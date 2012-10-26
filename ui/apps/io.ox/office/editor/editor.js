@@ -1428,15 +1428,28 @@ define('io.ox/office/editor/editor',
                     self.deleteSelected(selection);
                 }
                 else {
-                    var lastValue = selection.startPaM.oxoPosition.length - 1;
-                    var startPosition = selection.startPaM.oxoPosition;
-                    var paraLen = Position.getParagraphLength(paragraphs, startPosition);
+                    var lastValue = selection.startPaM.oxoPosition.length - 1,
+                        startPosition = selection.startPaM.oxoPosition,
+                        paraLen = Position.getParagraphLength(paragraphs, startPosition);
+
+                    // skipping floated images
+                    while (selection.startPaM.oxoPosition[lastValue] < paraLen) {
+
+                        var testPosition = _.copy(selection.startPaM.oxoPosition, true),
+                            node = Position.getDOMNodeAtPosition(paragraphs, testPosition).node;
+
+                        // is the image at testPosition a floated image?
+                        if ((node) && (DOM.isFloatingObjectNode(node))) {
+                            selection.startPaM.oxoPosition[lastValue] += 1;
+                        } else {
+                            break;
+                        }
+                    }
 
                     if (startPosition[lastValue] < paraLen) {
                         selection.endPaM.oxoPosition[lastValue]++;
                         self.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
-                    }
-                    else {
+                    } else {
                         var mergeselection = _.copy(selection.startPaM.oxoPosition),
                             characterPos = mergeselection.pop();
 
@@ -1497,20 +1510,17 @@ define('io.ox/office/editor/editor',
                     var lastValue = selection.startPaM.oxoPosition.length - 1;
 
                     // skipping floated images
-                    if (selection.startPaM.oxoPosition[lastValue] > 0) {
+                    while (selection.startPaM.oxoPosition[lastValue] > 0) {
 
-                        while (selection.startPaM.oxoPosition[lastValue] > 0) {
+                        var testPosition = _.copy(selection.startPaM.oxoPosition, true);
+                        testPosition[lastValue] -= 1;
+                        var node = Position.getDOMNodeAtPosition(paragraphs, testPosition).node;
 
-                            var testPosition = _.copy(selection.startPaM.oxoPosition, true);
-                            testPosition[lastValue] -= 1;
-                            var node = Position.getDOMNodeAtPosition(paragraphs, testPosition).node;
-
-                            // is the image at testPosition a floated image?
-                            if ((node) && (DOM.isFloatingObjectNode(node))) {
-                                selection.startPaM.oxoPosition[lastValue] -= 1;
-                            } else {
-                                break;
-                            }
+                        // is the image at testPosition a floated image?
+                        if ((node) && (DOM.isFloatingObjectNode(node))) {
+                            selection.startPaM.oxoPosition[lastValue] -= 1;
+                        } else {
+                            break;
                         }
                     }
 

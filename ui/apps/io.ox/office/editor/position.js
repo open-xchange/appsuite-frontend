@@ -318,13 +318,14 @@ define('io.ox/office/editor/position',
      *  The calculated dom position consisting of dom node and offset.
      *  Offset is only set for text nodes, otherwise it is undefined.
      */
-    Position.getDOMPosition = function (startnode, oxoPosition, useObjectNode) {
+    Position.getDOMPosition = function (startnode, oxoPosition, useObjectNode, forcePositionCounting) {
 
         var oxoPos = _.copy(oxoPosition, true),
             node = startnode,
             offset = null;
 
         useObjectNode = useObjectNode ? true : false;
+        forcePositionCounting = forcePositionCounting ? true : false;
 
         if ((oxoPosition === undefined) || (oxoPosition === null)) {
             // Utils.error('Position.getDOMPosition(): oxoPosition is undefined!');
@@ -338,7 +339,13 @@ define('io.ox/office/editor/position',
 
         while (oxoPos.length > 0) {
 
-            var returnObj = Position.getNextChildNode(node, oxoPos.shift(), useObjectNode);
+            var returnObj = null;
+
+            if (forcePositionCounting) {
+                returnObj = Position.getNextChildNodePositionCounting(node, oxoPos.shift());
+            } else {
+                returnObj = Position.getNextChildNode(node, oxoPos.shift(), useObjectNode);
+            }
 
             if (returnObj) {
                 if (returnObj.node) {
@@ -376,8 +383,8 @@ define('io.ox/office/editor/position',
      */
     Position.getDOMNodeAtPosition = function (startnode, oxoPosition) {
 
-        var useObjectNode = true;  // -> is this sufficient?
-        return Position.getDOMPosition(startnode, oxoPosition, useObjectNode);
+        var forcePositionCounting = true;
+        return Position.getDOMPosition(startnode, oxoPosition, undefined, forcePositionCounting);
     };
 
     /**
@@ -599,6 +606,58 @@ define('io.ox/office/editor/position',
      * Returns the following node and offset corresponding to the next
      * logical position. With a node and the next position index
      * the following node and in the case of a text node the offset
+     * are calculated. Contrary to the function 'getNextChildNode' this
+     * function 'getNextChildNodePositionCounting' does not take care of
+     * ranges but only of direct positions. So [6,0] points to the first
+     * character or image or field in the seventh paragraph, not to a
+     * cursor position before.
+     *
+     * @param {Node} node
+     *  The node, whose child is searched. For performance reasons, a
+     *  jQuery object is also supported. The jQuery object 'paragraphs'
+     *  from the editor can be used instead of the main DIV for the editor.
+     *
+     * @param {Number} pos
+     *  The one integer number, that determines the child according to the
+     *  parent position.
+     *
+     * @returns {Node | Number}
+     *  The child node and an offset. Offset is only set for text nodes,
+     *  otherwise it is undefined.
+     */
+    Position.getNextChildNodePositionCounting = function (node, pos) {
+
+        var childNode,
+            offset;
+
+        if (node instanceof $) {  // true for jQuery objects
+            if (pos > node.length - 1) {
+                // Utils.warn('Position.getNextChildNode(): Array ' + pos + ' is out of range. Last paragraph: ' + (node.length - 1));
+                return;
+            }
+            childNode = node.get(pos);
+        } else if (DOM.isTableNode(node)) {
+            childNode = $('> * > tr', node).get(pos);
+        } else if ($(node).is('tr')) {
+            childNode = $('> th, > td', node).get(pos);  // this is a table cell
+        } else if (DOM.isPageNode(node) || $(node).is('th, td')) {
+            childNode = node.childNodes[pos];
+        } else if (DOM.isParagraphNode(node)) {
+            Position.iterateParagraphChildNodes(node, function (_node, nodeStart, nodeLength, offsetStart) {
+                // first matching node is the requested node, store data and escape from iteration
+                childNode = _node;
+                offset = offsetStart;
+                return Utils.BREAK;
+            }, undefined, { start: pos });
+        }
+
+        return new DOM.Point(childNode, offset);
+    };
+
+    /**
+     * Returns the following node and offset corresponding to the next
+     * logical position. With a node and the next position index
+     * the following node and in the case of a text node the offset
      * are calculated. For performance reasons, the node can be a
      * jQuery object, so that the start position can be determined from
      * the 'paragraphs' object.
@@ -642,7 +701,7 @@ define('io.ox/office/editor/position',
         } else if ($(node).is('tr')) {
             childNode = $('> th, > td', node).get(pos);  // this is a table cell
         } else if (DOM.isPageNode(node) || $(node).is('th, td')) {
-            childNode = $(node).children().get(pos);
+            childNode = node.childNodes[pos];
         } else if (DOM.isParagraphNode(node)) {
             var textLength = 0,
                 bFound = false,
