@@ -134,16 +134,15 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * @param {Number} rgbValue
      *  The rgb color value.
      *
-     * @param {String} shade
-     *  A hex based value (00-FF) that is used to tint the
-     *  rgb color value.
+     * @param {Number} shade
+     *  A value 0.0 - 100.0 to tint the provided color
      *
      * @return {Number} tint rgb color value
      */
     function tintColor(rgbValue, tint) {
         var hsl = convertRgbToHsl(rgbValue);
-        var tintValue = parseInt(tint, 16);
-        hsl.l = hsl.l * (tintValue / 255) + (1 - (tintValue / 255));
+        var tintValue = tint / 100.0;
+        hsl.l = hsl.l * tintValue + (1 - tintValue);
         return convertHslToRgb(hsl);
     }
 
@@ -155,15 +154,14 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      *  The rgb color value.
      *
      * @param {String} shade
-     *  A hex based value (00-FF) that is used to shade the
-     *  rgb color value.
+     *  A value between 0.0 - 100.0 to shade the provided color
      *
      * @return {Number} shaded rgb color value
      */
     function shadeColor(rgbValue, shade) {
         var hsl = convertRgbToHsl(rgbValue);
-        var shadeValue = parseInt(shade, 16);
-        hsl.l = hsl.l * (shadeValue / 255);
+        var shadeValue = shade / 100.0;
+        hsl.l = hsl.l * shadeValue;
         return convertHslToRgb(hsl);
     }
 

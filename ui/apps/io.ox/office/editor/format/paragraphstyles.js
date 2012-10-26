@@ -58,7 +58,9 @@ define('io.ox/office/editor/format/paragraphstyles',
 
             numId: { def: -1 },
 
-            outlinelvl: { def: 9 }
+            outlinelvl: { def: 9 },
+
+            tabstops: { def: {} }
 
         };
 
