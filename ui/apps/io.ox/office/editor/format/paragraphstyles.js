@@ -126,12 +126,6 @@ define('io.ox/office/editor/format/paragraphstyles',
             return DOM.iterateAncestorNodesInRanges(ranges, rootNode, DOM.PARAGRAPH_NODE_SELECTOR, iterator, context);
         };
 
-        /**
-         * Iterates over all paragraph elements covered by the passed DOM
-         * ranges for read/write access and calls the passed iterator function.
-         */
-        this.iterateReadWrite = this.iterateReadOnly;
-
         // initialization -----------------------------------------------------
 
         this.registerUpdateHandler(updateParagraphFormatting);

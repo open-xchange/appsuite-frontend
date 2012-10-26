@@ -835,73 +835,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return newSpan;
     };
 
-    /**
-     * Splits the passed text node into two text nodes.
-     *
-     * @param {Text} textNode
-     *  The DOM text node to be split.
-     *
-     * @param {Number} offset
-     *  The character position where the text node will be split. If this
-     *  position is at the start or end of the text of the node, an empty text
-     *  node will be inserted.
-     *
-     * @param {Object} [options]
-     *  A map of options to control the split operation. Supports the following
-     *  options:
-     *  @param {Boolean} [options.append]
-     *      If set to true, the right part of the text will be inserted after
-     *      the passed text node; otherwise the left part of the text will be
-     *      inserted before the passed text node. The position of the new text
-     *      node may be important when iterating and manipulating a range of
-     *      DOM nodes.
-     *
-     * @returns {Text}
-     *  The newly created text node. Will be located before or after the passed
-     *  text node, depending on the 'options.append' option.
-     */
-    DOM.splitTextNode = function (textNode, offset, options) {
-        var newSpan = DOM.splitTextSpan(textNode.parentNode, offset, options);
-        return newSpan[0].firstChild;
-    };
-
-    /**
-     * Returns the text node of the next or previous sibling of the passed
-     * node. Checks that the sibling node is a span element, and contains
-     * exactly one text node. Works for regular text portions, empty text
-     * spans, and text fields.
-     *
-     * @param {Node|jQuery} node
-     *  The original DOM node. If this node is a text node, checks that it is
-     *  contained in its own <span> element and traverses to the next or
-     *  previous sibling of that span. Otherwise, directly traverses to the
-     *  next or previous sibling of the passed element node. If this object is
-     *  a jQuery collection, uses the first DOM node it contains.
-     *
-     * @param {Boolean} next
-     *  If set to true, searches for the next sibling text node, otherwise
-     *  searches for the previous sibling text node.
-     *
-     * @returns {Text|Null}
-     *  The sibling text node if existing, otherwise null.
-     */
-    DOM.getSiblingTextNode = function (node, next) {
-
-        // if the passed node is a text node, get its <span> parent element
-        node = Utils.getDomNode(node);
-        if (node.nodeType === 3) {
-            node = DOM.isTextSpan(node.parentNode) ? node.parentNode : null;
-        }
-
-        // go to next or previous sibling of the element
-        if (node && (node.nodeType === 1)) {
-            node = next ? node.nextSibling : node.previousSibling;
-        }
-
-        // extract the text node from the sibling element
-        return (node && DOM.isTextSpan(node)) ? node.firstChild : null;
-    };
-
     // range iteration ========================================================
 
     /**
@@ -1099,11 +1032,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *
      * @param {Function} iterator
      *  The iterator function that will be called for every text node. Receives
-     *  the DOM text node object as first parameter, the offset of the first
-     *  character as second parameter, the offset after the last character as
-     *  third parameter, the current DOM range as fourth parameter, its index
-     *  in the sorted array of DOM ranges as fifth parameter, and the entire
-     *  sorted array of DOM ranges as sixth parameter. If the iterator returns
+     *  the DOM text node object as first parameter. If the iterator returns
      *  the Utils.BREAK object, the iteration process will be stopped
      *  immediately. See the comments for the method DOM.iterateNodesInRanges()
      *  for details about manipulation of the array of DOM ranges and the DOM
@@ -1113,166 +1042,24 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  If specified, the iterator will be called with this context (the symbol
      *  'this' will be bound to the context inside the iterator function).
      *
-     * @param {Object} [options]
-     *  A map of options to control the iteration process. Supports the
-     *  following options:
-     *  @param {Boolean} [options.split]
-     *      If set to true, text nodes that are not covered completely by a DOM
-     *      range will be split before the iterator function will be called.
-     *      The iterator function will always receive a text node and a
-     *      character range that covers the text of that node completely.
-     *  @param {Function} [options.merge]
-     *      If set to a function, the visited text node may be merged with one
-     *      or both of its sibling text nodes after the iterator function
-     *      returns. The function attached to this option will be called once
-     *      or twice, always receiving exactly two DOM text nodes. It must
-     *      return whether these two text nodes can be merged to one text node.
-     *      It will be called once for the previous sibling of the visited text
-     *      node, and once for its next sibling (only if these sibling text
-     *      nodes exist).
-     *
      * @returns {Utils.BREAK|Undefined}
      *  A reference to the Utils.BREAK object, if the iterator has returned
      *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
-    DOM.iterateTextPortionsInRanges = function (ranges, iterator, context, options) {
-
-        var // split partly covered the text nodes before visiting them
-            split = Utils.getBooleanOption(options, 'split', false),
-            // predicate whether to merge sibling text nodes after visiting them
-            merge = Utils.getFunctionOption(options, 'merge');
-
-        function replaceTextNodeInRanges(ranges, index, next, oldTextNode, newTextNode, offsetDiff) {
-
-            for (var range = null; next ? (index < ranges.length) : (0 <= index); next ? (index += 1) : (index -= 1)) {
-                range = ranges[index];
-
-                // update start point
-                if (range.start.node === oldTextNode) {
-                    range.start.node = newTextNode;
-                    range.start.offset += offsetDiff;
-                }
-
-                // update end point
-                if (range.end.node === oldTextNode) {
-                    range.end.node = newTextNode;
-                    range.end.offset += offsetDiff;
-                }
-            }
-        }
-
-        // Split the passed text node if it is not covered completely.
-        function splitTextNode(textNode, start, end, ranges, index) {
-
-            var // following text node when splitting this text node
-                newTextNode = null;
-
-            // split text node to move the portion before start into its own span
-            if (start > 0) {
-                newTextNode = DOM.splitTextNode(textNode, start);
-                // adjust offsets of all following DOM ranges that refer to the text node
-                replaceTextNodeInRanges(ranges, index, true, textNode, textNode, -start);
-                // new end position in shortened text node
-                end -= start;
-            }
-
-            // split text node to move the portion after end into its own span
-            if (end < textNode.nodeValue.length) {
-                newTextNode = DOM.splitTextNode(textNode, end, { append: true });
-                // adjust all following DOM ranges that refer now to the new following text node
-                replaceTextNodeInRanges(ranges, index + 1, true, textNode, newTextNode, -end);
-            }
-        }
-
-        // Tries to merge the passed text node with its next or previous sibling.
-        function mergeSiblingTextNode(textNode, next, ranges, index) {
-
-            var // the sibling text node, depending on the passed direction
-                siblingTextNode = DOM.getSiblingTextNode(textNode, next),
-                // text in the passed and in the sibling node
-                text = null, siblingText = null;
-
-            // check preconditions
-            if (!siblingTextNode ||
-                    // do not merge with next text node, if it is contained in the current range,
-                    // this prevents unnecessary merge/split (merge will be done in next iteration step)
-                    (next && (DOM.Point.comparePoints(DOM.Point.createPointForNode(siblingTextNode), ranges[index].end) < 0)) ||
-                    // ask callback whether to merge text nodes
-                    !merge.call(context, textNode, siblingTextNode)) {
-                return;
-            }
-
-            // add text of the sibling text node to the passed text node, and update DOM ranges
-            text = textNode.nodeValue;
-            siblingText = siblingTextNode.nodeValue;
-            if (next) {
-                textNode.nodeValue = text + siblingText;
-                replaceTextNodeInRanges(ranges, index, true, siblingTextNode, textNode, text.length);
-            } else {
-                textNode.nodeValue = siblingText + text;
-                replaceTextNodeInRanges(ranges, index, true, textNode, textNode, siblingText.length);
-                replaceTextNodeInRanges(ranges, index, false, siblingTextNode, textNode, 0, false);
-            }
-            // remove the entire sibling span element
-            $(siblingTextNode.parentNode).remove();
-        }
+    DOM.iterateTextPortionsInRanges = function (ranges, iterator, context) {
 
         // iterate over all nodes, and process the text nodes
         return DOM.iterateNodesInRanges(ranges, function (node, range, index, ranges) {
 
-            var // start and end offset of covered text in the text node
-                start = 0, end = 0;
-
-            // Splits text node, calls iterator function, merges text node.
-            function callIterator() {
-
-                var // the result of the iterator call
-                    result = null,
-                    // whether to merge with previous or next node
-                    mergePrevious = false, mergeNext = false;
-
-                // split text node if specified
-                if (split) {
-                    splitTextNode(node, start, end, ranges, index);
-                    start = 0;
-                    end = node.nodeValue.length;
-                }
-
-                // check whether to merge, before iterator is called
-                mergePrevious = start === 0;
-                mergeNext = end === node.nodeValue.length;
-
-                // call iterator function
-                result = iterator.call(context, node, start, end, range, index, ranges);
-
-                // merge text node if specified
-                if ((result !== Utils.BREAK) && _.isFunction(merge)) {
-                    if (mergePrevious) {
-                        mergeSiblingTextNode(node, false, ranges, index);
-                    }
-                    if (mergeNext) {
-                        mergeSiblingTextNode(node, true, ranges, index);
-                    }
-                }
-
-                return result;
-            }
-
             // call passed iterator for all text nodes in span elements
-            if ((node.nodeType === 3) && (Utils.getNodeName(node.parentNode) === 'span')) {
-                // calculate/validate start/end offset in the text node
-                start = (node === range.start.node) ? Utils.minMax(range.start.offset, 0, node.nodeValue.length) : 0;
-                end = (node === range.end.node) ? Utils.minMax(range.end.offset, start, node.nodeValue.length) : node.nodeValue.length;
+            if (DOM.isTextSpan(node.parentNode)) {
                 // call iterator for the text node, return if iterator returns Utils.BREAK
-                if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
+                if (iterator.call(context, node) === Utils.BREAK) { return Utils.BREAK; }
 
             // cursor selects a single dummy text node, visit last preceding text node instead
-            } else if (range.isCollapsed() && DOM.isDummyTextNode(node) && (node = DOM.getSiblingTextNode(node, false))) {
-                // prepare start, end, and current DOM range object
-                start = range.start.offset = end = range.end.offset = node.nodeValue.length;
-                range.start.node = range.end.node = node;
+            } else if (range.isCollapsed() && DOM.isDummyTextNode(node) && (node = DOM.findPreviousTextSpan(node))) {
                 // call iterator for the text node, return if iterator returns Utils.BREAK
-                if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
+                if (iterator.call(context, node) === Utils.BREAK) { return Utils.BREAK; }
             }
         });
     };

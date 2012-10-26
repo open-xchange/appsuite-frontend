@@ -170,12 +170,6 @@ define('io.ox/office/editor/format/imagestyles',
             return DOM.iterateAncestorNodesInRanges(ranges, rootNode, DOM.IMAGE_NODE_SELECTOR, iterator, context);
         };
 
-        /**
-         * Iterates over all image elements covered by the passed DOM ranges
-         * for read/write access and calls the passed iterator function.
-         */
-        this.iterateReadWrite = this.iterateReadOnly;
-
         // initialization -----------------------------------------------------
 
         this.registerUpdateHandler(updateImageFormatting);

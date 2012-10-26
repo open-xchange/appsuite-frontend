@@ -206,12 +206,6 @@ define('io.ox/office/editor/format/tablestyles',
             return DOM.iterateAncestorNodesInRanges(ranges, rootNode, DOM.TABLE_NODE_SELECTOR, iterator, context);
         };
 
-        /**
-         * Iterates over all table elements covered by the passed DOM ranges
-         * for read/write access and calls the passed iterator function.
-         */
-        this.iterateReadWrite = this.iterateReadOnly;
-
         // initialization -----------------------------------------------------
 
         this.registerUpdateHandler(updateTableFormatting);

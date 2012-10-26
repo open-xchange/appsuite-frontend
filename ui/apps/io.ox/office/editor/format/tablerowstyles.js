@@ -94,12 +94,6 @@ define('io.ox/office/editor/format/tablerowstyles',
             return DOM.iterateAncestorNodesInRanges(ranges, rootNode, 'tr', iterator, context);
         };
 
-        /**
-         * Iterates over all image elements covered by the passed DOM ranges
-         * for read/write access and calls the passed iterator function.
-         */
-        this.iterateReadWrite = this.iterateReadOnly;
-
         // initialization -----------------------------------------------------
 
         this.registerUpdateHandler(updateTableRowFormatting);

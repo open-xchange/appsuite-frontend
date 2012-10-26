@@ -157,13 +157,6 @@ define('io.ox/office/editor/format/pagestyles',
             iterator.call(context, rootNode);
         };
 
-        /**
-         * Iterates over all page elements covered by the passed DOM ranges for
-         * read/write access and calls the passed iterator function.
-         */
-        this.iterateReadWrite = this.iterateReadOnly;
-
-
         // initialization -----------------------------------------------------
 
         this.registerUpdateHandler(updatePageFormatting);

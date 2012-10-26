@@ -161,14 +161,10 @@ define('io.ox/office/editor/format/characterstyles',
      * Iterates over all text nodes covered by the passed DOM ranges and
      * calls the passed iterator function for their parent <span> elements.
      */
-    function iterateTextSpans(ranges, iterator, context, readWrite) {
-
-        var // options for DOM.iterateTextPortionsInRanges() depending on read/write mode
-            options = readWrite ? { split: true, merge: hasEqualAttributes } : undefined;
-
+    function iterateTextSpans(ranges, iterator, context) {
         return DOM.iterateTextPortionsInRanges(ranges, function (textNode) {
             return iterator.call(context, textNode.parentNode);
-        }, context, options);
+        }, context);
     }
 
     // class CharacterStyles ==================================================
@@ -205,18 +201,7 @@ define('io.ox/office/editor/format/characterstyles',
          * calls the passed iterator function for their parent <span> elements.
          */
         this.iterateReadOnly = function (ranges, iterator, context) {
-            return iterateTextSpans(ranges, iterator, context, false);
-        };
-
-        /**
-         * Iterates over all text nodes covered by the passed DOM ranges and
-         * calls the passed iterator function for their parent <span> elements.
-         * Splits the text nodes that are covered partly before calling the
-         * iterator, and tries to merge sibling text nodes with equal character
-         * formatting after calling the iterator.
-         */
-        this.iterateReadWrite = function (ranges, iterator, context) {
-            return iterateTextSpans(ranges, iterator, context, true);
+            return iterateTextSpans(ranges, iterator, context);
         };
 
         // initialization -----------------------------------------------------
