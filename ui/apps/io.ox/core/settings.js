@@ -20,7 +20,9 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function 
     var settingsWrapper = function () {
 
         var settings = {},
-            settingsCache;
+            meta = {},
+            settingsCache,
+            metaCache;
 
         var settingsInitial = function (settings, path, settingsBase, callback) {
             var deferred = $.Deferred();
@@ -40,25 +42,30 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function 
             });
             return deferred;
         };
-
-        var get = function (key) {
-            var parts = key.split(/\//),
-                tmp = settings || {}, i = 0, $i = parts.length;
-            if (parts[1]) {
-                for (; i < $i; i++) {
-                    var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty([i]) && typeof tmp[i] !== 'undefined' && tmp[i] !== null);
-                    if (tmpHasSubNode) {
-                        tmp = tmp[i];
-                    } else {
-                        tmp = null;
-                        return null;
+        
+        function traversal(map) {
+            return function (key) {
+                var parts = key.split(/\//),
+                    tmp = map || {}, i = 0, $i = parts.length;
+                if (parts[1]) {
+                    for (; i < $i; i++) {
+                        var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty([i]) && typeof tmp[i] !== 'undefined' && tmp[i] !== null);
+                        if (tmpHasSubNode) {
+                            tmp = tmp[i];
+                        } else {
+                            tmp = null;
+                            return null;
+                        }
                     }
+                } else {
+                    return tmp[key];
                 }
-            } else {
-                return tmp[key];
-            }
 
-        };
+            };
+        }
+
+        var get = traversal(settings);
+        var getMeta = traversal(meta);
 
         var set = function (key, value) {
             var parts = typeof key === 'string' ? key.split(/\./) : key,
@@ -157,6 +164,14 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function 
                     }
                 }
             },
+            
+            meta: function (path) {
+                if (!path) {
+                    return getMeta(that.settingsPath);
+                } else {
+                    return getMeta(path);
+                }
+            },
 
             set: function (path, value) {
                 if (path) {
@@ -164,7 +179,10 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function 
                     set(path, value);
                 }
             },
-
+            
+            all: function () {
+                return settings;
+            },
             remove: function (path) {
                 if (path) {
                     path = (that.settingsPath + '/' + path);
@@ -177,7 +195,8 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function 
                 return contains(path);
             },
 
-            load: function () {
+            load: function (options) {
+                options = options || {};
                 // loader
                 var load = function () {
                     return http.PUT({
@@ -188,21 +207,29 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function 
                         data: ['apps/' + that.settingsBase + '/' + that.settingsPath]
                     }).done(function (data) {
                             settings = data[0].tree;
+                            meta = data[0].meta;
                         }).pipe(function () {
                             return settingsInitial(settings, that.settingsPath, that.settingsBase);
                         }).done(function () {
                             settingsCache.add(that.settingsPath, settings);
+                            metaCache.add(that.settingsPath, meta);
                         });
                 };
                 // trick to be fast: cached?
                 if (!settingsCache) {
                     settingsCache = new cache.SimpleCache('settings', true);
                 }
-
-                return settingsCache.get(that.settingsPath)
-                    .pipe(function (data) {
-                        if (data !== null) {
+                if (!metaCache) {
+                    metaCache = new cache.SimpleCache('settingsMeta', true);
+                }
+                if (options.noCache) {
+                    return load();
+                }
+                return $.when(settingsCache.get(that.settingsPath), metaCache.get(that.settingsPath))
+                    .pipe(function (data, metaData) {
+                        if (data !== null && metaData !== null) {
                             settings = data;
+                            meta = metaData;
                             return settings;
                         } else {
                             return load();

@@ -122,7 +122,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
             }
             if (this.syncer) {
                 this.trigger(action + ':start');
-                return this.syncer[action].call(this.factory.internal, model)
+                return this.syncer[action].call(this.syncer, model)
                     .done(function (response) {
                         callbacks.success(model, response);
                         self.trigger(action, response);
