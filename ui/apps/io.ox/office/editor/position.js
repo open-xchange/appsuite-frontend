@@ -630,7 +630,6 @@ define('io.ox/office/editor/position',
             childNode = $('> th, > td', node).get(pos);  // this is a table cell
         } else if (DOM.isPageNode(node) || $(node).is('th, td')) {
             childNode = node.childNodes[pos];
-            // childNode = $(node).children().get(pos);
         } else if (DOM.isParagraphNode(node)) {
             Position.iterateParagraphChildNodes(node, function (_node, nodeStart, nodeLength, offsetStart) {
                 // first matching node is the requested node, store data and escape from iteration
@@ -656,14 +655,6 @@ define('io.ox/office/editor/position',
      *  The one integer number, that determines the child according to the
      *  parent position.
      *
-     * @param {Boolean} useObjectNode
-     *  Typically (in the case of a full complete logical position)
-     *  text nodes and the corresponding offset are returned. But there are
-     *  some cases, in which not the text node, but the image or div, that
-     *  can also be located inside a 'div.p', shall be returned. In this cases
-     *  useObjectNode has to be set to 'true'. The default is 'false', so
-     *  that text nodes are returned.
-     *
      * @returns {Node | Number}
      *  The child node and an offset. Offset is only set for text nodes,
      *  otherwise it is undefined.
@@ -671,8 +662,7 @@ define('io.ox/office/editor/position',
     Position.getNextChildNode = function (node, pos) {
 
         var childNode,
-            offset,
-            useObjectNode = false;
+            offset;
 
         node = Utils.getDomNode(node);
 
@@ -681,14 +671,12 @@ define('io.ox/office/editor/position',
         } else if ($(node).is('tr')) {
             childNode = $('> th, > td', node).get(pos);  // this is a table cell
         } else if (DOM.isPageNode(node) || $(node).is('th, td')) {
-            // childNode = $(node).children().get(pos);
             childNode = node.childNodes[pos];
         } else if (DOM.isParagraphNode(node)) {
             var textLength = 0,
                 bFound = false,
                 isImage = false,
-                isField = false,
-                exactSum = false;
+                isField = false;
 
             // Checking if this paragraph has children
             if (! node.hasChildNodes()) {
@@ -728,10 +716,6 @@ define('io.ox/office/editor/position',
 
                     if (textLength + currentLength >= pos) {
 
-                        if (textLength + currentLength === pos) {
-                            exactSum = true;
-                        }
-
                         bFound = true;
                         node = currentNode;
                         break;  // leaving the for-loop
@@ -751,37 +735,13 @@ define('io.ox/office/editor/position',
                 return;
             }
 
-            // which node shall be returned, if the position is at the border between two nodes?
-            if ((useObjectNode) && (exactSum)) {  // special handling for images, that exactly fit the position
-
-                var nextNode = node.nextSibling;
-
-                if (DOM.isObjectNode(nextNode)) {  // if the next node is an object, this should be preferred
-                    node = nextNode;
-                    isImage = true;
-                } else if (DOM.isOffsetNode(nextNode) && DOM.isObjectNode(nextNode.nextSibling)) {
-                    node = nextNode.nextSibling;
-                    isImage = true;
-                } else if (DOM.isFieldNode(nextNode)) {  // also preferring following fields
-                    node = nextNode;
-                    isField = true;
-                }
-            }
-
-            if ((isImage) || (isField)) {
-                if (! useObjectNode) {  // this can lead to to dom positions, that do not fit to the oxo position
-                    // if the position is an image or field, the dom position shall be the following text node
-                    if (isImage) {
-                        childNode = Utils.findNextNodeInTree(node, Utils.JQ_TEXTNODE_SELECTOR); // can be more in a row without text span between them
-                        offset = 0;
-                    } else if (isField) {
-                        childNode = node.nextSibling.firstChild; // following the div field must be a text span (like inline images)
-                        offset = 0;
-                    }
-                } else {
-                    childNode = node;
-                    offset = pos - textLength;  // offset might be'1', if (textLength + currentLength) > pos . It is always '0', if exactSum is 'true'.
-                }
+            // if the position is an image or field, the dom position shall be the following text node
+            if (isImage) {
+                childNode = Utils.findNextNodeInTree(node, Utils.JQ_TEXTNODE_SELECTOR); // can be more in a row without text span between them
+                offset = 0;
+            } else if (isField) {
+                childNode = node.nextSibling.firstChild; // following the div field must be a text span (like inline images)
+                offset = 0;
             } else {
                 childNode = node;
                 if (childNode.nodeType !== 3) {

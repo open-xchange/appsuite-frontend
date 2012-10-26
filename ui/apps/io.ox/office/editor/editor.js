@@ -3060,6 +3060,35 @@ define('io.ox/office/editor/editor',
             }
         }
 
+        function setAttributesToAllParagraphsInCell(family, attributes, position) {
+
+            var localPos = _.copy(position, true),
+                isInTable = Position.isPositionInTable(editdiv, localPos);
+
+            if (isInTable) {
+
+                var cellPos = Position.getLastPositionFromPositionByNodeName(editdiv, position, 'th, td'),
+                    cellNode = Position.getDOMPosition(editdiv, cellPos).node;
+
+                if (cellNode) {
+
+                    var lastPara = $(cellNode).children().length;
+
+                    for (var i = 0; i < lastPara; i++) {
+                        var localPos = _.copy(cellPos, true);
+                        localPos.push(i);
+
+                        // it can be a table next to a paragraph
+                        if (DOM.isTableNode(Position.getDOMPosition(editdiv, _.copy(localPos, true)).node)) {
+                            setAttributesToCompleteTable(family, attributes, localPos);
+                        } else {
+                            setAttributesToParagraphInCell(family, attributes, localPos);
+                        }
+                    }
+                }
+            }
+        }
+
         function setAttributesToCompleteTable(family, attributes, position) {
 
             var localPos = _.copy(position),
@@ -3386,9 +3415,8 @@ define('io.ox/office/editor/editor',
                     var position = _.copy(startPos, true);
                     position.push(i);
                     position.push(j);
-                    var startPosition = Position.getFirstPositionInCurrentCell(editdiv, position);
-                    var endPosition = Position.getLastPositionInCurrentCell(editdiv, position);
-                    setAttributes(family, attributes, startPosition, endPosition);
+
+                    setAttributesToAllParagraphsInCell(family, attributes, position);
                 }
             }
         }
