@@ -154,18 +154,23 @@ define('io.ox/mail/actions',
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css({ height: '250px' });
                 var item = _(mail).first(),
-                    id = item.folder_id || item.folder,
+                    id = String(item.folder_id || item.folder),
                     tree = new views.FolderTree(dialog.getBody(), { type: 'mail' });
-                tree.paint();
                 dialog.show(function () {
-                    tree.selection.set({ id: id });
+                    tree.paint().done(function () {
+                        tree.select(id);
+                    });
                 })
                 .done(function (action) {
                     if (action === 'ok') {
-                        var selectedFolder = tree.selection.get();
-                        if (selectedFolder.length === 1 && selectedFolder[0].id !== id) {
+                        var target = _(tree.selection.get()).first();
+                        if (target && target !== id) {
                             // move action
-                            api.move(mail, selectedFolder[0].id);
+                            api.move(mail, target)
+                                .done(function () {
+                                    notifications.yell('success', 'Mails have been moved');
+                                })
+                                .fail(notifications.yell);
                         }
                     }
                     tree.destroy();
@@ -186,17 +191,19 @@ define('io.ox/mail/actions',
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css('maxHeight', '250px');
                 var item = _(mail).first(),
+                    id = String(item.folder_id || item.folder),
                     tree = new views.FolderTree(dialog.getBody(), { type: 'mail' });
-                tree.paint();
                 dialog.show(function () {
-                    tree.selection.set({ id: item.folder_id || item.folder });
+                    tree.paint().done(function () {
+                        tree.select(id);
+                    });
                 })
                 .done(function (action) {
                     if (action === 'ok') {
-                        var selectedFolder = tree.selection.get();
-                        if (selectedFolder.length === 1) {
+                        var target = _(tree.selection.get()).first();
+                        if (target && target !== id) {
                             // move action
-                            api.copy(mail, selectedFolder[0].id)
+                            api.copy(mail, target)
                                 .done(function () {
                                     notifications.yell('success', 'Mails have been copied');
                                 })

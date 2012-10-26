@@ -222,7 +222,9 @@ define('io.ox/core/commons',
                 }
                 _.url.hash('folder', app.folder.get());
             });
+
             defaultFolderId = _.url.hash('folder') || defaultFolderId;
+
             // explicit vs. default
             if (defaultFolderId !== undefined) {
                 return app.folder.set(defaultFolderId);

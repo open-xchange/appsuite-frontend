@@ -83,7 +83,7 @@ define('io.ox/core/commons-folderview',
                 // listen to selection event to update dropdown header
                 baton.tree.selection.on('change', function (e, selection) {
                     if (selection.length) {
-                        api.get({ folder: selection[0].id }).done(function (data) {
+                        api.get({ folder: selection[0] }).done(function (data) {
                             ul.find('.dropdown-header').text(_.noI18n(data.title));
                         });
                     }
@@ -196,19 +196,21 @@ define('io.ox/core/commons-folderview',
             baton = new ext.Baton({ app: app });
 
         fnChangeFolder = function (e, selection) {
-            var folder = selection[0];
-            if (folder.module === options.type) {
-                app.folder.unset();
-                if (options.permanent) {
-                    app.folder.set(folder.id);
-                } else {
-                    top = container.scrollTop();
-                    sidepanel.fadeOut('fast', function () {
-                        app.folder.set(folder.id);
-                    });
-                    visible = false;
+            var id = _(selection).first();
+            api.get({ folder: id }).done(function (data) {
+                if (data.module === options.type) {
+                    app.folder.unset();
+                    if (options.permanent) {
+                        app.folder.set(id);
+                    } else {
+                        top = container.scrollTop();
+                        sidepanel.fadeOut('fast', function () {
+                            app.folder.set(id);
+                        });
+                        visible = false;
+                    }
                 }
-            }
+            });
         };
 
         disablePermanent = function () {

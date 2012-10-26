@@ -73,6 +73,7 @@ define("io.ox/tasks/actions",
     });
 
     new Action('io.ox/tasks/actions/move', {
+        requires: 'one',
         action: function (task) {
             require(['io.ox/core/tk/dialogs', "io.ox/core/tk/folderviews", 'io.ox/tasks/api'],
                     function (dialogs, views, api) {
@@ -83,21 +84,20 @@ define("io.ox/tasks/actions",
                     .addButton("cancel", gt("Cancel"));
                 popup.getBody().css({ height: '250px' });
                 var tree = new views.FolderTree(popup.getBody(), { type: 'tasks' }),
-                    folder = task.folder;
-                if (!folder) {
-                    folder = task.folder_id;
-                }
-                tree.paint();
+                    id = String(task.folder || task.folder_id);
                 //go
                 popup.show(function () {
-                    tree.selection.set({id: folder});
-                }).done(function (action) {
+                    tree.paint().done(function () {
+                        tree.select(id);
+                    });
+                })
+                .done(function (action) {
                     if (action === 'ok') {
-                        var selectedFolder = tree.selection.get();
-                        //move only if folder differs from old folder
-                        if (selectedFolder.length === 1 && Number(selectedFolder[0].id) !== folder) {
+                        var target = _(tree.selection.get()).first();
+                        // move only if folder differs from old folder
+                        if (target && target !== id) {
                             // move action
-                            api.move(task, selectedFolder[0].id).done(function () {
+                            api.move(task, target).done(function () {
                                 notifications.yell('success', gt('Task moved.'));
                             });
                         }
@@ -108,7 +108,7 @@ define("io.ox/tasks/actions",
             });
         }
     });
-    
+
     new Action('io.ox/tasks/actions/done', {
         action: function (data) {
             require(['io.ox/tasks/api'], function (api) {
@@ -120,7 +120,7 @@ define("io.ox/tasks/actions",
             });
         }
     });
-    
+
     //attachment actions
     new Action('io.ox/tasks/actions/preview-attachment', {
         id: 'preview',
@@ -292,7 +292,7 @@ define("io.ox/tasks/actions",
             );
         }
     });
-    
+
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'move',
         index: 500,
