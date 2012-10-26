@@ -56,7 +56,9 @@ define('io.ox/office/tk/dropdown/scrollable',
                 // width of the drop-down group buttons (used as min-width of the menu)
                 minWidth = self.getNode().width(),
                 // width of the scroll bar in pixels
-                scrollBarWidth = 0;
+                scrollBarWidth = 0,
+                // maximum left offset of the menu node to not leave browser window
+                maxOffsetLeft = 0;
 
             // set maximum height of the drop-down menu, depending on window height
             menuNode
@@ -86,6 +88,10 @@ define('io.ox/office/tk/dropdown/scrollable',
             // 4) Expand width of the content node to the menu width (needed in
             // case minimum width is active).
             contentNode.css('width', '100%');
+
+            // refresh left offset to keep menu node inside browser window
+            maxOffsetLeft = window.innerWidth - menuNode.outerWidth() - 10;
+            menuNode.css('left', 0).css('left', Math.min(maxOffsetLeft - menuNode.offset().left, 0) + 'px');
         }
 
         // base constructor ---------------------------------------------------

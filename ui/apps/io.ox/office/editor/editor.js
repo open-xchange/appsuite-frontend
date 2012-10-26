@@ -200,6 +200,7 @@ define('io.ox/office/editor/editor',
          * Destructs the editor object.
          */
         this.destroy = function () {
+            editdiv.off();
             this.events.destroy();
             documentStyles.destroy();
             documentStyles = characterStyles = paragraphStyles = imageStyles = tableStyles = tableRowStyles = tableCellStyles = null;

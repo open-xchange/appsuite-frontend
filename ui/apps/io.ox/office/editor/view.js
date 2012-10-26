@@ -18,6 +18,7 @@ define('io.ox/office/editor/view',
      'io.ox/office/tk/control/radiogroup',
      'io.ox/office/tk/control/textfield',
      'io.ox/office/tk/control/combofield',
+     'io.ox/office/tk/control/colorchooser',
      'io.ox/office/tk/dropdown/gridsizer',
      'io.ox/office/tk/component/toolpane',
      'io.ox/office/tk/component/appwindowtoolbar',
@@ -25,7 +26,7 @@ define('io.ox/office/editor/view',
      'io.ox/office/editor/format/color',
      'io.ox/office/editor/format/lineheight',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, Button, RadioGroup, TextField, ComboField, GridSizer, ToolPane, AppWindowToolBar, Config, Color, LineHeight, gt) {
+    ], function (Utils, Fonts, Button, RadioGroup, TextField, ComboField, ColorChooser, GridSizer, ToolPane, AppWindowToolBar, Config, Color, LineHeight, gt) {
 
     'use strict';
 
@@ -120,7 +121,7 @@ define('io.ox/office/editor/view',
         // base constructor ---------------------------------------------------
 
         RadioGroup.call(this, Utils.extendOptions(options, {
-            width: 120,
+            width: 20,
             white: true,
             dropDown: true,
             sorted: true,
@@ -154,38 +155,46 @@ define('io.ox/office/editor/view',
         StyleSheetChooser.call(this, editor, 'paragraph', { tooltip: gt('Paragraph Style'), previewFamilies: ['paragraph', 'character'] });
     }}); // class ParagraphStyleChooser
 
-    // class ColorChooser =====================================================
+    // class ThemeColorChooser ================================================
 
-    var ColorChooser = RadioGroup.extend({ constructor: function (themes, context, options) {
+    var ThemeColorChooser = ColorChooser.extend({ constructor: function (editor, context, options) {
 
         var // self reference
             self = this,
-            theme = null;
+            // the collection of themes of the edited document
+            themes = editor.getThemes();
 
         // private methods ----------------------------------------------------
 
+        /**
+         * Converts the passed color value to a CSS color string.
+         */
+        function resolveCssColor(color) {
+            return Color.getCssColor(color, context, themes.getTheme());
+        }
+
         function fillList() {
+
+            var // the current theme
+                theme = themes.getTheme();
 
             var filter = null;
 
-            theme = themes.getTheme();
-            self.clearOptionButtons();
+            self.clearColorTable();
 
-            // add transparent color if supported
-            if (Color.getCssColor(Color.AUTO, context) === 'transparent') {
-                self.createOptionButton(Color.AUTO, { tooltip: gt('Transparent') });
-            }
-            else {
-                self.createOptionButton(Color.AUTO, { tooltip: gt('Auto') });
-            }
+            // add automatic color
+            self.createSectionHeader({ label: gt('Automatic Color') });
+            self.createColorItem(Color.AUTO, { tooltip: Color.isTransparentColor(Color.AUTO, context) ? gt('Transparent') : gt('Automatic') });
 
             // add predefined colors
+            self.createSectionHeader({ label: gt('Palette Colors') });
             _(BUILTIN_COLOR_DEFINITIONS).each(function (definition) {
-                self.createOptionButton(definition.color, { tooltip: definition.label, css: { backgroundColor: Color.getCssColor(definition.color, context, theme) }});
+                self.createColorItem(definition.color, { tooltip: definition.label });
             });
 
             // add theme colors
             if (theme) {
+                self.createSectionHeader({ label: gt('Theme Colors') });
 
                 switch (context) {
                 case 'fill':
@@ -201,7 +210,7 @@ define('io.ox/office/editor/view',
 
                 _(theme.getSchemeColors()).each(function (schemeColor) {
                     if (!_(filter).contains(schemeColor.name)) {
-                        self.createOptionButton({ type: 'scheme', value: schemeColor.name }, { tooltip: schemeColor.label, css: { backgroundColor: '#' + schemeColor.value } });
+                        self.createColorItem({ type: 'scheme', value: schemeColor.name }, { tooltip: schemeColor.label });
                     }
                 });
             }
@@ -219,9 +228,11 @@ define('io.ox/office/editor/view',
          *  The activated/selected color value.
          */
         function updateCaptionHandler(button, value) {
-            var menuButton = self.getMenuButton();
-            var updateOptions = { label: Utils.getStringOption(options, 'label') };
-            var labelCss = { 'font-weight': 'bold' }, rgbColor, color = value;
+
+            var theme = themes.getTheme(),
+                menuButton = self.getMenuButton(),
+                updateOptions = { label: Utils.getStringOption(options, 'label') },
+                labelCss = { fontWeight: 'bold' }, rgbColor, color = value;
 
             if (context === 'text') {
                 rgbColor = color ? Color.getCssColor(color, context, theme) : Color.getCssColor(Color.BLACK);
@@ -235,7 +246,7 @@ define('io.ox/office/editor/view',
                     labelCss.color = Color.getCssColor(Color.BLACK);
                 else
                     labelCss.color = Color.isDark(rgbColor) ? Color.getCssColor(Color.WHITE) : Color.getCssColor(Color.BLACK);
-                labelCss['background-color'] = rgbColor;
+                labelCss.backgroundColor = rgbColor;
             }
             updateOptions.labelCss = labelCss;
             Utils.setControlCaption(menuButton, updateOptions);
@@ -243,19 +254,19 @@ define('io.ox/office/editor/view',
 
         // base constructor ---------------------------------------------------
 
-        RadioGroup.call(this, Utils.extendOptions({
-            tooltip: gt('Color'),
-            dropDown: true,
-            updateCaptionMode: 'none',
+        ColorChooser.call(this, Utils.extendOptions(options, {
+            labelCss: { fontWeight: 'bold' },
+            columns: 10,
+            cssColorResolver: resolveCssColor,
             updateCaptionHandler: updateCaptionHandler
-        }, options));
+        }));
 
         // initialization -----------------------------------------------------
 
         fillList();
         themes.on('change', fillList);
 
-    }}); // class ColorChooser
+    }}); // class ThemeColorChooser
 
     // class FontFamilyChooser ================================================
 
@@ -530,9 +541,9 @@ define('io.ox/office/editor/view',
             .addButton('character/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
             .addButton('character/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
             .addSeparator()
-            .addGroup('character/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Text fill color'), label: 'ab' }))
+            .addGroup('character/fillcolor', new ThemeColorChooser(editor, 'fill', { tooltip: gt('Text fill color'), label: 'ab' }))
             .addSeparator()
-            .addGroup('character/color', new ColorChooser(editor.getThemes(), 'text', { tooltip: gt('Text Color'), label: 'A' }))
+            .addGroup('character/color', new ThemeColorChooser(editor, 'text', { tooltip: gt('Text Color'), label: 'A' }))
             .addSeparator()
             .addRadioGroup('paragraph/alignment', { icon: 'icon-align-left', tooltip: gt('Paragraph Alignment'), auto: true, highlight: true, updateCaptionMode: 'icon' })
                 .addOptionButton('left',    { icon: 'icon-io-ox-align-left',    tooltip: gt('Left') })
@@ -547,7 +558,7 @@ define('io.ox/office/editor/view',
                 .addOptionButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
                 .end()
             .addSeparator()
-            .addGroup('paragraph/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Paragraph Fill Color'), label: '==' }))
+            .addGroup('paragraph/fillcolor', new ThemeColorChooser(editor, 'fill', { tooltip: gt('Paragraph Fill Color'), label: '==' }))
             .addSeparator()
             .addButton('list/bullets', { icon: 'icon-io-ox-bullets', tooltip: gt('Bullets On/Off'), toggle: true })
             .addButton('list/numbering', { icon: 'icon-io-ox-numbering', tooltip: gt('Numbering On/Off'), toggle: true })

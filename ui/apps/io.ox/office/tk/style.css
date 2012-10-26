@@ -338,9 +338,10 @@ div.io-ox-view-component {
                 .border-radius(0);
                 .box-shadow(0 5px 10px fade(black, 25%));
 
-                /* the Scrollable mix-in class */
+                /* the Scrollable mix-in class (override 'important' settings of Bootstrap) */
                 &.scrollable {
-                    overflow-y: auto;
+                    overflow-x: hidden !important;
+                    overflow-y: auto !important;
                 }
 
                 /* the List mix-in class */
@@ -373,6 +374,62 @@ div.io-ox-view-component {
                                 &:hover { .vertical-gradient(darken(@button-accented-selected-color, 3%), @button-selected-color); }
                                 &:focus { .vertical-gradient(darken(@button-accented-selected-color, 3%), @button-selected-color); }
                                 &:active { .vertical-gradient(darken(@button-accented-selected-color, 6%), @button-selected-color); }
+                            }
+                        }
+                    }
+                }
+
+                /* the ColorTable mix-in class */
+                &.color-table > div {
+                    display: inline-block;
+                    background-color: @pane-fill-color;
+
+                    > label {
+                        display: block;
+                        width: 100%;
+                        margin: 4px 0 0 0;
+                        padding: 0;
+                        font-size: 10px;
+                        line-height: normal;
+                        font-weight: bold;
+
+                        &:not(:first-child) {
+                            padding-top: 4px;
+                        }
+                    }
+
+                    > table {
+                        margin: 0 4px 4px 4px;
+
+                        td {
+                            padding: 1px;
+    
+                            > button {
+                                overflow: visible;
+                                padding: 1px;
+                                border: 2px solid transparent;
+                                .border-radius(4px);
+    
+                                &:hover, &:focus, &:active {
+                                    border-color: lighten(@pane-fill-color, 10%);
+                                }
+    
+                                &.selected {
+                                    background-color: lighten(@pane-fill-color, 5%);
+                                    border-color: darken(@button-selected-color, 5%);
+    
+                                    &:hover, &:focus, &:active {
+                                        border-color: lighten(@button-selected-color, 5%);
+                                    }
+                                }
+    
+                                /* inner container with displayed color */
+                                > div {
+                                    width: 18px;
+                                    height: 18px;
+                                    .border-radius(2px);
+                                    .box-shadow(0 5px 10px fade(black, 25%));
+                                }
                             }
                         }
                     }
@@ -508,26 +565,26 @@ div.io-ox-view-component {
                         &:active { .vertical-gradient(darken(@button-accented-selected-color, 6%), @button-selected-color); }
                     }
                 }
-                
+
                 /* groups with white background and shadowed borders */
                 &.white {
                     @offset: 4px;
-                    
+
                     top: @offset;
                     .box-shadow(0 0 4px fade(black, 15%));
-        
+
                     > label, > button, > input {
                         height: @control-height - 2 * @offset;
                         background: white;
                     }
-        
+
                     > label, > button {
                         line-height: @control-height - 2 * @offset;
                     }
-        
+
                     /* keyboard/mouse effects (not for disabled buttons) */
                     &:not(.disabled) > button:not(.disabled) {
-            
+
                         /* mouse/keyboard effects */
                         &:hover { .vertical-gradient(darken(white, 5%), white); }
                         &:focus { .vertical-gradient(darken(white, 5%), white); }

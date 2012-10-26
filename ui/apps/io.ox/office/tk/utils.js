@@ -1500,8 +1500,8 @@ define('io.ox/office/tk/utils',
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the new label. Supports
-     *  all generic options supported by the method Utils.createControl(), and
-     *  all caption options supported by the method Utils.setControlLabel().
+     *  all generic options supported by the methods Utils.createControl() and
+     *  Utils.setControlLabel().
      *
      * @returns {jQuery}
      *  A jQuery object containing the new label element.
