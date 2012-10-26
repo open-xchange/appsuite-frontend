@@ -180,7 +180,7 @@ define("io.ox/core/extPatterns/links",
                 if (!multiple && all.length > 5 && lo.length > 1) {
                     node.append(
                         $('<span class="io-ox-action-link dropdown">').append(
-                            $('<a href="#" data-toggle="dropdown">').append(
+                            $('<a href="#" data-toggle="dropdown" data-action="more">').append(
                                 $.txt(gt('More')),
                                 $.txt(_.noI18n(' ...')),
                                 $('<b class="caret">')
