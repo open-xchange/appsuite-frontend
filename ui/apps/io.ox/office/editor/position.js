@@ -309,22 +309,16 @@ define('io.ox/office/editor/position',
      * @param {OXOPaM.oxoPosition} oxoPosition
      *  The logical position.
      *
-     * @param {Boolean} useObjectNode
-     *  A boolean value, that needs to be set to 'true' in the special case,
-     *  that an image node shall be returned instead of a text node. Typically
-     *  previous or following siblings are returned, instead of image nodes.
-     *
      * @returns {DOM.Point}
      *  The calculated dom position consisting of dom node and offset.
      *  Offset is only set for text nodes, otherwise it is undefined.
      */
-    Position.getDOMPosition = function (startnode, oxoPosition, useObjectNode, forcePositionCounting) {
+    Position.getDOMPosition = function (startnode, oxoPosition, forcePositionCounting) {
 
         var oxoPos = _.copy(oxoPosition, true),
             node = startnode,
             offset = null;
 
-        useObjectNode = useObjectNode ? true : false;
         forcePositionCounting = forcePositionCounting ? true : false;
 
         if ((oxoPosition === undefined) || (oxoPosition === null)) {
@@ -344,7 +338,7 @@ define('io.ox/office/editor/position',
             if (forcePositionCounting) {
                 returnObj = Position.getNextChildNodePositionCounting(node, oxoPos.shift());
             } else {
-                returnObj = Position.getNextChildNode(node, oxoPos.shift(), useObjectNode);
+                returnObj = Position.getNextChildNode(node, oxoPos.shift());
             }
 
             if (returnObj) {
@@ -384,7 +378,7 @@ define('io.ox/office/editor/position',
     Position.getDOMNodeAtPosition = function (startnode, oxoPosition) {
 
         var forcePositionCounting = true;
-        return Position.getDOMPosition(startnode, oxoPosition, undefined, forcePositionCounting);
+        return Position.getDOMPosition(startnode, oxoPosition, forcePositionCounting);
     };
 
     /**
@@ -674,12 +668,11 @@ define('io.ox/office/editor/position',
      *  The child node and an offset. Offset is only set for text nodes,
      *  otherwise it is undefined.
      */
-    Position.getNextChildNode = function (node, pos, useObjectNode) {
+    Position.getNextChildNode = function (node, pos) {
 
         var childNode,
-            offset;
-
-        useObjectNode = useObjectNode ? true : false;
+            offset,
+            useObjectNode = false;
 
         node = Utils.getDomNode(node);
 
@@ -816,40 +809,56 @@ define('io.ox/office/editor/position',
      * @param {OXOSelection} oxoSelection
      *  The logical selection consisting of two logical positions.
      *
-     * @param {Boolean} useObjectNode
-     *  If set to false, only text nodes shall be returned for 'complete'
-     *  logical positions. If set to true, it is allowed to return nodes, that
-     *  are also described by a 'complete' logical positio, like images or
+     * @returns {DOM.Range}
+     *  The calculated selection (DOM.Range) consisting of two dom points (DOM.Point).
+     */
+    Position.getDOMSelection = function (startnode, oxoSelection) {
+        // Only supporting single selection at the moment
+        var start = Position.getDOMPosition(startnode, oxoSelection.startPaM.oxoPosition),
+            end = Position.getDOMPosition(startnode, oxoSelection.endPaM.oxoPosition);
+
+        // DOM selection is always an array of text ranges
+        // TODO: fallback to HOME position in document instead of empty array?
+        return (start && end) ? [new DOM.Range(start, end)] : [];
+    };
+
+    /**
+     * Converts a selection consisting of two logical positions to a selection
+     * (range) consisting of two dom nodes and the corresponding offsets (DOM.Point).
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOSelection} oxoSelection
+     *  The logical selection consisting of two logical positions.
+     *
+     * @param {Boolean} usePositionCount
+     *  If set to true, position count is used, otherwise range count.
+     *  If set to true, it is allowed to return nodes, like images or
      *  fields.
      *
      * @returns {DOM.Range}
      *  The calculated selection (DOM.Range) consisting of two dom points (DOM.Point).
      */
-    Position.getDOMSelection = function (startnode, oxoSelection, useObjectNode) {
-
-        useObjectNode = useObjectNode ? true : false;
+    Position.getObjectSelection = function (startnode, oxoSelection) {
 
         // Only supporting single selection at the moment
-        var start = Position.getDOMPosition(startnode, oxoSelection.startPaM.oxoPosition, useObjectNode),
+        var start = Position.getDOMNodeAtPosition(startnode, oxoSelection.startPaM.oxoPosition),
             endSelection = _.copy(oxoSelection.endPaM.oxoPosition, true);
 
-        if ((useObjectNode) && (start) &&
+        if ((start) &&
             (DOM.isObjectNode(start.node)) &&
             (start.offset === 0) &&
             (Position.isOneCharacterSelection(oxoSelection.startPaM.oxoPosition, oxoSelection.endPaM.oxoPosition))) {
             endSelection = _.copy(oxoSelection.startPaM.oxoPosition, true);  // end position is copy of start position, so that end will be start
         }
 
-        var end = Position.getDOMPosition(startnode, endSelection, useObjectNode);
+        var end = Position.getDOMNodeAtPosition(startnode, endSelection);
 
-        if (useObjectNode) {
-
-            // if ((start === end) && (start.node.nodeType === 1)) {
-            if ((start.node.nodeType === 1) && (start.node.nodeType === 1)) {  // Todo: Clarification
-                start = DOM.Point.createPointForNode(start.node);
-                end = DOM.Point.createPointForNode(end.node);
-            }
-
+        if ((start.node.nodeType === 1) && (start.node.nodeType === 1)) {  // Todo: Clarification
+            start = DOM.Point.createPointForNode(start.node);
+            end = DOM.Point.createPointForNode(end.node);
         }
 
         // DOM selection is always an array of text ranges

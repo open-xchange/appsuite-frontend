@@ -1390,9 +1390,7 @@ define('io.ox/office/editor/editor',
                         (Position.isOneCharacterSelection(currentSelection.endPaM.oxoPosition, currentSelection.startPaM.oxoPosition))))) {
 
                         // getting object and drawing frame around it
-
-                        var useObjectNode = true,
-                            objectNode = Position.getDOMPosition(editdiv, currentSelection.startPaM.oxoPosition, useObjectNode).node;
+                        var objectNode = Position.getDOMNodeAtPosition(editdiv, currentSelection.startPaM.oxoPosition).node;
 
                         // only delete, if imageStartPosition is really an image position
                         if (DOM.isObjectNode(objectNode)) {
@@ -2245,9 +2243,10 @@ define('io.ox/office/editor/editor',
             // Multi selection for rectangle cell selection in Firefox.
             if (oxosel.hasRange() && (Position.isCellSelection(oxosel.startPaM, oxosel.endPaM))) {
                 ranges = Position.getCellDOMSelections(editdiv, oxosel);
+            } else if (selectedObjects.length > 0) {
+                ranges = Position.getObjectSelection(editdiv, oxosel);
             } else {
-                var useObjectNode = (selectedObjects.length > 0);
-                ranges = Position.getDOMSelection(editdiv, oxosel, useObjectNode);
+                ranges = Position.getDOMSelection(editdiv, oxosel);
             }
 
             // for (var i = 0; i < ranges.length; i++) {
@@ -2733,8 +2732,7 @@ define('io.ox/office/editor/editor',
         function sendImageSize(position) {
 
             // sending size of image to the server in an operation -> necessary after loading the image
-            var useObjectNode = true,
-                imagePos = Position.getDOMPosition(editdiv, _.copy(position), useObjectNode);
+            var imagePos = Position.getDOMNodeAtPosition(editdiv, _.copy(position));
 
             if (imagePos && DOM.isImageNode(imagePos.node)) {
 
@@ -3312,8 +3310,7 @@ define('io.ox/office/editor/editor',
 
         function deleteSelectedObject(selection) {
             var position = _.copy(selection.startPaM.oxoPosition, true),
-                useObjectNode = true,
-                objectNode = Position.getDOMPosition(editdiv, position, useObjectNode).node;
+                objectNode = Position.getDOMNodeAtPosition(editdiv, position).node;
 
             // only delete, if imageStartPosition is really an image position
             if (DOM.isObjectNode(objectNode)) {
@@ -4537,9 +4534,8 @@ define('io.ox/office/editor/editor',
 
             var source = _.copy(_source, true),
                 dest = _.copy(_dest, true),
-                useObjectNode = true,
-                sourcePos = Position.getDOMPosition(editdiv, source, useObjectNode),
-                destPos = Position.getDOMPosition(editdiv, dest, useObjectNode),
+                sourcePos = Position.getDOMNodeAtPosition(editdiv, source),
+                destPos = Position.getDOMNodeAtPosition(editdiv, dest),
                 insertBefore = true,
                 splitNode = false;
 
