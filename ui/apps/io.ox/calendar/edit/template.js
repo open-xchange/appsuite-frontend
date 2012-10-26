@@ -135,6 +135,21 @@ define('io.ox/calendar/edit/template',
         nextTo: 'location'
     });
 
+    // discard button
+    point.basicExtend({
+        id: 'discard',
+        draw: function (baton) {
+            this.append($('<button class="btn span2">')
+                .text(gt("Discard"))
+                .css({marginTop: '25px', float: 'right'})
+                .on('click', function () {
+                    baton.app.quit();
+                })
+            );
+        },
+        nextTo: 'save'
+    });
+
     // start date
     point.extend(new forms.DatePicker({
         id: 'start-date',

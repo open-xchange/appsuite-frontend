@@ -36,8 +36,8 @@ define('io.ox/calendar/edit/main',
             if (self.getDirtyStatus()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
-                        .text(gt('Do you really want to lose your changes?'))
-                        .addPrimaryButton('delete', gt('Lose changes'))
+                        .text(gt("Do you really want to discard your changes?"))
+                        .addPrimaryButton('delete', gt('Discard'))
                         .addButton('cancel', gt('Cancel'))
                         .show()
                         .done(function (action) {
@@ -71,7 +71,7 @@ define('io.ox/calendar/edit/main',
             function cont(data) {
                 self.model = appointmentModel.factory.create(data);
                 appointmentModel.setDefaultParticipants(self.model).done(function () {
-                    self.view = new MainView({model: self.model, mode: data.id ? 'edit' : 'create'});
+                    self.view = new MainView({model: self.model, mode: data.id ? 'edit' : 'create', app: self});
                     self.model.on('create:start update:start', function () {
                         self.getWindow().busy();
                     });
@@ -111,7 +111,7 @@ define('io.ox/calendar/edit/main',
             var self = this;
             self.model = appointmentModel.factory.create(data);
             appointmentModel.setDefaultParticipants(self.model).done(function () {
-                self.view = new MainView({model: self.model, lasso: data.lasso || false});
+                self.view = new MainView({model: self.model, lasso: data.lasso || false, app: self});
                 self.model.on('create update', _.bind(self.onSave, self));
 
                 self.view.on('save:success', function () {
@@ -158,14 +158,13 @@ define('io.ox/calendar/edit/main',
             this.considerSaved = true;
             this.getWindow().idle();
             this.quit();
-
         },
         failSave: function () {
-            /*var self = this;
+//            var self = this;
             return {
-                module: 'io.ox/calendar/edit',
-                point: self.model.attributes
-            };*/
+//                module: 'io.ox/calendar/edit',
+//                point: self.model.attributes
+            };
         },
         failRestore: function (point) {
             var df = $.Deferred();

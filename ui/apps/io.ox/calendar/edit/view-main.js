@@ -53,7 +53,6 @@ define('io.ox/calendar/edit/view-main',
                 });
             });
 
-
             return this;
         }
     });
