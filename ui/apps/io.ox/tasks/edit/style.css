@@ -11,20 +11,17 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
  
- .io-ox-tasks-edit-main .headline .title{
+ .io-ox-tasks-edit-main .title{
 	font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-weight: 200;
-	font-size: 20px;
+	font-size: 24px;
 	line-height: 30px;
 	height: 30px;
 	display: inline;
+	margin-bottom: 2em;
  }
  
- .io-ox-tasks-edit-main .headline{
-	margin-bottom: 9px;
- }
- 
- .io-ox-tasks-edit-main .headline .cancel{
+ .io-ox-tasks-edit-main .cancel{
 	float: right;
  }
  

@@ -36,18 +36,18 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             this.rows = [];
             this.attachmentArray = [];
             this.attachmentsToRemove = [];
+            this.dropZone = upload.dnd.createDropZone({'type': 'single'});
             this.on('dispose', this.close);
         },
         render: function (app) {
-            var self = this,
-                headline = $('<div>').addClass('headline').append($('<h1>').addClass('title').text(gt('Edit task')),
-                    $('<button>').addClass('btn btn-primary cancel').text(gt('Discard')).css('float', 'right')
-                        .on('click', function () {
-                            app.quit();
-                        }));
-            self.$el.append(headline);
-            //row 1 subject and savebutton
+            var self = this;
+            //row0 headlinetext cancel and savebutton
             util.buildExtensionRow(self.$el, this.getRow(0, app), self.baton);
+            self.$el.children().css({'margin-bottom': '2em',
+                                     'font-size': '24px'});
+            
+            //row 1 subject
+            util.buildExtensionRow(self.$el, this.getRow(1, app), self.baton);
             
             //row 2 reminder
             util.buildRow(this.$el, [[util.buildLabel(gt("Remind me"), this.fields.reminderDropdown.attr('id')), this.fields.reminderDropdown],
@@ -56,10 +56,10 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                     [5, [3, 1], 3]);
             
             //row 3 note
-            util.buildExtensionRow(self.$el, this.getRow(1), self.baton);
+            util.buildExtensionRow(self.$el, this.getRow(2), self.baton);
 
             //row 4 status progress priority privateFlag
-            util.buildExtensionRow(self.$el, this.getRow(2), self.baton);
+            util.buildExtensionRow(self.$el, this.getRow(3), self.baton);
             
             //row 5 start date due date
             util.buildRow(this.$el, [[util.buildLabel(gt("Start date"), this.fields.startDate.attr('id')), this.fields.startDate.parent()],
@@ -87,10 +87,9 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             
             //attachmentTab
             var attachmentDisplay = $('<div>').addClass("task-attachment-display")
-                .css("display:", "none").appendTo(attachmentsTab),
-                
-            dropZone = upload.dnd.createDropZone({'type': 'single'});
-            dropZone.on('drop', function (e, file) {
+                .css("display:", "none").appendTo(attachmentsTab);
+            
+            self.dropZone.on('drop', function (e, file) {
                 self.attachmentArray.push(file);
                 
                 tabs.find('a:eq(1)').text(//#. %1$s is the number of currently attachened attachments
@@ -133,7 +132,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             if (this.rows.length > 0) {
                 if (tab) {
                     if (tab === "detail") {
-                        return this.rows[3][number];
+                        return this.rows[4][number];
                     }
                 } else {
                     return this.rows[number];
@@ -146,51 +145,57 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 this.rows.push([]);
                 this.rows.push([]);
                 this.rows.push([]);
+                this.rows.push([]);
                 //get extension points
                 this.point.each(function (extension) {
                     temp[extension.id] = extension;
                 });
                 //put extension points and non extensionpoints into right rows and order
+                self.rows[0].push([self.fields.headline, 6]);
+                self.rows[0].push([self.fields.cancel, 3]);
+                self.rows[0].push([self.fields.saveButton, 3]);
                 //row 1
-                self.rows[0].push(temp.title);
-                self.rows[0].push([[util.buildLabel('\u00A0'),  self.fields.saveButton], 3]);
+                self.rows[1].push(temp.title);
                 //row 3
-                self.rows[1].push(temp.note);
+                self.rows[2].push(temp.note);
                 //row 4
-                self.rows[2].push(temp.status);
-                self.rows[2].push([[util.buildLabel(gt("Progress in %"), this.fields.progress.attr('id')), this.fields.progress.parent()], 3]);
-                self.rows[2].push(temp.priority);
-                self.rows[2].push(temp.private_flag);
+                self.rows[3].push(temp.status);
+                self.rows[3].push([[util.buildLabel(gt("Progress in %"), this.fields.progress.attr('id')), this.fields.progress.parent()], 3]);
+                self.rows[3].push(temp.priority);
+                self.rows[3].push(temp.private_flag);
                 //detailtab
-                self.rows[3].push([]);
-                self.rows[3].push([]);
-                self.rows[3].push([]);
-                self.rows[3].push([]);
-                self.rows[3].push([]);
-                self.rows[3][0].push(temp.target_duration);
-                self.rows[3][0].push(temp.actual_duration);
-                self.rows[3][1].push(temp.target_costs);
-                self.rows[3][1].push(temp.actual_costs);
-                self.rows[3][1].push(temp.currency);
-                self.rows[3][2].push(temp.trip_meter);
-                self.rows[3][3].push(temp.billing_information);
-                self.rows[3][4].push(temp.companies);
+                self.rows[4].push([]);
+                self.rows[4].push([]);
+                self.rows[4].push([]);
+                self.rows[4].push([]);
+                self.rows[4].push([]);
+                self.rows[4][0].push(temp.target_duration);
+                self.rows[4][0].push(temp.actual_duration);
+                self.rows[4][1].push(temp.target_costs);
+                self.rows[4][1].push(temp.actual_costs);
+                self.rows[4][1].push(temp.currency);
+                self.rows[4][2].push(temp.trip_meter);
+                self.rows[4][3].push(temp.billing_information);
+                self.rows[4][4].push(temp.companies);
                 return this.rows[number];
             }
         },
         createNonExt: function (app) {
-            //row 1
-            //find right text
             var saveBtnText = gt("Create"),
                 self = this,
                 //objects to display correct localtimes
                 alarmDateObj,
                 startDateObj,
                 endDateObj;
-            
             if (this.model.attributes.id) {
                 saveBtnText = gt("Save");
             }
+            //row 0
+            this.fields.headline = $('<h1>').addClass('title').text(gt('Edit task'));
+            this.fields.cancel = $('<button>').addClass('btn cancel span12').text(gt('Discard'))
+                        .on('click', function () {
+                            app.quit();
+                        });
             this.fields.saveButton = $('<button>')
                 .addClass("btn btn-primary task-edit-save span12")
                 .text(saveBtnText)
@@ -226,7 +231,6 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                     }
                     
                 });
-            
             //row 2
             this.fields.reminderDropdown = $('<select>').attr('id', 'task-edit-reminder-select')
                 .append($('<option>')
@@ -428,6 +432,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             this.rows = [];
             this.attachmentArray = [];
             this.attachmentsToRemove = [];
+            this.dropZone.remove();
         },
         
         saveAttachments: function (model, data, self) {

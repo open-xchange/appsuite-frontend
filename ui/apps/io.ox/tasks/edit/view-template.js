@@ -24,7 +24,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
     point.extend(new forms.InputField({
         id: 'title',
         index: 100,
-        className: 'span9',
+        className: 'span12',
         labelClassName: 'task-edit-label',
         control: '<input type="text" class="title-field span12" id="task-edit-title">',
         attribute: 'title',

@@ -81,8 +81,18 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 taskView = view.getView(taskModel, win.nodes.main, app);
             }
             
-            //ready for show
+            win.on('show', function () {
+                if (taskView) {
+                    taskView.dropZone.include();
+                }
+            });
 
+            win.on('hide', function () {
+                if (taskView) {
+                    taskView.dropZone.remove();
+                }
+            });
+            //ready for show
             win.show();
         });
         
