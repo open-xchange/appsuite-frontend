@@ -2444,6 +2444,9 @@ define('io.ox/office/editor/position',
         }, undefined, { children: true });
     };
 
+    Position.iterateNodesInSelection = function (rootNode, startPosition, endPosition, iterator, context, options) {
+    };
+
     // position ---------------------------------------------------------------
 
     /**

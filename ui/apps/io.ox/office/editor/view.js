@@ -45,6 +45,19 @@ define('io.ox/office/editor/view',
             { label: gt('Blue'),        color: { type: 'rgb', value: '0070C0' } },
             { label: gt('Dark Blue'),   color: { type: 'rgb', value: '002060' } },
             { label: gt('Purple'),      color: { type: 'rgb', value: '7030A0' } }
+        ],
+
+        SCHEME_COLOR_DEFINITIONS = [
+            { name: 'background1', label: gt('Background 1'), transformations: [ null,  '-F2', '-D9', '-BF', '-A6', '-80' ] },
+            { name: 'text1',       label: gt('Text 1'),       transformations: [ '+80', '+A6', '+BF', '+D9', '+F2', null  ] },
+            { name: 'background2', label: gt('Background 2'), transformations: [ null,  '-E6', '-BF', '-80', '-40', '-1A' ] },
+            { name: 'text2',       label: gt('Text 2'),       transformations: [ '+33', '+66', '+99', null,  '-BF', '-80' ] },
+            { name: 'accent1',     label: gt('Accent 1'),     transformations: [ '+33', '+66', '+99', null,  '-BF', '-80' ] },
+            { name: 'accent2',     label: gt('Accent 2'),     transformations: [ '+33', '+66', '+99', null,  '-BF', '-80' ] },
+            { name: 'accent3',     label: gt('Accent 3'),     transformations: [ '+33', '+66', '+99', null,  '-BF', '-80' ] },
+            { name: 'accent4',     label: gt('Accent 4'),     transformations: [ '+33', '+66', '+99', null,  '-BF', '-80' ] },
+            { name: 'accent5',     label: gt('Accent 5'),     transformations: [ '+33', '+66', '+99', null,  '-BF', '-80' ] },
+            { name: 'accent6',     label: gt('Accent 6'),     transformations: [ '+33', '+66', '+99', null,  '-BF', '-80' ] }
         ];
 
     // class StyleSheetChooser ================================================
@@ -176,9 +189,32 @@ define('io.ox/office/editor/view',
         function fillList() {
 
             var // the current theme
-                theme = themes.getTheme();
+                theme = themes.getTheme(),
+                // row index and count for scheme colors
+                rowIndex = 0, rowCount = 0;
 
-            var filter = null;
+            function fillSchemeColorRow() {
+                _(SCHEME_COLOR_DEFINITIONS).each(function (definition) {
+
+                    var // the encoded transformation
+                        encoded = definition.transformations[rowIndex],
+                        // decoded tint/shade value
+                        tint = false, value = 0,
+                        // the theme color object
+                        color = { type: 'scheme', value: definition.name },
+                        // description of the color (tool tip)
+                        label = definition.label;
+
+                    if (encoded) {
+                        tint = encoded[0] === '+';
+                        value = parseInt(encoded.substr(1), 16) / 255 * 100;
+                        color.transformations = [{ type: tint ? 'tint' : 'shade', value: value }];
+                        label += ', ' + (tint ? gt('Lighter') : gt('Darker')) + ' ' + (100 - Math.round(value)) + '%';
+                    }
+
+                    self.createColorItem(color, { tooltip: label });
+                });
+            }
 
             self.clearColorTable();
 
@@ -186,34 +222,19 @@ define('io.ox/office/editor/view',
             self.createSectionHeader({ label: gt('Automatic Color') });
             self.createColorItem(Color.AUTO, { tooltip: Color.isTransparentColor(Color.AUTO, context) ? gt('Transparent') : gt('Automatic') });
 
+            // add scheme colors
+            if (theme && _.isObject(theme.getSchemeColors())) {
+                self.createSectionHeader({ label: gt('Theme Colors') });
+                for (rowIndex = 0, rowCount = SCHEME_COLOR_DEFINITIONS[0].transformations.length; rowIndex < rowCount; rowIndex += 1) {
+                    fillSchemeColorRow();
+                }
+            }
+
             // add predefined colors
-            self.createSectionHeader({ label: gt('Palette Colors') });
+            self.createSectionHeader({ label: gt('Standard Colors') });
             _(BUILTIN_COLOR_DEFINITIONS).each(function (definition) {
                 self.createColorItem(definition.color, { tooltip: definition.label });
             });
-
-            // add theme colors
-            if (theme) {
-                self.createSectionHeader({ label: gt('Theme Colors') });
-
-                switch (context) {
-                case 'fill':
-                    filter = ['text1', 'text2', 'background1', 'background2'];
-                    break;
-                case 'text':
-                case 'line':
-                    filter = ['dark1', 'dark2', 'light1', 'light2'];
-                    break;
-                default:
-                    filter = [];
-                }
-
-                _(theme.getSchemeColors()).each(function (schemeColor) {
-                    if (!_(filter).contains(schemeColor.name)) {
-                        self.createColorItem({ type: 'scheme', value: schemeColor.name }, { tooltip: schemeColor.label });
-                    }
-                });
-            }
         }
 
         /**
