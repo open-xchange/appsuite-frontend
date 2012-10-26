@@ -221,10 +221,10 @@ define('io.ox/calendar/month/perspective',
                                                 $('<a href="#">').addClass('control prev').append($('<i>').addClass('icon-chevron-left'))
                                             ),
                                         $('<li>').append(
-                                            $('<a>').addClass('link today').text(gt('Today')).on('click', $.proxy(function (e) {
-                                                this.gotoMonth({duration: 800});
-                                            }, this))
-                                        ),
+                                            $('<a>').addClass('link today').text(gt('Today'))
+                                        ).on('click', $.proxy(function (e) {
+                                            this.gotoMonth({duration: 800});
+                                        }, this)),
                                         $('<li>')
                                             .append(
                                                     $('<a href="#">').addClass('control next').append($('<i>').addClass('icon-chevron-right'))
