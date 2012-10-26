@@ -74,9 +74,11 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     }
                     taskId = arguments[0].id;
                     modifications = arguments[0];
-                    if (arguments[0].folder_id) {
-                        folder = arguments[0].folder_id;
+                    folder = arguments[0].folder_id;
+                    if (!folder) {
+                        folder = arguments[0].folder;
                     }
+                    
                 }
                 //go on normaly
                 var useFolder;
@@ -109,6 +111,18 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 });
 
             };
+    api.move = function (task, newFolder) {
+        var folder = task.folder_id;
+        if (!folder) {
+            folder = task.folder;
+        }
+        // call updateCaches (part of remove process) to be responsive
+        return api.updateCaches(task).pipe(function () {
+            // trigger visual refresh
+            api.trigger('refresh.all');
+            return api.update(_.now(), task.id, {folder_id: newFolder}, folder);
+        });
+    };
 
     api.getDefaultFolder = function () {
         return folderApi.getDefaultFolder('tasks');

@@ -72,6 +72,43 @@ define("io.ox/tasks/actions",
         }
     });
 
+    new Action('io.ox/tasks/actions/move', {
+        action: function (task) {
+            require(['io.ox/core/tk/dialogs', "io.ox/core/tk/folderviews", 'io.ox/tasks/api'],
+                    function (dialogs, views, api) {
+                //build popup
+                var popup = new dialogs.ModalDialog({ easyOut: true })
+                    .header($('<h3>').text('Move'))
+                    .addPrimaryButton("ok", gt("OK"))
+                    .addButton("cancel", gt("Cancel"));
+                popup.getBody().css({ height: '250px' });
+                var tree = new views.FolderTree(popup.getBody(), { type: 'tasks' }),
+                    folder = task.folder;
+                if (!folder) {
+                    folder = task.folder_id;
+                }
+                tree.paint();
+                //go
+                popup.show(function () {
+                    tree.selection.set({id: folder});
+                }).done(function (action) {
+                    if (action === 'ok') {
+                        var selectedFolder = tree.selection.get();
+                        //move only if folder differs from old folder
+                        if (selectedFolder.length === 1 && Number(selectedFolder[0].id) !== folder) {
+                            // move action
+                            api.move(task, selectedFolder[0].id).done(function () {
+                                notifications.yell('success', gt('Task moved.'));
+                            });
+                        }
+                    }
+                    tree.destroy();
+                    tree = popup = null;
+                });
+            });
+        }
+    });
+    
     new Action('io.ox/tasks/actions/done', {
         action: function (data) {
             require(['io.ox/tasks/api'], function (api) {
@@ -83,7 +120,7 @@ define("io.ox/tasks/actions",
             });
         }
     });
-
+    
     //attachment actions
     new Action('io.ox/tasks/actions/preview-attachment', {
         id: 'preview',
@@ -255,6 +292,14 @@ define("io.ox/tasks/actions",
             );
         }
     });
+    
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'move',
+        index: 500,
+        prio: 'lo',
+        label: gt("Move"),
+        ref: 'io.ox/tasks/actions/move'
+    }));
 
     // Attachments
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
