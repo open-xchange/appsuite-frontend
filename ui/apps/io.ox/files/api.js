@@ -40,13 +40,15 @@ define('io.ox/files/api',
     };
 
     var fixContentType = function (data) {
-        if (data.file_mimetype === 'application/octet-stream') {
-            var ext = _((data.filename || '').split('.')).last().toLowerCase();
-            if (ext in mime_types) {
-                data.file_mimetype = mime_types[ext];
+        if (data) {
+            if (data.file_mimetype === 'application/octet-stream') {
+                var ext = _((data.filename || '').split('.')).last().toLowerCase();
+                if (ext in mime_types) {
+                    data.file_mimetype = mime_types[ext];
+                }
+            } else if (data.file_mimetype === 'audio/mp3') {
+                data.file_mimetype = 'audio/mpeg'; // might be superstition
             }
-        } else if (data.file_mimetype === 'audio/mp3') {
-            data.file_mimetype = 'audio/mpeg'; // might be superstition
         }
         return data;
     };

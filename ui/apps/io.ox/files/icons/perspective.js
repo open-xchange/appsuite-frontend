@@ -182,7 +182,6 @@ define('io.ox/files/icons/perspective',
                 displayedRows,
                 layout,
                 recalculateLayout,
-                lastTimestamp,
                 baton = new ext.Baton({ app: app }),
                 dialog = new dialogs.SidePopup();
 
@@ -202,29 +201,26 @@ define('io.ox/files/icons/perspective',
                 return node;
             };
 
-            drawIcons = function (ids) {
-                return api.getList(ids).done(function (files) {
-                    var nodes = [];
-                    _(files).each(function (file) {
-                        nodes.push(drawIcon(file));
+            drawIcons = function (files) {
+                iconContainer.find('.scroll-spacer').before(
+                    _(files).map(function (file) {
                         drawnCids.push(_.cid(file));
-                    });
-                    iconContainer.find('.scroll-spacer').before(nodes);
-                });
+                        return drawIcon(file);
+                    })
+                );
             };
 
             redraw = function (ids) {
-                drawIcons(ids).done(function () {
-                    $('.files-iconview').on('scroll', function (event) {
-                        if ($('.files-scrollable-pane')[0].scrollHeight - $(this).scrollTop() === $(this).outerHeight()) {
-                            $(this).off('scroll');
-                            start = end;
-                            end = end + layout.iconCols;
-                            if (layout.iconCols <= 3) end = end + 10;
-                            displayedRows = displayedRows + 1;
-                            redraw(allIds.slice(start, end));
-                        }
-                    });
+                drawIcons(ids);
+                $('.files-iconview').on('scroll', function (event) {
+                    if ($('.files-scrollable-pane')[0].scrollHeight - $(this).scrollTop() === $(this).outerHeight()) {
+                        $(this).off('scroll');
+                        start = end;
+                        end = end + layout.iconCols;
+                        if (layout.iconCols <= 3) end = end + 10;
+                        displayedRows = displayedRows + 1;
+                        redraw(allIds.slice(start, end));
+                    }
                 });
             };
 
@@ -250,7 +246,6 @@ define('io.ox/files/icons/perspective',
 
                 loadFiles(app)
                     .done(function (ids) {
-                        lastTimestamp = _.now();
                         iconview.idle();
                         displayedRows = layout.iconRows;
                         start = 0;
