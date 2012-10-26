@@ -2309,32 +2309,37 @@ define('io.ox/office/editor/editor',
                     finalWidth = 0;
                     finalHeight = 0;
 
-                    var deltaX = 0;
-                    var deltaY = 0;
+                    var deltaX = 0,
+                        deltaY = 0,
+                        leftShift = 0,
+                        topShift = 0,
+                        newWidth = 0,
+                        newHeight = 0;
 
                     if (nodeOptions.useX) { deltaX = currentX - startX; }
                     if (nodeOptions.useY) { deltaY = currentY - startY; }
 
                     if ((deltaX !== 0) || (deltaY !== 0)) {
 
-                        if (nodeOptions.leftSelection) { deltaX = - deltaX; }
-                        if (nodeOptions.topSelection) { deltaY = - deltaY; }
+                        if ((deltaX !== 0) && (nodeOptions.leftSelection)) {
+                            leftShift = deltaX;
+                            deltaX = - deltaX;
+                        }
 
-                        var newWidth = nodeOptions.oldWidth + deltaX,
-                            newHeight = nodeOptions.oldHeight + deltaY;
+                        if ((deltaY !== 0) && (nodeOptions.topSelection)) {
+                            topShift = deltaY;
+                            deltaY = - deltaY;
+                        }
+
+                        newWidth = nodeOptions.oldWidth + deltaX;
+                        newHeight = nodeOptions.oldHeight + deltaY;
 
                         if ((newWidth > 0) && (newHeight > 0)) {
 
                             finalWidth = newWidth;
                             finalHeight = newHeight;
 
-                            if (nodeOptions.isRightFloated) {
-                                moveBoxNode.css('left', - deltaX);
-                            } else if (nodeOptions.isInline) {
-                                moveBoxNode.css('top', - deltaY);
-                            }
-
-                            moveBoxNode.css({ width: finalWidth, height: finalHeight });
+                            moveBoxNode.css({ width: finalWidth, height: finalHeight, left: leftShift, top: topShift });
                         }
                     }
                 } else if (nodeOptions.isMoveEvent) {
@@ -2349,7 +2354,7 @@ define('io.ox/office/editor/editor',
 
             }, function (event, imageNode, moveBoxNode) {
                 // mouse up handler
-                moveBoxNode.css('border-width', '0px');  // making move box invisible
+                moveBoxNode.css({'border-width': 0, 'left': 0, 'top': 0});  // making move box invisible and shifting it back into image
 
                 if (nodeOptions.isResizeEvent) {
 
@@ -2363,8 +2368,6 @@ define('io.ox/office/editor/editor',
                         applyOperation(newOperation, true, true);
                     }
                 } else if (nodeOptions.isMoveEvent) {
-
-                    moveBoxNode.css({'left': 0, 'top': 0});  // shifting moveBoxNode back into image
 
                     if ((shiftX !== 0) || (shiftY !== 0)) {
 
