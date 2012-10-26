@@ -98,8 +98,8 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             if (app.getState() === app.STATES.DIRTY) {
                 require(["io.ox/core/tk/dialogs"], function (dialogs) {
                     new dialogs.ModalDialog()
-                        .text(gt("Do you really want to cancel editing this task?"))
-                        .addPrimaryButton("delete", gt('Lose changes'))
+                        .text(gt("Do you really want to discard your changes?"))
+                        .addPrimaryButton("delete", gt('Discard changes'))
                         .addButton("cancel", gt('Cancel'))
                         .show()
                         .done(function (action) {

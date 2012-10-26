@@ -41,7 +41,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
         render: function (app) {
             var self = this,
                 headline = $('<div>').addClass('headline').append($('<h1>').addClass('title').text(gt('Edit task')),
-                    $('<button>').addClass('btn btn-primary cancel').text(gt('Cancel')).css('float', 'right')
+                    $('<button>').addClass('btn btn-primary cancel').text(gt('Discard')).css('float', 'right')
                         .on('click', function () {
                             app.quit();
                         }));
