@@ -774,9 +774,16 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
     DOM.iterateTextSpans = function (node, iterator, context) {
-        return DOM.isTextSpan(node) ?
-            iterator.call(context, Utils.getDomNode(node)) :
-            Utils.iterateSelectedDescendantNodes(node, function () { return DOM.isTextSpan(this); }, iterator, context);
+
+        // visit passed text span directly
+        if (DOM.isTextSpan(node)) {
+            return iterator.call(context, Utils.getDomNode(node));
+        }
+
+        // do not iterate into objects, they may contain their own paragraphs
+        if (!DOM.isObjectNode(node)) {
+            return Utils.iterateSelectedDescendantNodes(node, function () { return DOM.isTextSpan(this); }, iterator, context);
+        }
     };
 
     /**

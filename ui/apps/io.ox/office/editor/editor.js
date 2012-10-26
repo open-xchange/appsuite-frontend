@@ -359,13 +359,11 @@ define('io.ox/office/editor/editor',
 
                 // collect all non-empty text spans in the paragraph
                 Position.iterateParagraphChildNodes(paragraph, function (node) {
-                    // skip object nodes (they may contain their own paragraphs)
-                    if (!DOM.isObjectNode(node)) {
-                        DOM.iterateTextSpans(node, function (span) {
-                            textSpans.push(span);
-                            elementText += span.firstChild.nodeValue;
-                        }, this);
-                    }
+                    // DOM.iterateTextSpans() skips object nodes
+                    DOM.iterateTextSpans(node, function (span) {
+                        textSpans.push(span);
+                        elementText += span.firstChild.nodeValue;
+                    }, this);
                 }, this, { allNodes: true });
 
                 // replace all whitespace characters, and convert to lower case

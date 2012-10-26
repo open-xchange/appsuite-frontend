@@ -137,6 +137,8 @@ define('io.ox/office/editor/format/characterstyles',
 
         // DOM.iterateTextSpans() visits the node itself if it is a text span,
         // otherwise it visits all descendant text spans contained in the node
+        // except for objects which will be skipped (they may contain their own
+        // paragraphs).
         DOM.iterateTextSpans(node, function (span) {
 
             // update calculated line height due to changed font settings
