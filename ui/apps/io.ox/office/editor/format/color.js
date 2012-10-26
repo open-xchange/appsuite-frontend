@@ -290,7 +290,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * true if color has type auto otherwise false
      */
     Color.isAutoColor = function (color) {
-        var type = Utils.getStringOption(color, 'type', 'none');
+        var type = Utils.getStringOption(color, 'type', 'auto');
         return (type === 'auto');
     };
 
