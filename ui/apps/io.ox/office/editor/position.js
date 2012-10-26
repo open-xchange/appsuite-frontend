@@ -392,7 +392,7 @@ define('io.ox/office/editor/position',
      * passed position must match the passed selector. Otherwise, a warning
      * will be printed to the debug console.
      *
-     * @param {jQuery} paragraphs
+     * @param {jQuery} startnode
      *  The list of top-level content nodes.
      *
      * @param {Number[]} position
@@ -409,10 +409,10 @@ define('io.ox/office/editor/position',
      *  The DOM element at the passed logical position, if it matches the
      *  passed selector, otherwise null.
      */
-    Position.getSelectedElement = function (paragraphs, position, selector) {
+    Position.getSelectedElement = function (startnode, position, selector) {
 
         var // the DOM node located at the passed position
-            domPos = Position.getDOMPosition(paragraphs, position);
+            domPos = Position.getDOMPosition(startnode, position);
 
         if (domPos && domPos.node && $(domPos.node).is(selector)) {
             return domPos.node;
@@ -427,7 +427,7 @@ define('io.ox/office/editor/position',
      * position. The passed position must point to a paragraph element.
      * Otherwise, a warning will be printed to the debug console.
      *
-     * @param {jQuery} paragraphs
+     * @param {jQuery} startnode
      *  The list of top-level content nodes.
      *
      * @param {Number[]} position
@@ -437,8 +437,8 @@ define('io.ox/office/editor/position',
      *  The DOM paragraph element at the passed logical position, if existing,
      *  otherwise null.
      */
-    Position.getParagraphElement = function (paragraphs, position) {
-        return Position.getSelectedElement(paragraphs, position, DOM.PARAGRAPH_NODE_SELECTOR);
+    Position.getParagraphElement = function (startnode, position) {
+        return Position.getSelectedElement(startnode, position, DOM.PARAGRAPH_NODE_SELECTOR);
     };
 
     /**
@@ -446,7 +446,7 @@ define('io.ox/office/editor/position',
      * The passed position must point to a table element. Otherwise, a warning
      * will be printed to the debug console.
      *
-     * @param {jQuery} paragraphs
+     * @param {jQuery} startnode
      *  The list of top-level content nodes.
      *
      * @param {Number[]} position
@@ -456,8 +456,8 @@ define('io.ox/office/editor/position',
      *  The DOM table element at the passed logical position, if existing,
      *  otherwise null.
      */
-    Position.getTableElement = function (paragraphs, position) {
-        return Position.getSelectedElement(paragraphs, position, DOM.TABLE_NODE_SELECTOR);
+    Position.getTableElement = function (startnode, position) {
+        return Position.getSelectedElement(startnode, position, DOM.TABLE_NODE_SELECTOR);
     };
 
     /**
@@ -465,7 +465,7 @@ define('io.ox/office/editor/position',
      * position. The passed position must point to a table row element.
      * Otherwise, a warning will be printed to the debug console.
      *
-     * @param {jQuery} paragraphs
+     * @param {jQuery} startnode
      *  The list of top-level content nodes.
      *
      * @param {Number[]} position
@@ -475,8 +475,8 @@ define('io.ox/office/editor/position',
      *  The DOM table row element at the passed logical position, if existing,
      *  otherwise null.
      */
-    Position.getTableRowElement = function (paragraphs, position) {
-        var table = Position.getTableElement(paragraphs, position.slice(0, -1)),
+    Position.getTableRowElement = function (startnode, position) {
+        var table = Position.getTableElement(startnode, position.slice(0, -1)),
             tableRow = table && $(table).find('> * > tr').get(position[position.length - 1]);
         if (table && !tableRow) {
             Utils.warn('Position.getTableRowElement(): expected element not found at position ' + JSON.stringify(position) + '.');
@@ -489,7 +489,7 @@ define('io.ox/office/editor/position',
      * position. The passed position must point to a table cell element.
      * Otherwise, a warning will be printed to the debug console.
      *
-     * @param {jQuery} paragraphs
+     * @param {jQuery} startnode
      *  The list of top-level content nodes.
      *
      * @param {Number[]} position
@@ -499,8 +499,8 @@ define('io.ox/office/editor/position',
      *  The DOM table cell element at the passed logical position, if existing,
      *  otherwise null.
      */
-    Position.getTableCellElement = function (paragraphs, position) {
-        var tableRow = Position.getTableRowElement(paragraphs, position.slice(0, -1)),
+    Position.getTableCellElement = function (startnode, position) {
+        var tableRow = Position.getTableRowElement(startnode, position.slice(0, -1)),
             tableCell = tableRow && $(tableRow).children('td').get(position[position.length - 1]);
         if (tableRow && !tableCell) {
             Utils.warn('Position.getTableCellElement(): expected element not found at position ' + JSON.stringify(position) + '.');
@@ -613,9 +613,7 @@ define('io.ox/office/editor/position',
      * cursor position before.
      *
      * @param {Node} node
-     *  The node, whose child is searched. For performance reasons, a
-     *  jQuery object is also supported. The jQuery object 'paragraphs'
-     *  from the editor can be used instead of the main DIV for the editor.
+     *  The top level node, whose child is searched.
      *
      * @param {Number} pos
      *  The one integer number, that determines the child according to the
@@ -630,18 +628,15 @@ define('io.ox/office/editor/position',
         var childNode,
             offset;
 
-        if (node instanceof $) {  // true for jQuery objects
-            if (pos > node.length - 1) {
-                // Utils.warn('Position.getNextChildNode(): Array ' + pos + ' is out of range. Last paragraph: ' + (node.length - 1));
-                return;
-            }
-            childNode = node.get(pos);
-        } else if (DOM.isTableNode(node)) {
+        node = Utils.getDomNode(node);
+
+        if (DOM.isTableNode(node)) {
             childNode = $('> * > tr', node).get(pos);
         } else if ($(node).is('tr')) {
             childNode = $('> th, > td', node).get(pos);  // this is a table cell
         } else if (DOM.isPageNode(node) || $(node).is('th, td')) {
             childNode = node.childNodes[pos];
+            // childNode = $(node).children().get(pos);
         } else if (DOM.isParagraphNode(node)) {
             Position.iterateParagraphChildNodes(node, function (_node, nodeStart, nodeLength, offsetStart) {
                 // first matching node is the requested node, store data and escape from iteration
@@ -658,14 +653,10 @@ define('io.ox/office/editor/position',
      * Returns the following node and offset corresponding to the next
      * logical position. With a node and the next position index
      * the following node and in the case of a text node the offset
-     * are calculated. For performance reasons, the node can be a
-     * jQuery object, so that the start position can be determined from
-     * the 'paragraphs' object.
+     * are calculated.
      *
      * @param {Node} node
-     *  The node, whose child is searched. For performance reasons, a
-     *  jQuery object is also supported. The jQuery object 'paragraphs'
-     *  from the editor can be used instead of the main DIV for the editor.
+     *  The top level node, whose child is searched.
      *
      * @param {Number} pos
      *  The one integer number, that determines the child according to the
@@ -690,17 +681,14 @@ define('io.ox/office/editor/position',
 
         useObjectNode = useObjectNode ? true : false;
 
-        if (node instanceof $) {  // true for jQuery objects
-            if (pos > node.length - 1) {
-                // Utils.warn('Position.getNextChildNode(): Array ' + pos + ' is out of range. Last paragraph: ' + (node.length - 1));
-                return;
-            }
-            childNode = node.get(pos);
-        } else if (DOM.isTableNode(node)) {
+        node = Utils.getDomNode(node);
+
+        if (DOM.isTableNode(node)) {
             childNode = $('> * > tr', node).get(pos);
         } else if ($(node).is('tr')) {
             childNode = $('> th, > td', node).get(pos);  // this is a table cell
         } else if (DOM.isPageNode(node) || $(node).is('th, td')) {
+            // childNode = $(node).children().get(pos);
             childNode = node.childNodes[pos];
         } else if (DOM.isParagraphNode(node)) {
             var textLength = 0,
@@ -1193,7 +1181,7 @@ define('io.ox/office/editor/position',
         var allParagraphs = null;
 
         if ((position.length === 1) || (position.length === 2)) {  // only for performance
-            allParagraphs = startnode;
+            allParagraphs = startnode.children();
         } else {
 
             var node = Position.getLastNodeFromPositionByNodeName(startnode, position, 'th, td');
