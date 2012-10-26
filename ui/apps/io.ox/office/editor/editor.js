@@ -61,7 +61,10 @@ define('io.ox/office/editor/editor',
             { color: { type: 'scheme', value: 'accent1'}, bold: true, italic: true },
             { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: '7F' }]} },
             { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: '7F' }]}, italic: true }
-        ];
+        ],
+
+        DEFAULT_PARAGRAPH_DEFINTIONS = { 'default': true, styleid: 'Standard', stylename: 'Normal' };
+
 
     // private global functions ===============================================
 
@@ -1194,6 +1197,10 @@ define('io.ox/office/editor/editor',
             return HEADINGS_CHARATTRIBUTES;
         };
 
+        this.getDefaultParagraphStyleDefinition = function () {
+            return DEFAULT_PARAGRAPH_DEFINTIONS;
+        };
+
         /**
          * Called when all initial document operations have been processed.
          * Can be used to start post-processing tasks which need a fully
@@ -1222,7 +1229,16 @@ define('io.ox/office/editor/editor',
         function insertMissingParagraphStyles() {
             var headings = [0, 1, 2, 3, 4, 5],
                 styleNames = paragraphStyles.getStyleSheetNames(),
-                parentId = paragraphStyles.getDefaultStyleSheetId();
+                parentId = paragraphStyles.getDefaultStyleSheetId(),
+                hasDefaultStyle = _.isString(parentId) && (parentId.length > 0);
+
+            if (!hasDefaultStyle) {
+                // add a missing default paragraph style
+                var defParaDef = self.getDefaultParagraphStyleDefinition();
+                paragraphStyles.addStyleSheet(defParaDef.styleid, defParaDef.stylename, null, null,
+                        { hidden: false, priority: 1, defStyle: defParaDef['default'], dirty: true });
+                parentId = defParaDef.styleid;
+            }
 
             // find out which outline level paragraph styles are missing
             _(styleNames).each(function (name, id) {
@@ -1242,7 +1258,8 @@ define('io.ox/office/editor/editor',
                     attr.character = charAttr;
                     attr.paragraph = { outlinelvl: level };
                     attr.next = parentId;
-                    paragraphStyles.addStyleSheet("heading " + (level + 1), "heading " + (level + 1), parentId, attr, { hidden: false, priority: 9, defStyle: false, dirty : true });
+                    paragraphStyles.addStyleSheet("heading " + (level + 1), "heading " + (level + 1),
+                            parentId, attr, { hidden: false, priority: 9, defStyle: false, dirty: true });
                 });
             }
         }

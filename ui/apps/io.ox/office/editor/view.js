@@ -175,6 +175,9 @@ define('io.ox/office/editor/view',
             if (Color.getCssColor(Color.AUTO, context) === 'transparent') {
                 self.createOptionButton(Color.AUTO, { tooltip: gt('Transparent') });
             }
+            else {
+                self.createOptionButton(Color.AUTO, { tooltip: gt('Auto') });
+            }
 
             // add predefined colors
             _(BUILTIN_COLOR_DEFINITIONS).each(function (definition) {
