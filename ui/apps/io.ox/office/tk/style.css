@@ -636,3 +636,12 @@ div.io-ox-view-component {
         right: -21px;
     }
 }
+
+
+/* Clipboard DIV============================================================ */
+
+.io-ox-office-clipboard {
+    position: absolute;
+    top: -10000px;
+    left: -10000px;
+}

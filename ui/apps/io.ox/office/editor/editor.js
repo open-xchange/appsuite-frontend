@@ -228,9 +228,30 @@ define('io.ox/office/editor/editor',
             Utils.warn('Editor.copy(): not yet implemented');
         };
 
-        this.paste = function () {
-            // TODO
-            Utils.warn('Editor.paste(): not yet implemented');
+        this.paste = function (event) {
+
+            var oxoSelection = getSelection(),
+                range,
+                clipboard = $('<div>', { contenteditable: true }).addClass('io-ox-office-clipboard user-select-text')
+            ;
+
+            // append clipboard div to the body and place the cursor into it
+            $('body').append(clipboard);
+            clipboard.focus();
+            range = DOM.Range.createRange(clipboard, 0);
+            DOM.setBrowserSelection(range);
+
+            // read pasted data
+            _.delay(function () {
+
+                var clipboardData = parseClipboard(clipboard);
+
+                clipboard.remove();
+                setSelection(oxoSelection);
+
+                createOperationsFromTextClipboard(clipboardData, oxoSelection);
+
+            }, 100, clipboard, oxoSelection);
         };
 
         // ==================================================================
@@ -1605,10 +1626,9 @@ define('io.ox/office/editor/editor',
                     event.preventDefault();
                     self.copy();
                 }
-                else if (c === 'V') {
-                    event.preventDefault();
-                    self.paste();
-                }
+//                else if (c === 'V') {
+//                    self.paste();
+//                }
                 else if (c === 'B') {
                     event.preventDefault();
                     self.setAttribute('character', 'bold', !self.getAttributes('character').bold);
@@ -1686,7 +1706,7 @@ define('io.ox/office/editor/editor',
             // For now (the prototype), only accept single chars, but let the browser process, so we don't need to care about DOM stuff
             // TODO: But we at least need to check if there is a selection!!!
 
-            if ((!event.ctrlKey) && (c.length === 1)) {
+            if ((!event.ctrlKey) && (!event.metaKey) && (c.length === 1)) {
 
                 self.deleteSelected(selection);
                 // Selection was adjusted, so we need to use start, not end
@@ -1762,7 +1782,9 @@ define('io.ox/office/editor/editor',
             }
 
             // Block everything else to be on the save side....
-            event.preventDefault();
+            if (!(event.metaKey || event.ctrlKey) && event.charCode === 118) {
+                event.preventDefault();
+            }
 
             // DEBUG STUFF
             if (self.getParagraphCount() !== editdiv.children().size()) {
@@ -1770,6 +1792,105 @@ define('io.ox/office/editor/editor',
             }
 
         }
+
+        /**
+         * Parses the clipboard div for pasted text content
+         * @param {jQuery} clipboard
+         * @returns {Array} the clipboard data to create operations from
+         */
+        function parseClipboard(clipboard) {
+
+            var result = [];
+
+            (function findTextNodes(current, depth) {
+
+                for (var i = 0; i < current.childNodes.length; i++) {
+                    var child = current.childNodes[i];
+                    if (child.nodeType === 3) {
+                        // text node with non-whitespace character
+                        if (/\S/.test(child.nodeValue)) {
+                            var splitted, text = child.nodeValue.replace(/[\r\n]/g, ' ');
+                            splitted = text.split('\t');
+                            for (var j = 0; j < splitted.length; j++) {
+                                if (splitted[j].length) {
+                                    // text
+                                    result.push({operation: Operations.TEXT_INSERT, data: splitted[j], depth: depth});
+                                } else {
+                                    // tab
+                                    result.push({operation: 'insertTab' /* Operations.TAB_INSERT */ });
+                                }
+                            }
+                        }
+                    } else {
+                        // insert paragraph for p, div and br, create only one paragraph if br is nested inside a div
+                        if ($(child).is('p, div') || $(child).is('br') && (!$(child.parentNode).is('div') || $(child.parentNode).hasClass('io-ox-office-clipboard'))) {
+                            result.push({operation: Operations.PARA_INSERT, depth: depth});
+                        }
+
+                        findTextNodes(child, depth + 1);
+                    }
+                }
+            } (clipboard.get(0), 0));
+
+            return result;
+        }
+
+        /**
+         * Creates operations from the clipboard data returned by parseClipboard(...)
+         * @param {Array} clipboardData
+         * @param {Object} [oxoSelection]
+         */
+        function createOperationsFromTextClipboard(clipboardData, oxoSelection) {
+
+            var selection = oxoSelection || getSelection(),
+                lastPos = selection.startPaM.oxoPosition.length - 1;
+//                currentDepth = clipboardData[0] && clipboardData[0].depth;
+
+            selection.adjust();
+            if (selection.hasRange()) {
+                self.deleteSelected(selection);
+            }
+
+            // to paste at the cursor position don't create a paragraph as first operation
+            if (clipboardData.length > 1 && clipboardData[0].operation === Operations.PARA_INSERT) {
+                clipboardData.shift();
+            }
+
+            undomgr.enterGroup(function () {
+
+                _.each(clipboardData, function (entry) {
+
+                    switch (entry.operation) {
+
+                    case Operations.PARA_INSERT:
+                        self.splitParagraph(selection.startPaM.oxoPosition);
+                        selection.startPaM.oxoPosition[lastPos - 1] ++;
+                        selection.startPaM.oxoPosition[lastPos] = 0;
+                        selection.endPaM = _.copy(selection.startPaM, true);
+                        break;
+
+                    case Operations.TEXT_INSERT:
+                        self.insertText(entry.data, selection.startPaM.oxoPosition);
+                        selection.startPaM.oxoPosition[lastPos] += entry.data.length;
+                        selection.endPaM = _.copy(selection.startPaM, true);
+                        break;
+
+                    case 'insertTab' /* Operations.TAB_INSERT */:
+                        // TODO
+                        break;
+
+                    default:
+                        Utils.log('createOperationsFromTextClipboard(...) - unhandled operation: ' + entry.operation);
+                        break;
+                    }
+
+                }, self);
+
+            }); // undomgr.enterGroup
+
+            setSelection(selection);
+        }
+
 
         // ==================================================================
         // Private functions
@@ -4725,7 +4846,8 @@ define('io.ox/office/editor/editor',
             .on('keypress', processKeyPressed)
             .on('mousedown', processMouseDown)
             .on('mouseup', processMouseUp)
-            .on('dragstart dragover drop contextmenu cut paste', false);
+            .on('dragstart dragover drop contextmenu cut', false)
+            .on('paste', this.paste);
 
     } // class Editor
 
