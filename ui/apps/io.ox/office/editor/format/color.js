@@ -295,6 +295,22 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
     };
 
     /**
+     * Returns whether the passed color resolves to full transparency.
+     *
+     * @param {Object} color
+     *  The color object.
+     *
+     * @param {String} context
+     *  The context needed to resolve the color type 'auto'.
+     *
+     * @returns {Boolean}
+     *  Whether the passed color represents full transparency.
+     */
+    Color.isTransparentColor = function (color, context) {
+        return Color.getCssColor(color, context) === 'transparent';
+    };
+
+    /**
      * Determine if the provided color is dark or light
      *
      * @param {String} rgbColor

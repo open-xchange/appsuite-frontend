@@ -407,7 +407,7 @@ div.io-ox-view-component {
                             > button {
                                 overflow: visible;
                                 padding: 1px;
-                                border: 2px solid transparent;
+                                border: 3px solid transparent;
                                 .border-radius(4px);
     
                                 &:hover, &:focus, &:active {
