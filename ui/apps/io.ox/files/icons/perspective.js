@@ -334,6 +334,14 @@ define('io.ox/files/icons/perspective',
                 dialog.close();
             });
 
+            api.on("update", function (e, obj) {
+                // update icon
+                var cid = _.cid(obj), icon = iconview.find('.file-icon[data-cid="' + cid + '"]');
+                if (icon.length) {
+                    icon.replaceWith(drawIcon(obj));
+                }
+            });
+
             api.on("refresh.all", function () {
                 if (!app.getWindow().search.active) {
                     api.getAll({ folder: app.folder.get() }).done(function (ids) {

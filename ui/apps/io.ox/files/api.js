@@ -226,8 +226,8 @@ define('io.ox/files/api',
                 return api.get(obj);
             })
             .done(function (data) {
-                api.trigger('update:' + _.cid(data), data);
-                api.trigger('update refresh.list');
+                api.trigger('update update:' + _.cid(data), data);
+                api.trigger('refresh.list');
             });
     };
 
