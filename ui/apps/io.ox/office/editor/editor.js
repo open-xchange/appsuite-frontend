@@ -3075,14 +3075,14 @@ define('io.ox/office/editor/editor',
                     var lastPara = $(cellNode).children().length;
 
                     for (var i = 0; i < lastPara; i++) {
-                        var localPos = _.copy(cellPos, true);
-                        localPos.push(i);
+                        var paraPos = _.copy(cellPos, true);
+                        paraPos.push(i);
 
                         // it can be a table next to a paragraph
-                        if (DOM.isTableNode(Position.getDOMPosition(editdiv, _.copy(localPos, true)).node)) {
-                            setAttributesToCompleteTable(family, attributes, localPos);
+                        if (DOM.isTableNode(Position.getDOMPosition(editdiv, _.copy(paraPos, true)).node)) {
+                            setAttributesToCompleteTable(family, attributes, paraPos);
                         } else {
-                            setAttributesToParagraphInCell(family, attributes, localPos);
+                            setAttributesToParagraphInCell(family, attributes, paraPos);
                         }
                     }
                 }
@@ -3455,9 +3455,7 @@ define('io.ox/office/editor/editor',
                 for (var i = startCol; i <= endCol; i++) {
                     startPos[rowIndex] = j;  // row
                     startPos[columnIndex] = i;  // column
-                    var startPosition = Position.getFirstPositionInCurrentCell(editdiv, startPos);
-                    var endPosition = Position.getLastPositionInCurrentCell(editdiv, startPos);
-                    setAttributes(family, attributes, startPosition, endPosition);
+                    setAttributesToAllParagraphsInCell(family, attributes, _.copy(startPos, true));
                 }
             }
 
