@@ -2490,11 +2490,11 @@ define('io.ox/office/editor/editor',
                     }
                     // otherwise simply ignore the span
 
-                } else if (DOM.isTextSpan(node) || DOM.isListLabelNode(node)) {
+                } else if (DOM.isTextSpan(node)) {
                     // append text node to current sequence
                     siblingTextNodes.push(node.firstChild);
 
-                } else if (DOM.isFieldNode(node)) {
+                } else if (DOM.isFieldNode(node) || DOM.isListLabelNode(node)) {
                     // append all text nodes of the field to current sequence of text nodes
                     Utils.iterateDescendantTextNodes(node, function (textNode) { siblingTextNodes.push(textNode); });
 
