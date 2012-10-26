@@ -368,10 +368,12 @@ define('io.ox/mail/view-detail',
             }
 
             // unread?
+            console.log('unread?', util.isUnread(data), 'unseen?', data.unseen);
             if (util.isUnread(data)) {
                 node.addClass('unread');
-            } else if (data.unseen === true) {
-                delayedRead(data, node.addClass('unread'));
+                if (data.unseen === true) {
+                    delayedRead(data, node);
+                }
             }
 
             // invoke extensions

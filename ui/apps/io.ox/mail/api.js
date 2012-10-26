@@ -131,6 +131,7 @@ define("io.ox/mail/api",
             setUnseen: function (obj) {
                 var cid = getCID(obj);
                 explicitUnseen[cid] = true;
+
             },
 
             setSeen: function (obj) {
@@ -142,7 +143,7 @@ define("io.ox/mail/api",
                 var cid = getCID(data);
                 if (explicitUnseen[cid] === true) {
                     if ('unseen' in data) data.unseen = false;
-                    if ('flags' in data) data.flags = data.flags & ~32;
+                    if ('flags' in data) { data.flags = data.flags & ~32; console.warn('Set unseen', cid); }
                 }
                 return data;
             }
@@ -499,6 +500,7 @@ define("io.ox/mail/api",
                                 var cid = obj.folder_id + '.' + obj.id;
                                 if (cid in hash) {
                                     obj.flags = obj.flags & bitmask;
+                                    if (bitmask === ~32) { obj.unseen = true; }
                                 }
                             });
                             return cache.add(folder, co);
