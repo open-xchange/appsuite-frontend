@@ -429,6 +429,8 @@
     
         .overflow();
         
+        form { margin: 0; }
+        
         .leftside {
             position: relative;
             width: 100%;
