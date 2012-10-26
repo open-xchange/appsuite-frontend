@@ -77,6 +77,9 @@ define("io.ox/core/api/factory",
         // hash to track very first cache hit
         var readThrough = {};
 
+        // track last_modified
+        var lastModified = {};
+
         var api = {
 
             options: o,
@@ -102,6 +105,37 @@ define("io.ox/core/api/factory",
                         processResponse: processResponse === undefined ? true : processResponse
                     })
                     .pipe(function (data) {
+                        // deferred
+                        var ready = $.when();
+                        // do we have the last_modified columns?
+                        if (/(^5,|,5,|5$)/.test(params.columns)) {
+                            return $.when.apply($,
+                                _(data).map(function (obj) {
+                                    var cid = _.cid(obj);
+                                    // do we see this item for the first time?
+                                    if (lastModified[cid] === undefined) {
+                                        lastModified[cid] = obj.last_modified;
+                                        return ready;
+                                    }
+                                    // do we see a newer item now?
+                                    else if (obj.last_modified > lastModified[cid]) {
+                                        lastModified[cid] = obj.last_modified;
+                                        return $.when(
+                                            api.caches.list.remove(cid),
+                                            api.caches.get.remove(cid)
+                                        )
+                                        .done(function () {
+                                            api.trigger('update:' + cid, obj);
+                                        });
+                                    }
+                                })
+                            )
+                            .pipe(function () { return data; });
+                        } else {
+                            return data;
+                        }
+                    })
+                    .pipe(function (data) {
                         return (o.pipe.all || _.identity)(data, opt);
                     })
                     .done(function (data) {
@@ -115,7 +149,7 @@ define("io.ox/core/api/factory",
                         readThrough[cid] = true;
                         setTimeout(function () {
                             api.refresh();
-                        }, 3000); // wait some secs
+                        }, 5000); // wait some secs
                     }
                 };
 
