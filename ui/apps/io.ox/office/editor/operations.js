@@ -244,7 +244,7 @@ define('io.ox/office/editor/operations',
          * @returns {Operations.Generator}
          *  A reference to this instance.
          */
-        this.generateParagraphContentOperations = function (paragraph, position, start, end) {
+        this.generateParagraphChildOperations = function (paragraph, position, start, end) {
 
             var // used to merge several text portions into the same operation
                 lastTextOperation = null,
@@ -304,7 +304,7 @@ define('io.ox/office/editor/operations',
 
                     // TODO: other objects
                     else {
-                        Utils.warn('Operations.Generator.generateParagraphContentOperations(): unknown content node');
+                        Utils.warn('Operations.Generator.generateParagraphChildOperations(): unknown content node');
                     }
                 }
 
@@ -350,7 +350,7 @@ define('io.ox/office/editor/operations',
             generateSetAttributesOperation(paragraph, position);
 
             // process all content nodes in the paragraph and create operations
-            return this.generateParagraphContentOperations(paragraph, position);
+            return this.generateParagraphChildOperations(paragraph, position);
         };
 
         /**

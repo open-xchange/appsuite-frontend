@@ -1837,7 +1837,7 @@ define('io.ox/office/editor/editor',
                     end = operation.end[operation.end.length - 1],
                     generator = new Operations.Generator();
 
-                generator.generateParagraphContentOperations(paragraph, position, start, end);
+                generator.generateParagraphChildOperations(paragraph, position, start, end);
                 undomgr.addUndo(generator.getOperations(), operation);
             }
             implDeleteText(operation.start, operation.end);
