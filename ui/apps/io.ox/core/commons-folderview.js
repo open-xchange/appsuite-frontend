@@ -113,6 +113,21 @@ define('io.ox/core/commons-folderview',
         }
 
         ext.point(POINT + '/sidepanel/toolbar').extend({
+            id: 'folderselect',
+            index: 250,
+            draw: function (baton) {
+                var ul;
+                this.append(
+                    $('<div class="toolbar-action pull-left dropdown dropup">').append(
+                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-plus"></a>'),
+                        ul = $('<ul class="dropdown-menu">')
+                    )
+                );
+                ext.point(POINT + '/sidepanel/toolbar/folderselect').invoke('draw', ul, baton);
+            }
+        });
+
+        ext.point(POINT + '/sidepanel/toolbar').extend({
             id: 'toggle',
             index: 1000,
             draw: function (baton) {
@@ -208,6 +223,19 @@ define('io.ox/core/commons-folderview',
                 this.append($('<li>').append(
                     $('<a href="#">').text(gt('Permissions'))
                     .on('click', { app: baton.app }, setFolderPermissions)
+                ));
+            }
+        });
+
+        ext.point(POINT + '/sidepanel/toolbar/folderselect').extend({
+            id: 'add-folder',
+            index: 100,
+            draw: function (baton) {
+                this.append($('<li>').append(
+                    $('<a href="#">').text(gt('Select folder'))
+                    .on('click', function () {
+                        console.log();
+                    })
                 ));
             }
         });
