@@ -360,6 +360,27 @@ define('io.ox/office/editor/position',
     };
 
     /**
+     * Returning the node when interpreting the oxo Position as "real position"
+     * and not as start or end point of a range. So [6,0] points to the first
+     * character, image or whatever in the seventh paragraph. It is NOT
+     * interpreted as cursor position left of the first character. The latter
+     * is done in function 'getDOMPosition' and 'getNextChildNode'.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPaM.oxoPosition} position
+     *  The logical position.
+     *
+     */
+    Position.getDOMNodeAtPosition = function (startnode, oxoPosition) {
+
+        var useObjectNode = true;  // -> is this sufficient?
+        return Position.getDOMPosition(startnode, oxoPosition, useObjectNode);
+    };
+
+    /**
      * Tries to get a DOM element from the specified logical position. The
      * passed position must match the passed selector. Otherwise, a warning
      * will be printed to the debug console.

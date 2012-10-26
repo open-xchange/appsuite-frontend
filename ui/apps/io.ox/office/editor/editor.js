@@ -1496,14 +1496,34 @@ define('io.ox/office/editor/editor',
                 else {
                     var lastValue = selection.startPaM.oxoPosition.length - 1;
 
+                    // skipping floated images
                     if (selection.startPaM.oxoPosition[lastValue] > 0) {
-                        var startPosition = _.copy(selection.startPaM.oxoPosition, true);
-                        var endPosition = _.copy(selection.startPaM.oxoPosition, true);
+
+                        while (selection.startPaM.oxoPosition[lastValue] > 0) {
+
+                            var testPosition = _.copy(selection.startPaM.oxoPosition, true);
+                            testPosition[lastValue] -= 1;
+                            var node = Position.getDOMNodeAtPosition(paragraphs, testPosition).node;
+
+                            // is the image at testPosition a floated image?
+                            if ((node) && (DOM.isFloatingObjectNode(node))) {
+                                selection.startPaM.oxoPosition[lastValue] -= 1;
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+
+                    if (selection.startPaM.oxoPosition[lastValue] > 0) {
+
+                        var startPosition = _.copy(selection.startPaM.oxoPosition, true),
+                            endPosition = _.copy(selection.startPaM.oxoPosition, true);
                         startPosition[lastValue] -= 1;
                         self.deleteText(startPosition, endPosition);
                         selection.startPaM.oxoPosition[lastValue] -= 1;
-                    }
-                    else if (selection.startPaM.oxoPosition[lastValue - 1] >= 0) {
+
+                    } else if (selection.startPaM.oxoPosition[lastValue - 1] >= 0) {
+
                         var startPosition = _.copy(selection.startPaM.oxoPosition, true);
 
                         if (! _(startPosition).all(function (value) { return (value === 0); })) {
