@@ -131,10 +131,7 @@ define('io.ox/office/editor/editor',
             pageStyles = documentStyles.getStyleSheets('page'),
             lists = documentStyles.getLists(),
 
-            // all highlighted DOM ranges (e.g. in quick search)
-            highlightRanges = [],
-
-            // all text spans with highlighting
+            // all text spans that are highlighted (for quick removal)
             highlightedSpans = [],
 
             // list of operations
@@ -302,12 +299,17 @@ define('io.ox/office/editor/editor',
          * Removes all highlighting (e.g. from quick-search) from the document.
          */
         this.removeHighlighting = function () {
-            if (highlightRanges.length > 0) {
-                characterStyles.setAttributesInRanges(highlightRanges, { highlight: null }, { special: true });
-                editdiv.removeClass('highlight');
-            }
-            highlightRanges = [];
+
+            // remove highlighting and merge sibling text spans
+            _(highlightedSpans).each(function (span) {
+                characterStyles.setElementAttributes(span, { highlight: null }, { special: true });
+                CharacterStyles.mergeSiblingTextSpans(span);
+                CharacterStyles.mergeSiblingTextSpans(span, true);
+            });
             highlightedSpans = [];
+
+            // fade in entire document
+            editdiv.removeClass('highlight');
         };
 
         /**
@@ -325,7 +327,7 @@ define('io.ox/office/editor/editor',
             this.removeHighlighting();
 
             // check input parameter
-            if (!_.isString(query) || !query.length) {
+            if (!_.isString(query) || (query.length === 0)) {
                 return false;
             }
             query = query.toLowerCase();
@@ -337,8 +339,23 @@ define('io.ox/office/editor/editor',
                     textSpans = [],
                     // the concatenated text from all text spans
                     elementText = '',
-                    // all matching ranges of the query text in the element text
-                    offsetRanges = [], offset = 0, index = 0;
+                    // all matching ranges of the query text in the complete paragraph text
+                    matchingRanges = [], start = 0,
+                    // information about a text span while iterating matching ranges
+                    spanInfo = { index: 0, start: 0 };
+
+                // adds information of the text span located at 'spanInfo.index' in the 'textSpans' array to 'spanInfo'
+                function getTextSpanInfo() {
+                    spanInfo.span = textSpans[spanInfo.index];
+                    spanInfo.length = spanInfo.span ? spanInfo.span.firstChild.nodeValue.length : 0;
+                }
+
+                // goes to the next text span in the 'textSpans' array and updates all information in 'spanInfo'
+                function getNextTextSpanInfo() {
+                    spanInfo.index += 1;
+                    spanInfo.start += spanInfo.length;
+                    getTextSpanInfo();
+                }
 
                 // collect all non-empty text spans in the paragraph
                 Position.iterateParagraphChildNodes(paragraph, function (node) {
@@ -356,72 +373,68 @@ define('io.ox/office/editor/editor',
                 elementText = elementText.replace(/\s/g, ' ').toLowerCase();
 
                 // find all occurrences of the query text in the paragraph text
-                while ((offset = elementText.indexOf(query, offset)) >= 0) {
+                while ((start = elementText.indexOf(query, start)) >= 0) {
                     // try to merge with last offset range
-                    if ((offsetRanges.length > 0) && (_(offsetRanges).last().end >= offset)) {
-                        _(offsetRanges).last().end = offset + query.length;
+                    if ((matchingRanges.length > 0) && (_(matchingRanges).last().end >= start)) {
+                        _(matchingRanges).last().end = start + query.length;
                     } else {
-                        offsetRanges.push({ start: offset, end: offset + query.length });
+                        matchingRanges.push({ start: start, end: start + query.length });
                     }
                     // continue at next character (occurrences of the query text may overlap)
-                    offset += 1;
+                    start += 1;
                 }
 
                 // set highlighting to all occurrences
-                //start = index = 0;
-                _(textSpans).each(function (span) {
+                getTextSpanInfo();
+                _(matchingRanges).each(function (range) {
 
-                });
-
-                // translate offset ranges to DOM ranges
-                offset = index = 0;
-                Utils.iterateDescendantTextNodes(paragraph, function (textNode) {
-
-                    var // do not declare in the for-loop header, this makes uglify.js very sad...
-                        offsetRange = null;
-
-                    // convert as many offset ranges as contained by the current text node
-                    for (; index < offsetRanges.length; index += 1) {
-                        offsetRange = offsetRanges[index];
-
-                        // start point may have been converted in the previous text node
-                        if ((offset <= offsetRange.start) && (offsetRange.start < offset + textNode.length)) {
-                            highlightRanges.push(new DOM.Range.createRange(textNode, offsetRange.start - offset));
-                        }
-
-                        // try to convert end point (
-                        if (offsetRange.end <= offset + textNode.length) {
-                            _(highlightRanges).last().end = new DOM.Point(textNode, offsetRange.end - offset);
-                        } else {
-                            break; // escape from loop without updating 'index'
-                        }
+                    // find first text span that contains text from current matching range
+                    while (spanInfo.start + spanInfo.length <= range.start) {
+                        getNextTextSpanInfo();
                     }
 
-                    // escape if all offset ranges have been translated
-                    if (index >= offsetRanges.length) { return Utils.BREAK; }
+                    // process all text spans covered by the current matching range
+                    while (spanInfo.start < range.end) {
 
-                    // update offset of next text node
-                    offset += textNode.length;
+                        // split beginning of text span not covered by the range
+                        if (spanInfo.start < range.start) {
+                            DOM.splitTextSpan(spanInfo.span, range.start - spanInfo.start);
+                            // update spanInfo
+                            spanInfo.length -= (range.start - spanInfo.start);
+                            spanInfo.start = range.start;
+                        }
+
+                        // split end of text span NOT covered by the range
+                        if (range.end < spanInfo.start + spanInfo.length) {
+                            var newSpan = DOM.splitTextSpan(spanInfo.span, range.end - spanInfo.start, { append: true });
+                            // insert the new span into textSpans after the current span
+                            textSpans.splice(spanInfo.index + 1, 0, newSpan[0]);
+                            // update spanInfo
+                            spanInfo.length = range.end - spanInfo.start;
+                        }
+
+                        // set highlighting to resulting text span and store it in the global list
+                        characterStyles.setElementAttributes(spanInfo.span, { highlight: true }, { special: true });
+                        highlightedSpans.push(spanInfo.span);
+
+                        // go to next text span
+                        getNextTextSpanInfo();
+                    }
 
                 }, this);
 
                 // exit at a certain number of found ranges (for performance)
-                if (highlightRanges.length >= 100) {
+                if (highlightedSpans.length >= 100) {
                     return Utils.BREAK;
                 }
 
             }, this);
 
-            // set the highlighting
-            if (highlightRanges.length) {
+            if (highlightedSpans.length > 0) {
+                // fade out entire document
                 editdiv.addClass('highlight');
-                characterStyles.setAttributesInRanges(highlightRanges, { highlight: true }, { special: true });
-
                 // make first highlighted text node visible
-                DOM.iterateTextPortionsInRanges(highlightRanges, function (textNode) {
-                    Utils.scrollToChildNode(editdiv.parent(), textNode.parentNode, { padding: 30 });
-                    return Utils.BREAK;
-                }, this);
+                Utils.scrollToChildNode(editdiv.parent(), highlightedSpans[0], { padding: 30 });
             }
 
             // return whether any text in the document matches the passed query text
@@ -992,28 +1005,13 @@ define('io.ox/office/editor/editor',
         };
 
         this.createList = function (type, options) {
-            var defNumId = (!options || (!options.symbol && !options.levelStart)) ? lists.getDefaultNumId(type) : undefined;
+            var defNumId = lists.getDefaultNumId(type, options);
             if (defNumId === undefined) {
-                var listOperation = lists.getDefaultListOperation(type, options);
+                var listOperation = lists.getDefaultListOperation(type);
                 applyOperation(listOperation, true, true);
                 defNumId = listOperation.listName;
             }
-            if (options && options.startPosition) {
-                var start = [];
-                var length = options.startPosition.length;
-                var index = 0;
-                for (; index < length - 1; ++index) {
-                    start[index] = options.startPosition[index];
-                }
-                var newOperation = {name: Operations.ATTRS_SET, attrs: { numId: defNumId, ilvl: 0}, start: start, end: start };
-                applyOperation(newOperation, true, true);
-                start[start.length - 1] += 1;
-                newOperation.start = start;
-                newOperation.end = newOperation.start;
-                applyOperation(newOperation, true, true);
-            } else {
-                setAttributes('paragraph', { numId: defNumId, ilvl: 0});
-            }
+            setAttributes('paragraph', { numId: defNumId, ilvl: 0});
 
         };
 
@@ -1595,7 +1593,7 @@ define('io.ox/office/editor/editor',
                 var paragraph = Position.getLastNodeFromPositionByNodeName(paragraphs, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR);
                 if (!selection.hasRange() &&
                         selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] === Position.getFirstTextNodePositionInParagraph(paragraph)) {
-                    var ilvl = paragraphStyles.getElementAttributes(paragraph).ilvl;
+                    var ilvl = self.getAttributes('paragraph').ilvl;
                     if (ilvl !== -1) {
                         if (!event.shiftKey && ilvl < 8) {
                             ilvl += 1;
@@ -1684,51 +1682,38 @@ define('io.ox/office/editor/editor',
                         selection.startPaM.oxoPosition = [0, 0];
                     } else {
                         // demote or end numbering instead of creating a new paragraph
-                        var // the paragraph element addressed by the passed logical position
-                            paragraph = Position.getLastNodeFromPositionByNodeName(paragraphs, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR);
-                        var ilvl = paragraphStyles.getElementAttributes(paragraph).ilvl;
+                        var ilvl = self.getAttributes('paragraph').ilvl;
                         var paragraphLength = Position.getParagraphLength(paragraphs, selection.startPaM.oxoPosition);
                         if (!hasSelection && ilvl >= 0 && paragraphLength === 0) {
                             ilvl--;
                             self.setAttribute('paragraph', 'ilvl', ilvl);
                         }
                         else {
-                            var numAutoCorrect = {};
                             if (!hasSelection && ilvl < 0 && paragraphLength > 3) {
-                                // detect Numbering/Bullet labels at paragraph start
-                                var paraText = paragraph.textContent,
-                                labelText = paraText.split(' ')[0],
-                                bullet,
-                                startNumber;
-                                numAutoCorrect.startPosition = _.copy(selection.startPaM.oxoPosition, true);
-                                numAutoCorrect.startPosition[numAutoCorrect.startPosition.length - 1] = 0;
-                                numAutoCorrect.endPosition = _.copy(selection.endPaM.oxoPosition, true);
-                                numAutoCorrect.endPosition[numAutoCorrect.endPosition.length - 1] = labelText.length + 1;
-                                if (labelText.length === 1 && (labelText === '-' || labelText === '*')) {
-                                    // bullet
-                                    numAutoCorrect.type = 'bullet';
-                                    numAutoCorrect.symbol = labelText;
-                                } else if (labelText.substring(labelText.length - 1) === '.') {
-                                    var sub = labelText.substring(0, labelText.length - 1);
-                                    startNumber = parseInt(sub, 10);
-                                    if (startNumber > 0) {
-                                        numAutoCorrect.type = 'numbering';
-                                        numAutoCorrect.levelStart = startNumber;
+                                // detect Numbering/Bullet labels at paragraph
+                                // start
+                                var // the paragraph element addressed by the
+                                    // passed logical position
+                                paragraph = Position.getLastNodeFromPositionByNodeName(paragraphs, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR);
+
+                                if (paragraph !== undefined) {
+                                    var paraText = paragraph.textContent,
+                                    labelText = paraText.split(' ')[0],
+                                    bullet,
+                                    startNumber;
+                                    if (labelText.length === 1 && (labelText === '-' || labelText === '*')) {
+                                        // bullet
+                                        bullet = labelText;
+                                        self.createList('bullet', {symbol: bullet});
+                                    } else if (labelText.substring(labelText.length - 1) === '.') {
+                                        var sub = labelText.substring(0, labelText.length - 1);
+                                        startNumber = parseInt(sub, 10);
+                                        if (startNumber > 0)
+                                            self.createList('numbering', {levelStart: startNumber});
                                     }
                                 }
                             }
                             self.splitParagraph(startPosition);
-                            // now apply 'AutoCorrection'
-                            if (numAutoCorrect.type !== undefined) {
-                                undomgr.enterGroup(function () {
-                                    self.deleteText(numAutoCorrect.startPosition, numAutoCorrect.endPosition);
-                                    self.createList(numAutoCorrect.type,
-                                            {levelStart: numAutoCorrect.levelStart, symbol: numAutoCorrect.symbol,
-                                             startPosition: numAutoCorrect.startPosition
-                                            });
-                                });
-                            }
-
                             // TODO / TBD: Should all API / Operation calls return the new position?!
                             var lastValue = selection.startPaM.oxoPosition.length - 1;
                             selection.startPaM.oxoPosition[lastValue - 1] += 1;
@@ -4638,7 +4623,7 @@ define('io.ox/office/editor/editor',
         function implUpdateLists() {
             if (listUpdateTimer)
                 return;
-            listUpdateTimer = setTimeout(function () {
+            listUpdateTimer = window.setTimeout(function () {
                     listUpdateTimer = null;
                     var listItemCounter = [];
                     Utils.iterateSelectedDescendantNodes(editdiv, DOM.PARAGRAPH_NODE_SELECTOR, function (para) {
@@ -4670,9 +4655,8 @@ define('io.ox/office/editor/editor',
                             }
                             $(para).prepend(numberingElement);
                         }
-
                     });
-                }, 0);
+                });
         }
         function implDbgOutEvent(event) {
 
