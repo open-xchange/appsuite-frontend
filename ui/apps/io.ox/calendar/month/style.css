@@ -29,7 +29,7 @@
         left: 10px;
         float: left;
         line-height: 32px;
-        font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-family: @font-light;
         font-size: 20px;
     }
     
