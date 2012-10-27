@@ -17,14 +17,14 @@ define("io.ox/backbone/settings", ["io.ox/backbone/basicModel"], function (Basic
     var cache = {};
     
     return {
-        get: function (ref) {
+        get: function (ref, options) {
             if (cache[ref]) {
                 return cache[ref];
             }
             
             var settings = require("settings!" + ref);
             
-            var ModelClass = BasicModel.extend({
+            var ModelClass = BasicModel.extend(_.extend({
                 ref: ref,
                 syncer: {
                     update: function () {
@@ -47,7 +47,7 @@ define("io.ox/backbone/settings", ["io.ox/backbone/basicModel"], function (Basic
                         return def;
                     }
                 }
-            });
+            }, options));
             
             return cache[ref] = settings.createModel(ModelClass);
         }

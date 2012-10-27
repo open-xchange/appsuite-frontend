@@ -22,6 +22,7 @@ define('io.ox/calendar/edit/main',
 
     'use strict';
 
+
     var EditAppointmentController = function () {};
 
     EditAppointmentController.prototype = {
@@ -59,7 +60,7 @@ define('io.ox/calendar/edit/main',
         /*
         * should cleanly remove every outbounding reference
         * of all objects created. this could be a awkward task
-        * but better for longtime perf. IE still has a huge memory-leak problem
+        * but better for longtime perf. IE still has a hu
         * :(
         */
         dispose: function () {

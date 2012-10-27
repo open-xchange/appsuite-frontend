@@ -81,7 +81,6 @@ define('io.ox/calendar/edit/view-addparticipants',
                                 obj.data.type = 2; //group
                                 break;
                             }
-
                             obj.data.image1_url = obj.data.image1_url || '';
                             var pmodel = new pModel.Participant(obj.data);
                             var pview = new pViews.ParticipantEntryView({model: pmodel, prefetched: true, closeButton: false});

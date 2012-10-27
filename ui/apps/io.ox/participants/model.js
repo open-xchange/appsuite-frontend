@@ -27,11 +27,12 @@ define("io.ox/participants/model",
                 self.id = self.get('internal_userid');
                 self.set({
                     id: self.get('internal_userid'),
-                    type: ParticipantModel.TYPE_USER
+                    type: this.TYPE_USER
                 });
             }
             this.fetch().done(function () {
                 self.trigger("fetch");
+                self.trigger("change");
             });
             if (this.get('type') === this.TYPE_EXTERNAL_USER) {
                 this.id = this.get('mail');
