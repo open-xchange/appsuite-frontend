@@ -41,7 +41,10 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * Hex based color string (RRGGBB).
      */
     function convertNumberToRgbColor(colorValue) {
-        return colorValue.toString(16);
+        var color = colorValue.toString(16);
+        // MUST be 6-digits with leading zeros, otherwise, CSS *appends* zeros instead of prepending them
+        while (color.length < 6) { color = '0' + color; }
+        return color;
     }
 
     /**

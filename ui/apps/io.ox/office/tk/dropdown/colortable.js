@@ -51,10 +51,7 @@ define('io.ox/office/tk/dropdown/colortable',
      */
     function ColorTable(options) {
 
-        var // self reference (the Group instance)
-            self = this,
-
-            // the root container element
+        var // the root container element
             rootNode = $('<div>'),
 
             // number of color items per table row
@@ -64,6 +61,18 @@ define('io.ox/office/tk/dropdown/colortable',
             cssColorResolver = Utils.getFunctionOption(options, 'cssColorResolver', _.identity);
 
         // private methods ----------------------------------------------------
+
+        function createColorButton(value, options) {
+
+            var // create the button element
+                button = Utils.createButton(Utils.extendOptions(options, { value: value }));
+
+            // add the colored box and the tool tip
+            button.prepend($('<div>').addClass('color-box').css('background-color', cssColorResolver.call(this, value)));
+            Utils.setControlTooltip(button, Utils.getStringOption(options, 'tooltip'), 'top');
+
+            return button;
+        }
 
         /**
          * Handles key events in the open drop-down menu element.
@@ -143,6 +152,16 @@ define('io.ox/office/tk/dropdown/colortable',
             return Utils.createLabel(options).appendTo(rootNode);
         };
 
+        this.createWideColorButton = function (value, options) {
+
+            var // create the button element
+                button = createColorButton(value, options);
+
+            // add the button in its own node to the color table
+            rootNode.append($('<div>').append(button));
+            return button;
+        };
+
         /**
          * Adds a new color item to the current section.
          *
@@ -156,6 +175,10 @@ define('io.ox/office/tk/dropdown/colortable',
          *  The following options are supported:
          *  @param {String} [options.tooltip]
          *      Tool tip text shown when the mouse hovers the color item.
+         *  @param {String} [options.label]
+         *      If set to a string, the button will take the entire width of
+         *      the color table; and the specified label will be shown next to
+         *      the color box.
          *
          * @returns {jQuery}
          *  The button element representing the new color item, as jQuery
@@ -163,10 +186,10 @@ define('io.ox/office/tk/dropdown/colortable',
          */
         this.createColorItem = function (value, options) {
 
-            var // the table and table row elements containing the color items
+            var // the table elements containing the color items
                 table = null, row = null,
-                // create the button element representing the color item
-                button = Utils.createButton({ value: value });
+                // create the button element
+                button = createColorButton(value, { tooltip: Utils.getStringOption(options, 'tooltip') });
 
             // create a new table element for the item if required
             table = rootNode.children().last();
@@ -180,11 +203,8 @@ define('io.ox/office/tk/dropdown/colortable',
                 row = $('<tr>').appendTo(table);
             }
 
-            // initialize the button and add it to the table row
-            button.append($('<div>').css('background-color', cssColorResolver.call(this, value)));
-            Utils.setControlTooltip(button, Utils.getStringOption(options, 'tooltip'), 'top');
+            // add the button to the table row
             row.append($('<td>').append(button));
-
             return button;
         };
 
