@@ -316,9 +316,11 @@ define('io.ox/core/api/folder',
             }, opt.data || {});
 
             // get parent folder to inherit permissions
-            return api.get({ folder: opt.folder }).pipe(function (parent) {
+            return this.get({ folder: opt.folder }).pipe(function (parent) {
                 // inherit module
-                var module = (opt.data.module = opt.data.module || parent.module);
+                // var module = (opt.data.module = opt.data.module || parent.module);
+                var module = opt.data.module = opt.folder.module;
+
                 // inherit rights only if folder isn't a system folder
                 // (type = 5)
                 if (parent.type === 5) {
@@ -328,14 +330,14 @@ define('io.ox/core/api/folder',
                         entity: ox.user_id
                     }];
                 } else {
-                    opt.data.permissions = parent.permissions;
+                    opt.data.permissions = opt.folder.permissions;
                 }
                 // go!
                 return http.PUT({
                     module: 'folders',
                     params: {
                         action: 'new',
-                        folder_id: opt.folder,
+                        folder_id: opt.folder.folder_id,
                         tree: '1'
                     },
                     data: opt.data,
@@ -345,7 +347,7 @@ define('io.ox/core/api/folder',
                     // wait for updating sub folder cache
                     return $.when(
                         api.get({ folder: data, cache: false }),
-                        api.getSubFolders({ folder: opt.folder, cache: false }),
+                        api.getSubFolders({ folder: opt.folder.folder_id, cache: false }),
                         !/^(mail|infostore)$/.test(module) ? api.getVisible({ type: module, cache: false }) : $.when()
                     )
                     .pipe(function (getRequest) {

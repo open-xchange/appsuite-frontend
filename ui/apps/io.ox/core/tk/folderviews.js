@@ -462,10 +462,13 @@ define('io.ox/core/tk/folderviews',
         };
 
         this.add = function (folder) {
-            var self = this;
-            folder = folder || _.chain(self.selection.get()).pluck('id').first().value();
+            var self = this,
+            folder = String(this.selection.get());
             if (folder) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                $.when(
+                    api.get({ folder: folder }),
+                    require(['io.ox/core/tk/dialogs'])
+                ).done(function (folder, dialogs) {
                     new dialogs.ModalDialog({
                         width: 400,
                         easyOut: true
@@ -476,7 +479,7 @@ define('io.ox/core/tk/folderviews',
                     .build(function () {
                         this.getContentNode().append(
                             $('<div class="row-fluid">').append(
-                                api.getBreadcrumb(folder, { subfolders: false }),
+                                api.getBreadcrumb(folder.id, { subfolders: false }),
                                 $('<input>', { type: 'text' })
                                 .attr('placeholder', gt('Folder name'))
                                 .addClass('span12')
@@ -503,11 +506,11 @@ define('io.ox/core/tk/folderviews',
         };
 
         this.remove = function (folder) {
-            var self = this;
-            folder = folder || _.chain(self.selection.get()).pluck('id').first().value();
-            if (folder) {
+            var self = this,
+            folder_id = String(this.selection.get());
+            if (folder_id) {
                 $.when(
-                    api.get({ folder: folder }),
+                    api.get({ folder: folder_id }),
                     require(['io.ox/core/tk/dialogs'])
                 ).done(function (folder, dialogs) {
                     new dialogs.ModalDialog()
@@ -529,11 +532,11 @@ define('io.ox/core/tk/folderviews',
         };
 
         this.rename = function (folder) {
-            var self = this;
-            folder = folder || _.chain(self.selection.get()).pluck('id').first().value();
-            if (folder) {
+            var self = this,
+            folder_id = String(this.selection.get());
+            if (folder_id) {
                 $.when(
-                    api.get({ folder: folder }),
+                    api.get({ folder: folder_id }),
                     require(['io.ox/core/tk/dialogs'])
                 )
                 .done(function (folder, dialogs) {
