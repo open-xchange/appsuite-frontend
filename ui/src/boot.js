@@ -207,8 +207,10 @@ $(document).ready(function () {
                 default: node.attr(target, val); break;
                 }
             });
-            // update placeholder
-            $('input').val('').placeholder();
+            // update placeholder (IE9 fix)
+            if (_.browser.IE) {
+                $('input[type=text], input[type=password]').val('').placeholder();
+            }
         });
     };
 
