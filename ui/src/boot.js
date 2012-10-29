@@ -208,7 +208,7 @@ $(document).ready(function () {
                 }
             });
             // update placeholder
-            $('input').placeholder();
+            $('input').val('').placeholder();
         });
     };
 
