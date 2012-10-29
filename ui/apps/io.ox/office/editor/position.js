@@ -2489,16 +2489,19 @@ define('io.ox/office/editor/position',
         // iterate through all paragraphs and tables until the end position has been reached
         return iterateContentNodes(firstParagraph, lastParagraph, function (contentNode) {
 
-            var // start offset in first paragraph
-                startOffset = (contentNode === firstParagraph) ? _.last(startPosition) : undefined,
-                // end offset in last paragraph (convert half-open range to closed range)
-                endOffset = (contentNode === lastParagraph) ? (_.last(endPosition) - 1) : undefined;
+            var // start offset in first paragraph, end offset in last paragraph
+                startOffset = 0, endOffset = 0;
 
             // process paragraph nodes
             if (DOM.isParagraphNode(contentNode)) {
 
-                // visit entire paragraph in shortest-path mode (also for start paragraph if covered completely)
-                if (shortestPath && (_.isUndefined(startOffset) || (startOffset === 0)) && _.isUndefined(endOffset)) {
+                // start offset in first paragraph
+                startOffset = (contentNode === firstParagraph) ? _.last(startPosition) : undefined;
+                // end offset in last paragraph (convert half-open range to closed range)
+                endOffset = (contentNode === lastParagraph) ? (_.last(endPosition) - 1) : undefined;
+
+                // visit entire paragraph in shortest-path mode
+                if (shortestPath && _.isUndefined(startOffset) && _.isUndefined(endOffset)) {
                     return iterator.call(context, contentNode);
                 }
 
@@ -2508,9 +2511,10 @@ define('io.ox/office/editor/position',
                 }, undefined, { start: startOffset, end: endOffset, split: split });
             }
 
-            // visit table nodes in shortest-path mode only
+            // visit table nodes in shortest-path mode (if not in shortest-path
+            // mode, iterateContentNodes() will not visit table elements at all)
             if (DOM.isTableNode(contentNode)) {
-                return shortestPath ? iterator.call(context, contentNode) : undefined;
+                return iterator.call(context, contentNode);
             }
 
             Utils.error('Position.iterateNodesInSelection(): unknown content node');

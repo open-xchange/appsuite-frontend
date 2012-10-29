@@ -217,15 +217,15 @@
                 .debug-highlight-mixin(#88f);
             }
 
-            div.field > span {
+            div.tab, div.field > span {
                 .debug-highlight-mixin(#f8f);
             }
-            
-            div.tab > span {
-                .debug-highlight-mixin(#8ff);
+
+            div.list-label > span {
+                .debug-highlight-mixin(#f88);
             }
 
-            table, div.object, div.list-label > span {
+            table, div.object {
                 .debug-highlight-mixin(#f88);
                 outline-offset: 1px;
             }
