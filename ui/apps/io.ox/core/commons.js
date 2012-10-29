@@ -162,18 +162,18 @@ define('io.ox/core/commons',
                     grid.refresh(true);
                 },
                 refreshList = function () {
-                    grid.repaint().done(function () {
-                        grid.selection.retrigger();
-                    });
-                },
-                on = function () {
-                    api.on('refresh.all refresh:all:local', refreshAll)
-                    .on('refresh.list', refreshList)
-                    .trigger('refresh.all');
+                    grid.repaint();
+                    grid.selection.retrigger();
                 },
                 off = function () {
                     api.off('refresh.all refresh:all:local', refreshAll)
-                    .off('refresh.list', refreshList);
+                        .off('refresh.list', refreshList);
+                },
+                on = function () {
+                    off();
+                    api.on('refresh.all refresh:all:local', refreshAll)
+                        .on('refresh.list', refreshList)
+                        .trigger('refresh.all');
                 };
             win.on({ show: on, hide: off });
             // already visible?

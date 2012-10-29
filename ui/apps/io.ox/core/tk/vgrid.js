@@ -363,46 +363,10 @@ define('io.ox/core/tk/vgrid',
             }
         };
 
-        paint = function (offset) {
+        paint = (function () {
 
-            if (!initialized) {
-                return;
-            }
-
-            // keep positive
-            offset = Math.max(offset, 0);
-
-            if (offset === currentOffset) {
-                return DONE;
-            } else {
-                currentOffset = offset;
-            }
-
-            // pending?
-            var def;
-            if (paint.pending) {
-                // enqueue latest paint
-                paint.pending = [offset, (def = $.Deferred())];
-                return def;
-            } else {
-                paint.pending = true;
-            }
-
-            // continuation
-            var cont = function (data) {
-
-                // pending?
-                if (isArray(paint.pending)) {
-                    // process latest paint
-                    offset = paint.pending[0];
-                    def = paint.pending[1];
-                    paint.pending = false;
-                    //currentOffset = offset;
-                    paint(offset).done(def.resolve);
-                    return;
-                } else {
-                    paint.pending = false;
-                }
+            // calling this via LFO, so that we always get the latest data
+            function cont(offset, data) {
 
                 // vars
                 var i, $i, shift = 0, j = '', row,
@@ -457,19 +421,36 @@ define('io.ox/core/tk/vgrid',
                 // remember bounds
                 bounds.top = offset;
                 bounds.bottom = offset + numRows;
+            }
+
+            return function (offset) {
+
+                if (!initialized) {
+                    return;
+                }
+
+                // keep positive
+                offset = Math.max(offset, 0);
+
+                if (offset === currentOffset) {
+                    return DONE;
+                } else {
+                    currentOffset = offset;
+                }
+
+                // get all items
+                var load = loadData[currentMode] || loadData.all,
+                    subset = all.slice(offset, offset + numRows),
+                    lfo = _.lfo(cont, offset);
+
+                return load.call(self, subset)
+                    .done(lfo)
+                    .fail(function () {
+                        // continue with dummy array
+                        lfo(new Array(subset.length));
+                    });
             };
-
-            // get all items
-            var load = loadData[currentMode] || loadData.all,
-                subset = all.slice(offset, offset + numRows);
-
-            return load.call(self, subset)
-                .done(cont)
-                .fail(function () {
-                    // continue with dummy array
-                    cont(new Array(subset.length));
-                });
-        };
+        }());
 
         resize = function () {
             // get num of rows
@@ -682,19 +663,17 @@ define('io.ox/core/tk/vgrid',
         };
 
         fnScroll = _.throttle(function () {
-            if (paint.pending === false) {
-                var top = scrollpane.scrollTop(),
-                    index = getIndex(top);
-                // checks bounds
-                if (index >= bounds.bottom - numVisible - 2) {
-                    // below bottom (scroll down)
-                    paint(index - (numVisible >> 1));
-                } else if (index < bounds.top + 2 && bounds.top !== 0) {
-                    // above top (scroll up)
-                    paint(index - numVisible * 1.5, 'above');
-                }
+            var top = scrollpane.scrollTop(),
+                index = getIndex(top);
+            // checks bounds
+            if (index >= bounds.bottom - numVisible - 2) {
+                // below bottom (scroll down)
+                paint(index - (numVisible >> 1));
+            } else if (index < bounds.top + 2 && bounds.top !== 0) {
+                // above top (scroll up)
+                paint(index - numVisible * 1.5, 'above');
             }
-        }, 100);
+        }, 50);
 
         // selection events
         this.selection
@@ -762,11 +741,14 @@ define('io.ox/core/tk/vgrid',
             return initLabels();
         };
 
-        this.repaint = function () {
+        this.repaint = _.debounce(function () {
             var offset = currentOffset || 0;
             currentOffset = null;
-            return paint(offset);
-        };
+            // cannot hand over deferred due to debounce;
+            // don't remove debouce cause repaint is likely wired with APIs' refresh.list
+            // which may be called many times in a row
+            paint(offset);
+        }, 100, true);
 
         this.clear = function () {
             return paused ? $.when() : apply([], true);

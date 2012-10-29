@@ -222,18 +222,16 @@ define("io.ox/core/api/factory",
                             // update list cache
                             caches.list.merge(data).done(function (ok) {
                                 if (ok) {
-                                    api.trigger("refresh.list", data);
+                                    api.trigger('refresh.list');
                                 }
                             });
-                        } else {
-                            api.trigger("refresh.list", data);
                         }
                     })
                     .fail(function (e) {
                         _.call(o.fail.get, e, opt, o);
                     });
                 };
-                return (useCache ? caches.get.get(opt, getter) : getter())
+                return (useCache ? caches.get.get(opt, getter, o.pipe.getCache) : getter())
                     .pipe(o.pipe.getPost)
                     .done(o.done.get || $.noop);
             },

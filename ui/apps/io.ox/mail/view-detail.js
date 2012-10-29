@@ -146,10 +146,9 @@ define('io.ox/mail/view-detail',
     var delayedRead = function (data, node) {
         setTimeout(function () {
             node.removeClass('unread');
-            data.unseen = false;
-            api.caches.get.add(data);
+            api.tracker.applyAutoRead(data);
             node = data = null;
-        }, 2000); // 2 seconds
+        }, 1000); // 1 second(s)
     };
 
     var blockquoteClickOpen, blockquoteClickClose, mailTo;
@@ -232,6 +231,8 @@ define('io.ox/mail/view-detail',
                         $(this).replaceWith($('<blockquote>').append($(this).contents()));
                     })
                     .end()
+                    // base tag
+                    .find('base').remove().end()
                     // blockquote
                     .find('blockquote')
                         // remove white-space: pre/nowrap
@@ -367,13 +368,12 @@ define('io.ox/mail/view-detail',
                 node.addClass('by-myself');
             }
 
-            // unread?
-            console.log('unread?', util.isUnread(data), 'unseen?', data.unseen);
             if (util.isUnread(data)) {
                 node.addClass('unread');
-                if (data.unseen === true) {
-                    delayedRead(data, node);
-                }
+            }
+            if (api.tracker.canAutoRead(data)) {
+                node.addClass('unread');
+                delayedRead(data, node);
             }
 
             // invoke extensions
@@ -435,6 +435,7 @@ define('io.ox/mail/view-detail',
                 top = nodes.eq(pos).position().top;
                 scrollpane.scrollTop(list.length === 1 ? 0 : top);
                 scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 250));
+                scrollpane.trigger('scroll'); // to be sure
                 nodes = frag = node = scrollpane = list = mail = mails = null;
             }
 
@@ -450,9 +451,14 @@ define('io.ox/mail/view-detail',
                         if (util.isUnread(data[i])) { break; }
                     }
                     // how many visible?
-                    numVisible = Math.ceil(node.parent().height() / 300);
-                    bottom = Math.min(pos + numVisible, $i);
-                    top = Math.max(0, pos - (pos + numVisible - bottom));
+                    if (pos === 0) {
+                        numVisible = 1;
+                        top = bottom = 0;
+                    } else {
+                        numVisible = Math.ceil(node.parent().height() / 300);
+                        bottom = Math.min(pos + numVisible, $i);
+                        top = Math.max(0, pos - (pos + numVisible - bottom));
+                    }
                     // fetch mails we will display
                     for (i = top; i <= bottom; i++) {
                         defs.push(api.get(api.reduce(list[i])));
@@ -558,7 +564,7 @@ define('io.ox/mail/view-detail',
 
     function changeLabel(e) {
         e.preventDefault();
-        return api.update(e.data.data, { color_label: e.data.color });
+        return api.changeColor(e.data.data, e.data.color);
     }
 
     ext.point('io.ox/mail/detail').extend({
@@ -748,7 +754,7 @@ define('io.ox/mail/view-detail',
         ref: 'io.ox/mail/links/inline'
     }));
 
-    // inline links for while thread
+    // inline links for entire thread
     ext.point('io.ox/mail/thread').extend(new links.InlineLinks({
         index: 100,
         id: 'inline-links',
