@@ -626,8 +626,9 @@ define('io.ox/backbone/forms',
                 this.nodes.dayField.datepicker({format: dateFormat});
                 this.nodes.timeField.combobox(comboboxHours);
 
-                this.nodes.dayField.on("blur", _.bind(this.updateModelDate, this));
-                this.nodes.timeField.on("blur", _.bind(this.updateModelTime, this));
+                this.nodes.dayField.on("change", _.bind(this.updateModelDate, this));
+                this.nodes.timeField.on("change", _.bind(this.updateModelTime, this));
+
                 return this;
             },
             setValueInField: function () {
