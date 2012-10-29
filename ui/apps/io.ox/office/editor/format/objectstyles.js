@@ -156,8 +156,8 @@ define('io.ox/office/editor/format/objectstyles',
             paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px'),
             // preceding node used for vertical offset
             verticalOffsetNode = object.prev(DOM.OFFSET_NODE_SELECTOR),
-            // first text node in paragraph
-            firstTextNode = null,
+            // text span related to inline objects
+            relatedTextSpan = null,
             // current object width, in 1/100 mm
             objectWidth = Utils.convertLengthToHmm(object.width(), 'px'),
             // offset from top/left/right margin of paragraph element, in 1/100 mm
@@ -174,9 +174,16 @@ define('io.ox/office/editor/format/objectstyles',
             // from floating mode to inline mode
             if (object.hasClass('float')) {
 
+                // remove CSS classes used for floating mode
+                object.removeClass('float left right');
+
                 // remove leading node used for positioning
                 verticalOffsetNode.remove();
-                object.removeClass('float left right');
+
+                // insert an empty text span before the inline object if missing
+                if (!DOM.isTextSpan(object.prev()) && (relatedTextSpan = DOM.findRelatedTextSpan(object))) {
+                    DOM.splitTextSpan(relatedTextSpan, 0).insertBefore(object);
+                }
             }
 
             // TODO: Word uses fixed predefined margins in inline mode, we too?
@@ -190,7 +197,14 @@ define('io.ox/office/editor/format/objectstyles',
 
             // from inline mode to floating mode
             if (object.hasClass('inline')) {
+
+                // remove CSS classes used for inline mode
                 object.removeClass('inline');
+
+                // remove leading empty text span before the object
+                if (DOM.isEmptySpan(object.prev())) {
+                    object.prev().remove();
+                }
             }
 
             // calculate top offset (only if object is anchored to paragraph)
