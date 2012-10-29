@@ -602,7 +602,7 @@ define('io.ox/office/tk/utils',
 
         function extend(options, extensions) {
             _(extensions).each(function (value, name) {
-                if (_.isObject(value) && !_.isFunction(value)) {
+                if (_.isObject(value) && !_.isArray(value) && !_.isFunction(value)) {
                     // extension value is an object: ensure that the options map contains an embedded object
                     if (!_.isObject(options[name])) {
                         options[name] = {};
@@ -1597,7 +1597,9 @@ define('io.ox/office/tk/utils',
     Utils.selectOptionButton = function (buttons, value) {
 
         var // find the button to be activated
-            button = _.isNull(value) ? $() : buttons.filter(function () { return _.isEqual(value, Utils.getControlValue($(this))); });
+            button = _.isNull(value) ? $() : buttons.filter(function () {
+                return _.isEqual(value, Utils.getControlValue($(this)));
+            });
 
         // remove highlighting from all buttons, highlight active button
         Utils.toggleButtons(buttons, false);
