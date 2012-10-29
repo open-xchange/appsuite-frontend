@@ -114,9 +114,7 @@
 .io-ox-mail-write input[type=text]:focus,
 .io-ox-mail-write input[type=text].discreet:focus {
     border-color: rgba(82, 168, 236, 0.8);
-    -moz-box-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
-    -webkit-box-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
-    box-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
+    .box-shadow(0px 0px 8px rgba(82, 168, 236, 0.6));
 }
 
 .io-ox-mail-write input[type=text].discreet {
@@ -140,9 +138,7 @@
 }
 
 .io-ox-mail-write input[type=file]:focus {
-    -webkit-box-shadow: 0px 0px 4px 0px @outline-color;
-    -moz-box-shadow: 0px 0px 4px 0px @outline-color;
-    box-shadow: 0px 0px 4px 0px @outline-color;
+    .box-shadow(0px 0px 4px 0px @outline-color);
 }
 
 .io-ox-mail-write .wrapping-label {
@@ -331,9 +327,7 @@
 
 .io-ox-mail-write .text-editor:focus {
     border-color: #fff;
-    -moz-box-shadow: 0px 0px 4px 0px @outline-color;
-    -webkit-box-shadow: 0px 0px 4px 0px @outline-color;
-    box-shadow: 0px 0px 4px 0px @outline-color;
+    .box-shadow(0px 0px 4px 0px @outline-color);
 }
 
 .io-ox-mail-write .change-format {
@@ -360,9 +354,7 @@
 
     .oxSkin table.mceLayout.focused tr.mceLast td {
         border-color: rgba(82, 168, 236, 0.8);
-        -moz-box-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
-        -webkit-box-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
-        box-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
+        .box-shadow(0px 0px 8px rgba(82, 168, 236, 0.6));
     }
 
     .oxSkin table.mceLayout {

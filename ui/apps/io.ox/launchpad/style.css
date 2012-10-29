@@ -43,7 +43,7 @@
 
 #io-ox-launchpad a.app:focus {
     outline: 0;
-    box-shadow: none;
+    .box-shadow(none);
 }
 
 #io-ox-launchpad a.app:active {

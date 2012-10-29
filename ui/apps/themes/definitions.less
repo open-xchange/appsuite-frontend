@@ -32,7 +32,7 @@
 
 /* individual definitions */
 
-@font-light: 'Segoe UI', OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+@font-light: 'Segoe UI Light', OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 @font-normal: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
 @wallpaper-fallback-color: #ffffff;
@@ -124,22 +124,30 @@
 // Copied from boostrap
 
 .box-sizing(@boxmodel: content-box) {
-  -webkit-box-sizing: @boxmodel;
-     -moz-box-sizing: @boxmodel;
-          box-sizing: @boxmodel;
+    -webkit-box-sizing: @boxmodel;
+    -moz-box-sizing: @boxmodel;
+    -ms-user-select: @boxmodel;
+    box-sizing: @boxmodel;
 }
 
 .user-select(@select: none) {
-  -webkit-user-select: @select;
-     -moz-user-select: @select;
-      -ms-user-select: @select;
-       -o-user-select: @select;
-          user-select: @select;
+    -webkit-user-select: @select;
+    -moz-user-select: @select;
+    -ms-user-select: @select;
+    user-select: @select;
 }
 
-.box-shadow(@shadow) {
+.border-radius(@radius: 0px) {
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    -ms-border-radius: @radius;
+    border-radius: @radius;
+}
+
+.box-shadow(@shadow: none) {
     -webkit-box-shadow: @shadow;
     -moz-box-shadow: @shadow;
+    -ms-box-shadow: @shadow;
     box-shadow: @shadow;
 }
 

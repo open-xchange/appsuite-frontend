@@ -207,6 +207,8 @@ $(document).ready(function () {
                 default: node.attr(target, val); break;
                 }
             });
+            // update placeholder
+            $('input').placeholder();
         });
     };
 
@@ -397,8 +399,6 @@ $(document).ready(function () {
                 'You don&rsquo;t need administrator rights. Just restart IE after installation.</div>'
             ));
         }
-
-        $('input').placeholder();
 
         return $.when(
                 // load extensions
