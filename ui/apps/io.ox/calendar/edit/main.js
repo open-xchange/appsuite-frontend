@@ -16,9 +16,7 @@ define('io.ox/calendar/edit/main',
        'io.ox/calendar/api',
        'io.ox/calendar/edit/view-main',
        'gettext!io.ox/calendar/edit/main',
-       'io.ox/core/date',
-       'io.ox/core/extensions',
-       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, MainView, gt, date, ext) {
+       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, MainView, gt) {
 
     'use strict';
 
