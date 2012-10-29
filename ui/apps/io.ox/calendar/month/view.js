@@ -29,6 +29,8 @@ define('io.ox/calendar/month/view',
     var View = Backbone.View.extend({
 
         className: 'week',
+        weekStart: 0,
+        weekEnd: 0,
 
         events: {
             'click .appointment': 'onClickAppointment'
@@ -36,6 +38,8 @@ define('io.ox/calendar/month/view',
 
         initialize: function (options) {
             this.collection.on('reset', this.renderAppointments, this);
+            this.weekStart = options.day;
+            this.weekEnd = options.day + date.WEEK;
         },
 
         onClickAppointment: function (e) {
@@ -104,33 +108,43 @@ define('io.ox/calendar/month/view',
         renderAppointments: function () {
             // clear first
             this.$el.find('.appointment').remove();
+
             // loop over all appointments
             this.collection.each(function (model) {
-                var start = formatDate(new date.Local(model.get('start_date'))),
-                    end = formatDate(new date.Local(model.get('end_date') - 1)),
-                    copy = _.copy(model.attributes, true),
-                    selector, d;
+
+                var startTSUTC = Math.max(model.get('start_date'), this.weekStart),
+                    endTSUTC = Math.min(model.get('end_date'), this.weekEnd) - 1;
+
+                // fix full-time UTC timestamps
+                if (model.get('full_time')) {
+                    startTSUTC = date.Local.utc(startTSUTC);
+                    endTSUTC = date.Local.utc(endTSUTC);
+                }
+
+                var startDate = new date.Local(startTSUTC),
+                    endDate = new date.Local(endTSUTC),
+                    start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime(),
+                    end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime(),
+                    sel,
+                    maxCount = 7;
 
                 if (model.get('start_date') < 0) {
                     console.error('FIXME: start_date should not be negative');
                     throw 'FIXME: start_date should not be negative';
                 }
 
-                // FIXE ME: just to make it work and safe
-                var maxCount = 100;
                 // draw across multiple days
-                while (true && maxCount) {
+                while (maxCount > 0) {
                     maxCount--;
-                    //console.log('start/end', start, end);
-                    selector = '[date="' + start + '"] .list';
-                    this.$(selector).append(this.renderAppointment(model));
+
+                    sel = '[date="' + formatDate(startDate) + '"] .list';
+                    this.$(sel).append(this.renderAppointment(model));
+
                     // inc date
                     if (start !== end) {
-                        copy.start_date += date.DAY;
-                        d = new date.Local(copy.start_date);
-                        d.setHours(0, 0, 0, 0);
-                        copy.start_date = d.getTime();
-                        start = formatDate(d);
+                        startDate.setDate(startDate.getDate() + 1);
+                        startDate.setHours(0, 0, 0, 0);
+                        start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime();
                     } else {
                         break;
                     }

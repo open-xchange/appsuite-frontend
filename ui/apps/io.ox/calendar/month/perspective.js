@@ -88,16 +88,15 @@ define('io.ox/calendar/month/perspective',
                 if (list.length > 0) {
                     var start = obj.start;
                     for (var i = 1; i <= obj.weeks; i++, start += date.WEEK) {
-                       var end = start + date.WEEK;
-                        var collection = self.collections[start];
+                        var end = start + date.WEEK,
+                            collection = self.collections[start];
                         if (collection) {
                             collection.reset(_(list).chain().map(function (mod) {
-                                if ((mod.start_date >= start && mod.start_date <= end) || (mod.end_date >= start && mod.end_date <= end)) {
+                                if ((mod.start_date > start && mod.start_date < end) || (mod.end_date > start && mod.end_date < end) || (mod.start_date < start && mod.end_date > end)) {
                                     var m = new Backbone.Model(mod);
                                     m.id = _.cid(mod);
                                     return m;
                                 }
-
                             }).compact().value());
                         }
                         collection = null;
@@ -183,6 +182,7 @@ define('io.ox/calendar/month/perspective',
         },
 
         render: function (app) {
+
             var start = new date.Local(),
                 year = start.getYear(),
                 month = start.getMonth(),
@@ -238,7 +238,7 @@ define('io.ox/calendar/month/perspective',
                 self.folder = data.id;
                 self.drawWeeks({multi: self.initLoad}).done(function () {
                     self.gotoMonth();
-                    $('[date^="' + year + '-' + month + '"]', self.pane).removeClass('out');
+                    $('[date^="' + year + '-' + month + '-"]', self.pane).removeClass('out');
                 });
             });
 
