@@ -4026,8 +4026,8 @@ define('io.ox/office/editor/editor',
                 Utils.warn('Editor.implSetAttributes(): missing start position');
                 return;
             }
-            startInfo = Position.getNodeInfoAtPosition(editdiv, start);
-            endInfo = _.isArray(end) ? Position.getNodeInfoAtPosition(editdiv, end) : startInfo;
+            startInfo = Position.getDOMNodeAtPosition(editdiv, start);
+            endInfo = _.isArray(end) ? Position.getDOMNodeAtPosition(editdiv, end) : startInfo;
             end = end || start;
             if (!startInfo.node || !endInfo.node) { return; }
 
