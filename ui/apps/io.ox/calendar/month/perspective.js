@@ -52,7 +52,7 @@ define('io.ox/calendar/month/perspective',
 
         scaffold: $(),      // perspective
         pane: $(),          // scrollpane
-        kwInfo: $('<div>'), //
+        monthInfo: $(),     //
         tops: {},           // scrollTop positions of the shown weeks
         fisrtWeek: 0,       // timestamp of the first week
         lastWeek: 0,        // timestamp of the last week
@@ -60,6 +60,7 @@ define('io.ox/calendar/month/perspective',
         initLoad: 2,        // amount of initial called updates
         scrollOffset: 250,  // offset space to trigger update event on scroll stop
         collections: {},    // all week collections of appointments
+        current: null,      // current month as UTC timestamp
         folder: 0,
 
         showAppointment: function (e, obj) {
@@ -164,7 +165,7 @@ define('io.ox/calendar/month/perspective',
             var self = this;
             $('.day.first', this.pane).each(function () {
                 var spDate = $(this).attr('date').split("-");
-                self.tops[($(this).position().top + self.scrollTop()) >> 0] = spDate[0] + '-' + spDate[1];
+                self.tops[($(this).position().top + self.scrollTop()) >> 0] = spDate;//[0] + '-' + spDate[1];
             });
         },
 
@@ -194,6 +195,8 @@ define('io.ox/calendar/month/perspective',
                 curMonth = '',
                 self = this;
 
+            this.current = start.getTime();
+
             this.lastWeek = this.firstWeek = util.getWeekStart(new date.Local(year, month - 1, 1));
 
             this.main
@@ -205,7 +208,7 @@ define('io.ox/calendar/month/perspective',
                 $('<div>')
                     .addClass('toolbar')
                     .append(
-                        this.kwInfo.addClass('info'),
+                        this.monthInfo = $('<div>').addClass('info'),
                         $('<div>').addClass('showall')
                             .append(
                                 $('<label>')
@@ -244,6 +247,7 @@ define('io.ox/calendar/month/perspective',
                 self.drawWeeks({multi: self.initLoad}).done(function () {
                     self.gotoMonth();
                     $('[date^="' + year + '-' + month + '-"]', self.pane).removeClass('out');
+                    self.monthInfo.text(gt.noI18n(date.locale.months[month] + ' ' + year));
                 });
             });
 
@@ -261,11 +265,14 @@ define('io.ox/calendar/month/perspective',
 //                .on('scroll', $.proxy(function (e) {
                     var top = this.scrollTop() + 200,
                         first = true,
-                        month = '';
+                        month = '',
+                        monthArray = [];
                     // find first visible month on scroll-position
+                    console.log(this.tops);
                     for (var y in this.tops) {
                         if (first || top >= y) {
-                            month = this.tops[y];
+                            monthArray = this.tops[y];
+                            month = monthArray[0] + '-' + monthArray[1];
                             first = false;
                         } else {
                             break;
@@ -277,6 +284,7 @@ define('io.ox/calendar/month/perspective',
                         $('.day:not(.out)', this.pane).addClass('out');
                         $('[date^="' + month + '-"]', this.pane).removeClass('out');
                         curMonth = month;
+                        self.monthInfo.text(gt.noI18n(date.locale.months[monthArray[1]] + ' ' + monthArray[0]));
                     }
                 }, this));
 
