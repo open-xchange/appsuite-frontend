@@ -268,7 +268,6 @@ define('io.ox/calendar/month/perspective',
                         month = '',
                         monthArray = [];
                     // find first visible month on scroll-position
-                    console.log(this.tops);
                     for (var y in this.tops) {
                         if (first || top >= y) {
                             monthArray = this.tops[y];
