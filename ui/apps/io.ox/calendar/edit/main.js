@@ -69,6 +69,8 @@ define('io.ox/calendar/edit/main',
             var self = this;
             function cont(data) {
                 self.model = appointmentModel.factory.create(data);
+                appointmentModel.toLocalTime(self.model);
+                appointmentModel.applyAutoLengthMagic(self.model);
                 appointmentModel.setDefaultParticipants(self.model).done(function () {
                     self.view = new MainView({model: self.model, mode: data.id ? 'edit' : 'create', app: self});
                     self.model.on('create:start update:start', function () {
@@ -109,6 +111,8 @@ define('io.ox/calendar/edit/main',
         create: function (data) {
             var self = this;
             self.model = appointmentModel.factory.create(data);
+            appointmentModel.applyAutoLengthMagic(self.model);
+
             appointmentModel.setDefaultParticipants(self.model).done(function () {
                 self.view = new MainView({model: self.model, lasso: data.lasso || false, app: self});
                 self.model.on('create update', _.bind(self.onSave, self));

@@ -626,17 +626,15 @@ define('io.ox/backbone/forms',
                 this.nodes.dayField.datepicker({format: dateFormat});
                 this.nodes.timeField.combobox(comboboxHours);
 
-                this.nodes.dayField.on("change", _.bind(this.updateModelDate, this));
-                this.nodes.timeField.on("change", _.bind(this.updateModelTime, this));
+                this.nodes.dayField.on("blur", _.bind(this.updateModelDate, this));
+                this.nodes.timeField.on("blur", _.bind(this.updateModelTime, this));
                 return this;
             },
             setValueInField: function () {
                 var value = this.model.get(this.attribute);
-                // custom for appointment edit
-                var cValue = (this.baton.mode === 'edit') ? date.Local.localTime(value): value;
                 this.nodes.timezoneField.text(date.Local.getTTInfoLocal(value).abbr);
-                this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', cValue, this.attribute, this.model));
-                this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', cValue, this.attribute, this.model));
+                this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', value, this.attribute, this.model));
+                this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', value, this.attribute, this.model));
             },
             updateModelDate: function () {
                 this.model.set(this.attribute, BinderUtils.convertDate('ViewToModel', this.nodes.dayField.val(), this.attribute, this.model));
