@@ -33,10 +33,12 @@ define("plugins/portal/dummy/register", ["io.ox/core/extensions"], function (ext
                 $('<div class="io-ox-typeA-item">').text('item #9')
             ),
             $('<div class="io-ox-typeA-action">').append(
-                $('<i class="icon-edit io-ox-portal-tile-action">').text(" "),
-                $('<i class="icon-remove io-ox-portal-tile-action">').text(" ")
+                $('<i class="icon-edit io-ox-portal-tile-action invisible">').text(" "),
+                $('<i class="icon-remove io-ox-portal-tile-action invisible">').text(" ")
             )
-        );
+        ).on('hover', function (myevent) {
+            $(myevent.target).closest('.io-ox-tile-container').find('.io-ox-portal-tile-action').toggleClass('invisible');
+        });
         return $node;
     };
     var drawTypeB = function () {
@@ -44,13 +46,15 @@ define("plugins/portal/dummy/register", ["io.ox/core/extensions"], function (ext
         var img = ['http://www.open-xchange.com/typo3conf/ext/opx/Resources/Public/Image/portal/icon/carousel/doller.png',
             'http://www.open-xchange.com/typo3conf/ext/opx/Resources/Public/Image/portal/icon/carousel/gear.png',
             'http://www.open-xchange.com/typo3conf/ext/opx/Resources/Public/Image/portal/icon/carousel/ignite.png'][pos];
-        var $node = $('<div>').append(
+        var $node = $('<div class="io-ox-tile-container">').append(
             $('<div class="io-ox-typeB-image">').attr({'style': 'background-image: url(' + img + ')'}),
             $('<div class="io-ox-typeB-title">').text("Dummy Type B" + pos).append(
-                $('<i class="icon-edit io-ox-portal-tile-action">').text(" "),
-                $('<i class="icon-remove io-ox-portal-tile-action">').text(" ")
+                $('<i class="icon-edit io-ox-portal-tile-action invisible">').text(" "),
+                $('<i class="icon-remove io-ox-portal-tile-action invisible">').text(" ")
             )
-        );
+        ).on('hover', function (myevent) {
+            $(myevent.target).closest('.io-ox-tile-container').find('.io-ox-portal-tile-action').toggleClass('invisible');
+        });
         
         return $node;
     };

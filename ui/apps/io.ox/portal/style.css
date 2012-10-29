@@ -75,6 +75,10 @@
     display: block;
     width: 240px;
     height: 320px;
+<<<<<<< HEAD
+=======
+    margin: 0 12px 12px 0;
+>>>>>>> hidding actions unless hovered
     float: left;
 } 
 .io-ox-portal-widget-tile { 
@@ -130,19 +134,20 @@
     color: #eee;
     text-align: center;
     padding-top: 6px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
 }
-.io-ox-typeB-title{
+.io-ox-typeA-action {
+    height: 36px;
+    background: black;
+    color: #eee;
+}
+.io-ox-typeB-title {
     width: 240px;
     height: 36px;
     background: #000;
     color: #eee;
     text-align: center;
     padding-top: 6px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
+
 .io-ox-typeB-image {
     height: 280px; /* height - title */
     background: no-repeat center;
@@ -156,6 +161,37 @@
 .io-ox-typeA-action .io-ox-portal-tile-action {
     margin-top: 6px;
 }
+
+
+/* Remove this to make Matthias happy */
+/*
+.io-ox-typeA-action, .io-ox-typeB-title {
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+.io-ox-typeA-title {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+.io-ox-portal-widget-tile {
+    border-radius: 12px;
+}
+*/
+
+.io-ox-typeA-action, .io-ox-typeB-title, .io-ox-typeA-title {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+    font-size: 14pt;
+    font-weight: 200;
+    line-height: 1.15em;
+    font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    text-align: left;
+    padding-left: 0.5em;
+}
+.invisible {
+    visibility: hidden;
+}
+
 .tile-color0, .tile-color6 {
     background: #234;
 }
