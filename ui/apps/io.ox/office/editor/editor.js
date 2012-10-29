@@ -1440,7 +1440,7 @@ define('io.ox/office/editor/editor',
                         (Position.isOneCharacterSelection(currentSelection.endPaM.oxoPosition, currentSelection.startPaM.oxoPosition))))) {
 
                         // getting object and drawing frame around it
-                        var objectNode = Position.getDOMNodeAtPosition(editdiv, currentSelection.startPaM.oxoPosition).node;
+                        var objectNode = Position.getDOMPosition(editdiv, currentSelection.startPaM.oxoPosition, true).node;
 
                         // only delete, if imageStartPosition is really an image position
                         if (DOM.isObjectNode(objectNode)) {
@@ -1475,7 +1475,7 @@ define('io.ox/office/editor/editor',
                     while (selection.startPaM.oxoPosition[lastValue] < paraLen) {
 
                         var testPosition = _.copy(selection.startPaM.oxoPosition, true),
-                            node = Position.getDOMNodeAtPosition(editdiv, testPosition).node;
+                            node = Position.getDOMPosition(editdiv, testPosition, true).node;
 
                         // is the image at testPosition a floated image?
                         if ((node) && (DOM.isFloatingObjectNode(node))) {
@@ -1553,7 +1553,7 @@ define('io.ox/office/editor/editor',
 
                         var testPosition = _.copy(selection.startPaM.oxoPosition, true);
                         testPosition[lastValue] -= 1;
-                        var node = Position.getDOMNodeAtPosition(editdiv, testPosition).node;
+                        var node = Position.getDOMPosition(editdiv, testPosition, true).node;
 
                         // is the image at testPosition a floated image?
                         if ((node) && (DOM.isFloatingObjectNode(node))) {
@@ -2889,7 +2889,7 @@ define('io.ox/office/editor/editor',
         function sendImageSize(position) {
 
             // sending size of image to the server in an operation -> necessary after loading the image
-            var imagePos = Position.getDOMNodeAtPosition(editdiv, _.copy(position));
+            var imagePos = Position.getDOMPosition(editdiv, _.copy(position), true);
 
             if (imagePos && DOM.isImageNode(imagePos.node)) {
 
@@ -3496,7 +3496,7 @@ define('io.ox/office/editor/editor',
 
         function deleteSelectedObject(selection) {
             var position = _.copy(selection.startPaM.oxoPosition, true),
-                objectNode = Position.getDOMNodeAtPosition(editdiv, position).node;
+                objectNode = Position.getDOMPosition(editdiv, position, true).node;
 
             // only delete, if imageStartPosition is really an image position
             if (DOM.isObjectNode(objectNode)) {
@@ -4026,8 +4026,8 @@ define('io.ox/office/editor/editor',
                 Utils.warn('Editor.implSetAttributes(): missing start position');
                 return;
             }
-            startInfo = Position.getDOMNodeAtPosition(editdiv, start);
-            endInfo = _.isArray(end) ? Position.getDOMNodeAtPosition(editdiv, end) : startInfo;
+            startInfo = Position.getDOMPosition(editdiv, start, true);
+            endInfo = _.isArray(end) ? Position.getDOMPosition(editdiv, end, true) : startInfo;
             end = end || start;
             if (!startInfo.node || !endInfo.node) { return; }
 
@@ -4717,8 +4717,8 @@ define('io.ox/office/editor/editor',
 
             var source = _.copy(_source, true),
                 dest = _.copy(_dest, true),
-                sourcePos = Position.getDOMNodeAtPosition(editdiv, source),
-                destPos = Position.getDOMNodeAtPosition(editdiv, dest),
+                sourcePos = Position.getDOMPosition(editdiv, source, true),
+                destPos = Position.getDOMPosition(editdiv, dest, true),
                 insertBefore = true,
                 splitNode = false;
 
