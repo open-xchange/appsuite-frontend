@@ -337,12 +337,10 @@ define('io.ox/office/editor/position',
 
         while (oxoPos.length > 0) {
 
-            var returnObj = null;
+            var returnObj = Position.getNextChildNode(node, oxoPos.shift());
 
-            if (forcePositionCounting) {
-                returnObj = Position.getNextChildNodePositionCounting(node, oxoPos.shift());
-            } else {
-                returnObj = Position.getNextChildNode(node, oxoPos.shift());
+            if (! forcePositionCounting) {
+                returnObj = Position.getTextSpanFromNode(returnObj);
             }
 
             if (returnObj) {
@@ -583,8 +581,7 @@ define('io.ox/office/editor/position',
      * Returns the following node and offset corresponding to the next
      * logical position. With a node and the next position index
      * the following node and in the case of a text node the offset
-     * are calculated. Contrary to the function 'getNextChildNode' this
-     * function 'getNextChildNodePositionCounting' does not take care of
+     * are calculated.This function does not take care of
      * ranges but only of direct positions. So [6,0] points to the first
      * character or image or field in the seventh paragraph, not to a
      * cursor position before.
@@ -600,7 +597,7 @@ define('io.ox/office/editor/position',
      *  The child node and an offset. Offset is only set for text nodes,
      *  otherwise it is undefined.
      */
-    Position.getNextChildNodePositionCounting = function (node, pos) {
+    Position.getNextChildNode = function (node, pos) {
 
         var childNode = null,
             offset,
@@ -647,26 +644,21 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * Returns the following node and offset corresponding to the next
-     * logical position. With a node and the next position index
-     * the following node and in the case of a text node the offset
-     * are calculated.
+     * Determining a text node for a DOM position, if this is required.
+     * For object nodes, image nodes or text span nodes, it is sometimes
+     * necessary to get a valid text node.
+     * (maybe this function can be removed in the future.)
      *
-     * @param {Node} node
-     *  The top level node, whose child is searched.
-     *
-     * @param {Number} pos
-     *  The one integer number, that determines the child according to the
-     *  parent position.
+     * @param {Node|Number} node
+     *  The child node and the offset, which might be modified to get
+     *  a valid text node.
      *
      * @returns {Node | Number}
-     *  The child node and an offset. Offset is only set for text nodes,
-     *  otherwise it is undefined.
+     *  The child node and an offset.
      */
-    Position.getNextChildNode = function (node, pos) {
+    Position.getTextSpanFromNode = function (domPoint) {
 
-        var domPoint = Position.getNextChildNodePositionCounting(node, pos),
-            childNode = null,
+        var childNode = null,
             offset = domPoint.offset,
             isTextSpan = false,
             isImage = false,
@@ -695,15 +687,14 @@ define('io.ox/office/editor/position',
                     childNode = childNode.firstChild;  // using text node instead of span node
                 }
                 offset = domPoint.offset;
-                // offset = pos - textLength;
             } else {
-                // do nothing more than in 'getNextChildNodePositionCounting'
+                // do nothing more than in 'getNextChildNode'
                 childNode = domPoint.node;
                 offset = domPoint.offset;
             }
 
         } else {
-            Utils.warn('Position.getNextChildNode(): Unknown node: ' + node.nodeName);
+            Utils.warn('Position.getTextSpanFromNode(): Unknown node: ' + domPoint.node.nodeName);
             return;
         }
 
