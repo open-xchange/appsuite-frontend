@@ -1002,16 +1002,16 @@ define('io.ox/office/editor/editor',
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
         };
-        
+
         this.insertTab = function () {
             var selection = getSelection(),
                 newOperation = {
                     name: Operations.TAB_INSERT,
                     position: _.copy(selection.startPaM.oxoPosition)
                 };
-            
+
             applyOperation(newOperation, true, true);
-            
+
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
         };
@@ -1042,7 +1042,7 @@ define('io.ox/office/editor/editor',
             if (defNumId === undefined) {
                 var listOperation = lists.getDefaultListOperation(type);
                 applyOperation(listOperation, true, true);
-                defNumId = listOperation.listName;
+                defNumId = listOperation.listname;
             }
             setAttributes('paragraph', { numId: defNumId, ilvl: 0});
         };
@@ -1051,7 +1051,7 @@ define('io.ox/office/editor/editor',
             if (defNumId === undefined) {
                 var listOperation = lists.getDefaultListOperation(type, options);
                 applyOperation(listOperation, true, true);
-                defNumId = listOperation.listName;
+                defNumId = listOperation.listname;
             }
             if (options && options.startPosition) {
                 var start = [];
@@ -1798,7 +1798,7 @@ define('io.ox/office/editor/editor',
                                     var paraText = paragraph.textContent,
                                     labelText = paraText.split(' ')[0];
                                     numAutoCorrect.listDetection = lists.detectListSymbol(labelText);
-                                    if (numAutoCorrect.listDetection.numberFormat !== undefined) {
+                                    if (numAutoCorrect.listDetection.numberformat !== undefined) {
                                         numAutoCorrect.startPosition = _.copy(selection.startPaM.oxoPosition, true);
                                         numAutoCorrect.startPosition[numAutoCorrect.startPosition.length - 1] = 0;
                                         numAutoCorrect.endPosition = _.copy(selection.endPaM.oxoPosition, true);
@@ -1808,13 +1808,13 @@ define('io.ox/office/editor/editor',
                             }
                             self.splitParagraph(startPosition);
                             // now apply 'AutoCorrection'
-                            if (numAutoCorrect.listDetection && numAutoCorrect.listDetection.numberFormat !== undefined) {
+                            if (numAutoCorrect.listDetection && numAutoCorrect.listDetection.numberformat !== undefined) {
                                 undomgr.enterGroup(function () {
                                     self.deleteText(numAutoCorrect.startPosition, numAutoCorrect.endPosition);
-                                    self.createList(numAutoCorrect.listDetection.numberFormat === 'bullet' ? 'bullet' : 'numbering',
+                                    self.createList(numAutoCorrect.listDetection.numberformat === 'bullet' ? 'bullet' : 'numbering',
                                             {levelStart: numAutoCorrect.listDetection.levelStart, symbol: numAutoCorrect.listDetection.symbol,
                                              startPosition: numAutoCorrect.startPosition,
-                                             numberFormat: numAutoCorrect.listDetection.numberFormat
+                                             numberFormat: numAutoCorrect.listDetection.numberformat
                                             });
                                 });
                             }
@@ -2038,9 +2038,9 @@ define('io.ox/office/editor/editor',
             if (undomgr.isEnabled()) {
                 // TODO!!!
             }
-            implInsertList(operation.listName, operation.listDefinition);
+            implInsertList(operation.listname, operation.listdefinition);
         };
-        
+
         operationHandlers[Operations.ATTRS_SET] = function (operation) {
             // undo/redo is done inside implSetAttributes()
             implSetAttributes(operation.start, operation.end, operation.attrs);
@@ -3784,7 +3784,7 @@ define('io.ox/office/editor/editor',
             var domPos = Position.getDOMPosition(editdiv, position),
                 node = domPos ? domPos.node : null,
                 tabSpan = null;
-            
+
             // check position
             if (!DOM.isPortionTextNode(node)) {
                 Utils.error('Editor.implInsertTab(): expecting text position to tab.');
@@ -3805,7 +3805,7 @@ define('io.ox/office/editor/editor',
             implParagraphChanged(position);
             return true;
         }
-        
+
         function implInsertImage(url, position, attributes) {
 
             var domPos = Position.getDOMPosition(editdiv, position),
@@ -3955,8 +3955,8 @@ define('io.ox/office/editor/editor',
          * @param {String} colorScheme
          *  The attributes of the scheme.
          */
-        function implInsertList(listName, listDefinition) {
-            lists.addList(listName, listDefinition);
+        function implInsertList(listname, listdefinition) {
+            lists.addList(listname, listdefinition);
         }
 
         /**
