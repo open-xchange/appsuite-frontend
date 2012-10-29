@@ -85,7 +85,7 @@ define('io.ox/office/editor/position',
 
         // Starting to calculate the logical position
         var oxoPosition = [],
-            evaluateCharacterPosition = DOM.isTextSpan(node) || DOM.isFieldNode(node) || DOM.isObjectNode(node) || $(node).is('img'),
+            evaluateCharacterPosition = DOM.isTextSpan(node) || DOM.isTextComponentNode(node) || DOM.isObjectNode(node) || $(node).is('img'),
             characterPositionEvaluated = false;
 
         // currently supported elements: 'div.p', 'table', 'th', 'td', 'tr'
@@ -159,14 +159,14 @@ define('io.ox/office/editor/position',
 
         // 1. Handling all selections, in which the node is below paragraph level
 
-        if ((node.nodeType === 3) && (DOM.isListLabelNode(node.parentNode))) {
-            node = node.parentNode.nextSibling;
+        // text nodes of fields/tabs are embedded in <span> elements in the <div>
+        if (DOM.isTextNodeInTextComponent(node)) {
             offset = 0;
             checkImageFloatMode = false;
         }
 
-        // text nodes of fields are embedded in <span> elements in the field <div>
-        if (DOM.isFieldTextNode(node)) {
+        else if ((node.nodeType === 3) && (DOM.isListLabelNode(node.parentNode))) {
+            node = node.parentNode.nextSibling;
             offset = 0;
             checkImageFloatMode = false;
         }
@@ -271,17 +271,13 @@ define('io.ox/office/editor/position',
         // if node is a text node, a span or an image, then startposition and
         // endposition are not equal.
 
-        if ($(node).is('img')) {
+        if ($(node).is('img') || DOM.isObjectNode(node)) {
             characterPositionOffset = 1;
-        } else if (DOM.isObjectNode(node)) {
-            characterPositionOffset = 1;
-        } else if (DOM.isFieldNode(node)) {
-            characterPositionOffset = 1;
-        } else if ((node.nodeType === 3) && DOM.isFieldNode(node.parentNode.parentNode)) {
+        } else if (DOM.isTextComponentNode(node) || DOM.isTextNodeInTextComponent(node)) {
             characterPositionOffset = 1;
         } else if (DOM.isPortionSpan(node)) {
             characterPositionOffset = node.firstChild.nodeValue.length;
-        } else if (DOM.isPortionTextNode(node)) {
+        } else if (DOM.isTextNodeInPortionSpan(node)) {
             characterPositionOffset = node.nodeValue.length;
         }
 
@@ -600,7 +596,7 @@ define('io.ox/office/editor/position',
     Position.getNextChildNode = function (node, pos) {
 
         var childNode = null,
-            offset,
+            offset = 0,
             lastTextSpanInfo = null;
 
         node = Utils.getDomNode(node);
@@ -612,8 +608,6 @@ define('io.ox/office/editor/position',
         } else if (DOM.isPageNode(node) || $(node).is('th, td')) {
             childNode = node.childNodes[pos];
         } else if (DOM.isParagraphNode(node)) {
-
-
             Position.iterateParagraphChildNodes(node, function (_node, nodeStart, nodeLength) {
 
                 var // offset inside the current child node
@@ -668,7 +662,7 @@ define('io.ox/office/editor/position',
 
             if (DOM.isObjectNode(domPoint.node)) {
                 isImage = true;
-            } else if (DOM.isFieldNode(domPoint.node)) {
+            } else if (DOM.isTextComponentNode(domPoint.node)) {
                 isField = true;
             } else if (DOM.isTextSpan(domPoint.node)) {
                 isTextSpan = true;
@@ -753,7 +747,7 @@ define('io.ox/office/editor/position',
         if ((start) &&
             (DOM.isObjectNode(start.node)) &&
             (start.offset === 0) &&
-            (Position.isOneCharacterSelection(oxoSelection.startPaM.oxoPosition, oxoSelection.endPaM.oxoPosition))) {
+            (Position.isNextComponent(oxoSelection.startPaM.oxoPosition, oxoSelection.endPaM.oxoPosition))) {
             endSelection = _.copy(oxoSelection.startPaM.oxoPosition, true);  // end position is copy of start position, so that end will be start
         }
 
@@ -2066,41 +2060,6 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * Checks if a specified node has the data property 'mode' set to 'leftFloated'
-     * or 'rightFloated' or 'noneFloated'.
-     *
-     * @param {HTMLElement|jQuery} node
-     *  A DOM element object or jQuery element, that is checked, if it contains
-     *  the data property 'mode' set to 'leftFloated' or 'rightFloated' or 'noneFloated'.
-     *  If it is a DOM element, it is jQuerified first.
-     *
-     * @returns {Boolean}
-     *  A boolean containing the information, if the specified node has the data
-     *  property 'mode' set to 'leftFloated' or 'rightFloated' or 'noneFloated'.
-     */
-    Position.hasFloatProperty = function (node) {
-        var floatMode = $(node).data('mode');
-        return _(['leftFloated', 'rightFloated', 'noneFloated']).contains(floatMode);
-    };
-
-
-    /**
-     * Checks if a specified node has the data property 'mode' set to 'inline'.
-     * This are typically Images that are inline.
-     *
-     * @param {HTMLElement|jQuery} node
-     *  A DOM element object or jQuery element, that is checked.
-     *  If it is a DOM element, it is jQuerified first.
-     *
-     * @returns {Boolean}
-     *  A boolean containing the information, if the specified node has the data
-     *  property 'mode' set to inline.
-     */
-    Position.hasInlineFloatProperty = function (node) {
-        return $(node).data('mode') === 'inline';
-    };
-
-    /**
      * Calculating the first text node position in a paragraph.
      *
      * @param {HTMLElement|jQuery} paragraph
@@ -2231,28 +2190,62 @@ define('io.ox/office/editor/position',
 
     };
 
+    // position arrays --------------------------------------------------------
+
     /**
-     * Checking, if two logical positions have a difference of one
-     * in the final position and are equal in all other positions.
+     * Returns whether the passed logical positions are located in the same
+     * parent component (all array elements but the last are equal).
      *
-     * @param {OXOPaM.oxoPosition} pos1
+     * @param {Number[]} position1
      *  The first logical position.
      *
-     * @param {OXOPaM.oxoPosition} pos2
+     * @param {Number[]} position2
+     *  The second logical position.
+     *
+     * @param {Number} [parentLevel=1]
+     *  The number of parent levels. If omitted, the direct parents of the
+     *  passed positions will be checked (only the last element of each array
+     *  will be ignored). Otherwise, the specified number of trailing array
+     *  elements will be ignored (for example, a value of 2 checks the grand
+     *  parents).
+     *
+     * @returns {Boolean}
+     *  Whether the logical positions are located in the same parent component.
+     */
+    Position.hasSameParentComponent = function (position1, position2, parentLevel) {
+
+        var index = 0, length = position1.length;
+
+        // length of both positions must be equal
+        parentLevel = parentLevel || 1;
+        if ((length < parentLevel) || (length !== position2.length)) { return false; }
+
+        // compare all array elements but the last ones
+        for (index = length - parentLevel - 1; index >= 0; index -= 1) {
+            if (position1[index] !== position2[index]) {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+    /**
+     * Returns whether the second logical position is the direct successor of
+     * the first logical position.
+     *
+     * @param {Number[]} position1
+     *  The first logical position.
+     *
+     * @param {Number[]} position2
      *  The second logical position.
      *
      * @returns {Boolean}
-     *  Returns true, if pos2 is directly following pos1 with a
-     *  difference of 1.
+     *  Returns whether position2 is following position1 with a difference of
+     *  exactly one component.
      */
-    Position.isOneCharacterSelection = function (_pos1, _pos2) {
-
-        var pos1 = _.copy(_pos1, true),
-            pos2 = _.copy(_pos2, true),
-            lastPos1 = pos1.pop(),
-            lastPos2 = pos2.pop();
-
-        return (_.isEqual(pos1, pos2)) && (lastPos2 === lastPos1 + 1);
+    Position.isNextComponent = function (position1, position2) {
+        return Position.hasSameParentComponent(position1, position2) && (_.last(position1) === _.last(position2) + 1);
     };
 
     // iteration --------------------------------------------------------------
@@ -2293,10 +2286,10 @@ define('io.ox/office/editor/position',
      *      also helper nodes that do not represent editable content and have a
      *      logical length of 0. Otherwise, only real content nodes will be
      *      visited (non-empty text portions, text fields, and object nodes).
-     *  @param {Number} [options.start=0]
+     *  @param {Number} [options.start]
      *      The logical index of the first node to be included into the
      *      iteration process. Text spans covered partly will be visited too.
-     *  @param {Number} [options.end=0x7FFFFFFF]
+     *  @param {Number} [options.end]
      *      The logical index of the last node to be included in the iteration
      *      process. Text spans covered partly will be visited too. Note that
      *      this index is considered inclusive (NOT a half-open range).
@@ -2339,8 +2332,8 @@ define('io.ox/office/editor/position',
             if (isTextSpan) {
                 // portion nodes contain regular text
                 nodeLength = node.firstChild.nodeValue.length;
-            } else if (DOM.isFieldNode(node) || DOM.isObjectNode(node)) {
-                // text fields and objects count as one character
+            } else if (DOM.isTextComponentNode(node) || DOM.isObjectNode(node)) {
+                // special text components (e.g. fields, tabs) and objects count as one character
                 nodeLength = 1;
             }
 
@@ -2387,7 +2380,144 @@ define('io.ox/office/editor/position',
         }, undefined, { children: true });
     };
 
+    /**
+     * Calls the passed iterator function for all content nodes located between
+     * the specified paragraph nodes.
+     *
+     * @param {HTMLElement} firstParagraph
+     *  The first paragraph element that will be visited. If this object is a
+     *  jQuery collection, uses the first DOM node it contains.
+     *
+     * @param {HTMLElement} lastParagraph
+     *  The last paragraph element that will be visited. If this object is a
+     *  jQuery collection, uses the first DOM node it contains.
+     *
+     * @param {Function} iterator
+     *  The iterator function that will be called for every matching content
+     *  node (paragraphs and tables). Receives the DOM node object as first
+     *  parameter. If the iterator returns the Utils.BREAK object, the
+     *  iteration process will be stopped immediately.
+     *
+     * @param {Object} [context]
+     *  If specified, the iterator will be called with this context (the symbol
+     *  'this' will be bound to the context inside the iterator function).
+     *
+     * @param {Object} [options]
+     *  A map of options to control the iteration. Supports the following
+     *  options:
+     *  @param {Boolean} [options.shortestPath=false]
+     *      If set to true, tables that are located between the first and last
+     *      paragraph will be visited but all paragraphs (and sub tables)
+     *      contained in the table cells will be skipped. By default, this
+     *      method visits all paragraphs and tables embedded in a table. Has no
+     *      effect for tables that contain the end paragraph, because these
+     *      tables are not fully covered by the paragraph range. Tables that
+     *      contain the start paragraph will never be visited, because they are
+     *      considered to be located before the start paragraph.
+     *
+     * @returns {Utils.BREAK|Undefined}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
+     */
+    function iterateContentNodes(firstParagraph, lastParagraph, iterator, context, options) {
+
+        var // whether to iterate on shortest path (do not traverse into completely covered tables)
+            shortestPath = Utils.getBooleanOption(options, 'shortestPath', false),
+            // current content node
+            contentNode = firstParagraph;
+
+        // iterate through all paragraphs until the end paragraph has been reached
+        for (;;) {
+
+            // visit the current colntent node
+            if (iterator.call(context, contentNode) === Utils.BREAK) { return Utils.BREAK; }
+
+            // end of selection reached, exit the endless loop
+            if (contentNode === lastParagraph) {
+                return;
+            }
+
+            // find next paragraph or table
+        }
+
+    }
+
     Position.iterateNodesInSelection = function (rootNode, startPosition, endPosition, iterator, context, options) {
+
+        var // start node and offset (pass true to NOT resolve text spans to text nodes)
+            startInfo = Position.getDOMPosition(rootNode, startPosition, true),
+            // end node and offset (pass true to NOT resolve text spans to text nodes)
+            endInfo = Position.getDOMPosition(rootNode, endPosition, true),
+            // whether to iterate on shortest path (do not traverse into completely covered tables)
+            shortestPath = Utils.getBooleanOption(options, 'shortestPath', false),
+            // split partly covered text spans before visiting them
+            split = Utils.getBooleanOption(options, 'split', false),
+            // paragraph nodes containing the passed start and end positions
+            firstParagraph = null, lastParagraph = null;
+
+        // check validity of passed positions
+        if (!startInfo.node || !endInfo.node) {
+            Utils.warn('Position.iterateNodesInSelection(): invalid selection');
+            return;
+        }
+
+        // object selection (start points to object, end points directly after object)
+        if (DOM.isObjectNode(startInfo.node) && Position.isNextComponent(startPosition, endPosition)) {
+            // visit all kinds of objects (floating and inline)
+            return iterator.call(context, startInfo.node);
+        }
+
+        // othrewise, process text selection
+        firstParagraph = startInfo.node.parentNode;
+        lastParagraph = endInfo.node.parentNode;
+        if (!DOM.isParagraphNode(firstParagraph) || !DOM.isParagraphNode(lastParagraph)) {
+            Utils.warn('Position.iterateNodesInSelection(): text selection expected');
+            return;
+        }
+
+        // special case 'simple cursor', visit the text span
+        if (_.isEqual(startPosition, endPosition)) {
+            // if located at the beginning of a text component: visit end of preceding text span if available
+            if (startInfo.offset === 0) {
+                startInfo.node = DOM.findPreviousTextSpan(startInfo.node) || startInfo.node;
+            }
+            return iterator.call(context, startInfo.node);
+        }
+
+        // TODO: process Firefox table cell selection
+
+        // iterate through all paragraphs and tables until the end position has been reached
+        return iterateContentNodes(firstParagraph, lastParagraph, function (contentNode) {
+
+            var // start offset in first paragraph
+                startOffset = (contentNode === firstParagraph) ? _.last(startPosition) : undefined,
+                // end offset in last paragraph (convert half-open range to closed range)
+                endOffset = (contentNode === lastParagraph) ? (_.last(endPosition) - 1) : undefined;
+
+            // process paragraph nodes
+            if (DOM.isParagraphNode(contentNode)) {
+
+                // visit entire paragraph in shortest-path mode (also for start paragraph if covered completely)
+                if (shortestPath && (_.isUndefined(startOffset) || (startOffset === 0)) && _.isUndefined(endOffset)) {
+                    return iterator.call(context, contentNode);
+                }
+
+                // visit child nodes in the paragraph (but skip floating objects)
+                return Position.iterateParagraphChildNodes(contentNode, function (node) {
+                    return DOM.isFloatingObject(node) ? undefined : iterator.call(context, node);
+                }, undefined, { start: startOffset, end: endOffset, split: split });
+            }
+
+            // visit table nodes in shortest-path mode only
+            if (DOM.isTableNode(contentNode)) {
+                return shortestPath ? iterator.call(context, contentNode) : undefined;
+            }
+
+            Utils.error('Position.iterateNodesInSelection(): unknown content node');
+            return Utils.BREAK;
+
+        }, undefined, options);
+
     };
 
     // exports ================================================================

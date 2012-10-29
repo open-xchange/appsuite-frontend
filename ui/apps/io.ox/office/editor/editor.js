@@ -472,7 +472,7 @@ define('io.ox/office/editor/editor',
 
                 selection.adjust();
 
-                if (selection.startPaM.imageFloatMode && (Position.isOneCharacterSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
+                if (selection.startPaM.imageFloatMode && (Position.isNextComponent(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
                     // An image selection
                     // This deleting of images is only possible with the button, not with an key down event.
                     deleteSelectedObject(selection);
@@ -1450,9 +1450,9 @@ define('io.ox/office/editor/editor',
                     // checked separately for both directions, foward and backward)
                     if ((currentSelection) &&
                         (((currentSelection.startPaM.imageFloatMode) &&
-                        (Position.isOneCharacterSelection(currentSelection.startPaM.oxoPosition, currentSelection.endPaM.oxoPosition))) ||
+                        (Position.isNextComponent(currentSelection.startPaM.oxoPosition, currentSelection.endPaM.oxoPosition))) ||
                         ((currentSelection.endPaM.imageFloatMode) &&
-                        (Position.isOneCharacterSelection(currentSelection.endPaM.oxoPosition, currentSelection.startPaM.oxoPosition))))) {
+                        (Position.isNextComponent(currentSelection.endPaM.oxoPosition, currentSelection.startPaM.oxoPosition))))) {
 
                         // getting object and drawing frame around it
                         var objectNode = Position.getDOMPosition(editdiv, currentSelection.startPaM.oxoPosition, true).node;
@@ -2702,7 +2702,7 @@ define('io.ox/office/editor/editor',
                     // append text node to current sequence
                     siblingTextNodes.push(node.firstChild);
 
-                } else if (DOM.isFieldNode(node) || DOM.isListLabelNode(node)) {
+                } else if (DOM.isTextSpanContainerNode(node)) {
                     // append all text nodes of the field to current sequence of text nodes
                     Utils.iterateDescendantTextNodes(node, function (textNode) { siblingTextNodes.push(textNode); });
 
@@ -2808,7 +2808,7 @@ define('io.ox/office/editor/editor',
 
                     selection.adjust();
 
-                    if ((selection.startPaM.imageFloatMode) && (Position.isOneCharacterSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
+                    if ((selection.startPaM.imageFloatMode) && (Position.isNextComponent(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
                         // An image selection
                         setAttributesToSelectedImage(selection, attributes);
 
@@ -3819,7 +3819,7 @@ define('io.ox/office/editor/editor',
                 image = null;
 
             // check position
-            if (!DOM.isPortionTextNode(node)) {
+            if (!DOM.isTextNodeInPortionSpan(node)) {
                 Utils.error('Editor.implInsertImage(): expecting text position to insert image.');
                 return false;
             }
@@ -3867,7 +3867,7 @@ define('io.ox/office/editor/editor',
                 fieldSpan = null;
 
             // check position
-            if (!DOM.isPortionTextNode(node)) {
+            if (!DOM.isTextNodeInPortionSpan(node)) {
                 Utils.error('Editor.implInsertField(): expecting text position to insert field.');
                 return false;
             }
@@ -3977,7 +3977,7 @@ define('io.ox/office/editor/editor',
             var // the resulting style family
                 family = null;
 
-            if (DOM.isTextSpan(element) || DOM.isFieldNode(element)) {
+            if (DOM.isTextSpan(element) || DOM.isTextSpanContainerNode(element)) {
                 family = 'character';
             } else if (DOM.isParagraphNode(element)) {
                 family = 'paragraph';
@@ -4723,7 +4723,7 @@ define('io.ox/office/editor/editor',
             for (var i = 0; i < nodes; i++) {
                 var text = '';
                 node = searchNodes[i];
-                if (DOM.isObjectNode(node) || DOM.isFieldNode(node)) {
+                if (DOM.isObjectNode(node) || DOM.isTextSpanContainerNode(node)) {
                     nodeLen = 1;
                 } else if (DOM.isTextSpan(node)) {
                     text = $(node).text();

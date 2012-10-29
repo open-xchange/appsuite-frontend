@@ -306,7 +306,7 @@ define('io.ox/office/editor/operations',
 
                     // TODO: other objects
                     else {
-                        Utils.warn('Operations.Generator.generateParagraphChildOperations(): unknown content node');
+                        Utils.error('Operations.Generator.generateParagraphChildOperations(): unknown content node');
                     }
                 }
 
@@ -474,7 +474,7 @@ define('io.ox/office/editor/operations',
                     // operations to create a table with its structure and contents
                     this.generateTableOperations(node, position);
                 } else {
-                    Utils.warn('Operations.Generator.generateContentOperations(): unexpected node "' + Utils.getNodeName(node) + '" at position ' + JSON.stringify(position) + '.');
+                    Utils.error('Operations.Generator.generateContentOperations(): unexpected node "' + Utils.getNodeName(node) + '" at position ' + JSON.stringify(position) + '.');
                     // continue with next child node (do not increase position)
                     return;
                 }

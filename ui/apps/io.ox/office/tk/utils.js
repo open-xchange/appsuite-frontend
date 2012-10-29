@@ -98,6 +98,38 @@ define('io.ox/office/tk/utils',
         return object;
     };
 
+    /**
+     * Compares the two passed numeric arrays lexicographically.
+     *
+     * @param {Number[]} array1
+     *  The first array that will be compared to the second array.
+     *
+     * @param {Number[]} array2
+     *  The second array that will be compared to the first array.
+     *
+     * returns {Number}
+     *  A negative value, if array1 is lexicographically less than array2; a
+     *  positive value, if array1 is lexicographically greater than array2; or
+     *  zero, if both arrays are equal.
+     */
+    Utils.compareNumberArrays = function (array1, array2) {
+
+        var // minimum length of both arrays
+            length = Math.min(array1.length, array2.length),
+            // loop index
+            index = 0;
+
+        // compare all array elements
+        for (index = 0; index < length; index += 1) {
+            if (array1[index] !== array2[index]) {
+                return array1[index] - array2[index];
+            }
+        }
+
+        // leading parts of both arrays are equal, compare array lengths
+        return array1.length - array2.length;
+    };
+
     // calculation and conversion ---------------------------------------------
 
     Utils.minMax = function (value, min, max) {
