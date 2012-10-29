@@ -1,4 +1,3 @@
-// NOJSHINT
 /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
@@ -87,17 +86,23 @@ define('io.ox/calendar/month/perspective',
             return api.getAll(obj).done(function (list) {
                 if (list.length > 0) {
                     var start = obj.start;
-                    for (var i = 1; i <= obj.weeks; i++, start += date.WEEK) {
+                    for (var i = 1; i <= obj.weeks; i++) {
+                        start += date.WEEK;
+
                         var end = start + date.WEEK,
                             collection = self.collections[start];
+
                         if (collection) {
-                            collection.reset(_(list).chain().map(function (mod) {
+                            var retList = [];
+                            for (var j = 0; j < list.length; j++) {
+                                var mod = list[j];
                                 if ((mod.start_date > start && mod.start_date < end) || (mod.end_date > start && mod.end_date < end) || (mod.start_date < start && mod.end_date > end)) {
                                     var m = new Backbone.Model(mod);
                                     m.id = _.cid(mod);
-                                    return m;
+                                    retList.push(m);
                                 }
-                            }).compact().value());
+                            }
+                            collection.reset(retList);
                         }
                         collection = null;
                     }
