@@ -339,7 +339,7 @@ define('io.ox/office/editor/position',
 
             var returnObj = Position.getNextChildNode(node, oxoPos.shift());
 
-            if (! forcePositionCounting) {
+            if ((returnObj) && (returnObj.node) && (! forcePositionCounting)) {
                 returnObj = Position.getTextSpanFromNode(returnObj);
             }
 
