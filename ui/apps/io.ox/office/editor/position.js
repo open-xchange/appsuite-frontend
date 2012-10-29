@@ -653,29 +653,23 @@ define('io.ox/office/editor/position',
     Position.getTextSpanFromNode = function (domPoint) {
 
         var childNode = null,
-            offset = domPoint.offset,
-            isTextSpan = false,
-            isImage = false,
-            isField = false;
+            offset = domPoint.offset;
 
         if ((domPoint) && (domPoint.node)) {
 
+            // if the position is an image or field, the dom position shall be the previous or following text node
             if (DOM.isObjectNode(domPoint.node)) {
-                isImage = true;
+                childNode = DOM.findNextTextSpan(domPoint.node);
+                offset = 0;
             } else if (DOM.isTextComponentNode(domPoint.node)) {
-                isField = true;
+                childNode = DOM.findPreviousTextSpan(domPoint.node);
+                if (childNode) {
+                    offset = $(childNode).text().length;
+                } else {
+                    childNode = DOM.findNextTextSpan(domPoint.node);
+                    offset = 0;
+                }
             } else if (DOM.isTextSpan(domPoint.node)) {
-                isTextSpan = true;
-            }
-
-            // if the position is an image or field, the dom position shall be the following text node
-            if (isImage) {
-                childNode = Utils.findNextNodeInTree(domPoint.node, Utils.JQ_TEXTNODE_SELECTOR); // can be more in a row without text span between them
-                offset = 0;
-            } else if (isField) {
-                childNode = domPoint.node.nextSibling.firstChild; // following the div field must be a text span (like inline images)
-                offset = 0;
-            } else if (isTextSpan) {
                 childNode = domPoint.node;
                 if (childNode.nodeType !== 3) {
                     childNode = childNode.firstChild;  // using text node instead of span node
@@ -2245,7 +2239,7 @@ define('io.ox/office/editor/position',
      *  exactly one component.
      */
     Position.isNextComponent = function (position1, position2) {
-        return Position.hasSameParentComponent(position1, position2) && (_.last(position1) === _.last(position2) + 1);
+        return Position.hasSameParentComponent(position1, position2) && (_.last(position1) === _.last(position2) - 1);
     };
 
     // iteration --------------------------------------------------------------
