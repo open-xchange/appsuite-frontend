@@ -60,7 +60,7 @@ define('io.ox/office/editor/format/paragraphstyles',
 
             outlinelvl: { def: 9 },
 
-            tabstops: { def: {} }
+            tabstops: { def: [] }
 
         };
 

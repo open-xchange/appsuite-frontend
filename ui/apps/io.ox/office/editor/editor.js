@@ -1002,6 +1002,19 @@ define('io.ox/office/editor/editor',
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
         };
+        
+        this.insertTab = function () {
+            var selection = getSelection(),
+                newOperation = {
+                    name: Operations.TAB_INSERT,
+                    position: _.copy(selection.startPaM.oxoPosition)
+                };
+            
+            applyOperation(newOperation, true, true);
+            
+            // setting the cursor position
+            setSelection(new OXOSelection(lastOperationEnd));
+        };
 
         this.splitParagraph = function (position) {
             var newOperation = {name: Operations.PARA_SPLIT, start: _.copy(position, true)};
@@ -1853,7 +1866,7 @@ define('io.ox/office/editor/editor',
                                     result.push({operation: Operations.TEXT_INSERT, data: splitted[j], depth: depth});
                                 } else {
                                     // tab
-                                    result.push({operation: 'insertTab' /* Operations.TAB_INSERT */ });
+                                    result.push({operation: Operations.TAB_INSERT});
                                 }
                             }
                         }
@@ -1962,6 +1975,15 @@ define('io.ox/office/editor/editor',
             implInsertText(operation.text, operation.start);
         };
 
+        operationHandlers[Operations.TAB_INSERT] = function (operation) {
+            if (implInsertTab(operation.position)) {
+                if (undomgr.isEnabled()) {
+                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.position, end: operation.position };
+                    undomgr.addUndo(undoOperation, operation);
+                }
+            }
+        };
+
 /*
         operationHandlers[Operations.DELETE] = function (operation) { // this shall be the only delete operation
             if (undomgr.isEnabled()) {
@@ -2018,7 +2040,7 @@ define('io.ox/office/editor/editor',
             }
             implInsertList(operation.listName, operation.listDefinition);
         };
-
+        
         operationHandlers[Operations.ATTRS_SET] = function (operation) {
             // undo/redo is done inside implSetAttributes()
             implSetAttributes(operation.start, operation.end, operation.attrs);
@@ -3758,6 +3780,32 @@ define('io.ox/office/editor/editor',
             }
         }
 
+        function implInsertTab(position) {
+            var domPos = Position.getDOMPosition(editdiv, position),
+                node = domPos ? domPos.node : null,
+                tabSpan = null;
+            
+            // check position
+            if (!DOM.isPortionTextNode(node)) {
+                Utils.error('Editor.implInsertTab(): expecting text position to tab.');
+                return false;
+            }
+
+            // split the text span at the specified position
+            DOM.splitTextSpan(node.parentNode, domPos.offset);
+
+            // split the text span again to get initial character formatting
+            // for the field, and insert the field representation text
+            tabSpan = DOM.splitTextSpan(node.parentNode, 0).css('margin-left', '1.25cm');
+
+            // insert a new text field before the addressed text node, move
+            // the field span element into the field node
+            DOM.createTabNode().append(tabSpan).insertBefore(node.parentNode);
+
+            implParagraphChanged(position);
+            return true;
+        }
+        
         function implInsertImage(url, position, attributes) {
 
             var domPos = Position.getDOMPosition(editdiv, position),

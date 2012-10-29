@@ -542,6 +542,36 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     DOM.createFieldNode = function (text) {
         return $('<div>').addClass('field');
     };
+    
+    /**
+     * A jQuery selector that matches elements representing a tab.
+     */
+    DOM.TAB_NODE_SELECTOR = 'div.tab';
+
+    /**
+     * Returns whether the passed node is a tab element
+     * (see DOM.isTabNode() method).
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a text node in a text field element.
+     */
+    DOM.isTabNode = function (node) {
+        return $(node).is(DOM.TAB_NODE_SELECTOR);
+    };
+    
+    /**
+     * Returns a new tab element.
+     *
+     * @returns {jQuery}
+     *  A new tab element, as jQuery object.
+     */
+    DOM.createTabNode = function () {
+        return $('<div>', { contenteditable: false }).addClass('tab component');
+    };
 
     /**
      * A jQuery selector that matches elements representing a list label.

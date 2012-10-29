@@ -315,7 +315,9 @@ define('io.ox/office/editor/view/view',
                 .addButton('file/editrights', { icon: 'icon-pencil',    tooltip: 'Acquire Edit Rights' })
                 .addButton('file/flush',      { icon: 'icon-share-alt', tooltip: 'Flush Operations' })
                 .addSeparator()
-                .addGroup('document/quicksearch', new TextField({ tooltip: 'Quick Search' }));
+                .addGroup('document/quicksearch', new TextField({ tooltip: 'Quick Search' }))
+                .addSeparator()
+                .addButton('character/tab', { icon: 'icon-io-ox-num-inc-indent', tooltip : 'Tab'});
         }
 
         // register a component that updates the window header tool bar

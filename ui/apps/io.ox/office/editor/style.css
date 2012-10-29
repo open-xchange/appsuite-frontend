@@ -65,7 +65,7 @@
             margin: 0;
             line-height: 0;
         
-            > div.field, > div.list-label {
+            > div.field, > div.tab, > div.list-label {
                 display: inline-block;
             }
 
@@ -219,6 +219,10 @@
 
             div.field > span {
                 .debug-highlight-mixin(#f8f);
+            }
+            
+            div.tab > span {
+                .debug-highlight-mixin(#8ff);
             }
 
             table, div.object, div.list-label > span {

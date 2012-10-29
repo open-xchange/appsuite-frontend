@@ -107,7 +107,9 @@ define('io.ox/office/editor/operations',
         ATTRS_CLEAR: 'clearAttributes',
 
         IMAGE_INSERT: 'insertImage',
-        FIELD_INSERT: 'insertField'
+        FIELD_INSERT: 'insertField',
+        
+        TAB_INSERT: 'insertTab'
 
     };
 
