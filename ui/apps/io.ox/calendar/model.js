@@ -223,7 +223,6 @@ define('io.ox/calendar/model',
         applyAutoLengthMagic: function (model) {
             // End date automatically shifts with start date
             var length = model.get('end_date') - model.get('start_date');
-            console.log("LENGTH", length);
             var updating = false;
             model.on('change:start_date', function () {
                 if (length < 0) {
@@ -239,8 +238,6 @@ define('io.ox/calendar/model',
                     return;
                 }
                 length = model.get('end_date') - model.get('start_date');
-                console.log("LENGTH", length);
-
             });
         },
         toLocalTime: function (model) {

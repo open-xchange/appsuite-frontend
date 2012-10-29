@@ -138,7 +138,6 @@ define('io.ox/backbone/forms',
         };
 
         this.onValidationError = function (messages) {
-            console.log("ON VALIDATION ERROR");
             var helpBlock =  $('<div class="help-block error">');
             _(messages).each(function (msg) {
                 helpBlock.append($.txt(msg));
@@ -688,8 +687,6 @@ define('io.ox/backbone/forms',
 
                 if (string !== '' && reg.test(string)) {
                     var dateArray = string.split('.');
-                    console.log(Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0])));
-                    console.log(date.DATE);
                     return Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0]));
                 } else {
                     return string;

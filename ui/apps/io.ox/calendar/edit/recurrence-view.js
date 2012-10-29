@@ -223,7 +223,6 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
         _.extend(this, {
             init: function () {
                 var self = this;
-                window.$appointment = this.model;
 
                 this.sentence = new ConfigSentence(gt('This appointment <a  data-widget="toggle">is not repeated</a>'), {
                     values: [gt("is not repeated"), gt("is repeated")]
