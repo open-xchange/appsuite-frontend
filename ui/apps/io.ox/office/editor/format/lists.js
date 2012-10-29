@@ -174,6 +174,9 @@ define('io.ox/office/editor/format/lists',
                 else
                     retString = "●";
                 break;
+            case "none":
+                    retString = '';
+                break;
             default:
             }
             if (numberFormat !== 'bullet')
