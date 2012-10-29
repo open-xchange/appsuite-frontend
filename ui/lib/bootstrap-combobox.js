@@ -161,7 +161,7 @@ $(document).ready(function () {
             if (selected) {
                 $(selected).addClass('active');
             } else {
-                items.first().addClass('active');
+                this.shown = false;
             }
 
             this.$li = items;
