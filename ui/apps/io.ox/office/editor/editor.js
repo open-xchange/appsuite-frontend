@@ -4823,28 +4823,36 @@ define('io.ox/office/editor/editor',
                         var paraAttributes = paragraphStyles.getElementAttributes(para);
                         $(para).children(DOM.LIST_LABEL_NODE_SELECTOR).remove();
                         $(para).css('margin-left', '');
-                        if (paraAttributes.ilvl !== -1 && paraAttributes.ilvl < 9 && paraAttributes.numId !== -1) {
-                            if (!listItemCounter[paraAttributes.numId])
-                                listItemCounter[paraAttributes.numId] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-                            listItemCounter[paraAttributes.numId][paraAttributes.ilvl]++;
-                            // TODO: reset sub-levels depending on their 'levelRestartValue' attribute
-                            var subLevelIdx = paraAttributes.ilvl + 1;
-                            for (; subLevelIdx < 9; subLevelIdx++)
-                                listItemCounter[paraAttributes.numId][subLevelIdx] = 0;
-                            var listObject = lists.formatNumber(paraAttributes.numId, paraAttributes.ilvl,
-                                    listItemCounter[paraAttributes.numId]);
-                            var numberingElement = DOM.createListLabelNode(listObject.text);
-                            var span = Utils.findDescendantNode(para, function () { return DOM.isPortionSpan(this); });
-                            var charAttributes = characterStyles.getElementAttributes(span);
-                            numberingElement.css('font-size', charAttributes.fontsize + 'pt');
-                            LineHeight.updateElementLineHeight(numberingElement, paraAttributes.lineheight);
-                            if (listObject.indent > 0) {
-                                $(para).css('margin-left', Utils.convertHmmToLength(listObject.indent, 'pt'));
+                        var numId = paraAttributes.numId;
+                        if (numId  !== -1) {
+                            var ilvl = paraAttributes.ilvl;
+                            if (ilvl < 0) {
+                                // is a numbering level assigned to the current paragraph style?
+                                ilvl = lists.findIlvl(numId, paraAttributes.style);
                             }
-                            if (listObject.labelWidth > 0) {
-                                numberingElement.css('min-width', Utils.convertHmmToLength(listObject.labelWidth, 'pt'));
+                            if (ilvl !== -1 && ilvl < 9) {
+                                if (!listItemCounter[paraAttributes.numId])
+                                    listItemCounter[paraAttributes.numId] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                                listItemCounter[paraAttributes.numId][ilvl]++;
+                                // TODO: reset sub-levels depending on their 'levelRestartValue' attribute
+                                var subLevelIdx = ilvl + 1;
+                                for (; subLevelIdx < 9; subLevelIdx++)
+                                    listItemCounter[paraAttributes.numId][subLevelIdx] = 0;
+                                var listObject = lists.formatNumber(paraAttributes.numId, ilvl,
+                                        listItemCounter[paraAttributes.numId]);
+                                var numberingElement = DOM.createListLabelNode(listObject.text);
+                                var span = Utils.findDescendantNode(para, function () { return DOM.isPortionSpan(this); });
+                                var charAttributes = characterStyles.getElementAttributes(span);
+                                numberingElement.css('font-size', charAttributes.fontsize + 'pt');
+                                LineHeight.updateElementLineHeight(numberingElement, paraAttributes.lineheight);
+                                if (listObject.indent > 0) {
+                                    $(para).css('margin-left', Utils.convertHmmToLength(listObject.indent, 'pt'));
+                                }
+                                if (listObject.labelWidth > 0) {
+                                    numberingElement.css('min-width', Utils.convertHmmToLength(listObject.labelWidth, 'pt'));
+                                }
+                                $(para).prepend(numberingElement);
                             }
-                            $(para).prepend(numberingElement);
                         }
                     });
                 });

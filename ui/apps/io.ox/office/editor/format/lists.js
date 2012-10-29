@@ -379,6 +379,19 @@ define('io.ox/office/editor/format/lists',
             }
             return ret;
         };
+        this.findIlvl = function (numId, pStyle) {
+            var list = this.getList(numId);
+            if (list === undefined) {
+                return -1;
+            }
+            var ilvl = 0;
+            for (; ilvl < 9; ++ilvl) {
+                var levelFormat = list.listLevels[ilvl];
+                if (levelFormat.pStyle === pStyle)
+                    return ilvl;
+            }
+            return -1;
+        };
 
     } // class Lists
 
