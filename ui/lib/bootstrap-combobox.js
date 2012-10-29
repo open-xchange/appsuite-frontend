@@ -90,11 +90,13 @@ $(document).ready(function () {
 
             case 38: // up arrow
                 e.preventDefault();
+                this.show();
                 this.prev();
                 break
 
             case 40: // down arrow
                 e.preventDefault();
+                this.show();
                 this.next();
                 break;
             }
@@ -215,7 +217,8 @@ $(document).ready(function () {
             var self = this,
                 items;
 
-            this.query = this.$element.val();
+            this.query = this.$element.val().toUpperCase();
+            this.$element.val(this.query);
 
             if (!this.query && this.options.autocompleteBehaviour) {
                 return this.shown ? this.hide() : this;
