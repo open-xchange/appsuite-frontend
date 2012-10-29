@@ -428,6 +428,16 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     // spans and text nodes ===================================================
 
     /**
+     * Returns a new empty text span element with a single child text node.
+     *
+     * @returns {jQuery}
+     *  The empty text span element, as jQuery object.
+     */
+    DOM.createTextSpan = function () {
+        return $('<span>').text('');
+    };
+
+    /**
      * Returns whether the passed node is a <span> element containing a single
      * text node.
      *
@@ -485,18 +495,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @returns {Boolean}
      *  Whether the passed node is a text node in a portion span element.
      */
-    DOM.isPortionTextNode = function (node) {
+    DOM.isTextNodeInPortionSpan = function (node) {
         return node && (node.nodeType === 3) && DOM.isPortionSpan(node.parentNode);
-    };
-
-    /**
-     * Returns a new empty text span element with a single child text node.
-     *
-     * @returns {jQuery}
-     *  The empty text span element, as jQuery object.
-     */
-    DOM.createTextSpan = function () {
-        return $('<span>').text('');
     };
 
     /**
@@ -519,28 +519,13 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * Returns whether the passed node is a text node embedded in a text field
-     * element (see DOM.isFieldNode() method).
-     *
-     * @param {Node|jQuery|Null} [node]
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains. If missing or null, returns false.
-     *
-     * @returns {Boolean}
-     *  Whether the passed node is a text node in a text field element.
-     */
-    DOM.isFieldTextNode = function (node) {
-        return node && DOM.isTextSpan(node.parentNode) && DOM.isFieldNode(node.parentNode.parentNode);
-    };
-
-    /**
      * Returns a new empty text field element.
      *
      * @returns {jQuery}
      *  A new empty text field element, as jQuery object.
      */
     DOM.createFieldNode = function (text) {
-        return $('<div>').addClass('field');
+        return $('<div>').addClass('component field');
     };
     
     /**
@@ -606,6 +591,63 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return $('<div>', { contenteditable: false })
             .addClass('list-label')
             .append(DOM.createTextSpan().text(text));
+    };
+
+    /**
+     * Returns whether the passed node is a <div> container with embedded text
+     * spans, used as root elements for special text components in a paragraph.
+     * Does NOT return true for helper nodes that do not represent editable
+     * contents of a paragraph (e.g. numbering labels). To check for all helper
+     * nodes that contain text spans (also non-editable elements such as
+     * numbering labels), use the method DOM.isTextSpanContainerNode() instead.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a <div> element representing an editable
+     *  text component in a paragraph.
+     */
+    DOM.isTextComponentNode = function (node) {
+        return $(node).is('div.component');
+    };
+
+    /**
+     * Returns whether the passed node is a <div> container with embedded text
+     * spans, used as root elements for special text components in a paragraph.
+     * Does NOT return true for text nodes contained in helper nodes that do
+     * not represent editable contents of a paragraph (e.g. numbering labels).
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a DOM text node contained in a <div> element
+     *  representing an editable text component in a paragraph.
+     */
+    DOM.isTextNodeInTextComponent = function (node) {
+        return node && DOM.isTextSpan(node.parentNode) && DOM.isTextComponentNode(node.parentNode.parentNode);
+    };
+
+    /**
+     * Returns whether the passed node is a <div> container with embedded text
+     * spans, used as root elements for special text elements in a paragraph.
+     * Returns also true for helper nodes that do NOT represent editable
+     * contents of a paragraph (e.g. numbering labels). To check for container
+     * nodes that represent editable components in a paragraph only, use the
+     * method DOM.isTextComponentNode() instead.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a <div> element containing text spans.
+     */
+    DOM.isTextSpanContainerNode = function (node) {
+        return $(node).is('div') && DOM.isTextSpan(Utils.getDomNode(node).firstChild);
     };
 
     /**
@@ -776,6 +818,23 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             node = node.nextSibling;
         }
         return node;
+    };
+
+    /**
+     * Returns the closest text span in the previous siblings of the passed
+     * node. If there is no such text span, tries to find the closest text span
+     * in the following siblings.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The node whose siblings will be searched for a text span element. If
+     *  this object is a jQuery collection, uses the first DOM node it
+     *  contains.
+     *
+     * @returns {HTMLElement|Null}
+     *  The closest text span in the siblings of the specified node, or null.
+     */
+    DOM.findRelatedTextSpan = function (node) {
+        return DOM.findPreviousTextSpan(node) || DOM.findNextTextSpan(node);
     };
 
     /**
