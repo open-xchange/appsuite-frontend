@@ -64,7 +64,9 @@ define('io.ox/office/editor/editor',
             { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: '7F' }]}, italic: true }
         ],
 
-        DEFAULT_PARAGRAPH_DEFINTIONS = { 'default': true, styleid: 'Standard', stylename: 'Normal' };
+        DEFAULT_PARAGRAPH_DEFINTIONS = { 'default': true, styleid: 'Standard', stylename: 'Normal' },
+        
+        DEFAULT_TABSIZE = 1250; // 1.25 cm
 
 
     // private global functions ===============================================
@@ -3791,8 +3793,8 @@ define('io.ox/office/editor/editor',
                 tabSpan = null;
 
             // check position
-            if (!DOM.isPortionTextNode(node)) {
-                Utils.error('Editor.implInsertTab(): expecting text position to tab.');
+            if (!DOM.isTextNodeInPortionSpan(node)) {
+                Utils.error('Editor.implInsertField(): expecting text position to insert field.');
                 return false;
             }
 
@@ -3800,8 +3802,14 @@ define('io.ox/office/editor/editor',
             DOM.splitTextSpan(node.parentNode, domPos.offset);
 
             // split the text span again to get initial character formatting
-            // for the field, and insert the field representation text
-            tabSpan = DOM.splitTextSpan(node.parentNode, 0).css('margin-left', '1.25cm');
+            // for the tab, and insert the field representation text
+            tabSpan = DOM.splitTextSpan(node.parentNode, 0).css('margin-left', (DEFAULT_TABSIZE / 100) + "mm");
+            var pos = tabSpan.position();
+            if (pos) {
+                var leftHMM = Utils.convertLengthToHmm(pos.left, "px");
+                var width = Math.max(0, DEFAULT_TABSIZE - (leftHMM % DEFAULT_TABSIZE)) / 100;
+                tabSpan.css('margin-left', width + "mm");
+            }
 
             // insert a new text field before the addressed text node, move
             // the field span element into the field node
