@@ -54,7 +54,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                     });
                 }),
                 // cancel button
-                $('<button class="btn">').text(gt('Cancel')).on('click', function () {
+                $('<button class="btn">').text(gt('Discard')).on('click', function () {
                     // use this sneaky channel
                     $(this).trigger('controller:quit');
                 })

@@ -210,10 +210,10 @@ define('io.ox/contacts/edit/view-form', [
     //cancel
 
     views.ext.point("io.ox/contacts/edit/view/inline").extend(new links.Button({
-        id: "cancel",
+        id: "discard",
         index: 100,
-        label: gt("Cancel"),
-        ref: "io.ox/contacts/actions/edit/cancel",
+        label: gt("Discard"),
+        ref: "io.ox/contacts/actions/edit/discard",
         cssClasses: "btn",
         tabIndex: 11,
         tagtype: "button"
@@ -245,10 +245,10 @@ define('io.ox/contacts/edit/view-form', [
         }
     });
 
-    new actions.Action('io.ox/contacts/actions/edit/cancel', {
-        id: 'cancel',
+    new actions.Action('io.ox/contacts/actions/edit/discard', {
+        id: 'discard',
         action: function (options, baton) {
-            options.parentView.$el.find('[data-action="cancel"]').trigger('controller:quit');
+            options.parentView.$el.find('[data-action="discard"]').trigger('controller:quit');
         }
     });
 

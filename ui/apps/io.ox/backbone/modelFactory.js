@@ -53,11 +53,34 @@ define("io.ox/backbone/modelFactory",
 
                 var o = oldAttributes[key];
                 var c = currentAttributes[key];
+                var different = false;
 
                 if (o !== c) {
                     if (_.isArray(o) && _.isArray(c)) {
                         if (_(o).difference(c).length !== 0 || _(c).difference(o).length !== 0) {
-                            retval[key] = c;
+                            if (o.length !== c.length) {
+                                different = true;
+                            } else {
+                                _.each(c, function (val, key) {
+
+                                    _.each(c[key], function (val2, key2) {
+
+                                        if (o[key] === undefined) {
+                                            different = true;
+                                        } else {
+                                            if (val2 !== o[key][key2]) {
+                                                different = true;
+                                            }
+                                        }
+                                    });
+
+                                });
+                            }
+
+                            if (different === true) {
+                                retval[key] = c;
+                            }
+
                         }
                     } else {
                         retval[key] = c;
@@ -65,7 +88,6 @@ define("io.ox/backbone/modelFactory",
                 }
 
             });
-
             return retval;
         },
 

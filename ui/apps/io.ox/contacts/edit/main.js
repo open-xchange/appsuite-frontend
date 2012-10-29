@@ -101,7 +101,7 @@ define('io.ox/contacts/edit/main',
             if (getDirtyStatus()) {
                 require(["io.ox/core/tk/dialogs"], function (dialogs) {
                     new dialogs.ModalDialog()
-                        .text(gt("Do you really want to lose your changes?"))
+                        .text(gt("Do you really want to discard your changes?"))
                         .addPrimaryButton("delete", gt('Lose changes'))
                         .addButton("cancel", gt('Cancel'))
                         .show()
