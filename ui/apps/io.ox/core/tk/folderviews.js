@@ -465,10 +465,7 @@ define('io.ox/core/tk/folderviews',
             var self = this,
             folder = String(this.selection.get());
             if (folder) {
-                $.when(
-                    api.get({ folder: folder }),
-                    require(['io.ox/core/tk/dialogs'])
-                ).done(function (folder, dialogs) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog({
                         width: 400,
                         easyOut: true
