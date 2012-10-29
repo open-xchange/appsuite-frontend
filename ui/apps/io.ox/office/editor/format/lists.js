@@ -49,6 +49,7 @@ define('io.ox/office/editor/format/lists',
             listLevel7: { justification: 'left', leftIndent: 8 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Symbol', levelText: 'o',  hangingIndent: 635 },
             listLevel8: { justification: 'left', leftIndent: 9 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Symbol', levelText: '', hangingIndent: 635 }
         };
+        // O 2010 uses: decimal-lowerLetter-lowerRomen-decimal-lowerLetter-lowerRomen-decimal-lowerLetter-lowerRomen-
         var defaultNumberingListDefinition = {
             listLevel0: { numberFormat: 'decimal',       levelStart: 1, leftIndent: 1270,     hangingIndent: 635, justification: 'left',  levelText: '%1.'},
             listLevel1: { numberFormat: 'lowerLetter',   levelStart: 1, leftIndent: 2 * 1270, hangingIndent: 635, justification: 'left',  levelText: '%2.'},
@@ -91,8 +92,98 @@ define('io.ox/office/editor/format/lists',
             return ret;
         }
 
+        function convertToRoman(value, caps) {
+            var result = '';
+            var romanCapsArr = ['M', 'D', 'C', 'L', 'X', 'V', 'I'];
+            var romanSmallArr = ['m', 'd', 'c', 'l', 'x', 'v', 'i'];
+            var romanValArr = [1000, 500, 100,  50,  10,   5,   1];
+            if (value > 0) {
+                var index = 0;
+                for (;index < 7; index++) {
+                    while (value >= romanValArr[index]) {
+                        result += caps ? romanCapsArr[index] : romanSmallArr[index];
+                        value -= romanValArr[index];
+                    }
+                    var position = 7;
+                    for (; position > index; position--) {
+                        var tempVal = romanValArr[index] - romanValArr[position];
+                        if ((romanValArr[position] < tempVal) && (tempVal <= value))
+                        {
+                            if (caps)
+                                result += romanCapsArr[position] + romanCapsArr[index];
+                            else
+                                result += romanSmallArr[position] + romanSmallArr[index];
+                            value -= tempVal;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+        function parseRoman(text) {
+            var romanSmallArr = ['m', 'd', 'c', 'l', 'x', 'v', 'i'],
+            romanValArr = [1000, 500, 100,  50,  10,   5,   1],
+            ret = {},
+            lowerText = text.toLowerCase(),
+            startValue = 0;
+            ret.caps = lowerText !== text;
+            var index = 0, lastValue = 1000;
+            for (; index < text.length; ++index) {
+                var position = 0;
+                for (; position < 7; ++position) {
+                    var char = lowerText.charAt(index);
+                    if (char === romanSmallArr[position]) {
+                        var value = romanValArr[position];
+                        if (lastValue < value) {
+                            startValue = startValue - lastValue + (value - lastValue);
+                        } else {
+                            startValue += value;
+                        }
+                        lastValue = value;
+                        break;
+                    }
+                }
+            }
+            if (startValue > 0) {
+                ret.startNumber = startValue;
+                ret.numberFormat = lowerText !== text ? 'upperRoman' : 'lowerRoman';
+            }
+            return ret;
+        }
+        function formatNumberType(seqNo, numberFormat, levelText) {
+            var retString = "???";
+            switch (numberFormat) {
+            case "decimal":
+                retString = seqNo.toString();
+                break;
+            case "lowerLetter":
+                retString = String.fromCharCode(96 + seqNo);
+                break;
+            case "upperLetter":
+                retString = String.fromCharCode(64 + seqNo);
+                break;
+            case "lowerRoman":
+            case "upperRoman":
+                retString = convertToRoman(seqNo, numberFormat === "upperRoman");
+                break;
+            case "bullet":
+                var charCode = levelText ? levelText.charCodeAt(0) : -1;
+                if (charCode > 0 && (charCode < 0xE000 || charCode > 0xF8FF)) {
+                    retString = levelText;
+                }
+                else
+                    retString = "●";
+                break;
+            default:
+            }
+            if (numberFormat !== 'bullet')
+                retString += '.';
+            return retString;
+        }
+        // exports ================================================================
+
         /**
-         * Adds a new style sheet to this container. An existing list definition
+         * Adds a new list to this container. An existing list definition
          * with the specified identifier will be replaced.
          *
          * @param {String} name
@@ -188,20 +279,28 @@ define('io.ox/office/editor/format/lists',
             var newOperation = { name: Operations.INSERT_LIST, listName: freeId };
             if (type === 'bullet') {
                 newOperation.listDefinition = _.copy(defaultBulletListDefinition, true);
-                if (options.symbol && options.symbol !== '*') {
+                if (options && options.symbol && options.symbol !== '*') {
                     newOperation.listDefinition.listLevel0.levelText = options.symbol;
                 } else {
                     newOperation.listDefinition.defaultList = type;
                 }
             } else {
                 newOperation.listDefinition = _.copy(defaultNumberingListDefinition, true);
-                if (options.levelStart) {
-                    newOperation.listDefinition.listLevel0.levelStart = options.levelStart;
-                } else {
+                var defaultList = true;
+                if (options) {
+                    if (options.levelStart) {
+                        newOperation.listDefinition.listLevel0.levelStart = options.levelStart;
+                        defaultList = false;
+                    }
+                    if (options.numberFormat) {
+                        newOperation.listDefinition.listLevel0.numberFormat = options.numberFormat;
+                        defaultList = false;
+                    }
+                }
+                if (defaultList) {
                     newOperation.listDefinition.defaultList = type;
                 }
             }
-
             return newOperation;
         };
         /**
@@ -226,7 +325,11 @@ define('io.ox/office/editor/format/lists',
          * @param levelIndexes array of sequential position of the current paragraph
          *      contains an array with ilvl + 1 elements that determines the sequential position of the current paragraph within the numbering
          *
-         * @returns tbd.
+         * @returns {Object} containing:
+         *          indent
+         *          labelwidth
+         *          text
+         *          tbd.
          */
         this.formatNumber = function (listId, ilvl, levelIndexes) {
             var ret = {};
@@ -239,7 +342,7 @@ define('io.ox/office/editor/format/lists',
                 return "??";
             }
             var numberFormat = levelFormat.numberFormat;
-            ret.text = this.formatNumberType(levelIndexes === undefined ? 0 :
+            ret.text = formatNumberType(levelIndexes === undefined ? 0 :
                     levelIndexes[ilvl] + (levelFormat.levelStart !== undefined ? levelFormat.levelStart - 1 : 0), numberFormat,
                     levelFormat.levelText);
             ret.indent = levelFormat.leftIndent - (levelFormat.hangingIndent ? levelFormat.hangingIndent : 0);
@@ -248,46 +351,36 @@ define('io.ox/office/editor/format/lists',
             return ret;
         };
 
-        this.formatNumberType = function (seqNo, numberFormat, levelText) {
-            var retString = "???";
-            switch (numberFormat) {
-            case "decimal":
-                retString = seqNo.toString();
-                break;
-            case "lowerLetter":
-                retString = String.fromCharCode(96 + seqNo);
-                break;
-            case "upperLetter":
-                retString = String.fromCharCode(64 + seqNo);
-                break;
-            case "lowerRoman":
-                var romanSmall = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x' ];
-                if (seqNo < 11)
-                    retString = romanSmall[seqNo - 1];
-                break;
-            case "upperRoman":
-                var romanCaps = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X' ];
-                if (seqNo < 11)
-                    retString = romanCaps[seqNo - 1];
-                break;
-            case "bullet":
-                var charCode = levelText ? levelText.charCodeAt(0) : -1;
-                if (charCode > 0 && (charCode < 0xE000 || charCode > 0xF8FF)) {
-                    retString = levelText;
+        /**
+         * @param text possible numbering label text
+         *
+         * @returns {integer} listId
+         *
+         */
+        this.detectListSymbol = function (text) {
+            var ret = {};
+            if (text.length === 1 && (text === '-' || text === '*')) {
+                // bullet
+                ret.numberFormat = 'bullet';
+                ret.symbol = text;
+            } else if (text.substring(text.length - 1) === '.') {
+                var sub = text.substring(0, text.length - 1);
+                var startNumber = parseInt(sub, 10);
+                if (startNumber > 0) {
+                    ret.numberFormat = 'decimal';
+                    ret.levelStart = startNumber;
+                } else {
+                    var roman = parseRoman(text);
+                    if (roman.startNumber > 0) {
+                        ret.numberFormat = roman.numberFormat;
+                        ret.levelStart = roman.startNumber;
+                    }
                 }
-                else
-                    retString = "●";
-                break;
-            default:
             }
-            if (numberFormat !== 'bullet')
-                retString += '.';
-            return retString;
+            return ret;
         };
 
     } // class Lists
-
-    // exports ================================================================
 
     // derive this class from class Container
     return Container.extend({ constructor: Lists });

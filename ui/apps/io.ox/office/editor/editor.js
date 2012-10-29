@@ -12,6 +12,7 @@
  * @author Ingo Schmidt-Rosbiegal <ingo.schmidt-rosbiegal@open-xchange.com>
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  * @author Carsten Driesner <carsten.driesner@open-xchange.com>
+ * @author Oliver Specht <oliver.specht@open-xchange.com>
  */
 
 define('io.ox/office/editor/editor',
@@ -1019,14 +1020,42 @@ define('io.ox/office/editor/editor',
             applyOperation(newOperation, true, true);
         };
 
-        this.createList = function (type, options) {
-            var defNumId = lists.getDefaultNumId(type, options);
+        /**
+         * creates a default list either with decimal numbers or bullets
+         * @param type {String} 'numbering' or 'bullet'
+         */
+        this.createDefaultList = function (type) {
+            var defNumId = lists.getDefaultNumId(type);
             if (defNumId === undefined) {
                 var listOperation = lists.getDefaultListOperation(type);
                 applyOperation(listOperation, true, true);
                 defNumId = listOperation.listName;
             }
             setAttributes('paragraph', { numId: defNumId, ilvl: 0});
+        };
+        this.createList = function (type, options) {
+            var defNumId = (!options || (!options.symbol && !options.levelStart)) ? lists.getDefaultNumId(type) : undefined;
+            if (defNumId === undefined) {
+                var listOperation = lists.getDefaultListOperation(type, options);
+                applyOperation(listOperation, true, true);
+                defNumId = listOperation.listName;
+            }
+            if (options && options.startPosition) {
+                var start = [];
+                var length = options.startPosition.length;
+                var index = 0;
+                for (; index < length - 1; ++index) {
+                    start[index] = options.startPosition[index];
+                }
+                var newOperation = {name: Operations.ATTRS_SET, attrs: { numId: defNumId, ilvl: 0}, start: start, end: start };
+                applyOperation(newOperation, true, true);
+                start[start.length - 1] += 1;
+                newOperation.start = start;
+                newOperation.end = newOperation.start;
+                applyOperation(newOperation, true, true);
+            } else {
+                setAttributes('paragraph', { numId: defNumId, ilvl: 0});
+            }
 
         };
 
@@ -1744,6 +1773,7 @@ define('io.ox/office/editor/editor',
                             self.setAttribute('paragraph', 'ilvl', ilvl);
                         }
                         else {
+                            var numAutoCorrect = {};
                             if (!hasSelection && ilvl < 0 && paragraphLength > 3) {
                                 // detect Numbering/Bullet labels at paragraph
                                 // start
@@ -1753,22 +1783,28 @@ define('io.ox/office/editor/editor',
 
                                 if (paragraph !== undefined) {
                                     var paraText = paragraph.textContent,
-                                    labelText = paraText.split(' ')[0],
-                                    bullet,
-                                    startNumber;
-                                    if (labelText.length === 1 && (labelText === '-' || labelText === '*')) {
-                                        // bullet
-                                        bullet = labelText;
-                                        self.createList('bullet', {symbol: bullet});
-                                    } else if (labelText.substring(labelText.length - 1) === '.') {
-                                        var sub = labelText.substring(0, labelText.length - 1);
-                                        startNumber = parseInt(sub, 10);
-                                        if (startNumber > 0)
-                                            self.createList('numbering', {levelStart: startNumber});
+                                    labelText = paraText.split(' ')[0];
+                                    numAutoCorrect.listDetection = lists.detectListSymbol(labelText);
+                                    if (numAutoCorrect.listDetection.numberFormat !== undefined) {
+                                        numAutoCorrect.startPosition = _.copy(selection.startPaM.oxoPosition, true);
+                                        numAutoCorrect.startPosition[numAutoCorrect.startPosition.length - 1] = 0;
+                                        numAutoCorrect.endPosition = _.copy(selection.endPaM.oxoPosition, true);
+                                        numAutoCorrect.endPosition[numAutoCorrect.endPosition.length - 1] = labelText.length + 1;
                                     }
                                 }
                             }
                             self.splitParagraph(startPosition);
+                            // now apply 'AutoCorrection'
+                            if (numAutoCorrect.listDetection && numAutoCorrect.listDetection.numberFormat !== undefined) {
+                                undomgr.enterGroup(function () {
+                                    self.deleteText(numAutoCorrect.startPosition, numAutoCorrect.endPosition);
+                                    self.createList(numAutoCorrect.listDetection.numberFormat === 'bullet' ? 'bullet' : 'numbering',
+                                            {levelStart: numAutoCorrect.listDetection.levelStart, symbol: numAutoCorrect.listDetection.symbol,
+                                             startPosition: numAutoCorrect.startPosition,
+                                             numberFormat: numAutoCorrect.listDetection.numberFormat
+                                            });
+                                });
+                            }
                             // TODO / TBD: Should all API / Operation calls return the new position?!
                             var lastValue = selection.startPaM.oxoPosition.length - 1;
                             selection.startPaM.oxoPosition[lastValue - 1] += 1;
@@ -4784,23 +4820,23 @@ define('io.ox/office/editor/editor',
                     Utils.iterateSelectedDescendantNodes(editdiv, DOM.PARAGRAPH_NODE_SELECTOR, function (para) {
                         // always remove an existing label
                         // TODO: it might make more sense to change the label appropriately
-                        var attributes = paragraphStyles.getElementAttributes(para, false);
+                        var paraAttributes = paragraphStyles.getElementAttributes(para);
                         $(para).children(DOM.LIST_LABEL_NODE_SELECTOR).remove();
                         $(para).css('margin-left', '');
-                        if (attributes.ilvl !== -1 && attributes.ilvl < 9 && attributes.numId !== -1) {
-                            if (!listItemCounter[attributes.numId])
-                                listItemCounter[attributes.numId] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-                            listItemCounter[attributes.numId][attributes.ilvl]++;
+                        if (paraAttributes.ilvl !== -1 && paraAttributes.ilvl < 9 && paraAttributes.numId !== -1) {
+                            if (!listItemCounter[paraAttributes.numId])
+                                listItemCounter[paraAttributes.numId] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            listItemCounter[paraAttributes.numId][paraAttributes.ilvl]++;
                             // TODO: reset sub-levels depending on their 'levelRestartValue' attribute
-                            var subLevelIdx = attributes.ilvl + 1;
+                            var subLevelIdx = paraAttributes.ilvl + 1;
                             for (; subLevelIdx < 9; subLevelIdx++)
-                                listItemCounter[attributes.numId][subLevelIdx] = 0;
-                            var listObject = lists.formatNumber(attributes.numId, attributes.ilvl, listItemCounter[attributes.numId]);
+                                listItemCounter[paraAttributes.numId][subLevelIdx] = 0;
+                            var listObject = lists.formatNumber(paraAttributes.numId, paraAttributes.ilvl,
+                                    listItemCounter[paraAttributes.numId]);
                             var numberingElement = DOM.createListLabelNode(listObject.text);
                             var span = Utils.findDescendantNode(para, function () { return DOM.isPortionSpan(this); });
-                            var charAttributes = characterStyles.getElementAttributes(span, false);
+                            var charAttributes = characterStyles.getElementAttributes(span);
                             numberingElement.css('font-size', charAttributes.fontsize + 'pt');
-                            var paraAttributes = paragraphStyles.getElementAttributes(para, false);
                             LineHeight.updateElementLineHeight(numberingElement, paraAttributes.lineheight);
                             if (listObject.indent > 0) {
                                 $(para).css('margin-left', Utils.convertHmmToLength(listObject.indent, 'pt'));
