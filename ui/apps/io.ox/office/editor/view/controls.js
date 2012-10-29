@@ -216,7 +216,7 @@ define('io.ox/office/editor/view/controls',
                     var // the encoded transformation
                         encoded = definition.transformations[rowIndex],
                         // decoded tint/shade value
-                        tint = encoded > 0, value = Math.abs(encoded) / 255 * 100,
+                        tint = encoded > 0, value = Math.round(Math.abs(encoded) / 255 * 100000),
                         // the theme color object
                         color = { type: 'scheme', value: definition.name },
                         // description of the color (tool tip)
@@ -224,10 +224,10 @@ define('io.ox/office/editor/view/controls',
 
                     if (encoded !== 0) {
                         color.transformations = [{ type: tint ? 'tint' : 'shade', value: value }];
-                        label += ', ' + (tint ? gt('Lighter') : gt('Darker')) + ' ' + (100 - Math.round(value)) + '%';
+                        label += ', ' + (tint ? gt('Lighter') : gt('Darker')) + ' ' + (100 - Math.round(value / 1000)) + '%';
                     }
 
-                    self.createColorItem(color, { tooltip: label });
+                    self.createColorButton(color, { tooltip: label });
                 });
             }
 
@@ -247,7 +247,7 @@ define('io.ox/office/editor/view/controls',
             // add predefined colors
             self.createSectionHeader({ label: gt('Standard Colors') });
             _(BUILTIN_COLOR_DEFINITIONS).each(function (definition) {
-                self.createColorItem(definition.color, { tooltip: definition.label });
+                self.createColorButton(definition.color, { tooltip: definition.label });
             });
         }
 
