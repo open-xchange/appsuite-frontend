@@ -1296,27 +1296,30 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
                     mousedownhandler.call(context, event, nodeOptions);
                 });
+            // }
+
+                // mousemove and mouseup events can be anywhere on the page
+                $(document)
+                .mouseup(function (e) {
+
+                    if (mousedownevent === true) {
+                        mouseuphandler.call(context, e, objectNode, moveBox);
+                        mousedownevent = false;
+                    } else {
+                        // setting correct cursor, should not be necessary (but sometimes mousedownevent is 'false') -> should be removed
+                        $('div.page', document).css('cursor', 'default');
+                        $('div.object', document).css('cursor', 'inherit');
+                    }
+                })
+                .mousemove(function (e) {
+
+                    if (! mousedownevent) return;
+                    mousemovehandler.call(context, e, moveBox);
+                });
+
+                // set classes according to passed options, and resize handles
+                selectionBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
             }
-
-            // mousemove and mouseup events can be anywhere on the page
-            $(document)
-            .mouseup(function (e) {
-                if (mousedownevent) {
-                    mouseuphandler.call(context, e, objectNode, moveBox);
-                    mousedownevent = false;
-                } else {
-                    // setting correct cursor, should not be necessary (but sometimes mousedownevent is 'false') -> should be removed
-                    $('div.page', document).css('cursor', 'default');
-                    $('div.object', document).css('cursor', 'inherit');
-                }
-            })
-            .mousemove(function (e) {
-                if (! mousedownevent) return;
-                mousemovehandler.call(context, e, moveBox);
-            });
-
-            // set classes according to passed options, and resize handles
-            selectionBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
         });
     };
 

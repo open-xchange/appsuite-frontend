@@ -619,8 +619,9 @@ define('io.ox/office/editor/position',
      */
     Position.getNextChildNodePositionCounting = function (node, pos) {
 
-        var childNode,
-            offset;
+        var childNode = null,
+            offset,
+            lastTextSpanInfo = null;
 
         node = Utils.getDomNode(node);
 
@@ -631,12 +632,32 @@ define('io.ox/office/editor/position',
         } else if (DOM.isPageNode(node) || $(node).is('th, td')) {
             childNode = node.childNodes[pos];
         } else if (DOM.isParagraphNode(node)) {
-            Position.iterateParagraphChildNodes(node, function (_node, nodeStart, nodeLength, offsetStart) {
-                // first matching node is the requested node, store data and escape from iteration
-                childNode = _node;
-                offset = offsetStart;
-                return Utils.BREAK;
-            }, undefined, { start: pos });
+
+
+            Position.iterateParagraphChildNodes(node, function (_node, nodeStart, nodeLength) {
+
+                var // offset inside the current child node
+                    nodeOffset = pos - nodeStart;
+
+                // check if passed position points inside the current node
+                if ((0 <= nodeOffset) && (nodeOffset < nodeLength)) {
+                    childNode = _node;
+                    offset = nodeOffset;
+                    return Utils.BREAK;
+                }
+
+                // store temporary text span info, will be used to find the last
+                // text span for a position pointing behind the last character
+                if (DOM.isTextSpan(_node)) {
+                    lastTextSpanInfo = { node: _node, start: nodeStart, length: nodeLength };
+                }
+            }, undefined, { allNodes: true });
+
+            // no node found that represents the passed position, try to match position after last character
+            if (!childNode && lastTextSpanInfo && (lastTextSpanInfo.start + lastTextSpanInfo.length === pos)) {
+                childNode = lastTextSpanInfo.node;
+                offset = lastTextSpanInfo.length;
+            }
         }
 
         return new DOM.Point(childNode, offset);
@@ -661,93 +682,41 @@ define('io.ox/office/editor/position',
      */
     Position.getNextChildNode = function (node, pos) {
 
-        var childNode,
-            offset;
+        var domPoint = Position.getNextChildNodePositionCounting(node, pos),
+            childNode = null,
+            offset = domPoint.offset,
+            isTextSpan = false,
+            isImage = false,
+            isField = false;
 
-        node = Utils.getDomNode(node);
+        if ((domPoint) && (domPoint.node)) {
 
-        if (DOM.isTableNode(node)) {
-            childNode = $('> * > tr', node).get(pos);
-        } else if ($(node).is('tr')) {
-            childNode = $('> th, > td', node).get(pos);  // this is a table cell
-        } else if (DOM.isPageNode(node) || $(node).is('th, td')) {
-            childNode = node.childNodes[pos];
-        } else if (DOM.isParagraphNode(node)) {
-            var textLength = 0,
-                bFound = false,
-                isImage = false,
-                isField = false;
-
-            // Checking if this paragraph has children
-            if (! node.hasChildNodes()) {
-                Utils.warn('Position.getNextChildNode(): paragraph is empty');
-                return;
-            }
-
-            while ((node.hasChildNodes()) && (! bFound)) {
-
-                var nodeList = node.childNodes,
-                    lastChild = false;
-
-                for (var i = 0; i < nodeList.length; i++) {
-
-                    // Searching the children
-                    var currentLength = 0,
-                        currentNode = nodeList[i];
-
-                    if (i === (nodeList.length - 1)) {
-                        lastChild = true;
-                    }
-
-                    if (DOM.isObjectNode(currentNode)) {
-                        currentLength = 1;
-                        isImage = true;
-                    } else if (DOM.isFieldNode(currentNode)) {
-                        currentLength = 1;
-                        isField = true;
-                    } else if (DOM.isPortionSpan(currentNode)) {
-                        currentLength = $(currentNode).text().length;
-                        isImage = false;
-                        isField = false;
-                    } else {
-                        // ignoring for example spans that exist only for positioning image
-                        continue;
-                    }
-
-                    if (textLength + currentLength >= pos) {
-
-                        bFound = true;
-                        node = currentNode;
-                        break;  // leaving the for-loop
-
-                    } else {
-                        textLength += currentLength;
-                    }
-                }
-
-                if ((! bFound) && (lastChild)) {
-                    break; // avoiding endless loop
-                }
-            }
-
-            if (! bFound) {
-                Utils.warn('Position.getNextChildNode(): Paragraph does not contain position: ' + pos + '. Last position: ' + textLength);
-                return;
+            if (DOM.isObjectNode(domPoint.node)) {
+                isImage = true;
+            } else if (DOM.isFieldNode(domPoint.node)) {
+                isField = true;
+            } else if (DOM.isTextSpan(domPoint.node)) {
+                isTextSpan = true;
             }
 
             // if the position is an image or field, the dom position shall be the following text node
             if (isImage) {
-                childNode = Utils.findNextNodeInTree(node, Utils.JQ_TEXTNODE_SELECTOR); // can be more in a row without text span between them
+                childNode = Utils.findNextNodeInTree(domPoint.node, Utils.JQ_TEXTNODE_SELECTOR); // can be more in a row without text span between them
                 offset = 0;
             } else if (isField) {
-                childNode = node.nextSibling.firstChild; // following the div field must be a text span (like inline images)
+                childNode = domPoint.node.nextSibling.firstChild; // following the div field must be a text span (like inline images)
                 offset = 0;
-            } else {
-                childNode = node;
+            } else if (isTextSpan) {
+                childNode = domPoint.node;
                 if (childNode.nodeType !== 3) {
                     childNode = childNode.firstChild;  // using text node instead of span node
                 }
-                offset = pos - textLength;
+                offset = domPoint.offset;
+                // offset = pos - textLength;
+            } else {
+                // do nothing more than in 'getNextChildNodePositionCounting'
+                childNode = domPoint.node;
+                offset = domPoint.offset;
             }
 
         } else {
