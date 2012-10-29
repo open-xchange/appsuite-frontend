@@ -1276,9 +1276,11 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 _(['tl', 't', 'tr', 'r', 'br', 'b', 'bl', 'l']).each(function (pos) {
 
                     var handleDiv = $('<div>')
-                    .mousedown(function (event) {
+                    .mousedown(function (e1, e2) {
 
                         if (mousedownevent === true) { return; }
+
+                        var event = e1.pageX ? e1 : e2;  // from triggerHandler in editor only e2 can be used
 
                         mousedownevent = true;
 
@@ -1307,9 +1309,11 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 });
 
                 // moving the image
-                $(this).mousedown(function (event) {
+                $(this).mousedown(function (e1, e2) {
 
                     if (mousedownevent === true) { return; }
+
+                    var event = e1.pageX ? e1 : e2;  // from triggerHandler in editor only e2 can be used
 
                     mousedownevent = true;
 
@@ -1326,7 +1330,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
                     mousedownhandler.call(context, event, nodeOptions);
                 });
-            // }
 
                 // mousemove and mouseup events can be anywhere on the page
                 $(document)
@@ -1335,10 +1338,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                     if (mousedownevent === true) {
                         mouseuphandler.call(context, e, objectNode, moveBox);
                         mousedownevent = false;
-                    } else {
-                        // setting correct cursor, should not be necessary (but sometimes mousedownevent is 'false') -> should be removed
-                        $('div.page', document).css('cursor', 'default');
-                        $('div.object', document).css('cursor', 'inherit');
                     }
                 })
                 .mousemove(function (e) {
@@ -1365,7 +1364,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         $(objects).children('div.selection').remove();
         $(objects).children('div.move').remove();
         // removing mouse event handler (mouseup and mousemove) from page div
-        $(document).off('mouseup mousemove');
+        $(document).off('mousedown mouseup mousemove');
     };
 
     // exports ================================================================

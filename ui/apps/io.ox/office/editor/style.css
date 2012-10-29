@@ -145,7 +145,6 @@
                 .box-shadow(0 5px 10px fade(black, 20%));
 
                 cursor: default;
-                /* &.moveable { cursor: move; } */
 
                 > div.handle {
                     position: absolute;
@@ -183,10 +182,11 @@
                 @border-color: #000000;
                 position: absolute;
                 top: -1px;
-                bottom: -1px;
+                bottom: -10px;
                 left: -1px;
-                right: -1px;
+                right: -10px;
                 border: 0px dotted;
+                cursor: move;
             }
         }
 

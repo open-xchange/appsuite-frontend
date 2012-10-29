@@ -1350,6 +1350,8 @@ define('io.ox/office/editor/editor',
                     self.grabFocus();
                     // select single objects only (multi selection not supported yet)
                     selectObjects(object, false);
+                    // triggering mouse down at object, that is now selected
+                    object.triggerHandler('mousedown', event);
                 } else {
                     // prevent default click handling of the browser
                     event.preventDefault();
@@ -2495,7 +2497,9 @@ define('io.ox/office/editor/editor',
                 nodeOptions = _.copy(startNodeOptions, true);
 
                 editdiv.css('cursor', nodeOptions.cursorStyle);  // setting cursor
-                $('div.object', editdiv).css('cursor', 'inherit');
+                $('div.object', editdiv).css('cursor', nodeOptions.cursorStyle);
+                $('div.move', editdiv).css('cursor', nodeOptions.cursorStyle);
+
             }, function (event, moveBoxNode) {
                 // mouse move event handler
                 moveBoxNode.css('border-width', '2px');  // making move box visible
@@ -2547,7 +2551,7 @@ define('io.ox/office/editor/editor',
                     shiftX = currentX - startX;
                     shiftY = currentY - startY;
 
-                    if ((shiftX !== 0) || (shiftY !== 0)) {
+                    if ((_.isNumber(shiftX)) && (_.isNumber(shiftY)) && (shiftX !== 0) || (shiftY !== 0)) {
                         moveBoxNode.css({ 'left': shiftX, 'top': shiftY, 'width': nodeOptions.oldWidth, 'height': nodeOptions.oldHeight });
                     }
                 }
@@ -2580,8 +2584,9 @@ define('io.ox/office/editor/editor',
                     }
                 }
 
-                editdiv.css('cursor', 'default');
-                $('div.object', editdiv).css('cursor', 'inherit');
+                editdiv.css('cursor', '');
+                $('div.object', editdiv).css('cursor', '');
+                $('div.move', editdiv).css('cursor', '');
 
             }, self);
 
