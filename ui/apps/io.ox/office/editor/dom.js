@@ -425,7 +425,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return $(node).is(DOM.CONTENT_NODE_SELECTOR);
     };
 
-    // spans and text nodes ===================================================
+    // text spans, text nodes, text components ================================
+
+    // text spans -------------------------------------------------------------
 
     /**
      * Returns a new empty text span element with a single child text node.
@@ -499,6 +501,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return node && (node.nodeType === 3) && DOM.isPortionSpan(node.parentNode);
     };
 
+    // text components: fields, tabs ------------------------------------------
+
     /**
      * A jQuery selector that matches elements representing a text field.
      */
@@ -527,7 +531,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     DOM.createFieldNode = function (text) {
         return $('<div>').addClass('component field');
     };
-    
+
     /**
      * A jQuery selector that matches elements representing a tab.
      */
@@ -547,7 +551,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     DOM.isTabNode = function (node) {
         return $(node).is(DOM.TAB_NODE_SELECTOR);
     };
-    
+
     /**
      * Returns a new tab element.
      *
@@ -556,6 +560,67 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.createTabNode = function () {
         return $('<div>', { contenteditable: false }).addClass('tab component');
+    };
+
+    /**
+     * Returns whether the passed node is a <div> container with embedded text
+     * spans, used as root elements for special text components in a paragraph.
+     * Does NOT return true for helper nodes that do not represent editable
+     * contents of a paragraph (e.g. numbering labels). To check for all helper
+     * nodes that contain text spans (also non-editable elements such as
+     * numbering labels), use the method DOM.isTextSpanContainerNode() instead.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a <div> element representing an editable
+     *  text component in a paragraph.
+     */
+    DOM.isTextComponentNode = function (node) {
+        return $(node).is('div.component');
+    };
+
+    /**
+     * Returns whether the passed node is a <div> container with embedded text
+     * spans, used as root elements for special text components in a paragraph.
+     * Does NOT return true for text nodes contained in helper nodes that do
+     * not represent editable contents of a paragraph (e.g. numbering labels).
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a DOM text node contained in a <div> element
+     *  representing an editable text component in a paragraph.
+     */
+    DOM.isTextNodeInTextComponent = function (node) {
+        node = node ? Utils.getDomNode(node) : null;
+        return node && DOM.isTextSpan(node.parentNode) && DOM.isTextComponentNode(node.parentNode.parentNode);
+    };
+
+    // paragraph helper nodes -------------------------------------------------
+
+    /**
+     * Returns whether the passed node is a <div> container with embedded text
+     * spans, used as root elements for special text elements in a paragraph.
+     * Returns also true for helper nodes that do NOT represent editable
+     * contents of a paragraph (e.g. numbering labels). To check for container
+     * nodes that represent editable components in a paragraph only, use the
+     * method DOM.isTextComponentNode() instead.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a <div> element containing text spans.
+     */
+    DOM.isTextSpanContainerNode = function (node) {
+        node = node ? Utils.getDomNode(node) : null;
+        return $(node).is('div') && DOM.isParagraphNode(node.parentNode) && DOM.isTextSpan(node.firstChild);
     };
 
     /**
@@ -594,63 +659,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * Returns whether the passed node is a <div> container with embedded text
-     * spans, used as root elements for special text components in a paragraph.
-     * Does NOT return true for helper nodes that do not represent editable
-     * contents of a paragraph (e.g. numbering labels). To check for all helper
-     * nodes that contain text spans (also non-editable elements such as
-     * numbering labels), use the method DOM.isTextSpanContainerNode() instead.
-     *
-     * @param {Node|jQuery|Null} [node]
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains. If missing or null, returns false.
-     *
-     * @returns {Boolean}
-     *  Whether the passed node is a <div> element representing an editable
-     *  text component in a paragraph.
-     */
-    DOM.isTextComponentNode = function (node) {
-        return $(node).is('div.component');
-    };
-
-    /**
-     * Returns whether the passed node is a <div> container with embedded text
-     * spans, used as root elements for special text components in a paragraph.
-     * Does NOT return true for text nodes contained in helper nodes that do
-     * not represent editable contents of a paragraph (e.g. numbering labels).
-     *
-     * @param {Node|jQuery|Null} [node]
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains. If missing or null, returns false.
-     *
-     * @returns {Boolean}
-     *  Whether the passed node is a DOM text node contained in a <div> element
-     *  representing an editable text component in a paragraph.
-     */
-    DOM.isTextNodeInTextComponent = function (node) {
-        return node && DOM.isTextSpan(node.parentNode) && DOM.isTextComponentNode(node.parentNode.parentNode);
-    };
-
-    /**
-     * Returns whether the passed node is a <div> container with embedded text
-     * spans, used as root elements for special text elements in a paragraph.
-     * Returns also true for helper nodes that do NOT represent editable
-     * contents of a paragraph (e.g. numbering labels). To check for container
-     * nodes that represent editable components in a paragraph only, use the
-     * method DOM.isTextComponentNode() instead.
-     *
-     * @param {Node|jQuery|Null} [node]
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains. If missing or null, returns false.
-     *
-     * @returns {Boolean}
-     *  Whether the passed node is a <div> element containing text spans.
-     */
-    DOM.isTextSpanContainerNode = function (node) {
-        return $(node).is('div') && DOM.isTextSpan(Utils.getDomNode(node).firstChild);
-    };
-
-    /**
      * Returns whether the passed node is a dummy text node that is used in
      * empty paragraphs to preserve an initial element height according to the
      * current font size.
@@ -677,6 +685,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         // TODO: create correct element for current browser
         return $('<br>').data('dummy', true);
     };
+
+    // object nodes -----------------------------------------------------------
 
     /**
      * A jQuery selector that matches elements representing an object.
@@ -765,21 +775,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return $(node).is(DOM.OFFSET_NODE_SELECTOR);
     };
 
-    /**
-     * Returns whether the passed node is a <div> element that contains a
-     * selection. The selection is represented by a <div> element with
-     * class 'selection'.
-     *
-     * @param {Node|jQuery} node
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
-     *
-     * @returns {Boolean}
-     *  Whether the passed node contains a div element with class selection.
-     */
-    DOM.hasObjectSelection = function (node) {
-        return (DOM.isObjectNode(node)) && ($(node).children('div.selection').length > 0);
-    };
+    // find, manipulate, and iterate text spans -------------------------------
 
     /**
      * Searches a text span element in the previous siblings of the passed
@@ -838,44 +834,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * Calls the passed iterator function for all descendant text span elements
-     * in a the passed node. As a special case, if the passed node is a text
-     * span by itself, it will be visited directly. Text spans can be direct
-     * children of a paragraph node (regular editable text portions), or
-     * children of other nodes such as text fields or list label nodes.
-     *
-     * @param {HTMLElement|jQuery} node
-     *  The DOM node whose descendant text spans will be visited (or which will
-     *  be visited by itself if it is a text span). If this object is a jQuery
-     *  collection, uses the first DOM node it contains.
-     *
-     * @param {Function} iterator
-     *  The iterator function that will be called for every text span. Receives
-     *  the DOM span element as first parameter. If the iterator returns the
-     *  Utils.BREAK object, the iteration process will be stopped immediately.
-     *
-     * @param {Object} [context]
-     *  If specified, the iterator will be called with this context (the symbol
-     *  'this' will be bound to the context inside the iterator function).
-     *
-     * @returns {Utils.BREAK|Undefined}
-     *  A reference to the Utils.BREAK object, if the iterator has returned
-     *  Utils.BREAK to stop the iteration process, otherwise undefined.
-     */
-    DOM.iterateTextSpans = function (node, iterator, context) {
-
-        // visit passed text span directly
-        if (DOM.isTextSpan(node)) {
-            return iterator.call(context, Utils.getDomNode(node));
-        }
-
-        // do not iterate into objects, they may contain their own paragraphs
-        if (!DOM.isObjectNode(node)) {
-            return Utils.iterateSelectedDescendantNodes(node, function () { return DOM.isTextSpan(this); }, iterator, context);
-        }
-    };
-
-    /**
      * Splits the passed text span element into two text span elements. Clones
      * all formatting to the new span element.
      *
@@ -929,6 +887,44 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
         // return the new text span
         return newSpan;
+    };
+
+    /**
+     * Calls the passed iterator function for all descendant text span elements
+     * in a the passed node. As a special case, if the passed node is a text
+     * span by itself, it will be visited directly. Text spans can be direct
+     * children of a paragraph node (regular editable text portions), or
+     * children of other nodes such as text fields or list label nodes.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The DOM node whose descendant text spans will be visited (or which will
+     *  be visited by itself if it is a text span). If this object is a jQuery
+     *  collection, uses the first DOM node it contains.
+     *
+     * @param {Function} iterator
+     *  The iterator function that will be called for every text span. Receives
+     *  the DOM span element as first parameter. If the iterator returns the
+     *  Utils.BREAK object, the iteration process will be stopped immediately.
+     *
+     * @param {Object} [context]
+     *  If specified, the iterator will be called with this context (the symbol
+     *  'this' will be bound to the context inside the iterator function).
+     *
+     * @returns {Utils.BREAK|Undefined}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
+     */
+    DOM.iterateTextSpans = function (node, iterator, context) {
+
+        // visit passed text span directly
+        if (DOM.isTextSpan(node)) {
+            return iterator.call(context, Utils.getDomNode(node));
+        }
+
+        // do not iterate into objects, they may contain their own paragraphs
+        if (!DOM.isObjectNode(node)) {
+            return Utils.iterateSelectedDescendantNodes(node, function () { return DOM.isTextSpan(this); }, iterator, context);
+        }
     };
 
     // range iteration ========================================================
@@ -1277,6 +1273,22 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     // object selection =======================================================
+
+    /**
+     * Returns whether the passed node is a <div> element that contains a
+     * selection. The selection is represented by a <div> element with class
+     * 'selection'.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node contains a div element with class selection.
+     */
+    DOM.hasObjectSelection = function (node) {
+        return DOM.isObjectNode(node) && ($(node).children('div.selection').length > 0);
+    };
 
     /**
      * Inserts a new selection box into the specified object node, or modifies
