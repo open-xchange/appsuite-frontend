@@ -65,7 +65,7 @@ define('io.ox/office/editor/editor',
         ],
 
         DEFAULT_PARAGRAPH_DEFINTIONS = { 'default': true, styleid: 'Standard', stylename: 'Normal' },
-        
+
         DEFAULT_TABSIZE = 1250; // 1.25 cm
 
 
@@ -4226,10 +4226,8 @@ define('io.ox/office/editor/editor',
                 para = position[posLength - 1],
                 pos = position[posLength],
                 allParagraphs = Position.getAllAdjacentParagraphs(editdiv, position),
-                isTable = Position.isPositionInTable(editdiv, position) ? true : false;
+                paraclone = $(allParagraphs[para]).clone(true);
 
-            var dbg_oldparacount = allParagraphs.size();
-            var paraclone = $(allParagraphs[para]).clone(true);
             paraclone.insertAfter(allParagraphs[para]);
 
             allParagraphs = Position.getAllAdjacentParagraphs(editdiv, position);
@@ -4724,7 +4722,7 @@ define('io.ox/office/editor/editor',
             }
 
             var paragraph = Position.getCurrentParagraph(editdiv, startPosition);
-            var searchNodes = $(paragraph).children('span, ' + DOM.FIELD_NODE_SELECTOR + ', ' + DOM.OBJECT_NODE_SELECTOR).get();
+            var searchNodes = $(paragraph).children('span, ' + DOM.FIELD_NODE_SELECTOR + ', ' + DOM.OBJECT_NODE_SELECTOR + ', ' + DOM.TAB_NODE_SELECTOR).get();
             var node, nodeLen, delStart, delEnd;
             var nodes = searchNodes.length;
             var nodeStart = 0;
