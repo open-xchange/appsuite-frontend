@@ -137,7 +137,6 @@ $(document).ready(function () {
                 }
                 e.stopPropagation();
             break;
-
             default:
                 if (!this.shown) {
                     return;
@@ -226,7 +225,6 @@ $(document).ready(function () {
                 items;
 
             this.query = this.$element.val().toUpperCase();
-            this.$element.val(this.query);
 
             if (!this.query && this.options.autocompleteBehaviour) {
                 return this.shown ? this.hide() : this;
