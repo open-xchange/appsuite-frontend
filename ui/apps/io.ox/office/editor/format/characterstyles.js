@@ -151,16 +151,6 @@ define('io.ox/office/editor/format/characterstyles',
         return StyleSheets.hasEqualElementAttributes(textNode1.parentNode, textNode2.parentNode);
     }
 
-    /**
-     * Iterates over all text nodes covered by the passed DOM ranges and
-     * calls the passed iterator function for their parent <span> elements.
-     */
-    function iterateTextSpans(ranges, iterator, context) {
-        return DOM.iterateTextPortionsInRanges(ranges, function (textNode) {
-            return iterator.call(context, textNode.parentNode);
-        }, context);
-    }
-
     // class CharacterStyles ==================================================
 
     /**
@@ -181,6 +171,18 @@ define('io.ox/office/editor/format/characterstyles',
      *  Collection with the style containers of all style families.
      */
     function CharacterStyles(rootNode, documentStyles) {
+
+        // private methods ----------------------------------------------------
+
+        /**
+         * Iterates over all text nodes covered by the passed DOM ranges and
+         * calls the passed iterator function for their parent <span> elements.
+         */
+        function iterateTextSpans(ranges, iterator, context) {
+            return DOM.iterateTextPortionsInRanges(ranges, rootNode, function (textNode) {
+                return iterator.call(context, textNode.parentNode);
+            }, context);
+        }
 
         // base constructor ---------------------------------------------------
 

@@ -972,6 +972,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  further manipulate this array while iterating, see the comments in the
      *  description of the parameter 'iterator' for details.
      *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The DOM root node containing the elements covered by the passed ranges.
+     *  If this object is a jQuery collection, uses the first node it contains.
+     *
      * @param {Function} iterator
      *  The iterator function that will be called for every node. Receives the
      *  DOM node object as first parameter, the current DOM range as second
@@ -996,7 +1000,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  A reference to the Utils.BREAK object, if the iterator has returned
      *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
-    DOM.iterateNodesInRanges = function (ranges, iterator, context) {
+    DOM.iterateNodesInRanges = function (ranges, rootNode, iterator, context) {
 
         var // loop variables
             index = 0, range = null, node = null;
@@ -1027,7 +1031,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             // skip first text node, if DOM range starts directly at its end
             // TODO: is this the desired behavior?
             if (node && (node.nodeType === 3) && (range.start.offset >= node.nodeValue.length)) {
-                node = Utils.getNextNodeInTree(node);
+                node = Utils.getNextNodeInTree(rootNode, node);
             }
 
             // iterate as long as the end of the range has not been reached
@@ -1035,7 +1039,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 // call iterator for the node, return if iterator returns Utils.BREAK
                 if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
                 // find next node
-                node = Utils.getNextNodeInTree(node);
+                node = Utils.getNextNodeInTree(rootNode, node);
             }
         }
     };
@@ -1091,7 +1095,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         rootNode = Utils.getDomNode(rootNode);
 
         // iterate over all nodes, and try to find the specified parent nodes
-        return DOM.iterateNodesInRanges(ranges, function (node, range, index, ranges) {
+        return DOM.iterateNodesInRanges(ranges, rootNode, function (node, range, index, ranges) {
 
             // shortcut for call to iterator function
             function callIterator() { return iterator.call(context, node, range, index, ranges); }
@@ -1122,6 +1126,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  will be validated and sorted before iteration starts (see method
      *  DOM.iterateNodesInRanges() for details).
      *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The DOM root node containing the elements covered by the passed ranges.
+     *  If this object is a jQuery collection, uses the first node it contains.
+     *
      * @param {Function} iterator
      *  The iterator function that will be called for every text node. Receives
      *  the DOM text node object as first parameter. If the iterator returns
@@ -1138,10 +1146,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  A reference to the Utils.BREAK object, if the iterator has returned
      *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
-    DOM.iterateTextPortionsInRanges = function (ranges, iterator, context) {
+    DOM.iterateTextPortionsInRanges = function (ranges, rootNode, iterator, context) {
 
         // iterate over all nodes, and process the text nodes
-        return DOM.iterateNodesInRanges(ranges, function (node, range, index, ranges) {
+        return DOM.iterateNodesInRanges(ranges, rootNode, function (node, range, index, ranges) {
 
             // call passed iterator for all text nodes in span elements
             if (DOM.isTextSpan(node.parentNode)) {

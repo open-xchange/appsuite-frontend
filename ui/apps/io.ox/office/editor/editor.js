@@ -474,7 +474,7 @@ define('io.ox/office/editor/editor',
 
                 selection.adjust();
 
-                if (selection.startPaM.imageFloatMode && (Position.isNextComponent(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
+                if (selection.startPaM.imageFloatMode && (Position.isSingleComponentSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
                     // An image selection
                     // This deleting of images is only possible with the button, not with an key down event.
                     deleteSelectedObject(selection);
@@ -1114,7 +1114,20 @@ define('io.ox/office/editor/editor',
          */
         this.getAttributes = function (family) {
             var styleSheets = this.getStyleSheets(family),
+                selection = getSelection(),
                 ranges = getBrowserSelection();
+
+            if (family === 'character') {
+                selection.adjust();
+                Utils.info('Editor.getAttributes(): iterating text components...');
+                var i = 0;
+                Position.iterateComponentsInSelection(editdiv, selection.startPaM.oxoPosition, selection.endPaM.oxoPosition, function (node) {
+                    DOM.iterateTextSpans(node, function (span) {
+                        Utils.log(++i + ': text="' + span.firstChild.nodeValue + '", attrs=' + JSON.stringify(styleSheets.getElementAttributes(span)));
+                    });
+                }, this, { allNodes: true });
+            }
+
             return styleSheets ? styleSheets.getAttributesInRanges(ranges) : {};
         };
 
@@ -1452,9 +1465,9 @@ define('io.ox/office/editor/editor',
                     // checked separately for both directions, foward and backward)
                     if ((currentSelection) &&
                         (((currentSelection.startPaM.imageFloatMode) &&
-                        (Position.isNextComponent(currentSelection.startPaM.oxoPosition, currentSelection.endPaM.oxoPosition))) ||
+                        (Position.isSingleComponentSelection(currentSelection.startPaM.oxoPosition, currentSelection.endPaM.oxoPosition))) ||
                         ((currentSelection.endPaM.imageFloatMode) &&
-                        (Position.isNextComponent(currentSelection.endPaM.oxoPosition, currentSelection.startPaM.oxoPosition))))) {
+                        (Position.isSingleComponentSelection(currentSelection.endPaM.oxoPosition, currentSelection.startPaM.oxoPosition))))) {
 
                         // getting object and drawing frame around it
                         var objectNode = Position.getDOMPosition(editdiv, currentSelection.startPaM.oxoPosition, true).node;
@@ -2804,7 +2817,7 @@ define('io.ox/office/editor/editor',
 
             Position.iterateParagraphChildNodes(paragraph, function (node) {
                 if (DOM.isTabNode(node)) {
-                    var spanNode = Utils.findNextNodeInTree(node, 'span');
+                    var spanNode = DOM.findNextTextSpan(node);
                     if (spanNode) {
                         allTabSpanNodes.push(spanNode);
                     }
@@ -2827,7 +2840,7 @@ define('io.ox/office/editor/editor',
                         mustExtendTab = true;
                     }
                     width = mustExtendTab ? DEFAULT_TABSIZE : Math.max(0, DEFAULT_TABSIZE - (leftHMM % DEFAULT_TABSIZE));
-                    width = Utils.areSameValuesWithBlur(width, 0, 1) ? DEFAULT_TABSIZE : width; // no 0 tab size allowed
+                    width = (width <= 1) ? DEFAULT_TABSIZE : width; // no 0 tab size allowed, check for <= 1 to prevent rounding errors
                     $(tabSpanNode).css('margin-left', (width / 100) + "mm");
                 }
             });
@@ -2870,7 +2883,7 @@ define('io.ox/office/editor/editor',
 
                     selection.adjust();
 
-                    if ((selection.startPaM.imageFloatMode) && (Position.isNextComponent(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
+                    if ((selection.startPaM.imageFloatMode) && (Position.isSingleComponentSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
                         // An image selection
                         setAttributesToSelectedImage(selection, attributes);
 

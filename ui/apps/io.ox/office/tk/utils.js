@@ -301,36 +301,6 @@ define('io.ox/office/tk/utils',
     };
 
     /**
-     * Checks if two values are within a specified range to each other.
-     *
-     * @param {Number} value1
-     *  The first value to check
-     *
-     * @param {Number} value2
-     *  The second value to check
-     *
-     * @param {Number} blur
-     *  A blur value that describes how much values can differ to treat
-     *  same as equal
-     *
-     * @returns {Boolean}
-     *  Returns true if the difference between value1 and value2 is
-     *  smaller or equal to blur.
-     */
-    Utils.areSameValuesWithBlur = function (value1, value2, blur) {
-        if (value1 === value2)
-            return true;
-        if (value1 < value2) {
-            return ((value1 + blur) >= value2);
-        }
-        else if (value1 > value2) {
-            return ((value1 - blur) <= value2);
-        }
-
-        return false;
-    };
-
-    /**
      * Returns whether the passed space-separated token list contains the
      * specified token.
      *
@@ -780,15 +750,20 @@ define('io.ox/office/tk/utils',
      * the last sibling, goes up to the parent node(s) and tries to return
      * their next sibling.
      *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The DOM root node whose sub node tree will not be left when searching
+     *  for the next node. If this object is a jQuery collection, uses the
+     *  first node it contains.
+     *
      * @param {Node|jQuery} node
      *  The DOM node whose successor will be returned. If this object is a
      *  jQuery collection, uses the first node it contains.
      *
      * @returns {Node|Null}
-     *  The next node in the DOM tree; or null, if the passed node is the very
-     *  last leaf in the DOM tree.
+     *  The next node in the DOM sub tree of the root node; or null, if the
+     *  passed node is the very last leaf in the DOM sub tree.
      */
-    Utils.getNextNodeInTree = function (node) {
+    Utils.getNextNodeInTree = function (rootNode, node) {
         node = Utils.getDomNode(node);
 
         // node is an element with child nodes, return its first child
@@ -796,16 +771,25 @@ define('io.ox/office/tk/utils',
             return node.firstChild;
         }
 
-        // find first node up the tree that has a sibling, return that sibling
+        // find first node up the tree that has a sibling, get that sibling
         while (node && !node.nextSibling) {
             node = node.parentNode;
         }
-        return node && node.nextSibling;
+        node = node && node.nextSibling;
+
+        // check that this node is inside the root node
+        rootNode = Utils.getDomNode(rootNode);
+        return (node && rootNode.contains(node)) ? node : null;
     };
 
     /**
      * Finds a DOM node that follows the passed node in DOM tree order and that
      * matches a jQuery selector.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The DOM root node whose sub node tree will not be left when searching
+     *  for the next node. If this object is a jQuery collection, uses the
+     *  first node it contains.
      *
      * @param {Node|jQuery} node
      *  The DOM node whose successor will be returned. If this object is a
@@ -819,13 +803,13 @@ define('io.ox/office/tk/utils',
      *  http://api.jquery.com/is for details.
      *
      * @returns {Node|Null}
-     *  The first node in the DOM tree, that follows the passed node and
-     *  matches the selector; or null, no node has been found.
+     *  The first node in the DOM sub tree of the root node, that follows the
+     *  passed node and matches the selector; or null, no node has been found.
      */
-    Utils.findNextNodeInTree = function (node, selector) {
-        node = Utils.getNextNodeInTree(node);
+    Utils.findNextNodeInTree = function (rootNode, node, selector) {
+        node = Utils.getNextNodeInTree(rootNode, node);
         while (node && !$(node).is(selector)) {
-            node = Utils.getNextNodeInTree(node);
+            node = Utils.getNextNodeInTree(rootNode, node);
         }
         return node;
     };
@@ -837,15 +821,21 @@ define('io.ox/office/tk/utils',
      * the last sibling, goes up to the parent node(s) and tries to return
      * their next sibling.
      *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The DOM root node whose sub node tree will not be left when searching
+     *  for the previous node. If this object is a jQuery collection, uses the
+     *  first node it contains.
+     *
      * @param {Node|jQuery} node
      *  The DOM node whose predecessor will be returned. If this object is a
      *  jQuery collection, uses the first node it contains.
      *
      * @returns {Node|Null}
-     *  The previous node in the DOM tree, or null, if the passed node is the
-     *  root node of the DOM tree.
+     *  The previous node in the DOM sub tree of the root node; or null, if the
+     *  passed node is the root node itself (or is not contained in the root
+     *  node).
      */
-    Utils.getPreviousNodeInTree = function (node) {
+    Utils.getPreviousNodeInTree = function (rootNode, node) {
         node = Utils.getDomNode(node);
 
         // if node has a previous sibling, return its last leaf
@@ -857,13 +847,22 @@ define('io.ox/office/tk/utils',
             return node;
         }
 
-        // otherwise, return the parent node (will return null for the root node)
-        return node.parentNode;
+        // otherwise, go to the parent node
+        node = node.parentNode;
+
+        // check that this node is inside the root node
+        rootNode = Utils.getDomNode(rootNode);
+        return ((node === rootNode) || rootNode.contains(node)) ? node : null;
     };
 
     /**
      * Finds a DOM node that precedes the passed node in DOM tree order and
      * that matches a jQuery selector.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The DOM root node whose sub node tree will not be left when searching
+     *  for the previous node. If this object is a jQuery collection, uses the
+     *  first node it contains.
      *
      * @param {Node|jQuery} node
      *  The DOM node whose predecessor will be returned. If this object is a
@@ -877,13 +876,14 @@ define('io.ox/office/tk/utils',
      *  http://api.jquery.com/is for details.
      *
      * @returns {Node|Null}
-     *  The first node in the DOM tree, that precedes the passed node and that
-     *  matches the selector; or null, no node has been found.
+     *  The first node in the DOM sub tree of the root node, that precedes the
+     *  passed node and that matches the selector; or null, no node has been
+     *  found.
      */
-    Utils.findPreviousNodeInTree = function (node, selector) {
-        node = Utils.getPreviousNodeInTree(node);
+    Utils.findPreviousNodeInTree = function (rootNode, node, selector) {
+        node = Utils.getPreviousNodeInTree(rootNode, node);
         while (node && !$(node).is(selector)) {
-            node = Utils.getPreviousNodeInTree(node);
+            node = Utils.getPreviousNodeInTree(rootNode, node);
         }
         return node;
     };
