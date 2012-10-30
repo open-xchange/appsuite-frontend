@@ -170,18 +170,35 @@ define('io.ox/calendar/month/perspective',
         },
 
         gotoMonth: function (opt) {
-            var param = $.extend({
-                    date: new date.Local(),
+            var today = new date.Local(),
+                param = $.extend({
+                    date: new date.Local(today.getYear(), today.getMonth(), 1),
                     duration: 0
                 }, opt),
-                sel = '[date="' + param.date.getYear() + '-' + param.date.getMonth() + '-1"]',
-                pos = $(sel, this.pane).position().top  + this.scrollTop() - 23;
+                self = this,
+                firstDay = $('[date="' + param.date.getYear() + '-' + param.date.getMonth() + '-1"]', self.pane),
+                scrollToDate = function (pos) {
 
-            // set initial scroll position
-            if (param.duration === 0) {
-                this.scrollTop(pos);
+                    // update current date
+                    self.current = param.date;
+
+                    // scroll to position
+                    if (param.duration === 0) {
+                        self.scrollTop(pos);
+                    } else {
+                        self.pane.animate({scrollTop : pos}, param.duration);
+                    }
+                };
+
+            if (firstDay.length > 0) {
+                scrollToDate(firstDay.position().top  + this.scrollTop() - 23);
             } else {
-                this.pane.animate({scrollTop : pos}, param.duration);
+                if (param.date.getTime() < self.current.getTime()) {
+                    this.drawWeeks({up: true}).done(function () {
+                        firstDay = $('[date="' + param.date.getYear() + '-' + param.date.getMonth() + '-1"]', self.pane);
+                        scrollToDate(firstDay.position().top  + self.scrollTop() - 23);
+                    });
+                }
             }
 
             //this.pane.on('scroll', magneticScroll).on('scroll', getLastScrollTop);
@@ -195,7 +212,7 @@ define('io.ox/calendar/month/perspective',
                 curMonth = '',
                 self = this;
 
-            this.current = start.getTime();
+            this.current = new date.Local(year, month, 1);
 
             this.lastWeek = this.firstWeek = util.getWeekStart(new date.Local(year, month - 1, 1));
 
@@ -227,16 +244,28 @@ define('io.ox/calendar/month/perspective',
                                         $('<li>')
                                             .append(
                                                 $('<a href="#">').addClass('control prev').append($('<i>').addClass('icon-chevron-left'))
-                                            ),
+                                            ).on('click', $.proxy(function (e) {
+                                                this.gotoMonth({
+                                                    duration: 400,
+                                                    date: new date.Local(this.current.getYear(), this.current.getMonth() - 1, 1)
+                                                });
+                                            }, this)),
                                         $('<li>').append(
                                             $('<a>').addClass('link today').text(gt('Today'))
                                         ).on('click', $.proxy(function (e) {
-                                            this.gotoMonth({duration: 800});
+                                            this.gotoMonth({
+                                                duration: 800
+                                            });
                                         }, this)),
                                         $('<li>')
                                             .append(
                                                     $('<a href="#">').addClass('control next').append($('<i>').addClass('icon-chevron-right'))
-                                            )
+                                            ).on('click', $.proxy(function (e) {
+                                                this.gotoMonth({
+                                                    duration: 400,
+                                                    date: new date.Local(this.current.getYear(), this.current.getMonth() + 1, 1)
+                                                });
+                                            }, this))
                                     )
                             )
                     )
