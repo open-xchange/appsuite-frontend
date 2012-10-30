@@ -2771,6 +2771,47 @@ define('io.ox/office/editor/editor',
             }
 
             // TODO: Adjust tabs, ...
+            adjustTabsOfParagraph(paragraph);
+        }
+        
+        /**
+         * Private helper function to update all tabs inside a paragraph.
+         *
+         * @param {HTMLElement|jQuery} paragraph
+         *  The paragraph element to be validated. If this object is a jQuery
+         *  collection, uses the first DOM node it contains.
+         */
+        function adjustTabsOfParagraph(paragraph) {
+            var allTabSpanNodes = [];
+            
+            Position.iterateParagraphChildNodes(paragraph, function (node) {
+                if (DOM.isTabNode(node)) {
+                    var spanNode = Utils.findNextNodeInTree(node, 'span');
+                    if (spanNode) {
+                        allTabSpanNodes.push(spanNode);
+                    }
+                }
+            });
+            
+            var lastPosLeft = -1;
+            var lastPosTop = -1;
+            _(allTabSpanNodes).each(function (tabSpanNode) {
+                var pos = $(tabSpanNode).position();
+                if (pos) {
+                    var leftHMM = Utils.convertLengthToHmm(pos.left, "px"),
+                        topHMM = Utils.convertLengthToHmm(pos.top, "px"),
+                        width = 0, mustExtendTab = false;
+                    if ((lastPosLeft === -1) && (lastPosTop === -1)) {
+                        lastPosLeft = leftHMM;
+                        lastPosTop = topHMM;
+                    }
+                    else if ((lastPosLeft === leftHMM) && (lastPosTop === topHMM)) {
+                        mustExtendTab = true;
+                    }
+                    width = mustExtendTab ? (DEFAULT_TABSIZE / 100) : Math.max(0, DEFAULT_TABSIZE - (leftHMM % DEFAULT_TABSIZE)) / 100;
+                    $(tabSpanNode).css('margin-left', width + "mm");
+                }
+            });
         }
 
         // ==================================================================
@@ -3794,7 +3835,7 @@ define('io.ox/office/editor/editor',
 
             // check position
             if (!DOM.isTextNodeInPortionSpan(node)) {
-                Utils.error('Editor.implInsertField(): expecting text position to insert field.');
+                Utils.error('Editor.implInsertTab(): expecting text position to insert tab.');
                 return false;
             }
 
