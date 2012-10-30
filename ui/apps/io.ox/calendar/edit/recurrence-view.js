@@ -451,6 +451,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 var type = this.model.get('recurrence_type');
                 if (type === RECURRENCE_TYPES.NO_RECURRENCE) {
                     this.controls.checkbox.removeAttr("checked");
+                    this.nodes.summary.empty();
                 } else {
                     this.controls.checkbox.attr('checked', 'checked');
                     
@@ -532,7 +533,11 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         this.nodes.endsChoice.append(this.ends.never);
                         this.setEnding(this.ends.never);
                     }
-                    // TODO: Update Summary
+                    
+                    this.nodes.summary.append(
+                        this.choice.ghost(),
+                        this.endsChoice.ghost()
+                    );
                 }
 
                 this.updatingState = false;

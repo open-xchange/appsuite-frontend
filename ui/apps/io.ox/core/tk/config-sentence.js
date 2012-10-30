@@ -181,6 +181,20 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             this.trigger("change:" + key, this);
         };
 
+        this.ghost = function () {
+            var $ghost = this.$el.clone();
+            $ghost.find('*').off();
+            return $ghost;
+        };
+
+        this.disable = function () {
+            // TODO
+        };
+
+        this.enabled = function () {
+            // TODO
+        };
+
         this.id = options.id;
 
     }
