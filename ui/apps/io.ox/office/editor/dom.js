@@ -551,6 +551,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     DOM.isTabNode = function (node) {
         return $(node).is(DOM.TAB_NODE_SELECTOR);
     };
+    
+    DOM.getSpanFromTabNode = function (node) {
+        return $('div.tab > span', Utils.getDomNode(node));
+    };
 
     /**
      * Returns a new tab element.

@@ -64,9 +64,7 @@ define('io.ox/office/editor/editor',
             { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: '7F' }]}, italic: true }
         ],
 
-        DEFAULT_PARAGRAPH_DEFINTIONS = { 'default': true, styleid: 'Standard', stylename: 'Normal' },
-
-        DEFAULT_TABSIZE = 1250; // 1.25 cm
+        DEFAULT_PARAGRAPH_DEFINTIONS = { 'default': true, styleid: 'Standard', stylename: 'Normal' };
 
 
     // private global functions ===============================================
@@ -1100,6 +1098,13 @@ define('io.ox/office/editor/editor',
         this.getLists = function () {
             return lists;
         };
+        
+        /**
+         * Returns the document attributes.
+         */
+        this.getDocumentAttributes = function () {
+            return documentStyles.getAttributes();
+        };
 
         /**
          * Returns the values of all formatting attributes of the specified
@@ -1980,6 +1985,10 @@ define('io.ox/office/editor/editor',
         operationHandlers[Operations.INIT_DOCUMENT] = function (operation) {
             implInitDocument();
         };
+        
+        operationHandlers[Operations.SET_DOCUMENT_ATTRIBUTES] = function (operation) {
+            implSetDocumentAttributes(operation.attrs);
+        };
 
         operationHandlers[Operations.TEXT_INSERT] = function (operation) {
             if (undomgr.isEnabled()) {
@@ -2817,17 +2826,19 @@ define('io.ox/office/editor/editor',
 
             Position.iterateParagraphChildNodes(paragraph, function (node) {
                 if (DOM.isTabNode(node)) {
-                    var spanNode = DOM.findNextTextSpan(node);
+                    // first child span of div.tab node
+                    var spanNode = $(node).children().first();
                     if (spanNode) {
                         allTabSpanNodes.push(spanNode);
                     }
                 }
             });
 
-            var lastPosLeft = -1;
-            var lastPosTop = -1;
+            var lastPosLeft = -1,
+                lastPosTop = -1,
+                defaultTabstop = self.getDocumentAttributes().defaulttabstop;
             _(allTabSpanNodes).each(function (tabSpanNode) {
-                var pos = $(tabSpanNode).position();
+                var pos = tabSpanNode.position();
                 if (pos) {
                     var leftHMM = Utils.convertLengthToHmm(pos.left, "px"),
                         topHMM = Utils.convertLengthToHmm(pos.top, "px"),
@@ -2839,9 +2850,9 @@ define('io.ox/office/editor/editor',
                     else if ((lastPosLeft === leftHMM) && (lastPosTop === topHMM)) {
                         mustExtendTab = true;
                     }
-                    width = mustExtendTab ? DEFAULT_TABSIZE : Math.max(0, DEFAULT_TABSIZE - (leftHMM % DEFAULT_TABSIZE));
-                    width = (width <= 1) ? DEFAULT_TABSIZE : width; // no 0 tab size allowed, check for <= 1 to prevent rounding errors
-                    $(tabSpanNode).css('margin-left', (width / 100) + "mm");
+                    width = mustExtendTab ? defaultTabstop : Math.max(0, defaultTabstop - (leftHMM % defaultTabstop));
+                    width = (width <= 1) ? defaultTabstop : width; // no 0 tab size allowed, check for <= 1 to prevent rounding errors
+                    tabSpanNode.css('margin-left', (width / 100) + "mm");
                 }
             });
         }
@@ -3842,6 +3853,16 @@ define('io.ox/office/editor/editor',
             self.clearUndo();
             self.setEditMode(null); // set null for 'read-only' and not yet determined edit status by the server
         }
+        
+        function implSetDocumentAttributes(attributes) {
+            var documentAttributes = self.getDocumentAttributes();
+            
+            // read various document attributes and set it at the document styles
+            documentAttributes.defaulttabstop = attributes.defaulttabstop;
+            if (attributes.zoom) {
+                documentAttributes.zoom = attributes.zoom;
+            }
+        }
 
         function implInsertText(text, position) {
             var domPos = Position.getDOMPosition(editdiv, position);
@@ -3863,7 +3884,8 @@ define('io.ox/office/editor/editor',
         function implInsertTab(position) {
             var domPos = Position.getDOMPosition(editdiv, position),
                 node = (domPos && domPos.node) ? domPos.node.parentNode : null,
-                tabSpan = null;
+                tabSpan = null,
+                defaultTabstop = self.getDocumentAttributes().defaulttabstop;
 
             // check position
             if (!DOM.isPortionSpan(node)) {
@@ -3875,11 +3897,12 @@ define('io.ox/office/editor/editor',
             DOM.splitTextSpan(node, domPos.offset);
 
             // split the text span again to get initial character formatting for the tab
-            tabSpan = DOM.splitTextSpan(node, 0).css('margin-left', (DEFAULT_TABSIZE / 100) + "mm");
+            // just use the default tab stop - value will be updated by validateParagraph
+            tabSpan = DOM.splitTextSpan(node, 0).css('margin-left', (defaultTabstop / 100) + "mm");
             var pos = tabSpan.position();
             if (pos) {
                 var leftHMM = Utils.convertLengthToHmm(pos.left, "px");
-                var width = Math.max(0, DEFAULT_TABSIZE - (leftHMM % DEFAULT_TABSIZE)) / 100;
+                var width = Math.max(0, defaultTabstop - (leftHMM % defaultTabstop)) / 100;
                 tabSpan.css('margin-left', width + "mm");
             }
 
