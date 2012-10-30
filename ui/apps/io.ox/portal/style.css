@@ -71,19 +71,17 @@
     position: relative;
     background: #999;
 }
+
+@tHeight: 300px;
+@tWidth: 260px;
+@tSpace: 12px;
+@tLine: @tSpace * 3;
+
 .io-ox-portal-widget-tile {
     display: block;
-<<<<<<< HEAD
-    width: 240px;
-    height: 320px;
-<<<<<<< HEAD
-=======
-=======
-    width: 260px;
-    height: 300px;
->>>>>>> Portal v5
-    margin: 0 12px 12px 0;
->>>>>>> hidding actions unless hovered
+    width: @tWidth;
+    height: @tHeight;
+    margin: 0 @tSpace @tSpace 0;
     float: left;
 } 
 .io-ox-portal-widget-tile { 
@@ -118,36 +116,36 @@
     font-family: @font-light;
 }
 .io-ox-typeA-item {
-    height: 40px;
+    height: @tLine;
     border-top: 1px solid rgba(255,255,255,0.5);
     width: 100%;
     color: #eee;
-    padding: 0 6px 0 12px;
+    padding: 0 6px 0 @tSpace;
 }
 .io-ox-typeA-content :first-child.io-ox-typeA-item{
     border: none;
 }
 .io-ox-typeA-content {
-    height: 280px;
+    height: @tHeight - @tLine - @tLine; /* height - title - action */
     overflow: hidden;
 }
 
 .io-ox-typeA-title {
-    width: 240px;
-    height: 36px;
+    width: @tWidth;
+    height: @tLine;
     background: #000;
     color: #eee;
     text-align: center;
     padding-top: 6px;
 }
 .io-ox-typeA-action {
-    height: 36px;
+    height: @tLine;
     background: black;
     color: #eee;
 }
 .io-ox-typeB-title {
-    width: 240px;
-    height: 36px;
+    width: @tWidth;
+    height: @tLine;
     background: #000;
     color: #eee;
     text-align: center;
@@ -155,7 +153,7 @@
 }
 
 .io-ox-typeB-image {
-    height: 280px; /* height - title */
+    height: @tHeight - @tLine; /* height - title */
     background: no-repeat center;
     background-size: cover;
 }
@@ -172,15 +170,15 @@
 /* Remove this to make Matthias happy */
 /*
 .io-ox-typeA-action, .io-ox-typeB-title {
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: @tile-space;
+    border-bottom-right-radius: @tile-space;
 }
 .io-ox-typeA-title {
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
+    border-top-left-radius: @tile-space;
+    border-top-right-radius: @tile-space;
 }
 .io-ox-portal-widget-tile {
-    border-radius: 12px;
+    border-radius: @tile-space;
 }
 */
 
@@ -197,7 +195,6 @@
 .invisible {
     visibility: hidden;
 }
-
 .tile-color0, .tile-color6 {
     background: #234;
 }
