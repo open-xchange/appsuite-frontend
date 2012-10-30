@@ -71,20 +71,16 @@ define('io.ox/calendar/week/perspective',
                         if (action === 'series') {
                             delete obj.recurrence_position;
                         }
-                        api.update(obj).done(function (data) {
-//                          console.log('updateAppointment result', data);
-                        });
+                        api.update(obj);
                     });
             } else {
-                api.update(obj).done(function (data) {
-//                  console.log('updateAppointment result', data);
-                });
+                api.update(obj);
             }
         },
 
         openCreateAppointment: function (e, obj) {
             ext.point('io.ox/calendar/detail/actions/create')
-                .invoke('action', this, this.app, obj);
+                .invoke('action', this, {app: this.app}, obj);
         },
 
         openEditAppointment: function (e, obj) {
