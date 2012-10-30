@@ -130,6 +130,14 @@ $(document).ready(function () {
                 this.hide();
                 break;
 
+            case 37: // left
+            case 39: // right
+                if (!this.shown) {
+                    return;
+                }
+                e.stopPropagation();
+            break;
+
             default:
                 if (!this.shown) {
                     return;
