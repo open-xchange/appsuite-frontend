@@ -2773,7 +2773,7 @@ define('io.ox/office/editor/editor',
             // TODO: Adjust tabs, ...
             adjustTabsOfParagraph(paragraph);
         }
-        
+
         /**
          * Private helper function to update all tabs inside a paragraph. This
          * function just works only with the default tab size and doesn't use
@@ -2785,7 +2785,7 @@ define('io.ox/office/editor/editor',
          */
         function adjustTabsOfParagraph(paragraph) {
             var allTabSpanNodes = [];
-            
+
             Position.iterateParagraphChildNodes(paragraph, function (node) {
                 if (DOM.isTabNode(node)) {
                     var spanNode = Utils.findNextNodeInTree(node, 'span');
@@ -2794,7 +2794,7 @@ define('io.ox/office/editor/editor',
                     }
                 }
             });
-            
+
             var lastPosLeft = -1;
             var lastPosTop = -1;
             _(allTabSpanNodes).each(function (tabSpanNode) {
@@ -3833,21 +3833,20 @@ define('io.ox/office/editor/editor',
 
         function implInsertTab(position) {
             var domPos = Position.getDOMPosition(editdiv, position),
-                node = domPos ? domPos.node : null,
+                node = (domPos && domPos.node) ? domPos.node.parentNode : null,
                 tabSpan = null;
 
             // check position
-            if (!DOM.isTextNodeInPortionSpan(node)) {
-                Utils.error('Editor.implInsertTab(): expecting text position to insert tab.');
+            if (!DOM.isPortionSpan(node)) {
+                Utils.warn('Editor.implInsertTab(): expecting text position to insert tab.');
                 return false;
             }
 
             // split the text span at the specified position
-            DOM.splitTextSpan(node.parentNode, domPos.offset);
+            DOM.splitTextSpan(node, domPos.offset);
 
-            // split the text span again to get initial character formatting
-            // for the tab, and insert the field representation text
-            tabSpan = DOM.splitTextSpan(node.parentNode, 0).css('margin-left', (DEFAULT_TABSIZE / 100) + "mm");
+            // split the text span again to get initial character formatting for the tab
+            tabSpan = DOM.splitTextSpan(node, 0).css('margin-left', (DEFAULT_TABSIZE / 100) + "mm");
             var pos = tabSpan.position();
             if (pos) {
                 var leftHMM = Utils.convertLengthToHmm(pos.left, "px");
@@ -3856,8 +3855,8 @@ define('io.ox/office/editor/editor',
             }
 
             // insert a new text field before the addressed text node, move
-            // the field span element into the field node
-            DOM.createTabNode().append(tabSpan).insertBefore(node.parentNode);
+            // the tab span element into the tab container node
+            DOM.createTabNode().append(tabSpan).insertBefore(node);
 
             implParagraphChanged(position);
 
@@ -3871,26 +3870,26 @@ define('io.ox/office/editor/editor',
         function implInsertImage(url, position, attributes) {
 
             var domPos = Position.getDOMPosition(editdiv, position),
-                node = domPos ? domPos.node : null,
+                node = (domPos && domPos.node) ? domPos.node.parentNode : null,
                 absUrl = /:\/\//.test(url) ? url : getDocumentUrl({ get_filename: url }),
                 image = null;
 
             // check position
-            if (!DOM.isTextNodeInPortionSpan(node)) {
-                Utils.error('Editor.implInsertImage(): expecting text position to insert image.');
+            if (!DOM.isPortionSpan(node)) {
+                Utils.warn('Editor.implInsertImage(): expecting text position to insert image.');
                 return false;
             }
 
             // prepend text before offset in a new span (also if position
             // points to start or end of text, needed to clone formatting)
-            DOM.splitTextSpan(node.parentNode, domPos.offset);
+            DOM.splitTextSpan(node, domPos.offset);
 
             // insert the image with default settings (inline) between the two text nodes (store original URL for later use)
             image = $('<div>', { contenteditable: false })
                 .addClass('object inline')
                 .data('url', url)
                 .append($('<div>').addClass('content').append($('<img>', { src: absUrl })))
-                .insertBefore(node.parentNode);
+                .insertBefore(node);
 
             // apply the passed image attributes
             imageStyles.setElementAttributes(image, attributes);
@@ -3920,25 +3919,25 @@ define('io.ox/office/editor/editor',
         function implInsertField(position, type, representation) {
 
             var domPos = Position.getDOMPosition(editdiv, position),
-                node = domPos ? domPos.node : null,
+                node = (domPos && domPos.node) ? domPos.node.parentNode : null,
                 fieldSpan = null;
 
             // check position
-            if (!DOM.isTextNodeInPortionSpan(node)) {
-                Utils.error('Editor.implInsertField(): expecting text position to insert field.');
+            if (!DOM.isPortionSpan(node)) {
+                Utils.warn('Editor.implInsertField(): expecting text position to insert field.');
                 return false;
             }
 
             // split the text span at the specified position
-            DOM.splitTextSpan(node.parentNode, domPos.offset);
+            DOM.splitTextSpan(node, domPos.offset);
 
             // split the text span again to get initial character formatting
             // for the field, and insert the field representation text
-            fieldSpan = DOM.splitTextSpan(node.parentNode, 0).text(representation);
+            fieldSpan = DOM.splitTextSpan(node, 0).text(representation);
 
             // insert a new text field before the addressed text node, move
             // the field span element into the field node
-            DOM.createFieldNode().append(fieldSpan).insertBefore(node.parentNode);
+            DOM.createFieldNode().append(fieldSpan).insertBefore(node);
 
             implParagraphChanged(position);
             return true;
@@ -4135,9 +4134,16 @@ define('io.ox/office/editor/editor',
                 return;
             }
             startInfo = Position.getDOMPosition(editdiv, start, true);
+            if (!startInfo || !startInfo.node) {
+                Utils.warn('Editor.implSetAttributes(): invalid start position: ' + JSON.stringify(start));
+                return;
+            }
             endInfo = _.isArray(end) ? Position.getDOMPosition(editdiv, end, true) : startInfo;
+            if (!endInfo || !endInfo.node) {
+                Utils.warn('Editor.implSetAttributes(): invalid end position: ' + JSON.stringify(end));
+                return;
+            }
             end = end || start;
-            if (!startInfo.node || !endInfo.node) { return; }
 
             // get attribute family of start and end node
             startInfo.family = resolveElementFamily(startInfo.node);

@@ -335,7 +335,8 @@ define('io.ox/office/editor/position',
 
             var returnObj = Position.getNextChildNode(node, oxoPos.shift());
 
-            if ((returnObj) && (returnObj.node) && (! forcePositionCounting)) {
+            // child node of a paragraph: resolve element to DOM text node
+            if (!forcePositionCounting && returnObj && returnObj.node && DOM.isParagraphNode(returnObj.node.parentNode)) {
                 returnObj = Position.getTextSpanFromNode(returnObj);
             }
 
@@ -589,7 +590,7 @@ define('io.ox/office/editor/position',
      *  The one integer number, that determines the child according to the
      *  parent position.
      *
-     * @returns {Node | Number}
+     * @returns {DOM.Point}
      *  The child node and an offset. Offset is only set for text nodes,
      *  otherwise it is undefined.
      */
@@ -641,58 +642,50 @@ define('io.ox/office/editor/position',
      * Determining a text node for a DOM position, if this is required.
      * For object nodes, image nodes or text span nodes, it is sometimes
      * necessary to get a valid text node.
-     * (maybe this function can be removed in the future.)
      *
-     * @param {Node|Number} node
+     * @param {DOM.Point} domPoint
      *  The child node and the offset, which might be modified to get
      *  a valid text node.
      *
-     * @returns {Node | Number}
+     * @returns {DOM.Point}
      *  The child node and an offset.
      */
     Position.getTextSpanFromNode = function (domPoint) {
 
-        var childNode = null,
-            offset = domPoint.offset;
+        var // a text span corresponding to a component node
+            span = null;
 
-        if ((domPoint) && (domPoint.node)) {
-
-            // if the position is an image or field, the dom position shall be the previous or following text node
-            if (DOM.isObjectNode(domPoint.node)) {
-                childNode = DOM.findNextTextSpan(domPoint.node);
-                offset = 0;
-                if ((childNode) && (childNode.nodeName !== 3)) {
-                    childNode = childNode.firstChild;  // using text node instead of span node
-                }
-            } else if (DOM.isTextComponentNode(domPoint.node)) {
-                childNode = DOM.findPreviousTextSpan(domPoint.node);
-                if (childNode) {
-                    offset = $(childNode).text().length;
-                } else {
-                    childNode = DOM.findNextTextSpan(domPoint.node);
-                    offset = 0;
-                }
-                if ((childNode) && (childNode.nodeName !== 3)) {
-                    childNode = childNode.firstChild;  // using text node instead of span node
-                }
-            } else if (DOM.isTextSpan(domPoint.node)) {
-                childNode = domPoint.node;
-                if (childNode.nodeType !== 3) {
-                    childNode = childNode.firstChild;  // using text node instead of span node
-                }
-                offset = domPoint.offset;
-            } else {
-                // do nothing more than in 'getNextChildNode'
-                childNode = domPoint.node;
-                offset = domPoint.offset;
-            }
-
-        } else {
-            Utils.warn('Position.getTextSpanFromNode(): Warning: Parameter domPoint not set.');
+        if (!domPoint || !domPoint.node) {
+            Utils.warn('Position.getTextSpanFromNode(): Parameter domPoint not set.');
             return;
         }
 
-        return new DOM.Point(childNode, offset);
+        // if the position is an image or field, the dom position shall be the previous or following text node
+        if (DOM.isTextComponentNode(domPoint.node) || DOM.isObjectNode(domPoint.node)) {
+
+            // go to text span preceding the component node
+            span = DOM.findPreviousTextSpan(domPoint.node);
+            if (span) {
+                return new DOM.Point(span.firstChild, span.firstChild.nodeValue.length);
+            }
+
+            // leading floating objects do not have a preceding text span, try following text span
+            span = DOM.findNextTextSpan(domPoint.node);
+            if (span) {
+                return new DOM.Point(span.firstChild, 0);
+            }
+
+            Utils.warn('Position.getTextSpanFromNode(): no text span in paragraph found');
+            return;
+        }
+
+        // from text span to text node
+        if (DOM.isTextSpan(domPoint.node)) {
+            return new DOM.Point(domPoint.node.firstChild, domPoint.offset);
+        }
+
+        // other node types need to be handled if existing
+        Utils.warn('Position.getTextSpanFromNode(): unknown paragraph child node');
     };
 
     /**
