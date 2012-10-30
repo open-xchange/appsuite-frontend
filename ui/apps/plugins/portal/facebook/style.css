@@ -24,9 +24,7 @@
 }
 
 .facebook.wall-entry a.profile-picture img.picture{
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
+    .border-radius(5px);
 }
 
 .facebook .from {

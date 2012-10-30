@@ -413,7 +413,7 @@
     pre {
         background-color: initial;
         border: 0px none;
-        -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0;
+        .border-radius(0px);
     }
 
     .mail-warning {
