@@ -4215,7 +4215,11 @@ define('io.ox/office/editor/editor',
             }
 
             // adjust tab sizes
-            var paragraph = startInfo.family === 'paragraph' ? startInfo.node : startInfo.node.parentNode;
+            var paragraph = null;
+            if (DOM.isParagraphNode(startInfo.node))
+                paragraph = startInfo.node;
+            else if (DOM.isParagraphNode(startInfo.node.parentNode))
+                paragraph = startInfo.node.parentNode;
             if (!_.isNull(paragraph)) {
                 adjustTabsOfParagraph(paragraph);
             }
