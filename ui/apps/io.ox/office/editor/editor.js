@@ -1049,7 +1049,7 @@ define('io.ox/office/editor/editor',
             setAttributes('paragraph', { numId: defNumId, ilvl: 0});
         };
         this.createList = function (type, options) {
-            var defNumId = (!options || (!options.symbol && !options.levelStart)) ? lists.getDefaultNumId(type) : undefined;
+            var defNumId = (!options || (!options.symbol && !options.levelstart)) ? lists.getDefaultNumId(type) : undefined;
             if (defNumId === undefined) {
                 var listOperation = lists.getDefaultListOperation(type, options);
                 applyOperation(listOperation, true, true);
@@ -1816,9 +1816,9 @@ define('io.ox/office/editor/editor',
                                 undomgr.enterGroup(function () {
                                     self.deleteText(numAutoCorrect.startPosition, numAutoCorrect.endPosition);
                                     self.createList(numAutoCorrect.listDetection.numberformat === 'bullet' ? 'bullet' : 'numbering',
-                                            {levelStart: numAutoCorrect.listDetection.levelStart, symbol: numAutoCorrect.listDetection.symbol,
+                                            {levelstart: numAutoCorrect.listDetection.levelstart, symbol: numAutoCorrect.listDetection.symbol,
                                              startPosition: numAutoCorrect.startPosition,
-                                             numberFormat: numAutoCorrect.listDetection.numberformat
+                                             numberformat: numAutoCorrect.listDetection.numberformat
                                             });
                                 });
                             }
