@@ -23,7 +23,7 @@ define("io.ox/mail/api",
     'use strict';
 
     var DONE = $.when(),
-        DELAY = 1000 * 5; // 5 seconds
+        DELAY = 1000 * 3; // 3 seconds
 
     var tracker = (function () {
 

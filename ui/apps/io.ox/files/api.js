@@ -204,7 +204,6 @@ define('io.ox/files/api',
                     folder_id = String(options.json.folder_id),
                     obj = { folder_id: folder_id, id: id };
                 return api.propagate('change', obj).pipe(function () {
-                    api.trigger('update:' + _.cid(obj), obj);
                     api.trigger('create.version update', obj);
                     return { folder_id: folder_id, id: id, timestamp: data.timestamp};
                 });
@@ -220,14 +219,7 @@ define('io.ox/files/api',
                 appendColumns: false
             })
             .pipe(function () {
-                return api.propagate('change', obj, true);
-            })
-            .pipe(function () {
-                return api.get(obj);
-            })
-            .done(function (data) {
-                api.trigger('update update:' + _.cid(data), data);
-                api.trigger('refresh.list');
+                return api.propagate('change', obj);
             });
     };
 
@@ -263,7 +255,8 @@ define('io.ox/files/api',
         if (type && _.isObject(obj)) {
 
             fid = obj.folder_id || obj.folder;
-            id = obj.id;
+            id = String(obj.id);
+            obj = { folder_id: fid, id: id };
 
             if (/^(new|delete)$/.test(type) && fid) {
                 // if we have a new file or an existing file was deleted, we have to clear the proper folder cache.
@@ -275,17 +268,26 @@ define('io.ox/files/api',
             if (/^(change|delete)$/.test(type) && fid && id) {
                 // just changing a file does not affect the file list.
                 // However, in case of a change or delete, we have to remove the file from item caches
-                list = caches.list.remove({ folder_id: fid, id: id });
-                get = caches.get.remove({ folder_id: fid, id: id });
-                versions = caches.versions.remove(String(id));
+                list = caches.list.remove(obj);
+                get = caches.get.remove(obj);
+                versions = caches.versions.remove(id);
             } else {
                 list = get = versions = ready;
             }
 
-            return $.when(all, list, get, versions).done(function () {
+            return $.when(all, list, get, versions).pipe(function () {
                 if (!silent) {
-                    api.trigger(type === 'change' ? 'refresh.list' : 'refresh.all');
+                    if (type === 'change') {
+                        return api.get(obj).done(function (data) {
+                            var cid = _.cid(data);
+                            api.trigger('update update:' + cid, data);
+                            api.trigger('refresh.list');
+                        });
+                    } else {
+                        api.trigger('refresh.all');
+                    }
                 }
+                return ready;
             });
         } else {
             return ready;
