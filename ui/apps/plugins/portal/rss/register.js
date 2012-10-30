@@ -71,7 +71,16 @@ define("plugins/portal/rss/register",
                     .fail(def.reject);
                 return def;
             },
-
+            drawTile: function () {
+                $(this).append(
+                    $('<div class="io-ox-portal-title">').append(
+                        $('<i class="icon-rss tile-image">'),
+                        $('<h1 class="tile-heading">').text(tilegroup.groupname)
+                    ),
+                    $('<div class="io-ox-portal-content">')
+                );
+               
+            },
             draw: function (feed) {
                 var togglePreview = function () {
                     $(this).parent().find('.io-ox-portal-rss-content').toggleClass('portal-preview');
