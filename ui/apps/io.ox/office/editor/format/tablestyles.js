@@ -54,75 +54,7 @@ define('io.ox/office/editor/format/tablestyles',
             /**
              * Grid width of columns in relative units. It is an array of numbers
              */
-            tablegrid: { def: [] },
-
-            /**
-             * Style, width and color of the left table border.
-             */
-            borderleft: {
-                def: NO_BORDER,
-                set: function (element, border) {
-                    element.css('border-left', this.getCssBorder(border));
-                }
-            },
-
-            /**
-             * Style, width and color of the right table border.
-             */
-            borderright: {
-                def: NO_BORDER,
-                set: function (element, border) {
-                    element.css('border-right', this.getCssBorder(border));
-                }
-            },
-
-            /**
-             * Style, width and color of the top table border.
-             */
-            bordertop: {
-                def: NO_BORDER,
-                set: function (element, border) {
-                    element.css('border-top', this.getCssBorder(border));
-                }
-            },
-
-            /**
-             * Style, width and color of the bottom table border.
-             */
-            borderbottom: {
-                def: NO_BORDER,
-                set: function (element, border) {
-                    element.css('border-bottom', this.getCssBorder(border));
-                }
-            }
-
-//            /**
-//             * Style, width and color of the inner horizontal borders.
-//             */
-//            borderinsideh: {
-//                def: NO_BORDER,
-//                set: function (element, border) {
-//                    // setting top border for every td inside the table
-//                    // -> td and th do not exist after operation insertTable
-//                    $('th, td', element).css('border-top', this.getCssBorder(border));
-//                    // setting hidden border for the table
-//                    element.css({'border': 'hidden', 'border-collapse': 'collapse'});
-//                }
-//            },
-//
-//            /**
-//             * Style, width and color of the inner vertical borders.
-//             */
-//            borderinsidev: {
-//                def: NO_BORDER,
-//                set: function (element, border) {
-//                    // setting left border for every td inside the table
-//                    // -> td and th do not exist after operation insertTable
-//                    $('th, td', element).css('border-left', this.getCssBorder(border));
-//                    // setting hidden border for the table
-//                    element.css({'border': 'hidden', 'border-collapse': 'collapse'});
-//                }
-//            }
+            tablegrid: { def: [] }
 
         };
 
@@ -144,6 +76,16 @@ define('io.ox/office/editor/format/tablestyles',
     function updateTableFormatting(table, attributes) {
 
         Table.updateColGroup(table, attributes.tablegrid);
+
+        var // the table cell styles/formatter
+            tableCellStyles = this.getDocumentStyles().getStyleSheets('tablecell');
+
+        $('> tbody > tr > th, > tbody > tr > td', table).each(
+            function () {
+                // iterating over all cells in the table to set the table attributes in the cell
+                tableCellStyles.updateElementFormatting(this);
+            }
+        );
 
     }
 

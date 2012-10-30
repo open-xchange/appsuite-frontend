@@ -1281,7 +1281,7 @@ define('io.ox/office/editor/editor',
          * processed document.
          */
         this.documentLoaded = function () {
-            var postProcessingTasks = [insertMissingParagraphStyles];
+            var postProcessingTasks = [insertMissingParagraphStyles, updateTableAttributes];
 
             _(postProcessingTasks).each(function (task) {
                 task.call(self);
@@ -1336,6 +1336,20 @@ define('io.ox/office/editor/editor',
                             parentId, attr, { hidden: false, priority: 9, defStyle: false, dirty: true });
                 });
             }
+        }
+
+        /**
+         * Updating the table cell attributes of all tables within the document
+         * with the table attributes. This function is called after a document is
+         * completely loaded from the server and after changes in the table, that
+         * were done within the UI.
+         */
+        function updateTableAttributes() {
+            $('table', editdiv).each(
+                function () {
+                    tableStyles.updateElementFormatting(this);
+                }
+            );
         }
 
         // ====================================================================

@@ -105,6 +105,66 @@ define('io.ox/office/editor/format/tablecellstyles',
      *  attribute values merged from style sheets and explicit attributes.
      */
     function updateTableCellFormatting(cell, attributes) {
+
+        // must get the table attributes
+        // getElementAttributes from table
+        // getExplicitAttributes from cell (static!)
+
+        var table = cell.closest(DOM.TABLE_NODE_SELECTOR),
+            // the table styles/formatter
+            tableStyles = this.getDocumentStyles().getStyleSheets('table'),
+            // table attributes
+            tableAttributes = tableStyles.getElementAttributes(table),
+            // explicitly set cell attributes (that must not be overridden)
+            cellAttributes = StyleSheets.getExplicitAttributes(cell),
+            // setting some cell position information
+            row = cell.parent(),
+            isFirstCellInRow = ($('> th, > td', row).index(cell) === 0),
+            isLastCellInRow = ($('> th, > td', row).index(cell) === $('> th, > td', row).length - 1),
+            isFirstRow = ($('> tr', row.parent()).index(row) === 0),
+            isLastRow = ($('> tr', row.parent()).index(row) === $('> tr', row.parent()).length - 1),
+            isOddRow = ($('> tr', row.parent()).index(row) % 2 !== 0),
+            isEvenRow = !isOddRow;
+
+        // fillcolor
+        if (tableAttributes.fillcolor && (! cellAttributes.fillcolor)) {
+            cell.css('background-color', this.getCssColor(tableAttributes.fillcolor, 'fill'));
+        }
+
+        // borderleft
+        if (tableAttributes.borderleft && (! cellAttributes.borderleft)) {
+            cell.css('border-left', this.getCssBorder(tableAttributes.borderleft));
+        }
+
+        // borderright
+        if (tableAttributes.borderright && (! cellAttributes.borderright)) {
+            cell.css('border-right', this.getCssBorder(tableAttributes.borderright));
+        }
+
+        // bordertop
+        if (tableAttributes.bordertop && (! cellAttributes.bordertop)) {
+            cell.css('border-top', this.getCssBorder(tableAttributes.bordertop));
+        }
+
+        // borderbottom
+        if (tableAttributes.borderbottom && (! cellAttributes.borderbottom)) {
+            cell.css('border-bottom', this.getCssBorder(tableAttributes.borderbottom));
+        }
+
+        // borderinsideh
+        if (tableAttributes.borderinsideh) {
+            if ((! cellAttributes.bordertop) && (! isFirstRow)) {
+                cell.css('border-top', this.getCssBorder(tableAttributes.borderinsideh));
+            }
+        }
+
+        // borderinsidev
+        if (tableAttributes.borderinsidev) {
+            if ((! cellAttributes.borderleft) && (! isFirstCellInRow)) {
+                cell.css('border-left', this.getCssBorder(tableAttributes.borderinsidev));
+            }
+        }
+
     }
 
     // class TableCellStyles ======================================================
