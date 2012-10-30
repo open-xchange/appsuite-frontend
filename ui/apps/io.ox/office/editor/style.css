@@ -185,6 +185,10 @@
                 right: 2px;
                 border: 0px dotted black;
                 cursor: move;
+
+                &:not(.moveable) {
+                    cursor: inherit;
+                }
             }
         }
 

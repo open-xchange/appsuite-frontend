@@ -2486,12 +2486,18 @@ define('io.ox/office/editor/editor',
                 shiftY = 0,
                 finalWidth = 0,
                 finalHeight = 0,
-                nodeOptions = {};
+                nodeOptions = {},
+                moveable = true;
+
+            // if objects (only one at the moment, is an inline image, it shall not be moveable
+            if (DOM.isInlineObjectNode(objects)) {
+                moveable = false;
+            }
 
             // collect selected objects
             selectedObjects = selectedObjects.add(objects);
             // draw the selection box into the passed objects
-            DOM.drawObjectSelection(objects, { moveable: true, sizeable: true
+            DOM.drawObjectSelection(objects, { moveable: moveable, sizeable: true
             }, function (event, startNodeOptions) {
                 // mouse down event handler
                 startX = event.pageX;

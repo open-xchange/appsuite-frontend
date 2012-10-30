@@ -1382,7 +1382,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 // moving the image
                 $(this).mousedown(function (e1, e2) {
 
-                    if (mousedownevent === true) { return; }
+                    if ((! moveable) || (mousedownevent === true)) { return; }
 
                     var event = e1.pageX ? e1 : e2;  // from triggerHandler in editor only e2 can be used
 
@@ -1419,6 +1419,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             });
 
             // set classes according to passed options, and resize handles
+            moveBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
             selectionBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
         });
     };
