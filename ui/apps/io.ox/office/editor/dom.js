@@ -1401,25 +1401,25 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
                     mousedownhandler.call(context, event, nodeOptions);
                 });
-
-                // mousemove and mouseup events can be anywhere on the page
-                $(document)
-                .mouseup(function (e) {
-
-                    if (mousedownevent === true) {
-                        mouseuphandler.call(context, e, objectNode, moveBox);
-                        mousedownevent = false;
-                    }
-                })
-                .mousemove(function (e) {
-
-                    if (! mousedownevent) return;
-                    mousemovehandler.call(context, e, moveBox);
-                });
-
-                // set classes according to passed options, and resize handles
-                selectionBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
             }
+
+            // mousemove and mouseup events can be anywhere on the page
+            $(document)
+            .mouseup(function (e) {
+
+                if (mousedownevent === true) {
+                    mouseuphandler.call(context, e, objectNode, moveBox);
+                    mousedownevent = false;
+                }
+            })
+            .mousemove(function (e) {
+
+                if (! mousedownevent) return;
+                mousemovehandler.call(context, e, moveBox);
+            });
+
+            // set classes according to passed options, and resize handles
+            selectionBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
         });
     };
 
@@ -1435,7 +1435,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         $(objects).children('div.selection').remove();
         $(objects).children('div.move').remove();
         // removing mouse event handler (mouseup and mousemove) from page div
-        $(document).off('mousedown mouseup mousemove');
+        $(document).off('mouseup mousemove');
+        $(objects).off('mousedown');
     };
 
     // exports ================================================================

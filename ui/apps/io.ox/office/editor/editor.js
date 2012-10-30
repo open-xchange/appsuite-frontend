@@ -2498,9 +2498,9 @@ define('io.ox/office/editor/editor',
                 startY = event.pageY;
                 nodeOptions = _.copy(startNodeOptions, true);
 
-                editdiv.css('cursor', nodeOptions.cursorStyle);  // setting cursor
-                $('div.object', editdiv).css('cursor', nodeOptions.cursorStyle);
-                $('div.move', editdiv).css('cursor', nodeOptions.cursorStyle);
+                editdiv.css('cursor', nodeOptions.cursorStyle);  // setting cursor for increasing image
+                $('div.selection', editdiv).css('cursor', nodeOptions.cursorStyle); // setting cursor for decreasing image
+                $('div.move', editdiv).css('cursor', nodeOptions.cursorStyle); // setting cursor for flexible move node
 
             }, function (event, moveBoxNode) {
                 // mouse move event handler
@@ -2520,7 +2520,8 @@ define('io.ox/office/editor/editor',
                         leftShift = 0,
                         topShift = 0,
                         newWidth = 0,
-                        newHeight = 0;
+                        newHeight = 0,
+                        borderwidth = 4;
 
                     if (nodeOptions.useX) { deltaX = currentX - startX; }
                     if (nodeOptions.useY) { deltaY = currentY - startY; }
@@ -2544,6 +2545,9 @@ define('io.ox/office/editor/editor',
 
                             finalWidth = newWidth;
                             finalHeight = newHeight;
+
+                            finalWidth -= borderwidth;   // taking care of border width
+                            finalHeight -= borderwidth;  // taking care of border width
 
                             moveBoxNode.css({ width: finalWidth, height: finalHeight, left: leftShift, top: topShift });
                         }
@@ -2575,7 +2579,7 @@ define('io.ox/office/editor/editor',
                     }
                 } else if (nodeOptions.isMoveEvent) {
 
-                    if ((shiftX !== 0) || (shiftY !== 0)) {
+                    if ((_.isNumber(shiftX)) && (_.isNumber(shiftY)) && (shiftX !== 0) || (shiftY !== 0)) {
 
                         var moveX = Utils.convertLengthToHmm(shiftX, 'px'),
                             moveY = Utils.convertLengthToHmm(shiftY, 'px'),
@@ -2586,8 +2590,14 @@ define('io.ox/office/editor/editor',
                     }
                 }
 
+                // Resetting shiftX and shiftY, for new mouseup events without mousemove
+                shiftX = 0;
+                shiftY = 0;
+                nodeOptions = {};
+
+                // Resetting cursor, using css file again
                 editdiv.css('cursor', '');
-                $('div.object', editdiv).css('cursor', '');
+                $('div.selection', editdiv).css('cursor', '');
                 $('div.move', editdiv).css('cursor', '');
 
             }, self);
