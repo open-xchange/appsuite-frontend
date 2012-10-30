@@ -31,6 +31,7 @@
 .io-ox-portal .vgrid-cell:last-child {
     border-bottom: 0px none;
 }
+<<<<<<< HEAD
 .io-ox-portal h1 {
     font-size: 16pt;
     font-weight: 200;
@@ -41,6 +42,9 @@
     font-size: 18px;
     font-family: @font-light;
 }
+=======
+
+>>>>>>> Portal v5 - intermediate state
 .io-ox-portal-greeting {
     font-family: @font-light;
     font-size: 22px;
@@ -81,7 +85,7 @@
     display: block;
     width: @tWidth;
     height: @tHeight;
-    margin: 0 @tSpace @tSpace 0;
+    margin: 0 1px 1px 0;
     float: left;
 } 
 .io-ox-portal-widget-tile { 
@@ -97,6 +101,7 @@
     margin: 0 !important;
 }
 
+<<<<<<< HEAD
 @media all and (min-width: 0px ) {
     .io-ox-portal-widget-tile-border { width: 100%; }
 }
@@ -117,55 +122,89 @@
 }
 .io-ox-typeA-item {
     height: @tLine;
+=======
+.io-ox-portal-preview-firstline {
+    font-weight: bold;
+    color: white;
+}
+
+.io-ox-portal-typeA .io-ox-portal-item {
+    height: 3em;
+    line-height: 1.5em;
+    font-size: 1em;
+>>>>>>> Portal v5 - intermediate state
     border-top: 1px solid rgba(255,255,255,0.5);
     width: 100%;
     color: #eee;
     padding: 0 6px 0 @tSpace;
+    overflow: hidden;
 }
+<<<<<<< HEAD
 .io-ox-typeA-content :first-child.io-ox-typeA-item{
     border: none;
 }
 .io-ox-typeA-content {
     height: @tHeight - @tLine - @tLine; /* height - title - action */
     overflow: hidden;
+=======
+
+.io-ox-portal-typeA .io-ox-portal-content :first-child.io-ox-portal-item {
+    border: none;
 }
 
-.io-ox-typeA-title {
+.io-ox-portal-typeA .io-ox-portal-content {
+    height: @tHeight - @tLine - @tLine; /* height - title - action */
+    overflow: hidden;
+    line-height: 1.5em;
+    text-overflow: ellipsis;
+>>>>>>> Portal v5 - intermediate state
+}
+
+
+.io-ox-portal-typeA .io-ox-portal-title {
     width: @tWidth;
     height: @tLine;
     background: #000;
     color: #eee;
     text-align: center;
     padding-top: 6px;
+    font-family: @font-light;
 }
-.io-ox-typeA-action {
+
+.io-ox-portal-typeA .io-ox-portal-action {
     height: @tLine;
     background: black;
     color: #eee;
 }
-.io-ox-typeB-title {
+
+.io-ox-portal-typeB .io-ox-portal-title {
     width: @tWidth;
     height: @tLine;
     background: #000;
     color: #eee;
     text-align: center;
     padding-top: 6px;
-}
-
-.io-ox-typeB-image {
+    font-family: @font-light;
+}   
+.io-ox-portal-typeB .io-ox-portal-image {
     height: @tHeight - @tLine; /* height - title */
     background: no-repeat center;
     background-size: cover;
 }
-.io-ox-portal-tile-action {
+
+.io-ox-portal-action {
     display: block;
     float: right;
     margin-right: 6px;
 }
-.io-ox-typeA-action .io-ox-portal-tile-action {
-    margin-top: 6px;
+.io-ox-portal-title h1 {
+    font-size: 16pt;
+    line-height: 0;
 }
-
+.io-ox-portal-title .tile-image {
+    float: right;
+    margin-right: 6px;
+}
 
 /* Remove this to make Matthias happy */
 /*

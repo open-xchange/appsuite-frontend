@@ -266,7 +266,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
 
                 contentQueue.enqueue(createContentTask(extension));
 
-                var $tile = $('<div class="io-ox-portal-widget-tile">')
+                var $tile = $('<div class="io-ox-portal-widget-tile io-ox-portal-typeA">')
                     // experimental
                     .addClass('tile-color' + getColorIndex(extension))
                     .attr('widget-id', extension.id)
@@ -302,8 +302,19 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                 if (!extension.drawTile) {
                     extension.drawTile = function () {
                         var $node = $(this);
-                        $(this).append('<img class="tile-image"/><h1 class="tile-heading"/>');
-
+                        $(this).append(
+                            $('<div class="io-ox-portal-title">').append(
+                                $('<img class="tile-image">'),
+                                $('<h1 class="tile-heading"/>')
+                            )
+                        );
+                        extension.asyncMetadata("type").done(function (type) {
+                            if (type === control.CANCEL) {
+                                $tile.remove();
+                                return;
+                            }
+                            $node.find(".io-ox-portal-typeA").removeClass("io-ox-portal-typeA").addClass("io-ox-portal-type" + type);
+                        });
                         extension.asyncMetadata("title").done(function (title) {
                             if (title === control.CANCEL) {
                                 $tile.remove();
@@ -348,6 +359,21 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                             }
                             if (color !== undefined) {
                                 $node.addClass("tile-" + color);
+                            }
+                        });
+                        extension.asyncMetadata("actions").done(function (actions) {
+                            if (actions === control.CANCEL) {
+                                $tile.remove();
+                                return;
+                            }
+                            var $actions = $('<div class="io-ox-portal-actions">').appendTo($node);
+
+                            if (actions !== undefined) {
+                                $actions.append(actions);
+                            } else {
+                                $node.append(
+                                    $('<i class="io-ox-portal-action icon-delete">').text(" ")
+                                );
                             }
                         });
                     };

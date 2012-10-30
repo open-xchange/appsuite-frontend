@@ -103,7 +103,7 @@ define('plugins/portal/twitter/register',
             _(tweets).each(function (tweet) {
                 var message = $('<div>').html(tweet.text).text();
                 $node.append(
-                    $('<div class="io-ox-portal-preview">').append(
+                    $('<div class="io-ox-portal-preview io-ox-portal-item">').append(
                         $('<span class="io-ox-portal-preview-firstline">').text('@' + tweet.user.name + ': '),
                         $('<span class="io-ox-portal-preview-thirdline">').text(message)
                     )

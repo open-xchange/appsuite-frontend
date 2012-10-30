@@ -74,7 +74,7 @@ define('plugins/portal/facebook/register',
             }).pipe(JSON.parse).done(function (resultsets) {
                 var wall = resultsets.data[0].fql_result_set;
                 var profiles = resultsets.data[1].fql_result_set;
-                var $previewNode = $('<div class="io-ox-portal-preview" />');
+                var $previewNode = $('<div class="io-ox-portal-content" />');
                 if (!wall) {
                     return deferred.resolve(control.CANCEL);
                 }
@@ -88,9 +88,10 @@ define('plugins/portal/facebook/register',
                             message = message.substring(0, 150) + '...';
                         }
                         $previewNode.append(
-                            $('<span class="io-ox-portal-preview-firstline">').append($('<b>').text(getProfile(profiles, post.actor_id).name + ': ')),
-                            $('<span class="io-ox-portal-preview-thirdline">').text(message),
-                            '<br />'
+                            $('<div class="io-ox-portal-item">').append(
+                                $('<span class="io-ox-portal-preview-firstline">').append($('<b>').text(getProfile(profiles, post.actor_id).name + ': ')),
+                                $('<span class="io-ox-portal-preview-thirdline">').text(message)
+                            )
                         );
                     });
                 }

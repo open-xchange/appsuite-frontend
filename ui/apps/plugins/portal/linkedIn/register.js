@@ -118,17 +118,22 @@ define("plugins/portal/linkedIn/register",
             var message = values ? values[0] : null;
 
             $(this).append(
-                $('<img class="linkedin-logo">').attr({src: 'apps/plugins/portal/linkedIn/glyphicons_377_linked_in.png'}),
-                $('<h1 class="tile-heading">').text('LinkedIn')
+                $('<div class="io-ox-portal-title">').append(
+                    $('<img class="tile-image">').attr({src: 'apps/plugins/portal/linkedIn/glyphicons_377_linked_in.png'}),
+                    $('<h1 class="tile-heading">').text('LinkedIn')
+                )
             ).addClass('io-ox-portal-tile-linkedin');
 
-            if (message) {
-                $('<div class="io-ox-portal-preview">').append(
-                    $('<span class="io-ox-portal-preview-firstline">').text(message.from.person.firstName + " " + message.from.person.lastName + ": "),
-                    $('<span class="io-ox-portal-preview-secondline">').text(message.subject),
-                    $('<span class="">').text(' '),
-                    $('<span class="io-ox-portal-preview-thirdline">').text(message.body)
-                ).appendTo(this);
+            if (values) {
+                var $content = $('<div class="io-ox-portal-content">').appendTo(this);
+                _(values).each(function (message) {
+                    $('<div class="io-ox-portal-item">').append(
+                        $('<span class="io-ox-portal-preview-firstline">').text(message.from.person.firstName + " " + message.from.person.lastName + ": "),
+                        $('<span class="io-ox-portal-preview-secondline">').text(message.subject),
+                        $('<span class="">').text(' '),
+                        $('<span class="io-ox-portal-preview-thirdline">').text(message.body)
+                    );
+                });
             }
         },
         load: function () {
