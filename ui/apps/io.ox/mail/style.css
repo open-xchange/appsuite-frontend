@@ -224,7 +224,7 @@
     &.thread-inline-actions {
         border: 0px none;
         padding: 18px 40px 0 40px;
-        min-height: initial;
+        min-height: 0px;
         text-align: right;
         z-index: 1;
     }
