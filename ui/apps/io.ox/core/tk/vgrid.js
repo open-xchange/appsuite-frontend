@@ -560,10 +560,6 @@ define('io.ox/core/tk/vgrid',
 
         loadAll = function () {
 
-            if (paused) {
-                return $.when();
-            }
-
             if (all.length === 0) {
                 // be busy
                 scrollpane.find('.io-ox-center').remove().end();
@@ -596,6 +592,19 @@ define('io.ox/core/tk/vgrid',
                         // try to use 'data' property
                         self.prop('total', list.more);
                         list = list.data;
+                    }
+                    // is pause? (only allow new items)
+                    if (paused) {
+                        var hash = {}, tmp = [];
+                        _(all).each(function (obj) {
+                            hash[_.cid(obj)] = true;
+                        });
+                        _(list).each(function (obj) {
+                            if (!(_.cid(obj) in hash)) {
+                                tmp.push(obj);
+                            }
+                        });
+                        list = tmp.concat(all);
                     }
                     if (isArray(list)) {
                         return apply(list)

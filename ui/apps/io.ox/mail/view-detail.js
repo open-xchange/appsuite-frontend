@@ -368,11 +368,10 @@ define('io.ox/mail/view-detail',
                 node.addClass('by-myself');
             }
 
-            if (util.isUnread(data)) {
+            if (api.tracker.isUnseen(data)) {
                 node.addClass('unread');
             }
             if (api.tracker.canAutoRead(data)) {
-                node.addClass('unread');
                 delayedRead(data, node);
             }
 

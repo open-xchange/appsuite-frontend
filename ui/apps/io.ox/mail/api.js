@@ -22,7 +22,8 @@ define("io.ox/mail/api",
 
     'use strict';
 
-    var DONE = $.when();
+    var DONE = $.when(),
+        DELAY = 1000 * 5; // 5 seconds
 
     var tracker = (function () {
 
@@ -110,53 +111,63 @@ define("io.ox/mail/api",
                 });
             },
 
-            resetUnseen: function (list) {
-                _(list).each(function (obj) {
+            reset: (function () {
+
+                function reset(obj) {
                     var cid = _.cid(obj);
-                    if ((obj.flags & 32) === 32) {
-                        // delete mark if seen meanwhile (another client for example)
-                        delete explicitUnseen[cid];
-                    } else {
-                        // help uncached GET requests
-                        unseen[cid] = true;
-                    }
-                });
-            },
+                    unseen[cid] = (obj.flags & 32) !== 32;
+                }
+
+                return function (list) {
+                    _(list).each(function (obj) {
+                        reset(obj);
+                        _(obj.thread).each(reset);
+                    });
+                };
+
+            }()),
 
             setUnseen: function (obj) {
                 var cid = getCID(obj);
-                explicitUnseen[cid] = true;
-                // we do NOT update 'unseen' hash here!
+                explicitUnseen[cid] = _.now();
+                unseen[cid] = true;
             },
 
             setSeen: function (obj) {
                 var cid = getCID(obj);
                 delete explicitUnseen[cid];
-                delete unseen[cid];
+                unseen[cid] = false;
+            },
+
+            // use this to check if mails in a thread are unseen
+            isPartiallyUnseen: function (obj) {
+                var cid = getCID(obj), top = threads[threadHash[cid]];
+                if (top) {
+                    return _(top).reduce(function (memo, obj) {
+                        return memo || unseen[_.cid(obj)] === true;
+                    }, false);
+                } else {
+                    return false;
+                }
+            },
+
+            isUnseen: function (obj) {
+                var cid = getCID(obj);
+                return !!unseen[cid];
             },
 
             applyAutoRead: function (obj) {
                 var cid = getCID(obj);
-                if (explicitUnseen[cid] !== true) {
-                    api.markRead(obj, true);
+                if (unseen[cid] === true) {
+                    unseen[cid] = false;
+                    delete explicitUnseen[cid];
+                    api.markRead(obj);
                 }
-            },
-
-            isUnread: function (obj) {
-                return (obj.flags & 32) !== 32;
             },
 
             canAutoRead: function (obj) {
                 var cid = getCID(obj);
-                return explicitUnseen[cid] !== true && (unseen[cid] === true || this.isUnread(obj));
-            },
-
-            fixUnseen: function (data) {
-                var cid = getCID(data);
-                if (explicitUnseen[cid] === true) {
-                    data.flags = data.flags & ~32;
-                }
-                return data;
+                return this.isUnseen(cid) && (!(cid in explicitUnseen) || explicitUnseen[cid] < (_.now() - DELAY));
             }
         };
 
@@ -235,7 +246,7 @@ define("io.ox/mail/api",
 //                });
                 // reset tracker! if we get a seen mail here, although we have it in 'explicit unseen' hash,
                 // another devices might have set it back to seen.
-                tracker.resetUnseen(response.data);
+                tracker.reset(response.data);
                 // apply unread count
                 folderAPI.setUnread(opt.folder, tracker.getUnreadCount(response.data));
                 return response;
@@ -248,15 +259,6 @@ define("io.ox/mail/api",
                     folderAPI.decUnread(data);
                 }
                 return data;
-            },
-            getCache: function (data) {
-                // mark cached objects as ... wait for it ... cached!
-                // need this to send "mark read" request if we have a cached unseen mail
-                data.cached = true;
-            },
-            getPost: function (data) {
-                // the user might have marked it as unseen during the session
-                return tracker.fixUnseen(data);
             }
         },
         params: {
