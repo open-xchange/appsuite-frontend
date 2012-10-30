@@ -2775,7 +2775,9 @@ define('io.ox/office/editor/editor',
         }
         
         /**
-         * Private helper function to update all tabs inside a paragraph.
+         * Private helper function to update all tabs inside a paragraph. This
+         * function just works only with the default tab size and doesn't use
+         * paragraph tab stop definitions.
          *
          * @param {HTMLElement|jQuery} paragraph
          *  The paragraph element to be validated. If this object is a jQuery
@@ -2808,8 +2810,9 @@ define('io.ox/office/editor/editor',
                     else if ((lastPosLeft === leftHMM) && (lastPosTop === topHMM)) {
                         mustExtendTab = true;
                     }
-                    width = mustExtendTab ? (DEFAULT_TABSIZE / 100) : Math.max(0, DEFAULT_TABSIZE - (leftHMM % DEFAULT_TABSIZE)) / 100;
-                    $(tabSpanNode).css('margin-left', width + "mm");
+                    width = mustExtendTab ? DEFAULT_TABSIZE : Math.max(0, DEFAULT_TABSIZE - (leftHMM % DEFAULT_TABSIZE));
+                    width = Utils.areSameValuesWithBlur(width, 0, 1) ? DEFAULT_TABSIZE : width; // no 0 tab size allowed
+                    $(tabSpanNode).css('margin-left', (width / 100) + "mm");
                 }
             });
         }
@@ -4191,6 +4194,12 @@ define('io.ox/office/editor/editor',
             // update numberings and bullets (attributes may be null if called from clearAttributes operation)
             if ((startInfo.family === 'paragraph') && (_.isNull(attributes) || ('style' in attributes) || ('ilvl' in attributes) || ('numId' in attributes))) {
                 implUpdateLists();
+            }
+
+            // adjust tab sizes
+            var paragraph = startInfo.family === 'paragraph' ? startInfo.node : startInfo.node.parentNode;
+            if (!_.isNull(paragraph)) {
+                adjustTabsOfParagraph(paragraph);
             }
 
             // store last position

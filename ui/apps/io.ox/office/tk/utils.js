@@ -301,6 +301,36 @@ define('io.ox/office/tk/utils',
     };
 
     /**
+     * Checks if two values are within a specified range to each other.
+     *
+     * @param {Number} value1
+     *  The first value to check
+     *
+     * @param {Number} value2
+     *  The second value to check
+     *
+     * @param {Number} blur
+     *  A blur value that describes how much values can differ to treat
+     *  same as equal
+     *
+     * @returns {Boolean}
+     *  Returns true if the difference between value1 and value2 is
+     *  smaller or equal to blur.
+     */
+    Utils.areSameValuesWithBlur = function (value1, value2, blur) {
+        if (value1 === value2)
+            return true;
+        if (value1 < value2) {
+            return ((value1 + blur) >= value2);
+        }
+        else if (value1 > value2) {
+            return ((value1 - blur) <= value2);
+        }
+
+        return false;
+    };
+
+    /**
      * Returns whether the passed space-separated token list contains the
      * specified token.
      *
