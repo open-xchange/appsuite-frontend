@@ -338,29 +338,30 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
     };
 
     /**
-     * Updates the text color of the provided element dependent on the theme,
-     * character and paragraph attributes.
+     * Sets the text color of the passed element. If the text color is set to
+     * automatic, calculates the effective color depending on the character
+     * fill color, and paragraph fill color.
      *
      * @param {HTMLElement|jQuery} element
-     *  The element whose text color will be updated. If this object is a
-     *  jQuery collection, uses the first DOM node it contains.
+     *  The element whose text color will be set. If this object is a jQuery
+     *  collection, uses the first DOM node it contains.
      *
-     * @param {Object} theme
+     * @param {Theme} theme
      *  The theme object currently used by the document.
      *
      * @param {Object} attrs
-     *  The current character attributes
+     *  The current character attributes (text color and character fill color).
      *
      * @param {Object} paraAttrs
-     *  The paragraph attributes
+     *  The paragraph attributes containing the fill color.
      */
-    Color.updateElementTextColor = function (element, theme, attrs, paraAttrs) {
+    Color.setElementTextColor = function (element, theme, attrs, paraAttrs) {
         var $element = $(element).first(),
             textColor = attrs.color,
             backColor = attrs.fillcolor,
             rgbBackColor = null;
 
-        if (textColor && Color.isAutoColor(textColor)) {
+        if (Color.isAutoColor(textColor)) {
             if (Color.isAutoColor(backColor)) {
                 if (Color.isAutoColor(paraAttrs.fillcolor))
                     rgbBackColor = Color.WHITE.value;
@@ -374,6 +375,8 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
                 $element.css('color', '#' + Color.WHITE.value);
             else
                 $element.css('color', '#' + Color.BLACK.value);
+        } else {
+            $element.css('color', Color.getCssColor(textColor, 'text', theme));
         }
     };
 

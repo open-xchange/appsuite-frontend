@@ -87,8 +87,10 @@ define('io.ox/office/editor/format/paragraphstyles',
         // Always update character formatting of all child nodes which may
         // depend on paragraph settings, e.g. automatic text color which
         // depends on the paragraph fill color.
-        return Utils.iterateDescendantNodes(paragraph, function (node) {
-            characterStyles.updateElementFormatting(node);
+        Utils.iterateDescendantNodes(paragraph, function (node) {
+            DOM.iterateTextSpans(node, function (span) {
+                characterStyles.updateElementFormatting(span);
+            });
         }, undefined, { children: true });
     }
 

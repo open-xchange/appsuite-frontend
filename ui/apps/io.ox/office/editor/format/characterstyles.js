@@ -79,9 +79,7 @@ define('io.ox/office/editor/format/characterstyles',
 
             color: {
                 def: Color.AUTO,
-                set: function (element, color) {
-                    element.css('color', this.getCssColor(color, 'text'));
-                },
+                // color will be set in update handler, depending on fill colors
                 preview: function (options, color) {
                     options.labelCss.color = this.getCssColor(color, 'text');
                 }
@@ -126,7 +124,7 @@ define('io.ox/office/editor/format/characterstyles',
      */
     function updateCharacterFormatting(node, attributes) {
 
-        var // the parent paragraph of the node
+        var // the parent paragraph of the node (may be a grandparent)
             paragraph = $(node).closest(DOM.PARAGRAPH_NODE_SELECTOR),
             // the current theme
             theme = this.getDocumentStyles().getCurrentTheme(),
@@ -135,20 +133,14 @@ define('io.ox/office/editor/format/characterstyles',
             // the merged attributes of the paragraph
             paragraphAttributes = paragraphStyles.getElementAttributes(paragraph);
 
-        // DOM.iterateTextSpans() visits the node itself if it is a text span,
-        // otherwise it visits all descendant text spans contained in the node
-        // except for objects which will be skipped (they may contain their own
-        // paragraphs).
-        DOM.iterateTextSpans(node, function (span) {
+        // calculate text color (automatic color depends on fill colors)
+        Color.setElementTextColor(node, theme, attributes, paragraphAttributes);
 
-            // update calculated line height due to changed font settings
-            LineHeight.updateElementLineHeight(span, paragraphAttributes.lineheight);
-            // determine auto text color
-            Color.updateElementTextColor(span, theme, attributes, paragraphAttributes);
+        // update calculated line height due to changed font settings
+        LineHeight.updateElementLineHeight(node, paragraphAttributes.lineheight);
 
-            // try to merge with the preceding text span
-            CharacterStyles.mergeSiblingTextSpans(span, false);
-        });
+        // try to merge with the preceding text span
+        CharacterStyles.mergeSiblingTextSpans(node, false);
     }
 
     /**

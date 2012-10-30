@@ -4079,8 +4079,8 @@ define('io.ox/office/editor/editor',
                 styleSheets = null,
                 // options for StyleSheets method calls
                 options = null,
-                // the last element visited by the formatter
-                lastElement = null,
+                // the last text span visited by the character formatter
+                lastTextSpan = null,
                 // undo and redo operations going into a single action
                 undoOperations = [], redoOperations = [];
 
@@ -4092,8 +4092,6 @@ define('io.ox/office/editor/editor',
                 } else {
                     styleSheets.setElementAttributes(element, attributes, options);
                 }
-                // store last visited element for later use
-                lastElement = element;
             }
 
             // change listener used to build the undo operations
@@ -4160,9 +4158,23 @@ define('io.ox/office/editor/editor',
                     return;
                 }
 
-                // visit all paragraph child nodes covered by the passed range
+                // visit all text span elements covered by the passed range
+                // (not only the direct children of the paragraph, but also
+                // text spans embedded in component nodes such as fields and tabs)
                 styleSheets = characterStyles;
-                Position.iterateParagraphChildNodes(startInfo.node.parentNode, setElementAttributes, undefined, {
+                Position.iterateParagraphChildNodes(startInfo.node.parentNode, function (node) {
+
+                    // DOM.iterateTextSpans() visits the node itself if it is a
+                    // text span, otherwise it visits all descendant text spans
+                    // contained in the node except for objects which will be
+                    // skipped (they may contain their own paragraphs).
+                    DOM.iterateTextSpans(node, function (span) {
+                        setElementAttributes(span);
+                        lastTextSpan = span;
+                    });
+
+                }, undefined, {
+                    // options for Position.iterateParagraphChildNodes()
                     allNodes: true,
                     start: _(start).last(),
                     end: _(end).last(),
@@ -4170,8 +4182,8 @@ define('io.ox/office/editor/editor',
                 });
 
                 // try to merge last text span in the range with its next sibling
-                if (lastElement) {
-                    CharacterStyles.mergeSiblingTextSpans(lastElement, true);
+                if (lastTextSpan) {
+                    CharacterStyles.mergeSiblingTextSpans(lastTextSpan, true);
                 }
 
             // otherwise: only single components allowed at this time
