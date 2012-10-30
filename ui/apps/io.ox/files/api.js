@@ -204,7 +204,7 @@ define('io.ox/files/api',
                     folder_id = String(options.json.folder_id),
                     obj = { folder_id: folder_id, id: id };
                 return api.propagate('change', obj).pipe(function () {
-                    api.trigger('create.version update', obj);
+                    api.trigger('create.version', obj);
                     return { folder_id: folder_id, id: id, timestamp: data.timestamp};
                 });
             });
@@ -254,7 +254,7 @@ define('io.ox/files/api',
 
         if (type && _.isObject(obj)) {
 
-            fid = obj.folder_id || obj.folder;
+            fid = String(obj.folder_id || obj.folder);
             id = String(obj.id);
             obj = { folder_id: fid, id: id };
 
@@ -279,8 +279,7 @@ define('io.ox/files/api',
                 if (!silent) {
                     if (type === 'change') {
                         return api.get(obj).done(function (data) {
-                            var cid = _.cid(data);
-                            api.trigger('update update:' + cid, data);
+                            api.trigger('update update:' + _.cid(data), data);
                             api.trigger('refresh.list');
                         });
                     } else {
@@ -343,8 +342,7 @@ define('io.ox/files/api',
             return api.propagate('change', { folder_id: version.folder_id, id: version.id });
         })
         .done(function () {
-            api.trigger('update:' + _.cid(version), version);
-            api.trigger('delete.version update', version);
+            api.trigger('delete.version', version);
         });
     };
 

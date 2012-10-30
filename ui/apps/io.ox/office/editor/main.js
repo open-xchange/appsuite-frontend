@@ -115,21 +115,28 @@ define('io.ox/office/editor/main',
          * Sends a 'closedocument' notification to the server.
          *
          * @param {Boolean} [synchronous=false]
-         *  If set to true, the notification will be sent synchronously.
+         *     If set to true, the notification will be sent synchronously.
+         * @returns {jQuery.Deferred}
          */
         function sendCloseNotification(synchronous) {
             // TODO: one-way call, alternative to GET?
             if (self.hasFileDescriptor()) {
-                $.ajax({
+                return $.ajax({
                     type: 'GET',
                     url: self.getDocumentFilterUrl('closedocument'),
                     dataType: 'json',
                     async: !synchronous
+                })
+                .pipe(function () {
+                    if (invalidateDriveCacheOnClose === true) {
+                        var file = self.getFileDescriptor();
+                        return FilesAPI.propagate('change', file);
+                    } else {
+                        return $.when();
+                    }
                 });
-            }
-            if (invalidateDriveCacheOnClose === true) {
-                var file = Utils.getObjectOption(options, 'file', null);
-                FilesAPI.propagate('change', file);
+            } else {
+                return $.when();
             }
         }
 
@@ -304,8 +311,10 @@ define('io.ox/office/editor/main',
                 })
                 .done(function (response) {
                     var file = Utils.getObjectOption(options, 'file', null);
-                    FilesAPI.propagate('change', file);
-                    def.resolve();
+                    // TODO: did not test this; getObjectOption is suspicious
+                    FilesAPI.propagate('change', file).done(function () {
+                        def.resolve();
+                    });
                 })
                 .fail(function (response) {
                     showAjaxError(response);
@@ -609,11 +618,11 @@ define('io.ox/office/editor/main',
                     type: 'GET',
                     url: self.buildServiceUrl('oxodocumentfilter', { action: 'createdefaultdocument', folder_id: Utils.getOption(options, 'folder_id'), document_type: 'text' }),
                     dataType: 'json'
-                }).pipe(function (response) {
+                })
+                .pipe(function (response) {
                     // creation succeeded: receive file descriptor and set it
                     self.setFileDescriptor(response.data);
-                    var file = Utils.getObjectOption(options, 'file', null);
-                    FilesAPI.propagate('new', file);
+                    return FilesAPI.propagate('new', response.data);
                 });
             } else {
                 initFileDef = $.when();
@@ -648,11 +657,8 @@ define('io.ox/office/editor/main',
                 def = $.Deferred();
 
             win.busy();
-            def.done(function () {
-                // deinitialize application on quit
-                sendCloseNotification();
-                self.destroy();
-            }).fail(function () {
+
+            def.fail(function () {
                 // back to living application
                 win.idle();
                 startOperationsTimer();
@@ -683,7 +689,12 @@ define('io.ox/office/editor/main',
                 }
             });
 
-            return def;
+            return def.pipe(function () {
+                // deinitialize application on quit
+                return sendCloseNotification().done(function () {
+                    self.destroy();
+                });
+            });
         }
 
         // methods ------------------------------------------------------------
@@ -750,25 +761,29 @@ define('io.ox/office/editor/main',
 
         /**
          * Renames the currently edited file and updates the UI accordingly
+         * @returns {jQuery.Deferred}
          */
         this.rename = function (newFilename) {
 
             var file = this.getFileDescriptor();
 
             if (newFilename && newFilename.length && file && (newFilename !== file.filename)) {
-                $.ajax({
+                return $.ajax({
                     type: 'GET',
                     url: this.getDocumentFilterUrl('renamedocument', { filename: newFilename }),
                     dataType: 'json'
                 })
-                .done(function (response) {
+                .pipe(function (response) {
                     if (response && response.data && response.data.filename) {
                         file.filename = response.data.filename;
-
                         updateTitles();
-                        FilesAPI.propagate('change', file);
+                        return FilesAPI.propagate('change', file);
+                    } else {
+                        return $.when();
                     }
                 });
+            } else {
+                return $.when();
             }
         };
 
