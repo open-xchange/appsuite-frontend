@@ -22,11 +22,9 @@
 }
 
 .io-ox-portal, .io-ox-portal * {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    box-sizing: border-box;
+    .box-sizing(border-box);
 }
+
 .io-ox-portal .clear-title {
     margin: 0.5em 0 1em 0;
     font-size: 16pt;
@@ -134,7 +132,7 @@
 .io-ox-portal-widget-tile { 
     height: @tile-height;
     width: 100%;
-    box-sizing: border-box;
+    .box-sizing(border-box);
 }
 .io-ox-portal-widget-phototile {
     padding: 0 !important;

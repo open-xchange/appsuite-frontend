@@ -471,3 +471,11 @@ h4.mail-attachment-preview {
     .mail-detail .contact-picture { display: none; }
     .mail-detail .subject { padding-right: 0px; }
 }
+
+.mail-source-view {
+    width: 100%;
+    visibility: hidden;
+    .box-sizing(border-box);
+}
+
+}

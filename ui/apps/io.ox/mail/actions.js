@@ -122,8 +122,7 @@ define('io.ox/mail/actions',
                         $('<h3>').text(gt('Mail source') + ': ' + (data.subject || ''))
                     )
                     .append(
-                        textarea = $('<textarea>', { rows: 15, readonly: 'readonly' })
-                        .css({ width: '100%', boxSizing: 'border-box', visibility: 'hidden' })
+                        textarea = $('<textarea class="mail-source-view">', { rows: 15, readonly: 'readonly' })
                         .addClass('input-xlarge')
                         .on('keydown', function (e) {
                             if (e.which !== 27) {
@@ -134,7 +133,7 @@ define('io.ox/mail/actions',
                     .show(function () {
                         var self = this.busy();
                         getSource.done(function (src) {
-                            textarea.val(src || '').css({ visibility: '',  cursor: 'default' });
+                            textarea.val(src || '').css({ visibility: 'visible',  cursor: 'default' });
                             textarea = getSource = null;
                             self.idle();
                         });
