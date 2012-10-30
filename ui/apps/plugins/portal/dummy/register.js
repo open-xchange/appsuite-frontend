@@ -66,7 +66,6 @@ define("plugins/portal/dummy/register", ["io.ox/core/extensions"], function (ext
             $node = drawTypeB();
         }
         $node.appendTo(this);
-        console.log("This is my node:", $node);
         return $.Deferred().resolve($node);
     };
     var draw = function () {

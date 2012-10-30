@@ -73,10 +73,15 @@
 }
 .io-ox-portal-widget-tile {
     display: block;
+<<<<<<< HEAD
     width: 240px;
     height: 320px;
 <<<<<<< HEAD
 =======
+=======
+    width: 260px;
+    height: 300px;
+>>>>>>> Portal v5
     margin: 0 12px 12px 0;
 >>>>>>> hidding actions unless hovered
     float: left;
@@ -147,6 +152,7 @@
     color: #eee;
     text-align: center;
     padding-top: 6px;
+}
 
 .io-ox-typeB-image {
     height: 280px; /* height - title */
@@ -179,8 +185,8 @@
 */
 
 .io-ox-typeA-action, .io-ox-typeB-title, .io-ox-typeA-title {
-    opacity: 0.5;
-    filter: alpha(opacity=50);
+/*    opacity: 0.5;
+    filter: alpha(opacity=50); */
     font-size: 14pt;
     font-weight: 200;
     line-height: 1.15em;
