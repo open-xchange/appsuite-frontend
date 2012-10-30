@@ -114,12 +114,11 @@ define('io.ox/calendar/edit/main',
                 create: function (data) {
                     var self = this;
                     app.model = self.model = appointmentModel.factory.create(data);
-                    console.log(self);
                     appointmentModel.applyAutoLengthMagic(self.model);
 
                     appointmentModel.setDefaultParticipants(self.model).done(function () {
                         self.view = new MainView({model: self.model, lasso: data.lasso || false, app: self});
-                        
+
                         self.model.on('create update', _.bind(self.onSave, self));
                         self.view.on('save:success', function () {
                             self.considerSaved = true;
@@ -182,7 +181,7 @@ define('io.ox/calendar/edit/main',
                     df.resolve();
                     return df;
                 }
-    
+
             });
 
         controller.setLauncher(_.bind(controller.start, controller));
