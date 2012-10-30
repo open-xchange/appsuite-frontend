@@ -49,7 +49,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
 
         _(tasks).each(function (task) {
             var task = util.interpretTask(task);
-            var $task = $('<div>').append(
+            var $task = $('<div class="io-ox-portal-item">').append(
                 $("<span>").text(gt.noI18n(strings.shorten(task.title, 50) + ' ')).addClass("io-ox-portal-tasks-preview-title io-ox-portal-preview-firstline"),
                 $('<span>').text(gt("Due in %1$s ", _.noI18n(task.end_date))).addClass("io-ox-portal-tasks-preview-date io-ox-portal-preview-thirdline"),
                 $("<span>").text(gt.noI18n(strings.shorten(task.note, 100))).addClass("io-ox-portal-tasks-preview-note io-ox-portal-preview-secondline")

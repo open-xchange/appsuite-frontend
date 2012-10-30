@@ -124,12 +124,20 @@
     height: @tLine;
 =======
 .io-ox-portal-preview-firstline {
-    font-weight: bold;
+    font-weight: 300;
     color: white;
 }
-
+.io-ox-portal-preview-secondline {
+    font-weight: 100;
+    color: white;
+}
+.io-ox-portal-preview-thirdline {
+    font-weight: 100;
+    color: white;
+    font-style: italic;
+}
 .io-ox-portal-typeA .io-ox-portal-item {
-    height: 3em;
+    max-height: 4.5em;
     line-height: 1.5em;
     font-size: 1em;
 >>>>>>> Portal v5 - intermediate state
@@ -171,7 +179,7 @@
     font-family: @font-light;
 }
 
-.io-ox-portal-typeA .io-ox-portal-action {
+.io-ox-portal-typeA .io-ox-portal-actions {
     height: @tLine;
     background: black;
     color: #eee;

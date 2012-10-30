@@ -123,9 +123,9 @@ define("plugins/portal/linkedIn/register",
                     $('<h1 class="tile-heading">').text('LinkedIn')
                 )
             ).addClass('io-ox-portal-tile-linkedin');
+            var $content = $('<div class="io-ox-portal-content">').appendTo(this);
 
             if (values) {
-                var $content = $('<div class="io-ox-portal-content">').appendTo(this);
                 _(values).each(function (message) {
                     $('<div class="io-ox-portal-item">').append(
                         $('<span class="io-ox-portal-preview-firstline">').text(message.from.person.firstName + " " + message.from.person.lastName + ": "),

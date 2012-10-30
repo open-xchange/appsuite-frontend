@@ -89,8 +89,8 @@ define('plugins/portal/facebook/register',
                         }
                         $previewNode.append(
                             $('<div class="io-ox-portal-item">').append(
-                                $('<span class="io-ox-portal-preview-firstline">').append($('<b>').text(getProfile(profiles, post.actor_id).name + ': ')),
-                                $('<span class="io-ox-portal-preview-thirdline">').text(message)
+                                $('<span class="io-ox-portal-preview-firstline">').text(getProfile(profiles, post.actor_id).name + ': '),
+                                $('<span class="io-ox-portal-preview-secondline">').text(message)
                             )
                         );
                     });

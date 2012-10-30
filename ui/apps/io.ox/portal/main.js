@@ -361,21 +361,6 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                                 $node.addClass("tile-" + color);
                             }
                         });
-                        extension.asyncMetadata("actions").done(function (actions) {
-                            if (actions === control.CANCEL) {
-                                $tile.remove();
-                                return;
-                            }
-                            var $actions = $('<div class="io-ox-portal-actions">').appendTo($node);
-
-                            if (actions !== undefined) {
-                                $actions.append(actions);
-                            } else {
-                                $node.append(
-                                    $('<i class="io-ox-portal-action icon-delete">').text(" ")
-                                );
-                            }
-                        });
                     };
                 } //END of "is draw method missing?"
 
@@ -390,16 +375,16 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                             $tile.idle().remove();
                         });
                 }
-
                 return extension.invoke('loadTile')
                 .pipe(function (a1, a2) {
-                    return (extension.invoke.apply(extension, ['drawTile', $tile].concat($.makeArray(arguments))) || $.Deferred())
+                    var $content = $('<div>').appendTo($tile);
+                    return (extension.invoke.apply(extension, ['drawTile', $content].concat($.makeArray(arguments))) || $.Deferred().resolve())
                         .done(function () {
                             $tile.idle();
-                            extension.invoke('postTile', $tile, extension);
+                            extension.invoke('postTile', $content, extension);
+                            $('<div class="io-ox-portal-actions">').append($('<i class="icon-remove io-ox-portal-action">')).appendTo($tile);
                         });
-                })
-                .fail(function (e) {
+                }).fail(function (e) {
                     $tile.idle().remove();
                 });
             });
