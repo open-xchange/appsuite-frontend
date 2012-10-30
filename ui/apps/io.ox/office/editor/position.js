@@ -661,6 +661,9 @@ define('io.ox/office/editor/position',
             if (DOM.isObjectNode(domPoint.node)) {
                 childNode = DOM.findNextTextSpan(domPoint.node);
                 offset = 0;
+                if ((childNode) && (childNode.nodeName !== 3)) {
+                    childNode = childNode.firstChild;  // using text node instead of span node
+                }
             } else if (DOM.isTextComponentNode(domPoint.node)) {
                 childNode = DOM.findPreviousTextSpan(domPoint.node);
                 if (childNode) {
@@ -668,6 +671,9 @@ define('io.ox/office/editor/position',
                 } else {
                     childNode = DOM.findNextTextSpan(domPoint.node);
                     offset = 0;
+                }
+                if ((childNode) && (childNode.nodeName !== 3)) {
+                    childNode = childNode.firstChild;  // using text node instead of span node
                 }
             } else if (DOM.isTextSpan(domPoint.node)) {
                 childNode = domPoint.node;
@@ -682,7 +688,7 @@ define('io.ox/office/editor/position',
             }
 
         } else {
-            Utils.warn('Position.getTextSpanFromNode(): Unknown node: ' + domPoint.node.nodeName);
+            Utils.warn('Position.getTextSpanFromNode(): Warning: Parameter domPoint not set.');
             return;
         }
 
