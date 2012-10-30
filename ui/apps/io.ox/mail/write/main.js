@@ -475,10 +475,10 @@ define('io.ox/mail/write/main',
             this.setSendType(data.sendtype);
             // add files (from file storage)
             this.addFiles(data.infostore_ids);
-            // apply mode
-            var title = data.subject ? _.noI18n(data.subject) : windowTitles[composeMode = mail.mode];
-            // set title once in DOM
+            // app title
+            var title = windowTitles[composeMode = mail.mode];
             win.nodes.main.find('h1.title').text(title);
+            title = data.subject ? _.noI18n(data.subject) : title;
             app.setTitle(title);
             // set signature
             currentSignature = mail.signature || '';
