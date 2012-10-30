@@ -33,7 +33,8 @@ define('io.ox/calendar/month/view',
         weekEnd: 0,
 
         events: {
-            'click .appointment': 'onClickAppointment'
+            'click .appointment': 'onClickAppointment',
+            'dblclick .day' : 'onCreateAppointment'
         },
 
         initialize: function (options) {
@@ -44,6 +45,10 @@ define('io.ox/calendar/month/view',
 
         onClickAppointment: function (e) {
             this.trigger('showAppoinment', e, _.cid($(e.currentTarget).data('cid') + ''));
+        },
+
+        onCreateAppointment: function (e) {
+            this.trigger('createAppoinment', e, $(e.currentTarget).data('date'));
         },
 
         render: function () {
@@ -73,6 +78,7 @@ define('io.ox/calendar/month/view',
                             (list.hasFirst ? (firstFound ? ' bordertop' : ' borderbottom') : '')
                         )
                         .attr('date', day.year + '-' + day.month + '-' + day.date)
+                        .data('date', day.timestamp)
                         .append(
                             $('<div>').addClass('list abs'),
                             $('<div>').addClass('number').text(gt.noI18n(day.date))

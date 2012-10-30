@@ -15,8 +15,9 @@ define('io.ox/calendar/month/perspective',
      'io.ox/calendar/api',
      'io.ox/calendar/util',
      'io.ox/core/date',
+     'io.ox/core/extensions',
      'gettext!io.ox/calendar',
-     'io.ox/core/http'], function (View, api, util, date, gt, http) {
+     'io.ox/core/http'], function (View, api, util, date, ext, gt, http) {
     'use strict';
 
     var perspective = new ox.ui.Perspective('month');
@@ -62,6 +63,7 @@ define('io.ox/calendar/month/perspective',
         collections: {},    // all week collections of appointments
         current: null,      // current month as UTC timestamp
         folder: 0,
+        app: null,          // the current application
 
         showAppointment: function (e, obj) {
             // open appointment details
@@ -73,6 +75,15 @@ define('io.ox/calendar/month/perspective',
                     });
                 });
             });
+        },
+
+        createAppointment: function (e, startTS) {
+            // add current time to start timestamp
+            var now = new date.Local();
+            startTS += now.getHours() * date.HOUR + now.getMinutes() * date.MINUTE;
+            startTS = util.floor(startTS, 15 * date.MINUTE);
+            ext.point('io.ox/calendar/detail/actions/create')
+                .invoke('action', this, {app: this.app}, {start_date: startTS, end_date: startTS + date.HOUR});
         },
 
         updateWeeks: function (obj) {
@@ -128,7 +139,8 @@ define('io.ox/calendar/month/perspective',
                 self.collections[day] = new Backbone.Collection([]);
                 // new view
                 var view = new View({ collection: self.collections[day], day: day });
-                view.on('showAppoinment', self.showAppointment, self);
+                view.on('showAppoinment', self.showAppointment, self)
+                    .on('createAppoinment', self.createAppointment, self);
                 views.push(view.render().el);
             }
 
@@ -213,6 +225,7 @@ define('io.ox/calendar/month/perspective',
                 self = this;
 
             this.current = new date.Local(year, month, 1);
+            this.app = app;
 
             this.lastWeek = this.firstWeek = util.getWeekStart(new date.Local(year, month - 1, 1));
 
