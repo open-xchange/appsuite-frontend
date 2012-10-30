@@ -80,8 +80,7 @@ define('io.ox/calendar/month/perspective',
         createAppointment: function (e, startTS) {
             // add current time to start timestamp
             var now = new date.Local();
-            startTS += now.getHours() * date.HOUR + now.getMinutes() * date.MINUTE;
-            startTS = util.floor(startTS, 15 * date.MINUTE);
+            startTS += util.floor(now.getHours() * date.HOUR + now.getMinutes() * date.MINUTE, 15 * date.MINUTE);
             ext.point('io.ox/calendar/detail/actions/create')
                 .invoke('action', this, {app: this.app}, {start_date: startTS, end_date: startTS + date.HOUR});
         },
@@ -325,6 +324,7 @@ define('io.ox/calendar/month/perspective',
                         $('.day:not(.out)', this.pane).addClass('out');
                         $('[date^="' + month + '-"]', this.pane).removeClass('out');
                         curMonth = month;
+                        this.current = new date.Local(monthArray[0], monthArray[1], 1);
                         self.monthInfo.text(gt.noI18n(date.locale.months[monthArray[1]] + ' ' + monthArray[0]));
                     }
                 }, this));
