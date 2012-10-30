@@ -4990,6 +4990,12 @@ define('io.ox/office/editor/editor',
                                 var subLevelIdx = ilvl + 1;
                                 for (; subLevelIdx < 9; subLevelIdx++)
                                     listItemCounter[paraAttributes.numId][subLevelIdx] = 0;
+                                // fix level counts of non-existing upper levels
+                                subLevelIdx = ilvl - 1;
+                                for (; subLevelIdx >= 0; subLevelIdx--)
+                                    if (listItemCounter[paraAttributes.numId][subLevelIdx] === 0)
+                                        listItemCounter[paraAttributes.numId][subLevelIdx] = 1;
+
                                 var listObject = lists.formatNumber(paraAttributes.numId, ilvl,
                                         listItemCounter[paraAttributes.numId]);
                                 var numberingElement = DOM.createListLabelNode(listObject.text);

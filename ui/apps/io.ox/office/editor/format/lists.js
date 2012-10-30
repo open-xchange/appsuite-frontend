@@ -150,43 +150,71 @@ define('io.ox/office/editor/format/lists',
             }
             return ret;
         }
-        function formatNumberType(seqNo, levelformat) {
-            var ret = {text: "???"};
-            switch (levelformat.numberformat) {
-            case "decimal":
-                ret.text = seqNo.toString();
-                break;
-            case "lowerLetter":
-                ret.text = String.fromCharCode(96 + seqNo);
-                break;
-            case "upperLetter":
-                ret.text = String.fromCharCode(64 + seqNo);
-                break;
-            case "lowerRoman":
-            case "upperRoman":
-                ret.text = convertToRoman(seqNo, levelformat.numberformat === "upperRoman");
-                break;
-            case "bullet":
-                if (levelformat.levelpicbulleturi) {
-                    ret.imgsrc = levelformat.levelpicbulleturi;
-                    ret.text = '';
-                }
-                else {
-                    var charCode = levelformat.leveltext ? levelformat.leveltext.charCodeAt(0) : -1;
-                    if (charCode > 0 && (charCode < 0xE000 || charCode > 0xF8FF)) {
-                        ret.text = levelformat.leveltext;
+        /**
+         * Creates the label text of the current numbered paragraph.
+         * For picture numbered bullet list it returns the URI of the picture
+         *
+         * @param levelIndexes array of indexes of all numbering levels
+         * @param ilvl current indentation level
+         * @param listdefinition properties of the list used
+         * @returns {Object}
+         *  text element contains label text
+         *  imgsrc element contains URI of the picture used
+         *
+         *  In case imgsrc is set then text will be empty
+         */
+        function formatNumberType(levelIndexes, ilvl, listdefinition) {
+            var ret = {};
+            var topLevelformat = listdefinition.listlevels[ilvl];
+            var leveltext = topLevelformat.leveltext;
+            for (;ilvl >= 0; --ilvl) {
+                var levelformat = listdefinition.listlevels[ilvl];
+                var seqNo = levelIndexes === undefined ? 0 :
+                    levelIndexes[ilvl] + (levelformat && levelformat.levelstart !== undefined ? levelformat.levelstart - 1 : 0);
+                var levelToken = '%' + (ilvl + 1);
+                var indexpos = leveltext.indexOf(levelToken);
+                if (indexpos < 0 && levelformat.numberformat !== 'bullet')
+                    continue;
+                var replacetext = '';
+                switch (levelformat.numberformat) {
+                case "decimal":
+                    replacetext = seqNo.toString();
+                    break;
+                case "lowerLetter":
+                    replacetext = String.fromCharCode(96 + seqNo);
+                    break;
+                case "upperLetter":
+                    replacetext = String.fromCharCode(64 + seqNo);
+                    break;
+                case "lowerRoman":
+                case "upperRoman":
+                    replacetext = convertToRoman(seqNo, levelformat.numberformat === "upperRoman");
+                    break;
+                case "bullet":
+                    if (levelformat.levelpicbulleturi) {
+                        ret.imgsrc = levelformat.levelpicbulleturi;
+                        replacetext = '';
                     }
-                    else
-                        ret.text = "●";
+                    else {
+                        var charCode = levelformat.leveltext ? levelformat.leveltext.charCodeAt(0) : -1;
+                        if (charCode > 0 && (charCode < 0xE000 || charCode > 0xF8FF)) {
+                            replacetext = levelformat.leveltext;
+                        }
+                        else
+                            replacetext = "●";
+                    }
+                    break;
+                case "none":
+                    replacetext = '';
+                    break;
+                default:
                 }
-                break;
-            case "none":
-                ret.text = '';
-                break;
-            default:
+                if (levelformat.levelpicbulleturi)
+                    leveltext = '';
+                else
+                    leveltext = leveltext.replace(levelToken, replacetext);
             }
-            if (levelformat.numberformat !== 'bullet')
-                ret.text += '.';
+            ret.text = leveltext;
             return ret;
         }
         // exports ================================================================
@@ -350,8 +378,7 @@ define('io.ox/office/editor/format/lists',
             if (levelFormat === undefined) {
                 return "??";
             }
-            var format = formatNumberType(levelIndexes === undefined ? 0 :
-                levelIndexes[ilvl] + (levelFormat.levelstart !== undefined ? levelFormat.levelstart - 1 : 0), levelFormat);
+            var format = formatNumberType(levelIndexes, ilvl, currentList);
             ret.text = format.text;
             ret.imgsrc = format.imgsrc;
             ret.indent = levelFormat.leftindent - (levelFormat.hangingindent ? levelFormat.hangingindent : 0);
