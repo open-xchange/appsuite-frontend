@@ -210,9 +210,9 @@ define("io.ox/editor/main",
             if (model.isDirty()) {
                 require(["io.ox/core/tk/dialogs"], function (dialogs) {
                     new dialogs.ModalDialog()
-                    .text(gt("Do you really want to quit?"))
-                    .addPrimaryButton("quit", gt('Yes, lose changes'))
-                    .addButton("cancel", gt('No'))
+                    .text(gt("Do you really want to discard your changes?"))
+                    .addPrimaryButton("quit", gt('Discard'))
+                    .addButton("cancel", gt('Cancel'))
                     .on('quit', function () {
                         app.destroy();
                         def.resolve();

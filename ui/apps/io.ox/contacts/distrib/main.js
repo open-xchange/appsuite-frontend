@@ -152,7 +152,7 @@ define('io.ox/contacts/distrib/main',
                     new dialogs.ModalDialog()
                         .text(gt("Do you really want to discard your changes?"))
                         .addButton("cancel", gt('Cancel'))
-                        .addPrimaryButton("delete", gt('Lose changes'))
+                        .addPrimaryButton("delete", gt('Discard'))
                         .show()
                         .done(function (action) {
                             console.debug("Action", action);
