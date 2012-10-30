@@ -12,7 +12,6 @@
  */
 define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/core/tk/config-sentence", "io.ox/core/date", 'io.ox/core/tk/keys', 'gettext!io.ox/calendar/edit/main'], function (model, ConfigSentence, dateAPI, KeyListener, gt) {
     "use strict";
-    
     var DAYS = model.DAYS;
     var RECURRENCE_TYPES = model.RECURRENCE_TYPES;
     
@@ -217,6 +216,370 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
     gt.ngettext("every week", "every %1$d weeks", 2);
     gt.ngettext("every month", "every %1$d months", 2);
     gt.ngettext("after %1$d appointment", 'after %1$d appointments', 2);
+
+
+    var RecurrenceView = function (options) {
+        _.extend(this, {
+
+            init: function () {
+                var self = this;
+
+                // Construct the UI
+                this.controls = {
+                    checkbox: $('<input type="checkbox">'),
+                    detailToggle: $('<a href="#">').text(gt("Show more")).hide(),
+                    typeRadios: {
+                        daily: $('<input type="radio" name="recurrence_type" value="daily">'),
+                        weekly: $('<input type="radio" name="recurrence_type" value="weekly">'),
+                        monthly: $('<input type="radio" name="recurrence_type" value="monthly">'),
+                        yearly: $('<input type="radio" name="recurrence_type" value="yearly">')
+                    },
+                    alternativeBoxes: {
+                        alternative1: $('<input type="radio" name="alternative" value="1">'),
+                        alternative2: $('<input type="radio" name="alternative" value="2">')
+                    }
+                };
+
+                this.nodes = {
+                    summary: $('<span>'),
+                    typeChoice: $('<div class="row-fluid">').hide(),
+                    alternative1: $('<div class="row-fluid"').hide(),
+                    alternative2: $('<div class="row-fluid"').hide(),
+                    endsChoice: $('<div class="row-fluid"').hide()
+                };
+
+                this.nodes.typeChoice.append(
+                    $('<label class="span3">').append(this.controls.typeRadios.daily).append(gt("Daily")),
+                    $('<label class="span3">').append(this.controls.typeRadios.weekly).append(gt("Weekly")),
+                    $('<label class="span3">').append(this.controls.typeRadios.monthly).append(gt("Monthly")),
+                    $('<label class="span3">').append(this.controls.typeRadios.yearly).append(gt("Yearly"))
+                );
+
+                // UI state
+
+                this.more = false;
+
+                // Config Sentences
+
+                this.sentences = {
+                    daily: new ConfigSentence(gt(' <a href="#"  data-widget="number" data-attribute="interval">every <span class="number-control">2</span> days</a>'), {
+                        id: 'daily',
+                        singular: gt("every day"),
+                        plural: gt("every %1$d days"),
+                        initial: 1,
+                        gt: gt
+                    }),
+                    weekly: new ConfigSentence(gt(' <a href="#"  data-widget="number" data-attribute="interval">every <span class="number-control">2</span> weeks</a> on <a href="#"  data-widget="custom" data-attribute="days">monday</a>'), {
+                        id: 'weekly',
+                        interval: {
+                            singular: "every week",
+                            plural: "every %1$d weeks",
+                            initial: 1,
+                            gt: gt
+                        },
+                        days: CalendarWidgets.days
+                    }),
+                    monthlyDate: new ConfigSentence(gt(' on day <a href="#"  data-widget="custom" data-attribute="dayInMonth">10</a> <a href="#"  data-widget="number" data-attribute="interval">every <span class="number-control">2</span> months</a>'), {
+                        id: 'monthlyDate',
+                        interval: {
+                            singular: "every month",
+                            plural: "every %1$d months",
+                            initial: 1,
+                            gt: gt
+                        },
+                        dayInMonth: CalendarWidgets.dayInMonth
+                    }),
+                    monthlyDay: new ConfigSentence(gt(' the <a href="#" data-widget="options" data-attribute="ordinal">second</a> <a href="#" data-widget="options" data-attribute="day">wednesday</a> <a href="#" data-widget="number" data-attribute="interval">every <span class="number-control">2</span> months</a>'), {
+                        id: 'monthlyDay',
+                        ordinal: {
+                            options: {
+                                1: gt("first"),
+                                2: gt("second"),
+                                3: gt("third"),
+                                4: gt("fourth"),
+                                5: gt("last")
+                            }
+                        },
+                        day: {
+                            options: {
+                                1: gt("sunday"),
+                                2: gt("monday"),
+                                4: gt("tuesday"),
+                                8: gt("wednesday"),
+                                16: gt("thursday"),
+                                32: gt("friday"),
+                                64: gt("saturday"),
+                                62: gt("day of the week"),
+                                65: gt("day of the weekend")
+                            },
+                            initial: 2
+                        },
+                        interval: {
+                            singular: "every month",
+                            plural: "every %1$d months",
+                            initial: 1,
+                            gt: gt
+                        }
+                    }),
+                    yearlyDate: new ConfigSentence(gt(' every year on day <a href="#"  data-widget="custom" data-attribute="dayInMonth">10</a> of <a href="#" data-widget="options" data-attribute="month">october</a>'), {
+                        id: 'yearlyDate',
+                        dayInMonth: CalendarWidgets.dayInMonth,
+                        month: {
+                            options: {
+                                0: gt("january"),
+                                1: gt("february"),
+                                2: gt("march"),
+                                3: gt("april"),
+                                4: gt("may"),
+                                5: gt("june"),
+                                6: gt("july"),
+                                7: gt("august"),
+                                8: gt("september"),
+                                9: gt("october"),
+                                10: gt("november"),
+                                11: gt("december")
+                            },
+                            initial: 2
+                        }
+                    }),
+                    yearlyDay: new ConfigSentence(gt(' every <a href="#" data-widget="options" data-attribute="ordinal">first</a> <a href="#" data-widget="options" data-attribute="day">wednesday</a> in <a href="#" data-widget="options" data-attribute="month">october</a>'), {
+                        id: 'yearlyDay',
+                        ordinal: {
+                            options: {
+                                1: gt("first"),
+                                2: gt("second"),
+                                3: gt("third"),
+                                4: gt("fourth"),
+                                5: gt("last")
+                            }
+                        },
+                        day: {
+                            options: {
+                                1: gt("sunday"),
+                                2: gt("monday"),
+                                4: gt("tuesday"),
+                                8: gt("wednesday"),
+                                16: gt("thursday"),
+                                32: gt("friday"),
+                                64: gt("saturday"),
+                                62: gt("day of the week"),
+                                65: gt("day of the weekend")
+                            },
+                            initial: 2
+                        },
+                        month: {
+                            options: {
+                                0: gt("january"),
+                                1: gt("february"),
+                                2: gt("march"),
+                                3: gt("april"),
+                                4: gt("may"),
+                                5: gt("june"),
+                                6: gt("july"),
+                                7: gt("august"),
+                                8: gt("september"),
+                                9: gt("october"),
+                                10: gt("november"),
+                                11: gt("december")
+                            },
+                            initial: 2
+                        }
+                    })
+                };
+
+                var endingOptions = {
+                    options: {
+                        1: gt('never ends'),
+                        2: gt('ends on a specific date'),
+                        3: gt('ends after a certain number of appointments')
+                    },
+                    chooseLabel: function (value) {
+                        return gt('ends');
+                    }
+                };
+
+                this.ends = {
+                    never: new ConfigSentence(gt('The series <a href="#" data-attribute="ending" data-widget="options">never ends</a>.'), {
+                        id: 'never',
+                        ending: _.extend({}, endingOptions, {
+                            chooseLabel: function (value) {
+                                return gt('never ends');
+                            }
+                        })
+                    }),
+                    date: new ConfigSentence(gt('The series <a href="#" data-attribute="ending" data-widget="options">ends</a> on <a href="#" data-attribute="until" data-widget="custom">11/03/2013</a>.'), {
+                        id: 'date',
+                        ending: endingOptions,
+                        until: CalendarWidgets.datePicker
+                    }),
+                    after: new ConfigSentence(gt('The series <a href="#" data-attribute="ending" data-widget="options">ends</a> <a href="#" data-attribute="occurrences" data-widget="number">after <span class="number-control">2</span> appointments</a>.'), {
+                        id: 'after',
+                        ending: endingOptions,
+                        occurrences: {
+                            singular: 'after %1$d appointment',
+                            plural: 'after %1$d appointments',
+                            initial: 3,
+                            gt: gt
+                        }
+                    })
+                };
+
+
+                // Events
+
+                this.controls.checkbox.on("change", function () {
+                    self.showMore();
+                });
+
+                this.controls.detailToggle.on('click', function () {
+                    if (self.more) {
+                        self.showLess();
+                    } else {
+                        self.showMore();
+                    }
+                });
+
+                _("recurrence_type days month day_in_month interval occurrences until".split(" ")).each(function (attr) {
+                    self.observeModel("change:" + attr, self.modelChanged, self);
+                });
+            },
+            modelChanged: function () {
+                if (this.updatingModel) {
+                    return;
+                }
+                this.updatingState = true;
+                var type = this.model.get('recurrence_type');
+                if (type === RECURRENCE_TYPES.NO_RECURRENCE) {
+                    this.controls.checkbox.removeAttr("checked");
+                } else {
+                    this.controls.checkbox.attr('checked', 'checked');
+                    
+                    this.nodes.alternative1.children().detach();
+                    this.nodes.alternative2.children().detach();
+                    
+                    // Choose and configure the correct type of sentence to represent this recurrence
+                    switch (type) {
+                    case RECURRENCE_TYPES.DAILY:
+                        this.controls.typeRadios.daily.attr('checked', 'checked');
+                        this.nodes.alternative1.append(this.sentences.daily.$el);
+                        this.setChoice(this.sentences.daily);
+                        this.choice.set('interval', this.model.get('interval'));
+                        break;
+                    case RECURRENCE_TYPES.WEEKLY:
+                        this.controls.typeRadios.weekly.attr('checked', 'checked');
+                        this.nodes.alternative1.append(this.sentences.weekly.$el);
+                        this.setChoice(this.sentences.weekly);
+                        this.choice.set('interval', this.model.get('interval'));
+                        this.choice.set('days', this.model.get('days'));
+                        break;
+                    case RECURRENCE_TYPES.MONTHLY:
+                        this.controls.typeRadios.monthly.attr('checked', 'checked');
+                        this.nodes.alternative1.append(
+                            this.controls.alternativeBoxes.alternative1,
+                            this.sentences.monthlyDay.$el
+                        );
+                        this.nodes.alternative1.append(
+                            this.controls.alternativeBoxes.alternative2,
+                            this.sentences.monthlyDate.$el
+                        );
+                        if (this.model.get("days")) {
+                            this.setChoice(this.sentences.monthlyDay);
+                            this.choice.set("ordinal", this.model.get("day_in_month"));
+                            this.choice.set("day", this.model.get("days"));
+                            this.choice.set("interval", this.model.get("interval"));
+                        } else {
+                            this.setChoice(this.sentences.monthlyDate);
+                            this.choice.set("dayInMonth", this.model.get("day_in_month"));
+                            this.choice.set("interval", this.model.get("interval"));
+                        }
+                        break;
+                    case RECURRENCE_TYPES.YEARLY:
+                        this.controls.typeRadios.yearly.attr('checked', 'checked');
+                        this.nodes.alternative1.append(
+                            this.controls.alternativeBoxes.alternative1,
+                            this.sentences.yearlyDay.$el
+                        );
+                        this.nodes.alternative1.append(
+                            this.controls.alternativeBoxes.alternative2,
+                            this.sentences.yearlyDate.$el
+                        );
+                        if (this.model.get("days")) {
+                            this.choice = this.sentences.yearlyDay;
+                            this.choice.set("ordinal", this.model.get("day_in_month"));
+                            this.choice.set("day", this.model.get("days"));
+                            this.choice.set("month", this.model.get("month"));
+                        } else {
+                            this.setChoice(this.sentences.yearlyDate);
+                            this.choice.set("month", this.model.get("month"));
+                            this.choice.set("dayInMonth", this.model.get("day_in_month"));
+                        }
+                        break;
+
+                    }
+
+                    this.nodes.endsChoice.children().detach();
+
+
+                    if (this.model.get('occurrences')) {
+                        this.nodes.endsChoice.append(this.ends.after);
+                        this.setEnding(this.ends.after);
+                        this.endsChoice.set('occurrences', this.model.get("occurrences"));
+                    } else if (this.model.get('until')) {
+                        this.nodes.endsChoice.append(this.ends.date);
+                        this.setEnding(this.ends.date);
+                        this.endsChoice.set("until", this.model.get("until"));
+                    } else {
+                        this.nodes.endsChoice.append(this.ends.never);
+                        this.setEnding(this.ends.never);
+                    }
+                    // TODO: Update Summary
+                }
+
+                this.updatingState = false;
+            },
+            setChoice: function (sentence) {
+                this.choice = sentence;
+            },
+            showMore: function () {
+                this.more = true;
+                this.controls.detailToggle.show();
+                this.controls.detailToggle.text(gt("Show less"));
+                this.nodes.summary.show();
+                this.nodes.typeChoice.show();
+                this.nodes.alternative1.show();
+                this.nodes.alternative2.show();
+                this.nodes.endsChoice.show();
+            },
+            showLess: function () {
+                this.more = false;
+                this.controls.detailToggle.text(gt("Show more"));
+                this.nodes.typeChoice.hide();
+                this.nodes.alternative1.hide();
+                this.nodes.alternative2.hide();
+                this.nodes.endsChoice.hide();
+            },
+
+            render: function () {
+                this.$el.append(
+                    $('<div class="row-fluid">').append(
+                        $('<label class="checkbox control-label desc">').append(
+                            this.controls.checkbox,
+                            $.txt("Repeats")
+                        ),
+                        this.nodes.summary,
+                        this.controls.detailToggle
+                    ),
+                    this.nodes.typeChoice,
+                    this.nodes.alternative1,
+                    this.nodes.alternative2,
+                    this.nodes.endsChoice
+                );
+            }
+        }, options);
+    };
+
+    
+    /*
     
     var RecurrenceView = function (options) {
         
@@ -864,8 +1227,8 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             }
         }, options);
         
-    };
+    }; */
     
-    
+
     return RecurrenceView;
 });

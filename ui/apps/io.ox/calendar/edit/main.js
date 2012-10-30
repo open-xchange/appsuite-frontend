@@ -166,10 +166,12 @@ define('io.ox/calendar/edit/main',
                     this.quit();
                 },
                 failSave: function () {
-                    return {
-                        module: 'io.ox/calendar/edit',
-                        point: this.model.attributes
-                    };
+                    if (this.model) {
+                        return {
+                            module: 'io.ox/calendar/edit',
+                            point: this.model.attributes
+                        };
+                    }
                 },
                 failRestore: function (point) {
                     var df = $.Deferred();
