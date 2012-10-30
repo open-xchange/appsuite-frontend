@@ -24,9 +24,10 @@ define("io.ox/mail/main",
      "io.ox/core/tk/upload",
      "io.ox/core/extPatterns/dnd",
      "io.ox/core/notifications",
+     "io.ox/core/api/folder",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
-    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd, notifications) {
+    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd, notifications, folderAPI) {
 
     'use strict';
 
@@ -171,16 +172,6 @@ define("io.ox/mail/main",
             }
         });
 
-        ext.point('io.ox/mail/vgrid/toolbar').extend({
-            id: 'count',
-            index: 200,
-            draw: function () {
-                this.append(
-                    $('<div>').addClass('grid-count').css({ textAlign: 'center', color: '#888' })
-                );
-            }
-        });
-
         grid.on('change:prop:unread', function (e, value) {
             if (value === true) {
                 grid.refresh().done(grid.pause);
@@ -192,7 +183,7 @@ define("io.ox/mail/main",
         grid.on('change:prop', updateGridOptions);
         updateGridOptions();
 
-        ext.point('io.ox/mail/vgrid/toolbar').invoke('draw', grid.getToolbar());
+        commons.addGridToolbarFolder(app, grid);
 
         grid.on('change:ids', function (e, all) {
             // get node & clear now

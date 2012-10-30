@@ -581,7 +581,7 @@ define('io.ox/core/api/folder',
             var node = document.createTextNode('');
             getFolder(id)
                 .done(function (data) {
-                    node.nodeValue = data.title || data.id;
+                    node.nodeValue = _.noI18n(data.title || data.id);
                 })
                 .always(function () {
                     _.defer(function () { // use defer! otherwise we return null on cache hit

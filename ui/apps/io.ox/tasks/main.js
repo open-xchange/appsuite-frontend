@@ -173,7 +173,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
         grid.on('change:prop', updateGridOptions);
         updateGridOptions();
 
-        ext.point('io.ox/tasks/vgrid/toolbar').invoke('draw', grid.getToolbar());
+        commons.addGridToolbarFolder(app, grid);
 
         //ready for show
         commons.addFolderSupport(app, grid, 'tasks')

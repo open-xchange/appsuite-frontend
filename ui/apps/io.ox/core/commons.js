@@ -14,7 +14,8 @@ define('io.ox/core/commons',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/core',
-     'io.ox/core/commons-folderview'], function (ext, links, gt, folderview) {
+     'io.ox/core/commons-folderview',
+     'io.ox/core/api/folder'], function (ext, links, gt, folderview, folderAPI) {
 
     'use strict';
 
@@ -140,6 +141,47 @@ define('io.ox/core/commons',
                     return grid;
                 };
             }
+        },
+
+        addGridToolbarFolder: function (app, grid) {
+
+            ext.point(app.get('name') + '/vgrid/toolbar').extend({
+                id: 'info',
+                index: 200,
+                draw: function () {
+                    this.append($('<div class="grid-info">'));
+                }
+            });
+
+            function fnOpen(e) {
+                e.preventDefault();
+                app.showFolderView();
+            }
+
+            function fnCancel(e) {
+                e.preventDefault();
+                app.getWindow().search.stop();
+            }
+
+            grid.on('change:prop:folder change:mode', function (e, value) {
+                var folder_id = grid.prop('folder'), mode = grid.getMode(),
+                    node = grid.getToolbar().find('.grid-info').empty();
+                if (mode === 'all') {
+                    node.append(
+                        $('<a href="#" data-action="open-folderview">')
+                        .append(folderAPI.getTextNode(folder_id))
+                        .on('click', fnOpen)
+                    );
+                } else if (mode === 'search') {
+                    node.append(
+                        $('<a href="#" data-action="cancel-search">')
+                        .text(gt('Cancel search'))
+                        .on('click', fnCancel)
+                    );
+                }
+            });
+
+            ext.point(app.get('name') + '/vgrid/toolbar').invoke('draw', grid.getToolbar());
         },
 
         /**

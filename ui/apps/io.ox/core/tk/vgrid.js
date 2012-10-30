@@ -777,6 +777,7 @@ define('io.ox/core/tk/vgrid',
             // otherwise subsequent search queries are impossible
             // if this function gets called too often, fix it elsewhere
             currentMode = mode;
+            this.trigger('change:mode', currentMode);
             _.url.hash('id', null);
             firstAutoSelect = true;
             return this.refresh();

@@ -960,6 +960,11 @@ define("io.ox/core/desktop",
                         this.open().setQuery(query);
                         self.trigger('search', query);
                         return this;
+                    },
+
+                    stop: function () {
+                        this.close();
+                        return this;
                     }
                 };
 

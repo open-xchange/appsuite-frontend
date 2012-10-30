@@ -216,6 +216,7 @@ define('io.ox/files/list/perspective',
             commons.wireFirstRefresh(app, api);
             commons.wireGridAndRefresh(grid, api, win);
             commons.addGridFolderSupport(app, grid);
+            commons.addGridToolbarFolder(app, grid);
 
             app.invalidateFolder = function (data) {
                 if (data) {
