@@ -115,16 +115,16 @@ define('io.ox/core/commons',
          * Wire grid & window
          */
         wireGridAndWindow: function (grid, win) {
-            var top = 0;
-            // show
-            win.on('show idle', function () {
+            var top = 0, on = function () {
                     grid.selection.keyboard(true);
                     if (grid.selection.get().length) {
                         // only retrigger if selection is not empty; hash gets broken if caches are empty
                         // TODO: figure out why this was important
                         grid.selection.retriggerUnlessEmpty();
                     }
-                })
+                };
+            // show
+            win.on('show idle', on)
                 // hide
                 .on('hide busy', function () {
                     grid.selection.keyboard(false);
@@ -141,6 +141,8 @@ define('io.ox/core/commons',
                     return grid;
                 };
             }
+            // already visible?
+            if (win.state.visible) { on(); }
         },
 
         addGridToolbarFolder: function (app, grid) {
