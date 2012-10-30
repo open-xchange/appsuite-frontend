@@ -91,17 +91,35 @@ define('io.ox/core/commons-folderview',
             }
         });
 
+        function fnClose(e) {
+            e.preventDefault();
+            e.data.app.toggleFolderView();
+        }
+
+        ext.point(POINT + '/sidepanel/toolbar').extend({
+            id: 'close',
+            index: 900,
+            draw: function (baton) {
+                this.append(
+                    $('<a href="#" class="toolbar-action pull-right"><i class="icon-remove"></a>')
+                    .on('click', { app: baton.app }, fnClose)
+                );
+            }
+        });
+
+        function fnToggle(e) {
+            e.preventDefault();
+            $(this).find('i').attr('class', e.data.app.togglePermanentFolderView() ? 'icon-chevron-right' : 'icon-chevron-left');
+        }
+
         ext.point(POINT + '/sidepanel/toolbar').extend({
             id: 'toggle',
-            index: 300,
+            index: 1000,
             draw: function (baton) {
                 var className = baton.options.permanent ? 'icon-chevron-right' : 'icon-chevron-left';
                 this.append(
                     $('<a href="#" class="toolbar-action pull-right"><i class="' + className + '"></a>')
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        $(this).find('i').attr('class', baton.app.togglePermanentFolderView() ? 'icon-chevron-right' : 'icon-chevron-left');
-                    })
+                    .on('click', { app: baton.app }, fnToggle)
                 );
             }
         });
