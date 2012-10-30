@@ -40,8 +40,8 @@ define('io.ox/files/carousel',
 
         firstStart: true,
         list: [],
-        container:      $('<div class="carousel slide">'),
-        inner:          $('<div class="carousel-inner">'),
+        container:      $('<div class="abs carousel slide">'),
+        inner:          $('<div class="abs carousel-inner">'),
         prevControl:    $('<a class="carousel-control left">').text(gt.noI18n('‹')).attr('data-slide', 'prev'),
         nextControl:    $('<a class="carousel-control right">').text(gt.noI18n('›')).attr('data-slide', 'next'),
         closeControl:   $('<button class="btn btn-primary closecarousel">').text(gt('Close')),
@@ -137,8 +137,12 @@ define('io.ox/files/carousel',
                 self.pos.sliding = false;
             });
 
-            this.container.on('click', '.item', function (e) {
+            this.container.on('click swipeleft', '.item', function (e) {
                 if (!self.pos.sliding) self.nextItem(e);
+            });
+
+            this.container.on('swiperight', '.item', function (e) {
+                if (!self.pos.sliding) self.prevItem(e);
             });
 
             this.prevControl.on('click', $.proxy(this.prevItem, this));
