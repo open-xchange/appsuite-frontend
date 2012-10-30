@@ -4946,8 +4946,23 @@ define('io.ox/office/editor/editor',
                                 var listObject = lists.formatNumber(paraAttributes.numId, ilvl,
                                         listItemCounter[paraAttributes.numId]);
                                 var numberingElement = DOM.createListLabelNode(listObject.text);
-                                var span = Utils.findDescendantNode(para, function () { return DOM.isPortionSpan(this); });
                                 var charAttributes = characterStyles.getElementAttributes(span);
+                                if (listObject.imgsrc) {
+                                    var absUrl = getDocumentUrl({ get_filename: listObject.imgsrc });
+                                    var image = $('<div>', { contenteditable: false })
+                                    .addClass('object inline')
+                                    .data('url', listObject.imgsrc)
+                                    .append($('<div>').addClass('content')
+                                            .append($('<img>', { src: absUrl }).css('width', charAttributes.fontsize + 'pt'))
+                                            );
+
+                                    LineHeight.updateElementLineHeight(image, paraAttributes.lineheight);
+                                    $(image).css('height', charAttributes.fontsize + 'pt');
+                                    $(image).css('width', charAttributes.fontsize + 'pt');
+                                    numberingElement.prepend(image);
+
+                                }
+                                var span = Utils.findDescendantNode(para, function () { return DOM.isPortionSpan(this); });
                                 numberingElement.css('font-size', charAttributes.fontsize + 'pt');
                                 LineHeight.updateElementLineHeight(numberingElement, paraAttributes.lineheight);
                                 if (listObject.indent > 0) {

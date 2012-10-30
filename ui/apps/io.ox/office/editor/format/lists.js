@@ -150,38 +150,44 @@ define('io.ox/office/editor/format/lists',
             }
             return ret;
         }
-        function formatNumberType(seqNo, numberformat, leveltext) {
-            var retString = "???";
-            switch (numberformat) {
+        function formatNumberType(seqNo, levelformat) {
+            var ret = {text: "???"};
+            switch (levelformat.numberformat) {
             case "decimal":
-                retString = seqNo.toString();
+                ret.text = seqNo.toString();
                 break;
             case "lowerLetter":
-                retString = String.fromCharCode(96 + seqNo);
+                ret.text = String.fromCharCode(96 + seqNo);
                 break;
             case "upperLetter":
-                retString = String.fromCharCode(64 + seqNo);
+                ret.text = String.fromCharCode(64 + seqNo);
                 break;
             case "lowerRoman":
             case "upperRoman":
-                retString = convertToRoman(seqNo, numberformat === "upperRoman");
+                ret.text = convertToRoman(seqNo, levelformat.numberformat === "upperRoman");
                 break;
             case "bullet":
-                var charCode = leveltext ? leveltext.charCodeAt(0) : -1;
-                if (charCode > 0 && (charCode < 0xE000 || charCode > 0xF8FF)) {
-                    retString = leveltext;
+                if (levelformat.levelpicbulleturi) {
+                    ret.imgsrc = levelformat.levelpicbulleturi;
+                    ret.text = '';
                 }
-                else
-                    retString = "●";
+                else {
+                    var charCode = levelformat.leveltext ? levelformat.leveltext.charCodeAt(0) : -1;
+                    if (charCode > 0 && (charCode < 0xE000 || charCode > 0xF8FF)) {
+                        ret.text = levelformat.leveltext;
+                    }
+                    else
+                        ret.text = "●";
+                }
                 break;
             case "none":
-                retString = '';
+                ret.text = '';
                 break;
             default:
             }
-            if (numberformat !== 'bullet')
-                retString += '.';
-            return retString;
+            if (levelformat.numberformat !== 'bullet')
+                ret.text += '.';
+            return ret;
         }
         // exports ================================================================
 
@@ -344,10 +350,10 @@ define('io.ox/office/editor/format/lists',
             if (levelFormat === undefined) {
                 return "??";
             }
-            var numberformat = levelFormat.numberformat;
-            ret.text = formatNumberType(levelIndexes === undefined ? 0 :
-                    levelIndexes[ilvl] + (levelFormat.levelstart !== undefined ? levelFormat.levelstart - 1 : 0), numberformat,
-                    levelFormat.leveltext);
+            var format = formatNumberType(levelIndexes === undefined ? 0 :
+                levelIndexes[ilvl] + (levelFormat.levelstart !== undefined ? levelFormat.levelstart - 1 : 0), levelFormat);
+            ret.text = format.text;
+            ret.imgsrc = format.imgsrc;
             ret.indent = levelFormat.leftindent - (levelFormat.hangingindent ? levelFormat.hangingindent : 0);
             //+ levelFormat.firstlineindent
             ret.labelWidth = (levelFormat.hangingindent ? levelFormat.hangingindent : 0);
