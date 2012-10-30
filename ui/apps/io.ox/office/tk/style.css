@@ -657,7 +657,7 @@ div.io-ox-view-component {
 /* Clipboard DIV============================================================ */
 
 .io-ox-office-clipboard {
-    position: absolute;
+    position: relative;
     top: -10000px;
     left: -10000px;
 }
