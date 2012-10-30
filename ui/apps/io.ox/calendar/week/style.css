@@ -83,8 +83,12 @@
         background-color: #fff;
         -webkit-transition: background-color 0.4s;
         -moz-transition: background-color 0.4s;
+        -o-transition: background-color 0.4s;
         transition: background-color 0.4s;
-    }
+        backface-visibility:hidden;
+        -webkit-backface-visibility:hidden;
+        -moz-backface-visibility:hidden;
+}
     
     .fulltime-container {
         position: relative;
@@ -271,6 +275,9 @@
         -moz-transition: opacity 0.2s;
         -o-transition: opacity 0.2s;
         transition: opacity 0.2s;
+        backface-visibility:hidden;
+        -webkit-backface-visibility:hidden;
+        -moz-backface-visibility:hidden;
     }
 
     .appointment.reserved {

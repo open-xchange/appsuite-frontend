@@ -134,6 +134,9 @@
         -o-transition: background-color 0.2s linear;
         -ms-transition: background-color 0.2s linear;
         transition: background-color 0.2s linear;
+        backface-visibility:hidden;
+        -webkit-backface-visibility:hidden;
+        -moz-backface-visibility:hidden;
     }
 
     .day.bordertop, .week-info.bordertop {
@@ -155,6 +158,9 @@
         -o-transition: background-color 0.2s linear;
         -ms-transition: background-color 0.2s linear;
         transition: background-color 0.2s linear;
+        backface-visibility:hidden;
+        -webkit-backface-visibility:hidden;
+        -moz-backface-visibility:hidden;
     }
     
     .day.out.today {
