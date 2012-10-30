@@ -294,17 +294,17 @@ define("io.ox/mail/api",
     };
 
     api.COLORS = {
-        NONE:      0,
-        RED:       1,
-        BLUE:      2,
-        GREEN:     3,
-        GREY:      4,
-        BROWN:     5,
-        AQUA:      6,
-        ORANGE:    7,
-        PINK:      8,
-        LIGHTBLUE: 9,
-        YELLOW:   10
+        NONE:        0,
+        RED:         1,
+        ORANGE:      7,
+        YELLOW:     10,
+        LIGHTGREEN:  6,
+        GREEN:       3,
+        LIGHTBLUE:   9,
+        BLUE:        2,
+        PURPLE:      5,
+        PINK:        8,
+        GREY:        4
     };
 
     // control for each folder:

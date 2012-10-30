@@ -548,17 +548,17 @@ define('io.ox/mail/view-detail',
     });
 
     var colorNames = {
-        NONE:      gt('None'),
-        RED:       gt('Red'),
-        BLUE:      gt('Blue'),
-        GREEN:     gt('Green'),
-        GREY:      gt('Grey'),
-        BROWN:     gt('Brown'),
-        AQUA:      gt('Aqua'),
-        ORANGE:    gt('Orange'),
-        PINK:      gt('Pink'),
-        LIGHTBLUE: gt('Lightblue'),
-        YELLOW:    gt('Yellow')
+        NONE:       gt('None'),
+        RED:        gt('Red'),
+        BLUE:       gt('Blue'),
+        GREEN:      gt('Green'),
+        GREY:       gt('Grey'),
+        PURPLE:     gt('Purple'),
+        LIGHTGREEN: gt('Light green'),
+        ORANGE:     gt('Orange'),
+        PINK:       gt('Pink'),
+        LIGHTBLUE:  gt('Light blue'),
+        YELLOW:     gt('Yellow')
     };
 
     function changeLabel(e) {
@@ -581,7 +581,10 @@ define('io.ox/mail/view-detail',
                     .append(
                         _(api.COLORS).reduce(function (memo, index, color) {
                             return memo.add($('<li>').append(
-                                $('<a href="#">').text(colorNames[color])
+                                $('<a href="#">').append(
+                                    index > 0 ? $('<span class="flag-example">').addClass('flag_' + index) : $(),
+                                    $.txt(colorNames[color])
+                                )
                                 .on('click', { data: data, color: index }, changeLabel)
                                 .addClass(data.color_label === index ? 'active-label' : undefined)
                             ));
