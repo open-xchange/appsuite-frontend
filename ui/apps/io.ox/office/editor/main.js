@@ -94,6 +94,9 @@ define('io.ox/office/editor/main',
             // browser timer for operations handling
             operationsTimer = null,
 
+            // invalidate local storage cache in case a new document ,ight be written
+            invalidateDriveCacheOnClose = false,
+
             // if true, debug mode is active (second editor and operations output console)
             debugMode = false,
 
@@ -123,6 +126,10 @@ define('io.ox/office/editor/main',
                     dataType: 'json',
                     async: !synchronous
                 });
+            }
+            if (invalidateDriveCacheOnClose === true) {
+                var file = Utils.getObjectOption(options, 'file', null);
+                FilesAPI.propagate('change', file);
             }
         }
 
@@ -432,6 +439,8 @@ define('io.ox/office/editor/main',
 
                 // we might receive new operations while sending the current ones
                 operationsBuffer = [];
+
+                invalidateDriveCacheOnClose = true;
 
                 // log the state in the debug view
                 view.logSyncState('sending');
