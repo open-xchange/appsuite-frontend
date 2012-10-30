@@ -172,6 +172,7 @@ define('io.ox/calendar/edit/main',
                             point: this.model.attributes
                         };
                     }
+                    return {module: 'io.ox/calendar/edit'};
                 },
                 failRestore: function (point) {
                     var df = $.Deferred();

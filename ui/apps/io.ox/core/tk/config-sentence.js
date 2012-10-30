@@ -184,6 +184,9 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
         this.ghost = function () {
             var $ghost = this.$el.clone();
             $ghost.find('*').off();
+            $ghost.find('a').each(function () {
+                $(this).replaceWith($.txt($(this).text()));
+            });
             return $ghost;
         };
 
