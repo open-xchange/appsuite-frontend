@@ -3857,6 +3857,11 @@ define('io.ox/office/editor/editor',
             DOM.createTabNode().append(tabSpan).insertBefore(node.parentNode);
 
             implParagraphChanged(position);
+
+            var localPos = _.copy(position);
+            localPos[localPos.length - 1] += 1;
+            lastOperationEnd = new OXOPaM(localPos);
+
             return true;
         }
 
