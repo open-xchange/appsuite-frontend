@@ -303,9 +303,8 @@ define('io.ox/office/editor/main',
                     dataType: 'json'
                 })
                 .done(function (response) {
-                    FilesAPI.caches.get.clear(); // TODO
-                    FilesAPI.caches.versions.clear();
-                    FilesAPI.trigger('refresh.all');
+                    var file = Utils.getObjectOption(options, 'file', null);
+                    FilesAPI.propagate('change', file);
                     def.resolve();
                 })
                 .fail(function (response) {
@@ -613,6 +612,8 @@ define('io.ox/office/editor/main',
                 }).pipe(function (response) {
                     // creation succeeded: receive file descriptor and set it
                     self.setFileDescriptor(response.data);
+                    var file = Utils.getObjectOption(options, 'file', null);
+                    FilesAPI.propagate('new', file);
                 });
             } else {
                 initFileDef = $.when();
@@ -760,28 +761,12 @@ define('io.ox/office/editor/main',
                     url: this.getDocumentFilterUrl('renamedocument', { filename: newFilename }),
                     dataType: 'json'
                 })
-                .pipe(function (response) {
-                    // TODO clear cachesupdate UI
-                    if (response && response.data) {
-                        FilesAPI.caches.all.grepRemove(response.data.folder_id + '\t')
-                            .pipe(function () { FilesAPI.trigger("create.file refresh.all"); });
-                    }
-
-                    return response;
-                })
                 .done(function (response) {
                     if (response && response.data && response.data.filename) {
                         file.filename = response.data.filename;
 
                         updateTitles();
-
-                        // TODO clear cachesupdate UI
-                        FilesAPI.caches.get.clear();
-                        FilesAPI.caches.versions.clear()
-                            .pipe(function () {
-                                FilesAPI.trigger('refresh.all');
-                                FilesAPI.trigger('update refresh.all', { id: response.data.id, folder: response.data.folder_id });
-                            });
+                        FilesAPI.propagate('change', file);
                     }
                 });
             }
