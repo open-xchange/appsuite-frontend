@@ -209,8 +209,14 @@ define('io.ox/office/editor/format/lists',
                     break;
                 default:
                 }
-                if (levelformat.levelpicbulleturi)
+                if (levelformat.levelpicbulleturi) {
                     leveltext = '';
+                    break;
+                }
+                else if (levelformat.numberformat === 'bullet') {
+                    leveltext = replacetext;
+                    break;
+                }
                 else
                     leveltext = leveltext.replace(levelToken, replacetext);
             }
