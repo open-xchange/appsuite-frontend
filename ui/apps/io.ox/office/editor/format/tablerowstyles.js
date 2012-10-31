@@ -82,18 +82,6 @@ define('io.ox/office/editor/format/tablerowstyles',
 
         StyleSheets.call(this, documentStyles, 'tablerow', 'tr', DEFINITIONS);
 
-        // methods ------------------------------------------------------------
-
-        /**
-         * Iterates over all table row elements covered by the passed DOM ranges
-         * for read-only access and calls the passed iterator function.
-         */
-        this.iterateReadOnly = function (ranges, iterator, context) {
-            // DOM.iterateAncestorNodesInRanges() passes the current element to
-            // the passed iterator function exactly as expected
-            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, 'tr', iterator, context);
-        };
-
         // initialization -----------------------------------------------------
 
         this.registerUpdateHandler(updateTableRowFormatting);

@@ -34,6 +34,14 @@ define('io.ox/office/editor/oxoselection',
             return !_.isEqual(this.startPaM.oxoPosition, this.endPaM.oxoPosition);
         };
 
+        /**
+         * Returns whether this selection object represents a rectangular cell
+         * selection (FireFox only).
+         */
+        this.isCellSelection = function () {
+            return (this.startPaM.selectedNodeName === 'TR') && (this.endPaM.selectedNodeName === 'TR');
+        };
+
         this.adjust = function () {
             if (Utils.compareNumberArrays(this.startPaM.oxoPosition, this.endPaM.oxoPosition) > 0) {
                 var tmp = this.startPaM;

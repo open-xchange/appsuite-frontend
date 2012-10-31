@@ -197,18 +197,6 @@ define('io.ox/office/editor/format/tablecellstyles',
 
         StyleSheets.call(this, documentStyles, 'tablecell', 'td', DEFINITIONS);
 
-        // methods ------------------------------------------------------------
-
-        /**
-         * Iterates over all table cell elements covered by the passed DOM ranges
-         * for read-only access and calls the passed iterator function.
-         */
-        this.iterateReadOnly = function (ranges, iterator, context) {
-            // DOM.iterateAncestorNodesInRanges() passes the current element to
-            // the passed iterator function exactly as expected
-            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, 'td', iterator, context);
-        };
-
         // initialization -----------------------------------------------------
 
         this.registerUpdateHandler(updateTableCellFormatting);

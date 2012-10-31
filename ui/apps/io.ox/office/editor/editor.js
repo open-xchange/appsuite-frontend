@@ -128,10 +128,10 @@ define('io.ox/office/editor/editor',
             // shortcuts for style sheet containers
             characterStyles = documentStyles.getStyleSheets('character'),
             paragraphStyles = documentStyles.getStyleSheets('paragraph'),
-            imageStyles = documentStyles.getStyleSheets('image'),
             tableStyles = documentStyles.getStyleSheets('table'),
             tableRowStyles = documentStyles.getStyleSheets('tablerow'),
             tableCellStyles = documentStyles.getStyleSheets('tablecell'),
+            imageStyles = documentStyles.getStyleSheets('image'),
             pageStyles = documentStyles.getStyleSheets('page'),
             lists = documentStyles.getLists(),
 
@@ -485,7 +485,7 @@ define('io.ox/office/editor/editor',
                     // More than one paragraph concerned from deletion, but in same level in document or table cell.
                     deleteSelectedInSameParagraphLevel(selection);
 
-                } else if (Position.isCellSelection(selection.startPaM, selection.endPaM)) {
+                } else if (selection.isCellSelection()) {
                     // This cell selection is a rectangle selection of cells in a table (only supported in Firefox).
                     deleteSelectedInCellSelection(selection);
 
@@ -576,7 +576,7 @@ define('io.ox/office/editor/editor',
 
             selection.adjust();
 
-            var isCellSelection = Position.isCellSelection(selection.startPaM, selection.endPaM),
+            var isCellSelection = selection.isCellSelection(),
                 startPos = _.copy(selection.startPaM.oxoPosition, true),
                 endPos = _.copy(selection.endPaM.oxoPosition, true);
 
@@ -638,7 +638,7 @@ define('io.ox/office/editor/editor',
 
             selection.adjust();
 
-            var isCellSelection = Position.isCellSelection(selection.startPaM, selection.endPaM),
+            var isCellSelection = selection.isCellSelection(),
                 startPos = _.copy(selection.startPaM.oxoPosition, true),
                 endPos = _.copy(selection.endPaM.oxoPosition, true);
 
@@ -698,7 +698,7 @@ define('io.ox/office/editor/editor',
 
             selection.adjust();
 
-            var isCellSelection = Position.isCellSelection(selection.startPaM, selection.endPaM),
+            var isCellSelection = selection.isCellSelection(),
                 startPos = _.copy(selection.startPaM.oxoPosition, true),
                 endPos = _.copy(selection.endPaM.oxoPosition, true),
                 count = 1;  // default, adding one cell in each row
@@ -1118,22 +1118,59 @@ define('io.ox/office/editor/editor',
          *  A map of paragraph attribute name/value pairs.
          */
         this.getAttributes = function (family) {
-            var styleSheets = this.getStyleSheets(family),
-                selection = getSelection(),
-                ranges = getBrowserSelection();
 
-            if (family === 'character') {
-                selection.adjust();
-                Utils.info('Editor.getAttributes(): iterating text components...');
-                var i = 0;
-                Position.iterateComponentsInSelection(editdiv, selection.startPaM.oxoPosition, selection.endPaM.oxoPosition, function (node) {
-                    DOM.iterateTextSpans(node, function (span) {
-                        Utils.log(++i + ': text="' + span.firstChild.nodeValue + '", attrs=' + JSON.stringify(styleSheets.getElementAttributes(span)));
-                    });
-                }, this, { allNodes: true });
+            var selection = getSelection(),
+                ranges = getBrowserSelection(),
+                attributes = {};
+
+            // merges the passed element attributes into the resulting attributes
+            function mergeElementAttributes(elementAttributes) {
+
+                var // whether any attribute is still unambiguous
+                    hasNonNull = false;
+
+                // process all passed element attributes
+                _(elementAttributes).each(function (value, name) {
+
+                    if (!(name in attributes)) {
+                        // initial iteration: store value
+                        attributes[name] = value;
+                    } else if (!_.isEqual(value, attributes[name])) {
+                        // value differs from previous value: ambiguous state
+                        attributes[name] = null;
+                    }
+                    hasNonNull = hasNonNull || !_.isNull(attributes[name]);
+                });
+
+                // stop iteration, if all attributes are ambiguous
+                return hasNonNull ? undefined : Utils.BREAK;
             }
 
-            return styleSheets ? styleSheets.getAttributesInRanges(ranges) : {};
+            // always iterate forwards
+            selection.adjust();
+
+            switch (family) {
+
+            case 'character':
+                Position.iterateComponentsInSelection(editdiv, selection, function (node) {
+                    return DOM.iterateTextSpans(node, function (span) {
+                        return mergeElementAttributes(characterStyles.getElementAttributes(span));
+                    });
+                }, this, { allNodes: true });
+                return attributes;
+
+            case 'paragraph':
+                return paragraphStyles.getAttributesInRanges(ranges);
+
+            case 'table':
+                return tableStyles.getAttributesInRanges(ranges);
+
+            case 'image':
+                return imageStyles.getAttributesInRanges(ranges);
+            }
+
+            Utils.error('Editor.getAttributes(): missing implementation for family "' + family + '"');
+            return {};
         };
 
         /**
@@ -2136,7 +2173,7 @@ define('io.ox/office/editor/editor',
         };
 
         operationHandlers[Operations.CELLRANGE_DELETE] = function (operation) {
-            implDeleteCellRange(operation.position, operation.start, operation.end);
+            implDeleteCellRange(operation.position, operation.start, operation.end, undomgr.isEnabled());
         };
 
         operationHandlers[Operations.CELLS_DELETE] = function (operation) {
@@ -2460,10 +2497,10 @@ define('io.ox/office/editor/editor',
             currentSelection = _.copy(oxosel, true);
 
             // Multi selection for rectangle cell selection in Firefox.
-            if (oxosel.hasRange() && (Position.isCellSelection(oxosel.startPaM, oxosel.endPaM))) {
-                ranges = Position.getCellDOMSelections(editdiv, oxosel);
-            } else if (selectedObjects.length > 0) {
+            if (selectedObjects.length > 0) {
                 ranges = Position.getObjectSelection(editdiv, oxosel);
+            } else if (oxosel.isCellSelection()) {
+                ranges = Position.getCellDOMSelections(editdiv, oxosel);
             } else {
                 ranges = Position.getDOMSelection(editdiv, oxosel);
             }
@@ -2784,25 +2821,27 @@ define('io.ox/office/editor/editor',
             // sequences of sibling text spans (needed for white-space handling)
             Position.iterateParagraphChildNodes(paragraph, function (node) {
 
-                if (DOM.isEmptySpan(node)) {
-                    // remove this span, if it is an empty portion and has a sibling text portion
-                    if (DOM.isTextSpan(node.previousSibling) || DOM.isTextSpan(node.nextSibling)) {
-                        $(node).remove();
-                    }
-                    // otherwise simply ignore the span
+                // visit all text spans embedded in text container nodes (fields, tabs, numbering labels, ...)
+                if (DOM.isTextSpan(node) || DOM.isTextSpanContainerNode(node)) {
+                    DOM.iterateTextSpans(node, function (span) {
 
-                } else if (DOM.isTextSpan(node)) {
-                    // append text node to current sequence
-                    siblingTextNodes.push(node.firstChild);
+                        if (DOM.isEmptySpan(span)) {
+                            // remove this span, if it is an empty portion and has a sibling text portion
+                            if (DOM.isTextSpan(span.previousSibling) || DOM.isTextSpan(span.nextSibling)) {
+                                $(span).remove();
+                            }
+                            // otherwise simply ignore the empty span
+                        } else {
+                            // append text node to current sequence
+                            siblingTextNodes.push(span.firstChild);
+                        }
+                    });
 
-                } else if (DOM.isTextSpanContainerNode(node)) {
-                    // append all text nodes of the field to current sequence of text nodes
-                    Utils.iterateDescendantTextNodes(node, function (textNode) { siblingTextNodes.push(textNode); });
-
+                // anything else (no text span or text container node): start a new sequence of text nodes
                 } else {
-                    // anything else: start a new sequence of text nodes
                     allSiblingTextNodes.push(siblingTextNodes = []);
                 }
+
             }, undefined, { allNodes: true });
 
             // Convert consecutive white-space characters to sequences of SPACE/NBSP
@@ -2880,7 +2919,7 @@ define('io.ox/office/editor/editor',
             Position.iterateParagraphChildNodes(paragraph, function (node) {
                 if (DOM.isTabNode(node)) {
                     // first child span of div.tab node
-                    var spanNode = $(node).children().first();
+                    var spanNode = node.firstChild;
                     if (spanNode) {
                         allTabSpanNodes.push(spanNode);
                     }
@@ -2970,7 +3009,7 @@ define('io.ox/office/editor/editor',
                         // The included paragraphs are neighbours.
                         setAttributesInSameParagraphLevel(selection, family, attributes);
 
-                    } else if (Position.isCellSelection(selection.startPaM, selection.endPaM)) {
+                    } else if (selection.isCellSelection()) {
                         // This cell selection is a rectangle selection of cells in a table (only supported in Firefox).
                         setAttributesInCellSelection(selection, family, attributes);
 
@@ -3541,8 +3580,13 @@ define('io.ox/office/editor/editor',
 
         function deleteSelectedInCellSelection(selection) {
 
-            var startPos = _.copy(selection.startPaM.oxoPosition, true),
-                endPos = _.copy(selection.endPaM.oxoPosition, true);
+            var startPos = _.clone(selection.startPaM.oxoPosition),
+                endPos = _.clone(selection.endPaM.oxoPosition);
+
+            // if the first child of a cell is a table, selection of this cell may
+            // point into this subtable -> go back to the outer cell
+            while (startPos.length > endPos.length) { startPos.pop(); }
+            while (startPos.length < endPos.length) { endPos.pop(); }
 
             startPos.pop();
             startPos.pop();
@@ -4559,22 +4603,40 @@ define('io.ox/office/editor/editor',
             }
         }
 
-        function implDeleteCellRange(pos, startCell, endCell) {
+        function implDeleteCellRange(pos, startCell, endCell, createUndo) {
 
             var startRow = startCell[0],
                 startCol = startCell[1],
                 endRow = endCell[0],
-                endCol = endCell[1];
+                endCol = endCell[1],
+                cellPosition = null,
+                cellInfo = null,
+                generator = createUndo ? new Operations.Generator() : null;
 
             for (var i = startRow; i <= endRow; i++) {
                 for (var j = startCol; j <= endCol; j++) {
-                    var position = _.copy(pos, true);
-                    position.push(i);
-                    position.push(j);
-                    // second parameter TRUE, so that no further
-                    // operations are created.
-                    deleteAllParagraphsInCell(position, true);
+
+                    cellPosition = pos.concat([i, j]);
+                    cellInfo = Position.getDOMPosition(editdiv, cellPosition, true);
+
+                    if (!cellInfo || !$(cellInfo.node).is('td')) {
+                        Utils.warn('Editor.implDeleteCellRange(): cannot find table cells at position ' + JSON.stringify(cellPosition));
+                        // do not try further elements, they will not be cells either...
+                        return;
+                    }
+
+                    // first create the undo operations
+                    if (generator) {
+                        generator.generateContentOperations(cellInfo.node, cellPosition);
+                    }
+
+                    // pass true to use implementation methods instead of creating more operations
+                    deleteAllParagraphsInCell(cellPosition, true);
                 }
+            }
+
+            if (generator) {
+                undomgr.addUndo(generator.getOperations(), { name: Operations.CELLRANGE_DELETE, position: pos, start: startCell, end: endCell });
             }
         }
 

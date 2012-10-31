@@ -1116,54 +1116,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         });
     };
 
-    /**
-     * Iterates over all text nodes contained in the specified DOM ranges. The
-     * iterator function will receive the text node and the character range in
-     * its text contents that is covered by the specified DOM ranges.
-     *
-     * @param {DOM.Range[]} ranges
-     *  (in/out) The DOM ranges whose text nodes will be iterated. The array
-     *  will be validated and sorted before iteration starts (see method
-     *  DOM.iterateNodesInRanges() for details).
-     *
-     * @param {HTMLElement|jQuery} rootNode
-     *  The DOM root node containing the elements covered by the passed ranges.
-     *  If this object is a jQuery collection, uses the first node it contains.
-     *
-     * @param {Function} iterator
-     *  The iterator function that will be called for every text node. Receives
-     *  the DOM text node object as first parameter. If the iterator returns
-     *  the Utils.BREAK object, the iteration process will be stopped
-     *  immediately. See the comments for the method DOM.iterateNodesInRanges()
-     *  for details about manipulation of the array of DOM ranges and the DOM
-     *  tree.
-     *
-     * @param {Object} [context]
-     *  If specified, the iterator will be called with this context (the symbol
-     *  'this' will be bound to the context inside the iterator function).
-     *
-     * @returns {Utils.BREAK|Undefined}
-     *  A reference to the Utils.BREAK object, if the iterator has returned
-     *  Utils.BREAK to stop the iteration process, otherwise undefined.
-     */
-    DOM.iterateTextPortionsInRanges = function (ranges, rootNode, iterator, context) {
-
-        // iterate over all nodes, and process the text nodes
-        return DOM.iterateNodesInRanges(ranges, rootNode, function (node, range, index, ranges) {
-
-            // call passed iterator for all text nodes in span elements
-            if (DOM.isTextSpan(node.parentNode)) {
-                // call iterator for the text node, return if iterator returns Utils.BREAK
-                if (iterator.call(context, node) === Utils.BREAK) { return Utils.BREAK; }
-
-            // cursor selects a single dummy text node, visit last preceding text node instead
-            } else if (range.isCollapsed() && DOM.isDummyTextNode(node) && (node = DOM.findPreviousTextSpan(node))) {
-                // call iterator for the text node, return if iterator returns Utils.BREAK
-                if (iterator.call(context, node) === Utils.BREAK) { return Utils.BREAK; }
-            }
-        });
-    };
-
     // browser selection ======================================================
 
     /**
@@ -1253,31 +1205,31 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
         // single range: use attributes of the Selection object (anchor/focus)
         // directly to preserve direction of selection when selecting backwards
-        if (ranges.length === 1) {
-
+        if ((ranges.length === 1) && !$(ranges[0].start.node).is('tr')) {
             try {
                 selection.collapse(ranges[0].start.node, ranges[0].start.offset);
                 selection.extend(ranges[0].end.node, ranges[0].end.offset);
+                return;
+            } catch (ex) {
+                Utils.warn('DOM.setBrowserSelection(): failed to collapse/expand range to selection');
+                // retry with regular code below
+                selection.removeAllRanges();
+            }
+        }
+
+        // create a multi-selection
+        _(ranges).each(function (range) {
+
+            var docRange = null;
+            try {
+                docRange = window.document.createRange();
+                docRange.setStart(range.start.node, range.start.offset);
+                docRange.setEnd(range.end.node, range.end.offset);
+                selection.addRange(docRange);
             } catch (ex) {
                 Utils.warn('DOM.setBrowserSelection(): failed to add range to selection');
             }
-
-        } else {
-
-            // create a multi-selection
-            _(ranges).each(function (range) {
-
-                var docRange = null;
-                try {
-                    docRange = window.document.createRange();
-                    docRange.setStart(range.start.node, range.start.offset);
-                    docRange.setEnd(range.end.node, range.end.offset);
-                    selection.addRange(docRange);
-                } catch (ex) {
-                    Utils.warn('DOM.setBrowserSelection(): failed to add range to selection');
-                }
-            });
-        }
+        });
     };
 
     // object selection =======================================================

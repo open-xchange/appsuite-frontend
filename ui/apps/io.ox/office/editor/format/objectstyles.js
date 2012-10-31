@@ -121,15 +121,6 @@ define('io.ox/office/editor/format/objectstyles',
     // private global functions ===============================================
 
     /**
-     * A jQuery selector function that returns whether the DOM node bound to
-     * the 'this' symbol is an element that can receive object formatting
-     * attributes.
-     */
-    function objectNodeSelector() {
-        return DOM.isObjectNode(this);
-    }
-
-    /**
      * Returns whether the passed 'textwrapmode' attribute allows to wrap the
      * text around the object.
      */

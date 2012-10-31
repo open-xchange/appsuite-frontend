@@ -129,8 +129,24 @@ define('io.ox/office/editor/format/tablestyles',
      * Returns the attributes of the specified attribute family contained in
      * table style sheets. Resolves the conditional attributes that match the
      * position of the passed source element.
+     *
+     * @param {String} family
+     *  The family of the attributes to be returned from the styleAttributes
+     *  object passed to this method.
+     *
+     * @param {Object} styleAttributes
+     *  The complete 'attributes' object of a table style sheet.
+     *
+     * @param {jQuery} sourceNode
+     *  The source node corresponding to the passed attribute family that has
+     *  initially requested the formatting attributes of a table style sheet,
+     *  as jQuery object.
+     *
+     * @returns {Object}
+     *  The formatting attributes of the specified family extracted from the
+     *  passed styleAttributes object, as name/value pairs.
      */
-    function resolveChildStyleAttributes(family, styleAttributes, sourceNode) {
+    function resolveTableStyleAttributes(family, styleAttributes, sourceNode) {
 
         var // the cell element (source node may be a paragraph or text span)
             cell = sourceNode.closest('td'),
@@ -181,7 +197,7 @@ define('io.ox/office/editor/format/tablestyles',
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, documentStyles, 'table', DOM.TABLE_NODE_SELECTOR, DEFINITIONS, {
-            childStyleAttributesResolver: resolveChildStyleAttributes
+            styleAttributesResolver: resolveTableStyleAttributes
         });
 
         // methods ------------------------------------------------------------

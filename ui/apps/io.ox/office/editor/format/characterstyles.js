@@ -104,53 +104,6 @@ define('io.ox/office/editor/format/characterstyles',
 
         };
 
-    // private global functions ===============================================
-
-    /**
-     * Will be called for every element whose character attributes have been
-     * changed.
-     *
-     * @param {jQuery} node
-     *  The paragraph child node whose character attributes have been changed,
-     *  as jQuery object. May be a text field or a list label node, in that
-     *  case the text span contained in the node will be iterated. Other child
-     *  nodes of the paragraph (e.g. objects, helper nodes) will be ignored
-     *  silently.
-     *
-     * @param {Object} attributes
-     *  A map of all attributes (name/value pairs), containing the
-     *  effective attribute values merged from style sheets and explicit
-     *  attributes.
-     */
-    function updateCharacterFormatting(node, attributes) {
-
-        var // the parent paragraph of the node (may be a grandparent)
-            paragraph = $(node).closest(DOM.PARAGRAPH_NODE_SELECTOR),
-            // the current theme
-            theme = this.getDocumentStyles().getCurrentTheme(),
-            // the paragraph style container
-            paragraphStyles = this.getDocumentStyles().getStyleSheets('paragraph'),
-            // the merged attributes of the paragraph
-            paragraphAttributes = paragraphStyles.getElementAttributes(paragraph);
-
-        // calculate text color (automatic color depends on fill colors)
-        Color.setElementTextColor(node, theme, attributes, paragraphAttributes);
-
-        // update calculated line height due to changed font settings
-        LineHeight.updateElementLineHeight(node, paragraphAttributes.lineheight);
-
-        // try to merge with the preceding text span
-        CharacterStyles.mergeSiblingTextSpans(node, false);
-    }
-
-    /**
-     * Returns whether the passed text nodes contain equal character
-     * formatting attributes.
-     */
-    function hasEqualAttributes(textNode1, textNode2) {
-        return StyleSheets.hasEqualElementAttributes(textNode1.parentNode, textNode2.parentNode);
-    }
-
     // class CharacterStyles ==================================================
 
     /**
@@ -172,16 +125,43 @@ define('io.ox/office/editor/format/characterstyles',
      */
     function CharacterStyles(rootNode, documentStyles) {
 
+        var // self reference
+            self = this;
+
         // private methods ----------------------------------------------------
 
         /**
-         * Iterates over all text nodes covered by the passed DOM ranges and
-         * calls the passed iterator function for their parent <span> elements.
+         * Will be called for every text span whose character attributes have
+         * been changed.
+         *
+         * @param {jQuery} node
+         *  The text span whose character attributes have been changed, as
+         *  jQuery object.
+         *
+         * @param {Object} attributes
+         *  A map of all attributes (name/value pairs), containing the
+         *  effective attribute values merged from style sheets and explicit
+         *  attributes.
          */
-        function iterateTextSpans(ranges, iterator, context) {
-            return DOM.iterateTextPortionsInRanges(ranges, rootNode, function (textNode) {
-                return iterator.call(context, textNode.parentNode);
-            }, context);
+        function updateCharacterFormatting(textSpan, attributes) {
+
+            var // the parent paragraph of the node (may be a grandparent)
+                paragraph = $(textSpan).closest(DOM.PARAGRAPH_NODE_SELECTOR),
+                // the current theme
+                theme = self.getDocumentStyles().getCurrentTheme(),
+                // the paragraph style container
+                paragraphStyles = self.getDocumentStyles().getStyleSheets('paragraph'),
+                // the merged attributes of the paragraph
+                paragraphAttributes = paragraphStyles.getElementAttributes(paragraph);
+
+            // calculate text color (automatic color depends on fill colors)
+            Color.setElementTextColor(textSpan, theme, attributes, paragraphAttributes);
+
+            // update calculated line height due to changed font settings
+            LineHeight.updateElementLineHeight(textSpan, paragraphAttributes.lineheight);
+
+            // try to merge with the preceding text span
+            CharacterStyles.mergeSiblingTextSpans(textSpan, false);
         }
 
         // base constructor ---------------------------------------------------
@@ -189,16 +169,6 @@ define('io.ox/office/editor/format/characterstyles',
         StyleSheets.call(this, documentStyles, 'character', undefined, DEFINITIONS, {
             parentStyleFamily: 'paragraph'
         });
-
-        // methods ------------------------------------------------------------
-
-        /**
-         * Iterates over all text nodes covered by the passed DOM ranges and
-         * calls the passed iterator function for their parent <span> elements.
-         */
-        this.iterateReadOnly = function (ranges, iterator, context) {
-            return iterateTextSpans(ranges, iterator, context);
-        };
 
         // initialization -----------------------------------------------------
 

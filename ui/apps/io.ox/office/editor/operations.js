@@ -109,7 +109,6 @@ define('io.ox/office/editor/operations',
 
         IMAGE_INSERT: 'insertImage',
         FIELD_INSERT: 'insertField',
-        
         TAB_INSERT: 'insertTab'
 
     };
@@ -236,11 +235,11 @@ define('io.ox/office/editor/operations',
          *  The logical position of the passed paragraph node. The generated
          *  operations will contain positions starting with this address.
          *
-         * @param {Number} [start=0]
+         * @param {Number} [start]
          *  The logical index of the first character to be included into the
          *  generated operations.
          *
-         * @param {Number} [end=0x7FFFFFFF]
+         * @param {Number} [end]
          *  The logical index of the last character to be included in the
          *  generated operations (closed range).
          *
@@ -295,6 +294,14 @@ define('io.ox/office/editor/operations',
                         // extract text of all embedded spans representing the field
                         text = $(node).text();
                         generateOperation(Operations.FIELD_INSERT, { position: startPosition, representation: text });
+                        generateOperation(Operations.ATTRS_CLEAR, { start: startPosition });
+                        // attributes are contained in the embedded span elements
+                        attributeRanges.push({ node: node.firstChild, position: startPosition });
+                    }
+
+                    // operation to create a tabulator
+                    else if (DOM.isTabNode(node)) {
+                        generateOperation(Operations.TAB_INSERT, { position: startPosition });
                         generateOperation(Operations.ATTRS_CLEAR, { start: startPosition });
                         // attributes are contained in the embedded span elements
                         attributeRanges.push({ node: node.firstChild, position: startPosition });

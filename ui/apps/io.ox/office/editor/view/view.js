@@ -170,8 +170,8 @@ define('io.ox/office/editor/view/view',
          */
         function logSelection(selection) {
             if (infoNode) {
-                infoNode.find('tr').eq(1).children('td').eq(1).text((selection && selection.startPaM) ? JSON.stringify(selection.startPaM.oxoPosition) : '- empty -');
-                infoNode.find('tr').eq(2).children('td').eq(1).text((selection && selection.endPaM) ? JSON.stringify(selection.endPaM.oxoPosition) : '- empty -');
+                infoNode.find('tr').eq(1).children('td').eq(1).text((selection && selection.startPaM) ? selection.startPaM : '- empty -');
+                infoNode.find('tr').eq(2).children('td').eq(1).text((selection && selection.endPaM) ? selection.endPaM : '- empty -');
             }
         }
 

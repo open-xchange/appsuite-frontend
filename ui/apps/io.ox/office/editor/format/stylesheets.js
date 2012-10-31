@@ -101,16 +101,16 @@ define('io.ox/office/editor/format/stylesheets',
      *      The attribute family of the style sheets assigned to parent
      *      elements (or other ancestors). Used to resolve attributes from the
      *      style sheet of an ancestor of the current element.
-     *  @param {Function} [options.childStyleAttributesResolver]
-     *      If specified, a function that returns the attributes of a child
-     *      attribute family (not the own style family) from the 'attributes'
-     *      object of a style sheet. The set of attributes returned may depend
-     *      on a context element (e.g. on the position of the context element
-     *      in its parents). The function receives the desired attribute family
-     *      as first parameter, the complete 'attributes' object of the style
-     *      sheet as second parameter, and the source node as jQuery object as
-     *      third parameter. Will be called in the context of this style sheet
-     *      container instance.
+     *  @param {Function} [options.styleAttributesResolver]
+     *      If specified, a function that returns the attributes of a specific
+     *      attribute family from the complete 'attributes' object of a style
+     *      sheet. The set of attributes returned may depend on a source
+     *      element (e.g. on the position of this source element in its
+     *      parents). The function receives the desired attribute family as
+     *      first parameter, the complete 'attributes' object of the style
+     *      sheet as second parameter, and the source node (as jQuery object)
+     *      as third parameter. Will be called in the context of this style
+     *      sheet container instance.
      */
     function StyleSheets(documentStyles, styleFamily, selector, definitions, options) {
 
@@ -129,8 +129,8 @@ define('io.ox/office/editor/format/stylesheets',
             // update handlers, called after attributes have been changed
             updateHandlers = [],
 
-            // custom resolver for style attributes of child families depending on a context element
-            childStyleAttributesResolver = Utils.getFunctionOption(options, 'childStyleAttributesResolver'),
+            // custom resolver for style attributes depending on a context element
+            styleAttributesResolver = Utils.getFunctionOption(options, 'styleAttributesResolver'),
 
             // style family of parent style sheets
             parentStyleFamily = Utils.getStringOption(options, 'parentStyleFamily');
@@ -211,10 +211,10 @@ define('io.ox/office/editor/format/stylesheets',
          * @param {HTMLElement|jQuery} [sourceNode]
          *  The source DOM node corresponding to the specified attribute family
          *  that has initiated the call to this method. Will be used to receive
-         *  attributes from style sheets in other container, referred by the
+         *  attributes from style sheets in other containers, referred by the
          *  ancestors of this node. Will be passed to a custom style attributes
-         *  resolver (see the 'options.childStyleAttributesResolver' option
-         *  passed to the constructor).
+         *  resolver (see the 'options.styleAttributesResolver' option passed
+         *  to the constructor).
          *
          * @returns {Object}
          *  The formatting attributes contained in the style sheet and its
@@ -244,9 +244,9 @@ define('io.ox/office/editor/format/stylesheets',
                     _(attributes).extend(styleSheet.attributes[family]);
                 }
 
-                // try resolver for style attributes of other families or optional attributes (for tables)
-                if (_.isFunction(childStyleAttributesResolver)) {
-                    _(attributes).extend(childStyleAttributesResolver.call(self, family, styleSheet.attributes, $(sourceNode)));
+                // try user-defined resolver for style attributes mapped in non-standard structures
+                if (_.isFunction(styleAttributesResolver)) {
+                    _(attributes).extend(styleAttributesResolver.call(self, family, styleSheet.attributes, $(sourceNode)));
                 }
             }
 
