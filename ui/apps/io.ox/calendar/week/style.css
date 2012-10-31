@@ -225,6 +225,7 @@
         background-color: #08c;
         opacity: 1;
         .transition(opacity 0.2s);
+        .backface-visibility(hidden);
     }
 
     .week-container .appointment {
@@ -259,7 +260,6 @@
     .appointment.opac {
         opacity: 0.5;
         .transition(opacity 0.2s);
-        .backface-visibility(hidden);
     }
 
     .appointment.reserved {

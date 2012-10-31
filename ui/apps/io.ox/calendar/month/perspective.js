@@ -16,8 +16,10 @@ define('io.ox/calendar/month/perspective',
      'io.ox/calendar/util',
      'io.ox/core/date',
      'io.ox/core/extensions',
+     'io.ox/core/tk/dialogs',
+     'io.ox/calendar/view-detail',
      'gettext!io.ox/calendar',
-     'io.ox/core/http'], function (View, api, util, date, ext, gt, http) {
+     'io.ox/core/http'], function (View, api, util, date, ext, dialogs, detailView, gt, http) {
     'use strict';
 
     var perspective = new ox.ui.Perspective('month');
@@ -39,16 +41,16 @@ define('io.ox/calendar/month/perspective',
         current: null,      // current month as UTC timestamp
         folder: 0,
         app: null,          // the current application
+        dialog: $(),        // sidepopup
 
         showAppointment: function (e, obj) {
             // open appointment details
+            var self = this;
             api.get(obj).done(function (data) {
-                require(["io.ox/core/tk/dialogs", "io.ox/calendar/view-detail"])
-                .done(function (dialogs, detailView) {
-                    new dialogs.SidePopup().show(e, function (popup) {
+                self.dialog
+                    .show(e, function (popup) {
                         popup.append(detailView.draw(data));
                     });
-                });
             });
         },
 
@@ -301,6 +303,11 @@ define('io.ox/calendar/month/perspective',
                     self.gotoMonth();
                 });
             });
+
+            this.dialog = new dialogs.SidePopup()
+                .on('close', function () {
+                    $('.appointment', this.main).removeClass('opac current');
+                });
 
             var refresh = $.proxy(function () {
                 app.folder.getData().done(function (data) {

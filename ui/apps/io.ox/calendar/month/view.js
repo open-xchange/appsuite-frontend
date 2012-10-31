@@ -46,7 +46,11 @@ define('io.ox/calendar/month/view',
         },
 
         onClickAppointment: function (e) {
-            this.trigger('showAppoinment', e, _.cid($(e.currentTarget).data('cid') + ''));
+            var cid = $(e.currentTarget).data('cid'),
+                el = $('[data-cid="' + cid + '"]');
+            $('.appointment').removeClass('opac').not(el).addClass('opac');
+            el.add('.appointment.current').toggleClass('current');
+            this.trigger('showAppoinment', e, _.cid(cid + ''));
         },
 
         onCreateAppointment: function (e) {
