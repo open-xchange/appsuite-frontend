@@ -31,7 +31,6 @@
 .io-ox-portal .vgrid-cell:last-child {
     border-bottom: 0px none;
 }
-<<<<<<< HEAD
 .io-ox-portal h1 {
     font-size: 16pt;
     font-weight: 200;
@@ -39,12 +38,9 @@
     font-family: @font-light;
 }
 .io-ox-portal h2 {
-    font-size: 18px;
+    font-size: 18px; /* TODO: Either all px or all pt */
     font-family: @font-light;
 }
-=======
-
->>>>>>> Portal v5 - intermediate state
 .io-ox-portal-greeting {
     font-family: @font-light;
     font-size: 22px;
@@ -159,13 +155,21 @@
 .io-ox-portal-typeA .io-ox-portal-content :first-child.io-ox-portal-item {
     border: none;
 }
-
+.io-ox-portal-typeA :hover.io-ox-portal-item {
+    background: black;
+    opacity: 0.25;
+    font-weight: 200;
+}
 .io-ox-portal-typeA .io-ox-portal-content {
     height: @tHeight - @tLine - @tLine; /* height - title - action */
     overflow: hidden;
     line-height: 1.5em;
     text-overflow: ellipsis;
+<<<<<<< HEAD
 >>>>>>> Portal v5 - intermediate state
+=======
+    clear: both;
+>>>>>>> Portal v5
 }
 
 
@@ -183,6 +187,14 @@
     height: @tLine;
     background: black;
     color: #eee;
+    padding-top: @tSpace/2;
+}
+.io-ox-portal-actions .action-text {
+    height: 100%;
+    cursor: pointer;
+    padding-left: .5em;
+    font-weight: 100;
+    font-size: 13pt;
 }
 
 .io-ox-portal-typeB .io-ox-portal-title {

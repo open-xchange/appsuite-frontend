@@ -98,6 +98,7 @@ define("plugins/portal/linkedIn/register",
     var updatesPortal = {
         id: "linkedinUpdates",
         index: 200,
+        title: 'LinkedIn updates',
         isEnabled: function () {
             return keychain.isEnabled('linkedin');
         },

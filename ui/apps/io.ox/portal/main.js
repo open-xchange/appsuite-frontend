@@ -254,6 +254,10 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
             addFillers(fillers, count, maxIndex, maxIndex + 100);
 
             point.each(function (extension) {
+                var $actionbar = $('<div class="io-ox-portal-actions">').append(
+                    $('<span class="action-text">').text(gt("View %s", extension.title || extension.id)),
+                    $('<i class="icon-remove io-ox-portal-action">'));
+                
                 if (!extension.isEnabled) {
                     extension.isEnabled = function () { return true; };
                 }
@@ -283,13 +287,9 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                     } else {
                         $tile.on('click', function () { return keychain.createInteractively(extension.id); });
                     }
-                } else {
-                    if (!extension.hideSidePopup) {
-                        $tile.on('click', makeClickHandler(extension));
-                    }
+                } else if (!extension.hideSidePopup) {
+                    $tile.on('click', makeClickHandler(extension));
                 }
-
-
 
                 if (!extension.loadTile) {
                     extension.loadTile = function () {
@@ -309,6 +309,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                                 )
                             );
                         }
+                        
                         extension.asyncMetadata("type").done(function (type) {
                             if (type === control.CANCEL) {
                                 $tile.remove();
@@ -388,7 +389,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                             $tile.idle();
                             extension.invoke('postTile', $content, extension);
                             if (!/^filler/.test(extension.id)) {
-                                $('<div class="io-ox-portal-actions">').append($('<i class="icon-remove io-ox-portal-action">')).appendTo($tile);
+                                $actionbar.appendTo($tile);
                             }
                         });
                 }).fail(function (e) {

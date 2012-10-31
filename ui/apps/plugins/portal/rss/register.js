@@ -87,7 +87,7 @@ define("plugins/portal/rss/register",
                 });
                 $(this).append(
                     $('<div class="io-ox-portal-title">').append(
-                        $('<i class="icon-rss tile-image">'),
+                        $('<i class="icon-rss icon-large tile-image">'),
                         $('<h1 class="tile-heading">').text(tilegroup.groupname)
                     ),
                     $content
