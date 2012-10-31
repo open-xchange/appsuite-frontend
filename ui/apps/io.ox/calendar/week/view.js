@@ -409,19 +409,19 @@ define('io.ox/calendar/week/view',
                             )
                     ),
                 $('<div>')
+                    .addClass('footer-container')
+                    .append(
+                        $('<div>').addClass('footer-label'),
+                        this.footer
+                    ),
+                $('<div>')
                     .addClass('week-view-container')
                     .append(
                         this.fulltimeCon.empty().append(
                             $('<div>').addClass('fulltime-label'),
                             this.fulltimePane
                         ),
-                        this.pane.empty().append(timeLabel, weekCon),
-                        $('<div>')
-                            .addClass('footer-container')
-                            .append(
-                                $('<div>').addClass('footer-label'),
-                                this.footer
-                            )
+                        this.pane.empty().append(timeLabel, weekCon)
                     )
             );
 

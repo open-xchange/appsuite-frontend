@@ -27,14 +27,13 @@
     @appointment-hover-pct: 15%; 
     @appointment-unconfirmed-alpha: 0.4;
     @weekview-time-with: 42px;
-    @weekview-footer-height: 30px;
+    @weekview-footer-height: 25px;
     @weekview-toolbar-height: 41px;
     
     .toolbar {
         background-color: #FFF; 
         height: @weekview-toolbar-height;
         text-align: center;
-        border-bottom: 1px solid #ccc;
         padding: 3px;
     }
     
@@ -67,7 +66,7 @@
         left: 0px;
         right: 0px;
         bottom: 0px;
-        top: @weekview-toolbar-height;
+        top: @weekview-toolbar-height + @weekview-footer-height;
     }
     
     .week {
@@ -113,19 +112,19 @@
         .overflow-y(scroll);
         .overflow-x(hidden);
         position: absolute;
-        top: 40px;
+        top: @weekview-toolbar-height + @weekview-footer-height;
         left: 0;
         right: 0; 
-        bottom: @weekview-footer-height; 
+        bottom: 0; 
     }
     
     .footer-container {
         position: absolute;
         height: @weekview-footer-height;
-        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
         left: 0;
         right: 0;
-        bottom: 0; 
+        top: @weekview-toolbar-height; 
         width: 100%;
         .overflow-y(scroll);
     }
@@ -222,7 +221,10 @@
 
     .weekday {
         display: inline-block;
-        padding-left: 10px;
+        white-space: nowrap;
+        font-family: @font-light;
+        font-size: 13px;
+        text-align: center;
         overflow: hidden;
         text-overflow: ellipsis;
     }
