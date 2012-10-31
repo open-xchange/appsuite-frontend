@@ -15,7 +15,8 @@ define("io.ox/tasks/model", ['io.ox/tasks/api',
                              'io.ox/backbone/modelFactory',
                              'io.ox/backbone/validation',
                              'io.ox/core/extensions',
-                             'gettext!io.ox/tasks'], function (api, ModelFactory, Validations, ext, gt) {
+                             'io.ox/participants/model',
+                             'gettext!io.ox/tasks'], function (api, ModelFactory, Validations, ext, pModel, gt) {
         
     "use strict";
         
@@ -29,6 +30,39 @@ define("io.ox/tasks/model", ['io.ox/tasks/api',
                 percent_completed: 0,
                 folder_id: api.getDefaultFolder(),
                 currency: 'EUR'
+            },
+            getParticipants: function () {
+                if (this._participants) {
+                    return this._participants;
+                }
+                var self = this;
+                var resetListUpdate = false;
+                var changeParticipantsUpdate = false;
+                var participants = this._participants = new pModel.Participants(this.get('participants'));
+                participants.invoke('fetch');
+
+                function resetList(participant) {
+                    if (changeParticipantsUpdate) {
+                        return;
+                    }
+                    resetListUpdate = true;
+                    self.set('participants', participants.toJSON());
+                    resetListUpdate = false;
+                }
+
+                participants.on('add remove reset', resetList);
+
+                this.on('change:participants', function () {
+                    if (resetListUpdate) {
+                        return;
+                    }
+                    changeParticipantsUpdate = true;
+                    participants.reset(self.get('participants'));
+                    participants.invoke('fetch');
+                    changeParticipantsUpdate = false;
+                });
+
+                return participants;
             }
         }
     });

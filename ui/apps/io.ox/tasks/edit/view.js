@@ -27,7 +27,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
     "use strict";
     
     var point = views.point('io.ox/tasks/edit/view'),
-    TaskEditView = point.createView({
+        TaskEditView = point.createView({
         tagName: 'div',
         className: 'io-ox-tasks-edit  task-edit-wrapper container-fluid',
         init: function () {
@@ -83,7 +83,8 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             temp = null;
             
             //partitipants tab
-            participantsTab.append($('<h4>').text(gt("Under construction")).css('text-align', 'center'));
+            this.getRow(0, app, 'participants').invoke("draw", participantsTab, self.baton);
+            this.getRow(1, app, 'participants').invoke("draw", participantsTab, self.baton);
             
             //attachmentTab
             var attachmentDisplay = $('<div>').addClass("task-attachment-display")
@@ -133,6 +134,8 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 if (tab) {
                     if (tab === "detail") {
                         return this.rows[4][number];
+                    } else if (tab === "participants") {
+                        return this.rows[5][number];
                     }
                 } else {
                     return this.rows[number];
@@ -141,11 +144,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 //create non extensionPoint nodes
                 self.createNonExt(app);
                 //fill with empty rows
-                this.rows.push([]);
-                this.rows.push([]);
-                this.rows.push([]);
-                this.rows.push([]);
-                this.rows.push([]);
+                this.rows = [[], [], [], [], [[], [], [], [], []], []];
                 //get extension points
                 this.point.each(function (extension) {
                     temp[extension.id] = extension;
@@ -164,11 +163,6 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 self.rows[3].push(temp.priority);
                 self.rows[3].push(temp.private_flag);
                 //detailtab
-                self.rows[4].push([]);
-                self.rows[4].push([]);
-                self.rows[4].push([]);
-                self.rows[4].push([]);
-                self.rows[4].push([]);
                 self.rows[4][0].push(temp.target_duration);
                 self.rows[4][0].push(temp.actual_duration);
                 self.rows[4][1].push(temp.target_costs);
@@ -177,6 +171,9 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 self.rows[4][2].push(temp.trip_meter);
                 self.rows[4][3].push(temp.billing_information);
                 self.rows[4][4].push(temp.companies);
+                //participantstab
+                self.rows[5].push(temp.participants_list);
+                self.rows[5].push(temp.add_participant);
                 return this.rows[number];
             }
         },
@@ -488,6 +485,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             node.append(view.render(app));
         }
     };
+    
     
     return {
         TaskEditView: TaskEditView,

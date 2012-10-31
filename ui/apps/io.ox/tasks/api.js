@@ -36,7 +36,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
         requests: {
             all: {
                 folder: folderApi.getDefaultFolder("tasks"),
-                columns: "1,20,200,202,203,300,309",
+                columns: "1,20,200,202,203,220,300,309",
                 sort: "202",
                 order: "asc",
                 cache: true, // allow DB cache
@@ -101,13 +101,10 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     appendColumns: false
                 }).pipe(function () {
                     // update cache
-                    return $.when(
-                        api.caches.get.remove(key),
-                        api.caches.list.remove(key)
-                    );
+                    return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
                 }).done(function () {
                     //trigger refresh, for vGrid etc
-                    api.trigger("refresh.all");
+                    api.trigger('refresh.all');
                 });
 
             };

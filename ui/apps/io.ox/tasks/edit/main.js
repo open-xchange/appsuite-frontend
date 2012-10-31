@@ -74,13 +74,14 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 this.edit = true;
                 model.factory.realm('edit').retain().get(taskData).done(function (task) {
                     taskModel = task;
+                    taskModel.getParticipants();
                     taskView = view.getView(taskModel, win.nodes.main, app);
                 });
             } else {
                 taskModel = model.factory.create();
                 taskView = view.getView(taskModel, win.nodes.main, app);
             }
-
+            
             win.on('show', function () {
                 if (taskView) {
                     taskView.dropZone.include();
@@ -95,7 +96,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             //ready for show
             win.show();
         });
-
+        
         // Popup on close
         app.setQuit(function () {
             var def = $.Deferred();
@@ -109,7 +110,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 require(["io.ox/core/tk/dialogs"], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt("Do you really want to discard your changes?"))
-                        .addPrimaryButton("delete", gt('Discard'))
+                        .addPrimaryButton("delete", gt('Discard changes'))
                         .addButton("cancel", gt('Cancel'))
                         .show()
                         .done(function (action) {
