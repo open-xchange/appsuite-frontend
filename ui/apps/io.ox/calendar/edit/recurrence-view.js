@@ -698,11 +698,12 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     // No Recurrence
                     this.model.set({recurrence_type: RECURRENCE_TYPES.NO_RECURRENCE});
                 }
-
+                this.magicStartDate();
                 this.updatingModel = false;
 
                 this.modelChanged();
             },
+
             createGhost: function (sentence) {
                 var self = this;
                 var $ghost = $('<span class="muted">').append(sentence.ghost());
@@ -772,6 +773,79 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 this.nodes.alternative2.hide();
                 this.nodes.endsChoice.hide();
             },
+            // determineSentenceConcordance: function () {
+            //     if (this.choice.id === 'no-choice' || this.choice.id === 'daily') {
+            //         return false;
+            //     }
+                
+            //     var startDate = new dateAPI.Local(dateAPI.Local.utc(this.model.get("start_date")));
+
+            //     var dayBits = 1 << startDate.getDay();
+            //     var dayInMonth = startDate.getDate();
+            //     var month = startDate.getMonth();
+            //     var ordinal = Math.ceil(startDate.getDate() / 7);
+
+            //     // Weekly
+            //     if (this.choice.id === 'weekly') {
+            //         // Concordance: if the start dates day is one of the selected days
+            //         return !!(dayBits & this.choice.days);
+            //     }
+
+            //     // Monthly
+            //     if (this.choice.id === 'monthlyDay') {
+            //         // Concordance: if the date matches the start date
+            //         return dayInMonth === this.choice.dayInMonth;
+            //     }
+
+            //     if (this.choice.id === 'monthlyDate') {
+            //         // Concordance: if days and day_in_month point to the same day as the start date
+            //         return (dayBits === this.choice.day && ordinal === this.choice.ordinal);
+            //     }
+
+            //     // Yearly
+            //     if (this.choice.id === 'yearlyDay') {
+            //         // Concordance: if the date matches the start date
+            //         return (dayInMonth === this.choice.dayInMonth && month === this.choice.month);
+            //     }
+
+            //     if (this.choice.id === 'yearlyDate') {
+            //         // Concordance: if days and day_in_month point to the same day as the start date
+            //         return (dayBits === this.choice.day && ordinal === this.choice.ordinal && month === this.choice.month);
+            //     }
+
+            //     return false;
+            // },
+            // magicStartDate: function () {
+            //     if (!this.concordance) {
+            //         return;
+            //     }
+            //     if (this.determineSentenceConcordance()) {
+            //         return;
+            //     }
+            //     var startDate = new dateAPI.Local(dateAPI.Local.utc(this.model.get("start_date")));
+
+            //     switch (this.choice.id) {
+            //     case "weekly":
+            //         // A different set of days was selected
+            //         // That doesn't include the current day anymore
+            //         // So, select the next day from the old start date that actually works here
+            //         while (true) {
+            //             startDate.add(dateAPI.DAY);
+            //             if ((1 << startDate.getDay()) & this.choice.days) {
+            //                 this.model.set("start_date", dateAPI.Local.utc(startDate));
+            //             }
+            //         }
+            //         break;
+            //     case "monthlyDay":
+            //         break;
+            //     case "monthlyDate":
+            //         break;
+            //     case "yearlyDay":
+            //         break;
+            //     case "yearlyDate":
+            //         break;
+            //     }
+            // },
             updateSuggestions: function () {
                 var self = this;
                 var startDate = new dateAPI.Local(dateAPI.Local.utc(this.model.get("start_date")));
