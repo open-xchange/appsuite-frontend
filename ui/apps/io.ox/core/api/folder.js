@@ -408,7 +408,11 @@ define('io.ox/core/api/folder',
 
                 resolve = function (offset) {
                     // use symbolic offset or plain numeric value?
-                    return offset in parts ? parts[offset] : offset;
+                    if (_.isString(offset)) {
+                        if (offset in parts) return parts[offset];
+                        console.error('Typo!?', offset);
+                    }
+                    return offset || 0;
                 };
 
             return function (value) {
@@ -419,13 +423,8 @@ define('io.ox/core/api/folder',
                 var Bitmask = {
 
                     get: function (offset) {
-                        // return value?
-                        if (arguments.length === 0) {
-                            return value;
-                        } else {
-                            // return relevant bits only
-                            return (value >> resolve(offset)) & 127;
-                        }
+                        // return value OR relevant bits only
+                        return arguments.length === 0 ? value : (value >> resolve(offset)) & 127;
                     },
 
                     set: function (offset, bits) {
