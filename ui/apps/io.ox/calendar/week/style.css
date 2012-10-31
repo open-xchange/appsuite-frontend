@@ -78,13 +78,8 @@
         border-right: 1px solid #ccc;
         overflow: hidden;
         background-color: #fff;
-        -webkit-transition: background-color 0.4s;
-        -moz-transition: background-color 0.4s;
-        -o-transition: background-color 0.4s;
-        transition: background-color 0.4s;
-        backface-visibility:hidden;
-        -webkit-backface-visibility:hidden;
-        -moz-backface-visibility:hidden;
+        .transition(background-color 0.4s);
+        .backface-visibility(hidden);
 }
     
     .fulltime-container {
@@ -196,11 +191,7 @@
         width: 100%;
         background-color: red;
         z-index: 9999;
-        -moz-user-select: -moz-none;
-        -khtml-user-select: none;
-        -webkit-user-select: none;
-        -o-user-select: none;
-        user-select: none;
+        .user-select(none);
     }
     
     .day .timeslot:nth-child(2n+1) {
@@ -233,10 +224,7 @@
         position: absolute;
         background-color: #08c;
         opacity: 1;
-        -webkit-transition: opacity 0.2s;
-        -moz-transition: opacity 0.2s;
-        -o-transition: opacity 0.2s;
-        transition: opacity 0.2s;
+        .transition(opacity 0.2s);
     }
 
     .week-container .appointment {
@@ -249,7 +237,6 @@
     
     .appointment-content {
         height: 100%;
-        font-family: Arial, Helvetica, sans-serif;
         font-size: 12px;
         color: white;
         padding: 0px 7px 0px 7px;
@@ -271,13 +258,8 @@
         
     .appointment.opac {
         opacity: 0.5;
-        -webkit-transition: opacity 0.2s;
-        -moz-transition: opacity 0.2s;
-        -o-transition: opacity 0.2s;
-        transition: opacity 0.2s;
-        backface-visibility:hidden;
-        -webkit-backface-visibility:hidden;
-        -moz-backface-visibility:hidden;
+        .transition(opacity 0.2s);
+        .backface-visibility(hidden);
     }
 
     .appointment.reserved {
@@ -304,6 +286,11 @@
         background-color: @appointment-lasso;
         width: 100%;
         cursor: default;
+    }
+
+    .appointment .location {
+        color: #ccc;
+        color: rgba(255, 255, 255, 0.6);
     }
 
     .appointment.reserved.hover {
@@ -341,12 +328,6 @@
     .appointment.free.unconfirmed {
         background-color: hsla(hue(@appointment-free), saturation(@appointment-free), lightness(@appointment-free), @appointment-unconfirmed-alpha);
     }
-
-    .appointment .location {
-        color: #ccc;
-        color: rgba(255, 255, 255, 0.6);
-    }
-
 }
 
 .ui-resizable {
