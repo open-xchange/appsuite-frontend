@@ -78,13 +78,14 @@ define("io.ox/mail/main",
         // folder tree
         commons.addFolderView(app, { type: 'mail' });
 
-        // sound
-        audio = $('<audio>', { src: ox.base + '/apps/io.ox/mail/images/ping.mp3' })
-            .hide().prop('volume', 0.40).appendTo(win.nodes.main);
-
-        api.on('new-mail', function (e, mails) {
-            audio.get(0).play();
-        });
+// TODO: re-enable once we have a proper sound and a user setting
+//        // sound
+//        audio = $('<audio>', { src: ox.base + '/apps/io.ox/mail/images/ping.mp3' })
+//            .hide().prop('volume', 0.40).appendTo(win.nodes.main);
+//
+//        api.on('new-mail', function (e, mails) {
+//            audio.get(0).play();
+//        });
 
         var vsplit = commons.vsplit(win.nodes.main);
         left = vsplit.left.addClass('border-right');

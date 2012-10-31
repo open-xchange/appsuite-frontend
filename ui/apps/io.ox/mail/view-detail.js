@@ -393,15 +393,18 @@ define('io.ox/mail/view-detail',
         drawThread: (function () {
 
             function autoResolve(e) {
-                // determine visible nodes
-                var pane = $(this), node = e.data.node,
-                    top = pane.scrollTop(), bottom = top + node.parent().height();
-                e.data.nodes.each(function () {
-                    var self = $(this), pos = self.position();
-                    if (pos.top > top && pos.top < bottom) {
-                        self.trigger('resolve');
-                    }
-                });
+                // check for data (due to debounce)
+                if (e.data) {
+                    // determine visible nodes
+                    var pane = $(this), node = e.data.node,
+                        top = pane.scrollTop(), bottom = top + node.parent().height();
+                    e.data.nodes.each(function () {
+                        var self = $(this), pos = self.position();
+                        if (pos.top > top && pos.top < bottom) {
+                            self.trigger('resolve');
+                        }
+                    });
+                }
             }
 
             function drawThread(node, list, pos, top, bottom, mails) {
@@ -433,7 +436,7 @@ define('io.ox/mail/view-detail',
                 // set initial scroll position (37px not to see thread's inline links)
                 top = nodes.eq(pos).position().top;
                 scrollpane.scrollTop(list.length === 1 ? 0 : top);
-                scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 250));
+                scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100, true));
                 scrollpane.trigger('scroll'); // to be sure
                 nodes = frag = node = scrollpane = list = mail = mails = null;
             }
@@ -478,14 +481,14 @@ define('io.ox/mail/view-detail',
         draw: function (data) {
             var picture;
             this.append(
-                picture = $('<div>').addClass('contact-picture').hide()
+                picture = $('<div>').addClass('contact-picture')
             );
             require(['io.ox/contacts/api'], function (api) {
                 // get contact picture
                 api.getPictureURL(data.from[0][1], { width: 64, height: 64, scaleType: 'contain' })
                     .done(function (url) {
                         if (url) {
-                            picture.css({ backgroundImage: 'url(' + url + ')', display: '' });
+                            picture.css({ backgroundImage: 'url(' + url + ')' });
                         }
                         if (/dummypicture\.png$/.test(url)) {
                             picture.addClass('default-picture');

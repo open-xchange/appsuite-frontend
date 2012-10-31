@@ -924,6 +924,7 @@ define("io.ox/core/desktop",
 
                     open: function () {
                         if (!this.active) {
+                            self.trigger('search:open');
                             self.nodes.body.addClass('search-open');
                             self.nodes.searchField.focus();
                             this.active = true;
@@ -933,10 +934,11 @@ define("io.ox/core/desktop",
 
                     close: function () {
                         if (this.active) {
+                            self.trigger('search:close');
                             self.nodes.body.removeClass('search-open');
                             this.active = false;
                             self.nodes.searchField.val('');
-                            self.trigger('cancel-search', '');
+                            self.trigger('search:cancel cancel-search');
                             this.query = this.previous = '';
                         }
                         return this;

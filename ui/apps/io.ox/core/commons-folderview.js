@@ -251,15 +251,25 @@ define('io.ox/core/commons-folderview',
             app.getWindow().nodes.title.find('.' + UP).removeClass(UP).addClass(DOWN);
             top = container.scrollTop();
             disablePermanent();
-            sidepanel[options.permanent ? 'hide' : 'fadeOut']();
+            if (options.permanent) {
+                sidepanel.hide();
+            } else {
+                app.getWindow().off('search:open', fnHide);
+                sidepanel.fadeOut();
+            }
             visible = false;
         };
 
         fnShow = function () {
             if (!visible) {
                 app.getWindow().nodes.title.find('.' + DOWN).removeClass(DOWN).addClass(UP);
-                if (options.permanent) { enablePermanent(); }
-                sidepanel[options.permanent ? 'show' : 'fadeIn']();
+                if (options.permanent) {
+                    enablePermanent();
+                    sidepanel.show();
+                } else {
+                    app.getWindow().on('search:open', fnHide);
+                    sidepanel.fadeIn();
+                }
                 container.scrollTop(top);
                 visible = true;
             }
