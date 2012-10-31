@@ -2848,24 +2848,35 @@ define('io.ox/office/editor/editor',
                 }
             });
 
-            var lastPosLeft = -1,
-                lastPosTop = -1,
-                defaultTabstop = self.getDocumentAttributes().defaulttabstop;
+            var defaultTabstop = self.getDocumentAttributes().defaulttabstop,
+                paraStyles = paragraphStyles.getElementAttributes(paragraph),
+                paraTabstops = [];
+
+            // paragraph tab stop definitions
+            if (paraStyles && paraStyles.tabstops) {
+                paraTabstops = paraStyles.tabstops;
+            }
+
             _(allTabSpanNodes).each(function (tabSpanNode) {
                 var pos = tabSpanNode.position();
                 if (pos) {
                     var leftHMM = Utils.convertLengthToHmm(pos.left, "px"),
-                        topHMM = Utils.convertLengthToHmm(pos.top, "px"),
-                        width = 0, mustExtendTab = false;
-                    if ((lastPosLeft === -1) && (lastPosTop === -1)) {
-                        lastPosLeft = leftHMM;
-                        lastPosTop = topHMM;
+                        width = 0;
+
+                    // paragraph tab stops
+                    if (paraTabstops && paraTabstops.length > 0) {
+                        var tabstop = _.find(paraTabstops, function (tab) { return (leftHMM + 1) < tab.pos; });
+                        if (tabstop) {
+                            // tabsize calculation based on the paragraph defined tabstop
+                            width = Math.max(0, tabstop.pos - (leftHMM % tabstop.pos));
+                        }
                     }
-                    else if ((lastPosLeft === leftHMM) && (lastPosTop === topHMM)) {
-                        mustExtendTab = true;
+
+                    if (width <= 1) {
+                        // tabsize calculation based on default tabstop
+                        width = Math.max(0, defaultTabstop - (leftHMM % defaultTabstop));
+                        width = (width <= 1) ? defaultTabstop : width; // no 0 tab size allowed, check for <= 1 to prevent rounding errors
                     }
-                    width = mustExtendTab ? defaultTabstop : Math.max(0, defaultTabstop - (leftHMM % defaultTabstop));
-                    width = (width <= 1) ? defaultTabstop : width; // no 0 tab size allowed, check for <= 1 to prevent rounding errors
                     tabSpanNode.css('margin-left', (width / 100) + "mm");
                 }
             });
@@ -3914,7 +3925,7 @@ define('io.ox/office/editor/editor',
 
             // split the text span again to get initial character formatting for the tab
             // just use the default tab stop - value will be updated by validateParagraph
-            tabSpan = DOM.splitTextSpan(node, 0).css('margin-left', (defaultTabstop / 100) + "mm");
+            tabSpan = DOM.splitTextSpan(node, 0);
             var pos = tabSpan.position();
             if (pos) {
                 var leftHMM = Utils.convertLengthToHmm(pos.left, "px");
