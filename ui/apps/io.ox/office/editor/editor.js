@@ -2906,23 +2906,21 @@ define('io.ox/office/editor/editor',
 
         /**
          * Private helper function to update all tabs inside a paragraph. This
-         * function just works only with the default tab size and doesn't use
-         * paragraph tab stop definitions.
+         * function uses both the default tab size and existing paragraph tab
+         * stop definitions.
+         * Currently only left aligned tabs without character filling are
+         * supported!
          *
          * @param {HTMLElement|jQuery} paragraph
          *  The paragraph element to be validated. If this object is a jQuery
          *  collection, uses the first DOM node it contains.
          */
         function adjustTabsOfParagraph(paragraph) {
-            var allTabSpanNodes = [];
+            var allTabNodes = [];
 
             Position.iterateParagraphChildNodes(paragraph, function (node) {
                 if (DOM.isTabNode(node)) {
-                    // first child span of div.tab node
-                    var spanNode = node.firstChild;
-                    if (spanNode) {
-                        allTabSpanNodes.push(spanNode);
-                    }
+                    allTabNodes.push(node);
                 }
             });
 
@@ -2935,8 +2933,8 @@ define('io.ox/office/editor/editor',
                 paraTabstops = paraStyles.tabstops;
             }
 
-            _(allTabSpanNodes).each(function (tabSpanNode) {
-                var pos = tabSpanNode.position();
+            _(allTabNodes).each(function (tabNode) {
+                var pos = $(tabNode).position();
                 if (pos) {
                     var leftHMM = Utils.convertLengthToHmm(pos.left, "px"),
                         width = 0;
@@ -2955,7 +2953,8 @@ define('io.ox/office/editor/editor',
                         width = Math.max(0, defaultTabstop - (leftHMM % defaultTabstop));
                         width = (width <= 1) ? defaultTabstop : width; // no 0 tab size allowed, check for <= 1 to prevent rounding errors
                     }
-                    tabSpanNode.css('margin-left', (width / 100) + "mm");
+                    $(tabNode).css('width', (width / 100) + "mm");
+                    $(tabNode).css('overflow', 'hidden');
                 }
             });
         }
@@ -3994,9 +3993,8 @@ define('io.ox/office/editor/editor',
         function implInsertTab(position) {
             var domPos = Position.getDOMPosition(editdiv, position),
                 node = (domPos && domPos.node) ? domPos.node.parentNode : null,
-                tabSpan = null,
-                defaultTabstop = self.getDocumentAttributes().defaulttabstop;
-
+                tabSpan = null;
+            
             // check position
             if (!DOM.isPortionSpan(node)) {
                 Utils.warn('Editor.implInsertTab(): expecting text position to insert tab.');
@@ -4009,12 +4007,6 @@ define('io.ox/office/editor/editor',
             // split the text span again to get initial character formatting for the tab
             // just use the default tab stop - value will be updated by validateParagraph
             tabSpan = DOM.splitTextSpan(node, 0);
-            var pos = tabSpan.position();
-            if (pos) {
-                var leftHMM = Utils.convertLengthToHmm(pos.left, "px");
-                var width = Math.max(0, defaultTabstop - (leftHMM % defaultTabstop)) / 100;
-                tabSpan.css('margin-left', width + "mm");
-            }
 
             // insert a new text field before the addressed text node, move
             // the tab span element into the tab container node
