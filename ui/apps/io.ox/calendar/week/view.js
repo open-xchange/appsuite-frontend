@@ -399,7 +399,7 @@ define('io.ox/calendar/week/view',
                                                 $('<a href="#">').addClass('control prev').append($('<i>').addClass('icon-chevron-left'))
                                             ),
                                         $('<li>').append(
-                                            $('<a>').addClass('link today').text(gt('Today'))
+                                            $('<a href="#">').addClass('link today').text(gt('Today'))
                                         ),
                                         $('<li>')
                                             .append(
