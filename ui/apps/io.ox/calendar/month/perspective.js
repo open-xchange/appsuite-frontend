@@ -22,33 +22,6 @@ define('io.ox/calendar/month/perspective',
 
     var perspective = new ox.ui.Perspective('month');
 
-    // TODO: Do this properly - too much flicker right now
-//    var lastScrollTop = 0,
-//
-//        scrollAhead = true,
-//
-//        getLastScrollTop = function () {
-//            var top = $(this).scrollTop();
-//            scrollAhead = lastScrollTop < top;
-//            lastScrollTop = top;
-//        },
-//
-//        magneticScroll = _.debounce(function () {
-//            var self = $(this),
-//                weeks = self.find('.week'),
-//                height = weeks.outerHeight(),
-//                top = self.scrollTop(),
-//                y = Math[scrollAhead ? 'ceil' : 'floor'](top / height),
-//                delta = (weeks.eq(y).position() || { top: 0 }).top;
-//            // adjust scroll position
-//            self.off('scroll', magneticScroll)
-//                .stop()
-//                .animate({ scrollTop: top + delta }, 100, function () {
-//                    self.on('scroll', magneticScroll);
-//                    self = weeks = null;
-//                });
-//        }, 50);
-
     _.extend(perspective, {
 
         scaffold: $(),      // perspective
@@ -213,8 +186,6 @@ define('io.ox/calendar/month/perspective',
                     });
                 }
             }
-
-            //this.pane.on('scroll', magneticScroll).on('scroll', getLastScrollTop);
         },
 
         render: function (app) {
@@ -340,7 +311,6 @@ define('io.ox/calendar/month/perspective',
                     } else {
                         self.folder = data.id;
                     }
-//                    console.log('folder:', self.folder);
                     self.update();
                 });
             }, this);
