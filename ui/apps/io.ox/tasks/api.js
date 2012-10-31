@@ -58,7 +58,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 order: "asc",
                 timezone: "UTC",
                 getData: function (query) {
-                    return { folder: folderApi.getDefaultFolder("tasks"), pattern: query };
+                    return { folder: query.folder, pattern: query.pattern };
                 }
             }
         }

@@ -122,7 +122,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
                 } else {
                     column = 202;
                 }
-                return api.search(win.search.query, {folder: this.prop('folder'), sort: column, order: order}).pipe(function (data) {
+                return api.search({pattern: win.search.query, folder: this.prop('folder')}, {sort: column, order: order}).pipe(function (data) {
                     if (sort !== 'state') {
                         datacopy = _.copy(data, true);
                     } else {
