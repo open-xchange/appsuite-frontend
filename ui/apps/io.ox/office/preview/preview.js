@@ -61,7 +61,14 @@ define('io.ox/office/preview/preview',
 
             if (_.isString(htmlPreview)) {
                 // import the passed HTML markup
-                node.html(htmlPreview);
+                // !!!
+                // don't use the jquery node.html()
+                // method here since this mixes up the defs
+                // section of the svg content (possibly
+                // due to namespace problems)
+                // !!!
+                node.get()[0].innerHTML = htmlPreview;
+
                 // TODO: remove 'hr's in backend, so we don't need to remove it
                 // here for cost reasons
                 node.children('hr').hide();
