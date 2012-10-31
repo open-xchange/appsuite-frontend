@@ -93,7 +93,7 @@
         color: #555;
         position: absolute;
         right: 0px;
-        width: 100/8+1%; /* fix for different round functions */
+        width: 100/8%; /* fix for different round functions */
         height: 100/6%;
         padding: 13px 13px 13px 1px;
         text-align: right;
