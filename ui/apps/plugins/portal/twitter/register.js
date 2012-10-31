@@ -101,9 +101,10 @@ define('plugins/portal/twitter/register',
                 $('<div class="io-ox-portal-item">').text(gt('No tweets yet.')));
         } else {
             _(tweets).each(function (tweet) {
-                var message = $('<div>').html(tweet.text).text();
+                var message = $('<div>').html(tweet.text).text(),
+                    tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str;
                 $node.append(
-                    $('<div class="io-ox-portal-item">').append(
+                    $('<a class="io-ox-portal-item">').attr({href: tweetLink, target: '_blank'}).append(
                         $('<span class="io-ox-portal-preview-firstline">').text('@' + tweet.user.name + ': '),
                         $('<span class="io-ox-portal-preview-secondline">').text(message)
                     )

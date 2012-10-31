@@ -133,6 +133,8 @@
     font-style: italic;
 }
 .io-ox-portal-typeA .io-ox-portal-item {
+    display: inline-block;
+    text-decoration: none;
     max-height: 4.5em;
     line-height: 1.5em;
     font-size: 1em;

@@ -76,7 +76,7 @@ define("plugins/portal/rss/register",
                     $content = $('<div class="io-ox-portal-content">');
                 data.done(function (loaded) {
                     _(loaded).each(function (entry) {
-                        $('<div class="io-ox-portal-item">').append(
+                        $('<a class="io-ox-portal-item">').attr({href: entry.url, target: '_blank'}).append(
                             $('<span class="io-ox-portal-preview-firstline">').text(entry.feedTitle + ": "),
                             $('<span class="io-ox-portal-preview-secondline">').text(entry.subject)
                         ).appendTo($content);
