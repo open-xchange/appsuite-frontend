@@ -156,7 +156,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             }
 
             $anchor.on('click', function () {
-                var $dateInput = $('<input type="text" class="input-small">').css({
+                var $dateInput = $('<input type="text" class="input-small no-clone">').css({
                     marginBottom: 0
                 }).val(renderDate());
                 var keys = new KeyListener($dateInput);
