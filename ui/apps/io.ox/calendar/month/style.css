@@ -84,7 +84,6 @@
         height: 100/6%; /* might be 6 weeks in a month */
         min-height: 80px;
         max-height: 160px;
-        border-bottom: 1px solid #ccc;
     }
     
     .week-info {
@@ -113,12 +112,6 @@
         font-family: Arial, Helvetica, sans-serif;
     }
     
-    
-    @-webkit-keyframes day-out {
-        from { background-color: #fff; }
-        to { background-color: #e0e0e0; }
-    }
-    
     .day {
         position: relative;
         display: inline-block;
@@ -126,27 +119,20 @@
         height: 100%;
         min-height: 80px;
         border-right: 1px solid #ccc;
+        border-top: 1px solid #ccc;
         background-color: #fff;
-        -webkit-transition: background-color 0.2s linear;
-        -moz-transition: background-color 0.2s linear;
-        -o-transition: background-color 0.2s linear;
-        -ms-transition: background-color 0.2s linear;
-        transition: background-color 0.2s linear;
-        backface-visibility:hidden;
-        -webkit-backface-visibility:hidden;
-        -moz-backface-visibility:hidden;
+        .transition(background-color 0.2s linear);
+        .backface-visibility(hidden);
+        .box-sizing(content-box);
     }
 
     .day.bordertop, .week-info.bordertop {
-        border-top: 1px solid black;
     }
     
     .day.borderbottom {
-        border-bottom: 1px solid black;
     }
 
     .day.borderleft {
-        border-left: 1px solid black;
     }
 
     .day.out {
