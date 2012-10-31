@@ -36,7 +36,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
         requests: {
             all: {
                 folder: folderApi.getDefaultFolder("tasks"),
-                columns: "1,20,200,202,203,220,300,309",
+                columns: "1,20,200,202,203,220,300,301",
                 sort: "202",
                 order: "asc",
                 cache: true, // allow DB cache
@@ -50,6 +50,16 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             get: {
                 action: "get",
                 timezone: "UTC"
+            },
+            search: {
+                action: "search",
+                columns: "1,20,200,202,220,300,301",
+                sort: "202",
+                order: "asc",
+                timezone: "UTC",
+                getData: function (query) {
+                    return { folder: folderApi.getDefaultFolder("tasks"), pattern: query };
+                }
             }
         }
     });
