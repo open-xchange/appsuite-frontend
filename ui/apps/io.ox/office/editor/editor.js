@@ -3872,7 +3872,9 @@ define('io.ox/office/editor/editor',
             var documentAttributes = self.getDocumentAttributes();
             
             // read various document attributes and set it at the document styles
-            documentAttributes.defaulttabstop = attributes.defaulttabstop;
+            if (attributes.defaulttabstop) {
+                documentAttributes.defaulttabstop = attributes.defaulttabstop;
+            }
             if (attributes.zoom) {
                 documentAttributes.zoom = attributes.zoom;
             }
