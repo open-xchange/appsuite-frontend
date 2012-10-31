@@ -192,7 +192,6 @@ define('io.ox/calendar/month/perspective',
                 self = this,
                 firstDay = $('[date="' + param.date.getYear() + '-' + param.date.getMonth() + '-1"]', self.pane),
                 scrollToDate = function (pos) {
-
                     // update current date
                     self.current = param.date;
 
@@ -205,12 +204,12 @@ define('io.ox/calendar/month/perspective',
                 };
 
             if (firstDay.length > 0) {
-                scrollToDate(firstDay.position().top  + this.scrollTop() - 24);
+                scrollToDate(firstDay.position().top  + this.scrollTop() + 2);
             } else {
                 if (param.date.getTime() < self.current.getTime()) {
                     this.drawWeeks({up: true}).done(function () {
                         firstDay = $('[date="' + param.date.getYear() + '-' + param.date.getMonth() + '-1"]', self.pane);
-                        scrollToDate(firstDay.position().top  + self.scrollTop() - 23);
+                        scrollToDate(firstDay.position().top  + self.scrollTop() + 2);
                     });
                 }
             }
