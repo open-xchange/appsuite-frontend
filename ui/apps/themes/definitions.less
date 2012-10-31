@@ -176,6 +176,7 @@
 .transition(@transition: all 1s linear) {
     -webkit-transition: @transition;
     -moz-transition: @transition;
+    -ms-transition: @transition;
     transition: @transition;
 }
 
@@ -187,6 +188,7 @@
 .animation-name(@name) {
     -webkit-animation-name: @name;
     -moz-animation-name: @name;
+    -ms-animation-name: @name;
     animation-name: @name;
 }
 
@@ -210,4 +212,10 @@
     overflow-y: @type;
     -webkit-overflow-scrolling: touch;
 } 
+
+.backface-visibility(@type: hidden) {
+    backface-visibility: @type;
+    -webkit-backface-visibility: @type;
+    -moz-backface-visibility: @type;
+}
 
