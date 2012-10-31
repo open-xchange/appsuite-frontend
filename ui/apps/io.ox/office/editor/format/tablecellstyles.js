@@ -141,13 +141,7 @@ define('io.ox/office/editor/format/tablecellstyles',
                 // explicitly set cell attributes (that must not be overridden)
                 cellAttributes = StyleSheets.getExplicitAttributes(cell),
                 // setting some cell position information
-                row = cell.parent(),
-                isFirstCellInRow = ($('> th, > td', row).index(cell) === 0),
-                isLastCellInRow = ($('> th, > td', row).index(cell) === $('> th, > td', row).length - 1),
-                isFirstRow = ($('> tr', row.parent()).index(row) === 0),
-                isLastRow = ($('> tr', row.parent()).index(row) === $('> tr', row.parent()).length - 1),
-                isOddRow = ($('> tr', row.parent()).index(row) % 2 !== 0),
-                isEvenRow = !isOddRow;
+                cellOrientation = DOM.evaluateCellOrientationInTable(cell);
 
             // _.each(tableAttributes, function (val, key) {
             //     if (_.isObject(val)) { val = JSON.stringify(val); }
@@ -165,34 +159,36 @@ define('io.ox/office/editor/format/tablecellstyles',
             }
 
             // borderleft
-            if ((_.isUndefined(cellAttributes.borderleft)) && (! _.isUndefined(tableAttributes.borderleft))) {
+            if ((_.isUndefined(cellAttributes.borderleft)) && (cellOrientation.firstcol) && (! _.isUndefined(tableAttributes.borderleft))) {
                 cell.css('border-left', this.getCssBorder(tableAttributes.borderleft));
             }
 
             // borderright
-            if ((_.isUndefined(cellAttributes.borderright)) && (! _.isUndefined(tableAttributes.borderright))) {
+            if ((_.isUndefined(cellAttributes.borderright)) && (cellOrientation.lastcol) && (! _.isUndefined(tableAttributes.borderright))) {
                 cell.css('border-right', this.getCssBorder(tableAttributes.borderright));
             }
 
             // bordertop
-            if ((_.isUndefined(cellAttributes.bordertop)) && (! _.isUndefined(tableAttributes.bordertop))) {
+            if ((_.isUndefined(cellAttributes.bordertop)) && (cellOrientation.firstrow) && (! _.isUndefined(tableAttributes.bordertop))) {
                 cell.css('border-top', this.getCssBorder(tableAttributes.bordertop));
             }
 
             // borderbottom
-            if ((_.isUndefined(cellAttributes.borderbottom)) && (! _.isUndefined(tableAttributes.borderbottom))) {
+            if ((_.isUndefined(cellAttributes.borderbottom)) && (cellOrientation.lastrow) && (! _.isUndefined(tableAttributes.borderbottom))) {
                 cell.css('border-bottom', this.getCssBorder(tableAttributes.borderbottom));
             }
 
             // borderinsideh
-            if ((_.isUndefined(cellAttributes.bordertop)) && (! isFirstRow) && (! _.isUndefined(tableAttributes.borderinsideh))) {
+            if ((_.isUndefined(cellAttributes.bordertop)) && (! cellOrientation.firstrow) && (! _.isUndefined(tableAttributes.borderinsideh))) {
                 cell.css('border-top', this.getCssBorder(tableAttributes.borderinsideh));
             }
 
             // borderinsidev
-            if ((_.isUndefined(cellAttributes.borderleft)) && (! isFirstCellInRow) && (! _.isUndefined(tableAttributes.borderinsidev))) {
+            if ((_.isUndefined(cellAttributes.borderleft)) && (! cellOrientation.firstcol) && (! _.isUndefined(tableAttributes.borderinsidev))) {
                 cell.css('border-left', this.getCssBorder(tableAttributes.borderinsidev));
             }
+
+            // TODO: taking care of further optional attributes
 
         }
 

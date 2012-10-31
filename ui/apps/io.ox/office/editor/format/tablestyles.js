@@ -172,26 +172,40 @@ define('io.ox/office/editor/format/tablestyles',
 
             var // the cell element (source node may be a paragraph or text span)
                 cell = sourceNode.closest('td'),
-                // the table row containing the cell
-                row = cell.parent(),
-                // whether cell is in first row
-                isFirstRow = (cell.length > 0) && (row.index() === 0),
-                // whether cell is in last row (jQuery.siblings() excludes the own row!)
-                isLastRow = (cell.length > 0) && (row.index() === row.siblings('tr').length);
+                // an object containing information about the cell orientation inside the table
+                cellOrientation = {},
+                // an object containing the style attributes defined in table styles for the specific table cell
+                tableStyleAttributes = {},
+                // an array containing the names of the optional table attributes
+                tableAttributeNames = ['wholetable',
+                                       'firstrow',
+                                       'lastrow',
+                                       'firstcol',
+                                       'lastcol',
+                                       'band1vert',
+                                       'band2vert',
+                                       'band1horz',
+                                       'band2horz',
+                                       'necell',
+                                       'nwcell',
+                                       'secell',
+                                       'swcell'];
 
             // evaluating optional table attributes
-            // family must be table, styleAttributes is the complete attr-object from
-            // insertStyleSheet and sourceNode is the cell
             if (family === 'table') {
 
-                // taking only care of 'wholetable' -> needs to be expanded
-                if ((styleAttributes.wholetable) && (styleAttributes.wholetable.table)) {
-                    return styleAttributes.wholetable.table;
-                }
+                cellOrientation = DOM.evaluateCellOrientationInTable(cell);
 
+                // evaluating attributes for all other optional attributes
+                // -> overwriting values from global ('wholetable') to specific ('swcell')
+                _.each(tableAttributeNames, function (name) {
+                    if ((cellOrientation[name]) && (styleAttributes[name]) && (styleAttributes[name].table)) {
+                        tableStyleAttributes = _.extend(tableStyleAttributes, styleAttributes[name].table);
+                    }
+                });
+
+                return tableStyleAttributes;
             }
-
-            // TODO: collect attributes from the 'attributes' parameter according to the cell position
 
             return {};
         }
