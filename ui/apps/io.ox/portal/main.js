@@ -289,9 +289,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                     }
                 }
 
-                if (/^filler/.test(extension.id)) {
-                    $tile.off('click');
-                }
+
 
                 if (!extension.loadTile) {
                     extension.loadTile = function () {
@@ -302,12 +300,15 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                 if (!extension.drawTile) {
                     extension.drawTile = function () {
                         var $node = $(this);
-                        $(this).append(
-                            $('<div class="io-ox-portal-title">').append(
-                                $('<img class="tile-image">'),
-                                $('<h1 class="tile-heading"/>')
-                            )
-                        );
+                        
+                        if (!/^filler/.test(extension.id)) {
+                            $(this).append(
+                                $('<div class="io-ox-portal-title">').append(
+                                    $('<img class="tile-image">'),
+                                    $('<h1 class="tile-heading"/>')
+                                )
+                            );
+                        }
                         extension.asyncMetadata("type").done(function (type) {
                             if (type === control.CANCEL) {
                                 $tile.remove();
@@ -364,6 +365,10 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                     };
                 } //END of "is draw method missing?"
 
+                if (/^filler/.test(extension.id)) {
+                    $tile.off('click');
+                }
+
                 if (extension.requiresSetUp()) {
                     $tile.addClass("io-ox-portal-createMe");
                     return (extension.invoke.apply(extension, ['drawCreationDialog', $tile].concat($.makeArray(arguments))) || $.Deferred())
@@ -382,7 +387,9 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                         .done(function () {
                             $tile.idle();
                             extension.invoke('postTile', $content, extension);
-                            $('<div class="io-ox-portal-actions">').append($('<i class="icon-remove io-ox-portal-action">')).appendTo($tile);
+                            if (!/^filler/.test(extension.id)) {
+                                $('<div class="io-ox-portal-actions">').append($('<i class="icon-remove io-ox-portal-action">')).appendTo($tile);
+                            }
                         });
                 }).fail(function (e) {
                     $tile.idle().remove();

@@ -92,7 +92,6 @@ define("plugins/portal/rss/register",
                     ),
                     $content
                 );
-               
             },
             draw: function (feed) {
                 var togglePreview = function () {
