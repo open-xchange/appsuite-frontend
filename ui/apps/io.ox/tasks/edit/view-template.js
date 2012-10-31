@@ -308,7 +308,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
 
                 node.append(
                     $('<div class="input-append">').append(
-                        $('<input type="text" class="add-participant">'),
+                        $('<input type="text" class="add-participant task-participant-input-field">'),
                         $('<button class="btn" type="button" data-action="add">')
                             .append($('<i class="icon-plus">'))
                     ),

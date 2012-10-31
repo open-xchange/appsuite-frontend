@@ -83,8 +83,8 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             temp = null;
             
             //partitipants tab
-            this.getRow(0, app, 'participants').invoke("draw", participantsTab, self.baton);
-            this.getRow(1, app, 'participants').invoke("draw", participantsTab, self.baton);
+            util.buildExtensionRow(participantsTab, [this.getRow(0, app, 'participants')], self.baton);
+            util.buildExtensionRow(participantsTab, [this.getRow(1, app, 'participants')], self.baton);
             
             //attachmentTab
             var attachmentDisplay = $('<div>').addClass("task-attachment-display")
