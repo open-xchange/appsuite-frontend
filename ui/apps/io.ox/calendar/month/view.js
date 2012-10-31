@@ -70,6 +70,7 @@ define('io.ox/calendar/month/view',
                 }
                 this.$el.append(
                     $('<div>')
+                        .css('z-index', list.days.length - i)
                         .addClass('day out' +
                             (day.isFirst ? ' first' : '') +
                             (day.isToday ? ' today' : '') +
