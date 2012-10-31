@@ -113,21 +113,6 @@ define('io.ox/core/commons-folderview',
         }
 
         ext.point(POINT + '/sidepanel/toolbar').extend({
-            id: 'folderselect',
-            index: 250,
-            draw: function (baton) {
-                var ul;
-                this.append(
-                    $('<div class="toolbar-action pull-left dropdown dropup">').append(
-                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-plus"></a>'),
-                        ul = $('<ul class="dropdown-menu">')
-                    )
-                );
-                ext.point(POINT + '/sidepanel/toolbar/folderselect').invoke('draw', ul, baton);
-            }
-        });
-
-        ext.point(POINT + '/sidepanel/toolbar').extend({
             id: 'toggle',
             index: 1000,
             draw: function (baton) {
@@ -170,6 +155,56 @@ define('io.ox/core/commons-folderview',
                 if (baton.options.type === 'mail') {
                     this.append($('<li>').append(
                         $('<a href="#">').text(gt('Add mail account')).on('click', addAccount)
+                    ));
+                }
+            }
+        });
+
+        function subscribeIMAPFolder(e) {
+            e.preventDefault();
+
+            require(['io.ox/core/tk/folderviews'], function (views) {
+                var options;
+                _(ext.point(POINT + '/options').all()).each(function (obj) {
+                    options = _.extend(obj, options || {});
+                });
+
+                var container = $('<div>');
+                var tree = e.data.app.folderView = new views[options.view](container, {
+                    type: options.type,
+                    rootFolderId: options.rootFolderId
+                });
+                tree.paint();
+
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog({
+                        width: 400,
+                        easyOut: true
+                    })
+                    .header(
+                        $('<h4>').text(gt('subscribe IMAP folders'))
+                    )
+                    .build(function () {
+                        this.getContentNode().append(
+                            container
+                        );
+                    })
+                    .addButton('cancel', 'Cancel')
+                    .show(function () {
+                    });
+                });
+
+            });
+
+        }
+
+        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+            id: 'subscribe-folder',
+            index: 200,
+            draw: function (baton) {
+                if (baton.options.type === 'mail') {
+                    this.append($('<li>').append(
+                        $('<a href="#">').text(gt('subscribe IMAP folders')).on('click', { app: baton.app }, subscribeIMAPFolder)
                     ));
                 }
             }
@@ -227,18 +262,6 @@ define('io.ox/core/commons-folderview',
             }
         });
 
-        ext.point(POINT + '/sidepanel/toolbar/folderselect').extend({
-            id: 'add-folder',
-            index: 100,
-            draw: function (baton) {
-                this.append($('<li>').append(
-                    $('<a href="#">').text(gt('Select folder'))
-                    .on('click', function () {
-                        console.log();
-                    })
-                ));
-            }
-        });
     }
 
     /**
