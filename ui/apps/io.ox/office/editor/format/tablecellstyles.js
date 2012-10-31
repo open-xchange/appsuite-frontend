@@ -126,43 +126,49 @@ define('io.ox/office/editor/format/tablecellstyles',
             isOddRow = ($('> tr', row.parent()).index(row) % 2 !== 0),
             isEvenRow = !isOddRow;
 
+        // _.each(tableAttributes, function (val, key) {
+        //     if (_.isObject(val)) { val = JSON.stringify(val); }
+        //     window.console.log("Table: " + key + " : " + val);
+        // });
+
+        // _.each(cellAttributes, function (val, key) {
+        //     if (_.isObject(val)) { val = JSON.stringify(val); }
+        //     window.console.log("Cell: " + key + " : " + val);
+        // });
+
         // fillcolor
-        if (tableAttributes.fillcolor && (! cellAttributes.fillcolor)) {
+        if ((_.isUndefined(cellAttributes.fillcolor)) && (! _.isUndefined(tableAttributes.fillcolor))) {
             cell.css('background-color', this.getCssColor(tableAttributes.fillcolor, 'fill'));
         }
 
         // borderleft
-        if (tableAttributes.borderleft && (! cellAttributes.borderleft)) {
+        if ((_.isUndefined(cellAttributes.borderleft)) && (! _.isUndefined(tableAttributes.borderleft))) {
             cell.css('border-left', this.getCssBorder(tableAttributes.borderleft));
         }
 
         // borderright
-        if (tableAttributes.borderright && (! cellAttributes.borderright)) {
+        if ((_.isUndefined(cellAttributes.borderright)) && (! _.isUndefined(tableAttributes.borderright))) {
             cell.css('border-right', this.getCssBorder(tableAttributes.borderright));
         }
 
         // bordertop
-        if (tableAttributes.bordertop && (! cellAttributes.bordertop)) {
+        if ((_.isUndefined(cellAttributes.bordertop)) && (! _.isUndefined(tableAttributes.bordertop))) {
             cell.css('border-top', this.getCssBorder(tableAttributes.bordertop));
         }
 
         // borderbottom
-        if (tableAttributes.borderbottom && (! cellAttributes.borderbottom)) {
+        if ((_.isUndefined(cellAttributes.borderbottom)) && (! _.isUndefined(tableAttributes.borderbottom))) {
             cell.css('border-bottom', this.getCssBorder(tableAttributes.borderbottom));
         }
 
         // borderinsideh
-        if (tableAttributes.borderinsideh) {
-            if ((! cellAttributes.bordertop) && (! isFirstRow)) {
-                cell.css('border-top', this.getCssBorder(tableAttributes.borderinsideh));
-            }
+        if ((_.isUndefined(cellAttributes.bordertop)) && (! isFirstRow) && (! _.isUndefined(tableAttributes.borderinsideh))) {
+            cell.css('border-top', this.getCssBorder(tableAttributes.borderinsideh));
         }
 
         // borderinsidev
-        if (tableAttributes.borderinsidev) {
-            if ((! cellAttributes.borderleft) && (! isFirstCellInRow)) {
-                cell.css('border-left', this.getCssBorder(tableAttributes.borderinsidev));
-            }
+        if ((_.isUndefined(cellAttributes.borderleft)) && (! isFirstCellInRow) && (! _.isUndefined(tableAttributes.borderinsidev))) {
+            cell.css('border-left', this.getCssBorder(tableAttributes.borderinsidev));
         }
 
     }

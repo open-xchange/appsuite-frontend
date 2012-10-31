@@ -54,7 +54,37 @@ define('io.ox/office/editor/format/tablestyles',
             /**
              * Grid width of columns in relative units. It is an array of numbers
              */
-            tablegrid: { def: [] }
+            tablegrid: { def: [] },
+
+            /**
+             * Left border of the table (set in tablecellstyles).
+             */
+            borderleft: { def: NO_BORDER },
+
+            /**
+             * Top border of the table (set in tablecellstyles).
+             */
+            bordertop: { def: NO_BORDER },
+
+            /**
+             * Right border of the table (set in tablecellstyles).
+             */
+            borderright: { def: NO_BORDER },
+
+            /**
+             * Bottom border of the table (set in tablecellstyles).
+             */
+            borderbottom: { def: NO_BORDER },
+
+            /**
+             * Horizontal borders inside the table (set in tablecellstyles).
+             */
+            borderinsideh: { def: NO_BORDER },
+
+            /**
+             * Vertical borders inside the table (set in tablecellstyles).
+             */
+            borderinsidev: { def: NO_BORDER }
 
         };
 
@@ -104,6 +134,18 @@ define('io.ox/office/editor/format/tablestyles',
             isFirstRow = (cell.length > 0) && (row.index() === 0),
             // whether cell is in last row (jQuery.siblings() excludes the own row!)
             isLastRow = (cell.length > 0) && (row.index() === row.siblings('tr').length);
+
+        // evaluating optional table attributes
+        // family must be table, styleAttributes is the complete attr-object from
+        // insertStyleSheet and sourceNode is the cell
+        if (family === 'table') {
+
+            // taking only care of 'wholetable' -> needs to be expanded
+            if ((styleAttributes.wholetable) && (styleAttributes.wholetable.table)) {
+                return styleAttributes.wholetable.table;
+            }
+
+        }
 
         // TODO: collect attributes from the 'attributes' parameter according to the cell position
 

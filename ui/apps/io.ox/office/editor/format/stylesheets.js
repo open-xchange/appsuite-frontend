@@ -244,8 +244,8 @@ define('io.ox/office/editor/format/stylesheets',
                     _(attributes).extend(styleSheet.attributes[family]);
                 }
 
-                // try resolver for style attributes of other families
-                if ((family !== styleFamily) && _.isFunction(childStyleAttributesResolver)) {
+                // try resolver for style attributes of other families or optional attributes (for tables)
+                if (_.isFunction(childStyleAttributesResolver)) {
                     _(attributes).extend(childStyleAttributesResolver.call(self, family, styleSheet.attributes, $(sourceNode)));
                 }
             }
