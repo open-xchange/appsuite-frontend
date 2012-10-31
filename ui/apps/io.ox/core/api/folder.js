@@ -402,6 +402,49 @@ define('io.ox/core/api/folder',
             });
         },
 
+        Bitmask: (function () {
+
+            var parts = { folder: 0, read: 7, write: 14, modify: 14, 'delete': 21, admin: 28 },
+
+                resolve = function (offset) {
+                    // use symbolic offset or plain numeric value?
+                    return offset in parts ? parts[offset] : offset;
+                };
+
+            return function (value) {
+
+                value = value || 0;
+
+                // this way we may forget the new operator
+                var Bitmask = {
+
+                    resolve: resolve,
+
+                    get: function (offset) {
+                        // return value?
+                        if (arguments.length === 0) {
+                            return value;
+                        } else {
+                            // return first 6 bits only
+                            return (value >> resolve(offset)) & 127;
+                        }
+                    },
+
+                    set: function (offset, bits) {
+                        offset = resolve(offset);
+                        // clear 6 bits first, then combine
+                        value = value & (536870911 ^ (127 << offset));
+                        // combine with given bits
+                        value = value | (bits << offset);
+                        return this;
+                    }
+                };
+
+                return Bitmask;
+            };
+
+        }()),
+
         derive: {
 
             bits: function (data, offset) {

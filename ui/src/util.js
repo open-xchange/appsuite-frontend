@@ -533,6 +533,8 @@
         }, $());
     };
 
+
+
     window.assert = function (value, message) {
         if (value) return;
         console.error(message || 'Assertion failed!');

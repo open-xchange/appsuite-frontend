@@ -335,7 +335,7 @@ define("io.ox/mail/api",
             sortKey: 'threaded-' + (options.sort || '610'),
             konfetti: true,
             order: options.order || 'desc',
-            includeSent: !accountAPI.is(options.folder, 'sent'),
+            includeSent: !accountAPI.is('sent', options.folder),
             cache: false, // never use server cache
             max: 1000 // apply internal limit to build threads fast enough
         });
