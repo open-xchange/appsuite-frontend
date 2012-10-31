@@ -34,7 +34,9 @@ define('io.ox/calendar/month/view',
 
         events: {
             'click .appointment': 'onClickAppointment',
-            'dblclick .day' : 'onCreateAppointment'
+            'dblclick .day' : 'onCreateAppointment',
+            'mouseenter .appointment': 'onEnterAppointment',
+            'mouseleave .appointment': 'onLeaveAppointment'
         },
 
         initialize: function (options) {
@@ -49,6 +51,16 @@ define('io.ox/calendar/month/view',
 
         onCreateAppointment: function (e) {
             this.trigger('createAppoinment', e, $(e.currentTarget).data('date'));
+        },
+
+        // handler for onmouseenter event for hover effect
+        onEnterAppointment: function (e) {
+            $('[data-cid="' + $(e.currentTarget).data('cid') + '"]').addClass('hover');
+        },
+
+        // handler for onmouseleave event for hover effect
+        onLeaveAppointment: function (e) {
+            $('[data-cid="' + $(e.currentTarget).data('cid') + '"]').removeClass('hover');
         },
 
         render: function () {

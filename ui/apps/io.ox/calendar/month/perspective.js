@@ -285,9 +285,10 @@ define('io.ox/calendar/month/perspective',
 
                     // highlight current visible month
                     if (month !== this.current.getTime()) {
-                        $('.day:not(.out)', this.pane).addClass('out');
                         this.current = new date.Local(month);
-                        $('[date^="' + this.current.getYear() + '-' + this.current.getMonth() + '-"]', this.pane).removeClass('out');
+                        $('.day:not(.out)', this.pane)
+                            .add($('[date^="' + this.current.getYear() + '-' + this.current.getMonth() + '-"]', this.pane))
+                            .toggleClass('out');
                         self.monthInfo.text(gt.noI18n(this.current.format('MMMM y')));
                     }
                 }, this));
