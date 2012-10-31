@@ -66,7 +66,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
         days: function ($anchor, attribute, options) {
             // TODO: Modal close. But how?!?
             var self = this;
-            var $dayList = $('<ul class="io-ox-recurrence-day-picker">');
+            var $dayList = $('<ul class="io-ox-recurrence-day-picker no-clone">');
             var nodes = {};
 
             this[attribute] = 1;
@@ -227,22 +227,19 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 // Construct the UI
                 this.controls = {
                     checkbox: $('<input type="checkbox">'),
-                    detailToggle: $('<a href="#">').text(gt("Show more")).hide(),
+                    detailToggle: $('<a href="#">').text(gt("Edit")).hide(),
                     typeRadios: {
                         daily: $('<input type="radio" name="recurrence_type" value="daily">'),
                         weekly: $('<input type="radio" name="recurrence_type" value="weekly">'),
                         monthly: $('<input type="radio" name="recurrence_type" value="monthly">'),
                         yearly: $('<input type="radio" name="recurrence_type" value="yearly">')
-                    },
-                    alternativeBoxes: {
-                        alternative1: $('<input type="radio" name="alternative" value="1">'),
-                        alternative2: $('<input type="radio" name="alternative" value="2">')
                     }
                 };
 
                 this.nodes = {
                     summary: $('<span>'),
                     typeChoice: $('<div class="row-fluid">').hide(),
+                    hint: $('<div class="row-fluid muted">').hide(),
                     alternative1: $('<div class="row-fluid">').hide(),
                     alternative2: $('<div class="row-fluid">').hide(),
                     endsChoice: $('<div class="row-fluid">').hide()
@@ -428,15 +425,20 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 // Events
 
                 this.controls.checkbox.on("change", function () {
-                    if (self.lastConfiguration) {
-                        self.model.set(self.lastConfiguration);
-                    } else {
-                        self.model.set({
-                            recurrence_type: RECURRENCE_TYPES.WEEKLY,
-                            interval: self.sentences.weekly.interval,
-                            days: self.sentences.weekly.days
-                        });
+                    if (self.controls.checkbox.is(":checked")) {
+                        if (self.lastConfiguration) {
+                            self.model.set(self.lastConfiguration);
+                        } else {
+                            self.model.set({
+                                recurrence_type: RECURRENCE_TYPES.WEEKLY,
+                                interval: self.sentences.weekly.interval,
+                                days: self.sentences.weekly.days
+                            });
+                        }
                         self.showMore();
+                    } else {
+                        self.updateModel();
+                        self.showLess();
                     }
                 });
 
@@ -454,12 +456,6 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     });
                 });
 
-                _(this.controls.alternativeBoxes).each(function ($radioButton) {
-                    $radioButton.on("change", function () {
-                        self.updateModel();
-                    });
-                });
-
                 _("recurrence_type days month day_in_month interval occurrences until".split(" ")).each(function (attr) {
                     self.observeModel("change:" + attr, self.modelChanged, self);
                 });
@@ -471,7 +467,11 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
 
             },
+            setHint: function (string) {
+                this.nodes.hint.empty().append($('<small>').text(string));
+            },
             modelChanged: function () {
+                var self = this;
                 if (this.updatingModel) {
                     return;
                 }
@@ -479,75 +479,100 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 var type = this.model.get('recurrence_type');
                 if (type === RECURRENCE_TYPES.NO_RECURRENCE) {
                     this.controls.checkbox.removeAttr("checked");
-                    this.nodes.summary.empty();
+                    this.nodes.summary.empty().text(gt("Repeat"));
+                    this.controls.detailToggle.hide();
                 } else {
+                    this.controls.detailToggle.show();
                     this.controls.checkbox.attr('checked', 'checked');
-                    this.lastConfiguration = {
-                        recurrence_type: this.model.get("recurrence_type"),
-                        days: this.model.get("days"),
-                        day_in_month: this.model.get("day_in_month"),
-                        interval: this.model.get("interval"),
-                        occurrences: this.model.get("occurrences"),
-                        until: this.model.get("until")
-                    };
+                    this.lastConfiguration = {};
+
+                    _(["recurrence_type", "days", "day_in_month", "interval", "occurrences", "until"]).each(function (attr) {
+                        if (self.model.isSet(attr)) {
+                            self.lastConfiguration[attr] = self.model.get(attr);
+                        }
+                    });
+
+                    var useLinksHint = gt("Click on the links to change the values.");
+                    var chooseSentenceHint = gt("Click on a sentence to choose when to repeat the appointment.");
+
                     this.nodes.alternative1.children().detach();
                     this.nodes.alternative2.children().detach();
-                    
-                    // Choose and configure the correct type of sentence to represent this recurrence
                     switch (type) {
                     case RECURRENCE_TYPES.DAILY:
                         this.controls.typeRadios.daily.attr('checked', 'checked');
                         this.nodes.alternative1.append(this.sentences.daily.$el);
                         this.setChoice(this.sentences.daily);
-                        this.choice.set('interval', this.model.get('interval'));
+                        this.choice.set('interval', this.model.get('interval') || 1);
+                        this.setHint(useLinksHint);
                         break;
                     case RECURRENCE_TYPES.WEEKLY:
                         this.controls.typeRadios.weekly.attr('checked', 'checked');
                         this.nodes.alternative1.append(this.sentences.weekly.$el);
                         this.setChoice(this.sentences.weekly);
-                        this.choice.set('interval', this.model.get('interval'));
-                        this.choice.set('days', this.model.get('days'));
+                        if (this.model.isSet("interval")) {
+                            this.choice.set('interval', this.model.get('interval'));
+                        }
+                        if (this.model.isSet('days')) {
+                            this.choice.set('days', this.model.get('days'));
+                        }
+                        this.setHint(useLinksHint);
                         break;
                     case RECURRENCE_TYPES.MONTHLY:
                         this.controls.typeRadios.monthly.attr('checked', 'checked');
                         this.nodes.alternative1.append(
-                            this.controls.alternativeBoxes.alternative1,
-                            this.sentences.monthlyDay.$el
+                            this.createGhost(this.sentences.monthlyDay)
                         );
                         this.nodes.alternative2.append(
-                            this.controls.alternativeBoxes.alternative2,
-                            this.sentences.monthlyDate.$el
+                            this.createGhost(this.sentences.monthlyDate)
                         );
-                        if (this.model.get("days")) {
+                        this.setHint(useLinksHint);
+                        if (this.model.isSet("days")) {
                             this.setChoice(this.sentences.monthlyDay);
                             this.choice.set("ordinal", this.model.get("day_in_month"));
                             this.choice.set("day", this.model.get("days"));
                             this.choice.set("interval", this.model.get("interval"));
-                        } else {
+                            this.nodes.alternative1.children().detach();
+                            this.nodes.alternative1.append(this.sentences.monthlyDay.$el);
+                        } else if (this.model.isSet("day_in_month")) {
                             this.setChoice(this.sentences.monthlyDate);
                             this.choice.set("dayInMonth", this.model.get("day_in_month"));
                             this.choice.set("interval", this.model.get("interval"));
+                            this.nodes.alternative2.children().detach();
+                            this.nodes.alternative2.append(this.sentences.monthlyDate.$el);
+                        } else {
+                            this.setHint(chooseSentenceHint);
+                            this.nodes.alternative1.find(".muted").removeClass("muted");
+                            this.nodes.alternative2.find(".muted").removeClass("muted");
+                            this.setChoice(null);
                         }
                         break;
                     case RECURRENCE_TYPES.YEARLY:
                         this.controls.typeRadios.yearly.attr('checked', 'checked');
                         this.nodes.alternative1.append(
-                            this.controls.alternativeBoxes.alternative1,
-                            this.sentences.yearlyDay.$el
+                            this.createGhost(this.sentences.yearlyDay)
                         );
                         this.nodes.alternative2.append(
-                            this.controls.alternativeBoxes.alternative2,
-                            this.sentences.yearlyDate.$el
+                            this.createGhost(this.sentences.yearlyDate)
                         );
-                        if (this.model.get("days")) {
-                            this.choice = this.sentences.yearlyDay;
+                        this.setHint(useLinksHint);
+                        if (this.model.isSet("days")) {
+                            this.setChoice(this.sentences.yearlyDay);
                             this.choice.set("ordinal", this.model.get("day_in_month"));
                             this.choice.set("day", this.model.get("days"));
                             this.choice.set("month", this.model.get("month"));
-                        } else {
+                            this.nodes.alternative1.children().detach();
+                            this.nodes.alternative1.append(this.sentences.yearlyDay.$el);
+                        } else if (this.model.isSet("day_in_month")) {
                             this.setChoice(this.sentences.yearlyDate);
                             this.choice.set("month", this.model.get("month"));
                             this.choice.set("dayInMonth", this.model.get("day_in_month"));
+                            this.nodes.alternative2.children().detach();
+                            this.nodes.alternative2.append(this.sentences.yearlyDate.$el);
+                        } else {
+                            this.setHint(chooseSentenceHint);
+                            this.nodes.alternative1.find(".muted").removeClass("muted");
+                            this.nodes.alternative2.find(".muted").removeClass("muted");
+                            this.setChoice(null);
                         }
                         break;
 
@@ -569,11 +594,16 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         this.setEnding(this.ends.never);
                     }
                     this.nodes.summary.empty();
-                    this.nodes.summary.append(
-                        this.choice.ghost(),
-                        this.endsChoice.ghost(),
-                        $("<span>&nbsp;</span>")
-                    );
+                    if (this.choice.id === "no-choice") {
+                        this.nodes.summary.append(this.choice.ghost(), $("<span>&nbsp;</span>"));
+                    } else {
+                        this.nodes.summary.append(
+                            this.choice.ghost(),
+                            this.endsChoice.ghost(),
+                            $("<span>&nbsp;</span>")
+                        );
+                    }
+
                 }
 
                 this.updatingState = false;
@@ -606,37 +636,45 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                             days: this.choice.days
                         };
                         this.model.set(weekly);
-                    } else if (this.controls.typeRadios.monthly.is(":checked") && this.controls.alternativeBoxes.alternative1.is(":checked")) {
+                    } else if (this.controls.typeRadios.monthly.is(":checked")) {
                         var monthly =  {
-                            recurrence_type: RECURRENCE_TYPES.MONTHLY,
-                            day_in_month: this.choice.ordinal,
-                            days: this.choice.day,
-                            interval: this.choice.interval
+                            recurrence_type: RECURRENCE_TYPES.MONTHLY
                         };
+                        if (this.choice.id === "monthlyDay") {
+                            _.extend(monthly, {
+                                day_in_month: this.choice.ordinal,
+                                days: this.choice.day,
+                                interval: this.choice.interval
+                            });
+                        } else if (this.choice.id === "monthlyDate") {
+                            _.extend(monthly, {
+                                recurrence_type: RECURRENCE_TYPES.MONTHLY,
+                                day_in_month: this.choice.dayInMonth,
+                                interval: this.choice.interval
+                            });
+                        }
                         this.model.set(monthly);
-                    } else if (this.controls.typeRadios.monthly.is(":checked") && this.controls.alternativeBoxes.alternative2.is(":checked")) {
-                        var monthly =  {
-                            recurrence_type: RECURRENCE_TYPES.MONTHLY,
-                            day_in_month: this.choice.dayInMonth,
-                            interval: this.choice.interval
-                        };
-                        this.model.set(monthly);
-                    } else if (this.controls.typeRadios.yearly.is(":checked") && this.controls.alternativeBoxes.alternative1.is(":checked")) {
+                    } else if (this.controls.typeRadios.yearly.is(":checked")) {
+
                         var yearly =  {
-                            recurrence_type: RECURRENCE_TYPES.YEARLY,
-                            day_in_month: this.choice.ordinal,
-                            days: this.choice.day,
-                            month: this.choice.month,
-                            interval: 1
+                            recurrence_type: RECURRENCE_TYPES.YEARLY
                         };
-                        this.model.set(yearly);
-                    } else if (this.controls.typeRadios.yearly.is(":checked") && this.controls.alternativeBoxes.alternative2.is(":checked")) {
-                        var yearly =  {
-                            recurrence_type: RECURRENCE_TYPES.YEARLY,
-                            day_in_month: this.choice.dayInMonth,
-                            month: this.choice.month,
-                            interval: 1
-                        };
+
+                        if (this.choice.id === "yearlyDay") {
+                            _.extend(yearly, {
+                                day_in_month: this.choice.ordinal,
+                                days: this.choice.day,
+                                month: this.choice.month,
+                                interval: 1
+                            });
+                        } else if (this.choice.id === "yearlyDate") {
+                            _.extend(yearly, {
+                                day_in_month: this.choice.dayInMonth,
+                                month: this.choice.month,
+                                interval: 1
+                            });
+                        }
+
                         this.model.set(yearly);
                     }
 
@@ -661,32 +699,75 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     this.model.set({recurrence_type: RECURRENCE_TYPES.NO_RECURRENCE});
                 }
 
-
-
                 this.updatingModel = false;
 
                 this.modelChanged();
             },
+            createGhost: function (sentence) {
+                var self = this;
+                var $ghost = $('<span class="muted">').append(sentence.ghost());
+                $ghost.on('click', function () {
+                    self.setChoice(sentence);
+                    self.updateModel();
+                });
+                $ghost.css({cursor: 'pointer'});
+                return $ghost;
+            },
             setEnding: function (sentence) {
+                if (this.endsChoice) {
+                    this.endsChoice.off("change");
+                }
                 this.endsChoice = sentence;
+                this.endsChoice.on("change", this.endingChanged, this);
+            },
+            endingChanged: function () {
+                switch (this.endsChoice.ending) {
+                case "1":
+                    this.setEnding(this.ends.never);
+                    break;
+                case "2":
+                    this.setEnding(this.ends.date);
+                    break;
+                case "3":
+                    this.setEnding(this.ends.after);
+                    break;
+                }
+                this.updateModel();
             },
             setChoice: function (sentence) {
+                if (this.choice) {
+                    this.choice.off('change');
+                }
+                if (sentence === null) {
+                    this.choice = {
+                        id: 'no-choice',
+                        ghost: function () {
+                            return $('<span>').text(gt("Please choose a sentence below."));
+                        },
+                        on: $.noop,
+                        off: $.noop
+                    };
+                    return;
+                }
                 this.choice = sentence;
+                this.choice.on("change", this.updateModel, this);
             },
             showMore: function () {
                 this.more = true;
                 this.controls.detailToggle.show();
-                this.controls.detailToggle.text(gt("Show less"));
+                this.controls.detailToggle.text(gt("Hide"));
                 this.nodes.summary.show();
                 this.nodes.typeChoice.show();
+                this.nodes.hint.show();
                 this.nodes.alternative1.show();
                 this.nodes.alternative2.show();
                 this.nodes.endsChoice.show();
             },
             showLess: function () {
                 this.more = false;
-                this.controls.detailToggle.text(gt("Show more"));
+                this.controls.detailToggle.text(gt("Edit"));
                 this.nodes.typeChoice.hide();
+                this.nodes.hint.hide();
                 this.nodes.alternative1.hide();
                 this.nodes.alternative2.hide();
                 this.nodes.endsChoice.hide();
@@ -778,15 +859,16 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     $('<div class="row-fluid">').append(
                         $('<label class="checkbox control-label desc">').append(
                             this.controls.checkbox,
-                            $.txt(gt("Repeats"))
+                            this.nodes.summary
                         ),
-                        this.nodes.summary,
                         this.controls.detailToggle
                     ),
                     $('<div class="row-fluid">&nbsp;</div>'),
                     this.nodes.typeChoice,
+                    this.nodes.hint,
                     this.nodes.alternative1,
                     this.nodes.alternative2,
+                    $('<div class="row-fluid">&nbsp;</div>'),
                     this.nodes.endsChoice
                 );
             }

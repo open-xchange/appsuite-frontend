@@ -127,7 +127,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             }
 
             // Now build the menu
-            var $menu = $('<ul class="dropdown-menu">');
+            var $menu = $('<ul class="dropdown-menu no-clone">');
             _(options.options).each(function (label, value) {
                 $menu.append(
                     $('<li>').append(
@@ -187,15 +187,8 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             $ghost.find('a').each(function () {
                 $(this).replaceWith($.txt($(this).text()));
             });
+            $ghost.find(".no-clone").remove();
             return $ghost;
-        };
-
-        this.disable = function () {
-            // TODO
-        };
-
-        this.enabled = function () {
-            // TODO
         };
 
         this.id = options.id;
