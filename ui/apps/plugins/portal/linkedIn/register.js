@@ -134,6 +134,8 @@ define("plugins/portal/linkedIn/register",
                         $('<span class="io-ox-portal-preview-thirdline">').text(message.body)
                     );
                 });
+            } else {
+                $('<div class="io-ox-portal-item">').text(gt('You have no new messages.'));
             }
         },
         load: function () {
