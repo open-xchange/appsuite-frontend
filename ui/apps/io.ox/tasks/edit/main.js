@@ -128,6 +128,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     require(['io.ox/tasks/api'], function (api) {
                         api.trigger("update:" + taskModel.attributes.folder_id + '.' + taskModel.attributes.id);
                         clean();
+                        model.factory.realm('edit').release();//old model no longer needed
                         def.resolve();
                     });
                 } else {
