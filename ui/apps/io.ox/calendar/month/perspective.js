@@ -261,6 +261,7 @@ define('io.ox/calendar/month/perspective',
                                             .append(
                                                 $('<a href="#">').addClass('control prev').append($('<i>').addClass('icon-chevron-left'))
                                             ).on('click', $.proxy(function (e) {
+                                                e.preventDefault();
                                                 this.gotoMonth({
                                                     duration: 400,
                                                     date: new date.Local(this.current.getYear(), this.current.getMonth() - 1, 1)
@@ -269,6 +270,7 @@ define('io.ox/calendar/month/perspective',
                                         $('<li>').append(
                                             $('<a href="#">').addClass('link today').text(gt('Today'))
                                         ).on('click', $.proxy(function (e) {
+                                            e.preventDefault();
                                             this.gotoMonth({
                                                 duration: 800
                                             });
@@ -277,6 +279,7 @@ define('io.ox/calendar/month/perspective',
                                             .append(
                                                     $('<a href="#">').addClass('control next').append($('<i>').addClass('icon-chevron-right'))
                                             ).on('click', $.proxy(function (e) {
+                                                e.preventDefault();
                                                 this.gotoMonth({
                                                     duration: 400,
                                                     date: new date.Local(this.current.getYear(), this.current.getMonth() + 1, 1)

@@ -89,6 +89,7 @@ define('io.ox/calendar/week/view',
         },
 
         onControlView: function (e) {
+            e.preventDefault();
             var cT = $(e.currentTarget),
                 t = $(e.target);
             if (cT.hasClass('next') || (t.hasClass('timeslot') && e.type === 'swipeleft' && !this.lasso)) {
