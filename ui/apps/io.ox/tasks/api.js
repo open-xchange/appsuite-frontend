@@ -36,7 +36,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
         requests: {
             all: {
                 folder: folderApi.getDefaultFolder("tasks"),
-                columns: "1,20,200,202,203,300,309",
+                columns: "1,20,200,202,203,220,300,301",
                 sort: "202",
                 order: "asc",
                 cache: true, // allow DB cache
@@ -50,6 +50,16 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             get: {
                 action: "get",
                 timezone: "UTC"
+            },
+            search: {
+                action: "search",
+                columns: "1,20,200,202,220,300,301",
+                sort: "202",
+                order: "asc",
+                timezone: "UTC",
+                getData: function (query) {
+                    return { folder: folderApi.getDefaultFolder("tasks"), pattern: query };
+                }
             }
         }
     });
@@ -66,6 +76,21 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             };
 
     api.update = function (timestamp, taskId, modifications, folder) {
+                //check if only one big array was given for exsample by modelfactory
+                if (arguments.length === 1) {
+                    timestamp = arguments[0].last_modified;
+                    if (!timestamp) {
+                        timestamp = _.now();
+                    }
+                    taskId = arguments[0].id;
+                    modifications = arguments[0];
+                    folder = arguments[0].folder_id;
+                    if (!folder) {
+                        folder = arguments[0].folder;
+                    }
+                    
+                }
+                //go on normaly
                 var useFolder;
                 if (folder === undefined) {
                     useFolder = api.getDefaultFolder();
@@ -86,16 +111,25 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     appendColumns: false
                 }).pipe(function () {
                     // update cache
-                    return $.when(
-                        api.caches.get.remove(key),
-                        api.caches.list.remove(key)
-                    );
+                    return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
                 }).done(function () {
                     //trigger refresh, for vGrid etc
-                    api.trigger("refresh.all");
+                    api.trigger('refresh.all');
                 });
 
             };
+    api.move = function (task, newFolder) {
+        var folder = task.folder_id;
+        if (!folder) {
+            folder = task.folder;
+        }
+        // call updateCaches (part of remove process) to be responsive
+        return api.updateCaches(task).pipe(function () {
+            // trigger visual refresh
+            api.trigger('refresh.all');
+            return api.update(_.now(), task.id, {folder_id: newFolder}, folder);
+        });
+    };
 
     api.getDefaultFolder = function () {
         return folderApi.getDefaultFolder('tasks');

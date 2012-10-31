@@ -13,13 +13,14 @@
 
 define('io.ox/office/editor/format/pagestyles',
     ['io.ox/office/tk/utils',
+     'io.ox/office/editor/dom',
      'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, StyleSheets) {
+    ], function (Utils, DOM, StyleSheets) {
 
     'use strict';
 
     var // definitions for page attributes
-        definitions = {
+        DEFINITIONS = {
 
             /**
              * Total width of a single page, in 1/100 of millimeters.
@@ -67,11 +68,10 @@ define('io.ox/office/editor/format/pagestyles',
      *  changed, as jQuery object.
      *
      * @param {Object} attributes
-     *  A map of all attributes (name/value pairs), containing the
-     *  effective attribute values merged from style sheets and explicit
-     *  attributes.
+     *  A map of all attributes (name/value pairs), containing the effective
+     *  attribute values merged from style sheets and explicit attributes.
      */
-    function updatePageHandler(page, attributes) {
+    function updatePageFormatting(page, attributes) {
 
         var // effective page width (at least 2cm)
             pageWidth = Math.max(attributes.width, 2000),
@@ -144,9 +144,7 @@ define('io.ox/office/editor/format/pagestyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, 'page', definitions, documentStyles, {
-            updateHandler: updatePageHandler
-        });
+        StyleSheets.call(this, documentStyles, 'page', DOM.PAGE_NODE_SELECTOR, DEFINITIONS);
 
         // methods ------------------------------------------------------------
 
@@ -159,13 +157,9 @@ define('io.ox/office/editor/format/pagestyles',
             iterator.call(context, rootNode);
         };
 
-        /**
-         * Iterates over all page elements covered by the passed DOM ranges for
-         * read/write access and calls the passed iterator function.
-         */
-        this.iterateReadWrite = this.iterateReadOnly;
-
         // initialization -----------------------------------------------------
+
+        this.registerUpdateHandler(updatePageFormatting);
 
         // for now, update the root node after every change event
         // TODO: page layout, update entire document formatting

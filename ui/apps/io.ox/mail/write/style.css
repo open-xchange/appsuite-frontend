@@ -1,21 +1,31 @@
 
-.io-ox-mail-write-main,
-.io-ox-mail-write-sidepanel {
-    background-color: #f5f5f5;
-    padding: 13px;
+.io-ox-mail-write {
+    .leftside, .rightside {
+        background-color: #f5f5f5;
+        padding: 13px;
+    }
+}
+
+.io-ox-mail-write h1.title {
+    font-family: @font-light;
+    font-weight: 200;
+    font-size: 20px;
+    line-height: 30px;
+    height: 30px;
+    margin: 0 0 13px 0;
 }
 
 .io-ox-mail-write .subject-wrapper {
     position: absolute;
     top: 0px;
     left: 0px;
-    right: 160px;
+    right: 0px;
 }
 
 .io-ox-mail-write .priority-overlay {
     position: absolute;
     top: 0px;
-    right: 180px;
+    right: 13px;
     line-height: 30px;
     font-weight: bold;
     font-size: 16px;
@@ -86,10 +96,7 @@
     margin: 0;
     padding: 5px 5px 4px 5px;
     width: 100%;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    box-sizing: border-box;
+    .box-sizing(border-box);
     -webkit-border-radius: 0;
     -webkit-appearance: none;
 }
@@ -104,9 +111,7 @@
 .io-ox-mail-write input[type=text]:focus,
 .io-ox-mail-write input[type=text].discreet:focus {
     border-color: rgba(82, 168, 236, 0.8);
-    -moz-box-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
-    -webkit-box-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
-    box-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
+    .box-shadow(0px 0px 8px rgba(82, 168, 236, 0.6));
 }
 
 .io-ox-mail-write input[type=text].discreet {
@@ -130,9 +135,7 @@
 }
 
 .io-ox-mail-write input[type=file]:focus {
-    -webkit-box-shadow: 0px 0px 4px 0px @outline-color;
-    -moz-box-shadow: 0px 0px 4px 0px @outline-color;
-    box-shadow: 0px 0px 4px 0px @outline-color;
+    .box-shadow(0px 0px 4px 0px @outline-color);
 }
 
 .io-ox-mail-write .wrapping-label {
@@ -166,7 +169,7 @@
 }
 
 .io-ox-mail-write .section[data-section='All']{
-	font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family: @font-light;
 }
 
 .io-ox-mail-write-contact {
@@ -174,9 +177,9 @@
 }
 
 .io-ox-mail-write-contact .contact-image {
-    height: 3em;
-    width: 3em;
-    margin-right: 1em;
+    height: 3 * 14px;
+    width: 3 * 14px;
+    margin-right: 14px;
     display: inline-block;
     background-size: cover;
     background-repeat: no-repeat;
@@ -277,7 +280,7 @@
 }
 
 .io-ox-mail-write .editor-outer-container {
-    top: 67px;
+    top: 93px;
     right: 9px;
     bottom: 9px;
     left: 9px;
@@ -313,17 +316,12 @@
     resize: none;
     padding: 10px;
     margin: 0px;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    box-sizing: border-box;
+    .box-sizing(border-box);
 }
 
 .io-ox-mail-write .text-editor:focus {
     border-color: #fff;
-    -moz-box-shadow: 0px 0px 4px 0px @outline-color;
-    -webkit-box-shadow: 0px 0px 4px 0px @outline-color;
-    box-shadow: 0px 0px 4px 0px @outline-color;
+    .box-shadow(0px 0px 4px 0px @outline-color);
 }
 
 .io-ox-mail-write .change-format {
@@ -344,47 +342,13 @@
     overflow: auto;
 }
 
-
-/*sender select*/
-
-
-.io-ox-mail-write-sender.section-item {
-	 border: 1px solid #CCC;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-	-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-}
-
-.io-ox-mail-write-sender.section-item[checked] {
-	background-color: @selected-background !important;
-    background-image: -webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0, lighten(@selected-background, 20%)),
-        color-stop(1, darken(@selected-background, 5%))
-    ) !important;
-    background-image: -o-linear-gradient(top, lighten(@selected-background, 20%) 0%, darken(@selected-background, 5%) 100%) !important;
-    background-image: -moz-linear-gradient(
-        center top,
-        lighten(@selected-background, 20%) 0%,
-        darken(@selected-background, 5%) 100%
-    ) !important;
-    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="lighten(@selected-background, 20%)", endColorstr="darken(@selected-background, 5%)~")";
-    border-bottom-color: black;
-    color: #fff;
-}
-
-
 /* tinyMCE polishing */
 
 .editor-inner-container {
 
     .oxSkin table.mceLayout.focused tr.mceLast td {
         border-color: rgba(82, 168, 236, 0.8);
-        -moz-box-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
-        -webkit-box-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
-        box-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
+        .box-shadow(0px 0px 8px rgba(82, 168, 236, 0.6));
     }
 
     .oxSkin table.mceLayout {
@@ -409,6 +373,45 @@
     .oxSkin table.mceListBoxEnabled:hover .mceText,
     .oxSkin table.mceListBoxEnabled:hover .mceOpen {
         border-color: rgba(82, 168, 236, 0.8); background-color: rgba(82, 168, 236, 0.2);
+    }
+}
+
+// TINY SCREENS
+@media (max-width: 700px) {
+
+    .io-ox-mail-write {
+    
+        .overflow();
+        
+        form { margin: 0; }
+        
+        .leftside {
+            position: relative;
+            width: 100%;
+            height: auto;
+            padding-bottom: 0;
+            overflow: visible;
+        }
+    
+        .rightside {
+            position: relative;
+            left: 0;
+            width: 100%;
+            height: 600px;
+        }
+    
+        .section-link {
+            display: inline-block;
+            margin-right: 1em;
+        }
+        
+        [data-section-label="format"], [data-section="format"] {
+            display: none;
+        }
+        
+        .inline-buttons .btn {
+            margin-left: 4px;
+        }
     }
 }
 

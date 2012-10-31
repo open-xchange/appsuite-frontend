@@ -10,85 +10,135 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 .window-content.month-view * {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+    .box-sizing(border-box);
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 .window-content.month-view { 
     
-    .footer { 
+    @weekview-toolbar-height: 41px;
+    
+    .toolbar {
+        background-color: #FFF; 
+        height: @weekview-toolbar-height;
+        text-align: center;
+        padding: 3px;
+    }
+
+    .toolbar .info {
         position: absolute;
-        width: 100/8*7%;
-        height: 30px;
-        bottom: 0;
-        left: 0;
-        white-space: nowrap;
-        background-color: white;
+        left: 10px;
+        float: left;
+        line-height: 32px;
         font-family: @font-light;
-        font-size: 15px;
-        text-overflow: ellipsis;
-        line-height: 30px;
-        z-index: 3;
+        font-size: 20px;
     }
     
-    .weekday {
-        width: 100/7%;
+    .toolbar .showall {
+        position: absolute;
+        right: 30px;
+        top: 10px;
+    }
+
+    .toolbar .pagination {
+        margin: 0px;
+    }
+    
+    .toolbar .pagination a {
+        line-height: 32px;
+        height: 34px;
+    }
+    
+    .daylabel { 
+        position: absolute;
+        width: 100%;
+        height: 26px;
+        top: @weekview-toolbar-height;
+        left: 0;
+        font-family: @font-light;
+        font-size: 13px;
+        line-height: 25px;
+        z-index: 3;
+        background-color: white;
+        border-bottom: 1px solid #ccc;
+    }
+    
+    .daylabel .weekday {
+        width: 100/8%;
         display: inline-block;
-        padding-left: 13px;
+        text-align: center;
+        .ellipsis();
     }
     
     .scrollpane {
-        .overflow(auto);
-        -webkit-backface-visibility: hidden;
         position: absolute;
-        top: 0;
+        top: 67px;
         right: 0;
         bottom: 0;
         left: 0;
+        .overflow(auto);
+        .backface-visibility(hidden);
     }
     
     .week {
-        -webkit-backface-visibility: hidden;
         height: 100/6%; /* might be 6 weeks in a month */
         min-height: 80px;
         max-height: 160px;
+        .backface-visibility(hidden);
+    }
+    
+    .week-info {
+        font-family: @font-light;
+        font-size: 22px;
+        line-height: 1.0em;
+        color: #555;
+        position: absolute;
+        right: 0px;
+        width: 100/8%; /* fix for different round functions */
+        height: 100/6%;
+        padding: 13px 13px 13px 1px;
+        text-align: right;
+        .ellipsis();
+    }
+    
+    .week-info .cw {
+        position: absolute;
+        right: 13px;
+        bottom: 5px;
+        z-index: 1;
+        text-align: right;
+        font-size: 11px;
+        line-height: 1em;
+        font-family: Arial, Helvetica, sans-serif;
     }
     
     .day {
+        position: relative;
+        display: inline-block;
         width: 100/8%;
         height: 100%;
         min-height: 80px;
-        max-height: 160px;
-        position: relative;
-        display: inline-block;
-        border-color: #ccc;
-        border-style: solid;
-        border-width: 0 1px 1px 0;
-        overflow: hidden;
+        border-right: 1px solid #ccc;
+        border-top: 1px solid #ccc;
         background-color: #fff;
-        -webkit-transition: background-color 0.4s;
-        -moz-transition: background-color 0.4s;
-        transition: background-color 0.4s;
+        .transition(background-color 0.2s linear);
+        .backface-visibility(hidden);
+        .box-sizing(content-box);
+    }
+
+    .day.bordertop, .week-info.bordertop {
     }
     
-    .vertical {
-        font-family: @font-light;
-        font-size: 28px;
-        line-height: 1.1em;
-        color: #aaa;
-        position: absolute;
-        right: 0;
-        width: 12.5%;
-        height: 100/6%;
-        padding: 13px 5px;
-        text-align: right;
-        overflow: hidden;
-        text-overflow: ellipsis;
+    .day.borderbottom {
     }
-    
+
+    .day.borderleft {
+    }
+
     .day.out {
-        background-color: #e0e0e0;
+        background-color: #eee;
+        .transition(background-color 0.2s linear);
+        .backface-visibility(hidden);
     }
     
     .day.out.today {
@@ -124,38 +174,40 @@
     }
     
     .day .list {
-        margin: 5px;
-        .overflow(auto);
+        margin: 4px;
+        .overflow-y(auto);
     }
     
     .appointment {
         line-height: 14px;
-        background-color: #08c;
         margin-bottom: 1px;
         white-space: nowrap;
         cursor: pointer;
-        -webkit-transition: background-color, color 0.1s;
-        -moz-transition: background-color, color 0.1s;
-        transition: background-color, color 0.1s;
+        background-color: #08c;
         opacity: 1;
-        -moz-transition: opacity 0.2s;
-        -webkit-transition: opacity 0.2s;
-        -o-transition: opacity 0.2s;
-        transition: opacity 0.2s;
+        .transition(opacity 0.2s);
+        .backface-visibility(hidden);
     }
     
+    .appointment.opac {
+        opacity: 0.5;
+        .transition(opacity 0.2s);
+    }
+
     .appointment-content {
         height: 100%;
-        font-family: Arial, Helvetica, sans-serif;
+        width: 100%;
         font-size: 12px;
         color: white;
-        padding: 2px 7px 2px 7px;
-        .overflow(auto);
+        overflow: hidden;
+        padding: 2px 0px;
     }
     
     .appointment-content * {
-        overflow: hidden;
-        text-overflow: ellipsis;
+        padding-left: 5px;
+        max-width: 100%;
+        display: inline-block;
+        .ellipsis();
     }
     
     @appointment-reserved: #08c; /* blue */ 
@@ -210,27 +262,27 @@
     }
     
     /* mouse over */
-    .appointment.reserved:hover {
+    .appointment.reserved.hover {
         background-color: darken(@appointment-reserved, @appointment-hover-pct);
     }
     
-    .appointment.temporary:hover {
+    .appointment.temporary.hover {
         background-color: darken(@appointment-temporary, @appointment-hover-pct);
     }
     
-    .appointment.absent:hover {
+    .appointment.absent.hover {
         background-color: darken(@appointment-absent, @appointment-hover-pct);
     }
     
-    .appointment.free:hover {
+    .appointment.free.hover {
         background-color: darken(@appointment-free, @appointment-hover-pct);
     }
     
-    .appointment.private:hover {
+    .appointment.private.hover {
         background-color: darken(@appointment-private, @appointment-hover-pct);
     }
     
-    .day.out .appointment:hover {
+    .day.out .appointment.hover {
         background-color: darken(@appointment-out, @appointment-hover-pct);
     }
     

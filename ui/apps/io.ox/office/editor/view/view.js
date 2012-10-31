@@ -11,286 +11,22 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/editor/view',
+define('io.ox/office/editor/view/view',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/config',
      'io.ox/office/tk/fonts',
-     'io.ox/office/tk/control/button',
-     'io.ox/office/tk/control/radiogroup',
      'io.ox/office/tk/control/textfield',
-     'io.ox/office/tk/control/combofield',
-     'io.ox/office/tk/dropdown/gridsizer',
      'io.ox/office/tk/component/toolpane',
      'io.ox/office/tk/component/appwindowtoolbar',
-     'io.ox/office/tk/config',
-     'io.ox/office/editor/format/color',
+     'io.ox/office/editor/view/controls',
      'io.ox/office/editor/format/lineheight',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, Button, RadioGroup, TextField, ComboField, GridSizer, ToolPane, AppWindowToolBar, Config, Color, LineHeight, gt) {
+    ], function (Utils, Config, Fonts, TextField, ToolPane, AppWindowToolBar, Controls, LineHeight, gt) {
 
     'use strict';
 
     var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes,
-
-        // predefined color definitions
-        BUILTIN_COLOR_DEFINITIONS = [
-            { label: gt('Dark Red'),    color: { type: 'rgb', value: 'C00000' } },
-            { label: gt('Red'),         color: { type: 'rgb', value: 'FF0000' } },
-            { label: gt('Orange'),      color: { type: 'rgb', value: 'FFC000' } },
-            { label: gt('Yellow'),      color: { type: 'rgb', value: 'FFFF00' } },
-            { label: gt('Light Green'), color: { type: 'rgb', value: '92D050' } },
-            { label: gt('Green'),       color: { type: 'rgb', value: '00B050' } },
-            { label: gt('Light Blue'),  color: { type: 'rgb', value: '00B0F0' } },
-            { label: gt('Blue'),        color: { type: 'rgb', value: '0070C0' } },
-            { label: gt('Dark Blue'),   color: { type: 'rgb', value: '002060' } },
-            { label: gt('Purple'),      color: { type: 'rgb', value: '7030A0' } }
-        ];
-
-    // class StyleSheetChooser ================================================
-
-    /**
-     * A drop-down list control used to select a style sheet from a list. The
-     * drop-down list entries will visualize the formatting attributes of the
-     * style sheet if possible.
-     *
-     * @constructor
-     *
-     * @extends RadioGroup
-     *
-     * @param {Editor} editor
-     *  The editor instance containing the style sheet container visualized by
-     *  this control.
-     *
-     * @param {String} family
-     *  The attribute family of the style sheet container visualized by this
-     *  control.
-     *
-     * @param {Object} [options]
-     *  Additional options passed to the RadioGroup constructor.
-     */
-    var StyleSheetChooser = RadioGroup.extend({ constructor: function (editor, family, options) {
-
-        var // self reference
-            self = this,
-            // the style sheet container
-            styleSheets = editor.getStyleSheets(family);
-
-        /**
-         * Called for each list item to get the sorting index, which has been
-         * stored in the user data of the button elements.
-         */
-        function sortFunctor(button) {
-            return Utils.getControlUserData(button);
-        }
-
-        /**
-         * Fills the drop-down list with all known style names, and adds
-         * preview CSS formatting to the list items.
-         */
-        function fillList() {
-            self.clearOptionButtons();
-            _(styleSheets.getStyleSheetNames()).each(function (name, id) {
-
-                var // options for the formatting preview
-                    options = styleSheets.getPreviewButtonOptions(id),
-                    // sorting priority
-                    priority = styleSheets.getUIPriority(id),
-                    // the sort index stored at the button for lexicographical sorting
-                    sortIndex = String((priority < 0) ? (priority + 0x7FFFFFFF) : priority);
-
-                // build a sorting index usable for lexicographical comparison:
-                // 1 digit for priority sign, 10 digits positive priority,
-                // followed by lower-case style sheet name
-                while (sortIndex.length < 10) { sortIndex = '0' + sortIndex; }
-                sortIndex = ((priority < 0) ? '0' : '1') + sortIndex + name.toLowerCase();
-
-                // create the list item, pass sorting index as user data
-                self.createOptionButton(id, Utils.extendOptions(options, { label: name, css: { height: '36px', padding: '2px 12px' }, userData: sortIndex }));
-            });
-        }
-
-        // base constructor ---------------------------------------------------
-
-        RadioGroup.call(this, Utils.extendOptions(options, {
-            width: 120,
-            white: true,
-            dropDown: true,
-            sorted: true,
-            sortFunctor: sortFunctor
-        }));
-
-        // initialization -----------------------------------------------------
-
-        // add all known style sheets, listen to 'change' events
-        fillList();
-        styleSheets.on('change', fillList);
-        // also reinitialize the preview if theme settings have been changed
-        editor.getThemes().on('change', fillList);
-
-    }}); // class StyleSheetChooser
-
-    // class ColorChooser =====================================================
-
-    var ColorChooser = RadioGroup.extend({ constructor: function (themes, context, options) {
-
-        var // self reference
-            self = this,
-            theme = null;
-
-        // private methods ----------------------------------------------------
-
-        function fillList() {
-
-            var filter = null;
-
-            theme = themes.getTheme();
-            self.clearOptionButtons();
-
-            // add transparent color if supported
-            if (Color.getCssColor(Color.AUTO, context) === 'transparent') {
-                self.createOptionButton(Color.AUTO, { tooltip: gt('Transparent') });
-            }
-
-            // add predefined colors
-            _(BUILTIN_COLOR_DEFINITIONS).each(function (definition) {
-                self.createOptionButton(definition.color, { tooltip: definition.label, css: { backgroundColor: Color.getCssColor(definition.color, context, theme) }});
-            });
-
-            // add theme colors
-            if (theme) {
-
-                switch (context) {
-                case 'fill':
-                    filter = ['text1', 'text2', 'background1', 'background2'];
-                    break;
-                case 'text':
-                case 'line':
-                    filter = ['dark1', 'dark2', 'light1', 'light2'];
-                    break;
-                default:
-                    filter = [];
-                }
-
-                _(theme.getSchemeColors()).each(function (schemeColor) {
-                    if (!_(filter).contains(schemeColor.name)) {
-                        self.createOptionButton({ type: 'scheme', value: schemeColor.name }, { tooltip: schemeColor.label, css: { backgroundColor: '#' + schemeColor.value } });
-                    }
-                });
-            }
-        }
-
-        /**
-         * Will be called after a new list item has been activated.
-         *
-         * @param {jQuery} button
-         *  The DOM button element representing the activated list item. If no
-         *  list item is active (ambiguous state), this object will be an empty
-         *  jQuery collection.
-         *
-         *  @param {String} value
-         *  The activated/selected color value.
-         */
-        function updateCaptionHandler(button, value) {
-            var menuButton = self.getMenuButton();
-            var updateOptions = { label: Utils.getStringOption(options, 'label') };
-            var labelCss = { 'font-weight': 'bold' }, rgbColor, color = value;
-
-            if (context === 'text') {
-                rgbColor = color ? Color.getCssColor(color, context, theme) : Color.getCssColor(Color.BLACK);
-                if (rgbColor === 'transparent')
-                    rgbColor = Color.getCssColor(Color.BLACK);
-                labelCss.color = rgbColor;
-            }
-            else if (context === 'fill') {
-                rgbColor = color ? Color.getCssColor(color, context, theme) : 'transparent';
-                if (rgbColor === 'transparent')
-                    labelCss.color = Color.getCssColor(Color.BLACK);
-                else
-                    labelCss.color = Color.isDark(rgbColor) ? Color.getCssColor(Color.WHITE) : Color.getCssColor(Color.BLACK);
-                labelCss['background-color'] = rgbColor;
-            }
-            updateOptions.labelCss = labelCss;
-            Utils.setControlCaption(menuButton, updateOptions);
-        }
-
-        // base constructor ---------------------------------------------------
-
-        RadioGroup.call(this, Utils.extendOptions({
-            tooltip: gt('Color'),
-            dropDown: true,
-            updateCaptionMode: 'none',
-            updateCaptionHandler: updateCaptionHandler
-        }, options));
-
-        // initialization -----------------------------------------------------
-
-        fillList();
-        themes.on('change', fillList);
-
-    }}); // class ColorChooser
-
-    // class FontFamilyChooser ================================================
-
-    var FontFamilyChooser = ComboField.extend({ constructor: function () {
-
-        // base constructor ---------------------------------------------------
-
-        ComboField.call(this, {
-            width: 150,
-            tooltip: gt('Font Name'),
-            sorted: true,
-            typeAhead: true
-        });
-
-        // initialization -----------------------------------------------------
-
-        // add all known fonts
-        _(Fonts.getRegisteredFontNames()).each(function (fontName) {
-            this.addListEntry(fontName, { labelCss: { fontFamily: Fonts.getCssFontFamily(fontName), fontSize: '115%' } });
-        }, this);
-
-    }}); // class FontFamilyChooser
-
-    // class FontHeightChooser ================================================
-
-    var FontHeightChooser = ComboField.extend({ constructor: function () {
-
-        // base constructor ---------------------------------------------------
-
-        ComboField.call(this, {
-            width: 35,
-            tooltip: gt('Font Size'),
-            css: { textAlign: 'right' },
-            validator: new TextField.NumberValidator({ min: 1, max: 999.9, digits: 1 })
-        });
-
-        // initialization -----------------------------------------------------
-
-        _([6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 54, 60, 66, 72, 80, 88, 96]).each(function (size) {
-            this.addListEntry(size, { css: { textAlign: 'right', paddingRight: '20px' } });
-        }, this);
-
-    }}); // class FontHeightChooser
-
-    // class TableSizeChooser =================================================
-
-    var TableSizeChooser = Button.extend({ constructor: function () {
-
-        var options = {
-                icon: 'icon-io-ox-table',
-                tooltip: gt('Insert Table'),
-                defaultSize: { width: 5, height: 3 },
-                maxSize: { width: 15, height: 15 }
-            };
-
-        // base constructors --------------------------------------------------
-
-        // create the default button (set value to default size, will be returned by click handler)
-        Button.call(this, Utils.extendOptions(options, { value: options.defaultSize }));
-        // create the grid sizer
-        GridSizer.call(this, Utils.extendOptions(options, { plainCaret: true }));
-
-    }}); // class TableSizeChooser
+        KeyCodes = Utils.KeyCodes;
 
     // class View =============================================================
 
@@ -434,8 +170,8 @@ define('io.ox/office/editor/view',
          */
         function logSelection(selection) {
             if (infoNode) {
-                infoNode.find('tr').eq(1).children('td').eq(1).text((selection && selection.startPaM) ? JSON.stringify(selection.startPaM.oxoPosition) : '- empty -');
-                infoNode.find('tr').eq(2).children('td').eq(1).text((selection && selection.endPaM) ? JSON.stringify(selection.endPaM.oxoPosition) : '- empty -');
+                infoNode.find('tr').eq(1).children('td').eq(1).text((selection && selection.startPaM) ? selection.startPaM : '- empty -');
+                infoNode.find('tr').eq(2).children('td').eq(1).text((selection && selection.endPaM) ? selection.endPaM : '- empty -');
             }
         }
 
@@ -492,19 +228,19 @@ define('io.ox/office/editor/view',
 */
 
         createToolBar('format', { label: gt('Format') })
-            .addGroup('paragraph/stylesheet', new StyleSheetChooser(editor, 'paragraph', { tooltip: gt('Paragraph Style') }))
+            .addGroup('paragraph/stylesheet', new Controls.ParagraphStyleChooser(editor))
             .addSeparator()
-            .addGroup('character/fontname', new FontFamilyChooser())
+            .addGroup('character/fontname', new Controls.FontFamilyChooser())
             .addSeparator()
-            .addGroup('character/fontsize', new FontHeightChooser())
+            .addGroup('character/fontsize', new Controls.FontHeightChooser())
             .addSeparator()
             .addButton('character/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
             .addButton('character/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
             .addButton('character/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
             .addSeparator()
-            .addGroup('character/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Text fill color'), label: 'ab' }))
+            .addGroup('character/fillcolor', new Controls.ColorChooser(editor, 'fill', { tooltip: gt('Text fill color'), label: 'ab' }))
             .addSeparator()
-            .addGroup('character/color', new ColorChooser(editor.getThemes(), 'text', { tooltip: gt('Text Color'), label: 'A' }))
+            .addGroup('character/color', new Controls.ColorChooser(editor, 'text', { tooltip: gt('Text Color'), label: 'A' }))
             .addSeparator()
             .addRadioGroup('paragraph/alignment', { icon: 'icon-align-left', tooltip: gt('Paragraph Alignment'), auto: true, highlight: true, updateCaptionMode: 'icon' })
                 .addOptionButton('left',    { icon: 'icon-io-ox-align-left',    tooltip: gt('Left') })
@@ -519,10 +255,15 @@ define('io.ox/office/editor/view',
                 .addOptionButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
                 .end()
             .addSeparator()
-            .addGroup('paragraph/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Paragraph Fill Color'), label: '==' }));
+            .addGroup('paragraph/fillcolor', new Controls.ColorChooser(editor, 'fill', { tooltip: gt('Paragraph Fill Color'), label: '==' }))
+            .addSeparator()
+            .addButton('list/bullets', { icon: 'icon-io-ox-bullets', tooltip: gt('Bullets On/Off'), toggle: true })
+            .addButton('list/numbering', { icon: 'icon-io-ox-numbering', tooltip: gt('Numbering On/Off'), toggle: true })
+            .addButton('list/decindent', { icon: 'icon-io-ox-num-dec-indent', tooltip: gt('Demote one level'), toggle: false })
+            .addButton('list/incindent', { icon: 'icon-io-ox-num-inc-indent', tooltip: gt('Promote one level'), toggle: false });
 
         createToolBar('table', { label: gt('Table') })
-            .addGroup('table/insert', new TableSizeChooser())
+            .addGroup('table/insert', new Controls.TableSizeChooser())
             .addSeparator()
             .addButton('table/insert/row',    { icon: 'icon-io-ox-table-insert-row',    tooltip: gt('Insert Row') })
             .addButton('table/insert/column', { icon: 'icon-io-ox-table-insert-column', tooltip: gt('Insert Column') })
@@ -570,15 +311,13 @@ define('io.ox/office/editor/view',
             createToolBar('debug', { label: gt('Debug') })
                 .addButton('debug/toggle',     { icon: 'icon-eye-open',   tooltip: 'Debug Mode',               toggle: true })
                 .addButton('debug/sync',       { icon: 'icon-refresh',    tooltip: 'Synchronize With Backend', toggle: true })
-                .addButton('debug/borderless', { icon: 'icon-fullscreen', tooltip: 'Borderless Tool Bars',     toggle: true })
                 .addSeparator()
                 .addButton('file/editrights', { icon: 'icon-pencil',    tooltip: 'Acquire Edit Rights' })
                 .addButton('file/flush',      { icon: 'icon-share-alt', tooltip: 'Flush Operations' })
                 .addSeparator()
-                .addButton('list/bullets', { icon: 'icon-io-ox-bullets', tooltip: gt('Bullets'), toggle: true })
-                .addButton('list/numbering', { icon: 'icon-io-ox-numbering', tooltip: gt('Numbering'), toggle: true })
-                .addButton('list/incindent', { icon: 'icon-io-ox-num-inc-indent', tooltip: gt('Numbering'), toggle: false })
-                .addButton('list/decindent', { icon: 'icon-io-ox-num-dec-indent', tooltip: gt('Numbering'), toggle: false });
+                .addGroup('document/quicksearch', new TextField({ tooltip: 'Quick Search' }))
+                .addSeparator()
+                .addButton('character/tab', { icon: 'icon-io-ox-num-inc-indent', tooltip : 'Tab'});
         }
 
         // register a component that updates the window header tool bar

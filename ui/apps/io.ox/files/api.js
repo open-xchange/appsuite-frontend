@@ -40,13 +40,15 @@ define('io.ox/files/api',
     };
 
     var fixContentType = function (data) {
-        if (data.file_mimetype === 'application/octet-stream') {
-            var ext = _((data.filename || '').split('.')).last().toLowerCase();
-            if (ext in mime_types) {
-                data.file_mimetype = mime_types[ext];
+        if (data) {
+            if (data.file_mimetype === 'application/octet-stream') {
+                var ext = _((data.filename || '').split('.')).last().toLowerCase();
+                if (ext in mime_types) {
+                    data.file_mimetype = mime_types[ext];
+                }
+            } else if (data.file_mimetype === 'audio/mp3') {
+                data.file_mimetype = 'audio/mpeg'; // might be superstition
             }
-        } else if (data.file_mimetype === 'audio/mp3') {
-            data.file_mimetype = 'audio/mpeg'; // might be superstition
         }
         return data;
     };
@@ -58,7 +60,7 @@ define('io.ox/files/api',
             all: {
                 action: 'all',
                 folder: config.get('folder.infostore'),
-                columns: '20,1,702,703',
+                columns: '20,1,5,700,702,703',
                 sort: '700',
                 order: 'asc'
             },
@@ -155,11 +157,11 @@ define('io.ox/files/api',
             })
             .pipe(function (data) {
                 // clear folder cache
-                return api.caches.all.grepRemove(options.json.folder_id + '\t')
-                    .pipe(function () {
-                        api.trigger('create.file refresh.all');
-                        return { folder_id: String(options.json.folder_id), id: parseInt(data.data, 10) };
-                    });
+                var fid = String(options.json.folder_id);
+                return api.propagate('new', { folder_id: fid }).pipe(function () {
+                    api.trigger('create.file');
+                    return { folder_id: fid, id: parseInt(data.data, 10) };
+                });
             });
     };
 
@@ -198,16 +200,12 @@ define('io.ox/files/api',
                 fixPost: true // TODO: temp. backend fix
             })
             .pipe(function (data) {
-                var id = options.json.id || options.id;
-                // clear folder cache
-                return $.when(
-                    api.caches.all.grepRemove(options.json.folder_id + '\t'),
-                    api.caches.get.remove({ folder_id: options.json.folder_id, id: id }),
-                    api.caches.versions.remove(id)
-                )
-                .pipe(function () {
-                    api.trigger('create.version update refresh.all', { id: id, folder: options.json.folder_id });
-                    return { folder_id: String(options.json.folder_id), id: id, timestamp: data.timestamp};
+                var id = options.json.id || options.id,
+                    folder_id = String(options.json.folder_id),
+                    obj = { folder_id: folder_id, id: id };
+                return api.propagate('change', obj).pipe(function () {
+                    api.trigger('create.version', obj);
+                    return { folder_id: folder_id, id: id, timestamp: data.timestamp};
                 });
             });
     };
@@ -221,14 +219,7 @@ define('io.ox/files/api',
                 appendColumns: false
             })
             .pipe(function () {
-                // clear all cache since titles and thus the order might have changed
-                return $.when(api.caches.all.grepRemove(file.folder_id + '\t'),  api.caches.get.remove({ folder_id: file.folder_id, id: file.id }));
-            })
-            .pipe(function () {
-                return api.get(obj, false);
-            })
-            .done(function () {
-                api.trigger('update refresh.all', obj);
+                return api.propagate('change', obj);
             });
     };
 
@@ -250,12 +241,56 @@ define('io.ox/files/api',
             })
             .pipe(function (data) {
                 // clear folder cache
-                return api.caches.all.grepRemove(options.folder)
-                    .pipe(function () {
-                        api.trigger('create.file', {id: data, folder: options.folder});
-                        return { folder_id: String(options.folder), id: String(data ? data : 0) };
-                    });
+                return api.propagate('new', { folder_id: options.folder }).pipe(function () {
+                    api.trigger('create.file', {id: data, folder: options.folder});
+                    return { folder_id: String(options.folder), id: String(data ? data : 0) };
+                });
             });
+    };
+
+    api.propagate = function (type, obj, silent) {
+
+        var id, fid, all, list, get, versions, caches = api.caches, ready = $.when();
+
+        if (type && _.isObject(obj)) {
+
+            fid = String(obj.folder_id || obj.folder);
+            id = String(obj.id);
+            obj = { folder_id: fid, id: id };
+
+            if (/^(new|delete)$/.test(type) && fid) {
+                // if we have a new file or an existing file was deleted, we have to clear the proper folder cache.
+                all = caches.all.grepRemove(fid + '\t');
+            } else {
+                all = ready;
+            }
+
+            if (/^(change|delete)$/.test(type) && fid && id) {
+                // just changing a file does not affect the file list.
+                // However, in case of a change or delete, we have to remove the file from item caches
+                list = caches.list.remove(obj);
+                get = caches.get.remove(obj);
+                versions = caches.versions.remove(id);
+            } else {
+                list = get = versions = ready;
+            }
+
+            return $.when(all, list, get, versions).pipe(function () {
+                if (!silent) {
+                    if (type === 'change') {
+                        return api.get(obj).done(function (data) {
+                            api.trigger('update update:' + _.cid(data), data);
+                            api.trigger('refresh.list');
+                        });
+                    } else {
+                        api.trigger('refresh.all');
+                    }
+                }
+                return ready;
+            });
+        } else {
+            return ready;
+        }
     };
 
     api.versions = function (options) {
@@ -274,9 +309,8 @@ define('io.ox/files/api',
                     params: getOptions,
                     appendColumns: true
                 })
-                .pipe(function (data) {
-                    api.caches.versions.add(options.id, data);
-                    return data;
+                .done(function (data) {
+                    api.caches.versions.add(String(options.id), data);
                 });
             }
         });
@@ -300,20 +334,15 @@ define('io.ox/files/api',
     api.detach = function (version) {
         return http.PUT({
             module: 'infostore',
-            params: { action: 'detach', id: version.id, folder: version.folder, timestamp: _.now() },
+            params: { action: 'detach', id: version.id, folder: version.folder_id, timestamp: _.now() },
             data: [version.version],
             appendColumns: false
         })
         .pipe(function () {
-            return $.when(
-                api.caches.all.grepRemove(version.folder + '\t'),
-                api.caches.list.remove({ id: version.id, folder: version.folder }),
-                api.caches.get.remove({ id: version.id, folder: version.folder }),
-                api.caches.versions.remove(version.id)
-            );
+            return api.propagate('change', { folder_id: version.folder_id, id: version.id });
         })
         .done(function () {
-            api.trigger('delete.version update refresh.all', {id: version.id, folder: version.folder, version: version.version});
+            api.trigger('delete.version', version);
         });
     };
 

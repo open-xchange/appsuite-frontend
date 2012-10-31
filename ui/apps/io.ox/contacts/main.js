@@ -58,7 +58,6 @@ define("io.ox/contacts/main",
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/contacts',
-            toolbar: true,
             search: true
         });
 
@@ -176,6 +175,7 @@ define("io.ox/contacts/main",
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api, win);
+        commons.addGridToolbarFolder(app, grid);
 
         api.on("edit", function (evt, updated) {
             if (updated.folder === app.currentContact.folder_id && updated.id === app.currentContact.id) {

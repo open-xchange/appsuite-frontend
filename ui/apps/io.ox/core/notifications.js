@@ -104,6 +104,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions'], function (ext) {
     };
 
     NotificationController.prototype = {
+
         attach: function (addLauncher) {
             //view
             var self = this;
@@ -125,21 +126,15 @@ define('io.ox/core/notifications', ['io.ox/core/extensions'], function (ext) {
             require(plugins).done(function () {
                 ext.point('io.ox/core/notifications/register').invoke('register', self, self);
             });
+
             // now register default notification handler
             /*require(['io.ox/mail/notifications',
                      'io.ox/calendar/notifications'], function (mailNotifications, calNotifications) {
                 mailNotifications.register();
                 calNotifications.register();
             });*/
-
-
-
         },
-        addFaviconNotification: function () {
-            if (window.Tinycon) {
-                this.badges.push(new FaviconBadge());
-            }
-        },
+
         get: function (key, listview) {
             if (_.isUndefined(this.notifications[key])) {
                 var module = {};

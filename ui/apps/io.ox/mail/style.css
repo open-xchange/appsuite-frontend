@@ -224,7 +224,7 @@
     &.thread-inline-actions {
         border: 0px none;
         padding: 18px 40px 0 40px;
-        min-height: initial;
+        min-height: 0px;
         text-align: right;
         z-index: 1;
     }
@@ -274,15 +274,30 @@
         width: 30px;
         height: 24px;
         margin-left: 1em;
-        border: 1px solid rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(0, 0, 0, 0.2);
         cursor: pointer;
         z-index: 10001; // to be above attachment dropdowns
     }
     
     .flag-dropdown ul {
-        font: 13px/18 @font-normal;
-        right: 0;
+        font: 14px/20 @font-normal;
+        right: -22px;
         left: auto;
+        top: 125%;
+        width: 200px;
+    }
+    
+    .flag-dropdown a {
+        line-height: 24px;
+    }
+    
+    .flag-example {
+        display: inline-block;
+        float: right;
+        width: 28px;
+        height: 22px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        .border-radius(5px);
     }
 
     .priority {
@@ -398,7 +413,7 @@
     pre {
         background-color: initial;
         border: 0px none;
-        -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0;
+        .border-radius(0px);
     }
 
     .mail-warning {
@@ -415,16 +430,16 @@
 }
 
 /* flag colors */
-.flag_1  { background-color:  #9d261d; } /* red old: 913F3F  Crimson*/
-.flag_2  { background-color:  darken(#049cdb, 5%); } /* blue */
-.flag_3  { background-color:  #46a546; } /* green */
-.flag_4  { background-color:  #aaa; } /* dark gray */
-.flag_5  { background-color:  #c09853; } /* brown */
-.flag_6  { background-color:  #d9edf7; } /* aqua */
+.flag_1  { background-color:  #cc0000; } /* red */
 .flag_7  { background-color:  #f89406; } /* orange */
-.flag_8  { background-color:  #c3325f; } /* pink */
+.flag_10 { background-color:  #ffff00; } /* yellow */
+.flag_6  { background-color:  #92D050; } /* light green */
+.flag_3  { background-color:  #1A8D1A; } /* green */
 .flag_9  { background-color:  lighten(#049cdb, 25%); } /* light blue */
-.flag_10 { background-color:  #ffc40d; } /* yellow */
+.flag_2  { background-color:  darken(#049cdb, 5%); } /* blue */
+.flag_5  { background-color:  #7E16CF; } /* purple (former brown) */
+.flag_8  { background-color:  #E01CD9; } /* pink */
+.flag_4  { background-color:  #aaa; } /* dark gray */
 
 /* attachment preview */
 
@@ -454,4 +469,13 @@ h4.mail-attachment-preview {
         content: ''
     }
     .mail-detail .contact-picture { display: none; }
+    .mail-detail .subject { padding-right: 0px; }
+}
+
+.mail-source-view {
+    width: 100%;
+    visibility: hidden;
+    .box-sizing(border-box);
+}
+
 }

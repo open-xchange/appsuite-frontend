@@ -23,7 +23,7 @@ define('io.ox/office/editor/format/characterstyles',
     'use strict';
 
     var // definitions for character attributes
-        definitions = {
+        DEFINITIONS = {
 
             fontname: {
                 def: 'sans-serif',
@@ -72,16 +72,14 @@ define('io.ox/office/editor/format/characterstyles',
                     element.css('text-decoration', Utils.toggleToken(value, 'underline', state, 'none'));
                 },
                 preview: function (options, state) {
-                    var value = options.labelCss.textDecoration;
+                    var value = options.labelCss.textDecoration || '';
                     options.labelCss.textDecoration = Utils.toggleToken(value, 'underline', state, 'none');
                 }
             },
 
             color: {
-                def: Color.BLACK,
-                set: function (element, color) {
-                    element.css('color', this.getCssColor(color, 'text'));
-                },
+                def: Color.AUTO,
+                // color will be set in update handler, depending on fill colors
                 preview: function (options, color) {
                     options.labelCss.color = this.getCssColor(color, 'text');
                 }
@@ -110,8 +108,8 @@ define('io.ox/office/editor/format/characterstyles',
 
     /**
      * Contains the style sheets for character formatting attributes. The CSS
-     * formatting will be read from and written to <span> elements contained in
-     * paragraph <p> elements.
+     * formatting will be written to text span elements contained somewhere in
+     * the paragraph elements.
      *
      * @constructor
      *
@@ -127,36 +125,17 @@ define('io.ox/office/editor/format/characterstyles',
      */
     function CharacterStyles(rootNode, documentStyles) {
 
+        var // self reference
+            self = this;
+
         // private methods ----------------------------------------------------
 
         /**
-         * Returns whether the passed text nodes contain equal character
-         * formatting attributes.
-         */
-        function hasEqualAttributes(textNode1, textNode2) {
-            return StyleSheets.hasEqualElementAttributes(textNode1.parentNode, textNode2.parentNode);
-        }
-
-        /**
-         * Iterates over all text nodes covered by the passed DOM ranges and
-         * calls the passed iterator function for their parent <span> elements.
-         */
-        function iterateTextSpans(ranges, iterator, context, readWrite) {
-
-            var // options for DOM.iterateTextPortionsInRanges() depending on read/write mode
-                options = readWrite ? { split: true, merge: hasEqualAttributes } : undefined;
-
-            return DOM.iterateTextPortionsInRanges(ranges, function (textNode) {
-                return iterator.call(context, textNode.parentNode);
-            }, context, options);
-        }
-
-        /**
-         * Will be called for every text span whose attributes have been
-         * changed.
+         * Will be called for every text span whose character attributes have
+         * been changed.
          *
-         * @param {jQuery} span
-         *  The <span> element whose character attributes have been changed, as
+         * @param {jQuery} node
+         *  The text span whose character attributes have been changed, as
          *  jQuery object.
          *
          * @param {Object} attributes
@@ -164,41 +143,78 @@ define('io.ox/office/editor/format/characterstyles',
          *  effective attribute values merged from style sheets and explicit
          *  attributes.
          */
-        function updateSpanFormatting(span, attributes) {
+        function updateCharacterFormatting(textSpan, attributes) {
+
+            var // the parent paragraph of the node (may be a grandparent)
+                paragraph = $(textSpan).closest(DOM.PARAGRAPH_NODE_SELECTOR),
+                // the current theme
+                theme = self.getDocumentStyles().getCurrentTheme(),
+                // the paragraph style container
+                paragraphStyles = self.getDocumentStyles().getStyleSheets('paragraph'),
+                // the merged attributes of the paragraph
+                paragraphAttributes = paragraphStyles.getElementAttributes(paragraph);
+
+            // calculate text color (automatic color depends on fill colors)
+            Color.setElementTextColor(textSpan, theme, attributes, paragraphAttributes);
+
             // update calculated line height due to changed font settings
-            LineHeight.updateElementLineHeight(span);
+            LineHeight.updateElementLineHeight(textSpan, paragraphAttributes.lineheight);
+
+            // try to merge with the preceding text span
+            CharacterStyles.mergeSiblingTextSpans(textSpan, false);
         }
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, 'character', definitions, documentStyles, {
-            updateHandler: updateSpanFormatting,
-            ancestorStyleFamily: 'paragraph',
-            ancestorElementResolver: function (span) { return span.parentNode; }
+        StyleSheets.call(this, documentStyles, 'character', undefined, DEFINITIONS, {
+            parentStyleFamily: 'paragraph'
         });
 
-        // methods ------------------------------------------------------------
+        // initialization -----------------------------------------------------
 
-        /**
-         * Iterates over all text nodes covered by the passed DOM ranges and
-         * calls the passed iterator function for their parent <span> elements.
-         */
-        this.iterateReadOnly = function (ranges, iterator, context) {
-            return iterateTextSpans(ranges, iterator, context, false);
-        };
-
-        /**
-         * Iterates over all text nodes covered by the passed DOM ranges and
-         * calls the passed iterator function for their parent <span> elements.
-         * Splits the text nodes that are covered partly before calling the
-         * iterator, and tries to merge sibling text nodes with equal character
-         * formatting after calling the iterator.
-         */
-        this.iterateReadWrite = function (ranges, iterator, context) {
-            return iterateTextSpans(ranges, iterator, context, true);
-        };
+        this.registerUpdateHandler(updateCharacterFormatting);
 
     } // class CharacterStyles
+
+    // static methods ---------------------------------------------------------
+
+    /**
+     * Tries to merge the passed text span with its next or previous sibling
+     * text span. To be able to merge two text spans, they must contain equal
+     * formatting attributes. If merging was successful, the sibling span will
+     * be removed from the DOM.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The DOM node to be merged with its sibling text span. If this object is
+     *  a jQuery object, uses the first DOM node it contains.
+     *
+     * @param {Boolean} next
+     *  If set to true, will try to merge with the next span, otherwise with
+     *  the previous text span.
+     */
+    CharacterStyles.mergeSiblingTextSpans = function (node, next) {
+
+        var // the sibling text span, depending on the passed direction
+            sibling = null,
+            // text in the passed and in the sibling node
+            text = null, siblingText = null;
+
+        // passed node and sibling node, as DOM nodes
+        node = Utils.getDomNode(node);
+        sibling = node[next ? 'nextSibling' : 'previousSibling'];
+
+        // both nodes must be text spans with the same attributes
+        if (DOM.isTextSpan(node) && DOM.isTextSpan(sibling) && StyleSheets.hasEqualElementAttributes(node, sibling)) {
+
+            // add text of the sibling text node to the passed text node
+            text = node.firstChild.nodeValue;
+            siblingText = sibling.firstChild.nodeValue;
+            node.firstChild.nodeValue = next ? (text + siblingText) : (siblingText + text);
+
+            // remove the entire sibling span element
+            $(sibling).remove();
+        }
+    };
 
     // exports ================================================================
 

@@ -96,7 +96,6 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
         function getGreetingPhrase(name) {
             var hour = new date.Local().getHours();
             // find proper phrase
-            console.log('name', name, 'hour', hour);
             if (hour >= 4 && hour <= 11) {
                 return gt('Good morning, %s', name);
             } else if (hour >= 18 && hour <= 23) {
@@ -245,7 +244,6 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                 count = point.count(),
                 fillers = 12 - count,
                 minIndex, maxIndex;
-
             point.each(function (extension) { //underscore does not work on this enum...
                 if (!minIndex && extension.index || minIndex > extension.index) { minIndex = extension.index; }
                 if (!maxIndex && extension.index || maxIndex < extension.index) { maxIndex = extension.index; }
@@ -459,7 +457,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                         $('<span class="io-ox-portal-login">').text(' / Logged in as ' + ox.user + '')
                     ));
                 } finally {
-                    userAPI.getName(ox.user_id).done(function (name) {
+                    userAPI.getGreeting(ox.user_id).done(function (name) {
                         node.find('.io-ox-portal-greeting').text(getGreetingPhrase(name));
                         node = null;
                     });

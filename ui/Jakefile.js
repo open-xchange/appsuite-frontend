@@ -269,7 +269,6 @@ utils.concat("boot.js", [
         "lib/backbone.validation.js",
         "lib/backbone.custom.js",
         "lib/doT.js",
-        "lib/tinycon/tinycon.min.js",
         "apps/io.ox/core/event.js",
         "apps/io.ox/core/http.js",
         "apps/io.ox/core/session.js",

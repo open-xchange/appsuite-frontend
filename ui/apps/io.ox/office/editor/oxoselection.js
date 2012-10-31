@@ -16,56 +16,36 @@ define('io.ox/office/editor/oxoselection',
 
     'use strict';
 
-    // class OXOSelection =======================================================
+    // class Selection ========================================================
 
     /**
-     * OXOSelection represents a cursor selection with the two member variables
-     * startPaM and endPaM (Point and Mark). These two members contain the
-     * logical position as an array of integers.
+     * An instance of this class represents a cursor selection with the two
+     * member variables startPaM and endPaM (Point and Mark). These two members
+     * contain the logical position as an array of integers.
      */
-    function OXOSelection(start, end) {
+    function Selection(start, end) {
 
         this.startPaM = start ? _.copy(start, true) : new OXOPaM([0, 0]);
         this.endPaM = end ? _.copy(end, true) : _.copy(this.startPaM, true);
 
-        this.hasRange = function () {
-            var hasRange = false;
-            if (this.startPaM.oxoPosition.length === this.endPaM.oxoPosition.length) {
-                _(this.startPaM.oxoPosition).each(function (element, i) {
-                    if (element !== this.endPaM.oxoPosition[i]) {
-                        hasRange = true;
-                    }
-                }, this);
-            } else {
-                hasRange = true;
-            }
+        // methods ------------------------------------------------------------
 
-            return hasRange;
+        this.hasRange = function () {
+            return !_.isEqual(this.startPaM.oxoPosition, this.endPaM.oxoPosition);
+        };
+
+        /**
+         * Returns whether this selection object represents a rectangular cell
+         * selection (FireFox only).
+         */
+        this.isCellSelection = function () {
+            return (this.startPaM.selectedNodeName === 'TR') && (this.endPaM.selectedNodeName === 'TR');
         };
 
         this.adjust = function () {
-            var change = false,
-                minLength = 0;
-
-            if (this.startPaM.oxoPosition.length > this.endPaM.oxoPosition.length) {
-                minLength = this.endPaM.oxoPosition.length;
-            } else {
-                minLength = this.startPaM.oxoPosition.length;
-            }
-
-            for (var i = 0; i < minLength; i++) {
-                if (this.startPaM.oxoPosition[i] > this.endPaM.oxoPosition[i]) {
-                    change = true;
-                    break;
-                } else if (this.startPaM.oxoPosition[i] < this.endPaM.oxoPosition[i]) {
-                    change = false;
-                    break;
-                }
-            }
-
-            if (change) {
-                var tmp = _.copy(this.startPaM, true);
-                this.startPaM = _.copy(this.endPaM, true);
+            if (Utils.compareNumberArrays(this.startPaM.oxoPosition, this.endPaM.oxoPosition) > 0) {
+                var tmp = this.startPaM;
+                this.startPaM = this.endPaM;
                 this.endPaM = tmp;
             }
         };
@@ -73,8 +53,11 @@ define('io.ox/office/editor/oxoselection',
         this.isEqual = function (selection) {
             return (_.isEqual(this.startPaM.oxoPosition, selection.startPaM.oxoPosition) && _.isEqual(this.endPaM.oxoPosition, selection.endPaM.oxoPosition)) ? true : false;
         };
-    }
 
-    return OXOSelection;
+    } // class Selection
+
+    // export =================================================================
+
+    return Selection;
 
 });

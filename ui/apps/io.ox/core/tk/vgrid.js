@@ -146,6 +146,7 @@ define('io.ox/core/tk/vgrid',
             self = this,
             // states
             initialized = false,
+            loaded = false,
             firstRun = true,
             firstAutoSelect = true,
             paused = false,
@@ -362,46 +363,10 @@ define('io.ox/core/tk/vgrid',
             }
         };
 
-        paint = function (offset) {
+        paint = (function () {
 
-            if (!initialized) {
-                return;
-            }
-
-            // keep positive
-            offset = Math.max(offset, 0);
-
-            if (offset === currentOffset) {
-                return DONE;
-            } else {
-                currentOffset = offset;
-            }
-
-            // pending?
-            var def;
-            if (paint.pending) {
-                // enqueue latest paint
-                paint.pending = [offset, (def = $.Deferred())];
-                return def;
-            } else {
-                paint.pending = true;
-            }
-
-            // continuation
-            var cont = function (data) {
-
-                // pending?
-                if (isArray(paint.pending)) {
-                    // process latest paint
-                    offset = paint.pending[0];
-                    def = paint.pending[1];
-                    paint.pending = false;
-                    //currentOffset = offset;
-                    paint(offset).done(def.resolve);
-                    return;
-                } else {
-                    paint.pending = false;
-                }
+            // calling this via LFO, so that we always get the latest data
+            function cont(offset, data) {
 
                 // vars
                 var i, $i, shift = 0, j = '', row,
@@ -456,19 +421,36 @@ define('io.ox/core/tk/vgrid',
                 // remember bounds
                 bounds.top = offset;
                 bounds.bottom = offset + numRows;
+            }
+
+            return function (offset) {
+
+                if (!initialized) {
+                    return;
+                }
+
+                // keep positive
+                offset = Math.max(offset, 0);
+
+                if (offset === currentOffset) {
+                    return DONE;
+                } else {
+                    currentOffset = offset;
+                }
+
+                // get all items
+                var load = loadData[currentMode] || loadData.all,
+                    subset = all.slice(offset, offset + numRows),
+                    lfo = _.lfo(cont, offset);
+
+                return load.call(self, subset)
+                    .done(lfo)
+                    .fail(function () {
+                        // continue with dummy array
+                        lfo(new Array(subset.length));
+                    });
             };
-
-            // get all items
-            var load = loadData[currentMode] || loadData.all,
-                subset = all.slice(offset, offset + numRows);
-
-            return load.call(self, subset)
-                .done(cont)
-                .fail(function () {
-                    // continue with dummy array
-                    cont(new Array(subset.length));
-                });
-        };
+        }());
 
         resize = function () {
             // get num of rows
@@ -520,7 +502,7 @@ define('io.ox/core/tk/vgrid',
             }
             // empty?
             scrollpane.find('.io-ox-center').remove().end();
-            if (list.length === 0) {
+            if (list.length === 0 && loaded) {
                 scrollpane.append($.fail(emptyMessage ? emptyMessage(self.getMode()) : gt('Empty')));
             }
             // trigger event
@@ -578,10 +560,6 @@ define('io.ox/core/tk/vgrid',
 
         loadAll = function () {
 
-            if (paused) {
-                return $.when();
-            }
-
             if (all.length === 0) {
                 // be busy
                 scrollpane.find('.io-ox-center').remove().end();
@@ -605,13 +583,28 @@ define('io.ox/core/tk/vgrid',
             // get all IDs
             var load = loadIds[currentMode] || loadIds.all;
 
-            return load.call(self)
-                .done(function (list) {
+            return load.call(self).then(
+                function (list) {
+                    // mark as loaded
+                    loaded = true;
                     // get list
                     if (!isArray(list)) {
                         // try to use 'data' property
                         self.prop('total', list.more);
                         list = list.data;
+                    }
+                    // is pause? (only allow new items)
+                    if (paused) {
+                        var hash = {}, tmp = [];
+                        _(all).each(function (obj) {
+                            hash[_.cid(obj)] = true;
+                        });
+                        _(list).each(function (obj) {
+                            if (!(_.cid(obj) in hash)) {
+                                tmp.push(obj);
+                            }
+                        });
+                        list = tmp.concat(all);
                     }
                     if (isArray(list)) {
                         return apply(list)
@@ -627,8 +620,9 @@ define('io.ox/core/tk/vgrid',
                         console.warn('VGrid.all() must provide an array!');
                         return $.Deferred().reject();
                     }
-                })
-                .fail(handleFail);
+                },
+                handleFail
+            );
         };
 
         init = function () {
@@ -678,19 +672,17 @@ define('io.ox/core/tk/vgrid',
         };
 
         fnScroll = _.throttle(function () {
-            if (paint.pending === false) {
-                var top = scrollpane.scrollTop(),
-                    index = getIndex(top);
-                // checks bounds
-                if (index >= bounds.bottom - numVisible - 2) {
-                    // below bottom (scroll down)
-                    paint(index - (numVisible >> 1));
-                } else if (index < bounds.top + 2 && bounds.top !== 0) {
-                    // above top (scroll up)
-                    paint(index - numVisible * 1.5, 'above');
-                }
+            var top = scrollpane.scrollTop(),
+                index = getIndex(top);
+            // checks bounds
+            if (index >= bounds.bottom - numVisible - 2) {
+                // below bottom (scroll down)
+                paint(index - (numVisible >> 1));
+            } else if (index < bounds.top + 2 && bounds.top !== 0) {
+                // above top (scroll up)
+                paint(index - numVisible * 1.5, 'above');
             }
-        }, 100);
+        }, 50);
 
         // selection events
         this.selection
@@ -758,11 +750,14 @@ define('io.ox/core/tk/vgrid',
             return initLabels();
         };
 
-        this.repaint = function () {
+        this.repaint = _.debounce(function () {
             var offset = currentOffset || 0;
             currentOffset = null;
-            return paint(offset);
-        };
+            // cannot hand over deferred due to debounce;
+            // don't remove debouce cause repaint is likely wired with APIs' refresh.list
+            // which may be called many times in a row
+            paint(offset);
+        }, 100, true);
 
         this.clear = function () {
             return paused ? $.when() : apply([], true);
@@ -782,6 +777,7 @@ define('io.ox/core/tk/vgrid',
             // otherwise subsequent search queries are impossible
             // if this function gets called too often, fix it elsewhere
             currentMode = mode;
+            this.trigger('change:mode', currentMode);
             _.url.hash('id', null);
             firstAutoSelect = true;
             return this.refresh();

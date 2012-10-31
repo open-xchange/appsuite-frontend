@@ -98,6 +98,38 @@ define('io.ox/office/tk/utils',
         return object;
     };
 
+    /**
+     * Compares the two passed numeric arrays lexicographically.
+     *
+     * @param {Number[]} array1
+     *  The first array that will be compared to the second array.
+     *
+     * @param {Number[]} array2
+     *  The second array that will be compared to the first array.
+     *
+     * returns {Number}
+     *  A negative value, if array1 is lexicographically less than array2; a
+     *  positive value, if array1 is lexicographically greater than array2; or
+     *  zero, if both arrays are equal.
+     */
+    Utils.compareNumberArrays = function (array1, array2) {
+
+        var // minimum length of both arrays
+            length = Math.min(array1.length, array2.length),
+            // loop index
+            index = 0;
+
+        // compare all array elements
+        for (index = 0; index < length; index += 1) {
+            if (array1[index] !== array2[index]) {
+                return array1[index] - array2[index];
+            }
+        }
+
+        // leading parts of both arrays are equal, compare array lengths
+        return array1.length - array2.length;
+    };
+
     // calculation and conversion ---------------------------------------------
 
     Utils.minMax = function (value, min, max) {
@@ -602,7 +634,7 @@ define('io.ox/office/tk/utils',
 
         function extend(options, extensions) {
             _(extensions).each(function (value, name) {
-                if (_.isObject(value) && !_.isFunction(value)) {
+                if (_.isObject(value) && !_.isArray(value) && !_.isFunction(value)) {
                     // extension value is an object: ensure that the options map contains an embedded object
                     if (!_.isObject(options[name])) {
                         options[name] = {};
@@ -718,15 +750,20 @@ define('io.ox/office/tk/utils',
      * the last sibling, goes up to the parent node(s) and tries to return
      * their next sibling.
      *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The DOM root node whose sub node tree will not be left when searching
+     *  for the next node. If this object is a jQuery collection, uses the
+     *  first node it contains.
+     *
      * @param {Node|jQuery} node
      *  The DOM node whose successor will be returned. If this object is a
      *  jQuery collection, uses the first node it contains.
      *
      * @returns {Node|Null}
-     *  The next node in the DOM tree; or null, if the passed node is the very
-     *  last leaf in the DOM tree.
+     *  The next node in the DOM sub tree of the root node; or null, if the
+     *  passed node is the very last leaf in the DOM sub tree.
      */
-    Utils.getNextNodeInTree = function (node) {
+    Utils.getNextNodeInTree = function (rootNode, node) {
         node = Utils.getDomNode(node);
 
         // node is an element with child nodes, return its first child
@@ -734,16 +771,25 @@ define('io.ox/office/tk/utils',
             return node.firstChild;
         }
 
-        // find first node up the tree that has a sibling, return that sibling
+        // find first node up the tree that has a sibling, get that sibling
         while (node && !node.nextSibling) {
             node = node.parentNode;
         }
-        return node && node.nextSibling;
+        node = node && node.nextSibling;
+
+        // check that this node is inside the root node
+        rootNode = Utils.getDomNode(rootNode);
+        return (node && rootNode.contains(node)) ? node : null;
     };
 
     /**
      * Finds a DOM node that follows the passed node in DOM tree order and that
      * matches a jQuery selector.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The DOM root node whose sub node tree will not be left when searching
+     *  for the next node. If this object is a jQuery collection, uses the
+     *  first node it contains.
      *
      * @param {Node|jQuery} node
      *  The DOM node whose successor will be returned. If this object is a
@@ -757,13 +803,13 @@ define('io.ox/office/tk/utils',
      *  http://api.jquery.com/is for details.
      *
      * @returns {Node|Null}
-     *  The first node in the DOM tree, that follows the passed node and
-     *  matches the selector; or null, no node has been found.
+     *  The first node in the DOM sub tree of the root node, that follows the
+     *  passed node and matches the selector; or null, no node has been found.
      */
-    Utils.findNextNodeInTree = function (node, selector) {
-        node = Utils.getNextNodeInTree(node);
+    Utils.findNextNodeInTree = function (rootNode, node, selector) {
+        node = Utils.getNextNodeInTree(rootNode, node);
         while (node && !$(node).is(selector)) {
-            node = Utils.getNextNodeInTree(node);
+            node = Utils.getNextNodeInTree(rootNode, node);
         }
         return node;
     };
@@ -775,15 +821,21 @@ define('io.ox/office/tk/utils',
      * the last sibling, goes up to the parent node(s) and tries to return
      * their next sibling.
      *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The DOM root node whose sub node tree will not be left when searching
+     *  for the previous node. If this object is a jQuery collection, uses the
+     *  first node it contains.
+     *
      * @param {Node|jQuery} node
      *  The DOM node whose predecessor will be returned. If this object is a
      *  jQuery collection, uses the first node it contains.
      *
      * @returns {Node|Null}
-     *  The previous node in the DOM tree, or null, if the passed node is the
-     *  root node of the DOM tree.
+     *  The previous node in the DOM sub tree of the root node; or null, if the
+     *  passed node is the root node itself (or is not contained in the root
+     *  node).
      */
-    Utils.getPreviousNodeInTree = function (node) {
+    Utils.getPreviousNodeInTree = function (rootNode, node) {
         node = Utils.getDomNode(node);
 
         // if node has a previous sibling, return its last leaf
@@ -795,13 +847,22 @@ define('io.ox/office/tk/utils',
             return node;
         }
 
-        // otherwise, return the parent node (will return null for the root node)
-        return node.parentNode;
+        // otherwise, go to the parent node
+        node = node.parentNode;
+
+        // check that this node is inside the root node
+        rootNode = Utils.getDomNode(rootNode);
+        return ((node === rootNode) || rootNode.contains(node)) ? node : null;
     };
 
     /**
      * Finds a DOM node that precedes the passed node in DOM tree order and
      * that matches a jQuery selector.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The DOM root node whose sub node tree will not be left when searching
+     *  for the previous node. If this object is a jQuery collection, uses the
+     *  first node it contains.
      *
      * @param {Node|jQuery} node
      *  The DOM node whose predecessor will be returned. If this object is a
@@ -815,13 +876,14 @@ define('io.ox/office/tk/utils',
      *  http://api.jquery.com/is for details.
      *
      * @returns {Node|Null}
-     *  The first node in the DOM tree, that precedes the passed node and that
-     *  matches the selector; or null, no node has been found.
+     *  The first node in the DOM sub tree of the root node, that precedes the
+     *  passed node and that matches the selector; or null, no node has been
+     *  found.
      */
-    Utils.findPreviousNodeInTree = function (node, selector) {
-        node = Utils.getPreviousNodeInTree(node);
+    Utils.findPreviousNodeInTree = function (rootNode, node, selector) {
+        node = Utils.getPreviousNodeInTree(rootNode, node);
         while (node && !$(node).is(selector)) {
-            node = Utils.getPreviousNodeInTree(node);
+            node = Utils.getPreviousNodeInTree(rootNode, node);
         }
         return node;
     };
@@ -1017,6 +1079,48 @@ define('io.ox/office/tk/utils',
      */
     Utils.findLastTextNode = function (element) {
         return Utils.findDescendantNode(element, Utils.JQ_TEXTNODE_SELECTOR, { reverse: true });
+    };
+
+    /**
+     * Returns a child node of the passed node, that is at a specific index in
+     * the array of all matching child nodes.
+     *
+     * @param {HTMLElement|jQuery} element
+     *  A DOM element object whose child nodes will be visited. If this object
+     *  is a jQuery collection, uses the first node it contains.
+     *
+     * @param {String|Function|Node|jQuery} selector
+     *  A jQuery selector that will be used to decide which child nodes are
+     *  matching while searching to the specified index. The selector will be
+     *  passed to the jQuery method jQuery.is() for each node. If this selector
+     *  is a function, it will be called with the current DOM node bound to the
+     *  symbol 'this'. See the jQuery API documentation at
+     *  http://api.jquery.com/is for details.
+     *
+     * @param {Number} index
+     *  The zero-based index of the child node in the set of child nodes
+     *  matching the selector that will be returned.
+     *
+     * @returns {Node|Null}
+     *  The 'index'-th child node that matches the selector; or null, if the
+     *  index is outside the valid range.
+     */
+    Utils.getSelectedChildNodeByIndex = function (element, selector, index) {
+
+        var // the node to be returned
+            resultNode = null;
+
+        // find the 'index'-th matching child node
+        Utils.iterateSelectedDescendantNodes(element, selector, function (node) {
+            // node found: store and escape from loop
+            if (index === 0) {
+                resultNode = node;
+                return Utils.BREAK;
+            }
+            index -= 1;
+        }, undefined, { children: true });
+
+        return resultNode;
     };
 
     /**
@@ -1458,8 +1562,8 @@ define('io.ox/office/tk/utils',
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the new label. Supports
-     *  all generic options supported by the method Utils.createControl(), and
-     *  all caption options supported by the method Utils.setControlLabel().
+     *  all generic options supported by the methods Utils.createControl() and
+     *  Utils.setControlLabel().
      *
      * @returns {jQuery}
      *  A jQuery object containing the new label element.
@@ -1555,7 +1659,9 @@ define('io.ox/office/tk/utils',
     Utils.selectOptionButton = function (buttons, value) {
 
         var // find the button to be activated
-            button = _.isNull(value) ? $() : buttons.filter(function () { return _.isEqual(value, Utils.getControlValue($(this))); });
+            button = _.isNull(value) ? $() : buttons.filter(function () {
+                return _.isEqual(value, Utils.getControlValue($(this)));
+            });
 
         // remove highlighting from all buttons, highlight active button
         Utils.toggleButtons(buttons, false);

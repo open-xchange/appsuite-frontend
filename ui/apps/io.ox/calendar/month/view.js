@@ -29,29 +29,73 @@ define('io.ox/calendar/month/view',
     var View = Backbone.View.extend({
 
         className: 'week',
+        weekStart: 0,
+        weekEnd: 0,
 
         events: {
-            'click .appointment': 'onClickAppointment'
+            'click .appointment': 'onClickAppointment',
+            'dblclick .day' : 'onCreateAppointment',
+            'mouseenter .appointment': 'onEnterAppointment',
+            'mouseleave .appointment': 'onLeaveAppointment'
         },
 
         initialize: function (options) {
             this.collection.on('reset', this.renderAppointments, this);
+            this.weekStart = options.day;
+            this.weekEnd = options.day + date.WEEK;
         },
 
         onClickAppointment: function (e) {
-            var obj = _.cid($(e.currentTarget).attr('data-cid'));
-            this.trigger('showAppoinment', e, obj);
+            var cid = $(e.currentTarget).data('cid'),
+                el = $('[data-cid="' + cid + '"]');
+            $('.appointment').removeClass('opac').not(el).addClass('opac');
+            el.add('.appointment.current').toggleClass('current');
+            this.trigger('showAppoinment', e, _.cid(cid + ''));
+        },
+
+        onCreateAppointment: function (e) {
+            this.trigger('createAppoinment', e, $(e.currentTarget).data('date'));
+        },
+
+        // handler for onmouseenter event for hover effect
+        onEnterAppointment: function (e) {
+            $('[data-cid="' + $(e.currentTarget).data('cid') + '"]').addClass('hover');
+        },
+
+        // handler for onmouseleave event for hover effect
+        onLeaveAppointment: function (e) {
+            $('[data-cid="' + $(e.currentTarget).data('cid') + '"]').removeClass('hover');
         },
 
         render: function () {
 
-            var list = util.getWeekScaffold(this.options.day);
+            var list = util.getWeekScaffold(this.options.day),
+                firstFound = false,
+                weekinfo = $('<div>')
+                    .addClass('week-info')
+                    .append(
+                        $('<span>').addClass('cw').append(
+                            gt('CW'),
+                            gt.noI18n(' ' + new date.Local(this.options.day).format('w'))
+                        )
+                    );
 
-            _(list).each(function (day) {
+            _(list.days).each(function (day, i) {
+                if (day.isFirst) {
+                    firstFound = true;
+                }
                 this.$el.append(
                     $('<div>')
-                        .addClass('day out' + (day.isFirst ? ' first' : '') + (day.isToday ? ' today' : '') + (day.isWeekend ? ' weekend' : ''))
+                        .css('z-index', list.days.length - i)
+                        .addClass('day out' +
+                            (day.isFirst ? ' first' : '') +
+                            (day.isToday ? ' today' : '') +
+                            (day.isWeekend ? ' weekend' : '') +
+                            (day.isFirst && i > 0 ? ' borderleft' : '') +
+                            (list.hasFirst ? (firstFound ? ' bordertop' : ' borderbottom') : '')
+                        )
                         .attr('date', day.year + '-' + day.month + '-' + day.date)
+                        .data('date', day.timestamp)
                         .append(
                             $('<div>').addClass('list abs'),
                             $('<div>').addClass('number').text(gt.noI18n(day.date))
@@ -59,13 +103,11 @@ define('io.ox/calendar/month/view',
                 );
 
                 if (day.isFirst) {
-                    this.$el.prepend(
-                        $('<div>').addClass('vertical').html(
-                                gt.noI18n(date.locale.months[day.month]) + '<br>' + gt.noI18n(day.year)
-                        )
-                    );
+                    weekinfo.prepend(gt.noI18n(date.locale.months[day.month]) + '<br>' + gt.noI18n(day.year));
                 }
             }, this);
+
+            this.$el.prepend(weekinfo.addClass(firstFound ? ' bordertop' : ''));
 
             return this;
         },
@@ -89,33 +131,43 @@ define('io.ox/calendar/month/view',
         renderAppointments: function () {
             // clear first
             this.$el.find('.appointment').remove();
+
             // loop over all appointments
             this.collection.each(function (model) {
-                var start = formatDate(new date.Local(model.get('start_date'))),
-                    end = formatDate(new date.Local(model.get('end_date') - 1)),
-                    copy = _.copy(model.attributes, true),
-                    selector, d;
+
+                var startTSUTC = Math.max(model.get('start_date'), this.weekStart),
+                    endTSUTC = Math.min(model.get('end_date'), this.weekEnd) - 1;
+
+                // fix full-time UTC timestamps
+                if (model.get('full_time')) {
+                    startTSUTC = date.Local.utc(startTSUTC);
+                    endTSUTC = date.Local.utc(endTSUTC);
+                }
+
+                var startDate = new date.Local(startTSUTC),
+                    endDate = new date.Local(endTSUTC),
+                    start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime(),
+                    end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime(),
+                    sel,
+                    maxCount = 7;
 
                 if (model.get('start_date') < 0) {
                     console.error('FIXME: start_date should not be negative');
                     throw 'FIXME: start_date should not be negative';
                 }
 
-                // FIXE ME: just to make it work and safe
-                var maxCount = 100;
                 // draw across multiple days
-                while (true && maxCount) {
+                while (maxCount > 0) {
                     maxCount--;
-                    //console.log('start/end', start, end);
-                    selector = '[date="' + start + '"] .list';
-                    this.$(selector).append(this.renderAppointment(model));
+
+                    sel = '[date="' + formatDate(startDate) + '"] .list';
+                    this.$(sel).append(this.renderAppointment(model));
+
                     // inc date
                     if (start !== end) {
-                        copy.start_date += date.DAY;
-                        d = new date.Local(copy.start_date);
-                        d.setHours(0, 0, 0, 0);
-                        copy.start_date = d.getTime();
-                        start = formatDate(d);
+                        startDate.setDate(startDate.getDate() + 1);
+                        startDate.setHours(0, 0, 0, 0);
+                        start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime();
                     } else {
                         break;
                     }
@@ -133,13 +185,13 @@ define('io.ox/calendar/month/view',
         return $('<div>')
             .addClass('abs')
             .append(
-                $('<div>').addClass('scrollpane'),
-                $('<div>').addClass('footer').append(function () {
+                $('<div>').addClass('daylabel').append(function () {
                     _(days).each(function (day) {
                         tmp.push($('<div>').addClass('weekday').text(gt.noI18n(day)));
                     });
                     return tmp;
-                })
+                }),
+                $('<div>').addClass('scrollpane')
             );
     };
 

@@ -24,9 +24,10 @@ define("io.ox/mail/main",
      "io.ox/core/tk/upload",
      "io.ox/core/extPatterns/dnd",
      "io.ox/core/notifications",
+     "io.ox/core/api/folder",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
-    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd, notifications) {
+    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd, notifications, folderAPI) {
 
     'use strict';
 
@@ -77,13 +78,14 @@ define("io.ox/mail/main",
         // folder tree
         commons.addFolderView(app, { type: 'mail' });
 
-        // sound
-        audio = $('<audio>', { src: ox.base + '/apps/io.ox/mail/images/ping.mp3' })
-            .hide().prop('volume', 0.40).appendTo(win.nodes.main);
-
-        api.on('new-mail', function (e, mails) {
-            audio.get(0).play();
-        });
+// TODO: re-enable once we have a proper sound and a user setting
+//        // sound
+//        audio = $('<audio>', { src: ox.base + '/apps/io.ox/mail/images/ping.mp3' })
+//            .hide().prop('volume', 0.40).appendTo(win.nodes.main);
+//
+//        api.on('new-mail', function (e, mails) {
+//            audio.get(0).play();
+//        });
 
         var vsplit = commons.vsplit(win.nodes.main);
         left = vsplit.left.addClass('border-right');
@@ -171,16 +173,6 @@ define("io.ox/mail/main",
             }
         });
 
-        ext.point('io.ox/mail/vgrid/toolbar').extend({
-            id: 'count',
-            index: 200,
-            draw: function () {
-                this.append(
-                    $('<div>').addClass('grid-count').css({ textAlign: 'center', color: '#888' })
-                );
-            }
-        });
-
         grid.on('change:prop:unread', function (e, value) {
             if (value === true) {
                 grid.refresh().done(grid.pause);
@@ -192,7 +184,7 @@ define("io.ox/mail/main",
         grid.on('change:prop', updateGridOptions);
         updateGridOptions();
 
-        ext.point('io.ox/mail/vgrid/toolbar').invoke('draw', grid.getToolbar());
+        commons.addGridToolbarFolder(app, grid);
 
         grid.on('change:ids', function (e, all) {
             // get node & clear now

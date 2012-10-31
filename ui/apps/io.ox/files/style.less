@@ -12,13 +12,6 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-.files-scrollable-pane {
-    padding:13px;
-    width: 100%;
-    min-height: 100%;
-    box-sizing: border-box;
-}
-
 .files-iconview {
 
     @innerHeight:   110px;
@@ -37,6 +30,10 @@
 
     .files-scrollable-pane {
 
+        padding:13px;
+        width: 100%;
+        .box-sizing(border-box);
+    
         .inline-actions {
 
             text-align: right;
@@ -189,7 +186,7 @@
     line-height: 37px;
     height: 37px;
     width: 100%;
-    box-sizing: border-box; -moz-box-sizing: border-box;
+    .box-sizing(border-box);
 }
 
 .file-details .title .editing::-webkit-input-placeholder,

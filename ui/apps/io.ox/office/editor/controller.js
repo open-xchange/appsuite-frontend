@@ -14,8 +14,8 @@
 define('io.ox/office/editor/controller',
     ['io.ox/office/tk/controller',
      'io.ox/office/editor/image',
-     'io.ox/office/editor/format/imagestyles'
-    ], function (BaseController, Image, ImageStyles) {
+     'io.ox/office/editor/format/objectstyles'
+    ], function (BaseController, Image, ObjectStyles) {
 
     'use strict';
 
@@ -36,7 +36,7 @@ define('io.ox/office/editor/controller',
                     enable: function () { return editor.isEditMode(); }
                 },
                 'document/editable/text': {
-                    chain: 'document/editable',
+                    parent: 'document/editable',
                     enable: function (enabled) { return enabled && editor.isTextSelected(); }
                 },
 
@@ -55,7 +55,7 @@ define('io.ox/office/editor/controller',
                     set: function () { app.flush(); }
                 },
                 'file/rename': {
-                    chain: 'document/editable',
+                    parent: 'document/editable',
                     get: function () { return app.getFileName(); },
                     set: function (fileName) { app.rename(fileName); }
                 },
@@ -63,21 +63,24 @@ define('io.ox/office/editor/controller',
                     enable: function () { return !editor.isEditMode() && app.hasFileDescriptor(); },
                     set: function (state) { app.acquireEditRights(); }
                 },
+                'file/quit': {
+                    set: function () { window.setTimeout(function () { app.quit(); }); }
+                },
 
                 // document contents
 
                 'document/undo': {
-                    chain: 'document/editable',
+                    parent: 'document/editable',
                     enable: function (enabled) { return enabled && editor.undoAvailable() > 0; },
                     set: function () { editor.undo(1); }
                 },
                 'document/redo': {
-                    chain: 'document/editable',
+                    parent: 'document/editable',
                     enable: function (enabled) { return enabled && editor.redoAvailable() > 0; },
                     set: function () { editor.redo(1); }
                 },
                 'document/quicksearch': {
-                    get: function () { return editor.hasHighlighting(); },
+                    //get: function () { return editor.hasHighlighting(); },
                     set: function (query) { editor.quickSearch(query); },
                     done: $.noop // do not focus editor
                 },
@@ -85,26 +88,26 @@ define('io.ox/office/editor/controller',
                 // paragraphs
 
                 'paragraph/attributes': {
-                    chain: 'document/editable/text',
+                    parent: 'document/editable/text',
                     get: function () { return editor.getAttributes('paragraph'); }
                 },
                 'paragraph/stylesheet': {
-                    chain: 'paragraph/attributes',
+                    parent: 'paragraph/attributes',
                     get: function (attributes) { return attributes.style; },
                     set: function (styleId) { editor.setAttribute('paragraph', 'style', styleId); }
                 },
                 'paragraph/alignment': {
-                    chain: 'paragraph/attributes',
+                    parent: 'paragraph/attributes',
                     get: function (attributes) { return attributes.alignment; },
                     set: function (alignment) { editor.setAttribute('paragraph', 'alignment', alignment); }
                 },
                 'paragraph/lineheight': {
-                    chain: 'paragraph/attributes',
+                    parent: 'paragraph/attributes',
                     get: function (attributes) { return attributes.lineheight; },
                     set: function (lineHeight) { editor.setAttribute('paragraph', 'lineheight', lineHeight); }
                 },
                 'paragraph/fillcolor': {
-                    chain: 'paragraph/attributes',
+                    parent: 'paragraph/attributes',
                     get: function (attributes) { return attributes.fillcolor; },
                     set: function (color) { editor.setAttribute('paragraph', 'fillcolor', color); }
                 },
@@ -112,143 +115,147 @@ define('io.ox/office/editor/controller',
                 // characters
 
                 'character/attributes': {
-                    chain: 'document/editable/text',
+                    parent: 'document/editable/text',
                     get: function () { return editor.getAttributes('character'); }
                 },
                 'character/stylesheet': {
-                    chain: 'character/attributes',
+                    parent: 'character/attributes',
                     get: function (attributes) { return attributes.style; },
                     set: function (styleId) { editor.setAttribute('character', 'style', styleId); }
                 },
                 'character/fontname': {
-                    chain: 'character/attributes',
+                    parent: 'character/attributes',
                     get: function (attributes) { return attributes.fontname; },
                     set: function (fontName) { editor.setAttribute('character', 'fontname', fontName); }
                 },
                 'character/fontsize': {
-                    chain: 'character/attributes',
+                    parent: 'character/attributes',
                     get: function (attributes) { return attributes.fontsize; },
                     set: function (fontSize) { editor.setAttribute('character', 'fontsize', fontSize); }
                 },
                 'character/bold': {
-                    chain: 'character/attributes',
+                    parent: 'character/attributes',
                     get: function (attributes) { return attributes.bold; },
                     set: function (state) { editor.setAttribute('character', 'bold', state); }
                 },
                 'character/italic': {
-                    chain: 'character/attributes',
+                    parent: 'character/attributes',
                     get: function (attributes) { return attributes.italic; },
                     set: function (state) { editor.setAttribute('character', 'italic', state); }
                 },
                 'character/underline': {
-                    chain: 'character/attributes',
+                    parent: 'character/attributes',
                     get: function (attributes) { return attributes.underline; },
                     set: function (state) { editor.setAttribute('character', 'underline', state); }
                 },
                 'character/color': {
-                    chain: 'character/attributes',
+                    parent: 'character/attributes',
                     get: function (attributes) { return attributes.color; },
                     set: function (color) { editor.setAttribute('character', 'color', color); }
                 },
                 'character/fillcolor': {
-                    chain: 'character/attributes',
+                    parent: 'character/attributes',
                     get: function (attributes) { return attributes.fillcolor; },
                     set: function (color) { editor.setAttribute('character', 'fillcolor', color); }
+                },
+                'character/tab' : {
+                    parent: 'character/attributes',
+                    set: function () { editor.insertTab(); }
                 },
 
                 // tables
 
                 'table/insert': {
-                    chain: 'document/editable/text',
+                    parent: 'document/editable/text',
                     set: function (size) { editor.insertTable(size); }
                 },
 
                 'document/editable/table': {
-                    chain: 'document/editable/text',
+                    parent: 'document/editable/text',
                     enable: function (enabled) { return enabled && editor.isPositionInTable(); }
                 },
                 'table/insert/row': {
-                    chain: 'document/editable/table',
+                    parent: 'document/editable/table',
                     set: function () { editor.insertRow(); }
                 },
                 'table/insert/column': {
-                    chain: 'document/editable/table',
+                    parent: 'document/editable/table',
                     set: function () { editor.insertColumn(); }
                 },
                 'table/delete/row': {
-                    chain: 'document/editable/table',
+                    parent: 'document/editable/table',
                     set: function () { editor.deleteRows(); }
                 },
                 'table/delete/column': {
-                    chain: 'document/editable/table',
+                    parent: 'document/editable/table',
                     set: function () { editor.deleteColumns(); }
                 },
 
                 'table/attributes': {
-                    chain: 'document/editable/table',
+                    parent: 'document/editable/table',
                     get: function () { return editor.getAttributes('table'); }
                 },
 
                 // images
 
                 'image/insert/file': {
-                    chain: 'document/editable/text',
+                    parent: 'document/editable/text',
                     set: function () { Image.insertFileDialog(app); }
                 },
                 'image/insert/url': {
-                    chain: 'document/editable/text',
+                    parent: 'document/editable/text',
                     set: function () { Image.insertURLDialog(app); }
                 },
 
                 'document/editable/image': {
-                    chain: 'document/editable',
+                    parent: 'document/editable',
                     enable: function (enabled) { return enabled && editor.isImageSelected(); }
                 },
                 'image/delete': {
-                    chain: 'document/editable/image',
+                    parent: 'document/editable/image',
                     set: function () { editor.deleteSelected(); }
                 },
 
                 'image/attributes': {
-                    chain: 'document/editable/image',
+                    parent: 'document/editable/image',
                     get: function () { return editor.getAttributes('image'); }
                 },
                 'image/floatmode': {
-                    chain: 'image/attributes',
-                    // TODO: enable this when image selection works correctly
-                    // get: function (attributes) { return ImageStyles.getFloatModeFromAttributes(attributes); },
+                    parent: 'image/attributes',
+                    // TODO: enable this when object selection works correctly
+                    // get: function (attributes) { return ObjectStyles.getFloatModeFromAttributes(attributes); },
                     get: function () { return editor.getImageFloatMode(); },
-                    set: function (floatMode) { editor.setAttributes('image', ImageStyles.getAttributesFromFloatMode(floatMode)); }
+                    set: function (floatMode) { editor.setAttributes('image', ObjectStyles.getAttributesFromFloatMode(floatMode)); }
                 },
 
                 // numbering and bullets
                 'list/bullets': {
-                    chain: 'paragraph/attributes',
-                    get: function (attributes) { return attributes.ilvl !== undefined; },
+                    parent: 'paragraph/attributes',
+                    get: function (attributes) { return attributes.ilvl !== null && attributes.ilvl !== -1 && editor.getLists().isDefaultList(attributes.numId, 'bullet'); },
                     set: function (mode) {
                         if (mode) {
-                            editor.createList('bullet');
+                            editor.createDefaultList('bullet');
                         } else {
-                            editor.setAttributes('paragraph', { numId: undefined, ilvl: undefined });
+                            editor.setAttributes('paragraph', { numId: -1, ilvl: -1 });
                         }
                     }
                 },
                 'list/numbering': {
-                    chain: 'paragraph/attributes',
+                    parent: 'paragraph/attributes',
                     get: function (attributes) {
-                        return attributes.ilvl !== undefined;
+                        return attributes.ilvl !== null && attributes.ilvl !== -1 && editor.getLists().isDefaultList(attributes.numId, 'numbering');
                     },
                     set: function (mode) {
                         if (mode) {
-                            editor.createList('numbering');
+                            editor.createDefaultList('numbering');
                         } else {
-                            editor.setAttributes('paragraph', { numId: undefined, ilvl: undefined });
+                            editor.setAttributes('paragraph', { numId: -1, ilvl: -1 });
                         }
                     }
                 },
                 'list/incindent': {
-                    chain: 'paragraph/attributes',
-                    enable: function (enabled) { return enabled && this.ilvl !== undefined && this.ilvl < 8; },
+                    parent: 'paragraph/attributes',
+                    enable: function (enabled) { return enabled && this.ilvl !== null && this.ilvl !== -1 && this.ilvl < 8; },
                     get: function (attributes) {
                         this.ilvl = attributes.ilvl;
                     },
@@ -259,8 +266,8 @@ define('io.ox/office/editor/controller',
                     }
                 },
                 'list/decindent': {
-                    chain: 'paragraph/attributes',
-                    enable: function (enabled) { return enabled && this.ilvl !== undefined && this.ilvl > 0; },
+                    parent: 'paragraph/attributes',
+                    enable: function (enabled) { return enabled && this.ilvl !== null && this.ilvl !== -1 && this.ilvl > 0; },
                     get: function (attributes) {
                         this.ilvl = attributes.ilvl;
                     },
@@ -280,10 +287,6 @@ define('io.ox/office/editor/controller',
                 'debug/sync': {
                     get: function () { return app.isSynchronizedMode(); },
                     set: function (state) { app.setSynchronizedMode(state); }
-                },
-                'debug/borderless': {
-                    get: function () { return app.getView().getToolPane().getNode().hasClass('borderless'); },
-                    set: function (state) { return app.getView().getToolPane().getNode().toggleClass('borderless', state); }
                 }
 
             };

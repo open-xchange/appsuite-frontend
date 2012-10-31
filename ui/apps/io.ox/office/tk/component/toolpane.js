@@ -40,7 +40,7 @@ define('io.ox/office/tk/component/toolpane',
             self = this,
 
             // the container element representing the tool pane
-            node = $('<div>').addClass('io-ox-pane top toolpane borderless'),
+            node = $('<div>').addClass('io-ox-pane top toolpane'),
 
             // all registered tool bars, mapped by tool bar key
             toolBars = {},

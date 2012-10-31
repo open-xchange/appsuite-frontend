@@ -266,7 +266,7 @@ define('io.ox/core/cache',
 
         // get from cache
         var get = this.get;
-        this.get = function (key, getter) {
+        this.get = function (key, getter, readThroughHandler) {
             // array?
             if (_.isArray(key)) {
 
@@ -279,7 +279,8 @@ define('io.ox/core/cache',
                 )
                 .done(function () {
                     // contains null?
-                    var containsNull = _(arguments).reduce(function (memo, o) {
+                    var args,
+                        containsNull = _(arguments).reduce(function (memo, o) {
                             return memo || o === null;
                         }, false);
                     if (containsNull) {
@@ -289,7 +290,9 @@ define('io.ox/core/cache',
                             def.resolve(null);
                         }
                     } else {
-                        def.resolve($.makeArray(arguments));
+                        args = $.makeArray(arguments);
+                        if (readThroughHandler) { readThroughHandler(args); }
+                        def.resolve(args);
                     }
                 });
 
@@ -302,7 +305,7 @@ define('io.ox/core/cache',
                 } else {
                     tmpKey = this.keyGenerator(key);
                 }
-                return get(tmpKey, getter);
+                return get(tmpKey, getter, readThroughHandler);
             }
         };
 

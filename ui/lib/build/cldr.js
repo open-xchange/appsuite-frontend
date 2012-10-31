@@ -219,9 +219,11 @@ function processLanguage(lang) {
                 var retval = {};
                 _.each(ldml.get(gregorian +
                     "dayPeriods/dayPeriodContext[@type='format']/" +
-                    "dayPeriodWidth[@type='narrow']/dayPeriod"),
+                    "dayPeriodWidth[@type='wide']/dayPeriod"),
                     function(period) {
-                        retval[period['@'].type] = period['#'];
+                        if (!period['@'].alt) {
+                            retval[period['@'].type] = period['#'];
+                        }
                     });
                 return retval;
             }

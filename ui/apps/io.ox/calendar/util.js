@@ -460,11 +460,12 @@ define("io.ox/calendar/util",
         getWeekScaffold: function (timestamp) {
 
             var day = this.getWeekStart(timestamp),
-                i = 0, d, obj, days = [];
+                i = 0, d, obj, ret = {};
+            ret.days = [];
 
             for (; i < 7; i += 1, day += DAY) {
                 d = new date.Local(day);
-                days.push(obj = {
+                ret.days.push(obj = {
                     year: d.getYear(),
                     month: d.getMonth(),
                     date: d.getDate(),
@@ -476,9 +477,12 @@ define("io.ox/calendar/util",
                 // is weekend?
                 obj.isWeekend = obj.day === 0 || obj.day === 6;
                 obj.isFirst = d.getDate() === 1;
+                if (obj.isFirst) {
+                    ret.hasFirst = true;
+                }
             }
 
-            return days;
+            return ret;
         },
 
         removeDuplicates: function (idsFromGrGroups, idsFromUsers) {

@@ -54,6 +54,9 @@ define("io.ox/core/api/factory",
                 search: { action: "search" },
                 remove: { action: "delete" }
             },
+            cid: function (o) {
+                return o.folder + '\t' + (o.sortKey || o.sort) + '.' + o.order + '.' + (o.max || o.limit || 0);
+            },
             done: {},
             fail: {},
             pipe: {},
@@ -74,15 +77,20 @@ define("io.ox/core/api/factory",
         // hash to track very first cache hit
         var readThrough = {};
 
+        // track last_modified
+        var lastModified = {};
+
         var api = {
 
             options: o,
+
+            cid: o.cid,
 
             getAll: function (options, useCache, cache, processResponse) {
 
                 // merge defaults for "all"
                 var opt = $.extend({}, o.requests.all, options || {}),
-                    cid = opt.folder + '\t' + (opt.sortKey || opt.sort) + '.' + opt.order + '.' + (opt.max || opt.limit || 0);
+                    cid = o.cid(opt);
 
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
@@ -95,6 +103,37 @@ define("io.ox/core/api/factory",
                         module: o.module,
                         params: params,
                         processResponse: processResponse === undefined ? true : processResponse
+                    })
+                    .pipe(function (data) {
+                        // deferred
+                        var ready = $.when();
+                        // do we have the last_modified columns?
+                        if (/(^5,|,5,|5$)/.test(params.columns)) {
+                            return $.when.apply($,
+                                _(data).map(function (obj) {
+                                    var cid = _.cid(obj);
+                                    // do we see this item for the first time?
+                                    if (lastModified[cid] === undefined) {
+                                        lastModified[cid] = obj.last_modified;
+                                        return ready;
+                                    }
+                                    // do we see a newer item now?
+                                    else if (obj.last_modified > lastModified[cid]) {
+                                        lastModified[cid] = obj.last_modified;
+                                        return $.when(
+                                            api.caches.list.remove(cid),
+                                            api.caches.get.remove(cid)
+                                        )
+                                        .done(function () {
+                                            api.trigger('update:' + cid, obj);
+                                        });
+                                    }
+                                })
+                            )
+                            .pipe(function () { return data; });
+                        } else {
+                            return data;
+                        }
                     })
                     .pipe(function (data) {
                         return (o.pipe.all || _.identity)(data, opt);
@@ -110,7 +149,7 @@ define("io.ox/core/api/factory",
                         readThrough[cid] = true;
                         setTimeout(function () {
                             api.refresh();
-                        }, 3000); // wait some secs
+                        }, 5000); // wait some secs
                     }
                 };
 
@@ -183,18 +222,16 @@ define("io.ox/core/api/factory",
                             // update list cache
                             caches.list.merge(data).done(function (ok) {
                                 if (ok) {
-                                    api.trigger("refresh.list", data);
+                                    api.trigger('refresh.list');
                                 }
                             });
-                        } else {
-                            api.trigger("refresh.list", data);
                         }
                     })
                     .fail(function (e) {
                         _.call(o.fail.get, e, opt, o);
                     });
                 };
-                return (useCache ? caches.get.get(opt, getter) : getter())
+                return (useCache ? caches.get.get(opt, getter, o.pipe.getCache) : getter())
                     .pipe(o.pipe.getPost)
                     .done(o.done.get || $.noop);
             },

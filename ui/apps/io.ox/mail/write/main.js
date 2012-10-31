@@ -32,40 +32,29 @@ define('io.ox/mail/write/main',
 
     'use strict';
 
+    var ACTIONS = 'io.ox/mail/write/actions';
+
     // actions (define outside of multi-instance app)
-    ext.point('io.ox/mail/write/actions/send').extend({
-        id: 'send',
-        action: function (app) {
-            app.send();
+    ext.point(ACTIONS + '/send').extend({
+        action: function (baton) {
+            baton.app.send();
         }
     });
 
     // actions (define outside of multi-instance app)
-    ext.point('io.ox/mail/write/actions/draft').extend({
-        id: 'send',
-        action: function (app) {
-            app.saveDraft().done(function (data) {
-                app.setMsgRef(data.data);
-            }).fail(function (e) {
-
+    ext.point(ACTIONS + '/draft').extend({
+        action: function (baton) {
+            baton.app.saveDraft().done(function (data) {
+                baton.app.setMsgRef(data.data);
             });
         }
     });
 
-    ext.point('io.ox/mail/write/actions/proofread').extend({
-        id: 'proofread',
-        action: function (app) {
-            app.proofread();
+    ext.point(ACTIONS + '/discard').extend({
+        action: function (baton) {
+            baton.app.quit();
         }
     });
-
-    // links
-//    ext.point('io.ox/mail/write/links/toolbar').extend(new ext.Link({
-//        index: 200,
-//        id: 'proofread',
-//        label: 'Proofread',
-//        ref: 'io.ox/mail/write/actions/proofread'
-//    }));
 
     var UUID = 1;
 
@@ -165,9 +154,7 @@ define('io.ox/mail/write/main',
 
             win = ox.ui.createWindow({
                 name: 'io.ox/mail/write',
-                title: '',
-                toolbar: true,
-                close: true
+                chromeless: true
             });
 
             // due to tinyMCE's iframe
@@ -189,8 +176,8 @@ define('io.ox/mail/write/main',
                 .append(
                     $('<input>', { type: 'hidden', name: 'msgref', value: '' }),
                     $('<input>', { type: 'hidden', name: 'sendtype', value: mailAPI.SENDTYPE.NORMAL }),
-                    view.main,
-                    view.scrollpane
+                    view.leftside,
+                    view.rightside
                 )
             );
 
@@ -307,14 +294,14 @@ define('io.ox/mail/write/main',
         };
 
         app.getFrom = function () {
-            return (view.sidepanel.find('.fromselect-wrapper select').val() || '')
+            return (view.leftside.find('.fromselect-wrapper select').val() || '')
                 .split(/\|/).reverse();
         };
 
         app.setFrom = function (data) {
             return this.getPrimaryAddressFromFolder(data).done(function (from) {
                 var value = from[1] + '|' + (from[0] || from[1]);
-                view.sidepanel.find('select').val(value);
+                view.leftside.find('select').val(value);
             });
         };
 
@@ -488,9 +475,10 @@ define('io.ox/mail/write/main',
             this.setSendType(data.sendtype);
             // add files (from file storage)
             this.addFiles(data.infostore_ids);
-            // apply mode
-            var title = data.subject ? _.noI18n(data.subject) : windowTitles[composeMode = mail.mode];
-            win.setTitle(title);
+            // app title
+            var title = windowTitles[composeMode = mail.mode];
+            win.nodes.main.find('h1.title').text(title);
+            title = data.subject ? _.noI18n(data.subject) : title;
             app.setTitle(title);
             // set signature
             currentSignature = mail.signature || '';
@@ -876,9 +864,9 @@ define('io.ox/mail/write/main',
             if (app.getState() === app.STATES.DIRTY) {
                 require(["io.ox/core/tk/dialogs"], function (dialogs) {
                     new dialogs.ModalDialog()
-                        .text(gt("Do you really want to cancel editing this mail?"))
-                        .addPrimaryButton("delete", gt('Lose changes'))
-                        .addAlternativeButton('savedraft', gt('Save as draft'))
+                        .text(gt("Do you really want to discard this mail?"))
+                        .addPrimaryButton("delete", gt('Discard'))
+                        .addAlternativeButton('savedraft', gt("Save as draft"))
                         .addButton("cancel", gt('Cancel'))
                         .show()
                         .done(function (action) {

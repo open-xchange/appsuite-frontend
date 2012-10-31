@@ -35,22 +35,29 @@ define('io.ox/contacts/distrib/create-dist-view',
         id: 'displayname',
         index: 100,
         attribute: 'display_name',
-        label: gt('Title'),
+        label: gt('List name'),
         control: '<input type="text" class="input-xlarge">',
         buildControls: function () {
             var self = this,
-                buttonText = (_.isEmpty(self.model.get('distribution_list'))) ?  gt("Create list") : gt("Edit");
+                buttonText = (_.isEmpty(self.model.get('distribution_list'))) ?  gt("Create list") : gt("Save");
 
             return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
-                    this.buildElement(),
-                    $('<button class="btn btn-primary">').text(buttonText).on("click", function () {
-                        self.options.parentView.trigger('save:start');
-                        self.options.model.save().done(function () {
-                            self.options.parentView.trigger('save:success');
-                        }).fail(function () {
-                            self.options.parentView.trigger('save:fail');
-                        });
-                    })
+                // element
+                this.buildElement(),
+                // save/create button
+                $('<button class="btn btn-primary">').text(buttonText).on("click", function () {
+                    self.options.parentView.trigger('save:start');
+                    self.options.model.save().done(function () {
+                        self.options.parentView.trigger('save:success');
+                    }).fail(function () {
+                        self.options.parentView.trigger('save:fail');
+                    });
+                }),
+                // cancel button
+                $('<button class="btn">').text(gt('Discard')).on('click', function () {
+                    // use this sneaky channel
+                    $(this).trigger('controller:quit');
+                })
             ));
         }
 

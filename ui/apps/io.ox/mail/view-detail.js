@@ -146,10 +146,9 @@ define('io.ox/mail/view-detail',
     var delayedRead = function (data, node) {
         setTimeout(function () {
             node.removeClass('unread');
-            data.unseen = false;
-            api.caches.get.add(data);
+            api.tracker.applyAutoRead(data);
             node = data = null;
-        }, 2000); // 2 seconds
+        }, 1000); // 1 second(s)
     };
 
     var blockquoteClickOpen, blockquoteClickClose, mailTo;
@@ -232,6 +231,8 @@ define('io.ox/mail/view-detail',
                         $(this).replaceWith($('<blockquote>').append($(this).contents()));
                     })
                     .end()
+                    // base tag
+                    .find('base').remove().end()
                     // blockquote
                     .find('blockquote')
                         // remove white-space: pre/nowrap
@@ -367,11 +368,11 @@ define('io.ox/mail/view-detail',
                 node.addClass('by-myself');
             }
 
-            // unread?
-            if (util.isUnread(data)) {
+            if (api.tracker.isUnseen(data)) {
                 node.addClass('unread');
-            } else if (data.unseen === true) {
-                delayedRead(data, node.addClass('unread'));
+            }
+            if (api.tracker.canAutoRead(data)) {
+                delayedRead(data, node);
             }
 
             // invoke extensions
@@ -392,15 +393,18 @@ define('io.ox/mail/view-detail',
         drawThread: (function () {
 
             function autoResolve(e) {
-                // determine visible nodes
-                var pane = $(this), node = e.data.node,
-                    top = pane.scrollTop(), bottom = top + node.parent().height();
-                e.data.nodes.each(function () {
-                    var self = $(this), pos = self.position();
-                    if (pos.top > top && pos.top < bottom) {
-                        self.trigger('resolve');
-                    }
-                });
+                // check for data (due to debounce)
+                if (e.data) {
+                    // determine visible nodes
+                    var pane = $(this), node = e.data.node,
+                        top = pane.scrollTop(), bottom = top + node.parent().height();
+                    e.data.nodes.each(function () {
+                        var self = $(this), pos = self.position();
+                        if (pos.top > top && pos.top < bottom) {
+                            self.trigger('resolve');
+                        }
+                    });
+                }
             }
 
             function drawThread(node, list, pos, top, bottom, mails) {
@@ -432,7 +436,8 @@ define('io.ox/mail/view-detail',
                 // set initial scroll position (37px not to see thread's inline links)
                 top = nodes.eq(pos).position().top;
                 scrollpane.scrollTop(list.length === 1 ? 0 : top);
-                scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 250));
+                scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100, true));
+                scrollpane.trigger('scroll'); // to be sure
                 nodes = frag = node = scrollpane = list = mail = mails = null;
             }
 
@@ -448,9 +453,14 @@ define('io.ox/mail/view-detail',
                         if (util.isUnread(data[i])) { break; }
                     }
                     // how many visible?
-                    numVisible = Math.ceil(node.parent().height() / 300);
-                    bottom = Math.min(pos + numVisible, $i);
-                    top = Math.max(0, pos - (pos + numVisible - bottom));
+                    if (pos === 0) {
+                        numVisible = 1;
+                        top = bottom = 0;
+                    } else {
+                        numVisible = Math.ceil(node.parent().height() / 300);
+                        bottom = Math.min(pos + numVisible, $i);
+                        top = Math.max(0, pos - (pos + numVisible - bottom));
+                    }
                     // fetch mails we will display
                     for (i = top; i <= bottom; i++) {
                         defs.push(api.get(api.reduce(list[i])));
@@ -471,14 +481,14 @@ define('io.ox/mail/view-detail',
         draw: function (data) {
             var picture;
             this.append(
-                picture = $('<div>').addClass('contact-picture').hide()
+                picture = $('<div>').addClass('contact-picture')
             );
             require(['io.ox/contacts/api'], function (api) {
                 // get contact picture
-                api.getPictureURL(data.from[0][1])
+                api.getPictureURL(data.from[0][1], { width: 64, height: 64, scaleType: 'contain' })
                     .done(function (url) {
                         if (url) {
-                            picture.css({ backgroundImage: 'url(' + url + ')', display: '' });
+                            picture.css({ backgroundImage: 'url(' + url + ')' });
                         }
                         if (/dummypicture\.png$/.test(url)) {
                             picture.addClass('default-picture');
@@ -506,9 +516,7 @@ define('io.ox/mail/view-detail',
             win = app.getWindow(),
             query = e.data.display_name || e.data.email1;
         // trigger search
-        win.nodes.search.val(query).focus();
-        win.search.query = query;
-        win.trigger('search');
+        win.search.start(query);
     }
 
     ext.point('io.ox/mail/detail').extend({
@@ -543,22 +551,22 @@ define('io.ox/mail/view-detail',
     });
 
     var colorNames = {
-        NONE:      gt('None'),
-        RED:       gt('Red'),
-        BLUE:      gt('Blue'),
-        GREEN:     gt('Green'),
-        GREY:      gt('Grey'),
-        BROWN:     gt('Brown'),
-        AQUA:      gt('Aqua'),
-        ORANGE:    gt('Orange'),
-        PINK:      gt('Pink'),
-        LIGHTBLUE: gt('Lightblue'),
-        YELLOW:    gt('Yellow')
+        NONE:       gt('None'),
+        RED:        gt('Red'),
+        BLUE:       gt('Blue'),
+        GREEN:      gt('Green'),
+        GREY:       gt('Grey'),
+        PURPLE:     gt('Purple'),
+        LIGHTGREEN: gt('Light green'),
+        ORANGE:     gt('Orange'),
+        PINK:       gt('Pink'),
+        LIGHTBLUE:  gt('Light blue'),
+        YELLOW:     gt('Yellow')
     };
 
     function changeLabel(e) {
         e.preventDefault();
-        return api.update(e.data.data, { color_label: e.data.color });
+        return api.changeColor(e.data.data, e.data.color);
     }
 
     ext.point('io.ox/mail/detail').extend({
@@ -576,7 +584,10 @@ define('io.ox/mail/view-detail',
                     .append(
                         _(api.COLORS).reduce(function (memo, index, color) {
                             return memo.add($('<li>').append(
-                                $('<a href="#">').text(colorNames[color])
+                                $('<a href="#">').append(
+                                    index > 0 ? $('<span class="flag-example">').addClass('flag_' + index) : $(),
+                                    $.txt(colorNames[color])
+                                )
                                 .on('click', { data: data, color: index }, changeLabel)
                                 .addClass(data.color_label === index ? 'active-label' : undefined)
                             ));
@@ -748,7 +759,7 @@ define('io.ox/mail/view-detail',
         ref: 'io.ox/mail/links/inline'
     }));
 
-    // inline links for while thread
+    // inline links for entire thread
     ext.point('io.ox/mail/thread').extend(new links.InlineLinks({
         index: 100,
         id: 'inline-links',

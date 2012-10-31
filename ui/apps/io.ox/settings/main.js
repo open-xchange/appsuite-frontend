@@ -75,7 +75,7 @@ define('io.ox/settings/main',
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/settings',
             title: gt('Settings'),
-            toolbar: true
+            chromeless: true
         }));
 
         var saveSettings = function () {
@@ -137,10 +137,10 @@ define('io.ox/settings/main',
                     settings: true,
                     title: 'Keyring'
                 });
-                
+
                 def.resolve(apps);
             });
-            
+
 
             return def;
         });

@@ -28,21 +28,21 @@ define('io.ox/office/editor/operations',
 
     /**
      * Creates a clone of the passed logical position and appends the specified
-     * start index. The passed array object will not be changed.
+     * index. The passed array object will not be changed.
      *
      * @param {Number[]} position
      *  The initial logical position.
      *
-     * @param {Number} [start=0]
+     * @param {Number} [index=0]
      *  The value that will be appended to the new position.
      *
      * @returns {Number[]}
      *  A clone of the passed logical position, with the specified start value
      *  appended.
      */
-    function appendNewIndex(position, start) {
+    function appendNewIndex(position, index) {
         position = _.clone(position);
-        position.push(_.isNumber(start) ? start : 0);
+        position.push(_.isNumber(index) ? index : 0);
         return position;
     }
 
@@ -76,6 +76,7 @@ define('io.ox/office/editor/operations',
     var Operations = {
 
         INIT_DOCUMENT: 'initDocument',
+        SET_DOCUMENT_ATTRIBUTES: 'setDocumentAttributes',
 
         DELETE: 'delete',
         MOVE: 'move',
@@ -104,10 +105,11 @@ define('io.ox/office/editor/operations',
         INSERT_THEME: 'insertTheme',
         INSERT_LIST: 'insertList',
         ATTRS_SET: 'setAttributes',
+        ATTRS_CLEAR: 'clearAttributes',
 
         IMAGE_INSERT: 'insertImage',
-        FIELD_INSERT: 'insertField'
-        // ATTR_DELETE:  'deleteAttribute'
+        FIELD_INSERT: 'insertField',
+        TAB_INSERT: 'insertTab'
 
     };
 
@@ -233,77 +235,90 @@ define('io.ox/office/editor/operations',
          *  The logical position of the passed paragraph node. The generated
          *  operations will contain positions starting with this address.
          *
-         * @param {Number} [start=0]
+         * @param {Number} [start]
          *  The logical index of the first character to be included into the
          *  generated operations.
          *
-         * @param {Number} [end=0x7FFFFFFF]
+         * @param {Number} [end]
          *  The logical index of the last character to be included in the
          *  generated operations (closed range).
          *
          * @returns {Operations.Generator}
          *  A reference to this instance.
          */
-        this.generateParagraphContentOperations = function (paragraph, position, start, end) {
+        this.generateParagraphChildOperations = function (paragraph, position, start, end) {
 
             var // used to merge several text portions into the same operation
-                lastOperation = null,
+                lastTextOperation = null,
+                // used to clear the attributes of the entire inserted text
+                lastClearOperation = null,
                 // formatting ranges for text portions, must be applied after the contents
                 attributeRanges = [];
 
-            // logical index of first character to be included into the result
-            start = _.isNumber(start) ? Math.max(start, 0) : 0;
-            // logical index of last character to be included into the result
-            end = _.isNumber(end) ? Math.max(start, end) : 0x7FFFFFFF;
-
             // process all content nodes in the paragraph and create operations
-            position = appendNewIndex(position, start);
-            Position.iterateParagraphContentNodes(paragraph, function (node, nodeStart, nodeLength) {
+            Position.iterateParagraphChildNodes(paragraph, function (node, nodeStart, nodeLength, offsetStart, offsetLength) {
 
-                var // text of a portion span
+                var // logical start index of the covered part of the child node
+                    startIndex = nodeStart + offsetStart,
+                    // logical end index of the covered part of the child node (closed range)
+                    endIndex = startIndex + offsetLength - 1,
+                    // logical start position of the covered part of the child node
+                    startPosition = appendNewIndex(position, startIndex),
+                    // logical end position of the covered part of the child node
+                    endPosition = appendNewIndex(position, endIndex),
+                    // text of a portion span
                     text = null;
 
-                // node ends before the specified start index (continue with next node)
-                if (nodeStart + nodeLength <= start) { return; }
-                // node starts after the specified end index (escape from iteration)
-                if (nodeStart > end) { return Utils.BREAK; }
-
                 // operation to create a (non-empty) generic text portion
-                if (DOM.isPortionSpan(node)) {
+                if (DOM.isTextSpan(node)) {
                     // extract the text covered by the specified range
-                    text = node.firstChild.nodeValue.substring(Math.max(start - nodeStart, 0), end - nodeStart + 1);
-                    // merge text portions into the last 'insertText' operation
-                    if (lastOperation && (lastOperation.name === Operations.TEXT_INSERT)) {
-                        lastOperation.text += text;
+                    text = node.firstChild.nodeValue.substr(offsetStart, offsetLength);
+                    // append text portions to the last 'insertText' operation
+                    if (lastTextOperation) {
+                        lastTextOperation.text += text;
+                        lastClearOperation.end = endPosition;
                     } else {
-                        lastOperation = generateOperation(Operations.TEXT_INSERT, { start: position, text: text });
+                        lastTextOperation = generateOperation(Operations.TEXT_INSERT, { start: startPosition, text: text });
+                        lastClearOperation = generateOperation(Operations.ATTRS_CLEAR, { start: startPosition, end: endPosition });
                     }
-                    attributeRanges.push({ node: node, position: position, endPosition: (text.length > 1) ? increaseLastIndex(position, text.length - 1) : null });
-                    position = increaseLastIndex(position, text.length);
+                    attributeRanges.push({ node: node, position: startPosition, endPosition: (text.length > 1) ? endPosition : null });
+
+                } else {
+
+                    // anything else than plain text will be inserted, forget last text operation
+                    lastTextOperation = null;
+
+                    // operation to create a text field
+                    // TODO: field type
+                    if (DOM.isFieldNode(node)) {
+                        // extract text of all embedded spans representing the field
+                        text = $(node).text();
+                        generateOperation(Operations.FIELD_INSERT, { position: startPosition, representation: text });
+                        generateOperation(Operations.ATTRS_CLEAR, { start: startPosition });
+                        // attributes are contained in the embedded span elements
+                        attributeRanges.push({ node: node.firstChild, position: startPosition });
+                    }
+
+                    // operation to create a tabulator
+                    else if (DOM.isTabNode(node)) {
+                        generateOperation(Operations.TAB_INSERT, { position: startPosition });
+                        generateOperation(Operations.ATTRS_CLEAR, { start: startPosition });
+                        // attributes are contained in the embedded span elements
+                        attributeRanges.push({ node: node.firstChild, position: startPosition });
+                    }
+
+                    // operation to create an image (including its attributes)
+                    else if (DOM.isImageNode(node)) {
+                        generateOperationWithAttributes(node, Operations.IMAGE_INSERT, { position: startPosition, imgurl: $(node).data('url') });
+                    }
+
+                    // TODO: other objects
+                    else {
+                        Utils.error('Operations.Generator.generateParagraphChildOperations(): unknown content node');
+                    }
                 }
 
-                // operation to create a text field
-                // TODO: field type
-                else if (DOM.isFieldSpan(node)) {
-                    // extract text of all spans representing the field
-                    text = DOM.getFieldSpans(node).text();
-                    lastOperation = generateOperation(Operations.FIELD_INSERT, { position: position, representation: text });
-                    attributeRanges.push({ node: node, position: position });
-                    position = increaseLastIndex(position);
-                }
-
-                // operation to create an image (including its attributes)
-                else if (DOM.isImageNode(node)) {
-                    lastOperation = generateOperationWithAttributes(node, Operations.IMAGE_INSERT, { position: position, imgurl: $(node).data('url') });
-                    position = increaseLastIndex(position);
-                }
-
-                // TODO: other objects
-                else {
-                    Utils.warn('Operations.Generator.generateParagraphContentOperations(): unknown content node');
-                }
-
-            }, this);
+            }, this, { start: start, end: end });
 
             // Generate 'setAttribute' operations after all contents have been
             // created via 'insertText', 'insertField', etc. Otherwise, these
@@ -345,7 +360,7 @@ define('io.ox/office/editor/operations',
             generateSetAttributesOperation(paragraph, position);
 
             // process all content nodes in the paragraph and create operations
-            return this.generateParagraphContentOperations(paragraph, position);
+            return this.generateParagraphChildOperations(paragraph, position);
         };
 
         /**
@@ -463,11 +478,11 @@ define('io.ox/office/editor/operations',
                     // operations to create a paragraph (first paragraph node exists in every root node)
                     this.generateParagraphOperations(node, position, initialParagraph);
                     initialParagraph = false;
-                } else if ($(node).is('table')) {
+                } else if (DOM.isTableNode(node)) {
                     // operations to create a table with its structure and contents
                     this.generateTableOperations(node, position);
                 } else {
-                    Utils.warn('Operations.Generator.generateContentOperations(): unexpected node "' + Utils.getNodeName(node) + '" at position ' + JSON.stringify(position) + '.');
+                    Utils.error('Operations.Generator.generateContentOperations(): unexpected node "' + Utils.getNodeName(node) + '" at position ' + JSON.stringify(position) + '.');
                     // continue with next child node (do not increase position)
                     return;
                 }

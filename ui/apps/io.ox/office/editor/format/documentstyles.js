@@ -42,6 +42,8 @@ define('io.ox/office/editor/format/documentstyles',
 
         var // style sheet containers mapped by attribute family
             containers = {},
+            // document attributes
+            attributes = { defaulttabstop: 1270, zoom: { value: 100 }},
             // document themes
             themes = {},
             // list definitions
@@ -49,6 +51,13 @@ define('io.ox/office/editor/format/documentstyles',
 
         // methods ------------------------------------------------------------
 
+        /**
+         * Returns the attributes associated with the document
+         */
+        this.getAttributes = function () {
+            return attributes;
+        };
+        
         /**
          * Returns the style sheet container for the specified attribute
          * family.
@@ -81,12 +90,10 @@ define('io.ox/office/editor/format/documentstyles',
         };
 
         this.destroy = function () {
-            _(containers).invoke('destroy');
-            containers = null;
-            _([themes]).invoke('destroy');
-            themes = null;
             _([lists]).invoke('destroy');
-            lists = null;
+            _([themes]).invoke('destroy');
+            _(containers).invoke('destroy');
+            containers = themes = lists = null;
         };
 
         // initialization -----------------------------------------------------

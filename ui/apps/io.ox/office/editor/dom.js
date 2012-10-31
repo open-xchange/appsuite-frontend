@@ -333,16 +333,119 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return range;
     };
 
-    // spans and text nodes ===================================================
+    // pages ==================================================================
 
     /**
-     * Returns whether the passed node is a <span> element containing a single
-     * text node. The <span> element may represent regular text portions, an
-     * empty text span, or a text field.
+     * A jQuery selector that matches elements representing a page.
+     */
+    DOM.PAGE_NODE_SELECTOR = 'div.page';
+
+    /**
+     * Returns whether the passed node is a page element.
      *
      * @param {Node|jQuery} node
      *  The DOM node to be checked. If this object is a jQuery collection, uses
      *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a page element.
+     */
+    DOM.isPageNode = function (node) {
+        return $(node).is(DOM.PAGE_NODE_SELECTOR);
+    };
+
+    // paragraphs and tables ==================================================
+
+    /**
+     * A jQuery selector that matches elements representing a paragraph.
+     */
+    DOM.PARAGRAPH_NODE_SELECTOR = 'div.p';
+
+    /**
+     * Returns whether the passed node is a paragraph element.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a paragraph element.
+     */
+    DOM.isParagraphNode = function (node) {
+        return $(node).is(DOM.PARAGRAPH_NODE_SELECTOR);
+    };
+
+    /**
+     * Creates a new paragraph element.
+     *
+     * @returns {jQuery}
+     *  A paragraph element, as jQuery object.
+     */
+    DOM.createParagraphNode = function () {
+        return $('<div>').addClass('p');
+    };
+
+    /**
+     * A jQuery selector that matches elements representing a table.
+     */
+    DOM.TABLE_NODE_SELECTOR = 'table';
+
+    /**
+     * Returns whether the passed node is a table element.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a table element.
+     */
+    DOM.isTableNode = function (node) {
+        return $(node).is(DOM.TABLE_NODE_SELECTOR);
+    };
+
+    /**
+     * A jQuery selector that matches elements representing a top-level content
+     * node (e.g. paragraphs or tables).
+     */
+    DOM.CONTENT_NODE_SELECTOR = DOM.PARAGRAPH_NODE_SELECTOR + ', ' + DOM.TABLE_NODE_SELECTOR;
+
+    /**
+     * Returns whether the passed node is a top-level content node (e.g.
+     * paragraphs or tables).
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a top-level content node.
+     */
+    DOM.isContentNode = function (node) {
+        return $(node).is(DOM.CONTENT_NODE_SELECTOR);
+    };
+
+    // text spans, text nodes, text components ================================
+
+    // text spans -------------------------------------------------------------
+
+    /**
+     * Returns a new empty text span element with a single child text node.
+     *
+     * @returns {jQuery}
+     *  The empty text span element, as jQuery object.
+     */
+    DOM.createTextSpan = function () {
+        return $('<span>').text('');
+    };
+
+    /**
+     * Returns whether the passed node is a <span> element containing a single
+     * text node.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a span element with a text node.
@@ -353,103 +456,264 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * Returns whether the passed node is a <span> element representing a
-     * regular text portion, or an empty text span.
-     *
-     * @param {Node|jQuery} node
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
-     *
-     * @returns {Boolean}
-     *  Whether the passed node is a span element representing a text field.
-     */
-    DOM.isPortionSpan = function (node) {
-        return DOM.isTextSpan(node) && !$(node).hasClass('field');
-    };
-
-    /**
      * Returns whether the passed node is a <span> element containing an empty
-     * text portion. Does NOT return true for text fields with an empty
-     * representation text.
+     * text node.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a span element with an empty text node.
      */
     DOM.isEmptySpan = function (node) {
-        return DOM.isPortionSpan(node) && (node.firstChild.nodeValue.length === 0);
+        return DOM.isTextSpan(node) && ($(node).text().length === 0);
     };
 
     /**
      * Returns whether the passed node is a <span> element representing a text
-     * field.
+     * portion (a child element of a paragraph node).
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
-     *  Whether the passed node is a span element representing a text field.
+     *  Whether the passed node is a text portion span element.
      */
-    DOM.isFieldSpan = function (node) {
-        return DOM.isTextSpan(node) && $(node).hasClass('field');
+    DOM.isPortionSpan = function (node) {
+        node = $(node);
+        return node.is('span') && DOM.isParagraphNode(node.parent());
     };
 
     /**
-     * Returns all field span elements, that are the direct preceding and
-     * following siblings of the passed text field node, in a jQuery
-     * collection.
+     * Returns whether the passed node is a text node embedded in a text
+     * portion span (see DOM.isPortionSpan() method).
      *
-     * @param {Node|jQuery} node
-     *  The DOM node representing a text field whose associated text field
-     *  spans will be collected. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a text node in a portion span element.
+     */
+    DOM.isTextNodeInPortionSpan = function (node) {
+        return node && (node.nodeType === 3) && DOM.isPortionSpan(node.parentNode);
+    };
+
+    // text components: fields, tabs ------------------------------------------
+
+    /**
+     * A jQuery selector that matches elements representing a text field.
+     */
+    DOM.FIELD_NODE_SELECTOR = 'div.field';
+
+    /**
+     * Returns whether the passed node is an element representing a text field.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is an element representing a text field.
+     */
+    DOM.isFieldNode = function (node) {
+        return $(node).is(DOM.FIELD_NODE_SELECTOR);
+    };
+
+    /**
+     * Returns a new empty text field element.
      *
      * @returns {jQuery}
-     *  All text field spans that are the direct preceding and following
-     *  siblings of the passed text field node. If the passed node is not a
-     *  text field span, returns an empty jQuery object.
+     *  A new empty text field element, as jQuery object.
      */
-    DOM.getFieldSpans = function (node) {
-        var spans = $(), span = $(node);
-        if (DOM.isFieldSpan(node)) {
-            while (DOM.isFieldSpan(span.prev())) { span = span.prev(); }
-            while (DOM.isFieldSpan(span)) { spans = spans.add(span); span = span.next(); }
-        }
-        return spans;
+    DOM.createFieldNode = function (text) {
+        return $('<div>').addClass('component field');
     };
+
+    /**
+     * A jQuery selector that matches elements representing a tab.
+     */
+    DOM.TAB_NODE_SELECTOR = 'div.tab';
+
+    /**
+     * Returns whether the passed node is a tab element
+     * (see DOM.isTabNode() method).
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a text node in a text field element.
+     */
+    DOM.isTabNode = function (node) {
+        return $(node).is(DOM.TAB_NODE_SELECTOR);
+    };
+
+    /**
+     * Returns a new tab element.
+     *
+     * @returns {jQuery}
+     *  A new tab element, as jQuery object.
+     */
+    DOM.createTabNode = function () {
+        return $('<div>', { contenteditable: false }).addClass('tab component');
+    };
+
+    /**
+     * Returns whether the passed node is a <div> container with embedded text
+     * spans, used as root elements for special text components in a paragraph.
+     * Does NOT return true for helper nodes that do not represent editable
+     * contents of a paragraph (e.g. numbering labels). To check for all helper
+     * nodes that contain text spans (also non-editable elements such as
+     * numbering labels), use the method DOM.isTextSpanContainerNode() instead.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a <div> element representing an editable
+     *  text component in a paragraph.
+     */
+    DOM.isTextComponentNode = function (node) {
+        return $(node).is('div.component');
+    };
+
+    /**
+     * Returns whether the passed node is a <div> container with embedded text
+     * spans, used as root elements for special text components in a paragraph.
+     * Does NOT return true for text nodes contained in helper nodes that do
+     * not represent editable contents of a paragraph (e.g. numbering labels).
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a DOM text node contained in a <div> element
+     *  representing an editable text component in a paragraph.
+     */
+    DOM.isTextNodeInTextComponent = function (node) {
+        node = node ? Utils.getDomNode(node) : null;
+        return node && DOM.isTextSpan(node.parentNode) && DOM.isTextComponentNode(node.parentNode.parentNode);
+    };
+
+    // paragraph helper nodes -------------------------------------------------
+
+    /**
+     * Returns whether the passed node is a <div> container with embedded text
+     * spans, used as root elements for special text elements in a paragraph.
+     * Returns also true for helper nodes that do NOT represent editable
+     * contents of a paragraph (e.g. numbering labels). To check for container
+     * nodes that represent editable components in a paragraph only, use the
+     * method DOM.isTextComponentNode() instead.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a <div> element containing text spans.
+     */
+    DOM.isTextSpanContainerNode = function (node) {
+        node = node ? Utils.getDomNode(node) : null;
+        return $(node).is('div') && DOM.isParagraphNode(node.parentNode) && DOM.isTextSpan(node.firstChild);
+    };
+
+    /**
+     * A jQuery selector that matches elements representing a list label.
+     */
+    DOM.LIST_LABEL_NODE_SELECTOR = 'div.list-label';
+
+    /**
+     * Returns whether the passed node is an element representing a list label.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a list label element.
+     */
+    DOM.isListLabelNode = function (node) {
+        return $(node).is(DOM.LIST_LABEL_NODE_SELECTOR);
+    };
+
+    /**
+     * Creates a new element representing a list label.
+     *
+     * @param {String} [text]
+     *  The text contents of the list label node.
+     *
+     * @returns
+     *  A new list label node, as jQuery object.
+     */
+    DOM.createListLabelNode = function (text) {
+        text = _.isString(text) ? text : '';
+        return $('<div>', { contenteditable: false })
+            .addClass('list-label')
+            .append(DOM.createTextSpan().text(text));
+    };
+
+    /**
+     * Returns whether the passed node is a dummy text node that is used in
+     * empty paragraphs to preserve an initial element height according to the
+     * current font size.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a dummy text node.
+     */
+    DOM.isDummyTextNode = function (node) {
+        return $(node).data('dummy') === true;
+    };
+
+    /**
+     * Creates a dummy text node that is used in empty paragraphs to preserve
+     * an initial element height according to the current font size.
+     *
+     * @returns {jQuery}
+     *  A dummy text node, as jQuery object.
+     */
+    DOM.createDummyTextNode = function () {
+        // TODO: create correct element for current browser
+        return $('<br>').data('dummy', true);
+    };
+
+    // object nodes -----------------------------------------------------------
+
+    /**
+     * A jQuery selector that matches elements representing an object.
+     */
+    DOM.OBJECT_NODE_SELECTOR = 'div.object';
 
     /**
      * Returns whether the passed node is a <div> element wrapping an object.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a div element wrapping an object.
      */
     DOM.isObjectNode = function (node) {
-        return $(node).is('div.object');
+        return $(node).is(DOM.OBJECT_NODE_SELECTOR);
     };
-
-    /**
-     * A selector function that matches <div> elements refered by the 'this'
-     * symbol representing an object (floating or inline). Can be used in the
-     * jQuery method is() and in the DOM iterator methods supporting selectors.
-     */
-    DOM.OBJECT_NODE_SELECTOR = function () { return DOM.isObjectNode(this); };
 
     /**
      * Returns whether the passed node is a <div> element wrapping an object
      * in inline mode.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a div element wrapping an object and is
@@ -463,9 +727,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * Returns whether the passed node is a <div> element wrapping an object
      * in floating mode.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a div element wrapping an object and is
@@ -478,9 +742,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     /**
      * Returns whether the passed node is a <div> element wrapping an image.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a div element wrapping an image.
@@ -491,40 +755,82 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * A selector function that matches <div> elements refered by the 'this'
-     * symbol representing an image object (floating or inline). Can be used in
-     * the jQuery method is() and in the DOM iterator methods supporting
-     * selectors.
+     * A jQuery selector that matches elements representing an object offset
+     * helper node.
      */
-    DOM.IMAGE_NODE_SELECTOR = function () { return DOM.isImageNode(this); };
+    DOM.OFFSET_NODE_SELECTOR = 'div.offset';
 
     /**
      * Returns whether the passed node is a <div> element for positioning
      * an object with a vertical or horizontal offset.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a div element wrapping an object.
      */
     DOM.isOffsetNode = function (node) {
-        return $(node).is('div.offset');
+        return $(node).is(DOM.OFFSET_NODE_SELECTOR);
+    };
+
+    // find, manipulate, and iterate text spans -------------------------------
+
+    /**
+     * Searches a text span element in the previous siblings of the passed
+     * node.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The node whose previous siblings will be searched for a text span
+     *  element. If this object is a jQuery collection, uses the first DOM node
+     *  it contains.
+     *
+     * @returns {HTMLElement|Null}
+     *  The closest text span preceding the specified node, or null.
+     */
+    DOM.findPreviousTextSpan = function (node) {
+        node = Utils.getDomNode(node);
+        while (node && !DOM.isTextSpan(node)) {
+            node = node.previousSibling;
+        }
+        return node;
     };
 
     /**
-     * Returns whether the passed node is a <div> element with class list-label.
+     * Searches a text span element in the next siblings of the passed node.
      *
-     * @param {Node|jQuery} node
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     * @param {HTMLElement|jQuery} node
+     *  The node whose next siblings will be searched for a text span element.
+     *  If this object is a jQuery collection, uses the first DOM node it
+     *  contains.
      *
-     * @returns {Boolean}
-     *  Whether the passed node is a div element with class list-label.
+     * @returns {HTMLElement|Null}
+     *  The closest text span following the specified node, or null.
      */
-    DOM.isListlabelNode = function (node) {
-        return $(node).is('div.list-label');
+    DOM.findNextTextSpan = function (node) {
+        node = Utils.getDomNode(node);
+        while (node && !DOM.isTextSpan(node)) {
+            node = node.nextSibling;
+        }
+        return node;
+    };
+
+    /**
+     * Returns the closest text span in the previous siblings of the passed
+     * node. If there is no such text span, tries to find the closest text span
+     * in the following siblings.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The node whose siblings will be searched for a text span element. If
+     *  this object is a jQuery collection, uses the first DOM node it
+     *  contains.
+     *
+     * @returns {HTMLElement|Null}
+     *  The closest text span in the siblings of the specified node, or null.
+     */
+    DOM.findRelatedTextSpan = function (node) {
+        return DOM.findPreviousTextSpan(node) || DOM.findNextTextSpan(node);
     };
 
     /**
@@ -584,96 +890,41 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * Splits the passed text node into two text nodes.
+     * Calls the passed iterator function for all descendant text span elements
+     * in a the passed node. As a special case, if the passed node is a text
+     * span by itself, it will be visited directly. Text spans can be direct
+     * children of a paragraph node (regular editable text portions), or
+     * children of other nodes such as text fields or list label nodes.
      *
-     * @param {Text} textNode
-     *  The DOM text node to be split.
+     * @param {HTMLElement|jQuery} node
+     *  The DOM node whose descendant text spans will be visited (or which will
+     *  be visited by itself if it is a text span). If this object is a jQuery
+     *  collection, uses the first DOM node it contains.
      *
-     * @param {Number} offset
-     *  The character position where the text node will be split. If this
-     *  position is at the start or end of the text of the node, an empty text
-     *  node will be inserted.
+     * @param {Function} iterator
+     *  The iterator function that will be called for every text span. Receives
+     *  the DOM span element as first parameter. If the iterator returns the
+     *  Utils.BREAK object, the iteration process will be stopped immediately.
      *
-     * @param {Object} [options]
-     *  A map of options to control the split operation. Supports the following
-     *  options:
-     *  @param {Boolean} [options.append]
-     *      If set to true, the right part of the text will be inserted after
-     *      the passed text node; otherwise the left part of the text will be
-     *      inserted before the passed text node. The position of the new text
-     *      node may be important when iterating and manipulating a range of
-     *      DOM nodes.
+     * @param {Object} [context]
+     *  If specified, the iterator will be called with this context (the symbol
+     *  'this' will be bound to the context inside the iterator function).
      *
-     * @returns {Text}
-     *  The newly created text node. Will be located before or after the passed
-     *  text node, depending on the 'options.append' option.
+     * @returns {Utils.BREAK|Undefined}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
-    DOM.splitTextNode = function (textNode, offset, options) {
-        var newSpan = DOM.splitTextSpan(textNode.parentNode, offset, options);
-        return newSpan[0].firstChild;
-    };
+    DOM.iterateTextSpans = function (node, iterator, context) {
 
-    /**
-     * Returns the text node of the next or previous sibling of the passed
-     * node. Checks that the sibling node is a span element, and contains
-     * exactly one text node. Works for regular text portions, empty text
-     * spans, and text fields.
-     *
-     * @param {Node|jQuery} node
-     *  The original DOM node. If this node is a text node, checks that it is
-     *  contained in its own <span> element and traverses to the next or
-     *  previous sibling of that span. Otherwise, directly traverses to the
-     *  next or previous sibling of the passed element node. If this object is
-     *  a jQuery collection, uses the first DOM node it contains.
-     *
-     * @param {Boolean} next
-     *  If set to true, searches for the next sibling text node, otherwise
-     *  searches for the previous sibling text node.
-     *
-     * @returns {Text|Null}
-     *  The sibling text node if existing, otherwise null.
-     */
-    DOM.getSiblingTextNode = function (node, next) {
-
-        // if the passed node is a text node, get its <span> parent element
-        node = Utils.getDomNode(node);
-        if (node.nodeType === 3) {
-            node = DOM.isTextSpan(node.parentNode) ? node.parentNode : null;
+        // visit passed text span directly
+        if (DOM.isTextSpan(node)) {
+            return iterator.call(context, Utils.getDomNode(node));
         }
 
-        // go to next or previous sibling of the element
-        if (node && (node.nodeType === 1)) {
-            node = next ? node.nextSibling : node.previousSibling;
+        // do not iterate into objects, they may contain their own paragraphs
+        if (!DOM.isObjectNode(node)) {
+            return Utils.iterateSelectedDescendantNodes(node, function () { return DOM.isTextSpan(this); }, iterator, context);
         }
-
-        // extract the text node from the sibling element
-        return (node && DOM.isTextSpan(node)) ? node.firstChild : null;
-    };
-
-    // paragraphs =============================================================
-
-    /**
-     * Returns whether the passed node is a paragraph element.
-     *
-     * @param {Node|jQuery} node
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
-     *
-     * @returns {Boolean}
-     *  Whether the passed node is a paragraph element.
-     */
-    DOM.isParagraphNode = function (node) {
-        return $(node).is('div.p');
-    };
-
-    /**
-     * Creates a new paragraph element.
-     *
-     * @returns {jQuery}
-     *  A paragraph element, as jQuery object.
-     */
-    DOM.createParagraphNode = function () {
-        return $('<div>').addClass('p');
     };
 
     // range iteration ========================================================
@@ -721,6 +972,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  further manipulate this array while iterating, see the comments in the
      *  description of the parameter 'iterator' for details.
      *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The DOM root node containing the elements covered by the passed ranges.
+     *  If this object is a jQuery collection, uses the first node it contains.
+     *
      * @param {Function} iterator
      *  The iterator function that will be called for every node. Receives the
      *  DOM node object as first parameter, the current DOM range as second
@@ -745,7 +1000,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  A reference to the Utils.BREAK object, if the iterator has returned
      *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
-    DOM.iterateNodesInRanges = function (ranges, iterator, context) {
+    DOM.iterateNodesInRanges = function (ranges, rootNode, iterator, context) {
 
         var // loop variables
             index = 0, range = null, node = null;
@@ -776,7 +1031,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             // skip first text node, if DOM range starts directly at its end
             // TODO: is this the desired behavior?
             if (node && (node.nodeType === 3) && (range.start.offset >= node.nodeValue.length)) {
-                node = Utils.getNextNodeInTree(node);
+                node = Utils.getNextNodeInTree(rootNode, node);
             }
 
             // iterate as long as the end of the range has not been reached
@@ -784,7 +1039,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 // call iterator for the node, return if iterator returns Utils.BREAK
                 if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
                 // find next node
-                node = Utils.getNextNodeInTree(node);
+                node = Utils.getNextNodeInTree(rootNode, node);
             }
         }
     };
@@ -840,7 +1095,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         rootNode = Utils.getDomNode(rootNode);
 
         // iterate over all nodes, and try to find the specified parent nodes
-        return DOM.iterateNodesInRanges(ranges, function (node, range, index, ranges) {
+        return DOM.iterateNodesInRanges(ranges, rootNode, function (node, range, index, ranges) {
 
             // shortcut for call to iterator function
             function callIterator() { return iterator.call(context, node, range, index, ranges); }
@@ -857,198 +1112,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 }
                 if (node === rootNode) { return; }
                 node = node.parentNode;
-            }
-        });
-    };
-
-    /**
-     * Iterates over all text nodes contained in the specified DOM ranges. The
-     * iterator function will receive the text node and the character range in
-     * its text contents that is covered by the specified DOM ranges.
-     *
-     * @param {DOM.Range[]} ranges
-     *  (in/out) The DOM ranges whose text nodes will be iterated. The array
-     *  will be validated and sorted before iteration starts (see method
-     *  DOM.iterateNodesInRanges() for details).
-     *
-     * @param {Function} iterator
-     *  The iterator function that will be called for every text node. Receives
-     *  the DOM text node object as first parameter, the offset of the first
-     *  character as second parameter, the offset after the last character as
-     *  third parameter, the current DOM range as fourth parameter, its index
-     *  in the sorted array of DOM ranges as fifth parameter, and the entire
-     *  sorted array of DOM ranges as sixth parameter. If the iterator returns
-     *  the Utils.BREAK object, the iteration process will be stopped
-     *  immediately. See the comments for the method DOM.iterateNodesInRanges()
-     *  for details about manipulation of the array of DOM ranges and the DOM
-     *  tree.
-     *
-     * @param {Object} [context]
-     *  If specified, the iterator will be called with this context (the symbol
-     *  'this' will be bound to the context inside the iterator function).
-     *
-     * @param {Object} [options]
-     *  A map of options to control the iteration process. Supports the
-     *  following options:
-     *  @param {Boolean} [options.split]
-     *      If set to true, text nodes that are not covered completely by a DOM
-     *      range will be split before the iterator function will be called.
-     *      The iterator function will always receive a text node and a
-     *      character range that covers the text of that node completely.
-     *  @param {Function} [options.merge]
-     *      If set to a function, the visited text node may be merged with one
-     *      or both of its sibling text nodes after the iterator function
-     *      returns. The function attached to this option will be called once
-     *      or twice, always receiving exactly two DOM text nodes. It must
-     *      return whether these two text nodes can be merged to one text node.
-     *      It will be called once for the previous sibling of the visited text
-     *      node, and once for its next sibling (only if these sibling text
-     *      nodes exist).
-     *
-     * @returns {Utils.BREAK|Undefined}
-     *  A reference to the Utils.BREAK object, if the iterator has returned
-     *  Utils.BREAK to stop the iteration process, otherwise undefined.
-     */
-    DOM.iterateTextPortionsInRanges = function (ranges, iterator, context, options) {
-
-        var // split partly covered the text nodes before visiting them
-            split = Utils.getBooleanOption(options, 'split', false),
-            // predicate whether to merge sibling text nodes after visiting them
-            merge = Utils.getFunctionOption(options, 'merge');
-
-        function replaceTextNodeInRanges(ranges, index, next, oldTextNode, newTextNode, offsetDiff) {
-
-            for (var range = null; next ? (index < ranges.length) : (0 <= index); next ? (index += 1) : (index -= 1)) {
-                range = ranges[index];
-
-                // update start point
-                if (range.start.node === oldTextNode) {
-                    range.start.node = newTextNode;
-                    range.start.offset += offsetDiff;
-                }
-
-                // update end point
-                if (range.end.node === oldTextNode) {
-                    range.end.node = newTextNode;
-                    range.end.offset += offsetDiff;
-                }
-            }
-        }
-
-        // Split the passed text node if it is not covered completely.
-        function splitTextNode(textNode, start, end, ranges, index) {
-
-            var // following text node when splitting this text node
-                newTextNode = null;
-
-            // split text node to move the portion before start into its own span
-            if (start > 0) {
-                newTextNode = DOM.splitTextNode(textNode, start);
-                // adjust offsets of all following DOM ranges that refer to the text node
-                replaceTextNodeInRanges(ranges, index, true, textNode, textNode, -start);
-                // new end position in shortened text node
-                end -= start;
-            }
-
-            // split text node to move the portion after end into its own span
-            if (end < textNode.nodeValue.length) {
-                newTextNode = DOM.splitTextNode(textNode, end, { append: true });
-                // adjust all following DOM ranges that refer now to the new following text node
-                replaceTextNodeInRanges(ranges, index + 1, true, textNode, newTextNode, -end);
-            }
-        }
-
-        // Tries to merge the passed text node with its next or previous sibling.
-        function mergeSiblingTextNode(textNode, next, ranges, index) {
-
-            var // the sibling text node, depending on the passed direction
-                siblingTextNode = DOM.getSiblingTextNode(textNode, next),
-                // text in the passed and in the sibling node
-                text = null, siblingText = null;
-
-            // check preconditions
-            if (!siblingTextNode ||
-                    // do not mix portion spans and field spans
-                    (DOM.isPortionSpan(textNode.parentNode) !== DOM.isPortionSpan(siblingTextNode.parentNode)) ||
-                    // do not merge with next text node, if it is contained in the current range,
-                    // this prevents unnecessary merge/split (merge will be done in next iteration step)
-                    (next && (DOM.Point.comparePoints(DOM.Point.createPointForNode(siblingTextNode), ranges[index].end) < 0)) ||
-                    // ask callback whether to merge text nodes
-                    !merge.call(context, textNode, siblingTextNode)) {
-                return;
-            }
-
-            // add text of the sibling text node to the passed text node, and update DOM ranges
-            text = textNode.nodeValue;
-            siblingText = siblingTextNode.nodeValue;
-            if (next) {
-                textNode.nodeValue = text + siblingText;
-                replaceTextNodeInRanges(ranges, index, true, siblingTextNode, textNode, text.length);
-            } else {
-                textNode.nodeValue = siblingText + text;
-                replaceTextNodeInRanges(ranges, index, true, textNode, textNode, siblingText.length);
-                replaceTextNodeInRanges(ranges, index, false, siblingTextNode, textNode, 0, false);
-            }
-            // remove the entire sibling span element
-            $(siblingTextNode.parentNode).remove();
-        }
-
-        // iterate over all nodes, and process the text nodes
-        return DOM.iterateNodesInRanges(ranges, function (node, range, index, ranges) {
-
-            var // start and end offset of covered text in the text node
-                start = 0, end = 0;
-
-            // Splits text node, calls iterator function, merges text node.
-            function callIterator() {
-
-                var // the result of the iterator call
-                    result = null,
-                    // whether to merge with previous or next node
-                    mergePrevious = false, mergeNext = false;
-
-                // split text node if specified
-                if (split) {
-                    splitTextNode(node, start, end, ranges, index);
-                    start = 0;
-                    end = node.nodeValue.length;
-                }
-
-                // check whether to merge, before iterator is called
-                mergePrevious = start === 0;
-                mergeNext = end === node.nodeValue.length;
-
-                // call iterator function
-                result = iterator.call(context, node, start, end, range, index, ranges);
-
-                // merge text node if specified
-                if ((result !== Utils.BREAK) && _.isFunction(merge)) {
-                    if (mergePrevious) {
-                        mergeSiblingTextNode(node, false, ranges, index);
-                    }
-                    if (mergeNext) {
-                        mergeSiblingTextNode(node, true, ranges, index);
-                    }
-                }
-
-                return result;
-            }
-
-            // call passed iterator for all text nodes in span elements
-            if ((node.nodeType === 3) && (Utils.getNodeName(node.parentNode) === 'span')) {
-                // calculate/validate start/end offset in the text node
-                start = (node === range.start.node) ? Utils.minMax(range.start.offset, 0, node.nodeValue.length) : 0;
-                end = (node === range.end.node) ? Utils.minMax(range.end.offset, start, node.nodeValue.length) : node.nodeValue.length;
-                // call iterator for the text node, return if iterator returns Utils.BREAK
-                if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
-
-            // cursor selects a single <br> element, visit last preceding text node instead
-            } else if (range.isCollapsed() && (Utils.getNodeName(node) === 'br') && (node = DOM.getSiblingTextNode(node, false))) {
-                // prepare start, end, and current DOM range object
-                start = range.start.offset = end = range.end.offset = node.nodeValue.length;
-                range.start.node = range.end.node = node;
-                // call iterator for the text node, return if iterator returns Utils.BREAK
-                if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
             }
         });
     };
@@ -1142,34 +1205,50 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
         // single range: use attributes of the Selection object (anchor/focus)
         // directly to preserve direction of selection when selecting backwards
-        if (ranges.length === 1) {
-
+        if ((ranges.length === 1) && !$(ranges[0].start.node).is('tr')) {
             try {
                 selection.collapse(ranges[0].start.node, ranges[0].start.offset);
                 selection.extend(ranges[0].end.node, ranges[0].end.offset);
+                return;
+            } catch (ex) {
+                Utils.warn('DOM.setBrowserSelection(): failed to collapse/expand range to selection');
+                // retry with regular code below
+                selection.removeAllRanges();
+            }
+        }
+
+        // create a multi-selection
+        _(ranges).each(function (range) {
+
+            var docRange = null;
+            try {
+                docRange = window.document.createRange();
+                docRange.setStart(range.start.node, range.start.offset);
+                docRange.setEnd(range.end.node, range.end.offset);
+                selection.addRange(docRange);
             } catch (ex) {
                 Utils.warn('DOM.setBrowserSelection(): failed to add range to selection');
             }
-
-        } else {
-
-            // create a multi-selection
-            _(ranges).each(function (range) {
-
-                var docRange = null;
-                try {
-                    docRange = window.document.createRange();
-                    docRange.setStart(range.start.node, range.start.offset);
-                    docRange.setEnd(range.end.node, range.end.offset);
-                    selection.addRange(docRange);
-                } catch (ex) {
-                    Utils.warn('DOM.setBrowserSelection(): failed to add range to selection');
-                }
-            });
-        }
+        });
     };
 
     // object selection =======================================================
+
+    /**
+     * Returns whether the passed node is a <div> element that contains a
+     * selection. The selection is represented by a <div> element with class
+     * 'selection'.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node contains a div element with class selection.
+     */
+    DOM.hasObjectSelection = function (node) {
+        return DOM.isObjectNode(node) && ($(node).children('div.selection').length > 0);
+    };
 
     /**
      * Inserts a new selection box into the specified object node, or modifies
@@ -1191,30 +1270,68 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *      pointer when the mouse hovers the corner handles of the selected
      *      element.
      */
-    DOM.drawObjectSelection = function (objects, options) {
+    DOM.drawObjectSelection = function (objects, options, mousedownhandler, mousemovehandler, mouseuphandler, context) {
 
         $(objects).each(function () {
 
             var // the container element used to visualize the selection
                 selectionBox = $(this).children('div.selection'),
+                // the container element used to visualize the movement and resizing
+                moveBox = $(this).children('div.move'),
                 // whether object is moveable
                 moveable = Utils.getBooleanOption(options, 'moveable', false),
                 // whether object is sizeable
-                sizeable = Utils.getBooleanOption(options, 'sizeable', false);
+                sizeable = Utils.getBooleanOption(options, 'sizeable', false),
+                // whether mousedown is a current event
+                mousedownevent = false,
+                // saving the selected object node
+                objectNode = this;
 
-            // create a new selection box if missing
+            // create a new selection box and a move box if missing
             if (selectionBox.length === 0) {
-                $(this).append(selectionBox = $('<div>').addClass('selection'));
-                // add resize handles
-                _(['tl', 't', 'tr', 'r', 'br', 'b', 'bl', 'l']).each(function (pos) {
-                    selectionBox.append($('<div>').addClass('handle ' + pos));
-                });
-            }
+                $(this).append(selectionBox = $('<div>').addClass('selection')).append(moveBox = $('<div>').addClass('move'));
 
-            // set classes according to passed options, and resize handles
-            selectionBox = $('<div>').addClass('selection')
-                .toggleClass('moveable', moveable)
-                .toggleClass('sizeable', sizeable);
+                if (sizeable) {
+                    // add resize handles
+                    _(['tl', 't', 'tr', 'r', 'br', 'b', 'bl', 'l']).each(function (pos) {
+                        var handleDiv = $('<div>')
+                        .mousedown(function (e1, e2) {
+                            if (mousedownevent === true) { return; }
+                            var event = e1.pageX ? e1 : e2;  // from triggerHandler in editor only e2 can be used
+                            mousedownevent = true;
+                            mousedownhandler.call(context, event, objectNode, pos);
+                        });
+                        selectionBox.append(handleDiv.addClass('handle ' + pos));
+                    });
+                }
+
+                if (moveable) {
+                    // moving the object
+                    $(this).mousedown(function (e1, e2) {
+                        if ((! moveable) || (mousedownevent === true)) { return; }
+                        var event = e1.pageX ? e1 : e2;  // from triggerHandler in editor only e2 can be used
+                        mousedownevent = true;
+                        mousedownhandler.call(context, event, objectNode, undefined);
+                    });
+                }
+
+                // mousemove and mouseup events can be anywhere on the page -> binding to $(document)
+                $(document)
+                .mousemove(function (e) {
+                    if (! mousedownevent) return;
+                    mousemovehandler.call(context, e, moveBox);
+                })
+                .mouseup(function (e) {
+                    if (mousedownevent === true) {
+                        mouseuphandler.call(context, e, objectNode, moveBox);
+                        mousedownevent = false;
+                    }
+                });
+
+                // set classes according to passed options, and resize handles
+                moveBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
+                selectionBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
+            }
         });
     };
 
@@ -1228,6 +1345,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.clearObjectSelection = function (objects) {
         $(objects).children('div.selection').remove();
+        $(objects).children('div.move').remove();
+        // removing mouse event handler (mouseup and mousemove) from page div
+        $(document).off('mouseup mousemove');
+        $(objects).off('mousedown');
     };
 
     // exports ================================================================

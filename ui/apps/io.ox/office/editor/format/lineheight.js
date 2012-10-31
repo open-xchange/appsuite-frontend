@@ -65,42 +65,6 @@ define('io.ox/office/editor/format/lineheight', ['io.ox/office/tk/utils'], funct
         return lineHeight * fontSize / intFontSize;
     }
 
-    /**
-     * Sets the text line height of the specified element.
-     *
-     * @param {jQuery} element
-     *  The element whose line height will be changed, as jQuery object.
-     *
-     * @param {Object} lineHeight
-     *  The new line height. Must contain the attributes 'type' and 'value'.
-     *  See method LineHeight.validateLineHeight() for details how to get a
-     *  valid line height value for this parameter.
-     */
-    function setElementLineHeight(element, lineHeight) {
-
-        var // effective line height in points (start with passed value, converted from 1/100mm to points)
-            height = Utils.convertHmmToLength(lineHeight.value, 'pt');
-
-        // set the CSS formatting
-        switch (lineHeight.type) {
-        case 'fixed':
-            // line height as passed
-            break;
-        case 'leading':
-            height += calculateNormalLineHeight(element);
-            break;
-        case 'atleast':
-            height = Math.max(height, calculateNormalLineHeight(element));
-            break;
-        case 'percent':
-            height = calculateNormalLineHeight(element) * lineHeight.value / 100;
-            break;
-        default:
-            Utils.error('LineHeight.setElementLineHeight(): invalid line height type');
-        }
-        element.css('line-height', Utils.roundDigits(height, 1) + 'pt');
-    }
-
     // static class LineHeight ================================================
 
     /**
@@ -113,53 +77,42 @@ define('io.ox/office/editor/format/lineheight', ['io.ox/office/tk/utils'], funct
         };
 
     /**
-     * Converts the passed value to a valid value for the 'lineheight'
-     * attribute.
-     */
-    LineHeight.validateLineHeight = function (lineHeight) {
-
-        var type = Utils.getStringOption(lineHeight, 'type');
-
-        switch (type) {
-        case 'fixed':
-        case 'leading':
-        case 'atleast':
-            // passed value is in 1/100mm in the range [0cm,10cm]
-            return { type: type, value: Utils.getNumberOption(lineHeight, 'value', 0, 0, 10000) };
-        case 'percent':
-            // passed value is percentage in the range [20%,500%]
-            return { type: type, value: Utils.getIntegerOption(lineHeight, 'value', 100, 20, 500) };
-        }
-        return LineHeight.SINGLE;
-    };
-
-    /**
      * Sets the text line height of the specified element.
      *
-     * @param {jQuery} element
-     *  The element whose line height will be changed, as jQuery object.
+     * @param {HTMLElement|jQuery} element
+     *  The element whose line height will be changed. If this object is a
+     *  jQuery collection, uses the first DOM node it contains.
      *
      * @param {Object} lineHeight
      *  The new line height. Must contain the attributes 'type' and 'value'.
-     *  See method LineHeight.validateLineHeight() for details how to get a
-     *  valid line height value for this parameter.
      */
-    LineHeight.setElementLineHeight = function (element, lineHeight) {
-        setElementLineHeight(element, lineHeight);
-        // store value for updateElementLineHeight()
-        element.data('line-height', lineHeight);
-    };
+    LineHeight.updateElementLineHeight = function (element, lineHeight) {
 
-    /**
-     * Updates the text line height of the specified element according to its
-     * current font settings.
-     *
-     * @param {jQuery} element
-     *  The element whose line height will be updated, as jQuery object.
-     */
-    LineHeight.updateElementLineHeight = function (element) {
-        // read line height from element, stored in setElementLineHeight()
-        setElementLineHeight(element, element.data('line-height') || LineHeight.SINGLE);
+        var // the passed element, as jQuery object
+            $element = $(element).first(),
+            // effective line height in points (start with passed value, converted from 1/100mm to points)
+            height = Utils.convertHmmToLength(lineHeight.value, 'pt');
+
+        // calculate effective line height
+        switch (lineHeight.type) {
+        case 'fixed':
+            // line height as passed
+            break;
+        case 'leading':
+            height += calculateNormalLineHeight($element);
+            break;
+        case 'atleast':
+            height = Math.max(height, calculateNormalLineHeight($element));
+            break;
+        case 'percent':
+            height = calculateNormalLineHeight($element) * lineHeight.value / 100;
+            break;
+        default:
+            Utils.error('LineHeight.updateElementLineHeight(): invalid line height type');
+        }
+
+        // set the CSS formatting
+        $element.css('line-height', Utils.roundDigits(height, 1) + 'pt');
     };
 
     // exports ================================================================

@@ -53,6 +53,12 @@ define("io.ox/core/api/user",
         });
     };
 
+    api.getGreeting = function (id) {
+        return api.get({ id: id }).pipe(function (data) {
+            return gt.noI18n(data.first_name || data.display_name || data.email1 || '');
+        });
+    };
+
     api.getTextNode = function (id) {
         var node = document.createTextNode(_.noI18n(''));
         api.get({ id: id })

@@ -20,7 +20,7 @@ define('io.ox/office/editor/main',
      'io.ox/office/tk/config',
      'io.ox/office/tk/component/toolpane',
      'io.ox/office/editor/editor',
-     'io.ox/office/editor/view',
+     'io.ox/office/editor/view/view',
      'io.ox/office/editor/controller',
      'io.ox/office/tk/alert',
      'gettext!io.ox/office/main',
@@ -94,6 +94,9 @@ define('io.ox/office/editor/main',
             // browser timer for operations handling
             operationsTimer = null,
 
+            // invalidate local storage cache in case a new document ,ight be written
+            invalidateDriveCacheOnClose = false,
+
             // if true, debug mode is active (second editor and operations output console)
             debugMode = false,
 
@@ -112,17 +115,28 @@ define('io.ox/office/editor/main',
          * Sends a 'closedocument' notification to the server.
          *
          * @param {Boolean} [synchronous=false]
-         *  If set to true, the notification will be sent synchronously.
+         *     If set to true, the notification will be sent synchronously.
+         * @returns {jQuery.Deferred}
          */
         function sendCloseNotification(synchronous) {
             // TODO: one-way call, alternative to GET?
             if (self.hasFileDescriptor()) {
-                $.ajax({
+                return $.ajax({
                     type: 'GET',
                     url: self.getDocumentFilterUrl('closedocument'),
                     dataType: 'json',
                     async: !synchronous
+                })
+                .pipe(function () {
+                    if (invalidateDriveCacheOnClose === true) {
+                        var file = self.getFileDescriptor();
+                        return FilesAPI.propagate('change', file);
+                    } else {
+                        return $.when();
+                    }
                 });
+            } else {
+                return $.when();
             }
         }
 
@@ -244,6 +258,7 @@ define('io.ox/office/editor/main',
                         if (_.isArray(operations)) {
                             editor.enableUndo(false);
                             applyOperations(operations);
+                            editor.documentLoaded();
                             editor.enableUndo(true);
                             startOperationsTimer();
                             def.resolve();
@@ -295,10 +310,11 @@ define('io.ox/office/editor/main',
                     dataType: 'json'
                 })
                 .done(function (response) {
-                    FilesAPI.caches.get.clear(); // TODO
-                    FilesAPI.caches.versions.clear();
-                    FilesAPI.trigger('refresh.all');
-                    def.resolve();
+                    var file = Utils.getObjectOption(options, 'file', null);
+                    // TODO: did not test this; getObjectOption is suspicious
+                    FilesAPI.propagate('change', file).done(function () {
+                        def.resolve();
+                    });
                 })
                 .fail(function (response) {
                     showAjaxError(response);
@@ -432,6 +448,8 @@ define('io.ox/office/editor/main',
                 // we might receive new operations while sending the current ones
                 operationsBuffer = [];
 
+                invalidateDriveCacheOnClose = true;
+
                 // log the state in the debug view
                 view.logSyncState('sending');
 
@@ -552,7 +570,7 @@ define('io.ox/office/editor/main',
             // create the application window
             win = ox.ui.createWindow({
                 name: MODULE_NAME,
-                close: true,
+                classic: true,
                 search: true,
                 toolbar: true
             });
@@ -600,9 +618,11 @@ define('io.ox/office/editor/main',
                     type: 'GET',
                     url: self.buildServiceUrl('oxodocumentfilter', { action: 'createdefaultdocument', folder_id: Utils.getOption(options, 'folder_id'), document_type: 'text' }),
                     dataType: 'json'
-                }).pipe(function (response) {
+                })
+                .pipe(function (response) {
                     // creation succeeded: receive file descriptor and set it
                     self.setFileDescriptor(response.data);
+                    return FilesAPI.propagate('new', response.data);
                 });
             } else {
                 initFileDef = $.when();
@@ -637,11 +657,8 @@ define('io.ox/office/editor/main',
                 def = $.Deferred();
 
             win.busy();
-            def.done(function () {
-                // deinitialize application on quit
-                sendCloseNotification();
-                self.destroy();
-            }).fail(function () {
+
+            def.fail(function () {
                 // back to living application
                 win.idle();
                 startOperationsTimer();
@@ -672,7 +689,12 @@ define('io.ox/office/editor/main',
                 }
             });
 
-            return def;
+            return def.pipe(function () {
+                // deinitialize application on quit
+                return sendCloseNotification().done(function () {
+                    self.destroy();
+                });
+            });
         }
 
         // methods ------------------------------------------------------------
@@ -739,41 +761,29 @@ define('io.ox/office/editor/main',
 
         /**
          * Renames the currently edited file and updates the UI accordingly
+         * @returns {jQuery.Deferred}
          */
         this.rename = function (newFilename) {
 
             var file = this.getFileDescriptor();
 
             if (newFilename && newFilename.length && file && (newFilename !== file.filename)) {
-                $.ajax({
+                return $.ajax({
                     type: 'GET',
                     url: this.getDocumentFilterUrl('renamedocument', { filename: newFilename }),
                     dataType: 'json'
                 })
                 .pipe(function (response) {
-                    // TODO clear cachesupdate UI
-                    if (response && response.data) {
-                        FilesAPI.caches.all.grepRemove(response.data.folder_id + '\t')
-                            .pipe(function () { FilesAPI.trigger("create.file refresh.all"); });
-                    }
-
-                    return response;
-                })
-                .done(function (response) {
                     if (response && response.data && response.data.filename) {
                         file.filename = response.data.filename;
-
                         updateTitles();
-
-                        // TODO clear cachesupdate UI
-                        FilesAPI.caches.get.clear();
-                        FilesAPI.caches.versions.clear()
-                            .pipe(function () {
-                                FilesAPI.trigger('refresh.all');
-                                FilesAPI.trigger('update refresh.all', { id: response.data.id, folder: response.data.folder_id });
-                            });
+                        return FilesAPI.propagate('change', file);
+                    } else {
+                        return $.when();
                     }
                 });
+            } else {
+                return $.when();
             }
         };
 
@@ -864,8 +874,9 @@ define('io.ox/office/editor/main',
         };
 
         /**
-         * Triggers the acquire edit rights action.
-         * If the edit rights were aquired is determined by the server response to the pull operation action
+         * Triggers the acquire edit rights action. If the edit rights were
+         * aquired is determined by the server response to the pull operation
+         * action.
          */
         this.acquireEditRights = function () {
 
@@ -918,6 +929,9 @@ define('io.ox/office/editor/main',
             .addButton('table',  { label: gt('Table') })
             .addButton('image',  { label: gt('Image') })
             .addButton('debug',  { label: gt('Debug'), active: Config.isDebugAvailable() })
+            .end()
+        .addButtonGroup('quit')
+            .addButton('file/quit', { label: gt('Close') })
             .end();
 
     // exports ================================================================

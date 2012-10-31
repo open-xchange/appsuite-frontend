@@ -207,6 +207,10 @@ $(document).ready(function () {
                 default: node.attr(target, val); break;
                 }
             });
+            // update placeholder (IE9 fix)
+            if (_.browser.IE) {
+                $('input[type=text], input[type=password]').val('').placeholder();
+            }
         });
     };
 
@@ -397,8 +401,6 @@ $(document).ready(function () {
                 'You don&rsquo;t need administrator rights. Just restart IE after installation.</div>'
             ));
         }
-
-        $('input').placeholder();
 
         return $.when(
                 // load extensions

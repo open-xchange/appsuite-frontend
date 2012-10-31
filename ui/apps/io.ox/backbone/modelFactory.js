@@ -11,129 +11,26 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define("io.ox/backbone/modelFactory",
-    ["io.ox/core/extensions",
-     'gettext!io.ox/core'], function (ext, gt) {
+    ["io.ox/backbone/basicModel",
+     "io.ox/core/extensions",
+     'gettext!io.ox/core'], function (BasicModel, ext, gt) {
 
     "use strict";
 
-    function ValidationErrors() {
-        this.errors = {};
-
-        this.add = function (attribute, error) {
-            (this.errors[attribute] || (this.errors[attribute] = [])).push(error);
-            return this;
-        };
-
-        this.hasErrors = function () {
-            return !_.isEmpty(this.errors);
-        };
-
-        this.errorsFor = function (attribute) {
-            return this.errors[attribute];
-        };
-
-        this.each = function () {
-            var wrapped = _(this.errors);
-            return wrapped.each.apply(wrapped, $.makeArray(arguments));
-        };
-    }
-
-    var OXModel = Backbone.Model.extend({
+    var OXModel = BasicModel.extend({
         idAttribute: '_uid',
         initialize: function (obj) {
-            var self = this;
-            this.realm = this.get('_realm') || this.factory.realm("default");
-            this._valid = true;
-            this.attributeValidity = {};
-            this.id = obj.id;
+            BasicModel.prototype.initialize.apply(this, $.makeArray(arguments));
 
+            this.realm = this.get('_realm') || this.factory.realm("default");
             delete this.attributes._realm;
 
-            this.on("change:id", function () {
-                self.id = self.get("id");
-            });
-
-            if (this.init) {
-                this.init();
-            }
+            this.syncer = this.factory.internal;
 
         },
-        validate: function (attributes, evt, options) {
-            options = options || {};
-            var self = this,
-                errors = new ValidationErrors();
-
-            attributes = attributes || this.toJSON();
-
-            this.factory.point("validation").invoke("validate", errors, attributes, errors, this);
-
-            if (options.isSave) {
-                this.factory.point("validation/save").invoke("validate", errors, attributes, errors, this);
-            }
-            if (errors.hasErrors()) {
-                var validAttributes = {};
-                _(attributes).chain().keys().each(function (key) {
-                    validAttributes[key] = true;
-                });
-                errors.each(function (messages, attribute) {
-                    validAttributes[attribute] = false;
-                    self.trigger("invalid:" + attribute, messages, errors, self);
-                });
-                // Trigger a valid:attribute event for all attributes that have turned valid
-                _(self.attributeValidity).each(function (wasValid, attribute) {
-                    if (!wasValid && validAttributes[attribute]) {
-                        self.trigger('valid:' + attribute, self);
-                    }
-                });
-
-                self.attributeValidity = validAttributes;
-                self.trigger('invalid', errors, self);
-                self._valid = false;
-            } else {
-                if (!self._valid) {
-                    _(self.attributeValidity).each(function (wasValid, attribute) {
-                        if (!wasValid) {
-                            self.trigger('valid:' + attribute, self);
-                        }
-                    });
-
-                    _(attributes).chain().keys().each(function (key) {
-                        self.attributeValidity[key] = true;
-                    });
-                    self._valid = true;
-                    this.trigger('valid');
-                }
-            }
+        point: function (subpath) {
+            return this.factory.point(subpath);
         },
-        sync: function (action, model, callbacks) {
-
-            var self = this;
-
-            // action is one of 'update', 'create', 'delete' or 'read'
-            if (action === 'delete') {
-                action = 'destroy';
-            }
-            if ((action === 'update' || action === 'create')) {
-                this.validate(this.toJSON(), null, {
-                    isSave: true
-                });
-                if (!this.isValid()) {
-                    return $.Deferred().reject({error: gt('Invalid data')});
-                }
-            }
-            this.trigger(action + ':start');
-            return this.factory.internal[action].call(this.factory.internal, model)
-                .done(function (response) {
-                    callbacks.success(model, response);
-                    self.trigger(action, response);
-                })
-                .fail(function (response) {
-                    callbacks.error(model, response);
-                    self.trigger('backendError', response);
-                    self.trigger(action + ':fail', response);
-                });
-        },
-
         changedSinceLoading: function () {
             var self = this;
 
@@ -156,11 +53,34 @@ define("io.ox/backbone/modelFactory",
 
                 var o = oldAttributes[key];
                 var c = currentAttributes[key];
+                var different = false;
 
                 if (o !== c) {
                     if (_.isArray(o) && _.isArray(c)) {
                         if (_(o).difference(c).length !== 0 || _(c).difference(o).length !== 0) {
-                            retval[key] = c;
+                            if (o.length !== c.length) {
+                                different = true;
+                            } else {
+                                _.each(c, function (val, key) {
+
+                                    _.each(c[key], function (val2, key2) {
+
+                                        if (o[key] === undefined) {
+                                            different = true;
+                                        } else {
+                                            if (val2 !== o[key][key2]) {
+                                                different = true;
+                                            }
+                                        }
+                                    });
+
+                                });
+                            }
+
+                            if (different === true) {
+                                retval[key] = c;
+                            }
+
                         }
                     } else {
                         retval[key] = c;
@@ -168,44 +88,14 @@ define("io.ox/backbone/modelFactory",
                 }
 
             });
-
             return retval;
         },
 
         isDirty: function () {
             return !_.isEmpty(this.changedSinceLoading());
         },
-
-        isSet: function () {
-            var self = this;
-            return _(arguments).all(function (attribute) {
-                return self.has(attribute) && self.get(attribute) !== '';
-            });
-        },
-
-        isAnySet: function () {
-            var self = this;
-            return _(arguments).any(function (attribute) {
-                return self.has(attribute) && self.get(attribute) !== '';
-            });
-        },
         getCompositeId: function () {
-            return "id.folder : " + (this.get('id') || 'new-object') + '.' + (this.get('folder') || this.get('folder_id'));
-        },
-        isValid: function () {
-            return this._valid;
-        },
-        hasValidAttributes: function () {
-            var self = this;
-            return _(arguments).all(function (attr) {
-                return self.attributeValidity[attr];
-            });
-        },
-        invalidAttributes: function () {
-            var self = this;
-            return _(this.attributeValidity).chain().keys().filter(function (attr) {
-                return !self.attributeValidity[attr];
-            }).values()._wrapped;
+            return (this.get('folder') || this.get('folder_id')) + '.' + (this.get('id') || 'new-object');
         }
     });
 
@@ -316,7 +206,6 @@ define("io.ox/backbone/modelFactory",
             if (models[uid]) {
                 var model = models[uid];
                 delete models[uid];
-                console.log("MARK DESTROYED");
                 model.trigger('destroy', model);
             }
         };
@@ -490,13 +379,11 @@ define("io.ox/backbone/modelFactory",
         _(this.internal.updateEvents).each(function (eventName) {
 
             self.api.on(eventName, function () {
-                console.log("Caught event", eventName);
                 var args = self.internal.eventToGetArguments.apply(self, $.makeArray(arguments)),
                     uid = self.internal.toUniqueIdFromGet.apply(self, args);
 
                 self.api.get.apply(self.api, args).done(function (loaded) {
                     _(realms).each(function (realm) {
-                        console.log(realm, uid, loaded);
                         realm.refresh(uid, loaded);
                     });
                 });

@@ -230,7 +230,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core'], func
             }
 
             var dim = {
-                width: parseInt(o.width || nodes.popup.width(), 10),
+                width: parseInt(o.width || nodes.popup.width() * 1.1, 10),
                 height: parseInt(o.height || nodes.popup.height(), 10)
             };
 
@@ -400,22 +400,25 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core'], func
         };
 
         close = function (e) {
-            // remove handlers & avoid leaks
-            $(document).off("keydown", closeByEscapeKey);
-            self.nodes.closest.off("scroll", closeByScroll).prop('sidepopup', previousProp);
-            self.nodes.click.off("click", closeByClick);
-            self.lastTrigger = previousProp = null;
-            // use time to avoid flicker
-            timer = setTimeout(function () {
-                if (options.modal) {
-                    overlay.detach();
-                } else {
-                    arrow.detach();
-                    popup.detach();
-                }
-                pane.empty();
-                self.trigger('close');
-            }, 100);
+            // use this to check if it's open
+            if (self.nodes.closest) {
+                // remove handlers & avoid leaks
+                $(document).off("keydown", closeByEscapeKey);
+                self.nodes.closest.off("scroll", closeByScroll).prop('sidepopup', previousProp);
+                self.nodes.click.off("click", closeByClick);
+                self.lastTrigger = previousProp = null;
+                // use time to avoid flicker
+                timer = setTimeout(function () {
+                    if (options.modal) {
+                        overlay.detach();
+                    } else {
+                        arrow.detach();
+                        popup.detach();
+                    }
+                    pane.empty();
+                    self.trigger('close');
+                }, 100);
+            }
         };
 
         closeAll = function (e) {

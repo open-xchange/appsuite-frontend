@@ -89,7 +89,7 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     j.expect($extensionNode.data('extension-id')).toEqual("view");
                     j.expect($extensionNode.data('extension-point')).toEqual(ref);
-                    j.expect($extensionNode.data('composite-id')).toEqual("id.folder : 23.12");
+                    j.expect(String($extensionNode.data('composite-id'))).toEqual("12.23");
                 });
 
                 j.it("should provide access to the baton, model and element to extension views", function () {

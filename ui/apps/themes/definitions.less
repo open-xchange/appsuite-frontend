@@ -32,7 +32,7 @@
 
 /* individual definitions */
 
-@font-light: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+@font-light: 'Segoe UI Light', OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 @font-normal: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
 @wallpaper-fallback-color: #ffffff;
@@ -61,7 +61,8 @@
 @head-color: @menu-color;
 
 @window-head-top: #222;
-@window-head-bottom: #444;
+@window-head-bottom: #111;
+@foldertree-sidepanel-background: #333;
 
 @window-title-color: #fff;
 @toolbar-link-color: lighten(@toolbar, 20%);
@@ -115,25 +116,38 @@
 
 @tile-hover: 8%;
 
+// Dimensions
+
+@window-head-width: 50px;
+@window-content-shift: 250px;
+
 // Copied from boostrap
 
 .box-sizing(@boxmodel: content-box) {
-  -webkit-box-sizing: @boxmodel;
-     -moz-box-sizing: @boxmodel;
-          box-sizing: @boxmodel;
+    -webkit-box-sizing: @boxmodel;
+    -moz-box-sizing: @boxmodel;
+    -ms-box-sizing: @boxmodel;
+    box-sizing: @boxmodel;
 }
 
 .user-select(@select: none) {
-  -webkit-user-select: @select;
-     -moz-user-select: @select;
-      -ms-user-select: @select;
-       -o-user-select: @select;
-          user-select: @select;
+    -webkit-user-select: @select;
+    -moz-user-select: @select;
+    -ms-user-select: @select;
+    user-select: @select;
 }
 
-.box-shadow(@shadow) {
+.border-radius(@radius: 0px) {
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    -ms-border-radius: @radius;
+    border-radius: @radius;
+}
+
+.box-shadow(@shadow: none) {
     -webkit-box-shadow: @shadow;
     -moz-box-shadow: @shadow;
+    -ms-box-shadow: @shadow;
     box-shadow: @shadow;
 }
 
@@ -159,6 +173,25 @@
     filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@color1),argb(@color3)));
 }
 
+.transition(@transition: all 1s linear) {
+    -webkit-transition: @transition;
+    -moz-transition: @transition;
+    -ms-transition: @transition;
+    transition: @transition;
+}
+
+.animation(@animation) {
+    -webkit-animation: @animation;
+    animation: @animation;
+}
+
+.animation-name(@name) {
+    -webkit-animation-name: @name;
+    -moz-animation-name: @name;
+    -ms-animation-name: @name;
+    animation-name: @name;
+}
+
 .ellipsis {
     white-space: nowrap;
     overflow: hidden;
@@ -179,4 +212,10 @@
     overflow-y: @type;
     -webkit-overflow-scrolling: touch;
 } 
+
+.backface-visibility(@type: hidden) {
+    backface-visibility: @type;
+    -webkit-backface-visibility: @type;
+    -moz-backface-visibility: @type;
+}
 

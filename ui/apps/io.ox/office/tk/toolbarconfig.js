@@ -137,7 +137,7 @@ define('io.ox/office/tk/toolbarconfig',
             Group.call(this, id);
 
             this.addButton = function (key, options) {
-                return this.registerButton(key, function (app) { app.getController().change(key); }, options);
+                return this.registerButton(key, function (data) { data.app.getController().change(key); }, options);
             };
 
         }}); // class ButtonGroup
@@ -149,7 +149,7 @@ define('io.ox/office/tk/toolbarconfig',
             Group.call(this, key, { radio: true });
 
             this.addButton = function (value, options) {
-                return this.registerButton(key + '/' + value, function (app) { app.getController().change(key, value); }, options);
+                return this.registerButton(key + '/' + value, function (data) { data.app.getController().change(key, value); }, options);
             };
 
         }}); // class RadioGroup

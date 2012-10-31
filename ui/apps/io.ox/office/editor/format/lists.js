@@ -38,15 +38,195 @@ define('io.ox/office/editor/format/lists',
         // defaults
             defaultNumberingNumId, defaultBulletNumId;
 
-
+        var defaultBulletListDefinition = {
+            listlevel0: { justification: 'left', leftindent: 1270,     numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', hangingindent: 635 },
+            listlevel1: { justification: 'left', leftindent: 2 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: 'o',  hangingindent: 635 },
+            listlevel2: { justification: 'left', leftindent: 3 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', hangingindent: 635 },
+            listlevel3: { justification: 'left', leftindent: 4 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', hangingindent: 635 },
+            listlevel4: { justification: 'left', leftindent: 5 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: 'o', hangingindent: 635 },
+            listlevel5: { justification: 'left', leftindent: 6 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', hangingindent: 635 },
+            listlevel6: { justification: 'left', leftindent: 7 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', hangingindent: 635 },
+            listlevel7: { justification: 'left', leftindent: 8 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: 'o',  hangingindent: 635 },
+            listlevel8: { justification: 'left', leftindent: 9 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', hangingindent: 635 }
+        };
+        // O 2010 uses: decimal-lowerLetter-lowerRomen-decimal-lowerLetter-lowerRomen-decimal-lowerLetter-lowerRomen-
+        var defaultNumberingListDefinition = {
+            listlevel0: { numberformat: 'decimal',       levelstart: 1, leftindent: 1270,     hangingindent: 635, justification: 'left',  leveltext: '%1.'},
+            listlevel1: { numberformat: 'lowerLetter',   levelstart: 1, leftindent: 2 * 1270, hangingindent: 635, justification: 'left',  leveltext: '%2.'},
+            listlevel2: { numberformat: 'upperLetter',   levelstart: 1, leftindent: 3 * 1270, hangingindent: 635, justification: 'right', leveltext: '%3.'},
+            listlevel3: { numberformat: 'lowerRoman',    levelstart: 1, leftindent: 4 * 1270, hangingindent: 635, justification: 'left',  leveltext: '%4.'},
+            listlevel4: { numberformat: 'upperRoman',    levelstart: 1, leftindent: 5 * 1270, hangingindent: 635, justification: 'left',  leveltext: '%5.'},
+            listlevel5: { numberformat: 'decimal',       levelstart: 1, leftindent: 6 * 1270, hangingindent: 635, justification: 'right', leveltext: '%6.'},
+            listlevel6: { numberformat: 'lowerLetter',   levelstart: 1, leftindent: 7 * 1270, hangingindent: 635, justification: 'left',  leveltext: '%7.'},
+            listlevel7: { numberformat: 'upperLetter',   levelstart: 1, leftindent: 8 * 1270, hangingindent: 635, justification: 'left',  leveltext: '%8.'},
+            listlevel8: { numberformat: 'lowerRoman',    levelstart: 1, leftindent: 9 * 1270, hangingindent: 635, justification: 'right', leveltext: '%9.'}
+        };
         // base constructor ---------------------------------------------------
 
         Container.call(this, documentStyles);
 
         // methods ------------------------------------------------------------
 
+        function isLevelEqual(defaultLevel, compareLevel) {
+            var ret = defaultLevel !== undefined && compareLevel !== undefined &&
+            defaultLevel.numberformat === compareLevel.numberformat &&
+            defaultLevel.leftindent === compareLevel.leftindent &&
+            defaultLevel.hangingindent === compareLevel.hangingindent &&
+            defaultLevel.firstlineindent === compareLevel.firstlineindent &&
+            defaultLevel.justification === compareLevel.justification &&
+            defaultLevel.leveltext === compareLevel.leveltext &&
+            defaultLevel.fontname === compareLevel.fontname;
+            return ret;
+        }
+        function isDefinitionEqual(defaultDefinition, compareDefinition) {
+            var ret = isLevelEqual(defaultDefinition.listlevel0, compareDefinition.listlevel0) &&
+                    isLevelEqual(defaultDefinition.listlevel1, compareDefinition.listlevel1) &&
+                    isLevelEqual(defaultDefinition.listlevel2, compareDefinition.listlevel2) &&
+                    isLevelEqual(defaultDefinition.listlevel3, compareDefinition.listlevel3) &&
+                    isLevelEqual(defaultDefinition.listlevel4, compareDefinition.listlevel4) &&
+                    isLevelEqual(defaultDefinition.listlevel5, compareDefinition.listlevel5) &&
+                    isLevelEqual(defaultDefinition.listlevel6, compareDefinition.listlevel6) &&
+                    isLevelEqual(defaultDefinition.listlevel7, compareDefinition.listlevel7) &&
+                    isLevelEqual(defaultDefinition.listlevel8, compareDefinition.listlevel8);
+
+            return ret;
+        }
+
+        function convertToRoman(value, caps) {
+            var result = '';
+            var romanCapsArr = ['M', 'D', 'C', 'L', 'X', 'V', 'I'];
+            var romanSmallArr = ['m', 'd', 'c', 'l', 'x', 'v', 'i'];
+            var romanValArr = [1000, 500, 100,  50,  10,   5,   1];
+            if (value > 0) {
+                var index = 0;
+                for (;index < 7; index++) {
+                    while (value >= romanValArr[index]) {
+                        result += caps ? romanCapsArr[index] : romanSmallArr[index];
+                        value -= romanValArr[index];
+                    }
+                    var position = 7;
+                    for (; position > index; position--) {
+                        var tempVal = romanValArr[index] - romanValArr[position];
+                        if ((romanValArr[position] < tempVal) && (tempVal <= value))
+                        {
+                            if (caps)
+                                result += romanCapsArr[position] + romanCapsArr[index];
+                            else
+                                result += romanSmallArr[position] + romanSmallArr[index];
+                            value -= tempVal;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+        function parseRoman(text) {
+            var romanSmallArr = ['m', 'd', 'c', 'l', 'x', 'v', 'i'],
+            romanValArr = [1000, 500, 100,  50,  10,   5,   1],
+            ret = {},
+            lowerText = text.toLowerCase(),
+            startValue = 0;
+            ret.caps = lowerText !== text;
+            var index = 0, lastValue = 1000;
+            for (; index < text.length; ++index) {
+                var position = 0;
+                for (; position < 7; ++position) {
+                    var char = lowerText.charAt(index);
+                    if (char === romanSmallArr[position]) {
+                        var value = romanValArr[position];
+                        if (lastValue < value) {
+                            startValue = startValue - lastValue + (value - lastValue);
+                        } else {
+                            startValue += value;
+                        }
+                        lastValue = value;
+                        break;
+                    }
+                }
+            }
+            if (startValue > 0) {
+                ret.startnumber = startValue;
+                ret.numberformat = lowerText !== text ? 'upperRoman' : 'lowerRoman';
+            }
+            return ret;
+        }
         /**
-         * Adds a new style sheet to this container. An existing list definition
+         * Creates the label text of the current numbered paragraph.
+         * For picture numbered bullet list it returns the URI of the picture
+         *
+         * @param levelIndexes array of indexes of all numbering levels
+         * @param ilvl current indentation level
+         * @param listdefinition properties of the list used
+         * @returns {Object}
+         *  text element contains label text
+         *  imgsrc element contains URI of the picture used
+         *
+         *  In case imgsrc is set then text will be empty
+         */
+        function formatNumberType(levelIndexes, ilvl, listdefinition) {
+            var ret = {};
+            var topLevelformat = listdefinition.listlevels[ilvl];
+            var leveltext = topLevelformat.leveltext;
+            for (;ilvl >= 0; --ilvl) {
+                var levelformat = listdefinition.listlevels[ilvl];
+                var seqNo = levelIndexes === undefined ? 0 :
+                    levelIndexes[ilvl] + (levelformat && levelformat.levelstart !== undefined ? levelformat.levelstart - 1 : 0);
+                var levelToken = '%' + (ilvl + 1);
+                var indexpos = leveltext.indexOf(levelToken);
+                if (indexpos < 0 && levelformat.numberformat !== 'bullet')
+                    continue;
+                var replacetext = '';
+                switch (levelformat.numberformat) {
+                case "decimal":
+                    replacetext = seqNo.toString();
+                    break;
+                case "lowerLetter":
+                    replacetext = String.fromCharCode(96 + seqNo);
+                    break;
+                case "upperLetter":
+                    replacetext = String.fromCharCode(64 + seqNo);
+                    break;
+                case "lowerRoman":
+                case "upperRoman":
+                    replacetext = convertToRoman(seqNo, levelformat.numberformat === "upperRoman");
+                    break;
+                case "bullet":
+                    if (levelformat.levelpicbulleturi) {
+                        ret.imgsrc = levelformat.levelpicbulleturi;
+                        replacetext = '';
+                    }
+                    else {
+                        var charCode = levelformat.leveltext ? levelformat.leveltext.charCodeAt(0) : -1;
+                        if (charCode > 0 && (charCode < 0xE000 || charCode > 0xF8FF)) {
+                            replacetext = levelformat.leveltext;
+                        }
+                        else
+                            replacetext = "●";
+                    }
+                    break;
+                case "none":
+                    replacetext = '';
+                    break;
+                default:
+                }
+                if (levelformat.levelpicbulleturi) {
+                    leveltext = '';
+                    break;
+                }
+                else if (levelformat.numberformat === 'bullet') {
+                    leveltext = replacetext;
+                    break;
+                }
+                else
+                    leveltext = leveltext.replace(levelToken, replacetext);
+            }
+            ret.text = leveltext;
+            return ret;
+        }
+        // exports ================================================================
+
+        /**
+         * Adds a new list to this container. An existing list definition
          * with the specified identifier will be replaced.
          *
          * @param {String} name
@@ -58,28 +238,38 @@ define('io.ox/office/editor/format/lists',
          * @returns {Lists}
          *  A reference to this instance.
          */
-        this.addList = function (listIdentifier, listDefinition) {
+        this.addList = function (listIdentifier, listdefinition) {
 
             lists[listIdentifier] = {};
             var list = lists[listIdentifier];
             //list.listIdentifier = listIdentifier;
-            list.listLevels = [];
-            list.listLevels[0] = listDefinition.listLevel0;
-            list.listLevels[1] = listDefinition.listLevel1;
-            list.listLevels[2] = listDefinition.listLevel2;
-            list.listLevels[3] = listDefinition.listLevel3;
-            list.listLevels[4] = listDefinition.listLevel4;
-            list.listLevels[5] = listDefinition.listLevel5;
-            list.listLevels[6] = listDefinition.listLevel6;
-            list.listLevels[7] = listDefinition.listLevel7;
-            list.listLevels[8] = listDefinition.listLevel8;
-            if (listDefinition.defaultList) {
-                if (listDefinition.defaultList === 'bullet')
-                    defaultBulletNumId = listIdentifier;
-                else
-                    defaultNumberingNumId = listIdentifier;
+            list.listlevels = [];
+            if (listdefinition) {
+                list.listlevels[0] = listdefinition.listlevel0;
+                list.listlevels[1] = listdefinition.listlevel1;
+                list.listlevels[2] = listdefinition.listlevel2;
+                list.listlevels[3] = listdefinition.listlevel3;
+                list.listlevels[4] = listdefinition.listlevel4;
+                list.listlevels[5] = listdefinition.listlevel5;
+                list.listlevels[6] = listdefinition.listlevel6;
+                list.listlevels[7] = listdefinition.listlevel7;
+                list.listlevels[8] = listdefinition.listlevel8;
+                if (listdefinition.defaultlist) {
+                    if (listdefinition.defaultlist === 'bullet')
+                        defaultBulletNumId = listIdentifier;
+                    else
+                        defaultNumberingNumId = listIdentifier;
+                } else {
+                    if (defaultBulletNumId === undefined) {
+                        if (isDefinitionEqual(defaultBulletListDefinition, listdefinition) === true)
+                            defaultBulletNumId = listIdentifier;
+                    }
+                    if (defaultNumberingNumId === undefined) {
+                        if (isDefinitionEqual(defaultNumberingListDefinition, listdefinition) === true)
+                            defaultNumberingNumId = listIdentifier;
+                    }
+                }
             }
-
             // notify listeners
             this.triggerChangeEvent();
 
@@ -116,44 +306,59 @@ define('io.ox/office/editor/format/lists',
         /**
          * @param {String} type
          *  either bullet or numbering
+         * @param {Object} options
+         *  can contain symbol - the bullet symbol
+         *              levelstart - start index of an ordered list
          * @returns {Object}
          *  the operation that creates the requested list
          *
          */
-        this.getDefaultListOperation = function (type) {
+        this.getDefaultListOperation = function (type, options) {
             var freeId = 1;
             for (;;++freeId) {
                 if (!(freeId in lists))
                     break;
             }
-            var newOperation = { name: Operations.INSERT_LIST, listName: freeId };
+            var newOperation = { name: Operations.INSERT_LIST, listname: freeId };
             if (type === 'bullet') {
-                newOperation.listDefinition = {
-                    listLevel0: { numberFormat: 'bullet',   leftIndent: 720,     hangingIndent: 360 },
-                    listLevel1: { numberFormat: 'bullet',   leftIndent: 2 * 720, hangingIndent: 360 },
-                    listLevel2: { numberFormat: 'bullet',   leftIndent: 3 * 720, hangingIndent: 360 },
-                    listLevel3: { numberFormat: 'bullet',   leftIndent: 4 * 720, hangingIndent: 360 },
-                    listLevel4: { numberFormat: 'bullet',   leftIndent: 5 * 720, hangingIndent: 360 },
-                    listLevel5: { numberFormat: 'bullet',   leftIndent: 6 * 720, hangingIndent: 360 },
-                    listLevel6: { numberFormat: 'bullet',   leftIndent: 7 * 720, hangingIndent: 360 },
-                    listLevel7: { numberFormat: 'bullet',   leftIndent: 8 * 720, hangingIndent: 360 },
-                    listLevel8: { numberFormat: 'bullet',   leftIndent: 9 * 720, hangingIndent: 360 }
-                };
+                newOperation.listdefinition = _.copy(defaultBulletListDefinition, true);
+                if (options && options.symbol && options.symbol !== '*') {
+                    newOperation.listdefinition.listlevel0.leveltext = options.symbol;
+                } else {
+                    newOperation.listdefinition.defaultlist = type;
+                }
             } else {
-                newOperation.listDefinition = {
-                    listLevel0: {numberFormat: 'decimal',       leftIndent: 720,     hangingIndent: 360 },
-                    listLevel1: {numberFormat: 'lowerLetter',   leftIndent: 2 * 720, hangingIndent: 360 },
-                    listLevel2: {numberFormat: 'upperLetter',   leftIndent: 3 * 720, hangingIndent: 360 },
-                    listLevel3: {numberFormat: 'lowerRoman',    leftIndent: 4 * 720, hangingIndent: 360 },
-                    listLevel4: {numberFormat: 'upperRoman',    leftIndent: 5 * 720, hangingIndent: 360 },
-                    listLevel5: {numberFormat: 'decimal',       leftIndent: 6 * 720, hangingIndent: 360 },
-                    listLevel6: {numberFormat: 'lowerLetter',   leftIndent: 7 * 720, hangingIndent: 360 },
-                    listLevel7: {numberFormat: 'upperLetter',   leftIndent: 8 * 720, hangingIndent: 360 },
-                    listLevel8: {numberFormat: 'lowerRoman',    leftIndent: 9 * 720, hangingIndent: 360 }
-                };
+                newOperation.listdefinition = _.copy(defaultNumberingListDefinition, true);
+                var defaultlist = true;
+                if (options) {
+                    if (options.levelstart) {
+                        newOperation.listdefinition.listlevel0.levelstart = options.levelstart;
+                        defaultlist = false;
+                    }
+                    if (options.numberformat) {
+                        newOperation.listdefinition.listlevel0.numberformat = options.numberformat;
+                        defaultlist = false;
+                    }
+                }
+                if (defaultlist) {
+                    newOperation.listdefinition.defaultlist = type;
+                }
             }
-            newOperation.listDefinition.defaultList = type;
             return newOperation;
+        };
+        /**
+         *
+         * @param {integer} numId
+         *  id of a list
+         * @param {String} type
+         *  either bullet or numbering
+         * @returns {bool}
+         *  determines whether a supplied id is points to the default list of bullets or numberings
+         *
+         */
+        this.isDefaultList = function (numId, type) {
+            return (type === 'bullet' && defaultBulletNumId === numId) ||
+                    (type === 'numbering' && defaultNumberingNumId === numId);
         };
         /**
          * Generates the numbering Label for the given paragraph
@@ -163,7 +368,11 @@ define('io.ox/office/editor/format/lists',
          * @param levelIndexes array of sequential position of the current paragraph
          *      contains an array with ilvl + 1 elements that determines the sequential position of the current paragraph within the numbering
          *
-         * @returns tbd.
+         * @returns {Object} containing:
+         *          indent
+         *          labelwidth
+         *          text
+         *          tbd.
          */
         this.formatNumber = function (listId, ilvl, levelIndexes) {
             var ret = {};
@@ -171,47 +380,62 @@ define('io.ox/office/editor/format/lists',
             if (currentList === undefined) {
                 return "?";
             }
-            var levelFormat = currentList.listLevels[ilvl];
+            var levelFormat = currentList.listlevels[ilvl];
             if (levelFormat === undefined) {
                 return "??";
             }
-            var numberFormat = levelFormat.numberFormat;
-            ret.text = this.formatNumberType(levelIndexes === undefined ? 0 : levelIndexes[ilvl], numberFormat);
-            ret.indent = levelFormat.leftIndent - (levelFormat.hangingIndent ? levelFormat.hangingIndent : 0);
-            //+ levelFormat.firstLineIndent
-            ret.labelWidth = (levelFormat.hangingIndent ? levelFormat.hangingIndent : 0);
+            var format = formatNumberType(levelIndexes, ilvl, currentList);
+            ret.text = format.text;
+            ret.imgsrc = format.imgsrc;
+            ret.indent = levelFormat.leftindent - (levelFormat.hangingindent ? levelFormat.hangingindent : 0);
+            //+ levelFormat.firstlineindent
+            ret.labelWidth = (levelFormat.hangingindent ? levelFormat.hangingindent : 0);
             return ret;
         };
 
-        this.formatNumberType = function (seqNo, numberFormat) {
-            var retString = "???";
-            switch (numberFormat) {
-            case "decimal":
-                retString = "1";
-                break;
-            case "lowerLetter":
-                retString = "a";
-                break;
-            case "upperLetter":
-                retString = "A";
-                break;
-            case "lowerRoman":
-                retString = "i";
-                break;
-            case "upperRoman":
-                retString = "I";
-                break;
-            case "bullet":
-                retString = "●";
-                break;
-            default:
+        /**
+         * @param text possible numbering label text
+         *
+         * @returns {integer} listId
+         *
+         */
+        this.detectListSymbol = function (text) {
+            var ret = {};
+            if (text.length === 1 && (text === '-' || text === '*')) {
+                // bullet
+                ret.numberformat = 'bullet';
+                ret.symbol = text;
+            } else if (text.substring(text.length - 1) === '.') {
+                var sub = text.substring(0, text.length - 1);
+                var startnumber = parseInt(sub, 10);
+                if (startnumber > 0) {
+                    ret.numberformat = 'decimal';
+                    ret.levelstart = startnumber;
+                } else {
+                    var roman = parseRoman(text);
+                    if (roman.startnumber > 0) {
+                        ret.numberformat = roman.numberformat;
+                        ret.levelstart = roman.startnumber;
+                    }
+                }
             }
-            return retString;
+            return ret;
+        };
+        this.findIlvl = function (numId, pstyle) {
+            var list = this.getList(numId);
+            if (list === undefined) {
+                return -1;
+            }
+            var ilvl = 0;
+            for (; ilvl < 9; ++ilvl) {
+                var levelFormat = list.listlevels[ilvl];
+                if (levelFormat.pstyle === pstyle)
+                    return ilvl;
+            }
+            return -1;
         };
 
     } // class Lists
-
-    // exports ================================================================
 
     // derive this class from class Container
     return Container.extend({ constructor: Lists });

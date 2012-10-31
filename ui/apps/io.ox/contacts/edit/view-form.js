@@ -136,7 +136,7 @@ define('io.ox/contacts/edit/view-form', [
             options.point.extend(new CityControlGroup({
                 id: cityAttribute,
                 index: options.index,
-                label: model.fields[postalCodeAttribute] + '/' + model.fields[cityAttribute],
+                label: _.noI18n(model.fields[postalCodeAttribute] + '/' + model.fields[cityAttribute]),
                 zipControl: '<input type="text" class="span1" name="' + postalCodeAttribute + '">',
                 control: '<input type="text" class="span3" name="' + cityAttribute + '">',
                 zipAttribute: postalCodeAttribute,
@@ -207,6 +207,18 @@ define('io.ox/contacts/edit/view-form', [
         }
     }));
 
+    //cancel
+
+    views.ext.point("io.ox/contacts/edit/view/inline").extend(new links.Button({
+        id: "discard",
+        index: 100,
+        label: gt("Discard"),
+        ref: "io.ox/contacts/actions/edit/discard",
+        cssClasses: "btn",
+        tabIndex: 11,
+        tagtype: "button"
+    }));
+
     // Save
 
     views.ext.point("io.ox/contacts/edit/view/inline").extend(new links.Button({
@@ -215,7 +227,8 @@ define('io.ox/contacts/edit/view-form', [
         label: gt("Save"),
         ref: "io.ox/contacts/actions/edit/save",
         cssClasses: "btn btn-primary",
-        tabIndex: 10
+        tabIndex: 10,
+        tagtype: "button"
     }));
 
     // Edit Actions
@@ -223,12 +236,19 @@ define('io.ox/contacts/edit/view-form', [
     new actions.Action('io.ox/contacts/actions/edit/save', {
         id: 'save',
         action: function (options, baton) {
-            baton.parentView.trigger('save:start');
-            baton.model.save().done(function () {
-                baton.parentView.trigger('save:success');
+            options.parentView.trigger('save:start');
+            options.model.save().done(function () {
+                options.parentView.trigger('save:success');
             }).fail(function () {
-                baton.parentView.trigger('save:fail');
+                options.parentView.trigger('save:fail');
             });
+        }
+    });
+
+    new actions.Action('io.ox/contacts/actions/edit/discard', {
+        id: 'discard',
+        action: function (options, baton) {
+            options.parentView.$el.find('[data-action="discard"]').trigger('controller:quit');
         }
     });
 

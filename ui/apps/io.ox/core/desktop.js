@@ -140,6 +140,7 @@ define("io.ox/core/desktop",
                         if (grid) {
                             grid.clear();
                         }
+
                     },
 
                     set: function (id) {
@@ -164,9 +165,8 @@ define("io.ox/core/desktop",
                                     if (grid && grid.prop('folder') !== folder) {
                                         grid.clear();
                                         grid.prop('folder', folder);
-                                        if (win && win.getSearchQuery() !== '') {
-                                            win.setSearchQuery('');
-                                            grid.setMode('all');
+                                        if (win && win.search.active) {
+                                            win.search.close();
                                         } else {
                                             grid.refresh();
                                         }
@@ -283,9 +283,7 @@ define("io.ox/core/desktop",
 
             // update hash
             if (this.get('name') !== _.url.hash('app')) {
-                _.url.hash('folder', null);
-                _.url.hash('perspective', null);
-                _.url.hash('id', null);
+                _.url.hash({ folder: null, perspective: null, id: null });
             }
             if (this.has('name')) {
                 _.url.hash('app', this.get('name'));
@@ -319,10 +317,7 @@ define("io.ox/core/desktop",
                     self.destroy();
                 }
                 // update hash
-                _.url.hash('app', null);
-                _.url.hash('folder', null);
-                _.url.hash('perspective', null);
-                _.url.hash('id', null);
+                _.url.hash({ app: null, folder: null, perspective: null, id: null });
                 // don't save
                 clearInterval(self.get('saveRestorePointTimer'));
                 self.removeRestorePoint();
@@ -509,25 +504,30 @@ define("io.ox/core/desktop",
 
             // init
             var rendered = false,
-                initialized = false;
+                initialized = false,
+                options = {
+                    force: false
+                };
 
             this.main = $();
 
-            this.show = function (app, force) {
+            this.show = function (app, opt) {
                 // make sure it's initialized
-                if (!force) {
-                    force = false;
-                }
+
+                _.extend(options, opt);
+
                 if (!initialized) {
                     this.main = app.getWindow().addPerspective(name);
                     initialized = true;
                 }
                 // set perspective
                 app.getWindow().setPerspective(name);
-                _.url.hash('perspective', name);
+
+                _.url.hash('perspective', (_.isArray(options.perspective) ? options.perspective.join(':') : options.perspective));
+
                 // render?
-                if (!rendered || force) {
-                    this.render(app);
+                if (!rendered || options.force) {
+                    this.render(app, options);
                     rendered = true;
                 }
             };
@@ -631,9 +631,7 @@ define("io.ox/core/desktop",
 
             scrollTo = function (node, cont) {
 
-                var children = pane.find(".window-container-center"),
-                    center = node.find(".window-container-center").show(),
-                    index = node.data("index") || 0,
+                var index = node.data("index") || 0,
                     left = (-index * 101),
                     done = function () {
                         // use timeout for smoother animations
@@ -673,7 +671,7 @@ define("io.ox/core/desktop",
 
                 this.id = id;
                 this.name = name;
-                this.nodes = { title: $(), toolbar: $(), controls: $() };
+                this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $() };
                 this.search = { query: '', active: false };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
@@ -687,8 +685,9 @@ define("io.ox/core/desktop",
                     firstShow = true;
 
                 this.updateToolbar = function () {
-                    ext.point(name + '/toolbar')
-                        .invoke('draw', this.nodes.toolbar.empty(), this.app || this);
+                    var folder = this.app && this.app.folder ? this.app.folder.get() : null,
+                        baton = ext.Baton({ window: this, $: this.nodes, app: this.app, folder: folder });
+                    ext.point(name + '/toolbar').invoke('draw', this.nodes.toolbar.empty(), baton);
                 };
 
                 ext.point(name + '/window-title').extend({
@@ -715,44 +714,12 @@ define("io.ox/core/desktop",
                     }
                 });
 
-                ext.point(name + '/window-controls').extend({
-                    id: 'default',
-                    draw: function () {
-                        return $('<div class="window-controls">').append(
-                            // fullscreen
-                            this.fullscreenButton = $('<div class="window-control pull-right">').hide()
-                                .append($('<button class="btn btn-inverse pull-right"><i class="icon-resize-full icon-white"></button>')),
-                                // settings
-                            this.settingsButton = $('<div class="window-control pull-right">').hide()
-                                .text(_.noI18n('\u270E')),
-                            // close
-                            this.closeButton = $('<div class="window-control pull-right">').hide()
-                                .append($('<a class="close">').text(_.noI18n('\u00D7')))
-                        );
-                    }
-                });
-
                 ext.point(name + '/window-head').extend({
                     id: 'default',
                     draw: function () {
                         return this.head.append(
-                            $('<div class="css-table-row">').append(
-                                // title
-                                $('<div class="css-table-cell cell-30">').append(
-                                    this.title = ext.point(name + '/window-title')
-                                        .invoke('draw', this).first().value() || $()
-                                ),
-                                // toolbar
-                                $("<div class='css-table-cell cell-40 cell-center'>").append(
-                                    this.toolbar = ext.point(name + '/window-toolbar')
-                                        .invoke('draw', this).first().value() || $()
-                                ),
-                                // controls
-                                $("<div class='css-table-cell cell-30 cell-right'>").append(
-                                    this.controls = ext.point(name + '/window-controls')
-                                        .invoke('draw', this).first().value() || $()
-                                )
-                            )
+                            this.toolbar = ext.point(name + '/window-toolbar')
+                                .invoke('draw', this).first().value() || $()
                         );
                     }
                 });
@@ -761,7 +728,10 @@ define("io.ox/core/desktop",
                     id: 'default',
                     draw: function () {
                         return this.body.append(
-                            this.main = $('<div class="window-content">')
+                            // default perspective
+                            this.main = $('<div class="abs window-content">'),
+                            // search area
+                            this.search = $('<div class="window-search">')
                         );
                     }
                 });
@@ -946,13 +916,58 @@ define("io.ox/core/desktop",
                     return this;
                 };
 
-                this.getSearchQuery = function () {
-                    return $.trim(this.nodes.search.val());
-                };
+                this.search = {
 
-                this.setSearchQuery = function (q) {
-                    this.nodes.search.val(q);
-                    return this;
+                    active: false,
+                    query: '',
+                    previous: '',
+
+                    open: function () {
+                        if (!this.active) {
+                            self.trigger('search:open');
+                            self.nodes.body.addClass('search-open');
+                            self.nodes.searchField.focus();
+                            this.active = true;
+                        }
+                        return this;
+                    },
+
+                    close: function () {
+                        if (this.active) {
+                            self.trigger('search:close');
+                            self.nodes.body.removeClass('search-open');
+                            this.active = false;
+                            self.nodes.searchField.val('');
+                            self.trigger('search:cancel cancel-search');
+                            this.query = this.previous = '';
+                        }
+                        return this;
+                    },
+
+                    toggle: function () {
+                        if (this.active) { this.close(); } else { this.open(); }
+                        return this;
+                    },
+
+                    getQuery: function () {
+                        return $.trim(self.nodes.searchField.val());
+                    },
+
+                    setQuery: function (query) {
+                        self.nodes.searchField.val(this.query = query);
+                        return this;
+                    },
+
+                    start: function (query) {
+                        this.open().setQuery(query);
+                        self.trigger('search', query);
+                        return this;
+                    },
+
+                    stop: function () {
+                        this.close();
+                        return this;
+                    }
                 };
 
                 this.addClass = function () {
@@ -976,9 +991,7 @@ define("io.ox/core/desktop",
 
                 this.addPerspective = function (id) {
                     if (this.nodes[id] === undefined) {
-                        var node = $("<div>")
-                            .addClass("window-content").hide()
-                            .appendTo(this.nodes.body);
+                        var node = $('<div class="abs window-content">').hide().appendTo(this.nodes.body);
                         return (this.nodes[id] = perspectives[id] = node);
                     }
                 };
@@ -998,15 +1011,14 @@ define("io.ox/core/desktop",
         return function (options) {
 
             var opt = $.extend({
-                id: "window-" + guid,
-                name: "",
-                width: 0,
-                title: "",
-                titleWidth: '300px',
+                chromeless: false,
+                classic: false,
+                id: 'window-' + guid,
+                name: '',
                 search: false,
+                title: '',
                 toolbar: false,
-                settings: false,
-                chromeless: false
+                width: 0
             }, options);
 
             // get width
@@ -1036,11 +1048,18 @@ define("io.ox/core/desktop",
                             .append($('<div class="progress progress-striped active"><div class="bar" style="width: 0%;"></div></div>').hide())
                             .append($('<div class="progress progress-striped progress-warning active"><div class="bar" style="width: 0%;"></div></div>').hide()),
                         // window HEAD
-                        win.nodes.head = $('<div class="window-head css-table">'),
+                        win.nodes.head = $('<div class="window-head">'),
                         // window BODY
                         win.nodes.body = $('<div class="window-body">')
                     )
+                    // capture controller events
+                    .on('controller:quit', function () {
+                        if (win.app) { win.app.quit(); }
+                    })
                 );
+
+            // classic window header?
+            if (opt.classic) win.nodes.outer.addClass('classic');
 
             // add default css class
             if (opt.name) {
@@ -1057,47 +1076,26 @@ define("io.ox/core/desktop",
             // search?
             if (opt.search) {
                 // search
-                var lastQuery = "",
-                    triggerSearch = function (query) {
+                var triggerSearch = function (query) {
                         // yeah, waiting for the one who reports this :)
                         if (/^porn$/i.test(query)) {
                             $("body").append(
-                                $("<div>")
-                                .addClass("abs")
-                                .css({
-                                    backgroundColor: "black",
-                                    zIndex: 65000
-                                })
+                                $('<div class="abs">')
+                                .css({ backgroundColor: "black", zIndex: 65000 })
                                 .append(
-                                    $("<div>")
-                                    .addClass("abs").css({
-                                        top: "25%",
-                                        textAlign: "center",
-                                        color: "#aaa",
-                                        fontWeight: "bold",
-                                        fontSize: "50px",
-                                        fontFamily: "'Comic Sans MS', Arial"
-                                    })
+                                    $('<div class="abs">')
+                                    .css({ top: "25%", textAlign: "center", color: "#aaa", fontWeight: "bold", fontSize: "50px", fontFamily: "'Comic Sans MS', Arial" })
                                     .html('<span style="color: rgb(230,110,110)">YOU</span> SEARCHED FOR WHAT?')
                                 )
                                 .append(
-                                    $("<div>")
-                                    .addClass("abs")
-                                    .css({
-                                        top: "50%",
-                                        width: "670px",
-                                        textAlign: "center",
-                                        margin: "0 auto 0 auto",
-                                        color: "#666"
-                                    })
+                                    $('<div class="abs">')
+                                    .css({ top: "50%", width: "670px", textAlign: "center", margin: "0 auto 0 auto", color: "#666" })
                                     .html(
                                         '<div style="font-size: 26px">WARNING: This website contains explicit adult material.</div>' +
                                         '<div style="font-size: 18px">You may only enter this Website if you are at least 18 years of age, or at least the age of majority in the jurisdiction where you reside or from which you access this Website. If you do not meet these requirements, then you do not have permission to use the Website.</div>'
                                     )
                                 )
-                                .click(function () {
-                                        $(this).remove();
-                                    })
+                                .click(function () { $(this).remove(); })
                             );
                         } else if (/^use the force$/i.test(query) && currentWindow) {
                             // star wars!
@@ -1123,53 +1121,32 @@ define("io.ox/core/desktop",
 
                 var searchId = 'search_' + _.now(); // acccessibility
 
-                var setActive = function () {
-                    win.search.active = true;
-                    win.nodes.search.closest('form').addClass('active-search');
-                };
-
-                var setInactive = function () {
-                    win.search.active = false;
-                    win.nodes.search.val(win.search.query = '');
-                    win.nodes.search.closest('form').removeClass('active-search');
-                };
-
                 var searchHandler = {
                     keydown: function (e) {
                         e.stopPropagation();
                         if (e.which === 27) {
-                            $(this).val('');
-                            setInactive();
-                            win.trigger("cancel-search", lastQuery = '');
-                        }
-                    },
-                    search: function (e) {
-                        e.stopPropagation();
-                        if ($(this).val() === "") {
-                            $(this).blur();
-                            setInactive();
+                            win.search.close();
+                        } else if (e.which === 13 && $(this).val() === '') {
+                            win.search.close();
                         }
                     },
                     change: function (e) {
                         e.stopPropagation();
-                        win.search.query = $(this).val();
+                        win.search.query = $.trim($(this).val());
                         // trigger search?
-                        if (win.search.query !== '') {
-                            setActive();
-                            if (win.search.query !== lastQuery) {
-                                triggerSearch(lastQuery = win.search.query);
-                            }
-                        } else if (lastQuery !== "") {
-                            setInactive();
-                            win.trigger("cancel-search", lastQuery = "");
+                        if (win.search.query !== '' && win.search.query !== win.search.previous) {
+                            triggerSearch(win.search.previous = win.search.query);
+                        }
+                        else if (win.search.query === '') {
+                            win.search.close();
                         }
                     }
                 };
 
-                $('<form class="form-search pull-right">').append(
+                $('<form class="form-search">').append(
                     $('<div class="input-append">').append(
                         $('<label>', { 'for': searchId }).append(
-                            win.nodes.search = $('<input type="text" class="input-medium search-query">')
+                            win.nodes.searchField = $('<input type="text" class="input-xlarge search-query">')
                             .attr({
                                 tabindex: '1',
                                 placeholder: gt('Search') + ' ...',
@@ -1182,52 +1159,69 @@ define("io.ox/core/desktop",
                     )
                 )
                 .on('submit', false)
-                .appendTo(win.nodes.controls);
-            }
-
-            // toolbar extension point
-            if (opt.toolbar === true) {
-                // add "create" link
-                if (opt.name) {
-                    // ToolbarLinks VS ToolbarButtons
-                    ext.point(opt.name + '/toolbar').extend(new links.ToolbarLinks({
-                        id: 'links',
-                        ref: opt.name + '/links/toolbar'
-                    }));
-                }
-            } else {
-                // hide toolbar
-                win.nodes.head.find('.css-table-cell')
-                    .eq(0).removeClass('cell-30').addClass('cell-70').end()
-                    .eq(1).hide();
+                .appendTo(win.nodes.search);
             }
 
             // fix height/position/appearance
             if (opt.chromeless) {
 
+                win.nodes.outer.addClass('chromeless-window');
                 win.nodes.head.hide();
-                win.nodes.body.css("top", "0px");
+                win.nodes.body.css('left', '0px');
 
-            } else {
+            } else if (opt.name) {
 
-                // add close handler
-                if (opt.close === true) {
-                    win.nodes.closeButton.show().on("click", close);
-                    win.setQuitOnClose(true);
-                }
+                // toolbar
+                ext.point(opt.name + '/toolbar').extend(new links.ToolbarLinks({
+                    id: 'links',
+                    ref: opt.name + '/links/toolbar'
+                }));
 
-                // add fullscreen handler
-                if (opt.fullscreen === true && win.nodes.fullscreenButton) {
-                    win.nodes.fullscreenButton.show().on('click', function () {
-                        // Maximize
-                        if (BigScreen.enabled) {
-                            BigScreen.toggle(win.nodes.outer.get(0));
+                // add search
+                if (opt.search === true) {
+
+                    new links.Action(opt.name + '/actions/search', {
+                        action:  function (baton) {
+                            baton.window.search.toggle();
+                        }
+                    });
+
+                    new links.ActionLink(opt.name + '/links/toolbar/search', {
+                        ref: opt.name + '/actions/search'
+                    });
+
+                    new links.ActionGroup(opt.name + '/links/toolbar', {
+                        id: 'search',
+                        index: 900,
+                        icon: function () {
+                            return $('<i class="icon-search">');
                         }
                     });
                 }
 
-                // set title
-                win.setTitle(opt.title);
+                // add fullscreen handler
+                if (opt.fullscreen === true) {
+
+                    new links.Action(opt.name + '/actions/fullscreen', {
+                        action:  function (baton) {
+                            if (BigScreen.enabled) {
+                                BigScreen.toggle(baton.$.outer.get(0));
+                            }
+                        }
+                    });
+
+                    new links.ActionLink(opt.name + '/links/toolbar/fullscreen', {
+                        ref: opt.name + '/actions/fullscreen'
+                    });
+
+                    new links.ActionGroup(opt.name + '/links/toolbar', {
+                        id: 'fullscreen',
+                        index: 1000,
+                        icon: function () {
+                            return $('<i class="icon-resize-full">');
+                        }
+                    });
+                }
             }
 
             // inc

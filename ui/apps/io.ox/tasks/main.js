@@ -71,46 +71,81 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
         grid.addTemplate(template.main);
 
         commons.wireGridAndAPI(grid, api);
-
-        grid.setAllRequest(function () {
-            var datacopy,
+        commons.wireGridAndSearch(grid, win, api);
+        
+        //custom requests
+        var allRequest = function () {
+                var datacopy,
+                    done = grid.prop('done'),
+                    sort = grid.prop('sort'),
+                    order = grid.prop('order'),
+                    column;
+                if (sort !== 'state') {
+                    column = sort;
+                } else {
+                    column = 202;
+                }
+                return api.getAll({folder: this.prop('folder'), sort: column, order: order}, false).pipe(function (data) {
+                    if (sort !== 'state') {
+                        datacopy = _.copy(data, true);
+                    } else {
+                        datacopy = util.sortTasks(data, order);
+                    }
+    
+                    if (!done) {
+                        datacopy = _(datacopy).filter(function (obj) {
+                            return obj.status !== 3;
+                        });
+                    }
+                    return datacopy;
+                });
+            },
+            listRequest = function (ids) {
+                return api.getList(ids, false).pipe(function (list) {
+                    var listcopy = _.copy(list, true),
+                        i = 0;
+                    for (; i < listcopy.length; i++) {
+                        listcopy[i] = util.interpretTask(listcopy[i]);
+                    }
+    
+                    return listcopy;
+                });
+            },
+            searchAllRequest = function () {
+                var datacopy,
                 done = grid.prop('done'),
                 sort = grid.prop('sort'),
                 order = grid.prop('order'),
                 column;
-            if (sort !== 'state') {
-                column = sort;
-            } else {
-                column = 202;
-            }
-            return api.getAll({folder: this.prop('folder'), sort: column, order: order}, false).pipe(function (data) {
                 if (sort !== 'state') {
-                    datacopy = _.copy(data, true);
+                    column = sort;
                 } else {
-                    datacopy = util.sortTasks(data, order);
+                    column = 202;
                 }
-
-                if (!done) {
-                    datacopy = _(datacopy).filter(function (obj) {
-                        return obj.status !== 3;
-                    });
-                }
-                return datacopy;
-            });
-        });
-
-        grid.setListRequest(function (ids) {
-            return api.getList(ids, false).pipe(function (list) {
-                var listcopy = _.copy(list, true),
-                    i = 0;
-                for (; i < listcopy.length; i++) {
-                    listcopy[i] = util.interpretTask(listcopy[i]);
-                }
-
-                return listcopy;
-            });
-        });
-
+                return api.search(win.search.query, {folder: this.prop('folder'), sort: column, order: order}).pipe(function (data) {
+                    if (sort !== 'state') {
+                        datacopy = _.copy(data, true);
+                    } else {
+                        datacopy = util.sortTasks(data, order);
+                    }
+    
+                    if (!done) {
+                        datacopy = _(datacopy).filter(function (obj) {
+                            return obj.status !== 3;
+                        });
+                    }
+                    return datacopy;
+                });
+            };
+        
+        grid.setAllRequest(allRequest);
+        grid.setListRequest(listRequest);
+        
+        // search: all request
+        grid.setAllRequest('search', searchAllRequest);
+        // search: list request
+        grid.setListRequest('search', listRequest);
+        
         var showTask, drawTask, drawFail;
 
         //detailview lfo callbacks
@@ -173,7 +208,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
         grid.on('change:prop', updateGridOptions);
         updateGridOptions();
 
-        ext.point('io.ox/tasks/vgrid/toolbar').invoke('draw', grid.getToolbar());
+        commons.addGridToolbarFolder(app, grid);
 
         //ready for show
         commons.addFolderSupport(app, grid, 'tasks')

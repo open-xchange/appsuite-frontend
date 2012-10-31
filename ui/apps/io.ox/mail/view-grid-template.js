@@ -52,12 +52,12 @@ define('io.ox/mail/view-grid-template',
                     fields.threadSize.text(_.noI18n(data.threadSize)).css('display', '');
                 }
                 fields.from.empty().append(
-                    util.getFrom(data, account.is(data.folder_id, 'sent') ? 'to' : 'from')
+                    util.getFrom(data, account.is('sent', data.folder_id) ? 'to' : 'from')
                 );
                 fields.date.text(_.noI18n(util.getTime(data.received_date)));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
                 fields.flag.get(0).className = 'flag flag_' + (data.color_label || 0);
-                if (util.isUnread(data)) {
+                if (api.tracker.isPartiallyUnseen(data)) {
                     this.addClass('unread');
                 }
                 if (util.byMyself(data)) {

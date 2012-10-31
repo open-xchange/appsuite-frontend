@@ -108,7 +108,7 @@ define('io.ox/core/api/account',
     };
 
     // is drafts, trash, spam etc.
-    api.is = function (id, type) {
+    api.is = function (type, id) {
         return typeHash[id] === type;
     };
 
@@ -168,6 +168,17 @@ define('io.ox/core/api/account',
                     return data;
                 });
             }
+        })
+        .pipe(function (list) {
+            _(list).each(function (account) {
+                // remember account id
+                idHash[account.id] = true;
+                // remember types
+                _('sent drafts'.split(' ')).each(function (type) {
+                    typeHash[account[type + '_fullname']] = type;
+                });
+            });
+            return list;
         });
     };
 

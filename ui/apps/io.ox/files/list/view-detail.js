@@ -28,15 +28,25 @@ define("io.ox/files/list/view-detail",
 
     "use strict";
 
-    var draw = function (file) {
+    var draw;
+
+    var createRedraw = function (node) {
+        return function (e, data) {
+            node.replaceWith(draw(data).element);
+        };
+    };
+
+    draw = function (file) {
 
         var self,
             mode = 'display',
-            $element = $("<div>").addClass("file-details view"),
+            $element = $.createViewContainer(file, filesAPI),
             sections = new layouts.Sections({
                 ref: "io.ox/files/details/sections"
             });
 
+        $element.on('redraw', createRedraw($element))
+            .addClass('file-details view');
 
         var blacklisted = {
             "refresh.list": true
@@ -51,7 +61,7 @@ define("io.ox/files/list/view-detail",
                 }
                 var self = this;
                 if (evt && evt.id && evt.id === file.id && type !== "delete") {
-                    filesAPI.get({id: evt.id, folder: evt.folder}).done(function (file) {
+                    filesAPI.get({ id: evt.id, folder: evt.folder_id }).done(function (file) {
                         self.file = file;
                         sections.trigger($element, type, file);
                     });

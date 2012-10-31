@@ -37,10 +37,7 @@ define('io.ox/core/collection',
         },
 
         getFolderId = function (obj) {
-            // is app (pseudo collection used by window toolbar)?
-            if (_.isObject(obj.folder) && _.isFunction(obj.folder.get)) {
-                return obj.folder.get();
-            } else if ('folder_id' in obj || 'folder' in obj) {
+            if ('folder_id' in obj || 'folder' in obj) {
                 return obj.folder_id || obj.folder;
             } else {
                 return undefined;

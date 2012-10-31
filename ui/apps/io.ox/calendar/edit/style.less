@@ -32,6 +32,16 @@ div.io-ox-calendar-edit {
         clear: both;
         padding: 20px;
     }
+    
+    h1.title {
+        font-family: @font-light;
+        font-weight: 200;
+        font-size: 20px;
+        line-height: 30px;
+        height: 30px;
+        margin: 0 0 13px 0;
+        float: left;
+    }
 
     input.title {
         width: 99%;
@@ -75,9 +85,7 @@ div.io-ox-calendar-edit {
         color: white;
         text-transform: uppercase;
         background-color: #999;
-        -webkit-border-radius: 3px;
-        -moz-border-radius: 3px;
-        border-radius: 3px;
+        .border-radius(3px);
     }
     textarea.note {
         font-family: @font-normal;
@@ -93,16 +101,11 @@ div.io-ox-calendar-edit {
         padding: 10px;
         margin: 0px;
         min-height: 120px;
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        -ms-box-sizing: border-box;
-        box-sizing: border-box;
+        .box-sizing(border-box);
     }
     textarea.note:focus {
         border-color: white;
-        -moz-box-shadow: 0px 0px 4px 0px #006897;
-        -webkit-box-shadow: 0px 0px 4px 0px #006897;
-        box-shadow: 0px 0px 4px 0px #006897;
+        .box-shadow(0px 0px 4px 0px #006897);
     }
 
 
@@ -306,10 +309,7 @@ div.edit-appointment-participant div {
     margin: 0;
     padding: 5px 5px 4px 5px;
     width: 100%;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    box-sizing: border-box;
+    .box-sizing(border-box);
     -webkit-border-radius: 0;
     -webkit-appearance: none;
 }

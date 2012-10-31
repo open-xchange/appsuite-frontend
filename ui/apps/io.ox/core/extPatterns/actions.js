@@ -41,13 +41,12 @@ define("io.ox/core/extPatterns/actions",
         ext.point(id).extend(o);
     };
 
-    var performAction = function (ref, self, context) {
-        var p = ext.point(ref),
-            data = context ? context.data || context : {};
+    var invoke = function (ref, self, baton) {
+        var p = ext.point(ref), data = baton.data || baton;
         // general handler
-        p.invoke('action', self, _.isArray(data) && data.length === 1 ? data[0] : data, context);
+        p.invoke('action', self, baton);
         // handler for multi selection - always provides an array
-        p.invoke('multiple', self, _.isArray(data) ? data : [data], context);
+        p.invoke('multiple', self, _.isArray(data) ? data : [data], baton);
     };
 
     var processActions = function (ref, collection, context) {
@@ -68,7 +67,7 @@ define("io.ox/core/extPatterns/actions",
     };
 
     var customClick = function (e) {
-        performAction(e.data.ref, this, e.data.selection, e);
+        invoke(e.data.ref, this, e.data.selection, e);
     };
 
     var updateCustomControls = function (container, selection) {
@@ -102,6 +101,9 @@ define("io.ox/core/extPatterns/actions",
     };
 
     var applyCollection = function (ref, collection, context, args) {
+
+        if (!ref) return $.when();
+
         // resolve collection's properties
         var linksResolved = new $.Deferred();
         collection.getProperties()
@@ -140,7 +142,7 @@ define("io.ox/core/extPatterns/actions",
 
     return {
         Action: Action,
-        invoke: performAction,
+        invoke: invoke,
         applyCollection: applyCollection,
         updateCustomControls: updateCustomControls
     };

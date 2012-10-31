@@ -15,9 +15,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                                 'io.ox/core/strings'], function (gt, strings) {
     "use strict";
     
-    var detailsTab = {}, //utilClass manages the detailsTab
-        currencyArray = ['CAD', 'CHF', 'DKK', 'EUR', 'GBP', 'PLN', 'RUB', 'SEK', 'USD', 'JPY', 'RMB'],
-        util = {
+    var util = {
         buildLabel: function (text, id) {
             return $('<label>').text(text).addClass("task-edit-label").attr('for', id);
         },
@@ -55,7 +53,22 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
             
             return progress;
         },
-        
+        buildExtensionRow: function (parent, extensions, baton) {
+            var row = $('<div>').addClass("row-fluid task-edit-row").appendTo(parent);
+            for (var i = 0; i < extensions.length; i++) {
+                if (!(_.isArray(extensions[i]))) { //check for true extensionpoint
+                    extensions[i].invoke("draw", row, baton);
+                } else { //its a normal node
+                    $('<div>').addClass("span" + extensions[i][1]).append(extensions[i][0]).appendTo(row);
+                }
+            }
+            //find labels and make them focus the inputfield
+            row.find("label").each(function (label) {
+                if (this) {
+                    $(this).attr("for", $(this).next().attr('id'));
+                }
+            });
+        },
         buildRow: function (parent, nodes, widths, fillGrid) {
             
             //check for impossible number of rows to avoid dividing by 0 or overflowing rows
@@ -89,103 +102,22 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
         },
         
         //Tabs
-        buildTabs: function (tabs) {
+        buildTabs: function (tabs, uid) {//uid is important so tabs dont change tabs in other apps
             var table = $('<ul>').addClass("nav nav-tabs"),
                 content = $('<div>').addClass("tab-content");
             for (var i = 0; i < tabs.length; i++) {
                 $('<li>').css('width', '33%')
                     .append($('<a>').addClass("tab-link").css('text-align', 'center')
-                        .attr({href: '#edit-task-tab' + [i], 'data-toggle': "tab"}).text(tabs[i])).appendTo(table);
+                        .attr({href: '#edit-task-tab' + [i] + uid, 'data-toggle': "tab"}).text(tabs[i])).appendTo(table);
             }
             for (var i = 0; i < tabs.length; i++) {
-                $('<div>').attr('id', "edit-task-tab" + [i]).addClass("tab-pane").appendTo(content);
+                $('<div>').attr('id', "edit-task-tab" + [i] + uid).addClass("tab-pane").appendTo(content);
             }
             table.find('li :first').addClass('active');
             content.find('div :first').addClass('active');
             return {table: table, content: content};
         },
-        //detail tab
-        getDetailsTab: function () {return detailsTab; },
-        
-        buildDetailsTab: function (tab) {
-            //build TabObject
-            detailsTab.main = tab;
-            detailsTab.target_duration = $('<input>').attr({type: 'text', id: 'task-edit-target-duration'}).addClass('target-duration');
-            detailsTab.actual_duration = $('<input>').attr({type: 'text', id: 'task-edit-actual-duration'}).addClass('actual-duration');
-            detailsTab.target_costs = $('<input>').attr({type: 'text', id: 'task-edit-target-costs'}).addClass('target-costs');
-            detailsTab.actual_costs = $('<input>').attr({type: 'text', id: 'task-edit-actual-costs'}).addClass('actual-costs');
-            detailsTab.billing_information = $('<input>').attr({type: 'text', id: 'task-edit-billing-information'}).addClass('billing-information');
-            detailsTab.companies = $('<input>').attr({type: 'text', id: 'task-edit-companies'}).addClass('companies');
-            detailsTab.trip_meter = $('<input>').attr({type: 'text', id: 'task-edit-trip-meter'}).addClass('trip_meter');
-            detailsTab.currency = $('<select>').addClass('currency').attr('id', 'task-edit-currency');
-            for (var i = 0; i < currencyArray.length; i++) {
-                $('<option>').text(_.noI18n(currencyArray[i])).appendTo(detailsTab.currency);
-            }
-            detailsTab.currency.prop('selectedIndex', 3);
-            
-            //build Output
-            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Estimated time in minutes"),
-                                             detailsTab.target_duration.attr('id')), detailsTab.target_duration],
-                                            [this.buildLabel(gt("Actual time in minutes"),
-                                             detailsTab.actual_duration.attr('id')), detailsTab.actual_duration]]);
-            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Estimated costs"),
-                                             detailsTab.target_costs.attr('id')), detailsTab.target_costs],
-                                            [this.buildLabel(gt("Actual costs"),
-                                             detailsTab.actual_costs.attr('id')), detailsTab.actual_costs],
-                                            [this.buildLabel(gt("Currency"),
-                                             detailsTab.currency.attr('id')), detailsTab.currency]],
-                                            [6, 4, 2]);
-            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Distance"),
-                                             detailsTab.trip_meter.attr('id')), detailsTab.trip_meter]]);
-            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Billing information"),
-                                             detailsTab.billing_information.attr('id')), detailsTab.billing_information]]);
-            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Companies"),
-                                             detailsTab.companies.attr('id')), detailsTab.companies]]);
-            
-            return detailsTab;
-        },
-        
-        fillDetailsTab: function (task) {
-            if (task.target_duration) {
-                detailsTab.target_duration.val(task.target_duration);
-            }
-            if (task.actual_duration) {
-                detailsTab.actual_duration.val(task.actual_duration);
-            }
-            if (task.target_costs) {
-                detailsTab.target_costs.val(task.target_costs);
-            }
-            if (task.actual_costs) {
-                detailsTab.actual_costs.val(task.actual_costs);
-            }
-            if (task.billing_information) {
-                detailsTab.billing_information.val(task.billing_information);
-            }
-            if (task.companies) {
-                detailsTab.companies.val(task.companies);
-            }
-            if (task.trip_meter) {
-                detailsTab.trip_meter.val(task.trip_meter);
-            }
-            if (task.currency) {
-                var temp = currencyArray.indexOf(task.currency);
-                if (temp !== -1) {
-                    detailsTab.currency.prop('selectedIndex', temp);
-                }
-            }
-        },
-        
-        updateDetailTabValues: function (data) {
-            data.target_duration = detailsTab.target_duration.val();
-            data.actual_duration = detailsTab.actual_duration.val();
-            data.target_costs = detailsTab.target_costs.val();
-            data.actual_costs = detailsTab.actual_costs.val();
-            data.billing_information = detailsTab.billing_information.val();
-            data.companies = detailsTab.companies.val();
-            data.trip_meter = detailsTab.trip_meter.val();
-            data.currency = detailsTab.currency.val();
-        },
-        
+
         buildAttachmentNode: function (node, attachments) {
             var tempNodes = [];
             node.empty();

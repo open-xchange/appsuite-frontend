@@ -49,7 +49,7 @@ define("io.ox/files/main",
                 // switch to view in url hash or default
                 var p = _.url.hash('perspective') || 'icons';
                 require(['io.ox/files/' + p + '/perspective'], function (perspective) {
-                    perspective.show(app);
+                    perspective.show(app, { perspective: p });
                 });
             });
     });

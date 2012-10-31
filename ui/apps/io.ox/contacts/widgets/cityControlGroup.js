@@ -11,12 +11,12 @@
  */
 define('io.ox/contacts/widgets/cityControlGroup', ['io.ox/backbone/forms', 'less!io.ox/contacts/widgets/widgets.css'], function (forms) {
     "use strict";
-    
+
     function CityControlGroup(options) {
         return new forms.ControlGroup(_.extend({}, {
-    
+
             attribute: options.cityAttribute,
-            
+
             buildElement: function () {
                 var self = this;
                 if (this.nodes.bothElements) {
@@ -32,32 +32,32 @@ define('io.ox/contacts/widgets/cityControlGroup', ['io.ox/backbone/forms', 'less
                 this.nodes.element.on('change', function () {
                     self.updateModel();
                 });
-                
+
                 function updateZip() {
                     self.updateZipInElement();
                 }
-                
+
                 this.observeModel('change:' + options.zipAttribute, updateZip);
-                
-                
+
+
                 updateZip();
-                
+
                 return this.nodes.bothElements = $("<span>").append(this.nodes.zipElement, $.txt(" "), this.nodes.element);
             },
-            
+
             updateZipInModel: function () {
                 this.model.set(this.zipAttribute, this.nodes.zipElement.val());
             },
-            
+
             updateZipInElement: function (valueFromModel) {
                 this.nodes.zipElement.val(this.model.get(this.zipAttribute));
             }
-            
-            
+
+
         }, options));
-        
+
     }
-    
-    
+
+
     return CityControlGroup;
 });

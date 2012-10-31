@@ -19,11 +19,12 @@ define("io.ox/tasks/actions",
      'io.ox/core/notifications'], function (ext, util, links, gt, notifications) {
 
     "use strict";
-    var Action = links.Action;
 
+    //  actions
+    var Action = links.Action, Button = links.Button,
+        ActionGroup = links.ActionGroup, ActionLink = links.ActionLink;
 
-    new Action('io.ox/tasks/actions/newtask', {
-        id: 'newtask',
+    new Action('io.ox/tasks/actions/create', {
         action: function (app) {
             require(['io.ox/tasks/edit/main'], function (edit) {
                 edit.getApp().launch();
@@ -32,18 +33,14 @@ define("io.ox/tasks/actions",
     });
 
     new Action('io.ox/tasks/actions/edit', {
-        id: 'edit',
         action: function (data) {
             require(['io.ox/tasks/edit/main'], function (edit) {
-                edit.getApp().launch().done(function () {
-                    this.preFill(data);
-                });
+                edit.getApp().launch(data);
             });
         }
     });
 
     new Action('io.ox/tasks/actions/delete', {
-        id: 'delete',
         action: function (data) {
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 //build popup
@@ -75,8 +72,44 @@ define("io.ox/tasks/actions",
         }
     });
 
+    new Action('io.ox/tasks/actions/move', {
+        requires: 'one',
+        action: function (task) {
+            require(['io.ox/core/tk/dialogs', "io.ox/core/tk/folderviews", 'io.ox/tasks/api'],
+                    function (dialogs, views, api) {
+                //build popup
+                var popup = new dialogs.ModalDialog({ easyOut: true })
+                    .header($('<h3>').text('Move'))
+                    .addPrimaryButton("ok", gt("OK"))
+                    .addButton("cancel", gt("Cancel"));
+                popup.getBody().css({ height: '250px' });
+                var tree = new views.FolderTree(popup.getBody(), { type: 'tasks' }),
+                    id = String(task.folder || task.folder_id);
+                //go
+                popup.show(function () {
+                    tree.paint().done(function () {
+                        tree.select(id);
+                    });
+                })
+                .done(function (action) {
+                    if (action === 'ok') {
+                        var target = _(tree.selection.get()).first();
+                        // move only if folder differs from old folder
+                        if (target && target !== id) {
+                            // move action
+                            api.move(task, target).done(function () {
+                                notifications.yell('success', gt('Task moved.'));
+                            });
+                        }
+                    }
+                    tree.destroy();
+                    tree = popup = null;
+                });
+            });
+        }
+    });
+
     new Action('io.ox/tasks/actions/done', {
-        id: 'done',
         action: function (data) {
             require(['io.ox/tasks/api'], function (api) {
                 api.update(data.last_modified, data.id, {status: 3, percent_completed: 100}, data.folder_id)
@@ -177,16 +210,22 @@ define("io.ox/tasks/actions",
         }
     });
 
-    //extension points
     // toolbar
 
-    ext.point('io.ox/tasks/links/toolbar').extend(new links.Button({
+    new links.ActionGroup('io.ox/tasks/links/toolbar', {
+        id: 'default',
         index: 100,
-        id: 'newtask',
+        icon: function () {
+            return $('<i class="icon-pencil">');
+        }
+    });
+
+    new links.ActionLink('io.ox/tasks/links/toolbar/default', {
+        index: 100,
+        id: 'create',
         label: gt('Create new task'),
-        cssClasses: 'btn btn-primary',
-        ref: 'io.ox/tasks/actions/newtask'
-    }));
+        ref: 'io.ox/tasks/actions/create'
+    });
 
     //inline
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
@@ -253,6 +292,14 @@ define("io.ox/tasks/actions",
             );
         }
     });
+
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'move',
+        index: 500,
+        prio: 'lo',
+        label: gt("Move"),
+        ref: 'io.ox/tasks/actions/move'
+    }));
 
     // Attachments
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({

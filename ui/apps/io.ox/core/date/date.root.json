@@ -86,7 +86,6 @@
             "m": "h:mm–h:mm a"
         },
         "Hm": {
-            "a": "HH:mm–HH:mm",
             "h": "HH:mm–HH:mm",
             "m": "HH:mm–HH:mm"
         },
@@ -96,7 +95,6 @@
             "m": "h:mm–h:mm a v"
         },
         "Hmv": {
-            "a": "HH:mm–HH:mm v",
             "h": "HH:mm–HH:mm v",
             "m": "HH:mm–HH:mm v"
         },

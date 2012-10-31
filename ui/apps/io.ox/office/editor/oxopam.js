@@ -30,7 +30,11 @@ define('io.ox/office/editor/oxopam', ['io.ox/office/tk/utils'], function (Utils)
         this.imageFloatMode = imageFloatMode ? imageFloatMode : null;
 
         this.toString = function () {
-            return oxoPosition.toString();
+            var name = JSON.stringify(this.oxoPosition);
+            if (_.isString(this.selectedNodeName)) {
+                name += ', node="' + this.selectedNodeName + '"';
+            }
+            return name;
         };
     }
 

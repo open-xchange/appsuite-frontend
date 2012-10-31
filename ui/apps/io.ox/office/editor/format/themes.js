@@ -19,26 +19,6 @@ define('io.ox/office/editor/format/themes',
 
     'use strict';
 
-    var // all known scheme color names, in a specific order, with readable names
-        SCHEME_COLOR_DEFINITIONS = [
-            { name: 'dark1',             label: gt('Dark 1') },
-            { name: 'light1',            label: gt('Light 1') },
-            { name: 'dark2',             label: gt('Dark 2') },
-            { name: 'light2',            label: gt('Light 2') },
-            { name: 'text1',             label: gt('Text 1') },
-            { name: 'text2',             label: gt('Text 2') },
-            { name: 'background1',       label: gt('Background 1') },
-            { name: 'background2',       label: gt('Background 2') },
-            { name: 'accent1',           label: gt('Accent 1') },
-            { name: 'accent2',           label: gt('Accent 2') },
-            { name: 'accent3',           label: gt('Accent 3') },
-            { name: 'accent4',           label: gt('Accent 4') },
-            { name: 'accent5',           label: gt('Accent 5') },
-            { name: 'accent6',           label: gt('Accent 6') },
-            { name: 'hyperlink',         label: gt('Hyperlink') },
-            { name: 'followedHyperlink', label: gt('Followed Hyperlink') }
-        ];
-
     // class Theme ============================================================
 
     /**
@@ -56,6 +36,10 @@ define('io.ox/office/editor/format/themes',
 
         // methods ------------------------------------------------------------
 
+        this.hasSchemeColors = function () {
+            return !_.isEmpty(colorScheme);
+        };
+
         /**
          * Returns the RGB color value of the specified scheme color.
          *
@@ -68,25 +52,6 @@ define('io.ox/office/editor/format/themes',
          */
         this.getSchemeColor = function (name) {
             return _.isString(colorScheme[name]) ? colorScheme[name] : null;
-        };
-
-        /**
-         * Returns an array containing all existing scheme colors in a specific
-         * order.
-         *
-         * @returns {Object[]}
-         *  An array with all scheme colors, as name/value pairs containing the
-         *  color name and the RGB value as string.
-         */
-        this.getSchemeColors = function () {
-            var schemeColors = [];
-            _(SCHEME_COLOR_DEFINITIONS).each(function (definition) {
-                var value = colorScheme[definition.name];
-                if (_.isString(value)) {
-                    schemeColors.push(_({ value: value }).extend(definition));
-                }
-            });
-            return schemeColors;
         };
 
     } // class Theme

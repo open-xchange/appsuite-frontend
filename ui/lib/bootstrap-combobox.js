@@ -61,22 +61,47 @@ $(document).ready(function () {
                 .on('mouseenter', 'li', $.proxy(this.mouseenter, this));
 
         },
+        hide: function () {
+            this.$menu.hide();
+            return this;
+        },
         click: function (e) {
             e.stopPropagation();
             e.preventDefault();
             this.select();
         },
         focus: function (e) {
-            console.log('focus');
             this.lookup();
         },
         blur: function (e) {
             var self = this;
-            e.stopPropagation();
-            e.preventDefault();
             setTimeout(function () {
                 self.select();
             }, 0);
+        },
+        move: function (e) {
+            if (!this.shown) return;
+
+            switch(e.keyCode) {
+            case 13: // enter
+            case 27: // escape
+                e.preventDefault();
+                break;
+
+            case 38: // up arrow
+                e.preventDefault();
+                this.show();
+                this.prev();
+                break
+
+            case 40: // down arrow
+                e.preventDefault();
+                this.show();
+                this.next();
+                break;
+            }
+
+            e.stopPropagation();
         },
         keyup: function (e) {
             switch (e.keyCode) {
@@ -85,10 +110,10 @@ $(document).ready(function () {
                 if (!this.shown) {
                     this.lookup();
                 }
-                e.stopPropagation();
                 break;
 
-            case 9: // tab
+            case 9:
+                break; // tab
             case 13: // enter
                 e.stopPropagation();
                 if (!this.shown) {
@@ -105,6 +130,13 @@ $(document).ready(function () {
                 this.hide();
                 break;
 
+            case 37: // left
+            case 39: // right
+                if (!this.shown) {
+                    return;
+                }
+                e.stopPropagation();
+            break;
             default:
                 if (!this.shown) {
                     return;
@@ -118,7 +150,7 @@ $(document).ready(function () {
             var val = this.$menu.find('.active').attr('data-value');
             if (val) {
                 this.$element.val(val);
-                this.$element.trigger('change');
+                this.$element.trigger('change blur');
             }
             return this.hide();
         },
@@ -132,17 +164,23 @@ $(document).ready(function () {
             });
 
             var selected = _(items).find(function (item) {
-                return ($(item).attr('data-value') === self.query);
+                return ($(item).is('li[data-value^="' + self.query + '"]'));
             });
 
             if (selected) {
                 $(selected).addClass('active');
             } else {
-                //items.first().addClass('active');
+                this.shown = false;
             }
+
             this.$li = items;
             this.$menu.html(items);
             return this;
+        },
+        scrollIntoCombobox: function (el) {
+            var ownHeight = this.$menu.height();
+            var itemPos = el.get(0).offsetTop;
+            this.$menu.scrollTop(itemPos - ownHeight / 2 );
         },
         show: function () {
             var pos = $.extend({}, {top: this.$element[0].offsetTop, left: this.$element[0].offsetLeft}, {
@@ -157,10 +195,7 @@ $(document).ready(function () {
             var selected = this.$menu.find('.active');
             if (selected.length > 0) {
                 // calculate position to center actual time in dropdown
-                //selected.get(0).scrollIntoView();
-                var itemPos = selected.get(0).offsetTop;
-                var ownHeight = this.$menu.height();
-                this.$menu.scrollTop(itemPos - ownHeight / 2 );
+                this.scrollIntoCombobox(selected);
             }
             this.shown = true;
             return this;
@@ -172,7 +207,7 @@ $(document).ready(function () {
             if (!next.length) {
                 next = $(this.$menu.find('li')[0]);
             }
-            next.get(0).scrollIntoView();
+            this.scrollIntoCombobox(next);
             next.addClass('active');
         },
         prev: function (e) {
@@ -182,20 +217,20 @@ $(document).ready(function () {
             if (!prev.length) {
                 prev = this.$menu.find('li').last();
             }
-            prev.get(0).scrollIntoView();
+            this.scrollIntoCombobox(prev);
             prev.addClass('active');
         },
         lookup: function (event) {
             var self = this,
                 items;
 
-            this.query = this.$element.val();
+            this.query = this.$element.val().toUpperCase();
 
-            if (!this.query && this.options.autocompleteBehavoir) {
+            if (!this.query && this.options.autocompleteBehaviour) {
                 return this.shown ? this.hide() : this;
             }
 
-            if (this.options.autocompleteBehavoir) {
+            if (this.options.autocompleteBehaviour) {
                 items = $.grep(this.source, function (item) {
                     if (self.matcher(item)) {
                         return item;
@@ -237,7 +272,7 @@ $(document).ready(function () {
         items: 8,
         menu: '<ul class="typeahead dropdown-menu"></ul>',
         item: '<li><a></a></li>',
-        autocompleteBehavoir: false
+        autocompleteBehaviour: false
     };
 
     $.fn.combobox.Constructor = Combobox;

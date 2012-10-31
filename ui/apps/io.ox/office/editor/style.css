@@ -65,8 +65,12 @@
             margin: 0;
             line-height: 0;
         
-            /* default text formatting */
-            > span {
+            > div.field, > div.tab, > div.list-label {
+                display: inline-block;
+            }
+
+            /* default text formatting (also for fields and list labels) */
+            > span, > div > span {
                 font-family: sans-serif;
                 font-size: 11pt;
                 line-height: normal;
@@ -77,15 +81,6 @@
                     background-color: yellow !important;
                     color: black !important;
                 }
-            }
-            > div.list-label {
-                display : inline-block;
-                line-height: 12pt;
-                /*font-size: 15pt;
-                background-color: red;
-                width: 40pt;
-                text-align: right;
-                font-family: 'Symbol';*/
             }
         }
 
@@ -104,9 +99,8 @@
             &:first-child { margin-top: 0; }
             &:last-child { margin-bottom: 0; }
 
-            th, td {
+            td {
                 padding: 4px;
-                border: 1px solid black;
                 vertical-align: top;
             }
         }
@@ -116,7 +110,7 @@
             position: relative;
             cursor: default;
             font-size: 0;
-
+            
             /* inlined objects */
             &.inline {
                 display: inline-block;
@@ -148,9 +142,7 @@
                 right: -1px;
                 border: 3px fade(@border-color, 70%) solid;
                 .box-shadow(0 5px 10px fade(black, 20%));
-
                 cursor: default;
-                &.moveable { cursor: move; }
 
                 > div.handle {
                     position: absolute;
@@ -182,10 +174,25 @@
                     cursor: inherit;
                 }
             }
+            
+            /* move and resize box for objects/images */
+            > div.move {
+                position: absolute;
+                top: 2px;
+                bottom: 2px;
+                left: 2px;
+                right: 2px;
+                border: 0px dotted black;
+                cursor: move;
+
+                &:not(.moveable) {
+                    cursor: inherit;
+                }
+            }
         }
 
-        /* floated elements (object spans and offset helper divs) */
-        .float {
+        /* floated elements (objects and offset helper divs) */
+        div.float {
             display: block;
 
             &.left { float: left; clear: left; }
@@ -197,25 +204,36 @@
             outline: none;
         }
 
+        /* fade out remaining document while highlighting quick-search matches */
         &.highlight > * {
             .opacity(0.7);
         }
 
+        /* debug highlighting for document contents */
         &.debug-highlight {
 
+            /* paragraph nodes */
             div.p {
                 .debug-highlight-mixin(#8f8);
+
+                /* text portions in paragraph */
+                > span {
+                    .debug-highlight-mixin(#88f);
+                }
+
+                /* special text components in paragraph counting as one character */
+                > div.component {
+                    .debug-highlight-mixin(#f8f);
+                }
+
+                /* helper nodes in paragraph */
+                > div.list-label {
+                    .debug-highlight-mixin(#f88);
+                }
             }
 
-            span {
-                .debug-highlight-mixin(#88f);
-            }
-
-            span.field {
-                .debug-highlight-mixin(#f8f);
-            }
-
-            table, .object {
+            /* other document content nodes */
+            table, div.object {
                 .debug-highlight-mixin(#f88);
                 outline-offset: 1px;
             }

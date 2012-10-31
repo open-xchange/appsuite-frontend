@@ -220,6 +220,31 @@ define('io.ox/calendar/model',
 
             });
         },
+        applyAutoLengthMagic: function (model) {
+            // End date automatically shifts with start date
+            var length = model.get('end_date') - model.get('start_date');
+            var updating = false;
+            model.on('change:start_date', function () {
+                if (length < 0) {
+                    return;
+                }
+                updating = true;
+                model.set('end_date', model.get('start_date') + length);
+                updating = false;
+            });
+
+            model.on('change:end_date', function () {
+                if (updating) {
+                    return;
+                }
+                length = model.get('end_date') - model.get('start_date');
+            });
+        },
+        toLocalTime: function (model) {
+            model.set('start_date', dateAPI.Local.localTime(model.get('start_date')));
+            model.set('end_date', dateAPI.Local.localTime(model.get('end_date')));
+
+        },
         factory: factory,
         Appointment: factory.model,
         Appointments: factory.collection,

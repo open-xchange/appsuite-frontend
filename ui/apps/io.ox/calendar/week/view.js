@@ -89,9 +89,9 @@ define('io.ox/calendar/week/view',
         },
 
         onControlView: function (e) {
+            e.preventDefault();
             var cT = $(e.currentTarget),
                 t = $(e.target);
-            console.log(t, cT, e.type, this.lasso);
             if (cT.hasClass('next') || (t.hasClass('timeslot') && e.type === 'swipeleft' && !this.lasso)) {
                 this.curTimeUTC += (this.columns === 1 ? date.DAY : date.WEEK);
             }
@@ -400,7 +400,7 @@ define('io.ox/calendar/week/view',
                                                 $('<a href="#">').addClass('control prev').append($('<i>').addClass('icon-chevron-left'))
                                             ),
                                         $('<li>').append(
-                                            $('<a>').addClass('link today').text(gt('Today'))
+                                            $('<a href="#">').addClass('link today').text(gt('Today'))
                                         ),
                                         $('<li>')
                                             .append(
@@ -410,19 +410,19 @@ define('io.ox/calendar/week/view',
                             )
                     ),
                 $('<div>')
+                    .addClass('footer-container')
+                    .append(
+                        $('<div>').addClass('footer-label'),
+                        this.footer
+                    ),
+                $('<div>')
                     .addClass('week-view-container')
                     .append(
                         this.fulltimeCon.empty().append(
                             $('<div>').addClass('fulltime-label'),
                             this.fulltimePane
                         ),
-                        this.pane.empty().append(timeLabel, weekCon),
-                        $('<div>')
-                            .addClass('footer-container')
-                            .append(
-                                $('<div>').addClass('footer-label'),
-                                this.footer
-                            )
+                        this.pane.empty().append(timeLabel, weekCon)
                     )
             );
 
@@ -625,6 +625,7 @@ define('io.ox/calendar/week/view',
                         top: pos.top,
                         left: left + '%',
                         height: pos.height - (border ? 0 : 1),
+                        lineHeight: self.cellHeight + 'px',
                         width: width + '%',
                         minHeight: self.cellHeight + 'px',
                         maxWidth: self.appWidth + '%',

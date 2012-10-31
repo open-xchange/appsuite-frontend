@@ -14,32 +14,24 @@
  */
 
 .carousel {
-    background:#000;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100%;
 
+    background-color: #000;
+    margin-bottom: 0;
     z-index: 10000;
     
-    .carousel-inner {
-        height:100%;
-    }
-
     .closecarousel {
-        position:absolute;
-        top:13px;
-        right:13px;
+        position: absolute;
+        bottom: 26px;
+        right: 13px;
     }
 
     .item {
         height: 100%;
-        // bit faster (at least for development)
-        -webkit-transition: 0.3s ease-in-out left;
-        -moz-transition: 0.3s ease-in-out left;
-        -o-transition: 0.3s ease-in-out left;
-        transition: 0.3s ease-in-out left;
+        -webkit-backface-visibility: hidden; // for ipad!
+        -webkit-transition: 0.6s ease-in-out left;
+        -moz-transition: 0.6s ease-in-out left;
+        -o-transition: 0.6s ease-in-out left;
+        transition: 0.6s ease-in-out left;
 
         .carousel-caption {
 

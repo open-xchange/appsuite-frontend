@@ -24,19 +24,17 @@ define('io.ox/mail/actions',
 
     'use strict';
 
-
     var defaultDraftFolder = config.get('modules.mail.defaultFolder.drafts'),
         Action = links.Action;
-
 
     // actions
 
     new Action('io.ox/mail/actions/compose', {
         id: 'compose',
-        action: function (app) {
+        action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
-                    this.compose({ folder_id: app.folder.get() });
+                    this.compose({ folder_id: baton.app.folder.get() });
                 });
             });
         }
@@ -124,8 +122,7 @@ define('io.ox/mail/actions',
                         $('<h3>').text(gt('Mail source') + ': ' + (data.subject || ''))
                     )
                     .append(
-                        textarea = $('<textarea>', { rows: 15, readonly: 'readonly' })
-                        .css({ width: '100%', boxSizing: 'border-box', visibility: 'hidden' })
+                        textarea = $('<textarea class="mail-source-view">', { rows: 15, readonly: 'readonly' })
                         .addClass('input-xlarge')
                         .on('keydown', function (e) {
                             if (e.which !== 27) {
@@ -136,7 +133,7 @@ define('io.ox/mail/actions',
                     .show(function () {
                         var self = this.busy();
                         getSource.done(function (src) {
-                            textarea.val(src || '').css({ visibility: '',  cursor: 'default' });
+                            textarea.val(src || '').css({ visibility: 'visible',  cursor: 'default' });
                             textarea = getSource = null;
                             self.idle();
                         });
@@ -156,17 +153,23 @@ define('io.ox/mail/actions',
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css({ height: '250px' });
                 var item = _(mail).first(),
+                    id = String(item.folder_id || item.folder),
                     tree = new views.FolderTree(dialog.getBody(), { type: 'mail' });
-                tree.paint();
                 dialog.show(function () {
-                    tree.selection.set(item.folder_id || item.folder);
+                    tree.paint().done(function () {
+                        tree.select(id);
+                    });
                 })
                 .done(function (action) {
                     if (action === 'ok') {
-                        var selectedFolder = tree.selection.get();
-                        if (selectedFolder.length === 1) {
+                        var target = _(tree.selection.get()).first();
+                        if (target && target !== id) {
                             // move action
-                            api.move(mail, selectedFolder[0].id);
+                            api.move(mail, target)
+                                .done(function () {
+                                    notifications.yell('success', 'Mails have been moved');
+                                })
+                                .fail(notifications.yell);
                         }
                     }
                     tree.destroy();
@@ -187,17 +190,19 @@ define('io.ox/mail/actions',
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css('maxHeight', '250px');
                 var item = _(mail).first(),
+                    id = String(item.folder_id || item.folder),
                     tree = new views.FolderTree(dialog.getBody(), { type: 'mail' });
-                tree.paint();
                 dialog.show(function () {
-                    tree.selection.set({ id: item.folder_id || item.folder });
+                    tree.paint().done(function () {
+                        tree.select(id);
+                    });
                 })
                 .done(function (action) {
                     if (action === 'ok') {
-                        var selectedFolder = tree.selection.get();
-                        if (selectedFolder.length === 1) {
+                        var target = _(tree.selection.get()).first();
+                        if (target && target !== id) {
                             // move action
-                            api.copy(mail, selectedFolder[0].id)
+                            api.copy(mail, target)
                                 .done(function () {
                                     notifications.yell('success', 'Mails have been copied');
                                 })
@@ -242,7 +247,7 @@ define('io.ox/mail/actions',
             api.markRead(list);
         }
     });
-    
+
     new Action('io.ox/mail/actions/markspam', {
         id: 'marspam',
         requires: function (e) {
@@ -563,13 +568,20 @@ define('io.ox/mail/actions',
 
     // toolbar
 
-    ext.point('io.ox/mail/links/toolbar').extend(new links.Button({
+    new links.ActionGroup('io.ox/mail/links/toolbar', {
+        id: 'default',
+        index: 100,
+        icon: function () {
+            return $('<i class="icon-pencil">');
+        }
+    });
+
+    new links.ActionLink('io.ox/mail/links/toolbar/default', {
         index: 100,
         id: 'compose',
         label: gt('Compose new mail'),
-        cssClasses: 'btn btn-primary',
         ref: 'io.ox/mail/actions/compose'
-    }));
+    });
 
     // inline links
 
@@ -664,7 +676,8 @@ define('io.ox/mail/actions',
         index: 900,
         prio: 'lo',
         id: 'source',
-        label: gt('View Source'),
+        //#. source in terms of source code
+        label: gt('View source'),
         ref: 'io.ox/mail/actions/source'
     }));
 

@@ -316,9 +316,10 @@ define('io.ox/core/api/folder',
             }, opt.data || {});
 
             // get parent folder to inherit permissions
-            return api.get({ folder: opt.folder }).pipe(function (parent) {
+            return this.get({ folder: opt.folder }).pipe(function (parent) {
                 // inherit module
                 var module = (opt.data.module = opt.data.module || parent.module);
+
                 // inherit rights only if folder isn't a system folder
                 // (type = 5)
                 if (parent.type === 5) {
@@ -400,6 +401,49 @@ define('io.ox/core/api/folder',
                 });
             });
         },
+
+        Bitmask: (function () {
+
+            var parts = { folder: 0, read: 7, write: 14, modify: 14, 'delete': 21, admin: 28 },
+
+                resolve = function (offset) {
+                    // use symbolic offset or plain numeric value?
+                    return offset in parts ? parts[offset] : offset;
+                };
+
+            return function (value) {
+
+                value = value || 0;
+
+                // this way we may forget the new operator
+                var Bitmask = {
+
+                    resolve: resolve,
+
+                    get: function (offset) {
+                        // return value?
+                        if (arguments.length === 0) {
+                            return value;
+                        } else {
+                            // return first 6 bits only
+                            return (value >> resolve(offset)) & 127;
+                        }
+                    },
+
+                    set: function (offset, bits) {
+                        offset = resolve(offset);
+                        // clear 6 bits first, then combine
+                        value = value & (536870911 ^ (127 << offset));
+                        // combine with given bits
+                        value = value | (bits << offset);
+                        return this;
+                    }
+                };
+
+                return Bitmask;
+            };
+
+        }()),
 
         derive: {
 
@@ -580,7 +624,7 @@ define('io.ox/core/api/folder',
             var node = document.createTextNode('');
             getFolder(id)
                 .done(function (data) {
-                    node.nodeValue = data.title || data.id;
+                    node.nodeValue = _.noI18n(data.title || data.id);
                 })
                 .always(function () {
                     _.defer(function () { // use defer! otherwise we return null on cache hit

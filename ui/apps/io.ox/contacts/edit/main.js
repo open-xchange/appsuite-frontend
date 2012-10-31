@@ -14,7 +14,8 @@
 define('io.ox/contacts/edit/main',
     ['io.ox/contacts/edit/view-form',
      'io.ox/contacts/model',
-     'gettext!io.ox/contacts'
+     'gettext!io.ox/contacts',
+     'less!io.ox/contacts/edit/style.css'
      ], function (view, model, gt) {
 
     'use strict';
@@ -35,7 +36,7 @@ define('io.ox/contacts/edit/main',
 
             win = ox.ui.createWindow({
                 name: 'io.ox/contacts/edit',
-                title: 'Edit Contact',
+                title: gt('Edit Contact'),
                 toolbar: true,
                 close: true
             });
@@ -45,7 +46,7 @@ define('io.ox/contacts/edit/main',
             container = win.nodes.main
                 .css({ backgroundColor: '#fff' })
                 .scrollable()
-                .css({ width: '1000px', margin: '20px auto 20px auto' });
+                .css({ width: '700px', margin: '20px auto 20px auto' });
 
             var cont = function (data) {
 
@@ -100,8 +101,8 @@ define('io.ox/contacts/edit/main',
             if (getDirtyStatus()) {
                 require(["io.ox/core/tk/dialogs"], function (dialogs) {
                     new dialogs.ModalDialog()
-                        .text(gt("Do you really want to lose your changes?"))
-                        .addPrimaryButton("delete", gt('Lose changes'))
+                        .text(gt("Do you really want to discard your changes?"))
+                        .addPrimaryButton("delete", gt('Discard'))
                         .addButton("cancel", gt('Cancel'))
                         .show()
                         .done(function (action) {

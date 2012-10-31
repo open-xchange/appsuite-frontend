@@ -32,6 +32,35 @@ define('io.ox/calendar/edit/template',
         className: 'additional-info'
     });
 
+    ext.point('io.ox/calendar/edit/section/buttons').extend({
+        index: 100,
+        id: 'title',
+        draw: function (baton) {
+            this.append($('<h1>').addClass('title').text(gt(baton.mode === 'edit' ? 'Edit Appointment' : 'Create Appointment')));
+        }
+    });
+
+    ext.point('io.ox/calendar/edit/section/buttons').extend({
+        index: 100,
+        id: 'buttons',
+        draw: function (baton) {
+            this.append($('<button class="btn btn-primary">')
+                .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
+                .css({float: 'right', marginLeft: '13px'})
+                .on('click', function () {
+                    baton.model.save();
+                })
+            );
+            this.append($('<button class="btn">')
+                .text(gt("Discard"))
+                .css({float: 'right'})
+                .on('click', function () {
+                    baton.app.quit();
+                })
+            );
+        }
+    });
+
     // conflicts
     pointConflicts.extend({
         index: 100,
@@ -112,7 +141,7 @@ define('io.ox/calendar/edit/template',
     // location input
     point.extend(new forms.InputField({
         id: 'location',
-        className: 'span10',
+        className: 'span12',
         labelClassName: 'control-label desc',
         index: 300,
         control: '<input type="text" class="span12">',
@@ -120,20 +149,35 @@ define('io.ox/calendar/edit/template',
         label: gt('Location')
     }));
 
-    // save button
-    point.basicExtend({
-        id: 'save',
-        draw: function (baton) {
-            this.append($('<button class="btn btn-primary span2">')
-                .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
-                .css({marginTop: '25px', float: 'right'})
-                .on('click', function () {
-                    baton.model.save();
-                })
-            );
-        },
-        nextTo: 'location'
-    });
+//    // save button
+//    point.basicExtend({
+//        id: 'save',
+//        draw: function (baton) {
+//            this.append($('<button class="btn btn-primary span2">')
+//                .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
+//                .css({marginTop: '25px', float: 'right'})
+//                .on('click', function () {
+//                    baton.model.save();
+//                })
+//            );
+//        },
+//        nextTo: 'location'
+//    });
+//
+//    // discard button
+//    point.basicExtend({
+//        id: 'discard',
+//        draw: function (baton) {
+//            this.append($('<button class="btn span2">')
+//                .text(gt("Discard"))
+//                .css({marginTop: '25px', float: 'right'})
+//                .on('click', function () {
+//                    baton.app.quit();
+//                })
+//            );
+//        },
+//        nextTo: 'save'
+//    });
 
     // start date
     point.extend(new forms.DatePicker({

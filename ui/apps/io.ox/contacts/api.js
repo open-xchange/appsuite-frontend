@@ -67,6 +67,13 @@ define('io.ox/contacts/api',
         }
     }
 
+    function fixDistributionList(data) {
+        // fix last_name for distribution lists (otherwise sorting sucks)
+        if (data.distribution_list && data.distribution_list.length) {
+            data.last_name = data.display_name || '';
+        }
+    }
+
     api.create = function (data, file) {
 
         // TODO: Ask backend for a fix, until that:
@@ -75,6 +82,8 @@ define('io.ox/contacts/api',
         wat(data, 'email3');
 
         var method, body;
+
+        fixDistributionList(data);
 
         if (file) {
             var body = new FormData();
@@ -118,8 +127,7 @@ define('io.ox/contacts/api',
         if (_.isEmpty(o.data)) {
             return $.when();
         } else {
-            // fix last_name for distribution lists
-            if (o.data.distribution_list && o.data.distribution_list.length) { o.data.last_name = ''; }
+            fixDistributionList(o.data);
             // go!
             return http.PUT({
                     module: 'contacts',
@@ -444,6 +452,17 @@ define('io.ox/contacts/api',
         return copymove(list, 'copy', targetFolderId);
     };
 
+    api.birthdays = function (start, end, columns) {
+        return http.GET({
+            module: 'contacts',
+            params: {
+                action: 'birthdays',
+                start: start,
+                end: end,
+                columns: columns || '500,501,502,503,504,505,511'
+            }
+        });
+    };
     return api;
 
 });

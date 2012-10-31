@@ -142,11 +142,11 @@ define('io.ox/core/tk/folderviews',
                 if (!open) { openNode(); } else { closeNode(); }
             };
 
-        // store in hash for quick access
-        tree.treeNodes[id] = this;
-
         // make accessible
-        this.id = id;
+        this.id = String(id);
+
+        // store in hash for quick access
+        tree.treeNodes[this.id] = this;
 
         // open & close
         this.open = openNode;
@@ -280,7 +280,7 @@ define('io.ox/core/tk/folderviews',
                         // customize, re-add to index, update arrow
                         self.customize();
                         if (nodes.folder.hasClass('selectable')) {
-                            tree.selection.addToIndex(data);
+                            tree.selection.addToIndex(data.id);
                         }
                         updateArrow();
                         // draw children
@@ -336,7 +336,7 @@ define('io.ox/core/tk/folderviews',
                     // work with selection
                     nodes.folder.attr('data-obj-id', data.id);
                     if (nodes.folder.hasClass('selectable')) {
-                        tree.selection.addToIndex(data);
+                        tree.selection.addToIndex(data.id);
                     }
                     // Done
                     return def;
@@ -462,8 +462,8 @@ define('io.ox/core/tk/folderviews',
         };
 
         this.add = function (folder) {
-            var self = this;
-            folder = folder || _.chain(self.selection.get()).pluck('id').first().value();
+            var self = this,
+            folder = String(this.selection.get());
             if (folder) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog({
@@ -476,7 +476,7 @@ define('io.ox/core/tk/folderviews',
                     .build(function () {
                         this.getContentNode().append(
                             $('<div class="row-fluid">').append(
-                                api.getBreadcrumb(folder, { subfolders: false }),
+                                api.getBreadcrumb(folder.id, { subfolders: false }),
                                 $('<input>', { type: 'text' })
                                 .attr('placeholder', gt('Folder name'))
                                 .addClass('span12')
@@ -503,11 +503,11 @@ define('io.ox/core/tk/folderviews',
         };
 
         this.remove = function (folder) {
-            var self = this;
-            folder = folder || _.chain(self.selection.get()).pluck('id').first().value();
-            if (folder) {
+            var self = this,
+            folder_id = String(this.selection.get());
+            if (folder_id) {
                 $.when(
-                    api.get({ folder: folder }),
+                    api.get({ folder: folder_id }),
                     require(['io.ox/core/tk/dialogs'])
                 ).done(function (folder, dialogs) {
                     new dialogs.ModalDialog()
@@ -529,11 +529,11 @@ define('io.ox/core/tk/folderviews',
         };
 
         this.rename = function (folder) {
-            var self = this;
-            folder = folder || _.chain(self.selection.get()).pluck('id').first().value();
-            if (folder) {
+            var self = this,
+            folder_id = String(this.selection.get());
+            if (folder_id) {
                 $.when(
-                    api.get({ folder: folder }),
+                    api.get({ folder: folder_id }),
                     require(['io.ox/core/tk/dialogs'])
                 )
                 .done(function (folder, dialogs) {
@@ -601,22 +601,25 @@ define('io.ox/core/tk/folderviews',
         };
 
         this.getNode = function (id) {
+            id = String(id);
             return this.treeNodes[id];
         };
 
         this.removeNode = function (id) {
+            id = String(id);
             if (id in this.treeNodes) {
                 this.treeNodes[id].destroy();
             }
         };
 
         this.repaintNode = function (id) {
+            id = String(id);
             return id in this.treeNodes ? this.treeNodes[id].repaint() : $.when();
         };
 
         function deferredEach(list, done) {
             var top = list.shift(), node, self = this;
-            if (top && (node = this.getNode(top.id))) {
+            if (top && (node = this.getNode(top))) {
                 node.open().done(function () {
                     deferredEach.call(self, list, done);
                 });
@@ -628,12 +631,12 @@ define('io.ox/core/tk/folderviews',
         this.select = function (data) {
             // unpack array; pluck 'id'
             data = _.isArray(data) ? data[0] : data;
-            data = _.isString(data) ? data : data.id;
+            data = _.isString(data) ? data : String(data.id);
             // get path
             var self = this;
             return api.getPath({ folder: data }).pipe(function (list) {
                 var def = $.Deferred();
-                deferredEach.call(self, list, function () {
+                deferredEach.call(self, _(list).pluck('id'), function () {
                     self.selection.set(data);
                     def.resolve();
                 });
@@ -815,7 +818,7 @@ define('io.ox/core/tk/folderviews',
             }
 
             // update selection
-            self.selection.addToIndex(data);
+            self.selection.addToIndex(data.id);
 
             // invoke extension points
             ext.point('io.ox/foldertree/folder').invoke('customize', folder, data, opt);

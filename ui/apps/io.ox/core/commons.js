@@ -14,7 +14,8 @@ define('io.ox/core/commons',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/core',
-     'io.ox/core/commons-folderview'], function (ext, extLinks, gt, folderview) {
+     'io.ox/core/commons-folderview',
+     'io.ox/core/api/folder'], function (ext, links, gt, folderview, folderAPI) {
 
     'use strict';
 
@@ -40,15 +41,15 @@ define('io.ox/core/commons',
 
             function draw(id, selection) {
                 // inline links
-                var links = $('<div>');
-                (points[id] || (points[id] = new extLinks.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
-                    .draw.call(links, selection);
+                var node = $('<div>');
+                (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
+                    .draw.call(node, selection);
                 return $().add(
                     $('<div>').addClass('summary').html(
                         gt('<b>%1$d</b> elements selected', selection.length)
                     )
                 )
-                .add(links.children().first());
+                .add(node.children().first());
             }
 
             return function (id, node, selection, api) {
@@ -114,16 +115,16 @@ define('io.ox/core/commons',
          * Wire grid & window
          */
         wireGridAndWindow: function (grid, win) {
-            var top = 0;
-            // show
-            win.on('show idle', function () {
+            var top = 0, on = function () {
                     grid.selection.keyboard(true);
                     if (grid.selection.get().length) {
                         // only retrigger if selection is not empty; hash gets broken if caches are empty
                         // TODO: figure out why this was important
                         grid.selection.retriggerUnlessEmpty();
                     }
-                })
+                };
+            // show
+            win.on('show idle', on)
                 // hide
                 .on('hide busy', function () {
                     grid.selection.keyboard(false);
@@ -140,6 +141,49 @@ define('io.ox/core/commons',
                     return grid;
                 };
             }
+            // already visible?
+            if (win.state.visible) { on(); }
+        },
+
+        addGridToolbarFolder: function (app, grid) {
+
+            ext.point(app.get('name') + '/vgrid/toolbar').extend({
+                id: 'info',
+                index: 200,
+                draw: function () {
+                    this.append($('<div class="grid-info">'));
+                }
+            });
+
+            function fnOpen(e) {
+                e.preventDefault();
+                app.showFolderView();
+            }
+
+            function fnCancel(e) {
+                e.preventDefault();
+                app.getWindow().search.stop();
+            }
+
+            grid.on('change:prop:folder change:mode', function (e, value) {
+                var folder_id = grid.prop('folder'), mode = grid.getMode(),
+                    node = grid.getToolbar().find('.grid-info').empty();
+                if (mode === 'all') {
+                    node.append(
+                        $('<a href="#" data-action="open-folderview">')
+                        .append(folderAPI.getTextNode(folder_id))
+                        .on('click', fnOpen)
+                    );
+                } else if (mode === 'search') {
+                    node.append(
+                        $('<a href="#" data-action="cancel-search">')
+                        .text(gt('Cancel search'))
+                        .on('click', fnCancel)
+                    );
+                }
+            });
+
+            ext.point(app.get('name') + '/vgrid/toolbar').invoke('draw', grid.getToolbar());
         },
 
         /**
@@ -162,19 +206,22 @@ define('io.ox/core/commons',
                     grid.refresh(true);
                 },
                 refreshList = function () {
-                    grid.repaint().done(function () {
-                        grid.selection.retrigger();
-                    });
-                };
-            win.on('show', function () {
+                    grid.repaint();
+                    grid.selection.retrigger();
+                },
+                off = function () {
+                    api.off('refresh.all refresh:all:local', refreshAll)
+                        .off('refresh.list', refreshList);
+                },
+                on = function () {
+                    off();
                     api.on('refresh.all refresh:all:local', refreshAll)
                         .on('refresh.list', refreshList)
                         .trigger('refresh.all');
-                })
-                .on('hide', function () {
-                    api.off('refresh.all refresh:all:local', refreshAll)
-                        .off('refresh.list', refreshList);
-                });
+                };
+            win.on({ show: on, hide: off });
+            // already visible?
+            if (win.state.visible) { on(); }
         },
 
         /**
@@ -204,9 +251,6 @@ define('io.ox/core/commons',
          */
         addFolderSupport: function (app, grid, type, defaultFolderId) {
 
-            var name = app.getName(),
-                POINT = name + '/folderview';
-
             app.folder
                 .updateTitle(app.getWindow())
                 .updateGrid(grid)
@@ -215,21 +259,6 @@ define('io.ox/core/commons',
                 app.folder.updateGrid(grid);
             }
 
-            ext.point(POINT + '/toggle').extend({
-                id: 'default',
-                index: 100,
-                draw: function () {
-                    return $().add($.txt(' ')).add(
-                        $('<i class="icon-chevron-down folderview-toggle">')
-                    );
-                }
-            });
-
-            // add visual caret
-            app.getWindow().nodes.title.append(
-                ext.point(POINT + '/toggle').invoke('draw').value()
-            );
-
             // hash support
             app.getWindow().on('show', function () {
                 if (grid) {
@@ -237,7 +266,9 @@ define('io.ox/core/commons',
                 }
                 _.url.hash('folder', app.folder.get());
             });
+
             defaultFolderId = _.url.hash('folder') || defaultFolderId;
+
             // explicit vs. default
             if (defaultFolderId !== undefined) {
                 return app.folder.set(defaultFolderId);
@@ -287,6 +318,80 @@ define('io.ox/core/commons',
                 return sides;
             };
         }())
+    };
+
+    /*
+     * View container
+     */
+
+    // view container with dispose capability
+    var originalCleanData = $.cleanData,
+        triggerDispose = function (elem) {
+            return $(elem).triggerHandler('dispose');
+        };
+
+    $.cleanData = function (list) {
+        return originalCleanData(_(list).map(triggerDispose));
+    };
+
+    // factory
+    $.createViewContainer = function (baton, api, getter) {
+
+        var data = baton instanceof ext.Baton ? baton.data : baton,
+
+            cid,
+
+            node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
+
+            update = function () {
+                if ((getter = getter || (api ? api.get : null))) {
+                    getter(api.reduce(data)).done(function (data) {
+                        if (baton instanceof ext.Baton) {
+                            baton.data = data;
+                        } else {
+                            baton = data;
+                        }
+                        if (node) node.triggerHandler('redraw', baton);
+                    });
+                }
+            },
+
+            // we use redraw directly if we're in multiple mode
+            // each redraw handler must get the data on its own
+            redraw = _.debounce(function () {
+                if (node) node.triggerHandler('redraw', baton);
+            }, 10),
+
+            remove = function () {
+                node.remove();
+            };
+
+        if (_.isArray(data)) {
+            // multiple items
+            _.chain(data).map(_.cid).each(function (cid) {
+                api.on('delete:' + cid, redraw);
+                api.on('update:' + cid, redraw);
+            });
+        } else {
+            // single item
+            cid = _.cid(data);
+            api.on('delete:' + cid, remove);
+            api.on('update:' + cid, update);
+        }
+
+        return node.on('dispose', function () {
+                if (_.isArray(data)) {
+                    _.chain(data).map(_.cid).each(function (cid) {
+                        api.off('delete:' + cid, redraw);
+                        api.off('update:' + cid, redraw);
+                    });
+                } else {
+                    cid = _.cid(data);
+                    api.off('delete:' + cid, remove);
+                    api.off('update:' + cid, update);
+                }
+                api = update = data = node = getter = null;
+            });
     };
 
     return commons;

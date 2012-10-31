@@ -209,7 +209,6 @@ define("io.ox/core/main",
                 // so let's delay this for responsiveness
                 setTimeout(function () {
                     notifications.attach(addLauncher);
-                    notifications.addFaviconNotification();
                 }, 5000);
             }
         });
@@ -306,7 +305,8 @@ define("io.ox/core/main",
                     return require(["io.ox/launchpad/main"], function (m) {
                         m.show();
                     });
-                });
+                })
+                .css('width', '26px'); // to match side navigation
             }
         });
 

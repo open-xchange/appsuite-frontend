@@ -138,7 +138,6 @@ define('io.ox/backbone/forms',
         };
 
         this.onValidationError = function (messages) {
-            console.log("ON VALIDATION ERROR");
             var helpBlock =  $('<div class="help-block error">');
             _(messages).each(function (msg) {
                 helpBlock.append($.txt(msg));
@@ -299,6 +298,7 @@ define('io.ox/backbone/forms',
     // Form Sections made up of horizontal forms
 
     function Section(options) {
+        var self = this;
         _.extend(this, {
 
             tagName: 'div',
@@ -310,14 +310,13 @@ define('io.ox/backbone/forms',
             },
 
             point: function () {
-                return ext.point(this.ref);
+                return ext.point(self.ref);
             },
 
             render: function () {
-                var self = this;
-                var anyHidden = false;
-                var anyVisible = false;
-
+                var self = this,
+                    anyHidden = false,
+                    anyVisible = false;
                 this.point().each(function (extension) {
                     if (extension.metadata('hidden', [self.model])) {
                         anyHidden = anyHidden || true;
@@ -587,7 +586,7 @@ define('io.ox/backbone/forms',
                 });
                 return items;
             },
-            autocompleteBehavoir: false
+            autocompleteBehaviour: false
         };
 
         var modelEvents = {};
@@ -628,15 +627,14 @@ define('io.ox/backbone/forms',
 
                 this.nodes.dayField.on("change", _.bind(this.updateModelDate, this));
                 this.nodes.timeField.on("change", _.bind(this.updateModelTime, this));
+
                 return this;
             },
             setValueInField: function () {
                 var value = this.model.get(this.attribute);
-                // custom for appointment edit
-                var cValue = (this.baton.mode === 'edit') ? date.Local.localTime(value): value;
                 this.nodes.timezoneField.text(date.Local.getTTInfoLocal(value).abbr);
-                this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', cValue, this.attribute, this.model));
-                this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', cValue, this.attribute, this.model));
+                this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', value, this.attribute, this.model));
+                this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', value, this.attribute, this.model));
             },
             updateModelDate: function () {
                 this.model.set(this.attribute, BinderUtils.convertDate('ViewToModel', this.nodes.dayField.val(), this.attribute, this.model));
@@ -689,8 +687,6 @@ define('io.ox/backbone/forms',
 
                 if (string !== '' && reg.test(string)) {
                     var dateArray = string.split('.');
-                    console.log(Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0])));
-                    console.log(date.DATE);
                     return Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0]));
                 } else {
                     return string;

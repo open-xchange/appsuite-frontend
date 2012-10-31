@@ -30,7 +30,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
     function convertRgbColorToNumber(rgbColor) {
         return parseInt(rgbColor, 16);
     }
-    
+
     /**
      * Converts a number to a hex based rgb color string.
      *
@@ -41,9 +41,12 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * Hex based color string (RRGGBB).
      */
     function convertNumberToRgbColor(colorValue) {
-        return colorValue.toString(16);
+        var color = colorValue.toString(16);
+        // MUST be 6-digits with leading zeros, otherwise, CSS *appends* zeros instead of prepending them
+        while (color.length < 6) { color = '0' + color; }
+        return color;
     }
-    
+
     /**
      * Converts a RGB color value to a HSL color object
      * which contains the attributes h (hue),
@@ -59,14 +62,14 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      */
     function convertRgbToHsl(rgbValue) {
         var r, g, b, min, max, h, s, l;
-       
+
         r = ((rgbValue & 16711680) >> 16) / 255;
         g = ((rgbValue & 65280) >> 8) / 255;
         b = (rgbValue & 255) / 255;
-       
+
         min = Math.min(r, g, b);
         max = Math.max(r, g, b);
-        
+
         l = (min + max) / 2;
         s = (min === max) ? 0 : (l < 0.5) ? (max - min) / (max + min) : (max - min) / (2.0 - max - min);
         h = 0;
@@ -74,10 +77,10 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
             h = ((max === r) ? (g - b) / (max - min) : (max === g) ? 2.0 + (b - r) / (max - min) : 4.0 + (r - g) / (max - min)) * 60;
             h = ((h < 0) ? h + 360 : h) / 360;
         }
-            
+
         return { h: h, s: s, l: l };
     }
-    
+
     /**
      * Converts a HSL color object to a rgb color value.
      *
@@ -90,24 +93,24 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      */
     function convertHslToRgb(hsl) {
         var r, g, b;
-        
+
         if (hsl.s === 0) {
             r = g = b = Math.round(hsl.l * 255);
         }
         else {
             var t1, t2, tr, tg, tb;
-            
+
             t1 = (hsl.l < 0.5) ? hsl.l * (1.0 + hsl.s) : hsl.l + hsl.s - hsl.l * hsl.s;
             t2 = 2 * hsl.l - t1;
-            
+
             tr = hsl.h + (1 / 3);
             tg = hsl.h;
             tb = hsl.h - (1 / 3);
-            
+
             tr = (tr < 0) ? tr + 1 : (tr > 1) ? tr - 1 : tr;
             tg = (tg < 0) ? tg + 1 : (tg > 1) ? tg - 1 : tg;
             tb = (tb < 0) ? tb + 1 : (tb > 1) ? tb - 1 : tb;
-            
+
             var convChannel = function conv(ch) {
                 if ((6 * ch) < 1)
                     return t2 + (t1 - t2) * 6 * ch;
@@ -118,15 +121,15 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
                 else
                     return t2;
             };
-            
+
             r = Math.round(convChannel(tr) * 255);
             g = Math.round(convChannel(tg) * 255);
             b = Math.round(convChannel(tb) * 255);
         }
-        
+
         return ((r << 16) + (g << 8) + b);
     }
-    
+
     /**
      * Tints the rgb color value with the provided tint value
      * according to ooxml documentation.
@@ -134,19 +137,19 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * @param {Number} rgbValue
      *  The rgb color value.
      *
-     * @param {String} shade
-     *  A hex based value (00-FF) that is used to tint the
-     *  rgb color value.
+     * @param {Number} shade
+     *  A value 0 - 100000 (0 - 100%) to tint the provided color.
+     *  Fixed floating point number.
      *
      * @return {Number} tint rgb color value
      */
     function tintColor(rgbValue, tint) {
         var hsl = convertRgbToHsl(rgbValue);
-        var tintValue = parseInt(tint, 16);
-        hsl.l = hsl.l * (tintValue / 255) + (1 - (tintValue / 255));
+        var tintValue = tint / 100000;
+        hsl.l = hsl.l * tintValue + (1 - tintValue);
         return convertHslToRgb(hsl);
     }
-    
+
     /**
      * Shades the rgb color value with the provided shade value
      * according to ooxml documentation.
@@ -155,18 +158,17 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      *  The rgb color value.
      *
      * @param {String} shade
-     *  A hex based value (00-FF) that is used to shade the
-     *  rgb color value.
+     *  A value 0 - 100000 (0 - 100%) to shade the provided color
      *
      * @return {Number} shaded rgb color value
      */
     function shadeColor(rgbValue, shade) {
         var hsl = convertRgbToHsl(rgbValue);
-        var shadeValue = parseInt(shade, 16);
-        hsl.l = hsl.l * (shadeValue / 255);
+        var shadeValue = shade / 100000;
+        hsl.l = hsl.l * shadeValue;
         return convertHslToRgb(hsl);
     }
-    
+
     /**
      * Calculates the resulting RGB color from a source RGB color value
      * and a transformation array defining the transformation rules.
@@ -183,7 +185,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      */
     function transformRGBColor(rgbColor, transformations) {
         var color = rgbColor;
-        
+
         if (transformations && (transformations.length > 0)) {
             color = convertRgbColorToNumber(rgbColor);
             _(transformations).each(function (transformation) {
@@ -234,7 +236,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      */
     Color.getCssColor = function (color, context, theme) {
 
-        var type = Utils.getStringOption(color, 'type', 'none'),
+        var type = Utils.getStringOption(color, 'type', 'auto'),
             transformations = Utils.getArrayOption(color, 'transformations', []),
             rgbColor = null;
 
@@ -265,7 +267,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
 
         return _.isString(rgbColor) ? ('#' + rgbColor) : 'transparent';
     };
-    
+
     /**
      * Determine if provided color has theme based color value
      *
@@ -279,7 +281,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
         var type = Utils.getStringOption(color, 'type', 'none');
         return (type === 'scheme');
     };
-    
+
     /**
      * Determine if provided color has type auto
      *
@@ -293,7 +295,23 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
         var type = Utils.getStringOption(color, 'type', 'auto');
         return (type === 'auto');
     };
-    
+
+    /**
+     * Returns whether the passed color resolves to full transparency.
+     *
+     * @param {Object} color
+     *  The color object.
+     *
+     * @param {String} context
+     *  The context needed to resolve the color type 'auto'.
+     *
+     * @returns {Boolean}
+     *  Whether the passed color represents full transparency.
+     */
+    Color.isTransparentColor = function (color, context) {
+        return Color.getCssColor(color, context) === 'transparent';
+    };
+
     /**
      * Determine if the provided color is dark or light
      *
@@ -304,7 +322,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * True if the color is dark otherwise false.
      */
     Color.isDark = function (rgbColor) {
-        if (_.isString(rgbColor) && (6 <= rgbColor.length <= 7)) {
+        if (rgbColor && (6 <= rgbColor.length) && (rgbColor.length <= 7)) {
             var hexString = rgbColor.length === 6 ? rgbColor : rgbColor.substring(1);
             var rgbColorValue = convertRgbColorToNumber(hexString);
             var luminance = ((((rgbColorValue & 0x00ff0000) >> 16) * 5036060) +
@@ -315,8 +333,51 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
             else
                 return false;
         }
-        
+
         return false;
+    };
+
+    /**
+     * Sets the text color of the passed element. If the text color is set to
+     * automatic, calculates the effective color depending on the character
+     * fill color, and paragraph fill color.
+     *
+     * @param {HTMLElement|jQuery} element
+     *  The element whose text color will be set. If this object is a jQuery
+     *  collection, uses the first DOM node it contains.
+     *
+     * @param {Theme} theme
+     *  The theme object currently used by the document.
+     *
+     * @param {Object} attrs
+     *  The current character attributes (text color and character fill color).
+     *
+     * @param {Object} paraAttrs
+     *  The paragraph attributes containing the fill color.
+     */
+    Color.setElementTextColor = function (element, theme, attrs, paraAttrs) {
+        var $element = $(element).first(),
+            textColor = attrs.color,
+            backColor = attrs.fillcolor,
+            rgbBackColor = null;
+
+        if (Color.isAutoColor(textColor)) {
+            if (Color.isAutoColor(backColor)) {
+                if (Color.isAutoColor(paraAttrs.fillcolor))
+                    rgbBackColor = Color.WHITE.value;
+                else
+                    rgbBackColor = Color.getCssColor(paraAttrs.fillcolor, 'fill', theme);
+            }
+            else
+                rgbBackColor = Color.getCssColor(backColor, 'fill', theme);
+
+            if (Color.isDark(rgbBackColor))
+                $element.css('color', '#' + Color.WHITE.value);
+            else
+                $element.css('color', '#' + Color.BLACK.value);
+        } else {
+            $element.css('color', Color.getCssColor(textColor, 'text', theme));
+        }
     };
 
     // exports ================================================================

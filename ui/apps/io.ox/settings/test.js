@@ -31,8 +31,8 @@ define("io.ox/settings/test",
                         me.ready = false;
                         api.configtestGet()
                         .done(function (o) {
-                            if (o[0].id === 'apps/io.ox/mail') {
-                                console.log(o);
+//                            console.log(o);
+                            if (_.isArray(o)) {
                                 me.ready = true;
                             }
                         })
@@ -63,7 +63,7 @@ define("io.ox/settings/test",
                     j.runs(function () {
                         var me = this;
                         me.ready = false;
-                        api.configtestList(['ui'])
+                        api.configtestList(['apps/io.ox/mail'])
                         .done(function (o) {
                             if (o) {
                                 console.log(o);
