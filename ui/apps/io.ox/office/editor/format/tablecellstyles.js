@@ -89,91 +89,7 @@ define('io.ox/office/editor/format/tablecellstyles',
 
         };
 
-    // private global functions ===============================================
-
-    /**
-     * Will be called for every table cell element whose attributes have been
-     * changed. Repositions and reformats the table cell according to the
-     * passed attributes.
-     *
-     * @param {jQuery} cell
-     *  The <th> or <td> element whose table cell attributes have been changed,
-     *  as jQuery object.
-     *
-     * @param {Object} attributes
-     *  A map of all attributes (name/value pairs), containing the effective
-     *  attribute values merged from style sheets and explicit attributes.
-     */
-    function updateTableCellFormatting(cell, attributes) {
-
-        // must get the table attributes
-        // getElementAttributes from table
-        // getExplicitAttributes from cell (static!)
-
-        var table = cell.closest(DOM.TABLE_NODE_SELECTOR),
-            // the table styles/formatter
-            tableStyles = this.getDocumentStyles().getStyleSheets('table'),
-            // table attributes
-            tableAttributes = tableStyles.getElementAttributes(table),
-            // explicitly set cell attributes (that must not be overridden)
-            cellAttributes = StyleSheets.getExplicitAttributes(cell),
-            // setting some cell position information
-            row = cell.parent(),
-            isFirstCellInRow = ($('> th, > td', row).index(cell) === 0),
-            isLastCellInRow = ($('> th, > td', row).index(cell) === $('> th, > td', row).length - 1),
-            isFirstRow = ($('> tr', row.parent()).index(row) === 0),
-            isLastRow = ($('> tr', row.parent()).index(row) === $('> tr', row.parent()).length - 1),
-            isOddRow = ($('> tr', row.parent()).index(row) % 2 !== 0),
-            isEvenRow = !isOddRow;
-
-        // _.each(tableAttributes, function (val, key) {
-        //     if (_.isObject(val)) { val = JSON.stringify(val); }
-        //     window.console.log("Table: " + key + " : " + val);
-        // });
-
-        // _.each(cellAttributes, function (val, key) {
-        //     if (_.isObject(val)) { val = JSON.stringify(val); }
-        //     window.console.log("Cell: " + key + " : " + val);
-        // });
-
-        // fillcolor
-        if ((_.isUndefined(cellAttributes.fillcolor)) && (! _.isUndefined(tableAttributes.fillcolor))) {
-            cell.css('background-color', this.getCssColor(tableAttributes.fillcolor, 'fill'));
-        }
-
-        // borderleft
-        if ((_.isUndefined(cellAttributes.borderleft)) && (! _.isUndefined(tableAttributes.borderleft))) {
-            cell.css('border-left', this.getCssBorder(tableAttributes.borderleft));
-        }
-
-        // borderright
-        if ((_.isUndefined(cellAttributes.borderright)) && (! _.isUndefined(tableAttributes.borderright))) {
-            cell.css('border-right', this.getCssBorder(tableAttributes.borderright));
-        }
-
-        // bordertop
-        if ((_.isUndefined(cellAttributes.bordertop)) && (! _.isUndefined(tableAttributes.bordertop))) {
-            cell.css('border-top', this.getCssBorder(tableAttributes.bordertop));
-        }
-
-        // borderbottom
-        if ((_.isUndefined(cellAttributes.borderbottom)) && (! _.isUndefined(tableAttributes.borderbottom))) {
-            cell.css('border-bottom', this.getCssBorder(tableAttributes.borderbottom));
-        }
-
-        // borderinsideh
-        if ((_.isUndefined(cellAttributes.bordertop)) && (! isFirstRow) && (! _.isUndefined(tableAttributes.borderinsideh))) {
-            cell.css('border-top', this.getCssBorder(tableAttributes.borderinsideh));
-        }
-
-        // borderinsidev
-        if ((_.isUndefined(cellAttributes.borderleft)) && (! isFirstCellInRow) && (! _.isUndefined(tableAttributes.borderinsidev))) {
-            cell.css('border-left', this.getCssBorder(tableAttributes.borderinsidev));
-        }
-
-    }
-
-    // class TableCellStyles ======================================================
+    // class TableCellStyles ==================================================
 
     /**
      * Contains the style sheets for table cell formatting attributes. The CSS
@@ -192,6 +108,93 @@ define('io.ox/office/editor/format/tablecellstyles',
      *  Collection with the style containers of all style families.
      */
     function TableCellStyles(rootNode, documentStyles) {
+
+        var // self reference
+            self = this;
+
+        // private methods ----------------------------------------------------
+
+        /**
+         * Will be called for every table cell element whose attributes have been
+         * changed. Repositions and reformats the table cell according to the
+         * passed attributes.
+         *
+         * @param {jQuery} cell
+         *  The <td> element whose table cell attributes have been changed, as
+         *  jQuery object.
+         *
+         * @param {Object} attributes
+         *  A map of all attributes (name/value pairs), containing the effective
+         *  attribute values merged from style sheets and explicit attributes.
+         */
+        function updateTableCellFormatting(cell, attributes) {
+
+            // must get the table attributes
+            // getElementAttributes from table
+            // getExplicitAttributes from cell (static!)
+
+            var table = cell.closest(DOM.TABLE_NODE_SELECTOR),
+                // the table styles/formatter
+                tableStyles = self.getDocumentStyles().getStyleSheets('table'),
+                // table attributes
+                tableAttributes = tableStyles.getElementAttributes(table, { sourceNode: cell }),
+                // explicitly set cell attributes (that must not be overridden)
+                cellAttributes = StyleSheets.getExplicitAttributes(cell),
+                // setting some cell position information
+                row = cell.parent(),
+                isFirstCellInRow = ($('> th, > td', row).index(cell) === 0),
+                isLastCellInRow = ($('> th, > td', row).index(cell) === $('> th, > td', row).length - 1),
+                isFirstRow = ($('> tr', row.parent()).index(row) === 0),
+                isLastRow = ($('> tr', row.parent()).index(row) === $('> tr', row.parent()).length - 1),
+                isOddRow = ($('> tr', row.parent()).index(row) % 2 !== 0),
+                isEvenRow = !isOddRow;
+
+            // _.each(tableAttributes, function (val, key) {
+            //     if (_.isObject(val)) { val = JSON.stringify(val); }
+            //     window.console.log("Table: " + key + " : " + val);
+            // });
+
+            // _.each(cellAttributes, function (val, key) {
+            //     if (_.isObject(val)) { val = JSON.stringify(val); }
+            //     window.console.log("Cell: " + key + " : " + val);
+            // });
+
+            // fillcolor
+            if ((_.isUndefined(cellAttributes.fillcolor)) && (! _.isUndefined(tableAttributes.fillcolor))) {
+                cell.css('background-color', this.getCssColor(tableAttributes.fillcolor, 'fill'));
+            }
+
+            // borderleft
+            if ((_.isUndefined(cellAttributes.borderleft)) && (! _.isUndefined(tableAttributes.borderleft))) {
+                cell.css('border-left', this.getCssBorder(tableAttributes.borderleft));
+            }
+
+            // borderright
+            if ((_.isUndefined(cellAttributes.borderright)) && (! _.isUndefined(tableAttributes.borderright))) {
+                cell.css('border-right', this.getCssBorder(tableAttributes.borderright));
+            }
+
+            // bordertop
+            if ((_.isUndefined(cellAttributes.bordertop)) && (! _.isUndefined(tableAttributes.bordertop))) {
+                cell.css('border-top', this.getCssBorder(tableAttributes.bordertop));
+            }
+
+            // borderbottom
+            if ((_.isUndefined(cellAttributes.borderbottom)) && (! _.isUndefined(tableAttributes.borderbottom))) {
+                cell.css('border-bottom', this.getCssBorder(tableAttributes.borderbottom));
+            }
+
+            // borderinsideh
+            if ((_.isUndefined(cellAttributes.bordertop)) && (! isFirstRow) && (! _.isUndefined(tableAttributes.borderinsideh))) {
+                cell.css('border-top', this.getCssBorder(tableAttributes.borderinsideh));
+            }
+
+            // borderinsidev
+            if ((_.isUndefined(cellAttributes.borderleft)) && (! isFirstCellInRow) && (! _.isUndefined(tableAttributes.borderinsidev))) {
+                cell.css('border-left', this.getCssBorder(tableAttributes.borderinsidev));
+            }
+
+        }
 
         // base constructor ---------------------------------------------------
 

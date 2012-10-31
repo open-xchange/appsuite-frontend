@@ -94,86 +94,6 @@ define('io.ox/office/editor/format/tablestyles',
 
         };
 
-    // private global functions ===============================================
-
-    /**
-     * Will be called for every table element whose attributes have been
-     * changed. Repositions and reformats the table according to the passed
-     * attributes.
-     *
-     * @param {jQuery} table
-     *  The <table> element whose table attributes have been changed, as jQuery
-     *  object.
-     *
-     * @param {Object} attributes
-     *  A map of all attributes (name/value pairs), containing the effective
-     *  attribute values merged from style sheets and explicit attributes.
-     */
-    function updateTableFormatting(table, attributes) {
-
-        Table.updateColGroup(table, attributes.tablegrid);
-
-        var // the table cell styles/formatter
-            tableCellStyles = this.getDocumentStyles().getStyleSheets('tablecell');
-
-        $('> tbody > tr > th, > tbody > tr > td', table).each(
-            function () {
-                // iterating over all cells in the table to set the table attributes in the cell
-                tableCellStyles.updateElementFormatting(this);
-            }
-        );
-
-    }
-
-    /**
-     * Returns the attributes of the specified attribute family contained in
-     * table style sheets. Resolves the conditional attributes that match the
-     * position of the passed source element.
-     *
-     * @param {String} family
-     *  The family of the attributes to be returned from the styleAttributes
-     *  object passed to this method.
-     *
-     * @param {Object} styleAttributes
-     *  The complete 'attributes' object of a table style sheet.
-     *
-     * @param {jQuery} sourceNode
-     *  The source node corresponding to the passed attribute family that has
-     *  initially requested the formatting attributes of a table style sheet,
-     *  as jQuery object.
-     *
-     * @returns {Object}
-     *  The formatting attributes of the specified family extracted from the
-     *  passed styleAttributes object, as name/value pairs.
-     */
-    function resolveTableStyleAttributes(family, styleAttributes, sourceNode) {
-
-        var // the cell element (source node may be a paragraph or text span)
-            cell = sourceNode.closest('td'),
-            // the table row containing the cell
-            row = cell.parent(),
-            // whether cell is in first row
-            isFirstRow = (cell.length > 0) && (row.index() === 0),
-            // whether cell is in last row (jQuery.siblings() excludes the own row!)
-            isLastRow = (cell.length > 0) && (row.index() === row.siblings('tr').length);
-
-        // evaluating optional table attributes
-        // family must be table, styleAttributes is the complete attr-object from
-        // insertStyleSheet and sourceNode is the cell
-        if (family === 'table') {
-
-            // taking only care of 'wholetable' -> needs to be expanded
-            if ((styleAttributes.wholetable) && (styleAttributes.wholetable.table)) {
-                return styleAttributes.wholetable.table;
-            }
-
-        }
-
-        // TODO: collect attributes from the 'attributes' parameter according to the cell position
-
-        return {};
-    }
-
     // class TableStyles ======================================================
 
     /**
@@ -193,6 +113,88 @@ define('io.ox/office/editor/format/tablestyles',
      *  Collection with the style containers of all style families.
      */
     function TableStyles(rootNode, documentStyles) {
+
+        var // self reference
+            self = this;
+
+        // private methods ----------------------------------------------------
+
+        /**
+         * Will be called for every table element whose attributes have been
+         * changed. Repositions and reformats the table according to the passed
+         * attributes.
+         *
+         * @param {jQuery} table
+         *  The <table> element whose table attributes have been changed, as
+         *  jQuery object.
+         *
+         * @param {Object} attributes
+         *  A map of all attributes (name/value pairs), containing the
+         *  effective attribute values merged from style sheets and explicit
+         *  attributes.
+         */
+        function updateTableFormatting(table, attributes) {
+
+            Table.updateColGroup(table, attributes.tablegrid);
+
+            var // the table cell styles/formatter
+                tableCellStyles = self.getDocumentStyles().getStyleSheets('tablecell');
+
+            // iterating over all cells in the table to set the table attributes in the cell
+            table.find('> tbody > tr > td').each(function () {
+                tableCellStyles.updateElementFormatting(this);
+            });
+
+        }
+
+        /**
+         * Returns the attributes of the specified attribute family contained
+         * in table style sheets. Resolves the conditional attributes that
+         * match the position of the passed source element.
+         *
+         * @param {String} family
+         *  The family of the attributes to be returned from the
+         *  styleAttributes object passed to this method.
+         *
+         * @param {Object} styleAttributes
+         *  The complete 'attributes' object of a table style sheet.
+         *
+         * @param {jQuery} sourceNode
+         *  The source node corresponding to the passed attribute family that
+         *  has initially requested the formatting attributes of a table style
+         *  sheet, as jQuery object.
+         *
+         * @returns {Object}
+         *  The formatting attributes of the specified family extracted from
+         *  the passed styleAttributes object, as name/value pairs.
+         */
+        function resolveTableStyleAttributes(family, styleAttributes, sourceNode) {
+
+            var // the cell element (source node may be a paragraph or text span)
+                cell = sourceNode.closest('td'),
+                // the table row containing the cell
+                row = cell.parent(),
+                // whether cell is in first row
+                isFirstRow = (cell.length > 0) && (row.index() === 0),
+                // whether cell is in last row (jQuery.siblings() excludes the own row!)
+                isLastRow = (cell.length > 0) && (row.index() === row.siblings('tr').length);
+
+            // evaluating optional table attributes
+            // family must be table, styleAttributes is the complete attr-object from
+            // insertStyleSheet and sourceNode is the cell
+            if (family === 'table') {
+
+                // taking only care of 'wholetable' -> needs to be expanded
+                if ((styleAttributes.wholetable) && (styleAttributes.wholetable.table)) {
+                    return styleAttributes.wholetable.table;
+                }
+
+            }
+
+            // TODO: collect attributes from the 'attributes' parameter according to the cell position
+
+            return {};
+        }
 
         // base constructor ---------------------------------------------------
 

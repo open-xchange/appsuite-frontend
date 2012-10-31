@@ -776,10 +776,8 @@ define('io.ox/office/editor/format/stylesheets',
         };
 
         /**
-         * Returns the merged values of all formatting attributes in the
-         * specified DOM element. If an attribute value is not unique in the specified
-         * ranges, the respective value in the returned attribute map be set to
-         * null.
+         * Returns the values of all formatting attributes in the specified DOM
+         * element.
          *
          * @param {HTMLElement|jQuery} element
          *  The element whose attributes will be returned. If this object is a
@@ -792,6 +790,11 @@ define('io.ox/office/editor/format/stylesheets',
          *      If set to true, includes special attributes (attributes that
          *      are marked with the 'special' flag in the attribute definitions
          *      passed to the constructor) to the result map.
+         *  @param {HTMLElement|jQuery} [options.sourceNode]
+         *      If specified, a source node that will be used to resolve the
+         *      attributes of the style sheet references by the passed element.
+         *      Must be a descendant node of the passed element. If this object
+         *      is a jQuery collection, uses the first DOM node it contains.
          *
          * @returns {Object}
          *  A map of attribute name/value pairs.
@@ -800,13 +803,15 @@ define('io.ox/office/editor/format/stylesheets',
 
             var // whether to allow special attributes
                 special = Utils.getBooleanOption(options, 'special', false),
+                // source node to be passed when resolving style sheet attributes
+                sourceNode = Utils.getOption(options, 'sourceNode', element),
 
                 // the current element, as jQuery object
                 $element = $(element),
                 // get the element attributes
                 elementAttributes = getElementAttributes($element),
                 // get attributes of the style sheets
-                styleAttributes = getStyleSheetAttributes(elementAttributes.style, styleFamily, $element),
+                styleAttributes = getStyleSheetAttributes(elementAttributes.style, styleFamily, sourceNode),
                 // the resulting attributes according to style sheet and explicit formatting
                 mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
 
