@@ -158,7 +158,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      *  The rgb color value.
      *
      * @param {String} shade
-     *  A value between 0 to shade the provided color
+     *  A value 0 - 100000 (0 - 100%) to shade the provided color
      *
      * @return {Number} shaded rgb color value
      */

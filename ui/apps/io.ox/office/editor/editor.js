@@ -56,12 +56,12 @@ define('io.ox/office/editor/editor',
 
         // style attributes for heading 1 -6 based on latent styles
         HEADINGS_CHARATTRIBUTES = [
-            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 'BF' }]}, bold: true, fontsize: 14 },
+            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 74902 }]}, bold: true, fontsize: 14 },
             { color: { type: 'scheme', value: 'accent1'}, bold: true, fontsize: 13 },
             { color: { type: 'scheme', value: 'accent1'}, bold: true },
             { color: { type: 'scheme', value: 'accent1'}, bold: true, italic: true },
-            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: '7F' }]} },
-            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: '7F' }]}, italic: true }
+            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 49804 }]} },
+            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 49804 }]}, italic: true }
         ],
 
         DEFAULT_PARAGRAPH_DEFINTIONS = { 'default': true, styleid: 'Standard', stylename: 'Normal' };
