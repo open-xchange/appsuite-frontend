@@ -71,15 +71,16 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             util.buildRow(this.$el, this.fields.repeatLink);
 
             //tabsection
-            var temp = util.buildTabs([gt('Participants'), //#. %1$s is the number of currently attachened attachments
-                                                           //#, c-format
-                                                           gt('Attachments (%1$s)', this.attachmentArray.length), gt('Details')]),
+            var temp = util.buildTabs([gt('Participants'),
+                                       //#. %1$s is the number of currently attachened attachments
+                                       //#, c-format
+                                       gt('Attachments (%1$s)', this.attachmentArray.length),
+                                       gt('Details')], '-' + self.cid),
                 tabs = temp.table,
-                participantsTab = temp.content.find('#edit-task-tab0'),
-                attachmentsTab = temp.content.find('#edit-task-tab1'),
-                detailsTab = temp.content.find('#edit-task-tab2');
+                participantsTab = temp.content.find('#edit-task-tab0'  + '-' + self.cid),
+                attachmentsTab = temp.content.find('#edit-task-tab1'  + '-' + self.cid),
+                detailsTab = temp.content.find('#edit-task-tab2'  + '-' + self.cid);
             this.$el.append(tabs, temp.content);
-            
             temp = null;
             
             //partitipants tab

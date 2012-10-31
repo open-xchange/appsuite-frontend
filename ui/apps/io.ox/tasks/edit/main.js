@@ -103,6 +103,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             var clean = function () {
                 // clear private vars
                 taskView.trigger('dispose');
+                taskModel.off();//important so no events are executed on non existing models
                 app = win = taskModel = taskView = null;
             };
 

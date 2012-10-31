@@ -102,16 +102,16 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
         },
         
         //Tabs
-        buildTabs: function (tabs) {
+        buildTabs: function (tabs, uid) {//uid is important so tabs dont change tabs in other apps
             var table = $('<ul>').addClass("nav nav-tabs"),
                 content = $('<div>').addClass("tab-content");
             for (var i = 0; i < tabs.length; i++) {
                 $('<li>').css('width', '33%')
                     .append($('<a>').addClass("tab-link").css('text-align', 'center')
-                        .attr({href: '#edit-task-tab' + [i], 'data-toggle': "tab"}).text(tabs[i])).appendTo(table);
+                        .attr({href: '#edit-task-tab' + [i] + uid, 'data-toggle': "tab"}).text(tabs[i])).appendTo(table);
             }
             for (var i = 0; i < tabs.length; i++) {
-                $('<div>').attr('id', "edit-task-tab" + [i]).addClass("tab-pane").appendTo(content);
+                $('<div>').attr('id', "edit-task-tab" + [i] + uid).addClass("tab-pane").appendTo(content);
             }
             table.find('li :first').addClass('active');
             content.find('div :first').addClass('active');
