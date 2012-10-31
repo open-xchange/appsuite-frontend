@@ -551,7 +551,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     DOM.isTabNode = function (node) {
         return $(node).is(DOM.TAB_NODE_SELECTOR);
     };
-    
+
     /**
      * Returns a new tab element.
      *
@@ -1333,102 +1333,53 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 // whether mousedown is a current event
                 mousedownevent = false,
                 // saving the selected object node
-                objectNode = this,
-                // an object with information about the node, on which mousedown was pressed
-                nodeOptions = {},
-                // all available cursor styles
-                cursorstyles = {
-                    tl: 'nw-resize',
-                    t : 'n-resize',
-                    tr: 'ne-resize',
-                    r : 'e-resize',
-                    br: 'se-resize',
-                    b : 's-resize',
-                    bl: 'sw-resize',
-                    l : 'w-resize'
-                };
+                objectNode = this;
 
             // create a new selection box and a move box if missing
             if (selectionBox.length === 0) {
                 $(this).append(selectionBox = $('<div>').addClass('selection')).append(moveBox = $('<div>').addClass('move'));
-                // add resize handles
-                _(['tl', 't', 'tr', 'r', 'br', 'b', 'bl', 'l']).each(function (pos) {
 
-                    var handleDiv = $('<div>')
-                    .mousedown(function (e1, e2) {
-
-                        if (mousedownevent === true) { return; }
-
-                        var event = e1.pageX ? e1 : e2;  // from triggerHandler in editor only e2 can be used
-
-                        mousedownevent = true;
-
-                        // storing old height and width of image
-                        nodeOptions.oldWidth = $(objectNode).width();
-                        nodeOptions.oldHeight = $(objectNode).height();
-                        nodeOptions.isInline = $(objectNode).hasClass('inline');
-                        nodeOptions.isRightFloated = $(objectNode).hasClass('float') && $(objectNode).hasClass('right');
-
-                        // collecting information about the handle node
-                        nodeOptions.useX = (_.contains(['tl', 'tr', 'r', 'br', 'bl', 'l'], pos));
-                        nodeOptions.useY = (_.contains(['tl', 't', 'tr', 'br', 'b', 'bl'], pos));
-                        nodeOptions.topSelection = (_.contains(['tl', 't', 'tr'], pos));
-                        nodeOptions.rightSelection = (_.contains(['tr', 'r', 'br'], pos));
-                        nodeOptions.bottomSelection = (_.contains(['br', 'b', 'bl'], pos));
-                        nodeOptions.leftSelection = (_.contains(['tl', 'bl', 'l'], pos));
-                        nodeOptions.cursorStyle = cursorstyles[pos];
-
-                        nodeOptions.isResizeEvent = true;
-                        nodeOptions.isMoveEvent = false;
-
-                        mousedownhandler.call(context, event, nodeOptions);
+                if (sizeable) {
+                    // add resize handles
+                    _(['tl', 't', 'tr', 'r', 'br', 'b', 'bl', 'l']).each(function (pos) {
+                        var handleDiv = $('<div>')
+                        .mousedown(function (e1, e2) {
+                            if (mousedownevent === true) { return; }
+                            var event = e1.pageX ? e1 : e2;  // from triggerHandler in editor only e2 can be used
+                            mousedownevent = true;
+                            mousedownhandler.call(context, event, objectNode, pos);
+                        });
+                        selectionBox.append(handleDiv.addClass('handle ' + pos));
                     });
-
-                    selectionBox.append(handleDiv.addClass('handle ' + pos));
-                });
-
-                // moving the image
-                $(this).mousedown(function (e1, e2) {
-
-                    if ((! moveable) || (mousedownevent === true)) { return; }
-
-                    var event = e1.pageX ? e1 : e2;  // from triggerHandler in editor only e2 can be used
-
-                    mousedownevent = true;
-
-                    // storing old height and width of image
-                    nodeOptions.oldWidth = $(objectNode).width();
-                    nodeOptions.oldHeight = $(objectNode).height();
-                    nodeOptions.isInline = $(objectNode).hasClass('inline');
-                    nodeOptions.isRightFloated = $(objectNode).hasClass('float') && $(objectNode).hasClass('right');
-
-                    nodeOptions.cursorStyle = 'move';
-
-                    nodeOptions.isResizeEvent = false;
-                    nodeOptions.isMoveEvent = true;
-
-                    mousedownhandler.call(context, event, nodeOptions);
-                });
-            }
-
-            // mousemove and mouseup events can be anywhere on the page
-            $(document)
-            .mouseup(function (e) {
-
-                if (mousedownevent === true) {
-                    mouseuphandler.call(context, e, objectNode, moveBox);
-                    mousedownevent = false;
                 }
-            })
-            .mousemove(function (e) {
 
-                if (! mousedownevent) return;
-                mousemovehandler.call(context, e, moveBox);
-            });
+                if (moveable) {
+                    // moving the object
+                    $(this).mousedown(function (e1, e2) {
+                        if ((! moveable) || (mousedownevent === true)) { return; }
+                        var event = e1.pageX ? e1 : e2;  // from triggerHandler in editor only e2 can be used
+                        mousedownevent = true;
+                        mousedownhandler.call(context, event, objectNode, undefined);
+                    });
+                }
 
-            // set classes according to passed options, and resize handles
-            moveBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
-            selectionBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
+                // mousemove and mouseup events can be anywhere on the page -> binding to $(document)
+                $(document)
+                .mousemove(function (e) {
+                    if (! mousedownevent) return;
+                    mousemovehandler.call(context, e, moveBox);
+                })
+                .mouseup(function (e) {
+                    if (mousedownevent === true) {
+                        mouseuphandler.call(context, e, objectNode, moveBox);
+                        mousedownevent = false;
+                    }
+                });
+
+                // set classes according to passed options, and resize handles
+                moveBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
+                selectionBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
+            }
         });
     };
 

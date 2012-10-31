@@ -57,6 +57,12 @@ define('io.ox/office/editor/format/tablestyles',
             tablegrid: { def: [] },
 
             /**
+             * Array containing information, if conditional table styles shall be used. As default
+             * value, all styles shall be used, so that this array can be empty.
+             */
+            look: { def: [] },
+
+            /**
              * Left border of the table (set in tablecellstyles).
              */
             borderleft: { def: NO_BORDER },

@@ -1098,7 +1098,7 @@ define('io.ox/office/editor/editor',
         this.getLists = function () {
             return lists;
         };
-        
+
         /**
          * Returns the document attributes.
          */
@@ -1999,7 +1999,7 @@ define('io.ox/office/editor/editor',
         operationHandlers[Operations.INIT_DOCUMENT] = function (operation) {
             implInitDocument();
         };
-        
+
         operationHandlers[Operations.SET_DOCUMENT_ATTRIBUTES] = function (operation) {
             implSetDocumentAttributes(operation.attrs);
         };
@@ -2509,42 +2509,67 @@ define('io.ox/office/editor/editor',
          */
         function selectObjects(objects, extend) {
 
-            // remove old object selection, unless selection will be extended
-            if (extend !== true) {
-                deselectAllObjects();
-            }
-
-            var startX,
-                startY,
-                currentX,
-                currentY,
+            var startX = 0,
+                startY = 0,
+                currentX = 0,
+                currentY = 0,
                 shiftX = 0,
                 shiftY = 0,
                 finalWidth = 0,
                 finalHeight = 0,
                 nodeOptions = {},
-                moveable = true;
+                moveable = true,
+                sizeable = true,
+                // all available cursor styles
+                cursorstyles = {
+                    tl: 'nw-resize',
+                    t : 'n-resize',
+                    tr: 'ne-resize',
+                    r : 'e-resize',
+                    br: 'se-resize',
+                    b : 's-resize',
+                    bl: 'sw-resize',
+                    l : 'w-resize'
+                };
 
-            // if objects (only one at the moment, is an inline image, it shall not be moveable
-            if (DOM.isInlineObjectNode(objects)) {
-                moveable = false;
-            }
-
-            // collect selected objects
-            selectedObjects = selectedObjects.add(objects);
-            // draw the selection box into the passed objects
-            DOM.drawObjectSelection(objects, { moveable: moveable, sizeable: true
-            }, function (event, startNodeOptions) {
+            function mouseDownOnObject(event, objectNode, pos) {
                 // mouse down event handler
                 startX = event.pageX;
                 startY = event.pageY;
-                nodeOptions = _.copy(startNodeOptions, true);
 
+                // storing old height and width of image
+                nodeOptions.oldWidth = $(objectNode).width();
+                nodeOptions.oldHeight = $(objectNode).height();
+                nodeOptions.isInline = $(objectNode).hasClass('inline');
+                nodeOptions.isRightFloated = $(objectNode).hasClass('float') && $(objectNode).hasClass('right');
+
+                if (pos) {
+                    // collecting information about the handle node
+                    nodeOptions.useX = (_.contains(['tl', 'tr', 'r', 'br', 'bl', 'l'], pos));
+                    nodeOptions.useY = (_.contains(['tl', 't', 'tr', 'br', 'b', 'bl'], pos));
+                    nodeOptions.topSelection = (_.contains(['tl', 't', 'tr'], pos));
+                    nodeOptions.rightSelection = (_.contains(['tr', 'r', 'br'], pos));
+                    nodeOptions.bottomSelection = (_.contains(['br', 'b', 'bl'], pos));
+                    nodeOptions.leftSelection = (_.contains(['tl', 'bl', 'l'], pos));
+
+                    nodeOptions.cursorStyle = cursorstyles[pos];  // resizing object
+
+                    nodeOptions.isResizeEvent = true;
+                    nodeOptions.isMoveEvent = false;
+                } else {
+                    nodeOptions.cursorStyle = 'move';  // moving object
+
+                    nodeOptions.isResizeEvent = false;
+                    nodeOptions.isMoveEvent = true;
+                }
+
+                // setting cursor
                 editdiv.css('cursor', nodeOptions.cursorStyle);  // setting cursor for increasing image
                 $('div.selection', editdiv).css('cursor', nodeOptions.cursorStyle); // setting cursor for decreasing image
                 $('div.move', editdiv).css('cursor', nodeOptions.cursorStyle); // setting cursor for flexible move node
+            }
 
-            }, function (event, moveBoxNode) {
+            function mouseMoveOnObject(event, moveBoxNode) {
                 // mouse move event handler
                 moveBoxNode.css('border-width', '2px');  // making move box visible
 
@@ -2563,7 +2588,7 @@ define('io.ox/office/editor/editor',
                         topShift = 0,
                         newWidth = 0,
                         newHeight = 0,
-                        borderwidth = 4;
+                        borderwidth = 3;
 
                     if (nodeOptions.useX) { deltaX = currentX - startX; }
                     if (nodeOptions.useY) { deltaY = currentY - startY; }
@@ -2603,8 +2628,9 @@ define('io.ox/office/editor/editor',
                         moveBoxNode.css({ 'left': shiftX, 'top': shiftY, 'width': nodeOptions.oldWidth, 'height': nodeOptions.oldHeight });
                     }
                 }
+            }
 
-            }, function (event, imageNode, moveBoxNode) {
+            function mouseUpOnObject(event, objectNode, moveBoxNode) {
                 // mouse up handler
                 moveBoxNode.css({'border-width': 0, 'left': 0, 'top': 0});  // making move box invisible and shifting it back into image
 
@@ -2614,7 +2640,7 @@ define('io.ox/office/editor/editor',
 
                         var width = Utils.convertLengthToHmm(finalWidth, 'px'),
                             height = Utils.convertLengthToHmm(finalHeight, 'px'),
-                            updatePosition = Position.getOxoPosition(editdiv, imageNode, 0),
+                            updatePosition = Position.getOxoPosition(editdiv, objectNode, 0),
                             newOperation = { name: Operations.ATTRS_SET, attrs: {width: width, height: height}, start: updatePosition };
 
                         applyOperation(newOperation, true, true);
@@ -2625,7 +2651,7 @@ define('io.ox/office/editor/editor',
 
                         var moveX = Utils.convertLengthToHmm(shiftX, 'px'),
                             moveY = Utils.convertLengthToHmm(shiftY, 'px'),
-                            updatePosition = Position.getOxoPosition(editdiv, imageNode, 0),
+                            updatePosition = Position.getOxoPosition(editdiv, objectNode, 0),
                             newOperation = { name: Operations.ATTRS_SET, attrs: {anchorhoffset: moveX, anchorvoffset: moveY}, start: updatePosition };
 
                         applyOperation(newOperation, true, true);
@@ -2641,9 +2667,22 @@ define('io.ox/office/editor/editor',
                 editdiv.css('cursor', '');
                 $('div.selection', editdiv).css('cursor', '');
                 $('div.move', editdiv).css('cursor', '');
+            }
 
-            }, self);
+            // remove old object selection, unless selection will be extended
+            if (extend !== true) {
+                deselectAllObjects();
+            }
 
+            // if objects (only one at the moment, is an inline image, it shall not be moveable
+            if (DOM.isInlineObjectNode(objects)) {
+                moveable = false;
+            }
+
+            // collect selected objects
+            selectedObjects = selectedObjects.add(objects);
+            // draw the selection box into the passed objects
+            DOM.drawObjectSelection(objects, { moveable: moveable, sizeable: sizeable }, mouseDownOnObject, mouseMoveOnObject, mouseUpOnObject, self);
             // clear browser selection to hide the text cursor
             DOM.setBrowserSelection([]);
         }
@@ -3878,10 +3917,10 @@ define('io.ox/office/editor/editor',
             self.clearUndo();
             self.setEditMode(null); // set null for 'read-only' and not yet determined edit status by the server
         }
-        
+
         function implSetDocumentAttributes(attributes) {
             var documentAttributes = self.getDocumentAttributes();
-            
+
             // read various document attributes and set it at the document styles
             if (attributes.defaulttabstop) {
                 documentAttributes.defaulttabstop = attributes.defaulttabstop;
