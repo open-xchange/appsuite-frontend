@@ -509,46 +509,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return Utils.findDescendantNode(paragraph, function () { return DOM.isTextSpan(this); }, { children: true, reverse: true });
     };
 
-    /**
-     * Determines cell orientation inside a table. This includes information, if the cell is located
-     * in the first row or in the last row, or if it is the first cell in a row or the last cell in
-     * a row and if it is located in an even row or in an odd row.
-     *
-     * @param {jQuery} cell
-     *  The cell node whose orientation inside the table shall be
-     *  investigated.
-     *
-     * @returns {Object}
-     *  An object containing information about the orientation of the
-     *  cell inside the table.
-     */
-    DOM.evaluateCellOrientationInTable = function (cell) {
-
-        var cellOrientation = {},
-            row = null;
-
-        if (!((cell) && (cell.get(0)) && (cell.get(0).nodeName) && (((Utils.getNodeName(cell) === 'td') || (Utils.getNodeName(cell) === 'th'))))) { return cellOrientation; }
-        // if ((Utils.getNodeName(cell) !== 'td') && (Utils.getNodeName(cell) !== 'th')) { return; }
-
-        row = cell.parent();
-
-        cellOrientation.wholetable = true;  // the cell is located somewhere in the table
-        cellOrientation.firstrow = ($('> tr', row.parent()).index(row) === 0);
-        cellOrientation.lastrow = ($('> tr', row.parent()).index(row) === $('> tr', row.parent()).length - 1);
-        cellOrientation.firstcol = ($('> th, > td', row).index(cell) === 0);
-        cellOrientation.lastcol = ($('> th, > td', row).index(cell) === $('> th, > td', row).length - 1);
-        cellOrientation.band1horz = ($('> tr', row.parent()).index(row) % 2 !== 0);
-        cellOrientation.band2horz = ! cellOrientation.band1horz;
-        cellOrientation.necell = (cellOrientation.firstrow && cellOrientation.lastcol);
-        cellOrientation.nwcell = (cellOrientation.firstrow && cellOrientation.firstcol);
-        cellOrientation.secell = (cellOrientation.lastrow && cellOrientation.lastcol);
-        cellOrientation.swcell = (cellOrientation.lastrow && cellOrientation.firstcol);
-
-        // still missing band1vert and band2vert
-
-        return cellOrientation;
-    };
-
     // text components: fields, tabs ------------------------------------------
 
     /**

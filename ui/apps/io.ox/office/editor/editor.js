@@ -1377,7 +1377,7 @@ define('io.ox/office/editor/editor',
          * processed document.
          */
         this.documentLoaded = function () {
-            var postProcessingTasks = [insertMissingParagraphStyles, updateTableAttributes];
+            var postProcessingTasks = [insertMissingParagraphStyles, updateAllTableAttributes];
 
             _(postProcessingTasks).each(function (task) {
                 task.call(self);
@@ -1440,10 +1440,10 @@ define('io.ox/office/editor/editor',
          * completely loaded from the server and after changes in the table, that
          * were done within the UI.
          */
-        function updateTableAttributes() {
+        function updateAllTableAttributes() {
             $('table', editdiv).each(
                 function () {
-                    tableStyles.updateElementFormatting(this);
+                    implTableChanged(this);
                 }
             );
         }
@@ -4061,6 +4061,24 @@ define('io.ox/office/editor/editor',
             }
         }
 
+        /**
+         * Has to be called each time, after changing the cell structure of
+         * a table. It recalculates the position of each cell in
+         * the table and sets the corresponding attributes. This can be set
+         * for the first or last column or row, or even only for the south
+         * east cell.
+         *
+         * @param {jQuery} table
+         *  The <table> element whose table attributes have been changed, as
+         *  jQuery object.
+         */
+        function implTableChanged(table) {
+            tableStyles.updateElementFormatting(table);
+        }
+
+        /**
+         * Has to be called for the initialization of a new document.
+         */
         function implInitDocument() {
 
             // create empty page with single paragraph
@@ -4821,6 +4839,9 @@ define('io.ox/office/editor/editor',
                 localPosition.push(0);
             }
 
+            // recalculating the attributes of the table cells
+            implTableChanged(table);
+
             lastOperationEnd = new OXOPaM(localPosition);
         }
 
@@ -4845,7 +4866,8 @@ define('io.ox/office/editor/editor',
             var table = Position.getDOMPosition(editdiv, tablePos).node,
                 tableRowDomPos = Position.getDOMPosition(editdiv, localPosition),
                 tableRowNode = null,
-                row = null;
+                row = null,
+                cellsInserted = false;
 
             if (tableRowDomPos) {
                 tableRowNode = tableRowDomPos.node;
@@ -4854,6 +4876,7 @@ define('io.ox/office/editor/editor',
             if (useReferenceRow) {
 
                 row = $(table).children('tbody, thead').children().eq(referencerow);
+                cellsInserted = true;
 
             } else if (insertdefaultcells) {
 
@@ -4869,6 +4892,8 @@ define('io.ox/office/editor/editor',
 
                 // clone the cells in the row element
                 _.times(columnCount, function () { row.append(cell.clone(true)); });
+
+                cellsInserted = true;
 
             } else {
                 row = $('<tr>');
@@ -4891,6 +4916,11 @@ define('io.ox/office/editor/editor',
             if (useReferenceRow) {
                 // iterating over all new cells and remove all paragraphs in the cells
                 implDeleteCellRange(tablePos, [referencerow + 1, 0], [referencerow + count, row.children().length - 1]);
+            }
+
+            // recalculating the attributes of the table cells
+            if (cellsInserted) {
+                implTableChanged(table);
             }
 
             // Setting cursor
@@ -4941,6 +4971,9 @@ define('io.ox/office/editor/editor',
                 _.times(count, function () { $(row).append(cell.clone(true)); });
             }
 
+            // recalculating the attributes of the table cells
+            var table = cell.closest('table');
+            implTableChanged(table);
         }
 
         function implDeleteCells(pos, start, end) {
@@ -4985,6 +5018,11 @@ define('io.ox/office/editor/editor',
                 localPosition.push(0);
                 localPosition.push(0);
                 localPosition.push(0);
+            }
+
+            if (row) {
+                var table = $(row).closest('table');
+                implTableChanged(table);
             }
 
             lastOperationEnd = new OXOPaM(localPosition);
@@ -5038,6 +5076,9 @@ define('io.ox/office/editor/editor',
                 localPosition.push(0);
             }
 
+            // recalculating the attributes of the table cells
+            implTableChanged(table);
+
             lastOperationEnd = new OXOPaM(localPosition);
         }
 
@@ -5069,6 +5110,9 @@ define('io.ox/office/editor/editor',
                     }
                 }
             );
+
+            // recalculating the attributes of the table cells
+            implTableChanged(table);
 
             // Setting cursor to first position in table
             localPosition.push(0);

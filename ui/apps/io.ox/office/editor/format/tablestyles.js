@@ -172,42 +172,176 @@ define('io.ox/office/editor/format/tablestyles',
 
             var // the cell element (source node may be a paragraph or text span)
                 cell = sourceNode.closest('td'),
+                // the table element (required for evaluating the look attribute)
+                table = cell.closest('table'),
                 // an object containing information about the cell orientation inside the table
-                cellOrientation = {},
+                cellOrientation = evaluateCellOrientationInTable(cell),
+                // an object containing the attributes set at the table explicitely
+                explicitTableAttributes = {},
+                // an array containing the style attributes names that are excluded from style using the 'look' attribute
+                excludedAttributes = [],
                 // an object containing the style attributes defined in table styles for the specific table cell
-                tableStyleAttributes = {},
+                attributes = {},
                 // an array containing the names of the optional table attributes
+                // -> this is also an order of relevance from global to specific
+                // -> following attribute names overwrite values of previous attribute names
+                // -> firstRow overwrites lastRow, row overwrites column, ...
                 tableAttributeNames = ['wholetable',
-                                       'firstrow',
-                                       'lastrow',
-                                       'firstcol',
-                                       'lastcol',
                                        'band1vert',
                                        'band2vert',
                                        'band1horz',
                                        'band2horz',
+                                       'lastcol',
+                                       'firstcol',
+                                       'lastrow',
+                                       'firstrow',
                                        'necell',
                                        'nwcell',
                                        'secell',
                                        'swcell'];
 
-            // evaluating optional table attributes
-            if (family === 'table') {
+            // checking if special attribute names are deselected in table using
+            // the 'look' attribute
+            explicitTableAttributes = StyleSheets.getExplicitAttributes(table);
 
-                cellOrientation = DOM.evaluateCellOrientationInTable(cell);
-
-                // evaluating attributes for all other optional attributes
-                // -> overwriting values from global ('wholetable') to specific ('swcell')
-                _.each(tableAttributeNames, function (name) {
-                    if ((cellOrientation[name]) && (styleAttributes[name]) && (styleAttributes[name].table)) {
-                        tableStyleAttributes = _.extend(tableStyleAttributes, styleAttributes[name].table);
+            if (explicitTableAttributes.look) {
+                _.each(explicitTableAttributes.look, function (val, key) {
+                    if (val === false) {
+                        excludedAttributes.push(key);
                     }
                 });
-
-                return tableStyleAttributes;
             }
 
-            return {};
+            // rename problem because of discrepancy of cell <-> tablecell and row <-> tablerow
+            var localfamily = family;
+
+            if (family === 'tablecell') {
+                localfamily = 'cell';
+            } else if (family === 'tablerow') {
+                localfamily = 'row';
+            }
+
+            // evaluating attributes for all other optional attributes
+            // -> overwriting values from global ('wholetable') to specific ('swcell')
+            _.each(tableAttributeNames, function (name) {
+
+                if (family === 'tablecell') {  // table cells have to iterate over table attributes, too
+                    if ((cellOrientation[name]) && (styleAttributes[name]) && (styleAttributes[name].table) && (! _.contains(excludedAttributes, name))) {
+                        attributes = _.extend(attributes, resolveTableStylesWithCellPosition(cellOrientation, styleAttributes[name].table));
+                    }
+                }
+
+                if ((cellOrientation[name]) && (styleAttributes[name]) && (styleAttributes[name][localfamily]) && (! _.contains(excludedAttributes, name))) {
+                    attributes = _.extend(attributes, styleAttributes[name][localfamily]);
+                }
+            });
+
+            return attributes;
+        }
+
+        /**
+         * Switching from table attributes to table cell attributes. Later no
+         * further evaluation of cell orientation is required.
+         * Especially 'borderinsideh' and 'borderinsidev' are valid only for inner
+         * table cells. And 'bordertop', 'borderbottom', ... are only valid for cells
+         * that have a table border.
+         *
+         * @param {Object} cellOrientation
+         *  An object containing information about the orientation of the
+         *  cell inside the table.
+         *
+         * @param tableStyleAttributes
+         *  The 'attributes' object of the 'table' family.
+         *
+         * @returns {Object} cellStyles
+         *  An object containing the table cell attributes determined from the
+         *  table attributes with the help of the orientation of the cell inside
+         *  the table.
+         */
+        function resolveTableStylesWithCellPosition(cellOrientation, tableStyleAttributes) {
+
+            var cellStyles = {};
+
+            if ((tableStyleAttributes.bordertop) && (cellOrientation.firstrow)) {
+                cellStyles.bordertop = tableStyleAttributes.bordertop;
+            }
+
+            if ((tableStyleAttributes.borderbottom) && (cellOrientation.lastrow)) {
+                cellStyles.borderbottom = tableStyleAttributes.borderbottom;
+            }
+
+            if ((tableStyleAttributes.borderleft) && (cellOrientation.firstcol)) {
+                cellStyles.borderleft = tableStyleAttributes.borderleft;
+            }
+
+            if ((tableStyleAttributes.borderright) && (! cellOrientation.lastcol)) {
+                cellStyles.borderright = tableStyleAttributes.borderright;
+            }
+
+            if (tableStyleAttributes.borderinsideh) {
+                if (cellOrientation.firstrow) {
+                    cellStyles.borderbottom = tableStyleAttributes.borderinsideh;
+                } else if (cellOrientation.lastrow) {
+                    cellStyles.bordertop = tableStyleAttributes.borderinsideh;
+                } else {
+                    cellStyles.bordertop = tableStyleAttributes.borderinsideh;
+                    cellStyles.borderbottom = tableStyleAttributes.borderinsideh;
+                }
+            }
+
+            if (tableStyleAttributes.borderinsidev) {
+                if (cellOrientation.firstcol) {
+                    cellStyles.borderright = tableStyleAttributes.borderinsidev;
+                } else if (cellOrientation.lastcol) {
+                    cellStyles.borderleft = tableStyleAttributes.borderinsidev;
+                } else {
+                    cellStyles.borderright = tableStyleAttributes.borderinsidev;
+                    cellStyles.borderleft = tableStyleAttributes.borderinsidev;
+                }
+            }
+
+            return cellStyles;
+        }
+
+        /**
+         * Determines cell orientation inside a table. This includes information, if the cell is located
+         * in the first row or in the last row, or if it is the first cell in a row or the last cell in
+         * a row and if it is located in an even row or in an odd row.
+         *
+         * @param {jQuery} cell
+         *  The cell node whose orientation inside the table shall be
+         *  investigated.
+         *
+         * @returns {Object}
+         *  An object containing information about the orientation of the
+         *  cell inside the table.
+         */
+        function evaluateCellOrientationInTable(cell) {
+
+            var cellOrientation = {};
+
+            if (!((cell) && (cell.get(0)) && (cell.get(0).nodeName) && (((Utils.getNodeName(cell) === 'td') || (Utils.getNodeName(cell) === 'th'))))) { return cellOrientation; }
+            // if ((Utils.getNodeName(cell) !== 'td') && (Utils.getNodeName(cell) !== 'th')) { return; }
+
+            var row = cell.parent(),
+                rowCollection = $('> tr', row.parent()),
+                cellCollection = $('> th, > td', row);
+
+            cellOrientation.wholetable = true;  // the cell is located somewhere in the table
+            cellOrientation.firstrow = rowCollection.index(row) === 0;
+            cellOrientation.lastrow = rowCollection.index(row) === rowCollection.length - 1;
+            cellOrientation.firstcol = cellCollection.index(cell) === 0;
+            cellOrientation.lastcol = cellCollection.index(cell) === cellCollection.length - 1;
+            cellOrientation.band1horz = rowCollection.index(row) % 2 !== 0;
+            cellOrientation.band2horz = ! cellOrientation.band1horz;
+            cellOrientation.band1vert = cellCollection.index(cell) % 2 !== 0;
+            cellOrientation.band2vert = ! cellOrientation.band1vert;
+            cellOrientation.necell = (cellOrientation.firstrow && cellOrientation.lastcol);
+            cellOrientation.nwcell = (cellOrientation.firstrow && cellOrientation.firstcol);
+            cellOrientation.secell = (cellOrientation.lastrow && cellOrientation.lastcol);
+            cellOrientation.swcell = (cellOrientation.lastrow && cellOrientation.firstcol);
+
+            return cellOrientation;
         }
 
         // base constructor ---------------------------------------------------

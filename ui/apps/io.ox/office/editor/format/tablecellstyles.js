@@ -17,7 +17,7 @@ define('io.ox/office/editor/format/tablecellstyles',
      'io.ox/office/editor/table',
      'io.ox/office/editor/format/color',
      'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, DOM, Table, Color, StyleSheets) {
+    ], function (Utils, DOM, Table, Color, StyleSheets) {  // AAA remove position
 
     'use strict';
 
@@ -40,52 +40,27 @@ define('io.ox/office/editor/format/tablecellstyles',
             /**
              * Fill color of the table cell.
              */
-            fillcolor: {
-                def: Color.AUTO,
-                set: function (element, color) {
-                    element.css('background-color', this.getCssColor(color, 'fill'));
-                }
-            },
+            fillcolor: { def: Color.AUTO },
 
             /**
              * Style, width and color of the left table cell border.
              */
-            borderleft: {
-                def: NO_BORDER,
-                set: function (element, border) {
-                    element.css('border-left', this.getCssBorder(border));
-                }
-            },
+            borderleft: { def: NO_BORDER },
 
             /**
              * Style, width and color of the right table cell border.
              */
-            borderright: {
-                def: NO_BORDER,
-                set: function (element, border) {
-                    element.css('border-right', this.getCssBorder(border));
-                }
-            },
+            borderright: { def: NO_BORDER },
 
             /**
              * Style, width and color of the top table cell border.
              */
-            bordertop: {
-                def: NO_BORDER,
-                set: function (element, border) {
-                    element.css('border-top', this.getCssBorder(border));
-                }
-            },
+            bordertop: { def: NO_BORDER },
 
             /**
              * Style, width and color of the bottom table cell border.
              */
-            borderbottom: {
-                def: NO_BORDER,
-                set: function (element, border) {
-                    element.css('border-bottom', this.getCssBorder(border));
-                }
-            }
+            borderbottom: { def: NO_BORDER }
 
         };
 
@@ -129,72 +104,52 @@ define('io.ox/office/editor/format/tablecellstyles',
          */
         function updateTableCellFormatting(cell, attributes) {
 
-            // must get the table attributes
-            // getElementAttributes from table
-            // getExplicitAttributes from cell (static!)
-
-            var table = cell.closest(DOM.TABLE_NODE_SELECTOR),
-                // the table styles/formatter
-                tableStyles = self.getDocumentStyles().getStyleSheets('table'),
-                // table attributes
-                tableAttributes = tableStyles.getElementAttributes(table, { sourceNode: cell }),
-                // explicitly set cell attributes (that must not be overridden)
-                cellAttributes = StyleSheets.getExplicitAttributes(cell),
-                // setting some cell position information
-                cellOrientation = DOM.evaluateCellOrientationInTable(cell);
-
-            // _.each(tableAttributes, function (val, key) {
-            //     if (_.isObject(val)) { val = JSON.stringify(val); }
-            //     window.console.log("Table: " + key + " : " + val);
-            // });
-
-            // _.each(cellAttributes, function (val, key) {
-            //     if (_.isObject(val)) { val = JSON.stringify(val); }
-            //     window.console.log("Cell: " + key + " : " + val);
-            // });
+            var cellAttributes = StyleSheets.getExplicitAttributes(cell);
 
             // fillcolor
-            if ((_.isUndefined(cellAttributes.fillcolor)) && (! _.isUndefined(tableAttributes.fillcolor))) {
-                cell.css('background-color', this.getCssColor(tableAttributes.fillcolor, 'fill'));
+            if (! _.isUndefined(cellAttributes.fillcolor)) {
+                cell.css('background-color', this.getCssColor(cellAttributes.fillcolor, 'fill'));
+                // cell.css('background-color', Color.getCssColor(cellAttributes.fillcolor, 'fill', documentStyles.getCurrentTheme()));
+            } else if (! _.isUndefined(attributes.fillcolor)) {
+                cell.css('background-color', this.getCssColor(attributes.fillcolor, 'fill'));
+                // cell.css('background-color', Color.getCssColor(attributes.fillcolor, 'fill', documentStyles.getCurrentTheme()));
             }
 
             // borderleft
-            if ((_.isUndefined(cellAttributes.borderleft)) && (cellOrientation.firstcol) && (! _.isUndefined(tableAttributes.borderleft))) {
-                cell.css('border-left', this.getCssBorder(tableAttributes.borderleft));
+            if (! _.isUndefined(cellAttributes.borderleft)) {
+                cell.css('border-left', this.getCssBorder(cellAttributes.borderleft));
+            } else if (! _.isUndefined(attributes.borderleft)) {
+                cell.css('border-left', this.getCssBorder(attributes.borderleft));
             }
 
             // borderright
-            if ((_.isUndefined(cellAttributes.borderright)) && (cellOrientation.lastcol) && (! _.isUndefined(tableAttributes.borderright))) {
-                cell.css('border-right', this.getCssBorder(tableAttributes.borderright));
+            if (! _.isUndefined(cellAttributes.borderright)) {
+                cell.css('border-right', this.getCssBorder(cellAttributes.borderright));
+            } else if (! _.isUndefined(attributes.borderright)) {
+                cell.css('border-right', this.getCssBorder(attributes.borderright));
             }
 
             // bordertop
-            if ((_.isUndefined(cellAttributes.bordertop)) && (cellOrientation.firstrow) && (! _.isUndefined(tableAttributes.bordertop))) {
-                cell.css('border-top', this.getCssBorder(tableAttributes.bordertop));
+            if (! _.isUndefined(cellAttributes.bordertop)) {
+                cell.css('border-top', this.getCssBorder(cellAttributes.bordertop));
+            } else if (! _.isUndefined(attributes.bordertop)) {
+                cell.css('border-top', this.getCssBorder(attributes.bordertop));
             }
 
             // borderbottom
-            if ((_.isUndefined(cellAttributes.borderbottom)) && (cellOrientation.lastrow) && (! _.isUndefined(tableAttributes.borderbottom))) {
-                cell.css('border-bottom', this.getCssBorder(tableAttributes.borderbottom));
+            if (! _.isUndefined(cellAttributes.borderbottom)) {
+                cell.css('border-bottom', this.getCssBorder(cellAttributes.borderbottom));
+            } else if (! _.isUndefined(attributes.borderbottom)) {
+                cell.css('border-bottom', this.getCssBorder(attributes.borderbottom));
             }
-
-            // borderinsideh
-            if ((_.isUndefined(cellAttributes.bordertop)) && (! cellOrientation.firstrow) && (! _.isUndefined(tableAttributes.borderinsideh))) {
-                cell.css('border-top', this.getCssBorder(tableAttributes.borderinsideh));
-            }
-
-            // borderinsidev
-            if ((_.isUndefined(cellAttributes.borderleft)) && (! cellOrientation.firstcol) && (! _.isUndefined(tableAttributes.borderinsidev))) {
-                cell.css('border-left', this.getCssBorder(tableAttributes.borderinsidev));
-            }
-
-            // TODO: taking care of further optional attributes
 
         }
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'tablecell', 'td', DEFINITIONS);
+        StyleSheets.call(this, documentStyles, 'tablecell', 'td', DEFINITIONS, {
+            parentStyleFamily: 'table'
+        });
 
         // initialization -----------------------------------------------------
 
