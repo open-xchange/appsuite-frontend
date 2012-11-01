@@ -247,7 +247,7 @@ define('io.ox/office/editor/operations',
          * @returns {Operations.Generator}
          *  A reference to this instance.
          */
-        this.generateParagraphChildOperations = function (paragraph, position, start, end) {
+        this.generateTextComponentOperations = function (paragraph, position, start, end) {
 
             var // used to merge several text portions into the same operation
                 lastTextOperation = null,
@@ -315,7 +315,7 @@ define('io.ox/office/editor/operations',
 
                     // TODO: other objects
                     else {
-                        Utils.error('Operations.Generator.generateParagraphChildOperations(): unknown content node');
+                        Utils.error('Operations.Generator.generateTextComponentOperations(): unknown content node');
                     }
                 }
 
@@ -355,13 +355,15 @@ define('io.ox/office/editor/operations',
         this.generateParagraphOperations = function (paragraph, position, initialParagraph) {
 
             // operations to create the paragraph element and formatting
-            if (initialParagraph !== true) {
+            if (initialParagraph === true) {
+                generateOperation(Operations.ATTRS_CLEAR, { start: position });
+            } else {
                 generateOperation(Operations.PARA_INSERT, { start: position });
             }
             generateSetAttributesOperation(paragraph, position);
 
             // process all content nodes in the paragraph and create operations
-            return this.generateParagraphChildOperations(paragraph, position);
+            return this.generateTextComponentOperations(paragraph, position);
         };
 
         /**
@@ -496,24 +498,66 @@ define('io.ox/office/editor/operations',
             return this;
         };
 
+        /**
+         * Generates all operations needed to recreate the contents of the
+         * passed selection. The logical positions in the generated operations
+         * will start at [0].
+         *
+         * @param {HTMLElement|jQuery} rootNode
+         *  The root node of the document containing the passed selection. If
+         *  this object is a jQuery collection, uses the first node it
+         *  contains.
+         *
+         * @param {Selection} selection
+         *  The logical selection covering the contents to be converted to
+         *  operations.
+         *
+         * @returns {Operations.Generator}
+         *  A reference to this instance.
+         */
         this.generateOperationsForSelection = function (rootNode, selection) {
 
             var // zero-based position of the current component
-                position = [0];
+                targetPosition = [0];
 
-            Position.iterateComponentsInSelection(rootNode, selection, function (node, nodePosition, length) {
+            Position.iterateContentNodesInSelection(rootNode, selection, function (contentNode, position, startOffset, endOffset) {
 
-                if (DOM.isParagraphNode(node)) {
-                    this.generateParagraphOperations(node, position);
-                } else if (DOM.isTableNode(node)) {
-                    this.generateTableOperations(node, position);
-                } else {
+                // paragraphs may be covered partly
+                if (DOM.isParagraphNode(contentNode)) {
 
+                    // first or last paragraph: generate operations for covered text components
+                    if (_.isNumber(startOffset) || _.isNumber(endOffset)) {
+
+                        // do not create an 'insertParagraph' operation for the first paragraph
+                        if (!_.isNumber(startOffset)) {
+                            generateOperation(Operations.PARA_INSERT, { start: targetPosition });
+                            generateSetAttributesOperation(contentNode, targetPosition);
+                        }
+
+                        // operations for the text contents covered by the selection
+                        this.generateTextComponentOperations(contentNode, targetPosition, startOffset, endOffset);
+
+                    } else {
+                        // generate operations for entire paragraph
+                        this.generateParagraphOperations(contentNode, targetPosition);
+                    }
                 }
 
-                position = increaseLastIndex(position);
-            });
+                // entire table: generate complete operations array for the table
+                else if (DOM.isTableNode(contentNode)) {
+                    this.generateTableOperations(contentNode, targetPosition);
+                }
 
+                else {
+                    Utils.error('Operations.Generator.generateOperationsForSelection(): unknown content node "' + Utils.getNodeName(contentNode) + '" at position ' + JSON.stringify(position) + '.');
+                    return Utils.BREAK;
+                }
+
+                targetPosition = increaseLastIndex(targetPosition);
+
+            }, undefined, { shortestPath: true });
+
+            return this;
         };
 
     }; // class Operations.Generator

@@ -28,8 +28,7 @@ define('io.ox/office/editor/format/imagestyles',
              */
             cropl: { def: 0 },
 
-            /**
-             * Amount of right part of the image cropped outside the object
+            /**             * Amount of right part of the image cropped outside the object
              * border, in percent.
              */
             cropr: { def: 0 },
@@ -157,18 +156,6 @@ define('io.ox/office/editor/format/imagestyles',
         // base constructor ---------------------------------------------------
 
         ObjectsStyles.call(this, documentStyles, 'image', imageNodeSelector, DEFINITIONS);
-
-        // methods ------------------------------------------------------------
-
-        /**
-         * Iterates over all image elements covered by the passed DOM ranges
-         * for read-only access and calls the passed iterator function.
-         */
-        this.iterateReadOnly = function (ranges, iterator, context) {
-            // DOM.iterateAncestorNodesInRanges() passes the current element to
-            // the passed iterator function exactly as expected
-            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, DOM.IMAGE_NODE_SELECTOR, iterator, context);
-        };
 
         // initialization -----------------------------------------------------
 

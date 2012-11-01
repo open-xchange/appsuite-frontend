@@ -1173,7 +1173,11 @@ define('io.ox/office/editor/editor',
                 break;
 
             case 'image':
-                attributes = imageStyles.getAttributesInRanges(ranges);
+                selectedObjects.each(function (object) {
+                    if (DOM.isImageNode(object)) {
+                        mergeElementAttributes(imageStyles.getElementAttributes(object));
+                    }
+                });
                 break;
 
             default:
@@ -1208,10 +1212,6 @@ define('io.ox/office/editor/editor',
             // in the local setAttributes() method (it calls itself recursively
             // with smaller parts of the current selection).
             undomgr.enterGroup(function () { setAttributes(family, attributes); });
-        };
-
-        this.getParagraphCount = function () {
-            return editdiv.children().size();
         };
 
         this.setEditMode = function (state) {
@@ -1787,11 +1787,6 @@ define('io.ox/office/editor/editor',
                     event.preventDefault();
                 }
             }
-
-            // DEBUG STUFF
-            if (self.getParagraphCount() !== editdiv.children().size()) {
-                Utils.warn('Editor.processKeyDown(): paragraph count invalid!');
-            }
         }
 
         function processKeyPressed(event) {
@@ -1924,12 +1919,6 @@ define('io.ox/office/editor/editor',
             if (!(event.metaKey || event.ctrlKey) && event.charCode === 118) {
                 event.preventDefault();
             }
-
-            // DEBUG STUFF
-            if (self.getParagraphCount() !== editdiv.children().size()) {
-                Utils.warn('Editor.processKeyPressed(): paragraph count invalid!');
-            }
-
         }
 
         /**
@@ -2108,7 +2097,7 @@ define('io.ox/office/editor/editor',
                     end = operation.end[operation.end.length - 1],
                     generator = new Operations.Generator();
 
-                generator.generateParagraphChildOperations(paragraph, position, start, end);
+                generator.generateTextComponentOperations(paragraph, position, start, end);
                 undomgr.addUndo(generator.getOperations(), operation);
             }
             implDeleteText(operation.start, operation.end);
@@ -2429,11 +2418,6 @@ define('io.ox/office/editor/editor',
             }
 
             blockOperations = false;
-
-            // DEBUG STUFF
-            if (self.getParagraphCount() !== editdiv.children().size()) {
-                Utils.warn('Editor.applyOperation(): paragraph count invalid!');
-            }
         }
 
         // ==================================================================
