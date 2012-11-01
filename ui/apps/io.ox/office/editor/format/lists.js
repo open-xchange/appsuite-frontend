@@ -240,8 +240,10 @@ define('io.ox/office/editor/format/lists',
          */
         this.addList = function (listIdentifier, listdefinition) {
 
-            lists[listIdentifier] = {};
-            var list = lists[listIdentifier];
+            var newPosition = lists.length;
+            lists[newPosition] = {};
+            var list = lists[newPosition];
+            list.listIdentifier = listIdentifier;
             //list.listIdentifier = listIdentifier;
             list.listlevels = [];
             if (listdefinition) {
@@ -275,6 +277,28 @@ define('io.ox/office/editor/format/lists',
 
             return this;
         };
+        /**
+         * Remove an existing list
+         *
+         * @param {String} listIdentifier
+         *  The name of of the list to be removed.
+         *
+         * @returns {Lists}
+         *  A reference to this instance.
+         */
+        this.deleteList = function (listIdentifier) {
+            var index = 0;
+            for (; index < lists.length; ++index)
+                if (lists[index].listIdentifier === listIdentifier) {
+                    lists.splice(index, 1);
+                    if (defaultNumberingNumId === listIdentifier)
+                        defaultNumberingNumId = undefined;
+                    if (defaultBulletNumId === listIdentifier)
+                        defaultBulletNumId = undefined;
+                    break;
+                }
+            return this;
+        };
 
         /**
          * Gives access to a single list definition.
@@ -284,7 +308,14 @@ define('io.ox/office/editor/format/lists',
          *  A reference to this instance.
          */
         this.getList = function (name) {
-            return (name in lists) ? lists[name] : undefined;
+            var index = 0,
+                ret;
+            for (; index < lists.length; ++index)
+                if (lists[index].listIdentifier === name) {
+                    ret = lists[index];
+                    break;
+                }
+            return ret;
         };
 
         /**
@@ -314,10 +345,12 @@ define('io.ox/office/editor/format/lists',
          *
          */
         this.getDefaultListOperation = function (type, options) {
-            var freeId = 1;
-            for (;;++freeId) {
-                if (!(freeId in lists))
-                    break;
+            var index = 0,
+                freeId = lists.length;
+            for (; index < lists.length; ++index) {
+                if (lists[index].identifier >= freeId) {
+                    freeId = lists[index].identifier + 1;
+                }
             }
             var newOperation = { name: Operations.INSERT_LIST, listname: freeId };
             if (type === 'bullet') {

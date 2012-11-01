@@ -1039,12 +1039,14 @@ define('io.ox/office/editor/editor',
          */
         this.createDefaultList = function (type) {
             var defNumId = lists.getDefaultNumId(type);
-            if (defNumId === undefined) {
-                var listOperation = lists.getDefaultListOperation(type);
-                applyOperation(listOperation, true, true);
-                defNumId = listOperation.listname;
-            }
-            setAttributes('paragraph', { numId: defNumId, ilvl: 0});
+            undomgr.enterGroup(function () {
+                if (defNumId === undefined) {
+                    var listOperation = lists.getDefaultListOperation(type);
+                    applyOperation(listOperation, true, true);
+                    defNumId = listOperation.listname;
+                }
+                setAttributes('paragraph', { numId: defNumId, ilvl: 0});
+            });
         };
         this.createList = function (type, options) {
             var defNumId = (!options || (!options.symbol && !options.levelstart)) ? lists.getDefaultNumId(type) : undefined;
@@ -2120,11 +2122,16 @@ define('io.ox/office/editor/editor',
 
         operationHandlers[Operations.INSERT_LIST] = function (operation) {
             if (undomgr.isEnabled()) {
-                // TODO!!!
+                var undoOperation = { name: Operations.DELETE_LIST, listname: operation.listname };
+                undomgr.addUndo(undoOperation, operation);
             }
             implInsertList(operation.listname, operation.listdefinition);
         };
 
+        operationHandlers[Operations.DELETE_LIST] = function (operation) {
+            // no Undo, cannot be removed by UI
+            implDeleteList(operation.listname);
+        };
         operationHandlers[Operations.ATTRS_SET] = function (operation) {
             // undo/redo is done inside implSetAttributes()
             implSetAttributes(operation.start, operation.end, operation.attrs);
@@ -4180,7 +4187,9 @@ define('io.ox/office/editor/editor',
         function implInsertList(listname, listdefinition) {
             lists.addList(listname, listdefinition);
         }
-
+        function implDeleteList(listname) {
+            lists.deleteList(listname);
+        }
         /**
          * Returns the family of the attributes supported by the passed DOM
          * element.
