@@ -418,7 +418,7 @@ define("io.ox/mail/main",
         win.on("show", dropZone.include).on('hide', dropZone.remove);
 
         // go!
-        commons.addFolderSupport(app, grid, 'mail')
+        commons.addFolderSupport(app, grid, 'mail', options.folder)
             .pipe(commons.showWindow(win, grid));
     });
 

@@ -411,11 +411,15 @@ define('io.ox/files/icons/perspective',
 
                             var data = hash[cid],
                                 prev = indexPrevPosition(newIds, cid);
+
                             if (indexPrev(newIds, cid)) {
-                                iconview.find('.file-icon[data-cid="' + prev + '"]').after(drawIcon(data));
+                                if (iconview.find('.file-icon[data-cid="' + prev + '"]').length) {
+                                    iconview.find('.file-icon[data-cid="' + prev + '"]').after(drawIcon(data));
+                                } else {
+                                    iconview.find('.icon-container').prepend(drawIcon(data));
+                                }
                                 end = end + 1;
                             }
-
                         });
 
                         recalculateLayout();

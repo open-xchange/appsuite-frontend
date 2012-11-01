@@ -379,7 +379,7 @@ define('io.ox/core/commons',
             api.on('update:' + cid, update);
         }
 
-        return node.on('dispose', function () {
+        return node.one('dispose', function () {
                 if (_.isArray(data)) {
                     _.chain(data).map(_.cid).each(function (cid) {
                         api.off('delete:' + cid, redraw);

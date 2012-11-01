@@ -9,61 +9,99 @@
  * Mail: info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
+
 define('plugins/notifications/mail/register',
     ['io.ox/core/notifications',
      'io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/core/extensions',
-     'io.ox/core/config',
-     'dot!plugins/notifications/mail/template.html',
      'gettext!plugins/notifications'
-    ], function (notificationsController, mailApi, util, ext, config, tpl, gt) {
+    ], function (notifications, api, util, ext, gt) {
 
     'use strict';
 
-    var NotificationView = Backbone.View.extend({
-        events: {
-            'click .item': 'onClickItem'
-        },
-        _modelBinder: undefined,
-        initialize: function () {
-            this._modelBinder = new Backbone.ModelBinder();
-        },
-        render: function () {
-            var self = this;
-            self.$el.empty().append(tpl.render('plugins/notifications/mail/mailitem', {}));
-            self._modelBinder.bind(self.model, self.el, Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property'));
+    ext.point('io.ox/core/notifications/mail/header').extend({
+        draw: function () {
+            this.append(
+                $('<legend class="section-title">').text(gt('New Mails')),
+                $('<div class="notifications">'),
+                $('<div class="open-app">').append(
+                    $('<a href="#" data-action="open-app">').text(gt('Show Inbox'))
+                )
+            );
+        }
+    });
+
+    function drawItem(node, data) {
+        var f = data.from || [['', '']];
+        node.append(
+            $('<div class="item">').attr('data-cid', _.cid(data)).append(
+                $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
+                $('<div class="subject">').text(_.noI18n(data.subject)),
+                $('<div class="content">').html(_.noI18n(api.beautifyMailText(data.attachments[0].content)))
+            )
+        );
+    }
+
+    ext.point('io.ox/core/notifications/mail/item').extend({
+        draw: function (baton) {
+
+            var obj = _.extend(api.reduce(baton.model.toJSON()), { unseen: true, view: 'text' }),
+                node = this;
 
             // fetch plain text mail; don't use cache
-            var obj = _.extend(mailApi.reduce(self.model.toJSON()), { unseen: true, view: 'text' });
-            mailApi.get(obj, false)
-                .done(function (data) {
-                    var f = data.from || [['', '']];
-                    self.model.set({
-                        title: _.noI18n(util.getDisplayName(f[0])),
-                        subject: _.noI18n(data.subject),
-                        content: _.noI18n(mailApi.beautifyMailText(data.attachments[0].content)),
-                        data: data
-                    });
-                    self.$('.content').html(self.model.get('content'));
-                });
+            api.get(obj, false).done(function (data) {
+                drawItem(node, data);
+            });
+        }
+    });
+
+    var NotificationsView = Backbone.View.extend({
+
+        className: 'notifications',
+        id: 'io-ox-notifications-mail',
+        events: {
+            'click [data-action="open-app"]': 'openApp',
+            'click .item': 'openMail'
+        },
+
+        initialize: function () {
+            var self = this;
+            this.notificationviews = [];
+            this.model = new Backbone.Model({ unread: 0 });
+            this.collection.on('reset add remove', this.render, this);
+            api.on('unseen-mail', function (e, data) {
+                self.model.set('unread', _(data).size());
+            });
+        },
+
+        render: function () {
+
+            var i = 0, $i = Math.min(this.collection.size(), 3), baton;
+
+            baton = ext.Baton({ view: this });
+            ext.point('io.ox/core/notifications/mail/header').invoke('draw', this.$el.empty(), baton);
+
+            for (; i < $i; i++) {
+                baton = ext.Baton({ model: this.collection.at(i), view: this });
+                ext.point('io.ox/core/notifications/mail/item').invoke('draw', this.$('.notifications'), baton);
+            }
 
             return this;
-
         },
-        onClickItem: function (e) {
-            var obj = mailApi.reduce(this.model.get('data')),
-                overlay = $('#io-ox-notifications-overlay'),
-                sidepopup = overlay.prop('sidepopup'),
-                cid = overlay.find('[data-cid]').data('cid');
 
+        openMail: function (e) {
+            var cid = $(e.currentTarget).data('cid'),
+                overlay = $('#io-ox-notifications-overlay'),
+                sidepopup = overlay.prop('sidepopup');
             // toggle?
-            if (sidepopup && cid === _.cid(obj)) {
+            if (sidepopup && cid === overlay.find('[data-cid]').data('cid')) {
                 sidepopup.close();
             } else {
                 // fetch proper mail first
-                mailApi.get(obj).done(function (data) {
+                api.get(_.cid(cid)).done(function (data) {
                     require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
                         // open SidePopup without array
                         new dialogs.SidePopup({ arrow: false, side: 'right' })
@@ -75,66 +113,15 @@ define('plugins/notifications/mail/register',
                     });
                 });
             }
-        }
-    });
-
-    var NotificationsView = Backbone.View.extend({
-        className: 'notifications',
-        id: 'io-ox-notifications-mail',
-        events: {
-            'click [data-action="openApp"]': 'onOpenApp'
         },
-        _collectionBinder: undefined,
-        initialize: function () {
-            var self = this;
 
-            this.notificationviews = [];
-            this.model = new Backbone.Model({unread: 0});
-            //this.model.on('change:unread', _.bind(this.onChangeCount, this));
-            this.collection.on('reset', _.bind(this.render, this));
-            this.collection.on('add', _.bind(this.render, this));
-            this.collection.on('remove', _.bind(this.render, this));
-
-            mailApi.on('unseen-mail', function (e, data) {
-                self.model.set('unread', _(data).size());
-            });
-        },
-        render: function () {
-
-            this.$el.empty().append(tpl.render('plugins/notifications/mail/new-mails', { strings: {
-                NEW_MAILS: gt('New Mails'),
-                OPEN_APP: gt('Show Inbox')
-            }}));
-
-            for (var i = 0; i < this.collection.size() && i < 3; i++) {
-                this.notificationviews[i] = new NotificationView({ model: this.collection.at(i)});
-                this.$('.notifications').append(this.notificationviews[i].render().el);
-            }
-
-            return this;
-        },
-       /* onChangeCount: function () {
-            var unread = this.model.get('unread');
-            var $badge = this.$el.find('[data-property="unread"]');
-
-            $badge.text(unread);
-
-            if (unread > 0) {
-                $badge.addClass('badge-important');
-            } else {
-                $badge.removeClass('badge-important');
-            }
-        },*/
-        onOpenApp: function () {
-            var defaultInboxFolderId = config.get('modules.mail.defaultFolder.inbox');
-            notificationsController.hideList();
+        openApp: function (e) {
+            e.preventDefault();
+            notifications.hideList();
             ox.launch('io.ox/mail/main').done(function () {
-                this.folder.set(defaultInboxFolderId); // go to inbox
-            })
-            .fail(function () {
-                console.error('failed launching app', arguments);
+                // go to inbox
+                this.folder.set(api.getDefaultFolder());
             });
-
         }
     });
 
@@ -145,14 +132,14 @@ define('plugins/notifications/mail/register',
 
             var notifications = controller.get('io.ox/mail', NotificationsView);
 
-            mailApi.on('new-mail', function (e, mails) {
+            api.on('new-mail', function (e, mails) {
                 _(mails.reverse()).each(function (mail) {
-                    notifications.collection.unshift(new Backbone.Model(mail), {silent: true}); ///_(mails).clone());
+                    notifications.collection.unshift(new Backbone.Model(mail), { silent: true });
                 });
                 notifications.collection.trigger('reset');
             });
 
-            mailApi.checkInbox();
+            api.checkInbox();
         }
     });
 

@@ -53,8 +53,6 @@ define("io.ox/contacts/main",
     // launcher
     app.setLauncher(function (options) {
 
-        options = options || {};
-
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/contacts',
