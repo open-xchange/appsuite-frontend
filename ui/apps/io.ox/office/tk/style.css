@@ -421,7 +421,7 @@ div.io-ox-view-component {
                         overflow: visible;
                         padding: 1px;
                         border: 3px solid transparent;
-                        .border-radius(4px);
+                        .border-radius(5px);
 
                         &:hover { border-color: darken(@pane-fill-color, 5%); }
                         &:focus { border-color: darken(@pane-fill-color, 5%); }

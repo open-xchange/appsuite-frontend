@@ -496,6 +496,26 @@ define('io.ox/office/editor/operations',
             return this;
         };
 
+        this.generateOperationsForSelection = function (rootNode, selection) {
+
+            var // zero-based position of the current component
+                position = [0];
+
+            Position.iterateComponentsInSelection(rootNode, selection, function (node, nodePosition, length) {
+
+                if (DOM.isParagraphNode(node)) {
+                    this.generateParagraphOperations(node, position);
+                } else if (DOM.isTableNode(node)) {
+                    this.generateTableOperations(node, position);
+                } else {
+
+                }
+
+                position = increaseLastIndex(position);
+            });
+
+        };
+
     }; // class Operations.Generator
 
     // exports ================================================================

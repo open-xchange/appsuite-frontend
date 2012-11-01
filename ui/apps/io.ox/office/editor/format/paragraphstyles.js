@@ -64,36 +64,6 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         };
 
-    // global private functions ===============================================
-
-    /**
-     * Will be called for every paragraph whose character attributes have been
-     * changed.
-     *
-     * @param {jQuery} paragraph
-     *  The paragraph node whose attributes have been changed, as jQuery
-     *  object.
-     *
-     * @param {Object} attributes
-     *  A map of all attributes (name/value pairs), containing the
-     *  effective attribute values merged from style sheets and explicit
-     *  attributes.
-     */
-    function updateParagraphFormatting(paragraph, attributes) {
-
-        var // the character styles/formatter
-            characterStyles = this.getDocumentStyles().getStyleSheets('character');
-
-        // Always update character formatting of all child nodes which may
-        // depend on paragraph settings, e.g. automatic text color which
-        // depends on the paragraph fill color.
-        Utils.iterateDescendantNodes(paragraph, function (node) {
-            DOM.iterateTextSpans(node, function (span) {
-                characterStyles.updateElementFormatting(span);
-            });
-        }, undefined, { children: true });
-    }
-
     // class ParagraphStyles ==================================================
 
     /**
@@ -114,21 +84,43 @@ define('io.ox/office/editor/format/paragraphstyles',
      */
     function ParagraphStyles(rootNode, documentStyles) {
 
+        var // self reference
+            self = this;
+
+        // private methods ----------------------------------------------------
+
+        /**
+         * Will be called for every paragraph whose character attributes have
+         * been changed.
+         *
+         * @param {jQuery} paragraph
+         *  The paragraph node whose attributes have been changed, as jQuery
+         *  object.
+         *
+         * @param {Object} attributes
+         *  A map of all attributes (name/value pairs), containing the
+         *  effective attribute values merged from style sheets and explicit
+         *  attributes.
+         */
+        function updateParagraphFormatting(paragraph, attributes) {
+
+            var // the character styles/formatter
+                characterStyles = self.getDocumentStyles().getStyleSheets('character');
+
+            // Always update character formatting of all child nodes which may
+            // depend on paragraph settings, e.g. automatic text color which
+            // depends on the paragraph fill color. Also visit all helper nodes
+            // containing text spans, e.g. numbering labels.
+            Utils.iterateDescendantNodes(paragraph, function (node) {
+                DOM.iterateTextSpans(node, function (span) {
+                    characterStyles.updateElementFormatting(span);
+                });
+            }, undefined, { children: true });
+        }
+
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, documentStyles, 'paragraph', DOM.PARAGRAPH_NODE_SELECTOR, DEFINITIONS);
-
-        // methods ------------------------------------------------------------
-
-        /**
-         * Iterates over all paragraph elements covered by the passed DOM
-         * ranges for read-only access and calls the passed iterator function.
-         */
-        this.iterateReadOnly = function (ranges, iterator, context) {
-            // DOM.iterateAncestorNodesInRanges() passes the current element to
-            // the passed iterator function exactly as expected
-            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, DOM.PARAGRAPH_NODE_SELECTOR, iterator, context);
-        };
 
         // initialization -----------------------------------------------------
 

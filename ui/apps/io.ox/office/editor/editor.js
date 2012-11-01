@@ -478,11 +478,11 @@ define('io.ox/office/editor/editor',
                     // This deleting of images is only possible with the button, not with an key down event.
                     deleteSelectedObject(selection);
 
-                } else if (Position.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                } else if (Position.hasSameParentComponent(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
                     // Only one paragraph concerned from deletion.
                     this.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
 
-                } else if (Position.isSameParagraphLevel(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                } else if (Position.hasSameParentComponent(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition, 2)) {
                     // More than one paragraph concerned from deletion, but in same level in document or table cell.
                     deleteSelectedInSameParagraphLevel(selection);
 
@@ -1155,25 +1155,32 @@ define('io.ox/office/editor/editor',
             switch (family) {
 
             case 'character':
-                Position.iterateComponentsInSelection(editdiv, selection, function (node) {
+                Position.iterateTextComponentsInSelection(editdiv, selection, function (node) {
                     return DOM.iterateTextSpans(node, function (span) {
                         return mergeElementAttributes(characterStyles.getElementAttributes(span));
                     });
-                }, this, { allNodes: true });
-                return attributes;
+                }, this);
+                break;
 
             case 'paragraph':
-                return paragraphStyles.getAttributesInRanges(ranges);
+                Position.iterateContentNodesInSelection(editdiv, selection, function (paragraph) {
+                    return mergeElementAttributes(paragraphStyles.getElementAttributes(paragraph));
+                }, this);
+                break;
 
             case 'table':
-                return tableStyles.getAttributesInRanges(ranges);
+                attributes = tableStyles.getAttributesInRanges(ranges);
+                break;
 
             case 'image':
-                return imageStyles.getAttributesInRanges(ranges);
+                attributes = imageStyles.getAttributesInRanges(ranges);
+                break;
+
+            default:
+                Utils.error('Editor.getAttributes(): missing implementation for family "' + family + '"');
             }
 
-            Utils.error('Editor.getAttributes(): missing implementation for family "' + family + '"');
-            return {};
+            return attributes;
         };
 
         /**
@@ -3061,11 +3068,11 @@ define('io.ox/office/editor/editor',
                         // An image selection
                         setAttributesToSelectedImage(selection, attributes);
 
-                    } else if (Position.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                    } else if (Position.hasSameParentComponent(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
                         // Only one paragraph concerned from attribute changes.
                         setAttributes(family, attributes, selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
 
-                    } else if (Position.isSameParagraphLevel(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                    } else if (Position.hasSameParentComponent(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition, 2)) {
                         // The included paragraphs are neighbours.
                         setAttributesInSameParagraphLevel(selection, family, attributes);
 

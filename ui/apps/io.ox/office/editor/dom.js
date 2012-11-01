@@ -482,8 +482,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  Whether the passed node is a text portion span element.
      */
     DOM.isPortionSpan = function (node) {
-        node = $(node);
-        return node.is('span') && DOM.isParagraphNode(node.parent());
+        return DOM.isTextSpan(node) && DOM.isParagraphNode(Utils.getDomNode(node).parentNode);
     };
 
     /**
@@ -498,7 +497,16 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  Whether the passed node is a text node in a portion span element.
      */
     DOM.isTextNodeInPortionSpan = function (node) {
+        node = node && Utils.getDomNode(node);
         return node && (node.nodeType === 3) && DOM.isPortionSpan(node.parentNode);
+    };
+
+    DOM.findFirstPortionSpan = function (paragraph) {
+        return Utils.findDescendantNode(paragraph, function () { return DOM.isTextSpan(this); }, { children: true });
+    };
+
+    DOM.findLastPortionSpan = function (paragraph) {
+        return Utils.findDescendantNode(paragraph, function () { return DOM.isTextSpan(this); }, { children: true, reverse: true });
     };
 
     /**

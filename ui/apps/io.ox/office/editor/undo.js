@@ -14,24 +14,11 @@
 
 define('io.ox/office/editor/undo',
     ['io.ox/office/tk/utils',
+     'io.ox/office/editor/position',
      'io.ox/office/editor/operations'
-    ], function (Utils, Operations) {
+    ], function (Utils, Position, Operations) {
 
     'use strict';
-
-    // private global functions ===============================================
-
-    function isSameParagraph(pos1, pos2) {
-        if (pos1.length !== pos2.length)
-            return false;
-        if (pos1.length < 2)
-            return false;
-        var n = pos1.length - 2;
-        for (var i = 0; i <= n; i++)
-            if (pos1[n] !== pos2[n])
-                return false;
-        return true;
-    }
 
     // class Action ===========================================================
 
@@ -96,7 +83,7 @@ define('io.ox/office/editor/undo',
             lastIndex = 0;
 
         // check that the operations are valid for merging the actions
-        if (validActions && (nextRedo.text.length === 1) && isSameParagraph(thisRedo.start, nextRedo.start)) {
+        if (validActions && (nextRedo.text.length === 1) && Position.hasSameParentComponent(thisRedo.start, nextRedo.start)) {
 
             lastIndex = thisRedo.start.length - 1;
 

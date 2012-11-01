@@ -238,11 +238,11 @@ define('io.ox/office/editor/view/view',
             .addButton('character/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
             .addButton('character/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
             .addSeparator()
-            .addGroup('character/fillcolor', new Controls.ColorChooser(editor, 'fill', { tooltip: gt('Text fill color'), label: 'ab' }))
+            .addGroup('character/fillcolor', new Controls.ColorChooser(editor, 'fill', { tooltip: gt('Text Fill Color'), label: 'ab' }))
             .addSeparator()
             .addGroup('character/color', new Controls.ColorChooser(editor, 'text', { tooltip: gt('Text Color'), label: 'A' }))
             .addSeparator()
-            .addRadioGroup('paragraph/alignment', { icon: 'icon-align-left', tooltip: gt('Paragraph Alignment'), auto: true, highlight: true, updateCaptionMode: 'icon' })
+            .addRadioGroup('paragraph/alignment', { icon: 'icon-io-ox-align-left', tooltip: gt('Paragraph Alignment'), auto: true, highlight: true, updateCaptionMode: 'icon' })
                 .addOptionButton('left',    { icon: 'icon-io-ox-align-left',    tooltip: gt('Left') })
                 .addOptionButton('center',  { icon: 'icon-io-ox-align-center',  tooltip: gt('Center') })
                 .addOptionButton('right',   { icon: 'icon-io-ox-align-right',   tooltip: gt('Right') })
@@ -259,8 +259,8 @@ define('io.ox/office/editor/view/view',
             .addSeparator()
             .addButton('list/bullets', { icon: 'icon-io-ox-bullets', tooltip: gt('Bullets On/Off'), toggle: true })
             .addButton('list/numbering', { icon: 'icon-io-ox-numbering', tooltip: gt('Numbering On/Off'), toggle: true })
-            .addButton('list/decindent', { icon: 'icon-io-ox-num-dec-indent', tooltip: gt('Demote one level'), toggle: false })
-            .addButton('list/incindent', { icon: 'icon-io-ox-num-inc-indent', tooltip: gt('Promote one level'), toggle: false });
+            .addButton('list/decindent', { icon: 'icon-io-ox-num-dec-indent', tooltip: gt('Demote One Level'), toggle: false })
+            .addButton('list/incindent', { icon: 'icon-io-ox-num-inc-indent', tooltip: gt('Promote One Level'), toggle: false });
 
         createToolBar('table', { label: gt('Table') })
             .addGroup('table/insert', new Controls.TableSizeChooser())

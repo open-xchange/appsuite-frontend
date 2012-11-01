@@ -30,6 +30,10 @@ define('io.ox/office/editor/oxoselection',
 
         // methods ------------------------------------------------------------
 
+        this.isTextCursor = function () {
+            return !this.isCellSelection() && _.isEqual(this.startPaM.oxoPosition, this.endPaM.oxoPosition);
+        };
+
         this.hasRange = function () {
             return !_.isEqual(this.startPaM.oxoPosition, this.endPaM.oxoPosition);
         };
