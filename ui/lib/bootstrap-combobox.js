@@ -150,7 +150,8 @@ $(document).ready(function () {
             var val = this.$menu.find('.active').attr('data-value');
             if (val) {
                 this.$element.val(val);
-                this.$element.trigger('change blur');
+                this.$element.trigger('change');
+                this.$element.trigger('blur');
             }
             return this.hide();
         },
