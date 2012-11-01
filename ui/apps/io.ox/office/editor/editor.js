@@ -234,10 +234,43 @@ define('io.ox/office/editor/editor',
 
             var oxoSelection = getSelection(),
                 range,
-                clipboard = $('<div>', { contenteditable: true }).addClass('io-ox-office-clipboard user-select-text')
-            ;
+                clipboard,
+                items = event && event.originalEvent && event.originalEvent.clipboardData && event.originalEvent.clipboardData.items,
+                reader,
+                eventHasImageData = false;
 
-            // append clipboard div to the body and place the cursor into it
+            // handles the result of reading file data from the file blob received from the clipboard data api
+            function onLoadHandler(evt) {
+                var data = evt && evt.target && evt.target.result;
+
+                if (data) {
+                    createOperationsFromTextClipboard([{operation: Operations.IMAGE_INSERT, data: data, depth: 0}], oxoSelection);
+                }
+            }
+
+            // Chrome doesn't paste images into a (content editable) div, but supports a clipboard data api
+            // check if the event has clipboardData with images
+            _.each(items, function (item) {
+                // look for image items
+                if (item.type.indexOf('image') !== -1) {
+                    var file = item.getAsFile();
+                    eventHasImageData = true;
+
+                    reader = new FileReader();
+                    reader.onload = onLoadHandler;
+                    reader.readAsDataURL(file);
+                }
+            }, self);
+
+            // if the image data could be read from the event data, don't paste into the clipboard div
+            if (eventHasImageData) {
+                // prevent default paste handling of the browser
+                event.preventDefault();
+                return;
+            }
+
+            // append the clipboard div to the body and place the cursor into it
+            clipboard = $('<div>', { contenteditable: true }).addClass('io-ox-office-clipboard user-select-text');
             $('body').append(clipboard);
             clipboard.focus();
             range = DOM.Range.createRange(clipboard, 0);
@@ -253,7 +286,7 @@ define('io.ox/office/editor/editor',
 
                 createOperationsFromTextClipboard(clipboardData, oxoSelection);
 
-            }, 100, clipboard, oxoSelection);
+            }, 0, clipboard, oxoSelection);
         };
 
         // ==================================================================
@@ -994,6 +1027,22 @@ define('io.ox/office/editor/editor',
                     name: Operations.IMAGE_INSERT,
                     position: _.copy(selection.startPaM.oxoPosition),
                     imgurl: imageURL
+                };
+
+            applyOperation(newOperation, true, true);
+
+            sendImageSize(_.copy(selection.startPaM.oxoPosition));
+
+            // setting the cursor position
+            setSelection(new OXOSelection(lastOperationEnd));
+        };
+
+        this.insertImageData = function (imageData) {
+            var selection = getSelection(),
+                newOperation = {
+                    name: Operations.IMAGE_INSERT,
+                    position: _.copy(selection.startPaM.oxoPosition),
+                    imgdata: imageData
                 };
 
             applyOperation(newOperation, true, true);
@@ -1935,17 +1984,18 @@ define('io.ox/office/editor/editor',
                 for (var i = 0; i < current.childNodes.length; i++) {
                     var child = current.childNodes[i];
                     if (child.nodeType === 3) {
-                        // text node with non-whitespace character
+                        // drop text nodes containing only non-whitespace characters
                         if (/\S/.test(child.nodeValue)) {
+                            // replace '\r' and '\n' with space to fix pastes from aoo
                             var splitted, text = child.nodeValue.replace(/[\r\n]/g, ' ');
-                            splitted = text.split('\t');
+                            splitted = text.match(/[^\t]+|\t/g);
                             for (var j = 0; j < splitted.length; j++) {
-                                if (splitted[j].length) {
+                                if (splitted[j] === '\t') {
+                                    // tab
+                                    result.push({operation: Operations.TAB_INSERT, depth: depth});
+                                } else {
                                     // text
                                     result.push({operation: Operations.TEXT_INSERT, data: splitted[j], depth: depth});
-                                } else {
-                                    // tab
-                                    result.push({operation: Operations.TAB_INSERT});
                                 }
                             }
                         }
@@ -1953,6 +2003,8 @@ define('io.ox/office/editor/editor',
                         // insert paragraph for p, div and br, create only one paragraph if br is nested inside a div
                         if ($(child).is('p, div') || $(child).is('br') && (!$(child.parentNode).is('div') || $(child.parentNode).hasClass('io-ox-office-clipboard'))) {
                             result.push({operation: Operations.PARA_INSERT, depth: depth});
+                        } else if ($(child).is('img')) {
+                            result.push({operation: Operations.IMAGE_INSERT, data: child.src, depth: depth});
                         }
 
                         findTextNodes(child, depth + 1);
@@ -1995,16 +2047,34 @@ define('io.ox/office/editor/editor',
                         selection.startPaM.oxoPosition[lastPos - 1] ++;
                         selection.startPaM.oxoPosition[lastPos] = 0;
                         selection.endPaM = _.copy(selection.startPaM, true);
+                        setSelection(selection);
                         break;
 
                     case Operations.TEXT_INSERT:
                         self.insertText(entry.data, selection.startPaM.oxoPosition);
                         selection.startPaM.oxoPosition[lastPos] += entry.data.length;
                         selection.endPaM = _.copy(selection.startPaM, true);
+                        setSelection(selection);
                         break;
 
-                    case 'insertTab' /* Operations.TAB_INSERT */:
-                        // TODO
+                    case Operations.TAB_INSERT:
+                        self.insertTab();
+                        selection = getSelection();
+                        break;
+
+                    case Operations.IMAGE_INSERT:
+                        if (_.isString(entry.data)) {
+                            if (entry.data.substring(0, 10) === 'data:image') {
+                                // base64 image data
+                                self.insertImageData(entry.data);
+                            } else {
+                                // image url
+                                self.insertImageURL(entry.data);
+                            }
+                            selection.startPaM.oxoPosition[lastPos] ++;
+                            selection.endPaM = _.copy(selection.startPaM, true);
+                            setSelection(selection);
+                        }
                         break;
 
                     default:
@@ -2015,8 +2085,6 @@ define('io.ox/office/editor/editor',
                 }, self);
 
             }); // undomgr.enterGroup
-
-            setSelection(selection);
         }
 
 
@@ -2339,7 +2407,7 @@ define('io.ox/office/editor/editor',
         };
 
         operationHandlers[Operations.IMAGE_INSERT] = function (operation) {
-            if (implInsertImage(operation.imgurl, operation.position, operation.attrs)) {
+            if (implInsertImage(operation.imgurl, operation.imgdata, operation.position, operation.attrs)) {
                 if (undomgr.isEnabled()) {
                     var undoOperation = { name: Operations.TEXT_DELETE, start: operation.position, end: operation.position };
                     undomgr.addUndo(undoOperation, operation);
@@ -4073,11 +4141,12 @@ define('io.ox/office/editor/editor',
             return true;
         }
 
-        function implInsertImage(url, position, attributes) {
+        function implInsertImage(url, data, position, attributes) {
 
             var domPos = Position.getDOMPosition(editdiv, position),
                 node = (domPos && domPos.node) ? domPos.node.parentNode : null,
                 absUrl = /:\/\//.test(url) ? url : getDocumentUrl({ get_filename: url }),
+                imgSrc = data && data.length ? data : absUrl,
                 image = null;
 
             // check position
@@ -4094,7 +4163,7 @@ define('io.ox/office/editor/editor',
             image = $('<div>', { contenteditable: false })
                 .addClass('object inline')
                 .data('url', url)
-                .append($('<div>').addClass('content').append($('<img>', { src: absUrl })))
+                .append($('<div>').addClass('content').append($('<img>', { src: imgSrc })))
                 .insertBefore(node);
 
             // apply the passed image attributes
@@ -5279,7 +5348,7 @@ define('io.ox/office/editor/editor',
             .on('mousedown', processMouseDown)
             .on('mouseup', processMouseUp)
             .on('dragstart dragover drop contextmenu cut', false)
-            .on('paste', this.paste);
+            .on('paste', _.bind(this.paste, this));
 
     } // class Editor
 

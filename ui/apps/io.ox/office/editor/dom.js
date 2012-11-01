@@ -1259,7 +1259,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 selection.extend(ranges[0].end.node, ranges[0].end.offset);
                 return;
             } catch (ex) {
-                Utils.warn('DOM.setBrowserSelection(): failed to collapse/expand range to selection');
+                Utils.warn('DOM.setBrowserSelection(): failed to collapse/expand range to selection: ' + ex);
                 // retry with regular code below
                 selection.removeAllRanges();
             }
