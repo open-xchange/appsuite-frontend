@@ -1982,7 +1982,9 @@ define('io.ox/office/editor/editor',
             (function findTextNodes(current, depth) {
 
                 for (var i = 0; i < current.childNodes.length; i++) {
-                    var child = current.childNodes[i];
+                    var child = current.childNodes[i],
+                        nextLevel = true;
+
                     if (child.nodeType === 3) {
                         // drop text nodes containing only non-whitespace characters
                         if (/\S/.test(child.nodeValue)) {
@@ -2005,9 +2007,13 @@ define('io.ox/office/editor/editor',
                             result.push({operation: Operations.PARA_INSERT, depth: depth});
                         } else if ($(child).is('img')) {
                             result.push({operation: Operations.IMAGE_INSERT, data: child.src, depth: depth});
+                        } else if ($(child).is('style')) {
+                            nextLevel = false;
                         }
 
-                        findTextNodes(child, depth + 1);
+                        if (nextLevel) {
+                            findTextNodes(child, depth + 1);
+                        }
                     }
                 }
             } (clipboard.get(0), 0));
