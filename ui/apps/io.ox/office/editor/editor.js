@@ -1764,7 +1764,7 @@ define('io.ox/office/editor/editor',
                 var paragraph = Position.getLastNodeFromPositionByNodeName(editdiv, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR);
                 if (!selection.hasRange() &&
                         selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] === Position.getFirstTextNodePositionInParagraph(paragraph)) {
-                    var ilvl = self.getAttributes('paragraph').ilvl;
+                    var ilvl = paragraphStyles.getElementAttributes(paragraph).ilvl;
                     if (ilvl !== -1) {
                         if (!event.shiftKey && ilvl < 8) {
                             ilvl += 1;
@@ -1852,33 +1852,35 @@ define('io.ox/office/editor/editor',
                         selection.startPaM.oxoPosition = [0, 0];
                     } else {
                         // demote or end numbering instead of creating a new paragraph
-                        var ilvl = self.getAttributes('paragraph').ilvl;
+                        var // the paragraph element addressed by the
+                            // passed logical position
+                            paragraph = Position.getLastNodeFromPositionByNodeName(editdiv, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR);
+                        var ilvl = paragraphStyles.getElementAttributes(paragraph).ilvl;
+                        var split = true;
                         var paragraphLength = Position.getParagraphLength(editdiv, selection.startPaM.oxoPosition);
                         if (!hasSelection && ilvl >= 0 && paragraphLength === 0) {
                             ilvl--;
                             self.setAttribute('paragraph', 'ilvl', ilvl);
+                            split = false;
                         }
-                        else {
-                            var numAutoCorrect = {};
-                            if (!hasSelection && ilvl < 0 && paragraphLength > 3) {
-                                // detect Numbering/Bullet labels at paragraph
-                                // start
-                                var // the paragraph element addressed by the
-                                    // passed logical position
-                                paragraph = Position.getLastNodeFromPositionByNodeName(editdiv, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR);
+                        var numAutoCorrect = {};
+                        if (!hasSelection && ilvl < 0 && paragraphLength > 3) {
+                            // detect Numbering/Bullet labels at paragraph
+                            // start
 
-                                if (paragraph !== undefined) {
-                                    var paraText = paragraph.textContent,
-                                    labelText = paraText.split(' ')[0];
-                                    numAutoCorrect.listDetection = lists.detectListSymbol(labelText);
-                                    if (numAutoCorrect.listDetection.numberformat !== undefined) {
-                                        numAutoCorrect.startPosition = _.copy(selection.startPaM.oxoPosition, true);
-                                        numAutoCorrect.startPosition[numAutoCorrect.startPosition.length - 1] = 0;
-                                        numAutoCorrect.endPosition = _.copy(selection.endPaM.oxoPosition, true);
-                                        numAutoCorrect.endPosition[numAutoCorrect.endPosition.length - 1] = labelText.length + 1;
-                                    }
+                            if (paragraph !== undefined) {
+                                var paraText = paragraph.textContent,
+                                labelText = paraText.split(' ')[0];
+                                numAutoCorrect.listDetection = lists.detectListSymbol(labelText);
+                                if (numAutoCorrect.listDetection.numberformat !== undefined) {
+                                    numAutoCorrect.startPosition = _.copy(selection.startPaM.oxoPosition, true);
+                                    numAutoCorrect.startPosition[numAutoCorrect.startPosition.length - 1] = 0;
+                                    numAutoCorrect.endPosition = _.copy(selection.endPaM.oxoPosition, true);
+                                    numAutoCorrect.endPosition[numAutoCorrect.endPosition.length - 1] = labelText.length + 1;
                                 }
                             }
+                        }
+                        if (split === true) {
                             self.splitParagraph(startPosition);
                             // now apply 'AutoCorrection'
                             if (numAutoCorrect.listDetection && numAutoCorrect.listDetection.numberformat !== undefined) {
@@ -3994,7 +3996,7 @@ define('io.ox/office/editor/editor',
             var domPos = Position.getDOMPosition(editdiv, position),
                 node = (domPos && domPos.node) ? domPos.node.parentNode : null,
                 tabSpan = null;
-            
+
             // check position
             if (!DOM.isPortionSpan(node)) {
                 Utils.warn('Editor.implInsertTab(): expecting text position to insert tab.');
