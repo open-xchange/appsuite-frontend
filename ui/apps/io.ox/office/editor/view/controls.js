@@ -251,49 +251,11 @@ define('io.ox/office/editor/view/controls',
             });
         }
 
-        /**
-         * Will be called after a new list item has been activated.
-         *
-         * @param {jQuery} button
-         *  The DOM button element representing the activated list item. If no
-         *  list item is active (ambiguous state), this object will be an empty
-         *  jQuery collection.
-         *
-         *  @param {String} value
-         *  The activated/selected color value.
-         */
-        function updateCaptionHandler(button, value) {
-
-            var theme = themes.getTheme(),
-                menuButton = self.getMenuButton(),
-                updateOptions = { label: Utils.getStringOption(options, 'label') },
-                labelCss = { fontWeight: 'bold' }, rgbColor, color = value;
-
-            if (context === 'text') {
-                rgbColor = color ? Color.getCssColor(color, context, theme) : Color.getCssColor(Color.BLACK);
-                if (rgbColor === 'transparent')
-                    rgbColor = Color.getCssColor(Color.BLACK);
-                labelCss.color = rgbColor;
-            }
-            else if (context === 'fill') {
-                rgbColor = color ? Color.getCssColor(color, context, theme) : 'transparent';
-                if (rgbColor === 'transparent')
-                    labelCss.color = Color.getCssColor(Color.BLACK);
-                else
-                    labelCss.color = Color.isDark(rgbColor) ? Color.getCssColor(Color.WHITE) : Color.getCssColor(Color.BLACK);
-                labelCss.backgroundColor = rgbColor;
-            }
-            updateOptions.labelCss = labelCss;
-            Utils.setControlCaption(menuButton, updateOptions);
-        }
-
         // base constructor ---------------------------------------------------
 
         ColorChooser.call(this, Utils.extendOptions(options, {
-            labelCss: { fontWeight: 'bold' },
             columns: 10,
-            cssColorResolver: resolveCssColor,
-            updateCaptionHandler: updateCaptionHandler
+            cssColorResolver: resolveCssColor
         }));
 
         // initialization -----------------------------------------------------

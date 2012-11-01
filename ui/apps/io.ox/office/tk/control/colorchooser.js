@@ -46,15 +46,6 @@ define('io.ox/office/tk/control/colorchooser',
      *      button. If omitted, the values associated to the color buttons MUST
      *      be valid CSS colors (strings). Receives the value associated to a
      *      color button. Will be called in the context of this group instance.
-     *  @param {Function} [options.updateCaptionHandler]
-     *      A function that will be called after a color button has been
-     *      activated, or if the control will be updated via its update
-     *      handler. Receives the activated button element (as jQuery object)
-     *      in the first parameter (empty jQuery object, if no color button is
-     *      active), and the value of the selected/activated color button in
-     *      the second parameter (also if this value originates from the update
-     *      handler but does not correspond to any existing color button). Will
-     *      be called in the context of this group instance.
      */
     function ColorChooser(options) {
 
@@ -64,14 +55,14 @@ define('io.ox/office/tk/control/colorchooser',
             // the drop-down menu container element
             colorTable = $('<div>'),
 
+            // the color box in the drop-down button
+            colorBox = $('<div>'),
+
             // number of color buttons per table row
             columns = Utils.getIntegerOption(options, 'columns', 10, 1),
 
             // converts color button values to CSS color strings
-            cssColorResolver = Utils.getFunctionOption(options, 'cssColorResolver', _.identity),
-
-            // custom update handler for the caption of the menu button
-            updateCaptionHandler = Utils.getFunctionOption(options, 'updateCaptionHandler');
+            cssColorResolver = Utils.getFunctionOption(options, 'cssColorResolver', _.identity);
 
         // private methods ----------------------------------------------------
 
@@ -106,13 +97,14 @@ define('io.ox/office/tk/control/colorchooser',
          */
         function updateHandler(value) {
 
-            var // activate a color button
-                button = Utils.selectOptionButton(getColorButtons(), value);
+            var // current color, as CSS value
+                cssColor = (_.isNull(value) || _.isUndefined(value)) ? 'transparent' : cssColorResolver.call(this, value);
 
-            // call custom update handler
-            if (_.isFunction(updateCaptionHandler)) {
-                updateCaptionHandler.call(self, button, value);
-            }
+            // activate a color button
+            Utils.selectOptionButton(getColorButtons(), value);
+
+            // set color to the color box in the menu button
+            colorBox.css('background-color', cssColor);
         }
 
         /**
@@ -276,6 +268,16 @@ define('io.ox/office/tk/control/colorchooser',
 
         // initialize the drop-down element
         this.getMenuNode().addClass('color-table');
+
+        // add the color box to the menu button
+        this.getMenuButton().append(colorBox.css({
+            position: 'absolute',
+            bottom: '2px',
+            height: '3px',
+            left: '6px',
+            right: '6px',
+            border: '1px solid rgba(0, 0, 0, 0.2)'
+        }));
 
         // register event handlers
         colorTable.on('keydown keypress keyup', menuKeyHandler);
