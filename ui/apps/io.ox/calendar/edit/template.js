@@ -213,6 +213,13 @@ define('io.ox/calendar/edit/template',
         index: 600
     }));
 
+    point.extend(new RecurrenceView({
+        id: 'recurrence',
+        className: 'span12',
+        index: 650
+    }));
+
+
     // note
     point.extend(new forms.InputField({
         id: 'note',
@@ -324,20 +331,6 @@ define('io.ox/calendar/edit/template',
     }), {
         nextTo: 'shown_as'
     });
-
-    // recurrence
-    point.extend(new forms.SectionLegend({
-        id: 'recurrence_legend',
-        className: 'span12',
-        label: gt('Recurrence'),
-        index: 1100
-    }));
-
-    point.extend(new RecurrenceView({
-        id: 'recurrence',
-        className: 'span12',
-        index: 1200
-    }));
 
     // participants label
     point.extend(new forms.SectionLegend({

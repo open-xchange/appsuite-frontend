@@ -20,11 +20,13 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             self[attribute] = 0;
             $anchor.text(options.values[self.value]);
 
-            $anchor.on("click", function () {
+            $anchor.on("click", function (e) {
+                e.preventDefault();
                 var newValue = (self.value === 0) ? 1 : 0;
                 self[attribute] = newValue;
                 self.trigger("change", self);
                 self.trigger("change:" + attribute, self);
+
             });
 
             function drawState() {
@@ -49,7 +51,8 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
                 self.trigger("redraw", self);
             }
 
-            $anchor.on('click', function () {
+            $anchor.on('click', function (e) {
+                e.preventDefault();
                 var $numberInput = $('<input type="text">').css({
                     width: '1em',
                     marginBottom: 0
@@ -69,7 +72,6 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
 
                 // TODO: Allow only number entries
 
-                // On change
                 function updateValue() {
                     var value = parseInt($numberInput.val(), 10);
                     if (!isNaN(value)) {
@@ -89,7 +91,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
                 });
 
                 // Enter
-                $numberInput.on("enter", function () {
+                keys.on("enter", function () {
                     updateValue();
                 });
 
@@ -131,7 +133,8 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             _(options.options).each(function (label, value) {
                 $menu.append(
                     $('<li>').append(
-                        $('<a href="#">').text(label).on("click", function () {
+                        $('<a href="#">').text(label).on("click", function (e) {
+                            e.preventDefault();
                             self[attribute] = value;
                             self.trigger("change", self);
                             self.trigger("change:" + attribute, self);

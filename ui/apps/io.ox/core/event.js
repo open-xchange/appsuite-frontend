@@ -66,6 +66,10 @@ define('io.ox/core/event', function () {
 
         // destroy event hub
         this.destroy = function () {
+            if (!hub) {
+                // Called twice?
+                return;
+            }
             hub.off();
             if (context) {
                 try {

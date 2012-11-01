@@ -22,7 +22,8 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             var $row;
 
             function clickHandler(i) {
-                return function () {
+                return function (e) {
+                    e.preventDefault();
                     self[attribute] = i;
                     $anchor.popover("hide");
                     self.trigger("change", self);
@@ -57,6 +58,8 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     return $dayPicker;
                 }
             });
+
+            $anchor.on('click', function (e) { e.preventDefault(); });
 
             drawState();
 
@@ -124,6 +127,10 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 }
             });
 
+            $anchor.on("click", function (e) {
+                e.preventDefault();
+            });
+
             drawState();
 
             this.on("change:" + attribute, drawState);
@@ -155,7 +162,9 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 self.trigger("redraw", self);
             }
 
-            $anchor.on('click', function () {
+            $anchor.on('click', function (e) {
+                console.log("prevendDefault");
+                e.preventDefault();
                 var $dateInput = $('<input type="text" class="input-small no-clone">').css({
                     marginBottom: 0
                 }).val(renderDate());
@@ -442,7 +451,8 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     }
                 });
 
-                this.controls.detailToggle.on('click', function () {
+                this.controls.detailToggle.on('click', function (e) {
+                    e.preventDefault();
                     if (self.more) {
                         self.showLess();
                     } else {
@@ -626,14 +636,14 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     if (this.controls.typeRadios.daily.is(":checked")) {
                         var daily =  {
                             recurrence_type: RECURRENCE_TYPES.DAILY,
-                            interval: this.choice.interval
+                            interval: this.sentences.daily.interval
                         };
                         this.model.set(daily);
                     } else if (this.controls.typeRadios.weekly.is(":checked")) {
                         var weekly =  {
                             recurrence_type: RECURRENCE_TYPES.WEEKLY,
-                            interval: this.choice.interval,
-                            days: this.choice.days
+                            interval: this.sentences.weekly.interval,
+                            days: this.sentences.weekly.days
                         };
                         this.model.set(weekly);
                     } else if (this.controls.typeRadios.monthly.is(":checked")) {
@@ -698,7 +708,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     // No Recurrence
                     this.model.set({recurrence_type: RECURRENCE_TYPES.NO_RECURRENCE});
                 }
-                this.magicStartDate();
+                
                 this.updatingModel = false;
 
                 this.modelChanged();
