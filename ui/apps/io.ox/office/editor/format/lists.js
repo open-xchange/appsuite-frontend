@@ -215,6 +215,7 @@ define('io.ox/office/editor/format/lists',
                 }
                 else if (levelformat.numberformat === 'bullet') {
                     leveltext = replacetext;
+                    ret.color = levelformat.color;
                     break;
                 }
                 else
@@ -418,10 +419,8 @@ define('io.ox/office/editor/format/lists',
                 return "??";
             }
             var format = formatNumberType(levelIndexes, ilvl, currentList);
-            ret.text = format.text;
-            ret.imgsrc = format.imgsrc;
+            _.extend(ret, format);
             ret.indent = levelFormat.leftindent - (levelFormat.hangingindent ? levelFormat.hangingindent : 0);
-            //+ levelFormat.firstlineindent
             ret.labelWidth = (levelFormat.hangingindent ? levelFormat.hangingindent : 0);
             return ret;
         };

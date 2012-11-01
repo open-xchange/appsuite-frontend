@@ -30,9 +30,10 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/format/characterstyles',
      'io.ox/office/editor/format/documentstyles',
      'io.ox/office/editor/format/lineheight',
+     'io.ox/office/editor/format/color',
      'io.ox/office/tk/alert',
      'gettext!io.ox/office/main'
-    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Operations, Position, UndoManager, StyleSheets, CharacterStyles, DocumentStyles, LineHeight, Alert, gt) {
+    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Operations, Position, UndoManager, StyleSheets, CharacterStyles, DocumentStyles, LineHeight, Color, Alert, gt) {
 
     'use strict';
 
@@ -5235,7 +5236,11 @@ define('io.ox/office/editor/editor',
                                     numberingElement.prepend(image);
 
                                 }
-                                numberingElement.children('span').css('font-size', charAttributes.fontsize + 'pt');
+                                var listSpan = numberingElement.children('span');
+                                listSpan.css('font-size', charAttributes.fontsize + 'pt');
+                                if (listObject.color) {
+                                    Color.setElementTextColor(listSpan, documentStyles.getCurrentTheme(), listObject, paraAttributes);
+                                }
                                 LineHeight.updateElementLineHeight(numberingElement, paraAttributes.lineheight);
                                 if (listObject.indent > 0) {
                                     $(para).css('margin-left', Utils.convertHmmToLength(listObject.indent, 'pt'));
