@@ -5217,6 +5217,8 @@ define('io.ox/office/editor/editor',
                                 var listObject = lists.formatNumber(paraAttributes.numId, ilvl,
                                         listItemCounter[paraAttributes.numId]);
                                 var numberingElement = DOM.createListLabelNode(listObject.text);
+
+                                var span = Utils.findDescendantNode(para, function () { return DOM.isPortionSpan(this); });
                                 var charAttributes = characterStyles.getElementAttributes(span);
                                 if (listObject.imgsrc) {
                                     var absUrl = getDocumentUrl({ get_filename: listObject.imgsrc });
@@ -5233,8 +5235,7 @@ define('io.ox/office/editor/editor',
                                     numberingElement.prepend(image);
 
                                 }
-                                var span = Utils.findDescendantNode(para, function () { return DOM.isPortionSpan(this); });
-                                numberingElement.css('font-size', charAttributes.fontsize + 'pt');
+                                numberingElement.children('span').css('font-size', charAttributes.fontsize + 'pt');
                                 LineHeight.updateElementLineHeight(numberingElement, paraAttributes.lineheight);
                                 if (listObject.indent > 0) {
                                     $(para).css('margin-left', Utils.convertHmmToLength(listObject.indent, 'pt'));
