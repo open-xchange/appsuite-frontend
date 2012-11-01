@@ -2921,12 +2921,12 @@ define('io.ox/office/editor/editor',
         /**
          * Private helper function to update all tabs inside a paragraph. This
          * function uses both the default tab size and existing paragraph tab
-         * stop definitions.
-         * Currently only left aligned tabs without character filling are
-         * supported!
+         * stop definitions. Tab fill characters are also supported.
+         *
+         * Currently only left aligned tabs are supported!
          *
          * @param {HTMLElement|jQuery} paragraph
-         *  The paragraph element to be validated. If this object is a jQuery
+         *  The paragraph element to be adjusted. If this object is a jQuery
          *  collection, uses the first DOM node it contains.
          */
         function adjustTabsOfParagraph(paragraph) {
@@ -2953,12 +2953,32 @@ define('io.ox/office/editor/editor',
                     var leftHMM = Utils.convertLengthToHmm(pos.left, "px"),
                         width = 0;
 
-                    // paragraph tab stops
+                    // Paragraph tab stops. Only paragraph tab stop can have a leader and
+                    // define a new alignment
                     if (paraTabstops && paraTabstops.length > 0) {
                         var tabstop = _.find(paraTabstops, function (tab) { return (leftHMM + 1) < tab.pos; });
                         if (tabstop) {
                             // tabsize calculation based on the paragraph defined tabstop
                             width = Math.max(0, tabstop.pos - (leftHMM % tabstop.pos));
+                            if (tabstop.leader) {
+                                var tabSpan = tabNode.firstChild;
+                                if (tabSpan) {
+                                    var fillChar = null;
+                                    switch (tabstop.leader) {
+                                    case 'dot':
+                                        fillChar = '.';
+                                        break;
+                                    case 'hyphen':
+                                        fillChar = '-';
+                                        break;
+                                    case 'underscore':
+                                        fillChar = '_';
+                                        break;
+                                    }
+                                    if (fillChar)
+                                        $(tabSpan).text(createTabFillCharString(tabSpan, width, fillChar));
+                                }
+                            }
                         }
                     }
 
@@ -2968,9 +2988,35 @@ define('io.ox/office/editor/editor',
                         width = (width <= 1) ? defaultTabstop : width; // no 0 tab size allowed, check for <= 1 to prevent rounding errors
                     }
                     $(tabNode).css('width', (width / 100) + "mm");
-                    $(tabNode).css('overflow', 'hidden');
                 }
             });
+        }
+
+        /**
+         * Private helper to create a string with a sufficient number
+         * of a provided fill character.
+         *
+         * @param {HTMLElement|jQuery} paragraph
+         *  The element to be used for the width calculation.
+         *
+         * @param {Number} width
+         *  The minimal width in 1/100th mm to be filled
+         *
+         * @param {String} fillChar
+         *  A string with a single character to used to fill the
+         *  string.
+         *
+         * @returns {String}
+         *  A string which contains a number of fill chars
+         *  to reach at least the provided width.
+         */
+        function createTabFillCharString(element, width, fillChar) {
+            var charWidth = 0, numChars;
+
+            charWidth = Utils.convertLengthToHmm($(element).text(fillChar).width(), 'px');
+            numChars = Math.round(width / charWidth) + 1;
+
+            return (new Array(numChars)).join(fillChar);
         }
 
         // ==================================================================

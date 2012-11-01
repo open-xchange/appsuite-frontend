@@ -65,8 +65,14 @@
             margin: 0;
             line-height: 0;
         
-            > div.field, > div.tab, > div.list-label {
+            > div.field, > div.list-label {
                 display: inline-block;
+            }
+
+            > div.tab {
+                display: inline-block;
+                white-space: nowrap;
+                overflow: hidden;
             }
 
             /* default text formatting (also for fields and list labels) */
