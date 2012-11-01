@@ -1861,6 +1861,11 @@ define('io.ox/office/editor/editor',
                         if (!hasSelection && ilvl >= 0 && paragraphLength === 0) {
                             ilvl--;
                             self.setAttribute('paragraph', 'ilvl', ilvl);
+                            if (ilvl < 0) {
+                                //remove list-label and update paragraph
+                                $(paragraph).children(DOM.LIST_LABEL_NODE_SELECTOR).remove();
+                                implParagraphChanged(startPosition);
+                            }
                             split = false;
                         }
                         var numAutoCorrect = {};
