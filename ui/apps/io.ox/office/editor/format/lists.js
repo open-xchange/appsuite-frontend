@@ -348,8 +348,8 @@ define('io.ox/office/editor/format/lists',
             var index = 0,
                 freeId = lists.length;
             for (; index < lists.length; ++index) {
-                if (lists[index].identifier >= freeId) {
-                    freeId = lists[index].identifier + 1;
+                if (lists[index].listIdentifier >= freeId) {
+                    freeId = lists[index].listIdentifier + 1;
                 }
             }
             var newOperation = { name: Operations.INSERT_LIST, listname: freeId };
