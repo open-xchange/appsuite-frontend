@@ -5,7 +5,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
@@ -69,7 +69,6 @@ define('plugins/notifications/mail/register',
 
         initialize: function () {
             var self = this;
-            this.notificationviews = [];
             this.model = new Backbone.Model({ unread: 0 });
             this.collection.on('reset add remove', this.render, this);
             api.on('unseen-mail', function (e, data) {

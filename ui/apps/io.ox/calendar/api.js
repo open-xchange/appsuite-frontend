@@ -313,28 +313,26 @@ define("io.ox/calendar/api",
 
         var start = _.now();
 
-        return userAPI.get().pipe(function (user) {
-            api.getUpdates({
-                start: start,
-                end: start + 28 * 5 * DAY, //next four month?!?
-                timestamp: 0,
-                recurrence_master: true
-            })
-            .pipe(function (list) {
-                // sort by start_date & look for unconfirmed appointments
-                var invites = _.chain(list)
-                    .filter(function (item) {
-                        return _(item.users).any(function (item_user) {
-                            return (item_user.id === user.id && (item_user.confirmation === 0));
-                        });
-                    })
-                    .sortBy('start_date')
-                    .value();
-                if (invites.length > 0) {
-                    api.trigger('new-invites', invites);
-                }
-                return invites;
-            });
+        return api.getUpdates({
+            start: start,
+            end: start + 28 * 5 * DAY, //next four month?!?
+            timestamp: 0,
+            recurrence_master: true
+        })
+        .pipe(function (list) {
+            // sort by start_date & look for unconfirmed appointments
+            var invites = _.chain(list)
+                .filter(function (item) {
+                    return _(item.users).any(function (user) {
+                        return user.id === ox.user_id && user.confirmation === 0;
+                    });
+                })
+                .sortBy('start_date')
+                .value();
+            if (invites.length > 0) {
+                api.trigger('new-invites', invites);
+            }
+            return invites;
         });
     };
 

@@ -5,10 +5,11 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
 define('plugins/notifications/calendar/register',
@@ -17,29 +18,53 @@ define('plugins/notifications/calendar/register',
      'io.ox/calendar/util',
      'io.ox/core/extensions',
      'io.ox/core/api/user',
-     'dot!plugins/notifications/calendar/template.html',
      'gettext!plugins/notifications'
-    ], function (notificationController, calApi, util, ext, userApi, tpl, gt) {
+    ], function (notificationController, calApi, util, ext, userApi, gt) {
 
     'use strict';
 
-    var NotificationView = Backbone.View.extend({
+    ext.point('io.ox/core/notifications/invites/header').extend({
+        draw: function () {
+            this.append(
+                $('<legend class="section-title">').text(gt('Invites')),
+                $('<div class="notifications">')
+            );
+        }
+    });
+
+    ext.point('io.ox/core/notifications/invites/item').extend({
+        draw: function (baton) {
+            var model = baton.model;
+            this.attr('data-cid', model.get('cid')).append(
+                $('<div class="time">').text(model.get('time')),
+                $('<div class="date">').text(model.get('date')),
+                $('<div class="title">').text(model.get('title')),
+                $('<div class="location">').text(model.get('location')),
+                $('<div class="organizer">').text(model.get('blue')),
+                $('<div class="actions">').append(
+                    $('<button class="btn btn-inverse" data-action="accept_decline">').text(gt('Accept / Decline'))
+                )
+            );
+        }
+    });
+
+    var ItemView = Backbone.View.extend({
+
+        className: 'item',
+
         events: {
-            'click .item': 'onClickItem',
+            'click': 'onClickItem',
             'click [data-action="accept_decline"]': 'onClickChangeStatus'
         },
-        _modelBinder: undefined,
-        initialize: function () {
-            this._modelBinder = new Backbone.ModelBinder();
-        },
+
         render: function () {
-            this.$el.empty().append(tpl.render('plugins/notifications/calendar/inviteitem', {}));
-            var bindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property');
-            bindings.cid = { selector: "[data-cid]", elAttribute: 'data-cid' };
-            this._modelBinder.bind(this.model, this.el, bindings);
+            var baton = ext.Baton({ model: this.model, view: this });
+            ext.point('io.ox/core/notifications/invites/item').invoke('draw', this.$el, baton);
             return this;
         },
+
         onClickItem: function (e) {
+
             var obj = this.model.get('data'),
                 overlay = $('#io-ox-notifications-overlay'),
                 sidepopup = overlay.prop('sidepopup'),
@@ -74,23 +99,25 @@ define('plugins/notifications/calendar/register',
     });
 
     var NotificationsView = Backbone.View.extend({
+
         className: 'notifications',
         id: 'io-ox-notifications-calendar',
-        _collectionBinder: undefined,
+
         initialize: function () {
-            var viewCreator = function (model) {
-                return new NotificationView({model: model});
-            };
-            var elManagerFactory = new Backbone.CollectionBinder.ViewManagerFactory(viewCreator);
-            this._collectionBinder = new Backbone.CollectionBinder(elManagerFactory);
+            this.collection.on('reset add remove', this.render, this);
         },
+
         render: function () {
-            this.$el.empty().append(tpl.render('plugins/notifications/calendar/invites', {
-                strings: {
-                    NEW_INVITES: gt('Invitations')
-                }
-            }));
-            this._collectionBinder.bind(this.collection, this.$('.notifications'));
+
+            var baton = ext.Baton({ view: this });
+            ext.point('io.ox/core/notifications/invites/header').invoke('draw', this.$el.empty(), baton);
+
+            this.collection.each(function (model) {
+                this.$el.append(
+                    new ItemView({ model: model }).render().$el
+                );
+            }, this);
+
             return this;
         }
     });
@@ -103,28 +130,38 @@ define('plugins/notifications/calendar/register',
             var notifications = controller.get('io.ox/calendar', NotificationsView);
 
             calApi.on('new-invites', function (e, invites) {
-                notifications.collection.reset([]);
-                _(invites).each(function (invite) {
-                    var inObj = {
-                        cid: _.cid(invite),
-                        title: invite.title,
-                        subject: invite.location,
-                        date: util.getDateInterval(invite),
-                        time: util.getTimeInterval(invite),
-                        data: invite
-                    };
-                    // TODO: ignore organizerId until we know better
-                    var userId = invite.organizerId || invite.created_by;
-                    userApi.get({ id: userId })
-                        .done(function (user) {
-                            inObj.organizer = user.display_name;
-                            notifications.collection.push(inObj);
-                        })
-                        .fail(function () {
-                            // no organizer
-                            inObj.organizer = invite.organizer || false;
-                            notifications.collection.push(inObj);
-                        });
+
+                var tmp = [];
+
+                $.when.apply($,
+                    _(invites).map(function (invite) {
+                        var inObj = {
+                            cid: _.cid(invite),
+                            title: invite.title,
+                            location: invite.location || '',
+                            date: util.getDateInterval(invite),
+                            time: util.getTimeInterval(invite),
+                            data: invite
+                        };
+                        // TODO: ignore organizerId until we know better
+                        var def = $.Deferred();
+                        userApi.get({ id: invite.organizerId || invite.created_by })
+                            .done(function (user) {
+                                inObj.organizer = user.display_name;
+                                tmp.push(inObj);
+                                def.resolve();
+                            })
+                            .fail(function () {
+                                // no organizer
+                                inObj.organizer = invite.organizer || false;
+                                tmp.push(inObj);
+                                def.resolve();
+                            });
+                        return def;
+                    })
+                )
+                .done(function () {
+                    notifications.collection.reset(tmp);
                 });
             });
 
