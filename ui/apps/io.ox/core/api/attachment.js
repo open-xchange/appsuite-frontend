@@ -32,7 +32,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                 for (var i = 0; i < data.length; i++) {
                     data[i].folder = options.folder || options.folder_id;
                 }
-                return data;
+                return _(data).reject(function (attachment) { return attachment.rtf_flag; }); // Filter out outlook-special attachments
             });
         },
         

@@ -149,35 +149,6 @@ define('io.ox/calendar/edit/template',
         label: gt('Location')
     }));
 
-//    // save button
-//    point.basicExtend({
-//        id: 'save',
-//        draw: function (baton) {
-//            this.append($('<button class="btn btn-primary span2">')
-//                .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
-//                .css({marginTop: '25px', float: 'right'})
-//                .on('click', function () {
-//                    baton.model.save();
-//                })
-//            );
-//        },
-//        nextTo: 'location'
-//    });
-//
-//    // discard button
-//    point.basicExtend({
-//        id: 'discard',
-//        draw: function (baton) {
-//            this.append($('<button class="btn span2">')
-//                .text(gt("Discard"))
-//                .css({marginTop: '25px', float: 'right'})
-//                .on('click', function () {
-//                    baton.app.quit();
-//                })
-//            );
-//        },
-//        nextTo: 'save'
-//    });
 
     // start date
     point.extend(new forms.DatePicker({
@@ -412,6 +383,18 @@ define('io.ox/calendar/edit/template',
             });
         }
     });
+
+    // Attachments
+
+    // attachments label
+    point.extend(new forms.SectionLegend({
+        id: 'attachments_legend',
+        className: 'span12',
+        label: gt('Attachments'),
+        index: 1600
+    }));
+
+    
 
     return null;
 });
