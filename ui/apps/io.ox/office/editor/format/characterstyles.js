@@ -162,6 +162,11 @@ define('io.ox/office/editor/format/characterstyles',
 
             // try to merge with the preceding text span
             CharacterStyles.mergeSiblingTextSpans(textSpan, false);
+
+            var listLabel = $(paragraph).children(DOM.LIST_LABEL_NODE_SELECTOR);
+            if (listLabel.length) {
+                listLabel.children('span').css('font-size', attributes.fontsize + 'pt');
+            }
         }
 
         // base constructor ---------------------------------------------------
