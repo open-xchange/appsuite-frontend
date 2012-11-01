@@ -236,25 +236,48 @@ define('io.ox/office/editor/operations',
          *  The logical position of the passed paragraph node. The generated
          *  operations will contain positions starting with this address.
          *
-         * @param {Number} [start]
-         *  The logical index of the first character to be included into the
-         *  generated operations.
-         *
-         * @param {Number} [end]
-         *  The logical index of the last character to be included in the
-         *  generated operations (closed range).
+         * @param {Object} [options]
+         *  A map with options controlling the operation generation process.
+         *  Supports the following options:
+         *  @param {Number} [options.start]
+         *      The logical index of the first character to be included into
+         *      the generated operations. By default, operations will include
+         *      all contents from the beginning of the paragraph.
+         *  @param {Number} [options.end]
+         *      The logical index of the last character to be included into the
+         *      generated operations (closed range). By default, operations
+         *      will include all contents up to the end of the paragraph.
+         *  @param {Boolean} [options.clear]
+         *      If set to true, a 'clearAttributes' operation will be generated
+         *      for the first 'insertText' operation. This prevents that
+         *      applying the operations at another place in the document clones
+         *      the character formatting of the target position.
          *
          * @returns {Operations.Generator}
          *  A reference to this instance.
          */
-        this.generateTextComponentOperations = function (paragraph, position, start, end) {
+        this.generateTextComponentOperations = function (paragraph, position, options) {
 
-            var // used to merge several text portions into the same operation
+            var // start of text range to be included in the operations
+                rangeStart = Utils.getIntegerOption(options, 'start'),
+                // end of text range to be included in the operations
+                rangeEnd = Utils.getIntegerOption(options, 'end'),
+                // whether to generate a 'clearAttributes' operation
+                clear = Utils.getBooleanOption(options, 'clear', false),
+
+                // used to merge several text portions into the same operation
                 lastTextOperation = null,
                 // used to clear the attributes of the entire inserted text
                 lastClearOperation = null,
                 // formatting ranges for text portions, must be applied after the contents
                 attributeRanges = [];
+
+            // generate a 'clearAttributes' operation on first call only
+            function generateClearAttributesOperation(options) {
+                var operation = clear ? generateOperation(Operations.ATTRS_CLEAR, options) : null;
+                clear = false;
+                return operation;
+            }
 
             // process all content nodes in the paragraph and create operations
             Position.iterateParagraphChildNodes(paragraph, function (node, nodeStart, nodeLength, offsetStart, offsetLength) {
@@ -277,17 +300,18 @@ define('io.ox/office/editor/operations',
                     // append text portions to the last 'insertText' operation
                     if (lastTextOperation) {
                         lastTextOperation.text += text;
-                        lastClearOperation.end = endPosition;
+                        if (lastClearOperation) { lastClearOperation.end = endPosition; }
                     } else {
                         lastTextOperation = generateOperation(Operations.TEXT_INSERT, { start: startPosition, text: text });
-                        lastClearOperation = generateOperation(Operations.ATTRS_CLEAR, { start: startPosition, end: endPosition });
+                        // generate a 'clearAttributes' operation for the first text span
+                        lastClearOperation = generateClearAttributesOperation({ start: startPosition, end: endPosition });
                     }
                     attributeRanges.push({ node: node, position: startPosition, endPosition: (text.length > 1) ? endPosition : null });
 
                 } else {
 
                     // anything else than plain text will be inserted, forget last text operation
-                    lastTextOperation = null;
+                    lastTextOperation = lastClearOperation = null;
 
                     // operation to create a text field
                     // TODO: field type
@@ -295,7 +319,7 @@ define('io.ox/office/editor/operations',
                         // extract text of all embedded spans representing the field
                         text = $(node).text();
                         generateOperation(Operations.FIELD_INSERT, { position: startPosition, representation: text });
-                        generateOperation(Operations.ATTRS_CLEAR, { start: startPosition });
+                        generateClearAttributesOperation({ start: startPosition });
                         // attributes are contained in the embedded span elements
                         attributeRanges.push({ node: node.firstChild, position: startPosition });
                     }
@@ -303,7 +327,7 @@ define('io.ox/office/editor/operations',
                     // operation to create a tabulator
                     else if (DOM.isTabNode(node)) {
                         generateOperation(Operations.TAB_INSERT, { position: startPosition });
-                        generateOperation(Operations.ATTRS_CLEAR, { start: startPosition });
+                        generateClearAttributesOperation({ start: startPosition });
                         // attributes are contained in the embedded span elements
                         attributeRanges.push({ node: node.firstChild, position: startPosition });
                     }
@@ -313,13 +337,12 @@ define('io.ox/office/editor/operations',
                         generateOperationWithAttributes(node, Operations.IMAGE_INSERT, { position: startPosition, imgurl: $(node).data('url') });
                     }
 
-                    // TODO: other objects
                     else {
                         Utils.error('Operations.Generator.generateTextComponentOperations(): unknown content node');
                     }
                 }
 
-            }, this, { start: start, end: end });
+            }, this, { start: rangeStart, end: rangeEnd });
 
             // Generate 'setAttribute' operations after all contents have been
             // created via 'insertText', 'insertField', etc. Otherwise, these
@@ -520,6 +543,7 @@ define('io.ox/office/editor/operations',
             var // zero-based position of the current component
                 targetPosition = [0];
 
+            // visit the paragraphs and tables covered by the selection
             Position.iterateContentNodesInSelection(rootNode, selection, function (contentNode, position, startOffset, endOffset) {
 
                 // paragraphs may be covered partly
@@ -535,7 +559,7 @@ define('io.ox/office/editor/operations',
                         }
 
                         // operations for the text contents covered by the selection
-                        this.generateTextComponentOperations(contentNode, targetPosition, startOffset, endOffset);
+                        this.generateTextComponentOperations(contentNode, targetPosition, { start: startOffset, end: endOffset });
 
                     } else {
                         // generate operations for entire paragraph
@@ -555,7 +579,7 @@ define('io.ox/office/editor/operations',
 
                 targetPosition = increaseLastIndex(targetPosition);
 
-            }, undefined, { shortestPath: true });
+            }, this, { shortestPath: true });
 
             return this;
         };

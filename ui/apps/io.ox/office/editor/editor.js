@@ -226,8 +226,17 @@ define('io.ox/office/editor/editor',
         };
 
         this.copy = function () {
-            // TODO
-            Utils.warn('Editor.copy(): not yet implemented');
+
+            var selection = getSelection(),
+                generator = new Operations.Generator();
+
+            Utils.info('Editor.copy(): generating operations...');
+            _(generator.generateOperationsForSelection(editdiv, selection).getOperations()).each(function (operation) {
+                var text = 'name="' + operation.name + '", attrs=';
+                delete operation.name;
+                text += JSON.stringify(operation);
+                Utils.log(text);
+            });
         };
 
         this.paste = function (event) {
@@ -2171,7 +2180,7 @@ define('io.ox/office/editor/editor',
                     end = operation.end[operation.end.length - 1],
                     generator = new Operations.Generator();
 
-                generator.generateTextComponentOperations(paragraph, position, start, end);
+                generator.generateTextComponentOperations(paragraph, position, { start: start, end: end, clear: true });
                 undomgr.addUndo(generator.getOperations(), operation);
             }
             implDeleteText(operation.start, operation.end);

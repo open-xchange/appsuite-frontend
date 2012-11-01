@@ -317,7 +317,9 @@ define('io.ox/office/editor/view/view',
                 .addSeparator()
                 .addGroup('document/quicksearch', new TextField({ tooltip: 'Quick Search' }))
                 .addSeparator()
-                .addButton('character/tab', { icon: 'icon-io-ox-num-inc-indent', tooltip : 'Tab'});
+                .addButton('character/tab', { icon: 'icon-io-ox-num-inc-indent', tooltip : 'Tab'})
+                .addSeparator()
+                .addButton('document/copy', { label: 'Copy' });
         }
 
         // register a component that updates the window header tool bar

@@ -2374,12 +2374,14 @@ define('io.ox/office/editor/position',
             return;
         }
 
+        // TODO! entire table selected
+
         // table cell selection (FireFox only): visit all table cells
         if (selection.isCellSelection()) {
             return Position.iterateTableCellsInSelection(rootNode, selection, function (cell) {
 
                 // iterate all content nodes according to 'shortest-path' option
-                contentNode = findNextContentNode(cell, cell);
+                contentNode = Utils.findDescendantNode(cell, DOM.CONTENT_NODE_SELECTOR, { children: true });
                 while (contentNode) {
 
                     // visit current content node

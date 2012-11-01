@@ -84,6 +84,9 @@ define('io.ox/office/editor/controller',
                     set: function (query) { editor.quickSearch(query); },
                     done: $.noop // do not focus editor
                 },
+                'document/copy': {
+                    set: function () { editor.copy(); }
+                },
 
                 // paragraphs
 
