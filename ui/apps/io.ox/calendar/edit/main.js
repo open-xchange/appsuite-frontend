@@ -14,9 +14,10 @@
 define('io.ox/calendar/edit/main',
       ['io.ox/calendar/model',
        'io.ox/calendar/api',
+       'io.ox/core/extPatterns/dnd',
        'io.ox/calendar/edit/view-main',
        'gettext!io.ox/calendar/edit/main',
-       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, MainView, gt) {
+       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, dnd, MainView, gt) {
 
     'use strict';
 
@@ -28,6 +29,9 @@ define('io.ox/calendar/edit/main',
         var app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: gt('Edit Appointment')}),
             controller = _.extend(app, {
                 start: function () {
+                    app.dropZone = new dnd.UploadZone({
+                        ref: "io.ox/calendar/edit/dnd/actions"
+                    }, app);
 
                 },
                 stop: function () {
@@ -75,7 +79,7 @@ define('io.ox/calendar/edit/main',
                         appointmentModel.toLocalTime(self.model);
                         appointmentModel.applyAutoLengthMagic(self.model);
                         appointmentModel.setDefaultParticipants(self.model).done(function () {
-                            self.view = new MainView({model: self.model, mode: data.id ? 'edit' : 'create', app: self});
+                            app.view = self.view = new MainView({model: self.model, mode: data.id ? 'edit' : 'create', app: self});
                             self.model.on('create:start update:start', function () {
                                 self.getWindow().busy();
                             });
@@ -87,13 +91,26 @@ define('io.ox/calendar/edit/main',
                             self.setTitle(gt('Edit Appointment'));
 
                             // create app window
-                            self.setWindow(ox.ui.createWindow({
+                            var win = ox.ui.createWindow({
                                 name: 'io.ox/calendar/edit',
                                 chromeless: true
-                            }));
+                            });
 
+                            self.setWindow(win);
+                            console.log("Registering listener", win);
+                            win.on('show', function () {
+                                console.log("ENABLE DROP ZONE");
+                                app.dropZone.include();
+                            });
+
+                            win.on('hide', function () {
+                                console.log("DISABLE DROP ZONE");
+                                app.dropZone.remove();
+                            });
+           
                             $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                             self.getWindow().show(_.bind(self.onShowWindow, self));
+
                         });
                     }
 
@@ -117,7 +134,7 @@ define('io.ox/calendar/edit/main',
                     appointmentModel.applyAutoLengthMagic(self.model);
 
                     appointmentModel.setDefaultParticipants(self.model).done(function () {
-                        self.view = new MainView({model: self.model, lasso: data.lasso || false, app: self});
+                        app.view = self.view = new MainView({model: self.model, lasso: data.lasso || false, app: self});
 
                         self.model.on('create update', _.bind(self.onSave, self));
                         self.view.on('save:success', function () {
@@ -129,11 +146,21 @@ define('io.ox/calendar/edit/main',
                         self.setTitle(gt('Create Appointment'));
 
                         // create app window
-                        self.setWindow(ox.ui.createWindow({
+                        var win = ox.ui.createWindow({
                             name: 'io.ox/calendar/edit',
                             title: gt('Create Appointment'),
                             chromeless: true
-                        }));
+                        });
+
+                        self.setWindow(win);
+
+                        win.on('show', function () {
+                            app.dropZone.include();
+                        });
+
+                        win.on('hide', function () {
+                            app.dropZone.remove();
+                        });
 
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));

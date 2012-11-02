@@ -62,10 +62,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
             data = data || [];
             data = _.isArray(data) ? data : [data];
             for (var i = 0; i < data.length; i++) {
-                
-                params["json_" + i] = json;
                 formData.append("json_" + i, JSON.stringify(json));
-                params["file_" + i] = data[i];
                 formData.append("file_" + i, data[i]);
             }
             return http.UPLOAD({

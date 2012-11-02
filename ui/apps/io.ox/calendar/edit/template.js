@@ -18,8 +18,9 @@ define('io.ox/calendar/edit/template',
          'io.ox/core/date',
          'io.ox/backbone/views',
          'io.ox/backbone/forms',
+         'io.ox/core/tk/attachmentEdit',
          'io.ox/calendar/edit/recurrence-view',
-         'io.ox/participants/views'], function (ext, gt, util, dateAPI, views, forms, RecurrenceView, pViews) {
+         'io.ox/participants/views'], function (ext, gt, util, dateAPI, views, forms, attachments, RecurrenceView, pViews) {
 
     'use strict';
 
@@ -335,8 +336,7 @@ define('io.ox/calendar/edit/template',
                         $('<input type="text" class="add-participant">'),
                         $('<button class="btn" type="button" data-action="add">')
                             .append($('<i class="icon-plus">'))
-                    ),
-                    $('<div>').css('height', '220px') // default height of autocomplete popup, we do need expand the page to a height which can show the autocomplete popup
+                    )
                 );
 
                 var autocomplete = new AddParticipantsView({el: node});
@@ -394,7 +394,48 @@ define('io.ox/calendar/edit/template',
         index: 1600
     }));
 
+    point.extend(new attachments.AttachmentList({
+        id: 'attachment_list',
+        registerAs: 'attachmentList',
+        className: 'span12',
+        index: 1700,
+        module: 1
+    }));
     
+    point.basicExtend({
+        id: 'attachments_upload',
+        index: 1800,
+        draw: function (baton) {
+            var $node = $("<form>").appendTo(this);
+            var $input = $("<input>", {
+                type: "file"
+            });
+
+            var $button = $("<button/>").text(gt("Add")).addClass("btn btn-primary pull-right").on("click", function (e) {
+                e.preventDefault();
+                _($input[0].files).each(function (fileData) {
+                    baton.attachmentList.addFile(fileData);
+                });
+            });
+
+            $node.append($("<div>").addClass("span6").append($input));
+            $node.append($("<div>").addClass("span6 pull-right").append($button));
+        }
+    });
+
+    ext.point("io.ox/calendar/edit/dnd/actions").extend({
+        id: 'attachment',
+        index: 10,
+        label: gt("Drop here to upload a <b>new attachment</b>"),
+        multiple: function (files, app) {
+            console.log(app, app.view);
+            
+            _(files).each(function (fileData) {
+                app.view.baton.attachmentList.addFile(fileData);
+            });
+
+        }
+    });
 
     return null;
 });
