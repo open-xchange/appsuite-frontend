@@ -60,8 +60,15 @@ define('io.ox/office/editor/format/paragraphstyles',
 
             outlinelvl: { def: 9 },
 
-            tabstops: { def: [] }
-
+            tabstops: {
+                def: [],
+                merge: function (tabstops1, tabstops2) {
+                    var newTabstops = _.union(tabstops1, tabstops2);
+                    return _.sortBy(newTabstops, function (tabstop) {
+                        return tabstop.pos;
+                    });
+                }
+            }
         };
 
     // class ParagraphStyles ==================================================
