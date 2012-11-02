@@ -120,6 +120,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                         .done(function (action) {
                             if (action === 'delete') {
                                 clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
+                                model.factory.realm('edit').release();//old model no longer needed
                                 def.resolve();
                             } else {
                                 def.reject();

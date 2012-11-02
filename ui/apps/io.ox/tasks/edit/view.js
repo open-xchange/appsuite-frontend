@@ -392,20 +392,25 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 }
             });
             var endDateUpdate = function () {
-                var divider = ' ',
-                    format = date.getFormat();
-                if (format.search(/, /) !== -1) {//english seperates date and time with a comma
-                    format = format.replace(/, /, ' ');
-                    divider = ", ";
-                }
-                var temp = date.Local.parse(self.fields.endDate.val() + divider + self.fields.endDateTime.val().toUpperCase());
-                if (temp !== null) {
-                    endDateObj = temp;
-                    self.model.set('end_date', temp.t);
-                } else {
-                    
-                    setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.") + ' ' + gt.noI18n(format)); }, 300);
-                    self.model.trigger('change:end_date');
+                if (self.fields.endDate.val() !== '') {
+                    var divider = ' ',
+                        format = date.getFormat();
+                    if (format.search(/, /) !== -1) {//english seperates date and time with a comma
+                        format = format.replace(/, /, ' ');
+                        divider = ", ";
+                    }
+                    var temp = date.Local.parse(self.fields.endDate.val() + divider + self.fields.endDateTime.val().toUpperCase());
+                    if (temp !== null) {
+                        endDateObj = temp;
+                        self.model.set('end_date', temp.t);
+                    } else {
+                        
+                        setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.") + ' ' + gt.noI18n(format)); }, 300);
+                        self.model.trigger('change:end_date');
+                    }
+                } else {//User wants to delete the end date
+                    endDateObj = undefined;
+                    self.model.set('end_date', null);
                 }
             };
             this.fields.endDate.on("change", endDateUpdate);
@@ -423,19 +428,24 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 }
             });
             var startDateUpdate = function () {
-                var divider = ' ',
-                    format = date.getFormat();
-                if (format.search(/, /) !== -1) {//english seperates date and time with a comma
-                    format = format.replace(/, /, ' ');
-                    divider = ", ";
-                }
-                var temp = date.Local.parse(self.fields.startDate.val() + divider + self.fields.startDateTime.val().toUpperCase());
-                if (temp !== null) {
-                    startDateObj = temp;
-                    self.model.set('start_date', temp.t);
-                } else {
-                    setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.") + ' ' + gt.noI18n(format)); }, 300);
-                    self.model.trigger('change:start_date');
+                if (self.fields.startDate.val() !== '') {
+                    var divider = ' ',
+                        format = date.getFormat();
+                    if (format.search(/, /) !== -1) {//english seperates date and time with a comma
+                        format = format.replace(/, /, ' ');
+                        divider = ", ";
+                    }
+                    var temp = date.Local.parse(self.fields.startDate.val() + divider + self.fields.startDateTime.val().toUpperCase());
+                    if (temp !== null) {
+                        startDateObj = temp;
+                        self.model.set('start_date', temp.t);
+                    } else {
+                        setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.") + ' ' + gt.noI18n(format)); }, 300);
+                        self.model.trigger('change:start_date');
+                    }
+                } else {//User wants to delete the start date
+                    startDateObj = undefined;
+                    self.model.set('start_date', null);
                 }
             };
             this.fields.startDate.on("change", startDateUpdate);
