@@ -279,10 +279,10 @@ define("io.ox/core/extPatterns/links",
         }
 
         function draw(extension, baton) {
-            var args = $.makeArray(arguments), a, ul;
+            var args = $.makeArray(arguments), a, ul, title = [];
             this.append(
                 $('<div class="toolbar-button dropdown">').append(
-                    a = $('<a href="#" data-toggle="dropdown">')
+                    a = $('<a href="#" data-toggle="dropdown" title="">')
                         .attr('data-ref', extension.ref)
                         .addClass(extension.addClass)
                         .append(extension.icon()),
@@ -293,9 +293,16 @@ define("io.ox/core/extPatterns/links",
             return getLinks(extension, new Collection(baton), ul, baton, args).done(function (links) {
                 if (links.length > 1) {
                     // call draw method to fill dropdown
-                    _(links).chain().pluck('draw').compact().each(function (fn) {
-                        fn.call(ul, baton);
-                    });
+                    _(links).chain()
+                        .filter(function (x) {
+                            return _.isFunction(x.draw);
+                        })
+                        .each(function (x) {
+                            title.push(x.label);
+                            x.draw.call(ul, baton);
+                        });
+                    // set title attribute
+                    a.attr('title', extension.label || title.join(', '));
                     // add footer label?
                     if (extension.label) {
                         ul.append(
@@ -308,7 +315,8 @@ define("io.ox/core/extPatterns/links",
                     ul.remove();
                     if (links.length === 1) {
                         // directly link actions
-                        a.on('click', { baton: baton, extension: links[0] }, actionClick);
+                        a.attr('title', links[0].label || '')
+                            .on('click', { baton: baton, extension: links[0] }, actionClick);
                     } else {
                         a.addClass('disabled').on('click', preventDefault);
                     }

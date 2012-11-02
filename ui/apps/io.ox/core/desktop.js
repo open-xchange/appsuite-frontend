@@ -1187,6 +1187,7 @@ define("io.ox/core/desktop",
                     });
 
                     new links.ActionLink(opt.name + '/links/toolbar/search', {
+                        label: gt('Toggle search'),
                         ref: opt.name + '/actions/search'
                     });
 
