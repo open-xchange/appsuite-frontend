@@ -115,7 +115,7 @@ define('io.ox/office/tk/control/colorchooser',
          *
          * @returns
          *  The button value that has been passed to the method
-         *  ColorChooser.createColorButton().
+         *  ColorChooser.addColorButton().
          */
         function clickHandler(button) {
             var value = Utils.getControlValue(button);
@@ -203,22 +203,22 @@ define('io.ox/office/tk/control/colorchooser',
         /**
          * Adds a new section header to the drop-down menu.
          *
-         * @returns {jQuery}
-         *  The label element representing the section header, as jQuery
-         *  object.
+         * @returns {ColorChooser}
+         *  A reference to this instance.
          */
-        this.createSectionHeader = function (options) {
+        this.addSectionHeader = function (options) {
             return Utils.createLabel(options).appendTo(colorTable);
         };
 
-        this.createWideColorButton = function (value, options) {
+        this.addWideColorButton = function (value, options) {
 
             var // create the button element
                 button = createColorButton(value, options);
 
             // add the button in its own node to the color table
             colorTable.append($('<div>').append(button));
-            return button;
+
+            return this;
         };
 
         /**
@@ -236,10 +236,10 @@ define('io.ox/office/tk/control/colorchooser',
          *  @param {String} [options.tooltip]
          *      Tool tip text shown when the mouse hovers the color button.
          *
-         * @returns {jQuery}
-         *  The color button element, as jQuery object.
+         * @returns {ColorChooser}
+         *  A reference to this instance.
          */
-        this.createColorButton = function (value, options) {
+        this.addColorButton = function (value, options) {
 
             var // the table elements containing the color buttons
                 table = null, row = null,
@@ -260,7 +260,8 @@ define('io.ox/office/tk/control/colorchooser',
 
             // add the button to the table row
             row.append($('<td>').append(button));
-            return button;
+
+            return this;
         };
 
         // initialization -----------------------------------------------------

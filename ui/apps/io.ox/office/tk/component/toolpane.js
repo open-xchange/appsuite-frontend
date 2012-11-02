@@ -106,7 +106,7 @@ define('io.ox/office/tk/component/toolpane',
          * @param {Object} [options]
          *  A map of options to control the properties of the new tab in the
          *  tab bar representing the tool bar. Supports all options for buttons
-         *  in radio groups (see method RadioGroup.createOptionButton() for
+         *  in radio groups (see method RadioGroup.addOptionButton() for
          *  details).
          *
          * @returns {ToolBar}
@@ -169,14 +169,6 @@ define('io.ox/office/tk/component/toolpane',
             if (visibleToolBarId in toolBars) {
                 toolBars[visibleToolBarId].grabFocus();
             }
-            return this;
-        };
-
-        /**
-         * Triggers a 'refresh' event at all registered tool bars.
-         */
-        this.refresh = function () {
-            _(toolBars).invoke('trigger', 'refresh');
             return this;
         };
 

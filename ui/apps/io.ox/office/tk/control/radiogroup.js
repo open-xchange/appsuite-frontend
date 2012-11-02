@@ -184,10 +184,10 @@ define('io.ox/office/tk/control/radiogroup',
          *  @param {String} [options.tooltip]
          *      Tool tip text shown when the mouse hovers the button.
          *
-         * @returns {jQuery}
-         *  The new option button, as jQuery object.
+         * @returns {RadioGroup}
+         *  A reference to this instance.
          */
-        this.createOptionButton = function (value, options) {
+        this.addOptionButton = function (value, options) {
 
             var // options for the new button, including the passed value
                 buttonOptions = Utils.extendOptions(options, { value: value }),
@@ -205,7 +205,7 @@ define('io.ox/office/tk/control/radiogroup',
             // add tool tip
             Utils.setControlTooltip(button, Utils.getStringOption(options, 'tooltip'), 'bottom');
 
-            return button;
+            return this;
         };
 
         // initialization -----------------------------------------------------

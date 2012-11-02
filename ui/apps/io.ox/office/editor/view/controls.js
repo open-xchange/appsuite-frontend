@@ -122,7 +122,7 @@ define('io.ox/office/editor/view/controls',
                 sortIndex = ((priority < 0) ? '0' : '1') + sortIndex + name.toLowerCase();
 
                 // create the list item, pass sorting index as user data
-                self.createOptionButton(id, Utils.extendOptions(options, { label: name, css: { height: '36px', padding: '2px 12px' }, userData: sortIndex }));
+                self.addOptionButton(id, Utils.extendOptions(options, { label: name, css: { height: '36px', padding: '2px 12px' }, userData: sortIndex }));
             });
         }
 
@@ -227,27 +227,27 @@ define('io.ox/office/editor/view/controls',
                         label += ', ' + (tint ? gt('Lighter') : gt('Darker')) + ' ' + (100 - Math.round(value / 1000)) + '%';
                     }
 
-                    self.createColorButton(color, { tooltip: label });
+                    self.addColorButton(color, { tooltip: label });
                 });
             }
 
             self.clearColorTable();
 
             // add automatic color
-            self.createWideColorButton(Color.AUTO, { label: Color.isTransparentColor(Color.AUTO, context) ? gt('No Color') : gt('Automatic Color') });
+            self.addWideColorButton(Color.AUTO, { label: Color.isTransparentColor(Color.AUTO, context) ? gt('No Color') : gt('Automatic Color') });
 
             // add scheme colors
             if (theme && theme.hasSchemeColors()) {
-                self.createSectionHeader({ label: gt('Theme Colors') });
+                self.addSectionHeader({ label: gt('Theme Colors') });
                 for (rowIndex = 0, rowCount = SCHEME_COLOR_DEFINITIONS[0].transformations.length; rowIndex < rowCount; rowIndex += 1) {
                     fillSchemeColorRow();
                 }
             }
 
             // add predefined colors
-            self.createSectionHeader({ label: gt('Standard Colors') });
+            self.addSectionHeader({ label: gt('Standard Colors') });
             _(BUILTIN_COLOR_DEFINITIONS).each(function (definition) {
-                self.createColorButton(definition.color, { tooltip: definition.label });
+                self.addColorButton(definition.color, { tooltip: definition.label });
             });
         }
 

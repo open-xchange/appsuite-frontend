@@ -223,12 +223,14 @@ define('io.ox/office/editor/format/tablestyles',
 
                 if (family === 'cell') {  // table cells have to iterate over table attributes, too
                     if ((cellOrientation[name]) && (styleAttributes[name]) && (styleAttributes[name].table) && (! _.contains(excludedAttributes, name))) {
-                        _.extend(attributes, resolveTableStylesWithCellPosition(cellOrientation, _.extend({}, styleAttributes[name].table, explicitTableAttributes)));
+                        var tableAttributes = _.copy(styleAttributes[name].table);
+                        self.extendAttributes(tableAttributes, explicitTableAttributes);
+                        self.extendAttributes(attributes, resolveTableStylesWithCellPosition(cellOrientation, tableAttributes));
                     }
                 }
 
                 if ((cellOrientation[name]) && (styleAttributes[name]) && (styleAttributes[name][family]) && (! _.contains(excludedAttributes, name))) {
-                    attributes = _.extend(attributes, styleAttributes[name][family]);
+                    documentStyles.getStyleSheets(family).extendAttributes(attributes, styleAttributes[name][family]);
                 }
             });
 

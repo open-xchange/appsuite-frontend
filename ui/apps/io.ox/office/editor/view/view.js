@@ -16,12 +16,13 @@ define('io.ox/office/editor/view/view',
      'io.ox/office/tk/config',
      'io.ox/office/tk/fonts',
      'io.ox/office/tk/control/textfield',
+     'io.ox/office/tk/control/radiogroup',
      'io.ox/office/tk/component/toolpane',
      'io.ox/office/tk/component/appwindowtoolbar',
      'io.ox/office/editor/view/controls',
      'io.ox/office/editor/format/lineheight',
      'gettext!io.ox/office/main'
-    ], function (Utils, Config, Fonts, TextField, ToolPane, AppWindowToolBar, Controls, LineHeight, gt) {
+    ], function (Utils, Config, Fonts, TextField, RadioGroup, ToolPane, AppWindowToolBar, Controls, LineHeight, gt) {
 
     'use strict';
 
@@ -58,7 +59,7 @@ define('io.ox/office/editor/view/view',
          * @param {Object} [options]
          *  A map of options to control the properties of the new tab in the
          *  tab bar representing the tool bar. Supports all options for buttons
-         *  in radio groups (see method RadioGroup.createOptionButton() for
+         *  in radio groups (see method RadioGroup.addOptionButton() for
          *  details).
          */
         function createToolBar(id, options) {
@@ -81,8 +82,6 @@ define('io.ox/office/editor/view/view',
 
             // set a left padding to the tool pane to align the tool bars with the editor node
             toolPane.getNode().css('padding-left', Math.max(editorLeft, 13) + 'px');
-            // refresh all tool bars (they may resize some controls according to the available space)
-            toolPane.refresh();
         }
 
         /**
@@ -242,18 +241,16 @@ define('io.ox/office/editor/view/view',
             .addSeparator()
             .addGroup('character/color', new Controls.ColorChooser(editor, 'text', { icon: 'icon-font', tooltip: gt('Text Color') }))
             .addSeparator()
-            .addRadioGroup('paragraph/alignment', { icon: 'icon-io-ox-align-left', tooltip: gt('Paragraph Alignment'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
+            .addGroup('paragraph/alignment', new RadioGroup({ icon: 'icon-io-ox-align-left', tooltip: gt('Paragraph Alignment'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
                 .addOptionButton('left',    { icon: 'icon-io-ox-align-left',    tooltip: gt('Left') })
                 .addOptionButton('center',  { icon: 'icon-io-ox-align-center',  tooltip: gt('Center') })
                 .addOptionButton('right',   { icon: 'icon-io-ox-align-right',   tooltip: gt('Right') })
-                .addOptionButton('justify', { icon: 'icon-io-ox-align-justify', tooltip: gt('Justify') })
-                .end()
+                .addOptionButton('justify', { icon: 'icon-io-ox-align-justify', tooltip: gt('Justify') }))
             .addSeparator()
-            .addRadioGroup('paragraph/lineheight', { icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
+            .addGroup('paragraph/lineheight', new RadioGroup({ icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
                 .addOptionButton(LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   tooltip: gt('Single') })
                 .addOptionButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half') })
-                .addOptionButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
-                .end()
+                .addOptionButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') }))
             .addSeparator()
             .addGroup('paragraph/fillcolor', new Controls.ColorChooser(editor, 'fill', { icon: 'icon-tint', tooltip: gt('Paragraph Fill Color') }))
             .addSeparator()
@@ -276,12 +273,11 @@ define('io.ox/office/editor/view/view',
             .addSeparator()
             .addButton('image/delete', { icon: 'icon-io-ox-image-delete', tooltip: gt('Delete Image') })
             .addSeparator()
-            .addRadioGroup('image/floatmode', { icon: 'icon-io-ox-image-inline', tooltip: gt('Image Position'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
+            .addGroup('image/floatmode', new RadioGroup({ icon: 'icon-io-ox-image-inline', tooltip: gt('Image Position'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
                 .addOptionButton('inline',       { icon: 'icon-io-ox-image-inline',      tooltip: gt('Inline') })
                 .addOptionButton('leftFloated',  { icon: 'icon-io-ox-image-float-left',  tooltip: gt('Float Left') })
                 .addOptionButton('rightFloated', { icon: 'icon-io-ox-image-float-right', tooltip: gt('Float Right') })
-                .addOptionButton('noneFloated',  { icon: 'icon-io-ox-image-center',      tooltip: gt('Center') })
-                .end();
+                .addOptionButton('noneFloated',  { icon: 'icon-io-ox-image-center',      tooltip: gt('Center') }));
 
         // additions for debug mode
         if (Config.isDebugAvailable()) {
