@@ -3298,24 +3298,31 @@ define('io.ox/office/editor/editor',
             if (imagePos && DOM.isImageNode(imagePos.node)) {
 
                 $('img', imagePos.node).one('load', function () {
-                    var width = Utils.convertLengthToHmm($(this).width(), 'px'),
+                    var width, height, para, maxWidth, factor, updatePosition, newOperation;
+
+                    // Workaround for a strange Chrome behavior, even if we use .one() Chrome fires the 'load' event twice.
+                    // One time for the image node rendered and the other time for a not rendered image node.
+                    // We check for the rendered image node
+                    if (editdiv[0].contains(this)) {
+                        width = Utils.convertLengthToHmm($(this).width(), 'px');
                         height = Utils.convertLengthToHmm($(this).height(), 'px');
 
-                    // maybe the paragraph is not so big
-                    var para = imagePos.node.parentNode,
+                        // maybe the paragraph is not so big
+                        para = imagePos.node.parentNode;
                         maxWidth = Utils.convertLengthToHmm($(para).outerWidth(), 'px');
 
-                    if (width > maxWidth) {
-                        var factor = Utils.roundDigits(maxWidth / width, 2);
-                        width = maxWidth;
-                        height = Utils.roundDigits(height * factor, 0);
-                    }
+                        if (width > maxWidth) {
+                            factor = Utils.roundDigits(maxWidth / width, 2);
+                            width = maxWidth;
+                            height = Utils.roundDigits(height * factor, 0);
+                        }
 
-                    // updating the logical position of the image div, maybe it changed in the meantime while loading the image
-                    var updatePosition = Position.getOxoPosition(editdiv, this, 0),
+                        // updating the logical position of the image div, maybe it changed in the meantime while loading the image
+                        updatePosition = Position.getOxoPosition(editdiv, this, 0);
                         newOperation = { name: Operations.ATTRS_SET, attrs: {width: width, height: height}, start: updatePosition };
 
-                    applyOperation(newOperation, true, true);
+                        applyOperation(newOperation, true, true);
+                    }
                 });
             }
         }
