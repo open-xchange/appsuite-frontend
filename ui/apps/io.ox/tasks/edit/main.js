@@ -55,7 +55,8 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
         };
 
         // launcher
-        app.setLauncher(function (taskData) {
+        app.setLauncher(function (options) {
+            var taskData = options.taskData;
             self = this;
             self.markDirty();
             // get window
