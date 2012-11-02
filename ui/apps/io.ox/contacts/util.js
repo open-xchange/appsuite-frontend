@@ -33,7 +33,7 @@ define('io.ox/contacts/util', [], function () {
         getFullName: function (obj) {
             // vanity fix
             function fix(field) {
-                return (/^(dr\.|prof\.)\s/i).test(field) ? field : '';
+                return (/^(dr\.?|prof\.?)\s/i).test(field) ? field : '';
             }
             // combine title, last_name, and first_name
             if (obj.last_name && obj.first_name) {
