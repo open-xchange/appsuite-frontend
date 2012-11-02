@@ -19,7 +19,7 @@
     @weekview-toolbar-height: 41px;
     
     .toolbar {
-        background-color: #FFF; 
+        background-color: #fff; 
         height: @weekview-toolbar-height;
         text-align: center;
         padding: 3px;
@@ -155,30 +155,31 @@
         z-index: 1;
         font-size: 11px;
         line-height: 1em;
+        background-color: #fff;
         .transition(background-color 0.2s linear);
-        background-color: #FFF;
+        .user-select(none);
+        cursor: default;
     }
     
-    .day.out .number {
-        .transition(background-color 0.2s linear);
-        background-color: transparent;
-    }
-
     .day.out .number {
         color: #aaa;
+        background-color: #eee;
+        .transition(background-color 0.2s linear);
     }
     
+    .day.today .number {
+        color: darken(#08c, 10%);
+        background-color: transparent;
+        .transition(background-color 0.2s linear);
+    }
+
     .day.weekend .number {
         color: #a00;
     }
     
     .day.today {
-        background-color: #daefFf;
+        background-color: #daefff;
         background-color: rgba(0, 136, 204, 0.25);
-    }
-    
-    .day.today .number {
-        color: darken(#08c, 10%);
     }
     
     .day .list {
@@ -219,9 +220,9 @@
     }
     
     @appointment-reserved: #08c; /* blue */ 
-    @appointment-temporary: #FFBB00; /* yellow */ 
-    @appointment-absent: #913F3F; /* red */ 
-    @appointment-free: #8EB360; /* green */ 
+    @appointment-temporary: #ffbb00; /* yellow */ 
+    @appointment-absent: #913f3f; /* red */ 
+    @appointment-free: #8eb360; /* green */ 
     @appointment-private: #555; /* dark grey */ 
     @appointment-out: #aaa; /* light grey */ 
     @appointment-hover-pct: 15%; 
