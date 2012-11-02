@@ -271,6 +271,7 @@ define('io.ox/files/carousel',
                 )
                 .on('click', '.breadcrumb li a', $.proxy(this.close, this))
             );
+            if (this.list.length === 1) this.nextControl.hide();
             win.idle();
             this.getItems();
         },
