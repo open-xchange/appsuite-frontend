@@ -74,6 +74,10 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             if (data.priority === 3) {
                 $('<br>').appendTo(infoPanel);
                 $('<div>').text(gt.noI18n("\u2605\u2605\u2605")).addClass("priority").appendTo(infoPanel);
+            } else if (data.priority === 1) {
+                $('<br>').appendTo(infoPanel);
+                $('<div>').append($('<span>').text(gt.noI18n("\u2605\u2605")).css('color', '#aaa'),
+                                  $('<span>').text(gt.noI18n("\u2605"))).addClass("priority").appendTo(infoPanel);
             }
 
             //check to see if there is a leading <br> and remove it
