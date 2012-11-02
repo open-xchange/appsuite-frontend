@@ -205,15 +205,8 @@ define('io.ox/office/editor/format/tablestyles',
             explicitTableAttributes = StyleSheets.getExplicitAttributes(table);
 
             if (explicitTableAttributes.look) {
-
                 if (_.isArray(explicitTableAttributes.look)) {
                     excludedAttributes = explicitTableAttributes.look;
-                } else {  // -> to be removed, because explicitTableAttributes.look shall always be an array
-                    _.each(explicitTableAttributes.look, function (val, key) {
-                        if (val === false) {
-                            excludedAttributes.push(key);
-                        }
-                    });
                 }
             }
 
