@@ -249,7 +249,7 @@ define('io.ox/office/editor/operations',
         };
 
         /**
-         * Generates all operations needed to recreate the content nodes of the
+         * Generates all operations needed to recreate the child nodes of the
          * passed paragraph.
          *
          * @param {HTMLElement|jQuery} paragraph
@@ -277,6 +277,11 @@ define('io.ox/office/editor/operations',
          *      for the first 'insertText' operation. This prevents that
          *      applying the operations at another place in the document clones
          *      the character formatting of the target position.
+         *  @param {Number} [options.targetOffset]
+         *      If set to a number, the logical positions in the operations
+         *      generated for the child nodes will start at this offset. If
+         *      omitted, the original node offset will be used in the logical
+         *      positions.
          *
          * @returns {Operations.Generator}
          *  A reference to this instance.
@@ -289,6 +294,8 @@ define('io.ox/office/editor/operations',
                 rangeEnd = Utils.getIntegerOption(options, 'end'),
                 // whether to generate a 'clearAttributes' operation
                 clear = Utils.getBooleanOption(options, 'clear', false),
+                // start position of text nodes in the generated operations
+                targetOffset = Utils.getIntegerOption(options, 'targetOffset'),
 
                 // used to merge several text portions into the same operation
                 lastTextOperation = null,
@@ -308,7 +315,7 @@ define('io.ox/office/editor/operations',
             Position.iterateParagraphChildNodes(paragraph, function (node, nodeStart, nodeLength, offsetStart, offsetLength) {
 
                 var // logical start index of the covered part of the child node
-                    startIndex = nodeStart + offsetStart,
+                    startIndex = _.isNumber(targetOffset) ? targetOffset : (nodeStart + offsetStart),
                     // logical end index of the covered part of the child node (closed range)
                     endIndex = startIndex + offsetLength - 1,
                     // logical start position of the covered part of the child node
@@ -364,7 +371,13 @@ define('io.ox/office/editor/operations',
 
                     else {
                         Utils.error('Operations.Generator.generateParagraphChildOperations(): unknown content node');
+                        return Utils.BREAK;
                     }
+                }
+
+                // custom target offset: advance offset by covered node length
+                if (_.isNumber(targetOffset)) {
+                    targetOffset += offsetLength;
                 }
 
             }, this, { start: rangeStart, end: rangeEnd });

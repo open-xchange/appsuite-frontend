@@ -252,7 +252,7 @@ define('io.ox/office/editor/editor',
                         }
 
                         // operations for the text contents covered by the selection
-                        generator.generateParagraphChildOperations(contentNode, [targetPosition], { start: startOffset, end: endOffset });
+                        generator.generateParagraphChildOperations(contentNode, [targetPosition], { start: startOffset, end: endOffset, targetOffset: 0 });
 
                     } else {
                         // generate operations for entire paragraph
