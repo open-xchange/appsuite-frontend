@@ -181,7 +181,8 @@ define("io.ox/files/list/view-detail",
         layout: "Grid",
         index: 400,
         isEnabled: function (file) {
-            return file.current_version && file.version > 1;
+            // show versions if there is more than one - even if version #1 is marked as current
+            return file.number_of_versions > 1 || (file.current_version && file.version > 1);
         }
     });
 
@@ -501,7 +502,10 @@ define("io.ox/files/list/view-detail",
                 type: "file"
             });
 
-            var $button = $("<button/>").text(gt("Upload")).addClass("btn btn-primary pull-right").on("click", function () {
+            var $button = $("<button>").text(gt("Upload"))
+            .addClass("btn btn-primary pull-right")
+            .attr('disabled', 'disabled')
+            .on("click", function () {
                 _($input[0].files).each(function (fileData) {
                     $button.addClass("disabled").text(gt("Uploading..."));
                     $commentArea.addClass("disabled");
@@ -524,13 +528,19 @@ define("io.ox/files/list/view-detail",
                 return false;
             });
 
-            $("<div>").addClass("row-fluid").append($("<div>").addClass("span6").append($input)).append($("<div>").addClass("span6 pull-right").append($button)).appendTo($node);
+            $node.append(
+                $("<div>").addClass("row-fluid").append(
+                    $("<div>").addClass("span6").append($input),
+                    $("<div>").addClass("span6 pull-right").append($button)
+                )
+            );
 
             var $comment = $("<div>").addClass("row-fluid").hide().appendTo($node);
             $comment.append($("<label>").text(gt("Version Comment:")));
-            var $commentArea = $("<textarea rows='5'></textarea>").css({resize: 'none', width: "100%"}).appendTo($comment);
+            var $commentArea = $('<textarea rows="5">').css({ resize: 'none', width: "100%" }).appendTo($comment);
 
             $input.on("change", function () {
+                $button.removeAttr('disabled');
                 $comment.show();
                 $commentArea.focus();
             });
@@ -562,7 +572,8 @@ define("io.ox/files/list/view-detail",
         id: "table",
         index: 10,
         isEnabled: function (file) {
-            return file.current_version && file.version > 1;
+            // this check appears twice - this one seems to have no effect. Happy debugging!
+            return file.number_of_versions > 1 || (file.current_version && file.version > 1);
         },
         draw: function (file, detailView, allVersions) {
             var self = this,
