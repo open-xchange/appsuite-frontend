@@ -12,7 +12,8 @@
  */
 
 define("io.ox/core/api/attachment", ["io.ox/core/http",
-                                     'io.ox/core/config'], function (http, config) {
+                                     "io.ox/core/event",
+                                     'io.ox/core/config'], function (http, Events, config) {
     "use strict";
     
     var api = {
@@ -38,7 +39,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
         
         //removes attachments. data contains attachment ids
         remove: function (options, data) {
-            
+            var self = this;
             return http.PUT({
                 module: "attachment",
                 params: {
@@ -48,11 +49,17 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                     folder: options.folder || options.folder_id
                 },
                 data: data
+            }).done(function () {
+                self.trigger("detach", {
+                    module: options.module,
+                    id: options.id,
+                    folder: options.folder || options.folder_id
+                });
             });
         },
         
         create: function (options, data) {
-            
+            var self = this;
             var params = {action: "attach"},
                 json = {module: options.module,
                         attached: options.id,
@@ -70,6 +77,12 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                 params: params,
                 data: formData,
                 fixPost: true
+            }).done(function () {
+                self.trigger('attach', {
+                    module: options.module,
+                    id: options.id,
+                    folder: options.folder || options.folder_id
+                });
             });
         },
         
@@ -124,6 +137,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
         
     };
     
-    
+    Events.extend(api);
+
     return api;
 });

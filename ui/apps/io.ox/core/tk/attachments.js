@@ -11,11 +11,11 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/tk/attachmentEdit', ['io.ox/core/api/attachment', 'io.ox/core/strings', 'less!io.ox/core/tk/attachmentEdit.less'], function (attachmentAPI, strings) {
+define('io.ox/core/tk/attachments', ['io.ox/core/api/attachment', 'io.ox/core/strings', 'gettext!io.ox/core/tk/attachments', 'less!io.ox/core/tk/attachmentEdit.less'], function (attachmentAPI, strings, gt) {
 	'use strict';
 	var counter = 0;
 
-	function AttachmentList(options) {
+	function EditableAttachmentList(options) {
 		_.extend(this, {
 
 			init: function () {
@@ -140,7 +140,69 @@ define('io.ox/core/tk/attachmentEdit', ['io.ox/core/api/attachment', 'io.ox/core
 		}, options);
 	}
 
+	function AttachmentList(options) {
+		var self = this;
+		_.extend(this, {
+
+			draw: function (baton) {
+				if (self.processArguments) {
+					baton = self.processArguments.apply(this, $.makeArray(arguments));
+				}
+				// TODO: Open
+				// TODO: Download
+
+				var $node = $('<div>').appendTo(this);
+
+				function drawAttachment(attachment) {
+					var $el = $('<div class="io-ox-core-tk-attachment">');
+					$el.append(
+						$('<table width="100%">').append(
+							$('<tr>').append(
+								$('<td class="attachment-icon">').append($('<img src="' + ox.base + '/apps/themes/default/attachment.png">')),
+								$('<td class="details">').append(
+									$('<table>').append(
+										$('<tr>').append(
+											$('<td class="filename">').text(attachment.filename)
+										),
+										$('<tr>').append(
+											$('<td class="filesize muted">').text(strings.fileSize(attachment.file_size))
+										)
+									)
+								)
+							)
+						)
+					);
+
+					$node.append($el);
+				}
+				function redraw() {
+					$node.empty();
+					attachmentAPI.getAll({
+						module: options.module,
+						id: baton.data.id,
+						folder: baton.data.folder || baton.data.folder_id
+					}).done(function (attachments) {
+						if (attachments.length) {
+							_(attachments).each(drawAttachment);
+						} else {
+							$node.append(gt("None"));
+						}
+					});
+				}
+
+				attachmentAPI.on('attach detach', redraw);
+				$node.on('dispose', function () {
+					attachmentAPI.off('attach detach', redraw);
+				});
+
+				redraw();
+			}
+
+		}, options);
+	}
+
 	return {
+		EditableAttachmentList: EditableAttachmentList,
 		AttachmentList: AttachmentList
 	};
 });

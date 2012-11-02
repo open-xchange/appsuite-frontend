@@ -18,7 +18,7 @@ define('io.ox/calendar/edit/template',
          'io.ox/core/date',
          'io.ox/backbone/views',
          'io.ox/backbone/forms',
-         'io.ox/core/tk/attachmentEdit',
+         'io.ox/core/tk/attachments',
          'io.ox/calendar/edit/recurrence-view',
          'io.ox/participants/views'], function (ext, gt, util, dateAPI, views, forms, attachments, RecurrenceView, pViews) {
 
@@ -394,7 +394,7 @@ define('io.ox/calendar/edit/template',
         index: 1600
     }));
 
-    point.extend(new attachments.AttachmentList({
+    point.extend(new attachments.EditableAttachmentList({
         id: 'attachment_list',
         registerAs: 'attachmentList',
         className: 'span12',

@@ -97,14 +97,11 @@ define('io.ox/calendar/edit/main',
                             });
 
                             self.setWindow(win);
-                            console.log("Registering listener", win);
                             win.on('show', function () {
-                                console.log("ENABLE DROP ZONE");
                                 app.dropZone.include();
                             });
 
                             win.on('hide', function () {
-                                console.log("DISABLE DROP ZONE");
                                 app.dropZone.remove();
                             });
            

@@ -18,10 +18,11 @@ define("io.ox/calendar/view-detail",
      "io.ox/core/api/group",
      "io.ox/core/api/resource",
      "io.ox/core/api/folder",
+     "io.ox/core/tk/attachments",
      "io.ox/core/extPatterns/links",
      "gettext!io.ox/calendar",
      "less!io.ox/calendar/style.css"
-    ], function (ext, util, userAPI, groupAPI, resourceAPI, folderAPI, links, gt) {
+    ], function (ext, util, userAPI, groupAPI, resourceAPI, folderAPI, attachments, links, gt) {
 
     "use strict";
 
@@ -393,6 +394,21 @@ define("io.ox/calendar/view-detail",
              .append($("<br>"));
         }
     });
+
+    ext.point("io.ox/calendar/detail").extend({
+        id: 'attachments',
+        index: 700,
+        draw: function (data) {
+            var $node = $('<div>').appendTo(this).append($("<div>").addClass("io-ox-label").text(gt("Attachments")));
+            ext.point("io.ox/calendar/detail/attachments").invoke('draw', $node, new ext.Baton({data: data}));
+        }
+    });
+
+    ext.point("io.ox/calendar/detail/attachments").extend(new attachments.AttachmentList({
+        id: 'attachment-list',
+        index: 200,
+        module: 1
+    }));
 
     return {
 
