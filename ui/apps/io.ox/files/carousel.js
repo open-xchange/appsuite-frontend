@@ -73,10 +73,6 @@ define('io.ox/files/carousel',
             this.pos = _.extend({}, this.defaults); // get a fresh copy
             this.firstStart = true; // should have a better name
 
-            if (config.fullScreen === true && BigScreen.enabled && !config.attachmentMode) {
-                BigScreen.request(this.win.nodes.outer.get(0));
-            }
-
             // no automatic animation
             this.container.carousel({ interval: false });
 

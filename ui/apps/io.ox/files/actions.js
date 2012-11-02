@@ -510,6 +510,7 @@ define("io.ox/files/actions",
         },
         action: function (e) {
             var baton = e.baton;
+            BigScreen.request(baton.app.getWindow().nodes.outer.get(0));
             require(['io.ox/files/carousel'], function (carousel) {
                 carousel.init({
                     fullScreen: true,
