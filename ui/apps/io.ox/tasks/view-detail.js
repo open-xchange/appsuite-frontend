@@ -19,13 +19,13 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
                                    'io.ox/tasks/actions',
                                    'less!io.ox/tasks/style.css' ], function (util, gt, ext, links, api) {
     "use strict";
-    
+
     var taskDetailView = {
         draw: function (data) {
             if (!data) {
                 return $('<div>');
             }
-            
+
             var task = util.interpretTask(data, true),
                 // outer node
                 self = this;
@@ -34,24 +34,24 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
                         node.replaceWith(self.draw(tmp));
                     })
                     .addClass('tasks-detailview'),
-            
-                
+
+
                 infoPanel = $('<div>').addClass('info-panel');
-            
+
             if (task.end_date) {
                 infoPanel.append(
                         $('<br>'),
-                        
+
                         $('<div>').text(//#. %1$s due date of a task
                                         //#, c-format
                                         gt("Due %1$s", _.noI18n(task.end_date))).addClass("end-date")
                 );
             }
-            
+
             if (task.alarm) {
                 infoPanel.append(
                         $('<br>'),
-                        
+
                         $('<div>').text(//#. %1$s reminder date of a task
                                         //#, c-format
                                         gt("Remind date %1$s", _.noI18n(task.alarm))).addClass("alarm-date")
@@ -60,7 +60,7 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             if (task.percent_completed && task.percent_completed !== 0) {
                 infoPanel.append(
                         $('<br>'),
-                        
+
                         $('<div>').text(//#. %1$s how much of a task is completed in percent, values from 0-100
                                         //#, c-format
                                         gt("Progress %1$s %", _.noI18n(task.percent_completed))).addClass("task-progress")
@@ -70,39 +70,43 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
                 $('<br>'),
                 $('<div>').text(task.status).addClass("status " +  task.badge)
             );
-            
+
             if (data.priority === 3) {
                 $('<br>').appendTo(infoPanel);
                 $('<div>').text(gt.noI18n("\u2605\u2605\u2605")).addClass("priority").appendTo(infoPanel);
             }
-            
+
             //check to see if there is a leading <br> and remove it
             var firstBr = infoPanel.find("br:first");
             if (firstBr.is(infoPanel.find("*:first"))) {
                 firstBr.remove();
             }
             infoPanel.appendTo(node);
-            
+
             $('<div>').text(gt.noI18n(task.title)).addClass("title clear-title").appendTo(node);
             if (task.number_of_attachments > 0) {
                 ext.point("io.ox/tasks/detail-attach").invoke("draw", node, task);
             }
-            
+
             var inlineLinks = $('<div>').addClass("tasks-inline-links").appendTo(node);
             ext.point("io.ox/tasks/detail-inline").invoke("draw", inlineLinks, data);
-            $('<div>').text(gt.noI18n(task.note)).addClass("note").appendTo(node);
-            
+            node.append(
+                $('<div class="note">').html(
+                    gt.noI18n(_.escape($.trim(task.note)).replace(/\n/g, '<br>'))
+                )
+            );
+
             return node;
         }
     };
-    
+
     // inline links for each task
     ext.point('io.ox/tasks/detail-inline').extend(new links.InlineLinks({
         index: 100,
         id: 'inline-links',
         ref: 'io.ox/tasks/links/inline'
     }));
-    
+
     //attachments
     ext.point('io.ox/tasks/detail-attach').extend({
         index: 100,
@@ -124,7 +128,7 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             });
         }
     });
-    
+
     var buildDropdown = function (container, label, data) {
         new links.DropdownLinks({
                 label: label,
@@ -132,6 +136,6 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
                 ref: 'io.ox/tasks/attachment/links'
             }).draw.call(container, data);
     };
-  
+
     return taskDetailView;
 });
