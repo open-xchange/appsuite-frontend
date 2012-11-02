@@ -363,7 +363,7 @@
         font-family: Arial, Helvetica, sans-serif;
         font-size: 14px;
         line-height: 20px;
-        max-width: 750px;
+        max-width: 1000px;
         margin-top: 1em;
         cursor: auto;
         position: relative;
@@ -408,12 +408,14 @@
         }
 
         li { line-height: 16px; margin-bottom: 0.7em; }
-    }
-
-    pre {
-        background-color: initial;
-        border: 0px none;
-        .border-radius(0px);
+        
+        pre {
+            word-break: keep-all; // for firefox
+            word-break: initial;
+            background-color: transparent;
+            border: 0px none;
+            .border-radius(0px);
+        }
     }
 
     .mail-warning {
