@@ -123,6 +123,24 @@ define('io.ox/office/editor/editor',
             // the container element for the document contents
             editdiv = $('<div>', { contenteditable: true }).addClass('page user-select-text'),
 
+            // maps all operation handler functions to the operation names
+            operationHandlers = {},
+
+            // list of operations
+            operations = [],
+
+            //undo manager collection undo and redo operations
+            undomgr = new UndoManager(this),
+
+            // internal clipboard
+            clipboardOperations = [],
+
+            // current selection as OXOSelection instance
+            currentSelection = null,
+
+            // all selected object nodes, as jQuery collection
+            selectedObjects = $(),
+
             // container for all style sheets of all attribute families
             documentStyles = new DocumentStyles(editdiv),
 
@@ -139,22 +157,9 @@ define('io.ox/office/editor/editor',
             // all text spans that are highlighted (for quick removal)
             highlightedSpans = [],
 
-            // list of operations
-            operations = [],
-
             focused = false,
 
             lastKeyDownEvent,
-
-            // current selection as OXOSelection instance
-            currentSelection = null,
-            // all selected object nodes, as jQuery collection
-            selectedObjects = $(),
-
-            undomgr = new UndoManager(this),
-
-            // maps all operation handler functions to the operation names
-            operationHandlers = {},
 
             lastOperationEnd,     // Need to decide: Should the last operation modify this member, or should the selection be passed up the whole call chain?!
 
@@ -220,11 +225,31 @@ define('io.ox/office/editor/editor',
 
         // Cut, copy, paste
 
-        this.cut = function () {
-            // TODO
-            Utils.warn('Editor.cut(): not yet implemented');
+        /**
+         * Returns whether the editor contains a selection range (text,
+         * objects, or table cells) instead of a simple text cursor.
+         */
+        this.hasSelectedRange = function () {
+            var selection = getSelection();
+            return selection && !selection.isTextCursor();
         };
 
+        /**
+         * Copies the current selection into the internal clipboard and deletes
+         * the selection.
+         */
+        this.cut = function () {
+
+            // copy current selection to clipboard
+            this.copy();
+
+            // delete current selection
+            this.deleteSelected();
+        };
+
+        /**
+         * Copies the current selection into the internal clipboard.
+         */
         this.copy = function () {
 
             var // the current selection to be copied into the clipboard
@@ -232,12 +257,12 @@ define('io.ox/office/editor/editor',
                 // the operations generator
                 generator = new Operations.Generator(),
                 // zero-based index of the current content node
-                targetPosition = 0;
-
-            Utils.info('Editor.copy(): generating operations...');
+                targetPosition = 0,
+                // result of the iteration process
+                result = null;
 
             // visit the paragraphs and tables covered by the selection
-            Position.iterateContentNodesInSelection(editdiv, selection, function (contentNode, position, startOffset, endOffset) {
+            result = Position.iterateContentNodesInSelection(editdiv, selection, function (contentNode, position, startOffset, endOffset) {
 
                 // paragraphs may be covered partly
                 if (DOM.isParagraphNode(contentNode)) {
@@ -245,14 +270,14 @@ define('io.ox/office/editor/editor',
                     // first or last paragraph: generate operations for covered text components
                     if (_.isNumber(startOffset) || _.isNumber(endOffset)) {
 
-                        // do not create an 'insertParagraph' operation for the first paragraph
-                        if (!_.isNumber(startOffset)) {
-                            generator.generateOperation(Operations.PARA_INSERT, { start: [targetPosition] });
-                            generator.generateSetAttributesOperation(contentNode, [targetPosition]);
+                        // generate a splitParagraph operation for contents of first
+                        // paragraph (but for multiple-paragraph selections only)
+                        if (!_.isNumber(endOffset)) {
+                            generator.generateOperation(Operations.PARA_SPLIT, { start: [targetPosition, 0] });
                         }
 
                         // operations for the text contents covered by the selection
-                        generator.generateParagraphChildOperations(contentNode, [targetPosition], { start: startOffset, end: endOffset, targetOffset: 0 });
+                        generator.generateParagraphChildOperations(contentNode, [targetPosition], { start: startOffset, end: endOffset, targetOffset: 0, clear: true });
 
                     } else {
                         // generate operations for entire paragraph
@@ -274,13 +299,95 @@ define('io.ox/office/editor/editor',
 
             }, this, { shortestPath: true });
 
-            // TODO: store operations in clipboard
-            _(generator.getOperations()).each(function (operation) {
+            // store generated operations in internal clipboard
+            clipboardOperations = (result === Utils.BREAK) ? [] : generator.getOperations();
+
+            // dump clipboard
+            Utils.warn('Editor.copy()');
+            _(clipboardOperations).each(function (operation) {
                 var text = 'name="' + operation.name + '", attrs=';
+                operation = _.clone(operation);
                 delete operation.name;
                 text += JSON.stringify(operation);
                 Utils.log(text);
             });
+        };
+
+        /**
+         * Returns whether the internal clipboard contains operations.
+         */
+        this.hasInternalClipboard = function () {
+            return clipboardOperations.length > 0;
+        };
+
+        /**
+         * Deletes the current selection and pastes the internal clipboard to
+         * the resulting cursor position.
+         */
+        this.pasteInternalClipboard = function () {
+
+            if (this.hasInternalClipboard()) {
+                undomgr.enterGroup(function () {
+
+                    var // current selection
+                        selection = null,
+                        // position of text cursor after deleting the selection
+                        position = null,
+                        // text offset in first paragraph
+                        offset = 0;
+
+                    // delete current selection
+                    this.deleteSelected();
+
+                    // paste clipboard to current cursor position
+                    selection = getSelection();
+                    position = selection ? selection.startPaM.oxoPosition : null;
+                    if (_.isArray(position) && (position.length >= 2)) {
+
+                        // separate offset for text contents in first paragraph
+                        offset = _(position).last();
+                        position.pop();
+                        Utils.warn('Editor.pasteInternalClipboard()');
+
+                        // last element in startPosition
+                        _(clipboardOperations).each(function (operation) {
+
+                            // clone the operation to transform the positions
+                            operation = _.clone(operation);
+
+                            // transform position of operation
+                            // TODO: need reliable way to get the position attributes
+                            _(['position', 'start', 'end']).each(function (name) {
+                                var opPosition = operation[name];
+                                if (_.isArray(opPosition)) {
+
+                                    // adjust text offset for first paragraph
+                                    if ((opPosition[0] === 0) && (opPosition.length === 2)) {
+                                        operation[name] = position.concat([opPosition[1] + offset]);
+                                    } else {
+                                        operation[name] = position.slice(0, -1);
+                                        operation[name].push(_.last(position) + opPosition[0]);
+                                        operation[name] = operation[name].concat(opPosition.slice(1));
+                                    }
+                                }
+                            });
+
+                            this.applyOperation(operation, true, true);
+
+                            var text = 'name="' + operation.name + '", attrs=';
+                            operation = _.clone(operation);
+                            delete operation.name;
+                            text += JSON.stringify(operation);
+                            Utils.log(text);
+
+                        }, this);
+
+                        position.push(offset);
+                        setSelection(new OXOSelection(new OXOPaM(position)));
+                    }
+
+                }, this);
+            }
         };
 
         this.paste = function (event) {

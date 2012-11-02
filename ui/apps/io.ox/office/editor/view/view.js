@@ -315,7 +315,9 @@ define('io.ox/office/editor/view/view',
                 .addSeparator()
                 .addButton('character/tab', { icon: 'icon-io-ox-num-inc-indent', tooltip : 'Tab'})
                 .addSeparator()
-                .addButton('document/copy', { label: 'Copy' });
+                .addButton('document/cut', { label: 'Cut' })
+                .addButton('document/copy', { label: 'Copy' })
+                .addButton('document/paste', { label: 'Paste' });
         }
 
         // register a component that updates the window header tool bar

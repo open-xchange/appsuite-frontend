@@ -84,8 +84,17 @@ define('io.ox/office/editor/controller',
                     set: function (query) { editor.quickSearch(query); },
                     done: $.noop // do not focus editor
                 },
+                'document/cut': {
+                    enable: function () { return editor.hasSelectedRange(); },
+                    set: function () { editor.cut(); }
+                },
                 'document/copy': {
+                    enable: function () { return editor.hasSelectedRange(); },
                     set: function () { editor.copy(); }
+                },
+                'document/paste': {
+                    enable: function () { return editor.hasInternalClipboard(); },
+                    set: function () { editor.pasteInternalClipboard(); }
                 },
 
                 // paragraphs
