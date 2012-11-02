@@ -159,13 +159,12 @@ define('io.ox/office/editor/position',
 
         // 1. Handling all selections, in which the node is below paragraph level
 
-        // text nodes of fields/tabs are embedded in <span> elements in the <div>
-        if (DOM.isTextNodeInTextComponent(node)) {
+        if ((DOM.isEmptySpan(node)) || (DOM.isTextNodeInTextComponent(node))) {
+            // empty spans must not have an offset (special case for spans behind tabs)
+            // or text nodes of fields/tabs are embedded in <span> elements in the <div>
             offset = 0;
             checkImageFloatMode = false;
-        }
-
-        else if ((node.nodeType === 3) && (DOM.isListLabelNode(node.parentNode))) {
+        } else if ((node.nodeType === 3) && (DOM.isListLabelNode(node.parentNode))) {
             node = node.parentNode.nextSibling;
             offset = 0;
             checkImageFloatMode = false;
