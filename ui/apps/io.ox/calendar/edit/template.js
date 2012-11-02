@@ -428,8 +428,6 @@ define('io.ox/calendar/edit/template',
         index: 10,
         label: gt("Drop here to upload a <b>new attachment</b>"),
         multiple: function (files, app) {
-            console.log(app, app.view);
-            
             _(files).each(function (fileData) {
                 app.view.baton.attachmentList.addFile(fileData);
             });
