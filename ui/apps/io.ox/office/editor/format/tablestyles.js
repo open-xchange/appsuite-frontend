@@ -274,7 +274,7 @@ define('io.ox/office/editor/format/tablestyles',
                 cellStyles.borderleft = tableStyleAttributes.borderleft;
             }
 
-            if ((tableStyleAttributes.borderright) && (! cellOrientation.lastcol)) {
+            if ((tableStyleAttributes.borderright) && (cellOrientation.lastcol)) {
                 cellStyles.borderright = tableStyleAttributes.borderright;
             }
 
