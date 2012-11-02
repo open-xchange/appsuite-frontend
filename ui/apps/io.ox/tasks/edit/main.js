@@ -79,6 +79,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     taskView = view.getView(taskModel, win.nodes.main, app);
                 });
             } else {
+                app.attributes.title = gt("Create task");
                 taskModel = model.factory.create();
                 taskView = view.getView(taskModel, win.nodes.main, app);
             }

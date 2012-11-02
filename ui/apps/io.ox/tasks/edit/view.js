@@ -180,6 +180,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
         },
         createNonExt: function (app) {
             var saveBtnText = gt("Create"),
+                headlineText = gt('Create task'),
                 self = this,
                 //objects to display correct localtimes
                 alarmDateObj,
@@ -187,9 +188,10 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 endDateObj;
             if (this.model.attributes.id) {
                 saveBtnText = gt("Save");
+                headlineText = gt("Edit task");
             }
             //row 0
-            this.fields.headline = $('<h1>').addClass('title').text(gt('Edit task'));
+            this.fields.headline = $('<h1>').addClass('title').text(headlineText);
             this.fields.cancel = $('<button>').addClass('btn cancel span12').text(gt('Discard'))
                         .on('click', function () {
                             app.quit();
