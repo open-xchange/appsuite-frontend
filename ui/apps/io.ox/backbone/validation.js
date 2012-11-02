@@ -46,8 +46,9 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions"], function (ext) {
             return _.now() > val || 'Please enter a date in the past';
         },
         email: function (val) {
-            return regEmail.test(val) ||
-                'Please enter a valid email address';
+            var result = (regEmail.test(val) || val === '') ? true : 'Please enter a valid email address';
+            return result;
+
         },
         url: function (val) {
             return true;
