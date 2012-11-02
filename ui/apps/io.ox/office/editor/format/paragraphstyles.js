@@ -26,7 +26,7 @@ define('io.ox/office/editor/format/paragraphstyles',
 
             alignment: {
                 def: 'left',
-                set: function (element, value) {
+                format: function (element, value) {
                     element.css('text-align', value);
                 },
                 preview: function (options, value) {
@@ -36,7 +36,7 @@ define('io.ox/office/editor/format/paragraphstyles',
 
             fillcolor: {
                 def: Color.AUTO, // auto for paragraph fill resolves to 'transparent'
-                set: function (element, color) {
+                format: function (element, color) {
                     element.css('background-color', this.getCssColor(color, 'fill'));
                 }
             },

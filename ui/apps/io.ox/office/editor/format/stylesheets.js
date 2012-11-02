@@ -80,13 +80,23 @@ define('io.ox/office/editor/format/stylesheets',
      *  - 'def': Specifies the default value of the attribute which will be
      *      used if neither the style sheet of an element nor its explicit
      *      attributes collection specify a value for the attribute.
-     *  - 'set': An optional setter function that applies the passed attribute
-     *      value to a DOM element. Will be called in the context of the style
-     *      sheet container instance. The function receives the DOM element as
-     *      jQuery object in the first parameter, and the attribute value in
-     *      the second parameter. An alternative way to update the element
-     *      formatting using a complete map of all attribute values is to
-     *      specify a global update handler (see options below).
+     *  - 'format': An optional function that applies the passed attribute
+     *      value to a DOM element (usually its CSS formatting). Will be called
+     *      in the context of the style sheet container instance. The function
+     *      receives the DOM element as jQuery object in the first parameter,
+     *      and the attribute value in the second parameter. An alternative way
+     *      to update the element formatting using a complete map of all
+     *      attribute values is to specify a global update handler (see options
+     *      below).
+     *  - 'merge': An optional function that will be called while resolving
+     *      attribute maps from different style sheets and explicit element
+     *      formatting. Will be called to merge two existing values of this
+     *      attributes, where the second value has to overwrite the first value
+     *      in some way. Will be called in the context of the style sheet
+     *      container instance. The function receives the 'old' attribute value
+     *      in the first parameter, and the 'new' attribute value in the second
+     *      parameter. By default, the new value wins and the first value will
+     *      be overwritten completely.
      *  - 'preview': An optional function that initializes an options map that
      *      will be used to create a list item in a GUI style sheet chooser
      *      control. Will be called in the context of the style sheet container
@@ -104,9 +114,9 @@ define('io.ox/office/editor/format/stylesheets',
      *  @param {Function} [options.styleAttributesResolver]
      *      If specified, a function that returns the attributes of a specific
      *      attribute family from the complete 'attributes' object of a style
-     *      sheet. The set of attributes returned may depend on a source
-     *      element (e.g. on the position of this source element in its
-     *      parents). The function receives the desired attribute family as
+     *      sheet. The map of attributes returned by this function may depend
+     *      on a source element (e.g. on the position of this source element in
+     *      its parents). The function receives the desired attribute family as
      *      first parameter, the complete 'attributes' object of the style
      *      sheet as second parameter, and the source node (as jQuery object)
      *      as third parameter. Will be called in the context of this style
@@ -226,8 +236,12 @@ define('io.ox/office/editor/format/stylesheets',
 
             var // the attributes of the style sheet and its ancestors
                 attributes = null,
+                // the style sheet container associated to the passed family
+                familyStyleSheets = documentStyles.getStyleSheets(family),
                 // parent style sheet container from the document styles collection
-                parentStyleSheets = null;
+                parentStyleSheets = null,
+                // passed source node, as jQuery object
+                $sourceNode = $(sourceNode);
 
             // collects style sheet attributes recursively through parents
             function collectStyleAttributes(styleSheet) {
@@ -241,12 +255,12 @@ define('io.ox/office/editor/format/stylesheets',
                 // add own attributes of the specified attribute family
                 if (_.isObject(styleSheet.attributes[family])) {
                     // attributes directly mapped by family name in 'attributes' member of the style sheet
-                    _(attributes).extend(styleSheet.attributes[family]);
+                    familyStyleSheets.extendAttributes(attributes, styleSheet.attributes[family]);
                 }
 
                 // try user-defined resolver for style attributes mapped in non-standard structures
-                if (_.isFunction(styleAttributesResolver)) {
-                    _(attributes).extend(styleAttributesResolver.call(self, family, styleSheet.attributes, $(sourceNode)));
+                if (_.isFunction(styleAttributesResolver) && ($sourceNode.length > 0)) {
+                    familyStyleSheets.extendAttributes(attributes, styleAttributesResolver.call(self, family, styleSheet.attributes, $sourceNode));
                 }
             }
 
@@ -254,10 +268,10 @@ define('io.ox/office/editor/format/stylesheets',
             attributes = (family === styleFamily) ? _.clone(defaultAttributes) : {};
 
             // collect styles from ancestor elements if specified
-            if (_.isString(parentStyleFamily) && ($(sourceNode).length > 0)) {
+            if (_.isString(parentStyleFamily) && ($sourceNode.length > 0)) {
                 parentStyleSheets = documentStyles.getStyleSheets(parentStyleFamily);
                 // ask the container of the parent style family for style attributes
-                _(attributes).extend(parentStyleSheets.resolveParentStyleAttributes(family, sourceNode));
+                familyStyleSheets.extendAttributes(attributes, parentStyleSheets.resolveParentStyleAttributes(family, $sourceNode));
             }
 
             // fall-back to default style sheet if passed identifier is invalid
@@ -291,14 +305,14 @@ define('io.ox/office/editor/format/stylesheets',
          */
         function updateElementFormatting(element, mergedAttributes, updateAttributeNames) {
 
-            // updates a single attribute, if it has a registered setter in its definition
+            // updates a single attribute, if it has a registered formatter in its definition
             function updateSingleAttribute(name, value) {
-                if ((name in definitions) && _.isFunction(definitions[name].set)) {
-                    definitions[name].set.call(self, element, value);
+                if ((name in definitions) && _.isFunction(definitions[name].format)) {
+                    definitions[name].format.call(self, element, value);
                 }
             }
 
-            // update attributes via setter functions from definitions
+            // update attributes via formatter functions from definitions
             if (_.isArray(updateAttributeNames)) {
                 _(updateAttributeNames).each(function (name) {
                     if (name in mergedAttributes) {
@@ -372,9 +386,9 @@ define('io.ox/office/editor/format/stylesheets',
         /**
          * Registers an update handler that will be called for every DOM
          * element whose attributes have been changed. In difference to the
-         * individual setter functions specified in the definitions for single
-         * attributes, this handler will be called once for a DOM element
-         * regardless of the number of changed attributes.
+         * individual formatter functions specified in the definitions for
+         * single attributes, this handler will be called once for a DOM
+         * element regardless of the number of changed attributes.
          *
          * @param {Function} updateHandler
          *  The update handler function. Receives the element whose attributes
@@ -664,7 +678,8 @@ define('io.ox/office/editor/format/stylesheets',
 
         /**
          * Returns the complete 'attributes' object of the specified style
-         * sheet as-is, without resolving the parent style sheets.
+         * sheet as-is, without resolving the parent style sheets, or
+         * converting to the attributes of a specific attribute family.
          *
          * @param {String} id
          *  The unique identifier of the style sheet.
@@ -673,8 +688,52 @@ define('io.ox/office/editor/format/stylesheets',
          *  The complete 'attributes' object contained in the style sheet, as a
          *  deep clone.
          */
-        this.getStyleSheetAttributesOnly = function (id) {
+        this.getStyleSheetAttributeMap = function (id) {
             return (id in styleSheets) ? _.copy(styleSheets[id].attributes, true) : {};
+        };
+
+        /**
+         * Extends the passed first attribute set with the attribute values of
+         * the second attribute set. If the definitions of a specific attribute
+         * contain a merger function, and both sets contain an attribute value,
+         * uses that merger function to merge the values from both attribute
+         * sets, otherwise the value of the second attribute set will be copied
+         * to the first attribute set.
+         *
+         * @param {Object} attributes1
+         *  (in/out) The first attribute set that will be extended in-place.
+         *
+         * @param {Object} attributes2
+         *  The second attribute set, whose attribute values will be inserted
+         *  into the first attribute set.
+         *
+         * @returns {StyleSheets}
+         *  A reference to this style sheets container.
+         */
+        this.extendAttributes = function (attributes1, attributes2) {
+
+            _(attributes2).each(function (value, name) {
+
+                var // the merger function from the attribute definition
+                    merger = null;
+
+                // copy style sheet identifier directly
+                if (name === 'style') {
+                    attributes1.style = value;
+                } else if (isRegisteredAttribute(name)) {
+                    // try to find merger function from attribute definition
+                    merger = definitions[name].merge;
+                    // either set return value from merger, or copy the attribute directly
+                    if ((name in attributes1) && _.isFunction(merger)) {
+                        attributes1[name] = merger.call(this, attributes1[name], value);
+                    } else {
+                        attributes1[name] = value;
+                    }
+                }
+
+            }, this);
+
+            return this;
         };
 
         /**
@@ -811,9 +870,10 @@ define('io.ox/office/editor/format/stylesheets',
                 // get the element attributes
                 elementAttributes = getElementAttributes($element),
                 // get attributes of the style sheets
-                styleAttributes = getStyleSheetAttributes(elementAttributes.style, styleFamily, sourceNode),
-                // the resulting attributes according to style sheet and explicit formatting
-                mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
+                mergedAttributes = getStyleSheetAttributes(elementAttributes.style, styleFamily, sourceNode);
+
+            // add explicit attributes to merged attribute map
+            this.extendAttributes(mergedAttributes, elementAttributes);
 
             // filter by supported attributes
             _(mergedAttributes).each(function (value, name)  {
@@ -910,6 +970,9 @@ define('io.ox/office/editor/format/stylesheets',
          *      parameter, the old explicit attributes (name/value map) as
          *      second parameter, and the new explicit attributes (name/value
          *      map) as third parameter.
+         *
+         * @returns {StyleSheets}
+         *  A reference to this style sheets container.
          */
         this.setElementAttributes = function (element, attributes, options) {
 
@@ -930,8 +993,6 @@ define('io.ox/office/editor/format/stylesheets',
                 elementAttributes = null,
                 // attributes of the current or new style sheet
                 styleAttributes = null,
-                // the resulting attributes according to style sheet and explicit formatting
-                mergedAttributes = null,
                 // names of all attributes needed to update the current element
                 updateAttributeNames = null;
 
@@ -972,9 +1033,9 @@ define('io.ox/office/editor/format/stylesheets',
                 // write back new explicit attributes to the element
                 setElementAttributes($element, elementAttributes);
 
-                // update element formatting
-                mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
-                updateElementFormatting($element, mergedAttributes, updateAttributeNames);
+                // merge explicit attributes into style attributes, and update element formatting
+                this.extendAttributes(styleAttributes, elementAttributes);
+                updateElementFormatting($element, styleAttributes, updateAttributeNames);
 
                 // call the passed change listener
                 if (_.isFunction(changeListener)) {
@@ -1058,10 +1119,10 @@ define('io.ox/office/editor/format/stylesheets',
                 // explicit element attributes
                 elementAttributes = getElementAttributes($element),
                 // get attributes of the style sheet
-                styleAttributes = getStyleSheetAttributes(elementAttributes.style, styleFamily, $element),
-                // the resulting attributes to be updated at each element
-                mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
+                mergedAttributes = getStyleSheetAttributes(elementAttributes.style, styleFamily, $element);
 
+            // the resulting attributes to be updated at each element
+            this.extendAttributes(mergedAttributes, elementAttributes);
             // update element formatting according to current attribute values
             updateElementFormatting($element, mergedAttributes);
 

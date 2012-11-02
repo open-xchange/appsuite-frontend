@@ -27,7 +27,7 @@ define('io.ox/office/editor/format/characterstyles',
 
             fontname: {
                 def: 'sans-serif',
-                set: function (element, fontName) {
+                format: function (element, fontName) {
                     element.css('font-family', Fonts.getCssFontFamily(fontName));
                 },
                 preview: function (options, fontName) {
@@ -37,7 +37,7 @@ define('io.ox/office/editor/format/characterstyles',
 
             fontsize: {
                 def: 12,
-                set: function (element, fontSize) {
+                format: function (element, fontSize) {
                     element.css('font-size', fontSize + 'pt');
                 },
                 preview: function (options, fontSize) {
@@ -47,7 +47,7 @@ define('io.ox/office/editor/format/characterstyles',
 
             bold: {
                 def: false,
-                set: function (element, state) {
+                format: function (element, state) {
                     element.css('font-weight', state ? 'bold' : 'normal');
                 },
                 preview: function (options, state) {
@@ -57,7 +57,7 @@ define('io.ox/office/editor/format/characterstyles',
 
             italic: {
                 def: false,
-                set: function (element, state) {
+                format: function (element, state) {
                     element.css('font-style', state ? 'italic' : 'normal');
                 },
                 preview: function (options, state) {
@@ -67,7 +67,7 @@ define('io.ox/office/editor/format/characterstyles',
 
             underline: {
                 def: false,
-                set: function (element, state) {
+                format: function (element, state) {
                     var value = element.css('text-decoration');
                     element.css('text-decoration', Utils.toggleToken(value, 'underline', state, 'none'));
                 },
@@ -87,7 +87,7 @@ define('io.ox/office/editor/format/characterstyles',
 
             fillcolor: {
                 def: Color.AUTO,
-                set: function (element, color) {
+                format: function (element, color) {
                     element.css('background-color', this.getCssColor(color, 'fill'));
                 }
             },
@@ -96,7 +96,7 @@ define('io.ox/office/editor/format/characterstyles',
 
             highlight: {
                 def: false,
-                set: function (element, state) {
+                format: function (element, state) {
                     element.toggleClass('highlight', state);
                 },
                 special: true

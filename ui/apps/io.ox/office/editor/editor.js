@@ -3270,7 +3270,7 @@ define('io.ox/office/editor/editor',
                     dirty = styleSheets.isDirty(styleId);
 
                 if (dirty) {
-                    var styleAttr = styleSheets.getStyleSheetAttributesOnly(styleId),
+                    var styleAttr = styleSheets.getStyleSheetAttributeMap(styleId),
                         uiPriority = styleSheets.getUIPriority(styleId),
                         parentId = styleSheets.getParentId(styleId),
                         styleName = styleSheets.getName(styleId);

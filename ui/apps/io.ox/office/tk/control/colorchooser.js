@@ -97,14 +97,13 @@ define('io.ox/office/tk/control/colorchooser',
          */
         function updateHandler(value) {
 
-            var // current color, as CSS value
-                cssColor = (_.isNull(value) || _.isUndefined(value)) ? 'transparent' : cssColorResolver.call(this, value);
-
             // activate a color button
             Utils.selectOptionButton(getColorButtons(), value);
 
             // set color to the color box in the menu button
-            colorBox.css('background-color', cssColor);
+            if (!_.isUndefined(value)) {
+                colorBox.css('background-color', _.isNull(value) ? 'transparent' : cssColorResolver.call(this, value));
+            }
         }
 
         /**

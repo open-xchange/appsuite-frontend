@@ -27,7 +27,7 @@ define('io.ox/office/editor/format/objectstyles',
              */
             width: {
                 def: 0,
-                set: function (element, width) {
+                format: function (element, width) {
                     element.width(Utils.convertHmmToLength(width, 'px', 0));
                 }
             },
@@ -37,7 +37,7 @@ define('io.ox/office/editor/format/objectstyles',
              */
             height: {
                 def: 0,
-                set: function (element, height) {
+                format: function (element, height) {
                     element.height(Utils.convertHmmToLength(height, 'px', 0));
                 }
             },

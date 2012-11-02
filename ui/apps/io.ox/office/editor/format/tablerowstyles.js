@@ -28,7 +28,7 @@ define('io.ox/office/editor/format/tablerowstyles',
              */
             height: {
                 def: 0,
-                set: function (element, height) {
+                format: function (element, height) {
                     if (height !== 0) {
                         element.css('height', Utils.convertHmmToCssLength(height, 'px', 0));
                     }

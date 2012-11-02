@@ -32,7 +32,7 @@ define('io.ox/office/editor/format/tablestyles',
              */
             width: {
                 def: 0,
-                set: function (element, width) {
+                format: function (element, width) {
                     if (width === 0) {
                         element.css('width', '100%');
                     } else {
@@ -46,7 +46,7 @@ define('io.ox/office/editor/format/tablestyles',
              */
             fillcolor: {
                 def: Color.AUTO,
-                set: function (element, color) {
+                format: function (element, color) {
                     element.css('background-color', this.getCssColor(color, 'fill'));
                 }
             },

@@ -32,7 +32,7 @@ define('io.ox/office/editor/format/tablecellstyles',
              */
             gridspan: {
                 def: 1,
-                set: function (element, gridspan) {
+                format: function (element, gridspan) {
                     element.attr('colspan', gridspan);
                 }
             },
