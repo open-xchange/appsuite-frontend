@@ -77,7 +77,6 @@ define('io.ox/calendar/month/perspective',
                 if (list.length > 0) {
                     var start = obj.start;
                     for (var i = 1; i <= obj.weeks; i++) {
-                        start += date.WEEK;
 
                         var end = start + date.WEEK,
                             collection = self.collections[start];
@@ -94,6 +93,7 @@ define('io.ox/calendar/month/perspective',
                             }
                             collection.reset(retList);
                         }
+                        start += date.WEEK;
                         collection = null;
                     }
                 }
@@ -136,7 +136,6 @@ define('io.ox/calendar/month/perspective',
             }
             // update first positions
             self.getFirsts();
-
             return this.updateWeeks({start: start, weeks: weeks});
         },
 
