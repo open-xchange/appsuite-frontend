@@ -98,8 +98,8 @@ define('io.ox/contacts/create/view',
             pane.getBody()
                 .append(view.render().$el);
             // footer
-            pane.addPrimaryButton('save', gt('Save'))
-                .addButton('cancel', gt('Cancel'));
+            pane.addPrimaryButton('save', gt('Save'), 'save')
+                .addButton('cancel', gt('Cancel'), 'cancel');
             // on show
             return pane.on('show', function () {
                 view.$el.find('input[type=text]').first().focus();
