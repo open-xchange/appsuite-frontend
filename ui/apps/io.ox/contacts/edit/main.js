@@ -15,8 +15,10 @@ define('io.ox/contacts/edit/main',
     ['io.ox/contacts/edit/view-form',
      'io.ox/contacts/model',
      'gettext!io.ox/contacts',
+     'io.ox/core/extensions',
+     'io.ox/contacts/util',
      'less!io.ox/contacts/edit/style.css'
-     ], function (view, model, gt) {
+     ], function (view, model, gt, ext, util) {
 
     'use strict';
 
@@ -73,6 +75,7 @@ define('io.ox/contacts/edit/main',
                             win.idle();
                             app.quit();
                         });
+                        ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
                     });
 
 
@@ -125,6 +128,15 @@ define('io.ox/contacts/edit/main',
 
         return app;
     }
+
+    ext.point('io.ox/contacts/edit/main/model').extend({
+        id: 'io.ox/contacts/edit/main/model/auto_display_name',
+        customizeModel: function (contact) {
+            contact.on('change:first_name change:last_name', function () {
+                contact.set('display_name', util.getFullName(contact.toJSON()));
+            });
+        }
+    });
 
     return {
         getApp: createInstance
