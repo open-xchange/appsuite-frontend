@@ -664,14 +664,12 @@ define("io.ox/mail/write/view-main",
 
     function drawAutoCompleteItem(node, data, query) {
 
-        var url = contactsUtil.getImage(data.data, contactPictureOptions),
-            name = highlight(data.display_name, query),
-            email = highlight(data.email, query);
+        var url = contactsUtil.getImage(data.data, contactPictureOptions);
 
         node.addClass('io-ox-mail-write-contact').append(
             $('<div class="contact-image">').css('backgroundImage', 'url(' + url + ')'),
-            $('<div class="person-link ellipsis noI18n">').html(name + '\u00A0'),
-            $('<div class="ellipsis noI18n">').html(email)
+            $('<div class="person-link ellipsis">').text(_.noI18n(data.display_name + '\u00A0')),
+            $('<div class="ellipsis">').text(_.noI18n(data.email))
         );
     }
 
@@ -720,11 +718,6 @@ define("io.ox/mail/write/view-main",
         // display_name might be null!
         return obj.display_name ?
              '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + '>' : '<' + obj.email + '>';
-    }
-
-    function highlight(text, query) {
-        return String(text).replace(/</g, '&lt;')
-            .replace(new RegExp(query, 'i'), '<b>' + query + '</b>');
     }
 
     function createRadio(name, value, text, isChecked) {
