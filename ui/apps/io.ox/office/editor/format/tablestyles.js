@@ -227,7 +227,7 @@ define('io.ox/office/editor/format/tablestyles',
 
                 if (family === 'tablecell') {  // table cells have to iterate over table attributes, too
                     if ((cellOrientation[name]) && (styleAttributes[name]) && (styleAttributes[name].table) && (! _.contains(excludedAttributes, name))) {
-                        attributes = _.extend(attributes, resolveTableStylesWithCellPosition(cellOrientation, styleAttributes[name].table));
+                        _.extend(attributes, resolveTableStylesWithCellPosition(cellOrientation, _.extend({}, styleAttributes[name].table, explicitTableAttributes)));
                     }
                 }
 
