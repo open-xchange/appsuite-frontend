@@ -165,7 +165,9 @@ define('io.ox/core/commons-folderview',
 
             require(['io.ox/core/tk/folderviews'], function (views) {
                 var options;
+//                console.log(ext.point(POINT + '/options'));
                 _(ext.point(POINT + '/options').all()).each(function (obj) {
+//                    console.log(options);
                     options = _.extend(obj, options || {});
                 });
 
