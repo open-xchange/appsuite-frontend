@@ -284,12 +284,18 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 }
             });
             var alarmupdate = function () {
-                var temp = date.Local.parse(self.fields.alarmDate.val() + ' ' + self.fields.alarmDateTime.val());
+                var divider = ' ',
+                    format = date.getFormat();
+                if (format.search(/, /) !== -1) {//english seperates date and time with a comma
+                    format = format.replace(/, /, ' ');
+                    divider = ", ";
+                }
+                var temp = date.Local.parse(self.fields.alarmDate.val() + divider + self.fields.alarmDateTime.val().toUpperCase());
                 if (temp !== null) {
                     alarmDateObj = temp;
                     self.model.set('alarm', temp.t);
                 } else {
-                    setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.")); }, 300);
+                    setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.") + ' ' + gt.noI18n(format)); }, 300);
                     self.model.trigger('change:alarm');
                 }
             };
@@ -386,12 +392,19 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 }
             });
             var endDateUpdate = function () {
-                var temp = date.Local.parse(self.fields.endDate.val() + ' ' + self.fields.endDateTime.val());
+                var divider = ' ',
+                    format = date.getFormat();
+                if (format.search(/, /) !== -1) {//english seperates date and time with a comma
+                    format = format.replace(/, /, ' ');
+                    divider = ", ";
+                }
+                var temp = date.Local.parse(self.fields.endDate.val() + divider + self.fields.endDateTime.val().toUpperCase());
                 if (temp !== null) {
                     endDateObj = temp;
                     self.model.set('end_date', temp.t);
                 } else {
-                    setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.")); }, 300);
+                    
+                    setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.") + ' ' + gt.noI18n(format)); }, 300);
                     self.model.trigger('change:end_date');
                 }
             };
@@ -408,12 +421,18 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 }
             });
             var startDateUpdate = function () {
-                var temp = date.Local.parse(self.fields.startDate.val() + ' ' + self.fields.startDateTime.val());
+                var divider = ' ',
+                    format = date.getFormat();
+                if (format.search(/, /) !== -1) {//english seperates date and time with a comma
+                    format = format.replace(/, /, ' ');
+                    divider = ", ";
+                }
+                var temp = date.Local.parse(self.fields.startDate.val() + divider + self.fields.startDateTime.val().toUpperCase());
                 if (temp !== null) {
                     startDateObj = temp;
                     self.model.set('start_date', temp.t);
                 } else {
-                    setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.")); }, 300);
+                    setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.") + ' ' + gt.noI18n(format)); }, 300);
                     self.model.trigger('change:start_date');
                 }
             };
@@ -453,7 +472,6 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             }
             if (attachmentsToAdd.length > 0) {
                 require(['io.ox/core/api/attachment'], function (attachmentApi) {
-                    console.log(attachmentsToAdd);
                     attachmentApi.create({module: 4, folder: folder_id, id: data.id},
                                          attachmentsToAdd);
                 });
