@@ -2310,10 +2310,9 @@ define('io.ox/office/editor/position',
      *      process. By default, this method visits all paragraphs embedded in
      *      all tables and their sub tables, but does not visit the table
      *      objects. Has no effect for tables that contain the end paragraph,
-     *      because these tables are not fully covered by the paragraph range.
-     *      Tables that contain the start paragraph will never be visited,
-     *      because they are considered to be located before the start
-     *      paragraph.
+     *      because these tables are not fully covered by the selection. Tables
+     *      that contain the start paragraph will never be visited, because
+     *      they start before the selection.
      *
      * @returns {Utils.BREAK|Undefined}
      *  A reference to the Utils.BREAK object, if the iterator has returned
@@ -2424,13 +2423,13 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * Calls the passed iterator function for specific component nodes selected
-     * by the passed logical half-open range. It is possible to visit all
-     * text components embedded in all covered paragraphs (also inside tables
-     * and nested tables), or to iterate on the 'shortest path' by visiting
-     * content nodes (paragraphs or tables) exactly once if they are covered
-     * completely by the selection range and skipping the embedded paragraphs,
-     * sub tables, and text components.
+     * Calls the passed iterator function for specific nodes selected by the
+     * passed logical half-open range. It is possible to visit all child nodes
+     * embedded in all covered paragraphs (also inside tables and nested
+     * tables), or to iterate on the 'shortest path' by visiting content nodes
+     * (paragraphs or tables) exactly once if they are covered completely by
+     * the selection range and skipping the embedded paragraphs, sub tables,
+     * and text contents.
      *
      * @param {HTMLElement|jQuery} rootNode
      *  The root node of the document. If this object is a jQuery collection,
@@ -2460,12 +2459,11 @@ define('io.ox/office/editor/position',
      *      If set to true, tables and paragraphs that are covered completely
      *      by the specified selection will be visited directly and once, and
      *      their descendant components will be skipped in the iteration
-     *      process. By default, this method visits the text components of all
+     *      process. By default, this method visits the child nodes of all
      *      paragraphs and tables embedded in tables. Has no effect for tables
      *      that contain the end paragraph, because these tables are not fully
-     *      covered by the paragraph range. Tables that contain the start
-     *      paragraph will never be visited, because they are considered to be
-     *      located before the start paragraph.
+     *      covered by the selection. Tables that contain the start paragraph
+     *      will never be visited, because they start before the selection.
      *  @param {Boolean} [options.split=false]
      *      If set to true, the first and last text span not covered completely
      *      by the specified range will be split before the iterator function
@@ -2476,7 +2474,7 @@ define('io.ox/office/editor/position',
      *  A reference to the Utils.BREAK object, if the iterator has returned
      *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
-    Position.iterateTextComponentsInSelection = function (rootNode, selection, iterator, context, options) {
+    Position.iterateNodesInSelection = function (rootNode, selection, iterator, context, options) {
 
         var // whether to iterate on shortest path (do not traverse into completely covered content nodes)
             shortestPath = Utils.getBooleanOption(options, 'shortestPath', false),
@@ -2495,7 +2493,7 @@ define('io.ox/office/editor/position',
             // start node and offset (pass true to NOT resolve text spans to text nodes)
             startInfo = Position.getDOMPosition(rootNode, startPosition, true);
             if (!startInfo || !startInfo.node) {
-                Utils.warn('Position.iterateTextComponentsInSelection(): invalid selection');
+                Utils.warn('Position.iterateNodesInSelection(): invalid selection');
                 return;
             }
 

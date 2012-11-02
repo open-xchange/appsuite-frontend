@@ -227,11 +227,55 @@ define('io.ox/office/editor/editor',
 
         this.copy = function () {
 
-            var selection = getSelection(),
-                generator = new Operations.Generator();
+            var // the current selection to be copied into the clipboard
+                selection = getSelection(),
+                // the operations generator
+                generator = new Operations.Generator(),
+                // zero-based index of the current content node
+                targetPosition = 0;
 
             Utils.info('Editor.copy(): generating operations...');
-            _(generator.generateOperationsForSelection(editdiv, selection).getOperations()).each(function (operation) {
+
+            // visit the paragraphs and tables covered by the selection
+            Position.iterateContentNodesInSelection(editdiv, selection, function (contentNode, position, startOffset, endOffset) {
+
+                // paragraphs may be covered partly
+                if (DOM.isParagraphNode(contentNode)) {
+
+                    // first or last paragraph: generate operations for covered text components
+                    if (_.isNumber(startOffset) || _.isNumber(endOffset)) {
+
+                        // do not create an 'insertParagraph' operation for the first paragraph
+                        if (!_.isNumber(startOffset)) {
+                            generator.generateOperation(Operations.PARA_INSERT, { start: [targetPosition] });
+                            generator.generateSetAttributesOperation(contentNode, [targetPosition]);
+                        }
+
+                        // operations for the text contents covered by the selection
+                        generator.generateParagraphChildOperations(contentNode, [targetPosition], { start: startOffset, end: endOffset });
+
+                    } else {
+                        // generate operations for entire paragraph
+                        generator.generateParagraphOperations(contentNode, [targetPosition]);
+                    }
+                }
+
+                // entire table: generate complete operations array for the table
+                else if (DOM.isTableNode(contentNode)) {
+                    generator.generateTableOperations(contentNode, [targetPosition]);
+                }
+
+                else {
+                    Utils.error('Operations.Generator.generateOperationsForSelection(): unknown content node "' + Utils.getNodeName(contentNode) + '" at position ' + JSON.stringify(position) + '.');
+                    return Utils.BREAK;
+                }
+
+                targetPosition += 1;
+
+            }, this, { shortestPath: true });
+
+            // TODO: store operations in clipboard
+            _(generator.getOperations()).each(function (operation) {
                 var text = 'name="' + operation.name + '", attrs=';
                 delete operation.name;
                 text += JSON.stringify(operation);
@@ -1213,7 +1257,7 @@ define('io.ox/office/editor/editor',
             switch (family) {
 
             case 'character':
-                Position.iterateTextComponentsInSelection(editdiv, selection, function (node) {
+                Position.iterateNodesInSelection(editdiv, selection, function (node) {
                     return DOM.iterateTextSpans(node, function (span) {
                         return mergeElementAttributes(characterStyles.getElementAttributes(span));
                     });
@@ -2180,7 +2224,7 @@ define('io.ox/office/editor/editor',
                     end = operation.end[operation.end.length - 1],
                     generator = new Operations.Generator();
 
-                generator.generateTextComponentOperations(paragraph, position, { start: start, end: end, clear: true });
+                generator.generateParagraphChildOperations(paragraph, position, { start: start, end: end, clear: true });
                 undomgr.addUndo(generator.getOperations(), operation);
             }
             implDeleteText(operation.start, operation.end);

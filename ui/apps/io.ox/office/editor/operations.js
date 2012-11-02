@@ -149,10 +149,38 @@ define('io.ox/office/editor/operations',
             return operation;
         }
 
+        // methods ------------------------------------------------------------
+
+        /**
+         * Returns the array of operations that has been generated so far.
+         */
+        this.getOperations = function () {
+            return operations;
+        };
+
+        // private methods ----------------------------------------------------
+
+        /**
+         * Creates and appends a new operation to the operations array.
+         *
+         * @param {String} name
+         *  The name of the operation.
+         *
+         * @param {Object} [options]
+         *  Additional options that will be stored in the operation.
+         *
+         * @returns {Operations.Generator}
+         *  A reference to this instance.
+         */
+        this.generateOperation = function (name, options) {
+            generateOperation(name, options);
+            return this;
+        };
+
         /**
          * Creates and appends a new operation to the operations array. Adds
-         * explicit attributes of the specified node to the 'attrs' option of
-         * the operation.
+         * explicit attributes of the passed node to the 'attrs' option of the
+         * new operation.
          *
          * @param {HTMLElement|jQuery} node
          *  The element node that may contain explicit formatting attributes.
@@ -165,10 +193,10 @@ define('io.ox/office/editor/operations',
          * @param {Object} [options]
          *  Additional options that will be stored in the operation.
          *
-         * @returns {Object}
-         *  Reference to the created operation, for later use.
+         * @returns {Operations.Generator}
+         *  A reference to this instance.
          */
-        function generateOperationWithAttributes(node, name, options) {
+        this.generateOperationWithAttributes = function (node, name, options) {
 
             var // explicit attributes of the passed node
                 attributes = StyleSheets.getExplicitAttributes(node);
@@ -177,9 +205,10 @@ define('io.ox/office/editor/operations',
             if (!_.isEmpty(attributes)) {
                 options = _.extend({ attrs: attributes }, options);
             }
+            generateOperation(name, options);
 
-            return generateOperation(name, options);
-        }
+            return this;
+        };
 
         /**
          * Generates the 'setAttributes' operation needed to set the explicit
@@ -198,8 +227,11 @@ define('io.ox/office/editor/operations',
          * @param {Number[]} [endPosition]
          *  The logical end position of the passed node, if the node spans
          *  several logical components (e.g. a text portion).
+         *
+         * @returns {Operations.Generator}
+         *  A reference to this instance.
          */
-        function generateSetAttributesOperation(node, position, endPosition) {
+        this.generateSetAttributesOperation = function (node, position, endPosition) {
 
             var // explicit attributes of the passed node
                 attributes = StyleSheets.getExplicitAttributes(node),
@@ -212,15 +244,8 @@ define('io.ox/office/editor/operations',
                 if (_.isArray(endPosition)) { options.end = endPosition; }
                 generateOperation(Operations.ATTRS_SET, options);
             }
-        }
 
-        // methods ------------------------------------------------------------
-
-        /**
-         * Returns the array of operations that has been generated so far.
-         */
-        this.getOperations = function () {
-            return operations;
+            return this;
         };
 
         /**
@@ -256,7 +281,7 @@ define('io.ox/office/editor/operations',
          * @returns {Operations.Generator}
          *  A reference to this instance.
          */
-        this.generateTextComponentOperations = function (paragraph, position, options) {
+        this.generateParagraphChildOperations = function (paragraph, position, options) {
 
             var // start of text range to be included in the operations
                 rangeStart = Utils.getIntegerOption(options, 'start'),
@@ -334,11 +359,11 @@ define('io.ox/office/editor/operations',
 
                     // operation to create an image (including its attributes)
                     else if (DOM.isImageNode(node)) {
-                        generateOperationWithAttributes(node, Operations.IMAGE_INSERT, { position: startPosition, imgurl: $(node).data('url') });
+                        this.generateOperationWithAttributes(node, Operations.IMAGE_INSERT, { position: startPosition, imgurl: $(node).data('url') });
                     }
 
                     else {
-                        Utils.error('Operations.Generator.generateTextComponentOperations(): unknown content node');
+                        Utils.error('Operations.Generator.generateParagraphChildOperations(): unknown content node');
                     }
                 }
 
@@ -349,8 +374,8 @@ define('io.ox/office/editor/operations',
             // operations would clone the attributes of the last text portion
             // instead of creating a clean text node as expected in this case.
             _(attributeRanges).each(function (range) {
-                generateSetAttributesOperation(range.node, range.position, range.endPosition);
-            });
+                this.generateSetAttributesOperation(range.node, range.position, range.endPosition);
+            }, this);
 
             return this;
         };
@@ -383,10 +408,10 @@ define('io.ox/office/editor/operations',
             } else {
                 generateOperation(Operations.PARA_INSERT, { start: position });
             }
-            generateSetAttributesOperation(paragraph, position);
+            this.generateSetAttributesOperation(paragraph, position);
 
             // process all content nodes in the paragraph and create operations
-            return this.generateTextComponentOperations(paragraph, position);
+            return this.generateParagraphChildOperations(paragraph, position);
         };
 
         /**
@@ -407,7 +432,7 @@ define('io.ox/office/editor/operations',
         this.generateTableCellOperations = function (cell, position) {
 
             // operation to create the table cell element
-            generateOperationWithAttributes(cell, Operations.CELL_INSERT, { position: position, count: 1 });
+            this.generateOperationWithAttributes(cell, Operations.CELL_INSERT, { position: position, count: 1 });
 
             // generate operations for the contents of the cell
             return this.generateContentOperations(cell, position);
@@ -430,7 +455,7 @@ define('io.ox/office/editor/operations',
         this.generateTableRowOperations = function (row, position) {
 
             // operation to create the table row element
-            generateOperationWithAttributes(row, Operations.ROW_INSERT, { position: position, count: 1, insertdefaultcells: false });
+            this.generateOperationWithAttributes(row, Operations.ROW_INSERT, { position: position, count: 1, insertdefaultcells: false });
 
             // generate operations for all cells
             position = appendNewIndex(position);
@@ -459,11 +484,11 @@ define('io.ox/office/editor/operations',
         this.generateTableOperations = function (table, position) {
 
             // operation to create the table element
-            generateOperationWithAttributes(table, Operations.TABLE_INSERT, { position: position });
+            this.generateOperationWithAttributes(table, Operations.TABLE_INSERT, { position: position });
 
             // generate operations for all rows
             position = appendNewIndex(position);
-            $(table).find('> * > tr').each(function () {
+            $(table).find('> tbody > tr').each(function () {
                 self.generateTableRowOperations(this, position);
                 position = increaseLastIndex(position);
             });
@@ -517,69 +542,6 @@ define('io.ox/office/editor/operations',
                 position = increaseLastIndex(position);
 
             }, this, { children: true });
-
-            return this;
-        };
-
-        /**
-         * Generates all operations needed to recreate the contents of the
-         * passed selection. The logical positions in the generated operations
-         * will start at [0].
-         *
-         * @param {HTMLElement|jQuery} rootNode
-         *  The root node of the document containing the passed selection. If
-         *  this object is a jQuery collection, uses the first node it
-         *  contains.
-         *
-         * @param {Selection} selection
-         *  The logical selection covering the contents to be converted to
-         *  operations.
-         *
-         * @returns {Operations.Generator}
-         *  A reference to this instance.
-         */
-        this.generateOperationsForSelection = function (rootNode, selection) {
-
-            var // zero-based position of the current component
-                targetPosition = [0];
-
-            // visit the paragraphs and tables covered by the selection
-            Position.iterateContentNodesInSelection(rootNode, selection, function (contentNode, position, startOffset, endOffset) {
-
-                // paragraphs may be covered partly
-                if (DOM.isParagraphNode(contentNode)) {
-
-                    // first or last paragraph: generate operations for covered text components
-                    if (_.isNumber(startOffset) || _.isNumber(endOffset)) {
-
-                        // do not create an 'insertParagraph' operation for the first paragraph
-                        if (!_.isNumber(startOffset)) {
-                            generateOperation(Operations.PARA_INSERT, { start: targetPosition });
-                            generateSetAttributesOperation(contentNode, targetPosition);
-                        }
-
-                        // operations for the text contents covered by the selection
-                        this.generateTextComponentOperations(contentNode, targetPosition, { start: startOffset, end: endOffset });
-
-                    } else {
-                        // generate operations for entire paragraph
-                        this.generateParagraphOperations(contentNode, targetPosition);
-                    }
-                }
-
-                // entire table: generate complete operations array for the table
-                else if (DOM.isTableNode(contentNode)) {
-                    this.generateTableOperations(contentNode, targetPosition);
-                }
-
-                else {
-                    Utils.error('Operations.Generator.generateOperationsForSelection(): unknown content node "' + Utils.getNodeName(contentNode) + '" at position ' + JSON.stringify(position) + '.');
-                    return Utils.BREAK;
-                }
-
-                targetPosition = increaseLastIndex(targetPosition);
-
-            }, this, { shortestPath: true });
 
             return this;
         };

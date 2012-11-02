@@ -115,6 +115,57 @@ define('io.ox/office/editor/controller',
                     set: function (color) { editor.setAttribute('paragraph', 'fillcolor', color); }
                 },
 
+                'paragraph/list/bullets': {
+                    parent: 'paragraph/attributes',
+                    get: function (attributes) {
+                        return (attributes.ilvl !== -1) && editor.getLists().isDefaultList(attributes.numId, 'bullet');
+                    },
+                    set: function (mode) {
+                        if (mode) {
+                            editor.createDefaultList('bullet');
+                        } else {
+                            editor.setAttributes('paragraph', { numId: -1, ilvl: -1 });
+                        }
+                    }
+                },
+                'paragraph/list/numbering': {
+                    parent: 'paragraph/attributes',
+                    get: function (attributes) {
+                        return (attributes.ilvl !== -1) && editor.getLists().isDefaultList(attributes.numId, 'numbering');
+                    },
+                    set: function (mode) {
+                        if (mode) {
+                            editor.createDefaultList('numbering');
+                        } else {
+                            editor.setAttributes('paragraph', { numId: -1, ilvl: -1 });
+                        }
+                    }
+                },
+                'paragraph/list/incindent': {
+                    parent: 'paragraph/attributes',
+                    enable: function (enabled) { return enabled && this.ilvl !== null && this.ilvl !== -1 && this.ilvl < 8; },
+                    get: function (attributes) {
+                        this.ilvl = attributes.ilvl;
+                    },
+                    set: function () {
+                        if (this.ilvl < 8) {
+                            editor.setAttribute('paragraph', 'ilvl', this.ilvl + 1);
+                        }
+                    }
+                },
+                'paragraph/list/decindent': {
+                    parent: 'paragraph/attributes',
+                    enable: function (enabled) { return enabled && this.ilvl !== null && this.ilvl !== -1 && this.ilvl > 0; },
+                    get: function (attributes) {
+                        this.ilvl = attributes.ilvl;
+                    },
+                    set: function () {
+                        if (this.ilvl > 0) {
+                            editor.setAttribute('paragraph', 'ilvl', this.ilvl - 1);
+                        }
+                    }
+                },
+
                 // characters
 
                 'character/attributes': {
@@ -229,56 +280,6 @@ define('io.ox/office/editor/controller',
                     // get: function (attributes) { return ObjectStyles.getFloatModeFromAttributes(attributes); },
                     get: function () { return editor.getImageFloatMode(); },
                     set: function (floatMode) { editor.setAttributes('image', ObjectStyles.getAttributesFromFloatMode(floatMode)); }
-                },
-
-                // numbering and bullets
-                'list/bullets': {
-                    parent: 'paragraph/attributes',
-                    get: function (attributes) { return attributes.ilvl !== null && attributes.ilvl !== -1 && editor.getLists().isDefaultList(attributes.numId, 'bullet'); },
-                    set: function (mode) {
-                        if (mode) {
-                            editor.createDefaultList('bullet');
-                        } else {
-                            editor.setAttributes('paragraph', { numId: -1, ilvl: -1 });
-                        }
-                    }
-                },
-                'list/numbering': {
-                    parent: 'paragraph/attributes',
-                    get: function (attributes) {
-                        return attributes.ilvl !== null && attributes.ilvl !== -1 && editor.getLists().isDefaultList(attributes.numId, 'numbering');
-                    },
-                    set: function (mode) {
-                        if (mode) {
-                            editor.createDefaultList('numbering');
-                        } else {
-                            editor.setAttributes('paragraph', { numId: -1, ilvl: -1 });
-                        }
-                    }
-                },
-                'list/incindent': {
-                    parent: 'paragraph/attributes',
-                    enable: function (enabled) { return enabled && this.ilvl !== null && this.ilvl !== -1 && this.ilvl < 8; },
-                    get: function (attributes) {
-                        this.ilvl = attributes.ilvl;
-                    },
-                    set: function () {
-                        if (this.ilvl < 8) {
-                            editor.setAttribute('paragraph', 'ilvl', this.ilvl + 1);
-                        }
-                    }
-                },
-                'list/decindent': {
-                    parent: 'paragraph/attributes',
-                    enable: function (enabled) { return enabled && this.ilvl !== null && this.ilvl !== -1 && this.ilvl > 0; },
-                    get: function (attributes) {
-                        this.ilvl = attributes.ilvl;
-                    },
-                    set: function () {
-                        if (this.ilvl > 0) {
-                            editor.setAttribute('paragraph', 'ilvl', this.ilvl - 1);
-                        }
-                    }
                 },
 
                 // debug
