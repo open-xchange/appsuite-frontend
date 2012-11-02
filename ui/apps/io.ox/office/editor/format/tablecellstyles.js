@@ -147,7 +147,7 @@ define('io.ox/office/editor/format/tablecellstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'tablecell', 'td', DEFINITIONS, {
+        StyleSheets.call(this, documentStyles, 'cell', 'td', DEFINITIONS, {
             parentStyleFamily: 'table'
         });
 

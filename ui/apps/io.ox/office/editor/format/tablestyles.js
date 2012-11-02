@@ -138,7 +138,7 @@ define('io.ox/office/editor/format/tablestyles',
             Table.updateColGroup(table, attributes.tablegrid);
 
             var // the table cell styles/formatter
-                tableCellStyles = self.getDocumentStyles().getStyleSheets('tablecell');
+                tableCellStyles = self.getDocumentStyles().getStyleSheets('cell');
 
             // iterating over all cells in the table to set the table attributes in the cell
             table.find('> tbody > tr > td').each(function () {
@@ -205,34 +205,30 @@ define('io.ox/office/editor/format/tablestyles',
             explicitTableAttributes = StyleSheets.getExplicitAttributes(table);
 
             if (explicitTableAttributes.look) {
-                _.each(explicitTableAttributes.look, function (val, key) {
-                    if (val === false) {
-                        excludedAttributes.push(key);
-                    }
-                });
-            }
 
-            // rename problem because of discrepancy of cell <-> tablecell and row <-> tablerow
-            var localfamily = family;
-
-            if (family === 'tablecell') {
-                localfamily = 'cell';
-            } else if (family === 'tablerow') {
-                localfamily = 'row';
+                if (_.isArray(explicitTableAttributes.look)) {
+                    excludedAttributes = explicitTableAttributes.look;
+                } else {  // -> to be removed, because explicitTableAttributes.look shall always be an array
+                    _.each(explicitTableAttributes.look, function (val, key) {
+                        if (val === false) {
+                            excludedAttributes.push(key);
+                        }
+                    });
+                }
             }
 
             // evaluating attributes for all other optional attributes
             // -> overwriting values from global ('wholetable') to specific ('swcell')
             _.each(tableAttributeNames, function (name) {
 
-                if (family === 'tablecell') {  // table cells have to iterate over table attributes, too
+                if (family === 'cell') {  // table cells have to iterate over table attributes, too
                     if ((cellOrientation[name]) && (styleAttributes[name]) && (styleAttributes[name].table) && (! _.contains(excludedAttributes, name))) {
                         _.extend(attributes, resolveTableStylesWithCellPosition(cellOrientation, _.extend({}, styleAttributes[name].table, explicitTableAttributes)));
                     }
                 }
 
-                if ((cellOrientation[name]) && (styleAttributes[name]) && (styleAttributes[name][localfamily]) && (! _.contains(excludedAttributes, name))) {
-                    attributes = _.extend(attributes, styleAttributes[name][localfamily]);
+                if ((cellOrientation[name]) && (styleAttributes[name]) && (styleAttributes[name][family]) && (! _.contains(excludedAttributes, name))) {
+                    attributes = _.extend(attributes, styleAttributes[name][family]);
                 }
             });
 

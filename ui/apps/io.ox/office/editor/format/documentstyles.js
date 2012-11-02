@@ -57,7 +57,7 @@ define('io.ox/office/editor/format/documentstyles',
         this.getAttributes = function () {
             return attributes;
         };
-        
+
         /**
          * Returns the style sheet container for the specified attribute
          * family.
@@ -102,8 +102,8 @@ define('io.ox/office/editor/format/documentstyles',
         containers.paragraph = new ParagraphStyles(rootNode, this);
         containers.image = new ImageStyles(rootNode, this);
         containers.table = new TableStyles(rootNode, this);
-        containers.tablerow = new TableRowStyles(rootNode, this);
-        containers.tablecell = new TableCellStyles(rootNode, this);
+        containers.row = new TableRowStyles(rootNode, this);
+        containers.cell = new TableCellStyles(rootNode, this);
         containers.page = new PageStyles(rootNode, this);
 
         themes = new Themes(this);

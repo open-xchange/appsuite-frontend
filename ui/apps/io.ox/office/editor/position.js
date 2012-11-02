@@ -1816,10 +1816,10 @@ define('io.ox/office/editor/position',
         case 'table':
             assignedPos = (DOM.isTableNode(node)) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, DOM.TABLE_NODE_SELECTOR);
             break;
-        case 'tablerow':
+        case 'row':
             assignedPos = ($(node).is('tr')) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'tr');
             break;
-        case 'tablecell':
+        case 'cell':
             assignedPos = ($(node).is('th, td')) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'th, td');
             break;
         default:

@@ -130,8 +130,8 @@ define('io.ox/office/editor/editor',
             characterStyles = documentStyles.getStyleSheets('character'),
             paragraphStyles = documentStyles.getStyleSheets('paragraph'),
             tableStyles = documentStyles.getStyleSheets('table'),
-            tableRowStyles = documentStyles.getStyleSheets('tablerow'),
-            tableCellStyles = documentStyles.getStyleSheets('tablecell'),
+            tableRowStyles = documentStyles.getStyleSheets('row'),
+            tableCellStyles = documentStyles.getStyleSheets('cell'),
             imageStyles = documentStyles.getStyleSheets('image'),
             pageStyles = documentStyles.getStyleSheets('page'),
             lists = documentStyles.getLists(),
@@ -3084,7 +3084,7 @@ define('io.ox/office/editor/editor',
                             width = 0,
                             fillChar = null,
                             tabSpan = tabNode.firstChild;
-    
+
                         // Paragraph tab stops. Only paragraph tab stop can have a leader and
                         // define a new alignment
                         if (paraTabstops && paraTabstops.length > 0) {
@@ -4404,9 +4404,9 @@ define('io.ox/office/editor/editor',
             } else if (DOM.isTableNode(element)) {
                 family = 'table';
             } else if ($(element).is('tr')) {
-                family = 'tablerow';
+                family = 'row';
             } else if ($(element).is('td')) {
-                family = 'tablecell';
+                family = 'cell';
             } else if (DOM.isImageNode(element)) {
                 family = 'image';
             } else {

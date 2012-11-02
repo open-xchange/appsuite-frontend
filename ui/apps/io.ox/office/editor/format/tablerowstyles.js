@@ -44,7 +44,7 @@ define('io.ox/office/editor/format/tablerowstyles',
      * changed. Repositions and reformats the table row according to the passed
      * attributes.
      *
-     * @param {jQuery} tablerow
+     * @param {jQuery} row
      *  The <tr> element whose table row attributes have been changed,
      *  as jQuery object.
      *
@@ -52,7 +52,7 @@ define('io.ox/office/editor/format/tablerowstyles',
      *  A map of all attributes (name/value pairs), containing the effective
      *  attribute values merged from style sheets and explicit attributes.
      */
-    function updateTableRowFormatting(tablerow, attributes) {
+    function updateTableRowFormatting(row, attributes) {
 
         // Table.updateTableRows(table, attributes);
 
@@ -80,7 +80,7 @@ define('io.ox/office/editor/format/tablerowstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'tablerow', 'tr', DEFINITIONS);
+        StyleSheets.call(this, documentStyles, 'row', 'tr', DEFINITIONS);
 
         // initialization -----------------------------------------------------
 
