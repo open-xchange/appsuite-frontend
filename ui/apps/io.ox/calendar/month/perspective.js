@@ -189,6 +189,23 @@ define('io.ox/calendar/month/perspective',
             }
         },
 
+        getFolder: function () {
+            var self = this,
+                def = $.Deferred();
+            self.app.folder.getData().done(function (data) {
+                // switch only visible on private folders
+                self.showAllCon[data.type === 1 ? 'show' : 'hide']();
+                // do folder magic
+                if (data.type === 1 && self.showAll.prop('checked') === true) {
+                    self.folder = null;
+                } else {
+                    self.folder = data.id;
+                }
+                def.resolve();
+            });
+            return def;
+        },
+
         render: function (app) {
 
             var start = new date.Local(),
@@ -296,31 +313,23 @@ define('io.ox/calendar/month/perspective',
 
             $(window).on('resize', this.getFirsts);
 
-            app.folder.getData().done(function (data) {
-                self.folder = data.id;
+            self.getFolder().done(function () {
                 self.drawWeeks({multi: self.initLoad}).done(function () {
                     self.gotoMonth();
                 });
             });
 
+            // define default sidepopup dialog
             this.dialog = new dialogs.SidePopup()
                 .on('close', function () {
                     $('.appointment', this.main).removeClass('opac current');
                 });
 
-            var refresh = $.proxy(function () {
-                app.folder.getData().done(function (data) {
-                    // switch only visible on private folders
-                    self.showAllCon[data.type === 1 ? 'show' : 'hide']();
-                    // do folder magic
-                    if (data.type === 1 && self.showAll.prop('checked') === true) {
-                        self.folder = null;
-                    } else {
-                        self.folder = data.id;
-                    }
+            var refresh = function () {
+                self.getFolder().done(function () {
                     self.update();
                 });
-            }, this);
+            };
 
             // watch for api refresh
             api.on('refresh.all', refresh);
