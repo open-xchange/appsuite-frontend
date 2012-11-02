@@ -86,6 +86,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             win.on('show', function () {
                 if (taskView) {
                     taskView.dropZone.include();
+                    taskView.$el.find(".title-field").focus();
                 }
             });
 
