@@ -155,10 +155,12 @@
         z-index: 1;
         font-size: 11px;
         line-height: 1em;
+        .transition(background-color 0.2s linear);
         background-color: #FFF;
     }
     
     .day.out .number {
+        .transition(background-color 0.2s linear);
         background-color: transparent;
     }
 
