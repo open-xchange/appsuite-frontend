@@ -341,18 +341,6 @@ define('io.ox/office/editor/format/tablestyles',
             styleAttributesResolver: resolveTableStyleAttributes
         });
 
-        // methods ------------------------------------------------------------
-
-        /**
-         * Iterates over all table elements covered by the passed DOM ranges
-         * for read-only access and calls the passed iterator function.
-         */
-        this.iterateReadOnly = function (ranges, iterator, context) {
-            // DOM.iterateAncestorNodesInRanges() passes the current element to
-            // the passed iterator function exactly as expected
-            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, DOM.TABLE_NODE_SELECTOR, iterator, context);
-        };
-
         // initialization -----------------------------------------------------
 
         this.registerUpdateHandler(updateTableFormatting);

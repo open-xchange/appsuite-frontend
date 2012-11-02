@@ -1331,8 +1331,11 @@ define('io.ox/office/editor/editor',
          */
         this.getAttributes = function (family) {
 
-            var selection = getSelection(),
-                ranges = getBrowserSelection(),
+            var // the current selection
+                selection = getSelection(),
+                // table element containing the selection
+                table = null,
+                // resulting merged attributes
                 attributes = {};
 
             // merges the passed element attributes into the resulting attributes
@@ -1378,7 +1381,9 @@ define('io.ox/office/editor/editor',
                 break;
 
             case 'table':
-                attributes = tableStyles.getAttributesInRanges(ranges);
+                if ((table = Position.getEnclosingTable(editdiv, selection))) {
+                    mergeElementAttributes(tableStyles.getElementAttributes(table));
+                }
                 break;
 
             case 'image':

@@ -146,17 +146,6 @@ define('io.ox/office/editor/format/pagestyles',
 
         StyleSheets.call(this, documentStyles, 'page', DOM.PAGE_NODE_SELECTOR, DEFINITIONS);
 
-        // methods ------------------------------------------------------------
-
-        /**
-         * Iterates over all page elements covered by the passed DOM ranges for
-         * read-only access and calls the passed iterator function.
-         */
-        this.iterateReadOnly = function (ranges, iterator, context) {
-            // currently, the root node IS the page (this may change in the future!)
-            iterator.call(context, rootNode);
-        };
-
         // initialization -----------------------------------------------------
 
         this.registerUpdateHandler(updatePageFormatting);

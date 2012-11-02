@@ -335,52 +335,6 @@ define('io.ox/office/editor/format/stylesheets',
 
         Container.call(this, documentStyles);
 
-        // abstract interface -------------------------------------------------
-
-        /**
-         * Subclasses MUST overwrite this method and implement iterating the
-         * DOM elements covered by the passed array of DOM ranges for read-only
-         * access. Usually the iterator functions defined in the DOM module can
-         * be used to implement the iteration process.
-         *
-         * @param {DOM.Range[]} ranges
-         *  (in/out) The DOM ranges to be visited.
-         *
-         * @param {Function} iterator
-         *  The iterator function to be called for each found DOM element. This
-         *  function receives the current DOM element as first parameter.
-         *
-         * @param {Object} [context]
-         *  If specified, the iterator will be called with this context (the
-         *  symbol 'this' will be bound to the context inside the iterator
-         *  function).
-         */
-        this.iterateReadOnly = function (ranges, iterator, context) {
-            Utils.error('StyleSheets.iterateReadOnly(): MUST be implemented in the subclass!');
-        };
-
-        /**
-         * Subclasses MUST overwrite this method and implement iterating the
-         * DOM elements covered by the passed array of DOM ranges for
-         * read/write access. Usually the iterator functions defined in the DOM
-         * module can be used to implement the iteration process.
-         *
-         * @param {DOM.Range[]} ranges
-         *  (in/out) The DOM ranges to be visited.
-         *
-         * @param {Function} iterator
-         *  The iterator function to be called for each found DOM element. This
-         *  function receives the current DOM element as first parameter.
-         *
-         * @param {Object} [context]
-         *  If specified, the iterator will be called with this context (the
-         *  symbol 'this' will be bound to the context inside the iterator
-         *  function).
-         */
-        this.iterateReadWrite = function (ranges, iterator, context) {
-            Utils.error('StyleSheets.iterateReadWrite(): MUST be implemented in the subclass!');
-        };
-
         // methods ------------------------------------------------------------
 
         /**
@@ -883,61 +837,6 @@ define('io.ox/office/editor/format/stylesheets',
             });
 
             return mergedAttributes;
-        };
-
-        /**
-         * Returns the merged values of all formatting attributes in the
-         * specified DOM ranges. If an attribute value is not unique in the
-         * specified ranges, the respective value in the returned attribute map
-         * be set to null.
-         *
-         * @param {DOM.Range[]} ranges
-         *  (in/out) The DOM ranges to be visited. The array will be validated
-         *  and sorted before iteration starts (see method
-         *  DOM.iterateNodesInRanges() for details).
-         *
-         * @param {Object} [options]
-         *  A map of options controlling the operation. Supports the following
-         *  options:
-         *  @param {Boolean} [options.special=false]
-         *      If set to true, includes special attributes (attributes that
-         *      are marked with the 'special' flag in the attribute definitions
-         *      passed to the constructor) to the result map.
-         *
-         * @returns {Object}
-         *  A map of attribute name/value pairs.
-         */
-        this.getAttributesInRanges = function (ranges, options) {
-
-            var // the resulting attribute values, mapped by name
-                attributes = {};
-
-            // get merged attributes from all covered elements
-            this.iterateReadOnly(ranges, function (element) {
-
-                var // get attributes of the current element
-                    elementAttributes = this.getElementAttributes(element, options),
-                    // whether any attribute is still unambiguous
-                    hasNonNull = false;
-
-                // update all attributes in the result set
-                _(elementAttributes).each(function (value, name) {
-                    if (!(name in attributes)) {
-                        // initial iteration: store value
-                        attributes[name] = value;
-                    } else if (!_.isEqual(value, attributes[name])) {
-                        // value differs from previous value: ambiguous state
-                        attributes[name] = null;
-                    }
-                    hasNonNull = hasNonNull || !_.isNull(attributes[name]);
-                });
-
-                // exit iteration loop if there are no unambiguous attributes left
-                if (!hasNonNull) { return Utils.BREAK; }
-
-            }, this);
-
-            return attributes;
         };
 
         /**

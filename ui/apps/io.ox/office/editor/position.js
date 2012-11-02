@@ -383,7 +383,7 @@ define('io.ox/office/editor/position',
     Position.getSelectedElement = function (startnode, position, selector) {
 
         var // the DOM node located at the passed position
-            domPos = Position.getDOMPosition(startnode, position);
+            domPos = Position.getDOMPosition(startnode, position, true);
 
         if (domPos && domPos.node && $(domPos.node).is(selector)) {
             return domPos.node;
@@ -745,7 +745,7 @@ define('io.ox/office/editor/position',
 
         var end = Position.getDOMPosition(startnode, endSelection, true);
 
-        if ((start.node.nodeType === 1) && (start.node.nodeType === 1)) {  // Todo: Clarification
+        if ((start.node.nodeType === 1) && (end.node.nodeType === 1)) {  // Todo: Clarification
             start = DOM.Point.createPointForNode(start.node);
             end = DOM.Point.createPointForNode(end.node);
         }
@@ -1016,6 +1016,30 @@ define('io.ox/office/editor/position',
      */
     Position.getCurrentTable = function (startnode, position) {
         return Position.getLastNodeFromPositionByNodeName(startnode, position, DOM.TABLE_NODE_SELECTOR);
+    };
+
+    /**
+     * Returns the closest table that contains the passed selection completely.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The root node containing the document contents covered by the passed
+     *  selection. If this object is a jQuery collection, uses the first DOM
+     *  node it contains.
+     *
+     * @param {Selection} selection
+     *  The selection whose containing table element will be returned.
+     *
+     * @returns {HTMLTableElement|Null}
+     *  The closest containing table; or null, if the selection is not
+     *  contained in a table.
+     */
+    Position.getEnclosingTable = function (rootNode, selection) {
+
+        var // position of closest common parent component containing the selection
+            commonPosition = Position.getClosestCommonPosition(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
+
+        // the closest table containing the common parent component
+        return (commonPosition.length > 0) ? Position.getCurrentTable(rootNode, commonPosition) : null;
     };
 
     /**
@@ -2019,6 +2043,33 @@ define('io.ox/office/editor/position',
         }
 
         return true;
+    };
+
+    /**
+     * Returns the logical position of the closest common component containing
+     * both passed logical positions (the leading array elements that are equal
+     * in both arrays).
+     *
+     * @param {Number[]} position1
+     *  The first logical position.
+     *
+     * @param {Number[]} position2
+     *  The second logical position.
+     *
+     * @returns {Number[]}
+     *  The logical position of the closest common component. May be the empty
+     *  array if the positions already differ in their first element.
+     */
+    Position.getClosestCommonPosition = function (position1, position2) {
+
+        var index = 0, length = Math.min(position1.length, position2.length);
+
+        // compare all array elements but the last ones
+        while ((index < length) && (position1[index] === position2[index])) {
+            index += 1;
+        }
+
+        return position1.slice(0, index);
     };
 
     /**
