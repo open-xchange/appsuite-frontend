@@ -179,10 +179,6 @@
 	float: right;
 }
 
-.picture{
-	cursor: pointer;
-}
-
 input#image1 {
 	width: 300px;
 }
