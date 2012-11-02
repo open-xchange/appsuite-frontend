@@ -1873,11 +1873,13 @@ define('io.ox/office/editor/editor',
                 }
             } else if (event.keyCode === KeyCodes.TAB && !event.ctrlKey && !event.metaKey) {
                 // (shift)Tab: Change list indent (if in list) when selection is at first position in paragraph
-                var paragraph = Position.getLastNodeFromPositionByNodeName(editdiv, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR);
+                var paragraph = Position.getLastNodeFromPositionByNodeName(editdiv, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR),
+                    mustInsertTab = !event.shiftKey && !selection.hasRange(), callPreventDefault = true;
                 if (!selection.hasRange() &&
                         selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] === Position.getFirstTextNodePositionInParagraph(paragraph)) {
                     var ilvl = paragraphStyles.getElementAttributes(paragraph).ilvl;
                     if (ilvl !== -1) {
+                        mustInsertTab = false;
                         if (!event.shiftKey && ilvl < 8) {
                             ilvl += 1;
                             self.setAttribute('paragraph', 'ilvl', ilvl);
@@ -1887,6 +1889,13 @@ define('io.ox/office/editor/editor',
                         }
                     }
                     event.preventDefault();
+                    callPreventDefault = false;
+                }
+                if (mustInsertTab) {
+                    // TODO: insert tab
+                    self.insertTab();
+                    if (callPreventDefault)
+                        event.preventDefault();
                 }
             }
         }
@@ -3070,33 +3079,31 @@ define('io.ox/office/editor/editor',
                 var pos = $(tabNode).position();
                 if (pos) {
                     var leftHMM = Utils.convertLengthToHmm(pos.left, "px"),
-                        width = 0;
+                        width = 0,
+                        fillChar = null,
+                        tabSpan = tabNode.firstChild;
 
                     // Paragraph tab stops. Only paragraph tab stop can have a leader and
                     // define a new alignment
                     if (paraTabstops && paraTabstops.length > 0) {
                         var tabstop = _.find(paraTabstops, function (tab) { return (leftHMM + 1) < tab.pos; });
-                        if (tabstop) {
+                        if (tabstop && tabSpan) {
                             // tabsize calculation based on the paragraph defined tabstop
                             width = Math.max(0, tabstop.pos - (leftHMM % tabstop.pos));
                             if (tabstop.leader) {
-                                var tabSpan = tabNode.firstChild;
-                                if (tabSpan) {
-                                    var fillChar = null;
-                                    switch (tabstop.leader) {
-                                    case 'dot':
-                                        fillChar = '.';
-                                        break;
-                                    case 'hyphen':
-                                        fillChar = '-';
-                                        break;
-                                    case 'underscore':
-                                        fillChar = '_';
-                                        break;
-                                    }
-                                    if (fillChar)
-                                        $(tabSpan).text(createTabFillCharString(tabSpan, width, fillChar));
+                                switch (tabstop.leader) {
+                                case 'dot':
+                                    fillChar = '.';
+                                    break;
+                                case 'hyphen':
+                                    fillChar = '-';
+                                    break;
+                                case 'underscore':
+                                    fillChar = '_';
+                                    break;
                                 }
+                                if (fillChar)
+                                    $(tabSpan).text(createTabFillCharString(tabSpan, width, fillChar));
                             }
                         }
                     }
@@ -3106,7 +3113,7 @@ define('io.ox/office/editor/editor',
                         width = Math.max(0, defaultTabstop - (leftHMM % defaultTabstop));
                         width = (width <= 1) ? defaultTabstop : width; // no 0 tab size allowed, check for <= 1 to prevent rounding errors
                     }
-                    $(tabNode).css('width', (width / 100) + "mm");
+                    $(tabNode).css('width', (width / 100) + 'mm');
                 }
             });
         }
@@ -4202,10 +4209,10 @@ define('io.ox/office/editor/editor',
             DOM.splitTextSpan(node, domPos.offset);
 
             // split the text span again to get initial character formatting for the tab
-            // just use the default tab stop - value will be updated by validateParagraph
+            // tab stop size will be updated by validateParagraph
             tabSpan = DOM.splitTextSpan(node, 0);
 
-            // insert a new text field before the addressed text node, move
+            // insert a tab container node before the addressed text node, move
             // the tab span element into the tab container node
             DOM.createTabNode().append(tabSpan).insertBefore(node);
 
