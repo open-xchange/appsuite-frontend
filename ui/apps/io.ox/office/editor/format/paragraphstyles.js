@@ -63,7 +63,24 @@ define('io.ox/office/editor/format/paragraphstyles',
             tabstops: {
                 def: [],
                 merge: function (tabstops1, tabstops2) {
-                    var newTabstops = _.union(tabstops1, tabstops2);
+                    var clearedTabstops = _.filter(tabstops2, function (tabstop) {
+                            return tabstop.value === 'clear';
+                        }),
+                        additionalTabstops = _.filter(tabstops2, function (tabstop) {
+                            return tabstop.value !== 'clear';
+                        }),
+                        newTabstops = _.union(tabstops1, additionalTabstops);
+
+                    // filter out cleared tabstops
+                    if (clearedTabstops.length > 0) {
+                        newTabstops = _.filter(newTabstops, function (tabstop) {
+                            return _.find(clearedTabstops, function (cleared) {
+                                return cleared.pos !== tabstop.pos;
+                            });
+                        });
+                    }
+
+                    // sort tabstops by position
                     return _.sortBy(newTabstops, function (tabstop) {
                         return tabstop.pos;
                     });
