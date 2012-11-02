@@ -291,7 +291,7 @@ define("io.ox/core/desktop",
 
             if (this.get('state') === 'ready') {
                 this.set('state', 'initializing');
-                (deferred = this.get('launch').apply(this, options || {}) || $.when())
+                (deferred = this.get('launch').call(this, options || {}) || $.when())
                 .done(function () {
                     ox.ui.apps.add(self);
                     self.set('state', 'running');
