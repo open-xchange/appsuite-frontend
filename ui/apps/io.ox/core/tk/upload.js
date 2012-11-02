@@ -17,8 +17,8 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
 
     function hasLeftViewport(evt) {
         evt = evt.originalEvent || evt;
-
-        return evt.clientX === 0 && evt.clientY === 0;
+        if (_.browser.Safari) return true; // Safari's behaviour is different. evt.clientXY is never 0
+        return (evt.clientX === 0 && evt.clientY === 0);
     }
 
     // We provide a few events:
