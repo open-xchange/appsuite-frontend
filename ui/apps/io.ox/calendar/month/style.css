@@ -149,13 +149,19 @@
         position: absolute;
         color: #aaa;
         text-align: right;
-        right: 7px;
-        bottom: 5px;
+        right: 0px;
+        bottom: 0px;
+        padding: 5px 7px;
         z-index: 1;
         font-size: 11px;
         line-height: 1em;
+        background-color: #FFF;
     }
     
+    .day.out .number {
+        background-color: transparent;
+    }
+
     .day.out .number {
         color: #aaa;
     }
