@@ -12,6 +12,12 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
+.user-select-text {
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    user-select: text;
+}
+
 .files-iconview {
 
     @innerHeight:   110px;
@@ -33,7 +39,7 @@
         padding:13px;
         width: 100%;
         .box-sizing(border-box);
-    
+
         .inline-actions {
 
             text-align: right;
@@ -136,6 +142,7 @@
 .file-details .title {
     margin-bottom: 0.5em;
     word-wrap: break-word;
+    .user-select-text();
 }
 
 .file-details .basicInfo em {
@@ -148,6 +155,7 @@
 .file-details .basicInfo span {
     margin-left: 5px;
     margin-right: 5px;
+    .user-select-text();
 }
 
 .file-details .buttons {
