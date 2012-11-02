@@ -273,19 +273,38 @@ define("io.ox/tasks/actions",
                             var endDate = util.computePopupTime(new Date(), finderId).alarmDate,
                                 modifications = {end_date: endDate.getTime()},
                                 folder;
-                            //check if startDate is still valid with new endDate, if not, make it fit
-                            if (e.data.task.start_date && e.data.task.start_date > endDate.getTime()) {
-                                modifications.start_date = modifications.end_date;
-                            }
                             if (e.data.task.folder) {
                                 folder = e.data.task.folder;
                             } else {
                                 folder = e.data.task.folder_id;
                             }
-                            api.update(_.now(), e.data.task.id, modifications, folder).done(function () {
-                                api.trigger("update:" + folder + '.' + e.data.task.id);
-                                notifications.yell('success', gt('Changed due date'));
-                            });
+                            //check if startDate is still valid with new endDate, if not, show dialog
+                            if (e.data.task.start_date && e.data.task.start_date > endDate.getTime()) {
+                                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                                    var popup = new dialogs.ModalDialog()
+                                        .addButton('cancel', gt('Cancel'))
+                                        .addPrimaryButton('change', gt('Change start date'));
+                                    //text
+                                    popup.getBody().append($("<h4>").text(gt('New due date must not be before start date.')),
+                                            $("<div>").text(gt("Do you want the start date to be set to new due date too?")));
+                                    popup.show().done(function (action) {
+                                        if (action === 'cancel') {
+                                            notifications.yell('info', gt('Cancelled'));
+                                        } else {
+                                            modifications.start_date = modifications.end_date;
+                                            api.update(_.now(), e.data.task.id, modifications, folder).done(function () {
+                                                api.trigger("update:" + folder + '.' + e.data.task.id);
+                                                notifications.yell('success', gt('Changed due date'));
+                                            });
+                                        }
+                                    });
+                                });
+                            } else {
+                                api.update(_.now(), e.data.task.id, modifications, folder).done(function () {
+                                    api.trigger("update:" + folder + '.' + e.data.task.id);
+                                    notifications.yell('success', gt('Changed due date'));
+                                });
+                            }
                         });
                     })
                 )

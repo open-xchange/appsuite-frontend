@@ -410,7 +410,9 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             };
             this.fields.endDate.on("change", endDateUpdate);
             this.fields.endDateTime.on("change", endDateUpdate);
-            
+            this.model.on("invalid:end_date", function (messages, errors, model) {
+                setTimeout(function () {notifications.yell("error", messages[0]); }, 300);
+            });
             this.model.on("change:start_date", function () {
                 if (startDateObj) {
                     self.fields.startDate.val(startDateObj.format(date.DATE));
@@ -438,7 +440,9 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             };
             this.fields.startDate.on("change", startDateUpdate);
             this.fields.startDateTime.on("change", startDateUpdate);
-            
+            this.model.on("invalid:start_date", function (messages, errors, model) {
+                setTimeout(function () {notifications.yell("error", messages[0]); }, 300);
+            });
             //row 6
             this.fields.repeatLink = $('<a>').text(gt("Repeat")).addClass("repeat-link").attr('href', '#')
                 .on('click', function (e) { e.preventDefault();
