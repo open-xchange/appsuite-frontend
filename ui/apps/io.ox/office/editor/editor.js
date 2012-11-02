@@ -3066,56 +3066,59 @@ define('io.ox/office/editor/editor',
                 }
             });
 
-            var defaultTabstop = self.getDocumentAttributes().defaulttabstop,
-                paraStyles = paragraphStyles.getElementAttributes(paragraph),
-                paraTabstops = [];
+            if (allTabNodes.length > 0) {
 
-            // paragraph tab stop definitions
-            if (paraStyles && paraStyles.tabstops) {
-                paraTabstops = paraStyles.tabstops;
-            }
+                var defaultTabstop = self.getDocumentAttributes().defaulttabstop,
+                    paraStyles = paragraphStyles.getElementAttributes(paragraph),
+                    paraTabstops = [];
 
-            _(allTabNodes).each(function (tabNode) {
-                var pos = $(tabNode).position();
-                if (pos) {
-                    var leftHMM = Utils.convertLengthToHmm(pos.left, "px"),
-                        width = 0,
-                        fillChar = null,
-                        tabSpan = tabNode.firstChild;
+                // paragraph tab stop definitions
+                if (paraStyles && paraStyles.tabstops) {
+                    paraTabstops = paraStyles.tabstops;
+                }
 
-                    // Paragraph tab stops. Only paragraph tab stop can have a leader and
-                    // define a new alignment
-                    if (paraTabstops && paraTabstops.length > 0) {
-                        var tabstop = _.find(paraTabstops, function (tab) { return (leftHMM + 1) < tab.pos; });
-                        if (tabstop && tabSpan) {
-                            // tabsize calculation based on the paragraph defined tabstop
-                            width = Math.max(0, tabstop.pos - (leftHMM % tabstop.pos));
-                            if (tabstop.leader) {
-                                switch (tabstop.leader) {
-                                case 'dot':
-                                    fillChar = '.';
-                                    break;
-                                case 'hyphen':
-                                    fillChar = '-';
-                                    break;
-                                case 'underscore':
-                                    fillChar = '_';
-                                    break;
+                _(allTabNodes).each(function (tabNode) {
+                    var pos = $(tabNode).position();
+                    if (pos) {
+                        var leftHMM = Utils.convertLengthToHmm(pos.left, "px"),
+                            width = 0,
+                            fillChar = null,
+                            tabSpan = tabNode.firstChild;
+    
+                        // Paragraph tab stops. Only paragraph tab stop can have a leader and
+                        // define a new alignment
+                        if (paraTabstops && paraTabstops.length > 0) {
+                            var tabstop = _.find(paraTabstops, function (tab) { return (leftHMM + 1) < tab.pos; });
+                            if (tabstop && tabSpan) {
+                                // tabsize calculation based on the paragraph defined tabstop
+                                width = Math.max(0, tabstop.pos - (leftHMM % tabstop.pos));
+                                if (tabstop.leader) {
+                                    switch (tabstop.leader) {
+                                    case 'dot':
+                                        fillChar = '.';
+                                        break;
+                                    case 'hyphen':
+                                        fillChar = '-';
+                                        break;
+                                    case 'underscore':
+                                        fillChar = '_';
+                                        break;
+                                    }
+                                    if (fillChar)
+                                        $(tabSpan).text(createTabFillCharString(tabSpan, width, fillChar));
                                 }
-                                if (fillChar)
-                                    $(tabSpan).text(createTabFillCharString(tabSpan, width, fillChar));
                             }
                         }
-                    }
 
-                    if (width <= 1) {
-                        // tabsize calculation based on default tabstop
-                        width = Math.max(0, defaultTabstop - (leftHMM % defaultTabstop));
-                        width = (width <= 1) ? defaultTabstop : width; // no 0 tab size allowed, check for <= 1 to prevent rounding errors
+                        if (width <= 1) {
+                            // tabsize calculation based on default tabstop
+                            width = Math.max(0, defaultTabstop - (leftHMM % defaultTabstop));
+                            width = (width <= 1) ? defaultTabstop : width; // no 0 tab size allowed, check for <= 1 to prevent rounding errors
+                        }
+                        $(tabNode).css('width', (width / 100) + 'mm');
                     }
-                    $(tabNode).css('width', (width / 100) + 'mm');
-                }
-            });
+                });
+            }
         }
 
         /**
