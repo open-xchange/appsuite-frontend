@@ -23,12 +23,13 @@ define("io.ox/mail/write/view-main",
      'io.ox/contacts/util',
      'io.ox/mail/util',
      'io.ox/preview/main',
+     'io.ox/core/tk/dialogs',
      'io.ox/core/tk/autocomplete',
      'io.ox/core/api/autocomplete',
      'io.ox/core/api/account',
      'io.ox/core/strings',
      'gettext!io.ox/mail'
-    ], function (ext, links, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, autocomplete, AutocompleteAPI, accountAPI, strings, gt) {
+    ], function (ext, links, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, dialogs, autocomplete, AutocompleteAPI, accountAPI, strings, gt) {
 
     'use strict';
 
@@ -318,6 +319,8 @@ define("io.ox/mail/write/view-main",
                 this.addSection('attachments', gt('Attachments'), false, true);
                 this.addUpload();
                 this.addLink('attachments', gt('Attachments'));
+                // add preview side-popup
+                new dialogs.SidePopup().delegate(this.sections.attachments, '.attachment-preview', previewAttachment);
             }
 
             // Signatures
@@ -486,7 +489,7 @@ define("io.ox/mail/write/view-main",
     });
 
     var dummySignature = { signature_name: gt('No signature') };
-    var handleFileSelect, addUpload, supportsPreview, createPreview;
+    var handleFileSelect, addUpload, supportsPreview, previewAttachment, createPreview;
 
     supportsPreview = function (file) {
         // is not local?
@@ -497,51 +500,49 @@ define("io.ox/mail/write/view-main",
         }
     };
 
-    createPreview = function (file) {
-        return $('<a>', { href: '#' })
-            .text(gt('Preview'))
-            .on('click', { file: file }, function (e) {
-                e.preventDefault();
-                // open side popup
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.SidePopup().show(e, function (popup) {
-                        var file = e.data.file, message = file.message, preview, reader;
-                        // nested message?
-                        if (message) {
-                            preview = new pre.Preview({
-                                    data: { nested_message: message },
-                                    mimetype: 'message/rfc822'
-                                }, {
-                                    width: popup.parent().width(),
-                                    height: 'auto'
-                                });
-                            if (preview.supportsPreview()) {
-                                preview.appendTo(popup);
-                                popup.append($('<div>').text(_.noI18n('\u00A0')));
-                            }
-                        } else {
-                            // inject image as data-url
-                            reader = new FileReader();
-                            reader.onload = function (e) {
-                                popup.css({ width: '100%', height: '100%' })
-                                .append(
-                                    $('<div>')
-                                    .css({
-                                        width: '100%',
-                                        height: '100%',
-                                        backgroundImage: 'url(' + e.target.result + ')',
-                                        backgroundRepeat: 'no-repeat',
-                                        backgroundPosition: 'center center',
-                                        backgroundSize: 'contain'
-                                    })
-                                );
-                                reader = reader.onload = null;
-                            };
-                            reader.readAsDataURL(file);
-                        }
-                    });
+    previewAttachment = function (popup, e, target) {
+
+        e.preventDefault();
+
+        var file = target.data('file'), message = file.message, preview, reader;
+
+        // nested message?
+        if (message) {
+            preview = new pre.Preview({
+                    data: { nested_message: message },
+                    mimetype: 'message/rfc822'
+                }, {
+                    width: popup.parent().width(),
+                    height: 'auto'
                 });
-            });
+            if (preview.supportsPreview()) {
+                preview.appendTo(popup);
+                popup.append($('<div>').text(_.noI18n('\u00A0')));
+            }
+        } else {
+            // inject image as data-url
+            reader = new FileReader();
+            reader.onload = function (e) {
+                popup.css({ width: '100%', height: '100%' })
+                .append(
+                    $('<div>')
+                    .css({
+                        width: '100%',
+                        height: '100%',
+                        backgroundImage: 'url(' + e.target.result + ')',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center center',
+                        backgroundSize: 'contain'
+                    })
+                );
+                reader = reader.onload = null;
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    createPreview = function (file) {
+        return $('<a href="#" class="attachment-preview">').data('file', file).text(gt('Preview'));
     };
 
     function round(num, digits) {
