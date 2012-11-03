@@ -400,7 +400,7 @@ define('io.ox/mail/view-detail',
                         top = pane.scrollTop(), bottom = top + node.parent().height();
                     e.data.nodes.each(function () {
                         var self = $(this), pos = self.position();
-                        if (pos.top > top && pos.top < bottom) {
+                        if ((pos.top + 100) > top && pos.top < bottom) { // +100 due to min-height
                             self.trigger('resolve');
                         }
                     });
@@ -436,8 +436,9 @@ define('io.ox/mail/view-detail',
                 // set initial scroll position (37px not to see thread's inline links)
                 top = nodes.eq(pos).position().top;
                 scrollpane.scrollTop(list.length === 1 ? 0 : top);
-                scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100, true));
-                scrollpane.trigger('scroll'); // to be sure
+                scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100));
+                scrollpane.one('scroll.now', { nodes: nodes, node: node }, autoResolve);
+                scrollpane.trigger('scroll.now'); // to be sure
                 nodes = frag = node = scrollpane = list = mail = mails = null;
             }
 
