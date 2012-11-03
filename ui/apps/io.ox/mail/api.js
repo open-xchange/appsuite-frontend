@@ -23,7 +23,8 @@ define("io.ox/mail/api",
     'use strict';
 
     var DONE = $.when(),
-        DELAY = 1000 * 3; // 3 seconds
+        DELAY = 1000 * 3, // 3 seconds
+        DELIM = '//';
 
     var tracker = (function () {
 
@@ -221,7 +222,7 @@ define("io.ox/mail/api",
         },
         // composite key for "all" cache
         cid: function (o) {
-            return (o.action || 'all') + ':' + o.folder + '//' + [o.sort, o.order, o.max || 0, !!o.unseen, !!o.deleted].join('.');
+            return (o.action || 'all') + ':' + o.folder + DELIM + [o.sort, o.order, o.max || 0, !!o.unseen, !!o.deleted].join('.');
         },
 
         fail: {
@@ -444,7 +445,7 @@ define("io.ox/mail/api",
                     api.caches.get.remove(id),
                     api.caches.list.remove(obj),
                     api.caches.list.remove(id),
-                    api.caches.all.grepRemove(targetFolderId + '\t') // clear target folder
+                    api.caches.all.grepRemove(targetFolderId + DELIM) // clear target folder
                 );
             };
         };
@@ -463,7 +464,7 @@ define("io.ox/mail/api",
 
         function update(folder_id, hash, callback) {
             // get proper keys (differ due to sort/order suffix)
-            return api.caches.all.grepKeys(folder_id + '\t').pipe(function (keys) {
+            return api.caches.all.grepKeys(folder_id + DELIM).pipe(function (keys) {
                 return $.when.apply($, _(keys).map(function (folder_id) {
                     return api.caches.all.get(folder_id).pipe(function (co) {
                         if (co && co.data) {
@@ -552,7 +553,7 @@ define("io.ox/mail/api",
             .pipe(function () {
                 return $.when(
                     // clear source folder
-                    api.caches.all.grepRemove(_(list).first().folder_id + '\t')
+                    api.caches.all.grepRemove(_(list).first().folder_id + DELIM)
                 );
             })
             .done(refreshAll);
@@ -851,7 +852,7 @@ define("io.ox/mail/api",
         });
         return http.resume().done(function () {
             require(['io.ox/files/api'], function (fileAPI) {
-                fileAPI.caches.all.grepRemove(target + '\t');
+                fileAPI.caches.all.grepRemove(target + DELIM);
                 fileAPI.trigger('refresh.all');
             });
         });
@@ -1047,7 +1048,7 @@ define("io.ox/mail/api",
                 fixPost: true
             })
             .pipe(function (data) {
-                return api.caches.all.grepRemove(options.folder + '\t').pipe(function () {
+                return api.caches.all.grepRemove(options.folder + DELIM).pipe(function () {
                     api.trigger('refresh.all');
                     return data;
                 });
