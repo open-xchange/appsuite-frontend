@@ -297,11 +297,13 @@ define('io.ox/contacts/api',
     api.getPictureByMailAddress = function (address) {
 
         // lower case!
-        address = String(address).toLowerCase();
+        address = $.trim(address).toLowerCase();
 
         return contactPictures.get(address).pipe(function (data) {
             if (data !== null) {
                 return data;
+            } else if (address === '') {
+                return $.Deferred.resolve('');
             } else {
                 return http.PUT({
                     module: 'contacts',

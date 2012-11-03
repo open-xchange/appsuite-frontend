@@ -369,20 +369,6 @@ define("io.ox/mail/main",
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api, win);
 
-        app.on('folder:change folder:refresh', function (e) {
-            app.folder.getData().done(function (data) {
-                var unread = data.unread, badge;
-                if ((badge = win.nodes.title.find('.badge')).length === 0) {
-                    badge = $('<span class="badge">').appendTo(win.nodes.title);
-                }
-                if (unread > 0) {
-                    badge.text(_.noI18n(unread)).show();
-                } else {
-                    badge.hide();
-                }
-            });
-        });
-
         grid.setEmptyMessage(function (mode) {
             return mode === 'search' ?
                 gt('No mails found for "%s"', win.search.query) :

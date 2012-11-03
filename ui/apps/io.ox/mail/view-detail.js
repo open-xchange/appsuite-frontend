@@ -446,12 +446,17 @@ define('io.ox/mail/view-detail',
                 // define next step now
                 var next = _.lfo(drawThread);
                 // get list data, esp. to know unseen flag - we need this list for inline link checks anyway
-                api.getList(list).done(function (data) {
-                    var i, $i = data.length - 1, pos, numVisible, top, bottom, defs = [];
+                api.getList(list).done(function (list) {
+                    
+                    var i, $i, pos, numVisible, top, bottom, defs = [];
+
+                    // getList might be incomplete
+                    list = _(list).compact();
+                    
                     // which mail to focus?
-                    for (i = pos = $i; i >= 0; i--) {
+                    for (i = pos = $i = list.length - 1; i >= 0; i--) {
                         pos = i;
-                        if (util.isUnread(data[i])) { break; }
+                        if (util.isUnread(list[i])) { break; }
                     }
                     // how many visible?
                     if (pos === 0) {
@@ -486,7 +491,7 @@ define('io.ox/mail/view-detail',
             );
             require(['io.ox/contacts/api'], function (api) {
                 // get contact picture
-                api.getPictureURL(data.from[0][1], { width: 64, height: 64, scaleType: 'contain' })
+                api.getPictureURL(data.from && data.from.length ? data.from[0][1] : '', { width: 64, height: 64, scaleType: 'contain' })
                     .done(function (url) {
                         if (url) {
                             picture.css({ backgroundImage: 'url(' + url + ')' });

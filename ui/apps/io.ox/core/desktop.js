@@ -120,12 +120,7 @@ define("io.ox/core/desktop",
             // add folder management
             this.folder = (function () {
 
-                var folder = null, that, win = null, grid = null, type, hChanged;
-
-                hChanged = function (e) {
-                    that.set(e.data.folder);
-                    self.trigger('folder:refresh', e.data.folder);
-                };
+                var folder = null, that, win = null, grid = null, type;
 
                 that = {
 
@@ -153,9 +148,6 @@ define("io.ox/core/desktop",
                                     api.off('change:' + folder);
                                     // remember
                                     folder = String(id);
-                                    // process change
-                                    // look for change folder event
-                                    api.on('change:' + folder, { folder: folder }, hChanged);
                                     // update window title & toolbar?
                                     if (win) {
                                         win.setTitle(_.noI18n(data.title));

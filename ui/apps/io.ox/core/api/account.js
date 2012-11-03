@@ -112,6 +112,12 @@ define('io.ox/core/api/account',
         return typeHash[id] === type;
     };
 
+    api.getFoldersByType = function (type) {
+        return _(typeHash).chain().map(function (value, key) {
+            return value === type ? key : null;
+        }).compact().value();
+    };
+
     api.parseAccountId = function (str, strict) {
         if (typeof str === 'number') {
             // return number
@@ -139,8 +145,6 @@ define('io.ox/core/api/account',
             return 0;
         }
     };
-
-
 
     /**
      * Get all mail accounts
@@ -174,9 +178,11 @@ define('io.ox/core/api/account',
                 // remember account id
                 idHash[account.id] = true;
                 // remember types
-                _('sent drafts'.split(' ')).each(function (type) {
+                _('sent trash drafts spam'.split(' ')).each(function (type) {
                     typeHash[account[type + '_fullname']] = type;
                 });
+                // add inbox
+                typeHash['default' + account.id + '/INBOX'] = 'inbox';
             });
             return list;
         });
@@ -195,7 +201,6 @@ define('io.ox/core/api/account',
         };
 
         return accountsAllCache.get(id, getter);
-
     };
 
     /**

@@ -769,10 +769,19 @@ define("io.ox/mail/api",
                 }
                 // wait a moment, then update mail index
                 setTimeout(function () {
-                    api.getAllThreads({}, false)
-                        .done(function (data) {
-                            api.trigger('refresh.all');
-                        });
+                    // clear inbox & sent folder
+                    var folders = [].concat(
+                        accountAPI.getFoldersByType('inbox'),
+                        accountAPI.getFoldersByType('sent')
+                    );
+                    $.when.apply(
+                        _(folders).map(function (id) {
+                            return api.caches.all.grepRemove(id + DELIM);
+                        })
+                    )
+                    .done(function () {
+                        api.trigger('refresh.all');
+                    });
                 }, 3000);
             })
             .fail(deferred.reject);
