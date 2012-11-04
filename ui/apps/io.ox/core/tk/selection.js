@@ -58,7 +58,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         isMultiple = function (e) {
             var closest = $(e.target).closest(editableSelector),
                 isEditable = editable && closest.length;
-            return isEditable || (multiple && (e && e.metaKey));
+            return isEditable || (multiple && e && (e.metaKey || e.ctrlKey));
         };
 
         isRange = function (e) {
@@ -154,7 +154,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             switch (e.which) {
             case 38:
                 // cursor up
-                if (e.metaKey) {
+                if (e.metaKey || e.ctrlKey) {
                     selectFirst(e);
                 } else {
                     selectPrevious(e);
@@ -162,7 +162,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
                 return false;
             case 40:
                 // cursor down
-                if (e.metaKey) {
+                if (e.metaKey || e.crtlKey) {
                     selectLast(e);
                 } else {
                     selectNext(e);
