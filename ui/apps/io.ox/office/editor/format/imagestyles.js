@@ -50,15 +50,6 @@ define('io.ox/office/editor/format/imagestyles',
     // private global functions ===============================================
 
     /**
-     * A jQuery selector function that returns whether the DOM node bound to
-     * the 'this' symbol is an element that can receive image formatting
-     * attributes.
-     */
-    function imageNodeSelector() {
-        return DOM.isImageNode(this);
-    }
-
-    /**
      * Calculates the offset and size of the bitmap in an image object for one
      * dimension (either horizontally or vertically), according to the passed
      * cropping settings.
@@ -155,7 +146,7 @@ define('io.ox/office/editor/format/imagestyles',
 
         // base constructor ---------------------------------------------------
 
-        ObjectsStyles.call(this, documentStyles, 'image', imageNodeSelector, DEFINITIONS);
+        ObjectsStyles.call(this, documentStyles, 'image', DEFINITIONS);
 
         // initialization -----------------------------------------------------
 

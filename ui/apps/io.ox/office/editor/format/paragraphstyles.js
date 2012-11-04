@@ -144,11 +144,12 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'paragraph', DOM.PARAGRAPH_NODE_SELECTOR, DEFINITIONS);
+        StyleSheets.call(this, documentStyles, 'paragraph', DEFINITIONS);
 
         // initialization -----------------------------------------------------
 
         this.registerUpdateHandler(updateParagraphFormatting);
+        this.registerParentStyleFamily('cell', function (paragraph) { return paragraph.parent().filter('td'); });
 
     } // class ParagraphStyles
 

@@ -147,13 +147,12 @@ define('io.ox/office/editor/format/tablecellstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'cell', 'td', DEFINITIONS, {
-            parentStyleFamily: 'table'
-        });
+        StyleSheets.call(this, documentStyles, 'cell', DEFINITIONS);
 
         // initialization -----------------------------------------------------
 
         this.registerUpdateHandler(updateTableCellFormatting);
+        this.registerParentStyleFamily('table', function (cell) { return cell.closest(DOM.TABLE_NODE_SELECTOR); });
 
     } // class TableCellStyles
 

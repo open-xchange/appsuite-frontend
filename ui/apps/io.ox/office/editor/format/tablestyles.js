@@ -138,7 +138,7 @@ define('io.ox/office/editor/format/tablestyles',
             Table.updateColGroup(table, attributes.tablegrid);
 
             var // the table cell styles/formatter
-                tableCellStyles = self.getDocumentStyles().getStyleSheets('cell');
+                tableCellStyles = documentStyles.getStyleSheets('cell');
 
             // iterating over all cells in the table to set the table attributes in the cell
             table.find('> tbody > tr > td').each(function () {
@@ -159,8 +159,8 @@ define('io.ox/office/editor/format/tablestyles',
          * @param {Object} styleAttributes
          *  The complete 'attributes' object of a table style sheet.
          *
-         * @param {jQuery} sourceNode
-         *  The source node corresponding to the passed attribute family that
+         * @param {jQuery} cell
+         *  The DOM cell node, if this  corresponding to the passed attribute family that
          *  has initially requested the formatting attributes of a table style
          *  sheet, as jQuery object.
          *
@@ -168,13 +168,9 @@ define('io.ox/office/editor/format/tablestyles',
          *  The formatting attributes of the specified family extracted from
          *  the passed styleAttributes object, as name/value pairs.
          */
-        function resolveTableStyleAttributes(family, styleAttributes, sourceNode) {
+        function resolveTableStyleAttributes(family, styleAttributes, table, cell) {
 
-            var // the cell element (source node may be a paragraph or text span)
-                cell = sourceNode.closest('td'),
-                // the table element (required for evaluating the look attribute)
-                table = cell.closest('table'),
-                // an object containing information about the cell orientation inside the table
+            var // an object containing information about the cell orientation inside the table
                 cellOrientation = evaluateCellOrientationInTable(cell),
                 // an object containing the attributes set at the table explicitely
                 explicitTableAttributes = {},
@@ -337,7 +333,7 @@ define('io.ox/office/editor/format/tablestyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'table', DOM.TABLE_NODE_SELECTOR, DEFINITIONS, {
+        StyleSheets.call(this, documentStyles, 'table', DEFINITIONS, {
             styleAttributesResolver: resolveTableStyleAttributes
         });
 

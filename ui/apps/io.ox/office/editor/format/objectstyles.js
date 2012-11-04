@@ -331,11 +331,11 @@ define('io.ox/office/editor/format/objectstyles',
      * @param {DocumentStyles} documentStyles
      *  Collection with the style containers of all style families.
      */
-    function ObjectStyles(documentStyles, styleFamily, selector, definitions, options) {
+    function ObjectStyles(documentStyles, styleFamily, definitions, options) {
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, styleFamily, selector, _({}).extend(DEFINITIONS, definitions));
+        StyleSheets.call(this, documentStyles, styleFamily, _({}).extend(DEFINITIONS, definitions));
 
         // initialization -----------------------------------------------------
 

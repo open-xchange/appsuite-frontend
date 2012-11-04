@@ -171,13 +171,12 @@ define('io.ox/office/editor/format/characterstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'character', undefined, DEFINITIONS, {
-            parentStyleFamily: 'paragraph'
-        });
+        StyleSheets.call(this, documentStyles, 'character', DEFINITIONS);
 
         // initialization -----------------------------------------------------
 
         this.registerUpdateHandler(updateCharacterFormatting);
+        this.registerParentStyleFamily('paragraph', function (span) { return span.closest(DOM.PARAGRAPH_NODE_SELECTOR); });
 
     } // class CharacterStyles
 

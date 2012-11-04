@@ -144,7 +144,7 @@ define('io.ox/office/editor/format/pagestyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'page', DOM.PAGE_NODE_SELECTOR, DEFINITIONS);
+        StyleSheets.call(this, documentStyles, 'page', DEFINITIONS);
 
         // initialization -----------------------------------------------------
 

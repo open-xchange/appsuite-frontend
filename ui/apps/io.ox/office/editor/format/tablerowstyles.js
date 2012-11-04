@@ -80,7 +80,7 @@ define('io.ox/office/editor/format/tablerowstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'row', 'tr', DEFINITIONS);
+        StyleSheets.call(this, documentStyles, 'row', DEFINITIONS);
 
         // initialization -----------------------------------------------------
 
