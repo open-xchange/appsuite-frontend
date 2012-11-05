@@ -20,7 +20,7 @@ define('io.ox/office/editor/editor',
      'io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/oxopam',
-     'io.ox/office/editor/oxoselection',
+     'io.ox/office/editor/selection',
      'io.ox/office/editor/table',
      'io.ox/office/editor/image',
      'io.ox/office/editor/operations',
@@ -33,7 +33,7 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/format/color',
      'io.ox/office/tk/alert',
      'gettext!io.ox/office/main'
-    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Operations, Position, UndoManager, StyleSheets, CharacterStyles, DocumentStyles, LineHeight, Color, Alert, gt) {
+    ], function (Events, Utils, DOM, OXOPaM, Selection, Table, Image, Operations, Position, UndoManager, StyleSheets, CharacterStyles, DocumentStyles, LineHeight, Color, Alert, gt) {
 
     'use strict';
 
@@ -135,7 +135,7 @@ define('io.ox/office/editor/editor',
             // internal clipboard
             clipboardOperations = [],
 
-            // current selection as OXOSelection instance
+            // current selection as Selection instance
             currentSelection = null,
 
             // all selected object nodes, as jQuery collection
@@ -201,7 +201,7 @@ define('io.ox/office/editor/editor',
                 // floating object in the first paragraph, or a leading table)
                 var firstSpan = Utils.findDescendantNode(editdiv, function () { return DOM.isPortionSpan(this); }),
                     position = Position.getOxoPosition(editdiv, firstSpan, 0);
-                setSelection(new OXOSelection(new OXOPaM(position)));
+                setSelection(new Selection(new OXOPaM(position)));
             }
         };
 
@@ -385,7 +385,7 @@ define('io.ox/office/editor/editor',
                         }, this);
 
                         position.push(offset);
-                        setSelection(new OXOSelection(new OXOPaM(position)));
+                        setSelection(new Selection(new OXOPaM(position)));
                     }
 
                 }, this);
@@ -394,7 +394,7 @@ define('io.ox/office/editor/editor',
 
         this.paste = function (event) {
 
-            var oxoSelection = getSelection(),
+            var selection = getSelection(),
                 range,
                 clipboard,
                 items = event && event.originalEvent && event.originalEvent.clipboardData && event.originalEvent.clipboardData.items,
@@ -406,7 +406,7 @@ define('io.ox/office/editor/editor',
                 var data = evt && evt.target && evt.target.result;
 
                 if (data) {
-                    createOperationsFromTextClipboard([{operation: Operations.IMAGE_INSERT, data: data, depth: 0}], oxoSelection);
+                    createOperationsFromTextClipboard([{operation: Operations.IMAGE_INSERT, data: data, depth: 0}], selection);
                 }
             }
 
@@ -444,11 +444,11 @@ define('io.ox/office/editor/editor',
                 var clipboardData = parseClipboard(clipboard);
 
                 clipboard.remove();
-                setSelection(oxoSelection);
+                setSelection(selection);
 
-                createOperationsFromTextClipboard(clipboardData, oxoSelection);
+                createOperationsFromTextClipboard(clipboardData, selection);
 
-            }, 0, clipboard, oxoSelection);
+            }, 0, clipboard, selection);
         };
 
         // ==================================================================
@@ -494,7 +494,7 @@ define('io.ox/office/editor/editor',
 
         this.undo = function (count) {
             undomgr.undo(count);
-            setSelection(new OXOSelection(lastOperationEnd));
+            setSelection(new Selection(lastOperationEnd));
         };
 
         this.redoAvailable = function () {
@@ -503,7 +503,7 @@ define('io.ox/office/editor/editor',
 
         this.redo = function (count) {
             undomgr.redo(count);
-            setSelection(new OXOSelection(lastOperationEnd));
+            setSelection(new Selection(lastOperationEnd));
         };
 
         /**
@@ -668,16 +668,16 @@ define('io.ox/office/editor/editor',
 
                 selection.adjust();
 
-                if (selection.startPaM.imageFloatMode && (Position.isSingleComponentSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
+                if (selection.startPaM.imageFloatMode && selection.isSingleComponentSelection()) {
                     // An image selection
                     // This deleting of images is only possible with the button, not with an key down event.
                     deleteSelectedObject(selection);
 
-                } else if (Position.hasSameParentComponent(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                } else if (selection.hasSameParentComponent()) {
                     // Only one paragraph concerned from deletion.
                     this.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
 
-                } else if (Position.hasSameParentComponent(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition, 2)) {
+                } else if (selection.hasSameParentComponent(2)) {
                     // More than one paragraph concerned from deletion, but in same level in document or table cell.
                     deleteSelectedInSameParagraphLevel(selection);
 
@@ -717,7 +717,7 @@ define('io.ox/office/editor/editor',
                 // var newOperation = { name: Operations.TEXT_DELETE, start: startposition, end: endposition };
                 applyOperation(newOperation, true, true);
                 // setting the cursor position
-                setSelection(new OXOSelection(lastOperationEnd));
+                setSelection(new Selection(lastOperationEnd));
             }
         };
 
@@ -731,7 +731,7 @@ define('io.ox/office/editor/editor',
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
-            setSelection(new OXOSelection(lastOperationEnd));
+            setSelection(new Selection(lastOperationEnd));
         };
 
         this.deleteCellRange = function (position, start, end) {
@@ -763,7 +763,7 @@ define('io.ox/office/editor/editor',
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
-            setSelection(new OXOSelection(lastOperationEnd));
+            setSelection(new Selection(lastOperationEnd));
         };
 
         this.deleteCells = function () {
@@ -825,7 +825,7 @@ define('io.ox/office/editor/editor',
             undomgr.endGroup();
 
             // setting the cursor position
-            setSelection(new OXOSelection(lastOperationEnd));
+            setSelection(new Selection(lastOperationEnd));
         };
 
         this.mergeCells = function () {
@@ -884,7 +884,7 @@ define('io.ox/office/editor/editor',
                 endPosition.push(0);
 
                 // setting the cursor position
-                setSelection(new OXOSelection(new OXOPaM(endPosition)));
+                setSelection(new Selection(new OXOPaM(endPosition)));
             }
         };
 
@@ -966,7 +966,7 @@ define('io.ox/office/editor/editor',
             endPosition.push(0);
 
             // setting the cursor position
-            setSelection(new OXOSelection(new OXOPaM(endPosition)));
+            setSelection(new Selection(new OXOPaM(endPosition)));
         };
 
         this.deleteColumns = function () {
@@ -1037,7 +1037,7 @@ define('io.ox/office/editor/editor',
             }); // undomgr.enterGroup();
 
             // setting the cursor position
-            setSelection(new OXOSelection(lastOperationEnd));
+            setSelection(new Selection(lastOperationEnd));
         };
 
         this.insertRow = function () {
@@ -1060,7 +1060,7 @@ define('io.ox/office/editor/editor',
             }
 
             // setting the cursor position
-            setSelection(new OXOSelection(lastOperationEnd));
+            setSelection(new Selection(lastOperationEnd));
         };
 
         this.insertColumn = function () {
@@ -1086,7 +1086,7 @@ define('io.ox/office/editor/editor',
             }, this);
 
             // setting the cursor position
-            setSelection(new OXOSelection(lastOperationEnd));
+            setSelection(new Selection(lastOperationEnd));
         };
 
         this.insertParagraph = function (position) {
@@ -1161,7 +1161,7 @@ define('io.ox/office/editor/editor',
                 }
 
                 // setting the cursor position
-                setSelection(new OXOSelection(lastOperationEnd));
+                setSelection(new Selection(lastOperationEnd));
 
                 undomgr.endGroup();  // necessary because of paragraph split
             }
@@ -1180,7 +1180,7 @@ define('io.ox/office/editor/editor',
             sendImageSize(_.copy(selection.startPaM.oxoPosition));
 
             // setting the cursor position
-            setSelection(new OXOSelection(lastOperationEnd));
+            setSelection(new Selection(lastOperationEnd));
         };
 
         this.insertImageURL = function (imageURL) {
@@ -1196,7 +1196,7 @@ define('io.ox/office/editor/editor',
             sendImageSize(_.copy(selection.startPaM.oxoPosition));
 
             // setting the cursor position
-            setSelection(new OXOSelection(lastOperationEnd));
+            setSelection(new Selection(lastOperationEnd));
         };
 
         this.insertImageData = function (imageData) {
@@ -1212,7 +1212,7 @@ define('io.ox/office/editor/editor',
             sendImageSize(_.copy(selection.startPaM.oxoPosition));
 
             // setting the cursor position
-            setSelection(new OXOSelection(lastOperationEnd));
+            setSelection(new Selection(lastOperationEnd));
         };
 
         this.insertTab = function () {
@@ -1225,7 +1225,7 @@ define('io.ox/office/editor/editor',
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
-            setSelection(new OXOSelection(lastOperationEnd));
+            setSelection(new Selection(lastOperationEnd));
         };
 
         this.splitParagraph = function (position) {
@@ -1735,16 +1735,14 @@ define('io.ox/office/editor/editor',
             .done(function () {
                 if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.RIGHT_ARROW)) && (event.shiftKey)) {
 
-                    // check that the selection covers a single image (must be
-                    // checked separately for both directions, foward and backward)
-                    if ((currentSelection) &&
-                        (((currentSelection.startPaM.imageFloatMode) &&
-                        (Position.isSingleComponentSelection(currentSelection.startPaM.oxoPosition, currentSelection.endPaM.oxoPosition))) ||
-                        ((currentSelection.endPaM.imageFloatMode) &&
-                        (Position.isSingleComponentSelection(currentSelection.endPaM.oxoPosition, currentSelection.startPaM.oxoPosition))))) {
+                    var selection = _.copy(currentSelection, true);
+                    selection.adjust();
+
+                    // check that the selection covers a single image
+                    if (selection.startPaM.imageFloatMode && selection.isSingleComponentSelection()) {
 
                         // getting object and drawing frame around it
-                        var objectNode = Position.getDOMPosition(editdiv, currentSelection.startPaM.oxoPosition, true).node;
+                        var objectNode = Position.getDOMPosition(editdiv, selection.startPaM.oxoPosition, true).node;
 
                         // only delete, if imageStartPosition is really an image position
                         if (DOM.isObjectNode(objectNode)) {
@@ -1937,7 +1935,7 @@ define('io.ox/office/editor/editor',
                     var startPaM = new OXOPaM([0]),
                         endPaM = new OXOPaM(Position.getLastPositionInDocument(editdiv));
 
-                    selection = new OXOSelection(startPaM, endPaM);
+                    selection = new Selection(startPaM, endPaM);
 
                     event.preventDefault();
 
@@ -2192,11 +2190,11 @@ define('io.ox/office/editor/editor',
         /**
          * Creates operations from the clipboard data returned by parseClipboard(...)
          * @param {Array} clipboardData
-         * @param {Object} [oxoSelection]
+         * @param {Selection} [sel]
          */
-        function createOperationsFromTextClipboard(clipboardData, oxoSelection) {
+        function createOperationsFromTextClipboard(clipboardData, sel) {
 
-            var selection = oxoSelection || getSelection(),
+            var selection = sel || getSelection(),
                 lastPos = selection.startPaM.oxoPosition.length - 1;
 //                currentDepth = clipboardData[0] && clipboardData[0].depth;
 
@@ -2723,7 +2721,7 @@ define('io.ox/office/editor/editor',
                 var startPaM = Position.getTextLevelOxoPosition(domRange.start, editdiv, isPos1Endpoint),
                     endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isPos2Endpoint);
 
-                currentSelection = new OXOSelection(startPaM, endPaM);
+                currentSelection = new Selection(startPaM, endPaM);
                 // Utils.log('getSelection(): logical position: start=[' + currentSelection.startPaM.oxoPosition + '], end=[' + currentSelection.endPaM.oxoPosition + '],' +
                 //           ' start: ' + currentSelection.startPaM.selectedNodeName + ' (image float mode: ' + currentSelection.startPaM.imageFloatMode + '),' +
                 //           ' end: ' + currentSelection.endPaM.selectedNodeName + ' (image float mode: ' + currentSelection.endPaM.imageFloatMode + ')');
@@ -3296,15 +3294,15 @@ define('io.ox/office/editor/editor',
 
                     selection.adjust();
 
-                    if ((selection.startPaM.imageFloatMode) && (Position.isSingleComponentSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
+                    if (selection.startPaM.imageFloatMode && selection.isSingleComponentSelection()) {
                         // An image selection
                         setAttributesToSelectedImage(selection, attributes);
 
-                    } else if (Position.hasSameParentComponent(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                    } else if (selection.hasSameParentComponent()) {
                         // Only one paragraph concerned from attribute changes.
                         setAttributes(family, attributes, selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
 
-                    } else if (Position.hasSameParentComponent(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition, 2)) {
+                    } else if (selection.hasSameParentComponent(2)) {
                         // The included paragraphs are neighbours.
                         setAttributesInSameParagraphLevel(selection, family, attributes);
 
@@ -4222,7 +4220,7 @@ define('io.ox/office/editor/editor',
 
             // setting the cursor position -> only required for changes to inline
             // if (lastOperationEnd) {
-            //     setSelection(new OXOSelection(lastOperationEnd));
+            //     setSelection(new Selection(lastOperationEnd));
             // }
         }
 
@@ -4279,7 +4277,7 @@ define('io.ox/office/editor/editor',
             });
 
             // set initial selection
-            setSelection(new OXOSelection());
+            setSelection(new Selection());
             lastOperationEnd = new OXOPaM([0, 0]);
 
             self.clearUndo();
@@ -4543,7 +4541,7 @@ define('io.ox/office/editor/editor',
          *  The logical start position of the element or text range to be
          *  formatted.
          *
-         * @param {Number[]} end
+         * @param {Number[]} [end]
          *  The logical end position of the element or text range to be
          *  formatted.
          *
@@ -4554,7 +4552,9 @@ define('io.ox/office/editor/editor',
          */
         function implSetAttributes(start, end, attributes) {
 
-            var // node info for start/end position
+            var // setting or clearing attributes
+                clear = _.isNull(attributes),
+                // node info for start/end position
                 startInfo = null, endInfo = null,
                 // the style sheet container of the specified attribute family
                 styleSheets = null,
@@ -4562,13 +4562,15 @@ define('io.ox/office/editor/editor',
                 options = null,
                 // the last text span visited by the character formatter
                 lastTextSpan = null,
-                // undo and redo operations going into a single action
-                undoOperations = [], redoOperations = [];
+                // undo operations going into a single action
+                undoOperations = [],
+                // redo operation
+                redoOperation = null;
 
             // sets or clears the attributes using the current style sheet container
             function setElementAttributes(element) {
                 // set or clear the attributes at the element
-                if (_.isNull(attributes)) {
+                if (clear) {
                     styleSheets.clearElementAttributes(element, undefined, options);
                 } else {
                     styleSheets.setElementAttributes(element, attributes, options);
@@ -4579,34 +4581,31 @@ define('io.ox/office/editor/editor',
             function changeListener(element, oldAttributes, newAttributes) {
 
                 var // selection object representing the passed element
-                    selection = Position.getOxoSelectionForNode(editdiv, element, false),
-                    // the operational address of the passed element
-                    range = { start: selection.startPaM.oxoPosition, end: selection.endPaM.oxoPosition },
+                    range = Position.getPositionRangeForNode(editdiv, element),
                     // the operation used to undo the attribute changes
                     undoOperation = _({ name: Operations.ATTRS_SET, attrs: {} }).extend(range),
-                    // the operation used to redo the attribute changes
-                    redoOperation = _({ name: Operations.ATTRS_SET, attrs: {} }).extend(range);
+                    // last undo operation (used to merge sibling character undos)
+                    lastUndoOperation = ((undoOperations.length > 0) && (startInfo.family === 'character')) ? _.last(undoOperations) : null;
 
-                if (undomgr.isEnabled()) {
-                    // find all old attributes that have been changed or cleared
-                    _(oldAttributes).each(function (value, name) {
-                        if (!_.isEqual(value, newAttributes[name])) {
-                            undoOperation.attrs[name] = value;
-                            redoOperation.attrs[name] = (name in newAttributes) ? newAttributes[name] : null;
-                        }
-                    });
+                // find all old attributes that have been changed or cleared
+                _(oldAttributes).each(function (value, name) {
+                    if (!_.isEqual(value, newAttributes[name])) {
+                        undoOperation.attrs[name] = value;
+                    }
+                });
 
-                    // find all newly added attributes
-                    _(newAttributes).each(function (value, name) {
-                        if (!(name in oldAttributes)) {
-                            undoOperation.attrs[name] = null;
-                            redoOperation.attrs[name] = value;
-                        }
-                    });
+                // find all newly added attributes
+                _(newAttributes).each(function (value, name) {
+                    if (!(name in oldAttributes)) {
+                        undoOperation.attrs[name] = null;
+                    }
+                });
 
-                    // add operations to arrays
+                // try to merge 'character' undo operation with last array entry, otherwise add operation to array
+                if (lastUndoOperation && (_.last(lastUndoOperation.end) + 1 === _.last(undoOperation.start)) && _.isEqual(lastUndoOperation.attrs, undoOperation.attrs)) {
+                    lastUndoOperation.end = undoOperation.end;
+                } else {
                     undoOperations.push(undoOperation);
-                    redoOperations.push(redoOperation);
                 }
             }
 
@@ -4658,6 +4657,9 @@ define('io.ox/office/editor/editor',
                     // skipped (they may contain their own paragraphs).
                     DOM.iterateTextSpans(node, function (span) {
                         setElementAttributes(span);
+                        // try to merge with the preceding text span
+                        CharacterStyles.mergeSiblingTextSpans(span, false);
+                        // remember span (last visited span will be merged with its next sibling)
                         lastTextSpan = span;
                     });
 
@@ -4689,10 +4691,14 @@ define('io.ox/office/editor/editor',
             }
 
             // create the undo action
-            undomgr.addUndo(undoOperations, redoOperations);
+            if (undomgr.isEnabled()) {
+                redoOperation = clear ? { name: Operations.ATTRS_CLEAR } : { name: Operations.ATTRS_SET, attrs: attributes };
+                _(redoOperation).extend({ start: start, end: end });
+                undomgr.addUndo(undoOperations, redoOperation);
+            }
 
             // update numberings and bullets (attributes may be null if called from clearAttributes operation)
-            if ((startInfo.family === 'paragraph') && (_.isNull(attributes) || ('style' in attributes) || ('ilvl' in attributes) || ('numId' in attributes))) {
+            if ((startInfo.family === 'paragraph') && (clear || ('style' in attributes) || ('ilvl' in attributes) || ('numId' in attributes))) {
                 implUpdateLists();
             }
 
@@ -4702,7 +4708,7 @@ define('io.ox/office/editor/editor',
                 paragraph = startInfo.node;
             else if (DOM.isParagraphNode(startInfo.node.parentNode))
                 paragraph = startInfo.node.parentNode;
-            if (!_.isNull(paragraph)) {
+            if (paragraph) {
                 adjustTabsOfParagraph(paragraph);
             }
 

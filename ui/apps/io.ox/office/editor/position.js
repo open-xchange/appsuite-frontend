@@ -15,8 +15,8 @@ define('io.ox/office/editor/position',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/oxopam',
-     'io.ox/office/editor/oxoselection'
-    ], function (Utils, DOM, OXOPaM, OXOSelection) {
+     'io.ox/office/editor/selection'
+    ], function (Utils, DOM, OXOPaM, Selection) {
 
     'use strict';
 
@@ -255,38 +255,22 @@ define('io.ox/office/editor/position',
      *  a 'range' mode (end position behind the final character) and a
      *  'position' mode (end position points to the final character).
      *
-     * @returns {OXOSelection} oxoSelection
-     *  The selection consisting of start and end point.
+     * @returns {Object}
+     *  An object containing the attribute 'start' with the logical start
+     *  position, and an attribute 'end' with the logical end position of the
+     *  passed node.
      */
-    Position.getOxoSelectionForNode = function (maindiv, node, useRangeMode) {
+    Position.getPositionRangeForNode = function (maindiv, node) {
 
-        var offset = 0,
-            startPosition = Position.getOxoPosition(maindiv, node, offset),
-            endPosition = _.copy(startPosition),
-            characterPositionOffset = 0;
+        var // logical start position of the passed node
+            startPosition = Position.getOxoPosition(maindiv, node, 0),
+            // logical end position of the passed node
+            endPosition = _.clone(startPosition),
+            // logical length of the node
+            length = DOM.isPortionSpan(node) ? Utils.getDomNode(node).firstChild.nodeValue.length : 1;
 
-        // if node is a text node, a span or an image, then startposition and
-        // endposition are not equal.
-
-        if ($(node).is('img') || DOM.isObjectNode(node)) {
-            characterPositionOffset = 1;
-        } else if (DOM.isTextComponentNode(node) || DOM.isTextNodeInTextComponent(node)) {
-            characterPositionOffset = 1;
-        } else if (DOM.isPortionSpan(node)) {
-            characterPositionOffset = node.firstChild.nodeValue.length;
-        } else if (DOM.isTextNodeInPortionSpan(node)) {
-            characterPositionOffset = node.nodeValue.length;
-        }
-
-        if ((!useRangeMode) && (characterPositionOffset > 0)) {
-            characterPositionOffset -= 1;
-        }
-
-        if (characterPositionOffset > 0) {
-            endPosition[endPosition.length - 1] += characterPositionOffset;
-        }
-
-        return new OXOSelection(new OXOPaM(startPosition), new OXOPaM(endPosition));
+        endPosition[endPosition.length - 1] += (length - 1);
+        return { start: startPosition, end: endPosition };
     };
 
     /**
@@ -694,16 +678,16 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOSelection} oxoSelection
+     * @param {Selection} selection
      *  The logical selection consisting of two logical positions.
      *
      * @returns {DOM.Range}
      *  The calculated selection (DOM.Range) consisting of two dom points (DOM.Point).
      */
-    Position.getDOMSelection = function (startnode, oxoSelection) {
+    Position.getDOMSelection = function (startnode, selection) {
         // Only supporting single selection at the moment
-        var start = Position.getDOMPosition(startnode, oxoSelection.startPaM.oxoPosition),
-            end = Position.getDOMPosition(startnode, oxoSelection.endPaM.oxoPosition);
+        var start = Position.getDOMPosition(startnode, selection.startPaM.oxoPosition),
+            end = Position.getDOMPosition(startnode, selection.endPaM.oxoPosition);
 
         // DOM selection is always an array of text ranges
         // TODO: fallback to HOME position in document instead of empty array?
@@ -718,7 +702,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOSelection} oxoSelection
+     * @param {Selection} selection
      *  The logical selection consisting of two logical positions.
      *
      * @param {Boolean} usePositionCount
@@ -729,17 +713,17 @@ define('io.ox/office/editor/position',
      * @returns {DOM.Range}
      *  The calculated selection (DOM.Range) consisting of two dom points (DOM.Point).
      */
-    Position.getObjectSelection = function (startnode, oxoSelection) {
+    Position.getObjectSelection = function (startnode, selection) {
 
         // Only supporting single selection at the moment
-        var start = Position.getDOMPosition(startnode, oxoSelection.startPaM.oxoPosition, true),
-            endSelection = _.copy(oxoSelection.endPaM.oxoPosition, true);
+        var start = Position.getDOMPosition(startnode, selection.startPaM.oxoPosition, true),
+            endSelection = _.copy(selection.endPaM.oxoPosition, true);
 
         if ((start) &&
             (DOM.isObjectNode(start.node)) &&
             (start.offset === 0) &&
-            (Position.isSingleComponentSelection(oxoSelection.startPaM.oxoPosition, oxoSelection.endPaM.oxoPosition))) {
-            endSelection = _.copy(oxoSelection.startPaM.oxoPosition, true);  // end position is copy of start position, so that end will be start
+            selection.isSingleComponentSelection()) {
+            endSelection = _.copy(selection.startPaM.oxoPosition, true);  // end position is copy of start position, so that end will be start
         }
 
         var end = Position.getDOMPosition(startnode, endSelection, true);
@@ -2016,26 +2000,18 @@ define('io.ox/office/editor/position',
      * @param {Number[]} position2
      *  The second logical position.
      *
-     * @param {Number} [parentLevel=1]
-     *  The number of parent levels. If omitted, the direct parents of the
-     *  passed positions will be checked (only the last element of each array
-     *  will be ignored). Otherwise, the specified number of trailing array
-     *  elements will be ignored (for example, a value of 2 checks the grand
-     *  parents).
-     *
      * @returns {Boolean}
      *  Whether the logical positions are located in the same parent component.
      */
-    Position.hasSameParentComponent = function (position1, position2, parentLevel) {
+    Position.hasSameParentComponent = function (position1, position2) {
 
         var index = 0, length = position1.length;
 
         // length of both positions must be equal
-        parentLevel = parentLevel || 1;
-        if ((length < parentLevel) || (length !== position2.length)) { return false; }
+        if ((length < 1) || (length !== position2.length)) { return false; }
 
         // compare all array elements but the last ones
-        for (index = length - parentLevel - 1; index >= 0; index -= 1) {
+        for (index = length - 2; index >= 0; index -= 1) {
             if (position1[index] !== position2[index]) {
                 return false;
             }
@@ -2069,26 +2045,6 @@ define('io.ox/office/editor/position',
         }
 
         return position1.slice(0, index);
-    };
-
-    /**
-     * Returns whether the specified half-open selection range covers exactly
-     * one component.
-     *
-     * @param {Number[]} startPosition
-     *  The logical start position of the selection range.
-     *
-     * @param {Number[]} endPosition
-     *  The logical end position of the selection range
-     *
-     * @returns {Boolean}
-     *  Returns whether the selection range of startPosition and endPosition
-     *  are covering a single component. The positions must refer to the same
-     *  parent component, and the last array element of endPosition must be
-     *  the last array element of startPosition increased by the value 1.
-     */
-    Position.isSingleComponentSelection = function (position1, position2) {
-        return Position.hasSameParentComponent(position1, position2) && (_.last(position1) === _.last(position2) - 1);
     };
 
     // iteration --------------------------------------------------------------
