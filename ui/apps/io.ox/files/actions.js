@@ -203,17 +203,17 @@ define("io.ox/files/actions",
     // edit mode actions
     ext.point("io.ox/files/actions/edit/save").extend({
         id: "save",
-        action: function (file, context) {
-            var updatedFile = context.view.getModifiedFile();
-            context.view.endEdit();
+        action: function (baton) {
+            var updatedFile = baton.view.getModifiedFile();
+            baton.view.endEdit();
             api.update(updatedFile);
         }
     });
 
     ext.point("io.ox/files/actions/edit/cancel").extend({
         id: "cancel",
-        action: function (file, context) {
-            context.view.endEdit();
+        action: function (baton) {
+            baton.view.endEdit();
         }
     });
 
