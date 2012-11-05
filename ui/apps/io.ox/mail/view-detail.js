@@ -151,11 +151,18 @@ define('io.ox/mail/view-detail',
         }, 1000); // 1 second(s)
     };
 
-    var blockquoteClickOpen, blockquoteClickClose, mailTo;
+    var blockquoteMore, blockquoteClickOpen, blockquoteClickClose, mailTo;
+
+    blockquoteMore = function (e) {
+        e.preventDefault();
+        blockquoteClickOpen.call($(this).prev().get(0));
+        $(this).remove();
+    };
 
     blockquoteClickOpen = function () {
-        var h = this.scrollHeight + 'px';
-        $(this).off('click.open')
+        var h = this.scrollHeight + 'px', node = $(this);
+        $(this)
+            .off('click.open')
             .css('cursor', '')
             .on('dblclick.close', blockquoteClickClose)
             .stop().animate({ maxHeight: h, opacity: 1.0 }, 500);
@@ -335,7 +342,11 @@ define('io.ox/mail/view-detail',
                 content.find('blockquote').not(content.find('blockquote blockquote'))
                     .css({ maxHeight: '3em', overflow: 'hidden', opacity: 0.5, cursor: 'pointer' })
                     .on('click.open', blockquoteClickOpen)
-                    .on('dblclick.close', blockquoteClickClose);
+                    .on('dblclick.close', blockquoteClickClose)
+                    .after(
+                        $('<a href="#" class="toggle-blockquote">').text('Show more')
+                        .on('click', blockquoteMore)
+                    );
             }
 
             return content;
