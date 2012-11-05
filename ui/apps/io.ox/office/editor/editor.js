@@ -2177,7 +2177,7 @@ define('io.ox/office/editor/editor',
                         }
                     } else {
                         // insert paragraph for p, div and br, create only one paragraph if br is nested inside a div
-                        if ($(child).is('p, div') || $(child).is('br') && (!$(child.parentNode).is('div') || $(child.parentNode).hasClass('io-ox-office-clipboard'))) {
+                        if ($(child).is('p, div') || $(child).is('br') && (!$(child.parentNode).is('p, div') || $(child.parentNode).hasClass('io-ox-office-clipboard'))) {
                             result.push({operation: Operations.PARA_INSERT, depth: depth});
                         } else if ($(child).is('img')) {
                             result.push({operation: Operations.IMAGE_INSERT, data: child.src, depth: depth});
