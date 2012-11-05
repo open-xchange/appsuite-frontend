@@ -242,10 +242,10 @@ define('io.ox/mail/view-detail',
                     .end()
                     // images with attribute width/height
                     .find('img[width], img[height]').each(function () {
-                        var node = $(this), w = node.attr('width'), h = node.attr('height');
+                        var node = $(this), w = node.attr('width');
                         node.removeAttr('width height');
-                        if (w) { node.css({ width: w + 'px', maxWidth: w + 'px' }); }
-                        if (h) { node.css('height', h + 'px'); }
+                        // just set width; max-width=100% should still apply
+                        if (w) { node.css({ width: w + 'px' }); }
                     })
                     .end();
                     // nested message?

@@ -380,14 +380,14 @@ define("io.ox/core/desktop",
 
         canRestore: function () {
             // use get instead of contains since it might exist as empty list
-            return appCache.get('savepoints').pipe(function (list) {
+            return this.getSavePoints().pipe(function (list) {
                 return list && list.length;
             });
         },
 
         getSavePoints: function () {
             return appCache.get('savepoints').pipe(function (list) {
-                return list || [];
+                return _(list || []).filter(function (obj) { return 'point' in obj; });
             });
         },
 
