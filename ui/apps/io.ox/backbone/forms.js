@@ -411,7 +411,7 @@ define('io.ox/backbone/forms',
                     return;
                 }
 
-                this.nodes.toggleLink = $('<a href="#" class="span6">').on('click', function () {
+                this.nodes.toggleLink = $('<a href="#" class="span6" data-action="toggle-' + options.id + '">').on('click', function () {
                     if (self.state === 'mixed') {
                         self.more();
                     } else if (self.state === 'allVisible') {
@@ -423,7 +423,7 @@ define('io.ox/backbone/forms',
                     this.nodes.collapsedHeader = $('<div class="row sectionheader collapsed">').appendTo(this.$el);
                     $('<span class="offset2 span4">').append(
                         $('<i class="icon-plus-sign">'),
-                        $('<a href="#">').text(this.title).on('click', function () {
+                        $('<a href="#" data-action="toggle-' + options.id + '">').text(this.title).on('click', function () {
                             self.more();
                         })
                     ).appendTo(this.nodes.collapsedHeader);
