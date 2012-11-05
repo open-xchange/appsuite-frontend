@@ -214,8 +214,10 @@
 } 
 
 .backface-visibility(@type: hidden) {
-    backface-visibility: @type;
-    -webkit-backface-visibility: @type;
-    -moz-backface-visibility: @type;
+   .touch & {
+        backface-visibility: @type;
+        -webkit-backface-visibility: @type;
+        -moz-backface-visibility: @type;
+    }
 }
 
