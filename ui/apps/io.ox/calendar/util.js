@@ -202,10 +202,8 @@ define("io.ox/calendar/util",
                     //#, c-format
                     gt.ngettext('%d day', '%d days', length), length);
             } else {
-                start = new date.Local(data.start_date);
-                end = new date.Local(data.end_date);
-                suffix = this.onSameDay(data.start_date, data.end_date) ? '' : ' ' + this.getDate(data.end_date);
-                return that.getTime(start) + " \u2013 " + that.getTime(end) + suffix;
+                return new D(data.start_date).formatInterval(
+                    new D(data.end_date), date.TIME);
             }
         },
 
