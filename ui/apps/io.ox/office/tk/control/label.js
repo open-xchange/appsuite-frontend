@@ -40,7 +40,7 @@ define('io.ox/office/tk/control/label',
         // private methods ----------------------------------------------------
 
         function updateHandler(value) {
-            var labelOptions = Utils.extendOptions(options, { label: _.isNull(value) ? undefined : value });
+            var labelOptions = Utils.extendOptions(options, { label: (_.isUndefined(value) || _.isNull(value)) ? undefined : value });
             Utils.setControlCaption(label, labelOptions);
         }
 

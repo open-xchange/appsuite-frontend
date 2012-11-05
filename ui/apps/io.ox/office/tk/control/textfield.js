@@ -92,7 +92,7 @@ define('io.ox/office/tk/control/textfield',
          * The update handler for this text field.
          */
         function updateHandler(value) {
-            textField.val(validator.valueToText(value));
+            textField.val((_.isUndefined(value) || _.isNull(value)) ? '' : validator.valueToText(value));
             validationFieldState = getFieldState();
         }
 
@@ -101,7 +101,7 @@ define('io.ox/office/tk/control/textfield',
          */
         function commitHandler() {
             var value = readOnly ? null : self.getFieldValue();
-            if (!_.isNull(value)) {
+            if (!_.isUndefined(value) && !_.isNull(value)) {
                 initialText = null;
             }
             return value;

@@ -197,9 +197,11 @@ define('io.ox/office/editor/editor',
         this.grabFocus = function (initSelection) {
             editdiv.focus();
             if (initSelection) {
-                // TODO: find first text position (instead of [0,0])
-                // there may be a floated image in the first paragraph, or a leading table
-                setSelection(new OXOSelection(new OXOPaM([0, 0]), new OXOPaM([0, 0])));
+                // find first valid text cursor position (there may be a leading
+                // floating object in the first paragraph, or a leading table)
+                var firstSpan = Utils.findDescendantNode(editdiv, function () { return DOM.isPortionSpan(this); }),
+                    position = Position.getOxoPosition(editdiv, firstSpan, 0);
+                setSelection(new OXOSelection(new OXOPaM(position)));
             }
         };
 
@@ -3250,7 +3252,7 @@ define('io.ox/office/editor/editor',
 
             charWidth = Utils.convertLengthToHmm($(element).text(fillChar).width(), 'px');
             numChars = Math.floor(maxWidth / charWidth);
-            
+
             if (numChars > 0)
                 return (new Array(numChars + 1)).join(fillChar);
             else

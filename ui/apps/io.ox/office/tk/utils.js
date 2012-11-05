@@ -1529,7 +1529,7 @@ define('io.ox/office/tk/utils',
     Utils.selectOptionButton = function (buttons, value) {
 
         var // find the button to be activated
-            button = _.isNull(value) ? $() : buttons.filter(function () {
+            button = (_.isUndefined(value) || _.isNull(value)) ? $() : buttons.filter(function () {
                 return _.isEqual(value, Utils.getControlValue($(this)));
             });
 

@@ -49,10 +49,7 @@ define('io.ox/office/tk/control/colorchooser',
      */
     function ColorChooser(options) {
 
-        var // self reference
-            self = this,
-
-            // the drop-down menu container element
+        var // the drop-down menu container element
             colorTable = $('<div>'),
 
             // the color box in the drop-down button
@@ -101,9 +98,7 @@ define('io.ox/office/tk/control/colorchooser',
             Utils.selectOptionButton(getColorButtons(), value);
 
             // set color to the color box in the menu button
-            if (!_.isUndefined(value)) {
-                colorBox.css('background-color', _.isNull(value) ? 'transparent' : cssColorResolver.call(this, value));
-            }
+            colorBox.css('background-color', (_.isUndefined(value) || _.isNull(value)) ? 'transparent' : cssColorResolver.call(this, value));
         }
 
         /**

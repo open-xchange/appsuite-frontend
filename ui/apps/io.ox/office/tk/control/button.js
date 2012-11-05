@@ -56,7 +56,7 @@ define('io.ox/office/tk/control/button',
                 // prevent toggling the button as implemented by the static
                 // method Utils.toggleButtons().
                 // TODO: Support for null as tristate?
-                Utils.toggleButtons(button, _.isNull(value) ? false : value);
+                Utils.toggleButtons(button, _.isBoolean(value) && value);
             } else {
                 // change the 'data-value' attribute of push buttons
                 Utils.setControlValue(button, value);
