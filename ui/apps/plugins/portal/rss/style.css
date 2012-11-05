@@ -29,8 +29,8 @@
     overflow: hidden;
 }
 .portal-preview img{
-    width: 50%;
-    height: auto;
+    width: auto;
+    height: 4em;
 }
 .portal-full {
     height: 100%;
