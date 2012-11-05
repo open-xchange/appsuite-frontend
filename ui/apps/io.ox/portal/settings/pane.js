@@ -255,7 +255,8 @@ define('io.ox/portal/settings/pane',
                             settings.set('pluginSettings', pluginSettings);
                             settings.save();
 
-                            ox.trigger('refresh-portal');
+                            ox.trigger('refresh-portal', [true]);
+//                            ox.trigger('refresh-portal');
                         }
                     });
 

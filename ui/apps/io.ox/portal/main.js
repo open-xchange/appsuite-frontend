@@ -379,6 +379,8 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
 
         // launcher
         app.setLauncher(function () {
+            var formerlyActivePluginIds = {};
+            
             contentQueue.start();
             // get window
             app.setWindow(win = ox.ui.createWindow({
@@ -399,10 +401,11 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                 .addClass('io-ox-portal')
                 .append(intro)
                 .append(tileSide);
-
             ox.on('refresh^ refresh-portal', function (event, completeReload) {
+                console.log("Refresh triggered", event, completeReload);
                 if (completeReload) {
                     pluginSettings = _.sortBy(settings.get('pluginSettings', []), function (obj) { return obj.index; });
+                    formerlyActivePluginIds = allActivePluginIds;
                     allActivePluginIds = {};
                     _.each(pluginSettings, function (obj) {
                         if (obj.active) {
@@ -413,9 +416,12 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                     allActivePlugins = _.map(allActivePluginIds, function (obj) {
                         return 'plugins/portal/' + obj.id + '/register';
                     });
-
+                    var formerlyActivePlugins = _.map(formerlyActivePluginIds, function (obj) {
+                        return 'plugins/portal/' + obj.id + '/register';
+                    });
+                    
                     reqPlugins = _.intersection(allActivePlugins, plugins);
-
+                    reqPlugins = _(reqPlugins).without(formerlyActivePlugins);
                     require(reqPlugins).pipe(function () {
                         setOrder(arguments);
                     });
