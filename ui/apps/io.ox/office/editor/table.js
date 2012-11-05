@@ -15,9 +15,8 @@ define('io.ox/office/editor/table',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/position',
-     'io.ox/office/editor/oxopam',
      'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, DOM, Position, OXOPaM, StyleSheets) {
+    ], function (Utils, DOM, Position, StyleSheets) {
 
     'use strict';
 

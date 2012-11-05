@@ -12,22 +12,31 @@
  */
 define('io.ox/office/editor/selection',
     ['io.ox/office/tk/utils',
-     'io.ox/office/editor/oxopam'
-    ], function (Utils, OXOPaM) {
+     'io.ox/office/editor/position'
+    ], function (Utils, Position) {
 
     'use strict';
 
     // class Selection ========================================================
 
     /**
-     * An instance of this class represents a cursor selection with the two
-     * member variables startPaM and endPaM (Point and Mark). These two members
-     * contain the logical position as an array of integers.
+     * An instance of this class represents a selection in the edited document,
+     * consisting of a logical start and end position representing a half-open
+     * text range, or a rectangular table cell range (FireFox only).
+     *
+     * @constructor
+     *
+     * @param {Number[]} startPosition
+     *  The logical position of the first component in the selected range.
+     *
+     * @param {Number[]} endPosition
+     *  The logical position following the last component in the selected range
+     *  (half-open range).
      */
-    function Selection(start, end) {
+    function Selection(startPosition, endPosition) {
 
-        this.startPaM = start ? _.copy(start, true) : new OXOPaM([0, 0]);
-        this.endPaM = end ? _.copy(end, true) : _.copy(this.startPaM, true);
+        this.startPaM = new Position(_.isArray(startPosition) ? startPosition : [0, 0]);
+        this.endPaM = new Position(_.isArray(endPosition) ? endPosition : this.startPaM.oxoPosition);
 
         // methods ------------------------------------------------------------
 

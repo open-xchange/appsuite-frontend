@@ -19,7 +19,6 @@ define('io.ox/office/editor/editor',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
-     'io.ox/office/editor/oxopam',
      'io.ox/office/editor/selection',
      'io.ox/office/editor/table',
      'io.ox/office/editor/image',
@@ -33,7 +32,7 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/format/color',
      'io.ox/office/tk/alert',
      'gettext!io.ox/office/main'
-    ], function (Events, Utils, DOM, OXOPaM, Selection, Table, Image, Operations, Position, UndoManager, StyleSheets, CharacterStyles, DocumentStyles, LineHeight, Color, Alert, gt) {
+    ], function (Events, Utils, DOM, Selection, Table, Image, Operations, Position, UndoManager, StyleSheets, CharacterStyles, DocumentStyles, LineHeight, Color, Alert, gt) {
 
     'use strict';
 
@@ -201,7 +200,7 @@ define('io.ox/office/editor/editor',
                 // floating object in the first paragraph, or a leading table)
                 var firstSpan = Utils.findDescendantNode(editdiv, function () { return DOM.isPortionSpan(this); }),
                     position = Position.getOxoPosition(editdiv, firstSpan, 0);
-                setSelection(new Selection(new OXOPaM(position)));
+                setSelection(new Selection(position));
             }
         };
 
@@ -385,7 +384,7 @@ define('io.ox/office/editor/editor',
                         }, this);
 
                         position.push(offset);
-                        setSelection(new Selection(new OXOPaM(position)));
+                        setSelection(new Selection(position));
                     }
 
                 }, this);
@@ -884,7 +883,7 @@ define('io.ox/office/editor/editor',
                 endPosition.push(0);
 
                 // setting the cursor position
-                setSelection(new Selection(new OXOPaM(endPosition)));
+                setSelection(new Selection(endPosition));
             }
         };
 
@@ -966,7 +965,7 @@ define('io.ox/office/editor/editor',
             endPosition.push(0);
 
             // setting the cursor position
-            setSelection(new Selection(new OXOPaM(endPosition)));
+            setSelection(new Selection(endPosition));
         };
 
         this.deleteColumns = function () {
@@ -1932,10 +1931,7 @@ define('io.ox/office/editor/editor',
             else if (event.ctrlKey) {
                 var c = getPrintableChar(event);
                 if (c === 'A') {
-                    var startPaM = new OXOPaM([0]),
-                        endPaM = new OXOPaM(Position.getLastPositionInDocument(editdiv));
-
-                    selection = new Selection(startPaM, endPaM);
+                    selection = new Selection([0], Position.getLastPositionInDocument(editdiv));
 
                     event.preventDefault();
 
@@ -2721,7 +2717,7 @@ define('io.ox/office/editor/editor',
                 var startPaM = Position.getTextLevelOxoPosition(domRange.start, editdiv, isPos1Endpoint),
                     endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isPos2Endpoint);
 
-                currentSelection = new Selection(startPaM, endPaM);
+                currentSelection = new Selection(startPaM.oxoPosition, endPaM.oxoPosition);
                 // Utils.log('getSelection(): logical position: start=[' + currentSelection.startPaM.oxoPosition + '], end=[' + currentSelection.endPaM.oxoPosition + '],' +
                 //           ' start: ' + currentSelection.startPaM.selectedNodeName + ' (image float mode: ' + currentSelection.startPaM.imageFloatMode + '),' +
                 //           ' end: ' + currentSelection.endPaM.selectedNodeName + ' (image float mode: ' + currentSelection.endPaM.imageFloatMode + ')');
@@ -4278,7 +4274,7 @@ define('io.ox/office/editor/editor',
 
             // set initial selection
             setSelection(new Selection());
-            lastOperationEnd = new OXOPaM([0, 0]);
+            lastOperationEnd = [0, 0];
 
             self.clearUndo();
             self.setEditMode(null); // set null for 'read-only' and not yet determined edit status by the server
@@ -4304,10 +4300,9 @@ define('io.ox/office/editor/editor',
                 if (oldText !== null) {
                     var newText = oldText.slice(0, domPos.offset) + text + oldText.slice(domPos.offset);
                     domPos.node.nodeValue = newText;
-                    var lastPos = _.copy(position);
+                    lastOperationEnd = _.clone(position);
                     var posLength = position.length - 1;
-                    lastPos[posLength] = position[posLength] + text.length;
-                    lastOperationEnd = new OXOPaM(lastPos);
+                    lastOperationEnd[posLength] = position[posLength] + text.length;
                     implParagraphChanged(position);
                 }
             }
@@ -4337,9 +4332,8 @@ define('io.ox/office/editor/editor',
 
             implParagraphChanged(position);
 
-            var localPos = _.copy(position);
-            localPos[localPos.length - 1] += 1;
-            lastOperationEnd = new OXOPaM(localPos);
+            lastOperationEnd = _.clone(position);
+            lastOperationEnd[lastOperationEnd.length - 1] += 1;
 
             return true;
         }
@@ -4372,10 +4366,8 @@ define('io.ox/office/editor/editor',
             // apply the passed image attributes
             imageStyles.setElementAttributes(image, attributes);
 
-            var lastPos = _.copy(position);
-            var posLength = position.length - 1;
-            lastPos[posLength] = position[posLength] + 1;
-            lastOperationEnd = new OXOPaM(lastPos);
+            lastOperationEnd = _.clone(position);
+            lastOperationEnd[lastOperationEnd.length - 1] += 1;
 
             implParagraphChanged(position);
             return true;
@@ -4715,7 +4707,7 @@ define('io.ox/office/editor/editor',
             }
 
             // store last position
-            lastOperationEnd = new OXOPaM(end);
+            lastOperationEnd = end;
         }
 
         function implInsertParagraph(position) {
@@ -4743,9 +4735,8 @@ define('io.ox/office/editor/editor',
                 newPara.insertBefore(allParagraphs[0]);
             }
 
-            var lastPos = _.copy(position);
-            lastPos.push(0);
-            lastOperationEnd = new OXOPaM(lastPos);
+            lastOperationEnd = _.clone(position);
+            lastOperationEnd.push(0);
 
             implParagraphChanged(position);
             implUpdateLists();
@@ -4832,7 +4823,7 @@ define('io.ox/office/editor/editor',
 
             implParagraphChanged(position);
             implParagraphChanged(startPosition);
-            lastOperationEnd = new OXOPaM(startPosition);
+            lastOperationEnd = startPosition;
 
             implUpdateLists();
         }
@@ -4886,11 +4877,10 @@ define('io.ox/office/editor/editor',
 
                     implDeleteParagraph(localPosition);
 
-                    var lastPos = _.copy(position);
-                    lastPos.push(oldParaLen);
-                    lastOperationEnd = new OXOPaM(lastPos);
-                    implParagraphChanged(position);
+                    lastOperationEnd = _.clone(position);
+                    lastOperationEnd.push(oldParaLen);
 
+                    implParagraphChanged(position);
                 }
             }
             implUpdateLists();
@@ -4913,13 +4903,12 @@ define('io.ox/office/editor/editor',
             if (paragraph) {
                 paragraph.parentNode.removeChild(paragraph);
 
-                var localPos = _.copy(position, true);
+                lastOperationEnd = _.clone(position);
                 if (para > 0) {
                     para -= 1;
                 }
-                localPos[posLength] = para;
-                localPos.push(0); // pos not corrct, but doesn't matter. Deleting paragraphs always happens between other operations, never at the last one.
-                lastOperationEnd = new OXOPaM(localPos);
+                lastOperationEnd[posLength] = para;
+                lastOperationEnd.push(0); // pos not corrct, but doesn't matter. Deleting paragraphs always happens between other operations, never at the last one.
             }
         }
 
@@ -4991,7 +4980,7 @@ define('io.ox/office/editor/editor',
                 tablePosition.push(para);
                 tablePosition.push(Position.getParagraphLength(editdiv, tablePosition));
 
-                lastOperationEnd = new OXOPaM(tablePosition);
+                lastOperationEnd = tablePosition;
             }
         }
 
@@ -5031,7 +5020,7 @@ define('io.ox/office/editor/editor',
             // recalculating the attributes of the table cells
             implTableChanged(table);
 
-            lastOperationEnd = new OXOPaM(localPosition);
+            lastOperationEnd = localPosition;
         }
 
         function implInsertRow(pos, count, insertdefaultcells, referencerow, attrs) {
@@ -5118,7 +5107,7 @@ define('io.ox/office/editor/editor',
                 localPosition.push(0);
                 localPosition.push(0);
 
-                lastOperationEnd = new OXOPaM(localPosition);
+                lastOperationEnd = localPosition;
             }
         }
 
@@ -5214,7 +5203,7 @@ define('io.ox/office/editor/editor',
                 implTableChanged(table);
             }
 
-            lastOperationEnd = new OXOPaM(localPosition);
+            lastOperationEnd = localPosition;
         }
 
         function implDeleteColumns(pos, startGrid, endGrid) {
@@ -5268,7 +5257,7 @@ define('io.ox/office/editor/editor',
             // recalculating the attributes of the table cells
             implTableChanged(table);
 
-            lastOperationEnd = new OXOPaM(localPosition);
+            lastOperationEnd = localPosition;
         }
 
         function implInsertColumn(pos, gridposition, tablegrid, insertmode) {
@@ -5309,7 +5298,7 @@ define('io.ox/office/editor/editor',
             localPosition.push(0);
             localPosition.push(0);
 
-            lastOperationEnd = new OXOPaM(localPosition);
+            lastOperationEnd = localPosition;
         }
 
         function implDeleteText(startPosition, endPosition) {
@@ -5377,8 +5366,7 @@ define('io.ox/office/editor/editor',
                     break;
             }
 
-            lastOperationEnd = new OXOPaM(_.copy(startPosition, true));
-            // old:  lastOperationEnd = new OXOPaM([para, start]);
+            lastOperationEnd = _.clone(startPosition);
 
             implParagraphChanged(startPosition);
         }

@@ -13,22 +13,37 @@
 
 define('io.ox/office/editor/position',
     ['io.ox/office/tk/utils',
-     'io.ox/office/editor/dom',
-     'io.ox/office/editor/oxopam'
-    ], function (Utils, DOM, OXOPaM) {
+     'io.ox/office/editor/dom'
+    ], function (Utils, DOM) {
 
     'use strict';
 
-    // static class Position ==================================================
+    // class Position =========================================================
 
     /**
-     * Provides static helper methods for manipulation and calculation
-     * of logical positions and to access dom positions and dom nodes
-     * from logical position.
+     * Represents a text cursor position. Member field 'oxoPosition' contains
+     * the logical position as an array of integers. Member field
+     * 'selectedNodeName' contains the property 'nodeName' of the dom node that
+     * was used to calculate the logical position.
+     *
+     * @constructor
      */
-    var Position = {};
+    function Position(position, nodeName, imageFloatMode) {
 
-    // static functions =======================================================
+        this.oxoPosition = _.clone(position);
+        this.selectedNodeName = nodeName || null;
+        this.imageFloatMode = imageFloatMode || null;
+
+        this.toString = function () {
+            var name = JSON.stringify(this.oxoPosition);
+            if (_.isString(this.selectedNodeName)) {
+                name += ', node="' + this.selectedNodeName + '"';
+            }
+            return name;
+        };
+    }
+
+    // static methods ---------------------------------------------------------
 
     /**
      * This function calculates the logical position from dom positions.
@@ -55,7 +70,7 @@ define('io.ox/office/editor/position',
      *  inside the logical position array. This is typically only useful
      *  for text nodes.
 
-     * @returns {OXOPaM.oxoPosition} oxoPosition
+     * @returns {Number[]}
      *  The logical position.
      */
     Position.getOxoPosition = function (maindiv, node, offset) {
@@ -112,18 +127,18 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * This function calculates the logical position from dom positions.
-     * Receiving a dom position consisting of a dom node and an offset, it
-     * calculates the logical position (oxoPosition) that is an array of
+     * This function calculates the logical position from DOM positions.
+     * Receiving a DOM position consisting of a DOM node and an offset, it
+     * calculates the logical position that is an array of
      * integer values. This logical position is saved together with the
-     * property nodeName of the dom node in the OXOPaM object, that is
+     * property nodeName of the DOM node in the object, that is
      * the return value of this function. The calculated logical position
      * is always a valid text level position. This means, that even if the
-     * dom position is a DIV, a TR or a similar node type, the logical position
+     * DOM position is a DIV, a TR or a similar node type, the logical position
      * describes always the position of a text node or image or field.
      *
      * @param {DOM.Point} domposition
-     *  The dom position, consisting of dom node and offset, whose logical
+     *  The DOM position, consisting of dom node and offset, whose logical
      *  position will be calculated.
      *
      * @param {jQuery} maindiv
@@ -132,13 +147,13 @@ define('io.ox/office/editor/position',
      *  maindiv can be calculated.
      *
      * @param {Boolean} isEndPoint
-     *  The information, if the specified domposition is the end point
+     *  The information, if the specified DOM position is the end point
      *  of a range. This is important for some calculations, where the
-     *  dom node is a row inside a table.
+     *  DOM node is a row inside a table.
      *
-     * @returns {OXOPaM}
-     *  The calculated logical position (OXOPaM.oxoPosition) together with
-     *  the property nodeName of the dom node parameter.
+     * @returns {Position}
+     *  The calculated logical position together with the property nodeName of
+     *  the DOM node parameter.
      */
     Position.getTextLevelOxoPosition = function (domposition, maindiv, isEndPoint) {
 
@@ -227,7 +242,7 @@ define('io.ox/office/editor/position',
         // 4. Calculating the logical position for the specified text node, span, or image
         var oxoPosition = Position.getOxoPosition(maindiv, node, offset);
 
-        return new OXOPaM(oxoPosition, selectedNodeName, imageFloatMode);
+        return new Position(oxoPosition, selectedNodeName, imageFloatMode);
     };
 
     /**
@@ -282,7 +297,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPaM.oxoPosition} oxoPosition
+     * @param {Number[]} oxoPosition
      *  The logical position.
      *
      * @param {Boolean} forcePositionCounting
@@ -778,7 +793,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @param {String} selector
@@ -834,7 +849,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
 
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @param {String} selector
@@ -862,7 +877,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
 
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @param {String} selector
@@ -889,7 +904,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @param {String} selector
@@ -915,7 +930,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @param {String} selector
@@ -948,7 +963,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @returns {Boolean}
@@ -989,7 +1004,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @returns {Node}
@@ -1032,7 +1047,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @returns {Node}
@@ -1053,7 +1068,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @returns {jQuery}
@@ -1089,7 +1104,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @returns {Number}
@@ -1118,7 +1133,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @returns {jQuery}
@@ -1146,7 +1161,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @returns {Number}
@@ -1176,7 +1191,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @returns {Number}
@@ -1206,7 +1221,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @returns {Number}
@@ -1235,7 +1250,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @returns {Number}
@@ -1265,7 +1280,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @returns {Number}
@@ -1287,7 +1302,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @returns {Number}
@@ -1310,7 +1325,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @returns {Number}
@@ -1333,7 +1348,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
      * @returns {Number}
@@ -1419,7 +1434,7 @@ define('io.ox/office/editor/position',
      * Checks, if a specified position is the first position
      * inside a text node in a cell in a table.
      *
-     * @param {OXOPam.oxoPosition} pos
+     * @param {Number[]} pos
      *  The logical position.
      *
      * @returns {Boolean}
@@ -1451,7 +1466,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPam.oxoPosition} pos
+     * @param {Number[]} pos
      *  The logical position.
      *
      * @returns {Boolean}
@@ -1486,10 +1501,10 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
 
-     * @param {OXOPam.oxoPosition} posA
+     * @param {Number[]} posA
      *  The logical position.
      *
-     * @param {OXOPam.oxoPosition} posB
+     * @param {Number[]} posB
      *  The logical position.
      *
      * @returns {Boolean}
@@ -1534,10 +1549,10 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPaM.oxoPosition} paragraph
+     * @param {Number[]} paragraph
      *  The logical position.
      *
-     * @returns {OXOPaM.oxoPosition}
+     * @returns {Number[]}
      *  Returns the last logical position inside a paragraph or
      *  a table. If the parameter 'paragraph' is a logical position, that
      *  is not located inside a table or paragraph, null is returned.
@@ -1568,10 +1583,10 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPaM.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
-     * @returns {OXOPaM.oxoPosition}
+     * @returns {Number[]}
      *  Returns the first logical position inside a paragraph or
      *  a table. If the parameter 'paragraph' is a logical position, that
      *  is not located inside a table or paragraph, null is returned.
@@ -1603,10 +1618,10 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPaM.oxoPosition} paragraph
+     * @param {Number[]} paragraph
      *  The logical position.
      *
-     * @returns {OXOPaM.oxoPosition, Boolean}
+     * @returns {Object}
      *  Returns the first logical position inside a following cell. If the
      *  end of the table is reached, the value for 'endOfTable' is set to
      *  true. Otherwise it is false.
@@ -1655,10 +1670,10 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPaM.oxoPosition} paragraph
+     * @param {Number[]} paragraph
      *  The logical position.
      *
-     * @returns {OXOPaM.oxoPosition, Boolean}
+     * @returns {Object}
      *  Returns the last logical position inside a previous cell. If the
      *  begin of the table is reached, the value for 'beginOfTable' is set to
      *  true. Otherwise it is false.
@@ -1726,10 +1741,10 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPaM.oxoPosition} cellPosition
+     * @param {Number[]} cellPosition
      *  The logical position.
      *
-     * @returns {OXOPaM.oxoPosition}
+     * @returns {Number[]}
      *  Returns the first logical position inside the specified cell.
      */
     Position.getFirstPositionInCurrentCell = function (startnode, cellPosition) {
@@ -1751,10 +1766,10 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPaM.oxoPosition} cellPosition
+     * @param {Number[]} cellPosition
      *  The logical position.
      *
-     * @returns {OXOPaM.oxoPosition}
+     * @returns {Number[]}
      *  Returns the last logical position inside the specified cell.
      */
     Position.getLastPositionInCurrentCell = function (startnode, cellPosition) {
@@ -1775,7 +1790,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @returns {OXOPaM.oxoPosition}
+     * @returns {Number[]}
      *  Returns the last logical position inside the document.
      */
     Position.getLastPositionInDocument = function (startnode) {
@@ -1799,33 +1814,36 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPaM.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      *
-     * @returns {OXOPaM.oxoPosition}
+     * @returns {Number[]}
      *  Returns the logical position inside the document or null,
      *  if no correct assignment can be made
      */
     Position.getFamilyAssignedPosition = function (family, startnode, position) {
 
         var assignedPos = null,
-            node = Position.getDOMPosition(startnode, position).node;
+            node = Position.getDOMPosition(startnode, position, true).node;
 
         switch (family) {
         case 'character':
-            assignedPos = (node.nodeType === 3) ? position : null;
+            assignedPos = (node && DOM.isParagraphNode(node.parentNode)) ? position : null;
             break;
         case 'paragraph':
-            assignedPos = (DOM.isParagraphNode(node)) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, DOM.PARAGRAPH_NODE_SELECTOR);
+            assignedPos = DOM.isParagraphNode(node) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, DOM.PARAGRAPH_NODE_SELECTOR);
             break;
         case 'table':
-            assignedPos = (DOM.isTableNode(node)) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, DOM.TABLE_NODE_SELECTOR);
+            assignedPos = DOM.isTableNode(node) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, DOM.TABLE_NODE_SELECTOR);
             break;
         case 'row':
-            assignedPos = ($(node).is('tr')) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'tr');
+            assignedPos = $(node).is('tr') ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'tr');
             break;
         case 'cell':
-            assignedPos = ($(node).is('th, td')) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'th, td');
+            assignedPos = $(node).is('td') ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'th, td');
+            break;
+        case 'image':
+            assignedPos = DOM.isImageNode(node) ? position : null;
             break;
         default:
             Utils.error('Position.getFamilyAssignedPosition(): Invalid family type: ' + family);
@@ -1890,7 +1908,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPaM.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      */
     Position.removeLeadingEmptyTextSpans = function (startnode, position) {
@@ -1926,7 +1944,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPaM.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      */
     Position.removeLeadingImageDivs = function (startnode, position) {
@@ -1962,7 +1980,7 @@ define('io.ox/office/editor/position',
      *  The start node corresponding to the logical position.
      *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {OXOPaM.oxoPosition} position
+     * @param {Number[]} position
      *  The logical position.
      */
     Position.removeUnusedImageDivs = function (startnode, position) {
