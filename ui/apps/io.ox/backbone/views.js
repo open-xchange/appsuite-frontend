@@ -153,8 +153,11 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         return _.extend({}, {
             id: ViewClass.extId,
             index: options.index,
-            draw: function (options) {
-                var view = new ViewClass(options);
+            draw: function (baton) {
+                var view = new ViewClass(baton);
+                if (options.registerAs) {
+                    baton[options.registerAs] = view;
+                }
                 view.render();
                 this.append(view.$el);
             }
