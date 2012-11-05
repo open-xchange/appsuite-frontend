@@ -54,10 +54,6 @@ define('io.ox/office/editor/oxoselection',
             }
         };
 
-        this.isEqual = function (selection) {
-            return (_.isEqual(this.startPaM.oxoPosition, selection.startPaM.oxoPosition) && _.isEqual(this.endPaM.oxoPosition, selection.endPaM.oxoPosition)) ? true : false;
-        };
-
     } // class Selection
 
     // export =================================================================

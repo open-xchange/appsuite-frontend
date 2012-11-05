@@ -176,10 +176,8 @@ define('io.ox/office/editor/position',
 
         if (DOM.isObjectNode(node)) {
             offset = 0;
-            if (DOM.isImageNode(node)) {
-                imageFloatMode = $(node).data('mode');
-                checkImageFloatMode = false;
-            }
+            imageFloatMode = $(node).data('mode');
+            checkImageFloatMode = false;
         }
 
         // 2. Handling all selections, in which the node is above paragraph level
@@ -217,10 +215,10 @@ define('io.ox/office/editor/position',
             if (localNode.nodeType === 3) {
                 localNode = localNode.parentNode;
             }
-            if ($(localNode).is('span')) {
+            if (DOM.isTextSpan(localNode)) {
                 if ($(localNode).text().length === offset) {
-                    // Checking if an inline image follows
-                    if (DOM.isImageNode(localNode.nextSibling)) {
+                    // Checking if an inline object follows
+                    if (DOM.isObjectNode(localNode.nextSibling)) {
                         imageFloatMode = $(localNode.nextSibling).data('mode'); // must be 'inline' mode
                     }
                 }
@@ -536,7 +534,7 @@ define('io.ox/office/editor/position',
         }
 
         // setting some properties for image nodes
-        if (DOM.isImageNode(localNode)) {
+        if (DOM.isObjectNode(localNode)) {
             imageFloatMode = $(localNode).data('mode');
             foundValidNode = true;  // image nodes are valid
             offset = isEndPoint ? 1 : 0;
@@ -552,9 +550,9 @@ define('io.ox/office/editor/position',
         if (! foundValidNode) {
             // find the first or last text node contained in the element
             if (localNode && (localNode.nodeType !== 3)) {
-                foundNode = useFirstTextNode ? Utils.findFirstTextNode(localNode) : Utils.findLastTextNode(localNode);
+                foundNode = Utils.findDescendantNode(localNode, function () { return DOM.isPortionSpan(this); }, { reverse: !useFirstTextNode });
                 if (foundNode) {
-                    localNode = foundNode;
+                    localNode = foundNode = foundNode.firstChild;
                 }
             }
         }
@@ -659,33 +657,33 @@ define('io.ox/office/editor/position',
             return;
         }
 
-        // if the position is an image or field, the dom position shall be the previous or following text node
-        // if (DOM.isTextComponentNode(domPoint.node) || DOM.isObjectNode(domPoint.node) || ((DOM.isPortionSpan(domPoint.node)) && (domPoint.offset === 0))) {  // only checking for 'offset === 0' should be sufficient
-        if ((DOM.isTextComponentNode(domPoint.node)) || (DOM.isObjectNode(domPoint.node))) {  // only checking for 'offset === 0' should be sufficient
+        // use preceding text node for inline text components
+        if (DOM.isTextComponentNode(domPoint.node) || DOM.isInlineObjectNode(domPoint.node)) {
 
-            // go to text span preceding the component node
-            span = DOM.findPreviousTextSpan(domPoint.node);
-            if (span) {
+            // go to text span preceding the component node (must exist)
+            span = domPoint.node.previousSibling;
+            if (DOM.isTextSpan(span)) {
                 return new DOM.Point(span.firstChild, span.firstChild.nodeValue.length);
             }
 
-            // leading floating objects do not have a preceding text span, try following text span
-            span = DOM.findNextTextSpan(domPoint.node);
-            if (span) {
-                return new DOM.Point(span.firstChild, 0);
-            }
-
-            Utils.warn('Position.getTextSpanFromNode(): no text span in paragraph found');
+            Utils.error('Position.getTextSpanFromNode(): missing preceding text span for inline component node');
             return;
         }
 
-        // from text span to text node
-        if (DOM.isTextSpan(domPoint.node)) {
+        if (DOM.isPortionSpan(domPoint.node)) {
+
+            // beginning of a text span: try to go to the end of the previous text node
+            if ((domPoint.offset === 0) && DOM.isPortionSpan(domPoint.node.previousSibling)) {
+                span = domPoint.node.previousSibling;
+                return new DOM.Point(span.firstChild, span.firstChild.nodeValue.length);
+            }
+
+            // from text span to text node
             return new DOM.Point(domPoint.node.firstChild, domPoint.offset);
         }
 
         // other node types need to be handled if existing
-        Utils.warn('Position.getTextSpanFromNode(): unknown paragraph child node');
+        Utils.warn('Position.getTextSpanFromNode(): unsupported paragraph child node');
     };
 
     /**
@@ -2406,9 +2404,10 @@ define('io.ox/office/editor/position',
         // find the next content node in DOM tree (either table or embedded paragraph depending on shortest-path option)
         function findNextContentNode(rootNode, contentNode, lastParagraph) {
 
-            // find next content node in DOM tree (next sibling paragraph or table,
-            // or first node in next cell, or out of table to next content node...)
-            contentNode = Utils.findNextSiblingNode(rootNode, contentNode, DOM.CONTENT_NODE_SELECTOR);
+            // find next content node in DOM tree (searches in siblings of the own
+            // parent, AND in other nodes following the parent node, e.g. the next
+            // table cell, or paragraphs following the containing table, etc.)
+            contentNode = Utils.findNextNode(rootNode, contentNode, DOM.CONTENT_NODE_SELECTOR);
 
             // iterate into a table, if shortest-path option is off, or the end paragraph is inside the table
             while (DOM.isTableNode(contentNode) && (!shortestPath || (lastParagraph && contentNode.contains(lastParagraph)))) {
@@ -2549,8 +2548,8 @@ define('io.ox/office/editor/position',
             }
 
             // if located at the beginning of a component: use end of preceding text span if available
-            if (startInfo.offset === 0) {
-                startInfo.node = DOM.findPreviousTextSpan(startInfo.node) || startInfo.node;
+            if ((startInfo.offset === 0) && DOM.isPortionSpan(startInfo.node.previousSibling)) {
+                startInfo.node = startInfo.node.previousSibling;
             }
 
             // visit the text component node

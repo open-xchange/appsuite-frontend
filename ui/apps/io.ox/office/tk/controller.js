@@ -38,7 +38,7 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
     function Controller(definitions, defaultDoneHandler) {
 
         var // self reference
-            controller = this,
+            self = this,
 
             // definitions for all items, mapped by item key
             items = {},
@@ -59,7 +59,10 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
 
         function Item(key, definition) {
 
-            var enabled = true,
+            var // self reference
+                self = this,
+                // global enabled state of the item
+                enabled = true,
                 // parent item whose value/state is needed to resolve the own value/state
                 parentKey = Utils.getStringOption(definition, 'parent'),
                 // handler for enabled state
@@ -78,7 +81,7 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
 
                 // if the required value does not exist yet, resolve it via the passed handler
                 if (!(type in result)) {
-                    result[type] = handler.call(controller, parentValue);
+                    result[type] = handler.call(self, parentValue);
                 }
                 return result[type];
             }
@@ -105,7 +108,7 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
              */
             this.enable = function (state) {
                 enabled = _.isUndefined(state) || (state === true);
-                _(components).invoke('enabled', key, this.isEnabled());
+                _(components).invoke('enable', key, this.isEnabled());
                 return this;
             };
 
@@ -131,9 +134,7 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
                 var value = this.get();
                 value = _.isUndefined(value) ? defaultValue : value;
                 _(components).invoke('enable', key, this.isEnabled());
-                if (!_.isUndefined(value)) {
-                    _(components).invoke('update', key, value);
-                }
+                _(components).invoke('update', key, value);
                 return this;
             };
 
@@ -150,10 +151,10 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
              */
             this.change = function (value) {
                 if (this.isEnabled()) {
-                    setHandler.call(controller, value);
+                    setHandler.call(self, value);
                     this.update(value);
                 }
-                doneHandler.call(controller);
+                doneHandler.call(self);
                 return this;
             };
 
@@ -166,29 +167,6 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
          */
         function clearResultCache() {
             resultCache = {};
-        }
-
-        /**
-         * Returns the cached result for the specified item key and attribute.
-         * Creates a new empty result object if no result object exists yet,
-         * and resolves the specified attribute.
-         *
-         * @param {String} key
-         *  The key of the item whose attribute result will be cached and
-         *  returned.
-         *
-         * @param {String} attribute
-         *  An item attribute whose value will be cached and returned. May be
-         *  'isEnabled' to get the value of the enabler function registered for
-         *  the specified item, or 'get' to get the value of its getter
-         *  function.
-         */
-        function getAndCacheResult(key, attribute) {
-            var result = resultCache[key] || (resultCache[key] = {});
-            if (!(attribute in result)) {
-                result[attribute] = (key in items) ? items[key][attribute]() : undefined;
-            }
-            return result[attribute];
         }
 
         /**
@@ -246,11 +224,11 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
                     clearResultCache();
                     items[key].change(value);
                 } else {
-                    defaultDoneHandler.call(controller);
+                    defaultDoneHandler.call(self);
                 }
             } else if (event.type === 'cancel') {
                 Utils.info('Controller: received cancel event');
-                defaultDoneHandler.call(controller);
+                defaultDoneHandler.call(self);
             }
         }
 
@@ -263,7 +241,9 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
          *  The key of the new item.
          *
          * @param {Object} definition
-         *  A map defining the item. The following attributes are supported:
+         *  A map with callback functions defining the behavior of the item.
+         *  All callback functions will be executed in the context of the Item
+         *  class instance. The following attributes are supported:
          *  @param {String} [definition.parent]
          *      The name of an item that will be used to calculate intermediate
          *      results for the getter function and enabler function (see
@@ -275,11 +255,10 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
          *      all item getters or enablers that are using this parent item.
          *  @param {Function} [definition.enable]
          *      Predicate function returning true if the item is enabled, and
-         *      false otherwise. Will be executed in the context of this
-         *      controller. If a parent item has been specified (see above),
-         *      the cached return value of its enabler function will be passed
-         *      to this function. This means that the enabler function of
-         *      parent items may return other values then booleans, if the
+         *      false otherwise. If a parent item has been specified (see
+         *      above), the cached return value of its enabler function will be
+         *      passed to this function. This means that the enabler function
+         *      of parent items may return other values then booleans, if the
          *      enablers of items using the parent item will calculate a
          *      boolean value from that result. Defaults to a function that
          *      returns always true; or, if a parent item has been registered,
@@ -287,21 +266,19 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
          *  @param {Function} [definition.get]
          *      Getter function returning the current value of the item. Can be
          *      omitted for one-way action items (actions without a return
-         *      value). Will be executed in the context of this controller. If
-         *      a parent item has been specified (see above), the cached return
-         *      value of its getter will be passed to this getter. May return
-         *      null to indicate an ambiguous state. May return undefined to
-         *      indicate that calculating the value is not applicable, not
-         *      possible, not implemented, etc. In the case of an undefined
-         *      return value, the current state of the controls in the view
-         *      components will not be changed. Defaults to a function that
-         *      returns undefined; or, if a parent item has been registered,
-         *      that returns its cached value directly.
+         *      value). If a parent item has been specified (see above), the
+         *      cached return value of its getter will be passed to this
+         *      getter. May return null to indicate an ambiguous state. May
+         *      return undefined to indicate that calculating the value is not
+         *      applicable, not possible, not implemented, etc. In the case of
+         *      an undefined return value, the current state of the controls in
+         *      the view components will not be changed. Defaults to a function
+         *      that returns undefined; or, if a parent item has been
+         *      registered, that returns its cached value directly.
          *  @param {Function} [definition.set]
          *      Setter function changing the value of an item to the first
          *      parameter of the setter. Can be omitted for read-only items.
-         *      Defaults to a no-op function. Will be executed in the context
-         *      of this controller.
+         *      Defaults to an empty function.
          *  @param {Function} [definition.done]
          *      A function that will be executed after the setter function has
          *      returned. If specified, overrides the default done handler

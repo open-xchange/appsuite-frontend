@@ -1387,9 +1387,9 @@ define('io.ox/office/editor/editor',
                 break;
 
             case 'image':
-                selectedObjects.each(function (object) {
-                    if (DOM.isImageNode(object)) {
-                        mergeElementAttributes(imageStyles.getElementAttributes(object));
+                selectedObjects.each(function () {
+                    if (DOM.isImageNode(this)) {
+                        mergeElementAttributes(imageStyles.getElementAttributes(this));
                     }
                 });
                 break;
@@ -1515,14 +1515,6 @@ define('io.ox/office/editor/editor',
          */
         this.isImageSelected = function () {
             return _(selectedObjects.get()).any(function (object) { return DOM.isImageNode(object); });
-        };
-
-        /**
-         * Returns whether the current selection selects a single image.
-         */
-        this.getImageFloatMode = function () {
-            var selection = getSelection();
-            return selection ? selection.endPaM.imageFloatMode : null;
         };
 
         /**
@@ -2979,7 +2971,7 @@ define('io.ox/office/editor/editor',
         }
 
         /**
-         * Updates the broser selection to a range that starts directly before
+         * Updates the browser selection to a range that starts directly before
          * the passed object node, and ends diectly after the object.
          *
          * @param {HTMLElement|jQuery} object
@@ -2988,10 +2980,14 @@ define('io.ox/office/editor/editor',
          */
         function selectObjectAsText(object) {
 
-            var // previous text span of the object node
-                prevTextSpan = DOM.findPreviousTextSpan(object),
-                // next text span of the object node
-                nextTextSpan = DOM.findNextTextSpan(object),
+            var // the object node, as jQuery collection
+                $object = $(object),
+                // whether the object is in inline mode
+                inline = DOM.isInlineObjectNode(object),
+                // previous text span of the object node
+                prevTextSpan = inline ? $object[0].previousSibling : null,
+                // next text span of the object node (skip following floating objects)
+                nextTextSpan = Utils.findNextNode($object.parent(), object, function () { return DOM.isTextSpan(this); }),
                 // DOM points representing the text selection over the object
                 startPoint = null, endPoint = null;
 
@@ -3002,11 +2998,6 @@ define('io.ox/office/editor/editor',
             // end point before the first character following the object
             if (DOM.isPortionSpan(nextTextSpan)) {
                 endPoint = new DOM.Point(nextTextSpan.firstChild, 0);
-            }
-
-            // floating objects: go to following text span (do not select 'over' the object)
-            if (DOM.isFloatingObjectNode(object) && endPoint) {
-                startPoint = endPoint;
             }
 
             // set browser selection (do nothing if no start and no end point

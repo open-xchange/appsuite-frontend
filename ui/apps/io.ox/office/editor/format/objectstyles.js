@@ -129,6 +129,32 @@ define('io.ox/office/editor/format/objectstyles',
     }
 
     /**
+     * Tries to find a preceding text span for the passed object. Leading
+     * floating objects in a paragraph do not have a preceding text span; in
+     * this case, the first text span following the object will be returned.
+     */
+    function findRelatedTextSpan(object) {
+
+        var // the text span related to the object
+            span = object[0].previousSibling;
+
+        // find preceding span
+        while (span && !DOM.isTextSpan(span)) {
+            span = span.previousSibling;
+        }
+
+        // no preceding span found: find following span
+        if (!span) {
+            span = object[0].nextSibling;
+            while (span && !DOM.isTextSpan(span)) {
+                span = span.nextSibling;
+            }
+        }
+
+        return span;
+    }
+
+    /**
      * Will be called for every object node whose attributes have been changed.
      * Repositions and reformats the object according to the passed attributes.
      *
@@ -172,7 +198,7 @@ define('io.ox/office/editor/format/objectstyles',
                 verticalOffsetNode.remove();
 
                 // insert an empty text span before the inline object if missing
-                if (!DOM.isTextSpan(object.prev()) && (relatedTextSpan = DOM.findRelatedTextSpan(object))) {
+                if (!DOM.isTextSpan(object.prev()) && (relatedTextSpan = findRelatedTextSpan(object))) {
                     DOM.splitTextSpan(relatedTextSpan, 0).insertBefore(object);
                 }
             }
@@ -376,13 +402,20 @@ define('io.ox/office/editor/format/objectstyles',
             return 'inline';
         }
 
+        // only paragraph anchor supported
+        if ((attributes.anchorhbase !== 'column') || (attributes.anchorvbase !== 'paragraph')) {
+            return null;
+        }
+
         // floating mode depends on text wrapping side
         if (isTextWrapped(attributes.textwrapmode)) {
             switch (attributes.textwrapside) {
             case 'left':
-                return 'leftFloated';
-            case 'right':
                 return 'rightFloated';
+            case 'right':
+                return 'leftFloated';
+            default:
+                return null;
             }
         }
         return 'noneFloated';

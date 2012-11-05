@@ -123,6 +123,32 @@ define('io.ox/office/editor/controller',
                     get: function (attributes) { return attributes.fillcolor; },
                     set: function (color) { editor.setAttribute('paragraph', 'fillcolor', color); }
                 },
+                'paragraph/list/indent': {
+                    parent: 'paragraph/attributes',
+                    enable: function (enabled) { var ilvl = this.get(); return enabled && _.isNumber(ilvl) && (ilvl >= 0) && (ilvl <= 8); },
+                    get: function (attributes) { return attributes.ilvl; },
+                    set: function (indent) { editor.setAttribute('paragraph', 'ilvl', indent); }
+                },
+                'paragraph/list/incindent': {
+                    parent: 'paragraph/list/indent',
+                    enable: function (enabled) { return enabled && (this.get() < 8); },
+                    set: function () {
+                        var ilvl = this.get();
+                        if (ilvl < 8) {
+                            editor.setAttribute('paragraph', 'ilvl', ilvl + 1);
+                        }
+                    }
+                },
+                'paragraph/list/decindent': {
+                    parent: 'paragraph/list/indent',
+                    enable: function (enabled) { return enabled && (this.get() > 0); },
+                    set: function () {
+                        var ilvl = this.get();
+                        if (ilvl > 0) {
+                            editor.setAttribute('paragraph', 'ilvl', ilvl - 1);
+                        }
+                    }
+                },
 
                 'paragraph/list/bullets': {
                     parent: 'paragraph/attributes',
@@ -147,30 +173,6 @@ define('io.ox/office/editor/controller',
                             editor.createDefaultList('numbering');
                         } else {
                             editor.setAttributes('paragraph', { numId: -1, ilvl: -1 });
-                        }
-                    }
-                },
-                'paragraph/list/incindent': {
-                    parent: 'paragraph/attributes',
-                    enable: function (enabled) { return enabled && this.ilvl !== null && this.ilvl !== -1 && this.ilvl < 8; },
-                    get: function (attributes) {
-                        this.ilvl = attributes.ilvl;
-                    },
-                    set: function () {
-                        if (this.ilvl < 8) {
-                            editor.setAttribute('paragraph', 'ilvl', this.ilvl + 1);
-                        }
-                    }
-                },
-                'paragraph/list/decindent': {
-                    parent: 'paragraph/attributes',
-                    enable: function (enabled) { return enabled && this.ilvl !== null && this.ilvl !== -1 && this.ilvl > 0; },
-                    get: function (attributes) {
-                        this.ilvl = attributes.ilvl;
-                    },
-                    set: function () {
-                        if (this.ilvl > 0) {
-                            editor.setAttribute('paragraph', 'ilvl', this.ilvl - 1);
                         }
                     }
                 },
@@ -221,6 +223,7 @@ define('io.ox/office/editor/controller',
                     get: function (attributes) { return attributes.fillcolor; },
                     set: function (color) { editor.setAttribute('character', 'fillcolor', color); }
                 },
+
                 'character/tab' : {
                     parent: 'character/attributes',
                     set: function () { editor.insertTab(); }
@@ -285,9 +288,7 @@ define('io.ox/office/editor/controller',
                 },
                 'image/floatmode': {
                     parent: 'image/attributes',
-                    // TODO: enable this when object selection works correctly
-                    // get: function (attributes) { return ObjectStyles.getFloatModeFromAttributes(attributes); },
-                    get: function () { return editor.getImageFloatMode(); },
+                    get: function (attributes) { return ObjectStyles.getFloatModeFromAttributes(attributes); },
                     set: function (floatMode) { editor.setAttributes('image', ObjectStyles.getAttributesFromFloatMode(floatMode)); }
                 },
 

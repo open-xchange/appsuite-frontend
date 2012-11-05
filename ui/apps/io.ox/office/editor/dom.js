@@ -783,63 +783,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return $(node).is(DOM.OFFSET_NODE_SELECTOR);
     };
 
-    // find, manipulate, and iterate text spans -------------------------------
-
-    /**
-     * Searches a text span element in the previous siblings of the passed
-     * node.
-     *
-     * @param {HTMLElement|jQuery} node
-     *  The node whose previous siblings will be searched for a text span
-     *  element. If this object is a jQuery collection, uses the first DOM node
-     *  it contains.
-     *
-     * @returns {HTMLElement|Null}
-     *  The closest text span preceding the specified node, or null.
-     */
-    DOM.findPreviousTextSpan = function (node) {
-        node = Utils.getDomNode(node);
-        while (node && !DOM.isTextSpan(node)) {
-            node = node.previousSibling;
-        }
-        return node;
-    };
-
-    /**
-     * Searches a text span element in the next siblings of the passed node.
-     *
-     * @param {HTMLElement|jQuery} node
-     *  The node whose next siblings will be searched for a text span element.
-     *  If this object is a jQuery collection, uses the first DOM node it
-     *  contains.
-     *
-     * @returns {HTMLElement|Null}
-     *  The closest text span following the specified node, or null.
-     */
-    DOM.findNextTextSpan = function (node) {
-        node = Utils.getDomNode(node);
-        while (node && !DOM.isTextSpan(node)) {
-            node = node.nextSibling;
-        }
-        return node;
-    };
-
-    /**
-     * Returns the closest text span in the previous siblings of the passed
-     * node. If there is no such text span, tries to find the closest text span
-     * in the following siblings.
-     *
-     * @param {HTMLElement|jQuery} node
-     *  The node whose siblings will be searched for a text span element. If
-     *  this object is a jQuery collection, uses the first DOM node it
-     *  contains.
-     *
-     * @returns {HTMLElement|Null}
-     *  The closest text span in the siblings of the specified node, or null.
-     */
-    DOM.findRelatedTextSpan = function (node) {
-        return DOM.findPreviousTextSpan(node) || DOM.findNextTextSpan(node);
-    };
+    // manipulate and iterate text spans --------------------------------------
 
     /**
      * Splits the passed text span element into two text span elements. Clones
