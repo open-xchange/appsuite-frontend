@@ -898,7 +898,9 @@ define.async('io.ox/core/date',
                 if (this.getDays() === end.getDays()) {
                     var diff = L.intervals[(L.h12 ? 'hm' : 'Hm') +
                                            (format & api.TIMEZONE ? 'v' : '')];
-                    if ((this.getHours() < 12) !== (end.getHours() < 12)) {
+                    if (L.h12 &&
+                        (this.getHours() < 12) !== (end.getHours() < 12))
+                    {
                         return diff.a;
                     } else if (this.getHours() !== end.getHours()) {
                         return diff.h;
