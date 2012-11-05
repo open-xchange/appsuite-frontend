@@ -20,7 +20,8 @@ define('io.ox/mail/actions',
      'gettext!io.ox/mail',
      'io.ox/core/config',
      'io.ox/core/notifications',
-     'io.ox/contacts/api'], function (ext, links, api, util, gt, config, notifications, contactAPI) {
+     'io.ox/contacts/api',
+     'io.ox/core/api/account'], function (ext, links, api, util, gt, config, notifications, contactAPI, account) {
 
     'use strict';
 
@@ -44,7 +45,34 @@ define('io.ox/mail/actions',
         id: 'delete',
         requires: 'toplevel some delete',
         multiple: function (list) {
-            api.remove(list);
+            console.log(list, this);
+            var check = _(list).any(function (o) {
+                return account.is('trash', o.folder_id);
+            });
+            if (check) {
+                var question = gt.ngettext(
+                    'Do you really want to permanently delete this mail?',
+                    'Do you really want to permanently delete these mails?',
+                    list.length
+                );
+
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(question)
+                        .addPrimaryButton("delete", gt('Delete'))
+                        .addButton("cancel", gt('Cancel'))
+                        .show()
+                        .done(function (action) {
+                            if (action === 'delete') {
+                                api.remove(list);
+                            }
+                        });
+                });
+            }
+            else
+            {
+                api.remove(list);
+            }
         }
     });
 

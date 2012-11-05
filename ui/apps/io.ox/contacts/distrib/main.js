@@ -151,8 +151,8 @@ define('io.ox/contacts/distrib/main',
                 require(["io.ox/core/tk/dialogs"], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt("Do you really want to discard your changes?"))
-                        .addButton("cancel", gt('Cancel'))
                         .addPrimaryButton("delete", gt('Discard'))
+                        .addButton("cancel", gt('Cancel'))
                         .show()
                         .done(function (action) {
                             console.debug("Action", action);

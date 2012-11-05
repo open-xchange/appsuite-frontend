@@ -179,7 +179,6 @@ define("io.ox/files/actions",
         id: 'delete',
         requires: 'some',
         multiple: function (list) {
-
             var question = gt.ngettext(
                     'Do you really want to delete this file?',
                     'Do you really want to delete these files?',

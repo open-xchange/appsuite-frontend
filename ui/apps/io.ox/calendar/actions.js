@@ -171,9 +171,9 @@ define('io.ox/calendar/actions',
                             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                                 new dialogs.ModalDialog()
                                     .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
+                                    .addPrimaryButton('appointment', gt('Delete appointment'))
+                                    .addPrimaryButton('series', gt('Delete whole series'))
                                     .addButton('cancel', gt('Cancel'))
-                                    .addDangerButton('appointment', gt('Delete appointment'))
-                                    .addDangerButton('series', gt('Delete whole series'))
                                     .show()
                                     .done(function (action) {
                                         if (action === 'cancel') {
@@ -189,8 +189,8 @@ define('io.ox/calendar/actions',
                             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                                 new dialogs.ModalDialog()
                                     .text(gt('Do you want to delete this appointment?'))
+                                    .addPrimaryButton('ok', gt('Delete'))
                                     .addButton('cancel', gt('Cancel'))
-                                    .addDangerButton('ok', gt('Delete'))
                                     .show()
                                     .done(function (action) {
                                         if (action === 'cancel') {
@@ -246,7 +246,7 @@ define('io.ox/calendar/actions',
             require(['io.ox/calendar/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (api, dialogs, views) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
                     .header($('<h3>').text(title))
-                    .addPrimaryButton('ok', gt('OK'))
+                    .addPrimaryButton('ok', gt('Move'))
                     .addButton('cancel', gt('Cancel'));
                 dialog.getBody().css('maxHeight', '250px');
                 var item = _(list).first(),
@@ -366,29 +366,26 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 200,
         prio: 'hi',
-        id: 'delete',
-        label: gt('Delete'),
-        ref: 'io.ox/calendar/detail/actions/delete'
-    }));
-
-    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
-        index: 300,
-        prio: 'hi',
         id: 'changestatus',
         label: gt('Change status'),
         ref: 'io.ox/calendar/detail/actions/changestatus'
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
-        index: 400,
+        index: 300,
         prio: 'hi',
         id: 'move',
         label: gt('Move'),
         ref: 'io.ox/calendar/detail/actions/move'
     }));
 
-
-
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 400,
+        prio: 'hi',
+        id: 'delete',
+        label: gt('Delete'),
+        ref: 'io.ox/calendar/detail/actions/delete'
+    }));
 
     ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({
         index: 100,
