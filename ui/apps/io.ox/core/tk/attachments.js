@@ -18,7 +18,7 @@ define('io.ox/core/tk/attachments',
         'io.ox/core/strings',
         'gettext!io.ox/core/tk/attachments',
         'io.ox/core/extPatterns/links',
-        'less!io.ox/core/tk/attachmentEdit.less'
+        'less!io.ox/core/tk/attachments.less'
     ], function (ext, attachmentAPI, strings, gt, links) {
 
         'use strict';
