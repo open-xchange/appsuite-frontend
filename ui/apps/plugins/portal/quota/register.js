@@ -124,11 +124,12 @@ define("plugins/portal/quota/register", ["io.ox/core/extensions",
     };
 
     ext.point("io.ox/portal/widget").extend({
-        id: 'filler',//needed so onclick sidepane isn't shown
+        id: 'quota',//needed so onclick sidepane isn't shown
         index: 900,
         title: gt('Quota'),
         load: load,
         draw: draw,
+        hideSidePopup: true,
         preview: function () {
             var deferred = $.Deferred();
             loadTile().done(function (quota) {

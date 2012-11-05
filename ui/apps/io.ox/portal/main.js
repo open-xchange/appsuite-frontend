@@ -284,7 +284,9 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                         $node.on('click', function () { return keychain.createInteractively(extension.id); });
                     }
                 } else {
-                    $node.on('click', makeClickHandler(extension));
+                    if (!extension.hideSidePopup) {
+                        $node.on('click', makeClickHandler(extension));
+                    }
                 }
 
                 if (/^filler/.test(extension.id)) {
@@ -402,7 +404,6 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                 .append(intro)
                 .append(tileSide);
             ox.on('refresh^ refresh-portal', function (event, completeReload) {
-                console.log("Refresh triggered", event, completeReload);
                 if (completeReload) {
                     pluginSettings = _.sortBy(settings.get('pluginSettings', []), function (obj) { return obj.index; });
                     formerlyActivePluginIds = allActivePluginIds;
@@ -422,6 +423,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                     
                     reqPlugins = _.intersection(allActivePlugins, plugins);
                     reqPlugins = _(reqPlugins).without(formerlyActivePlugins);
+                    
                     require(reqPlugins).pipe(function () {
                         setOrder(arguments);
                     });
