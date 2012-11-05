@@ -193,6 +193,24 @@ define('io.ox/core/commons-folderview',
                 );
             }
         });
+
+        function setFolderPermissions(e) {
+            e.preventDefault();
+            require(['io.ox/core/permissions/permissions'], function (permissions) {
+                permissions.initPermissionsDialog(e);
+            });
+        }
+
+        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+            id: 'permissions',
+            index: 200,
+            draw: function (baton) {
+                this.append($('<li>').append(
+                    $('<a href="#">').text(gt('Permissions'))
+                    .on('click', { app: baton.app }, setFolderPermissions)
+                ));
+            }
+        });
     }
 
     /**

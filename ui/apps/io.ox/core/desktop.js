@@ -496,17 +496,12 @@ define("io.ox/core/desktop",
 
             // init
             var rendered = false,
-                initialized = false,
-                options = {
-                    force: false
-                };
+                initialized = false;
 
             this.main = $();
 
-            this.show = function (app, opt) {
+            this.show = function (app, options) {
                 // make sure it's initialized
-
-                _.extend(options, opt);
 
                 if (!initialized) {
                     this.main = app.getWindow().addPerspective(name);
@@ -515,13 +510,15 @@ define("io.ox/core/desktop",
                 // set perspective
                 app.getWindow().setPerspective(name);
 
-                _.url.hash('perspective', (_.isArray(options.perspective) ? options.perspective.join(':') : options.perspective));
+                _.url.hash('perspective', options.perspective);
 
                 // render?
-                if (!rendered || options.force) {
+                if (!rendered || options.perspective.split(":").length > 1) {
                     this.render(app, options);
                     rendered = true;
                 }
+                app.getWindow().currentPerspective = options.perspective;
+                app.getWindow().trigger('change:perspective', options.perspective);
             };
 
             this.render = $.noop;
@@ -529,6 +526,12 @@ define("io.ox/core/desktop",
             this.setRendered = function (value) {
                 rendered = value;
             };
+        };
+
+        Perspective.show = function (app, p) {
+            require([app.get('name') + '/' + p.split(":")[0] + '/perspective'], function (perspective) {
+                perspective.show(app, { perspective: p });
+            });
         };
 
         return Perspective;
@@ -672,7 +675,6 @@ define("io.ox/core/desktop",
                 var quitOnClose = false,
                     // perspectives
                     perspectives = { main: true },
-                    currentPerspective = "main",
                     self = this,
                     firstShow = true;
 
@@ -989,14 +991,16 @@ define("io.ox/core/desktop",
                 };
 
                 this.setPerspective = function (id) {
-                    if (id !== currentPerspective) {
+                    if (id !== this.currentPerspective.split(':')[0]) {
                         if (perspectives[id] !== undefined) {
-                            this.nodes[currentPerspective].hide();
-                            this.nodes[currentPerspective = id].show();
+                            this.nodes[this.currentPerspective.split(':')[0]].hide();
+                            this.nodes[this.currentPerspective.split(':')[0] = id].show();
                         }
                     }
                     return this;
                 };
+
+                this.currentPerspective = 'main';
             };
 
         // window factory

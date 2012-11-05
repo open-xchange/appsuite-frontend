@@ -33,7 +33,7 @@ define('io.ox/calendar/week/perspective',
         app:            null,
         view:           null,
         folder:         null,
-        mode:           { 'day': 1, 'workweek': 5, 'week': 7 },
+        mode:           { 'week:day': 1, 'week:workweek': 5, 'week:week': 7 },
         days: function (d) {
             if (d) {
                 this.columns = d;
@@ -134,7 +134,7 @@ define('io.ox/calendar/week/perspective',
             this.collection = new Backbone.Collection([]);
             this.main.addClass('week-view').empty();
 
-            this.days(this.mode[options.perspective[1]]);
+            this.days(this.mode[options.perspective]);
 
             if (this.columns === 1) {
                 this.startDate = new date.Local().setHours(0, 0, 0, 0);

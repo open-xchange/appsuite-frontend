@@ -25,7 +25,7 @@ define("io.ox/calendar/main",
     var app = ox.ui.createApp({ name: 'io.ox/calendar', title: 'Calendar' }),
         // app window
         win,
-        lastperspective;
+        lastPerspective = 'list';
 
     // launcher
     app.setLauncher(function () {
@@ -46,28 +46,25 @@ define("io.ox/calendar/main",
         commons.addFolderSupport(app, null, 'calendar')
             .pipe(commons.showWindow(win))
             .done(function () {
-                // switch to week perspective or perspective in hash
-                var options = {
-                    perspective: (_.url.hash('perspective') ? _.url.hash('perspective').split(":") : ["week", "week"])
-                };
-                require(['io.ox/calendar/' + options.perspective[0] + '/perspective'], function (perspective) {
-                    perspective.show(app, options);
-                });
-
+                ox.ui.Perspective.show(app, _.url.hash('perspective') || lastPerspective);
             });
 
         win.on('search:open', function () {
-            lastperspective = (_.url.hash('perspective') ? _.url.hash('perspective').split(":") : ["week", "week"]);
-            require(['io.ox/calendar/list/perspective'], function (perspective) {
-                perspective.show(app, { perspective: 'list' });
-            });
+            lastPerspective = win.currentPerspective;
+            ox.ui.Perspective.show(app, 'list');
         });
 
         win.on('search:close', function () {
-            var options = { perspective: lastperspective };
-            require(['io.ox/calendar/' + options.perspective[0] + '/perspective'], function (perspective) {
-                perspective.show(app, options);
-            });
+            if (lastPerspective) {
+                ox.ui.Perspective.show(app, lastPerspective);
+            }
+        });
+
+        win.on('change:perspective', function (e, name) {
+            if (name !== 'list') {
+                lastPerspective = null;
+                win.search.close();
+            }
         });
 
     });

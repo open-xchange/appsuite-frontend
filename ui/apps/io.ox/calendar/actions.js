@@ -31,45 +31,35 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/actions/switch-to-list-view', {
         requires: true,
         action: function (baton) {
-            require(['io.ox/calendar/list/perspective'], function (perspective) {
-                perspective.show(baton.app, { perspective: 'list' });
-            });
+            ox.ui.Perspective.show(baton.app, 'list');
         }
     });
 
     new Action('io.ox/calendar/actions/switch-to-month-view', {
         requires: true,
         action: function (baton) {
-            require(['io.ox/calendar/month/perspective'], function (perspective) {
-                perspective.show(baton.app, { perspective: 'month' });
-            });
+            ox.ui.Perspective.show(baton.app, 'month');
         }
     });
 
     new Action('io.ox/calendar/actions/switch-to-fullweek-view', {
         requires: true,
         action: function (baton) {
-            require(['io.ox/calendar/week/perspective'], function (perspective) {
-                perspective.show(baton.app, { perspective: ['week', 'week'], force: true });
-            });
+            ox.ui.Perspective.show(baton.app, 'week:week');
         }
     });
 
     new Action('io.ox/calendar/actions/switch-to-week-view', {
         requires: true,
         action: function (baton) {
-            require(['io.ox/calendar/week/perspective'], function (perspective) {
-                perspective.show(baton.app, { perspective: ['week', 'workweek'], force: true });
-            });
+            ox.ui.Perspective.show(baton.app, 'week:workweek');
         }
     });
 
     new Action('io.ox/calendar/actions/switch-to-day-view', {
         requires: true,
         action: function (baton) {
-            require(['io.ox/calendar/week/perspective'], function (perspective) {
-                perspective.show(baton.app, { perspective: ['week', 'day'], force: true });
-            });
+            ox.ui.Perspective.show(baton.app, 'week:day');
         }
     });
 
