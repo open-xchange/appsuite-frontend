@@ -338,7 +338,7 @@ define('io.ox/calendar/week/view',
                 timeLabel.push(
                     $('<div>')
                         .addClass('time')
-                        .append($('<div>').addClass('number').text(gt.noI18n((i < 10 ? '0' + i : i) + '.00')))
+                        .append($('<div>').addClass('number').text(new date.Local(0, 0, 0, i, 0, 0, 0).format(date.TIME)))
                         .height(this.cellHeight * this.fragmentation)
                 );
             }

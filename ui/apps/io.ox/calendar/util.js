@@ -113,12 +113,11 @@ define("io.ox/calendar/util",
             }
         },
 
-// OLD STUFF - looks nice
-        getTime: function (timestamp) {
-            var d = new date.Local(timestamp);
-            return _.pad(d.getHours(), 2) + ":" + _.pad(d.getMinutes(), 2);
+        getTime: function (localDate) {
+            return localDate.format(date.TIME);
         },
 
+// OLD STUFF - looks nice
         getDate: function (timestamp) {
             var d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local();
             return n_dayShort[d.getDay()] + ", " + _.pad(d.getDate(), 2) + "." + _.pad(d.getMonth() + 1, 2) + "." + d.getYear();

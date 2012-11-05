@@ -26,7 +26,7 @@
     @appointment-lasso: rgba(0, 0, 0, 0.4);
     @appointment-hover-pct: 15%; 
     @appointment-unconfirmed-alpha: 0.4;
-    @weekview-time-with: 42px;
+    @weekview-time-with: 58px;
     @weekview-footer-height: 25px;
     @weekview-toolbar-height: 41px;
     
