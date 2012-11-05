@@ -76,7 +76,6 @@ define('io.ox/calendar/edit/main',
                     var self = this;
                     function cont(data) {
                         app.model = self.model = appointmentModel.factory.create(data);
-                        appointmentModel.toLocalTime(self.model);
                         appointmentModel.applyAutoLengthMagic(self.model);
                         appointmentModel.setDefaultParticipants(self.model).done(function () {
                             app.view = self.view = new MainView({model: self.model, mode: data.id ? 'edit' : 'create', app: self});

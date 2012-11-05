@@ -497,7 +497,7 @@ define('io.ox/backbone/forms',
                 if (!value) {
                     return null;
                 }
-                myTime = date.Local.utc(parseInt(value, 10));
+                myTime = new date.Local(parseInt(value, 10));
 
                 if (_.isNull(myTime)) {
                     return value;
@@ -510,7 +510,7 @@ define('io.ox/backbone/forms',
                 if (!myValue) {
                     return value;
                 }
-                var mydate = new date.Local(date.Local.utc(myValue));
+                var mydate = new date.Local(myValue);
                 var parsedDate = date.Local.parse(value, date.TIME);
 
                 if (_.isNull(parsedDate)) {
@@ -525,7 +525,7 @@ define('io.ox/backbone/forms',
                 mydate.setMinutes(parsedDate.getMinutes());
                 mydate.setSeconds(parsedDate.getSeconds());
 
-                return date.Local.localTime(mydate.getTime());
+                return mydate.getTime();
             },
             _dateStrToDate: function (value, attribute, model) {
 
