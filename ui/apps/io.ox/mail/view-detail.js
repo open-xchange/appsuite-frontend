@@ -344,7 +344,7 @@ define('io.ox/mail/view-detail',
                     .on('click.open', blockquoteClickOpen)
                     .on('dblclick.close', blockquoteClickClose)
                     .after(
-                        $('<a href="#" class="toggle-blockquote">').text('Show more')
+                        $('<a href="#" class="toggle-blockquote">').text(gt('Show more'))
                         .on('click', blockquoteMore)
                     );
             }
