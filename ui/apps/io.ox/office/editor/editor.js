@@ -4510,20 +4510,22 @@ define('io.ox/office/editor/editor',
          */
         function resolveElementFamily(element) {
 
-            var // the resulting style family
+            var // the element, as jQuery object
+                $element = $(element),
+                // the resulting style family
                 family = null;
 
-            if (DOM.isTextSpan(element) || DOM.isTextSpanContainerNode(element)) {
+            if (DOM.isTextSpan($element) || DOM.isTextSpanContainerNode($element)) {
                 family = 'character';
-            } else if (DOM.isParagraphNode(element)) {
+            } else if (DOM.isParagraphNode($element)) {
                 family = 'paragraph';
-            } else if (DOM.isTableNode(element)) {
+            } else if (DOM.isTableNode($element)) {
                 family = 'table';
-            } else if ($(element).is('tr')) {
+            } else if ($element.is('tr')) {
                 family = 'row';
-            } else if ($(element).is('td')) {
+            } else if ($element.is('td')) {
                 family = 'cell';
-            } else if (DOM.isImageNode(element)) {
+            } else if (DOM.isImageNode($element)) {
                 family = 'image';
             } else {
                 Utils.warn('Editor.resolveElementFamily(): unsupported element');
