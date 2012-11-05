@@ -14,9 +14,8 @@
 define('io.ox/office/editor/position',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
-     'io.ox/office/editor/oxopam',
-     'io.ox/office/editor/selection'
-    ], function (Utils, DOM, OXOPaM, Selection) {
+     'io.ox/office/editor/oxopam'
+    ], function (Utils, DOM, OXOPaM) {
 
     'use strict';
 
