@@ -157,12 +157,19 @@ define("io.ox/contacts/view-detail",
         index: 100,
         id: 'contact-picture',
         draw: function (baton) {
-            this.append(
-                // left side / picture
-                $('<div class="span4 field-label">').append(
-                    api.getPicture(baton.data, { scaleType: 'contain', width: 80, height: 80 }).addClass('picture')
-                )
-            );
+            var data = baton.data;
+            if (data.mark_as_distributionlist === true) {
+                this.append(
+                    $('<div class="span4 field-label">')
+                );
+            } else {
+                this.append(
+                    // left side / picture
+                    $('<div class="span4 field-label">').append(
+                        api.getPicture(baton.data, { scaleType: 'contain', width: 80, height: 80 }).addClass('picture')
+                    )
+                );
+            }
         }
     });
 
