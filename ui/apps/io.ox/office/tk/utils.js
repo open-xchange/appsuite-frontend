@@ -932,8 +932,9 @@ define('io.ox/office/tk/utils',
      *  the first node it contains.
      *
      * @param {Node|jQuery} node
-     *  The DOM node whose next sibling will be returned. If this object is a
-     *  jQuery collection, uses the first node it contains.
+     *  The DOM node whose next sibling will be returned. Must be a descendant
+     *  of the passed root node. If this object is a jQuery collection, uses
+     *  the first node it contains.
      *
      * @param {String|Function|Node|jQuery} [selector]
      *  A jQuery selector that will be used to find a DOM node. The selector
@@ -957,29 +958,36 @@ define('io.ox/office/tk/utils',
      */
     Utils.findNextNode = function (rootNode, node, selector, options) {
 
+        var // visit own descendant nodes
+            children = Utils.getBooleanOption(options, 'children', false);
+
         // set 'node' to the next sibling (of itself or one of its parents)
-        function nextSibling() {
+        function nextNode() {
+
+            // visit own descendant nodes if specified
+            if (children && node && node.firstChild) {
+                node = node.firstChild;
+                return;
+            }
 
             // find first node up the tree that has a next sibling
             while (node && !node.nextSibling) {
-                node = node.parentNode;
+                // do not leave the root node
+                node = (node.parentNode === rootNode) ? null : node.parentNode;
+                // always visit descendant nodes of parent siblings
+                children = true;
             }
 
             // go to that next sibling
             node = node && node.nextSibling;
-
-            // check that the new node is inside the root node
-            if (node && !rootNode.contains(node)) {
-                node = null;
-            }
         }
 
         rootNode = Utils.getDomNode(rootNode);
         node = Utils.getDomNode(node);
 
-        nextSibling();
+        nextNode();
         if (!_.isUndefined(selector)) {
-            while (node && !$(node).is(selector)) { nextSibling(); }
+            while (node && !$(node).is(selector)) { nextNode(); }
         }
 
         return node;
