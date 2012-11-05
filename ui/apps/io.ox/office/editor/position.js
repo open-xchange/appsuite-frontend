@@ -614,7 +614,7 @@ define('io.ox/office/editor/position',
                     nodeOffset = pos - nodeStart;
 
                 // check if passed position points inside the current node
-                if ((0 <= nodeOffset) && (nodeOffset < nodeLength)) {
+                if ((0 <= nodeOffset) && (nodeOffset <= nodeLength)) {
                     childNode = _node;
                     offset = nodeOffset;
                     return Utils.BREAK;
