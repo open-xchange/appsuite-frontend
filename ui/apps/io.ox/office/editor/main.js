@@ -530,7 +530,7 @@ define('io.ox/office/editor/main',
          * Starts a timer that calls the method synchronizeOperations()
          * periodically.
          *
-         * @param {Number} [timeout=1000]
+         * @param {Number} [timeout=3000]
          *  The time period, in milliseconds.
          */
         function startOperationsTimer(timeout) {
@@ -543,7 +543,7 @@ define('io.ox/office/editor/main',
                 operationsTimer = window.setTimeout(function () {
                     operationsTimer = null;
                     synchronizeOperations();
-                }, timeout || 1000);
+                }, timeout || 3000);
             }
         }
 
