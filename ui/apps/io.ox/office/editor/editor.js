@@ -3226,6 +3226,9 @@ define('io.ox/office/editor/editor',
                             // tabsize calculation based on default tabstop
                             width = Math.max(0, defaultTabstop - (leftHMM % defaultTabstop));
                             width = (width <= 1) ? defaultTabstop : width; // no 0 tab size allowed, check for <= 1 to prevent rounding errors
+                            // reset possible fill character
+                            if (tabSpan)
+                                $(tabSpan).text('');
                         }
                         $(tabNode).css('width', (width / 100) + 'mm');
                     }
@@ -3240,8 +3243,8 @@ define('io.ox/office/editor/editor',
          * @param {HTMLElement|jQuery} paragraph
          *  The element to be used for the width calculation.
          *
-         * @param {Number} width
-         *  The minimal width in 1/100th mm to be filled
+         * @param {Number} maxWidth
+         *  The maximal width in 1/100th mm to be filled
          *
          * @param {String} fillChar
          *  A string with a single character to used to fill the
@@ -3249,15 +3252,18 @@ define('io.ox/office/editor/editor',
          *
          * @returns {String}
          *  A string which contains a number of fill chars
-         *  to reach at least the provided width.
+         *  where the width is smaller or equal to maxWidth.
          */
-        function createTabFillCharString(element, width, fillChar) {
+        function createTabFillCharString(element, maxWidth, fillChar) {
             var charWidth = 0, numChars;
 
             charWidth = Utils.convertLengthToHmm($(element).text(fillChar).width(), 'px');
-            numChars = Math.round(width / charWidth) + 1;
-
-            return (new Array(numChars)).join(fillChar);
+            numChars = Math.floor(maxWidth / charWidth);
+            
+            if (numChars > 0)
+                return (new Array(numChars + 1)).join(fillChar);
+            else
+                return '';
         }
 
         // ==================================================================
