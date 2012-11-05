@@ -19,8 +19,9 @@ define('io.ox/core/tk/folderviews',
      'io.ox/core/extensions',
      'io.ox/core/event',
      'io.ox/core/config',
+     'io.ox/core/notifications',
      'gettext!io.ox/core'
-    ], function (Selection, api, account, userAPI, ext, Events, config, gt) {
+    ], function (Selection, api, account, userAPI, ext, Events, config, notifications, gt) {
 
     'use strict';
 
@@ -86,6 +87,11 @@ define('io.ox/core/tk/folderviews',
 //                        }, 1000);
 //                        return def;
 //                    })
+                    .fail(function (error) {
+                        // reset folder and show global error
+                        nodes.sub.idle().hide();
+                        notifications.yell(error);
+                    })
                     .pipe(function (children) {
                         // tricky one liner: we invoke 'paint' for all child nodes.
                         // invoke returns a nice array of all returns values which are deferred objects.
