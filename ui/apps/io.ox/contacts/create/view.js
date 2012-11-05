@@ -89,7 +89,7 @@ define('io.ox/contacts/create/view',
             var view = new ContactCreateView({model: contactModel});
 
             // create modal popup
-            var pane = new dialogs.CreateDialog({ easyOut: true, async: true, width: 500 });
+            var pane = new dialogs.CreateDialog({ easyOut: false, async: true, width: 500 });
             // header
             pane.header(
                 $('<h3>').text(gt('Add new contact'))
