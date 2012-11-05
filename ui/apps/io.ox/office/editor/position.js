@@ -614,7 +614,7 @@ define('io.ox/office/editor/position',
                     nodeOffset = pos - nodeStart;
 
                 // check if passed position points inside the current node
-                if ((0 <= nodeOffset) && (nodeOffset <= nodeLength)) {
+                if ((0 <= nodeOffset) && (nodeOffset < nodeLength)) {
                     childNode = _node;
                     offset = nodeOffset;
                     return Utils.BREAK;
@@ -660,7 +660,8 @@ define('io.ox/office/editor/position',
         }
 
         // if the position is an image or field, the dom position shall be the previous or following text node
-        if (DOM.isTextComponentNode(domPoint.node) || DOM.isObjectNode(domPoint.node)) {
+        // if (DOM.isTextComponentNode(domPoint.node) || DOM.isObjectNode(domPoint.node) || (domPoint.offset === 0)) {  // only checking for 'offset === 0' should be sufficient
+        if ((DOM.isTextComponentNode(domPoint.node)) || (DOM.isObjectNode(domPoint.node))) {  // only checking for 'offset === 0' should be sufficient
 
             // go to text span preceding the component node
             span = DOM.findPreviousTextSpan(domPoint.node);
