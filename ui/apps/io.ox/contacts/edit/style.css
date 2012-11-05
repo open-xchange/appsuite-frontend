@@ -22,3 +22,8 @@
 .edit-contact .btn {
     margin-left: 13px;
 }
+
+.edit-contact button[data-action="imagereset"] {
+	float: left;
+    margin-left: 25px;
+}

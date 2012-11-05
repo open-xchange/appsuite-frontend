@@ -210,6 +210,17 @@ define('io.ox/contacts/edit/view-form', [
     //cancel
 
     views.ext.point("io.ox/contacts/edit/view/inline").extend(new links.Button({
+        id: "imagereset",
+        index: 100,
+        label: gt("Reset image"),
+        ref: "io.ox/contacts/actions/edit/reset-image",
+        cssClasses: "btn",
+        tabIndex: 10,
+        tagtype: "button"
+    }));
+
+
+    views.ext.point("io.ox/contacts/edit/view/inline").extend(new links.Button({
         id: "discard",
         index: 100,
         label: gt("Discard"),
@@ -249,6 +260,15 @@ define('io.ox/contacts/edit/view-form', [
         id: 'discard',
         action: function (options, baton) {
             options.parentView.$el.find('[data-action="discard"]').trigger('controller:quit');
+        }
+    });
+
+    new actions.Action('io.ox/contacts/actions/edit/reset-image', {
+        id: 'imagereset',
+        action: function (baton) {
+            baton.model.set("image1", '');
+            var imageUrl =  ox.base + '/apps/themes/default/dummypicture.png';
+            baton.parentView.$el.find('.picture-uploader').css('background-image', 'url(' + imageUrl + ')');
         }
     });
 
