@@ -70,24 +70,21 @@ define('io.ox/core/permissions/permissions',
         )
         .build(function () {
             this.getContentNode().append(
-                $('<div class="row-fluid">').append(
+                $('<div class="permissions row-fluid">').append(
                     content
                 )
             );
         })
         .addButton('cancel', gt('Cancel'))
-        .addPrimaryButton('add', gt('Save'));
+        .addPrimaryButton('save', gt('Save'));
 
-        dialog.getPopup()
-            .find('.modal-header').addClass('clearfix')
-            .children('h4').addClass('pull-left').end()
-            .children('ul').addClass('pull-right');
+        dialog.getPopup().addClass('permissions-dialog');
 
         dialog.show(function () {
             this.find('input').focus();
         })
         .done(function (action) {
-            if (action === 'add') {
+            if (action === 'save') {
             }
         });
     };
@@ -97,23 +94,28 @@ define('io.ox/core/permissions/permissions',
         permissions = folder.permissions;
         _(permissions).each(function (permission) {
             var def = $.Deferred(),
-            d = $('<div class="userpermission row-fluid">');
+            d = $('<div class="permission row-fluid">');
             if (!permission.group)
             {
-                userAPI.getPictureURL(permission.entity).done(function (picture) {
-                    d.append($('<img>', { src: picture, 'class': 'pull-left contact-image' }));
-                });
-                userAPI.getName(permission.entity).done(function (user) {
+                $.when(
+                    userAPI.getPictureURL(permission.entity),
+                    userAPI.getName(permission.entity)
+                )
+                .done(function (picture, user) {
                     d.append(
-                        $('<div class="name">').append(gt.noI18n(user)),
-                            gt('The user can '),
-                            addDropdown('folder', permission.bits),
-                            gt.noI18n(', '),
-                            addDropdown('read', permission.bits),
-                            gt.noI18n(', '),
-                            addDropdown('write', permission.bits),
-                            gt.noI18n(' and '),
-                            addDropdown('delete', permission.bits)
+                        $('<img>', { src: picture, 'class': 'pull-left contact-image' }),
+                        $('<div class="user">').append(
+                            $('<div class="name">').append(gt.noI18n(user)),
+                                gt('The user can '),
+                                addDropdown('folder', permission.bits),
+                                gt.noI18n(', '),
+                                addDropdown('read', permission.bits),
+                                gt.noI18n(', '),
+                                addDropdown('write', permission.bits),
+                                gt.noI18n(' and '),
+                                addDropdown('delete', permission.bits),
+                                gt.noI18n(' objects.')
+                            )
                     ).data('permissions', permission);
                 });
             }
@@ -134,7 +136,9 @@ define('io.ox/core/permissions/permissions',
                 $('<li>').append(
                     $('<a href="#">', { 'data-val': value })
                         .text(item).on('click', function () {
-                            var data = $(this).closest('.userpermission').data();
+                            var data = $(this).closest('.permission').data(),
+                            newdata = api.Bitmask(data.permissions.bits).set(permission, value).get();
+                            console.log(data.permissions.bits, item, value, permission, newdata);
                         })
                 )
             );
