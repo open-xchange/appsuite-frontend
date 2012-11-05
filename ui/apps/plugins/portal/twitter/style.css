@@ -32,6 +32,8 @@
 .twitter .name {
     font-weight: normal;
     color: gray;
+    display: inline-block;
+    padding-bottom: 3px;
 }
 .io-ox-twitter-action-tweet {
     display: block;
