@@ -75,7 +75,6 @@ $(document).ready(function () {
         },
         blur: function (e) {
             if (this.blurring) {
-                this.blurring = false;
                 return;
             }
             var self = this;
