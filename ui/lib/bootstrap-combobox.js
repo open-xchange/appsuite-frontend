@@ -74,6 +74,10 @@ $(document).ready(function () {
             this.lookup();
         },
         blur: function (e) {
+            if (this.blurring) {
+                this.blurring = false;
+                return;
+            }
             var self = this;
             setTimeout(function () {
                 self.select();
@@ -151,7 +155,9 @@ $(document).ready(function () {
             if (val) {
                 this.$element.val(val);
                 this.$element.trigger('change');
+                this.blurring = true;
                 this.$element.trigger('blur');
+                this.blurring = false;
             }
             return this.hide();
         },
