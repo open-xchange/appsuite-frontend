@@ -5482,7 +5482,8 @@ define('io.ox/office/editor/editor',
                         // TODO: it might make more sense to change the label appropriately
                         var paraAttributes = paragraphStyles.getElementAttributes(para);
                         $(para).children(DOM.LIST_LABEL_NODE_SELECTOR).remove();
-                        $(para).css('margin-left', '');
+                        $(para).css('margin-left', '')
+                            .css('text-indent', '');
                         var numId = paraAttributes.numId;
                         if (numId  !== -1) {
                             var ilvl = paraAttributes.ilvl;
@@ -5532,10 +5533,17 @@ define('io.ox/office/editor/editor',
                                 }
                                 LineHeight.updateElementLineHeight(numberingElement, paraAttributes.lineheight);
                                 if (listObject.indent > 0) {
-                                    $(para).css('margin-left', Utils.convertHmmToLength(listObject.indent, 'pt'));
+                                    var leftMargin = listObject.indent;
+                                    $(para).css('margin-left', Utils.convertHmmToLength(leftMargin, 'pt'));
                                 }
-                                if (listObject.labelWidth > 0) {
-                                    numberingElement.css('min-width', Utils.convertHmmToLength(listObject.labelWidth, 'pt'));
+                                if (listObject.firstLine < listObject.indent) {
+                                    var labelWidth = listObject.indent - listObject.firstLine;
+                                    numberingElement.css('min-width', Utils.convertHmmToLength(labelWidth, 'pt'));
+                                    numberingElement.css('margin-left', Utils.convertHmmToLength(-labelWidth, 'pt'));
+                                } else {
+                                    numberingElement.css('margin-left', Utils.convertHmmToLength(listObject.firstLine - listObject.indent, 'pt'));
+                                    // TODO: calc. min-width depending on tabposition or distance
+                                    //numberingElement.css('min-width', Utils.convertHmmToLength(0, 'pt'));
                                 }
                                 $(para).prepend(numberingElement);
                             }

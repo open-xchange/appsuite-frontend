@@ -420,8 +420,9 @@ define('io.ox/office/editor/format/lists',
             }
             var format = formatNumberType(levelIndexes, ilvl, currentList);
             _.extend(ret, format);
-            ret.indent = levelFormat.leftindent - (levelFormat.hangingindent ? levelFormat.hangingindent : 0);
-            ret.labelWidth = (levelFormat.hangingindent ? levelFormat.hangingindent : 0);
+            ret.indent = levelFormat.leftindent;
+            ret.firstLine = (levelFormat.hangingindent ? levelFormat.leftindent - levelFormat.hangingindent :
+                (levelFormat.firstlineindent ? levelFormat.leftindent + levelFormat.firstlineindent : levelFormat.leftindent));
             return ret;
         };
 
