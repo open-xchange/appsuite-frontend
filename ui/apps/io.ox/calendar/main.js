@@ -24,7 +24,8 @@ define("io.ox/calendar/main",
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/calendar', title: 'Calendar' }),
         // app window
-        win;
+        win,
+        lastperspective;
 
     // launcher
     app.setLauncher(function () {
@@ -54,6 +55,21 @@ define("io.ox/calendar/main",
                 });
 
             });
+
+        win.on('search:open', function () {
+            lastperspective = (_.url.hash('perspective') ? _.url.hash('perspective').split(":") : ["week", "week"]);
+            require(['io.ox/calendar/list/perspective'], function (perspective) {
+                perspective.show(app, { perspective: 'list' });
+            });
+        });
+
+        win.on('search:close', function () {
+            var options = { perspective: lastperspective };
+            require(['io.ox/calendar/' + options.perspective[0] + '/perspective'], function (perspective) {
+                perspective.show(app, options);
+            });
+        });
+
     });
 
     return {
