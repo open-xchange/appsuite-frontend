@@ -64,32 +64,16 @@ define('io.ox/office/editor/selection',
          * @param {Number} [parentLevel=1]
          *  The number of parent levels. If omitted, the direct parents of the
          *  start and end position will be checked (only the last element of
-         *  each array will be ignored). Otherwise, the specified number of
-         *  trailing array elements will be ignored (for example, a value of 2
-         *  checks the grand parents).
+         *  the position array will be ignored). Otherwise, the specified
+         *  number of trailing array elements will be ignored (for example, a
+         *  value of 2 checks the grand parents).
          *
          * @returns {Boolean}
          *  Whether the start and end position are located in the same parent
          *  component.
          */
         this.hasSameParentComponent = function (parentLevel) {
-
-            // TODO: use implementation in Position (not yet, to prevent cyclic module dependency)
-
-            var index = 0, length = this.startPaM.oxoPosition.length;
-
-            // length of both positions must be equal
-            parentLevel = parentLevel || 1;
-            if ((length < parentLevel) || (length !== this.endPaM.oxoPosition.length)) { return false; }
-
-            // compare all array elements but the last ones
-            for (index = length - parentLevel - 1; index >= 0; index -= 1) {
-                if (this.startPaM.oxoPosition[index] !== this.endPaM.oxoPosition[index]) {
-                    return false;
-                }
-            }
-
-            return true;
+            return Position.hasSameParentComponent(this.startPaM.oxoPosition, this.endPaM.oxoPosition, parentLevel);
         };
 
         /**

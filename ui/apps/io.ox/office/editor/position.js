@@ -2017,18 +2017,26 @@ define('io.ox/office/editor/position',
      * @param {Number[]} position2
      *  The second logical position.
      *
+     * @param {Number} [parentLevel=1]
+     *  The number of parent levels. If omitted, the direct parents of the
+     *  start and end position will be checked (only the last element of each
+     *  position array will be ignored). Otherwise, the specified number of
+     *  trailing array elements will be ignored (for example, a value of 2
+     *  checks the grand parents).
+     *
      * @returns {Boolean}
      *  Whether the logical positions are located in the same parent component.
      */
-    Position.hasSameParentComponent = function (position1, position2) {
+    Position.hasSameParentComponent = function (position1, position2, parentLevel) {
 
         var index = 0, length = position1.length;
 
         // length of both positions must be equal
-        if ((length < 1) || (length !== position2.length)) { return false; }
+        parentLevel = _.isNumber(parentLevel) ? parentLevel : 1;
+        if ((length < parentLevel) || (length !== position2.length)) { return false; }
 
         // compare all array elements but the last ones
-        for (index = length - 2; index >= 0; index -= 1) {
+        for (index = length - parentLevel - 1; index >= 0; index -= 1) {
             if (position1[index] !== position2[index]) {
                 return false;
             }
