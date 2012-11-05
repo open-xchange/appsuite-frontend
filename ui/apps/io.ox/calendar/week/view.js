@@ -41,7 +41,7 @@ define('io.ox/calendar/week/view',
         workStart:      8,      // full hour for start position of working time marker
         workEnd:        18,     // full hour for end position of working time marker
 
-        curTimeUTC:     0,      // current timestamp
+        startDate:      null,   // start of day/week as local date
         clickTimer:     null,   // timer to separate single and double click
         clicks:         0,      // click counter
         lasso:          false,  // lasso object
@@ -93,15 +93,15 @@ define('io.ox/calendar/week/view',
             var cT = $(e.currentTarget),
                 t = $(e.target);
             if (cT.hasClass('next') || (t.hasClass('timeslot') && e.type === 'swipeleft' && !this.lasso)) {
-                this.curTimeUTC += (this.columns === 1 ? date.DAY : date.WEEK);
+                this.startDate.add(this.columns === 1 ? date.DAY : date.WEEK);
             }
             if (cT.hasClass('prev') || (t.hasClass('timeslot') && e.type === 'swiperight' && !this.lasso)) {
-                this.curTimeUTC -= (this.columns === 1 ? date.DAY : date.WEEK);
+                this.startDate.add((this.columns === 1 ? date.DAY : date.WEEK) * -1);
             }
             if (cT.hasClass('today')) {
-                this.curTimeUTC = this.columns === 1 ? util.getTodayStart() : util.getWeekStart();
+                this.startDate = this.columns === 1 ? new date.Local().setHours(0, 0, 0, 0) : new date.Local().setStartOfWeek();
             }
-            this.trigger('onRefreshView', this.curTimeUTC);
+            this.trigger('onRefreshView', this.startDate);
         },
 
         // handler for single- and double-click events on appointments
@@ -323,9 +323,9 @@ define('io.ox/calendar/week/view',
         },
 
         // init values from prespective
-        initialize: function (options) {
-            this.columns = options.columns;
-            this.curTimeUTC = options.startTimeUTC;
+        initialize: function (opt) {
+            this.columns = opt.columns;
+            this.startDate = opt.startDate;
             this.collection
                 .on('reset', this.renderAppointments, this)
                 .on('change', this.redrawAppointment, this);
@@ -452,7 +452,7 @@ define('io.ox/calendar/week/view',
                 fulltimeColPos = [0],
                 days = [],
                 hasToday = false,
-                tmpDate = new date.Local(this.curTimeUTC);
+                tmpDate = new date.Local(self.startDate);
 
             // refresh footer, timeline and today-label
             for (var d = 0; d < this.columns; d++) {
@@ -463,7 +463,7 @@ define('io.ox/calendar/week/view',
                         .width(100 / this.columns + '%')
                 );
                 // mark today
-                if (util.isToday(tmpDate.getTime())) {
+                if (new date.Local().setHours(0, 0, 0, 0).getTime() === tmpDate.getTime()) {
                     this.pane.find('.day[date="' + d + '"]').addClass('today');
                     hasToday = true;
                 }
@@ -472,8 +472,8 @@ define('io.ox/calendar/week/view',
             this.footer.empty().append(days);
             this.kwInfo.text(
                 gt.noI18n(
-                    new date.Local(this.curTimeUTC)
-                        .formatInterval(new date.Local(this.curTimeUTC + ((this.columns - 1) * date.DAY)), date.DATE)
+                    self.startDate
+                        .formatInterval(new date.Local(self.startDate.getTime() + ((this.columns - 1) * date.DAY)), date.DATE)
                 )
             );
 
@@ -492,7 +492,7 @@ define('io.ox/calendar/week/view',
 
                 if (model.get('full_time')) {
                     var app = this.renderAppointment(model),
-                        fulltimePos = (model.get('start_date') - this.curTimeUTC) / date.DAY,
+                        fulltimePos = (model.get('start_date') - this.startDate.getDays() * date.DAY) / date.DAY,
                         fulltimeWidth = (model.get('end_date') - model.get('start_date')) / date.DAY + Math.min(0, fulltimePos);
                     // loop over all column positions
                     for (var row = 0; row < fulltimeColPos.length; row++) {
@@ -513,37 +513,37 @@ define('io.ox/calendar/week/view',
                     });
                     this.fulltimePane.append(app);
                 } else {
-                    var startDate = new date.Local(model.get('start_date')),
-                        endDate = new date.Local(model.get('end_date')),
-                        start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime(),
-                        end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime(),
+                    var startLocal = new date.Local(model.get('start_date')),
+                        endLocal = new date.Local(model.get('end_date')),
+                        start = new date.Local(startLocal.getYear(), startLocal.getMonth(), startLocal.getDate()).getTime(),
+                        end = new date.Local(endLocal.getYear(), endLocal.getMonth(), endLocal.getDate()).getTime(),
                         maxCount = 0,
                         style = '';
 
                     // draw across multiple days
                     while (true && maxCount <= this.columns) {
                         var app = this.renderAppointment(model),
-                            sel = '[date="' + Math.floor((startDate.getTime() - date.Local.utc(this.curTimeUTC)) / date.DAY) + '"]';
+                            sel = '[date="' + Math.floor((startLocal.getTime() - this.startDate.getTime()) / date.DAY) + '"]';
+                        console.log();
                         maxCount++;
 
-                        // if
                         if (start !== end) {
-                            endDate = new date.Local(startDate.getTime());
-                            endDate.setHours(23, 59, 59, 999);
+                            endLocal = new date.Local(startLocal.getTime());
+                            endLocal.setHours(23, 59, 59, 999);
                             style += 'rmsouth';
                         } else {
-                            endDate = new date.Local(model.get('end_date'));
+                            endLocal = new date.Local(model.get('end_date'));
                         }
 
                         // kill overlap appointments with length null
-                        if (startDate.getTime() === endDate.getTime() && maxCount > 1) {
+                        if (startLocal.getTime() === endLocal.getTime() && maxCount > 1) {
                             break;
                         }
 
                         app.addClass(style).pos = {
                                 id: model.id,
-                                start: startDate.getTime(),
-                                end: endDate.getTime()
+                                start: startLocal.getTime(),
+                                end: endLocal.getTime()
                             };
                         if (!draw[sel]) {
                             draw[sel] = [];
@@ -553,9 +553,9 @@ define('io.ox/calendar/week/view',
                         style = '';
                         // inc date
                         if (start !== end) {
-                            startDate.setDate(startDate.getDate() + 1);
-                            startDate.setHours(0, 0, 0, 0);
-                            start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime();
+                            startLocal.setDate(startLocal.getDate() + 1);
+                            startLocal.setHours(0, 0, 0, 0);
+                            start = new date.Local(startLocal.getYear(), startLocal.getMonth(), startLocal.getDate()).getTime();
                             style = 'rmnorth ';
                         } else {
                             break;
@@ -798,8 +798,7 @@ define('io.ox/calendar/week/view',
                         var el = $(this),
                             d = el.data('resizable'),
                             app = self.collection.get(el.data('cid')).attributes,
-                            // TODO: FIX update call to UTC
-                            tmpTS = date.Local.utc(self.getTimeFromDateTag(d.my.day));
+                            tmpTS = self.getTimeFromDateTag(d.my.day);
                         d.my.all.removeClass('opac');
                         switch (d.my.handle) {
                         case 'n':
@@ -962,7 +961,7 @@ define('io.ox/calendar/week/view',
                     stop: function (e, ui) {
                         $(this).busy();
                         var newPos = Math.round($(this).position().left / (self.fulltimePane.width() / self.columns)),
-                            startTS = self.curTimeUTC + (newPos * date.DAY),
+                            startTS = self.startDate.getDays() * date.DAY + newPos * date.DAY,
                             cid = $(this).data('cid'),
                             app = self.collection.get(cid).attributes;
                         _.extend(app, {
@@ -1068,7 +1067,7 @@ define('io.ox/calendar/week/view',
 
         // get timestamp from date marker
         getTimeFromDateTag: function (tag)  {
-            return this.curTimeUTC + (tag * date.DAY);
+            return this.startDate.getTime() + (tag * date.DAY);
         },
 
         // calc daily timestamp from mouse position

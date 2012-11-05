@@ -13,12 +13,12 @@
 define('io.ox/calendar/week/perspective',
         ['io.ox/calendar/week/view',
          'io.ox/calendar/api',
-         'io.ox/calendar/util',
          'io.ox/core/extensions',
          'io.ox/core/tk/dialogs',
          'io.ox/calendar/view-detail',
+         'io.ox/core/date',
          'gettext!io.ox/calendar'
-         ], function (View, api, util, ext, dialogs, detailView, gt) {
+         ], function (View, api, ext, dialogs, detailView, date, gt) {
 
     'use strict';
 
@@ -28,7 +28,7 @@ define('io.ox/calendar/week/perspective',
 
         collection:     {},
         columns:        7,
-        startTimeUTC:   null,
+        startDate:      null,
         dialog:         $(),
         app:            null,
         view:           null,
@@ -106,8 +106,8 @@ define('io.ox/calendar/week/perspective',
 
         refresh: function () {
             var obj = {
-                    start: this.startTimeUTC,
-                    end: this.startTimeUTC + util.DAY * this.columns
+                    start: this.startDate.getTime(),
+                    end: this.startDate.getTime() + (date.DAY * this.columns)
                 },
                 self = this;
             this.app.folder.getData().done(function (data) {
@@ -136,16 +136,15 @@ define('io.ox/calendar/week/perspective',
 
             this.days(this.mode[options.perspective[1]]);
 
-            // FIXME: replace 'startTimeUTC' with calendar logic
             if (this.columns === 1) {
-                this.startTimeUTC = util.getTodayStart();
+                this.startDate = new date.Local().setHours(0, 0, 0, 0);
             } else {
-                this.startTimeUTC = util.getWeekStart();
+                this.startDate = new date.Local().setStartOfWeek();
             }
             this.view = new View({
                 collection: this.collection,
                 columns: this.columns,
-                startTimeUTC: this.startTimeUTC
+                startDate: this.startDate
             });
 
             this.view
@@ -153,8 +152,8 @@ define('io.ox/calendar/week/perspective',
                 .on('openCreateAppointment', this.openCreateAppointment, this)
                 .on('openEditAppointment', this.openEditAppointment, this)
                 .on('updateAppointment', this.updateAppointment, this)
-                .on('onRefreshView', function (curDate) {
-                    this.startTimeUTC = curDate;
+                .on('onRefreshView', function (startDate) {
+                    this.startDate = startDate;
                     this.refresh();
                 }, this);
 
