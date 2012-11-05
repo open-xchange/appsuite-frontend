@@ -44,7 +44,7 @@ define('io.ox/contacts/actions',
             require(['io.ox/contacts/api', 'io.ox/core/tk/dialogs'], function (api, dialogs) {
                 new dialogs.ModalDialog()
                 .text(question)
-                .addPrimaryButton('delete', gt('Delete'))
+                .addPrimaryButton('delete', gt('Delete'), 'delete')
                 .addButton('cancel', gt('Cancel'), 'cancel')
                 .show()
                 .done(function (action) {
