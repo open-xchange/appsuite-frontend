@@ -214,7 +214,6 @@ define("io.ox/files/actions",
     ext.point("io.ox/files/actions/edit/cancel").extend({
         id: "cancel",
         action: function (baton) {
-            console.log("Blupp", arguments);
             baton.view.endEdit();
         }
     });
