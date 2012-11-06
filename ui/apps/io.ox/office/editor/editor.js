@@ -64,9 +64,26 @@ define('io.ox/office/editor/editor',
             { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 49804 }]}, italic: true }
         ],
 
-        DEFAULT_PARAGRAPH_DEFINTIONS = { 'default': true, styleid: 'Standard', stylename: 'Normal' };
-
-
+        DEFAULT_PARAGRAPH_DEFINTIONS = { 'default': true, styleid: 'Standard', stylename: 'Normal' },
+    
+        // style attributes for lateral table style
+        DEFAULT_LATERAL_TABLE_DEFINITIONS = { 'default': true, styleid: 'TableGrid', stylename: 'Table Grid', uipriority: 59 },
+        DEFAULT_LATERAL_TABLE_ATTRIBUTES =
+        {
+            wholeTable: {
+                paragraph: { lineheight: { type: 'percent', value: 100 }},
+                table:
+                {
+                    bordertop: { color : { type: 'auto' }, width: 17, style: 'single' },
+                    borderbottom: { color: { type: 'auto' }, width: 17, style: 'single' },
+                    borderinsideh: { color: { type: 'auto' }, width: 17, style: 'single' },
+                    borderinsidev: { color: { type: 'auto' }, width: 17, style: 'single' },
+                    borderleft: { color: { type: 'auto' }, width: 17, style: 'single' },
+                    borderright: { color: { type: 'auto' }, width: 17, style: 'single' }
+                }
+            }
+        };
+        
     // private global functions ===============================================
 
     /**
@@ -1143,8 +1160,8 @@ define('io.ox/office/editor/editor',
                 for (var i = 0; i < size.width; i++) {
                     tableGrid.push(Utils.roundDigits(1000 / size.width, 0));  // only ints
                 }
-
-                var newOperation = {name: Operations.TABLE_INSERT, position: _.copy(selection.startPaM.oxoPosition, true), attrs: {'tablegrid': tableGrid, 'width': width}};
+                var tablePos = _.copy(selection.startPaM.oxoPosition, true),
+                    newOperation = {name: Operations.TABLE_INSERT, position: _.copy(tablePos, true), attrs: {'tablegrid': tableGrid, 'width': width}};
                 applyOperation(newOperation, true, true);
 
                 // adding rows
@@ -1157,6 +1174,29 @@ define('io.ox/office/editor/editor',
                 if (deleteTempParagraph) {
                     selection.startPaM.oxoPosition[lastPos - 1] += 1;  // the position of the new temporary empty paragraph
                     implDeleteParagraph(selection.startPaM.oxoPosition);
+                }
+                
+                // Setting default table grid attribute to newly inserted table
+                var defaultUITableStyleId = self.getDefaultUITableStylesheet();
+                if (defaultUITableStyleId) {
+/*
+                    if (tableStyles.isDirty(defaultUITableStyleId)) {
+                        newOperation = {name: Operations.INSERT_STYLE,
+                                        attrs: tableStyles.getStyleSheetAttributeMap(defaultUITableStyleId),
+                                        type: 'table',
+                                        styleid: defaultUITableStyleId,
+                                        stylename: defaultUITableStyleId,
+                                        parent: tableStyles.getParentId(defaultUITableStyleId),
+                                        'default': false,
+                                        hidden: false,
+                                        uipriority: tableStyles.getUIPriority(defaultUITableStyleId),
+                                        pooldefault: false};
+                        applyOperation(newOperation, true, true);
+                        tableStyles.setDirty(defaultUITableStyleId, false);
+                    }
+*/
+                    newOperation = { name: Operations.ATTRS_SET, attrs: { style: defaultUITableStyleId }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
+                    applyOperation(newOperation, true, true);
                 }
 
                 // setting the cursor position
@@ -1520,22 +1560,70 @@ define('io.ox/office/editor/editor',
 
         /**
          * Returns the default heading character styles
+         * Returns whether the current selection selects a single image.
+         */
+        this.getImageFloatMode = function () {
+            var selection = getSelection();
+            return selection ? selection.endPaM.imageFloatMode : null;
+        };
+
+        /**
+         * Returns the default lateral heading character styles
          */
         this.getDefaultHeadingCharacterStyles = function () {
             return HEADINGS_CHARATTRIBUTES;
         };
 
+        /**
+         * Returns the default lateral paragraph style
+         */
         this.getDefaultParagraphStyleDefinition = function () {
             return DEFAULT_PARAGRAPH_DEFINTIONS;
         };
+        
+        /**
+         * Returns the default lateral table definiton
+         */
+        this.getDefaultLateralTableDefinition = function () {
+            return DEFAULT_LATERAL_TABLE_DEFINITIONS;
+        };
+        
+        /**
+         * Returns the default lateral table attributes
+         */
+        this.getDefaultLateralTableAttributes = function () {
+            return DEFAULT_LATERAL_TABLE_ATTRIBUTES;
+        };
 
         /**
+         * Returns the document default table stylesheet id
+         * which can be used to set attributes for a new
+         * table.
+         */
+        this.getDefaultUITableStylesheet = function () {
+            var styleNames = tableStyles.getStyleSheetNames(),
+                highestUIPriority = 99,
+                tableStyleId = null;
+            
+            _(styleNames).each(function (name, id) {
+                var uiPriority = tableStyles.getUIPriority(id);
+                
+                if (uiPriority && (uiPriority < highestUIPriority)) {
+                    tableStyleId = id;
+                    highestUIPriority = uiPriority;
+                }
+            });
+            
+            return tableStyleId;
+        };
+        
+         /**
          * Called when all initial document operations have been processed.
          * Can be used to start post-processing tasks which need a fully
          * processed document.
          */
         this.documentLoaded = function () {
-            var postProcessingTasks = [insertMissingParagraphStyles, updateAllTableAttributes];
+            var postProcessingTasks = [insertMissingParagraphStyles, insertMissingTableStyle, updateAllTableAttributes];
 
             _(postProcessingTasks).each(function (task) {
                 task.call(self);
@@ -1589,6 +1677,51 @@ define('io.ox/office/editor/editor',
                     paragraphStyles.addStyleSheet("heading " + (level + 1), "heading " + (level + 1),
                             parentId, attr, { hidden: false, priority: 9, defStyle: false, dirty: true });
                 });
+            }
+        }
+        
+        /**
+         * Check the stored table styles of a document and adds a "missing"
+         * default table style. This ensures that we can insert tables that
+         * are based on a reasonable default style.
+         */
+        function insertMissingTableStyle() {
+            var styleNames = tableStyles.getStyleSheetNames(),
+                parentId = tableStyles.getDefaultStyleSheetId(),
+                hasDefaultStyle = _.isString(parentId) && (parentId.length > 0),
+                defTableDef = self.getDefaultLateralTableDefinition(),
+                defTableAttr = self.getDefaultLateralTableAttributes();
+
+            if (!hasDefaultStyle) {
+                // Add a missing default table style
+                var attr = _.copy(defTableAttr);
+                attr.next = null;
+                tableStyles.addStyleSheet(defTableDef.styleid, defTableDef.stylename, null, attr,
+                        { hidden: false, priority: 59, defStyle: defTableDef['default'], dirty: true });
+            }
+            else {
+                // Search for a style defined in the document that can be used for tables
+                // If we cannot find it we have to add it.
+                var lowestUIPriority = 99,
+                    tableStyleId = null;
+                _(styleNames).each(function (name, id) {
+                    var uiPriority = tableStyles.getUIPriority(id);
+                    
+                    if (uiPriority && (uiPriority < lowestUIPriority)) {
+                        tableStyleId = id;
+                        lowestUIPriority = uiPriority;
+                    }
+                });
+
+                if ((!tableStyleId) || ((tableStyleId === tableStyles.getDefaultStyleSheetId()) && (lowestUIPriority === 99))) {
+                    // OOXML uses a default table style which contains no border
+                    // definitions. Therfore we add our own default table style
+                    // if we only find the default style with uipriority 99
+                    var attr = _.copy(defTableAttr);
+                    attr.next = parentId;
+                    tableStyles.addStyleSheet(defTableDef.styleid, defTableDef.stylename, parentId, attr,
+                            { hidden: false, priority: 59, defStyle: false, dirty: true });
+                }
             }
         }
 
@@ -3381,7 +3514,6 @@ define('io.ox/office/editor/editor',
                         parentId = styleSheets.getParentId(styleId),
                         styleName = styleSheets.getName(styleId);
                     styleSheets.setDirty(styleId, false);
-                    //implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority, operation['default'], operation.pooldefault);
                     operation = {name: Operations.INSERT_STYLE,
                                  attrs: styleAttr, type: family, styleid: styleId, stylename: styleName,
                                  parent: parentId, 'default': false, hidden: false,
