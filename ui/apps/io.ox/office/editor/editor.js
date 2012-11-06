@@ -105,7 +105,7 @@ define('io.ox/office/editor/editor',
      *  A jQuery keyboard event object.
      */
     function isIgnorableKeyEvent(event) {
-        return isCursorKeyEvent(event) || (event && IGNORABLE_KEYS.contains(event.keyCode));
+        return event && IGNORABLE_KEYS.contains(event.keyCode);
     }
 
     function getPrintableChar(event) {
@@ -215,11 +215,12 @@ define('io.ox/office/editor/editor',
         };
 
         /**
-         * Destructs the editor object.
+         * Destroys the editor object.
          */
         this.destroy = function () {
             editdiv.off();
             this.events.destroy();
+            selection.destroy();
             documentStyles.destroy();
             selection = documentStyles = characterStyles = paragraphStyles = imageStyles = tableStyles = tableRowStyles = tableCellStyles = null;
         };
@@ -2044,7 +2045,7 @@ define('io.ox/office/editor/editor',
 
             implDbgOutEvent(event);
 
-            if (isCursorKeyEvent()) {
+            if (isCursorKeyEvent(event)) {
                 updateSelection();
                 return;
             }

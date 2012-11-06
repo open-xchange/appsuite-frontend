@@ -749,6 +749,10 @@ define('io.ox/office/editor/selection',
 
         };
 
+        this.destroy = function () {
+            this.events.destroy();
+        };
+
         // initialization -----------------------------------------------------
 
         // add event hub
