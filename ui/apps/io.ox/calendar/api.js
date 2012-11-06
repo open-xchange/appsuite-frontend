@@ -66,10 +66,9 @@ define("io.ox/calendar/api",
                 start: _.now(),
                 end: _.now() + 28 * 1 * DAY
             }, o || {});
-
             // round start & end date
-            o.start = (o.start / DAY >> 0) * DAY;
-            o.end = (o.end / DAY >> 0) * DAY;
+//            o.start = (o.start / DAY >> 0) * DAY;
+//            o.end = (o.end / DAY >> 0) * DAY;
             var key = o.folder + "." + o.start + "." + o.end,
                 params = {
                     action: "all",
@@ -264,8 +263,8 @@ define("io.ox/calendar/api",
             }, o || {});
 
             // round start & end date
-            o.start = (o.start / DAY >> 0) * DAY;
-            o.end = (o.end / DAY >> 0) * DAY;
+//            o.start = (o.start / DAY >> 0) * DAY;
+//            o.end = (o.end / DAY >> 0) * DAY;
 
             var key = o.folder + "." + o.start + "." + o.end,
                 params = {
