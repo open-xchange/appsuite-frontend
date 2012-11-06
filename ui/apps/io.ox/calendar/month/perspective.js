@@ -152,9 +152,11 @@ define('io.ox/calendar/month/perspective',
         getFirsts: function (e) {
             this.tops = {};
             var self = this;
-            $('.day.first', this.pane).each(function () {
-                self.tops[($(this).position().top + self.pane.scrollTop()) >> 0] = $(this).data('date');
-            });
+            if (this.pane) {
+                $('.day.first', this.pane).each(function () {
+                    self.tops[($(this).position().top + self.pane.scrollTop()) >> 0] = $(this).data('date');
+                });
+            }
         },
 
         gotoMonth: function (opt) {
