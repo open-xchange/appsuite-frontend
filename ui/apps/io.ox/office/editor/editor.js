@@ -3150,6 +3150,13 @@ define('io.ox/office/editor/editor',
                 });
                 break;
 
+            case 'cell':
+                // TODO: iterate cells for Chrome's text selection in tables
+                selection.iterateTableCells(function (cell, position) {
+                    generator.generateOperation(Operations.ATTRS_SET, { start: position, attrs: attributes });
+                });
+                break;
+
             case 'table':
                 if ((element = selection.getEnclosingTable())) {
                     generator.generateOperation(Operations.ATTRS_SET, { start: Position.getOxoPosition(editdiv, element, 0), attrs: attributes });
