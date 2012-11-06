@@ -43,7 +43,8 @@ define("io.ox/files/list/view-detail",
             $element = $.createViewContainer(file, filesAPI),
             sections = new layouts.Sections({
                 ref: "io.ox/files/details/sections"
-            });
+            }),
+            eventHub = new Event({});
 
         $element.on('redraw', createRedraw($element))
             .addClass('file-details view');
@@ -84,10 +85,13 @@ define("io.ox/files/list/view-detail",
                     self.edit();
                 }
             },
+            on: eventHub.on,
+            off: eventHub.off,
             edit: function () {
                 if (mode === 'edit') {
                     return;
                 }
+                eventHub.trigger('edit');
                 mode = 'edit';
                 sections.each(function (sublayout, $sectionNode) {
                     var hideSection = true;
@@ -119,6 +123,8 @@ define("io.ox/files/list/view-detail",
                 if (mode === 'display') {
                     return;
                 }
+                eventHub.trigger('endEdit');
+                
                 mode = 'display';
                 sections.each(function (sublayout, $sectionNode) {
                     sublayout.each(function (extension, $node) {

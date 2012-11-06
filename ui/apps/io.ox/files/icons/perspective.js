@@ -140,6 +140,21 @@ define('io.ox/files/icons/perspective',
             var view = viewDetail.draw(file);
             popup.append(view.element);
             view.registerInlineEdit(popup);
+
+            function fnHideClose() {
+                popup.closest(".io-ox-sidepopup").find(".io-ox-sidepopup-close").hide();
+            }
+
+            function fnShowClose() {
+                popup.closest(".io-ox-sidepopup").find(".io-ox-sidepopup-close").show();
+            }
+
+            view.on('edit', fnHideClose);
+            view.on('endEdit', fnShowClose);
+            view.element.on('dispose', function () {
+                view.off('edit', fnHideClose);
+                view.off('endEdit', fnShowClose);
+            });
         });
     }
 
