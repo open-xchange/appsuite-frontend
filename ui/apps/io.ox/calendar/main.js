@@ -25,7 +25,7 @@ define("io.ox/calendar/main",
     var app = ox.ui.createApp({ name: 'io.ox/calendar', title: 'Calendar' }),
         // app window
         win,
-        lastPerspective = 'list';
+        lastPerspective = 'week:workweek';
 
     // launcher
     app.setLauncher(function () {
