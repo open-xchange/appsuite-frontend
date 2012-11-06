@@ -384,10 +384,14 @@ define("io.ox/files/actions",
     ext.point("io.ox/files/links/edit/inline").extend(new links.Button({
         id: "cancel",
         index: 100,
-        label: gt("Cancel"),
+        label: gt("Discard"),
         ref: "io.ox/files/actions/edit/cancel",
-        cssClasses: "btn btn-primary",
-        tabIndex: 40
+        cssClasses: "btn",
+        tabIndex: 30,
+        tagtype: 'button',
+        css: {
+            marginRight: '10px'
+        }
     }));
 
     ext.point("io.ox/files/links/edit/inline").extend(new links.Button({
@@ -396,7 +400,8 @@ define("io.ox/files/actions",
         label: gt("Save"),
         ref: "io.ox/files/actions/edit/save",
         cssClasses: "btn btn-primary",
-        tabIndex: 30
+        tabIndex: 40,
+        tagtype: 'button'
     }));
 
 
