@@ -65,7 +65,7 @@ define('io.ox/office/editor/editor',
         ],
 
         DEFAULT_PARAGRAPH_DEFINTIONS = { 'default': true, styleid: 'Standard', stylename: 'Normal' },
-    
+
         // style attributes for lateral table style
         DEFAULT_LATERAL_TABLE_DEFINITIONS = { 'default': true, styleid: 'TableGrid', stylename: 'Table Grid', uipriority: 59 },
         DEFAULT_LATERAL_TABLE_ATTRIBUTES =
@@ -83,7 +83,7 @@ define('io.ox/office/editor/editor',
                 }
             }
         };
-        
+
     // private global functions ===============================================
 
     /**
@@ -1139,7 +1139,7 @@ define('io.ox/office/editor/editor',
                     selection.startPaM.oxoPosition[lastPos - 1] += 1;  // the position of the new temporary empty paragraph
                     implDeleteParagraph(selection.startPaM.oxoPosition);
                 }
-                
+
                 // Setting default table grid attribute to newly inserted table
                 var defaultUITableStyleId = self.getDefaultUITableStylesheet();
                 if (defaultUITableStyleId) {
@@ -1512,15 +1512,6 @@ define('io.ox/office/editor/editor',
         };
 
         /**
-         * Returns the default heading character styles
-         * Returns whether the current selection selects a single image.
-         */
-        this.getImageFloatMode = function () {
-            var selection = getSelection();
-            return selection ? selection.endPaM.imageFloatMode : null;
-        };
-
-        /**
          * Returns the default lateral heading character styles
          */
         this.getDefaultHeadingCharacterStyles = function () {
@@ -1533,14 +1524,14 @@ define('io.ox/office/editor/editor',
         this.getDefaultParagraphStyleDefinition = function () {
             return DEFAULT_PARAGRAPH_DEFINTIONS;
         };
-        
+
         /**
          * Returns the default lateral table definiton
          */
         this.getDefaultLateralTableDefinition = function () {
             return DEFAULT_LATERAL_TABLE_DEFINITIONS;
         };
-        
+
         /**
          * Returns the default lateral table attributes
          */
@@ -1557,19 +1548,19 @@ define('io.ox/office/editor/editor',
             var styleNames = tableStyles.getStyleSheetNames(),
                 highestUIPriority = 99,
                 tableStyleId = null;
-            
+
             _(styleNames).each(function (name, id) {
                 var uiPriority = tableStyles.getUIPriority(id);
-                
+
                 if (uiPriority && (uiPriority < highestUIPriority)) {
                     tableStyleId = id;
                     highestUIPriority = uiPriority;
                 }
             });
-            
+
             return tableStyleId;
         };
-        
+
          /**
          * Called when all initial document operations have been processed.
          * Can be used to start post-processing tasks which need a fully
@@ -1632,7 +1623,7 @@ define('io.ox/office/editor/editor',
                 });
             }
         }
-        
+
         /**
          * Check the stored table styles of a document and adds a "missing"
          * default table style. This ensures that we can insert tables that
@@ -1659,7 +1650,7 @@ define('io.ox/office/editor/editor',
                     tableStyleId = null;
                 _(styleNames).each(function (name, id) {
                     var uiPriority = tableStyles.getUIPriority(id);
-                    
+
                     if (uiPriority && (uiPriority < lowestUIPriority)) {
                         tableStyleId = id;
                         lowestUIPriority = uiPriority;
