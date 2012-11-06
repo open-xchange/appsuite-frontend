@@ -11,10 +11,11 @@
  * @author Ingo Schmidt-Rosbiegal <ingo.schmidt-rosbiegal@open-xchange.com>
  */
 define('io.ox/office/editor/selection',
-    ['io.ox/office/tk/utils',
+    ['io.ox/core/event',
+     'io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/position'
-    ], function (Utils, DOM, Position) {
+    ], function (Events, Utils, DOM, Position) {
 
     'use strict';
 
@@ -30,27 +31,79 @@ define('io.ox/office/editor/selection',
      * @param {HTMLElement|jQuery} rootNode
      *  The root node of the document. If this object is a jQuery collection,
      *  uses the first node it contains.
-     *
-     * @param {Number[]} startPosition
-     *  The logical position of the first component in the selected range.
-     *
-     * @param {Number[]} endPosition
-     *  The logical position following the last component in the selected range
-     *  (half-open range).
      */
-    function Selection(rootNode, startPosition, endPosition) {
+    function Selection(rootNode) {
 
-        this.startPaM = new Position(_.isArray(startPosition) ? startPosition : [0, 0]);
-        this.endPaM = new Position(_.isArray(endPosition) ? endPosition : this.startPaM.oxoPosition);
+        var // self reference
+            self = this,
+
+            // whether the current text range has been selected backwards
+            backwards = false,
+
+            // object node currently selected, as jQuery collection
+            selectedObject = $();
+
+        this.startPaM = this.endPaM = null;
+
+        // private methods ----------------------------------------------------
+
+        /**
+         * Returns the first logical text position in the document.
+         */
+        function getFirstPosition() {
+            var firstSpan = Utils.findDescendantNode(rootNode, function () { return DOM.isPortionSpan(this); });
+            return Position.getOxoPosition(rootNode, firstSpan, 0);
+        }
+
+        /**
+         * Returns the last logical text position in the document.
+         */
+        function getLastPosition() {
+            var lastSpan = Utils.findDescendantNode(rootNode, function () { return DOM.isPortionSpan(this); }, { reverse: true });
+            return Position.getOxoPosition(rootNode, lastSpan, lastSpan.firstChild.nodeValue.length);
+        }
+
+        /**
+         * Initializes internal fields after the selection has been changed.
+         */
+        function initialize() {
+
+            var // selected object node
+                objectInfo = null;
+
+            // remove object selection boxes
+            DOM.clearObjectSelection(selectedObject);
+            selectedObject = $();
+
+            // adjust start and end position
+            backwards = Utils.compareNumberArrays(self.startPaM.oxoPosition, self.endPaM.oxoPosition) > 0;
+            if (backwards) {
+                var tmp = self.startPaM;
+                self.startPaM = self.endPaM;
+                self.endPaM = tmp;
+            }
+
+            // check for object selection
+            if (self.isSingleComponentSelection()) {
+                objectInfo = Position.getDOMPosition(rootNode, self.startPaM.oxoPosition, true);
+                if (objectInfo && DOM.isObjectNode(objectInfo.node)) {
+                    selectedObject = $(objectInfo.node);
+                    // TODO: move call to DOM.drawObjectSelection() to here once
+                    // editor code becomes independent from explicit mouse handlers
+                }
+            }
+
+            // draw browser selection
+            self.restoreBrowserSelection();
+
+            // notify listeners
+            self.trigger('change');
+        }
 
         // methods ------------------------------------------------------------
 
-        this.adjust = function () {
-            if (Utils.compareNumberArrays(this.startPaM.oxoPosition, this.endPaM.oxoPosition) > 0) {
-                var tmp = this.startPaM;
-                this.startPaM = this.endPaM;
-                this.endPaM = tmp;
-            }
+        this.isValid = function () {
+            return this.startPaM && this.endPaM;
         };
 
         this.isTextCursor = function () {
@@ -62,8 +115,15 @@ define('io.ox/office/editor/selection',
         };
 
         /**
-         * Returns whether this selection object represents a rectangular cell
-         * selection in a table element.
+         * Returns whether this selection represents an object node.
+         */
+        this.isObjectSelection = function () {
+            return selectedObject.length > 0;
+        };
+
+        /**
+         * Returns whether this selection represents a rectangular cell range
+         * in a table element.
          */
         this.isTableCellSelection = function () {
             return (this.startPaM.selectedNodeName === 'TR') && (this.endPaM.selectedNodeName === 'TR');
@@ -142,40 +202,198 @@ define('io.ox/office/editor/selection',
         };
 
         /**
-         * Converts this selection to an array of DOM.Range objects suitable
-         * for the internal browser selection.
+         * Returns the object node currently selected.
          *
-         * @returns {DOM.Range[]}
-         *  The DOM ranges representing the current text selection.
+         * @returns {jQuery}
+         *  A jQuery collection containing the currently selected object, if
+         *  existing; otherwise an empty jQuery collection.
          */
-        this.getTextSelectionRanges = function () {
+        this.getSelectedObject = function () {
+            return selectedObject;
+        };
 
-            var startPoint = Position.getDOMPosition(rootNode, this.startPaM.oxoPosition),
-                endPoint = Position.getDOMPosition(rootNode, this.endPaM.oxoPosition);
+        // selection manipulation ---------------------------------------------
 
-            // DOM selection is always an array of text ranges
-            // TODO: fallback to HOME position in document instead of empty array?
-            return (startPoint && endPoint) ? [new DOM.Range(startPoint, endPoint)] : [];
+        /**
+         * Restores the browser selection according to the current logical
+         * selection represented by this instance.
+         *
+         * @returns {Selection}
+         *  A reference to this instance.
+         */
+        this.restoreBrowserSelection = function () {
+
+            var // the DOM ranges representing the logical selection
+                ranges = [],
+                // start and end DOM point for text selection
+                startPoint = null, endPoint = null;
+
+            // do not set browser selection in object selection mode
+            if (selectedObject.length === 0) {
+
+                // cell selection: iterate all cells
+                if (this.isTableCellSelection()) {
+
+                    this.iterateTableCells(function (cell) {
+                        ranges.push(DOM.Range.createRangeForNode(cell));
+                    });
+
+                // text selection: select text range
+                } else {
+
+                    startPoint = Position.getDOMPosition(rootNode, this.startPaM.oxoPosition);
+                    endPoint = Position.getDOMPosition(rootNode, this.endPaM.oxoPosition);
+                    if (startPoint && endPoint) {
+                        ranges.push(new DOM.Range(backwards ? endPoint : startPoint, backwards ? startPoint : endPoint));
+                    } else {
+                        Utils.error('Selection.restoreBrowserSelection(): missing text selection range');
+                    }
+                }
+            }
+
+            DOM.setBrowserSelection(ranges);
+            return this;
         };
 
         /**
-         * Converts this table cell selection to an array of DOM.Range objects
-         * suitable for the internal browser selection.
-         *
-         * @returns {DOM.Range[]}
-         *  The DOM ranges representing the current table cell selection.
+         * Calculates the logical selection according to the current browser
+         * selection.
          */
-        this.getCellSelectionRanges = function () {
+        this.updateFromBrowserSelection = function () {
 
-            var ranges = [];
+            var // the current browser selection
+                domSelection = DOM.getBrowserSelection(rootNode),
+                // last range from the selection
+                domRange = null;
 
-            // visit each cell and create a DOM.Range instance
-            this.iterateTableCells(function (cell) {
-                ranges.push(DOM.Range.createRangeForNode(cell));
-            });
+            if (domSelection.length > 0) {
 
-            return ranges;
+                // currently, only single ranges supported
+                domRange = _(domSelection).last();
+
+                // allowing multi-selection for tables (rectangle cell selection)
+                if ($(domRange.start.node).is('tr')) {
+                    domRange.start = _(domSelection).first().start;
+                }
+
+                // calculate logical start and end position
+                this.startPaM = Position.getTextLevelOxoPosition(domRange.start, rootNode, false);
+                this.endPaM = Position.getTextLevelOxoPosition(domRange.end, rootNode, !domRange.isCollapsed());
+
+                // initialize other members
+                initialize();
+
+            } else {
+                Utils.warn('Selection.updateFromBrowserSelection(): missing browser selection');
+            }
+
+            return this;
         };
+
+        /**
+         * Selects the passed logical range in the document.
+         *
+         * @param {Number[} startPosition
+         *  The logical position of the first component in the selection.
+         *
+         * @param {Number[]} endPosition
+         *  The logical position behind the last component in the selection
+         *  (half-open range).
+         *
+         * @returns {Selection}
+         *  A reference to this instance.
+         */
+        this.setSelection = function (startPosition, endPosition) {
+
+            // passed start position must be valid
+            if (_.isArray(startPosition)) {
+
+                // store start and end position
+                this.startPaM = new Position(startPosition);
+                this.endPaM = new Position(_.isArray(endPosition) ? endPosition : startPosition);
+
+                // initialize other members
+                initialize();
+
+            } else {
+                Utils.warn('Selection.setSelection(): missing start position');
+            }
+
+            return this;
+        };
+
+        /**
+         * Sets the text cursor to the first available cursor position in the
+         * document. Skips leading floating objects in the first paragraph. If
+         * the first content node is a table, selects its first available
+         * cell paragraph (may be located in a sub table in the first outer
+         * cell).
+         *
+         * @returns {Selection}
+         *  A reference to this instance.
+         */
+        this.selectTopPosition = function () {
+            return this.setSelection(getFirstPosition());
+        };
+
+        /**
+         * Selects the entire document.
+         *
+         * @returns {Selection}
+         *  A reference to this instance.
+         */
+        this.selectAll = function () {
+            return this.setSelection(getFirstPosition(), getLastPosition());
+        };
+
+        /**
+         * Updates the browser selection to a range that starts directly before
+         * the the last selected object node, and ends directly after that
+         * object.
+         *
+         * @returns {Selection}
+         *  A reference to this instance.
+         */
+        this.selectObjectAsText = function () {
+
+            var // whether the object is in inline mode
+                inline = DOM.isInlineObjectNode(selectedObject),
+                // previous text span of the object node
+                prevTextSpan = inline ? selectedObject[0].previousSibling : null,
+                // next text span of the object node (skip following floating objects)
+                nextTextSpan = Utils.findNextNode(selectedObject.parent(), selectedObject, function () { return DOM.isPortionSpan(this); }),
+                // DOM points representing the text selection over the object
+                startPoint = null, endPoint = null;
+
+            if (selectedObject.length > 0) {
+
+                // remove object selection boxes
+                DOM.clearObjectSelection(selectedObject);
+
+                // start point after the last character preceding the object
+                if (DOM.isPortionSpan(prevTextSpan)) {
+                    startPoint = new DOM.Point(prevTextSpan.firstChild, prevTextSpan.firstChild.nodeValue.length);
+                }
+                // end point before the first character following the object
+                if (DOM.isPortionSpan(nextTextSpan)) {
+                    endPoint = new DOM.Point(nextTextSpan.firstChild, 0);
+                }
+
+                // set browser selection (do nothing if no start and no end point
+                // have been found - but that should never happen)
+                if (startPoint || endPoint) {
+                    if (backwards) {
+                        DOM.setBrowserSelection(new DOM.Range(endPoint || startPoint, startPoint || endPoint));
+                    } else {
+                        DOM.setBrowserSelection(new DOM.Range(startPoint || endPoint, endPoint || startPoint));
+                    }
+                }
+            }
+
+            return this;
+        };
+
+        // iterators ----------------------------------------------------------
 
         /**
          * Calls the passed iterator function for each table cell, if this
@@ -530,6 +748,11 @@ define('io.ox/office/editor/selection',
             }, this, { shortestPath: shortestPath });
 
         };
+
+        // initialization -----------------------------------------------------
+
+        // add event hub
+        Events.extend(this);
 
     } // class Selection
 

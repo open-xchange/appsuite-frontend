@@ -87,7 +87,7 @@ define('io.ox/office/editor/position',
         }
 
         // Check, if the selected node is a descendant of the maindiv
-        if (!maindiv.get(0).contains(node)) { // range not in text area
+        if (!maindiv[0].contains(node)) { // range not in text area
             Utils.error('Position.getOxoPosition(): Invalid DOM position. It is not part of the editor DIV: ! Offset : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
             return;
         }
@@ -1665,24 +1665,6 @@ define('io.ox/office/editor/position',
         position = Position.getLastPositionInParagraph(startnode, position);
 
         return position;
-    };
-
-    /**
-     * Calculating the last logical position of the document.
-     *
-     * @param {Node} startnode
-     *  The start node corresponding to the logical position.
-     *  (Can be a jQuery object for performance reasons.)
-     *
-     * @returns {Number[]}
-     *  Returns the last logical position inside the document.
-     */
-    Position.getLastPositionInDocument = function (startnode) {
-
-        var lastPara = startnode.length - 1,
-            oxoPosition = Position.getLastPositionInParagraph(startnode, [lastPara]);
-
-        return oxoPosition;
     };
 
     /**
