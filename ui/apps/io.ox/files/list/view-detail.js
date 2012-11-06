@@ -67,6 +67,15 @@ define("io.ox/files/list/view-detail",
                     });
                 }
             },
+            registerInlineEdit: function ($node) {
+                var self = this;
+                $node.on("dblclick", function (e) {
+                    if (_(["a", "button", "input", "textarea"]).include(e.srcElement.tagName.toLowerCase())) {
+                        return;
+                    }
+                    self.toggleEdit();
+                });
+            },
             toggleEdit: function () {
                 if (mode === 'edit') {
                     // Trigger Save

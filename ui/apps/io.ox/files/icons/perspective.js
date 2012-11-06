@@ -137,7 +137,9 @@ define('io.ox/files/icons/perspective',
     function iconClick(popup, e, target) {
         var cid = target.attr('data-cid');
         api.get(_.cid(cid)).done(function (file) {
-            popup.append(viewDetail.draw(file).element);
+            var view = viewDetail.draw(file);
+            popup.append(view.element);
+            view.registerInlineEdit(popup);
         });
     }
 
