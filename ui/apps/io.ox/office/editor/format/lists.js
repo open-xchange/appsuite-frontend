@@ -167,6 +167,8 @@ define('io.ox/office/editor/format/lists',
             var ret = {};
             var topLevelformat = listdefinition.listlevels[ilvl];
             var leveltext = topLevelformat.leveltext;
+            ret.suff = listdefinition.listlevels[ilvl].suff;
+            ret.tabpos = listdefinition.listlevels[ilvl].tabpos;
             for (;ilvl >= 0; --ilvl) {
                 var levelformat = listdefinition.listlevels[ilvl];
                 var seqNo = levelIndexes === undefined ? 0 :

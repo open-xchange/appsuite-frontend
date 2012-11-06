@@ -3176,10 +3176,11 @@ define('io.ox/office/editor/editor',
                     paraTabstops = paraStyles.tabstops;
                 }
 
+                var marginLeft = Utils.convertLengthToHmm(parseFloat($(paragraph).css('margin-left')), 'px');
                 _(allTabNodes).each(function (tabNode) {
                     var pos = $(tabNode).position();
                     if (pos) {
-                        var leftHMM = Utils.convertLengthToHmm(pos.left, "px"),
+                        var leftHMM = marginLeft + Utils.convertLengthToHmm(pos.left, "px"),
                             width = 0,
                             fillChar = null,
                             tabSpan = tabNode.firstChild;
@@ -5478,8 +5479,10 @@ define('io.ox/office/editor/editor',
                     Utils.iterateSelectedDescendantNodes(editdiv, DOM.PARAGRAPH_NODE_SELECTOR, function (para) {
                         // always remove an existing label
                         // TODO: it might make more sense to change the label appropriately
-                        var paraAttributes = paragraphStyles.getElementAttributes(para);
-                        $(para).children(DOM.LIST_LABEL_NODE_SELECTOR).remove();
+                        var paraAttributes = paragraphStyles.getElementAttributes(para),
+                        oldLabel = $(para).children(DOM.LIST_LABEL_NODE_SELECTOR);
+                        var updateParaTabstops = oldLabel.length > 0;
+                        oldLabel.remove();
                         $(para).css('margin-left', '')
                             .css('text-indent', '');
                         var numId = paraAttributes.numId;
@@ -5490,6 +5493,7 @@ define('io.ox/office/editor/editor',
                                 ilvl = lists.findIlvl(numId, paraAttributes.style);
                             }
                             if (ilvl !== -1 && ilvl < 9) {
+                                updateParaTabstops = true;
                                 if (!listItemCounter[paraAttributes.numId])
                                     listItemCounter[paraAttributes.numId] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
                                 listItemCounter[paraAttributes.numId][ilvl]++;
@@ -5505,6 +5509,11 @@ define('io.ox/office/editor/editor',
 
                                 var listObject = lists.formatNumber(paraAttributes.numId, ilvl,
                                         listItemCounter[paraAttributes.numId]);
+                                var tab = !listObject.suff || listObject.suff === 'tab';
+                                if (!tab && (listObject.suff === 'space')) {
+                                    listObject.text += String.fromCharCode(0x00a0);//add non breaking space
+                                }
+
                                 var numberingElement = DOM.createListLabelNode(listObject.text);
 
                                 var span = Utils.findDescendantNode(para, function () { return DOM.isPortionSpan(this); });
@@ -5530,21 +5539,69 @@ define('io.ox/office/editor/editor',
                                     Color.setElementTextColor(listSpan, documentStyles.getCurrentTheme(), listObject, paraAttributes);
                                 }
                                 LineHeight.updateElementLineHeight(numberingElement, paraAttributes.lineheight);
+                                var leftMargin = 0;
                                 if (listObject.indent > 0) {
-                                    var leftMargin = listObject.indent;
-                                    $(para).css('margin-left', Utils.convertHmmToLength(leftMargin, 'pt'));
+                                    leftMargin = listObject.indent;
+                                    $(para).css('margin-left', leftMargin / 100 + 'mm');
                                 }
-                                if (listObject.firstLine < listObject.indent) {
+                                var minWidth = 0,
+                                    isNegativeIndent = listObject.firstLine < listObject.indent;
+
+                                if (isNegativeIndent) {
                                     var labelWidth = listObject.indent - listObject.firstLine;
-                                    numberingElement.css('min-width', Utils.convertHmmToLength(labelWidth, 'pt'));
-                                    numberingElement.css('margin-left', Utils.convertHmmToLength(-labelWidth, 'pt'));
+                                    if (tab)
+                                        minWidth = labelWidth;
+                                    numberingElement.css('margin-left', (-listObject.indent + listObject.firstLine) / 100 + 'mm');
                                 } else {
-                                    numberingElement.css('margin-left', Utils.convertHmmToLength(listObject.firstLine - listObject.indent, 'pt'));
-                                    // TODO: calc. min-width depending on tabposition or distance
-                                    //numberingElement.css('min-width', Utils.convertHmmToLength(0, 'pt'));
+                                    numberingElement.css('margin-left', (listObject.firstLine - listObject.indent) / 100 + 'mm');
                                 }
+                                numberingElement.css('min-width', minWidth / 100 + 'mm');
                                 $(para).prepend(numberingElement);
+                                if (tab) {
+                                    var minTabPos = listObject.firstLine;
+                                    var maxTabPos = listObject.tabpos ? listObject.tabpos : 999999;
+                                    if (isNegativeIndent) {
+                                        minTabPos = listObject.tabpos && listObject.tabpos < listObject.indent ? listObject.tabpos : listObject.firstLine;
+                                        maxTabPos = listObject.indent;
+                                    }
+
+                                    var numWidth = $(numberingElement).width();
+                                    if (numWidth > minTabPos)
+                                        minTabPos = numWidth;
+
+
+                                    var defaultTabstop = self.getDocumentAttributes().defaulttabstop,
+                                    paraStyles = paragraphStyles.getElementAttributes(para),
+                                    paraTabstops = [];
+                                    // paragraph tab stop definitions
+                                    if (paraStyles && paraStyles.tabstops) {
+                                        paraTabstops = paraStyles.tabstops;
+                                    }
+
+                                    var width = 0;
+
+                                    if (paraTabstops && paraTabstops.length > 0) {
+                                        var tabstop = _.find(paraTabstops, function (tab) { return (minTabPos + 1) < tab.pos && tab.pos < maxTabPos; });
+                                        if (tabstop)
+                                            width = Math.max(0, tabstop.pos - (minTabPos % tabstop.pos));
+                                    }
+
+                                    if (width <= 1 && (!isNegativeIndent && !listObject.tabpos)) {
+                                        // tabsize calculation based on default tabstop
+                                        width = Math.max(0, defaultTabstop - (minTabPos % defaultTabstop));
+                                        width = (width <= 1) ? defaultTabstop : width; // no 0 tab size allowed, check for <= 1 to prevent rounding errors
+                                    }
+                                    if (width <= 1) {
+                                        width = isNegativeIndent ?
+                                                listObject.indent - listObject.firstLine  :
+                                                    listObject.tabpos ? (listObject.tabpos - listObject.firstLine) : minTabPos;
+                                    }
+                                    numberingElement.css('min-width', (width / 100) + 'mm');
+
+                                }
                             }
+                            if (updateParaTabstops)
+                                adjustTabsOfParagraph(para);
                         }
                     });
                 });
