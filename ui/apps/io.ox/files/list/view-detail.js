@@ -493,7 +493,7 @@ define("io.ox/files/list/view-detail",
         id: "form",
         index: 10,
         dim: {
-            span: 6
+            span: 12
         },
         draw: function (file) {
             var self = this;
@@ -503,7 +503,7 @@ define("io.ox/files/list/view-detail",
             });
 
             var $button = $("<button>").text(gt("Upload"))
-            .addClass("btn btn-primary pull-right")
+            .addClass("btn btn-primary")
             .attr('disabled', 'disabled')
             .on("click", function () {
                 _($input[0].files).each(function (fileData) {
@@ -529,10 +529,7 @@ define("io.ox/files/list/view-detail",
             });
 
             $node.append(
-                $("<div>").addClass("row-fluid").append(
-                    $("<div>").addClass("span6").append($input),
-                    $("<div>").addClass("span6 pull-right").append($button)
-                )
+                $input, $button
             );
 
             var $comment = $("<div>").addClass("row-fluid").hide().appendTo($node);

@@ -204,6 +204,7 @@ define("io.ox/files/actions",
     ext.point("io.ox/files/actions/edit/save").extend({
         id: "save",
         action: function (baton) {
+            console.log("Bla", arguments);
             var updatedFile = baton.view.getModifiedFile();
             baton.view.endEdit();
             api.update(updatedFile);
@@ -213,6 +214,7 @@ define("io.ox/files/actions",
     ext.point("io.ox/files/actions/edit/cancel").extend({
         id: "cancel",
         action: function (baton) {
+            console.log("Blupp", arguments);
             baton.view.endEdit();
         }
     });
