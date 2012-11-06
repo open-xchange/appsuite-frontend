@@ -68,18 +68,17 @@ define('io.ox/calendar/month/view',
         },
 
         render: function () {
-
-            var list = util.getWeekScaffold(this.options.day),
+            // TODO: fix this workaround
+            var list = util.getWeekScaffold(this.weekStart + date.DAY),
                 firstFound = false,
                 weekinfo = $('<div>')
                     .addClass('week-info')
                     .append(
                         $('<span>').addClass('cw').append(
                             gt('CW'),
-                            gt.noI18n(' ' + new date.Local(this.options.day).format('w'))
+                            gt.noI18n(' ' + new date.Local(this.weekStart + date.DAY).format('w'))
                         )
                     );
-
             _(list.days).each(function (day, i) {
                 if (day.isFirst) {
                     firstFound = true;
@@ -180,7 +179,9 @@ define('io.ox/calendar/month/view',
 
         var days = date.locale.days,
             tmp = [];
-        days = days.slice(1).concat(days[0]);
+        if (date.locale.weekStart === 1) {
+            days = days.slice(1).concat(days[0]);
+        }
 
         return $('<div>')
             .addClass('abs')
