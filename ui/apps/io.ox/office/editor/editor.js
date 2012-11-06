@@ -1749,6 +1749,12 @@ define('io.ox/office/editor/editor',
 
             lastKeyDownEvent = event;   // for some keys we only get keyDown, not keyPressed!
 
+            if (isIgnorableKeyEvent(event)) {
+                return;
+            }
+
+            implDbgOutEvent(event);
+
             if (isCursorKeyEvent(event)) {
 
                 // any navigation key: change object selection to text selection before
@@ -1762,10 +1768,6 @@ define('io.ox/office/editor/editor',
                     }
                 });
 
-                return;
-            }
-
-            if (isIgnorableKeyEvent(event)) {
                 return;
             }
 
@@ -1978,7 +1980,7 @@ define('io.ox/office/editor/editor',
 
                 selection.setSelection(selection.startPaM.oxoPosition);
             }
-            else if (event.ctrlKey) {
+            else if (event.ctrlKey && !event.altKey) {
                 event.preventDefault();
                 var c = getPrintableChar(event);
                 if (c === 'A') {
@@ -2036,12 +2038,14 @@ define('io.ox/office/editor/editor',
 
         function processKeyPressed(event) {
 
-            if (isCursorKeyEvent()) {
-                updateSelection();
+            if (isIgnorableKeyEvent(lastKeyDownEvent)) {
                 return;
             }
 
-            if (isIgnorableKeyEvent(lastKeyDownEvent)) {
+            implDbgOutEvent(event);
+
+            if (isCursorKeyEvent()) {
+                updateSelection();
                 return;
             }
 
@@ -2054,7 +2058,7 @@ define('io.ox/office/editor/editor',
             // For now (the prototype), only accept single chars, but let the browser process, so we don't need to care about DOM stuff
             // TODO: But we at least need to check if there is a selection!!!
 
-            if ((!event.ctrlKey) && (!event.metaKey) && (c.length === 1)) {
+            if ((!event.ctrlKey || (event.ctrlKey && event.altKey && !event.shiftKey)) && !event.metaKey && (c.length === 1)) {
 
                 self.deleteSelected();
                 // Selection was adjusted, so we need to use start, not end
@@ -4997,17 +5001,9 @@ define('io.ox/office/editor/editor',
         }
 
         function implDbgOutEvent(event) {
-
-            if (!dbgoutEvents)
-                return;
-
-            var dbg = fillstr(event.type, 10, ' ', true) + ' sel:[' + getFormattedPositionString(selection.startPaM.oxoPosition) + '/' + getFormattedPositionString(selection.endPaM.oxoPosition) + ']';
-
-            if ((event.type === 'keypress') || (event.type === 'keydown')) {
-                dbg += ' key:[keyCode=' + fillstr(event.keyCode.toString(), 3, '0') + ' charCode=' + fillstr(event.charCode.toString(), 3, '0') + ' shift=' + event.shiftKey + ' ctrl=' + event.ctrlKey + ' alt=' + event.altKey + ']';
+            if (dbgoutEvents) {
+                Utils.log('type=' + event.type + ' keyCode=' + event.keyCode + ' charCode=' + event.charCode + ' shift=' + event.shiftKey + ' ctrl=' + event.ctrlKey + ' alt=' + event.altKey);
             }
-
-            window.console.log(dbg);
         }
 
         function implDbgOutObject(obj) {
