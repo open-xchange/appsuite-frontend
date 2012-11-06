@@ -44,7 +44,7 @@
 .io-ox-editor .title {
     border: 1px solid #f5f5f5;
     font-weight: bold;
-    width: 700px;
+    width: 560px;
     padding-left: 13px;
     padding-right: 13px;
 }
@@ -57,6 +57,13 @@
     width: 120px;
     float: right;
 }
+
+.io-ox-editor .discard {
+    width: 120px;
+    float: right;
+    margin-right: 10px;
+}
+
 
 .io-ox-editor textarea {
     

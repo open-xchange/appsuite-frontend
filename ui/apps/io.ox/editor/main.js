@@ -40,6 +40,11 @@ define("io.ox/editor/main",
             app.save();
         }
 
+        function fnClose(e) {
+            e.preventDefault();
+            app.quit();
+        }
+
         // launcher
         app.setLauncher(function () {
 
@@ -77,8 +82,9 @@ define("io.ox/editor/main",
                                 .addClass('title')
                                 .parent(),
                             // save button
-                            $('<button>', { tabindex: 3 }).addClass('save btn btn-primary').text(gt('Save'))
-                                .on('click', fnSave)
+                            $('<button>', { tabindex: 4 }).addClass('save btn btn-primary').text(gt('Save'))
+                                .on('click', fnSave),
+                            $('<button>', { tabindex: 3 }).addClass("discard btn").text(gt('Discard')).on('click', fnClose)
                         ),
                         // body
                         $('<div>').addClass('body')
