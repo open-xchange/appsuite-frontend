@@ -217,7 +217,7 @@ define('io.ox/office/editor/editor',
                 // floating object in the first paragraph, or a leading table)
                 var firstSpan = Utils.findDescendantNode(editdiv, function () { return DOM.isPortionSpan(this); }),
                     position = Position.getOxoPosition(editdiv, firstSpan, 0);
-                setSelection(new Selection(position));
+                setSelection(new Selection(editdiv, position));
             }
         };
 
@@ -280,7 +280,7 @@ define('io.ox/office/editor/editor',
                 result = null;
 
             // visit the paragraphs and tables covered by the selection
-            result = Position.iterateContentNodesInSelection(editdiv, selection, function (contentNode, position, startOffset, endOffset) {
+            result = selection.iterateContentNodes(function (contentNode, position, startOffset, endOffset) {
 
                 // paragraphs may be covered partly
                 if (DOM.isParagraphNode(contentNode)) {
@@ -401,7 +401,7 @@ define('io.ox/office/editor/editor',
                         }, this);
 
                         position.push(offset);
-                        setSelection(new Selection(position));
+                        setSelection(new Selection(editdiv, position));
                     }
 
                 }, this);
@@ -510,7 +510,7 @@ define('io.ox/office/editor/editor',
 
         this.undo = function (count) {
             undomgr.undo(count);
-            setSelection(new Selection(lastOperationEnd));
+            setSelection(new Selection(editdiv, lastOperationEnd));
         };
 
         this.redoAvailable = function () {
@@ -519,7 +519,7 @@ define('io.ox/office/editor/editor',
 
         this.redo = function (count) {
             undomgr.redo(count);
-            setSelection(new Selection(lastOperationEnd));
+            setSelection(new Selection(editdiv, lastOperationEnd));
         };
 
         /**
@@ -697,7 +697,7 @@ define('io.ox/office/editor/editor',
                     // More than one paragraph concerned from deletion, but in same level in document or table cell.
                     deleteSelectedInSameParagraphLevel(selection);
 
-                } else if (selection.isCellSelection()) {
+                } else if (selection.isTableCellSelection()) {
                     // This cell selection is a rectangle selection of cells in a table (only supported in Firefox).
                     deleteSelectedInCellSelection(selection);
 
@@ -733,7 +733,7 @@ define('io.ox/office/editor/editor',
                 // var newOperation = { name: Operations.TEXT_DELETE, start: startposition, end: endposition };
                 applyOperation(newOperation, true, true);
                 // setting the cursor position
-                setSelection(new Selection(lastOperationEnd));
+                setSelection(new Selection(editdiv, lastOperationEnd));
             }
         };
 
@@ -747,7 +747,7 @@ define('io.ox/office/editor/editor',
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
-            setSelection(new Selection(lastOperationEnd));
+            setSelection(new Selection(editdiv, lastOperationEnd));
         };
 
         this.deleteCellRange = function (position, start, end) {
@@ -779,7 +779,7 @@ define('io.ox/office/editor/editor',
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
-            setSelection(new Selection(lastOperationEnd));
+            setSelection(new Selection(editdiv, lastOperationEnd));
         };
 
         this.deleteCells = function () {
@@ -788,7 +788,7 @@ define('io.ox/office/editor/editor',
 
             selection.adjust();
 
-            var isCellSelection = selection.isCellSelection(),
+            var isCellSelection = selection.isTableCellSelection(),
                 startPos = _.copy(selection.startPaM.oxoPosition, true),
                 endPos = _.copy(selection.endPaM.oxoPosition, true);
 
@@ -841,7 +841,7 @@ define('io.ox/office/editor/editor',
             undomgr.endGroup();
 
             // setting the cursor position
-            setSelection(new Selection(lastOperationEnd));
+            setSelection(new Selection(editdiv, lastOperationEnd));
         };
 
         this.mergeCells = function () {
@@ -850,7 +850,7 @@ define('io.ox/office/editor/editor',
 
             selection.adjust();
 
-            var isCellSelection = selection.isCellSelection(),
+            var isCellSelection = selection.isTableCellSelection(),
                 startPos = _.copy(selection.startPaM.oxoPosition, true),
                 endPos = _.copy(selection.endPaM.oxoPosition, true);
 
@@ -900,7 +900,7 @@ define('io.ox/office/editor/editor',
                 endPosition.push(0);
 
                 // setting the cursor position
-                setSelection(new Selection(endPosition));
+                setSelection(new Selection(editdiv, endPosition));
             }
         };
 
@@ -910,7 +910,7 @@ define('io.ox/office/editor/editor',
 
             selection.adjust();
 
-            var isCellSelection = selection.isCellSelection(),
+            var isCellSelection = selection.isTableCellSelection(),
                 startPos = _.copy(selection.startPaM.oxoPosition, true),
                 endPos = _.copy(selection.endPaM.oxoPosition, true),
                 count = 1;  // default, adding one cell in each row
@@ -982,7 +982,7 @@ define('io.ox/office/editor/editor',
             endPosition.push(0);
 
             // setting the cursor position
-            setSelection(new Selection(endPosition));
+            setSelection(new Selection(editdiv, endPosition));
         };
 
         this.deleteColumns = function () {
@@ -1053,7 +1053,7 @@ define('io.ox/office/editor/editor',
             }); // undomgr.enterGroup();
 
             // setting the cursor position
-            setSelection(new Selection(lastOperationEnd));
+            setSelection(new Selection(editdiv, lastOperationEnd));
         };
 
         this.insertRow = function () {
@@ -1076,7 +1076,7 @@ define('io.ox/office/editor/editor',
             }
 
             // setting the cursor position
-            setSelection(new Selection(lastOperationEnd));
+            setSelection(new Selection(editdiv, lastOperationEnd));
         };
 
         this.insertColumn = function () {
@@ -1102,7 +1102,7 @@ define('io.ox/office/editor/editor',
             }, this);
 
             // setting the cursor position
-            setSelection(new Selection(lastOperationEnd));
+            setSelection(new Selection(editdiv, lastOperationEnd));
         };
 
         this.insertParagraph = function (position) {
@@ -1200,7 +1200,7 @@ define('io.ox/office/editor/editor',
                 }
 
                 // setting the cursor position
-                setSelection(new Selection(lastOperationEnd));
+                setSelection(new Selection(editdiv, lastOperationEnd));
 
                 undomgr.endGroup();  // necessary because of paragraph split
             }
@@ -1219,7 +1219,7 @@ define('io.ox/office/editor/editor',
             sendImageSize(_.copy(selection.startPaM.oxoPosition));
 
             // setting the cursor position
-            setSelection(new Selection(lastOperationEnd));
+            setSelection(new Selection(editdiv, lastOperationEnd));
         };
 
         this.insertImageURL = function (imageURL) {
@@ -1235,7 +1235,7 @@ define('io.ox/office/editor/editor',
             sendImageSize(_.copy(selection.startPaM.oxoPosition));
 
             // setting the cursor position
-            setSelection(new Selection(lastOperationEnd));
+            setSelection(new Selection(editdiv, lastOperationEnd));
         };
 
         this.insertImageData = function (imageData) {
@@ -1251,7 +1251,7 @@ define('io.ox/office/editor/editor',
             sendImageSize(_.copy(selection.startPaM.oxoPosition));
 
             // setting the cursor position
-            setSelection(new Selection(lastOperationEnd));
+            setSelection(new Selection(editdiv, lastOperationEnd));
         };
 
         this.insertTab = function () {
@@ -1264,7 +1264,7 @@ define('io.ox/office/editor/editor',
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
-            setSelection(new Selection(lastOperationEnd));
+            setSelection(new Selection(editdiv, lastOperationEnd));
         };
 
         this.splitParagraph = function (position) {
@@ -1408,21 +1408,21 @@ define('io.ox/office/editor/editor',
             switch (family) {
 
             case 'character':
-                Position.iterateNodesInSelection(editdiv, selection, function (node) {
+                selection.iterateNodes(function (node) {
                     return DOM.iterateTextSpans(node, function (span) {
                         return mergeElementAttributes(characterStyles.getElementAttributes(span));
                     });
-                }, this);
+                });
                 break;
 
             case 'paragraph':
-                Position.iterateContentNodesInSelection(editdiv, selection, function (paragraph) {
+                selection.iterateContentNodes(function (paragraph) {
                     return mergeElementAttributes(paragraphStyles.getElementAttributes(paragraph));
-                }, this);
+                });
                 break;
 
             case 'table':
-                if ((table = Position.getEnclosingTable(editdiv, selection))) {
+                if ((table = selection.getEnclosingTable())) {
                     mergeElementAttributes(tableStyles.getElementAttributes(table));
                 }
                 break;
@@ -2064,7 +2064,7 @@ define('io.ox/office/editor/editor',
             else if (event.ctrlKey) {
                 var c = getPrintableChar(event);
                 if (c === 'A') {
-                    selection = new Selection([0], Position.getLastPositionInDocument(editdiv));
+                    selection = new Selection(editdiv, [0], Position.getLastPositionInDocument(editdiv));
 
                     event.preventDefault();
 
@@ -2847,10 +2847,13 @@ define('io.ox/office/editor/editor',
                     isPos2Endpoint = false;
                 }
 
-                var startPaM = Position.getTextLevelOxoPosition(domRange.start, editdiv, isPos1Endpoint),
-                    endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isPos2Endpoint);
+                currentSelection = new Selection(editdiv);
+                currentSelection.startPaM = Position.getTextLevelOxoPosition(domRange.start, editdiv, isPos1Endpoint);
+                currentSelection.endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isPos2Endpoint);
 
-                currentSelection = new Selection(startPaM.oxoPosition, endPaM.oxoPosition);
+                if (!currentSelection.startPaM) {
+                    var a = 1;
+                }
                 // Utils.log('getSelection(): logical position: start=[' + currentSelection.startPaM.oxoPosition + '], end=[' + currentSelection.endPaM.oxoPosition + '],' +
                 //           ' start: ' + currentSelection.startPaM.selectedNodeName + ' (image float mode: ' + currentSelection.startPaM.imageFloatMode + '),' +
                 //           ' end: ' + currentSelection.endPaM.selectedNodeName + ' (image float mode: ' + currentSelection.endPaM.imageFloatMode + ')');
@@ -2871,26 +2874,21 @@ define('io.ox/office/editor/editor',
 
             currentSelection = _.copy(oxosel, true);
 
-            // Multi selection for rectangle cell selection in Firefox.
-            if (selectedObjects.length > 0) {
-                ranges = Position.getObjectSelection(editdiv, oxosel);
-            } else if (oxosel.isCellSelection()) {
-                ranges = Position.getCellDOMSelections(editdiv, oxosel);
-            } else {
-                ranges = Position.getDOMSelection(editdiv, oxosel);
+            if (selectedObjects.length === 0) {
+                if (oxosel.isTableCellSelection()) {
+                    ranges = oxosel.getCellSelectionRanges();
+                } else {
+                    ranges = oxosel.getTextSelectionRanges();
+                }
             }
 
             // for (var i = 0; i < ranges.length; i++) {
             //     window.console.log('setSelection: Calculated browser selection (' + i + '): ' + ranges[i].start.node.nodeName + ' : ' + ranges[i].start.offset + ' to ' + ranges[i].end.node.nodeName + ' : ' + ranges[i].end.offset);
             // }
 
-            if (ranges.length) {
-                DOM.setBrowserSelection(ranges);
-                // if (TODO: Compare Arrays oldSelection, oxosel)
-                self.trigger('selection', currentSelection);
-            } else {
-                Utils.error('Editor.setSelection(): Failed to determine DOM Selection from OXO Selection: ' + oxosel.startPaM.oxoPosition + ' : ' + oxosel.endPaM.oxoPosition);
-            }
+            DOM.setBrowserSelection(ranges);
+            // if (TODO: Compare Arrays oldSelection, oxosel)
+            self.trigger('selection', currentSelection);
         }
 
         function updateSelection() {
@@ -3436,7 +3434,7 @@ define('io.ox/office/editor/editor',
                         // The included paragraphs are neighbours.
                         setAttributesInSameParagraphLevel(selection, family, attributes);
 
-                    } else if (selection.isCellSelection()) {
+                    } else if (selection.isTableCellSelection()) {
                         // This cell selection is a rectangle selection of cells in a table (only supported in Firefox).
                         setAttributesInCellSelection(selection, family, attributes);
 
@@ -4349,7 +4347,7 @@ define('io.ox/office/editor/editor',
 
             // setting the cursor position -> only required for changes to inline
             // if (lastOperationEnd) {
-            //     setSelection(new Selection(lastOperationEnd));
+            //     setSelection(new Selection(editdiv, lastOperationEnd));
             // }
         }
 
@@ -4406,7 +4404,7 @@ define('io.ox/office/editor/editor',
             });
 
             // set initial selection
-            setSelection(new Selection());
+            setSelection(new Selection(editdiv));
             lastOperationEnd = [0, 0];
 
             self.clearUndo();
