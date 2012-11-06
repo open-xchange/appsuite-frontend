@@ -548,9 +548,16 @@ define('io.ox/office/editor/position',
         if (! foundValidNode) {
             // find the first or last text node contained in the element
             if (localNode && (localNode.nodeType !== 3)) {
-                foundNode = Utils.findDescendantNode(localNode, function () { return DOM.isPortionSpan(this); }, { reverse: !useFirstTextNode });
-                if (foundNode) {
-                    localNode = foundNode = foundNode.firstChild;
+                if (DOM.isPortionSpan(localNode)) {
+                    foundNode = Utils.findDescendantNode(localNode, function () { return DOM.isTextNodeInPortionSpan(this); }, { reverse: !useFirstTextNode });
+                    if (foundNode) {
+                        localNode = foundNode;
+                    }
+                } else {
+                    foundNode = Utils.findDescendantNode(localNode, function () { return DOM.isPortionSpan(this); }, { reverse: !useFirstTextNode });
+                    if (foundNode) {
+                        localNode = foundNode = foundNode.firstChild;
+                    }
                 }
             }
         }
