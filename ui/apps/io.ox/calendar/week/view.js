@@ -524,13 +524,14 @@ define('io.ox/calendar/week/view',
                     while (true && maxCount <= this.columns) {
                         var app = this.renderAppointment(model),
                             sel = '[date="' + Math.floor((startLocal.getTime() - this.startDate.getTime()) / date.DAY) + '"]';
-                        console.log();
                         maxCount++;
 
                         if (start !== end) {
                             endLocal = new date.Local(startLocal.getTime());
                             endLocal.setHours(23, 59, 59, 999);
-                            style += 'rmsouth';
+                            if (model.get('end_date') - endLocal.getTime() > 1) {
+                                style += 'rmsouth';
+                            }
                         } else {
                             endLocal = new date.Local(model.get('end_date'));
                         }
