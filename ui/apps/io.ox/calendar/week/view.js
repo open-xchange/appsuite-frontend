@@ -932,17 +932,21 @@ define('io.ox/calendar/week/view',
                         d.my.lastTop = top;
                     },
                     stop: function (e, ui) {
-                        var d = $(this).data('draggable'),
-                            move = Math.round((ui.position.left - ui.originalPosition.left) / colWidth),
-                            app = self.collection.get($(this).data('cid')).attributes,
-                            startTS = app.start_date + self.getTimeFromPos(d.my.lastTop - ui.originalPosition.top) + (move * date.DAY);
-                        d.my.all.busy();
-                        _.extend(app, {
-                            start_date: startTS,
-                            end_date: startTS + (app.end_date - app.start_date),
-                            ignore_conflicts: true
-                        });
-                        self.onUpdateAppointment(app);
+                        if (e.pageX < window.innerWidth && e.pageY < window.innerHeight) {
+                            var d = $(this).data('draggable'),
+                                move = Math.round((ui.position.left - ui.originalPosition.left) / colWidth),
+                                app = self.collection.get($(this).data('cid')).attributes,
+                                startTS = app.start_date + self.getTimeFromPos(d.my.lastTop - ui.originalPosition.top) + (move * date.DAY);
+                            _.extend(app, {
+                                start_date: startTS,
+                                end_date: startTS + (app.end_date - app.start_date),
+                                ignore_conflicts: true
+                            });
+                            d.my.all.busy();
+                            self.onUpdateAppointment(app);
+                        } else {
+                            self.trigger('onRefreshView', self.startDate);
+                        }
                     }
                 });
 
@@ -959,17 +963,21 @@ define('io.ox/calendar/week/view',
                     snap: '.day',
                     zIndex: 2,
                     stop: function (e, ui) {
-                        $(this).busy();
-                        var newPos = Math.round($(this).position().left / (self.fulltimePane.width() / self.columns)),
-                            startTS = self.startDate.getDays() * date.DAY + newPos * date.DAY,
-                            cid = $(this).data('cid'),
-                            app = self.collection.get(cid).attributes;
-                        _.extend(app, {
-                            start_date: startTS,
-                            end_date: startTS + (app.end_date - app.start_date),
-                            ignore_conflicts: true
-                        });
-                        self.onUpdateAppointment(app);
+                        if (e.pageX < window.innerWidth && e.pageY < window.innerHeight) {
+                            $(this).busy();
+                            var newPos = Math.round($(this).position().left / (self.fulltimePane.width() / self.columns)),
+                                startTS = self.startDate.getDays() * date.DAY + newPos * date.DAY,
+                                cid = $(this).data('cid'),
+                                app = self.collection.get(cid).attributes;
+                            _.extend(app, {
+                                start_date: startTS,
+                                end_date: startTS + (app.end_date - app.start_date),
+                                ignore_conflicts: true
+                            });
+                            self.onUpdateAppointment(app);
+                        } else {
+                            self.trigger('onRefreshView', self.startDate);
+                        }
                     }
                 })
                 .resizable({
