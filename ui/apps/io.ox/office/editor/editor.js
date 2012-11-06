@@ -1769,11 +1769,9 @@ define('io.ox/office/editor/editor',
                 return;
             }
 
-            // prevent browser from evaluating the key event
-            event.preventDefault();
-
             // TODO: How to strip away debug code?
             if (event.keyCode && event.shiftKey && event.ctrlKey && event.altKey) {
+                event.preventDefault();
                 var c = getPrintableChar(event);
                 if (c === 'P') {
                     alert('#Paragraphs: ' + editdiv.children().length);
@@ -1820,6 +1818,7 @@ define('io.ox/office/editor/editor',
             }
 
             if (event.keyCode === KeyCodes.DELETE) {
+                event.preventDefault();
                 if (selection.hasRange()) {
                     self.deleteSelected();
                 }
@@ -1896,6 +1895,7 @@ define('io.ox/office/editor/editor',
                 selection.setSelection(selection.startPaM.oxoPosition);
             }
             else if (event.keyCode === KeyCodes.BACKSPACE) {
+                event.preventDefault();
                 if (selection.hasRange()) {
                     self.deleteSelected();
                 }
@@ -1979,6 +1979,7 @@ define('io.ox/office/editor/editor',
                 selection.setSelection(selection.startPaM.oxoPosition);
             }
             else if (event.ctrlKey) {
+                event.preventDefault();
                 var c = getPrintableChar(event);
                 if (c === 'A') {
                     selection.selectAll();
@@ -2008,6 +2009,7 @@ define('io.ox/office/editor/editor',
                     self.setAttribute('character', 'underline', !self.getAttributes('character').underline);
                 }
             } else if (event.keyCode === KeyCodes.TAB && !event.ctrlKey && !event.metaKey) {
+                event.preventDefault();
                 // (shift)Tab: Change list indent (if in list) when selection is at first position in paragraph
                 var paragraph = Position.getLastNodeFromPositionByNodeName(editdiv, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR),
                     mustInsertTab = !event.shiftKey && !selection.hasRange();
