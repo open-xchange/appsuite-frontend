@@ -1259,6 +1259,7 @@ define('io.ox/office/editor/editor',
                 setAttributes('paragraph', { numId: defNumId, ilvl: 0});
             });
         };
+
         this.createList = function (type, options) {
             var defNumId = (!options || (!options.symbol && !options.levelstart)) ? lists.getDefaultNumId(type) : undefined;
             if (defNumId === undefined) {
@@ -1383,6 +1384,7 @@ define('io.ox/office/editor/editor',
                 break;
 
             case 'image':
+                // TODO: needs change when multiple objects can be selected
                 if ((element = selection.getSelectedObject()[0]) && DOM.isImageNode(element)) {
                     mergeElementAttributes(imageStyles.getElementAttributes(element));
                 }
@@ -3092,124 +3094,81 @@ define('io.ox/office/editor/editor',
          * @param {String} family
          *  The name of the attribute family containing the specified
          *  attribute.
+         *
+         * @param {Object} attributes
+         *  The attributes to be set at the current selection.
          */
-        function setAttributes(family, attributes, startPosition, endPosition) {
+        function setAttributes(family, attributes) {
 
-            var para,
-                start,
-                end;
-
-            if ((startPosition !== undefined) && (endPosition !== undefined)) {
-                var startposLength = startPosition.length - 1,
-                    endposLength = endPosition.length - 1;
-                para = startPosition[startposLength - 1];
-                start = startPosition[startposLength];
-                end = endPosition[endposLength];
-            }
-
-            // TODO: adjust position according to passed attribute family
-            if (para === undefined) {
-                // Set attr to current selection
-                if (selection.hasRange()) {
-
-                    if (selection.startPaM.imageFloatMode && selection.isSingleComponentSelection()) {
-                        // An image selection
-                        setAttributesToSelectedImage(selection, attributes);
-
-                    } else if (selection.hasSameParentComponent()) {
-                        // Only one paragraph concerned from attribute changes.
-                        setAttributes(family, attributes, selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
-
-                    } else if (selection.hasSameParentComponent(2)) {
-                        // The included paragraphs are neighbours.
-                        setAttributesInSameParagraphLevel(selection, family, attributes);
-
-                    } else if (selection.isTableCellSelection()) {
-                        // This cell selection is a rectangle selection of cells in a table (only supported in Firefox).
-                        setAttributesInCellSelection(selection, family, attributes);
-
-                    } else if (Position.isSameTableLevel(editdiv, selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
-                        // This selection is inside a table in a browser, where no cell selection is possible (Chrome). Selected
-                        // can be parts of paragraphs inside a cell and also all paragraphs in other cells. This selection is
-                        // important to be able to support something similar like cell selection, that is only possible
-                        // in Firefox. So changes made in Firefox tables are displayed correctly in Chrome and vice versa.
-                        setAttributesInSameTableLevel(selection, family, attributes);
-
-                    } else {
-                        // The included paragraphs are not neighbours. For example one paragraph top level and one in table.
-                        // Should this be supported? How about tables in tables?
-                        // This probably works not reliable for tables in tables.
-                        setAttributesInDifferentParagraphLevels(selection, family, attributes);
-                    }
-                }
-                // paragraph attributes also for cursor without selection (// if (selection.hasRange()))
-                else if (family === 'paragraph') {
-                    var insStyleSheetOperation = neededInsertStyleSheetOperation(family, attributes);
-                    if (insStyleSheetOperation)
-                        applyOperation(insStyleSheetOperation, true, true);
-
-                    startPosition = Position.getFamilyAssignedPosition(family, editdiv, selection.startPaM.oxoPosition);
-                    endPosition = Position.getFamilyAssignedPosition(family, editdiv, selection.endPaM.oxoPosition);
-                    var newOperation = {name: Operations.ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
-                    applyOperation(newOperation, true, true);
-                }
-            }
-            else {
-                var insStyleSheetOperation = neededInsertStyleSheetOperation(family, attributes);
-                if (insStyleSheetOperation)
-                    applyOperation(insStyleSheetOperation, true, true);
-
-                startPosition = Position.getFamilyAssignedPosition(family, editdiv, startPosition);
-                endPosition = Position.getFamilyAssignedPosition(family, editdiv, endPosition);
-
-                var _endPosition = _.copy(endPosition, true);
-                if ((family === 'character') && (_endPosition[_endPosition.length - 1] > 0)) {
-                    _endPosition[_endPosition.length - 1] -= 1;  // switching from range mode to operation mode
-                }
-
-                var newOperation = {name: Operations.ATTRS_SET, attrs: attributes, start: startPosition, end: _endPosition};
-                // var newOperation = {name: Operations.ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
-                applyOperation(newOperation, true, true);
-            }
-        }
-
-        /**
-         * Private set attributes helper. Checks if the used style sheet
-         * must be added to the document. If yes, the operation is provided
-         * otherwise null.
-         *
-         * @param {String} family
-         * The style family which must be checked.
-         *
-         * @param attributes
-         * The attributes used for the setAttributes call.
-         *
-         * @returns {Object}
-         * The operation to insert a dirty style sheet or null.
-         *
-         */
-        function neededInsertStyleSheetOperation(family, attributes) {
-            var operation = null,
+            var // table or object element contained by the selection
+                element = null,
+                // operations generator
+                generator = new Operations.Generator(),
+                // the style sheet container
                 styleSheets = self.getStyleSheets(family);
 
-            if (styleSheets) {
-                var styleId = attributes.style,
-                    dirty = styleSheets.isDirty(styleId);
+            // register pending style sheet via 'insertStylesheet' operation
+            if (_.isString(attributes.style) && styleSheets.isDirty(attributes.style)) {
 
-                if (dirty) {
-                    var styleAttr = styleSheets.getStyleSheetAttributeMap(styleId),
-                        uiPriority = styleSheets.getUIPriority(styleId),
-                        parentId = styleSheets.getParentId(styleId),
-                        styleName = styleSheets.getName(styleId);
-                    styleSheets.setDirty(styleId, false);
-                    operation = {name: Operations.INSERT_STYLE,
-                                 attrs: styleAttr, type: family, styleid: styleId, stylename: styleName,
-                                 parent: parentId, 'default': false, hidden: false,
-                                 uipriority: uiPriority, pooldefault: false};
-                }
+                generator.generateOperation(Operations.INSERT_STYLE, {
+                    attrs: styleSheets.getStyleSheetAttributeMap(attributes.style),
+                    type: family,
+                    styleid: attributes.style,
+                    stylename: styleSheets.getName(attributes.style),
+                    parent: styleSheets.getParentId(attributes.style),
+                    uipriority: styleSheets.getUIPriority(attributes.style)
+                });
+
+                // remove the dirty flag
+                styleSheets.setDirty(attributes.style, false);
             }
 
-            return operation;
+            // generate 'setAttribute' operations
+            switch (family) {
+
+            case 'character':
+                selection.iterateContentNodes(function (paragraph, position, startOffset, endOffset) {
+                    // validate start offset (iterator passes 'undefined' for fully covered paragraphs)
+                    if (!_.isNumber(startOffset)) {
+                        startOffset = 0;
+                    }
+                    // validate end offset (iterator passes 'undefined' for fully covered paragraphs)
+                    if (!_.isNumber(endOffset)) {
+                        endOffset = Position.getParagraphLength(editdiv, position) - 1;
+                    }
+                    // set the attributes at the covered text range
+                    // TODO: currently, no way to set character attributes at empty paragraphs via operation...
+                    if (startOffset <= endOffset) {
+                        generator.generateOperation(Operations.ATTRS_SET, { start: position.concat([startOffset]), end: position.concat([endOffset]), attrs: attributes });
+                    }
+                });
+                break;
+
+            case 'paragraph':
+                selection.iterateContentNodes(function (paragraph, position) {
+                    generator.generateOperation(Operations.ATTRS_SET, { start: position, attrs: attributes });
+                });
+                break;
+
+            case 'table':
+                if ((element = selection.getEnclosingTable())) {
+                    generator.generateOperation(Operations.ATTRS_SET, { start: Position.getOxoPosition(editdiv, element, 0), attrs: attributes });
+                }
+                break;
+
+            case 'image':
+                // TODO: needs change when multiple objects can be selected
+                if ((element = selection.getSelectedObject()[0]) && DOM.isImageNode(element)) {
+                    generator.generateOperation(Operations.ATTRS_SET, { start: Position.getOxoPosition(editdiv, element, 0), attrs: attributes });
+                }
+                break;
+
+            default:
+                Utils.error('Editor.getAttributes(): missing implementation for family "' + family + '"');
+            }
+
+            // apply all collected operations
+            self.applyOperations(generator.getOperations(), true, true);
         }
 
         // ==================================================================
@@ -3419,215 +3378,6 @@ define('io.ox/office/editor/editor',
                         self.deleteParagraph(localPos);
                     }
                 }
-            }
-        }
-
-        function setAttributesToPreviousCellsInTable(family, attributes, position) {
-
-            var localPos = _.copy(position, true),
-                isInTable = Position.isPositionInTable(editdiv, localPos);
-
-            if (isInTable) {
-
-                var paraIndex = Position.getLastIndexInPositionByNodeName(editdiv, localPos, DOM.PARAGRAPH_NODE_SELECTOR);
-
-                if (paraIndex !== -1) {
-
-                    var columnIndex = paraIndex - 1,
-                        rowIndex = columnIndex - 1,
-                        thisRow = localPos[rowIndex],
-                        thisColumn = localPos[columnIndex],
-                        lastColumn = Position.getLastColumnIndexInTable(editdiv, localPos),
-                        lastIndex = localPos.length - 1;
-
-                    while (lastIndex > columnIndex) {
-                        localPos.pop();  // Removing position and paragraph optionally
-                        lastIndex = localPos.length - 1;
-                    }
-
-                    for (var j = 0; j <= thisRow; j++) {
-                        var max = lastColumn;
-                        if (j === thisRow) {
-                            max = thisColumn - 1;
-                        }
-                        for (var i = 0; i <= max; i++) {
-                            localPos[rowIndex] = j;   // row
-                            localPos[columnIndex] = i;  // column
-                            var startPosition = Position.getFirstPositionInCurrentCell(editdiv, localPos);
-                            var endPosition = Position.getLastPositionInCurrentCell(editdiv, localPos);
-                            setAttributes(family, attributes, startPosition, endPosition);
-                        }
-                    }
-                }
-            }
-        }
-
-        function setAttributesToFollowingCellsInTable(family, attributes, position) {
-
-            var localPos = _.copy(position, true),
-                isInTable = Position.isPositionInTable(editdiv, localPos);
-
-            if (isInTable) {
-                var rowIndex = Position.getLastIndexInPositionByNodeName(editdiv, localPos, 'tr'),
-                columnIndex = rowIndex + 1,
-                thisRow = localPos[rowIndex],
-                thisColumn = localPos[columnIndex],
-                lastRow = Position.getLastRowIndexInTable(editdiv, position),
-                lastColumn = Position.getLastColumnIndexInTable(editdiv, position);
-
-                while (localPos.length > columnIndex) {
-                    localPos.pop();  // Removing position and paragraph optionally
-                }
-
-                for (var j = thisRow; j <= lastRow; j++) {
-                    var min = 0;
-                    if (j === thisRow) {
-                        min = thisColumn + 1;
-                    }
-                    for (var i = min; i <= lastColumn; i++) {
-                        localPos[rowIndex] = j;  // row
-                        localPos[columnIndex] = i;  // column
-                        var startPosition = Position.getFirstPositionInCurrentCell(editdiv, localPos);
-                        var endPosition = Position.getLastPositionInCurrentCell(editdiv, localPos);
-                        setAttributes(family, attributes, startPosition, endPosition);
-                    }
-                }
-            }
-        }
-
-        function setAttributesToPreviousParagraphsInCell(family, attributes, position) {
-
-            var localPos = _.copy(position, true),
-                isInTable = Position.isPositionInTable(editdiv, localPos);
-
-            if (isInTable) {
-
-                var paraIndex = Position.getLastIndexInPositionByNodeName(editdiv, localPos, DOM.PARAGRAPH_NODE_SELECTOR),
-                    thisPara = localPos[paraIndex],
-                    paragraphPosition = [];
-
-                for (var i = 0; i <= paraIndex; i++) {
-                    paragraphPosition.push(localPos[i]);
-                }
-
-                for (var i = 0; i < thisPara; i++) {
-                    localPos[paraIndex] = i;
-                    paragraphPosition[paraIndex] = i;
-
-                    // it can be a table next to a paragraph
-                    if (DOM.isTableNode(Position.getDOMPosition(editdiv, paragraphPosition).node)) {
-                        setAttributesToCompleteTable(family, attributes, localPos);
-                    } else {
-                        setAttributesToParagraphInCell(family, attributes, localPos);
-                    }
-                }
-            }
-        }
-
-        function setAttributesToFollowingParagraphsInCell(family, attributes, position) {
-
-            var localPos = _.copy(position, true),
-                isInTable = Position.isPositionInTable(editdiv, localPos);
-
-            if (isInTable) {
-
-                var paraIndex = Position.getLastIndexInPositionByNodeName(editdiv, localPos, DOM.PARAGRAPH_NODE_SELECTOR),
-                    startPara = localPos[paraIndex] + 1,
-                    lastPara =  Position.getLastParaIndexInCell(editdiv, position),
-                    paragraphPosition = [];
-
-                for (var i = 0; i <= paraIndex; i++) {
-                    paragraphPosition.push(localPos[i]);
-                }
-
-                for (var i = startPara; i <= lastPara; i++) {
-                    localPos[paraIndex] = i;
-                    paragraphPosition[paraIndex] = i;
-
-                    // it can be a table next to a paragraph
-                    if (DOM.isTableNode(Position.getDOMPosition(editdiv, paragraphPosition).node)) {
-                        setAttributesToCompleteTable(family, attributes, localPos);
-                    } else {
-                        setAttributesToParagraphInCell(family, attributes, localPos);
-                    }
-                }
-            }
-        }
-
-        function setAttributesToAllParagraphsInCell(family, attributes, position) {
-
-            var localPos = _.copy(position, true),
-                isInTable = Position.isPositionInTable(editdiv, localPos);
-
-            if (isInTable) {
-
-                var cellPos = Position.getLastPositionFromPositionByNodeName(editdiv, position, 'th, td'),
-                    cellNode = Position.getDOMPosition(editdiv, cellPos).node;
-
-                if (cellNode) {
-
-                    var lastPara = $(cellNode).children().length;
-
-                    for (var i = 0; i < lastPara; i++) {
-                        var paraPos = _.copy(cellPos, true);
-                        paraPos.push(i);
-
-                        // it can be a table next to a paragraph
-                        if (DOM.isTableNode(Position.getDOMPosition(editdiv, _.copy(paraPos, true)).node)) {
-                            setAttributesToCompleteTable(family, attributes, paraPos);
-                        } else {
-                            setAttributesToParagraphInCell(family, attributes, paraPos);
-                        }
-                    }
-                }
-            }
-        }
-
-        function setAttributesToCompleteTable(family, attributes, position) {
-
-            var localPos = _.copy(position),
-                tableIndex = Position.getLastIndexInPositionByNodeName(editdiv, localPos, DOM.TABLE_NODE_SELECTOR),
-                localPos = [];
-
-            for (var i = 0; i <= tableIndex; i++) {
-                localPos[i] = position[i];
-            }
-
-            localPos.push(0); // row
-
-            var rowIndex = localPos.length - 1,
-                columnIndex = rowIndex + 1;
-
-            localPos.push(0); // column
-
-            var lastRow = Position.getLastRowIndexInTable(editdiv, position),
-                lastColumn = Position.getLastColumnIndexInTable(editdiv, position);
-
-
-            for (var j = 0; j <= lastRow; j++) {
-                for (var i = 0; i <= lastColumn; i++) {
-                    localPos[rowIndex] = j;  // row
-                    localPos[columnIndex] = i;  // column
-                    var startPosition = Position.getFirstPositionInCurrentCell(editdiv, localPos);
-                    var endPosition = Position.getLastPositionInCurrentCell(editdiv, localPos);
-                    setAttributes(family, attributes, startPosition, endPosition);
-                }
-            }
-        }
-
-        function setAttributesToParagraphInCell(family, attributes, position) {
-
-            var startPosition = _.copy(position, true),
-                endPosition = _.copy(position, true),
-                isInTable = Position.isPositionInTable(editdiv, startPosition);
-
-            if (isInTable) {
-                var paraIndex = Position.getLastIndexInPositionByNodeName(editdiv, startPosition, DOM.PARAGRAPH_NODE_SELECTOR);
-
-                startPosition[paraIndex + 1] = 0;
-                endPosition[paraIndex + 1] = Position.getParagraphLength(editdiv, position);
-
-                setAttributes(family, attributes, startPosition, endPosition);
             }
         }
 
@@ -3849,194 +3599,6 @@ define('io.ox/office/editor/editor',
 
                 lastOperationEnd = selection.startPaM.oxoPosition;
             }
-        }
-
-        function setAttributesInSameParagraphLevel(selection, family, attributes) {
-
-            // 1) selected part or rest of para in first para (pos to end)
-            var startposLength = selection.startPaM.oxoPosition.length - 1,
-                endposLength = selection.endPaM.oxoPosition.length - 1,
-                localendPosition = _.copy(selection.startPaM.oxoPosition, true);
-
-            localendPosition[startposLength] = Position.getParagraphLength(editdiv, localendPosition);
-            setAttributes(family, attributes, selection.startPaM.oxoPosition, localendPosition);
-
-            // 2) completly selected paragraphs
-            for (var i = selection.startPaM.oxoPosition[startposLength - 1] + 1; i < selection.endPaM.oxoPosition[endposLength - 1]; i++) {
-                var localstartPosition = _.copy(selection.startPaM.oxoPosition, true);
-                localstartPosition[startposLength - 1] = i;
-                localstartPosition[startposLength] = 0;
-
-                // Is the new dom position a table or a paragraph or whatever? Special handling for tables required
-                // Removing position temporarely
-                var pos = localstartPosition.pop();
-                var isTable = DOM.isTableNode(Position.getDOMPosition(editdiv, localstartPosition).node);
-
-                if (isTable) {
-                    setAttributesToCompleteTable(family, attributes, localstartPosition);
-                } else {
-                    localstartPosition.push(pos);
-                    localendPosition = _.copy(localstartPosition, true);
-                    localendPosition[startposLength] = Position.getParagraphLength(editdiv, localendPosition);
-                    setAttributes(family, attributes, localstartPosition, localendPosition);
-                }
-            }
-
-            // 3) selected part in last para
-            if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
-                var localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
-                localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
-                localstartPosition[endposLength] = 0;
-
-                setAttributes(family, attributes, localstartPosition, selection.endPaM.oxoPosition);
-            }
-        }
-
-        function setAttributesInCellSelection(selection, family, attributes) {
-
-            var startPos = _.copy(selection.startPaM.oxoPosition, true),
-                endPos = _.copy(selection.endPaM.oxoPosition, true);
-
-            startPos.pop();
-            startPos.pop();
-            endPos.pop();
-            endPos.pop();
-
-            var startCol = startPos.pop(),
-                startRow = startPos.pop(),
-                endCol = endPos.pop(),
-                endRow = endPos.pop();
-
-            for (var i = startRow; i <= endRow; i++) {
-                for (var j = startCol; j <= endCol; j++) {
-                    var position = _.copy(startPos, true);
-                    position.push(i);
-                    position.push(j);
-
-                    setAttributesToAllParagraphsInCell(family, attributes, position);
-                }
-            }
-        }
-
-        function setAttributesInSameTableLevel(selection, family, attributes) {
-
-            var startPos = _.copy(selection.startPaM.oxoPosition, true),
-                endPos = _.copy(selection.endPaM.oxoPosition, true);
-
-            // 1) selected part in first cell
-            var startposLength = selection.startPaM.oxoPosition.length - 1,
-                localendPosition = _.copy(selection.startPaM.oxoPosition, true);
-
-            localendPosition[startposLength] = Position.getParagraphLength(editdiv, localendPosition);
-            setAttributes(family, attributes, selection.startPaM.oxoPosition, localendPosition);
-            setAttributesToFollowingParagraphsInCell(family, attributes, localendPosition);
-
-            // 2) completely selected cells
-            var rowIndex = Position.getLastIndexInPositionByNodeName(editdiv, startPos, 'tr'),
-                columnIndex = rowIndex + 1,
-                startRow = startPos[rowIndex],
-                startColumn = startPos[columnIndex],
-                endRow = endPos[rowIndex],
-                endColumn = endPos[columnIndex],
-                lastColumn = Position.getLastColumnIndexInTable(editdiv, startPos);
-
-            while (startPos.length > columnIndex) {
-                startPos.pop();  // Removing position and paragraph optionally
-            }
-
-
-            for (var j = startRow; j <= endRow; j++) {
-                var startCol = (j === startRow) ? startColumn + 1 : 0;
-                var endCol =  (j === endRow) ? endColumn - 1 : lastColumn;
-
-                for (var i = startCol; i <= endCol; i++) {
-                    startPos[rowIndex] = j;  // row
-                    startPos[columnIndex] = i;  // column
-                    setAttributesToAllParagraphsInCell(family, attributes, _.copy(startPos, true));
-                }
-            }
-
-            // 3) selected part in final cell
-            var endposLength = selection.endPaM.oxoPosition.length - 1,
-                localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
-
-            localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
-            localstartPosition[endposLength] = 0;
-
-            setAttributesToPreviousParagraphsInCell(family, attributes, selection.endPaM.oxoPosition);
-            setAttributes(family, attributes, localstartPosition, selection.endPaM.oxoPosition);
-        }
-
-        function setAttributesInDifferentParagraphLevels(selection, family, attributes) {
-
-            // 1) selected part or rest of para in first para (pos to end)
-            var startposLength = selection.startPaM.oxoPosition.length - 1,
-                endposLength = selection.endPaM.oxoPosition.length - 1,
-                localendPosition = selection.endPaM.oxoPosition,
-                isTable = Position.isPositionInTable(editdiv, selection.startPaM.oxoPosition);
-
-            if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
-                // TODO: This is not sufficient
-                localendPosition = _.copy(selection.startPaM.oxoPosition, true);
-                if (isTable) {
-                    // Assigning attribute to all following paragraphs in this cell and to all following cells!
-                    setAttributesToFollowingCellsInTable(family, attributes, localendPosition);
-                    setAttributesToFollowingParagraphsInCell(family, attributes, localendPosition);
-                }
-                localendPosition[startposLength] = Position.getParagraphLength(editdiv, localendPosition);
-            }
-            setAttributes(family, attributes, selection.startPaM.oxoPosition, localendPosition);
-
-            // 2) completly selected paragraphs
-            for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
-                var localstartPosition = []; //_.copy(selection.startPaM.oxoPosition, true);
-                localstartPosition[0] = i;
-                localstartPosition[1] = 0;
-
-                isTable = Position.isPositionInTable(editdiv, localstartPosition);
-
-                if (isTable) {
-                    setAttributesToCompleteTable(family, attributes, localstartPosition);
-                } else {
-                    localendPosition = _.copy(localstartPosition, true);
-                    localendPosition[1] = Position.getParagraphLength(editdiv, localendPosition);
-                    setAttributes(family, attributes, localstartPosition, localendPosition);
-                }
-            }
-
-            // 3) selected part in last para
-            if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
-                var localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
-                localstartPosition[endposLength] = 0;
-
-                isTable = Position.isPositionInTable(editdiv, localstartPosition);
-
-                if (isTable) {
-                    // Assigning attribute to all previous cells and to all previous paragraphs in this cell!
-                    setAttributesToPreviousCellsInTable(family, attributes, selection.endPaM.oxoPosition);
-                    setAttributesToPreviousParagraphsInCell(family, attributes, selection.endPaM.oxoPosition);
-                }
-                setAttributes(family, attributes, localstartPosition, selection.endPaM.oxoPosition);
-            }
-        }
-
-        function setAttributesToSelectedImage(selection, attributes) {
-
-            var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
-                imageEndPosition = _.copy(imageStartPosition, true);
-
-            if (imageStartPosition && imageEndPosition) {
-
-                // setting attributes to image
-                var newOperation = { name: Operations.ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPosition };
-                applyOperation(newOperation, true, true);
-
-            }
-
-            // setting the cursor position -> only required for changes to inline
-            // if (lastOperationEnd) {
-            //     setSelection(new Selection(editdiv, lastOperationEnd));
-            // }
         }
 
         // ====================================================================

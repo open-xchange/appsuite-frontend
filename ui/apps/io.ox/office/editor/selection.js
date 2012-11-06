@@ -347,9 +347,9 @@ define('io.ox/office/editor/selection',
         };
 
         /**
-         * Updates the browser selection to a range that starts directly before
-         * the the last selected object node, and ends directly after that
-         * object.
+         * If this selection selects an object node, changes the browser
+         * selection to a range that starts directly before that object node,
+         * and ends directly after that object.
          *
          * @returns {Selection}
          *  A reference to this instance.

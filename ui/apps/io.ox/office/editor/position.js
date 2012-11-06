@@ -1668,57 +1668,6 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * Calculating the correct logical position that fits to the
-     * family. Allowed values for family are 'paragraph' and
-     * 'character'. So the logical position has to describe
-     * the position of a paragraph or character.
-     *
-     * @param {String} family
-     *  The string describing the 'family'.
-     *
-     * @param {Node} startnode
-     *  The start node corresponding to the logical position.
-     *  (Can be a jQuery object for performance reasons.)
-     *
-     * @param {Number[]} position
-     *  The logical position.
-     *
-     * @returns {Number[]}
-     *  Returns the logical position inside the document or null,
-     *  if no correct assignment can be made
-     */
-    Position.getFamilyAssignedPosition = function (family, startnode, position) {
-
-        var assignedPos = null,
-            node = Position.getDOMPosition(startnode, position, true).node;
-
-        switch (family) {
-        case 'character':
-            assignedPos = (node && DOM.isParagraphNode(node.parentNode)) ? position : null;
-            break;
-        case 'paragraph':
-            assignedPos = DOM.isParagraphNode(node) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, DOM.PARAGRAPH_NODE_SELECTOR);
-            break;
-        case 'table':
-            assignedPos = DOM.isTableNode(node) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, DOM.TABLE_NODE_SELECTOR);
-            break;
-        case 'row':
-            assignedPos = $(node).is('tr') ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'tr');
-            break;
-        case 'cell':
-            assignedPos = $(node).is('td') ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'th, td');
-            break;
-        case 'image':
-            assignedPos = DOM.isImageNode(node) ? position : null;
-            break;
-        default:
-            Utils.error('Position.getFamilyAssignedPosition(): Invalid family type: ' + family);
-        }
-
-        return assignedPos;
-    };
-
-    /**
      * Returns the logical offset of the first text span in a paragraph.
      *
      * @param {HTMLElement|jQuery} paragraph
