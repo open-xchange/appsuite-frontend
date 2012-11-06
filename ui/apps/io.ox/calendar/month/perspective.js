@@ -13,13 +13,11 @@
 define('io.ox/calendar/month/perspective',
     ['io.ox/calendar/month/view',
      'io.ox/calendar/api',
-     'io.ox/calendar/util',
      'io.ox/core/date',
      'io.ox/core/extensions',
      'io.ox/core/tk/dialogs',
      'io.ox/calendar/view-detail',
-     'gettext!io.ox/calendar',
-     'io.ox/core/http'], function (View, api, util, date, ext, dialogs, detailView, gt, http) {
+     'gettext!io.ox/calendar'], function (View, api, date, ext, dialogs, detailView, gt) {
     'use strict';
 
     var perspective = new ox.ui.Perspective('month');
@@ -56,8 +54,9 @@ define('io.ox/calendar/month/perspective',
 
         createAppointment: function (e, startTS) {
             // add current time to start timestamp
-            var now = new date.Local();
-            startTS += util.floor(now.getHours() * date.HOUR + now.getMinutes() * date.MINUTE, 15 * date.MINUTE);
+            var now = new date.Local(),
+                offset = 15 * date.MINUTE;
+            startTS += Math.ceil((now.getHours() * date.HOUR + now.getMinutes() * date.MINUTE) / offset) * offset;
             ext.point('io.ox/calendar/detail/actions/create')
                 .invoke('action', this, {app: this.app}, {start_date: startTS, end_date: startTS + date.HOUR});
         },
@@ -218,7 +217,7 @@ define('io.ox/calendar/month/perspective',
             this.current = new date.Local(year, month, 1);
             this.app = app;
 
-            this.lastWeek = this.firstWeek = util.getWeekStart(new date.Local(year, month - 1, 1));
+            this.lastWeek = this.firstWeek = new date.Local(year, month - 1, 1).setStartOfWeek().getTime();
 
             this.main
                 .addClass('month-view')
