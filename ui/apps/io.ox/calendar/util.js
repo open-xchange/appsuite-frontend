@@ -455,30 +455,27 @@ define("io.ox/calendar/util",
         },
 
         getWeekScaffold: function (timestamp) {
-
-            var day = this.getWeekStart(timestamp),
-                i = 0, d, obj, ret = {};
+            var day = new date.Local(timestamp).setStartOfWeek(),
+                i = 0, obj, ret = {}, today = new date.Local().getDays();
             ret.days = [];
-
-            for (; i < 7; i += 1, day += DAY) {
-                d = new date.Local(day);
+            for (; i < 7; i += 1) {
                 ret.days.push(obj = {
-                    year: d.getYear(),
-                    month: d.getMonth(),
-                    date: d.getDate(),
-                    day: d.getDay(),
-                    timestamp: day,
-                    isToday: that.isToday(day),
+                    year: day.getYear(),
+                    month: day.getMonth(),
+                    date: day.getDate(),
+                    day: day.getDay(),
+                    timestamp: day.getTime(),
+                    isToday: day.getDays() === today,
                     col: i % 7
                 });
                 // is weekend?
                 obj.isWeekend = obj.day === 0 || obj.day === 6;
-                obj.isFirst = d.getDate() === 1;
+                obj.isFirst = day.getDate() === 1;
                 if (obj.isFirst) {
                     ret.hasFirst = true;
                 }
+                day.add(date.DAY);
             }
-
             return ret;
         },
 
