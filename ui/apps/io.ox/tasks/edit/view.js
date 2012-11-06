@@ -49,24 +49,24 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             //row 1 subject
             util.buildExtensionRow(self.$el, this.getRow(1, app), self.baton);
             
-            //row 2 reminder
+            //row 2 start date due date
+            util.buildRow(this.$el, [[util.buildLabel(gt("Due date"), this.fields.endDate.attr('id')), this.fields.endDate.parent()],
+                                 [util.buildLabel(gt("Time"), this.fields.endDateTime.attr('id')), this.fields.endDateTime],
+                                 [util.buildLabel(gt("Start date"), this.fields.startDate.attr('id')), this.fields.startDate.parent()],
+                                 [util.buildLabel(gt("Time"), this.fields.startDateTime.attr('id')), this.fields.startDateTime]]);
+
+            //row 3 description
+            util.buildExtensionRow(self.$el, this.getRow(2), self.baton);
+            
+            //row 4 reminder
             util.buildRow(this.$el, [[util.buildLabel(gt("Remind me"), this.fields.reminderDropdown.attr('id')), this.fields.reminderDropdown],
                                      [util.buildLabel(gt("Date"), this.fields.alarmDate.attr('id')), this.fields.alarmDate.parent()],
                                      [util.buildLabel(gt("Time"), this.fields.alarmDateTime.attr('id')), this.fields.alarmDateTime]],
                     [5, [3, 1], 3]);
             
-            //row 3 note
-            util.buildExtensionRow(self.$el, this.getRow(2), self.baton);
-
-            //row 4 status progress priority privateFlag
+            //row 5 status progress priority privateFlag
             util.buildExtensionRow(self.$el, this.getRow(3), self.baton);
             
-            //row 5 start date due date
-            util.buildRow(this.$el, [[util.buildLabel(gt("Start date"), this.fields.startDate.attr('id')), this.fields.startDate.parent()],
-                                 [util.buildLabel(gt("Time"), this.fields.startDateTime.attr('id')), this.fields.startDateTime],
-                                 [util.buildLabel(gt("Due date"), this.fields.endDate.attr('id')), this.fields.endDate.parent()],
-                                 [util.buildLabel(gt("Time"), this.fields.endDateTime.attr('id')), this.fields.endDateTime]]);
-           
             //row 6 repeat
             util.buildRow(this.$el, this.fields.repeatLink);
 
@@ -231,7 +231,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                     }
                     
                 });
-            //row 2
+            //row 4
             this.fields.reminderDropdown = $('<select>').attr('id', 'task-edit-reminder-select')
                 .append($('<option>')
                 .text(''), reminderUtil.buildDropdownMenu())
@@ -302,7 +302,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             this.fields.alarmDate.on("change", alarmupdate);
             this.fields.alarmDateTime.on("change", alarmupdate);
             
-            //row 4
+            //row 5
             this.fields.progress = util.buildProgress();
             this.fields.progress.on('change', function () {
                 var value = parseInt(self.fields.progress.val(), 10);
@@ -330,7 +330,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             });
             this.fields.progress.val(this.model.get('percent_completed'));
             
-            //row5
+            //row2
             this.fields.startDateButton = $('<button>')
             .addClass("btn task-edit-picker span3 fluid-grid-fix")
             .on('click', function (e) {

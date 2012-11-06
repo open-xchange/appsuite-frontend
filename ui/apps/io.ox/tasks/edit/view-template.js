@@ -42,7 +42,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         labelClassName: 'task-edit-label',
         control: '<textarea class="note-field span12" id="task-edit-note">',
         attribute: 'note',
-        label: gt('Note')
+        label: gt('Description')
     }));
     
     // status
@@ -124,7 +124,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         attribute: 'private_flag'
     }));
     
-    //estimated time
+    //estimated duration
     point.extend(new forms.InputField({
         id: 'target_duration',
         index: 600,
@@ -132,7 +132,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         labelClassName: 'task-edit-label',
         control: '<input type="text" class="target_duration span12" id="task-edit-target-duration">',
         attribute: 'target_duration',
-        label: gt('Estimated time in minutes'),
+        label: gt('Estimated duration in minutes'),
         updateModel: function () {
             var value = this.nodes.inputField.val();
             if (!isNaN(parseFloat(value, 10)) || value === '') {
@@ -147,7 +147,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         }
     }));
     
-    //actual time
+    //actual duration
     point.extend(new forms.InputField({
         id: 'actual_duration',
         index: 700,
@@ -155,7 +155,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         labelClassName: 'task-edit-label',
         control: '<input type="text" class="actual_duration span12" id="task-edit-actual-duration">',
         attribute: 'actual_duration',
-        label: gt('Actual time in minutes'),
+        label: gt('Actual duration in minutes'),
         updateModel: function () {
             var value = this.nodes.inputField.val();
             if (!isNaN(parseFloat(value, 10)) || value === '') {
