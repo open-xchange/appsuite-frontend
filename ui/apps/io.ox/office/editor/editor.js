@@ -108,6 +108,16 @@ define('io.ox/office/editor/editor',
         return event && IGNORABLE_KEYS.contains(event.keyCode);
     }
 
+    /**
+     * Returns true, if the passed keyboard event is ctrl+v or meta+v.
+     *
+     * @param event
+     *  A jQuery keyboard event object.
+     */
+    function isPasteKeyEvent(event) {
+        return ((event.metaKey || event.ctrlKey) && event.charCode === 118);
+    }
+
     function getPrintableChar(event) {
         // event.char preferred. DL2, but nyi in most browsers:(
         if (event.char) {
@@ -2153,8 +2163,11 @@ define('io.ox/office/editor/editor',
 
             implDbgOutEvent(event);
 
-            // prevent browser from evaluating the key event
-            event.preventDefault();
+            // prevent browser from evaluating the key event,
+            // but allow ctrl+v and meta+v to make the browser send the 'paste' event
+            if (!isPasteKeyEvent(event)) {
+                event.preventDefault();
+            }
 
             var c = getPrintableChar(event);
 
