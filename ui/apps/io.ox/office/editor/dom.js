@@ -921,6 +921,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             return rootNode.contains(adjustedRange.start.node) && (DOM.Point.comparePoints(adjustedRange.end, globalEndPos) <= 0) ? range : null;
         }
 
+        Utils.info('DOM.getBrowserSelection(): reading browser selection...');
+
         // convert parameter to DOM element
         rootNode = Utils.getDomNode(rootNode);
 
@@ -930,7 +932,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
         // get anchor range which preserves direction of selection (focus node
         // may be located before anchor node)
-        Utils.info('DOM.getBrowserSelection(): reading browser selection');
         if (selection.rangeCount >= 1) {
             result.active = createRange(selection.anchorNode, selection.anchorOffset, selection.focusNode, selection.focusOffset);
             Utils.log('  anchor=' + result.active);
@@ -964,6 +965,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         var // the browser selection
             selection = window.getSelection();
 
+        Utils.info('DOM.setBrowserSelection(): writing browser selection...');
+
         // clear the old browser selection
         selection.removeAllRanges();
 
@@ -973,6 +976,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         // single range: use attributes of the Selection object (anchor/focus)
         // directly to preserve direction of selection when selecting backwards
         if ((ranges.length === 1) && !$(ranges[0].start.node).is('tr')) {
+            Utils.log('  0=' + ranges[0]);
             try {
                 selection.collapse(ranges[0].start.node, ranges[0].start.offset);
                 selection.extend(ranges[0].end.node, ranges[0].end.offset);
@@ -985,16 +989,18 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         }
 
         // create a multi-selection
-        _(ranges).each(function (range) {
+        _(ranges).each(function (range, index) {
 
             var docRange = null;
+
+            Utils.log('  ' + index + '=' + range);
             try {
                 docRange = window.document.createRange();
                 docRange.setStart(range.start.node, range.start.offset);
                 docRange.setEnd(range.end.node, range.end.offset);
                 selection.addRange(docRange);
             } catch (ex) {
-                Utils.warn('DOM.setBrowserSelection(): failed to add range to selection');
+                Utils.warn('DOM.setBrowserSelection(): failed to add range to selection; ' + ex);
             }
         });
     };

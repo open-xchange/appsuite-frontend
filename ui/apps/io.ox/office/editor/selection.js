@@ -37,6 +37,12 @@ define('io.ox/office/editor/selection',
         var // self reference
             self = this,
 
+            // logical start position
+            startPosition = [],
+
+            // logical end position (half-open range)
+            endPosition = [],
+
             // whether the current text range has been selected backwards
             backwards = false,
 
@@ -46,14 +52,17 @@ define('io.ox/office/editor/selection',
             // whether this selection represents a rectangular table cell range
             cellRangeSelected = false;
 
-        this.startPaM = this.endPaM = null;
+        // TODO: convert editor code to use methods instead of member access
+        // (especially, do not modify these arrays from outside...)
+        this.startPaM = { oxoPosition: startPosition };
+        this.endPaM = { oxoPosition: endPosition };
 
         // private methods ----------------------------------------------------
 
         /**
          * Returns the first logical text position in the document.
          */
-        function getFirstPosition() {
+        function getFirstTextPosition() {
             var firstSpan = Utils.findDescendantNode(rootNode, function () { return DOM.isPortionSpan(this); });
             return Position.getOxoPosition(rootNode, firstSpan, 0);
         }
@@ -61,9 +70,40 @@ define('io.ox/office/editor/selection',
         /**
          * Returns the last logical text position in the document.
          */
-        function getLastPosition() {
+        function getLastTextPosition() {
             var lastSpan = Utils.findDescendantNode(rootNode, function () { return DOM.isPortionSpan(this); }, { reverse: true });
             return Position.getOxoPosition(rootNode, lastSpan, lastSpan.firstChild.nodeValue.length);
+        }
+
+        /**
+         * Converts the passed logical text position to a valid DOM point as
+         * used by the internal browser selection.
+         *
+         * @param {Number[]} position
+         *  The logical position of the target node. Must be the position of a
+         *  paragraph child node, either a text span, a text component (fields,
+         *  tabs), or an object node.
+         *
+         * @returns {DOM.Point|Null}
+         *  The DOM-Point object representing the passed logical position, or
+         *  null, if the passed position is invalid.
+         */
+        function getPointForTextPosition(position) {
+
+            var // resolve position to DOM element
+                nodeInfo = Position.getDOMPosition(rootNode, position, true);
+
+            // check that the position selects a paragraph child node
+            if (nodeInfo && nodeInfo.node && DOM.isParagraphNode(nodeInfo.node.parentNode)) {
+
+                // convert to a valid DOM point: text spans to text nodes with offset,
+                // otherwise DOM element point, consisting of parent node and own sibling index
+                return DOM.isTextSpan(nodeInfo.node) ?
+                    new DOM.Point(nodeInfo.node.firstChild, nodeInfo.offset) :
+                    DOM.Point.createPointForNode(nodeInfo.node);
+            }
+
+            return null;
         }
 
         /**
@@ -71,37 +111,47 @@ define('io.ox/office/editor/selection',
          * validates the browser selection by moving the start and end points
          * to editable nodes.
          *
-         * @param {Number[]} anchorPosition
-         *  The logical anchor position of a selected range. This is the side
-         *  of the range where selectiing with mouse or keyboard has been
-         *  started.
+         * @param {DOM.Point} anchorPoint
+         *  The DOM anchor point of a selected range. This is the side of the
+         *  range where selecting with mouse or keyboard has been started.
          *
-         * @param {Number[]} focusPosition
-         *  The logical focus position of a selected range. This is the side of
-         *  the range that will be extended when selection will be changed
-         *  while dragging the mouse with pressed button, or with cursor keys
-         *  while holding the SHIFT key. May be located before the passed
-         *  anchor position.
+         * @param {DOM.Point} focusPoint
+         *  The DOM focus point of a selected range. This is the side of the
+         *  range that will be extended when selection will be changed while
+         *  dragging the mouse with pressed button, or with cursor keys while
+         *  holding the SHIFT key. May be located before the passed anchor
+         *  position.
          *
-         * @param {Boolean} [cellRange]
-         *  Whether the passed positions describe a rectangular cell range.
+         * @param {Boolean} [backwards]
+         *  If set to true, the new browser selection originates from a cursor
+         *  navigation key that moves the cursor backwards in the document.
          */
-        function setSelectionRange(anchorPosition, focusPosition, cellRange) {
+        function setSelectionRange(anchorPoint, focusPoint, backwards) {
 
-            var // selected object node
+            var // adjusted points (start before end)
+                startPoint = null, endPoint = null,
+                // whether position is a single cursor
+                isCursor = DOM.Point.equalPoints(anchorPoint, focusPoint),
+                // selected object node
                 objectInfo = null;
 
-            // store and adjust start and end position
-            cellRangeSelected = cellRange === true;
-            backwards = Utils.compareNumberArrays(anchorPosition, focusPosition) > 0;
-            self.startPaM = new Position(backwards ? focusPosition : anchorPosition);
-            self.endPaM = new Position(backwards ? anchorPosition : focusPosition);
+            // adjust start and end position
+            backwards = !isCursor && (DOM.Point.comparePoints(anchorPoint, focusPoint) > 0);
+            startPoint = backwards ? focusPoint : anchorPoint;
+            endPoint = backwards ? anchorPoint : focusPoint;
+
+            // calculate start and end position
+            self.startPaM.oxoPosition = startPosition = Position.getTextLevelOxoPosition(startPoint, rootNode, false);
+            self.endPaM.oxoPosition = endPosition = Position.getTextLevelOxoPosition(endPoint, rootNode, !isCursor);
+
+            // check for cell range selection
+            cellRangeSelected = $(anchorPoint.node).is('tr') && $(focusPoint.node).is('tr');
 
             // check for object selection
             DOM.clearObjectSelection(selectedObject);
             selectedObject = $();
             if (!cellRangeSelected && self.isSingleComponentSelection()) {
-                objectInfo = Position.getDOMPosition(rootNode, self.startPaM.oxoPosition, true);
+                objectInfo = Position.getDOMPosition(rootNode, startPosition, true);
                 if (objectInfo && DOM.isObjectNode(objectInfo.node)) {
                     selectedObject = $(objectInfo.node);
                     // TODO: move call to DOM.drawObjectSelection() to here once
@@ -109,7 +159,7 @@ define('io.ox/office/editor/selection',
                 }
             }
 
-            // draw corrected browser selection
+            // draw correct browser selection
             self.restoreBrowserSelection();
 
             // notify listeners
@@ -119,11 +169,19 @@ define('io.ox/office/editor/selection',
         // methods ------------------------------------------------------------
 
         this.isValid = function () {
-            return this.startPaM && this.endPaM;
+            return (startPosition.length > 0) && (endPosition.length > 0);
+        };
+
+        this.getStartPosition = function () {
+            return _.clone(startPosition);
+        };
+
+        this.getEndPosition = function () {
+            return _.clone(endPosition);
         };
 
         this.isTextCursor = function () {
-            return !cellRangeSelected && _.isEqual(this.startPaM.oxoPosition, this.endPaM.oxoPosition);
+            return !cellRangeSelected && _.isEqual(startPosition, endPosition);
         };
 
         this.isBackwards = function () {
@@ -131,7 +189,7 @@ define('io.ox/office/editor/selection',
         };
 
         this.hasRange = function () {
-            return !_.isEqual(this.startPaM.oxoPosition, this.endPaM.oxoPosition);
+            return !_.isEqual(startPosition, endPosition);
         };
 
         /**
@@ -163,7 +221,7 @@ define('io.ox/office/editor/selection',
          *  component.
          */
         this.hasSameParentComponent = function (parentLevel) {
-            return Position.hasSameParentComponent(this.startPaM.oxoPosition, this.endPaM.oxoPosition, parentLevel);
+            return Position.hasSameParentComponent(startPosition, endPosition, parentLevel);
         };
 
         /**
@@ -176,7 +234,7 @@ define('io.ox/office/editor/selection',
          *  element of the start position increased by the value 1.
          */
         this.isSingleComponentSelection = function () {
-            return this.hasSameParentComponent() && (_.last(this.startPaM.oxoPosition) === _.last(this.endPaM.oxoPosition) - 1);
+            return this.hasSameParentComponent() && (_.last(startPosition) === _.last(endPosition) - 1);
         };
 
         /**
@@ -191,14 +249,14 @@ define('io.ox/office/editor/selection',
          */
         this.getClosestCommonPosition = function () {
 
-            var index = 0, length = Math.min(this.startPaM.oxoPosition.length, this.endPaM.oxoPosition.length);
+            var index = 0, length = Math.min(startPosition.length, endPosition.length);
 
             // compare all array elements but the last ones
-            while ((index < length) && (this.startPaM.oxoPosition[index] === this.endPaM.oxoPosition[index])) {
+            while ((index < length) && (startPosition[index] === endPosition[index])) {
                 index += 1;
             }
 
-            return this.startPaM.oxoPosition.slice(0, index);
+            return startPosition.slice(0, index);
         };
 
         /**
@@ -249,8 +307,8 @@ define('io.ox/office/editor/selection',
 
             // text selection: select text range
             case 'text':
-                startPoint = Position.getDOMPosition(rootNode, this.startPaM.oxoPosition);
-                endPoint = Position.getDOMPosition(rootNode, this.endPaM.oxoPosition);
+                startPoint = Position.getDOMPosition(rootNode, startPosition);
+                endPoint = Position.getDOMPosition(rootNode, endPosition);
                 if (startPoint && endPoint) {
                     ranges.push(new DOM.Range(backwards ? endPoint : startPoint, backwards ? startPoint : endPoint));
                 } else {
@@ -280,28 +338,28 @@ define('io.ox/office/editor/selection',
         /**
          * Calculates the own logical selection according to the current
          * browser selection.
+         *
+         * @param {Boolean} [backwards]
+         *  If set to true, the new browser selection originates from a cursor
+         *  navigation key that moves the cursor backwards in the document.
          */
-        this.updateFromBrowserSelection = function () {
+        this.updateFromBrowserSelection = function (backwards) {
 
             var // the current browser selection
                 browserSelection = DOM.getBrowserSelection(rootNode),
-                // cell range selection mode
-                cellRange = false;
+                // the active range
+                activeRange = browserSelection.active;
 
-            if (browserSelection.active) {
+            if (activeRange) {
 
                 // allowing multi-selection for tables (rectangular cell selection)
-                if ($(browserSelection.active.start.node).is('tr')) {
-                    browserSelection.active.start = _(browserSelection.ranges).first().start;
-                    browserSelection.active.end = _(browserSelection.ranges).last().end;
-                    cellRange = true;
+                if ($(activeRange.start.node).is('tr')) {
+                    activeRange.start = _(browserSelection.ranges).first().start;
+                    activeRange.end = _(browserSelection.ranges).last().end;
                 }
 
                 // calculate logical start and end position
-                setSelectionRange(
-                    Position.getTextLevelOxoPosition(browserSelection.active.start, rootNode, false),
-                    Position.getTextLevelOxoPosition(browserSelection.active.end, rootNode, !browserSelection.active.isCollapsed()),
-                    cellRange);
+                setSelectionRange(activeRange.start, activeRange.end, backwards);
 
             } else if (selectedObject.length === 0) {
                 Utils.warn('Selection.updateFromBrowserSelection(): missing valid browser selection');
@@ -311,28 +369,33 @@ define('io.ox/office/editor/selection',
         };
 
         /**
-         * Selects the passed logical range in the document.
+         * Selects the passed logical text range in the document.
          *
-         * @param {Number[} startPosition
-         *  The logical position of the first component in the selection.
+         * @param {Number[} newStartPosition
+         *  The logical position of the first text component in the selection.
+         *  Must be the position of a paragraph child node, either a text span,
+         *  a text component (fields, tabs), or an object node.
          *
-         * @param {Number[]} endPosition
-         *  The logical position behind the last component in the selection
-         *  (half-open range).
+         * @param {Number[]} [newEndPosition]
+         *  The logical position behind the last text component in the
+         *  selection (half-open range). Must be the position of a paragraph
+         *  child node, either a text span, a text component (fields, tabs), or
+         *  an object node. If omitted, sets a text cursor according to the
+         *  passed start position.
          *
          * @returns {Selection}
          *  A reference to this instance.
          */
-        this.setSelection = function (startPosition, endPosition) {
+        this.setTextSelection = function (newStartPosition, newEndPosition) {
 
-            // passed start position must be valid
-            if (_.isArray(startPosition)) {
+            var // DOM points for start and end position
+                startPoint = _.isArray(newStartPosition) ? getPointForTextPosition(newStartPosition) : null,
+                endPoint = _.isArray(newEndPosition) ? getPointForTextPosition(newEndPosition) : null;
 
-                // store start and end position
-                setSelectionRange(startPosition, _.isArray(endPosition) ? endPosition : startPosition);
-
+            if (startPoint) {
+                setSelectionRange(startPoint, endPoint || startPoint);
             } else {
-                Utils.warn('Selection.setSelection(): missing start position');
+                Utils.warn('Selection.setTextSelection(): expecting text positions, start=' + JSON.stringify(newStartPosition) + ', end=' + JSON.stringify(newEndPosition));
             }
 
             return this;
@@ -349,7 +412,7 @@ define('io.ox/office/editor/selection',
          *  A reference to this instance.
          */
         this.selectTopPosition = function () {
-            return this.setSelection(getFirstPosition());
+            return this.setTextSelection(getFirstTextPosition());
         };
 
         /**
@@ -359,7 +422,7 @@ define('io.ox/office/editor/selection',
          *  A reference to this instance.
          */
         this.selectAll = function () {
-            return this.setSelection(getFirstPosition(), getLastPosition());
+            return this.setTextSelection(getFirstTextPosition(), getLastTextPosition());
         };
 
         /**
@@ -476,12 +539,12 @@ define('io.ox/office/editor/selection',
             tablePosition = Position.getOxoPosition(rootNode, table, 0);
 
             // convert selection position to cell position relative to table
-            if ((this.startPaM.oxoPosition.length < tablePosition.length + 2) || (this.endPaM.oxoPosition.length < tablePosition.length + 2)) {
+            if ((startPosition.length < tablePosition.length + 2) || (endPosition.length < tablePosition.length + 2)) {
                 Utils.error('Selection.iterateTableCells(): invalid start or end position');
                 return;
             }
-            firstPosition = this.startPaM.oxoPosition.slice(tablePosition.length, tablePosition.length + 2);
-            lastPosition = this.endPaM.oxoPosition.slice(tablePosition.length, tablePosition.length + 2);
+            firstPosition = startPosition.slice(tablePosition.length, tablePosition.length + 2);
+            lastPosition = endPosition.slice(tablePosition.length, tablePosition.length + 2);
 
             // resolve position to closest table cell
             firstCellInfo = Position.getDOMPosition(table, firstPosition, true);
@@ -585,12 +648,7 @@ define('io.ox/office/editor/selection',
          */
         this.iterateContentNodes = function (iterator, context, options) {
 
-            var // the logical start position in the passed selection
-                startPosition = this.startPaM.oxoPosition,
-                // the logical end position in the passed selection
-                endPosition = this.endPaM.oxoPosition,
-
-                // start node and offset (pass true to NOT resolve text spans to text nodes)
+            var // start node and offset (pass true to NOT resolve text spans to text nodes)
                 startInfo = Position.getDOMPosition(rootNode, startPosition, true),
                 // end node and offset (pass true to NOT resolve text spans to text nodes)
                 endInfo = Position.getDOMPosition(rootNode, endPosition, true),
@@ -745,13 +803,10 @@ define('io.ox/office/editor/selection',
                 split = Utils.getBooleanOption(options, 'split', false),
 
                 // start node and offset
-                startPosition = null, startInfo = null;
+                startInfo = null;
 
             // special case 'simple cursor': visit the text span
             if (this.isTextCursor()) {
-
-                // clone cursor position (iterator is allowed to change it)
-                startPosition = _.clone(this.startPaM.oxoPosition);
 
                 // start node and offset (pass true to NOT resolve text spans to text nodes)
                 startInfo = Position.getDOMPosition(rootNode, startPosition, true);
@@ -765,8 +820,8 @@ define('io.ox/office/editor/selection',
                     startInfo.node = startInfo.node.previousSibling;
                 }
 
-                // visit the text component node
-                return iterator.call(context, startInfo.node, startPosition, 0);
+                // visit the text component node (clone, because iterator is allowed to change passed position)
+                return iterator.call(context, startInfo.node, _.clone(startPosition), 0);
             }
 
             // iterate the content nodes (paragraphs and tables) covered by the selection

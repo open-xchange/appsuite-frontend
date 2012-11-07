@@ -169,8 +169,8 @@ define('io.ox/office/editor/view/view',
          */
         function logSelection(selection) {
             if (selTypeCell) { selTypeCell.text(selection.getSelectionType()); }
-            if (selStartCell) { selStartCell.text(selection.startPaM); }
-            if (selEndCell) { selEndCell.text(selection.endPaM); }
+            if (selStartCell) { selStartCell.text(selection.getStartPosition()); }
+            if (selEndCell) { selEndCell.text(selection.getEndPosition()); }
         }
 
         // methods ------------------------------------------------------------
@@ -284,7 +284,7 @@ define('io.ox/office/editor/view/view',
             opsNode = $('<table>');
 
             infoNode = $('<table>').css('table-layout', 'fixed').append(
-                $('<colgroup>').append($('<col>', { width: '40px' })),
+                $('<colgroup>').append($('<col>', { width: '40px' }), $('<col>')),
                 $('<tr>').append($('<th>', { colspan: 2 }).text('Editor')),
                 $('<tr>').append($('<td>').text('state'), syncCell = $('<td>')),
                 $('<tr>').append($('<th>', { colspan: 2 }).text('Selection')),

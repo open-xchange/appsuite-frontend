@@ -39,11 +39,11 @@ define('io.ox/office/editor/editor',
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
 
-        // key codes of keys that change the text cursor position
-        CURSOR_KEYS = _([
-            KeyCodes.PAGE_UP, KeyCodes.PAGE_DOWN, KeyCodes.END, KeyCodes.HOME,
-            KeyCodes.LEFT_ARROW, KeyCodes.UP_ARROW, KeyCodes.RIGHT_ARROW, KeyCodes.DOWN_ARROW
-        ]),
+        // key codes of keys that change the text cursor position backwards
+        BACKWARD_CURSOR_KEYS = _([ KeyCodes.PAGE_UP, KeyCodes.HOME, KeyCodes.LEFT_ARROW, KeyCodes.UP_ARROW ]),
+
+        // key codes of keys that change the text cursor position forwards
+        FORWARD_CURSOR_KEYS = _([ KeyCodes.PAGE_DOWN, KeyCodes.END, KeyCodes.RIGHT_ARROW, KeyCodes.DOWN_ARROW ]),
 
         // key codes of keys that will be passed directly to the browser
         IGNORABLE_KEYS = _([
@@ -87,6 +87,22 @@ define('io.ox/office/editor/editor',
     // private global functions ===============================================
 
     /**
+     * Returns whether the passed key code is a cursor navigation key that
+     * moves the cursor backwards in the document.
+     */
+    function isBackwardCursorKey(keyCode) {
+        return BACKWARD_CURSOR_KEYS.contains(keyCode);
+    }
+
+    /**
+     * Returns whether the passed key code is a cursor navigation key that
+     * moves the cursor forwards in the document.
+     */
+    function isForwardCursorKey(keyCode) {
+        return FORWARD_CURSOR_KEYS.contains(keyCode);
+    }
+
+    /**
      * Returns true, if the passed keyboard event is an event that moves the
      * text cursor.
      *
@@ -94,7 +110,7 @@ define('io.ox/office/editor/editor',
      *  A jQuery keyboard event object.
      */
     function isCursorKeyEvent(event) {
-        return event && CURSOR_KEYS.contains(event.keyCode);
+        return event && (isBackwardCursorKey(event.keyCode) || isForwardCursorKey(event.keyCode));
     }
 
     /**
@@ -404,7 +420,7 @@ define('io.ox/office/editor/editor',
                         }, this);
 
                         position.push(offset);
-                        selection.setSelection(position);
+                        selection.setTextSelection(position);
                     }
 
                 }, this);
@@ -513,7 +529,7 @@ define('io.ox/office/editor/editor',
 
         this.undo = function (count) {
             undoManager.undo(count);
-            selection.setSelection(lastOperationEnd);
+            selection.setTextSelection(lastOperationEnd);
         };
 
         this.redoAvailable = function () {
@@ -522,7 +538,7 @@ define('io.ox/office/editor/editor',
 
         this.redo = function (count) {
             undoManager.redo(count);
-            selection.setSelection(lastOperationEnd);
+            selection.setTextSelection(lastOperationEnd);
         };
 
         /**
@@ -732,7 +748,7 @@ define('io.ox/office/editor/editor',
                 // var newOperation = { name: Operations.TEXT_DELETE, start: startposition, end: endposition };
                 applyOperation(newOperation, true, true);
                 // setting the cursor position
-                selection.setSelection(lastOperationEnd);
+                selection.setTextSelection(lastOperationEnd);
             }
         };
 
@@ -746,7 +762,7 @@ define('io.ox/office/editor/editor',
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
-            selection.setSelection(lastOperationEnd);
+            selection.setTextSelection(lastOperationEnd);
         };
 
         this.deleteCellRange = function (position, start, end) {
@@ -777,7 +793,7 @@ define('io.ox/office/editor/editor',
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
-            selection.setSelection(lastOperationEnd);
+            selection.setTextSelection(lastOperationEnd);
         };
 
         this.deleteCells = function () {
@@ -835,7 +851,7 @@ define('io.ox/office/editor/editor',
             undoManager.endGroup();
 
             // setting the cursor position
-            selection.setSelection(lastOperationEnd);
+            selection.setTextSelection(lastOperationEnd);
         };
 
         this.mergeCells = function () {
@@ -890,7 +906,7 @@ define('io.ox/office/editor/editor',
                 endPosition.push(0);
 
                 // setting the cursor position
-                selection.setSelection(endPosition);
+                selection.setTextSelection(endPosition);
             }
         };
 
@@ -966,7 +982,7 @@ define('io.ox/office/editor/editor',
             endPosition.push(0);
 
             // setting the cursor position
-            selection.setSelection(endPosition);
+            selection.setTextSelection(endPosition);
         };
 
         this.deleteColumns = function () {
@@ -1036,7 +1052,7 @@ define('io.ox/office/editor/editor',
             }); // undoManager.enterGroup();
 
             // setting the cursor position
-            selection.setSelection(lastOperationEnd);
+            selection.setTextSelection(lastOperationEnd);
         };
 
         this.insertRow = function () {
@@ -1058,7 +1074,7 @@ define('io.ox/office/editor/editor',
             }
 
             // setting the cursor position
-            selection.setSelection(lastOperationEnd);
+            selection.setTextSelection(lastOperationEnd);
         };
 
         this.insertColumn = function () {
@@ -1083,7 +1099,7 @@ define('io.ox/office/editor/editor',
             }, this);
 
             // setting the cursor position
-            selection.setSelection(lastOperationEnd);
+            selection.setTextSelection(lastOperationEnd);
         };
 
         this.insertParagraph = function (position) {
@@ -1188,7 +1204,7 @@ define('io.ox/office/editor/editor',
                 }
 
                 // setting the cursor position
-                selection.setSelection(lastOperationEnd);
+                selection.setTextSelection(lastOperationEnd);
 
                 undoManager.endGroup();  // necessary because of paragraph split
             }
@@ -1206,7 +1222,7 @@ define('io.ox/office/editor/editor',
             sendImageSize(_.copy(selection.startPaM.oxoPosition));
 
             // setting the cursor position
-            selection.setSelection(lastOperationEnd);
+            selection.setTextSelection(lastOperationEnd);
         };
 
         this.insertImageURL = function (imageURL) {
@@ -1221,7 +1237,7 @@ define('io.ox/office/editor/editor',
             sendImageSize(_.copy(selection.startPaM.oxoPosition));
 
             // setting the cursor position
-            selection.setSelection(lastOperationEnd);
+            selection.setTextSelection(lastOperationEnd);
         };
 
         this.insertImageData = function (imageData) {
@@ -1236,7 +1252,7 @@ define('io.ox/office/editor/editor',
             sendImageSize(_.copy(selection.startPaM.oxoPosition));
 
             // setting the cursor position
-            selection.setSelection(lastOperationEnd);
+            selection.setTextSelection(lastOperationEnd);
         };
 
         this.insertTab = function () {
@@ -1254,7 +1270,7 @@ define('io.ox/office/editor/editor',
             }, this);
 
             // setting the cursor position
-            selection.setSelection(lastOperationEnd);
+            selection.setTextSelection(lastOperationEnd);
         };
 
         this.splitParagraph = function (position) {
@@ -1842,7 +1858,7 @@ define('io.ox/office/editor/editor',
                 // select the object
                 startPosition = Position.getOxoPosition(editdiv, object[0], 0);
                 endPosition = Position.getOxoPosition(editdiv, object[0], 1);
-                selection.setSelection(startPosition, endPosition);
+                selection.setTextSelection(startPosition, endPosition);
                 drawObjectSelection(object);
 
                 // send initial mouse down event to the handlers registered in drawObjectSelection()
@@ -1882,7 +1898,7 @@ define('io.ox/office/editor/editor',
                 selection.selectObjectAsText();
 
                 // let browser process the key event, select an object that has been covered exactly
-                updateSelection().done(function () {
+                updateSelection(isBackwardCursorKey(event.keyCode)).done(function () {
                     // draw selection box for selected objects
                     if (event.shiftKey) {
                         drawObjectSelection(selection.getSelectedObject());
@@ -2018,7 +2034,7 @@ define('io.ox/office/editor/editor',
                     }
                 }
 
-                selection.setSelection(selection.startPaM.oxoPosition);
+                selection.setTextSelection(selection.startPaM.oxoPosition);
             }
             else if (event.keyCode === KeyCodes.BACKSPACE) {
                 event.preventDefault();
@@ -2103,7 +2119,7 @@ define('io.ox/office/editor/editor',
                     }
                 }
 
-                selection.setSelection(selection.startPaM.oxoPosition);
+                selection.setTextSelection(selection.startPaM.oxoPosition);
             }
             else if (event.ctrlKey && !event.altKey) {
                 event.preventDefault();
@@ -2194,14 +2210,14 @@ define('io.ox/office/editor/editor',
                     // setting selection
                     var endPosition = _.copy(selection.startPaM.oxoPosition);
                     endPosition[endPosition.length - 1]++;
-                    selection.setSelection(selection.startPaM.oxoPosition, endPosition);
+                    selection.setTextSelection(selection.startPaM.oxoPosition, endPosition);
                     self.setAttributes('character', preselectedAttributes);
                     preselectedAttributes = {};
                 }
 
                 var lastValue = selection.startPaM.oxoPosition.length - 1;
                 selection.startPaM.oxoPosition[lastValue]++;
-                selection.setSelection(selection.startPaM.oxoPosition);
+                selection.setTextSelection(selection.startPaM.oxoPosition);
 
             }
             else if (c.length > 1) {
@@ -2278,7 +2294,7 @@ define('io.ox/office/editor/editor',
                             selection.startPaM.oxoPosition[lastValue] = 0;
                         }
                     }
-                    selection.setSelection(selection.startPaM.oxoPosition);
+                    selection.setTextSelection(selection.startPaM.oxoPosition);
                 }
             }
         }
@@ -2363,18 +2379,17 @@ define('io.ox/office/editor/editor',
                         self.splitParagraph(selection.startPaM.oxoPosition);
                         selection.startPaM.oxoPosition[lastPos - 1] ++;
                         selection.startPaM.oxoPosition[lastPos] = 0;
-                        selection.setSelection(selection.startPaM.oxoPosition);
+                        selection.setTextSelection(selection.startPaM.oxoPosition);
                         break;
 
                     case Operations.TEXT_INSERT:
                         self.insertText(entry.data, selection.startPaM.oxoPosition);
                         selection.startPaM.oxoPosition[lastPos] += entry.data.length;
-                        selection.setSelection(selection.startPaM.oxoPosition);
+                        selection.setTextSelection(selection.startPaM.oxoPosition);
                         break;
 
                     case Operations.TAB_INSERT:
                         self.insertTab();
-                        // insertTab updates the selection
                         break;
 
                     case Operations.IMAGE_INSERT:
@@ -2386,7 +2401,6 @@ define('io.ox/office/editor/editor',
                                 // image url
                                 self.insertImageURL(entry.data);
                             }
-                         // insertImage updates the selection
                         }
                         break;
 
@@ -2805,7 +2819,7 @@ define('io.ox/office/editor/editor',
         // Private selection functions
         // ==================================================================
 
-        function updateSelection() {
+        function updateSelection(backwards) {
 
             var // deferred return value
                 def = $.Deferred();
@@ -2813,7 +2827,7 @@ define('io.ox/office/editor/editor',
             if (focused && editMode) {
                 // browser needs to process pending events before its selection can be querried
                 window.setTimeout(function () {
-                    selection.updateFromBrowserSelection();
+                    selection.updateFromBrowserSelection(backwards);
                     def.resolve();
                 }, 0);
             } else {

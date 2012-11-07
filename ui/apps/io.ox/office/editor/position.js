@@ -18,22 +18,9 @@ define('io.ox/office/editor/position',
 
     'use strict';
 
-    // class Position =========================================================
+    // static class Position ==================================================
 
-    /**
-     * Represents a text cursor position. Member field 'oxoPosition' contains
-     * the logical position as an array of integers.
-     *
-     * @constructor
-     */
-    function Position(position) {
-
-        this.oxoPosition = _.clone(position);
-
-        this.toString = function () {
-            return JSON.stringify(this.oxoPosition);
-        };
-    }
+    var Position = {};
 
     // static methods ---------------------------------------------------------
 
@@ -195,7 +182,7 @@ define('io.ox/office/editor/position',
         // Sometimes (double click in FireFox) a complete paragraph is selected with DIV + Offset 3 and DIV + Offset 4.
         // These DIVs need to be converted to the correct paragraph first.
         // Also cells in columns have to be converted at this point.
-        if (DOM.isParagraphNode(node) || DOM.isPageNode(node) || $(node).is('tr, td, th')) {
+        if (DOM.isParagraphNode(node) || DOM.isPageNode(node) || $(node).is('tr, td')) {
 
             var newNode = Position.getTextNodeFromCurrentNode(node, offset, isEndPoint);
 
@@ -303,18 +290,12 @@ define('io.ox/office/editor/position',
                 returnObj = Position.getTextSpanFromNode(returnObj);
             }
 
-            if (returnObj) {
-                if (returnObj.node) {
-                    node = returnObj.node;
-                    if (_(returnObj.offset).isNumber()) {
-                        offset = returnObj.offset;
-                    }
-                } else {
-                    // Utils.warn('Position.getDOMPosition() (1): Failed to determine node for position: ' + oxoPosition);
-                    return;
+            if (returnObj && returnObj.node) {
+                node = returnObj.node;
+                if (_.isNumber(returnObj.offset)) {
+                    offset = returnObj.offset;
                 }
             } else {
-                // Utils.warn('Position.getDOMPosition() (2): Failed to determine node for position: ' + oxoPosition);
                 return;
             }
         }
@@ -579,8 +560,8 @@ define('io.ox/office/editor/position',
             //        return Utils.BREAK;
             //    }
             // });
-            childNode = $('> th, > td', node).get(pos);  // this is a table cell
-        } else if (DOM.isPageNode(node) || $(node).is('th, td')) {
+            childNode = $(node).children('td').get(pos);  // this is a table cell
+        } else if (DOM.isPageNode(node) || $(node).is('td')) {
             childNode = node.childNodes[pos];
         } else if (DOM.isParagraphNode(node)) {
             Position.iterateParagraphChildNodes(node, function (_node, nodeStart, nodeLength) {
