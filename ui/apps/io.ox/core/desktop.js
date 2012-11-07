@@ -506,6 +506,10 @@ define("io.ox/core/desktop",
                     this.main = app.getWindow().addPerspective(name);
                     initialized = true;
                 }
+                // trigger change event
+                if (app.getWindow().currentPerspective !== 'main') {
+                    app.getWindow().trigger('change:perspective', options.perspective);
+                }
                 // set perspective
                 app.getWindow().setPerspective(name);
 
@@ -517,7 +521,6 @@ define("io.ox/core/desktop",
                     rendered = true;
                 }
                 app.getWindow().currentPerspective = options.perspective;
-                app.getWindow().trigger('change:perspective', options.perspective);
             };
 
             this.render = $.noop;
