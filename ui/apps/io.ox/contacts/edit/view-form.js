@@ -163,7 +163,7 @@ define('io.ox/contacts/edit/view-form', [
             this.$el.css({
                 display: 'inline-block',
                 height: "100px"
-            }).addClass("span2");
+            }).addClass("span2 header-pic");
         }
     }));
 
@@ -210,7 +210,7 @@ define('io.ox/contacts/edit/view-form', [
         id: 'inline-actions',
         ref: 'io.ox/contacts/edit/view/inline',
         customizeNode: function ($node) {
-            $node.addClass("span7");
+            $node.addClass("span9");
             $node.css({marginBottom: '20px'});
         }
     }));

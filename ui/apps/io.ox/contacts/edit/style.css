@@ -25,7 +25,7 @@
 
 .edit-contact button[data-action="imagereset"] {
 	float: left;
-    margin-left: 25px;
+    margin-left: 15px;
 }
 
 
@@ -50,10 +50,14 @@
 }
 
 .edit-contact .sectionheader .offset2 {
-	margin-left: 210px;
+	margin-left: 200px;
 }
 
 .edit-contact .clear-title.job {
 	font-size: 1.25em;
     color: #888;
+}
+
+.edit-contact .span2.header-pic {
+	width: 160px;
 }
