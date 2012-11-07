@@ -423,7 +423,7 @@ $(document).ready(function () {
         if (_.isArray(deps)) {
             // use deferred object
             var def = $.Deferred().done(callback || $.noop);
-            req(deps, def.resolve);
+            req(deps, def.resolve, def.reject);
             return def;
         } else {
             // bypass

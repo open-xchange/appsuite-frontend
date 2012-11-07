@@ -1142,26 +1142,35 @@ define('io.ox/office/editor/editor',
                 }
 
                 // Setting default table grid attribute to newly inserted table
-                var defaultUITableStyleId = self.getDefaultUITableStylesheet();
-                if (defaultUITableStyleId) {
-/*
-                    if (tableStyles.isDirty(defaultUITableStyleId)) {
-                        newOperation = {name: Operations.INSERT_STYLE,
-                                        attrs: tableStyles.getStyleSheetAttributeMap(defaultUITableStyleId),
-                                        type: 'table',
-                                        styleid: defaultUITableStyleId,
-                                        stylename: defaultUITableStyleId,
-                                        parent: tableStyles.getParentId(defaultUITableStyleId),
-                                        'default': false,
-                                        hidden: false,
-                                        uipriority: tableStyles.getUIPriority(defaultUITableStyleId),
-                                        pooldefault: false};
-                        applyOperation(newOperation, true, true);
-                        tableStyles.setDirty(defaultUITableStyleId, false);
+                var tableStyleId = self.getDefaultUITableStylesheet();
+                if (tableStyleId) {
+                    // the table style sheet container
+                    var tableStyles = self.getStyleSheets('table'),
+                    // operations generator
+                        generator = new Operations.Generator();
+                    
+                    if (tableStyles.isDirty(tableStyleId)) {
+                        // insert table style to document
+                        generator.generateOperation(Operations.INSERT_STYLE, {
+                            attrs: tableStyles.getStyleSheetAttributeMap(tableStyleId),
+                            type: 'table',
+                            styleid: tableStyleId,
+                            stylename: tableStyles.getName(tableStyleId),
+                            parent: tableStyles.getParentId(tableStyleId),
+                            uipriority: tableStyles.getUIPriority(tableStyleId)
+                        });
+                        tableStyles.setDirty(tableStyleId, false);
                     }
-*/
-                    newOperation = { name: Operations.ATTRS_SET, attrs: { style: defaultUITableStyleId }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
-                    applyOperation(newOperation, true, true);
+
+                    // set table style to newly inserted table
+                    generator.generateOperation(Operations.ATTRS_SET, {
+                        attrs: { style: tableStyleId },
+                        start: _.copy(tablePos, true),
+                        end: _.copy(tablePos, true)
+                    });
+                    
+                    // apply all collected operations
+                    self.applyOperations(generator.getOperations(), true, true);
                 }
 
                 // setting the cursor position

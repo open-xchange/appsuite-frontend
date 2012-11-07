@@ -18,7 +18,8 @@ define("io.ox/core/desktop",
      "io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
      "io.ox/core/cache",
-     "gettext!io.ox/core"], function (Events, ext, links, cache, gt) {
+     "io.ox/core/notifications",
+     "gettext!io.ox/core"], function (Events, ext, links, cache, notifications, gt) {
 
     "use strict";
 
@@ -80,10 +81,8 @@ define("io.ox/core/desktop",
         },
 
         launch: function () {
-            var self = this;
-            return ox.launch((this.get('name') || this.id) + '/main').done(function () {
-                self.quit();
-            });
+            var self = this, id = (this.get('name') || this.id) + '/main';
+            return ox.launch(id).done(function () { self.quit(); });
         },
 
         quit: function (force) {
@@ -507,6 +506,10 @@ define("io.ox/core/desktop",
                     this.main = app.getWindow().addPerspective(name);
                     initialized = true;
                 }
+                // trigger change event
+                if (app.getWindow().currentPerspective !== 'main') {
+                    app.getWindow().trigger('change:perspective', options.perspective);
+                }
                 // set perspective
                 app.getWindow().setPerspective(name);
 
@@ -518,7 +521,6 @@ define("io.ox/core/desktop",
                     rendered = true;
                 }
                 app.getWindow().currentPerspective = options.perspective;
-                app.getWindow().trigger('change:perspective', options.perspective);
             };
 
             this.render = $.noop;
@@ -1234,11 +1236,17 @@ define("io.ox/core/desktop",
     ox.launch = function (id, data) {
         var def = $.Deferred();
         if (_.isString(id)) {
-            require([id], function (m) {
-                m.getApp(data).launch(data).done(function () {
-                    def.resolveWith(this, arguments);
-                });
-            });
+            require([id]).then(
+                function (m) {
+                    m.getApp(data).launch(data).done(function () {
+                        def.resolveWith(this, arguments);
+                    });
+                },
+                function (err) {
+                    notifications.yell('error', gt('Failed to start application. Maybe you have connection problems. Please try again.'));
+                    requirejs.undef(id);
+                }
+            );
         } else {
             def.resolve({});
         }

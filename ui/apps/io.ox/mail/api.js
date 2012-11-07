@@ -252,7 +252,9 @@ define("io.ox/mail/api",
                 folderAPI.setUnread(opt.folder, tracker.getUnreadCount(response.data));
                 return response;
             },
-            get: function (data) {
+            get: function (data, options) {
+                // inject view (text/html/noimg). need this to generate proper cache keys.
+                data.view = options.view;
                 // a mail should be always marked as seen on fetch
                 data.flags = data.flags | 32;
                 // was unseen?

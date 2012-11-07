@@ -291,6 +291,9 @@ define('io.ox/core/commons',
             var click = function (e) {
                 e.preventDefault();
                 $(this).closest('.vsplit').addClass('vsplit-reverse').removeClass('vsplit-slide');
+                if (e.data.app) {
+                    e.data.app.getGrid().selection.clear();
+                }
             };
 
             var select = function (e) {
@@ -300,7 +303,7 @@ define('io.ox/core/commons',
                 }, 100);
             };
 
-            return function (parent) {
+            return function (parent, app) {
                 var sides = {};
                 parent.addClass('vsplit').append(
                     // left
@@ -309,7 +312,7 @@ define('io.ox/core/commons',
                     $('<div class="rightside-navbar">').append(
                         $('<a href="#" class="btn">').append(
                             $('<i class="icon-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
-                        ).on('click', click)
+                        ).on('click', { app: app }, click)
                     ),
                     // right
                     sides.right = $('<div class="rightside">')

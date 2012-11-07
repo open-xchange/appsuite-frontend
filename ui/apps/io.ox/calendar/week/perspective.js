@@ -34,6 +34,7 @@ define('io.ox/calendar/week/perspective',
         view:           null,
         folder:         null,
         mode:           { 'week:day': 1, 'week:workweek': 5, 'week:week': 7 },
+
         days: function (d) {
             if (d) {
                 this.columns = d;
@@ -171,7 +172,8 @@ define('io.ox/calendar/week/perspective',
             // watch for folder change
             app.on('folder:change', refresh)
                 .getWindow()
-                .on('show', refresh);
+                .on('show', refresh)
+                .on('change:perspective', this.view.unbindKeys);
 
             this.view.setScrollPos();
 

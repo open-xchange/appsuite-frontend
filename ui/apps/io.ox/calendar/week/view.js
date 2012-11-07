@@ -64,6 +64,7 @@ define('io.ox/calendar/week/view',
             this.collection
                 .on('reset', this.renderAppointments, this)
                 .on('change', this.redrawAppointment, this);
+            this.bindKeys();
         },
 
         initSettings: function () {
@@ -105,6 +106,7 @@ define('io.ox/calendar/week/view',
             }
         },
 
+        // handler for clickevents in toolbar
         onControlView: function (e) {
             e.preventDefault();
             var cT = $(e.currentTarget),
@@ -119,6 +121,32 @@ define('io.ox/calendar/week/view',
                 this.startDate = this.columns === 1 ? new date.Local().setHours(0, 0, 0, 0) : new date.Local().setStartOfWeek();
             }
             this.trigger('onRefreshView', this.startDate);
+        },
+
+        // hadler for key events in toolbar
+        onKey: function (e) {
+            e.preventDefault();
+            var self = this;
+            switch (e.which) {
+            case 37:
+                self.startDate.add((self.columns === 1 ? date.DAY : date.WEEK) * -1);
+                self.trigger('onRefreshView', self.startDate);
+                break;
+            case 39:
+                self.startDate.add(self.columns === 1 ? date.DAY : date.WEEK);
+                self.trigger('onRefreshView', self.startDate);
+                break;
+            default:
+                break;
+            }
+        },
+
+        unbindKeys: function () {
+            $(document).off('keyup', this.onKey);
+        },
+
+        bindKeys: function () {
+            $(document).on('keyup', $.proxy(this.onKey, this));
         },
 
         // handler for single- and double-click events on appointments

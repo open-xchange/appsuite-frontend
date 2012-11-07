@@ -61,7 +61,7 @@ define("io.ox/contacts/main",
 
         app.setWindow(win);
 
-        var vsplit = commons.vsplit(win.nodes.main);
+        var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left;
         right = vsplit.right.addClass('default-content-padding').scrollable();
 
