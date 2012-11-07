@@ -89,6 +89,8 @@ define('plugins/portal/reddit/settings/plugin',
                     }
 
                     $listbox.sortable({
+                        axis: 'y',
+                        containment: 'parent',
                         update: function (event, ui) {
                             subreddits = [];
 

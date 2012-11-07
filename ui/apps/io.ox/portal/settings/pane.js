@@ -236,6 +236,7 @@ define('io.ox/portal/settings/pane',
                         axis: 'y',
                         items: 'div.enabled',
                         opacity: 0.5,
+                        containment: 'parent',
                         update: function (event, ui) {
 
                             var index = 100, array = $(this).sortable('toArray');

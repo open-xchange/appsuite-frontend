@@ -118,6 +118,8 @@ define('plugins/portal/flickr/settings/plugin',
                     }
 
                     $listbox.sortable({
+                        axis: 'y',
+                        containment: 'parent',
                         update: function (event, ui) {
                             var newStreams = [];
 
