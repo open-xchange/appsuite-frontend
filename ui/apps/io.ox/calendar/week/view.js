@@ -17,9 +17,10 @@ define('io.ox/calendar/week/view',
      'gettext!io.ox/calendar',
      'io.ox/core/api/folder',
      'io.ox/backbone/views',
+     'settings!io.ox/calendar',
      'less!io.ox/calendar/week/style.css',
      'apps/io.ox/core/tk/jquery-ui.min.js',
-     'apps/io.ox/core/tk/jquery.mobile.touch.min.js'], function (util, date, ext, gt, folder, views) {
+     'apps/io.ox/core/tk/jquery.mobile.touch.min.js'], function (util, date, ext, gt, folder, views, settings) {
 
     'use strict';
 
@@ -55,6 +56,22 @@ define('io.ox/calendar/week/view',
         kwInfo:         $('<span>').addClass('info'),                   // current KW
         showAll:        $('<input/>').attr('type', 'checkbox'),         // show all folders check-box
         showAllCon:     $('<div>').addClass('showall'),                 // container
+
+        // init values from prespective
+        initialize: function (opt) {
+            this.columns = opt.columns;
+            this.startDate = opt.startDate;
+            this.collection
+                .on('reset', this.renderAppointments, this)
+                .on('change', this.redrawAppointment, this);
+        },
+
+        initSettings: function () {
+            // init settings
+            this.gridSize = 60 / settings.get('interval');
+            this.workStart = settings.get('starttime');
+            this.workEnd = settings.get('endtime');
+        },
 
         // define view events
         events: {
@@ -322,16 +339,11 @@ define('io.ox/calendar/week/view',
             return;
         },
 
-        // init values from prespective
-        initialize: function (opt) {
-            this.columns = opt.columns;
-            this.startDate = opt.startDate;
-            this.collection
-                .on('reset', this.renderAppointments, this)
-                .on('change', this.redrawAppointment, this);
-        },
-
         render: function () {
+
+            // init settings
+            this.initSettings();
+
             // create timelabels
             var timeLabel = [];
             for (var i = 1; i < this.slots; i++) {
