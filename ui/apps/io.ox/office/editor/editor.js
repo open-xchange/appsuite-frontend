@@ -1477,6 +1477,8 @@ define('io.ox/office/editor/editor',
                         // TODO: currently, no way to set character attributes at empty paragraphs via operation...
                         if (startOffset <= endOffset) {
                             generator.generateOperation(Operations.ATTRS_SET, { start: position.concat([startOffset]), end: position.concat([endOffset]), attrs: attributes });
+                        } else {
+                            _.extend(preselectedAttributes, attributes); // setting attributes without selection
                         }
                     });
                     break;
