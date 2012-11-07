@@ -318,6 +318,7 @@ define('io.ox/office/editor/view/controls',
         // base constructor ---------------------------------------------------
 
         RadioGroup.call(this, {
+            white: true,
             width: 100,
             dropDown: true,
             sorted: true,
