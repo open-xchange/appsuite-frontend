@@ -17,7 +17,7 @@ define('io.ox/office/editor/format/tablecellstyles',
      'io.ox/office/editor/table',
      'io.ox/office/editor/format/color',
      'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, DOM, Table, Color, StyleSheets) {  // AAA remove position
+    ], function (Utils, DOM, Table, Color, StyleSheets) {
 
     'use strict';
 
