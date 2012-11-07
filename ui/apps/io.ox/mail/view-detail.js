@@ -147,6 +147,7 @@ define('io.ox/mail/view-detail',
         setTimeout(function () {
             node.removeClass('unread');
             api.tracker.applyAutoRead(data);
+            ext.point('io.ox/mail/detail/notification').invoke('action', node, data);
             node = data = null;
         }, 1000); // 1 second(s)
     };
@@ -880,6 +881,20 @@ define('io.ox/mail/view-detail',
                 }
                 content = null;
             }, 0);
+        }
+    });
+    
+    //Extensionpoint to remove read mails in notification Area
+    ext.point('io.ox/mail/detail/notification').extend({
+        index: 100,
+        id: 'update-notification',
+        action: function (data) {
+            //build cid
+            var cid = (data.folder_id || data.folder) + '.' + data.id,
+                notificationItem = $.find('#io-ox-notifications-mail .item[data-cid="' + cid + '"]');
+            if (notificationItem) {
+                $(notificationItem).trigger('dispose');//use dispose event, to clean up properly
+            }
         }
     });
 
