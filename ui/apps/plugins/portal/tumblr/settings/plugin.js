@@ -9,17 +9,16 @@
  * Mail: info@open-xchange.com
  *
  * @author Markus Bode <markus.bode@open-xchange.com>
+ * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
 define('plugins/portal/tumblr/settings/plugin',
        ['io.ox/core/extensions',
         'io.ox/core/tk/dialogs',
-        'text!plugins/portal/tumblr/settings/tpl/blog.html',
-        'text!plugins/portal/tumblr/settings/tpl/pluginsettings.html',
         'settings!plugins/portal/tumblr',
         'gettext!io.ox/portal',
         'less!plugins/portal/tumblr/style.css'
-        ], function (ext, dialogs, blogSelectTemplate, pluginSettingsTemplate, settings, gt) {
+        ], function (ext, dialogs, settings, gt) {
 
     'use strict';
 
@@ -91,6 +90,9 @@ define('plugins/portal/tumblr/settings/plugin',
                         // No dot and url does not end with tumblr.com? Append it!
                         if (url.indexOf('.') === -1 && !url.match(/\.tumblr\.com$/)) {
                             url = url + '.tumblr.com';
+                        }
+                        if (url.match(/http:\/\//)) {
+                            url = url.substring('http://'.length);
                         }
 
                         if (url.length === 0) {
@@ -186,7 +188,6 @@ define('plugins/portal/tumblr/settings/plugin',
 
         PluginSettingsView = Backbone.View.extend({
             initialize: function (options) {
-                this.template = doT.template(pluginSettingsTemplate);
             },
             render: function () {
                 this.$el.empty().append(
@@ -203,11 +204,8 @@ define('plugins/portal/tumblr/settings/plugin',
                         )
                     )
                 );
-
-                
                 var that = this;
                 function redraw() {
-                    console.log("Redrawing blogs", blogs);
                     var $settings = that.$el.find('.io-ox-tumblr-settings');
                     var collection = new Backbone.Collection(blogs);
                     $settings.empty();
@@ -262,6 +260,9 @@ define('plugins/portal/tumblr/settings/plugin',
                     // No dot and url does not end with tumblr.com? Append it!
                     if (url.indexOf('.') === -1 && !url.match(/\.tumblr\.com$/)) {
                         url = url + '.tumblr.com';
+                    }
+                    if (url.match(/http:\/\//)) {
+                        url = url.substring('http://'.length);
                     }
 
                     if (url.length === 0) {
