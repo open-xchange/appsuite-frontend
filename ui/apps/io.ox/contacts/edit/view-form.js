@@ -115,7 +115,7 @@ define('io.ox/contacts/edit/view-form', [
 
 
     function dateField(options) {
-        options.point.extend(new forms.ControlGroup({
+        options.point.extend(new forms.DateControlGroup({
             id: options.field,
             index: options.index,
             label: model.fields[options.field],

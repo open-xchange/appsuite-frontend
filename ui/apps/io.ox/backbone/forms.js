@@ -164,6 +164,159 @@ define('io.ox/backbone/forms',
         _.extend(this, options); // May override any of the above aspects
     }
 
+    function DateControlGroup(options) {
+
+        this.tagName = 'div';
+
+        this.init = function () {
+            this.nodes = {};
+        };
+
+        this.buildControlGroup = function () {
+            if (this.nodes.controlGroup) {
+                return this.nodes.controlGroup;
+            }
+            this.buildControls();
+
+            this.nodes.controlGroup = $('<div class="control-group">').appendTo(this.$el);
+
+            this.nodes.controlGroup.append(
+                this.buildLabel(),
+                this.buildControls()
+            );
+        };
+
+        this.buildControls = function () {
+            return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
+                    this.buildElement(),
+                    this.buildDropElements())
+                    );
+        };
+
+        this.buildLabel = function () {
+            return this.nodes.label || (this.nodes.label = $('<label class="control-label">').text(this.label));
+        };
+
+        this.buildElement = function () {
+            var self = this;
+            if (this.nodes.element) {
+                return this.nodes.element;
+            }
+            this.nodes.element = $(this.control).addClass('control');
+            this.nodes.element.on('change', function () {
+                console.log('triggert');
+                self.updateModel();
+            });
+
+            return this.nodes.element;
+        };
+
+        this.buildDropElements = function () {
+            var self = this,
+                collectedDate = function () {
+                var dayValue = self.nodes.dropelements.find('[name="day"]').val(),
+                    monthValue = self.nodes.dropelements.find('[name="month"]').val(),
+                    yearValue = self.nodes.dropelements.find('[name="year"]').val();
+
+                return dayValue + '.' + monthValue + '.' + yearValue;
+            },
+                createSelect = function (name, from, to) {
+                var node,
+                    arrayOfValues = [];
+
+                for (var i = from; i <= to; i += 1) {
+                    var element = $('<option>').text(i);
+                    arrayOfValues.push(element);
+
+                }
+
+                node = $('<select>').addClass('span1').attr({
+                    'name': name,
+                    'size': 1
+                });
+
+                _(arrayOfValues).each(function (val) {
+                    node.append(val);
+                });
+
+                return node;
+            };
+
+            this.nodes.element.css('display', 'none');
+
+            this.nodes.dropelements = $('<span>').append(
+                createSelect('day', 1, 31),
+                createSelect('month', 1, 12),
+                createSelect('year', 1900, 2012)
+            );
+            this.nodes.dropelements.on('change', 'select', function () {
+                self.nodes.element.val(collectedDate);
+                self.nodes.element.trigger('change');
+            });
+
+            return this.nodes.dropelements;
+        };
+
+        this.setValueInElement = function (valueFromModel) {
+            this.nodes.element.val(valueFromModel);
+        };
+
+        this.setValueInModel = function (valueFromElement) {
+            this.model.set(this.attribute, valueFromElement);
+        };
+
+        this.updateElement = function () {
+            this.setValueInElement(this.model.get(this.attribute));
+        };
+
+        this.updateModel = function () {
+            this.setValueInModel(this.nodes.element.val());
+        };
+
+        this.removeError = function () {
+            this.nodes.controlGroup.removeClass('error');
+            this.nodes.controls.find('.help-block.error').remove();
+        };
+
+        this.handleRareModelChange = function () {
+            if (this.model.isSet(this.attribute)) {
+                this.nodes.controlGroup.show();
+            }
+        };
+
+        this.render = function () {
+            this.buildControlGroup();
+            this.updateElement();
+            if (this.rare && !this.model.isSet(this.attribute)) {
+                this.nodes.controlGroup.hide();
+            }
+        };
+
+        this.onValidationError = function (messages) {
+            var helpBlock =  $('<div class="help-block error">');
+            _(messages).each(function (msg) {
+                helpBlock.append($.txt(msg));
+            });
+            this.nodes.controlGroup.addClass('error');
+            this.nodes.controls.append(helpBlock);
+            this.nodes.element.select();
+        };
+
+        this.modelEvents = {};
+
+
+        if (options.rare) {
+            this.modelEvents['change:' + options.attribute] = 'handleRareModelChange updateElement';
+        } else {
+            this.modelEvents['change:' + options.attribute] = 'updateElement';
+        }
+
+        this.modelEvents['invalid:' + options.attribute] = 'onValidationError';
+        this.modelEvents['valid:' + options.attribute] = 'removeError';
+
+        _.extend(this, options); // May override any of the above aspects
+    }
+
     function addErrorHandling(options, object) {
         if (!object.modelEvents) {
             object.modelEvents = {};
@@ -677,6 +830,7 @@ define('io.ox/backbone/forms',
     var forms = {
         ErrorAlert: ErrorAlert,
         ControlGroup: ControlGroup,
+        DateControlGroup: DateControlGroup,
         Section: Section,
         InputField: InputField,
         CheckBoxField: CheckBoxField,
@@ -705,7 +859,18 @@ define('io.ox/backbone/forms',
             controlGroup: {
                 date: {
                     setValueInElement: function (valueFromModel) {
+                        var allSelects = this.nodes.dropelements.find('select'),
+                            singleValues = [],
+                            transformedValue = forms.utils.date2string(valueFromModel);
                         this.nodes.element.val(forms.utils.date2string(valueFromModel));
+                        if (transformedValue !== undefined) {
+                            singleValues = transformedValue.split('.');
+                        }
+
+                        _(allSelects).each(function (element, key) {
+                            $(element).val(singleValues[key]);
+                        });
+
                     },
 
                     setValueInModel: function (valueFromElement) {
