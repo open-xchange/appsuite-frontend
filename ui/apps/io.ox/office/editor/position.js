@@ -75,6 +75,15 @@ define('io.ox/office/editor/position',
      */
     Position.getOxoPosition = function (maindiv, node, offset) {
 
+        // Helper function to calculate sum of colspans of cells
+        function getColspanSum(cellSelection) {
+            var sum = 0;
+            cellSelection.each(function () {
+                sum += Utils.getElementAttributeAsInteger(this, 'colspan', 1);
+            });
+            return sum;
+        }
+
         // Checking offset for text nodes
         if ((node.nodeType === 3) && !_.isNumber(offset)) {
             Utils.error('Position.getOxoPosition(): Invalid start position: text node without offset');
@@ -104,7 +113,12 @@ define('io.ox/office/editor/position',
 
         // currently supported elements: 'div.p', 'table', 'th', 'td', 'tr'
         for (; node && (node !== maindiv.get(0)); node = node.parentNode) {
-            if (DOM.isContentNode(node) || $(node).is('tr, td')) {
+            if (DOM.isContentNode(node) || $(node).is('tr, td, th')) {
+                // if ($(node).is('td, th')) {
+                //     oxoPosition.unshift(getColspanSum($(node).prevAll()));  // zero based
+                // } else {
+                //     oxoPosition.unshift($(node).prevAll().length);  // zero based
+                // }
                 oxoPosition.unshift($(node).prevAll().length);  // zero based
                 evaluateCharacterPosition = false;
             }
@@ -607,6 +621,14 @@ define('io.ox/office/editor/position',
         if (DOM.isTableNode(node)) {
             childNode = $('> * > tr', node).get(pos);
         } else if ($(node).is('tr')) {
+            // Adding all colspans, to get the selected cell
+            // Position.iterateRowChildNodes(node, function (cellNode, nodeStart, nodeColSpan) {
+            //    // check if passed position points inside the current cell
+            //     if (nodeStart + nodeColSpan > pos) {
+            //        childNode = cellNode;
+            //        return Utils.BREAK;
+            //    }
+            // });
             childNode = $('> th, > td', node).get(pos);  // this is a table cell
         } else if (DOM.isPageNode(node) || $(node).is('th, td')) {
             childNode = node.childNodes[pos];
@@ -1500,9 +1522,8 @@ define('io.ox/office/editor/position',
      *
      * @param {Node} startnode
      *  The start node corresponding to the logical position.
-     *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {Number[]} paragraph
+     * @param {Number[]} position
      *  The logical position.
      *
      * @returns {Object}
@@ -1510,39 +1531,31 @@ define('io.ox/office/editor/position',
      *  end of the table is reached, the value for 'endOfTable' is set to
      *  true. Otherwise it is false.
      */
-    Position.getFirstPositionInNextCell = function (startnode, paragraph) {
+    Position.getFirstPositionInNextCell = function (startnode, position) {
 
-        var endOfTable = false;
+        var endOfTable = false,
+            cellnode = Position.getLastNodeFromPositionByNodeName(startnode, position, 'th, td');
 
-        paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'th, td');
+        if (cellnode) {
 
-        if ((paragraph) && (paragraph.length > 0)) {
-
-            var column = paragraph.pop(),
-                lastColumn = Position.getLastColumnIndexInRow(startnode, paragraph),
-                row = paragraph.pop(),
-                lastRow = Position.getLastRowIndexInTable(startnode, paragraph);
-
-            if (column < lastColumn) {
-                column += 1;
+            if (cellnode.nextSibling) {
+                position = Position.getOxoPosition(startnode, cellnode.nextSibling);
+                position.push(0);
+                position = Position.getFirstPositionInParagraph(startnode, position);
             } else {
-                if (row < lastRow) {
-                    row += 1;
-                    column = 0;
+                // is this already the last row?
+                if (cellnode.parentNode.nextSibling) {  // -> following row
+                    position = Position.getOxoPosition(startnode, cellnode.parentNode.nextSibling.firstChild);
+                    position.push(0);
+                    position = Position.getFirstPositionInParagraph(startnode, position);
                 } else {
+                    position = Position.getLastPositionFromPositionByNodeName(startnode, position, DOM.TABLE_NODE_SELECTOR);
                     endOfTable = true;
                 }
             }
-
-            if (! endOfTable) {
-                paragraph.push(row);
-                paragraph.push(column);
-                paragraph.push(0);  // first paragraph
-                paragraph = Position.getFirstPositionInParagraph(startnode, paragraph);
-            }
         }
 
-        return {position: paragraph, endOfTable: endOfTable};
+        return {position: position, endOfTable: endOfTable};
     };
 
     /**
@@ -1552,9 +1565,8 @@ define('io.ox/office/editor/position',
      *
      * @param {Node} startnode
      *  The start node corresponding to the logical position.
-     *  (Can be a jQuery object for performance reasons.)
      *
-     * @param {Number[]} paragraph
+     * @param {Number[]} position
      *  The logical position.
      *
      * @returns {Object}
@@ -1562,59 +1574,54 @@ define('io.ox/office/editor/position',
      *  begin of the table is reached, the value for 'beginOfTable' is set to
      *  true. Otherwise it is false.
      */
-    Position.getLastPositionInPrevCell = function (startnode, paragraph) {
+    Position.getLastPositionInPrevCell = function (startnode, position) {
 
         var beginOfTable = false,
-            continueSearch = true;
+            continueSearch = true,
+            cellnode = Position.getLastNodeFromPositionByNodeName(startnode, position, 'th, td');
 
-        paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'th, td');
+        while ((cellnode) && (continueSearch)) {
 
-        while ((paragraph) && (paragraph.length > 0) && (continueSearch)) {
-
-            var column = paragraph.pop(),
-                row = paragraph.pop();
-
-            if (column > 0) {
-                column -= 1;
+            if (cellnode.previousSibling) {
+                position = Position.getOxoPosition(startnode, cellnode.previousSibling);
+                position.push(Position.getLastParaIndexInCell(startnode, position));
+                position = Position.getLastPositionInParagraph(startnode, position);
+                continueSearch = false;
             } else {
-                if (row > 0) {
-                    row -= 1;
-                    var localRow = _.copy(paragraph, true);
-                    localRow.push(row);
-                    column = Position.getLastColumnIndexInRow(startnode, row);
+                // is this already the first row?
+                if (cellnode.parentNode.previousSibling) {  // -> previous row
+                    position = Position.getOxoPosition(startnode, cellnode.parentNode.previousSibling.lastChild);
+                    position.push(Position.getLastParaIndexInCell(startnode, position));
+                    position = Position.getLastPositionInParagraph(startnode, position);
+                    continueSearch = false;
                 } else {
+                    position = Position.getLastPositionFromPositionByNodeName(startnode, position, DOM.TABLE_NODE_SELECTOR);
                     beginOfTable = true;
                 }
             }
 
-            if (! beginOfTable) {
-                paragraph.push(row);
-                paragraph.push(column);
-                paragraph.push(Position.getLastParaIndexInCell(startnode, paragraph));  // last paragraph
-                paragraph = Position.getLastPositionInParagraph(startnode, paragraph);
-                continueSearch = false;
-            } else {
-                // column and row are 0. So there is no previous cell,
+            if (beginOfTable) {
+                // There is no previous cell inside this table. So there is no previous cell
                 // or the previous cell is inside an outer table.
+                // Position now contains the table/paragraph selection
+                cellnode = Position.getLastNodeFromPositionByNodeName(startnode, position, DOM.TABLE_NODE_SELECTOR);
 
-                // is there a paragraph/table directly before this first cell?
-                if (paragraph[paragraph.length - 1] === 0) {  // <- this is the first paragraph/table
-                    var localParagraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'th, td');
-                    if ((localParagraph) && (localParagraph.length > 0)) {
-                        paragraph = localParagraph;
+                if (cellnode.previousSibling) {  // this table is not the first table/paragraph
+                    beginOfTable = true;
+                    continueSearch = false;  // simply jump into preceeding paragraph/table
+                } else {  // this table is the first table/paragraph
+                    cellnode = Position.getLastNodeFromPositionByNodeName(startnode, position, 'th, td');
+                    if (cellnode) {
+                        position = Position.getLastPositionFromPositionByNodeName(startnode, position, 'th, td');
                         beginOfTable = false;
                     } else {
                         continueSearch = false;
                     }
-                } else {
-                    // simply jump into preceeding paragraph/table
-                    beginOfTable = true;
-                    continueSearch = false;
                 }
             }
         }
 
-        return {position: paragraph, beginOfTable: beginOfTable};
+        return {position: position, beginOfTable: beginOfTable};
     };
 
     /**
@@ -1991,6 +1998,55 @@ define('io.ox/office/editor/position',
 
             // update start index of next visited node
             nodeStart += nodeLength;
+
+        }, undefined, { children: true });
+
+        return result;
+    };
+
+    /**
+     * Calls the passed iterator function for all or selected child elements in
+     * a row node (only cell nodes, 'th# and 'td').
+     *
+     * @param {HTMLElement|jQuery} row
+     *  The row element whose child nodes will be visited. If this object
+     *  is a jQuery collection, uses the first DOM node it contains.
+     *
+     * @param {Function} iterator
+     *  The iterator function that will be called for every matching node.
+     *  Receives the DOM cell node object as first parameter, the logical start
+     *  index of the node in the row as second parameter, and the logical
+     *  length (colspan) of the cell as third parameter.
+     *  If the iterator returns the Utils.BREAK object, the iteration process
+     *   will be stopped immediately.
+     *
+     * @param {Object} [context]
+     *  If specified, the iterator will be called with this context (the symbol
+     *  'this' will be bound to the context inside the iterator function).
+     *
+     * @returns {Utils.BREAK|Undefined}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
+     */
+    Position.iterateRowChildNodes = function (row, iterator, context) {
+
+        var // the logical start index of the visited cell node
+            cellNodeStart = 0,
+            // result of the iteration
+            result = null;
+
+        // visit the content nodes of the specified cell element (only child nodes, no other descendants)
+        result = Utils.iterateDescendantNodes(row, function (cellNode) {
+
+            var currentColSpan = Utils.getElementAttributeAsInteger(cellNode, 'colspan', 1);
+
+            // call the iterator for the current content node
+            if (iterator.call(context, cellNode, cellNodeStart, currentColSpan) === Utils.BREAK) {
+                return Utils.BREAK;
+            }
+
+            // update start index of next visited node
+            cellNodeStart += currentColSpan;
 
         }, undefined, { children: true });
 

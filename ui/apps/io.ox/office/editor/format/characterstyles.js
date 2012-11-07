@@ -92,6 +92,12 @@ define('io.ox/office/editor/format/characterstyles',
                 }
             },
 
+            language: {
+                def: '',
+                set: function (element, value) {
+                    element.css('lang', value);
+                }
+            },
             // special attributes
 
             highlight: {

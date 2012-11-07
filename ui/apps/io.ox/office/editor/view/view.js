@@ -257,7 +257,9 @@ define('io.ox/office/editor/view/view',
             .addButton('paragraph/list/bullets',   { icon: 'icon-io-ox-bullets',        tooltip: gt('Bullets On/Off'),   toggle: true })
             .addButton('paragraph/list/numbering', { icon: 'icon-io-ox-numbering',      tooltip: gt('Numbering On/Off'), toggle: true })
             .addButton('paragraph/list/decindent', { icon: 'icon-io-ox-num-dec-indent', tooltip: gt('Demote One Level') })
-            .addButton('paragraph/list/incindent', { icon: 'icon-io-ox-num-inc-indent', tooltip: gt('Promote One Level') });
+            .addButton('paragraph/list/incindent', { icon: 'icon-io-ox-num-inc-indent', tooltip: gt('Promote One Level') })
+            .addSeparator()
+             .addGroup('character/language', new Controls.LanguageChooser());
 
         createToolBar('table', { label: gt('Table') })
             .addGroup('table/insert', new Controls.TableSizeChooser())

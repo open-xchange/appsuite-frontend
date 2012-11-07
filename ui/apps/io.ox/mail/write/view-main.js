@@ -721,40 +721,44 @@ define("io.ox/mail/write/view-main",
              '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + '>' : '<' + obj.email + '>';
     }
 
+    // function clickRadio(e) {
+    //     var node = $(this).parent();
+    //     node.prop('selected', !node.prop('selected')).trigger('change'); // selected, not checked!
+    // }
+
     function createRadio(name, value, text, isChecked) {
-        var id = name + '_' + value + '_' + _.now(),
-            radio = $('<input>', { type: 'radio', name: name, id: id, value: value, tabindex: '5' }),
-            label = $('<label>', { 'for': id }).append(
-                        $.txt(_.noI18n('\u00A0\u00A0')), text, $.txt(_.noI18n('\u00A0\u00A0\u00A0\u00A0 '))
-                    );
+        var label, radio;
+        radio = $('<input>', { type: 'radio', name: name, value: value, tabindex: '5' });
+        label = $('<label class="radio">').append(
+            radio, $.txt(_.noI18n('\u00A0\u00A0')), text, $.txt(_.noI18n('\u00A0\u00A0\u00A0\u00A0 '))
+        );
         if (isChecked) {
             radio.attr('checked', 'checked');
         }
-        if (Modernizr.touch) {
-            label.on('click', { id: id }, function (e) {
-                var node = $(this).prev();
-                node.prop('selected', !node.prop('selected')).trigger('change'); // selected, not checked!
-            });
-        }
-        return radio.add(label);
+        // if (Modernizr.touch) {
+        //     label.on('click', clickRadio);
+        // }
+        return label;
     }
 
+    // function clickCheckbox(e) {
+    //     var node = $(this).parent();
+    //     node.prop('selected', !node.prop('selected')).trigger('change'); // selected, not checked!
+    // }
+
     function createCheckbox(name, text, isChecked) {
-        var id = name + '_' + _.now(),
-            box = $('<input>', { type: 'checkbox', name: name, id: id, value: '1', tabindex: '5' }),
-            label = $('<label>', { 'for': id }).append(
-                        $.txt(_.noI18n('\u00A0\u00A0')), text, $.txt(_.noI18n('\u00A0\u00A0\u00A0\u00A0 '))
-                    );
+        var label, box;
+        box = $('<input>', { type: 'checkbox', name: name, value: '1', tabindex: '5' });
+        label = $('<label class="checkbox">').append(
+            box, $.txt(_.noI18n('\u00A0\u00A0')), text, $.txt(_.noI18n('\u00A0\u00A0\u00A0\u00A0 '))
+        );
         if (isChecked) {
             box.attr('checked', 'checked');
         }
-        if (Modernizr.touch) {
-            label.on('click', { id: id }, function (e) {
-                var node = $(this).prev();
-                node.prop('selected', !node.prop('selected')).trigger('change'); // selected, not checked!
-            });
-        }
-        return box.add(label);
+        // if (Modernizr.touch) {
+        //     label.on('click', clickCheckbox);
+        // }
+        return label;
     }
 
     return view;
