@@ -144,6 +144,8 @@ define('plugins/portal/rss/settings/plugin',
                     }
 
                     $listbox.sortable({
+                        axis: 'y',
+                        containment: 'parent',
                         update: function (event, ui) {
                             var newfeedgroups = [];
 

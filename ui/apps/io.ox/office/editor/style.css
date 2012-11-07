@@ -264,15 +264,21 @@
                     line-height: normal;
                     white-space: nowrap;
 
-                    td {
+                    th, td {
                         padding: 0 1mm;
+                    }
 
-                        &:first-child {
-                            background-color: #d5d5d5;
-                            color: white;
-                            font-weight: bold;
-                            text-align: right;
-                        }
+                    th {
+                        background-color: #d5d5d5;
+                        color: #666;
+                        font-weight: bold;
+                    }
+
+                    td:first-child {
+                        background-color: #d5d5d5;
+                        color: white;
+                        font-weight: bold;
+                        text-align: right;
                     }
                 }
             }

@@ -108,6 +108,16 @@ define('io.ox/office/editor/editor',
         return event && IGNORABLE_KEYS.contains(event.keyCode);
     }
 
+    /**
+     * Returns true, if the passed keyboard event is ctrl+v or meta+v.
+     *
+     * @param event
+     *  A jQuery keyboard event object.
+     */
+    function isPasteKeyEvent(event) {
+        return ((event.metaKey || event.ctrlKey) && event.charCode === 118);
+    }
+
     function getPrintableChar(event) {
         // event.char preferred. DL2, but nyi in most browsers:(
         if (event.char) {
@@ -186,6 +196,9 @@ define('io.ox/office/editor/editor',
 
             // name of the user that currently has the edit rigths
             editUser = '',
+
+            // attributes that were set without a selection
+            preselectedAttributes = {},
 
             dbgoutEvents = false, dbgoutObjects = false;
 
@@ -669,7 +682,8 @@ define('io.ox/office/editor/editor',
 
                 undoManager.startGroup();
 
-                if (selection.startPaM.imageFloatMode && selection.isSingleComponentSelection()) {
+                var objectInfo = selection.isSingleComponentSelection() ? Position.getDOMPosition(editdiv, selection.startPaM.oxoPosition, true) : null;
+                if (objectInfo && DOM.isObjectNode(objectInfo.node)) {
                     // An image selection
                     // This deleting of images is only possible with the button, not with an key down event.
                     deleteSelectedObject(selection);
@@ -1148,7 +1162,7 @@ define('io.ox/office/editor/editor',
                     var tableStyles = self.getStyleSheets('table'),
                     // operations generator
                         generator = new Operations.Generator();
-                    
+
                     if (tableStyles.isDirty(tableStyleId)) {
                         // insert table style to document
                         generator.generateOperation(Operations.INSERT_STYLE, {
@@ -1168,7 +1182,7 @@ define('io.ox/office/editor/editor',
                         start: _.copy(tablePos, true),
                         end: _.copy(tablePos, true)
                     });
-                    
+
                     // apply all collected operations
                     self.applyOperations(generator.getOperations(), true, true);
                 }
@@ -1473,6 +1487,8 @@ define('io.ox/office/editor/editor',
                         // TODO: currently, no way to set character attributes at empty paragraphs via operation...
                         if (startOffset <= endOffset) {
                             generator.generateOperation(Operations.ATTRS_SET, { start: position.concat([startOffset]), end: position.concat([endOffset]), attrs: attributes });
+                        } else {
+                            _.extend(preselectedAttributes, attributes); // setting attributes without selection
                         }
                     });
                     break;
@@ -1651,6 +1667,10 @@ define('io.ox/office/editor/editor',
             return tableStyleId;
         };
 
+        this.isAttributePreselected = function (attribute) {
+            return (! _.isUndefined(preselectedAttributes[attribute])) && (preselectedAttributes[attribute] === true);
+        };
+
          /**
          * Called when all initial document operations have been processed.
          * Can be used to start post-processing tasks which need a fully
@@ -1795,6 +1815,8 @@ define('io.ox/office/editor/editor',
                 // object start and end position for selection
                 startPosition = null, endPosition = null;
 
+            preselectedAttributes = {};
+
             // click on object node: set browser selection to object node, draw selection
             if ((object.length > 0) && (editdiv[0].contains(object[0]))) {
 
@@ -1822,6 +1844,7 @@ define('io.ox/office/editor/editor',
                 // after browser has processed the mouse event
                 updateSelection();
             }
+
         }
 
         function processMouseUp() {
@@ -1838,6 +1861,7 @@ define('io.ox/office/editor/editor',
             lastKeyDownEvent = event;   // for some keys we only get keyDown, not keyPressed!
 
             if (isIgnorableKeyEvent(event)) {
+                preselectedAttributes = {};
                 return;
             }
 
@@ -1855,6 +1879,8 @@ define('io.ox/office/editor/editor',
                         drawObjectSelection(selection.getSelectedObject());
                     }
                 });
+
+                preselectedAttributes = {};
 
                 return;
             }
@@ -1909,6 +1935,7 @@ define('io.ox/office/editor/editor',
 
             if (event.keyCode === KeyCodes.DELETE) {
                 event.preventDefault();
+                preselectedAttributes = {};
                 if (selection.hasRange()) {
                     self.deleteSelected();
                 }
@@ -1986,6 +2013,7 @@ define('io.ox/office/editor/editor',
             }
             else if (event.keyCode === KeyCodes.BACKSPACE) {
                 event.preventDefault();
+                preselectedAttributes = {};
                 if (selection.hasRange()) {
                     self.deleteSelected();
                 }
@@ -2070,6 +2098,7 @@ define('io.ox/office/editor/editor',
             }
             else if (event.ctrlKey && !event.altKey) {
                 event.preventDefault();
+                preselectedAttributes = {};
                 var c = getPrintableChar(event);
                 if (c === 'A') {
                     selection.selectAll();
@@ -2100,6 +2129,7 @@ define('io.ox/office/editor/editor',
                 }
             } else if (event.keyCode === KeyCodes.TAB && !event.ctrlKey && !event.metaKey) {
                 event.preventDefault();
+                preselectedAttributes = {};
                 // (shift)Tab: Change list indent (if in list) when selection is at first position in paragraph
                 var paragraph = Position.getLastNodeFromPositionByNodeName(editdiv, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR),
                     mustInsertTab = !event.shiftKey && !selection.hasRange();
@@ -2126,19 +2156,18 @@ define('io.ox/office/editor/editor',
 
         function processKeyPressed(event) {
 
-            if (isIgnorableKeyEvent(lastKeyDownEvent)) {
+            if (isIgnorableKeyEvent(lastKeyDownEvent) || isCursorKeyEvent(lastKeyDownEvent)) {
+                preselectedAttributes = {};
                 return;
             }
 
             implDbgOutEvent(event);
 
-            if (isCursorKeyEvent(event)) {
-                updateSelection();
-                return;
+            // prevent browser from evaluating the key event,
+            // but allow ctrl+v and meta+v to make the browser send the 'paste' event
+            if (!isPasteKeyEvent(event)) {
+                event.preventDefault();
             }
-
-            // prevent browser from evaluating the key event
-            event.preventDefault();
 
             var c = getPrintableChar(event);
 
@@ -2151,14 +2180,28 @@ define('io.ox/office/editor/editor',
                 self.deleteSelected();
                 // Selection was adjusted, so we need to use start, not end
                 self.insertText(c, selection.startPaM.oxoPosition);
+
+                if (! _.isEmpty(preselectedAttributes)) {
+                    // setting selection
+                    var endPosition = _.copy(selection.startPaM.oxoPosition);
+                    endPosition[endPosition.length - 1]++;
+                    selection.setSelection(selection.startPaM.oxoPosition, endPosition);
+                    self.setAttributes('character', preselectedAttributes);
+                    preselectedAttributes = {};
+                }
+
                 var lastValue = selection.startPaM.oxoPosition.length - 1;
                 selection.startPaM.oxoPosition[lastValue]++;
                 selection.setSelection(selection.startPaM.oxoPosition);
+
             }
             else if (c.length > 1) {
+                preselectedAttributes = {};
                 // TODO?
             }
             else {
+
+                preselectedAttributes = {};
 
                 if (event.keyCode === KeyCodes.ENTER) {
                     var hasSelection = selection.hasRange();

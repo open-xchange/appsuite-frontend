@@ -219,7 +219,6 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
          */
         function componentEventHandler(event, key, value) {
             if (event.type === 'change') {
-                Utils.info('Controller: received change event: key="' + key + '", value=' + JSON.stringify(value));
                 if (key in items) {
                     clearResultCache();
                     items[key].change(value);
@@ -227,7 +226,6 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
                     defaultDoneHandler.call(self);
                 }
             } else if (event.type === 'cancel') {
-                Utils.info('Controller: received cancel event');
                 defaultDoneHandler.call(self);
             }
         }

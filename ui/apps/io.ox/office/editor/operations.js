@@ -158,8 +158,6 @@ define('io.ox/office/editor/operations',
             return operations;
         };
 
-        // private methods ----------------------------------------------------
-
         /**
          * Creates and appends a new operation to the operations array.
          *
@@ -327,6 +325,7 @@ define('io.ox/office/editor/operations',
 
                 // operation to create a (non-empty) generic text portion
                 if (DOM.isTextSpan(node)) {
+
                     // extract the text covered by the specified range
                     text = node.firstChild.nodeValue.substr(offsetStart, offsetLength);
                     // append text portions to the last 'insertText' operation
@@ -484,12 +483,12 @@ define('io.ox/office/editor/operations',
          * Generates all operations needed to recreate the passed table.
          *
          * @param {HTMLTableElement|jQuery} table
-         *  The table element that will be converted to operations. If this object
-         *  is a jQuery collection, uses the first node it contains.
+         *  The table element that will be converted to operations. If this
+         *  object is a jQuery collection, uses the first node it contains.
          *
          * @param {Number[]} position
-         *  The logical position of the passed table node. The generated operations
-         *  will contain positions starting with this address.
+         *  The logical position of the passed table node. The generated
+         *  operations will contain positions starting with this address.
          *
          * @returns {Operations.Generator}
          *  A reference to this instance.

@@ -66,20 +66,26 @@ define('io.ox/core/notifications', ['io.ox/core/extensions'], function (ext) {
         id: 'io-ox-notifications-display',
         initialize: function (options) {
             options = options || {};
-            this.subviews = options.subviews || [];
+            this.subviews = options.subviews || {};
         },
         render: function (notifications) {
             var self = this;
-
             self.$el.empty();
-
-
-            _(notifications).each(function (category) {
-                if (category.collection.size() > 0) {
-                    var v = new category.ListView({ collection: category.collection});
-                    self.$el.append(v.render().el);
+            
+            if (_.size(self.subviews) < _.size(notifications)) { //make sure views are created one time only to avoid zombies
+                _(notifications).each(function (category, type) {
+                    if (self.subviews[type] === undefined) {
+                        self.subviews[type] = new category.ListView({ collection: category.collection});
+                    }
+                });
+            }
+            
+            _(self.subviews).each(function (category) {
+                if (category.collection.length > 0) {
+                    self.$el.append(category.render().el);
                 }
             });
+            
             return self;
         }
     });

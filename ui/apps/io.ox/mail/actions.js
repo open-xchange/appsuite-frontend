@@ -273,6 +273,9 @@ define('io.ox/mail/actions',
         },
         multiple: function (list) {
             api.markRead(list);
+            for (var i = 0; i < list.length; i++) {
+                ext.point('io.ox/mail/detail/notification').invoke('action', this, list[i]);
+            }
         }
     });
 

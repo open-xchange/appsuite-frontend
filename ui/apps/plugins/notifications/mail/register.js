@@ -64,7 +64,8 @@ define('plugins/notifications/mail/register',
         id: 'io-ox-notifications-mail',
         events: {
             'click [data-action="open-app"]': 'openApp',
-            'click .item': 'openMail'
+            'click .item': 'openMail',
+            'dispose .item': 'removeNotification' //triggered by detailView
         },
 
         initialize: function () {
@@ -77,9 +78,7 @@ define('plugins/notifications/mail/register',
         },
 
         render: function () {
-
             var i = 0, $i = Math.min(this.collection.size(), 3), baton;
-
             baton = ext.Baton({ view: this });
             ext.point('io.ox/core/notifications/mail/header').invoke('draw', this.$el.empty(), baton);
 
@@ -87,7 +86,7 @@ define('plugins/notifications/mail/register',
                 baton = ext.Baton({ model: this.collection.at(i), view: this });
                 ext.point('io.ox/core/notifications/mail/item').invoke('draw', this.$('.notifications'), baton);
             }
-
+            
             return this;
         },
 
@@ -121,6 +120,17 @@ define('plugins/notifications/mail/register',
                 // go to inbox
                 this.folder.set(api.getDefaultFolder());
             });
+        },
+        
+        removeNotification: function (e) {
+            e.preventDefault();
+            var cid = $(e.target).attr('data-cid'),
+                idArray = cid.split('.');
+            for (var i = 0; i < this.collection.length; i++) {
+                if (this.collection.models[i].get('folder_id') === idArray[0] && this.collection.models[i].get('id') === idArray[1]) {
+                    this.collection.remove(this.collection.models[i]);
+                }
+            }
         }
     });
 
@@ -128,11 +138,22 @@ define('plugins/notifications/mail/register',
         id: 'mail',
         index: 200,
         register: function (controller) {
-
             var notifications = controller.get('io.ox/mail', NotificationsView);
-
             api.on('new-mail', function (e, mails) {
-                _(mails.reverse()).each(function (mail) {
+                var mailsToAdd = [],
+                    present = false;
+                for (var i = 0; i < mails.length; i++) { //check if models for this mail are already present
+                    present = false;
+                    for (var b = 0; b < notifications.collection.length; b++) {
+                        if (mails[i].id === notifications.collection.models[b].get('id')) {
+                            present = true;
+                        }
+                    }
+                    if (!present) {
+                        mailsToAdd.push(mails[i]);
+                    }
+                }
+                _(mailsToAdd.reverse()).each(function (mail) {
                     notifications.collection.unshift(new Backbone.Model(mail), { silent: true });
                 });
                 notifications.collection.trigger('reset');
