@@ -2368,8 +2368,7 @@ define('io.ox/office/editor/editor',
 
                     case Operations.TAB_INSERT:
                         self.insertTab();
-                        selection.startPaM.oxoPosition[lastPos] += 1;
-                        selection.setSelection(selection.startPaM.oxoPosition);
+                        // insertTab updates the selection
                         break;
 
                     case Operations.IMAGE_INSERT:
@@ -2381,8 +2380,7 @@ define('io.ox/office/editor/editor',
                                 // image url
                                 self.insertImageURL(entry.data);
                             }
-                            selection.startPaM.oxoPosition[lastPos] ++;
-                            selection.setSelection(selection.startPaM.oxoPosition);
+                         // insertImage updates the selection
                         }
                         break;
 
