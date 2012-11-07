@@ -123,8 +123,6 @@ define('plugins/portal/tumblr/settings/plugin',
                         }
 
                         deferred.done(function () {
-                            console.log('disable tumblr-' + oldUrl.replace(/[^a-zA-Z0-9]/g, '_'));
-
                             ext.point("io.ox/portal/widget").disable('tumblr-' + oldUrl.replace(/[^a-zA-Z0-9]/g, '_'));
 
                             blogs = removeBlog(blogs, oldUrl);
@@ -133,7 +131,6 @@ define('plugins/portal/tumblr/settings/plugin',
                             settings.set('blogs', blogs);
                             settings.save();
 
-                            console.log('enable tumblr-' + url.replace(/[^a-zA-Z0-9]/g, '_'));
                             ext.point("io.ox/portal/widget").enable('tumblr-' + url.replace(/[^a-zA-Z0-9]/g, '_'));
 
                             require(['plugins/portal/tumblr/register'], function (tumblr) {
@@ -169,25 +166,16 @@ define('plugins/portal/tumblr/settings/plugin',
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
-                            var newblogs = [];
-                            _.each(blogs, function (sub) {
-                                if (sub.url !== url) {
-                                    newblogs.push(sub);
-                                }
-                            });
-
                             blogs = removeBlog(blogs, url);
                             settings.set('blogs', blogs);
                             settings.save();
-
+                            $myNode.remove();
                             var extId = 'tumblr-' + url.replace(/[^a-zA-Z0-9]/g, '_');
 
                             ext.point("io.ox/portal/widget").disable(extId);
-
                             require(['plugins/portal/tumblr/register'], function (tumblr) {
-                                tumblr.reload();
-                                that.trigger('redraw');
                                 ox.trigger("refresh^");
+                                tumblr.reload();
                             });
                         }
                         return false;
@@ -219,6 +207,7 @@ define('plugins/portal/tumblr/settings/plugin',
                 
                 var that = this;
                 function redraw() {
+                    console.log("Redrawing blogs", blogs);
                     var $settings = that.$el.find('.io-ox-tumblr-settings');
                     var collection = new Backbone.Collection(blogs);
                     $settings.empty();
