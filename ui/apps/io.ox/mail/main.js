@@ -87,7 +87,7 @@ define("io.ox/mail/main",
 //            audio.get(0).play();
 //        });
 
-        var vsplit = commons.vsplit(win.nodes.main);
+        var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left.addClass('border-right');
         right = vsplit.right.addClass('mail-detail-pane').scrollable();
 

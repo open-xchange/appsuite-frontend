@@ -61,7 +61,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
         // folder tree
         commons.addFolderView(app, { type: 'tasks', view: 'FolderList' });
 
-        var vsplit = commons.vsplit(win.nodes.main);
+        var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left.addClass('border-right');
         right = vsplit.right.addClass('default-content-padding').scrollable();
 
