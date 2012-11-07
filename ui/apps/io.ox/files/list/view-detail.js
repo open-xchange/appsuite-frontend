@@ -434,6 +434,7 @@ define("io.ox/files/list/view-detail",
         on: {
             update: function (file, extension) {
                 this.empty();
+                console.log('Sind wir hier?', file);
                 extension.draw.call(this, file, extension);
             }
         }

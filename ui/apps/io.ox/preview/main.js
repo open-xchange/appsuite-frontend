@@ -129,6 +129,15 @@ define("io.ox/preview/main",
         }));
     }
 
+    function previewLoaded() {
+        $(this).css('visibility', '').closest('div').idle();
+    }
+
+    function previewFailed() {
+        $(this).closest('div').empty().append(
+            $('<div class="alert alert-info">').text(gt("Preview could not be loaded"))
+        );
+    }
 
     // if available register office typed renderer
     if (ox.serverConfig.previewExtensions) {
@@ -137,19 +146,24 @@ define("io.ox/preview/main",
             index: 10,
             supports: ox.serverConfig.previewExtensions,
             draw: function (file) {
+
                 var $a = clickableLink(file, function (e) {
-                    e.preventDefault();
-                    require(["io.ox/preview/officePreview"], function (officePreview) {
-                        officePreview.draw(file);
-                    });
-                });
-                $a.append(
-                    $("<img>", { src: file.dataURL + "&format=preview_image&width=400&delivery=view", alt: 'Preview' })
-                        .css({
-                            width: "400px",
-                            maxWidth: "100%"
-                        }).addClass("io-ox-clickable")
-                );
+                        e.preventDefault();
+                        require(["io.ox/preview/officePreview"], function (officePreview) {
+                            officePreview.draw(file);
+                        });
+                    }),
+                    $img = $('<img alt="">')
+                        .css({ width: '400px', maxWidth: '100%', visibility: 'hidden' })
+                        .addClass("io-ox-clickable")
+                        .on({ load: previewLoaded, error: previewFailed });
+
+                this.busy();
+
+                // setting src now; just helpful for debugging/setTimeout
+                $img.attr('src', file.dataURL + '&format=preview_image&width=400&delivery=view');
+
+                $a.append($img);
                 dragOutHandler($a);
                 this.append($a);
             },
