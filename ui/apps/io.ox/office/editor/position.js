@@ -22,24 +22,16 @@ define('io.ox/office/editor/position',
 
     /**
      * Represents a text cursor position. Member field 'oxoPosition' contains
-     * the logical position as an array of integers. Member field
-     * 'selectedNodeName' contains the property 'nodeName' of the dom node that
-     * was used to calculate the logical position.
+     * the logical position as an array of integers.
      *
      * @constructor
      */
-    function Position(position, nodeName, imageFloatMode) {
+    function Position(position) {
 
         this.oxoPosition = _.clone(position);
-        this.selectedNodeName = nodeName || null;
-        this.imageFloatMode = imageFloatMode || null;
 
         this.toString = function () {
-            var name = JSON.stringify(this.oxoPosition);
-            if (_.isString(this.selectedNodeName)) {
-                name += ', node="' + this.selectedNodeName + '"';
-            }
-            return name;
+            return JSON.stringify(this.oxoPosition);
         };
     }
 
@@ -144,12 +136,10 @@ define('io.ox/office/editor/position',
      * This function calculates the logical position from DOM positions.
      * Receiving a DOM position consisting of a DOM node and an offset, it
      * calculates the logical position that is an array of
-     * integer values. This logical position is saved together with the
-     * property nodeName of the DOM node in the object, that is
-     * the return value of this function. The calculated logical position
-     * is always a valid text level position. This means, that even if the
-     * DOM position is a DIV, a TR or a similar node type, the logical position
-     * describes always the position of a text node or image or field.
+     * integer values. The calculated logical position is always a valid text
+     * level position. This means, that even if the DOM position is a DIV, a TR
+     * or a similar node type, the logical position describes always the
+     * position of a text node or image or field.
      *
      * @param {DOM.Point} domposition
      *  The DOM position, consisting of dom node and offset, whose logical
@@ -165,17 +155,13 @@ define('io.ox/office/editor/position',
      *  of a range. This is important for some calculations, where the
      *  DOM node is a row inside a table.
      *
-     * @returns {Position}
-     *  The calculated logical position together with the property nodeName of
-     *  the DOM node parameter.
+     * @returns {Number[]}
+     *  The calculated logical position.
      */
     Position.getTextLevelOxoPosition = function (domposition, maindiv, isEndPoint) {
 
         var node = domposition.node,
-            offset = domposition.offset,
-            selectedNodeName = node.nodeName,
-            imageFloatMode = null,
-            checkImageFloatMode = true;
+            offset = domposition.offset;
 
         isEndPoint = isEndPoint ? true : false;
 
@@ -191,11 +177,9 @@ define('io.ox/office/editor/position',
             // empty spans must not have an offset (special case for spans behind tabs)
             // or text nodes of fields/tabs are embedded in <span> elements in the <div>
             offset = 0;
-            checkImageFloatMode = false;
         } else if ((node.nodeType === 3) && (DOM.isListLabelNode(node.parentNode))) {
             node = node.parentNode.nextSibling;
             offset = 0;
-            checkImageFloatMode = false;
         }
 
         if (DOM.isObjectNode(node.parentNode)) {  // inside the contents of an object
@@ -204,8 +188,6 @@ define('io.ox/office/editor/position',
 
         if (DOM.isObjectNode(node)) {
             offset = 0;
-            imageFloatMode = $(node).data('mode');
-            checkImageFloatMode = false;
         }
 
         // 2. Handling all selections, in which the node is above paragraph level
@@ -215,17 +197,7 @@ define('io.ox/office/editor/position',
         // Also cells in columns have to be converted at this point.
         if (DOM.isParagraphNode(node) || DOM.isPageNode(node) || $(node).is('tr, td, th')) {
 
-            var returnObj = Position.getTextNodeFromCurrentNode(node, offset, isEndPoint);
-
-            if (! returnObj) {
-                Utils.error('Position.getTextLevelOxoPosition(): Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
-                return;
-            }
-
-            var newNode = returnObj.domPoint;
-
-            imageFloatMode = returnObj.imageFloatMode;
-            checkImageFloatMode = false;
+            var newNode = Position.getTextNodeFromCurrentNode(node, offset, isEndPoint);
 
             if (newNode) {
                 node = newNode.node;
@@ -237,26 +209,8 @@ define('io.ox/office/editor/position',
 
         }
 
-        // 3. Special handling to enable image selection, if the following position is an image
-        if (checkImageFloatMode) {
-            var localNode = node;
-            if (localNode.nodeType === 3) {
-                localNode = localNode.parentNode;
-            }
-            if (DOM.isTextSpan(localNode)) {
-                if ($(localNode).text().length === offset) {
-                    // Checking if an inline object follows
-                    if (DOM.isObjectNode(localNode.nextSibling)) {
-                        imageFloatMode = $(localNode.nextSibling).data('mode'); // must be 'inline' mode
-                    }
-                }
-            }
-        }
-
         // 4. Calculating the logical position for the specified text node, span, or image
-        var oxoPosition = Position.getOxoPosition(maindiv, node, offset);
-
-        return new Position(oxoPosition, selectedNodeName, imageFloatMode);
+        return Position.getOxoPosition(maindiv, node, offset);
     };
 
     /**
@@ -509,11 +463,9 @@ define('io.ox/office/editor/position',
      *  of a range. This is important for some calculations, where the
      *  dom node is a row inside a table.
      *
-     * @returns {Object}
+     * @returns {DOM.Point}
      *  The text node, that will be used in Position.getTextLevelOxoPosition
      *  for the calculation of the logical position.
-     *  And additionally some information about the floating state of an
-     *  image, if the position describes an image.
      */
     Position.getTextNodeFromCurrentNode = function (node, offset, isEndPoint) {
 
@@ -521,7 +473,6 @@ define('io.ox/office/editor/position',
             usePreviousCell = false,
             foundValidNode = false,
             localNode = node.childNodes[offset], // offset can be zero for start points but too high for end points
-            imageFloatMode = null,
             offsetSave = offset;
 
         offset = 0;
@@ -547,7 +498,6 @@ define('io.ox/office/editor/position',
 
         // setting some properties for image nodes
         if (DOM.isObjectNode(localNode)) {
-            imageFloatMode = $(localNode).data('mode');
             foundValidNode = true;  // image nodes are valid
             offset = isEndPoint ? 1 : 0;
         }
@@ -587,7 +537,7 @@ define('io.ox/office/editor/position',
             offset = useFirstTextNode ? 0 : foundNode.nodeValue.length;
         }
 
-        return {domPoint: new DOM.Point(foundNode, offset), imageFloatMode: imageFloatMode};
+        return new DOM.Point(foundNode, offset);
     };
 
     /**

@@ -45,8 +45,8 @@ define('io.ox/office/editor/view/view',
             // output element for operations log
             opsNode = null,
 
-            // output element for other debug information
-            infoNode = null;
+            // output elements for other debug information
+            infoNode = null, syncCell = null, selTypeCell = null, selStartCell = null, selEndCell = null;
 
         // private methods ----------------------------------------------------
 
@@ -168,10 +168,9 @@ define('io.ox/office/editor/view/view',
          * Logs the passed selection to the info output console.
          */
         function logSelection(selection) {
-            if (infoNode) {
-                infoNode.find('tr').eq(1).children('td').eq(1).text((selection && selection.startPaM) ? selection.startPaM : '- empty -');
-                infoNode.find('tr').eq(2).children('td').eq(1).text((selection && selection.endPaM) ? selection.endPaM : '- empty -');
-            }
+            if (selTypeCell) { selTypeCell.text(selection.getSelectionType()); }
+            if (selStartCell) { selStartCell.text(selection.startPaM); }
+            if (selEndCell) { selEndCell.text(selection.endPaM); }
         }
 
         // methods ------------------------------------------------------------
@@ -198,9 +197,7 @@ define('io.ox/office/editor/view/view',
          *  The state of the operations buffer.
          */
         this.logSyncState = function (state) {
-            if (infoNode) {
-                infoNode.find('tr').eq(0).children('td').eq(1).text(state);
-            }
+            if (syncCell) { syncCell.text(state); }
             return this;
         };
 
@@ -288,9 +285,12 @@ define('io.ox/office/editor/view/view',
 
             infoNode = $('<table>').css('table-layout', 'fixed').append(
                 $('<colgroup>').append($('<col>', { width: '40px' })),
-                $('<tr>').append($('<td>').text('state'), $('<td>')),
-                $('<tr>').append($('<td>').text('start'), $('<td>')),
-                $('<tr>').append($('<td>').text('end'), $('<td>'))
+                $('<tr>').append($('<th>', { colspan: 2 }).text('Editor')),
+                $('<tr>').append($('<td>').text('state'), syncCell = $('<td>')),
+                $('<tr>').append($('<th>', { colspan: 2 }).text('Selection')),
+                $('<tr>').append($('<td>').text('type'), selTypeCell = $('<td>')),
+                $('<tr>').append($('<td>').text('start'), selStartCell = $('<td>')),
+                $('<tr>').append($('<td>').text('end'), selEndCell = $('<td>'))
             );
 
             nodes.debugPane = $('<div>').addClass('io-ox-pane bottom debug user-select-text').append(
@@ -315,11 +315,11 @@ define('io.ox/office/editor/view/view',
                 .addSeparator()
                 .addGroup('document/quicksearch', new TextField({ tooltip: 'Quick Search' }))
                 .addSeparator()
-                .addButton('character/tab', { icon: 'icon-io-ox-num-inc-indent', tooltip : 'Tab'})
+                .addButton('insert/tab', { icon: 'icon-arrow-right', tooltip : 'Insert Tabulator'})
                 .addSeparator()
-                .addButton('document/cut', { label: 'Cut' })
-                .addButton('document/copy', { label: 'Copy' })
-                .addButton('document/paste', { label: 'Paste' });
+                .addButton('document/cut',   { label: 'Cut',   tooltip: 'Cut To Clipboard' })
+                .addButton('document/copy',  { label: 'Copy',  tooltip: 'Copy To Clipboard' })
+                .addButton('document/paste', { label: 'Paste', tooltip: 'Paste From Clipboard' });
         }
 
         // register a component that updates the window header tool bar

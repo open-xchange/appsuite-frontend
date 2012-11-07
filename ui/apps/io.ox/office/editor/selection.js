@@ -44,7 +44,7 @@ define('io.ox/office/editor/selection',
             selectedObject = $(),
 
             // whether this selection represents a rectangular table cell range
-            cellRange = false;
+            cellRangeSelected = false;
 
         this.startPaM = this.endPaM = null;
 
@@ -67,28 +67,40 @@ define('io.ox/office/editor/selection',
         }
 
         /**
-         * Initializes internal fields after the selection has been changed.
+         * Initializes this selection with the passed start and end points, and
+         * validates the browser selection by moving the start and end points
+         * to editable nodes.
+         *
+         * @param {Number[]} anchorPosition
+         *  The logical anchor position of a selected range. This is the side
+         *  of the range where selectiing with mouse or keyboard has been
+         *  started.
+         *
+         * @param {Number[]} focusPosition
+         *  The logical focus position of a selected range. This is the side of
+         *  the range that will be extended when selection will be changed
+         *  while dragging the mouse with pressed button, or with cursor keys
+         *  while holding the SHIFT key. May be located before the passed
+         *  anchor position.
+         *
+         * @param {Boolean} [cellRange]
+         *  Whether the passed positions describe a rectangular cell range.
          */
-        function initialize() {
+        function setSelectionRange(anchorPosition, focusPosition, cellRange) {
 
             var // selected object node
                 objectInfo = null;
 
-            // adjust start and end position
-            backwards = Utils.compareNumberArrays(self.startPaM.oxoPosition, self.endPaM.oxoPosition) > 0;
-            if (backwards) {
-                var tmp = self.startPaM;
-                self.startPaM = self.endPaM;
-                self.endPaM = tmp;
-            }
-
-            // check for cell range selection
-            cellRange = (self.startPaM.selectedNodeName === 'TR') && (self.endPaM.selectedNodeName === 'TR');
+            // store and adjust start and end position
+            cellRangeSelected = cellRange === true;
+            backwards = Utils.compareNumberArrays(anchorPosition, focusPosition) > 0;
+            self.startPaM = new Position(backwards ? focusPosition : anchorPosition);
+            self.endPaM = new Position(backwards ? anchorPosition : focusPosition);
 
             // check for object selection
             DOM.clearObjectSelection(selectedObject);
             selectedObject = $();
-            if (!cellRange && self.isSingleComponentSelection()) {
+            if (!cellRangeSelected && self.isSingleComponentSelection()) {
                 objectInfo = Position.getDOMPosition(rootNode, self.startPaM.oxoPosition, true);
                 if (objectInfo && DOM.isObjectNode(objectInfo.node)) {
                     selectedObject = $(objectInfo.node);
@@ -97,7 +109,7 @@ define('io.ox/office/editor/selection',
                 }
             }
 
-            // draw browser selection
+            // draw corrected browser selection
             self.restoreBrowserSelection();
 
             // notify listeners
@@ -111,7 +123,7 @@ define('io.ox/office/editor/selection',
         };
 
         this.isTextCursor = function () {
-            return !cellRange && _.isEqual(this.startPaM.oxoPosition, this.endPaM.oxoPosition);
+            return !cellRangeSelected && _.isEqual(this.startPaM.oxoPosition, this.endPaM.oxoPosition);
         };
 
         this.isBackwards = function () {
@@ -131,13 +143,7 @@ define('io.ox/office/editor/selection',
          *  selection.
          */
         this.getSelectionType = function () {
-            if (cellRange) {
-                return 'cell';
-            }
-            if (selectedObject.length > 0) {
-                return 'object';
-            }
-            return 'text';
+            return cellRangeSelected ? 'cell' : (selectedObject.length > 0) ? 'object' : 'text';
         };
 
         /**
@@ -278,29 +284,27 @@ define('io.ox/office/editor/selection',
         this.updateFromBrowserSelection = function () {
 
             var // the current browser selection
-                domSelection = DOM.getBrowserSelection(rootNode),
-                // last range from the selection
-                domRange = null;
+                browserSelection = DOM.getBrowserSelection(rootNode),
+                // cell range selection mode
+                cellRange = false;
 
-            if (domSelection.length > 0) {
+            if (browserSelection.active) {
 
-                // currently, only single ranges supported
-                domRange = _(domSelection).last();
-
-                // allowing multi-selection for tables (rectangle cell selection)
-                if ($(domRange.start.node).is('tr')) {
-                    domRange.start = _(domSelection).first().start;
+                // allowing multi-selection for tables (rectangular cell selection)
+                if ($(browserSelection.active.start.node).is('tr')) {
+                    browserSelection.active.start = _(browserSelection.ranges).first().start;
+                    browserSelection.active.end = _(browserSelection.ranges).last().end;
+                    cellRange = true;
                 }
 
                 // calculate logical start and end position
-                this.startPaM = Position.getTextLevelOxoPosition(domRange.start, rootNode, false);
-                this.endPaM = Position.getTextLevelOxoPosition(domRange.end, rootNode, !domRange.isCollapsed());
-
-                // initialize other members
-                initialize();
+                setSelectionRange(
+                    Position.getTextLevelOxoPosition(browserSelection.active.start, rootNode, false),
+                    Position.getTextLevelOxoPosition(browserSelection.active.end, rootNode, !browserSelection.active.isCollapsed()),
+                    cellRange);
 
             } else if (selectedObject.length === 0) {
-                Utils.warn('Selection.updateFromBrowserSelection(): missing browser selection');
+                Utils.warn('Selection.updateFromBrowserSelection(): missing valid browser selection');
             }
 
             return this;
@@ -325,11 +329,7 @@ define('io.ox/office/editor/selection',
             if (_.isArray(startPosition)) {
 
                 // store start and end position
-                this.startPaM = new Position(startPosition);
-                this.endPaM = new Position(_.isArray(endPosition) ? endPosition : startPosition);
-
-                // initialize other members
-                initialize();
+                setSelectionRange(startPosition, _.isArray(endPosition) ? endPosition : startPosition);
 
             } else {
                 Utils.warn('Selection.setSelection(): missing start position');
@@ -492,7 +492,7 @@ define('io.ox/office/editor/selection',
             }
 
             // visit all cells for rectangular cell selection mode
-            if (cellRange) {
+            if (cellRangeSelected) {
 
                 for (row = firstPosition[0]; row <= lastPosition[0]; row += 1) {
                     for (col = firstPosition[1]; col <= lastPosition[1]; col += 1) {
@@ -646,7 +646,7 @@ define('io.ox/office/editor/selection',
             // TODO! entire table selected
 
             // rectangular cell range selection: visit all table cells
-            if (cellRange) {
+            if (cellRangeSelected) {
                 return this.iterateTableCells(function (cell) {
 
                     // iterate all content nodes according to 'shortest-path' option

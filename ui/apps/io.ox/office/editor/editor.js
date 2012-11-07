@@ -2126,16 +2126,11 @@ define('io.ox/office/editor/editor',
 
         function processKeyPressed(event) {
 
-            if (isIgnorableKeyEvent(lastKeyDownEvent)) {
+            if (isIgnorableKeyEvent(lastKeyDownEvent) || isCursorKeyEvent(lastKeyDownEvent)) {
                 return;
             }
 
             implDbgOutEvent(event);
-
-            if (isCursorKeyEvent(event)) {
-                updateSelection();
-                return;
-            }
 
             // prevent browser from evaluating the key event
             event.preventDefault();

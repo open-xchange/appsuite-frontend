@@ -223,16 +223,12 @@ define('io.ox/office/editor/controller',
                     get: function (attributes) { return attributes.fillcolor; },
                     set: function (color) { editor.setAttribute('character', 'fillcolor', color); }
                 },
-
-                'character/tab' : {
-                    parent: 'character/attributes',
-                    set: function () { editor.insertTab(); }
-                },
                 'character/language': {
                     parent: 'character/attributes',
                     get: function (attributes) { return attributes.language; },
                     set: function (language) { editor.setAttribute('character', 'language', language); }
                 },
+
                 // tables
 
                 'table/insert': {
@@ -305,6 +301,10 @@ define('io.ox/office/editor/controller',
                 'debug/sync': {
                     get: function () { return app.isSynchronizedMode(); },
                     set: function (state) { app.setSynchronizedMode(state); }
+                },
+                'insert/tab' : {
+                    parent: 'document/editable/text',
+                    set: function () { editor.insertTab(); }
                 }
 
             };

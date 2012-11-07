@@ -114,7 +114,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             result += '.' + this.node.className.replace(/ /g, '.');
         } else if (this.node.nodeType === 3) {
             // add some text of a text node
-            result += '"' + this.node.nodeValue.substr(0, 10) + ((this.node.nodeValue.length > 10) ? '...' : '') + '"';
+            result += '"' + this.node.nodeValue.substr(0, 10) + ((this.node.nodeValue.length > 10) ? '\u2026' : '') + '"';
         }
 
         if (_.isNumber(this.offset)) {
@@ -889,31 +889,36 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  The container element the returned selection will be restricted to.
      *  Only ranges inside this root element will be included in the array.
      *
-     * @returns {DOM.Range[]}
-     *  The DOM ranges representing the current browser selection.
+     * @returns {Object}
+     *  An object that contains an attribute 'active' with a DOM.Range object
+     *  containing the current anchor point in its 'start' attribute, and the
+     *  focus point in its 'end' attribute. The focus point may precede the
+     *  anchor point if selecting backwards with mouse or keyboard. The
+     *  returned object contains another attribute 'ranges' which is an array
+     *  of DOM.Range objects representing all ranges currently selected. Start
+     *  and end points of these ranges are already adjusted so that each start
+     *  point precedes the end point.
      */
     DOM.getBrowserSelection = function (rootNode) {
 
         var // the browser selection
             selection = window.getSelection(),
-            // an array of all text ranges
-            ranges = [],
+            // the result object
+            result = { active: null, ranges: [] },
             // a single range object
             range = null,
             // the limiting point for valid ranges (next sibling of root node)
             globalEndPos = null;
 
-        // creates a DOM.Range object and pushes it into the result array if it is inside the root node
-        function pushRange(startNode, startOffset, endNode, endOffset) {
+        // creates a DOM.Range object
+        function createRange(startNode, startOffset, endNode, endOffset) {
 
             var // the range to be pushed into the array
                 range = DOM.Range.createRange(startNode, startOffset, endNode, endOffset),
                 // check that the nodes are inside the root node (with adjusted clone of the range)
                 adjustedRange = range.clone().adjust();
 
-            if (rootNode.contains(adjustedRange.start.node) && (DOM.Point.comparePoints(adjustedRange.end, globalEndPos) <= 0)) {
-                ranges.push(range);
-            }
+            return rootNode.contains(adjustedRange.start.node) && (DOM.Point.comparePoints(adjustedRange.end, globalEndPos) <= 0) ? range : null;
         }
 
         // convert parameter to DOM element
@@ -923,29 +928,28 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         globalEndPos = DOM.Point.createPointForNode(rootNode);
         globalEndPos.offset += 1;
 
-        // single range: use attributes of the Selection object (anchor/focus)
-        // directly to preserve direction of selection when selecting backwards
-        // (range objects received by the Selection.getRangeAt() method are
-        // adjusted already)
-        if (selection.rangeCount === 1) {
+        // get anchor range which preserves direction of selection (focus node
+        // may be located before anchor node)
+        Utils.info('DOM.getBrowserSelection(): reading browser selection');
+        if (selection.rangeCount >= 1) {
+            result.active = createRange(selection.anchorNode, selection.anchorOffset, selection.focusNode, selection.focusOffset);
+            Utils.log('  anchor=' + result.active);
+        }
 
-            // 'anchor' always points to selection start point, 'focus' always
-            // points to current cursor position (may precede anchor when
-            // selecting backwards with mouse or keyboard)
-            pushRange(selection.anchorNode, selection.anchorOffset, selection.focusNode, selection.focusOffset);
-
-        } else if (selection.rangeCount > 1) {
-
-            // get all ranges of a multi-selection
-            for (var index = 0; index < selection.rangeCount; index += 1) {
-                // get the native selection Range object
-                range = selection.getRangeAt(index);
-                // translate to the internal text range representation
-                pushRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
+        // read all selection ranges
+        for (var index = 0; index < selection.rangeCount; index += 1) {
+            // get the native selection Range object
+            range = selection.getRangeAt(index);
+            // translate to the internal text range representation
+            range = createRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
+            // push, if range is valid
+            if (range) {
+                Utils.log('  ' + result.ranges.length + '=' + range);
+                result.ranges.push(range.adjust());
             }
         }
 
-        return ranges;
+        return result;
     };
 
     /**
