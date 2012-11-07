@@ -70,7 +70,7 @@ define('io.ox/office/editor/editor',
         DEFAULT_LATERAL_TABLE_DEFINITIONS = { 'default': true, styleid: 'TableGrid', stylename: 'Table Grid', uipriority: 59 },
         DEFAULT_LATERAL_TABLE_ATTRIBUTES =
         {
-            wholeTable: {
+            wholetable: {
                 paragraph: { lineheight: { type: 'percent', value: 100 }},
                 table:
                 {
