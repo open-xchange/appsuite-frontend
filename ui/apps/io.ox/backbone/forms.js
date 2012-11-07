@@ -50,11 +50,13 @@ define('io.ox/backbone/forms',
             isRelevant: function (response) {
                 return true;
             },
+
             errorTitle: gt('An error occurred'),
 
             formatError: function (error) {
-                return gt("An error occurred. Please try again later");
+                return error.error || gt("An error occurred. Please try again later");
             }
+            
         }, options || {});
     }
 
