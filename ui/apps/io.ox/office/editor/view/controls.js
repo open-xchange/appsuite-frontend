@@ -330,7 +330,19 @@ define('io.ox/office/editor/view/controls',
         var locales = [ {lang: gt('English (US)'), locale: "en-US"},
                         {lang: gt('German'), locale: "de-DE"},
                         {lang: gt('French'), locale: "fr"},
-                        {lang: gt('Spanish'), locale: "es-ES"}
+                        {lang: gt('Spanish'), locale: "es-ES"},
+                        {lang: gt('Czech'), locale: 'cs-CZ'},
+                        {lang: gt('Danish'), locale: 'da-DK'},
+                        {lang: gt('Dutch (Netherlands)'), locale: 'nl-NL'},
+                        {lang: gt('Finnish'), locale: 'fi-FI'},
+                        {lang: gt('Greek'), locale: 'el-GR'},
+                        {lang: gt('Hungarian'), locale: 'hu-HU'},
+                        {lang: gt('Italian (Italy)'), locale: 'it-IT'},
+                        {lang: gt('Polish'), locale: 'pl-PL'},
+                        {lang: gt('Portuguese (Portugal)'), locale: 'pt-PT'},
+                        {lang: gt('Romanian'), locale: 'ro-RO'},
+                        {lang: gt('Russian'), locale: 'ru-RU'},
+                        {lang: gt('Swedish (Sweden)'), locale: 'sv-SE'}
                         ];
         function fillList() {
             self.clearOptionButtons();
