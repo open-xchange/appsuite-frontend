@@ -141,10 +141,12 @@ define('io.ox/core/config',
             configCache.get('default').done(function (data) {
                 if (data !== null) {
                     config = data;
-                    load();
+                    if (ox.online) { load(); }
                     def.resolve(data);
-                } else {
+                } else if (ox.online) {
                     load().done(def.resolve);
+                } else {
+                    def.resolve(config = {});
                 }
             });
 
