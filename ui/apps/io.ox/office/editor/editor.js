@@ -669,7 +669,8 @@ define('io.ox/office/editor/editor',
 
                 undoManager.startGroup();
 
-                if (selection.startPaM.imageFloatMode && selection.isSingleComponentSelection()) {
+                var objectInfo = selection.isSingleComponentSelection() ? Position.getDOMPosition(editdiv, selection.startPaM.oxoPosition, true) : null;
+                if (objectInfo && DOM.isObjectNode(objectInfo.node)) {
                     // An image selection
                     // This deleting of images is only possible with the button, not with an key down event.
                     deleteSelectedObject(selection);
@@ -1148,7 +1149,7 @@ define('io.ox/office/editor/editor',
                     var tableStyles = self.getStyleSheets('table'),
                     // operations generator
                         generator = new Operations.Generator();
-                    
+
                     if (tableStyles.isDirty(tableStyleId)) {
                         // insert table style to document
                         generator.generateOperation(Operations.INSERT_STYLE, {
@@ -1168,7 +1169,7 @@ define('io.ox/office/editor/editor',
                         start: _.copy(tablePos, true),
                         end: _.copy(tablePos, true)
                     });
-                    
+
                     // apply all collected operations
                     self.applyOperations(generator.getOperations(), true, true);
                 }

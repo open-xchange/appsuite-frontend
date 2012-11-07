@@ -207,9 +207,6 @@ define('io.ox/office/editor/format/objectstyles',
             object.addClass('inline').css('margin', '0 1mm');
             // ignore other attributes in inline mode
 
-            // TODO: positioning code still relies on the 'mode' data attribute
-            object.data('mode', 'inline');
-
         } else {
 
             // from inline mode to floating mode
@@ -302,31 +299,28 @@ define('io.ox/office/editor/format/objectstyles',
 
             // calculate left/right object margins
             switch (wrapMode) {
+
             case 'left':
                 // object floats at right paragraph margin
                 rightMargin = rightOffset;
                 leftMargin = Math.max(attributes.marginl, 0);
                 // if there is less than 6mm space available for text, occupy all space (no wrapping)
                 if (leftOffset - leftMargin < 600) { leftMargin = Math.max(leftOffset, 0); }
-                // TODO: positioning code still relies on the 'mode' data attribute
-                object.data('mode', 'rightFloated');
                 break;
+
             case 'right':
                 // object floats at left paragraph margin
                 leftMargin = leftOffset;
                 rightMargin = Math.max(attributes.marginr, 0);
                 // if there is less than 6mm space available for text, occupy all space (no wrapping)
                 if (rightOffset - rightMargin < 600) { rightMargin = Math.max(rightOffset, 0); }
-                // TODO: positioning code still relies on the 'mode' data attribute
-                object.data('mode', 'leftFloated');
                 break;
+
             default:
                 // no wrapping: will be modeled by left-floated with large CSS margins
                 wrapMode = 'right';
                 leftMargin = leftOffset;
                 rightMargin = Math.max(rightOffset, 0);
-                // TODO: positioning code still relies on the 'mode' data attribute
-                object.data('mode', 'noneFloated');
             }
 
             // set floating mode to object and offset node
