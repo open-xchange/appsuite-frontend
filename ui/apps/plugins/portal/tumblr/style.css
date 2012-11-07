@@ -33,3 +33,15 @@
     border: 0px none;
     max-width: 250px;
 }
+
+.io-ox-tumblr-setting .icon-edit, .io-ox-tumblr-setting .icon-remove {
+    display: inline-block;
+    float: right;
+    padding: 0 .25em;
+}
+.io-ox-tumblr-setting {
+    background: #eee;
+    padding: 13px;
+    color: black;
+    margin-bottom: 1px;
+}

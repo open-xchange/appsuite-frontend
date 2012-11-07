@@ -17,7 +17,8 @@ define('plugins/portal/tumblr/settings/plugin',
         'text!plugins/portal/tumblr/settings/tpl/blog.html',
         'text!plugins/portal/tumblr/settings/tpl/pluginsettings.html',
         'settings!plugins/portal/tumblr',
-        'gettext!io.ox/portal'
+        'gettext!io.ox/portal',
+        'less!plugins/portal/tumblr/style.css'
         ], function (ext, dialogs, blogSelectTemplate, pluginSettingsTemplate, settings, gt) {
 
     'use strict';
@@ -29,36 +30,169 @@ define('plugins/portal/tumblr/settings/plugin',
             EDIT:        gt('Edit'),
             DELETE:      gt('Delete')
         },
-
         BlogSelectView = Backbone.View.extend({
             _modelBinder: undefined,
             initialize: function (options) {
-                this.template = doT.template(blogSelectTemplate);
                 this._modelBinder = new Backbone.ModelBinder();
             },
             render: function () {
                 var self = this;
 
-                self.$el.empty().append(self.template({
-                    url: this.model.get('url'),
-                    description: this.model.get('description'),
-                    strings: staticStrings
-                }));
+                self.$el.empty().append(
+                    $('<div class="io-ox-tumblr-setting">')
+                    .attr({'data-url': this.model.get('url'),  'data-description': this.model.get('description')}).append(
+                        $('<span data-property="url">'),
+                        $('<i>').attr({'class': 'icon-edit', 'data-action': 'edit-feed', title: staticStrings.EDIT_FEED}),
+                        $('<i>').attr({'class': 'icon-remove', 'data-action': 'del-feed', title: staticStrings.DELETE_FEED})
+                    )
+                );
 
-                // Used by jquery ui sortable
                 self.$el.attr('id', this.model.get('url'));
 
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
-
+                
                 return self;
             },
             events: {
-                'click .sortable-item': 'onSelect'
+                'click .icon-remove': 'onDelete',
+                'click .icon-edit': 'onEdit'
             },
-            onSelect: function () {
-                this.$el.parent().find('div[selected="selected"]').attr('selected', null);
-                this.$el.find('.sortable-item').attr('selected', 'selected');
+            onEdit: function (pEvent) {
+                var dialog = new dialogs.ModalDialog({
+                    easyOut: true,
+                    async: true
+                });
+                var $myNode = $(pEvent.target).parent(),
+                    oldUrl = $myNode.data('url'),
+                    oldDescription = $myNode.data('description');
+
+                if (oldUrl) {
+                    var $url = $('<input>').attr({type: 'text', placeholder: '.tumblr.com'}).val(oldUrl),
+                    $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}).val(oldDescription),
+                    $error = $('<div>').addClass('alert alert-error').hide(),
+                    that = this;
+
+                    dialog.header($("<h4>").text(gt('Edit a blog')))
+                    .append($url)
+                    .append($description)
+                    .append($error)
+                    .addButton('cancel', gt('Cancel'))
+                    .addButton('edit', gt('Edit'), null, {classes: 'btn-primary'})
+                    .show();
+
+                    dialog.on('edit', function (e) {
+                        $error.hide();
+
+                        var url = $.trim($url.val()),
+                        description = $.trim($description.val()),
+                        deferred = $.Deferred();
+
+                        // No dot and url does not end with tumblr.com? Append it!
+                        if (url.indexOf('.') === -1 && !url.match(/\.tumblr\.com$/)) {
+                            url = url + '.tumblr.com';
+                        }
+
+                        if (url.length === 0) {
+                            $error.text(gt('Please enter an blog-url.'));
+                            deferred.reject();
+                        } else if (description.length === 0) {
+                            $error.text(gt('Please enter a description.'));
+                            deferred.reject();
+                        } else {
+                            $.ajax({
+                                url: 'https://api.tumblr.com/v2/blog/' + url + '/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=&jsonp=testcallback',
+                                type: 'HEAD',
+                                dataType: 'jsonp',
+                                jsonp: false,
+                                jsonpCallback: 'testcallback',
+                                success: function (data) {
+                                    if (data.meta && data.meta.status && data.meta.status === 200) {
+                                        $myNode.data({url: url, description: description});
+                                        deferred.resolve();
+                                    } else {
+                                        $error.text(gt('Unknown error while checking tumblr-blog.'));
+                                        deferred.reject();
+                                    }
+                                },
+                                error: function () {
+                                    $error.text(gt('Unknown error while checking tumblr-blog.'));
+                                    deferred.reject();
+                                }
+                            });
+                        }
+
+                        deferred.done(function () {
+                            console.log('disable tumblr-' + oldUrl.replace(/[^a-z0-9]/g, '_'));
+
+                            ext.point("io.ox/portal/widget").disable('tumblr-' + oldUrl.replace(/[^a-z0-9]/g, '_'));
+
+                            blogs = removeBlog(blogs, oldUrl);
+
+                            blogs.push({url: url, description: description});
+                            settings.set('blogs', blogs);
+                            settings.save();
+
+                            console.log('enable tumblr-' + url.replace(/[^a-z0-9]/g, '_'));
+                            ext.point("io.ox/portal/widget").enable('tumblr-' + url.replace(/[^a-z0-9]/g, '_'));
+
+                            require(['plugins/portal/tumblr/register'], function (tumblr) {
+                                tumblr.reload();
+                                that.trigger('redraw');
+                                ox.trigger("refresh^");
+                                dialog.close();
+                            });
+                        });
+
+                        deferred.fail(function () {
+                            $error.show();
+                            dialog.idle();
+                        });
+                    });
+                }
+            },
+            onDelete: function (args) {
+                var dialog = new dialogs.ModalDialog({
+                    easyOut: true
+                });
+
+                var url = this.$el.find('[selected]').data('url');
+
+                if (url) {
+                    var that = this;
+
+                    dialog.header($("<h4>").text(gt('Delete a Blog')))
+                    .append($('<span>').text(gt('Do you really want to delete the following blog(s)?')))
+                    .append($('<ul>').append($('<li>').text(url)))
+                    .addButton('cancel', gt('Cancel'))
+                    .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
+                    .show()
+                    .done(function (action) {
+                        if (action === 'delete') {
+                            var newblogs = [];
+                            _.each(blogs, function (sub) {
+                                if (sub.url !== url) {
+                                    newblogs.push(sub);
+                                }
+                            });
+
+                            blogs = removeBlog(blogs, url);
+                            settings.set('blogs', blogs);
+                            settings.save();
+
+                            var extId = 'tumblr-' + url.replace(/[^a-z0-9]/g, '_');
+
+                            ext.point("io.ox/portal/widget").disable(extId);
+
+                            require(['plugins/portal/tumblr/register'], function (tumblr) {
+                                tumblr.reload();
+                                that.trigger('redraw');
+                                ox.trigger("refresh^");
+                            });
+                        }
+                        return false;
+                    });
+                }
             }
         }),
 
@@ -67,45 +201,37 @@ define('plugins/portal/tumblr/settings/plugin',
                 this.template = doT.template(pluginSettingsTemplate);
             },
             render: function () {
-                this.$el.empty().append(this.template({
-                    strings: staticStrings
-                }));
+                this.$el.empty().append(
+                    $('<div>').append(
+                        $('<div class="section">').append(
+                            $('<legend class="sectiontitle">').text(staticStrings.TUMBLRBLOGS),
+                            $('<div class="settings-detail-pane">').append(
+                                $('<div class="io-ox-tumblr-settings">')
+                            ),
+                            $('<div class="sectioncontent">').append(
+                                $('<button class="btn" data-action="add" style="margin-right: 15px; ">').text(staticStrings.ADD)
+                            ),
+                            $('<div class="settings sectiondelimiter">')
+                        )
+                    )
+                );
 
+                
                 var that = this;
-
                 function redraw() {
-                    var $listbox = that.$el.find('.listbox');
+                    var $settings = that.$el.find('.io-ox-tumblr-settings');
                     var collection = new Backbone.Collection(blogs);
-                    $listbox.empty();
+                    $settings.empty();
 
                     collection.each(function (item) {
-                        $listbox.append(new BlogSelectView({ model: item }).render().el);
+                        $settings.append(new BlogSelectView({ model: item }).render().el);
                     });
 
                     if (collection.length === 0) {
-                        $listbox.hide();
+                        $settings.hide();
                     } else {
-                        $listbox.show();
+                        $settings.show();
                     }
-
-                    $listbox.sortable({
-                        update: function (event, ui) {
-                            var newBlogs = [];
-
-                            _.each($(this).sortable('toArray'), function (url) {
-                                var oldData = _.find(blogs, function (blog) { return (blog.url === url); });
-
-                                if (oldData) {
-                                    newBlogs.push(oldData);
-                                }
-                            });
-                            blogs = newBlogs;
-                            settings.set('blogs', blogs);
-                            settings.save();
-
-                            ox.trigger("refresh^", [true]);
-                        }
-                    });
                 }
 
                 redraw();
@@ -115,9 +241,7 @@ define('plugins/portal/tumblr/settings/plugin',
                 return this;
             },
             events: {
-                'click [data-action="add"]': 'onAdd',
-                'click [data-action="edit"]': 'onEdit',
-                'click [data-action="del"]': 'onDelete'
+                'click [data-action="add"]': 'onAdd'
             },
 
             onAdd: function (args) {
@@ -200,143 +324,6 @@ define('plugins/portal/tumblr/settings/plugin',
                         dialog.idle();
                     });
                 });
-            },
-            onEdit: function (args) {
-                var dialog = new dialogs.ModalDialog({
-                    easyOut: true,
-                    async: true
-                });
-
-                var oldUrl = this.$el.find('[selected]').data('url'),
-                    oldDescription = this.$el.find('[selected]').data('description');
-
-                if (oldUrl) {
-                    var $url = $('<input>').attr({type: 'text', placeholder: '.tumblr.com'}).val(oldUrl),
-                        $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}).val(oldDescription),
-                        $error = $('<div>').addClass('alert alert-error').hide(),
-                        that = this;
-
-                    dialog.header($("<h4>").text(gt('Edit a blog')))
-                        .append($url)
-                        .append($description)
-                        .append($error)
-                        .addButton('cancel', gt('Cancel'))
-                        .addButton('edit', gt('Edit'), null, {classes: 'btn-primary'})
-                        .show();
-
-                    dialog.on('edit', function (e) {
-                        $error.hide();
-
-                        var url = $.trim($url.val()),
-                            description = $.trim($description.val()),
-                            deferred = $.Deferred();
-
-                        // No dot and url does not end with tumblr.com? Append it!
-                        if (url.indexOf('.') === -1 && !url.match(/\.tumblr\.com$/)) {
-                            url = url + '.tumblr.com';
-                        }
-
-                        if (url.length === 0) {
-                            $error.text(gt('Please enter an blog-url.'));
-                            deferred.reject();
-                        } else if (description.length === 0) {
-                            $error.text(gt('Please enter a description.'));
-                            deferred.reject();
-                        } else {
-                            $.ajax({
-                                url: 'https://api.tumblr.com/v2/blog/' + url + '/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=&jsonp=testcallback',
-                                type: 'HEAD',
-                                dataType: 'jsonp',
-                                jsonp: false,
-                                jsonpCallback: 'testcallback',
-                                success: function (data) {
-                                    if (data.meta && data.meta.status && data.meta.status === 200) {
-                                        deferred.resolve();
-                                    } else {
-                                        $error.text(gt('Unknown error while checking tumblr-blog.'));
-                                        deferred.reject();
-                                    }
-                                },
-                                error: function () {
-                                    $error.text(gt('Unknown error while checking tumblr-blog.'));
-                                    deferred.reject();
-                                }
-                            });
-                        }
-
-                        deferred.done(function () {
-                            console.log('disable tumblr-' + oldUrl.replace(/[^a-z0-9]/g, '_'));
-
-                            ext.point("io.ox/portal/widget").disable('tumblr-' + oldUrl.replace(/[^a-z0-9]/g, '_'));
-
-                            blogs = removeBlog(blogs, oldUrl);
-
-                            blogs.push({url: url, description: description});
-                            settings.set('blogs', blogs);
-                            settings.save();
-
-                            console.log('enable tumblr-' + url.replace(/[^a-z0-9]/g, '_'));
-                            ext.point("io.ox/portal/widget").enable('tumblr-' + url.replace(/[^a-z0-9]/g, '_'));
-
-                            require(['plugins/portal/tumblr/register'], function (tumblr) {
-                                tumblr.reload();
-                                that.trigger('redraw');
-                                ox.trigger("refresh^");
-                                dialog.close();
-                            });
-                        });
-
-                        deferred.fail(function () {
-                            $error.show();
-                            dialog.idle();
-                        });
-                    });
-                }
-            },
-            onDelete: function (args) {
-                console.log("onDelete");
-
-                var dialog = new dialogs.ModalDialog({
-                    easyOut: true
-                });
-
-                var url = this.$el.find('[selected]').data('url');
-
-                if (url) {
-                    var that = this;
-
-                    dialog.header($("<h4>").text(gt('Delete a Blog')))
-                        .append($('<span>').text(gt('Do you really want to delete the following blog(s)?')))
-                        .append($('<ul>').append($('<li>').text(url)))
-                        .addButton('cancel', gt('Cancel'))
-                        .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
-                        .show()
-                        .done(function (action) {
-                            if (action === 'delete') {
-                                var newblogs = [];
-                                _.each(blogs, function (sub) {
-                                    if (sub.url !== url) {
-                                        newblogs.push(sub);
-                                    }
-                                });
-
-                                blogs = removeBlog(blogs, url);
-                                settings.set('blogs', blogs);
-                                settings.save();
-
-                                var extId = 'tumblr-' + url.replace(/[^a-z0-9]/g, '_');
-
-                                ext.point("io.ox/portal/widget").disable(extId);
-
-                                require(['plugins/portal/tumblr/register'], function (tumblr) {
-                                    tumblr.reload();
-                                    that.trigger('redraw');
-                                    ox.trigger("refresh^");
-                                });
-                            }
-                            return false;
-                        });
-                }
             }
         }),
 
