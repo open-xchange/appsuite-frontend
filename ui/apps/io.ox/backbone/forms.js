@@ -56,7 +56,7 @@ define('io.ox/backbone/forms',
             formatError: function (error) {
                 return error.error || gt("An error occurred. Please try again later");
             }
-            
+
         }, options || {});
     }
 
@@ -229,17 +229,24 @@ define('io.ox/backbone/forms',
                     'name': name,
                     'size': 1
                 }),
-                    arrayOfValues = [$('<option>').text('')];
-
+                    arrayOfValues = [];
                 if (name === 'month') {
+                    arrayOfValues.push($('<option>').text(''));
                     for (var i = from; i <= to; i += 1) {
                         arrayOfValues.push($('<option>').val(i).text(gt.noI18n(date.locale.months[i - 1])));
                     }
 
+                } else if (name === 'day') {
+                    arrayOfValues.push($('<option>').text(''));
+                    for (var i = from; i <= to; i += 1) {
+                        arrayOfValues.push($('<option>').text(i));
+                    }
                 } else {
                     for (var i = from; i <= to; i += 1) {
                         arrayOfValues.push($('<option>').text(i));
                     }
+                    arrayOfValues.push($('<option>').text(''));
+                    arrayOfValues.reverse();
                 }
 
                 _(arrayOfValues).each(function (val) {
