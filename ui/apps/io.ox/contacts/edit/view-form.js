@@ -176,6 +176,14 @@ define('io.ox/contacts/edit/view-form', [
         attribute: 'display_name'
     }));
 
+    point.extend(new views.AttributeView({
+        id: 'io.ox/contacts/edit/view/profession_header',
+        index: 170,
+        tagName: 'div',
+        className: 'clear-title job',
+        attribute: ['company', 'position', 'profession']
+    }));
+
     point.basicExtend({
         id: 'io.ox/contacts/edit/view/headerBreak',
         index: 200,

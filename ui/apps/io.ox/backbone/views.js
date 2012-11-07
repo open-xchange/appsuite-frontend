@@ -254,7 +254,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                         value = self.transform(value);
                     }
                     if (!first) {
-                        self.$el.append($.txt(" "));
+                        self.$el.append($.txt(", "));
                     }
 
                     if (self.model.isSet(attribute)) {

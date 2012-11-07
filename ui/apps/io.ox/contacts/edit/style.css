@@ -52,3 +52,8 @@
 .edit-contact .sectionheader .offset2 {
 	margin-left: 210px;
 }
+
+.edit-contact .clear-title.job {
+	font-size: 1.25em;
+    color: #888;
+}
