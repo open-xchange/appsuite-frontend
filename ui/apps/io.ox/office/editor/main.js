@@ -260,7 +260,7 @@ define('io.ox/office/editor/main',
                             applyOperations(operations);
                             editor.documentLoaded();
                             editor.enableUndo(true);
-                            startOperationsTimer();
+                            startOperationsTimer(0);
                             def.resolve();
                         } else {
                             showError(gt('An error occurred while importing the document.'), gt('Load Error'));
@@ -543,7 +543,7 @@ define('io.ox/office/editor/main',
                 operationsTimer = window.setTimeout(function () {
                     operationsTimer = null;
                     synchronizeOperations();
-                }, timeout || 3000);
+                }, _.isNumber(timeout) ? timeout : 3000);
             }
         }
 
@@ -661,7 +661,7 @@ define('io.ox/office/editor/main',
             def.fail(function () {
                 // back to living application
                 win.idle();
-                startOperationsTimer();
+                startOperationsTimer(0);
             });
 
             // send any pending operations (but not in debug offline mode)
@@ -868,7 +868,7 @@ define('io.ox/office/editor/main',
         this.setSynchronizedMode = function (state) {
             if (syncMode !== state) {
                 syncMode = state;
-                startOperationsTimer();
+                startOperationsTimer(0);
             }
             return this;
         };
