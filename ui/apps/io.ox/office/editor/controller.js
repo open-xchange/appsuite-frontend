@@ -200,17 +200,17 @@ define('io.ox/office/editor/controller',
                 },
                 'character/bold': {
                     parent: 'character/attributes',
-                    get: function (attributes) { return (attributes.bold || editor.isAttributePreselected('bold')); },
+                    get: function (attributes) { return attributes.bold; },
                     set: function (state) { editor.setAttribute('character', 'bold', state); }
                 },
                 'character/italic': {
                     parent: 'character/attributes',
-                    get: function (attributes) { return (attributes.italic || editor.isAttributePreselected('italic')); },
+                    get: function (attributes) { return attributes.italic; },
                     set: function (state) { editor.setAttribute('character', 'italic', state); }
                 },
                 'character/underline': {
                     parent: 'character/attributes',
-                    get: function (attributes) { return (attributes.underline || editor.isAttributePreselected('underline')); },
+                    get: function (attributes) { return attributes.underline; },
                     set: function (state) { editor.setAttribute('character', 'underline', state); }
                 },
                 'character/color': {

@@ -197,7 +197,7 @@ define('io.ox/office/editor/editor',
             // name of the user that currently has the edit rigths
             editUser = '',
 
-            // attributes that were set without a selection
+            // attributes that were set without a selection and are only set for a single character
             preselectedAttributes = {},
 
             dbgoutEvents = false, dbgoutObjects = false;
@@ -1418,6 +1418,11 @@ define('io.ox/office/editor/editor',
                 Utils.error('Editor.getAttributes(): missing implementation for family "' + family + '"');
             }
 
+            // preselected Attributes, set without selection, overwrite the found values
+            if (family === 'character') {
+                _.extend(attributes, preselectedAttributes);
+            }
+
             return attributes;
         };
 
@@ -1667,9 +1672,14 @@ define('io.ox/office/editor/editor',
             return tableStyleId;
         };
 
-        this.isAttributePreselected = function (attribute) {
-            return (! _.isUndefined(preselectedAttributes[attribute])) && (preselectedAttributes[attribute] === true);
-        };
+//        this.isAttributePreselected = function (attribute) {
+//            // return (! _.isUndefined(preselectedAttributes[attribute])) && (preselectedAttributes[attribute] === true);
+//            return (! _.isUndefined(preselectedAttributes[attribute]));
+//        };
+//
+//        this.getPreselectedAttribute = function (attribute) {
+//            return preselectedAttributes[attribute];
+//        };
 
          /**
          * Called when all initial document operations have been processed.
