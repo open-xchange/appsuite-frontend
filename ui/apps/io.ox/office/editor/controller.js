@@ -228,7 +228,11 @@ define('io.ox/office/editor/controller',
                     parent: 'character/attributes',
                     set: function () { editor.insertTab(); }
                 },
-
+                'character/language': {
+                    parent: 'character/attributes',
+                    get: function (attributes) { return attributes.language; },
+                    set: function (language) { editor.setAttribute('character', 'language', language); }
+                },
                 // tables
 
                 'table/insert': {

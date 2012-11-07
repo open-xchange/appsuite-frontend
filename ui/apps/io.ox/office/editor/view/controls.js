@@ -308,6 +308,42 @@ define('io.ox/office/editor/view/controls',
 
     }}); // class FontHeightChooser
 
+    // class LanguageChooser ================================================
+
+    Controls.LanguageChooser = RadioGroup.extend({ constructor: function () {
+
+        var // self reference
+            self = this;
+
+        // base constructor ---------------------------------------------------
+
+        RadioGroup.call(this, {
+            width: 100,
+            dropDown: true,
+            sorted: true,
+            tooltip: gt('Language'),
+            css: { textAlign: 'left' }
+        });
+
+        // initialization -----------------------------------------------------
+
+        var locales = [ {lang: gt('English (US)'), locale: "en-US"},
+                        {lang: gt('German'), locale: "de-DE"},
+                        {lang: gt('French'), locale: "fr"},
+                        {lang: gt('Spanish'), locale: "es-ES"}
+                        ];
+        function fillList() {
+            self.clearOptionButtons();
+            _(locales).each(function (entry) {
+
+                // create the list item, pass sorting index as user data
+                self.addOptionButton(entry.locale, { label: entry.lang, css: { height: '36px', padding: '2px 12px' }});
+            });
+        }
+        fillList();
+
+    }}); // class LanguageChooser
+
     // class TableSizeChooser =================================================
 
     Controls.TableSizeChooser = Button.extend({ constructor: function () {
