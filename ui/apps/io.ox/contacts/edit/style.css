@@ -48,3 +48,7 @@
 .edit-contact select[name="year"] {
     width: 69px;
 }
+
+.edit-contact .sectionheader .offset2 {
+	margin-left: 210px;
+}

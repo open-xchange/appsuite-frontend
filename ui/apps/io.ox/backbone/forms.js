@@ -575,7 +575,13 @@ define('io.ox/backbone/forms',
 
                 this.nodes.header = $('<div class="row sectionheader">').appendTo(this.$el);
 
-                $('<span class="sectiontitle offset2 span4">').text(this.title).appendTo(this.nodes.header);
+                $('<a href="#" class="offset2 span4">').text(this.title).on('click', function () {
+                    if (self.state === 'mixed') {
+                        self.more();
+                    } else if (self.state === 'allVisible') {
+                        self.less();
+                    }
+                }).appendTo(this.nodes.header);
                 if (this.state === 'allVisible') {
                     return;
                 }
@@ -586,7 +592,8 @@ define('io.ox/backbone/forms',
                     } else if (self.state === 'allVisible') {
                         self.less();
                     }
-                }).appendTo(this.nodes.header);
+                });
+//                .appendTo(this.nodes.header);
 
                 if (this.state === 'collapsed') {
                     this.nodes.collapsedHeader = $('<div class="row sectionheader collapsed">').appendTo(this.$el);
