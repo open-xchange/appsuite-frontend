@@ -945,6 +945,14 @@ define("io.ox/core/desktop",
                         return this;
                     },
 
+                    getOptions: function () {
+                        var tmp = {};
+                        _(self.nodes.search.find('form').serializeArray()).each(function (element) {
+                            tmp[element.name] = $.trim(element.value);
+                        });
+                        return tmp;
+                    },
+
                     getQuery: function () {
                         return $.trim(self.nodes.searchField.val());
                     },
@@ -1130,7 +1138,7 @@ define("io.ox/core/desktop",
                     },
                     change: function (e) {
                         e.stopPropagation();
-                        win.search.query = $.trim($(this).val());
+                        win.search.query = win.search.getQuery();
                         // trigger search?
                         if (win.search.query !== '' && win.search.query !== win.search.previous) {
                             triggerSearch(win.search.previous = win.search.query);
@@ -1141,10 +1149,10 @@ define("io.ox/core/desktop",
                     }
                 };
 
-                $('<form class="form-search">').append(
+                $('<form class="form-search form-inline">').append(
                     $('<div class="input-append">').append(
                         $('<label>', { 'for': searchId }).append(
-                            win.nodes.searchField = $('<input type="text" class="input-xlarge search-query">')
+                            win.nodes.searchField = $('<input type="text" class="input-xlarge search-query" name="query">')
                             .attr({
                                 tabindex: '1',
                                 placeholder: gt('Search') + ' ...',
@@ -1153,9 +1161,11 @@ define("io.ox/core/desktop",
                             .on(searchHandler)
                             .placeholder()
                         ),
-                        $('<button type="submit" class="btn"><i class="icon-search"></i></button>')
+                        $('<button type="submit" class="btn margin-right"><i class="icon-search"></i></button>')
+                        .on('click', searchHandler.change)
                     )
                 )
+                .on('change', 'input', function () { win.search.previous = ''; })
                 .on('submit', false)
                 .appendTo(win.nodes.search);
             }

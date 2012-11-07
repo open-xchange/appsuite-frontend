@@ -230,7 +230,8 @@ define('io.ox/core/commons',
         wireGridAndSearch: function (grid, win, api) {
             // search: all request
             grid.setAllRequest('search', function () {
-                return api.search(win.search.query);
+                var options = win.search.getOptions();
+                return api.search(win.search.query, options);
             });
             // search: list request
             grid.setListRequest('search', function (ids) {

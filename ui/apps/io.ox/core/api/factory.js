@@ -349,7 +349,7 @@ define("io.ox/core/api/factory",
                 return http.PUT({
                     module: o.module,
                     params: opt,
-                    data: getData(query)
+                    data: getData(query, options)
                 });
             };
         }

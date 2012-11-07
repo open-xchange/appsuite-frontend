@@ -212,11 +212,14 @@ define("io.ox/mail/api",
                 columns: "601,600",
                 sort: "610",
                 order: "desc",
-                getData: function (query) {
-                    return [
-                        { col: 603, pattern: query }, // from
-                        { col: 607, pattern: query }  // subject
-                    ];
+                getData: function (query, options) {
+                    var map = { from: 603, to: 604, cc: 605, subject: 607, text: -1 }, composite = [];
+                    _(options).each(function (value, key) {
+                        if (key in map && value === 'on') {
+                            composite.push({ col: map[key], pattern: query });
+                        }
+                    });
+                    return composite;
                 }
             }
         },

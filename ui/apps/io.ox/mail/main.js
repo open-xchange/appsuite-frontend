@@ -69,7 +69,6 @@ define("io.ox/mail/main",
         win = ox.ui.createWindow({
             name: 'io.ox/mail',
             title: gt("Inbox"),
-            toolbar: true,
             search: true
         });
 
@@ -402,6 +401,24 @@ define("io.ox/mail/main",
         // drop zone
         var dropZone = new dnd.UploadZone({ ref: "io.ox/mail/dnd/actions" }, app);
         win.on("show", dropZone.include).on('hide', dropZone.remove);
+
+        // search
+        (function () {
+
+            var translations = { from: gt('From'), to: gt('To'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
+                ids = 'from to cc subject text'.split(' '),
+                state = { from: true, cc: true, subject: true };
+
+            win.nodes.search.find('form').append(
+                _(ids).map(function (name) {
+                    return $('<label class="checkbox margin-right">').append(
+                        $('<input type="checkbox" value="on">').attr({ name: name, checked: state[name] ? 'checked' : null }),
+                        $.txt(translations[name])
+                    );
+                })
+            );
+
+        }());
 
         // go!
         commons.addFolderSupport(app, grid, 'mail', options.folder)
