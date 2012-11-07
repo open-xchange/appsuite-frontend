@@ -41,7 +41,9 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions"], function (ext) {
         },
         pastDate: function (val) {
             if (_.isString(val)) {
-                return 'Please enter a valid date';
+                if (val !== '') {
+                    return 'Please enter a valid date';
+                }
             }
             return _.now() > val || 'Please enter a date in the past';
         },
