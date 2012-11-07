@@ -19,7 +19,7 @@ function () {
     'use strict';
 
     var settingsDefaults = {
-            interval: '10',
+            interval: '30',
             starttime: '8',
             endtime: '18',
             view_view: 'calendar',

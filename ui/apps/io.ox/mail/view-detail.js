@@ -163,9 +163,10 @@ define('io.ox/mail/view-detail',
         var h = this.scrollHeight + 'px', node = $(this);
         $(this)
             .off('click.open')
-            .css('cursor', '')
             .on('dblclick.close', blockquoteClickClose)
-            .stop().animate({ maxHeight: h, opacity: 1.0 }, 500);
+            .stop().animate({ maxHeight: h }, 300, function () {
+                $(this).removeClass('collapsed-blockquote');
+            });
     };
 
     blockquoteClickClose = function () {
@@ -174,9 +175,10 @@ define('io.ox/mail/view-detail',
             document.getSelection().collapse(this, 0);
         }
         $(this).off('dblclick.close')
-            .css('cursor', 'pointer')
             .on('click.open', blockquoteClickOpen)
-            .stop().animate({ maxHeight: '3em', opacity: 0.5 }, 500);
+            .stop().animate({ maxHeight: '2em' }, 300, function () {
+                $(this).addClass('collapsed-blockquote');
+            });
     };
 
     mailTo = function (e) {
@@ -226,8 +228,8 @@ define('io.ox/mail/view-detail',
             if (!isLarge) {
                 source = source.replace(/dennis sieben/ig, 'Dennis App Suite (Sieben)')
                     .replace(/D7/ig, 'D App Suite (7)')
-                    .replace(/OX7/ig, '<b class="glow"> OX App Suite </b>')
-                    .replace(/7\.0/ig, '<b class="glow"> App Suite (7.0) </b>');
+                    .replace(/OX7/ig, '<b> OX App Suite </b>')
+                    .replace(/7\.0/ig, '<b> App Suite (7.0) </b>');
             }
 
             // robust constructor for large HTML
@@ -347,14 +349,26 @@ define('io.ox/mail/view-detail',
 
             if (!isLarge) {
                 // blockquotes (top-level only)
-                content.find('blockquote').not(content.find('blockquote blockquote'))
-                    .css({ maxHeight: '3em', overflow: 'hidden', opacity: 0.5, cursor: 'pointer' })
-                    .on('click.open', blockquoteClickOpen)
-                    .on('dblclick.close', blockquoteClickClose)
-                    .after(
-                        $('<a href="#" class="toggle-blockquote">').text(gt('Show more'))
-                        .on('click', blockquoteMore)
-                    );
+                content.find('blockquote').not(content.find('blockquote blockquote')).each(function () {
+                    var node = $(this);
+                    node.addClass('collapsed-blockquote')
+                        .css({ opacity: 0.75, maxHeight: '2em' })
+                        .on('click.open', blockquoteClickOpen)
+                        .on('dblclick.close', blockquoteClickClose)
+                        .after(
+                            $('<a href="#" class="toggle-blockquote">').text(gt('Show more'))
+                            .on('click', blockquoteMore)
+                        );
+                    setTimeout(function () {
+                        if (node.prop('scrollHeight') < 60) { // 3 rows a 20px line-height
+                            node.removeClass('collapsed-blockquote')
+                                .css('maxHeight', '')
+                                .off('click.open dblclick.close')
+                                .next().remove();
+                        }
+                        node = null;
+                    }, 0);
+                });
             }
 
             return content;

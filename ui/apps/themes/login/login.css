@@ -34,7 +34,7 @@ html, body {
 
 @font-face {
     font-family: OpenSans;
-    src: url(fonts/opensans-300.woff);
+    src: local('Open Sans Light'), local('OpenSans-Light'), url(fonts/opensans-300.woff);
 }
 
 .clear-title {
