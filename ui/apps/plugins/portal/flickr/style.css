@@ -33,3 +33,16 @@
     border: 0px none;
     max-width: 250px;
 }
+.io-ox-portal-flickr-setting {
+    display: inline-block;
+    color: black;
+    background: #eee;
+    margin-bottom: 1px;
+    padding: 13px;
+    width: 75%;
+}
+.io-ox-portal-flickr-setting .setting-action {
+    display: inline-block;
+    float: right;
+    margin-right: 0.5em;
+}
