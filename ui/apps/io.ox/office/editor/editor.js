@@ -1479,23 +1479,25 @@ define('io.ox/office/editor/editor',
                 switch (family) {
 
                 case 'character':
-                    selection.iterateContentNodes(function (paragraph, position, startOffset, endOffset) {
-                        // validate start offset (iterator passes 'undefined' for fully covered paragraphs)
-                        if (!_.isNumber(startOffset)) {
-                            startOffset = 0;
-                        }
-                        // validate end offset (iterator passes 'undefined' for fully covered paragraphs)
-                        if (!_.isNumber(endOffset)) {
-                            endOffset = Position.getParagraphLength(editdiv, position) - 1;
-                        }
-                        // set the attributes at the covered text range
-                        // TODO: currently, no way to set character attributes at empty paragraphs via operation...
-                        if (startOffset <= endOffset) {
-                            generator.generateOperation(Operations.ATTRS_SET, { start: position.concat([startOffset]), end: position.concat([endOffset]), attrs: attributes });
-                        } else {
-                            _.extend(preselectedAttributes, attributes); // setting attributes without selection
-                        }
-                    });
+                    if (selection.hasRange()) {
+                        selection.iterateContentNodes(function (paragraph, position, startOffset, endOffset) {
+                            // validate start offset (iterator passes 'undefined' for fully covered paragraphs)
+                            if (!_.isNumber(startOffset)) {
+                                startOffset = 0;
+                            }
+                            // validate end offset (iterator passes 'undefined' for fully covered paragraphs)
+                            if (!_.isNumber(endOffset)) {
+                                endOffset = Position.getParagraphLength(editdiv, position) - 1;
+                            }
+                            // set the attributes at the covered text range
+                            // TODO: currently, no way to set character attributes at empty paragraphs via operation...
+                            if (startOffset <= endOffset) {
+                                generator.generateOperation(Operations.ATTRS_SET, { start: position.concat([startOffset]), end: position.concat([endOffset]), attrs: attributes });
+                            }
+                        });
+                    } else {
+                        _.extend(preselectedAttributes, attributes); // setting attributes without selection
+                    }
                     break;
 
                 case 'paragraph':
@@ -1671,15 +1673,6 @@ define('io.ox/office/editor/editor',
 
             return tableStyleId;
         };
-
-//        this.isAttributePreselected = function (attribute) {
-//            // return (! _.isUndefined(preselectedAttributes[attribute])) && (preselectedAttributes[attribute] === true);
-//            return (! _.isUndefined(preselectedAttributes[attribute]));
-//        };
-//
-//        this.getPreselectedAttribute = function (attribute) {
-//            return preselectedAttributes[attribute];
-//        };
 
          /**
          * Called when all initial document operations have been processed.
