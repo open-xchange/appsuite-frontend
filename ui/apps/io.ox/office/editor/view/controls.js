@@ -350,7 +350,7 @@ define('io.ox/office/editor/view/controls',
             _(locales).each(function (entry) {
 
                 // create the list item, pass sorting index as user data
-                self.addOptionButton(entry.locale, { label: entry.lang, css: { height: '36px', padding: '2px 12px' }});
+                self.addOptionButton(entry.locale, { label: entry.lang });
             });
         }
         fillList();

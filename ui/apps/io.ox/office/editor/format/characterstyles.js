@@ -98,6 +98,7 @@ define('io.ox/office/editor/format/characterstyles',
                     element.attr('lang', value);
                 }
             },
+
             // special attributes
 
             highlight: {
