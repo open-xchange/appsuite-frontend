@@ -353,10 +353,19 @@
         font-size: 13px;
     }
 
+    .collapsed-blockquote {
+        padding: 0 1em 0 39px !important;
+        overflow: hidden !important;
+        cursor: pointer;
+    }
+
     .toggle-blockquote {
-        display: inline-block;
+        display: block;
         margin: 0em 0 1em 0;
         font-size: 12px;
+        position: relative;
+        top: -1em;
+        left: 40px;
     }
 
     /* label dropdown */
@@ -421,17 +430,6 @@
             background-color: transparent;
             border: 0px none;
             .border-radius(0px);
-        }
-
-        @-webkit-keyframes glow {
-            from { color: #fff; }
-            to { color: #c0a; }
-        }
-
-        .glow {
-            .animation(glow 2s ease-in-out infinite alternate);
-            background-color: #333;
-            .border-radius(4px);
         }
     }
 

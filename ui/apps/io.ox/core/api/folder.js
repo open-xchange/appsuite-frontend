@@ -684,28 +684,26 @@ define('io.ox/core/api/folder',
 
     api.getBreadcrumb = (function () {
 
-        var dropdown = function (li, id) {
+        var dropdown = function (li, id, title) {
             _.defer(function () {
                 api.getSubFolders({ folder: id }).done(function (list) {
                     var first;
                     if (list.length) {
                         // add first folder as dropdown
                         first = list[0];
-                        li.after(
-                            $('<span class="divider">').text(gt.noI18n(' / ')),
-                            $('<li class="dropdown">').append(
-                                $('<a class="dropdown-toggle" data-toggle="dropdown" href="#">').append(
-                                    $.txt(gt.noI18n(first.title + ' ... ')),
-                                    $('<b class="caret">')
-                                ),
-                                $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">').append(
-                                    _(list).map(function (folder) {
-                                        return $('<li>').append(
-                                            $('<a href="#">')
-                                            .attr('data-folder-id', folder.id).text(gt.noI18n(folder.title))
-                                        );
-                                    })
-                                )
+                        li.addClass('dropdown').append(
+                            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">')
+                            .append(
+                                $.txt(gt.noI18n(title)),
+                                $('<b class="caret">')
+                            ),
+                            $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">').append(
+                                _(list).map(function (folder) {
+                                    return $('<li>').append(
+                                        $('<a href="#">')
+                                        .attr('data-folder-id', folder.id).text(gt.noI18n(folder.title))
+                                    );
+                                })
                             )
                         );
                     }
@@ -719,7 +717,9 @@ define('io.ox/core/api/folder',
                 properModule = options.module === undefined || folder.module === options.module,
                 clickable = properModule && options.handler !== undefined;
 
-            if (isLast && options.last) {
+            if (isLast && options.subfolder && clickable) {
+                dropdown(elem = li, folder.id, folder.title);
+            } else if (isLast && options.last) {
                 elem = li.addClass('active').text(gt.noI18n(folder.title));
             } else {
                 if (!clickable) {
@@ -728,9 +728,6 @@ define('io.ox/core/api/folder',
                     li.append(elem = $('<a href="#">').text(gt.noI18n(folder.title)));
                 }
                 li.append(isLast ? $() : $('<span class="divider">').text(gt.noI18n(' / ')));
-            }
-            if (isLast && options.subfolder && clickable) {
-                dropdown(elem, folder.id);
             }
             elem.attr('data-folder-id', folder.id);
             this.append(li);
