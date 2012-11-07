@@ -65,7 +65,7 @@ define('plugins/portal/rss/settings/plugin',
                     id = 'rss-feedgroup-' + groupname.replace(/[^A-Za-z0-9]/g, '_');
 
                 self.$el.empty().append(
-                    $('<div>').attr({'class': 'io-ox-portal-rss-settings-feedgroup sortable-item listbox-item enabled', id: id, 'data-groupname': groupname}).append(
+                    $('<div>').attr({'class': 'io-ox-portal-rss-settings-feedgroup', id: id, 'data-groupname': groupname}).append(
                         $('<strong>').text(groupname),
                         $('<i>').attr({'class': 'icon-edit', 'data-action': 'edit-group', title: staticStrings.EDIT_GROUP}),
                         $('<i>').attr({'class': 'icon-remove', 'data-action': 'del-group', title: staticStrings.DELETE_GROUP}),

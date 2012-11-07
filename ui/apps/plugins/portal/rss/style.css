@@ -42,10 +42,14 @@
 .io-ox-portal-rss-feedurl{
     margin: 0 .5em;
 }
-
+.io-ox-portal-rss-settings-feedgroup {
+    margin-top: 13px;
+}
 .io-ox-portal-rss-settings-feedgroup strong {
     margin-right: .5em;
 }
 .io-ox-portal-rss-settings-feedgroup i, .io-ox-portal-rss-settings-members i {
+    display: inline-block;
+    float: right;
     margin: 0 .1em;
 }

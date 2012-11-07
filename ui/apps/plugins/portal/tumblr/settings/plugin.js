@@ -123,9 +123,9 @@ define('plugins/portal/tumblr/settings/plugin',
                         }
 
                         deferred.done(function () {
-                            console.log('disable tumblr-' + oldUrl.replace(/[^a-z0-9]/g, '_'));
+                            console.log('disable tumblr-' + oldUrl.replace(/[^a-zA-Z0-9]/g, '_'));
 
-                            ext.point("io.ox/portal/widget").disable('tumblr-' + oldUrl.replace(/[^a-z0-9]/g, '_'));
+                            ext.point("io.ox/portal/widget").disable('tumblr-' + oldUrl.replace(/[^a-zA-Z0-9]/g, '_'));
 
                             blogs = removeBlog(blogs, oldUrl);
 
@@ -133,8 +133,8 @@ define('plugins/portal/tumblr/settings/plugin',
                             settings.set('blogs', blogs);
                             settings.save();
 
-                            console.log('enable tumblr-' + url.replace(/[^a-z0-9]/g, '_'));
-                            ext.point("io.ox/portal/widget").enable('tumblr-' + url.replace(/[^a-z0-9]/g, '_'));
+                            console.log('enable tumblr-' + url.replace(/[^a-zA-Z0-9]/g, '_'));
+                            ext.point("io.ox/portal/widget").enable('tumblr-' + url.replace(/[^a-zA-Z0-9]/g, '_'));
 
                             require(['plugins/portal/tumblr/register'], function (tumblr) {
                                 tumblr.reload();
@@ -151,12 +151,12 @@ define('plugins/portal/tumblr/settings/plugin',
                     });
                 }
             },
-            onDelete: function (args) {
+            onDelete: function (pEvent) {
                 var dialog = new dialogs.ModalDialog({
                     easyOut: true
                 });
-
-                var url = this.$el.find('[selected]').data('url');
+                var $myNode = $(pEvent.target).parent(),
+                    url = $myNode.data('url');
 
                 if (url) {
                     var that = this;
@@ -180,7 +180,7 @@ define('plugins/portal/tumblr/settings/plugin',
                             settings.set('blogs', blogs);
                             settings.save();
 
-                            var extId = 'tumblr-' + url.replace(/[^a-z0-9]/g, '_');
+                            var extId = 'tumblr-' + url.replace(/[^a-zA-Z0-9]/g, '_');
 
                             ext.point("io.ox/portal/widget").disable(extId);
 
@@ -308,7 +308,7 @@ define('plugins/portal/tumblr/settings/plugin',
                         settings.set('blogs', blogs);
                         settings.save();
 
-                        var extId = 'tumblr-' + url.replace(/[^a-z0-9]/g, '_');
+                        var extId = 'tumblr-' + url.replace(/[^a-zA-Z0-9]/g, '_');
                         ext.point("io.ox/portal/widget").enable(extId);
 
                         require(['plugins/portal/tumblr/register'], function (tumblr) {
