@@ -94,8 +94,8 @@ define('io.ox/office/editor/format/characterstyles',
 
             language: {
                 def: '',
-                set: function (element, value) {
-                    element.css('lang', value);
+                format: function (element, value) {
+                    element.attr('lang', value);
                 }
             },
             // special attributes
