@@ -682,7 +682,7 @@ define('io.ox/office/editor/editor',
                     // More than one paragraph concerned from deletion, but in same level in document or table cell.
                     deleteSelectedInSameParagraphLevel(selection);
 
-                } else if (selection.isTableCellSelection()) {
+                } else if (selection.getSelectionType() === 'cell') {
                     // This cell selection is a rectangle selection of cells in a table (only supported in Firefox).
                     deleteSelectedInCellSelection(selection);
 
@@ -768,7 +768,7 @@ define('io.ox/office/editor/editor',
 
         this.deleteCells = function () {
 
-            var isCellSelection = selection.isTableCellSelection(),
+            var isCellSelection = selection.getSelectionType() === 'cell',
                 startPos = _.copy(selection.startPaM.oxoPosition, true),
                 endPos = _.copy(selection.endPaM.oxoPosition, true);
 
@@ -826,7 +826,7 @@ define('io.ox/office/editor/editor',
 
         this.mergeCells = function () {
 
-            var isCellSelection = selection.isTableCellSelection(),
+            var isCellSelection = selection.getSelectionType() === 'cell',
                 startPos = _.copy(selection.startPaM.oxoPosition, true),
                 endPos = _.copy(selection.endPaM.oxoPosition, true);
 
@@ -882,7 +882,7 @@ define('io.ox/office/editor/editor',
 
         this.insertCell = function () {
 
-            var isCellSelection = selection.isTableCellSelection(),
+            var isCellSelection = selection.getSelectionType() === 'cell',
                 startPos = _.copy(selection.startPaM.oxoPosition, true),
                 endPos = _.copy(selection.endPaM.oxoPosition, true),
                 count = 1;  // default, adding one cell in each row
@@ -1257,8 +1257,8 @@ define('io.ox/office/editor/editor',
                     applyOperation(listOperation, true, true);
                     defNumId = listOperation.listname;
                 }
-                setAttributes('paragraph', { numId: defNumId, ilvl: 0});
-            });
+                this.setAttributes('paragraph', { numId: defNumId, ilvl: 0 });
+            }, this);
         };
 
         this.createList = function (type, options) {
@@ -1282,7 +1282,7 @@ define('io.ox/office/editor/editor',
                 newOperation.end = newOperation.start;
                 applyOperation(newOperation, true, true);
             } else {
-                setAttributes('paragraph', { numId: defNumId, ilvl: 0});
+                this.setAttributes('paragraph', { numId: defNumId, ilvl: 0 });
             }
 
         };
@@ -1422,7 +1422,85 @@ define('io.ox/office/editor/editor',
             // Create an undo group that collects all undo operations generated
             // in the local setAttributes() method (it calls itself recursively
             // with smaller parts of the current selection).
-            undoManager.enterGroup(function () { setAttributes(family, attributes); });
+            undoManager.enterGroup(function () {
+
+                var // table or object element contained by the selection
+                    element = null,
+                    // operations generator
+                    generator = new Operations.Generator(),
+                    // the style sheet container
+                    styleSheets = this.getStyleSheets(family);
+
+                // register pending style sheet via 'insertStylesheet' operation
+                if (_.isString(attributes.style) && styleSheets.isDirty(attributes.style)) {
+
+                    generator.generateOperation(Operations.INSERT_STYLE, {
+                        attrs: styleSheets.getStyleSheetAttributeMap(attributes.style),
+                        type: family,
+                        styleid: attributes.style,
+                        stylename: styleSheets.getName(attributes.style),
+                        parent: styleSheets.getParentId(attributes.style),
+                        uipriority: styleSheets.getUIPriority(attributes.style)
+                    });
+
+                    // remove the dirty flag
+                    styleSheets.setDirty(attributes.style, false);
+                }
+
+                // generate 'setAttribute' operations
+                switch (family) {
+
+                case 'character':
+                    selection.iterateContentNodes(function (paragraph, position, startOffset, endOffset) {
+                        // validate start offset (iterator passes 'undefined' for fully covered paragraphs)
+                        if (!_.isNumber(startOffset)) {
+                            startOffset = 0;
+                        }
+                        // validate end offset (iterator passes 'undefined' for fully covered paragraphs)
+                        if (!_.isNumber(endOffset)) {
+                            endOffset = Position.getParagraphLength(editdiv, position) - 1;
+                        }
+                        // set the attributes at the covered text range
+                        // TODO: currently, no way to set character attributes at empty paragraphs via operation...
+                        if (startOffset <= endOffset) {
+                            generator.generateOperation(Operations.ATTRS_SET, { start: position.concat([startOffset]), end: position.concat([endOffset]), attrs: attributes });
+                        }
+                    });
+                    break;
+
+                case 'paragraph':
+                    selection.iterateContentNodes(function (paragraph, position) {
+                        generator.generateOperation(Operations.ATTRS_SET, { start: position, attrs: attributes });
+                    });
+                    break;
+
+                case 'cell':
+                    selection.iterateTableCells(function (cell, position) {
+                        generator.generateOperation(Operations.ATTRS_SET, { start: position, attrs: attributes });
+                    });
+                    break;
+
+                case 'table':
+                    if ((element = selection.getEnclosingTable())) {
+                        generator.generateOperation(Operations.ATTRS_SET, { start: Position.getOxoPosition(editdiv, element, 0), attrs: attributes });
+                    }
+                    break;
+
+                case 'image':
+                    // TODO: needs change when multiple objects can be selected
+                    if ((element = selection.getSelectedObject()[0]) && DOM.isImageNode(element)) {
+                        generator.generateOperation(Operations.ATTRS_SET, { start: Position.getOxoPosition(editdiv, element, 0), attrs: attributes });
+                    }
+                    break;
+
+                default:
+                    Utils.error('Editor.setAttributes(): missing implementation for family "' + family + '"');
+                }
+
+                // apply all collected operations
+                this.applyOperations(generator.getOperations(), true, true);
+
+            }, this);
         };
 
         this.setEditMode = function (state) {
@@ -1478,7 +1556,7 @@ define('io.ox/office/editor/editor',
          * includes the rectangular table cell selection mode.
          */
         this.isTextSelected = function () {
-            return !selection.isObjectSelection();
+            return selection.getSelectionType() !== 'object';
         };
 
         // PUBLIC TABLE METHODS
@@ -1502,7 +1580,7 @@ define('io.ox/office/editor/editor',
          * Returns whether the current selection selects one or more objects.
          */
         this.isObjectSelected = function () {
-            return selection.isObjectSelection();
+            return selection.getSelectionType() === 'object';
         };
 
         /**
@@ -1739,7 +1817,7 @@ define('io.ox/office/editor/editor',
 
         function processMouseUp() {
             // mouse up while object selected: selection does not change
-            if (!selection.isObjectSelection()) {
+            if (selection.getSelectionType() !== 'object') {
                 // calculate logical selection from browser selection, after
                 // browser has processed the mouse event
                 updateSelection();
@@ -2674,7 +2752,7 @@ define('io.ox/office/editor/editor',
                 def = $.Deferred();
 
             if (focused && editMode) {
-                // browser needs to process key events before its selection will be querried
+                // browser needs to process pending events before its selection can be querried
                 window.setTimeout(function () {
                     selection.updateFromBrowserSelection();
                     def.resolve();
@@ -3087,102 +3165,6 @@ define('io.ox/office/editor/editor',
                 return (new Array(numChars + 1)).join(fillChar);
             else
                 return '';
-        }
-
-        // ==================================================================
-        // Private helper method for setting attributes. Only called from
-        // function 'setAttribute'.
-        // ==================================================================
-
-        /**
-         * Changes multiple attributes of the specified attribute family in the
-         * current selection.
-         *
-         * @param {String} family
-         *  The name of the attribute family containing the specified
-         *  attribute.
-         *
-         * @param {Object} attributes
-         *  The attributes to be set at the current selection.
-         */
-        function setAttributes(family, attributes) {
-
-            var // table or object element contained by the selection
-                element = null,
-                // operations generator
-                generator = new Operations.Generator(),
-                // the style sheet container
-                styleSheets = self.getStyleSheets(family);
-
-            // register pending style sheet via 'insertStylesheet' operation
-            if (_.isString(attributes.style) && styleSheets.isDirty(attributes.style)) {
-
-                generator.generateOperation(Operations.INSERT_STYLE, {
-                    attrs: styleSheets.getStyleSheetAttributeMap(attributes.style),
-                    type: family,
-                    styleid: attributes.style,
-                    stylename: styleSheets.getName(attributes.style),
-                    parent: styleSheets.getParentId(attributes.style),
-                    uipriority: styleSheets.getUIPriority(attributes.style)
-                });
-
-                // remove the dirty flag
-                styleSheets.setDirty(attributes.style, false);
-            }
-
-            // generate 'setAttribute' operations
-            switch (family) {
-
-            case 'character':
-                selection.iterateContentNodes(function (paragraph, position, startOffset, endOffset) {
-                    // validate start offset (iterator passes 'undefined' for fully covered paragraphs)
-                    if (!_.isNumber(startOffset)) {
-                        startOffset = 0;
-                    }
-                    // validate end offset (iterator passes 'undefined' for fully covered paragraphs)
-                    if (!_.isNumber(endOffset)) {
-                        endOffset = Position.getParagraphLength(editdiv, position) - 1;
-                    }
-                    // set the attributes at the covered text range
-                    // TODO: currently, no way to set character attributes at empty paragraphs via operation...
-                    if (startOffset <= endOffset) {
-                        generator.generateOperation(Operations.ATTRS_SET, { start: position.concat([startOffset]), end: position.concat([endOffset]), attrs: attributes });
-                    }
-                });
-                break;
-
-            case 'paragraph':
-                selection.iterateContentNodes(function (paragraph, position) {
-                    generator.generateOperation(Operations.ATTRS_SET, { start: position, attrs: attributes });
-                });
-                break;
-
-            case 'cell':
-                // TODO: iterate cells for Chrome's text selection in tables
-                selection.iterateTableCells(function (cell, position) {
-                    generator.generateOperation(Operations.ATTRS_SET, { start: position, attrs: attributes });
-                });
-                break;
-
-            case 'table':
-                if ((element = selection.getEnclosingTable())) {
-                    generator.generateOperation(Operations.ATTRS_SET, { start: Position.getOxoPosition(editdiv, element, 0), attrs: attributes });
-                }
-                break;
-
-            case 'image':
-                // TODO: needs change when multiple objects can be selected
-                if ((element = selection.getSelectedObject()[0]) && DOM.isImageNode(element)) {
-                    generator.generateOperation(Operations.ATTRS_SET, { start: Position.getOxoPosition(editdiv, element, 0), attrs: attributes });
-                }
-                break;
-
-            default:
-                Utils.error('Editor.getAttributes(): missing implementation for family "' + family + '"');
-            }
-
-            // apply all collected operations
-            self.applyOperations(generator.getOperations(), true, true);
         }
 
         // ==================================================================

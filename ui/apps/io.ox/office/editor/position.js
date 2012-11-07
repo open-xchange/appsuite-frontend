@@ -1880,18 +1880,21 @@ define('io.ox/office/editor/position',
      *
      * @param {Function} iterator
      *  The iterator function that will be called for every matching node.
-     *  Receives the DOM node object as first parameter, the logical start
-     *  index of the node in the paragraph as second parameter, the logical
-     *  length of the node as third parameter, the relative start offset of the
-     *  covered part in the child node as fourth parameter, and the offset
-     *  length of the covered part of the child node as fifth parameter. The
-     *  last two parameters are important if the options 'options.start' and
-     *  'options.end' will be used to iterate over a specific sub-range in the
-     *  paragraph where the first and last visited text nodes may be covered
-     *  only partly. Note that text fields and object nodes have a logical
-     *  length of 1, and other helper nodes that do not represent editable
-     *  contents have a logical length of 0. If the iterator returns the
-     *  Utils.BREAK object, the iteration process will be stopped immediately.
+     *  Receives the following parameters:
+     *      (1) {HTMLElement} the DOM node object,
+     *      (2) {Number} the logical start index of the node in the paragraph,
+     *      (3) {Number} the logical length of the node,
+     *      (4) {Number} the offset of the covered part in the visited node,
+     *          relative to its start,
+     *      (5) {Number} the length of the covered part of the child node.
+     *  The last two parameters are important if the options 'options.start'
+     *  and 'options.end' will be used to iterate over a specific sub-range in
+     *  the paragraph where the first and last visited text nodes may be
+     *  covered only partially. Note that text components (e.g. fields or tabs)
+     *  and object nodes have a logical length of 1, and other helper nodes
+     *  that do not represent editable contents have a logical length of 0. If
+     *  the iterator returns the Utils.BREAK object, the iteration process will
+     *  be stopped immediately.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol

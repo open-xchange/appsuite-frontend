@@ -24,7 +24,7 @@ define('io.ox/office/editor/selection',
     /**
      * An instance of this class represents a selection in the edited document,
      * consisting of a logical start and end position representing a half-open
-     * text range, or a rectangular table cell range (FireFox only).
+     * text range, or a rectangular table cell range.
      *
      * @constructor
      *
@@ -41,7 +41,10 @@ define('io.ox/office/editor/selection',
             backwards = false,
 
             // object node currently selected, as jQuery collection
-            selectedObject = $();
+            selectedObject = $(),
+
+            // whether this selection represents a rectangular table cell range
+            cellRange = false;
 
         this.startPaM = this.endPaM = null;
 
@@ -71,10 +74,6 @@ define('io.ox/office/editor/selection',
             var // selected object node
                 objectInfo = null;
 
-            // remove object selection boxes
-            DOM.clearObjectSelection(selectedObject);
-            selectedObject = $();
-
             // adjust start and end position
             backwards = Utils.compareNumberArrays(self.startPaM.oxoPosition, self.endPaM.oxoPosition) > 0;
             if (backwards) {
@@ -83,8 +82,13 @@ define('io.ox/office/editor/selection',
                 self.endPaM = tmp;
             }
 
+            // check for cell range selection
+            cellRange = (self.startPaM.selectedNodeName === 'TR') && (self.endPaM.selectedNodeName === 'TR');
+
             // check for object selection
-            if (self.isSingleComponentSelection()) {
+            DOM.clearObjectSelection(selectedObject);
+            selectedObject = $();
+            if (!cellRange && self.isSingleComponentSelection()) {
                 objectInfo = Position.getDOMPosition(rootNode, self.startPaM.oxoPosition, true);
                 if (objectInfo && DOM.isObjectNode(objectInfo.node)) {
                     selectedObject = $(objectInfo.node);
@@ -107,7 +111,11 @@ define('io.ox/office/editor/selection',
         };
 
         this.isTextCursor = function () {
-            return !this.isTableCellSelection() && _.isEqual(this.startPaM.oxoPosition, this.endPaM.oxoPosition);
+            return !cellRange && _.isEqual(this.startPaM.oxoPosition, this.endPaM.oxoPosition);
+        };
+
+        this.isBackwards = function () {
+            return backwards;
         };
 
         this.hasRange = function () {
@@ -115,18 +123,21 @@ define('io.ox/office/editor/selection',
         };
 
         /**
-         * Returns whether this selection represents an object node.
+         * Returns the type of this selection as string.
+         *
+         * @returns {String}
+         *  Returns 'text' for a text range or text cursor, or 'cell' for a
+         *  rectangular cell range in a table, or 'object' for an object
+         *  selection.
          */
-        this.isObjectSelection = function () {
-            return selectedObject.length > 0;
-        };
-
-        /**
-         * Returns whether this selection represents a rectangular cell range
-         * in a table element.
-         */
-        this.isTableCellSelection = function () {
-            return (this.startPaM.selectedNodeName === 'TR') && (this.endPaM.selectedNodeName === 'TR');
+        this.getSelectionType = function () {
+            if (cellRange) {
+                return 'cell';
+            }
+            if (selectedObject.length > 0) {
+                return 'object';
+            }
+            return 'text';
         };
 
         /**
@@ -228,27 +239,32 @@ define('io.ox/office/editor/selection',
                 // start and end DOM point for text selection
                 startPoint = null, endPoint = null;
 
-            // do not set browser selection in object selection mode
-            if (selectedObject.length === 0) {
+            switch (this.getSelectionType()) {
 
-                // cell selection: iterate all cells
-                if (this.isTableCellSelection()) {
-
-                    this.iterateTableCells(function (cell) {
-                        ranges.push(DOM.Range.createRangeForNode(cell));
-                    });
-
-                // text selection: select text range
+            // text selection: select text range
+            case 'text':
+                startPoint = Position.getDOMPosition(rootNode, this.startPaM.oxoPosition);
+                endPoint = Position.getDOMPosition(rootNode, this.endPaM.oxoPosition);
+                if (startPoint && endPoint) {
+                    ranges.push(new DOM.Range(backwards ? endPoint : startPoint, backwards ? startPoint : endPoint));
                 } else {
-
-                    startPoint = Position.getDOMPosition(rootNode, this.startPaM.oxoPosition);
-                    endPoint = Position.getDOMPosition(rootNode, this.endPaM.oxoPosition);
-                    if (startPoint && endPoint) {
-                        ranges.push(new DOM.Range(backwards ? endPoint : startPoint, backwards ? startPoint : endPoint));
-                    } else {
-                        Utils.error('Selection.restoreBrowserSelection(): missing text selection range');
-                    }
+                    Utils.error('Selection.restoreBrowserSelection(): missing text selection range');
                 }
+                break;
+
+            // cell selection: iterate all cells
+            case 'cell':
+                this.iterateTableCells(function (cell) {
+                    ranges.push(DOM.Range.createRangeForNode(cell));
+                });
+                break;
+
+            // do not set any browser selection in object selection mode
+            case 'object':
+                break;
+
+            default:
+                Utils.error('Selection.restoreBrowserSelection(): unknown selection type');
             }
 
             DOM.setBrowserSelection(ranges);
@@ -256,8 +272,8 @@ define('io.ox/office/editor/selection',
         };
 
         /**
-         * Calculates the logical selection according to the current browser
-         * selection.
+         * Calculates the own logical selection according to the current
+         * browser selection.
          */
         this.updateFromBrowserSelection = function () {
 
@@ -283,7 +299,7 @@ define('io.ox/office/editor/selection',
                 // initialize other members
                 initialize();
 
-            } else {
+            } else if (selectedObject.length === 0) {
                 Utils.warn('Selection.updateFromBrowserSelection(): missing browser selection');
             }
 
@@ -397,15 +413,17 @@ define('io.ox/office/editor/selection',
 
         /**
          * Calls the passed iterator function for each table cell, if this
-         * selection instance represents a rectangular table cell selection.
-         * Does nothing, if this selection is not a table cell selection.
+         * selection is located inside a table. Processes a rectangular cell
+         * selection (if supported by the browser), otherwise a row-oriented
+         * text selection inside a table.
          *
          * @param {Function} iterator
          *  The iterator function that will be called for every table cell node
-         *  covered by this selection. Receives the DOM cell node as first
-         *  parameter, and its logical start position as second parameter. If
-         *  the iterator returns the Utils.BREAK object, the iteration process
-         *  will be stopped immediately.
+         *  covered by this selection. Receives the following parameters:
+         *      (1) {HTMLTableCellElement} the visited DOM cell element,
+         *      (2) {Number[]} its logical position.
+         *  If the iterator returns the Utils.BREAK object, the iteration
+         *  process will be stopped immediately.
          *
          * @param {Object} [context]
          *  If specified, the iterator will be called with this context (the
@@ -418,59 +436,97 @@ define('io.ox/office/editor/selection',
          */
         this.iterateTableCells = function (iterator, context) {
 
-            // do nothing, if the passed selection is not a rectangular cell selection
-            if (!this.isTableCellSelection()) { return; }
+            var // the closest table containing the selection, and its position
+                table = this.getEnclosingTable(), tablePosition = null,
 
-            var // position of top-left and bottom-right cell
-                firstPosition = _.clone(this.startPaM.oxoPosition),
-                lastPosition = _.clone(this.endPaM.oxoPosition),
+                // position of top-left and bottom-right cell, relative to table
+                firstPosition = null, lastPosition = null,
                 // the DOM cells
-                firstCell = null, lastCell = null,
-                // row and column indexes
-                firstRow = 0, lastRow = 0, row = 0, firstCol = 0, lastCol = 0, col = 0,
+                firstCellInfo = null, lastCellInfo = null,
                 // current cell, and its logical position
-                cellInfo = null, cellPosition = null;
+                cellInfo = null, cellNode = 0, cellPosition = null,
 
-            // if the first content node of a cell is a sub-table instead of a
-            // paragraph, selection of this cell points into this sub-table
-            // -> go back to the outer cell
-            while (firstPosition.length > lastPosition.length) { firstPosition.pop(); }
-            while (firstPosition.length < lastPosition.length) { lastPosition.pop(); }
+                // row and column index for iteration
+                row = 0, col = 0;
+
+            // returns the next cell (either sibling, or in following row) in the same table
+            function findNextCell(cellNode) {
+
+                var rowNode = null;
+
+                // next sibling cell
+                if (cellNode.nextSibling) {
+                    return cellNode.nextSibling;
+                }
+
+                // first child of next table row
+                // TODO: can there be empty rows, e.g. if all cells are merged vertically?
+                rowNode = cellNode.parentNode.nextSibling;
+                while (rowNode && !rowNode.hasChildNodes()) {
+                    rowNode = rowNode.nextSibling;
+                }
+                return rowNode && rowNode.firstChild;
+            }
+
+            // check enclosing table, get its position
+            if (!table) {
+                Utils.warn('Selection.iterateTableCells(): selection not contained in a single table');
+                return;
+            }
+            tablePosition = Position.getOxoPosition(rootNode, table, 0);
+
+            // convert selection position to cell position relative to table
+            if ((this.startPaM.oxoPosition.length < tablePosition.length + 2) || (this.endPaM.oxoPosition.length < tablePosition.length + 2)) {
+                Utils.error('Selection.iterateTableCells(): invalid start or end position');
+                return;
+            }
+            firstPosition = this.startPaM.oxoPosition.slice(tablePosition.length, tablePosition.length + 2);
+            lastPosition = this.endPaM.oxoPosition.slice(tablePosition.length, tablePosition.length + 2);
 
             // resolve position to closest table cell
-            firstCell = Position.getLastNodeFromPositionByNodeName(rootNode, firstPosition, 'td');
-            lastCell = Position.getLastNodeFromPositionByNodeName(rootNode, lastPosition, 'td');
-            if (!firstCell || !lastCell) {
-                Utils.warn('Selection.iterateTableCells(): no table cells found for passed selection');
+            firstCellInfo = Position.getDOMPosition(table, firstPosition, true);
+            lastCellInfo = Position.getDOMPosition(table, lastPosition, true);
+            if (!firstCellInfo || !$(firstCellInfo.node).is('td') || !lastCellInfo || !$(lastCellInfo.node).is('td')) {
+                Utils.error('Selection.iterateTableCells(): no table cells found for cell positions');
                 return;
             }
 
-            // get logical positions of the cells, and their row/column indexes
-            firstPosition = Position.getOxoPosition(rootNode, firstCell);
-            lastPosition = Position.getOxoPosition(rootNode, lastCell);
-            firstCol = firstPosition.pop();
-            firstRow = firstPosition.pop();
-            lastCol = lastPosition.pop();
-            lastRow = lastPosition.pop();
+            // visit all cells for rectangular cell selection mode
+            if (cellRange) {
 
-            // cells must be located in the same table
-            if (!_.isEqual(firstPosition, lastPosition)) {
-                Utils.warn('Selection.iterateTableCells(): top-left cell and bottom-right cell in different tables');
-                return;
-            }
-
-            // visit all cells
-            for (row = firstRow; row <= lastRow; row += 1) {
-                for (col = firstCol; col <= lastCol; col += 1) {
-                    cellPosition = firstPosition.concat([row, col]);
-                    cellInfo = Position.getDOMPosition(rootNode, cellPosition);
-                    if (cellInfo && $(cellInfo.node).is('td')) {
-                        if (iterator.call(context, cellInfo.node, cellPosition) === Utils.BREAK) { return Utils.BREAK; }
-                    } else {
-                        Utils.warn('Selection.iterateTableCells(): cannot find cell at position ' + JSON.stringify(cellPosition));
-                        return;
+                for (row = firstPosition[0]; row <= lastPosition[0]; row += 1) {
+                    for (col = firstPosition[1]; col <= lastPosition[1]; col += 1) {
+                        cellPosition = tablePosition.concat([row, col]);
+                        cellInfo = Position.getDOMPosition(rootNode, cellPosition);
+                        if (cellInfo && $(cellInfo.node).is('td')) {
+                            if (iterator.call(context, cellInfo.node, cellPosition) === Utils.BREAK) { return Utils.BREAK; }
+                        } else {
+                            Utils.warn('Selection.iterateTableCells(): cannot find cell at position ' + JSON.stringify(cellPosition));
+                            return;
+                        }
                     }
                 }
+
+            // otherwise: visit all cells row-by-row (text selection mode)
+            } else {
+
+                cellNode = firstCellInfo.node;
+                while (cellNode) {
+
+                    // visit current cell
+                    cellPosition = tablePosition.concat(Position.getOxoPosition(table, cellNode, 0));
+                    if (iterator.call(context, cellNode, cellPosition) === Utils.BREAK) { return Utils.BREAK; }
+
+                    // last cell reached
+                    if (cellNode === lastCellInfo.node) { return; }
+
+                    // find next cell node (either next sibling, or first child of next row)
+                    cellNode = findNextCell(cellNode);
+                }
+
+                // in a valid DOM tree, there must always be valid cell nodes until
+                // the last cell has been reached, so this point should never be reached
+                Utils.error('Selection.iteraTableCells(): iteration exceeded selection');
             }
         };
 
@@ -480,23 +536,28 @@ define('io.ox/office/editor/selection',
          * possible to visit all paragraphs embedded in all covered tables and
          * nested tables, or to iterate on the 'shortest path' by visiting
          * tables exactly once if they are covered completely by the selection
-         * range and skipping the embedded paragraphs and sub tables.
+         * range and skipping the embedded paragraphs and sub tables. If the
+         * selection range end at the very beginning of a paragraph (before the
+         * first character), this paragraph is not considered to be included in
+         * the selected range.
          *
          * @param {Function} iterator
          *  The iterator function that will be called for every content node
-         *  (paragraphs and tables) covered by this selection. Receives the DOM
-         *  node object as first parameter, its logical position as second
-         *  parameter, the logical index of the first text component covered by
-         *  the first paragraph in the selection as third parameter (undefined
-         *  for all other component nodes but the first paragraph, may point
-         *  after the last existing child text component, if the selection
-         *  starts at the very end of a paragraph), and the logical index of
-         *  the last child text component covered by the last paragraph in the
-         *  selection as fourth parameter (closed range, undefined for all
-         *  other component nodes but the last paragraph, may be -1, if the
-         *  selection ends at the very beginning of a paragraph). If the
-         *  iterator returns the Utils.BREAK object, the iteration process will
-         *  be stopped immediately.
+         *  (paragraphs and tables) covered by this selection. Receives the
+         *  following parameters:
+         *      (1) {HTMLElement} the visited content node,
+         *      (2) {Number[]} its logical position,
+         *      (3) {Number|Undefined} the logical index of the first text
+         *          component covered by the first paragraph, undefined for
+         *          all other paragraphs and tables (may point after the last
+         *          existing child text component, if the selection starts at
+         *          the very end of a paragraph),
+         *      (4) {Number|Undefined} the logical index of the last child text
+         *          component covered by the last paragraph (closed range, will
+         *          be -1 for empty paragraphs), undefined for all other
+         *          paragraphs and tables.
+         *  If the iterator returns the Utils.BREAK object, the iteration
+         *  process will be stopped immediately.
          *
          * @param {Object} [context]
          *  If specified, the iterator will be called with this context (the
@@ -549,11 +610,15 @@ define('io.ox/office/editor/selection',
                     position = Position.getOxoPosition(rootNode, contentNode),
                     // start text offset in first paragraph
                     startOffset = (contentNode === firstParagraph) ? _.last(startPosition) : undefined,
-                    // end text offset in last paragraph (from half-open range to closed range)
+                    // end text offset in last paragraph (convert half-open range to closed range)
                     endOffset = (contentNode === lastParagraph) ? (_.last(endPosition) - 1) : undefined;
 
-                // visit the content node
-                return iterator.call(context, contentNode, position, startOffset, endOffset);
+                // visit the content node, but not the last paragraph, if selection
+                // does not start in that paragraph and end before its beginning
+                // (otherwise, it's a cursor in an empty paragraph)
+                if ((contentNode === firstParagraph) || (contentNode !== lastParagraph) || (endOffset >= 0)) {
+                    return iterator.call(context, contentNode, position, startOffset, endOffset);
+                }
             }
 
             // find the next content node in DOM tree (either table or embedded paragraph depending on shortest-path option)
@@ -580,8 +645,8 @@ define('io.ox/office/editor/selection',
 
             // TODO! entire table selected
 
-            // table cell selection (FireFox only): visit all table cells
-            if (this.isTableCellSelection()) {
+            // rectangular cell range selection: visit all table cells
+            if (cellRange) {
                 return this.iterateTableCells(function (cell) {
 
                     // iterate all content nodes according to 'shortest-path' option
@@ -618,13 +683,11 @@ define('io.ox/office/editor/selection',
                 // find next content node in DOM tree (next sibling paragraph or
                 // table, or first node in next cell, or out of last table cell...)
                 contentNode = findNextContentNode(rootNode, contentNode, lastParagraph);
-
-                // in a valid DOM tree, there must always be valid content nodes until end paragraph has been reached
-                if (!contentNode) {
-                    Utils.error('Selection.iterateContentNodes(): iteration exceeded selection');
-                }
             }
 
+            // in a valid DOM tree, there must always be valid content nodes until end
+            // paragraph has been reached, so this point should never be reached
+            Utils.error('Selection.iterateContentNodes(): iteration exceeded selection');
         };
 
         /**
