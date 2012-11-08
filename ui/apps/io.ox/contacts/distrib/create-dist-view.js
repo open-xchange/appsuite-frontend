@@ -45,7 +45,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                 // element
                 this.buildElement(),
                 // save/create button
-                $('<button class="btn btn-primary">').text(buttonText).on("click", function () {
+                $('<button class="btn btn-primary" data-action="save">').text(buttonText).on("click", function () {
                     self.options.parentView.trigger('save:start');
                     self.options.model.save().done(function () {
                         self.options.parentView.trigger('save:success');
@@ -54,7 +54,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                     });
                 }),
                 // cancel button
-                $('<button class="btn">').text(gt('Discard')).on('click', function () {
+                $('<button class="btn" data-action="discard">').text(gt('Discard')).on('click', function () {
                     // use this sneaky channel
                     $(this).trigger('controller:quit');
                 })

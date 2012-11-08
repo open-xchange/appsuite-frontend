@@ -45,14 +45,14 @@ define('io.ox/calendar/edit/template',
         index: 100,
         id: 'buttons',
         draw: function (baton) {
-            this.append($('<button class="btn btn-primary">')
+            this.append($('<button class="btn btn-primary" data-action="save" >')
                 .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
                 .css({float: 'right', marginLeft: '13px'})
                 .on('click', function () {
                     baton.model.save();
                 })
             );
-            this.append($('<button class="btn">')
+            this.append($('<button class="btn" data-action="discard" >')
                 .text(gt("Discard"))
                 .css({float: 'right'})
                 .on('click', function () {
@@ -401,7 +401,7 @@ define('io.ox/calendar/edit/template',
         index: 1700,
         module: 1
     }));
-    
+
     point.basicExtend({
         id: 'attachments_upload',
         index: 1800,
@@ -411,7 +411,7 @@ define('io.ox/calendar/edit/template',
                 type: "file"
             });
 
-            var $button = $("<button/>").text(gt("Add")).addClass("btn btn-primary pull-right").on("click", function (e) {
+            var $button = $("<button/>").attr('data-action', 'add').text(gt("Add")).addClass("btn btn-primary pull-right").on("click", function (e) {
                 e.preventDefault();
                 _($input[0].files).each(function (fileData) {
                     baton.attachmentList.addFile(fileData);
