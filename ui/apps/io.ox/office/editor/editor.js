@@ -1898,7 +1898,7 @@ define('io.ox/office/editor/editor',
                 selection.selectObjectAsText();
 
                 // let browser process the key event, select an object that has been covered exactly
-                updateSelection(isBackwardCursorKey(event.keyCode)).done(function () {
+                updateSelection(isForwardCursorKey(event.keyCode)).done(function () {
                     // draw selection box for selected objects
                     if (event.shiftKey) {
                         drawObjectSelection(selection.getSelectedObject());

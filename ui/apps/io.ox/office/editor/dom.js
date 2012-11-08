@@ -106,22 +106,28 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.Point.prototype.toString = function () {
 
-        var // full string representation of this DOM Point
-            result = this.node.nodeName.toLowerCase();
+        // generates a readable description of the passed node and offset
+        function getNodeName(node, offset) {
 
-        if ((this.node.nodeType === 1) && (this.node.className.length > 0)) {
-            // add class names of an element
-            result += '.' + this.node.className.replace(/ /g, '.');
-        } else if (this.node.nodeType === 3) {
-            // add some text of a text node
-            result += '"' + this.node.nodeValue.substr(0, 10) + ((this.node.nodeValue.length > 10) ? '\u2026' : '') + '"';
+            var // full string representation of this DOM Point
+                result = node.nodeName.toLowerCase();
+
+            if ((node.nodeType === 1) && (node.className.length > 0)) {
+                // add class names of an element
+                result += '.' + node.className.replace(/ /g, '.');
+            } else if (node.nodeType === 3) {
+                // add some text of a text node
+                result += '"' + node.nodeValue.substr(0, 10) + ((node.nodeValue.length > 10) ? '\u2026' : '') + '"';
+            }
+
+            if (_.isNumber(offset)) {
+                result += ':' + offset;
+            }
+
+            return result;
         }
 
-        if (_.isNumber(this.offset)) {
-            result += ':' + this.offset;
-        }
-
-        return result;
+        return getNodeName(this.node.parentNode, $(this.node).index()) + '>' + getNodeName(this.node, this.offset);
     };
 
     // static methods ---------------------------------------------------------

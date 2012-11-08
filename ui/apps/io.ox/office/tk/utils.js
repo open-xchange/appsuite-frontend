@@ -993,28 +993,26 @@ define('io.ox/office/tk/utils',
      *  http://api.jquery.com/is for details. If omitted, this method returns
      *  the direct next sibling of the passed node.
      *
-     * @param {Object} [options]
-     *  A map of options to control the iteration. Supports the following
-     *  options:
-     *  @param {Boolean} [options.children]
-     *      If set to true, searches the descendants of the specified node for
-     *      a matching node. By default, starts to search in the following
-     *      siblings of the specified node.
+     * @param {String|Function|Node|jQuery} [skipSiblingsSelector]
+     *  A jQuery selector that will be used to to identify DOM nodes whose
+     *  siblings will be ignored completely, even if they match the specified
+     *  selector. If omitted, this method visits all descendant nodes of all
+     *  siblings while searching for a matching node.
      *
      * @returns {Node|Null}
      *  The next sibling of the passed node in the DOM sub tree of the root
      *  node; or null, no node has been found.
      */
-    Utils.findNextNode = function (rootNode, node, selector, options) {
+    Utils.findNextNode = function (rootNode, node, selector, skipSiblingsSelector) {
 
-        var // visit own descendant nodes
-            children = Utils.getBooleanOption(options, 'children', false);
+        var // visit descendant nodes
+            visitDescendants = false;
 
         // set 'node' to the next sibling (of itself or one of its parents)
         function nextNode() {
 
-            // visit own descendant nodes if specified
-            if (children && node && node.firstChild) {
+            // visit descendant nodes if specified
+            if (visitDescendants && node && (_.isUndefined(skipSiblingsSelector) || !$(node).is(skipSiblingsSelector)) && node.firstChild) {
                 node = node.firstChild;
                 return;
             }
@@ -1024,7 +1022,7 @@ define('io.ox/office/tk/utils',
                 // do not leave the root node
                 node = (node.parentNode === rootNode) ? null : node.parentNode;
                 // always visit descendant nodes of parent siblings
-                children = true;
+                visitDescendants = true;
             }
 
             // go to that next sibling

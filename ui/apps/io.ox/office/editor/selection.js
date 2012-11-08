@@ -122,11 +122,11 @@ define('io.ox/office/editor/selection',
          *  holding the SHIFT key. May be located before the passed anchor
          *  position.
          *
-         * @param {Boolean} [backwards]
+         * @param {Boolean} [forwardCursor]
          *  If set to true, the new browser selection originates from a cursor
-         *  navigation key that moves the cursor backwards in the document.
+         *  navigation key that moves the cursor forwards in the document.
          */
-        function setSelectionRange(anchorPoint, focusPoint, backwards) {
+        function setSelectionRange(anchorPoint, focusPoint, forwardCursor) {
 
             var // adjusted points (start before end)
                 startPoint = null, endPoint = null,
@@ -135,17 +135,17 @@ define('io.ox/office/editor/selection',
                 // selected object node
                 objectInfo = null;
 
-            // adjust start and end position
+            // check for cell range selection
+            cellRangeSelected = $(anchorPoint.node).is('tr') && $(focusPoint.node).is('tr');
+
+            // get range direction (check for real range, DOM.Point.comparePoints() is expensive), adjust start and end position
             backwards = !isCursor && (DOM.Point.comparePoints(anchorPoint, focusPoint) > 0);
             startPoint = backwards ? focusPoint : anchorPoint;
             endPoint = backwards ? anchorPoint : focusPoint;
 
             // calculate start and end position
-            self.startPaM.oxoPosition = startPosition = Position.getTextLevelOxoPosition(startPoint, rootNode, false);
-            self.endPaM.oxoPosition = endPosition = Position.getTextLevelOxoPosition(endPoint, rootNode, !isCursor);
-
-            // check for cell range selection
-            cellRangeSelected = $(anchorPoint.node).is('tr') && $(focusPoint.node).is('tr');
+            self.startPaM.oxoPosition = startPosition = Position.getTextLevelOxoPosition(startPoint, rootNode, false, forwardCursor);
+            self.endPaM.oxoPosition = endPosition = isCursor ? _.clone(startPosition) : Position.getTextLevelOxoPosition(endPoint, rootNode, true, forwardCursor);
 
             // check for object selection
             DOM.clearObjectSelection(selectedObject);
@@ -339,11 +339,11 @@ define('io.ox/office/editor/selection',
          * Calculates the own logical selection according to the current
          * browser selection.
          *
-         * @param {Boolean} [backwards]
+         * @param {Boolean} [forwardCursor]
          *  If set to true, the new browser selection originates from a cursor
-         *  navigation key that moves the cursor backwards in the document.
+         *  navigation key that moves the cursor forwards in the document.
          */
-        this.updateFromBrowserSelection = function (backwards) {
+        this.updateFromBrowserSelection = function (forwardCursor) {
 
             var // the current browser selection
                 browserSelection = DOM.getBrowserSelection(rootNode),
@@ -359,7 +359,7 @@ define('io.ox/office/editor/selection',
                 }
 
                 // calculate logical start and end position
-                setSelectionRange(activeRange.start, activeRange.end, backwards);
+                setSelectionRange(activeRange.start, activeRange.end, forwardCursor);
 
             } else if (selectedObject.length === 0) {
                 Utils.warn('Selection.updateFromBrowserSelection(): missing valid browser selection');
@@ -390,10 +390,10 @@ define('io.ox/office/editor/selection',
 
             var // DOM points for start and end position
                 startPoint = _.isArray(newStartPosition) ? getPointForTextPosition(newStartPosition) : null,
-                endPoint = _.isArray(newEndPosition) ? getPointForTextPosition(newEndPosition) : null;
+                endPoint = _.isArray(newEndPosition) ? getPointForTextPosition(newEndPosition) : startPoint;
 
-            if (startPoint) {
-                setSelectionRange(startPoint, endPoint || startPoint);
+            if (startPoint && endPoint) {
+                setSelectionRange(startPoint, endPoint);
             } else {
                 Utils.warn('Selection.setTextSelection(): expecting text positions, start=' + JSON.stringify(newStartPosition) + ', end=' + JSON.stringify(newEndPosition));
             }
@@ -440,7 +440,7 @@ define('io.ox/office/editor/selection',
                 // previous text span of the object node
                 prevTextSpan = inline ? selectedObject[0].previousSibling : null,
                 // next text span of the object node (skip following floating objects)
-                nextTextSpan = Utils.findNextNode(selectedObject.parent(), selectedObject, function () { return DOM.isPortionSpan(this); }),
+                nextTextSpan = Utils.findNextNode(selectedObject.parent(), selectedObject, function () { return DOM.isPortionSpan(this); }, DOM.OBJECT_NODE_SELECTOR),
                 // DOM points representing the text selection over the object
                 startPoint = null, endPoint = null;
 
@@ -512,25 +512,6 @@ define('io.ox/office/editor/selection',
                 // row and column index for iteration
                 row = 0, col = 0;
 
-            // returns the next cell (either sibling, or in following row) in the same table
-            function findNextCell(cellNode) {
-
-                var rowNode = null;
-
-                // next sibling cell
-                if (cellNode.nextSibling) {
-                    return cellNode.nextSibling;
-                }
-
-                // first child of next table row
-                // TODO: can there be empty rows, e.g. if all cells are merged vertically?
-                rowNode = cellNode.parentNode.nextSibling;
-                while (rowNode && !rowNode.hasChildNodes()) {
-                    rowNode = rowNode.nextSibling;
-                }
-                return rowNode && rowNode.firstChild;
-            }
-
             // check enclosing table, get its position
             if (!table) {
                 Utils.warn('Selection.iterateTableCells(): selection not contained in a single table');
@@ -583,8 +564,9 @@ define('io.ox/office/editor/selection',
                     // last cell reached
                     if (cellNode === lastCellInfo.node) { return; }
 
-                    // find next cell node (either next sibling, or first child of next row)
-                    cellNode = findNextCell(cellNode);
+                    // find next cell node (either next sibling, or first child
+                    // of next row, but skip embedded tables)
+                    cellNode = Utils.findNextNode(table, cellNode, 'td', DOM.TABLE_NODE_SELECTOR);
                 }
 
                 // in a valid DOM tree, there must always be valid cell nodes until
@@ -682,10 +664,10 @@ define('io.ox/office/editor/selection',
             // find the next content node in DOM tree (either table or embedded paragraph depending on shortest-path option)
             function findNextContentNode(rootNode, contentNode, lastParagraph) {
 
-                // find next content node in DOM tree (searches in siblings of the own
-                // parent, AND in other nodes following the parent node, e.g. the next
-                // table cell, or paragraphs following the containing table, etc.)
-                contentNode = Utils.findNextNode(rootNode, contentNode, DOM.CONTENT_NODE_SELECTOR);
+                // find next content node in DOM tree (searches in own siblings, AND in other nodes
+                // following the parent node, e.g. the next table cell, or paragraphs following the
+                // containing table, etc.; but skips object nodes that may contain their own paragraphs)
+                contentNode = Utils.findNextNode(rootNode, contentNode, DOM.CONTENT_NODE_SELECTOR, DOM.OBJECT_NODE_SELECTOR);
 
                 // iterate into a table, if shortest-path option is off, or the end paragraph is inside the table
                 while (DOM.isTableNode(contentNode) && (!shortestPath || (lastParagraph && contentNode.contains(lastParagraph)))) {

@@ -145,7 +145,7 @@ define('io.ox/office/editor/position',
      * @returns {Number[]}
      *  The calculated logical position.
      */
-    Position.getTextLevelOxoPosition = function (domposition, maindiv, isEndPoint) {
+    Position.getTextLevelOxoPosition = function (domposition, maindiv, isEndPoint, forwardCursor) {
 
         var node = domposition.node,
             offset = domposition.offset;
@@ -174,7 +174,8 @@ define('io.ox/office/editor/position',
         }
 
         if (DOM.isObjectNode(node)) {
-            offset = 0;
+            // move cursor behind the object, if hit by forward cursor key
+            offset = (forwardCursor === true) ? 1 : 0;
         }
 
         // 2. Handling all selections, in which the node is above paragraph level
@@ -625,6 +626,31 @@ define('io.ox/office/editor/position',
             }
 
             Utils.error('Position.getTextSpanFromNode(): missing preceding text span for inline component node');
+            return;
+        }
+
+        // floating objects: last preceding span
+        if (DOM.isFloatingObjectNode(domPoint.node)) {
+
+            // skip other floating objects and helper nodes
+            span = domPoint.node.previousSibling;
+            while (span && !DOM.isTextSpan(span) && !DOM.isTextComponentNode(domPoint.node) && !DOM.isInlineObjectNode(domPoint.node)) {
+                span = span.previousSibling;
+            }
+
+            // no previous span: go to next span
+            if (!span) {
+                span = domPoint.node.nextSibling;
+                while (span && !DOM.isTextSpan(span)) {
+                    span = span.nextSibling;
+                }
+            }
+
+            if (DOM.isTextSpan(span)) {
+                return new DOM.Point(span.firstChild, span.firstChild.nodeValue.length);
+            }
+
+            Utils.error('Position.getTextSpanFromNode(): missing text span for floating object node');
             return;
         }
 
