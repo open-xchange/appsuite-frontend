@@ -4512,6 +4512,12 @@ define('io.ox/office/editor/editor',
                     // prototype elements for row, cell, and paragraph
                     paragraph = DOM.createParagraphNode(),
                     cell = $('<td>').append(paragraph);
+                    // cell = $('<td>').append($('<div>').addClass('cell')
+                    //     .append($('<div>').addClass('topborder'))
+                    //     .append($('<div>').addClass('bottomborder'))
+                    //     .append($('<div>').addClass('leftborder'))
+                    //     .append($('<div>').addClass('rightborder'))
+                    //     .append($('<div>').addClass('content').append(paragraph)));
 
                 // insert empty text node into the paragraph
                 validateParagraphNode(paragraph);
