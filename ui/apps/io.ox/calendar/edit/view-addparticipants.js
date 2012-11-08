@@ -46,7 +46,6 @@ define('io.ox/calendar/edit/view-addparticipants',
                     .replace(new RegExp(query, 'i'), '<b>' + query + '</b>');
             }
 
-
             self.autoparticpants = self.$el.find('.add-participant')
                 .attr('autocapitalize', 'off')
                 .attr('autocorrect', 'off')
@@ -85,7 +84,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                             var pmodel = new pModel.Participant(obj.data);
                             var pview = new pViews.ParticipantEntryView({model: pmodel, prefetched: true, closeButton: false});
                             var markup = pview.render().el;
-                            
+
                             this.append(markup);
                         }
                     },
