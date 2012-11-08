@@ -50,7 +50,10 @@ define('io.ox/office/editor/selection',
             selectedObject = $(),
 
             // whether this selection represents a rectangular table cell range
-            cellRangeSelected = false;
+            cellRangeSelected = false,
+
+            // whether the cell range selection covers the entire table
+            tableSelected = false;
 
         // TODO: convert editor code to use methods instead of member access
         // (especially, do not modify these arrays from outside...)
@@ -126,22 +129,37 @@ define('io.ox/office/editor/selection',
          *  If set to true, the new browser selection originates from a cursor
          *  navigation key that moves the cursor forwards in the document.
          */
-        function setSelectionRange(anchorPoint, focusPoint, forwardCursor) {
+        function applyBrowserSelection(browserSelection, forwardCursor) {
 
-            var // adjusted points (start before end)
+            var // active range from selection, preserving direction
+                anchorPoint = browserSelection.active.start,
+                focusPoint = browserSelection.active.end,
+                // adjusted points (start before end)
                 startPoint = null, endPoint = null,
                 // whether position is a single cursor
-                isCursor = DOM.Point.equalPoints(anchorPoint, focusPoint),
+                isCursor = false,
                 // selected object node
                 objectInfo = null;
 
             // check for cell range selection
-            cellRangeSelected = $(anchorPoint.node).is('tr') && $(focusPoint.node).is('tr');
+            cellRangeSelected = $(anchorPoint.node).is('tr') && $(focusPoint.node).is('tr') && (anchorPoint.node.parentNode === focusPoint.node.parentNode);
 
-            // get range direction (check for real range, DOM.Point.comparePoints() is expensive), adjust start and end position
-            backwards = !isCursor && (DOM.Point.comparePoints(anchorPoint, focusPoint) > 0);
-            startPoint = backwards ? focusPoint : anchorPoint;
-            endPoint = backwards ? anchorPoint : focusPoint;
+            // convert multi-selection for cells to rectangular cell selection
+            if (cellRangeSelected) {
+                // cell range selection is always ordered, no need to check for direction
+                isCursor = false;
+                backwards = false;
+                startPoint = _(browserSelection.ranges).first().start;
+                endPoint = _(browserSelection.ranges).last().end;
+                tableSelected = browserSelection.ranges.length === $(anchorPoint.node.parentNode).find('> tbody > tr > td').length;
+            } else {
+                // get range direction (check for real range, DOM.Point.comparePoints() is expensive), adjust start and end position
+                isCursor = browserSelection.active.isCollapsed();
+                backwards = !isCursor && (DOM.Point.comparePoints(anchorPoint, focusPoint) > 0);
+                startPoint = backwards ? focusPoint : anchorPoint;
+                endPoint = backwards ? anchorPoint : focusPoint;
+                tableSelected = false;
+            }
 
             // calculate start and end position
             self.startPaM.oxoPosition = startPosition = Position.getTextLevelOxoPosition(startPoint, rootNode, false, forwardCursor);
@@ -168,28 +186,65 @@ define('io.ox/office/editor/selection',
 
         // methods ------------------------------------------------------------
 
+        /**
+         * Returns whether this selection contains a valid start and end
+         * position.
+         */
         this.isValid = function () {
             return (startPosition.length > 0) && (endPosition.length > 0);
         };
 
+        /**
+         * Returns the current logical start position.
+         *
+         * @returns {Number[]}
+         *  The logical start position of this selection.
+         */
         this.getStartPosition = function () {
             return _.clone(startPosition);
         };
 
+        /**
+         * Returns the current logical end position.
+         *
+         * @returns {Number[]}
+         *  The logical end position of this selection.
+         */
         this.getEndPosition = function () {
             return _.clone(endPosition);
         };
 
+        /**
+         * Returns whether this selection represents a simple text cursor.
+         *
+         * @returns {Boolean}
+         *  True, if this selection represents a simple text cursor.
+         */
         this.isTextCursor = function () {
             return !cellRangeSelected && _.isEqual(startPosition, endPosition);
         };
 
-        this.isBackwards = function () {
-            return backwards;
+        /**
+         * Returns whether this selection represents a range that covers some
+         * document contents. The result is the exact opposite of the method
+         * Selection.isTextCursor().
+         *
+         * @returns {Boolean}
+         *  True, if this selection represents a range in the document.
+         */
+        this.hasRange = function () {
+            return !this.isTextCursor();
         };
 
-        this.hasRange = function () {
-            return !_.isEqual(startPosition, endPosition);
+        /**
+         * Returns whether this selection has been created while selecting the
+         * document contents backwards (by cursor keys or by mouse).
+         *
+         * @returns {Boolean}
+         *  True, if the selection has been created backwards.
+         */
+        this.isBackwards = function () {
+            return backwards;
         };
 
         /**
@@ -346,21 +401,10 @@ define('io.ox/office/editor/selection',
         this.updateFromBrowserSelection = function (forwardCursor) {
 
             var // the current browser selection
-                browserSelection = DOM.getBrowserSelection(rootNode),
-                // the active range
-                activeRange = browserSelection.active;
+                browserSelection = DOM.getBrowserSelection(rootNode);
 
-            if (activeRange) {
-
-                // allowing multi-selection for tables (rectangular cell selection)
-                if ($(activeRange.start.node).is('tr')) {
-                    activeRange.start = _(browserSelection.ranges).first().start;
-                    activeRange.end = _(browserSelection.ranges).last().end;
-                }
-
-                // calculate logical start and end position
-                setSelectionRange(activeRange.start, activeRange.end, forwardCursor);
-
+            if (browserSelection.active) {
+                applyBrowserSelection(browserSelection, forwardCursor);
             } else if (selectedObject.length === 0) {
                 Utils.warn('Selection.updateFromBrowserSelection(): missing valid browser selection');
             }
@@ -390,10 +434,20 @@ define('io.ox/office/editor/selection',
 
             var // DOM points for start and end position
                 startPoint = _.isArray(newStartPosition) ? getPointForTextPosition(newStartPosition) : null,
-                endPoint = _.isArray(newEndPosition) ? getPointForTextPosition(newEndPosition) : startPoint;
+                endPoint = _.isArray(newEndPosition) ? getPointForTextPosition(newEndPosition) : startPoint,
+
+                // create a browser selection object, as returned by DOM.getBrowserSelection()
+                browserSelection = null;
 
             if (startPoint && endPoint) {
-                setSelectionRange(startPoint, endPoint);
+
+                // add the ranges member representing the multi-selection ranges
+                browserSelection = { active: new DOM.Range(startPoint, endPoint) };
+                browserSelection.ranges = [browserSelection.active];
+
+                // apply the constructed browser selection
+                applyBrowserSelection(browserSelection);
+
             } else {
                 Utils.warn('Selection.setTextSelection(): expecting text positions, start=' + JSON.stringify(newStartPosition) + ', end=' + JSON.stringify(newEndPosition));
             }
@@ -654,11 +708,19 @@ define('io.ox/office/editor/selection',
                     endOffset = (contentNode === lastParagraph) ? (_.last(endPosition) - 1) : undefined;
 
                 // visit the content node, but not the last paragraph, if selection
-                // does not start in that paragraph and end before its beginning
+                // does not start in that paragraph and ends before its beginning
                 // (otherwise, it's a cursor in an empty paragraph)
-                if ((contentNode === firstParagraph) || (contentNode !== lastParagraph) || (endOffset >= 0)) {
+                if ((contentNode === firstParagraph) || (contentNode !== lastParagraph) || (endOffset >= Position.getFirstTextNodePositionInParagraph(contentNode))) {
                     return iterator.call(context, contentNode, position, startOffset, endOffset);
                 }
+            }
+
+            // find the first content node in passed root node (either table or embedded paragraph depending on shortest-path option)
+            function findFirstContentNode(rootNode) {
+
+                // in shortest-path mode, use first table or paragraph in cell,
+                // otherwise find first paragraph which may be embedded in a sub table)
+                return Utils.findDescendantNode(rootNode, shortestPath ? DOM.CONTENT_NODE_SELECTOR : DOM.PARAGRAPH_NODE_SELECTOR);
             }
 
             // find the next content node in DOM tree (either table or embedded paragraph depending on shortest-path option)
@@ -680,24 +742,21 @@ define('io.ox/office/editor/selection',
             // check validity of passed positions
             if (!startInfo || !startInfo.node || !endInfo || !endInfo.node) {
                 Utils.warn('Selection.iterateContentNodes(): invalid selection');
-                return;
+                return Utils.BREAK;
             }
 
-            // TODO! entire table selected
-
-            // rectangular cell range selection: visit all table cells
+            // rectangular cell range selection
             if (cellRangeSelected) {
+
+                // entire table selected
+                if (shortestPath && tableSelected) {
+                    return visitContentNode(this.getEnclosingTable());
+                }
+
+                // visit all table cells, iterate all content nodes according to 'shortest-path' option
                 return this.iterateTableCells(function (cell) {
-
-                    // iterate all content nodes according to 'shortest-path' option
-                    contentNode = Utils.findDescendantNode(cell, DOM.CONTENT_NODE_SELECTOR, { children: true });
-                    while (contentNode) {
-
-                        // visit current content node
+                    for (contentNode = findFirstContentNode(cell); contentNode; contentNode = findNextContentNode(cell, contentNode)) {
                         if (visitContentNode(contentNode) === Utils.BREAK) { return Utils.BREAK; }
-
-                        // iterate as long as there are more content nodes in the cell
-                        contentNode = findNextContentNode(cell, contentNode);
                     }
                 }, this);
             }
@@ -707,7 +766,7 @@ define('io.ox/office/editor/selection',
             lastParagraph = endInfo.node.parentNode;
             if (!DOM.isParagraphNode(firstParagraph) || !DOM.isParagraphNode(lastParagraph)) {
                 Utils.warn('Selection.iterateContentNodes(): text selection expected');
-                return;
+                return Utils.BREAK;
             }
 
             // iterate through all paragraphs and tables until the end paragraph has been reached
@@ -728,6 +787,7 @@ define('io.ox/office/editor/selection',
             // in a valid DOM tree, there must always be valid content nodes until end
             // paragraph has been reached, so this point should never be reached
             Utils.error('Selection.iterateContentNodes(): iteration exceeded selection');
+            return Utils.BREAK;
         };
 
         /**
@@ -823,12 +883,6 @@ define('io.ox/office/editor/selection',
                 if (_.isNumber(startOffset) && (startOffset >= Position.getLastTextNodePositionInParagraph(contentNode))) {
                     textSpan = DOM.findLastPortionSpan(contentNode);
                     return textSpan ? iterator.call(context, textSpan, position.concat([startOffset]), 0) : undefined;
-                }
-
-                // if selection ends before the first character in a paragraph, visit the first text span
-                if (_.isNumber(endOffset) && (endOffset < Position.getFirstTextNodePositionInParagraph(contentNode))) {
-                    textSpan = DOM.findFirstPortionSpan(contentNode);
-                    return textSpan ? iterator.call(context, textSpan, position.concat([endOffset + 1]), 0) : undefined;
                 }
 
                 // visit covered text components in the paragraph

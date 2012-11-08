@@ -1379,7 +1379,9 @@ define('io.ox/office/editor/editor',
          */
         this.getAttributes = function (family) {
 
-            var // table or object element contained by the selection
+            var // whether the selection is a simple cursor
+                isCursor = selection.isTextCursor(),
+                // table or object element contained by the selection
                 element = null,
                 // resulting merged attributes
                 attributes = {};
@@ -1412,9 +1414,17 @@ define('io.ox/office/editor/editor',
             case 'character':
                 selection.iterateNodes(function (node) {
                     return DOM.iterateTextSpans(node, function (span) {
-                        return mergeElementAttributes(characterStyles.getElementAttributes(span));
+                        // ignore empty text spans (they cannot be formatted via operations),
+                        // but get formatting of an empty span selected by a text cursor
+                        if (isCursor || (span.firstChild.nodeValue.length > 0)) {
+                            return mergeElementAttributes(characterStyles.getElementAttributes(span));
+                        }
                     });
                 });
+                if (isCursor) {
+                    // add preselected attributes (text cursor selection cannot result in ambiguous attributes)
+                    characterStyles.extendAttributes(attributes, preselectedAttributes);
+                }
                 break;
 
             case 'paragraph':
@@ -1438,11 +1448,6 @@ define('io.ox/office/editor/editor',
 
             default:
                 Utils.error('Editor.getAttributes(): missing implementation for family "' + family + '"');
-            }
-
-            // preselected Attributes, set without selection, overwrite the found values
-            if (family === 'character') {
-                _.extend(attributes, preselectedAttributes);
             }
 
             return attributes;
