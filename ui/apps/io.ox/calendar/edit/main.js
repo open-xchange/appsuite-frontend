@@ -103,7 +103,7 @@ define('io.ox/calendar/edit/main',
                             win.on('hide', function () {
                                 app.dropZone.remove();
                             });
-           
+
                             $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                             self.getWindow().show(_.bind(self.onShowWindow, self));
 

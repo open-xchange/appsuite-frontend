@@ -82,10 +82,7 @@
             button.attr("id", opt.id);
         }
 
-        // ad data-action
-        if (opt.dataaction !== undefined) {
-            button.attr("data-action", opt.dataaction);
-        }
+        button.attr("data-action", opt.dataaction || opt.data.action);
 
         // add tabindex?
         if (opt.tabIndex !== undefined) {
