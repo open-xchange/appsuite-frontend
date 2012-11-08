@@ -396,6 +396,55 @@ define('io.ox/office/tk/utils',
         return Utils[state ? 'addToken' : 'removeToken'](list, token, nothing);
     };
 
+    /**
+     *  create border css code
+     *
+     *  @param {Object} border
+     *    An object containing the following attributes
+     *    color line color object
+     *    bordertype {dashed, dotted, double, single, an lots of other types that are mapped to a supported type}
+     *    space padding of the line
+     *    isframe
+     *    isshadow
+     *    size line width
+     */
+    Utils.createBorderStyle = function (border, Color) {
+        var style = '';
+        switch (border.bordertype) {
+        case 'double':
+            style = border.bordertype;
+            break;
+        case 'double':
+        case 'triple':
+            style = 'double';
+            break;
+
+        case 'dashed':
+        case 'dashSmallGap':
+            style = 'dashed';
+            break;
+
+        case 'dotted':
+        case 'dotDash':
+        case 'dotDotDash':
+        case 'dashDotStroked':
+            style = 'dotted';
+            break;
+
+        //case 'single':
+        //case 'thick':
+        default:
+            style = 'solid';
+        }
+        if (border.color) {
+            style += ' ' + Color.getCssColor(border.color, 'line');
+        }
+        if (border.size) {
+            style += ' ' + border.size / 100 + 'mm';
+        }
+
+        return style;
+    };
     // options object ---------------------------------------------------------
 
     /**

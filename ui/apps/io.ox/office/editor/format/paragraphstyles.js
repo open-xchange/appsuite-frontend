@@ -87,6 +87,39 @@ define('io.ox/office/editor/format/paragraphstyles',
                         return tabstop.pos;
                     });
                 }
+            },
+            borders: {
+                def: {},
+                format: function (element, value) {
+                    if (value.topborder) {
+                        element.css("border-top", Utils.createBorderStyle(value.topborder, this));
+                        if (value.topborder.space) {
+                            element.css('padding-top', value.topborder.space / 100 + 'mm');
+                        }
+                    }
+                    if (value.bottomborder) {
+                        element.css("border-bottom", Utils.createBorderStyle(value.bottomborder, this));
+                        if (value.bottomborder.space) {
+                            element.css('padding-bottom', value.bottomborder.space / 100 + 'mm');
+                        }
+                    }
+                    if (value.leftborder) {
+                        if (value.leftborder.space) {
+                            element.css('padding-left', value.leftborder.space / 100 + 'mm');
+                        }
+                        element.css("border-left", Utils.createBorderStyle(value.leftborder, this));
+                    }
+                    if (value.rightborder) {
+                        if (value.rightborder.space) {
+                            element.css('padding-right', value.rightborder.space / 100 + 'mm');
+                        }
+                        element.css("border-right", Utils.createBorderStyle(value.rightborder, this));
+                    }
+                    //TODO determine bottom/top border depending on prev/next paragraph border settings
+//                    if (value.innerborder) {
+//                        element.css("border(top|bottom)", Utils.createBorderStyle(value.innerborder, this));
+//                    }
+                }
             }
         };
 
