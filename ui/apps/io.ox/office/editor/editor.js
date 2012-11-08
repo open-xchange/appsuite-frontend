@@ -1496,7 +1496,7 @@ define('io.ox/office/editor/editor',
                             }
                         });
                     } else {
-                        _.extend(preselectedAttributes, attributes); // setting attributes without selection
+                        characterStyles.extendAttributes(preselectedAttributes, attributes);
                     }
                     break;
 
