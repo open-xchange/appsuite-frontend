@@ -1240,12 +1240,18 @@ define('io.ox/office/editor/editor',
         };
 
         this.insertTab = function () {
-            var newOperation = {
-                    name: Operations.TAB_INSERT,
-                    position: _.copy(selection.startPaM.oxoPosition)
-                };
+            undoManager.enterGroup(function () {
+                if (selection.hasRange()) {
+                    this.deleteSelected();
+                }
 
-            applyOperation(newOperation, true, true);
+                var newOperation = {
+                        name: Operations.TAB_INSERT,
+                        position: _.copy(selection.startPaM.oxoPosition)
+                    };
+
+                applyOperation(newOperation, true, true);
+            }, this);
 
             // setting the cursor position
             selection.setSelection(lastOperationEnd);
@@ -2135,7 +2141,7 @@ define('io.ox/office/editor/editor',
                 preselectedAttributes = {};
                 // (shift)Tab: Change list indent (if in list) when selection is at first position in paragraph
                 var paragraph = Position.getLastNodeFromPositionByNodeName(editdiv, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR),
-                    mustInsertTab = !event.shiftKey && !selection.hasRange();
+                    mustInsertTab = !event.shiftKey;
                 if (!selection.hasRange() &&
                         selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] === Position.getFirstTextNodePositionInParagraph(paragraph)) {
                     var ilvl = paragraphStyles.getElementAttributes(paragraph).ilvl;
