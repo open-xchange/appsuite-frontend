@@ -147,6 +147,44 @@ define('io.ox/office/editor/undo',
 
         // private methods ----------------------------------------------------
 
+        /**
+         * Truncates the main action stack to the current undo position, and
+         * pushes the passed object onto the stack.
+         *
+         * @param {Action|Action[]|Null} action
+         *  A single undo action, or an array of undo actions. Does not modify
+         *  the undo stack, if the passed value is null or an empty array.
+         */
+        function truncateAndPush(action) {
+
+            // do nothing, if the passed parameter is an empty array
+            if (_.isObject(action) && (!_.isArray(action) || (action.length > 0))) {
+
+                // remove undone actions
+                if (currentAction < actions.length) {
+                    actions.splice(currentAction);
+                }
+
+                // push the new action (or array of actions) onto the stack
+                actions.push(action);
+                currentAction += 1;
+            }
+        }
+
+        function mergeAndPush(actionStack, nextAction) {
+
+            var // last action on passed action stack
+                lastAction = actionStack[actionStack.length - 1];
+
+            // try to merge an 'insertText' operation for a single character with the last action on stack
+            if (_.isObject(lastAction) && _.isFunction(lastAction.tryMergeInsertCharacter) && lastAction.tryMergeInsertCharacter(nextAction)) {
+                return;
+            }
+
+            // action has not been merged: append
+            actionStack.push(nextAction);
+        }
+
         function startActionGroup() {
 
             // count nested calls but use the same array for all actions
@@ -158,7 +196,8 @@ define('io.ox/office/editor/undo',
                 groupedActions = [];
                 groupedActions.undo = function (editor) {
                     var index = this.length;
-                    while (index-- > 0) {
+                    while (index > 0) {
+                        index -= 1;
                         this[index].undo(editor);
                     }
                 };
@@ -174,25 +213,10 @@ define('io.ox/office/editor/undo',
             groupLevel -= 1;
 
             // push action group array to global action stack on last call
-            if ((groupLevel === 0) && (groupedActions.length > 0)) {
-                actions.push(groupedActions);
-                currentAction = actions.length;
+            if (groupLevel === 0) {
+                truncateAndPush(groupedActions);
                 groupedActions = null;
             }
-        }
-
-        function pushAction(actionStack, nextAction) {
-
-            var // last action on passed action stack
-                lastAction = actionStack[actionStack.length - 1];
-
-            // try to merge an 'insertText' operation for a single character with the last action on stack
-            if (_.isObject(lastAction) && _.isFunction(lastAction.tryMergeInsertCharacter) && lastAction.tryMergeInsertCharacter(nextAction)) {
-                return;
-            }
-
-            // action has not been merged: append
-            actionStack.push(nextAction);
         }
 
         // methods ------------------------------------------------------------
@@ -291,18 +315,14 @@ define('io.ox/office/editor/undo',
                 action = new Action(undoOperations, redoOperations);
 
             if (groupedActions) {
-                // action grouping is active
-                pushAction(groupedActions, action);
+                // collect actions in extra array, if grouping is currently active
+                mergeAndPush(groupedActions, action);
+            } else if (currentAction < actions.length) {
+                // truncate main undo stack and push the new action
+                truncateAndPush(action);
             } else {
-                // top-level action
-                if (currentAction < actions.length) {
-                    // remove undone actions, do not try to merge with last existing action
-                    actions.splice(currentAction);
-                    actions.push(action);
-                } else {
-                    pushAction(actions, action);
-                }
-                currentAction = actions.length;
+                // try to merge with last action, if stack has not been truncated
+                mergeAndPush(actions, action);
             }
         };
 
