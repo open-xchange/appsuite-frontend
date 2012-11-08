@@ -461,7 +461,7 @@ define('io.ox/contacts/api',
                 action: 'birthdays',
                 start: start,
                 end: end,
-                columns: columns || '500,501,502,503,504,505,511'
+                columns: columns || '1,20,500,501,502,503,504,505,511'
             }
         });
     };

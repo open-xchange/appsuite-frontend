@@ -17,7 +17,8 @@ define("io.ox/contacts/view-detail",
      "io.ox/contacts/util",
      "io.ox/contacts/api",
      "io.ox/contacts/actions",
-     "io.ox/core/api/folder"
+     "io.ox/core/api/folder",
+     "less!io.ox/contacts/style.css"
     ], function (ext, gt, util, api, actions, folderAPI) {
 
     "use strict";
@@ -363,14 +364,20 @@ define("io.ox/contacts/view-detail",
 
             if (!baton) return $();
 
-            // make sure we have a baton
-            baton = ext.Baton.ensure(baton);
+            try {
+                
+                // make sure we have a baton
+                baton = ext.Baton.ensure(baton);
 
-            var node = $.createViewContainer(baton.data, api).on('redraw', { view: this }, redraw);
-            node.addClass('contact-detail view user-select-text');
-            ext.point('io.ox/contacts/detail').invoke('draw', node, baton);
+                var node = $.createViewContainer(baton.data, api).on('redraw', { view: this }, redraw);
+                node.addClass('contact-detail view user-select-text');
+                ext.point('io.ox/contacts/detail').invoke('draw', node, baton);
+    
+                return node;
 
-            return node;
+            } catch (e) {
+                console.error('io.ox/contacts/view-detail:draw()', e);
+            }
         }
     };
 });
