@@ -409,6 +409,15 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             return list;
         };
 
+        this.unique = function (list) {
+            list = list || this.get();
+            var hash = {};
+            return _(list).filter(function (obj) {
+                var key = _.isString(obj) ? obj : _.cid(obj);
+                return key in hash ? false : (hash[key] = true);
+            });
+        };
+
         /**
          * Get complete selection. Useful for threaded mails, for example. Defaults to get().
          */

@@ -83,7 +83,7 @@ define('io.ox/core/commons',
                         draw(selection[0]);
                     } else if (len > 1) {
                         node.css('height', '100%');
-                        commons.multiSelection(id, node, this.unfold(), api);
+                        commons.multiSelection(id, node, this.unique(this.unfold()), api);
                     } else {
                         node.css('height', '').idle().empty();
                     }

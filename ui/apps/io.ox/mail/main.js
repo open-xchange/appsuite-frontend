@@ -97,13 +97,6 @@ define("io.ox/mail/main",
         // add template
         grid.addTemplate(tmpl.main);
 
-        // customize selection
-        grid.selection.unfold = function () {
-            return _(this.get()).inject(function (memo, o) {
-                return memo.concat(api.getThread(o));
-            }, []);
-        };
-
         // add grid options
         grid.prop('sort', options.threadView !== false ? 'thread' : '610')
             .prop('order', 'desc')
@@ -240,6 +233,9 @@ define("io.ox/mail/main",
         /*
          * Thread summary
          */
+
+        var isInOpenThreadSummary;
+
         (function () {
 
             var openThreads = {};
@@ -297,11 +293,6 @@ define("io.ox/mail/main",
                 toggle(index, cid);
             });
 
-            grid.getContainer().on('click', '.thread-summary-item', function () {
-                var cid = $(this).attr('data-obj-id');
-                grid.selection.set(cid);
-            });
-
             grid.selection.on('keyboard', function (evt, e) {
                 var sel = grid.selection.get(), cid, index, key;
                 if (sel.length === 1) {
@@ -319,7 +310,20 @@ define("io.ox/mail/main",
                 }
             });
 
+            isInOpenThreadSummary = function (obj) {
+                var cid = _.cid(obj),
+                    index = grid.selection.getIndex(cid);
+                return openThreads[index + 1] !== undefined;
+            };
+
         }());
+
+        // customize selection
+        grid.selection.unfold = function () {
+            return _(this.get()).inject(function (memo, o) {
+                return memo.concat(isInOpenThreadSummary(o) ? o : api.getThread(o));
+            }, []);
+        };
 
         var showMail, drawMail, drawFail;
 
@@ -327,7 +331,7 @@ define("io.ox/mail/main",
             // be busy
             right.busy(true);
             // which mode?
-            if (grid.getMode() === "all" && grid.prop('sort') === 'thread') {
+            if (grid.getMode() === "all" && grid.prop('sort') === 'thread' && !isInOpenThreadSummary(obj)) {
                 // get thread
                 var thread = api.getThread(obj);
                 // get first mail first
