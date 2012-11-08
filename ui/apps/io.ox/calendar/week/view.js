@@ -497,7 +497,7 @@ define('io.ox/calendar/week/view',
             // refresh footer, timeline and today-label
             for (var d = 0; d < this.columns; d++) {
                 days.push(
-                        $('<div>')
+                    $('<div>')
                         .addClass('weekday')
                         .text(gt.noI18n(tmpDate.format(date.DAYOFWEEK_DATE)))
                         .width(100 / this.columns + '%')

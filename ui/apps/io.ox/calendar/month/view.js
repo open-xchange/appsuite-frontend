@@ -179,10 +179,7 @@ define('io.ox/calendar/month/view',
 
         var days = date.locale.days,
             tmp = [];
-        if (date.locale.weekStart === 1) {
-            days = days.slice(1).concat(days[0]);
-        }
-
+        days = days.slice(date.locale.weekStart, days.length).concat(days.slice(0, date.locale.weekStart));
         return $('<div>')
             .addClass('abs')
             .append(
