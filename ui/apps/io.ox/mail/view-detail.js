@@ -225,8 +225,8 @@ define('io.ox/mail/view-detail',
             // replace images on source level
             source = source.replace(regImageSrc, '$1' + ox.apiRoot);
 
-            // apply new naming guidelines ;-)
-            if (false && !isLarge) {
+            // apply new naming guidelines ;-) Sorry, we just have to
+            if (!isLarge) {
                 source = source.replace(/dennis sieben/ig, 'Dennis App Suite (Sieben)')
                     .replace(/D7/ig, 'D App Suite (7)')
                     .replace(/OX7/ig, '<b> OX App Suite </b>')
