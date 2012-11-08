@@ -15,8 +15,11 @@ define('io.ox/calendar/list/perspective',
      'io.ox/core/tk/vgrid',
      'io.ox/calendar/view-grid-template',
      'io.ox/calendar/view-detail',
-     'io.ox/core/commons'
-     ], function (api, VGrid, tmpl, viewDetail, commons) {
+     'io.ox/core/commons',
+     'io.ox/core/extensions',
+     'io.ox/core/date',
+     'gettext!io.ox/calendar'
+     ], function (api, VGrid, tmpl, viewDetail, commons, ext, date, gt) {
 
     'use strict';
 
@@ -25,19 +28,23 @@ define('io.ox/calendar/list/perspective',
     perspective.render = function (app) {
 
         var win = app.getWindow(),
-            left, right, grid;
-
-        var vsplit = commons.vsplit(this.main, app);
-        left = vsplit.left.addClass('border-right');
-        right = vsplit.right.addClass('default-content-padding calendar-detail-pane').scrollable();
-
-        // grid
-        grid = new VGrid(left);
+            vsplit = commons.vsplit(this.main, app),
+            left = vsplit.left.addClass('border-right'),
+            right = vsplit.right.addClass('default-content-padding calendar-detail-pane').scrollable(),
+            grid = new VGrid(left);
 
         // fix selection's serialize
         grid.selection.serialize = function (obj) {
             return typeof obj === "object" ? (obj.folder_id || obj.folder || 0) + "." + obj.id + "." + (obj.recurrence_position || 0) : obj;
         };
+
+        commons.wireGridAndAPI(grid, api);
+        commons.wireGridAndSearch(grid, win, api);
+
+        // add grid options
+        grid.prop('order', 'desc')
+            .prop('all', true)
+            .prop('folder', app.folder.get());
 
         // add template
         grid.addTemplate(tmpl.main);
@@ -47,9 +54,6 @@ define('io.ox/calendar/list/perspective',
 
         // requires new label?
         grid.requiresLabel = tmpl.requiresLabel;
-
-        commons.wireGridAndAPI(grid, api);
-        commons.wireGridAndSearch(grid, win, api);
 
         api.on('created', function (e, data) {
             if (app.folder.get() === data.folder) {
@@ -62,28 +66,102 @@ define('io.ox/calendar/list/perspective',
             return $.Deferred().resolve(ids);
         });
 
-        var showAppointment, drawAppointment, drawFail;
-
-        showAppointment = function (obj) {
+        function showAppointment(obj) {
             // be busy
             right.busy(true);
             // get appointment
             api.get(obj)
                 .done(_.lfo(drawAppointment))
                 .fail(_.lfo(drawFail, obj));
-        };
+        }
 
-        drawAppointment = function (data) {
+        function drawAppointment(data) {
             right.idle().empty().append(viewDetail.draw(data));
-        };
+        }
 
-        drawFail = function (obj) {
+        function drawFail(obj) {
             right.idle().empty().append(
                 $.fail("Oops, couldn't load appointment data.", function () {
                     showAppointment(obj);
                 })
             );
-        };
+        }
+
+        function buildOption(value, text) {
+            return $('<li>').append($('<a href="#"><i/></a>').attr('data-option', value).append($.txt(text)));
+        }
+
+        function updateGridOptions() {
+            var dropdown = grid.getToolbar().find('.grid-options'),
+                list = dropdown.find('ul'),
+                props = grid.prop();
+            // uncheck all
+            list.find('i').attr('class', 'icon-none');
+            // sort
+            list.find(
+                    '[data-option="' + props.order + '"], ' +
+                    '[data-option="' + (props.all ? 'all' : '~all') + '"]'
+                )
+                .find('i').attr('class', 'icon-ok');
+            // order
+            var opacity = [1, 0.4][props.order === 'desc' ? 'slice' : 'reverse']();
+            dropdown.find('.icon-arrow-down').css('opacity', opacity[0]).end()
+                .find('.icon-arrow-up').css('opacity', opacity[1]).end();
+        }
+
+        ext.point('io.ox/calendar/vgrid/toolbar').extend({
+            id: 'dropdown',
+            index: 100,
+            draw: function () {
+                this.prepend(
+                    $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
+                        .append(
+                            $('<a>', { href: '#' })
+                                .attr('data-toggle', 'dropdown')
+                                .append(
+                                    $('<i class="icon-arrow-down">'),
+                                    $('<i class="icon-arrow-up">')
+                                )
+                                .dropdown(),
+                            $('<ul>').addClass("dropdown-menu")
+                                .append(
+                                    buildOption('asc', gt('Ascending')),
+                                    buildOption('desc', gt('Descending')),
+                                    $('<li class="divider">'),
+                                    buildOption('all', gt('show all'))
+                                )
+                                .on('click', 'a', { grid: grid }, function () {
+                                    var option = $(this).attr('data-option');
+                                    switch (option) {
+                                    case 'asc':
+                                    case 'desc':
+                                        grid.prop('order', option).refresh(true);
+                                        break;
+                                    case 'all':
+                                        grid.prop('all', !grid.prop('all')).refresh(true);
+                                        break;
+                                    default:
+                                        break;
+                                    }
+                                })
+                        )
+                );
+            }
+        });
+
+        grid.setAllRequest(function () {
+
+            var prop = grid.prop(),
+                start = new date.Local().setHours(0, 0, 0, 0),
+                end = new date.Local(start).setMonth(start.getMonth() + 1);
+
+            return api.getAll({
+                start: start.getTime(),
+                end: end.getTime(),
+                folder: prop.all ? undefined : prop.folder,
+                order: prop.order
+            });
+        });
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/calendar', showAppointment, right, api);
         commons.wireGridAndWindow(grid, win);
@@ -91,11 +169,13 @@ define('io.ox/calendar/list/perspective',
         commons.addGridFolderSupport(app, grid);
         commons.addGridToolbarFolder(app, grid);
 
+        grid.on('change:prop', updateGridOptions);
+        updateGridOptions();
+
         grid.setListRequest(function (ids) {
             return $.Deferred().resolve(ids);
         });
 
-        grid.prop('folder', app.folder.get());
         grid.paint();
     };
 
