@@ -299,6 +299,8 @@ define('io.ox/office/editor/editor',
                 // result of the iteration process
                 result = null;
 
+            // TODO: cell selection/entire table selection
+
             // visit the paragraphs and tables covered by the selection
             result = selection.iterateContentNodes(function (contentNode, position, startOffset, endOffset) {
 
@@ -341,13 +343,12 @@ define('io.ox/office/editor/editor',
             clipboardOperations = (result === Utils.BREAK) ? [] : generator.getOperations();
 
             // dump clipboard
-            Utils.warn('Editor.copy()');
+            Utils.info('Editor.copy()');
             _(clipboardOperations).each(function (operation) {
-                var text = 'name="' + operation.name + '", attrs=';
+                var text = '  name="' + operation.name + '", attrs=';
                 operation = _.clone(operation);
                 delete operation.name;
-                text += JSON.stringify(operation);
-                Utils.log(text);
+                Utils.log(text + JSON.stringify(operation));
             });
         };
 
@@ -364,67 +365,79 @@ define('io.ox/office/editor/editor',
          */
         this.pasteInternalClipboard = function () {
 
-            if (this.hasInternalClipboard()) {
-                undoManager.enterGroup(function () {
+            // check if clipboard contains something
+            if (!this.hasInternalClipboard()) { return; }
 
-                    var // current selection
-                        selection = null,
-                        // position of text cursor after deleting the selection
-                        position = null,
-                        // text offset in first paragraph
-                        offset = 0;
+            // group all executed operations into a single undo action
+            undoManager.enterGroup(function () {
 
-                    // delete current selection
-                    this.deleteSelected();
+                var // target position to paste the clipboard contents to
+                    anchorPosition = null,
+                    // the generated paste operations with transformed positions
+                    operations = null;
 
-                    // paste clipboard to current cursor position
-                    position = selection.startPaM.oxoPosition;
-                    if (position.length >= 2) {
+                // transforms a position being relative to [0,0] to a position relative to anchorPosition
+                function transformPosition(position) {
 
-                        // separate offset for text contents in first paragraph
-                        offset = _(position).last();
-                        position.pop();
-                        Utils.warn('Editor.pasteInternalClipboard()');
+                    var // the resulting position
+                        resultPosition = null;
 
-                        // last element in startPosition
-                        _(clipboardOperations).each(function (operation) {
-
-                            // clone the operation to transform the positions
-                            operation = _.clone(operation);
-
-                            // transform position of operation
-                            // TODO: need reliable way to get the position attributes
-                            _(['position', 'start', 'end']).each(function (name) {
-                                var opPosition = operation[name];
-                                if (_.isArray(opPosition)) {
-
-                                    // adjust text offset for first paragraph
-                                    if ((opPosition[0] === 0) && (opPosition.length === 2)) {
-                                        operation[name] = position.concat([opPosition[1] + offset]);
-                                    } else {
-                                        operation[name] = position.slice(0, -1);
-                                        operation[name].push(_.last(position) + opPosition[0]);
-                                        operation[name] = operation[name].concat(opPosition.slice(1));
-                                    }
-                                }
-                            });
-
-                            this.applyOperation(operation, true, true);
-
-                            var text = 'name="' + operation.name + '", attrs=';
-                            operation = _.clone(operation);
-                            delete operation.name;
-                            text += JSON.stringify(operation);
-                            Utils.log(text);
-
-                        }, this);
-
-                        position.push(offset);
-                        selection.setTextSelection(position);
+                    if ((position[0] === 0) && (position.length === 2)) {
+                        // adjust text offset for first paragraph
+                        resultPosition = anchorPosition.slice(0, -1);
+                        resultPosition.push(_.last(anchorPosition) + position[1]);
+                    } else {
+                        // adjust paragraph offset for following paragraphs
+                        resultPosition = anchorPosition.slice(0, -2);
+                        resultPosition.push(anchorPosition[anchorPosition.length - 2] + position[0]);
+                        resultPosition = resultPosition.concat(position.slice(1));
                     }
 
-                }, this);
-            }
+                    return resultPosition;
+                }
+
+                // transforms the passed operation relative to anchorPosition
+                function transformOperation(operation) {
+
+                    // clone the operation to transform the positions (no deep clone,
+                    // as the position arrays will be recreated, not modified inplace)
+                    operation = _.clone(operation);
+
+                    // transform position of operation
+                    // TODO: need reliable way to get the position attributes
+                    if (_.isArray(operation.position)) {
+                        operation.position = transformPosition(operation.position);
+                    } else if (_.isArray(operation.start)) {
+                        // ignore 'start' when 'position' exists, start may exist but is relative to position then
+                        operation.start = transformPosition(operation.start);
+                        // attribute 'end' only with attribute 'start'
+                        if (_.isArray(operation.end)) {
+                            operation.end = transformPosition(operation.end);
+                        }
+                    }
+
+                    var text = '  name="' + operation.name + '", attrs=';
+                    var op = _.clone(operation);
+                    delete op.name;
+                    Utils.log(text + JSON.stringify(op));
+
+                    return operation;
+                }
+
+                // delete current selection
+                this.deleteSelected();
+
+                // paste clipboard to current cursor position
+                anchorPosition = selection.getStartPosition();
+                if (anchorPosition.length >= 2) {
+                    Utils.info('Editor.pasteInternalClipboard()');
+                    operations = _(clipboardOperations).map(transformOperation);
+                    this.applyOperations(operations, true, true);
+                } else {
+                    Utils.warn('Editor.pasteInternalClipboard(): invalid cursor position');
+                }
+
+            }, this);
         };
 
         this.paste = function (event) {

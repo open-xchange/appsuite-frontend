@@ -151,7 +151,8 @@ define('io.ox/office/editor/selection',
                 backwards = false;
                 startPoint = _(browserSelection.ranges).first().start;
                 endPoint = _(browserSelection.ranges).last().end;
-                tableSelected = browserSelection.ranges.length === $(anchorPoint.node.parentNode).find('> tbody > tr > td').length;
+                // entire table selected, if number of rell range objects in selection is equal to number of table cells
+                tableSelected = browserSelection.ranges.length === $(anchorPoint.node.parentNode).find('> tr > td').length;
             } else {
                 // get range direction (check for real range, DOM.Point.comparePoints() is expensive), adjust start and end position
                 isCursor = browserSelection.active.isCollapsed();

@@ -447,7 +447,7 @@ define('io.ox/office/editor/operations',
             this.generateOperationWithAttributes(cell, Operations.CELL_INSERT, { position: position, count: 1 });
 
             // generate operations for the contents of the cell
-            return this.generateContentOperations(cell, position);
+            return this.generateContentOperations($(cell).find('div.cellcontent'), position);
         };
 
         /**
