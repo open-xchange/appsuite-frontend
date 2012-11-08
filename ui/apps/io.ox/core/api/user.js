@@ -78,11 +78,11 @@ define("io.ox/core/api/user",
         return $('<a href="#" class="halo-link">').append(text).data({ internal_userid: id });
     };
 
-    api.getPictureURL = function (id) {
+    api.getPictureURL = function (id, options) {
         return $.when(api.get({ id: id }), require(["io.ox/contacts/api"]))
             .pipe(
                 function (data, contactsAPI) {
-                    return contactsAPI.getPictureURL(data[0] || data);
+                    return contactsAPI.getPictureURL(data[0] || data, options);
                 },
                 function () {
                     return ox.base + "/apps/themes/default/dummypicture.png";
@@ -90,14 +90,14 @@ define("io.ox/core/api/user",
             );
     };
 
-    api.getPicture = function (id) {
+    api.getPicture = function (id, options) {
         var node = $("<div>"),
             clear = function () {
                 _.defer(function () { // use defer! otherwise we return null on cache hit
                     node = clear = null; // don't leak
                 });
             };
-        api.getPictureURL(id)
+        api.getPictureURL(id, options)
             .done(function (url) {
                 node.css("backgroundImage", "url(" + url + ")");
             })

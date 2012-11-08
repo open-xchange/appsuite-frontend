@@ -17,7 +17,7 @@ define('io.ox/core/permissions/permissions',
      'io.ox/core/api/group',
      'io.ox/core/tk/dialogs',
      'gettext!io.ox/core',
-     'less!io.ox/core/permissions/permissions.less'], function (ext, api, userAPI, groupAPI, dialogs, gt) {
+     'less!io.ox/core/permissions/style.css'], function (ext, api, userAPI, groupAPI, dialogs, gt) {
 
     'use strict';
 
@@ -73,7 +73,7 @@ define('io.ox/core/permissions/permissions',
                 easyOut: true
             })
             .header(
-                $('<h4>').text(gt('Set folder permissions')),
+                $('<h4>').text(gt('Folder permissions')),
                 api.getBreadcrumb(folder.id, { subfolders: false })
             )
             .build(function () {
@@ -113,7 +113,7 @@ define('io.ox/core/permissions/permissions',
                 if (!permission.group) {
                     $.when(
                         userAPI.getName(permission.entity),
-                        userAPI.getPictureURL(permission.entity)
+                        userAPI.getPictureURL(permission.entity, { width: 64, height: 64, scaleType: 'cover' })
                     )
                     .done(function (entity, picture) {
                         ext.point(POINT + '/entity').invoke('draw', d, {
@@ -153,11 +153,14 @@ define('io.ox/core/permissions/permissions',
         draw: function (data) {
             if (data.picture) {
                 this.append(
-                    $('<img>', { src: data.picture, 'class': 'pull-left contact-image' })
+                    $('<div class="pull-left contact-picture">')
+                    .css('background-image', 'url(' + data.picture + ')')
                 );
             } else {
                 this.append(
-                    $('<div class="pull-left group-image">')
+                    $('<div class="pull-left contact-picture group">').append(
+                        $('<i class="icon-group">')
+                    )
                 );
             }
         }
@@ -169,7 +172,7 @@ define('io.ox/core/permissions/permissions',
         draw: function (data) {
             this.append(
                 $('<div class="entity">').append(
-                    $('<div>').append(gt.noI18n(data.entity)),
+                    $('<div class="name">').append(gt.noI18n(data.entity)),
                     $('<div>').append(
                         gt('The user can '),
                         addDropdown('folder', data.permission.bits),

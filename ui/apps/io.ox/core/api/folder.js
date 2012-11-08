@@ -745,7 +745,7 @@ define('io.ox/core/api/folder',
                     }
                 });
                 if (options.prefix) {
-                    ul.append($('<li>').append(
+                    ul.append($('<li class="prefix">').append(
                         $.txt(options.prefix), $('<span class="divider">').text(gt.noI18n(' '))
                     ));
                 }
