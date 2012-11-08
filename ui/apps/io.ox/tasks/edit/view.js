@@ -201,13 +201,13 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 .text(saveBtnText)
                 .on('click', function (e) {
                     e.stopPropagation();
+                    //self.model.set('number_of attachments', self.attachmentArray.length);
                     if (self.model.get('id')) {
                         var callbacks = {
                                 success: function (model, response) {
                                     response = {id: model.attributes.id};
-                                    self.saveAttachments(model, response, self);
-                                    app.markClean();
-                                    app.quit();
+                                    self.saveAttachments(model, response, self, app);
+                                    
                                 },
                                 error: function (model, response) {
                                     console.log(model);
@@ -218,9 +218,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                     } else {
                         var callbacks = {
                                 success: function (model, response) {
-                                    self.saveAttachments(model, response, self);
-                                    app.markClean();
-                                    app.quit();
+                                    self.saveAttachments(model, response, self, app);
                                 },
                                 error: function (model, response) {
                                     console.log(model);
@@ -468,26 +466,44 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             this.dropZone.remove();
         },
         
-        saveAttachments: function (model, data, self) {
+        saveAttachments: function (model, data, self, app) {
             var folder_id = model.attributes.folder_id;
-            //remove attachments
-            if (self.attachmentsToRemove.length > 0) {
-                require(['io.ox/core/api/attachment'], function (attachmentApi) {
-                    attachmentApi.remove({module: 4, folder: folder_id, id: data.id},
-                                         self.attachmentsToRemove);
-                });
-            }
-            //add new attachments
+            
+            //fill new attachments array
             var attachmentsToAdd = [];
             for (var i = 0; i < self.attachmentArray.length; i++) {
                 if (!self.attachmentArray[i].id) { //unstored Attachments don't have an id
                     attachmentsToAdd.push(self.attachmentArray[i]);
                 }
             }
-            if (attachmentsToAdd.length > 0) {
+            
+            //remove attachments and add
+            if (self.attachmentsToRemove.length > 0 && attachmentsToAdd.length > 0) {
                 require(['io.ox/core/api/attachment'], function (attachmentApi) {
-                    attachmentApi.create({module: 4, folder: folder_id, id: data.id},
-                                         attachmentsToAdd);
+                    attachmentApi.remove({module: 4, folder: folder_id, id: data.id},
+                        self.attachmentsToRemove).done(function () {
+                            attachmentApi.create({module: 4, folder: folder_id, id: data.id}, attachmentsToAdd)
+                            .done(function () {
+                                app.markClean();
+                                app.quit();
+                            });
+                        });
+                });
+            } else if (self.attachmentsToRemove.length > 0) {//remove attachments
+                require(['io.ox/core/api/attachment'], function (attachmentApi) {
+                    attachmentApi.remove({module: 4, folder: folder_id, id: data.id},
+                        self.attachmentsToRemove).done(function () {
+                            app.markClean();
+                            app.quit();
+                        });
+                });
+            } else if (attachmentsToAdd.length > 0) {//add attachments
+                require(['io.ox/core/api/attachment'], function (attachmentApi) {
+                    attachmentApi.create({module: 4, folder: folder_id, id: data.id}, attachmentsToAdd)
+                    .done(function () {
+                        app.markClean();
+                        app.quit();
+                    });
                 });
             }
         }
