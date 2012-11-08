@@ -382,7 +382,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
         // launcher
         app.setLauncher(function () {
             var formerlyActivePluginIds = {};
-            
+
             contentQueue.start();
             // get window
             app.setWindow(win = ox.ui.createWindow({
@@ -420,10 +420,10 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                     var formerlyActivePlugins = _.map(formerlyActivePluginIds, function (obj) {
                         return 'plugins/portal/' + obj.id + '/register';
                     });
-                    
+
                     reqPlugins = _.intersection(allActivePlugins, plugins);
                     reqPlugins = _(reqPlugins).without(formerlyActivePlugins);
-                    
+
                     require(reqPlugins).pipe(function () {
                         setOrder(arguments);
                     });
@@ -451,7 +451,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                 try {
                     return (node = $('<div>').append(
                         $('<span class="io-ox-portal-settings">').append(
-                            $('<button class="btn btn-primary">')
+                            $('<button class="btn btn-primary">').attr('data-action', 'personalize')
                             .text(gt('Personalize this page'))
                             .on('click', function (event) {
                                 return require(["io.ox/settings/main"], function (m) {

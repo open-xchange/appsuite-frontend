@@ -14,7 +14,7 @@
 define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                                 'io.ox/core/strings'], function (gt, strings) {
     "use strict";
-    
+
     var util = {
         buildLabel: function (text, id) {
             return $('<label>').text(text).addClass("task-edit-label").attr('for', id);
@@ -23,9 +23,9 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
         buildProgress: function () {
             var progress = $('<input>').attr({type: 'text', id: 'task-edit-progress-field'}).val('0')
                 .addClass("span6 progress-field");
-            
+
             $('<div>').addClass('input-append').append(progress,
-                    $('<button>').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-minus'))
+                    $('<button>').attr('data-action', 'minus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-minus'))
                     .on('click', function () {
                         var temp = parseInt(progress.val(), 10);
                         temp -= 25;
@@ -37,7 +37,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                             progress.trigger('change');
                         }
                     }),
-                    $('<button>').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-plus'))
+                    $('<button>').attr('data-action', 'plus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-plus'))
                     .on('click', function () {
                         var temp = parseInt(progress.val(), 10);
                         temp += 25;
@@ -50,7 +50,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                         }
                     })
                     );
-            
+
             return progress;
         },
         buildExtensionRow: function (parent, extensions, baton) {
@@ -70,12 +70,12 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
             });
         },
         buildRow: function (parent, nodes, widths, fillGrid) {
-            
+
             //check for impossible number of rows to avoid dividing by 0 or overflowing rows
             if (!nodes || nodes.length === 0 || nodes.length > 12) {
                 return;
             }
-            
+
             //check for valid widths
             if (!widths || nodes.length !== widths.length) {
                 var temp = 12 / nodes.length;
@@ -85,7 +85,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                     widths.push(temp);
                 }
             }
-            
+
             var row = $('<div>').addClass("row-fluid task-edit-row").appendTo(parent);
             for (var i = 0; i < nodes.length; i++) {
                 if (_.isArray(widths[i])) {
@@ -94,13 +94,13 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                     $('<div>').addClass("span" + widths[i]).append(nodes[i]).appendTo(row);
                 }
             }
-            
+
             //fillout gridCells
             if (fillGrid || fillGrid === undefined) {
                 row.children().children().not('label').addClass("span12");
             }
         },
-        
+
         //Tabs
         buildTabs: function (tabs, uid) {//uid is important so tabs dont change tabs in other apps
             var table = $('<ul>').addClass("nav nav-tabs"),
@@ -131,12 +131,12 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
             if (tempNodes.length !== 0 && tempNodes.length % 2 !== 0) {
                 tempNodes.push({});
             }
-            
+
             for (var i = 0; i < tempNodes.length; i += 2) {
                 this.buildRow(node, [tempNodes[i], tempNodes[i + 1]], [6, 6], false);
             }
         }
     };
-    
+
     return util;
 });

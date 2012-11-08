@@ -1161,7 +1161,7 @@ define("io.ox/core/desktop",
                             .on(searchHandler)
                             .placeholder()
                         ),
-                        $('<button type="submit" class="btn margin-right"><i class="icon-search"></i></button>')
+                        $('<button type="submit" data-action="search" class="btn margin-right"><i class="icon-search"></i></button>')
                         .on('click', searchHandler.change)
                     )
                 )
