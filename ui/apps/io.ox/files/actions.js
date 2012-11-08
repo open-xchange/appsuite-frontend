@@ -91,24 +91,6 @@ define("io.ox/files/actions",
         }
     });
 
-    new Action('io.ox/files/actions/office/newdocument', {
-        id: 'officenew',
-        action: function (baton) {
-            ox.launch('io.ox/office/editor/main', { file: 'new', folder_id: baton.app.folder.get() });
-        }
-    });
-
-    new Action('io.ox/files/actions/office/editor', {
-        id: 'officeeditor',
-        requires: function (e) {
-            var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
-            return e.collection.has('one') && pattern.test(e.context.data.filename);
-        },
-        action: function (data) {
-            ox.launch('io.ox/office/editor/main', { file: data.data });
-        }
-    });
-
     new Action('io.ox/files/actions/office/view', {
         id: 'officepreview',
         requires: function (e) {
@@ -275,13 +257,6 @@ define("io.ox/files/actions",
     });
 
     new ActionLink(POINT + '/links/toolbar/default', {
-        index: 200,
-        id: "officenew",
-        label: gt("New office document"),
-        ref: "io.ox/files/actions/office/newdocument"
-    });
-
-    new ActionLink(POINT + '/links/toolbar/default', {
         index: 300,
         id: "share",
         label: gt("Share current folder"),
@@ -328,14 +303,6 @@ define("io.ox/files/actions",
         index: 50,
         label: gt("Edit"),
         ref: "io.ox/files/actions/edit"
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: "officeeditor",
-        index: 60,
-        prio: 'hi',
-        label: gt("Change"),
-        ref: "io.ox/files/actions/office/editor"
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
