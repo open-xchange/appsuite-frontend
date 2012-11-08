@@ -64,12 +64,11 @@ define("io.ox/calendar/api",
 
             o = $.extend({
                 start: _.now(),
-                end: _.now() + 28 * 1 * DAY
+                end: _.now() + 28 * 1 * DAY,
+                order: 'asc'
             }, o || {});
-            // round start & end date
-//            o.start = (o.start / DAY >> 0) * DAY;
-//            o.end = (o.end / DAY >> 0) * DAY;
-            var key = o.folder + "." + o.start + "." + o.end,
+
+            var key = o.folder + "." + o.start + "." + o.end + "." + o.order,
                 params = {
                     action: "all",
                     // id, folder_id, private_flag, recurrence_id, recurrence_position, start_date,
@@ -82,7 +81,7 @@ define("io.ox/calendar/api",
                     showPrivate: true,
                     recurrence_master: false,
                     sort: "201",
-                    order: "asc",
+                    order: o.order,
                     timezone: "UTC"
                 };
 
