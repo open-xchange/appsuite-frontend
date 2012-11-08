@@ -307,12 +307,12 @@ define('io.ox/office/editor/format/tablestyles',
 
             var cellOrientation = {};
 
-            if (!((cell) && (cell.get(0)) && (cell.get(0).nodeName) && (((Utils.getNodeName(cell) === 'td') || (Utils.getNodeName(cell) === 'th'))))) { return cellOrientation; }
+            if (!((cell) && (cell.get(0)) && (cell.get(0).nodeName) && (((Utils.getNodeName(cell) === 'td'))))) { return cellOrientation; }
             // if ((Utils.getNodeName(cell) !== 'td') && (Utils.getNodeName(cell) !== 'th')) { return; }
 
             var row = cell.parent(),
-                rowCollection = $('> tr', row.parent()),
-                cellCollection = $('> th, > td', row);
+                rowCollection = row.parent().children('tr'),
+                cellCollection = row.children('td');
 
             cellOrientation.wholetable = true;  // the cell is located somewhere in the table
             cellOrientation.firstrow = rowCollection.index(row) === 0;

@@ -432,6 +432,12 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * A jQuery selector that matches the content node container in a table
+     * cell.
+     */
+    DOM.TABLE_CELLCONTENT_NODE_SELECTOR = 'div.cellcontent';
+
+    /**
      * Creates a new table cell element.
      *
      * @param {jQuery} paragraph
@@ -441,7 +447,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @returns {jQuery}
      *  A table cell element, as jQuery object.
      */
-    DOM.createTablecellNode = function (paragraph) {
+    DOM.createTableCellNode = function (paragraph) {
         return $('<td>').append($('<div>').addClass('cell')
                 .append($('<div>').addClass('topborder'))
                 .append($('<div>').addClass('bottomborder'))

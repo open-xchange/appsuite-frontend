@@ -394,7 +394,7 @@ define('io.ox/office/editor/position',
      */
     Position.getTableRowElement = function (startnode, position) {
         var table = Position.getTableElement(startnode, position.slice(0, -1)),
-            tableRow = table && $(table).find('> * > tr').get(position[position.length - 1]);
+            tableRow = table && $(table).find('> tbody > tr').get(position[position.length - 1]);
         if (table && !tableRow) {
             Utils.warn('Position.getTableRowElement(): expected element not found at position ' + JSON.stringify(position) + '.');
         }
@@ -551,7 +551,7 @@ define('io.ox/office/editor/position',
         node = Utils.getDomNode(node);
 
         if (DOM.isTableNode(node)) {
-            childNode = $('> * > tr', node).get(pos);
+            childNode = $('> tbody > tr', node).get(pos);
         } else if ($(node).is('tr')) {
             // Adding all colspans, to get the selected cell
             // Position.iterateRowChildNodes(node, function (cellNode, nodeStart, nodeColSpan) {
@@ -948,7 +948,7 @@ define('io.ox/office/editor/position',
             allParagraphs = startnode.children();
         } else {
 
-            var node = Position.getLastNodeFromPositionByNodeName(startnode, position, 'th, td');
+            var node = Position.getLastNodeFromPositionByNodeName(startnode, position, 'td');
 
             if (node) {
                 allParagraphs = $(node.firstChild).children('div.cellcontent').children();
@@ -1008,7 +1008,7 @@ define('io.ox/office/editor/position',
     Position.getAllParagraphsFromTableCell = function (startnode, position) {
 
         var allParagraphs = null,
-            cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'th, td');
+            cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'td');
 
         if (cell) {
             allParagraphs = $(cell.firstChild).children('div.cellcontent').children();
@@ -1039,8 +1039,7 @@ define('io.ox/office/editor/position',
             table = Position.getLastNodeFromPositionByNodeName(startnode, position, DOM.TABLE_NODE_SELECTOR);
 
         if (table) {
-            rowIndex = $('> * > tr', table).length;
-            rowIndex--;
+            rowIndex = $('> tbody > tr', table).length - 1;
         }
 
         return rowIndex;
@@ -1069,8 +1068,8 @@ define('io.ox/office/editor/position',
             table = Position.getLastNodeFromPositionByNodeName(startnode, position, DOM.TABLE_NODE_SELECTOR);
 
         if (table) {
-            var row = $('> * > tr', table).get(0);  // first row
-            columnIndex = $('> th, > td', row).length - 1;
+            var row = $('> tbody > tr', table).first();  // first row
+            columnIndex = row.children('td').length - 1;
         }
 
         return columnIndex;
@@ -1128,7 +1127,7 @@ define('io.ox/office/editor/position',
             row = Position.getLastNodeFromPositionByNodeName(startnode, position, 'tr');
 
         if (row) {
-            columnIndex = $('> th, > td', row).length - 1;
+            columnIndex = $(row).children('td').length - 1;
         }
 
         return columnIndex;
@@ -1175,7 +1174,7 @@ define('io.ox/office/editor/position',
      *  logical position does not contain a column/cell.
      */
     Position.getColumnIndexInRow = function (startnode, position) {
-        return Position.getLastValueFromPositionByNodeName(startnode, position, 'th, td');
+        return Position.getLastValueFromPositionByNodeName(startnode, position, 'td');
     };
 
     /**
@@ -1223,7 +1222,7 @@ define('io.ox/office/editor/position',
     Position.getLastParaIndexInCell = function (startnode, position) {
 
         var lastPara = -1,
-            cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'th, td');
+            cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'td');
 
         if (cell) {
             lastPara = $(cell.firstChild).children('div.cellcontent').children().length - 1;
@@ -1314,7 +1313,7 @@ define('io.ox/office/editor/position',
         if (localPos.pop() === 0) {   // start position
             if (localPos.pop() === 0) {   // start paragraph
                 var domPos = Position.getDOMPosition(localPos);
-                if ((domPos) && ($(domPos.node).is('th, td'))) {
+                if ((domPos) && ($(domPos.node).is('td'))) {
                     isCellStartPosition = true;
                 }
             }
@@ -1347,7 +1346,7 @@ define('io.ox/office/editor/position',
             var lastPara = localPos.pop();
             if (lastPara ===  Position.getLastParaIndexInCell(startnode, localPos)) {   // last paragraph
                 var domPos = Position.getDOMPosition(localPos);
-                if ((domPos) && ($(domPos.node).is('th, td'))) {
+                if ((domPos) && ($(domPos.node).is('td'))) {
                     isCellEndPosition = true;
                 }
             }
@@ -1493,7 +1492,7 @@ define('io.ox/office/editor/position',
     Position.getFirstPositionInNextCell = function (startnode, position) {
 
         var endOfTable = false,
-            cellnode = Position.getLastNodeFromPositionByNodeName(startnode, position, 'th, td');
+            cellnode = Position.getLastNodeFromPositionByNodeName(startnode, position, 'td');
 
         if (cellnode) {
 
@@ -1537,7 +1536,7 @@ define('io.ox/office/editor/position',
 
         var beginOfTable = false,
             continueSearch = true,
-            cellnode = Position.getLastNodeFromPositionByNodeName(startnode, position, 'th, td');
+            cellnode = Position.getLastNodeFromPositionByNodeName(startnode, position, 'td');
 
         while ((cellnode) && (continueSearch)) {
 
@@ -1569,9 +1568,9 @@ define('io.ox/office/editor/position',
                     beginOfTable = true;
                     continueSearch = false;  // simply jump into preceeding paragraph/table
                 } else {  // this table is the first table/paragraph
-                    cellnode = Position.getLastNodeFromPositionByNodeName(startnode, position, 'th, td');
+                    cellnode = Position.getLastNodeFromPositionByNodeName(startnode, position, 'td');
                     if (cellnode) {
-                        position = Position.getLastPositionFromPositionByNodeName(startnode, position, 'th, td');
+                        position = Position.getLastPositionFromPositionByNodeName(startnode, position, 'td');
                         beginOfTable = false;
                     } else {
                         continueSearch = false;
@@ -1601,7 +1600,7 @@ define('io.ox/office/editor/position',
 
         var position = _.copy(cellPosition, true);
 
-        position = Position.getLastPositionFromPositionByNodeName(startnode, position, 'th, td');
+        position = Position.getLastPositionFromPositionByNodeName(startnode, position, 'td');
         position.push(0);  // first paragraph or table
         position = Position.getFirstPositionInParagraph(startnode, position);
 
@@ -1626,7 +1625,7 @@ define('io.ox/office/editor/position',
 
         var position = _.copy(cellPosition, true);
 
-        position = Position.getLastPositionFromPositionByNodeName(startnode, position, 'th, td');
+        position = Position.getLastPositionFromPositionByNodeName(startnode, position, 'td');
         position.push(Position.getLastParaIndexInCell(startnode, position));  // last paragraph or table
         position = Position.getLastPositionInParagraph(startnode, position);
 
