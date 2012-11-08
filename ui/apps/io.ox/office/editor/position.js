@@ -562,8 +562,10 @@ define('io.ox/office/editor/position',
             //    }
             // });
             childNode = $(node).children('td').get(pos);  // this is a table cell
-        } else if (DOM.isPageNode(node) || $(node).is('td')) {
+        } else if (DOM.isPageNode(node)) {
             childNode = node.childNodes[pos];
+        } else if ($(node).is('td')) {
+            childNode = $(node.firstChild).children('div.cellcontent').get(0).childNodes[pos];
         } else if (DOM.isParagraphNode(node)) {
             Position.iterateParagraphChildNodes(node, function (_node, nodeStart, nodeLength) {
 
@@ -949,7 +951,7 @@ define('io.ox/office/editor/position',
             var node = Position.getLastNodeFromPositionByNodeName(startnode, position, 'th, td');
 
             if (node) {
-                allParagraphs = $(node).children();
+                allParagraphs = $(node.firstChild).children('div.cellcontent').children();
             }
         }
 
@@ -1009,7 +1011,7 @@ define('io.ox/office/editor/position',
             cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'th, td');
 
         if (cell) {
-            allParagraphs = $(cell).children();
+            allParagraphs = $(cell.firstChild).children('div.cellcontent').children();
         }
 
         return allParagraphs;
@@ -1224,7 +1226,7 @@ define('io.ox/office/editor/position',
             cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'th, td');
 
         if (cell) {
-            lastPara = $(cell).children().length - 1;
+            lastPara = $(cell.firstChild).children('div.cellcontent').children().length - 1;
         }
 
         return lastPara;

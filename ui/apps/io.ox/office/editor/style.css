@@ -109,12 +109,12 @@
                     height: 100%;
                     border: hidden;
                     
-                    > div.content {
+                    > div.cellcontent {
                     }
                     
                     > div.topborder {
                         position: absolute;
-                        width: 100% + 3px;
+                        width: 105%;
                         height: 3px;
                         border: 0px solid green;
                         top: -6px;
@@ -124,7 +124,7 @@
 
                     > div.bottomborder {
                         position: absolute;
-                        width: 100% + 3px;
+                        width: 105%;
                         height: 3px;
                         border: 0px solid green;
                         bottom: -6px;
@@ -135,7 +135,7 @@
                     > div.leftborder {
                         position: absolute;
                         width: 3px;
-                        height: 100% + 3px;
+                        height: 105%;
                         border: 0px solid blue;
                         top: -6px;
                         left: -6px;
@@ -145,7 +145,7 @@
                     > div.rightborder {
                         position: absolute;
                         width: 3px;
-                        height: 100% + 3px;
+                        height: 105%;
                         border: 0px solid red;
                         top: -6px;
                         right: -6px;
