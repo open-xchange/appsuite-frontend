@@ -71,20 +71,6 @@ define('io.ox/office/editor/view/view',
         }
 
         /**
-         * Handles resize events of the browser window, and adjusts the left
-         * positions of all tool bars in the tool pane according to the current
-         * position of the editor node.
-         */
-        function windowResizeHandler(event) {
-
-            var // the left position of the editor node
-                editorLeft = Math.floor(editor.getNode().offset().left);
-
-            // set a left padding to the tool pane to align the tool bars with the editor node
-            toolPane.getNode().css('padding-left', Math.max(editorLeft, 13) + 'px');
-        }
-
-        /**
          * Handles keyboard events in the quick-search text field.
          */
         function searchKeyHandler(event) {
@@ -239,15 +225,15 @@ define('io.ox/office/editor/view/view',
             .addGroup('character/color', new Controls.ColorChooser(editor, 'text', { icon: 'icon-font', tooltip: gt('Text Color') }))
             .addSeparator()
             .addGroup('paragraph/alignment', new RadioGroup({ icon: 'icon-io-ox-align-left', tooltip: gt('Paragraph Alignment'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
-                .addOptionButton('left',    { icon: 'icon-io-ox-align-left',    tooltip: gt('Left') })
-                .addOptionButton('center',  { icon: 'icon-io-ox-align-center',  tooltip: gt('Center') })
-                .addOptionButton('right',   { icon: 'icon-io-ox-align-right',   tooltip: gt('Right') })
-                .addOptionButton('justify', { icon: 'icon-io-ox-align-justify', tooltip: gt('Justify') }))
+                .addOptionButton('left',    { icon: 'icon-io-ox-align-left',    label: gt('Left') })
+                .addOptionButton('center',  { icon: 'icon-io-ox-align-center',  label: gt('Center') })
+                .addOptionButton('right',   { icon: 'icon-io-ox-align-right',   label: gt('Right') })
+                .addOptionButton('justify', { icon: 'icon-io-ox-align-justify', label: gt('Justify') }))
             .addSeparator()
             .addGroup('paragraph/lineheight', new RadioGroup({ icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
-                .addOptionButton(LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   tooltip: gt('Single') })
-                .addOptionButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half') })
-                .addOptionButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') }))
+                .addOptionButton(LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   label: gt('Single') })
+                .addOptionButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', label: gt('One and a Half') })
+                .addOptionButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   label: gt('Double') }))
             .addSeparator()
             .addGroup('paragraph/fillcolor', new Controls.ColorChooser(editor, 'fill', { icon: 'icon-tint', tooltip: gt('Paragraph Fill Color') }))
             .addSeparator()
@@ -273,10 +259,10 @@ define('io.ox/office/editor/view/view',
             .addButton('image/delete', { icon: 'icon-io-ox-image-delete', tooltip: gt('Delete Image') })
             .addSeparator()
             .addGroup('image/floatmode', new RadioGroup({ icon: 'icon-io-ox-image-inline', tooltip: gt('Image Position'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
-                .addOptionButton('inline',       { icon: 'icon-io-ox-image-inline',      tooltip: gt('Inline') })
-                .addOptionButton('leftFloated',  { icon: 'icon-io-ox-image-float-left',  tooltip: gt('Float Left') })
-                .addOptionButton('rightFloated', { icon: 'icon-io-ox-image-float-right', tooltip: gt('Float Right') })
-                .addOptionButton('noneFloated',  { icon: 'icon-io-ox-image-center',      tooltip: gt('Center') }));
+                .addOptionButton('inline',       { icon: 'icon-io-ox-image-inline',      label: gt('Inline With Text') })
+                .addOptionButton('leftFloated',  { icon: 'icon-io-ox-image-float-left',  label: gt('Float Left') })
+                .addOptionButton('rightFloated', { icon: 'icon-io-ox-image-float-right', label: gt('Float Right') })
+                .addOptionButton('noneFloated',  { icon: 'icon-io-ox-image-center',      label: gt('Center') }));
 
         // additions for debug mode
         if (Config.isDebugAvailable()) {
@@ -327,9 +313,6 @@ define('io.ox/office/editor/view/view',
 
         // make the format tool bar visible
         toolPane.showToolBar('format');
-
-        // listen to browser window resize events when the OX window is visible
-        Utils.registerWindowResizeHandler(appWindow, windowResizeHandler);
 
         // add 'rename document' functionality to title field
         nodes.title.addClass('io-ox-office-title').click(renameDocumentHandler);
