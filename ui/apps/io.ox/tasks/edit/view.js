@@ -25,7 +25,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                                  'io.ox/backbone/forms'],
                                  function (gt, template, reminderUtil, model, date, picker, util, ext, notifications, upload, views, forms) {
     "use strict";
-    
+
     var point = views.point('io.ox/tasks/edit/view'),
         TaskEditView = point.createView({
         tagName: 'div',
@@ -45,10 +45,10 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             util.buildExtensionRow(self.$el, this.getRow(0, app), self.baton);
             self.$el.children().css({'margin-bottom': '2em',
                                      'font-size': '24px'});
-            
+
             //row 1 subject
             util.buildExtensionRow(self.$el, this.getRow(1, app), self.baton);
-            
+
             //row 2 start date due date
             util.buildRow(this.$el, [[util.buildLabel(gt("Due date"), this.fields.endDate.attr('id')), this.fields.endDate.parent()],
                                  [util.buildLabel(gt("Time"), this.fields.endDateTime.attr('id')), this.fields.endDateTime],
@@ -57,16 +57,16 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
 
             //row 3 description
             util.buildExtensionRow(self.$el, this.getRow(2), self.baton);
-            
+
             //row 4 reminder
             util.buildRow(this.$el, [[util.buildLabel(gt("Remind me"), this.fields.reminderDropdown.attr('id')), this.fields.reminderDropdown],
                                      [util.buildLabel(gt("Date"), this.fields.alarmDate.attr('id')), this.fields.alarmDate.parent()],
                                      [util.buildLabel(gt("Time"), this.fields.alarmDateTime.attr('id')), this.fields.alarmDateTime]],
                     [5, [3, 1], 3]);
-            
+
             //row 5 status progress priority privateFlag
             util.buildExtensionRow(self.$el, this.getRow(3), self.baton);
-            
+
             //row 6 repeat
             util.buildRow(this.$el, this.fields.repeatLink);
 
@@ -82,50 +82,50 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 detailsTab = temp.content.find('#edit-task-tab2'  + '-' + self.cid);
             this.$el.append(tabs, temp.content);
             temp = null;
-            
+
             //partitipants tab
             util.buildExtensionRow(participantsTab, [this.getRow(0, app, 'participants')], self.baton);
             util.buildExtensionRow(participantsTab, [this.getRow(1, app, 'participants')], self.baton);
-            
+
             //attachmentTab
             var attachmentDisplay = $('<div>').addClass("task-attachment-display")
                 .css("display:", "none").appendTo(attachmentsTab);
-            
+
             self.dropZone.on('drop', function (e, file) {
                 self.attachmentArray.push(file);
-                
+
                 tabs.find('a:eq(1)').text(//#. %1$s is the number of currently attachened attachments
                                           //#, c-format
                                           gt('Attachments (%1$s)', self.attachmentArray.length));
                 util.buildAttachmentNode(attachmentDisplay, self.attachmentArray);
             });
-            
+
             util.buildAttachmentNode(attachmentDisplay, this.attachmentArray);
-            
+
             tabs.find('a:eq(1)').text(//#. %1$s is the number of currently attachened attachments
                                       //#, c-format
                                       gt('Attachments (%1$s)', self.attachmentArray.length));
-            
+
             attachmentDisplay.delegate(".task-remove-attachment", "click", function () {
-                
+
                 if (self.attachmentArray[$(this).attr('lnr')].id) { //attachments with id are already stored so they need to be deleted
                     self.attachmentsToRemove.push(self.attachmentArray[$(this).attr('lnr')].id);
                 }
                 self.attachmentArray.splice($(this).attr('lnr'), 1);
-                
+
                 tabs.find('a:eq(1)').text(//#. %1$s is the number of currently attachened attachments
                                           //#, c-format
                                           gt('Attachments (%1$s)', self.attachmentArray.length));
                 util.buildAttachmentNode(attachmentDisplay, self.attachmentArray);
             });
-            
+
             //detailstab
             util.buildExtensionRow(detailsTab, this.getRow(0, app, 'detail'), self.baton);
             util.buildExtensionRow(detailsTab, this.getRow(1, app, 'detail'), self.baton);
             util.buildExtensionRow(detailsTab, this.getRow(2, app, 'detail'), self.baton);
             util.buildExtensionRow(detailsTab, this.getRow(3, app, 'detail'), self.baton);
             util.buildExtensionRow(detailsTab, this.getRow(4, app, 'detail'), self.baton);
-            
+
             return this.$el;
         },
         getRow: function (number, app, tab) {
@@ -192,11 +192,11 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             }
             //row 0
             this.fields.headline = $('<h1>').addClass('title').text(headlineText);
-            this.fields.cancel = $('<button>').addClass('btn cancel span12').text(gt('Discard'))
+            this.fields.cancel = $('<button>').attr('data-action', 'discard').addClass('btn cancel span12').text(gt('Discard'))
                         .on('click', function () {
                             app.quit();
                         });
-            this.fields.saveButton = $('<button>')
+            this.fields.saveButton = $('<button>').attr('data-action', 'save')
                 .addClass("btn btn-primary task-edit-save span12")
                 .text(saveBtnText)
                 .on('click', function (e) {
@@ -207,7 +207,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                                 success: function (model, response) {
                                     response = {id: model.attributes.id};
                                     self.saveAttachments(model, response, self, app);
-                                    
+
                                 },
                                 error: function (model, response) {
                                     console.log(model);
@@ -227,7 +227,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                             };
                         self.model.sync("create", self.model, callbacks);
                     }
-                    
+
                 });
             //row 4
             this.fields.reminderDropdown = $('<select>').attr('id', 'task-edit-reminder-select')
@@ -256,7 +256,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 this.fields.alarmDateTime.val(alarmDateObj.format(date.TIME));
             }
             this.fields.alarmButton = $('<button>')
-                .addClass("btn task-edit-picker span3 fluid-grid-fix")
+                .addClass("btn task-edit-picker span3 fluid-grid-fix").attr('data-action', 'alert')
                 .on('click', function (e) {
                     e.stopPropagation();
                     picker.create().done(function (timevalue) {
@@ -299,7 +299,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             };
             this.fields.alarmDate.on("change", alarmupdate);
             this.fields.alarmDateTime.on("change", alarmupdate);
-            
+
             //row 5
             this.fields.progress = util.buildProgress();
             this.fields.progress.on('change', function () {
@@ -327,9 +327,9 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 self.fields.progress.val(self.model.get('percent_completed'));
             });
             this.fields.progress.val(this.model.get('percent_completed'));
-            
+
             //row2
-            this.fields.startDateButton = $('<button>')
+            this.fields.startDateButton = $('<button>').attr('data-action', 'start-date')
             .addClass("btn task-edit-picker span3 fluid-grid-fix")
             .on('click', function (e) {
                 e.stopPropagation();
@@ -345,8 +345,8 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 });
             })
             .append($('<i>').addClass('icon-calendar'));
-    
-            this.fields.endDateButton = $('<button>')
+
+            this.fields.endDateButton = $('<button>').attr('data-action', 'end-date')
                 .addClass("btn task-edit-picker span3 fluid-grid-fix")
                 .on('click', function (e) {
                     e.stopPropagation();
@@ -362,7 +362,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                     });
                 })
                 .append($('<i>').addClass('icon-calendar'));
-            
+
             this.fields.startDate = $('<input>').addClass("start-date-field span9").attr({type: 'text', id: 'task-edit-start-date-field'});
             this.fields.startDateTime = $('<input>').addClass("start-date-time-field span12").attr({type: 'text', id: 'task-edit-start-date-time-field'});
             this.fields.endDate = $('<input>').addClass("end-date-field span9").attr({type: 'text', id: 'task-edit-end-date-field'});
@@ -379,7 +379,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             }
             $('<div>').addClass('input-append').append(this.fields.startDate, this.fields.startDateButton);
             $('<div>').addClass('input-append').append(this.fields.endDate, this.fields.endDateButton);
-            
+
             this.model.on("change:end_date", function () {
                 if (endDateObj) {
                     self.fields.endDate.val(endDateObj.format(date.DATE));
@@ -402,7 +402,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                         endDateObj = temp;
                         self.model.set('end_date', temp.t);
                     } else {
-                        
+
                         setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.") + ' ' + gt.noI18n(format)); }, 300);
                         self.model.trigger('change:end_date');
                     }
@@ -465,10 +465,10 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             this.attachmentsToRemove = [];
             this.dropZone.remove();
         },
-        
+
         saveAttachments: function (model, data, self, app) {
             var folder_id = model.attributes.folder_id;
-            
+
             //fill new attachments array
             var attachmentsToAdd = [];
             for (var i = 0; i < self.attachmentArray.length; i++) {
@@ -476,7 +476,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                     attachmentsToAdd.push(self.attachmentArray[i]);
                 }
             }
-            
+
             //remove attachments and add
             if (self.attachmentsToRemove.length > 0 && attachmentsToAdd.length > 0) {
                 require(['io.ox/core/api/attachment'], function (attachmentApi) {
@@ -508,23 +508,23 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             }
         }
     }),
-    
+
     //special handling for attachments
     getAttachments = function (view, node, app) {
         var self = view;
         if (self.model.attributes.number_of_attachments > 0) {
             require(['io.ox/core/api/attachment'], function (attachmentsApi) {
                 attachmentsApi.getAll({folder_id: self.model.attributes.folder_id, id: self.model.attributes.id, module: 4}).done(function (data) {
-        
+
                     for (var i = 0; i < data.length; i++) {
                         data[i].name = data[i].filename;
                         data[i].size = data[i].file_size;
                         data[i].type = data[i].file_mimetype;
-                                    
+
                         delete data[i].filename;
                         delete data[i].file_size;
                         delete data[i].file_mimetype;
-                                    
+
                         self.attachmentArray.push(data[i]);
                     }
                     //render
@@ -536,8 +536,8 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             node.append(view.render(app));
         }
     };
-    
-    
+
+
     return {
         TaskEditView: TaskEditView,
         getView: function (taskModel, node, app) {
@@ -546,11 +546,11 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             } else {
                 taskModel = model.factory.wrap(taskModel);
             }
-            
+
             var view = new TaskEditView({model: taskModel});
             //get attachments if there are any then render
             getAttachments(view, node, app);
-            
+
             return view;
         }
     };
