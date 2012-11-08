@@ -124,7 +124,7 @@ define("io.ox/files/list/view-detail",
                     return;
                 }
                 eventHub.trigger('endEdit');
-                
+
                 mode = 'display';
                 sections.each(function (sublayout, $sectionNode) {
                     sublayout.each(function (extension, $node) {
@@ -520,7 +520,10 @@ define("io.ox/files/list/view-detail",
 
             var $button = $("<button>").text(gt("Upload"))
             .addClass("btn btn-primary")
-            .attr('disabled', 'disabled')
+            .attr({
+                'disabled': 'disabled',
+                'data-action': 'upload'
+            })
             .on("click", function () {
                 _($input[0].files).each(function (fileData) {
                     $button.addClass("disabled").text(gt("Uploading..."));
