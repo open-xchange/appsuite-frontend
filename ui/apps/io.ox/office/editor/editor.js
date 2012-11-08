@@ -131,7 +131,7 @@ define('io.ox/office/editor/editor',
      *  A jQuery keyboard event object.
      */
     function isPasteKeyEvent(event) {
-        return ((event.metaKey || event.ctrlKey) && event.charCode === 118);
+        return ((event.metaKey || event.ctrlKey) && !event.altKey && (event.charCode === 118 || event.keyCode === 86));
     }
 
     function getPrintableChar(event) {
@@ -2122,7 +2122,12 @@ define('io.ox/office/editor/editor',
                 selection.setTextSelection(selection.startPaM.oxoPosition);
             }
             else if (event.ctrlKey && !event.altKey) {
-                event.preventDefault();
+
+                // don't catch ctrl+v and meta+v to make the browser send the 'paste' event
+                if (!isPasteKeyEvent(event)) {
+                    event.preventDefault();
+                }
+
                 preselectedAttributes = {};
                 var c = getPrintableChar(event);
                 if (c === 'A') {
