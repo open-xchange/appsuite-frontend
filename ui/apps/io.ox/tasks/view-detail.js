@@ -104,37 +104,33 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
                     gt.noI18n(_.escape($.trim(task.note)).replace(/\n/g, '<br>'))
                 )
             );
-            if (task.start_date) {
-                node.append($('<label>').text(gt('Start date')).addClass('detail-label'), $('<div>').text(gt.noI18n(task.start_date)));
-            }
-            if (task.target_duration) {
-                node.append($('<label>').text(gt('Estimated duration in minutes')).addClass('detail-label'),
-                        $('<div>').text(gt.noI18n(task.target_duration)));
-            }
-            if (task.actual_duration) {
-                node.append($('<label>').text(gt('Actual duration in minutes')).addClass('detail-label'),
-                        $('<div>').text(gt.noI18n(task.actual_duration)));
-            }
-            if (task.target_costs) {
-                node.append($('<label>').text(gt('Estimated costs in minutes')).addClass('detail-label'),
-                        $('<div>').text(gt.noI18n(task.target_costs)));
-            }
-            if (task.actual_costs) {
-                node.append($('<label>').text(gt('Actual costs in minutes')).addClass('detail-label'),
-                        $('<div>').text(gt.noI18n(task.actual_costs)));
-            }
-            if (task.currency) {
-                node.append($('<label>').text(gt('Currency')).addClass('detail-label'), $('<div>').text(gt.noI18n(task.currency)));
-            }
-            if (task.trip_meter) {
-                node.append($('<label>').text(gt('Distance')).addClass('detail-label'), $('<div>').text(gt.noI18n(task.trip_meter)));
-            }
-            if (task.billing_information) {
-                node.append($('<label>').text(gt('Billing information')).addClass('detail-label'),
-                        $('<div>').text(gt.noI18n(task.billing_information)));
-            }
-            if (task.company) {
-                node.append($('<label>').text(gt('Company')).addClass('detail-label'), $('<div>').text(gt.noI18n(task.company)));
+
+            var fields = {
+                start_date: gt('Start date'),
+                target_duration: gt('Estimated duration in minutes'),
+                actual_duration: gt('Actual duration in minutes'),
+                target_costs: gt('Estimated costs in minutes'),
+                actual_costs: gt('Actual costs in minutes'),
+                currency: gt('Currency'),
+                trip_meter: gt('Distance'),
+                billing_information: gt('Billing information'),
+                company: gt('Company')
+            };
+
+            var $details = $('<div class="task-details">'), hasDetails = false;
+
+            _(fields).each(function (label, key) {
+                if (task[key]) {
+                    $details.append(
+                        $('<label class="detail-label">').text(label),
+                        $('<div class="detail-value">').text(gt.noI18n(task[key]))
+                    );
+                    hasDetails = true;
+                }
+            });
+
+            if (hasDetails) {
+                node.append($details);
             }
 
             return node;

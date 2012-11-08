@@ -104,9 +104,17 @@
 	.attachment-item{
 		color: #333;
 	}
+	.task-details {
+		margin: 1em 0 1em 0;
+	}
 	.detail-label{
-		margin-top: 6px;
 		color: #aaa;
+		display: inline-block;
+		margin-right: 0.5em;
+	}
+	.detail-value {
+		display: inline-block;
+		margin-right: 1em;	
 	}
 	.tasks-detailview .note,
 	.tasks-detailview .tasks-inline-links {
