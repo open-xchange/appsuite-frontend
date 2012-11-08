@@ -147,11 +147,10 @@ define('io.ox/mail/actions',
                 new dialogs.ModalDialog({ easyOut: true, width: 700 })
                     .addPrimaryButton("close", gt("Close"))
                     .header(
-                        $('<h3>').text(gt('Mail source') + ': ' + (data.subject || ''))
+                        $('<h4>').text(gt('Mail source') + ': ' + (data.subject || ''))
                     )
                     .append(
-                        textarea = $('<textarea class="mail-source-view">', { rows: 15, readonly: 'readonly' })
-                        .addClass('input-xlarge')
+                        textarea = $('<textarea class="mail-source-view input-xlarge" rows="15" readonly="readonly">')
                         .on('keydown', function (e) {
                             if (e.which !== 27) {
                                 e.stopPropagation();
@@ -216,7 +215,7 @@ define('io.ox/mail/actions',
                     .header($('<h3>').text('Copy'))
                     .addPrimaryButton("ok", gt("OK"))
                     .addButton("cancel", gt("Cancel"));
-                dialog.getBody().css('maxHeight', '250px');
+                dialog.getBody().css('height', '250px');
                 var item = _(mail).first(),
                     id = String(item.folder_id || item.folder),
                     tree = new views.FolderTree(dialog.getBody(), { type: 'mail' });

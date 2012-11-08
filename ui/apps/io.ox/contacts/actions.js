@@ -112,7 +112,7 @@ define('io.ox/contacts/actions',
                     .header($('<h3>').text(title))
                     .addPrimaryButton('ok', gt('OK'))
                     .addButton('cancel', gt('Cancel'));
-                dialog.getBody().css('maxHeight', '250px');
+                dialog.getBody().css('height', '250px');
                 var item = _(list).first(),
                     tree = new views.FolderTree(dialog.getBody(), { type: type });
                 tree.paint();

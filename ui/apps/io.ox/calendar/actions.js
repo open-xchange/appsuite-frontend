@@ -238,7 +238,7 @@ define('io.ox/calendar/actions',
                     .header($('<h3>').text(title))
                     .addPrimaryButton('ok', gt('Move'))
                     .addButton('cancel', gt('Cancel'));
-                dialog.getBody().css('maxHeight', '250px');
+                dialog.getBody().css('height', '250px');
                 var item = _(list).first(),
                     id = String(item.folder_id || item.folder),
                     tree = new views.FolderTree(dialog.getBody(), { type: type });
