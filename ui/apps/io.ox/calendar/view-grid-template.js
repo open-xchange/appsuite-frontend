@@ -36,7 +36,7 @@ define("io.ox/calendar/view-grid-template",
                 this.addClass("calendar")
                     .append(time = $("<div>").addClass("time"))
                     .append(date = $("<div>").addClass("date"))
-                    .append(isPrivate = $("<div>").addClass("private").hide())
+                    .append(isPrivate = $('<i class="icon-lock private-flag">').hide())
                     .append(title = $("<div>").addClass("title"))
                     .append(
                         $('<div class="location-row">').append(
@@ -82,7 +82,7 @@ define("io.ox/calendar/view-grid-template",
                 }
 
                 if (data.private_flag === true) {
-                    fields.isPrivate.text(gt('private')).show();
+                    fields.isPrivate.show();
                 } else {
                     fields.isPrivate.hide();
                 }

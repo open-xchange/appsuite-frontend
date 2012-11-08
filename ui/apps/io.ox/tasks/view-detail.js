@@ -87,7 +87,12 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             }
             infoPanel.appendTo(node);
 
+            if (data.private_flag) {
+                $('<i>').addClass("icon-lock private-flag").appendTo(node);
+            }
+            
             $('<div>').text(gt.noI18n(task.title)).addClass("title clear-title").appendTo(node);
+             
             if (task.number_of_attachments > 0) {
                 ext.point("io.ox/tasks/detail-attach").invoke("draw", node, task);
             }
@@ -99,6 +104,38 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
                     gt.noI18n(_.escape($.trim(task.note)).replace(/\n/g, '<br>'))
                 )
             );
+            if (task.start_date) {
+                node.append($('<label>').text(gt('Start date')).addClass('detail-label'), $('<div>').text(gt.noI18n(task.start_date)));
+            }
+            if (task.target_duration) {
+                node.append($('<label>').text(gt('Estimated duration in minutes')).addClass('detail-label'),
+                        $('<div>').text(gt.noI18n(task.target_duration)));
+            }
+            if (task.actual_duration) {
+                node.append($('<label>').text(gt('Actual duration in minutes')).addClass('detail-label'),
+                        $('<div>').text(gt.noI18n(task.actual_duration)));
+            }
+            if (task.target_costs) {
+                node.append($('<label>').text(gt('Estimated costs in minutes')).addClass('detail-label'),
+                        $('<div>').text(gt.noI18n(task.target_costs)));
+            }
+            if (task.actual_costs) {
+                node.append($('<label>').text(gt('Actual costs in minutes')).addClass('detail-label'),
+                        $('<div>').text(gt.noI18n(task.actual_costs)));
+            }
+            if (task.currency) {
+                node.append($('<label>').text(gt('Currency')).addClass('detail-label'), $('<div>').text(gt.noI18n(task.currency)));
+            }
+            if (task.trip_meter) {
+                node.append($('<label>').text(gt('Distance')).addClass('detail-label'), $('<div>').text(gt.noI18n(task.trip_meter)));
+            }
+            if (task.billing_information) {
+                node.append($('<label>').text(gt('Billing information')).addClass('detail-label'),
+                        $('<div>').text(gt.noI18n(task.billing_information)));
+            }
+            if (task.company) {
+                node.append($('<label>').text(gt('Company')).addClass('detail-label'), $('<div>').text(gt.noI18n(task.company)));
+            }
 
             return node;
         }

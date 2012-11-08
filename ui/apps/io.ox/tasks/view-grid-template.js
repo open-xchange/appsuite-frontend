@@ -23,11 +23,12 @@ define('io.ox/tasks/view-grid-template',
          // main grid template
             main: {
                 build: function () {
-                    var title, status, end_date, user, progress;
+                    var title, status, end_date, user, progress, private_flag;
                     this.addClass('tasks').append(
                         $('<div class="first-row">').append(
                             end_date = $('<span>').addClass('end_date'),
-                            title = $('<div>').addClass('title')
+                            title = $('<div>').addClass('title'),
+                            private_flag = $('<i class="icon-lock private-flag">').hide()
                         ),
                         $('<div class="second-row">').append(
                             status = $('<span>').addClass('status'),
@@ -36,7 +37,7 @@ define('io.ox/tasks/view-grid-template',
                         )
                     );
 
-                    return { title: title, end_date: end_date, status: status, user: user, progress: progress };
+                    return { title: title, private_flag: private_flag, end_date: end_date, status: status, user: user, progress: progress };
                 },
 
                 set: function (data, fields, index) {
@@ -45,6 +46,11 @@ define('io.ox/tasks/view-grid-template',
                     fields.status.attr('class', 'status ' + data.badge) //important. with addClass old classes aren't removed correctly
                         .text(data.status || _.noI18n('\u00A0'));
                     fields.user[data.participants && data.participants.length ? 'show' : 'hide']();
+                    if (data.private_flag) {
+                        fields.private_flag.show();
+                    } else {
+                        fields.private_flag.hide();
+                    }
                     if (data.percent_completed > 0 && data.percent_completed < 100) {
                         fields.progress.find('.bar').css('width', data.percent_completed + '%').end().show();
                     } else {

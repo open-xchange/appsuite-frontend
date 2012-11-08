@@ -36,7 +36,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
         requests: {
             all: {
                 folder: folderApi.getDefaultFolder("tasks"),
-                columns: "1,20,200,202,203,220,300,301",
+                columns: "1,20,101,200,202,203,220,300,301",
                 sort: "202",
                 order: "asc",
                 cache: true, // allow DB cache
@@ -44,7 +44,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             },
             list: {
                 action: "list",
-                columns: "1,20,200,202,203,220,300,301,309",
+                columns: "1,20,101,200,202,203,220,300,301,309",
                 timezone: "UTC"
             },
             get: {

@@ -78,6 +78,17 @@ define("io.ox/calendar/view-detail",
             ext.point('io.ox/calendar/detail/actions').invoke('draw', this, data);
         }
     });
+    
+    // draw private flag
+    ext.point("io.ox/calendar/detail").extend({
+        index: 150,
+        id: "private-flag",
+        draw: function (data) {
+            if (data.private_flag) {
+                $('<i>').addClass("icon-lock private-flag").appendTo(this);
+            }
+        }
+    });
 
     // draw title
     ext.point("io.ox/calendar/detail").extend({

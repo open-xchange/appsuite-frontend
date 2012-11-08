@@ -36,6 +36,16 @@
     display: inline-block;
 }
 
+.vgrid-cell.calendar .private-flag {
+ 	color: #AAA;
+	float: right;
+	display: inline-block;
+	line-height: 19px;
+	font-size: 13pt;
+	position: relative;
+	top: 1px;
+}
+
 .vgrid-cell.calendar .location {
     color: #888;
 }
@@ -82,7 +92,14 @@
     color: #888;
 }
 
+.calendar-detail .private-flag {
+		font-size: 18pt;
+		margin-right: 11px;
+		color: #aaa;
+}
+
 .calendar-detail .title {
+	display: inline-block;
     font-size: 18pt;
     line-height: 22pt;
     margin: 0.25em 0 0.25em 0;

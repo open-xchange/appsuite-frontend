@@ -46,6 +46,14 @@
 .vgrid-cell.tasks .title {
     color: black;
     font-weight: 500;
+    display: inline;
+}
+
+.vgrid-cell.tasks .private-flag {
+	float: left;
+	font-size: 18px;
+	margin-right: 3px;
+	color: #aaa;
 }
 
 .vgrid-cell.tasks .second-row {
@@ -66,43 +74,50 @@
 
 //detailview
 
-.tasks-detailview .info-panel {
-    margin-left: 2em;
-    margin-bottom: 1em;
-	display: inline;
-    float: right;
-}
-
-.tasks-detailview .priority,
-.tasks-detailview .status,
-.tasks-detailview .end-date,
-.tasks-detailview .alarm-date,
-.tasks-detailview .task-progress {
-	float: right;
-}
-
-.tasks-detailview br {
-	line-height: 21px; //to correctstrange behavior of priority
-}
-
-.tasks-detailview .status {
-	margin-top: 4px;
-}
-
-.tasks-detailview .attachments {
-	font-family: @font-light;
-    color: #aaa;
-}
-
-.tasks-detailview .attachments-container {
-	margin-top: 0.8em;
-}
-
-.tasks-detailview .attachment-item{
-	color: #333;
-}
-
-.tasks-detailview .note,
-.tasks-detailview .tasks-inline-links {
-	margin-top: 1em;
+.tasks-detailview {
+	.info-panel {
+	    margin-left: 2em;
+	    margin-bottom: 1em;
+		display: inline;
+	    float: right;
+	}
+	.priority,
+	.status,
+	.end-date,
+	.alarm-date,
+	.task-progress {
+		float: right;
+	}
+	br {
+		line-height: 21px; //to correctstrange behavior of priority
+	}
+	.status {
+		margin-top: 4px;
+	}
+	.attachments {
+		font-family: @font-light;
+	    color: #aaa;
+	}
+	.attachments-container {
+		margin-top: 0.8em;
+	}
+	.attachment-item{
+		color: #333;
+	}
+	.detail-label{
+		margin-top: 6px;
+		color: #aaa;
+	}
+	.tasks-detailview .note,
+	.tasks-detailview .tasks-inline-links {
+		margin-top: 1em;
+	}
+	.title {
+		display: inline;
+	}
+	.private-flag {
+		font-size: 20pt;
+		margin-right: 12px;
+		color: #aaa;
+	}
 }
