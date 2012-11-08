@@ -161,12 +161,12 @@ define("io.ox/calendar/view-detail",
         id: "participants",
         draw: function (data) {
 
-            var list = data.participants, $i = list.length,
-                participants = $i > 1 ? $("<div>").addClass("participants") : $(),
+            var list = data.participants, $i = list.length, MIN = 0,
+                participants = $i > MIN ? $("<div>").addClass("participants") : $(),
                 confirmations = {};
 
-            // has more than one participant?
-            if ($i > 1) {
+            // has participants? should always be true. Was $i > 1 (see bug #23295).
+            if ($i > MIN) {
 
                 confirmations = util.getConfirmations(data);
                 participants.busy();
@@ -302,7 +302,7 @@ define("io.ox/calendar/view-detail",
 
     // draw details
     ext.point("io.ox/calendar/detail").extend({
-        index: 600,
+        index: 700,
         id: "details",
         draw: function (data) {
             var node = $("<div>").addClass('details')
@@ -397,10 +397,16 @@ define("io.ox/calendar/view-detail",
 
     ext.point("io.ox/calendar/detail").extend({
         id: 'attachments',
-        index: 700,
+        index: 600,
         draw: function (data) {
-            var $node = $('<div>').appendTo(this).append($("<div>").addClass("io-ox-label").text(gt("Attachments")));
-            ext.point("io.ox/calendar/detail/attachments").invoke('draw', $node, new ext.Baton({data: data}));
+            var $node;
+            if (data.number_of_attachments) {
+                this.append(
+                    $('<div class="io-ox-label">').text(gt('Attachments')),
+                    $node = $('<div>')
+                );
+                ext.point("io.ox/calendar/detail/attachments").invoke('draw', $node, new ext.Baton({ data: data }));
+            }
         }
     });
 
