@@ -4521,13 +4521,7 @@ define('io.ox/office/editor/editor',
                 var columnCount = $(table).children('colgroup').children().length,
                     // prototype elements for row, cell, and paragraph
                     paragraph = DOM.createParagraphNode(),
-                    // cell = $('<td>').append(paragraph);
-                    cell = $('<td>').append($('<div>').addClass('cell')
-                        .append($('<div>').addClass('topborder'))
-                        .append($('<div>').addClass('bottomborder'))
-                        .append($('<div>').addClass('leftborder'))
-                        .append($('<div>').addClass('rightborder'))
-                        .append($('<div>').addClass('cellcontent').append(paragraph)));
+                    cell = DOM.createTablecellNode(paragraph);
 
                 // insert empty text node into the paragraph
                 validateParagraphNode(paragraph);
@@ -4598,13 +4592,7 @@ define('io.ox/office/editor/editor',
 
             // prototype elements for row, cell, and paragraph
             var paragraph = DOM.createParagraphNode(),
-                // cell = $('<td>').append(paragraph);
-                cell = $('<td>').append($('<div>').addClass('cell')
-                    .append($('<div>').addClass('topborder'))
-                    .append($('<div>').addClass('bottomborder'))
-                    .append($('<div>').addClass('leftborder'))
-                    .append($('<div>').addClass('rightborder'))
-                    .append($('<div>').addClass('cellcontent').append(paragraph)));
+                cell = DOM.createTablecellNode(paragraph);
 
             // apply the passed table attributes
             tableCellStyles.setElementAttributes(cell, attrs);
@@ -4744,13 +4732,7 @@ define('io.ox/office/editor/editor',
                 allRows = $(table).children('tbody, thead').children(),
                 // prototype elements for cell and paragraph
                 paragraph = DOM.createParagraphNode(),
-                // cell = $('<td>').append(paragraph);
-                cell = $('<td>').append($('<div>').addClass('cell')
-                    .append($('<div>').addClass('topborder'))
-                    .append($('<div>').addClass('bottomborder'))
-                    .append($('<div>').addClass('leftborder'))
-                    .append($('<div>').addClass('rightborder'))
-                    .append($('<div>').addClass('cellcontent').append(paragraph)));
+                cell = DOM.createTablecellNode(paragraph);
 
             // insert empty text node into the paragraph
             validateParagraphNode(paragraph);

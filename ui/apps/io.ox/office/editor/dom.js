@@ -431,6 +431,25 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return $(node).is(DOM.CONTENT_NODE_SELECTOR);
     };
 
+    /**
+     * Creates a new table cell element.
+     *
+     * @param {jQuery} paragraph
+     *  A paragraph node that is inserted into the cellcontent div of the new
+     *  table cell.
+     *
+     * @returns {jQuery}
+     *  A table cell element, as jQuery object.
+     */
+    DOM.createTablecellNode = function (paragraph) {
+        return $('<td>').append($('<div>').addClass('cell')
+                .append($('<div>').addClass('topborder'))
+                .append($('<div>').addClass('bottomborder'))
+                .append($('<div>').addClass('leftborder'))
+                .append($('<div>').addClass('rightborder'))
+                .append($('<div>').addClass('cellcontent').append(paragraph)));
+    };
+
     // text spans, text nodes, text components ================================
 
     // text spans -------------------------------------------------------------
