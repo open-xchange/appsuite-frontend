@@ -159,8 +159,8 @@ define('io.ox/office/editor/format/tablestyles',
          * @param {Object} styleAttributes
          *  The complete 'attributes' object of a table style sheet.
          *
-         * @param {jQuery} cell
-         *  The DOM cell node, if this  corresponding to the passed attribute family that
+         * @param {jQuery} [cell]
+         *  The DOM cell node corresponding to the passed attribute family that
          *  has initially requested the formatting attributes of a table style
          *  sheet, as jQuery object.
          *
@@ -307,10 +307,9 @@ define('io.ox/office/editor/format/tablestyles',
 
             var cellOrientation = {};
 
-            if (!((cell) && (cell.get(0)) && (cell.get(0).nodeName) && (((Utils.getNodeName(cell) === 'td'))))) { return cellOrientation; }
-            // if ((Utils.getNodeName(cell) !== 'td') && (Utils.getNodeName(cell) !== 'th')) { return; }
+            if (!$(cell).is('td')) { return cellOrientation; }
 
-            var row = cell.parent(),
+            var row = $(cell).parent(),
                 rowCollection = row.parent().children('tr'),
                 cellCollection = row.children('td');
 

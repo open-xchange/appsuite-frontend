@@ -270,7 +270,7 @@ define('io.ox/office/editor/format/stylesheets',
                 }
 
                 // try user-defined resolver for style attributes mapped in non-standard structures
-                if (_.isFunction(styleAttributesResolver) && ($element.length > 0) && ($sourceNode.length > 0)) {
+                if (_.isFunction(styleAttributesResolver) && ($element.length > 0)) {
                     familyStyleSheets.extendAttributes(attributes, styleAttributesResolver.call(self, family, styleSheet.attributes, $element, $sourceNode));
                 }
             }
