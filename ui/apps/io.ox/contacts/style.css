@@ -18,6 +18,12 @@
     padding: 0.75em 13px 0.75em 13px;
 }
 
+.vgrid-cell.contact .private_flag {
+	float: right;
+	color: #AAA;
+	font-size: 18px;
+}
+
 .vgrid-cell.contact .fullname {
     font-weight: bold;
 }
@@ -121,6 +127,13 @@
 
     .name {
         margin-bottom: 0.25em;
+        display: inline-block;
+    }
+    
+    .private-flag {
+	    color: #AAA;
+		font-size: 20pt;
+		margin-left: 8px;
     }
 
     .job {

@@ -282,6 +282,11 @@
         background-color: @appointment-private;
     }
     
+    .appointment .private-flag {
+    	float: right;
+    	font-size: 18px;
+    }
+    
     .appointment.lasso {
         background-color: @appointment-lasso;
         width: 100%;

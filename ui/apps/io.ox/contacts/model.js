@@ -198,7 +198,8 @@ define('io.ox/contacts/model',
         yomiCompany: { format: 'string'},
         addressHome: { format: 'string'},
         addressBusiness: { format: 'string'},
-        addressOther: { format: 'string'}
+        addressOther: { format: 'string'},
+        private_flag: { format: 'boolean'}
     });
 
     var fields = {
@@ -310,7 +311,8 @@ define('io.ox/contacts/model',
         yomiCompany: gt('yomi Company'),
         addressHome: gt('Address Home'),
         addressBusiness: gt('Address Business'),
-        addressOther: gt('Address Other')
+        addressOther: gt('Address Other'),
+        private_flag: gt('Private')
     };
 
     return {

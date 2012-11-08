@@ -26,14 +26,14 @@ define('io.ox/contacts/api',
             all: {
                 action: 'all',
                 folder: '6',
-                columns: '20,1,500,502',
+                columns: '20,1,101,500,502',
                 sort: '607', // 607 = magic field
                 order: 'asc',
                 admin: 'false'
             },
             list: {
                 action: 'list',
-                columns: '20,1,500,501,502,505,520,524,555,556,557,569,592,602,606'
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606'
                     // 524 = internal_userid, 592 = distribution_list,
                     // 602 = mark_as_distributionlist, 606 = image1_url
             },

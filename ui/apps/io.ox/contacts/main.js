@@ -82,19 +82,30 @@ define("io.ox/contacts/main",
         // add template
         grid.addTemplate({
             build: function () {
-                var name, description;
+                var name, description, private_flag;
                 this.addClass('contact').append(
+                    private_flag = $('<i class="icon-lock private_flag">').hide(),
                     name = $('<div class="fullname">'),
                     description = $('<div class="bright-text">')
                 );
-                return { name: name, description: description };
+                return { name: name, private_flag: private_flag, description: description };
             },
             set: function (data, fields, index) {
                 if (data.mark_as_distributionlist === true) {
                     fields.name.text(_.noI18n(data.display_name || ''));
+                    if (data.private_flag) {
+                        fields.private_flag.show();
+                    } else {
+                        fields.private_flag.hide();
+                    }
                     fields.description.text(gt('Distribution list'));
                 } else {
                     fields.name.text(_.noI18n(util.getFullName(data)));
+                    if (data.private_flag) {
+                        fields.private_flag.show();
+                    } else {
+                        fields.private_flag.hide();
+                    }
                     fields.description.text(_.noI18n(util.getDescription(data)));
                 }
             }

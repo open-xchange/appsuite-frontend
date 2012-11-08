@@ -177,15 +177,22 @@ define("io.ox/contacts/view-detail",
         index: 200,
         id: 'contact-title',
         draw: function (baton) {
+            var private_flag;
             this.append(
                 // right side
                 $('<div class="span8 field-value">').append(
                     $('<div class="name clear-title user-select-text">')
                         .text(_.noI18n(util.getFullName(baton.data))),
+                    private_flag = $('<i class="icon-lock private-flag">').hide(),
                     $('<div class="job clear-title user-select-text">')
                         .text(getDescription(baton.data))
                 )
             );
+            if (baton.data.private_flag) {
+                private_flag.show();
+            } else {
+                private_flag.hide();
+            }
         }
     });
 

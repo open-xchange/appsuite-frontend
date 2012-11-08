@@ -248,6 +248,12 @@
         background-color: @appointment-private;
     }
     
+    .appointment .private-flag {
+    	float: left;
+    	display: inline-block;
+    	font-size: 15px;
+    }
+    
     /* unconfirmed */
     .appointment.reserved.unconfirmed {
         background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved),@appointment-unconfirmed-alpha );

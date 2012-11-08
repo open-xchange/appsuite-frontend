@@ -28,6 +28,10 @@
     .form-horizontal .control-group {
         margin-bottom: 10px;
     }
+    
+   	.form-horizontal .private-flag {
+   		margin-left: 180px;
+   	}
 
     .sectionheader {
         margin-top: 40px;

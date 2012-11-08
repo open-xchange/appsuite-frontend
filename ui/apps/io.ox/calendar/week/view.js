@@ -1156,7 +1156,8 @@ define('io.ox/calendar/week/view',
         id: 'default',
         index: 100,
         draw: function (baton) {
-            var a = baton.model;
+            var a = baton.model,
+                private_flag;
                     // check confirmations
             var state = (_(a.get('participants')).find(function (o) {
                     return o.id === myself;
@@ -1165,7 +1166,6 @@ define('io.ox/calendar/week/view',
             this
                 .addClass(
                         util.getShownAsClass(a.attributes) +
-                        (a.get('private_flag') ? ' private' : '') +
                         (state === 0 ? ' unconfirmed' : '') +
                         (folder.can('write', baton.folder, a.attributes) ? ' modify' : '')
                 )
@@ -1173,12 +1173,18 @@ define('io.ox/calendar/week/view',
                         $('<div>')
                         .addClass('appointment-content')
                         .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
+                        .append(private_flag = $('<i class="icon-lock private-flag">').hide())
                         .append($('<div>').addClass('title').text(gt.noI18n(a.get('title'))))
                         .append($('<div>').addClass('location').text(gt.noI18n(a.get('location') || '')))
                 )
                 .attr({
                     'data-extension': 'default'
                 });
+            if (a.get('private_flag')) {
+                private_flag.show();
+            } else {
+                private_flag.hide();
+            }
         }
     });
 

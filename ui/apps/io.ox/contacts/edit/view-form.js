@@ -56,7 +56,8 @@ define('io.ox/contacts/edit/view-form', [
                         'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10',
                         'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
                         'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'],
-            comment: ['note']
+            comment: ['note'],
+            misc: ['private_flag']
         },
 
         rare: ['nickname', 'marital_status', 'number_of_children', 'spouse_name', 'url', 'anniversary',
@@ -86,7 +87,8 @@ define('io.ox/contacts/edit/view-form', [
             other_address: gt('Other address'),
             job: gt('Job description'),
             comment: gt('Comment'),
-            userfields: gt('User fields')
+            userfields: gt('User fields'),
+            misc: gt('Miscellaneous')
         },
 
         special: {
@@ -107,6 +109,20 @@ define('io.ox/contacts/edit/view-form', [
 
             birthday: dateField,
             anniversary: dateField,
+            private_flag: function (options) {
+                options.point.extend(new forms.CheckBoxField({
+                    id: options.field,
+                    index: options.index,
+                    label: model.fields[options.field],
+                    labelClassName: 'private-flag',
+                    rare: options.isRare,
+                    attribute: options.field
+                }), {
+                    hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
+                        return (model.attributes.private_flag === undefined || model.attributes.private_flag === false);
+                    }
+                });
+            },
             city_home: city('city_home', 'postal_code_home'),
             city_business: city('city_business', 'postal_code_business'),
             city_other: city('city_other', 'postal_code_other')
@@ -285,7 +301,6 @@ define('io.ox/contacts/edit/view-form', [
     _(meta.sections).each(function (fields, id) {
         var uid = 'io.ox/contacts/edit/' + id,
             section = {};
-
         point.extend(new forms.Section({
             id: id,
             index: index,
