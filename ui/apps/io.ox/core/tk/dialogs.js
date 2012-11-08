@@ -342,7 +342,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core'], func
             pane = $('<div class="io-ox-sidepopup-pane default-content-padding abs">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
-                    $('<button class="btn">').text(gt('Close'))
+                    $('<button class="btn" data-action="close" >').text(gt('Close'))
                 ),
 
             popup = $('<div class="io-ox-sidepopup abs">').append(closer, pane),
@@ -472,7 +472,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core'], func
                 if (self.nodes.closest.is('.io-ox-sidepopup-pane')) {
                     closer.find('.close-all').remove();
                     closer.prepend(
-                        $('<button class="btn close-all">').text(gt('Close all'))
+                        $('<button class="btn close-all" data-action="close-all">').text(gt('Close all'))
                         .on('click', { target: self.nodes.target }, closeAll)
                     );
                 }
