@@ -37,7 +37,7 @@ define('io.ox/calendar/month/perspective',
         scrollOffset: 250,  // offset space to trigger update event on scroll stop
         collections: {},    // all week collections of appointments
         current: null,      // current month as UTC timestamp
-        folder: 0,
+        folder: null,
         app: null,          // the current application
         dialog: $(),        // sidepopup
 
@@ -66,8 +66,9 @@ define('io.ox/calendar/month/perspective',
             obj = $.extend({
                 weeks: this.updateLoad
             }, obj);
-            if (this.folder) {
-                obj.folder = this.folder;
+            // do folder magic
+            if (this.folder.type !== 1 || this.showAll.prop('checked') === false) {
+                obj.folder = this.folder.id;
             }
             obj.end = obj.start + obj.weeks * date.WEEK;
 
@@ -109,13 +110,12 @@ define('io.ox/calendar/month/perspective',
                 weeks = param.multi * self.updateLoad,
                 day = param.up ? self.firstWeek -= (weeks) * date.WEEK : self.lastWeek,
                 start = day;
-
             // draw all weeks
             for (var i = 1; i <= weeks; i++, day += date.WEEK) {
                 // add collection for week
                 self.collections[day] = new Backbone.Collection([]);
                 // new view
-                var view = new View({ collection: self.collections[day], day: day });
+                var view = new View({ collection: self.collections[day], day: day, folder: self.folder });
                 view.on('showAppoinment', self.showAppointment, self)
                     .on('createAppoinment', self.createAppointment, self);
                 views.push(view.render().el);
@@ -192,12 +192,7 @@ define('io.ox/calendar/month/perspective',
             self.app.folder.getData().done(function (data) {
                 // switch only visible on private folders
                 self.showAllCon[data.type === 1 ? 'show' : 'hide']();
-                // do folder magic
-                if (data.type === 1 && self.showAll.prop('checked') === true) {
-                    self.folder = null;
-                } else {
-                    self.folder = data.id;
-                }
+                self.folder = data;
                 def.resolve();
             });
             return def;

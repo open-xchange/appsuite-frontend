@@ -16,7 +16,9 @@ define('io.ox/calendar/month/view',
      'io.ox/core/extensions',
      'io.ox/core/api/folder',
      'gettext!io.ox/calendar',
-     'less!io.ox/calendar/month/style.css'], function (util, date, ext, folder, gt) {
+     'less!io.ox/calendar/month/style.css',
+     'apps/io.ox/core/tk/jquery-ui.min.js',
+     'apps/io.ox/core/tk/jquery.mobile.touch.min.js'], function (util, date, ext, folder, gt) {
 
     'use strict';
 
@@ -31,6 +33,7 @@ define('io.ox/calendar/month/view',
         className: 'week',
         weekStart: 0,
         weekEnd: 0,
+        folder: null,
 
         events: {
             'click .appointment': 'onClickAppointment',
@@ -43,6 +46,7 @@ define('io.ox/calendar/month/view',
             this.collection.on('reset', this.renderAppointments, this);
             this.weekStart = options.day;
             this.weekEnd = options.day + date.WEEK;
+            this.folder = options.folder;
         },
 
         onClickAppointment: function (e) {
@@ -114,22 +118,24 @@ define('io.ox/calendar/month/view',
         renderAppointment: function (a) {
             myself = myself || ox.user_id;
 
-            var el = $('<div>')
-                .addClass('appointment')
-                .attr({
-                    'data-cid': a.id,
-                    'data-extension-point': 'io.ox/calendar/month/view/appointment',
-                    'data-composite-id': a.id
-                });
+            var self = this,
+                el = $('<div>')
+                    .addClass('appointment')
+                    .attr({
+                        'data-cid': a.id,
+                        'data-extension-point': 'io.ox/calendar/month/view/appointment',
+                        'data-composite-id': a.id
+                    });
 
             ext.point('io.ox/calendar/month/view/appointment')
-                .invoke('draw', el, ext.Baton(_.extend({}, this.options, {model: a, folder: this.folder})));
+                .invoke('draw', el, ext.Baton(_.extend({}, this.options, {model: a, folder: self.folder})));
             return el;
         },
 
         renderAppointments: function () {
+            var self = this;
             // clear first
-            this.$el.find('.appointment').remove();
+            $('.appointment', this.$el).remove();
 
             // loop over all appointments
             this.collection.each(function (model) {
@@ -172,6 +178,25 @@ define('io.ox/calendar/month/view',
                     }
                 }
             }, this);
+
+//            $('.appointment.modify', this.$el).draggable({
+//                helper: function () {
+//                    return $(this).clone().width($(this).outerWidth()).css({zIndex: 999});
+//                },
+//                appendTo: self.$el,
+//                scroll: true,
+//                snap: '.day .list',
+//                snapMode: 'inner',
+//                snapTolerance: 20,
+//                containment: self.$el.parent(),
+//                start: function (e, ui) {
+//                    $(this).hide();
+//                },
+//                drag: function (e, ui) {
+//                },
+//                stop: function (e, ui) {
+//                }
+//            });
         }
     });
 
@@ -207,7 +232,8 @@ define('io.ox/calendar/month/view',
             this
                 .addClass(
                     util.getShownAsClass(a.attributes) +
-                    (state === 0 ? ' unconfirmed' : '')
+                    (state === 0 ? ' unconfirmed' : '') +
+                    (folder.can('write', baton.folder, a.attributes) ? ' modify' : '')
                 )
                 .append(
                     $('<div>')
