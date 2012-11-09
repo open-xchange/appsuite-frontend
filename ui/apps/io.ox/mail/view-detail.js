@@ -229,7 +229,7 @@ define('io.ox/mail/view-detail',
             if (!isLarge) {
                 source = source.replace(/dennis sieben/ig, 'Dennis App Suite (Sieben)')
                     .replace(/D7/ig, 'D App Suite (7)')
-                    .replace(/OX7/ig, '<b> OX App Suite </b>')
+                    .replace(/([^\/])OX7/ig, '$1<b> OX App Suite </b>')
                     .replace(/7\.0/ig, '<b> App Suite (7.0) </b>');
             }
 
