@@ -31,40 +31,29 @@ define('io.ox/office/editor/hyperlink',
     // static functions =======================================================
 
     /**
-     * Shows the hyperlink dialog
+     * Shows a hyperlink input dialog.
      *
-     * @param  app the current application
+     *  @param {String} text
+     *      The optional text which represents the URL
+     *  @param {String} url
+     *      An optional URL which is set for the supplied text
+     *
+     * @returns {jQuery.Promise}
+     *  The promise of a deferred object that will be resolved if the primary
+     *  button has been activated, or rejected if the dialog has been canceled.
+     *  The done handlers registered at the promise object will receive the
+     *  entered text.
      */
-    Hyperlink.insertHyperlinkDialog = function (app) {
-        Dialogs.showHyperlinkDialog({
+    Hyperlink.showHyperlinkDialog = function (text, url) {
+
+        return Dialogs.showHyperlinkDialog({
             title: gt('Insert/Edit Hyperlink'),
-            valueURL: 'http://',
+            valueURL: url,
             placeholderURL: gt('Enter URL'),
-            valueText: null,
+            valueText: text,
             placeholderText: gt('Enter visible text'),
             okLabel: gt('Insert')
-        })
-        .done(function (data) {
-            Hyperlink.insertHyperlink(app, data.text, data.url, true);
         });
-    };
-
-    /**
-     * Inserts the hyperlink into a document.
-     *
-     * @param {ox.ui.App} app
-     *  The application object representing the edited document.
-     *
-     * @param {String} url
-     *  The url describing the target of the hyperlink to be inserted.
-     *
-     * @param {Boolean} [showError]
-     *  If set to true, an alert box is shown in case of an error. Otherwise,
-     *  errors are silently ignored.
-     */
-    Hyperlink.insertHyperlink = function (app, text, url, showError) {
-
-        app.getEditor().insertHyperlink(text, url);
     };
 
     // exports ================================================================

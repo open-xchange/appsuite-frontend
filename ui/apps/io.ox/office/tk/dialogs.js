@@ -190,7 +190,7 @@ define('io.ox/office/tk/dialogs',
     };
 
     /**
-     * Shows a simple text input dialog.
+     * Shows a hyperlink input dialog.
      *
      * @param {Object} [options]
      *  Additional options that control the appearance and behavior of the

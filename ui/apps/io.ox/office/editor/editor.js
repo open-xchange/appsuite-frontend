@@ -22,6 +22,7 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/selection',
      'io.ox/office/editor/table',
      'io.ox/office/editor/image',
+     'io.ox/office/editor/hyperlink',
      'io.ox/office/editor/operations',
      'io.ox/office/editor/position',
      'io.ox/office/editor/undo',
@@ -32,7 +33,7 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/format/color',
      'io.ox/office/tk/alert',
      'gettext!io.ox/office/main'
-    ], function (Events, Utils, DOM, Selection, Table, Image, Operations, Position, UndoManager, StyleSheets, CharacterStyles, DocumentStyles, LineHeight, Color, Alert, gt) {
+    ], function (Events, Utils, DOM, Selection, Table, Image, Hyperlink, Operations, Position, UndoManager, StyleSheets, CharacterStyles, DocumentStyles, LineHeight, Color, Alert, gt) {
 
     'use strict';
 
@@ -1267,37 +1268,77 @@ define('io.ox/office/editor/editor',
             // setting the cursor position
             selection.setTextSelection(lastOperationEnd);
         };
-
-        this.insertHyperlink = function (text, url) {
+        
+        this.insertHyperlink = function () {
             var generator = new Operations.Generator();
-
-            if (!text && (selection.hasRange())) {
-                var start = selection.startPaM.oxoPosition,
-                    end = selection.endPaM.oxoPosition;
-
-                // set url to selected text
-                var hyperlinkStyleId = self.getDefaultUIHyperlinkStylesheet();
-                if (characterStyles.isDirty(hyperlinkStyleId)) {
-                    // insert hyperlink style to document
-                    generator.generateOperation(Operations.INSERT_STYLE, {
-                        attrs: characterStyles.getStyleSheetAttributeMap(hyperlinkStyleId),
-                        type: 'character',
-                        styleid: hyperlinkStyleId,
-                        stylename: characterStyles.getName(hyperlinkStyleId),
-                        parent: characterStyles.getParentId(hyperlinkStyleId),
-                        uipriority: characterStyles.getUIPriority(hyperlinkStyleId)
-                    });
-                    characterStyles.setDirty(hyperlinkStyleId, false);
-                }
-
-                generator.generateOperation(Operations.ATTRS_SET, {
-                    attrs: { url: url, style: hyperlinkStyleId },
-                    start: _.copy(start, true),
-                    end: _.copy(end, true)
+            
+            if (selection.hasRange() && selection.getEnclosingParagraph()) {
+                var start = _.copy(selection.getStartPosition()),
+                    end = _.copy(selection.getEndPosition()),
+                    text = '', url = '';
+                
+                // Find out the text/url of the selected text to provide them to the
+                // hyperlink dialog
+                selection.iterateNodes(function (node, pos, start, length) {
+                    if ((start >= 0) && (length >= 0) && DOM.isTextSpan(node)) {
+                        var nodeText = $(node).text();
+                        if (nodeText) {
+                            text = text.concat(nodeText.slice(start, start + length));
+                        }
+                        if (url.length === 0) {
+                            var styles = characterStyles.getElementAttributes(node);
+                            if (styles.url && styles.url.length > 0)
+                                url = styles.url;
+                        }
+                    }
                 });
 
-                // apply all collected operations
-                self.applyOperations(generator.getOperations(), true, true);
+                // show hyperlink dialog
+                Hyperlink.showHyperlinkDialog(text, url).done(function (data) {
+                    // set url to selected text
+                    var hyperlinkStyleId = self.getDefaultUIHyperlinkStylesheet(),
+                        url = data.url;
+
+                    undoManager.enterGroup(function () {
+
+                        if (data.text !== text) {
+
+                            // text has been changed
+                            if (selection.hasRange()) {
+                                self.deleteSelected();
+                            }
+
+                            // insert new text
+                            var newOperation = { name: Operations.TEXT_INSERT, text: data.text, start: _.copy(start, true) };
+                            applyOperation(newOperation, true, true);
+                            // calculate end position of new text
+                            end = _.copy(start);
+                            end[end.length - 1] += data.text.length;
+                        }
+
+                        if (characterStyles.isDirty(hyperlinkStyleId)) {
+                            // insert hyperlink style to document
+                            generator.generateOperation(Operations.INSERT_STYLE, {
+                                attrs: characterStyles.getStyleSheetAttributeMap(hyperlinkStyleId),
+                                type: 'character',
+                                styleid: hyperlinkStyleId,
+                                stylename: characterStyles.getName(hyperlinkStyleId),
+                                parent: characterStyles.getParentId(hyperlinkStyleId),
+                                uipriority: characterStyles.getUIPriority(hyperlinkStyleId)
+                            });
+                            characterStyles.setDirty(hyperlinkStyleId, false);
+                        }
+
+                        generator.generateOperation(Operations.ATTRS_SET, {
+                            attrs: { url: url, style: hyperlinkStyleId },
+                            start: _.copy(start, true),
+                            end: _.copy(end, true)
+                        });
+
+                        // apply all collected operations
+                        self.applyOperations(generator.getOperations(), true, true);
+                    }, self);
+                });
             }
         };
 

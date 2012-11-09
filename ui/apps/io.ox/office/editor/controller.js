@@ -232,7 +232,7 @@ define('io.ox/office/editor/controller',
                 'character/hyperlink': {
                     parent: 'character/attributes',
                     get: function (attributes) { return attributes.url; },
-                    set: function (hyperlink) { Hyperlink.insertHyperlinkDialog(app); }
+                    set: function (hyperlink) { editor.insertHyperlink(); }
                 },
                 'insert/tab' : {
                     parent: 'document/editable/text',
