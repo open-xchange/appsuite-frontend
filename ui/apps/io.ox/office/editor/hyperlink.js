@@ -36,8 +36,6 @@ define('io.ox/office/editor/hyperlink',
      * @param  app the current application
      */
     Hyperlink.insertHyperlinkDialog = function (app) {
-        var editor = app.getEditor();
-        
         Dialogs.showHyperlinkDialog({
             title: gt('Insert/Edit Hyperlink'),
             valueURL: 'http://',
