@@ -457,9 +457,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.createTableCellNode = function (paragraph) {
         return $('<td>').append($('<div>').addClass('cell')
-                // .append($('<div>').addClass('topborder resize'))
                 .append($('<div>').addClass('bottomborder resize'))
-                // .append($('<div>').addClass('leftborder resize'))
                 .append($('<div>').addClass('rightborder resize'))
                 .append($('<div>').addClass('cellcontent').append(paragraph)));
     };

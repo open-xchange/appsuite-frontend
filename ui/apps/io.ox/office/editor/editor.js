@@ -3219,6 +3219,7 @@ define('io.ox/office/editor/editor',
                 }
 
                 editdiv.css('cursor', $(resizeNode).css('cursor'));  // setting cursor for increasing image
+                $(resizeLine).css('cursor', $(resizeNode).css('cursor'));  // setting cursor for increasing image
             }
 
             function mouseMoveOnObject(event, resizeNode) {
@@ -3257,21 +3258,18 @@ define('io.ox/office/editor/editor',
                     shiftY = currentY - startY;
                     if ((_.isNumber(shiftX)) && (_.isNumber(shiftY)) && (shiftY !== 0)) {
                         var rowNode = $(resizeNode).closest('tr'),
-                            rowHeight = rowNode.outerHeight() + shiftY;
+                            rowHeight = rowNode.outerHeight() + shiftY,
+                            newRowHeight = Utils.convertLengthToHmm(rowHeight, 'px'),
+                            rowPosition = Position.getOxoPosition(editdiv, rowNode.get(0), 0),
+                            newOperation = { name: Operations.ATTRS_SET, attrs: {height: newRowHeight}, start: rowPosition };
+                        applyOperation(newOperation, true, true);
 
-                        if (rowHeight > 5) {  // minimum height of table row: 5 px
-                            var newRowHeight = Utils.convertLengthToHmm(rowHeight, 'px'),
-                                rowPosition = Position.getOxoPosition(editdiv, rowNode.get(0), 0),
-                                newOperation = { name: Operations.ATTRS_SET, attrs: {height: newRowHeight}, start: rowPosition };
+                        // checking the operation, maybe the browser did not set the desired height (because of text content in the cell)
+                        if (rowNode.outerHeight() !== rowHeight) {
+                            // informing the server about the new table row height
+                            newRowHeight = Utils.convertLengthToHmm(rowNode.outerHeight(), 'px');
+                            newOperation = { name: Operations.ATTRS_SET, attrs: {height: newRowHeight}, start: rowPosition };
                             applyOperation(newOperation, true, true);
-
-                            // checking the operation, maybe the browser did not set the desired height (because of text content in the cell)
-                            if (rowNode.outerHeight() !== rowHeight) {
-                                // informing the server about the new table row height
-                                newRowHeight = Utils.convertLengthToHmm(rowNode.outerHeight(), 'px');
-                                newOperation = { name: Operations.ATTRS_SET, attrs: {height: newRowHeight}, start: rowPosition };
-                                applyOperation(newOperation, true, true);
-                            }
                         }
                     }
                 }

@@ -116,16 +116,6 @@
                     
                     > div.cellcontent {
                     }
-                    
-                    > div.topborder {
-                        position: absolute;
-                        width: 100%;
-                        height: 3px;
-                        border: 0px solid green;
-                        top: -5px;
-                        left: -5px;
-                        cursor: n-resize;
-                    }
 
                     > div.bottomborder {
                         position: absolute;
@@ -135,16 +125,6 @@
                         bottom: -5px;
                         left: -5px;
                         cursor: s-resize;
-                    }
-
-                    > div.leftborder {
-                        position: absolute;
-                        width: 3px;
-                        height: 100%;
-                        border: 0px solid blue;
-                        top: -5px;
-                        left: -5px;
-                        cursor: w-resize;
                     }
 
                     > div.rightborder {
