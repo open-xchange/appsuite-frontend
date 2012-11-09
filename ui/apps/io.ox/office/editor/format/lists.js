@@ -166,7 +166,7 @@ define('io.ox/office/editor/format/lists',
         function formatNumberType(levelIndexes, ilvl, listdefinition) {
             var ret = {};
             var topLevelformat = listdefinition.listlevels[ilvl];
-            var leveltext = topLevelformat.leveltext;
+            var leveltext = topLevelformat.leveltext ? topLevelformat.leveltext : '';
             ret.suff = listdefinition.listlevels[ilvl].suff;
             ret.tabpos = listdefinition.listlevels[ilvl].tabpos;
             for (;ilvl >= 0; --ilvl) {

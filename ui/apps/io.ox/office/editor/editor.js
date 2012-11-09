@@ -2298,7 +2298,6 @@ define('io.ox/office/editor/editor',
                     }
                 }
                 if (mustInsertTab) {
-                    // TODO: insert tab
                     self.insertTab();
                 }
             }
@@ -5058,8 +5057,6 @@ define('io.ox/office/editor/editor',
                         oldLabel = $(para).children(DOM.LIST_LABEL_NODE_SELECTOR);
                         var updateParaTabstops = oldLabel.length > 0;
                         oldLabel.remove();
-                        $(para).css('margin-left', '')
-                            .css('text-indent', '');
                         var numId = paraAttributes.numId;
                         if (numId  !== -1) {
                             var ilvl = paraAttributes.ilvl;
@@ -5114,11 +5111,6 @@ define('io.ox/office/editor/editor',
                                     Color.setElementTextColor(listSpan, documentStyles.getCurrentTheme(), listObject, paraAttributes);
                                 }
                                 LineHeight.updateElementLineHeight(numberingElement, paraAttributes.lineheight);
-                                var leftMargin = 0;
-                                if (listObject.indent > 0) {
-                                    leftMargin = listObject.indent;
-                                    $(para).css('margin-left', leftMargin / 100 + 'mm');
-                                }
                                 var minWidth = 0,
                                     isNegativeIndent = listObject.firstLine < listObject.indent;
 

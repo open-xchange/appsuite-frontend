@@ -21,6 +21,18 @@ define('io.ox/office/editor/format/paragraphstyles',
 
     'use strict';
 
+    function initBorder(border) {
+        if (!border.style) {
+            border.width = border.color = border.space = undefined;
+        } else {
+            if (!border.width)
+                border.width = 0;
+            if (!border.space)
+                border.space = 0;
+            if (!border.color)
+                border.color = 'auto';
+        }
+    }
     var // definitions for paragraph attributes
         DEFINITIONS = {
 
@@ -90,46 +102,32 @@ define('io.ox/office/editor/format/paragraphstyles',
             },
             borderleft: {
                 def: {},
-                format: function (element, value) {
-                    if (value) {
-                        if (value.space) {
-                            element.css('padding-left', value.space / 100 + 'mm');
-                        }
-                        element.css("border-left", this.getCssBorder(value));
-                    }
+                format: function (element, border) {
+                    initBorder(border);
                 }
             },
             borderright: {
                 def: {},
-                format: function (element, value) {
-                    if (value) {
-                        if (value.space) {
-                            element.css('padding-right', value.space / 100 + 'mm');
-                        }
-                        element.css("border-right", this.getCssBorder(value));
-                    }
+                format: function (element, border) {
+                    initBorder(border);
                 }
             },
             bordertop: {
                 def: {},
-                format: function (element, value) {
-                    if (value) {
-                        if (value.space) {
-                            element.css('padding-top', value.space / 100 + 'mm');
-                        }
-                        element.css("border-top", this.getCssBorder(value));
-                    }
+                format: function (element, border) {
+                    initBorder(border);
                 }
             },
             borderbottom: {
                 def: {},
-                format: function (element, value) {
-                    if (value) {
-                        if (value.space) {
-                            element.css('padding-bottom', value.space / 100 + 'mm');
-                        }
-                        element.css("border-bottom", this.getCssBorder(value));
-                    }
+                format: function (element, border) {
+                    initBorder(border);
+                }
+            },
+            borderinside: {
+                def: {},
+                format: function (element, border) {
+                    initBorder(border);
                 }
             }
         };
@@ -186,6 +184,66 @@ define('io.ox/office/editor/format/paragraphstyles',
                     characterStyles.updateElementFormatting(span);
                 });
             }, undefined, { children: true });
+            var leftMargin = 0,
+                rightMargin = 0;
+            // update borders
+            var prevParagraph = $(paragraph).prev(),
+                prevAttributes = prevParagraph ? self.getElementAttributes(prevParagraph) : {};
+            var nextParagraph = $(paragraph).next(),
+                nextAttributes = nextParagraph ? self.getElementAttributes(nextParagraph) : {};
+
+            function isBorderEqual(attributes1, attributes2) {
+                var ret = _.isEqual(attributes1.borderleft, attributes2.borderleft) &&
+                _.isEqual(attributes1.borderright, attributes2.borderright) &&
+                _.isEqual(attributes1.bordertop, attributes2.bordertop) &&
+                _.isEqual(attributes1.borderbottom, attributes2.borderbottom) &&
+                _.isEqual(attributes1.borderinside, attributes2.borderinside);
+                return ret;
+            }
+            function setBorder(border, position) {
+                var space = border && border.space ? border.space : 0;
+                paragraph.css('padding-' + position, space ? (space / 100 + 'mm') : '');
+                paragraph.css('border-' + position, border ? self.getCssBorder(border) : '');
+                return -space;
+            }
+            leftMargin += setBorder(attributes.borderleft, 'left');
+            rightMargin += setBorder(attributes.borderright, 'right');
+            //top border is not set if previous paragraph uses the same border settings
+            var equalToPrevBorder = isBorderEqual(attributes, prevAttributes);
+            if (equalToPrevBorder) {
+                setBorder(undefined, 'top');
+                prevParagraph.css("padding-bottom", this.getCssBorder(attributes.borderinside.space));
+                prevParagraph.css("border-bottom", this.getCssBorder(attributes.borderinside));
+            } else {
+                setBorder(attributes.bordertop, 'top');
+            }
+            var equalToNextBorder = isBorderEqual(attributes, nextAttributes);
+            //bottom border is replaced by inner border next paragraph uses the same border settings
+            setBorder(equalToNextBorder ? attributes.borderinside : attributes.borderbottom, 'bottom');
+
+            //calculate list indents
+            var numId = attributes.numId;
+            if (numId  !== -1) {
+                var ilvl = attributes.ilvl,
+                     lists = documentStyles.getLists();
+                if (ilvl < 0) {
+                    // is a numbering level assigned to the current paragraph style?
+                    ilvl = lists.findIlvl(numId, attributes.style);
+                }
+                if (ilvl !== -1 && ilvl < 9) {
+                    var listItemCounter = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    //updateParaTabstops = true;
+                    var listObject = lists.formatNumber(attributes.numId, ilvl, listItemCounter);
+
+                    if (listObject.indent > 0) {
+                        leftMargin += listObject.indent;
+                    }
+                }
+            }
+            //now set left/right margins
+            paragraph.css('margin-left', leftMargin / 100 + 'mm');
+            paragraph.css('margin-right', rightMargin / 100  + 'mm');
+
         }
 
         // base constructor ---------------------------------------------------
