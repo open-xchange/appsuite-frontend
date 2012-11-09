@@ -19,6 +19,19 @@ define('io.ox/office/editor/format/container',
 
     'use strict';
 
+    var // map operation line styles to CSS line styles (anything else maps to 'solid')
+        CSS_LINE_STYLES = {
+            none: 'none',
+            double: 'double',
+            triple: 'double',
+            dashed: 'dashed',
+            dashSmallGap: 'dashed',
+            dotted: 'dotted',
+            dotDash: 'dotted',
+            dotDotDash: 'dotted',
+            dashDotStroked: 'dotted'
+        };
+
     // class Container ========================================================
 
     /**
@@ -106,39 +119,16 @@ define('io.ox/office/editor/format/container',
 
             var style = Utils.getStringOption(border, 'style', 'none'),
                 width = Utils.getIntegerOption(border, 'width', 0),
-                color = Utils.getObjectOption(border, 'color', Color.AUTO),
-                borderVisible = false;
+                color = Utils.getObjectOption(border, 'color', Color.AUTO);
 
-            // checking that width is set also for very thin borders
-            if (width > 0) { borderVisible = true; }
+            // convert operation line styles to CSS styles
+            style = CSS_LINE_STYLES[style] || 'solid';
 
-            // convert operation styles to CSS styles
-            switch (style) {
-            case 'double':
-            case 'triple':
-                style = 'double';
-                break;
-
-            case 'dashed':
-            case 'dashSmallGap':
-                style = 'dashed';
-                break;
-
-            case 'dotted':
-            case 'dotDash':
-            case 'dotDotDash':
-            case 'dashDotStroked':
-                style = 'dotted';
-                break;
-            default:
-                style = 'solid';
+            // convert 1/100mm to pixels (at least one pixel)
+            width = Utils.convertHmmToLength(width, 'px', 1);
+            if (width > 0) {
+                width = Math.max(width, 1) + 'px';
             }
-
-            // convert 1/100mm to pixels
-            width = Utils.convertHmmToCssLength(width, 'px', 1);
-
-            // border thickness must be at least 1px (for Chrome)
-            if ((borderVisible) && (parseFloat(width) < 1)) { width = '1px'; }
 
             // convert color object to CSS color
             color = this.getCssColor(color, 'line');
