@@ -236,7 +236,7 @@ define('io.ox/office/editor/main',
             var // the result deferred
                 def = null;
 
-            if (_.isNumber(folderId)) {
+            if (!_.isUndefined(folderId)) {
                 def = $.ajax({
                     type: 'GET',
                     url: self.buildServiceUrl('oxodocumentfilter', { action: 'createdefaultdocument', folder_id: folderId, document_type: 'text' }),
