@@ -3229,7 +3229,7 @@ define('io.ox/office/editor/editor',
                 }
 
                 if ((_.isNumber(shiftX)) && (_.isNumber(shiftY))) {
-                    $(resizeLine).css({ 'left': shiftX, 'top': shiftY });
+                    $(resizeLine).css({'left': shiftX, 'top': shiftY});
                 }
             }
 
@@ -3246,7 +3246,48 @@ define('io.ox/office/editor/editor',
 
                 if (verticalResize) {
                     shiftX = currentX - startX;
-                    shiftY = startY;
+                    if ((_.isNumber(shiftX)) && (shiftX !== 0)) {
+                        var cellNode = $(resizeNode).closest('td, th'),
+                            rowNode =  $(resizeNode).closest('tr'),
+                            tableNode =  $(resizeNode).closest('table'),
+                            lastCell = cellNode[0].nextSibling ? false : true,
+                            tablePosition = Position.getOxoPosition(editdiv, tableNode.get(0), 0),
+                            oldTableGrid = StyleSheets.getExplicitAttributes(tableNode).tablegrid,
+                            oldTableWidth = StyleSheets.getExplicitAttributes(tableNode).width,
+                            tableGrid = [],
+                            pixelGrid = [],
+                            gridSum = 0,  // sum of all grid values, will not be modified
+                            newTableWidth = 0,
+                            shiftedGrid = 0;
+
+                        if (oldTableWidth === 0) { oldTableWidth = tableNode.outerWidth(); }
+                        newTableWidth = lastCell ? (oldTableWidth + shiftX) : oldTableWidth;
+
+                        // converting from relational grid to pixel grid
+                        for (var i = 0; i < oldTableGrid.length; i++) { gridSum += oldTableGrid[i]; }
+                        for (var i = 0; i < oldTableGrid.length; i++) { pixelGrid.push(Utils.roundDigits(oldTableGrid[i] * oldTableWidth / gridSum, 0)); }
+
+                        // which border was shifted?
+                        shiftedGrid = Table.getGridPositionFromCellPosition(rowNode, cellNode.prevAll().length).end;
+                        // -> shifting the border
+                        pixelGrid[shiftedGrid] += shiftX;
+                        if (! lastCell) { pixelGrid[shiftedGrid + 1] -= shiftX; }
+
+                        // both still have to be positive
+                        if ((pixelGrid[shiftedGrid] > 0) && ((lastCell) || (pixelGrid[shiftedGrid + 1] > 0))) {
+
+                            // converting modified pixel grid to new relation table grid
+                            for (var i = 0; i < pixelGrid.length; i++) {
+                                tableGrid.push(Utils.roundDigits(gridSum * pixelGrid[i] / newTableWidth, 0));  // only ints
+                            }
+
+                            if ((! lastCell) && (StyleSheets.getExplicitAttributes(tableNode).width === 0)) { newTableWidth = 0; }
+                            else { newTableWidth = Utils.convertLengthToHmm(newTableWidth, 'px'); }
+
+                            var newOperation = {name: Operations.ATTRS_SET, attrs: {'tablegrid': tableGrid, 'width': newTableWidth}, position: tablePosition};
+                            applyOperation(newOperation, true, true);
+                        }
+                    }
                 } else if (horizontalResize) {
                     shiftY = currentY - startY;
                     if ((_.isNumber(shiftX)) && (_.isNumber(shiftY)) && (shiftY !== 0)) {
