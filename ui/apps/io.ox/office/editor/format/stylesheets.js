@@ -19,16 +19,6 @@ define('io.ox/office/editor/format/stylesheets',
 
     'use strict';
 
-    var // definitions for attributes
-        DEFINITIONS = {
-
-            style: {
-                def: '',
-                scope: 'element'
-            }
-
-        };
-
     // private static functions ===============================================
 
     /**
@@ -360,9 +350,6 @@ define('io.ox/office/editor/format/stylesheets',
         Container.call(this, documentStyles);
 
         // methods ------------------------------------------------------------
-
-        this.registerAttributeDefinitions = function (definitions) {
-        };
 
         /**
          * Registers an update handler that will be called for every DOM
@@ -938,27 +925,26 @@ define('io.ox/office/editor/format/stylesheets',
                 $element = $(element),
                 // the existing explicit element attributes
                 oldElementAttributes = getElementAttributes($element),
-                // new explicit element attributes
-                elementAttributes = null,
+                // new explicit element attributes (clone, there may be multiple elements pointing to the same data object)
+                elementAttributes = _.clone(oldElementAttributes),
                 // attributes of the current or new style sheet
                 styleAttributes = null,
                 // names of all attributes needed to update the current element
-                updateAttributeNames = null;
-
-            if (_.isString(styleId) || _.isNull(styleId)) {
-                // style sheet of the element will be changed: remove all
-                // existing element attributes
-                styleAttributes = getStyleSheetAttributes(styleId, styleFamily, $element);
-                elementAttributes = _.isNull(styleId) ? {} : { style: styleAttributes.style };
-            } else {
-                // clone the attributes coming from the element, there may
-                // be multiple elements pointing to the same data object,
-                // e.g. after using the $.clone() method.
-                elementAttributes = _.clone(oldElementAttributes);
-                styleAttributes = getStyleSheetAttributes(elementAttributes.style, styleFamily, $element);
-                // collect every single changed attribute
                 updateAttributeNames = [];
+
+            // set or clear new style sheet identifier
+            if (_.isString(styleId) || _.isNull(styleId)) {
+                if (_.isNull(styleId)) {
+                    delete elementAttributes.style;
+                } else {
+                    elementAttributes.style = styleId;
+                }
+                // the formatting of all attributes must be updated
+                updateAttributeNames = null;
             }
+
+            // get the merged style sheet attributes
+            styleAttributes = getStyleSheetAttributes(elementAttributes.style, styleFamily, $element);
 
             // add (or remove/clear) the passed explicit attributes
             _(attributes).each(function (value, name) {

@@ -802,13 +802,21 @@ define('io.ox/office/editor/selection',
          *
          * @param {Function} iterator
          *  The iterator function that will be called for every node covered by
-         *  this selection. Receives the DOM node object as first parameter,
-         *  its logical start position as second parameter, and the logical
-         *  length of the element as third parameter. Position and length will
-         *  cover only a part of a text span element, if the text span is
-         *  partly covered by the start or end position of the selection. If
-         *  the iterator returns the Utils.BREAK object, the iteration process
-         *  will be stopped immediately.
+         *  this selection. Receives the following parameters:
+         *      (1) {HTMLElement} the visited DOM node object,
+         *      (2) {Number[]} the logical start position of the visited node
+         *          (if the node is a partially covered text span, this is the
+         *          logical position of the first character covered by the
+         *          selection, NOT the start position of the span itself),
+         *      (3) {Number} the relative start offset inside the visited node
+         *          (usually 0; if the visited node is a partially covered text
+         *          span, this offset is relative to the first character in the
+         *          span covered by the selection),
+         *      (4) {Number} the logical length of the visited node (1 for
+         *          content nodes, character count of the covered part of text
+         *          spans).
+         *  If the iterator returns the Utils.BREAK object, the iteration
+         *  process will be stopped immediately.
          *
          * @param {Object} [context]
          *  If specified, the iterator will be called with this context (the
@@ -861,10 +869,11 @@ define('io.ox/office/editor/selection',
                 // if located at the beginning of a component: use end of preceding text span if available
                 if ((startInfo.offset === 0) && DOM.isPortionSpan(startInfo.node.previousSibling)) {
                     startInfo.node = startInfo.node.previousSibling;
+                    startInfo.offset = startInfo.node.firstChild.nodeValue.length;
                 }
 
                 // visit the text component node (clone, because iterator is allowed to change passed position)
-                return iterator.call(context, startInfo.node, _.clone(startPosition), 0);
+                return iterator.call(context, startInfo.node, _.clone(startPosition), startInfo.offset, 0);
             }
 
             // iterate the content nodes (paragraphs and tables) covered by the selection
@@ -877,13 +886,13 @@ define('io.ox/office/editor/selection',
 
                 // visit fully covered content node in 'shortest-path' mode
                 if (shortestPath && !_.isNumber(startOffset) && !_.isNumber(endOffset)) {
-                    return iterator.call(context, contentNode, position, 1);
+                    return iterator.call(context, contentNode, position, 0, 1);
                 }
 
                 // if selection starts after the last character in a paragraph, visit the last text span
                 if (_.isNumber(startOffset) && (startOffset >= Position.getLastTextNodePositionInParagraph(contentNode))) {
                     textSpan = DOM.findLastPortionSpan(contentNode);
-                    return textSpan ? iterator.call(context, textSpan, position.concat([startOffset]), 0) : undefined;
+                    return textSpan ? iterator.call(context, textSpan, position.concat([startOffset]), textSpan.firstChild.nodeValue.length, 0) : undefined;
                 }
 
                 // visit covered text components in the paragraph
@@ -893,7 +902,7 @@ define('io.ox/office/editor/selection',
                     // skip floating objects (unless they are selected directly) and helper nodes
                     if (DOM.isTextSpan(node) || DOM.isTextComponentNode(node) || DOM.isInlineObjectNode(node) || (singleComponent && DOM.isFloatingObjectNode(node))) {
                         // create local copy of position, iterator is allowed to change the array
-                        return iterator.call(context, node, position.concat([nodeStart + nodeOffset]), offsetLength);
+                        return iterator.call(context, node, position.concat([nodeStart + nodeOffset]), nodeOffset, offsetLength);
                     }
 
                 // options for Position.iterateParagraphChildNodes(): visit empty text spans
