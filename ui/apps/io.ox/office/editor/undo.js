@@ -109,18 +109,14 @@ define('io.ox/office/editor/undo',
      */
     Action.prototype.undo = function (editor) {
         // Doc is being modified, so we need to notify/transfer/merge this operation. Is there a better way for undo?
-        _(this.undoOperations).each(function (operation) {
-            editor.applyOperation(operation, true, true);
-        });
+        editor.applyOperations(this.undoOperations, true, true);
     };
 
     /**
      * Applies the redo operations of this action at the passed editor.
      */
     Action.prototype.redo = function (editor) {
-        _(this.redoOperations).each(function (operation) {
-            editor.applyOperation(operation, true, true);
-        });
+        editor.applyOperations(this.redoOperations, true, true);
     };
 
     // class UndoManager ======================================================

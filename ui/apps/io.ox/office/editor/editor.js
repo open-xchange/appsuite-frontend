@@ -517,10 +517,6 @@ define('io.ox/office/editor/editor',
             return editdiv;
         };
 
-        this.applyOperation = function (operation, record, notify) {
-            applyOperation(operation, record, notify);
-        };
-
         this.applyOperations = function (operations, record, notify) {
             _(operations).each(function (operation) {
                 applyOperation(operation, record, notify);
@@ -1914,11 +1910,7 @@ define('io.ox/office/editor/editor',
          * were done within the UI.
          */
         function updateAllTableAttributes() {
-            $('table', editdiv).each(
-                function () {
-                    implTableChanged(this);
-                }
-            );
+            Utils.iterateSelectedDescendantNodes(editdiv, DOM.TABLE_NODE_SELECTOR, implTableChanged);
         }
 
         // ====================================================================
@@ -4688,9 +4680,10 @@ define('io.ox/office/editor/editor',
 
         function implInsertCell(pos, count, attrs) {
 
-            var localPosition = _.copy(pos, true);
+            var localPosition = _.clone(pos),
+                tableNode = Position.getLastPositionFromPositionByNodeName(editdiv, pos, DOM.TABLE_NODE_SELECTOR);
 
-            if (! Position.isPositionInTable(editdiv, localPosition)) {
+            if (!tableNode) {
                 return;
             }
 
@@ -4725,8 +4718,7 @@ define('io.ox/office/editor/editor',
             }
 
             // recalculating the attributes of the table cells
-            var table = cell.closest('table');
-            implTableChanged(table);
+            implTableChanged(tableNode);
         }
 
         function implDeleteCells(pos, start, end) {

@@ -763,6 +763,14 @@ define('io.ox/office/editor/selection',
                 return Utils.BREAK;
             }
 
+            // find first and last paragraph node (also in table cell selection mode)
+            firstParagraph = startInfo.node.parentNode;
+            lastParagraph = endInfo.node.parentNode;
+            if (!DOM.isParagraphNode(firstParagraph) || !DOM.isParagraphNode(lastParagraph)) {
+                Utils.warn('Selection.iterateContentNodes(): text selection expected');
+                return Utils.BREAK;
+            }
+
             // rectangular cell range selection
             if (cellRangeSelected) {
 
@@ -777,14 +785,6 @@ define('io.ox/office/editor/selection',
                         if (visitContentNode(contentNode) === Utils.BREAK) { return Utils.BREAK; }
                     }
                 }, this);
-            }
-
-            // find first and last paragraph node
-            firstParagraph = startInfo.node.parentNode;
-            lastParagraph = endInfo.node.parentNode;
-            if (!DOM.isParagraphNode(firstParagraph) || !DOM.isParagraphNode(lastParagraph)) {
-                Utils.warn('Selection.iterateContentNodes(): text selection expected');
-                return Utils.BREAK;
             }
 
             // iterate through all paragraphs and tables until the end paragraph has been reached
