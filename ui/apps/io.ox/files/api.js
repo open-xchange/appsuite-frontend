@@ -53,6 +53,8 @@ define('io.ox/files/api',
         return data;
     };
 
+    var allColumns = '20,1,5,700,702,703';
+
     // generate basic API
     var api = apiFactory({
         module: 'infostore',
@@ -60,7 +62,7 @@ define('io.ox/files/api',
             all: {
                 action: 'all',
                 folder: config.get('folder.infostore'),
-                columns: '20,1,5,700,702,703',
+                columns: allColumns,
                 sort: '700',
                 order: 'asc'
             },
@@ -73,7 +75,7 @@ define('io.ox/files/api',
             },
             search: {
                 action: 'search',
-                columns: '20,1,702,703',
+                columns: allColumns, // should be the same as all-request
                 sort: '700',
                 order: 'asc',
                 getData: function (query) {

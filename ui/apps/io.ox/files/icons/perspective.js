@@ -31,7 +31,7 @@ define('io.ox/files/icons/perspective',
         thumbnailHeight: 90,
         fileIconWidth: 158,
         fileIconHeight: 182,
-        fileFilterRegExp: '^[^.].*$'
+        fileFilterRegExp: '.*' // was: '^[^.].*$'
     });
 
     ext.point('io.ox/files/icons').extend({
@@ -75,10 +75,8 @@ define('io.ox/files/icons/perspective',
         if (/docx?$/i.test(name)) { node.addClass('icon-align-left file-type-doc'); }
         else if (/xlsx?$/i.test(name)) { node.addClass('icon-table file-type-xls'); }
         else if (/pptx?$/i.test(name)) { node.addClass('icon-picture file-type-ppt'); }
-        else if ((/mp3$/i).test(name)) { node.addClass('icon-music'); }
-        else if ((/mp4$/i).test(name)) { node.addClass('icon-film'); }
-        else if ((/ogv$/i).test(name)) { node.addClass('icon-film'); }
-        else if ((/webm$/i).test(name)) { node.addClass('icon-film'); }
+        else if ((/(mp3|m4a)$/i).test(name)) { node.addClass('icon-music'); }
+        else if ((/(mp4|ogv|webm)$/i).test(name)) { node.addClass('icon-film'); }
         else { node.addClass('icon-file'); }
         return node;
     }
@@ -109,9 +107,9 @@ define('io.ox/files/icons/perspective',
     function cut(str) {
         str = String(str || '');
         var parts = str.split('.'),
-            extension = parts.length > 1 ? parts.pop() : '';
+            extension = parts.length > 1 ? '.' + parts.pop() : '';
         str = parts.join('');
-        return (str.length <= 40 ? str + '.' : str.substr(0, 40) + '…') + extension;
+        return (str.length <= 40 ? str : str.substr(0, 40) + '..') + extension;
     }
 
     ext.point('io.ox/files/icons/file').extend({
@@ -122,7 +120,7 @@ define('io.ox/files/icons/perspective',
             this.addClass('file-icon pull-left').attr('data-cid', _.cid(file));
             if ((/^(image\/(gif|png|jpe?g|bmp|tiff))$/i).test(file.file_mimetype)) {
                 img = drawImage(getIcon(file, options)).on('error', { name: file.filename }, imageIconError);
-            } else if ((/^audio\/mpeg$/i).test(file.file_mimetype)) {
+            } else if ((/^audio\/(mpeg|m4a|x-m4a)$/i).test(file.file_mimetype)) {
                 img = drawImage(getCover(file, options)).on('error', { name: file.filename }, audioIconError);
             } else {
                 img = drawGeneric(file.filename);

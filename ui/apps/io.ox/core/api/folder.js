@@ -687,10 +687,7 @@ define('io.ox/core/api/folder',
         var dropdown = function (li, id, title) {
             _.defer(function () {
                 api.getSubFolders({ folder: id }).done(function (list) {
-                    var first;
                     if (list.length) {
-                        // add first folder as dropdown
-                        first = list[0];
                         li.addClass('dropdown').append(
                             $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">')
                             .append(
@@ -706,6 +703,8 @@ define('io.ox/core/api/folder',
                                 })
                             )
                         );
+                    } else {
+                        li.addClass('active').text(gt.noI18n(title));
                     }
                 });
             });
