@@ -449,12 +449,18 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.createTableCellNode = function (paragraph) {
         return $('<td>').append($('<div>').addClass('cell')
-                .append($('<div>').addClass('topborder'))
-                .append($('<div>').addClass('bottomborder'))
-                .append($('<div>').addClass('leftborder'))
-                .append($('<div>').addClass('rightborder'))
+                // .append($('<div>').addClass('topborder resize'))
+                .append($('<div>').addClass('bottomborder resize'))
+                // .append($('<div>').addClass('leftborder resize'))
+                .append($('<div>').addClass('rightborder resize'))
                 .append($('<div>').addClass('cellcontent').append(paragraph)));
     };
+
+    /**
+     * A jQuery selector that matches elements representing a resize node.
+     */
+    DOM.RESIZE_NODE_SELECTOR = 'div.resize';
+
 
     // text spans, text nodes, text components ================================
 

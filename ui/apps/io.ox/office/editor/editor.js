@@ -1853,10 +1853,21 @@ define('io.ox/office/editor/editor',
 
         function processMouseDown(event) {
 
-            var // mouse click on an object node
+            var // object start and end position for selection
+                startPosition = null, endPosition = null,
+                // mouse click on an object node
                 object = $(event.target).closest(DOM.OBJECT_NODE_SELECTOR),
-                // object start and end position for selection
-                startPosition = null, endPosition = null;
+                isObjectNode = false,
+                isResizeNode = false;
+
+            if (object.length > 0) {
+                isObjectNode = true;
+            } else {
+                object = $(event.target).closest(DOM.RESIZE_NODE_SELECTOR);
+                if (object.length > 0) {
+                    isResizeNode = true;
+                }
+            }
 
             preselectedAttributes = {};
 
@@ -1873,11 +1884,17 @@ define('io.ox/office/editor/editor',
                     return;
                 }
 
-                // select the object
-                startPosition = Position.getOxoPosition(editdiv, object[0], 0);
-                endPosition = Position.getOxoPosition(editdiv, object[0], 1);
-                selection.setTextSelection(startPosition, endPosition);
-                drawObjectSelection(object);
+                if (isObjectNode) {
+                    // select the object
+                    startPosition = Position.getOxoPosition(editdiv, object[0], 0);
+                    endPosition = Position.getOxoPosition(editdiv, object[0], 1);
+                    selection.setTextSelection(startPosition, endPosition);
+                    drawObjectSelection(object);
+                }
+
+                if (isResizeNode) {
+                    // ToDo -> to be implemented
+                }
 
                 // send initial mouse down event to the handlers registered in drawObjectSelection()
                 object.triggerHandler('mousedown', event);

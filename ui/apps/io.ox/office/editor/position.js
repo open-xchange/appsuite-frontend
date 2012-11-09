@@ -565,7 +565,7 @@ define('io.ox/office/editor/position',
         } else if (DOM.isPageNode(node)) {
             childNode = node.childNodes[pos];
         } else if ($(node).is('td')) {
-            childNode = $(node.firstChild).children('div.cellcontent').get(0).childNodes[pos];
+            childNode = Position.getCellContent(node, pos);
         } else if (DOM.isParagraphNode(node)) {
             Position.iterateParagraphChildNodes(node, function (_node, nodeStart, nodeLength) {
 
@@ -951,7 +951,7 @@ define('io.ox/office/editor/position',
             var node = Position.getLastNodeFromPositionByNodeName(startnode, position, 'td');
 
             if (node) {
-                allParagraphs = $(node.firstChild).children('div.cellcontent').children();
+                allParagraphs = Position.getCellContent(node);
             }
         }
 
@@ -1011,7 +1011,7 @@ define('io.ox/office/editor/position',
             cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'td');
 
         if (cell) {
-            allParagraphs = $(cell.firstChild).children('div.cellcontent').children();
+            allParagraphs = Position.getCellContent(cell);
         }
 
         return allParagraphs;
@@ -1225,7 +1225,7 @@ define('io.ox/office/editor/position',
             cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'td');
 
         if (cell) {
-            lastPara = $(cell.firstChild).children('div.cellcontent').children().length - 1;
+            lastPara = Position.getCellContent(cell).length - 1;
         }
 
         return lastPara;
@@ -1783,6 +1783,37 @@ define('io.ox/office/editor/position',
             }
         }
 
+    };
+
+    /**
+     * Returns all top level paragraphs/tables inside a table cell element
+     * as jQuery element or one specified paragraph/table at position pos
+     * as dom node.
+     *
+     * @param {Node} node
+     *  The table cell dom node.
+     *
+     * @param {Number} [pos]
+     * Optional integer value of one specific paragraph/table in the list of
+     * top level components of the table cell (0-based)
+     *  The second logical position.
+     *
+     * @returns {jQuery|Node}
+     *  If optional parameter pos is defined, the dom node of the specified top
+     *  level component inside the table cell is returned. Without pos defined,
+     *  all paragraphs/tables are returned in a jQuery collection.
+     */
+    Position.getCellContent = function (cellnode, pos) {
+
+        var result = null;
+
+        if (_.isNumber(pos)) {
+            result = $(cellnode.firstChild).children('div.cellcontent').get(0).childNodes[pos];
+        } else {
+            result = $(cellnode.firstChild).children('div.cellcontent').children();
+        }
+
+        return result;
     };
 
     // position arrays --------------------------------------------------------
