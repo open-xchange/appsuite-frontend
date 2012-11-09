@@ -315,10 +315,13 @@ define('io.ox/office/editor/editor',
                     // first or last paragraph: generate operations for covered text components
                     if (_.isNumber(startOffset) || _.isNumber(endOffset)) {
 
-                        // generate a splitParagraph operation for contents of first
-                        // paragraph (but for multiple-paragraph selections only)
+                        // generate a splitParagraph and setAttributes operation for
+                        // contents of first paragraph (but for multiple-paragraph
+                        // selections only)
                         if (!_.isNumber(endOffset)) {
                             generator.generateOperation(Operations.PARA_SPLIT, { start: [targetPosition, 0] });
+                            generator.generateOperation(Operations.ATTRS_CLEAR, [targetPosition]);
+                            generator.generateSetAttributesOperation(contentNode, [targetPosition]);
                         }
 
                         // operations for the text contents covered by the selection
