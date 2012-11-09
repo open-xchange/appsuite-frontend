@@ -82,7 +82,10 @@ define('io.ox/office/editor/editor',
                     borderright: { color: { type: 'auto' }, width: 17, style: 'single' }
                 }
             }
-        };
+        },
+    
+        DEFAULT_HYPERLINK_DEFINTIONS = { 'default': false, styleid: 'Hyperlink', stylename: 'Hyperlink', uipriority: 99 },
+        DEFAULT_HYPERLINK_CHARATTRIBUTES = { color: { type: 'scheme', value: 'hyperlink' }, underline: true };
 
     // private global functions ===============================================
 
@@ -1267,6 +1270,39 @@ define('io.ox/office/editor/editor',
             // setting the cursor position
             selection.setTextSelection(lastOperationEnd);
         };
+        
+        this.insertHyperlink = function (text, url) {
+            var generator = new Operations.Generator();
+            
+            if (!text && (selection.hasRange())) {
+                var start = selection.startPaM.oxoPosition,
+                    end = selection.endPaM.oxoPosition;
+                
+                // set url to selected text
+                var hyperlinkStyleId = self.getDefaultUIHyperlinkStylesheet();
+                if (characterStyles.isDirty(hyperlinkStyleId)) {
+                    // insert hyperlink style to document
+                    generator.generateOperation(Operations.INSERT_STYLE, {
+                        attrs: characterStyles.getStyleSheetAttributeMap(hyperlinkStyleId),
+                        type: 'character',
+                        styleid: hyperlinkStyleId,
+                        stylename: characterStyles.getName(hyperlinkStyleId),
+                        parent: characterStyles.getParentId(hyperlinkStyleId),
+                        uipriority: characterStyles.getUIPriority(hyperlinkStyleId)
+                    });
+                    characterStyles.setDirty(hyperlinkStyleId, false);
+                }
+                
+                generator.generateOperation(Operations.ATTRS_SET, {
+                    attrs: { url: url, style: hyperlinkStyleId },
+                    start: _.copy(start, true),
+                    end: _.copy(end, true)
+                });
+
+                // apply all collected operations
+                self.applyOperations(generator.getOperations(), true, true);
+            }
+        };
 
         this.insertTab = function () {
             undoManager.enterGroup(function () {
@@ -1691,6 +1727,14 @@ define('io.ox/office/editor/editor',
         this.getDefaultLateralTableAttributes = function () {
             return DEFAULT_LATERAL_TABLE_ATTRIBUTES;
         };
+        
+        this.getDefaultLateralHyperlinkDefinition = function () {
+            return DEFAULT_HYPERLINK_DEFINTIONS;
+        };
+        
+        this.getDefaultLateralHyperlinkAttributes = function () {
+            return DEFAULT_HYPERLINK_CHARATTRIBUTES;
+        };
 
         /**
          * Returns the document default table stylesheet id
@@ -1713,6 +1757,22 @@ define('io.ox/office/editor/editor',
 
             return tableStyleId;
         };
+        
+        /**
+         * Returns the document default hyperlink stylesheet id
+         */
+        this.getDefaultUIHyperlinkStylesheet = function () {
+            var styleNames = characterStyles.getStyleSheetNames(),
+                hyperlinkId = null;
+            
+            _(styleNames).each(function (name, id) {
+                var lowerName = name.toLowerCase();
+                if (lowerName.indexOf('hyperlink') >= 0)
+                    hyperlinkId = id;
+            });
+            
+            return hyperlinkId;
+        };
 
          /**
          * Called when all initial document operations have been processed.
@@ -1720,7 +1780,7 @@ define('io.ox/office/editor/editor',
          * processed document.
          */
         this.documentLoaded = function () {
-            var postProcessingTasks = [insertMissingParagraphStyles, insertMissingTableStyle, updateAllTableAttributes];
+            var postProcessingTasks = [insertMissingCharacterStyles, insertMissingParagraphStyles, insertMissingTableStyle, updateAllTableAttributes];
 
             _(postProcessingTasks).each(function (task) {
                 task.call(self);
@@ -1734,7 +1794,31 @@ define('io.ox/office/editor/editor',
         // ==================================================================
         // Private functions for document post-processing
         // ==================================================================
-
+        /**
+         * Checks stored character styles of a document and adds "missing"
+         * character styles (e.g. hyperlink).
+         */
+        function insertMissingCharacterStyles() {
+            var styleNames = characterStyles.getStyleSheetNames(),
+                parentId = characterStyles.getDefaultStyleSheetId(),
+                hyperlinkMissing = true;
+            
+            _(styleNames).each(function (name, id) {
+                var lowerName = name.toLowerCase();
+                if (lowerName.indexOf('hyperlink') >= 0)
+                    hyperlinkMissing = false;
+            });
+            
+            if (hyperlinkMissing) {
+                var hyperlinkAttr = self.getDefaultLateralHyperlinkAttributes(),
+                    hyperlinkDef = self.getDefaultLateralHyperlinkDefinition();
+                characterStyles.addStyleSheet(
+                        hyperlinkDef.styleid, hyperlinkDef.stylename,
+                        parentId, hyperlinkAttr,
+                        { hidden: false, priority: hyperlinkDef['default'], defStyle: false, dirty: true });
+            }
+        }
+        
         /**
          * Check the stored paragraph styles of a document and adds "missing"
          * heading / default paragraph styles.

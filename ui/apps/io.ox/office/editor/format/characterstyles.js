@@ -98,6 +98,10 @@ define('io.ox/office/editor/format/characterstyles',
                     element.attr('lang', value);
                 }
             },
+            
+            url: {
+                def: ''
+            },
 
             // special attributes
 

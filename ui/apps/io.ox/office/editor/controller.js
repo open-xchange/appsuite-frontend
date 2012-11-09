@@ -14,8 +14,9 @@
 define('io.ox/office/editor/controller',
     ['io.ox/office/tk/controller',
      'io.ox/office/editor/image',
+     'io.ox/office/editor/hyperlink',
      'io.ox/office/editor/format/objectstyles'
-    ], function (BaseController, Image, ObjectStyles) {
+    ], function (BaseController, Image, Hyperlink, ObjectStyles) {
 
     'use strict';
 
@@ -228,6 +229,15 @@ define('io.ox/office/editor/controller',
                     get: function (attributes) { return attributes.language; },
                     set: function (language) { editor.setAttribute('character', 'language', language); }
                 },
+                'character/hyperlink': {
+                    parent: 'character/attributes',
+                    get: function (attributes) { return attributes.url; },
+                    set: function (hyperlink) { Hyperlink.insertHyperlinkDialog(app); }
+                },
+                'insert/tab' : {
+                    parent: 'document/editable/text',
+                    set: function () { editor.insertTab(); }
+                },
 
                 // tables
 
@@ -301,10 +311,6 @@ define('io.ox/office/editor/controller',
                 'debug/sync': {
                     get: function () { return app.isSynchronizedMode(); },
                     set: function (state) { app.setSynchronizedMode(state); }
-                },
-                'insert/tab' : {
-                    parent: 'document/editable/text',
-                    set: function () { editor.insertTab(); }
                 }
 
             };

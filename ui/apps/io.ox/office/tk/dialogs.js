@@ -190,6 +190,66 @@ define('io.ox/office/tk/dialogs',
     };
 
     /**
+     * Shows a simple text input dialog.
+     *
+     * @param {Object} [options]
+     *  Additional options that control the appearance and behavior of the
+     *  dialog. The following options are supported:
+     *  @param {String} [options.title]
+     *      If specified, the title of the dialog window that will be shown in
+     *      a larger font.
+     *  @param {String} [options.value='']
+     *      The initial value of the text field.
+     *  @param {String} [options.placeholder='']
+     *      The place-holder text that will be shown in the empty text field.
+     *  @param {String} [options.okLabel=gt('OK')]
+     *      The label of the primary button that triggers the intended action
+     *      by resolving the promise object returned by this method.
+     *  @param {String} [options.cancelLabel=gt('Cancel')]
+     *      The label of the Cancel button that rejects the promise object
+     *      returned by this method.
+     *
+     * @returns {jQuery.Promise}
+     *  The promise of a deferred object that will be resolved if the primary
+     *  button has been activated, or rejected if the dialog has been canceled.
+     *  The done handlers registered at the promise object will receive the
+     *  entered text.
+     */
+    Dialogs.showHyperlinkDialog = function (options) {
+
+        var // the text input field
+            inputURL = $('<input>', {
+                    placeholder: Utils.getStringOption(options, 'placeholderURL', ''),
+                    value: Utils.getStringOption(options, 'valueURL', '')
+                }),
+            inputText = $('<input>', {
+                    placeholder: Utils.getStringOption(options, 'placeholderText', ''),
+                    value: Utils.getStringOption(options, 'valueText', '')
+                }),
+
+            // the dialog object
+            dialog = createModalDialog(options).append(inputText.addClass('nice-input')).append(inputURL.addClass('nice-input')),
+
+            // the result deferred
+            def = $.Deferred();
+
+        // add OK and Cancel buttons
+        addDialogButtons(dialog, options);
+
+        // show the dialog and register listeners for the results
+        dialog.show(function () { inputURL.focus(); })
+        .done(function (action, data, node) {
+            if (action === 'ok') {
+                def.resolve({ text: inputText.val(), url: inputURL.val() });
+            } else {
+                def.reject();
+            }
+        });
+
+        return def.promise();
+    };
+
+    /**
      * Shows a generic file selector dialog.
      *
      * @param {Object} [options]

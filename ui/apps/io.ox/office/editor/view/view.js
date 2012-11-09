@@ -301,7 +301,7 @@ define('io.ox/office/editor/view/view',
                 .addSeparator()
                 .addGroup('document/quicksearch', new TextField({ tooltip: 'Quick Search' }))
                 .addSeparator()
-                .addButton('insert/tab', { icon: 'icon-arrow-right', tooltip : 'Insert Tabulator'})
+                .addButton('character/hyperlink', { icon: 'icon-eye-open', tooltip : 'Insert Hyperlink' })
                 .addSeparator()
                 .addButton('document/cut',   { label: 'Cut',   tooltip: 'Cut To Clipboard' })
                 .addButton('document/copy',  { label: 'Copy',  tooltip: 'Copy To Clipboard' })
