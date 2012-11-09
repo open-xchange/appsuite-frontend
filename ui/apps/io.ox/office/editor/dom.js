@@ -1092,7 +1092,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  passed value is a jQuery collection, draws selection boxes for all
      *  contained objects.
      *
-     * @param {Object} [options]
+     * @param {Object} options
      *  A map of options to control the appearance of the selection box.
      *  Supports the following options:
      *  @param {Boolean} [options.moveable]
@@ -1102,6 +1102,18 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *      If set to true, the mouse pointer will change to a specific resize
      *      pointer when the mouse hovers the corner handles of the selected
      *      element.
+     *
+     * @param {Function} mousedownhandler
+     *  Callback function for mouse down event.
+     *
+     * @param {Function} mousemovehandler
+     *  Callback function for mouse move event.
+     *
+     * @param {Function} mouseuphandler
+     *  Callback function for mouse up event.
+     *
+     * @param {Object} context
+     *  The context object that is required in the callback function calls.
      */
     DOM.drawObjectSelection = function (objects, options, mousedownhandler, mousemovehandler, mouseuphandler, context) {
 
@@ -1182,6 +1194,57 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         // removing mouse event handler (mouseup and mousemove) from page div
         $(document).off('mouseup mousemove');
         $(objects).off('mousedown');
+    };
+
+    /**
+     * Inserts a new resize line at the position of the specified object node.
+     *
+     * @param {HTMLElement|jQuery} objects
+     *  The object node for which a resize line will be inserted.
+     *
+     * @param {Function} mousedownhandler
+     *  Callback function for mouse down event.
+     *
+     * @param {Function} mousemovehandler
+     *  Callback function for mouse move event.
+     *
+     * @param {Function} mouseuphandler
+     *  Callback function for mouse up event.
+     *
+     * @param {Object} context
+     *  The context object that is required in the callback function calls.
+     */
+    DOM.drawTablecellResizeLine = function (objects, mousedownhandler, mousemovehandler, mouseuphandler, context) {
+
+        $(objects).each(function () {
+
+            var // whether mousedown is a current event
+                mousedownevent = false,
+                // saving the selected object node
+                resizeNode = this;
+
+            // moving the object
+            $(this).mousedown(function (e1, e2) {
+                if (mousedownevent === true) { return; }
+                var e = e1.pageX ? e1 : e2;  // from triggerHandler in editor only e2 can be used
+                mousedownevent = true;
+                mousedownhandler.call(context, e, resizeNode);
+            });
+
+            // mousemove and mouseup events can be anywhere on the page -> binding to $(document)
+            $(document)
+            .mousemove(function (e) {
+                if (! mousedownevent) return;
+                mousemovehandler.call(context, e, resizeNode);
+            })
+            .mouseup(function (e) {
+                if (mousedownevent === true) {
+                    mouseuphandler.call(context, e, resizeNode);
+                    mousedownevent = false;
+                }
+            });
+        });
+
     };
 
     // exports ================================================================

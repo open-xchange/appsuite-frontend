@@ -1,4 +1,4 @@
-/**
+ /**
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -2012,7 +2012,7 @@ define('io.ox/office/editor/editor',
                 }
 
                 if (isResizeNode) {
-                    // ToDo -> to be implemented
+                    drawTableCellResizeSelection(object);
                 }
 
                 // send initial mouse down event to the handlers registered in drawObjectSelection()
@@ -3172,6 +3172,118 @@ define('io.ox/office/editor/editor',
 
             // draw the selection box into the passed objects
             DOM.drawObjectSelection(object, { moveable: moveable, sizeable: sizeable }, mouseDownOnObject, mouseMoveOnObject, mouseUpOnObject, self);
+        }
+
+        /**
+         * Draws a selection box for the specified object node and registers
+         * mouse handlers for moving.
+         *
+         * @param {HTMLElement|jQuery} object
+         *  The object node to be selected. If this value is a jQuery
+         *  collection, uses the first DOM node it contains.
+         */
+        function drawTableCellResizeSelection(object) {
+
+            var startX = 0,
+                startY = 0,
+                currentX = 0,
+                currentY = 0,
+                shiftX = 0,
+                shiftY = 0,
+                verticalResize = false,
+                horizontalResize = false,
+                // the window, to which the resize line will be appended temporarely
+                officemaindiv = editdiv.closest('div.io-ox-office-main'),
+                // the container element used to visualize the resizing
+                resizeLine = $('<div>').addClass('resizeline'),
+                // the distance from body element to 'officemaindiv' in pixel
+                topDistance = officemaindiv.offset().top;
+
+            function mouseDownOnObject(event, resizeNode) {
+                // mouse down event handler
+                startX = event.pageX;
+                startY = event.pageY - topDistance;
+
+                if ($(resizeNode).is('div.rightborder')) {
+                    verticalResize = true;
+                } else if ($(resizeNode).is('div.bottomborder')) {
+                    horizontalResize = true;
+                }
+
+                if (verticalResize) {
+                    $(resizeLine).css({ width: '1px', height: '100%', left: startX, top: '0px' });
+                    officemaindiv.append(resizeLine);
+                } else if (horizontalResize) {
+                    $(resizeLine).css({ width: '100%', height: '1px', left: '0px', top: startY});
+                    officemaindiv.append(resizeLine);
+                }
+
+                editdiv.css('cursor', $(resizeNode).css('cursor'));  // setting cursor for increasing image
+            }
+
+            function mouseMoveOnObject(event, resizeNode) {
+                // mouse move event handler
+                currentX = event.pageX;
+                currentY = event.pageY - topDistance;
+
+                if (verticalResize) {
+                    shiftX = currentX;
+                    shiftY = 0;
+                } else if (horizontalResize) {
+                    shiftX = 0;
+                    shiftY = currentY;
+                }
+
+                if ((_.isNumber(shiftX)) && (_.isNumber(shiftY))) {
+                    $(resizeLine).css({ 'left': shiftX, 'top': shiftY });
+                }
+            }
+
+            function mouseUpOnObject(event, resizeNode) {
+                // mouse up event handler
+                currentX = event.pageX;
+                currentY = event.pageY - topDistance;
+
+                // removing the resize line
+                officemaindiv.children('div.resizeline').remove();
+
+                // Resetting cursor, using css file again
+                editdiv.css('cursor', '');
+
+                if (verticalResize) {
+                    shiftX = currentX - startX;
+                    shiftY = startY;
+                } else if (horizontalResize) {
+                    shiftY = currentY - startY;
+                    if ((_.isNumber(shiftX)) && (_.isNumber(shiftY)) && (shiftY !== 0)) {
+                        var rowNode = $(resizeNode).closest('tr'),
+                            rowHeight = rowNode.outerHeight() + shiftY;
+
+                        if (rowHeight > 5) {  // minimum height of table row: 5 px
+                            var newRowHeight = Utils.convertLengthToHmm(rowHeight, 'px'),
+                                rowPosition = Position.getOxoPosition(editdiv, rowNode.get(0), 0),
+                                newOperation = { name: Operations.ATTRS_SET, attrs: {height: newRowHeight}, start: rowPosition };
+                            applyOperation(newOperation, true, true);
+
+                            // checking the operation, maybe the browser did not set the desired height (because of text content in the cell)
+                            if (rowNode.outerHeight() !== rowHeight) {
+                                // informing the server about the new table row height
+                                newRowHeight = Utils.convertLengthToHmm(rowNode.outerHeight(), 'px');
+                                newOperation = { name: Operations.ATTRS_SET, attrs: {height: newRowHeight}, start: rowPosition };
+                                applyOperation(newOperation, true, true);
+                            }
+                        }
+                    }
+                }
+
+                // deregister event handler
+                // removing mouse event handler (mouseup and mousemove) from page div
+                $(document).off('mouseup mousemove');
+                $(resizeNode).off('mousedown');
+            }
+
+            // draw the resize line at the position of the passed object
+            DOM.drawTablecellResizeLine(object, mouseDownOnObject, mouseMoveOnObject, mouseUpOnObject, self);
         }
 
         // End of private selection functions
