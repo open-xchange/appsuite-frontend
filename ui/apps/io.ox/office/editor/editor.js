@@ -1818,7 +1818,7 @@ define('io.ox/office/editor/editor',
          * processed document.
          */
         this.documentLoaded = function () {
-            var postProcessingTasks = [insertMissingCharacterStyles, insertMissingParagraphStyles, insertMissingTableStyle, updateAllTableAttributes];
+            var postProcessingTasks = [insertMissingCharacterStyles, insertMissingParagraphStyles, insertMissingTableStyle];
 
             _(postProcessingTasks).each(function (task) {
                 task.call(self);
@@ -1942,16 +1942,6 @@ define('io.ox/office/editor/editor',
                             { hidden: false, priority: 59, defStyle: false, dirty: true });
                 }
             }
-        }
-
-        /**
-         * Updating the table cell attributes of all tables within the document
-         * with the table attributes. This function is called after a document is
-         * completely loaded from the server and after changes in the table, that
-         * were done within the UI.
-         */
-        function updateAllTableAttributes() {
-            Utils.iterateSelectedDescendantNodes(editdiv, DOM.TABLE_NODE_SELECTOR, implTableChanged);
         }
 
         // ====================================================================
@@ -3846,18 +3836,41 @@ define('io.ox/office/editor/editor',
 
         /**
          * Has to be called each time, after changing the cell structure of
-         * a table. It recalculates the position of each cell in
-         * the table and sets the corresponding attributes. This can be set
-         * for the first or last column or row, or even only for the south
-         * east cell.
+         * a table. It recalculates the position of each cell in the table and
+         * sets the corresponding attributes. This can be set for the first or
+         * last column or row, or even only for the south east cell.
          *
-         * @param {jQuery} table
-         *  The <table> element whose table attributes have been changed, as
-         *  jQuery object.
+         * @param {HTMLTableElement|jQuery} table
+         *  The table element whose table attributes have been changed. If this
+         *  object is a jQuery collection, uses the first node it contains.
          */
-        function implTableChanged(table) {
-            tableStyles.updateElementFormatting(table);
-        }
+        var implTableChanged = (function () {
+
+            var // the timeout that will be executed after all operations
+                timeout = null,
+                // all changed tables, as jQuery collection (keeps entries unique)
+                tables = $();
+
+            // return the actual 'implTableChanged' function
+            return function (table) {
+
+                // create a timeout handler that will update all collected tables
+                if (!timeout) {
+                    timeout = window.setTimeout(function () {
+                        timeout = null;
+                        tables.each(function () {
+                            // the table may have been removed from the DOM in the meantime
+                            if (editdiv[0].contains(this)) {
+                                tableStyles.updateElementFormatting(this);
+                            }
+                        });
+                    }, 0);
+                }
+
+                // store the new table in the collection (jQuery keeps the collection unique)
+                tables = tables.add(table);
+            };
+        }());
 
         /**
          * Has to be called for the initialization of a new document.
@@ -4722,7 +4735,7 @@ define('io.ox/office/editor/editor',
         function implInsertCell(pos, count, attrs) {
 
             var localPosition = _.clone(pos),
-                tableNode = Position.getLastPositionFromPositionByNodeName(editdiv, pos, DOM.TABLE_NODE_SELECTOR);
+                tableNode = Position.getLastNodeFromPositionByNodeName(editdiv, pos, DOM.TABLE_NODE_SELECTOR);
 
             if (!tableNode) {
                 return;
