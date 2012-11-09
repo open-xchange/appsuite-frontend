@@ -316,6 +316,23 @@ define('io.ox/office/editor/selection',
         };
 
         /**
+         * Returns the closest paragraph that contains all nodes of this
+         * selection completely.
+         *
+         * @returns {HTMLElement|Null}
+         *  The closest paragraph containing this selection; or null, if the
+         *  selection is not contained in a single paragraph.
+         */
+        this.getEnclosingParagraph = function () {
+
+            var // position of closest common parent component containing the selection
+                commonPosition = this.getClosestCommonPosition();
+
+            // the closest paragraph containing the common parent component
+            return (commonPosition.length > 0) ? Position.getCurrentParagraph(rootNode, commonPosition) : null;
+        };
+
+        /**
          * Returns the closest table that contains all nodes of this selection
          * completely.
          *
