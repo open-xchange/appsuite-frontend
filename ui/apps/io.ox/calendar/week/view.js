@@ -69,9 +69,9 @@ define('io.ox/calendar/week/view',
 
         initSettings: function () {
             // init settings
-            this.gridSize = 60 / settings.get('interval');
-            this.workStart = settings.get('starttime');
-            this.workEnd = settings.get('endtime');
+            this.gridSize = 60 / settings.get('interval') | this.gridSize;
+            this.workStart = settings.get('starttime3') | this.workStart;
+            this.workEnd = settings.get('endtime') | this.workEnd;
         },
 
         // define view events
@@ -484,8 +484,8 @@ define('io.ox/calendar/week/view',
 
         renderAppointments: function () {
             // clear all first
-            this.$el.find('.appointment').remove();
-            $('.day.today').removeClass('today');
+            $('.appointment', this.$el).remove();
+            $('.day.today', this.$el).removeClass('today');
 
             var self = this,
                 draw = {},
