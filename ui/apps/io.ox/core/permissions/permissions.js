@@ -21,13 +21,6 @@ define('io.ox/core/permissions/permissions',
 
     'use strict';
 
-    // TODO: Last Folderadmin cannot be deleted. Shouldn't delete owner?
-    // Groups: Picturedisplay
-    // Dropdowns: Write selected option into Dropdown header
-    // Creator Lastmodified //
-    // use own_rights to decide if permissions should be granted.
-
-
     var POINT = 'io.ox/core/permissions',
     menus = {
         'folder': {
@@ -62,12 +55,20 @@ define('io.ox/core/permissions/permissions',
     },
     addDropdown,
     addRemoveButton,
-    setPermission;
+    setPermission,
+    isFolderAdmin = false;
 
     ext.point(POINT).extend({
         index: 100,
         id: 'dialog',
         draw: function (folder) {
+            if (api.Bitmask(folder.own_rights).get('admin') === 1) {
+                isFolderAdmin = true;
+            }
+            else
+            {
+                isFolderAdmin = false;
+            }
             var dialog = new dialogs.ModalDialog({
                 width: 800,
                 easyOut: true
@@ -82,18 +83,26 @@ define('io.ox/core/permissions/permissions',
                 this.getContentNode().on('click', '.remove', function (e) {
                     $(this).closest('.permission').remove();
                 });
-            })
-            .addButton('cancel', gt('Cancel'))
-            .addPrimaryButton('save', gt('Save'));
+            });
 
+
+            if (isFolderAdmin) {
+                dialog.addButton('cancel', gt('Cancel'))
+                    .addPrimaryButton('save', gt('Save'));
+            }
+            else
+            {
+                dialog.addPrimaryButton('ok', gt('Ok'));
+            }
             dialog.getPopup().addClass('permissions-dialog');
 
             dialog.show(function () {
                 this.find('input').focus();
             })
             .done(function (action) {
-                if (action === 'save') {
+                if (isFolderAdmin && action === 'save') {
                     var permissions = _.map($(this).find('.permission'), function (p) { return $(p).data(); });
+                    setPermission(folder, permissions);
                 }
             });
         }
@@ -104,7 +113,6 @@ define('io.ox/core/permissions/permissions',
         id: 'folderpermissions',
         draw: function (folder) {
             var entities = [];
-
             _(folder.permissions).each(function (permission) {
 
                 var def = $.Deferred(),
@@ -175,54 +183,64 @@ define('io.ox/core/permissions/permissions',
                     $('<div class="name">').append(gt.noI18n(data.entity)),
                     $('<div>').append(
                         gt('The user can '),
-                        addDropdown('folder', data.permission.bits),
+                        addDropdown('folder', data),
                         gt.noI18n(', '),
-                        addDropdown('read', data.permission.bits),
+                        addDropdown('read', data),
                         gt.noI18n(', '),
-                        addDropdown('write', data.permission.bits),
+                        addDropdown('write', data),
                         gt(' and '),
-                        addDropdown('delete', data.permission.bits),
+                        addDropdown('delete', data),
                         gt(' objects.')
                     ),
                     $('<div>').append(
                         gt('Folder admin: '),
-                        addDropdown('admin', data.permission.bits),
+                        addDropdown('admin', data),
                         gt.noI18n('.')
                     ),
                     addRemoveButton(data.permission)
                 )
             );
             // attach data to parent
-            this.parent().data(data.permission);
+            this.data(data.permission);
         }
     });
 
     addRemoveButton = function (permission) {
-        if (permission.entity !== ox.user_id)
+        if (isFolderAdmin && permission.entity !== ox.user_id)
             return $('<div class="remove">').append($('<div class="icon">').append($('<i class="icon-remove">')));
     };
 
-    addDropdown = function (permission, bits) {
-        var selected = api.Bitmask(bits).get(permission),
+    addDropdown = function (permission, data) {
+
+        var self = this,
+        bits = data.permission.bits,
+        selected = api.Bitmask(bits).get(permission),
         menu = $('<span class="dropdown">').append(
             $('<a>', { 'data-val': bits, 'data-toggle': 'dropdown' }).text(menus[permission][selected]),
             $('<ul class="dropdown-menu">')
         );
-
+        if (!isFolderAdmin) {
+            return menus[permission][selected];
+        }
         _(menus[permission]).each(function (item, value) {
             if (value === '64') return true; // Skip maximum rights
             menu.find('ul').append(
                 $('<li>').append(
-                    $('<a>', { 'data-val': value }).text(item).on('click', function () {
-                        var data = $(this).closest('.permission').data(),
-                        newdata = api.Bitmask(data.bits).set(permission, value).get();
-                        $(this).closest('.permission').data('bits', newdata);
-                        $(this).text(item);
-                    })
+                    $('<a>', { 'data-val': value }).text(item)
+                        .on('click', function () {
+                            var data = $(this).closest('.permission').data(),
+                            newdata = api.Bitmask(data.bits).set(permission, value).get();
+                            $(this).closest('.permission').data('bits', newdata);
+                            $(this).parent().parent().parent().children('a').text(item);
+                        })
                 )
             );
         });
         return menu;
+    };
+
+    setPermission = function (folder, permissions) {
+        api.update({ folder: folder.id, changes: { permissions: permissions }});
     };
 
     return {
