@@ -1301,39 +1301,50 @@ define('io.ox/office/editor/editor',
 
                     undoManager.enterGroup(function () {
 
-                        if (data.text !== text) {
+                        if (data.url === null && data.text === null) {
+                            // remove hyperlink
+                            generator.generateOperation(Operations.ATTRS_SET, {
+                                attrs: { url: '', style: null },
+                                start: _.copy(start, true),
+                                end: _.copy(end, true)
+                            });
+                        }
+                        else {
+                            // insert/change hyperlink
+                            if (data.text !== text) {
 
-                            // text has been changed
-                            if (selection.hasRange()) {
-                                self.deleteSelected();
+                                // text has been changed
+                                if (selection.hasRange()) {
+                                    self.deleteSelected();
+                                }
+
+                                // insert new text
+                                var newOperation = { name: Operations.TEXT_INSERT, text: data.text, start: _.copy(start, true) };
+                                applyOperation(newOperation, true, true);
+                                // calculate end position of new text
+                                end = _.copy(start);
+                                end[end.length - 1] += data.text.length;
                             }
 
-                            // insert new text
-                            var newOperation = { name: Operations.TEXT_INSERT, text: data.text, start: _.copy(start, true) };
-                            applyOperation(newOperation, true, true);
-                            // calculate end position of new text
-                            end = _.copy(start);
-                            end[end.length - 1] += data.text.length;
-                        }
+                            if (characterStyles.isDirty(hyperlinkStyleId)) {
+                                // insert hyperlink style to document
+                                generator.generateOperation(Operations.INSERT_STYLE, {
+                                    attrs: characterStyles.getStyleSheetAttributeMap(hyperlinkStyleId),
+                                    type: 'character',
+                                    styleid: hyperlinkStyleId,
+                                    stylename: characterStyles.getName(hyperlinkStyleId),
+                                    parent: characterStyles.getParentId(hyperlinkStyleId),
+                                    uipriority: characterStyles.getUIPriority(hyperlinkStyleId)
+                                });
+                                characterStyles.setDirty(hyperlinkStyleId, false);
+                            }
 
-                        if (characterStyles.isDirty(hyperlinkStyleId)) {
-                            // insert hyperlink style to document
-                            generator.generateOperation(Operations.INSERT_STYLE, {
-                                attrs: characterStyles.getStyleSheetAttributeMap(hyperlinkStyleId),
-                                type: 'character',
-                                styleid: hyperlinkStyleId,
-                                stylename: characterStyles.getName(hyperlinkStyleId),
-                                parent: characterStyles.getParentId(hyperlinkStyleId),
-                                uipriority: characterStyles.getUIPriority(hyperlinkStyleId)
+                            generator.generateOperation(Operations.ATTRS_SET, {
+                                attrs: { url: url, style: hyperlinkStyleId },
+                                start: _.copy(start, true),
+                                end: _.copy(end, true)
                             });
-                            characterStyles.setDirty(hyperlinkStyleId, false);
                         }
-
-                        generator.generateOperation(Operations.ATTRS_SET, {
-                            attrs: { url: url, style: hyperlinkStyleId },
-                            start: _.copy(start, true),
-                            end: _.copy(end, true)
-                        });
 
                         // apply all collected operations
                         self.applyOperations(generator.getOperations(), true, true);

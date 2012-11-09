@@ -233,14 +233,17 @@ define('io.ox/office/tk/dialogs',
             // the result deferred
             def = $.Deferred();
 
-        // add OK and Cancel buttons
+        // add OK and Cancel buttons & remove button to remove hyperlink
         addDialogButtons(dialog, options);
-
+        dialog.addAlternativeButton('remove', Utils.getStringOption(options, 'removeLabel', gt('Remove')));
+ 
         // show the dialog and register listeners for the results
         dialog.show(function () { inputURL.focus(); })
         .done(function (action, data, node) {
             if (action === 'ok') {
                 def.resolve({ text: inputText.val(), url: inputURL.val() });
+            } else if (action === 'remove') {
+                def.resolve({ text: null, url: null });
             } else {
                 def.reject();
             }
