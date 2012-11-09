@@ -95,14 +95,14 @@ define('io.ox/calendar/week/view',
         // handler for onmouseenter event for hover effect
         onEnterAppointment: function (e) {
             if (!this.lasso) {
-                $('[data-cid="' + $(e.currentTarget).data('cid') + '"]').addClass('hover');
+                $('[data-cid="' + $(e.currentTarget).data('cid') + '"]:visible').addClass('hover');
             }
         },
 
         // handler for onmouseleave event for hover effect
         onLeaveAppointment: function (e) {
             if (!this.lasso) {
-                $('[data-cid="' + $(e.currentTarget).data('cid') + '"]').removeClass('hover');
+                $('[data-cid="' + $(e.currentTarget).data('cid') + '"]:visible').removeClass('hover');
             }
         },
 
@@ -167,7 +167,7 @@ define('io.ox/calendar/week/view',
                             .removeClass('current opac')
                             .not($('[data-cid="' + cid + '"]'))
                             .addClass('opac');
-                        $('[data-cid="' + cid + '"]').addClass('current');
+                        $('[data-cid="' + cid + '"]:visible').addClass('current');
                     }, 300);
                 }
                 self.clicks++;
@@ -695,7 +695,7 @@ define('io.ox/calendar/week/view',
                         // set current day
                         $.extend(d.my, {
                             curHelper: $(this),
-                            all: $('[data-cid="' + ui.helper.data('cid') + '"]'),
+                            all: $('[data-cid="' + ui.helper.data('cid') + '"]:visible'),
                             day: Math.floor((e.pageX - paneOffset) / colWidth),
                             handle: ''
                         });
@@ -750,7 +750,7 @@ define('io.ox/calendar/week/view',
                                 } else {
                                     d.my.all.filter(':visible').last().hide();
                                 }
-                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
                                 d.my.curHelper = d.my.all.filter(':visible').last();
                                 d.my.curHelper.css({
                                     minHeight: 0,
@@ -762,7 +762,7 @@ define('io.ox/calendar/week/view',
                                     // set new helper
                                     $('.week-container .day[date="' + day + '"]')
                                         .append(d.my.curHelper = el.clone());
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
                                 } else {
                                     d.my.curHelper = d.my.all.filter(':hidden').first();
                                 }
@@ -803,7 +803,7 @@ define('io.ox/calendar/week/view',
                                     d.my.all.filter(':visible').first().hide();
                                 }
                                 // update dataset
-                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
                                 d.my.curHelper = d.my.all.filter(':visible').first();
                             } else if (day < d.my.day) {
                                 // move left
@@ -811,7 +811,7 @@ define('io.ox/calendar/week/view',
                                     // add new helper
                                     $('.week-container .day[date="' + day + '"]')
                                         .append(d.my.curHelper = el.clone().addClass('opac'));
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
 
                                 } else {
                                     d.my.curHelper = d.my.all.filter(':hidden').last();
@@ -829,7 +829,7 @@ define('io.ox/calendar/week/view',
                                     });
                                 }
                                 // update dataset
-                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
                             }
                         }
                         // update day
@@ -869,7 +869,7 @@ define('io.ox/calendar/week/view',
                         // write all appointment divs to draggable object
                         var d = $(this).data('draggable');
                         d.my = {};
-                        d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]')
+                        d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible')
                             .addClass('opac')
                             .css({
                                 left : 0,
@@ -927,12 +927,12 @@ define('io.ox/calendar/week/view',
                                 if (((d.my.firstTop >= 0 && firstTop < 0) || (d.my.firstTop >= paneHeight && firstTop < paneHeight)) && diff < 0) {
                                     $('.week-container .day[date="' + (--d.my.firstPos) + '"]')
                                         .append($(this).clone());
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
                                 }
                                 if (((d.my.firstTop < 0 && firstTop >= 0) || (d.my.firstTop < paneHeight && firstTop >= paneHeight)) && diff > 0) {
                                     d.my.firstPos++;
                                     d.my.all.first().remove();
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
                                 }
                                 if (firstTop < 0) {
                                     firstTop += paneHeight;
@@ -949,12 +949,14 @@ define('io.ox/calendar/week/view',
                                 if (((d.my.lastHeight <= 0 && lastHeight > 0) || (d.my.lastHeight <= paneHeight && lastHeight > paneHeight)) && diff > 0) {
                                     $('.week-container .day[date="' + (++d.my.lastPos) + '"]')
                                         .append($(this).clone());
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                    console.log('+', d.my.lastPos);
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
                                 }
                                 if (((d.my.lastHeight > 0 && lastHeight <= 0) || (d.my.lastHeight > paneHeight && lastHeight <= paneHeight)) && diff < 0) {
                                     d.my.lastPos--;
+                                    console.log('-', d.my.lastPos);
                                     d.my.all.last().remove();
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
                                 }
                                 if (lastHeight <= 0) {
                                     lastHeight += paneHeight;
@@ -973,11 +975,11 @@ define('io.ox/calendar/week/view',
                         d.my.lastTop = top;
                     },
                     stop: function (e, ui) {
+                        var d = $(this).data('draggable'),
+                            move = Math.round((ui.position.left - ui.originalPosition.left) / colWidth),
+                            app = self.collection.get($(this).data('cid')).attributes,
+                            startTS = app.start_date + self.getTimeFromPos(d.my.lastTop - ui.originalPosition.top) + (move * date.DAY);
                         if (e.pageX < window.innerWidth && e.pageY < window.innerHeight) {
-                            var d = $(this).data('draggable'),
-                                move = Math.round((ui.position.left - ui.originalPosition.left) / colWidth),
-                                app = self.collection.get($(this).data('cid')).attributes,
-                                startTS = app.start_date + self.getTimeFromPos(d.my.lastTop - ui.originalPosition.top) + (move * date.DAY);
                             _.extend(app, {
                                 start_date: startTS,
                                 end_date: startTS + (app.end_date - app.start_date),
@@ -988,6 +990,7 @@ define('io.ox/calendar/week/view',
                         } else {
                             self.trigger('onRefreshView', self.startDate);
                         }
+                        d.my = null;
                     }
                 });
 
@@ -1076,7 +1079,7 @@ define('io.ox/calendar/week/view',
             if (positionFieldChanged) {
                 this.renderAppointments();
             } else {
-                var el = this.$el.find('[data-cid="' + a.id + '"]');
+                var el = this.$el.find('[data-cid="' + a.id + '"]:visible');
                 el.replaceWith(this.renderAppointment(a)
                     .attr('style', el.attr('style')));
             }

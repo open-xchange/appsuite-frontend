@@ -47,7 +47,7 @@ define('io.ox/calendar/month/view',
 
         onClickAppointment: function (e) {
             var cid = $(e.currentTarget).data('cid'),
-                el = $('[data-cid="' + cid + '"]');
+                el = $('[data-cid="' + cid + '"]:visible');
             $('.appointment').removeClass('opac').not(el).addClass('opac');
             el.add('.appointment.current').toggleClass('current');
             this.trigger('showAppoinment', e, _.cid(cid + ''));
@@ -59,12 +59,12 @@ define('io.ox/calendar/month/view',
 
         // handler for onmouseenter event for hover effect
         onEnterAppointment: function (e) {
-            $('[data-cid="' + $(e.currentTarget).data('cid') + '"]').addClass('hover');
+            $('[data-cid="' + $(e.currentTarget).data('cid') + '"]:visible').addClass('hover');
         },
 
         // handler for onmouseleave event for hover effect
         onLeaveAppointment: function (e) {
-            $('[data-cid="' + $(e.currentTarget).data('cid') + '"]').removeClass('hover');
+            $('[data-cid="' + $(e.currentTarget).data('cid') + '"]:visible').removeClass('hover');
         },
 
         render: function () {
