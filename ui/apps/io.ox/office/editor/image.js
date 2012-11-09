@@ -74,9 +74,10 @@ define('io.ox/office/editor/image',
         AppHelper.readFileAsDataUrl(file)
         .done(function (dataUrl) {
 
+            var uniqueName = _.uniqueId(ox.session + '_') + file.name.substring(file.name.lastIndexOf('.'));
             $.ajax({
                 type: 'POST',
-                url: app.getDocumentFilterUrl('addfile', { add_filename: file.name }),
+                url: app.getDocumentFilterUrl('addfile', { add_filename: uniqueName, alt_filename: file.name }),
                 dataType: 'json',
                 data: { add_filedata: dataUrl },
                 beforeSend: function (xhr) {
