@@ -222,11 +222,46 @@ define('io.ox/office/editor/main',
         }
 
         /**
+         * Creates a new document in the Drive.
+         *
+         * @param {Number} folderId
+         *  The identifier of the Drive folder for the new document.
+         *
+         * @returns {jQuery.Promise}
+         *  The promise of a deferred that will be resolved with the file
+         *  descriptor of the new document when the document has been created.
+         */
+        function createNewDocument(folderId) {
+
+            var // the result deferred
+                def = null;
+
+            if (_.isNumber(folderId)) {
+                def = $.ajax({
+                    type: 'GET',
+                    url: self.buildServiceUrl('oxodocumentfilter', { action: 'createdefaultdocument', folder_id: folderId, document_type: 'text' }),
+                    dataType: 'json'
+                })
+                .pipe(function (response) {
+                    // creation succeeded: receive file descriptor and set it
+                    self.setFileDescriptor(response.data);
+                    return FilesAPI.propagate('new', response.data);
+                });
+            } else {
+                Utils.error('Application.createNewDocument(): cannot create new document without folder identifier');
+                def = $.Deferred().reject();
+            }
+
+            return def.promise();
+        }
+
+        /**
          * Loads the document described in the current file descriptor of this
          * application, and shows the application window.
          *
-         * @returns {jQuery.Deferred}
-         *  A deferred that reflects the result of the load operation.
+         * @returns {jQuery.Promise}
+         *  The promise of a deferred that reflects the result of the load
+         *  operation.
          */
         function loadAndShow() {
 
@@ -273,19 +308,20 @@ define('io.ox/office/editor/main',
                     });
 
                 } else {
-                    // no file descriptor: just show an empty editor
+                    // no file descriptor (restored from save point): just show an empty editor
                     def.resolve();
                 }
             });
 
-            return def;
+            return def.promise();
         }
 
         /**
          * Saves the document to its origin.
          *
-         * @returns {jQuery.Deferred}
-         *  A deferred that reflects the result of the save operation.
+         * @returns {jQuery.Promise}
+         *  The promise of a deferred that reflects the result of the save
+         *  operation.
          */
         function saveOrFlush(action) {
 
@@ -325,14 +361,15 @@ define('io.ox/office/editor/main',
                 def.reject();
             });
 
-            return def;
+            return def.promise();
         }
 
         /**
          * Downloads the document in the specified format.
          *
-         * @returns {jQuery.Deferred}
-         *  A deferred that reflects the result of the operation.
+         * @returns {jQuery.Promise}
+         *  The promise of a deferred that reflects the result of the
+         *  operation.
          */
         function download(format) {
 
@@ -360,7 +397,7 @@ define('io.ox/office/editor/main',
                 def.reject();
             });
 
-            return def;
+            return def.promise();
         }
 
         /**
@@ -612,18 +649,9 @@ define('io.ox/office/editor/main',
             // disable Firefox spell checking. TODO: better solution...
             $('body').attr('spellcheck', false);
 
-            // 'new document' action: create the new file in InfoStore
-            if (Utils.getStringOption(options, 'file') === 'new') {
-                initFileDef = $.ajax({
-                    type: 'GET',
-                    url: self.buildServiceUrl('oxodocumentfilter', { action: 'createdefaultdocument', folder_id: Utils.getOption(options, 'folder_id'), document_type: 'text' }),
-                    dataType: 'json'
-                })
-                .pipe(function (response) {
-                    // creation succeeded: receive file descriptor and set it
-                    self.setFileDescriptor(response.data);
-                    return FilesAPI.propagate('new', response.data);
-                });
+            if (Utils.getStringOption(options, 'action') === 'new') {
+                // 'new document' action: create the new file in InfoStore
+                initFileDef = createNewDocument(Utils.getOption(options, 'folder_id'));
             } else {
                 initFileDef = $.when();
             }
@@ -635,7 +663,7 @@ define('io.ox/office/editor/main',
                 def.reject();
             });
 
-            return def;
+            return def.promise();
         }
 
         /**

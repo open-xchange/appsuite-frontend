@@ -83,7 +83,7 @@ define('io.ox/office/editor/editor',
                 }
             }
         },
-    
+
         DEFAULT_HYPERLINK_DEFINTIONS = { 'default': false, styleid: 'Hyperlink', stylename: 'Hyperlink', uipriority: 99 },
         DEFAULT_HYPERLINK_CHARATTRIBUTES = { color: { type: 'scheme', value: 'hyperlink' }, underline: true };
 
@@ -250,10 +250,11 @@ define('io.ox/office/editor/editor',
          * Destroys the editor object.
          */
         this.destroy = function () {
-            editdiv.off();
             this.events.destroy();
             selection.destroy();
             documentStyles.destroy();
+            // remove root node from DOM, this unbinds all (embedded) event handlers
+            editdiv.remove();
             selection = documentStyles = characterStyles = paragraphStyles = imageStyles = tableStyles = tableRowStyles = tableCellStyles = null;
         };
 
@@ -1270,14 +1271,14 @@ define('io.ox/office/editor/editor',
             // setting the cursor position
             selection.setTextSelection(lastOperationEnd);
         };
-        
+
         this.insertHyperlink = function (text, url) {
             var generator = new Operations.Generator();
-            
+
             if (!text && (selection.hasRange())) {
                 var start = selection.startPaM.oxoPosition,
                     end = selection.endPaM.oxoPosition;
-                
+
                 // set url to selected text
                 var hyperlinkStyleId = self.getDefaultUIHyperlinkStylesheet();
                 if (characterStyles.isDirty(hyperlinkStyleId)) {
@@ -1292,7 +1293,7 @@ define('io.ox/office/editor/editor',
                     });
                     characterStyles.setDirty(hyperlinkStyleId, false);
                 }
-                
+
                 generator.generateOperation(Operations.ATTRS_SET, {
                     attrs: { url: url, style: hyperlinkStyleId },
                     start: _.copy(start, true),
@@ -1727,11 +1728,11 @@ define('io.ox/office/editor/editor',
         this.getDefaultLateralTableAttributes = function () {
             return DEFAULT_LATERAL_TABLE_ATTRIBUTES;
         };
-        
+
         this.getDefaultLateralHyperlinkDefinition = function () {
             return DEFAULT_HYPERLINK_DEFINTIONS;
         };
-        
+
         this.getDefaultLateralHyperlinkAttributes = function () {
             return DEFAULT_HYPERLINK_CHARATTRIBUTES;
         };
@@ -1757,20 +1758,20 @@ define('io.ox/office/editor/editor',
 
             return tableStyleId;
         };
-        
+
         /**
          * Returns the document default hyperlink stylesheet id
          */
         this.getDefaultUIHyperlinkStylesheet = function () {
             var styleNames = characterStyles.getStyleSheetNames(),
                 hyperlinkId = null;
-            
+
             _(styleNames).each(function (name, id) {
                 var lowerName = name.toLowerCase();
                 if (lowerName.indexOf('hyperlink') >= 0)
                     hyperlinkId = id;
             });
-            
+
             return hyperlinkId;
         };
 
@@ -1802,13 +1803,13 @@ define('io.ox/office/editor/editor',
             var styleNames = characterStyles.getStyleSheetNames(),
                 parentId = characterStyles.getDefaultStyleSheetId(),
                 hyperlinkMissing = true;
-            
+
             _(styleNames).each(function (name, id) {
                 var lowerName = name.toLowerCase();
                 if (lowerName.indexOf('hyperlink') >= 0)
                     hyperlinkMissing = false;
             });
-            
+
             if (hyperlinkMissing) {
                 var hyperlinkAttr = self.getDefaultLateralHyperlinkAttributes(),
                     hyperlinkDef = self.getDefaultLateralHyperlinkDefinition();
@@ -1818,7 +1819,7 @@ define('io.ox/office/editor/editor',
                         { hidden: false, priority: hyperlinkDef['default'], defStyle: false, dirty: true });
             }
         }
-        
+
         /**
          * Check the stored paragraph styles of a document and adds "missing"
          * heading / default paragraph styles.

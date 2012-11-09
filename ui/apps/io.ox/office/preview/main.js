@@ -129,6 +129,64 @@ define('io.ox/office/preview/main',
         }
 
         /**
+         * Loads the document described in the file descriptor passed to the
+         * constructor of this application, and shows the application window.
+         *
+         * @returns {jQuery.Promise}
+         *  The promise of a deferred that reflects the result of the load
+         *  operation.
+         */
+        function loadAndShow() {
+
+            var // initialize the deferred to be returned
+                def = $.Deferred().always(function () {
+                    win.idle();
+                });
+
+            // show application window
+            // show application window
+            win.show(function () {
+                win.busy();
+                updateTitles();
+
+                // do not try to load, if file descriptor is missing
+                if (self.hasFileDescriptor()) {
+
+                    // load the file
+                    $.ajax({
+                        type: 'GET',
+                        url: self.getDocumentFilterUrl('importdocument', { filter_format: 'html' }),
+                        dataType: 'json'
+                    })
+                    .pipe(function (response) {
+                        return AppHelper.extractAjaxStringResult(response, 'HTMLPages');
+                    })
+                    .done(function (previewDocument) {
+                        if (_.isString(previewDocument)) {
+                            preview.setPreviewDocument(previewDocument);
+                            def.resolve();
+                        } else {
+                            showError(gt('An error occurred while loading the document.'), gt('Load Error'));
+                            preview.setPreviewDocument(null);
+                            def.reject();
+                        }
+                    })
+                    .fail(function (response) {
+                        showAjaxError(response);
+                        preview.setPreviewDocument(null);
+                        def.reject();
+                    });
+
+                } else {
+                    // no file descriptor (restored from save point): just show an empty application
+                    def.resolve();
+                }
+            });
+
+            return def.promise();
+        }
+
+        /**
          * Handles resize events of the browser window, and adjusts the size of
          * the application pane node.
          */
@@ -165,6 +223,9 @@ define('io.ox/office/preview/main',
 
             // disable FF spell checking
             $('body').attr('spellcheck', false);
+
+            // load the file
+            return loadAndShow();
         }
 
         /**
@@ -193,90 +254,27 @@ define('io.ox/office/preview/main',
         };
 
         /**
-         * Shows the application window and activates the preview.
+         * Will be called automatically from the OX framework to create and
+         * return a restore point containing the current state of the
+         * application.
          *
-         * @returns {jQuery.Deferred}
-         *  A deferred that is resolved if the application has been made
-         *  visible, or rejected if the application is in an invalid state.
+         * @return {Object}
+         *  The restore point containing the application state.
          */
-        this.show = function () {
-
-            var def = $.Deferred();
-
-            if (win && preview) {
-                win.show();
-                updateTitles();
-                def.resolve();
-            } else {
-                def.reject();
-            }
-
-            return def;
-        };
-
-        /**
-         * Loads the document described in the file descriptor passed to the
-         * constructor of this application, and shows the application window.
-         *
-         * @returns {jQuery.Deferred}
-         *  A deferred that reflects the result of the load operation.
-         */
-        this.load = function () {
-
-            var def = null;
-
-            // do not load twice (may be called repeatedly from app launcher)
-            this.load = this.show;
-
-            // do not try to load, if file descriptor is missing
-            if (!this.hasFileDescriptor()) {
-                return this.show();
-            }
-
-            // show application window
-            win.show().busy();
-            updateTitles();
-
-            // initialize the deferred to be returned
-            def = $.Deferred().always(function () {
-                win.idle();
-            });
-
-            // load the file
-            $.ajax({
-                type: 'GET',
-                url: this.getDocumentFilterUrl('importdocument', { filter_format: 'html' }),
-                dataType: 'json'
-            })
-            .pipe(function (response) {
-                return AppHelper.extractAjaxStringResult(response, 'HTMLPages');
-            })
-            .done(function (previewDocument) {
-                if (_.isString(previewDocument)) {
-                    preview.setPreviewDocument(previewDocument);
-                    def.resolve();
-                } else {
-                    showError(gt('An error occurred while loading the document.'), gt('Load Error'));
-                    preview.setPreviewDocument(null);
-                    def.reject();
-                }
-            })
-            .fail(function (response) {
-                showAjaxError(response);
-                preview.setPreviewDocument(null);
-                def.reject();
-            });
-
-            return def;
-        };
-
         this.failSave = function () {
             return { module: MODULE_NAME, point: { file: this.getFileDescriptor() } };
         };
 
+        /**
+         * Will be called automatically from the OX framework to restore the
+         * state of the application after a browser refresh.
+         *
+         * @param {Object} point
+         *  The restore point containing the application state.
+         */
         this.failRestore = function (point) {
             this.setFileDescriptor(Utils.getObjectOption(point, 'file'));
-            return this.load();
+            return loadAndShow();
         };
 
         /**
