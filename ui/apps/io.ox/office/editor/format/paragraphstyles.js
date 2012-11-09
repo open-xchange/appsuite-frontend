@@ -88,37 +88,48 @@ define('io.ox/office/editor/format/paragraphstyles',
                     });
                 }
             },
-            borders: {
+            borderleft: {
                 def: {},
                 format: function (element, value) {
-                    if (value.topborder) {
-                        element.css("border-top", Utils.createBorderStyle(value.topborder, this));
-                        if (value.topborder.space) {
-                            element.css('padding-top', value.topborder.space / 100 + 'mm');
+                    if (value) {
+                        if (value.space) {
+                            element.css('padding-left', value.space / 100 + 'mm');
                         }
+                        element.css("border-left", this.getCssBorder(value));
                     }
-                    if (value.bottomborder) {
-                        element.css("border-bottom", Utils.createBorderStyle(value.bottomborder, this));
-                        if (value.bottomborder.space) {
-                            element.css('padding-bottom', value.bottomborder.space / 100 + 'mm');
+                }
+            },
+            borderright: {
+                def: {},
+                format: function (element, value) {
+                    if (value) {
+                        if (value.space) {
+                            element.css('padding-right', value.space / 100 + 'mm');
                         }
+                        element.css("border-right", this.getCssBorder(value));
                     }
-                    if (value.leftborder) {
-                        if (value.leftborder.space) {
-                            element.css('padding-left', value.leftborder.space / 100 + 'mm');
+                }
+            },
+            bordertop: {
+                def: {},
+                format: function (element, value) {
+                    if (value) {
+                        if (value.space) {
+                            element.css('padding-top', value.space / 100 + 'mm');
                         }
-                        element.css("border-left", Utils.createBorderStyle(value.leftborder, this));
+                        element.css("border-top", this.getCssBorder(value));
                     }
-                    if (value.rightborder) {
-                        if (value.rightborder.space) {
-                            element.css('padding-right', value.rightborder.space / 100 + 'mm');
+                }
+            },
+            borderbottom: {
+                def: {},
+                format: function (element, value) {
+                    if (value) {
+                        if (value.space) {
+                            element.css('padding-bottom', value.space / 100 + 'mm');
                         }
-                        element.css("border-right", Utils.createBorderStyle(value.rightborder, this));
+                        element.css("border-bottom", this.getCssBorder(value));
                     }
-                    //TODO determine bottom/top border depending on prev/next paragraph border settings
-//                    if (value.innerborder) {
-//                        element.css("border(top|bottom)", Utils.createBorderStyle(value.innerborder, this));
-//                    }
                 }
             }
         };

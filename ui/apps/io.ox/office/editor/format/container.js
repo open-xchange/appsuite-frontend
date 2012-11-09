@@ -113,7 +113,26 @@ define('io.ox/office/editor/format/container',
             if (width > 0) { borderVisible = true; }
 
             // convert operation styles to CSS styles
-            if (style === 'single') { style = 'solid'; }
+            switch (style) {
+            case 'double':
+            case 'triple':
+                style = 'double';
+                break;
+
+            case 'dashed':
+            case 'dashSmallGap':
+                style = 'dashed';
+                break;
+
+            case 'dotted':
+            case 'dotDash':
+            case 'dotDotDash':
+            case 'dashDotStroked':
+                style = 'dotted';
+                break;
+            default:
+                style = 'solid';
+            }
 
             // convert 1/100mm to pixels
             width = Utils.convertHmmToCssLength(width, 'px', 1);
