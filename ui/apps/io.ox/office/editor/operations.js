@@ -447,7 +447,7 @@ define('io.ox/office/editor/operations',
             this.generateOperationWithAttributes(cell, Operations.CELL_INSERT, { position: position, count: 1 });
 
             // generate operations for the contents of the cell
-            return this.generateContentOperations($(cell).find(DOM.TABLE_CELLCONTENT_NODE_SELECTOR), position);
+            return this.generateContentOperations(DOM.getCellContentNode(cell), position);
         };
 
         /**
@@ -500,7 +500,7 @@ define('io.ox/office/editor/operations',
 
             // generate operations for all rows
             position = appendNewIndex(position);
-            $(table).find('> tbody > tr').each(function () {
+            DOM.getTableRows(table).each(function () {
                 self.generateTableRowOperations(this, position);
                 position = increaseLastIndex(position);
             });

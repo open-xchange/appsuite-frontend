@@ -141,7 +141,7 @@ define('io.ox/office/editor/format/tablestyles',
                 tableCellStyles = documentStyles.getStyleSheets('cell');
 
             // iterating over all cells in the table to set the table attributes in the cell
-            table.find('> tbody > tr > td').each(function () {
+            DOM.getTableRows(table).children('td').each(function () {
                 tableCellStyles.updateElementFormatting(this);
             });
 

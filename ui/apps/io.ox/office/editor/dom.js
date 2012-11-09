@@ -411,6 +411,20 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * Returns the collection of table rows from the passed table element.
+     *
+     * @param {HTMLTableElement|jQuery} tableNode
+     *  The table DOM node. If this object is a jQuery collection, uses the
+     *  first DOM node it contains.
+     *
+     * @returns {jQuery}
+     *  A jQuery collection containing all rows of the specified table.
+     */
+    DOM.getTableRows = function (tableNode) {
+        return $(tableNode).find('> tbody > tr');
+    };
+
+    /**
      * A jQuery selector that matches elements representing a top-level content
      * node (e.g. paragraphs or tables).
      */
@@ -432,12 +446,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * A jQuery selector that matches the content node container in a table
-     * cell.
-     */
-    DOM.TABLE_CELLCONTENT_NODE_SELECTOR = 'div.cellcontent';
-
-    /**
      * Creates a new table cell element.
      *
      * @param {jQuery} paragraph
@@ -457,10 +465,25 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * Returns the container node of a table cell that contains all top-level
+     * content nodes (paragraphs and tables).
+     *
+     * @param {HTMLTableCellElement|jQuery} cellNode
+     *  The table cell DOM node. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {jQuery}
+     *  The container DOM node from the passed table cell that contains all
+     *  top-level content nodes (paragraphs and tables).
+     */
+    DOM.getCellContentNode = function (cellNode) {
+        return $(cellNode).find('div.cellcontent');
+    };
+
+    /**
      * A jQuery selector that matches elements representing a resize node.
      */
     DOM.RESIZE_NODE_SELECTOR = 'div.resize';
-
 
     // text spans, text nodes, text components ================================
 

@@ -394,7 +394,7 @@ define('io.ox/office/editor/position',
      */
     Position.getTableRowElement = function (startnode, position) {
         var table = Position.getTableElement(startnode, position.slice(0, -1)),
-            tableRow = table && $(table).find('> tbody > tr').get(position[position.length - 1]);
+            tableRow = table && DOM.getTableRows(table).get(position[position.length - 1]);
         if (table && !tableRow) {
             Utils.warn('Position.getTableRowElement(): expected element not found at position ' + JSON.stringify(position) + '.');
         }
@@ -551,7 +551,7 @@ define('io.ox/office/editor/position',
         node = Utils.getDomNode(node);
 
         if (DOM.isTableNode(node)) {
-            childNode = $('> tbody > tr', node).get(pos);
+            childNode = DOM.getTableRows(node).get(pos);
         } else if ($(node).is('tr')) {
             // Adding all colspans, to get the selected cell
             // Position.iterateRowChildNodes(node, function (cellNode, nodeStart, nodeColSpan) {
@@ -1039,7 +1039,7 @@ define('io.ox/office/editor/position',
             table = Position.getLastNodeFromPositionByNodeName(startnode, position, DOM.TABLE_NODE_SELECTOR);
 
         if (table) {
-            rowIndex = $('> tbody > tr', table).length - 1;
+            rowIndex = DOM.getTableRows(table).length - 1;
         }
 
         return rowIndex;
@@ -1068,7 +1068,7 @@ define('io.ox/office/editor/position',
             table = Position.getLastNodeFromPositionByNodeName(startnode, position, DOM.TABLE_NODE_SELECTOR);
 
         if (table) {
-            var row = $('> tbody > tr', table).first();  // first row
+            var row = DOM.getTableRows(table).first();  // first row
             columnIndex = row.children('td').length - 1;
         }
 
@@ -1790,11 +1790,12 @@ define('io.ox/office/editor/position',
      * as jQuery element or one specified paragraph/table at position pos
      * as dom node.
      *
-     * @param {Node} node
-     *  The table cell dom node.
+     * @param {HTMLElement|jQuery} cellNode
+     *  The table cell DOM node. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
      *
      * @param {Number} [pos]
-     * Optional integer value of one specific paragraph/table in the list of
+     *  Optional integer value of one specific paragraph/table in the list of
      * top level components of the table cell (0-based)
      *  The second logical position.
      *
@@ -1803,17 +1804,15 @@ define('io.ox/office/editor/position',
      *  level component inside the table cell is returned. Without pos defined,
      *  all paragraphs/tables are returned in a jQuery collection.
      */
-    Position.getCellContent = function (cellnode, pos) {
+    Position.getCellContent = function (cellNode, pos) {
 
-        var result = null;
+        var cellContentNode = DOM.getCellContentNode(cellNode);
 
         if (_.isNumber(pos)) {
-            result = $(cellnode.firstChild).children('div.cellcontent').get(0).childNodes[pos];
+            return cellContentNode[0].childNodes[pos];
         } else {
-            result = $(cellnode.firstChild).children('div.cellcontent').children();
+            return cellContentNode.children();
         }
-
-        return result;
     };
 
     // position arrays --------------------------------------------------------

@@ -854,7 +854,7 @@ define('io.ox/office/editor/editor',
 
                 // checking if the table is empty
                 var tableNode = Position.getDOMPosition(editdiv, tablePos).node;
-                if ($(tableNode).find('> tbody > tr').length === 0) {
+                if (DOM.getTableRows(tableNode).length === 0) {
                     newOperation = { name: Operations.TABLE_DELETE, start: _.copy(tablePos, true) };
                     applyOperation(newOperation, true, true);
                 }
@@ -1029,7 +1029,7 @@ define('io.ox/office/editor/editor',
                     applyOperation(newOperation, true, true);
 
                     // Checking, if there are empty rows
-                    var maxRow = $(tableNode).find('> tbody > tr').length - 1,
+                    var maxRow = DOM.getTableRows(tableNode).length - 1,
                         deletedAllRows = true;
 
                     for (var i = maxRow; i >= 0; i--) {
@@ -2669,7 +2669,7 @@ define('io.ox/office/editor/editor',
             if (table) {
                 if (undoManager.isEnabled()) {
 
-                    var allRows = $(table).find('> tbody > tr'),
+                    var allRows = DOM.getTableRows(table),
                         allCellRemovePositions = Table.getAllRemovePositions(allRows, operation.startgrid, operation.endgrid),
                         generator = new Operations.Generator();
 
@@ -2744,7 +2744,7 @@ define('io.ox/office/editor/editor',
                 // at very different grid positions. It is only possible to remove the new cells with deleteCells operation.
                 var localPos = _.copy(operation.position, true),
                     table = Position.getDOMPosition(editdiv, localPos).node,  // -> this is already the new grid with the new column!
-                    allRows = $(table).find('> tbody > tr'),
+                    allRows = DOM.getTableRows(table),
                     allCellInsertPositions = Table.getAllInsertPositions(allRows, operation.gridposition, operation.insertmode);
 
                 for (var i = (allCellInsertPositions.length - 1); i >= 0; i--) {
@@ -4489,16 +4489,16 @@ define('io.ox/office/editor/editor',
             // iterating over all cells and remove all paragraphs in the cells
             implDeleteCellRange(localPosition, [startRow, 0], [endRow, lastColumn]);
 
-            $(table).find('> tbody > tr').slice(startRow, endRow + 1).remove();
+            DOM.getTableRows(table).slice(startRow, endRow + 1).remove();
 
-            if ($(table).find('> tbody > tr').length === 0) {
+            if (DOM.getTableRows(table).length === 0) {
                 // This code should never be reached. If last row shall be deleted, deleteTable is called.
                 self.deleteTable(localPosition);
                 $(table).remove();
                 localPosition.push(0);
             } else {
                 // Setting cursor
-                var lastRow = $(table).find('> tbody > tr').length - 1;
+                var lastRow = DOM.getTableRows(table).length - 1;
                 if (endRow > lastRow) {
                     endRow = lastRow;
                 }
@@ -4544,7 +4544,7 @@ define('io.ox/office/editor/editor',
 
             if (useReferenceRow) {
 
-                row = $(table).find('> tbody > tr').eq(referencerow);
+                row = DOM.getTableRows(table).eq(referencerow);
                 cellsInserted = true;
 
             } else if (insertdefaultcells) {
@@ -4706,7 +4706,7 @@ define('io.ox/office/editor/editor',
             }
 
             var table = Position.getDOMPosition(editdiv, localPosition).node,
-                allRows = $(table).find('> tbody > tr'),
+                allRows = DOM.getTableRows(table),
                 endColInFirstRow = -1;
 
             allRows.each(
@@ -4729,13 +4729,13 @@ define('io.ox/office/editor/editor',
                 }
             );
 
-            if ($(table).find('> tbody > tr > td').length === 0) {   // no more columns
+            if (DOM.getTableRows(table).children('td').length === 0) {   // no more columns
                 // This code should never be reached. If last column shall be deleted, deleteTable is called.
                 $(table).remove();
                 localPosition.push(0);
             } else {
                 // Setting cursor
-                var lastColInFirstRow = $(table).find('> tbody > tr').first().children().length - 1;
+                var lastColInFirstRow = DOM.getTableRows(table).first().children().length - 1;
                 if ((endColInFirstRow > lastColInFirstRow) || (endColInFirstRow === -1)) {
                     endColInFirstRow = lastColInFirstRow;
                 }
@@ -4760,7 +4760,7 @@ define('io.ox/office/editor/editor',
             }
 
             var table = Position.getDOMPosition(editdiv, localPosition).node,
-                allRows = $(table).find('> tbody > tr'),
+                allRows = DOM.getTableRows(table),
                 // prototype elements for cell and paragraph
                 paragraph = DOM.createParagraphNode(),
                 cell = DOM.createTableCellNode(paragraph);
