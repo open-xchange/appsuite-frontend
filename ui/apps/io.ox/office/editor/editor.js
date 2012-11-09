@@ -1268,15 +1268,15 @@ define('io.ox/office/editor/editor',
             // setting the cursor position
             selection.setTextSelection(lastOperationEnd);
         };
-        
+
         this.insertHyperlink = function () {
             var generator = new Operations.Generator();
-            
+
             if (selection.hasRange() && selection.getEnclosingParagraph()) {
                 var start = _.copy(selection.getStartPosition()),
                     end = _.copy(selection.getEndPosition()),
                     text = '', url = '';
-                
+
                 // Find out the text/url of the selected text to provide them to the
                 // hyperlink dialog
                 selection.iterateNodes(function (node, pos, start, length) {
@@ -3875,6 +3875,7 @@ define('io.ox/office/editor/editor',
                                 tableStyles.updateElementFormatting(this);
                             }
                         });
+                        tables = $();
                     }, 0);
                 }
 
