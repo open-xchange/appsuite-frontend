@@ -3155,8 +3155,6 @@ define('io.ox/office/editor/editor',
             // insert an empty text span if there is no other content (except the dummy node)
             if (!paragraph.hasChildNodes() || (hasLastDummy && (paragraph.childNodes.length === 1))) {
                 $(paragraph).prepend(DOM.createTextSpan());
-                // initialize paragraph and character formatting from current paragraph style
-                paragraphStyles.updateElementFormatting(paragraph);
             }
 
             // append dummy text node if the paragraph contains no text,
@@ -3169,6 +3167,9 @@ define('io.ox/office/editor/editor',
 
             // TODO: Adjust tabs, ...
             adjustTabsOfParagraph(paragraph);
+
+            // initialize paragraph and character formatting from current paragraph style
+            paragraphStyles.updateElementFormatting(paragraph);
         }
 
         /**
