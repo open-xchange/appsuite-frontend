@@ -108,7 +108,7 @@ define('io.ox/files/icons/perspective',
         str = String(str || '');
         var parts = str.split('.'),
             extension = parts.length > 1 ? '.' + parts.pop() : '';
-        str = parts.join('');
+        str = parts.join('.');
         return (str.length <= 40 ? str : str.substr(0, 40) + '..') + extension;
     }
 
