@@ -487,6 +487,7 @@ define('io.ox/mail/write/main',
                 .done(function () {
                     // set body
                     var content = data.attachments && data.attachments.length ? data.attachments[0].content : '';
+                    console.log('setMail > content', content);
                     if (mail.format === 'text') {
                         content = content.replace(/<br>\n?/g, '\n');
                     }
@@ -494,6 +495,7 @@ define('io.ox/mail/write/main',
                     if (editorMode === 'html') {
                         content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
                     }
+                    console.log('setBody', content);
                     app[mail.initial ? 'setBody' : 'setRawBody'](content);
                 });
         };

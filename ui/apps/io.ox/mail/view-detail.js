@@ -75,6 +75,7 @@ define('io.ox/mail/view-detail',
         regImage = /^image\/(jpe?g|png|gif|bmp)$/i,
         regFolder = /^(\s*)(http[^#]+#m=infostore&f=\d+)(\s*)$/i,
         regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i,
+        regDocumentAlt = /^(\s*)(http[^#]+#!&?app=io.ox\/files&perspective=list?&folder=\d+&id=[\d\.]+)(\s*)$/i,
         regLink = /^(.*)(https?:\/\/\S+)(\s.*)?$/i,
         regMail = /([^\s<;]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/i,
         regMailReplace = /([^\s<;]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/ig, /* dedicated one to avoid strange side effects */
@@ -297,7 +298,7 @@ define('io.ox/mail/view-detail',
                             this.nodeValue = text.replace(/(\S{60})/g, '$1\u200B'); // zero width space
                         }
                         // some replacements
-                        if ((m = text.match(regDocument)) && m.length) {
+                        if (((m = text.match(regDocument)) && m.length) || ((m = text.match(regDocumentAlt)) && m.length)) {
                             // link to document
                             node.replaceWith(
                                  $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Document'))).add($.txt(m[3]))

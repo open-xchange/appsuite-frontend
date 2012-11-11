@@ -159,6 +159,23 @@ define("io.ox/files/actions",
         }
     });
 
+    new Action('io.ox/files/actions/sendlink', {
+        requires: 'some',
+        multiple: function (list) {
+            require(['io.ox/mail/write/main'], function (m) {
+                api.getList(list).done(function (list) {
+                    m.getApp().launch().done(function () {
+                        var content  = _(list).map(function (file) {
+                            var url = location.protocol + '//' + location.host + '/ox7/#!&app=io.ox/files&perspective=list&folder=' + file.folder_id + '&id=' + _.cid(file);
+                            return gt('Title: %1$s', file.title || file.filename) + '\n' + gt('Link: %1$s', url);
+                        });
+                        this.compose({ attachments: [{ content: content.join('\n\n') }] });
+                    });
+                });
+            });
+        }
+    });
+
     new Action('io.ox/files/actions/send', {
         id: 'send',
         requires: 'some',
@@ -361,15 +378,22 @@ define("io.ox/files/actions",
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'send',
+        id: 'sendlink',
         index: 300,
-        label: gt("Send by email"),
+        label: gt("Send as link"),
+        ref: "io.ox/files/actions/sendlink"
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'send',
+        index: 400,
+        label: gt("Send by mail"),
         ref: "io.ox/files/actions/send"
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'delete',
-        index: 400,
+        index: 500,
         prio: 'hi',
         label: gt("Delete"),
         ref: "io.ox/files/actions/delete"

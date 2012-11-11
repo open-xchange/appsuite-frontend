@@ -86,7 +86,7 @@ define('plugins/portal/birthdays/register',
                         // get human readable delta
                         days = birthday.getDate() - now.getDate();
                         delta = (next - now) / date.DAY;
-                        delta = days === 0 ? gt('Today') : days === 1 ? gt('Tomorrow') : gt('In %1$d days', Math.ceil(delta));
+                        delta = days === 0 && delta <= 1 ? gt('Today') : days === 1 && delta <= 2 ? gt('Tomorrow') : gt('In %1$d days', Math.ceil(delta));
 
                         $list.append(
                             $('<div class="birthday">').data('contact', contact).append(
