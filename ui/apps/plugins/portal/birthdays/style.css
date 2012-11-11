@@ -40,6 +40,14 @@ div.io-ox-portal-birthdays {
     		margin-right: 13px;
     		width: 48px;
     		height: 48px;
+            border-radius: 5px;
     	}
+
+        .distance {
+            color: #888;
+            font-family: @font-light;
+            display: inline-block;
+            margin-left: 0.5em;
+        }
     }
 }

@@ -88,7 +88,7 @@ define.async('io.ox/core/date',
                     w);
             }
             function days(m) {
-                var Day = api.DAY / api.MIN;
+                var Day = api.DAY / api.MINUTE;
                 if (m < Day) return hours(m);
                 var d = Math.floor(m / Day);
                 m = m % Day;

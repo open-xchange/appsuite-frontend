@@ -21,9 +21,24 @@ define('plugins/portal/birthdays/register',
 
     'use strict';
 
-    var WEEKS = 4,
+    var WEEKS = 8,
         RANGE = WEEKS * 7 * 24 * 60 * 60 * 1000,
         sidepopup;
+
+    function unifySpelling(name) {
+        // lowercase & transform umlauts
+        return String(name).toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss');
+    }
+
+    function markDuplicate(name, hash) {
+        name = unifySpelling(name);
+        hash[name] = true;
+    }
+
+    function isDuplicate(name, hash) {
+        name = unifySpelling(name);
+        return name in hash;
+    }
 
     ext.point("io.ox/portal/widget").extend({
         id: 'birthdays',
@@ -36,7 +51,7 @@ define('plugins/portal/birthdays/register',
         },
         draw: function (contacts) {
 
-            var duplicates = {}, $list;
+            var hash = {}, $list;
 
             $list = $('<div class="io-ox-portal-birthdays">').append(
                 $('<h1>').text(gt('Next birthdays'))
@@ -56,17 +71,34 @@ define('plugins/portal/birthdays/register',
                 );
                 // loop
                 _(contacts).each(function (contact) {
-                    var birthday = new date.Local(date.Local.utc(contact.birthday)).format(date.DATE),
-                        name = util.getDisplayName(contact);
-                    if (!(name in duplicates)) {
+                    var utc = date.Local.utc(contact.birthday), birthday, next, now, days, delta,
+                        // we use fullname here to avoid haveing duplicates like "Jon Doe" and "Doe, Jon"
+                        name = util.getFullName(contact);
+
+                    if (!isDuplicate(name, hash)) {
+
+                        // get delta
+                        now = new date.Local();
+                        birthday = new date.Local(utc);
+                        next = new date.Local(now.getYear(), birthday.getMonth(), birthday.getDate());
+                        // inc year?
+                        if (now - next > 0) next.addYears(1);
+                        // get human readable delta
+                        days = birthday.getDate() - now.getDate();
+                        delta = (next - now) / date.DAY;
+                        delta = days === 0 ? gt('Today') : days === 1 ? gt('Tomorrow') : gt('In %1$d days', Math.ceil(delta));
+
                         $list.append(
                             $('<div class="birthday">').data('contact', contact).append(
                                 api.getPicture(contact, { width: 48, height: 48, scaleType: 'cover' }).addClass('picture'),
                                 $('<div class="name">').text(_.noI18n(name)),
-                                $('<div class="date">').text(_.noI18n(birthday))
+                                $('<div>').append(
+                                    $('<span class="date">').text(_.noI18n(birthday.format(date.DATE))), $.txt(' '),
+                                    $('<span class="distance">').text(delta)
+                                )
                             )
                         );
-                        duplicates[name] = true;
+                        markDuplicate(name, hash);
                     }
                 });
                 // init sidepopup
@@ -85,27 +117,31 @@ define('plugins/portal/birthdays/register',
             this.append($list);
             return $.Deferred().resolve();
         },
+
         preview: function () {
+
             var $list = $('<ul class="io-ox-portal-birthdays">'),
                 start = _.now(),
                 end = start + RANGE;
 
-            $list.append($('<li>').text(gt('No birthdays within the next %1$d weeks', WEEKS)));
+            api.birthdays(start, end).done(function (contacts) {
 
-            api.birthdays(start, end).done(function (data) {
-                var duplicates = [];
-                if (data.length > 0) {
-                    $list.empty();
+                var hash = {};
+
+                if (contacts.length === 0) {
+                    $list.append($('<li>').text(gt('No birthdays within the next %1$d weeks', WEEKS)));
+                } else {
+                    _(contacts).each(function (contact) {
+                        var birthday = new date.Local(date.Local.utc(contact.birthday)).format(date.DATE),
+                            name = util.getFullName(contact);
+                        if (!isDuplicate(name, hash)) {
+                            $('<li>').text(gt('%1$s on %2$s', name, birthday)).appendTo($list);
+                            markDuplicate(name, hash);
+                        }
+                    });
                 }
-                _(data).each(function (contact) {
-                    var birthday = new date.Local(date.Local.utc(contact.birthday)).format(date.DATE),
-                        name = util.getDisplayName(contact);
-                    if (! _(duplicates).include(name)) {
-                        $('<li>').text(gt('%1$s on %2$s', name, birthday)).appendTo($list);
-                        duplicates.push(name);
-                    }
-                });
             });
+
             return $list;
         }
     });
