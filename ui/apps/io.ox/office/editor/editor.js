@@ -3261,7 +3261,18 @@ define('io.ox/office/editor/editor',
                             shiftedGrid = 0;
 
                         if (oldTableWidth === 0) { oldTableWidth = tableNode.outerWidth(); }
+                        else { oldTableWidth = Utils.convertHmmToLength(oldTableWidth, 'px', 0); }
                         newTableWidth = lastCell ? (oldTableWidth + shiftX) : oldTableWidth;
+
+                        // checking if new table width is inside the width of the parent -> otherwise cut it
+                        if (lastCell) {
+                            var maxWidth = tableNode.parent().width();
+                            if (newTableWidth > maxWidth) {
+                                var delta = newTableWidth - maxWidth;
+                                newTableWidth = maxWidth;
+                                shiftX -= delta;  // shiftX can be 0
+                            }
+                        }
 
                         // converting from relational grid to pixel grid
                         for (var i = 0; i < oldTableGrid.length; i++) { gridSum += oldTableGrid[i]; }
@@ -3274,7 +3285,7 @@ define('io.ox/office/editor/editor',
                         if (! lastCell) { pixelGrid[shiftedGrid + 1] -= shiftX; }
 
                         // both still have to be positive
-                        if ((pixelGrid[shiftedGrid] > 0) && ((lastCell) || (pixelGrid[shiftedGrid + 1] > 0))) {
+                        if ((shiftX !== 0) && (pixelGrid[shiftedGrid] > 0) && ((lastCell) || (pixelGrid[shiftedGrid + 1] > 0))) {
 
                             // converting modified pixel grid to new relation table grid
                             for (var i = 0; i < pixelGrid.length; i++) {
@@ -3284,7 +3295,7 @@ define('io.ox/office/editor/editor',
                             if ((! lastCell) && (StyleSheets.getExplicitAttributes(tableNode).width === 0)) { newTableWidth = 0; }
                             else { newTableWidth = Utils.convertLengthToHmm(newTableWidth, 'px'); }
 
-                            var newOperation = {name: Operations.ATTRS_SET, attrs: {'tablegrid': tableGrid, 'width': newTableWidth}, position: tablePosition};
+                            var newOperation = {name: Operations.ATTRS_SET, attrs: {'tablegrid': tableGrid, 'width': newTableWidth}, start: tablePosition};
                             applyOperation(newOperation, true, true);
                         }
                     }
