@@ -475,7 +475,11 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
         this.destroy = function () {
             // unregister from view components
             _(components).invoke('off', 'change cancel', componentEventHandler);
-            items = components = null;
+            // clear pending update cycle
+            if (updateTimeout) {
+                window.clearTimeout(updateTimeout);
+            }
+            items = components = updateTimeout = null;
         };
 
         // initialization -----------------------------------------------------
