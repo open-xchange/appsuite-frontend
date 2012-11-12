@@ -72,46 +72,13 @@ define('io.ox/calendar/edit/template',
         },
         showConflicts: function (conflicts) {
             var self = this;
-            var conflictList = $('<div>');
-            require(["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"],
-                function (dialogs, viewGrid) {
-                    conflictList = viewGrid.drawSimpleGrid(conflicts);
-                    new dialogs.SidePopup()
-                        .delegate($(conflictList), ".vgrid-cell", function (popup, e, target) {
-                            var data = target.data("appointment");
-                            require(["io.ox/calendar/view-detail"], function (view) {
-                                popup.append(view.draw(data));
-                                data = null;
-                            });
-                        });
-
-                    self.$el.append(
-                        $('<h4 class="text-error">').text(gt('Conflicts detected')),
-                        conflictList,
-                        $('<div class="row">')
-                            .css('margin-top', '10px').append(
-                                $('<span class="span12">')
-                                    .css('text-align', 'right').append(
-                                        $('<a class="btn">')
-                                            .text(gt('Cancel'))
-                                            .on('click', function (e) {
-                                                e.preventDefault();
-                                                self.$el.empty();
-                                            }),
-                                        '&nbsp;',
-                                        $('<a class="btn btn-danger">')
-                                            .addClass('btn')
-                                            .text(gt('Ignore conflicts'))
-                                            .on('click', function (e) {
-                                                e.preventDefault();
-                                                self.model.set('ignore_conflicts', true);
-                                                self.model.save();
-                                            })
-                                        )
-                                )
-                        );
-                }
-                );
+            require(["io.ox/calendar/conflicts/conflictList"], function (conflictList) {
+                conflictList.drawConflicts({
+                    $el: self.$el,
+                    conflicts: conflicts,
+                    model: self.model
+                });
+            });
         }
     });
 
