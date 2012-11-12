@@ -3284,7 +3284,7 @@ define('io.ox/office/editor/editor',
                             if ((! lastCell) && (StyleSheets.getExplicitAttributes(tableNode).width === 0)) { newTableWidth = 0; }
                             else { newTableWidth = Utils.convertLengthToHmm(newTableWidth, 'px'); }
 
-                            var newOperation = {name: Operations.ATTRS_SET, attrs: {'tablegrid': tableGrid, 'width': newTableWidth}, position: tablePosition};
+                            var newOperation = {name: Operations.ATTRS_SET, attrs: {'tablegrid': tableGrid, 'width': newTableWidth}, start: tablePosition};
                             applyOperation(newOperation, true, true);
                         }
                     }
