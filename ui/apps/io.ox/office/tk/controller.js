@@ -40,17 +40,14 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
         var // self reference
             self = this,
 
+            // deferred methods that will be executed in a browser timeout
+            deferredMethods = new Utils.DeferredMethods(this),
+
             // definitions for all items, mapped by item key
             items = {},
 
             // registered view components
             components = [],
-
-            // keys of all items waiting for an update
-            pendingKeys = [],
-
-            // timer collecting multiple update requests
-            updateTimeout = null,
 
             // cached item values during a complex update
             resultCache = {};
@@ -402,27 +399,29 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
          * @returns {Controller}
          *  A reference to this controller.
          */
-        this.update = function (keys) {
+        this.update = deferredMethods.createMethod(
 
-            // update the array of pending keys
-            if (_.isUndefined(keys)) {
-                pendingKeys = undefined;
-            } else if (_.isArray(pendingKeys) && (_.isString(keys) || _.isRegExp(keys))) {
-                pendingKeys.push(keys);
-            }
+            // direct callback: called every time when Controller.update() has been called
+            function registerKeys(storage, keys) {
+                // update the array of pending keys
+                if (_.isUndefined(keys)) {
+                    storage.pendingKeys = undefined;
+                } else if (_.isArray(storage.pendingKeys) && (_.isString(keys) || _.isRegExp(keys))) {
+                    storage.pendingKeys.push(keys);
+                }
+                return self;
+            },
 
-            // start a timeout that calls the item update handlers
-            if (!updateTimeout) {
-                updateTimeout = window.setTimeout(function () {
-                    updateTimeout = null;
-                    clearResultCache();
-                    _(selectItems(pendingKeys)).invoke('update');
-                    pendingKeys = [];
-                }, 0);
-            }
+            // deferred callback: called once, after current script ends
+            function updateComponents(storage) {
+                clearResultCache();
+                _(selectItems(storage.pendingKeys)).invoke('update');
+                storage.pendingKeys = [];
+            },
 
-            return this;
-        };
+            // storage object passed to all callbacks
+            { pendingKeys: [] }
+        );
 
         /**
          * Returns the current value of the specified item.
@@ -473,13 +472,10 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
          * Removes this controller from all event sources.
          */
         this.destroy = function () {
+            deferredMethods.destroy();
             // unregister from view components
             _(components).invoke('off', 'change cancel', componentEventHandler);
-            // clear pending update cycle
-            if (updateTimeout) {
-                window.clearTimeout(updateTimeout);
-            }
-            items = components = updateTimeout = null;
+            deferredMethods = items = components = null;
         };
 
         // initialization -----------------------------------------------------

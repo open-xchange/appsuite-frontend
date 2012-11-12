@@ -1846,7 +1846,106 @@ define('io.ox/office/tk/utils',
 */
     };
 
-    // console output ---------------------------------------------------------
+    // deferred methods container =============================================
+
+    /**
+     * @constructor
+     */
+    Utils.DeferredMethods = function (context) {
+
+        var // browser timeout for all deferred callbacks
+            timeout = null,
+            // pending deferred callbacks that will be called in the timeout
+            pendingDeferreds = {},
+            // counter for unique indexes of all deferred methods
+            count = 0;
+
+        // private methods ----------------------------------------------------
+
+        /**
+         * Executes all pending deferred callback functions.
+         */
+        function executePendingDeferreds() {
+            timeout = null;
+            _(pendingDeferreds).each(function (callback) { callback(); });
+            pendingDeferreds = {};
+        }
+
+        // methods ------------------------------------------------------------
+
+        /**
+         * Creates a deferred method that can be called multiple times.
+         * Execution is separated into a part that runs directly every time the
+         * method is called (direct callback), and a part that runce once after
+         * the current script execution ends (deferred callback).
+         *
+         * @param {Function} directCallback
+         *  A function that will be called every time the deferred method
+         *  has been called. Receives the following parameters:
+         *  @param {Object} storage
+         *      The storage object passed to the DeferredObjects.createObject()
+         *      method. Can be used to store additional data needed across
+         *      multiple calls of the direct and/or deferred callbacks.
+         *
+         * @param {Function} deferredCallback
+         *  A function that will be called once after calling the deferred
+         *  method once or multiple times during the execution of the current
+         *  script. Receives the following parameters:
+         *  @param {Object} storage
+         *      The storage object passed to the DeferredObjects.createObject()
+         *      method. Can be used to store additional data needed across
+         *      multiple calls of the direct and/or deferred callbacks.
+         *
+         * @param {Object} [storage]
+         *  An object that will be passed to all callback functions and can be
+         *  used to store additional data. The storage object remains valid
+         *  across all calls of the direct callback and the deferred callback.
+         *
+         * @returns {Function}
+         *  The deferred method that can be called multiple times, and that
+         *  executes the deferred callback once after execution of the current
+         *  script ends. Passes all arguments to the direct callback (following
+         *  the leading storage parameter if specified), and returns the result
+         *  of the direct callback function.
+         */
+        this.createMethod = function (directCallback, deferredCallback, storage) {
+
+            var // unique index
+                index = count++,
+                // arguments for callbacks
+                args = _.isUndefined(storage) ? [] : [storage];
+
+            // create and return the deferred method
+            return function () {
+
+                // create a timeout if not existing yet
+                if (!timeout) {
+                    timeout = window.setTimeout(executePendingDeferreds, 0);
+                }
+
+                // register the deferred callback
+                pendingDeferreds[index] = _.bind(deferredCallback, context, storage);
+
+                // call the direct callback with the passed arguments
+                return directCallback.apply(context, args.concat(_.toArray(arguments)));
+            };
+        };
+
+        /**
+         * Clears the running timeout, without calling the pending deferred
+         * callback functions.
+         */
+        this.destroy = function () {
+            if (timeout) {
+                window.clearTimeout(timeout);
+                timeout = null;
+            }
+            pendingDeferreds = null;
+        };
+
+    };
+
+    // console output =========================================================
 
     Utils.MIN_LOG_LEVEL = 'log';
 

@@ -49,8 +49,8 @@ define('io.ox/office/editor/format/container',
         var // self reference
             self = this,
 
-            // timeout handler for postponed change events
-            triggerTimeout = null;
+            // deferred methods that will be executed in a browser timeout
+            deferredMethods = new Utils.DeferredMethods(this);
 
         // methods ------------------------------------------------------------
 
@@ -74,18 +74,14 @@ define('io.ox/office/editor/format/container',
          * @returns {Container}
          *  A reference to this instance.
          */
-        this.triggerChangeEvent = function () {
+        this.triggerChangeEvent = deferredMethods.createMethod(
 
-            // check if a pending change event exists
-            if (!triggerTimeout) {
-                triggerTimeout = window.setTimeout(function () {
-                    triggerTimeout = null;
-                    self.trigger('change');
-                }, 0);
-            }
+            // direct callback: called every time when Container.triggerChangeEvent() has been called
+            function () { return self; },
 
-            return this;
-        };
+            // deferred callback: called once, after current script ends
+            function triggerEvent() { self.trigger('change'); }
+        );
 
         /**
          * Converts the passed color attribute object to a CSS color value.
@@ -139,6 +135,7 @@ define('io.ox/office/editor/format/container',
 
         this.destroy = function () {
             this.events.destroy();
+            deferredMethods.destroy();
         };
 
         // initialization -----------------------------------------------------

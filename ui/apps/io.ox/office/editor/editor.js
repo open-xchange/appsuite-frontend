@@ -169,6 +169,9 @@ define('io.ox/office/editor/editor',
             // the container element for the document contents
             editdiv = $('<div>', { contenteditable: true }).addClass('page user-select-text'),
 
+            // deferred methods that will be executed in a browser timeout
+            deferredMethods = new Utils.DeferredMethods(this),
+
             // the logical selection, synchronizes with browser DOM selection
             selection = new Selection(editdiv),
 
@@ -252,11 +255,12 @@ define('io.ox/office/editor/editor',
          */
         this.destroy = function () {
             this.events.destroy();
+            deferredMethods.destroy();
             selection.destroy();
             documentStyles.destroy();
-            // remove root node from DOM, this unbinds all (embedded) event handlers
+            // remove root node from DOM, this unbinds all event handlers (also of descendant nodes)
             editdiv.remove();
-            selection = documentStyles = characterStyles = paragraphStyles = imageStyles = tableStyles = tableRowStyles = tableCellStyles = null;
+            deferredMethods = selection = documentStyles = null;
         };
 
         // OPERATIONS API
@@ -1356,7 +1360,7 @@ define('io.ox/office/editor/editor',
                 text = '', url = '',
                 start = selection.getStartPosition(),
                 end = selection.getEndPosition();
-            
+
             if (!selection.hasRange()) {
                 var newSelection = Hyperlink.findSelectionRange(this, selection);
                 if (newSelection.start !== null && newSelection.end !== null) {
@@ -1365,7 +1369,7 @@ define('io.ox/office/editor/editor',
                     selection.setTextSelection(start, end);
                 }
             }
-            
+
             if (selection.getEnclosingParagraph()) {
                 // use range to retrieve text and possible url
                 if (selection.hasRange()) {
@@ -1386,15 +1390,15 @@ define('io.ox/office/editor/editor',
                         }
                     });
                 }
-    
+
                 // show hyperlink dialog
                 Hyperlink.showHyperlinkDialog(text, url).done(function (data) {
                     // set url to selected text
                     var hyperlinkStyleId = self.getDefaultUIHyperlinkStylesheet(),
                         url = data.url;
-    
+
                     undoManager.enterGroup(function () {
-    
+
                         if (data.url === null && data.text === null) {
                             // remove hyperlink
                             generator.generateOperation(Operations.ATTRS_SET, {
@@ -1406,12 +1410,12 @@ define('io.ox/office/editor/editor',
                         else {
                             // insert/change hyperlink
                             if (data.text !== text) {
-    
+
                                 // text has been changed
                                 if (selection.hasRange()) {
                                     self.deleteSelected();
                                 }
-    
+
                                 // insert new text
                                 var newOperation = { name: Operations.TEXT_INSERT, text: data.text, start: _.clone(start) };
                                 applyOperation(newOperation, true, true);
@@ -1419,7 +1423,7 @@ define('io.ox/office/editor/editor',
                                 end = _.clone(start);
                                 end[end.length - 1] += data.text.length;
                             }
-    
+
                             if (characterStyles.isDirty(hyperlinkStyleId)) {
                                 // insert hyperlink style to document
                                 generator.generateOperation(Operations.INSERT_STYLE, {
@@ -1432,14 +1436,14 @@ define('io.ox/office/editor/editor',
                                 });
                                 characterStyles.setDirty(hyperlinkStyleId, false);
                             }
-    
+
                             generator.generateOperation(Operations.ATTRS_SET, {
                                 attrs: { url: url, style: hyperlinkStyleId },
                                 start: _.clone(start),
                                 end: _.clone(end)
                             });
                         }
-    
+
                         // apply all collected operations
                         self.applyOperations(generator.getOperations(), true, true);
                     }, self);
@@ -4143,8 +4147,8 @@ define('io.ox/office/editor/editor',
         }
 
         /**
-         * Has to be called each time, after changing the cell structure of
-         * a table. It recalculates the position of each cell in the table and
+         * Has to be called every time after changing the cell structure of a
+         * table. It recalculates the position of each cell in the table and
          * sets the corresponding attributes. This can be set for the first or
          * last column or row, or even only for the south east cell.
          *
@@ -4152,39 +4156,34 @@ define('io.ox/office/editor/editor',
          *  The table element whose structure has been changed. If this object
          *  is a jQuery collection, uses the first node it contains.
          */
-        var implTableChanged = (function () {
+        var implTableChanged = deferredMethods.createMethod(
 
-            var // the timeout that will be executed after all operations
-                timeout = null,
-                // all changed tables, as jQuery collection (keeps entries unique)
-                tables = $();
-
-            // return the actual 'implTableChanged' function
-            return function (table) {
-
-                // create a timeout handler that will update all collected tables
-                if (!timeout) {
-                    timeout = window.setTimeout(function () {
-                        timeout = null;
-                        tables.each(function () {
-                            // the table may have been removed from the DOM in the meantime
-                            if (editdiv[0].contains(this)) {
-                                tableStyles.updateElementFormatting(this);
-                                // Also updating the table row attribute 'height'
-                                var tableRows = DOM.getTableRows(this);
-                                tableRows.each(function () {
-                                    tableRowStyles.updateElementFormatting(this);
-                                });
-                            }
-                        });
-                        tables = $();
-                    }, 0);
-                }
-
+            // direct callback: called every time when implTableChanged() has been called
+            function registerTable(storage, table) {
                 // store the new table in the collection (jQuery keeps the collection unique)
-                tables = tables.add(table);
-            };
-        }());
+                storage.tables = storage.tables.add(table);
+            },
+
+            // deferred callback: called once, after current script ends
+            function updateTables(storage) {
+                storage.tables.each(function () {
+                    // the table may have been removed from the DOM in the meantime
+                    if (editdiv[0].contains(this)) {
+                        tableStyles.updateElementFormatting(this);
+                        // Also updating the table row attribute 'height'
+                        var tableRows = DOM.getTableRows(this);
+                        tableRows.each(function () {
+                            tableRowStyles.updateElementFormatting(this);
+                        });
+                    }
+                });
+                storage.tables = $();
+            },
+
+            // storage object passed to all callbacks
+            { tables: $() }
+
+        ); // implTableChanged()
 
         /**
          * Has to be called for the initialization of a new document.
@@ -5400,139 +5399,142 @@ define('io.ox/office/editor/editor',
             // apply the passed table attributes
             tableCellStyles.setElementAttributes(targetCell, { 'gridspan' : colSpanSum });
         }
+
         /**
          * iterate over _all_ paragraphs and update numbering symbols and index
          */
-        var listUpdateTimer = null;
-        function implUpdateLists() {
-            if (listUpdateTimer)
-                return;
-            listUpdateTimer = window.setTimeout(function () {
-                    listUpdateTimer = null;
-                    var listItemCounter = [];
-                    Utils.iterateSelectedDescendantNodes(editdiv, DOM.PARAGRAPH_NODE_SELECTOR, function (para) {
-                        // always remove an existing label
-                        // TODO: it might make more sense to change the label appropriately
-                        var paraAttributes = paragraphStyles.getElementAttributes(para),
-                        oldLabel = $(para).children(DOM.LIST_LABEL_NODE_SELECTOR);
-                        var updateParaTabstops = oldLabel.length > 0;
-                        oldLabel.remove();
-                        var numId = paraAttributes.numId;
-                        if (numId  !== -1) {
-                            var ilvl = paraAttributes.ilvl;
-                            if (ilvl < 0) {
-                                // is a numbering level assigned to the current paragraph style?
-                                ilvl = lists.findIlvl(numId, paraAttributes.style);
-                            }
-                            if (ilvl !== -1 && ilvl < 9) {
-                                updateParaTabstops = true;
-                                if (!listItemCounter[paraAttributes.numId])
-                                    listItemCounter[paraAttributes.numId] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-                                listItemCounter[paraAttributes.numId][ilvl]++;
-                                // TODO: reset sub-levels depending on their 'levelRestartValue' attribute
-                                var subLevelIdx = ilvl + 1;
-                                for (; subLevelIdx < 9; subLevelIdx++)
-                                    listItemCounter[paraAttributes.numId][subLevelIdx] = 0;
-                                // fix level counts of non-existing upper levels
-                                subLevelIdx = ilvl - 1;
-                                for (; subLevelIdx >= 0; subLevelIdx--)
-                                    if (listItemCounter[paraAttributes.numId][subLevelIdx] === 0)
-                                        listItemCounter[paraAttributes.numId][subLevelIdx] = 1;
+        var implUpdateLists = deferredMethods.createMethod(
 
-                                var listObject = lists.formatNumber(paraAttributes.numId, ilvl,
-                                        listItemCounter[paraAttributes.numId]);
-                                var tab = !listObject.suff || listObject.suff === 'tab';
-                                if (!tab && (listObject.suff === 'space')) {
-                                    listObject.text += String.fromCharCode(0x00a0);//add non breaking space
-                                }
+            // direct callback: called every time when implUpdateLists() has been called
+            $.noop,
 
-                                var numberingElement = DOM.createListLabelNode(listObject.text);
-
-                                var span = DOM.findFirstPortionSpan(para);
-                                var charAttributes = characterStyles.getElementAttributes(span);
-                                if (listObject.imgsrc) {
-                                    var absUrl = getDocumentUrl({ get_filename: listObject.imgsrc });
-                                    var image = $('<div>', { contenteditable: false })
-                                    .addClass('object inline')
-                                    .data('url', listObject.imgsrc)
-                                    .append($('<div>').addClass('content')
-                                            .append($('<img>', { src: absUrl }).css('width', charAttributes.fontsize + 'pt'))
-                                            );
-
-                                    LineHeight.updateElementLineHeight(image, paraAttributes.lineheight);
-                                    $(image).css('height', charAttributes.fontsize + 'pt');
-                                    $(image).css('width', charAttributes.fontsize + 'pt');
-                                    numberingElement.prepend(image);
-
-                                }
-                                var listSpan = numberingElement.children('span');
-                                listSpan.css('font-size', charAttributes.fontsize + 'pt');
-                                if (listObject.color) {
-                                    Color.setElementTextColor(listSpan, documentStyles.getCurrentTheme(), listObject, paraAttributes);
-                                }
-                                LineHeight.updateElementLineHeight(numberingElement, paraAttributes.lineheight);
-                                var minWidth = 0,
-                                    isNegativeIndent = listObject.firstLine < listObject.indent;
-
-                                if (isNegativeIndent) {
-                                    var labelWidth = listObject.indent - listObject.firstLine;
-                                    if (tab)
-                                        minWidth = labelWidth;
-                                    numberingElement.css('margin-left', (-listObject.indent + listObject.firstLine) / 100 + 'mm');
-                                } else {
-                                    numberingElement.css('margin-left', (listObject.firstLine - listObject.indent) / 100 + 'mm');
-                                }
-                                numberingElement.css('min-width', minWidth / 100 + 'mm');
-                                $(para).prepend(numberingElement);
-                                if (tab) {
-                                    var minTabPos = listObject.firstLine;
-                                    var maxTabPos = listObject.tabpos ? listObject.tabpos : 999999;
-                                    if (isNegativeIndent) {
-                                        minTabPos = listObject.tabpos && listObject.tabpos < listObject.indent ? listObject.tabpos : listObject.firstLine;
-                                        maxTabPos = listObject.indent;
-                                    }
-
-                                    var numWidth = $(numberingElement).width();
-                                    if (numWidth > minTabPos)
-                                        minTabPos = numWidth;
-
-
-                                    var defaultTabstop = self.getDocumentAttributes().defaulttabstop,
-                                    paraStyles = paragraphStyles.getElementAttributes(para),
-                                    paraTabstops = [];
-                                    // paragraph tab stop definitions
-                                    if (paraStyles && paraStyles.tabstops) {
-                                        paraTabstops = paraStyles.tabstops;
-                                    }
-
-                                    var width = 0;
-
-                                    if (paraTabstops && paraTabstops.length > 0) {
-                                        var tabstop = _.find(paraTabstops, function (tab) { return (minTabPos + 1) < tab.pos && tab.pos < maxTabPos; });
-                                        if (tabstop)
-                                            width = Math.max(0, tabstop.pos - (minTabPos % tabstop.pos));
-                                    }
-
-                                    if (width <= 1 && (!isNegativeIndent && !listObject.tabpos)) {
-                                        // tabsize calculation based on default tabstop
-                                        width = Math.max(0, defaultTabstop - (minTabPos % defaultTabstop));
-                                        width = (width <= 1) ? defaultTabstop : width; // no 0 tab size allowed, check for <= 1 to prevent rounding errors
-                                    }
-                                    if (width <= 1) {
-                                        width = isNegativeIndent ?
-                                                listObject.indent - listObject.firstLine  :
-                                                    listObject.tabpos ? (listObject.tabpos - listObject.firstLine) : minTabPos;
-                                    }
-                                    numberingElement.css('min-width', (width / 100) + 'mm');
-
-                                }
-                            }
-                            if (updateParaTabstops)
-                                adjustTabsOfParagraph(para);
+            // deferred callback: called once, after current script ends
+            function updateLists() {
+                var listItemCounter = [];
+                Utils.iterateSelectedDescendantNodes(editdiv, DOM.PARAGRAPH_NODE_SELECTOR, function (para) {
+                    // always remove an existing label
+                    // TODO: it might make more sense to change the label appropriately
+                    var paraAttributes = paragraphStyles.getElementAttributes(para),
+                    oldLabel = $(para).children(DOM.LIST_LABEL_NODE_SELECTOR);
+                    var updateParaTabstops = oldLabel.length > 0;
+                    oldLabel.remove();
+                    var numId = paraAttributes.numId;
+                    if (numId  !== -1) {
+                        var ilvl = paraAttributes.ilvl;
+                        if (ilvl < 0) {
+                            // is a numbering level assigned to the current paragraph style?
+                            ilvl = lists.findIlvl(numId, paraAttributes.style);
                         }
-                    });
+                        if (ilvl !== -1 && ilvl < 9) {
+                            updateParaTabstops = true;
+                            if (!listItemCounter[paraAttributes.numId])
+                                listItemCounter[paraAttributes.numId] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            listItemCounter[paraAttributes.numId][ilvl]++;
+                            // TODO: reset sub-levels depending on their 'levelRestartValue' attribute
+                            var subLevelIdx = ilvl + 1;
+                            for (; subLevelIdx < 9; subLevelIdx++)
+                                listItemCounter[paraAttributes.numId][subLevelIdx] = 0;
+                            // fix level counts of non-existing upper levels
+                            subLevelIdx = ilvl - 1;
+                            for (; subLevelIdx >= 0; subLevelIdx--)
+                                if (listItemCounter[paraAttributes.numId][subLevelIdx] === 0)
+                                    listItemCounter[paraAttributes.numId][subLevelIdx] = 1;
+
+                            var listObject = lists.formatNumber(paraAttributes.numId, ilvl,
+                                    listItemCounter[paraAttributes.numId]);
+                            var tab = !listObject.suff || listObject.suff === 'tab';
+                            if (!tab && (listObject.suff === 'space')) {
+                                listObject.text += String.fromCharCode(0x00a0);//add non breaking space
+                            }
+
+                            var numberingElement = DOM.createListLabelNode(listObject.text);
+
+                            var span = DOM.findFirstPortionSpan(para);
+                            var charAttributes = characterStyles.getElementAttributes(span);
+                            if (listObject.imgsrc) {
+                                var absUrl = getDocumentUrl({ get_filename: listObject.imgsrc });
+                                var image = $('<div>', { contenteditable: false })
+                                .addClass('object inline')
+                                .data('url', listObject.imgsrc)
+                                .append($('<div>').addClass('content')
+                                        .append($('<img>', { src: absUrl }).css('width', charAttributes.fontsize + 'pt'))
+                                        );
+
+                                LineHeight.updateElementLineHeight(image, paraAttributes.lineheight);
+                                $(image).css('height', charAttributes.fontsize + 'pt');
+                                $(image).css('width', charAttributes.fontsize + 'pt');
+                                numberingElement.prepend(image);
+
+                            }
+                            var listSpan = numberingElement.children('span');
+                            listSpan.css('font-size', charAttributes.fontsize + 'pt');
+                            if (listObject.color) {
+                                Color.setElementTextColor(listSpan, documentStyles.getCurrentTheme(), listObject, paraAttributes);
+                            }
+                            LineHeight.updateElementLineHeight(numberingElement, paraAttributes.lineheight);
+                            var minWidth = 0,
+                                isNegativeIndent = listObject.firstLine < listObject.indent;
+
+                            if (isNegativeIndent) {
+                                var labelWidth = listObject.indent - listObject.firstLine;
+                                if (tab)
+                                    minWidth = labelWidth;
+                                numberingElement.css('margin-left', (-listObject.indent + listObject.firstLine) / 100 + 'mm');
+                            } else {
+                                numberingElement.css('margin-left', (listObject.firstLine - listObject.indent) / 100 + 'mm');
+                            }
+                            numberingElement.css('min-width', minWidth / 100 + 'mm');
+                            $(para).prepend(numberingElement);
+                            if (tab) {
+                                var minTabPos = listObject.firstLine;
+                                var maxTabPos = listObject.tabpos ? listObject.tabpos : 999999;
+                                if (isNegativeIndent) {
+                                    minTabPos = listObject.tabpos && listObject.tabpos < listObject.indent ? listObject.tabpos : listObject.firstLine;
+                                    maxTabPos = listObject.indent;
+                                }
+
+                                var numWidth = $(numberingElement).width();
+                                if (numWidth > minTabPos)
+                                    minTabPos = numWidth;
+
+
+                                var defaultTabstop = self.getDocumentAttributes().defaulttabstop,
+                                paraStyles = paragraphStyles.getElementAttributes(para),
+                                paraTabstops = [];
+                                // paragraph tab stop definitions
+                                if (paraStyles && paraStyles.tabstops) {
+                                    paraTabstops = paraStyles.tabstops;
+                                }
+
+                                var width = 0;
+
+                                if (paraTabstops && paraTabstops.length > 0) {
+                                    var tabstop = _.find(paraTabstops, function (tab) { return (minTabPos + 1) < tab.pos && tab.pos < maxTabPos; });
+                                    if (tabstop)
+                                        width = Math.max(0, tabstop.pos - (minTabPos % tabstop.pos));
+                                }
+
+                                if (width <= 1 && (!isNegativeIndent && !listObject.tabpos)) {
+                                    // tabsize calculation based on default tabstop
+                                    width = Math.max(0, defaultTabstop - (minTabPos % defaultTabstop));
+                                    width = (width <= 1) ? defaultTabstop : width; // no 0 tab size allowed, check for <= 1 to prevent rounding errors
+                                }
+                                if (width <= 1) {
+                                    width = isNegativeIndent ?
+                                            listObject.indent - listObject.firstLine  :
+                                                listObject.tabpos ? (listObject.tabpos - listObject.firstLine) : minTabPos;
+                                }
+                                numberingElement.css('min-width', (width / 100) + 'mm');
+
+                            }
+                        }
+                        if (updateParaTabstops)
+                            adjustTabsOfParagraph(para);
+                    }
                 });
-        }
+            }
+
+        ); // implUpdateLists()
 
         function implDbgOutEvent(event) {
             if (dbgoutEvents) {
