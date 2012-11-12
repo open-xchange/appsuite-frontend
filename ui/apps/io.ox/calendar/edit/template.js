@@ -72,12 +72,33 @@ define('io.ox/calendar/edit/template',
         },
         showConflicts: function (conflicts) {
             var self = this;
-            require(["io.ox/calendar/conflicts/conflictList"], function (conflictList) {
-                conflictList.drawConflicts({
-                    $el: self.$el,
-                    conflicts: conflicts,
-                    model: self.model
-                });
+            require(["io.ox/calendar/conflicts/conflictList"], function (c) {
+                var conflictList = c.drawList(conflicts);
+                self.$el.append(
+                    conflictList,
+                    $('<div class="row">')
+                        .css('margin-top', '10px').append(
+                            $('<span class="span12">')
+                                .css('text-align', 'right').append(
+                                    $('<a class="btn">')
+                                        .text(gt('Cancel'))
+                                        .on('click', function (e) {
+                                            e.preventDefault();
+                                            self.$el.empty();
+                                        }),
+                                    '&nbsp;',
+                                    $('<a class="btn btn-danger">')
+                                        .addClass('btn')
+                                        .text(gt('Ignore conflicts'))
+                                        .on('click', function (e) {
+                                            e.preventDefault();
+                                            self.model.set('ignore_conflicts', true);
+                                            self.model.save();
+                                        })
+                                    )
+                            )
+                    );
+                   
             });
         }
     });
