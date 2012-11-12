@@ -562,19 +562,21 @@ define('io.ox/office/editor/selection',
          */
         this.selectObjectAsText = function () {
 
-            var // whether the object is in inline mode
-                inline = DOM.isInlineObjectNode(selectedObject),
+            var // the selected object, as plain DOM node
+                objectNode = selectedObject[0],
+                // whether the object is in inline mode
+                inline = objectNode && DOM.isInlineObjectNode(objectNode),
                 // previous text span of the object node
-                prevTextSpan = inline ? selectedObject[0].previousSibling : null,
+                prevTextSpan = inline ? objectNode.previousSibling : null,
                 // next text span of the object node (skip following floating objects)
-                nextTextSpan = Utils.findNextSiblingNode(selectedObject, function () { return DOM.isPortionSpan(this); }),
+                nextTextSpan = objectNode ? Utils.findNextSiblingNode(objectNode, function () { return DOM.isPortionSpan(this); }) : null,
                 // DOM points representing the text selection over the object
                 startPoint = null, endPoint = null;
 
-            if (selectedObject.length > 0) {
+            if (objectNode) {
 
                 // remove object selection boxes
-                DOM.clearObjectSelection(selectedObject);
+                DOM.clearObjectSelection(objectNode);
 
                 // start point after the last character preceding the object
                 if (DOM.isPortionSpan(prevTextSpan)) {

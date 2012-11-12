@@ -319,6 +319,7 @@ define('io.ox/office/editor/undo',
             } else {
                 // try to merge with last action, if stack has not been truncated
                 mergeAndPush(actions, action);
+                currentAction = actions.length;
             }
         };
 
