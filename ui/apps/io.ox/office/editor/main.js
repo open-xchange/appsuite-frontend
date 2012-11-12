@@ -523,7 +523,7 @@ define('io.ox/office/editor/main',
                 // create a new result deferred
                 syncDef = $.Deferred()
                     .always(startOperationsTimer)
-                    .done(function () { view.logSyncState('synchronized'); })
+                    .done(function () { view.logSyncState('synchronized'); controller.update('file/connection/state'); })
                     .fail(function () { view.logSyncState('failed'); });
 
                 // first, check if the server has new operations
@@ -834,6 +834,13 @@ define('io.ox/office/editor/main',
         };
 
         /**
+         * Returns true once the first operation has been sent to the server.
+         */
+        this.isLocallyModified = function () {
+            return invalidateDriveCacheOnClose;
+        };
+
+        /**
          * Will be called automatically from the OX framework to create and
          * return a restore point containing the current state of the
          * application.
@@ -960,6 +967,9 @@ define('io.ox/office/editor/main',
             .end()
         .addButtonGroup('quit')
             .addButton('file/quit', { label: gt('Close') })
+            .end()
+        .addButtonGroup('file/connection')
+            .addLabel('file/connection/state', '', { minWidth: 115 })
             .end();
 
     // exports ================================================================

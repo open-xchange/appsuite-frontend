@@ -69,6 +69,11 @@ define('io.ox/office/editor/controller',
                     set: function () { window.setTimeout(function () { app.quit(); }); }
                 },
 
+                'file/connection/state': {
+                    enable: function () { return false; },
+                    get: function () { return editor.getEditorStateString(); }
+                },
+
                 // document contents
 
                 'document/undo': {

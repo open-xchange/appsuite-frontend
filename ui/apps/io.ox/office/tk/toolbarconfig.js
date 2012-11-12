@@ -65,7 +65,8 @@ define('io.ox/office/tk/toolbarconfig',
                     // options for the button element
                     buttonOptions = active ? { index: index += 1, id: key, ref: actionPath + '/' + key } : null,
                     // width of the button, in pixels
-                    width = Utils.getIntegerOption(options, 'width');
+                    width = Utils.getIntegerOption(options, 'width'),
+                    minWidth = Utils.getIntegerOption(options, 'minWidth');
 
                 // initialize button options
                 if (buttonOptions) {
@@ -77,6 +78,9 @@ define('io.ox/office/tk/toolbarconfig',
                     buttonOptions.label = Utils.getStringOption(options, 'label');
                     if (width) {
                         buttonOptions.css = { width: width + 'px' };
+                    }
+                    if (minWidth) {
+                        buttonOptions.css = { minWidth: minWidth + 'px' };
                     }
                 }
 
