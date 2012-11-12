@@ -121,6 +121,7 @@ define('io.ox/calendar/month/view',
             var self = this,
                 el = $('<div>')
                     .addClass('appointment')
+                    .data('app', a)
                     .attr({
                         'data-cid': a.id,
                         'data-extension-point': 'io.ox/calendar/month/view/appointment',
@@ -179,24 +180,43 @@ define('io.ox/calendar/month/view',
                 }
             }, this);
 
-//            $('.appointment.modify', this.$el).draggable({
-//                helper: function () {
-//                    return $(this).clone().width($(this).outerWidth()).css({zIndex: 999});
-//                },
-//                appendTo: self.$el,
-//                scroll: true,
-//                snap: '.day .list',
-//                snapMode: 'inner',
-//                snapTolerance: 20,
-//                containment: self.$el.parent(),
-//                start: function (e, ui) {
-//                    $(this).hide();
-//                },
-//                drag: function (e, ui) {
-//                },
-//                stop: function (e, ui) {
-//                }
-//            });
+            $('.appointment.modify', this.$el).draggable({
+                helper: function () {
+                    return $(this)
+                        .clone()
+                        .width($(this).outerWidth())
+                        .css({zIndex: 999});
+                },
+                appendTo: self.$el,
+                scroll: true,
+                snap: '.day .list',
+                snapMode: 'inner',
+                snapTolerance: 20,
+                distance: 20,
+                containment: self.$el.parent(),
+                start: function (e, ui) {
+                    $(this).hide();
+                },
+                drag: function (e, ui) {
+                },
+                stop: function (e, ui) {
+                }
+            });
+
+            $('.day', this.$el).droppable({
+                accept: '.appointment',
+                drop: function (e, ui) {
+                    $('.list', this).append(
+                            ui.draggable.show()
+                    );
+                    var app = ui.draggable.data('app').attributes,
+                        s = new date.Local(app.start_date),
+                        start = new date.Local($(this).data('date')).setHours(s.getHours(), s.getMinutes(), s.getSeconds(), s.getMilliseconds()).getTime();
+                    app.end_date = start + app.end_date - app.start_date;
+                    app.start_date = start;
+                    self.trigger('updateAppointment', app);
+                }
+            });
         }
     });
 
