@@ -11,15 +11,17 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-.form-horizontal input.span3.control {
-    width: 196px;
-}
+
 
 .icon-plus-sign {
     margin-right: 5px;
 }
 
 .edit-contact {
+	
+	.form-horizontal input.span3.control {
+    width: 206px;
+    }
 
     .btn {
         margin-left: 13px;
