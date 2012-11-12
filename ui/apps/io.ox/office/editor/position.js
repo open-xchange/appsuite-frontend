@@ -230,16 +230,18 @@ define('io.ox/office/editor/position',
      *  position, and an attribute 'end' with the logical end position of the
      *  passed node.
      */
-    Position.getPositionRangeForNode = function (maindiv, node) {
+    Position.getPositionRangeForNode = function (maindiv, node, useRangeMode) {
 
         var // logical start position of the passed node
             startPosition = Position.getOxoPosition(maindiv, node, 0),
             // logical end position of the passed node
             endPosition = _.clone(startPosition),
             // logical length of the node
-            length = DOM.isPortionSpan(node) ? Utils.getDomNode(node).firstChild.nodeValue.length : 1;
+            length = DOM.isPortionSpan(node) ? Utils.getDomNode(node).firstChild.nodeValue.length : 1,
+            // open/close range offset
+            offset = ((useRangeMode === undefined) || (useRangeMode !== true)) ? 1 : 0;
 
-        endPosition[endPosition.length - 1] += (length - 1);
+        endPosition[endPosition.length - 1] += (length - offset);
         return { start: startPosition, end: endPosition };
     };
 

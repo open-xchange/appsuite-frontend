@@ -1352,37 +1352,49 @@ define('io.ox/office/editor/editor',
         };
 
         this.insertHyperlink = function () {
-            var generator = new Operations.Generator();
+            var generator = new Operations.Generator(),
+                text = '', url = '',
+                start = selection.getStartPosition(),
+                end = selection.getEndPosition();
+            
+            if (!selection.hasRange()) {
+                var newSelection = Hyperlink.findSelectionRange(this, selection);
+                if (newSelection.start !== null && newSelection.end !== null) {
+                    start[start.length - 1] = newSelection.start;
+                    end[end.length - 1] = newSelection.end;
+                    selection.setTextSelection(start, end);
+                }
+            }
+            
+            if (selection.getEnclosingParagraph()) {
+                // use range to retrieve text and possible url
+                if (selection.hasRange()) {
 
-            if (selection.hasRange() && selection.getEnclosingParagraph()) {
-                var start = selection.getStartPosition(),
-                    end = selection.getEndPosition(),
-                    text = '', url = '';
-
-                // Find out the text/url of the selected text to provide them to the
-                // hyperlink dialog
-                selection.iterateNodes(function (node, pos, start, length) {
-                    if ((start >= 0) && (length >= 0) && DOM.isTextSpan(node)) {
-                        var nodeText = $(node).text();
-                        if (nodeText) {
-                            text = text.concat(nodeText.slice(start, start + length));
+                    // Find out the text/url of the selected text to provide them to the
+                    // hyperlink dialog
+                    selection.iterateNodes(function (node, pos, start, length) {
+                        if ((start >= 0) && (length >= 0) && DOM.isTextSpan(node)) {
+                            var nodeText = $(node).text();
+                            if (nodeText) {
+                                text = text.concat(nodeText.slice(start, start + length));
+                            }
+                            if (url.length === 0) {
+                                var styles = characterStyles.getElementAttributes(node);
+                                if (styles.url && styles.url.length > 0)
+                                    url = styles.url;
+                            }
                         }
-                        if (url.length === 0) {
-                            var styles = characterStyles.getElementAttributes(node);
-                            if (styles.url && styles.url.length > 0)
-                                url = styles.url;
-                        }
-                    }
-                });
-
+                    });
+                }
+    
                 // show hyperlink dialog
                 Hyperlink.showHyperlinkDialog(text, url).done(function (data) {
                     // set url to selected text
                     var hyperlinkStyleId = self.getDefaultUIHyperlinkStylesheet(),
                         url = data.url;
-
+    
                     undoManager.enterGroup(function () {
-
+    
                         if (data.url === null && data.text === null) {
                             // remove hyperlink
                             generator.generateOperation(Operations.ATTRS_SET, {
@@ -1394,12 +1406,12 @@ define('io.ox/office/editor/editor',
                         else {
                             // insert/change hyperlink
                             if (data.text !== text) {
-
+    
                                 // text has been changed
                                 if (selection.hasRange()) {
                                     self.deleteSelected();
                                 }
-
+    
                                 // insert new text
                                 var newOperation = { name: Operations.TEXT_INSERT, text: data.text, start: _.clone(start) };
                                 applyOperation(newOperation, true, true);
@@ -1407,7 +1419,7 @@ define('io.ox/office/editor/editor',
                                 end = _.clone(start);
                                 end[end.length - 1] += data.text.length;
                             }
-
+    
                             if (characterStyles.isDirty(hyperlinkStyleId)) {
                                 // insert hyperlink style to document
                                 generator.generateOperation(Operations.INSERT_STYLE, {
@@ -1420,14 +1432,14 @@ define('io.ox/office/editor/editor',
                                 });
                                 characterStyles.setDirty(hyperlinkStyleId, false);
                             }
-
+    
                             generator.generateOperation(Operations.ATTRS_SET, {
                                 attrs: { url: url, style: hyperlinkStyleId },
                                 start: _.clone(start),
                                 end: _.clone(end)
                             });
                         }
-
+    
                         // apply all collected operations
                         self.applyOperations(generator.getOperations(), true, true);
                     }, self);
