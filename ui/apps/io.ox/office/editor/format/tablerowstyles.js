@@ -27,12 +27,7 @@ define('io.ox/office/editor/format/tablerowstyles',
              * The height of the table row. If zero then the row is auto sized.
              */
             height: {
-                def: 0,
-                format: function (element, height) {
-                    if (height !== 0) {
-                        element.css('height', Utils.convertHmmToCssLength(height, 'px', 0));
-                    }
-                }
+                def: 0
             }
 
         };
@@ -54,7 +49,27 @@ define('io.ox/office/editor/format/tablerowstyles',
      */
     function updateTableRowFormatting(row, attributes) {
 
-        // Table.updateTableRows(table, attributes);
+        if (($.browser.webkit) && (attributes.height === 0)) {
+            // Chrome requires that every cell has a defined height. Otherwise the resize-div
+            // will not be shifted to the bottom of the cell, if a neighbour cell increases in
+            // height.
+            attributes.height = Utils.convertLengthToHmm(parseInt(row.css('height'), 10), 'px');
+        }
+
+        if (attributes.height !== 0) {
+            if ($.browser.webkit) {
+                // Chrome requires row height at the cells, setting height at <tr> is ignored.
+                var rowHeight = Utils.convertHmmToLength(attributes.height, 'px', 0);
+                row.children('th, td').each(function () {
+                    var cellHeight = rowHeight - parseInt($(this).css('padding-top'), 10) - parseInt($(this).css('padding-bottom'), 10) + 'px';
+                    $(this).css('height', cellHeight);
+                });
+            } else {
+                // FireFox requires row height at the rows. Setting height at cells, makes
+                // height of cells unchanged, even if text leaves the cell.
+                row.css('height', Utils.convertHmmToCssLength(attributes.height, 'px', 0));
+            }
+        }
 
     }
 

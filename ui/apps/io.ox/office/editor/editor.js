@@ -3456,15 +3456,8 @@ define('io.ox/office/editor/editor',
                             newRowHeight = Utils.convertLengthToHmm(rowHeight, 'px'),
                             rowPosition = Position.getOxoPosition(editdiv, rowNode.get(0), 0),
                             newOperation = { name: Operations.ATTRS_SET, attrs: {height: newRowHeight}, start: rowPosition };
-                        applyOperation(newOperation, true, true);
 
-                        // checking the operation, maybe the browser did not set the desired height (because of text content in the cell)
-                        if (rowNode.outerHeight() !== rowHeight) {
-                            // informing the server about the new table row height
-                            newRowHeight = Utils.convertLengthToHmm(rowNode.outerHeight(), 'px');
-                            newOperation = { name: Operations.ATTRS_SET, attrs: {height: newRowHeight}, start: rowPosition };
-                            applyOperation(newOperation, true, true);
-                        }
+                        applyOperation(newOperation, true, true);
                     }
                 }
 
@@ -4177,6 +4170,11 @@ define('io.ox/office/editor/editor',
                             // the table may have been removed from the DOM in the meantime
                             if (editdiv[0].contains(this)) {
                                 tableStyles.updateElementFormatting(this);
+                                // Also updating the table row attribute 'height'
+                                var tableRows = DOM.getTableRows(this);
+                                tableRows.each(function () {
+                                    tableRowStyles.updateElementFormatting(this);
+                                });
                             }
                         });
                         tables = $();
