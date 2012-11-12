@@ -21,18 +21,6 @@ define('io.ox/office/editor/format/paragraphstyles',
 
     'use strict';
 
-    function initBorder(border) {
-        if (!border.style) {
-            border.width = border.color = border.space = undefined;
-        } else {
-            if (!border.width)
-                border.width = 0;
-            if (!border.space)
-                border.space = 0;
-            if (!border.color)
-                border.color = 'auto';
-        }
-    }
     var // definitions for paragraph attributes
         DEFINITIONS = {
 
@@ -100,50 +88,83 @@ define('io.ox/office/editor/format/paragraphstyles',
                     });
                 }
             },
+
             borderleft: {
                 def: {},
                 format: function (element, border) {
                     initBorder(border);
                 }
             },
+
             borderright: {
                 def: {},
                 format: function (element, border) {
                     initBorder(border);
                 }
             },
+
             bordertop: {
                 def: {},
                 format: function (element, border) {
                     initBorder(border);
                 }
             },
+
             borderbottom: {
                 def: {},
                 format: function (element, border) {
                     initBorder(border);
                 }
             },
+
             borderinside: {
                 def: {},
                 format: function (element, border) {
                     initBorder(border);
                 }
             },
+
             hangingindent: {
                 def: 0
             },
+
             firstlineindent: {
                 def: 0
             },
+
             leftindent: {
                 def: 0
             },
+
             rightindent: {
                 def: 0
             }
+
         };
 
+    // private static functions ===============================================
+
+    function isBorderEqual(attributes1, attributes2) {
+        var ret = _.isEqual(attributes1.borderleft, attributes2.borderleft) &&
+        _.isEqual(attributes1.borderright, attributes2.borderright) &&
+        _.isEqual(attributes1.bordertop, attributes2.bordertop) &&
+        _.isEqual(attributes1.borderbottom, attributes2.borderbottom) &&
+        _.isEqual(attributes1.borderinside, attributes2.borderinside);
+        return ret;
+    }
+
+    function initBorder(border) {
+        if (!border.style) {
+            border.width = border.color = border.space = undefined;
+        } else {
+            if (!border.width)
+                border.width = 0;
+            if (!border.space)
+                border.space = 0;
+            if (!border.color)
+                border.color = 'auto';
+        }
+    }
     // class ParagraphStyles ==================================================
 
     /**
@@ -166,72 +187,6 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         var // self reference
             self = this;
-        // static methods ----------------------------------------------------
-
-        ParagraphStyles.getBorderModeFromAttributes = function (attributes) {
-            var ret = 'none',
-            value = attributes.borderleft.style ? 1 : 0;
-            value += attributes.borderright.style ? 2 : 0;
-            value += attributes.bordertop.style ? 4 : 0;
-            value += attributes.borderbottom.style ? 8 : 0;
-            value += attributes.borderinside.style ? 16: 0;
-
-            switch (value) {
-            case 0:
-                ret = 'none';
-                break;
-            case 1:
-                ret = 'left';
-                break;
-            case 2:
-                ret = 'right';
-                break;
-            case 4:
-                ret = 'top';
-                break;
-            case 8:
-                ret = 'bottom';
-                break;
-            case 16:
-                ret = 'inside';
-                break;
-            case 3:
-                ret = 'leftright';
-                break;
-            case 12:
-                ret = 'topbottom';
-                break;
-            case 15:
-                ret = 'outside';
-                break;
-            case 31:
-                ret = 'full';
-                break;
-            }
-            return ret;
-        };
-        ParagraphStyles.getAttributesBorderMode = function (borderMode) {
-            var value = borderMode === 'none' ? 0 :
-                    borderMode === 'left' ? 1 :
-                    borderMode === 'right' ? 2 :
-                    borderMode === 'top' ? 4 :
-                    borderMode === 'bottom' ? 8 :
-                    borderMode === 'inside' ? 16 :
-                    borderMode === 'leftright' ? 3 :
-                    borderMode === 'topbottom' ? 12  :
-                    borderMode === 'outside' ? 15 :
-                    borderMode === 'full' ? 31 : -1;
-            var ret = {},
-                defBorder = {style: 'single', width: 17, space: 140, color: {type: 'auto'}};
-
-            ret.borderleft = value & 1 ? defBorder : {};
-            ret.borderright = value & 2 ? defBorder : {};
-            ret.bordertop = value & 4 ? defBorder : {};
-            ret.borderbottom = value & 8 ? defBorder : {};
-            ret.borderinside = value & 16 ? defBorder : {};
-            return ret;
-        };
-
         // private methods ----------------------------------------------------
 
         /**
@@ -250,7 +205,23 @@ define('io.ox/office/editor/format/paragraphstyles',
         function updateParagraphFormatting(paragraph, attributes) {
 
             var // the character styles/formatter
-                characterStyles = self.getDocumentStyles().getStyleSheets('character');
+                characterStyles = self.getDocumentStyles().getStyleSheets('character'),
+
+                leftMargin = 0,
+                rightMargin = 0,
+
+                prevParagraph = paragraph.prev(),
+                prevAttributes = (prevParagraph.length > 0) ? self.getElementAttributes(prevParagraph) : {},
+
+                nextParagraph = paragraph.next(),
+                nextAttributes = (nextParagraph.length > 0) ? self.getElementAttributes(nextParagraph) : {};
+
+            function setBorder(border, position) {
+                var space = (border && border.space) ? border.space : 0;
+                paragraph.css('padding-' + position, space ? (space / 100 + 'mm') : '');
+                paragraph.css('border-' + position, border ? self.getCssBorder(border) : '');
+                return -space;
+            }
 
             // Always update character formatting of all child nodes which may
             // depend on paragraph settings, e.g. automatic text color which
@@ -261,42 +232,22 @@ define('io.ox/office/editor/format/paragraphstyles',
                     characterStyles.updateElementFormatting(span);
                 });
             }, undefined, { children: true });
-            var leftMargin = 0,
-                rightMargin = 0;
-            // update borders
-            var prevParagraph = $(paragraph).prev(),
-                prevAttributes = prevParagraph ? self.getElementAttributes(prevParagraph) : {};
-            var nextParagraph = $(paragraph).next(),
-                nextAttributes = nextParagraph ? self.getElementAttributes(nextParagraph) : {};
 
-            function isBorderEqual(attributes1, attributes2) {
-                var ret = _.isEqual(attributes1.borderleft, attributes2.borderleft) &&
-                _.isEqual(attributes1.borderright, attributes2.borderright) &&
-                _.isEqual(attributes1.bordertop, attributes2.bordertop) &&
-                _.isEqual(attributes1.borderbottom, attributes2.borderbottom) &&
-                _.isEqual(attributes1.borderinside, attributes2.borderinside);
-                return ret;
-            }
-            function setBorder(border, position) {
-                var space = border && border.space ? border.space : 0;
-                paragraph.css('padding-' + position, space ? (space / 100 + 'mm') : '');
-                paragraph.css('border-' + position, border ? self.getCssBorder(border) : '');
-                return -space;
-            }
+            // update borders
             leftMargin += setBorder(attributes.borderleft, 'left');
             rightMargin += setBorder(attributes.borderright, 'right');
-            //top border is not set if previous paragraph uses the same border settings
-            var equalToPrevBorder = isBorderEqual(attributes, prevAttributes);
-            if (equalToPrevBorder) {
+
+            // top border is not set if previous paragraph uses the same border settings
+            if (isBorderEqual(attributes, prevAttributes)) {
                 setBorder(undefined, 'top');
                 prevParagraph.css("padding-bottom", this.getCssBorder(attributes.borderinside.space));
                 prevParagraph.css("border-bottom", this.getCssBorder(attributes.borderinside));
             } else {
                 setBorder(attributes.bordertop, 'top');
             }
-            var equalToNextBorder = isBorderEqual(attributes, nextAttributes);
-            //bottom border is replaced by inner border next paragraph uses the same border settings
-            setBorder(equalToNextBorder ? attributes.borderinside : attributes.borderbottom, 'bottom');
+
+            // bottom border is replaced by inner border next paragraph uses the same border settings
+            setBorder(isBorderEqual(attributes, nextAttributes) ? attributes.borderinside : attributes.borderbottom, 'bottom');
 
             //calculate list indents
             var numId = attributes.numId;
@@ -317,7 +268,8 @@ define('io.ox/office/editor/format/paragraphstyles',
                     }
                 }
             }
-            //paragraph margin attributes - not applied if paragraph is in a list
+
+            // paragraph margin attributes - not applied if paragraph is in a list
             if (numId < 0) {
                 leftMargin += attributes.leftindent;
                 rightMargin += attributes.rightindent;
@@ -325,10 +277,9 @@ define('io.ox/office/editor/format/paragraphstyles',
                 paragraph.css('text-indent', textIndent / 100 + 'mm');
             }
 
-            //now set left/right margins
+            // now set left/right margins
             paragraph.css('margin-left', leftMargin / 100 + 'mm');
             paragraph.css('margin-right', rightMargin / 100  + 'mm');
-
         }
 
         // base constructor ---------------------------------------------------
@@ -341,6 +292,73 @@ define('io.ox/office/editor/format/paragraphstyles',
         this.registerParentStyleFamily('cell', function (paragraph) { return paragraph.parent().filter('td'); });
 
     } // class ParagraphStyles
+
+    // static methods ---------------------------------------------------------
+
+    ParagraphStyles.getBorderModeFromAttributes = function (attributes) {
+        var ret = 'none',
+        value = attributes.borderleft.style ? 1 : 0;
+        value += attributes.borderright.style ? 2 : 0;
+        value += attributes.bordertop.style ? 4 : 0;
+        value += attributes.borderbottom.style ? 8 : 0;
+        value += attributes.borderinside.style ? 16: 0;
+
+        switch (value) {
+        case 0:
+            ret = 'none';
+            break;
+        case 1:
+            ret = 'left';
+            break;
+        case 2:
+            ret = 'right';
+            break;
+        case 4:
+            ret = 'top';
+            break;
+        case 8:
+            ret = 'bottom';
+            break;
+        case 16:
+            ret = 'inside';
+            break;
+        case 3:
+            ret = 'leftright';
+            break;
+        case 12:
+            ret = 'topbottom';
+            break;
+        case 15:
+            ret = 'outside';
+            break;
+        case 31:
+            ret = 'full';
+            break;
+        }
+        return ret;
+    };
+
+    ParagraphStyles.getAttributesBorderMode = function (borderMode) {
+        var value = borderMode === 'none' ? 0 :
+                borderMode === 'left' ? 1 :
+                borderMode === 'right' ? 2 :
+                borderMode === 'top' ? 4 :
+                borderMode === 'bottom' ? 8 :
+                borderMode === 'inside' ? 16 :
+                borderMode === 'leftright' ? 3 :
+                borderMode === 'topbottom' ? 12  :
+                borderMode === 'outside' ? 15 :
+                borderMode === 'full' ? 31 : -1,
+            ret = {},
+            defBorder = { style: 'single', width: 17, space: 140, color: Color.AUTO };
+
+        ret.borderleft = value & 1 ? defBorder : {};
+        ret.borderright = value & 2 ? defBorder : {};
+        ret.bordertop = value & 4 ? defBorder : {};
+        ret.borderbottom = value & 8 ? defBorder : {};
+        ret.borderinside = value & 16 ? defBorder : {};
+        return ret;
+    };
 
     // exports ================================================================
 
