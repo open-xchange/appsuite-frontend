@@ -206,11 +206,6 @@ define('io.ox/calendar/week/view',
         },
 
         onUpdateAppointment: function (obj) {
-            _.each(obj, function (el, i) {
-                if (el === null) {
-                    delete obj[i];
-                }
-            });
             this.trigger('updateAppointment', obj);
         },
 
@@ -682,7 +677,7 @@ define('io.ox/calendar/week/view',
                 paneOffset = self.pane.children().first().width(),
                 paneHeight = self.height();
 
-            $('.week-container .day>.appointment.modify')
+            $('.week-container .day>.appointment.modify', this.$el)
                 .resizable({
                     handles: "n, s",
                     grid: [0, self.gridHeight()],
@@ -843,16 +838,10 @@ define('io.ox/calendar/week/view',
                         d.my.all.removeClass('opac');
                         switch (d.my.handle) {
                         case 'n':
-                            _.extend(app, {
-                                start_date: tmpTS + self.getTimeFromPos(d.my.top),
-                                ignore_conflicts: true
-                            });
+                            app.start_date = tmpTS + self.getTimeFromPos(d.my.top);
                             break;
                         case 's':
-                            _.extend(app, {
-                                end_date: tmpTS + self.getTimeFromPos(d.my.bottom),
-                                ignore_conflicts: true
-                            });
+                            app.end_date = tmpTS + self.getTimeFromPos(d.my.bottom);
                             break;
                         default:
                             break;
@@ -995,11 +984,11 @@ define('io.ox/calendar/week/view',
                 });
 
             // remove unused resizable panes
-            $('.day>.appointment.rmnorth .ui-resizable-n, .day>.appointment.rmsouth .ui-resizable-s')
+            $('.day>.appointment.rmnorth .ui-resizable-n, .day>.appointment.rmsouth .ui-resizable-s', this.$el)
                 .remove();
 
             // init drag and resize widget on full-time appointments
-            $('.fulltime>.appointment.modify')
+            $('.fulltime>.appointment.modify', this.$el)
                 .draggable({
                     grid: [colWidth, 0],
                     axis: 'x',
