@@ -361,6 +361,41 @@ var apps = _.groupBy(utils.list("apps/"), function (f) {
 if (apps.js) utils.copy(apps.js, { type: "module" });
 if (apps.rest) utils.copy(apps.rest);
 
+// manifests
+var manifests = _.filter(utils.list("apps/"), function (f) {
+    return /(.*?)manifest\.json/.test(f);
+});
+var combinedManifest = [];
+_(manifests).each(function (m) {
+    var prefix = /apps\/(.*?)\/manifest\.json/.exec(m)[1] + "/";
+    var data = null;
+    try {
+        data = new Function(" return " + fs.readFileSync(m, "utf8") + ";")();
+    } catch (e) {
+        console.error("Invalid manifest " + m, e);
+    }
+    if (!_.isArray(data)) {
+        data = [data];
+    }
+    _(data).each(function (entry) {
+        if (!entry.path) {
+            if (entry.pluginFor) {
+                // Assume Plugin
+                if (path.existsSync("apps/" + prefix + "register.js")) {
+                    entry.path = prefix + "register";
+                }
+            } else {
+                // Assume App
+                if (path.existsSync("apps/" + prefix + "main.js")) {
+                    entry.path = prefix + "main";
+                }
+            }
+        }
+        combinedManifest.push(entry);
+    });
+});
+fs.writeFileSync("tmp/core-manifest.json", JSON.stringify(combinedManifest));
+
 // time zone database
 
 if (!path.existsSync("apps/io.ox/core/date/tz/zoneinfo")) {

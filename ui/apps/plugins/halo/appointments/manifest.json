@@ -1,0 +1,4 @@
+{
+	pluginFor: "halo",
+	requires: "calendar"
+}

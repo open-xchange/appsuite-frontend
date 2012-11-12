@@ -1,0 +1,9 @@
+{
+    title: "Compose email",
+    company: "Open-Xchange",
+    icon: "mail-write.png",
+    category: "Basic",
+    settings: false,
+    visible: false,
+    requires: 'webmail'
+}

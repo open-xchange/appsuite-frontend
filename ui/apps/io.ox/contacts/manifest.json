@@ -1,0 +1,8 @@
+{
+    title: "Address Book",
+    company: "Open-Xchange",
+    icon: "addressbook.png",
+    category: "Basic",
+    settings: false,
+    requires: "contacts"
+}

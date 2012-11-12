@@ -1,0 +1,12 @@
+[
+	{
+		path: "io.ox/mail/accounts/keychain",
+		pluginFor: "keychain",
+		requires: ["webmail", "multiple_mail_accounts"]
+	},
+	{
+		path: "io.ox/mail/accounts/settings",
+		pluginFor: "settings",
+		requires: ["webmail", "multiple_mail_accounts"]
+	}
+]

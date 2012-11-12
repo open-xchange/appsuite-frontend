@@ -1,0 +1,8 @@
+{
+    title: "Lessons",
+    company: "Open-Xchange Inc.",
+    icon: "default.png",
+    category: "Dev",
+    settings: false,
+    requires: "dev"
+}

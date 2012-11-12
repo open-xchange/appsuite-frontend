@@ -1,0 +1,4 @@
+{
+	pluginFor: "notifications",
+	requires: "tasks"
+}

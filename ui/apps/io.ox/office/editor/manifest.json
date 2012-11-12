@@ -1,0 +1,9 @@
+{
+    title: "Documents",
+    company: "Open-Xchange Inc.",
+    icon: "documents.png",
+    category: "Dev",
+    settings: false,
+    createArguments: {file:"new"},
+    requires: "text"
+}

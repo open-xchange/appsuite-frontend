@@ -27,7 +27,7 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http'], function (http) {
 
 	var capLookup = {
 		get: function (capName) {
-			return capabilities[capName];
+			return capabilities[capName.toLowerCase()];
 		},
 		has: function () {
 			var self = this;
@@ -35,16 +35,25 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http'], function (http) {
 			_(arguments).each(function (capDef) {
 				var definition = capDef.split(/\s+/);
 				var name = definition[0];
+				var inverse = false;
+				if (name[0] === '!') {
+					name = name.substr(1);
+					inverse = true;
+				}
 				var needsBackend = false;
 				if (definition[1] && (definition[1].toLowerCase() === 'withbackendsupport' || definition[1].toLowerCase() === 'backendsupport')) {
 					needsBackend = true;
 				}
 				var capability = self.get(name);
-				if (capability) {
-					if (needsBackend) {
-						result = capability.backendSupport;
-					} else {
-						result = true;
+				if (inverse) {
+					return !!!capability;
+				} else {
+					if (capability) {
+						if (needsBackend) {
+							result = capability.backendSupport;
+						} else {
+							result = true;
+						}
 					}
 				}
 			});

@@ -86,24 +86,6 @@ define(function () {
                 visible: false
             },
 
-            "io.ox/tasks/edit": {
-                title: "Edit task",
-                company: "Open-Xchange",
-                icon: "default.png",
-                category: "Productivity",
-                settings: false,
-                visible: false
-            },
-
-            "io.ox/tasks/edit": {
-                title: "Edit task",
-                company: "Open-Xchange",
-                icon: "default.png",
-                category: "Productivity",
-                settings: false,
-                visible: false
-            },
-
             "io.ox/files": {
                 title: "Files",
                 company: "Open-Xchange",

@@ -1,0 +1,4 @@
+{
+	pluginFor: "portal",
+	requires: "tasks"
+}
