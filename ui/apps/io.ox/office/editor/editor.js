@@ -3264,6 +3264,16 @@ define('io.ox/office/editor/editor',
                         else { oldTableWidth = Utils.convertHmmToLength(oldTableWidth, 'px', 0); }
                         newTableWidth = lastCell ? (oldTableWidth + shiftX) : oldTableWidth;
 
+                        // checking if new table width is inside the width of the parent -> otherwise cut it
+                        if (lastCell) {
+                            var maxWidth = tableNode.parent().width();
+                            if (newTableWidth > maxWidth) {
+                                var delta = newTableWidth - maxWidth;
+                                newTableWidth = maxWidth;
+                                shiftX -= delta;  // shiftX can be 0
+                            }
+                        }
+
                         // converting from relational grid to pixel grid
                         for (var i = 0; i < oldTableGrid.length; i++) { gridSum += oldTableGrid[i]; }
                         for (var i = 0; i < oldTableGrid.length; i++) { pixelGrid.push(Utils.roundDigits(oldTableGrid[i] * oldTableWidth / gridSum, 0)); }
@@ -3275,7 +3285,7 @@ define('io.ox/office/editor/editor',
                         if (! lastCell) { pixelGrid[shiftedGrid + 1] -= shiftX; }
 
                         // both still have to be positive
-                        if ((pixelGrid[shiftedGrid] > 0) && ((lastCell) || (pixelGrid[shiftedGrid + 1] > 0))) {
+                        if ((shiftX !== 0) && (pixelGrid[shiftedGrid] > 0) && ((lastCell) || (pixelGrid[shiftedGrid + 1] > 0))) {
 
                             // converting modified pixel grid to new relation table grid
                             for (var i = 0; i < pixelGrid.length; i++) {
