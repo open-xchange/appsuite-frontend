@@ -63,13 +63,13 @@ define('io.ox/calendar/month/view',
 
         // handler for onmouseenter event for hover effect
         onEnterAppointment: function (e) {
-            var cid = _.cid($(e.currentTarget).data('cid'));
+            var cid = _.cid($(e.currentTarget).data('cid') + '');
             $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').addClass('hover');
         },
 
         // handler for onmouseleave event for hover effect
         onLeaveAppointment: function (e) {
-            var cid = _.cid($(e.currentTarget).data('cid'));
+            var cid = _.cid($(e.currentTarget).data('cid') + '');
             $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').removeClass('hover');
         },
 

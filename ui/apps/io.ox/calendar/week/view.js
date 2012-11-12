@@ -95,14 +95,18 @@ define('io.ox/calendar/week/view',
         // handler for onmouseenter event for hover effect
         onEnterAppointment: function (e) {
             if (!this.lasso) {
-                $('[data-cid="' + $(e.currentTarget).data('cid') + '"]:visible').addClass('hover');
+                var cid = _.cid($(e.currentTarget).data('cid') + '');
+                console.log(cid);
+                $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').addClass('hover');
             }
         },
 
         // handler for onmouseleave event for hover effect
         onLeaveAppointment: function (e) {
             if (!this.lasso) {
-                $('[data-cid="' + $(e.currentTarget).data('cid') + '"]:visible').removeClass('hover');
+                var cid = _.cid($(e.currentTarget).data('cid') + '');
+                console.log(cid);
+                $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').removeClass('hover');
             }
         },
 
