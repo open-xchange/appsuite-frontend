@@ -17,7 +17,8 @@ define('io.ox/calendar/month/perspective',
      'io.ox/core/extensions',
      'io.ox/core/tk/dialogs',
      'io.ox/calendar/view-detail',
-     'gettext!io.ox/calendar'], function (View, api, date, ext, dialogs, detailView, gt) {
+     'io.ox/calendar/conflicts/conflictList',
+     'gettext!io.ox/calendar'], function (View, api, date, ext, dialogs, detailView, conflictView, gt) {
     'use strict';
 
     var perspective = new ox.ui.Perspective('month');
@@ -68,7 +69,29 @@ define('io.ox/calendar/month/perspective',
                     delete obj[i];
                 }
             });
-            obj.ignore_conflicts = true;
+
+            var apiUpdate = function (obj) {
+                api.update(obj).fail(function (con) {
+                    if (con.conflicts) {
+                        new dialogs.ModalDialog()
+                            .append(conflictView.drawList(con.conflicts))
+                            .addDangerButton('ignore', gt('Ignore conflicts'))
+                            .addButton('cancel', gt('Cancel'))
+                            .show()
+                            .done(function (action) {
+                                if (action === 'cancel') {
+                                    self.refresh();
+                                    return;
+                                }
+                                if (action === 'ignore') {
+                                    obj.ignore_conflicts = true;
+                                    apiUpdate(obj);
+                                }
+                            });
+                    }
+                });
+            };
+
             if (obj.recurrence_type > 0) {
                 new dialogs.ModalDialog()
                     .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
@@ -84,10 +107,10 @@ define('io.ox/calendar/month/perspective',
                         if (action === 'series') {
                             delete obj.recurrence_position;
                         }
-                        api.update(obj);
+                        apiUpdate(obj);
                     });
             } else {
-                api.update(obj);
+                apiUpdate(obj);
             }
         },
 
