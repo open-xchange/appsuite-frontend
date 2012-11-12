@@ -129,6 +129,18 @@ define('io.ox/office/editor/format/paragraphstyles',
                 format: function (element, border) {
                     initBorder(border);
                 }
+            },
+            hangingindent: {
+                def: 0
+            },
+            firstlineindent: {
+                def: 0
+            },
+            leftindent: {
+                def: 0
+            },
+            rightindent: {
+                def: 0
             }
         };
 
@@ -240,6 +252,12 @@ define('io.ox/office/editor/format/paragraphstyles',
                     }
                 }
             }
+            //paragraph margin attributes
+            leftMargin += attributes.leftindent;
+            rightMargin += attributes.rightindent;
+            var textIndent = attributes.hangingindent ? -attributes.hangingindent : attributes.firstlineindent ? attributes.firstlineindent : 0;
+            paragraph.css('text-indent', textIndent / 100 + 'mm');
+
             //now set left/right margins
             paragraph.css('margin-left', leftMargin / 100 + 'mm');
             paragraph.css('margin-right', rightMargin / 100  + 'mm');
