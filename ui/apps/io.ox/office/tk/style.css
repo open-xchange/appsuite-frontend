@@ -143,6 +143,17 @@ i.icon-io-ox-numbering              { background-position:  -20px  -40px; }
 i.icon-io-ox-num-inc-indent         { background-position:  -40px  -40px; }
 i.icon-io-ox-num-dec-indent         { background-position:  -60px  -40px; }
 
+i.icon-io-ox-para-border-none           { background-position:    -80px  -40px; }     
+i.icon-io-ox-para-border-leftright      { background-position:   -100px  -40px; }
+i.icon-io-ox-para-border-topbottom      { background-position:   -120px  -40px; }
+i.icon-io-ox-para-border-outside        { background-position:   -140px  -40px; }
+i.icon-io-ox-para-border-full           { background-position:   -160px  -40px; }
+i.icon-io-ox-para-border-left           { background-position:   -180px  -40px; }
+i.icon-io-ox-para-border-right          { background-position:   -200px  -40px; }
+i.icon-io-ox-para-border-top            { background-position:   -220px  -40px; }
+i.icon-io-ox-para-border-bottom         { background-position:   -240px  -40px; }
+i.icon-io-ox-image-center-inside        { background-position:   -260px  -40px; }
+                                  
 /* ========================================================================= */
 /* panes and view components                                                 */
 /* ========================================================================= */

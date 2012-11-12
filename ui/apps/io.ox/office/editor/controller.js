@@ -15,8 +15,9 @@ define('io.ox/office/editor/controller',
     ['io.ox/office/tk/controller',
      'io.ox/office/editor/image',
      'io.ox/office/editor/hyperlink',
-     'io.ox/office/editor/format/objectstyles'
-    ], function (BaseController, Image, Hyperlink, ObjectStyles) {
+     'io.ox/office/editor/format/objectstyles',
+     'io.ox/office/editor/format/paragraphstyles'
+    ], function (BaseController, Image, Hyperlink, ObjectStyles, ParagraphStyles) {
 
     'use strict';
 
@@ -177,6 +178,11 @@ define('io.ox/office/editor/controller',
                         }
                     }
                 },
+                'paragraph/borders': {
+                    parent: 'paragraph/attributes',
+                    get: function (attributes) { return ParagraphStyles.getBorderModeFromAttributes(attributes); },
+                    set: function (bordermode) { editor.setAttributes('paragraph', ParagraphStyles.getAttributesBorderMode(bordermode)); }
+                },
 
                 // characters
 
@@ -301,7 +307,6 @@ define('io.ox/office/editor/controller',
                     get: function (attributes) { return ObjectStyles.getFloatModeFromAttributes(attributes); },
                     set: function (floatMode) { editor.setAttributes('image', ObjectStyles.getAttributesFromFloatMode(floatMode)); }
                 },
-
                 // debug
 
                 'debug/toggle': {

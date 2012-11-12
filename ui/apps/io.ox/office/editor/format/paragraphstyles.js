@@ -166,6 +166,71 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         var // self reference
             self = this;
+        // static methods ----------------------------------------------------
+
+        ParagraphStyles.getBorderModeFromAttributes = function (attributes) {
+            var ret = 'none',
+            value = attributes.borderleft.style ? 1 : 0;
+            value += attributes.borderright.style ? 2 : 0;
+            value += attributes.bordertop.style ? 4 : 0;
+            value += attributes.borderbottom.style ? 8 : 0;
+            value += attributes.borderinside.style ? 16: 0;
+
+            switch (value) {
+            case 0:
+                ret = 'none';
+                break;
+            case 1:
+                ret = 'left';
+                break;
+            case 2:
+                ret = 'right';
+                break;
+            case 4:
+                ret = 'top';
+                break;
+            case 8:
+                ret = 'bottom';
+                break;
+            case 16:
+                ret = 'inside';
+                break;
+            case 3:
+                ret = 'leftright';
+                break;
+            case 12:
+                ret = 'topbottom';
+                break;
+            case 15:
+                ret = 'outside';
+                break;
+            case 31:
+                ret = 'full';
+                break;
+            }
+            return ret;
+        };
+        ParagraphStyles.getAttributesBorderMode = function (borderMode) {
+            var value = borderMode === 'none' ? 0 :
+                    borderMode === 'left' ? 1 :
+                    borderMode === 'right' ? 2 :
+                    borderMode === 'top' ? 4 :
+                    borderMode === 'bottom' ? 8 :
+                    borderMode === 'inside' ? 16 :
+                    borderMode === 'leftright' ? 3 :
+                    borderMode === 'topbottom' ? 12  :
+                    borderMode === 'outside' ? 15 :
+                    borderMode === 'full' ? 31 : -1;
+            var ret = {},
+                defBorder = {style: 'single', width: 17, space: 140, color: {type: 'auto'}};
+
+            ret.borderleft = value & 1 ? defBorder : {};
+            ret.borderright = value & 2 ? defBorder : {};
+            ret.bordertop = value & 4 ? defBorder : {};
+            ret.borderbottom = value & 8 ? defBorder : {};
+            ret.borderinside = value & 16 ? defBorder : {};
+            return ret;
+        };
 
         // private methods ----------------------------------------------------
 

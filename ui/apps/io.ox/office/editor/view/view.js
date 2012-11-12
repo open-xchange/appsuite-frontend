@@ -306,7 +306,19 @@ define('io.ox/office/editor/view/view',
                 .addButton('document/copy',  { label: 'Copy',  tooltip: 'Copy To Clipboard' })
                 .addButton('document/paste', { label: 'Paste', tooltip: 'Paste From Clipboard' })
                 .addSeparator()
-                .addGroup('character/language', new Controls.LanguageChooser());
+                .addGroup('character/language', new Controls.LanguageChooser())
+                .addSeparator()
+                .addGroup('paragraph/borders', new RadioGroup({ icon: 'icon-io-ox-para-border-outside', tooltip: gt('Pargraph Border'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
+                    .addOptionButton('none',        { icon: 'icon-io-ox-para-border-none',      label: gt('No border') })
+                    .addOptionButton('leftright',   { icon: 'icon-io-ox-para-border-leftright',  label: gt('Border left and right') })
+                    .addOptionButton('topbottom',   { icon: 'icon-io-ox-para-border-topbottom', label: gt('Border top and bottom') })
+                    .addOptionButton('outside',     { icon: 'icon-io-ox-para-border-outside',      label: gt('Border outside') })
+                    .addOptionButton('full',        { icon: 'icon-io-ox-para-border-full',      label: gt('Border outside and inside') })
+                    .addOptionButton('left',        { icon: 'icon-io-ox-para-border-left',      label: gt('Border left') })
+                    .addOptionButton('right',       { icon: 'icon-io-ox-para-border-right',      label: gt('Border right') })
+                    .addOptionButton('top',         { icon: 'icon-io-ox-para-border-top',      label: gt('Border top') })
+                    .addOptionButton('bottom',      { icon: 'icon-io-ox-para-border-bottom',      label: gt('Border bottom') })
+                    .addOptionButton('inside',      { icon: 'icon-io-ox-image-center-inside',      label: gt('Border inside') }));
         }
 
         // register a component that updates the window header tool bar
