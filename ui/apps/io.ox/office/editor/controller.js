@@ -108,7 +108,7 @@ define('io.ox/office/editor/controller',
                 'paragraph/stylesheet': {
                     parent: 'paragraph/attributes',
                     get: function (attributes) { return attributes.style; },
-                    set: function (styleId) { editor.setAttribute('paragraph', 'style', styleId); }
+                    set: function (styleId) { editor.setAttribute('paragraph', 'style', styleId, { clear: true }); }
                 },
                 'paragraph/alignment': {
                     parent: 'paragraph/attributes',
@@ -193,7 +193,7 @@ define('io.ox/office/editor/controller',
                 'character/stylesheet': {
                     parent: 'character/attributes',
                     get: function (attributes) { return attributes.style; },
-                    set: function (styleId) { editor.setAttribute('character', 'style', styleId); }
+                    set: function (styleId) { editor.setAttribute('character', 'style', styleId, { clear: true }); }
                 },
                 'character/fontname': {
                     parent: 'character/attributes',
@@ -276,6 +276,11 @@ define('io.ox/office/editor/controller',
                 'table/attributes': {
                     parent: 'document/editable/table',
                     get: function () { return editor.getAttributes('table'); }
+                },
+                'table/stylesheet': {
+                    parent: 'table/attributes',
+                    get: function (attributes) { return attributes.style; },
+                    set: function (styleId) { editor.setAttribute('table', 'style', styleId, { clear: true }); }
                 },
 
                 // images

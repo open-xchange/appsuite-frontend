@@ -424,17 +424,20 @@ define('io.ox/office/editor/editor',
          */
         this.copy = function () {
 
-            // generate operations and store them in internal clipboard
-            clipboardOperations = (selection.getSelectionType() === 'cell') ? copyCellRangeSelection() : copyTextSelection();
+            switch (selection.getSelectionType()) {
 
-            // dump clipboard
-            Utils.info('Editor.copy()');
-            _(clipboardOperations).each(function (operation) {
-                var text = '  name="' + operation.name + '", attrs=';
-                operation = _.clone(operation);
-                delete operation.name;
-                Utils.log(text + JSON.stringify(operation));
-            });
+            case 'text':
+            case 'object':
+                clipboardOperations = copyTextSelection();
+                break;
+
+            case 'cell':
+                clipboardOperations = copyCellRangeSelection();
+                break;
+
+            default:
+                Utils.error('Editor.copy(): unsupported selection type: ' + selection.getSelectionType());
+            }
         };
 
         /**
@@ -1637,9 +1640,16 @@ define('io.ox/office/editor/editor',
          * @param {String} family
          *  The name of the attribute family containing the specified
          *  attribute.
+         *
+         * @param {Object} [options]
+         *  A map with additional options controlling the opration. The
+         *  following options are supported:
+         *  @param {Boolean} [options.clear=false]
+         *      If set to true, all existing explicit attributes will be
+         *      removed from the selection, before applying the new attributes.
          */
-        this.setAttribute = function (family, name, value) {
-            this.setAttributes(family, Utils.makeSimpleObject(name, value));
+        this.setAttribute = function (family, name, value, options) {
+            this.setAttributes(family, Utils.makeSimpleObject(name, value), options);
         };
 
         /**
@@ -1648,8 +1658,19 @@ define('io.ox/office/editor/editor',
          *
          * @param {String} family
          *  The name of the attribute family containing the passed attributes.
+         *
+         * @param {Object} attributes
+         *  A map with formatting attribute values, mapped by the attribute
+         *  names.
+         *
+         * @param {Object} [options]
+         *  A map with additional options controlling the opration. The
+         *  following options are supported:
+         *  @param {Boolean} [options.clear=false]
+         *      If set to true, all existing explicit attributes will be
+         *      removed from the selection, before applying the new attributes.
          */
-        this.setAttributes = function (family, attributes) {
+        this.setAttributes = function (family, attributes, options) {
 
             // Create an undo group that collects all undo operations generated
             // in the local setAttributes() method (it calls itself recursively
@@ -1661,7 +1682,26 @@ define('io.ox/office/editor/editor',
                     // operations generator
                     generator = new Operations.Generator(),
                     // the style sheet container
-                    styleSheets = this.getStyleSheets(family);
+                    styleSheets = this.getStyleSheets(family),
+                    // whether to generate 'clearAttributes' operations
+                    clear = Utils.getBooleanOption(options, 'clear', false);
+
+                // generates a 'setAttributes' or 'clearAttributes' operation
+                function generateAttributeOperation(startPosition, endPosition) {
+
+                    var // the options for the operation
+                        operationOptions = { start: startPosition };
+
+                    if (_.isArray(endPosition)) {
+                        operationOptions.end = endPosition;
+                    }
+                    if (clear) {
+                        generator.generateOperation(Operations.ATTRS_CLEAR, operationOptions);
+                    }
+                    if (!_.isEmpty(attributes)) {
+                        generator.generateOperation(Operations.ATTRS_SET, _({ attrs: attributes }).extend(operationOptions));
+                    }
+                }
 
                 // register pending style sheet via 'insertStylesheet' operation
                 if (_.isString(attributes.style) && styleSheets.isDirty(attributes.style)) {
@@ -1696,7 +1736,7 @@ define('io.ox/office/editor/editor',
                             // set the attributes at the covered text range
                             // TODO: currently, no way to set character attributes at empty paragraphs via operation...
                             if (startOffset <= endOffset) {
-                                generator.generateOperation(Operations.ATTRS_SET, { start: position.concat([startOffset]), end: position.concat([endOffset]), attrs: attributes });
+                                generateAttributeOperation(position.concat([startOffset]), position.concat([endOffset]));
                             }
                         });
                     } else {
@@ -1706,26 +1746,26 @@ define('io.ox/office/editor/editor',
 
                 case 'paragraph':
                     selection.iterateContentNodes(function (paragraph, position) {
-                        generator.generateOperation(Operations.ATTRS_SET, { start: position, attrs: attributes });
+                        generateAttributeOperation(position);
                     });
                     break;
 
                 case 'cell':
                     selection.iterateTableCells(function (cell, position) {
-                        generator.generateOperation(Operations.ATTRS_SET, { start: position, attrs: attributes });
+                        generateAttributeOperation(position);
                     });
                     break;
 
                 case 'table':
                     if ((element = selection.getEnclosingTable())) {
-                        generator.generateOperation(Operations.ATTRS_SET, { start: Position.getOxoPosition(editdiv, element, 0), attrs: attributes });
+                        generateAttributeOperation(Position.getOxoPosition(editdiv, element, 0));
                     }
                     break;
 
                 case 'image':
                     // TODO: needs change when multiple objects can be selected
                     if ((element = selection.getSelectedObject()[0]) && DOM.isImageNode(element)) {
-                        generator.generateOperation(Operations.ATTRS_SET, { start: Position.getOxoPosition(editdiv, element, 0), attrs: attributes });
+                        generateAttributeOperation(Position.getOxoPosition(editdiv, element, 0));
                     }
                     break;
 
