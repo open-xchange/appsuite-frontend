@@ -61,8 +61,39 @@ define('io.ox/calendar/month/perspective',
                 .invoke('action', this, {app: this.app}, {start_date: startTS, end_date: startTS + date.HOUR});
         },
 
+        updateAppointment: function (obj) {
+            var self = this;
+            _.each(obj, function (el, i) {
+                if (el === null) {
+                    delete obj[i];
+                }
+            });
+            obj.ignore_conflicts = true;
+            if (obj.recurrence_type > 0) {
+                new dialogs.ModalDialog()
+                    .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
+                    .addPrimaryButton('series', gt('Series'))
+                    .addButton('appointment', gt('Appointment'))
+                    .addButton('cancel', gt('Cancel'))
+                    .show()
+                    .done(function (action) {
+                        if (action === 'cancel') {
+                            self.refresh();
+                            return;
+                        }
+                        if (action === 'series') {
+                            delete obj.recurrence_position;
+                        }
+                        api.update(obj);
+                    });
+            } else {
+                api.update(obj);
+            }
+        },
+
         updateWeeks: function (obj) {
             // fetch appointments
+            var self = this;
             obj = $.extend({
                 weeks: this.updateLoad
             }, obj);
@@ -71,16 +102,13 @@ define('io.ox/calendar/month/perspective',
                 obj.folder = this.folder.id;
             }
             obj.end = obj.start + obj.weeks * date.WEEK;
-
-            var self = this;
             return api.getAll(obj).done(function (list) {
                 if (list.length > 0) {
+                    // update single week view collections
                     var start = obj.start;
                     for (var i = 1; i <= obj.weeks; i++) {
-
                         var end = start + date.WEEK,
                             collection = self.collections[start];
-
                         if (collection) {
                             var retList = [];
                             for (var j = 0; j < list.length; j++) {
@@ -117,7 +145,8 @@ define('io.ox/calendar/month/perspective',
                 // new view
                 var view = new View({ collection: self.collections[day], day: day, folder: self.folder });
                 view.on('showAppoinment', self.showAppointment, self)
-                    .on('createAppoinment', self.createAppointment, self);
+                    .on('createAppoinment', self.createAppointment, self)
+                    .on('updateAppointment', self.updateAppointment, self);
                 views.push(view.render().el);
             }
 
