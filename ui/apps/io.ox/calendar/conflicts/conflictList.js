@@ -18,12 +18,12 @@ define('io.ox/calendar/conflicts/conflictList', ['io.ox/core/extensions', 'gette
         drawList: function (conflicts) {
             var conflictList = $('<div>');
             conflictList.append($('<h4 class="text-error">').text(gt('Conflicts detected')));
-            
+
             require(["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"],
                 function (dialogs, viewGrid) {
                     conflictList.append(viewGrid.drawSimpleGrid(conflicts));
                     new dialogs.SidePopup()
-                        .delegate($(conflictList), ".vgrid-cell", function (popup, e, target) {
+                        .delegate(conflictList, ".vgrid-cell", function (popup, e, target) {
                             var data = target.data("appointment");
                             require(["io.ox/calendar/view-detail"], function (view) {
                                 popup.append(view.draw(data));

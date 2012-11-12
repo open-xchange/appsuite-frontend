@@ -971,8 +971,7 @@ define('io.ox/calendar/week/view',
                         if (e.pageX < window.innerWidth && e.pageY < window.innerHeight) {
                             _.extend(app, {
                                 start_date: startTS,
-                                end_date: startTS + (app.end_date - app.start_date),
-                                ignore_conflicts: true
+                                end_date: startTS + (app.end_date - app.start_date)
                             });
                             d.my.all.busy();
                             self.onUpdateAppointment(app);
@@ -1004,8 +1003,8 @@ define('io.ox/calendar/week/view',
                                 app = self.collection.get(cid).attributes;
                             _.extend(app, {
                                 start_date: startTS,
-                                end_date: startTS + (app.end_date - app.start_date),
-                                ignore_conflicts: true
+                                end_date: startTS + (app.end_date - app.start_date)
+//                                ignore_conflicts: true
                             });
                             self.onUpdateAppointment(app);
                         } else {
@@ -1030,13 +1029,13 @@ define('io.ox/calendar/week/view',
 
                         if (el.position().left !== ui.originalPosition.left) {
                             _.extend(app, {
-                                start_date: app.end_date - (newDayCount * date.DAY),
-                                ignore_conflicts: true
+                                start_date: app.end_date - (newDayCount * date.DAY)
+//                                ignore_conflicts: true
                             });
                         } else if (el.width() !== ui.originalSize.width) {
                             _.extend(app, {
-                                end_date: app.start_date + (newDayCount * date.DAY),
-                                ignore_conflicts: true
+                                end_date: app.start_date + (newDayCount * date.DAY)
+//                                ignore_conflicts: true
                             });
                         }
                         el.busy();
