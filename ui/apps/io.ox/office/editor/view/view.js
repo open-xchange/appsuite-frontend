@@ -241,8 +241,7 @@ define('io.ox/office/editor/view/view',
             .addButton('paragraph/list/numbering', { icon: 'icon-io-ox-numbering',      tooltip: gt('Numbering On/Off'), toggle: true })
             .addButton('paragraph/list/decindent', { icon: 'icon-io-ox-num-dec-indent', tooltip: gt('Demote One Level') })
             .addButton('paragraph/list/incindent', { icon: 'icon-io-ox-num-inc-indent', tooltip: gt('Promote One Level') })
-            .addSeparator()
-             .addGroup('character/language', new Controls.LanguageChooser());
+            .addSeparator();
 
         createToolBar('table', { label: gt('Table') })
             .addGroup('table/insert', new Controls.TableSizeChooser())
@@ -305,7 +304,9 @@ define('io.ox/office/editor/view/view',
                 .addSeparator()
                 .addButton('document/cut',   { label: 'Cut',   tooltip: 'Cut To Clipboard' })
                 .addButton('document/copy',  { label: 'Copy',  tooltip: 'Copy To Clipboard' })
-                .addButton('document/paste', { label: 'Paste', tooltip: 'Paste From Clipboard' });
+                .addButton('document/paste', { label: 'Paste', tooltip: 'Paste From Clipboard' })
+                .addSeparator()
+                .addGroup('character/language', new Controls.LanguageChooser());
         }
 
         // register a component that updates the window header tool bar
