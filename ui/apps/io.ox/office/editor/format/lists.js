@@ -349,7 +349,7 @@ define('io.ox/office/editor/format/lists',
          */
         this.getDefaultListOperation = function (type, options) {
             var index = 0,
-                freeId = lists.length;
+                freeId = lists.length + 1;
             for (; index < lists.length; ++index) {
                 if (lists[index].listIdentifier >= freeId) {
                     freeId = lists[index].listIdentifier + 1;
