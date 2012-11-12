@@ -692,7 +692,7 @@ define('io.ox/office/tk/utils',
      *
      * @returns {String}
      *  The lower-case name of the DOM node object. If the node is a text node,
-     *  returns the string '#text'.
+     *  the string '#text' will be returned.
      */
     Utils.getNodeName = function (node) {
         return Utils.getDomNode(node).nodeName.toLowerCase();
@@ -917,6 +917,106 @@ define('io.ox/office/tk/utils',
         }, undefined, { children: true });
 
         return resultNode;
+    };
+
+    /**
+     * Finds the closest ancestor of the passed node that matches the specified
+     * jQuery selector. In difference to the jQuery method jQuery.closest(),
+     * the passed node selector can be a function, and the found parent can be
+     * the root node itself.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The DOM root node that will not be left while searching for an ancestor
+     *  node. If this object is a jQuery collection, uses the first node it
+     *  contains.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node whose chain of ancestors will be searched for a matching
+     *  node. Must be a descendant of the passed root node. If this object is a
+     *  jQuery collection, uses the first node it contains.
+     *
+     * @param {String|Function|Node|jQuery} selector
+     *  A jQuery selector that will be used to find the ancestor DOM node. The
+     *  selector will be passed to the jQuery method jQuery.is() for each node.
+     *  If this selector is a function, it will be called with the current DOM
+     *  node bound to the symbol 'this'. See the jQuery API documentation at
+     *  http://api.jquery.com/is for details.
+     *
+     * @returns {Node|Null}
+     *  The first ancestor node that matches the passed selector, and is
+     *  contained in or equal to the root node; or null, no node has been
+     *  found.
+     */
+    Utils.findClosestParent = function (rootNode, node, selector) {
+
+        rootNode = Utils.getDomNode(rootNode);
+        node = Utils.getDomNode(node).parentNode;
+
+        while (node && !$(node).is(selector)) {
+            node = node.parentNode;
+        }
+
+        return (node && rootNode.contains(node)) ? node : null;
+    };
+
+    /**
+     * Finds the closest previous sibling node of the passed node that matches
+     * a jQuery selector.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node whose previous matching sibling will be returned. If this
+     *  object is a jQuery collection, uses the first node it contains.
+     *
+     * @param {String|Function|Node|jQuery} [selector]
+     *  A jQuery selector that will be used to find a matching sibling. The
+     *  selector will be passed to the jQuery method jQuery.is() for each node.
+     *  If this selector is a function, it will be called with the current DOM
+     *  node bound to the symbol 'this'. See the jQuery API documentation at
+     *  http://api.jquery.com/is for details. If omitted, this method returns
+     *  the direct previous sibling of the passed node.
+     *
+     * @returns {Node|Null}
+     *  The previous matching sibling of the passed node; or null, no previous
+     *  sibling node has been found.
+     */
+    Utils.findPreviousSiblingNode = function (node, selector) {
+        node = Utils.getDomNode(node).previousSibling;
+        if (!_.isUndefined(selector)) {
+            while (node && !$(node).is(selector)) {
+                node = node.previousSibling;
+            }
+        }
+        return node;
+    };
+
+    /**
+     * Finds the closest next sibling node of the passed node that matches a
+     * jQuery selector.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node whose next matching sibling will be returned. If this
+     *  object is a jQuery collection, uses the first node it contains.
+     *
+     * @param {String|Function|Node|jQuery} [selector]
+     *  A jQuery selector that will be used to find a matching sibling. The
+     *  selector will be passed to the jQuery method jQuery.is() for each node.
+     *  If this selector is a function, it will be called with the current DOM
+     *  node bound to the symbol 'this'. See the jQuery API documentation at
+     *  http://api.jquery.com/is for details. If omitted, this method returns
+     *  the direct next sibling of the passed node.
+     *
+     * @returns {Node|Null}
+     *  The next matching sibling of the passed node; or null, no next sibling
+     *  node has been found.
+     */
+    Utils.findNextSiblingNode = function (node, selector) {
+        node = Utils.getDomNode(node).nextSibling;
+        if (!_.isUndefined(selector)) {
+            while (node && !$(node).is(selector)) {
+                node = node.nextSibling;
+            }
+        }
+        return node;
     };
 
     /**

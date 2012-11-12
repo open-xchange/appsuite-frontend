@@ -471,7 +471,7 @@ define('io.ox/office/editor/operations',
 
             // generate operations for all cells
             position = appendNewIndex(position);
-            $(row).children().each(function () {
+            $(row).children('td').each(function () {
                 self.generateTableCellOperations(this, position);
                 position = increaseLastIndex(position);
             });

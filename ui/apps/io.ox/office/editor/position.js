@@ -635,17 +635,13 @@ define('io.ox/office/editor/position',
         if (DOM.isFloatingObjectNode(domPoint.node)) {
 
             // skip other floating objects and helper nodes
-            span = domPoint.node.previousSibling;
-            while (span && !DOM.isTextSpan(span) && !DOM.isTextComponentNode(domPoint.node) && !DOM.isInlineObjectNode(domPoint.node)) {
-                span = span.previousSibling;
-            }
+            span = Utils.findPreviousSiblingNode(domPoint.node, function () {
+                return DOM.isTextSpan(this) || DOM.isTextComponentNode(this) || DOM.isInlineObjectNode(this);
+            });
 
             // no previous span: go to next span
-            if (!span) {
-                span = domPoint.node.nextSibling;
-                while (span && !DOM.isTextSpan(span)) {
-                    span = span.nextSibling;
-                }
+            if (!DOM.isTextSpan(span)) {
+                span = Utils.findNextSiblingNode(domPoint.node, function () { return DOM.isTextSpan(this); });
             }
 
             if (DOM.isTextSpan(span)) {

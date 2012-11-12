@@ -138,31 +138,39 @@ define('io.ox/office/editor/selection',
                 startPoint = null, endPoint = null,
                 // whether position is a single cursor
                 isCursor = false,
+                // table containing the selection
+                tableNode = null,
                 // selected object node
                 objectInfo = null;
 
-            // check for cell range selection
+            // check for cell range selection (must be in the same table)
             cellRangeSelected = $(anchorPoint.node).is('tr') && $(focusPoint.node).is('tr') && (anchorPoint.node.parentNode === focusPoint.node.parentNode);
-
-            // convert multi-selection for cells to rectangular cell selection
             if (cellRangeSelected) {
+
                 // cell range selection is always ordered, no need to check for direction
-                isCursor = false;
                 backwards = false;
+
+                // convert multi-selection for cells to rectangular cell selection
                 startPoint = _(browserSelection.ranges).first().start;
                 endPoint = _(browserSelection.ranges).last().end;
-                // entire table selected, if number of rell range objects in selection is equal to number of table cells
-                tableSelected = browserSelection.ranges.length === $(anchorPoint.node.parentNode).find('> tr > td').length;
+
+                // entire table selected, if number of cell range objects in selection is equal to number of table cells
+                tableNode = Utils.findClosestParent(rootNode, focusPoint.node, 'table');
+                tableSelected = browserSelection.ranges.length === DOM.getTableRows(tableNode).children('td').length;
+
             } else {
-                // get range direction (check for real range, DOM.Point.comparePoints() is expensive), adjust start and end position
+
+                // get range direction (check for real range, DOM.Point.comparePoints() is expensive)
                 isCursor = browserSelection.active.isCollapsed();
                 backwards = !isCursor && (DOM.Point.comparePoints(anchorPoint, focusPoint) > 0);
+                tableSelected = false;
+
+                // adjust start and end position
                 startPoint = backwards ? focusPoint : anchorPoint;
                 endPoint = backwards ? anchorPoint : focusPoint;
-                tableSelected = false;
             }
 
-            // calculate start and end position
+            // calculate start and end position (always text positions, also in cell range mode)
             self.startPaM.oxoPosition = startPosition = Position.getTextLevelOxoPosition(startPoint, rootNode, false, forwardCursor);
             self.endPaM.oxoPosition = endPosition = isCursor ? _.clone(startPosition) : Position.getTextLevelOxoPosition(endPoint, rootNode, true, forwardCursor);
 
@@ -512,7 +520,7 @@ define('io.ox/office/editor/selection',
                 // previous text span of the object node
                 prevTextSpan = inline ? selectedObject[0].previousSibling : null,
                 // next text span of the object node (skip following floating objects)
-                nextTextSpan = Utils.findNextNode(selectedObject.parent(), selectedObject, function () { return DOM.isPortionSpan(this); }, DOM.OBJECT_NODE_SELECTOR),
+                nextTextSpan = Utils.findNextSiblingNode(selectedObject, function () { return DOM.isPortionSpan(this); }),
                 // DOM points representing the text selection over the object
                 startPoint = null, endPoint = null;
 
@@ -556,7 +564,23 @@ define('io.ox/office/editor/selection',
          *  The iterator function that will be called for every table cell node
          *  covered by this selection. Receives the following parameters:
          *      (1) {HTMLTableCellElement} the visited DOM cell element,
-         *      (2) {Number[]} its logical position.
+         *      (2) {Number[]} its logical position (the last two elements in
+         *          this array represent the row and column index of the cell),
+         *      (3) {Object|Undefined} an object containing attributes for the
+         *          position of the visited cell in the cell range, and the
+         *          cell range itself. Contains the following attributes:
+         *          - rowOffset: the row offset, relative to the first row in
+         *              the cell range,
+         *          - colOffset: the column offset, relative to the first
+         *              column in the cell range,
+         *          - firstRow: the absolute index of the first row in the cell
+         *              range,
+         *          - firstCol: the absolute index of the first column in the
+         *              cell range,
+         *          - width: the number of columns in the cell range,
+         *          - height: the number of rows in the cell range.
+         *          Will be undefined, if the current selection is a text range
+         *          in a table.
          *  If the iterator returns the Utils.BREAK object, the iteration
          *  process will be stopped immediately.
          *
@@ -572,53 +596,74 @@ define('io.ox/office/editor/selection',
         this.iterateTableCells = function (iterator, context) {
 
             var // the closest table containing the selection, and its position
-                table = this.getEnclosingTable(), tablePosition = null,
+                tableNode = this.getEnclosingTable(), tablePosition = null,
 
                 // position of top-left and bottom-right cell, relative to table
                 firstPosition = null, lastPosition = null,
                 // the DOM cells
                 firstCellInfo = null, lastCellInfo = null,
                 // current cell, and its logical position
-                cellInfo = null, cellNode = 0, cellPosition = null,
+                cellInfo = null, cellNode = null, cellPosition = null,
 
-                // row and column index for iteration
+                // cell offset, and information about the cell range
+                cellOffsets = { rowOffset: 0, colOffset: 0, firstRow: 0, firstCol: 0, width: 0, height: 0 },
+                // row/column index for loops
                 row = 0, col = 0;
 
             // check enclosing table, get its position
-            if (!table) {
+            if (!tableNode) {
                 Utils.warn('Selection.iterateTableCells(): selection not contained in a single table');
-                return;
+                return Utils.BREAK;
             }
-            tablePosition = Position.getOxoPosition(rootNode, table, 0);
+            tablePosition = Position.getOxoPosition(rootNode, tableNode, 0);
 
             // convert selection position to cell position relative to table
             if ((startPosition.length < tablePosition.length + 2) || (endPosition.length < tablePosition.length + 2)) {
                 Utils.error('Selection.iterateTableCells(): invalid start or end position');
-                return;
+                return Utils.BREAK;
             }
             firstPosition = startPosition.slice(tablePosition.length, tablePosition.length + 2);
             lastPosition = endPosition.slice(tablePosition.length, tablePosition.length + 2);
 
             // resolve position to closest table cell
-            firstCellInfo = Position.getDOMPosition(table, firstPosition, true);
-            lastCellInfo = Position.getDOMPosition(table, lastPosition, true);
+            firstCellInfo = Position.getDOMPosition(tableNode, firstPosition, true);
+            lastCellInfo = Position.getDOMPosition(tableNode, lastPosition, true);
             if (!firstCellInfo || !$(firstCellInfo.node).is('td') || !lastCellInfo || !$(lastCellInfo.node).is('td')) {
                 Utils.error('Selection.iterateTableCells(): no table cells found for cell positions');
-                return;
+                return Utils.BREAK;
             }
 
             // visit all cells for rectangular cell selection mode
             if (cellRangeSelected) {
 
-                for (row = firstPosition[0]; row <= lastPosition[0]; row += 1) {
-                    for (col = firstPosition[1]; col <= lastPosition[1]; col += 1) {
-                        cellPosition = tablePosition.concat([row, col]);
-                        cellInfo = Position.getDOMPosition(rootNode, cellPosition);
+                // initialize cell offset and range info passed to the iterator
+                cellOffsets = {
+                        rowOffset: 0,
+                        colOffset: 0,
+                        firstRow: firstPosition[0],
+                        firstCol: firstPosition[1],
+                        width: lastPosition[1] - firstPosition[1] + 1,
+                        height: lastPosition[0] - firstPosition[0] + 1
+                    };
+
+                // loop over all cells in the range
+                for (row = 0; row < cellOffsets.height; row += 1) {
+                    for (col = 0; col < cellOffsets.width; col += 1) {
+
+                        // cell position relative to table
+                        cellPosition = [firstPosition[0] + row, firstPosition[1] + col];
+                        cellInfo = Position.getDOMPosition(tableNode, cellPosition);
+
+                        // cellInfo will be undefined, if current position is covered by a merged cell
                         if (cellInfo && $(cellInfo.node).is('td')) {
-                            if (iterator.call(context, cellInfo.node, cellPosition) === Utils.BREAK) { return Utils.BREAK; }
-                        } else {
-                            Utils.warn('Selection.iterateTableCells(): cannot find cell at position ' + JSON.stringify(cellPosition));
-                            return;
+
+                            // absolute cell position, and row/column offsets
+                            cellPosition = tablePosition.concat(cellPosition);
+                            cellOffsets.rowOffset = row;
+                            cellOffsets.colOffset = col;
+
+                            // call iterator function
+                            if (iterator.call(context, cellInfo.node, cellPosition, cellOffsets) === Utils.BREAK) { return Utils.BREAK; }
                         }
                     }
                 }
@@ -630,7 +675,7 @@ define('io.ox/office/editor/selection',
                 while (cellNode) {
 
                     // visit current cell
-                    cellPosition = tablePosition.concat(Position.getOxoPosition(table, cellNode, 0));
+                    cellPosition = tablePosition.concat(Position.getOxoPosition(tableNode, cellNode, 0));
                     if (iterator.call(context, cellNode, cellPosition) === Utils.BREAK) { return Utils.BREAK; }
 
                     // last cell reached
@@ -638,12 +683,13 @@ define('io.ox/office/editor/selection',
 
                     // find next cell node (either next sibling, or first child
                     // of next row, but skip embedded tables)
-                    cellNode = Utils.findNextNode(table, cellNode, 'td', DOM.TABLE_NODE_SELECTOR);
+                    cellNode = Utils.findNextNode(tableNode, cellNode, 'td', DOM.TABLE_NODE_SELECTOR);
                 }
 
                 // in a valid DOM tree, there must always be valid cell nodes until
                 // the last cell has been reached, so this point should never be reached
-                Utils.error('Selection.iteraTableCells(): iteration exceeded selection');
+                Utils.error('Selection.iterateTableCells(): iteration exceeded end of selection');
+                return Utils.BREAK;
             }
         };
 
@@ -665,16 +711,18 @@ define('io.ox/office/editor/selection',
          *      (1) {HTMLElement} the visited content node,
          *      (2) {Number[]} its logical position,
          *      (3) {Number|Undefined} the logical index of the first text
-         *          component covered by the first paragraph, undefined for
+         *          component covered by the FIRST paragraph; undefined for
          *          all other paragraphs and tables (may point after the last
          *          existing child text component, if the selection starts at
          *          the very end of a paragraph),
          *      (4) {Number|Undefined} the logical index of the last child text
-         *          component covered by the last paragraph (closed range, will
-         *          be -1 for empty paragraphs), undefined for all other
-         *          paragraphs and tables.
-         *  If the iterator returns the Utils.BREAK object, the iteration
-         *  process will be stopped immediately.
+         *          component covered by the LAST paragraph (closed range);
+         *          undefined for all other paragraphs and tables.
+         *  If the selection represents a text cursor, the start position will
+         *  exceed the end position by 1. Thus, a text cursor in an empty
+         *  paragraph will be represented by the text range [0, -1]. If the
+         *  iterator returns the Utils.BREAK object, the iteration process will
+         *  be stopped immediately.
          *
          * @param {Object} [context]
          *  If specified, the iterator will be called with this context (the
@@ -759,15 +807,15 @@ define('io.ox/office/editor/selection',
 
             // check validity of passed positions
             if (!startInfo || !startInfo.node || !endInfo || !endInfo.node) {
-                Utils.warn('Selection.iterateContentNodes(): invalid selection');
+                Utils.error('Selection.iterateContentNodes(): invalid selection, cannot find first or last DOM node');
                 return Utils.BREAK;
             }
 
             // find first and last paragraph node (also in table cell selection mode)
-            firstParagraph = startInfo.node.parentNode;
-            lastParagraph = endInfo.node.parentNode;
-            if (!DOM.isParagraphNode(firstParagraph) || !DOM.isParagraphNode(lastParagraph)) {
-                Utils.warn('Selection.iterateContentNodes(): text selection expected');
+            firstParagraph = Utils.findClosestParent(rootNode, startInfo.node, DOM.PARAGRAPH_NODE_SELECTOR);
+            lastParagraph = Utils.findClosestParent(rootNode, endInfo.node, DOM.PARAGRAPH_NODE_SELECTOR);
+            if (!firstParagraph || !lastParagraph) {
+                Utils.error('Selection.iterateContentNodes(): invalid selection, cannot find containing paragraph nodes');
                 return Utils.BREAK;
             }
 
@@ -804,7 +852,7 @@ define('io.ox/office/editor/selection',
 
             // in a valid DOM tree, there must always be valid content nodes until end
             // paragraph has been reached, so this point should never be reached
-            Utils.error('Selection.iterateContentNodes(): iteration exceeded selection');
+            Utils.error('Selection.iterateContentNodes(): iteration exceeded end of selection');
             return Utils.BREAK;
         };
 
@@ -879,8 +927,8 @@ define('io.ox/office/editor/selection',
                 // start node and offset (pass true to NOT resolve text spans to text nodes)
                 startInfo = Position.getDOMPosition(rootNode, startPosition, true);
                 if (!startInfo || !startInfo.node) {
-                    Utils.warn('Selection.iterateNodes(): invalid selection');
-                    return;
+                    Utils.error('Selection.iterateNodes(): invalid selection, cannot find DOM node at start position ' + JSON.stringify(startPosition));
+                    return Utils.BREAK;
                 }
 
                 // if located at the beginning of a component: use end of preceding text span if available
@@ -908,8 +956,11 @@ define('io.ox/office/editor/selection',
 
                 // if selection starts after the last character in a paragraph, visit the last text span
                 if (_.isNumber(startOffset) && (startOffset >= Position.getLastTextNodePositionInParagraph(contentNode))) {
-                    textSpan = DOM.findLastPortionSpan(contentNode);
-                    return textSpan ? iterator.call(context, textSpan, position.concat([startOffset]), textSpan.firstChild.nodeValue.length, 0) : undefined;
+                    if ((textSpan = DOM.findLastPortionSpan(contentNode))) {
+                        return iterator.call(context, textSpan, position.concat([startOffset]), textSpan.firstChild.nodeValue.length, 0);
+                    }
+                    Utils.error('Selection.iterateNodes(): cannot find last text span in paragraph at position ' + JSON.stringify(position));
+                    return Utils.BREAK;
                 }
 
                 // visit covered text components in the paragraph

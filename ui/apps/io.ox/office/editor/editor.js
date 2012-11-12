@@ -293,9 +293,13 @@ define('io.ox/office/editor/editor',
         };
 
         /**
-         * Copies the current selection into the internal clipboard.
+         * Generates operations needed to copy the current text selection to
+         * the internal clipboard.
+         *
+         * @returns {Array}
+         *  The operations array that represents the current selection.
          */
-        this.copy = function () {
+        function copyTextSelection() {
 
             var // the operations generator
                 generator = new Operations.Generator(),
@@ -304,9 +308,7 @@ define('io.ox/office/editor/editor',
                 // result of the iteration process
                 result = null;
 
-            // TODO: cell selection/entire table selection
-
-            // visit the paragraphs and tables covered by the selection
+            // visit the paragraphs and tables covered by the text selection
             result = selection.iterateContentNodes(function (contentNode, position, startOffset, endOffset) {
 
                 // paragraphs may be covered partly
@@ -331,15 +333,13 @@ define('io.ox/office/editor/editor',
                         // generate operations for entire paragraph
                         generator.generateParagraphOperations(contentNode, [targetPosition]);
                     }
-                }
 
                 // entire table: generate complete operations array for the table
-                else if (DOM.isTableNode(contentNode)) {
+                } else if (DOM.isTableNode(contentNode)) {
                     generator.generateTableOperations(contentNode, [targetPosition]);
-                }
 
-                else {
-                    Utils.error('Operations.Generator.generateOperationsForSelection(): unknown content node "' + Utils.getNodeName(contentNode) + '" at position ' + JSON.stringify(position) + '.');
+                } else {
+                    Utils.error('Editor.copyTextSelection(): unknown content node "' + Utils.getNodeName(contentNode) + '" at position ' + JSON.stringify(position));
                     return Utils.BREAK;
                 }
 
@@ -347,8 +347,89 @@ define('io.ox/office/editor/editor',
 
             }, this, { shortestPath: true });
 
-            // store generated operations in internal clipboard
-            clipboardOperations = (result === Utils.BREAK) ? [] : generator.getOperations();
+            // return operations, if iteration has not stopped on error
+            return (result === Utils.BREAK) ? [] : generator.getOperations();
+        }
+
+        /**
+         * Generates operations needed to copy the current cell range selection
+         * to the internal clipboard.
+         *
+         * @returns {Array}
+         *  The operations array that represents the current selection.
+         */
+        function copyCellRangeSelection() {
+
+            var // the operations generator
+                generator = new Operations.Generator(),
+                // enclosing table for cell selection
+                tableNode = selection.getEnclosingTable(),
+                // explicit table attributes
+                tableAttributes = null,
+                // all rows in the table
+                tableRowNodes = DOM.getTableRows(tableNode),
+                // relative offset of last visited row and column
+                lastRow = -1, lastCol = -1,
+                // result of the iteration process
+                result = null;
+
+            if (!tableNode) {
+                Utils.error('Editor.copyCellRangeSelection(): missing enclosing table');
+                return [];
+            }
+
+            // split the paragraph to insert the new table between the text portions
+            generator.generateOperation(Operations.PARA_SPLIT, { start: [0, 0] });
+
+            // visit the cell nodes covered by the selection
+            result = selection.iterateTableCells(function (cellNode, position, offsets) {
+
+                // generate operation for new table with the correct number of columns
+                if ((lastRow < 0) && (lastCol < 0)) {
+
+                    // explicit table attributes
+                    tableAttributes = StyleSheets.getExplicitAttributes(tableNode);
+                    // extract the column widths according to the covered columns
+                    tableAttributes.tablegrid = tableStyles.getElementAttributes(tableNode).tablegrid.slice(offsets.firstCol, offsets.firstCol + offsets.width);
+
+                    // generate the operation to create the new table
+                    generator.generateOperation(Operations.TABLE_INSERT, { position: [1], attrs: tableAttributes });
+                }
+
+                // cell is located in a new row (may be called repeatedly, if a row is covered completely by merged cells)
+                while (lastRow < offsets.rowOffset) {
+
+                    // generate operation to create a new row
+                    lastRow += 1;
+                    generator.generateOperationWithAttributes(tableRowNodes[offsets.firstRow + lastRow], Operations.ROW_INSERT, { position: [1, lastRow], count: 1, insertdefaultcells: false });
+
+                    // initialize last column index to detect missing cells at beginning of row (see below)
+                    lastCol = -1;
+                }
+
+                // fill up missing cells (covered by merged cells that are not part of the selection)
+                if (lastCol + 1 < offsets.colOffset) {
+                    generator.generateOperation(Operations.CELL_INSERT, { position: [1, offsets.rowOffset, lastCol + 1], count: offsets.colOffset - lastCol - 1 });
+                }
+                lastCol = offsets.colOffset;
+
+                // generate operations for the cell
+                generator.generateTableCellOperations(cellNode, [1, offsets.rowOffset, offsets.colOffset]);
+            });
+
+            // TODO: covered cells at end of rows; covered rows at end of range
+
+            // return operations, if iteration has not stopped on error
+            return (result === Utils.BREAK) ? [] : generator.getOperations();
+        }
+
+        /**
+         * Copies the current selection into the internal clipboard.
+         */
+        this.copy = function () {
+
+            // generate operations and store them in internal clipboard
+            clipboardOperations = (selection.getSelectionType() === 'cell') ? copyCellRangeSelection() : copyTextSelection();
 
             // dump clipboard
             Utils.info('Editor.copy()');
@@ -4062,7 +4143,7 @@ define('io.ox/office/editor/editor',
 
             // set initial selection
             selection.selectTopPosition();
-            lastOperationEnd = [0, 0];
+            lastOperationEnd = selection.getStartPosition();
 
             self.clearUndo();
             self.setEditMode(null); // set null for 'read-only' and not yet determined edit status by the server
@@ -5301,7 +5382,7 @@ define('io.ox/office/editor/editor',
 
                                 var numberingElement = DOM.createListLabelNode(listObject.text);
 
-                                var span = Utils.findDescendantNode(para, function () { return DOM.isPortionSpan(this); });
+                                var span = DOM.findFirstPortionSpan(para);
                                 var charAttributes = characterStyles.getElementAttributes(span);
                                 if (listObject.imgsrc) {
                                     var absUrl = getDocumentUrl({ get_filename: listObject.imgsrc });

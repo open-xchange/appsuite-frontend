@@ -135,20 +135,12 @@ define('io.ox/office/editor/format/objectstyles',
      */
     function findRelatedTextSpan(object) {
 
-        var // the text span related to the object
-            span = object[0].previousSibling;
-
-        // find preceding span
-        while (span && !DOM.isTextSpan(span)) {
-            span = span.previousSibling;
-        }
+        var // the closest preceding text span
+            span = Utils.findPreviousSiblingNode(object, function () { return DOM.isTextSpan(this); });
 
         // no preceding span found: find following span
         if (!span) {
-            span = object[0].nextSibling;
-            while (span && !DOM.isTextSpan(span)) {
-                span = span.nextSibling;
-            }
+            span = Utils.findNextSiblingTextSpan(object, function () { return DOM.isTextSpan(this); });
         }
 
         return span;

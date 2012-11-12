@@ -559,10 +559,32 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return node && (node.nodeType === 3) && DOM.isPortionSpan(node.parentNode);
     };
 
+    /**
+     * Returns the first text portion span of the specified paragraph node.
+     *
+     * @param {HTMLElement|jQuery} paragraph
+     *  The paragraph node whose first text portion span will be returned. If
+     *  this object is a jQuery collection, uses the first DOM node it
+     *  contains.
+     *
+     * @returns {HTMLElement}
+     *  The first text portion span of the paragraph.
+     */
     DOM.findFirstPortionSpan = function (paragraph) {
         return Utils.findDescendantNode(paragraph, function () { return DOM.isTextSpan(this); }, { children: true });
     };
 
+    /**
+     * Returns the last text portion span of the specified paragraph node.
+     *
+     * @param {HTMLElement|jQuery} paragraph
+     *  The paragraph node whose last text portion span will be returned. If
+     *  this object is a jQuery collection, uses the first DOM node it
+     *  contains.
+     *
+     * @returns {HTMLElement}
+     *  The last text portion span of the paragraph.
+     */
     DOM.findLastPortionSpan = function (paragraph) {
         return Utils.findDescendantNode(paragraph, function () { return DOM.isTextSpan(this); }, { children: true, reverse: true });
     };
