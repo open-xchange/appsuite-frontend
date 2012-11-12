@@ -358,6 +358,53 @@ define('io.ox/office/editor/selection',
         };
 
         /**
+         * Returns an object describing the table cell range that is currently
+         * selected.
+         *
+         * @returns {Object|Null}
+         *  If this selection is contained completely inside a table, returns
+         *  an object containing the following attributes:
+         *  - {HTMLTableElement} tableNode: the table element containing the
+         *      selection,
+         *  - {Number[]} tablePosition: the logical position of the table,
+         *  - {Number[]} firstCellPosition: the logical position of the first
+         *      cell, relative to the table (contains exactly two elements:
+         *      row, column),
+         *  - {Number[]} lastCellPosition: the logical position of the last
+         *      cell, relative to the table (contains exactly two elements:
+         *      row, column),
+         *  - {Number} width: the number of columns covered by the cell range,
+         *  - {Number} height: the number of rows covered by the cell range.
+         *  Otherwise, this method returns null.
+         */
+        this.getSelectedCellRange = function () {
+
+            var // the result object containing all info about the cell range
+                result = { tableNode: this.getEnclosingTable() };
+
+            if (!result.tableNode) {
+                return null;
+            }
+
+            // logical position of the table
+            result.tablePosition = Position.getOxoPosition(rootNode, result.tableNode, 0);
+
+            // convert selection positions to cell positions relative to table
+            if ((startPosition.length < result.tablePosition.length + 2) || (endPosition.length < result.tablePosition.length + 2)) {
+                Utils.error('Selection.getSelectedCellRange(): invalid start or end position');
+                return null;
+            }
+            result.firstCellPosition = startPosition.slice(result.tablePosition.length, result.tablePosition.length + 2);
+            result.lastCellPosition = endPosition.slice(result.tablePosition.length, result.tablePosition.length + 2);
+
+            // width and height of the range for convenience
+            result.width = result.lastCellPosition[1] - result.firstCellPosition[1] + 1;
+            result.height = result.lastCellPosition[0] - result.firstCellPosition[0] + 1;
+
+            return result;
+        };
+
+        /**
          * Returns the object node currently selected.
          *
          * @returns {jQuery}
@@ -566,23 +613,13 @@ define('io.ox/office/editor/selection',
          *      (1) {HTMLTableCellElement} the visited DOM cell element,
          *      (2) {Number[]} its logical position (the last two elements in
          *          this array represent the row and column index of the cell),
-         *      (3) {Object|Undefined} an object containing attributes for the
-         *          position of the visited cell in the cell range, and the
-         *          cell range itself. Contains the following attributes:
-         *          - rowOffset: the row offset, relative to the first row in
-         *              the cell range,
-         *          - colOffset: the column offset, relative to the first
-         *              column in the cell range,
-         *          - firstRow: the absolute index of the first row in the cell
-         *              range,
-         *          - firstCol: the absolute index of the first column in the
-         *              cell range,
-         *          - width: the number of columns in the cell range,
-         *          - height: the number of rows in the cell range.
-         *          Will be undefined, if the current selection is a text range
-         *          in a table.
-         *  If the iterator returns the Utils.BREAK object, the iteration
-         *  process will be stopped immediately.
+         *      (3) {Number|Undefined} the row offset, relative to the first
+         *          row in the rectangular cell range,
+         *      (4) {Number|Undefined} the column offset, relative to the first
+         *          column in the rectangular cell range.
+         *  The last two parameters will be undefined, if the current selection
+         *  is a text range in a table. If the iterator returns the Utils.BREAK
+         *  object, the iteration process will be stopped immediately.
          *
          * @param {Object} [context]
          *  If specified, the iterator will be called with this context (the
@@ -595,39 +632,26 @@ define('io.ox/office/editor/selection',
          */
         this.iterateTableCells = function (iterator, context) {
 
-            var // the closest table containing the selection, and its position
-                tableNode = this.getEnclosingTable(), tablePosition = null,
+            var // information about the cell range and containing table
+                cellRangeInfo = this.getSelectedCellRange(),
 
-                // position of top-left and bottom-right cell, relative to table
-                firstPosition = null, lastPosition = null,
                 // the DOM cells
                 firstCellInfo = null, lastCellInfo = null,
                 // current cell, and its logical position
                 cellInfo = null, cellNode = null, cellPosition = null,
 
-                // cell offset, and information about the cell range
-                cellOffsets = { rowOffset: 0, colOffset: 0, firstRow: 0, firstCol: 0, width: 0, height: 0 },
-                // row/column index for loops
+                // row/column indexes for loops
                 row = 0, col = 0;
 
             // check enclosing table, get its position
-            if (!tableNode) {
+            if (!cellRangeInfo) {
                 Utils.warn('Selection.iterateTableCells(): selection not contained in a single table');
                 return Utils.BREAK;
             }
-            tablePosition = Position.getOxoPosition(rootNode, tableNode, 0);
-
-            // convert selection position to cell position relative to table
-            if ((startPosition.length < tablePosition.length + 2) || (endPosition.length < tablePosition.length + 2)) {
-                Utils.error('Selection.iterateTableCells(): invalid start or end position');
-                return Utils.BREAK;
-            }
-            firstPosition = startPosition.slice(tablePosition.length, tablePosition.length + 2);
-            lastPosition = endPosition.slice(tablePosition.length, tablePosition.length + 2);
 
             // resolve position to closest table cell
-            firstCellInfo = Position.getDOMPosition(tableNode, firstPosition, true);
-            lastCellInfo = Position.getDOMPosition(tableNode, lastPosition, true);
+            firstCellInfo = Position.getDOMPosition(cellRangeInfo.tableNode, cellRangeInfo.firstCellPosition, true);
+            lastCellInfo = Position.getDOMPosition(cellRangeInfo.tableNode, cellRangeInfo.lastCellPosition, true);
             if (!firstCellInfo || !$(firstCellInfo.node).is('td') || !lastCellInfo || !$(lastCellInfo.node).is('td')) {
                 Utils.error('Selection.iterateTableCells(): no table cells found for cell positions');
                 return Utils.BREAK;
@@ -636,34 +660,20 @@ define('io.ox/office/editor/selection',
             // visit all cells for rectangular cell selection mode
             if (cellRangeSelected) {
 
-                // initialize cell offset and range info passed to the iterator
-                cellOffsets = {
-                        rowOffset: 0,
-                        colOffset: 0,
-                        firstRow: firstPosition[0],
-                        firstCol: firstPosition[1],
-                        width: lastPosition[1] - firstPosition[1] + 1,
-                        height: lastPosition[0] - firstPosition[0] + 1
-                    };
-
                 // loop over all cells in the range
-                for (row = 0; row < cellOffsets.height; row += 1) {
-                    for (col = 0; col < cellOffsets.width; col += 1) {
+                for (row = 0; row < cellRangeInfo.height; row += 1) {
+                    for (col = 0; col < cellRangeInfo.width; col += 1) {
 
                         // cell position relative to table
-                        cellPosition = [firstPosition[0] + row, firstPosition[1] + col];
-                        cellInfo = Position.getDOMPosition(tableNode, cellPosition);
+                        cellPosition = [cellRangeInfo.firstCellPosition[0] + row, cellRangeInfo.firstCellPosition[1] + col];
+                        cellInfo = Position.getDOMPosition(cellRangeInfo.tableNode, cellPosition);
 
                         // cellInfo will be undefined, if current position is covered by a merged cell
                         if (cellInfo && $(cellInfo.node).is('td')) {
-
-                            // absolute cell position, and row/column offsets
-                            cellPosition = tablePosition.concat(cellPosition);
-                            cellOffsets.rowOffset = row;
-                            cellOffsets.colOffset = col;
-
-                            // call iterator function
-                            if (iterator.call(context, cellInfo.node, cellPosition, cellOffsets) === Utils.BREAK) { return Utils.BREAK; }
+                            cellPosition = cellRangeInfo.tablePosition.concat(cellPosition);
+                            if (iterator.call(context, cellInfo.node, cellPosition, row, col) === Utils.BREAK) {
+                                return Utils.BREAK;
+                            }
                         }
                     }
                 }
@@ -675,7 +685,8 @@ define('io.ox/office/editor/selection',
                 while (cellNode) {
 
                     // visit current cell
-                    cellPosition = tablePosition.concat(Position.getOxoPosition(tableNode, cellNode, 0));
+                    cellPosition = Position.getOxoPosition(cellRangeInfo.tableNode, cellNode, 0);
+                    cellPosition = cellRangeInfo.tablePosition.concat(cellPosition);
                     if (iterator.call(context, cellNode, cellPosition) === Utils.BREAK) { return Utils.BREAK; }
 
                     // last cell reached
@@ -683,7 +694,7 @@ define('io.ox/office/editor/selection',
 
                     // find next cell node (either next sibling, or first child
                     // of next row, but skip embedded tables)
-                    cellNode = Utils.findNextNode(tableNode, cellNode, 'td', DOM.TABLE_NODE_SELECTOR);
+                    cellNode = Utils.findNextNode(cellRangeInfo.tableNode, cellNode, 'td', DOM.TABLE_NODE_SELECTOR);
                 }
 
                 // in a valid DOM tree, there must always be valid cell nodes until

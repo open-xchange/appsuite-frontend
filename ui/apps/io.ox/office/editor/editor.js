@@ -362,62 +362,58 @@ define('io.ox/office/editor/editor',
 
             var // the operations generator
                 generator = new Operations.Generator(),
-                // enclosing table for cell selection
-                tableNode = selection.getEnclosingTable(),
+                // information about the cell range
+                cellRangeInfo = selection.getSelectedCellRange(),
                 // explicit table attributes
                 tableAttributes = null,
                 // all rows in the table
-                tableRowNodes = DOM.getTableRows(tableNode),
-                // relative offset of last visited row and column
-                lastRow = -1, lastCol = -1,
+                tableRowNodes = null,
+                // relative row offset of last visited cell
+                lastRow = -1,
                 // result of the iteration process
                 result = null;
 
-            if (!tableNode) {
-                Utils.error('Editor.copyCellRangeSelection(): missing enclosing table');
+            // generates operations for missing rows and cells, according to lastRow/lastCol
+            function generateMissingRowsAndCells(row, col) {
+
+                // generate new rows (repeatedly, a row may be covered completely by merged cells)
+                while (lastRow < row) {
+                    lastRow += 1;
+                    generator.generateOperationWithAttributes(tableRowNodes[lastRow], Operations.ROW_INSERT, { position: [1, lastRow], count: 1, insertdefaultcells: false });
+                }
+
+                // TODO: detect missing cells, which are covered by merged cells outside of the cell range
+                // (but do not generate cells covered by merged cells INSIDE the cell range)
+            }
+
+            if (!cellRangeInfo) {
+                Utils.error('Editor.copyCellRangeSelection(): invalid cell range selection');
                 return [];
             }
 
             // split the paragraph to insert the new table between the text portions
             generator.generateOperation(Operations.PARA_SPLIT, { start: [0, 0] });
 
+            // generate the operation to create the new table
+            tableAttributes = StyleSheets.getExplicitAttributes(cellRangeInfo.tableNode);
+            tableAttributes.tablegrid = tableStyles.getElementAttributes(cellRangeInfo.tableNode).tablegrid.slice(cellRangeInfo.firstCellPosition[1], cellRangeInfo.lastCellPosition[1] + 1);
+            generator.generateOperation(Operations.TABLE_INSERT, { position: [1], attrs: tableAttributes });
+
+            // all covered rows in the table
+            tableRowNodes = DOM.getTableRows(cellRangeInfo.tableNode).slice(cellRangeInfo.firstCellPosition[0], cellRangeInfo.lastCellPosition[0] + 1);
+
             // visit the cell nodes covered by the selection
-            result = selection.iterateTableCells(function (cellNode, position, offsets) {
+            result = selection.iterateTableCells(function (cellNode, position, row, col) {
 
-                // generate operation for new table with the correct number of columns
-                if ((lastRow < 0) && (lastCol < 0)) {
-
-                    // explicit table attributes
-                    tableAttributes = StyleSheets.getExplicitAttributes(tableNode);
-                    // extract the column widths according to the covered columns
-                    tableAttributes.tablegrid = tableStyles.getElementAttributes(tableNode).tablegrid.slice(offsets.firstCol, offsets.firstCol + offsets.width);
-
-                    // generate the operation to create the new table
-                    generator.generateOperation(Operations.TABLE_INSERT, { position: [1], attrs: tableAttributes });
-                }
-
-                // cell is located in a new row (may be called repeatedly, if a row is covered completely by merged cells)
-                while (lastRow < offsets.rowOffset) {
-
-                    // generate operation to create a new row
-                    lastRow += 1;
-                    generator.generateOperationWithAttributes(tableRowNodes[offsets.firstRow + lastRow], Operations.ROW_INSERT, { position: [1, lastRow], count: 1, insertdefaultcells: false });
-
-                    // initialize last column index to detect missing cells at beginning of row (see below)
-                    lastCol = -1;
-                }
-
-                // fill up missing cells (covered by merged cells that are not part of the selection)
-                if (lastCol + 1 < offsets.colOffset) {
-                    generator.generateOperation(Operations.CELL_INSERT, { position: [1, offsets.rowOffset, lastCol + 1], count: offsets.colOffset - lastCol - 1 });
-                }
-                lastCol = offsets.colOffset;
+                // generate operations for new rows, and for cells covered by merged cells outside the range
+                generateMissingRowsAndCells(row, col);
 
                 // generate operations for the cell
-                generator.generateTableCellOperations(cellNode, [1, offsets.rowOffset, offsets.colOffset]);
+                generator.generateTableCellOperations(cellNode, [1, row, col]);
             });
 
-            // TODO: covered cells at end of rows; covered rows at end of range
+            // missing rows at bottom of range, covered completely by merged cells
+            generateMissingRowsAndCells(cellRangeInfo.lastCellPosition[0], cellRangeInfo.lastCellPosition[1] + 1);
 
             // return operations, if iteration has not stopped on error
             return (result === Utils.BREAK) ? [] : generator.getOperations();
