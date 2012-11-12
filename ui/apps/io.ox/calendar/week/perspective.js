@@ -57,6 +57,12 @@ define('io.ox/calendar/week/perspective',
 
         updateAppointment: function (obj) {
             var self = this;
+            _.each(obj, function (el, i) {
+                if (el === null) {
+                    delete obj[i];
+                }
+            });
+            obj.ignore_conflicts = true;
             if (obj.recurrence_type > 0) {
                 new dialogs.ModalDialog()
                     .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
