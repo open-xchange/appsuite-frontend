@@ -3261,6 +3261,7 @@ define('io.ox/office/editor/editor',
                             shiftedGrid = 0;
 
                         if (oldTableWidth === 0) { oldTableWidth = tableNode.outerWidth(); }
+                        else { oldTableWidth = Utils.convertHmmToLength(oldTableWidth, 'px', 0); }
                         newTableWidth = lastCell ? (oldTableWidth + shiftX) : oldTableWidth;
 
                         // converting from relational grid to pixel grid
