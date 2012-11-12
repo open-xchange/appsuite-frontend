@@ -252,11 +252,13 @@ define('io.ox/office/editor/format/paragraphstyles',
                     }
                 }
             }
-            //paragraph margin attributes
-            leftMargin += attributes.leftindent;
-            rightMargin += attributes.rightindent;
-            var textIndent = attributes.hangingindent ? -attributes.hangingindent : attributes.firstlineindent ? attributes.firstlineindent : 0;
-            paragraph.css('text-indent', textIndent / 100 + 'mm');
+            //paragraph margin attributes - not applied if paragraph is in a list
+            if (numId < 0) {
+                leftMargin += attributes.leftindent;
+                rightMargin += attributes.rightindent;
+                var textIndent = attributes.hangingindent ? -attributes.hangingindent : attributes.firstlineindent ? attributes.firstlineindent : 0;
+                paragraph.css('text-indent', textIndent / 100 + 'mm');
+            }
 
             //now set left/right margins
             paragraph.css('margin-left', leftMargin / 100 + 'mm');
