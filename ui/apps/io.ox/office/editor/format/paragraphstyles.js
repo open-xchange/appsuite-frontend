@@ -123,11 +123,6 @@ define('io.ox/office/editor/format/paragraphstyles',
                     initBorder(border);
                 }
             },
-
-            hangingindent: {
-                def: 0
-            },
-
             firstlineindent: {
                 def: 0
             },
@@ -273,7 +268,7 @@ define('io.ox/office/editor/format/paragraphstyles',
             if (numId < 0) {
                 leftMargin += attributes.leftindent;
                 rightMargin += attributes.rightindent;
-                var textIndent = attributes.hangingindent ? -attributes.hangingindent : attributes.firstlineindent ? attributes.firstlineindent : 0;
+                var textIndent = attributes.firstlineindent ? attributes.firstlineindent : 0;
                 paragraph.css('text-indent', textIndent / 100 + 'mm');
             }
 

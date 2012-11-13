@@ -39,27 +39,27 @@ define('io.ox/office/editor/format/lists',
             defaultNumberingNumId, defaultBulletNumId;
 
         var defaultBulletListDefinition = {
-            listlevel0: { justification: 'left', leftindent: 1270,     numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', hangingindent: 635 },
-            listlevel1: { justification: 'left', leftindent: 2 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: 'o',  hangingindent: 635 },
-            listlevel2: { justification: 'left', leftindent: 3 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', hangingindent: 635 },
-            listlevel3: { justification: 'left', leftindent: 4 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', hangingindent: 635 },
-            listlevel4: { justification: 'left', leftindent: 5 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: 'o', hangingindent: 635 },
-            listlevel5: { justification: 'left', leftindent: 6 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', hangingindent: 635 },
-            listlevel6: { justification: 'left', leftindent: 7 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', hangingindent: 635 },
-            listlevel7: { justification: 'left', leftindent: 8 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: 'o',  hangingindent: 635 },
-            listlevel8: { justification: 'left', leftindent: 9 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', hangingindent: 635 }
+            listlevel0: { justification: 'left', leftindent: 1270,     numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', firstlineindent: -635 },
+            listlevel1: { justification: 'left', leftindent: 2 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: 'o',  firstlineindent: -635 },
+            listlevel2: { justification: 'left', leftindent: 3 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', firstlineindent: -635 },
+            listlevel3: { justification: 'left', leftindent: 4 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', firstlineindent: -635 },
+            listlevel4: { justification: 'left', leftindent: 5 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: 'o', firstlineindent: -635 },
+            listlevel5: { justification: 'left', leftindent: 6 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', firstlineindent: -635 },
+            listlevel6: { justification: 'left', leftindent: 7 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', firstlineindent: -635 },
+            listlevel7: { justification: 'left', leftindent: 8 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: 'o',  firstlineindent: -635 },
+            listlevel8: { justification: 'left', leftindent: 9 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', firstlineindent: -635 }
         };
         // O 2010 uses: decimal-lowerLetter-lowerRomen-decimal-lowerLetter-lowerRomen-decimal-lowerLetter-lowerRomen-
         var defaultNumberingListDefinition = {
-            listlevel0: { numberformat: 'decimal',       levelstart: 1, leftindent: 1270,     hangingindent: 635, justification: 'left',  leveltext: '%1.'},
-            listlevel1: { numberformat: 'lowerLetter',   levelstart: 1, leftindent: 2 * 1270, hangingindent: 635, justification: 'left',  leveltext: '%2.'},
-            listlevel2: { numberformat: 'upperLetter',   levelstart: 1, leftindent: 3 * 1270, hangingindent: 635, justification: 'right', leveltext: '%3.'},
-            listlevel3: { numberformat: 'lowerRoman',    levelstart: 1, leftindent: 4 * 1270, hangingindent: 635, justification: 'left',  leveltext: '%4.'},
-            listlevel4: { numberformat: 'upperRoman',    levelstart: 1, leftindent: 5 * 1270, hangingindent: 635, justification: 'left',  leveltext: '%5.'},
-            listlevel5: { numberformat: 'decimal',       levelstart: 1, leftindent: 6 * 1270, hangingindent: 635, justification: 'right', leveltext: '%6.'},
-            listlevel6: { numberformat: 'lowerLetter',   levelstart: 1, leftindent: 7 * 1270, hangingindent: 635, justification: 'left',  leveltext: '%7.'},
-            listlevel7: { numberformat: 'upperLetter',   levelstart: 1, leftindent: 8 * 1270, hangingindent: 635, justification: 'left',  leveltext: '%8.'},
-            listlevel8: { numberformat: 'lowerRoman',    levelstart: 1, leftindent: 9 * 1270, hangingindent: 635, justification: 'right', leveltext: '%9.'}
+            listlevel0: { numberformat: 'decimal',       levelstart: 1, leftindent: 1270,     firstlineindent: -635, justification: 'left',  leveltext: '%1.'},
+            listlevel1: { numberformat: 'lowerLetter',   levelstart: 1, leftindent: 2 * 1270, firstlineindent: -635, justification: 'left',  leveltext: '%2.'},
+            listlevel2: { numberformat: 'upperLetter',   levelstart: 1, leftindent: 3 * 1270, firstlineindent: -635, justification: 'right', leveltext: '%3.'},
+            listlevel3: { numberformat: 'lowerRoman',    levelstart: 1, leftindent: 4 * 1270, firstlineindent: -635, justification: 'left',  leveltext: '%4.'},
+            listlevel4: { numberformat: 'upperRoman',    levelstart: 1, leftindent: 5 * 1270, firstlineindent: -635, justification: 'left',  leveltext: '%5.'},
+            listlevel5: { numberformat: 'decimal',       levelstart: 1, leftindent: 6 * 1270, firstlineindent: -635, justification: 'right', leveltext: '%6.'},
+            listlevel6: { numberformat: 'lowerLetter',   levelstart: 1, leftindent: 7 * 1270, firstlineindent: -635, justification: 'left',  leveltext: '%7.'},
+            listlevel7: { numberformat: 'upperLetter',   levelstart: 1, leftindent: 8 * 1270, firstlineindent: -635, justification: 'left',  leveltext: '%8.'},
+            listlevel8: { numberformat: 'lowerRoman',    levelstart: 1, leftindent: 9 * 1270, firstlineindent: -635, justification: 'right', leveltext: '%9.'}
         };
         // base constructor ---------------------------------------------------
 
@@ -71,7 +71,6 @@ define('io.ox/office/editor/format/lists',
             var ret = defaultLevel !== undefined && compareLevel !== undefined &&
             defaultLevel.numberformat === compareLevel.numberformat &&
             defaultLevel.leftindent === compareLevel.leftindent &&
-            defaultLevel.hangingindent === compareLevel.hangingindent &&
             defaultLevel.firstlineindent === compareLevel.firstlineindent &&
             defaultLevel.justification === compareLevel.justification &&
             defaultLevel.leveltext === compareLevel.leveltext &&
@@ -423,8 +422,7 @@ define('io.ox/office/editor/format/lists',
             var format = formatNumberType(levelIndexes, ilvl, currentList);
             _.extend(ret, format);
             ret.indent = levelFormat.leftindent;
-            ret.firstLine = (levelFormat.hangingindent ? levelFormat.leftindent - levelFormat.hangingindent :
-                (levelFormat.firstlineindent ? levelFormat.leftindent + levelFormat.firstlineindent : levelFormat.leftindent));
+            ret.firstLine = levelFormat.firstlineindent ? levelFormat.leftindent + levelFormat.firstlineindent : levelFormat.leftindent);
             return ret;
         };
 
