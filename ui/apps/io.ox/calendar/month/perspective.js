@@ -197,7 +197,7 @@ define('io.ox/calendar/month/perspective',
 
         update: function () {
             var today = new date.Local(),
-                day = $('[date="' + today.getYear() + '-' + today.getMonth() + '-' + today.getDate() + '"]', this.pane);
+                day = $('#' + today.getYear() + '-' + today.getMonth() + '-' + today.getDate(), this.pane);
             if (!day.hasClass('today')) {
                 $('.day.today', this.pane).removeClass('today');
                 day.addClass('today');
@@ -223,7 +223,7 @@ define('io.ox/calendar/month/perspective',
                     duration: 0
                 }, opt),
                 self = this,
-                firstDay = $('[date="' + param.date.getYear() + '-' + param.date.getMonth() + '-1"]', self.pane),
+                firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane),
                 scrollToDate = function (pos) {
                     // scroll to position
                     if (param.duration === 0) {
@@ -237,7 +237,7 @@ define('io.ox/calendar/month/perspective',
             } else {
                 if (param.date.getTime() < self.current.getTime()) {
                     this.drawWeeks({up: true}).done(function () {
-                        firstDay = $('[date="' + param.date.getYear() + '-' + param.date.getMonth() + '-1"]', self.pane);
+                        firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane);
                         scrollToDate(firstDay.position().top  + self.scrollTop() + 2);
                     });
                 }
@@ -355,7 +355,7 @@ define('io.ox/calendar/month/perspective',
                     if (month !== this.current.getTime()) {
                         this.current = new date.Local(month);
                         $('.day:not(.out)', this.pane)
-                            .add($('[date^="' + this.current.getYear() + '-' + this.current.getMonth() + '-"]', this.pane))
+                            .add($('[id^="' + this.current.getYear() + '-' + this.current.getMonth() + '-"]', this.pane))
                             .toggleClass('out');
                         self.monthInfo.text(gt.noI18n(this.current.format('MMMM y')));
                     }
@@ -365,7 +365,7 @@ define('io.ox/calendar/month/perspective',
 
             self.getFolder().done(function () {
                 self.drawWeeks({multi: self.initLoad}).done(function () {
-                    $('[date^="' + self.current.getYear() + '-' + self.current.getMonth() + '-"]', self.pane).toggleClass('out');
+                    $('[id^="' + self.current.getYear() + '-' + self.current.getMonth() + '-"]', self.pane).toggleClass('out');
                     self.gotoMonth();
                 });
             });

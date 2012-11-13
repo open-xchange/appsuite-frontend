@@ -99,7 +99,7 @@ define('io.ox/calendar/month/view',
                             (day.isFirst && i > 0 ? ' borderleft' : '') +
                             (list.hasFirst ? (firstFound ? ' bordertop' : ' borderbottom') : '')
                         )
-                        .attr('date', day.year + '-' + day.month + '-' + day.date)
+                        .attr('id', day.year + '-' + day.month + '-' + day.date)
                         .data('date', day.timestamp)
                         .append(
                             $('<div>').addClass('list abs'),
@@ -156,7 +156,6 @@ define('io.ox/calendar/month/view',
                     endDate = new date.Local(endTSUTC),
                     start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime(),
                     end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime(),
-                    sel,
                     maxCount = 7;
 
                 if (model.get('start_date') < 0) {
@@ -167,9 +166,7 @@ define('io.ox/calendar/month/view',
                 // draw across multiple days
                 while (maxCount > 0) {
                     maxCount--;
-
-                    sel = '[date="' + formatDate(startDate) + '"] .list';
-                    this.$(sel).append(this.renderAppointment(model));
+                    this.$('#' + formatDate(startDate) + ' .list').append(this.renderAppointment(model));
 
                     // inc date
                     if (start !== end) {
