@@ -41,6 +41,8 @@ define('io.ox/calendar/week/view',
         slots:          24,     // amount of shown time-slots
         workStart:      8,      // full hour for start position of working time marker
         workEnd:        18,     // full hour for end position of working time marker
+        mode:           0,      // view mode {1: day, 2: workweek, 3: week}
+        workWeekStart:  1,      // workweek start (0=Sunday, 1=Monday, ..., 6=Saturday)
 
         startDate:      null,   // start of day/week as local date
         clickTimer:     null,   // timer to separate single and double click
@@ -59,12 +61,47 @@ define('io.ox/calendar/week/view',
 
         // init values from prespective
         initialize: function (opt) {
-            this.columns = opt.columns;
-            this.startDate = opt.startDate;
+            // select column value
+            this.mode = opt.mode;
+            this.setStartDate();
             this.collection
                 .on('reset', this.renderAppointments, this)
                 .on('change', this.redrawAppointment, this);
+
             this.bindKeys();
+        },
+
+        setStartDate: function (opt) {
+            if (opt && typeof opt === 'string') {
+                switch (opt) {
+                case 'next':
+                    this.startDate.add(this.columns === 1 ? date.DAY : date.WEEK);
+                    break;
+                case 'prev':
+                    this.startDate.add((this.columns === 1 ? date.DAY : date.WEEK) * -1);
+                    break;
+                default:
+                    break;
+                }
+            } else {
+                switch (this.mode) {
+                case 1: // day
+                    this.columns = 1;
+                    this.startDate = new date.Local().setHours(0, 0, 0, 0);
+                    break;
+                case 2: // workweek
+                    this.columns = 5;
+                    var l = new date.Local(),
+                    weekStart = date.Local.utc((l.getDays() - l.getDay() + this.workWeekStart) * date.DAY);
+                    this.startDate = new date.Local(weekStart);
+                    break;
+                default:
+                case 3: // week
+                    this.columns = 7;
+                    this.startDate = new date.Local().setStartOfWeek();
+                    break;
+                }
+            }
         },
 
         initSettings: function () {
@@ -114,29 +151,28 @@ define('io.ox/calendar/week/view',
             var cT = $(e.currentTarget),
                 t = $(e.target);
             if (cT.hasClass('next') || (t.hasClass('timeslot') && e.type === 'swipeleft' && !this.lasso)) {
-                this.startDate.add(this.columns === 1 ? date.DAY : date.WEEK);
+                this.setStartDate('next');
             }
             if (cT.hasClass('prev') || (t.hasClass('timeslot') && e.type === 'swiperight' && !this.lasso)) {
-                this.startDate.add((this.columns === 1 ? date.DAY : date.WEEK) * -1);
+                this.setStartDate('prev');
             }
             if (cT.hasClass('today')) {
-                this.startDate = this.columns === 1 ? new date.Local().setHours(0, 0, 0, 0) : new date.Local().setStartOfWeek();
+                this.setStartDate();
             }
-            this.trigger('onRefreshView', this.startDate);
+            this.trigger('onRefreshView');
         },
 
         // hadler for key events in toolbar
         onKey: function (e) {
             e.preventDefault();
-            var self = this;
             switch (e.which) {
             case 37:
-                self.startDate.add((self.columns === 1 ? date.DAY : date.WEEK) * -1);
-                self.trigger('onRefreshView', self.startDate);
+                this.setStartDate('prev');
+                this.trigger('onRefreshView');
                 break;
             case 39:
-                self.startDate.add(self.columns === 1 ? date.DAY : date.WEEK);
-                self.trigger('onRefreshView', self.startDate);
+                this.setStartDate('next');
+                this.trigger('onRefreshView');
                 break;
             default:
                 break;
@@ -977,7 +1013,7 @@ define('io.ox/calendar/week/view',
                             d.my.all.busy();
                             self.onUpdateAppointment(app);
                         } else {
-                            self.trigger('onRefreshView', self.startDate);
+                            self.trigger('onRefreshView');
                         }
                         d.my = null;
                     }
@@ -1009,7 +1045,7 @@ define('io.ox/calendar/week/view',
                             });
                             self.onUpdateAppointment(app);
                         } else {
-                            self.trigger('onRefreshView', self.startDate);
+                            self.trigger('onRefreshView');
                         }
                     }
                 })

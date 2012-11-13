@@ -29,12 +29,11 @@ define('io.ox/calendar/week/perspective',
 
         collection:     {},
         columns:        7,
-        startDate:      null,
         dialog:         $(),
         app:            null,
         view:           null,
         folder:         null,
-        mode:           { 'week:day': 1, 'week:workweek': 5, 'week:week': 7 },
+        modes:           { 'week:day': 1, 'week:workweek': 2, 'week:week': 3 },
 
         days: function (d) {
             if (d) {
@@ -136,8 +135,8 @@ define('io.ox/calendar/week/perspective',
 
         refresh: function () {
             var obj = {
-                    start: this.startDate.getTime(),
-                    end: this.startDate.getTime() + (date.DAY * this.columns)
+                    start: this.view.startDate.getTime(),
+                    end: this.view.startDate.getTime() + (date.DAY * this.columns)
                 },
                 self = this;
             this.app.folder.getData().done(function (data) {
@@ -160,21 +159,15 @@ define('io.ox/calendar/week/perspective',
 
         render: function (app, options) {
 
+            // init perspective
             this.app = app;
             this.collection = new Backbone.Collection([]);
             this.main.addClass('week-view').empty();
 
-            this.days(this.mode[options.perspective]);
-
-            if (this.columns === 1) {
-                this.startDate = new date.Local().setHours(0, 0, 0, 0);
-            } else {
-                this.startDate = new date.Local().setStartOfWeek();
-            }
             this.view = new View({
                 collection: this.collection,
                 columns: this.columns,
-                startDate: this.startDate
+                mode: this.modes[options.perspective]
             });
 
             this.view
@@ -182,10 +175,7 @@ define('io.ox/calendar/week/perspective',
                 .on('openCreateAppointment', this.openCreateAppointment, this)
                 .on('openEditAppointment', this.openEditAppointment, this)
                 .on('updateAppointment', this.updateAppointment, this)
-                .on('onRefreshView', function (startDate) {
-                    this.startDate = startDate;
-                    this.refresh();
-                }, this);
+                .on('onRefreshView', this.refresh, this);
 
             this.main.append(this.view.render().el);
 
