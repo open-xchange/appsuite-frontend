@@ -23,6 +23,7 @@ var i18n = require("./lib/build/i18n");
 var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
 var less = require("./lib/build/less");
+var showdown = require('./lib/showdown/src/showdown');
 
 utils.builddir = process.env.builddir || "build";
 console.info("Build path: " + utils.builddir);
@@ -47,6 +48,25 @@ if (debug) console.info("Debug mode: on");
 utils.fileType("source").addHook("filter", utils.includeFilter);
 utils.fileType("module").addHook("filter", utils.includeFilter);
 
+// In case of parse errors, the actually parsed source is stored
+// in tmp/errorfile.js
+function catchParseErrors(f, data, name) {
+    try {
+        return f(data);
+    } catch (e) {
+        fs.writeFileSync('tmp/errorfile.js', data, 'utf8');
+        fail('Parse error in ' + name + ' at ' + e.line + ':' +
+             e.col + '\n' + e.message);
+    }
+}
+
+// parses a string of JavaScript
+function parse(data, name) {
+    return catchParseErrors(function (data) {
+        return jsp.parse(data, false, true);
+    }, data, name);
+}
+
 var defineWalker = ast("define").asCall().walker();
 var defineAsyncWalker = ast("define.async").asCall().walker();
 var assertWalker = ast("assert").asCall().walker();
@@ -56,25 +76,7 @@ function jsFilter (data) {
         data = hint.call(this, data, this.getSrc);
     }
 
-    var tree = parse(data);
-
-    function parse(data) {
-        return catchParseErrors(function (data) {
-            return jsp.parse(data, false, true);
-        }, data);
-    }
-
-    // In case of parse errors, the actually parsed source is stored
-    // in tmp/errorfile.js
-    function catchParseErrors(f, data) {
-        try {
-            return f(data);
-        } catch (e) {
-            fs.writeFileSync('tmp/errorfile.js', data, 'utf8');
-            fail('Parse error in ' + self.task.name + ' at ' + e.line + ':' +
-                 e.col + '\n' + e.message);
-        }
-    }
+    var tree = parse(data, self.task.name);
 
     // Custom processing of the parsed AST
 
@@ -92,7 +94,8 @@ function jsFilter (data) {
         var mod = filename.slice(5, -3);
         if (filename.slice(0, 5) === 'apps/' && (!name || name[1] !== mod)) {
             if (name === undefined) {
-                var newName = parse('(' + JSON.stringify(mod) + ')')[1][0][1];
+                var newName = parse('(' + JSON.stringify(mod) + ')',
+                                    self.task.name)[1][0][1];
                 return [this[0], this[1], [newName].concat(args)];
             } else {
                 fail('Invalid module name: ' + (name ? name[1] : "''") +
@@ -378,7 +381,9 @@ var titles = [];
 function docFile(file, title) {
     filename = "doc/" + file + ".html";
     utils.concat(filename, ["doc/lib/header.html", filename,
-                            "doc/lib/footer.html"]);
+                            "doc/lib/footer.html"], { filter: function(src) {
+                                return new showdown.converter().makeHtml(src);
+                            } });
     titles.push('<a href="' + file +'.html">' + title + '</a><br/>');
 }
 
@@ -533,3 +538,73 @@ task("jakedeps", [], function() {
         return false;
     }
 });
+
+// verify documentation
+
+desc('Verifies that all modules are documented');
+utils.topLevelTask('verify-doc');
+var extPoints = {};
+utils.fileType('doc-source')
+    .addHook('filter', utils.includeFilter)
+    .addHook('filter', verifyDoc)
+    .addHook('define', checkExtensions);
+utils.copy(utils.list('apps', '**/*.js'), {
+    to: 'doc/reference',
+    mapper: function (name) { return name.replace(/\.js$/, '.html'); },
+    type: 'doc-source'
+});
+function verifyDoc(data) {
+    var self = this;
+    this.points = {};
+    var defineHooks = this.type.getHooks('define');
+    ast.scanner(defineWalker, defineHandler)
+        .scanner(defineAsyncWalker, defineHandler)
+        .scan(pro.ast_add_scope(parse(data, self.task.name)));
+    function defineHandler(scope) {
+        if (scope.refs.define !== undefined) return;
+        var args = this[2];
+        var name = _.detect(args, ast.is('string'));
+        var deps = _.detect(args, ast.is('array'));
+        var f = _.detect(args, ast.is('function'));
+        if (!name || !deps || !f) return;
+        for (var i = 0; i < defineHooks.length; i++) {
+            defineHooks[i].call(self, name, deps, f);
+        }
+    }
+    var pointlist = [];
+    for (var i in this.points) pointlist.push(i);
+    pointlist.sort();
+    return '<!doctype html>\n' +
+        '<html><head><title>Extension points</title></head><body><ul>\n' +
+        _.map(pointlist, function (id) { return '<li>' + id + '</li>'; })
+            .join('\n') +
+        '</ul></body></html>\n';
+}
+function warn(message, src) {
+    console.warn(
+        ["WARNING: ", message, "\n  at ", src.name, ":", src.line].join(""));
+}
+var extWalker = _.memoize(function (apiName) {
+    return ast(apiName + '.point').asCall().walker();
+});
+function checkExtensions(name, deps, f) {
+    var extIndex = _(_(deps[1]).pluck(1)).indexOf('io.ox/core/extensions');
+    if (extIndex < 0) return;
+    var self = this;
+    var apiName = f[2][extIndex];
+    var fScope = f[3].scope;
+    ast.scanner(extWalker(apiName), function (scope) {
+        if (scope.refs[apiName] !== fScope) return;
+        var args = this[2];
+        if (args.length !== 1) {
+            console.warn('extension.point should have 1 parameter');
+            return;
+        }
+        if (!pro.when_constant(args[0], checkPoint)) {
+            warn('Can\'t evaluate id of extension point',
+                 self.getSrc(args[0][0].start.line + 1));
+            return;
+        }
+    }).scan(f);
+    function checkPoint(id) { return self.points[id] = true; }
+}

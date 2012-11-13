@@ -127,4 +127,16 @@ Scanner.prototype.scan = function(tree) {
     return w.with_walkers(walkers, function() { return w.walk(tree); });
 };
 
+ast.walker = {
+    call: ast('f').any('f').asCall().walker(),
+    method: ast('x.x').any('x').asCall().walker()
+};
+
+ast.getter = {
+    call: ast('f').asCall().getter('f'),
+    methodObj: ast('obj.method').asCall().getter('obj'),
+    methodName: ast('obj.method').asCall().getter('method'),
+    string: ast('"str"').getter('str')
+};
+
 module.exports = ast;

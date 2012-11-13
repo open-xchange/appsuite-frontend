@@ -21,12 +21,6 @@ var rimraf = require("../rimraf/rimraf");
 var jshint = require("../jshint").JSHINT;
 var _ = require("../underscore.js");
 
-var gtWalker = ast("gt").any("gt").asCall().walker();
-var gtMethodWalker = ast("gt.gt").any("gt").asCall().walker();
-var getGt = ast("gt").asCall().getter("gt");
-var getMethod = ast("gt.gt").asCall().getter("gt");
-var getStr = ast("'str'").getter("str");
-
 var potHeader = 'msgid ""\nmsgstr ""\n' +
     '"Project-Id-Version: Open-Xchange 7\\n"\n' +
     '"POT-Creation-Date: ' + utils.startTime + '\\n"\n' +
@@ -231,14 +225,14 @@ exports.potScanner = function(name, deps, f) {
     // find gettext calls
     // results are stored in pot and exports.potFiles
     var gtScope = f[3].scope;
-    ast.scanner(gtWalker, function(scope) {
-        if (getGt(this) !== apiName) return;
+    ast.scanner(ast.walker.call, function(scope) {
+        if (ast.getter.call(this) !== apiName) return;
         if (scope.refs[apiName] !== gtScope) return;
         return addMessage(self.task.name, this, gtMethods.gettext, self.getSrc);
-    }).scanner(gtMethodWalker, function(scope) {
-        if (getMethod[0](this) !== apiName) return;
+    }).scanner(ast.walker.method, function(scope) {
+        if (ast.getter.methodObj(this) !== apiName) return;
         if (scope.refs[apiName] !== gtScope) return;
-        var method = gtMethods[getMethod[1](this)];
+        var method = gtMethods[ast.getter.methodName(this)];
         if (!method) return;
         return addMessage(self.task.name, this, method, self.getSrc);
     }).scan(f);
