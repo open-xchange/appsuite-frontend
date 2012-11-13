@@ -617,7 +617,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  A new empty text field element, as jQuery object.
      */
     DOM.createFieldNode = function (text) {
-        return $('<div>').addClass('component field');
+        return $('<div>', { contenteditable: false }).addClass('component field');
     };
 
     /**
@@ -647,7 +647,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  A new tab element, as jQuery object.
      */
     DOM.createTabNode = function () {
-        return $('<div>', { contenteditable: false }).addClass('tab component');
+        return $('<div>', { contenteditable: false }).addClass('component tab');
     };
 
     /**
