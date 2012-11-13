@@ -196,6 +196,12 @@ define('io.ox/calendar/month/perspective',
         },
 
         update: function () {
+            var today = new date.Local(),
+                day = $('[date="' + today.getYear() + '-' + today.getMonth() + '-' + today.getDate() + '"]', this.pane);
+            if (!day.hasClass('today')) {
+                $('.day.today', this.pane).removeClass('today');
+                day.addClass('today');
+            }
             var weeks = (this.lastWeek - this.firstWeek) / date.WEEK;
             this.updateWeeks({start: this.firstWeek, weeks: weeks});
         },
