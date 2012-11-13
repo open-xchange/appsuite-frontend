@@ -226,14 +226,6 @@ define('io.ox/mail/view-detail',
             // replace images on source level
             source = source.replace(regImageSrc, '$1' + ox.apiRoot);
 
-            // apply new naming guidelines ;-) Sorry, we just have to
-            if (!isLarge) {
-                source = source.replace(/dennis sieben/ig, 'Dennis App Suite (Sieben)')
-                    .replace(/D7/ig, 'D App Suite (7)')
-                    .replace(/([^\/])OX7/ig, '$1<b> OX App Suite </b>')
-                    .replace(/7\.0/ig, '<b> App Suite (7.0) </b>');
-            }
-
             // robust constructor for large HTML
             content = document.createElement('DIV');
             content.className = 'content noI18n';

@@ -38,7 +38,7 @@ html, body {
 }
 
 .clear-title {
-    font-family: 'Segoe UI Light', OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Segoe UI Light', 'Segoe UI', OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 200;
     font-size: 20pt;
     line-height: 1.15em;

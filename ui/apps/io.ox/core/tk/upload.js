@@ -78,8 +78,12 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
         _(options.actions || []).each(function (action) {
             var $actionNode = nodeGenerator();
             $actionNode.append($("<div>").html(action.label).center()).on({
-                dragenter: function () {
+                dragenter: function (e) {
                     self.trigger("dragenter", action.id, action);
+                    // make sure it's file oriented
+                    e = e.originalEvent || e;
+                    //console.log('YEAH', e.dataTransfer.files, e);
+                    //TODO: get date about dragged object
                     if (highlightedAction) {
                         highlightedAction.removeClass("io-ox-dropzone-hover");
                     }

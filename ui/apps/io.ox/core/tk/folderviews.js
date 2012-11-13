@@ -482,7 +482,7 @@ define('io.ox/core/tk/folderviews',
                     .build(function () {
                         this.getContentNode().append(
                             $('<div class="row-fluid">').append(
-                                api.getBreadcrumb(folder.id, { subfolders: false }),
+                                api.getBreadcrumb(folder, { subfolders: false }),
                                 $('<input>', { type: 'text' })
                                 .attr('placeholder', gt('Folder name'))
                                 .addClass('span12')
