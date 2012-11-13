@@ -46,8 +46,8 @@ define('io.ox/office/editor/selection',
             // whether the current text range has been selected backwards
             backwards = false,
 
-            // object node currently selected, as jQuery collection
-            selectedObject = $(),
+            // drawing node currently selected, as jQuery collection
+            selectedDrawing = $(),
 
             // whether this selection represents a rectangular table cell range
             cellRangeSelected = false,
@@ -85,7 +85,7 @@ define('io.ox/office/editor/selection',
          * @param {Number[]} position
          *  The logical position of the target node. Must be the position of a
          *  paragraph child node, either a text span, a text component (fields,
-         *  tabs), or an object node.
+         *  tabs), or a drawing node.
          *
          * @returns {DOM.Point|Null}
          *  The DOM-Point object representing the passed logical position, or
@@ -140,8 +140,8 @@ define('io.ox/office/editor/selection',
                 isCursor = false,
                 // table containing the selection
                 tableNode = null,
-                // selected object node
-                objectInfo = null;
+                // selected drawing node
+                nodeInfo = null;
 
             // check for cell range selection (must be in the same table)
             cellRangeSelected = $(anchorPoint.node).is('tr') && $(focusPoint.node).is('tr') && (anchorPoint.node.parentNode === focusPoint.node.parentNode);
@@ -174,14 +174,14 @@ define('io.ox/office/editor/selection',
             self.startPaM.oxoPosition = startPosition = Position.getTextLevelOxoPosition(startPoint, rootNode, false, forwardCursor);
             self.endPaM.oxoPosition = endPosition = isCursor ? _.clone(startPosition) : Position.getTextLevelOxoPosition(endPoint, rootNode, true, forwardCursor);
 
-            // check for object selection
-            DOM.clearObjectSelection(selectedObject);
-            selectedObject = $();
+            // check for drawing selection
+            DOM.clearDrawingSelection(selectedDrawing);
+            selectedDrawing = $();
             if (!cellRangeSelected && self.isSingleComponentSelection()) {
-                objectInfo = Position.getDOMPosition(rootNode, startPosition, true);
-                if (objectInfo && DOM.isObjectNode(objectInfo.node)) {
-                    selectedObject = $(objectInfo.node);
-                    // TODO: move call to DOM.drawObjectSelection() to here once
+                nodeInfo = Position.getDOMPosition(rootNode, startPosition, true);
+                if (nodeInfo && DOM.isDrawingNode(nodeInfo.node)) {
+                    selectedDrawing = $(nodeInfo.node);
+                    // TODO: move call to DOM.drawDrawingSelection() to here once
                     // editor code becomes independent from explicit mouse handlers
                 }
             }
@@ -261,11 +261,11 @@ define('io.ox/office/editor/selection',
          *
          * @returns {String}
          *  Returns 'text' for a text range or text cursor, or 'cell' for a
-         *  rectangular cell range in a table, or 'object' for an object
+         *  rectangular cell range in a table, or 'drawing' for a drawing
          *  selection.
          */
         this.getSelectionType = function () {
-            return cellRangeSelected ? 'cell' : (selectedObject.length > 0) ? 'object' : 'text';
+            return cellRangeSelected ? 'cell' : (selectedDrawing.length > 0) ? 'drawing' : 'text';
         };
 
         /**
@@ -405,14 +405,14 @@ define('io.ox/office/editor/selection',
         };
 
         /**
-         * Returns the object node currently selected.
+         * Returns the drawing node currently selected.
          *
          * @returns {jQuery}
-         *  A jQuery collection containing the currently selected object, if
+         *  A jQuery collection containing the currently selected drawing, if
          *  existing; otherwise an empty jQuery collection.
          */
-        this.getSelectedObject = function () {
-            return selectedObject;
+        this.getSelectedDrawing = function () {
+            return selectedDrawing;
         };
 
         // selection manipulation ---------------------------------------------
@@ -451,8 +451,8 @@ define('io.ox/office/editor/selection',
                 });
                 break;
 
-            // do not set any browser selection in object selection mode
-            case 'object':
+            // do not set any browser selection in drawing selection mode
+            case 'drawing':
                 break;
 
             default:
@@ -478,7 +478,7 @@ define('io.ox/office/editor/selection',
 
             if (browserSelection.active) {
                 applyBrowserSelection(browserSelection, forwardCursor);
-            } else if (selectedObject.length === 0) {
+            } else if (selectedDrawing.length === 0) {
                 Utils.warn('Selection.updateFromBrowserSelection(): missing valid browser selection');
             }
 
@@ -491,13 +491,13 @@ define('io.ox/office/editor/selection',
          * @param {Number[} newStartPosition
          *  The logical position of the first text component in the selection.
          *  Must be the position of a paragraph child node, either a text span,
-         *  a text component (fields, tabs), or an object node.
+         *  a text component (fields, tabs), or a drawing node.
          *
          * @param {Number[]} [newEndPosition]
          *  The logical position behind the last text component in the
          *  selection (half-open range). Must be the position of a paragraph
          *  child node, either a text span, a text component (fields, tabs), or
-         *  an object node. If omitted, sets a text cursor according to the
+         *  a drawing node. If omitted, sets a text cursor according to the
          *  passed start position.
          *
          * @returns {Selection}
@@ -530,7 +530,7 @@ define('io.ox/office/editor/selection',
 
         /**
          * Sets the text cursor to the first available cursor position in the
-         * document. Skips leading floating objects in the first paragraph. If
+         * document. Skips leading floating drawings in the first paragraph. If
          * the first content node is a table, selects its first available
          * cell paragraph (may be located in a sub table in the first outer
          * cell).
@@ -553,36 +553,36 @@ define('io.ox/office/editor/selection',
         };
 
         /**
-         * If this selection selects an object node, changes the browser
-         * selection to a range that starts directly before that object node,
-         * and ends directly after that object.
+         * If this selection selects a drawing node, changes the browser
+         * selection to a range that starts directly before that drawing node,
+         * and ends directly after that drawing.
          *
          * @returns {Selection}
          *  A reference to this instance.
          */
-        this.selectObjectAsText = function () {
+        this.selectDrawingAsText = function () {
 
-            var // the selected object, as plain DOM node
-                objectNode = selectedObject[0],
-                // whether the object is in inline mode
-                inline = objectNode && DOM.isInlineObjectNode(objectNode),
-                // previous text span of the object node
-                prevTextSpan = inline ? objectNode.previousSibling : null,
-                // next text span of the object node (skip following floating objects)
-                nextTextSpan = objectNode ? Utils.findNextSiblingNode(objectNode, function () { return DOM.isPortionSpan(this); }) : null,
-                // DOM points representing the text selection over the object
+            var // the selected drawing, as plain DOM node
+                drawingNode = selectedDrawing[0],
+                // whether the drawing is in inline mode
+                inline = drawingNode && DOM.isInlineDrawingNode(drawingNode),
+                // previous text span of the drawing node
+                prevTextSpan = inline ? drawingNode.previousSibling : null,
+                // next text span of the drawing node (skip following floating drawings)
+                nextTextSpan = drawingNode ? Utils.findNextSiblingNode(drawingNode, function () { return DOM.isPortionSpan(this); }) : null,
+                // DOM points representing the text selection over the drawing
                 startPoint = null, endPoint = null;
 
-            if (objectNode) {
+            if (drawingNode) {
 
-                // remove object selection boxes
-                DOM.clearObjectSelection(objectNode);
+                // remove drawing selection boxes
+                DOM.clearDrawingSelection(drawingNode);
 
-                // start point after the last character preceding the object
+                // start point after the last character preceding the drawing
                 if (DOM.isPortionSpan(prevTextSpan)) {
                     startPoint = new DOM.Point(prevTextSpan.firstChild, prevTextSpan.firstChild.nodeValue.length);
                 }
-                // end point before the first character following the object
+                // end point before the first character following the drawing
                 if (DOM.isPortionSpan(nextTextSpan)) {
                     endPoint = new DOM.Point(nextTextSpan.firstChild, 0);
                 }
@@ -807,8 +807,8 @@ define('io.ox/office/editor/selection',
 
                 // find next content node in DOM tree (searches in own siblings, AND in other nodes
                 // following the parent node, e.g. the next table cell, or paragraphs following the
-                // containing table, etc.; but skips object nodes that may contain their own paragraphs)
-                contentNode = Utils.findNextNode(rootNode, contentNode, DOM.CONTENT_NODE_SELECTOR, DOM.OBJECT_NODE_SELECTOR);
+                // containing table, etc.; but skips drawing nodes that may contain their own paragraphs)
+                contentNode = Utils.findNextNode(rootNode, contentNode, DOM.CONTENT_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR);
 
                 // iterate into a table, if shortest-path option is off, or the end paragraph is inside the table
                 while (DOM.isTableNode(contentNode) && (!shortestPath || (lastParagraph && contentNode.contains(lastParagraph)))) {
@@ -980,8 +980,8 @@ define('io.ox/office/editor/selection',
                 singleComponent = _.isNumber(startOffset) && _.isNumber(endOffset) && (startOffset === endOffset);
                 return Position.iterateParagraphChildNodes(contentNode, function (node, nodeStart, nodeLength, nodeOffset, offsetLength) {
 
-                    // skip floating objects (unless they are selected directly) and helper nodes
-                    if (DOM.isTextSpan(node) || DOM.isTextComponentNode(node) || DOM.isInlineObjectNode(node) || (singleComponent && DOM.isFloatingObjectNode(node))) {
+                    // skip floating drawings (unless they are selected directly) and helper nodes
+                    if (DOM.isTextSpan(node) || DOM.isTextComponentNode(node) || DOM.isInlineDrawingNode(node) || (singleComponent && DOM.isFloatingDrawingNode(node))) {
                         // create local copy of position, iterator is allowed to change the array
                         return iterator.call(context, node, position.concat([nodeStart + nodeOffset]), nodeOffset, offsetLength);
                     }

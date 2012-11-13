@@ -15,9 +15,9 @@ define('io.ox/office/editor/controller',
     ['io.ox/office/tk/controller',
      'io.ox/office/editor/image',
      'io.ox/office/editor/hyperlink',
-     'io.ox/office/editor/format/objectstyles',
+     'io.ox/office/editor/format/drawingstyles',
      'io.ox/office/editor/format/paragraphstyles'
-    ], function (Controller, Image, Hyperlink, ObjectStyles, ParagraphStyles) {
+    ], function (Controller, Image, Hyperlink, DrawingStyles, ParagraphStyles) {
 
     'use strict';
 
@@ -287,23 +287,25 @@ define('io.ox/office/editor/controller',
                     done: $.noop
                 },
 
-                'document/editable/image': {
+                // drawing
+
+                'document/editable/drawing': {
                     parent: 'document/editable',
-                    enable: function (enabled) { return enabled && editor.isImageSelected(); }
+                    enable: function (enabled) { return enabled && editor.isDrawingSelected(); }
                 },
-                'image/delete': {
-                    parent: 'document/editable/image',
+                'drawing/delete': {
+                    parent: 'document/editable/drawing',
                     set: function () { editor.deleteSelected(); }
                 },
 
-                'image/attributes': {
-                    parent: 'document/editable/image',
-                    get: function () { return editor.getAttributes('image'); }
+                'drawing/attributes': {
+                    parent: 'document/editable/drawing',
+                    get: function () { return editor.getAttributes('drawing'); }
                 },
-                'image/floatmode': {
-                    parent: 'image/attributes',
-                    get: function (attributes) { return ObjectStyles.getFloatModeFromAttributes(attributes); },
-                    set: function (floatMode) { editor.setAttributes('image', ObjectStyles.getAttributesFromFloatMode(floatMode)); }
+                'drawing/floatmode': {
+                    parent: 'drawing/attributes',
+                    get: function (attributes) { return DrawingStyles.getFloatModeFromAttributes(attributes); },
+                    set: function (floatMode) { editor.setAttributes('drawing', DrawingStyles.getAttributesFromFloatMode(floatMode)); }
                 },
                 // debug
 

@@ -196,7 +196,7 @@ define('io.ox/office/editor/editor',
             tableStyles = documentStyles.getStyleSheets('table'),
             tableRowStyles = documentStyles.getStyleSheets('row'),
             tableCellStyles = documentStyles.getStyleSheets('cell'),
-            imageStyles = documentStyles.getStyleSheets('image'),
+            drawingStyles = documentStyles.getStyleSheets('drawing'),
             pageStyles = documentStyles.getStyleSheets('page'),
             lists = documentStyles.getLists(),
 
@@ -277,7 +277,7 @@ define('io.ox/office/editor/editor',
 
         /**
          * Returns whether the editor contains a selection range (text,
-         * objects, or table cells) instead of a simple text cursor.
+         * drawings, or table cells) instead of a simple text cursor.
          */
         this.hasSelectedRange = function () {
             return !selection.isTextCursor();
@@ -431,7 +431,7 @@ define('io.ox/office/editor/editor',
             switch (selection.getSelectionType()) {
 
             case 'text':
-            case 'object':
+            case 'drawing':
                 clipboardOperations = copyTextSelection();
                 break;
 
@@ -544,7 +544,7 @@ define('io.ox/office/editor/editor',
                 var data = evt && evt.target && evt.target.result;
 
                 if (data) {
-                    createOperationsFromTextClipboard([{operation: Operations.IMAGE_INSERT, data: data, depth: 0}]);
+                    createOperationsFromTextClipboard([{operation: Operations.DRAWING_INSERT, data: data, depth: 0}]);
                 }
             }
 
@@ -713,7 +713,7 @@ define('io.ox/office/editor/editor',
 
                 // collect all non-empty text spans in the paragraph
                 Position.iterateParagraphChildNodes(paragraph, function (node) {
-                    // DOM.iterateTextSpans() skips object nodes
+                    // DOM.iterateTextSpans() skips drawing nodes
                     DOM.iterateTextSpans(node, function (span) {
                         textSpans.push(span);
                         elementText += span.firstChild.nodeValue;
@@ -799,11 +799,11 @@ define('io.ox/office/editor/editor',
 
                 undoManager.startGroup();
 
-                var objectInfo = selection.isSingleComponentSelection() ? Position.getDOMPosition(editdiv, selection.getStartPosition(), true) : null;
-                if (objectInfo && DOM.isObjectNode(objectInfo.node)) {
-                    // An image selection
-                    // This deleting of images is only possible with the button, not with an key down event.
-                    deleteSelectedObject(selection);
+                var nodeInfo = selection.isSingleComponentSelection() ? Position.getDOMPosition(editdiv, selection.getStartPosition(), true) : null;
+                if (nodeInfo && DOM.isDrawingNode(nodeInfo.node)) {
+                    // An drawing selection
+                    // This deleting of drawings is only possible with the button, not with an key down event.
+                    deleteSelectedDrawing(selection);
 
                 } else if (selection.hasSameParentComponent()) {
                     // Only one paragraph concerned from deletion.
@@ -1308,9 +1308,10 @@ define('io.ox/office/editor/editor',
 
             var position = selection.getStartPosition(),
                 newOperation = {
-                    name: Operations.IMAGE_INSERT,
+                    name: Operations.DRAWING_INSERT,
                     position: position,
-                    imgurl: imageFragment
+                    type: 'image',
+                    attrs: { imgurl: imageFragment }
                 };
 
             applyOperation(newOperation, true, true);
@@ -1325,9 +1326,10 @@ define('io.ox/office/editor/editor',
 
             var position = selection.getStartPosition(),
                 newOperation = {
-                    name: Operations.IMAGE_INSERT,
+                    name: Operations.DRAWING_INSERT,
                     position: position,
-                    imgurl: imageURL
+                    type: 'image',
+                    attrs: { imgurl: imageURL }
                 };
 
             applyOperation(newOperation, true, true);
@@ -1342,9 +1344,10 @@ define('io.ox/office/editor/editor',
 
             var position = selection.getStartPosition(),
                 newOperation = {
-                    name: Operations.IMAGE_INSERT,
+                    name: Operations.DRAWING_INSERT,
                     position: position,
-                    imgdata: imageData
+                    type: 'image',
+                    attrs: { imgdata: imageData }
                 };
 
             applyOperation(newOperation, true, true);
@@ -1584,7 +1587,7 @@ define('io.ox/office/editor/editor',
 
             var // whether the selection is a simple cursor
                 isCursor = selection.isTextCursor(),
-                // table or object element contained by the selection
+                // table or drawing element contained by the selection
                 element = null,
                 // resulting merged attributes
                 attributes = {};
@@ -1642,10 +1645,10 @@ define('io.ox/office/editor/editor',
                 }
                 break;
 
-            case 'image':
-                // TODO: needs change when multiple objects can be selected
-                if ((element = selection.getSelectedObject()[0]) && DOM.isImageNode(element)) {
-                    mergeElementAttributes(imageStyles.getElementAttributes(element));
+            case 'drawing':
+                // TODO: needs change when multiple drawings can be selected
+                if ((element = selection.getSelectedDrawing()[0]) && DOM.isDrawingNode(element)) {
+                    mergeElementAttributes(drawingStyles.getElementAttributes(element));
                 }
                 break;
 
@@ -1700,7 +1703,7 @@ define('io.ox/office/editor/editor',
             // with smaller parts of the current selection).
             undoManager.enterGroup(function () {
 
-                var // table or object element contained by the selection
+                var // table or drawing element contained by the selection
                     element = null,
                     // operations generator
                     generator = new Operations.Generator(),
@@ -1785,9 +1788,9 @@ define('io.ox/office/editor/editor',
                     }
                     break;
 
-                case 'image':
-                    // TODO: needs change when multiple objects can be selected
-                    if ((element = selection.getSelectedObject()[0]) && DOM.isImageNode(element)) {
+                case 'drawing':
+                    // TODO: needs change when multiple drawings can be selected
+                    if ((element = selection.getSelectedDrawing()[0]) && DOM.isDrawingNode(element)) {
                         generateAttributeOperation(Position.getOxoPosition(editdiv, element, 0));
                     }
                     break;
@@ -1877,7 +1880,7 @@ define('io.ox/office/editor/editor',
          * includes the rectangular table cell selection mode.
          */
         this.isTextSelected = function () {
-            return selection.getSelectionType() !== 'object';
+            return selection.getSelectionType() !== 'drawing';
         };
 
         // PUBLIC TABLE METHODS
@@ -1886,22 +1889,13 @@ define('io.ox/office/editor/editor',
             return !_.isNull(selection.getEnclosingTable());
         };
 
-        // PUBLIC OBJECT METHODS
+        // PUBLIC DRAWING METHODS
 
         /**
-         * Returns whether the current selection selects one or more objects.
+         * Returns whether the current selection selects one or more drawings.
          */
-        this.isObjectSelected = function () {
-            return selection.getSelectionType() === 'object';
-        };
-
-        /**
-         * Returns whether the current selection selects one or more image
-         * objects. Returns also true, if the object selection contains other
-         * objects too.
-         */
-        this.isImageSelected = function () {
-            return DOM.isImageNode(selection.getSelectedObject());
+        this.isDrawingSelected = function () {
+            return selection.getSelectionType() === 'drawing';
         };
 
         /**
@@ -2127,51 +2121,52 @@ define('io.ox/office/editor/editor',
 
         function processMouseDown(event) {
 
-            var // object start and end position for selection
+            var // drawing start and end position for selection
                 startPosition = null, endPosition = null,
-                // mouse click on an object node
-                object = $(event.target).closest(DOM.OBJECT_NODE_SELECTOR),
-                isObjectNode = false,
+                // mouse click on a drawing node
+                drawing = $(event.target).closest(DOM.DRAWING_NODE_SELECTOR),
+                isDrawingNode = false,
                 isResizeNode = false;
 
-            if (object.length > 0) {
-                isObjectNode = true;
+            if (drawing.length > 0) {
+                isDrawingNode = true;
             } else {
-                object = $(event.target).closest(DOM.RESIZE_NODE_SELECTOR);
-                if (object.length > 0) {
+                // mouse click on a table resize node
+                drawing = $(event.target).closest(DOM.RESIZE_NODE_SELECTOR);
+                if (drawing.length > 0) {
                     isResizeNode = true;
                 }
             }
 
             preselectedAttributes = {};
 
-            // click on object node: set browser selection to object node, draw selection
-            if ((object.length > 0) && (editdiv[0].contains(object[0]))) {
+            // click on drawing node: set browser selection to drawing node, draw selection
+            if ((drawing.length > 0) && (editdiv[0].contains(drawing[0]))) {
 
                 // prevent default click handling of the browser
                 event.preventDefault();
                 // set focus to the document container (may be located in GUI edit fields)
                 self.grabFocus();
 
-                // checking if the object already has a selection (nothing to do here)
-                if (DOM.hasObjectSelection(object)) {
+                // checking if the drawing already has a selection (nothing to do here)
+                if (DOM.hasDrawingSelection(drawing)) {
                     return;
                 }
 
-                if (isObjectNode) {
-                    // select the object
-                    startPosition = Position.getOxoPosition(editdiv, object[0], 0);
-                    endPosition = Position.getOxoPosition(editdiv, object[0], 1);
+                if (isDrawingNode) {
+                    // select the drawing
+                    startPosition = Position.getOxoPosition(editdiv, drawing[0], 0);
+                    endPosition = Position.getOxoPosition(editdiv, drawing[0], 1);
                     selection.setTextSelection(startPosition, endPosition);
-                    drawObjectSelection(object);
+                    drawDrawingSelection(drawing);
                 }
 
                 if (isResizeNode) {
-                    drawTableCellResizeSelection(object);
+                    drawTableCellResizeSelection(drawing);
                 }
 
-                // send initial mouse down event to the handlers registered in drawObjectSelection()
-                object.triggerHandler('mousedown', event);
+                // send initial mouse down event to the handlers registered in drawDrawingSelection()
+                drawing.triggerHandler('mousedown', event);
 
             } else {
                 // clicked somewhere else: calculate logical selection from browser selection,
@@ -2182,8 +2177,8 @@ define('io.ox/office/editor/editor',
         }
 
         function processMouseUp() {
-            // mouse up while object selected: selection does not change
-            if (selection.getSelectionType() !== 'object') {
+            // mouse up while drawing selected: selection does not change
+            if (selection.getSelectionType() !== 'drawing') {
                 // calculate logical selection from browser selection, after
                 // browser has processed the mouse event
                 updateSelection();
@@ -2203,14 +2198,14 @@ define('io.ox/office/editor/editor',
 
             if (isCursorKeyEvent(event)) {
 
-                // any navigation key: change object selection to text selection before
-                selection.selectObjectAsText();
+                // any navigation key: change drawing selection to text selection before
+                selection.selectDrawingAsText();
 
-                // let browser process the key event, select an object that has been covered exactly
+                // let browser process the key event, select a drawing that has been covered exactly
                 updateSelection(isForwardCursorKey(event.keyCode)).done(function () {
-                    // draw selection box for selected objects
+                    // draw selection box for selected drawings
                     if (event.shiftKey) {
-                        drawObjectSelection(selection.getSelectedObject());
+                        drawDrawingSelection(selection.getSelectedDrawing());
                     }
                 });
 
@@ -2278,14 +2273,14 @@ define('io.ox/office/editor/editor',
                         startPosition = selection.startPaM.oxoPosition,
                         paraLen = Position.getParagraphLength(editdiv, startPosition);
 
-                    // skipping floated images
+                    // skipping floated drawings
                     while (selection.startPaM.oxoPosition[lastValue] < paraLen) {
 
                         var testPosition = _.clone(selection.startPaM.oxoPosition),
                             node = Position.getDOMPosition(editdiv, testPosition, true).node;
 
-                        // is the image at testPosition a floated image?
-                        if ((node) && (DOM.isFloatingObjectNode(node))) {
+                        // is the node at testPosition a floated drawing?
+                        if ((node) && (DOM.isFloatingDrawingNode(node))) {
                             selection.startPaM.oxoPosition[lastValue] += 1;
                         } else {
                             break;
@@ -2354,15 +2349,15 @@ define('io.ox/office/editor/editor',
                 else {
                     var lastValue = selection.startPaM.oxoPosition.length - 1;
 
-                    // skipping floated images
+                    // skipping floated drawings
                     while (selection.startPaM.oxoPosition[lastValue] > 0) {
 
                         var testPosition = _.clone(selection.startPaM.oxoPosition);
                         testPosition[lastValue] -= 1;
                         var node = Position.getDOMPosition(editdiv, testPosition, true).node;
 
-                        // is the image at testPosition a floated image?
-                        if ((node) && (DOM.isFloatingObjectNode(node))) {
+                        // is the node at testPosition a floated drawing?
+                        if ((node) && (DOM.isFloatingDrawingNode(node))) {
                             selection.startPaM.oxoPosition[lastValue] -= 1;
                         } else {
                             break;
@@ -2648,7 +2643,7 @@ define('io.ox/office/editor/editor',
                         if ($(child).is('p, div') || $(child).is('br') && (!$(child.parentNode).is('p, div') || $(child.parentNode).hasClass('io-ox-office-clipboard'))) {
                             result.push({operation: Operations.PARA_INSERT, depth: depth});
                         } else if ($(child).is('img')) {
-                            result.push({operation: Operations.IMAGE_INSERT, data: child.src, depth: depth});
+                            result.push({operation: Operations.DRAWING_INSERT, data: child.src, depth: depth});
                         } else if ($(child).is('style')) {
                             nextLevel = false;
                         }
@@ -2705,7 +2700,7 @@ define('io.ox/office/editor/editor',
                         self.insertTab();
                         break;
 
-                    case Operations.IMAGE_INSERT:
+                    case Operations.DRAWING_INSERT:
                         if (_.isString(entry.data)) {
                             if (entry.data.substring(0, 10) === 'data:image') {
                                 // base64 image data
@@ -3046,8 +3041,8 @@ define('io.ox/office/editor/editor',
             implSplitParagraph(operation.start);
         };
 
-        operationHandlers[Operations.IMAGE_INSERT] = function (operation) {
-            if (implInsertImage(operation.imgurl, operation.imgdata, operation.position, operation.attrs)) {
+        operationHandlers[Operations.DRAWING_INSERT] = function (operation) {
+            if (implInsertDrawing(operation.type, operation.position, operation.attrs)) {
                 if (undoManager.isEnabled()) {
                     var undoOperation = { name: Operations.TEXT_DELETE, start: operation.position, end: operation.position };
                     undoManager.addUndo(undoOperation, operation);
@@ -3151,14 +3146,14 @@ define('io.ox/office/editor/editor',
         }
 
         /**
-         * Draws a selection box for the specified object node and registers
+         * Draws a selection box for the specified drawing node and registers
          * mouse handlers for moving and resizing.
          *
-         * @param {HTMLElement|jQuery} object
-         *  The object node to be selected. If this value is a jQuery
+         * @param {HTMLElement|jQuery} drawing
+         *  The drawing node to be selected. If this value is a jQuery
          *  collection, uses the first DOM node it contains.
          */
-        function drawObjectSelection(object) {
+        function drawDrawingSelection(drawing) {
 
             var startX = 0,
                 startY = 0,
@@ -3183,16 +3178,16 @@ define('io.ox/office/editor/editor',
                     l : 'w-resize'
                 };
 
-            function mouseDownOnObject(event, objectNode, pos) {
+            function mouseDownOnDrawing(event, drawingNode, pos) {
                 // mouse down event handler
                 startX = event.pageX;
                 startY = event.pageY;
 
-                // storing old height and width of image
-                nodeOptions.oldWidth = $(objectNode).width();
-                nodeOptions.oldHeight = $(objectNode).height();
-                nodeOptions.isInline = $(objectNode).hasClass('inline');
-                nodeOptions.isRightFloated = $(objectNode).hasClass('float') && $(objectNode).hasClass('right');
+                // storing old height and width of drawing
+                nodeOptions.oldWidth = $(drawingNode).width();
+                nodeOptions.oldHeight = $(drawingNode).height();
+                nodeOptions.isInline = $(drawingNode).hasClass('inline');
+                nodeOptions.isRightFloated = $(drawingNode).hasClass('float') && $(drawingNode).hasClass('right');
 
                 if (pos) {
                     // collecting information about the handle node
@@ -3203,24 +3198,24 @@ define('io.ox/office/editor/editor',
                     nodeOptions.bottomSelection = (_.contains(['br', 'b', 'bl'], pos));
                     nodeOptions.leftSelection = (_.contains(['tl', 'bl', 'l'], pos));
 
-                    nodeOptions.cursorStyle = cursorstyles[pos];  // resizing object
+                    nodeOptions.cursorStyle = cursorstyles[pos];  // resizing drawing
 
                     nodeOptions.isResizeEvent = true;
                     nodeOptions.isMoveEvent = false;
                 } else {
-                    nodeOptions.cursorStyle = 'move';  // moving object
+                    nodeOptions.cursorStyle = 'move';  // moving drawing
 
                     nodeOptions.isResizeEvent = false;
                     nodeOptions.isMoveEvent = true;
                 }
 
                 // setting cursor
-                editdiv.css('cursor', nodeOptions.cursorStyle);  // setting cursor for increasing image
-                $('div.selection', editdiv).css('cursor', nodeOptions.cursorStyle); // setting cursor for decreasing image
+                editdiv.css('cursor', nodeOptions.cursorStyle);  // setting cursor for increasing drawing
+                $('div.selection', editdiv).css('cursor', nodeOptions.cursorStyle); // setting cursor for decreasing drawing
                 $('div.move', editdiv).css('cursor', nodeOptions.cursorStyle); // setting cursor for flexible move node
             }
 
-            function mouseMoveOnObject(event, moveBoxNode) {
+            function mouseMoveOnDrawing(event, moveBoxNode) {
                 // mouse move event handler
                 moveBoxNode.css('border-width', '2px');  // making move box visible
 
@@ -3281,9 +3276,9 @@ define('io.ox/office/editor/editor',
                 }
             }
 
-            function mouseUpOnObject(event, objectNode, moveBoxNode) {
+            function mouseUpOnDrawing(event, drawingNode, moveBoxNode) {
                 // mouse up handler
-                moveBoxNode.css({'border-width': 0, 'left': 0, 'top': 0});  // making move box invisible and shifting it back into image
+                moveBoxNode.css({'border-width': 0, 'left': 0, 'top': 0});  // making move box invisible and shifting it back into drawing
 
                 if (nodeOptions.isResizeEvent) {
 
@@ -3291,7 +3286,7 @@ define('io.ox/office/editor/editor',
 
                         var width = Utils.convertLengthToHmm(finalWidth, 'px'),
                             height = Utils.convertLengthToHmm(finalHeight, 'px'),
-                            updatePosition = Position.getOxoPosition(editdiv, objectNode, 0),
+                            updatePosition = Position.getOxoPosition(editdiv, drawingNode, 0),
                             newOperation = { name: Operations.ATTRS_SET, attrs: {width: width, height: height}, start: updatePosition };
 
                         applyOperation(newOperation, true, true);
@@ -3302,7 +3297,7 @@ define('io.ox/office/editor/editor',
 
                         var moveX = Utils.convertLengthToHmm(shiftX, 'px'),
                             moveY = Utils.convertLengthToHmm(shiftY, 'px'),
-                            updatePosition = Position.getOxoPosition(editdiv, objectNode, 0),
+                            updatePosition = Position.getOxoPosition(editdiv, drawingNode, 0),
                             newOperation = { name: Operations.ATTRS_SET, attrs: {anchorhoffset: moveX, anchorvoffset: moveY}, start: updatePosition };
 
                         applyOperation(newOperation, true, true);
@@ -3320,24 +3315,24 @@ define('io.ox/office/editor/editor',
                 $('div.move', editdiv).css('cursor', '');
             }
 
-            // inline objects are currently not moveable
-            if (DOM.isInlineObjectNode(object)) {
+            // inline drawings are currently not moveable
+            if (DOM.isInlineDrawingNode(drawing)) {
                 moveable = false;
             }
 
-            // draw the selection box into the passed objects
-            DOM.drawObjectSelection(object, { moveable: moveable, sizeable: sizeable }, mouseDownOnObject, mouseMoveOnObject, mouseUpOnObject, self);
+            // draw the selection box into the passed drawings
+            DOM.drawDrawingSelection(drawing, { moveable: moveable, sizeable: sizeable }, mouseDownOnDrawing, mouseMoveOnDrawing, mouseUpOnDrawing, self);
         }
 
         /**
-         * Draws a selection box for the specified object node and registers
+         * Draws a selection box for the specified resize node and registers
          * mouse handlers for moving.
          *
-         * @param {HTMLElement|jQuery} object
-         *  The object node to be selected. If this value is a jQuery
+         * @param {HTMLElement|jQuery} resizeObject
+         *  The drawing node to be selected. If this value is a jQuery
          *  collection, uses the first DOM node it contains.
          */
-        function drawTableCellResizeSelection(object) {
+        function drawTableCellResizeSelection(resizeObject) {
 
             var startX = 0,
                 startY = 0,
@@ -3354,7 +3349,7 @@ define('io.ox/office/editor/editor',
                 // the distance from body element to 'officemaindiv' in pixel
                 topDistance = officemaindiv.offset().top;
 
-            function mouseDownOnObject(event, resizeNode) {
+            function mouseDownOnResizeNode(event, resizeNode) {
                 // mouse down event handler
                 startX = event.pageX;
                 startY = event.pageY - topDistance;
@@ -3373,11 +3368,11 @@ define('io.ox/office/editor/editor',
                     officemaindiv.append(resizeLine);
                 }
 
-                editdiv.css('cursor', $(resizeNode).css('cursor'));  // setting cursor for increasing image
-                $(resizeLine).css('cursor', $(resizeNode).css('cursor'));  // setting cursor for increasing image
+                editdiv.css('cursor', $(resizeNode).css('cursor'));  // setting cursor for increasing drawing
+                $(resizeLine).css('cursor', $(resizeNode).css('cursor'));  // setting cursor for increasing drawing
             }
 
-            function mouseMoveOnObject(event, resizeNode) {
+            function mouseMoveOnResizeNode(event, resizeNode) {
                 // mouse move event handler
                 currentX = event.pageX;
                 currentY = event.pageY - topDistance;
@@ -3395,7 +3390,7 @@ define('io.ox/office/editor/editor',
                 }
             }
 
-            function mouseUpOnObject(event, resizeNode) {
+            function mouseUpOnResizeNode(event, resizeNode) {
                 // mouse up event handler
                 currentX = event.pageX;
                 currentY = event.pageY - topDistance;
@@ -3480,8 +3475,8 @@ define('io.ox/office/editor/editor',
                 $(resizeNode).off('mousedown');
             }
 
-            // draw the resize line at the position of the passed object
-            DOM.drawTablecellResizeLine(object, mouseDownOnObject, mouseMoveOnObject, mouseUpOnObject, self);
+            // draw the resize line at the position of the passed resize node
+            DOM.drawTablecellResizeLine(resizeObject, mouseDownOnResizeNode, mouseMoveOnResizeNode, mouseUpOnResizeNode, self);
         }
 
         // End of private selection functions
@@ -3544,7 +3539,7 @@ define('io.ox/office/editor/editor',
             // it breaks the paragraph's CSS attribute text-align:justify. Process
             // each sequence of sibling text nodes for its own (the text node
             // sequences may be interrupted by other elements such as hard line
-            // breaks, images, or other objects).
+            // breaks, drawings, or other objects).
             // TODO: handle explicit NBSP inserted by the user (when supported)
             _(allSiblingTextNodes).each(function (siblingTextNodes) {
 
@@ -4124,15 +4119,15 @@ define('io.ox/office/editor/editor',
 
         }
 
-        function deleteSelectedObject(selection) {
+        function deleteSelectedDrawing(selection) {
             var position = _.copy(selection.startPaM.oxoPosition, true),
-                objectNode = Position.getDOMPosition(editdiv, position, true).node;
+                drawingNode = Position.getDOMPosition(editdiv, position, true).node;
 
-            // only delete, if imageStartPosition is really an image position
-            if (DOM.isObjectNode(objectNode)) {
+            // only delete, if drawing start position is really a drawing position
+            if (DOM.isDrawingNode(drawingNode)) {
                 // delete an corresponding offset div
-                $(objectNode).prev(DOM.OFFSET_NODE_SELECTOR).remove();
-                // deleting the image with an operation
+                $(drawingNode).prev(DOM.OFFSET_NODE_SELECTOR).remove();
+                // deleting the drawing with an operation
                 self.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
 
                 lastOperationEnd = selection.startPaM.oxoPosition;
@@ -4281,17 +4276,20 @@ define('io.ox/office/editor/editor',
             return true;
         }
 
-        function implInsertImage(url, data, position, attributes) {
+        function implInsertDrawing(type, position, attributes) {
 
             var domPos = Position.getDOMPosition(editdiv, position),
                 node = (domPos && domPos.node) ? domPos.node.parentNode : null,
+                url = attributes.imgurl,
+                data = attributes.imgdata,
                 absUrl = /:\/\//.test(url) ? url : getDocumentUrl({ get_filename: url }),
                 imgSrc = data && data.length ? data : absUrl,
-                image = null;
+                drawing = null,
+                contentdiv = $('<div>').addClass('content');
 
             // check position
             if (!DOM.isPortionSpan(node)) {
-                Utils.warn('Editor.implInsertImage(): expecting text position to insert image.');
+                Utils.warn('Editor.implInsertDrawing(): expecting text position to insert drawing.');
                 return false;
             }
 
@@ -4299,15 +4297,21 @@ define('io.ox/office/editor/editor',
             // points to start or end of text, needed to clone formatting)
             DOM.splitTextSpan(node, domPos.offset);
 
-            // insert the image with default settings (inline) between the two text nodes (store original URL for later use)
-            image = $('<div>', { contenteditable: false })
-                .addClass('object inline')
-                .data('url', url)
-                .append($('<div>').addClass('content').append($('<img>', { src: imgSrc })))
-                .insertBefore(node);
+            // insert the drawing with default settings (inline) between the two text nodes (store original URL for later use)
 
-            // apply the passed image attributes
-            imageStyles.setElementAttributes(image, attributes);
+            drawing = $('<div>', { contenteditable: false })
+               .addClass('drawing inline')
+               .data('type', type)  // replace with Type; url is in attrs
+               .append(contentdiv);
+
+            if (type === 'image') {
+                contentdiv.append($('<img>', { src: imgSrc }));
+            }
+
+            drawing.insertBefore(node);
+
+            // apply the passed drawing attributes
+            drawingStyles.setElementAttributes(drawing, attributes);
 
             lastOperationEnd = _.clone(position);
             lastOperationEnd[lastOperationEnd.length - 1] += 1;
@@ -4460,8 +4464,8 @@ define('io.ox/office/editor/editor',
                 family = 'row';
             } else if ($element.is('td')) {
                 family = 'cell';
-            } else if (DOM.isImageNode($element)) {
-                family = 'image';
+            } else if (DOM.isDrawingNode($element)) {
+                family = 'drawing';
             } else {
                 Utils.warn('Editor.resolveElementFamily(): unsupported element');
             }
@@ -4571,10 +4575,10 @@ define('io.ox/office/editor/editor',
             // options for the StyleSheets method calls (build undo operations while formatting)
             options = undoManager.isEnabled() ? { changeListener: changeListener } : null;
 
-            // characters (start or end may point to an object node, ignore that but format as
+            // characters (start or end may point to a drawing node, ignore that but format as
             // characters if the start objects is different from the end object)
             if ((startInfo.family === 'character') || (endInfo.family === 'character') ||
-                    ((startInfo.node !== endInfo.node) && DOM.isObjectNode(startInfo.node) && DOM.isObjectNode(endInfo.node))) {
+                    ((startInfo.node !== endInfo.node) && DOM.isDrawingNode(startInfo.node) && DOM.isDrawingNode(endInfo.node))) {
 
                 // check that start and end are located in the same paragraph
                 if (startInfo.node.parentNode !== endInfo.node.parentNode) {
@@ -4590,7 +4594,7 @@ define('io.ox/office/editor/editor',
 
                     // DOM.iterateTextSpans() visits the node itself if it is a
                     // text span, otherwise it visits all descendant text spans
-                    // contained in the node except for objects which will be
+                    // contained in the node except for drawings which will be
                     // skipped (they may contain their own paragraphs).
                     DOM.iterateTextSpans(node, function (span) {
                         setElementAttributes(span);
@@ -5265,14 +5269,14 @@ define('io.ox/office/editor/editor',
             }
 
             var paragraph = Position.getCurrentParagraph(editdiv, startPosition);
-            var searchNodes = $(paragraph).children('span, ' + DOM.FIELD_NODE_SELECTOR + ', ' + DOM.OBJECT_NODE_SELECTOR + ', ' + DOM.TAB_NODE_SELECTOR).get();
+            var searchNodes = $(paragraph).children('span, ' + DOM.FIELD_NODE_SELECTOR + ', ' + DOM.DRAWING_NODE_SELECTOR + ', ' + DOM.TAB_NODE_SELECTOR).get();
             var node, nodeLen, delStart, delEnd;
             var nodes = searchNodes.length;
             var nodeStart = 0;
             for (var i = 0; i < nodes; i++) {
                 var text = '';
                 node = searchNodes[i];
-                if (DOM.isObjectNode(node) || DOM.isTextSpanContainerNode(node)) {
+                if (DOM.isDrawingNode(node) || DOM.isTextSpanContainerNode(node)) {
                     nodeLen = 1;
                 } else if (DOM.isTextSpan(node)) {
                     text = $(node).text();
@@ -5327,7 +5331,7 @@ define('io.ox/office/editor/editor',
                 insertBefore = true;
             } else if ((destPos.node.length) && (destPos.offset === (destPos.node.length - 1))) {
                 insertBefore = false;
-            } else if ((DOM.isObjectNode(destPos.node)) && (destPos.offset === 1)) {
+            } else if ((DOM.isDrawingNode(destPos.node)) && (destPos.offset === 1)) {
                 insertBefore = false;
             } else {
                 splitNode = true;  // splitting node is required
@@ -5344,9 +5348,9 @@ define('io.ox/office/editor/editor',
 
                 if ((sourceNode) && (destNode)) {
 
-                    if (! DOM.isObjectNode(sourceNode)) {
-                        doMove = false; // supporting only images at the moment
-                        Utils.warn('Editor.implMove(): moved  node is not an object: ' + Utils.getNodeName(sourceNode));
+                    if (! DOM.isDrawingNode(sourceNode)) {
+                        doMove = false; // supporting only drawings at the moment
+                        Utils.warn('Editor.implMove(): moved  node is not a drawing: ' + Utils.getNodeName(sourceNode));
                     } else {
                         // also move the offset divs
                         if (!DOM.isOffsetNode(offsetDiv)) {
@@ -5377,7 +5381,7 @@ define('io.ox/office/editor/editor',
                             $(sourceNode).insertAfter(destNode);
                         }
 
-                        // moving also the corresponding div before the moved image
+                        // moving also the corresponding div before the moved drawing
                         if (useOffsetDiv) {
                             $(offsetDiv).insertBefore(sourceNode);
                         }
@@ -5463,7 +5467,7 @@ define('io.ox/office/editor/editor',
                             if (listObject.imgsrc) {
                                 var absUrl = getDocumentUrl({ get_filename: listObject.imgsrc });
                                 var image = $('<div>', { contenteditable: false })
-                                .addClass('object inline')
+                                .addClass('drawing inline')
                                 .data('url', listObject.imgsrc)
                                 .append($('<div>').addClass('content')
                                         .append($('<img>', { src: absUrl }).css('width', charAttributes.fontsize + 'pt'))

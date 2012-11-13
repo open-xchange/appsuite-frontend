@@ -14,14 +14,14 @@
 define('io.ox/office/editor/format/documentstyles',
     ['io.ox/office/editor/format/characterstyles',
      'io.ox/office/editor/format/paragraphstyles',
-     'io.ox/office/editor/format/imagestyles',
+     'io.ox/office/editor/format/drawingstyles',
      'io.ox/office/editor/format/tablestyles',
      'io.ox/office/editor/format/tablerowstyles',
      'io.ox/office/editor/format/tablecellstyles',
      'io.ox/office/editor/format/pagestyles',
      'io.ox/office/editor/format/themes',
      'io.ox/office/editor/format/lists'
-    ], function (CharacterStyles, ParagraphStyles, ImageStyles, TableStyles, TableRowStyles, TableCellStyles, PageStyles, Themes, Lists) {
+    ], function (CharacterStyles, ParagraphStyles, DrawingStyles, TableStyles, TableRowStyles, TableCellStyles, PageStyles, Themes, Lists) {
 
     'use strict';
 
@@ -100,7 +100,7 @@ define('io.ox/office/editor/format/documentstyles',
 
         containers.character = new CharacterStyles(rootNode, this);
         containers.paragraph = new ParagraphStyles(rootNode, this);
-        containers.image = new ImageStyles(rootNode, this);
+        containers.drawing = new DrawingStyles(rootNode, this);
         containers.table = new TableStyles(rootNode, this);
         containers.row = new TableRowStyles(rootNode, this);
         containers.cell = new TableCellStyles(rootNode, this);

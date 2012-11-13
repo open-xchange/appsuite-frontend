@@ -108,7 +108,7 @@ define('io.ox/office/editor/operations',
         ATTRS_SET: 'setAttributes',
         ATTRS_CLEAR: 'clearAttributes',
 
-        IMAGE_INSERT: 'insertImage',
+        DRAWING_INSERT: 'insertDrawing',
         FIELD_INSERT: 'insertField',
         TAB_INSERT: 'insertTab'
 
@@ -321,7 +321,9 @@ define('io.ox/office/editor/operations',
                     // logical end position of the covered part of the child node
                     endPosition = appendNewIndex(position, endIndex),
                     // text of a portion span
-                    text = null;
+                    text = null,
+                    // type of the drawing
+                    type = null;
 
                 // operation to create a (non-empty) generic text portion
                 if (DOM.isTextSpan(node)) {
@@ -363,9 +365,10 @@ define('io.ox/office/editor/operations',
                         attributeRanges.push({ node: node.firstChild, position: startPosition });
                     }
 
-                    // operation to create an image (including its attributes)
-                    else if (DOM.isImageNode(node)) {
-                        this.generateOperationWithAttributes(node, Operations.IMAGE_INSERT, { position: startPosition, imgurl: $(node).data('url') });
+                    // operation to create a drawing (including its attributes)
+                    else if (DOM.isDrawingNode(node)) {
+                        type = 'image';    // adding type ToDo, it is not always an image
+                        this.generateOperationWithAttributes(node, Operations.DRAWING_INSERT, { position: startPosition, type: type });
                     }
 
                     else {

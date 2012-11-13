@@ -148,19 +148,19 @@
             }
         }
 
-        /* objects */
-        div.object {
+        /* drawings */
+        div.drawing {
             position: relative;
             cursor: default;
             font-size: 0;
             
-            /* inlined objects */
+            /* inlined drawings */
             &.inline {
                 display: inline-block;
                 vertical-align: bottom;
             }
 
-            /* crop object contents at object border */
+            /* crop drawing contents at drawings border */
             > div.content {
                 position: absolute;
                 width: 100%;
@@ -174,7 +174,7 @@
                 }
             }
 
-            /* selection box for objects/images */
+            /* selection box for drawings/images */
             > div.selection {
                 @border-color: #3f7fff;
 
@@ -218,7 +218,7 @@
                 }
             }
             
-            /* move and resize box for objects/images */
+            /* move and resize box for drawings/images */
             > div.move {
                 position: absolute;
                 top: 2px;
@@ -234,7 +234,7 @@
             }
         }
 
-        /* floated elements (objects and offset helper divs) */
+        /* floated elements (drawings and offset helper divs) */
         div.float {
             display: block;
 
@@ -276,7 +276,7 @@
             }
 
             /* other document content nodes */
-            table, div.object {
+            table, div.drawing {
                 .debug-highlight-mixin(#f88);
                 outline-offset: 1px;
             }

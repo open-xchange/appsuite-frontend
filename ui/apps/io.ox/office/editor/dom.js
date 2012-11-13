@@ -774,29 +774,29 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return $('<br>').data('dummy', true);
     };
 
-    // object nodes -----------------------------------------------------------
+    // drawing nodes -----------------------------------------------------------
 
     /**
-     * A jQuery selector that matches elements representing an object.
+     * A jQuery selector that matches elements representing a drawing.
      */
-    DOM.OBJECT_NODE_SELECTOR = 'div.object';
+    DOM.DRAWING_NODE_SELECTOR = 'div.drawing';
 
     /**
-     * Returns whether the passed node is a <div> element wrapping an object.
+     * Returns whether the passed node is a <div> element wrapping a drawing.
      *
      * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
      *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
-     *  Whether the passed node is a div element wrapping an object.
+     *  Whether the passed node is a div element wrapping a drawing.
      */
-    DOM.isObjectNode = function (node) {
-        return $(node).is(DOM.OBJECT_NODE_SELECTOR);
+    DOM.isDrawingNode = function (node) {
+        return $(node).is(DOM.DRAWING_NODE_SELECTOR);
     };
 
     /**
-     * Returns whether the passed node is a <div> element wrapping an object
+     * Returns whether the passed node is a <div> element wrapping a drawing
      * in inline mode.
      *
      * @param {Node|jQuery|Null} [node]
@@ -804,15 +804,15 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
-     *  Whether the passed node is a div element wrapping an object and is
+     *  Whether the passed node is a div element wrapping a drawing and is
      *  rendered inlined.
      */
-    DOM.isInlineObjectNode = function (node) {
-        return DOM.isObjectNode(node) && $(node).hasClass('inline');
+    DOM.isInlineDrawingNode = function (node) {
+        return DOM.isDrawingNode(node) && $(node).hasClass('inline');
     };
 
     /**
-     * Returns whether the passed node is a <div> element wrapping an object
+     * Returns whether the passed node is a <div> element wrapping a drawing
      * in floating mode.
      *
      * @param {Node|jQuery|Null} [node]
@@ -820,11 +820,11 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
-     *  Whether the passed node is a div element wrapping an object and is
+     *  Whether the passed node is a div element wrapping a drawing and is
      *  rendered floated.
      */
-    DOM.isFloatingObjectNode = function (node) {
-        return DOM.isObjectNode(node) && $(node).hasClass('float');
+    DOM.isFloatingDrawingNode = function (node) {
+        return DOM.isDrawingNode(node) && $(node).hasClass('float');
     };
 
     /**
@@ -838,26 +838,26 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  Whether the passed node is a div element wrapping an image.
      */
     DOM.isImageNode = function (node) {
-        // object div contains another div (class content) that contains an image
-        return DOM.isObjectNode(node) && ($(node).find('img').length > 0);
+        // drawing div contains another div (class content) that contains an image
+        return DOM.isDrawingNode(node) && ($(node).find('img').length > 0);
     };
 
     /**
-     * A jQuery selector that matches elements representing an object offset
+     * A jQuery selector that matches elements representing a drawing offset
      * helper node.
      */
     DOM.OFFSET_NODE_SELECTOR = 'div.offset';
 
     /**
      * Returns whether the passed node is a <div> element for positioning
-     * an object with a vertical or horizontal offset.
+     * a drawing with a vertical or horizontal offset.
      *
      * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
      *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
-     *  Whether the passed node is a div element wrapping an object.
+     *  Whether the passed node is a div element wrapping a drawing.
      */
     DOM.isOffsetNode = function (node) {
         return $(node).is(DOM.OFFSET_NODE_SELECTOR);
@@ -953,8 +953,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             return iterator.call(context, Utils.getDomNode(node));
         }
 
-        // do not iterate into objects, they may contain their own paragraphs
-        if (!DOM.isObjectNode(node)) {
+        // do not iterate into drawings, they may contain their own paragraphs
+        if (!DOM.isDrawingNode(node)) {
             return Utils.iterateSelectedDescendantNodes(node, function () { return DOM.isTextSpan(this); }, iterator, context);
         }
     };
@@ -1085,7 +1085,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         });
     };
 
-    // object selection =======================================================
+    // drawing selection =======================================================
 
     /**
      * Returns whether the passed node is a <div> element that contains a
@@ -1099,18 +1099,18 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @returns {Boolean}
      *  Whether the passed node contains a div element with class selection.
      */
-    DOM.hasObjectSelection = function (node) {
-        return DOM.isObjectNode(node) && ($(node).children('div.selection').length > 0);
+    DOM.hasDrawingSelection = function (node) {
+        return DOM.isDrawingNode(node) && ($(node).children('div.selection').length > 0);
     };
 
     /**
-     * Inserts a new selection box into the specified object node, or modifies
+     * Inserts a new selection box into the specified drawing node, or modifies
      * an existing selector box according to the passed options.
      *
-     * @param {HTMLElement|jQuery} objects
-     *  The object node for which a selection box will be inserted. If the
+     * @param {HTMLElement|jQuery} drawings
+     *  The drawing node for which a selection box will be inserted. If the
      *  passed value is a jQuery collection, draws selection boxes for all
-     *  contained objects.
+     *  contained drawings.
      *
      * @param {Object} options
      *  A map of options to control the appearance of the selection box.
@@ -1135,22 +1135,22 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @param {Object} context
      *  The context object that is required in the callback function calls.
      */
-    DOM.drawObjectSelection = function (objects, options, mousedownhandler, mousemovehandler, mouseuphandler, context) {
+    DOM.drawDrawingSelection = function (drawings, options, mousedownhandler, mousemovehandler, mouseuphandler, context) {
 
-        $(objects).each(function () {
+        $(drawings).each(function () {
 
             var // the container element used to visualize the selection
                 selectionBox = $(this).children('div.selection'),
                 // the container element used to visualize the movement and resizing
                 moveBox = $(this).children('div.move'),
-                // whether object is moveable
+                // whether drawing is moveable
                 moveable = Utils.getBooleanOption(options, 'moveable', false),
-                // whether object is sizeable
+                // whether drawing is sizeable
                 sizeable = Utils.getBooleanOption(options, 'sizeable', false),
                 // whether mousedown is a current event
                 mousedownevent = false,
-                // saving the selected object node
-                objectNode = this;
+                // saving the selected drawing node
+                drawingNode = this;
 
             // create a new selection box and a move box if missing
             if (selectionBox.length === 0) {
@@ -1164,19 +1164,19 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                             if (mousedownevent === true) { return; }
                             var event = e1.pageX ? e1 : e2;  // from triggerHandler in editor only e2 can be used
                             mousedownevent = true;
-                            mousedownhandler.call(context, event, objectNode, pos);
+                            mousedownhandler.call(context, event, drawingNode, pos);
                         });
                         selectionBox.append(handleDiv.addClass('handle ' + pos));
                     });
                 }
 
                 if (moveable) {
-                    // moving the object
+                    // moving the drawing
                     $(this).mousedown(function (e1, e2) {
                         if ((! moveable) || (mousedownevent === true)) { return; }
                         var event = e1.pageX ? e1 : e2;  // from triggerHandler in editor only e2 can be used
                         mousedownevent = true;
-                        mousedownhandler.call(context, event, objectNode, undefined);
+                        mousedownhandler.call(context, event, drawingNode, undefined);
                     });
                 }
 
@@ -1188,7 +1188,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 })
                 .mouseup(function (e) {
                     if (mousedownevent === true) {
-                        mouseuphandler.call(context, e, objectNode, moveBox);
+                        mouseuphandler.call(context, e, drawingNode, moveBox);
                         mousedownevent = false;
                     }
                 });
@@ -1201,26 +1201,26 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * Removes the selection box from the specified object node.
+     * Removes the selection box from the specified drawing node.
      *
-     * @param {HTMLElement|jQuery} objects
-     *  The object node whose selection box will be removed. If the passed
+     * @param {HTMLElement|jQuery} drawings
+     *  The drawings node whose selection box will be removed. If the passed
      *  value is a jQuery collection, removes the selection boxes from all
-     *  contained objects.
+     *  contained drawings.
      */
-    DOM.clearObjectSelection = function (objects) {
-        $(objects).children('div.selection').remove();
-        $(objects).children('div.move').remove();
+    DOM.clearDrawingSelection = function (drawings) {
+        $(drawings).children('div.selection').remove();
+        $(drawings).children('div.move').remove();
         // removing mouse event handler (mouseup and mousemove) from page div
         $(document).off('mouseup mousemove');
-        $(objects).off('mousedown');
+        $(drawings).off('mousedown');
     };
 
     /**
-     * Inserts a new resize line at the position of the specified object node.
+     * Inserts a new resize line at the position of the specified resize nodes.
      *
-     * @param {HTMLElement|jQuery} objects
-     *  The object node for which a resize line will be inserted.
+     * @param {HTMLElement|jQuery} resizenodes
+     *  The resize node for which a resize line will be inserted.
      *
      * @param {Function} mousedownhandler
      *  Callback function for mouse down event.
@@ -1234,16 +1234,16 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @param {Object} context
      *  The context object that is required in the callback function calls.
      */
-    DOM.drawTablecellResizeLine = function (objects, mousedownhandler, mousemovehandler, mouseuphandler, context) {
+    DOM.drawTablecellResizeLine = function (resizenodes, mousedownhandler, mousemovehandler, mouseuphandler, context) {
 
-        $(objects).each(function () {
+        $(resizenodes).each(function () {
 
             var // whether mousedown is a current event
                 mousedownevent = false,
-                // saving the selected object node
+                // saving the selected resize node
                 resizeNode = this;
 
-            // moving the object
+            // moving the resize node
             $(this).mousedown(function (e1, e2) {
                 if (mousedownevent === true) { return; }
                 var e = e1.pageX ? e1 : e2;  // from triggerHandler in editor only e2 can be used

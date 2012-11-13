@@ -87,7 +87,7 @@ define('io.ox/office/editor/position',
 
         // Starting to calculate the logical position
         var oxoPosition = [],
-            evaluateCharacterPosition = DOM.isTextSpan(node) || DOM.isTextComponentNode(node) || DOM.isObjectNode(node) || $(node).is('img'),
+            evaluateCharacterPosition = DOM.isTextSpan(node) || DOM.isTextComponentNode(node) || DOM.isDrawingNode(node) || $(node).is('img'),
             characterPositionEvaluated = false;
 
         // currently supported elements: 'div.p', 'table', 'th', 'td', 'tr'
@@ -169,12 +169,12 @@ define('io.ox/office/editor/position',
             offset = 0;
         }
 
-        if (DOM.isObjectNode(node.parentNode)) {  // inside the contents of an object
+        if (DOM.isDrawingNode(node.parentNode)) {  // inside the contents of a drawing
             node = node.parentNode;
         }
 
-        if (DOM.isObjectNode(node)) {
-            // move cursor behind the object, if hit by forward cursor key
+        if (DOM.isDrawingNode(node)) {
+            // move cursor behind the drawing, if hit by forward cursor key
             offset = (forwardCursor === true) ? 1 : 0;
         }
 
@@ -465,7 +465,7 @@ define('io.ox/office/editor/position',
             usePreviousCell = true;
         }
 
-        if ((isEndPoint) && (localNode) && DOM.isObjectNode(localNode.previousSibling)) {
+        if ((isEndPoint) && (localNode) && DOM.isDrawingNode(localNode.previousSibling)) {
             usePreviousCell = true;
         }
 
@@ -480,9 +480,9 @@ define('io.ox/office/editor/position',
             useFirstTextNode = false;
         }
 
-        // setting some properties for image nodes or text component nodes like fields
-        if ((DOM.isObjectNode(localNode)) || (DOM.isTextComponentNode(localNode))) {
-            foundValidNode = true;  // image nodes are valid
+        // setting some properties for drawing nodes or text component nodes like fields
+        if ((DOM.isDrawingNode(localNode)) || (DOM.isTextComponentNode(localNode))) {
+            foundValidNode = true;  // drawing nodes are valid
             offset = isEndPoint ? 1 : 0;
         }
 
@@ -530,7 +530,7 @@ define('io.ox/office/editor/position',
      * the following node and in the case of a text node the offset
      * are calculated.This function does not take care of
      * ranges but only of direct positions. So [6,0] points to the first
-     * character or image or field in the seventh paragraph, not to a
+     * character or drawing or field in the seventh paragraph, not to a
      * cursor position before.
      *
      * @param {Node} node
@@ -600,7 +600,7 @@ define('io.ox/office/editor/position',
 
     /**
      * Determining a text node for a DOM position, if this is required.
-     * For object nodes, image nodes or text span nodes, it is sometimes
+     * For drawing nodes, drawing nodes or text span nodes, it is sometimes
      * necessary to get a valid text node.
      *
      * @param {DOM.Point} domPoint
@@ -621,7 +621,7 @@ define('io.ox/office/editor/position',
         }
 
         // use preceding text node for inline text components
-        if (DOM.isTextComponentNode(domPoint.node) || DOM.isInlineObjectNode(domPoint.node)) {
+        if (DOM.isTextComponentNode(domPoint.node) || DOM.isInlineDrawingNode(domPoint.node)) {
 
             // go to text span preceding the component node (must exist)
             span = domPoint.node.previousSibling;
@@ -633,12 +633,12 @@ define('io.ox/office/editor/position',
             return;
         }
 
-        // floating objects: last preceding span
-        if (DOM.isFloatingObjectNode(domPoint.node)) {
+        // floating drawings: last preceding span
+        if (DOM.isFloatingDrawingNode(domPoint.node)) {
 
-            // skip other floating objects and helper nodes
+            // skip other floating drawings and helper nodes
             span = Utils.findPreviousSiblingNode(domPoint.node, function () {
-                return DOM.isTextSpan(this) || DOM.isTextComponentNode(this) || DOM.isInlineObjectNode(this);
+                return DOM.isTextSpan(this) || DOM.isTextComponentNode(this) || DOM.isInlineDrawingNode(this);
             });
 
             // no previous span: go to next span
@@ -650,7 +650,7 @@ define('io.ox/office/editor/position',
                 return new DOM.Point(span.firstChild, span.firstChild.nodeValue.length);
             }
 
-            Utils.error('Position.getTextSpanFromNode(): missing text span for floating object node');
+            Utils.error('Position.getTextSpanFromNode(): missing text span for floating drawing node');
             return;
         }
 
@@ -1231,7 +1231,7 @@ define('io.ox/office/editor/position',
 
     /**
      * Returns the logical length of the content nodes of the paragraph located
-     * at the specified logical position. Text fields and object nodes have a
+     * at the specified logical position. Text fields and drawing nodes have a
      * logical length of 1.
      *
      * @param {Node|jQuery} startnode
@@ -1265,7 +1265,7 @@ define('io.ox/office/editor/position',
      * Returns the logical start index of a text component node in its parent
      * paragraph. The passed node may be any child node of a paragraph (either
      * an editable content node, or a helper node such as an offset container
-     * used to position floated objects).
+     * used to position floated drawings).
      *
      * @param {HTMLElement|jQuery} node
      *  The paragraph child node, whose logical start index will be calculated.
@@ -1680,7 +1680,7 @@ define('io.ox/office/editor/position',
     /**
      * After splitting a paragraph, it might be necessary to remove
      * leading empty text spans at the beginning of the paragraph. This
-     * is especially important, if there are following floated images.
+     * is especially important, if there are following floated drawings.
      *
      * @param {Node} startnode
      *  The start node corresponding to the logical position.
@@ -1716,7 +1716,7 @@ define('io.ox/office/editor/position',
 
     /**
      * After splitting a paragraph, it might be necessary to remove leading
-     * floating objects at the beginning of the paragraph.
+     * floating drawings at the beginning of the paragraph.
      *
      * @param {Node} startnode
      *  The start node corresponding to the logical position.
@@ -1737,10 +1737,10 @@ define('io.ox/office/editor/position',
 
                 var nextChild = child.nextSibling;
 
-                if (DOM.isOffsetNode(child) && !DOM.isObjectNode(nextChild)) {
+                if (DOM.isOffsetNode(child) && !DOM.isDrawingNode(nextChild)) {
                     var removeElement = child;
                     $(removeElement).remove();
-                } else if (!DOM.isFloatingObjectNode(child)) {
+                } else if (!DOM.isFloatingDrawingNode(child)) {
                     break;
                 }
                 child = nextChild;
@@ -1773,7 +1773,7 @@ define('io.ox/office/editor/position',
 
                 var nextChild = child.nextSibling;
 
-                if (DOM.isOffsetNode(child) && !DOM.isObjectNode(nextChild)) {
+                if (DOM.isOffsetNode(child) && !DOM.isDrawingNode(nextChild)) {
                     $(child).remove();
                 }
 
@@ -1857,7 +1857,7 @@ define('io.ox/office/editor/position',
 
     /**
      * Calls the passed iterator function for all or selected child elements in
-     * a paragraph node (text spans, text fields, objects, and other helper
+     * a paragraph node (text spans, text fields, drawings, and other helper
      * nodes).
      *
      * @param {HTMLElement|jQuery} paragraph
@@ -1877,7 +1877,7 @@ define('io.ox/office/editor/position',
      *  and 'options.end' will be used to iterate over a specific sub-range in
      *  the paragraph where the first and last visited text nodes may be
      *  covered only partially. Note that text components (e.g. fields or tabs)
-     *  and object nodes have a logical length of 1, and other helper nodes
+     *  and drawing nodes have a logical length of 1, and other helper nodes
      *  that do not represent editable contents have a logical length of 0. If
      *  the iterator returns the Utils.BREAK object, the iteration process will
      *  be stopped immediately.
@@ -1893,7 +1893,7 @@ define('io.ox/office/editor/position',
      *      If set to true, all child nodes of the paragraph will be visited,
      *      also helper nodes that do not represent editable content and have a
      *      logical length of 0. Otherwise, only real content nodes will be
-     *      visited (non-empty text portions, text fields, and object nodes).
+     *      visited (non-empty text portions, text fields, and drawing nodes).
      *  @param {Number} [options.start]
      *      The logical index of the first text component to be included into
      *      the iteration process. Text spans covered partly will be visited
@@ -1945,8 +1945,8 @@ define('io.ox/office/editor/position',
             if (isTextSpan) {
                 // portion nodes contain regular text
                 nodeLength = node.firstChild.nodeValue.length;
-            } else if (DOM.isTextComponentNode(node) || DOM.isObjectNode(node)) {
-                // special text components (e.g. fields, tabs) and objects count as one character
+            } else if (DOM.isTextComponentNode(node) || DOM.isDrawingNode(node)) {
+                // special text components (e.g. fields, tabs) and drawings count as one character
                 nodeLength = 1;
             }
 

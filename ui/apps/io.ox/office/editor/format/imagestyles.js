@@ -14,8 +14,8 @@
 define('io.ox/office/editor/format/imagestyles',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
-     'io.ox/office/editor/format/objectstyles'
-    ], function (Utils, DOM, ObjectsStyles) {
+     'io.ox/office/editor/format/drawingstyles'
+    ], function (Utils, DOM, DrawingStyles) {
 
     'use strict';
 
@@ -132,7 +132,7 @@ define('io.ox/office/editor/format/imagestyles',
      *
      * @constructor
      *
-     * @extends ObjectsStyles
+     * @extends DrawingStyles
      *
      * @param {HTMLElement|jQuery} rootNode
      *  The root node containing all elements formatted by the style sheets of
@@ -146,7 +146,7 @@ define('io.ox/office/editor/format/imagestyles',
 
         // base constructor ---------------------------------------------------
 
-        ObjectsStyles.call(this, documentStyles, 'image', DEFINITIONS);
+        DrawingStyles.call(this, documentStyles, 'image', DEFINITIONS);
 
         // initialization -----------------------------------------------------
 
@@ -157,6 +157,6 @@ define('io.ox/office/editor/format/imagestyles',
     // exports ================================================================
 
     // derive this class from class ObjectsStyles
-    return ObjectsStyles.extend({ constructor: ImageStyles });
+    return DrawingStyles.extend({ constructor: ImageStyles });
 
 });
