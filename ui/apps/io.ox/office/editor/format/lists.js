@@ -422,7 +422,7 @@ define('io.ox/office/editor/format/lists',
             var format = formatNumberType(levelIndexes, ilvl, currentList);
             _.extend(ret, format);
             ret.indent = levelFormat.leftindent;
-            ret.firstLine = levelFormat.firstlineindent ? levelFormat.leftindent + levelFormat.firstlineindent : levelFormat.leftindent);
+            ret.firstLine = levelFormat.firstlineindent ? levelFormat.leftindent + levelFormat.firstlineindent : levelFormat.leftindent;
             return ret;
         };
 
