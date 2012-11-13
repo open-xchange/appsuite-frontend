@@ -35,7 +35,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
 
     drawTile = function (taskarray, $node) {
         if (taskarray.length === 0) {
-            $node.append($('<div class="io-ox-clear io-ox-portal-preview">').text(gt("You don't have any tasks.")));
+            $node.append($('<div class="io-ox-clear io-ox-portal-content">').text(gt("You don't have any tasks.")));
             return;
         }
         var tasks = [];
@@ -45,7 +45,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
                 tasks.push(taskarray[i]);
             }
         }
-        var $preview = $('<div class="io-ox-clear io-ox-portal-preview">').appendTo($node);
+        var $preview = $('<div class="io-ox-clear io-ox-portal-content">').appendTo($node);
 
         _(tasks).each(function (task) {
             var task = util.interpretTask(task);

@@ -126,17 +126,18 @@ define("plugins/portal/linkedIn/register",
             ).addClass('io-ox-portal-tile-linkedin');
             var $content = $('<div class="io-ox-portal-content">').appendTo(this);
 
-            if (values) {
+            if (values && values.length > 0) {
+                console.log("Values:", values);
                 _(values).each(function (message) {
                     $('<div class="io-ox-portal-item">').append(
                         $('<span class="io-ox-portal-preview-firstline">').text(message.from.person.firstName + " " + message.from.person.lastName + ": "),
                         $('<span class="io-ox-portal-preview-secondline">').text(message.subject),
                         $('<span class="">').text(' '),
                         $('<span class="io-ox-portal-preview-thirdline">').text(message.body)
-                    );
+                    ).appendTo($content);
                 });
             } else {
-                $('<div class="io-ox-portal-item">').text(gt('You have no new messages.'));
+                $('<div class="io-ox-portal-item centered">').text(gt('You have no new messages.')).appendTo($content);
             }
         },
         load: function () {

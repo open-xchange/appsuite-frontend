@@ -228,10 +228,8 @@ define('io.ox/portal/mediaplugin',
                     id: extension.id,
                     index: extension.index,
                     tileClass: options.bigPreview ? 'io-ox-portal-widget-phototile' : '',
-
-                    title: function () {
-                        return extension.description;
-                    },
+                    tileType: 'B',
+                    title: extension.description,
 
                     preview: function () {
                         var deferred = $.Deferred();

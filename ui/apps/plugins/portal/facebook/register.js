@@ -51,7 +51,6 @@ define('plugins/portal/facebook/register',
         index: 150,
         title: 'Facebook',
         icon: 'apps/plugins/portal/facebook/f_logo.png',
-        color: 'bright',
         isEnabled: function () {
             return keychain.isEnabled('facebook');
         },
@@ -80,7 +79,7 @@ define('plugins/portal/facebook/register',
                 }
                 if (wall.length === 0) {
                     $previewNode.append(
-                        $('<div>').text(gt('No wall posts yet.')));
+                        $('<span>').text(gt('No wall posts yet.')));
                 } else {
                     _(wall).each(function (post) {
                         var message = post.message || post.description || '';
@@ -179,10 +178,12 @@ define('plugins/portal/facebook/register',
         drawCreationDialog: function () {
             var $node = $(this);
             $node.append(
-                $('<h1>').text('Facebook'),
-                $('<div class="io-ox-portal-preview centered">').append(
-                    $('<div>').text(gt('Add your account'))
-                )
+                $('<div class="io-ox-portal-title">').append(
+                    $('<h1>').text('Facebook')),
+                $('<div class="io-ox-portal-content centered">').append(
+                    $('<span>').text(gt('Add your account'))),
+                $('<div class="io-ox-portal-actions"').append(
+                    $('<i class="icon-remove io-ox-portal-action">'))
             );
         }
     });

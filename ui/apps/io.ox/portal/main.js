@@ -255,9 +255,9 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
 
             point.each(function (extension) {
                 var $actionbar = $('<div class="io-ox-portal-actions">').append(
-                    $('<span class="action-text">').text(gt("View %s", extension.title || extension.id)),
+                    $('<span class="action-text io-ox-portal-action-view">').text(gt("View %s", extension.title || extension.id)),
                     $('<i class="icon-remove io-ox-portal-action">'));
-                
+
                 if (!extension.isEnabled) {
                     extension.isEnabled = function () { return true; };
                 }
@@ -288,7 +288,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                         $tile.on('click', function () { return keychain.createInteractively(extension.id); });
                     }
                 } else if (!extension.hideSidePopup) {
-                    $tile.on('click', makeClickHandler(extension));
+                    $actionbar.find('.io-ox-portal-action-view').on('click', makeClickHandler(extension));
                 }
 
                 if (!extension.loadTile) {
@@ -296,12 +296,15 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                         return $.Deferred().resolve();
                     };
                 }
+                if (extension.tileType) {
+                    $tile.removeClass('io-ox-portal-typeA').addClass('io-ox-portal-type' + extension.tileType);
+                }
 
                 if (!extension.drawTile) {
                     extension.drawTile = function () {
                         var $node = $(this);
-                        
-                        if (!/^filler/.test(extension.id)) {
+
+                        if (! (/^filler/.test(extension.id) || (extension.type && extension.type !== 'A'))) {
                             $(this).append(
                                 $('<div class="io-ox-portal-title">').append(
                                     $('<img class="tile-image">'),
@@ -309,14 +312,6 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                                 )
                             );
                         }
-                        
-                        extension.asyncMetadata("type").done(function (type) {
-                            if (type === control.CANCEL) {
-                                $tile.remove();
-                                return;
-                            }
-                            $node.find(".io-ox-portal-typeA").removeClass("io-ox-portal-typeA").addClass("io-ox-portal-type" + type);
-                        });
                         extension.asyncMetadata("title").done(function (title) {
                             if (title === control.CANCEL) {
                                 $tile.remove();
@@ -352,15 +347,6 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                             if (color !== undefined) {
 //                                    $node[0].className = $node[0].className.replace(/tile-color\d/g, '');
 //                                    $node.addClass('tile-color' + color);
-                            }
-                        });
-                        extension.asyncMetadata("color").done(function (color) {
-                            if (color === control.CANCEL) {
-                                $tile.remove();
-                                return;
-                            }
-                            if (color !== undefined) {
-                                $node.addClass("tile-" + color);
                             }
                         });
                     };

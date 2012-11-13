@@ -8,10 +8,10 @@
     position: relative;
     height: 100%;
     .overflow(auto);
- 
+
     border-top: 1px solid #000;
     background-color: #2C2C2C;
-    
+
     background-image: -moz-linear-gradient(top, @portal-background-alt, @portal-background);
     background-image: -ms-linear-gradient(top, @portal-background-alt, @portal-background);
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@portal-background-alt), to(@portal-background));
@@ -68,6 +68,7 @@
 .io-ox-portal-tiles {
     clear: both;
     text-align: left;
+    vertical-align: top;
     position: relative;
     background: #999;
 }
@@ -78,26 +79,19 @@
 @tLine: @tSpace * 3;
 
 .io-ox-portal-widget-tile {
-    display: block;
+    display: inline-block;
     width: @tWidth;
     height: @tHeight;
     margin: 0 1px 1px 0;
+    overflow: hidden;
     float: left;
-} 
-.io-ox-portal-widget-tile { 
-    height: @tile-height;
-    width: 100%;
     .box-sizing(border-box);
 }
 .io-ox-portal-widget-phototile {
     padding: 0 !important;
 }
-.io-ox-portal-widget-phototile h1 {
-	padding: 1.3em 0.5em 0.5em 0.5em;
-    margin: 0 !important;
-}
 
-<<<<<<< HEAD
+/* LATER:
 @media all and (min-width: 0px ) {
     .io-ox-portal-widget-tile-border { width: 100%; }
 }
@@ -113,12 +107,7 @@
 @media all and (min-width: 1200px) {
     .io-ox-portal-widget-tile-border { width: 20%; }
 }
-.io-ox-typeA-title, .io-ox-typeB-title {
-    font-family: @font-light;
-}
-.io-ox-typeA-item {
-    height: @tLine;
-=======
+*/
 .io-ox-portal-preview-firstline {
     font-weight: 300;
     color: white;
@@ -138,28 +127,17 @@
     max-height: 4.5em;
     line-height: 1.5em;
     font-size: 1em;
->>>>>>> Portal v5 - intermediate state
-    border-top: 1px solid rgba(255,255,255,0.5);
+    border-top: 1px solid rgba(255,255,255,0.3);
     width: 100%;
     color: #eee;
     padding: 0 6px 0 @tSpace;
     overflow: hidden;
 }
-<<<<<<< HEAD
-.io-ox-typeA-content :first-child.io-ox-typeA-item{
-    border: none;
-}
-.io-ox-typeA-content {
-    height: @tHeight - @tLine - @tLine; /* height - title - action */
-    overflow: hidden;
-=======
-
 .io-ox-portal-typeA .io-ox-portal-content :first-child.io-ox-portal-item {
     border: none;
 }
 .io-ox-portal-typeA :hover.io-ox-portal-item {
-    background: black;
-    opacity: 0.25;
+    background: rgba(255, 255, 255, 0.75);
     font-weight: 200;
 }
 .io-ox-portal-typeA .io-ox-portal-content {
@@ -167,31 +145,26 @@
     overflow: hidden;
     line-height: 1.5em;
     text-overflow: ellipsis;
-<<<<<<< HEAD
->>>>>>> Portal v5 - intermediate state
-=======
     clear: both;
->>>>>>> Portal v5
+    color: white;
 }
-
-
 .io-ox-portal-typeA .io-ox-portal-title {
     width: @tWidth;
     height: @tLine;
-    background: #000;
-    color: #eee;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
     text-align: center;
     padding-top: 6px;
     font-family: @font-light;
 }
-
 .io-ox-portal-typeA .io-ox-portal-actions {
     height: @tLine;
-    background: black;
-    color: #eee;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
     padding-top: @tSpace/2;
 }
 .io-ox-portal-actions .action-text {
+    display: inline-block;
     height: 100%;
     cursor: pointer;
     padding-left: .5em;
@@ -202,16 +175,24 @@
 .io-ox-portal-typeB .io-ox-portal-title {
     width: @tWidth;
     height: @tLine;
-    background: #000;
-    color: #eee;
-    text-align: center;
     padding-top: 6px;
-    font-family: @font-light;
-}   
+    visibility: hidden;
+}
 .io-ox-portal-typeB .io-ox-portal-image {
     height: @tHeight - @tLine; /* height - title */
     background: no-repeat center;
     background-size: cover;
+}
+.io-ox-portal-typeB .io-ox-portal-actions {
+    margin-top: @tHeight - @tLine - @tLine; /* box_height - header_height - footer_height*/
+    height: @tLine;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding-top: @tSpace/2;
+    opacity: 0.75;
+}
+.io-ox-portal-typeB .io-ox-portal-actions .action-text, .io-ox-portal-typeB .io-ox-portal-title  {
+    font-weight: 200;
 }
 
 .io-ox-portal-action {
@@ -231,28 +212,18 @@
 /* Remove this to make Matthias happy */
 /*
 .io-ox-typeA-action, .io-ox-typeB-title {
-    border-bottom-left-radius: @tile-space;
-    border-bottom-right-radius: @tile-space;
+    border-bottom-left-radius: @tSpace;
+    border-bottom-right-radius: @tSpace;
 }
 .io-ox-typeA-title {
-    border-top-left-radius: @tile-space;
-    border-top-right-radius: @tile-space;
+    border-top-left-radius: @tSpace;
+    border-top-right-radius: @tSpace;
 }
 .io-ox-portal-widget-tile {
-    border-radius: @tile-space;
+    border-radius: @tSpace;
 }
 */
 
-.io-ox-typeA-action, .io-ox-typeB-title, .io-ox-typeA-title {
-/*    opacity: 0.5;
-    filter: alpha(opacity=50); */
-    font-size: 14pt;
-    font-weight: 200;
-    line-height: 1.15em;
-    font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    text-align: left;
-    padding-left: 0.5em;
-}
 .invisible {
     visibility: hidden;
 }
