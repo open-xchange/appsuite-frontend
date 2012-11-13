@@ -82,8 +82,16 @@
                     color: black !important;
                 }
             }
+            
+            &:after {
+                content: '.';
+                display: block;
+                height: 0;
+                clear: both;
+                visibility: hidden;
+            }
         }
-
+        
         /* no text cursor in read-only mode */
         &:not(.user-select-text) div.p {
             cursor: default;
