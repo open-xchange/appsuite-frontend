@@ -157,6 +157,7 @@ define('io.ox/calendar/week/view',
                 var cid = $(e.currentTarget).data('cid'),
                     obj = _.cid(cid + ''),
                     self = this;
+                cid = obj.folder_id + '.' + obj.id;
                 self.trigger('showAppointment', e, obj);
 
                 if (self.clickTimer === null && self.clicks === 0) {
@@ -167,9 +168,9 @@ define('io.ox/calendar/week/view',
 
                         self.$el.find('.appointment')
                             .removeClass('current opac')
-                            .not($('[data-cid="' + cid + '"]'))
+                            .not($('[data-cid^="' + cid + '"]'))
                             .addClass('opac');
-                        $('[data-cid="' + cid + '"]:visible').addClass('current');
+                        $('[data-cid^="' + cid + '"]:visible').addClass('current');
                     }, 300);
                 }
                 self.clicks++;
