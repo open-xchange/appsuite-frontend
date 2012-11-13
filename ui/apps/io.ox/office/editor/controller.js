@@ -243,7 +243,8 @@ define('io.ox/office/editor/controller',
                 'character/hyperlink': {
                     parent: 'character/attributes',
                     get: function (attributes) { return attributes.url; },
-                    set: function (hyperlink) { editor.insertHyperlink(); }
+                    set: function (hyperlink) { editor.insertHyperlink(); },
+                    done: $.noop
                 },
                 'insert/tab' : {
                     parent: 'document/editable/text',
@@ -296,7 +297,8 @@ define('io.ox/office/editor/controller',
                 },
                 'image/insert/url': {
                     parent: 'document/editable/text',
-                    set: function () { Image.insertURLDialog(app); }
+                    set: function () { Image.insertURLDialog(app); },
+                    done: $.noop
                 },
 
                 'document/editable/image': {

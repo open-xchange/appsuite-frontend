@@ -217,31 +217,59 @@ define('io.ox/office/tk/dialogs',
      */
     Dialogs.showHyperlinkDialog = function (options) {
 
-        var // the text input field
-            inputURL = $('<input>', {
-                    placeholder: Utils.getStringOption(options, 'placeholderURL', ''),
-                    value: Utils.getStringOption(options, 'valueURL', '')
-                }),
-            inputText = $('<input>', {
-                    placeholder: Utils.getStringOption(options, 'placeholderText', ''),
-                    value: Utils.getStringOption(options, 'valueText', '')
-                }),
-
+        var // the text input fields
+            inputurlid = _.uniqueId('url'),
+            inputtextid = _.uniqueId('text'),
+            
             // the dialog object
-            dialog = createModalDialog(options).append(inputText.addClass('nice-input')).append(inputURL.addClass('nice-input')),
+            dialog = createModalDialog(options)
+            .append(
+                $('<div>').addClass('row-fluid').css({'margin-top': '10px'}).append(
+                    $('<div>').addClass('control-group').css({'margin-bottom': '0px'}).append(
+                        $('<label>').addClass('control-label').attr('for', inputtextid).text(gt('Text:')),
+                        $('<div>').addClass('controls').css({'margin-right': '10px'}).append(
+                            $('<input>', { value: Utils.getStringOption(options, 'valueText', ''), placeholder: Utils.getStringOption(options, 'placeholderURL', '')})
+                            .addClass('nice-input')
+                            .css({'width': '100%'})
+                            .attr('data-property', 'text')
+                            .attr('id', inputtextid))
+                        )
+                    )
+                )
+            .append(
+                $('<div>').addClass('row-fluid').css({'margin-top': '10px'}).append(
+                    $('<div>').addClass('control-group').css({'margin-bottom': '0px'}).append(
+                        $('<label>').addClass('control-label').attr('for', inputurlid).text(gt('URL:')),
+                        $('<div>').addClass('controls').css({'margin-right': '10px'}).append(
+                            $('<input>', { value: Utils.getStringOption(options, 'valueURL', '')})
+                            .addClass('nice-input')
+                            .css({'width': '100%'})
+                            .attr('data-property', 'url')
+                            .attr('id', inputurlid))
+                            )
+                        )
+                    ),
 
             // the result deferred
             def = $.Deferred();
 
         // add OK and Cancel buttons & remove button to remove hyperlink
         addDialogButtons(dialog, options);
-        dialog.addAlternativeButton('remove', Utils.getStringOption(options, 'removeLabel', gt('Remove')));
+        dialog.addDangerButton('remove', Utils.getStringOption(options, 'removeLabel', gt('Remove')));
  
         // show the dialog and register listeners for the results
-        dialog.show(function () { inputURL.focus(); })
+        dialog.show(function () {
+            if (Utils.getStringOption(options, 'valueText', '').length > 0)
+                $(dialog).find('[data-property="url"]').focus();
+            else
+                $(dialog).find('[data-property="text"]').focus();
+        })
         .done(function (action, data, node) {
             if (action === 'ok') {
-                def.resolve({ text: inputText.val(), url: inputURL.val() });
+                var text = $.trim($(node).find('[data-property="text"]').val()),
+                    url = $.trim($(node).find('[data-property="url"]').val());
+                
+                def.resolve({ text: text, url: url });
             } else if (action === 'remove') {
                 def.resolve({ text: null, url: null });
             } else {

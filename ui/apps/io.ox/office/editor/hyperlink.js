@@ -95,6 +95,23 @@ define('io.ox/office/editor/hyperlink',
         return newSelection;
     };
     
+    /**
+     * Tries to find a selection based on the provided position which includes
+     * @param editor {Object}
+     *  The editor instance.
+     * @param characterStyles {Object}
+     *  The character style sheets.
+     * @param node
+     *  The node which includes the position
+     * @param pos
+     *  The position in the paragraph
+     * @param url
+     *  The hyperlink URL which is set as character style at pos
+     * @returns {Object}
+     *  Contains start and end position of the selection where both could
+     *  be null which means that there is no selection but the hyperlink
+     *  should be inserted at the position.
+     */
     Hyperlink.findURLSelection = function (editor, characterStyles, node, pos, url) {
         var startPos,
             endPos,
