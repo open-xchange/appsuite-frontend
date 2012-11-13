@@ -751,7 +751,8 @@ define('io.ox/mail/view-detail',
             if (length > 0) {
                 var outer = $('<div>').addClass('list attachment-list').append(
                     $('<span>').addClass('io-ox-label').append(
-                        $.txt(gt.ngettext('Attachment', 'Attachments', length)),
+                        $.txt(gt.npgettext('plural', 'Attachment',
+                                           'Attachments', length)),
                         $.txt('\u00A0\u00A0')
                     )
                 );

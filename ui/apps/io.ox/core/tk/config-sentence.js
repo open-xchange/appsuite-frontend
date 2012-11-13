@@ -47,7 +47,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
 
             function drawState() {
                 var value = self[attribute];
-                $anchor.text(gt.format(gt.ngettext(options.singular, options.plural, value), gt.noI18n(value)));
+                $anchor.text(options.phrase(value));
                 self.trigger("redraw", self);
             }
 

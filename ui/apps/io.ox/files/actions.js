@@ -251,12 +251,11 @@ define("io.ox/files/actions",
         action: function (data) {
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 // get proper question
-                var question;
-                if (_.isArray(data) && data.length > 1) {
-                    question = gt('Do you really want to delete these files?');
-                } else {
-                    question = gt('Do you really want to delete this file?');
-                }
+                var question = gt.ngettext(
+                        'Do you really want to delete this file?',
+                        'Do you really want to delete these files?',
+                        _.isArray(data) ? data.length : 1
+                );
                 // ask
                 new dialogs.ModalDialog()
                     .text(question)
