@@ -63,6 +63,13 @@ define('io.ox/office/editor/hyperlink',
         });
     };
     
+    /**
+     * Tries to find a selection range based on the current text cursor
+     * position. The url character style is used to find a consecutive
+     * @param editor
+     * @param selection
+     * @returns
+     */
     Hyperlink.findSelectionRange = function (editor, selection) {
         var newSelection = null;
         

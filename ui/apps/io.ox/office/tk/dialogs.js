@@ -198,10 +198,14 @@ define('io.ox/office/tk/dialogs',
      *  @param {String} [options.title]
      *      If specified, the title of the dialog window that will be shown in
      *      a larger font.
-     *  @param {String} [options.value='']
+     *  @param {String} [options.valueText='']
      *      The initial value of the text field.
-     *  @param {String} [options.placeholder='']
+     *  @param {String} [options.placeholderText='']
      *      The place-holder text that will be shown in the empty text field.
+     *  @param {String} [options.valueURL='']
+     *      The initial value of the URL field.
+     *  @param {String} [options.placeholderURL='']
+     *      The place-holder text that will be shown in the empty URL field.
      *  @param {String} [options.okLabel=gt('OK')]
      *      The label of the primary button that triggers the intended action
      *      by resolving the promise object returned by this method.
@@ -211,9 +215,11 @@ define('io.ox/office/tk/dialogs',
      *
      * @returns {jQuery.Promise}
      *  The promise of a deferred object that will be resolved if the primary
-     *  button has been activated, or rejected if the dialog has been canceled.
-     *  The done handlers registered at the promise object will receive the
-     *  entered text.
+     *  button or the remove button have been activated, or rejected if the
+     *  dialog has been canceled.
+     *  The done handlers registered at the promise object will receive a
+     *  object containing the text and url entered by the user. The object
+     *  contains null for text and url if remove has been clicked.
      */
     Dialogs.showHyperlinkDialog = function (options) {
 
@@ -260,9 +266,9 @@ define('io.ox/office/tk/dialogs',
         // show the dialog and register listeners for the results
         dialog.show(function () {
             if (Utils.getStringOption(options, 'valueText', '').length > 0)
-                $(dialog).find('[data-property="url"]').focus();
+                dialog.getBody().find('[data-property="url"]').focus();
             else
-                $(dialog).find('[data-property="text"]').focus();
+                dialog.getBody().find('[data-property="text"]').focus();
         })
         .done(function (action, data, node) {
             if (action === 'ok') {

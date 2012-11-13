@@ -1401,6 +1401,8 @@ define('io.ox/office/editor/editor',
 
                         if (data.url === null && data.text === null) {
                             // remove hyperlink
+                            // setAttribute uses a closed range therefore -1
+                            end[end.length - 1] -= 1;
                             generator.generateOperation(Operations.ATTRS_SET, {
                                 attrs: { url: '', style: null },
                                 start: _.copy(start, true),
@@ -1419,9 +1421,14 @@ define('io.ox/office/editor/editor',
                                 // insert new text
                                 var newOperation = { name: Operations.TEXT_INSERT, text: data.text, start: _.clone(start) };
                                 applyOperation(newOperation, true, true);
-                                // calculate end position of new text
+
+                                // Calculate end position of new text
+                                // will be used for setAttributes operation
                                 end = _.clone(start);
                                 end[end.length - 1] += data.text.length;
+                            }
+                            else {
+                                end[end.length - 1] -= 1;
                             }
 
                             if (characterStyles.isDirty(hyperlinkStyleId)) {
