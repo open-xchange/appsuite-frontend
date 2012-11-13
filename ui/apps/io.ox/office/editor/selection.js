@@ -103,7 +103,7 @@ define('io.ox/office/editor/selection',
                 // otherwise DOM element point, consisting of parent node and own sibling index
                 return DOM.isTextSpan(nodeInfo.node) ?
                     new DOM.Point(nodeInfo.node.firstChild, nodeInfo.offset) :
-                    DOM.Point.createPointForNode(nodeInfo.node);
+                    new DOM.Point(nodeInfo.node, 0);
             }
 
             return null;
