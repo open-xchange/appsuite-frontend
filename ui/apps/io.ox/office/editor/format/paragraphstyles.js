@@ -133,8 +133,15 @@ define('io.ox/office/editor/format/paragraphstyles',
 
             rightindent: {
                 def: 0
-            }
+            },
 
+            topmargin: {
+                def: 0
+            },
+
+            bottommargin: {
+                def: 0
+            }
         };
 
     // private static functions ===============================================
@@ -275,6 +282,12 @@ define('io.ox/office/editor/format/paragraphstyles',
             // now set left/right margins
             paragraph.css('margin-left', leftMargin / 100 + 'mm');
             paragraph.css('margin-right', rightMargin / 100  + 'mm');
+
+            var topMargin = attributes.topmargin;
+            var bottomMargin = attributes.bottommargin;
+
+            paragraph.css('margin-top', topMargin / 100 + 'mm');
+            paragraph.css('margin-bottom', bottomMargin / 100  + 'mm');
         }
 
         // base constructor ---------------------------------------------------
