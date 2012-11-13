@@ -1829,12 +1829,14 @@ define('io.ox/office/editor/editor',
             if (showReadOnlyInfo) {
                 Alert.showWarning(gt('Read Only Mode'),
                         (editUser || gt('Another user')) + gt(' is currently editing this document.'),
+                        false,
                         editdiv.parent(),
+                        app.getController(),
                         -1,
-                        {label: gt('Acquire Edit Rights'), key: 'file/editrights', controller: app.getController()}
+                        {label: gt('Acquire Edit Rights'), key: 'file/editrights'}
                     );
             } else if (showEditModeInfo) {
-                Alert.showSuccess(gt('Edit Mode'), gt('You have edit rights.'), editdiv.parent(), 5000);
+                Alert.showSuccess(gt('Edit Mode'), gt('You have edit rights.'), true, editdiv.parent(), app.getController(), 5000);
             }
         };
 

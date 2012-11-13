@@ -148,13 +148,7 @@ define('io.ox/office/editor/main',
          *  The title of the error message. Defaults to 'Error'.
          */
         function showError(message, title) {
-
-            var // the alert box (return focus to editor when clicked)
-                alert = $.alert(title || gt('Error'), message).click(function () { controller.done(); });
-
-            win.nodes.appPane
-                .find('.alert').remove().end()
-                .prepend(alert);
+            Alert.showError(title || gt('Error'), message, true, win.nodes.appPane, controller, -1);
         }
 
         /**
@@ -456,7 +450,7 @@ define('io.ox/office/editor/main',
                     var readOnlyMode = response && response.status === 0 && response.readyState === 0;
                     if (readOnlyMode && editor.isEditMode()) {
                         controller.setEditMode(false);
-                        Alert.showWarning(gt('Network Problems'), gt('Switched to read only mode.'), win.nodes.appPane, 10000);
+                        Alert.showWarning(gt('Network Problems'), gt('Switched to read only mode.'), true, win.nodes.appPane, controller, 10000);
                     }
                 });
 
