@@ -96,7 +96,6 @@ define('io.ox/calendar/week/view',
         onEnterAppointment: function (e) {
             if (!this.lasso) {
                 var cid = _.cid($(e.currentTarget).data('cid') + '');
-                console.log(cid);
                 $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').addClass('hover');
             }
         },
@@ -105,7 +104,6 @@ define('io.ox/calendar/week/view',
         onLeaveAppointment: function (e) {
             if (!this.lasso) {
                 var cid = _.cid($(e.currentTarget).data('cid') + '');
-                console.log(cid);
                 $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').removeClass('hover');
             }
         },
@@ -942,12 +940,10 @@ define('io.ox/calendar/week/view',
                                 if (((d.my.lastHeight <= 0 && lastHeight > 0) || (d.my.lastHeight <= paneHeight && lastHeight > paneHeight)) && diff > 0) {
                                     $('.week-container .day[date="' + (++d.my.lastPos) + '"]')
                                         .append($(this).clone());
-                                    console.log('+', d.my.lastPos);
                                     d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
                                 }
                                 if (((d.my.lastHeight > 0 && lastHeight <= 0) || (d.my.lastHeight > paneHeight && lastHeight <= paneHeight)) && diff < 0) {
                                     d.my.lastPos--;
-                                    console.log('-', d.my.lastPos);
                                     d.my.all.last().remove();
                                     d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
                                 }
