@@ -12,16 +12,12 @@
  */
 
 define('io.ox/office/editor/hyperlink',
-    ['io.ox/office/tk/apphelper',
+    ['io.ox/office/tk/utils',
      'io.ox/office/tk/dialogs',
-     'io.ox/office/editor/editor',
-     'io.ox/office/editor/position',
-     'io.ox/office/editor/selection',
      'io.ox/office/editor/dom',
-     'io.ox/office/tk/utils',
+     'io.ox/office/editor/position',
      'gettext!io.ox/office/main'
-    ], function (AppHelper, Dialogs, Editor, Position, Selection, DOM, Utils, gt) {
-    
+    ], function (Utils, Dialogs, DOM, Position, gt) {
 
     'use strict';
 
@@ -62,7 +58,7 @@ define('io.ox/office/editor/hyperlink',
             okLabel: gt('Insert')
         });
     };
-    
+
     /**
      * Tries to find a selection range based on the current text cursor
      * position. The url character style is used to find a consecutive
@@ -72,7 +68,7 @@ define('io.ox/office/editor/hyperlink',
      */
     Hyperlink.findSelectionRange = function (editor, selection) {
         var newSelection = null;
-        
+
         if (!selection.hasRange() && selection.getEnclosingParagraph()) {
             var paragraph = selection.getEnclosingParagraph(),
                 pos = null,
@@ -80,7 +76,7 @@ define('io.ox/office/editor/hyperlink',
                 url = null,
                 characterStyles = editor.getStyleSheets('character'),
                 obj = null;
-        
+
             // find out a possible URL set for the current position
             obj = Position.getDOMPosition(editor.getNode(), startSelection);
             if (obj && obj.node && DOM.isTextSpan(obj.node.parentNode)) {
@@ -90,7 +86,7 @@ define('io.ox/office/editor/hyperlink',
             }
 
             pos = startSelection[startSelection.length - 1];
-            
+
             if (url) {
                 newSelection = Hyperlink.findURLSelection(editor, characterStyles, obj.node.parentNode, pos, url);
             }
@@ -98,10 +94,10 @@ define('io.ox/office/editor/hyperlink',
                 newSelection = Hyperlink.findTextSelection(paragraph, pos);
             }
         }
-        
+
         return newSelection;
     };
-    
+
     /**
      * Tries to find a selection based on the provided position which includes
      * @param editor {Object}
@@ -125,21 +121,21 @@ define('io.ox/office/editor/hyperlink',
             startNode = node,
             endNode = node,
             styles = null;
-        
+
         while (endNode && endNode.nextSibling && DOM.isTextSpan(endNode.nextSibling)) {
             styles = characterStyles.getElementAttributes(endNode.nextSibling);
             if (styles.url !== url)
                 break;
             endNode = endNode.nextSibling;
         }
-        
+
         while (startNode && startNode.previousSibling && DOM.isTextSpan(startNode.previousSibling)) {
             styles = characterStyles.getElementAttributes(startNode.previousSibling);
             if (styles.url !== url)
                 break;
             startNode = startNode.previousSibling;
         }
-        
+
         startPos = Position.getPositionRangeForNode(editor.getNode(), startNode, true);
         if (startNode !== endNode) {
             endPos = Position.getPositionRangeForNode(editor.getNode(), endNode, true);
@@ -147,22 +143,22 @@ define('io.ox/office/editor/hyperlink',
         else {
             endPos = startPos;
         }
-        
+
         return { start: startPos.start[startPos.start.length - 1], end: endPos.end[endPos.end.length - 1] };
     };
-    
+
     Hyperlink.findTextSelection = function (paragraph, pos) {
         var text = '',
             startFound = false,
             startPos = -1,
             endPos = pos,
             selection = { start: null, end: null };
-        
+
         Position.iterateParagraphChildNodes(paragraph, function (node, nodeStart, nodeLength, nodeOffset, offsetLength) {
-            
+
             if (DOM.isTextSpan(node)) {
                 var str = $(node).text(), mustConcat = true;
-                
+
                 if (nodeStart <= pos) {
                     if (startPos === -1)
                         startPos = nodeStart;
@@ -172,7 +168,7 @@ define('io.ox/office/editor/hyperlink',
                 if ((nodeStart + nodeLength) > pos) {
                     if (!startFound) {
                         var leftPos = startPos;
-                        
+
                         startFound = true;
                         startPos = Hyperlink.findLeftWordPosition(text, leftPos, pos);
                         if (startPos === -1)
@@ -198,31 +194,31 @@ define('io.ox/office/editor/hyperlink',
                 }
             }
         });
-        
+
         if ((startPos >= 0) && (endPos >= startPos))
             selection = { start: startPos, end: endPos };
-        
+
         return selection;
     };
-    
+
     Hyperlink.findLeftWordPosition = function (text, offset, pos) {
         var i = pos - offset;
-        
+
         if (_.contains(Hyperlink.Separators, text[i]))
             return -1;
-        
+
         while (i >= 0 && !_.contains(Hyperlink.Separators, text[i])) {
             i--;
         }
         return offset + i + 1;
     };
-    
+
     Hyperlink.findRightWordPosition = function (text, offset, pos) {
         var i = pos - offset, length = text.length;
-        
+
         if (_.contains(Hyperlink.Separators, text[i]))
             return -1;
-        
+
         while (i < length && !_.contains(Hyperlink.Separators, text[i])) {
             i++;
         }

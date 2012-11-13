@@ -13,21 +13,20 @@
 
 define('io.ox/office/preview/main',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/apphelper',
-     'io.ox/office/tk/controller',
-     'io.ox/office/tk/component/appwindowtoolbar',
-     'io.ox/office/preview/preview',
+     'io.ox/office/tk/application',
+     'io.ox/office/preview/actions',
+     'io.ox/office/preview/model',
+     'io.ox/office/preview/controller',
+     'io.ox/office/preview/view',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.css'
-    ], function (Utils, AppHelper, Controller, AppWindowToolBar, Preview, gt) {
+    ], function (Utils, Application, Actions, PreviewModel, PreviewController, PreviewView, gt) {
 
     'use strict';
 
-    var MODULE_NAME = 'io.ox/office/preview';
+    // class PreviewApplication ===============================================
 
-    // class Application ======================================================
-
-    function Application(options) {
+    function PreviewApplication(options) {
 
         var // self reference
             self = this,
@@ -35,49 +34,14 @@ define('io.ox/office/preview/main',
             // the application window
             win = null,
 
-            // the previewer (model)
-            preview = new Preview(),
+            // the previewer model
+            model = null,
 
-            // the controller
-            controller = new Controller({
+            // view, contains panes, tool bars, etc.
+            view = null,
 
-                    'file/quit': {
-                        set: function () { window.setTimeout(function () { self.quit(); }); }
-                    },
-
-                    'pages/first': {
-                        enable: function () { return preview.getPage() > 1; },
-                        set: function () { preview.firstPage(); }
-                    },
-                    'pages/previous': {
-                        enable: function () { return preview.getPage() > 1; },
-                        set: function () { preview.previousPage(); }
-                    },
-                    'pages/next': {
-                        enable: function () { return preview.getPage() < preview.getPageCount(); },
-                        set: function () { preview.nextPage(); }
-                    },
-                    'pages/last': {
-                        enable: function () { return preview.getPage() < preview.getPageCount(); },
-                        set: function () { preview.lastPage(); }
-                    },
-
-                    'pages/current': {
-                        enable: function () { return false; },
-                        get: function () {
-                            // the gettext comments MUST be located directly before gt(), but
-                            // 'return' cannot be the last token in a line
-                            // -> use a temporary variable to store the result
-                            var label =
-                                //#. %1$s is the current page index in office document preview
-                                //#. %2$s is the number of pages in office document preview
-                                //#, c-format
-                                gt('%1$s of %2$s', preview.getPage(), preview.getPageCount());
-                            return label;
-                        }
-                    }
-
-                });
+            // controller as single connection point between model and view elements
+            controller = null;
 
         // private methods ----------------------------------------------------
 
@@ -144,7 +108,6 @@ define('io.ox/office/preview/main',
                 });
 
             // show application window
-            // show application window
             win.show(function () {
                 win.busy();
                 updateTitles();
@@ -159,21 +122,21 @@ define('io.ox/office/preview/main',
                         dataType: 'json'
                     })
                     .pipe(function (response) {
-                        return AppHelper.extractAjaxStringResult(response, 'HTMLPages');
+                        return Application.extractAjaxStringResult(response, 'HTMLPages');
                     })
                     .done(function (previewDocument) {
                         if (_.isString(previewDocument)) {
-                            preview.setPreviewDocument(previewDocument);
+                            model.setPreviewDocument(previewDocument);
                             def.resolve();
                         } else {
                             showError(gt('An error occurred while loading the document.'), gt('Load Error'));
-                            preview.setPreviewDocument(null);
+                            model.setPreviewDocument(null);
                             def.reject();
                         }
                     })
                     .fail(function (response) {
                         showAjaxError(response);
-                        preview.setPreviewDocument(null);
+                        model.setPreviewDocument(null);
                         def.reject();
                     });
 
@@ -187,39 +150,23 @@ define('io.ox/office/preview/main',
         }
 
         /**
-         * Handles resize events of the browser window, and adjusts the size of
-         * the application pane node.
-         */
-        function windowResizeHandler(event) {
-            win.nodes.appPane.height(window.innerHeight - win.nodes.appPane.offset().top);
-        }
-
-        /**
          * The handler function that will be called while launching the
          * application. Creates and initializes a new application window.
          */
         function launchHandler() {
 
             // create the application window
-            win = ox.ui.createWindow({
-                name: MODULE_NAME,
-                classic: true,
-                search: false,
-                toolbar: true
-            });
+            win = ox.ui.createWindow({ name: self.getName() });
             self.setWindow(win);
 
-            win.nodes.appPane = $('<div>').addClass('io-ox-pane apppane').append(preview.getNode());
-            win.nodes.main.addClass('io-ox-office-preview-main').append(win.nodes.appPane);
+            // the previewer model
+            model = new PreviewModel(self);
 
-            // register a component that updates the window header tool bar
-            controller.registerViewComponent(new AppWindowToolBar(win));
+            // create controller
+            controller = new PreviewController(self);
 
-            // update all view components every time the window will be shown
-            win.on('show', function () { controller.update(); });
-
-            // listen to browser window resize events when the OX window is visible
-            Utils.registerWindowResizeHandler(win, windowResizeHandler);
+            // the view
+            view = new PreviewView(win, model, controller);
 
             // disable FF spell checking
             $('body').attr('spellcheck', false);
@@ -240,14 +187,20 @@ define('io.ox/office/preview/main',
         // methods ------------------------------------------------------------
 
         /**
-         * Returns the preview instance.
+         * Returns the previewer model instance of this preview application.
+         *
+         * @returns {PreviewModel}
+         *  The model of this preview application.
          */
-        this.getPreview = function () {
-            return preview;
+        this.getModel = function () {
+            return model;
         };
 
         /**
-         * Returns the controller.
+         * Returns the controller of this preview application.
+         *
+         * @returns {PreviewController}
+         *  The controller of this preview application.
          */
         this.getController = function () {
             return controller;
@@ -262,7 +215,7 @@ define('io.ox/office/preview/main',
          *  The restore point containing the application state.
          */
         this.failSave = function () {
-            return { module: MODULE_NAME, point: { file: this.getFileDescriptor() } };
+            return { module: self.getName(), point: { file: this.getFileDescriptor() } };
         };
 
         /**
@@ -283,40 +236,25 @@ define('io.ox/office/preview/main',
          * window close button).
          */
         this.destroy = function () {
-            preview.destroy();
-            win = preview = null;
+            controller.destroy();
+            view.destroy();
+            model.destroy();
+            win = model = view = controller = null;
         };
 
         // initialization -----------------------------------------------------
 
-        // listen to 'showpage' events and update all GUI elements
-        preview.on('showpage', function () { controller.update(); });
-
         // set launch and quit handlers
         this.setLauncher(launchHandler).setQuit(quitHandler);
 
-    } // class Application
-
-    // global initialization --------------------------------------------------
-
-    AppHelper.configureWindowToolBar(MODULE_NAME)
-        .addButtonGroup('pages')
-            .addButton('pages/first', { icon: 'icon-fast-backward' })
-            .addButton('pages/previous', { icon: 'icon-chevron-left' })
-            .addLabel('pages/current', { width: 100 })
-            .addButton('pages/next', { icon: 'icon-chevron-right' })
-            .addButton('pages/last', { icon: 'icon-fast-forward' })
-            .end()
-        .addButtonGroup('quit')
-            .addButton('file/quit', { label: gt('Close') })
-            .end();
+    } // class PreviewApplication
 
     // exports ================================================================
 
     // io.ox.launch() expects an object with the method getApp()
     return {
         getApp: function (options) {
-            return AppHelper.getOrCreateApplication(MODULE_NAME, Application, options);
+            return Application.getOrCreateApplication(Actions.MODULE_NAME, PreviewApplication, options);
         }
     };
 

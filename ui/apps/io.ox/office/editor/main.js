@@ -16,21 +16,19 @@
 define('io.ox/office/editor/main',
     ['io.ox/files/api',
      'io.ox/office/tk/utils',
-     'io.ox/office/tk/apphelper',
+     'io.ox/office/tk/application',
      'io.ox/office/tk/config',
      'io.ox/office/tk/component/toolpane',
+     'io.ox/office/editor/actions',
      'io.ox/office/editor/editor',
      'io.ox/office/editor/view/view',
      'io.ox/office/editor/controller',
      'io.ox/office/tk/alert',
      'gettext!io.ox/office/main',
      'less!io.ox/office/editor/style.css'
-    ], function (FilesAPI, Utils, AppHelper, Config, ToolPane, Editor, View, Controller, Alert, gt) {
+    ], function (FilesAPI, Utils, Application, Config, ToolPane, Actions, EditorModel, EditorView, EditorController, Alert, gt) {
 
     'use strict';
-
-    var // application identifier
-        MODULE_NAME = 'io.ox/office/editor';
 
     // static functions =======================================================
 
@@ -47,7 +45,7 @@ define('io.ox/office/editor/main',
     function extractOperationsList(response) {
 
         var // the result data
-            data = AppHelper.extractAjaxResultData(response);
+            data = Application.extractAjaxResultData(response);
 
         // check that the result data object contains an operations array
         if (!_.isObject(data) || !_.isArray(data.operations)) {
@@ -69,9 +67,9 @@ define('io.ox/office/editor/main',
         return data.operations;
     }
 
-    // class Application ======================================================
+    // class EditorApplication ================================================
 
-    function Application(options) {
+    function EditorApplication(options) {
 
         var // self reference
             self = this,
@@ -79,7 +77,7 @@ define('io.ox/office/editor/main',
             // application window
             win = null,
 
-            // the editor (model)
+            // the editor model
             editor = null,
 
             // editor view, contains panes, tool bars, etc.
@@ -248,7 +246,7 @@ define('io.ox/office/editor/main',
                     return FilesAPI.propagate('new', response.data);
                 });
             } else {
-                Utils.error('Application.createNewDocument(): cannot create new document without folder identifier');
+                Utils.error('EditorApplication.createNewDocument(): cannot create new document without folder identifier');
                 def = $.Deferred().reject();
             }
 
@@ -439,7 +437,7 @@ define('io.ox/office/editor/main',
                 request.done(function (response) {
                     if (response && response.data) {
                         var // response data
-                            data = AppHelper.extractAjaxResultData(response),
+                            data = Application.extractAjaxResultData(response),
                             // operations
                             operations = extractOperationsList(response);
 
@@ -605,12 +603,7 @@ define('io.ox/office/editor/main',
                 def = $.Deferred();
 
             // create the application window
-            win = ox.ui.createWindow({
-                name: MODULE_NAME,
-                classic: true,
-                search: true,
-                toolbar: true
-            });
+            win = ox.ui.createWindow({ name: self.getName() });
             self.setWindow(win);
 
             // do not detach when hiding for several reasons:
@@ -619,13 +612,13 @@ define('io.ox/office/editor/main',
             win.detachable = false;
 
             // create the editor model
-            editor = new Editor(self);
+            editor = new EditorModel(self);
 
             // create controller
-            controller = new Controller(self);
+            controller = new EditorController(self);
 
             // editor view
-            view = new View(win, controller, editor);
+            view = new EditorView(win, editor, controller);
             updateDebugMode();
 
             // register window event handlers
@@ -728,21 +721,30 @@ define('io.ox/office/editor/main',
         // methods ------------------------------------------------------------
 
         /**
-         * Returns the editor instance.
+         * Returns the document model of this editor application.
+         *
+         * @returns {EditorModel}
+         *  The document model of this editor application.
          */
         this.getEditor = function () {
             return editor;
         };
 
         /**
-         * Returns the controller.
+         * Returns the controller of this editor application.
+         *
+         * @returns {EditorController}
+         *  The controller of this editor application.
          */
         this.getController = function () {
             return controller;
         };
 
         /**
-         * Returns the global view object.
+         * Returns the view of this editor application.
+         *
+         * @returns {EditorView}
+         *  The view of this editor application.
          */
         this.getView = function () {
             return view;
@@ -855,7 +857,7 @@ define('io.ox/office/editor/main',
                 debugMode: debugMode,
                 syncMode: syncMode
             };
-            return { module: MODULE_NAME, point: point };
+            return { module: self.getName(), point: point };
         };
 
         /**
@@ -949,35 +951,14 @@ define('io.ox/office/editor/main',
         initializeFromOptions(options);
         this.setLauncher(launchHandler).setQuit(quitHandler);
 
-    } // class Application
-
-    // global initialization --------------------------------------------------
-
-    AppHelper.configureWindowToolBar(MODULE_NAME)
-        .addButtonGroup('file')
-            .addButton('file/download', { label: gt('Download') })
-            .addButton('file/print',    { label: gt('Print') })
-            .end()
-        .addRadioGroup(ToolPane.KEY_SHOW_TOOLBAR)
-            .addButton('insert', { label: gt('Insert'), active: false })
-            .addButton('format', { label: gt('Format') })
-            .addButton('table',  { label: gt('Table') })
-            .addButton('image',  { label: gt('Image') })
-            .addButton('debug',  { label: gt('Debug'), active: Config.isDebugAvailable() })
-            .end()
-        .addButtonGroup('quit')
-            .addButton('file/quit', { label: gt('Close') })
-            .end()
-        .addButtonGroup('file/connection')
-            .addLabel('file/connection/state', '', { minWidth: 115 })
-            .end();
+    } // class EditorApplication
 
     // exports ================================================================
 
     // io.ox.launch() expects an object with the method getApp()
     return {
         getApp: function (options) {
-            return AppHelper.getOrCreateApplication(MODULE_NAME, Application, options);
+            return Application.getOrCreateApplication(Actions.MODULE_NAME, EditorApplication, options);
         }
     };
 

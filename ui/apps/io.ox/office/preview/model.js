@@ -11,19 +11,20 @@
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  */
 
-define('io.ox/office/preview/preview',
+define('io.ox/office/preview/model',
     ['io.ox/core/event',
-     'less!io.ox/office/preview/style.css'], function (Events) {
+     'less!io.ox/office/preview/style.css'
+    ], function (Events) {
 
     'use strict';
 
-    // class Preview ==========================================================
+    // class PreviewModel =====================================================
 
     /**
-     * The preview. Triggers a 'showpage' event passing the current page number
-     * (one-based) when the visible page has been changed.
+     * The preview model. Triggers a 'showpage' event passing the current page
+     * number (one-based) when the visible page has been changed.
      */
-    function Preview() {
+    function PreviewModel(app) {
 
         var // self reference
             self = this,
@@ -129,10 +130,10 @@ define('io.ox/office/preview/preview',
         // add event hub
         Events.extend(this);
 
-    } // class Preview
+    } // class PreviewModel
 
     // exports ================================================================
 
-    return Preview;
+    return PreviewModel;
 
 });

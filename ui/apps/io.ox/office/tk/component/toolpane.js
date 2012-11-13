@@ -13,13 +13,17 @@
 
 define('io.ox/office/tk/component/toolpane',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/component/toolbar'
-    ], function (Utils, ToolBar) {
+     'io.ox/office/tk/component/toolbar',
+     'io.ox/office/tk/control/radiogroup'
+    ], function (Utils, ToolBar, RadioGroup) {
 
     'use strict';
 
     var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
+        KeyCodes = Utils.KeyCodes,
+
+        // the controller key used to switch the visible tool bar
+        KEY_SHOW_TOOLBAR = 'tk/toolbars/show';
 
     // class ToolPane =========================================================
 
@@ -41,6 +45,12 @@ define('io.ox/office/tk/component/toolpane',
 
             // the container element representing the tool pane
             node = $('<div>').addClass('io-ox-pane top toolpane'),
+
+            // tab bar to switch the tool bars (temporary)
+            tabBar = new ToolBar(appWindow),
+
+            // radio group to switch the tool bars (temporary)
+            tabBarGroup = new RadioGroup(),
 
             // all registered tool bars, mapped by tool bar key
             toolBars = {},
@@ -96,6 +106,10 @@ define('io.ox/office/tk/component/toolpane',
             return node;
         };
 
+        this.getTabBar = function () {
+            return tabBar;
+        };
+
         /**
          * Creates a new tool bar object and registers it at the controller
          * passed to the constructor of this tool pane.
@@ -122,9 +136,14 @@ define('io.ox/office/tk/component/toolpane',
             node.append(toolBar.getNode());
             controller.registerViewComponent(toolBar);
 
+            // add an option button to the tab bar
+            tabBarGroup.addOptionButton(id, options);
+
             // hide all tool bars but the first
             if (toolBarIds.length > 1) {
                 toolBar.hide();
+                // show tab bar if at least two tool bars have been created
+                tabBar.show();
             } else {
                 visibleToolBarId = id;
             }
@@ -149,7 +168,7 @@ define('io.ox/office/tk/component/toolpane',
          *  A reference to this tool pane.
          */
         this.showToolBar = function (id) {
-            controller.change(ToolPane.KEY_SHOW_TOOLBAR, id);
+            controller.change(KEY_SHOW_TOOLBAR, id);
             return this;
         };
 
@@ -179,8 +198,13 @@ define('io.ox/office/tk/component/toolpane',
 
         // initialization -----------------------------------------------------
 
+        // insert the tab bar into this tool pane, but hide it initially
+        node.append(tabBar.getNode());
+        controller.registerViewComponent(tabBar);
+        tabBar.addGroup(KEY_SHOW_TOOLBAR, tabBarGroup).hide();
+
         // add item definition for the tab bar
-        controller.addDefinition(ToolPane.KEY_SHOW_TOOLBAR, {
+        controller.addDefinition(KEY_SHOW_TOOLBAR, {
             get: function () { return visibleToolBarId; },
             set: showToolBar
         });
@@ -189,10 +213,6 @@ define('io.ox/office/tk/component/toolpane',
         node.on('keydown keypress keyup', toolPaneKeyHandler);
 
     } // class ToolPane
-
-    // constants --------------------------------------------------------------
-
-    ToolPane.KEY_SHOW_TOOLBAR = 'view/toolbars/show';
 
     // exports ================================================================
 

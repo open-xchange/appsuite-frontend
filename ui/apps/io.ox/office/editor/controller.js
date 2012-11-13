@@ -17,13 +17,13 @@ define('io.ox/office/editor/controller',
      'io.ox/office/editor/hyperlink',
      'io.ox/office/editor/format/objectstyles',
      'io.ox/office/editor/format/paragraphstyles'
-    ], function (BaseController, Image, Hyperlink, ObjectStyles, ParagraphStyles) {
+    ], function (Controller, Image, Hyperlink, ObjectStyles, ParagraphStyles) {
 
     'use strict';
 
-    // class Controller =======================================================
+    // class EditorController =================================================
 
-    function Controller(app) {
+    function EditorController(app) {
 
         var // self reference
             self = this,
@@ -44,15 +44,6 @@ define('io.ox/office/editor/controller',
 
                 // document file
 
-                'file/download': {
-                    set: function () { app.download(); }
-                },
-                'file/print': {
-                    set: function () { app.print(); }
-                },
-                'file/export': {
-                    set: function () { app.save(); }
-                },
                 'file/flush': {
                     set: function () { app.flush(); }
                 },
@@ -65,12 +56,7 @@ define('io.ox/office/editor/controller',
                     enable: function () { return !editor.isEditMode() && app.hasFileDescriptor(); },
                     set: function (state) { app.acquireEditRights(); }
                 },
-                'file/quit': {
-                    set: function () { window.setTimeout(function () { app.quit(); }); }
-                },
-
                 'file/connection/state': {
-                    enable: function () { return false; },
                     get: function () { return editor.getEditorStateString(); }
                 },
 
@@ -345,7 +331,7 @@ define('io.ox/office/editor/controller',
 
         // base constructor ---------------------------------------------------
 
-        BaseController.call(this, items, doneHandler);
+        Controller.call(this, items, doneHandler);
 
         // methods ------------------------------------------------------------
 
@@ -374,11 +360,11 @@ define('io.ox/office/editor/controller',
         // update GUI after operations or changed selection
         editor.on('operation selection', function () { self.update(); });
 
-    } // class Controller
+    } // class EditorController
 
     // exports ================================================================
 
-    // derive this class from class BaseController
-    return BaseController.extend({ constructor: Controller });
+    // derive this class from class Controller
+    return Controller.extend({ constructor: EditorController });
 
 });

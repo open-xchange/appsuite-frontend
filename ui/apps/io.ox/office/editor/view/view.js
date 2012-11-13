@@ -18,20 +18,19 @@ define('io.ox/office/editor/view/view',
      'io.ox/office/tk/control/textfield',
      'io.ox/office/tk/control/radiogroup',
      'io.ox/office/tk/component/toolpane',
-     'io.ox/office/tk/component/appwindowtoolbar',
      'io.ox/office/editor/view/controls',
      'io.ox/office/editor/format/lineheight',
      'gettext!io.ox/office/main'
-    ], function (Utils, Config, Fonts, TextField, RadioGroup, ToolPane, AppWindowToolBar, Controls, LineHeight, gt) {
+    ], function (Utils, Config, Fonts, TextField, RadioGroup, ToolPane, Controls, LineHeight, gt) {
 
     'use strict';
 
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes;
 
-    // class View =============================================================
+    // class EditorView =======================================================
 
-    function View(appWindow, controller, editor) {
+    function EditorView(appWindow, editor, controller) {
 
         var // all nodes of the application window
             nodes = appWindow.nodes,
@@ -309,23 +308,25 @@ define('io.ox/office/editor/view/view',
                 .addGroup('character/language', new Controls.LanguageChooser())
                 .addSeparator()
                 .addGroup('paragraph/borders', new RadioGroup({ icon: 'icon-io-ox-para-border-outside', tooltip: gt('Pargraph Border'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
-                    .addOptionButton('none',        { icon: 'icon-io-ox-para-border-none',      label: gt('No border') })
-                    .addOptionButton('leftright',   { icon: 'icon-io-ox-para-border-leftright',  label: gt('Border left and right') })
-                    .addOptionButton('topbottom',   { icon: 'icon-io-ox-para-border-topbottom', label: gt('Border top and bottom') })
-                    .addOptionButton('outside',     { icon: 'icon-io-ox-para-border-outside',      label: gt('Border outside') })
-                    .addOptionButton('full',        { icon: 'icon-io-ox-para-border-full',      label: gt('Border outside and inside') })
-                    .addOptionButton('left',        { icon: 'icon-io-ox-para-border-left',      label: gt('Border left') })
-                    .addOptionButton('right',       { icon: 'icon-io-ox-para-border-right',      label: gt('Border right') })
-                    .addOptionButton('top',         { icon: 'icon-io-ox-para-border-top',      label: gt('Border top') })
-                    .addOptionButton('bottom',      { icon: 'icon-io-ox-para-border-bottom',      label: gt('Border bottom') })
-                    .addOptionButton('inside',      { icon: 'icon-io-ox-image-center-inside',      label: gt('Border inside') }));
+                    .addOptionButton('none',      { icon: 'icon-io-ox-para-border-none',      label: gt('No border') })
+                    .addOptionButton('leftright', { icon: 'icon-io-ox-para-border-leftright', label: gt('Border left and right') })
+                    .addOptionButton('topbottom', { icon: 'icon-io-ox-para-border-topbottom', label: gt('Border top and bottom') })
+                    .addOptionButton('outside',   { icon: 'icon-io-ox-para-border-outside',   label: gt('Border outside') })
+                    .addOptionButton('full',      { icon: 'icon-io-ox-para-border-full',      label: gt('Border outside and inside') })
+                    .addOptionButton('left',      { icon: 'icon-io-ox-para-border-left',      label: gt('Border left') })
+                    .addOptionButton('right',     { icon: 'icon-io-ox-para-border-right',     label: gt('Border right') })
+                    .addOptionButton('top',       { icon: 'icon-io-ox-para-border-top',       label: gt('Border top') })
+                    .addOptionButton('bottom',    { icon: 'icon-io-ox-para-border-bottom',    label: gt('Border bottom') })
+                    .addOptionButton('inside',    { icon: 'icon-io-ox-image-center-inside',   label: gt('Border inside') }));
         }
-
-        // register a component that updates the window header tool bar
-        controller.registerViewComponent(new AppWindowToolBar(appWindow));
 
         // make the format tool bar visible
         toolPane.showToolBar('format');
+
+        // add application status label to tab bar
+        toolPane.getTabBar()
+            .addSeparator()
+            .addLabel('file/connection/state', { css: { minWidth: 115 } });
 
         // add 'rename document' functionality to title field
         nodes.title.addClass('io-ox-office-title').click(renameDocumentHandler);
@@ -340,13 +341,14 @@ define('io.ox/office/editor/view/view',
         // set the quick-search tooltip
         Utils.setControlTooltip(nodes.search, gt('Quick Search'), 'bottom');
 
+
         // update all view components every time the window will be shown
         appWindow.on('show', function () { controller.update(); });
 
-    } // class View
+    } // class EditorView
 
     // exports ================================================================
 
-    return View;
+    return EditorView;
 
 });

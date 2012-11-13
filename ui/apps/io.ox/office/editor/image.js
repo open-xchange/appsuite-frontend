@@ -12,10 +12,10 @@
  */
 
 define('io.ox/office/editor/image',
-    ['io.ox/office/tk/apphelper',
+    ['io.ox/office/tk/application',
      'io.ox/office/tk/dialogs',
      'gettext!io.ox/office/main'
-    ], function (AppHelper, Dialogs, gt) {
+    ], function (Application, Dialogs, gt) {
 
     'use strict';
 
@@ -71,7 +71,7 @@ define('io.ox/office/editor/image',
         var // the error handler function that shows an error box if requested
             errorHandler = showError ? insertImageError : $.noop;
 
-        AppHelper.readFileAsDataUrl(file)
+        Application.readFileAsDataUrl(file)
         .done(function (dataUrl) {
 
             var uniqueName = _.uniqueId(ox.session + '_') + file.name.substring(file.name.lastIndexOf('.'));
