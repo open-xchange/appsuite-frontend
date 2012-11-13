@@ -480,8 +480,8 @@ define('io.ox/office/editor/position',
             useFirstTextNode = false;
         }
 
-        // setting some properties for image nodes
-        if (DOM.isObjectNode(localNode)) {
+        // setting some properties for image nodes or text component nodes like fields
+        if ((DOM.isObjectNode(localNode)) || (DOM.isTextComponentNode(localNode))) {
             foundValidNode = true;  // image nodes are valid
             offset = isEndPoint ? 1 : 0;
         }
