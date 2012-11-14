@@ -322,54 +322,6 @@ define('io.ox/office/editor/main',
         }
 
         /**
-         * Saves the document to its origin.
-         *
-         * @returns {jQuery.Promise}
-         *  The promise of a deferred that reflects the result of the save
-         *  operation.
-         */
-        function saveOrFlush(action) {
-
-            var // initialize the deferred to be returned
-                def = $.Deferred().always(function () {
-                    self.getWindow().idle();
-                    editor.grabFocus();
-                });
-
-            // do not try to save, if file descriptor is missing
-            if (!self.hasFileDescriptor()) {
-                return def.reject();
-            }
-
-            self.getWindow().busy();
-
-            synchronizeOperations()
-            .done(function () {
-                $.ajax({
-                    type: 'GET',
-                    url: self.getDocumentFilterUrl(action),
-                    dataType: 'json'
-                })
-                .done(function (response) {
-                    var file = Utils.getObjectOption(options, 'file', null);
-                    // TODO: did not test this; getObjectOption is suspicious
-                    FilesAPI.propagate('change', file).done(function () {
-                        def.resolve();
-                    });
-                })
-                .fail(function (response) {
-                    showAjaxError(response);
-                    def.reject();
-                });
-            })
-            .fail(function () {
-                def.reject();
-            });
-
-            return def.promise();
-        }
-
-        /**
          * Downloads the document in the specified format.
          *
          * @returns {jQuery.Promise}
@@ -775,14 +727,6 @@ define('io.ox/office/editor/main',
             }
 
             return def;
-        };
-
-        this.save = function () {
-            return saveOrFlush('exportdocument');
-        };
-
-        this.flush = function () {
-            return saveOrFlush('savedocument');
         };
 
         this.download = function () {
