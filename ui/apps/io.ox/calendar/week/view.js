@@ -47,16 +47,16 @@ define('io.ox/calendar/week/view',
         clickTimer:     null,   // timer to separate single and double click
         clicks:         0,      // click counter
         lasso:          false,  // lasso object
-        folderData:     {},     // current folder
+        folderData:     {},     // current folder object
 
-        pane:           $('<div>').addClass('scrollpane'),              // main scroll pane
-        fulltimePane:   $('<div>').addClass('fulltime'),                // full-time appointments pane
-        fulltimeCon:    $('<div>').addClass('fulltime-container'),      // full-time container
-        timeline:       $('<div>').addClass('timeline'),                // timeline
-        footer:         $('<div>').addClass('footer'),                  // footer
-        kwInfo:         $('<span>').addClass('info'),                   // current KW
-        showAllCheck:   $('<input/>').attr('type', 'checkbox'),         // show all folders check-box
-        showAllCon:     $('<div>').addClass('showall'),                 // container
+        pane:           $('<div>').addClass('scrollpane'),          // main scroll pane
+        fulltimePane:   $('<div>').addClass('fulltime'),            // full-time appointments pane
+        fulltimeCon:    $('<div>').addClass('fulltime-container'),  // full-time container
+        timeline:       $('<div>').addClass('timeline'),            // timeline
+        footer:         $('<div>').addClass('footer'),              // footer
+        kwInfo:         $('<span>').addClass('info'),               // current KW
+        showAllCheck:   $('<input/>').attr('type', 'checkbox'),     // show all folders check-box
+        showAllCon:     $('<div>').addClass('showall'),             // container
 
         // init values from prespective
         initialize: function (opt) {
@@ -1038,7 +1038,6 @@ define('io.ox/calendar/week/view',
                             _.extend(app, {
                                 start_date: startTS,
                                 end_date: startTS + (app.end_date - app.start_date)
-//                                ignore_conflicts: true
                             });
                             self.onUpdateAppointment(app);
                         } else {
@@ -1064,12 +1063,10 @@ define('io.ox/calendar/week/view',
                         if (el.position().left !== ui.originalPosition.left) {
                             _.extend(app, {
                                 start_date: app.end_date - (newDayCount * date.DAY)
-//                                ignore_conflicts: true
                             });
                         } else if (el.width() !== ui.originalSize.width) {
                             _.extend(app, {
                                 end_date: app.start_date + (newDayCount * date.DAY)
-//                                ignore_conflicts: true
                             });
                         }
                         el.busy();
