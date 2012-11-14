@@ -1,4 +1,4 @@
- /**
+/**
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -1887,13 +1887,13 @@ define('io.ox/office/editor/editor',
                 Alert.showWarning(gt('Read Only Mode'),
                         (editUser || gt('Another user')) + gt(' is currently editing this document.'),
                         false,
-                        editdiv.parent(),
+                        app.getView().getToolPane().getNode(),
                         app.getController(),
                         -1,
                         {label: gt('Acquire Edit Rights'), key: 'file/editrights'}
                     );
             } else if (showEditModeInfo) {
-                Alert.showSuccess(gt('Edit Mode'), gt('You have edit rights.'), true, editdiv.parent(), app.getController(), 5000);
+                Alert.showSuccess(gt('Edit Mode'), gt('You have edit rights.'), true,  app.getView().getToolPane().getNode(), app.getController(), 5000);
             }
         };
 
@@ -2047,7 +2047,7 @@ define('io.ox/office/editor/editor',
         // Private functions for document post-processing
         // ==================================================================
         function insertHyperlinkPopup() {
-            var hyperlinkPopup = $('<div>', { contenteditable: false, display: 'hidden' }).addClass('io-ox-office-hyperlink-popup')
+            var hyperlinkPopup = $('<div>', { contenteditable: false }).addClass('io-ox-office-hyperlink-popup').css({display: 'none'})
                 .append(
                     $('<a>').attr({ href: '', rel: 'noreferrer', target: '_blank' }),
                     $('<span>').text(' | '),
@@ -2064,11 +2064,43 @@ define('io.ox/office/editor/editor',
                     selection.on('change', function () {
                         var url = Hyperlink.getURLFromPosition(self, selection);
                         if (url) {
-                            var link = $('a', hyperlinkPopup[0]);
-                            link.text(url);
-                            link.attr({href: url});
-                            hyperlinkPopup.css({left: '30px', top: '70px'});
-                            hyperlinkPopup.css({display: 'block'});
+                            var link = $('a', hyperlinkPopup[0]),
+                                startSelection = selection.getStartPosition(),
+                                obj = Position.getDOMPosition(self.getNode(), startSelection);
+
+                            if (obj && obj.node && DOM.isTextSpan(obj.node.parentNode)) {
+                                var pos = startSelection[startSelection.length - 1],
+                                    startEndPos = Hyperlink.findURLSelection(self, obj.node.parentNode, pos, url),
+                                    left, top, height, width;
+
+                                // magic
+                                startSelection[startSelection.length - 1] = startEndPos.start;
+                                obj = Position.getDOMPosition(self.getNode(), startSelection, true);
+                                left = $(obj.node).offset().left;
+
+                                startSelection[startSelection.length - 1] = startEndPos.end;
+                                obj = Position.getDOMPosition(self.getNode(), startSelection, true);
+                                top = $(obj.node.parentNode).offset().top;
+                                height = $(obj.node).height();
+
+                                // calculate position relative to "io-ox-pane center"
+                                var parent = self.getNode().parent(".io-ox-pane.center"),
+                                    parentLeft = parent.offset().left,
+                                    parentTop = parent.offset().top,
+                                    parentWidth = parent.width();
+
+                                left = left - parentLeft;
+                                top = top - parentTop + height;
+
+                                link.text(url);
+                                link.attr({href: url});
+                                hyperlinkPopup.css({display: '', left: left, top: top});
+                                width = hyperlinkPopup.width();
+                                if ((left + width) > parentWidth) {
+                                    left -= (((left + width) - parentWidth) + parentLeft);
+                                    hyperlinkPopup.css({left: left});
+                                }
+                            }
                         }
                         else {
                             hyperlinkPopup.css({display: 'none'});
@@ -2368,6 +2400,7 @@ define('io.ox/office/editor/editor',
                         // is the node at testPosition a floated drawing?
                         if ((node) && (DOM.isFloatingDrawingNode(node))) {
                             selection.startPaM.oxoPosition[lastValue] += 1;
+                            selection.endPaM.oxoPosition[lastValue] += 1;
                         } else {
                             break;
                         }
@@ -2933,15 +2966,16 @@ define('io.ox/office/editor/editor',
         };
 
         operationHandlers[Operations.PARA_INSERT] = function (operation) {
-            if (undoManager.isEnabled()) {
-                var undoOperation = { name: Operations.PARA_DELETE, start: operation.start };
-                undoManager.addUndo(undoOperation, operation);
-            }
-            implInsertParagraph(operation.start);
-            if (operation.text) {
-                var startPos = _.copy(operation.start, true);
-                startPos.push(0);
-                implInsertText(operation.text, startPos);
+            if (implInsertParagraph(operation.start)) {
+                if (undoManager.isEnabled()) {
+                    var undoOperation = { name: Operations.PARA_DELETE, start: operation.start };
+                    undoManager.addUndo(undoOperation, operation);
+                }
+                // insert text into the new paragraph if specified (no seperate
+                // undo needed because this is covered by the deleteParagraph operation)
+                if (_.isString(operation.text) && (operation.text.length > 0)) {
+                    implInsertText(operation.text, operation.start.concat([0]));
+                }
             }
         };
 
@@ -2956,11 +2990,12 @@ define('io.ox/office/editor/editor',
         };
 
         operationHandlers[Operations.TABLE_INSERT] = function (operation) {
-            if (undoManager.isEnabled()) {
-                var undoOperation = { name: Operations.TABLE_DELETE, start: operation.position };
-                undoManager.addUndo(undoOperation, operation);
+            if (implInsertTable(operation.position, operation.attrs)) {
+                if (undoManager.isEnabled()) {
+                    var undoOperation = { name: Operations.TABLE_DELETE, start: operation.position };
+                    undoManager.addUndo(undoOperation, operation);
+                }
             }
-            implInsertTable(operation.position, operation.attrs);
         };
 
         operationHandlers[Operations.TABLE_DELETE] = function (operation) {
@@ -3678,11 +3713,11 @@ define('io.ox/office/editor/editor',
                 $(paragraph.lastChild).remove();
             }
 
-            // TODO: Adjust tabs, ...
-            adjustTabsOfParagraph(paragraph);
-
             // initialize paragraph and character formatting from current paragraph style
             paragraphStyles.updateElementFormatting(paragraph);
+
+            // adjust tabulator positions
+            adjustTabsOfParagraph(paragraph);
         }
 
         /**
@@ -4230,15 +4265,40 @@ define('io.ox/office/editor/editor',
         // The operations itself are never generated inside an impl*-function.
         // ====================================================================
 
-        function implParagraphChanged(position) {
+        /**
+         * Has to be called every time after changing the structure of a
+         * paragraph node.
+         *
+         * @param {Number[]} position
+         *  The logical position of the paragraph or any of its child
+         *  components.
+         */
+        var implParagraphChanged = deferredMethods.createMethod(
 
-            // Make sure that an empty paragraph has the dummy text node,
-            // and that all others don't have it anymore...
-            var paragraph = Position.getCurrentParagraph(editdiv, position);
-            if (paragraph) {
-                validateParagraphNode(paragraph);
-            }
-        }
+            // direct callback: called every time when implParagraphChanged() has been called
+            function registerParagraph(storage, position) {
+                var paragraph = Position.getCurrentParagraph(editdiv, position);
+                // store the new paragraph in the collection (jQuery keeps the collection unique)
+                if (paragraph) {
+                    storage.paragraphs = storage.paragraphs.add(paragraph);
+                }
+            },
+
+            // deferred callback: called once, after current script ends
+            function updateParagraphs(storage) {
+                storage.paragraphs.each(function () {
+                    // the paragraph may have been removed from the DOM in the meantime
+                    if (editdiv[0].contains(this)) {
+                        validateParagraphNode(this);
+                    }
+                });
+                storage.paragraphs = $();
+            },
+
+            // storage object passed to all callbacks
+            { paragraphs: $() }
+
+        ); // implParagraphChanged()
 
         /**
          * Has to be called every time after changing the cell structure of a
@@ -4284,12 +4344,16 @@ define('io.ox/office/editor/editor',
          */
         function implInitDocument() {
 
+            var // the initial paragraph node in an empty document
+                paragraph = DOM.createParagraphNode();
+
             // create empty page with single paragraph
-            editdiv.empty().append(DOM.createParagraphNode());
+            editdiv.empty().append(paragraph);
+            validateParagraphNode(paragraph);
+
+            // initialize default page formatting
             pageStyles.updateElementFormatting(editdiv);
 
-            // update the new paragraph
-            implParagraphChanged([0]);
             // Special handling for first paragraph, that has been inserted
             // above and thus exists already before any style sheets have been
             // inserted into the document. It may still refer implicitly to the
@@ -4747,72 +4811,111 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = end;
         }
 
-        function implInsertParagraph(position) {
-            var posLength = position.length - 1,
-                para = position[posLength],
-                allParagraphs = Position.getAllAdjacentParagraphs(editdiv, position);
+        /**
+         * Inserts the passed content node at the specified logical position.
+         *
+         * @returns {Boolean}
+         *  Whether the content node has been inserted successfully.
+         */
+        function implInsertContentNode(position, node) {
 
-            if (! allParagraphs) {
-                var pos = _.copy(position, true);
-                pos[pos.length - 1] -= 1; // decreasing last value by 1, if new paragraphs are inserted
-                allParagraphs = Position.getAllAdjacentParagraphs(editdiv, pos);
+            var // target index of the new node
+                index = _.last(position),
+                // logical position of the paragraph container node
+                parentPosition = position.slice(0, -1),
+                // the container node for the paragraph
+                containerInfo = Position.getDOMPosition(editdiv, parentPosition, true),
+                // the parent container node
+                containerNode = null;
+
+            // check that parent container node exists
+            if (!containerInfo || !containerInfo.node) {
+                Utils.warn('Editor.implInsertContentNode(): cannot find container node for new content node');
+                return false;
             }
 
-            var newPara = DOM.createParagraphNode();
-
-            if (para === -1) {
-                para = allParagraphs.size();
-                position[posLength] = para;
+            // resolve component node to the correct node that contains the
+            // next-level child elements (e.g. resolve table cell elements to
+            // the embedded div.cellcontent elements, or drawing elements to
+            // the embedded div.content elements)
+            containerNode = DOM.getChildContainerNode(containerInfo.node)[0];
+            if (!containerNode) {
+                Utils.warn('Editor.implInsertContentNode(): cannot find container node for new content node');
+                return false;
             }
 
-            if (para > 0) {
-                newPara.insertAfter(allParagraphs[para - 1]);
-            }
-            else {
-                newPara.insertBefore(allParagraphs[0]);
+            // index -1 has special menaing of appending the new content node
+            // TODO: is this feature still used somewhere?
+            if (index === -1) {
+                index = containerNode.childNodes.length;
             }
 
-            lastOperationEnd = _.clone(position);
-            lastOperationEnd.push(0);
+            // check that the index is valid
+            if ((index < 0) || (index > containerNode.childNodes.length)) {
+                Utils.warn('Editor.implInsertContentNode(): invalid insertion index for new content node');
+                return false;
+            }
 
-            implParagraphChanged(position);
-            implUpdateLists();
+            // insert the content node into the DOM tree
+            if (index < containerNode.childNodes.length) {
+                node.insertBefore(containerNode.childNodes[index]);
+            } else {
+                node.appendTo(containerNode);
+            }
+
+            return true;
         }
 
-        function implInsertTable(pos, attrs) {
+        /**
+         * Inserts a new empty paragraph at the specified logical position.
+         *
+         * @param {Number[]} position
+         *  The logical target position for the new paragraph.
+         *
+         * @returns {Boolean}
+         *  Whether the paragraph has been inserted successfully.
+         */
+        function implInsertParagraph(position) {
 
-            var position = _.copy(pos, true);
+            var // the new paragraph
+                paragraph = DOM.createParagraphNode(),
+                // insert the paragraph into the DOM tree
+                inserted = implInsertContentNode(position, paragraph);
 
-            // insert the table into the document
-            var table = $('<table>').append($('<colgroup>')),
-                domPosition = Position.getDOMPosition(editdiv, position),
-                domParagraph = null,
-                insertBefore = true;
-
-            if (domPosition) {
-                domParagraph = domPosition.node;
-            } else {
-                position[position.length - 1] -= 1; // inserting table at the end
-                domPosition = Position.getDOMPosition(editdiv, position);
-
-                if (domPosition) {
-                    domParagraph = domPosition.node;
-                    if (domParagraph.parentNode.childNodes.length === position[position.length - 1] + 1) {
-                        insertBefore = false;  // inserting after the last paragraph/table
-                    }
-                }
+            if (inserted) {
+                validateParagraphNode(paragraph);
+                // set cursor to beginning of the new paragraph
+                lastOperationEnd = Position.getOxoPosition(editdiv, paragraph, 0);
+                lastOperationEnd.push(0);
+                // the paragraph can be part of a list, update all lists
+                implUpdateLists();
             }
 
-            if (domParagraph !== null) {
-                if (insertBefore) {
-                    table.insertBefore(domParagraph);
-                } else {
-                    table.insertAfter(domParagraph);
-                }
+            return inserted;
+        }
+
+        /**
+         * Inserts a new empty table element at the specified logical position.
+         *
+         * @param {Number[]} position
+         *  The logical target position for the new table.
+         *
+         * @returns {Boolean}
+         *  Whether the table has been inserted successfully.
+         */
+        function implInsertTable(position, attrs) {
+
+            var // the new table
+                table = $('<table>').append($('<colgroup>')),
+                // insert the table into the DOM tree
+                inserted = implInsertContentNode(position, table);
+
+            if (inserted) {
+                // apply the passed table attributes
+                tableStyles.setElementAttributes(table, attrs);
             }
 
-            // apply the passed table attributes
-            tableStyles.setElementAttributes(table, attrs);
+            return inserted;
         }
 
         function implSplitParagraph(position) {
@@ -5516,7 +5619,6 @@ define('io.ox/office/editor/editor',
                 var listItemCounter = [];
                 Utils.iterateSelectedDescendantNodes(editdiv, DOM.PARAGRAPH_NODE_SELECTOR, function (para) {
                     // always remove an existing label
-                    // TODO: it might make more sense to change the label appropriately
                     var paraAttributes = paragraphStyles.getElementAttributes(para),
                     oldLabel = $(para).children(DOM.LIST_LABEL_NODE_SELECTOR);
                     var updateParaTabstops = oldLabel.length > 0;

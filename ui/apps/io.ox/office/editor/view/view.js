@@ -309,11 +309,10 @@ define('io.ox/office/editor/view/view',
                 .on('selection', function (event, selection) { logSelection(selection); });
 
             createToolBar('debug', { label: gt('Debug') })
-                .addButton('debug/toggle',     { icon: 'icon-eye-open',   tooltip: 'Debug Mode',               toggle: true })
-                .addButton('debug/sync',       { icon: 'icon-refresh',    tooltip: 'Synchronize With Backend', toggle: true })
+                .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
+                .addButton('debug/sync',   { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
                 .addSeparator()
-                .addButton('file/editrights', { icon: 'icon-pencil',    tooltip: 'Acquire Edit Rights' })
-                .addButton('file/flush',      { icon: 'icon-share-alt', tooltip: 'Flush Operations' })
+                .addButton('file/editrights', { icon: 'icon-pencil', tooltip: 'Acquire Edit Rights' })
                 .addSeparator()
                 .addGroup('document/quicksearch', new TextField({ tooltip: 'Quick Search' }))
                 .addSeparator()
@@ -335,7 +334,7 @@ define('io.ox/office/editor/view/view',
                     .addOptionButton('right',     { icon: 'icon-io-ox-para-border-right',     label: gt('Border right') })
                     .addOptionButton('top',       { icon: 'icon-io-ox-para-border-top',       label: gt('Border top') })
                     .addOptionButton('bottom',    { icon: 'icon-io-ox-para-border-bottom',    label: gt('Border bottom') })
-                    .addOptionButton('inside',    { icon: 'icon-io-ox-image-center-inside',   label: gt('Border inside') }));
+                    .addOptionButton('inside',    { icon: 'icon-io-ox-para-border-inside',    label: gt('Border inside') }));
         }
 
         // make the format tool bar visible

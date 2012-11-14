@@ -579,6 +579,17 @@ a.button {
     left: @window-content-shift + @window-head-width;
 }
 
+.window-container.toolbar-right {
+    .window-head {
+        left: auto;
+        right: 0;
+    }
+    .window-body {
+        left: 0;
+        right: @window-head-width;
+    }
+}
+
 .window-search {
     position: absolute;
     top: 0px;
@@ -1551,6 +1562,15 @@ div.external-user-image {
     
     .window-body { bottom: 40px; left: 0; }
     .chromeless-window .window-body { bottom: 0; }
+
+    .window-container.toolbar-right {
+        .window-head {
+            left: 0;
+        }
+        .window-body {
+            right: 0;
+        }
+    }
 
     .vsplit {
         left: 0%; width: 200%; right: auto;

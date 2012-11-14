@@ -428,27 +428,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * A jQuery selector that matches elements representing a top-level content
-     * node (e.g. paragraphs or tables).
-     */
-    DOM.CONTENT_NODE_SELECTOR = DOM.PARAGRAPH_NODE_SELECTOR + ', ' + DOM.TABLE_NODE_SELECTOR;
-
-    /**
-     * Returns whether the passed node is a top-level content node (e.g.
-     * paragraphs or tables).
-     *
-     * @param {Node|jQuery} node
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
-     *
-     * @returns {Boolean}
-     *  Whether the passed node is a top-level content node.
-     */
-    DOM.isContentNode = function (node) {
-        return $(node).is(DOM.CONTENT_NODE_SELECTOR);
-    };
-
-    /**
      * Creates a new table cell element.
      *
      * @param {jQuery} paragraph
@@ -739,7 +718,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @param {String} [text]
      *  The text contents of the list label node.
      *
-     * @returns
+     * @returns {jQuery}
      *  A new list label node, as jQuery object.
      */
     DOM.createListLabelNode = function (text) {
@@ -777,7 +756,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return $('<br>').data('dummy', true);
     };
 
-    // drawing nodes -----------------------------------------------------------
+    // drawing nodes ----------------------------------------------------------
 
     /**
      * A jQuery selector that matches elements representing a drawing.
@@ -843,6 +822,22 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     DOM.isImageNode = function (node) {
         // drawing div contains another div (class content) that contains an image
         return DOM.isDrawingNode(node) && ($(node).find('img').length > 0);
+    };
+
+    /**
+     * Returns the container node of a drawing object that contains all
+     * top-level content nodes of the drawing.
+     *
+     * @param {HTMLElement|jQuery} drawingNode
+     *  The root DOM node of the drawing object. If this object is a jQuery
+     *  collection, uses the first DOM node it contains.
+     *
+     * @returns {jQuery}
+     *  The container DOM node from the passed drawing object that contains all
+     *  top-level content nodes.
+     */
+    DOM.getDrawingContentNode = function (drawingNode) {
+        return $(drawingNode).find('div.contents');
     };
 
     /**
@@ -960,6 +955,65 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         if (!DOM.isDrawingNode(node)) {
             return Utils.iterateSelectedDescendantNodes(node, function () { return DOM.isTextSpan(this); }, iterator, context);
         }
+    };
+
+    // generic container and content nodes ====================================
+
+    /**
+     * A jQuery selector that matches elements representing a top-level content
+     * node (e.g. paragraphs or tables).
+     */
+    DOM.CONTENT_NODE_SELECTOR = DOM.PARAGRAPH_NODE_SELECTOR + ', ' + DOM.TABLE_NODE_SELECTOR;
+
+    /**
+     * Returns whether the passed node is a top-level content node (e.g.
+     * paragraphs or tables).
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a top-level content node.
+     */
+    DOM.isContentNode = function (node) {
+        return $(node).is(DOM.CONTENT_NODE_SELECTOR);
+    };
+
+    /**
+     * Returns the correct node of a container node that contains its content
+     * nodes as direct children. Container nodes include the document page,
+     * table cells, or drawing objects containing text.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {jQuery}
+     *  The element that contains the child components of the passed nodes as
+     *  direct children, as jQuery object.
+     */
+    DOM.getChildContainerNode = function (node) {
+
+        // convert to a jQuery object
+        node = $(node);
+
+        // page node contains its child components directly
+        if (DOM.isPageNode(node)) {
+            return node;
+        }
+
+        // table cell nodes contain a child <div> container
+        if (node.is('td')) {
+            return DOM.getCellContentNode(node);
+        }
+
+        // drawing nodes contain a child <div> container
+        if (DOM.isDrawingNode(node)) {
+            return DOM.getDrawingContentNode(node);
+        }
+
+        return $();
     };
 
     // browser selection ======================================================
