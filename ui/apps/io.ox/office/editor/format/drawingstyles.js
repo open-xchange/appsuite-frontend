@@ -108,6 +108,15 @@ define('io.ox/office/editor/format/drawingstyles',
             textwrapside: { def: 'bothsides' },
 
             /**
+             * Image Data. The string contains either base64 image data, or svg.
+             * If base64 encoded image data is used, the string begins with "data:"
+             * otherwise if svg is used it begins with "<svg"
+             */
+            replacementdata: { def: ''},
+
+            // Image specific attributes
+
+            /**
              * URL pointing to the image data. If the image was embedded in the
              * document archive, the URL will be relativ to the document (image specific style).
              */
@@ -255,7 +264,10 @@ define('io.ox/office/editor/format/drawingstyles',
             // margins to be applied at the drawing
             topMargin = 0, bottomMargin = 0, leftMargin = 0, rightMargin = 0,
             // text wrapping side (left/right/none)
-            wrapMode = 'none';
+            wrapMode = 'none',
+            // type of the drawing: 'image', ...
+            type = drawing.data('type');
+
 
         // position
 
@@ -410,19 +422,22 @@ define('io.ox/office/editor/format/drawingstyles',
             });
         }
 
-        // only for images -> ToDo: Check for image!
-        var // horizontal offset/size of the bitmap, as CSS attributes
-            horizontalSettings = calculateBitmapSettings(drawingWidth, attributes.cropl, attributes.cropr),
-            // vertical offset/size of the bitmap, as CSS attributes
-            verticalSettings = calculateBitmapSettings(drawingHeight, attributes.cropt, attributes.cropb);
+        // some attributes are specific to the drawing type
+        if (type === 'image') {
 
-        // set CSS formatting at the <img> element
-        drawing.find('img').css({
-            left: horizontalSettings.offset,
-            top: verticalSettings.offset,
-            width: horizontalSettings.size,
-            height: verticalSettings.size
-        });
+            var // horizontal offset/size of the bitmap, as CSS attributes
+                horizontalSettings = calculateBitmapSettings(drawingWidth, attributes.cropl, attributes.cropr),
+                // vertical offset/size of the bitmap, as CSS attributes
+                verticalSettings = calculateBitmapSettings(drawingHeight, attributes.cropt, attributes.cropb);
+
+            // set CSS formatting at the <img> element
+            drawing.find('img').css({
+                left: horizontalSettings.offset,
+                top: verticalSettings.offset,
+                width: horizontalSettings.size,
+                height: verticalSettings.size
+            });
+        }
 
     }
 
