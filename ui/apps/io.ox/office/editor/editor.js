@@ -2368,6 +2368,7 @@ define('io.ox/office/editor/editor',
                         // is the node at testPosition a floated drawing?
                         if ((node) && (DOM.isFloatingDrawingNode(node))) {
                             selection.startPaM.oxoPosition[lastValue] += 1;
+                            selection.endPaM.oxoPosition[lastValue] += 1;
                         } else {
                             break;
                         }
