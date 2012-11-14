@@ -346,7 +346,7 @@ define("io.ox/core/main",
             draw: function () {
                 this.append(
                     gt('Your session is expired'), $.txt(_.noI18n('.')), $('<br>'),
-                    $('<small>').text(gt('Please sign in again to continue')), $.txt(_.noI18n('.'))
+                    $('<small>').text(gt('Please sign in again to continue'))
                 );
             }
         });

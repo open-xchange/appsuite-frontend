@@ -80,11 +80,14 @@ html, body {
     box-shadow: 0px 0px 70px 5px #000;
 }
 
+#io-ox-login-screen a { color: #81CFF7; }
+#io-ox-login-screen a:hover { color: #2DA6E4; }
+
 .wallpaper {
     background: rgb(255,255,255); /* Old browsers */
     background: -moz-radial-gradient(center, circle cover, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 50%, rgba(200,200,200,1) 100%); /* FF3.6+ */
     background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(255,255,255,1)), color-stop(41%, rgba(246,246,246,1)), color-stop(100%,rgba(200,200,200,1))); /* Chrome,Safari4+ */
-    background: -webkit-radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 41%,rgba(200,200,200,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -webkit-radial-gradient(center, ellipse cover, #34749C 0%, #2A6085 41%, #1D3F59 100%); /* Chrome10+,Safari5.1+ */
     background: -o-radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 41%,rgba(200,200,200,1) 100%); /* Opera 12+ */
     background: -ms-radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 41%,rgba(200,200,200,1) 100%); /* IE10+ */
     background: radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 41%,rgba(200,200,200,1) 100%); /* W3C */
@@ -113,6 +116,7 @@ html, body {
 }
 
 #io-ox-login-container {
+    color: white;
     height: 100%;
     width: 100%;
     max-width: 680px;
@@ -134,18 +138,19 @@ html, body {
 }
 
 #io-ox-login-header h1 {
-    font-size: 22pt;
-    color: #333;
+    font-size: 24pt;
+    color: #fff;
     margin: 1em 0 1em 0;
 }
 
+#io-ox-login-header h1 small { color: #6FBBEC; }
+
 #io-ox-login-header-prefix {
-    color: #aaa;
-    color: rgba(0, 0, 0, 0.3);
+    color: #5DAADB;
 }
 
 #io-ox-login-header-label {
-    text-shadow: 0px 1px 3px #fff;
+    text-shadow: 0px 1px 3px #1E405A;
 }
 
 #io-ox-login-form-container {
@@ -192,7 +197,7 @@ html, body {
 }
 
 #io-ox-copyright {
-    color: #888;
+    color: #072131;
     text-align: right;
     font-weight: 200;
     margin-bottom: 1em;
