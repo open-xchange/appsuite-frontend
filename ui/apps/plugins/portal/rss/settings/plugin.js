@@ -373,9 +373,9 @@ define('plugins/portal/rss/settings/plugin',
                     });
                 });
             },
-            onEditGroup: function (args) {
+            onEditGroup: function (pEvent) {
                 var dialog = new dialogs.ModalDialog({easyOut: true, async: true }),
-                    $changed = $(this.$el.find('[selected]'));
+                    $changed = $(pEvent.target).parent();
 
                 var oldGroupname = $changed.data('groupname');
 
@@ -462,11 +462,11 @@ define('plugins/portal/rss/settings/plugin',
             },
 
 
-            onDeleteGroup: function (args) {
+            onDeleteGroup: function (pEvent) {
                 var dialog = new dialogs.ModalDialog({
                     easyOut: true
                 });
-                var deleteme = this.$el.find('[selected]'),
+                var deleteme = $(pEvent.target).parent(),
                     groupname = deleteme.data('groupname');
                 if (!groupname) {
                     return;
