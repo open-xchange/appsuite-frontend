@@ -28,7 +28,7 @@ define('io.ox/office/editor/hyperlink',
      * of a hyperlink.
      */
     var Hyperlink = {
-        Separators : [ '!', '?', '.', ' ', '-', ':', ',' ]
+        Separators : [ '!', '?', '.', ' ', '-', ':', ',', '\u00a0']
     };
 
     // static functions =======================================================
