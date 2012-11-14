@@ -11,15 +11,13 @@
  */
 
 define('io.ox/calendar/week/perspective',
-        ['io.ox/calendar/week/view',
-         'io.ox/calendar/api',
-         'io.ox/core/extensions',
-         'io.ox/core/tk/dialogs',
-         'io.ox/calendar/view-detail',
-         'io.ox/calendar/conflicts/conflictList',
-         'io.ox/core/date',
-         'gettext!io.ox/calendar'
-         ], function (View, api, ext, dialogs, detailView, conflictView, date, gt) {
+    ['io.ox/calendar/week/view',
+     'io.ox/calendar/api',
+     'io.ox/core/extensions',
+     'io.ox/core/tk/dialogs',
+     'io.ox/calendar/view-detail',
+     'io.ox/calendar/conflicts/conflictList',
+     'gettext!io.ox/calendar'], function (View, api, ext, dialogs, detailView, conflictView, gt) {
 
     'use strict';
 
@@ -27,22 +25,11 @@ define('io.ox/calendar/week/perspective',
 
     _.extend(perspective, {
 
-        collection:     {},
-        columns:        7,
-        dialog:         $(),
-        app:            null,
-        view:           null,
-        folder:         null,
-        modes:           { 'week:day': 1, 'week:workweek': 2, 'week:week': 3 },
-
-        days: function (d) {
-            if (d) {
-                this.columns = d;
-                return this;
-            } else {
-                return d;
-            }
-        },
+        collection:     {},     // collection of all appointments
+        dialog:         null,   // sidepopup
+        app:            null,   // the app
+        view:           null,   // the current view obj
+        modes:          { 'week:day': 1, 'week:workweek': 2, 'week:week': 3 }, // all available modes
 
         showAppointment: function (e, obj) {
             // open appointment details
@@ -134,31 +121,14 @@ define('io.ox/calendar/week/perspective',
         },
 
         refresh: function () {
-            var obj = {
-                    start: this.view.startDate.getTime(),
-                    end: this.view.startDate.getTime() + (date.DAY * this.columns)
-                },
-                self = this;
+            var self = this;
             this.app.folder.getData().done(function (data) {
-                // switch only visible on private folders
-                self.view.setShowAllVisibility(data.type === 1);
-                // set folder data to view
-                self.view.setFolder(data);
-                // do folder magic
-                if (data.type > 1 || self.view.getShowAllStatus() === false) {
-                    obj.folder = data.id;
-                }
-                self.getAppointments(obj);
+                // set folder data to view and update
+                self.getAppointments(self.view.folder(data));
             });
         },
 
-        changeFolder: function (e, data) {
-            this.folder = data;
-            this.refresh();
-        },
-
-        render: function (app, options) {
-
+        render: function (app, opt) {
             // init perspective
             this.app = app;
             this.collection = new Backbone.Collection([]);
@@ -166,10 +136,10 @@ define('io.ox/calendar/week/perspective',
 
             this.view = new View({
                 collection: this.collection,
-                columns: this.columns,
-                mode: this.modes[options.perspective]
+                mode: this.modes[opt.perspective]
             });
 
+            // bind listener for view events
             this.view
                 .on('showAppointment', this.showAppointment, this)
                 .on('openCreateAppointment', this.openCreateAppointment, this)
@@ -179,6 +149,7 @@ define('io.ox/calendar/week/perspective',
 
             this.main.append(this.view.render().el);
 
+            // create sidepopup object with eventlistener
             this.dialog = new dialogs.SidePopup()
                 .on('close', function () {
                     $('.appointment', this.main).removeClass('opac current');

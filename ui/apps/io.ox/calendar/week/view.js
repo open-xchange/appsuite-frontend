@@ -16,11 +16,10 @@ define('io.ox/calendar/week/view',
      'io.ox/core/extensions',
      'gettext!io.ox/calendar',
      'io.ox/core/api/folder',
-     'io.ox/backbone/views',
      'settings!io.ox/calendar',
      'less!io.ox/calendar/week/style.css',
      'apps/io.ox/core/tk/jquery-ui.min.js',
-     'apps/io.ox/core/tk/jquery.mobile.touch.min.js'], function (util, date, ext, gt, folder, views, settings) {
+     'apps/io.ox/core/tk/jquery.mobile.touch.min.js'], function (util, date, ext, gt, folder, settings) {
 
     'use strict';
 
@@ -44,11 +43,11 @@ define('io.ox/calendar/week/view',
         mode:           0,      // view mode {1: day, 2: workweek, 3: week}
         workWeekStart:  1,      // workweek start (0=Sunday, 1=Monday, ..., 6=Saturday)
 
-        startDate:      null,   // start of day/week as local date
+        startDate:      null,   // start of day/week as local date (use as reference point)
         clickTimer:     null,   // timer to separate single and double click
         clicks:         0,      // click counter
         lasso:          false,  // lasso object
-        folder:         {},     // current folder
+        folderData:     {},     // current folder
 
         pane:           $('<div>').addClass('scrollpane'),              // main scroll pane
         fulltimePane:   $('<div>').addClass('fulltime'),                // full-time appointments pane
@@ -56,18 +55,16 @@ define('io.ox/calendar/week/view',
         timeline:       $('<div>').addClass('timeline'),                // timeline
         footer:         $('<div>').addClass('footer'),                  // footer
         kwInfo:         $('<span>').addClass('info'),                   // current KW
-        showAll:        $('<input/>').attr('type', 'checkbox'),         // show all folders check-box
+        showAllCheck:   $('<input/>').attr('type', 'checkbox'),         // show all folders check-box
         showAllCon:     $('<div>').addClass('showall'),                 // container
 
         // init values from prespective
         initialize: function (opt) {
-            // select column value
             this.mode = opt.mode;
             this.setStartDate();
             this.collection
                 .on('reset', this.renderAppointments, this)
                 .on('change', this.redrawAppointment, this);
-
             this.bindKeys();
         },
 
@@ -228,7 +225,7 @@ define('io.ox/calendar/week/view',
 
         // handler for double-click events on grid
         onCreateAppointment: function (e) {
-            if (!folder.can('create', this.folder)) {
+            if (!folder.can('create', this.folder())) {
                 return;
             }
             if ($(e.target).hasClass('timeslot')) {
@@ -249,7 +246,7 @@ define('io.ox/calendar/week/view',
         },
 
         onLasso: function (e) {
-            if (!folder.can('create', this.folder)) {
+            if (!folder.can('create', this.folder())) {
                 return;
             }
 
@@ -460,7 +457,7 @@ define('io.ox/calendar/week/view',
                                     .addClass('checkbox')
                                     .text(gt('show all'))
                                     .prepend(
-                                        this.showAll
+                                        this.showAllCheck
                                             .prop('checked', true)
                                     )
                             ),
@@ -1094,7 +1091,7 @@ define('io.ox/calendar/week/view',
                 });
 
             ext.point('io.ox/calendar/week/view/appointment')
-                .invoke('draw', el, ext.Baton(_.extend({}, this.options, {model: a, folder: this.folder})));
+                .invoke('draw', el, ext.Baton(_.extend({}, this.options, {model: a, folder: this.folder()})));
             return el;
         },
 
@@ -1162,22 +1159,33 @@ define('io.ox/calendar/week/view',
             return this.cellHeight * this.fragmentation / this.gridSize;
         },
 
-        getShowAllStatus: function () {
-            return this.showAll.prop('checked');
+        showAll: function (opt) {
+            if (typeof opt === 'boolean') {
+                this.showAllCon[opt ? 'show': 'hide']();
+            } else {
+                return this.showAllCheck.prop('checked');
+            }
         },
 
-        setShowAllVisibility: function (display) {
-            this.showAllCon[display ? 'show': 'hide']();
-        },
+        folder: function (data) {
+            if (data) {
+                this.folderData = data;
+                this.showAll(data.type === 1);
 
-        getFolder: function () {
-            return this.folder;
-        },
-
-        setFolder: function (folder) {
-            this.folder =  folder;
+                // return update data
+                var obj = {
+                    start: this.startDate.getTime(),
+                    end: this.startDate.getTime() + (date.DAY * this.columns)
+                };
+                // do folder magic
+                if (data.type > 1 || this.showAll() === false) {
+                    obj.folder = data.id;
+                }
+                return obj;
+            } else {
+                return this.folderData;
+            }
         }
-
     });
 
     ext.point('io.ox/calendar/week/view/appointment').extend({
