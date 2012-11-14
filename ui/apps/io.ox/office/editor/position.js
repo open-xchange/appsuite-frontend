@@ -41,8 +41,9 @@ define('io.ox/office/editor/position',
      *  search and calculation process. No dom position outside of this
      *  maindiv can be calculated.
      *
-     * @param {Node} node
-     *  The dom node, whose logical position will be calculated.
+     * @param {Node|jQuery} node
+     *  The dom node, whose logical position will be calculated. If this object
+     *  is a jQuery collection, uses the first node it contains.
      *
      * @param {Number} offset
      *  An additional offset, that can be used to modify the last position
@@ -62,6 +63,9 @@ define('io.ox/office/editor/position',
             });
             return sum;
         }
+
+        // convert to DOM node object
+        node = Utils.getDomNode(node);
 
         // Checking offset for text nodes
         if ((node.nodeType === 3) && !_.isNumber(offset)) {
@@ -274,13 +278,8 @@ define('io.ox/office/editor/position',
 
         forcePositionCounting = forcePositionCounting ? true : false;
 
-        if ((oxoPosition === undefined) || (oxoPosition === null)) {
-            // Utils.error('Position.getDOMPosition(): oxoPosition is undefined!');
-            return;
-        }
-
-        if (oxoPos[0] === undefined) {
-            // Utils.error('Position.getDOMPosition(): Position is undefined!');
+        if (!_.isArray(oxoPosition)) {
+            Utils.error('Position.getDOMPosition(): invalid/missing logical position');
             return;
         }
 
