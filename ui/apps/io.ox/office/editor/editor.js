@@ -2906,6 +2906,10 @@ define('io.ox/office/editor/editor',
             implInsertTheme(operation.themename, operation.attrs);
         };
 
+        operationHandlers[Operations.INSERT_FONT_DESC] = function (operation) {
+            // TODO!
+        };
+
         operationHandlers[Operations.INSERT_LIST] = function (operation) {
             if (undoManager.isEnabled()) {
                 var undoOperation = { name: Operations.DELETE_LIST, listname: operation.listname };

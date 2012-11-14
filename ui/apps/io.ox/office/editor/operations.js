@@ -103,6 +103,7 @@ define('io.ox/office/editor/operations',
 
         INSERT_STYLE: 'insertStylesheet',
         INSERT_THEME: 'insertTheme',
+        INSERT_FONT_DESC: 'insertFontDescription',
         INSERT_LIST: 'insertList',
         DELETE_LIST: 'deleteList',
         ATTRS_SET: 'setAttributes',

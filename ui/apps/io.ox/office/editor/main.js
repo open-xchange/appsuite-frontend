@@ -258,7 +258,17 @@ define('io.ox/office/editor/main',
                 def = $.Deferred().always(function () {
                     self.getWindow().idle();
                     editor.grabFocus(true);
-                });
+                }),
+
+                // start time of the import process (for profiling)
+                time = 0;
+
+            // dumps elapsed time (difference of current time and 'time') to console
+            function dumpElapsedTime(msg) {
+                var now = new Date().getTime();
+                Utils.info('EditorApplication.loadAndShow(): ' + msg + ' in ' + (now - time) + 'ms');
+                time = now;
+            }
 
             // show application window
             self.getWindow().show(function () {
@@ -271,6 +281,7 @@ define('io.ox/office/editor/main',
 
                 // load the file
                 if (self.hasFileDescriptor()) {
+                    time = new Date().getTime();
 
                     $.ajax({
                         type: 'GET',
@@ -278,11 +289,16 @@ define('io.ox/office/editor/main',
                         dataType: 'json'
                     })
                     .pipe(extractOperationsList)
+                    .always(function () {
+                        dumpElapsedTime('document imported');
+                    })
                     .done(function (operations) {
                         if (_.isArray(operations)) {
                             editor.enableUndo(false);
                             applyOperations(operations);
+                            dumpElapsedTime('operations applied');
                             editor.documentLoaded();
+                            dumpElapsedTime('postprocessing finished');
                             editor.enableUndo(true);
                             startOperationsTimer(0);
                             def.resolve();
