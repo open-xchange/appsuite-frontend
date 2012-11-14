@@ -152,7 +152,7 @@ define('io.ox/office/editor/format/pagestyles',
 
         // for now, update the root node after every change event
         // TODO: page layout, update entire document formatting
-        this.on('change', function () { self.updateElementFormatting(rootNode); });
+        this.on('change:direct', function () { self.updateElementFormatting(rootNode); });
 
     } // class PageStyles
 

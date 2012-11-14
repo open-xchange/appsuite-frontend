@@ -77,10 +77,10 @@ define('io.ox/office/editor/format/container',
         this.triggerChangeEvent = deferredMethods.createMethod(
 
             // direct callback: called every time when Container.triggerChangeEvent() has been called
-            function () { return self; },
+            function triggerDirectEvent() { self.trigger('change:direct'); return self; },
 
             // deferred callback: called once, after current script ends
-            function triggerEvent() { self.trigger('change'); }
+            function triggerDeferredEvent() { self.trigger('change'); }
         );
 
         /**
