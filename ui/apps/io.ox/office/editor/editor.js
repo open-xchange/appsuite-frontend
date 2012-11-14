@@ -4387,7 +4387,7 @@ define('io.ox/office/editor/editor',
 
             drawing = $('<div>', { contenteditable: false })
                .addClass('drawing inline')
-               .data('type', type)  // replace with Type; url is in attrs
+               .data('type', type)
                .append(contentdiv);
 
             if (type === 'image') {

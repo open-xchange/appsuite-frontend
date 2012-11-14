@@ -367,7 +367,7 @@ define('io.ox/office/editor/operations',
 
                     // operation to create a drawing (including its attributes)
                     else if (DOM.isDrawingNode(node)) {
-                        type = 'image';    // adding type ToDo, it is not always an image
+                        type = $(node).data('type');
                         this.generateOperationWithAttributes(node, Operations.DRAWING_INSERT, { position: startPosition, type: type });
                     }
 
