@@ -184,7 +184,7 @@ define('io.ox/office/editor/hyperlink',
         var text = '',
             startFound = false,
             startPos = -1,
-            endPos = pos,
+            endPos = -1,
             selection = { start: null, end: null };
 
         Position.iterateParagraphChildNodes(paragraph, function (node, nodeStart, nodeLength, nodeOffset, offsetLength) {
