@@ -11,7 +11,10 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/view/view', ['io.ox/office/tk/utils'], function (Utils) {
+define('io.ox/office/tk/view/view',
+        ['io.ox/office/tk/utils',
+         'io.ox/office/tk/view/pane'
+        ], function (Utils, Pane) {
 
     'use strict';
 
@@ -42,17 +45,14 @@ define('io.ox/office/tk/view/view', ['io.ox/office/tk/utils'], function (Utils) 
      */
     function View(app) {
 
-        var // the application model
-            model = app.getModel(),
-
-            // the application controller
+        var // the application controller
             controller = app.getController(),
 
             // the application window
             win = ox.ui.createWindow({ name: app.getName() }),
 
             // centered application pane
-            appPane = $('<div>').addClass('io-ox-pane center').append(model.getNode()),
+            appPane = null,
 
             // all pane instances, mapped by identifier, and by border side
             panes = { all: {}, top: [], bottom: [], left: [], right: [] };
@@ -65,8 +65,10 @@ define('io.ox/office/tk/view/view', ['io.ox/office/tk/utils'], function (Utils) 
          */
         function windowResizeHandler(event) {
 
-            var offsets = { top: 0, bottom: 0, left: 0, right: 0 };
+            var // current offsets representing available space in the application window
+                offsets = { top: 0, bottom: 0, left: 0, right: 0 };
 
+            // updates the position of a single pane, and updates the 'offsets' object
             function updatePane(pane, horizontal, leading) {
 
                 var paneNode = pane.getNode(),
@@ -80,11 +82,13 @@ define('io.ox/office/tk/view/view', ['io.ox/office/tk/utils'], function (Utils) 
                 }
             }
 
+            // updates the top and bottom panes
             function updateHorizontalPanes() {
                 _(panes.top).each(function (pane) { updatePane(pane, true, true); });
                 _(panes.bottom).each(function (pane) { updatePane(pane, true, false); });
             }
 
+            // updates the left and right panes
             function updateVerticalPanes() {
                 _(panes.left).each(function (pane) { updatePane(pane, false, true); });
                 _(panes.right).each(function (pane) { updatePane(pane, false, false); });
@@ -100,7 +104,7 @@ define('io.ox/office/tk/view/view', ['io.ox/office/tk/utils'], function (Utils) 
             }
 
             // update the application pane
-            appPane.css(offsets);
+            appPane.getNode().css(offsets);
         }
 
         // methods ------------------------------------------------------------
@@ -136,6 +140,7 @@ define('io.ox/office/tk/view/view', ['io.ox/office/tk/utils'], function (Utils) 
                 panes.all[id].getNode().show();
                 windowResizeHandler();
             }
+            return this;
         };
 
         this.hidePane = function (id) {
@@ -143,6 +148,7 @@ define('io.ox/office/tk/view/view', ['io.ox/office/tk/utils'], function (Utils) 
                 panes.all[id].getNode().hide();
                 windowResizeHandler();
             }
+            return this;
         };
 
         this.togglePane = function (id, state) {
@@ -150,6 +156,7 @@ define('io.ox/office/tk/view/view', ['io.ox/office/tk/utils'], function (Utils) 
                 panes.all[id].getNode().toggle(state);
                 windowResizeHandler();
             }
+            return this;
         };
 
         // initialization -----------------------------------------------------
@@ -157,11 +164,15 @@ define('io.ox/office/tk/view/view', ['io.ox/office/tk/utils'], function (Utils) 
         // set the window at the application instance
         app.setWindow(win);
 
+        // add the central application pane, and insert the document model root node
+        appPane = new Pane(app);
+        appPane.getNode().addClass('center').append(app.getModel().getNode());
+
         // move window tool bar to the right
         win.nodes.outer.addClass('toolbar-right');
 
         // add the main application pane
-        win.nodes.main.addClass(app.getName().replace(/[.\/]/g, '-') + '-main').append(appPane);
+        win.nodes.main.addClass(app.getName().replace(/[.\/]/g, '-') + '-main').append(appPane.getNode());
 
         // listen to browser window resize events when the OX window is visible
         app.registerWindowResizeHandler(windowResizeHandler);

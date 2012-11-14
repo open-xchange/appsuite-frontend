@@ -212,9 +212,7 @@ define('io.ox/office/editor/view/view',
 
         // the tool pane for tool bars
         toolPane = new ToolPane(app);
-        debugPane = new Pane(app);
-        this.addPane('toolpane', toolPane, 'top')
-            .addPane('debugpane', debugPane, 'bottom');
+        this.addPane('toolpane', toolPane, 'top');
 
         // create the tool bars
 /*
@@ -281,6 +279,9 @@ define('io.ox/office/editor/view/view',
 
         // additions for debug mode
         if (Config.isDebugAvailable()) {
+
+            debugPane = new Pane(app);
+            this.addPane('debugpane', debugPane, 'bottom');
 
             opsNode = $('<table>');
 
