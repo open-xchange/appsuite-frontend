@@ -266,8 +266,9 @@ define('io.ox/office/editor/format/drawingstyles',
             // text wrapping side (left/right/none)
             wrapMode = 'none',
             // type of the drawing: 'image', ...
-            type = drawing.data('type');
-
+            type = drawing.data('type'),
+            // the content node inside the drawing
+            contentNode = DOM.getDrawingContentNode(drawing);
 
         // position
 
@@ -428,15 +429,28 @@ define('io.ox/office/editor/format/drawingstyles',
             var // horizontal offset/size of the bitmap, as CSS attributes
                 horizontalSettings = calculateBitmapSettings(drawingWidth, attributes.cropl, attributes.cropr),
                 // vertical offset/size of the bitmap, as CSS attributes
-                verticalSettings = calculateBitmapSettings(drawingHeight, attributes.cropt, attributes.cropb);
+                verticalSettings = calculateBitmapSettings(drawingHeight, attributes.cropt, attributes.cropb),
+                // the image node inside the drawing node
+                imageNode = contentNode.find('img'),
+                // the source data or url for the image
+                imgSrc = null;
 
-            // set CSS formatting at the <img> element
-            drawing.find('img').css({
-                left: horizontalSettings.offset,
-                top: verticalSettings.offset,
-                width: horizontalSettings.size,
-                height: verticalSettings.size
-            });
+            if (! imageNode.length) {
+                // inserting the image
+                imgSrc = attributes.imgdata && attributes.imgdata.length ? attributes.imgdata : drawing.data('absoluteURL');
+                imageNode = $('<img>', { src: imgSrc });
+                contentNode.append(imageNode);
+            }
+
+            if ((horizontalSettings.size > 0) && (verticalSettings.size > 0)) {
+                // set CSS formatting at the <img> element
+                imageNode.css({
+                    left: horizontalSettings.offset,
+                    top: verticalSettings.offset,
+                    width: horizontalSettings.size,
+                    height: verticalSettings.size
+                });
+            }
         }
 
     }

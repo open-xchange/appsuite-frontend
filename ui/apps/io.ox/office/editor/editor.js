@@ -3841,6 +3841,7 @@ define('io.ox/office/editor/editor',
             if (imagePos && DOM.isImageNode(imagePos.node)) {
 
                 $('img', imagePos.node).one('load', function () {
+
                     var width, height, para, maxWidth, factor, updatePosition, newOperation;
 
                     // Workaround for a strange Chrome behavior, even if we use .one() Chrome fires the 'load' event twice.
@@ -4436,11 +4437,9 @@ define('io.ox/office/editor/editor',
 
             var domPos = Position.getDOMPosition(editdiv, position),
                 node = (domPos && domPos.node) ? domPos.node.parentNode : null,
-                url = attributes.imgurl,
-                data = attributes.imgdata,
-                absUrl = /:\/\//.test(url) ? url : getDocumentUrl({ get_filename: url }),
-                imgSrc = data && data.length ? data : absUrl,
                 drawing = null,
+                url = null,
+                absUrl = null,
                 contentdiv = $('<div>').addClass('content');
 
             // check position
@@ -4460,11 +4459,14 @@ define('io.ox/office/editor/editor',
                .data('type', type)
                .append(contentdiv);
 
-            if (type === 'image') {
-                contentdiv.append($('<img>', { src: imgSrc }));
-            }
-
             drawing.insertBefore(node);
+
+            if (type === 'image') {
+                // saving the absolute image url as data object at content node
+                url = attributes.imgurl;
+                absUrl = /:\/\//.test(url) ? url : getDocumentUrl({ get_filename: url });
+                drawing.data('absoluteURL', absUrl);
+            }
 
             // apply the passed drawing attributes
             drawingStyles.setElementAttributes(drawing, attributes);

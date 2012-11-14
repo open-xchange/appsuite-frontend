@@ -837,7 +837,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  top-level content nodes.
      */
     DOM.getDrawingContentNode = function (drawingNode) {
-        return $(drawingNode).find('div.contents');
+        return $(drawingNode).find('div.content');
     };
 
     /**
