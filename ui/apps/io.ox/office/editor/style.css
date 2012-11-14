@@ -286,6 +286,26 @@
         border: 1px dotted black;
     }
 
+    div.io-ox-office-hyperlink-popup {
+        font-family: sans-serif;
+        font-size: 13px;
+        line-height: normal;
+	    position: absolute;
+        border: 1px solid;
+        border-color: #A0A0A0;
+        padding: 10px 20px;
+        background-color: #F8F8F8;
+    }
+
+    span.io-ox-office-hyperlink-popup-links {
+        color: #08C;
+
+       &:hover {
+           color: #005580;
+           text-decoration:underline;
+       }
+    }
+
     div.io-ox-pane.debug > table {
         width: 100%;
         table-layout: fixed;

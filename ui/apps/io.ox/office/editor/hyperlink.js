@@ -60,6 +60,36 @@ define('io.ox/office/editor/hyperlink',
     };
 
     /**
+     * Provides the url of a selection without range
+     *
+     * @param selection {Selection}
+     *  A selection object which describes the current
+     *  selection.
+     *
+     * @returns {String}
+     *  The url as string or null if no url character
+     *  attribute is set at the selection.
+     */
+    Hyperlink.getURLFromPosition = function (editor, selection) {
+        var url = null;
+
+        if (!selection.hasRange()) {
+            // find out a possible URL set for the current position
+            var startSelection = selection.getStartPosition(),
+                obj = Position.getDOMPosition(editor.getNode(), startSelection),
+                characterStyles = editor.getStyleSheets('character');
+
+            if (obj && obj.node && DOM.isTextSpan(obj.node.parentNode)) {
+                var styles = characterStyles.getElementAttributes(obj.node.parentNode);
+                if (styles.url && styles.url.length > 0)
+                    url = styles.url;
+            }
+        }
+
+        return url;
+    };
+
+    /**
      * Tries to find a selection range based on the current text cursor
      * position. The url character style is used to find a consecutive
      * @param editor
@@ -77,15 +107,17 @@ define('io.ox/office/editor/hyperlink',
                 characterStyles = editor.getStyleSheets('character'),
                 obj = null;
 
-            // find out a possible URL set for the current position
-            obj = Position.getDOMPosition(editor.getNode(), startSelection);
-            if (obj && obj.node && DOM.isTextSpan(obj.node.parentNode)) {
-                var styles = characterStyles.getElementAttributes(obj.node.parentNode);
-                if (styles.url && styles.url.length > 0)
-                    url = styles.url;
-            }
-
             pos = startSelection[startSelection.length - 1];
+
+            if (!selection.hasRange()) {
+                // find out a possible URL set for the current position
+                obj = Position.getDOMPosition(editor.getNode(), startSelection);
+                if (obj && obj.node && DOM.isTextSpan(obj.node.parentNode)) {
+                    var styles = characterStyles.getElementAttributes(obj.node.parentNode);
+                    if (styles.url && styles.url.length > 0)
+                        url = styles.url;
+                }
+            }
 
             if (url) {
                 newSelection = Hyperlink.findURLSelection(editor, characterStyles, obj.node.parentNode, pos, url);

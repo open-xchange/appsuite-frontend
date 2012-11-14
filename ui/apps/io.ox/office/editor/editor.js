@@ -1361,12 +1361,14 @@ define('io.ox/office/editor/editor',
         this.insertHyperlink = function () {
             var generator = new Operations.Generator(),
                 text = '', url = '',
+                startPos = null,
                 start = selection.getStartPosition(),
                 end = selection.getEndPosition();
 
             if (!selection.hasRange()) {
                 var newSelection = Hyperlink.findSelectionRange(this, selection);
                 if (newSelection.start !== null && newSelection.end !== null) {
+                    startPos = selection.getStartPosition();
                     start[start.length - 1] = newSelection.start;
                     end[end.length - 1] = newSelection.end;
                     selection.setTextSelection(start, end);
@@ -1456,8 +1458,60 @@ define('io.ox/office/editor/editor',
 
                         // apply all collected operations
                         self.applyOperations(generator.getOperations(), true, true);
+
+                        window.setTimeout(function () {
+                            app.getController().cancel();
+                            if (startPos)
+                                selection.setTextSelection(startPos, startPos);
+                        }, 0);
                     }, self);
+                }).fail(function (data) {
+                    window.setTimeout(function () {
+                        app.getController().cancel();
+                        if (startPos)
+                            selection.setTextSelection(startPos, startPos);
+                    }, 0);
                 });
+            }
+        };
+
+        this.removeHyperlink = function () {
+            var generator = new Operations.Generator(),
+                startPos = null,
+                start = selection.getStartPosition(),
+                end = selection.getEndPosition();
+
+            if (!selection.hasRange()) {
+                var newSelection = Hyperlink.findSelectionRange(this, selection);
+                if (newSelection.start !== null && newSelection.end !== null) {
+                    startPos = selection.getStartPosition();
+                    start[start.length - 1] = newSelection.start;
+                    end[end.length - 1] = newSelection.end;
+                    selection.setTextSelection(start, end);
+                }
+            }
+
+            if (selection.hasRange() && selection.getEnclosingParagraph()) {
+                undoManager.enterGroup(function () {
+
+                    // remove hyperlink
+                    // setAttribute uses a closed range therefore -1
+                    end[end.length - 1] -= 1;
+                    generator.generateOperation(Operations.ATTRS_SET, {
+                        attrs: { url: '', style: null },
+                        start: _.copy(start, true),
+                        end: _.copy(end, true)
+                    });
+
+                    // apply all collected operations
+                    self.applyOperations(generator.getOperations(), true, true);
+
+                    window.setTimeout(function () {
+                        app.getController().cancel();
+                        if (startPos)
+                            selection.setTextSelection(startPos, startPos);
+                    }, 0);
+                }, self);
             }
         };
 
@@ -1978,7 +2032,7 @@ define('io.ox/office/editor/editor',
          * processed document.
          */
         this.documentLoaded = function () {
-            var postProcessingTasks = [insertMissingCharacterStyles, insertMissingParagraphStyles, insertMissingTableStyle];
+            var postProcessingTasks = [insertHyperlinkPopup, insertMissingCharacterStyles, insertMissingParagraphStyles, insertMissingTableStyle];
 
             _(postProcessingTasks).each(function (task) {
                 task.call(self);
@@ -1992,6 +2046,38 @@ define('io.ox/office/editor/editor',
         // ==================================================================
         // Private functions for document post-processing
         // ==================================================================
+        function insertHyperlinkPopup() {
+            var hyperlinkPopup = $('<div>', { contenteditable: false, display: 'hidden' }).addClass('io-ox-office-hyperlink-popup')
+                .append(
+                    $('<a>').attr({ href: '', rel: 'noreferrer', target: '_blank' }),
+                    $('<span>').text(' | '),
+                    $('<span>').addClass('io-ox-office-hyperlink-popup-links').text(gt('Edit')).click(function () { self.insertHyperlink(); }),
+                    $('<span>').text(' - '),
+                    $('<span>').addClass('io-ox-office-hyperlink-popup-links').text(gt('Remove')).click(function () { self.removeHyperlink(); })
+                ),
+                page = $(self.getNode().parent()).first();
+
+            if (hyperlinkPopup[0]) {
+                var found = page.children(".io-ox-office-hyperlink-popup");
+                if (!found[0]) {
+                    page.append(hyperlinkPopup);
+                    selection.on('change', function () {
+                        var url = Hyperlink.getURLFromPosition(self, selection);
+                        if (url) {
+                            var link = $('a', hyperlinkPopup[0]);
+                            link.text(url);
+                            link.attr({href: url});
+                            hyperlinkPopup.css({left: '30px', top: '70px'});
+                            hyperlinkPopup.css({display: 'block'});
+                        }
+                        else {
+                            hyperlinkPopup.css({display: 'none'});
+                        }
+                    });
+                }
+            }
+        }
+
         /**
          * Checks stored character styles of a document and adds "missing"
          * character styles (e.g. hyperlink).

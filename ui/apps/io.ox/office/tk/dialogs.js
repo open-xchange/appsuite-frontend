@@ -226,7 +226,7 @@ define('io.ox/office/tk/dialogs',
         var // the text input fields
             inputurlid = _.uniqueId('url'),
             inputtextid = _.uniqueId('text'),
-            
+
             // the dialog object
             dialog = createModalDialog(options)
             .append(
@@ -262,7 +262,7 @@ define('io.ox/office/tk/dialogs',
         // add OK and Cancel buttons & remove button to remove hyperlink
         addDialogButtons(dialog, options);
         dialog.addDangerButton('remove', Utils.getStringOption(options, 'removeLabel', gt('Remove')));
- 
+
         // show the dialog and register listeners for the results
         dialog.show(function () {
             if (Utils.getStringOption(options, 'valueText', '').length > 0)
@@ -274,7 +274,7 @@ define('io.ox/office/tk/dialogs',
             if (action === 'ok') {
                 var text = $.trim($(node).find('[data-property="text"]').val()),
                     url = $.trim($(node).find('[data-property="url"]').val());
-                
+
                 def.resolve({ text: text, url: url });
             } else if (action === 'remove') {
                 def.resolve({ text: null, url: null });
