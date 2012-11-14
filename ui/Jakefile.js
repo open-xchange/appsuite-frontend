@@ -248,7 +248,7 @@ utils.concat("boot.js",
      debug ? utils.string(';STATIC_APPS=(' +
                           (process.env.STATIC_APPS || 'true') + ');')
            : utils.string(';'),
-     "src/css.js", "src/jquery.plugins.js", "apps/io.ox/core/gettext.js", "src/util.js", "src/boot.js"],
+     "src/plugins.js", "src/jquery.plugins.js", "apps/io.ox/core/gettext.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
 
 

@@ -15,6 +15,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
     'use strict';
 
+    var // if set to true, DOM selection will be logged to console
+        LOG_SELECTION = false;
+
     // static class DOM =======================================================
 
     /**
@@ -425,27 +428,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * A jQuery selector that matches elements representing a top-level content
-     * node (e.g. paragraphs or tables).
-     */
-    DOM.CONTENT_NODE_SELECTOR = DOM.PARAGRAPH_NODE_SELECTOR + ', ' + DOM.TABLE_NODE_SELECTOR;
-
-    /**
-     * Returns whether the passed node is a top-level content node (e.g.
-     * paragraphs or tables).
-     *
-     * @param {Node|jQuery} node
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
-     *
-     * @returns {Boolean}
-     *  Whether the passed node is a top-level content node.
-     */
-    DOM.isContentNode = function (node) {
-        return $(node).is(DOM.CONTENT_NODE_SELECTOR);
-    };
-
-    /**
      * Creates a new table cell element.
      *
      * @param {jQuery} paragraph
@@ -736,7 +718,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @param {String} [text]
      *  The text contents of the list label node.
      *
-     * @returns
+     * @returns {jQuery}
      *  A new list label node, as jQuery object.
      */
     DOM.createListLabelNode = function (text) {
@@ -774,7 +756,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return $('<br>').data('dummy', true);
     };
 
-    // drawing nodes -----------------------------------------------------------
+    // drawing nodes ----------------------------------------------------------
 
     /**
      * A jQuery selector that matches elements representing a drawing.
@@ -840,6 +822,22 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     DOM.isImageNode = function (node) {
         // drawing div contains another div (class content) that contains an image
         return DOM.isDrawingNode(node) && ($(node).find('img').length > 0);
+    };
+
+    /**
+     * Returns the container node of a drawing object that contains all
+     * top-level content nodes of the drawing.
+     *
+     * @param {HTMLElement|jQuery} drawingNode
+     *  The root DOM node of the drawing object. If this object is a jQuery
+     *  collection, uses the first DOM node it contains.
+     *
+     * @returns {jQuery}
+     *  The container DOM node from the passed drawing object that contains all
+     *  top-level content nodes.
+     */
+    DOM.getDrawingContentNode = function (drawingNode) {
+        return $(drawingNode).find('div.contents');
     };
 
     /**
@@ -959,6 +957,65 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         }
     };
 
+    // generic container and content nodes ====================================
+
+    /**
+     * A jQuery selector that matches elements representing a top-level content
+     * node (e.g. paragraphs or tables).
+     */
+    DOM.CONTENT_NODE_SELECTOR = DOM.PARAGRAPH_NODE_SELECTOR + ', ' + DOM.TABLE_NODE_SELECTOR;
+
+    /**
+     * Returns whether the passed node is a top-level content node (e.g.
+     * paragraphs or tables).
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a top-level content node.
+     */
+    DOM.isContentNode = function (node) {
+        return $(node).is(DOM.CONTENT_NODE_SELECTOR);
+    };
+
+    /**
+     * Returns the correct node of a container node that contains its content
+     * nodes as direct children. Container nodes include the document page,
+     * table cells, or drawing objects containing text.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {jQuery}
+     *  The element that contains the child components of the passed nodes as
+     *  direct children, as jQuery object.
+     */
+    DOM.getChildContainerNode = function (node) {
+
+        // convert to a jQuery object
+        node = $(node);
+
+        // page node contains its child components directly
+        if (DOM.isPageNode(node)) {
+            return node;
+        }
+
+        // table cell nodes contain a child <div> container
+        if (node.is('td')) {
+            return DOM.getCellContentNode(node);
+        }
+
+        // drawing nodes contain a child <div> container
+        if (DOM.isDrawingNode(node)) {
+            return DOM.getDrawingContentNode(node);
+        }
+
+        return $();
+    };
+
     // browser selection ======================================================
 
     /**
@@ -1001,7 +1058,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             return rootNode.contains(adjustedRange.start.node) && (DOM.Point.comparePoints(adjustedRange.end, globalEndPos) <= 0) ? range : null;
         }
 
-        Utils.info('DOM.getBrowserSelection(): reading browser selection...');
+        if (LOG_SELECTION) { Utils.info('DOM.getBrowserSelection(): reading browser selection...'); }
 
         // convert parameter to DOM element
         rootNode = Utils.getDomNode(rootNode);
@@ -1014,7 +1071,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         // may be located before anchor node)
         if (selection.rangeCount >= 1) {
             result.active = createRange(selection.anchorNode, selection.anchorOffset, selection.focusNode, selection.focusOffset);
-            Utils.log('  anchor=' + result.active);
+            if (LOG_SELECTION) { Utils.log('  anchor=' + result.active); }
         }
 
         // read all selection ranges
@@ -1025,7 +1082,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             range = createRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
             // push, if range is valid
             if (range) {
-                Utils.log('  ' + result.ranges.length + '=' + range);
+                if (LOG_SELECTION) { Utils.log('  ' + result.ranges.length + '=' + range); }
                 result.ranges.push(range.adjust());
             }
         }
@@ -1045,7 +1102,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         var // the browser selection
             selection = window.getSelection();
 
-        Utils.info('DOM.setBrowserSelection(): writing browser selection...');
+        if (LOG_SELECTION) { Utils.info('DOM.setBrowserSelection(): writing browser selection...'); }
 
         // clear the old browser selection
         selection.removeAllRanges();
@@ -1056,7 +1113,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         // single range: use attributes of the Selection object (anchor/focus)
         // directly to preserve direction of selection when selecting backwards
         if ((ranges.length === 1) && !$(ranges[0].start.node).is('tr')) {
-            Utils.log('  0=' + ranges[0]);
+            if (LOG_SELECTION) { Utils.log('  0=' + ranges[0]); }
             try {
                 selection.collapse(ranges[0].start.node, ranges[0].start.offset);
                 selection.extend(ranges[0].end.node, ranges[0].end.offset);
@@ -1073,14 +1130,14 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
             var docRange = null;
 
-            Utils.log('  ' + index + '=' + range);
+            if (LOG_SELECTION) { Utils.log('  ' + index + '=' + range); }
             try {
                 docRange = window.document.createRange();
                 docRange.setStart(range.start.node, range.start.offset);
                 docRange.setEnd(range.end.node, range.end.offset);
                 selection.addRange(docRange);
             } catch (ex) {
-                Utils.warn('DOM.setBrowserSelection(): failed to add range to selection; ' + ex);
+                Utils.error('DOM.setBrowserSelection(): failed to add range to selection; ' + ex);
             }
         });
     };

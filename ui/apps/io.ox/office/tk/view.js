@@ -60,6 +60,9 @@ define('io.ox/office/tk/view',
         // set the window at the application instance
         app.setWindow(win);
 
+        // move window tool bar to the right
+        win.nodes.outer.addClass('toolbar-right');
+
         // add the main application pane
         win.nodes.main.addClass(app.getName().replace(/[.\/]/g, '-') + '-main').append(appPane);
 

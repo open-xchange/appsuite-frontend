@@ -44,9 +44,6 @@ define('io.ox/office/editor/controller',
 
                 // document file
 
-                'file/flush': {
-                    set: function () { app.flush(); }
-                },
                 'file/rename': {
                     parent: 'document/editable',
                     get: function () { return app.getFileName(); },

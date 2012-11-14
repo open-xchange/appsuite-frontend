@@ -65,11 +65,11 @@ define('io.ox/office/editor/format/container',
         };
 
         /**
-         * Prepares to trigger a 'change' event for this container. Must be
+         * Immediately triggers a 'change:direct' event for this container, and
+         * prepares to trigger a deferred 'change' event that will be triggered
+         * once after the current script has been executed. This method must be
          * called always after contents of this container have been changed,
-         * added, or removed. Multiple calls of this method are collected, and
-         * a single event will be triggered after the current script has been
-         * executed.
+         * added, or removed.
          *
          * @returns {Container}
          *  A reference to this instance.
