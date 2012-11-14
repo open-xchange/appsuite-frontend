@@ -13,10 +13,10 @@
 
 define('io.ox/office/preview/view',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/view',
-     'io.ox/office/tk/component/toolpane',
+     'io.ox/office/tk/view/toolpane',
+     'io.ox/office/tk/view/view',
      'gettext!io.ox/office/main'
-    ], function (Utils, View, ToolPane, gt) {
+    ], function (Utils, ToolPane, View, gt) {
 
     'use strict';
 
@@ -29,28 +29,8 @@ define('io.ox/office/preview/view',
      */
     function PreviewView(app) {
 
-        var // self reference
-            self = this,
-
-            // the preview model
-            model = app.getModel(),
-
-            // the application controller
-            controller = app.getController(),
-
-            // tool pane containing all tool bars
+        var // tool pane containing all tool bars
             toolPane = null;
-
-        // private methods ----------------------------------------------------
-
-        /**
-         * Handles resize events of the browser window, and adjusts the size of
-         * the application pane node.
-         */
-        function windowResizeHandler(event) {
-            var appPane = self.getApplicationPane();
-            appPane.height(window.innerHeight - appPane.offset().top);
-        }
 
         // base constructor ---------------------------------------------------
 
@@ -66,24 +46,17 @@ define('io.ox/office/preview/view',
         // initialization -----------------------------------------------------
 
         // the tool pane for tool bars
-        toolPane = new ToolPane(app.getWindow(), controller);
-        app.getWindow().nodes.main.prepend(toolPane.getNode());
+        toolPane = new ToolPane(app);
+        this.addPane('toolpane', toolPane, 'top');
 
         // create the tool bar
         toolPane.createToolBar('pages')
-            .addButton('pages/first',    { icon: 'icon-fast-backward' })
-            .addButton('pages/previous', { icon: 'icon-chevron-left' })
+            .addButton('pages/first',    { icon: 'icon-io-ox-arrow-first' })
+            .addButton('pages/previous', { icon: 'icon-io-ox-arrow-previous' })
             .addLabel('pages/current',   { width: 100 })
-            .addButton('pages/next',     { icon: 'icon-chevron-right' })
-            .addButton('pages/last',     { icon: 'icon-fast-forward' })
+            .addButton('pages/next',     { icon: 'icon-io-ox-arrow-next' })
+            .addButton('pages/last',     { icon: 'icon-io-ox-arrow-last' })
             .getNode().css('text-align', 'center');
-
-        // listen to browser window resize events when the OX window is visible
-        app.registerWindowResizeHandler(windowResizeHandler);
-
-        // update all view components every time the window will be shown
-        app.getWindow().on('show', function () { controller.update(); });
-
 
     } // class PreviewView
 

@@ -18,7 +18,6 @@ define('io.ox/office/editor/main',
      'io.ox/office/tk/utils',
      'io.ox/office/tk/application',
      'io.ox/office/tk/config',
-     'io.ox/office/tk/component/toolpane',
      'io.ox/office/editor/actions',
      'io.ox/office/editor/editor',
      'io.ox/office/editor/view/view',
@@ -26,7 +25,7 @@ define('io.ox/office/editor/main',
      'io.ox/office/tk/alert',
      'gettext!io.ox/office/main',
      'less!io.ox/office/editor/style.css'
-    ], function (FilesAPI, Utils, Application, Config, ToolPane, Actions, EditorModel, EditorView, EditorController, Alert, gt) {
+    ], function (FilesAPI, Utils, Application, Config, Actions, EditorModel, EditorView, EditorController, Alert, gt) {
 
     'use strict';
 
@@ -187,13 +186,10 @@ define('io.ox/office/editor/main',
          * Updates the view according to the current state of the debug mode.
          */
         function updateDebugMode() {
-            var debugavailable = Config.isDebugAvailable();
-            if (debugavailable) {
+            if (Config.isDebugAvailable()) {
                 editor.getNode().toggleClass('debug-highlight', debugMode);
-                view.getDebugPane().toggle(debugMode);
+                view.togglePane('debugpane', debugMode);
                 controller.update('debug/toggle');
-                // resize editor pane
-                windowResizeHandler();
             }
         }
 
@@ -543,16 +539,6 @@ define('io.ox/office/editor/main',
         }
 
         /**
-         * Recalculates the size of the editor frame according to the current
-         * view port size.
-         */
-        function windowResizeHandler() {
-            var appPane = view.getApplicationPane(),
-                debugHeight = debugMode ? view.getDebugPane().outerHeight() : 0;
-            appPane.height(window.innerHeight - appPane.offset().top - debugHeight);
-        }
-
-        /**
          * The handler function that will be called while launching the
          * application. Creates and initializes a new application window.
          */
@@ -577,9 +563,6 @@ define('io.ox/office/editor/main',
             // - keep editor selection alive
             // - prevent resize handles for tables and objects (re-enabled after detach/insert)
             self.getWindow().detachable = false;
-
-            // register window event handlers
-            self.registerWindowResizeHandler(windowResizeHandler);
 
             // cache operations from editor
             editor.on('operation', function (event, operation) {

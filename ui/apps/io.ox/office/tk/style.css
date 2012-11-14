@@ -153,7 +153,12 @@ i.icon-io-ox-para-border-right      { background-position: -200px  -40px; }
 i.icon-io-ox-para-border-top        { background-position: -220px  -40px; }
 i.icon-io-ox-para-border-bottom     { background-position: -240px  -40px; }
 i.icon-io-ox-para-border-inside     { background-position: -260px  -40px; }
-                                  
+
+i.icon-io-ox-arrow-first            { background-position:      0  -60px; }     
+i.icon-io-ox-arrow-previous         { background-position:  -20px  -60px; }     
+i.icon-io-ox-arrow-next             { background-position:  -40px  -60px; }     
+i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }     
+
 /* ========================================================================= */
 /* panes and view components                                                 */
 /* ========================================================================= */
@@ -179,18 +184,29 @@ i.icon-io-ox-para-border-inside     { background-position: -260px  -40px; }
 /* panes =================================================================== */
 
 div.io-ox-pane {
-    position: relative;
+    position: absolute;
     background-color: @pane-fill-color;
+    .box-shadow(0 0 8px fade(black, 25%));
 
-    &.top { border-bottom: 1px solid @pane-border-color; }
-    &.bottom { border-top: 1px solid @pane-border-color; }
-    &.left { border-right: 1px solid @pane-border-color; }
-    &.right { border-left: 1px solid @pane-border-color; }
+    &.top {
+        border-bottom: 1px solid @pane-fill-color;
+    }
+
+    &.bottom {
+        border-top: 1px solid @pane-fill-color;
+    }
+
+    &.left {
+        border-right: 1px solid @pane-fill-color;
+    }
+
+    &.right {
+        border-left: 1px solid @pane-fill-color;
+    }
 
     &.toolpane {
         padding: 0 13px;
         .vertical-gradient(@pane-accented-fill-color, @pane-fill-color);
-        position: relative;
     }
 
     &.center {

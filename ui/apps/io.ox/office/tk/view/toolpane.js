@@ -11,11 +11,12 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/component/toolpane',
+define('io.ox/office/tk/view/toolpane',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/view/pane',
      'io.ox/office/tk/component/toolbar',
      'io.ox/office/tk/control/radiogroup'
-    ], function (Utils, ToolBar, RadioGroup) {
+    ], function (Utils, Pane, ToolBar, RadioGroup) {
 
     'use strict';
 
@@ -32,22 +33,23 @@ define('io.ox/office/tk/component/toolpane',
      * bar is visible at a time. Tool bars can be selected with a tab control
      * shown above the visible tool bar.
      *
-     * @param {ox.ui.Window} appWindow
-     *  The application window object.
+     * @constructor
      *
-     * @param {Controller} controller
-     *  The application controller.
+     * @extends Pane
+     *
+     * @param {Application} app
+     *  The application.
      */
-    function ToolPane(appWindow, controller) {
+    function ToolPane(app) {
 
         var // self reference
             self = this,
 
-            // the container element representing the tool pane
-            node = $('<div>').addClass('io-ox-pane top toolpane'),
+            // the application controller
+            controller = app.getController(),
 
             // tab bar to switch the tool bars (temporary)
-            tabBar = new ToolBar(appWindow),
+            tabBar = new ToolBar(app.getWindow()),
 
             // radio group to switch the tool bars (temporary)
             tabBarGroup = new RadioGroup(),
@@ -97,14 +99,11 @@ define('io.ox/office/tk/component/toolpane',
             }
         }
 
-        // methods ------------------------------------------------------------
+        // base constructor ---------------------------------------------------
 
-        /**
-         * Returns the root element containing this tool pane as jQuery object.
-         */
-        this.getNode = function () {
-            return node;
-        };
+        Pane.call(this, app);
+
+        // methods ------------------------------------------------------------
 
         this.getTabBar = function () {
             return tabBar;
@@ -129,11 +128,11 @@ define('io.ox/office/tk/component/toolpane',
         this.createToolBar = function (id, options) {
 
             var // create a new tool bar object, and store it in the map
-                toolBar = toolBars[id] = new ToolBar(appWindow);
+                toolBar = toolBars[id] = new ToolBar(app.getWindow());
 
             // add the tool bar to the pane, and register it at the controller
             toolBarIds.push(id);
-            node.append(toolBar.getNode());
+            this.getNode().append(toolBar.getNode());
             controller.registerViewComponent(toolBar);
 
             // add an option button to the tab bar
@@ -199,7 +198,7 @@ define('io.ox/office/tk/component/toolpane',
         // initialization -----------------------------------------------------
 
         // insert the tab bar into this tool pane, but hide it initially
-        node.append(tabBar.getNode());
+        this.getNode().addClass('toolpane').append(tabBar.getNode());
         controller.registerViewComponent(tabBar);
         tabBar.addGroup(KEY_SHOW_TOOLBAR, tabBarGroup).hide();
 
@@ -210,12 +209,13 @@ define('io.ox/office/tk/component/toolpane',
         });
 
         // change visible tool bar with keyboard
-        node.on('keydown keypress keyup', toolPaneKeyHandler);
+        this.getNode().on('keydown keypress keyup', toolPaneKeyHandler);
 
     } // class ToolPane
 
     // exports ================================================================
 
-    return ToolPane;
+    // derive this class from class Pane
+    return Pane.extend({ constructor: ToolPane });
 
 });

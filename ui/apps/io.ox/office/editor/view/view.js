@@ -15,14 +15,15 @@ define('io.ox/office/editor/view/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/config',
      'io.ox/office/tk/fonts',
-     'io.ox/office/tk/view',
      'io.ox/office/tk/control/textfield',
      'io.ox/office/tk/control/radiogroup',
-     'io.ox/office/tk/component/toolpane',
+     'io.ox/office/tk/view/pane',
+     'io.ox/office/tk/view/toolpane',
+     'io.ox/office/tk/view/view',
      'io.ox/office/editor/view/controls',
      'io.ox/office/editor/format/lineheight',
      'gettext!io.ox/office/main'
-    ], function (Utils, Config, Fonts, View, TextField, RadioGroup, ToolPane, Controls, LineHeight, gt) {
+    ], function (Utils, Config, Fonts, TextField, RadioGroup, Pane, ToolPane, View, Controls, LineHeight, gt) {
 
     'use strict';
 
@@ -180,10 +181,6 @@ define('io.ox/office/editor/view/view',
             return toolPane;
         };
 
-        this.getDebugPane = function () {
-            return debugPane;
-        };
-
         /**
          * Logs the passed operations in the operations output console.
          *
@@ -208,14 +205,16 @@ define('io.ox/office/editor/view/view',
 
         this.destroy = function () {
             toolPane.destroy();
-            toolPane = null;
+            toolPane = debugPane = null;
         };
 
         // initialization -----------------------------------------------------
 
         // the tool pane for tool bars
-        toolPane = new ToolPane(app.getWindow(), controller);
-        app.getWindow().nodes.main.prepend(toolPane.getNode());
+        toolPane = new ToolPane(app);
+        debugPane = new Pane(app);
+        this.addPane('toolpane', toolPane, 'top')
+            .addPane('debugpane', debugPane, 'bottom');
 
         // create the tool bars
 /*
@@ -295,7 +294,7 @@ define('io.ox/office/editor/view/view',
                 $('<tr>').append($('<td>').text('end'), selEndCell = $('<td>'))
             );
 
-            debugPane = $('<div>').addClass('io-ox-pane bottom debug user-select-text').append(
+            debugPane.getNode().addClass('debug user-select-text').append(
                 $('<table>').append(
                     $('<colgroup>').append($('<col>', { width: '70%' })),
                     $('<tr>').append(
@@ -357,9 +356,6 @@ define('io.ox/office/editor/view/view',
 
         // set the quick-search tooltip
         Utils.setControlTooltip(app.getWindow().nodes.search, gt('Quick Search'), 'bottom');
-
-        // update all view components every time the window will be shown
-        app.getWindow().on('show', function () { controller.update(); });
 
     } // class EditorView
 
