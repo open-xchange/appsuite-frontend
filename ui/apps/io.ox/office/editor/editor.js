@@ -2047,7 +2047,7 @@ define('io.ox/office/editor/editor',
         // Private functions for document post-processing
         // ==================================================================
         function insertHyperlinkPopup() {
-            var hyperlinkPopup = $('<div>', { contenteditable: false, display: 'hidden' }).addClass('io-ox-office-hyperlink-popup')
+            var hyperlinkPopup = $('<div>', { contenteditable: false }).addClass('io-ox-office-hyperlink-popup').css({display: 'none'})
                 .append(
                     $('<a>').attr({ href: '', rel: 'noreferrer', target: '_blank' }),
                     $('<span>').text(' | '),
@@ -2064,11 +2064,43 @@ define('io.ox/office/editor/editor',
                     selection.on('change', function () {
                         var url = Hyperlink.getURLFromPosition(self, selection);
                         if (url) {
-                            var link = $('a', hyperlinkPopup[0]);
-                            link.text(url);
-                            link.attr({href: url});
-                            hyperlinkPopup.css({left: '30px', top: '70px'});
-                            hyperlinkPopup.css({display: 'block'});
+                            var link = $('a', hyperlinkPopup[0]),
+                                startSelection = selection.getStartPosition(),
+                                obj = Position.getDOMPosition(self.getNode(), startSelection);
+
+                            if (obj && obj.node && DOM.isTextSpan(obj.node.parentNode)) {
+                                var pos = startSelection[startSelection.length - 1],
+                                    startEndPos = Hyperlink.findURLSelection(self, obj.node.parentNode, pos, url),
+                                    left, top, height, width;
+
+                                // magic
+                                startSelection[startSelection.length - 1] = startEndPos.start;
+                                obj = Position.getDOMPosition(self.getNode(), startSelection, true);
+                                left = $(obj.node).offset().left;
+
+                                startSelection[startSelection.length - 1] = startEndPos.end;
+                                obj = Position.getDOMPosition(self.getNode(), startSelection, true);
+                                top = $(obj.node.parentNode).offset().top;
+                                height = $(obj.node).height();
+
+                                // calculate position relative to "io-ox-pane center"
+                                var parent = self.getNode().parent(".io-ox-pane.center"),
+                                    parentLeft = parent.offset().left,
+                                    parentTop = parent.offset().top,
+                                    parentWidth = parent.width();
+
+                                left = left - parentLeft;
+                                top = top - parentTop + height;
+
+                                link.text(url);
+                                link.attr({href: url});
+                                hyperlinkPopup.css({display: '', left: left, top: top});
+                                width = hyperlinkPopup.width();
+                                if ((left + width) > parentWidth) {
+                                    left -= (((left + width) - parentWidth) + parentLeft);
+                                    hyperlinkPopup.css({left: left});
+                                }
+                            }
                         }
                         else {
                             hyperlinkPopup.css({display: 'none'});

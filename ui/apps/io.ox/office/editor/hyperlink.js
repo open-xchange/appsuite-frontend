@@ -120,7 +120,7 @@ define('io.ox/office/editor/hyperlink',
             }
 
             if (url) {
-                newSelection = Hyperlink.findURLSelection(editor, characterStyles, obj.node.parentNode, pos, url);
+                newSelection = Hyperlink.findURLSelection(editor, obj.node.parentNode, pos, url);
             }
             else {
                 newSelection = Hyperlink.findTextSelection(paragraph, pos);
@@ -147,12 +147,13 @@ define('io.ox/office/editor/hyperlink',
      *  be null which means that there is no selection but the hyperlink
      *  should be inserted at the position.
      */
-    Hyperlink.findURLSelection = function (editor, characterStyles, node, pos, url) {
+    Hyperlink.findURLSelection = function (editor, node, pos, url) {
         var startPos,
             endPos,
             startNode = node,
             endNode = node,
-            styles = null;
+            styles = null,
+            characterStyles = editor.getStyleSheets('character');
 
         while (endNode && endNode.nextSibling && DOM.isTextSpan(endNode.nextSibling)) {
             styles = characterStyles.getElementAttributes(endNode.nextSibling);
