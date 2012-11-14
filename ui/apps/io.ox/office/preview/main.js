@@ -31,17 +31,14 @@ define('io.ox/office/preview/main',
         var // self reference
             self = this,
 
-            // the application window
-            win = null,
-
             // the previewer model
             model = null,
 
-            // view, contains panes, tool bars, etc.
-            view = null,
-
             // controller as single connection point between model and view elements
-            controller = null;
+            controller = null,
+
+            // view, contains panes, tool bars, etc.
+            view = null;
 
         // private methods ----------------------------------------------------
 
@@ -55,7 +52,7 @@ define('io.ox/office/preview/main',
          *  The title of the error message. Defaults to 'Error'.
          */
         function showError(message, title) {
-            win.nodes.main
+            self.getWindow().nodes.main
                 .find('.alert').remove().end()
                 .prepend($.alert(title || gt('Error'), message));
         }
@@ -89,7 +86,7 @@ define('io.ox/office/preview/main',
             var file = self.getFileDescriptor(),
                 fileName = (file && file.filename) ? file.filename : gt('Unnamed');
             self.setTitle(fileName);
-            win.setTitle(fileName);
+            self.getWindow().setTitle(fileName);
         }
 
         /**
@@ -104,12 +101,12 @@ define('io.ox/office/preview/main',
 
             var // initialize the deferred to be returned
                 def = $.Deferred().always(function () {
-                    win.idle();
+                    self.getWindow().idle();
                 });
 
             // show application window
-            win.show(function () {
-                win.busy();
+            self.getWindow().show(function () {
+                self.getWindow().busy();
                 updateTitles();
 
                 // do not try to load, if file descriptor is missing
@@ -155,18 +152,14 @@ define('io.ox/office/preview/main',
          */
         function launchHandler() {
 
-            // create the application window
-            win = ox.ui.createWindow({ name: self.getName() });
-            self.setWindow(win);
-
-            // the previewer model
+            // create the previewer model
             model = new PreviewModel(self);
 
-            // create controller
+            // create the controller
             controller = new PreviewController(self);
 
-            // the view
-            view = new PreviewView(win, model, controller);
+            // create the view (creates application window)
+            view = new PreviewView(self);
 
             // disable FF spell checking
             $('body').attr('spellcheck', false);
@@ -237,9 +230,9 @@ define('io.ox/office/preview/main',
          */
         this.destroy = function () {
             controller.destroy();
-            view.destroy();
             model.destroy();
-            win = model = view = controller = null;
+            view.destroy();
+            model = controller = view = null;
         };
 
         // initialization -----------------------------------------------------

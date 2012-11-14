@@ -13,11 +13,8 @@
  */
 
 .io-ox-office-preview-main {
-    margin: 0;
-    padding: 0;
 
-    div.apppane {
-        height: 100%;
+    div.io-ox-pane.center {
         text-align: center;
 
         div.page {

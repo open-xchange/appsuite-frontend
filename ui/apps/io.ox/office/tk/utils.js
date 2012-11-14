@@ -1694,32 +1694,6 @@ define('io.ox/office/tk/utils',
         }
     };
 
-    // window -----------------------------------------------------------------
-
-    /**
-     * Registers a handler at the browser window that listens to resize events.
-     * The event handler will be activated when the specified application
-     * window is visible, and deactivated, if the application window is hidden.
-     *
-     * @param {ox.ui.Window} appWindow
-     *  The application window object.
-     *
-     * @param {Function} resizeHandler
-     *  The resize handler function bound to 'resize' events of the browser
-     *  window. Will be triggered once manually when the application window
-     *  becomes visible.
-     */
-    Utils.registerWindowResizeHandler = function (appWindow, resizeHandler) {
-        appWindow
-            .on('show', function () {
-                $(window).on('resize', resizeHandler);
-                resizeHandler();
-            })
-            .on('hide', function () {
-                $(window).off('resize', resizeHandler);
-            });
-    };
-
     // key codes --------------------------------------------------------------
 
     /**

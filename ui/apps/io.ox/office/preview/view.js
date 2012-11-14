@@ -13,21 +13,33 @@
 
 define('io.ox/office/preview/view',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/view',
      'io.ox/office/tk/component/toolpane',
      'gettext!io.ox/office/main'
-    ], function (Utils, ToolPane, gt) {
+    ], function (Utils, View, ToolPane, gt) {
 
     'use strict';
 
     // class PreviewView ======================================================
 
-    function PreviewView(appWindow, model, controller) {
+    /**
+     * @constructor
+     *
+     * @extends View
+     */
+    function PreviewView(app) {
 
-        var // all nodes of the application window
-            nodes = appWindow.nodes,
+        var // self reference
+            self = this,
+
+            // the preview model
+            model = app.getModel(),
+
+            // the application controller
+            controller = app.getController(),
 
             // tool pane containing all tool bars
-            toolPane = new ToolPane(appWindow, controller);
+            toolPane = null;
 
         // private methods ----------------------------------------------------
 
@@ -36,8 +48,13 @@ define('io.ox/office/preview/view',
          * the application pane node.
          */
         function windowResizeHandler(event) {
-            nodes.appPane.height(window.innerHeight - nodes.appPane.offset().top);
+            var appPane = self.getApplicationPane();
+            appPane.height(window.innerHeight - appPane.offset().top);
         }
+
+        // base constructor ---------------------------------------------------
+
+        View.call(this, app);
 
         // methods ------------------------------------------------------------
 
@@ -48,11 +65,9 @@ define('io.ox/office/preview/view',
 
         // initialization -----------------------------------------------------
 
-        // create all panes
-        nodes.main.addClass('io-ox-office-preview-main').append(
-            nodes.toolPane = toolPane.getNode(),
-            nodes.appPane = $('<div>').addClass('io-ox-pane apppane').append(model.getNode())
-        );
+        // the tool pane for tool bars
+        toolPane = new ToolPane(app.getWindow(), controller);
+        app.getWindow().nodes.main.prepend(toolPane.getNode());
 
         // create the tool bar
         toolPane.createToolBar('pages')
@@ -63,16 +78,17 @@ define('io.ox/office/preview/view',
             .addButton('pages/last',     { icon: 'icon-fast-forward' });
 
         // listen to browser window resize events when the OX window is visible
-        Utils.registerWindowResizeHandler(appWindow, windowResizeHandler);
+        app.registerWindowResizeHandler(windowResizeHandler);
 
         // update all view components every time the window will be shown
-        appWindow.on('show', function () { controller.update(); });
+        app.getWindow().on('show', function () { controller.update(); });
 
 
     } // class PreviewView
 
     // exports ================================================================
 
-    return PreviewView;
+    // derive this class from class View
+    return View.extend({ constructor: PreviewView });
 
 });

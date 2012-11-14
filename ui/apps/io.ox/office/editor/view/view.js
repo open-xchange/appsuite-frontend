@@ -15,13 +15,14 @@ define('io.ox/office/editor/view/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/config',
      'io.ox/office/tk/fonts',
+     'io.ox/office/tk/view',
      'io.ox/office/tk/control/textfield',
      'io.ox/office/tk/control/radiogroup',
      'io.ox/office/tk/component/toolpane',
      'io.ox/office/editor/view/controls',
      'io.ox/office/editor/format/lineheight',
      'gettext!io.ox/office/main'
-    ], function (Utils, Config, Fonts, TextField, RadioGroup, ToolPane, Controls, LineHeight, gt) {
+    ], function (Utils, Config, Fonts, View, TextField, RadioGroup, ToolPane, Controls, LineHeight, gt) {
 
     'use strict';
 
@@ -30,13 +31,24 @@ define('io.ox/office/editor/view/view',
 
     // class EditorView =======================================================
 
-    function EditorView(appWindow, editor, controller) {
+    /**
+     * @constructor
+     *
+     * @extends View
+     */
+    function EditorView(app) {
 
-        var // all nodes of the application window
-            nodes = appWindow.nodes,
+        var // the editor model
+            editor = app.getModel(),
+
+            // the application controller
+            controller = app.getController(),
 
             // tool pane containing all tool bars
-            toolPane = new ToolPane(appWindow, controller),
+            toolPane = null,
+
+            // bottom debug pane
+            debugPane = null,
 
             // old value of the search query field
             oldSearchQuery = '',
@@ -158,10 +170,18 @@ define('io.ox/office/editor/view/view',
             if (selEndCell) { selEndCell.text(selection.getEndPosition()); }
         }
 
+        // base constructor ---------------------------------------------------
+
+        View.call(this, app);
+
         // methods ------------------------------------------------------------
 
         this.getToolPane = function () {
             return toolPane;
+        };
+
+        this.getDebugPane = function () {
+            return debugPane;
         };
 
         /**
@@ -193,11 +213,9 @@ define('io.ox/office/editor/view/view',
 
         // initialization -----------------------------------------------------
 
-        // create all panes
-        nodes.main.addClass('io-ox-office-main').append(
-            nodes.toolPane = toolPane.getNode(),
-            nodes.appPane = $('<div>').addClass('io-ox-pane apppane').append(editor.getNode())
-        );
+        // the tool pane for tool bars
+        toolPane = new ToolPane(app.getWindow(), controller);
+        app.getWindow().nodes.main.prepend(toolPane.getNode());
 
         // create the tool bars
 /*
@@ -277,7 +295,7 @@ define('io.ox/office/editor/view/view',
                 $('<tr>').append($('<td>').text('end'), selEndCell = $('<td>'))
             );
 
-            nodes.debugPane = $('<div>').addClass('io-ox-pane bottom debug user-select-text').append(
+            debugPane = $('<div>').addClass('io-ox-pane bottom debug user-select-text').append(
                 $('<table>').append(
                     $('<colgroup>').append($('<col>', { width: '70%' })),
                     $('<tr>').append(
@@ -285,7 +303,7 @@ define('io.ox/office/editor/view/view',
                         $('<td>').append($('<div>').append(infoNode))
                     )
                 )
-            ).appendTo(nodes.main);
+            ).appendTo(app.getWindow().nodes.main);
 
             editor.on('operation', function (event, operation) { logOperation(operation); })
                 .on('selection', function (event, selection) { logSelection(selection); });
@@ -329,26 +347,26 @@ define('io.ox/office/editor/view/view',
             .addLabel('file/connection/state', { css: { minWidth: 115 } });
 
         // add 'rename document' functionality to title field
-        nodes.title.addClass('io-ox-office-title').click(renameDocumentHandler);
-        Utils.setControlTooltip(nodes.title, gt('Rename Document'), 'bottom');
+        app.getWindow().nodes.title.addClass('io-ox-office-title').click(renameDocumentHandler);
+        Utils.setControlTooltip(app.getWindow().nodes.title, gt('Rename Document'), 'bottom');
 
         // override the limited functionality of the quick-search text field
-        nodes.search
+        app.getWindow().nodes.search
             .off('keydown search change')
             .on('input keydown keypress keyup focus', searchKeyHandler)
             .data('tooltip', null); // remove old tooltip
 
         // set the quick-search tooltip
-        Utils.setControlTooltip(nodes.search, gt('Quick Search'), 'bottom');
-
+        Utils.setControlTooltip(app.getWindow().nodes.search, gt('Quick Search'), 'bottom');
 
         // update all view components every time the window will be shown
-        appWindow.on('show', function () { controller.update(); });
+        app.getWindow().on('show', function () { controller.update(); });
 
     } // class EditorView
 
     // exports ================================================================
 
-    return EditorView;
+    // derive this class from class View
+    return View.extend({ constructor: EditorView });
 
 });

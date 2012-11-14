@@ -62,7 +62,7 @@ define('io.ox/office/editor/actions',
     new links.ActionGroup(POINT + '/links/toolbar', {
         id: 'download',
         index: 200,
-        icon: function () { return Utils.createIcon('icon-download'); }
+        icon: function () { return Utils.createIcon('icon-download-alt'); }
     });
 
     new links.ActionLink(POINT + '/links/toolbar/download', {

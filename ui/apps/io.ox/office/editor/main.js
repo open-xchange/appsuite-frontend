@@ -74,17 +74,14 @@ define('io.ox/office/editor/main',
         var // self reference
             self = this,
 
-            // application window
-            win = null,
-
             // the editor model
             editor = null,
 
-            // editor view, contains panes, tool bars, etc.
-            view = null,
-
             // controller as single connection point between editor and view elements
             controller = null,
+
+            // editor view, contains panes, tool bars, etc.
+            view = null,
 
             // buffer for user operations
             operationsBuffer = [],
@@ -148,7 +145,7 @@ define('io.ox/office/editor/main',
          *  The title of the error message. Defaults to 'Error'.
          */
         function showError(message, title) {
-            Alert.showError(title || gt('Error'), message, true, win.nodes.appPane, controller, -1);
+            Alert.showError(title || gt('Error'), message, true, view.getApplicationPane(), controller, -1);
         }
 
         /**
@@ -183,7 +180,7 @@ define('io.ox/office/editor/main',
                 displayName = (extensionPos !== -1 && extensionPos > 0) ? filename.substring(0, extensionPos) : filename;
 
             self.setTitle(displayName);
-            win.setTitle(displayName);
+            self.getWindow().setTitle(displayName);
         }
 
         /**
@@ -193,7 +190,7 @@ define('io.ox/office/editor/main',
             var debugavailable = Config.isDebugAvailable();
             if (debugavailable) {
                 editor.getNode().toggleClass('debug-highlight', debugMode);
-                win.nodes.debugPane.toggle(debugMode);
+                view.getDebugPane().toggle(debugMode);
                 controller.update('debug/toggle');
                 // resize editor pane
                 windowResizeHandler();
@@ -259,13 +256,13 @@ define('io.ox/office/editor/main',
 
             var // initialize the deferred to be returned
                 def = $.Deferred().always(function () {
-                    win.idle();
+                    self.getWindow().idle();
                     editor.grabFocus(true);
                 });
 
             // show application window
-            win.show(function () {
-                win.busy();
+            self.getWindow().show(function () {
+                self.getWindow().busy();
                 $(window).resize();
                 updateTitles();
 
@@ -319,7 +316,7 @@ define('io.ox/office/editor/main',
 
             var // initialize the deferred to be returned
                 def = $.Deferred().always(function () {
-                    win.idle();
+                    self.getWindow().idle();
                     editor.grabFocus();
                 });
 
@@ -328,7 +325,7 @@ define('io.ox/office/editor/main',
                 return def.reject();
             }
 
-            win.busy();
+            self.getWindow().busy();
 
             synchronizeOperations()
             .done(function () {
@@ -367,7 +364,7 @@ define('io.ox/office/editor/main',
 
             // the deferred to be returned
             var def = $.Deferred().always(function () {
-                win.idle();
+                self.getWindow().idle();
                 editor.grabFocus();
             });
 
@@ -376,7 +373,7 @@ define('io.ox/office/editor/main',
                 return def.reject();
             }
 
-            win.busy();
+            self.getWindow().busy();
 
             synchronizeOperations()
             .done(function () {
@@ -450,7 +447,7 @@ define('io.ox/office/editor/main',
                     var readOnlyMode = response && response.status === 0 && response.readyState === 0;
                     if (readOnlyMode && editor.isEditMode()) {
                         controller.setEditMode(false);
-                        Alert.showWarning(gt('Network Problems'), gt('Switched to read only mode.'), true, win.nodes.appPane, controller, 10000);
+                        Alert.showWarning(gt('Network Problems'), gt('Switched to read only mode.'), true, view.getApplicationPane(), controller, 10000);
                     }
                 });
 
@@ -581,8 +578,9 @@ define('io.ox/office/editor/main',
          * view port size.
          */
         function windowResizeHandler() {
-            var debugHeight = debugMode ? win.nodes.debugPane.outerHeight() : 0;
-            win.nodes.appPane.height(window.innerHeight - win.nodes.appPane.offset().top - debugHeight);
+            var appPane = view.getApplicationPane(),
+                debugHeight = debugMode ? view.getDebugPane().outerHeight() : 0;
+            appPane.height(window.innerHeight - appPane.offset().top - debugHeight);
         }
 
         /**
@@ -596,27 +594,23 @@ define('io.ox/office/editor/main',
                 // deferred returned to caller
                 def = $.Deferred();
 
-            // create the application window
-            win = ox.ui.createWindow({ name: self.getName() });
-            self.setWindow(win);
+            // create the editor model
+            editor = new EditorModel(self);
+
+            // create the controller
+            controller = new EditorController(self);
+
+            // create the view (creates application window)
+            view = new EditorView(self);
+            updateDebugMode();
 
             // do not detach when hiding for several reasons:
             // - keep editor selection alive
             // - prevent resize handles for tables and objects (re-enabled after detach/insert)
-            win.detachable = false;
-
-            // create the editor model
-            editor = new EditorModel(self);
-
-            // create controller
-            controller = new EditorController(self);
-
-            // editor view
-            view = new EditorView(win, editor, controller);
-            updateDebugMode();
+            self.getWindow().detachable = false;
 
             // register window event handlers
-            Utils.registerWindowResizeHandler(win, windowResizeHandler);
+            self.registerWindowResizeHandler(windowResizeHandler);
 
             // cache operations from editor
             editor.on('operation', function (event, operation) {
@@ -671,11 +665,11 @@ define('io.ox/office/editor/main',
                 // the deferred returned to the framework
                 def = $.Deferred();
 
-            win.busy();
+            self.getWindow().busy();
 
             def.fail(function () {
                 // back to living application
-                win.idle();
+                self.getWindow().idle();
                 startOperationsTimer(0);
             });
 
@@ -720,7 +714,7 @@ define('io.ox/office/editor/main',
          * @returns {EditorModel}
          *  The document model of this editor application.
          */
-        this.getEditor = function () {
+        this.getEditor = this.getModel = function () {
             return editor;
         };
 
@@ -754,8 +748,8 @@ define('io.ox/office/editor/main',
         this.show = function () {
             var def = $.Deferred();
 
-            if (win && editor) {
-                win.show(function () {
+            if (self.getWindow() && editor) {
+                self.getWindow().show(function () {
                     updateTitles();
                     editor.grabFocus();
                     def.resolve();
@@ -934,9 +928,9 @@ define('io.ox/office/editor/main',
                 operationsTimer = null;
             }
             controller.destroy();
-            view.destroy();
             editor.destroy();
-            win = editor = view = controller = null;
+            view.destroy();
+            editor = controller = view = null;
         };
 
         // initialization -----------------------------------------------------

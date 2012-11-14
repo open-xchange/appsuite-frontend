@@ -191,12 +191,13 @@ div.io-ox-pane {
         .vertical-gradient(@pane-accented-fill-color, @pane-fill-color);
     }
 
-    &.apppane {
+    &.center {
         margin: 0;
         padding: 0;
         background-color: @pane-fill-color;
         .overflow(auto);
 
+        /* generic design of a 'page': white background with dark box shadow */
         div.page {
             position: relative;
             margin: 30px auto;
@@ -217,7 +218,9 @@ div.io-ox-view-component {
     /* disabled style for any element marked with the 'disabled' class */
     .disabled {
         .opacity(0.5);
-        cursor: default;
+        
+        /* override mouse pointer for any embedded elements */
+        &, * { cursor: default !important; }
     }
 
     /* groups (container elements for controls) ---------------------------- */
@@ -229,13 +232,6 @@ div.io-ox-view-component {
         /* hidden groups ('important' to overrule display modes from other rules) */
         &.hidden {
             display: none !important;
-        }
-
-        /* reset mouse pointer for controls embedded in a disabled group */
-        &.disabled {
-            label, button, input {
-                cursor: default !important;
-            }
         }
 
         /* common controls ------------------------------------------------- */

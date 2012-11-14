@@ -3343,7 +3343,7 @@ define('io.ox/office/editor/editor',
                 verticalResize = false,
                 horizontalResize = false,
                 // the window, to which the resize line will be appended temporarely
-                officemaindiv = editdiv.closest('div.io-ox-office-main'),
+                officemaindiv = app.getWindow().nodes.main,
                 // the container element used to visualize the resizing
                 resizeLine = $('<div>').addClass('resizeline'),
                 // the distance from body element to 'officemaindiv' in pixel

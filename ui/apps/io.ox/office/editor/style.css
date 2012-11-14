@@ -42,9 +42,7 @@
     }
 }
 
-.io-ox-office-main {
-    margin: 0;
-    padding: 0;
+.io-ox-office-editor-main {
 
     div.page {
         .box-sizing(border-box);
