@@ -427,9 +427,9 @@ define('io.ox/office/editor/format/drawingstyles',
         if (type === 'image') {
 
             var // horizontal offset/size of the bitmap, as CSS attributes
-                horizontalSettings = calculateBitmapSettings(drawingWidth, attributes.cropl, attributes.cropr),
+                horizontalSettings = null,
                 // vertical offset/size of the bitmap, as CSS attributes
-                verticalSettings = calculateBitmapSettings(drawingHeight, attributes.cropt, attributes.cropb),
+                verticalSettings = null,
                 // the image node inside the drawing node
                 imageNode = contentNode.find('img'),
                 // the source data or url for the image
@@ -442,7 +442,10 @@ define('io.ox/office/editor/format/drawingstyles',
                 contentNode.append(imageNode);
             }
 
-            if ((horizontalSettings.size !== '0px') && (verticalSettings.size !== '0px')) {
+            if (drawingWidth !== 0) {
+                horizontalSettings = calculateBitmapSettings(drawingWidth, attributes.cropl, attributes.cropr);
+                verticalSettings = calculateBitmapSettings(drawingHeight, attributes.cropt, attributes.cropb);
+
                 // set CSS formatting at the <img> element
                 imageNode.css({
                     left: horizontalSettings.offset,
