@@ -442,7 +442,7 @@ define('io.ox/office/editor/format/drawingstyles',
                 contentNode.append(imageNode);
             }
 
-            if ((horizontalSettings.size > 0) && (verticalSettings.size > 0)) {
+            if ((horizontalSettings.size !== '0px') && (verticalSettings.size !== '0px')) {
                 // set CSS formatting at the <img> element
                 imageNode.css({
                     left: horizontalSettings.offset,
