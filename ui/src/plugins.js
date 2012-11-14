@@ -195,27 +195,17 @@
          * @returns A promise which gets fulfilled when the theme finishes
          * loading. Please ignore the value of the promise.
          */
-        set: function (name, customTheme) {
-            var list;
-            if (name) {
-                list = ["text!themes/" + name + "/definitions.less", "text!themes/" + name + "/style.less", "text!themes/" + name + "/style.css"];
-            } else {
-                list = ["text!themes/default/definitions.less", "text!themes/style.less"];
-                name = 'default';
-            }
-            return require(list)
-                .pipe(function(theme, less, css) {
-                    var path = ox.base + "/apps/themes/" + name + "/";
-                    css = css || "";
-                    if (themeCSS) {
-                        themeCSS.text(relativeCSS(path, css));
-                    } else {
-                        themeCSS = insert(path + "static.css", css, "script");
-                    }
+        set: function (name) {
+            return require(['text!themes/definitions.less',
+                            'text!themes/' + name + '/definitions.less',
+                            'text!themes/style.less',
+                            'text!themes/' + name + '/style.less'])
+                .pipe(function (def1, def2, style1, style2) {
+                    var path = ox.base + '/apps/themes/' + name + '/';
                     themeLess.path = path;
-                    themeLess.name = path + "dynamic.less";
-                    themeLess.source = less;
-                    return setTheme(customTheme || theme);
+                    themeLess.name = path + 'dynamic.less';
+                    themeLess.source = style1 + (style2 || '');
+                    return setTheme(def1 + (def2 || ''));
                 });
         },
         /**
@@ -233,8 +223,7 @@
          * loading. Please ignore the value of the promise.
          */
         alter: function (definitions) {
-            return this.set(
-                    '',
+            return setTheme(
                     currentTheme.replace(/^\s*@([\w-]+)\s*:.*$/gm,
                         function (match, name) {
                             return name in definitions ?
