@@ -145,7 +145,7 @@ define('io.ox/calendar/week/perspective',
                 .on('openCreateAppointment', this.openCreateAppointment, this)
                 .on('openEditAppointment', this.openEditAppointment, this)
                 .on('updateAppointment', this.updateAppointment, this)
-                .on('onRefreshView', this.refresh, this);
+                .on('onRefresh', this.refresh, this);
 
             this.main.append(this.view.render().el);
 

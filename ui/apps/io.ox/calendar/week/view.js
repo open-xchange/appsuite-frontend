@@ -68,6 +68,7 @@ define('io.ox/calendar/week/view',
             this.bindKeys();
         },
 
+        // set or get week reference start date
         setStartDate: function (opt) {
             if (opt && typeof opt === 'string') {
                 switch (opt) {
@@ -101,6 +102,7 @@ define('io.ox/calendar/week/view',
             }
         },
 
+        // setup setting params
         initSettings: function () {
             // init settings
             this.gridSize = 60 / settings.get('interval') | this.gridSize;
@@ -128,12 +130,22 @@ define('io.ox/calendar/week/view',
             if (!this.lasso) {
                 var cid = _.cid($(e.currentTarget).data('cid') + ''),
                     el = $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]', this.$el);
-                el[e.type === 'mouseenter' ? 'addClass' : 'removeClass']('hover');
+                switch (e.type) {
+                case 'mouseenter':
+                    el.addClass('hover');
+                    break;
+                case 'mouseleave':
+                    el.removeClass('hover');
+                    break;
+                default:
+                    break;
+                }
             }
         },
 
         // handler for clickevents in toolbar
         onControlView: function (e) {
+            console.log(e, 'click', this.columns);
             e.preventDefault();
             var cT = $(e.currentTarget),
                 t = $(e.target);
@@ -146,20 +158,20 @@ define('io.ox/calendar/week/view',
             if (cT.hasClass('today')) {
                 this.setStartDate();
             }
-            this.trigger('onRefreshView');
+            this.trigger('onRefresh');
         },
 
-        // hadler for key events in toolbar
+        // handler for key events in view
         onKey: function (e) {
             e.preventDefault();
             switch (e.which) {
             case 37:
                 this.setStartDate('prev');
-                this.trigger('onRefreshView');
+                this.trigger('onRefresh');
                 break;
             case 39:
                 this.setStartDate('next');
-                this.trigger('onRefreshView');
+                this.trigger('onRefresh');
                 break;
             default:
                 break;
@@ -176,24 +188,26 @@ define('io.ox/calendar/week/view',
 
         // handler for single- and double-click events on appointments
         onClickAppointment: function (e) {
-            if ($(e.currentTarget).hasClass('appointment') && !this.lasso) {
-                var cid = $(e.currentTarget).data('cid'),
-                    obj = _.cid(cid + ''),
-                    self = this;
-                cid = obj.folder_id + '.' + obj.id;
-                self.trigger('showAppointment', e, obj);
+            var cT = $(e.currentTarget);
+            if (cT.hasClass('appointment') && !this.lasso) {
+                var self = this,
+                    obj = _.cid($(e.currentTarget).data('cid') + '');
+                if (!cT.hasClass('current')) {
+                    self.trigger('showAppointment', e, obj);
+                    self.$el.find('.appointment')
+                        .removeClass('current opac')
+                        .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el))
+                        .addClass('opac');
+                    $('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el).addClass('current');
+                } else {
+                    $('.appointment', self.$el).removeClass('opac');
+                }
 
                 if (self.clickTimer === null && self.clicks === 0) {
                     self.clickTimer = setTimeout(function () {
                         clearTimeout(self.clickTimer);
                         self.clicks = 0;
                         self.clickTimer = null;
-
-                        self.$el.find('.appointment')
-                            .removeClass('current opac')
-                            .not($('[data-cid^="' + cid + '"]'))
-                            .addClass('opac');
-                        $('[data-cid^="' + cid + '"]:visible').addClass('current');
                     }, 300);
                 }
                 self.clicks++;
@@ -880,7 +894,6 @@ define('io.ox/calendar/week/view',
                     grid: [colWidth, self.gridHeight()],
                     scroll: true,
                     start: function (e, ui) {
-                        self.onEnterAppointment(e);
                         // write all appointment divs to draggable object
                         var d = $(this).data('draggable');
                         d.my = {};
@@ -1000,7 +1013,7 @@ define('io.ox/calendar/week/view',
                             d.my.all.busy();
                             self.onUpdateAppointment(app);
                         } else {
-                            self.trigger('onRefreshView');
+                            self.trigger('onRefresh');
                         }
                         d.my = null;
                     }
@@ -1031,7 +1044,7 @@ define('io.ox/calendar/week/view',
                             });
                             self.onUpdateAppointment(app);
                         } else {
-                            self.trigger('onRefreshView');
+                            self.trigger('onRefresh');
                         }
                     }
                 })
