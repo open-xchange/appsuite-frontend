@@ -75,7 +75,8 @@ define('io.ox/office/preview/view',
             .addButton('pages/previous', { icon: 'icon-chevron-left' })
             .addLabel('pages/current',   { width: 100 })
             .addButton('pages/next',     { icon: 'icon-chevron-right' })
-            .addButton('pages/last',     { icon: 'icon-fast-forward' });
+            .addButton('pages/last',     { icon: 'icon-fast-forward' })
+            .getNode().css('text-align', 'center');
 
         // listen to browser window resize events when the OX window is visible
         app.registerWindowResizeHandler(windowResizeHandler);
