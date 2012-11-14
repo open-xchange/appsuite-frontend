@@ -4293,6 +4293,8 @@ define('io.ox/office/editor/editor',
                     }
                 });
                 storage.paragraphs = $();
+                // paragraph validation changes the DOM, restore selection
+                selection.restoreBrowserSelection();
             },
 
             // storage object passed to all callbacks
