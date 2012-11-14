@@ -190,6 +190,7 @@ div.io-ox-pane {
     &.toolpane {
         padding: 0 13px;
         .vertical-gradient(@pane-accented-fill-color, @pane-fill-color);
+        position: relative;
     }
 
     &.center {
@@ -650,17 +651,27 @@ div.io-ox-view-component {
 
 .alert.io-ox-office-alert {
     position: absolute;
+    left: 0;
+    padding: 4px 13px;
     z-index: 100;
     width: 100%;
+    height: 100%;
     .box-sizing(border-box);
-
-    button {
-        float: right;
+    h4{
+		float: left;
+	}
+	p{
+		float: left;
+		position: relative;
+        right: -10px;
+	}
+	button {
+        float: left;
         position: relative;
         right: -21px;
     }
+    
 }
-
 
 /* Clipboard DIV============================================================ */
 

@@ -1887,13 +1887,13 @@ define('io.ox/office/editor/editor',
                 Alert.showWarning(gt('Read Only Mode'),
                         (editUser || gt('Another user')) + gt(' is currently editing this document.'),
                         false,
-                        editdiv.parent(),
+                        app.getView().getToolPane().getNode(),
                         app.getController(),
                         -1,
                         {label: gt('Acquire Edit Rights'), key: 'file/editrights'}
                     );
             } else if (showEditModeInfo) {
-                Alert.showSuccess(gt('Edit Mode'), gt('You have edit rights.'), true, editdiv.parent(), app.getController(), 5000);
+                Alert.showSuccess(gt('Edit Mode'), gt('You have edit rights.'), true,  app.getView().getToolPane().getNode(), app.getController(), 5000);
             }
         };
 

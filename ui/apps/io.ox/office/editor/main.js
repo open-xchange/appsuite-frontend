@@ -145,7 +145,7 @@ define('io.ox/office/editor/main',
          *  The title of the error message. Defaults to 'Error'.
          */
         function showError(message, title) {
-            Alert.showError(title || gt('Error'), message, true, view.getApplicationPane(), controller, -1);
+            Alert.showError(title || gt('Error'), message, true, view.getToolPane().getNode(), controller, -1);
         }
 
         /**
@@ -415,7 +415,8 @@ define('io.ox/office/editor/main',
                     var readOnlyMode = response && response.status === 0 && response.readyState === 0;
                     if (readOnlyMode && editor.isEditMode()) {
                         controller.setEditMode(false);
-                        Alert.showWarning(gt('Network Problems'), gt('Switched to read only mode.'), true, view.getApplicationPane(), controller, 10000);
+
+                        Alert.showWarning(gt('Network Problems'), gt('Switched to read only mode.'), true, view.getToolPane().getNode(), controller, 10000);
                     }
                 });
 
