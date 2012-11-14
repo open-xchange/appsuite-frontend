@@ -104,41 +104,31 @@ define('io.ox/calendar/week/view',
         initSettings: function () {
             // init settings
             this.gridSize = 60 / settings.get('interval') | this.gridSize;
-            this.workStart = settings.get('starttime3') | this.workStart;
+            this.workStart = settings.get('starttime') | this.workStart;
             this.workEnd = settings.get('endtime') | this.workEnd;
         },
 
         // define view events
         events: {
+            'mouseenter .appointment': 'onHover',
+            'mouseleave .appointment': 'onHover',
             'mousedown .week-container>.day' : 'onLasso',
             'mousemove .week-container>.day' : 'onLasso',
             'mouseup' : 'onLasso',
+            'click .appointment': 'onClickAppointment',
+            'dblclick .week-container,.fulltime>.day' : 'onCreateAppointment',
             'swipeleft .timeslot' : 'onControlView',
             'swiperight .timeslot' : 'onControlView',
-            'click .appointment': 'onClickAppointment',
-            'mouseenter .appointment': 'onEnterAppointment',
-            'mouseleave .appointment': 'onLeaveAppointment',
-            'dblclick .week-container>.day' : 'onCreateAppointment',
-            'dblclick .fulltime>.day': 'onCreateAppointment',
-            'tap .toolbar .control.next': 'onControlView',
-            'tap .toolbar .control.prev': 'onControlView',
-            'tap .toolbar .link.today': 'onControlView',
+            'tap .control.next,.control.prev,.control.today': 'onControlView',
             'change .toolbar .showall input[type="checkbox"]' : 'onControlView'
         },
 
-        // handler for onmouseenter event for hover effect
-        onEnterAppointment: function (e) {
+        // handler for hover effect
+        onHover: function (e) {
             if (!this.lasso) {
-                var cid = _.cid($(e.currentTarget).data('cid') + '');
-                $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').addClass('hover');
-            }
-        },
-
-        // handler for onmouseleave event for hover effect
-        onLeaveAppointment: function (e) {
-            if (!this.lasso) {
-                var cid = _.cid($(e.currentTarget).data('cid') + '');
-                $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').removeClass('hover');
+                var cid = _.cid($(e.currentTarget).data('cid') + ''),
+                    el = $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]', this.$el);
+                el[e.type === 'mouseenter' ? 'addClass' : 'removeClass']('hover');
             }
         },
 
@@ -471,7 +461,7 @@ define('io.ox/calendar/week/view',
                                                 $('<a href="#">').addClass('control prev').append($('<i>').addClass('icon-chevron-left'))
                                             ),
                                         $('<li>').append(
-                                            $('<a href="#">').addClass('link today').text(gt('Today'))
+                                            $('<a href="#">').addClass('control today').text(gt('Today'))
                                         ),
                                         $('<li>')
                                             .append(
