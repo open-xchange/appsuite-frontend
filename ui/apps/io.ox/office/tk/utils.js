@@ -1328,7 +1328,6 @@ define('io.ox/office/tk/utils',
     Utils.enableControls = function (controls, state) {
         var enabled = _.isUndefined(state) || (state === true);
         controls.toggleClass(Utils.DISABLED_CLASS, !enabled);
-        //controls.tooltip(enabled ? 'enable' : 'disable');
         return enabled;
     };
 
@@ -1515,11 +1514,6 @@ define('io.ox/office/tk/utils',
      *  'left', and 'right'.
      */
     Utils.setControlTooltip = function (control, tooltip, placement) {
-//        control.tooltip({
-//            title: tooltip,
-//            placement: placement || 'top',
-//            animation: false
-//        });
         control.attr('title', tooltip || '');
     };
 

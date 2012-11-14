@@ -85,14 +85,6 @@ define('io.ox/office/tk/control/radiogroup',
         }
 
         /**
-         * Handles events after the group has been enabled or disabled. Enables
-         * or disables the Bootstrap tool tips attached to the option buttons.
-         */
-        function enableHandler(event, enabled) {
-            getOptionButtons().tooltip(enabled ? 'enable' : 'disable');
-        }
-
-        /**
          * Activates an option button in this radio group.
          *
          * @param value
@@ -211,8 +203,7 @@ define('io.ox/office/tk/control/radiogroup',
         // initialization -----------------------------------------------------
 
         // register event handlers
-        this.on('enable', enableHandler)
-            .registerUpdateHandler(updateHandler)
+        this.registerUpdateHandler(updateHandler)
             .registerActionHandler(this.hasDropDown ? this.getMenuNode() : this.getNode(), 'click', 'button', clickHandler);
 
     } // class RadioGroup
