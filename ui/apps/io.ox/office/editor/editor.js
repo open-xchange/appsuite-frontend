@@ -1564,19 +1564,17 @@ define('io.ox/office/editor/editor',
         };
 
         this.splitParagraph = function (position) {
-            var newOperation = {name: Operations.PARA_SPLIT, start: _.copy(position, true)};
+            var newOperation = {name: Operations.PARA_SPLIT, start: _.clone(position)};
             applyOperation(newOperation, true, true);
         };
 
         this.mergeParagraph = function (position) {
-            undoManager.enterGroup(function () {
-                var newOperation = {name: Operations.PARA_MERGE, start: _.copy(position)};
-                applyOperation(newOperation, true, true);
-            }, this);
+            var newOperation = {name: Operations.PARA_MERGE, start: _.clone(position)};
+            applyOperation(newOperation, true, true);
         };
 
         this.insertText = function (text, position) {
-            var newOperation = { name: Operations.TEXT_INSERT, text: text, start: _.copy(position, true) };
+            var newOperation = { name: Operations.TEXT_INSERT, text: text, start: _.clone(position) };
             applyOperation(newOperation, true, true);
         };
 
@@ -3002,12 +3000,12 @@ define('io.ox/office/editor/editor',
             implDeleteList(operation.listname);
         };
         operationHandlers[Operations.ATTRS_SET] = function (operation) {
-            // undo/redo is done inside implSetAttributes()
+            // undo/redo generation is done inside implSetAttributes()
             implSetAttributes(operation.start, operation.end, operation.attrs);
         };
 
         operationHandlers[Operations.ATTRS_CLEAR] = function (operation) {
-            // undo/redo is done inside implSetAttributes()
+            // undo/redo generation is done inside implSetAttributes()
             implSetAttributes(operation.start, operation.end, null);
         };
 
@@ -3227,15 +3225,55 @@ define('io.ox/office/editor/editor',
         };
 
         operationHandlers[Operations.PARA_MERGE] = function (operation) {
-            if (undoManager.isEnabled()) {
-                var sel = _.clone(operation.start),
-                    paraLen = Position.getParagraphLength(editdiv, sel);
 
-                sel.push(paraLen);
-                var undoOperation = { name: Operations.PARA_SPLIT, start: sel };
-                undoManager.addUndo(undoOperation, operation);
+            var // the paragraph that will be merged with its next sibling
+                paragraphInfo = Position.getDOMPosition(editdiv, operation.start, true),
+                // current and next paragraph, as jQuery objects
+                thisParagraph = null, nextParagraph = null,
+                // text position at end of current paragraph, logical position of next paragraph
+                paraEndPosition = null, nextParaPosition = null,
+                // the undo/redo operations
+                generator = undoManager.isEnabled() ? new Operations.Generator() : null;
+
+            // get current paragraph
+            if (!paragraphInfo || !DOM.isParagraphNode(paragraphInfo.node)) {
+                Utils.warn('Editor.mergeParagraph(): no paragraph found at position ' + JSON.stringify(operation.start));
+                return;
             }
-            implMergeParagraph(operation.start);
+            thisParagraph = $(paragraphInfo.node);
+            paraEndPosition = Position.appendNewIndex(operation.start, Position.getParagraphLength(editdiv, operation.start));
+
+            // get next paragraph
+            nextParagraph = thisParagraph.next();
+            if (!DOM.isParagraphNode(nextParagraph)) {
+                Utils.warn('Editor.mergeParagraph(): no paragraph found after position ' + JSON.stringify(operation.start));
+                return;
+            }
+            nextParaPosition = Position.increaseLastIndex(operation.start, 1);
+
+            // generate undo/redo operations
+            if (generator) {
+                generator.generateOperation(Operations.PARA_SPLIT, { start: paraEndPosition });
+                generator.generateOperation(Operations.ATTRS_CLEAR, { start: nextParaPosition });
+                generator.generateSetAttributesOperation(nextParagraph, nextParaPosition);
+                undoManager.addUndo(generator.getOperations(), operation);
+            }
+
+            // remove dummy text node from current paragraph
+            if (DOM.isDummyTextNode(thisParagraph[0].lastChild)) {
+                $(thisParagraph[0].lastChild).remove();
+            }
+
+            // append all children of the next paragraph to the current paragraph, delete the next paragraph
+            thisParagraph.append(nextParagraph.children());
+            nextParagraph.remove();
+
+            // refresh DOM
+            implParagraphChanged(operation.start);
+            implUpdateLists();
+
+            // new cursor position at merge position
+            lastOperationEnd = _.clone(paraEndPosition);
         };
 
         /**
@@ -4486,10 +4524,17 @@ define('io.ox/office/editor/editor',
         /**
          * Inserts the passed content node at the specified logical position.
          *
+         * @param {Number[]} position
+         *  The logical position of the new content node.
+         *
+         * @param {HTMLElement|jQuery} node
+         *  The new content node. If this object is a jQuery collection, uses
+         *  the first node it contains.
+         *
          * @returns {Boolean}
          *  Whether the content node has been inserted successfully.
          */
-        function implInsertContentNode(position, node) {
+        function insertContentNode(position, node) {
 
             var // target index of the new node
                 index = _.last(position),
@@ -4502,17 +4547,17 @@ define('io.ox/office/editor/editor',
 
             // check that parent container node exists
             if (!containerInfo || !containerInfo.node) {
-                Utils.warn('Editor.implInsertContentNode(): cannot find container node for new content node');
+                Utils.warn('Editor.insertContentNode(): cannot find container root node');
                 return false;
             }
 
             // resolve component node to the correct node that contains the
-            // next-level child elements (e.g. resolve table cell elements to
-            // the embedded div.cellcontent elements, or drawing elements to
-            // the embedded div.content elements)
+            // child content nodes (e.g. resolve table cell elements to the
+            // embedded div.cellcontent elements, or drawing elements to the
+            // embedded div.content elements)
             containerNode = DOM.getChildContainerNode(containerInfo.node)[0];
             if (!containerNode) {
-                Utils.warn('Editor.implInsertContentNode(): cannot find container node for new content node');
+                Utils.warn('Editor.insertContentNode(): cannot find content node for container');
                 return false;
             }
 
@@ -4524,15 +4569,15 @@ define('io.ox/office/editor/editor',
 
             // check that the index is valid
             if ((index < 0) || (index > containerNode.childNodes.length)) {
-                Utils.warn('Editor.implInsertContentNode(): invalid insertion index for new content node');
+                Utils.warn('Editor.insertContentNode(): invalid insertion index for new content node');
                 return false;
             }
 
             // insert the content node into the DOM tree
             if (index < containerNode.childNodes.length) {
-                node.insertBefore(containerNode.childNodes[index]);
+                $(node).first().insertBefore(containerNode.childNodes[index]);
             } else {
-                node.appendTo(containerNode);
+                $(node).first().appendTo(containerNode);
             }
 
             return true;
@@ -4552,7 +4597,7 @@ define('io.ox/office/editor/editor',
             var // the new paragraph
                 paragraph = DOM.createParagraphNode(),
                 // insert the paragraph into the DOM tree
-                inserted = implInsertContentNode(position, paragraph);
+                inserted = insertContentNode(position, paragraph);
 
             if (inserted) {
                 validateParagraphNode(paragraph);
@@ -4580,7 +4625,7 @@ define('io.ox/office/editor/editor',
             var // the new table
                 table = $('<table>').append($('<colgroup>')),
                 // insert the table into the DOM tree
-                inserted = implInsertContentNode(position, table);
+                inserted = insertContentNode(position, table);
 
             if (inserted) {
                 // apply the passed table attributes
@@ -4638,62 +4683,6 @@ define('io.ox/office/editor/editor',
             validateParagraphNode(paraclone);
             lastOperationEnd = startPosition;
 
-            implUpdateLists();
-        }
-
-        function implMergeParagraph(position) {
-
-            var posLength = position.length - 1,
-                para = position[posLength];
-
-            position.push(0); // adding pos to position temporarely
-
-            var allParagraphs = Position.getAllAdjacentParagraphs(editdiv, position);
-
-            position.pop();
-
-            if (para < (allParagraphs.size() - 1)) {
-
-                var thisPara = allParagraphs[para];
-                var nextPara = allParagraphs[para + 1];
-
-                // Only merging, if both nodes are paragraph nodes. Tables cannot be merged this way, and
-                // paragraphs and 'table' cannot be merged either.
-                if ((DOM.isParagraphNode(thisPara)) && (DOM.isParagraphNode(nextPara))) {
-
-                    var oldParaLen = 0;
-                    oldParaLen = Position.getParagraphLength(editdiv, position);
-
-                    var lastCurrentChild = thisPara.lastChild;
-                    if (lastCurrentChild && DOM.isDummyTextNode(lastCurrentChild)) {
-                        $(lastCurrentChild).remove();
-                    }
-
-                    var child = nextPara.firstChild;
-
-                    while (child !== null) {
-                        var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
-
-                        if ((child.nodeType === 3) && (thisPara.lastChild !== null) && (thisPara.lastChild.nodeType === 3)) {
-                            thisPara.lastChild.nodeValue += child.nodeValue;
-                        } else {
-                            thisPara.appendChild(child);
-                        }
-
-                        child = nextChild;
-                    }
-
-                    var localPosition = _.copy(position, true);
-                    localPosition[posLength] += 1;  // posLength is 0 for non-tables
-
-                    implDeleteParagraph(localPosition);
-
-                    lastOperationEnd = _.clone(position);
-                    lastOperationEnd.push(oldParaLen);
-
-                    implParagraphChanged(position);
-                }
-            }
             implUpdateLists();
         }
 

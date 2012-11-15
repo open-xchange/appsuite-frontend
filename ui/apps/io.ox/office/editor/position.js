@@ -25,6 +25,47 @@ define('io.ox/office/editor/position',
     // static methods ---------------------------------------------------------
 
     /**
+     * Creates a clone of the passed logical position and appends the specified
+     * index. The passed array object will not be changed.
+     *
+     * @param {Number[]} position
+     *  The initial logical position.
+     *
+     * @param {Number} [index=0]
+     *  The value that will be appended to the new position.
+     *
+     * @returns {Number[]}
+     *  A clone of the passed logical position, with the specified start value
+     *  appended.
+     */
+    Position.appendNewIndex = function (position, index) {
+        position = _.clone(position);
+        position.push(_.isNumber(index) ? index : 0);
+        return position;
+    };
+
+    /**
+     * Creates a clone of the passed logical position and increases the last
+     * element of the array by the specified value. The passed array object
+     * will not be changed.
+     *
+     * @param {Number[]} position
+     *  The initial logical position.
+     *
+     * @param {Number} [increment=1]
+     *  The value that will be added to the last element of the position.
+     *
+     * @returns {Number[]}
+     *  A clone of the passed logical position, with the last element
+     *  increased.
+     */
+    Position.increaseLastIndex = function (position, increment) {
+        position = _.clone(position);
+        position[position.length - 1] += (_.isNumber(increment) ? increment : 1);
+        return position;
+    };
+
+    /**
      * This function calculates the logical position from dom positions.
      * Receiving a dom position consisting of a dom node and optionally
      * an offset, it calculates the logical position (oxoPosition) that

@@ -46,17 +46,17 @@ define('io.ox/office/editor/view/view',
             // the application controller
             controller = app.getController(),
 
+            // old value of the search query field
+            oldSearchQuery = '',
+
             // tool pane containing all tool bars
             toolPane = null,
 
             // bottom debug pane
             debugPane = null,
 
-            // old value of the search query field
-            oldSearchQuery = '',
-
             // debug output elements
-            opsNode = null, infoNode = null, syncCell = null, selTypeCell = null, selStartCell = null, selEndCell = null;
+            debugNodes = null;
 
         // private methods ----------------------------------------------------
 
@@ -186,15 +186,15 @@ define('io.ox/office/editor/view/view',
          */
         function logOperation(operation) {
             var name = operation.name;
-            if (opsNode) {
+            if (debugNodes) {
                 operation = _.clone(operation);
                 delete operation.name;
                 operation = JSON.stringify(operation).replace(/^\{(.*)\}$/, '$1');
-                opsNode.append($('<tr>').append(
-                    $('<td>').text(opsNode.find('tr').length + 1),
+                debugNodes.ops.append($('<tr>').append(
+                    $('<td>').text(debugNodes.ops.find('tr').length + 1),
                     $('<td>').text(name),
                     $('<td>').text(operation)));
-                opsNode.parent().scrollTop(opsNode.parent().get(0).scrollHeight);
+                debugNodes.ops.parent().scrollTop(debugNodes.ops.parent().get(0).scrollHeight);
             }
         }
 
@@ -202,9 +202,12 @@ define('io.ox/office/editor/view/view',
          * Logs the passed selection to the info output console.
          */
         function logSelection(selection) {
-            if (selTypeCell) { selTypeCell.text(selection.getSelectionType()); }
-            if (selStartCell) { selStartCell.text(selection.getStartPosition()); }
-            if (selEndCell) { selEndCell.text(selection.getEndPosition()); }
+            if (debugNodes) {
+                debugNodes.selType.text(selection.getSelectionType());
+                debugNodes.selStart.text(selection.getStartPosition().join(', '));
+                debugNodes.selEnd.text(selection.getEndPosition().join(', '));
+                debugNodes.selDir.text(selection.isBackwards() ? 'backwards' : 'forwards');
+            }
         }
 
         // base constructor ---------------------------------------------------
@@ -235,13 +238,15 @@ define('io.ox/office/editor/view/view',
          *  The state of the operations buffer.
          */
         this.logSyncState = function (state) {
-            if (syncCell) { syncCell.text(state); }
+            if (debugNodes) {
+                debugNodes.sync.text(state);
+            }
             return this;
         };
 
         this.destroy = function () {
             toolPane.destroy();
-            toolPane = debugPane = null;
+            toolPane = debugPane = debugNodes = null;
         };
 
         // initialization -----------------------------------------------------
@@ -319,24 +324,26 @@ define('io.ox/office/editor/view/view',
             debugPane = new Pane(app);
             this.addPane('debugpane', debugPane, 'bottom');
 
-            opsNode = $('<table>');
+            debugNodes = {};
+            debugNodes.ops = $('<table>');
 
-            infoNode = $('<table>').css('table-layout', 'fixed').append(
+            debugNodes.info = $('<table>').css('table-layout', 'fixed').append(
                 $('<colgroup>').append($('<col>', { width: '40px' }), $('<col>')),
                 $('<tr>').append($('<th>', { colspan: 2 }).text('Editor')),
-                $('<tr>').append($('<td>').text('state'), syncCell = $('<td>')),
+                $('<tr>').append($('<td>').text('state'), debugNodes.sync = $('<td>')),
                 $('<tr>').append($('<th>', { colspan: 2 }).text('Selection')),
-                $('<tr>').append($('<td>').text('type'), selTypeCell = $('<td>')),
-                $('<tr>').append($('<td>').text('start'), selStartCell = $('<td>')),
-                $('<tr>').append($('<td>').text('end'), selEndCell = $('<td>'))
+                $('<tr>').append($('<td>').text('type'), debugNodes.selType = $('<td>')),
+                $('<tr>').append($('<td>').text('start'), debugNodes.selStart = $('<td>')),
+                $('<tr>').append($('<td>').text('end'), debugNodes.selEnd = $('<td>')),
+                $('<tr>').append($('<td>').text('dir'), debugNodes.selDir = $('<td>'))
             );
 
             debugPane.getNode().addClass('debug user-select-text').append(
                 $('<table>').append(
                     $('<colgroup>').append($('<col>', { width: '70%' })),
                     $('<tr>').append(
-                        $('<td>').append($('<div>').append(opsNode)),
-                        $('<td>').append($('<div>').append(infoNode))
+                        $('<td>').append($('<div>').append(debugNodes.ops)),
+                        $('<td>').append($('<div>').append(debugNodes.info))
                     )
                 )
             ).appendTo(app.getWindow().nodes.main);

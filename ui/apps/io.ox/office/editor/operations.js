@@ -24,49 +24,6 @@ define('io.ox/office/editor/operations',
     var // the exported module (forward declaration to suppress warnings in private functions)
         Operations = null;
 
-    // private global functions ===============================================
-
-    /**
-     * Creates a clone of the passed logical position and appends the specified
-     * index. The passed array object will not be changed.
-     *
-     * @param {Number[]} position
-     *  The initial logical position.
-     *
-     * @param {Number} [index=0]
-     *  The value that will be appended to the new position.
-     *
-     * @returns {Number[]}
-     *  A clone of the passed logical position, with the specified start value
-     *  appended.
-     */
-    function appendNewIndex(position, index) {
-        position = _.clone(position);
-        position.push(_.isNumber(index) ? index : 0);
-        return position;
-    }
-
-    /**
-     * Creates a clone of the passed logical position and increases the last
-     * element of the array by the specified value. The passed array object
-     * will not be changed.
-     *
-     * @param {Number[]} position
-     *  The initial logical position.
-     *
-     * @param {Number} [increment=1]
-     *  The value that will be added to the last element of the position.
-     *
-     * @returns {Number[]}
-     *  A clone of the passed logical position, with the last element
-     *  increased.
-     */
-    function increaseLastIndex(position, increment) {
-        position = _.clone(position);
-        position[position.length - 1] += (_.isNumber(increment) ? increment : 1);
-        return position;
-    }
-
     // static class Operations ================================================
 
     /**
@@ -328,9 +285,9 @@ define('io.ox/office/editor/operations',
                     // logical end index of the covered part of the child node (closed range)
                     endIndex = startIndex + offsetLength - 1,
                     // logical start position of the covered part of the child node
-                    startPosition = appendNewIndex(position, startIndex),
+                    startPosition = Position.appendNewIndex(position, startIndex),
                     // logical end position of the covered part of the child node
-                    endPosition = appendNewIndex(position, endIndex),
+                    endPosition = Position.appendNewIndex(position, endIndex),
                     // text of a portion span
                     text = null,
                     // type of the drawing
@@ -484,10 +441,10 @@ define('io.ox/office/editor/operations',
             this.generateOperationWithAttributes(row, Operations.ROW_INSERT, { position: position, count: 1, insertdefaultcells: false });
 
             // generate operations for all cells
-            position = appendNewIndex(position);
+            position = Position.appendNewIndex(position);
             $(row).children('td').each(function () {
                 self.generateTableCellOperations(this, position);
-                position = increaseLastIndex(position);
+                position = Position.increaseLastIndex(position);
             });
 
             return this;
@@ -513,10 +470,10 @@ define('io.ox/office/editor/operations',
             this.generateOperationWithAttributes(table, Operations.TABLE_INSERT, { position: position });
 
             // generate operations for all rows
-            position = appendNewIndex(position);
+            position = Position.appendNewIndex(position);
             DOM.getTableRows(table).each(function () {
                 self.generateTableRowOperations(this, position);
-                position = increaseLastIndex(position);
+                position = Position.increaseLastIndex(position);
             });
 
             return this;
@@ -548,7 +505,7 @@ define('io.ox/office/editor/operations',
                 initialParagraph = true;
 
             // iterate all child elements of the root node and create operations
-            position = appendNewIndex(position);
+            position = Position.appendNewIndex(position);
             Utils.iterateDescendantNodes(node, function (node) {
 
                 if (DOM.isParagraphNode(node)) {
@@ -565,7 +522,7 @@ define('io.ox/office/editor/operations',
                 }
 
                 // increase last element of the logical position (returns a clone)
-                position = increaseLastIndex(position);
+                position = Position.increaseLastIndex(position);
 
             }, this, { children: true });
 
