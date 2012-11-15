@@ -49,13 +49,6 @@ define('io.ox/office/editor/format/tablerowstyles',
      */
     function updateTableRowFormatting(row, attributes) {
 
-        if (($.browser.webkit) && (attributes.height === 0)) {
-            // Chrome requires that every cell has a defined height. Otherwise the resize-div
-            // will not be shifted to the bottom of the cell, if a neighbour cell increases in
-            // height.
-            attributes.height = Utils.convertLengthToHmm(Utils.convertCssLength($(this).css('height'), 'px', 0));
-        }
-
         if (attributes.height !== 0) {
             if ($.browser.webkit) {
                 // Chrome requires row height at the cells, setting height at <tr> is ignored.
@@ -77,12 +70,10 @@ define('io.ox/office/editor/format/tablerowstyles',
             // required for undo, if the table cell was not set before
             if ($.browser.webkit) {
                 // Chrome requires row height at the cells.
-                row.children('th, td').each(function () {
-                    $(this).css('height', 0);
-                });
+                row.children('th, td').css('height', 0);
             } else {
                 // FireFox requires row height at the rows.
-                row.css('height', 0);
+                row.css('height', '');
             }
         }
 
