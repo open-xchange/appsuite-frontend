@@ -268,7 +268,11 @@ define('io.ox/office/editor/format/drawingstyles',
             // type of the drawing: 'image', ...
             type = drawing.data('type'),
             // the content node inside the drawing
-            contentNode = DOM.getDrawingContentNode(drawing);
+            contentNode = DOM.getDrawingContentNode(drawing),
+            // image data string. if base64 image, string starts with 'data:'
+            base64String = 'data:',
+            // image data string. if svg image, string starts with '<svg'
+            svgString = '<svg';
 
         // position
 
@@ -423,6 +427,16 @@ define('io.ox/office/editor/format/drawingstyles',
             });
         }
 
+        // using replacement data, if available (valid for all drawing types)
+        if (attributes.replacementdata && attributes.replacementdata.length) {
+            if (attributes.replacementdata.indexOf(base64String) === 0) {
+                imageNode = $('<img>', { src: attributes.replacementdata });
+                contentNode.append(imageNode);
+            } else if (attributes.replacementdata.indexOf(svgString) === 0) {
+                contentNode[0].appendChild($(attributes.replacementdata).get(0));  // do not use jQuery for this!
+            }
+        }
+
         // some attributes are specific to the drawing type
         if (type === 'image') {
 
@@ -433,13 +447,32 @@ define('io.ox/office/editor/format/drawingstyles',
                 // the image node inside the drawing node
                 imageNode = contentNode.find('img'),
                 // the source data or url for the image
-                imgSrc = null;
+                imgSrc = null,
+                // an <img> node can be used for urls or image sources starting with 'data:'
+                useImageNode = false,
+                // an <svg> node can be used directly for image sources starting with '<svg'
+                useSvgNode = false;
 
             if (! imageNode.length) {
                 // inserting the image
-                imgSrc = attributes.imgdata && attributes.imgdata.length ? attributes.imgdata : drawing.data('absoluteURL');
-                imageNode = $('<img>', { src: imgSrc });
-                contentNode.append(imageNode);
+                if (attributes.imgdata && attributes.imgdata.length) {
+                    imgSrc = attributes.imgdata;
+                    if (imgSrc.indexOf(base64String) === 0) {
+                        useImageNode = true;
+                    } else if (imgSrc.indexOf(svgString) === 0) {
+                        useSvgNode = true;
+                    }
+                } else {
+                    imgSrc = drawing.data('absoluteURL');
+                    useImageNode = true;
+                }
+
+                if (useImageNode) {
+                    imageNode = $('<img>', { src: imgSrc });
+                    contentNode.append(imageNode);
+                } else if (useSvgNode) {
+                    contentNode[0].appendChild($(imgSrc).get(0));  // do not use jQuery for this!
+                }
             }
 
             if (drawingWidth !== 0) {
