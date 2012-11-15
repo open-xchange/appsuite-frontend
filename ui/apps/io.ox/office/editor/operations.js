@@ -91,7 +91,6 @@ define('io.ox/office/editor/operations',
 
         TABLE_INSERT: 'insertTable',
         TABLE_DELETE: 'deleteTable',
-        CELLRANGE_DELETE: 'deleteCellRange',
         ROWS_DELETE: 'deleteRows',
         COLUMNS_DELETE: 'deleteColumns',
         CELLS_DELETE: 'deleteCells',
@@ -157,6 +156,17 @@ define('io.ox/office/editor/operations',
          */
         this.getOperations = function () {
             return operations;
+        };
+
+        /**
+         * Reverses the entire operations array.
+         *
+         * @returns {Operations.Generator}
+         *  A reference to this instance.
+         */
+        this.reverseOperations = function () {
+            operations.reverse();
+            return this;
         };
 
         /**

@@ -130,6 +130,44 @@ define('io.ox/office/tk/utils',
         return array1.length - array2.length;
     };
 
+    /**
+     * Returns whether specific attributes of the passed objects are equal,
+     * while ignoring all other attributes. If an attribute is missing in both
+     * objects, it is considered to be equal. Uses the Underscore method
+     * _.isEqual() to compare the attribute values.
+     *
+     * @param {Object} object1
+     *  The first object to be compared to the other.
+     *
+     * @param {Object} object2
+     *  The second object to be compared to the other.
+     *
+     * @param {String[]} attributeNames
+     *  The names of all attributes of the objects that will be compared.
+     *
+     * @returns {Boolean}
+     *  Whether all specified attributes are equal in both objects.
+     */
+    Utils.hasEqualAttributes = function (object1, object2, attributeNames) {
+
+        var // loop indexes
+            index = 0, length = attributeNames.length,
+            // current attribute name
+            attrName = '',
+            // whether the objects contain the attribute
+            hasAttr1 = false, hasAttr2 = false;
+
+        for (; index < length; index += 1) {
+            attrName = attributeNames[index];
+            hasAttr1 = attrName in object1;
+            hasAttr2 = attrName in object2;
+            if ((hasAttr1 !== hasAttr2) || (hasAttr1 && hasAttr2 && !_.isEqual(object1[attrName], object2[attrName]))) {
+                return false;
+            }
+        }
+        return true;
+    };
+
     // calculation and conversion ---------------------------------------------
 
     Utils.minMax = function (value, min, max) {

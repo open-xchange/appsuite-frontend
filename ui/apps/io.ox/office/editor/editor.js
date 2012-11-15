@@ -803,48 +803,73 @@ define('io.ox/office/editor/editor',
             return this.hasHighlighting();
         };
 
+        /**
+         * Generates the operations that will delete the current selection, and
+         * executes the operations.
+         */
         this.deleteSelected = function () {
 
-            if (selection.hasRange()) {
+            if (!selection.hasRange()) { return; }
 
-                undoManager.startGroup();
+            undoManager.enterGroup(function () {
 
-                var nodeInfo = selection.isSingleComponentSelection() ? Position.getDOMPosition(editdiv, selection.getStartPosition(), true) : null;
-                if (nodeInfo && DOM.isDrawingNode(nodeInfo.node)) {
-                    // An drawing selection
-                    // This deleting of drawings is only possible with the button, not with an key down event.
-                    deleteSelectedDrawing(selection);
+                var // the operations generator
+                    generator = new Operations.Generator(),
+                    // the position of the first and last partially covered paragraph
+                    firstPosition = null, lastPosition = null;
 
-                } else if (selection.hasSameParentComponent()) {
-                    // Only one paragraph concerned from deletion.
-                    this.deleteText(selection.getStartPosition(), selection.getEndPosition());
+                // visit all content nodes (tables, paragraphs) in the selection
+                selection.iterateContentNodes(function (node, position, startOffset, endOffset, parentCovered) {
 
-                } else if (selection.hasSameParentComponent(2)) {
-                    // More than one paragraph concerned from deletion, but in same level in document or table cell.
-                    deleteSelectedInSameParagraphLevel(selection);
+                    var // whether the node is the last child of its parent
+                        isLastChild = node === node.parentNode.lastChild;
 
-                } else if (selection.getSelectionType() === 'cell') {
-                    // This cell selection is a rectangle selection of cells in a table (only supported in Firefox).
-                    deleteSelectedInCellSelection(selection);
+                    if (DOM.isParagraphNode(node)) {
 
-                } else if (Position.isSameTableLevel(editdiv, selection.getStartPosition(), selection.getEndPosition())) {
-                    // This selection is inside a table in a browser, where no cell selection is possible (Chrome). Selected
-                    // can be parts of paragraphs inside a cell and also all paragraphs in other cells. This selection is
-                    // important to be able to support something similar like cell selection, that is only possible
-                    // in Firefox. So changes made in Firefox tables are displayed correctly in Chrome and vice versa.
-                    deleteSelectedInSameTableLevel(selection);
+                        // remember first and last paragraph
+                        if (!firstPosition) { firstPosition = position; }
+                        lastPosition = position;
 
-                } else {
-                    // The included paragraphs are not neighbours. For example one paragraph top level and one in table.
-                    // Should this be supported? How about tables in tables?
-                    // This probably works not reliable for tables in tables.
-                    deleteSelectedInDifferentParagraphLevels(selection);
+                        // do not delete the paragraph node, if it is only covered partially;
+                        // or if it is the last paragraph when the parent container is cleared completely
+                        if (parentCovered ? isLastChild : (_.isNumber(startOffset) || _.isNumber(endOffset))) {
 
+                            // 'deleteText' operation needs valid start and end position
+                            startOffset = _.isNumber(startOffset) ? startOffset : 0;
+                            endOffset = _.isNumber(endOffset) ? endOffset : (Position.getParagraphLength(editdiv, position) - 1);
+
+                            // delete the covered part of the paragraph
+                            if (startOffset <= endOffset) {
+                                generator.generateOperation(Operations.TEXT_DELETE, { start: position.concat([startOffset]), end: position.concat([endOffset]) });
+                            }
+                        } else {
+                            generator.generateOperation(Operations.PARA_DELETE, { start: position });
+                        }
+
+                    } else if (DOM.isTableNode(node)) {
+                        // delete entire table
+                        generator.generateOperation(Operations.TABLE_DELETE, { start: position });
+                    } else {
+                        Utils.error('Editor.deleteSelected(): unsupported content node');
+                        return Utils.BREAK;
+                    }
+
+                }, this, { shortestPath: true });
+
+                // operations MUST be executed in reverse order to preserve the positions
+                generator.reverseOperations();
+
+                // generate a final 'mergeParagraph' operation for the first paragraph
+                // which will be merged with the remaining part of the last paragraph
+                // but only, if paragraphs are different but in the same parent container
+                if (firstPosition && lastPosition && Position.hasSameParentComponent(firstPosition, lastPosition) && (_.last(firstPosition) !== _.last(lastPosition))) {
+                    generator.generateOperation(Operations.PARA_MERGE, { start: firstPosition });
                 }
 
-                undoManager.endGroup();
-            }
+                // apply the operations
+                this.applyOperations(generator.getOperations(), true, true);
 
+            }, this);
         };
 
         this.deleteText = function (startposition, endposition) {
@@ -874,11 +899,6 @@ define('io.ox/office/editor/editor',
 
             // setting the cursor position
             selection.setTextSelection(lastOperationEnd);
-        };
-
-        this.deleteCellRange = function (position, start, end) {
-            var newOperation = { name: Operations.CELLRANGE_DELETE, position: _.copy(position, true), start: _.copy(start, true), end: _.copy(end, true) };
-            applyOperation(newOperation, true, true);
         };
 
         this.deleteRows = function () {
@@ -3038,10 +3058,6 @@ define('io.ox/office/editor/editor',
             }
         };
 
-        operationHandlers[Operations.CELLRANGE_DELETE] = function (operation) {
-            implDeleteCellRange(operation.position, operation.start, operation.end, undoManager.isEnabled());
-        };
-
         operationHandlers[Operations.CELLS_DELETE] = function (operation) {
             var tableRow = Position.getTableRowElement(editdiv, operation.position);
             if (tableRow) {
@@ -3898,175 +3914,6 @@ define('io.ox/office/editor/editor',
             }
         }
 
-        // ==================================================================
-        // Private table methods
-        // ==================================================================
-
-        function deletePreviousCellsInTable(position) {
-
-            var localPos = _.copy(position, true),
-                isInTable = Position.isPositionInTable(editdiv, localPos);
-
-            if (isInTable) {
-
-                var rowIndex = Position.getLastIndexInPositionByNodeName(editdiv, localPos, 'tr'),
-                    columnIndex = rowIndex + 1,
-                    thisRow = localPos[rowIndex],
-                    thisColumn = localPos[columnIndex],
-                    lastColumn = Position.getLastColumnIndexInTable(editdiv, localPos);
-
-                for (var j = 0; j <= thisRow; j++) {
-                    var max = lastColumn;
-                    if (j === thisRow) {
-                        max = thisColumn - 1;
-                    }
-                    for (var i = 0; i <= max; i++) {
-                        localPos[rowIndex] = j;  // row
-                        localPos[columnIndex] = i;   // column
-                        localPos[columnIndex + 1] = 0;
-                        localPos[columnIndex + 2] = 0;
-                        deleteAllParagraphsInCell(localPos);
-                    }
-                }
-            }
-        }
-
-        function deleteAllParagraphsInCell(position, noOPs) {
-
-            var localPos = _.copy(position, true),
-                isInTable = Position.isPositionInTable(editdiv, localPos);
-
-            noOPs = noOPs ? true : false;
-
-            if (isInTable) {
-
-                var colIndex = Position.getLastIndexInPositionByNodeName(editdiv, localPos, 'td'),
-                    paraIndex = colIndex + 1,
-                    lastParaInCell = Position.getLastParaIndexInCell(editdiv, localPos);
-
-                localPos[paraIndex] = 0;
-
-                for (var i = 0; i <= lastParaInCell; i++) {
-                    if ((localPos.length - 1) > paraIndex) {
-                        localPos.pop();
-                    }
-
-                    var isTable = DOM.isTableNode(Position.getDOMPosition(editdiv, localPos).node);
-
-                    if (i < lastParaInCell) {
-                        if (isTable) {
-                            if (noOPs) {
-                                implDeleteTable(localPos);
-                            } else {
-                                self.deleteTable(localPos);
-                            }
-                        } else {
-                            if (noOPs) {
-                                implDeleteParagraph(localPos);
-                            } else {
-                                self.deleteParagraph(localPos);
-                            }
-                        }
-                    } else {
-                        if (! noOPs) {
-                            var startPos = _.copy(localPos, true),
-                                endPos = _.copy(localPos, true);
-                            startPos.push(0);
-                            endPos.push(Position.getParagraphLength(editdiv, localPos));
-                            self.deleteText(startPos, endPos);
-                        }
-                        implDeleteParagraphContent(localPos);
-                    }
-                }
-            }
-        }
-
-        function deletePreviousParagraphsInCell(position) {
-
-            var localPos = _.copy(position, true),
-                isInTable = Position.isPositionInTable(editdiv, localPos);
-
-            if (isInTable) {
-
-                var paraIndex = Position.getLastIndexInPositionByNodeName(editdiv, localPos, DOM.PARAGRAPH_NODE_SELECTOR),
-                    lastPara =  localPos[paraIndex],
-                    paragraphPosition = [];
-
-                localPos[paraIndex] = 0; // always 0, because paragraphs are deleted
-
-                for (var i = 0; i <= paraIndex; i++) {
-                    paragraphPosition.push(localPos[i]);
-                }
-
-                for (var i = 0; i < lastPara; i++) {
-                    var isTable = DOM.isTableNode(Position.getDOMPosition(editdiv, paragraphPosition).node);
-                    if (isTable) {
-                        self.deleteTable(localPos);
-                    } else {
-                        self.deleteParagraph(localPos);
-                    }
-                }
-            }
-        }
-
-        function deleteFollowingCellsInTable(position) {
-
-            var localPos = _.copy(position, true),
-                isInTable = Position.isPositionInTable(editdiv, localPos);
-
-            if (isInTable) {
-
-                var rowIndex = Position.getLastIndexInPositionByNodeName(editdiv, localPos, 'tr'),
-                    columnIndex = rowIndex + 1,
-                    thisRow = localPos[rowIndex],
-                    thisColumn = localPos[columnIndex],
-                    lastRow = Position.getLastRowIndexInTable(editdiv, position),
-                    lastColumn = Position.getLastColumnIndexInTable(editdiv, position);
-
-                for (var j = thisRow; j <= lastRow; j++) {
-                    var min = 0;
-                    if (j === thisRow) {
-                        min = thisColumn + 1;
-                    }
-
-                    for (var i = min; i <= lastColumn; i++) {
-                        localPos[rowIndex] = j;  // row
-                        localPos[columnIndex] = i;  // column
-                        deleteAllParagraphsInCell(localPos);
-                    }
-                }
-            }
-        }
-
-        function deleteFollowingParagraphsInCell(position) {
-
-            var localPos = _.copy(position, true),
-                isInTable = Position.isPositionInTable(editdiv, localPos);
-
-            if (isInTable) {
-
-                var paraIndex = Position.getLastIndexInPositionByNodeName(editdiv, localPos, DOM.PARAGRAPH_NODE_SELECTOR),
-                    startPara = localPos[paraIndex] + 1,
-                    lastPara =  Position.getLastParaIndexInCell(editdiv, localPos),
-                    paragraphPosition = [];
-
-                localPos[paraIndex] = startPara; // always 'startPara', because paragraphs are deleted
-
-                for (var i = 0; i <= paraIndex; i++) {
-                    paragraphPosition.push(localPos[i]);
-                }
-
-                for (var i = startPara; i <= lastPara; i++) {
-                    var isTable = DOM.isTableNode(Position.getDOMPosition(editdiv, paragraphPosition).node);
-                    if (isTable) {
-                        self.deleteTable(localPos);
-                    } else {
-                        self.deleteParagraph(localPos);
-                    }
-                }
-            }
-        }
-
         // ====================================================================
         // Private helper functions
         // ====================================================================
@@ -4092,199 +3939,6 @@ define('io.ox/office/editor/editor',
             }
 
             return str;
-        }
-
-        function deleteSelectedInSameParagraphLevel(selection) {
-            // The included paragraphs are neighbours.
-            var endPosition = _.copy(selection.startPaM.oxoPosition, true),
-                startposLength = selection.startPaM.oxoPosition.length - 1,
-                endposLength = selection.endPaM.oxoPosition.length - 1;
-
-            // 1) delete selected part or rest of para in first para (pos to end)
-            endPosition[endposLength] = Position.getParagraphLength(editdiv, endPosition);
-            self.deleteText(selection.startPaM.oxoPosition, endPosition);
-
-            // 2) delete completly selected paragraphs completely
-            for (var i = selection.startPaM.oxoPosition[startposLength - 1] + 1; i < selection.endPaM.oxoPosition[endposLength - 1]; i++) {
-                var startPosition = _.copy(selection.startPaM.oxoPosition, true);
-                startPosition[startposLength - 1] = selection.startPaM.oxoPosition[startposLength - 1] + 1;
-
-                // Is the new dom position a table or a paragraph or whatever? Special handling for tables required
-                startPosition.pop();
-                var isTable = DOM.isTableNode(Position.getDOMPosition(editdiv, startPosition).node);
-
-                if (isTable) {
-                    self.deleteTable(startPosition);
-                } else {
-                    self.deleteParagraph(startPosition);
-                }
-            }
-
-            // 3) delete selected part in last para (start to pos) and merge first and last para
-            if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
-                var startPosition = _.copy(selection.endPaM.oxoPosition, true);
-                startPosition[endposLength - 1] = selection.startPaM.oxoPosition[startposLength - 1] + 1;
-                startPosition[endposLength] = 0;
-                endPosition = _.copy(startPosition, true);
-                endPosition[startposLength] = selection.endPaM.oxoPosition[endposLength];
-                self.deleteText(startPosition, endPosition);
-
-                var mergeselection = _.copy(selection.startPaM.oxoPosition);
-                mergeselection.pop();
-                self.mergeParagraph(mergeselection);
-            }
-        }
-
-        function deleteSelectedInCellSelection(selection) {
-
-            var startPos = _.clone(selection.startPaM.oxoPosition),
-                endPos = _.clone(selection.endPaM.oxoPosition);
-
-            // if the first child of a cell is a table, selection of this cell may
-            // point into this subtable -> go back to the outer cell
-            while (startPos.length > endPos.length) { startPos.pop(); }
-            while (startPos.length < endPos.length) { endPos.pop(); }
-
-            startPos.pop();
-            startPos.pop();
-            endPos.pop();
-            endPos.pop();
-
-            var startCol = startPos.pop(),
-                startRow = startPos.pop(),
-                endCol = endPos.pop(),
-                endRow = endPos.pop();
-
-            self.deleteCellRange(startPos, [startRow, startCol], [endRow, endCol]);
-        }
-
-        function deleteSelectedInSameTableLevel(selection) {
-
-            var startPos = _.copy(selection.startPaM.oxoPosition, true),
-                endPos = _.copy(selection.endPaM.oxoPosition, true),
-                startposLength = selection.startPaM.oxoPosition.length - 1;
-
-            // 1) delete selected part or rest of para in first para (pos to end)
-            var localEndPosition = _.copy(selection.startPaM.oxoPosition, true);
-            localEndPosition[startposLength] = Position.getParagraphLength(editdiv, localEndPosition);
-            self.deleteText(selection.startPaM.oxoPosition, localEndPosition);
-            localEndPosition.pop();
-            deleteFollowingParagraphsInCell(localEndPosition);
-
-            // 2) completely selected cells
-            var rowIndex = Position.getLastIndexInPositionByNodeName(editdiv, startPos, 'tr'),
-                columnIndex = rowIndex + 1,
-                startRow = startPos[rowIndex],
-                startColumn = startPos[columnIndex],
-                endRow = endPos[rowIndex],
-                endColumn = endPos[columnIndex],
-                lastColumn = Position.getLastColumnIndexInTable(editdiv, startPos);
-
-            for (var j = startRow; j <= endRow; j++) {
-                var startCol = (j === startRow) ? startColumn + 1 : 0;
-                var endCol =  (j === endRow) ? endColumn - 1 : lastColumn;
-
-                for (var i = startCol; i <= endCol; i++) {
-                    startPos[rowIndex] = j;  // row
-                    startPos[columnIndex] = i;  // column
-                    startPos[columnIndex + 1] = 0;
-                    startPos[columnIndex + 2] = 0;
-                    deleteAllParagraphsInCell(startPos);
-                }
-            }
-
-            var startPosition = _.copy(selection.endPaM.oxoPosition, true),
-                endposLength = selection.endPaM.oxoPosition.length - 1;
-
-            startPosition[endposLength] = 0;
-            localEndPosition = _.copy(startPosition, true);
-            localEndPosition[endposLength] = selection.endPaM.oxoPosition[endposLength];
-
-            self.deleteText(startPosition, localEndPosition);
-
-            // delete all previous paragraphs in this cell!
-            localEndPosition.pop();
-            deletePreviousParagraphsInCell(localEndPosition);
-        }
-
-        function deleteSelectedInDifferentParagraphLevels(selection) {
-
-            var endPosition = _.copy(selection.endPaM.oxoPosition, true),
-                startposLength = selection.startPaM.oxoPosition.length - 1,
-                endposLength = selection.endPaM.oxoPosition.length - 1,
-                isTable = false;
-
-            // 1) delete selected part or rest of para in first para (pos to end)
-            if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
-                isTable = Position.isPositionInTable(editdiv, selection.startPaM.oxoPosition);
-                endPosition = _.copy(selection.startPaM.oxoPosition);
-                if (isTable) {
-                    var localEndPosition = _.copy(endPosition);
-                    localEndPosition.pop();
-                    deleteFollowingParagraphsInCell(localEndPosition);
-                    localEndPosition.pop();
-                    deleteFollowingCellsInTable(localEndPosition);
-                }
-                endPosition[startposLength] = Position.getParagraphLength(editdiv, endPosition);
-            }
-            self.deleteText(selection.startPaM.oxoPosition, endPosition);
-
-            // 2) delete completly slected paragraphs completely
-            for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
-                // startPaM.oxoPosition[0]+1 instead of i, because we always remove a paragraph
-                var startPosition = [];
-                startPosition[0] = selection.startPaM.oxoPosition[0] + 1;
-                isTable = Position.isPositionInTable(editdiv, startPosition);
-                if (isTable) {
-                    self.deleteTable(startPosition);
-                } else {
-                    self.deleteParagraph(startPosition);
-                }
-            }
-
-            // 3) delete selected part in last para (start to pos) and merge first and last para
-            if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
-
-                var startPosition = _.copy(selection.endPaM.oxoPosition, true);
-                startPosition[0] = selection.startPaM.oxoPosition[0] + 1;
-                startPosition[endposLength] = 0;
-                endPosition = _.copy(startPosition, true);
-                endPosition[endposLength] = selection.endPaM.oxoPosition[endposLength];
-
-                isTable = Position.isPositionInTable(editdiv, endPosition);
-
-                self.deleteText(startPosition, endPosition);
-
-                if (isTable) {
-                    // delete all previous cells and all previous paragraphs in this cell!
-                    endPosition.pop();
-                    deletePreviousParagraphsInCell(endPosition);
-                    endPosition.pop();
-                    deletePreviousCellsInTable(endPosition);
-                }
-
-                if (! isTable) {
-                    var mergeselection = _.copy(selection.startPaM.oxoPosition);
-                    mergeselection.pop();
-                    self.mergeParagraph(mergeselection);
-                }
-            }
-
-        }
-
-        function deleteSelectedDrawing(selection) {
-            var position = _.copy(selection.startPaM.oxoPosition, true),
-                drawingNode = Position.getDOMPosition(editdiv, position, true).node;
-
-            // only delete, if drawing start position is really a drawing position
-            if (DOM.isDrawingNode(drawingNode)) {
-                // delete an corresponding offset div
-                $(drawingNode).prev(DOM.OFFSET_NODE_SELECTOR).remove();
-                // deleting the drawing with an operation
-                self.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
-
-                lastOperationEnd = selection.startPaM.oxoPosition;
-            }
         }
 
         // ====================================================================
@@ -4609,21 +4263,14 @@ define('io.ox/office/editor/editor',
             self.getThemes().addTheme(themeName, attributes);
         }
 
-        /**
-         * Inserts a new theme into the document.
-         *
-         * @param {String} themeName
-         *  The name of the scheme.
-         *
-         * @param {String} colorScheme
-         *  The attributes of the scheme.
-         */
         function implInsertList(listname, listdefinition) {
             lists.addList(listname, listdefinition);
         }
+
         function implDeleteList(listname) {
             lists.deleteList(listname);
         }
+
         /**
          * Returns the family of the attributes supported by the passed DOM
          * element.
@@ -5013,8 +4660,6 @@ define('io.ox/office/editor/editor',
 
             if (para < (allParagraphs.size() - 1)) {
 
-                var dbg_oldparacount = allParagraphs.size();
-
                 var thisPara = allParagraphs[para];
                 var nextPara = allParagraphs[para + 1];
 
@@ -5065,8 +4710,7 @@ define('io.ox/office/editor/editor',
 
             position.push(0); // adding pos to position temporarely
 
-            var allParagraphs = Position.getAllAdjacentParagraphs(editdiv, position),
-                isTable = Position.isPositionInTable(editdiv, position);
+            var allParagraphs = Position.getAllAdjacentParagraphs(editdiv, position);
 
             position.pop();
 
@@ -5084,63 +4728,10 @@ define('io.ox/office/editor/editor',
             }
         }
 
-        function implDeleteParagraphContent(position) {
-            var paragraph = Position.getDOMPosition(editdiv, position).node;
-            if (paragraph) {
-                $(paragraph).empty();
-                validateParagraphNode(paragraph);
-            }
-        }
-
-        function implDeleteCellRange(pos, startCell, endCell, createUndo) {
-
-            var startRow = startCell[0],
-                startCol = startCell[1],
-                endRow = endCell[0],
-                endCol = endCell[1],
-                cellPosition = null,
-                cellInfo = null,
-                generator = createUndo ? new Operations.Generator() : null;
-
-            for (var i = startRow; i <= endRow; i++) {
-                for (var j = startCol; j <= endCol; j++) {
-
-                    cellPosition = pos.concat([i, j]);
-                    cellInfo = Position.getDOMPosition(editdiv, cellPosition, true);
-
-                    if (!cellInfo || !$(cellInfo.node).is('td')) {
-                        Utils.warn('Editor.implDeleteCellRange(): cannot find table cells at position ' + JSON.stringify(cellPosition));
-                        // do not try further elements, they will not be cells either...
-                        return;
-                    }
-
-                    // first create the undo operations
-                    if (generator) {
-                        generator.generateContentOperations(cellInfo.node, cellPosition);
-                    }
-
-                    // pass true to use implementation methods instead of creating more operations
-                    deleteAllParagraphsInCell(cellPosition, true);
-                }
-            }
-
-            if (generator) {
-                undoManager.addUndo(generator.getOperations(), { name: Operations.CELLRANGE_DELETE, position: pos, start: startCell, end: endCell });
-            }
-        }
-
         function implDeleteTable(position) {
 
-            var tablePosition = Position.getLastPositionFromPositionByNodeName(editdiv, position, DOM.TABLE_NODE_SELECTOR),
-                lastRow = Position.getLastRowIndexInTable(editdiv, position),
-                lastColumn = Position.getLastColumnIndexInTable(editdiv, position);
+            var tablePosition = Position.getLastPositionFromPositionByNodeName(editdiv, position, DOM.TABLE_NODE_SELECTOR);
 
-            // iterating over all cells and remove all paragraphs in the cells
-            if ((lastRow > -1) && (lastColumn > -1)) {
-                implDeleteCellRange(tablePosition, [0, 0], [lastRow, lastColumn]);
-            }
-
-            // Finally removing the table itself
             var tableNode = Position.getTableElement(editdiv, tablePosition);
             if (tableNode) {
                 $(tableNode).remove();
@@ -5158,18 +4749,13 @@ define('io.ox/office/editor/editor',
 
         function implDeleteRows(pos, startRow, endRow) {
 
-            var localPosition = _.copy(pos, true),
-                lastColumn = Position.getLastColumnIndexInTable(editdiv, localPosition);
+            var localPosition = _.copy(pos, true);
 
             if (! Position.isPositionInTable(editdiv, localPosition)) {
                 return;
             }
 
             var table = Position.getDOMPosition(editdiv, localPosition).node;
-
-            // iterating over all cells and remove all paragraphs in the cells
-            implDeleteCellRange(localPosition, [startRow, 0], [endRow, lastColumn]);
-
             DOM.getTableRows(table).slice(startRow, endRow + 1).remove();
 
             if (DOM.getTableRows(table).length === 0) {
@@ -5193,6 +4779,30 @@ define('io.ox/office/editor/editor',
             implTableChanged(table);
 
             lastOperationEnd = localPosition;
+        }
+
+        /**
+         * Removes all contents of the cell, but preserves the formatting of
+         * the last paragraph node.
+         */
+        function implClearCell(cellNode) {
+
+            var // the container for the content nodes
+                container = DOM.getCellContentNode(cellNode),
+                // the last paragraph in the cell
+                paragraph = container[0].lastChild;
+
+            if (DOM.isParagraphNode(paragraph)) {
+                container.children().slice(0, -1).remove();
+                $(paragraph).empty();
+            } else {
+                Utils.warning('Editor.implClearCell(): invalid cell contents');
+                paragraph = DOM.createParagraphNode();
+                container.empty().append(paragraph);
+            }
+
+            // validate the paragraph (add the dummy node)
+            validateParagraphNode(paragraph);
         }
 
         function implInsertRow(pos, count, insertdefaultcells, referencerow, attrs) {
@@ -5225,7 +4835,11 @@ define('io.ox/office/editor/editor',
 
             if (useReferenceRow) {
 
-                row = DOM.getTableRows(table).eq(referencerow);
+                row = DOM.getTableRows(table).eq(referencerow).clone(true);
+
+                // clear the cell contents in the cloned row
+                row.children('td').each(function () { implClearCell(this); });
+
                 cellsInserted = true;
 
             } else if (insertdefaultcells) {
@@ -5251,6 +4865,7 @@ define('io.ox/office/editor/editor',
 
             _.times(count, function () {
                 var newRow = row.clone(true);
+
                 if (tableRowNode) {
                     // insert the new row before the existing row at the specified position
                     $(tableRowNode).before(newRow);
@@ -5261,12 +4876,6 @@ define('io.ox/office/editor/editor',
                 // apply the passed attributes
                 tableRowStyles.setElementAttributes(newRow, attrs);
             });
-
-            // removing content, if the row was cloned from a reference row
-            if (useReferenceRow) {
-                // iterating over all new cells and remove all paragraphs in the cells
-                implDeleteCellRange(tablePos, [referencerow + 1, 0], [referencerow + count, row.children().length - 1]);
-            }
 
             // recalculating the attributes of the table cells
             if (cellsInserted) {

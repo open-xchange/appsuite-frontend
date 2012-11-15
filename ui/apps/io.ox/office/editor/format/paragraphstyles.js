@@ -147,17 +147,17 @@ define('io.ox/office/editor/format/paragraphstyles',
     // private static functions ===============================================
 
     function isBorderEqual(attributes1, attributes2) {
-        var ret = _.isEqual(attributes1.borderleft, attributes2.borderleft) &&
-        _.isEqual(attributes1.borderright, attributes2.borderright) &&
-        _.isEqual(attributes1.bordertop, attributes2.bordertop) &&
-        _.isEqual(attributes1.borderbottom, attributes2.borderbottom) &&
-        _.isEqual(attributes1.borderinside, attributes2.borderinside);
-        return ret;
+        return Utils.hasEqualAttributes(attributes1, attributes2, ['borderleft', 'borderright', 'bordertop', 'borderbottom', 'borderinside']);
     }
 
     function initBorder(border) {
         if (!border.style) {
-            border.width = border.color = border.space = undefined;
+            border.style = 'none';
+        }
+        if (border.style === 'none') {
+            delete border.width;
+            delete border.color;
+            delete border.space;
         } else {
             if (!border.width)
                 border.width = 0;
@@ -189,6 +189,7 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         var // self reference
             self = this;
+
         // private methods ----------------------------------------------------
 
         /**
@@ -220,8 +221,8 @@ define('io.ox/office/editor/format/paragraphstyles',
 
             function setBorder(border, position) {
                 var space = (border && border.space) ? border.space : 0;
-                paragraph.css('padding-' + position, space ? (space / 100 + 'mm') : '');
-                paragraph.css('border-' + position, border ? self.getCssBorder(border) : '');
+                paragraph.css('padding-' + position, Utils.convertHmmToCssLength(space, 'px'));
+                paragraph.css('border-' + position, self.getCssBorder(border));
                 return -space;
             }
 
@@ -241,7 +242,7 @@ define('io.ox/office/editor/format/paragraphstyles',
 
             // top border is not set if previous paragraph uses the same border settings
             if (isBorderEqual(attributes, prevAttributes)) {
-                setBorder(undefined, 'top');
+                setBorder({ style: 'none' }, 'top');
                 prevParagraph.css("padding-bottom", this.getCssBorder(attributes.borderinside.space));
                 prevParagraph.css("border-bottom", this.getCssBorder(attributes.borderinside));
             } else {
@@ -304,12 +305,20 @@ define('io.ox/office/editor/format/paragraphstyles',
     // static methods ---------------------------------------------------------
 
     ParagraphStyles.getBorderModeFromAttributes = function (attributes) {
+
         var ret = 'none',
-        value = attributes.borderleft.style ? 1 : 0;
-        value += attributes.borderright.style ? 2 : 0;
-        value += attributes.bordertop.style ? 4 : 0;
-        value += attributes.borderbottom.style ? 8 : 0;
-        value += attributes.borderinside.style ? 16: 0;
+            value = 0;
+
+        // return null, if any of the border attributes is null
+        if (!attributes.borderleft || !attributes.borderright || !attributes.bordertop || !attributes.borderbottom || !attributes.borderinside) {
+            return null;
+        }
+
+        value += (attributes.borderleft.style !== 'none') ? 1 : 0;
+        value += (attributes.borderright.style !== 'none') ? 2 : 0;
+        value += (attributes.bordertop.style !== 'none') ? 4 : 0;
+        value += (attributes.borderbottom.style !== 'none') ? 8 : 0;
+        value += (attributes.borderinside.style !== 'none') ? 16: 0;
 
         switch (value) {
         case 0:

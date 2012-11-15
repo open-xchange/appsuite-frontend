@@ -730,7 +730,11 @@ define('io.ox/office/editor/selection',
          *          the very end of a paragraph),
          *      (4) {Number|Undefined} the logical index of the last child text
          *          component covered by the LAST paragraph (closed range);
-         *          undefined for all other paragraphs and tables.
+         *          undefined for all other paragraphs and tables,
+         *      (5) {Boolean} whether the selection includes the beginning of
+         *          the parent container of the current content node,
+         *      (6) {Boolean} whether the selection includes the end of the
+         *          parent container of the current content node.
          *  If the selection represents a text cursor, the start position will
          *  exceed the end position by 1. Thus, a text cursor in an empty
          *  paragraph will be represented by the text range [0, -1]. If the
@@ -774,10 +778,10 @@ define('io.ox/office/editor/selection',
                 // paragraph nodes containing the passed start and end positions
                 firstParagraph = null, lastParagraph = null,
                 // current content node while iterating
-                contentNode = null;
+                contentNode = null, parentCovered = false;
 
             // visit the passed content node (paragraph or table); or table child nodes, if not in shortest-path mode
-            function visitContentNode(contentNode) {
+            function visitContentNode(contentNode, parentCovered) {
 
                 var // each call of the iterator get its own position array (iterator is allowed to modify it)
                     position = Position.getOxoPosition(rootNode, contentNode),
@@ -790,7 +794,7 @@ define('io.ox/office/editor/selection',
                 // does not start in that paragraph and ends before its beginning
                 // (otherwise, it's a cursor in an empty paragraph)
                 if ((contentNode === firstParagraph) || (contentNode !== lastParagraph) || (endOffset >= Position.getFirstTextNodePositionInParagraph(contentNode))) {
-                    return iterator.call(context, contentNode, position, startOffset, endOffset);
+                    return iterator.call(context, contentNode, position, startOffset, endOffset, parentCovered);
                 }
             }
 
@@ -837,13 +841,13 @@ define('io.ox/office/editor/selection',
 
                 // entire table selected
                 if (shortestPath && tableSelected) {
-                    return visitContentNode(this.getEnclosingTable());
+                    return visitContentNode(this.getEnclosingTable(), false);
                 }
 
                 // visit all table cells, iterate all content nodes according to 'shortest-path' option
                 return this.iterateTableCells(function (cell) {
                     for (contentNode = findFirstContentNode(cell); contentNode; contentNode = findNextContentNode(cell, contentNode)) {
-                        if (visitContentNode(contentNode) === Utils.BREAK) { return Utils.BREAK; }
+                        if (visitContentNode(contentNode, true) === Utils.BREAK) { return Utils.BREAK; }
                     }
                 }, this);
             }
@@ -852,8 +856,11 @@ define('io.ox/office/editor/selection',
             contentNode = firstParagraph;
             while (contentNode) {
 
+                // check whether the parent container is completely covered
+                parentCovered = !contentNode.parentNode.contains(firstParagraph) && !contentNode.parentNode.contains(lastParagraph);
+
                 // visit current content node
-                if (visitContentNode(contentNode) === Utils.BREAK) { return Utils.BREAK; }
+                if (visitContentNode(contentNode, parentCovered) === Utils.BREAK) { return Utils.BREAK; }
 
                 // end of selection reached
                 if (contentNode === lastParagraph) { return; }
