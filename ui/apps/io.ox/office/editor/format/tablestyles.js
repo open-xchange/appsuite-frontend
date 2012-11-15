@@ -138,11 +138,18 @@ define('io.ox/office/editor/format/tablestyles',
             Table.updateColGroup(table, attributes.tablegrid);
 
             var // the table cell styles/formatter
-                tableCellStyles = documentStyles.getStyleSheets('cell');
+                tableCellStyles = documentStyles.getStyleSheets('cell'),
+                // the table row styles/formatter
+                tableRowStyles = documentStyles.getStyleSheets('row');
 
             // iterating over all cells in the table to set the table attributes in the cell
             DOM.getTableRows(table).children('td').each(function () {
                 tableCellStyles.updateElementFormatting(this);
+            });
+
+            // iterating over all rows in the table to set the row attributes ('height' only)
+            DOM.getTableRows(table).each(function () {
+                tableRowStyles.updateElementFormatting(this);
             });
 
         }

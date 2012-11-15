@@ -4008,11 +4008,6 @@ define('io.ox/office/editor/editor',
                     // the table may have been removed from the DOM in the meantime
                     if (editdiv[0].contains(this)) {
                         tableStyles.updateElementFormatting(this);
-                        // Also updating the table row attribute 'height'
-                        var tableRows = DOM.getTableRows(this);
-                        tableRows.each(function () {
-                            tableRowStyles.updateElementFormatting(this);
-                        });
                     }
                 });
                 storage.tables = $();
