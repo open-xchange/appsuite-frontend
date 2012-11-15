@@ -182,6 +182,11 @@ define('io.ox/office/editor/position',
             offset = (forwardCursor === true) ? 1 : 0;
         }
 
+        if ((DOM.isResizeNode(node)) || (DOM.isCellcontentNode(node))) {
+            // using table cell node instead of divs inside the table cell
+            node = node.parentNode.parentNode;
+        }
+
         // 2. Handling all selections, in which the node is above paragraph level
 
         // Sometimes (double click in FireFox) a complete paragraph is selected with DIV + Offset 3 and DIV + Offset 4.

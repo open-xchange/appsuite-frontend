@@ -53,7 +53,7 @@ define('io.ox/office/editor/format/tablerowstyles',
             // Chrome requires that every cell has a defined height. Otherwise the resize-div
             // will not be shifted to the bottom of the cell, if a neighbour cell increases in
             // height.
-            attributes.height = Utils.convertLengthToHmm(parseInt(row.css('height'), 10), 'px');
+            attributes.height = Utils.convertLengthToHmm(Utils.convertCssLength($(this).css('height'), 'px', 0));
         }
 
         if (attributes.height !== 0) {
@@ -72,6 +72,17 @@ define('io.ox/office/editor/format/tablerowstyles',
                 // FireFox requires row height at the rows. Setting height at cells, makes
                 // height of cells unchanged, even if text leaves the cell.
                 row.css('height', Utils.convertHmmToCssLength(attributes.height, 'px', 0));
+            }
+        } else {
+            // required for undo, if the table cell was not set before
+            if ($.browser.webkit) {
+                // Chrome requires row height at the cells.
+                row.children('th, td').each(function () {
+                    $(this).css('height', 0);
+                });
+            } else {
+                // FireFox requires row height at the rows.
+                row.css('height', 0);
             }
         }
 

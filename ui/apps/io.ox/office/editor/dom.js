@@ -457,13 +457,46 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  top-level content nodes (paragraphs and tables).
      */
     DOM.getCellContentNode = function (cellNode) {
-        return $(cellNode).find('div.cellcontent');
+        return $(cellNode).find('> div.cell > div.cellcontent');
     };
 
     /**
      * A jQuery selector that matches elements representing a resize node.
      */
     DOM.RESIZE_NODE_SELECTOR = 'div.resize';
+
+    /**
+     * Returns whether the passed node is a table resize element.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a table resize element.
+     */
+    DOM.isResizeNode = function (node) {
+        return $(node).is(DOM.RESIZE_NODE_SELECTOR);
+    };
+
+    /**
+     * A jQuery selector that matches elements representing a cell content node.
+     */
+    DOM.CELLCONTENT_NODE_SELECTOR = 'div.cellcontent';
+
+    /**
+     * Returns whether the passed node is a table cell content element.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a table cell content element.
+     */
+    DOM.isCellcontentNode = function (node) {
+        return $(node).is(DOM.CELLCONTENT_NODE_SELECTOR);
+    };
 
     // text spans, text nodes, text components ================================
 
@@ -837,7 +870,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  top-level content nodes.
      */
     DOM.getDrawingContentNode = function (drawingNode) {
-        return $(drawingNode).find('div.content');
+        return $(drawingNode).find('> div.content');
     };
 
     /**
