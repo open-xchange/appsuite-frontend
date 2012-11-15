@@ -4928,7 +4928,8 @@ define('io.ox/office/editor/editor',
                 para = position[posLength - 1],
                 pos = position[posLength],
                 allParagraphs = Position.getAllAdjacentParagraphs(editdiv, position),
-                paraclone = $(allParagraphs[para]).clone(true);
+                originalpara = allParagraphs[para],
+                paraclone = $(originalpara).clone(true);
 
             paraclone.insertAfter(allParagraphs[para]);
 
@@ -4965,8 +4966,8 @@ define('io.ox/office/editor/editor',
             localPos.pop();
             Position.removeUnusedImageDivs(editdiv, localPos);
 
-            implParagraphChanged(position);
-            implParagraphChanged(startPosition);
+            validateParagraphNode(originalpara);
+            validateParagraphNode(paraclone);
             lastOperationEnd = startPosition;
 
             implUpdateLists();
