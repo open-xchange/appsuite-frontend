@@ -2073,32 +2073,41 @@ define('io.ox/office/editor/editor',
                                     startEndPos = Hyperlink.findURLSelection(self, obj.node.parentNode, pos, url),
                                     left, top, height, width;
 
-                                // magic
-                                startSelection[startSelection.length - 1] = startEndPos.start;
-                                obj = Position.getDOMPosition(self.getNode(), startSelection, true);
-                                left = $(obj.node).offset().left;
+                                if (pos !== startEndPos.end) {
+                                    // find out position of the first span of our selection
+                                    startSelection[startSelection.length - 1] = startEndPos.start;
+                                    obj = Position.getDOMPosition(self.getNode(), startSelection, true);
+                                    left = $(obj.node).offset().left;
 
-                                startSelection[startSelection.length - 1] = startEndPos.end;
-                                obj = Position.getDOMPosition(self.getNode(), startSelection, true);
-                                top = $(obj.node.parentNode).offset().top;
-                                height = $(obj.node).height();
+                                    // find out position of the last span of our selection
+                                    startSelection[startSelection.length - 1] = startEndPos.end;
+                                    obj = Position.getDOMPosition(self.getNode(), startSelection, true);
+                                    top = $(obj.node.parentNode).offset().top;
+                                    height = $(obj.node).height();
 
-                                // calculate position relative to "io-ox-pane center"
-                                var parent = self.getNode().parent(".io-ox-pane.center"),
-                                    parentLeft = parent.offset().left,
-                                    parentTop = parent.offset().top,
-                                    parentWidth = parent.width();
+                                    // calculate position relative to "io-ox-pane center"
+                                    var parent = self.getNode().parent(".io-ox-pane.center"),
+                                        parentLeft = parent.offset().left,
+                                        parentTop = parent.offset().top,
+                                        parentWidth = parent.width();
 
-                                left = left - parentLeft;
-                                top = top - parentTop + height;
+                                    left = left - parentLeft;
+                                    top = top - parentTop + height;
 
-                                link.text(url);
-                                link.attr({href: url});
-                                hyperlinkPopup.css({display: '', left: left, top: top});
-                                width = hyperlinkPopup.width();
-                                if ((left + width) > parentWidth) {
-                                    left -= (((left + width) - parentWidth) + parentLeft);
-                                    hyperlinkPopup.css({left: left});
+                                    link.text(url);
+                                    link.attr({href: url});
+                                    hyperlinkPopup.css({display: '', left: left, top: top});
+                                    width = hyperlinkPopup.width();
+                                    if ((left + width) > parentWidth) {
+                                        left -= (((left + width) - parentWidth) + parentLeft);
+                                        hyperlinkPopup.css({left: left});
+                                    }
+                                }
+                                else {
+                                    // special case: at the end of a hyperlink we want to
+                                    // write with normal style and we don't show the popup
+                                    preselectedAttributes = { style: null, url: null };
+                                    hyperlinkPopup.css({display: 'none'});
                                 }
                             }
                         }
