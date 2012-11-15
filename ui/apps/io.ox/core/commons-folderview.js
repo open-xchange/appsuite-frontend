@@ -167,14 +167,15 @@ define('io.ox/core/commons-folderview',
                 var options;
 //                console.log(ext.point(POINT + '/options'));
                 _(ext.point(POINT + '/options').all()).each(function (obj) {
-//                    console.log(options);
+
                     options = _.extend(obj, options || {});
                 });
 
                 var container = $('<div>');
                 var tree = e.data.app.folderView = new views[options.view](container, {
                     type: options.type,
-                    rootFolderId: options.rootFolderId
+                    rootFolderId: options.rootFolderId,
+                    checkbox: true
                 });
                 tree.paint();
 

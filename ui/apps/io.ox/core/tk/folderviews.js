@@ -40,8 +40,7 @@ define('io.ox/core/tk/folderviews',
     /**
      * Tree node class
      */
-    function TreeNode(tree, id, container, level) {
-
+    function TreeNode(tree, id, container, level, checkbox) {
         // load folder data immediately
         var ready = api.get({ folder: id }),
             nodes = {},
@@ -231,7 +230,7 @@ define('io.ox/core/tk/folderviews',
                                     return node;
                                 } else {
                                     // new node
-                                    return new TreeNode(tree, folder.id, nodes.sub, skip() ? level : level + 1);
+                                    return new TreeNode(tree, folder.id, nodes.sub, skip() ? level : level + 1, checkbox);
                                 }
                             })
                             .value();
@@ -307,7 +306,6 @@ define('io.ox/core/tk/folderviews',
 
         // paint tree node - loads and paints sub folder if open
         this.paint = function () {
-
             nodes.folder = tmplFolder.clone().on('dblclick click', toggleState);
 
             if (level > 0) {
@@ -332,11 +330,17 @@ define('io.ox/core/tk/folderviews',
                     nodes.icon = $('<img>', { src: '', alt: '' }).addClass('folder-icon');
                     nodes.label = $('<span>').addClass('folder-label');
                     nodes.counter = $('<span>').addClass('folder-counter');
+                    nodes.subscriber = $('<input>').attr({'type': 'checkbox', 'name': 'folder', 'value': data.id}).css('float', 'right');
                     // draw children
                     var def = isOpen() ? paintChildren() : $.when();
                     updateArrow();
                     // add to DOM
-                    nodes.folder.append(nodes.arrow, nodes.icon, nodes.counter, nodes.label);
+                    if (checkbox) {
+                        nodes.folder.append(nodes.arrow, nodes.icon, nodes.counter, nodes.label, nodes.subscriber);
+                    } else {
+                        nodes.folder.append(nodes.arrow, nodes.icon, nodes.counter, nodes.label);
+                    }
+
                     // customize
                     self.customize();
                     // work with selection
@@ -594,9 +598,8 @@ define('io.ox/core/tk/folderviews',
 
         // tree node hash
         this.treeNodes = {};
-
         // root tree node
-        this.root = new TreeNode(this, this.options.rootFolderId, this.container, 0);
+        this.root = new TreeNode(this, this.options.rootFolderId, this.container, 0, opt.checkbox);
 
         this.internal.paint = function () {
             return this.root.paint();
