@@ -62,9 +62,9 @@ define('io.ox/office/editor/format/tablerowstyles',
                 var rowHeight = Utils.convertHmmToLength(attributes.height, 'px', 0);
                 row.children('th, td').each(function () {
                     var cellHeight = rowHeight -
-                                     parseInt($(this).css('padding-top'), 10) -
-                                     parseInt($(this).css('padding-bottom'), 10) -
-                                     parseInt($(this).css('border-bottom-width'), 10) +
+                                     Utils.convertCssLength($(this).css('padding-top'), 'px', 0) -
+                                     Utils.convertCssLength($(this).css('padding-bottom'), 'px', 0) -
+                                     Utils.convertCssLength($(this).css('border-bottom-width'), 'px', 0) +
                                      'px';
                     $(this).css('height', cellHeight);
                 });
