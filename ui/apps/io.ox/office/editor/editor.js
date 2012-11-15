@@ -1864,7 +1864,6 @@ define('io.ox/office/editor/editor',
                 showEditModeInfo = ox.online && state === true && editMode === false;
 
             editMode = state;
-            editdiv.toggleClass('user-select-text', !!editMode).attr('contenteditable', !!editMode);
 
             // disable resize handlers etc. everytime the edit mode has been enabled
             if (editMode) {
@@ -2235,6 +2234,12 @@ define('io.ox/office/editor/editor',
 
         function processMouseDown(event) {
 
+            // handle mouse events in edit mode only
+            if (!editMode) {
+                event.preventDefault();
+                return;
+            }
+
             var // drawing start and end position for selection
                 startPosition = null, endPosition = null,
                 // mouse click on a drawing node
@@ -2290,7 +2295,14 @@ define('io.ox/office/editor/editor',
 
         }
 
-        function processMouseUp() {
+        function processMouseUp(event) {
+
+            // handle mouse events in edit mode only
+            if (!editMode) {
+                event.preventDefault();
+                return;
+            }
+
             // mouse up while drawing selected: selection does not change
             if (selection.getSelectionType() !== 'drawing') {
                 // calculate logical selection from browser selection, after
@@ -2325,6 +2337,12 @@ define('io.ox/office/editor/editor',
 
                 preselectedAttributes = {};
 
+                return;
+            }
+
+            // handle just cursor events if in read only mode
+            if (!editMode && !isCursorKeyEvent(event)) {
+                event.preventDefault();
                 return;
             }
 
@@ -2606,6 +2624,12 @@ define('io.ox/office/editor/editor',
 
             if (isIgnorableKeyEvent(lastKeyDownEvent) || isCursorKeyEvent(lastKeyDownEvent)) {
                 preselectedAttributes = {};
+                return;
+            }
+
+            // handle just cursor events if in read only mode
+            if (!editMode && !isCursorKeyEvent(event)) {
+                event.preventDefault();
                 return;
             }
 
