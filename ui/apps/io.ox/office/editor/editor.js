@@ -4516,9 +4516,6 @@ define('io.ox/office/editor/editor',
             if (paragraph) {
                 adjustTabsOfParagraph(paragraph);
             }
-
-            // store last position
-            lastOperationEnd = end;
         }
 
         /**
