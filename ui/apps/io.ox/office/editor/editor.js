@@ -2042,23 +2042,23 @@ define('io.ox/office/editor/editor',
                         var url = Hyperlink.getURLFromPosition(self, selection);
                         if (url) {
                             var link = $('a', hyperlinkPopup[0]),
-                                startSelection = selection.getStartPosition(),
-                                obj = Position.getDOMPosition(self.getNode(), startSelection);
+                                urlSelection = selection.getStartPosition(),
+                                obj = Position.getDOMPosition(self.getNode(), urlSelection);
 
                             if (obj && obj.node && DOM.isTextSpan(obj.node.parentNode)) {
-                                var pos = startSelection[startSelection.length - 1],
+                                var pos = urlSelection[urlSelection.length - 1],
                                     startEndPos = Hyperlink.findURLSelection(self, obj.node.parentNode, pos, url),
                                     left, top, height, width;
 
                                 if (pos !== startEndPos.end) {
                                     // find out position of the first span of our selection
-                                    startSelection[startSelection.length - 1] = startEndPos.start;
-                                    obj = Position.getDOMPosition(self.getNode(), startSelection, true);
+                                    urlSelection[urlSelection.length - 1] = startEndPos.start;
+                                    obj = Position.getDOMPosition(self.getNode(), urlSelection, true);
                                     left = $(obj.node).offset().left;
 
                                     // find out position of the last span of our selection
-                                    startSelection[startSelection.length - 1] = startEndPos.end;
-                                    obj = Position.getDOMPosition(self.getNode(), startSelection, true);
+                                    urlSelection[urlSelection.length - 1] = startEndPos.end - 1;
+                                    obj = Position.getDOMPosition(self.getNode(), urlSelection, true);
                                     top = $(obj.node.parentNode).offset().top;
                                     height = $(obj.node).height();
 
