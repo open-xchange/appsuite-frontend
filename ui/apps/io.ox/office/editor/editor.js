@@ -2026,6 +2026,11 @@ define('io.ox/office/editor/editor',
         // ==================================================================
         // Private functions for document post-processing
         // ==================================================================
+
+        /**
+         * Inserts a hyperlink popup div into the DOM which is used to show
+         * hyperlink information and change/remove functions.
+         */
         function insertHyperlinkPopup() {
             var hyperlinkPopup = $('<div>', { contenteditable: false }).addClass('io-ox-office-hyperlink-popup').css({display: 'none'})
                 .append(
@@ -2065,14 +2070,16 @@ define('io.ox/office/editor/editor',
                                     top = $(obj.node.parentNode).offset().top;
                                     height = $(obj.node).height();
 
-                                    // calculate position relative to "io-ox-pane center"
-                                    var parent = self.getNode().parent(".io-ox-pane.center"),
+                                    // calculate position relative to the application pane
+                                    var parent = app.getView().getApplicationPane().getNode(),
                                         parentLeft = parent.offset().left,
                                         parentTop = parent.offset().top,
-                                        parentWidth = parent.width();
+                                        parentWidth = parent.width(),
+                                        scrollLeft = parent.scrollLeft(),
+                                        scrollTop = parent.scrollTop();
 
-                                    left = left - parentLeft;
-                                    top = top - parentTop + height;
+                                    left = (left + scrollLeft) - parentLeft;
+                                    top = (top + scrollTop + height) - parentTop;
 
                                     link.text(url);
                                     link.attr({href: url});

@@ -159,6 +159,10 @@ define('io.ox/office/tk/view/view',
             return this;
         };
 
+        this.getApplicationPane = function () {
+            return appPane;
+        };
+
         // initialization -----------------------------------------------------
 
         // set the window at the application instance

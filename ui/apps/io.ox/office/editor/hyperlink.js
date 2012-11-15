@@ -136,7 +136,7 @@ define('io.ox/office/editor/hyperlink',
      *  The editor instance.
      * @param characterStyles {Object}
      *  The character style sheets.
-     * @param node
+     * @param node {
      *  The node which includes the position
      * @param pos
      *  The position in the paragraph
@@ -180,6 +180,21 @@ define('io.ox/office/editor/hyperlink',
         return { start: startPos.start[startPos.start.length - 1], end: endPos.end[endPos.end.length - 1] };
     };
 
+    /**
+     * Find a text selection based on the provided position which is limited
+     * by separator characters.
+     *
+     * @param paragraph {HTMLElement|jQuery}
+     *  The paragraph which contains the position provided as the second
+     *  argument.
+     * @param pos {Number}
+     *  The position relative inside the paragraph
+     *
+     * @returns {Object}
+     *  An object which contains the start and end position relative to
+     *  the provided paragraph. Both can be null if there is no selection
+     *  and the hyperlink should inserted at pos.
+     */
     Hyperlink.findTextSelection = function (paragraph, pos) {
         var text = '',
             startFound = false,
@@ -234,6 +249,25 @@ define('io.ox/office/editor/hyperlink',
         return selection;
     };
 
+    /**
+     * Tries to find the left position of a word using a
+     * predefined separator array.
+     *
+     * @param text {String}
+     *  The text which should be parsed to find the left bound of
+     *  a selection.
+     *
+     * @param offset {Number}
+     *  An offset to be used to provide correct position data.
+     *
+     * @param pos {Number}
+     *  The absolute position to start with (pos - offset) is
+     *  the relative position in the provided text.
+     *
+     * @returns {Number}
+     *  The absolute position of the left boundary or -1 if the
+     *  current position is the boundary.
+     */
     Hyperlink.findLeftWordPosition = function (text, offset, pos) {
         var i = pos - offset;
 
@@ -246,6 +280,25 @@ define('io.ox/office/editor/hyperlink',
         return offset + i + 1;
     };
 
+    /**
+     * Tries to find the right position of a word using a
+     * predefined separator array.
+     *
+     * @param text {String}
+     *  The text which should be parsed to find the right bound of
+     *  a selection.
+     *
+     * @param offset {Number}
+     *  An offset to be used to provide correct position data.
+     *
+     * @param pos {Number}
+     *  The absolute position to start with (pos - offset) is
+     *  the relative position in the provided text.
+     *
+     * @returns {Number}
+     *  The absolute position of the right boundary or -1 if the
+     *  current position is the boundary.
+     */
     Hyperlink.findRightWordPosition = function (text, offset, pos) {
         var i = pos - offset, length = text.length;
 
