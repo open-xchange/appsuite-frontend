@@ -190,103 +190,6 @@ define('io.ox/office/tk/dialogs',
     };
 
     /**
-     * Shows a hyperlink input dialog.
-     *
-     * @param {Object} [options]
-     *  Additional options that control the appearance and behavior of the
-     *  dialog. The following options are supported:
-     *  @param {String} [options.title]
-     *      If specified, the title of the dialog window that will be shown in
-     *      a larger font.
-     *  @param {String} [options.valueText='']
-     *      The initial value of the text field.
-     *  @param {String} [options.placeholderText='']
-     *      The place-holder text that will be shown in the empty text field.
-     *  @param {String} [options.valueURL='']
-     *      The initial value of the URL field.
-     *  @param {String} [options.placeholderURL='']
-     *      The place-holder text that will be shown in the empty URL field.
-     *  @param {String} [options.okLabel=gt('OK')]
-     *      The label of the primary button that triggers the intended action
-     *      by resolving the promise object returned by this method.
-     *  @param {String} [options.cancelLabel=gt('Cancel')]
-     *      The label of the Cancel button that rejects the promise object
-     *      returned by this method.
-     *
-     * @returns {jQuery.Promise}
-     *  The promise of a deferred object that will be resolved if the primary
-     *  button or the remove button have been activated, or rejected if the
-     *  dialog has been canceled.
-     *  The done handlers registered at the promise object will receive a
-     *  object containing the text and url entered by the user. The object
-     *  contains null for text and url if remove has been clicked.
-     */
-    Dialogs.showHyperlinkDialog = function (options) {
-
-        var // the text input fields
-            inputurlid = _.uniqueId('url'),
-            inputtextid = _.uniqueId('text'),
-
-            // the dialog object
-            dialog = createModalDialog(options)
-            .append(
-                $('<div>').addClass('row-fluid').css({'margin-top': '10px'}).append(
-                    $('<div>').addClass('control-group').css({'margin-bottom': '0px'}).append(
-                        $('<label>').addClass('control-label').attr('for', inputtextid).text(gt('Text:')),
-                        $('<div>').addClass('controls').css({'margin-right': '10px'}).append(
-                            $('<input>', { value: Utils.getStringOption(options, 'valueText', ''), placeholder: Utils.getStringOption(options, 'placeholderURL', '')})
-                            .addClass('nice-input')
-                            .css({'width': '100%'})
-                            .attr('data-property', 'text')
-                            .attr('id', inputtextid))
-                        )
-                    )
-                )
-            .append(
-                $('<div>').addClass('row-fluid').css({'margin-top': '10px'}).append(
-                    $('<div>').addClass('control-group').css({'margin-bottom': '0px'}).append(
-                        $('<label>').addClass('control-label').attr('for', inputurlid).text(gt('URL:')),
-                        $('<div>').addClass('controls').css({'margin-right': '10px'}).append(
-                            $('<input>', { value: Utils.getStringOption(options, 'valueURL', '')})
-                            .addClass('nice-input')
-                            .css({'width': '100%'})
-                            .attr('data-property', 'url')
-                            .attr('id', inputurlid))
-                            )
-                        )
-                    ),
-
-            // the result deferred
-            def = $.Deferred();
-
-        // add OK and Cancel buttons & remove button to remove hyperlink
-        addDialogButtons(dialog, options);
-        dialog.addDangerButton('remove', Utils.getStringOption(options, 'removeLabel', gt('Remove')));
-
-        // show the dialog and register listeners for the results
-        dialog.show(function () {
-            if (Utils.getStringOption(options, 'valueText', '').length > 0)
-                dialog.getBody().find('[data-property="url"]').focus();
-            else
-                dialog.getBody().find('[data-property="text"]').focus();
-        })
-        .done(function (action, data, node) {
-            if (action === 'ok') {
-                var text = $.trim($(node).find('[data-property="text"]').val()),
-                    url = $.trim($(node).find('[data-property="url"]').val());
-
-                def.resolve({ text: text, url: url });
-            } else if (action === 'remove') {
-                def.resolve({ text: null, url: null });
-            } else {
-                def.reject();
-            }
-        });
-
-        return def.promise();
-    };
-
-    /**
      * Shows a generic file selector dialog.
      *
      * @param {Object} [options]
@@ -350,6 +253,20 @@ define('io.ox/office/tk/dialogs',
         });
 
         return def.promise();
+    };
+
+    /**
+     * Creates and returns an empty modal dialog
+     *
+     *  @param {String} [options.title]
+     *      If specified, the title of the dialog window that will be shown in
+     *      a larger font.
+     *
+     * @returns {Dialog}
+     *  A modal dialog object initialized with options.
+     */
+    Dialogs.createDialog = function (options) {
+        return createModalDialog(options);
     };
 
     // exports ================================================================

@@ -1397,7 +1397,7 @@ define('io.ox/office/editor/editor',
                 }
 
                 // show hyperlink dialog
-                Hyperlink.showHyperlinkDialog(text, url).done(function (data) {
+                Hyperlink.showDialog(text, url).done(function (data) {
                     // set url to selected text
                     var hyperlinkStyleId = self.getDefaultUIHyperlinkStylesheet(),
                         url = data.url;
@@ -2059,7 +2059,7 @@ define('io.ox/office/editor/editor',
                                     // find out position of the last span of our selection
                                     urlSelection[urlSelection.length - 1] = startEndPos.end - 1;
                                     obj = Position.getDOMPosition(self.getNode(), urlSelection, true);
-                                    top = $(obj.node.parentNode).offset().top;
+                                    top = $(obj.node).offset().top;
                                     height = $(obj.node).height();
 
                                     // calculate position relative to the application pane
