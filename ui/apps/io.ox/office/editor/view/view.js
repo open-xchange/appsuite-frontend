@@ -15,6 +15,7 @@ define('io.ox/office/editor/view/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/config',
      'io.ox/office/tk/fonts',
+     'io.ox/office/tk/control/label',
      'io.ox/office/tk/control/textfield',
      'io.ox/office/tk/control/radiogroup',
      'io.ox/office/tk/view/pane',
@@ -23,7 +24,7 @@ define('io.ox/office/editor/view/view',
      'io.ox/office/editor/view/controls',
      'io.ox/office/editor/format/lineheight',
      'gettext!io.ox/office/main'
-    ], function (Utils, Config, Fonts, TextField, RadioGroup, Pane, ToolPane, View, Controls, LineHeight, gt) {
+    ], function (Utils, Config, Fonts, Label, TextField, RadioGroup, Pane, ToolPane, View, Controls, LineHeight, gt) {
 
     'use strict';
 
@@ -54,11 +55,8 @@ define('io.ox/office/editor/view/view',
             // old value of the search query field
             oldSearchQuery = '',
 
-            // output element for operations log
-            opsNode = null,
-
-            // output elements for other debug information
-            infoNode = null, syncCell = null, selTypeCell = null, selStartCell = null, selEndCell = null;
+            // debug output elements
+            opsNode = null, infoNode = null, syncCell = null, selTypeCell = null, selStartCell = null, selEndCell = null;
 
         // private methods ----------------------------------------------------
 
@@ -80,6 +78,44 @@ define('io.ox/office/editor/view/view',
                 .addButton('document/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert Last Operation') })
                 .addButton('document/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore Last Operation') })
                 .addSeparator();
+        }
+
+        /**
+         * Update handler for the editor status label. Will be called in the
+         * context of the status label instance.
+         */
+        function statusLabelUpdateHandler(value) {
+
+            var // the <label> DOM element
+                label = this.getNode().find('label'),
+                // the new label text
+                caption = '';
+
+            switch (value) {
+            case 'offline':
+                caption = gt('Offline');
+                break;
+            case 'readonly':
+                caption = gt('Read-only mode');
+                break;
+            case 'sending':
+                caption = gt('Saving changes...');
+                break;
+            case 'ready':
+                caption = gt('All changes saved');
+                break;
+            case 'initial':
+                caption = gt('No changes');
+                break;
+            default:
+                // state must not be undefined/null
+                Utils.error('EditorView.statusLabelUpdateHandler(): unknown connection state: ' + value);
+                return;
+            }
+
+            // set caption and data-state attribute (used as CSS selector for formatting)
+            Utils.setControlCaption(label, { label: caption });
+            label.attr('data-state', value);
         }
 
         /**
@@ -341,9 +377,7 @@ define('io.ox/office/editor/view/view',
         toolPane.showToolBar('format');
 
         // add application status label to tab bar
-        toolPane.getTabBar()
-            .addSeparator()
-            .addLabel('file/connection/state', { css: { minWidth: 115 } });
+        toolPane.getTabBar().addGroup('file/connection/state', new Label({ classes: 'status-label', updateHandler: statusLabelUpdateHandler }));
 
         // add 'rename document' functionality to title field
         app.getWindow().nodes.title.addClass('io-ox-office-title').click(renameDocumentHandler);

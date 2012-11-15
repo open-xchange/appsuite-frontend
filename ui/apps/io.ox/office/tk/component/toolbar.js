@@ -33,26 +33,14 @@ define('io.ox/office/tk/component/toolbar',
      */
     function ToolBar(appWindow) {
 
-        var // DOM child element measuring the total width of the controls
-            containerNode = $('<span>');
-
-        // private methods ----------------------------------------------------
-
-        /**
-         * Handler function that will be called for every inserted group.
-         */
-        function insertGroupHandler(groupNode) {
-            containerNode.append(groupNode);
-        }
-
         // base constructor ---------------------------------------------------
 
-        Component.call(this, appWindow, insertGroupHandler);
+        Component.call(this, appWindow);
 
         // initialization -----------------------------------------------------
 
         // prepare component root node
-        this.getNode().addClass('toolbar').append(containerNode);
+        this.getNode().addClass('toolbar');
 
     } // class ToolBar
 

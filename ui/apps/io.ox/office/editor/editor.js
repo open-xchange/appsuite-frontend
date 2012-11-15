@@ -1910,26 +1910,6 @@ define('io.ox/office/editor/editor',
         };
 
         /**
-         * Returns the localized state, respecting ox.online state,
-         * edit mode and if there are operations to send to the server.
-         */
-        this.getEditorStateString = function () {
-
-            if (!ox.online) {
-                return gt('Offline');
-            } else if (!editMode) {
-                return gt('Read only mode');
-            } else if (!app.isLocallyModified() && !app.hasUnsavedChanges()) {
-                return gt('No changes');
-            } else if (app.hasUnsavedChanges()) {
-                return gt('Saving changes...');
-            } else if (app.isLocallyModified() && !app.hasUnsavedChanges()) {
-                return gt('All changes saved');
-            }
-            return '';
-        };
-
-        /**
          * Returns whether the current selection selects any text. This
          * includes the rectangular table cell selection mode.
          */

@@ -11,11 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-.border-radius(@radius) {
-    -webkit-border-radius: @radius;
-    -moz-border-radius: @radius;
-    border-radius: @radius;
-}
+/* generic mix-in classes ================================================== */
 
 .opacity(@opacity) {
     @opacity-percent: @opacity * 100;
@@ -27,6 +23,8 @@
     outline: 1px @color solid;
     background-color: fade(lighten(@color, 10%), 50%) !important;
 }
+
+/* editor GUI elements ===================================================== */
 
 .io-ox-office-title {
     margin-left: 5px;
@@ -42,9 +40,45 @@
     }
 }
 
+/* the label displaying the current status of the editor application */
+.io-ox-view-component.toolbar .group.status-label {
+    position: absolute;
+    top: 6px;
+    right: 0;
+
+    /* internal formatting */
+    label {
+        height: 20px;
+        line-height: 20px;
+        background: white;
+        .border-radius(10px);
+        .box-shadow(0 4px 8px fade(black, 25%));
+        color: #666666;
+        font-size: 11px;
+        font-weight: bold;
+
+        &[data-state="offline"] {
+            background: #eaa;
+            color: #755;
+        }
+
+        &[data-state="readonly"], &[data-state="sending"] {
+            background: #eea;
+            color: #775;
+        }
+
+        &[data-state="initial"], &[data-state="ready"] {
+            background: #aea;
+            color: #575;
+        }
+    }
+}
+
+/* editor application pane ================================================= */
+
 .io-ox-office-editor-main {
 
-    div.page {
+    .page {
         .box-sizing(border-box);
 
         /* text cursor over entire page, but not in read-only mode */
@@ -306,7 +340,7 @@
        }
     }
 
-    div.io-ox-pane.debug > table {
+    .io-ox-pane.debug > table {
         width: 100%;
         table-layout: fixed;
         border-collapse: separate;

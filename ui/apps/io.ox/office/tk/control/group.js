@@ -46,6 +46,9 @@ define('io.ox/office/tk/control/group',
      *  @param {Boolean} [options.white]
      *      If set to true, control embedded in the group will get a white
      *      background instead of being transparent.
+     *  @param {String} [options.classes]
+     *      Additional CSS classes that will be set at the root DOM node of
+     *      this instance.
      */
     function Group(options) {
 
@@ -323,7 +326,9 @@ define('io.ox/office/tk/control/group',
         Events.extend(this);
 
         // formatting and tool tip
-        groupNode.addClass(Utils.getBooleanOption(options, 'white') ? 'white' : '');
+        groupNode
+            .addClass(Utils.getBooleanOption(options, 'white') ? 'white' : '')
+            .addClass(Utils.getStringOption(options, 'classes', ''));
         Utils.setControlTooltip(groupNode, Utils.getStringOption(options, 'tooltip'));
 
         // add event handlers

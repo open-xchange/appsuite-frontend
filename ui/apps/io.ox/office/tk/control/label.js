@@ -30,16 +30,32 @@ define('io.ox/office/tk/control/label',
      * @param {Object} [options]
      *  A map of options to control the properties of the label. Supports all
      *  options of the Group base class, and all generic formatting options for
-     *  labels (see method Utils.createLabel() for details).
+     *  labels (see method Utils.createLabel() for details). Additionally,
+     *  supports the following options:
+     *  @param {Function} [updateHandler]
+     *      If specified, will be called every time the label has to be
+     *      updated. Will be called in the context of this control instance.
+     *      Receives the new value of the label control as first parameter.
      */
     function Label(options) {
 
         var // create the label
-            label = Utils.createLabel(options);
+            label = Utils.createLabel(options),
+
+            // the update handler
+            updateHandler = Utils.getFunctionOption(options, 'updateHandler');
 
         // private methods ----------------------------------------------------
 
-        function updateHandler(value) {
+        /**
+         * Sets the passed value as caption label.
+         *
+         * @param [value]
+         *  A value that will be set as caption label. If null or undefined is
+         *  passed, the caption label will be cleared. Otherwise, the label
+         *  will will be converted to a string value.
+         */
+        function defaultUpdateHandler(value) {
             var labelOptions = Utils.extendOptions(options, { label: (_.isUndefined(value) || _.isNull(value)) ? undefined : value });
             Utils.setControlCaption(label, labelOptions);
         }
@@ -52,7 +68,7 @@ define('io.ox/office/tk/control/label',
 
         // insert the label into this group, and register event handlers
         this.addChildNodes(label)
-            .registerUpdateHandler(updateHandler);
+            .registerUpdateHandler(_.isFunction(updateHandler) ? updateHandler : defaultUpdateHandler);
 
     } // class Label
 

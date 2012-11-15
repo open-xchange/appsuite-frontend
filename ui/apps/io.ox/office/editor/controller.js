@@ -54,7 +54,7 @@ define('io.ox/office/editor/controller',
                     set: function (state) { app.acquireEditRights(); }
                 },
                 'file/connection/state': {
-                    get: function () { return editor.getEditorStateString(); }
+                    get: function () { return app.getConnectionState(); }
                 },
 
                 // document contents

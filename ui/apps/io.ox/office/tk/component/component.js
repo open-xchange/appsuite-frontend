@@ -256,9 +256,7 @@ define('io.ox/office/tk/component/component',
          * Adds separation space following the last inserted group.
          */
         this.addSeparator = function () {
-            var group = new Group();
-            group.getNode().addClass('separator');
-            insertGroup(group);
+            insertGroup(new Group({ classes: 'separator' }));
             return this;
         };
 

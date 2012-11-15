@@ -775,6 +775,26 @@ define('io.ox/office/editor/main',
         };
 
         /**
+         * Returns the current application state.
+         *
+         * @returns {String}
+         *  A string representing the editor application state. Will be one of
+         *  the following values:
+         *  - 'offline': network connection missing,
+         *  - 'readonly': the document cannot be changed,
+         *  - 'initial': the document has not been changed yet,
+         *  - 'ready': all local changes have been sent to the server,
+         *  - 'sending': local changes are currently being sent to the server.
+         */
+        this.getConnectionState = function () {
+            return (!ox.online || !syncMode) ? 'offline' :
+                !editor.isEditMode() ? 'readonly' :
+                this.hasUnsavedChanges() ? 'sending' :
+                this.isLocallyModified() ? 'ready' :
+                'initial';
+        };
+
+        /**
          * Will be called automatically from the OX framework to create and
          * return a restore point containing the current state of the
          * application.
@@ -837,6 +857,7 @@ define('io.ox/office/editor/main',
         this.setSynchronizedMode = function (state) {
             if (syncMode !== state) {
                 syncMode = state;
+                controller.update('file/connection/state');
                 startOperationsTimer(0);
             }
             return this;

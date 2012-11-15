@@ -15,12 +15,6 @@
 /* generic mix-in classes                                                    */
 /* ========================================================================= */
 
-.border-radius(@radius) {
-    -webkit-border-radius: @radius;
-    -moz-border-radius: @radius;
-    border-radius: @radius;
-}
-
 .border-top-left-radius(@radius) {
     -webkit-border-top-left-radius: @radius;
     -moz-border-radius-topleft: @radius;
@@ -183,7 +177,7 @@ i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }
 
 /* panes =================================================================== */
 
-div.io-ox-pane {
+.io-ox-pane {
     position: absolute;
     background-color: @pane-fill-color;
     .box-shadow(0 0 8px fade(black, 25%));
@@ -216,7 +210,7 @@ div.io-ox-pane {
         .overflow(auto);
 
         /* generic design of a 'page': white background with dark box shadow */
-        div.page {
+        .page {
             position: relative;
             margin: 30px auto;
             background-color: white;
@@ -227,7 +221,8 @@ div.io-ox-pane {
 
 /* view components ========================================================= */
 
-div.io-ox-view-component {
+.io-ox-view-component {
+    position: relative;
     padding: 0;
     /* prevent multi-line layout of button groups */
     white-space: nowrap;
@@ -461,7 +456,7 @@ div.io-ox-view-component {
                         }
 
                         /* inner container in buttons with displayed color */
-                        > div.color-box {
+                        > .color-box {
                             width: 20px;
                             height: 20px;
                             float: left;
@@ -562,75 +557,70 @@ div.io-ox-view-component {
 
         padding: 0;
 
-        > span {
+        /* show groups in a horizontal bar */
+        > .group {
             display: inline-block;
-            position: relative;
 
-            /* show groups in a horizontal bar */
-            > .group {
-                display: inline-block;
+            /* group spacing */
+            &.separator {
+                width: 10px;
+            }
 
-                /* group spacing */
-                &.separator {
-                    width: 10px;
+            > label, > button, > input {
+                height: @control-height;
+                border: none;
+            }
+
+            > label, > button {
+                line-height: @control-height;
+            }
+
+            /* selected toggle/radio buttons */
+            > button.selected {
+                .vertical-gradient(@button-accented-selected-color, @button-selected-color);
+            }
+
+            /* keyboard/mouse effects (not for disabled buttons) */
+            &:not(.disabled) > button:not(.disabled) {
+
+                /* mouse/keyboard effects */
+                &:hover { .vertical-gradient(darken(@pane-accented-fill-color, 10%), @pane-fill-color); }
+                &:focus { .vertical-gradient(darken(@pane-accented-fill-color, 10%), @pane-fill-color); }
+                &:active { .vertical-gradient(darken(@pane-accented-fill-color, 20%), @pane-fill-color); }
+
+                /* selected toggle/radio buttons */
+                &.selected {
+
+                    /* mouse/keyboard effects */
+                    &:hover { .vertical-gradient(darken(@button-accented-selected-color, 3%), @button-selected-color); }
+                    &:focus { .vertical-gradient(darken(@button-accented-selected-color, 3%), @button-selected-color); }
+                    &:active { .vertical-gradient(darken(@button-accented-selected-color, 6%), @button-selected-color); }
                 }
+            }
+
+            /* groups with white background and shadowed borders */
+            &.white {
+                @offset: 4px;
+
+                top: @offset;
+                .box-shadow(0 0 4px fade(black, 15%));
 
                 > label, > button, > input {
-                    height: @control-height;
-                    border: none;
+                    height: @control-height - 2 * @offset;
+                    background: white;
                 }
 
                 > label, > button {
-                    line-height: @control-height;
-                }
-
-                /* selected toggle/radio buttons */
-                > button.selected {
-                    .vertical-gradient(@button-accented-selected-color, @button-selected-color);
+                    line-height: @control-height - 2 * @offset;
                 }
 
                 /* keyboard/mouse effects (not for disabled buttons) */
                 &:not(.disabled) > button:not(.disabled) {
 
                     /* mouse/keyboard effects */
-                    &:hover { .vertical-gradient(darken(@pane-accented-fill-color, 10%), @pane-fill-color); }
-                    &:focus { .vertical-gradient(darken(@pane-accented-fill-color, 10%), @pane-fill-color); }
-                    &:active { .vertical-gradient(darken(@pane-accented-fill-color, 20%), @pane-fill-color); }
-
-                    /* selected toggle/radio buttons */
-                    &.selected {
-
-                        /* mouse/keyboard effects */
-                        &:hover { .vertical-gradient(darken(@button-accented-selected-color, 3%), @button-selected-color); }
-                        &:focus { .vertical-gradient(darken(@button-accented-selected-color, 3%), @button-selected-color); }
-                        &:active { .vertical-gradient(darken(@button-accented-selected-color, 6%), @button-selected-color); }
-                    }
-                }
-
-                /* groups with white background and shadowed borders */
-                &.white {
-                    @offset: 4px;
-
-                    top: @offset;
-                    .box-shadow(0 0 4px fade(black, 15%));
-
-                    > label, > button, > input {
-                        height: @control-height - 2 * @offset;
-                        background: white;
-                    }
-
-                    > label, > button {
-                        line-height: @control-height - 2 * @offset;
-                    }
-
-                    /* keyboard/mouse effects (not for disabled buttons) */
-                    &:not(.disabled) > button:not(.disabled) {
-
-                        /* mouse/keyboard effects */
-                        &:hover { .vertical-gradient(darken(white, 5%), white); }
-                        &:focus { .vertical-gradient(darken(white, 5%), white); }
-                        &:active { .vertical-gradient(darken(white, 10%), white); }
-                    }
+                    &:hover { .vertical-gradient(darken(white, 5%), white); }
+                    &:focus { .vertical-gradient(darken(white, 5%), white); }
+                    &:active { .vertical-gradient(darken(white, 10%), white); }
                 }
             }
         }
@@ -689,10 +679,10 @@ div.io-ox-view-component {
     
 }
 
-/* Clipboard DIV============================================================ */
+/* Clipboard =============================================================== */
 
 .io-ox-office-clipboard {
-    position: relative;
+    position: absolute;
     top: -10000px;
     left: -10000px;
 }
