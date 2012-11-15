@@ -2262,9 +2262,9 @@ define('io.ox/office/editor/editor',
 
         function processMouseDown(event) {
 
-            // handle mouse events in edit mode only
+            // in read only mode allow text selection only
             if (!editMode) {
-                event.preventDefault();
+                updateSelection();
                 return;
             }
 
@@ -3300,7 +3300,7 @@ define('io.ox/office/editor/editor',
             var // deferred return value
                 def = $.Deferred();
 
-            if (focused && editMode) {
+            if (focused) {
                 // browser needs to process pending events before its selection can be querried
                 window.setTimeout(function () {
                     selection.updateFromBrowserSelection(backwards);
