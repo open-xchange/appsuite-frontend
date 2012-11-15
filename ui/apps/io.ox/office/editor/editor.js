@@ -138,6 +138,16 @@ define('io.ox/office/editor/editor',
         return ((event.metaKey || event.ctrlKey) && !event.altKey && (event.charCode === 118 || event.keyCode === 86));
     }
 
+    /**
+     * Returns true, if the passed keyboard event is ctrl+c or meta+c.
+     *
+     * @param event
+     *  A jQuery keyboard event object.
+     */
+    function isCopyKeyEvent(event) {
+        return ((event.metaKey || event.ctrlKey) && !event.altKey && (event.charCode === 99 || event.keyCode === 67));
+    }
+
     function getPrintableChar(event) {
         // event.char preferred. DL2, but nyi in most browsers:(
         if (event.char) {
@@ -2338,8 +2348,8 @@ define('io.ox/office/editor/editor',
                 return;
             }
 
-            // handle just cursor events if in read only mode
-            if (!editMode && !isCursorKeyEvent(event)) {
+            // handle just cursor and copy events if in read only mode
+            if (!editMode && !isCursorKeyEvent(event) && !isCopyKeyEvent(event)) {
                 event.preventDefault();
                 return;
             }
@@ -2625,17 +2635,16 @@ define('io.ox/office/editor/editor',
                 return;
             }
 
-            // handle just cursor events if in read only mode
-            if (!editMode && !isCursorKeyEvent(event)) {
+            // handle just cursor and copy events if in read only mode
+            if (!editMode && !isCursorKeyEvent(event) && !isCopyKeyEvent(event)) {
                 event.preventDefault();
                 return;
             }
 
             implDbgOutEvent(event);
 
-            // prevent browser from evaluating the key event,
-            // but allow ctrl+v and meta+v to make the browser send the 'paste' event
-            if (!isPasteKeyEvent(event)) {
+            // prevent browser from evaluating the key event, but allow copy and pate events
+            if (!isPasteKeyEvent(event) && !isCopyKeyEvent(event)) {
                 event.preventDefault();
             }
 
