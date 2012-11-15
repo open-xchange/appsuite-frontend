@@ -239,6 +239,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         },
         attribute: 'currency',
         selectOptions: {
+            '': undefined,
             CAD: _.noI18n('CAD'),
             CHF: _.noI18n('CHF'),
             DKK: _.noI18n('DKK'),
@@ -359,6 +360,121 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             });
         }
     });
+    
+    //Datepickers need Custom methods because standard methods show odd behaviour with undefined dates
+    var CustomBinderUtils = {
+        _timeStrToDate: function (value, attribute, model) {
+            var myValue = parseInt(model.get(attribute), 10) || false;
+            if (!myValue) {
+                //check if attribute is undefined or null
+                if (model.get(attribute) === undefined || model.get(attribute) === null) {
+                    myValue = _.now();
+                } else { //attribute seems to be broken
+                    return null;
+                }
+            }
+            var mydate = new date.Local(myValue);
+            var parsedDate = date.Local.parse(value, date.TIME);
+            
+            // just reject the change, if it's not parsable
+            if (value !== '' && (_.isNull(parsedDate) || parsedDate.getTime() === 0)) {
+                model.trigger('change:' + attribute);//reset inputfields
+                setTimeout(function () {notifications.yell("error", gt("Please enter a valid date.")); }, 300);
+                return model.get(attribute);
+            }
+            //set hours to 6:00 am if nothing is set
+            if (value === '') {
+                mydate.setHours(6);
+                mydate.setMinutes(0);
+                mydate.setSeconds(0);
+            } else {
+                mydate.setHours(parsedDate.getHours());
+                mydate.setMinutes(parsedDate.getMinutes());
+                mydate.setSeconds(parsedDate.getSeconds());
+            }
+
+            return mydate.getTime();
+        },
+        _dateStrToDate: function (value, attribute, model) {
+            var myValue = parseInt(model.get(attribute), 10) || false;
+            if (!myValue) {
+                //check if attribute is just undefined
+                if (model.get(attribute) === undefined || model.get(attribute) === null) {
+                    myValue = _.now();
+                } else { //attribute seems to be broken
+                    return null;
+                }
+            }
+            var mydate = new date.Local(date.Local.utc(myValue));
+            var parsedDate = date.Local.parse(value, date.DATE);
+            
+            if (value === '') { //empty input means date should be undefined
+                return null;
+            }
+            // just reject the change, if it's not parsable
+            if (_.isNull(parsedDate) || parsedDate.getTime() === 0) {
+                model.trigger('change:' + attribute);//reset inputfields
+                setTimeout(function () {notifications.yell("error", gt("Please enter a valid date.")); }, 300);
+                return model.get(attribute);
+            }
+    
+            mydate.setDate(parsedDate.getDate());
+            mydate.setMonth(parsedDate.getMonth());
+            mydate.setYear(parsedDate.getYear());
+            return date.Local.localTime(mydate.getTime());
+        }
+    };
+    
+    // start date
+    point.extend(new forms.DatePicker({
+        id: 'start_date',
+        index: 1600,
+        className: 'span6',
+        labelClassName: 'task-edit-label',
+        display: 'DATETIME',
+        attribute: 'start_date',
+        label: gt('Starts on'),
+        updateModelDate: function () {
+            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model));
+        },
+        updateModelTime: function () {
+            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model));
+        }
+    }));
+    
+    // due date
+    point.extend(new forms.DatePicker({
+        id: 'end_date',
+        index: 1700,
+        className: 'span6',
+        labelClassName: 'task-edit-label',
+        display: 'DATETIME',
+        attribute: 'end_date',
+        label: gt('Due date'),
+        updateModelDate: function () {
+            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model));
+        },
+        updateModelTime: function () {
+            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model));
+        }
+    }));
+    
+    // reminder date
+    point.extend(new forms.DatePicker({
+        id: 'alarm',
+        index: 1800,
+        className: 'span6 offset1',
+        labelClassName: 'task-edit-label',
+        display: 'DATETIME',
+        attribute: 'alarm',
+        label: gt('Date'),
+        updateModelDate: function () {
+            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model));
+        },
+        updateModelTime: function () {
+            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model));
+        }
+    }));
     
     return null; //just used to clean up the view class
 });

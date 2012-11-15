@@ -50,19 +50,13 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             util.buildExtensionRow(self.$el, this.getRow(1, app), self.baton);
 
             //row 2 start date due date
-            util.buildRow(this.$el, [[util.buildLabel(gt("Due date"), this.fields.endDate.attr('id')), this.fields.endDate.parent()],
-                                 [util.buildLabel(gt("Time"), this.fields.endDateTime.attr('id')), this.fields.endDateTime],
-                                 [util.buildLabel(gt("Start date"), this.fields.startDate.attr('id')), this.fields.startDate.parent()],
-                                 [util.buildLabel(gt("Time"), this.fields.startDateTime.attr('id')), this.fields.startDateTime]]);
-
+            util.buildExtensionRow(self.$el, this.getRow(6), self.baton);
+             
             //row 3 description
             util.buildExtensionRow(self.$el, this.getRow(2), self.baton);
 
             //row 4 reminder
-            util.buildRow(this.$el, [[util.buildLabel(gt("Remind me"), this.fields.reminderDropdown.attr('id')), this.fields.reminderDropdown],
-                                     [util.buildLabel(gt("Date"), this.fields.alarmDate.attr('id')), this.fields.alarmDate.parent()],
-                                     [util.buildLabel(gt("Time"), this.fields.alarmDateTime.attr('id')), this.fields.alarmDateTime]],
-                    [5, [3, 1], 3]);
+            util.buildExtensionRow(self.$el, this.getRow(7), self.baton);
 
             //row 5 status progress priority privateFlag
             util.buildExtensionRow(self.$el, this.getRow(3), self.baton);
@@ -145,7 +139,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 //create non extensionPoint nodes
                 self.createNonExt(app);
                 //fill with empty rows
-                this.rows = [[], [], [], [], [[], [], [], [], []], []];
+                this.rows = [[], [], [], [], [[], [], [], [], []], [], [], []];
                 //get extension points
                 this.point.each(function (extension) {
                     temp[extension.id] = extension;
@@ -175,17 +169,19 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 //participantstab
                 self.rows[5].push(temp.participants_list);
                 self.rows[5].push(temp.add_participant);
+                //row2
+                self.rows[6].push(temp.end_date);
+                self.rows[6].push(temp.start_date);
+                //row4
+                self.rows[7].push([[util.buildLabel(gt("Remind me"), this.fields.reminderDropdown.attr('id')), this.fields.reminderDropdown], 5]);
+                self.rows[7].push(temp.alarm);
                 return this.rows[number];
             }
         },
         createNonExt: function (app) {
             var saveBtnText = gt("Create"),
                 headlineText = gt('Create task'),
-                self = this,
-                //objects to display correct localtimes
-                alarmDateObj,
-                startDateObj,
-                endDateObj;
+                self = this;
             if (this.model.attributes.id) {
                 saveBtnText = gt("Save");
                 headlineText = gt("Edit task");
@@ -201,7 +197,6 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 .text(saveBtnText)
                 .on('click', function (e) {
                     e.stopPropagation();
-                    //self.model.set('number_of attachments', self.attachmentArray.length);
                     if (self.model.get('id')) {
                         var callbacks = {
                                 success: function (model, response) {
@@ -216,6 +211,9 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                             };
                         self.model.sync("update", self.model, callbacks);
                     } else {
+                        if (self.model.get('alarm') === null) {
+                            self.model.set('alarm', undefined);
+                        }
                         var callbacks = {
                                 success: function (model, response) {
                                     self.saveAttachments(model, response, self, app);
@@ -230,76 +228,19 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
 
                 });
             //row 4
-            this.fields.reminderDropdown = $('<select>').attr('id', 'task-edit-reminder-select')
+            this.fields.reminderDropdown = $('<select>').attr('id', 'task-edit-reminder-select').addClass("span12")
                 .append($('<option>')
                 .text(''), reminderUtil.buildDropdownMenu())
                 .on('change', function (e) {
                     if (self.fields.reminderDropdown.prop('selectedIndex') === 0) {
-                        alarmDateObj = undefined;
-                        self.model.set('alarm', undefined);
+                        self.model.set('alarm', null);
                     } else {
                         var dates = reminderUtil.computePopupTime(new Date(),
                                 self.fields.reminderDropdown.find(":selected").attr("finderId"));
-                        if (! self.model.attributes.alarm) {
-                            alarmDateObj = new date.Local(dates.alarmDate.getTime());
-                        } else {
-                            alarmDateObj.setTime(dates.alarmDate.getTime());
-                        }
                         self.model.set('alarm', dates.alarmDate.getTime());
                     }
                 });
-            this.fields.alarmDateTime = $('<input>').addClass("alarm-date-time-field span12").attr({type: 'text', id: 'task-edit-alarm-date-time-field'});
-            this.fields.alarmDate = $('<input>').addClass("alarm-date-field span9").attr({type: 'text', id: 'task-edit-alarm-date-field'});
-            if (this.model.get('alarm')) {
-                alarmDateObj = new date.Local(this.model.attributes.alarm);
-                this.fields.alarmDate.val(alarmDateObj.format(date.DATE));
-                this.fields.alarmDateTime.val(alarmDateObj.format(date.TIME));
-            }
-            this.fields.alarmButton = $('<button>')
-                .addClass("btn task-edit-picker span3 fluid-grid-fix").attr('data-action', 'alert')
-                .on('click', function (e) {
-                    e.stopPropagation();
-                    picker.create().done(function (timevalue) {
-                        if (timevalue !== -1) {
-                            if (!self.model.get('alarm')) {
-                                alarmDateObj = new date.Local(timevalue);
-                            } else {
-                                alarmDateObj.setTime(timevalue);
-                            }
-                            self.model.set('alarm', timevalue);
-                        }
-                    });
-                })
-                .append($('<i>').addClass('icon-calendar'));
-            $('<div>').addClass('input-append').append(this.fields.alarmDate, this.fields.alarmButton);
-            this.model.on("change:alarm", function () {
-                if (alarmDateObj) {
-                    self.fields.alarmDate.val(alarmDateObj.format(date.DATE));
-                    self.fields.alarmDateTime.val(alarmDateObj.format(date.TIME));
-                } else {
-                    self.fields.alarmDate.val('');
-                    self.fields.alarmDateTime.val('');
-                }
-            });
-            var alarmupdate = function () {
-                var divider = ' ',
-                    format = date.getFormat();
-                if (format.search(/, /) !== -1) {//english seperates date and time with a comma
-                    format = format.replace(/, /, ' ');
-                    divider = ", ";
-                }
-                var temp = date.Local.parse(self.fields.alarmDate.val() + divider + self.fields.alarmDateTime.val().toUpperCase());
-                if (temp !== null) {
-                    alarmDateObj = temp;
-                    self.model.set('alarm', temp.t);
-                } else {
-                    setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.") + ' ' + gt.noI18n(format)); }, 300);
-                    self.model.trigger('change:alarm');
-                }
-            };
-            this.fields.alarmDate.on("change", alarmupdate);
-            this.fields.alarmDateTime.on("change", alarmupdate);
-
+            
             //row 5
             this.fields.progress = util.buildProgress();
             this.fields.progress.on('change', function () {
@@ -327,130 +268,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 self.fields.progress.val(self.model.get('percent_completed'));
             });
             this.fields.progress.val(this.model.get('percent_completed'));
-
-            //row2
-            this.fields.startDateButton = $('<button>').attr('data-action', 'start-date')
-            .addClass("btn task-edit-picker span3 fluid-grid-fix")
-            .on('click', function (e) {
-                e.stopPropagation();
-                picker.create().done(function (timevalue) {
-                    if (timevalue !== -1) {
-                        if (!self.model.attributes.start_date) {
-                            startDateObj = new date.Local(timevalue);
-                        } else {
-                            startDateObj.setTime(timevalue);
-                        }
-                        self.model.set('start_date', timevalue);
-                    }
-                });
-            })
-            .append($('<i>').addClass('icon-calendar'));
-
-            this.fields.endDateButton = $('<button>').attr('data-action', 'end-date')
-                .addClass("btn task-edit-picker span3 fluid-grid-fix")
-                .on('click', function (e) {
-                    e.stopPropagation();
-                    picker.create().done(function (timevalue) {
-                        if (timevalue !== -1) {
-                            if (!self.model.attributes.end_date) {
-                                endDateObj = new date.Local(timevalue);
-                            } else {
-                                endDateObj.setTime(timevalue);
-                            }
-                            self.model.set('end_date', timevalue);
-                        }
-                    });
-                })
-                .append($('<i>').addClass('icon-calendar'));
-
-            this.fields.startDate = $('<input>').addClass("start-date-field span9").attr({type: 'text', id: 'task-edit-start-date-field'});
-            this.fields.startDateTime = $('<input>').addClass("start-date-time-field span12").attr({type: 'text', id: 'task-edit-start-date-time-field'});
-            this.fields.endDate = $('<input>').addClass("end-date-field span9").attr({type: 'text', id: 'task-edit-end-date-field'});
-            this.fields.endDateTime = $('<input>').addClass("end-date-time-field span12").attr({type: 'text', id: 'task-edit-end-date-time-field'});
-            if (this.model.attributes.start_date) {
-                startDateObj = new date.Local(this.model.attributes.start_date);
-                this.fields.startDate.val(startDateObj.format(date.DATE));
-                this.fields.startDateTime.val(startDateObj.format(date.TIME));
-            }
-            if (this.model.attributes.end_date) {
-                endDateObj = new date.Local(this.model.attributes.end_date);
-                this.fields.endDate.val(endDateObj.format(date.DATE));
-                this.fields.endDateTime.val(endDateObj.format(date.TIME));
-            }
-            $('<div>').addClass('input-append').append(this.fields.startDate, this.fields.startDateButton);
-            $('<div>').addClass('input-append').append(this.fields.endDate, this.fields.endDateButton);
-
-            this.model.on("change:end_date", function () {
-                if (endDateObj) {
-                    self.fields.endDate.val(endDateObj.format(date.DATE));
-                    self.fields.endDateTime.val(endDateObj.format(date.TIME));
-                } else {
-                    self.fields.endDate.val('');
-                    self.fields.endDateTime.val('');
-                }
-            });
-            var endDateUpdate = function () {
-                if (self.fields.endDate.val() !== '') {
-                    var divider = ' ',
-                        format = date.getFormat();
-                    if (format.search(/, /) !== -1) {//english seperates date and time with a comma
-                        format = format.replace(/, /, ' ');
-                        divider = ", ";
-                    }
-                    var temp = date.Local.parse(self.fields.endDate.val() + divider + self.fields.endDateTime.val().toUpperCase());
-                    if (temp !== null) {
-                        endDateObj = temp;
-                        self.model.set('end_date', temp.t);
-                    } else {
-
-                        setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.") + ' ' + gt.noI18n(format)); }, 300);
-                        self.model.trigger('change:end_date');
-                    }
-                } else {//User wants to delete the end date
-                    endDateObj = undefined;
-                    self.model.set('end_date', null);
-                }
-            };
-            this.fields.endDate.on("change", endDateUpdate);
-            this.fields.endDateTime.on("change", endDateUpdate);
-            this.model.on("invalid:end_date", function (messages, errors, model) {
-                setTimeout(function () {notifications.yell("error", messages[0]); }, 300);
-            });
-            this.model.on("change:start_date", function () {
-                if (startDateObj) {
-                    self.fields.startDate.val(startDateObj.format(date.DATE));
-                    self.fields.startDateTime.val(startDateObj.format(date.TIME));
-                } else {
-                    self.fields.startDate.val('');
-                    self.fields.startDateTime.val('');
-                }
-            });
-            var startDateUpdate = function () {
-                if (self.fields.startDate.val() !== '') {
-                    var divider = ' ',
-                        format = date.getFormat();
-                    if (format.search(/, /) !== -1) {//english seperates date and time with a comma
-                        format = format.replace(/, /, ' ');
-                        divider = ", ";
-                    }
-                    var temp = date.Local.parse(self.fields.startDate.val() + divider + self.fields.startDateTime.val().toUpperCase());
-                    if (temp !== null) {
-                        startDateObj = temp;
-                        self.model.set('start_date', temp.t);
-                    } else {
-                        setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.") + ' ' + gt.noI18n(format)); }, 300);
-                        self.model.trigger('change:start_date');
-                    }
-                } else {//User wants to delete the start date
-                    startDateObj = undefined;
-                    self.model.set('start_date', null);
-                }
-            };
-            this.fields.startDate.on("change", startDateUpdate);
-            this.fields.startDateTime.on("change", startDateUpdate);
-            this.model.on("invalid:start_date", function (messages, errors, model) {
-                setTimeout(function () {notifications.yell("error", messages[0]); }, 300);
-            });
+            
             //row 6
             this.fields.repeatLink = $('<a>').text(gt("Repeat")).addClass("repeat-link").attr('href', '#')
                 .on('click', function (e) { e.preventDefault();
@@ -505,6 +323,9 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                         app.quit();
                     });
                 });
+            } else {
+                app.markClean();
+                app.quit();
             }
         }
     }),

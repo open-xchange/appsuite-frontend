@@ -28,8 +28,7 @@ define("io.ox/tasks/model", ['io.ox/tasks/api',
                 status: 1,
                 priority: 2,
                 percent_completed: 0,
-                folder_id: api.getDefaultFolder(),
-                currency: 'EUR'
+                folder_id: api.getDefaultFolder()
             },
             getParticipants: function () {
                 if (this._participants) {
