@@ -2081,6 +2081,11 @@ define('io.ox/office/editor/editor',
                                         left -= (((left + width) - parentWidth) + parentLeft);
                                         hyperlinkPopup.css({left: left});
                                     }
+                                    if (pos === startEndPos.start) {
+                                        // special case: at the start of a hyperlink we want to
+                                        // write with normal style
+                                        preselectedAttributes = { style: null, url: null };
+                                    }
                                 }
                                 else {
                                     // special case: at the end of a hyperlink we want to
