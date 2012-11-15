@@ -326,6 +326,7 @@
         line-height: normal;
 	    position: absolute;
         border: 1px solid;
+        .box-shadow(0 5px 10px fade(black, 25%));
         border-color: #A0A0A0;
         padding: 10px 20px;
         background-color: #F8F8F8;
@@ -337,6 +338,7 @@
        &:hover {
            color: #005580;
            text-decoration:underline;
+           cursor: pointer;
        }
     }
 

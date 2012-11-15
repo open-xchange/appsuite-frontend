@@ -2121,7 +2121,6 @@ define('io.ox/office/editor/editor',
                                     // special case: at the end of a hyperlink we want to
                                     // write with normal style and we don't show the popup
                                     preselectedAttributes = { style: null, url: null };
-                                    hyperlinkPopup.css({display: 'none'});
                                 }
                             }
                         }
