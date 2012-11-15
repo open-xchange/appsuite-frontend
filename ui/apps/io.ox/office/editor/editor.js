@@ -1498,7 +1498,7 @@ define('io.ox/office/editor/editor',
                     // setAttribute uses a closed range therefore -1
                     end[end.length - 1] -= 1;
                     generator.generateOperation(Operations.ATTRS_SET, {
-                        attrs: { url: '', style: null },
+                        attrs: { url: null, style: null },
                         start: _.copy(start, true),
                         end: _.copy(end, true)
                     });
