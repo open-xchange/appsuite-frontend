@@ -1883,16 +1883,9 @@ define('io.ox/office/editor/editor',
             }
 
             if (showReadOnlyInfo) {
-                Alert.showWarning(gt('Read Only Mode'),
-                        (editUser || gt('Another user')) + gt(' is currently editing this document.'),
-                        false,
-                        app.getView().getToolPane().getNode(),
-                        app.getController(),
-                        -1,
-                        {label: gt('Acquire Edit Rights'), key: 'file/editrights'}
-                    );
+                Alert.showReadOnlyWarning(app.getView().getToolPane().getNode(), app.getController(), editUser);
             } else if (showEditModeInfo) {
-                Alert.showSuccess(gt('Edit Mode'), gt('You have edit rights.'), true,  app.getView().getToolPane().getNode(), app.getController(), 5000);
+                Alert.showEditModeSuccess(app.getView().getToolPane().getNode(), app.getController());
             }
         };
 

@@ -199,6 +199,49 @@ define('io.ox/office/tk/alert',
         }
     };
 
+    // special alerts -----------------------------------------------------------
+
+    /**
+     * Creates a read only mode alert including the 'Acquire Edit Rights' button
+     * and inserts it at the beginning of the given dom node.
+     * Removes a present alert before adding the new one.
+     *
+     *  @param {jQuery | Object} node the dom node to add the alert to
+     *  @param {Object} controller the controller for event handling
+     *  @param {String} [editUser] the user name who currently has edit rights
+     */
+    Alert.showReadOnlyWarning = function (node, controller, editUser) {
+
+        Alert.showWarning(
+                gt('Read Only Mode'),
+                (editUser || gt('Another user')) + gt(' is currently editing this document.'),
+                false,
+                node,
+                controller,
+                -1,
+                {label: gt('Acquire Edit Rights'), key: 'file/editrights'}
+        );
+    };
+
+    /**
+     * Creates a successfully acquired edit rights alert,
+     * inserts it at the beginning of the given dom node and closes it again after 5 seconds.
+     * Removes a present alert before adding the new one.
+     *
+     *  @param {jQuery | Object} node the dom node to add the alert to
+     *  @param {Object} controller the controller for event handling
+     */
+    Alert.showEditModeSuccess = function (node, controller) {
+
+        Alert.showSuccess(
+                gt('Edit Mode'),
+                gt('You have edit rights.'),
+                true,
+                node,
+                controller,
+                5000);
+    };
+
     /**
      * Returns true if the node contains an Alert
      *
