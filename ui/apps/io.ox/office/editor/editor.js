@@ -233,7 +233,7 @@ define('io.ox/office/editor/editor',
             // attributes that were set without a selection and are only set for a single character
             preselectedAttributes = {},
 
-            dbgoutEvents = false, dbgoutObjects = false;
+            dbgoutEvents = false;
 
         // add event hub
         Events.extend(this);
@@ -2406,14 +2406,10 @@ define('io.ox/office/editor/editor',
                     Utils.log('dbgoutEvents is now ' + dbgoutEvents);
                 }
                 else if (c === '2') {
-                    dbgoutObjects = !dbgoutObjects;
-                    Utils.log('dbgoutObjects is now ' + dbgoutObjects);
-                }
-                else if (c === '3') {
                     Utils.MIN_LOG_LEVEL = Utils.MIN_LOG_LEVEL ? undefined : 'log';
                     window.console.log('logging is now ' + (Utils.MIN_LOG_LEVEL ? 'on' : 'off'));
                 }
-                else if (c === '4') {
+                else if (c === '3') {
                     blockOperationNotifications = !blockOperationNotifications;
                     Utils.log('block operation notifications is now ' + blockOperationNotifications);
                 }
@@ -3311,8 +3307,6 @@ define('io.ox/office/editor/editor',
             // Copy operation now, because undo might manipulate it when merging with previous one...
             var notifyOperation = _.copy(operation, true);
 
-            implDbgOutObject({type: 'operation', value: operation});
-
             if (record) {
                 operations.push(operation);
             }
@@ -3949,33 +3943,6 @@ define('io.ox/office/editor/editor',
                     }
                 });
             }
-        }
-
-        // ====================================================================
-        // Private helper functions
-        // ====================================================================
-
-        function fillstr(str, len, fill, right) {
-            while (str.length < len) {
-                if (right)
-                    str = str + fill;
-                else
-                    str = fill + str;
-            }
-            return str;
-        }
-
-        function getFormattedPositionString(position) {
-            var str = '';
-
-            for (var i = 0; i < position.length; i++) {
-                str += fillstr(position[i].toString(), 2, '0');
-                if (i !== position.length - 1) {
-                    str += ',';
-                }
-            }
-
-            return str;
         }
 
         // ====================================================================
@@ -5366,15 +5333,6 @@ define('io.ox/office/editor/editor',
             if (dbgoutEvents) {
                 Utils.log('type=' + event.type + ' keyCode=' + event.keyCode + ' charCode=' + event.charCode + ' shift=' + event.shiftKey + ' ctrl=' + event.ctrlKey + ' alt=' + event.altKey);
             }
-        }
-
-        function implDbgOutObject(obj) {
-
-            if (!dbgoutObjects)
-                return;
-
-            var dbg = fillstr(obj.type + ': ', 10, ' ', true) + JSON.stringify(obj.value);
-            window.console.log(dbg);
         }
 
         // forward selection change events to own listeners
