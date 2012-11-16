@@ -1555,16 +1555,8 @@ define('io.ox/office/editor/editor',
 
         this.insertTab = function () {
             undoManager.enterGroup(function () {
-                if (selection.hasRange()) {
-                    this.deleteSelected();
-                }
-
-                var newOperation = {
-                        name: Operations.TAB_INSERT,
-                        position: selection.getStartPosition()
-                    };
-
-                applyOperation(newOperation, true, true);
+                this.deleteSelected();
+                applyOperation({ name: Operations.TAB_INSERT, position: selection.getStartPosition() }, true, true);
             }, this);
 
             // setting the cursor position
@@ -2916,7 +2908,19 @@ define('io.ox/office/editor/editor',
         };
 
         operationHandlers[Operations.SET_DOCUMENT_ATTRIBUTES] = function (operation) {
-            implSetDocumentAttributes(operation.attrs);
+
+            var // document proerties container
+                documentAttributes = self.getDocumentAttributes(),
+                // passed properties from operation
+                properties = _.isObject(operation.attrs) ? operation.attrs : {};
+
+            // read various document properties and set it at the document styles
+            if (properties.defaulttabstop) {
+                documentAttributes.defaulttabstop = properties.defaulttabstop;
+            }
+            if (properties.zoom) {
+                documentAttributes.zoom = properties.zoom;
+            }
         };
 
         operationHandlers[Operations.TEXT_INSERT] = function (operation) {
@@ -2976,17 +2980,36 @@ define('io.ox/office/editor/editor',
         };
 
         operationHandlers[Operations.INSERT_STYLE] = function (operation) {
+
+            var // target style sheet container
+                styleSheets = self.getStyleSheets(operation.type),
+                // passed attributes from operation
+                attributes = _.isObject(operation.attrs) ? operation.attrs : {};
+
+            if (!styleSheets) {
+                Utils.warn('Editor.insertStylesheet(): invalid style family: ' + operation.type);
+                return;
+            }
+
             if (undoManager.isEnabled()) {
                 // TODO!!!
             }
-            implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority, operation['default'], operation.pooldefault);
+
+            if (operation.pooldefault === true) {
+                styleSheets.setAttributeDefaults(attributes[operation.type]);
+            } else {
+                styleSheets.addStyleSheet(operation.styleid, operation.stylename, operation.parent, attributes,
+                    { hidden: operation.hidden, priority: operation.uipriority, defStyle: operation['default'] });
+            }
         };
 
         operationHandlers[Operations.INSERT_THEME] = function (operation) {
+
             if (undoManager.isEnabled()) {
                 // TODO!!!
             }
-            implInsertTheme(operation.themename, operation.attrs);
+
+            self.getThemes().addTheme(operation.themename, operation.attrs);
         };
 
         operationHandlers[Operations.INSERT_FONT_DESC] = function (operation) {
@@ -2994,17 +3017,15 @@ define('io.ox/office/editor/editor',
         };
 
         operationHandlers[Operations.INSERT_LIST] = function (operation) {
-            if (undoManager.isEnabled()) {
-                var undoOperation = { name: Operations.DELETE_LIST, listname: operation.listname };
-                undoManager.addUndo(undoOperation, operation);
-            }
-            implInsertList(operation.listname, operation.listdefinition);
+            undoManager.addUndo({ name: Operations.DELETE_LIST, listname: operation.listname }, operation);
+            lists.addList(operation.listname, operation.listdefinition);
         };
 
         operationHandlers[Operations.DELETE_LIST] = function (operation) {
             // no Undo, cannot be removed by UI
-            implDeleteList(operation.listname);
+            lists.deleteList(operation.listname);
         };
+
         operationHandlers[Operations.ATTRS_SET] = function (operation) {
             // undo/redo generation is done inside implSetAttributes()
             implSetAttributes(operation.start, operation.end, operation.attrs);
@@ -3238,6 +3259,8 @@ define('io.ox/office/editor/editor',
                 thisParagraph = null, nextParagraph = null,
                 // text position at end of current paragraph, logical position of next paragraph
                 paraEndPosition = null, nextParaPosition = null,
+                // first child node of next paragraph
+                firstChildNode = null,
                 // the undo/redo operations
                 generator = undoManager.isEnabled() ? new Operations.Generator() : null;
 
@@ -3255,7 +3278,7 @@ define('io.ox/office/editor/editor',
                 Utils.warn('Editor.mergeParagraph(): no paragraph found after position ' + JSON.stringify(operation.start));
                 return;
             }
-            nextParaPosition = Position.increaseLastIndex(operation.start, 1);
+            nextParaPosition = Position.increaseLastIndex(operation.start);
 
             // generate undo/redo operations
             if (generator) {
@@ -3270,9 +3293,25 @@ define('io.ox/office/editor/editor',
                 $(thisParagraph[0].lastChild).remove();
             }
 
+            // remove list label node from next paragraph
+            nextParagraph.children(DOM.LIST_LABEL_NODE_SELECTOR).remove();
+
             // append all children of the next paragraph to the current paragraph, delete the next paragraph
+            firstChildNode = nextParagraph[0].firstChild;
             thisParagraph.append(nextParagraph.children());
             nextParagraph.remove();
+
+            // remove one of the sibling text spans at the concatenation point,
+            // if one is empty; otherwise try to merge equally formatted text spans
+            if (DOM.isTextSpan(firstChildNode) && DOM.isTextSpan(firstChildNode.previousSibling)) {
+                if (DOM.isEmptySpan(firstChildNode)) {
+                    $(firstChildNode).remove();
+                } else if (DOM.isEmptySpan(firstChildNode.previousSibling)) {
+                    $(firstChildNode.previousSibling).remove();
+                } else {
+                    CharacterStyles.mergeSiblingTextSpans(firstChildNode);
+                }
+            }
 
             // refresh DOM
             implParagraphChanged(operation.start);
@@ -4065,18 +4104,6 @@ define('io.ox/office/editor/editor',
             self.setEditMode(null); // set null for 'read-only' and not yet determined edit status by the server
         }
 
-        function implSetDocumentAttributes(attributes) {
-            var documentAttributes = self.getDocumentAttributes();
-
-            // read various document attributes and set it at the document styles
-            if (attributes.defaulttabstop) {
-                documentAttributes.defaulttabstop = attributes.defaulttabstop;
-            }
-            if (attributes.zoom) {
-                documentAttributes.zoom = attributes.zoom;
-            }
-        }
-
         function implInsertText(text, position) {
             var domPos = Position.getDOMPosition(editdiv, position);
 
@@ -4206,78 +4233,6 @@ define('io.ox/office/editor/editor',
 
             implParagraphChanged(position);
             return true;
-        }
-
-        /**
-         * Inserts a new style sheet into the document.
-         *
-         * @param {String} family
-         *  The name of the attribute family the new style sheet is related to.
-         *
-         * @param {String} id
-         *  The unique identifier of of the new style sheet.
-         *
-         * @param {String} name
-         *  The user-defined name of of the new style sheet.
-         *
-         * @param {String|Null} parentId
-         *  The identifier of of the parent style sheet the new style sheet
-         *  will derive undefined attributes from.
-         *
-         * @param {Object} attributes
-         *  The formatting attributes contained in the new style sheet, as map
-         *  of name/value pairs.
-         *
-         * @param {Boolean} [hidden]
-         *  Optional property that determines if the style should be displayed
-         *  in the GUI.
-         *
-         * @param {Number} [uiPriority=0]
-         *  Optional property that describes the priority of the style (the
-         *  lower the value the higher the priority).
-         *
-         * @param {Boolean} [defStyle]
-         *  True, if the new style sheet is the default style sheet of the
-         *  attribute family (will be used for elements without explicit style
-         *  sheet).
-         *
-         * @param {Boolean} [poolDefault]
-         *  True, if the style sheet contains pool default settings for the
-         *  attribute family.
-         */
-        function implInsertStyleSheet(family, id, name, parentId, attributes, hidden, uiPriority, defStyle, poolDefault) {
-
-            var // the style sheet container
-                styleSheets = self.getStyleSheets(family);
-
-            if (styleSheets) {
-                if (poolDefault === true) {
-                    styleSheets.setAttributeDefaults(attributes[family]);
-                } else {
-                    styleSheets.addStyleSheet(id, name, parentId, attributes, { hidden: hidden, priority: uiPriority, defStyle: defStyle });
-                }
-            }
-        }
-
-        /**
-         * Inserts a new theme into the document.
-         *
-         * @param {String} themeName
-         *  The name of the theme.
-         *
-         * @param {Object} attributes
-         *  The formatting settings of the theme.
-         */
-        function implInsertTheme(themeName, attributes) {
-            self.getThemes().addTheme(themeName, attributes);
-        }
-
-        function implInsertList(listname, listdefinition) {
-            lists.addList(listname, listdefinition);
-        }
-
-        function implDeleteList(listname) {
-            lists.deleteList(listname);
         }
 
         /**
@@ -4649,12 +4604,11 @@ define('io.ox/office/editor/editor',
             }
 
             // delete all empty text spans in cloned paragraph before floated images
-            var localPos = _.copy(startPosition);
-            localPos.pop();
-            Position.removeUnusedImageDivs(editdiv, localPos);
+            // TODO: implDeleteText() should have done this already
+            Position.removeUnusedImageDivs(editdiv, startPosition.slice(0, -1));
 
-            validateParagraphNode(originalpara);
-            validateParagraphNode(paraclone);
+            implParagraphChanged(position);
+            implParagraphChanged(Position.increaseLastIndex(position));
             lastOperationEnd = startPosition;
 
             implUpdateLists();
@@ -5041,73 +4995,94 @@ define('io.ox/office/editor/editor',
 
         function implDeleteText(startPosition, endPosition) {
 
-            if (! endPosition) {  // operation.end is optional
-                endPosition = _.copy(startPosition, true);
+            var // info about the parent paragraph node
+                paragraphPosition = null, nodeInfo = null,
+                // last index in start and end position
+                startOffset = 0, endOffset = 0,
+                // next sibling text span of last visited child node
+                nextTextSpan = null;
+
+            // get paragraph node from start position
+            if (!_.isArray(startPosition)) {
+                Utils.warn('Editor.implDeleteText(): missing start position');
+                return false;
+            }
+            paragraphPosition = startPosition.slice(0, -1);
+            nodeInfo = Position.getDOMPosition(editdiv, paragraphPosition, true);
+            if (!nodeInfo || !DOM.isParagraphNode(nodeInfo.node)) {
+                Utils.warn('Editor.implDeleteText(): no paragraph found at position ' + JSON.stringify(paragraphPosition));
+                return false;
             }
 
-            var lastValue = startPosition.length - 1,
-                start = startPosition[lastValue],
-                end = endPosition[lastValue];
-
-            if (end === -1) {
-                end = Position.getParagraphLength(editdiv, startPosition);
+            // validate end position
+            if (_.isArray(endPosition) && !Position.hasSameParentComponent(startPosition, endPosition)) {
+                Utils.warn('Editor.implDeleteText(): range not in same paragraph');
+                return false;
             }
 
-            end += 1; // switching from operation mode to range mode
+            // start and end offset in paragraph
+            startOffset = _.last(startPosition);
+            endOffset = _.isArray(endPosition) ? _.last(endPosition) : startOffset;
+            if (endOffset === -1) { endOffset = undefined; }
 
-            if (start === end) {
-                return;
-            }
+            // visit all covered child nodes (iterator allows to remove the visited node)
+            Position.iterateParagraphChildNodes(nodeInfo.node, function (node) {
 
-            var paragraph = Position.getCurrentParagraph(editdiv, startPosition);
-            var searchNodes = $(paragraph).children('span, ' + DOM.FIELD_NODE_SELECTOR + ', ' + DOM.DRAWING_NODE_SELECTOR + ', ' + DOM.TAB_NODE_SELECTOR).get();
-            var node, nodeLen, delStart, delEnd;
-            var nodes = searchNodes.length;
-            var nodeStart = 0;
-            for (var i = 0; i < nodes; i++) {
-                var text = '';
-                node = searchNodes[i];
-                if (DOM.isDrawingNode(node) || DOM.isTextSpanContainerNode(node)) {
-                    nodeLen = 1;
-                } else if (DOM.isTextSpan(node)) {
-                    text = $(node).text();
-                    nodeLen = text.length;
+                var // previous text span of current node
+                    prevTextSpan = null;
+
+                // remove preceding position offset node of floating drawing objects
+                if (DOM.isFloatingDrawingNode(node)) {
+                    $(node).prev(DOM.OFFSET_NODE_SELECTOR).remove();
+                }
+
+                // get sibling text spans
+                prevTextSpan = DOM.isTextSpan(node.previousSibling) ? node.previousSibling : null;
+                nextTextSpan = DOM.isTextSpan(node.nextSibling) ? node.nextSibling : null;
+
+                // clear text in text spans
+                if (DOM.isTextSpan(node)) {
+
+                    // only remove the text span, if it has a sibling text span
+                    // (otherwise, it separates other component nodes)
+                    if (prevTextSpan || nextTextSpan) {
+                        $(node).remove();
+                    } else {
+                        // remove text, but keep text span element
+                        node.firstChild.nodeValue = '';
+                    }
+                    return;
+                }
+
+                // other component nodes (drawings or text components)
+                if (DOM.isTextComponentNode(node) || DOM.isDrawingNode(node)) {
+
+                    // remove preceding empty sibling text span
+                    if (DOM.isEmptySpan(prevTextSpan) && nextTextSpan) {
+                        $(prevTextSpan).remove();
+                    }
+                    $(node).remove();
+                    return;
+                }
+
+                Utils.error('Editor.implDeleteText(): unknown paragraph child node');
+                return Utils.BREAK;
+
+            }, undefined, { start: startOffset, end: endOffset, split: true });
+
+            // remove next sibling text span after deleted range, if empty,
+            // otherwise try to merge with equally formatted preceding text span
+            if (nextTextSpan && DOM.isTextSpan(nextTextSpan.previousSibling)) {
+                if (DOM.isEmptySpan(nextTextSpan)) {
+                    $(nextTextSpan).remove();
                 } else {
-                    Utils.warn('Editor.implDeleteText(): unexpected node in paragraph');
-                    nodeLen = 0;
+                    CharacterStyles.mergeSiblingTextSpans(nextTextSpan);
                 }
-                if ((nodeStart + nodeLen) > start) {
-                    delStart = 0;
-                    delEnd = nodeLen;
-                    if (nodeStart <= start) { // node matching startPaM
-                        delStart = start - nodeStart;
-                    }
-                    if ((nodeStart + nodeLen) >= end) { // node matching endPaM
-                        delEnd = end - nodeStart;
-                    }
-                    if ((delEnd - delStart) === nodeLen) {
-                        if (DOM.isTextSpan(node)) {
-                            // clear simple text span but do not remove it from the DOM
-                            $(node).text('');
-                        } else {
-                            // remove element completely
-                            paragraph.removeChild(node);
-                        }
-                    }
-                    else {
-                        text = text.slice(0, delStart) + text.slice(delEnd);
-                        $(node).text(text);
-                    }
-                }
-                nodeStart += nodeLen;
-                if (nodeStart >= end)
-                    break;
             }
 
+            // validate paragraph node, store operation position for cursor position
+            implParagraphChanged(paragraphPosition);
             lastOperationEnd = _.clone(startPosition);
-
-            //implParagraphChanged(startPosition);
-            validateParagraphNode(paragraph);
         }
 
         function implMove(_source, _dest) {

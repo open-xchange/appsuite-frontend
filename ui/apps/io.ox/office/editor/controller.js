@@ -70,20 +70,25 @@ define('io.ox/office/editor/controller',
                     set: function () { editor.redo(1); }
                 },
                 'document/quicksearch': {
+                    // enabled in read-only mode
                     //get: function () { return editor.hasHighlighting(); },
                     set: function (query) { editor.quickSearch(query); },
                     done: $.noop // do not focus editor
                 },
+
                 'document/cut': {
-                    enable: function () { return editor.hasSelectedRange(); },
+                    parent: 'document/editable',
+                    enable: function (enabled) { return enabled && editor.hasSelectedRange(); },
                     set: function () { editor.cut(); }
                 },
                 'document/copy': {
+                    // enabled in read-only mode
                     enable: function () { return editor.hasSelectedRange(); },
                     set: function () { editor.copy(); }
                 },
                 'document/paste': {
-                    enable: function () { return editor.hasInternalClipboard(); },
+                    parent: 'document/editable',
+                    enable: function (enabled) { return enabled && editor.hasInternalClipboard(); },
                     set: function () { editor.pasteInternalClipboard(); }
                 },
 
@@ -229,10 +234,6 @@ define('io.ox/office/editor/controller',
                     set: function (hyperlink) { editor.insertHyperlink(); },
                     enable: function (enabled) { return enabled && editor.selectionEnclosingParagraph(); },
                     done: $.noop
-                },
-                'insert/tab' : {
-                    parent: 'document/editable/text',
-                    set: function () { editor.insertTab(); }
                 },
 
                 // tables

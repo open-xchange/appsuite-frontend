@@ -758,7 +758,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     DOM.createListLabelNode = function (text) {
         text = _.isString(text) ? text : '';
         return $('<div>', { contenteditable: false })
-            .addClass('list-label')
+            .addClass('helper list-label')
             .append(DOM.createTextSpan().text(text));
     };
 

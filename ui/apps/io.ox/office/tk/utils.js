@@ -1859,23 +1859,10 @@ define('io.ox/office/tk/utils',
      */
     Utils.DeferredMethods = function (context) {
 
-        var // browser timeout for all deferred callbacks
-            timeout = null,
-            // pending deferred callbacks that will be called in the timeout
-            pendingDeferreds = {},
+        var // browser timeouts, mapped by indexes of deferred methods
+            timeouts = {},
             // counter for unique indexes of all deferred methods
             count = 0;
-
-        // private methods ----------------------------------------------------
-
-        /**
-         * Executes all pending deferred callback functions.
-         */
-        function executePendingDeferreds() {
-            timeout = null;
-            _(pendingDeferreds).each(function (callback) { callback(); });
-            pendingDeferreds = {};
-        }
 
         // methods ------------------------------------------------------------
 
@@ -1916,21 +1903,21 @@ define('io.ox/office/tk/utils',
          */
         this.createMethod = function (directCallback, deferredCallback, storage) {
 
-            var // unique index
+            var // unique index of this deferred method
                 index = count++,
-                // arguments for callbacks
+                // arguments for direct callback
                 args = _.isUndefined(storage) ? [] : [storage];
 
             // create and return the deferred method
             return function () {
 
-                // create a timeout if not existing yet
-                if (!timeout) {
-                    timeout = window.setTimeout(executePendingDeferreds, 0);
+                // create a timeout calling the deferred callback
+                if (!(index in timeouts)) {
+                    timeouts[index] = window.setTimeout(function () {
+                        delete timeouts[index];
+                        deferredCallback.call(context, storage);
+                    }, 0);
                 }
-
-                // register the deferred callback
-                pendingDeferreds[index] = _.bind(deferredCallback, context, storage);
 
                 // call the direct callback with the passed arguments
                 return directCallback.apply(context, args.concat(_.toArray(arguments)));
@@ -1938,15 +1925,14 @@ define('io.ox/office/tk/utils',
         };
 
         /**
-         * Clears the running timeout, without calling the pending deferred
+         * Clears the running timeouts, without calling the pending deferred
          * callback functions.
          */
         this.destroy = function () {
-            if (timeout) {
+            _(timeouts).each(function (timeout) {
                 window.clearTimeout(timeout);
-                timeout = null;
-            }
-            pendingDeferreds = null;
+            });
+            timeouts = null;
         };
 
     };

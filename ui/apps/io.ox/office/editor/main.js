@@ -294,7 +294,7 @@ define('io.ox/office/editor/main',
                             applyOperations(operations);
                             dumpElapsedTime('operations applied');
                             editor.documentLoaded();
-                            dumpElapsedTime('postprocessing finished');
+                            window.setTimeout(function () { dumpElapsedTime('postprocessing finished'); }, 0);
                             editor.enableUndo(true);
                             startOperationsTimer(0);
                             def.resolve();
