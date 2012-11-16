@@ -41,6 +41,7 @@ define('io.ox/calendar/month/perspective',
         folder: null,
         app: null,          // the current application
         dialog: $(),        // sidepopup
+        restoreCache:   {}, // object, which contains data for save and restore functions
 
         showAppointment: function (e, obj) {
             // open appointment details
@@ -386,7 +387,17 @@ define('io.ox/calendar/month/perspective',
             api.on('refresh.all', refresh);
             app.on('folder:change', refresh)
                 .getWindow()
-                .on('show', refresh);
+                .on('show', refresh)
+                .on('beforehide', function () {
+                    // save scrollposition
+                    self.restoreCache.scrollPosition = self.pane.scrollTop();
+                })
+                .on('show', function () {
+                    // restore scrollposition
+                    if (self.restoreCache.scrollPosition) {
+                        self.pane.scrollTop(self.restoreCache.scrollPosition);
+                    }
+                });
         }
     });
 
