@@ -350,6 +350,16 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     DOM.PAGE_NODE_SELECTOR = 'div.page';
 
     /**
+     * Creates a new page element.
+     *
+     * @returns {jQuery}
+     *  A page element, as jQuery object.
+     */
+    DOM.createPageNode = function () {
+        return $('<div>').addClass('page').append($('<div>').addClass('pagecontent'));
+    };
+
+    /**
      * Returns whether the passed node is a page element.
      *
      * @param {Node|jQuery} node
@@ -361,6 +371,42 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.isPageNode = function (node) {
         return $(node).is(DOM.PAGE_NODE_SELECTOR);
+    };
+
+    /**
+     * A jQuery selector that matches elements representing a cell content node.
+     */
+    DOM.PAGECONTENT_NODE_SELECTOR = 'div.pagecontent';
+
+    /**
+     * Returns whether the passed node is a page content node that contains all
+     * top-level content nodes (paragraphs and tables).
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a page content node.
+     */
+    DOM.isPageContentNode = function (node) {
+        return $(node).is(DOM.PAGECONTENT_NODE_SELECTOR);
+    };
+
+    /**
+     * Returns the container node of a page element that contains all top-level
+     * content nodes (paragraphs and tables).
+     *
+     * @param {HTMLElement|jQuery} pageNode
+     *  The page DOM node. If this object is a jQuery collection, uses the
+     *  first DOM node it contains.
+     *
+     * @returns {jQuery}
+     *  The container DOM node from the passed page that contains all top-level
+     *  content nodes (paragraphs and tables).
+     */
+    DOM.getPageContentNode = function (pageNode) {
+        return $(pageNode).children(DOM.PAGECONTENT_NODE_SELECTOR);
     };
 
     // paragraphs and tables ==================================================
@@ -446,6 +492,25 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * A jQuery selector that matches elements representing a cell content node.
+     */
+    DOM.CELLCONTENT_NODE_SELECTOR = 'div.cellcontent';
+
+    /**
+     * Returns whether the passed node is a table cell content element.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a table cell content element.
+     */
+    DOM.isCellContentNode = function (node) {
+        return $(node).is(DOM.CELLCONTENT_NODE_SELECTOR);
+    };
+
+    /**
      * Returns the container node of a table cell that contains all top-level
      * content nodes (paragraphs and tables).
      *
@@ -458,7 +523,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  top-level content nodes (paragraphs and tables).
      */
     DOM.getCellContentNode = function (cellNode) {
-        return $(cellNode).find('> div.cell > div.cellcontent');
+        return $(cellNode).find('> * > ' + DOM.CELLCONTENT_NODE_SELECTOR);
     };
 
     /**
@@ -478,25 +543,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.isResizeNode = function (node) {
         return $(node).is(DOM.RESIZE_NODE_SELECTOR);
-    };
-
-    /**
-     * A jQuery selector that matches elements representing a cell content node.
-     */
-    DOM.CELLCONTENT_NODE_SELECTOR = 'div.cellcontent';
-
-    /**
-     * Returns whether the passed node is a table cell content element.
-     *
-     * @param {Node|jQuery|Null} [node]
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains. If missing or null, returns false.
-     *
-     * @returns {Boolean}
-     *  Whether the passed node is a table cell content element.
-     */
-    DOM.isCellcontentNode = function (node) {
-        return $(node).is(DOM.CELLCONTENT_NODE_SELECTOR);
     };
 
     // text spans, text nodes, text components ================================
@@ -903,7 +949,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  top-level content nodes.
      */
     DOM.getDrawingContentNode = function (drawingNode) {
-        return $(drawingNode).find('> div.content');
+        return $(drawingNode).children('div.content');
     };
 
     /**
@@ -1064,17 +1110,17 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         // convert to a jQuery object
         node = $(node);
 
-        // page node contains its child components directly
+        // page nodes
         if (DOM.isPageNode(node)) {
-            return node;
+            return DOM.getPageContentNode(node);
         }
 
-        // table cell nodes contain a child <div> container
+        // table cell nodes
         if (node.is('td')) {
             return DOM.getCellContentNode(node);
         }
 
-        // drawing nodes contain a child <div> container
+        // drawing nodes
         if (DOM.isDrawingNode(node)) {
             return DOM.getDrawingContentNode(node);
         }

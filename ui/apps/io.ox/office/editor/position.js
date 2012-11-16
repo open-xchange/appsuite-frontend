@@ -135,15 +135,15 @@ define('io.ox/office/editor/position',
             evaluateCharacterPosition = DOM.isTextSpan(node) || DOM.isTextComponentNode(node) || DOM.isDrawingNode(node) || $(node).is('img'),
             characterPositionEvaluated = false;
 
-        // currently supported elements: 'div.p', 'table', 'th', 'td', 'tr'
+        // currently supported elements: 'div.p', 'table', 'td', 'tr'
         for (; node && (node !== maindiv.get(0)); node = node.parentNode) {
-            if (DOM.isContentNode(node) || $(node).is('tr, td, th')) {
+            if (DOM.isContentNode(node) || $(node).is('tr, td')) {
                 // if ($(node).is('td, th')) {
                 //     oxoPosition.unshift(getColspanSum($(node).prevAll()));  // zero based
                 // } else {
                 //     oxoPosition.unshift($(node).prevAll().length);  // zero based
                 // }
-                oxoPosition.unshift($(node).prevAll().length);  // zero based
+                oxoPosition.unshift($(node).index());  // zero based
                 evaluateCharacterPosition = false;
             }
             if (evaluateCharacterPosition) {
@@ -214,7 +214,13 @@ define('io.ox/office/editor/position',
             offset = 0;
         }
 
-        if (DOM.isDrawingNode(node.parentNode)) {  // inside the contents of a drawing
+        if (DOM.isPageContentNode(node)) {
+            // using table cell node instead of divs inside the table cell
+            node = $(node).closest(DOM.PAGE_NODE_SELECTOR)[0];
+        }
+
+        if (DOM.isDrawingNode(node.parentNode)) {
+            // inside the contents of a drawing
             node = node.parentNode;
         }
 
@@ -223,9 +229,9 @@ define('io.ox/office/editor/position',
             offset = (forwardCursor === true) ? 1 : 0;
         }
 
-        if ((DOM.isResizeNode(node)) || (DOM.isCellcontentNode(node))) {
+        if (DOM.isResizeNode(node) || DOM.isCellContentNode(node)) {
             // using table cell node instead of divs inside the table cell
-            node = node.parentNode.parentNode;
+            node = $(node).closest('td')[0];
         }
 
         // 2. Handling all selections, in which the node is above paragraph level
@@ -610,9 +616,9 @@ define('io.ox/office/editor/position',
             // });
             childNode = $(node).children('td').get(pos);  // this is a table cell
         } else if (DOM.isPageNode(node)) {
-            childNode = node.childNodes[pos];
+            childNode = DOM.getPageContentNode(node)[0].childNodes[pos];
         } else if ($(node).is('td')) {
-            childNode = Position.getCellContent(node, pos);
+            childNode = DOM.getCellContentNode(node)[0].childNodes[pos];
         } else if (DOM.isParagraphNode(node)) {
             Position.iterateParagraphChildNodes(node, function (_node, nodeStart, nodeLength) {
 
@@ -988,48 +994,17 @@ define('io.ox/office/editor/position',
         var allParagraphs = null;
 
         if ((position.length === 1) || (position.length === 2)) {  // only for performance
-            allParagraphs = startnode.children();
+            allParagraphs = DOM.getChildContainerNode(startnode).children();
         } else {
 
             var node = Position.getLastNodeFromPositionByNodeName(startnode, position, 'td');
 
             if (node) {
-                allParagraphs = Position.getCellContent(node);
+                allParagraphs = DOM.getCellContentNode(node).children();
             }
         }
 
         return allParagraphs;
-    };
-
-    /**
-     * Function, that returns the count of all adjacent paragraphs
-     * or tables of a paragraph or table described by the logical
-     * position. The logical position can describe a paragraph (table)
-     * or a text node inside it. If no node is found, '-1' will be
-     *  returned.
-     *
-     * @param {Node} startnode
-     *  The start node corresponding to the logical position.
-     *  (Can be a jQuery object for performance reasons.)
-     *
-     * @param {Number[]} position
-     *  The logical position.
-     *
-     * @returns {Number}
-     *  Returns the count of all adjacent paragraphs or tables of
-     *  a paragraph(table) described by the logical position.
-     *  Of no paragraph/table is found, -1 will be returned.
-     */
-    Position.getCountOfAdjacentParagraphsAndTables = function (startnode, position) {
-
-        var lastIndex = -1,
-        node = Position.getLastNodeFromPositionByNodeName(startnode, position, DOM.CONTENT_NODE_SELECTOR);
-
-        if (node) {
-            lastIndex = $(node.parentNode).children().length - 1;
-        }
-
-        return lastIndex;
     };
 
     /**
@@ -1054,7 +1029,7 @@ define('io.ox/office/editor/position',
             cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'td');
 
         if (cell) {
-            allParagraphs = Position.getCellContent(cell);
+            allParagraphs = DOM.getCellContentNode(cell).children();
         }
 
         return allParagraphs;
@@ -1268,7 +1243,7 @@ define('io.ox/office/editor/position',
             cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'td');
 
         if (cell) {
-            lastPara = Position.getCellContent(cell).length - 1;
+            lastPara = Position.getCellContentNode(cell)[0].childNodes.length - 1;
         }
 
         return lastPara;
@@ -1826,36 +1801,6 @@ define('io.ox/office/editor/position',
             }
         }
 
-    };
-
-    /**
-     * Returns all top level paragraphs/tables inside a table cell element
-     * as jQuery element or one specified paragraph/table at position pos
-     * as dom node.
-     *
-     * @param {HTMLElement|jQuery} cellNode
-     *  The table cell DOM node. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
-     *
-     * @param {Number} [pos]
-     *  Optional integer value of one specific paragraph/table in the list of
-     * top level components of the table cell (0-based)
-     *  The second logical position.
-     *
-     * @returns {jQuery|Node}
-     *  If optional parameter pos is defined, the dom node of the specified top
-     *  level component inside the table cell is returned. Without pos defined,
-     *  all paragraphs/tables are returned in a jQuery collection.
-     */
-    Position.getCellContent = function (cellNode, pos) {
-
-        var cellContentNode = DOM.getCellContentNode(cellNode);
-
-        if (_.isNumber(pos)) {
-            return cellContentNode[0].childNodes[pos];
-        } else {
-            return cellContentNode.children();
-        }
     };
 
     // position arrays --------------------------------------------------------

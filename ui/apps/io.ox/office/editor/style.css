@@ -79,7 +79,11 @@
 .io-ox-office-editor-main {
 
     .page {
+        /* default page formatting */
         .box-sizing(border-box);
+        width: 210mm;
+        min-height: 297mm;
+        padding: 15mm;
 
         /* text cursor over entire page, but not in read-only mode */
         &.io-ox-office-edit-mode {
@@ -96,11 +100,6 @@
 	        }
         }
         
-        /* default page formatting */
-        width: 210mm;
-        min-height: 297mm;
-        padding: 15mm;
-
         /* default paragraph formatting */
         div.p {
             position: relative;

@@ -176,8 +176,8 @@ define('io.ox/office/editor/editor',
         var // self reference for local functions
             self = this,
 
-            // the container element for the document contents
-            editdiv = $('<div>', { contenteditable: true }).addClass('page user-select-text'),
+            // the root element for the document contents
+            editdiv = DOM.createPageNode().attr('contenteditable', true).addClass('user-select-text'),
 
             // deferred methods that will be executed in a browser timeout
             deferredMethods = new Utils.DeferredMethods(this),
@@ -1217,79 +1217,55 @@ define('io.ox/office/editor/editor',
         };
 
         this.insertParagraph = function (position) {
-            var newOperation = {name: Operations.PARA_INSERT, start: _.copy(position, true)};
+            var newOperation = {name: Operations.PARA_INSERT, start: _.clone(position)};
             applyOperation(newOperation);
         };
 
         this.insertTable = function (size) {
-            if (size) {
+            if (!_.isObject(size)) { return; }
 
-                undoManager.startGroup();  // necessary because of paragraph split
+            undoManager.enterGroup(function () {
 
-                var position = selection.getStartPosition(),
-                    offset = _.last(position),
-                    deleteTempParagraph = false;
-
-                if (selection.hasRange()) {
-                    this.deleteSelected();
-                }
-
-                var length = Position.getParagraphLength(editdiv, position);
-
-                // Splitting paragraph, if the cursor is not at the beginning or at the end of the paragraph.
-                if ((0 < offset) && (offset < length)) {
-                    this.splitParagraph(position);
-                    position[position.length - 2] += 1;
-                }
-
-                // Splitting paragraph, if the cursor is at the end of an non empty paragraph and this paragraph is
-                // the last from all .
-                if ((offset > 0) && (offset === length)) {
-
-                    var maxIndex = Position.getCountOfAdjacentParagraphsAndTables(editdiv, position);
-                    // Is this a position after the final character in the final paragraph?
-                    // -> then the splitting of the paragraph is required, not only temporarely.
-                    deleteTempParagraph = position[position.length - 2] < maxIndex;
-                    if (deleteTempParagraph) {
-                        implSplitParagraph(position);  // creating temporarely, to be deleted after table is inserted
-                    } else {
-                        this.splitParagraph(position);
-                    }
-                    position[position.length - 2] += 1;
-                }
-
-                // remove character index, 'position' will be the table position now
-                position.pop();
-
-                var tableGrid = [],
-                    width = 0;  // defaulting to 'auto'
-
-                for (var i = 0; i < size.width; i++) {
-                    tableGrid.push(Utils.roundDigits(1000 / size.width, 0));  // only ints
-                }
-                var newOperation = {name: Operations.TABLE_INSERT, position: _.clone(position), attrs: {'tablegrid': tableGrid, 'width': width}};
-                applyOperation(newOperation);
-
-                // adding rows
-                newOperation = {name: Operations.ROW_INSERT, position: position.concat([0]), count: size.height, insertdefaultcells: true};
-                applyOperation(newOperation);
-
-                if (deleteTempParagraph) {
-                    var paraPosition = _.clone(position);
-                    paraPosition[paraPosition.length - 1] += 1;
-                    implDeleteParagraph(paraPosition);
-                }
-
-                // Setting default table grid attribute to newly inserted table
-                var tableStyleId = self.getDefaultUITableStylesheet();
-                if (tableStyleId) {
-                    // the table style sheet container
-                    var tableStyles = self.getStyleSheets('table'),
+                var // cursor position used to split the paragraph
+                    startPosition = null,
+                    // paragraph to be split for the new table, and its position
+                    paragraph = null, position = null,
+                    // text offset in paragraph, first and last text position in paragraph
+                    offset = 0, startOffset = 0, endOffset = 0,
+                    // table attributes
+                    attributes = { tablegrid: [], width: 0 },
+                    // default table style
+                    tableStyleId = self.getDefaultUITableStylesheet(),
                     // operations generator
-                        generator = new Operations.Generator();
+                    generator = new Operations.Generator();
 
+                this.deleteSelected();
+                startPosition = selection.getStartPosition();
+                position = startPosition.slice(0, -1);
+                paragraph = Position.getParagraphElement(editdiv, position);
+                if (!paragraph) { return; }
+
+                // split paragraph, if the cursor is between two characters,
+                // or if the paragraph is the very last in the container node
+                offset = _.last(startPosition);
+                startOffset = Position.getFirstTextNodePositionInParagraph(paragraph);
+                endOffset = Position.getLastTextNodePositionInParagraph(paragraph);
+                if (!paragraph.nextSibling || ((startOffset < offset) && (offset < endOffset))) {
+                    this.splitParagraph(startPosition);
+                    position = Position.increaseLastIndex(position);
+                } else if (offset === endOffset) {
+                    // cursor at the end of the paragrah: insert before next content node
+                    position = Position.increaseLastIndex(position);
+                }
+
+                // prepare table column widths (values are relative to each other)
+                _(size.width).times(function () { attributes.tablegrid.push(1000); });
+
+                // set default table style
+                if (_.isString(tableStyleId)) {
+
+                    // insert pending table style to document
                     if (tableStyles.isDirty(tableStyleId)) {
-                        // insert table style to document
                         generator.generateOperation(Operations.INSERT_STYLE, {
                             attrs: tableStyles.getStyleSheetAttributeMap(tableStyleId),
                             type: 'table',
@@ -1301,21 +1277,21 @@ define('io.ox/office/editor/editor',
                         tableStyles.setDirty(tableStyleId, false);
                     }
 
-                    // set table style to newly inserted table
-                    generator.generateOperation(Operations.ATTRS_SET, {
-                        attrs: { style: tableStyleId },
-                        start: _.clone(position)
-                    });
-
-                    // apply all collected operations
-                    self.applyOperations(generator.getOperations());
+                    // add table style name to attributes
+                    attributes.style = tableStyleId;
                 }
+
+                // insert the table, and add empty rows
+                generator.generateOperation(Operations.TABLE_INSERT, { position: _.clone(position), attrs: attributes });
+                generator.generateOperation(Operations.ROW_INSERT, { position: Position.appendNewIndex(position, 0), count: size.height, insertdefaultcells: true });
+
+                // apply all collected operations
+                self.applyOperations(generator.getOperations());
 
                 // set the cursor to first paragraph in first table cell
                 selection.setTextSelection(position.concat([0, 0, 0, 0]));
 
-                undoManager.endGroup();  // necessary because of paragraph split
-            }
+            }, this); // undoManager.enterGroup()
         };
 
         this.insertImageFile = function (imageFragment) {
@@ -2369,10 +2345,10 @@ define('io.ox/office/editor/editor',
                 event.preventDefault();
                 var c = getPrintableChar(event);
                 if (c === 'P') {
-                    alert('#Paragraphs: ' + editdiv.children().length);
+                    alert('#Paragraphs: ' + DOM.getPageContentNode(editdiv).children().length);
                 }
                 else if (c === 'I') {
-                    self.insertParagraph([editdiv.children().length]);
+                    self.insertParagraph([DOM.getPageContentNode(editdiv).children().length]);
                 }
                 else if (c === 'D') {
                     self.initDocument();
@@ -4110,11 +4086,13 @@ define('io.ox/office/editor/editor',
          */
         function implInitDocument() {
 
-            var // the initial paragraph node in an empty document
+            var // container for the top-level paragraphs
+                pageContentNode = DOM.getPageContentNode(editdiv),
+                // the initial paragraph node in an empty document
                 paragraph = DOM.createParagraphNode();
 
             // create empty page with single paragraph
-            editdiv.empty().append(paragraph);
+            pageContentNode.empty().append(paragraph);
             validateParagraphNode(paragraph);
 
             // initialize default page formatting
@@ -4127,7 +4105,10 @@ define('io.ox/office/editor/editor',
             // updated after the document has been loaded.
             // TODO: better solution needed when style cheets may change at runtime
             paragraphStyles.one('change', function () {
-                paragraphStyles.updateElementFormatting(editdiv.children(DOM.PARAGRAPH_NODE_SELECTOR).first());
+                var firstParagraph = pageContentNode[0].firstChild;
+                if (DOM.isParagraphNode(firstParagraph)) {
+                    paragraphStyles.updateElementFormatting(firstParagraph);
+                }
             });
 
             // set initial selection
