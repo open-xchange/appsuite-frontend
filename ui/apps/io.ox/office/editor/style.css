@@ -88,10 +88,10 @@
 	        /* resize cursor for table cells, but not in read-only mode */
 	        table td > div.cell {
 		        > div.bottomborder {
-		           	cursor: s-resize;
+		           	cursor: row-resize;
 		        }
 				> div.rightborder {
-					cursor: e-resize;
+					cursor: col-resize;
 				}
 	        }
         }
