@@ -3546,9 +3546,42 @@ define('io.ox/office/editor/editor',
                         var moveX = Utils.convertLengthToHmm(shiftX, 'px'),
                             moveY = Utils.convertLengthToHmm(shiftY, 'px'),
                             updatePosition = Position.getOxoPosition(editdiv, drawingNode, 0),
-                            newOperation = { name: Operations.ATTRS_SET, attrs: {anchorhoffset: moveX, anchorvoffset: moveY}, start: updatePosition };
+                            newOperation = null,
+                            anchorhoffset = 0,
+                            anchorvoffset = 0,
+                            oldanchorhoffset = StyleSheets.getExplicitAttributes(drawingNode).anchorhoffset ? StyleSheets.getExplicitAttributes(drawingNode).anchorhoffset : 0,
+                            oldanchorvoffset = StyleSheets.getExplicitAttributes(drawingNode).anchorvoffset ? StyleSheets.getExplicitAttributes(drawingNode).anchorvoffset : 0,
+                            anchorhalign = StyleSheets.getExplicitAttributes(drawingNode).anchorhalign,
+                            // current drawing width, in 1/100 mm
+                            drawingWidth = Utils.convertLengthToHmm($(drawingNode).width(), 'px'),
+                            // the paragraph element containing the drawing node
+                            paragraph = $(drawingNode).parent(),
+                            // total width of the paragraph, in 1/100 mm
+                            paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px');
 
-                        applyOperation(newOperation, true, true);
+                        if (moveX !== 0) {
+                            if ((DOM.isRightFloatingDrawingNode(drawingNode)) && (oldanchorhoffset === 0)) {
+                                // anchorhoffset has to be calculated corresponding to the left paragraph border
+                                anchorhoffset = paraWidth - drawingWidth;
+                            }
+
+                            anchorhoffset = oldanchorhoffset + moveX;
+                            anchorhalign = 'offset';
+                            if (anchorhoffset < 0) { anchorhoffset = 0; }
+                            else if (anchorhoffset > (paraWidth - drawingWidth)) { anchorhoffset = paraWidth - drawingWidth; }
+                        }
+
+                        if (moveY !== 0) {
+                            anchorvoffset = oldanchorvoffset + moveY;
+                            if (anchorvoffset < 0) { anchorvoffset = 0; }
+                        }
+
+                        if ((anchorhoffset !== oldanchorhoffset) || (anchorvoffset !== oldanchorvoffset)) {
+
+                            newOperation = { name: Operations.ATTRS_SET, attrs: {anchorhoffset: anchorhoffset, anchorvoffset: anchorvoffset, anchorhalign: anchorhalign}, start: updatePosition };
+
+                            applyOperation(newOperation, true, true);
+                        }
                     }
                 }
 

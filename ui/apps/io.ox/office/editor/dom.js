@@ -844,6 +844,38 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * Returns whether the passed node is a <div> element wrapping a drawing
+     * in left floating mode.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a div element wrapping a drawing and is
+     *  rendered left floated.
+     */
+    DOM.isLeftFloatingDrawingNode = function (node) {
+        return DOM.isFloatingDrawingNode(node) && $(node).hasClass('left');
+    };
+
+    /**
+     * Returns whether the passed node is a <div> element wrapping a drawing
+     * in right floating mode.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a div element wrapping a drawing and is
+     *  rendered right floated.
+     */
+    DOM.isRightFloatingDrawingNode = function (node) {
+        return DOM.isFloatingDrawingNode(node) && $(node).hasClass('right');
+    };
+
+    /**
      * Returns whether the passed node is a <div> element wrapping an image.
      *
      * @param {Node|jQuery|Null} [node]
