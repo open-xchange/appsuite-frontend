@@ -3553,9 +3553,11 @@ define('io.ox/office/editor/editor',
                             paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px');
 
                         if (oldanchorhoffset === undefined) {
-                            if (DOM.isRightFloatingDrawingNode(drawingNode)) {
-                                // anchorhoffset has to be calculated corresponding to the left paragraph border
+                            // anchorhoffset has to be calculated corresponding to the left paragraph border
+                            if (anchorhalign === 'right') {
                                 oldanchorhoffset = paraWidth - drawingWidth;
+                            } else if (anchorhalign === 'center') {
+                                oldanchorhoffset = (paraWidth - drawingWidth) / 2;
                             } else {
                                 oldanchorhoffset = 0;
                             }
