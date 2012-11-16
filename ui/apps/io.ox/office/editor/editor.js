@@ -3639,14 +3639,46 @@ define('io.ox/office/editor/editor',
                 currentY = 0,
                 shiftX = 0,
                 shiftY = 0,
+                // verticalResize is true, if the column width will be modified
                 verticalResize = false,
+                // horizontalResize is true, if the row height will be modified
                 horizontalResize = false,
                 // the window, to which the resize line will be appended temporarely
                 officemaindiv = app.getWindow().nodes.main,
                 // the container element used to visualize the resizing
                 resizeLine = $('<div>').addClass('resizeline'),
                 // the distance from body element to 'officemaindiv' in pixel
-                topDistance = officemaindiv.offset().top;
+                topDistance = officemaindiv.offset().top,
+                // the cell node for the selected resize node
+                cellNode = null,
+                // the row node for the selected resize node
+                rowNode =  null,
+                // the table node for the selected resize node
+                tableNode = null,
+                // the maximum table width
+                maxTableWidth = 0,
+                // is the selected cell the last cell in its row
+                lastCell = false,
+                // logical position of the selected node
+                tablePosition = [],
+                // table grid before shifting column or row
+                oldTableGrid = [],
+                // table width before shifting column or row
+                oldTableWidth = 0,
+                // table grid, containing relative widths
+                tableGrid = [],
+                // table grid, containing calculated pixel widhts
+                pixelGrid = [],
+                // sum of all grid values, will not be modified
+                gridSum = 0,
+                // the number of the grid count, that will be modified
+                shiftedGrid = 0,
+                // maximum shift to the left
+                maxLeftShift = 0,
+                // maximum shift to the right
+                maxRightShift = 0,
+                // maximum shift to the top
+                maxTopShift = 0;
 
             function mouseDownOnResizeNode(event, resizeNode) {
                 // mouse down event handler
@@ -3659,12 +3691,41 @@ define('io.ox/office/editor/editor',
                     horizontalResize = true;
                 }
 
+                // calculating maximum resize values
+                cellNode = $(resizeNode).closest('td, th');
+                rowNode =  $(resizeNode).closest('tr');
+                tableNode = $(resizeNode).closest('table');
+
                 if (verticalResize) {
                     $(resizeLine).css({ width: '1px', height: '100%', left: startX, top: '0px' });
                     officemaindiv.append(resizeLine);
+
+                    // calculating maxLeftShift and maxRightShift
+                    lastCell = cellNode[0].nextSibling ? false : true;
+                    tablePosition = Position.getOxoPosition(editdiv, tableNode.get(0), 0);
+                    oldTableGrid = StyleSheets.getExplicitAttributes(tableNode).tablegrid;
+                    oldTableWidth = StyleSheets.getExplicitAttributes(tableNode).width;
+                    maxTableWidth = tableNode.parent().width();
+
+                    if (oldTableWidth === 0) { oldTableWidth = tableNode.outerWidth(); }
+                    else { oldTableWidth = Utils.convertHmmToLength(oldTableWidth, 'px', 0); }
+
+                    // converting from relational grid to pixel grid
+                    for (var i = 0; i < oldTableGrid.length; i++) { gridSum += oldTableGrid[i]; }
+                    for (var i = 0; i < oldTableGrid.length; i++) { pixelGrid.push(Utils.roundDigits(oldTableGrid[i] * oldTableWidth / gridSum, 0)); }
+
+                    // which border was shifted?
+                    shiftedGrid = Table.getGridPositionFromCellPosition(rowNode, cellNode.prevAll().length).end;
+
+                    maxLeftShift = pixelGrid[shiftedGrid];
+                    if (! lastCell) { maxRightShift = pixelGrid[shiftedGrid + 1]; }
+                    else { maxRightShift = maxTableWidth - oldTableWidth; }
+
                 } else if (horizontalResize) {
                     $(resizeLine).css({ width: '100%', height: '1px', left: '0px', top: startY});
                     officemaindiv.append(resizeLine);
+                    // calculating maxTopShift (for bottom shift there is no limit)
+
                 }
 
                 editdiv.css('cursor', $(resizeNode).css('cursor'));  // setting cursor for increasing drawing
@@ -3672,6 +3733,10 @@ define('io.ox/office/editor/editor',
             }
 
             function mouseMoveOnResizeNode(event, resizeNode) {
+
+                var isValidShift = true,
+                    color = 'black';
+
                 // mouse move event handler
                 currentX = event.pageX;
                 currentY = event.pageY - topDistance;
@@ -3679,13 +3744,19 @@ define('io.ox/office/editor/editor',
                 if (verticalResize) {
                     shiftX = currentX;
                     shiftY = 0;
+
+                    if (((shiftX - startX) > maxRightShift) || ((shiftX - startX) < (- maxLeftShift))) {
+                        isValidShift = false;
+                    }
+
                 } else if (horizontalResize) {
                     shiftX = 0;
                     shiftY = currentY;
                 }
 
                 if ((_.isNumber(shiftX)) && (_.isNumber(shiftY))) {
-                    $(resizeLine).css({'left': shiftX, 'top': shiftY});
+                    color = isValidShift ? 'black' : 'red';
+                    $(resizeLine).css({'left': shiftX, 'top': shiftY, 'border-color': color});
                 }
             }
 
@@ -3703,39 +3774,18 @@ define('io.ox/office/editor/editor',
                 if (verticalResize) {
                     shiftX = currentX - startX;
                     if ((_.isNumber(shiftX)) && (shiftX !== 0)) {
-                        var cellNode = $(resizeNode).closest('td, th'),
-                            rowNode =  $(resizeNode).closest('tr'),
-                            tableNode =  $(resizeNode).closest('table'),
-                            lastCell = cellNode[0].nextSibling ? false : true,
-                            tablePosition = Position.getOxoPosition(editdiv, tableNode.get(0), 0),
-                            oldTableGrid = StyleSheets.getExplicitAttributes(tableNode).tablegrid,
-                            oldTableWidth = StyleSheets.getExplicitAttributes(tableNode).width,
-                            tableGrid = [],
-                            pixelGrid = [],
-                            gridSum = 0,  // sum of all grid values, will not be modified
-                            newTableWidth = 0,
-                            shiftedGrid = 0;
 
-                        if (oldTableWidth === 0) { oldTableWidth = tableNode.outerWidth(); }
-                        else { oldTableWidth = Utils.convertHmmToLength(oldTableWidth, 'px', 0); }
-                        newTableWidth = lastCell ? (oldTableWidth + shiftX) : oldTableWidth;
+                        var newTableWidth = lastCell ? (oldTableWidth + shiftX) : oldTableWidth;
 
                         // checking if new table width is inside the width of the parent -> otherwise cut it
                         if (lastCell) {
-                            var maxWidth = tableNode.parent().width();
-                            if (newTableWidth > maxWidth) {
-                                var delta = newTableWidth - maxWidth;
-                                newTableWidth = maxWidth;
+                            if (newTableWidth > maxTableWidth) {
+                                var delta = newTableWidth - maxTableWidth;
+                                newTableWidth = maxTableWidth;
                                 shiftX -= delta;  // shiftX can be 0
                             }
                         }
 
-                        // converting from relational grid to pixel grid
-                        for (var i = 0; i < oldTableGrid.length; i++) { gridSum += oldTableGrid[i]; }
-                        for (var i = 0; i < oldTableGrid.length; i++) { pixelGrid.push(Utils.roundDigits(oldTableGrid[i] * oldTableWidth / gridSum, 0)); }
-
-                        // which border was shifted?
-                        shiftedGrid = Table.getGridPositionFromCellPosition(rowNode, cellNode.prevAll().length).end;
                         // -> shifting the border
                         pixelGrid[shiftedGrid] += shiftX;
                         if (! lastCell) { pixelGrid[shiftedGrid + 1] -= shiftX; }
@@ -3758,8 +3808,7 @@ define('io.ox/office/editor/editor',
                 } else if (horizontalResize) {
                     shiftY = currentY - startY;
                     if ((_.isNumber(shiftX)) && (_.isNumber(shiftY)) && (shiftY !== 0)) {
-                        var rowNode = $(resizeNode).closest('tr'),
-                            rowHeight = rowNode.outerHeight() + shiftY,
+                        var rowHeight = rowNode.outerHeight() + shiftY,
                             newRowHeight = Utils.convertLengthToHmm(rowHeight, 'px'),
                             rowPosition = Position.getOxoPosition(editdiv, rowNode.get(0), 0),
                             newOperation = { name: Operations.ATTRS_SET, attrs: {height: newRowHeight}, start: rowPosition };
