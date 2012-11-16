@@ -2148,7 +2148,7 @@ define('io.ox/office/editor/editor',
             });
 
             if (hyperlinkMissing) {
-                var hyperlinkAttr = self.getDefaultLateralHyperlinkAttributes(),
+                var hyperlinkAttr = { character: self.getDefaultLateralHyperlinkAttributes() },
                     hyperlinkDef = self.getDefaultLateralHyperlinkDefinition();
                 characterStyles.addStyleSheet(
                         hyperlinkDef.styleid, hyperlinkDef.stylename,
