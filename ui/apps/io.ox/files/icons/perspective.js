@@ -89,6 +89,10 @@ define('io.ox/files/icons/perspective',
         $(this).replaceWith(drawGeneric(e.data.name));
     }
 
+    function officeIconError(e) {
+        $(this).replaceWith(drawGeneric(e.data.name));
+    }
+
     function drawImage(src) {
         return $('<img>', { alt: '', src: src }).addClass('img-polaroid');
     }
@@ -102,6 +106,11 @@ define('io.ox/files/icons/perspective',
         return api.getUrl(file, 'open') +
             '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight +
             '&content_type=' + file.file_mimetype;
+    }
+
+    function getOfficePreview(file, options) {
+        return 'api/infostore?action=document&folder=' + file.folder_id + '&id=' + file.id +
+              '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight + '&format=preview_image&delivery=view';
     }
 
     function cut(str) {
@@ -122,6 +131,9 @@ define('io.ox/files/icons/perspective',
                 img = drawImage(getIcon(file, options)).on('error', { name: file.filename }, imageIconError);
             } else if ((/^audio\/(mpeg|m4a|x-m4a)$/i).test(file.file_mimetype)) {
                 img = drawImage(getCover(file, options)).on('error', { name: file.filename }, audioIconError);
+            } else if (ox.serverConfig.previewExtensions &&
+                    (/^application\/.*(ms-word|ms-excel|ms-powerpoint|openxmlformats).*$/i).test(file.file_mimetype)) {
+                img = drawImage(getOfficePreview(file, options)).on('error', { name: file.filename }, officeIconError);
             } else {
                 img = drawGeneric(file.filename);
             }
