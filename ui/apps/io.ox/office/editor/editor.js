@@ -5096,7 +5096,8 @@ define('io.ox/office/editor/editor',
 
             lastOperationEnd = _.clone(startPosition);
 
-            implParagraphChanged(startPosition);
+            //implParagraphChanged(startPosition);
+            validateParagraphNode(paragraph);
         }
 
         function implMove(_source, _dest) {
