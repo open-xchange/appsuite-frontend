@@ -75,12 +75,12 @@ define('io.ox/office/editor/editor',
                 paragraph: { lineheight: { type: 'percent', value: 100 }},
                 table:
                 {
-                    bordertop: { color : { type: 'auto' }, width: 17, style: 'single' },
-                    borderbottom: { color: { type: 'auto' }, width: 17, style: 'single' },
-                    borderinsideh: { color: { type: 'auto' }, width: 17, style: 'single' },
-                    borderinsidev: { color: { type: 'auto' }, width: 17, style: 'single' },
-                    borderleft: { color: { type: 'auto' }, width: 17, style: 'single' },
-                    borderright: { color: { type: 'auto' }, width: 17, style: 'single' }
+                    bordertop:     { color: Color.AUTO, width: 17, style: 'single' },
+                    borderbottom:  { color: Color.AUTO, width: 17, style: 'single' },
+                    borderinsideh: { color: Color.AUTO, width: 17, style: 'single' },
+                    borderinsidev: { color: Color.AUTO, width: 17, style: 'single' },
+                    borderleft:    { color: Color.AUTO, width: 17, style: 'single' },
+                    borderright:   { color: Color.AUTO, width: 17, style: 'single' }
                 }
             }
         },
@@ -163,7 +163,7 @@ define('io.ox/office/editor/editor',
 
     // class Editor ===========================================================
 
-    /**'io.ox/office/editor/position',
+    /**
      * The text editor.
      *
      * Triggers the following events:
@@ -210,6 +210,9 @@ define('io.ox/office/editor/editor',
             pageStyles = documentStyles.getStyleSheets('page'),
             lists = documentStyles.getLists(),
 
+            // attributes that were set without a selection and are only set for a single character
+            preselectedAttributes = {},
+
             // all text spans that are highlighted (for quick removal)
             highlightedSpans = [],
 
@@ -220,7 +223,6 @@ define('io.ox/office/editor/editor',
             lastOperationEnd,     // Need to decide: Should the last operation modify this member, or should the selection be passed up the whole call chain?!
 
             blockOperations = false,
-            blockOperationNotifications = false,
 
             // set document into write protected mode
             // can be null, false and true
@@ -230,17 +232,18 @@ define('io.ox/office/editor/editor',
             // name of the user that currently has the edit rigths
             editUser = '',
 
-            // attributes that were set without a selection and are only set for a single character
-            preselectedAttributes = {},
-
             dbgoutEvents = false;
 
-        // add event hub
-        Events.extend(this);
+        // private methods ----------------------------------------------------
 
-        // ==================================================================
-        // Public editor functions
-        // ==================================================================
+        // methods ------------------------------------------------------------
+
+        /**
+         * Returns the root DOM element representing this editor.
+         */
+        this.getNode = function () {
+            return editdiv;
+        };
 
         /**
          * Returns whether the editor is currently focused.
@@ -273,7 +276,31 @@ define('io.ox/office/editor/editor',
             deferredMethods = selection = documentStyles = null;
         };
 
-        // OPERATIONS API
+        // undo/redo ----------------------------------------------------------
+
+        this.enableUndo = function (enable) {
+            undoManager.enable(enable);
+        };
+
+        this.undoAvailable = function () {
+            return undoManager.undoAvailable();
+        };
+
+        this.undo = function (count) {
+            undoManager.undo(count);
+            selection.setTextSelection(lastOperationEnd);
+        };
+
+        this.redoAvailable = function () {
+            return undoManager.redoAvailable();
+        };
+
+        this.redo = function (count) {
+            undoManager.redo(count);
+            selection.setTextSelection(lastOperationEnd);
+        };
+
+        // operations API -----------------------------------------------------
 
         this.clearOperations = function () {
             operations = [];
@@ -283,22 +310,10 @@ define('io.ox/office/editor/editor',
             return operations;
         };
 
-        // Cut, copy, paste
-
-        /**
-         * Returns whether the editor contains a selection range (text,
-         * drawings, or table cells) instead of a simple text cursor.
-         */
-        this.hasSelectedRange = function () {
-            return !selection.isTextCursor();
-        };
-
-        /**
-         * Returns whether the editor contains a selection within a
-         * single paragraph or not.
-         */
-        this.selectionEnclosingParagraph = function () {
-            return (selection.getEnclosingParagraph() !== null);
+        this.applyOperations = function (operations, silent) {
+            _(operations).each(function (operation) {
+                applyOperation(operation, silent);
+            });
         };
 
         /**
@@ -542,7 +557,7 @@ define('io.ox/office/editor/editor',
                 if (anchorPosition.length >= 2) {
                     Utils.info('Editor.pasteInternalClipboard()');
                     operations = _(clipboardOperations).map(transformOperation);
-                    this.applyOperations(operations, true, true);
+                    this.applyOperations(operations);
                 } else {
                     Utils.warn('Editor.pasteInternalClipboard(): invalid cursor position');
                 }
@@ -616,48 +631,9 @@ define('io.ox/office/editor/editor',
         // and generate operations.
         // ==================================================================
 
-        /**
-         * Returns the root DOM element representing this editor.
-         */
-        this.getNode = function () {
-            return editdiv;
-        };
-
-        this.applyOperations = function (operations, record, notify) {
-            _(operations).each(function (operation) {
-                applyOperation(operation, record, notify);
-            });
-        };
-
         this.initDocument = function () {
             var newOperation = { name: 'initDocument' };
-            applyOperation(newOperation, true, true);
-        };
-
-        this.clearUndo = function () {
-            undoManager.clear();
-        };
-
-        this.enableUndo = function (enable) {
-            undoManager.enable(enable);
-        };
-
-        this.undoAvailable = function () {
-            return undoManager.undoAvailable();
-        };
-
-        this.undo = function (count) {
-            undoManager.undo(count);
-            selection.setTextSelection(lastOperationEnd);
-        };
-
-        this.redoAvailable = function () {
-            return undoManager.redoAvailable();
-        };
-
-        this.redo = function (count) {
-            undoManager.redo(count);
-            selection.setTextSelection(lastOperationEnd);
+            applyOperation(newOperation);
         };
 
         /**
@@ -875,7 +851,7 @@ define('io.ox/office/editor/editor',
                 }
 
                 // apply the operations
-                this.applyOperations(generator.getOperations(), true, true);
+                this.applyOperations(generator.getOperations());
 
             }, this);
         };
@@ -890,7 +866,7 @@ define('io.ox/office/editor/editor',
 
                 var newOperation = { name: Operations.TEXT_DELETE, start: startposition, end: _endPosition };
                 // var newOperation = { name: Operations.TEXT_DELETE, start: startposition, end: endposition };
-                applyOperation(newOperation, true, true);
+                applyOperation(newOperation);
                 // setting the cursor position
                 selection.setTextSelection(lastOperationEnd);
             }
@@ -898,12 +874,12 @@ define('io.ox/office/editor/editor',
 
         this.deleteParagraph = function (position) {
             var newOperation = { name: Operations.PARA_DELETE, start: _.copy(position, true) };
-            applyOperation(newOperation, true, true);
+            applyOperation(newOperation);
         };
 
         this.deleteTable = function (position) {
             var newOperation = { name: Operations.TABLE_DELETE, start: _.copy(position, true) };
-            applyOperation(newOperation, true, true);
+            applyOperation(newOperation);
 
             // setting the cursor position
             selection.setTextSelection(lastOperationEnd);
@@ -929,7 +905,7 @@ define('io.ox/office/editor/editor',
                 newOperation = { name: Operations.ROWS_DELETE, position: tablePos, start: start, end: end };
             }
 
-            applyOperation(newOperation, true, true);
+            applyOperation(newOperation);
 
             // setting the cursor position
             selection.setTextSelection(lastOperationEnd);
@@ -969,20 +945,20 @@ define('io.ox/office/editor/editor',
                 }
 
                 var newOperation = {name: Operations.CELLS_DELETE, position: rowPosition, start: localStartCol, end: localEndCol};
-                applyOperation(newOperation, true, true);
+                applyOperation(newOperation);
 
                 // removing empty row
                 var rowNode = Position.getDOMPosition(editdiv, rowPosition).node;
                 if ($(rowNode).children().length === 0) {
                     newOperation = { name: Operations.ROWS_DELETE, position: _.copy(tablePos, true), start: i, end: i };
-                    applyOperation(newOperation, true, true);
+                    applyOperation(newOperation);
                 }
 
                 // checking if the table is empty
                 var tableNode = Position.getDOMPosition(editdiv, tablePos).node;
                 if (DOM.getTableRows(tableNode).length === 0) {
                     newOperation = { name: Operations.TABLE_DELETE, start: _.copy(tablePos, true) };
-                    applyOperation(newOperation, true, true);
+                    applyOperation(newOperation);
                 }
 
             }
@@ -1034,7 +1010,7 @@ define('io.ox/office/editor/editor',
                         cellPosition = _.copy(rowPosition, true);
                     cellPosition.push(localStartCol);
                     var newOperation = {name: Operations.CELL_MERGE, position: cellPosition, count: count};
-                    applyOperation(newOperation, true, true);
+                    applyOperation(newOperation);
 
                     endPosition = _.copy(cellPosition, true);
                 }
@@ -1088,7 +1064,7 @@ define('io.ox/office/editor/editor',
                 cellPosition.push(localEndCol);
                 attrs.gridspan = 1;  // only 1 grid for the new cell
                 var newOperation = {name: Operations.CELL_INSERT, position: cellPosition, count: count, attrs: attrs};
-                applyOperation(newOperation, true, true);
+                applyOperation(newOperation);
 
                 // Applying new tablegrid, if the current tablegrid is not sufficient
                 var tableDomPoint = Position.getDOMPosition(editdiv, tablePos),
@@ -1107,7 +1083,7 @@ define('io.ox/office/editor/editor',
 
                         // Setting new table grid attribute to table
                         newOperation = { name: Operations.ATTRS_SET, attrs: { 'tablegrid' : tablegrid }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
-                        applyOperation(newOperation, true, true);
+                        applyOperation(newOperation);
                     }
 
                 }
@@ -1149,10 +1125,10 @@ define('io.ox/office/editor/editor',
 
                 if (isCompleteTable) {
                     newOperation = { name: Operations.TABLE_DELETE, start: _.copy(tablePos, true) };
-                    applyOperation(newOperation, true, true);
+                    applyOperation(newOperation);
                 } else {
                     newOperation = { name: Operations.COLUMNS_DELETE, position: tablePos, startgrid: startGrid, endgrid: endGrid };
-                    applyOperation(newOperation, true, true);
+                    applyOperation(newOperation);
 
                     // Checking, if there are empty rows
                     var maxRow = DOM.getTableRows(tableNode).length - 1,
@@ -1165,7 +1141,7 @@ define('io.ox/office/editor/editor',
 
                         if ($(currentRowNode).children().length === 0) {
                             newOperation = {  name: Operations.ROWS_DELETE, position: _.copy(tablePos, true), start: i, end: i };
-                            applyOperation(newOperation, true, true);
+                            applyOperation(newOperation);
                         } else {
                             deletedAllRows = false;
                         }
@@ -1174,7 +1150,7 @@ define('io.ox/office/editor/editor',
                     // Checking, if now the complete table is empty
                     if (deletedAllRows) {
                         newOperation = { name: Operations.TABLE_DELETE, start: _.copy(tablePos, true) };
-                        applyOperation(newOperation, true, true);
+                        applyOperation(newOperation);
                     }
 
                     // Setting new table grid attribute to table
@@ -1183,7 +1159,7 @@ define('io.ox/office/editor/editor',
                             tablegrid = StyleSheets.getExplicitAttributes(tableNode).tablegrid;
                         tablegrid.splice(startGrid, endGrid - startGrid + 1);  // removing column(s) in tablegrid (automatically updated in table node)
                         newOperation = { name: Operations.ATTRS_SET, attrs: { 'tablegrid' : tablegrid }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
-                        applyOperation(newOperation, true, true);
+                        applyOperation(newOperation);
                     }
 
                 }
@@ -1209,7 +1185,7 @@ define('io.ox/office/editor/editor',
                 rowPos[rowPos.length - 1] += 1;
 
                 var newOperation = { name: Operations.ROW_INSERT, position: rowPos, count: count, insertdefaultcells: insertdefaultcells, referencerow: referenceRow };
-                applyOperation(newOperation, true, true);
+                applyOperation(newOperation);
             }
 
             // setting the cursor position
@@ -1228,11 +1204,11 @@ define('io.ox/office/editor/editor',
             undoManager.enterGroup(function () {
 
                 var newOperation = { name: Operations.COLUMN_INSERT, position: tablePos, tablegrid: tablegrid, gridposition: gridPosition, insertmode: insertmode };
-                applyOperation(newOperation, true, true);
+                applyOperation(newOperation);
 
                 // Setting new table grid attribute to table
                 newOperation = { name: Operations.ATTRS_SET, attrs: { 'tablegrid' : tablegrid }, start: _.clone(tablePos), end: _.clone(tablePos) };
-                applyOperation(newOperation, true, true);
+                applyOperation(newOperation);
 
             }, this);
 
@@ -1242,7 +1218,7 @@ define('io.ox/office/editor/editor',
 
         this.insertParagraph = function (position) {
             var newOperation = {name: Operations.PARA_INSERT, start: _.copy(position, true)};
-            applyOperation(newOperation, true, true);
+            applyOperation(newOperation);
         };
 
         this.insertTable = function (size) {
@@ -1292,11 +1268,11 @@ define('io.ox/office/editor/editor',
                     tableGrid.push(Utils.roundDigits(1000 / size.width, 0));  // only ints
                 }
                 var newOperation = {name: Operations.TABLE_INSERT, position: _.clone(position), attrs: {'tablegrid': tableGrid, 'width': width}};
-                applyOperation(newOperation, true, true);
+                applyOperation(newOperation);
 
                 // adding rows
                 newOperation = {name: Operations.ROW_INSERT, position: position.concat([0]), count: size.height, insertdefaultcells: true};
-                applyOperation(newOperation, true, true);
+                applyOperation(newOperation);
 
                 if (deleteTempParagraph) {
                     var paraPosition = _.clone(position);
@@ -1332,7 +1308,7 @@ define('io.ox/office/editor/editor',
                     });
 
                     // apply all collected operations
-                    self.applyOperations(generator.getOperations(), true, true);
+                    self.applyOperations(generator.getOperations());
                 }
 
                 // set the cursor to first paragraph in first table cell
@@ -1352,7 +1328,7 @@ define('io.ox/office/editor/editor',
                     attrs: { imgurl: imageFragment }
                 };
 
-            applyOperation(newOperation, true, true);
+            applyOperation(newOperation);
 
             sendImageSize(position);
 
@@ -1370,7 +1346,7 @@ define('io.ox/office/editor/editor',
                     attrs: { imgurl: imageURL }
                 };
 
-            applyOperation(newOperation, true, true);
+            applyOperation(newOperation);
 
             sendImageSize(position);
 
@@ -1388,7 +1364,7 @@ define('io.ox/office/editor/editor',
                     attrs: { imgdata: imageData }
                 };
 
-            applyOperation(newOperation, true, true);
+            applyOperation(newOperation);
 
             sendImageSize(position);
 
@@ -1463,7 +1439,7 @@ define('io.ox/office/editor/editor',
 
                                 // insert new text
                                 var newOperation = { name: Operations.TEXT_INSERT, text: data.text, start: _.clone(start) };
-                                applyOperation(newOperation, true, true);
+                                applyOperation(newOperation);
 
                                 // Calculate end position of new text
                                 // will be used for setAttributes operation
@@ -1495,7 +1471,7 @@ define('io.ox/office/editor/editor',
                         }
 
                         // apply all collected operations
-                        self.applyOperations(generator.getOperations(), true, true);
+                        self.applyOperations(generator.getOperations());
 
                         window.setTimeout(function () {
                             app.getController().cancel();
@@ -1542,7 +1518,7 @@ define('io.ox/office/editor/editor',
                     });
 
                     // apply all collected operations
-                    self.applyOperations(generator.getOperations(), true, true);
+                    self.applyOperations(generator.getOperations());
 
                     window.setTimeout(function () {
                         app.getController().cancel();
@@ -1556,7 +1532,7 @@ define('io.ox/office/editor/editor',
         this.insertTab = function () {
             undoManager.enterGroup(function () {
                 this.deleteSelected();
-                applyOperation({ name: Operations.TAB_INSERT, position: selection.getStartPosition() }, true, true);
+                applyOperation({ name: Operations.TAB_INSERT, position: selection.getStartPosition() });
             }, this);
 
             // setting the cursor position
@@ -1565,17 +1541,17 @@ define('io.ox/office/editor/editor',
 
         this.splitParagraph = function (position) {
             var newOperation = {name: Operations.PARA_SPLIT, start: _.clone(position)};
-            applyOperation(newOperation, true, true);
+            applyOperation(newOperation);
         };
 
         this.mergeParagraph = function (position) {
             var newOperation = {name: Operations.PARA_MERGE, start: _.clone(position)};
-            applyOperation(newOperation, true, true);
+            applyOperation(newOperation);
         };
 
         this.insertText = function (text, position) {
             var newOperation = { name: Operations.TEXT_INSERT, text: text, start: _.clone(position) };
-            applyOperation(newOperation, true, true);
+            applyOperation(newOperation);
         };
 
         /**
@@ -1587,7 +1563,7 @@ define('io.ox/office/editor/editor',
             undoManager.enterGroup(function () {
                 if (defNumId === undefined) {
                     var listOperation = lists.getDefaultListOperation(type);
-                    applyOperation(listOperation, true, true);
+                    applyOperation(listOperation);
                     defNumId = listOperation.listname;
                 }
                 this.setAttributes('paragraph', { numId: defNumId, ilvl: 0 });
@@ -1598,7 +1574,7 @@ define('io.ox/office/editor/editor',
             var defNumId = (!options || (!options.symbol && !options.levelstart)) ? lists.getDefaultNumId(type) : undefined;
             if (defNumId === undefined) {
                 var listOperation = lists.getDefaultListOperation(type, options);
-                applyOperation(listOperation, true, true);
+                applyOperation(listOperation);
                 defNumId = listOperation.listname;
             }
             if (options && options.startPosition) {
@@ -1609,11 +1585,11 @@ define('io.ox/office/editor/editor',
                     start[index] = options.startPosition[index];
                 }
                 var newOperation = {name: Operations.ATTRS_SET, attrs: { numId: defNumId, ilvl: 0}, start: start, end: start };
-                applyOperation(newOperation, true, true);
+                applyOperation(newOperation);
                 start[start.length - 1] += 1;
                 newOperation.start = start;
                 newOperation.end = newOperation.start;
-                applyOperation(newOperation, true, true);
+                applyOperation(newOperation);
             } else {
                 this.setAttributes('paragraph', { numId: defNumId, ilvl: 0 });
             }
@@ -1882,7 +1858,7 @@ define('io.ox/office/editor/editor',
                 }
 
                 // apply all collected operations
-                this.applyOperations(generator.getOperations(), true, true);
+                this.applyOperations(generator.getOperations());
 
             }, this);
         };
@@ -1935,6 +1911,22 @@ define('io.ox/office/editor/editor',
          */
         this.isTextSelected = function () {
             return selection.getSelectionType() !== 'drawing';
+        };
+
+        /**
+         * Returns whether the editor contains a selection range (text,
+         * drawings, or table cells) instead of a simple text cursor.
+         */
+        this.hasSelectedRange = function () {
+            return !selection.isTextCursor();
+        };
+
+        /**
+         * Returns whether the editor contains a selection within a
+         * single paragraph or not.
+         */
+        this.selectionEnclosingParagraph = function () {
+            return (selection.getEnclosingParagraph() !== null);
         };
 
         // PUBLIC TABLE METHODS
@@ -2400,7 +2392,7 @@ define('io.ox/office/editor/editor',
                 }
                 else if (c === 'F') {
                     var newOperation = {name: Operations.FIELD_INSERT, position: selection.getStartPosition(), type: ' DATE \\* MERGEFORMAT ', representation: '07.09.2012'};
-                    applyOperation(newOperation, true, true);
+                    applyOperation(newOperation);
                 }
                 else if (c === '1') {
                     dbgoutEvents = !dbgoutEvents;
@@ -2409,10 +2401,6 @@ define('io.ox/office/editor/editor',
                 else if (c === '2') {
                     Utils.MIN_LOG_LEVEL = Utils.MIN_LOG_LEVEL ? undefined : 'log';
                     window.console.log('logging is now ' + (Utils.MIN_LOG_LEVEL ? 'on' : 'off'));
-                }
-                else if (c === '3') {
-                    blockOperationNotifications = !blockOperationNotifications;
-                    Utils.log('block operation notifications is now ' + blockOperationNotifications);
                 }
             }
 
@@ -2726,7 +2714,7 @@ define('io.ox/office/editor/editor',
                             if (ilvl < 0) {
                                 //remove list-label and update paragraph
                                 $(paragraph).children(DOM.LIST_LABEL_NODE_SELECTOR).remove();
-                                implParagraphChanged(startPosition);
+                                implParagraphChanged(paragraph);
                             }
                             split = false;
                         }
@@ -3317,7 +3305,7 @@ define('io.ox/office/editor/editor',
             }
 
             // refresh DOM
-            implParagraphChanged(operation.start);
+            implParagraphChanged(thisParagraph);
             implUpdateLists();
 
             // new cursor position at merge position
@@ -3327,10 +3315,12 @@ define('io.ox/office/editor/editor',
         /**
          * Central dispatcher function for operations.
          */
-        function applyOperation(operation, record, notify) {
+        function applyOperation(operation, options) {
 
             var // the function that executes the operation
-                operationHandler = null;
+                operationHandler = null,
+                // silent mode
+                silent = Utils.getBooleanOption(options, 'silent', false);
 
             if (!_.isObject(operation)) {
                 Utils.error('Editor.applyOperation(): expecting operation object');
@@ -3347,7 +3337,7 @@ define('io.ox/office/editor/editor',
             if (blockOperations) {
                 // This can only happen if someone tries to apply new operation in the operation notify.
                 // This is not allowed because a document manipulation method might be split into multiple operations, following operations would have invalid positions then.
-                Utils.info('Editor.applyOperation(): operations blocked');
+                Utils.warn('Editor.applyOperation(): operations blocked');
                 return;
             }
 
@@ -3359,14 +3349,14 @@ define('io.ox/office/editor/editor',
             // Copy operation now, because undo might manipulate it when merging with previous one...
             var notifyOperation = _.copy(operation, true);
 
-            if (record) {
+            if (!silent) {
                 operations.push(operation);
             }
 
             // execute the operation handler (set function context to editor instance)
             operationHandler.call(self, operation);
 
-            if (notify && !blockOperationNotifications) {
+            if (!silent) {
                 // Will give everybody the same copy - how to give everybody his own copy?
                 self.trigger('operation', notifyOperation);
             }
@@ -3540,7 +3530,7 @@ define('io.ox/office/editor/editor',
                             updatePosition = Position.getOxoPosition(editdiv, drawingNode, 0),
                             newOperation = { name: Operations.ATTRS_SET, attrs: {width: width, height: height}, start: updatePosition };
 
-                        applyOperation(newOperation, true, true);
+                        applyOperation(newOperation);
                     }
                 } else if (nodeOptions.isMoveEvent) {
 
@@ -3587,7 +3577,7 @@ define('io.ox/office/editor/editor',
 
                             newOperation = { name: Operations.ATTRS_SET, attrs: {anchorhoffset: anchorhoffset, anchorvoffset: anchorvoffset, anchorhalign: anchorhalign}, start: updatePosition };
 
-                            applyOperation(newOperation, true, true);
+                            applyOperation(newOperation);
                         }
                     }
                 }
@@ -3741,7 +3731,7 @@ define('io.ox/office/editor/editor',
                             else { newTableWidth = Utils.convertLengthToHmm(newTableWidth, 'px'); }
 
                             var newOperation = {name: Operations.ATTRS_SET, attrs: {'tablegrid': tableGrid, 'width': newTableWidth}, start: tablePosition};
-                            applyOperation(newOperation, true, true);
+                            applyOperation(newOperation);
                         }
                     }
                 } else if (horizontalResize) {
@@ -3753,7 +3743,7 @@ define('io.ox/office/editor/editor',
                             rowPosition = Position.getOxoPosition(editdiv, rowNode.get(0), 0),
                             newOperation = { name: Operations.ATTRS_SET, attrs: {height: newRowHeight}, start: rowPosition };
 
-                        applyOperation(newOperation, true, true);
+                        applyOperation(newOperation);
                     }
                 }
 
@@ -4028,7 +4018,7 @@ define('io.ox/office/editor/editor',
                         updatePosition = Position.getOxoPosition(editdiv, this, 0);
                         newOperation = { name: Operations.ATTRS_SET, attrs: {width: width, height: height}, start: updatePosition };
 
-                        applyOperation(newOperation, true, true);
+                        applyOperation(newOperation);
                     }
                 });
             }
@@ -4044,15 +4034,17 @@ define('io.ox/office/editor/editor',
          * Has to be called every time after changing the structure of a
          * paragraph node.
          *
-         * @param {Number[]} position
-         *  The logical position of the paragraph or any of its child
-         *  components.
+         * @param {HTMLElement|jQuery|Number[]} paragraph
+         *  The paragraph element as DOM node or jQuery object, or the logical
+         *  position of the paragraph or any of its child components.
          */
         var implParagraphChanged = deferredMethods.createMethod(
 
             // direct callback: called every time when implParagraphChanged() has been called
-            function registerParagraph(storage, position) {
-                var paragraph = Position.getCurrentParagraph(editdiv, position);
+            function registerParagraph(storage, paragraph) {
+                if (_.isArray(paragraph)) {
+                    paragraph = Position.getCurrentParagraph(editdiv, paragraph);
+                }
                 // store the new paragraph in the collection (jQuery keeps the collection unique)
                 if (paragraph) {
                     storage.paragraphs = storage.paragraphs.add(paragraph);
@@ -4140,99 +4132,98 @@ define('io.ox/office/editor/editor',
             selection.selectTopPosition();
             lastOperationEnd = selection.getStartPosition();
 
-            self.clearUndo();
+            undoManager.clear();
             self.setEditMode(null); // set null for 'read-only' and not yet determined edit status by the server
         }
 
+        /**
+         * Returns a text span and its internal offset for the specified
+         * logical position.
+         *
+         * @param {Number[]} position
+         *  The logical text position.
+         *
+         * @returns {Object|Null}
+         *  An object with the attributes 'node' pointing to the text span DOM
+         *  node, and an attribute 'offset' containing the internal character
+         *  offset in the text span. Returns null, if the passed logical
+         *  position is invalid.
+         */
+        function getTextSpanInfo(position) {
+
+            var // node info at passed position (DOM text node level)
+                nodeInfo = Position.getDOMPosition(editdiv, position),
+                // the parent text span
+                span = (nodeInfo && nodeInfo.node) ? nodeInfo.node.parentNode : null;
+
+            if (!DOM.isPortionSpan(span)) {
+                Utils.warn('Editor.getTextSpanInfo(): expecting text span at position ' + JSON.stringify(position));
+                return null;
+            }
+
+            return { node: span, offset: nodeInfo.offset };
+        }
+
         function implInsertText(text, position) {
-            var domPos = Position.getDOMPosition(editdiv, position);
 
-            if ((domPos) && (domPos.node)) {
-                var oldText = domPos.node.nodeValue;
-                if (oldText !== null) {
-                    var newText = oldText.slice(0, domPos.offset) + text + oldText.slice(domPos.offset);
-                    domPos.node.nodeValue = newText;
-                    lastOperationEnd = _.clone(position);
-                    var posLength = position.length - 1;
-                    lastOperationEnd[posLength] = position[posLength] + text.length;
-                    implParagraphChanged(position);
-                }
-            }
-        }
+            var // text span and internal offset
+                spanInfo = getTextSpanInfo(position),
+                // the text node in the text span
+                textNode = null;
 
-        function implInsertTab(position) {
-            var domPos = Position.getDOMPosition(editdiv, position),
-                node = (domPos && domPos.node) ? domPos.node.parentNode : null,
-                tabSpan = null;
+            if (!spanInfo) { return false; }
 
-            // check position
-            if (!DOM.isPortionSpan(node)) {
-                Utils.warn('Editor.implInsertTab(): expecting text position to insert tab.');
-                return false;
-            }
+            // manipulate the existing DOM text node
+            textNode = spanInfo.node.firstChild;
 
-            // split the text span at the specified position
-            DOM.splitTextSpan(node, domPos.offset);
+            // insert the new text into the text node
+            textNode.nodeValue = textNode.nodeValue.slice(0, spanInfo.offset) + text + textNode.nodeValue.slice(spanInfo.offset);
 
-            // split the text span again to get initial character formatting for the tab
-            // tab stop size will be updated by validateParagraph
-            tabSpan = DOM.splitTextSpan(node, 0);
-
-            // insert a tab container node before the addressed text node, move
-            // the tab span element into the tab container node
-            DOM.createTabNode().append(tabSpan).insertBefore(node);
-
-            implParagraphChanged(position);
-
-            lastOperationEnd = _.clone(position);
-            lastOperationEnd[lastOperationEnd.length - 1] += 1;
-
+            // validate paragraph, store new cursor position
+            implParagraphChanged(spanInfo.node.parentNode);
+            lastOperationEnd = Position.increaseLastIndex(position, text.length);
             return true;
         }
 
-        function implInsertDrawing(type, position, attributes) {
+        /**
+         * Splits the text span at the specified position, if splitting is
+         * required. Always splits the span, if the position points between two
+         * characters of the span. Additionally splits the span, if there is no
+         * previous sibling text span while the position points to the
+         * beginning of the span, or if there is no next text span while the
+         * position points to the end of the span.
+         *
+         * @param {Number[]} position
+         *  The logical text position.
+         *
+         * @returns {HTMLSpanElement|Null}
+         *  The text span that precedes the passed offset. Will be the leading
+         *  part of the original text span addressed by the passed position, if
+         *  it has been split, or the previous sibling text span, if the passed
+         *  position points to the beginning of the span, or the entire text
+         *  span, if the passed position points to the end of a text span and
+         *  there is a following text span available. Returns null, if the
+         *  passed logical position is invalid.
+         */
+        function getPreparedTextSpan(position) {
 
-            var domPos = Position.getDOMPosition(editdiv, position),
-                node = (domPos && domPos.node) ? domPos.node.parentNode : null,
-                drawing = null,
-                url = null,
-                absUrl = null,
-                contentdiv = $('<div>').addClass('content');
+            var // resolve position to text span and offset
+                spanInfo = getTextSpanInfo(position);
 
-            // check position
-            if (!DOM.isPortionSpan(node)) {
-                Utils.warn('Editor.implInsertDrawing(): expecting text position to insert drawing.');
-                return false;
+            if (!spanInfo) { return null; }
+
+            // do not split at beginning with existing preceding text span
+            if ((spanInfo.offset === 0) && DOM.isTextSpan(spanInfo.node.previousSibling)) {
+                return spanInfo.node.previousSibling;
             }
 
-            // prepend text before offset in a new span (also if position
-            // points to start or end of text, needed to clone formatting)
-            DOM.splitTextSpan(node, domPos.offset);
-
-            // insert the drawing with default settings (inline) between the two text nodes (store original URL for later use)
-
-            drawing = $('<div>', { contenteditable: false })
-               .addClass('drawing inline')
-               .data('type', type)
-               .append(contentdiv);
-
-            drawing.insertBefore(node);
-
-            if (type === 'image') {
-                // saving the absolute image url as data object at content node
-                url = attributes.imgurl;
-                absUrl = /:\/\//.test(url) ? url : getDocumentUrl({ get_filename: url });
-                drawing.data('absoluteURL', absUrl);
+            // return following span, if offset points to end of span
+            if ((spanInfo.offset === spanInfo.node.firstChild.nodeValue.length) && DOM.isTextSpan(spanInfo.node.nextSibling)) {
+                return spanInfo.node;
             }
 
-            // apply the passed drawing attributes
-            drawingStyles.setElementAttributes(drawing, attributes);
-
-            lastOperationEnd = _.clone(position);
-            lastOperationEnd[lastOperationEnd.length - 1] += 1;
-
-            implParagraphChanged(position);
-            return true;
+            // otherwise, split the span
+            return DOM.splitTextSpan(spanInfo.node, spanInfo.offset)[0];
         }
 
         /**
@@ -4250,28 +4241,80 @@ define('io.ox/office/editor/editor',
          */
         function implInsertField(position, type, representation) {
 
-            var domPos = Position.getDOMPosition(editdiv, position),
-                node = (domPos && domPos.node) ? domPos.node.parentNode : null,
+            var // text span that will precede the field
+                span = getPreparedTextSpan(position),
+                // new text span for the field node
                 fieldSpan = null;
 
-            // check position
-            if (!DOM.isPortionSpan(node)) {
-                Utils.warn('Editor.implInsertField(): expecting text position to insert field.');
-                return false;
-            }
-
-            // split the text span at the specified position
-            DOM.splitTextSpan(node, domPos.offset);
+            if (!span) { return false; }
 
             // split the text span again to get initial character formatting
             // for the field, and insert the field representation text
-            fieldSpan = DOM.splitTextSpan(node, 0).text(representation);
+            fieldSpan = DOM.splitTextSpan(span, 0).text(representation);
 
             // insert a new text field before the addressed text node, move
             // the field span element into the field node
-            DOM.createFieldNode().append(fieldSpan).insertBefore(node);
+            DOM.createFieldNode().append(fieldSpan).insertAfter(span);
 
-            implParagraphChanged(position);
+            // validate paragraph, store new cursor position
+            implParagraphChanged(span.parentNode);
+            lastOperationEnd = Position.increaseLastIndex(position);
+            return true;
+        }
+
+        function implInsertTab(position) {
+
+            var // text span that will precede the field
+                span = getPreparedTextSpan(position),
+                // new text span for the tabulator node
+                tabSpan = null;
+
+            if (!span) { return false; }
+
+            // split the text span to get initial character formatting for the tab
+            tabSpan = DOM.splitTextSpan(span, 0);
+
+            // insert a tab container node before the addressed text node, move
+            // the tab span element into the tab container node
+            DOM.createTabNode().append(tabSpan).insertAfter(span);
+
+            // validate paragraph, store new cursor position
+            implParagraphChanged(span.parentNode);
+            lastOperationEnd = Position.increaseLastIndex(position);
+            return true;
+        }
+
+        function implInsertDrawing(type, position, attributes) {
+
+            var // text span that will precede the field
+                span = getPreparedTextSpan(position),
+                // new drawing node
+                drawingNode = null,
+                // URL from attributes, and absolute URL
+                url = null, absUrl = null;
+
+            if (!span) { return false; }
+
+            // insert the drawing with default settings (inline) between the two text nodes (store original URL for later use)
+            drawingNode = $('<div>', { contenteditable: false })
+               .addClass('drawing inline')
+               .data('type', type)
+               .append($('<div>').addClass('content'))
+               .insertAfter(span);
+
+            if (type === 'image') {
+                // saving the absolute image url as data object at content node
+                url = attributes.imgurl;
+                absUrl = /:\/\//.test(url) ? url : getDocumentUrl({ get_filename: url });
+                drawingNode.data('absoluteURL', absUrl);
+            }
+
+            // apply the passed drawing attributes
+            drawingStyles.setElementAttributes(drawingNode, attributes);
+
+            // validate paragraph, store new cursor position
+            implParagraphChanged(span.parentNode);
+            lastOperationEnd = Position.increaseLastIndex(position);
             return true;
         }
 
@@ -5360,6 +5403,11 @@ define('io.ox/office/editor/editor',
                 Utils.log('type=' + event.type + ' keyCode=' + event.keyCode + ' charCode=' + event.charCode + ' shift=' + event.shiftKey + ' ctrl=' + event.ctrlKey + ' alt=' + event.altKey);
             }
         }
+
+        // initialization -----------------------------------------------------
+
+        // add event hub
+        Events.extend(this);
 
         // forward selection change events to own listeners
         selection.on('change', function () { self.trigger('selection', selection); });

@@ -201,7 +201,7 @@ define('io.ox/office/editor/main',
          *  An array of operations to be applied.
          */
         function applyOperations(operations) {
-            editor.applyOperations(operations, false, false);
+            editor.applyOperations(operations, { silent: true });
             controller.update();
             view.logOperations(operations);
         }
