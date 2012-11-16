@@ -1008,34 +1008,6 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * Collecting all paragraphs inside a table cell that is described
-     * by the logical position. If no table cell is found in the logical
-     * position, null will be returned.
-     *
-     * @param {Node} startnode
-     *  The start node corresponding to the logical position.
-     *  (Can be a jQuery object for performance reasons.)
-     *
-     * @param {Number[]} position
-     *  The logical position.
-     *
-     * @returns {jQuery}
-     *  Returns all paragraphs inside the cell. This return value is a
-     *  jQuery object. If no cell is found, null will be returned.
-     */
-    Position.getAllParagraphsFromTableCell = function (startnode, position) {
-
-        var allParagraphs = null,
-            cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'td');
-
-        if (cell) {
-            allParagraphs = DOM.getCellContentNode(cell).children();
-        }
-
-        return allParagraphs;
-    };
-
-    /**
      * Determining the number of rows in a table. Returned is the last
      * index, the value is 0-based. So this is not the length.
      * Otherwise -1 we be returned.
