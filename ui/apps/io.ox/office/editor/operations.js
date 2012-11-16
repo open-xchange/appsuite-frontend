@@ -400,7 +400,7 @@ define('io.ox/office/editor/operations',
         /**
          * Generates all operations needed to recreate the passed table cell.
          *
-         * @param {HTMLTableCellElement|jQuery} cell
+         * @param {HTMLTableCellElement|jQuery} cellNode
          *  The table cell element that will be converted to operations. If
          *  this object is a jQuery collection, uses the first node it
          *  contains.
@@ -412,19 +412,19 @@ define('io.ox/office/editor/operations',
          * @returns {Operations.Generator}
          *  A reference to this instance.
          */
-        this.generateTableCellOperations = function (cell, position) {
+        this.generateTableCellOperations = function (cellNode, position) {
 
             // operation to create the table cell element
-            this.generateOperationWithAttributes(cell, Operations.CELL_INSERT, { position: position, count: 1 });
+            this.generateOperationWithAttributes(cellNode, Operations.CELL_INSERT, { position: position, count: 1 });
 
             // generate operations for the contents of the cell
-            return this.generateContentOperations(DOM.getCellContentNode(cell), position);
+            return this.generateContentOperations(cellNode, position);
         };
 
         /**
          * Generates all operations needed to recreate the passed table row.
          *
-         * @param {HTMLTableRowElement|jQuery} row
+         * @param {HTMLTableRowElement|jQuery} rowNode
          *  The table row element that will be converted to operations. If this
          *  object is a jQuery collection, uses the first node it contains.
          *
@@ -435,17 +435,17 @@ define('io.ox/office/editor/operations',
          * @returns {Operations.Generator}
          *  A reference to this instance.
          */
-        this.generateTableRowOperations = function (row, position) {
+        this.generateTableRowOperations = function (rowNode, position) {
 
             // operation to create the table row element
-            this.generateOperationWithAttributes(row, Operations.ROW_INSERT, { position: position, count: 1, insertdefaultcells: false });
+            this.generateOperationWithAttributes(rowNode, Operations.ROW_INSERT, { position: position, count: 1, insertdefaultcells: false });
 
             // generate operations for all cells
             position = Position.appendNewIndex(position);
-            $(row).children('td').each(function () {
-                self.generateTableCellOperations(this, position);
+            Utils.iterateSelectedDescendantNodes(rowNode, 'td', function (cellNode) {
+                this.generateTableCellOperations(cellNode, position);
                 position = Position.increaseLastIndex(position);
-            });
+            }, this, { children: true });
 
             return this;
         };
@@ -453,7 +453,7 @@ define('io.ox/office/editor/operations',
         /**
          * Generates all operations needed to recreate the passed table.
          *
-         * @param {HTMLTableElement|jQuery} table
+         * @param {HTMLTableElement|jQuery} tableNode
          *  The table element that will be converted to operations. If this
          *  object is a jQuery collection, uses the first node it contains.
          *
@@ -464,14 +464,14 @@ define('io.ox/office/editor/operations',
          * @returns {Operations.Generator}
          *  A reference to this instance.
          */
-        this.generateTableOperations = function (table, position) {
+        this.generateTableOperations = function (tableNode, position) {
 
             // operation to create the table element
-            this.generateOperationWithAttributes(table, Operations.TABLE_INSERT, { position: position });
+            this.generateOperationWithAttributes(tableNode, Operations.TABLE_INSERT, { position: position });
 
             // generate operations for all rows
             position = Position.appendNewIndex(position);
-            DOM.getTableRows(table).each(function () {
+            DOM.getTableRows(tableNode).each(function () {
                 self.generateTableRowOperations(this, position);
                 position = Position.increaseLastIndex(position);
             });
@@ -487,10 +487,11 @@ define('io.ox/office/editor/operations',
          * cells, or text shapes. Note that the operation to create the root
          * node itself will NOT be generated.
          *
-         * @param {HTMLElement|jQuery} node
-         *  The element node containing the content nodes that will be
-         *  converted to operations. If this object is a jQuery collection,
-         *  uses the first node it contains.
+         * @param {HTMLElement|jQuery} rootNode
+         *  The root node containing the content nodes that will be converted
+         *  to operations. The passed root node may contain an embedded node
+         *  that serves as parent for all content nodes.  If this object is a
+         *  jQuery collection, uses the first node it contains.
          *
          * @param {Number[]} position
          *  The logical position of the passed node. The generated operations
@@ -499,14 +500,16 @@ define('io.ox/office/editor/operations',
          * @returns {Operations.Generator}
          *  A reference to this instance.
          */
-        this.generateContentOperations = function (node, position) {
+        this.generateContentOperations = function (rootNode, position) {
 
             var // all root elements will contain an empty paragraph after creation
-                initialParagraph = true;
+                initialParagraph = true,
+                // the container node (direct parent of the target content nodes)
+                containerNode = DOM.getChildContainerNode(rootNode);
 
             // iterate all child elements of the root node and create operations
             position = Position.appendNewIndex(position);
-            Utils.iterateDescendantNodes(node, function (node) {
+            Utils.iterateDescendantNodes(containerNode, function (node) {
 
                 if (DOM.isParagraphNode(node)) {
                     // operations to create a paragraph (first paragraph node exists in every root node)
