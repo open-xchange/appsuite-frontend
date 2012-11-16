@@ -294,6 +294,14 @@ define('io.ox/office/editor/editor',
         };
 
         /**
+         * Returns whether the editor contains a selection within a
+         * single paragraph or not.
+         */
+        this.selectionEnclosingParagraph = function () {
+            return (selection.getEnclosingParagraph() !== null);
+        };
+
+        /**
          * Copies the current selection into the internal clipboard and deletes
          * the selection.
          */
@@ -2103,7 +2111,8 @@ define('io.ox/office/editor/editor',
 
                                     link.text(url);
                                     link.attr({href: url});
-                                    hyperlinkPopup.css({display: '', left: left, top: top});
+                                    hyperlinkPopup.show();
+                                    hyperlinkPopup.css({left: left, top: top});
                                     width = hyperlinkPopup.width();
                                     if ((left + width) > parentWidth) {
                                         left -= (((left + width) - parentWidth) + parentLeft);
@@ -2123,7 +2132,7 @@ define('io.ox/office/editor/editor',
                             }
                         }
                         else {
-                            hyperlinkPopup.css({display: 'none'});
+                            hyperlinkPopup.hide();
                         }
                     });
                 }

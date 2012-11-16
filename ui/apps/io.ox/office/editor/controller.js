@@ -227,6 +227,7 @@ define('io.ox/office/editor/controller',
                     parent: 'character/attributes',
                     get: function (attributes) { return attributes.url; },
                     set: function (hyperlink) { editor.insertHyperlink(); },
+                    enable: function (enabled) { return enabled && editor.selectionEnclosingParagraph(); },
                     done: $.noop
                 },
                 'insert/tab' : {
