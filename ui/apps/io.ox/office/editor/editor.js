@@ -2343,7 +2343,6 @@ define('io.ox/office/editor/editor',
             lastKeyDownEvent = event;   // for some keys we only get keyDown, not keyPressed!
 
             if (isIgnorableKeyEvent(event)) {
-                preselectedAttributes = {};
                 return;
             }
 
@@ -2645,7 +2644,11 @@ define('io.ox/office/editor/editor',
 
         function processKeyPressed(event) {
 
-            if (isIgnorableKeyEvent(lastKeyDownEvent) || isCursorKeyEvent(lastKeyDownEvent)) {
+            if (isIgnorableKeyEvent(lastKeyDownEvent)) {
+                return;
+            }
+
+            if (isCursorKeyEvent(lastKeyDownEvent)) {
                 preselectedAttributes = {};
                 return;
             }
