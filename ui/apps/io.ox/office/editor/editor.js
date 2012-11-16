@@ -2749,8 +2749,8 @@ define('io.ox/office/editor/editor',
                         nextLevel = true;
 
                     if (child.nodeType === 3) {
-                        // drop text nodes containing only non-whitespace characters
-                        if (/\S/.test(child.nodeValue)) {
+                        // handle non-whitespace characters and non-breaking spaces only
+                        if (/\S|\u00a0/.test(child.nodeValue)) {
                             // replace '\r' and '\n' with space to fix pastes from aoo
                             var splitted, text = child.nodeValue.replace(/[\r\n]/g, ' ');
                             splitted = text.match(/[^\t]+|\t/g);
