@@ -1900,20 +1900,20 @@ define('io.ox/office/editor/editor',
                 showEditModeInfo = ox.online && state === true && editMode === false;
 
             editMode = state;
+            editdiv.toggleClass('io-ox-office-edit-mode', !!editMode);
 
-            // disable resize handlers etc. everytime the edit mode has been enabled
+            // disable resize handlers etc. everytime the edit mode has been changed
+            try {
+                // disable FireFox table manipulation handlers
+                document.execCommand('enableObjectResizing', false, false);
+                document.execCommand('enableInlineTableEditing', false, false);
+            } catch (ex) {
+            }
+
+            // disable IE table manipulation handlers in edit mode
+            Utils.getDomNode(editdiv).onresizestart = function () { return false; };
+
             if (editMode) {
-
-                // disable FireFox table manipulation handlers in edit mode
-                try {
-                    document.execCommand('enableObjectResizing', false, false);
-                    document.execCommand('enableInlineTableEditing', false, false);
-                } catch (ex) {
-                }
-
-                // disable IE table manipulation handlers in edit mode
-                Utils.getDomNode(editdiv).onresizestart = function () { return false; };
-
                 // focus back to editor
                 this.grabFocus(true);
             }

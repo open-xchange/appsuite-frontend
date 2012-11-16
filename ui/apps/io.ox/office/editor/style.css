@@ -82,10 +82,20 @@
         .box-sizing(border-box);
 
         /* text cursor over entire page, but not in read-only mode */
-        &.user-select-text {
+        &.io-ox-office-edit-mode {
             cursor: text;
-        }
 
+	        /* resize cursor for table cells, but not in read-only mode */
+	        table td > div.cell {
+		        > div.bottomborder {
+		           	cursor: s-resize;
+		        }
+				> div.rightborder {
+					cursor: e-resize;
+				}
+	        }
+        }
+        
         /* default page formatting */
         width: 210mm;
         min-height: 297mm;
@@ -164,7 +174,6 @@
                         bottom: -6px;   /* dependent from <td> padding and height */
                         left: -4px;   /* dependent from <td> padding */
                         right: -5px;   /* dependent from <td> padding */
-                        cursor: s-resize;
                     }
 
                     > div.rightborder {
@@ -174,7 +183,6 @@
                         right: -6px;   /* dependent from <td> padding and width */
                         top: -4px;   /* dependent from <td> padding */
                         bottom: -5px;   /* dependent from <td> padding */
-                        cursor: e-resize;
                     }
                 }
             }
