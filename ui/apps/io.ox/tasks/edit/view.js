@@ -20,10 +20,9 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                                  'io.ox/tasks/edit/util',
                                  'io.ox/core/extensions',
                                  'io.ox/core/notifications',
-                                 'io.ox/core/tk/upload',
                                  'io.ox/backbone/views',
                                  'io.ox/backbone/forms'],
-                                 function (gt, template, reminderUtil, model, date, picker, util, ext, notifications, upload, views, forms) {
+                                 function (gt, template, reminderUtil, model, date, picker, util, ext, notifications, views, forms) {
     "use strict";
 
     var point = views.point('io.ox/tasks/edit/view'),
@@ -34,9 +33,6 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             //needed to do it this way, otherwise data stays for next instance of view and causes errors
             this.fields = {};
             this.rows = [];
-            this.attachmentArray = [];
-            this.attachmentsToRemove = [];
-            this.dropZone = upload.dnd.createDropZone({'type': 'single'});
             this.on('dispose', this.close);
         },
         render: function (app) {
@@ -50,25 +46,25 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             util.buildExtensionRow(self.$el, this.getRow(1, app), self.baton);
 
             //row 2 start date due date
-            util.buildExtensionRow(self.$el, this.getRow(6), self.baton);
+            util.buildExtensionRow(self.$el, this.getRow(2), self.baton);
              
             //row 3 description
-            util.buildExtensionRow(self.$el, this.getRow(2), self.baton);
+            util.buildExtensionRow(self.$el, this.getRow(3), self.baton);
 
             //row 4 reminder
-            util.buildExtensionRow(self.$el, this.getRow(7), self.baton);
+            util.buildExtensionRow(self.$el, this.getRow(4), self.baton);
 
             //row 5 status progress priority privateFlag
-            util.buildExtensionRow(self.$el, this.getRow(3), self.baton);
+            util.buildExtensionRow(self.$el, this.getRow(5), self.baton);
 
             //row 6 repeat
             util.buildRow(this.$el, this.fields.repeatLink);
 
             //tabsection
             var temp = util.buildTabs([gt('Participants'),
-                                       //#. %1$s is the number of currently attachened attachments
+                                       //#. %1$s is the number of currently attached attachments
                                        //#, c-format
-                                       gt('Attachments (%1$s)', this.attachmentArray.length),
+                                       gt('Attachments (%1$s)', gt.noI18n(0)),
                                        gt('Details')], '-' + self.cid),
                 tabs = temp.table,
                 participantsTab = temp.content.find('#edit-task-tab0'  + '-' + self.cid),
@@ -82,43 +78,24 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             util.buildExtensionRow(participantsTab, [this.getRow(1, app, 'participants')], self.baton);
 
             //attachmentTab
-            var attachmentDisplay = $('<div>').addClass("task-attachment-display")
-                .css("display:", "none").appendTo(attachmentsTab);
-
-            self.dropZone.on('drop', function (e, file) {
-                self.attachmentArray.push(file);
-
-                tabs.find('a:eq(1)').text(//#. %1$s is the number of currently attachened attachments
-                                          //#, c-format
-                                          gt('Attachments (%1$s)', self.attachmentArray.length));
-                util.buildAttachmentNode(attachmentDisplay, self.attachmentArray);
+            var attachmentTabheader = tabs.find('a:eq(1)');
+            this.on('attachmentCounterRefresh', function (e, number) {
+                e.stopPropagation();
+                attachmentTabheader.text(
+                    //#. %1$s is the number of currently attached attachments
+                    //#, c-format
+                    gt('Attachments (%1$s)', gt.noI18n(number)));
             });
-
-            util.buildAttachmentNode(attachmentDisplay, this.attachmentArray);
-
-            tabs.find('a:eq(1)').text(//#. %1$s is the number of currently attachened attachments
-                                      //#, c-format
-                                      gt('Attachments (%1$s)', self.attachmentArray.length));
-
-            attachmentDisplay.delegate(".task-remove-attachment", "click", function () {
-
-                if (self.attachmentArray[$(this).attr('lnr')].id) { //attachments with id are already stored so they need to be deleted
-                    self.attachmentsToRemove.push(self.attachmentArray[$(this).attr('lnr')].id);
-                }
-                self.attachmentArray.splice($(this).attr('lnr'), 1);
-
-                tabs.find('a:eq(1)').text(//#. %1$s is the number of currently attachened attachments
-                                          //#, c-format
-                                          gt('Attachments (%1$s)', self.attachmentArray.length));
-                util.buildAttachmentNode(attachmentDisplay, self.attachmentArray);
-            });
-
+            
+            this.getRow(0, app, 'attachments').invoke('draw', attachmentsTab, self.baton);
+            util.buildExtensionRow(attachmentsTab, [this.getRow(1, app, 'attachments')], self.baton);
+            
             //detailstab
-            util.buildExtensionRow(detailsTab, this.getRow(0, app, 'detail'), self.baton);
-            util.buildExtensionRow(detailsTab, this.getRow(1, app, 'detail'), self.baton);
-            util.buildExtensionRow(detailsTab, this.getRow(2, app, 'detail'), self.baton);
-            util.buildExtensionRow(detailsTab, this.getRow(3, app, 'detail'), self.baton);
-            util.buildExtensionRow(detailsTab, this.getRow(4, app, 'detail'), self.baton);
+            util.buildExtensionRow(detailsTab, this.getRow(0, app, 'details'), self.baton);
+            util.buildExtensionRow(detailsTab, this.getRow(1, app, 'details'), self.baton);
+            util.buildExtensionRow(detailsTab, this.getRow(2, app, 'details'), self.baton);
+            util.buildExtensionRow(detailsTab, this.getRow(3, app, 'details'), self.baton);
+            util.buildExtensionRow(detailsTab, this.getRow(4, app, 'details'), self.baton);
 
             return this.$el;
         },
@@ -126,55 +103,66 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             var self = this,
                 temp = {};
             if (this.rows.length > 0) {
-                if (tab) {
-                    if (tab === "detail") {
-                        return this.rows[4][number];
-                    } else if (tab === "participants") {
-                        return this.rows[5][number];
-                    }
-                } else {
-                    return this.rows[number];
+                var value;
+                switch (tab) {
+                case "details":
+                    value = this.rows[6][number];
+                    break;
+                case "participants":
+                    value = this.rows[7][number];
+                    break;
+                case "attachments":
+                    value = this.rows[8][number];
+                    break;
+                default:
+                    value = this.rows[number];
+                    break;
                 }
+                return value;
             } else {
                 //create non extensionPoint nodes
                 self.createNonExt(app);
                 //fill with empty rows
-                this.rows = [[], [], [], [], [[], [], [], [], []], [], [], []];
+                this.rows = [[], [], [], [], [], [], [[], [], [], [], []], [], []];
                 //get extension points
                 this.point.each(function (extension) {
                     temp[extension.id] = extension;
                 });
                 //put extension points and non extensionpoints into right rows and order
+                //headline row 0
                 self.rows[0].push([self.fields.headline, 6]);
                 self.rows[0].push([self.fields.cancel, 3]);
                 self.rows[0].push([self.fields.saveButton, 3]);
                 //row 1
                 self.rows[1].push(temp.title);
+                //row 2
+                self.rows[2].push(temp.end_date);
+                self.rows[2].push(temp.start_date);
                 //row 3
-                self.rows[2].push(temp.note);
+                self.rows[3].push(temp.note);
                 //row 4
-                self.rows[3].push(temp.status);
-                self.rows[3].push([[util.buildLabel(gt("Progress in %"), this.fields.progress.attr('id')), this.fields.progress.parent()], 3]);
-                self.rows[3].push(temp.priority);
-                self.rows[3].push(temp.private_flag);
+                self.rows[4].push([[util.buildLabel(gt("Remind me"), this.fields.reminderDropdown.attr('id')), this.fields.reminderDropdown], 5]);
+                self.rows[4].push(temp.alarm);
+                //row 5
+                self.rows[5].push(temp.status);
+                self.rows[5].push([[util.buildLabel(gt("Progress in %"), this.fields.progress.attr('id')), this.fields.progress.parent()], 3]);
+                self.rows[5].push(temp.priority);
+                self.rows[5].push(temp.private_flag);
                 //detailtab
-                self.rows[4][0].push(temp.target_duration);
-                self.rows[4][0].push(temp.actual_duration);
-                self.rows[4][1].push(temp.target_costs);
-                self.rows[4][1].push(temp.actual_costs);
-                self.rows[4][1].push(temp.currency);
-                self.rows[4][2].push(temp.trip_meter);
-                self.rows[4][3].push(temp.billing_information);
-                self.rows[4][4].push(temp.companies);
+                self.rows[6][0].push(temp.target_duration);
+                self.rows[6][0].push(temp.actual_duration);
+                self.rows[6][1].push(temp.target_costs);
+                self.rows[6][1].push(temp.actual_costs);
+                self.rows[6][1].push(temp.currency);
+                self.rows[6][2].push(temp.trip_meter);
+                self.rows[6][3].push(temp.billing_information);
+                self.rows[6][4].push(temp.companies);
                 //participantstab
-                self.rows[5].push(temp.participants_list);
-                self.rows[5].push(temp.add_participant);
-                //row2
-                self.rows[6].push(temp.end_date);
-                self.rows[6].push(temp.start_date);
-                //row4
-                self.rows[7].push([[util.buildLabel(gt("Remind me"), this.fields.reminderDropdown.attr('id')), this.fields.reminderDropdown], 5]);
-                self.rows[7].push(temp.alarm);
+                self.rows[7].push(temp.participants_list);
+                self.rows[7].push(temp.add_participant);
+                //attachmentstab
+                self.rows[8].push(temp.attachment_list);
+                self.rows[8].push(temp.attachment_upload);
                 return this.rows[number];
             }
         },
@@ -196,33 +184,37 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 .addClass("btn btn-primary task-edit-save span12")
                 .text(saveBtnText)
                 .on('click', function (e) {
+                    var callbacks = {
+                        success: function (model, response) {
+                            app.markClean();
+                            app.quit();
+                        },
+                        error: function (model, response) {
+                            console.log(model);
+                            console.log(response);
+                        }
+                    };
+                    function attachmentHandlingOver() {
+                        self.model.off('finishedAttachmentHandling', attachmentHandlingOver);
+                        app.markClean();
+                        app.quit();
+                    }
+                    //check if waiting for attachmenthandling is needed
+                    if (self.baton.attachmentList.attachmentsToAdd.length +
+                        self.baton.attachmentList.attachmentsToDelete.length > 0) {
+                        callbacks.success = function () {
+                            //look busy while uploading and deleting Attachments
+                            self.$el.busy(true);
+                        };
+                        self.model.on('finishedAttachmentHandling', attachmentHandlingOver);
+                    }
                     e.stopPropagation();
                     if (self.model.get('id')) {
-                        var callbacks = {
-                                success: function (model, response) {
-                                    response = {id: model.attributes.id};
-                                    self.saveAttachments(model, response, self, app);
-
-                                },
-                                error: function (model, response) {
-                                    console.log(model);
-                                    console.log(response);
-                                }
-                            };
                         self.model.sync("update", self.model, callbacks);
                     } else {
-                        if (self.model.get('alarm') === null) {
+                        if (self.model.get('alarm') === null) {//alarm must not be null on create action
                             self.model.set('alarm', undefined);
                         }
-                        var callbacks = {
-                                success: function (model, response) {
-                                    self.saveAttachments(model, response, self, app);
-                                },
-                                error: function (model, response) {
-                                    console.log(model);
-                                    console.log(response);
-                                }
-                            };
                         self.model.sync("create", self.model, callbacks);
                     }
 
@@ -279,85 +271,9 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             //clean up to prevent strange sideeffects
             this.fields = {};
             this.rows = [];
-            this.attachmentArray = [];
-            this.attachmentsToRemove = [];
-            this.dropZone.remove();
-        },
-
-        saveAttachments: function (model, data, self, app) {
-            var folder_id = model.attributes.folder_id;
-
-            //fill new attachments array
-            var attachmentsToAdd = [];
-            for (var i = 0; i < self.attachmentArray.length; i++) {
-                if (!self.attachmentArray[i].id) { //unstored Attachments don't have an id
-                    attachmentsToAdd.push(self.attachmentArray[i]);
-                }
-            }
-
-            //remove attachments and add
-            if (self.attachmentsToRemove.length > 0 && attachmentsToAdd.length > 0) {
-                require(['io.ox/core/api/attachment'], function (attachmentApi) {
-                    attachmentApi.remove({module: 4, folder: folder_id, id: data.id},
-                        self.attachmentsToRemove).done(function () {
-                            attachmentApi.create({module: 4, folder: folder_id, id: data.id}, attachmentsToAdd)
-                            .done(function () {
-                                app.markClean();
-                                app.quit();
-                            });
-                        });
-                });
-            } else if (self.attachmentsToRemove.length > 0) {//remove attachments
-                require(['io.ox/core/api/attachment'], function (attachmentApi) {
-                    attachmentApi.remove({module: 4, folder: folder_id, id: data.id},
-                        self.attachmentsToRemove).done(function () {
-                            app.markClean();
-                            app.quit();
-                        });
-                });
-            } else if (attachmentsToAdd.length > 0) {//add attachments
-                require(['io.ox/core/api/attachment'], function (attachmentApi) {
-                    attachmentApi.create({module: 4, folder: folder_id, id: data.id}, attachmentsToAdd)
-                    .done(function () {
-                        app.markClean();
-                        app.quit();
-                    });
-                });
-            } else {
-                app.markClean();
-                app.quit();
-            }
         }
-    }),
-
-    //special handling for attachments
-    getAttachments = function (view, node, app) {
-        var self = view;
-        if (self.model.attributes.number_of_attachments > 0) {
-            require(['io.ox/core/api/attachment'], function (attachmentsApi) {
-                attachmentsApi.getAll({folder_id: self.model.attributes.folder_id, id: self.model.attributes.id, module: 4}).done(function (data) {
-
-                    for (var i = 0; i < data.length; i++) {
-                        data[i].name = data[i].filename;
-                        data[i].size = data[i].file_size;
-                        data[i].type = data[i].file_mimetype;
-
-                        delete data[i].filename;
-                        delete data[i].file_size;
-                        delete data[i].file_mimetype;
-
-                        self.attachmentArray.push(data[i]);
-                    }
-                    //render
-                    node.append(view.render(app));
-                });
-            });
-        } else {
-            //render
-            node.append(view.render(app));
-        }
-    };
-
+        
+    });
 
     return {
         TaskEditView: TaskEditView,
@@ -369,8 +285,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             }
 
             var view = new TaskEditView({model: taskModel});
-            //get attachments if there are any then render
-            getAttachments(view, node, app);
+            node.append(view.render(app));
 
             return view;
         }

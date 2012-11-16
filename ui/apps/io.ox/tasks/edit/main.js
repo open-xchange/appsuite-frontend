@@ -15,8 +15,9 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                                  'io.ox/core/extensions',
                                  'io.ox/tasks/model',
                                  'io.ox/tasks/edit/view',
+                                 'io.ox/core/extPatterns/dnd',
                                  'less!io.ox/tasks/edit/style.css'],
-                                 function (gt, ext, model, view) {
+                                 function (gt, ext, model, view, dnd) {
 
     "use strict";
 
@@ -27,8 +28,6 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             win,
             //app
             self,
-            //headline
-            headline,
             //state
             taskState,
             //Model View
@@ -83,17 +82,20 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 taskModel = model.factory.create();
                 taskView = view.getView(taskModel, win.nodes.main, app);
             }
+            self.dropZone = new dnd.UploadZone({
+                ref: "io.ox/tasks/edit/dnd/actions"
+            }, taskView);
             
             win.on('show', function () {
+                app.dropZone.include();
                 if (taskView) {
-                    taskView.dropZone.include();
                     taskView.$el.find(".title-field").focus();
                 }
             });
 
             win.on('hide', function () {
-                if (taskView) {
-                    taskView.dropZone.remove();
+                if (app) {
+                    app.dropZone.remove();
                 }
             });
             //ready for show
@@ -107,6 +109,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 // clear private vars
                 taskView.trigger('dispose');
                 taskModel.off();//important so no events are executed on non existing models
+                app.dropZone.remove();
                 app = win = taskModel = taskView = null;
             };
 

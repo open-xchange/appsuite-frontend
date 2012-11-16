@@ -154,6 +154,19 @@
 	float: left;
 	position: relative;
  }
+ //attachments
+ .io-ox-tasks-edit .io-ox-core-tk-attachment {
+ 	.delete {
+ 		width: 25px;
+ 		font-size: 19px;
+		padding-left: 12px;
+		cursor: pointer;
+ 	}
+ 	.attachment-icon {
+ 		padding-left: 15px;
+		width: 45px;
+ 	}
+}
  
  //PickerPopup
  

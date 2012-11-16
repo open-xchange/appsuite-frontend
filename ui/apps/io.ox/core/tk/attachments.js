@@ -121,24 +121,37 @@ define('io.ox/core/tk/attachments',
                 },
 
                 save: function (id, folderId) {
-                    var self = this;
+                    var self = this,
+                        allDone = 0;//0 ready 1 delete 2 add 3 delete and add
                     var apiOptions = {
                         module: this.module,
                         id: id || this.model.id,
                         folder: folderId || this.model.get('folder') || this.model.get('folder_id')
                     };
                     if (this.attachmentsToDelete.length) {
+                        allDone++;
+                    }
+                    if (this.attachmentsToAdd.length) {
+                        allDone += 2;
+                    }
+                    if (this.attachmentsToDelete.length) {
                         attachmentAPI.remove(apiOptions, _(this.attachmentsToDelete).pluck('id')).fail(function (resp) {
                             self.model.trigger('backendError', resp);
+                        }).done(function () {
+                            allDone--;
+                            if (allDone <= 0) { self.model.trigger("finishedAttachmentHandling"); }
                         });
                     }
 
                     if (this.attachmentsToAdd.length) {
                         attachmentAPI.create(apiOptions, _(this.attachmentsToAdd).pluck('file')).fail(function (resp) {
                             self.model.trigger('backendError', resp);
+                        }).done(function () {
+                            allDone -= 2;
+                            if (allDone <= 0) { self.model.trigger("finishedAttachmentHandling"); }
                         });
                     }
-
+                    if (allDone <= 0) { self.model.trigger("finishedAttachmentHandling"); }
                     this.attachmentsToAdd = [];
                     this.attachmentsToDelete = [];
                     this.attachmentsOnServer = [];

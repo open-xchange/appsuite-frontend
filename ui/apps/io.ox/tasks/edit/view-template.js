@@ -17,8 +17,10 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                                           'io.ox/core/notifications',
                                           'io.ox/backbone/forms',
                                           'io.ox/contacts/util',
-                                          'io.ox/participants/views'],
-                                          function (gt, views, date, notifications, forms, util, pViews) {
+                                          'io.ox/participants/views',
+                                          'io.ox/core/tk/attachments',
+                                          'io.ox/core/extensions'],
+                                          function (gt, views, date, notifications, forms, util, pViews, attachments, ext) {
     "use strict";
    
     var point = views.point('io.ox/tasks/edit/view');
@@ -361,6 +363,8 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         }
     });
     
+    //DatePickers
+    
     //Datepickers need Custom methods because standard methods show odd behaviour with undefined dates
     var CustomBinderUtils = {
         _timeStrToDate: function (value, attribute, model) {
@@ -475,6 +479,72 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model));
         }
     }));
+    
+    // Attachments
+
+    point.extend(new attachments.EditableAttachmentList({
+        id: 'attachment_list',
+        registerAs: 'attachmentList',
+        className: 'div',
+        index: 1900,
+        module: 4,
+        render: function () {
+            var self = this,
+                odd = true,
+                row;
+            _(this.allAttachments).each(function (attachment) {
+                if (odd) {
+                    row = $('<div>').addClass("row-fluid task-edit-row").appendTo(self.$el);
+                    odd = false;
+                } else {
+                    odd = true;
+                }
+                row.append($('<div>').addClass('span6').append(self.renderAttachment(attachment).addClass('span12')));
+            });
+            
+            //trigger refresh of attachmentcounter
+            this.baton.parentView.trigger('attachmentCounterRefresh', this.allAttachments.length);
+            
+            //replace x with icon
+            self.$el.find('.delete').each(function (index, deleteNode) {
+                $(deleteNode).text('').append('<i class="icon-remove">');
+            });
+            return this;
+        }
+    }));
+
+    point.basicExtend({
+        id: 'attachment_upload',
+        index: 2000,
+        draw: function (baton) {
+            var $node = $("<form>").appendTo(this),
+                $input = $("<input>", {
+                    type: "file"
+                }),
+
+                $button = $("<button/>").attr('data-action', 'add').text(gt("Add")).addClass("btn btn-primary span12").on("click", function (e) {
+                    e.preventDefault();
+                    _($input[0].files).each(function (fileData) {
+                        baton.attachmentList.addFile(fileData);
+                    });
+                });
+
+            $node.append($("<div>").addClass("span6").append($input));
+            $node.append($("<div>").addClass("span3 offset3").append($button));
+        }
+    });
+
+    ext.point("io.ox/tasks/edit/dnd/actions").extend({
+        id: 'attachment',
+        index: 100,
+        label: gt("Drop here to upload a <b>new attachment</b>"),
+        multiple: function (files, view) {
+            _(files).each(function (fileData) {
+                view.baton.attachmentList.addFile(fileData);
+            });
+
+        }
+    });
     
     return null; //just used to clean up the view class
 });

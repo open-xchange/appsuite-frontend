@@ -112,6 +112,9 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 }).pipe(function () {
                     // update cache
                     return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
+                }).pipe(function () {
+                    //return object with id and folder id needed to save the attachments correctly
+                    return {folder_id: useFolder, id: taskId};
                 }).done(function () {
                     //trigger refresh, for vGrid etc
                     api.trigger('refresh.all');
