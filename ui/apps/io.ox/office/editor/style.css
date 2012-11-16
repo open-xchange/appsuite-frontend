@@ -335,9 +335,9 @@
 	    position: absolute;
         border: 1px solid;
         .box-shadow(0 5px 10px fade(black, 25%));
-        border-color: #A0A0A0;
+        border-color: #B0B0B0;
         padding: 10px 20px;
-        background-color: #F8F8F8;
+        background-color: white;
     }
 
     span.io-ox-office-hyperlink-popup-links {

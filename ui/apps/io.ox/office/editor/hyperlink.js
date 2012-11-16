@@ -75,14 +75,21 @@ define('io.ox/office/editor/hyperlink',
 
         if (!selection.hasRange()) {
             // find out a possible URL set for the current position
-            var startSelection = selection.getStartPosition(),
-                obj = Position.getDOMPosition(editor.getNode(), startSelection),
+            var startPosition = selection.getStartPosition(),
+                obj = Position.getDOMPosition(editor.getNode(), startPosition),
                 characterStyles = editor.getStyleSheets('character');
 
             if (obj && obj.node && DOM.isTextSpan(obj.node.parentNode)) {
                 var styles = characterStyles.getElementAttributes(obj.node.parentNode);
-                if (styles.url && styles.url.length > 0)
-                    url = styles.url;
+                if (styles.url && styles.url.length > 0) {
+                    // Now we have to check some edge cases to prevent to show
+                    // the popup for a paragraph which contains only an empty span
+                    // having set the url attribute.
+                    if ((obj.node.parentNode.innerText.length > 0) ||
+                        (obj.node.parentNode.previousElementSibling !== null) ||
+                        (DOM.isTextSpan(obj.node.parentNode.nextElementSibling)))
+                        url = styles.url;
+                }
             }
         }
 
