@@ -3552,7 +3552,7 @@ define('io.ox/office/editor/editor',
                             newOperation = null,
                             anchorhoffset = 0,
                             anchorvoffset = 0,
-                            oldanchorhoffset = StyleSheets.getExplicitAttributes(drawingNode).anchorhoffset ? StyleSheets.getExplicitAttributes(drawingNode).anchorhoffset : 0,
+                            oldanchorhoffset = StyleSheets.getExplicitAttributes(drawingNode).anchorhoffset,
                             oldanchorvoffset = StyleSheets.getExplicitAttributes(drawingNode).anchorvoffset ? StyleSheets.getExplicitAttributes(drawingNode).anchorvoffset : 0,
                             anchorhalign = StyleSheets.getExplicitAttributes(drawingNode).anchorhalign,
                             // current drawing width, in 1/100 mm
@@ -3562,12 +3562,16 @@ define('io.ox/office/editor/editor',
                             // total width of the paragraph, in 1/100 mm
                             paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px');
 
-                        if (moveX !== 0) {
-                            if ((DOM.isRightFloatingDrawingNode(drawingNode)) && (oldanchorhoffset === 0)) {
+                        if (oldanchorhoffset === undefined) {
+                            if (DOM.isRightFloatingDrawingNode(drawingNode)) {
                                 // anchorhoffset has to be calculated corresponding to the left paragraph border
-                                anchorhoffset = paraWidth - drawingWidth;
+                                oldanchorhoffset = paraWidth - drawingWidth;
+                            } else {
+                                oldanchorhoffset = 0;
                             }
+                        }
 
+                        if (moveX !== 0) {
                             anchorhoffset = oldanchorhoffset + moveX;
                             anchorhalign = 'offset';
                             if (anchorhoffset < 0) { anchorhoffset = 0; }
