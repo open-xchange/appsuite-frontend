@@ -48,6 +48,7 @@ define('io.ox/calendar/week/view',
         clicks:         0,      // click counter
         lasso:          false,  // lasso object
         folderData:     {},     // current folder object
+        restoreCache:   {},     // object, which contains data for save and restore functions
 
         pane:           $('<div>').addClass('scrollpane'),          // main scroll pane
         fulltimePane:   $('<div>').addClass('fulltime'),            // full-time appointments pane
@@ -145,7 +146,6 @@ define('io.ox/calendar/week/view',
 
         // handler for clickevents in toolbar
         onControlView: function (e) {
-            console.log(e, 'click', this.columns);
             e.preventDefault();
             var cT = $(e.currentTarget),
                 t = $(e.target);
@@ -1184,6 +1184,18 @@ define('io.ox/calendar/week/view',
                 return obj;
             } else {
                 return this.folderData;
+            }
+        },
+
+        save: function () {
+            // save scrollposition
+            this.restoreCache.scrollPosition = this.pane.scrollTop();
+        },
+
+        restore: function () {
+            // restore scrollposition
+            if (this.restoreCache.scrollPosition) {
+                this.pane.scrollTop(this.restoreCache.scrollPosition);
             }
         }
     });

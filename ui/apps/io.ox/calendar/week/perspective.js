@@ -163,6 +163,8 @@ define('io.ox/calendar/week/perspective',
             app.on('folder:change', refresh)
                 .getWindow()
                 .on('show', refresh)
+                .on('beforehide', $.proxy(this.view.save, this.view))
+                .on('show', $.proxy(this.view.restore, this.view))
                 .on('change:perspective', this.view.unbindKeys);
 
             this.view.setScrollPos();

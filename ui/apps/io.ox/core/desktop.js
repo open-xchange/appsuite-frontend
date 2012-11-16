@@ -492,7 +492,6 @@ define("io.ox/core/desktop",
     ox.ui.Perspective = (function () {
 
         var Perspective = function (name) {
-
             // init
             var rendered = false,
                 initialized = false;
@@ -501,15 +500,16 @@ define("io.ox/core/desktop",
 
             this.show = function (app, options) {
                 // make sure it's initialized
-
                 if (!initialized) {
                     this.main = app.getWindow().addPerspective(name);
                     initialized = true;
                 }
+
                 // trigger change event
                 if (app.getWindow().currentPerspective !== 'main') {
                     app.getWindow().trigger('change:perspective', options.perspective);
                 }
+
                 // set perspective
                 app.getWindow().setPerspective(name);
 
