@@ -8,7 +8,7 @@
 
 .io-ox-mail-write h1.title {
     font-family: @font-light;
-    font-weight: 200;
+    font-weight: 300;
     font-size: 20px;
     line-height: 30px;
     height: 30px;
@@ -330,7 +330,7 @@
 
 .io-ox-mail-write .change-format a {
     color: @link-color;
-    font-weight: 200;
+    font-weight: 300;
 }
 
 /* Proofread */

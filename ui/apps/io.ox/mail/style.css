@@ -88,7 +88,7 @@
 .vgrid-cell.mail .date,
 .vgrid-cell.thread-summary .date {
     color: #777;
-    font-weight: 200;
+    font-weight: 300;
     display: inline-block;
     float: right;
 }

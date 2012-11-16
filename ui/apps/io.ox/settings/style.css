@@ -148,7 +148,7 @@
 .settings-detail-pane .listbox .disabled .sortable-item {
     color: #999;
     background-color: #ddd;
-    font-weight: 200;
+    font-weight: 300;
 }
 
 .settings-detail-pane .listbox .sortable-item:hover { background-color: #ccc; }

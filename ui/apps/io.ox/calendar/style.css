@@ -77,7 +77,7 @@
 
 .calendar-detail .date {
     font-family: @font-light;
-    font-weight: 200;
+    font-weight: 300;
     font-size: 1.1em;
     color: #ccc;
 }
@@ -112,7 +112,7 @@
 
 .calendar-detail .io-ox-label {
     font-family: @font-light;
-    font-weight: 200;
+    font-weight: 300;
     font-size: 9pt;
     color: #333;
     clear: both;
@@ -183,7 +183,7 @@
 
 .calendar-detail .detail-label {
     font-family: @font-light;
-    font-weight: 200;
+    font-weight: 300;
     display: inline-block;
     width: 110px;
     white-space: nowrap;

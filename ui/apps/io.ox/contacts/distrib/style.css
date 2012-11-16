@@ -17,7 +17,7 @@
 	font-size: 13px;
 	margin: 20px 0 15px 0;
 	color: #888;
-	font-weight: 200;
+	font-weight: 300;
 	border-bottom: 1px solid #E5E5E5;
 }
 
@@ -39,7 +39,7 @@
 
 .create-distributionlist label {
     color: #888;
-    font-weight: 200;
+    font-weight: 300;
 	display: block;
 }
 

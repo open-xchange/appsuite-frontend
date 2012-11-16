@@ -34,7 +34,7 @@
 }
 .io-ox-portal h1 {
     font-size: 16pt;
-    font-weight: 200;
+    font-weight: 300;
     line-height: 1.15em;
     font-family: @font-light;
 }
@@ -66,11 +66,12 @@
 .io-ox-portal-greeting {
     font-family: @font-light;
     font-size: 22px;
-    font-weight: 200;
+    font-weight: 300;
     color: #ccc;
 }
 .io-ox-portal-login {
     font-family: @font-light;
+    font-weight: 300;
     font-size: 16px;
     color: #888;
 }

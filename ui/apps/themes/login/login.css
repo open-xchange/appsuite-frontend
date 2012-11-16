@@ -34,12 +34,13 @@ html, body {
 
 @font-face {
     font-family: OpenSans;
-    src: local('Open Sans Light'), local('OpenSans-Light'), url(fonts/opensans-300.woff);
+    src: local('Open Sans Light'), local('OpenSans-Light'),
+        url(fonts/opensans-light-webfont.ttf) format('truetype');
 }
 
 .clear-title {
-    font-family: 'Segoe UI Light', 'Segoe UI', OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-weight: 200;
+    font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 300;
     font-size: 20pt;
     line-height: 1.15em;
 }
@@ -199,7 +200,7 @@ html, body {
 #io-ox-copyright {
     color: #072131;
     text-align: right;
-    font-weight: 200;
+    font-weight: 300;
     margin-bottom: 1em;
 }
 
