@@ -14,7 +14,6 @@
     position: relative;
     min-height: 55px;
     margin: 0 0 20px 65px;
-    -webkit-user-select: text; -moz-user-select: text; user-select: text;
 }
 
 .facebook.wall-entry a.profile-picture {

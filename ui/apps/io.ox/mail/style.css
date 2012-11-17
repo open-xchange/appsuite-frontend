@@ -205,7 +205,6 @@
     
     position: relative;
     overflow-y: visible;
-    .user-select(text);
     clear: both;
     padding: 30px 40px 30px 40px;
     border-bottom: 1px solid #eee;

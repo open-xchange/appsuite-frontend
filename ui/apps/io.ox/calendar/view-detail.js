@@ -125,7 +125,10 @@ define("io.ox/calendar/view-detail",
         }
     });
 
-    // draw participants
+    // duck test
+    function looksLikeResource(obj) {
+        return 'mailaddress' in obj && 'description' in obj;
+    }
 
     function drawParticipant(obj, hash) {
         // initialize vars
@@ -136,7 +139,7 @@ define("io.ox/calendar/view-detail",
             isPerson = hash[key] || obj.folder_id,
             personClass = isPerson ? "person" : "",
             display_name, name, node, name_lc,
-            mail_lc = String(obj.mail).toLowerCase();
+            mail_lc = String(obj.mail || obj.mailaddress || '').toLowerCase();
         // external participant?
         if (obj.type === 5) {
             // beautify
@@ -148,18 +151,15 @@ define("io.ox/calendar/view-detail",
                 display_name = obj.display_name || mail_lc;
             }
         } else {
-            name = display_name = obj.display_name || String(obj.mail).toLowerCase();
+            name = display_name = obj.display_name || mail_lc;
         }
-        node = $("<div>").addClass("participant")
+        node = $('<div class="participant">')
+            .addClass(looksLikeResource(obj) ? 'halo-resource-link' : 'halo-link')
             .append($('<a href="#">').addClass(personClass + ' ' + statusClass).text(gt.noI18n(name)))
-            .append($("<span>").addClass("status " + statusClass).html(" " + confirm))
-            .on("click", {
-                display_name: display_name,
-                email1: mail_lc,
-                internal_userid: obj.internal_userid
-            }, fnClickPerson);
+            .append($('<span>').addClass("status " + statusClass).html(" " + confirm))
+            .data(_.extend(obj, { display_name: display_name, email1: mail_lc }));
         // has confirmation comment?
-        if (conf.comment !== "") {
+        if (conf.comment !== '') {
             node.append($("<span>").addClass("comment").text(gt.noI18n(conf.comment)));
         }
         return node;

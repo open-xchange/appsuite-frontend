@@ -148,9 +148,18 @@ define("io.ox/contacts/view-detail",
         }
     });
 
+    function looksLikeResource(obj) {
+        return 'mailaddress' in obj && 'description' in obj;
+    }
+
+    function looksLikeDistributionList(obj) {
+        return !!obj.mark_as_distributionlist;
+    }
+
     function getDescription(data) {
-        return data.mark_as_distributionlist ? gt('Distribution list') :
-            _.noI18n((data.company || data.position || data.profession) ?
+        if (looksLikeDistributionList(data)) return gt('Distribution list');
+        if (looksLikeResource(data)) return gt('Resource');
+        return _.noI18n((data.company || data.position || data.profession) ?
             join(", ", data.company, data.position, data.profession) + "\u00A0" : util.getMail(data) + "\u00A0");
     }
 
@@ -158,19 +167,22 @@ define("io.ox/contacts/view-detail",
         index: 100,
         id: 'contact-picture',
         draw: function (baton) {
+            
             var data = baton.data;
-            if (data.mark_as_distributionlist === true) {
+
+            if (looksLikeResource(data) || looksLikeDistributionList(data)) {
                 this.append(
                     $('<div class="span4 field-label">')
                 );
-            } else {
-                this.append(
-                    // left side / picture
-                    $('<div class="span4 field-label">').append(
-                        api.getPicture(baton.data, { scaleType: 'contain', width: 80, height: 80 }).addClass('picture')
-                    )
-                );
+                return;
             }
+
+            this.append(
+                // left side / picture
+                $('<div class="span4 field-label">').append(
+                    api.getPicture(baton.data, { scaleType: 'contain', width: 80, height: 80 }).addClass('picture')
+                )
+            );
         }
     });
 
@@ -182,10 +194,10 @@ define("io.ox/contacts/view-detail",
             this.append(
                 // right side
                 $('<div class="span8 field-value">').append(
-                    $('<div class="name clear-title user-select-text">')
+                    $('<div class="name clear-title">')
                         .text(_.noI18n(util.getFullName(baton.data))),
                     private_flag = $('<i class="icon-lock private-flag">').hide(),
-                    $('<div class="job clear-title user-select-text">')
+                    $('<div class="job clear-title">')
                         .text(getDescription(baton.data))
                 )
             );
@@ -208,6 +220,20 @@ define("io.ox/contacts/view-detail",
                 )
             );
             ext.point("io.ox/contacts/detail/actions").invoke("draw", node, baton.data);
+        }
+    });
+
+    ext.point("io.ox/contacts/detail").extend({
+        index: 250,
+        id: "description", // only for resources
+        draw: function (baton) {
+            if ('description' in baton.data) {
+                addField(gt('Description'), true, this, function (node) {
+                    var text = $.trim(baton.data.description).replace(/\n/g, '<br>');
+                    node.html(text);
+                });
+                addField('', '\u00A0', this);
+            }
         }
     });
 
@@ -370,7 +396,7 @@ define("io.ox/contacts/view-detail",
                 baton = ext.Baton.ensure(baton);
 
                 var node = $.createViewContainer(baton.data, api).on('redraw', { view: this }, redraw);
-                node.addClass('contact-detail view user-select-text');
+                node.addClass('contact-detail view');
                 ext.point('io.ox/contacts/detail').invoke('draw', node, baton);
     
                 return node;

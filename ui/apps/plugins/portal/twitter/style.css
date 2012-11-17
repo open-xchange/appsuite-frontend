@@ -18,7 +18,6 @@
     position: relative;
     min-height: 55px;
     margin: 0 0 26px 65px;
-    -webkit-user-select: text; -moz-user-select: text; user-select: text;
 }
 
 .twitter .profilePicture {
