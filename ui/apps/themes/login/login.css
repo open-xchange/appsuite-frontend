@@ -92,14 +92,14 @@ html, body {
 #io-ox-login-screen a:hover { color: #2DA6E4; }
 
 .wallpaper {
-    background: rgb(255,255,255); /* Old browsers */
-    background: -moz-radial-gradient(center, circle cover, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 50%, rgba(200,200,200,1) 100%); /* FF3.6+ */
-    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(255,255,255,1)), color-stop(41%, rgba(246,246,246,1)), color-stop(100%,rgba(200,200,200,1))); /* Chrome,Safari4+ */
-    background: -webkit-radial-gradient(center, ellipse cover, #34749C 0%, #2A6085 41%, #1D3F59 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 41%,rgba(200,200,200,1) 100%); /* Opera 12+ */
-    background: -ms-radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 41%,rgba(200,200,200,1) 100%); /* IE10+ */
-    background: radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 41%,rgba(200,200,200,1) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#a8a8a8',GradientType=1 );
+    background: #34749c; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover, #34749c 0%, #2a6085 41%, #1d3f59 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#34749c), color-stop(41%,#2a6085), color-stop(100%,#1d3f59)); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover, #34749c 0%,#2a6085 41%,#1d3f59 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover, #34749c 0%,#2a6085 41%,#1d3f59 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover, #34749c 0%,#2a6085 41%,#1d3f59 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center, #34749c 0%,#2a6085 41%,#1d3f59 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34749c', endColorstr='#1d3f59',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
     background-size: 100% 130%;
 }
 
