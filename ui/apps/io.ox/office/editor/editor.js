@@ -3585,7 +3585,10 @@ define('io.ox/office/editor/editor',
                             anchorvoffset = 0,
                             oldanchorhoffset = StyleSheets.getExplicitAttributes(drawingNode).anchorhoffset,
                             oldanchorvoffset = StyleSheets.getExplicitAttributes(drawingNode).anchorvoffset ? StyleSheets.getExplicitAttributes(drawingNode).anchorvoffset : 0,
+                            anchorhbase = StyleSheets.getExplicitAttributes(drawingNode).anchorhbase,
+                            anchorvbase = StyleSheets.getExplicitAttributes(drawingNode).anchorvbase,
                             anchorhalign = StyleSheets.getExplicitAttributes(drawingNode).anchorhalign,
+                            anchorvalign = StyleSheets.getExplicitAttributes(drawingNode).anchorvalign,
                             // current drawing width, in 1/100 mm
                             drawingWidth = Utils.convertLengthToHmm($(drawingNode).width(), 'px'),
                             // the paragraph element containing the drawing node
@@ -3607,18 +3610,21 @@ define('io.ox/office/editor/editor',
                         if (moveX !== 0) {
                             anchorhoffset = oldanchorhoffset + moveX;
                             anchorhalign = 'offset';
+                            anchorhbase = 'column';
                             if (anchorhoffset < 0) { anchorhoffset = 0; }
                             else if (anchorhoffset > (paraWidth - drawingWidth)) { anchorhoffset = paraWidth - drawingWidth; }
                         }
 
                         if (moveY !== 0) {
                             anchorvoffset = oldanchorvoffset + moveY;
+                            anchorvalign = 'offset';
+                            anchorvbase = 'paragraph';
                             if (anchorvoffset < 0) { anchorvoffset = 0; }
                         }
 
                         if ((anchorhoffset !== oldanchorhoffset) || (anchorvoffset !== oldanchorvoffset)) {
 
-                            newOperation = { name: Operations.ATTRS_SET, attrs: {anchorhoffset: anchorhoffset, anchorvoffset: anchorvoffset, anchorhalign: anchorhalign}, start: updatePosition };
+                            newOperation = { name: Operations.ATTRS_SET, attrs: {anchorhoffset: anchorhoffset, anchorvoffset: anchorvoffset, anchorhalign: anchorhalign, anchorvalign: anchorvalign, anchorhbase: anchorhbase, anchorvbase: anchorvbase}, start: updatePosition };
 
                             applyOperation(newOperation);
                         }
