@@ -360,6 +360,12 @@ define('io.ox/contacts/api',
                 })
                 .fail(fail);
         } else if (typeof obj === 'object' && obj !== null) {
+            // duck checks
+            if (api.looksLikeResource(obj)) {
+                defaultUrl = ox.base + '/apps/themes/default/dummypicture_resource.xpng';
+            } else if (api.looksLikeDistributionList(obj)) {
+                defaultUrl = ox.base + '/apps/themes/default/dummypicture_group.xpng';
+            }
             // also look for contact_id to support user objects directly
             api.get({ id: obj.contact_id || obj.id, folder: obj.folder_id || obj.folder })
                 .done(function (data) {
@@ -465,6 +471,16 @@ define('io.ox/contacts/api',
             }
         });
     };
+
+    // duck checks
+    api.looksLikeResource = function (obj) {
+        return 'mailaddress' in obj && 'description' in obj;
+    };
+
+    api.looksLikeDistributionList = function (obj) {
+        return !!obj.mark_as_distributionlist;
+    };
+
     return api;
 
 });

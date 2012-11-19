@@ -148,17 +148,9 @@ define("io.ox/contacts/view-detail",
         }
     });
 
-    function looksLikeResource(obj) {
-        return 'mailaddress' in obj && 'description' in obj;
-    }
-
-    function looksLikeDistributionList(obj) {
-        return !!obj.mark_as_distributionlist;
-    }
-
     function getDescription(data) {
-        if (looksLikeDistributionList(data)) return gt('Distribution list');
-        if (looksLikeResource(data)) return gt('Resource');
+        if (api.looksLikeDistributionList(data)) return gt('Distribution list');
+        if (api.looksLikeResource(data)) return gt('Resource');
         return _.noI18n((data.company || data.position || data.profession) ?
             join(", ", data.company, data.position, data.profession) + "\u00A0" : util.getMail(data) + "\u00A0");
     }
@@ -167,16 +159,6 @@ define("io.ox/contacts/view-detail",
         index: 100,
         id: 'contact-picture',
         draw: function (baton) {
-            
-            var data = baton.data;
-
-            if (looksLikeResource(data) || looksLikeDistributionList(data)) {
-                this.append(
-                    $('<div class="span4 field-label">')
-                );
-                return;
-            }
-
             this.append(
                 // left side / picture
                 $('<div class="span4 field-label">').append(
@@ -223,14 +205,22 @@ define("io.ox/contacts/view-detail",
         }
     });
 
+    function looksLikeHTML(str) {
+        return (/<\w/).test(str);
+    }
+
     ext.point("io.ox/contacts/detail").extend({
         index: 250,
         id: "description", // only for resources
         draw: function (baton) {
             if ('description' in baton.data) {
                 addField(gt('Description'), true, this, function (node) {
-                    var text = $.trim(baton.data.description).replace(/\n/g, '<br>');
-                    node.html(text);
+                    var text = $.trim(baton.data.description);
+                    if (looksLikeHTML(text)) {
+                        node.html(text);
+                    } else {
+                        node.html(text.replace(/\n/g, '<br>'));
+                    }
                 });
                 addField('', '\u00A0', this);
             }
