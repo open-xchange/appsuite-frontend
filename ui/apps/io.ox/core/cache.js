@@ -427,11 +427,16 @@ define('io.ox/core/cache',
 
     // debug!
     window.dumpStorage = function () {
-        var i = 0, $i = localStorage.length, key;
+        var i = 0, $i = localStorage.length, key, value;
         for (; i < $i; i++) {
             // get key by index
             key = localStorage.key(i);
-            console.info('key', key, 'value', JSON.parse(localStorage.getItem(key)));
+            try {
+                value = JSON.parse(localStorage.getItem(key));
+                console.info('key', key, 'value', value);
+            } catch (e) {
+                console.error('key', key, e);
+            }
         }
     };
 
