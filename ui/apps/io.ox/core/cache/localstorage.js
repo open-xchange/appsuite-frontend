@@ -21,7 +21,7 @@ define('io.ox/core/cache/localstorage', function () {
         ts_cachetimeout = (new Date()).getTime() - (2 * 24 * 60 * 60 * 1000), // 2 days
 
         // max size for persistent objects
-        MAX_LENGTH = 1024 * 512, // 1/2 MB
+        MAX_LENGTH = 1024 * 1024, // 1MB
 
         // fluent backup cache
         large = {};
@@ -76,13 +76,13 @@ define('io.ox/core/cache/localstorage', function () {
 
                 // if garbage collection does not kill any item, do something else
                 if (delCounter === 0) {
-                    //console.log('GC: nothing killed');
+                    //console.debug('GC: nothing killed');
                     if (force === true) {
-                        console.log('GC: forced -> clear current keyspace');
+                        //console.debug('GC: forced -> clear current keyspace');
                         that.clear();
                     }
                 } else {
-                    console.error('GC: removed', delCounter);
+                    console.warn('GC: removed', delCounter);
                 }
 
             }
