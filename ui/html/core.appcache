@@ -18,7 +18,6 @@ CACHE:
 @base@/apps/themes/login/busy.gif
 @base@/apps/themes/login/fonts/opensans-300.woff
 @base@/apps/themes/login/fonts/fontawesome-webfont.woff
-@base@/apps/themes/default/style.css
 @base@/apps/themes/default/style.less
 @base@/apps/themes/default/definitions.less
 @base@/apps/themes/default/dummypicture.png
