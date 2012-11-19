@@ -182,7 +182,8 @@ define('io.ox/core/commons-folderview',
                     type: options.type,
                     rootFolderId: currentFolder[0],
 //                    rootFolderId: options.rootFolderId,
-                    checkbox: true
+                    checkbox: true,
+                    all: true
                 });
                 tree.paint();
 

@@ -40,7 +40,7 @@ define('io.ox/core/tk/folderviews',
     /**
      * Tree node class
      */
-    function TreeNode(tree, id, container, level, checkbox) {
+    function TreeNode(tree, id, container, level, checkbox, all) {
         // load folder data immediately
         var ready = api.get({ folder: id }),
             nodes = {},
@@ -198,7 +198,7 @@ define('io.ox/core/tk/folderviews',
                 // check cache
                 needsRefresh = refreshHash[id] === undefined && api.needsRefresh(id);
                 // get sub folders
-                return api.getSubFolders({ folder: id })
+                return api.getSubFolders({ folder: id, all: all })
                     .done(function (list) {
                         // needs refresh?
                         if (needsRefresh) {
@@ -230,7 +230,7 @@ define('io.ox/core/tk/folderviews',
                                     return node;
                                 } else {
                                     // new node
-                                    return new TreeNode(tree, folder.id, nodes.sub, skip() ? level : level + 1, checkbox);
+                                    return new TreeNode(tree, folder.id, nodes.sub, skip() ? level : level + 1, checkbox, all);
                                 }
                             })
                             .value();
@@ -331,6 +331,9 @@ define('io.ox/core/tk/folderviews',
                     nodes.label = $('<span>').addClass('folder-label');
                     nodes.counter = $('<span>').addClass('folder-counter');
                     nodes.subscriber = $('<input>').attr({'type': 'checkbox', 'name': 'folder', 'value': data.id}).css('float', 'right');
+                    if (data.subscribed) {
+                        nodes.subscriber.attr('checked', 'checked');
+                    }
                     // draw children
                     var def = isOpen() ? paintChildren() : $.when();
                     updateArrow();
@@ -599,7 +602,7 @@ define('io.ox/core/tk/folderviews',
         // tree node hash
         this.treeNodes = {};
         // root tree node
-        this.root = new TreeNode(this, this.options.rootFolderId, this.container, 0, opt.checkbox);
+        this.root = new TreeNode(this, this.options.rootFolderId, this.container, 0, opt.checkbox, opt.all);
 
         this.internal.paint = function () {
             return this.root.paint();
