@@ -3725,7 +3725,7 @@ define('io.ox/office/editor/editor',
                     $(resizeLine).css({ width: '100%', height: '1px', left: '0px', top: startY});
                     officemaindiv.append(resizeLine);
                     // calculating maxTopShift (for bottom shift there is no limit)
-
+                    maxTopShift = cellNode.outerHeight();
                 }
 
                 editdiv.css('cursor', $(resizeNode).css('cursor'));  // setting cursor for increasing drawing
@@ -3752,6 +3752,10 @@ define('io.ox/office/editor/editor',
                 } else if (horizontalResize) {
                     shiftX = 0;
                     shiftY = currentY;
+
+                    if ((shiftY - startY) <= - maxTopShift) {
+                        isValidShift = false;
+                    }
                 }
 
                 if ((_.isNumber(shiftX)) && (_.isNumber(shiftY))) {
