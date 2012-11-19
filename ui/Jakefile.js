@@ -375,7 +375,7 @@ if (!path.existsSync("apps/io.ox/core/date/tz/zoneinfo")) {
 // doc task
 
 desc("Developer documentation");
-utils.topLevelTask("doc", [], utils.summary("doc"));
+utils.topLevelTask("docs", [], utils.summary("docs"));
 
 var titles = [];
 function docFile(file, title) {
@@ -548,9 +548,7 @@ utils.fileType('doc-source')
     .addHook('filter', utils.includeFilter)
     .addHook('filter', verifyDoc)
     .addHook('define', checkExtensions);
-utils.copy(utils.list('apps', '**/*.js'), {
-    to: 'doc/reference',
-    mapper: function (name) { return name.replace(/\.js$/, '.html'); },
+utils.concat('doc/extensionpoints.html', utils.list('apps/**/*.js'), {
     type: 'doc-source'
 });
 function verifyDoc(data) {
@@ -606,5 +604,5 @@ function checkExtensions(name, deps, f) {
             return;
         }
     }).scan(f);
-    function checkPoint(id) { return self.points[id] = true; }
+    function checkPoint(id) { return self.points[id[1]] = true; }
 }
