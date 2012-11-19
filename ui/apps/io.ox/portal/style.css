@@ -1,17 +1,17 @@
 @padding: 2px;
 @large-padding: 13px;
-@portal-background-alt: #050505;
-@portal-background: #222;
+@portal-background-alt: #333;
+@portal-background: #555;
 
 .io-ox-portal {
     padding: @large-padding;
     position: relative;
     height: 100%;
     .overflow(auto);
- 
+
     border-top: 1px solid #000;
     background-color: #2C2C2C;
-    
+
     background-image: -moz-linear-gradient(top, @portal-background-alt, @portal-background);
     background-image: -ms-linear-gradient(top, @portal-background-alt, @portal-background);
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@portal-background-alt), to(@portal-background));
@@ -24,7 +24,6 @@
 .io-ox-portal, .io-ox-portal * {
     .box-sizing(border-box);
 }
-
 .io-ox-portal .clear-title {
     margin: 0.5em 0 1em 0;
     font-size: 16pt;
@@ -39,29 +38,8 @@
     font-family: @font-light;
 }
 .io-ox-portal h2 {
-    font-size: 18px;
+    font-size: 18px; /* TODO: Either all px or all pt */
     font-family: @font-light;
-}
-.io-ox-portal-column {
-    display: inline-block;
-    float: left;
-}
-.io-ox-portal-widget {
-    min-height: 100px;
-    margin-bottom: 40px;
-}
-.io-ox-portal-widget .clear-title {
-    margin-bottom: 0.5em;
-}
-.io-ox-portal-linkedin-updates-entry {
-    margin-bottom: 0.5em;
-}
-.io-ox-portal-linkedin-updates-details {
-    margin: 1em 0 1em 4em;
-}
-.io-ox-portal-intro {
-    margin-bottom: 16px;
-    line-height: 22px;
 }
 .io-ox-portal-greeting {
     font-family: @font-light;
@@ -81,6 +59,9 @@
     padding-right: 5px;
     padding-bottom: 0.5em;
 }
+.io-ox-tile-container {
+    position: absolute;
+}
 .io-ox-portal-settings a {
     color: #0AF;
     font-size: 13px;
@@ -88,61 +69,30 @@
 .io-ox-portal-tiles {
     clear: both;
     text-align: left;
-//    margin: 0 auto;
+    vertical-align: top;
+    position: relative;
+    background: #999;
 }
 
-@tile-margin: 1px;
-@tile-width: 270px;
-@tile-height: 180px;
-/*
-@media all and (min-width: 320px) {
-    .io-ox-portal-tiles { width: 1*(@tile-width + 2*@tile-margin);}
-}
-@media all and (min-width: 640px) {
-    .io-ox-portal-tiles { width: 2*(@tile-width + 2*@tile-margin);}
-}
-@media all and (min-width: 960px) {
-    .io-ox-portal-tiles { width: 3*(@tile-width + 2*@tile-margin);}
-}
-@media all and (min-width: 1280px) {
-    .io-ox-portal-tiles { width: 4*(@tile-width + 2*@tile-margin);}
-}
-@media all and (min-width: 1600px) {
-    .io-ox-portal-tiles { width: 5*(@tile-width + 2*@tile-margin);}
-}
-@media all and (min-width: 1920px) {
-    .io-ox-portal-tiles { width: 6*(@tile-width + 2*@tile-margin); }
-}
-@media all and (min-width: 2240px) {
-    .io-ox-portal-tiles { width: 7*(@tile-width + 2*@tile-margin); }
-}
-@media all and (min-width: 2560px) {
-    .io-ox-portal-tiles { width: 8*(@tile-width + 2*@tile-margin); }
-}
-.io-ox-portal-widget-tile-border {
-    height: @tile-height;
-    width: @tile-width;
-}
-*/
-.io-ox-portal-widget-tile-border {
-    margin: 0;
-    padding: 0 @padding @padding 0;
-    background: transparent;
+@tHeight: 300px;
+@tWidth: 260px;
+@tSpace: 12px;
+@tLine: @tSpace * 3;
+
+.io-ox-portal-widget-tile {
+    display: inline-block;
+    width: @tWidth;
+    height: @tHeight;
+    margin: 0 1px 1px 0;
+    overflow: hidden;
     float: left;
-} 
-.io-ox-portal-widget-tile { 
-    height: @tile-height;
-    width: 100%;
     .box-sizing(border-box);
 }
 .io-ox-portal-widget-phototile {
     padding: 0 !important;
 }
-.io-ox-portal-widget-phototile h1 {
-	padding: 1.3em 0.5em 0.5em 0.5em;
-    margin: 0 !important;
-}
 
+/* LATER:
 @media all and (min-width: 0px ) {
     .io-ox-portal-widget-tile-border { width: 100%; }
 }
@@ -158,123 +108,141 @@
 @media all and (min-width: 1200px) {
     .io-ox-portal-widget-tile-border { width: 20%; }
 }
-@media all and (min-width: 1500px) {
-    .io-ox-portal-widget-tile-border { width: 16.66%; }
-}
-@media all and (min-width: 1800px) {
-    .io-ox-portal-widget-tile-border { width: 14.28%; }
-}
-@media all and (min-width: 2100px) {
-    .io-ox-portal-widget-tile-border { width: 12.5%; }
-}
-.io-ox-portal, .io-ox-portal-tiles {
-    height: 100%;
-}
-
-/*@media all and (min-height: 180px) {
-    .io-ox-portal-widget-tile-border { height: 99%; }
-}
-@media all and (min-height: 360px) {
-    .io-ox-portal-widget-tile-border { height: 49%; }
-}
-@media all and (min-height: 540px) {
-    .io-ox-portal-widget-tile-border { height: 32%; }
-}
-@media all and (min-height: 720px) {
-    .io-ox-portal-widget-tile-border { height: 24%; }
-}
-@media all and (min-height: 900px) {
-    .io-ox-portal-widget-tile-border { height: 19%; }
-}
-@media all and (min-height: 1080px) {
-    .io-ox-portal-widget-tile-border { height: 16%; }
-}
-@media all and (min-height: 1260px) {
-    .io-ox-portal-widget-tile-border { height: 14%; }
-}
-@media all and (min-height: 1440px) {
-    .io-ox-portal-widget-tile-border { height: 12%; }
-}*/
-.io-ox-portal-widget-tile {
-    background: #cce;
-    float: left;
-    padding: @large-padding;
-    overflow: hidden;
-    margin: 0;
-    cursor: pointer;
-    color: white;
-}
-.io-ox-portal-preview {
-    overflow: hidden;
-    height: 6em; 
-    line-height: 1.5em;
-    text-overflow: ellipsis;
-}
+*/
 .io-ox-portal-preview-firstline {
-    font-weight: bold;
+    font-weight: 300;
     color: white;
 }
 .io-ox-portal-preview-secondline {
+    font-weight: 100;
     color: white;
-    font-weight: normal;
 }
 .io-ox-portal-preview-thirdline {
-    color: rgba(255, 255, 255, 0.7);
-    font-weight: normal;
+    font-weight: 100;
+    color: white;
+    font-style: italic;
 }
-.io-ox-portal-widget-tile h1 {
+.io-ox-portal-typeA .io-ox-portal-item {
+    display: inline-block;
+    text-decoration: none;
+    max-height: 4.5em;
+    line-height: 1.5em;
+    font-size: 1em;
+    border-top: 1px solid rgba(255,255,255,0.3);
+    width: 100%;
     color: #eee;
-    color: rgba(255, 255, 255, 0.70);
-    line-height: 1em;
-    margin: 0.7em 0 1em 0;
+    padding: 0 6px 0 @tSpace;
+    overflow: hidden;
 }
-.io-ox-sidepopup-pane h1.clear-title {
-    margin-bottom: @large-padding;
+.io-ox-portal-typeA .io-ox-portal-content :first-child.io-ox-portal-item {
+    border: none;
 }
-.io-ox-portal-content .vgrid-cell.mail {
-    height: 4em;
+.io-ox-portal-typeA :hover.io-ox-portal-item {
+    background: rgba(255, 255, 255, 0.75);
+    font-weight: 200;
 }
-.io-ox-portal-tile-active {
+.io-ox-portal-typeA .io-ox-portal-content {
+    height: @tHeight - @tLine - @tLine; /* height - title - action */
+    overflow: hidden;
+    line-height: 1.5em;
+    text-overflow: ellipsis;
+    clear: both;
+    color: white;
 }
-.io-ox-portal .tile-image {
-    width: 32px;
-    height: auto;
+.io-ox-portal-typeA .io-ox-portal-title {
+    width: @tWidth;
+    height: @tLine;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    text-align: center;
+    padding-top: 6px;
+    font-family: @font-light;
+}
+.io-ox-portal-typeA .io-ox-portal-actions {
+    height: @tLine;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding-top: @tSpace/2;
+}
+.io-ox-portal-actions .action-text {
+    display: inline-block;
+    height: 100%;
+    cursor: pointer;
+    padding-left: .5em;
+    font-weight: 100;
+    font-size: 13pt;
+}
+
+.io-ox-portal-typeB .io-ox-portal-title {
+    width: @tWidth;
+    height: @tLine;
+    padding-top: 6px;
+    visibility: hidden;
+}
+.io-ox-portal-typeB .io-ox-portal-image {
+    height: @tHeight - @tLine; /* height - title */
+    background: no-repeat center;
+    background-size: cover;
+}
+.io-ox-portal-typeB .io-ox-portal-actions {
+    margin-top: @tHeight - @tLine - @tLine; /* box_height - header_height - footer_height*/
+    height: @tLine;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding-top: @tSpace/2;
+    opacity: 0.75;
+}
+.io-ox-portal-typeB .io-ox-portal-actions .action-text, .io-ox-portal-typeB .io-ox-portal-title  {
+    font-weight: 200;
+}
+
+.io-ox-portal-action {
+    display: block;
     float: right;
-    margin: 8px 0 8px 0;
+    margin-right: 6px;
+}
+.io-ox-portal-title h1 {
+    font-size: 16pt;
+    line-height: 0;
+}
+.io-ox-portal-title .tile-image {
+    float: right;
+    margin-right: 6px;
 }
 
-.io-ox-portal {
+/* Remove this to make Matthias happy */
+/*
+.io-ox-typeA-action, .io-ox-typeB-title {
+    border-bottom-left-radius: @tSpace;
+    border-bottom-right-radius: @tSpace;
+}
+.io-ox-typeA-title {
+    border-top-left-radius: @tSpace;
+    border-top-right-radius: @tSpace;
+}
+.io-ox-portal-widget-tile {
+    border-radius: @tSpace;
+}
+*/
 
-    .tile-color0 { background-color: @tile-color-0; }
-    .tile-color0:hover { background-color: darken(@tile-color-0, @tile-hover); }
-    .tile-color1 { background-color: @tile-color-1; }
-    .tile-color1:hover { background-color: darken(@tile-color-1, @tile-hover); }
-    .tile-color2 { background-color: @tile-color-2; }
-    .tile-color2:hover { background-color: darken(@tile-color-2, @tile-hover); }
-    .tile-color3 { background-color: @tile-color-3; }
-    .tile-color3:hover { background-color: darken(@tile-color-3, @tile-hover); }
-    .tile-color4 { background-color: @tile-color-4; }
-    .tile-color4:hover { background-color: darken(@tile-color-4, @tile-hover); }
-
-    .tile-color5 { background-color: @tile-color-5; }
-    .tile-color5:hover { background-color: darken(@tile-color-5, @tile-hover); }
-    .tile-color6 { background-color: @tile-color-6; }
-    .tile-color6:hover { background-color: darken(@tile-color-6, @tile-hover); }
-    .tile-color7 { background-color: @tile-color-7; }
-    .tile-color8:hover { background-color: darken(@tile-color-7, @tile-hover); }
-    .tile-color8 { background-color: @tile-color-8; }
-    .tile-color8:hover { background-color: darken(@tile-color-8, @tile-hover); }
-    .tile-color9 { background-color: @tile-color-9; }
-    .tile-color9:hover { background-color: darken(@tile-color-9, @tile-hover); }
-    
-    .tile-colorX { background-color: rgba(255, 255, 255, 0.10); cursor: default; }
-
-    .io-ox-portal-createMe { background-color: #444; }
-    .io-ox-portal-createMe:hover { background-color: #333; }
-    
-    .io-ox-portal-createMe .centered {
-        line-height: 6em;
-        text-align: center;
-        color: #888;
-    }
+.invisible {
+    visibility: hidden;
+}
+.tile-color0, .tile-color6 {
+    background: #234;
+}
+.tile-color1, .tile-color7 {
+    background: #243;
+}
+.tile-color2, .tile-color8 {
+    background: #324;
+}
+.tile-color3, .tile-color9 {
+    background: #342;
+}
+.tile-color4, .tile-color10 {
+    background: #423;
+}
+.tile-color5, .tile-color11 {
+    background: #432;
 }

@@ -34,38 +34,30 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
     },
 
     drawTile = function (taskarray, $node) {
-        if (taskarray.length > 0)
-            {
-            var task = taskarray[0];
-
-            for (var i = 0; i < taskarray.length; i++) {
-                if (taskarray[i].end_date !== null && taskarray[i].status !== 3) {
-                    task = taskarray[i];
-                    i = taskarray.length;
-                }
-            }
-
-            task = util.interpretTask(task);
-
-            $node.append(
-                    $('<div class="io-ox-clear io-ox-portal-preview">').append(
-                            $("<span>").text(gt("Next due task:")),
-                            $("<span>").text(gt.noI18n(strings.shorten(task.title, 50) + ' ')).addClass("io-ox-portal-tasks-preview-title"),
-                            
-                            $('<span>').text(//#. %1$s is the task due date
-                                             //#, c-format
-                                             gt("Due in %1$s ", _.noI18n(task.end_date))).addClass("io-ox-portal-tasks-preview-date"),
-                            $("<span>").text(gt.noI18n(strings.shorten(task.note, 100))).addClass("io-ox-portal-tasks-preview-note")
-                    )
-            );
-
-            if (task.end_date === "") {
-                $node.find(".io-ox-portal-tasks-preview-date").remove();
-            }
-        } else {
-            $node.append($('<div class="io-ox-clear io-ox-portal-preview">').text(gt("You don't have any tasks.")));
+        if (taskarray.length === 0) {
+            $node.append($('<div class="io-ox-clear io-ox-portal-content">').text(gt("You don't have any tasks.")));
+            return;
         }
+        var tasks = [];
 
+        for (var i = 0; i < taskarray.length; i++) {
+            if (taskarray[i].end_date !== null && taskarray[i].status !== 3) {
+                tasks.push(taskarray[i]);
+            }
+        }
+        var $preview = $('<div class="io-ox-clear io-ox-portal-content">').appendTo($node);
+
+        _(tasks).each(function (task) {
+            var task = util.interpretTask(task);
+            var $task = $('<div class="io-ox-portal-item">').append(
+                $("<span>").text(gt.noI18n(strings.shorten(task.title, 50) + ' ')).addClass("io-ox-portal-tasks-preview-title io-ox-portal-preview-firstline"),
+                $('<span>').text(gt("Due in %1$s ", _.noI18n(task.end_date))).addClass("io-ox-portal-tasks-preview-date io-ox-portal-preview-thirdline"),
+                $("<span>").text(gt.noI18n(strings.shorten(task.note, 100))).addClass("io-ox-portal-tasks-preview-note io-ox-portal-preview-secondline")
+            ).appendTo($preview);
+            if (task.end_date === "") {
+                $task.find(".io-ox-portal-tasks-preview-date").remove();
+            }
+        });
     },
 
     load = function () {

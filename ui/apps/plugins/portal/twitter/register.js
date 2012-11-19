@@ -90,7 +90,7 @@ define('plugins/portal/twitter/register',
         });
     };
     var loadTile = function () {
-        return loadFromTwitter({count: 1, include_entities: true});
+        return loadFromTwitter({count: 5, include_entities: true});
     };
     var drawTile = function (tweets, $node) {
         if (!tweets) {
@@ -98,16 +98,18 @@ define('plugins/portal/twitter/register',
         }
         if (tweets.length === 0) {
             $node.append(
-                $('<div class="io-ox-portal-preview">').text(gt('No tweets yet.')));
+                $('<div class="io-ox-portal-item">').text(gt('No tweets yet.')));
         } else {
-            var tweet = tweets[0];
-            var message = $('<div>').html(tweet.text).text();
-            $node.append(
-                $('<div class="io-ox-portal-preview">').append(
-                    $('<span class="io-ox-portal-preview-firstline">').text('@' + tweet.user.name + ': '),
-                    $('<span class="io-ox-portal-preview-thirdline">').text(message)
-                )
-            );
+            _(tweets).each(function (tweet) {
+                var message = $('<div>').html(tweet.text).text(),
+                    tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str;
+                $node.append(
+                    $('<a class="io-ox-portal-item">').attr({href: tweetLink, target: '_blank'}).append(
+                        $('<span class="io-ox-portal-preview-firstline">').text('@' + tweet.user.name + ': '),
+                        $('<span class="io-ox-portal-preview-secondline">').text(message)
+                    )
+                );
+            });
         }
     };
 
@@ -224,7 +226,7 @@ define('plugins/portal/twitter/register',
                     deferred.resolve(control.CANCEL);
                     return;
                 }
-                var $node = $('<div>');
+                var $node = $('<div class="io-ox-portal-content">');
                 drawTile(tweets, $node);
                 deferred.resolve($node);
             }).fail(function () {

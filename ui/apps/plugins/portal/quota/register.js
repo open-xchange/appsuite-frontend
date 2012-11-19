@@ -24,18 +24,18 @@ define("plugins/portal/quota/register", ["io.ox/core/extensions",
 
     drawTile = function (quota, $node) {
         $node.append(
-            $('<div class="io-ox-clear io-ox-portal-preview quota-preview">').append(
-                    $('<div>').append(
+            $('<div class="io-ox-portal-content">').append(
+                    $('<div class="io-ox-portal-item">').append(
                         $("<span>").text(gt("File quota")),
                         $("<span>").addClass("plugins-portal-quota-memory-file"),
                         $("<div>").addClass("plugins-portal-quota-filebar")
                     ),
-                    $('<div>').append(
+                    $('<div class="io-ox-portal-item">').append(
                         $('<span>').text(gt("Mail quota")),
                         $("<span>").addClass("plugins-portal-quota-memory-mail"),
                         $("<div>").addClass("plugins-portal-quota-mailbar")
                     ),
-                    $('<div>').append(
+                    $('<div class="io-ox-portal-item">').append(
                         $('<span>').text(gt("Mail count quota")),
                         $("<span>").addClass("plugins-portal-quota-memory-mailcount"),
                         $("<div>").addClass("plugins-portal-quota-mailcountbar")
@@ -124,7 +124,7 @@ define("plugins/portal/quota/register", ["io.ox/core/extensions",
     };
 
     ext.point("io.ox/portal/widget").extend({
-        id: 'quota',//needed so onclick sidepane isn't shown
+        id: 'quota',
         index: 900,
         title: gt('Quota'),
         load: load,

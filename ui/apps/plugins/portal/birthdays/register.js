@@ -8,7 +8,6 @@
  * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
  *
- * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
 define('plugins/portal/birthdays/register',
@@ -56,7 +55,7 @@ define('plugins/portal/birthdays/register',
             $list = $('<div class="io-ox-portal-birthdays">').append(
                 $('<h1>').text(gt('Next birthdays'))
             );
-            
+
             if (contacts.length === 0) {
                 $list.append(
                     $('<div>').text(gt('No birthdays within the next %1$d weeks', WEEKS))
@@ -129,20 +128,20 @@ define('plugins/portal/birthdays/register',
                 var hash = {};
 
                 if (contacts.length === 0) {
-                    $list.append($('<li>').text(gt('No birthdays within the next %1$d weeks', WEEKS)));
+                    $list.append($('<li class="io-ox-portal-item">').text(gt('No birthdays within the next %1$d weeks', WEEKS)));
                 } else {
                     _(contacts).each(function (contact) {
                         var birthday = new date.Local(date.Local.utc(contact.birthday)).format(date.DATE),
                             name = util.getFullName(contact);
                         if (!isDuplicate(name, hash)) {
-                            $('<li>').text(gt('%1$s on %2$s', name, birthday)).appendTo($list);
+                            $('<li class="io-ox-portal-item">').text(gt('%1$s on %2$s', name, birthday)).appendTo($list);
                             markDuplicate(name, hash);
                         }
                     });
                 }
             });
 
-            return $list;
+            return $('<div class="io-ox-portal-content">').append($list);
         }
     });
 });

@@ -74,20 +74,23 @@ define("plugins/portal/appointments/register", [
             return app.start_date > endSpan || app.end_date < startSpan;
         });
 
-        if (appointments.length > 0) {
-            var nextApp = appointments[0];
-            var deltaT = printTimespan(nextApp.start_date, new Date().getTime());
-            var start = new date.Local(nextApp.start_date), end = new date.Local(nextApp.end_date);
-            var timespan = start.formatInterval(end, date.DATE);
-            $node.append(
-//                $('<div class="io-ox-portal-calendar-timeSpan">').text(deltaT),
-                $('<span class="io-ox-portal-preview-thirdline">').text(gt('Next appointment') + ": "),
-                $('<span class="io-ox-portal-calendar-nextTitle io-ox-portal-preview-firstline">').text(nextApp.title || ""),
-                $('<span class="io-ox-portal-calendar-nextTimeSpan io-ox-portal-preview-secondline">').text(" " + timespan + " "),
-                $('<span class="io-ox-portal-calendar-nextLocation io-ox-portal-preview-thirdline">').text(nextApp.location || "")
-            );
+        if (nextAppointments.length > 0) {
+            var $content = $('<div class="io-ox-portal-content">').appendTo($node);
+            _(nextAppointments).each(function (nextApp) {
+                var deltaT = printTimespan(nextApp.start_date, new Date().getTime());
+                var start = new date.Local(nextApp.start_date), end = new date.Local(nextApp.end_date);
+                var timespan = start.formatInterval(end, date.DATE);
+                $('<div class="io-ox-portal-item">').append(
+//                  $('<div class="io-ox-portal-calendar-timeSpan">').text(deltaT),
+                    $('<span class="io-ox-portal-calendar-nextTitle io-ox-portal-preview-firstline">').text(nextApp.title || ""),
+                    $('<span class="io-ox-portal-calendar-nextTimeSpan io-ox-portal-preview-secondline">').text(" " + timespan + " "),
+                    $('<span class="io-ox-portal-calendar-nextLocation io-ox-portal-preview-thirdline">').text(nextApp.location || "")
+                ).appendTo($content);
+            });
         } else {
-            $('<div class="io-ox-portal-calendar-message">').text(gt("You don't have any appointments in the near future.")).appendTo($node);
+            $('<div class="io-ox-portal-content">').append(
+                $('<div class="io-ox-portal-item">').text(gt("You don't have any appointments in the near future."))
+            ).appendTo($node);
         }
     };
 

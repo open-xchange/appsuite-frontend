@@ -51,7 +51,6 @@ define('plugins/portal/facebook/register',
         index: 150,
         title: 'Facebook',
         icon: 'apps/plugins/portal/facebook/f_logo.png',
-        color: 'bright',
         isEnabled: function () {
             return keychain.isEnabled('facebook');
         },
@@ -68,30 +67,33 @@ define('plugins/portal/facebook/register',
             proxy.request({
                 api: 'facebook',
                 url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
-                    newsfeed: "SELECT actor_id, message, description , created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0 LIMIT 1",
+                    newsfeed: "SELECT actor_id, message, description , created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0 LIMIT 5",
                     profiles: "SELECT id, name FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed)"
                 })
             }).pipe(JSON.parse).done(function (resultsets) {
                 var wall = resultsets.data[0].fql_result_set;
                 var profiles = resultsets.data[1].fql_result_set;
-                var $previewNode = $('<div class="io-ox-portal-preview" />');
+                var $previewNode = $('<div class="io-ox-portal-content" />');
                 if (!wall) {
                     return deferred.resolve(control.CANCEL);
                 }
                 if (wall.length === 0) {
                     $previewNode.append(
-                        $('<div>').text(gt('No wall posts yet.')));
+                        $('<span>').text(gt('No wall posts yet.')));
                 } else {
-                    var post = wall[0];
-                    var message = post.message || post.description || '';
-                    if (message.length > 150) {
-                        message = message.substring(0, 150) + '...';
-                    }
-                    $previewNode.append(
-                        $('<span class="io-ox-portal-preview-firstline">').append($('<b>').text(getProfile(profiles, post.actor_id).name + ': ')),
-                        $('<span class="io-ox-portal-preview-thirdline">').text(message));
+                    _(wall).each(function (post) {
+                        var message = post.message || post.description || '';
+                        if (message.length > 150) {
+                            message = message.substring(0, 150) + '...';
+                        }
+                        $previewNode.append(
+                            $('<div class="io-ox-portal-item">').append(
+                                $('<span class="io-ox-portal-preview-firstline">').text(getProfile(profiles, post.actor_id).name + ': '),
+                                $('<span class="io-ox-portal-preview-secondline">').text(message)
+                            )
+                        );
+                    });
                 }
-
                 deferred.resolve($previewNode);
             }).fail(function () {
                 deferred.resolve(control.CANCEL);
@@ -142,7 +144,7 @@ define('plugins/portal/facebook/register',
                 ext.point('plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
                     if (renderer.accepts(post) && ! foundHandler) {
-//                        console.log(profile.name, ' Renderer: ', renderer.id, post);
+                        //console.log(profile.name, ' Renderer: ', renderer.id, post); //this is too useful to delete it, just uncomment it
                         renderer.draw.apply(content_container, [post]);
                         foundHandler = true;
                     }
@@ -176,10 +178,12 @@ define('plugins/portal/facebook/register',
         drawCreationDialog: function () {
             var $node = $(this);
             $node.append(
-                $('<h1>').text('Facebook'),
-                $('<div class="io-ox-portal-preview centered">').append(
-                    $('<div>').text(gt('Add your account'))
-                )
+                $('<div class="io-ox-portal-title">').append(
+                    $('<h1>').text('Facebook')),
+                $('<div class="io-ox-portal-content centered">').append(
+                    $('<span>').text(gt('Add your account'))),
+                $('<div class="io-ox-portal-actions"').append(
+                    $('<i class="icon-remove io-ox-portal-action">'))
             );
         }
     });

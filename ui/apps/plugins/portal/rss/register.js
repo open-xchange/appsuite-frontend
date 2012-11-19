@@ -52,8 +52,8 @@ define("plugins/portal/rss/register",
     tileGroups = _(tileGroups).sortBy(function (group) { return group.index || 0; });
 
     _(tileGroups).each(function (tilegroup) {
-        ext.point("io.ox/portal/widget").extend({
-            id: 'rss-' + tilegroup.groupname.replace(/[^a-z0-9]/g, '-'),
+        var extension = {
+            id: 'rss-' + tilegroup.groupname.replace(/[^a-zA-Z0-9]/g, '-'),
             index: 100,
             title: tilegroup.groupname,
             load: function () {
@@ -71,7 +71,28 @@ define("plugins/portal/rss/register",
                     .fail(def.reject);
                 return def;
             },
-
+            drawTile: function () {
+                var data = extension.load(),
+                    $content = $('<div class="io-ox-portal-content">');
+                data.done(function (loaded) {
+                    _(loaded).each(function (entry) {
+                        $('<a class="io-ox-portal-item">').attr({href: entry.url, target: '_blank'}).append(
+                            $('<span class="io-ox-portal-preview-firstline">').text(entry.feedTitle + ": "),
+                            $('<span class="io-ox-portal-preview-secondline">').text(entry.subject)
+                        ).appendTo($content);
+                    });
+                    if (!loaded || loaded.site === 0) {
+                        $('<div class="io-ox-portal-item">').text(gt('No RSS feeds found.')).appendTo($content);
+                    }
+                });
+                $(this).append(
+                    $('<div class="io-ox-portal-title">').append(
+                        $('<i class="icon-rss icon-large tile-image">'),
+                        $('<h1 class="tile-heading">').text(tilegroup.groupname)
+                    ),
+                    $content
+                );
+            },
             draw: function (feed) {
                 var togglePreview = function () {
                     $(this).parent().find('.io-ox-portal-rss-content').toggleClass('portal-preview');
@@ -95,6 +116,7 @@ define("plugins/portal/rss/register",
                 });
                 return $.Deferred().resolve();
             }
-        }); //END: ext.point(...).extend
+        };
+        ext.point("io.ox/portal/widget").extend(extension); //END: ext.point(...).extend
     }); //END: tileGroups.each
 });
