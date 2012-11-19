@@ -16,7 +16,10 @@ CACHE:
 @base@/apps/themes/login/login.css
 @base@/apps/themes/login/font-awesome.css
 @base@/apps/themes/login/busy.gif
-@base@/apps/themes/login/fonts/opensans-300.woff
+@base@/apps/themes/login/fonts/OpenSans-Light-webfont.eot
+@base@/apps/themes/login/fonts/OpenSans-Light-webfont.woff
+@base@/apps/themes/login/fonts/OpenSans-Light-webfont.ttf
+@base@/apps/themes/login/fonts/OpenSans-Light-webfont.svg
 @base@/apps/themes/login/fonts/fontawesome-webfont.woff
 @base@/apps/themes/default/style.less
 @base@/apps/themes/default/definitions.less
