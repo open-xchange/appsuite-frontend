@@ -3683,9 +3683,11 @@ define('io.ox/office/editor/editor',
                 lastCell = false,
                 // logical position of the selected node
                 tablePosition = [],
-                // table grid before shifting column or row
+                // table grid before shifting column
                 oldTableGrid = [],
-                // table width before shifting column or row
+                // table width after shifting column
+                newTableWidth = 0,
+                // table width before shifting column
                 oldTableWidth = 0,
                 // table grid, containing relative widths
                 tableGrid = [],
@@ -3700,7 +3702,13 @@ define('io.ox/office/editor/editor',
                 // maximum shift to the right
                 maxRightShift = 0,
                 // maximum shift to the top
-                maxTopShift = 0;
+                maxTopShift = 0,
+                // maximum right value of shift position
+                maxRightValue = 0,
+                // minimum left value of shift position
+                minLeftValue = 0,
+                // minimum width of a column in px
+                minColumnWidth = 10;
 
             function mouseDownOnResizeNode(event, resizeNode) {
                 // mouse down event handler
@@ -3756,19 +3764,23 @@ define('io.ox/office/editor/editor',
 
             function mouseMoveOnResizeNode(event, resizeNode) {
 
-                var isValidShift = true,
-                    color = 'black';
-
                 // mouse move event handler
                 currentX = event.pageX;
                 currentY = event.pageY - topDistance;
 
                 if (verticalResize) {
+
+                    maxRightValue = startX + maxRightShift;
+                    minLeftValue = startX - maxLeftShift + minColumnWidth;
+                    if (! lastCell) { maxRightValue -= minColumnWidth; }
+
                     shiftX = currentX;
                     shiftY = 0;
 
-                    if (((shiftX - startX) > maxRightShift) || ((shiftX - startX) < (- maxLeftShift))) {
-                        isValidShift = false;
+                    if (shiftX >= maxRightValue) {
+                        shiftX = maxRightValue;
+                    } else if (shiftX <= minLeftValue) {
+                        shiftX = minLeftValue;
                     }
 
                 } else if (horizontalResize) {
@@ -3776,13 +3788,12 @@ define('io.ox/office/editor/editor',
                     shiftY = currentY;
 
                     if ((shiftY - startY) <= - maxTopShift) {
-                        isValidShift = false;
+                        shiftY = startY - maxTopShift;
                     }
                 }
 
                 if ((_.isNumber(shiftX)) && (_.isNumber(shiftY))) {
-                    color = isValidShift ? 'black' : 'red';
-                    $(resizeLine).css({'left': shiftX, 'top': shiftY, 'border-color': color});
+                    $(resizeLine).css({'left': shiftX, 'top': shiftY});
                 }
             }
 
@@ -3798,44 +3809,47 @@ define('io.ox/office/editor/editor',
                 editdiv.css('cursor', '');
 
                 if (verticalResize) {
-                    shiftX = currentX - startX;
-                    if ((_.isNumber(shiftX)) && (shiftX !== 0)) {
 
-                        var newTableWidth = lastCell ? (oldTableWidth + shiftX) : oldTableWidth;
+                    if ((_.isNumber(currentX)) && (currentX !== startX)) {
 
-                        // checking if new table width is inside the width of the parent -> otherwise cut it
-                        if (lastCell) {
-                            if (newTableWidth > maxTableWidth) {
-                                var delta = newTableWidth - maxTableWidth;
-                                newTableWidth = maxTableWidth;
-                                shiftX -= delta;  // shiftX can be 0
-                            }
+                        maxRightValue = startX + maxRightShift;
+                        minLeftValue = startX - maxLeftShift + minColumnWidth;
+                        if (! lastCell) { maxRightValue -= minColumnWidth; }
+
+                        if (currentX >= maxRightValue) {
+                            currentX = maxRightValue;
+                        } else if (currentX <= minLeftValue) {
+                            currentX = minLeftValue;
                         }
+
+                        shiftX = currentX - startX;
+
+                        newTableWidth = lastCell ? (oldTableWidth + shiftX) : oldTableWidth;
 
                         // -> shifting the border
                         pixelGrid[shiftedGrid] += shiftX;
                         if (! lastCell) { pixelGrid[shiftedGrid + 1] -= shiftX; }
 
-                        // both still have to be positive
-                        if ((shiftX !== 0) && (pixelGrid[shiftedGrid] > 0) && ((lastCell) || (pixelGrid[shiftedGrid + 1] > 0))) {
-
-                            // converting modified pixel grid to new relation table grid
-                            for (var i = 0; i < pixelGrid.length; i++) {
-                                tableGrid.push(Utils.roundDigits(gridSum * pixelGrid[i] / newTableWidth, 0));  // only ints
-                            }
-
-                            if ((! lastCell) && (StyleSheets.getExplicitAttributes(tableNode).width === 0)) { newTableWidth = 0; }
-                            else { newTableWidth = Utils.convertLengthToHmm(newTableWidth, 'px'); }
-
-                            var newOperation = {name: Operations.ATTRS_SET, attrs: {'tablegrid': tableGrid, 'width': newTableWidth}, start: tablePosition};
-                            applyOperation(newOperation);
+                        // converting modified pixel grid to new relation table grid
+                        for (var i = 0; i < pixelGrid.length; i++) {
+                            tableGrid.push(Utils.roundDigits(gridSum * pixelGrid[i] / newTableWidth, 0));  // only ints
                         }
+
+                        if ((! lastCell) && (StyleSheets.getExplicitAttributes(tableNode).width === 0)) { newTableWidth = 0; }
+                        else { newTableWidth = Utils.convertLengthToHmm(newTableWidth, 'px'); }
+
+                        var newOperation = {name: Operations.ATTRS_SET, attrs: {'tablegrid': tableGrid, 'width': newTableWidth}, start: tablePosition};
+                        applyOperation(newOperation);
                     }
                 } else if (horizontalResize) {
-                    shiftY = currentY - startY;
-                    if ((_.isNumber(shiftX)) && (_.isNumber(shiftY)) && (shiftY !== 0)) {
-                        var rowHeight = rowNode.outerHeight() + shiftY,
-                            newRowHeight = Utils.convertLengthToHmm(rowHeight, 'px'),
+
+                    if ((_.isNumber(currentY)) && (currentY !== startY)) {
+
+                        var rowHeight = rowNode.outerHeight() + currentY - startY;
+
+                        if (rowHeight < 0) { rowHeight = 0; }
+
+                        var newRowHeight = Utils.convertLengthToHmm(rowHeight, 'px'),
                             rowPosition = Position.getOxoPosition(editdiv, rowNode.get(0), 0),
                             newOperation = { name: Operations.ATTRS_SET, attrs: {height: newRowHeight}, start: rowPosition };
 
