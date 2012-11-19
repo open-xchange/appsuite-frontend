@@ -146,8 +146,9 @@ define('io.ox/office/editor/format/paragraphstyles',
 
     // private static functions ===============================================
 
-    function isBorderEqual(attributes1, attributes2) {
-        return Utils.hasEqualAttributes(attributes1, attributes2, ['borderleft', 'borderright', 'bordertop', 'borderbottom', 'borderinside']);
+    function isMergeBorders(attributes1, attributes2) {
+        return Utils.hasEqualAttributes(attributes1, attributes2, ['borderleft', 'borderright', 'bordertop', 'borderbottom', 'borderinside',
+                                                                   'numId', 'leftindent', 'rightindent', 'firstlineindent']);
     }
 
     function initBorder(border) {
@@ -219,8 +220,8 @@ define('io.ox/office/editor/format/paragraphstyles',
                 nextParagraph = paragraph.next(),
                 nextAttributes = (nextParagraph.length > 0) ? self.getElementAttributes(nextParagraph) : {};
 
-            function setBorder(border, position) {
-                var space = (border && border.space) ? border.space : 0;
+            function setBorder(border, position, addSpace) {
+                var space = addSpace + ((border && border.space) ? border.space : 0);
                 paragraph.css('padding-' + position, Utils.convertHmmToCssLength(space, 'px'));
                 paragraph.css('border-' + position, self.getCssBorder(border));
                 return -space;
@@ -237,20 +238,31 @@ define('io.ox/office/editor/format/paragraphstyles',
             }, undefined, { children: true });
 
             // update borders
-            leftMargin += setBorder(attributes.borderleft, 'left');
-            rightMargin += setBorder(attributes.borderright, 'right');
+            var leftPadding = attributes.borderleft && attributes.borderleft.space ? attributes.borderleft.space : 0;
+            leftMargin += setBorder(attributes.borderleft, 'left', 0);
+            rightMargin += setBorder(attributes.borderright, 'right', 0);
+
+            var topMargin = attributes.topmargin;
+            var bottomMargin = attributes.bottommargin;
 
             // top border is not set if previous paragraph uses the same border settings
-            if (isBorderEqual(attributes, prevAttributes)) {
-                setBorder({ style: 'none' }, 'top');
-                prevParagraph.css("padding-bottom", this.getCssBorder(attributes.borderinside.space));
+            if (isMergeBorders(attributes, prevAttributes)) {
+                setBorder({ style: 'none' }, 'top', topMargin);
+                prevParagraph.css("padding-bottom", this.getCssBorder(attributes.borderinside.space + bottomMargin));
                 prevParagraph.css("border-bottom", this.getCssBorder(attributes.borderinside));
+                topMargin = 0;
             } else {
-                setBorder(attributes.bordertop, 'top');
+                setBorder(attributes.bordertop, 'top', 0);
             }
 
             // bottom border is replaced by inner border next paragraph uses the same border settings
-            setBorder(isBorderEqual(attributes, nextAttributes) ? attributes.borderinside : attributes.borderbottom, 'bottom');
+            if (isMergeBorders(attributes, nextAttributes)) {
+                setBorder(attributes.borderinside, 'bottom');
+                prevParagraph.css("padding-bottom", this.getCssBorder(bottomMargin));
+                bottomMargin = 0;
+            } else {
+                setBorder(attributes.borderbottom, 'bottom', 0);
+            }
 
             //calculate list indents
             var numId = attributes.numId;
@@ -267,25 +279,29 @@ define('io.ox/office/editor/format/paragraphstyles',
                     var listObject = lists.formatNumber(attributes.numId, ilvl, listItemCounter);
 
                     if (listObject.indent > 0) {
-                        leftMargin += listObject.indent;
+                        leftPadding += listObject.firstLine;
+                        leftMargin += listObject.indent - listObject.firstLine;
                     }
                 }
             }
 
             // paragraph margin attributes - not applied if paragraph is in a list
+            var textIndent = 0;
             if (numId < 0) {
                 leftMargin += attributes.leftindent;
                 rightMargin += attributes.rightindent;
-                var textIndent = attributes.firstlineindent ? attributes.firstlineindent : 0;
+                textIndent = attributes.firstlineindent ? attributes.firstlineindent : 0;
                 paragraph.css('text-indent', textIndent / 100 + 'mm');
             }
 
+            if (textIndent < 0) {
+                leftPadding -= textIndent;
+                leftMargin += textIndent;
+            }
+            paragraph.css('padding-left', leftPadding / 100 + 'mm');
             // now set left/right margins
             paragraph.css('margin-left', leftMargin / 100 + 'mm');
             paragraph.css('margin-right', rightMargin / 100  + 'mm');
-
-            var topMargin = attributes.topmargin;
-            var bottomMargin = attributes.bottommargin;
 
             paragraph.css('margin-top', topMargin / 100 + 'mm');
             paragraph.css('margin-bottom', bottomMargin / 100  + 'mm');
