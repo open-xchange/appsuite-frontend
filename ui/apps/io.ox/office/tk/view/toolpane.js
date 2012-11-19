@@ -14,9 +14,9 @@
 define('io.ox/office/tk/view/toolpane',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/view/pane',
-     'io.ox/office/tk/component/toolbar',
+     'io.ox/office/tk/view/component',
      'io.ox/office/tk/control/radiogroup'
-    ], function (Utils, Pane, ToolBar, RadioGroup) {
+    ], function (Utils, Pane, Component, RadioGroup) {
 
     'use strict';
 
@@ -24,7 +24,7 @@ define('io.ox/office/tk/view/toolpane',
         KeyCodes = Utils.KeyCodes,
 
         // the controller key used to switch the visible tool bar
-        KEY_SHOW_TOOLBAR = 'tk/toolbars/show';
+        KEY_SHOW_TOOLBAR = 'tk/toolpane/show';
 
     // class ToolPane =========================================================
 
@@ -49,7 +49,7 @@ define('io.ox/office/tk/view/toolpane',
             controller = app.getController(),
 
             // tab bar to switch the tool bars (temporary)
-            tabBar = new ToolBar(app.getWindow()),
+            tabBar = new Component(app, { classes: 'toolbar' }),
 
             // radio group to switch the tool bars (temporary)
             tabBarGroup = new RadioGroup(),
@@ -101,7 +101,7 @@ define('io.ox/office/tk/view/toolpane',
 
         // base constructor ---------------------------------------------------
 
-        Pane.call(this, app);
+        Pane.call(this, app, { classes: 'toolpane' });
 
         // methods ------------------------------------------------------------
 
@@ -128,17 +128,14 @@ define('io.ox/office/tk/view/toolpane',
         this.createToolBar = function (id, options) {
 
             var // create a new tool bar object, and store it in the map
-                toolBar = toolBars[id] = new ToolBar(app.getWindow());
+                toolBar = toolBars[id] = new Component(app, { classes: 'toolbar '});
 
-            // add the tool bar to the pane, and register it at the controller
-            toolBarIds.push(id);
-            this.getNode().append(toolBar.getNode());
-            controller.registerViewComponent(toolBar);
-
-            // add an option button to the tab bar
+            // add the tool bar to the pane, and an option button to the tab bar
+            this.addViewComponent(toolBar);
             tabBarGroup.addOptionButton(id, options);
 
             // hide all tool bars but the first
+            toolBarIds.push(id);
             if (toolBarIds.length > 1) {
                 toolBar.hide();
                 // show tab bar if at least two tool bars have been created
@@ -190,16 +187,10 @@ define('io.ox/office/tk/view/toolpane',
             return this;
         };
 
-        this.destroy = function () {
-            _(toolBars).invoke('destroy');
-            toolBars = null;
-        };
-
         // initialization -----------------------------------------------------
 
         // insert the tab bar into this tool pane, but hide it initially
-        this.getNode().addClass('toolpane').append(tabBar.getNode());
-        controller.registerViewComponent(tabBar);
+        this.addViewComponent(tabBar);
         tabBar.addGroup(KEY_SHOW_TOOLBAR, tabBarGroup).hide();
 
         // add item definition for the tab bar

@@ -110,13 +110,38 @@ define('io.ox/office/tk/view/view',
         // methods ------------------------------------------------------------
 
         /**
-         * Adds a new pane instance to this view.
+         * Returns the central application pane.
+         *
+         * @returns {Pane}
+         *  The central application pane.
+         */
+        this.getApplicationPane = function () {
+            return appPane;
+        };
+
+        /**
+         * Returns the specified pane which has been added with the method
+         * View.createPane() before.
          *
          * @param {String} id
          *  The unique identifier of the pane.
          *
-         * @param {Object} pane
-         *  The pane instance.
+         * @returns {Pane|Null}
+         *  The pane with the specified identifier, or null if no pane has been
+         *  found.
+         */
+        this.getPane = function (id) {
+            return (id in panes.all) ? panes.all[id] : null;
+        };
+
+        /**
+         * Adds the passed pane instance into this view.
+         *
+         * @param {String} id
+         *  The unique identifier of the pane.
+         *
+         * @param {Pane} pane
+         *  The new pane instance.
          *
          * @param {String} side
          *  The border of the application window to attach the pane to.
@@ -159,8 +184,10 @@ define('io.ox/office/tk/view/view',
             return this;
         };
 
-        this.getApplicationPane = function () {
-            return appPane;
+        this.destroy = function () {
+            _(panes.all).invoke('destroy');
+            appPane.destroy();
+            win = appPane = panes = null;
         };
 
         // initialization -----------------------------------------------------
@@ -169,8 +196,8 @@ define('io.ox/office/tk/view/view',
         app.setWindow(win);
 
         // add the central application pane, and insert the document model root node
-        appPane = new Pane(app);
-        appPane.getNode().addClass('center').append(app.getModel().getNode());
+        appPane = new Pane(app, { classes: 'center' });
+        appPane.getNode().append(app.getModel().getNode());
 
         // move window tool bar to the right
         win.nodes.outer.addClass('toolbar-right');

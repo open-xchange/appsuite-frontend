@@ -310,9 +310,23 @@ define('io.ox/office/editor/editor',
             return operations;
         };
 
-        this.applyOperations = function (operations, silent) {
+        /**
+         * Central dispatcher function for operations.
+         *
+         * @param {Array} operations
+         *  An array with operation to be applied.
+         *
+         * @param {Object} [options]
+         *  A map with options to control the behavior of this method. The
+         *  following options are supported:
+         *  @param {Boolean} [options.silent=false]
+         *      If set to true, the operation will be applied silently: No undo
+         *      action will be generated, and no operation listeners will be
+         *      notified.
+         */
+        this.applyOperations = function (operations, options) {
             _(operations).each(function (operation) {
-                applyOperation(operation, silent);
+                applyOperation(operation, options);
             });
         };
 
@@ -3333,13 +3347,23 @@ define('io.ox/office/editor/editor',
 
         /**
          * Central dispatcher function for operations.
+         *
+         * @param {Object} [options]
+         *  A map with options to control the behavior of this method. The
+         *  following options are supported:
+         *  @param {Boolean} [options.silent=false]
+         *      If set to true, the operation will be applied silently: No undo
+         *      action will be generated, and no operation listeners will be
+         *      notified.
          */
         function applyOperation(operation, options) {
 
             var // the function that executes the operation
                 operationHandler = null,
                 // silent mode
-                silent = Utils.getBooleanOption(options, 'silent', false);
+                silent = Utils.getBooleanOption(options, 'silent', false),
+                // deep copy of the operation, for notification (undo manager may modify operations)
+                notifyOperation = _.copy(operation, true);
 
             if (!_.isObject(operation)) {
                 Utils.error('Editor.applyOperation(): expecting operation object');
@@ -3365,9 +3389,7 @@ define('io.ox/office/editor/editor',
             // remove highlighting before changing the DOM which invalidates the positions in highlightRanges
             self.removeHighlighting();
 
-            // Copy operation now, because undo might manipulate it when merging with previous one...
-            var notifyOperation = _.copy(operation, true);
-
+            // store operation in internal operations list
             if (!silent) {
                 operations.push(operation);
             }

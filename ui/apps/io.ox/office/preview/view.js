@@ -36,13 +36,6 @@ define('io.ox/office/preview/view',
 
         View.call(this, app);
 
-        // methods ------------------------------------------------------------
-
-        this.destroy = function () {
-            toolPane.destroy();
-            toolPane = null;
-        };
-
         // initialization -----------------------------------------------------
 
         // the tool pane for tool bars

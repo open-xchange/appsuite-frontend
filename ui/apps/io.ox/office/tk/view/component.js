@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/component/component',
+define('io.ox/office/tk/view/component',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
      'io.ox/office/tk/dropdown/scrollable',
@@ -44,18 +44,17 @@ define('io.ox/office/tk/component/component',
      *
      * @constructor
      *
-     * @param {ox.ui.Window} appWindow
-     *  The application window object.
+     * @param {Application} app
+     *  The application instance.
      *
-     * @param {Function} [insertGroupHandler]
-     *  A handler function that will be called for every inserted group.
-     *  Receives the root element of the group (as jQuery object) as first
-     *  parameter, and must insert the element into this view component. Will
-     *  be called in the context of this view component instance. If omitted,
-     *  all groups will be inserted directly into the root node of this view
-     *  component.
+     * @param {Object} [options]
+     *  A map of options to control the properties of the new view component.
+     *  The following options are supported:
+     *  @param {String} [options.classes]
+     *      Additional CSS classes that will be set at the root DOM node of
+     *      this instance.
      */
-    function Component(appWindow, insertGroupHandler) {
+    function Component(app, options) {
 
         var // self reference
             self = this,
@@ -68,9 +67,6 @@ define('io.ox/office/tk/component/component',
 
             // all control groups, mapped by key
             groupsByKey = {},
-
-            // child view components inserted into drop-down menus
-            components = [],
 
             // group initializer waiting for the first window 'show' event
             deferredInit = $.Deferred(),
@@ -95,6 +91,9 @@ define('io.ox/office/tk/component/component',
          * calling the handler function passed to the constructor, or by
          * appending the root node of the group to the children of the own root
          * node.
+         *
+         * @param {Group} group
+         *  The group instance to be inserted into this view component.
          */
         function insertGroup(group) {
 
@@ -110,11 +109,7 @@ define('io.ox/office/tk/component/component',
             deferredInit.done(function () { group.trigger('init'); });
 
             // insert the group into this view component
-            if (_.isFunction(insertGroupHandler)) {
-                insertGroupHandler.call(self, group.getNode());
-            } else {
-                node.append(group.getNode());
-            }
+            node.append(group.getNode());
 
             // always forward 'cancel' events (e.g. closed drop-down menu)
             group.on('cancel', function () { self.trigger('cancel'); });
@@ -124,7 +119,9 @@ define('io.ox/office/tk/component/component',
          * Returns all visible and enabled group objects as array.
          */
         function getEnabledGroups() {
-            return _(groups).filter(function (group) { return group.isVisible() && group.isEnabled() && group.hasFocusableControls(); });
+            return _(groups).filter(function (group) {
+                return group.isVisible() && group.isEnabled() && group.hasFocusableControls();
+            });
         }
 
         /**
@@ -323,41 +320,6 @@ define('io.ox/office/tk/component/component',
         };
 
         /**
-         * Creates a drop-down button and inserts the passed view component
-         * into its drop-down menu. All events triggered by the passed view
-         * component will be forwarded to the own view component.
-         *
-         * @param {Component} component
-         *  The view component instance whose root node will be inserted into
-         *  the drop-down menu.
-         *
-         * @param {String} [options]
-         *  A map of options to control the properties of the drop-down button.
-         *  Supports all options of the Scrollable class constructor.
-         *
-         * @returns {Component}
-         *  A reference to this view component.
-         */
-        this.addMenu = function (component, options) {
-
-            var // a drop-down button containing the DOM element of the component
-                group = new Group(options);
-
-            Scrollable.call(group, component.getNode(), options);
-            insertGroup(group);
-
-            // remember the child view component
-            components.push(component);
-
-            // forward all component events to listeners of this view component
-            component.on('change cancel', function (event, key, value) {
-                self.trigger(event.type, key, value);
-            });
-
-            return this;
-        };
-
-        /**
          * Enables or disables the specified group of this view component.
          *
          * @param {String} key
@@ -373,7 +335,6 @@ define('io.ox/office/tk/component/component',
         this.enable = function (key, state) {
             if (key in groupsByKey) {
                 _(groupsByKey[key]).invoke('enable', state);
-                _(components).invoke('enable', key, state);
             }
             return this;
         };
@@ -407,7 +368,6 @@ define('io.ox/office/tk/component/component',
         this.update = function (key, value) {
             if (key in groupsByKey) {
                 _(groupsByKey[key]).invoke('update', value);
-                _(components).invoke('update', key, value);
             }
             return this;
         };
@@ -417,10 +377,10 @@ define('io.ox/office/tk/component/component',
          * view component from the page.
          */
         this.destroy = function () {
-            this.events.destroy();
-            _(components).invoke('destroy');
             node.off().remove();
-            self = node = groups = groupsByKey = components = deferredInit = null;
+            app.getController().unregisterViewComponent(this);
+            this.events.destroy();
+            self = node = groups = groupsByKey = deferredInit = null;
         };
 
         // initialization -----------------------------------------------------
@@ -428,8 +388,14 @@ define('io.ox/office/tk/component/component',
         // add event hub
         Events.extend(this);
 
+        // additional CSS classes
+        node.addClass(Utils.getStringOption(options, 'classes', ''));
+
+        // register this view component at the application controller
+        app.getController().registerViewComponent(this);
+
         // wait for the first window 'show' event and trigger an 'init' event at all groups
-        appWindow.one('show', function () { windowShown = true; initialize(); });
+        app.getWindow().one('show', function () { windowShown = true; initialize(); });
 
         // listen to key events for keyboard focus navigation
         node.on('keydown keypress keyup', keyHandler);

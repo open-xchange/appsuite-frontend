@@ -18,13 +18,14 @@ define('io.ox/office/editor/view/view',
      'io.ox/office/tk/control/label',
      'io.ox/office/tk/control/textfield',
      'io.ox/office/tk/control/radiogroup',
+     'io.ox/office/tk/view/component',
      'io.ox/office/tk/view/pane',
      'io.ox/office/tk/view/toolpane',
      'io.ox/office/tk/view/view',
      'io.ox/office/editor/view/controls',
      'io.ox/office/editor/format/lineheight',
      'gettext!io.ox/office/main'
-    ], function (Utils, Config, Fonts, Label, TextField, RadioGroup, Pane, ToolPane, View, Controls, LineHeight, gt) {
+    ], function (Utils, Config, Fonts, Label, TextField, RadioGroup, Component, Pane, ToolPane, View, Controls, LineHeight, gt) {
 
     'use strict';
 
@@ -51,6 +52,12 @@ define('io.ox/office/editor/view/view',
 
             // tool pane containing all tool bars
             toolPane = null,
+
+            // tool bar hovering at the top border of the application pane
+            hoverBar = null,
+
+            // fade-out timer for status label
+            fadeOutTimer = null,
 
             // bottom debug pane
             debugPane = null,
@@ -86,10 +93,19 @@ define('io.ox/office/editor/view/view',
          */
         function statusLabelUpdateHandler(value) {
 
-            var // the <label> DOM element
-                label = this.getNode().find('label'),
+            var // the group instance
+                group = this,
+                // the <label> DOM element
+                label = group.getNode().find('label'),
                 // the new label text
-                caption = '';
+                caption = null,
+                // whether to fade out the label
+                fadeOut = false;
+
+            // do nothing if state did not change (prevent blinking label after fade-out)
+            if (label.attr('data-state') === value) {
+                return;
+            }
 
             switch (value) {
             case 'offline':
@@ -103,19 +119,35 @@ define('io.ox/office/editor/view/view',
                 break;
             case 'ready':
                 caption = gt('All changes saved');
+                fadeOut = true;
                 break;
             case 'initial':
-                caption = gt('No changes');
+                // do not show anything
                 break;
             default:
                 // state must not be undefined/null
                 Utils.error('EditorView.statusLabelUpdateHandler(): unknown connection state: ' + value);
-                return;
             }
 
             // set caption and data-state attribute (used as CSS selector for formatting)
+            group.toggle(_.isString(caption));
             Utils.setControlCaption(label, { label: caption });
             label.attr('data-state', value);
+
+            if (fadeOutTimer) {
+                window.clearTimeout(fadeOutTimer);
+                fadeOutTimer = null;
+            }
+            if (fadeOut) {
+                fadeOutTimer = window.setTimeout(function () {
+                    fadeOutTimer = null;
+                    // TODO: stop running jQuery fade-out
+                    group.getNode().fadeOut(500, function () {
+                        group.getNode().show();
+                        group.hide();
+                    });
+                }, 2000);
+            }
         }
 
         /**
@@ -242,11 +274,6 @@ define('io.ox/office/editor/view/view',
                 debugNodes.sync.text(state);
             }
             return this;
-        };
-
-        this.destroy = function () {
-            toolPane.destroy();
-            toolPane = debugPane = debugNodes = null;
         };
 
         // initialization -----------------------------------------------------
@@ -383,8 +410,11 @@ define('io.ox/office/editor/view/view',
         // make the format tool bar visible
         toolPane.showToolBar('format');
 
-        // add application status label to tab bar
-        toolPane.getTabBar().addGroup('file/connection/state', new Label({ classes: 'status-label', updateHandler: statusLabelUpdateHandler }));
+        // create and add the application status label
+        hoverBar = new Component(app);
+        toolPane.addViewComponent(hoverBar);
+        hoverBar.getNode().css({ position: 'absolute', top: '100%', right: '16px' });
+        hoverBar.addGroup('file/connection/state', new Label({ classes: 'status-label', updateHandler: statusLabelUpdateHandler }));
 
         // add 'rename document' functionality to title field
         app.getWindow().nodes.title.addClass('io-ox-office-title').click(renameDocumentHandler);

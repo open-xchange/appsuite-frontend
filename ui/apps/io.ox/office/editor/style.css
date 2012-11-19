@@ -41,36 +41,30 @@
 }
 
 /* the label displaying the current status of the editor application */
-.io-ox-view-component.toolbar .group.status-label {
-    position: absolute;
-    top: 6px;
-    right: 0;
+.io-ox-view-component .group.status-label label {
+    margin: 6px;
+    height: 20px;
+    line-height: 20px;
+    background: white;
+    .border-radius(10px);
+    .box-shadow(0 4px 8px fade(black, 25%));
+    color: #666666;
+    font-size: 11px;
+    font-weight: bold;
 
-    /* internal formatting */
-    label {
-        height: 20px;
-        line-height: 20px;
-        background: white;
-        .border-radius(10px);
-        .box-shadow(0 4px 8px fade(black, 25%));
-        color: #666666;
-        font-size: 11px;
-        font-weight: bold;
+    &[data-state="offline"] {
+        background: #eaa;
+        color: #755;
+    }
 
-        &[data-state="offline"] {
-            background: #eaa;
-            color: #755;
-        }
+    &[data-state="readonly"], &[data-state="sending"] {
+        background: #eea;
+        color: #775;
+    }
 
-        &[data-state="readonly"], &[data-state="sending"] {
-            background: #eea;
-            color: #775;
-        }
-
-        &[data-state="initial"], &[data-state="ready"] {
-            background: #aea;
-            color: #575;
-        }
+    &[data-state="initial"], &[data-state="ready"] {
+        background: #aea;
+        color: #575;
     }
 }
 

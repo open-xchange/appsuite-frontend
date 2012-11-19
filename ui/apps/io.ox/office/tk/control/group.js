@@ -267,11 +267,17 @@ define('io.ox/office/tk/control/group',
         /**
          * Toggles the visibility of this control group.
          *
+         * @param {Boolean} [state]
+         *  If specified, shows or hides the groups depending on the boolean
+         *  value. If omitted, switches the group from visible to hidden and
+         *  vice versa.
+         *
          * @returns {Group}
          *  A reference to this group.
          */
-        this.toggle = function () {
-            groupNode.toggleClass(HIDDEN_CLASS);
+        this.toggle = function (state) {
+            var hidden = (state === false) || ((state !== true) && !this.isVisible());
+            groupNode.toggleClass(HIDDEN_CLASS, hidden);
             return this;
         };
 
