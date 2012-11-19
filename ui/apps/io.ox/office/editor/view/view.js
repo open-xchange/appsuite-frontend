@@ -56,9 +56,6 @@ define('io.ox/office/editor/view/view',
             // tool bar hovering at the top border of the application pane
             hoverBar = null,
 
-            // fade-out timer for status label
-            fadeOutTimer = null,
-
             // bottom debug pane
             debugPane = null,
 
@@ -95,12 +92,31 @@ define('io.ox/office/editor/view/view',
 
             var // the group instance
                 group = this,
+                // the root node of the label group instance
+                groupNode = group.getNode(),
                 // the <label> DOM element
-                label = group.getNode().find('label'),
+                label = groupNode.find('label'),
                 // the new label text
                 caption = null,
                 // whether to fade out the label
-                fadeOut = false;
+                fadeOut = false,
+                // running fade-out timer
+                runningTimer = groupNode.data('fade-out-timer');
+
+            function setGroupTimer(timer, delay) {
+                groupNode.data('fade-out-timer', _.isFunction(timer) ? window.setTimeout(timer, delay) : null);
+            }
+
+            function startFadeOutTimer() {
+                var opacity = Math.round(parseFloat(groupNode.css('opacity')) * 100);
+                if (opacity >= 10) {
+                    groupNode.css('opacity', (opacity - 10) / 100);
+                    setGroupTimer(startFadeOutTimer, 50);
+                } else {
+                    group.hide();
+                    setGroupTimer(null);
+                }
+            }
 
             // do nothing if state did not change (prevent blinking label after fade-out)
             if (label.attr('data-state') === value) {
@@ -130,23 +146,20 @@ define('io.ox/office/editor/view/view',
             }
 
             // set caption and data-state attribute (used as CSS selector for formatting)
+            groupNode.css('opacity', 1);
             group.toggle(_.isString(caption));
             Utils.setControlCaption(label, { label: caption });
             label.attr('data-state', value);
 
-            if (fadeOutTimer) {
-                window.clearTimeout(fadeOutTimer);
-                fadeOutTimer = null;
+            // stop running fade-out timer
+            if (runningTimer) {
+                window.clearTimeout(runningTimer);
+                setGroupTimer(null);
             }
+
+            // create a new fade-out timer that starts to fade out after 2 seconds
             if (fadeOut) {
-                fadeOutTimer = window.setTimeout(function () {
-                    fadeOutTimer = null;
-                    // TODO: stop running jQuery fade-out
-                    group.getNode().fadeOut(500, function () {
-                        group.getNode().show();
-                        group.hide();
-                    });
-                }, 2000);
+                setGroupTimer(startFadeOutTimer, 2000);
             }
         }
 
