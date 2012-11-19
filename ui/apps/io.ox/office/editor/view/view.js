@@ -131,7 +131,7 @@ define('io.ox/office/editor/view/view',
                 caption = gt('Read-only mode');
                 break;
             case 'sending':
-                caption = gt('Saving changes...');
+                caption = gt('Saving changes');
                 break;
             case 'ready':
                 caption = gt('All changes saved');
