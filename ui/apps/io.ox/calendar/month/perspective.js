@@ -264,8 +264,10 @@ define('io.ox/calendar/month/perspective',
 
         restore: function () {
             // restore scrollposition
-            if (this.restoreCache.scrollPosition) {
+            if (this.restoreCache.scrollPosition && this.restoreCache.scrollPosition > 0) {
                 this.scrollTop(this.restoreCache.scrollPosition);
+            } else {
+                this.gotoMonth();
             }
         },
 
