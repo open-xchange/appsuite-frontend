@@ -72,6 +72,11 @@ define('io.ox/mail/write/main',
             view,
             model;
 
+        function getDefaultEditorMode() {
+            if (defaultEditorMode === 'text') return 'text';
+            return 'html';
+        }
+
         app = ox.ui.createApp({
             name: 'io.ox/mail/write',
             title: 'Compose'
@@ -452,7 +457,7 @@ define('io.ox/mail/write/main',
             mail = mail || {};
             mail.data = mail.data || {};
             mail.mode = mail.mode || 'compose';
-            mail.format = mail.format || defaultEditorMode || 'text';
+            mail.format = mail.format || getDefaultEditorMode();
             mail.initial = mail.initial || false;
 
             //config settings
@@ -583,7 +588,7 @@ define('io.ox/mail/write/main',
 
                 function cont(obj) {
                     win.busy().show(function () {
-                        mailAPI[type](obj, defaultEditorMode || 'text')
+                        mailAPI[type](obj, getDefaultEditorMode())
                         .done(function (data) {
                             data.sendtype = mailAPI.SENDTYPE.REPLY;
                             app.setMail({ data: data, mode: type, initial: true })
@@ -619,7 +624,7 @@ define('io.ox/mail/write/main',
             _.url.hash('app', 'io.ox/mail/write:forward');
 
             win.busy().show(function () {
-                mailAPI.forward(obj, defaultEditorMode || 'text')
+                mailAPI.forward(obj, getDefaultEditorMode())
                 .done(function (data) {
                     data.sendtype = mailAPI.SENDTYPE.FORWARD;
                     app.setMail({ data: data, mode: 'forward', initial: true })
