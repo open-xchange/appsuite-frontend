@@ -93,9 +93,6 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function 
                 }
             });
             return falseSwitch;
-
-
-
         };
 
         var remove = function (key) {
@@ -148,7 +145,7 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function 
 
             get: function (path, defaultValue) {
                 if (!path) { // undefined, null, ''
-                    return get(that.settingsPath);
+                    return settings; //get(that.settingsPath);
                 } else {
                     if (defaultValue === undefined) {
                         return get(path);
@@ -209,6 +206,20 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function 
                         }
                     });
             },
+
+            reset: function () {
+                return settingsCache.remove(that.settingsPath).pipe(function () {
+                    return http.PUT({
+                        module: 'jslob',
+                        params: {
+                            action: 'set',
+                            id: 'apps/' + that.settingsBase + '/' + that.settingsPath
+                        },
+                        data: {}
+                    });
+                });
+            },
+
             save: function (external) {
                 if (external !== undefined) {
                     settings = external;
@@ -216,7 +227,7 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function 
 //                settingsInitial(settings, that.settingsPath, that.settingsBase, function () {
                 settingsCache.add(that.settingsPath, settings);
 
-                http.PUT({
+                return http.PUT({
                     module: 'jslob',
                     params: {
                         action: 'set',
