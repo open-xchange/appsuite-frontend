@@ -213,6 +213,10 @@ define("io.ox/core/extensions",
             return this;
         };
 
+        this.list = function () {
+            return list().value();
+        };
+
         this.chain = function () {
             return list();
         };

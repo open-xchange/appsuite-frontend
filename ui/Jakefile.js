@@ -290,7 +290,8 @@ utils.concat("pre-core.js",
         "commons.js",
         "commons-folderview.js",
         "collection.js", "notifications.js", "date.js",
-        "extPatterns/actions.js", "extPatterns/links.js"
+        "extPatterns/actions.js", "extPatterns/links.js",
+        "extPatterns/stage.js"
     ]), { type: "source" }
 );
 
