@@ -188,17 +188,25 @@ define('io.ox/calendar/month/view',
                 },
                 appendTo: self.$el,
                 scroll: true,
-                snap: '.day .list',
+                snap: '.day>.list',
                 snapMode: 'inner',
                 snapTolerance: 20,
                 distance: 20,
                 containment: self.$el.parent(),
+                revertDuration: 0,
+                revert: function (drop) {
+                    //if false then no socket object drop occurred.
+                    if (drop === false) {
+                        //revert the peg by returning true
+                        $(this).show();
+                        return true;
+                    } else {
+                        //return false so that the peg does not revert
+                        return false;
+                    }
+                },
                 start: function (e, ui) {
                     $(this).hide();
-                },
-                drag: function (e, ui) {
-                },
-                stop: function (e, ui) {
                 }
             });
 
@@ -210,10 +218,13 @@ define('io.ox/calendar/month/view',
                     );
                     var app = ui.draggable.data('app').attributes,
                         s = new date.Local(app.start_date),
-                        start = new date.Local($(this).data('date')).setHours(s.getHours(), s.getMinutes(), s.getSeconds(), s.getMilliseconds()).getTime();
-                    app.end_date = start + app.end_date - app.start_date;
-                    app.start_date = start;
-                    self.trigger('updateAppointment', app);
+                        start = new date.Local($(this).data('date')).setHours(s.getHours(), s.getMinutes(), s.getSeconds(), s.getMilliseconds()).getTime(),
+                        end = start + app.end_date - app.start_date;
+                    if (app.start_date !== start || app.end_date !== end) {
+                        app.start_date = start;
+                        app.end_date = end;
+                        self.trigger('updateAppointment', app);
+                    }
                 }
             });
         }
