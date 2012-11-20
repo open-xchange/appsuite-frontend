@@ -32,6 +32,35 @@
     content: "\00A0"; /* make sure margins/paddings are applied properly */
 }
 
+.core-boot-dialog {
+
+    position: absolute;
+    width: 500px;
+    height: 300px;
+    padding: 13px 26px;
+    background-color: white;
+    top: 45%;
+    left: 50%;
+    margin: -163px 0px 0px (-250px - 26);
+    z-index: 10000;
+    .box-shadow(0 0 20px -2px #888);
+    .border-radius(4px);
+
+    .header {
+        height: 110px;
+        h3 { margin-top: 0; }
+    }
+    .content {
+        height: 140px;
+        overflow: auto;
+    }
+    .footer {
+        padding-top: 13px;
+        height: 50px - 13;
+        text-align: right;
+    }
+}
+
 /* top bar */
 
 #io-ox-topbar {

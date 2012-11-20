@@ -17,11 +17,12 @@ define("io.ox/core/main",
      "io.ox/core/http",
      "io.ox/core/api/apps",
      "io.ox/core/extensions",
+     "io.ox/core/extPatterns/stage",
      "io.ox/core/date",
      'io.ox/core/notifications',
      'io.ox/core/commons', // defines jQuery plugin
      "gettext!io.ox/core",
-     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, date, notifications, commons, gt) {
+     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, gt) {
 
     "use strict";
 
@@ -432,79 +433,157 @@ define("io.ox/core/main",
             location.hash = '#!';
         }
 
-        var def = $.Deferred(),
-            autoLaunch = _.url.hash("app") ? _.url.hash("app").split(/,/) : ['io.ox/mail'],
-            autoLaunchModules = _(autoLaunch)
-                .map(function (m) {
-                    return m.split(/:/)[0] + '/main';
+        var baton = ext.Baton({
+            block: $.Deferred(),
+            autoLaunch: _.url.hash("app") ? _.url.hash("app").split(/,/) : ['io.ox/mail']
+        });
+
+        baton.autoLaunchModules = _(baton.autoLaunch).map(function (m) { return m.split(/:/)[0] + '/main'; });
+
+        // start loading stuff
+        baton.loaded = $.when(
+            baton.block,
+            ext.loadPlugins(),
+            require(baton.autoLaunchModules),
+            require(['io.ox/core/api/account']).pipe(function (api) { return api.all(); })
+        );
+
+        new Stage('io.ox/core/stages', {
+            id: 'first',
+            index: 100,
+            run: function () {
+            }
+        });
+
+        new Stage('io.ox/core/stages', {
+            id: 'restore-check',
+            index: 200,
+            run: function (baton) {
+                return ox.ui.App.canRestore().done(function (canRestore) {
+                    baton.canRestore = canRestore;
                 });
+            }
+        });
 
-        $.when(
-                def,
-                ext.loadPlugins(),
-                require(autoLaunchModules),
-                require(['io.ox/core/api/account']).pipe(function (api) {
-                    return api.all();
-                })
-            )
-            .done(function (instantFadeOut) {
+        new Stage('io.ox/core/stages', {
+            id: 'restore-confirm',
+            index: 300,
+            run: function (baton) {
 
-                // draw top bar now
-                ext.point('io.ox/core/topbar').invoke('draw');
+                if (baton.canRestore) {
 
-                // help here
-                if (!ext.point('io.ox/core/topbar').isEnabled('default')) {
-                    $('#io-ox-screens').css('top', '0px');
-                    topbar.hide();
-                }
-
-                // auto launch
-                _(autoLaunch).each(function (id) {
-                    // split app/call
-                    var pair = id.split(/:/),
-                        launch = require(pair[0] + '/main').getApp().launch(),
-                        call = pair[1];
-                    // explicit call?
-                    if (call) {
-                        launch.done(function () {
-                            if (this[call]) {
-                                this[call]();
-                            }
+                    var dialog,
+                        def = $.Deferred().done(function () {
+                            $("#background_loader").busy().fadeIn();
+                            topbar.show();
+                            dialog.remove();
+                            dialog = null;
                         });
+
+                    $('#io-ox-core').append(
+                        dialog = $('<div class="core-boot-dialog">').append(
+                            $('<div class="header">').append(
+                                $('<h3>').text(gt('Restore applications')),
+                                $('<div>').text(
+                                    gt("The following applications can be restored. Just remove the restore point if you don't want it to be restored.")
+                                )
+                            ),
+                            $('<div class="content">'),
+                            $('<div class="footer">').append($('<button class="btn btn-primary">').text(gt('Continue')))
+                        )
+                    );
+
+                    // draw savepoints to allow the user removing them
+                    ox.ui.App.getSavePoints().done(function (list) {
+                        _(list).each(function (item) {
+                            this.append(
+                                $('<div class="alert alert-info alert-block">').append(
+                                    $('<button type="button" class="close" data-dismiss="alert">&times;</button>').data(item),
+                                    $.txt(item.description || item.module)
+                                )
+                            );
+                        }, dialog.find('.content'));
+                    });
+
+                    dialog.on('click', '.footer .btn', def.resolve);
+                    dialog.on('click', '.content .close', function (e) {
+                        ox.ui.App.removeRestorePoint($(this).data('id'));
+                    });
+
+                    topbar.hide();
+                    $("#background_loader").idle().fadeOut();
+                    
+                    return def;
+                }
+            }
+        });
+
+        new Stage('io.ox/core/stages', {
+            id: 'restore',
+            index: 400,
+            run: function (baton) {
+                if (baton.canRestore) {
+                    // clear auto start stuff (just conflicts)
+                    baton.autoLaunch = [];
+                    baton.autoLaunchModules = [];
+                }
+                if (baton.autoLaunch.length === 0 && !baton.canRestore) {
+                    drawDesktop();
+                    return baton.block.resolve(true);
+                }
+                if (baton.autoLaunch.length || baton.canRestore || location.hash === '#!') {
+                    return baton.block.resolve(true);
+                } else {
+                    // fade out animation
+                    $("#background_loader").idle().fadeOut(DURATION, baton.block.resolve);
+                    return baton.block;
+                }
+            }
+        });
+
+        new Stage('io.ox/core/stages', {
+            id: 'load',
+            index: 500,
+            run: function (baton) {
+
+                return baton.loaded.done(function (instantFadeOut) {
+
+                    // draw top bar now
+                    ext.point('io.ox/core/topbar').invoke('draw');
+
+                    // help here
+                    if (!ext.point('io.ox/core/topbar').isEnabled('default')) {
+                        $('#io-ox-screens').css('top', '0px');
+                        topbar.hide();
+                    }
+
+                    // auto launch
+                    _(baton.autoLaunch).each(function (id) {
+                        // split app/call
+                        var pair = id.split(/:/),
+                            launch = require(pair[0] + '/main').getApp().launch(),
+                            call = pair[1];
+                        // explicit call?
+                        if (call) {
+                            launch.done(function () {
+                                if (this[call]) {
+                                    this[call]();
+                                }
+                            });
+                        }
+                    });
+                    // restore apps
+                    ox.ui.App.restore();
+
+                    if (instantFadeOut === true) {
+                        // instant fade out
+                        $("#background_loader").idle().hide();
                     }
                 });
-                // restore apps
-                ox.ui.App.restore();
-
-                if (instantFadeOut === true) {
-                    // instant fade out
-                    $("#background_loader").idle().hide();
-                }
-            });
-
-        var restoreLauncher = function (canRestore) {
-            if (autoLaunch.length === 0 && !canRestore) {
-                drawDesktop();
-                def.resolve(true);
-                return;
             }
-            if (autoLaunch.length || canRestore || location.hash === '#!') {
-                def.resolve(true);
-            } else {
-                // fade out animation
-                $("#background_loader").idle().fadeOut(DURATION, def.resolve);
-            }
-        };
+        });
 
-        ox.ui.App.canRestore()
-            .done(function (canRestore) {
-                if (canRestore) {
-                    // clear auto start stuff (just conflicts)
-                    autoLaunch = [];
-                    autoLaunchModules = [];
-                }
-                restoreLauncher(canRestore);
-            });
+        Stage.run('io.ox/core/stages', baton);
     }
 
     return {

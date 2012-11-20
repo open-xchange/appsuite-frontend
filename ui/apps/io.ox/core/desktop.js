@@ -361,16 +361,7 @@ define("io.ox/core/desktop",
 
         removeRestorePoint: function () {
             var uniqueID = this.get('uniqueID');
-            appCache.get('savepoints').done(function (list) {
-                list = list || [];
-                var ids = _(list).pluck('id'),
-                    pos = _(ids).indexOf(uniqueID);
-                list = list.slice();
-                if (pos > -1) {
-                    list.splice(pos, 1);
-                }
-                appCache.add('savepoints', list);
-            });
+            ox.ui.App.removeRestorePoint(uniqueID);
         }
     });
 
@@ -387,6 +378,19 @@ define("io.ox/core/desktop",
         getSavePoints: function () {
             return appCache.get('savepoints').pipe(function (list) {
                 return _(list || []).filter(function (obj) { return 'point' in obj; });
+            });
+        },
+
+        removeRestorePoint: function (id) {
+            return appCache.get('savepoints').pipe(function (list) {
+                list = list || [];
+                var ids = _(list).pluck('id'),
+                    pos = _(ids).indexOf(id);
+                list = list.slice();
+                if (pos > -1) {
+                    list.splice(pos, 1);
+                }
+                return appCache.add('savepoints', list);
             });
         },
 

@@ -1,46 +1,59 @@
-@padding: 2px;
-@large-padding: 13px;
-@portal-background-alt: #333;
-@portal-background: #555;
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2012
+ * Mail: info@open-xchange.com
+ *
+ * @author Tobias Prinz <tobias.prinz@open-xchange.com>
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
 
 .io-ox-portal {
+
+    @padding: 2px;
+    @large-padding: 13px;
+    @portal-background-alt: #333;
+    @portal-background: #555;
+
     padding: @large-padding;
     position: relative;
     height: 100%;
     .overflow(auto);
 
     border-top: 1px solid #000;
-    background-color: #2C2C2C;
+    background-color: white;
 
-    background-image: -moz-linear-gradient(top, @portal-background-alt, @portal-background);
-    background-image: -ms-linear-gradient(top, @portal-background-alt, @portal-background);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@portal-background-alt), to(@portal-background));
-    background-image: -webkit-linear-gradient(top, @portal-background-alt, @portal-background);
-    background-image: -o-linear-gradient(top, @portal-background-alt, @portal-background);
-    background-image: linear-gradient(top, @portal-background-alt, @portal-background);
-    background-repeat: repeat-x;
-}
+    &, * {
+        .box-sizing(border-box);
+    }
 
-.io-ox-portal, .io-ox-portal * {
-    .box-sizing(border-box);
-}
-.io-ox-portal .clear-title {
-    margin: 0.5em 0 1em 0;
-    font-size: 16pt;
-}
-.io-ox-portal .vgrid-cell:last-child {
-    border-bottom: 0px none;
-}
-.io-ox-portal h1 {
-    font-size: 16pt;
-    font-weight: 300;
-    line-height: 1.15em;
-    font-family: @font-light;
-}
-.io-ox-portal h2 {
-    font-size: 18px; /* TODO: Either all px or all pt */
-    font-family: @font-light;
-}
+    .clear-title {
+        margin: 0.5em 0 1em 0;
+        font-size: 16pt;
+    }
+
+    .vgrid-cell:last-child {
+        border-bottom: 0px none;
+    }
+
+    h1 {
+        font-size: 16pt;
+        font-weight: 300;
+        line-height: 1.15em;
+        font-family: @font-light;
+    }
+
+    h2 {
+        font-size: 18px; /* TODO: Either all px or all pt */
+        font-family: @font-light;
+    }
+}    
+
 .io-ox-portal-greeting {
     font-family: @font-light;
     font-size: 22px;

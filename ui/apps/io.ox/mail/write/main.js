@@ -503,6 +503,7 @@ define('io.ox/mail/write/main',
             delete mail.files;
             return {
                 module: 'io.ox/mail/write',
+                description: gt('Mail') + ': ' + (mail.data.subject || gt('No subject')),
                 point: mail
             };
         };
