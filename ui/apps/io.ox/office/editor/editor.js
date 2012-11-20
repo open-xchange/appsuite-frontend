@@ -1274,7 +1274,7 @@ define('io.ox/office/editor/editor',
                     // text offset in paragraph, first and last text position in paragraph
                     offset = 0, startOffset = 0, endOffset = 0,
                     // table attributes
-                    attributes = { tableGrid: [], width: 0 },
+                    attributes = { tableGrid: [], width: 'auto' },
                     // default table style
                     tableStyleId = self.getDefaultUITableStylesheet(),
                     // operations generator
