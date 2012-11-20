@@ -867,6 +867,9 @@ define('io.ox/office/editor/editor',
                 // apply the operations
                 this.applyOperations(generator.getOperations());
 
+                // collapse selection to old range start
+                selection.setTextSelection(selection.getStartPosition());
+
             }, this);
         };
 
