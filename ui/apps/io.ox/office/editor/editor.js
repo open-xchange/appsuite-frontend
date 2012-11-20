@@ -373,8 +373,7 @@ define('io.ox/office/editor/editor',
                         // selections only)
                         if (!_.isNumber(endOffset)) {
                             generator.generateOperation(Operations.PARA_SPLIT, { start: [targetPosition, 0] });
-                            generator.generateOperation(Operations.ATTRS_CLEAR, [targetPosition]);
-                            generator.generateSetAttributesOperation(contentNode, [targetPosition]);
+                            generator.generateSetAttributesOperation(contentNode, [targetPosition], undefined, { clearAttributes: paragraphStyles.getAttributeNames() });
                         }
 
                         // operations for the text contents covered by the selection
@@ -1740,7 +1739,7 @@ define('io.ox/office/editor/editor',
          *  following options are supported:
          *  @param {Boolean} [options.clear=false]
          *      If set to true, all existing explicit attributes will be
-         *      removed from the selection, before applying the new attributes.
+         *      removed from the selection while applying the new attributes.
          */
         this.setAttributes = function (family, attributes, options) {
 
@@ -1754,26 +1753,34 @@ define('io.ox/office/editor/editor',
                     // operations generator
                     generator = new Operations.Generator(),
                     // the style sheet container
-                    styleSheets = this.getStyleSheets(family),
-                    // whether to generate 'clearAttributes' operations
-                    clear = Utils.getBooleanOption(options, 'clear', false);
+                    styleSheets = this.getStyleSheets(family);
 
-                // generates a 'setAttributes' or 'clearAttributes' operation
+                // generates a 'setAttributes' operation with the correct attributes
                 function generateAttributeOperation(startPosition, endPosition) {
 
                     var // the options for the operation
-                        operationOptions = { start: startPosition };
+                        operationOptions = { start: startPosition, attrs: attributes };
 
+                    // add end position if specified
                     if (_.isArray(endPosition)) {
                         operationOptions.end = endPosition;
                     }
-                    if (clear) {
-                        generator.generateOperation(Operations.ATTRS_CLEAR, operationOptions);
-                    }
-                    if (!_.isEmpty(attributes)) {
-                        generator.generateOperation(Operations.ATTRS_SET, _({ attrs: attributes }).extend(operationOptions));
-                    }
+
+                    // generate the 'setAttributes' operation
+                    generator.generateOperation(Operations.ATTRS_SET, operationOptions);
                 }
+
+                // add all attributes to be cleared
+                if (Utils.getBooleanOption(options, 'clear', false)) {
+                    _(styleSheets.getAttributeNames()).each(function (name) {
+                        if (!(name in attributes)) {
+                            attributes[name] = null;
+                        }
+                    });
+                }
+
+                // nothig to do if no attributes will be changed
+                if (_.isEmpty(attributes)) { return; }
 
                 // register pending style sheet via 'insertStyleSheet' operation
                 if (_.isString(attributes.style) && styleSheets.isDirty(attributes.style)) {
@@ -3094,11 +3101,6 @@ define('io.ox/office/editor/editor',
             implSetAttributes(operation.start, operation.end, operation.attrs);
         };
 
-        operationHandlers[Operations.ATTRS_CLEAR] = function (operation) {
-            // undo/redo generation is done inside implSetAttributes()
-            implSetAttributes(operation.start, operation.end, null);
-        };
-
         operationHandlers[Operations.PARA_INSERT] = function (operation) {
 
             var // the new paragraph
@@ -3203,8 +3205,7 @@ define('io.ox/office/editor/editor',
             // generate undo/redo operations
             if (generator) {
                 generator.generateOperation(Operations.PARA_SPLIT, { start: paraEndPosition });
-                generator.generateOperation(Operations.ATTRS_CLEAR, { start: nextParaPosition });
-                generator.generateSetAttributesOperation(nextParagraph, nextParaPosition);
+                generator.generateSetAttributesOperation(nextParagraph, nextParaPosition, undefined, { clearAttributes: paragraphStyles.getAttributeNames() });
                 undoManager.addUndo(generator.getOperations(), operation);
             }
 
@@ -4600,16 +4601,13 @@ define('io.ox/office/editor/editor',
          *  The logical end position of the element or text range to be
          *  formatted.
          *
-         * @param {Object|Null} attributes
+         * @param {Object} attributes
          *  A map with formatting attribute values, mapped by the attribute
-         *  names. If the value null is passed, all exlicit attributes will be
-         *  cleared from the selection.
+         *  names.
          */
         function implSetAttributes(start, end, attributes) {
 
-            var // setting or clearing attributes
-                clear = _.isNull(attributes),
-                // node info for start/end position
+            var // node info for start/end position
                 startInfo = null, endInfo = null,
                 // the style sheet container of the specified attribute family
                 styleSheets = null,
@@ -4624,12 +4622,7 @@ define('io.ox/office/editor/editor',
 
             // sets or clears the attributes using the current style sheet container
             function setElementAttributes(element) {
-                // set or clear the attributes at the element
-                if (clear) {
-                    styleSheets.clearElementAttributes(element, undefined, options);
-                } else {
-                    styleSheets.setElementAttributes(element, attributes, options);
-                }
+                styleSheets.setElementAttributes(element, attributes, options);
             }
 
             // change listener used to build the undo operations
@@ -4638,8 +4631,8 @@ define('io.ox/office/editor/editor',
                 var // selection object representing the passed element
                     range = Position.getPositionRangeForNode(editdiv, element),
                     // the operation used to undo the attribute changes
-                    undoOperation = _({ name: Operations.ATTRS_SET, attrs: {} }).extend(range),
-                    // last undo operation (used to merge sibling character undos)
+                    undoOperation = { name: Operations.ATTRS_SET, start: range.start, end: range.end, attrs: {} },
+                    // last undo operation (used to merge character attributes of sibling text spans)
                     lastUndoOperation = ((undoOperations.length > 0) && (startInfo.family === 'character')) ? _.last(undoOperations) : null;
 
                 // find all old attributes that have been changed or cleared
@@ -4747,13 +4740,12 @@ define('io.ox/office/editor/editor',
 
             // create the undo action
             if (undoManager.isEnabled()) {
-                redoOperation = clear ? { name: Operations.ATTRS_CLEAR } : { name: Operations.ATTRS_SET, attrs: attributes };
-                _(redoOperation).extend({ start: start, end: end });
+                redoOperation = { name: Operations.ATTRS_SET, start: start, end: end, attrs: attributes };
                 undoManager.addUndo(undoOperations, redoOperation);
             }
 
             // update numberings and bullets (attributes may be null if called from clearAttributes operation)
-            if ((startInfo.family === 'paragraph') && (clear || ('style' in attributes) || ('indentLevel' in attributes) || ('numId' in attributes))) {
+            if ((startInfo.family === 'paragraph') && (('style' in attributes) || ('indentLevel' in attributes) || ('numId' in attributes))) {
                 implUpdateLists();
             }
 

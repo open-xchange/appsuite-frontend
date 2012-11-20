@@ -101,7 +101,7 @@ define('io.ox/office/editor/format/tablerowstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'row', DEFINITIONS);
+        StyleSheets.call(this, documentStyles, 'row');
 
         // initialization -----------------------------------------------------
 
@@ -112,6 +112,6 @@ define('io.ox/office/editor/format/tablerowstyles',
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: TableRowStyles });
+    return StyleSheets.extend({ constructor: TableRowStyles }, { DEFINITIONS: DEFINITIONS });
 
 });

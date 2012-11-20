@@ -508,7 +508,7 @@ define('io.ox/office/editor/format/drawingstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'drawing', DEFINITIONS);
+        StyleSheets.call(this, documentStyles, 'drawing');
 
         // initialization -----------------------------------------------------
 
@@ -571,6 +571,6 @@ define('io.ox/office/editor/format/drawingstyles',
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: DrawingStyles });
+    return StyleSheets.extend({ constructor: DrawingStyles }, { DEFINITIONS: DEFINITIONS });
 
 });

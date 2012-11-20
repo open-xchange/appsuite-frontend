@@ -144,7 +144,7 @@ define('io.ox/office/editor/format/pagestyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'page', DEFINITIONS);
+        StyleSheets.call(this, documentStyles, 'page');
 
         // initialization -----------------------------------------------------
 
@@ -159,6 +159,6 @@ define('io.ox/office/editor/format/pagestyles',
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: PageStyles });
+    return StyleSheets.extend({ constructor: PageStyles }, { DEFINITIONS: DEFINITIONS });
 
 });

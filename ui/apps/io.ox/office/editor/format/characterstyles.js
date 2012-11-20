@@ -179,7 +179,7 @@ define('io.ox/office/editor/format/characterstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'character', DEFINITIONS);
+        StyleSheets.call(this, documentStyles, 'character');
 
         // initialization -----------------------------------------------------
 
@@ -231,6 +231,6 @@ define('io.ox/office/editor/format/characterstyles',
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: CharacterStyles });
+    return StyleSheets.extend({ constructor: CharacterStyles }, { DEFINITIONS: DEFINITIONS });
 
 });
