@@ -34,7 +34,6 @@ define('io.ox/office/editor/operations',
      */
     var Operations = {
 
-        INIT_DOCUMENT: 'initDocument',
         SET_DOCUMENT_ATTRIBUTES: 'setDocumentAttributes',
 
         DELETE: 'delete',

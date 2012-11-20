@@ -634,16 +634,39 @@ define('io.ox/office/editor/editor',
             }, 0, clipboard, selection);
         };
 
-        // ==================================================================
-        // HIGH LEVEL EDITOR API which finally results in Operations
-        // and creates Undo Actions.
-        // Public functions, that are called from outside the editor
-        // and generate operations.
-        // ==================================================================
-
         this.initDocument = function () {
-            var newOperation = { name: 'initDocument' };
-            applyOperation(newOperation);
+
+            var // container for the top-level paragraphs
+                pageContentNode = DOM.getPageContentNode(editdiv),
+                // the initial paragraph node in an empty document
+                paragraph = DOM.createParagraphNode();
+
+            // create empty page with single paragraph
+            pageContentNode.empty().append(paragraph);
+            validateParagraphNode(paragraph);
+
+            // initialize default page formatting
+            pageStyles.updateElementFormatting(editdiv);
+
+            // Special handling for first paragraph, that has been inserted
+            // above and thus exists already before any style sheets have been
+            // inserted into the document. It may still refer implicitly to the
+            // default paragraph style, therefore its CSS formatting must be
+            // updated after the document has been loaded.
+            // TODO: better solution needed when style cheets may change at runtime
+            paragraphStyles.one('change', function () {
+                var firstParagraph = pageContentNode[0].firstChild;
+                if (DOM.isParagraphNode(firstParagraph)) {
+                    paragraphStyles.updateElementFormatting(firstParagraph);
+                }
+            });
+
+            // set initial selection
+            selection.selectTopPosition();
+            lastOperationEnd = selection.getStartPosition();
+
+            undoManager.clear();
+            self.setEditMode(null); // set null for 'read-only' and not yet determined edit status by the server
         };
 
         /**
@@ -796,6 +819,13 @@ define('io.ox/office/editor/editor',
             // return whether any text in the document matches the passed query text
             return this.hasHighlighting();
         };
+
+        // ==================================================================
+        // HIGH LEVEL EDITOR API which finally results in Operations
+        // and creates Undo Actions.
+        // Public functions, that are called from outside the editor
+        // and generate operations.
+        // ==================================================================
 
         /**
          * Generates the operations that will delete the current selection, and
@@ -2366,10 +2396,6 @@ define('io.ox/office/editor/editor',
                 else if (c === 'I') {
                     self.insertParagraph([DOM.getPageContentNode(editdiv).children().length]);
                 }
-                else if (c === 'D') {
-                    self.initDocument();
-                    self.grabFocus(true);
-                }
                 else if (c === 'T') {
                     self.insertTable({width: 2, height: 4});
                 }
@@ -2886,24 +2912,23 @@ define('io.ox/office/editor/editor',
             return app.getDocumentFilterUrl('getfile', options);
         }
 
-        operationHandlers[Operations.INIT_DOCUMENT] = function (operation) {
-            implInitDocument();
-        };
-
         operationHandlers[Operations.SET_DOCUMENT_ATTRIBUTES] = function (operation) {
 
-            var // document proerties container
-                documentAttributes = self.getDocumentAttributes(),
-                // passed properties from operation
-                properties = _.isObject(operation.attrs) ? operation.attrs : {};
+            var // passed attributes from operation
+                attributes = _.isObject(operation.attrs) ? operation.attrs : {};
 
-            // read various document properties and set it at the document styles
-            if (properties.defaultTabStop) {
-                documentAttributes.defaultTabStop = properties.defaultTabStop;
-            }
-            if (properties.zoom) {
-                documentAttributes.zoom = properties.zoom;
-            }
+            // global document attributes
+            documentStyles.setAttributes(attributes.document);
+
+            // default attribute values of other style families
+            _(attributes).each(function (defaults, family) {
+                var styleSheets = documentStyles.getStyleSheets(family);
+                if (styleSheets) {
+                    styleSheets.setAttributeDefaults(defaults);
+                }
+            });
+
+            // setting default attributes is not undoable
         };
 
         operationHandlers[Operations.TEXT_INSERT] = function (operation) {
@@ -2976,15 +3001,11 @@ define('io.ox/office/editor/editor',
             }
 
             if (undoManager.isEnabled()) {
-                // TODO!!!
+                undoManager.addUndo({ name: Operations.DELETE_STYLE, type: operation.type, styleId: operation.styleId }, operation);
             }
 
-            if (operation.poolDefault === true) {
-                styleSheets.setAttributeDefaults(attributes[operation.type]);
-            } else {
-                styleSheets.addStyleSheet(operation.styleId, operation.styleName, operation.parent, attributes,
-                    { hidden: operation.hidden, priority: operation.uiPriority, defStyle: operation['default'] });
-            }
+            styleSheets.addStyleSheet(operation.styleId, operation.styleName, operation.parent, attributes,
+                { hidden: operation.hidden, priority: operation.uiPriority, defStyle: operation['default'] });
         };
 
         operationHandlers[Operations.INSERT_THEME] = function (operation) {
@@ -4222,44 +4243,6 @@ define('io.ox/office/editor/editor',
             { tables: $() }
 
         ); // implTableChanged()
-
-        /**
-         * Has to be called for the initialization of a new document.
-         */
-        function implInitDocument() {
-
-            var // container for the top-level paragraphs
-                pageContentNode = DOM.getPageContentNode(editdiv),
-                // the initial paragraph node in an empty document
-                paragraph = DOM.createParagraphNode();
-
-            // create empty page with single paragraph
-            pageContentNode.empty().append(paragraph);
-            validateParagraphNode(paragraph);
-
-            // initialize default page formatting
-            pageStyles.updateElementFormatting(editdiv);
-
-            // Special handling for first paragraph, that has been inserted
-            // above and thus exists already before any style sheets have been
-            // inserted into the document. It may still refer implicitly to the
-            // default paragraph style, therefore its CSS formatting must be
-            // updated after the document has been loaded.
-            // TODO: better solution needed when style cheets may change at runtime
-            paragraphStyles.one('change', function () {
-                var firstParagraph = pageContentNode[0].firstChild;
-                if (DOM.isParagraphNode(firstParagraph)) {
-                    paragraphStyles.updateElementFormatting(firstParagraph);
-                }
-            });
-
-            // set initial selection
-            selection.selectTopPosition();
-            lastOperationEnd = selection.getStartPosition();
-
-            undoManager.clear();
-            self.setEditMode(null); // set null for 'read-only' and not yet determined edit status by the server
-        }
 
         /**
          * Returns a text span and its internal offset for the specified
