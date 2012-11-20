@@ -1414,7 +1414,7 @@ define('io.ox/office/editor/editor',
                             // setAttribute uses a closed range therefore -1
                             end[end.length - 1] -= 1;
                             generator.generateOperation(Operations.ATTRS_SET, {
-                                attrs: { url: '', style: null },
+                                attrs: { url: null, style: null },
                                 start: _.copy(start, true),
                                 end: _.copy(end, true)
                             });
@@ -2050,18 +2050,22 @@ define('io.ox/office/editor/editor',
                 if (!found[0]) {
                     page.append(hyperlinkPopup);
                     selection.on('change', function () {
-                        var url = Hyperlink.getURLFromPosition(self, selection);
-                        if (url) {
+                        var result = Hyperlink.getURLFromPosition(self, selection);
+                        if (result.url) {
                             var link = $('a', hyperlinkPopup[0]),
                                 urlSelection = selection.getStartPosition(),
-                                obj = Position.getDOMPosition(self.getNode(), urlSelection);
+                                obj = null;
 
+                            if (result.beforeHyperlink) {
+                                urlSelection[urlSelection.length - 1] += 1;
+                            }
+                            obj = Position.getDOMPosition(self.getNode(), urlSelection);
                             if (obj && obj.node && DOM.isTextSpan(obj.node.parentNode)) {
                                 var pos = urlSelection[urlSelection.length - 1],
-                                    startEndPos = Hyperlink.findURLSelection(self, obj.node.parentNode, pos, url),
+                                    startEndPos = Hyperlink.findURLSelection(self, urlSelection, result.url),
                                     left, top, height, width;
 
-                                if (pos !== startEndPos.end) {
+                                if (pos !== startEndPos.end || result.beforeHyperlink) {
                                     // find out position of the first span of our selection
                                     urlSelection[urlSelection.length - 1] = startEndPos.start;
                                     obj = Position.getDOMPosition(self.getNode(), urlSelection, true);
@@ -2084,8 +2088,8 @@ define('io.ox/office/editor/editor',
                                     left = (left + scrollLeft) - parentLeft;
                                     top = (top + scrollTop + height) - parentTop;
 
-                                    link.text(url);
-                                    link.attr({href: url});
+                                    link.text(result.url);
+                                    link.attr({href: result.url});
                                     hyperlinkPopup.show();
                                     hyperlinkPopup.css({left: left, top: top});
                                     width = hyperlinkPopup.width();
@@ -2093,7 +2097,7 @@ define('io.ox/office/editor/editor',
                                         left -= (((left + width) - parentWidth) + parentLeft);
                                         hyperlinkPopup.css({left: left});
                                     }
-                                    if (pos === startEndPos.start) {
+                                    if (pos === startEndPos.start || result.beforeHyperlink) {
                                         // special case: at the start of a hyperlink we want to
                                         // write with normal style
                                         preselectedAttributes = { style: null, url: null };
@@ -2109,6 +2113,8 @@ define('io.ox/office/editor/editor',
                         }
                         else {
                             hyperlinkPopup.hide();
+                            if (result.setPreselectedAttributes)
+                                preselectedAttributes = { style: null, url: null };
                         }
                     });
                 }
@@ -2136,7 +2142,7 @@ define('io.ox/office/editor/editor',
                 characterStyles.addStyleSheet(
                         hyperlinkDef.styleid, hyperlinkDef.stylename,
                         parentId, hyperlinkAttr,
-                        { hidden: false, priority: hyperlinkDef['default'], defStyle: false, dirty: true });
+                        { hidden: false, priority: hyperlinkDef.uipriority, defStyle: false, dirty: true });
             }
         }
 
@@ -2658,6 +2664,16 @@ define('io.ox/office/editor/editor',
                 endPosition[endPosition.length - 1]++;
 
                 self.deleteSelected();
+
+                if ((event.keyCode === KeyCodes.SPACE) && !selection.hasRange()) {
+                    // check left text to support hyperlink auto correction
+                    var hyperlinkSelection = Hyperlink.checkForHyperlinkText(selection.getEnclosingParagraph(), startPosition);
+                    if (hyperlinkSelection !== null) {
+                        Hyperlink.insertHyperlink(self, hyperlinkSelection.start, hyperlinkSelection.end, hyperlinkSelection.text);
+                        preselectedAttributes = { style: null, url: null };
+                    }
+                }
+
                 // Selection was adjusted, so we need to use start, not end
                 self.insertText(c, startPosition);
 
@@ -2684,6 +2700,16 @@ define('io.ox/office/editor/editor',
                     self.deleteSelected();
                     var startPosition = selection.getStartPosition(),
                         lastValue = startPosition.length - 1;
+
+                    // check for a possible hyperlink text
+                    if (!hasSelection) {
+
+                        var hyperlinkSelection = Hyperlink.checkForHyperlinkText(
+                                selection.getEnclosingParagraph(), selection.getStartPosition());
+                        if (hyperlinkSelection !== null) {
+                            Hyperlink.insertHyperlink(self, hyperlinkSelection.start, hyperlinkSelection.end, hyperlinkSelection.text);
+                        }
+                    }
 
                     //at first check if a paragraph has to be inserted before the current table
                     if ((lastValue >= 4) &&
@@ -3930,6 +3956,16 @@ define('io.ox/office/editor/editor',
                 }
 
             }, undefined, { allNodes: true });
+
+            // Special case for hyperlink formatting and empty paragraph (just one empty textspan)
+            // Here we always don't want to have the hyperlink formatting, we hardly reset these attributes
+            if (DOM.isTextSpan(paragraph.firstElementChild) && (paragraph.children.length === 1) &&
+                (paragraph.firstElementChild.textContent.length === 0)) {
+                var url = characterStyles.getElementAttributes(paragraph.firstElementChild).url;
+                if ((url !== null) && (url.length > 0)) {
+                    characterStyles.setElementAttributes(paragraph.firstElementChild, { url: null, style: null });
+                }
+            }
 
             // Convert consecutive white-space characters to sequences of SPACE/NBSP
             // pairs. We cannot use the CSS attribute white-space:pre-wrap, because
