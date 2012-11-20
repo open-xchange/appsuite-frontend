@@ -397,10 +397,9 @@ $(document).ready(function () {
                 'You don&rsquo;t need administrator rights. Just restart IE after installation.</div>'
             ));
         }
-
         return $.when(
                 // load extensions
-                require(['io.ox/core/extensions']).pipe(function (ext) { return ext.loadPlugins(); }),
+                require(['io.ox/core/manifests']).pipe(function (manifests) { return manifests.loadPluginsFor(ox.signin ? 'signin' : 'core'); }),
                 // use browser language
                 setDefaultLanguage()
             )

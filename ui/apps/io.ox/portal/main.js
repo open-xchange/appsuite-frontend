@@ -14,6 +14,7 @@
 
 define.async('io.ox/portal/main',
     ['io.ox/core/extensions',
+     'io.ox/core/manifests',
      'io.ox/core/api/user',
      'io.ox/core/date',
      'io.ox/core/taskQueue',
@@ -23,12 +24,12 @@ define.async('io.ox/portal/main',
      'io.ox/keychain/api',
      'settings!io.ox/portal',
      'less!io.ox/portal/style.css'],
-function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
+function (ext, manifests, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
 
     'use strict';
 
     // wait for plugin dependencies
-    var plugins = ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' });
+    var plugins = manifests.pluginsFor('portal');
     var pluginSettings = _.sortBy(settings.get('pluginSettings') || {}, function (obj) { return obj.index; });
 
     var allActivePluginIds = {};

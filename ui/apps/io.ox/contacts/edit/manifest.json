@@ -1,0 +1,5 @@
+{
+	pluginFor: "tests",
+	requires: "contacts",
+	path: "io.ox/contacts/edit/test"
+}

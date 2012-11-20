@@ -1,0 +1,4 @@
+{
+	pluginFor: "tests",
+	path: "io.ox/core/test"
+}

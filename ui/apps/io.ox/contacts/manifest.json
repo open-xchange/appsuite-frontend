@@ -1,8 +1,15 @@
-{
-    title: "Address Book",
-    company: "Open-Xchange",
-    icon: "addressbook.png",
-    category: "Basic",
-    settings: false,
-    requires: "contacts"
-}
+[
+	{
+	    title: "Address Book",
+	    company: "Open-Xchange",
+	    icon: "addressbook.png",
+	    category: "Basic",
+	    settings: false,
+	    requires: "contacts"
+	},
+	{
+		pluginFor: "tests",
+		path: "io.ox/contacts/test",
+		requires: "contacts"
+	}
+]

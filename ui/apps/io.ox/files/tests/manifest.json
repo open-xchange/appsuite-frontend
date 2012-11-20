@@ -1,0 +1,10 @@
+[
+	{
+		pluginFor: "tests",
+		path: "io.ox/files/tests/interface/test"
+	},
+	{
+		pluginFor: "tests",
+		path: "io.ox/files/tests/unit/test"
+	}
+]

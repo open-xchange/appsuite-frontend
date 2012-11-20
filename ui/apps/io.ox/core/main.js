@@ -17,12 +17,13 @@ define("io.ox/core/main",
      "io.ox/core/http",
      "io.ox/core/api/apps",
      "io.ox/core/extensions",
+     "io.ox/core/manifests",
      "io.ox/core/extPatterns/stage",
      "io.ox/core/date",
      'io.ox/core/notifications',
      'io.ox/core/commons', // defines jQuery plugin
      "gettext!io.ox/core",
-     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, gt) {
+     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, manifests, Stage, date, notifications, commons, gt) {
 
     "use strict";
 
@@ -443,11 +444,11 @@ define("io.ox/core/main",
         // start loading stuff
         baton.loaded = $.when(
             baton.block,
-            ext.loadPlugins(),
+            manifests.loadPluginsFor(ox.signin ? 'signin' : 'core'),
             require(baton.autoLaunchModules),
             require(['io.ox/core/api/account']).pipe(function (api) { return api.all(); })
         );
-
+           
         new Stage('io.ox/core/stages', {
             id: 'first',
             index: 100,

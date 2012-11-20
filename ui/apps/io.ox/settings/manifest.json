@@ -1,7 +1,13 @@
-{
-	title: "Settings",
-	company: "Open-Xchange",
-	icon: "files.png",
-	category: "Basic",
-	settings: false
-}
+[
+	{
+		title: "Settings",
+		company: "Open-Xchange",
+		icon: "files.png",
+		category: "Basic",
+		settings: false
+	},
+	{
+		pluginFor: "tests",
+		path: "io.ox/settings/test"
+	}
+]

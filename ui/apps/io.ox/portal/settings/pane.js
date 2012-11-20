@@ -14,6 +14,7 @@
 
 define('io.ox/portal/settings/pane',
       ['io.ox/core/extensions',
+       'io.ox/core/manifests',
        'io.ox/settings/utils',
        'io.ox/portal/settings/plugin/model',
        'io.ox/core/tk/dialogs',
@@ -21,7 +22,7 @@ define('io.ox/portal/settings/pane',
        'text!io.ox/portal/settings/tpl/listbox.html',
        'text!io.ox/portal/settings/tpl/plugin.html',
        'gettext!io.ox/portal',
-       'apps/io.ox/core/tk/jquery-ui.min.js'], function (ext, utils, PluginModel, dialogs, settings, tmplListBox, tmplPlugin, gt) {
+       'apps/io.ox/core/tk/jquery-ui.min.js'], function (ext, manifests, utils, PluginModel, dialogs, settings, tmplListBox, tmplPlugin, gt) {
 
     'use strict';
 
@@ -48,7 +49,7 @@ define('io.ox/portal/settings/pane',
 
     var getPlugins = function () {
         // get plugins
-        var plugins = _(ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal', nameOnly: true })).map(function (id) {
+        var plugins = _(manifests.pluginsFor('portal')).map(function (id) {
             // apply defaults
             var plugin = _.extend({ id: id, name: id, active: false, index: MAX_INDEX }, getPluginById(id));
             // put disabled plugins to end of list

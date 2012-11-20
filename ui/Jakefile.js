@@ -395,7 +395,8 @@ _(manifests).each(function (m) {
         combinedManifest.push(entry);
     });
 });
-fs.writeFileSync("tmp/core-manifest.json", JSON.stringify(combinedManifest));
+// TODO: Put this where it's supposed to be
+fs.writeFileSync("/tmp/core-manifest.json", JSON.stringify(combinedManifest));
 
 // time zone database
 

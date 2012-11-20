@@ -1,3 +1,9 @@
-{
-	pluginFor: "core"
-}
+[
+	{
+		pluginFor: "core"
+	},
+	{
+		pluginFor: "test",
+		path: "plugins/halo/test"
+	}
+]
