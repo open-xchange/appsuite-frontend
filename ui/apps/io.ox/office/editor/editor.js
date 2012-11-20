@@ -2787,9 +2787,16 @@ define('io.ox/office/editor/editor',
 
             (function findTextNodes(current, depth) {
 
+                var // the length (of chars, tabs, drawings...) to be added to the oxo position
+                    insertLength = 0,
+                    // the current child node
+                    child,
+                    // determins if the node gets parsed recursively or is skipped
+                    nextLevel;
+
                 for (var i = 0; i < current.childNodes.length; i++) {
-                    var child = current.childNodes[i],
-                        nextLevel = true;
+                    child = current.childNodes[i];
+                    nextLevel = true;
 
                     if (child.nodeType === 3) {
                         // handle non-whitespace characters and non-breaking spaces only
@@ -2801,8 +2808,10 @@ define('io.ox/office/editor/editor',
                                 if (splitted[j] === '\t') {
                                     // tab
                                     result.push({operation: Operations.TAB_INSERT, depth: depth});
+                                    insertLength ++;
                                 } else {
                                     // text
+                                    insertLength += splitted[j].length;
                                     result.push({operation: Operations.TEXT_INSERT, data: splitted[j], depth: depth});
                                 }
                             }
@@ -2813,7 +2822,17 @@ define('io.ox/office/editor/editor',
                             result.push({operation: Operations.PARA_INSERT, depth: depth});
                         } else if ($(child).is('img')) {
                             result.push({operation: Operations.DRAWING_INSERT, data: child.src, depth: depth});
+                            insertLength ++;
                         } else if ($(child).is('style')) {
+                            // don't parse <style> elements
+                            nextLevel = false;
+                        }  else if ($(child).is('a')) {
+                            // before we can add the operation for inserting the hyperlink we need to add the insertText operation
+                            // so we first parse the next recursion level
+                            var len = findTextNodes(child, depth + 1);
+                            // and then add the hyperlink
+                            result.push({operation: 'insertHyperlink', data: child.href, length: len, depth: depth});
+                            // we already traversed the tree, so don't do it again
                             nextLevel = false;
                         }
 
@@ -2822,6 +2841,9 @@ define('io.ox/office/editor/editor',
                         }
                     }
                 }
+
+                return insertLength;
+
             } (clipboard.get(0), 0));
 
             return result;
@@ -2834,8 +2856,19 @@ define('io.ox/office/editor/editor',
          */
         function createOperationsFromTextClipboard(clipboardData) {
 
-            var lastPos = selection.startPaM.oxoPosition.length - 1;
+            var lastPos = selection.startPaM.oxoPosition.length - 1,
+                hyperLinkInserted = false;
 //                currentDepth = clipboardData[0] && clipboardData[0].depth;
+
+
+            // the operation after insertHyperlink needs to remove the hyperlink style again
+            function removeHyperLinkStyle(startPosition, endPosition) {
+                if (hyperLinkInserted) {
+                    Hyperlink.removeHyperlink(self, startPosition, endPosition);
+                    hyperLinkInserted = false;
+                }
+            }
+
 
             if (selection.hasRange()) {
                 self.deleteSelected();
@@ -2850,23 +2883,30 @@ define('io.ox/office/editor/editor',
 
                 _.each(clipboardData, function (entry) {
 
+                    var start = _.copy(selection.startPaM.oxoPosition, true),
+                        end = _.copy(selection.startPaM.oxoPosition, true);
+
                     switch (entry.operation) {
 
                     case Operations.PARA_INSERT:
-                        self.splitParagraph(selection.startPaM.oxoPosition);
-                        selection.startPaM.oxoPosition[lastPos - 1] ++;
-                        selection.startPaM.oxoPosition[lastPos] = 0;
-                        selection.setTextSelection(selection.startPaM.oxoPosition);
+                        self.splitParagraph(start);
+                        end[lastPos - 1] ++;
+                        end[lastPos] = 0;
+                        selection.setTextSelection(end);
                         break;
 
                     case Operations.TEXT_INSERT:
-                        self.insertText(entry.data, selection.startPaM.oxoPosition);
-                        selection.startPaM.oxoPosition[lastPos] += entry.data.length;
-                        selection.setTextSelection(selection.startPaM.oxoPosition);
+                        self.insertText(entry.data, start);
+                        end[lastPos] += entry.data.length;
+                        removeHyperLinkStyle(start, end);
+                        selection.setTextSelection(end);
                         break;
 
                     case Operations.TAB_INSERT:
                         self.insertTab();
+                        end[lastPos] ++;
+                        removeHyperLinkStyle(start, end);
+                        selection.setTextSelection(end);
                         break;
 
                     case Operations.DRAWING_INSERT:
@@ -2878,6 +2918,23 @@ define('io.ox/office/editor/editor',
                                 // image url
                                 self.insertImageURL(entry.data);
                             }
+                            end[lastPos] ++;
+                            removeHyperLinkStyle(start, end);
+                            selection.setTextSelection(end);
+                        }
+                        break;
+
+                    case 'insertHyperlink':
+                        if (entry.data && _.isNumber(entry.length)) {
+                            // the text for the hyperlink has already been inserted and the current selection is right after this text,
+                            // so the start for the hyperlink attribute is the current selection minus the text length
+                            start[lastPos] -= entry.length;
+                            if (start[lastPos] < 0) {
+                                start[lastPos] = 0;
+                            }
+
+                            Hyperlink.insertHyperlink(self, start, end, entry.data);
+                            hyperLinkInserted = true;
                         }
                         break;
 

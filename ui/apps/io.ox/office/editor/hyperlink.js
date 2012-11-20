@@ -638,6 +638,31 @@ define('io.ox/office/editor/hyperlink',
         editor.applyOperations(generator.getOperations());
     };
 
+    /**
+     * 'Removes' the hyperlink at the provided selection.
+     *
+     * @param editor {Editor}
+     *  The editor instance to use.
+     *
+     * @param start {Position}
+     *  The start position of the selection
+     *
+     * @param end {Position}
+     *  The end position of the selection.
+     */
+    Hyperlink.removeHyperlink = function (editor, start, end) {
+
+        var generator = new Operations.Generator();
+
+        generator.generateOperation(Operations.ATTRS_SET, {
+            attrs: { url: null, style: null },
+            start: _.clone(start),
+            end: _.clone(end)
+        });
+
+        editor.applyOperations(generator.getOperations());
+    };
+
     // exports ================================================================
 
     return Hyperlink;
