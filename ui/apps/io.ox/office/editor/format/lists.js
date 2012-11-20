@@ -39,27 +39,27 @@ define('io.ox/office/editor/format/lists',
             defaultNumberingNumId, defaultBulletNumId;
 
         var defaultBulletListDefinition = {
-            listlevel0: { justification: 'left', leftindent: 1270,     numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', firstlineindent: -635 },
-            listlevel1: { justification: 'left', leftindent: 2 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Courier New', leveltext: 'o',  firstlineindent: -635 },
-            listlevel2: { justification: 'left', leftindent: 3 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Wingdings', leveltext: '', firstlineindent: -635 },
-            listlevel3: { justification: 'left', leftindent: 4 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', firstlineindent: -635 },
-            listlevel4: { justification: 'left', leftindent: 5 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Courier New', leveltext: 'o', firstlineindent: -635 },
-            listlevel5: { justification: 'left', leftindent: 6 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Wingdings', leveltext: '', firstlineindent: -635 },
-            listlevel6: { justification: 'left', leftindent: 7 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Symbol', leveltext: '', firstlineindent: -635 },
-            listlevel7: { justification: 'left', leftindent: 8 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Courier New', leveltext: 'o',  firstlineindent: -635 },
-            listlevel8: { justification: 'left', leftindent: 9 * 1270, numberformat: 'bullet', levelstart: 1, fontname: 'Wingdings', leveltext: '', firstlineindent: -635 }
+            listLevel0: { justification: 'left', indentLeft: 1270,     numberFormat: 'bullet', levelStart: 1, fontName: 'Symbol', levelText: '', indentFirstLine: -635 },
+            listLevel1: { justification: 'left', indentLeft: 2 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Courier New', levelText: 'o',  indentFirstLine: -635 },
+            listLevel2: { justification: 'left', indentLeft: 3 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Wingdings', levelText: '', indentFirstLine: -635 },
+            listLevel3: { justification: 'left', indentLeft: 4 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Symbol', levelText: '', indentFirstLine: -635 },
+            listLevel4: { justification: 'left', indentLeft: 5 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Courier New', levelText: 'o', indentFirstLine: -635 },
+            listLevel5: { justification: 'left', indentLeft: 6 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Wingdings', levelText: '', indentFirstLine: -635 },
+            listLevel6: { justification: 'left', indentLeft: 7 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Symbol', levelText: '', indentFirstLine: -635 },
+            listLevel7: { justification: 'left', indentLeft: 8 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Courier New', levelText: 'o',  indentFirstLine: -635 },
+            listLevel8: { justification: 'left', indentLeft: 9 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Wingdings', levelText: '', indentFirstLine: -635 }
         };
         // O 2010 uses: decimal-lowerLetter-lowerRomen-decimal-lowerLetter-lowerRomen-decimal-lowerLetter-lowerRomen-
         var defaultNumberingListDefinition = {
-            listlevel0: { numberformat: 'decimal',       levelstart: 1, leftindent: 1270,     firstlineindent: -635, justification: 'left',  leveltext: '%1.'},
-            listlevel1: { numberformat: 'lowerLetter',   levelstart: 1, leftindent: 2 * 1270, firstlineindent: -635, justification: 'left',  leveltext: '%2.'},
-            listlevel2: { numberformat: 'upperLetter',   levelstart: 1, leftindent: 3 * 1270, firstlineindent: -635, justification: 'right', leveltext: '%3.'},
-            listlevel3: { numberformat: 'lowerRoman',    levelstart: 1, leftindent: 4 * 1270, firstlineindent: -635, justification: 'left',  leveltext: '%4.'},
-            listlevel4: { numberformat: 'upperRoman',    levelstart: 1, leftindent: 5 * 1270, firstlineindent: -635, justification: 'left',  leveltext: '%5.'},
-            listlevel5: { numberformat: 'decimal',       levelstart: 1, leftindent: 6 * 1270, firstlineindent: -635, justification: 'right', leveltext: '%6.'},
-            listlevel6: { numberformat: 'lowerLetter',   levelstart: 1, leftindent: 7 * 1270, firstlineindent: -635, justification: 'left',  leveltext: '%7.'},
-            listlevel7: { numberformat: 'upperLetter',   levelstart: 1, leftindent: 8 * 1270, firstlineindent: -635, justification: 'left',  leveltext: '%8.'},
-            listlevel8: { numberformat: 'lowerRoman',    levelstart: 1, leftindent: 9 * 1270, firstlineindent: -635, justification: 'right', leveltext: '%9.'}
+            listLevel0: { numberFormat: 'decimal',       levelStart: 1, indentLeft: 1270,     indentFirstLine: -635, justification: 'left',  levelText: '%1.'},
+            listLevel1: { numberFormat: 'lowerLetter',   levelStart: 1, indentLeft: 2 * 1270, indentFirstLine: -635, justification: 'left',  levelText: '%2.'},
+            listLevel2: { numberFormat: 'upperLetter',   levelStart: 1, indentLeft: 3 * 1270, indentFirstLine: -635, justification: 'right', levelText: '%3.'},
+            listLevel3: { numberFormat: 'lowerRoman',    levelStart: 1, indentLeft: 4 * 1270, indentFirstLine: -635, justification: 'left',  levelText: '%4.'},
+            listLevel4: { numberFormat: 'upperRoman',    levelStart: 1, indentLeft: 5 * 1270, indentFirstLine: -635, justification: 'left',  levelText: '%5.'},
+            listLevel5: { numberFormat: 'decimal',       levelStart: 1, indentLeft: 6 * 1270, indentFirstLine: -635, justification: 'right', levelText: '%6.'},
+            listLevel6: { numberFormat: 'lowerLetter',   levelStart: 1, indentLeft: 7 * 1270, indentFirstLine: -635, justification: 'left',  levelText: '%7.'},
+            listLevel7: { numberFormat: 'upperLetter',   levelStart: 1, indentLeft: 8 * 1270, indentFirstLine: -635, justification: 'left',  levelText: '%8.'},
+            listLevel8: { numberFormat: 'lowerRoman',    levelStart: 1, indentLeft: 9 * 1270, indentFirstLine: -635, justification: 'right', levelText: '%9.'}
         };
         // base constructor ---------------------------------------------------
 
@@ -69,24 +69,24 @@ define('io.ox/office/editor/format/lists',
 
         function isLevelEqual(defaultLevel, compareLevel) {
             var ret = defaultLevel !== undefined && compareLevel !== undefined &&
-            defaultLevel.numberformat === compareLevel.numberformat &&
-            defaultLevel.leftindent === compareLevel.leftindent &&
-            defaultLevel.firstlineindent === compareLevel.firstlineindent &&
+            defaultLevel.numberFormat === compareLevel.numberFormat &&
+            defaultLevel.indentLeft === compareLevel.indentLeft &&
+            defaultLevel.indentFirstLine === compareLevel.indentFirstLine &&
             defaultLevel.justification === compareLevel.justification &&
-            defaultLevel.leveltext === compareLevel.leveltext &&
-            defaultLevel.fontname === compareLevel.fontname;
+            defaultLevel.levelText === compareLevel.levelText &&
+            defaultLevel.fontName === compareLevel.fontName;
             return ret;
         }
         function isDefinitionEqual(defaultDefinition, compareDefinition) {
-            var ret = isLevelEqual(defaultDefinition.listlevel0, compareDefinition.listlevel0) &&
-                    isLevelEqual(defaultDefinition.listlevel1, compareDefinition.listlevel1) &&
-                    isLevelEqual(defaultDefinition.listlevel2, compareDefinition.listlevel2) &&
-                    isLevelEqual(defaultDefinition.listlevel3, compareDefinition.listlevel3) &&
-                    isLevelEqual(defaultDefinition.listlevel4, compareDefinition.listlevel4) &&
-                    isLevelEqual(defaultDefinition.listlevel5, compareDefinition.listlevel5) &&
-                    isLevelEqual(defaultDefinition.listlevel6, compareDefinition.listlevel6) &&
-                    isLevelEqual(defaultDefinition.listlevel7, compareDefinition.listlevel7) &&
-                    isLevelEqual(defaultDefinition.listlevel8, compareDefinition.listlevel8);
+            var ret = isLevelEqual(defaultDefinition.listLevel0, compareDefinition.listLevel0) &&
+                    isLevelEqual(defaultDefinition.listLevel1, compareDefinition.listLevel1) &&
+                    isLevelEqual(defaultDefinition.listLevel2, compareDefinition.listLevel2) &&
+                    isLevelEqual(defaultDefinition.listLevel3, compareDefinition.listLevel3) &&
+                    isLevelEqual(defaultDefinition.listLevel4, compareDefinition.listLevel4) &&
+                    isLevelEqual(defaultDefinition.listLevel5, compareDefinition.listLevel5) &&
+                    isLevelEqual(defaultDefinition.listLevel6, compareDefinition.listLevel6) &&
+                    isLevelEqual(defaultDefinition.listLevel7, compareDefinition.listLevel7) &&
+                    isLevelEqual(defaultDefinition.listLevel8, compareDefinition.listLevel8);
 
             return ret;
         }
@@ -145,7 +145,7 @@ define('io.ox/office/editor/format/lists',
             }
             if (startValue > 0) {
                 ret.startnumber = startValue;
-                ret.numberformat = lowerText !== text ? 'upperRoman' : 'lowerRoman';
+                ret.numberFormat = lowerText !== text ? 'upperRoman' : 'lowerRoman';
             }
             return ret;
         }
@@ -155,29 +155,29 @@ define('io.ox/office/editor/format/lists',
          *
          * @param levelIndexes array of indexes of all numbering levels
          * @param ilvl current indentation level
-         * @param listdefinition properties of the list used
+         * @param listDefinition properties of the list used
          * @returns {Object}
          *  text element contains label text
          *  imgsrc element contains URI of the picture used
          *
          *  In case imgsrc is set then text will be empty
          */
-        function formatNumberType(levelIndexes, ilvl, listdefinition) {
+        function formatNumberType(levelIndexes, ilvl, listDefinition) {
             var ret = {};
-            var topLevelformat = listdefinition.listlevels[ilvl];
-            var leveltext = topLevelformat.leveltext ? topLevelformat.leveltext : '';
-            ret.suff = listdefinition.listlevels[ilvl].suff;
-            ret.tabpos = listdefinition.listlevels[ilvl].tabpos;
+            var topLevelformat = listDefinition.listLevels[ilvl];
+            var levelText = topLevelformat.levelText ? topLevelformat.levelText : '';
+            ret.suff = listDefinition.listLevels[ilvl].suff;
+            ret.tabpos = listDefinition.listLevels[ilvl].tabpos;
             for (;ilvl >= 0; --ilvl) {
-                var levelformat = listdefinition.listlevels[ilvl];
+                var levelFormat = listDefinition.listLevels[ilvl];
                 var seqNo = levelIndexes === undefined ? 0 :
-                    levelIndexes[ilvl] + (levelformat && levelformat.levelstart !== undefined ? levelformat.levelstart - 1 : 0);
+                    levelIndexes[ilvl] + (levelFormat && levelFormat.levelStart !== undefined ? levelFormat.levelStart - 1 : 0);
                 var levelToken = '%' + (ilvl + 1);
-                var indexpos = leveltext.indexOf(levelToken);
-                if (indexpos < 0 && levelformat.numberformat !== 'bullet')
+                var indexpos = levelText.indexOf(levelToken);
+                if (indexpos < 0 && levelFormat.numberFormat !== 'bullet')
                     continue;
                 var replacetext = '';
-                switch (levelformat.numberformat) {
+                switch (levelFormat.numberFormat) {
                 case "decimal":
                     replacetext = seqNo.toString();
                     break;
@@ -189,17 +189,17 @@ define('io.ox/office/editor/format/lists',
                     break;
                 case "lowerRoman":
                 case "upperRoman":
-                    replacetext = convertToRoman(seqNo, levelformat.numberformat === "upperRoman");
+                    replacetext = convertToRoman(seqNo, levelFormat.numberFormat === "upperRoman");
                     break;
                 case "bullet":
-                    if (levelformat.levelpicbulleturi) {
-                        ret.imgsrc = levelformat.levelpicbulleturi;
+                    if (levelFormat.levelPicBulletUri) {
+                        ret.imgsrc = levelFormat.levelPicBulletUri;
                         replacetext = '';
                     }
                     else {
-                        var charCode = levelformat.leveltext ? levelformat.leveltext.charCodeAt(0) : -1;
+                        var charCode = levelFormat.levelText ? levelFormat.levelText.charCodeAt(0) : -1;
                         if (charCode > 0 && (charCode < 0xE000 || charCode > 0xF8FF)) {
-                            replacetext = levelformat.leveltext;
+                            replacetext = levelFormat.levelText;
                         }
                         else
                             replacetext = "●";
@@ -210,19 +210,19 @@ define('io.ox/office/editor/format/lists',
                     break;
                 default:
                 }
-                if (levelformat.levelpicbulleturi) {
-                    leveltext = '';
+                if (levelFormat.levelPicBulletUri) {
+                    levelText = '';
                     break;
                 }
-                else if (levelformat.numberformat === 'bullet') {
-                    leveltext = replacetext;
-                    ret.color = levelformat.color;
+                else if (levelFormat.numberFormat === 'bullet') {
+                    levelText = replacetext;
+                    ret.color = levelFormat.color;
                     break;
                 }
                 else
-                    leveltext = leveltext.replace(levelToken, replacetext);
+                    levelText = levelText.replace(levelToken, replacetext);
             }
-            ret.text = leveltext;
+            ret.text = levelText;
             return ret;
         }
         // exports ================================================================
@@ -231,7 +231,7 @@ define('io.ox/office/editor/format/lists',
          * Adds a new list to this container. An existing list definition
          * with the specified identifier will be replaced.
          *
-         * @param {String} name
+         * @param {String} listIdentifier
          *  The name of of the new list definition.
          *
          * @param {Object} listDefinition
@@ -240,36 +240,36 @@ define('io.ox/office/editor/format/lists',
          * @returns {Lists}
          *  A reference to this instance.
          */
-        this.addList = function (listIdentifier, listdefinition) {
+        this.addList = function (listIdentifier, listDefinition) {
 
             var newPosition = lists.length;
             lists[newPosition] = {};
             var list = lists[newPosition];
             list.listIdentifier = listIdentifier;
             //list.listIdentifier = listIdentifier;
-            list.listlevels = [];
-            if (listdefinition) {
-                list.listlevels[0] = listdefinition.listlevel0;
-                list.listlevels[1] = listdefinition.listlevel1;
-                list.listlevels[2] = listdefinition.listlevel2;
-                list.listlevels[3] = listdefinition.listlevel3;
-                list.listlevels[4] = listdefinition.listlevel4;
-                list.listlevels[5] = listdefinition.listlevel5;
-                list.listlevels[6] = listdefinition.listlevel6;
-                list.listlevels[7] = listdefinition.listlevel7;
-                list.listlevels[8] = listdefinition.listlevel8;
-                if (listdefinition.defaultlist) {
-                    if (listdefinition.defaultlist === 'bullet')
+            list.listLevels = [];
+            if (listDefinition) {
+                list.listLevels[0] = listDefinition.listLevel0;
+                list.listLevels[1] = listDefinition.listLevel1;
+                list.listLevels[2] = listDefinition.listLevel2;
+                list.listLevels[3] = listDefinition.listLevel3;
+                list.listLevels[4] = listDefinition.listLevel4;
+                list.listLevels[5] = listDefinition.listLevel5;
+                list.listLevels[6] = listDefinition.listLevel6;
+                list.listLevels[7] = listDefinition.listLevel7;
+                list.listLevels[8] = listDefinition.listLevel8;
+                if (listDefinition.defaultlist) {
+                    if (listDefinition.defaultlist === 'bullet')
                         defaultBulletNumId = listIdentifier;
                     else
                         defaultNumberingNumId = listIdentifier;
                 } else {
                     if (defaultBulletNumId === undefined) {
-                        if (isDefinitionEqual(defaultBulletListDefinition, listdefinition) === true)
+                        if (isDefinitionEqual(defaultBulletListDefinition, listDefinition) === true)
                             defaultBulletNumId = listIdentifier;
                     }
                     if (defaultNumberingNumId === undefined) {
-                        if (isDefinitionEqual(defaultNumberingListDefinition, listdefinition) === true)
+                        if (isDefinitionEqual(defaultNumberingListDefinition, listDefinition) === true)
                             defaultNumberingNumId = listIdentifier;
                     }
                 }
@@ -341,7 +341,7 @@ define('io.ox/office/editor/format/lists',
          *  either bullet or numbering
          * @param {Object} options
          *  can contain symbol - the bullet symbol
-         *              levelstart - start index of an ordered list
+         *              levelStart - start index of an ordered list
          * @returns {Object}
          *  the operation that creates the requested list
          *
@@ -356,27 +356,27 @@ define('io.ox/office/editor/format/lists',
             }
             var newOperation = { name: Operations.INSERT_LIST, listname: freeId };
             if (type === 'bullet') {
-                newOperation.listdefinition = _.copy(defaultBulletListDefinition, true);
+                newOperation.listDefinition = _.copy(defaultBulletListDefinition, true);
                 if (options && options.symbol && options.symbol !== '*') {
-                    newOperation.listdefinition.listlevel0.leveltext = options.symbol;
+                    newOperation.listDefinition.listLevel0.levelText = options.symbol;
                 } else {
-                    newOperation.listdefinition.defaultlist = type;
+                    newOperation.listDefinition.defaultlist = type;
                 }
             } else {
-                newOperation.listdefinition = _.copy(defaultNumberingListDefinition, true);
+                newOperation.listDefinition = _.copy(defaultNumberingListDefinition, true);
                 var defaultlist = true;
                 if (options) {
-                    if (options.levelstart) {
-                        newOperation.listdefinition.listlevel0.levelstart = options.levelstart;
+                    if (options.levelStart) {
+                        newOperation.listDefinition.listLevel0.levelStart = options.levelStart;
                         defaultlist = false;
                     }
-                    if (options.numberformat) {
-                        newOperation.listdefinition.listlevel0.numberformat = options.numberformat;
+                    if (options.numberFormat) {
+                        newOperation.listDefinition.listLevel0.numberFormat = options.numberFormat;
                         defaultlist = false;
                     }
                 }
                 if (defaultlist) {
-                    newOperation.listdefinition.defaultlist = type;
+                    newOperation.listDefinition.defaultlist = type;
                 }
             }
             return newOperation;
@@ -415,14 +415,14 @@ define('io.ox/office/editor/format/lists',
             if (currentList === undefined) {
                 return "?";
             }
-            var levelFormat = currentList.listlevels[ilvl];
+            var levelFormat = currentList.listLevels[ilvl];
             if (levelFormat === undefined) {
                 return "??";
             }
             var format = formatNumberType(levelIndexes, ilvl, currentList);
             _.extend(ret, format);
-            ret.indent = levelFormat.leftindent;
-            ret.firstLine = levelFormat.firstlineindent ? levelFormat.leftindent + levelFormat.firstlineindent : levelFormat.leftindent;
+            ret.indent = levelFormat.indentLeft;
+            ret.firstLine = levelFormat.indentFirstLine ? levelFormat.indentLeft + levelFormat.indentFirstLine : levelFormat.indentLeft;
             return ret;
         };
 
@@ -436,33 +436,33 @@ define('io.ox/office/editor/format/lists',
             var ret = {};
             if (text.length === 1 && (text === '-' || text === '*')) {
                 // bullet
-                ret.numberformat = 'bullet';
+                ret.numberFormat = 'bullet';
                 ret.symbol = text;
             } else if (text.substring(text.length - 1) === '.') {
                 var sub = text.substring(0, text.length - 1);
                 var startnumber = parseInt(sub, 10);
                 if (startnumber > 0) {
-                    ret.numberformat = 'decimal';
-                    ret.levelstart = startnumber;
+                    ret.numberFormat = 'decimal';
+                    ret.levelStart = startnumber;
                 } else {
                     var roman = parseRoman(text);
                     if (roman.startnumber > 0) {
-                        ret.numberformat = roman.numberformat;
-                        ret.levelstart = roman.startnumber;
+                        ret.numberFormat = roman.numberFormat;
+                        ret.levelStart = roman.startnumber;
                     }
                 }
             }
             return ret;
         };
-        this.findIlvl = function (numId, pstyle) {
+        this.findIlvl = function (numId, paraStyle) {
             var list = this.getList(numId);
             if (list === undefined) {
                 return -1;
             }
             var ilvl = 0;
             for (; ilvl < 9; ++ilvl) {
-                var levelFormat = list.listlevels[ilvl];
-                if (levelFormat.pstyle === pstyle)
+                var levelFormat = list.listLevels[ilvl];
+                if (levelFormat.paraStyle === paraStyle)
                     return ilvl;
             }
             return -1;

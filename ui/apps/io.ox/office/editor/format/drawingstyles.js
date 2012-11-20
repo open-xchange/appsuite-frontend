@@ -47,25 +47,25 @@ define('io.ox/office/editor/format/drawingstyles',
              * Margin from top border of the drawing to text contents, in 1/100
              * of millimeters.
              */
-            margint: { def: 0 },
+            marginTop: { def: 0 },
 
             /**
              * Margin from bottom border of the drawing to text contents, in
              * 1/100 of millimeters.
              */
-            marginb: { def: 0 },
+            marginBottom: { def: 0 },
 
             /**
              * Margin from left border of the drawing to text contents, in 1/100
              * of millimeters.
              */
-            marginl: { def: 0 },
+            marginLeft: { def: 0 },
 
             /**
              * Margin from right border of the drawing to text contents, in
              * 1/100 of millimeters.
              */
-            marginr: { def: 0 },
+            marginRight: { def: 0 },
 
             /**
              * If set to true, the drawing is rendered as inline element ('as
@@ -74,17 +74,17 @@ define('io.ox/office/editor/format/drawingstyles',
              */
             inline: { def: true },
 
-            anchorhbase: { def: 'margin' },
+            anchorHorBase: { def: 'margin' },
 
-            anchorhalign: { def: 'left' },
+            anchorHorAlign: { def: 'left' },
 
-            anchorhoffset: { def: 0 },
+            anchorHorOffset: { def: 0 },
 
-            anchorvbase: { def: 'margin' },
+            anchorVertBase: { def: 'margin' },
 
-            anchorvalign: { def: 'top' },
+            anchorVertAlign: { def: 'top' },
 
-            anchorvoffset: { def: 0 },
+            anchorVertOffset: { def: 0 },
 
             /**
              * Specifies how text floats around the drawing.
@@ -92,27 +92,27 @@ define('io.ox/office/editor/format/drawingstyles',
              * - 'square': Text floats around the bounding box of the drawing.
              * - 'tight': Text aligns to the left/right outline of the drawing.
              * - 'through': Text aligns to the entire outline of the drawing.
-             * - 'topandbottom': Text floats above and below the drawing only.
+             * - 'topAndBottom': Text floats above and below the drawing only.
              */
-            textwrapmode: { def: 'none' },
+            textWrapMode: { def: 'none' },
 
             /**
              * Specifies on which side text floats around the drawing. Effective
-             * only if the attribute 'textwrapmode' is either 'square',
+             * only if the attribute 'textWrapMode' is either 'square',
              * 'tight', or 'through'.
-             * - 'bothsides': Text floats at the left and right side.
+             * - 'both': Text floats at the left and right side.
              * - 'left': Text floats at the left side of the drawing only.
              * - 'right': Text floats at the right side of the drawing only.
              * - 'largest': Text floats at the larger side of the drawing only.
              */
-            textwrapside: { def: 'bothsides' },
+            textWrapSide: { def: 'both' },
 
             /**
              * Image Data. The string contains either base64 image data, or svg.
              * If base64 encoded image data is used, the string begins with "data:"
              * otherwise if svg is used it begins with "<svg"
              */
-            replacementdata: { def: ''},
+            replacementData: { def: ''},
 
             // Image specific attributes
 
@@ -120,54 +120,54 @@ define('io.ox/office/editor/format/drawingstyles',
              * URL pointing to the image data. If the image was embedded in the
              * document archive, the URL will be relativ to the document (image specific style).
              */
-            imgurl: { def: ''},
+            imageUrl: { def: ''},
 
             /**
              * Image data (image specific style).
              */
-            imgdata: { def: ''},
+            imageData: { def: ''},
 
             /**
              * Amount of left part of the image cropped outside the object
              * border, in percent (image specific style).
              */
-            cropl: { def: 0 },
+            cropLeft: { def: 0 },
 
             /**
              * Amount of right part of the image cropped outside the object
              * border, in percent (image specific style).
              */
-            cropr: { def: 0 },
+            cropRight: { def: 0 },
 
             /**
              * Amount of top part of the image cropped outside the object
              * border, in percent (image specific style).
              */
-            cropt: { def: 0 },
+            cropTop: { def: 0 },
 
             /**
              * Amount of bottom part of the image cropped outside the object
              * border, in percent (image specific style).
              */
-            cropb: { def: 0 }
+            cropBottom: { def: 0 }
 
         },
 
         // predefined drawing attributes for floating modes used in GUI
         FLOAT_MODE_ATTRIBUTES = {
             inline:       { inline: true },
-            leftFloated:  { inline: false, anchorhbase: 'column', anchorhalign: 'left', textwrapmode: 'square', textwrapside: 'right', anchorhoffset: undefined },
-            rightFloated: { inline: false, anchorhbase: 'column', anchorhalign: 'right', textwrapmode: 'square', textwrapside: 'left', anchorhoffset: undefined },
-            noneFloated:  { inline: false, anchorhbase: 'column', anchorhalign: 'center', textwrapmode: 'none', anchorhoffset: undefined }
+            leftFloated:  { inline: false, anchorHorBase: 'column', anchorHorAlign: 'left', textWrapMode: 'square', textwWapSide: 'right', anchorHorOffset: undefined },
+            rightFloated: { inline: false, anchorHorBase: 'column', anchorHorAlign: 'right', textWrapMode: 'square', textWrapSide: 'left', anchorHorOffset: undefined },
+            noneFloated:  { inline: false, anchorHorBase: 'column', anchorHorAlign: 'center', textWrapMode: 'none', anchorHorOffset: undefined }
         },
 
-        // values for the 'textwrapmode' attribute allowing to wrap the text around the drawing
+        // values for the 'textWrapMode' attribute allowing to wrap the text around the drawing
         WRAPPED_TEXT_VALUES = _(['square', 'tight', 'through']);
 
     // private global functions ===============================================
 
     /**
-     * Returns whether the passed 'textwrapmode' attribute allows to wrap the
+     * Returns whether the passed 'textWrapMode' attribute allows to wrap the
      * text around the drawing.
      */
     function isTextWrapped(textWrapMode) {
@@ -312,9 +312,9 @@ define('io.ox/office/editor/format/drawingstyles',
             }
 
             // calculate top offset (only if drawing is anchored to paragraph)
-            if (attributes.anchorvbase === 'paragraph') {
-                if (attributes.anchorvalign === 'offset') {
-                    topOffset = Math.max(attributes.anchorvoffset, 0);
+            if (attributes.anchorVertBase === 'paragraph') {
+                if (attributes.anchorVertAlign === 'offset') {
+                    topOffset = Math.max(attributes.anchorVertOffset, 0);
                 } else {
                     // TODO: automatic alignment (top/bottom/center/...)
                     topOffset = 0;
@@ -322,8 +322,8 @@ define('io.ox/office/editor/format/drawingstyles',
             }
 
             // calculate top/bottom drawing margins
-            topMargin = Utils.minMax(attributes.margint, 0, topOffset);
-            bottomMargin = Math.max(attributes.marginb, 0);
+            topMargin = Utils.minMax(attributes.marginTop, 0, topOffset);
+            bottomMargin = Math.max(attributes.marginBottom, 0);
 
             // add or remove leading offset node used for positioning
             // TODO: support for multiple drawings (also overlapping) per side
@@ -344,8 +344,8 @@ define('io.ox/office/editor/format/drawingstyles',
             }
 
             // calculate left/right offset (only if drawing is anchored to column)
-            if (attributes.anchorhbase === 'column') {
-                switch (attributes.anchorhalign) {
+            if (attributes.anchorHorBase === 'column') {
+                switch (attributes.anchorHorAlign) {
                 case 'center':
                     leftOffset = (paraWidth - drawingWidth) / 2;
                     break;
@@ -353,7 +353,7 @@ define('io.ox/office/editor/format/drawingstyles',
                     leftOffset = paraWidth - drawingWidth;
                     break;
                 case 'offset':
-                    leftOffset = attributes.anchorhoffset;
+                    leftOffset = attributes.anchorHorOffset;
                     break;
                 default:
                     leftOffset = 0;
@@ -365,21 +365,21 @@ define('io.ox/office/editor/format/drawingstyles',
             rightOffset = paraWidth - leftOffset - drawingWidth;
 
             // determine text wrapping side
-            if (isTextWrapped(attributes.textwrapmode)) {
-                switch (attributes.textwrapside) {
+            if (isTextWrapped(attributes.textWrapMode)) {
+                switch (attributes.textWrapSide) {
                 case 'left':
                     wrapMode = 'left';
                     break;
                 case 'right':
                     wrapMode = 'right';
                     break;
-                case 'bothsides':
+                case 'both':
                 case 'largest':
                     // no support for 'wrap both sides' in CSS, default to 'largest'
                     wrapMode = (leftOffset > rightOffset) ? 'left' : 'right';
                     break;
                 default:
-                    Utils.warn('updateDrawingFormatting(): invalid text wrap side: ' + attributes.textwrapside);
+                    Utils.warn('updateDrawingFormatting(): invalid text wrap side: ' + attributes.textWrapSide);
                     wrapMode = 'none';
                 }
             } else {
@@ -393,7 +393,7 @@ define('io.ox/office/editor/format/drawingstyles',
             case 'left':
                 // drawing floats at right paragraph margin
                 rightMargin = rightOffset;
-                leftMargin = Math.max(attributes.marginl, 0);
+                leftMargin = Math.max(attributes.marginLeft, 0);
                 // if there is less than 6mm space available for text, occupy all space (no wrapping)
                 if (leftOffset - leftMargin < 600) { leftMargin = Math.max(leftOffset, 0); }
                 break;
@@ -401,7 +401,7 @@ define('io.ox/office/editor/format/drawingstyles',
             case 'right':
                 // drawing floats at left paragraph margin
                 leftMargin = leftOffset;
-                rightMargin = Math.max(attributes.marginr, 0);
+                rightMargin = Math.max(attributes.marginRight, 0);
                 // if there is less than 6mm space available for text, occupy all space (no wrapping)
                 if (rightOffset - rightMargin < 600) { rightMargin = Math.max(rightOffset, 0); }
                 break;
@@ -428,12 +428,12 @@ define('io.ox/office/editor/format/drawingstyles',
         }
 
         // using replacement data, if available (valid for all drawing types)
-        if (attributes.replacementdata && attributes.replacementdata.length) {
-            if (attributes.replacementdata.indexOf(base64String) === 0) {
-                imageNode = $('<img>', { src: attributes.replacementdata });
+        if (attributes.replacementData && attributes.replacementData.length) {
+            if (attributes.replacementData.indexOf(base64String) === 0) {
+                imageNode = $('<img>', { src: attributes.replacementData });
                 contentNode.append(imageNode);
-            } else if (attributes.replacementdata.indexOf(svgString) === 0) {
-                contentNode[0].appendChild($(attributes.replacementdata).get(0));  // do not use jQuery for this!
+            } else if (attributes.replacementData.indexOf(svgString) === 0) {
+                contentNode[0].appendChild($(attributes.replacementData).get(0));  // do not use jQuery for this!
             }
         }
 
@@ -455,8 +455,8 @@ define('io.ox/office/editor/format/drawingstyles',
 
             if (! imageNode.length) {
                 // inserting the image
-                if (attributes.imgdata && attributes.imgdata.length) {
-                    imgSrc = attributes.imgdata;
+                if (attributes.imageData && attributes.imageData.length) {
+                    imgSrc = attributes.imageData;
                     if (imgSrc.indexOf(base64String) === 0) {
                         useImageNode = true;
                     } else if (imgSrc.indexOf(svgString) === 0) {
@@ -476,8 +476,8 @@ define('io.ox/office/editor/format/drawingstyles',
             }
 
             if (drawingWidth !== 0) {
-                horizontalSettings = calculateBitmapSettings(drawingWidth, attributes.cropl, attributes.cropr);
-                verticalSettings = calculateBitmapSettings(drawingHeight, attributes.cropt, attributes.cropb);
+                horizontalSettings = calculateBitmapSettings(drawingWidth, attributes.cropLeft, attributes.cropRight);
+                verticalSettings = calculateBitmapSettings(drawingHeight, attributes.cropTop, attributes.cropBottom);
 
                 // set CSS formatting at the <img> element
                 imageNode.css({
@@ -550,13 +550,13 @@ define('io.ox/office/editor/format/drawingstyles',
         }
 
         // only paragraph anchor supported
-        if ((attributes.anchorhbase !== 'column') || (attributes.anchorvbase !== 'paragraph')) {
+        if ((attributes.anchorHorBase !== 'column') || (attributes.anchorVertBase !== 'paragraph')) {
             return null;
         }
 
         // floating mode depends on text wrapping side
-        if (isTextWrapped(attributes.textwrapmode)) {
-            switch (attributes.textwrapside) {
+        if (isTextWrapped(attributes.textWrapMode)) {
+            switch (attributes.textWrapSide) {
             case 'left':
                 return 'rightFloated';
             case 'right':

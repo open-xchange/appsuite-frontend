@@ -36,25 +36,25 @@ define('io.ox/office/editor/format/pagestyles',
              * Margin between left page border and editing area, in 1/100 of
              * millimeters.
              */
-            marginl: { def: 1500 },
+            marginLeft: { def: 1500 },
 
             /**
              * Margin between right page border and editing area, in 1/100 of
              * millimeters.
              */
-            marginr: { def: 1500 },
+            marginRight: { def: 1500 },
 
             /**
              * Margin between top page border and editing area, in 1/100 of
              * millimeters.
              */
-            margint: { def: 1500 },
+            marginTop: { def: 1500 },
 
             /**
              * Margin between bottom page border and editing area, in 1/100 of
              * millimeters.
              */
-            marginb: { def: 1500 }
+            marginBottom: { def: 1500 }
 
         };
 
@@ -78,15 +78,15 @@ define('io.ox/office/editor/format/pagestyles',
             // effective page height (at least 2cm)
             pageHeight = Math.max(attributes.height, 2000),
             // left page margin
-            leftMargin = Math.max(attributes.marginl, 0),
+            leftMargin = Math.max(attributes.marginLeft, 0),
             // right page margin
-            rightMargin = Math.max(attributes.marginr, 0),
+            rightMargin = Math.max(attributes.marginRight, 0),
             // total horizontal margin
             horizontalMargin = leftMargin + rightMargin,
             // top page margin
-            topMargin = Math.max(attributes.margint, 0),
+            topMargin = Math.max(attributes.marginTop, 0),
             // bottom page margin
-            bottomMargin = Math.max(attributes.marginb, 0),
+            bottomMargin = Math.max(attributes.marginBottom, 0),
             // total vertical margin
             verticalMargin = topMargin + bottomMargin;
 
