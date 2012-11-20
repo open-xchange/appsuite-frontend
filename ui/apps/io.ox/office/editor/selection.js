@@ -463,26 +463,32 @@ define('io.ox/office/editor/selection',
             return this;
         };
 
-        /**
-         * Calculates the own logical selection according to the current
-         * browser selection.
-         *
-         * @param {Boolean} [forwardCursor]
-         *  If set to true, the new browser selection originates from a cursor
-         *  navigation key that moves the cursor forwards in the document.
-         */
-        this.updateFromBrowserSelection = function (forwardCursor) {
+        this.processBrowserEvent = function (event) {
 
-            var // the current browser selection
-                browserSelection = DOM.getBrowserSelection(rootNode);
+            var // deferred return value
+                def = $.Deferred();
 
-            if (browserSelection.active) {
-                applyBrowserSelection(browserSelection, forwardCursor);
-            } else if (selectedDrawing.length === 0) {
-                Utils.warn('Selection.updateFromBrowserSelection(): missing valid browser selection');
-            }
+            // browser needs to process pending events before its selection can be queried
+            window.setTimeout(function () {
 
-            return this;
+                var // the current browser selection
+                    browserSelection = DOM.getBrowserSelection(rootNode),
+                    // whether the browser event is a forward key
+                    forwardKey = (event.type === 'keydown') && DOM.isForwardCursorKey(event.keyCode);
+
+                if (browserSelection.active) {
+                    applyBrowserSelection(browserSelection, forwardKey);
+                    def.resolve();
+                } else if (selectedDrawing.length > 0) {
+                    def.resolve();
+                } else {
+                    Utils.warn('Selection.processBrowserEvent(): missing valid browser selection');
+                    def.reject();
+                }
+
+            }, 0);
+
+            return def.promise();
         };
 
         /**

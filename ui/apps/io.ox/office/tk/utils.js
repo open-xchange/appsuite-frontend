@@ -1058,8 +1058,74 @@ define('io.ox/office/tk/utils',
     };
 
     /**
+     * Finds a previous sibling node of the passed node in the DOM tree. If the
+     * node is the first child of its parent, bubbles up the chain of parent
+     * nodes and continues with the previous sibling of the first ancestor that
+     * has more siblings. An optional jQuery selector can be specified to
+     * search through the previous siblings until a matching node has been
+     * found.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The DOM root node whose sub node tree will not be left when searching
+     *  for the previous sibling node. If this object is a jQuery collection,
+     *  uses the first node it contains.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node whose previous sibling will be returned. Must be a
+     *  descendant of the passed root node. If this object is a jQuery
+     *  collection, uses the first node it contains.
+     *
+     * @param {String|Function|Node|jQuery} [selector]
+     *  A jQuery selector that will be used to find a DOM node. The selector
+     *  will be passed to the jQuery method jQuery.is() for each node. If this
+     *  selector is a function, it will be called with the current DOM node
+     *  bound to the symbol 'this'. See the jQuery API documentation at
+     *  http://api.jquery.com/is for details. If omitted, this method returns
+     *  the direct next sibling of the passed node.
+     *
+     * @param {String|Function|Node|jQuery} [skipSiblingsSelector]
+     *  A jQuery selector that will be used to to identify DOM nodes whose
+     *  siblings will be ignored completely, even if they match the specified
+     *  selector. If omitted, this method visits all descendant nodes of all
+     *  siblings while searching for a matching node.
+     *
+     * @returns {Node|Null}
+     *  The previous sibling of the passed node in the DOM sub tree of the root
+     *  node; or null, no node has been found.
+     */
+    Utils.findPreviousNode = function (rootNode, node, selector, skipSiblingsSelector) {
+
+        // set 'node' to the previous sibling (of itself or one of its parents)
+        function previousNode() {
+
+            // go to previous sibling if existing
+            if (node && node.previousSibling) {
+                node = node.previousSibling;
+
+                // start with deepest last descendant node in the previous sibling
+                while (node && (_.isUndefined(skipSiblingsSelector) || !$(node).is(skipSiblingsSelector)) && node.lastChild) {
+                    node = node.lastChild;
+                }
+            } else {
+                // otherwise, go to parent, but do not leave the root node
+                node = (node.parentNode === rootNode) ? null : node.parentNode;
+            }
+        }
+
+        rootNode = Utils.getDomNode(rootNode);
+        node = Utils.getDomNode(node);
+
+        previousNode();
+        if (!_.isUndefined(selector)) {
+            while (node && !$(node).is(selector)) { previousNode(); }
+        }
+
+        return node;
+    };
+
+    /**
      * Finds a next sibling node of the passed node in the DOM tree. If the
-     * node is the last sibling of its parent, bubbles up the chain of parent
+     * node is the last child of its parent, bubbles up the chain of parent
      * nodes and continues with the next sibling of the first ancestor that has
      * more siblings. An optional jQuery selector can be specified to search
      * through the next siblings until a matching node has been found.

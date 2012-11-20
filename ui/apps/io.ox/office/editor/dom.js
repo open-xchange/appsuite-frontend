@@ -15,7 +15,25 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
     'use strict';
 
-    var // if set to true, DOM selection will be logged to console
+    var // shortcut for the KeyCodes object
+        KeyCodes = Utils.KeyCodes,
+
+        // key codes of keys that change the text cursor position backwards
+        BACKWARD_CURSOR_KEYS = _([ KeyCodes.PAGE_UP, KeyCodes.HOME, KeyCodes.LEFT_ARROW, KeyCodes.UP_ARROW ]),
+
+        // key codes of keys that change the text cursor position forwards
+        FORWARD_CURSOR_KEYS = _([ KeyCodes.PAGE_DOWN, KeyCodes.END, KeyCodes.RIGHT_ARROW, KeyCodes.DOWN_ARROW ]),
+
+        // key codes of keys that will be passed directly to the browser
+        IGNORABLE_KEYS = _([
+            KeyCodes.SHIFT, KeyCodes.CONTROL, KeyCodes.ALT,
+            KeyCodes.CAPS_LOCK, KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK,
+            KeyCodes.BREAK, KeyCodes.PRINT, KeyCodes.SELECT,
+            KeyCodes.LEFT_WINDOWS, KeyCodes.RIGHT_WINDOWS,
+            KeyCodes.F5
+        ]),
+
+        // if set to true, DOM selection will be logged to console
         LOG_SELECTION = false;
 
     // static class DOM =======================================================
@@ -340,6 +358,50 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             range.end.offset = range.end.node.nodeValue.length;
         }
         return range;
+    };
+
+    // key codes ==============================================================
+
+    /**
+     * Returns whether the passed key code is a cursor navigation key that
+     * moves the cursor backwards in the document.
+     *
+     * @param {Number} keyCode
+     *  The key code from a 'keydown' browser event.
+     */
+    DOM.isBackwardCursorKey = function (keyCode) {
+        return BACKWARD_CURSOR_KEYS.contains(keyCode);
+    };
+
+    /**
+     * Returns whether the passed key code is a cursor navigation key that
+     * moves the cursor forwards in the document.
+     *
+     * @param {Number} keyCode
+     *  The key code from a 'keydown' browser event.
+     */
+    DOM.isForwardCursorKey = function (keyCode) {
+        return FORWARD_CURSOR_KEYS.contains(keyCode);
+    };
+
+    /**
+     * Returns whether the passed key code is a cursor navigation key.
+     *
+     * @param {Number} keyCode
+     *  The key code from a 'keydown' browser event.
+     */
+    DOM.isCursorKey = function (keyCode) {
+        return DOM.isBackwardCursorKey(keyCode) || DOM.isForwardCursorKey(keyCode);
+    };
+
+    /**
+     * Returns whether the passed key code has to be ignored silently.
+     *
+     * @param {Number} keyCode
+     *  The key code from a 'keydown' browser event.
+     */
+    DOM.isIgnorableKey = function (keyCode) {
+        return IGNORABLE_KEYS.contains(keyCode);
     };
 
     // pages ==================================================================

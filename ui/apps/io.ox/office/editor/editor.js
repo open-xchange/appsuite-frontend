@@ -40,21 +40,6 @@ define('io.ox/office/editor/editor',
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
 
-        // key codes of keys that change the text cursor position backwards
-        BACKWARD_CURSOR_KEYS = _([ KeyCodes.PAGE_UP, KeyCodes.HOME, KeyCodes.LEFT_ARROW, KeyCodes.UP_ARROW ]),
-
-        // key codes of keys that change the text cursor position forwards
-        FORWARD_CURSOR_KEYS = _([ KeyCodes.PAGE_DOWN, KeyCodes.END, KeyCodes.RIGHT_ARROW, KeyCodes.DOWN_ARROW ]),
-
-        // key codes of keys that will be passed directly to the browser
-        IGNORABLE_KEYS = _([
-            KeyCodes.SHIFT, KeyCodes.CONTROL, KeyCodes.ALT, KeyCodes.BREAK,
-            KeyCodes.CAPS_LOCK, KeyCodes.PRINT, KeyCodes.SELECT,
-            KeyCodes.LEFT_WINDOWS, KeyCodes.RIGHT_WINDOWS,
-            KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK,
-            KeyCodes.F5
-        ]),
-
         // style attributes for heading 1 -6 based on latent styles
         HEADINGS_CHARATTRIBUTES = [
             { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 74902 }]}, bold: true, fontsize: 14 },
@@ -89,44 +74,6 @@ define('io.ox/office/editor/editor',
         DEFAULT_HYPERLINK_CHARATTRIBUTES = { color: { type: 'scheme', value: 'hyperlink' }, underline: true };
 
     // private global functions ===============================================
-
-    /**
-     * Returns whether the passed key code is a cursor navigation key that
-     * moves the cursor backwards in the document.
-     */
-    function isBackwardCursorKey(keyCode) {
-        return BACKWARD_CURSOR_KEYS.contains(keyCode);
-    }
-
-    /**
-     * Returns whether the passed key code is a cursor navigation key that
-     * moves the cursor forwards in the document.
-     */
-    function isForwardCursorKey(keyCode) {
-        return FORWARD_CURSOR_KEYS.contains(keyCode);
-    }
-
-    /**
-     * Returns true, if the passed keyboard event is an event that moves the
-     * text cursor.
-     *
-     * @param event
-     *  A jQuery keyboard event object.
-     */
-    function isCursorKeyEvent(event) {
-        return event && (isBackwardCursorKey(event.keyCode) || isForwardCursorKey(event.keyCode));
-    }
-
-    /**
-     * Returns true, if the passed keyboard event must be ignored and passed
-     * directly to the browser.
-     *
-     * @param event
-     *  A jQuery keyboard event object.
-     */
-    function isIgnorableKeyEvent(event) {
-        return event && IGNORABLE_KEYS.contains(event.keyCode);
-    }
 
     /**
      * Returns true, if the passed keyboard event is ctrl+v or meta+v.
@@ -2252,7 +2199,7 @@ define('io.ox/office/editor/editor',
 
             // in read only mode allow text selection only
             if (!editMode) {
-                updateSelection();
+                selection.processBrowserEvent(event);
                 return;
             }
 
@@ -2306,7 +2253,7 @@ define('io.ox/office/editor/editor',
             } else {
                 // clicked somewhere else: calculate logical selection from browser selection,
                 // after browser has processed the mouse event
-                updateSelection();
+                selection.processBrowserEvent(event);
             }
 
         }
@@ -2323,7 +2270,7 @@ define('io.ox/office/editor/editor',
             if (selection.getSelectionType() !== 'drawing') {
                 // calculate logical selection from browser selection, after
                 // browser has processed the mouse event
-                updateSelection();
+                selection.processBrowserEvent(event);
             }
         }
 
@@ -2331,19 +2278,19 @@ define('io.ox/office/editor/editor',
 
             lastKeyDownEvent = event;   // for some keys we only get keyDown, not keyPressed!
 
-            if (isIgnorableKeyEvent(event)) {
+            if (DOM.isIgnorableKey(event.keyCode)) {
                 return;
             }
 
             implDbgOutEvent(event);
 
-            if (isCursorKeyEvent(event)) {
+            if (DOM.isCursorKey(event.keyCode)) {
 
                 // any navigation key: change drawing selection to text selection before
                 selection.selectDrawingAsText();
 
                 // let browser process the key event, select a drawing that has been covered exactly
-                updateSelection(isForwardCursorKey(event.keyCode)).done(function () {
+                selection.processBrowserEvent(event).done(function () {
                     // draw selection box for selected drawings
                     if (event.shiftKey) {
                         drawDrawingSelection(selection.getSelectedDrawing());
@@ -2356,7 +2303,7 @@ define('io.ox/office/editor/editor',
             }
 
             // handle just cursor and copy events if in read only mode
-            if (!editMode && !isCursorKeyEvent(event) && !isCopyKeyEvent(event)) {
+            if (!editMode && !isCopyKeyEvent(event)) {
                 event.preventDefault();
                 return;
             }
@@ -2629,17 +2576,17 @@ define('io.ox/office/editor/editor',
 
         function processKeyPressed(event) {
 
-            if (isIgnorableKeyEvent(lastKeyDownEvent)) {
+            if (lastKeyDownEvent && DOM.isIgnorableKey(lastKeyDownEvent.keyCode)) {
                 return;
             }
 
-            if (isCursorKeyEvent(lastKeyDownEvent)) {
+            if (lastKeyDownEvent && DOM.isCursorKey(lastKeyDownEvent.keyCode)) {
                 preselectedAttributes = {};
                 return;
             }
 
             // handle just cursor and copy events if in read only mode
-            if (!editMode && !isCursorKeyEvent(event) && !isCopyKeyEvent(event)) {
+            if (!editMode && !isCopyKeyEvent(event)) {
                 event.preventDefault();
                 return;
             }
@@ -3494,24 +3441,6 @@ define('io.ox/office/editor/editor',
         // ==================================================================
         // Private selection functions
         // ==================================================================
-
-        function updateSelection(backwards) {
-
-            var // deferred return value
-                def = $.Deferred();
-
-            if (focused) {
-                // browser needs to process pending events before its selection can be querried
-                window.setTimeout(function () {
-                    selection.updateFromBrowserSelection(backwards);
-                    def.resolve();
-                }, 0);
-            } else {
-                def.reject();
-            }
-
-            return def.promise();
-        }
 
         /**
          * Draws a selection box for the specified drawing node and registers
