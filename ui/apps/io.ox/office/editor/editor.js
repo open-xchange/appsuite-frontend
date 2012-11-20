@@ -2616,7 +2616,10 @@ define('io.ox/office/editor/editor',
                     // check left text to support hyperlink auto correction
                     var hyperlinkSelection = Hyperlink.checkForHyperlinkText(selection.getEnclosingParagraph(), startPosition);
                     if (hyperlinkSelection !== null) {
-                        Hyperlink.insertHyperlink(self, hyperlinkSelection.start, hyperlinkSelection.end, hyperlinkSelection.text);
+                        Hyperlink.insertHyperlink(self,
+                                                  hyperlinkSelection.start,
+                                                  hyperlinkSelection.end,
+                                                  (hyperlinkSelection.url === null) ? hyperlinkSelection.text : hyperlinkSelection.url);
                         preselectedAttributes = { style: null, url: null };
                     }
                 }

@@ -30,8 +30,23 @@ define('io.ox/office/editor/hyperlink',
      */
     var Hyperlink = {
         Separators : [ '!', '?', '.', ' ', '-', ':', ',', '\u00a0'],
-        Protocols : [ 'http://', 'https://', 'ftp://']
+        Protocols : [ 'http://', 'https://', 'ftp://', 'mailto:' ],
+        TextTemplates : [ 'www.', 'ftp.' ] // templates for web/ftp indentifications
     };
+
+    // private functions
+    function createResultFromHyperlinkSelection(position, hyperlinkSelection) {
+        var result = null,
+            start = _.clone(position),
+            end = _.clone(position);
+
+        // create result with correct Position objects
+        start[start.length - 1] = hyperlinkSelection.start;
+        end[end.length - 1] = hyperlinkSelection.end;
+        result = { start: start, end: end, text: hyperlinkSelection.text, url: null };
+
+        return result;
+    }
 
     // static functions =======================================================
 
@@ -370,6 +385,10 @@ define('io.ox/office/editor/hyperlink',
         return (/^([a-z]([a-z]|\d|\+|-|\.)*):(\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?((\[(|(v[\da-f]{1,}\.(([a-z]|\d|-|\.|_|~)|[!\$&'\(\)\*\+,;=]|:)+))\])|((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=])*)(:\d*)?)(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*|(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)|((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)|((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)){0})(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url));
     };
 
+    Hyperlink.checkMailAddress = function (mailAddress) {
+        return (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(mailAddress));
+    };
+
     /**
      * Shows a hyperlink input dialog.
      *
@@ -567,26 +586,75 @@ define('io.ox/office/editor/hyperlink',
 
             if ((hyperlinkSelection.start !== null) && (hyperlinkSelection.end !== null) &&
                 (hyperlinkSelection.text !== null)) {
-                var found = false;
+                var found = false, foundProtocol = null;
 
                 _.each(Hyperlink.Protocols, function (protocol) {
-                    if (hyperlinkSelection.text.indexOf(protocol) === 0)
+                    if (hyperlinkSelection.text.indexOf(protocol) === 0) {
                         found = true;
+                        foundProtocol = protocol;
+                    }
                 });
 
                 if (found) {
 
-                    var index = hyperlinkSelection.text.indexOf('//');
-                    if (((index + 2) < hyperlinkSelection.text.length) &&
-                         (Hyperlink.checkURL(hyperlinkSelection.text))) {
-                        // At least one character after the protocol must be there
-                        var start = _.clone(position),
-                            end = _.clone(position);
+                    if (foundProtocol !== 'mailto:') {
+                        var index = hyperlinkSelection.text.indexOf('//');
 
-                        // create result with correct Position objects
-                        start[start.length - 1] = hyperlinkSelection.start;
-                        end[end.length - 1] = hyperlinkSelection.end;
-                        result = { start: start, end: end, text: hyperlinkSelection.text };
+                        // At least one character after the protocol must be there
+                        if (((index + 2) < hyperlinkSelection.text.length) &&
+                             (Hyperlink.checkURL(hyperlinkSelection.text))) {
+                            // create result with correct Position objects
+                            result = createResultFromHyperlinkSelection(position, hyperlinkSelection);
+                        }
+                    }
+                    else if (foundProtocol === 'mailto:') {
+                        var atIndex = hyperlinkSelection.text.indexOf('@'),
+                            dotIndex = hyperlinkSelection.text.lastIndexOf('.');
+
+                        // mailto: needs a '@' and '.' char and at least one char after the dot
+                        // we also use the regexp to check for other problems
+                        if ((atIndex > ('mailto:'.length + 1)) &&
+                            (dotIndex > atIndex) && (dotIndex < (hyperlinkSelection.text.length - 1)) &&
+                            Hyperlink.checkURL(hyperlinkSelection.text)) {
+
+                            // create result with correct Position objects
+                            result = createResultFromHyperlinkSelection(position, hyperlinkSelection);
+                        }
+                    }
+                }
+                else {
+                    //some magic auto detection for text without protocol
+                    var textTemplate = null, found = false;
+
+                    _.each(Hyperlink.TextTemplates, function (template) {
+                        if (hyperlinkSelection.text.indexOf(template) === 0) {
+                            found = true;
+                            textTemplate = template;
+                        }
+                    });
+
+                    if (found) {
+                        if (textTemplate === 'www.') {
+                            // http://
+                            if (hyperlinkSelection.text.length > 'www.'.length) {
+                                result = createResultFromHyperlinkSelection(position, hyperlinkSelection);
+                                result.url = 'http://' + hyperlinkSelection.text;
+                            }
+                        }
+                        else if (textTemplate === 'ftp.') {
+                            // ftp://
+                            if (hyperlinkSelection.text.length > 'ftp.'.length) {
+                                result = createResultFromHyperlinkSelection(position, hyperlinkSelection);
+                                result.url = 'ftp://' + hyperlinkSelection.text;
+                            }
+                        }
+                    }
+                    else {
+                        // some more magic for a mail address
+                        if (Hyperlink.checkMailAddress(hyperlinkSelection.text)) {
+                            result = createResultFromHyperlinkSelection(position, hyperlinkSelection);
+                            result.url = 'mailto:' + hyperlinkSelection.text;
+                        }
                     }
                 }
             }
