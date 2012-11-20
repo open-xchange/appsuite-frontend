@@ -31,9 +31,9 @@ define('io.ox/office/editor/format/tablestyles',
              * Width of the table, as number in 1/100 of millimeters.
              */
             width: {
-                def: 0,
+                def: 'auto',
                 format: function (element, width) {
-                    if (width === 0) {
+                    if (width === 'auto') {
                         element.css('width', '100%');
                     } else {
                         element.css('width', Utils.convertHmmToCssLength(width, 'px', 0));
