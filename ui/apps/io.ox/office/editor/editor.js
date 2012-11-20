@@ -1638,13 +1638,6 @@ define('io.ox/office/editor/editor',
         };
 
         /**
-         * Returns the document attributes.
-         */
-        this.getDocumentAttributes = function () {
-            return documentStyles.getAttributes();
-        };
-
-        /**
          * Returns the values of all formatting attributes of the specified
          * attribute family in the current selection.
          *
@@ -4036,13 +4029,13 @@ define('io.ox/office/editor/editor',
 
             if (allTabNodes.length > 0) {
 
-                var defaultTabstop = self.getDocumentAttributes().defaultTabStop,
-                    paraStyles = paragraphStyles.getElementAttributes(paragraph),
+                var defaultTabstop = documentStyles.getAttributes().defaultTabStop,
+                    paraAttributes = paragraphStyles.getElementAttributes(paragraph),
                     paraTabstops = [];
 
                 // paragraph tab stop definitions
-                if (paraStyles && paraStyles.tabStops) {
-                    paraTabstops = paraStyles.tabStops;
+                if (paraAttributes && paraAttributes.tabStops) {
+                    paraTabstops = paraAttributes.tabStops;
                 }
 
                 var marginLeft = Utils.convertLengthToHmm(parseFloat($(paragraph).css('margin-left')), 'px');
@@ -5398,11 +5391,11 @@ define('io.ox/office/editor/editor',
 
 
                                 var defaultTabstop = self.getDocumentAttributes().defaultTabStop,
-                                paraStyles = paragraphStyles.getElementAttributes(para),
+                                paraAttributes = paragraphStyles.getElementAttributes(para),
                                 paraTabstops = [];
                                 // paragraph tab stop definitions
-                                if (paraStyles && paraStyles.tabStops) {
-                                    paraTabstops = paraStyles.tabStops;
+                                if (paraAttributes && paraAttributes.tabStops) {
+                                    paraTabstops = paraAttributes.tabStops;
                                 }
 
                                 var width = 0;
