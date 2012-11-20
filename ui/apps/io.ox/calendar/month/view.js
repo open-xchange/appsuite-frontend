@@ -164,7 +164,7 @@ define('io.ox/calendar/month/view',
                 }
 
                 // draw across multiple days
-                while (maxCount > 0) {
+                while (maxCount >= 0) {
                     maxCount--;
                     this.$('#' + formatDate(startDate) + ' .list').append(this.renderAppointment(model));
 
