@@ -16,8 +16,10 @@ define('io.ox/office/editor/operations',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/position',
-     'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, DOM, Position, StyleSheets) {
+     'io.ox/office/editor/format/stylesheets',
+     'io.ox/office/editor/format/characterstyles',
+     'io.ox/office/editor/format/paragraphstyles'
+    ], function (Utils, DOM, Position, StyleSheets, CharacterStyles, ParagraphStyles) {
 
     'use strict';
 
@@ -40,6 +42,9 @@ define('io.ox/office/editor/operations',
 
         TEXT_INSERT: 'insertText',
         TEXT_DELETE: 'deleteText',
+        DRAWING_INSERT: 'insertDrawing',
+        FIELD_INSERT: 'insertField',
+        TAB_INSERT: 'insertTab',
 
         PARA_INSERT: 'insertParagraph',
         PARA_DELETE: 'deleteParagraph',
@@ -48,26 +53,22 @@ define('io.ox/office/editor/operations',
 
         TABLE_INSERT: 'insertTable',
         TABLE_DELETE: 'deleteTable',
+        ROWS_INSERT: 'insertRows',
         ROWS_DELETE: 'deleteRows',
-        COLUMNS_DELETE: 'deleteColumns',
+        CELLS_INSERT: 'insertCells',
         CELLS_DELETE: 'deleteCells',
-        ROW_INSERT: 'insertRow',
-        COLUMN_INSERT: 'insertColumn',
-        CELL_INSERT: 'insertCell',
         CELL_SPLIT: 'splitCell',
         CELL_MERGE: 'mergeCell',
+        COLUMN_INSERT: 'insertColumn',
+        COLUMNS_DELETE: 'deleteColumns',
 
-        INSERT_STYLE: 'insertStylesheet',
+        ATTRS_SET: 'setAttributes',
+        INSERT_STYLE: 'insertStyleSheet',
+        DELETE_STYLE: 'deleteStyleSheet',
         INSERT_THEME: 'insertTheme',
         INSERT_FONT_DESC: 'insertFontDescription',
         INSERT_LIST: 'insertList',
-        DELETE_LIST: 'deleteList',
-        ATTRS_SET: 'setAttributes',
-        ATTRS_CLEAR: 'clearAttributes',
-
-        DRAWING_INSERT: 'insertDrawing',
-        FIELD_INSERT: 'insertField',
-        TAB_INSERT: 'insertTab'
+        DELETE_LIST: 'deleteList'
 
     };
 
@@ -94,14 +95,14 @@ define('io.ox/office/editor/operations',
          * @param {String} name
          *  The name of the operation.
          *
-         * @param {Object} [options]
+         * @param {Object} [operationOptions]
          *  Additional options that will be stored in the operation.
          *
          * @returns {Object}
          *  Reference to the created operation, for later use.
          */
-        function generateOperation(name, options) {
-            var operation = _.extend({ name: name }, options);
+        function generateOperation(name, operationOptions) {
+            var operation = _.extend({ name: name }, operationOptions);
             operations.push(operation);
             return operation;
         }
@@ -132,14 +133,14 @@ define('io.ox/office/editor/operations',
          * @param {String} name
          *  The name of the operation.
          *
-         * @param {Object} [options]
+         * @param {Object} [operationOptions]
          *  Additional options that will be stored in the operation.
          *
          * @returns {Operations.Generator}
          *  A reference to this instance.
          */
-        this.generateOperation = function (name, options) {
-            generateOperation(name, options);
+        this.generateOperation = function (name, operationOptions) {
+            generateOperation(name, operationOptions);
             return this;
         };
 
@@ -156,22 +157,22 @@ define('io.ox/office/editor/operations',
          * @param {String} name
          *  The name of the operation.
          *
-         * @param {Object} [options]
+         * @param {Object} [operationOptions]
          *  Additional options that will be stored in the operation.
          *
          * @returns {Operations.Generator}
          *  A reference to this instance.
          */
-        this.generateOperationWithAttributes = function (node, name, options) {
+        this.generateOperationWithAttributes = function (node, name, operationOptions) {
 
             var // explicit attributes of the passed node
                 attributes = StyleSheets.getExplicitAttributes(node);
 
             // add the 'attrs' entry if there are attributes, and push the operation
             if (!_.isEmpty(attributes)) {
-                options = _.extend({ attrs: attributes }, options);
+                operationOptions = _.extend({ attrs: attributes }, operationOptions);
             }
-            generateOperation(name, options);
+            generateOperation(name, operationOptions);
 
             return this;
         };
@@ -194,21 +195,38 @@ define('io.ox/office/editor/operations',
          *  The logical end position of the passed node, if the node spans
          *  several logical components (e.g. a text portion).
          *
+         * @param {Object} [options]
+         *  A map with options controlling the operation generation process.
+         *  Supports the following options:
+         *  @param {String[]} [options.clearAttributes]
+         *      The names of all attributes that have to be cleared explicitly.
+         *      Only the attributes that are not set in the passed element will
+         *      be cleared by the generated operation.
+         *
          * @returns {Operations.Generator}
          *  A reference to this instance.
          */
-        this.generateSetAttributesOperation = function (node, position, endPosition) {
+        this.generateSetAttributesOperation = function (node, position, endPosition, options) {
 
             var // explicit attributes of the passed node
                 attributes = StyleSheets.getExplicitAttributes(node),
+                // names of all attributes to be cleared
+                clearAttributes = Utils.getArrayOption(options, 'clearAttributes', []),
                 // the operation options
-                options = null;
+                operationOptions = null;
+
+            // add all attributes that have to be cleared
+            _(clearAttributes).each(function (name) {
+                if (!(name in attributes)) {
+                    attributes[name] = null;
+                }
+            });
 
             // no attributes, no operation
             if (!_.isEmpty(attributes)) {
-                options = { start: position, attrs: attributes };
-                if (_.isArray(endPosition)) { options.end = endPosition; }
-                generateOperation(Operations.ATTRS_SET, options);
+                operationOptions = { start: position, attrs: attributes };
+                if (_.isArray(endPosition)) { operationOptions.end = endPosition; }
+                generateOperation(Operations.ATTRS_SET, operationOptions);
             }
 
             return this;
@@ -258,23 +276,34 @@ define('io.ox/office/editor/operations',
                 rangeStart = Utils.getIntegerOption(options, 'start'),
                 // end of text range to be included in the operations
                 rangeEnd = Utils.getIntegerOption(options, 'end'),
-                // whether to generate a 'clearAttributes' operation
-                clear = Utils.getBooleanOption(options, 'clear', false),
                 // start position of text nodes in the generated operations
                 targetOffset = Utils.getIntegerOption(options, 'targetOffset'),
 
                 // used to merge several text portions into the same operation
                 lastTextOperation = null,
-                // used to clear the attributes of the entire inserted text
-                lastClearOperation = null,
                 // formatting ranges for text portions, must be applied after the contents
-                attributeRanges = [];
+                attributeRanges = [],
+                // attributes passed to the first insert operation to clear all formatting
+                clearAttributes = null;
 
-            // generate a 'clearAttributes' operation on first call only
-            function generateClearAttributesOperation(options) {
-                var operation = clear ? generateOperation(Operations.ATTRS_CLEAR, options) : null;
-                clear = false;
-                return operation;
+            // generates the specified operation, adds that attributes in clearAttributes on first call
+            function generateOperationWithClearAttributes(name, operationOptions) {
+
+                // add the character attributes that will be cleared on first insertion operation
+                if (_.isObject(clearAttributes)) {
+                    operationOptions.attrs = clearAttributes;
+                    clearAttributes = null;
+                }
+
+                return generateOperation(name, operationOptions);
+            }
+
+            // clear all attributes of the first inserted text span
+            if (Utils.getBooleanOption(options, 'clear', false)) {
+                clearAttributes = {};
+                _(CharacterStyles.getAttributeNames()).each(function (name) {
+                    clearAttributes[name] = null;
+                });
             }
 
             // process all content nodes in the paragraph and create operations
@@ -301,42 +330,37 @@ define('io.ox/office/editor/operations',
                     // append text portions to the last 'insertText' operation
                     if (lastTextOperation) {
                         lastTextOperation.text += text;
-                        if (lastClearOperation) { lastClearOperation.end = endPosition; }
                     } else {
-                        lastTextOperation = generateOperation(Operations.TEXT_INSERT, { start: startPosition, text: text });
-                        // generate a 'clearAttributes' operation for the first text span
-                        lastClearOperation = generateClearAttributesOperation({ start: startPosition, end: endPosition });
+                        lastTextOperation = generateOperationWithClearAttributes(Operations.TEXT_INSERT, { start: startPosition, text: text });
                     }
-                    attributeRanges.push({ node: node, position: startPosition, endPosition: (text.length > 1) ? endPosition : null });
+                    attributeRanges.push({ node: node, start: startPosition, end: (text.length > 1) ? endPosition : null });
 
                 } else {
 
                     // anything else than plain text will be inserted, forget last text operation
-                    lastTextOperation = lastClearOperation = null;
+                    lastTextOperation = null;
 
                     // operation to create a text field
                     // TODO: field type
                     if (DOM.isFieldNode(node)) {
                         // extract text of all embedded spans representing the field
                         text = $(node).text();
-                        generateOperation(Operations.FIELD_INSERT, { position: startPosition, representation: text });
-                        generateClearAttributesOperation({ start: startPosition });
+                        generateOperationWithClearAttributes(Operations.FIELD_INSERT, { start: startPosition, representation: text });
                         // attributes are contained in the embedded span elements
-                        attributeRanges.push({ node: node.firstChild, position: startPosition });
+                        attributeRanges.push({ node: node.firstChild, start: startPosition });
                     }
 
                     // operation to create a tabulator
                     else if (DOM.isTabNode(node)) {
-                        generateOperation(Operations.TAB_INSERT, { position: startPosition });
-                        generateClearAttributesOperation({ start: startPosition });
+                        generateOperationWithClearAttributes(Operations.TAB_INSERT, { start: startPosition });
                         // attributes are contained in the embedded span elements
-                        attributeRanges.push({ node: node.firstChild, position: startPosition });
+                        attributeRanges.push({ node: node.firstChild, start: startPosition });
                     }
 
                     // operation to create a drawing (including its attributes)
                     else if (DOM.isDrawingNode(node)) {
                         type = $(node).data('type');
-                        this.generateOperationWithAttributes(node, Operations.DRAWING_INSERT, { position: startPosition, type: type });
+                        this.generateOperationWithAttributes(node, Operations.DRAWING_INSERT, { start: startPosition, type: type });
                     }
 
                     else {
@@ -357,7 +381,7 @@ define('io.ox/office/editor/operations',
             // operations would clone the attributes of the last text portion
             // instead of creating a clean text node as expected in this case.
             _(attributeRanges).each(function (range) {
-                this.generateSetAttributesOperation(range.node, range.position, range.endPosition);
+                this.generateSetAttributesOperation(range.node, range.start, range.end);
             }, this);
 
             return this;
@@ -377,7 +401,7 @@ define('io.ox/office/editor/operations',
          *
          * @param {Boolean} [initialParagraph]
          *  If set to true, no 'insertParagraph' operation will be generated.
-         *  The generated operations will assume that an empty paragraph
+         *  The generated operations will assume that an empty (!) paragraph
          *  element exists at the passed logical position.
          *
          * @returns {Operations.Generator}
@@ -387,11 +411,10 @@ define('io.ox/office/editor/operations',
 
             // operations to create the paragraph element and formatting
             if (initialParagraph === true) {
-                generateOperation(Operations.ATTRS_CLEAR, { start: position });
+                this.generateSetAttributesOperation(paragraph, position, undefined, { clearAttributes: ParagraphStyles.getAttributeNames() });
             } else {
-                generateOperation(Operations.PARA_INSERT, { start: position });
+                this.generateOperationWithAttributes(paragraph, Operations.PARA_INSERT, { start: position });
             }
-            this.generateSetAttributesOperation(paragraph, position);
 
             // process all content nodes in the paragraph and create operations
             return this.generateParagraphChildOperations(paragraph, position);
@@ -415,7 +438,7 @@ define('io.ox/office/editor/operations',
         this.generateTableCellOperations = function (cellNode, position) {
 
             // operation to create the table cell element
-            this.generateOperationWithAttributes(cellNode, Operations.CELL_INSERT, { position: position, count: 1 });
+            this.generateOperationWithAttributes(cellNode, Operations.CELLS_INSERT, { start: position, count: 1 });
 
             // generate operations for the contents of the cell
             return this.generateContentOperations(cellNode, position);
@@ -438,7 +461,7 @@ define('io.ox/office/editor/operations',
         this.generateTableRowOperations = function (rowNode, position) {
 
             // operation to create the table row element
-            this.generateOperationWithAttributes(rowNode, Operations.ROW_INSERT, { position: position, count: 1, insertdefaultcells: false });
+            this.generateOperationWithAttributes(rowNode, Operations.ROWS_INSERT, { start: position });
 
             // generate operations for all cells
             position = Position.appendNewIndex(position);
@@ -467,7 +490,7 @@ define('io.ox/office/editor/operations',
         this.generateTableOperations = function (tableNode, position) {
 
             // operation to create the table element
-            this.generateOperationWithAttributes(tableNode, Operations.TABLE_INSERT, { position: position });
+            this.generateOperationWithAttributes(tableNode, Operations.TABLE_INSERT, { start: position });
 
             // generate operations for all rows
             position = Position.appendNewIndex(position);

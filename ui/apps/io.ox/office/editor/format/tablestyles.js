@@ -339,7 +339,7 @@ define('io.ox/office/editor/format/tablestyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'table', DEFINITIONS, {
+        StyleSheets.call(this, documentStyles, 'table', {
             styleAttributesResolver: resolveTableStyleAttributes
         });
 
@@ -352,6 +352,6 @@ define('io.ox/office/editor/format/tablestyles',
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: TableStyles });
+    return StyleSheets.extend({ constructor: TableStyles }, { DEFINITIONS: DEFINITIONS });
 
 });

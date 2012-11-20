@@ -147,7 +147,7 @@ define('io.ox/office/editor/format/tablecellstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'cell', DEFINITIONS);
+        StyleSheets.call(this, documentStyles, 'cell');
 
         // initialization -----------------------------------------------------
 
@@ -159,6 +159,6 @@ define('io.ox/office/editor/format/tablecellstyles',
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: TableCellStyles });
+    return StyleSheets.extend({ constructor: TableCellStyles }, { DEFINITIONS: DEFINITIONS });
 
 });

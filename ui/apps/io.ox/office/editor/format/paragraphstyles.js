@@ -309,7 +309,7 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'paragraph', DEFINITIONS);
+        StyleSheets.call(this, documentStyles, 'paragraph');
 
         // initialization -----------------------------------------------------
 
@@ -396,6 +396,6 @@ define('io.ox/office/editor/format/paragraphstyles',
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: ParagraphStyles });
+    return StyleSheets.extend({ constructor: ParagraphStyles }, { DEFINITIONS: DEFINITIONS });
 
 });
