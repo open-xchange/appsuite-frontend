@@ -37,7 +37,7 @@ define('io.ox/office/editor/editor',
 
     'use strict';
 
-    var // shortcut for the  KeyCodes object
+    var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
 
         // key codes of keys that change the text cursor position backwards
