@@ -57,8 +57,8 @@ define('io.ox/office/editor/editor',
 
         // style attributes for heading 1 -6 based on latent styles
         HEADINGS_CHARATTRIBUTES = [
-            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 74902 }]}, bold: true, fontsize: 14 },
-            { color: { type: 'scheme', value: 'accent1'}, bold: true, fontsize: 13 },
+            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 74902 }]}, bold: true, fontSize: 14 },
+            { color: { type: 'scheme', value: 'accent1'}, bold: true, fontSize: 13 },
             { color: { type: 'scheme', value: 'accent1'}, bold: true },
             { color: { type: 'scheme', value: 'accent1'}, bold: true, italic: true },
             { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 49804 }]} },
@@ -71,16 +71,16 @@ define('io.ox/office/editor/editor',
         DEFAULT_LATERAL_TABLE_DEFINITIONS = { 'default': true, styleid: 'TableGrid', stylename: 'Table Grid', uipriority: 59 },
         DEFAULT_LATERAL_TABLE_ATTRIBUTES =
         {
-            wholetable: {
-                paragraph: { lineheight: { type: 'percent', value: 100 }},
+            wholeTable: {
+                paragraph: { lineHeight: { type: 'percent', value: 100 }},
                 table:
                 {
-                    bordertop:     { color: Color.AUTO, width: 17, style: 'single' },
-                    borderbottom:  { color: Color.AUTO, width: 17, style: 'single' },
-                    borderinsideh: { color: Color.AUTO, width: 17, style: 'single' },
-                    borderinsidev: { color: Color.AUTO, width: 17, style: 'single' },
-                    borderleft:    { color: Color.AUTO, width: 17, style: 'single' },
-                    borderright:   { color: Color.AUTO, width: 17, style: 'single' }
+                    borderTop:        { color: Color.AUTO, width: 17, style: 'single' },
+                    borderBottom:     { color: Color.AUTO, width: 17, style: 'single' },
+                    borderInsideHor:  { color: Color.AUTO, width: 17, style: 'single' },
+                    borderInsideVert: { color: Color.AUTO, width: 17, style: 'single' },
+                    borderLeft:       { color: Color.AUTO, width: 17, style: 'single' },
+                    borderRight:      { color: Color.AUTO, width: 17, style: 'single' }
                 }
             }
         },
@@ -430,7 +430,7 @@ define('io.ox/office/editor/editor',
                 // generate new rows (repeatedly, a row may be covered completely by merged cells)
                 while (lastRow < row) {
                     lastRow += 1;
-                    generator.generateOperationWithAttributes(tableRowNodes[lastRow], Operations.ROW_INSERT, { position: [1, lastRow], count: 1, insertdefaultcells: false });
+                    generator.generateOperationWithAttributes(tableRowNodes[lastRow], Operations.ROWS_INSERT, { start: [1, lastRow], count: 1, insertDefaultCells: false });
                 }
 
                 // TODO: detect missing cells, which are covered by merged cells outside of the cell range
@@ -447,8 +447,8 @@ define('io.ox/office/editor/editor',
 
             // generate the operation to create the new table
             tableAttributes = StyleSheets.getExplicitAttributes(cellRangeInfo.tableNode);
-            tableAttributes.tablegrid = tableStyles.getElementAttributes(cellRangeInfo.tableNode).tablegrid.slice(cellRangeInfo.firstCellPosition[1], cellRangeInfo.lastCellPosition[1] + 1);
-            generator.generateOperation(Operations.TABLE_INSERT, { position: [1], attrs: tableAttributes });
+            tableAttributes.tableGrid = tableStyles.getElementAttributes(cellRangeInfo.tableNode).tableGrid.slice(cellRangeInfo.firstCellPosition[1], cellRangeInfo.lastCellPosition[1] + 1);
+            generator.generateOperation(Operations.TABLE_INSERT, { start: [1], attrs: tableAttributes });
 
             // all covered rows in the table
             tableRowNodes = DOM.getTableRows(cellRangeInfo.tableNode).slice(cellRangeInfo.firstCellPosition[0], cellRangeInfo.lastCellPosition[0] + 1);
@@ -543,11 +543,8 @@ define('io.ox/office/editor/editor',
                     operation = _.clone(operation);
 
                     // transform position of operation
-                    // TODO: need reliable way to get the position attributes
-                    if (_.isArray(operation.position)) {
-                        operation.position = transformPosition(operation.position);
-                    } else if (_.isArray(operation.start)) {
-                        // ignore 'start' when 'position' exists, start may exist but is relative to position then
+                    if (_.isArray(operation.start)) {
+                        // start may exist but is relative to position then
                         operation.start = transformPosition(operation.start);
                         // attribute 'end' only with attribute 'start'
                         if (_.isArray(operation.end)) {
@@ -1024,7 +1021,7 @@ define('io.ox/office/editor/editor',
                     var count = localEndCol - localStartCol,
                         cellPosition = _.copy(rowPosition, true);
                     cellPosition.push(localStartCol);
-                    var newOperation = {name: Operations.CELL_MERGE, position: cellPosition, count: count};
+                    var newOperation = {name: Operations.CELL_MERGE, start: cellPosition, count: count};
                     applyOperation(newOperation);
 
                     endPosition = _.copy(cellPosition, true);
@@ -1077,27 +1074,27 @@ define('io.ox/office/editor/editor',
                 localEndCol++;  // adding new cell behind existing cell
                 var cellPosition = _.copy(rowPosition, true);
                 cellPosition.push(localEndCol);
-                attrs.gridspan = 1;  // only 1 grid for the new cell
-                var newOperation = {name: Operations.CELL_INSERT, position: cellPosition, count: count, attrs: attrs};
+                attrs.gridSpan = 1;  // only 1 grid for the new cell
+                var newOperation = {name: Operations.CELLS_INSERT, start: cellPosition, count: count, attrs: attrs};
                 applyOperation(newOperation);
 
-                // Applying new tablegrid, if the current tablegrid is not sufficient
+                // Applying new tableGrid, if the current tableGrid is not sufficient
                 var tableDomPoint = Position.getDOMPosition(editdiv, tablePos),
                     rowDomPoint = Position.getDOMPosition(editdiv, rowPosition);
 
                 if (tableDomPoint && DOM.isTableNode(tableDomPoint.node)) {
 
-                    var tableGridCount = StyleSheets.getExplicitAttributes(tableDomPoint.node).tablegrid.length,
+                    var tableGridCount = StyleSheets.getExplicitAttributes(tableDomPoint.node).tableGrid.length,
                         rowGridCount = Table.getColSpanSum($(rowDomPoint.node).children());
 
                     if (rowGridCount > tableGridCount) {
 
                         localEndCol--;  // behind is evaluated in getTableGridWithNewColumn
                         var insertmode = 'behind',
-                            tablegrid = Table.getTableGridWithNewColumn(editdiv, tablePos, localEndCol, insertmode);
+                            tableGrid = Table.getTableGridWithNewColumn(editdiv, tablePos, localEndCol, insertmode);
 
                         // Setting new table grid attribute to table
-                        newOperation = { name: Operations.ATTRS_SET, attrs: { 'tablegrid' : tablegrid }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
+                        newOperation = { name: Operations.ATTRS_SET, attrs: { 'tableGrid' : tableGrid }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
                         applyOperation(newOperation);
                     }
 
@@ -1142,7 +1139,7 @@ define('io.ox/office/editor/editor',
                     newOperation = { name: Operations.TABLE_DELETE, start: _.copy(tablePos, true) };
                     applyOperation(newOperation);
                 } else {
-                    newOperation = { name: Operations.COLUMNS_DELETE, position: tablePos, startgrid: startGrid, endgrid: endGrid };
+                    newOperation = { name: Operations.COLUMNS_DELETE, start: tablePos, startGrid: startGrid, endGrid: endGrid };
                     applyOperation(newOperation);
 
                     // Checking, if there are empty rows
@@ -1171,9 +1168,9 @@ define('io.ox/office/editor/editor',
                     // Setting new table grid attribute to table
                     if (! deletedAllRows) {
                         var // StyleSheets.getExplicitAttributes() returns deep copy of the table attributes
-                            tablegrid = StyleSheets.getExplicitAttributes(tableNode).tablegrid;
-                        tablegrid.splice(startGrid, endGrid - startGrid + 1);  // removing column(s) in tablegrid (automatically updated in table node)
-                        newOperation = { name: Operations.ATTRS_SET, attrs: { 'tablegrid' : tablegrid }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
+                            tableGrid = StyleSheets.getExplicitAttributes(tableNode).tableGrid;
+                        tableGrid.splice(startGrid, endGrid - startGrid + 1);  // removing column(s) in tableGrid (automatically updated in table node)
+                        newOperation = { name: Operations.ATTRS_SET, attrs: { 'tableGrid' : tableGrid }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
                         applyOperation(newOperation);
                     }
 
@@ -1188,7 +1185,7 @@ define('io.ox/office/editor/editor',
         this.insertRow = function () {
             var // start = Position.getRowIndexInTable(editdiv, selection.endPaM.oxoPosition),
                 count = 1,  // inserting only one row
-                insertdefaultcells = false,
+                insertDefaultCells = false,
                 position = selection.getEndPosition();
 
             var rowPos = Position.getLastPositionFromPositionByNodeName(editdiv, position, 'tr');
@@ -1199,7 +1196,7 @@ define('io.ox/office/editor/editor',
 
                 rowPos[rowPos.length - 1] += 1;
 
-                var newOperation = { name: Operations.ROW_INSERT, position: rowPos, count: count, insertdefaultcells: insertdefaultcells, referencerow: referenceRow };
+                var newOperation = { name: Operations.ROWS_INSERT, start: rowPos, count: count, insertDefaultCells: insertDefaultCells, referenceRow: referenceRow };
                 applyOperation(newOperation);
             }
 
@@ -1212,17 +1209,17 @@ define('io.ox/office/editor/editor',
                 cellPosition = Position.getColumnIndexInRow(editdiv, position),
                 tablePos = Position.getLastPositionFromPositionByNodeName(editdiv, position, DOM.TABLE_NODE_SELECTOR),
                 rowNode = Position.getLastNodeFromPositionByNodeName(editdiv, position, 'tr'),
-                insertmode = 'behind',
+                insertMode = 'behind',
                 gridPosition = Table.getGridPositionFromCellPosition(rowNode, cellPosition).start,
-                tablegrid = Table.getTableGridWithNewColumn(editdiv, tablePos, gridPosition, insertmode);
+                tableGrid = Table.getTableGridWithNewColumn(editdiv, tablePos, gridPosition, insertMode);
 
             undoManager.enterGroup(function () {
 
-                var newOperation = { name: Operations.COLUMN_INSERT, position: tablePos, tablegrid: tablegrid, gridposition: gridPosition, insertmode: insertmode };
+                var newOperation = { name: Operations.COLUMN_INSERT, start: tablePos, tableGrid: tableGrid, gridPosition: gridPosition, insertMode: insertMode };
                 applyOperation(newOperation);
 
                 // Setting new table grid attribute to table
-                newOperation = { name: Operations.ATTRS_SET, attrs: { 'tablegrid' : tablegrid }, start: _.clone(tablePos), end: _.clone(tablePos) };
+                newOperation = { name: Operations.ATTRS_SET, attrs: { 'tableGrid' : tableGrid }, start: _.clone(tablePos), end: _.clone(tablePos) };
                 applyOperation(newOperation);
 
             }, this);
@@ -1231,8 +1228,8 @@ define('io.ox/office/editor/editor',
             selection.setTextSelection(lastOperationEnd);
         };
 
-        this.insertParagraph = function (position) {
-            var newOperation = {name: Operations.PARA_INSERT, start: _.clone(position)};
+        this.insertParagraph = function (start) {
+            var newOperation = {name: Operations.PARA_INSERT, start: _.clone(start)};
             applyOperation(newOperation);
         };
 
@@ -1248,7 +1245,7 @@ define('io.ox/office/editor/editor',
                     // text offset in paragraph, first and last text position in paragraph
                     offset = 0, startOffset = 0, endOffset = 0,
                     // table attributes
-                    attributes = { tablegrid: [], width: 0 },
+                    attributes = { tableGrid: [], width: 0 },
                     // default table style
                     tableStyleId = self.getDefaultUITableStylesheet(),
                     // operations generator
@@ -1274,7 +1271,7 @@ define('io.ox/office/editor/editor',
                 }
 
                 // prepare table column widths (values are relative to each other)
-                _(size.width).times(function () { attributes.tablegrid.push(1000); });
+                _(size.width).times(function () { attributes.tableGrid.push(1000); });
 
                 // set default table style
                 if (_.isString(tableStyleId)) {
@@ -1284,10 +1281,10 @@ define('io.ox/office/editor/editor',
                         generator.generateOperation(Operations.INSERT_STYLE, {
                             attrs: tableStyles.getStyleSheetAttributeMap(tableStyleId),
                             type: 'table',
-                            styleid: tableStyleId,
-                            stylename: tableStyles.getName(tableStyleId),
+                            styleId: tableStyleId,
+                            styleName: tableStyles.getName(tableStyleId),
                             parent: tableStyles.getParentId(tableStyleId),
-                            uipriority: tableStyles.getUIPriority(tableStyleId)
+                            uiPriority: tableStyles.getUIPriority(tableStyleId)
                         });
                         tableStyles.setDirty(tableStyleId, false);
                     }
@@ -1297,8 +1294,8 @@ define('io.ox/office/editor/editor',
                 }
 
                 // insert the table, and add empty rows
-                generator.generateOperation(Operations.TABLE_INSERT, { position: _.clone(position), attrs: attributes });
-                generator.generateOperation(Operations.ROW_INSERT, { position: Position.appendNewIndex(position, 0), count: size.height, insertdefaultcells: true });
+                generator.generateOperation(Operations.TABLE_INSERT, { start: _.clone(position), attrs: attributes });
+                generator.generateOperation(Operations.ROWS_INSERT, { start: Position.appendNewIndex(position, 0), count: size.height, insertDefaultCells: true });
 
                 // apply all collected operations
                 self.applyOperations(generator.getOperations());
@@ -1311,17 +1308,17 @@ define('io.ox/office/editor/editor',
 
         this.insertImageFile = function (imageFragment) {
 
-            var position = selection.getStartPosition(),
+            var start = selection.getStartPosition(),
                 newOperation = {
                     name: Operations.DRAWING_INSERT,
-                    position: position,
+                    start: start,
                     type: 'image',
-                    attrs: { imgurl: imageFragment }
+                    attrs: { imageUrl: imageFragment }
                 };
 
             applyOperation(newOperation);
 
-            sendImageSize(position);
+            sendImageSize(start);
 
             // setting the cursor position
             selection.setTextSelection(lastOperationEnd);
@@ -1329,17 +1326,17 @@ define('io.ox/office/editor/editor',
 
         this.insertImageURL = function (imageURL) {
 
-            var position = selection.getStartPosition(),
+            var start = selection.getStartPosition(),
                 newOperation = {
                     name: Operations.DRAWING_INSERT,
-                    position: position,
+                    start: start,
                     type: 'image',
-                    attrs: { imgurl: imageURL }
+                    attrs: { imageUrl: imageURL }
                 };
 
             applyOperation(newOperation);
 
-            sendImageSize(position);
+            sendImageSize(start);
 
             // setting the cursor position
             selection.setTextSelection(lastOperationEnd);
@@ -1347,17 +1344,17 @@ define('io.ox/office/editor/editor',
 
         this.insertImageData = function (imageData) {
 
-            var position = selection.getStartPosition(),
+            var start = selection.getStartPosition(),
                 newOperation = {
                     name: Operations.DRAWING_INSERT,
-                    position: position,
+                    start: start,
                     type: 'image',
-                    attrs: { imgdata: imageData }
+                    attrs: { imageData: imageData }
                 };
 
             applyOperation(newOperation);
 
-            sendImageSize(position);
+            sendImageSize(start);
 
             // setting the cursor position
             selection.setTextSelection(lastOperationEnd);
@@ -1446,10 +1443,10 @@ define('io.ox/office/editor/editor',
                                 generator.generateOperation(Operations.INSERT_STYLE, {
                                     attrs: characterStyles.getStyleSheetAttributeMap(hyperlinkStyleId),
                                     type: 'character',
-                                    styleid: hyperlinkStyleId,
-                                    stylename: characterStyles.getName(hyperlinkStyleId),
+                                    styleId: hyperlinkStyleId,
+                                    styleName: characterStyles.getName(hyperlinkStyleId),
                                     parent: characterStyles.getParentId(hyperlinkStyleId),
-                                    uipriority: characterStyles.getUIPriority(hyperlinkStyleId)
+                                    uiPriority: characterStyles.getUIPriority(hyperlinkStyleId)
                                 });
                                 characterStyles.setDirty(hyperlinkStyleId, false);
                             }
@@ -1523,7 +1520,7 @@ define('io.ox/office/editor/editor',
         this.insertTab = function () {
             undoManager.enterGroup(function () {
                 this.deleteSelected();
-                applyOperation({ name: Operations.TAB_INSERT, position: selection.getStartPosition() });
+                applyOperation({ name: Operations.TAB_INSERT, start: selection.getStartPosition() });
             }, this);
 
             // setting the cursor position
@@ -1555,18 +1552,18 @@ define('io.ox/office/editor/editor',
                 if (defNumId === undefined) {
                     var listOperation = lists.getDefaultListOperation(type);
                     applyOperation(listOperation);
-                    defNumId = listOperation.listname;
+                    defNumId = listOperation.listName;
                 }
-                this.setAttributes('paragraph', { numId: defNumId, ilvl: 0 });
+                this.setAttributes('paragraph', { numId: defNumId, indentLevel: 0 });
             }, this);
         };
 
         this.createList = function (type, options) {
-            var defNumId = (!options || (!options.symbol && !options.levelstart)) ? lists.getDefaultNumId(type) : undefined;
+            var defNumId = (!options || (!options.symbol && !options.levelStart)) ? lists.getDefaultNumId(type) : undefined;
             if (defNumId === undefined) {
                 var listOperation = lists.getDefaultListOperation(type, options);
                 applyOperation(listOperation);
-                defNumId = listOperation.listname;
+                defNumId = listOperation.listName;
             }
             if (options && options.startPosition) {
                 var start = [];
@@ -1575,14 +1572,14 @@ define('io.ox/office/editor/editor',
                 for (; index < length - 1; ++index) {
                     start[index] = options.startPosition[index];
                 }
-                var newOperation = {name: Operations.ATTRS_SET, attrs: { numId: defNumId, ilvl: 0}, start: start, end: start };
+                var newOperation = {name: Operations.ATTRS_SET, attrs: { numId: defNumId, indentLevel: 0}, start: start, end: start };
                 applyOperation(newOperation);
                 start[start.length - 1] += 1;
                 newOperation.start = start;
                 newOperation.end = newOperation.start;
                 applyOperation(newOperation);
             } else {
-                this.setAttributes('paragraph', { numId: defNumId, ilvl: 0 });
+                this.setAttributes('paragraph', { numId: defNumId, indentLevel: 0 });
             }
 
         };
@@ -1778,16 +1775,16 @@ define('io.ox/office/editor/editor',
                     }
                 }
 
-                // register pending style sheet via 'insertStylesheet' operation
+                // register pending style sheet via 'insertStyleSheet' operation
                 if (_.isString(attributes.style) && styleSheets.isDirty(attributes.style)) {
 
                     generator.generateOperation(Operations.INSERT_STYLE, {
                         attrs: styleSheets.getStyleSheetAttributeMap(attributes.style),
                         type: family,
-                        styleid: attributes.style,
-                        stylename: styleSheets.getName(attributes.style),
+                        styleId: attributes.style,
+                        styleName: styleSheets.getName(attributes.style),
                         parent: styleSheets.getParentId(attributes.style),
-                        uipriority: styleSheets.getUIPriority(attributes.style)
+                        uiPriority: styleSheets.getUIPriority(attributes.style)
                     });
 
                     // remove the dirty flag
@@ -2167,7 +2164,7 @@ define('io.ox/office/editor/editor',
             // find out which outline level paragraph styles are missing
             _(styleNames).each(function (name, id) {
                 var styleAttributes = paragraphStyles.getStyleSheetAttributes(id),
-                    outlineLvl = styleAttributes.outlinelvl;
+                    outlineLvl = styleAttributes.outlineLevel;
                 if (_.isNumber(outlineLvl) && (outlineLvl >= 0 && outlineLvl < 6)) {
                     headings = _(headings).without(outlineLvl);
                 }
@@ -2180,7 +2177,7 @@ define('io.ox/office/editor/editor',
                     var attr = {},
                         charAttr = defaultCharStyles[level];
                     attr.character = charAttr;
-                    attr.paragraph = { outlinelvl: level };
+                    attr.paragraph = { outlineLevel: level };
                     attr.next = parentId;
                     paragraphStyles.addStyleSheet("heading " + (level + 1), "heading " + (level + 1),
                             parentId, attr, { hidden: false, priority: 9, defStyle: false, dirty: true });
@@ -2388,7 +2385,7 @@ define('io.ox/office/editor/editor',
                     self.insertCell();
                 }
                 else if (c === 'F') {
-                    var newOperation = {name: Operations.FIELD_INSERT, position: selection.getStartPosition(), type: ' DATE \\* MERGEFORMAT ', representation: '07.09.2012'};
+                    var newOperation = {name: Operations.FIELD_INSERT, start: selection.getStartPosition(), type: ' DATE \\* MERGEFORMAT ', representation: '07.09.2012'};
                     applyOperation(newOperation);
                 }
                 else if (c === '1') {
@@ -2609,15 +2606,15 @@ define('io.ox/office/editor/editor',
                     mustInsertTab = !event.shiftKey;
                 if (!selection.hasRange() &&
                         _.last(selection.getStartPosition()) === Position.getFirstTextNodePositionInParagraph(paragraph)) {
-                    var ilvl = paragraphStyles.getElementAttributes(paragraph).ilvl;
-                    if (ilvl !== -1) {
+                    var indentLevel = paragraphStyles.getElementAttributes(paragraph).indentLevel;
+                    if (indentLevel !== -1) {
                         mustInsertTab = false;
-                        if (!event.shiftKey && ilvl < 8) {
-                            ilvl += 1;
-                            self.setAttribute('paragraph', 'ilvl', ilvl);
-                        } else if (event.shiftKey && ilvl > 0) {
-                            ilvl -= 1;
-                            self.setAttribute('paragraph', 'ilvl', ilvl);
+                        if (!event.shiftKey && indentLevel < 8) {
+                            indentLevel += 1;
+                            self.setAttribute('paragraph', 'indentLevel', indentLevel);
+                        } else if (event.shiftKey && indentLevel > 0) {
+                            indentLevel -= 1;
+                            self.setAttribute('paragraph', 'indentLevel', indentLevel);
                         }
                     }
                 }
@@ -2722,13 +2719,13 @@ define('io.ox/office/editor/editor',
                         var // the paragraph element addressed by the
                             // passed logical position
                             paragraph = Position.getLastNodeFromPositionByNodeName(editdiv, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR);
-                        var ilvl = paragraphStyles.getElementAttributes(paragraph).ilvl;
+                        var indentLevel = paragraphStyles.getElementAttributes(paragraph).indentLevel;
                         var split = true;
                         var paragraphLength = Position.getParagraphLength(editdiv, selection.startPaM.oxoPosition);
-                        if (!hasSelection && ilvl >= 0 && paragraphLength === 0) {
-                            ilvl--;
-                            self.setAttribute('paragraph', 'ilvl', ilvl);
-                            if (ilvl < 0) {
+                        if (!hasSelection && indentLevel >= 0 && paragraphLength === 0) {
+                            indentLevel--;
+                            self.setAttribute('paragraph', 'indentLevel', indentLevel);
+                            if (indentLevel < 0) {
                                 //remove list-label and update paragraph
                                 $(paragraph).children(DOM.LIST_LABEL_NODE_SELECTOR).remove();
                                 implParagraphChanged(paragraph);
@@ -2736,7 +2733,7 @@ define('io.ox/office/editor/editor',
                             split = false;
                         }
                         var numAutoCorrect = {};
-                        if (!hasSelection && ilvl < 0 && paragraphLength > 3) {
+                        if (!hasSelection && indentLevel < 0 && paragraphLength > 3) {
                             // detect Numbering/Bullet labels at paragraph
                             // start
 
@@ -2744,7 +2741,7 @@ define('io.ox/office/editor/editor',
                                 var paraText = paragraph.textContent,
                                 labelText = paraText.split(' ')[0];
                                 numAutoCorrect.listDetection = lists.detectListSymbol(labelText);
-                                if (numAutoCorrect.listDetection.numberformat !== undefined) {
+                                if (numAutoCorrect.listDetection.numberFormat !== undefined) {
                                     numAutoCorrect.startPosition = _.copy(selection.startPaM.oxoPosition, true);
                                     numAutoCorrect.startPosition[numAutoCorrect.startPosition.length - 1] = 0;
                                     numAutoCorrect.endPosition = _.copy(selection.endPaM.oxoPosition, true);
@@ -2755,13 +2752,13 @@ define('io.ox/office/editor/editor',
                         if (split === true) {
                             self.splitParagraph(startPosition);
                             // now apply 'AutoCorrection'
-                            if (numAutoCorrect.listDetection && numAutoCorrect.listDetection.numberformat !== undefined) {
+                            if (numAutoCorrect.listDetection && numAutoCorrect.listDetection.numberFormat !== undefined) {
                                 undoManager.enterGroup(function () {
                                     self.deleteText(numAutoCorrect.startPosition, numAutoCorrect.endPosition);
-                                    self.createList(numAutoCorrect.listDetection.numberformat === 'bullet' ? 'bullet' : 'numbering',
-                                            {levelstart: numAutoCorrect.listDetection.levelstart, symbol: numAutoCorrect.listDetection.symbol,
+                                    self.createList(numAutoCorrect.listDetection.numberFormat === 'bullet' ? 'bullet' : 'numbering',
+                                            {levelStart: numAutoCorrect.listDetection.levelStart, symbol: numAutoCorrect.listDetection.symbol,
                                              startPosition: numAutoCorrect.startPosition,
-                                             numberformat: numAutoCorrect.listDetection.numberformat
+                                             numberFormat: numAutoCorrect.listDetection.numberFormat
                                             });
                                 });
                             }
@@ -2980,8 +2977,8 @@ define('io.ox/office/editor/editor',
                 properties = _.isObject(operation.attrs) ? operation.attrs : {};
 
             // read various document properties and set it at the document styles
-            if (properties.defaulttabstop) {
-                documentAttributes.defaulttabstop = properties.defaulttabstop;
+            if (properties.defaultTabStop) {
+                documentAttributes.defaultTabStop = properties.defaultTabStop;
             }
             if (properties.zoom) {
                 documentAttributes.zoom = properties.zoom;
@@ -2996,13 +2993,13 @@ define('io.ox/office/editor/editor',
                 var undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: endPos };
                 undoManager.addUndo(undoOperation, operation);
             }
-            implInsertText(operation.text, operation.start);
+            implInsertText(operation.text, operation.start, operation.attrs);
         };
 
         operationHandlers[Operations.TAB_INSERT] = function (operation) {
-            if (implInsertTab(operation.position)) {
+            if (implInsertTab(operation.start, operation.attrs)) {
                 if (undoManager.isEnabled()) {
-                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.position, end: operation.position };
+                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: operation.start };
                     undoManager.addUndo(undoOperation, operation);
                 }
             }
@@ -3024,10 +3021,11 @@ define('io.ox/office/editor/editor',
 
         operationHandlers[Operations.MOVE] = function (operation) {
             if (undoManager.isEnabled()) {
-                var undoOperation = { name: Operations.MOVE, start: operation.end, end: operation.start };
+                // Todo: Ignoring 'end', only 'start' === 'end' is supported
+                var undoOperation = { name: Operations.MOVE, start: operation.to, end: operation.to, to: operation.start };
                 undoManager.addUndo(undoOperation, operation);
             }
-            implMove(operation.start, operation.end);
+            implMove(operation.start, operation.end, operation.to);
         };
 
         operationHandlers[Operations.TEXT_DELETE] = function (operation) {
@@ -3052,7 +3050,7 @@ define('io.ox/office/editor/editor',
                 attributes = _.isObject(operation.attrs) ? operation.attrs : {};
 
             if (!styleSheets) {
-                Utils.warn('Editor.insertStylesheet(): invalid style family: ' + operation.type);
+                Utils.warn('Editor.insertStyleSheet(): invalid style family: ' + operation.type);
                 return;
             }
 
@@ -3060,11 +3058,11 @@ define('io.ox/office/editor/editor',
                 // TODO!!!
             }
 
-            if (operation.pooldefault === true) {
+            if (operation.poolDefault === true) {
                 styleSheets.setAttributeDefaults(attributes[operation.type]);
             } else {
-                styleSheets.addStyleSheet(operation.styleid, operation.stylename, operation.parent, attributes,
-                    { hidden: operation.hidden, priority: operation.uipriority, defStyle: operation['default'] });
+                styleSheets.addStyleSheet(operation.styleId, operation.styleName, operation.parent, attributes,
+                    { hidden: operation.hidden, priority: operation.uiPriority, defStyle: operation['default'] });
             }
         };
 
@@ -3074,7 +3072,7 @@ define('io.ox/office/editor/editor',
                 // TODO!!!
             }
 
-            self.getThemes().addTheme(operation.themename, operation.attrs);
+            self.getThemes().addTheme(operation.themeName, operation.attrs);
         };
 
         operationHandlers[Operations.INSERT_FONT_DESC] = function (operation) {
@@ -3082,13 +3080,13 @@ define('io.ox/office/editor/editor',
         };
 
         operationHandlers[Operations.INSERT_LIST] = function (operation) {
-            undoManager.addUndo({ name: Operations.DELETE_LIST, listname: operation.listname }, operation);
-            lists.addList(operation.listname, operation.listdefinition);
+            undoManager.addUndo({ name: Operations.DELETE_LIST, listName: operation.listName }, operation);
+            lists.addList(operation.listName, operation.listDefinition);
         };
 
         operationHandlers[Operations.DELETE_LIST] = function (operation) {
             // no Undo, cannot be removed by UI
-            lists.deleteList(operation.listname);
+            lists.deleteList(operation.listName);
         };
 
         operationHandlers[Operations.ATTRS_SET] = function (operation) {
@@ -3126,6 +3124,11 @@ define('io.ox/office/editor/editor',
             // undo needed because this is covered by the deleteParagraph operation)
             if (_.isString(operation.text) && (operation.text.length > 0)) {
                 implInsertText(operation.text, startPosition);
+            }
+
+            // apply the passed paragraph attributes
+            if (_.isObject(operation.attrs) && !_.isEmpty(operation.attrs)) {
+                paragraphStyles.setElementAttributes(paragraph, operation.attrs);
             }
 
             // set cursor to beginning of the new paragraph
@@ -3243,14 +3246,14 @@ define('io.ox/office/editor/editor',
             var // the new table
                 table = $('<table>').append($('<colgroup>')),
                 // insert the table into the DOM tree
-                inserted = insertContentNode(operation.position, table);
+                inserted = insertContentNode(operation.start, table);
 
             // insertContentNode() writes warning to console
             if (!inserted) { return; }
 
             // generate undo/redo operations
             if (undoManager.isEnabled()) {
-                undoManager.addUndo({ name: Operations.TABLE_DELETE, start: operation.position }, operation);
+                undoManager.addUndo({ name: Operations.TABLE_DELETE, start: operation.start }, operation);
             }
 
             // apply the passed table attributes
@@ -3315,12 +3318,12 @@ define('io.ox/office/editor/editor',
         };
 
         operationHandlers[Operations.COLUMNS_DELETE] = function (operation) {
-            var table = Position.getTableElement(editdiv, operation.position);
+            var table = Position.getTableElement(editdiv, operation.start);
             if (table) {
                 if (undoManager.isEnabled()) {
 
                     var allRows = DOM.getTableRows(table),
-                        allCellRemovePositions = Table.getAllRemovePositions(allRows, operation.startgrid, operation.endgrid),
+                        allCellRemovePositions = Table.getAllRemovePositions(allRows, operation.startGrid, operation.endGrid),
                         generator = new Operations.Generator();
 
                     allRows.each(function (index) {
@@ -3350,41 +3353,41 @@ define('io.ox/office/editor/editor',
                     });
                     undoManager.addUndo(generator.getOperations(), operation);
                 }
-                implDeleteColumns(operation.position, operation.startgrid, operation.endgrid);
+                implDeleteColumns(operation.start, operation.startGrid, operation.endGrid);
             }
         };
 
         operationHandlers[Operations.CELL_MERGE] = function (operation) {
             if (undoManager.isEnabled()) {
                 var content = null,
-                    gridspan = null,
-                    undoOperation = { name: Operations.CELL_SPLIT, position: operation.position, content: content, gridspan: gridspan };
+                    gridSpan = null,
+                    undoOperation = { name: Operations.CELL_SPLIT, start: operation.start, content: content, gridSpan: gridSpan };
                 undoManager.addUndo(undoOperation, operation);
             }
-            implMergeCell(_.copy(operation.position, true), operation.count);
+            implMergeCell(_.copy(operation.start, true), operation.count);
         };
 
-        operationHandlers[Operations.CELL_INSERT] = function (operation) {
+        operationHandlers[Operations.CELLS_INSERT] = function (operation) {
             if (undoManager.isEnabled()) {
-                var pos = _.copy(operation.position, true),
+                var pos = _.copy(operation.start, true),
                     start = pos.pop(),
                     count = operation.count || 1,
                     end = start + count - 1,
                     undoOperation = { name: Operations.CELLS_DELETE, position: pos, start: start, end: end };
                 undoManager.addUndo(undoOperation, operation);
             }
-            implInsertCell(_.copy(operation.position, true), operation.count, operation.attrs);
+            implInsertCells(_.copy(operation.start, true), operation.count, operation.attrs);
         };
 
-        operationHandlers[Operations.ROW_INSERT] = function (operation) {
+        operationHandlers[Operations.ROWS_INSERT] = function (operation) {
             if (undoManager.isEnabled()) {
-                var pos = _.copy(operation.position, true),
+                var pos = _.copy(operation.start, true),
                     start = pos.pop(),
                     end = start,
                     undoOperation = { name: Operations.ROWS_DELETE, position: pos, start: start, end: end };
                 undoManager.addUndo(undoOperation, operation);
             }
-            implInsertRow(operation.position, operation.count, operation.insertdefaultcells, operation.referencerow, operation.attrs);
+            implInsertRows(operation.start, operation.count, operation.insertDefaultCells, operation.referenceRow, operation.attrs);
         };
 
         operationHandlers[Operations.COLUMN_INSERT] = function (operation) {
@@ -3392,10 +3395,10 @@ define('io.ox/office/editor/editor',
                 undoManager.startGroup();
                 // COLUMNS_DELETE cannot be the answer to COLUMN_INSERT, because the cells of the new column may be inserted
                 // at very different grid positions. It is only possible to remove the new cells with deleteCells operation.
-                var localPos = _.copy(operation.position, true),
+                var localPos = _.copy(operation.start, true),
                     table = Position.getDOMPosition(editdiv, localPos).node,  // -> this is already the new grid with the new column!
                     allRows = DOM.getTableRows(table),
-                    allCellInsertPositions = Table.getAllInsertPositions(allRows, operation.gridposition, operation.insertmode);
+                    allCellInsertPositions = Table.getAllInsertPositions(allRows, operation.gridPosition, operation.insertMode);
 
                 for (var i = (allCellInsertPositions.length - 1); i >= 0; i--) {
                     var rowPos = _.copy(localPos, true),
@@ -3410,22 +3413,22 @@ define('io.ox/office/editor/editor',
 
                 undoManager.endGroup();
             }
-            implInsertColumn(operation.position, operation.gridposition, operation.tablegrid, operation.insertmode);
+            implInsertColumn(operation.start, operation.gridPosition, operation.insertMode);
         };
 
         operationHandlers[Operations.DRAWING_INSERT] = function (operation) {
-            if (implInsertDrawing(operation.type, operation.position, operation.attrs)) {
+            if (implInsertDrawing(operation.type, operation.start, operation.attrs)) {
                 if (undoManager.isEnabled()) {
-                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.position, end: operation.position };
+                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: operation.start };
                     undoManager.addUndo(undoOperation, operation);
                 }
             }
         };
 
         operationHandlers[Operations.FIELD_INSERT] = function (operation) {
-            if (implInsertField(operation.position, operation.type, operation.representation)) {
+            if (implInsertField(operation.start, operation.type, operation.representation, operation.attrs)) {
                 if (undoManager.isEnabled()) {
-                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.position, end: operation.position };
+                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: operation.start };
                     undoManager.addUndo(undoOperation, operation);
                 }
             }
@@ -3667,14 +3670,14 @@ define('io.ox/office/editor/editor',
                             moveY = Utils.convertLengthToHmm(shiftY, 'px'),
                             updatePosition = Position.getOxoPosition(editdiv, drawingNode, 0),
                             newOperation = null,
-                            anchorhoffset = 0,
-                            anchorvoffset = 0,
-                            oldanchorhoffset = StyleSheets.getExplicitAttributes(drawingNode).anchorhoffset,
-                            oldanchorvoffset = StyleSheets.getExplicitAttributes(drawingNode).anchorvoffset ? StyleSheets.getExplicitAttributes(drawingNode).anchorvoffset : 0,
-                            anchorhbase = StyleSheets.getExplicitAttributes(drawingNode).anchorhbase,
-                            anchorvbase = StyleSheets.getExplicitAttributes(drawingNode).anchorvbase,
-                            anchorhalign = StyleSheets.getExplicitAttributes(drawingNode).anchorhalign,
-                            anchorvalign = StyleSheets.getExplicitAttributes(drawingNode).anchorvalign,
+                            anchorHorOffset = 0,
+                            anchorVertOffset = 0,
+                            oldanchorhoffset = StyleSheets.getExplicitAttributes(drawingNode).anchorHorOffset,
+                            oldanchorvoffset = StyleSheets.getExplicitAttributes(drawingNode).anchorVertOffset ? StyleSheets.getExplicitAttributes(drawingNode).anchorVertOffset : 0,
+                            anchorHorBase = StyleSheets.getExplicitAttributes(drawingNode).anchorHorBase,
+                            anchorVertBase = StyleSheets.getExplicitAttributes(drawingNode).anchorVertBase,
+                            anchorHorAlign = StyleSheets.getExplicitAttributes(drawingNode).anchorHorAlign,
+                            anchorVertAlign = StyleSheets.getExplicitAttributes(drawingNode).anchorVertAlign,
                             // current drawing width, in 1/100 mm
                             drawingWidth = Utils.convertLengthToHmm($(drawingNode).width(), 'px'),
                             // the paragraph element containing the drawing node
@@ -3683,10 +3686,10 @@ define('io.ox/office/editor/editor',
                             paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px');
 
                         if (oldanchorhoffset === undefined) {
-                            // anchorhoffset has to be calculated corresponding to the left paragraph border
-                            if (anchorhalign === 'right') {
+                            // anchorHorOffset has to be calculated corresponding to the left paragraph border
+                            if (anchorHorAlign === 'right') {
                                 oldanchorhoffset = paraWidth - drawingWidth;
-                            } else if (anchorhalign === 'center') {
+                            } else if (anchorHorAlign === 'center') {
                                 oldanchorhoffset = (paraWidth - drawingWidth) / 2;
                             } else {
                                 oldanchorhoffset = 0;
@@ -3694,23 +3697,23 @@ define('io.ox/office/editor/editor',
                         }
 
                         if (moveX !== 0) {
-                            anchorhoffset = oldanchorhoffset + moveX;
-                            anchorhalign = 'offset';
-                            anchorhbase = 'column';
-                            if (anchorhoffset < 0) { anchorhoffset = 0; }
-                            else if (anchorhoffset > (paraWidth - drawingWidth)) { anchorhoffset = paraWidth - drawingWidth; }
+                            anchorHorOffset = oldanchorhoffset + moveX;
+                            anchorHorAlign = 'offset';
+                            anchorHorBase = 'column';
+                            if (anchorHorOffset < 0) { anchorHorOffset = 0; }
+                            else if (anchorHorOffset > (paraWidth - drawingWidth)) { anchorHorOffset = paraWidth - drawingWidth; }
                         }
 
                         if (moveY !== 0) {
-                            anchorvoffset = oldanchorvoffset + moveY;
-                            anchorvalign = 'offset';
-                            anchorvbase = 'paragraph';
-                            if (anchorvoffset < 0) { anchorvoffset = 0; }
+                            anchorVertOffset = oldanchorvoffset + moveY;
+                            anchorVertAlign = 'offset';
+                            anchorVertBase = 'paragraph';
+                            if (anchorVertOffset < 0) { anchorVertOffset = 0; }
                         }
 
-                        if ((anchorhoffset !== oldanchorhoffset) || (anchorvoffset !== oldanchorvoffset)) {
+                        if ((anchorHorOffset !== oldanchorhoffset) || (anchorVertOffset !== oldanchorvoffset)) {
 
-                            newOperation = { name: Operations.ATTRS_SET, attrs: {anchorhoffset: anchorhoffset, anchorvoffset: anchorvoffset, anchorhalign: anchorhalign, anchorvalign: anchorvalign, anchorhbase: anchorhbase, anchorvbase: anchorvbase}, start: updatePosition };
+                            newOperation = { name: Operations.ATTRS_SET, attrs: {anchorHorOffset: anchorHorOffset, anchorVertOffset: anchorVertOffset, anchorHorAlign: anchorHorAlign, anchorVertAlign: anchorVertAlign, anchorHorBase: anchorHorBase, anchorVertBase: anchorVertBase}, start: updatePosition };
 
                             applyOperation(newOperation);
                         }
@@ -3825,7 +3828,7 @@ define('io.ox/office/editor/editor',
                     // calculating maxLeftShift and maxRightShift
                     lastCell = cellNode[0].nextSibling ? false : true;
                     tablePosition = Position.getOxoPosition(editdiv, tableNode.get(0), 0);
-                    oldTableGrid = StyleSheets.getExplicitAttributes(tableNode).tablegrid;
+                    oldTableGrid = StyleSheets.getExplicitAttributes(tableNode).tableGrid;
                     oldTableWidth = StyleSheets.getExplicitAttributes(tableNode).width;
                     maxTableWidth = tableNode.parent().width();
 
@@ -3930,7 +3933,7 @@ define('io.ox/office/editor/editor',
                         if ((! lastCell) && (StyleSheets.getExplicitAttributes(tableNode).width === 0)) { newTableWidth = 0; }
                         else { newTableWidth = Utils.convertLengthToHmm(newTableWidth, 'px'); }
 
-                        var newOperation = {name: Operations.ATTRS_SET, attrs: {'tablegrid': tableGrid, 'width': newTableWidth}, start: tablePosition};
+                        var newOperation = {name: Operations.ATTRS_SET, attrs: {'tableGrid': tableGrid, 'width': newTableWidth}, start: tablePosition};
                         applyOperation(newOperation);
                     }
                 } else if (horizontalResize) {
@@ -4107,13 +4110,13 @@ define('io.ox/office/editor/editor',
 
             if (allTabNodes.length > 0) {
 
-                var defaultTabstop = self.getDocumentAttributes().defaulttabstop,
+                var defaultTabstop = self.getDocumentAttributes().defaultTabStop,
                     paraStyles = paragraphStyles.getElementAttributes(paragraph),
                     paraTabstops = [];
 
                 // paragraph tab stop definitions
-                if (paraStyles && paraStyles.tabstops) {
-                    paraTabstops = paraStyles.tabstops;
+                if (paraStyles && paraStyles.tabStops) {
+                    paraTabstops = paraStyles.tabStops;
                 }
 
                 var marginLeft = Utils.convertLengthToHmm(parseFloat($(paragraph).css('margin-left')), 'px');
@@ -4125,15 +4128,15 @@ define('io.ox/office/editor/editor',
                             fillChar = null,
                             tabSpan = tabNode.firstChild;
 
-                        // Paragraph tab stops. Only paragraph tab stop can have a leader and
+                        // Paragraph tab stops. Only paragraph tab stop can have a fill character and
                         // define a new alignment
                         if (paraTabstops && paraTabstops.length > 0) {
                             var tabstop = _.find(paraTabstops, function (tab) { return (leftHMM + 1) < tab.pos; });
                             if (tabstop && tabSpan) {
                                 // tabsize calculation based on the paragraph defined tabstop
                                 width = Math.max(0, tabstop.pos - (leftHMM % tabstop.pos));
-                                if (tabstop.leader) {
-                                    switch (tabstop.leader) {
+                                if (tabstop.fillChar) {
+                                    switch (tabstop.fillChar) {
                                     case 'dot':
                                         fillChar = '.';
                                         break;
@@ -4381,7 +4384,7 @@ define('io.ox/office/editor/editor',
             return { node: span, offset: nodeInfo.offset };
         }
 
-        function implInsertText(text, position) {
+        function implInsertText(text, position, attrs) {
 
             var // text span and internal offset
                 spanInfo = getTextSpanInfo(position),
@@ -4395,6 +4398,11 @@ define('io.ox/office/editor/editor',
 
             // insert the new text into the text node
             textNode.nodeValue = textNode.nodeValue.slice(0, spanInfo.offset) + text + textNode.nodeValue.slice(spanInfo.offset);
+
+            // apply the passed text attributes
+            if (_.isObject(attrs) && !_.isEmpty(attrs)) {
+                characterStyles.setElementAttributes(spanInfo.node, attrs);
+            }
 
             // validate paragraph, store new cursor position
             implParagraphChanged(spanInfo.node.parentNode);
@@ -4456,10 +4464,10 @@ define('io.ox/office/editor/editor',
          *  A fallback value, if the placeholder cannot be substituted with a
          *  reasonable value.
          */
-        function implInsertField(position, type, representation) {
+        function implInsertField(start, type, representation, attrs) {
 
             var // text span that will precede the field
-                span = getPreparedTextSpan(position),
+                span = getPreparedTextSpan(start),
                 // new text span for the field node
                 fieldSpan = null;
 
@@ -4473,16 +4481,21 @@ define('io.ox/office/editor/editor',
             // the field span element into the field node
             DOM.createFieldNode().append(fieldSpan).insertAfter(span);
 
+            // apply the passed field attributes
+            if (_.isObject(attrs) && !_.isEmpty(attrs)) {
+                characterStyles.setElementAttributes(fieldSpan, attrs);
+            }
+
             // validate paragraph, store new cursor position
             implParagraphChanged(span.parentNode);
-            lastOperationEnd = Position.increaseLastIndex(position);
+            lastOperationEnd = Position.increaseLastIndex(start);
             return true;
         }
 
-        function implInsertTab(position) {
+        function implInsertTab(start, attrs) {
 
             var // text span that will precede the field
-                span = getPreparedTextSpan(position),
+                span = getPreparedTextSpan(start),
                 // new text span for the tabulator node
                 tabSpan = null;
 
@@ -4495,16 +4508,21 @@ define('io.ox/office/editor/editor',
             // the tab span element into the tab container node
             DOM.createTabNode().append(tabSpan).insertAfter(span);
 
+            // apply the passed tab attributes
+            if (_.isObject(attrs) && !_.isEmpty(attrs)) {
+                characterStyles.setElementAttributes(tabSpan, attrs);
+            }
+
             // validate paragraph, store new cursor position
             implParagraphChanged(span.parentNode);
-            lastOperationEnd = Position.increaseLastIndex(position);
+            lastOperationEnd = Position.increaseLastIndex(start);
             return true;
         }
 
-        function implInsertDrawing(type, position, attributes) {
+        function implInsertDrawing(type, start, attributes) {
 
             var // text span that will precede the field
-                span = getPreparedTextSpan(position),
+                span = getPreparedTextSpan(start),
                 // new drawing node
                 drawingNode = null,
                 // URL from attributes, and absolute URL
@@ -4521,7 +4539,7 @@ define('io.ox/office/editor/editor',
 
             if (type === 'image') {
                 // saving the absolute image url as data object at content node
-                url = attributes.imgurl;
+                url = attributes.imageUrl;
                 absUrl = /:\/\//.test(url) ? url : getDocumentUrl({ get_filename: url });
                 drawingNode.data('absoluteURL', absUrl);
             }
@@ -4531,7 +4549,7 @@ define('io.ox/office/editor/editor',
 
             // validate paragraph, store new cursor position
             implParagraphChanged(span.parentNode);
-            lastOperationEnd = Position.increaseLastIndex(position);
+            lastOperationEnd = Position.increaseLastIndex(start);
             return true;
         }
 
@@ -4735,7 +4753,7 @@ define('io.ox/office/editor/editor',
             }
 
             // update numberings and bullets (attributes may be null if called from clearAttributes operation)
-            if ((startInfo.family === 'paragraph') && (clear || ('style' in attributes) || ('ilvl' in attributes) || ('numId' in attributes))) {
+            if ((startInfo.family === 'paragraph') && (clear || ('style' in attributes) || ('indentLevel' in attributes) || ('numId' in attributes))) {
                 implUpdateLists();
             }
 
@@ -4939,16 +4957,16 @@ define('io.ox/office/editor/editor',
             validateParagraphNode(paragraph);
         }
 
-        function implInsertRow(pos, count, insertdefaultcells, referencerow, attrs) {
+        function implInsertRows(start, count, insertDefaultCells, referenceRow, attrs) {
 
-            var localPosition = _.copy(pos, true),
-                useReferenceRow = _.isNumber(referencerow) ? true : false;
+            var localPosition = _.copy(start, true),
+                useReferenceRow = _.isNumber(referenceRow) ? true : false;
 
             if (! Position.isPositionInTable(editdiv, localPosition)) {
                 return;
             }
 
-            insertdefaultcells = insertdefaultcells ? true : false;
+            insertDefaultCells = insertDefaultCells ? true : false;
 
             if (!_.isNumber(count)) {
                 count = 1; // setting default for number of rows
@@ -4969,14 +4987,14 @@ define('io.ox/office/editor/editor',
 
             if (useReferenceRow) {
 
-                row = DOM.getTableRows(table).eq(referencerow).clone(true);
+                row = DOM.getTableRows(table).eq(referenceRow).clone(true);
 
                 // clear the cell contents in the cloned row
                 row.children('td').each(function () { implClearCell(this); });
 
                 cellsInserted = true;
 
-            } else if (insertdefaultcells) {
+            } else if (insertDefaultCells) {
 
                 var columnCount = $(table).children('colgroup').children().length,
                     // prototype elements for row, cell, and paragraph
@@ -5017,7 +5035,7 @@ define('io.ox/office/editor/editor',
             }
 
             // Setting cursor
-            if ((insertdefaultcells) || (useReferenceRow)) {
+            if ((insertDefaultCells) || (useReferenceRow)) {
                 localPosition.push(0);
                 localPosition.push(0);
                 localPosition.push(0);
@@ -5026,10 +5044,10 @@ define('io.ox/office/editor/editor',
             }
         }
 
-        function implInsertCell(pos, count, attrs) {
+        function implInsertCells(start, count, attrs) {
 
-            var localPosition = _.clone(pos),
-                tableNode = Position.getLastNodeFromPositionByNodeName(editdiv, pos, DOM.TABLE_NODE_SELECTOR);
+            var localPosition = _.clone(start),
+                tableNode = Position.getLastNodeFromPositionByNodeName(editdiv, start, DOM.TABLE_NODE_SELECTOR);
 
             if (!tableNode) {
                 return;
@@ -5121,9 +5139,9 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = localPosition;
         }
 
-        function implDeleteColumns(pos, startGrid, endGrid) {
+        function implDeleteColumns(start, startGrid, endGrid) {
 
-            var localPosition = _.copy(pos, true);
+            var localPosition = _.copy(start, true);
 
             if (! Position.isPositionInTable(editdiv, localPosition)) {
                 return;
@@ -5175,9 +5193,9 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = localPosition;
         }
 
-        function implInsertColumn(pos, gridposition, tablegrid, insertmode) {
+        function implInsertColumn(start, gridPosition, insertMode) {
 
-            var localPosition = _.copy(pos, true);
+            var localPosition = _.copy(start, true);
 
             if (! Position.isPositionInTable(editdiv, localPosition)) {
                 return;
@@ -5195,8 +5213,8 @@ define('io.ox/office/editor/editor',
             allRows.each(
                 function (i, row) {
                     var cellClone = cell.clone(true),
-                        cellPosition = Table.getCellPositionFromGridPosition(row, gridposition);
-                    if (insertmode === 'behind') {
+                        cellPosition = Table.getCellPositionFromGridPosition(row, gridPosition);
+                    if (insertMode === 'behind') {
                         cellClone.insertAfter($(row).children().get(cellPosition));
                     } else {
                         cellClone.insertBefore($(row).children().get(cellPosition));
@@ -5209,7 +5227,7 @@ define('io.ox/office/editor/editor',
 
             // Setting cursor to first position in table
             localPosition.push(0);
-            localPosition.push(gridposition);
+            localPosition.push(gridPosition);
             localPosition.push(0);
             localPosition.push(0);
 
@@ -5308,12 +5326,12 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = _.clone(startPosition);
         }
 
-        function implMove(_source, _dest) {
+        function implMove(_start, _end, _to) {
 
-            var source = _.copy(_source, true),
-                dest = _.copy(_dest, true),
-                sourcePos = Position.getDOMPosition(editdiv, source, true),
-                destPos = Position.getDOMPosition(editdiv, dest, true),
+            var start = _.copy(_start, true),
+                to = _.copy(_to, true),
+                sourcePos = Position.getDOMPosition(editdiv, start, true),
+                destPos = Position.getDOMPosition(editdiv, to, true),
                 insertBefore = true,
                 splitNode = false;
 
@@ -5376,15 +5394,15 @@ define('io.ox/office/editor/editor',
                             $(offsetDiv).insertBefore(sourceNode);
                         }
 
-                        implParagraphChanged(dest);
+                        implParagraphChanged(to);
                     }
                 }
             }
         }
 
-        function implMergeCell(cellposition, count) {
+        function implMergeCell(start, count) {
 
-            var rowPosition = _.copy(cellposition, true),
+            var rowPosition = _.copy(start, true),
                 localStartCol = rowPosition.pop(),
                 localEndCol = localStartCol + count,
                 // Counting the colSpan off all cells in the range
@@ -5400,7 +5418,7 @@ define('io.ox/office/editor/editor',
             sourceCells.remove();
 
             // apply the passed table attributes
-            tableCellStyles.setElementAttributes(targetCell, { 'gridspan' : colSpanSum });
+            tableCellStyles.setElementAttributes(targetCell, { 'gridSpan' : colSpanSum });
         }
 
         /**
@@ -5422,27 +5440,27 @@ define('io.ox/office/editor/editor',
                     oldLabel.remove();
                     var numId = paraAttributes.numId;
                     if (numId  !== -1) {
-                        var ilvl = paraAttributes.ilvl;
-                        if (ilvl < 0) {
+                        var indentLevel = paraAttributes.indentLevel;
+                        if (indentLevel < 0) {
                             // is a numbering level assigned to the current paragraph style?
-                            ilvl = lists.findIlvl(numId, paraAttributes.style);
+                            indentLevel = lists.findIlvl(numId, paraAttributes.style);
                         }
-                        if (ilvl !== -1 && ilvl < 9) {
+                        if (indentLevel !== -1 && indentLevel < 9) {
                             updateParaTabstops = true;
                             if (!listItemCounter[paraAttributes.numId])
                                 listItemCounter[paraAttributes.numId] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-                            listItemCounter[paraAttributes.numId][ilvl]++;
+                            listItemCounter[paraAttributes.numId][indentLevel]++;
                             // TODO: reset sub-levels depending on their 'levelRestartValue' attribute
-                            var subLevelIdx = ilvl + 1;
+                            var subLevelIdx = indentLevel + 1;
                             for (; subLevelIdx < 9; subLevelIdx++)
                                 listItemCounter[paraAttributes.numId][subLevelIdx] = 0;
                             // fix level counts of non-existing upper levels
-                            subLevelIdx = ilvl - 1;
+                            subLevelIdx = indentLevel - 1;
                             for (; subLevelIdx >= 0; subLevelIdx--)
                                 if (listItemCounter[paraAttributes.numId][subLevelIdx] === 0)
                                     listItemCounter[paraAttributes.numId][subLevelIdx] = 1;
 
-                            var listObject = lists.formatNumber(paraAttributes.numId, ilvl,
+                            var listObject = lists.formatNumber(paraAttributes.numId, indentLevel,
                                     listItemCounter[paraAttributes.numId]);
                             var tab = !listObject.suff || listObject.suff === 'tab';
                             if (!tab && (listObject.suff === 'space')) {
@@ -5459,21 +5477,21 @@ define('io.ox/office/editor/editor',
                                 .addClass('drawing inline')
                                 .data('url', listObject.imgsrc)
                                 .append($('<div>').addClass('content')
-                                        .append($('<img>', { src: absUrl }).css('width', charAttributes.fontsize + 'pt'))
+                                        .append($('<img>', { src: absUrl }).css('width', charAttributes.fontSize + 'pt'))
                                         );
 
-                                LineHeight.updateElementLineHeight(image, paraAttributes.lineheight);
-                                $(image).css('height', charAttributes.fontsize + 'pt');
-                                $(image).css('width', charAttributes.fontsize + 'pt');
+                                LineHeight.updateElementLineHeight(image, paraAttributes.lineHeight);
+                                $(image).css('height', charAttributes.fontSize + 'pt');
+                                $(image).css('width', charAttributes.fontSize + 'pt');
                                 numberingElement.prepend(image);
 
                             }
                             var listSpan = numberingElement.children('span');
-                            listSpan.css('font-size', charAttributes.fontsize + 'pt');
+                            listSpan.css('font-size', charAttributes.fontSize + 'pt');
                             if (listObject.color) {
                                 Color.setElementTextColor(listSpan, documentStyles.getCurrentTheme(), listObject, paraAttributes);
                             }
-                            LineHeight.updateElementLineHeight(numberingElement, paraAttributes.lineheight);
+                            LineHeight.updateElementLineHeight(numberingElement, paraAttributes.lineHeight);
                             var minWidth = 0,
                                 isNegativeIndent = listObject.firstLine < listObject.indent;
 
@@ -5500,12 +5518,12 @@ define('io.ox/office/editor/editor',
                                     minTabPos = numWidth;
 
 
-                                var defaultTabstop = self.getDocumentAttributes().defaulttabstop,
+                                var defaultTabstop = self.getDocumentAttributes().defaultTabStop,
                                 paraStyles = paragraphStyles.getElementAttributes(para),
                                 paraTabstops = [];
                                 // paragraph tab stop definitions
-                                if (paraStyles && paraStyles.tabstops) {
-                                    paraTabstops = paraStyles.tabstops;
+                                if (paraStyles && paraStyles.tabStops) {
+                                    paraTabstops = paraStyles.tabStops;
                                 }
 
                                 var width = 0;
