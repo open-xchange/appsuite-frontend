@@ -85,9 +85,9 @@ $(document).ready(function () {
         if (ox.signin === true) {
             // show loader
             $("#background_loader").fadeIn(DURATION, function () {
-                var ref = _.url.hash('ref'),
-                    location = "#?" + enc(
-                            _.rot("session=" + ox.session + "&user=" + ox.user + "&user_id=" + ox.user_id + "&language=" + ox.language + (ref ? "&ref=" + enc(ref) : ''), 1)
+                var location = "#?" + enc(
+                            _.rot("session=" + ox.session + "&user=" + ox.user +
+                                "&user_id=" + ox.user_id + "&language=" + ox.language, 1)
                     );
                 // use redirect servlet for real login request
                 // this even makes chrome and safari asking for storing credentials
@@ -294,14 +294,11 @@ $(document).ready(function () {
      */
     autoLogin = function () {
 
-        var ref;
-
         function fail() {
             if (ox.signin) {
                 initialize();
             } else {
-                ref = (location.hash || '').replace(/^#/, '');
-                _.url.redirect('signin' + (ref ? '#ref=' + enc(ref) : ''));
+                _.url.redirect('signin');
             }
         }
 
@@ -319,8 +316,7 @@ $(document).ready(function () {
             ox.user = _.url.hash('user');
             ox.user_id = parseInt(_.url.hash('user_id') || '0', 10);
             ox.language = _.url.hash('language');
-            ref = _.url.hash('ref');
-            _.url.redirect('#' + (ref ? decodeURIComponent(ref) : ''));
+            _.url.redirect('#');
             loadCoreFiles().done(function () {
                 loadCore();
             });

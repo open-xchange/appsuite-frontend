@@ -340,19 +340,22 @@ define("io.ox/core/desktop",
                 appCache.get('savepoints').done(function (list) {
                     // might be null, so:
                     list = list || [];
-
-                    var data = self.failSave(),
-                        ids = _(list).pluck('id'),
+                    var data, ids, pos;
+                    try {
+                        data = self.failSave();
+                        ids = _(list).pluck('id');
                         pos = _(ids).indexOf(uniqueID);
-
-                    data.id = uniqueID;
-
-                    if (pos > -1) {
-                        // replace
-                        list.splice(pos, 1, data);
-                    } else {
-                        // add
-                        list.push(data);
+                        data.id = uniqueID;
+                        if (pos > -1) {
+                            // replace
+                            list.splice(pos, 1, data);
+                        } else {
+                            // add
+                            list.push(data);
+                        }
+                    } catch (e) {
+                        // looks broken, so remove from list
+                        if (pos > -1) { list.splice(pos, 1); delete self.failSave; }
                     }
                     appCache.add('savepoints', list);
                 });
