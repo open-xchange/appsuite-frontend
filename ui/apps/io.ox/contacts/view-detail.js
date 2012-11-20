@@ -172,12 +172,13 @@ define("io.ox/contacts/view-detail",
         index: 200,
         id: 'contact-title',
         draw: function (baton) {
-            var private_flag;
+            var private_flag,
+                nameText = baton.data.display_name ? baton.data.display_name : util.getFullName(baton.data);
             this.append(
                 // right side
                 $('<div class="span8 field-value">').append(
                     $('<div class="name clear-title">')
-                        .text(_.noI18n(util.getFullName(baton.data))),
+                        .text(_.noI18n(nameText)),
                     private_flag = $('<i class="icon-lock private-flag">').hide(),
                     $('<div class="job clear-title">')
                         .text(getDescription(baton.data))
@@ -381,14 +382,14 @@ define("io.ox/contacts/view-detail",
             if (!baton) return $();
 
             try {
-                
+
                 // make sure we have a baton
                 baton = ext.Baton.ensure(baton);
 
                 var node = $.createViewContainer(baton.data, api).on('redraw', { view: this }, redraw);
                 node.addClass('contact-detail view');
                 ext.point('io.ox/contacts/detail').invoke('draw', node, baton);
-    
+
                 return node;
 
             } catch (e) {

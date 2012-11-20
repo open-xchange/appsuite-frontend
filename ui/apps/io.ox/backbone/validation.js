@@ -104,7 +104,7 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions"], function (ext) {
                         validate: function (attributes, errors) {
                             var value = attributes[attribute];
 
-                            if (_.isUndefined(value) || value === null) {
+                            if (_.isUndefined(value) || value === null || value === '') {
                                 errors.add(attribute, 'Please enter a value');
                             }
                         }
