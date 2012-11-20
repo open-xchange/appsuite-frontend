@@ -896,6 +896,41 @@ define('io.ox/office/editor/editor',
             }, this);
         };
 
+        /**
+         * Editor API function to generate 'delete' operations. The name of this API function
+         * should be 'delete' instead of 'deleteRange', but unfortunately 'delete' is already
+         * reserved in JavaScript language.
+         * This is a generic function, that can be used to delete any component (text, paragraph,
+         * cell, row, table, ...). Deleting columns is not supported, because columns cannot
+         * be described with a logical position.
+         * The parameter 'start' and 'end' are used to specify the range of the components that
+         * shall be deleted. For all components except 'text' the 'end' position will be ignored.
+         * For paragraphs, cells, ... only one specific component can be deleted within this
+         * operation. Only on text level a complete range can be deleted.
+         * ???
+         * For deleting a range, a 'real text range' has to be specified by the parameters
+         * 'start' and 'end', not the component counting used in operations. Therefore the 'end'
+         * position is reduced by '1' within this deleteRange function.
+         * ???
+         *
+         * @param {Number[]} start
+         *  The logical start position.
+         *
+         * @param {Number[]} [end]
+         *  The logical end position (optional). This can be different from 'start' only for text ranges
+         *  inside one paragraph. A text range can include characters, fields, and drawing objects,
+         *  but must be contained in a single paragraph.
+         */
+        this.deleteRange = function (start, end) {
+
+            // Using end as it is, not subtracting '1' like in 'deleteText'
+            var newOperation = { name: Operations.DELETE, start: _.clone(start), end: _.clone(end) };
+            applyOperation(newOperation);
+
+            // setting the cursor position
+            selection.setTextSelection(lastOperationEnd);
+        };
+
         this.deleteText = function (startposition, endposition) {
             if (startposition !== endposition) {
 
@@ -2944,19 +2979,80 @@ define('io.ox/office/editor/editor',
             }
         };
 
-/*
-        operationHandlers[Operations.DELETE] = function (operation) { // this shall be the only delete operation
-            if (undoManager.isEnabled()) {
-                var localStart = _.copy(operation.start, true),
-                    localEnd = _.copy(operation.end, true),
-                    startLastVal = localStart.pop(),
-                    endLastVal = localEnd.pop(),
-                    undoOperation = { name: Operations.TEXT_INSERT, start: operation.start, text: Position.getParagraphText(editdiv, localStart, startLastVal, endLastVal) };
-                undoManager.addUndo(undoOperation, operation);
+        operationHandlers[Operations.DELETE] = function (operation) {
+            var // node info about the paragraph to be deleted
+                nodeInfo = null,
+                // attribute type of the start node
+                type = null,
+                // generator for the undo/redo operations
+                generator = undoManager.isEnabled() ? new Operations.Generator() : null;
+
+            // undo/redo generation
+            if (generator) {
+
+                nodeInfo = Position.getDOMPosition(editdiv, operation.start, true);
+                type = resolveElementType(nodeInfo.node);
+
+                switch (type) {
+
+                case 'text':
+                    var position = operation.start.slice(0, -1),
+                        paragraph = Position.getCurrentParagraph(editdiv, position),
+                        start = operation.start[operation.start.length - 1],
+                        end = operation.end[operation.end.length - 1];
+
+                    generator.generateParagraphChildOperations(paragraph, position, { start: start, end: end, clear: true });
+                    undoManager.addUndo(generator.getOperations(), operation);
+                    break;
+
+                case 'paragraph':
+                    generator.generateParagraphOperations(nodeInfo.node, operation.start);
+                    undoManager.addUndo(generator.getOperations(), operation);
+                    break;
+
+                case 'cell':
+                    var tableRow = Position.getTableRowElement(editdiv, operation.position),
+                        cells = $(tableRow).children(),
+                        start = operation.start,
+                        end = operation.end || start;
+
+                    if ((start <= 0) && (end + 1 >= cells.length)) {
+                        // deleting the entire row element
+                        generator.generateTableRowOperations(tableRow, operation.position);
+                    } else {
+                        // deleting a few cells in the row
+                        cells.slice(start, end + 1).each(function (index) {
+                            generator.generateTableCellOperations(this, operation.position.concat([start + index]));
+                        });
+                    }
+                    undoManager.addUndo(generator.getOperations(), operation);
+                    break;
+
+                case 'row':
+                    var start = operation.start,
+                        end = operation.end || start;
+
+                    for (var i = start; i <= end; i += 1) {
+                        var localPos = operation.position.concat([i]),
+                            tableRow = Position.getTableRowElement(editdiv, localPos);
+                        if (tableRow) {
+                            generator.generateTableRowOperations(tableRow, localPos);
+                        }
+                    }
+                    undoManager.addUndo(generator.getOperations(), operation);
+                    break;
+
+                case 'table':
+                    var table = Position.getTableElement(editdiv, operation.start);
+                    generator.generateTableOperations(table, operation.start); // generate undo operations for the entire table
+                    undoManager.addUndo(generator.getOperations(), operation);
+                    break;
+                }
             }
+
+            // finally calling the implementation function to delete the content
             implDelete(operation.start, operation.end);
         };
-*/
 
         operationHandlers[Operations.MOVE] = function (operation) {
             if (undoManager.isEnabled()) {
@@ -4469,6 +4565,38 @@ define('io.ox/office/editor/editor',
         }
 
         /**
+         * Returns the type of the attributes supported by the passed DOM
+         * element.
+         *
+         * @param {HTMLElement|jQuery} element
+         *  The DOM element whose associated attribute type will be returned.
+         *  If this object is a jQuery collection, returns its first node.
+         */
+        function resolveElementType(element) {
+
+            var // the element, as jQuery object
+                $element = $(element),
+                // the resulting style type
+                type = null;
+
+            if (DOM.isTextSpan($element) || DOM.isTextSpanContainerNode($element) || DOM.isDrawingNode($element)) {
+                type = 'text';
+            } else if (DOM.isParagraphNode($element)) {
+                type = 'paragraph';
+            } else if (DOM.isTableNode($element)) {
+                type = 'table';
+            } else if ($element.is('tr')) {
+                type = 'row';
+            } else if ($element.is('td')) {
+                type = 'cell';
+            } else {
+                Utils.warn('Editor.resolveElementType(): unsupported element');
+            }
+
+            return type;
+        }
+
+        /**
          * Changes a specific formatting attribute of the specified element or
          * text range. The type of the attributes will be determined from the
          * specified range.
@@ -5196,6 +5324,107 @@ define('io.ox/office/editor/editor',
             // validate paragraph node, store operation position for cursor position
             implParagraphChanged(paragraphPosition);
             lastOperationEnd = _.clone(startPosition);
+        }
+
+        /**
+         * Removes a specified element or a text range. The type of the element
+         * will be determined from the parameters start and end.
+         * specified range. Currently, only single components can be deleted,
+         * except for text ranges in a paragraph. A text range can include
+         * characters, fields, and drawing objects, but must be contained in a
+         * single paragraph.
+         *
+         * @param {Number[]} start
+         *  The logical start position of the element or text range to be
+         *  deleted.
+         *
+         * @param {Number[]} [end]
+         *  The logical end position of the element or text range to be
+         *  deleted. Can be omitted, if the end position is equal to the start
+         *  position (single component)
+         */
+        function implDelete(start, end) {
+
+            var // node info for start/end position
+                startInfo = null, endInfo = null,
+                // position description for cells
+                rowPosition, startCell, endCell,
+                // position description for rows
+                tablePosition, startRow, endRow;
+
+            // resolve start and end position
+            if (!_.isArray(start)) {
+                Utils.warn('Editor.implDelete(): missing start position');
+                return;
+            }
+            startInfo = Position.getDOMPosition(editdiv, start, true);
+            if (!startInfo || !startInfo.node) {
+                Utils.warn('Editor.implDelete(): invalid start position: ' + JSON.stringify(start));
+                return;
+            }
+            endInfo = _.isArray(end) ? Position.getDOMPosition(editdiv, end, true) : startInfo;
+            if (!endInfo || !endInfo.node) {
+                Utils.warn('Editor.implDelete(): invalid end position: ' + JSON.stringify(end));
+                return;
+            }
+
+            end = end || start;
+
+            // get attribute type of start and end node
+            startInfo.type = resolveElementType(startInfo.node);
+            endInfo.type = resolveElementType(endInfo.node);
+
+            // check that start and end point to the same element type
+            if ((!startInfo.type || !endInfo.type) || (startInfo.type !== endInfo.type)) {
+                Utils.warn('Editor.implDelete(): problem with node types: ' + startInfo.type + ' and ' + endInfo.type);
+                return;
+            }
+
+            // check that start and end point to the same element for non text types (only one cell, row, paragraph, ...)
+            if ((startInfo.type !== 'text') && (startInfo.node !== endInfo.node)) {
+                Utils.warn('Editor.implDelete(): no ranges supported for node type "' + startInfo.type + '"');
+                return;
+            }
+
+            // check that for text nodes start and end point have the same parent
+            if ((startInfo.type === 'text') && (startInfo.node.parentNode !== endInfo.node.parentNode)) {
+                Utils.warn('Editor.implDelete(): deleting range only supported inside one paragraph.');
+                return;
+            }
+
+            // deleting the different types:
+            switch (startInfo.type) {
+
+            case 'text':
+                implDeleteText(start, end);
+                break;
+
+            case 'paragraph':
+                $(startInfo.node).remove(); // remove the paragraph from the DOM
+                break;
+
+            case 'cell':
+                rowPosition = _.clone(start);
+                startCell = rowPosition.pop();
+                endCell = startCell;
+                implDeleteCells(rowPosition, startCell, endCell);
+                break;
+
+            case 'row':
+                tablePosition = _.clone(start);
+                startRow = tablePosition.pop();
+                endRow = startRow;
+                implDeleteRows(tablePosition, startRow, endRow);
+                break;
+
+            case 'table':
+                implDeleteTable(start);
+                break;
+
+            default:
+                Utils.error('Editor.implDelete(): unsupported node type: ' + startInfo.type);
+            }
+
         }
 
         function implMove(_start, _end, _to) {
