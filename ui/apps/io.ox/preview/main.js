@@ -149,9 +149,7 @@ define("io.ox/preview/main",
 
                 var $a = clickableLink(file, function (e) {
                         e.preventDefault();
-                        require(["io.ox/preview/officePreview"], function (officePreview) {
-                            officePreview.draw(file);
-                        });
+                        ox.launch('io.ox/office/preview/main', { action: 'load', file: file });
                     }),
                     $img = $('<img alt="">')
                         .css({ width: '400px', maxWidth: '100%', visibility: 'hidden' })

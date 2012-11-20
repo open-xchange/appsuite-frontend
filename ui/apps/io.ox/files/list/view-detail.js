@@ -428,7 +428,9 @@ define("io.ox/files/list/view-detail",
                 name: file.filename,
                 mimetype: file.file_mimetype,
                 size: file.file_size,
-                dataURL: filesAPI.getUrl(file, 'bare')
+                dataURL: filesAPI.getUrl(file, 'bare'),
+                version: file.version,
+                id: file.id
             };
         },
         on: {
