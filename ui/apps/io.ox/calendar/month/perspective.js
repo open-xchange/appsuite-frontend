@@ -257,6 +257,18 @@ define('io.ox/calendar/month/perspective',
             return def;
         },
 
+        save: function (e, p) {
+            // save scrollposition
+            this.restoreCache.scrollPosition = this.scrollTop();
+        },
+
+        restore: function () {
+            // restore scrollposition
+            if (this.restoreCache.scrollPosition) {
+                this.scrollTop(this.restoreCache.scrollPosition);
+            }
+        },
+
         render: function (app) {
 
             var start = new date.Local(),
@@ -278,7 +290,7 @@ define('io.ox/calendar/month/perspective',
                 $('<div>')
                     .addClass('toolbar')
                     .append(
-                        this.monthInfo = $('<div>').addClass('info'),
+                        this.monthInfo = $('<div>').addClass('info').text(gt.noI18n(this.current.format('MMMM y'))),
                         this.showAllCon = $('<div>').addClass('showall')
                             .append(
                                 $('<label>')
@@ -388,16 +400,8 @@ define('io.ox/calendar/month/perspective',
             app.on('folder:change', refresh)
                 .getWindow()
                 .on('show', refresh)
-                .on('beforehide', function () {
-                    // save scrollposition
-                    self.restoreCache.scrollPosition = self.pane.scrollTop();
-                })
-                .on('show', function () {
-                    // restore scrollposition
-                    if (self.restoreCache.scrollPosition) {
-                        self.pane.scrollTop(self.restoreCache.scrollPosition);
-                    }
-                });
+                .on('show', $.proxy(this.restore, this))
+                .on('beforehide', $.proxy(this.save, this));
         }
     });
 

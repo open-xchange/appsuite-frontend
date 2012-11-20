@@ -128,16 +128,37 @@ define('io.ox/calendar/week/perspective',
             });
         },
 
+        save: function () {
+            // save scrollposition
+            if (this.view) {
+                this.view.save();
+            }
+        },
+
+        restore: function () {
+            // restore scrollposition
+            if (this.view) {
+                this.view.restore();
+            }
+        },
+
         render: function (app, opt) {
             // init perspective
             this.app = app;
             this.collection = new Backbone.Collection([]);
             this.main.addClass('week-view').empty();
 
+            delete this.view;
+
             this.view = new View({
                 collection: this.collection,
                 mode: this.modes[opt.perspective]
             });
+
+            var self = this,
+                refresh = $.proxy(function (e) {
+                    self.refresh();
+                }, this);
 
             // bind listener for view events
             this.view
@@ -149,27 +170,28 @@ define('io.ox/calendar/week/perspective',
 
             this.main.append(this.view.render().el);
 
-            // create sidepopup object with eventlistener
-            this.dialog = new dialogs.SidePopup()
-                .on('close', function () {
-                    $('.appointment', this.main).removeClass('opac current');
-                });
+            if (!opt.rendered) {
+                // create sidepopup object with eventlistener
+                this.dialog = new dialogs.SidePopup()
+                    .on('close', function () {
+                        $('.appointment', this.main).removeClass('opac current');
+                    });
 
-            var refresh = $.proxy(this.refresh, this);
+                // watch for api refresh
+                api.on('refresh.all', refresh, this);
 
-            // watch for api refresh
-            api.on('refresh.all', refresh);
-            // watch for folder change
-            app.on('folder:change', refresh)
-                .getWindow()
-                .on('show', refresh)
-                .on('beforehide', $.proxy(this.view.save, this.view))
-                .on('show', $.proxy(this.view.restore, this.view))
-                .on('change:perspective', this.view.unbindKeys);
+                // watch for folder change
+                app.on('folder:change', refresh, this)
+                    .getWindow()
+                    .on('show', refresh, this)
+                    .on('show', $.proxy(this.restore, this))
+                    .on('beforehide', $.proxy(this.save, this))
+                    .on('change:perspective', this.view.unbindKeys);
+            }
 
             this.view.setScrollPos();
 
-            refresh();
+            this.refresh();
         }
     });
 

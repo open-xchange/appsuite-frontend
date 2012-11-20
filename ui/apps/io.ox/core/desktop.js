@@ -490,7 +490,7 @@ define("io.ox/core/desktop",
     }());
 
     ox.ui.Perspective = (function () {
-
+        var cur = null;
         var Perspective = function (name) {
             // init
             var rendered = false,
@@ -499,31 +499,40 @@ define("io.ox/core/desktop",
             this.main = $();
 
             this.show = function (app, options) {
+                var win = app.getWindow();
+
+                if (options.perspective === win.currentPerspective) {
+                    return;
+                }
+
                 // make sure it's initialized
                 if (!initialized) {
-                    this.main = app.getWindow().addPerspective(name);
+                    this.main = win.addPerspective(name);
                     initialized = true;
                 }
 
                 // trigger change event
-                if (app.getWindow().currentPerspective !== 'main') {
-                    app.getWindow().trigger('change:perspective', options.perspective);
+                if (win.currentPerspective !== 'main') {
+                    win.trigger('change:perspective', options.perspective);
                 }
 
                 // set perspective
-                app.getWindow().setPerspective(name);
+                win.setPerspective(name);
 
                 _.url.hash('perspective', options.perspective);
 
                 // render?
                 if (!rendered || options.perspective.split(":").length > 1) {
+                    options.rendered = rendered;
                     this.render(app, options);
                     rendered = true;
                 }
-                app.getWindow().currentPerspective = options.perspective;
+                win.currentPerspective = options.perspective;
             };
 
             this.render = $.noop;
+            this.save = $.noop;
+            this.restore = $.noop;
 
             this.setRendered = function (value) {
                 rendered = value;
@@ -531,8 +540,16 @@ define("io.ox/core/desktop",
         };
 
         Perspective.show = function (app, p) {
-            require([app.get('name') + '/' + p.split(":")[0] + '/perspective'], function (perspective) {
+            var per = p.split(":")[0];
+            require([app.get('name') + '/' + per + '/perspective'], function (perspective) {
+                if (cur && (per === 'month' || per === 'week')) {
+                    cur.save();
+                }
+                cur = perspective;
                 perspective.show(app, { perspective: p });
+                if (per === 'month' || per === 'week') {
+                    cur.restore();
+                }
             });
         };
 
