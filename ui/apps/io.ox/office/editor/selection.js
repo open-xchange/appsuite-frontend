@@ -19,6 +19,9 @@ define('io.ox/office/editor/selection',
 
     'use strict';
 
+    var // shortcut for the KeyCodes object
+        KeyCodes = Utils.KeyCodes;
+
     // class Selection ========================================================
 
     /**
@@ -63,6 +66,20 @@ define('io.ox/office/editor/selection',
         // private methods ----------------------------------------------------
 
         /**
+         * Returns the current logical anchor position.
+         */
+        function getAnchorPosition() {
+            return backwards ? endPosition : startPosition;
+        }
+
+        /**
+         * Returns the current logical focus position.
+         */
+        function getFocusPosition() {
+            return backwards ? startPosition : endPosition;
+        }
+
+        /**
          * Returns the first logical text position in the document.
          */
         function getFirstTextPosition() {
@@ -88,7 +105,7 @@ define('io.ox/office/editor/selection',
          *  tabs), or a drawing node.
          *
          * @returns {DOM.Point|Null}
-         *  The DOM-Point object representing the passed logical position, or
+         *  The DOM.Point object representing the passed logical position, or
          *  null, if the passed position is invalid.
          */
         function getPointForTextPosition(position) {
@@ -204,23 +221,67 @@ define('io.ox/office/editor/selection',
         };
 
         /**
-         * Returns the current logical start position.
+         * Returns the current logical start position. The start position is
+         * always located before the end position (or, in case of a text
+         * cursor, is equal to the end position), regardless of the direction
+         * of the selection. To receive positions dependent on the direction,
+         * see the methods Selection.getAnchorPosition() and
+         * Selection.getFocusPosition().
          *
          * @returns {Number[]}
-         *  The logical start position of this selection.
+         *  The logical start position of this selection, as cloned array that
+         *  can be changed by the caller.
          */
         this.getStartPosition = function () {
             return _.clone(startPosition);
         };
 
         /**
-         * Returns the current logical end position.
+         * Returns the current logical end position. The end position is always
+         * located behind the start position (or, in case of a text cursor,
+         * is equal to the start position), regardless of the direction of the
+         * selection. To receive positions dependent on the direction, see the
+         * methods Selection.getAnchorPosition() and
+         * Selection.getFocusPosition().
          *
          * @returns {Number[]}
-         *  The logical end position of this selection.
+         *  The logical end position of this selection, as cloned array that
+         *  can be changed by the caller.
          */
         this.getEndPosition = function () {
             return _.clone(endPosition);
+        };
+
+        /**
+         * Returns the current logical anchor position. The anchor position is
+         * the position where the selection of a text range (by mouse or cursor
+         * keys) has been started. The anchor position will be located after
+         * the focus position if selecting backwards. To receive positions
+         * independent from the direction, see the methods
+         * Selection.getStartPosition() and Selection.getEndPosition().
+         *
+         * @returns {Number[]}
+         *  The logical anchor position of this selection, as cloned array that
+         *  can be changed by the caller.
+         */
+        this.getAnchorPosition = function () {
+            return _.clone(getAnchorPosition());
+        };
+
+        /**
+         * Returns the current logical focus position. The focus position is
+         * the position that changes while modifying the selection of a range
+         * (by mouse or cursor keys). The focus position will be located before
+         * the anchor position if selecting backwards. To receive positions
+         * independent from the direction, see the methods
+         * Selection.getStartPosition() and Selection.getEndPosition().
+         *
+         * @returns {Number[]}
+         *  The logical focus position of this selection, as cloned array that
+         *  can be changed by the caller.
+         */
+        this.getFocusPosition = function () {
+            return _.clone(getFocusPosition());
         };
 
         /**
@@ -463,10 +524,85 @@ define('io.ox/office/editor/selection',
             return this;
         };
 
+        /**
+         * Processes a browser event that will change the current selection.
+         * Supported are 'mousedown' events and 'keydown' events originating
+         * from cursor navigation keys.
+         *
+         * @param {jQuery.Event} event
+         *  The jQuery browser event object.
+         *
+         * @returns {jQuery.Promise}
+         *  The promise of a deferred object that will be resolved after the
+         *  browser has processed the passed event, and this selection instance
+         *  has updated itself according to the new browser selection.
+         */
         this.processBrowserEvent = function (event) {
 
             var // deferred return value
                 def = $.Deferred();
+
+            function advanceCursor(backwards) {
+
+                var // text node at the current focus position
+                    focusNodeInfo = Position.getDOMPosition(rootNode, getFocusPosition()),
+                    // text node at the current anchor position (changes with focus node without SHIFT key)
+                    anchorNodeInfo = event.shiftKey ? Position.getDOMPosition(rootNode, getAnchorPosition()) : focusNodeInfo;
+
+                function moveForwards() {
+                    var focusSpan = focusNodeInfo.node.parentNode;
+                    if (focusNodeInfo.offset < focusNodeInfo.node.nodeValue.length) {
+                        focusNodeInfo.offset += 1;
+                    } else if (DOM.isTextSpan(focusSpan.nextSibling)) {
+                        focusNodeInfo.node = focusSpan.nextSibling.firstChild;
+                        focusNodeInfo.offset = 1;
+                    } else {
+                        focusNodeInfo.node = Utils.findNextNode(rootNode, focusNodeInfo.node, function () { return DOM.isTextNodeInPortionSpan(this); }, DOM.DRAWING_NODE_SELECTOR);
+                        focusNodeInfo.offset = 0;
+                    }
+                }
+
+                function moveBackwards() {
+                    var focusSpan = focusNodeInfo.node.parentNode;
+                    if ((focusNodeInfo.offset === 1) && DOM.isTextSpan(focusSpan.previousSibling)) {
+                        focusNodeInfo.node = focusSpan.previousSibling.firstChild;
+                        focusNodeInfo.offset = focusNodeInfo.node.nodeValue.length;
+                    } else if (focusNodeInfo.offset > 0) {
+                        focusNodeInfo.offset -= 1;
+                    } else {
+                        focusNodeInfo.node = Utils.findPreviousNode(rootNode, focusNodeInfo.node, function () { return DOM.isTextNodeInPortionSpan(this); }, DOM.DRAWING_NODE_SELECTOR);
+                        focusNodeInfo.offset = focusNodeInfo.node ? focusNodeInfo.node.nodeValue.length : 0;
+                    }
+                }
+
+                // check anchor and focus position
+                if (!anchorNodeInfo || !anchorNodeInfo.node || !focusNodeInfo || !focusNodeInfo.node) {
+                    Utils.warn('Selection.advanceCursor(): missing valid text position');
+                    return false;
+                }
+
+                // update focusNodeInfo according to the passed direction
+                (backwards ? moveBackwards : moveForwards)();
+
+                // update browser selection if focusNodeInfo still valid
+                if (focusNodeInfo.node) {
+                    applyBrowserSelection({ active: new DOM.Range(anchorNodeInfo, focusNodeInfo), ranges: [] });
+                }
+                return true;
+            }
+
+            // handle simple left/right cursor keys (with and without SHIFT) manually
+            if ((event.type === 'keydown') && !event.ctrlKey && !event.altKey && !event.metaKey) {
+                if ((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.RIGHT_ARROW)) {
+                    if (advanceCursor(event.keyCode === KeyCodes.LEFT_ARROW)) {
+                        def.resolve();
+                    } else {
+                        def.reject();
+                    }
+                    event.preventDefault();
+                    return def.promise();
+                }
+            }
 
             // browser needs to process pending events before its selection can be queried
             window.setTimeout(function () {
