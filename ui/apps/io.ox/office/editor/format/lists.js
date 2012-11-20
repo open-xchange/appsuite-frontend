@@ -128,20 +128,19 @@ define('io.ox/office/editor/format/lists',
             ret.caps = lowerText !== text;
             var index = 0, lastValue = 1000;
             for (; index < text.length; ++index) {
-                var position = 0;
-                for (; position < 7; ++position) {
-                    var char = lowerText.charAt(index);
-                    if (char === romanSmallArr[position]) {
-                        var value = romanValArr[position];
-                        if (lastValue < value) {
-                            startValue = startValue - lastValue + (value - lastValue);
-                        } else {
-                            startValue += value;
-                        }
-                        lastValue = value;
-                        break;
-                    }
+                var char = lowerText.charAt(index);
+                if (char === '.')
+                    break;
+                var position = $.inArray(char, romanSmallArr);
+                if (position < 0)
+                    return {};
+                var value = romanValArr[position];
+                if (lastValue < value) {
+                    startValue = startValue - lastValue + (value - lastValue);
+                } else {
+                    startValue += value;
                 }
+                lastValue = value;
             }
             if (startValue > 0) {
                 ret.startnumber = startValue;
