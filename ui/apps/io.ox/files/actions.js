@@ -167,7 +167,7 @@ define("io.ox/files/actions",
                     m.getApp().launch().done(function () {
                         var content  = _(list).map(function (file) {
                             var url = location.protocol + '//' + location.host + ox.root + '/#!&app=io.ox/files&perspective=list&folder=' + file.folder_id + '&id=' + _.cid(file);
-                            return gt('Title: %1$s', file.title || file.filename) + '\n' + gt('Link: %1$s', url);
+                            return gt('File: %1$s', file.title || file.filename) + '\n' + gt('Direct link: %1$s', url);
                         });
                         this.compose({ attachments: [{ content: content.join('\n\n') }] });
                     });
