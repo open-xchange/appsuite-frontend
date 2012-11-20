@@ -15,7 +15,7 @@ define('io.ox/core/commons-folderview',
      'io.ox/core/extPatterns/links',
      'io.ox/core/notifications',
      'io.ox/core/api/folder',
-      'gettext!io.ox/core'], function (ext, links, notifications, api, gt) {
+     'gettext!io.ox/core'], function (ext, links, notifications, api, gt) {
 
     'use strict';
 
@@ -162,57 +162,7 @@ define('io.ox/core/commons-folderview',
 
         function subscribeIMAPFolder(e) {
             e.preventDefault();
-
-            var currentFolderArray = e.data.selection.get(),
-                currentFolder;
-
-            currentFolder = (currentFolderArray[0]).split('/');
-
-            currentFolder = (currentFolder[0] === 'default0') ? 1 : currentFolder;
-
-            require(['io.ox/core/tk/folderviews'], function (views) {
-                var options;
-                _(ext.point(POINT + '/options').all()).each(function (obj) {
-
-                    options = _.extend(obj, options || {});
-                });
-
-                var container = $('<div>'),
-                    tree = e.data.app.folderView = new views[options.view](container, {
-                    type: options.type,
-                    rootFolderId: currentFolder[0],
-//                    rootFolderId: options.rootFolderId,
-                    checkbox: true,
-                    all: true
-                });
-                tree.paint();
-
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    var pane = new dialogs.ModalDialog({
-                        width: 400,
-                        easyOut: true
-                    });
-
-                    pane.header(
-                        $('<h4>').text(gt('subscribe IMAP folders'))
-                    )
-                    .build(function () {
-                        this.getContentNode().append(
-                            container
-                        );
-                    })
-                    .addButton('cancel', 'Cancel')
-                    .addPrimaryButton('save', gt('Save'))
-                    .show(function () {
-                    });
-
-                    pane.on('save', function () {
-                        console.log('geht');
-                    });
-                });
-
-            });
-
+            e.data.app.folderView.subscribe(e.data);
         }
 
         ext.point(POINT + '/sidepanel/toolbar/add').extend({
@@ -221,7 +171,7 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
                 if (baton.options.type === 'mail') {
                     this.append($('<li>').append(
-                        $('<a href="#">').text(gt('subscribe IMAP folders')).on('click', { app: baton.app, selection: baton.tree.selection }, subscribeIMAPFolder)
+                        $('<a href="#">').text(gt('Subscribe IMAP folders')).on('click', { app: baton.app, selection: baton.tree.selection }, subscribeIMAPFolder)
                     ));
                 }
             }
