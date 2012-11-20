@@ -101,6 +101,9 @@ define('io.ox/core/api/folder',
         },
 
         getSubFolders: function (options) {
+            if (options.all) {
+                options.cache = false;
+            }
             // options
             var opt = _.extend({
                     folder: '1',
