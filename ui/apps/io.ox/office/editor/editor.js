@@ -3928,8 +3928,9 @@ define('io.ox/office/editor/editor',
                     DOM.iterateTextSpans(node, function (span) {
 
                         if (DOM.isEmptySpan(span)) {
-                            // remove this span, if it is an empty portion and has a sibling text portion
+                            // remove this span, if it is an empty portion and has a sibling text portion (should not happen anymore)
                             if (DOM.isTextSpan(span.previousSibling) || DOM.isTextSpan(span.nextSibling)) {
+                                Utils.warn('Editor.validateParagraphNode(): empty text span with sibling text span found');
                                 $(span).remove();
                             }
                             // otherwise simply ignore the empty span

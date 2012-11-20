@@ -716,6 +716,45 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     // text components: fields, tabs ------------------------------------------
 
     /**
+     * Returns whether the passed node is a <div> container with embedded text
+     * spans, used as root elements for special text components in a paragraph.
+     * Does NOT return true for helper nodes that do not represent editable
+     * contents of a paragraph (e.g. numbering labels). To check for all helper
+     * nodes that contain text spans (also non-editable elements such as
+     * numbering labels), use the method DOM.isTextSpanContainerNode() instead.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a <div> element representing an editable
+     *  text component in a paragraph.
+     */
+    DOM.isTextComponentNode = function (node) {
+        return $(node).is('div.component');
+    };
+
+    /**
+     * Returns whether the passed node is a <div> container with embedded text
+     * spans, used as root elements for special text components in a paragraph.
+     * Does NOT return true for text nodes contained in helper nodes that do
+     * not represent editable contents of a paragraph (e.g. numbering labels).
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a DOM text node contained in a <div> element
+     *  representing an editable text component in a paragraph.
+     */
+    DOM.isTextNodeInTextComponent = function (node) {
+        node = node ? Utils.getDomNode(node) : null;
+        return node && DOM.isTextSpan(node.parentNode) && DOM.isTextComponentNode(node.parentNode.parentNode);
+    };
+
+    /**
      * A jQuery selector that matches elements representing a text field.
      */
     DOM.FIELD_NODE_SELECTOR = 'div.field';
@@ -772,45 +811,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.createTabNode = function () {
         return $('<div>', { contenteditable: false }).addClass('component tab');
-    };
-
-    /**
-     * Returns whether the passed node is a <div> container with embedded text
-     * spans, used as root elements for special text components in a paragraph.
-     * Does NOT return true for helper nodes that do not represent editable
-     * contents of a paragraph (e.g. numbering labels). To check for all helper
-     * nodes that contain text spans (also non-editable elements such as
-     * numbering labels), use the method DOM.isTextSpanContainerNode() instead.
-     *
-     * @param {Node|jQuery|Null} [node]
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains. If missing or null, returns false.
-     *
-     * @returns {Boolean}
-     *  Whether the passed node is a <div> element representing an editable
-     *  text component in a paragraph.
-     */
-    DOM.isTextComponentNode = function (node) {
-        return $(node).is('div.component');
-    };
-
-    /**
-     * Returns whether the passed node is a <div> container with embedded text
-     * spans, used as root elements for special text components in a paragraph.
-     * Does NOT return true for text nodes contained in helper nodes that do
-     * not represent editable contents of a paragraph (e.g. numbering labels).
-     *
-     * @param {Node|jQuery|Null} [node]
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains. If missing or null, returns false.
-     *
-     * @returns {Boolean}
-     *  Whether the passed node is a DOM text node contained in a <div> element
-     *  representing an editable text component in a paragraph.
-     */
-    DOM.isTextNodeInTextComponent = function (node) {
-        node = node ? Utils.getDomNode(node) : null;
-        return node && DOM.isTextSpan(node.parentNode) && DOM.isTextComponentNode(node.parentNode.parentNode);
     };
 
     // paragraph helper nodes -------------------------------------------------
