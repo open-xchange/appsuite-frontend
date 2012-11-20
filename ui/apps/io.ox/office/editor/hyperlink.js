@@ -16,8 +16,9 @@ define('io.ox/office/editor/hyperlink',
      'io.ox/office/tk/dialogs',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/position',
+     'io.ox/office/editor/operations',
      'gettext!io.ox/office/main'
-    ], function (Utils, Dialogs, DOM, Position, gt) {
+    ], function (Utils, Dialogs, DOM, Position, Operations, gt) {
 
     'use strict';
 
@@ -28,7 +29,8 @@ define('io.ox/office/editor/hyperlink',
      * of a hyperlink.
      */
     var Hyperlink = {
-        Separators : [ '!', '?', '.', ' ', '-', ':', ',', '\u00a0']
+        Separators : [ '!', '?', '.', ' ', '-', ':', ',', '\u00a0'],
+        Protocols : [ 'http://', 'https://', 'ftp://']
     };
 
     // static functions =======================================================
@@ -66,12 +68,20 @@ define('io.ox/office/editor/hyperlink',
      *  A selection object which describes the current
      *  selection.
      *
-     * @returns {String}
-     *  The url as string or null if no url character
-     *  attribute is set at the selection.
+     * @returns {Object}
+     *  Object.url {String}
+     *  The url or null if no url character attribute is set
+     *  at the selection.
+     *  Object.beforeHyperlink {Boolean}
+     *  True if we provide the URL for the hyperlink which
+     *  is located at the next position.
+     *  Object.setPreselectedAttributes {Boolean}
+     *  True if we have to set the preselected attributes as
+     *  we don't want to show a popup but we have found url
+     *  attributes that we don't want to use for typing!
      */
     Hyperlink.getURLFromPosition = function (editor, selection) {
-        var url = null;
+        var result = { url: null, beforeHyperlink: false, setPreselectedAttributes: false };
 
         if (!selection.hasRange()) {
             // find out a possible URL set for the current position
@@ -88,12 +98,30 @@ define('io.ox/office/editor/hyperlink',
                     if ((obj.node.parentNode.innerText.length > 0) ||
                         (obj.node.parentNode.previousElementSibling !== null) ||
                         (DOM.isTextSpan(obj.node.parentNode.nextElementSibling)))
-                        url = styles.url;
+                        result.url = styles.url;
+                    else {
+                        result.setPreselectedAttributes = true;
+                    }
+                }
+                else {
+                    // Next special case: Before a hyperlink we always want to
+                    // show the popup
+                    var nextPosition = selection.getStartPosition();
+                    nextPosition[nextPosition.length - 1] += 1;
+
+                    obj = Position.getDOMPosition(editor.getNode(), nextPosition);
+                    if (obj && obj.node && DOM.isTextSpan(obj.node.parentNode)) {
+                        var nextCharStyles = characterStyles.getElementAttributes(obj.node.parentNode);
+                        if (nextCharStyles.url && nextCharStyles.url.length > 0) {
+                            result.url = nextCharStyles.url;
+                            result.beforeHyperlink = true;
+                        }
+                    }
                 }
             }
         }
 
-        return url;
+        return result;
     };
 
     /**
@@ -108,26 +136,21 @@ define('io.ox/office/editor/hyperlink',
 
         if (!selection.hasRange() && selection.getEnclosingParagraph()) {
             var paragraph = selection.getEnclosingParagraph(),
-                pos = null,
-                startSelection = selection.getStartPosition(),
-                url = null,
-                characterStyles = editor.getStyleSheets('character'),
-                obj = null;
+                startPosition = selection.getStartPosition(),
+                pos = null, url = null, result = null;
 
-            pos = startSelection[startSelection.length - 1];
+            pos = startPosition[startPosition.length - 1];
 
             if (!selection.hasRange()) {
-                // find out a possible URL set for the current position
-                obj = Position.getDOMPosition(editor.getNode(), startSelection);
-                if (obj && obj.node && DOM.isTextSpan(obj.node.parentNode)) {
-                    var styles = characterStyles.getElementAttributes(obj.node.parentNode);
-                    if (styles.url && styles.url.length > 0)
-                        url = styles.url;
-                }
+                result = Hyperlink.getURLFromPosition(editor, selection);
+                url = result.url;
             }
 
             if (url) {
-                newSelection = Hyperlink.findURLSelection(editor, obj.node.parentNode, pos, url);
+                if (result.beforeHyperlink)
+                    pos += 1;
+                startPosition[startPosition.length - 1] = pos;
+                newSelection = Hyperlink.findURLSelection(editor, startPosition, url);
             }
             else {
                 newSelection = Hyperlink.findTextSelection(paragraph, pos);
@@ -141,12 +164,8 @@ define('io.ox/office/editor/hyperlink',
      * Tries to find a selection based on the provided position which includes
      * @param editor {Object}
      *  The editor instance.
-     * @param characterStyles {Object}
-     *  The character style sheets.
-     * @param node {
-     *  The node which includes the position
-     * @param pos
-     *  The position in the paragraph
+     * @param startPosition {Position}
+     *  The startPosition in the paragraph
      * @param url
      *  The hyperlink URL which is set as character style at pos
      * @returns {Object}
@@ -154,37 +173,48 @@ define('io.ox/office/editor/hyperlink',
      *  be null which means that there is no selection but the hyperlink
      *  should be inserted at the position.
      */
-    Hyperlink.findURLSelection = function (editor, node, pos, url) {
+    Hyperlink.findURLSelection = function (editor, startPosition, url) {
         var startPos,
             endPos,
-            startNode = node,
-            endNode = node,
+            startNode = null,
+            endNode = null,
             styles = null,
-            characterStyles = editor.getStyleSheets('character');
+            obj = null,
+            characterStyles = editor.getStyleSheets('character'),
+            result = { start: null, end: null };
 
-        while (endNode && endNode.nextSibling && DOM.isTextSpan(endNode.nextSibling)) {
-            styles = characterStyles.getElementAttributes(endNode.nextSibling);
-            if (styles.url !== url)
-                break;
-            endNode = endNode.nextSibling;
+        obj = Position.getDOMPosition(editor.getNode(), startPosition);
+        if (obj && obj.node && DOM.isTextSpan(obj.node.parentNode)) {
+
+            startNode = obj.node.parentNode;
+            endNode = obj.node.parentNode;
+
+            while (endNode && endNode.nextSibling && DOM.isTextSpan(endNode.nextSibling)) {
+                styles = characterStyles.getElementAttributes(endNode.nextSibling);
+                if (styles.url !== url)
+                    break;
+                endNode = endNode.nextSibling;
+            }
+
+            while (startNode && startNode.previousSibling && DOM.isTextSpan(startNode.previousSibling)) {
+                styles = characterStyles.getElementAttributes(startNode.previousSibling);
+                if (styles.url !== url)
+                    break;
+                startNode = startNode.previousSibling;
+            }
+
+            startPos = Position.getPositionRangeForNode(editor.getNode(), startNode, true);
+            if (startNode !== endNode) {
+                endPos = Position.getPositionRangeForNode(editor.getNode(), endNode, true);
+            }
+            else {
+                endPos = startPos;
+            }
+
+            result = { start: startPos.start[startPos.start.length - 1], end: endPos.end[endPos.end.length - 1] };
         }
 
-        while (startNode && startNode.previousSibling && DOM.isTextSpan(startNode.previousSibling)) {
-            styles = characterStyles.getElementAttributes(startNode.previousSibling);
-            if (styles.url !== url)
-                break;
-            startNode = startNode.previousSibling;
-        }
-
-        startPos = Position.getPositionRangeForNode(editor.getNode(), startNode, true);
-        if (startNode !== endNode) {
-            endPos = Position.getPositionRangeForNode(editor.getNode(), endNode, true);
-        }
-        else {
-            endPos = startPos;
-        }
-
-        return { start: startPos.start[startPos.start.length - 1], end: endPos.end[endPos.end.length - 1] };
+        return result;
     };
 
     /**
@@ -194,20 +224,25 @@ define('io.ox/office/editor/hyperlink',
      * @param paragraph {HTMLElement|jQuery}
      *  The paragraph which contains the position provided as the second
      *  argument.
+     *
      * @param pos {Number}
      *  The position relative inside the paragraph
      *
+     * @param optional {Object}
+     *  A object with optional arguments.
+     *
      * @returns {Object}
-     *  An object which contains the start and end position relative to
-     *  the provided paragraph. Both can be null if there is no selection
-     *  and the hyperlink should inserted at pos.
+     *  An object which contains the Object.start and Object.end position
+     *  relative to the provided paragraph. Both can be null if there is
+     *  no selection and the hyperlink should inserted at pos. Object.text
+     *  contains the text within the selection.
      */
-    Hyperlink.findTextSelection = function (paragraph, pos) {
+    Hyperlink.findTextSelection = function (paragraph, pos, optional) {
         var text = '',
             startFound = false,
             startPos = -1,
             endPos = -1,
-            selection = { start: null, end: null };
+            selection = { start: null, end: null, text: null };
 
         Position.iterateParagraphChildNodes(paragraph, function (node, nodeStart, nodeLength, nodeOffset, offsetLength) {
 
@@ -251,7 +286,7 @@ define('io.ox/office/editor/hyperlink',
         });
 
         if ((startPos >= 0) && (endPos >= startPos))
-            selection = { start: startPos, end: endPos };
+            selection = { start: startPos, end: endPos, text: text };
 
         return selection;
     };
@@ -271,17 +306,22 @@ define('io.ox/office/editor/hyperlink',
      *  The absolute position to start with (pos - offset) is
      *  the relative position in the provided text.
      *
+     * @param optSeparators {optional, Array}
+     *  An array filled with separator characters which are a
+     *  border for the left work position search.
+     *
      * @returns {Number}
      *  The absolute position of the left boundary or -1 if the
      *  current position is the boundary.
      */
-    Hyperlink.findLeftWordPosition = function (text, offset, pos) {
-        var i = pos - offset;
+    Hyperlink.findLeftWordPosition = function (text, offset, pos, optSeparators) {
+        var i = pos - offset,
+            separators = (optSeparators === undefined) ? Hyperlink.Separators : optSeparators;
 
-        if (_.contains(Hyperlink.Separators, text[i]))
+        if (_.contains(separators, text[i]))
             return -1;
 
-        while (i >= 0 && !_.contains(Hyperlink.Separators, text[i])) {
+        while (i >= 0 && !_.contains(separators, text[i])) {
             i--;
         }
         return offset + i + 1;
@@ -433,6 +473,169 @@ define('io.ox/office/editor/hyperlink',
         });
 
         return def.promise();
+    };
+
+    /**
+     * Find a text selection based on the provided position to the left
+     * which is limited by the provided separator characters.
+     *
+     * @param paragraph {HTMLElement|jQuery}
+     *  The paragraph which contains the position provided as the second
+     *  argument.
+     *
+     * @param pos {Number}
+     *  The position relative inside the paragraph
+     *
+     * @param separators {Array}
+     *  An array with separator character to look for the left border.
+     *
+     * @returns {Object}
+     *  An object which contains the Object.start and Object.end position
+     *  relative to the provided paragraph. Both can be null if there is
+     *  no selection and the hyperlink should inserted at pos. Object.text
+     *  contains the text within the selection.
+     */
+    Hyperlink.findLeftText = function (paragraph, pos, separators) {
+        var text = '',
+            startFound = false,
+            startPos = -1,
+            endPos = -1,
+            selection = { start: null, end: null, text: null };
+
+        Position.iterateParagraphChildNodes(paragraph, function (node, nodeStart, nodeLength, nodeOffset, offsetLength) {
+
+            if (DOM.isTextSpan(node)) {
+                var str = $(node).text();
+
+                if (nodeStart <= pos) {
+                    if (startPos === -1)
+                        startPos = nodeStart;
+                    text = text.concat(str.slice(nodeOffset, nodeOffset + offsetLength));
+                }
+                if ((nodeStart + nodeLength) >= pos) {
+                    if (!startFound) {
+                        var leftPos = startPos;
+
+                        // we just need all text left inclusive pos
+                        text = text.slice(0, pos);
+
+                        startFound = true;
+                        startPos = Hyperlink.findLeftWordPosition(text, leftPos, pos, separators);
+                        endPos = Math.max(startPos, pos - 1);
+                        return Utils.Break;
+                    }
+                }
+            }
+            else {
+                if (startFound)
+                    return Utils.BREAK;
+                else {
+                    text = '';
+                    startPos = -1;
+                }
+            }
+        });
+
+        if ((startPos >= 0) && (endPos >= startPos))
+            selection = { start: startPos, end: endPos, text: text };
+
+        return selection;
+    };
+
+    /**
+     * Checks for a text in a paragraph which defines a hyperlink
+     * e.g. http://www.open-xchange.com
+     *
+     * @param paragraph {HTMLElement/jQuery}
+     *  The paragraph node to check
+     *
+     * @param position {Position}
+     *  The rightmost position to check the text to the left for
+     *  a hyperlink text.
+     *
+     * @returns {Object}
+     *  Returns an object containing the start and end position
+     *  to set the hyperlink style/url or null if no hyperlink
+     *  has been found.
+     */
+    Hyperlink.checkForHyperlinkText = function (paragraph, position) {
+        var result = null;
+
+        if (position !== null) {
+            var pos = position[position.length - 1],
+                hyperlinkSelection = Hyperlink.findLeftText(paragraph, pos, [' ', '\u00a0']);
+
+            if ((hyperlinkSelection.start !== null) && (hyperlinkSelection.end !== null) &&
+                (hyperlinkSelection.text !== null)) {
+                var found = false;
+
+                _.each(Hyperlink.Protocols, function (protocol) {
+                    if (hyperlinkSelection.text.indexOf(protocol) === 0)
+                        found = true;
+                });
+
+                if (found) {
+
+                    var index = hyperlinkSelection.text.indexOf('//');
+                    if (((index + 2) < hyperlinkSelection.text.length) &&
+                         (Hyperlink.checkURL(hyperlinkSelection.text))) {
+                        // At least one character after the protocol must be there
+                        var start = _.clone(position),
+                            end = _.clone(position);
+
+                        // create result with correct Position objects
+                        start[start.length - 1] = hyperlinkSelection.start;
+                        end[end.length - 1] = hyperlinkSelection.end;
+                        result = { start: start, end: end, text: hyperlinkSelection.text };
+                    }
+                }
+            }
+        }
+
+        return result;
+    };
+
+    /**
+     * 'Inserts' a hyperlink at the provided selection using the
+     * provided url.
+     *
+     * @param editor {Editor}
+     *  The editor instance to use.
+     *
+     * @param start {Position}
+     *  The start position of the selection
+     *
+     * @param end {Position}
+     *  The end position of the selection.
+     *
+     * @param url {String}
+     *  The url of the hyperlink to set at the selection
+     */
+    Hyperlink.insertHyperlink = function (editor, start, end, url) {
+        var hyperlinkStyleId = editor.getDefaultUIHyperlinkStylesheet(),
+            characterStyles = editor.getStyleSheets('character'),
+            generator = new Operations.Generator();
+
+        if (characterStyles.isDirty(hyperlinkStyleId)) {
+            // insert hyperlink style to document
+            generator.generateOperation(Operations.INSERT_STYLE, {
+                attrs: characterStyles.getStyleSheetAttributeMap(hyperlinkStyleId),
+                type: 'character',
+                styleid: hyperlinkStyleId,
+                stylename: characterStyles.getName(hyperlinkStyleId),
+                parent: characterStyles.getParentId(hyperlinkStyleId),
+                uipriority: characterStyles.getUIPriority(hyperlinkStyleId)
+            });
+            characterStyles.setDirty(hyperlinkStyleId, false);
+        }
+
+        generator.generateOperation(Operations.ATTRS_SET, {
+            attrs: { url: url, style: hyperlinkStyleId },
+            start: _.clone(start),
+            end: _.clone(end)
+        });
+
+        editor.applyOperations(generator.getOperations());
     };
 
     // exports ================================================================
