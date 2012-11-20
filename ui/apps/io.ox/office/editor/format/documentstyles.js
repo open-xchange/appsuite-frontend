@@ -43,7 +43,7 @@ define('io.ox/office/editor/format/documentstyles',
         var // style sheet containers mapped by attribute family
             containers = {},
             // document attributes
-            attributes = { defaulttabstop: 1270, zoom: { value: 100 }},
+            attributes = { defaultTabStop: 1270, zoom: { value: 100 }},
             // document themes
             themes = {},
             // list definitions

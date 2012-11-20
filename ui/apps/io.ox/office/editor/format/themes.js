@@ -32,7 +32,7 @@ define('io.ox/office/editor/format/themes',
     function Theme(attributes) {
 
         var // the color scheme of this theme
-            colorScheme = _.copy(Utils.getObjectOption(attributes, 'colorscheme', {}), true);
+            colorScheme = _.copy(Utils.getObjectOption(attributes, 'colorScheme', {}), true);
 
         // methods ------------------------------------------------------------
 
