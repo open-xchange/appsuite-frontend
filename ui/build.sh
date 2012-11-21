@@ -2,10 +2,10 @@
 
 if command -v nodejs > /dev/null; then NODEJS=nodejs; else NODEJS=node; fi
 
-cd $(dirname $0)
+export BASEDIR=$(dirname $0)
 
 if [ -f local.conf ]; then source ./local.conf; fi
-$NODEJS $nodeopts lib/jake/bin/cli.js $*
+$NODEJS $nodeopts "$BASEDIR/lib/jake/bin/cli.js" -f "$BASEDIR/Jakefile" $*
 
 # echo -e "\033[0;35m"
 # echo "Copy this to your .vimrc for auto-build on save:"

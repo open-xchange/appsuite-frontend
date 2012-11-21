@@ -25,7 +25,6 @@ var jshint = require("./lib/jshint").JSHINT;
 var less = require("./lib/build/less");
 var showdown = require('./lib/showdown/src/showdown');
 
-utils.builddir = process.env.builddir || "build";
 console.info("Build path: " + utils.builddir);
 
 function pad (n) { return n < 10 ? "0" + n : n; }
@@ -42,6 +41,7 @@ function envBoolean(name) {
     return /^\s*(?:on|yes|true|1)/i.test(process.env[name]);
 }
 
+var appName = process.env.appName || 'open-xchange-ui7';
 var debug = envBoolean('debug');
 if (debug) console.info("Debug mode: on");
 
@@ -128,17 +128,6 @@ function jsFilter (data) {
 utils.fileType("source").addHook("filter", jsFilter)
     .addHook("define", i18n.potScanner);
 
-var core_head = fs.readFileSync("html/core_head.html", "utf8"),
-    core_body = fs.readFileSync("html/core_body.html", "utf8");
-
-function htmlFilter (data) {
-    return data
-        .replace(/@\s?core_head\s?@/, core_head)
-        .replace(/@\s?core_body\s?@/, core_body)
-        .replace(/@\s?version\s?@/g, version)
-        .replace(/@base@/g, "v=" + version);
-}
-
 var jshintOptions = {
     bitwise: false,
     browser: true,
@@ -183,34 +172,26 @@ function hint (data, getSrc) {
     fail("JSHint error");
 }
 
-// default task
+//default task
 
-desc("Builds the GUI");
-utils.topLevelTask("default", ["ox.pot"], function() {
-    utils.includes.save();
-    i18n.modules.save();
-    utils.summary("default")();
+desc('Builds the GUI');
+utils.topLevelTask('default', ['buildApp'], function() {
+    utils.summary('default')();
 });
-
-i18n.modules.load("tmp/i18n.json");
-utils.includes.load("tmp/includes.json");
 
 utils.copy(utils.list("html", [".htaccess", "blank.html", "busy.html", "favicon.ico"]));
 utils.copy(utils.list("src/"));
 
+//html
 
-// i18n
+function htmlFilter (data) {
+    return data
+        .replace(/@\s?version\s?@/g, version)
+        .replace(/@base@/g, 'v=' + version);
+}
 
-file("ox.pot", ["Jakefile.js"], function() {
-    fs.writeFileSync(this.name, i18n.generatePOT(this.prereqs.slice(1)));
-});
-
-directory("tmp/pot");
-utils.fileType("source").addHook("handler", i18n.potHandler);
-utils.fileType("module").addHook("handler", i18n.potHandler);
-
-(function() {
-    var body_lines = core_body.split(/\r?\n|\r/);
+function bodyFilter(data) {
+    var body_lines = data.split(/\r?\n|\r/);
     for (var i = 0; i < body_lines.length; i++) {
         body_lines[i].replace(/data-i18n="([^"]*)"/g, function(match, msgid) {
             i18n.addMessage({
@@ -221,30 +202,24 @@ utils.fileType("module").addHook("handler", i18n.potHandler);
     }
     i18n.modules.add("io.ox/core/login", "html/core_body.html",
                      "html/core_body.html");
-})();
+    return htmlFilter(data);
+}
 
-// l10n
+utils.copy(utils.list('html', 'core_head.html'),
+    { to: 'tmp', filter: htmlFilter });
+utils.copy(utils.list('html', 'core_body.html'),
+    { to: 'tmp', filter: bodyFilter });
+utils.concat('core', ['html/index.html'], { filter: utils.includeFilter });
+utils.concat('signin', ['html/signin.html'], { filter: utils.includeFilter });
+utils.concat('core.appcache', ['html/core.appcache'], { filter: htmlFilter });
+utils.concat('signin.appcache', ['html/signin.appcache'], { filter: htmlFilter });
 
-utils.copy(utils.list("i18n", "*.po"), {
-    to: utils.dest("l10n"),
-    filter: function(data) { return JSON.stringify(i18n.parsePO(data)); },
-    mapper: function(name) { return name.replace(/\.po$/, ".json"); }
-});
+task('force');
+_.each(_.map(['core', 'signin', 'core.appcache', 'signin.appcache'], utils.dest)
+       .concat(['tmp/core_head.html', 'tmp/core_body.html']),
+       function (name) { file(name, ['force']); });
 
-// html
-
-utils.concat("core", ["html/index.html"], { filter: htmlFilter });
-utils.concat("signin", ["html/signin.html"], { filter: htmlFilter });
-utils.concat("core.appcache", ["html/core.appcache"], { filter: htmlFilter });
-utils.concat("signin.appcache", ["html/signin.appcache"], { filter: htmlFilter });
-
-task("force");
-file(utils.dest("core"), ["force"]);
-file(utils.dest("signin"), ["force"]);
-file(utils.dest("core.appcache"), ["force"]);
-file(utils.dest("signin.appcache"), ["force"]);
-
-// js
+//js
 
 utils.concat("boot.js",
     [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
@@ -319,6 +294,47 @@ utils.copy(utils.list("lib", "mediaelement/"), {to: utils.dest("apps") });
 
 utils.copy(utils.list("lib", "ace/"), {to: utils.dest("apps")});
 
+//time zone database
+
+if (!path.existsSync("apps/io.ox/core/date/tz/zoneinfo")) {
+    var zoneinfo = utils.dest("apps/io.ox/core/date/tz/zoneinfo");
+    utils.file(zoneinfo, [], function() {
+        if (!path.existsSync(zoneinfo)) {
+            fs.symlinkSync("/usr/share/zoneinfo", zoneinfo);
+        }
+    });
+}
+
+// external apps
+
+desc('Builds an external app\nParameter: appName');
+utils.topLevelTask('app', ['buildApp'], utils.summary('app'));
+
+// common task for external apps and the GUI
+
+utils.topLevelTask('buildApp', ['ox.pot'], function () {
+    utils.includes.save();
+    i18n.modules.save();
+});
+
+i18n.modules.load("tmp/i18n.json");
+utils.includes.load("tmp/includes.json");
+
+// i18n
+
+file("ox.pot", [utils.source("Jakefile.js")], function() {
+    fs.writeFileSync(this.name,
+        i18n.generatePOT(this.prereqs.slice(skipOxPotPrereqs)));
+});
+if (path.existsSync('html/core_body.html')) {
+    file('ox.pot', ['tmp/core_body.html']);
+}
+var skipOxPotPrereqs = jake.Task['ox.pot'].prereqs.length;
+
+directory("tmp/pot");
+utils.fileType("source").addHook("handler", i18n.potHandler);
+utils.fileType("module").addHook("handler", i18n.potHandler);
+
 // module dependencies
 
 var moduleDeps = {};
@@ -361,17 +377,6 @@ var apps = _.groupBy(utils.list("apps/"), function (f) {
 });
 if (apps.js) utils.copy(apps.js, { type: "module" });
 if (apps.rest) utils.copy(apps.rest);
-
-// time zone database
-
-if (!path.existsSync("apps/io.ox/core/date/tz/zoneinfo")) {
-    var zoneinfo = utils.dest("apps/io.ox/core/date/tz/zoneinfo");
-    utils.file(zoneinfo, [], function() {
-        if (!path.existsSync(zoneinfo)) {
-            fs.symlinkSync("/usr/share/zoneinfo", zoneinfo);
-        }
-    });
-}
 
 // doc task
 
@@ -483,19 +488,19 @@ task("dist", [distDest], function () {
     var toCopy = _.reject(fs.readdirSync("."), function(f) {
         return /^(tmp|ox.pot|build)$/.test(f);
     });
-    var name = "open-xchange-ui7-" + ver;
-    var debName = "open-xchange-ui7_" + ver;
-    var dest = path.join(distDest, name);
+    var tarName = appName + '-' + ver;
+    var debName = appName + '_' + ver;
+    var dest = path.join(distDest, tarName);
     fs.mkdirSync(dest);
     utils.exec(["cp", "-r"].concat(toCopy, dest), tar);
     function tar(code) {
         if (code) return fail();
-        utils.exec(["tar", "cjf", debName + ".orig.tar.bz2", name],
+        utils.exec(['tar', 'cjf', debName + '.orig.tar.bz2', tarName],
                    { cwd: distDest }, dpkgSource);
     }
     function dpkgSource(code) {
         if (code) return fail();
-        utils.exec(["dpkg-source", "-Zbzip2", "-b", name],
+        utils.exec(['dpkg-source', '-Zbzip2', '-b', tarName],
                    { cwd: distDest }, done);
     }
     function done(code) { if (code) return fail(); else complete(); }
