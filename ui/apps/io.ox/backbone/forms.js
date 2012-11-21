@@ -212,15 +212,19 @@ define('io.ox/backbone/forms',
 
         this.buildDropElements = function () {
             var self = this,
-                collectedDate = function () {
+                collectedDate = function (submittedValue) {
                 var dayValue = self.nodes.dropelements.find('[name="day"]').val(),
                     monthValue = self.nodes.dropelements.find('[name="month"]').val(),
                     yearValue = self.nodes.dropelements.find('[name="year"]').val(),
-                    collectedString = dayValue + '.' + monthValue + '.' + yearValue;
-                if (collectedString !== '..') {
-                    return collectedString;
+                    collectedString = new date.Local();
+
+                if (submittedValue === '') {
+                    return {formated: '', stamp: ''};
                 } else {
-                    return '';
+                    collectedString.setDate(dayValue);
+                    collectedString.setMonth(monthValue);
+                    collectedString.setYear(yearValue);
+                    return {formated: collectedString.format(date.DATE), stamp: collectedString};
                 }
 
             },
@@ -233,7 +237,7 @@ define('io.ox/backbone/forms',
                 if (name === 'month') {
                     arrayOfValues.push($('<option>').text(''));
                     for (var i = from; i <= to; i += 1) {
-                        arrayOfValues.push($('<option>').val(i).text(gt.noI18n(date.locale.months[i - 1])));
+                        arrayOfValues.push($('<option>').val(i).text(gt.noI18n(date.locale.months[i])));
                     }
 
                 } else if (name === 'day') {
@@ -260,11 +264,14 @@ define('io.ox/backbone/forms',
 
             this.nodes.dropelements = $('<span>').append(
                 createSelect('day', 1, 31),
-                createSelect('month', 1, 12),
+                createSelect('month', 0, 11),
                 createSelect('year', 1900,  new Date().getFullYear())
             );
             this.nodes.dropelements.on('change', 'select', function () {
-                self.nodes.element.val(collectedDate());
+
+                var dateObj = collectedDate($(this).val());
+                self.nodes.element.val(dateObj.formated);
+                self.nodes.element.data('dateobject', dateObj.stamp);
                 self.nodes.element.trigger('change');
             });
 
@@ -866,19 +873,9 @@ define('io.ox/backbone/forms',
         SectionLegend: SectionLegend,
         DatePicker: DatePicker,
         utils: {
-            string2date: function (string) {
-                var reg = /((\d{2})|(\d))\.((\d{2})|(\d))\.((\d{4})|(\d{2}))/;
-
-                if (string !== '' && reg.test(string)) {
-                    var dateArray = string.split('.');
-                    return Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0]));
-                } else {
-                    return string;
-                }
-            },
             date2string: function (value) {
                 if (_.isNumber(value)) {
-                    return new date.Local(date.Local.utc(value)).format(date.DATE);
+                    return (new date.Local(date.Local.utc(value)));
                 }
                 return value;
             },
@@ -887,13 +884,20 @@ define('io.ox/backbone/forms',
             controlGroup: {
                 date: {
                     setValueInElement: function (valueFromModel) {
+                        var transformedValue = forms.utils.date2string(valueFromModel),
+                            transformedValueFormated;
+
                         if (this.nodes.dropelements) {
                             var allSelects = this.nodes.dropelements.find('select'),
-                            singleValues = [],
-                            transformedValue = forms.utils.date2string(valueFromModel);
+                            singleValues = [];
+                            if (_.isObject(transformedValue)) {
+                                transformedValueFormated = transformedValue.format(date.DATE);
+                            } else {
+                                transformedValueFormated = transformedValue;
+                            }
 
                             if (transformedValue !== undefined && transformedValue !== null) {
-                                singleValues = transformedValue.split('.');
+                                singleValues.push(transformedValue.getDate(), transformedValue.getMonth(), transformedValue.getYear());
                             }
 
                             _(allSelects).each(function (element, key) {
@@ -901,15 +905,16 @@ define('io.ox/backbone/forms',
                             });
                         }
 
-                        this.nodes.element.val(forms.utils.date2string(valueFromModel));
+                        this.nodes.element.val(transformedValueFormated);
 
                     },
 
                     setValueInModel: function (valueFromElement) {
+                        var timestamp = this.nodes.element.data().dateobject.t;
                         if (valueFromElement === '') {
-                            valueFromElement = null;
+                            valueFromElement = timestamp = null;
                         }
-                        if (this.model.set(this.attribute, forms.utils.string2date(valueFromElement))) {
+                        if (this.model.set(this.attribute, timestamp)) {
                             this.$el.removeClass('error');
                             this.nodes.controls.find('.help-block.error').remove();
                         }
