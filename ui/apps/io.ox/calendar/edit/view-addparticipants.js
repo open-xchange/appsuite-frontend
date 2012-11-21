@@ -21,14 +21,6 @@ define('io.ox/calendar/edit/view-addparticipants',
 
     'use strict';
 
-    var autocompleteAPI = new AutocompleteAPI({
-        id: 'participants',
-        contacts: true,
-        groups: true,
-        resources: true,
-        distributionlists: true
-    });
-
     var AddParticipantView = Backbone.View.extend({
         events: {
             'click [data-action="add"]': 'onClickAdd'
@@ -37,21 +29,32 @@ define('io.ox/calendar/edit/view-addparticipants',
             var self = this;
         },
         // TODO: should refactored to a controller
-        render: function (parentSelector) {
+        render: function (opt) {
             var self = this,
-                renderedContent;
+                renderedContent,
+                defaults = {
+                    id: 'participants',
+                    users: false,
+                    contacts: true,
+                    groups: true,
+                    resources: true,
+                    distributionlists: true,
+                    parentSelector: '.io-ox-calendar-edit'
+                },
+                options = $.extend(defaults, opt),
+                autocompleteAPI = new AutocompleteAPI(options);
 
             function highlight(text, query) {
                 return String(text).replace(/</g, '&lt;')
                     .replace(new RegExp(query, 'i'), '<b>' + query + '</b>');
             }
 
-            self.autoparticpants = self.$el.find('.add-participant')
+            self.autoparticipants = self.$el.find('.add-participant')
                 .attr('autocapitalize', 'off')
-                .attr('autocorrect', 'off')
-                .attr('autocomplete', 'off')
+                .attr('autocorrect',    'off')
+                .attr('autocomplete',   'off')
                 .autocomplete({
-                    parentSelector: parentSelector || '.io-ox-calendar-edit',
+                    parentSelector: options.parentSelector,
                     source: function (query) {
                         return autocompleteAPI.search(query);
                     },
@@ -89,11 +92,12 @@ define('io.ox/calendar/edit/view-addparticipants',
                         }
                     },
                     click: function () {
-                        self.autoparticpants.trigger('selected', self.autoparticpants.getSelectedItem());
+                        self.autoparticipants.trigger('selected', self.autoparticipants.getSelectedItem());
                     }
                 })
                 .on('selected', function (e, selected) {
                     if (_.isObject(selected)) {
+                        //console.log(selected.data);
                         self.$('.add-participant').val('');
                         self.trigger('select', selected.data);
                     } else {
@@ -103,10 +107,10 @@ define('io.ox/calendar/edit/view-addparticipants',
             return self;
         },
         onClickAdd: function (e) {
-            var selectedItem = this.autoparticpants.getSelectedItem();
+            var selectedItem = this.autoparticipants.getSelectedItem();
 
             if (selectedItem) {
-                return this.autoparticpants.trigger('selected', selectedItem);
+                return this.autoparticipants.trigger('selected', selectedItem);
             } else {
                 var node = this.$('input.add-participant');
                 var val = node.val();

@@ -16,12 +16,65 @@ define('io.ox/core/permissions/permissions',
      'io.ox/core/api/user',
      'io.ox/core/api/group',
      'io.ox/core/tk/dialogs',
+     'io.ox/contacts/util',
+     'io.ox/calendar/edit/view-addparticipants',
      'gettext!io.ox/core',
-     'less!io.ox/core/permissions/style.css'], function (ext, api, userAPI, groupAPI, dialogs, gt) {
+     'less!io.ox/core/permissions/style.css'], function (ext, api, userAPI, groupAPI, dialogs, util, AddParticipantsView, gt) {
 
     'use strict';
 
     var POINT = 'io.ox/core/permissions',
+
+    folder_id,
+
+    Permission = Backbone.Model.extend({
+        idAttribute: "entity",
+        defaults: {
+            group: false,
+            bits: 0
+        }
+    }),
+
+    Permissions = Backbone.Collection.extend({
+        model: Permission
+    }),
+
+    PermissionsView = Backbone.View.extend({
+
+        className: "permission row-fluid",
+
+        events: {
+            'click .dropdown > ul li a': 'updateDropdown',
+            'click .remove > ul li a'  : 'removeEntity'
+        },
+
+        render: function () {
+
+            ext.point(POINT + '/detail').invoke('draw', this.$el, this.model);
+            return this;
+
+        },
+
+        removeEntity: function () {
+            this.collection.remove(this.model);
+            this.remove();
+        },
+
+        updateDropdown: function (e) {
+            e.preventDefault();
+            var $el     = $(e.target),
+                value   = $el.attr('data-value'),
+                link    = $el.parent().parent().parent().children('a'),
+                type    = link.attr('data-type'),
+                newbits = api.Bitmask(this.model.get('bits')).set(type, value).get();
+            link.text($el.text());
+
+            this.model.set('bits', newbits);
+        }
+    }),
+
+    collection = window.collection = new Permissions(),
+
     menus = {
         'folder': {
             0:  gt('not view'),
@@ -55,103 +108,31 @@ define('io.ox/core/permissions/permissions',
     },
     addDropdown,
     addRemoveButton,
-    setPermission,
     isFolderAdmin = false;
-
-    ext.point(POINT).extend({
-        index: 100,
-        id: 'dialog',
-        draw: function (folder) {
-            if (api.Bitmask(folder.own_rights).get('admin') === 1) {
-                isFolderAdmin = true;
-            }
-            else
-            {
-                isFolderAdmin = false;
-            }
-            var dialog = new dialogs.ModalDialog({
-                width: 800,
-                easyOut: true
-            })
-            .header(
-                $('<h4>').text(gt('Folder permissions')),
-                api.getBreadcrumb(folder.id, { subfolders: false })
-            )
-            .build(function () {
-                ext.point(POINT + '/detail').invoke('draw', this.getContentNode(), folder);
-
-                this.getContentNode().on('click', '.remove', function (e) {
-                    $(this).closest('.permission').remove();
-                });
-            });
-
-
-            if (isFolderAdmin) {
-                dialog.addButton('cancel', gt('Cancel'))
-                    .addPrimaryButton('save', gt('Save'));
-            }
-            else
-            {
-                dialog.addPrimaryButton('ok', gt('Ok'));
-            }
-            dialog.getPopup().addClass('permissions-dialog');
-
-            dialog.show(function () {
-                this.find('input').focus();
-            })
-            .done(function (action) {
-                if (isFolderAdmin && action === 'save') {
-                    var permissions = _.map($(this).find('.permission'), function (p) { return $(p).data(); });
-                    setPermission(folder, permissions);
-                }
-            });
-        }
-    });
 
     ext.point(POINT + '/detail').extend({
         index: 100,
         id: 'folderpermissions',
-        draw: function (folder) {
-            var entities = [];
-            _(folder.permissions).each(function (permission) {
+        draw: function (model) {
+            var self = this;
+            var entity = model.get('entity');
+            if (!model.get('group')) {
+                $.when(
+                    userAPI.getName(entity),
+                    userAPI.getPictureURL(entity, { width: 64, height: 64, scaleType: 'cover' })
+                )
+                .done(function (name, picture) {
+                    ext.point(POINT + '/entity').invoke('draw', self, { model: model, picture: picture, entity: name });
+                });
+            } else {
+                $.when(
+                    groupAPI.getTextNode(entity)
+                )
+                .done(function (entity) {
+                    ext.point(POINT + '/entity').invoke('draw', self, { model: model, entity: entity });
+                });
+            }
 
-                var def = $.Deferred(),
-                d = $('<div class="permission row-fluid">');
-
-                if (!permission.group) {
-                    $.when(
-                        userAPI.getName(permission.entity),
-                        userAPI.getPictureURL(permission.entity, { width: 64, height: 64, scaleType: 'cover' })
-                    )
-                    .done(function (entity, picture) {
-                        ext.point(POINT + '/entity').invoke('draw', d, {
-                            permission: permission,
-                            folder: folder,
-                            entity: entity,
-                            picture: picture
-                        });
-                    });
-                }
-                else
-                {
-                    $.when(
-                        groupAPI.getTextNode(permission.entity)
-                    )
-                    .done(function (entity) {
-                        ext.point(POINT + '/entity').invoke('draw', d, {
-                            permission: permission,
-                            folder: folder,
-                            entity: entity,
-                            picture: false
-                        });
-                    });
-                }
-
-                def.done(entities.push(d));
-            });
-            this.append(
-                $('<div class="permissions row-fluid">').append(entities)
-            );
         }
     });
 
@@ -197,26 +178,23 @@ define('io.ox/core/permissions/permissions',
                         addDropdown('admin', data),
                         gt.noI18n('.')
                     ),
-                    addRemoveButton(data.permission)
+                    addRemoveButton(data.model.get('entity'))
                 )
             );
-            // attach data to parent
-            this.data(data.permission);
         }
     });
 
-    addRemoveButton = function (permission) {
-        if (isFolderAdmin && permission.entity !== ox.user_id)
+    addRemoveButton = function (entity) {
+        if (isFolderAdmin && entity !== ox.user_id)
             return $('<div class="remove">').append($('<div class="icon">').append($('<i class="icon-remove">')));
     };
 
     addDropdown = function (permission, data) {
-
         var self = this,
-        bits = data.permission.bits,
+        bits = data.model.get('bits'),
         selected = api.Bitmask(bits).get(permission),
         menu = $('<span class="dropdown">').append(
-            $('<a>', { 'data-val': bits, 'data-toggle': 'dropdown' }).text(menus[permission][selected]),
+            $('<a>', { href: '#', 'data-type': permission, 'data-toggle': 'dropdown' }).text(menus[permission][selected]),
             $('<ul class="dropdown-menu">')
         );
         if (!isFolderAdmin) {
@@ -226,27 +204,96 @@ define('io.ox/core/permissions/permissions',
             if (value === '64') return true; // Skip maximum rights
             menu.find('ul').append(
                 $('<li>').append(
-                    $('<a>', { 'data-val': value }).text(item)
-                        .on('click', function () {
-                            var data = $(this).closest('.permission').data(),
-                            newdata = api.Bitmask(data.bits).set(permission, value).get();
-                            $(this).closest('.permission').data('bits', newdata);
-                            $(this).parent().parent().parent().children('a').text(item);
-                        })
+                    $('<a>', { href: '#', 'data-value': value }).text(item)
                 )
             );
         });
         return menu;
     };
 
-    setPermission = function (folder, permissions) {
-        api.update({ folder: folder.id, changes: { permissions: permissions }});
-    };
-
     return {
-        initPermissionsDialog: function (e) {
-            api.get({ folder: String(e.data.app.folderView.selection.get()) }).done(function (data) {
-                ext.point(POINT).invoke("draw", null, data);
+        show: function (folder) {
+            folder_id = String(folder);
+            api.get({ folder: folder_id }).done(function (data) {
+                try {
+                    isFolderAdmin = api.Bitmask(data.own_rights).get('admin') === 1;
+
+                    var dialog = new dialogs.ModalDialog({
+                        width: 800,
+                        easyOut: true
+                    })
+                    .header(
+                        $('<h4>').text(gt('Folder permissions')),
+                        api.getBreadcrumb(data.id, { subfolders: false })
+                    );
+
+                    if (isFolderAdmin) {
+                        dialog.addButton('cancel', gt('Cancel'))
+                            .addPrimaryButton('save', gt('Save'));
+
+                        var node =  $('<div class="autocomplete-controls input-append">').append(
+                                $('<input type="text" class="add-participant permissions-participant-input-field">'),
+                                $('<button class="btn" type="button" data-action="add">')
+                                    .append($('<i class="icon-plus">'))
+                        ),
+                        autocomplete = new AddParticipantsView({el: node});
+                        collection.on('reset', function () {
+                            var node = dialog.getContentNode().empty();
+                            this.each(function (model) {
+                                new PermissionsView({ model: model, collection: this }).render().$el.appendTo(node);
+                            }, this);
+                        });
+
+                        collection.on('add', function (model, collection) {
+                            var node = dialog.getContentNode();
+                            new PermissionsView({ model: model, collection: collection }).render().$el.appendTo(node);
+                        });
+
+                        collection.reset(_(data.permissions).map(function (obj) {
+                            return new Permission(obj);
+                        }));
+
+                        autocomplete.render({
+                            parentSelector: '.permissions-dialog > .modal-footer',
+                            users: true,
+                            contacts: false,
+                            groups: true,
+                            resources: false,
+                            distributionlists: false
+                        });
+
+                        autocomplete.on('select', function (data) {
+                            var obj = {
+                                group: data.type === 2,
+                                bits: 0,
+                                entity: data.group ? data.id : data.internal_userid
+                            };
+                            if (!collection.any(function (item) { return item.entity === obj.entity; })) {
+                                collection.add(new Permission(obj));
+                            }
+                        });
+                        dialog.getFooter().prepend(node);
+
+                    } else {
+                        dialog.addPrimaryButton('ok', gt('Ok'));
+                    }
+
+                    dialog.getPopup().addClass('permissions-dialog');
+                    dialog.show(function () {
+                        this.find('input').focus();
+                    })
+                    .done(function (action) {
+                        if (isFolderAdmin && action === 'save') {
+                            api.update({ folder: folder_id, changes: { permissions: collection.toJSON() }}).done(function () {
+                                collection.off();
+                            });
+                        } else if (action === 'cancel') {
+                            collection.off();
+                        }
+                    });
+                } catch (e) {
+                    console.error('Error', e);
+                }
             });
         }
     };

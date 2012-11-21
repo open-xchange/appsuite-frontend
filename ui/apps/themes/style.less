@@ -10,7 +10,7 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
- 
+
 #io-ox-core.wallpaper {
     .radial-gradient(@wallpaper-color1, @wallpaper-color2, @wallpaper-color3);
 }
@@ -64,11 +64,11 @@
 /* top bar */
 
 #io-ox-topbar {
- 
+
     height: 40px;
     bottom: auto;
     z-index: 2;
-    
+
     .vertical-gradient(@topbar-background-alt, @topbar-background);
 }
 
@@ -450,9 +450,9 @@
     width: @window-head-width;
     bottom: 0px;
     left: 0px;
-    
+
     z-index: 20;
-    
+
     font-size: @window-head-font-size;
 
     .user-select(none);
@@ -478,7 +478,7 @@
 
     font-size: 26px;
     line-height: 52px;
-    
+
     & > a {
         width: 50px;
         text-align: center;
@@ -486,11 +486,11 @@
         display: inline-block;
         outline: 0;
     }
-    
+
     & > a i { color: @link-on-dark; }
     &:hover > a i { color: @link-color; text-decoration: none; }
     & > a.disabled i { color: #555; cursor: default; }
-    
+
     ul { font-size: 14px; line-height: 20px; }
 }
 
@@ -628,14 +628,14 @@ a.button {
     height: 50px;
     left: 0px;
     z-index: 1;
-    
+
     overflow: hidden;
     padding: 10px 13px;
     border-bottom: 1px solid #ccc;
-    
+
     .box-sizing(border-box);
     .vertical-gradient(#f5f5f5, #eee);
-    
+
     form { margin: 0; }
 
     .margin-right {
@@ -1132,9 +1132,9 @@ span.hint {
 
     margin: 13px 0 13px 0;
     height: 30px;
-    
+
     &.top { margin-top: 0; }
-    
+
     .btn {
         float: right;
         margin-left: 13px;
@@ -1258,6 +1258,7 @@ input.nice-input {
     padding-top: 3px;
     .box-shadow(0px 5px 20px -10px black);
     .box-sizing(border-box);
+    text-align:left;
 }
 
 .autocomplete-popup .autocomplete-item {
@@ -1379,38 +1380,38 @@ input.nice-input {
 /* DARK VARIANT */
 
 .foldertree-sidepanel {
-    
+
     background-color: @foldertree-sidepanel-background;
     width: 330px;
 
     &.border-right { border: 0px none; }
-    
+
     .foldertree-container {
-    
+
         bottom: 36px;
-    
+
         &.io-ox-foldertree {
-        
+
             .section .section-title { color: #888; }
             .folder .folder-label { color: #ccc; }
             .folder-icon { display: none; }
-    
+
             .folder.expandable:hover,
             .folder.selectable:hover {
                 background-color: #555;
             }
-    
+
             .folder.selected {
                 background-image: none !important;
                 background-color: #333 !important;
                 font-weight: bold;
             }
-    
+
             a { font-size: 13px; color: lighten(@link-color, 20%); }
             .folder .shared-by { padding-left: 0; font-size: 12px; }
         }
     }
-    
+
     .foldertree-toolbar {
         top: auto;
         height: 40px - 1;
@@ -1418,7 +1419,7 @@ input.nice-input {
         border-top: 1px solid #222;
         background-color: #333;
     }
-    
+
     &.side-shift {
         width: @window-content-shift;
         left: 0 - @window-content-shift;
@@ -1555,9 +1556,9 @@ div.external-user-image {
         border-left: 0px none; border-right: 0px none;
         .box-shadow(none);
     }
-    
+
     .io-ox-sidepopup-arrow { display: none; }
-    
+
     .leftside { width: 250px; }
     .rightside { left: 250px; }
     .default-content-padding { padding: 26px 13px 26px 13px; }
@@ -1582,17 +1583,17 @@ div.external-user-image {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
 }
-    
+
 // TINY SCREENS
 @media (max-width: 700px) {
- 
+
     .window-head {
         top: auto; height: 40px; right: 0; width: auto;
         .toolbar-button { line-height: 44px; float: left; }
         .toolbar-button > a { height: 40px; }
         .dropdown-right-side { top: auto; bottom: 40px; left: 5px; }
     }
-    
+
     .window-body { bottom: 40px; left: 0; }
     .chromeless-window .window-body { bottom: 0; }
 
@@ -1630,7 +1631,7 @@ div.external-user-image {
     .touch .vsplit {
         -webkit-backface-visibility: hidden;
     }
-    
+
     .vsplit .leftside { width: 50%; right: auto; }
     .vsplit .rightside { left: 50%; width: 50%; top: 41px; right: auto; }
     .vsplit .rightside-navbar {
@@ -1640,10 +1641,10 @@ div.external-user-image {
     }
 
     .input-medium.search-query { width: 80px; }
-    
+
     #io-ox-topbar .launchers { display: none; }
     #io-ox-topbar .launcher-dropdown { display: inherit; }
-    
+
     #io-ox-notifications { width: 320px; right: -320px; }
     #io-ox-notifications-overlay { right: 320px; }
 }

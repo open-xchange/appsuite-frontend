@@ -22,6 +22,9 @@ define('io.ox/core/api/autocomplete',
         this.options = options || {};
         this.cache = {};
         this.apis = [];
+        if (options.users) {
+            this.apis.push({type: 'user', api: contactsAPI});
+        }
         if (options.contacts) {
             this.apis.push({type: 'contact', api: contactsAPI});
         }
@@ -53,15 +56,16 @@ define('io.ox/core/api/autocomplete',
                     //unify and process
                     var retData = [];
                     _(self.apis).each(function (apiModule, index) {
-                        switch (apiModule.type) {
+                        var type = apiModule.type;
+                        switch (type) {
+                        case 'user':
                         case 'contact':
-                            retData = self.processContactResults(retData.concat(self.processContacts(data[index])), query);
+                            retData = self.processContactResults(type, retData.concat(self.processContacts(type, data[index])), query);
                             break;
                         case 'resource':
-                            retData = retData.concat(self.processResources(data[index]));
-                            break;
                         case 'group':
-                            retData = retData.concat(self.processGroups(data[index]));
+                            retData = retData.concat(self.processItem(type, data[index]));
+                            break;
                         }
                     });
                     // add to cache
@@ -69,7 +73,7 @@ define('io.ox/core/api/autocomplete',
                 });
             }
         },
-        processContacts: function (data) {
+        processContacts: function (type, data) {
             var result = _(data.data).map(function (dataItem) {
                 // TODO: the api should return already mapped objects
                 var contactColumns = '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592';
@@ -77,34 +81,24 @@ define('io.ox/core/api/autocomplete',
 
                 var myobj = {
                     data: obj,
-                    type: 'contact'
+                    type: type
                 };
                 return myobj;
             });
 
             return result;
         },
-        processResources: function (data) {
+        processItem: function (type, data) {
             var result = _(data.data).map(function (dataItem) {
                 var obj = {
                     data: dataItem,
-                    type: 'resource'
+                    type: type
                 };
                 return obj;
             });
             return result;
         },
-        processGroups: function (data) {
-            var result = _(data.data).map(function (dataItem) {
-                var obj = {
-                    data: dataItem,
-                    type: 'group'
-                };
-                return obj;
-            });
-            return result;
-        },
-        processContactResults: function (data, query) {
+        processContactResults: function (type, data, query) {
             var tmp = [], hash = {}, self = this;
 
             // improve response
@@ -120,9 +114,9 @@ define('io.ox/core/api/autocomplete',
                     });
                 } else {
                     // email
-                    self.processContactItem(tmp, obj, 'email1');
-                    self.processContactItem(tmp, obj, 'email2');
-                    self.processContactItem(tmp, obj, 'email3');
+                    self.processContactItem(type, tmp, obj, 'email1');
+                    self.processContactItem(type, tmp, obj, 'email2');
+                    self.processContactItem(type, tmp, obj, 'email3');
                 }
             });
             // 2/2: filter distribution lists & remove email duplicates
@@ -142,7 +136,7 @@ define('io.ox/core/api/autocomplete',
             hash = null;
             return tmp;
         },
-        processContactItem: function (list, obj, field) {
+        processContactItem: function (type, list, obj, field) {
             if (obj.data[field]) {
                 var name, a = obj.data.last_name, b = obj.data.first_name, c = obj.data.display_name;
                 if (a && b) {
@@ -158,12 +152,16 @@ define('io.ox/core/api/autocomplete',
                     if (b) { name.push(b); }
                     name = name.join(', ');
                 }
+
+                if (obj.data.folder_id !== 6 && type === 'user') return;
+
                 list.push({
                     type: obj.type,
                     display_name: name,
                     email: obj.data[field].toLowerCase(),
                     data: _(obj.data).clone()
                 });
+
             }
         }
     };
