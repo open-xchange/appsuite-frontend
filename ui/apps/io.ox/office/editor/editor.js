@@ -3808,7 +3808,7 @@ define('io.ox/office/editor/editor',
                 // table width after shifting column
                 newTableWidth = 0,
                 // table width before shifting column
-                oldTableWidth = 0,
+                oldTableWidth = 'auto',
                 // table grid, containing relative widths
                 tableGrid = [],
                 // table grid, containing calculated pixel widhts
@@ -3857,7 +3857,7 @@ define('io.ox/office/editor/editor',
                     oldTableWidth = StyleSheets.getExplicitAttributes(tableNode).width;
                     maxTableWidth = tableNode.parent().width();
 
-                    if (oldTableWidth === 0) { oldTableWidth = tableNode.outerWidth(); }
+                    if (oldTableWidth === 'auto') { oldTableWidth = tableNode.outerWidth(); }
                     else { oldTableWidth = Utils.convertHmmToLength(oldTableWidth, 'px', 0); }
 
                     // converting from relational grid to pixel grid
@@ -3955,7 +3955,7 @@ define('io.ox/office/editor/editor',
                             tableGrid.push(Utils.roundDigits(gridSum * pixelGrid[i] / newTableWidth, 0));  // only ints
                         }
 
-                        if ((! lastCell) && (StyleSheets.getExplicitAttributes(tableNode).width === 0)) { newTableWidth = 0; }
+                        if ((! lastCell) && (StyleSheets.getExplicitAttributes(tableNode).width === 'auto')) { newTableWidth = 'auto'; }
                         else { newTableWidth = Utils.convertLengthToHmm(newTableWidth, 'px'); }
 
                         var newOperation = {name: Operations.ATTRS_SET, attrs: {'tableGrid': tableGrid, 'width': newTableWidth}, start: tablePosition};
