@@ -4241,9 +4241,11 @@ define('io.ox/office/editor/editor',
          *  where the width is smaller or equal to maxWidth.
          */
         function createTabFillCharString(element, maxWidth, fillChar) {
-            var charWidth = 0, numChars, string = '', width = 0;
+            var charWidth = 0, numChars, string = '', width = 0,
+                checkString = (new Array(5 + 1)).join(fillChar).toString();
 
-            charWidth = Utils.convertLengthToHmm($(element).text(fillChar).width(), 'px');
+            // Try to calculate the average char width using 5 chars string
+            charWidth = Utils.convertLengthToHmm($(element).text(checkString).width(), 'px') / 5;
             numChars = Math.floor(maxWidth / charWidth);
 
             if (numChars > 0) {
