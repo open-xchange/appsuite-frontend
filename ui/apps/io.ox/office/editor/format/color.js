@@ -358,15 +358,15 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
     Color.setElementTextColor = function (element, theme, attrs, paraAttrs) {
         var $element = $(element).first(),
             textColor = attrs.color,
-            backColor = attrs.fillcolor,
+            backColor = attrs.fillColor,
             rgbBackColor = null;
 
         if (Color.isAutoColor(textColor)) {
             if (Color.isAutoColor(backColor)) {
-                if (Color.isAutoColor(paraAttrs.fillcolor))
+                if (Color.isAutoColor(paraAttrs.fillColor))
                     rgbBackColor = Color.WHITE.value;
                 else
-                    rgbBackColor = Color.getCssColor(paraAttrs.fillcolor, 'fill', theme);
+                    rgbBackColor = Color.getCssColor(paraAttrs.fillColor, 'fill', theme);
             }
             else
                 rgbBackColor = Color.getCssColor(backColor, 'fill', theme);

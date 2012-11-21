@@ -30,37 +30,37 @@ define('io.ox/office/editor/format/tablecellstyles',
             /**
              * The number of grid columns spanned by the table cell.
              */
-            gridspan: {
+            gridSpan: {
                 def: 1,
-                format: function (element, gridspan) {
-                    element.attr('colspan', gridspan);
+                format: function (element, gridSpan) {
+                    element.attr('colspan', gridSpan);
                 }
             },
 
             /**
              * Fill color of the table cell.
              */
-            fillcolor: { def: Color.AUTO },
+            fillColor: { def: Color.AUTO },
 
             /**
              * Style, width and color of the left table cell border.
              */
-            borderleft: { def: NO_BORDER },
+            borderLeft: { def: NO_BORDER },
 
             /**
              * Style, width and color of the right table cell border.
              */
-            borderright: { def: NO_BORDER },
+            borderRight: { def: NO_BORDER },
 
             /**
              * Style, width and color of the top table cell border.
              */
-            bordertop: { def: NO_BORDER },
+            borderTop: { def: NO_BORDER },
 
             /**
              * Style, width and color of the bottom table cell border.
              */
-            borderbottom: { def: NO_BORDER }
+            borderBottom: { def: NO_BORDER }
 
         };
 
@@ -106,48 +106,48 @@ define('io.ox/office/editor/format/tablecellstyles',
 
             var cellAttributes = StyleSheets.getExplicitAttributes(cell);
 
-            // fillcolor
-            if (! _.isUndefined(cellAttributes.fillcolor)) {
-                cell.css('background-color', this.getCssColor(cellAttributes.fillcolor, 'fill'));
-                // cell.css('background-color', Color.getCssColor(cellAttributes.fillcolor, 'fill', documentStyles.getCurrentTheme()));
-            } else if (! _.isUndefined(attributes.fillcolor)) {
-                cell.css('background-color', this.getCssColor(attributes.fillcolor, 'fill'));
-                // cell.css('background-color', Color.getCssColor(attributes.fillcolor, 'fill', documentStyles.getCurrentTheme()));
+            // fillColor
+            if (! _.isUndefined(cellAttributes.fillColor)) {
+                cell.css('background-color', this.getCssColor(cellAttributes.fillColor, 'fill'));
+                // cell.css('background-color', Color.getCssColor(cellAttributes.fillColor, 'fill', documentStyles.getCurrentTheme()));
+            } else if (! _.isUndefined(attributes.fillColor)) {
+                cell.css('background-color', this.getCssColor(attributes.fillColor, 'fill'));
+                // cell.css('background-color', Color.getCssColor(attributes.fillColor, 'fill', documentStyles.getCurrentTheme()));
             }
 
-            // borderleft
-            if (! _.isUndefined(cellAttributes.borderleft)) {
-                cell.css('border-left', this.getCssBorder(cellAttributes.borderleft));
-            } else if (! _.isUndefined(attributes.borderleft)) {
-                cell.css('border-left', this.getCssBorder(attributes.borderleft));
+            // borderLeft
+            if (! _.isUndefined(cellAttributes.borderLeft)) {
+                cell.css('border-left', this.getCssBorder(cellAttributes.borderLeft));
+            } else if (! _.isUndefined(attributes.borderLeft)) {
+                cell.css('border-left', this.getCssBorder(attributes.borderLeft));
             }
 
-            // borderright
-            if (! _.isUndefined(cellAttributes.borderright)) {
-                cell.css('border-right', this.getCssBorder(cellAttributes.borderright));
-            } else if (! _.isUndefined(attributes.borderright)) {
-                cell.css('border-right', this.getCssBorder(attributes.borderright));
+            // borderRight
+            if (! _.isUndefined(cellAttributes.borderRight)) {
+                cell.css('border-right', this.getCssBorder(cellAttributes.borderRight));
+            } else if (! _.isUndefined(attributes.borderRight)) {
+                cell.css('border-right', this.getCssBorder(attributes.borderRight));
             }
 
-            // bordertop
-            if (! _.isUndefined(cellAttributes.bordertop)) {
-                cell.css('border-top', this.getCssBorder(cellAttributes.bordertop));
-            } else if (! _.isUndefined(attributes.bordertop)) {
-                cell.css('border-top', this.getCssBorder(attributes.bordertop));
+            // borderTop
+            if (! _.isUndefined(cellAttributes.borderTop)) {
+                cell.css('border-top', this.getCssBorder(cellAttributes.borderTop));
+            } else if (! _.isUndefined(attributes.borderTop)) {
+                cell.css('border-top', this.getCssBorder(attributes.borderTop));
             }
 
-            // borderbottom
-            if (! _.isUndefined(cellAttributes.borderbottom)) {
-                cell.css('border-bottom', this.getCssBorder(cellAttributes.borderbottom));
-            } else if (! _.isUndefined(attributes.borderbottom)) {
-                cell.css('border-bottom', this.getCssBorder(attributes.borderbottom));
+            // borderBottom
+            if (! _.isUndefined(cellAttributes.borderBottom)) {
+                cell.css('border-bottom', this.getCssBorder(cellAttributes.borderBottom));
+            } else if (! _.isUndefined(attributes.borderBottom)) {
+                cell.css('border-bottom', this.getCssBorder(attributes.borderBottom));
             }
 
         }
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'cell', DEFINITIONS);
+        StyleSheets.call(this, documentStyles, 'cell');
 
         // initialization -----------------------------------------------------
 
@@ -159,6 +159,6 @@ define('io.ox/office/editor/format/tablecellstyles',
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: TableCellStyles });
+    return StyleSheets.extend({ constructor: TableCellStyles }, { DEFINITIONS: DEFINITIONS });
 
 });

@@ -34,7 +34,7 @@ define('io.ox/office/editor/format/paragraphstyles',
                 }
             },
 
-            fillcolor: {
+            fillColor: {
                 def: Color.AUTO, // auto for paragraph fill resolves to 'transparent'
                 format: function (element, color) {
                     element.css('background-color', this.getCssColor(color, 'fill'));
@@ -52,28 +52,28 @@ define('io.ox/office/editor/format/paragraphstyles',
              * span with a font size of 6pt, resulting in a relative line
              * height of 24pt/6pt = 400% instead of the expected 200%.
              */
-            lineheight: { def: LineHeight.SINGLE },
+            lineHeight: { def: LineHeight.SINGLE },
 
-            ilvl: { def: -1 },
+            indentLevel: { def: -1 },
 
             numId: { def: -1 },
 
-            outlinelvl: { def: 9 },
+            outlineLevel: { def: 9 },
 
-            tabstops: {
+            tabStops: {
                 def: [],
-                merge: function (tabstops1, tabstops2) {
-                    // Merge tabstops2 into array tabstop1
-                    // Support to clear tab stops defined in tabstops1
-                    var clearedTabstops = _.filter(tabstops2, function (tabstop) {
+                merge: function (tabStops1, tabStops2) {
+                    // Merge tabStops2 into array tabstop1
+                    // Support to clear tab stops defined in tabStops1
+                    var clearedTabstops = _.filter(tabStops2, function (tabstop) {
                             return tabstop.value === 'clear';
                         }),
-                        additionalTabstops = _.filter(tabstops2, function (tabstop) {
+                        additionalTabstops = _.filter(tabStops2, function (tabstop) {
                             return tabstop.value !== 'clear';
                         }),
-                        newTabstops = _.union(tabstops1, additionalTabstops);
+                        newTabstops = _.union(tabStops1, additionalTabstops);
 
-                    // Filter out cleared tabstops
+                    // Filter out cleared tabStops
                     if (clearedTabstops.length > 0) {
                         newTabstops = _.filter(newTabstops, function (tabstop) {
                             return _.find(clearedTabstops, function (cleared) {
@@ -82,64 +82,64 @@ define('io.ox/office/editor/format/paragraphstyles',
                         });
                     }
 
-                    // Sort tabstops by position
+                    // Sort tabStops by position
                     return _.sortBy(newTabstops, function (tabstop) {
                         return tabstop.pos;
                     });
                 }
             },
 
-            borderleft: {
+            borderLeft: {
                 def: {},
                 format: function (element, border) {
                     initBorder(border);
                 }
             },
 
-            borderright: {
+            borderRight: {
                 def: {},
                 format: function (element, border) {
                     initBorder(border);
                 }
             },
 
-            bordertop: {
+            borderTop: {
                 def: {},
                 format: function (element, border) {
                     initBorder(border);
                 }
             },
 
-            borderbottom: {
+            borderBottom: {
                 def: {},
                 format: function (element, border) {
                     initBorder(border);
                 }
             },
 
-            borderinside: {
+            borderInside: {
                 def: {},
                 format: function (element, border) {
                     initBorder(border);
                 }
             },
-            firstlineindent: {
+            indentFirstLine: {
                 def: 0
             },
 
-            leftindent: {
+            indentLeft: {
                 def: 0
             },
 
-            rightindent: {
+            indentRight: {
                 def: 0
             },
 
-            topmargin: {
+            marginTop: {
                 def: 0
             },
 
-            bottommargin: {
+            marginBottom: {
                 def: 0
             }
         };
@@ -147,8 +147,8 @@ define('io.ox/office/editor/format/paragraphstyles',
     // private static functions ===============================================
 
     function isMergeBorders(attributes1, attributes2) {
-        return Utils.hasEqualAttributes(attributes1, attributes2, ['borderleft', 'borderright', 'bordertop', 'borderbottom', 'borderinside',
-                                                                   'numId', 'leftindent', 'rightindent', 'firstlineindent']);
+        return Utils.hasEqualAttributes(attributes1, attributes2, ['borderLeft', 'borderRight', 'borderTop', 'borderBottom', 'borderInside',
+                                                                   'numId', 'indentLeft', 'indentRight', 'indentFirstLine']);
     }
 
     function initBorder(border) {
@@ -238,45 +238,45 @@ define('io.ox/office/editor/format/paragraphstyles',
             }, undefined, { children: true });
 
             // update borders
-            var leftPadding = attributes.borderleft && attributes.borderleft.space ? attributes.borderleft.space : 0;
-            leftMargin += setBorder(attributes.borderleft, 'left', 0);
-            rightMargin += setBorder(attributes.borderright, 'right', 0);
+            var leftPadding = attributes.borderLeft && attributes.borderLeft.space ? attributes.borderLeft.space : 0;
+            leftMargin += setBorder(attributes.borderLeft, 'left', 0);
+            rightMargin += setBorder(attributes.borderRight, 'right', 0);
 
-            var topMargin = attributes.topmargin;
-            var bottomMargin = attributes.bottommargin;
+            var topMargin = attributes.marginTop;
+            var bottomMargin = attributes.marginBottom;
 
             // top border is not set if previous paragraph uses the same border settings
             if (isMergeBorders(attributes, prevAttributes)) {
                 setBorder({ style: 'none' }, 'top', topMargin);
-                prevParagraph.css("padding-bottom", this.getCssBorder(attributes.borderinside.space + bottomMargin));
-                prevParagraph.css("border-bottom", this.getCssBorder(attributes.borderinside));
+                prevParagraph.css("padding-bottom", this.getCssBorder(attributes.borderInside.space + bottomMargin));
+                prevParagraph.css("border-bottom", this.getCssBorder(attributes.borderInside));
                 topMargin = 0;
             } else {
-                setBorder(attributes.bordertop, 'top', 0);
+                setBorder(attributes.borderTop, 'top', 0);
             }
 
             // bottom border is replaced by inner border next paragraph uses the same border settings
             if (isMergeBorders(attributes, nextAttributes)) {
-                setBorder(attributes.borderinside, 'bottom');
+                setBorder(attributes.borderInside, 'bottom');
                 prevParagraph.css("padding-bottom", this.getCssBorder(bottomMargin));
                 bottomMargin = 0;
             } else {
-                setBorder(attributes.borderbottom, 'bottom', 0);
+                setBorder(attributes.borderBottom, 'bottom', 0);
             }
 
             //calculate list indents
             var numId = attributes.numId;
             if (numId  !== -1) {
-                var ilvl = attributes.ilvl,
+                var indentLevel = attributes.indentLevel,
                      lists = documentStyles.getLists();
-                if (ilvl < 0) {
+                if (indentLevel < 0) {
                     // is a numbering level assigned to the current paragraph style?
-                    ilvl = lists.findIlvl(numId, attributes.style);
+                    indentLevel = lists.findIlvl(numId, attributes.style);
                 }
-                if (ilvl !== -1 && ilvl < 9) {
+                if (indentLevel !== -1 && indentLevel < 9) {
                     var listItemCounter = [0, 0, 0, 0, 0, 0, 0, 0, 0];
                     //updateParaTabstops = true;
-                    var listObject = lists.formatNumber(attributes.numId, ilvl, listItemCounter);
+                    var listObject = lists.formatNumber(attributes.numId, indentLevel, listItemCounter);
 
                     if (listObject.indent > 0) {
                         leftPadding += listObject.firstLine;
@@ -288,9 +288,9 @@ define('io.ox/office/editor/format/paragraphstyles',
             // paragraph margin attributes - not applied if paragraph is in a list
             var textIndent = 0;
             if (numId < 0) {
-                leftMargin += attributes.leftindent;
-                rightMargin += attributes.rightindent;
-                textIndent = attributes.firstlineindent ? attributes.firstlineindent : 0;
+                leftMargin += attributes.indentLeft;
+                rightMargin += attributes.indentRight;
+                textIndent = attributes.indentFirstLine ? attributes.indentFirstLine : 0;
                 paragraph.css('text-indent', textIndent / 100 + 'mm');
             }
 
@@ -309,7 +309,7 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'paragraph', DEFINITIONS);
+        StyleSheets.call(this, documentStyles, 'paragraph');
 
         // initialization -----------------------------------------------------
 
@@ -326,15 +326,15 @@ define('io.ox/office/editor/format/paragraphstyles',
             value = 0;
 
         // return null, if any of the border attributes is null
-        if (!attributes.borderleft || !attributes.borderright || !attributes.bordertop || !attributes.borderbottom || !attributes.borderinside) {
+        if (!attributes.borderLeft || !attributes.borderRight || !attributes.borderTop || !attributes.borderBottom || !attributes.borderInside) {
             return null;
         }
 
-        value += (attributes.borderleft.style !== 'none') ? 1 : 0;
-        value += (attributes.borderright.style !== 'none') ? 2 : 0;
-        value += (attributes.bordertop.style !== 'none') ? 4 : 0;
-        value += (attributes.borderbottom.style !== 'none') ? 8 : 0;
-        value += (attributes.borderinside.style !== 'none') ? 16: 0;
+        value += (attributes.borderLeft.style !== 'none') ? 1 : 0;
+        value += (attributes.borderRight.style !== 'none') ? 2 : 0;
+        value += (attributes.borderTop.style !== 'none') ? 4 : 0;
+        value += (attributes.borderBottom.style !== 'none') ? 8 : 0;
+        value += (attributes.borderInside.style !== 'none') ? 16: 0;
 
         switch (value) {
         case 0:
@@ -385,17 +385,17 @@ define('io.ox/office/editor/format/paragraphstyles',
             ret = {},
             defBorder = { style: 'single', width: 17, space: 140, color: Color.AUTO };
 
-        ret.borderleft = value & 1 ? defBorder : {};
-        ret.borderright = value & 2 ? defBorder : {};
-        ret.bordertop = value & 4 ? defBorder : {};
-        ret.borderbottom = value & 8 ? defBorder : {};
-        ret.borderinside = value & 16 ? defBorder : {};
+        ret.borderLeft = value & 1 ? defBorder : {};
+        ret.borderRight = value & 2 ? defBorder : {};
+        ret.borderTop = value & 4 ? defBorder : {};
+        ret.borderBottom = value & 8 ? defBorder : {};
+        ret.borderInside = value & 16 ? defBorder : {};
         return ret;
     };
 
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: ParagraphStyles });
+    return StyleSheets.extend({ constructor: ParagraphStyles }, { DEFINITIONS: DEFINITIONS });
 
 });

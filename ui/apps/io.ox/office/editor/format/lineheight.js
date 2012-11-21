@@ -68,7 +68,7 @@ define('io.ox/office/editor/format/lineheight', ['io.ox/office/tk/utils'], funct
     // static class LineHeight ================================================
 
     /**
-     * Predefined values for the 'lineheight' attribute for paragraphs.
+     * Predefined values for the 'lineHeight' attribute for paragraphs.
      */
     var LineHeight = {
             SINGLE: { type: 'percent', value: 100 },
@@ -101,7 +101,7 @@ define('io.ox/office/editor/format/lineheight', ['io.ox/office/tk/utils'], funct
         case 'leading':
             height += calculateNormalLineHeight($element);
             break;
-        case 'atleast':
+        case 'atLeast':
             height = Math.max(height, calculateNormalLineHeight($element));
             break;
         case 'percent':

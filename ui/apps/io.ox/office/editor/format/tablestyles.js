@@ -31,9 +31,9 @@ define('io.ox/office/editor/format/tablestyles',
              * Width of the table, as number in 1/100 of millimeters.
              */
             width: {
-                def: 0,
+                def: 'auto',
                 format: function (element, width) {
-                    if (width === 0) {
+                    if (width === 'auto') {
                         element.css('width', '100%');
                     } else {
                         element.css('width', Utils.convertHmmToCssLength(width, 'px', 0));
@@ -44,7 +44,7 @@ define('io.ox/office/editor/format/tablestyles',
             /**
              * Fill color of the table.
              */
-            fillcolor: {
+            fillColor: {
                 def: Color.AUTO,
                 format: function (element, color) {
                     element.css('background-color', this.getCssColor(color, 'fill'));
@@ -54,43 +54,43 @@ define('io.ox/office/editor/format/tablestyles',
             /**
              * Grid width of columns in relative units. It is an array of numbers
              */
-            tablegrid: { def: [] },
+            tableGrid: { def: [] },
 
             /**
              * Array containing information, if conditional table styles shall be used. As default
              * value, all styles shall be used, so that this array can be empty.
              */
-            look: { def: [] },
+            exclude: { def: [] },
 
             /**
              * Left border of the table (set in tablecellstyles).
              */
-            borderleft: { def: NO_BORDER },
+            borderLeft: { def: NO_BORDER },
 
             /**
              * Top border of the table (set in tablecellstyles).
              */
-            bordertop: { def: NO_BORDER },
+            borderTop: { def: NO_BORDER },
 
             /**
              * Right border of the table (set in tablecellstyles).
              */
-            borderright: { def: NO_BORDER },
+            borderRight: { def: NO_BORDER },
 
             /**
              * Bottom border of the table (set in tablecellstyles).
              */
-            borderbottom: { def: NO_BORDER },
+            borderBottom: { def: NO_BORDER },
 
             /**
              * Horizontal borders inside the table (set in tablecellstyles).
              */
-            borderinsideh: { def: NO_BORDER },
+            borderInsideHor: { def: NO_BORDER },
 
             /**
              * Vertical borders inside the table (set in tablecellstyles).
              */
-            borderinsidev: { def: NO_BORDER }
+            borderInsideVert: { def: NO_BORDER }
 
         };
 
@@ -135,7 +135,7 @@ define('io.ox/office/editor/format/tablestyles',
          */
         function updateTableFormatting(table, attributes) {
 
-            Table.updateColGroup(table, attributes.tablegrid);
+            Table.updateColGroup(table, attributes.tableGrid);
 
             var // the table cell styles/formatter
                 tableCellStyles = documentStyles.getStyleSheets('cell'),
@@ -179,9 +179,9 @@ define('io.ox/office/editor/format/tablestyles',
 
             var // an object containing information about the cell orientation inside the table
                 cellOrientation = evaluateCellOrientationInTable(cell),
-                // an object containing the attributes set at the table explicitely
+                // an object containing the attributes set at the table explicitly
                 explicitTableAttributes = {},
-                // an array containing the style attributes names that are excluded from style using the 'look' attribute
+                // an array containing the style attributes names that are excluded from style using the 'exclude' attribute
                 excludedAttributes = [],
                 // an object containing the style attributes defined in table styles for the specific table cell
                 attributes = {},
@@ -189,32 +189,32 @@ define('io.ox/office/editor/format/tablestyles',
                 // -> this is also an order of relevance from global to specific
                 // -> following attribute names overwrite values of previous attribute names
                 // -> firstRow overwrites lastRow, row overwrites column, ...
-                tableAttributeNames = ['wholetable',
-                                       'band1vert',
-                                       'band2vert',
-                                       'band1horz',
-                                       'band2horz',
-                                       'lastcol',
-                                       'firstcol',
-                                       'lastrow',
-                                       'firstrow',
-                                       'necell',
-                                       'nwcell',
-                                       'secell',
-                                       'swcell'];
+                tableAttributeNames = ['wholeTable',
+                                       'band1Vert',
+                                       'band2Vert',
+                                       'band1Hor',
+                                       'band2Hor',
+                                       'lastCol',
+                                       'firstCol',
+                                       'lastRow',
+                                       'firstRow',
+                                       'northEastCell',
+                                       'northWestCell',
+                                       'southEastCell',
+                                       'southWestCell'];
 
             // checking if special attribute names are deselected in table using
-            // the 'look' attribute
+            // the 'exclude' attribute
             explicitTableAttributes = StyleSheets.getExplicitAttributes(table);
 
-            if (explicitTableAttributes.look) {
-                if (_.isArray(explicitTableAttributes.look)) {
-                    excludedAttributes = explicitTableAttributes.look;
+            if (explicitTableAttributes.exclude) {
+                if (_.isArray(explicitTableAttributes.exclude)) {
+                    excludedAttributes = explicitTableAttributes.exclude;
                 }
             }
 
             // evaluating attributes for all other optional attributes
-            // -> overwriting values from global ('wholetable') to specific ('swcell')
+            // -> overwriting values from global ('wholeTable') to specific ('southWestCell')
             _.each(tableAttributeNames, function (name) {
 
                 if (family === 'cell') {  // table cells have to iterate over table attributes, too
@@ -236,8 +236,8 @@ define('io.ox/office/editor/format/tablestyles',
         /**
          * Switching from table attributes to table cell attributes. Later no
          * further evaluation of cell orientation is required.
-         * Especially 'borderinsideh' and 'borderinsidev' are valid only for inner
-         * table cells. And 'bordertop', 'borderbottom', ... are only valid for cells
+         * Especially 'borderInsideHor' and 'borderInsideVert' are valid only for inner
+         * table cells. And 'borderTop', 'borderBottom', ... are only valid for cells
          * that have a table border.
          *
          * @param {Object} cellOrientation
@@ -256,41 +256,41 @@ define('io.ox/office/editor/format/tablestyles',
 
             var cellStyles = {};
 
-            if ((tableStyleAttributes.bordertop) && (cellOrientation.firstrow)) {
-                cellStyles.bordertop = tableStyleAttributes.bordertop;
+            if ((tableStyleAttributes.borderTop) && (cellOrientation.firstRow)) {
+                cellStyles.borderTop = tableStyleAttributes.borderTop;
             }
 
-            if ((tableStyleAttributes.borderbottom) && (cellOrientation.lastrow)) {
-                cellStyles.borderbottom = tableStyleAttributes.borderbottom;
+            if ((tableStyleAttributes.borderBottom) && (cellOrientation.lastRow)) {
+                cellStyles.borderBottom = tableStyleAttributes.borderBottom;
             }
 
-            if ((tableStyleAttributes.borderleft) && (cellOrientation.firstcol)) {
-                cellStyles.borderleft = tableStyleAttributes.borderleft;
+            if ((tableStyleAttributes.borderLeft) && (cellOrientation.firstCol)) {
+                cellStyles.borderLeft = tableStyleAttributes.borderLeft;
             }
 
-            if ((tableStyleAttributes.borderright) && (cellOrientation.lastcol)) {
-                cellStyles.borderright = tableStyleAttributes.borderright;
+            if ((tableStyleAttributes.borderRight) && (cellOrientation.lastCol)) {
+                cellStyles.borderRight = tableStyleAttributes.borderRight;
             }
 
-            if (tableStyleAttributes.borderinsideh) {
-                if (cellOrientation.firstrow) {
-                    cellStyles.borderbottom = tableStyleAttributes.borderinsideh;
-                } else if (cellOrientation.lastrow) {
-                    cellStyles.bordertop = tableStyleAttributes.borderinsideh;
+            if (tableStyleAttributes.borderInsideHor) {
+                if (cellOrientation.firstRow) {
+                    cellStyles.borderBottom = tableStyleAttributes.borderInsideHor;
+                } else if (cellOrientation.lastRow) {
+                    cellStyles.borderTop = tableStyleAttributes.borderInsideHor;
                 } else {
-                    cellStyles.bordertop = tableStyleAttributes.borderinsideh;
-                    cellStyles.borderbottom = tableStyleAttributes.borderinsideh;
+                    cellStyles.borderTop = tableStyleAttributes.borderInsideHor;
+                    cellStyles.borderBottom = tableStyleAttributes.borderInsideHor;
                 }
             }
 
-            if (tableStyleAttributes.borderinsidev) {
-                if (cellOrientation.firstcol) {
-                    cellStyles.borderright = tableStyleAttributes.borderinsidev;
-                } else if (cellOrientation.lastcol) {
-                    cellStyles.borderleft = tableStyleAttributes.borderinsidev;
+            if (tableStyleAttributes.borderInsideVert) {
+                if (cellOrientation.firstCol) {
+                    cellStyles.borderRight = tableStyleAttributes.borderInsideVert;
+                } else if (cellOrientation.lastCol) {
+                    cellStyles.borderLeft = tableStyleAttributes.borderInsideVert;
                 } else {
-                    cellStyles.borderright = tableStyleAttributes.borderinsidev;
-                    cellStyles.borderleft = tableStyleAttributes.borderinsidev;
+                    cellStyles.borderRight = tableStyleAttributes.borderInsideVert;
+                    cellStyles.borderLeft = tableStyleAttributes.borderInsideVert;
                 }
             }
 
@@ -320,26 +320,26 @@ define('io.ox/office/editor/format/tablestyles',
                 rowCollection = row.parent().children('tr'),
                 cellCollection = row.children('td');
 
-            cellOrientation.wholetable = true;  // the cell is located somewhere in the table
-            cellOrientation.firstrow = rowCollection.index(row) === 0;
-            cellOrientation.lastrow = rowCollection.index(row) === rowCollection.length - 1;
-            cellOrientation.firstcol = cellCollection.index(cell) === 0;
-            cellOrientation.lastcol = cellCollection.index(cell) === cellCollection.length - 1;
-            cellOrientation.band1horz = rowCollection.index(row) % 2 !== 0;
-            cellOrientation.band2horz = ! cellOrientation.band1horz;
-            cellOrientation.band1vert = cellCollection.index(cell) % 2 !== 0;
-            cellOrientation.band2vert = ! cellOrientation.band1vert;
-            cellOrientation.necell = (cellOrientation.firstrow && cellOrientation.lastcol);
-            cellOrientation.nwcell = (cellOrientation.firstrow && cellOrientation.firstcol);
-            cellOrientation.secell = (cellOrientation.lastrow && cellOrientation.lastcol);
-            cellOrientation.swcell = (cellOrientation.lastrow && cellOrientation.firstcol);
+            cellOrientation.wholeTable = true;  // the cell is located somewhere in the table
+            cellOrientation.firstRow = rowCollection.index(row) === 0;
+            cellOrientation.lastRow = rowCollection.index(row) === rowCollection.length - 1;
+            cellOrientation.firstCol = cellCollection.index(cell) === 0;
+            cellOrientation.lastCol = cellCollection.index(cell) === cellCollection.length - 1;
+            cellOrientation.band1Hor = rowCollection.index(row) % 2 !== 0;
+            cellOrientation.band2Hor = ! cellOrientation.band1Hor;
+            cellOrientation.band1Vert = cellCollection.index(cell) % 2 !== 0;
+            cellOrientation.band2Vert = ! cellOrientation.band1Vert;
+            cellOrientation.northEastCell = (cellOrientation.firstRow && cellOrientation.lastCol);
+            cellOrientation.northWestCell = (cellOrientation.firstRow && cellOrientation.firstCol);
+            cellOrientation.southEastCell = (cellOrientation.lastRow && cellOrientation.lastCol);
+            cellOrientation.southWestCell = (cellOrientation.lastRow && cellOrientation.firstCol);
 
             return cellOrientation;
         }
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'table', DEFINITIONS, {
+        StyleSheets.call(this, documentStyles, 'table', {
             styleAttributesResolver: resolveTableStyleAttributes
         });
 
@@ -352,6 +352,6 @@ define('io.ox/office/editor/format/tablestyles',
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: TableStyles });
+    return StyleSheets.extend({ constructor: TableStyles }, { DEFINITIONS: DEFINITIONS });
 
 });

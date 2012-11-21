@@ -273,7 +273,7 @@ define('io.ox/office/editor/main',
                 updateTitles();
 
                 editor.initDocument();
-                operationsBuffer = []; // initDocument will result in an operation
+                operationsBuffer = [];
 
                 // load the file
                 if (self.hasFileDescriptor()) {

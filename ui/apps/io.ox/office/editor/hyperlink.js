@@ -53,10 +53,11 @@ define('io.ox/office/editor/hyperlink',
     /**
      * Shows a hyperlink input dialog.
      *
-     *  @param {String} text
-     *      The optional text which represents the URL
-     *  @param {String} url
-     *      An optional URL which is set for the supplied text
+     * @param {String} text
+     *  The optional text which represents the URL
+     *
+     * @param {String} url
+     *  An optional URL which is set for the supplied text
      *
      * @returns {jQuery.Promise}
      *  The promise of a deferred object that will be resolved if the primary
@@ -77,11 +78,10 @@ define('io.ox/office/editor/hyperlink',
     };
 
     /**
-     * Provides the url of a selection without range
+     * Provides the URL of a selection without range.
      *
-     * @param selection {Selection}
-     *  A selection object which describes the current
-     *  selection.
+     * @param {Selection} selection
+     *  A selection object which describes the current selection.
      *
      * @returns {Object}
      *  Object.url {String}
@@ -105,15 +105,15 @@ define('io.ox/office/editor/hyperlink',
                 characterStyles = editor.getStyleSheets('character');
 
             if (obj && obj.node && DOM.isTextSpan(obj.node.parentNode)) {
-                var styles = characterStyles.getElementAttributes(obj.node.parentNode);
-                if (styles.url && styles.url.length > 0) {
+                var attributes = characterStyles.getElementAttributes(obj.node.parentNode);
+                if (attributes.url.length > 0) {
                     // Now we have to check some edge cases to prevent to show
                     // the popup for a paragraph which contains only an empty span
                     // having set the url attribute.
                     if ((obj.node.parentNode.innerText.length > 0) ||
                         (obj.node.parentNode.previousElementSibling !== null) ||
                         (DOM.isTextSpan(obj.node.parentNode.nextElementSibling)))
-                        result.url = styles.url;
+                        result.url = attributes.url;
                     else {
                         result.setPreselectedAttributes = true;
                     }
@@ -126,9 +126,9 @@ define('io.ox/office/editor/hyperlink',
 
                     obj = Position.getDOMPosition(editor.getNode(), nextPosition);
                     if (obj && obj.node && DOM.isTextSpan(obj.node.parentNode)) {
-                        var nextCharStyles = characterStyles.getElementAttributes(obj.node.parentNode);
-                        if (nextCharStyles.url && nextCharStyles.url.length > 0) {
-                            result.url = nextCharStyles.url;
+                        var nextAttributes = characterStyles.getElementAttributes(obj.node.parentNode);
+                        if (nextAttributes.url.length > 0) {
+                            result.url = nextAttributes.url;
                             result.beforeHyperlink = true;
                         }
                     }
@@ -141,9 +141,12 @@ define('io.ox/office/editor/hyperlink',
 
     /**
      * Tries to find a selection range based on the current text cursor
-     * position. The url character style is used to find a consecutive
-     * @param editor
-     * @param selection
+     * position. The URL character style is used to find a consecutive
+     *
+     * @param {Editor} editor
+     *
+     * @param {Selection} selection
+     *
      * @returns
      */
     Hyperlink.findSelectionRange = function (editor, selection) {
@@ -177,16 +180,18 @@ define('io.ox/office/editor/hyperlink',
 
     /**
      * Tries to find a selection based on the provided position which includes
-     * @param editor {Object}
+     *
+     * @param {Editor} editor
      *  The editor instance.
-     * @param startPosition {Position}
+     * @param {Number[]} startPosition
      *  The startPosition in the paragraph
      * @param url
      *  The hyperlink URL which is set as character style at pos
+     *
      * @returns {Object}
-     *  Contains start and end position of the selection where both could
-     *  be null which means that there is no selection but the hyperlink
-     *  should be inserted at the position.
+     *  Contains start and end position of the selection where both could be
+     *  null which means that there is no selection but the hyperlink should be
+     *  inserted at the position.
      */
     Hyperlink.findURLSelection = function (editor, startPosition, url) {
         var startPos,
@@ -236,21 +241,20 @@ define('io.ox/office/editor/hyperlink',
      * Find a text selection based on the provided position which is limited
      * by separator characters.
      *
-     * @param paragraph {HTMLElement|jQuery}
+     * @param {HTMLElement|jQuery} paragraph
      *  The paragraph which contains the position provided as the second
      *  argument.
      *
-     * @param pos {Number}
+     * @param {Number[]} pos
      *  The position relative inside the paragraph
      *
      * @param optional {Object}
      *  A object with optional arguments.
      *
      * @returns {Object}
-     *  An object which contains the Object.start and Object.end position
-     *  relative to the provided paragraph. Both can be null if there is
-     *  no selection and the hyperlink should inserted at pos. Object.text
-     *  contains the text within the selection.
+     *  An object which contains the start and end position relative to the
+     *  provided paragraph. Both can be null if there is no selection and the
+     *  hyperlink should inserted at pos.
      */
     Hyperlink.findTextSelection = function (paragraph, pos, optional) {
         var text = '',
@@ -277,7 +281,7 @@ define('io.ox/office/editor/hyperlink',
                         startFound = true;
                         startPos = Hyperlink.findLeftWordPosition(text, leftPos, pos);
                         if (startPos === -1)
-                            return Utils.Break;
+                            return Utils.BREAK;
                         else if (leftPos < startPos)
                             text = text.slice(startPos - leftPos, text.length);
                     }
@@ -307,27 +311,26 @@ define('io.ox/office/editor/hyperlink',
     };
 
     /**
-     * Tries to find the left position of a word using a
-     * predefined separator array.
+     * Tries to find the left position of a word using a predefined separator
+     * array.
      *
-     * @param text {String}
-     *  The text which should be parsed to find the left bound of
-     *  a selection.
+     * @param {String} text
+     *  The text which should be parsed to find the left bound of a selection.
      *
-     * @param offset {Number}
+     * @param {Number} offset
      *  An offset to be used to provide correct position data.
      *
-     * @param pos {Number}
-     *  The absolute position to start with (pos - offset) is
-     *  the relative position in the provided text.
+     * @param {Number} pos
+     *  The absolute position to start with (pos - offset) is the relative
+     *  position in the provided text.
      *
      * @param optSeparators {optional, Array}
      *  An array filled with separator characters which are a
      *  border for the left work position search.
      *
      * @returns {Number}
-     *  The absolute position of the left boundary or -1 if the
-     *  current position is the boundary.
+     *  The absolute position of the left boundary or -1 if the current
+     *  position is the boundary.
      */
     Hyperlink.findLeftWordPosition = function (text, offset, pos, optSeparators) {
         var i = pos - offset,
@@ -346,20 +349,19 @@ define('io.ox/office/editor/hyperlink',
      * Tries to find the right position of a word using a
      * predefined separator array.
      *
-     * @param text {String}
-     *  The text which should be parsed to find the right bound of
-     *  a selection.
+     * @param {String} text
+     *  The text which should be parsed to find the right bound of a selection.
      *
-     * @param offset {Number}
+     * @param {Number} offset
      *  An offset to be used to provide correct position data.
      *
-     * @param pos {Number}
-     *  The absolute position to start with (pos - offset) is
-     *  the relative position in the provided text.
+     * @param {Number} pos
+     *  The absolute position to start with (pos - offset) is the relative
+     *  position in the provided text.
      *
      * @returns {Number}
-     *  The absolute position of the right boundary or -1 if the
-     *  current position is the boundary.
+     *  The absolute position of the right boundary or -1 if the current
+     *  position is the boundary.
      */
     Hyperlink.findRightWordPosition = function (text, offset, pos) {
         var i = pos - offset, length = text.length;
@@ -374,12 +376,13 @@ define('io.ox/office/editor/hyperlink',
     };
 
     /**
-     * Checks an URL based on some basic rules. This is not a fully
-     * compliant URL check.
-     * @param url {String}
+     * Checks an URL based on some basic rules. This is not a fully compliant
+     * URL check.
      *
-     * @returns {boolean}
-     *  true if the url seems to be correct otherwise false
+     * @param {String} url
+     *
+     * @returns {Boolean}
+     *  true if the URL seems to be correct otherwise false
      */
     Hyperlink.checkURL = function (url) {
         return (/^([a-z]([a-z]|\d|\+|-|\.)*):(\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?((\[(|(v[\da-f]{1,}\.(([a-z]|\d|-|\.|_|~)|[!\$&'\(\)\*\+,;=]|:)+))\])|((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=])*)(:\d*)?)(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*|(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)|((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)|((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)){0})(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url));
@@ -416,10 +419,10 @@ define('io.ox/office/editor/hyperlink',
      * @returns {jQuery.Promise}
      *  The promise of a deferred object that will be resolved if the primary
      *  button or the remove button have been activated, or rejected if the
-     *  dialog has been canceled.
-     *  The done handlers registered at the promise object will receive a
-     *  object containing the text and url entered by the user. The object
-     *  contains null for text and url if remove has been clicked.
+     *  dialog has been canceled. The done handlers registered at the promise
+     *  object will receive a object containing the text and URL entered by the
+     *  user. The object contains null for text and the URL if remove has been
+     *  clicked.
      */
     Hyperlink.showHyperlinkDialog = function (options) {
 
