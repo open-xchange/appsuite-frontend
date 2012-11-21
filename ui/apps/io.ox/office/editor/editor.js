@@ -3232,12 +3232,6 @@ define('io.ox/office/editor/editor',
                 undoManager.addUndo({ name: Operations.PARA_DELETE, start: operation.start }, operation);
             }
 
-            // insert text into the new paragraph if specified (no seperate
-            // undo needed because this is covered by the deleteParagraph operation)
-            if (_.isString(operation.text) && (operation.text.length > 0)) {
-                implInsertText(operation.text, startPosition);
-            }
-
             // apply the passed paragraph attributes
             if (_.isObject(operation.attrs) && !_.isEmpty(operation.attrs)) {
                 paragraphStyles.setElementAttributes(paragraph, operation.attrs);
