@@ -334,7 +334,7 @@ exports.parsePO = function(file) {
             if (t[3]) return t[3];
             if (t[4]) return t[4];
             if (t[5]) throw new Error(format(
-                "Invalid character in line %s.", line_no));
+                "Invalid character in line %s.", [line_no]));
         }
     }
 
@@ -352,7 +352,7 @@ exports.parsePO = function(file) {
         } else if (!optional) {
             throw new Error(format(
                 "Unexpected '%1$s' in line %3$s, expected '%2$s'.",
-                lookahead, name, line_no));
+                [lookahead, name, line_no]));
         }
     }
     
