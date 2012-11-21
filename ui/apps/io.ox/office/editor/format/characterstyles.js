@@ -169,7 +169,7 @@ define('io.ox/office/editor/format/characterstyles',
             Color.setElementTextColor(textSpan, theme, attributes, paragraphAttributes);
 
             // update calculated line height due to changed font settings
-            LineHeight.updateElementLineHeight(textSpan, paragraphAttributes.lineheight);
+            LineHeight.updateElementLineHeight(textSpan, paragraphAttributes.lineHeight);
 
             var listLabel = $(paragraph).children(DOM.LIST_LABEL_NODE_SELECTOR);
             if (listLabel.length) {
