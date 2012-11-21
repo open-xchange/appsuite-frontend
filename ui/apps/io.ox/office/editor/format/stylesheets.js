@@ -407,6 +407,25 @@ define('io.ox/office/editor/format/stylesheets',
         };
 
         /**
+         * Returns the names of all formatting attributes registered at this
+         * style sheet container class.
+         *
+         * @param {Object} [options]
+         *  A map of options controlling the operation. Supports the following
+         *  options:
+         *  @param {Boolean} [options.special=false]
+         *      If set to true, the names of special attributes (attributes that
+         *      are marked with the 'special' flag in the attribute definitions)
+         *      will be returned too.
+         *
+         * @return {String[]}
+         *  The names of all registered attributes.
+         */
+        this.getAttributeNames = function (options) {
+            return ThisClass.getAttributeNames(options);
+        };
+
+        /**
          * Returns the names of all style sheets in a map, keyed by their
          * unique identifiers.
          *
