@@ -223,6 +223,9 @@ define('io.ox/backbone/forms',
                 } else {
                     collectedString.setDate(dayValue);
                     collectedString.setMonth(monthValue);
+
+                    yearValue = (yearValue !== '') ? yearValue : new Date().getFullYear();
+
                     collectedString.setYear(yearValue);
                     return {formated: collectedString.format(date.DATE), stamp: collectedString};
                 }
