@@ -141,14 +141,23 @@ define('io.ox/office/editor/format/paragraphstyles',
 
             marginBottom: {
                 def: 0
+            },
+
+            contextualSpacing: {
+                def: false
             }
         };
 
     // private static functions ===============================================
 
     function isMergeBorders(attributes1, attributes2) {
-        return Utils.hasEqualAttributes(attributes1, attributes2, ['borderLeft', 'borderRight', 'borderTop', 'borderBottom', 'borderInside',
-                                                                   'numId', 'indentLeft', 'indentRight', 'indentFirstLine']);
+        return (attributes1.borderLeft.style !== 'none' ||
+                attributes1.borderRight.style !== 'none' ||
+                attributes1.borderTop.style  !== 'none' ||
+                attributes1.borderBottom.style  !== 'none' ||
+                attributes1.borderInside.style !== 'none') &&
+                Utils.hasEqualAttributes(attributes1, attributes2, ['borderLeft', 'borderRight', 'borderTop', 'borderBottom', 'borderInside',
+                                                                    'numId', 'indentLeft', 'indentRight', 'indentFirstLine']);
     }
 
     function initBorder(border) {
@@ -255,7 +264,7 @@ define('io.ox/office/editor/format/paragraphstyles',
                 setBorder(attributes.borderTop, 'top', 0);
             }
 
-            // bottom border is replaced by inner border next paragraph uses the same border settings
+            // bottom border is replaced by inner border if next paragraph uses the same border settings
             if (isMergeBorders(attributes, nextAttributes)) {
                 setBorder(attributes.borderInside, 'bottom');
                 prevParagraph.css("padding-bottom", this.getCssBorder(bottomMargin));
@@ -302,6 +311,18 @@ define('io.ox/office/editor/format/paragraphstyles',
             // now set left/right margins
             paragraph.css('margin-left', leftMargin / 100 + 'mm');
             paragraph.css('margin-right', rightMargin / 100  + 'mm');
+
+            //no distance between paragraph using the same style if contextualSpacing is set
+            var noDistanceToPrev = prevAttributes.contextualSpacing && attributes.style === prevAttributes.style,
+                noDistanceToNext = attributes.contextualSpacing && attributes.style === nextAttributes.style;
+            if (noDistanceToPrev) {
+                paragraph.css('padding-top', 0 + 'mm');
+                topMargin = 0;
+            }
+            if (noDistanceToNext) {
+                paragraph.css('padding-bottom', 0 + 'mm');
+                bottomMargin = 0;
+            }
 
             paragraph.css('margin-top', topMargin / 100 + 'mm');
             paragraph.css('margin-bottom', bottomMargin / 100  + 'mm');

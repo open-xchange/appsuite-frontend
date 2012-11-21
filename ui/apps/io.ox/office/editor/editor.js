@@ -2614,15 +2614,29 @@ define('io.ox/office/editor/editor',
                     mustInsertTab = !event.shiftKey;
                 if (!selection.hasRange() &&
                         _.last(selection.getStartPosition()) === Position.getFirstTextNodePositionInParagraph(paragraph)) {
-                    var indentLevel = paragraphStyles.getElementAttributes(paragraph).indentLevel;
-                    if (indentLevel !== -1) {
+                    var paraAttributes = paragraphStyles.getElementAttributes(paragraph),
+                    indentLevel = paraAttributes.indentLevel,
+                        styleAttributes = paragraphStyles.getStyleSheetAttributes(paraAttributes.style, 'paragraph');
+
+                    if (paraAttributes.numId !== -1) {
                         mustInsertTab = false;
-                        if (!event.shiftKey && indentLevel < 8) {
-                            indentLevel += 1;
-                            self.setAttribute('paragraph', 'indentLevel', indentLevel);
-                        } else if (event.shiftKey && indentLevel > 0) {
-                            indentLevel -= 1;
-                            self.setAttribute('paragraph', 'indentLevel', indentLevel);
+                        var fromStyle = indentLevel === -1 || paraAttributes.numId === styleAttributes.numId;
+                        if (indentLevel === -1) {
+                            indentLevel = paraAttributes.indentLevel;
+                        }
+                        if (indentLevel !== 1 && !fromStyle) {
+                            if (!event.shiftKey && indentLevel < 8) {
+                                indentLevel += 1;
+                                self.setAttribute('paragraph', 'indentLevel', indentLevel);
+                            } else if (event.shiftKey && indentLevel > 0) {
+                                indentLevel -= 1;
+                                self.setAttribute('paragraph', 'indentLevel', indentLevel);
+                            }
+                        } else {
+                            // numbering via paragraph style (e.g. outline numbering)
+                            var style = lists.findPrevNextStyle(paraAttributes.numId, paraAttributes.style, event.shiftKey);
+                            if (style && style.length)
+                                self.setAttribute('paragraph', 'style', style);
                         }
                     }
                 }
