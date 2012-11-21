@@ -42,10 +42,11 @@ define('io.ox/office/editor/format/documentstyles',
 
         var // style sheet containers mapped by attribute family
             containers = {},
+
             // document themes
-            themes = {},
+            themes = new Themes(this),
             // list definitions
-            lists = {},
+            lists = new Lists(this),
 
             // global document attributes
             documentAttributes = {
@@ -111,8 +112,8 @@ define('io.ox/office/editor/format/documentstyles',
         };
 
         this.destroy = function () {
-            _(lists).invoke('destroy');
-            _(themes).invoke('destroy');
+            lists.destroy();
+            themes.destroy();
             _(containers).invoke('destroy');
             containers = themes = lists = null;
         };
@@ -126,9 +127,6 @@ define('io.ox/office/editor/format/documentstyles',
         containers.row = new TableRowStyles(rootNode, this);
         containers.cell = new TableCellStyles(rootNode, this);
         containers.page = new PageStyles(rootNode, this);
-
-        themes = new Themes(this);
-        lists = new Lists(this);
 
     } // class DocumentStyles
 
