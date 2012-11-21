@@ -125,7 +125,7 @@ define('io.ox/office/editor/format/stylesheets',
             self = this,
 
             // the derived class name for static functions dependent on the derived class
-            ThisClass = this.prototype.constructor,
+            ThisClass = this.constructor,
 
             // attribute definitions map specified by the derived class
             definitions = ThisClass.getAttributeDefinitions(),
