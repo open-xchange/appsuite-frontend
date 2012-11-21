@@ -95,7 +95,10 @@ define('io.ox/office/editor/main',
             debugMode = false,
 
             // if true, editor synchronizes operations with backend server
-            syncMode = true;
+            syncMode = true,
+
+            // if true, the synchronization of operations with the server failed
+            serverSyncError = false;
 
         // private methods ----------------------------------------------------
 
@@ -132,40 +135,6 @@ define('io.ox/office/editor/main',
             } else {
                 return $.when();
             }
-        }
-
-        /**
-         * Shows a closable error message above the editor.
-         *
-         * @param {String} message
-         *  The message text.
-         *
-         * @param {String} [title='Error']
-         *  The title of the error message. Defaults to 'Error'.
-         */
-        function showError(message, title) {
-            Alert.showError(title || gt('Error'), message, true, view.getToolPane().getNode(), controller, -1);
-        }
-
-        /**
-         * Shows an error message extracted from the error object returned by
-         * a jQuery AJAX call.
-         *
-         * @param {Object} response
-         *  Response object returned by the failed AJAX call.
-         */
-        function showAjaxError(response) {
-            showError(response.responseText, gt('AJAX Error'));
-        }
-
-        /**
-         * Shows an error message for an unhandled exception.
-         *
-         * @param exception
-         *  The exception to be reported.
-         */
-        function showExceptionError(exception) {
-            showError('Exception caught: ' + exception, 'Internal Error');
         }
 
         /**
@@ -299,12 +268,12 @@ define('io.ox/office/editor/main',
                             startOperationsTimer(0);
                             def.resolve();
                         } else {
-                            showError(gt('An error occurred while importing the document.'), gt('Load Error'));
+                            Alert.showGenericError(view.getToolPane().getNode(), gt('An error occurred while importing the document.'), gt('Load Error'));
                             def.reject();
                         }
                     })
                     .fail(function (response) {
-                        showAjaxError(response);
+                        Alert.showAjaxError(view.getToolPane().getNode(), response);
                         def.reject();
                     });
 
@@ -394,14 +363,24 @@ define('io.ox/office/editor/main',
                         var // response data
                             data = Application.extractAjaxResultData(response),
                             // operations
+                            operations;
+
+                        if (data && !data.serverIsBusy) {
+                            controller.setEditUser(data && data.editUser);
+                            controller.setEditMode(data && data.canEdit);
+
                             operations = extractOperationsList(response);
+                            if (_.isArray(operations) && (operations.length > 0)) {
+                                // We might need to do some "T" here!
+                                applyOperations(operations);
+                            }
+                        }
 
-                        controller.setEditUser(data && data.editUser);
-                        controller.setEditMode(data && data.canEdit);
-
-                        if (_.isArray(operations) && (operations.length > 0)) {
-                            // We might need to do some "T" here!
-                            applyOperations(operations);
+                        if (data && data.hasOwnProperty('hasErrors')) {
+                            if (data.hasErrors && !serverSyncError) {
+                                Alert.showGenericError(view.getToolPane().getNode(), gt('Synchronization to the server has been lost.'), gt('Server Error'));
+                            }
+                            serverSyncError = data.hasErrors;
                         }
                     }
                 });
@@ -877,7 +856,7 @@ define('io.ox/office/editor/main',
                     dataType: 'json'
                 })
                 .fail(function (response) {
-                    showAjaxError(response);
+                    Alert.showAjaxError(view.getToolPane().getNode(), response);
                 });
             }
         };
