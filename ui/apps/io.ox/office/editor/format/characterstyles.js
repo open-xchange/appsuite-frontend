@@ -25,7 +25,7 @@ define('io.ox/office/editor/format/characterstyles',
     var // definitions for character attributes
         DEFINITIONS = {
 
-            fontname: {
+            fontName: {
                 def: 'sans-serif',
                 format: function (element, fontName) {
                     element.css('font-family', Fonts.getCssFontFamily(fontName));
@@ -35,7 +35,7 @@ define('io.ox/office/editor/format/characterstyles',
                 }
             },
 
-            fontsize: {
+            fontSize: {
                 def: 12,
                 format: function (element, fontSize) {
                     element.css('font-size', fontSize + 'pt');
@@ -85,7 +85,7 @@ define('io.ox/office/editor/format/characterstyles',
                 }
             },
 
-            fillcolor: {
+            fillColor: {
                 def: Color.AUTO,
                 format: function (element, color) {
                     element.css('background-color', this.getCssColor(color, 'fill'));
@@ -98,7 +98,7 @@ define('io.ox/office/editor/format/characterstyles',
                     element.attr('lang', value);
                 }
             },
-            
+
             url: {
                 def: ''
             },
@@ -169,17 +169,17 @@ define('io.ox/office/editor/format/characterstyles',
             Color.setElementTextColor(textSpan, theme, attributes, paragraphAttributes);
 
             // update calculated line height due to changed font settings
-            LineHeight.updateElementLineHeight(textSpan, paragraphAttributes.lineheight);
+            LineHeight.updateElementLineHeight(textSpan, paragraphAttributes.lineHeight);
 
             var listLabel = $(paragraph).children(DOM.LIST_LABEL_NODE_SELECTOR);
             if (listLabel.length) {
-                listLabel.children('span').css('font-size', attributes.fontsize + 'pt');
+                listLabel.children('span').css('font-size', attributes.fontSize + 'pt');
             }
         }
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'character', DEFINITIONS);
+        StyleSheets.call(this, documentStyles, 'character');
 
         // initialization -----------------------------------------------------
 
@@ -231,6 +231,6 @@ define('io.ox/office/editor/format/characterstyles',
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: CharacterStyles });
+    return StyleSheets.extend({ constructor: CharacterStyles }, { DEFINITIONS: DEFINITIONS });
 
 });

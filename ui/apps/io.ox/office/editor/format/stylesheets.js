@@ -59,24 +59,11 @@ define('io.ox/office/editor/format/stylesheets',
      * Implements indirect element formatting via style sheets and direct
      * element formatting via explicit attribute maps.
      *
-     * @constructor
-     *
-     * @extends Container
-     *
-     * @param {DocumentStyles} documentStyles
-     *  Global collection with all style and formatting containers used in a
-     *  document.
-     *
-     * @param {String} styleFamily
-     *  The main attribute family represented by the style sheets in this
-     *  container. The style sheets MUST support all attributes of this family.
-     *  Additionally, the style sheets MAY support the attributes of other
-     *  attribute families.
-     *
-     * @param {Object} definitions
-     *  A map of attribute definitions for all attributes supported by the
-     *  specified style family, mapped by attribute names. Each definition
-     *  object contains the following entries:
+     * When deriving from this class, an attribute definitions map must be
+     * specified as static class field 'DEFINITIONS'. The map must contain
+     * attribute definition objects for all attributes supported by the
+     * specified style family, mapped by the names of the attributes. Each
+     * definition object contains the following entries:
      *  - 'def': Specifies the default value of the attribute which will be
      *      used if neither the style sheet of an element nor its explicit
      *      attributes collection specify a value for the attribute.
@@ -104,6 +91,20 @@ define('io.ox/office/editor/format/stylesheets',
      *      the first parameter, and the attribute value in the second
      *      parameter.
      *
+     * @constructor
+     *
+     * @extends Container
+     *
+     * @param {DocumentStyles} documentStyles
+     *  Global collection with all style and formatting containers used in a
+     *  document.
+     *
+     * @param {String} styleFamily
+     *  The main attribute family represented by the style sheets in this
+     *  container. The style sheets MUST support all attributes of this family.
+     *  Additionally, the style sheets MAY support the attributes of other
+     *  attribute families.
+     *
      * @param {Object} [options]
      *  A map of options to control the behavior of the style sheet container.
      *  The following options are supported:
@@ -118,10 +119,16 @@ define('io.ox/office/editor/format/stylesheets',
      *      as third parameter. Will be called in the context of this style
      *      sheet container instance.
      */
-    function StyleSheets(documentStyles, styleFamily, definitions, options) {
+    function StyleSheets(documentStyles, styleFamily, options) {
 
         var // self reference
             self = this,
+
+            // the derived class name for static functions dependent on the derived class
+            ThisClass = this.constructor,
+
+            // attribute definitions map specified by the derived class
+            definitions = ThisClass.getAttributeDefinitions(),
 
             // style sheets, mapped by identifier
             styleSheets = {},
@@ -142,26 +149,6 @@ define('io.ox/office/editor/format/stylesheets',
             styleAttributesResolver = Utils.getFunctionOption(options, 'styleAttributesResolver');
 
         // private methods ----------------------------------------------------
-
-        /**
-         * Returns whether the passed string is the name of a attribute
-         * registered in the definitions passed to the constructor.
-         *
-         * @param {String} name
-         *  The attribute name to be checked.
-         *
-         * @param {Boolean} [special]
-         *  If set to true, returns true for special attributes (attributes
-         *  that are marked with the 'special' flag in the attribute
-         *  definitions). Otherwise, special attributes will not be recognized
-         *  by this function.
-         *
-         * @returns {Boolean}
-         *  Whether the attribute is supported.
-         */
-        function isRegisteredAttribute(name, special) {
-            return (name in definitions) && (special || (definitions[name].special !== true));
-        }
 
         /**
          * Calculates the default attributes from the attribute definitions and
@@ -409,26 +396,33 @@ define('io.ox/office/editor/format/stylesheets',
         };
 
         /**
-         * Returns the definition of the specified formatting attribute.
+         * Returns the static definitions map of all attributes registered at
+         * this style sheet container class.
          *
-         * @param {String} name
-         *  The name of the attribute.
+         * @return {Object}
+         *  A reference to the static attribute definition map.
+         */
+        this.getAttributeDefinitions = function () {
+            return definitions;
+        };
+
+        /**
+         * Returns the names of all formatting attributes registered at this
+         * style sheet container class.
          *
          * @param {Object} [options]
          *  A map of options controlling the operation. Supports the following
          *  options:
          *  @param {Boolean} [options.special=false]
-         *      If set to true, the definitions of special attributes
-         *      (attributes that are marked with the 'special' flag in the
-         *      attribute definitions passed to the constructor) will be
-         *      returned too.
+         *      If set to true, the names of special attributes (attributes that
+         *      are marked with the 'special' flag in the attribute definitions)
+         *      will be returned too.
          *
-         * @return {Object}
-         *  The definition of the specified attribute, or null, if the
-         *  attribute does not exist.
+         * @return {String[]}
+         *  The names of all registered attributes.
          */
-        this.getAttributeDefinition = function (name, options) {
-            return isRegisteredAttribute(name, Utils.getBooleanOption(options, 'special', false)) ? definitions[name] : null;
+        this.getAttributeNames = function (options) {
+            return ThisClass.getAttributeNames(options);
         };
 
         /**
@@ -721,7 +715,7 @@ define('io.ox/office/editor/format/stylesheets',
                 // copy style sheet identifier directly
                 if (name === 'style') {
                     attributes1.style = value;
-                } else if (isRegisteredAttribute(name)) {
+                } else if (ThisClass.isRegisteredAttribute(name)) {
                     // try to find merger function from attribute definition
                     merger = definitions[name].merge;
                     // either set return value from merger, or copy the attribute directly
@@ -771,7 +765,7 @@ define('io.ox/office/editor/format/stylesheets',
             _(families).each(function (family) {
 
                 var // style sheet container for current family
-                    styleSheets = documentStyles.getStyleSheets(family),
+                    definitions = documentStyles.getStyleSheets(family).getAttributeDefinitions(),
                     // formatting attributes of the own style sheet
                     styleAttributes = getStyleSheetAttributes(id, family);
 
@@ -779,7 +773,7 @@ define('io.ox/office/editor/format/stylesheets',
                 _(styleAttributes).each(function (value, name) {
 
                     var // attribute definition from container corresponding to the current family
-                        definition = styleSheets.getAttributeDefinition(name);
+                        definition = definitions[name];
 
                     // call the preview handler of the attribute definition
                     if (definition && _.isFunction(definition.preview)) {
@@ -853,10 +847,7 @@ define('io.ox/office/editor/format/stylesheets',
          */
         this.getElementAttributes = function (element, options) {
 
-            var // whether to allow special attributes
-                special = Utils.getBooleanOption(options, 'special', false),
-
-                // the current element, as jQuery object
+            var // the current element, as jQuery object
                 $element = $(element),
                 // get the element attributes
                 elementAttributes = getElementAttributes($element),
@@ -868,7 +859,7 @@ define('io.ox/office/editor/format/stylesheets',
 
             // filter by supported attributes
             _(mergedAttributes).each(function (value, name)  {
-                if ((name !== 'style') && !isRegisteredAttribute(name, special)) {
+                if ((name !== 'style') && !ThisClass.isRegisteredAttribute(name, options)) {
                     delete mergedAttributes[name];
                 }
             });
@@ -916,8 +907,6 @@ define('io.ox/office/editor/format/stylesheets',
                 styleId = Utils.getOption(attributes, 'style'),
                 // whether to remove element attributes equal to style attributes
                 clear = Utils.getBooleanOption(options, 'clear', false),
-                // allow special attributes
-                special = Utils.getBooleanOption(options, 'special', false),
                 // change listener notified for changed attributes
                 changeListener = Utils.getFunctionOption(options, 'changeListener'),
 
@@ -948,7 +937,7 @@ define('io.ox/office/editor/format/stylesheets',
 
             // add (or remove/clear) the passed explicit attributes
             _(attributes).each(function (value, name) {
-                if (isRegisteredAttribute(name, special)) {
+                if (ThisClass.isRegisteredAttribute(name, options)) {
                     // check whether to clear the attribute
                     if (_.isNull(value) || (clear && _.isEqual(styleAttributes[name], value))) {
                         delete elementAttributes[name];
@@ -1015,22 +1004,17 @@ define('io.ox/office/editor/format/stylesheets',
             var // build a map with null values from passed name list
                 attributes = {};
 
-            // fill attribute map from passed array of attribute names
+            // convert passed parameter to string array
             if (_.isString(attributeNames)) {
-                // string passed: clear single attribute
-                attributes[attributeNames] = null;
-            } else if (_.isArray(attributeNames)) {
-                // array passed: clear all specified attributes
-                _(attributeNames).each(function (name) {
-                    attributes[name] = null;
-                });
-            } else {
-                // no valid attribute names passed: clear all attributes
-                attributes.style = null;
-                _(definitions).each(function (definition, name) {
-                    attributes[name] = null;
-                });
+                attributeNames = [attributeNames];
+            } else if (!_.isArray(attributeNames)) {
+                attributeNames = ThisClass.getAttributeNames(options);
             }
+
+            // prepare the attributes map with null values for all attributes
+            _(attributeNames).each(function (name) {
+                attributes[name] = null;
+            });
 
             // use method setElementAttributes() to do the real work
             return this.setElementAttributes(element, attributes, options);
@@ -1072,6 +1056,95 @@ define('io.ox/office/editor/format/stylesheets',
     } // class StyleSheets
 
     // static methods ---------------------------------------------------------
+
+    /**
+     * Returns the static definitions map of all attributes registered at the
+     * current style sheet container class.
+     *
+     * @attention
+     *  MUST be called at the correct derived style sheet container class to
+     *  get the expected result.
+     *
+     * @return {Object}
+     *  A reference to the static attribute definition map.
+     */
+    StyleSheets.getAttributeDefinitions = function () {
+
+        if (_.isObject(this.DEFINITIONS)) {
+            return this.DEFINITIONS;
+        }
+
+        Utils.error('StyleSheets.getAttributeDefinitions(): no attribute definitions found in this class');
+        return {};
+    };
+
+    /**
+     * Returns the names of all formatting attributes registered at the current
+     * style sheet container class.
+     *
+     * @attention
+     *  MUST be called at the correct derived style sheet container class to
+     *  get the expected result.
+     *
+     * @param {Object} [options]
+     *  A map of options controlling the operation. Supports the following
+     *  options:
+     *  @param {Boolean} [options.special=false]
+     *      If set to true, the names of special attributes (attributes that
+     *      are marked with the 'special' flag in the attribute definitions)
+     *      will be returned too.
+     *
+     * @return {String[]}
+     *  The names of all registered attributes.
+     */
+    StyleSheets.getAttributeNames = function (options) {
+
+        var // all attribute names, as array
+            attributeNames = ['style'],
+            // whether to include special attributes
+            special = Utils.getBooleanOption(options, 'special', false);
+
+        _(this.getAttributeDefinitions()).each(function (definition, name) {
+            if (special || (definition.special !== true)) {
+                attributeNames.push(name);
+            }
+        });
+
+        return attributeNames;
+    };
+
+    /**
+     * Returns whether the passed string is the name of a attribute that has
+     * been registered at the current style sheet container class.
+     *
+     * @attention
+     *  MUST be called at the correct derived style sheet container class to
+     *  get the expected result.
+     *
+     * @param {String} name
+     *  The attribute name to be checked.
+     *
+     * @param {Object} [options]
+     *  A map of options controlling the operation. Supports the following
+     *  options:
+     *  @param {Boolean} [options.special=false]
+     *      If set to true, returns true for special attributes (attributes
+     *      that are marked with the 'special' flag in the attribute
+     *      definitions). Otherwise, special attributes will not be recognized
+     *      by this function.
+     *
+     * @returns {Boolean}
+     *  Whether the attribute is registered in the attribute definitions.
+     */
+    StyleSheets.isRegisteredAttribute = function (name, options) {
+
+        var // all attribute names, as array
+            definitions = this.getAttributeDefinitions(),
+            // whether to include special attributes
+            special = Utils.getBooleanOption(options, 'special', false);
+
+        return (name in definitions) && (special || (definitions[name].special !== true));
+    };
 
     /**
      * Returns the explicit attributes stored in the passed element node.

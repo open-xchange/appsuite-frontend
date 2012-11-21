@@ -49,7 +49,7 @@ define('io.ox/office/editor/table',
             tableGrid = null;
 
         if (tablePosition) {
-            tableGrid = StyleSheets.getExplicitAttributes(tablePosition.node).tablegrid;
+            tableGrid = StyleSheets.getExplicitAttributes(tablePosition.node).tableGrid;
         }
 
         return tableGrid || [];

@@ -42,21 +42,19 @@ define('io.ox/office/editor/format/documentstyles',
 
         var // style sheet containers mapped by attribute family
             containers = {},
-            // document attributes
-            attributes = { defaulttabstop: 1270, zoom: { value: 100 }},
+
             // document themes
-            themes = {},
+            themes = new Themes(this),
             // list definitions
-            lists = {};
+            lists = new Lists(this),
+
+            // global document attributes
+            documentAttributes = {
+                defaultTabStop: 1270,   // default tab width: 0.5 inch
+                zoom: { value: 100 }    // default zoom: 100%
+            };
 
         // methods ------------------------------------------------------------
-
-        /**
-         * Returns the attributes associated with the document
-         */
-        this.getAttributes = function () {
-            return attributes;
-        };
 
         /**
          * Returns the style sheet container for the specified attribute
@@ -89,9 +87,33 @@ define('io.ox/office/editor/format/documentstyles',
             return lists;
         };
 
+        /**
+         * Returns the global attributes of the document.
+         *
+         * @param {Object}
+         *  A deep clone of the global document attributes.
+         */
+        this.getAttributes = function () {
+            return _.copy(documentAttributes, true);
+        };
+
+        /**
+         * Changes the global attributes of the document.
+         *
+         * @param {Object} attributes
+         *  The new document attributes.
+         *
+         * @returns {DocumentStyles}
+         *  A reference to this instance.
+         */
+        this.setAttributes = function (attributes) {
+            _(documentAttributes).extend(attributes);
+            return this;
+        };
+
         this.destroy = function () {
-            _([lists]).invoke('destroy');
-            _([themes]).invoke('destroy');
+            lists.destroy();
+            themes.destroy();
             _(containers).invoke('destroy');
             containers = themes = lists = null;
         };
@@ -105,9 +127,6 @@ define('io.ox/office/editor/format/documentstyles',
         containers.row = new TableRowStyles(rootNode, this);
         containers.cell = new TableCellStyles(rootNode, this);
         containers.page = new PageStyles(rootNode, this);
-
-        themes = new Themes(this);
-        lists = new Lists(this);
 
     } // class DocumentStyles
 

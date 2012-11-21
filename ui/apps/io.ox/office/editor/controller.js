@@ -110,27 +110,27 @@ define('io.ox/office/editor/controller',
                 },
                 'paragraph/lineheight': {
                     parent: 'paragraph/attributes',
-                    get: function (attributes) { return attributes.lineheight; },
-                    set: function (lineHeight) { editor.setAttribute('paragraph', 'lineheight', lineHeight); }
+                    get: function (attributes) { return attributes.lineHeight; },
+                    set: function (lineHeight) { editor.setAttribute('paragraph', 'lineHeight', lineHeight); }
                 },
                 'paragraph/fillcolor': {
                     parent: 'paragraph/attributes',
-                    get: function (attributes) { return attributes.fillcolor; },
-                    set: function (color) { editor.setAttribute('paragraph', 'fillcolor', color); }
+                    get: function (attributes) { return attributes.fillColor; },
+                    set: function (color) { editor.setAttribute('paragraph', 'fillColor', color); }
                 },
                 'paragraph/list/indent': {
                     parent: 'paragraph/attributes',
-                    enable: function (enabled) { var ilvl = this.get(); return enabled && _.isNumber(ilvl) && (ilvl >= 0) && (ilvl <= 8); },
-                    get: function (attributes) { return attributes.ilvl; },
-                    set: function (indent) { editor.setAttribute('paragraph', 'ilvl', indent); }
+                    enable: function (enabled) { var indent = this.get(); return enabled && _.isNumber(indent) && (0 <= indent) && (indent <= 8); },
+                    get: function (attributes) { return attributes.indentLevel; },
+                    set: function (indent) { editor.setAttribute('paragraph', 'indentLevel', indent); }
                 },
                 'paragraph/list/incindent': {
                     parent: 'paragraph/list/indent',
                     enable: function (enabled) { return enabled && (this.get() < 8); },
                     set: function () {
-                        var ilvl = this.get();
-                        if (ilvl < 8) {
-                            editor.setAttribute('paragraph', 'ilvl', ilvl + 1);
+                        var indent = this.get();
+                        if (indent < 8) {
+                            editor.setAttribute('paragraph', 'indentLevel', indent + 1);
                         }
                     }
                 },
@@ -138,9 +138,9 @@ define('io.ox/office/editor/controller',
                     parent: 'paragraph/list/indent',
                     enable: function (enabled) { return enabled && (this.get() > 0); },
                     set: function () {
-                        var ilvl = this.get();
-                        if (ilvl > 0) {
-                            editor.setAttribute('paragraph', 'ilvl', ilvl - 1);
+                        var indent = this.get();
+                        if (indent > 0) {
+                            editor.setAttribute('paragraph', 'indentLevel', indent - 1);
                         }
                     }
                 },
@@ -148,33 +148,33 @@ define('io.ox/office/editor/controller',
                 'paragraph/list/bullets': {
                     parent: 'paragraph/attributes',
                     get: function (attributes) {
-                        return (attributes.ilvl !== -1) && editor.getLists().isDefaultList(attributes.numId, 'bullet');
+                        return (attributes.indentLevel > -1) && editor.getLists().isDefaultList(attributes.numId, 'bullet');
                     },
                     set: function (mode) {
                         if (mode) {
                             editor.createDefaultList('bullet');
                         } else {
-                            editor.setAttributes('paragraph', { numId: -1, ilvl: -1 });
+                            editor.setAttributes('paragraph', { numId: -1, indentLevel: -1 });
                         }
                     }
                 },
                 'paragraph/list/numbering': {
                     parent: 'paragraph/attributes',
                     get: function (attributes) {
-                        return (attributes.ilvl !== -1) && editor.getLists().isDefaultList(attributes.numId, 'numbering');
+                        return (attributes.indentLevel > -1) && editor.getLists().isDefaultList(attributes.numId, 'numbering');
                     },
                     set: function (mode) {
                         if (mode) {
                             editor.createDefaultList('numbering');
                         } else {
-                            editor.setAttributes('paragraph', { numId: -1, ilvl: -1 });
+                            editor.setAttributes('paragraph', { numId: -1, indentLevel: -1 });
                         }
                     }
                 },
                 'paragraph/borders': {
                     parent: 'paragraph/attributes',
                     get: function (attributes) { return ParagraphStyles.getBorderModeFromAttributes(attributes); },
-                    set: function (bordermode) { editor.setAttributes('paragraph', ParagraphStyles.getAttributesBorderMode(bordermode)); }
+                    set: function (borderMode) { editor.setAttributes('paragraph', ParagraphStyles.getAttributesBorderMode(borderMode)); }
                 },
 
                 // characters
@@ -190,13 +190,13 @@ define('io.ox/office/editor/controller',
                 },
                 'character/fontname': {
                     parent: 'character/attributes',
-                    get: function (attributes) { return attributes.fontname; },
-                    set: function (fontName) { editor.setAttribute('character', 'fontname', fontName); }
+                    get: function (attributes) { return attributes.fontName; },
+                    set: function (fontName) { editor.setAttribute('character', 'fontName', fontName); }
                 },
                 'character/fontsize': {
                     parent: 'character/attributes',
-                    get: function (attributes) { return attributes.fontsize; },
-                    set: function (fontSize) { editor.setAttribute('character', 'fontsize', fontSize); }
+                    get: function (attributes) { return attributes.fontSize; },
+                    set: function (fontSize) { editor.setAttribute('character', 'fontSize', fontSize); }
                 },
                 'character/bold': {
                     parent: 'character/attributes',
@@ -220,8 +220,8 @@ define('io.ox/office/editor/controller',
                 },
                 'character/fillcolor': {
                     parent: 'character/attributes',
-                    get: function (attributes) { return attributes.fillcolor; },
-                    set: function (color) { editor.setAttribute('character', 'fillcolor', color); }
+                    get: function (attributes) { return attributes.fillColor; },
+                    set: function (color) { editor.setAttribute('character', 'fillColor', color); }
                 },
                 'character/language': {
                     parent: 'character/attributes',
@@ -230,9 +230,9 @@ define('io.ox/office/editor/controller',
                 },
                 'character/hyperlink': {
                     parent: 'character/attributes',
-                    get: function (attributes) { return attributes.url; },
-                    set: function (hyperlink) { editor.insertHyperlink(); },
                     enable: function (enabled) { return enabled && editor.selectionEnclosingParagraph(); },
+                    get: function (attributes) { return attributes.url; },
+                    set: function () { editor.insertHyperlink(); },
                     done: $.noop
                 },
 
@@ -274,18 +274,6 @@ define('io.ox/office/editor/controller',
                     set: function (styleId) { editor.setAttribute('table', 'style', styleId, { clear: true }); }
                 },
 
-                // images
-
-                'image/insert/file': {
-                    parent: 'document/editable/text',
-                    set: function () { Image.insertFileDialog(app); }
-                },
-                'image/insert/url': {
-                    parent: 'document/editable/text',
-                    set: function () { Image.insertURLDialog(app); },
-                    done: $.noop
-                },
-
                 // drawing
 
                 'document/editable/drawing': {
@@ -306,6 +294,19 @@ define('io.ox/office/editor/controller',
                     get: function (attributes) { return DrawingStyles.getFloatModeFromAttributes(attributes); },
                     set: function (floatMode) { editor.setAttributes('drawing', DrawingStyles.getAttributesFromFloatMode(floatMode)); }
                 },
+
+                // images
+
+                'image/insert/file': {
+                    parent: 'document/editable/text',
+                    set: function () { Image.insertFileDialog(app); }
+                },
+                'image/insert/url': {
+                    parent: 'document/editable/text',
+                    set: function () { Image.insertURLDialog(app); },
+                    done: $.noop
+                },
+
                 // debug
 
                 'debug/toggle': {

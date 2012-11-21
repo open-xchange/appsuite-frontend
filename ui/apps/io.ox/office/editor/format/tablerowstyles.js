@@ -24,10 +24,10 @@ define('io.ox/office/editor/format/tablerowstyles',
         DEFINITIONS = {
 
             /**
-             * The height of the table row. If zero then the row is auto sized.
+             * The height of the table row. If 'auto' then the row is auto sized.
              */
             height: {
-                def: 0
+                def: 'auto'
             }
 
         };
@@ -49,7 +49,7 @@ define('io.ox/office/editor/format/tablerowstyles',
      */
     function updateTableRowFormatting(row, attributes) {
 
-        if (attributes.height !== 0) {
+        if (attributes.height !== 'auto') {
             if ($.browser.webkit) {
                 // Chrome requires row height at the cells, setting height at <tr> is ignored.
                 var rowHeight = Utils.convertHmmToLength(attributes.height, 'px', 0);
@@ -101,7 +101,7 @@ define('io.ox/office/editor/format/tablerowstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'row', DEFINITIONS);
+        StyleSheets.call(this, documentStyles, 'row');
 
         // initialization -----------------------------------------------------
 
@@ -112,6 +112,6 @@ define('io.ox/office/editor/format/tablerowstyles',
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: TableRowStyles });
+    return StyleSheets.extend({ constructor: TableRowStyles }, { DEFINITIONS: DEFINITIONS });
 
 });
