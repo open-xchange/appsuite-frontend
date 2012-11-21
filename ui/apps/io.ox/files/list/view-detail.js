@@ -426,6 +426,7 @@ define("io.ox/files/list/view-detail",
 
             return {
                 name: file.filename,
+                filename: file.filename,
                 mimetype: file.file_mimetype,
                 size: file.file_size,
                 dataURL: filesAPI.getUrl(file, 'bare'),
