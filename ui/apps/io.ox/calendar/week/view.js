@@ -33,7 +33,7 @@ define('io.ox/calendar/week/view',
         fragmentation:  2,      // fragmentation of a hour
         gridSize:       2,      // grid fragmentation of a hour
         cellHeight:     24,     // height of one single fragment in px
-        fulltimeHeight: 19,     // height of full-time appointments in px
+        fulltimeHeight: 20,     // height of full-time appointments in px
         fulltimeMax:    5,      // threshold for visible full-time appointments in header
         appWidth:       98,     // max width of an appointment in %
         overlap:        0.35,   // visual overlap of appointments [0.0 - 1.0]
@@ -493,10 +493,7 @@ define('io.ox/calendar/week/view',
                 $('<div>')
                     .addClass('week-view-container')
                     .append(
-                        this.fulltimeCon.empty().append(
-                            $('<div>').addClass('fulltime-label'),
-                            this.fulltimePane
-                        ),
+                        this.fulltimeCon.empty().append(this.fulltimePane),
                         this.pane.empty().append(timeLabel, weekCon)
                     )
             );
@@ -645,8 +642,15 @@ define('io.ox/calendar/week/view',
             // calculate full-time appointment container height
             var ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight + 1) + 1;
             this.fulltimePane.css({ height: fulltimeColPos.length * (this.fulltimeHeight + 1) + 'px'});
-            this.fulltimeCon.add().css({ height: ftHeight + 'px' });
+            this.fulltimeCon.css({ height: ftHeight + 'px' });
             this.pane.css({ top: ftHeight + 'px' });
+
+            // fix for hidden scrollbars on small DIVs (esp. Firefox Win)
+            if (this.fulltimeCon[0].clientWidth !== this.pane[0].clientWidth) {
+                this.fulltimePane.css({ right: this.fulltimeCon[0].clientWidth - this.pane[0].clientWidth + 'px' });
+            } else {
+                this.fulltimePane.css({ right: '0px' });
+            }
 
             // loop over all single days
             $.each(draw, function (day, apps) {
