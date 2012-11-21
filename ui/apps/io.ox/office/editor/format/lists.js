@@ -466,21 +466,21 @@ define('io.ox/office/editor/format/lists',
             }
             return -1;
         };
-        this.findPrevNextStyle = function (numId, pstyle, prev) {
+        this.findPrevNextStyle = function (numId, paraStyle, prev) {
             var list = this.getList(numId);
             if (list === undefined) {
                 return '';
             }
             var ilvl = 0;
             for (; ilvl < 9; ++ilvl) {
-                var levelFormat = list.listlevels[ilvl];
-                if (levelFormat.pstyle === pstyle) {
+                var levelFormat = list.listLevels[ilvl];
+                if (levelFormat.paraStyle === paraStyle) {
                     var ret = '';
                     if (prev) {
-                        if (ilvl > 0 && list.listlevels[ilvl - 1].pstyle)
-                            ret = list.listlevels[ilvl - 1].pstyle;
-                    } else if (ilvl < 8 && list.listlevels[ilvl + 1].pstyle) {
-                        ret = list.listlevels[ilvl + 1].pstyle;
+                        if (ilvl > 0 && list.listLevels[ilvl - 1].paraStyle)
+                            ret = list.listLevels[ilvl - 1].paraStyle;
+                    } else if (ilvl < 8 && list.listLevels[ilvl + 1].paraStyle) {
+                        ret = list.listLevels[ilvl + 1].paraStyle;
                     }
                     return ret;
                 }

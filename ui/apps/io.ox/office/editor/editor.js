@@ -2624,19 +2624,22 @@ define('io.ox/office/editor/editor',
                         if (indentLevel === -1) {
                             indentLevel = paraAttributes.indentLevel;
                         }
-                        if (indentLevel !== 1 && !fromStyle) {
-                            if (!event.shiftKey && indentLevel < 8) {
-                                indentLevel += 1;
-                                self.setAttribute('paragraph', 'indentLevel', indentLevel);
-                            } else if (event.shiftKey && indentLevel > 0) {
-                                indentLevel -= 1;
-                                self.setAttribute('paragraph', 'indentLevel', indentLevel);
+                        if (indentLevel !== -1) {
+
+                            if (!fromStyle) {
+                                if (!event.shiftKey && indentLevel < 8) {
+                                    indentLevel += 1;
+                                    self.setAttribute('paragraph', 'indentLevel', indentLevel);
+                                } else if (event.shiftKey && indentLevel > 0) {
+                                    indentLevel -= 1;
+                                    self.setAttribute('paragraph', 'indentLevel', indentLevel);
+                                }
+                            } else {
+                                // numbering via paragraph style (e.g. outline numbering)
+                                var style = lists.findPrevNextStyle(paraAttributes.numId, paraAttributes.style, event.shiftKey);
+                                if (style && style.length)
+                                    self.setAttribute('paragraph', 'style', style);
                             }
-                        } else {
-                            // numbering via paragraph style (e.g. outline numbering)
-                            var style = lists.findPrevNextStyle(paraAttributes.numId, paraAttributes.style, event.shiftKey);
-                            if (style && style.length)
-                                self.setAttribute('paragraph', 'style', style);
                         }
                     }
                 }
@@ -5656,7 +5659,7 @@ define('io.ox/office/editor/editor',
                                     minTabPos = numWidth;
 
 
-                                var defaultTabstop = self.getDocumentAttributes().defaultTabStop,
+                                var defaultTabstop = documentStyles.getAttributes().defaultTabStop,
                                 paraAttributes = paragraphStyles.getElementAttributes(para),
                                 paraTabstops = [];
                                 // paragraph tab stop definitions
