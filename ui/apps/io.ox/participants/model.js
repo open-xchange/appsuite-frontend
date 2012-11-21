@@ -30,6 +30,13 @@ define("io.ox/participants/model",
                     type: this.TYPE_USER
                 });
             }
+            if (self.get('entity')) {
+                self.id = parseInt(self.get('entity'), 10);
+                self.set({
+                    id: parseInt(self.get('entity'), 10),
+                    type: this.TYPE_USER
+                });
+            }
             this.fetch().done(function () {
                 self.trigger("fetch");
                 self.trigger("change");

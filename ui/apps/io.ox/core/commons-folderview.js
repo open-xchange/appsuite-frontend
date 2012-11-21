@@ -215,7 +215,8 @@ define('io.ox/core/commons-folderview',
         function setFolderPermissions(e) {
             e.preventDefault();
             require(['io.ox/core/permissions/permissions'], function (permissions) {
-                permissions.initPermissionsDialog(e);
+                var folder_id = String(e.data.app.folderView.selection.get());
+                permissions.show(folder_id);
             });
         }
 

@@ -22,9 +22,9 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                                           'io.ox/core/extensions'],
                                           function (gt, views, date, notifications, forms, util, pViews, attachments, ext) {
     "use strict";
-   
+
     var point = views.point('io.ox/tasks/edit/view');
-    
+
     // title
     point.extend(new forms.InputField({
         id: 'title',
@@ -35,7 +35,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         attribute: 'title',
         label: gt('Subject')
     }));
-    
+
     // note
     point.extend(new forms.InputField({
         id: 'note',
@@ -46,7 +46,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         attribute: 'note',
         label: gt('Description')
     }));
-    
+
     // status
     point.extend(new forms.SelectBoxField({
         id: 'status',
@@ -85,7 +85,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         },
         label: gt('Status')
     }));
-    
+
     // priority
     point.extend(new forms.SelectBoxField({
         id: 'priority',
@@ -115,7 +115,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         },
         label: gt('Priority')
     }));
-    
+
     //privateflag
     point.extend(new forms.CheckBoxField({
         id: 'private_flag',
@@ -125,7 +125,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         label: gt('Private'),
         attribute: 'private_flag'
     }));
-    
+
     //estimated duration
     point.extend(new forms.InputField({
         id: 'target_duration',
@@ -148,7 +148,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             }
         }
     }));
-    
+
     //actual duration
     point.extend(new forms.InputField({
         id: 'actual_duration',
@@ -171,7 +171,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             }
         }
     }));
-    
+
     //estimated costs
     point.extend(new forms.InputField({
         id: 'target_costs',
@@ -194,7 +194,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             }
         }
     }));
-    
+
     //actual costs
     point.extend(new forms.InputField({
         id: 'actual_costs',
@@ -217,7 +217,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             }
         }
     }));
-    
+
     //currency
     point.extend(new forms.SelectBoxField({
         id: 'currency',
@@ -256,7 +256,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         },
         label: gt('Currency')
     }));
-    
+
     // distance
     point.extend(new forms.InputField({
         id: 'trip_meter',
@@ -267,7 +267,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         attribute: 'trip_meter',
         label: gt('Distance')
     }));
-    
+
     // billing information
     point.extend(new forms.InputField({
         id: 'billing_information',
@@ -278,7 +278,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         attribute: 'billing_information',
         label: gt('Billing information')
     }));
-    
+
     // companies
     point.extend(new forms.InputField({
         id: 'companies',
@@ -289,7 +289,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         attribute: 'companies',
         label: gt('Companies')
     }));
-    
+
     // participants
     point.basicExtend({
         id: 'participants_list',
@@ -298,7 +298,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             this.append(new pViews.UserContainer({collection: options.model.getParticipants()}).render().$el);
         }
     });
-    
+
     // add participants
     point.basicExtend({
         id: 'add_participant',
@@ -319,7 +319,9 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                 );
 
                 var autocomplete = new AddParticipantsView({el: node});
-                autocomplete.render('.io-ox-tasks-edit');
+                autocomplete.render({
+                    parentSelector: '.io-ox-tasks-edit'
+                });
 
                 autocomplete.on('select', function (data) {
                     var alreadyParticipant = false, obj,
@@ -362,9 +364,9 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             });
         }
     });
-    
+
     //DatePickers
-    
+
     //Datepickers need Custom methods because standard methods show odd behaviour with undefined dates
     var CustomBinderUtils = {
         _timeStrToDate: function (value, attribute, model) {
@@ -379,7 +381,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             }
             var mydate = new date.Local(myValue);
             var parsedDate = date.Local.parse(value, date.TIME);
-            
+
             // just reject the change, if it's not parsable
             if (value !== '' && (_.isNull(parsedDate) || parsedDate.getTime() === 0)) {
                 model.trigger('change:' + attribute);//reset inputfields
@@ -411,7 +413,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             }
             var mydate = new date.Local(date.Local.utc(myValue));
             var parsedDate = date.Local.parse(value, date.DATE);
-            
+
             if (value === '') { //empty input means date should be undefined
                 return null;
             }
@@ -421,14 +423,14 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                 setTimeout(function () {notifications.yell("error", gt("Please enter a valid date.")); }, 300);
                 return model.get(attribute);
             }
-    
+
             mydate.setDate(parsedDate.getDate());
             mydate.setMonth(parsedDate.getMonth());
             mydate.setYear(parsedDate.getYear());
             return date.Local.localTime(mydate.getTime());
         }
     };
-    
+
     // start date
     point.extend(new forms.DatePicker({
         id: 'start_date',
@@ -445,7 +447,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model));
         }
     }));
-    
+
     // due date
     point.extend(new forms.DatePicker({
         id: 'end_date',
@@ -462,7 +464,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model));
         }
     }));
-    
+
     // reminder date
     point.extend(new forms.DatePicker({
         id: 'alarm',
@@ -479,7 +481,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model));
         }
     }));
-    
+
     // Attachments
 
     point.extend(new attachments.EditableAttachmentList({
@@ -501,10 +503,10 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                 }
                 row.append($('<div>').addClass('span6').append(self.renderAttachment(attachment).addClass('span12')));
             });
-            
+
             //trigger refresh of attachmentcounter
             this.baton.parentView.trigger('attachmentCounterRefresh', this.allAttachments.length);
-            
+
             //replace x with icon
             self.$el.find('.delete').each(function (index, deleteNode) {
                 $(deleteNode).text('').append('<i class="icon-remove">');
@@ -545,6 +547,6 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
 
         }
     });
-    
+
     return null; //just used to clean up the view class
 });
