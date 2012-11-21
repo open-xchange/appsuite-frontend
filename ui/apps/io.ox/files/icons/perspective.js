@@ -90,7 +90,7 @@ define('io.ox/files/icons/perspective',
     }
 
     function officeIconError(e) {
-        $(this).replaceWith(drawGeneric(e.data.name));
+        $(this).remove();
     }
 
     function drawImage(src) {
@@ -125,20 +125,30 @@ define('io.ox/files/icons/perspective',
         draw: function (baton) {
             var file = baton.data,
                 options = baton.options,
-                img;
+                img,
+                wrap = $('<div class="wrap">'),
+                iElement;
             this.addClass('file-icon pull-left').attr('data-cid', _.cid(file));
             if ((/^(image\/(gif|png|jpe?g|bmp|tiff))$/i).test(file.file_mimetype)) {
                 img = drawImage(getIcon(file, options)).on('error', { name: file.filename }, imageIconError);
             } else if ((/^audio\/(mpeg|m4a|x-m4a)$/i).test(file.file_mimetype)) {
                 img = drawImage(getCover(file, options)).on('error', { name: file.filename }, audioIconError);
             } else if (ox.serverConfig.previewExtensions &&
-                    (/^application\/.*(ms-word|msword|msexcel|ms-excel|mspowerpoint|ms-powerpoint|openxmlformats|openxmlformats).*$/i).test(file.file_mimetype)) {
+                    (/^application\/.*(ms-word|ms-excel|ms-powerpoint|openxmlformats).*$/i).test(file.file_mimetype)) {
+                iElement = drawGeneric(file.filename);
+                wrap.append(iElement);
                 img = drawImage(getOfficePreview(file, options)).on('error', { name: file.filename }, officeIconError);
+                img.css('visibility', 'hidden');
+                img.on('load', function (event) {
+                    iElement.remove();
+                    img.css('visibility', '');
+                });
+
             } else {
                 img = drawGeneric(file.filename);
             }
             this.append(
-                $('<div class="wrap">').append(img),
+                wrap.append(img),
                 $('<div class="title">').text(gt.noI18n(cut(file.title)))
             );
         }
