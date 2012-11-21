@@ -4241,15 +4241,20 @@ define('io.ox/office/editor/editor',
          *  where the width is smaller or equal to maxWidth.
          */
         function createTabFillCharString(element, maxWidth, fillChar) {
-            var charWidth = 0, numChars;
+            var charWidth = 0, numChars, string = '', width = 0;
 
             charWidth = Utils.convertLengthToHmm($(element).text(fillChar).width(), 'px');
             numChars = Math.floor(maxWidth / charWidth);
 
-            if (numChars > 0)
-                return (new Array(numChars + 1)).join(fillChar);
-            else
-                return '';
+            if (numChars > 0) {
+                string = (new Array(numChars + 1)).join(fillChar).toString();
+
+                width = Utils.convertLengthToHmm($(element).text(string).width(), 'px');
+                if (width >= maxWidth)
+                    string = string.slice(0, string.length);
+            }
+
+            return string;
         }
 
         // ==================================================================

@@ -100,8 +100,14 @@
             margin: 0;
             line-height: 0;
         
-            > div.field, > div.tab, div.list-label {
+            > div.field, > div.list-label {
                 display: inline-block;
+            }
+            
+            /* needs white-space: nowrap to have correct width */
+            > div.tab {
+                display: inline-block;
+                white-space: nowrap;
             }
 
             /* default text formatting (also for fields and list labels) */
