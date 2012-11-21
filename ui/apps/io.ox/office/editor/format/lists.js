@@ -353,7 +353,7 @@ define('io.ox/office/editor/format/lists',
                     freeId = lists[index].listIdentifier + 1;
                 }
             }
-            var newOperation = { name: Operations.INSERT_LIST, listname: freeId };
+            var newOperation = { name: Operations.INSERT_LIST, listName: freeId };
             if (type === 'bullet') {
                 newOperation.listDefinition = _.copy(defaultBulletListDefinition, true);
                 if (options && options.symbol && options.symbol !== '*') {
