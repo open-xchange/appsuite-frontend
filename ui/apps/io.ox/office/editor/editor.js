@@ -3383,7 +3383,7 @@ define('io.ox/office/editor/editor',
 
                     allRows.each(function (index) {
 
-                        var rowPos = operation.position.concat([index]),
+                        var rowPos = operation.start.concat([index]),
                             cells = $(this).children(),
                             oneRowCellArray =  allCellRemovePositions[index],
                             end = oneRowCellArray.pop(),
