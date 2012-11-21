@@ -544,6 +544,9 @@ define('io.ox/office/editor/hyperlink',
                         startFound = true;
                         startPos = Hyperlink.findLeftWordPosition(text, leftPos, pos, separators);
                         endPos = Math.max(startPos, pos - 1);
+
+                        // make the final slice using startPos and endPos
+                        text = text.slice(startPos, endPos + 1);
                         return Utils.Break;
                     }
                 }
