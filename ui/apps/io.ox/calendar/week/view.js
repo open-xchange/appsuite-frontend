@@ -897,6 +897,19 @@ define('io.ox/calendar/week/view',
                 .draggable({
                     grid: [colWidth, self.gridHeight()],
                     scroll: true,
+                    containment: self.$el,
+                    revertDuration: 0,
+                    revert: function (drop) {
+                        //if false then no socket object drop occurred.
+                        if (drop === false) {
+                            //revert the peg by returning true
+                            $(this).show();
+                            return true;
+                        } else {
+                            //return false so that the peg does not revert
+                            return false;
+                        }
+                    },
                     start: function (e, ui) {
                         // write all appointment divs to draggable object
                         var d = $(this).data('draggable');
@@ -1022,6 +1035,8 @@ define('io.ox/calendar/week/view',
                         d.my = null;
                     }
                 });
+
+            $('.week-container .day').droppable();
 
             // remove unused resizable panes
             $('.day>.appointment.rmnorth .ui-resizable-n, .day>.appointment.rmsouth .ui-resizable-s', this.$el)
