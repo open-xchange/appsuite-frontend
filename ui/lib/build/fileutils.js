@@ -20,8 +20,8 @@ var _ = require("../underscore");
 /**
  * Default destination directory.
  * @type String
- * @name exports.builddir
  */
+exports.builddir = process.env.builddir || "build";
 
 /**
  * Resolves a filename relative to the build directory.
@@ -30,6 +30,18 @@ var _ = require("../underscore");
  * @return The filename in the build directory.
  */
 exports.dest = function(name) { return path.join(exports.builddir, name); };
+
+/**
+ * Resolves a filename relative to the source directory.
+ * When building an external app this is not the same as the current directory.
+ * @param {String} name The filename to resolve
+ * @type String
+ * @return The filename in the source directory.
+ */
+exports.source = function(name) {
+    if (process.env.BASEDIR) return process.env.BASEDIR + "/" + name;
+    return name;
+};
 
 /**
  * Number of generated files.
@@ -91,6 +103,7 @@ var topLevelTaskName = null;
  * task as dependencies.
  * @param {String} name An optional name of the new task. If not specified,
  * no new task is created and automatic dependencies won't be created anymore.
+ * All parameters are passed unmodified to the task() function.
  */
 exports.topLevelTask = function(name) {
     topLevelTaskName = name;
@@ -196,7 +209,7 @@ exports.file = function(dest, deps, callback, options, type) {
         callback.apply(this, arguments);
         counter++;
     }, options);
-    file(dest, [dir, "Jakefile.js"]);
+    file(dest, [dir, exports.source("Jakefile.js")]);
     var obj = { type: exports.fileType(type || path.extname(dest)) };
     var handlers = obj.type.getHooks("handler");
     for (var i = 0; i < handlers.length; i++) handlers[i].call(obj, dest);
@@ -256,7 +269,7 @@ exports.concat = function(name, files, options) {
         if (typeof files[i] == "string") deps.push(path.join(srcDir, files[i]));
     }
     deps.push(destDir);
-    deps.push("Jakefile.js");
+    deps.push(exports.source("Jakefile.js"));
     directory(destDir);
     file(dest, deps, function() {
         var data = [];

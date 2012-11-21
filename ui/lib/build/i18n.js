@@ -203,7 +203,7 @@ exports.modules = {
             if (modifiedModules[target]) writeModule(target);
         }
         modifiedModules = {};
-        fs.writeFileSync(gtModulesFilename, JSON.stringify(gtModules));
+        fs.writeFileSync(gtModulesFilename, JSON.stringify(gtModules, null, 4));
     }
 };
 
