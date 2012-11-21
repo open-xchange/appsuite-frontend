@@ -135,7 +135,7 @@ define('io.ox/core/commons-folderview',
             index: 100,
             draw: function (baton) {
                 this.append($('<li>').append(
-                    $('<a href="#">').text(gt('Add subfolder'))
+                    $('<a href="#" data-action="add-subfolder">').text(gt('Add subfolder'))
                     .on('click', { app: baton.app }, addSubFolder)
                 ));
             }
@@ -154,7 +154,7 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
                 if (baton.options.type === 'mail') {
                     this.append($('<li>').append(
-                        $('<a href="#">').text(gt('Add mail account')).on('click', addAccount)
+                        $('<a href="#" data-action="add-mail-account">').text(gt('Add mail account')).on('click', addAccount)
                     ));
                 }
             }
@@ -171,7 +171,8 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
                 if (baton.options.type === 'mail') {
                     this.append($('<li>').append(
-                        $('<a href="#">').text(gt('Subscribe IMAP folders')).on('click', { app: baton.app, selection: baton.tree.selection }, subscribeIMAPFolder)
+                        $('<a href="#" data-action="subscribe">').text(gt('Subscribe IMAP folders'))
+                        .on('click', { app: baton.app, selection: baton.tree.selection }, subscribeIMAPFolder)
                     ));
                 }
             }
@@ -187,7 +188,7 @@ define('io.ox/core/commons-folderview',
             index: 100,
             draw: function (baton) {
                 this.append($('<li>').append(
-                    $('<a href="#">').text(gt('Rename'))
+                    $('<a href="#" data-action="rename">').text(gt('Rename'))
                     .on('click', { app: baton.app }, renameFolder)
                 ));
             }
@@ -204,7 +205,7 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
                 this.append(
                     $('<li>').append(
-                        $('<a href="#">').text(gt('Delete'))
+                        $('<a href="#" data-action="delete">').text(gt('Delete'))
                         .on('click', { app: baton.app }, deleteFolder)
                     )
                 );

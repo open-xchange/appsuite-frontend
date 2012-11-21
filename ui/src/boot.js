@@ -60,7 +60,7 @@ $(document).ready(function () {
     // feedback
     function feedback(type, node) {
         $("#io-ox-login-feedback").empty().append(
-            $('<div class="alert alert-block alert-' + type + '">').append(node)
+            $('<div class="alert alert-block alert-' + type + ' selectable-text">').append(node)
         );
     }
 
