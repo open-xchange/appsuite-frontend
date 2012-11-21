@@ -243,6 +243,49 @@ define('io.ox/office/tk/alert',
     };
 
     /**
+     * Creates a close-able, generic error alert and inserts it at the beginning of the given dom node.
+     * Removes a present alert before adding the new one.
+     *
+     *  @param {jQuery | Object} node
+     *      The DOM node to add the alert to.
+     *  @param {String} message
+     *      The alert message.
+     *  @param {String} [title='Error']
+     *      The alert title
+     */
+    Alert.showGenericError = function (node, message, title) {
+        Alert.showError(title || gt('Error'), message, true, node, undefined, -1);
+    };
+
+    /**
+     * Creates a close-able ajax error alert and inserts it at the beginning of the given dom node.
+     * Removes a present alert before adding the new one.
+     *
+     *  @param {jQuery | Object} node
+     *      The DOM node to add the alert to.
+     *  @param {Object} response
+     *      Response object returned by the failed AJAX call.
+     */
+    Alert.showAjaxError = function (node, response) {
+        Alert.showError(gt('AJAX Error'), response.responseText, true, node, undefined, -1);
+    };
+
+    /**
+     * Creates a close-able error alert for an unhandled exception
+     * and inserts it at the beginning of the given dom node.
+     *
+     * Removes a present alert before adding the new one.
+     *
+     *  @param {jQuery | Object} node
+     *      The DOM node to add the alert to.
+     *  @param exception
+     *      The exception to be reported.
+     */
+    Alert.showExceptionError = function (node, exception) {
+        Alert.showError(gt('Internal Error'), gt('Exception caught: ') + exception, true, node, undefined, -1);
+    };
+
+    /**
      * Returns true if the node contains an Alert
      *
      * @param {jQuery | Object} node the dom node to look for the node in.
