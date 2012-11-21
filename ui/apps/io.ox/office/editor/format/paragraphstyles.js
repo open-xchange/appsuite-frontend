@@ -291,6 +291,14 @@ define('io.ox/office/editor/format/paragraphstyles',
                         leftPadding += listObject.firstLine;
                         leftMargin += listObject.indent - listObject.firstLine;
                     }
+                    var listLabel = $(paragraph).children(DOM.LIST_LABEL_NODE_SELECTOR);
+                    if (listLabel.length) {
+                        var listSpan = listLabel.children('span');
+                        if (listObject.fontSize)
+                            listSpan.css('font-size', listObject.fontSize + 'pt');
+                        if (listObject.color)
+                            Color.setElementTextColor(listSpan, documentStyles.getCurrentTheme(),  listObject, attributes);
+                    }
                 }
             }
 
