@@ -67,10 +67,10 @@ define('io.ox/mail/write/main',
             currentSignature = '',
             editorMode,
             defaultEditorMode = settings.get('messageFormat'),
-            mailState,
             composeMode,
             view,
-            model;
+            model,
+            previous;
 
         function getDefaultEditorMode() {
             if (defaultEditorMode === 'text') return 'text';
@@ -92,25 +92,6 @@ define('io.ox/mail/write/main',
         };
 
         window.newmailapp = function () { return app; };
-
-        app.STATES = {
-            'CLEAN': 1,
-            'DIRTY': 2
-        };
-
-        mailState = app.STATES.CLEAN;
-
-        app.getState = function () {
-            return mailState;
-        };
-
-        app.markDirty = function () {
-            mailState = app.STATES.DIRTY;
-        };
-
-        app.markClean = function () {
-            mailState = app.STATES.CLEAN;
-        };
 
         view.signatures = _(config.get('gui.mail.signatures', [])).map(function (obj) {
             obj.signature_name = _.noI18n(obj.signature_name);
@@ -214,8 +195,6 @@ define('io.ox/mail/write/main',
          */
         app.setFormat = (function () {
 
-            app.markDirty();
-
             function load(mode, content) {
                 var editorSrc = 'io.ox/core/tk/' + (mode === 'html' ? 'html-editor' : 'text-editor');
                 return require([editorSrc]).pipe(function (Editor) {
@@ -279,12 +258,10 @@ define('io.ox/mail/write/main',
         }());
 
         app.setSubject = function (str) {
-            app.markDirty();
             view.subject.val(str || '');
         };
 
         app.setRawBody = function (str) {
-            app.markDirty();
             app.getEditor().setContent(str);
         };
 
@@ -311,7 +288,6 @@ define('io.ox/mail/write/main',
         };
 
         app.setBody = function (str) {
-            app.markDirty();
             // get default signature
             var ds = _(view.signatures)
                     .find(function (o) {
@@ -362,7 +338,6 @@ define('io.ox/mail/write/main',
         };
 
         app.setAttachments = function (list) {
-            app.markDirty();
             // look for real attachments
             var found = false;
             _(list || []).each(function (attachment) {
@@ -381,7 +356,6 @@ define('io.ox/mail/write/main',
         };
 
         app.setNestedMessages = function (list) {
-            app.markDirty();
             var found = false;
             _(list || []).each(function (obj) {
                 found = true;
@@ -395,7 +369,6 @@ define('io.ox/mail/write/main',
         };
 
         app.addFiles = function (list) {
-            app.markDirty();
             var found = false;
             _(list || []).each(function (obj) {
                 found = true;
@@ -409,7 +382,6 @@ define('io.ox/mail/write/main',
         };
 
         app.setPriority = function (prio) {
-            app.markDirty();
             // be robust
             prio = parseInt(prio, 10) || 3;
             prio = prio < 3 ? 1 : prio;
@@ -424,24 +396,20 @@ define('io.ox/mail/write/main',
         };
 
         app.setAttachVCard = function (bool) {
-            app.markDirty();
             // set
             view.form.find('input[name=vcard]').prop('checked', !!bool);
         };
 
         app.setDeliveryReceipt = function (bool) {
-            app.markDirty();
             // set
             view.form.find('input[name=receipt]').prop('checked', !!bool);
         };
 
         app.setMsgRef = function (ref) {
-            app.markDirty();
             view.form.find('input[name=msgref]').val(ref || '');
         };
 
         app.setSendType = function (type) {
-            app.markDirty();
             view.form.find('input[name=sendtype]').val(type || mailAPI.SENDTYPE.NORMAL);
         };
 
@@ -450,6 +418,10 @@ define('io.ox/mail/write/main',
             replyall: gt('Reply all'),
             reply: gt('Reply'),
             forward: gt('Forward')
+        };
+
+        app.isDirty = function () {
+            return !_.isEqual(previous, app.getMail());
         };
 
         app.setMail = function (mail) {
@@ -488,19 +460,21 @@ define('io.ox/mail/write/main',
             // set signature
             currentSignature = mail.signature || '';
             // set format
-            return app.setFormat(mail.format)
-                .done(function () {
-                    // set body
-                    var content = data.attachments && data.attachments.length ? data.attachments[0].content : '';
-                    if (mail.format === 'text') {
-                        content = content.replace(/<br>\n?/g, '\n');
-                    }
-                    // image URL fix
-                    if (editorMode === 'html') {
-                        content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
-                    }
-                    app[mail.initial ? 'setBody' : 'setRawBody'](content);
-                });
+            return app.setFormat(mail.format).done(function () {
+                // set body
+                var content = data.attachments && data.attachments.length ? data.attachments[0].content : '';
+                if (mail.format === 'text') {
+                    content = content.replace(/<br>\n?/g, '\n');
+                }
+                // image URL fix
+                if (editorMode === 'html') {
+                    content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
+                }
+                app[mail.initial ? 'setBody' : 'setRawBody'](content);
+
+                // remember this state for dirty check
+                previous = app.getMail();
+            });
         };
 
         app.failSave = function () {
@@ -518,6 +492,7 @@ define('io.ox/mail/write/main',
             win.busy().show(function () {
                 _.url.hash('app', 'io.ox/mail/write:' + point.mode);
                 app.setMail(point).done(function () {
+                    previous = null; // always dirty this way
                     app.getEditor().focus();
                     win.idle();
                     def.resolve();
@@ -769,7 +744,6 @@ define('io.ox/mail/write/main',
 
             function cont() {
                 // close window now (!= quit / might be reopened)
-                app.markClean();
                 win.busy().preQuit();
                 // send!
                 mailAPI.send(mail.data, mail.files)
@@ -834,7 +808,6 @@ define('io.ox/mail/write/main',
                         def.reject(result);
                     } else {
                         notifications.yell('success', gt('Mail saved as draft'));
-                        app.markClean();
                         def.resolve(result);
                     }
                 });
@@ -867,7 +840,7 @@ define('io.ox/mail/write/main',
                 app = win = editor = currentSignature = editorHash = null;
             };
 
-            if (app.getState() === app.STATES.DIRTY) {
+            if (app.isDirty()) {
                 require(["io.ox/core/tk/dialogs"], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt("Do you really want to discard this mail?"))
