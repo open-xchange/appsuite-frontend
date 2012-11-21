@@ -639,33 +639,17 @@ msgstr "In %d Stunden:"
 msgid "Started %s days ago:"
 msgstr "Vor %s Tagen begonnen:"
 
-<<<<<<< HEAD
 #: apps/plugins/portal/appointments/register.js:47
 msgid "In %s days:"
 msgstr "In %s Tagen:"
-=======
-#. %1$s is the number of currently attachened attachments
-#: apps/io.ox/tasks/edit/view.js:77 apps/io.ox/tasks/edit/view.js:99
-#: apps/io.ox/tasks/edit/view.js:107 apps/io.ox/tasks/edit/view.js:118
-#, fuzzy, c-format
-msgid "Attachments (%1$s)"
-msgstr "Anlagen (%1$s)"
->>>>>>> 7a25fb3b5c33b60262ad15d03024f366f9f06841
 
 #: apps/plugins/portal/appointments/register.js:51
 msgid "Started %s weeks ago:"
 msgstr "Vor %s Wochen begonnen:"
 
-<<<<<<< HEAD
 #: apps/plugins/portal/appointments/register.js:51
 msgid "In %s weeks:"
 msgstr "In %s Wochen:"
-=======
-#: apps/io.ox/tasks/view-detail.js:153
-#, fuzzy
-msgid "Attachments   "
-msgstr "Anlagen   "
->>>>>>> 7a25fb3b5c33b60262ad15d03024f366f9f06841
 
 #: apps/plugins/portal/appointments/register.js:84
 msgid "Next appointment"
@@ -1074,17 +1058,10 @@ msgstr "Diashow"
 msgid "Preview"
 msgstr "Vorschau"
 
-<<<<<<< HEAD
 #: apps/io.ox/core/tk/attachments.js:203 apps/io.ox/mail/actions.js:757
 #: apps/io.ox/tasks/actions.js:334
 msgid "Open in new tab"
 msgstr "In neuem Reiter öffnen"
-=======
-#: apps/io.ox/office/editor/view/controls.js:30
-#, fuzzy
-msgid "Dark Red"
-msgstr "Rot"
->>>>>>> 7a25fb3b5c33b60262ad15d03024f366f9f06841
 
 #: apps/io.ox/core/tk/attachments.js:210 apps/io.ox/files/actions.js:375
 #: apps/io.ox/files/actions.js:440 apps/io.ox/mail/actions.js:764
