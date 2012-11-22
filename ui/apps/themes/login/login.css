@@ -244,15 +244,6 @@ html, body {
     opacity: .3;
 }
 
-/* ipad
-@media screen and (orientation: portrait) {
-    body { width: 768px; }
-}
-@media screen and (orientation: landscape) {
-    body { width: 1024px; }
-}
-*/
-
 @media (max-width: 767px) {
     #io-ox-login-header { height: 15%; }
     #io-ox-login-header h1 { font-size: 14pt; margin: 2em 0 2em 0; }

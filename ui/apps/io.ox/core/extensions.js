@@ -317,9 +317,14 @@ define("io.ox/core/extensions",
     Baton.prototype = {
 
         isDefaultPrevented: returnFalse,
+        isPropagationStopped: returnFalse,
 
         preventDefault: function () {
             this.isDefaultPrevented = returnTrue;
+        },
+
+        stopPropagation: function () {
+            this.isPropagationStopped = returnTrue;
         }
     };
 

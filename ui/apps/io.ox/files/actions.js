@@ -47,7 +47,6 @@ define("io.ox/files/actions",
     });
 
     new Action('io.ox/files/actions/upload', {
-        id: 'upload',
         requires: 'create',
         action: function (baton) {
             require(['io.ox/files/views/create'], function (create) {
@@ -61,7 +60,6 @@ define("io.ox/files/actions",
     });
 
     new Action('io.ox/files/actions/share', {
-        id: 'share',
         action: function (baton) {
             require(['io.ox/publications/wizard'], function (wizard) {
                 wizard.oneClickAdd(baton.app.folder.get());
@@ -71,7 +69,6 @@ define("io.ox/files/actions",
 
     // editor
     new Action('io.ox/files/actions/editor', {
-        id: 'editor',
         requires: function (e) {
             return e.collection.has('one') && (/\.(txt|js|md)$/i).test(e.context.data.filename);
         },
@@ -83,7 +80,6 @@ define("io.ox/files/actions",
     });
 
     new Action('io.ox/files/actions/editor-new', {
-        id: 'editor-new',
         action: function (baton) {
             ox.launch('io.ox/editor/main').done(function () {
                 this.create({ folder: baton.app.folder.get() });
@@ -92,14 +88,12 @@ define("io.ox/files/actions",
     });
 
     new Action('io.ox/files/actions/office/newdocument', {
-        id: 'officenew',
         action: function (baton) {
             ox.launch('io.ox/office/editor/main', { action: 'new', folder_id: baton.app.folder.get() });
         }
     });
 
     new Action('io.ox/files/actions/office/editor', {
-        id: 'officeeditor',
         requires: function (e) {
             var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
             return e.collection.has('one') && pattern.test(e.context.data.filename);
@@ -110,7 +104,6 @@ define("io.ox/files/actions",
     });
 
     new Action('io.ox/files/actions/office/view', {
-        id: 'officepreview',
         requires: function (e) {
             return e.collection.has('one') && /\.(doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg)$/i.test(e.context.data.filename);
         },
@@ -120,7 +113,6 @@ define("io.ox/files/actions",
     });
 
     new Action('io.ox/files/actions/download', {
-        id: 'download',
         requires: 'some',
         multiple: function (list) {
             // loop over list, get full file object and trigger downloads
@@ -136,7 +128,6 @@ define("io.ox/files/actions",
     });
 
     new Action('io.ox/files/actions/edit', {
-        id: 'edit',
         requires: 'one modify',
         action: function (baton) {
             baton.view.edit();
@@ -144,7 +135,6 @@ define("io.ox/files/actions",
     });
 
     new Action('io.ox/files/actions/open', {
-        id: 'open',
         requires: 'some',
         multiple: function (list) {
             // loop over list, get full file object and open new window
@@ -177,7 +167,6 @@ define("io.ox/files/actions",
     });
 
     new Action('io.ox/files/actions/send', {
-        id: 'send',
         requires: 'some',
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -191,7 +180,6 @@ define("io.ox/files/actions",
     });
 
     new Action('io.ox/files/actions/delete', {
-        id: 'delete',
         requires: 'some',
         multiple: function (list) {
             var question = gt.ngettext(
@@ -217,7 +205,6 @@ define("io.ox/files/actions",
 
     // edit mode actions
     ext.point("io.ox/files/actions/edit/save").extend({
-        id: "save",
         action: function (baton) {
             var updatedFile = baton.view.getModifiedFile();
             baton.view.endEdit();
@@ -226,7 +213,6 @@ define("io.ox/files/actions",
     });
 
     ext.point("io.ox/files/actions/edit/cancel").extend({
-        id: "cancel",
         action: function (baton) {
             baton.view.endEdit();
         }
@@ -236,7 +222,6 @@ define("io.ox/files/actions",
     // version specific actions
 
     new Action('io.ox/files/versions/actions/makeCurrent', {
-        id: 'makeCurrent',
         action: function (data) {
             api.update({
                 id: data.id,
@@ -247,7 +232,6 @@ define("io.ox/files/actions",
     });
 
     new Action('io.ox/files/versions/actions/delete', {
-        id: 'delete',
         action: function (data) {
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 // get proper question
