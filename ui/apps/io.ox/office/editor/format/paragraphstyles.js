@@ -259,6 +259,7 @@ define('io.ox/office/editor/format/paragraphstyles',
                 setBorder({ style: 'none' }, 'top', topMargin);
                 prevParagraph.css("padding-bottom", this.getCssBorder(attributes.borderInside.space + bottomMargin));
                 prevParagraph.css("border-bottom", this.getCssBorder(attributes.borderInside));
+                prevParagraph.css('margin-bottom', 0 + 'mm');
                 topMargin = 0;
             } else {
                 setBorder(attributes.borderTop, 'top', 0);
@@ -324,6 +325,8 @@ define('io.ox/office/editor/format/paragraphstyles',
             var noDistanceToPrev = prevAttributes.contextualSpacing && attributes.style === prevAttributes.style,
                 noDistanceToNext = attributes.contextualSpacing && attributes.style === nextAttributes.style;
             if (noDistanceToPrev) {
+                //remove bottom margin from previous paragraph
+                prevParagraph.css('margin-bottom', 0 + 'mm');
                 paragraph.css('padding-top', 0 + 'mm');
                 topMargin = 0;
             }
