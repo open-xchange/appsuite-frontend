@@ -42,7 +42,7 @@ define('io.ox/calendar/list/perspective',
         commons.wireGridAndSearch(grid, win, api);
 
         // add grid options
-        grid.prop('order', 'desc')
+        grid.prop('order', 'asc')
             .prop('all', true)
             .prop('folder', app.folder.get());
 
@@ -104,7 +104,7 @@ define('io.ox/calendar/list/perspective',
                 )
                 .find('i').attr('class', 'icon-ok');
             // order
-            var opacity = [1, 0.4][props.order === 'desc' ? 'slice' : 'reverse']();
+            var opacity = [1, 0.4][props.order === 'asc' ? 'slice' : 'reverse']();
             dropdown.find('.icon-arrow-down').css('opacity', opacity[0]).end()
                 .find('.icon-arrow-up').css('opacity', opacity[1]).end();
         }
@@ -125,8 +125,8 @@ define('io.ox/calendar/list/perspective',
                                 .dropdown(),
                             $('<ul>').addClass("dropdown-menu")
                                 .append(
-                                    buildOption('asc', gt('Ascending')),
-                                    buildOption('desc', gt('Descending')),
+                                    buildOption('desc', gt('Ascending')),
+                                    buildOption('asc', gt('Descending')),
                                     $('<li class="divider">'),
                                     buildOption('all', gt('show all'))
                                 )
