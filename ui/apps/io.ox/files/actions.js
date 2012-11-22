@@ -499,11 +499,11 @@ define("io.ox/files/actions",
             }, false);
         },
         action: function (e) {
-            var baton = e.baton;
+            var baton = e.data.baton;
             require(['io.ox/files/carousel'], function (carousel) {
                 carousel.init({
                     fullScreen: false,
-                    list: e.allIds,
+                    list: e.data.allIds,
                     app: baton.app,
                     attachmentMode: false
                 });
@@ -513,17 +513,18 @@ define("io.ox/files/actions",
 
     new Action('io.ox/files/icons/slideshow-fullscreen', {
         requires: function (e) {
+
             return _(e.context.allIds).reduce(function (memo, obj) {
                 return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
             }, false);
         },
         action: function (e) {
-            var baton = e.baton;
+            var baton = e.data.baton;
             BigScreen.request(baton.app.getWindow().nodes.outer.get(0));
             require(['io.ox/files/carousel'], function (carousel) {
                 carousel.init({
                     fullScreen: true,
-                    list: e.allIds,
+                    list: e.data.allIds,
                     app: baton.app,
                     attachmentMode: false
                 });
@@ -538,10 +539,10 @@ define("io.ox/files/actions",
             }, false);
         },
         action: function (e) {
-            var baton = e.baton;
+            var baton = e.data.baton;
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
                 mediaplayer.init({
-                    list: e.allIds,
+                    list: e.data.allIds,
                     app: baton.app,
                     videoSupport: false
                 });
@@ -558,10 +559,10 @@ define("io.ox/files/actions",
             }, false);
         },
         action: function (e) {
-            var baton = e.baton;
+            var baton = e.data.baton;
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
                 mediaplayer.init({
-                    list: e.allIds,
+                    list: e.data.allIds,
                     app: baton.app,
                     videoSupport: true
                 });
