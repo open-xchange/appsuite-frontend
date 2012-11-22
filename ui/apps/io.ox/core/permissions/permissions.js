@@ -45,7 +45,7 @@ define('io.ox/core/permissions/permissions',
 
         events: {
             'click .dropdown > ul li a': 'updateDropdown',
-            'click .remove > ul li a'  : 'removeEntity'
+            'click .remove'  : 'removeEntity'
         },
 
         render: function () {
@@ -56,6 +56,7 @@ define('io.ox/core/permissions/permissions',
         },
 
         removeEntity: function () {
+            console.log('remove');
             this.collection.remove(this.model);
             this.remove();
         },
@@ -216,7 +217,7 @@ define('io.ox/core/permissions/permissions',
             folder_id = String(folder);
             api.get({ folder: folder_id }).done(function (data) {
                 try {
-                    isFolderAdmin = api.Bitmask(data.own_rights).get('admin') === 1;
+                    isFolderAdmin = api.Bitmask(data.own_rights).get('admin') >= 1;
 
                     var dialog = new dialogs.ModalDialog({
                         width: 800,
