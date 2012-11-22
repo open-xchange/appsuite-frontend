@@ -5,22 +5,22 @@
             <div class="page-header">
                 <h1>Model / View <small>Managing and responding to state changes</small></h1>
             </div>
-            
+
             <p class="lead">
-                In OX7 we use the popular backbone library as a basis for our model/view handling. 
+                In OX App Suite we use the popular backbone library as a basis for our model/view handling.
             </p>
-            
+
             <section id="basics">
                 <h2>Model/View Basics</h2>
                 <p>
-                    
+
                 </p>
             </section>
             <section id="getting_and_setting">
                 <h2>Getting and setting attributes</h2>
                 <pre class="experiment">
 var Recipe = Backbone.Model.extend({});
- 
+
 var recipe = new Recipe({
     folder: 12,
     title: 'Water',
@@ -55,7 +55,7 @@ var Recipe = Backbone.Model.extend({
             this.trigger("change:ingredients");
         }
     },
- 
+
     removeIngredient: function (ingredient) {
         this.set('ingredients', _(this.get('ingredients')).without(ingredient));
     }
@@ -77,14 +77,14 @@ print("=================");
 print(recipe.toJSON());
                 </pre>
             </section>
-            
+
             <section>
                 <h2>Creating a model factory</h2>
                 <h3>Loading an entry</h3>
                 <pre class="experiment">
 define("io.ox/lessons/recipes/model", ["io.ox/backbone/modelFactory", "io.ox/lessons/lessons/model_view/api"], function (ModelFactory, api) {
     "use strict";
-    
+
     var factory = new ModelFactory({
         ref: 'io.ox/lessons/recipes/model',
         api: api,
@@ -108,11 +108,11 @@ define("io.ox/lessons/recipes/model", ["io.ox/backbone/modelFactory", "io.ox/les
         Recipe: factory.model,
         Recipes: factory.collection
     };
-    
+
 });
 
 require(['io.ox/lessons/recipes/model'], function (model) {
-    
+
     model.factory.get({
         id: 2,
         folder: 12
@@ -125,7 +125,7 @@ require(['io.ox/lessons/recipes/model'], function (model) {
 <pre class="experiment">
 define("io.ox/lessons/recipes/model", ["io.ox/backbone/modelFactory", "io.ox/lessons/lessons/model_view/api"], function (ModelFactory, api) {
     "use strict";
-    
+
     var factory = new ModelFactory({
         ref: 'io.ox/lessons/recipes/model',
         api: api,
@@ -153,7 +153,7 @@ define("io.ox/lessons/recipes/model", ["io.ox/backbone/modelFactory", "io.ox/les
 });
 
 require(['io.ox/lessons/recipes/model'], function (model) {
-    
+
     var recipe = model.factory.create({
         title: 'Scrambled Eggs',
         ingredients: ['Eggs', 'Substitution table'],
@@ -163,11 +163,11 @@ require(['io.ox/lessons/recipes/model'], function (model) {
     // Create the recipe
     recipe.save().done(function (resp) {
         print("Saved!", resp);
-        
+
         // Load it again
         model.factory.get({id: resp.id, folder: 12}).done(function (loadedRecipe) {
             print(loadedRecipe);
-            
+
             // Modify the recipe
             loadedRecipe.set("title", "Crypted Eggs");
             loadedRecipe.removeIngredient('Substitution table');
@@ -182,13 +182,13 @@ require(['io.ox/lessons/recipes/model'], function (model) {
                 });
             }); // Now an update
         });
-        
+
     });
-    
+
 });
  </pre>
             </section>
-            
+
             <section>
                 <h3>Be observable</h3>
                 <pre class="experiment" data-context="factory">
@@ -215,7 +215,7 @@ recipe.removeIngredient('Substitution table');
 recipe.addIngredient('Salt');
 recipe.addIngredient('A secret');
                 </pre>
-                
+
                 <h3>A live view</h3>
                 <pre class="experiment" data-context="factory">
 var recipe = ctx.model.factory.create({
@@ -262,7 +262,7 @@ recipe.on("change:servings", function () {
 window.$recipe = recipe;
 
                 </pre>
-                
+
                 <h3>With an extension</h3>
                 <pre class="experiment" data-context="factory">
 var recipe = ctx.model.factory.create({
@@ -314,7 +314,7 @@ this.append("&lt;br&gt;", "&lt;br&gt;",
             nodes.titleInput.val('');
             return false;
         })
-    ), 
+    ),
     $('&lt;form class="form-inline"&gt;').append(
         nodes.ingredientInput = $('&lt;input type="text"&gt;'),
         $('&lt;button class="btn"&gt;').text("Add").on("click", function () {
@@ -367,7 +367,7 @@ print("Play with $recipes in the console");
                 <h2>Validation</h2>
                 <pre class="experiment" data-context="factory">
 require(["io.ox/core/extensions"], function (ext) {
-    
+
     ext.point('io.ox/lessons/recipes/model/validation/title').extend({
         id: 'recipes_title_begins_with_the_great',
         validate: function(value) {
@@ -378,24 +378,24 @@ require(["io.ox/core/extensions"], function (ext) {
             }
         }
     });
-    
+
     window.$recipe = ctx.model.factory.create({});
-    
+
     window.$recipe.on("invalid:title", function (messages) {
         print(messages);
     });
 
     print("Play with $recipe in the console");
-    
+
 });
 </pre>
                 <h3>Predefined validators</h3>
                 <pre class="experiment" data-context="factory">
 require(["io.ox/backbone/validation"], function (Validation) {
-    
+
     Validation.validationFor('io.ox/lessons/recipes/model', {
         title: {
-            format: 'string', 
+            format: 'string',
             mandatory: true
         },
         ingredients: {
@@ -416,13 +416,13 @@ require(["io.ox/backbone/validation"], function (Validation) {
             print(attribute + ": " + messages.join(', '));
         });
     });
-    
+
     print("Play with $recipe in the console");
 });
-</pre>          
-                
+</pre>
+
             </section>
-            
+
             <h2>Views</h2>
             <section>
                 <h3>A backbone view</h3>
@@ -431,8 +431,8 @@ var RecipeView = Backbone.View.extend({
     tagName: 'div',
     className: 'io-ox-recipe-details',
     initialize: function () {
-        _.bindAll(this); // Preserves the 'this' 
-        
+        _.bindAll(this); // Preserves the 'this'
+
         this.model.on('change:title'        , this.onTitleChange);
         this.model.on('change:ingredients'  , this.onIngredientsChange);
         this.model.on('change:description'  , this.onDescriptionChange);
@@ -487,12 +487,12 @@ var RecipeEdit = Backbone.View.extend({
     className: 'form-horizontal',
     initialize: function () {
         _.bindAll(this);
-        
+
         this.model.on('change:title'        , this.onTitleChange);
         this.model.on('change:ingredients'  , this.onIngredientsChange);
         this.model.on('change:description'  , this.onDescriptionChange);
         this.model.on('change:servings'     , this.onServingsChange);
-        
+
     },
     render: function () {
         var self = this;
@@ -506,10 +506,10 @@ var RecipeEdit = Backbone.View.extend({
                 )
             )
         );
-        
+
         this.nodes.titleInput.on("change", this.updateTitle);
         this.onTitleChange();
-        
+
         // Ingredients
         this.$el.append(
             $('&lt;div class="control-group"&gt;').append(
@@ -525,7 +525,7 @@ var RecipeEdit = Backbone.View.extend({
                 self.nodes.ingredientInput.val(ingredient);
             });
         });
-        
+
         this.$el.append(
             $('&lt;div class="control-group"&gt;').append(
                 $('&lt;div class="controls"&gt;').append(
@@ -543,8 +543,8 @@ var RecipeEdit = Backbone.View.extend({
                 )
             )
         );
-        
-        
+
+
         // Description
         this.$el.append(
             $('&lt;div class="control-group"&gt;').append(
@@ -556,7 +556,7 @@ var RecipeEdit = Backbone.View.extend({
         );
         this.nodes.descriptionInput.on("change", this.updateDescription);
         this.onDescriptionChange();
-        
+
         // Servings
         this.$el.append(
             $('&lt;div class="control-group"&gt;').append(
@@ -566,10 +566,10 @@ var RecipeEdit = Backbone.View.extend({
                 )
             )
         );
-        
+
         this.nodes.servingsInput.on("change", this.updateServings);
         this.onServingsChange();
-        
+
         return this;
     },
     onTitleChange: function () {
@@ -617,14 +617,14 @@ recipe.on("change", function () {
     attributeNode.text(JSON.stringify(recipe, null, 4));
 });
 </pre>
-                
+
                 <h3>With Validation</h3>
                 <pre class="experiment" data-context="factory">
 require(["io.ox/backbone/validation"], function (Validation) {
 
     Validation.validationFor('io.ox/lessons/recipes/model', {
         title: {
-            format: 'string', 
+            format: 'string',
             mandatory: true
         },
         ingredients: {
@@ -644,18 +644,18 @@ var RecipeEdit = Backbone.View.extend({
     className: 'form-horizontal',
     initialize: function () {
         _.bindAll(this);
-        
+
         this.model.on('change:title'        , this.onTitleChange);
         this.model.on('change:ingredients'  , this.onIngredientsChange);
         this.model.on('change:description'  , this.onDescriptionChange);
         this.model.on('change:servings'     , this.onServingsChange);
-        
+
         this.model.on("invalid:title"       , this.titleError);
         //this.model.on("invalid:ingredients" , this.ingredientsError);
         this.model.on("invalid:description" , this.descriptionError);
         this.model.on("invalid:servings"    , this.servingsError);
         this.model.on("valid"               , this.clearError);
-        
+
     },
     render: function () {
         var self = this;
@@ -671,10 +671,10 @@ var RecipeEdit = Backbone.View.extend({
                 )
             )
         );
-        
+
         this.nodes.titleInput.on("change", this.updateTitle);
         this.onTitleChange();
-        
+
         // Ingredients
         this.$el.append(
             $('&lt;div class="control-group"&gt;').append(
@@ -690,7 +690,7 @@ var RecipeEdit = Backbone.View.extend({
                 self.nodes.ingredientInput.val(ingredient);
             });
         });
-        
+
         this.$el.append(
             $('&lt;div class="control-group"&gt;').append(
                 $('&lt;div class="controls"&gt;').append(
@@ -708,8 +708,8 @@ var RecipeEdit = Backbone.View.extend({
                 )
             )
         );
-        
-        
+
+
         // Description
         this.$el.append(
             $('&lt;div class="control-group"&gt;').append(
@@ -721,7 +721,7 @@ var RecipeEdit = Backbone.View.extend({
         );
         this.nodes.descriptionInput.on("change", this.updateDescription);
         this.onDescriptionChange();
-        
+
         // Servings
         this.$el.append(
             $('&lt;div class="control-group"&gt;').append(
@@ -731,10 +731,10 @@ var RecipeEdit = Backbone.View.extend({
                 )
             )
         );
-        
+
         this.nodes.servingsInput.on("change", this.updateServings);
         this.onServingsChange();
-        
+
         return this;
     },
     onTitleChange: function () {
@@ -791,7 +791,7 @@ var RecipeEdit = Backbone.View.extend({
         this.nodes.errorBox.show();
         this.nodes.servingsInput.closest('.control-group').addClass("error");
     },
-    
+
     clearError: function () {
         this.nodes.errorBox.empty().hide();
         this.$el.find('.error').removeClass('error');
@@ -819,9 +819,9 @@ recipe.on("change", function () {
                 <h3>An extensible OX view</h3>
                 <pre class="experiment" data-context="factory">
 require(["io.ox/backbone/views"], function (views) {
-    
+
     var point = views.point("io.ox/lessons/recipes/details");
-    
+
     point.extend({
         id: 'title',
         index: 100,
@@ -833,9 +833,9 @@ require(["io.ox/backbone/views"], function (views) {
         onTitleChange: function () {
             this.$el.text(this.model.get('title'));
         }
-        
+
     });
-    
+
     point.extend({
         id: 'ingredients',
         index: 200,
@@ -854,7 +854,7 @@ require(["io.ox/backbone/views"], function (views) {
             });
         }
     });
-    
+
     point.extend({
         id: 'description',
         index: 300,
@@ -866,9 +866,9 @@ require(["io.ox/backbone/views"], function (views) {
         onDescriptionChange: function () {
             this.$el.text(this.model.get('description'));
         }
-        
+
     });
-    
+
     point.extend({
         id: 'servings',
         index: 400,
@@ -880,14 +880,14 @@ require(["io.ox/backbone/views"], function (views) {
         onServingsChange: function () {
             this.$el.text("Servings: " + this.model.get('servings'));
         }
-        
+
     });
-    
+
     var RecipeView = point.createView({
         tagName: 'div',
         className: 'io-ox-recipe-details'
     });
-    
+
     window.$recipe = ctx.model.factory.create({
         title: 'Scrambled Eggs',
         ingredients: ['Eggs', 'Substitution table'],
@@ -895,10 +895,10 @@ require(["io.ox/backbone/views"], function (views) {
         servings: 1,
         folder: 12
     });
-    
+
     parentNode.append(new RecipeView({model: window.$recipe}).render().$el);
-    
-    
+
+
 });
 </pre>
             <h3>DRYing things up</h3>
@@ -909,7 +909,7 @@ require(["io.ox/backbone/views"], function (views) {
 
     function AttributeView(options) {
         _.extend(this, {
-            
+
             render: function () {
                 this.$el.text(this.model.get(this.attribute));
                 this.observeModel('change:' + this.attribute, _.bind(this.updateText, this));
@@ -989,7 +989,7 @@ require(["io.ox/backbone/views"], function (views) {
 
 });
             </pre>
-            
+
             <h3>Using the predefined AttributeView</h3>
                         <pre class="experiment" data-context="factory">
 require(["io.ox/backbone/views"], function (views) {
@@ -1063,15 +1063,15 @@ require(["io.ox/backbone/views"], function (views) {
     parentNode.append(new RecipeView({model: window.$recipe}).render().$el);
 });
             </pre>
-            
+
             </section>
             <section>
                 <h3>An extensible OX form</h3>
                 <pre class="experiment" data-context="factory">
 require(["io.ox/backbone/views", "io.ox/backbone/forms"], function (views, forms) {
-    
+
     var point = views.point("io.ox/lessons/recipes/edit");
-    
+
     point.extend(new forms.ControlGroup({
         id: 'title',
         index: 100,
@@ -1079,13 +1079,13 @@ require(["io.ox/backbone/views", "io.ox/backbone/forms"], function (views, forms
         label: 'Title',
         control: '&lt;input type="text" class="input-xlarge"&gt;'
     }));
-    
+
     point.extend({
         id: 'ingredients-list',
         index: 200,
         render: function () {
             var self = this;
-            
+
             this.nodes = {};
             this.$el.append(
                 $('&lt;div class="control-group"&gt;').append(
@@ -1095,7 +1095,7 @@ require(["io.ox/backbone/views", "io.ox/backbone/forms"], function (views, forms
                     )
                 )
             );
-            
+
             _(this.model.get("ingredients")).each(function (ingredient) {
                 self.nodes.ingredients.append($("&lt;li&gt;").text(ingredient));
             });
@@ -1106,20 +1106,20 @@ require(["io.ox/backbone/views", "io.ox/backbone/forms"], function (views, forms
         onChangeIngredients: function () {
             var self = this;
             this.nodes.ingredients.empty();
-            
+
             _(this.model.get("ingredients")).each(function (ingredient) {
                 self.nodes.ingredients.append($("&lt;li&gt;").text(ingredient));
             });
         }
     });
-    
+
     point.extend({
         id: 'ingredient-modify',
         index: 250,
         render: function () {
             var self = this;
             this.nodes = {};
-            
+
             this.$el.append(
                 $('&lt;div class="control-group"&gt;').append(
                     $('&lt;div class="controls"&gt;').append(
@@ -1139,7 +1139,7 @@ require(["io.ox/backbone/views", "io.ox/backbone/forms"], function (views, forms
             );
         }
     });
-    
+
     point.extend(new forms.ControlGroup({
         id: 'description',
         index: 300,
@@ -1147,7 +1147,7 @@ require(["io.ox/backbone/views", "io.ox/backbone/forms"], function (views, forms
         control: '&lt;textarea class="input-xlarge" rows="10"&gt;',
         label: 'Description'
     }));
-    
+
     point.extend(new forms.ControlGroup({
         id: 'servings',
         index: 400,
@@ -1155,12 +1155,12 @@ require(["io.ox/backbone/views", "io.ox/backbone/forms"], function (views, forms
         label: 'Servings',
         control: '&lt;input type="text" class="input-xlarge"&gt;'
     }));
-    
+
     var RecipeEdit = point.createView({
         tagName: 'form',
         className: 'form-horizontal'
     });
-    
+
     window.$recipe = ctx.model.factory.create({
         title: 'Scrambled Eggs',
         ingredients: ['Eggs', 'Substitution table'],
@@ -1170,13 +1170,13 @@ require(["io.ox/backbone/views", "io.ox/backbone/forms"], function (views, forms
     });
 
     parentNode.append(new RecipeEdit({model: window.$recipe}).render().$el);
-    
+
     var attributeNode;
     parentNode.append(attributeNode = $('&lt;pre&gt;').text(JSON.stringify(window.$recipe, null, 4)));
     window.$recipe.on("change", function () {
         attributeNode.text(JSON.stringify(window.$recipe, null, 4));
     });
-    
+
 });
 </pre>
             </section>

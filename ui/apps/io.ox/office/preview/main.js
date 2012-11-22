@@ -18,9 +18,10 @@ define('io.ox/office/preview/main',
      'io.ox/office/preview/model',
      'io.ox/office/preview/controller',
      'io.ox/office/preview/view',
+     'io.ox/office/tk/alert',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.css'
-    ], function (Utils, Application, Actions, PreviewModel, PreviewController, PreviewView, gt) {
+    ], function (Utils, Application, Actions, PreviewModel, PreviewController, PreviewView, Alert, gt) {
 
     'use strict';
 
@@ -42,41 +43,6 @@ define('io.ox/office/preview/main',
 
         // private methods ----------------------------------------------------
 
-        /**
-         * Shows a closable error message above the preview.
-         *
-         * @param {String} message
-         *  The message text.
-         *
-         * @param {String} [title='Error']
-         *  The title of the error message. Defaults to 'Error'.
-         */
-        function showError(message, title) {
-            self.getWindow().nodes.main
-                .find('.alert').remove().end()
-                .prepend($.alert(title || gt('Error'), message));
-        }
-
-        /**
-         * Shows an error message extracted from the error object returned by
-         * a jQuery AJAX call.
-         *
-         * @param {Object} response
-         *  Response object returned by the failed AJAX call.
-         */
-        function showAjaxError(response) {
-            showError(response.responseText, gt('AJAX Error'));
-        }
-
-        /**
-         * Shows an error message for an unhandled exception.
-         *
-         * @param exception
-         *  The exception to be reported.
-         */
-        function showExceptionError(exception) {
-            showError('Exception caught: ' + exception, 'Internal Error');
-        }
 
         /**
          * Sets application title (launcher) and window title according to the
@@ -126,13 +92,13 @@ define('io.ox/office/preview/main',
                             model.setPreviewDocument(previewDocument);
                             def.resolve();
                         } else {
-                            showError(gt('An error occurred while loading the document.'), gt('Load Error'));
+                            Alert.showGenericError(self.getWindow().nodes.main.children('.toolpane'), gt('An error occurred while loading the document.'), gt('Load Error'));
                             model.setPreviewDocument(null);
                             def.reject();
                         }
                     })
                     .fail(function (response) {
-                        showAjaxError(response);
+                        Alert.showAjaxError(self.getWindow().nodes.main.children('.toolpane'), response);
                         model.setPreviewDocument(null);
                         def.reject();
                     });
