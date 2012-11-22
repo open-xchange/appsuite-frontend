@@ -71,15 +71,28 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
                 $('<div>').text(task.status).addClass("status " +  task.badge)
             );
 
-            if (data.priority === 3) {
-                $('<br>').appendTo(infoPanel);
-                $('<div>').text(gt.noI18n("\u2605\u2605\u2605")).addClass("priority").appendTo(infoPanel);
-            } else if (data.priority === 1) {
-                $('<br>').appendTo(infoPanel);
-                $('<div>').append($('<span>').text(gt.noI18n("\u2605\u2605")).css('color', '#aaa'),
-                                  $('<span>').text(gt.noI18n("\u2605"))).addClass("priority").appendTo(infoPanel);
+            var blackStars,
+                greyStars;
+            
+            switch (data.priority) {
+            case 1:
+                blackStars = "\u2605";
+                greyStars = "\u2605\u2605";
+                break;
+            case 2:
+                blackStars = "\u2605\u2605";
+                greyStars = "\u2605";
+                break;
+            case 3:
+                blackStars = "\u2605\u2605\u2605";
+                greyStars = "";
+                break;
             }
-
+            $('<br>').appendTo(infoPanel);
+            $('<div>').append($('<span>').text(gt.noI18n(greyStars)).css('color', '#aaa'),
+                              $('<span>').text(gt.noI18n(blackStars))).addClass("priority").appendTo(infoPanel);
+            blackStars = greyStars = null;
+            
             //check to see if there is a leading <br> and remove it
             var firstBr = infoPanel.find("br:first");
             if (firstBr.is(infoPanel.find("*:first"))) {
