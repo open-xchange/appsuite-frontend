@@ -28,6 +28,10 @@ define('io.ox/core/cache/localstorage', function () {
 
     var that = {
 
+        dump: function () {
+            console.log(large);
+        },
+
         setId: function (theId) {
             id = theId;
             reg = new RegExp('^' + id.replace(/\./g, '\\.') + '\\.');
@@ -179,7 +183,7 @@ define('io.ox/core/cache/localstorage', function () {
             }
             // loop over backup cache
             for (key in large) {
-                if (reg.test(id + '.' + key)) {
+                if (reg.test(key)) {
                     tmp.push(key);
                 }
             }

@@ -93,7 +93,7 @@ define('io.ox/mail/write/main',
 
         window.newmailapp = function () { return app; };
 
-        view.signatures = _(config.get('gui.mail.signatures', [])).map(function (obj) {
+        view.signatures = _(config.get('gui.mail.signatures') || []).map(function (obj) {
             obj.signature_name = _.noI18n(obj.signature_name);
             return obj;
         });
@@ -421,7 +421,7 @@ define('io.ox/mail/write/main',
         };
 
         app.isDirty = function () {
-            return !_.isEqual(previous, app.getMail());
+            return previous !== false && !_.isEqual(previous, app.getMail());
         };
 
         app.setMail = function (mail) {
@@ -534,6 +534,7 @@ define('io.ox/mail/write/main',
             _.url.hash('app', 'io.ox/mail/write:compose');
 
             win.busy().show(function () {
+
                 app.setMail({ data: data, mode: 'compose', initial: true })
                 .done(function () {
                     if (mailto) {
@@ -545,6 +546,12 @@ define('io.ox/mail/write/main',
                     }
                     win.idle();
                     def.resolve();
+                })
+                .fail(function () {
+                    previous = false;
+                    notifications.yell('error', gt('An error occured. Please try again.'));
+                    app.quit();
+                    def.reject();
                 });
             });
 
@@ -573,6 +580,12 @@ define('io.ox/mail/write/main',
                                 win.idle();
                                 def.resolve();
                             });
+                        })
+                        .fail(function () {
+                            previous = false;
+                            notifications.yell('error', gt('An error occured. Please try again.'));
+                            app.quit();
+                            def.reject();
                         });
                     });
                 }
@@ -608,6 +621,12 @@ define('io.ox/mail/write/main',
                         win.idle();
                         def.resolve();
                     });
+                })
+                .fail(function () {
+                    previous = false;
+                    notifications.yell('error', gt('An error occured. Please try again.'));
+                    app.quit();
+                    def.reject();
                 });
             });
             return def;

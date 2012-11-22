@@ -45,7 +45,6 @@ define('io.ox/mail/actions',
         id: 'delete',
         requires: 'toplevel some delete',
         multiple: function (list) {
-            console.log(list, this);
             var check = _(list).any(function (o) {
                 return account.is('trash', o.folder_id);
             });
@@ -83,10 +82,10 @@ define('io.ox/mail/actions',
             return e.collection.has('toplevel', 'one') &&
                 util.hasOtherRecipients(e.context) && e.context.folder_id !== defaultDraftFolder;
         },
-        action: function (data) {
+        action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
-                    this.replyall(data);
+                    this.replyall(baton.data);
                 });
             });
         }
@@ -97,10 +96,10 @@ define('io.ox/mail/actions',
         requires: function (e) {
             return e.collection.has('toplevel', 'one') && e.context.folder_id !== defaultDraftFolder;
         },
-        action: function (data) {
+        action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
-                    this.reply(data);
+                    this.reply(baton.data);
                 });
             });
         }
@@ -111,10 +110,10 @@ define('io.ox/mail/actions',
         requires: function (e) {
             return e.collection.has('toplevel', 'some');
         },
-        action: function (data) {
+        action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
-                    this.forward(data);
+                    this.forward(baton.data);
                 });
             });
         }
@@ -125,12 +124,12 @@ define('io.ox/mail/actions',
         requires: function (e) {
             return e.collection.has('toplevel', 'one') && e.context.folder_id === defaultDraftFolder;
         },
-        action: function (data) {
+        action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
                     var self = this;
-                    this.compose(data).done(function () {
-                        self.setMsgRef(data.folder_id + '/' + data.id);
+                    this.compose(baton.data).done(function () {
+                        self.setMsgRef(baton.data.folder_id + '/' + baton.data.id);
                         self.markClean();
                     });
                 });
@@ -141,13 +140,13 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/source', {
         id: 'source',
         requires: 'toplevel one',
-        action: function (data) {
-            var getSource = api.getSource(data), textarea;
+        action: function (baton) {
+            var getSource = api.getSource(baton.data), textarea;
             require(["io.ox/core/tk/dialogs"], function (dialogs) {
                 new dialogs.ModalDialog({ easyOut: true, width: 700 })
                     .addPrimaryButton("close", gt("Close"))
                     .header(
-                        $('<h4>').text(gt('Mail source') + ': ' + (data.subject || ''))
+                        $('<h4>').text(gt('Mail source') + ': ' + (baton.data.subject || ''))
                     )
                     .append(
                         textarea = $('<textarea class="mail-source-view input-xlarge" rows="15" readonly="readonly">')
@@ -413,9 +412,10 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/createdistlist', {
         id: 'create-distlist',
         requires: 'some',
-        action: function (data) {
+        action: function (baton) {
 
-            var collectedRecipientsArray = data.to.concat(data.cc).concat(data.from),
+            var data = baton.data,
+                collectedRecipientsArray = data.to.concat(data.cc).concat(data.from),
                 collectedRecipients = [],
                 dev = $.Deferred(),
                 arrayOfMembers = [],
@@ -467,8 +467,9 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/invite', {
         id: 'invite',
         requires: 'some',
-        action: function (data) {
-            var collectedRecipients = [],
+        action: function (baton) {
+            var data = baton.data,
+                collectedRecipients = [],
                 participantsArray = [],
                 currentId = ox.user_id,
                 currentFolder = config.get('folder.calendar'),
@@ -525,7 +526,8 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/reminder', {
         id: 'reminder',
-        action: function (data) {
+        action: function (baton) {
+            var data = baton.data;
             require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'],
                     function (dialogs, taskApi, tasksUtil) {
                         //create popup dialog
@@ -633,7 +635,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 300,
-        prio: 'lo',
+        prio: 'hi',
         id: 'forward',
         label: gt('Forward'),
         ref: 'io.ox/mail/actions/forward'
