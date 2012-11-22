@@ -11,17 +11,41 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define.async('io.ox/core/api/apps',
-    ['io.ox/core/cache',
-     'io.ox/core/event',
-     'io.ox/core/extensions'], function (cache, Events, ext) {
+define('io.ox/core/api/apps',
+    ['io.ox/core/event',
+     'io.ox/core/extensions',
+     'io.ox/core/manifests'], function (Events, ext, manifests) {
 
     'use strict';
 
     // simple plain cache
-    var appCache = null,
-        appData = {},
+    var appData = {
+        favorites: [],
+        installed: [],
+        categories: [],
+        apps: {}
+
+    },
         api;
+
+    // Construct App Data
+
+    _(manifests.apps).each(function (appManifest) {
+        var id = appManifest.path.substr(0, appManifest.path.length - 5);
+
+        appData.installed.push(id);
+        appData.apps[id] = appManifest;
+        appData.categories.push(appManifest.category);
+    });
+
+    appData.categories = _(appData.categories).uniq();
+
+    // TODO: Make favourites dynamic
+    _(["io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar", "io.ox/files", "io.ox/tasks"]).each(function (appId) {
+        if (appData.apps[appId]) {
+            appData.favorites.push(appId);
+        }
+    });
 
     var bless = function (obj, id) {
             obj = _.clone(obj || {});
@@ -175,26 +199,5 @@ define.async('io.ox/core/api/apps',
 
     Events.extend(api);
 
-    // initialize
-    appCache = new cache.SimpleCache('apps', true);
-
-    function fetch() {
-        return require([ox.base + '/src/userconfig.js'])
-            .pipe(function (data) {
-                // add to cache & local var
-                return appCache.add('default', appData = data);
-            });
-    }
-
-    return appCache.get('default').pipe(function (data) {
-        if (data !== null) {
-            appData = data;
-            fetch();
-            return api;
-        } else {
-            return fetch().pipe(function () {
-                return api;
-            });
-        }
-    });
+    return api;
 });
