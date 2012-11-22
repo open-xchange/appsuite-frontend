@@ -2771,7 +2771,8 @@ define('io.ox/office/editor/editor',
                             paragraph = Position.getLastNodeFromPositionByNodeName(editdiv, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR);
                         var indentLevel = paragraphStyles.getElementAttributes(paragraph).indentLevel;
                         var split = true;
-                        var paragraphLength = Position.getParagraphLength(editdiv, selection.startPaM.oxoPosition);
+                        var paragraphLength = Position.getParagraphLength(editdiv, selection.startPaM.oxoPosition),
+                            endOfParagraph = paragraphLength ===  selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1];
                         if (!hasSelection && indentLevel >= 0 && paragraphLength === 0) {
                             indentLevel--;
                             self.setAttribute('paragraph', 'indentLevel', indentLevel);
@@ -2816,6 +2817,12 @@ define('io.ox/office/editor/editor',
                             var lastValue = selection.startPaM.oxoPosition.length - 1;
                             selection.startPaM.oxoPosition[lastValue - 1] += 1;
                             selection.startPaM.oxoPosition[lastValue] = 0;
+                            if (endOfParagraph) {
+                                var paraAttributes = paragraphStyles.getElementAttributes(paragraph),
+                                    styleAttributes = paragraphStyles.getStyleSheetAttributeMap(paraAttributes.style, 'paragraph');
+                                if (styleAttributes.next !== paraAttributes.style)
+                                    self.setAttribute('paragraph', 'style', styleAttributes.next);
+                            }
                         }
                     }
                     selection.setTextSelection(selection.startPaM.oxoPosition);
