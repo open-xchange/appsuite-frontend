@@ -172,7 +172,7 @@ function hint (data, getSrc) {
     fail("JSHint error");
 }
 
-//default task
+// default task
 
 desc('Builds the GUI');
 utils.topLevelTask('default', ['buildApp'], function() {
@@ -182,7 +182,7 @@ utils.topLevelTask('default', ['buildApp'], function() {
 utils.copy(utils.list("html", [".htaccess", "blank.html", "busy.html", "favicon.ico"]));
 utils.copy(utils.list("src/"));
 
-//html
+// html
 
 function htmlFilter (data) {
     return data
@@ -272,7 +272,7 @@ utils.concat("pre-core.js",
 
 
 
-//Twitter Bootstrap
+// Twitter Bootstrap
 utils.copy(utils.list("lib/bootstrap", ["css/bootstrap.min.css", "img/*"]),
     { to: utils.dest("apps/io.ox/core/bootstrap") });
 
@@ -286,7 +286,7 @@ utils.concat( "bootstrap.min.css", ["lib/bootstrap/css/bootstrap.min.css", "lib/
 utils.copy(utils.list("lib", ["jquery-ui.min.js", "jquery.mobile.touch.min.js"]),
     { to: utils.dest("apps/io.ox/core/tk") });
 
-//Mediaelement.js
+// Mediaelement.js
 
 utils.copy(utils.list("lib", "mediaelement/"), {to: utils.dest("apps") });
 
@@ -294,7 +294,7 @@ utils.copy(utils.list("lib", "mediaelement/"), {to: utils.dest("apps") });
 
 utils.copy(utils.list("lib", "ace/"), {to: utils.dest("apps")});
 
-//time zone database
+// time zone database
 
 if (!path.existsSync("apps/io.ox/core/date/tz/zoneinfo")) {
     var zoneinfo = utils.dest("apps/io.ox/core/date/tz/zoneinfo");
@@ -379,40 +379,41 @@ if (apps.js) utils.copy(apps.js, { type: "module" });
 if (apps.rest) utils.copy(apps.rest);
 
 // manifests
-var manifests = _.filter(utils.list("apps/"), function (f) {
-    return /(.*?)manifest\.json/.test(f);
-});
-var combinedManifest = [];
-_(manifests).each(function (m) {
-    var prefix = /apps\/(.*?)\/manifest\.json/.exec(m)[1] + "/";
-    var data = null;
-    try {
-        data = new Function(" return " + fs.readFileSync(m, "utf8") + ";")();
-    } catch (e) {
-        console.error("Invalid manifest " + m, e);
-    }
-    if (!_.isArray(data)) {
-        data = [data];
-    }
-    _(data).each(function (entry) {
-        if (!entry.path) {
-            if (entry.pluginFor) {
-                // Assume Plugin
-                if (path.existsSync("apps/" + prefix + "register.js")) {
-                    entry.path = prefix + "register";
-                }
-            } else {
-                // Assume App
-                if (path.existsSync("apps/" + prefix + "main.js")) {
-                    entry.path = prefix + "main";
-                }
+
+utils.merge(appName + '.manifest.json', utils.list('apps/**/manifest.json'), {
+    merge: function (manifests, names) {
+        var combinedManifest = [];
+        _.each(manifests, function (m, i) {
+            var prefix = /^apps\/(.*)\/manifest\.json$/.exec(names[i])[1] + '/';
+            var data = null;
+            try {
+                data = new Function('return (' + m + ')')();
+            } catch (e) {
+                fail('Invalid manifest ' + names[i], e);
             }
-        }
-        combinedManifest.push(entry);
-    });
+            if (!_.isArray(data)) {
+                data = [data];
+            }
+            _(data).each(function (entry) {
+                if (!entry.path) {
+                    if (entry.pluginFor) {
+                        // Assume Plugin
+                        if (path.existsSync("apps/" + prefix + "register.js")) {
+                            entry.path = prefix + "register";
+                        }
+                    } else {
+                        // Assume App
+                        if (path.existsSync("apps/" + prefix + "main.js")) {
+                            entry.path = prefix + "main";
+                        }
+                    }
+                }
+                combinedManifest.push(entry);
+            });
+        });
+        return JSON.stringify(combinedManifest, null, debug ? 4 : null);
+    }
 });
-// TODO: Put this where it's supposed to be
-fs.writeFileSync("/tmp/core-manifest.json", JSON.stringify(combinedManifest));
 
 // doc task
 
