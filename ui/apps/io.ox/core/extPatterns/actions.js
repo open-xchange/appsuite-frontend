@@ -30,9 +30,7 @@ define("io.ox/core/extPatterns/actions",
 
     var Action = function (id, options) {
         // get options - use 'requires one' as default
-        var o = _.extend({ requires: requiresOne }, options);
-        // fix missing id
-        o.id = o.id || _(id.split(/\//)).last();
+        var o = _.extend({ id: 'default', index: 100, requires: requiresOne }, options);
         // string?
         if (_.isString(o.requires)) {
             o.requires = requires(o.requires);
@@ -41,12 +39,39 @@ define("io.ox/core/extPatterns/actions",
         ext.point(id).extend(o);
     };
 
-    var invoke = function (ref, self, baton) {
-        var p = ext.point(ref), data = baton.data || baton;
-        // general handler
-        p.invoke('action', self, baton);
-        // handler for multi selection - always provides an array
-        p.invoke('multiple', self, _.isArray(data) ? data : [data], baton);
+    var invoke = function (point, scope, baton) {
+
+        // make sure we have a baton
+        baton = ext.Baton.ensure(baton);
+
+        // add a list to track which items are processed
+        baton.tracker = [].concat(baton.data);
+
+        var list = ext.point(point).list(), i = 0, $i = list.length, extension, tmp;
+
+        // loop over all actions; skip 'default' extension if preventDefault was called
+        for (; i < $i && !baton.isPropagationStopped(); i++) {
+            extension = list[i];
+            // avoid default behaviour?
+            if (extension.id === 'default' && baton.isDefaultPrevented()) continue;
+            // empty tracker?
+            if (baton.tracker.length === 0) break;
+            // apply filter
+            if (_.isFunction(extension.filter)) {
+                tmp = _(baton.tracker).filter(extension.filter);
+                baton.tracker = _(baton.tracker).without(tmp);
+            } else {
+                tmp = baton.tracker.slice();
+            }
+            // call handlers
+            if (_.isFunction(extension.action)) {
+                extension.action.call(scope, baton);
+            }
+            if (_.isFunction(extension.multiple)) {
+                // make sure to always provide an array
+                extension.multiple.call(scope, tmp, baton);
+            }
+        }
     };
 
     var processActions = function (ref, collection, context) {

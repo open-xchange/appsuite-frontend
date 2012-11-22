@@ -22,7 +22,7 @@ CACHE:
 @base@/apps/themes/default/style.less
 @base@/apps/themes/default/definitions.less
 @base@/apps/themes/default/dummypicture.png
-@base@/apps/themes/default/logo-small.xpng
+@base@/apps/themes/default/logo-small.png
 # core
 @base@/apps/io.ox/core/main.js
 # mail
