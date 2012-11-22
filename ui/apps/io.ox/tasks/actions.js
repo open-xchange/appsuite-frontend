@@ -33,15 +33,16 @@ define("io.ox/tasks/actions",
     });
 
     new Action('io.ox/tasks/actions/edit', {
-        action: function (data) {
+        action: function (baton) {
             require(['io.ox/tasks/edit/main'], function (edit) {
-                edit.getApp().launch({taskData: data});
+                edit.getApp().launch({taskData: baton.data});
             });
         }
     });
 
     new Action('io.ox/tasks/actions/delete', {
-        action: function (data) {
+        action: function (baton) {
+            var data = baton.data;
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 //build popup
                 var popup = new dialogs.ModalDialog()
@@ -74,7 +75,8 @@ define("io.ox/tasks/actions",
 
     new Action('io.ox/tasks/actions/move', {
         requires: 'one',
-        action: function (task) {
+        action: function (baton) {
+            var task = baton.data;
             require(['io.ox/core/tk/dialogs', "io.ox/core/tk/folderviews", 'io.ox/tasks/api'],
                     function (dialogs, views, api) {
                 //build popup
@@ -110,7 +112,8 @@ define("io.ox/tasks/actions",
     });
 
     new Action('io.ox/tasks/actions/done', {
-        action: function (data) {
+        action: function (baton) {
+            var data = baton.data;
             require(['io.ox/tasks/api'], function (api) {
                 api.update(data.last_modified, data.id, {status: 3, percent_completed: 100}, data.folder_id)
                     .done(function (result) {
