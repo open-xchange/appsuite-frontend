@@ -180,13 +180,16 @@ define('io.ox/office/editor/format/drawingstyles',
      * this case, the first text span following the drawing will be returned.
      */
     function findRelatedTextSpan(drawing) {
+        var span = null;
 
-        var // the closest preceding text span
+        // the closest preceding text span
+        if (drawing[0].previousSibling) {
             span = Utils.findPreviousSiblingNode(drawing, function () { return DOM.isTextSpan(this); });
+        }
 
         // no preceding span found: find following span
         if (!span) {
-            span = Utils.findNextSiblingTextSpan(drawing, function () { return DOM.isTextSpan(this); });
+            span = Utils.findNextSiblingNode(drawing, function () { return DOM.isTextSpan(this); });
         }
 
         return span;
