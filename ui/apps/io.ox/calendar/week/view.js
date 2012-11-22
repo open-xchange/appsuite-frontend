@@ -880,6 +880,9 @@ define('io.ox/calendar/week/view',
                             app = self.collection.get(el.data('cid')).attributes,
                             tmpTS = self.getTimeFromDateTag(d.my.day);
                         d.my.all.removeClass('opac');
+                        // save for update calculations
+                        app.old_start_date = app.start_date;
+                        app.old_end_date = app.end_date;
                         switch (d.my.handle) {
                         case 'n':
                             app.start_date = tmpTS + self.getTimeFromPos(d.my.top);
@@ -1023,6 +1026,9 @@ define('io.ox/calendar/week/view',
                             app = self.collection.get($(this).data('cid')).attributes,
                             startTS = app.start_date + self.getTimeFromPos(d.my.lastTop - ui.originalPosition.top) + (move * date.DAY);
                         if (e.pageX < window.innerWidth && e.pageY < window.innerHeight) {
+                            // save for update calculations
+                            app.old_start_date = app.start_date;
+                            app.old_end_date = app.end_date;
                             _.extend(app, {
                                 start_date: startTS,
                                 end_date: startTS + (app.end_date - app.start_date)
@@ -1057,6 +1063,9 @@ define('io.ox/calendar/week/view',
                                 startTS = self.startDate.getDays() * date.DAY + newPos * date.DAY,
                                 cid = $(this).data('cid'),
                                 app = self.collection.get(cid).attributes;
+                            // save for update calculations
+                            app.old_start_date = app.start_date;
+                            app.old_end_date = app.end_date;
                             _.extend(app, {
                                 start_date: startTS,
                                 end_date: startTS + (app.end_date - app.start_date)
@@ -1080,6 +1089,9 @@ define('io.ox/calendar/week/view',
                             cid = el.data('cid'),
                             app = self.collection.get(cid).attributes,
                             newDayCount = Math.round(el.outerWidth() / (self.fulltimePane.width() / self.columns));
+                        // save for update calculations
+                        app.old_start_date = app.start_date;
+                        app.old_end_date = app.end_date;
                         el.removeClass('opac').css('zIndex', $(this).css('zIndex') - 2000);
 
                         if (el.position().left !== ui.originalPosition.left) {
