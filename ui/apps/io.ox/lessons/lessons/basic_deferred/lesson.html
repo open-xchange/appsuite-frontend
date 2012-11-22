@@ -2,21 +2,21 @@
 	<div class="row">
 		<div class="span3 navigation">&nbsp;</div>
 		<div class="content span9">
-			
+
 			<div class="page-header">
 				<h1>Deferred objects<small>... and all we hear are promises and promises</small></h1>
 			</div>
-			
+
 			<p class="lead">
-				Since the introduction of AJAX, asynchronous operations have become a mainstay of JavaScript applications. The mantra of "never lock the user interface" coupled with JavaScripts single-threaded run loop model means every developer sooner or later deals with callbacks notifying the system of a concluded asynchronous operation. jQueries Deferred objects – introduced in version 1.5 – are a powerful architecture for simplifying dealing with callbacks. 
+				Since the introduction of AJAX, asynchronous operations have become a mainstay of JavaScript applications. The mantra of "never lock the user interface" coupled with JavaScripts single-threaded run loop model means every developer sooner or later deals with callbacks notifying the system of a concluded asynchronous operation. jQueries Deferred objects – introduced in version 1.5 – are a powerful architecture for simplifying dealing with callbacks.
 			</p>
-			
-			
+
+
 			<h2>Who should read this document?</h2>
 			<p>
-				In OX7 we use Deferred Objects extensively. Whenever our APIs have to carry out an asynchronous operation, most commonly talking to the backend to load or modify something, they return a deferred object. When you write a plugin, you are sometimes asked to return a deferred object to let the surrounding system know when you're done. A good understanding of the Deferred Object is crucial for effectively developing in an OX7 context. If you already feel confident wielding and chaining deferreds, you can skip this tutorial.
+				In OX App Suite we use Deferred Objects extensively. Whenever our APIs have to carry out an asynchronous operation, most commonly talking to the backend to load or modify something, they return a deferred object. When you write a plugin, you are sometimes asked to return a deferred object to let the surrounding system know when you're done. A good understanding of the Deferred Object is crucial for effectively developing in an OX App Suite context. If you already feel confident wielding and chaining deferreds, you can skip this tutorial.
 			</p>
-			
+
 			<section id="then_and_now">
 				<h2>How to handle asynchronous calls - a bit of history</h2>
 				<p>
@@ -27,15 +27,15 @@ $.ajax({
 	dataType: "json",
 	success: function (response) {
 		print("Hello there, " + response.data.first_name + "! I'm pleased to make your acquaintance");
-	}, 
+	},
 	error: function () {
 		print("Geebus! An error occurred!");
-	}	
+	}
 });
 </pre>
 					What's wrong with that? Well, nothing really, only once we get to more complicated use cases, this system turns out to be a bit too inflexible.
 				</p>
-				
+
 				<p>
 					Now, let's see how this plays out using the deferred object. jQueries <code>#ajax</code> method returns a Deferred Object. On it you can call <code>#done</code> with a callback parameter, for the <strong>success</strong> callback, and <code>#fail</code> for the <strong>error</strong> callback:
 						<pre class="experiment">
@@ -50,9 +50,9 @@ $.ajax({
 </pre>
 					Looks pretty similar. The strengths of the Deferred Objects way of handling asynchronous operations will become apparent, once we look at more complex use cases. But first: A bit of theory
 				</p>
-				
+
 			</section>
-			
+
 			<section id="using">
 				<h2>Consuming deferreds</h2>
 				<h3>State management</h3>
@@ -126,7 +126,7 @@ ctx.delayedAjax({
 });
 
 </pre>
-					Probably though, we want a bit more layering, where a low-level API takes care of both loading things and managing the busy indicator (like the one in the OX7 toolbar), and the higher level API actually doing something with the data:
+					Probably though, we want a bit more layering, where a low-level API takes care of both loading things and managing the busy indicator (like the one in the OX App Suite toolbar), and the higher level API actually doing something with the data:
 					<pre class="experiment" data-context="delayedAjax">
 var loadIndicator = $("&lt;div&gt;").css({
 	minHeight: "100px"
@@ -137,7 +137,7 @@ function ajaxWithLoadIndicator(options) {
 	// Keep the original callbacks around, so we can call them later
 	var realSuccessHandler = options.success;
 	var realErrorHandler = options.error;
-	
+
 	// Redefine the success and error callbacks, so we can deal with the loadIndicator before
 	options.success = function (response) {
 		loadIndicator.idle();
@@ -149,7 +149,7 @@ function ajaxWithLoadIndicator(options) {
 		// Call the original handler
 		realErrorHandler(response);
 	};
-	
+
 	// Indicate we're loading something
 	loadIndicator.busy();
 	// make the ajax call
@@ -199,7 +199,7 @@ ajaxWithLoadIndicator({
 	print("Hello there, " + response.data.first_name + "! I'm pleased to make your acquaintance");
 });
 					</pre>
-					
+
 					Traversing the layers, other aspects of http handling would simply add more <code>#done</code> and <code>#fail</code> handlers.
 				</p>
 				<h3>Coordinating multiple asynchronous actions</h3>
@@ -213,7 +213,7 @@ function allLoaded() {
     if (!folderData || !userData) {
         return;
     }
-    
+
     print("See the folder data for " + userData.first_name + " " + userData.last_name, folderData);
 }
 
@@ -252,7 +252,7 @@ var foldersLoaded = $.ajax({
 $.when(userLoaded, foldersLoaded).done(function (userResponse, folderResponse) {
     // Unpack since the ajax request resolved to three arguments,
     // which are turned into an array and passed as the first and second parameter here
-    var userData = userResponse[0].data, 
+    var userData = userResponse[0].data,
         folderData = folderResponse[0].data;
     print("See the folder data for " + userData.first_name + " " + userData.last_name, folderData);
 });
@@ -286,7 +286,7 @@ $.when(userLoaded, foldersLoaded).done(function (name, folderData) {
 				    The handler you register with <code>#pipe</code> is given the result of the operation, and in turn, whatever the handler returns is passed on to the done handlers.
 				</p>
 			</section>
-			
+
 			<section id="creating">
 				<h2>Creating deferreds</h2>
 				<p>
@@ -295,8 +295,8 @@ $.when(userLoaded, foldersLoaded).done(function (name, folderData) {
 function myAsynchronousFunction(number) {
     // New deferreds can be created simply by calling the $.Deferred() method
     var def = $.Deferred();
-    
-    // To simulate an asynchronous operation, we use javascripts setTimeout method. 
+
+    // To simulate an asynchronous operation, we use javascripts setTimeout method.
     // This simulates the delay a true asynchronous operation might incur.
     setTimeout(function () {
         // Let's say this function fails on odd values, and returns a halfed value for even values
@@ -305,11 +305,11 @@ function myAsynchronousFunction(number) {
             // This means all done handlers are called with the value we pass in here
             def.resolve(number / 2);
         } else {
-            // Reject on the other hand transitions the deferred object into rejected state and calls all fail handlers 
+            // Reject on the other hand transitions the deferred object into rejected state and calls all fail handlers
             def.reject("I can only deal with even numbers, and " + number + " does not look even to me");
         }
     }, 2000);
-    
+
     // Return the deferred object
     return def;
 }
@@ -331,7 +331,7 @@ myAsynchronousFunction(23).done(function (result) {
 				</p>
 				<h3>Chaining deferreds</h3>
 				<p>
-				    More typically than the above (very contrived) example, you might need to create a new deferred and resolve/reject it based on the state of another deferred. For example, we can more closely tie the AJAX calls we've been making to OXs HTTP API conventions. When the backend runs into an error it returns a JSON object with an error attribute. So, it would be nice if we could build a function that:
+				    More typically than the above (very contrived) example, you might need to create a new deferred and resolve/reject it based on the state of another deferred. For example, we can more closely tie the AJAX calls we've been making to OX App Suites HTTP API conventions. When the backend runs into an error it returns a JSON object with an error attribute. So, it would be nice if we could build a function that:
 				    <ul>
 				        <li>Fails, when the HTTP protocol call fails</li>
 	                    <li>Fails, when the server returns an error</li>
@@ -341,7 +341,7 @@ myAsynchronousFunction(23).done(function (result) {
 				    <pre class="experiment">
 function callBackend(options) {
     var def = $.Deferred();
-    
+
     $.ajax(options)
         .done(function (response) {
             if (response.error) {
@@ -353,7 +353,7 @@ function callBackend(options) {
             }
         })
         .fail(def.reject); // The reject function can be passed directly as a handler
-    
+
     return def;
 }
 
@@ -367,7 +367,7 @@ callBackend({
     print("(first call) Frowny face :(");
 });
 
-// 2) Let's try the backend error by loading a user with an invalid argument 
+// 2) Let's try the backend error by loading a user with an invalid argument
 callBackend({
     url: "/ox7/api/user?action=get&amp;id=-23&amp;session=" + ox.session,
     dataType: 'json'
@@ -395,13 +395,13 @@ callBackend({
 function myNotQuiteAsynchronousFunction() {
     // Immediately resolve the deferred to the value
     // Sometimes plugin hooks will give plugin code the opportunity
-    // to be called asynchronously, but the plugin can comfortably conclude 
+    // to be called asynchronously, but the plugin can comfortably conclude
     // the operation synchronously. In that case simply stick the value into a deferred
     // that you resolve immediately.
     return $.Deferred().resolve(23);
 }
 </pre>
-				    
+
 				    or, if you don't even want to pass a value:
 				    <pre class="code">
 function myNotQuiteAsynchronousFunction() {
@@ -411,11 +411,11 @@ function myNotQuiteAsynchronousFunction() {
 </pre>
 				</p>
 			</section>
-			
+
 			<section id="summary">
 				<h2>Summary</h2>
 				<p>
-				    In OX7 we use jQuery Deferreds extensively to model and deal with asynchronous operations. This is our quick cheat sheet for deferreds:
+				    In OX App Suite we use jQuery Deferreds extensively to model and deal with asynchronous operations. This is our quick cheat sheet for deferreds:
 				    <ul>
 				        <li>Asynchronous operations (like HTTP calls or modal dialog style user interactions) return a deferred</li>
 				        <li>You can register success handlers with the <code>done</code> method, and error handlers with the <code>fail</code> method on a deferred</li>
@@ -423,7 +423,7 @@ function myNotQuiteAsynchronousFunction() {
 				        <li>You can combine deferreds by calling <code>$.when(d1, d2, d3, ...)</code> with the deferreds as arguments. This method takes any number of deferreds.</li>
 				        <li>You can create your own deferreds by calling <code>$.Deferred</code>. This is sometimes useful if you want to modify the control flow of an asynchronous processing chain.</li>
 				    </ul>
-				    
+
 				    Finally I can heartily recommend you read up on deferreds in their offical documentation at <a href="http://api.jquery.com/category/deferred-object/" target="_blank">http://api.jquery.com/category/deferred-object/</a>
 				</p>
 			</section>
