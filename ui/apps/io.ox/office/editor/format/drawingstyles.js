@@ -156,9 +156,9 @@ define('io.ox/office/editor/format/drawingstyles',
         // predefined drawing attributes for floating modes used in GUI
         FLOAT_MODE_ATTRIBUTES = {
             inline:       { inline: true },
-            leftFloated:  { inline: false, anchorHorBase: 'column', anchorHorAlign: 'left', textWrapMode: 'square', textwWapSide: 'right', anchorHorOffset: undefined },
-            rightFloated: { inline: false, anchorHorBase: 'column', anchorHorAlign: 'right', textWrapMode: 'square', textWrapSide: 'left', anchorHorOffset: undefined },
-            noneFloated:  { inline: false, anchorHorBase: 'column', anchorHorAlign: 'center', textWrapMode: 'none', anchorHorOffset: undefined }
+            leftFloated:  { inline: false, anchorHorBase: 'column', anchorHorAlign: 'left', textWrapMode: 'square', textWrapSide: 'right', anchorHorOffset: undefined, anchorVertOffset: undefined },
+            rightFloated: { inline: false, anchorHorBase: 'column', anchorHorAlign: 'right', textWrapMode: 'square', textWrapSide: 'left', anchorHorOffset: undefined, anchorVertOffset: undefined },
+            noneFloated:  { inline: false, anchorHorBase: 'column', anchorHorAlign: 'center', textWrapMode: 'none', anchorHorOffset: undefined, anchorVertOffset: undefined }
         },
 
         // values for the 'textWrapMode' attribute allowing to wrap the text around the drawing
@@ -330,6 +330,7 @@ define('io.ox/office/editor/format/drawingstyles',
                     drawingSelParams.options.moveable = true;  // floated selection is moveable
                     DOM.drawDrawingSelection(drawing, drawingSelParams.options, drawingSelParams.mousedownhandler, drawingSelParams.mousemovehandler, drawingSelParams.mouseuphandler, drawingSelParams.context);
                 }
+
             }
 
             // calculate top offset (only if drawing is anchored to paragraph)
