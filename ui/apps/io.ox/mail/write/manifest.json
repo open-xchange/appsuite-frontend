@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 [
 	{
 	    title: "Compose email",
@@ -15,14 +14,3 @@
 		requires: "webmail"
 	}
 ]
-=======
-{
-    title: "Compose email",
-    company: "Open-Xchange",
-    icon: "mail-write.png",
-    category: "Basic",
-    settings: false,
-    visible: false,
-    requires: 'webmail'
-}
->>>>>>> 8543d3a... merge

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 [
 	{
 		title: "Settings",
@@ -12,12 +11,3 @@
 		path: "io.ox/settings/test"
 	}
 ]
-=======
-{
-	title: "Settings",
-	company: "Open-Xchange",
-	icon: "files.png",
-	category: "Basic",
-	settings: false
-}
->>>>>>> 8543d3a... merge
