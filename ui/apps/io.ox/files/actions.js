@@ -121,7 +121,7 @@ define("io.ox/files/actions",
                     if (o.version) {
                         file = _.extend({}, file, { version: o.version });
                     }
-                    window.open(api.getUrl(file, 'download'));
+                    window.location.assign(api.getUrl(file, 'download'));
                 });
             });
         }
