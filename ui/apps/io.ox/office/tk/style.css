@@ -666,6 +666,10 @@ i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }
     height: 100%;
     .box-sizing(border-box);
 
+    > .close {
+    	right: 0;
+    }
+
     h4 {
 		float: left;
 	}
