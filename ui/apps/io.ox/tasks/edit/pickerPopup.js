@@ -48,7 +48,7 @@ define('io.ox/tasks/edit/pickerPopup', ['io.ox/core/tk/dialogs',
             var popup = new dialogs.ModalDialog();
             
             //buttons
-            popup.addPrimaryButton('ok', gt('Ok'))
+            popup.addPrimaryButton('ok', gt('OK'))
                 .addButton('cancel', gt('Cancel'));
             
             //Header

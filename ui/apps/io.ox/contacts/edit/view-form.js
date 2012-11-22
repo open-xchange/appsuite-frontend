@@ -88,7 +88,8 @@ define('io.ox/contacts/edit/view-form', [
             job: gt('Job description'),
             comment: gt('Comment'),
             userfields: gt('User fields'),
-            misc: gt('Miscellaneous')
+            misc: //#. section name for contact inputfields that does not fit somewhere else
+                  gt('Miscellaneous')
         },
 
         special: {

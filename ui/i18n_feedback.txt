@@ -12,7 +12,7 @@ Delete a Blog -> Delete a blog
 Do you really want to delete the following blog(s)? -> solche Konstruktionen bitte vermeiden (besser: Pluralform)
 hot -> Kontext? Bitte Kommentar einfügen
 Do you really want to delete the following subreddit(s)? -> solche Konstruktionen bitte vermeiden (besser: Pluralform)
-Over due Tasks -> Overdue tasks
+#Over due Tasks -> Overdue tasks
 Ok -> OK
 Invites -> Kontext? Lädt ein? Wer zu was?
 Pop3 refresh rate: -> POP3
@@ -23,7 +23,7 @@ more -> Kontext?
 Oops, couldn't load that email. -> wenn was schiefgeht und dann kommt oops als Meldung, täte ich mich ärgern :-)
 More -> Kontext?
 Enable Plugin -> Plug-in (muss nicht sein, ist aber wohl -noch- besser)
-Miscellaneous -> Kontext? Bitte Kommentar einfügen
+#Miscellaneous -> Kontext? Bitte Kommentar einfügen
 List name -> Kontext? noun or verb, bitte Kommentar einfügen
 Display name -> noun or verb, bitte Kommentar einfügen, die Frage bekomm ich sonst wieder zigfach gestellt ;-)
 Title -> Anrede oder Titel? Bitte Kommentar einfügen
@@ -50,14 +50,14 @@ Pargraph Border -> Paragraph Border
 msgid "Another user"
 msgid " is currently editing this document." -> Siehe oben. Bitte keine zerrissenen Sätze
 
-Do you want the start date to be set to new due date too? -> Versteh ich nicht
+#Do you want the start date to be set to new due date too? -> Versteh ich nicht
 
-Cancelled -> Canceled (American English)
+#Cancelled -> Canceled (American English)
 
-Estimated costs in minutes
-Actual costs in minutes  -> ?
+#Estimated costs in minutes
+#Actual costs in minutes  -> ?
 
-Oops, couldn't load that task. -> oops ist irgendwie nervig in dem Zusammenhang
+#Oops, couldn't load that task. -> oops ist irgendwie nervig in dem Zusammenhang
 
 N/A -> Not available, no answer? 
 

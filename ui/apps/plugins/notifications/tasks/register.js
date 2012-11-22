@@ -22,16 +22,16 @@ define('plugins/notifications/tasks/register',
 
     'use strict';
 
-    // this file builds three notification views: OVER DUE TASKS, TASK REMINDERS and TASK CONFIRMATIONS
+    // this file builds three notification views: OVERDUE TASKS, TASK REMINDERS and TASK CONFIRMATIONS
 
     /*
-     * OVER DUE TASKS
+     * OVERDUE TASKS
      */
 
     ext.point('io.ox/core/notifications/due-tasks/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Over due Tasks')),
+                $('<legend class="section-title">').text(gt('Overdue Tasks')),
                 $('<div class="notifications">')
             );
         }
@@ -182,7 +182,7 @@ define('plugins/notifications/tasks/register',
                 $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')),
                 $('<div class="actions">').append(
                     $('<button class="btn btn-inverse taskremindbtn" data-action="remindAgain">').text(gt('Remind me again')),
-                    $('<button class="btn btn-inverse taskokbtn" data-action="ok">').text(gt('Ok')),
+                    $('<button class="btn btn-inverse taskokbtn" data-action="ok">').text(gt('OK')),
                     $('<select class="dateselect" data-action="selector">')
                     .append(util.buildDropdownMenu(new Date()))
                 )
