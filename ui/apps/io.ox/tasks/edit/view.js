@@ -38,7 +38,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
         render: function (app) {
             var self = this;
             //row0 headlinetext cancel and savebutton
-            util.buildExtensionRow(self.$el, this.getRow(0, app), self.baton);
+            self.$el.append($('<div>').addClass('task-edit-headline').append(this.getRow(0, app)));
             self.$el.children().css({'margin-bottom': '2em',
                                      'font-size': '24px'});
 
@@ -129,9 +129,9 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 });
                 //put extension points and non extensionpoints into right rows and order
                 //headline row 0
-                self.rows[0].push([self.fields.headline, 6]);
-                self.rows[0].push([self.fields.cancel, 3]);
-                self.rows[0].push([self.fields.saveButton, 3]);
+                self.rows[0].push(self.fields.headline);
+                self.rows[0].push(self.fields.saveButton);
+                self.rows[0].push(self.fields.cancel);
                 //row 1
                 self.rows[1].push(temp.title);
                 //row 2
@@ -175,12 +175,12 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             }
             //row 0
             this.fields.headline = $('<h1>').addClass('title').text(headlineText);
-            this.fields.cancel = $('<button>').attr('data-action', 'discard').addClass('btn cancel span12').text(gt('Discard'))
+            this.fields.cancel = $('<button>').attr('data-action', 'discard').addClass('btn cancel').text(gt('Discard'))
                         .on('click', function () {
                             app.quit();
                         });
             this.fields.saveButton = $('<button>').attr('data-action', 'save')
-                .addClass("btn btn-primary task-edit-save span12")
+                .addClass("btn btn-primary task-edit-save")
                 .text(saveBtnText)
                 .on('click', function (e) {
                     var callbacks = {

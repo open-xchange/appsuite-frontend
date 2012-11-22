@@ -129,9 +129,9 @@
   	resize: vertical;
  }
  
- .io-ox-tasks-edit .input-append,
  .io-ox-tasks-edit .task-edit-save{
- 	margin: 0;
+ 	margin-left: 13px;
+ 	float: right;
  }
  
  .io-ox-tasks-edit .info-wrapper .task-attachment-link {
