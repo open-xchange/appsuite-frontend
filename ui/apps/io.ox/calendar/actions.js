@@ -143,8 +143,9 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/delete', {
         id: 'delete',
         requires: 'one modify',
-        action: function (params) {
-            var o = {
+        action: function (baton) {
+            var params = baton.data,
+                o = {
                 id: params.id,
                 folder: params.folder_id
             };
