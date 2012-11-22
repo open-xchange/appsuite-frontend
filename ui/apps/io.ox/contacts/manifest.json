@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [
 	{
 	    title: "Address Book",
@@ -13,3 +14,13 @@
 		requires: "contacts"
 	}
 ]
+=======
+{
+    title: "Address Book",
+    company: "Open-Xchange",
+    icon: "addressbook.png",
+    category: "Basic",
+    settings: false,
+    requires: "contacts"
+}
+>>>>>>> 8543d3a... merge
