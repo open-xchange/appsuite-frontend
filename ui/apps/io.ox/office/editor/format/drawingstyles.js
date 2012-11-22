@@ -269,6 +269,8 @@ define('io.ox/office/editor/format/drawingstyles',
             type = drawing.data('type'),
             // the content node inside the drawing
             contentNode = DOM.getDrawingContentNode(drawing),
+            // an object containing all parameters required for drawing the selection again
+            drawingSelParams = null,
             // image data string. if base64 image, string starts with 'data:'
             base64String = 'data:',
             // image data string. if svg image, string starts with '<svg'
@@ -291,6 +293,14 @@ define('io.ox/office/editor/format/drawingstyles',
                 if (!DOM.isTextSpan(drawing.prev()) && (relatedTextSpan = findRelatedTextSpan(drawing))) {
                     DOM.splitTextSpan(relatedTextSpan, 0).insertBefore(drawing);
                 }
+
+                // repainting the non-moveable selection
+                drawingSelParams = drawing.data('drawingSelection');
+                if (drawingSelParams) {
+                    DOM.clearDrawingSelection(drawing);
+                    drawingSelParams.options.moveable = false;  // inline selection is not moveable
+                    DOM.drawDrawingSelection(drawing, drawingSelParams.options, drawingSelParams.mousedownhandler, drawingSelParams.mousemovehandler, drawingSelParams.mouseuphandler, drawingSelParams.context);
+                }
             }
 
             // TODO: Word uses fixed predefined margins in inline mode, we too?
@@ -308,6 +318,14 @@ define('io.ox/office/editor/format/drawingstyles',
                 // remove leading empty text span before the drawing
                 if (DOM.isEmptySpan(drawing.prev())) {
                     drawing.prev().remove();
+                }
+
+                // repainting the moveable selection
+                drawingSelParams = drawing.data('drawingSelection');
+                if (drawingSelParams) {
+                    DOM.clearDrawingSelection(drawing);
+                    drawingSelParams.options.moveable = true;  // floated selection is moveable
+                    DOM.drawDrawingSelection(drawing, drawingSelParams.options, drawingSelParams.mousedownhandler, drawingSelParams.mousemovehandler, drawingSelParams.mouseuphandler, drawingSelParams.context);
                 }
             }
 

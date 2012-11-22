@@ -1758,7 +1758,11 @@ define('io.ox/office/editor/editor',
                     // operations generator
                     generator = new Operations.Generator(),
                     // the style sheet container
-                    styleSheets = this.getStyleSheets(family);
+                    styleSheets = this.getStyleSheets(family),
+                    // logical position
+                    localPosition = null,
+                    // an additional operation
+                    newOperation = null;
 
                 // generates a 'setAttributes' operation with the correct attributes
                 function generateAttributeOperation(startPosition, endPosition) {
@@ -1849,7 +1853,25 @@ define('io.ox/office/editor/editor',
                 case 'drawing':
                     // TODO: needs change when multiple drawings can be selected
                     if ((element = selection.getSelectedDrawing()[0]) && DOM.isDrawingNode(element)) {
-                        generateAttributeOperation(Position.getOxoPosition(editdiv, element, 0));
+
+                        localPosition = Position.getOxoPosition(editdiv, element, 0);
+
+                        // when switching from inline to floated, saving current position in the drawing, so that it can
+                        // be set correctly when switching back to inline.
+                        // This is only necessary, if the drawing was moved in that way, that implMove needed to be called.
+                        if ((attributes.inline === false) && (DOM.isInlineDrawingNode(element))) {
+                            $(element).data('inlinePosition', localPosition);
+                        }
+
+                        // when switching from floated to inline, a move of the drawing might be necessary
+                        if ((attributes.inline === true) && (DOM.isFloatingDrawingNode(element)) && ($(element).data('inlinePosition')) && (! _.isEqual(localPosition, $(element).data('inlinePosition')))) {
+                            newOperation = { name: Operations.MOVE, start: localPosition, end: localPosition, to: $(element).data('inlinePosition') };
+                            applyOperation(newOperation);
+                            localPosition = $(element).data('inlinePosition');
+                        }
+
+                        generateAttributeOperation(localPosition);
+
                     }
                     break;
 
@@ -3720,57 +3742,83 @@ define('io.ox/office/editor/editor',
 
                     if ((_.isNumber(shiftX)) && (_.isNumber(shiftY)) && (shiftX !== 0) || (shiftY !== 0)) {
 
-                        var moveX = Utils.convertLengthToHmm(shiftX, 'px'),
-                            moveY = Utils.convertLengthToHmm(shiftY, 'px'),
-                            updatePosition = Position.getOxoPosition(editdiv, drawingNode, 0),
-                            newOperation = null,
-                            anchorHorOffset = 0,
-                            anchorVertOffset = 0,
-                            oldanchorhoffset = StyleSheets.getExplicitAttributes(drawingNode).anchorHorOffset,
-                            oldanchorvoffset = StyleSheets.getExplicitAttributes(drawingNode).anchorVertOffset ? StyleSheets.getExplicitAttributes(drawingNode).anchorVertOffset : 0,
-                            anchorHorBase = StyleSheets.getExplicitAttributes(drawingNode).anchorHorBase,
-                            anchorVertBase = StyleSheets.getExplicitAttributes(drawingNode).anchorVertBase,
-                            anchorHorAlign = StyleSheets.getExplicitAttributes(drawingNode).anchorHorAlign,
-                            anchorVertAlign = StyleSheets.getExplicitAttributes(drawingNode).anchorVertAlign,
-                            // current drawing width, in 1/100 mm
-                            drawingWidth = Utils.convertLengthToHmm($(drawingNode).width(), 'px'),
-                            // the paragraph element containing the drawing node
-                            paragraph = $(drawingNode).parent(),
-                            // total width of the paragraph, in 1/100 mm
-                            paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px');
+                        undoManager.enterGroup(function () {
 
-                        if (oldanchorhoffset === undefined) {
-                            // anchorHorOffset has to be calculated corresponding to the left paragraph border
-                            if (anchorHorAlign === 'right') {
-                                oldanchorhoffset = paraWidth - drawingWidth;
-                            } else if (anchorHorAlign === 'center') {
-                                oldanchorhoffset = (paraWidth - drawingWidth) / 2;
-                            } else {
-                                oldanchorhoffset = 0;
+                            var moveX = Utils.convertLengthToHmm(shiftX, 'px'),
+                                moveY = Utils.convertLengthToHmm(shiftY, 'px'),
+                                updatePosition = Position.getOxoPosition(editdiv, drawingNode, 0),
+                                newOperation = null,
+                                anchorHorOffset = 0,
+                                anchorVertOffset = 0,
+                                oldAnchorHorOffset = StyleSheets.getExplicitAttributes(drawingNode).anchorHorOffset,
+                                oldAnchorVertOffset = StyleSheets.getExplicitAttributes(drawingNode).anchorVertOffset ? StyleSheets.getExplicitAttributes(drawingNode).anchorVertOffset : 0,
+                                anchorHorBase = StyleSheets.getExplicitAttributes(drawingNode).anchorHorBase,
+                                anchorVertBase = StyleSheets.getExplicitAttributes(drawingNode).anchorVertBase,
+                                anchorHorAlign = StyleSheets.getExplicitAttributes(drawingNode).anchorHorAlign,
+                                anchorVertAlign = StyleSheets.getExplicitAttributes(drawingNode).anchorVertAlign,
+                                // current drawing width, in 1/100 mm
+                                drawingWidth = Utils.convertLengthToHmm($(drawingNode).width(), 'px'),
+                                // the paragraph element containing the drawing node
+                                paragraph = $(drawingNode).parent(),
+                                // total width of the paragraph, in 1/100 mm
+                                paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px');
+
+                            if (oldAnchorHorOffset === undefined) {
+                                // anchorHorOffset has to be calculated corresponding to the left paragraph border
+                                if (anchorHorAlign === 'right') {
+                                    oldAnchorHorOffset = paraWidth - drawingWidth;
+                                } else if (anchorHorAlign === 'center') {
+                                    oldAnchorHorOffset = (paraWidth - drawingWidth) / 2;
+                                } else {
+                                    oldAnchorHorOffset = 0;
+                                }
                             }
-                        }
 
-                        if (moveX !== 0) {
-                            anchorHorOffset = oldanchorhoffset + moveX;
-                            anchorHorAlign = 'offset';
-                            anchorHorBase = 'column';
-                            if (anchorHorOffset < 0) { anchorHorOffset = 0; }
-                            else if (anchorHorOffset > (paraWidth - drawingWidth)) { anchorHorOffset = paraWidth - drawingWidth; }
-                        }
+                            anchorHorOffset = oldAnchorHorOffset;
+                            anchorVertOffset = oldAnchorVertOffset;
 
-                        if (moveY !== 0) {
-                            anchorVertOffset = oldanchorvoffset + moveY;
-                            anchorVertAlign = 'offset';
-                            anchorVertBase = 'paragraph';
-                            if (anchorVertOffset < 0) { anchorVertOffset = 0; }
-                        }
+                            if (moveX !== 0) {
+                                anchorHorOffset = oldAnchorHorOffset + moveX;
+                                anchorHorAlign = 'offset';
+                                anchorHorBase = 'column';
+                                if (anchorHorOffset < 0) { anchorHorOffset = 0; }
+                                else if (anchorHorOffset > (paraWidth - drawingWidth)) { anchorHorOffset = paraWidth - drawingWidth; }
+                            }
 
-                        if ((anchorHorOffset !== oldanchorhoffset) || (anchorVertOffset !== oldanchorvoffset)) {
+                            if (moveY !== 0) {
+                                anchorVertOffset = oldAnchorVertOffset + moveY;
+                                anchorVertAlign = 'offset';
+                                anchorVertBase = 'paragraph';
+                                if (anchorVertOffset < 0) {
+                                    var maxTopShift = $(drawingNode).offset().top - paragraph.offset().top;  // distance from top drawing border to top paragraph border
+                                    if ((maxTopShift > 0) && (updatePosition[updatePosition.length - 1] !== 0)) {
+                                        // moving the image inside the paragraph to the beginning of the paragraph
+                                        maxTopShift = Utils.convertLengthToHmm(maxTopShift, 'px') - oldAnchorVertOffset;
+                                        // calculating the new vertical offset (anchorvoffset is < 0)
+                                        anchorVertOffset = maxTopShift + anchorVertOffset;
+                                        if (anchorVertOffset < 0) { anchorVertOffset = 0; }  // not leaving the paragraph
 
-                            newOperation = { name: Operations.ATTRS_SET, attrs: {anchorHorOffset: anchorHorOffset, anchorVertOffset: anchorVertOffset, anchorHorAlign: anchorHorAlign, anchorVertAlign: anchorVertAlign, anchorHorBase: anchorHorBase, anchorVertBase: anchorVertBase}, start: updatePosition };
+                                        // moving the drawing
+                                        var destPosition = _.clone(updatePosition);
+                                        destPosition.pop();
+                                        destPosition.push(0);
+                                        newOperation = { name: Operations.MOVE, start: updatePosition, end: updatePosition, to: destPosition };
+                                        applyOperation(newOperation);
+                                        updatePosition = destPosition; // for setting attributes required
+                                    } else {
+                                        anchorVertOffset = 0; // drawing is already at the top of the paragraph
+                                    }
+                                }
+                            }
 
-                            applyOperation(newOperation);
-                        }
+                            if ((anchorHorOffset !== oldAnchorHorOffset) || (anchorVertOffset !== oldAnchorVertOffset)) {
+
+                                newOperation = { name: Operations.ATTRS_SET, attrs: {anchorHorOffset: anchorHorOffset, anchorVertOffset: anchorVertOffset, anchorHorAlign: anchorHorAlign, anchorVertAlign: anchorVertAlign, anchorHorBase: anchorHorBase, anchorVertBase: anchorVertBase}, start: updatePosition };
+
+                                applyOperation(newOperation);
+                            }
+
+                        }, this);
                     }
                 }
 
@@ -5509,15 +5557,15 @@ define('io.ox/office/editor/editor',
                         Utils.warn('Editor.implMove(): moved  node is not a drawing: ' + Utils.getNodeName(sourceNode));
                     } else {
                         // also move the offset divs
-                        if (!DOM.isOffsetNode(offsetDiv)) {
-                            useOffsetDiv = false; // should never be reached
+                        if ((!offsetDiv) || (!DOM.isOffsetNode(offsetDiv))) {
+                            useOffsetDiv = false;
                         }
                     }
 
                     if (doMove) {
 
                         if (splitNode) {
-                            destNode = DOM.splitTextSpan(destNode.parentNode, destPos.offset + 1)[0];
+                            destNode = DOM.splitTextSpan(destNode, destPos.offset + 1)[0];
                         } else {
                             if (destNode.nodeType === 3) {
                                 destNode = destNode.parentNode;

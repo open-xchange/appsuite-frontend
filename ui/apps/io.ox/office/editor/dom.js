@@ -1428,6 +1428,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 moveBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
                 selectionBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
             }
+
+            // saving the selection parameter at the drawing object to reuse them
+            // when switching from 'floated' to 'inline' and vice versa
+            $(this).data('drawingSelection', {options: options, mousedownhandler: mousedownhandler, mousemovehandler: mousemovehandler, mouseuphandler: mouseuphandler, context: context});
         });
     };
 
@@ -1445,6 +1449,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         // removing mouse event handler (mouseup and mousemove) from page div
         $(document).off('mouseup mousemove');
         $(drawings).off('mousedown');
+        $(drawings).data('drawingSelection', null);
     };
 
     /**
