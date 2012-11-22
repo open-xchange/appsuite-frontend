@@ -361,7 +361,12 @@ define("io.ox/mail/write/view-main",
             // FROM
             this.addSection('from', gt('From'), false, true)
                 .append(this.createSenderField());
-            this.addLink('from', gt('Sender'));
+
+            accountAPI.all().done(function (array) {
+                if (array[1]) {
+                    self.addLink('from', gt('Sender'));
+                }
+            });
 
             // Options
             this.addSection('options', gt('Options'), false, true)
