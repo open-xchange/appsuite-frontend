@@ -203,6 +203,7 @@ exports.file = function(dest, deps, callback, options, type) {
         type = options;
         options = {};
     }
+    dest = dest.replace(/\\/g, '/');
     var dir = path.dirname(dest);
     directory(dir);
     file(dest, deps, function() {
