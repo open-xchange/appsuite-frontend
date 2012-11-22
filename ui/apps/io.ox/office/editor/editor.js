@@ -163,8 +163,6 @@ define('io.ox/office/editor/editor',
             // all text spans that are highlighted (for quick removal)
             highlightedSpans = [],
 
-            focused = false,
-
             lastKeyDownEvent,
 
             lastOperationEnd,     // Need to decide: Should the last operation modify this member, or should the selection be passed up the whole call chain?!
@@ -190,13 +188,6 @@ define('io.ox/office/editor/editor',
          */
         this.getNode = function () {
             return editdiv;
-        };
-
-        /**
-         * Returns whether the editor is currently focused.
-         */
-        this.hasFocus = function () {
-            return focused;
         };
 
         /**
@@ -2268,16 +2259,53 @@ define('io.ox/office/editor/editor',
         // Private functions for the hybrid edit mode
         // ====================================================================
 
-        function processFocus(state) {
-            if (focused !== state) {
-                focused = state;
-                // selection is invalid until document has been initialized
-                if (focused && selection.isValid()) {
-                    selection.restoreBrowserSelection();
+        /**
+         * Processes a focus event for the editor root node.
+         *
+         * @param {jQuery.Event} event
+         *  The jQuery event object.
+         */
+        var processFocus = (function () {
+
+            var // current focus state
+                isFocused = false,
+                // current scroll position
+                scrollOffset = { top: 0, left: 0 };
+
+            // return the actual processFocus() method
+            return function (event) {
+
+                var // the new focus state
+                    gotFocus = event.type === 'focus';
+
+                // do nothing for repeated calls without changed state
+                if (isFocused === gotFocus) { return; }
+                isFocused = gotFocus;
+
+                if (isFocused) {
+                    // store current scroll positions
+                    scrollOffset.top = editdiv.parent().scrollTop();
+                    scrollOffset.left = editdiv.parent().scrollLeft();
+                    // Chrome sets a default text cursor at the top position
+                    // while processing the focus event, if the editor does
+                    // not contain a valid browser selection, e.g. when a
+                    // drawing object is selected. Thus, selection needs to
+                    // be restored in a timeout handler.
+                    window.setTimeout(function () {
+                        // restore current scroll positions
+                        editdiv.parent().scrollTop(scrollOffset.top);
+                        editdiv.parent().scrollLeft(scrollOffset.left);
+                        // selection is invalid until document has been initialized
+                        if (selection.isValid()) {
+                            selection.restoreBrowserSelection();
+                        }
+                    });
                 }
-                self.trigger('focus', state);
-            }
-        }
+
+                // notify listeners
+                self.trigger('focus', isFocused);
+            };
+        }());
 
         function processMouseDown(event) {
 
@@ -5777,8 +5805,7 @@ define('io.ox/office/editor/editor',
 
         // hybrid edit mode
         editdiv
-            .on('focus', function () { processFocus(true); })
-            .on('blur', function () { processFocus(false); })
+            .on('focus blur', processFocus)
             .on('keydown', processKeyDown)
             .on('keypress', processKeyPressed)
             .on('mousedown', processMouseDown)
