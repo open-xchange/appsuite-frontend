@@ -225,12 +225,6 @@ define('io.ox/mail/write/test/html_send',
                         .toEqual(true);
                 });
 
-                j.it('has correct mail props (delivery receipt)', function () {
-                    var data = app.getMail().data;
-                    j.expect(data.disp_notification_to === 0)
-                        .toEqual(true);
-                });
-
                 j.it('has correct mail props (from)', function () {
                     var data = app.getMail().data;
                     j.expect(_.isArray(data.from) && data.from.length === 1)

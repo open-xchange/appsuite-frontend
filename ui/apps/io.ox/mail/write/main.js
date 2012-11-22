@@ -400,11 +400,6 @@ define('io.ox/mail/write/main',
             view.form.find('input[name=vcard]').prop('checked', !!bool);
         };
 
-        app.setDeliveryReceipt = function (bool) {
-            // set
-            view.form.find('input[name=receipt]').prop('checked', !!bool);
-        };
-
         app.setMsgRef = function (ref) {
             view.form.find('input[name=msgref]').val(ref || '');
         };
@@ -447,7 +442,6 @@ define('io.ox/mail/write/main',
             this.setNestedMessages(data.nested_msgs);
             this.setPriority(data.priority || 3);
             this.setAttachVCard(data.vcard !== undefined ? data.vcard : config.get('mail.vcard', false));
-            this.setDeliveryReceipt(data.disp_notification_to !== undefined ? data.disp_notification_to : false);
             this.setMsgRef(data.msgref);
             this.setSendType(data.sendtype);
             // add files (from file storage)
@@ -692,10 +686,6 @@ define('io.ox/mail/write/main',
                 attachments: [content],
                 nested_msgs: []
             };
-            // delivery receipt (add only if true)
-            if (parseInt(data.receipt, 10)) {
-                mail.disp_notification_to = true;
-            }
             // add msgref?
             if (data.msgref) {
                 mail.msgref = data.msgref;

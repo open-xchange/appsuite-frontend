@@ -390,12 +390,6 @@ define("io.ox/mail/write/view-main",
                     })
                 )
                 .append(
-                    // Delivery Receipt
-                    $('<div>').addClass('section-item')
-                    .css({ paddingTop: '1em', paddingBottom: '1em' })
-                    .append(createCheckbox('receipt', gt('Delivery Receipt')))
-                )
-                .append(
                     // Attach vCard
                     $('<div>').addClass('section-item')
                     .css({ paddingTop: '1em', paddingBottom: '1em' })

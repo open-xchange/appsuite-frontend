@@ -64,13 +64,13 @@ define('io.ox/calendar/actions',
     });
 
     new Action('io.ox/calendar/detail/actions/sendmail', {
-        action: function (params) {
+        action: function (baton) {
             var def = $.Deferred();
-            util.createArrayOfRecipients(params.participants, def);
+            util.createArrayOfRecipients(baton.data.participants, def);
             def.done(function (arrayOfRecipients) {
                 require(['io.ox/mail/write/main'], function (m) {
                     m.getApp().launch().done(function () {
-                        this.compose({to: arrayOfRecipients, subject: params.title});
+                        this.compose({to: arrayOfRecipients, subject: baton.data.title});
                     });
                 });
             });
@@ -78,10 +78,10 @@ define('io.ox/calendar/actions',
     });
 
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
-        action: function (params) {
+        action: function (baton) {
             var contactsFolder = config.get('folder.contacts'),
                 def = $.Deferred();
-            util.createDistlistArrayFromPartisipantList(params.participants, def);
+            util.createDistlistArrayFromPartisipantList(baton.data.participants, def);
             def.done(function (initdata) {
                 require(['io.ox/contacts/distrib/main'], function (m) {
                     m.getApp().launch().done(function () {
@@ -225,10 +225,10 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/changestatus', {
         id: 'change_status',
         requires: 'one modify',
-        action: function (params) {
+        action: function (baton) {
             // load & call
             require(['io.ox/calendar/acceptdeny']).done(function (acceptdeny) {
-                acceptdeny(params);
+                acceptdeny(baton.data);
             });
         }
     });
