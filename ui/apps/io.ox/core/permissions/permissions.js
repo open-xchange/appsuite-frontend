@@ -56,7 +56,6 @@ define('io.ox/core/permissions/permissions',
         },
 
         removeEntity: function () {
-            console.log('remove');
             this.collection.remove(this.model);
             this.remove();
         },
