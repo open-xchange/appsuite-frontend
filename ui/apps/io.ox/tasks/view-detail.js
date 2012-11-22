@@ -103,9 +103,9 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             if (data.private_flag) {
                 $('<i>').addClass("icon-lock private-flag").appendTo(node);
             }
-            
+
             $('<div>').text(gt.noI18n(task.title)).addClass("title clear-title").appendTo(node);
-             
+
             if (task.number_of_attachments > 0) {
                 ext.point("io.ox/tasks/detail-attach").invoke("draw", node, task);
             }

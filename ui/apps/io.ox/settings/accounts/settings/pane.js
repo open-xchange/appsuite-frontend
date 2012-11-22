@@ -122,6 +122,7 @@ define('io.ox/settings/accounts/settings/pane',
                             $dropDown;
                         self.$el.empty().append(self.template({}));
                         this.collection.each(function (item) {
+                            console.log("Account: ", item);
                             self.$el.find('.listbox').append(new AccountSelectView({ model: item }).render().el);
                         });
 
