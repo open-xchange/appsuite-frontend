@@ -1,4 +1,4 @@
 {
-	pluginFor: "tests",
+	namespace: "tests",
 	path: "io.ox/core/test"
 }

@@ -1,12 +1,12 @@
 [
 	{
 		path: "io.ox/oauth/keychain",
-		pluginFor: "keychain",
+		namespace: "keychain",
 		requires: "oauth"
 	},
 	{
 		path: "io.ox/oauth/settings",
-		pluginFor: "settings",
+		namespace: "settings",
 		requires: "oauth"
 	}
 

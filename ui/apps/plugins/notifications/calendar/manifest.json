@@ -1,4 +1,4 @@
 {
-	pluginFor: "notifications",
+	namespace: "notifications",
 	requires: "calendar"
 }

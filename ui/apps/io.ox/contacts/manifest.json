@@ -8,7 +8,7 @@
 	    requires: "contacts"
 	},
 	{
-		pluginFor: "tests",
+		namespace: "tests",
 		path: "io.ox/contacts/test",
 		requires: "contacts"
 	}

@@ -7,7 +7,7 @@
 		settings: false
 	},
 	{
-		pluginFor: "tests",
+		namespace: "tests",
 		path: "io.ox/settings/test"
 	}
 ]

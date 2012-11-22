@@ -1,4 +1,4 @@
 {
-	pluginFor: "portal",
+	namespace: "portal",
 	requires: "tasks"
 }

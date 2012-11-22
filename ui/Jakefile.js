@@ -396,7 +396,7 @@ utils.merge(appName + '.manifest.json', utils.list('apps/**/manifest.json'), {
             }
             _(data).each(function (entry) {
                 if (!entry.path) {
-                    if (entry.pluginFor) {
+                    if (entry.namespace) {
                         // Assume Plugin
                         if (path.existsSync("apps/" + prefix + "register.js")) {
                             entry.path = prefix + "register";

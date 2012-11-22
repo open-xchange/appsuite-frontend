@@ -1,12 +1,12 @@
 [
 	{
 		path: "io.ox/mail/accounts/keychain",
-		pluginFor: "keychain",
+		namespace: "keychain",
 		requires: ["webmail", "multiple_mail_accounts"]
 	},
 	{
 		path: "io.ox/mail/accounts/settings",
-		pluginFor: "settings",
+		namespace: "settings",
 		requires: ["webmail", "multiple_mail_accounts"]
 	}
 ]

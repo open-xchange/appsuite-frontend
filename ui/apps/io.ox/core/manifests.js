@@ -61,12 +61,12 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
     ox.manifests = manifestManager;
 
     var fnProcessManifest = function (manifest) {
-        if (manifest.pluginFor) {
+        if (manifest.namespace) {
             // Looks like a plugin
-            if (!pluginPoints[manifest.pluginFor]) {
-                pluginPoints[manifest.pluginFor] = [];
+            if (!pluginPoints[manifest.namespace]) {
+                pluginPoints[manifest.namespace] = [];
             }
-            pluginPoints[manifest.pluginFor].push(manifest);
+            pluginPoints[manifest.namespace].push(manifest);
             plugins[manifest.path] = manifest;
         } else {
             // Looks like an app

@@ -1,9 +1,9 @@
 [
 	{
-		pluginFor: "core"
+		namespace: "core"
 	},
 	{
-		pluginFor: "test",
+		namespace: "test",
 		path: "plugins/halo/test"
 	}
 ]

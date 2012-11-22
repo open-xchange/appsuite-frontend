@@ -1,10 +1,10 @@
 [
 	{
-		pluginFor: "tests",
+		namespace: "tests",
 		path: "io.ox/files/tests/interface/test"
 	},
 	{
-		pluginFor: "tests",
+		namespace: "tests",
 		path: "io.ox/files/tests/unit/test"
 	}
 ]

@@ -1,4 +1,4 @@
 {
-	pluginFor: "halo",
+	namespace: "halo",
 	requires: "webmail"
 }
