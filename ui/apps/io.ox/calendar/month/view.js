@@ -221,6 +221,10 @@ define('io.ox/calendar/month/view',
                         start = new date.Local($(this).data('date')).setHours(s.getHours(), s.getMinutes(), s.getSeconds(), s.getMilliseconds()).getTime(),
                         end = start + app.end_date - app.start_date;
                     if (app.start_date !== start || app.end_date !== end) {
+                        // save for update calculations
+                        app.old_start_date = app.start_date;
+                        app.old_end_date = app.end_date;
+
                         app.start_date = start;
                         app.end_date = end;
                         self.trigger('updateAppointment', app);
