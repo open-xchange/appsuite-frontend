@@ -88,7 +88,7 @@ define('io.ox/office/editor/main',
             // browser timer for operations handling
             operationsTimer = null,
 
-            // invalidate local storage cache in case a new document ,ight be written
+            // invalidate local storage cache in case a new document might be written
             invalidateDriveCacheOnClose = false,
 
             // if true, debug mode is active (second editor and operations output console)
@@ -181,19 +181,29 @@ define('io.ox/office/editor/main',
          * @param {Number} folderId
          *  The identifier of the Drive folder for the new document.
          *
+         * @param {Object} fileTemplateData
+         *  The file data of an optional template file
+         *
          * @returns {jQuery.Promise}
          *  The promise of a deferred that will be resolved with the file
          *  descriptor of the new document when the document has been created.
          */
-        function createNewDocument(folderId) {
+        function createNewDocument(folderId, fileTemplateData) {
 
             var // the result deferred
                 def = null;
 
             if (!_.isUndefined(folderId)) {
+                var args = { action: 'createdefaultdocument', folder_id: folderId, document_type: 'text' };
+
+                if (!_.isUndefined(fileTemplateData)) {
+                    args.template_id = fileTemplateData.id;
+                    args.version = fileTemplateData.version;
+                }
+
                 def = $.ajax({
                     type: 'GET',
-                    url: self.buildServiceUrl('oxodocumentfilter', { action: 'createdefaultdocument', folder_id: folderId, document_type: 'text' }),
+                    url: self.buildServiceUrl('oxodocumentfilter', args),
                     dataType: 'json'
                 })
                 .pipe(function (response) {
@@ -562,9 +572,10 @@ define('io.ox/office/editor/main',
             $('body').attr('spellcheck', false);
 
             if (Utils.getStringOption(options, 'action') === 'new') {
-                // 'new document' action: create the new file in InfoStore
-                initFileDef = createNewDocument(Utils.getOption(options, 'folder_id'));
-            } else {
+                // 'new document' action: create the new file in InfoStore (optionally based on a template file)
+                initFileDef = createNewDocument(Utils.getOption(options, 'folder_id'), Utils.getOption(options, 'template'));
+            }
+            else {
                 initFileDef = $.when();
             }
 
