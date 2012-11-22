@@ -234,7 +234,7 @@ define('io.ox/calendar/week/view',
             }
             if ($(e.target).hasClass('timeslot')) {
                 // calculate timestamp for current position
-                var pos = this.getTimeFromPos(e.target.offsetTop + e.offsetY),
+                var pos = this.getTimeFromPos(e.target.offsetTop),
                     startTS = this.getTimeFromDateTag($(e.currentTarget).attr('date')) + pos;
                 this.trigger('openCreateAppointment', e, {start_date: startTS, end_date: startTS + date.HOUR});
             }
@@ -1164,8 +1164,9 @@ define('io.ox/calendar/week/view',
         },
 
         // calc daily timestamp from mouse position
-        getTimeFromPos: function (pos) {
-            return this.roundToGrid(pos) / this.height() * date.DAY;
+        getTimeFromPos: function (pos, roundType) {
+            roundType = roundType || '';
+            return this.roundToGrid(pos, roundType) / this.height() * date.DAY;
         },
 
         // calculate complete height of the grid
