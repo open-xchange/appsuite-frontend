@@ -112,6 +112,16 @@ define("io.ox/files/actions",
         }
     });
 
+    new Action('io.ox/files/actions/office/editasnew', {
+        requires: function (e) {
+            var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
+            return e.collection.has('one') && pattern.test(e.context.data.filename);
+        },
+        action: function (data) {
+            ox.launch('io.ox/office/editor/main', { action: 'new', folder_id: data.folder_id, template: data.data });
+        }
+    });
+
     new Action('io.ox/files/actions/download', {
         requires: 'some',
         multiple: function (list) {
@@ -380,6 +390,13 @@ define("io.ox/files/actions",
         prio: 'hi',
         label: gt("Delete"),
         ref: "io.ox/files/actions/delete"
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: "officeeditasnew",
+        index: 600,
+        label: gt("Edit as new"),
+        ref: "io.ox/files/actions/office/editasnew"
     }));
 
     // edit links
