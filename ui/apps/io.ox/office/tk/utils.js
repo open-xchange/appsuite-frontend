@@ -792,7 +792,9 @@ define('io.ox/office/tk/utils',
      *  The iterator function that will be called for every node. Receives the
      *  DOM node as first parameter. If the iterator returns the Utils.BREAK
      *  object, the iteration process will be stopped immediately. The iterator
-     *  can remove visited nodes from the DOM.
+     *  can remove the visited node descendants from the DOM. It is also
+     *  allowed to remove any siblings of the visited node, as long as the
+     *  visited node will not be removed itself.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
@@ -813,26 +815,33 @@ define('io.ox/office/tk/utils',
     Utils.iterateDescendantNodes = function (element, iterator, context, options) {
 
         var // only child nodes
-            children = Utils.getBooleanOption(options, 'children', false),
+            childrenOnly = Utils.getBooleanOption(options, 'children', false),
             // iteration direction
             reverse = Utils.getBooleanOption(options, 'reverse', false),
-            // the next or previous sibling of the visited node
-            nextSibling = null;
+            // visited node, and the next or previous sibling of the visited node
+            childNode = null, nextSibling = null;
 
         // visit all child nodes
         element = Utils.getDomNode(element);
-        for (var child = reverse ? element.lastChild : element.firstChild; child; child = nextSibling) {
+        for (childNode = reverse ? element.lastChild : element.firstChild; childNode; childNode = nextSibling) {
 
             // get next/previous sibling in case the iterator removes the node
-            nextSibling = reverse ? child.previousSibling : child.nextSibling;
+            nextSibling = reverse ? childNode.previousSibling : childNode.nextSibling;
 
             // call iterator for child node; if it returns Utils.BREAK, exit loop and return too
-            if (iterator.call(context, child) === Utils.BREAK) { return Utils.BREAK; }
+            if (iterator.call(context, childNode) === Utils.BREAK) { return Utils.BREAK; }
 
-            // iterate grand child nodes (only if the previous iterator did not
-            // remove the node from the DOM); if iterator for any descendant
-            // node returns Utils.BREAK, return too
-            if (!children && element.contains(child) && (child.nodeType === 1) && (Utils.iterateDescendantNodes(child, iterator, context, options) === Utils.BREAK)) { return Utils.BREAK; }
+            // iterate grand child nodes (only if the iterator did not remove the node from the DOM)
+            if (element.contains(childNode)) {
+
+                // refresh next sibling (iterator may have removed the old one, or may have inserted another one)
+                nextSibling = reverse ? childNode.previousSibling : childNode.nextSibling;
+
+                // if iterator for any descendant node returns Utils.BREAK, return too
+                if (!childrenOnly && (childNode.nodeType === 1) && (Utils.iterateDescendantNodes(childNode, iterator, context, options) === Utils.BREAK)) {
+                    return Utils.BREAK;
+                }
+            }
         }
     };
 

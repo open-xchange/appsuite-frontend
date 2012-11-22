@@ -716,6 +716,28 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     // text components: fields, tabs ------------------------------------------
 
     /**
+     * A jQuery selector that matches elements representing an inline component
+     * inside a paragraph (text components or inline drawing objects).
+     */
+    DOM.INLINE_COMPONENT_NODE_SELECTOR = 'div.inline';
+
+    /**
+     * Returns whether the passed node is an editable inline component node in
+     * a paragraph. Inline components include text components (e.g. fields,
+     * tabs) and inline drawing objects.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is an inline component node in a paragraph.
+     */
+    DOM.isInlineComponentNode = function (node) {
+        return $(node).is(DOM.INLINE_COMPONENT_NODE_SELECTOR);
+    };
+
+    /**
      * Returns whether the passed node is a <div> container with embedded text
      * spans, used as root elements for special text components in a paragraph.
      * Does NOT return true for helper nodes that do not represent editable
@@ -732,7 +754,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  text component in a paragraph.
      */
     DOM.isTextComponentNode = function (node) {
-        return $(node).is('div.component');
+        return DOM.isInlineComponentNode(node) && DOM.isTextSpan(Utils.getDomNode(node).firstChild);
     };
 
     /**
@@ -751,7 +773,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.isTextNodeInTextComponent = function (node) {
         node = node ? Utils.getDomNode(node) : null;
-        return node && DOM.isTextSpan(node.parentNode) && DOM.isTextComponentNode(node.parentNode.parentNode);
+        return node && node.parentNode && DOM.isTextComponentNode(node.parentNode.parentNode);
     };
 
     /**
@@ -780,7 +802,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  A new empty text field element, as jQuery object.
      */
     DOM.createFieldNode = function (text) {
-        return $('<div>', { contenteditable: false }).addClass('component field');
+        return $('<div>', { contenteditable: false }).addClass('inline field');
     };
 
     /**
@@ -810,7 +832,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  A new tab element, as jQuery object.
      */
     DOM.createTabNode = function () {
-        return $('<div>', { contenteditable: false }).addClass('component tab');
+        return $('<div>', { contenteditable: false }).addClass('inline tab');
     };
 
     // paragraph helper nodes -------------------------------------------------
@@ -901,6 +923,28 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     // drawing nodes ----------------------------------------------------------
 
     /**
+     * A jQuery selector that matches elements representing a floating node
+     * inside a paragraph (editable component nodes and helper nodes).
+     */
+    DOM.FLOATING_NODE_SELECTOR = 'div.float';
+
+    /**
+     * Returns whether the passed node is a floating node in a paragraph.
+     * Floating nodes include floating drawing objects, and their associated
+     * helper nodes.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a floating node in a paragraph.
+     */
+    DOM.isFloatingNode = function (node) {
+        return $(node).is(DOM.FLOATING_NODE_SELECTOR);
+    };
+
+    /**
      * A jQuery selector that matches elements representing a drawing.
      */
     DOM.DRAWING_NODE_SELECTOR = 'div.drawing';
@@ -932,7 +976,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  rendered inlined.
      */
     DOM.isInlineDrawingNode = function (node) {
-        return DOM.isDrawingNode(node) && $(node).hasClass('inline');
+        return DOM.isDrawingNode(node) && DOM.isInlineComponentNode(node);
     };
 
     /**
@@ -948,39 +992,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  rendered floated.
      */
     DOM.isFloatingDrawingNode = function (node) {
-        return DOM.isDrawingNode(node) && $(node).hasClass('float');
-    };
-
-    /**
-     * Returns whether the passed node is a <div> element wrapping a drawing
-     * in left floating mode.
-     *
-     * @param {Node|jQuery|Null} [node]
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains. If missing or null, returns false.
-     *
-     * @returns {Boolean}
-     *  Whether the passed node is a div element wrapping a drawing and is
-     *  rendered left floated.
-     */
-    DOM.isLeftFloatingDrawingNode = function (node) {
-        return DOM.isFloatingDrawingNode(node) && $(node).hasClass('left');
-    };
-
-    /**
-     * Returns whether the passed node is a <div> element wrapping a drawing
-     * in right floating mode.
-     *
-     * @param {Node|jQuery|Null} [node]
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains. If missing or null, returns false.
-     *
-     * @returns {Boolean}
-     *  Whether the passed node is a div element wrapping a drawing and is
-     *  rendered right floated.
-     */
-    DOM.isRightFloatingDrawingNode = function (node) {
-        return DOM.isFloatingDrawingNode(node) && $(node).hasClass('right');
+        return DOM.isDrawingNode(node) && DOM.isFloatingNode(node);
     };
 
     /**
@@ -1018,7 +1030,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * A jQuery selector that matches elements representing a drawing offset
      * helper node.
      */
-    DOM.OFFSET_NODE_SELECTOR = 'div.offset';
+    DOM.OFFSET_NODE_SELECTOR = 'div.float.offset';
 
     /**
      * Returns whether the passed node is a <div> element for positioning

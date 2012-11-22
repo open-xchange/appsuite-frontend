@@ -666,55 +666,40 @@ define('io.ox/office/editor/position',
         var // a text span corresponding to a component node
             span = null;
 
+        function createTextPointForSpan(span, offset) {
+            return new DOM.Point(span.firstChild, _.isNumber(offset) ? offset : span.firstChild.nodeValue.length);
+        }
+
         if (!domPoint || !domPoint.node) {
             Utils.warn('Position.getTextSpanFromNode(): Parameter domPoint not set.');
             return;
         }
 
-        // use preceding text node for inline text components
-        if (DOM.isTextComponentNode(domPoint.node) || DOM.isInlineDrawingNode(domPoint.node)) {
+        // use preceding text node for all components (fields, tabs, drawings)
+        if (DOM.isInlineComponentNode(domPoint.node) || DOM.isFloatingNode(domPoint.node)) {
 
-            // go to text span preceding the component node (must exist)
+            // go to previous inline node (must exist, must be a text span), skip floating helper nodes
             span = domPoint.node.previousSibling;
-            if (DOM.isTextSpan(span)) {
-                return new DOM.Point(span.firstChild, span.firstChild.nodeValue.length);
+            if (DOM.isOffsetNode(span)) {
+                span = span.previousSibling;
+            }
+            if (span) {
+                return createTextPointForSpan(span);
             }
 
             Utils.error('Position.getTextSpanFromNode(): missing preceding text span for inline component node');
             return;
         }
 
-        // floating drawings: last preceding span
-        if (DOM.isFloatingDrawingNode(domPoint.node)) {
-
-            // skip other floating drawings and helper nodes
-            span = Utils.findPreviousSiblingNode(domPoint.node, function () {
-                return DOM.isTextSpan(this) || DOM.isTextComponentNode(this) || DOM.isInlineDrawingNode(this);
-            });
-
-            // no previous span: go to next span
-            if (!DOM.isTextSpan(span)) {
-                span = Utils.findNextSiblingNode(domPoint.node, function () { return DOM.isTextSpan(this); });
-            }
-
-            if (DOM.isTextSpan(span)) {
-                return new DOM.Point(span.firstChild, span.firstChild.nodeValue.length);
-            }
-
-            Utils.error('Position.getTextSpanFromNode(): missing text span for floating drawing node');
-            return;
-        }
-
         if (DOM.isPortionSpan(domPoint.node)) {
 
             // beginning of a text span: try to go to the end of the previous text node
-            if ((domPoint.offset === 0) && DOM.isPortionSpan(domPoint.node.previousSibling)) {
-                span = domPoint.node.previousSibling;
-                return new DOM.Point(span.firstChild, span.firstChild.nodeValue.length);
+            if ((domPoint.offset === 0) && DOM.isTextSpan(domPoint.node.previousSibling)) {
+                return createTextPointForSpan(domPoint.node.previousSibling);
             }
 
             // from text span to text node
-            return new DOM.Point(domPoint.node.firstChild, domPoint.offset);
+            return createTextPointForSpan(domPoint.node, domPoint.offset);
         }
 
         // other node types need to be handled if existing

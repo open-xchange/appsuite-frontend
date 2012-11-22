@@ -127,6 +127,66 @@ define('io.ox/office/editor/selection',
         }
 
         /**
+         * A jQuery selector for non-empty text spans and inline component
+         * nodes.
+         */
+        function inlineNodeSelector() {
+            return DOM.isInlineComponentNode(this) || (DOM.isTextSpan(this) && !DOM.isEmptySpan(this));
+        }
+
+        /**
+         * Returns the closest preceding inline node of the passed node. Inline
+         * nodes can be inline components (fields, tabs, inline draing objects)
+         * or non-empty text spans.
+         *
+         * @param {Node|jQuery} node
+         *  The DOM node whose preceding inline node will be returned. If this
+         *  object is a jQuery collection, uses the first DOM node it contains.
+         *
+         * @param {Object} [options]
+         *  A map with additional options to control the operation. The
+         *  following options are supported:
+         *  @param {Boolean} [options.wholeTree=false]
+         *      If set to true, searches the entire document DOM tree for an
+         *      inline node. Otherwise, searches in the siblings of the passed
+         *      node only.
+         *
+         * @returns {HTMLElement|Null}
+         *  The closest preceding inline node if existing; otherwise null.
+         */
+        function findPreviousInlineNode(node, options) {
+            return Utils.getBooleanOption(options, 'wholeTree', false) ?
+                Utils.findPreviousNode(rootNode, node, inlineNodeSelector, DOM.DRAWING_NODE_SELECTOR) :
+                Utils.findPreviousSiblingNode(node, inlineNodeSelector);
+        }
+
+        /**
+         * Returns the closest following inline node of the passed node. Inline
+         * nodes can be inline components (fields, tabs, inline draing objects)
+         * or non-empty text spans.
+         *
+         * @param {Node|jQuery} node
+         *  The DOM node whose following inline node will be returned. If this
+         *  object is a jQuery collection, uses the first DOM node it contains.
+         *
+         * @param {Object} [options]
+         *  A map with additional options to control the operation. The
+         *  following options are supported:
+         *  @param {Boolean} [options.wholeTree=false]
+         *      If set to true, searches the entire document DOM tree for an
+         *      inline node. Otherwise, searches in the siblings of the passed
+         *      node only.
+         *
+         * @returns {HTMLElement|Null}
+         *  The closest following inline node if existing; otherwise null.
+         */
+        function findNextInlineNode(node, options) {
+            return Utils.getBooleanOption(options, 'wholeTree', false) ?
+                Utils.findNextNode(rootNode, node, inlineNodeSelector, DOM.DRAWING_NODE_SELECTOR) :
+                Utils.findNextSiblingNode(node, inlineNodeSelector);
+        }
+
+        /**
          * Initializes this selection with the passed start and end points, and
          * validates the browser selection by moving the start and end points
          * to editable nodes.
@@ -208,6 +268,143 @@ define('io.ox/office/editor/selection',
 
             // notify listeners
             self.trigger('change');
+        }
+
+        /**
+         * Changes the current text position or selection by one character or
+         * inline component.
+         *
+         * @param {Object} [options]
+         *  A map with options controlling the operation. The following options
+         *  are supported:
+         *  @param {Boolean} [options.extend=false]
+         *      If set to true, the current selection will be extended at the
+         *      current focus point. Otherwise, the text cursor will be moved
+         *      starting from the current focus point.
+         *  @param {Boolean} [options.backwards=false]
+         *      If set to true, the selection will be moved back by one
+         *      character; otherwise the selection will be moved ahead.
+         */
+        function moveTextCursor(options) {
+
+            var // whether to extend the selection
+                extend = Utils.getBooleanOption(options, 'extend', false),
+                // whether to move cursor back
+                backwards = Utils.getBooleanOption(options, 'backwards', false),
+
+                // text node at the current focus position
+                focusNodeInfo = Position.getDOMPosition(rootNode, getFocusPosition()),
+                // text node at the current anchor position (changes with focus node without SHIFT key)
+                anchorNodeInfo = extend ? Position.getDOMPosition(rootNode, getAnchorPosition()) : focusNodeInfo,
+                // the text node at the anchor position
+                anchorTextNode = anchorNodeInfo && anchorNodeInfo.node && (anchorNodeInfo.node.nodeType === 3) ? anchorNodeInfo.node : null,
+                // the text node at the focus position
+                focusTextNode = focusNodeInfo && focusNodeInfo.node && (focusNodeInfo.node.nodeType === 3) ? focusNodeInfo.node : null,
+                // space for another node
+                node = null;
+
+            // move to start of text span; or to end of text span preceding the inline component
+            function jumpBeforeInlineNode(node) {
+                if (DOM.isTextSpan(node)) {
+                    // text span: jump to its beginning
+                    focusNodeInfo.node = node.firstChild;
+                    focusNodeInfo.offset = 0;
+                } else if (DOM.isTextSpan(node.previousSibling)) {
+                    // jump to end of the span preceding the inline component
+                    focusNodeInfo.node = node.previousSibling.firstChild;
+                    focusNodeInfo.offset = focusNodeInfo.node.nodeValue.length;
+                } else {
+                    Utils.warn('Selection.moveTextCursor.jumpBeforeInlineNode(): missing text span preceding a component node');
+                }
+            }
+
+            // skip inline component; move to end or to specific offset of text span
+            function jumpOverInlineNode(node, offset) {
+                if (DOM.isTextSpan(node)) {
+                    // text span: jump to passed offset, or to its end
+                    focusNodeInfo.node = node.firstChild;
+                    focusNodeInfo.offset = _.isNumber(offset) ? offset : focusNodeInfo.node.nodeValue.length;
+                } else if (DOM.isTextSpan(node.nextSibling)) {
+                    // jump to beginning of the span following the inline component
+                    // (may be an empty span before floating node)
+                    focusNodeInfo.node = node.nextSibling.firstChild;
+                    focusNodeInfo.offset = 0;
+                } else {
+                    Utils.warn('Selection.moveTextCursor.jumpOverInlineNode(): missing text span following a component node');
+                }
+            }
+
+            // check anchor and focus position
+            if (!anchorTextNode || !focusTextNode) {
+                Utils.warn('Selection.moveTextCursor(): missing valid text position');
+                return false;
+            }
+
+            // update focusNodeInfo according to the passed direction
+            if (backwards) {
+
+                // move back inside non-empty text span, but not always to the beginning
+                if (focusNodeInfo.offset > 1) {
+                    focusNodeInfo.offset -= 1;
+                }
+
+                // try to find the previous non-empty inline node in the own paragraph
+                else if ((node = findPreviousInlineNode(focusTextNode.parentNode))) {
+
+                    // offset is 1, or preceding node is a text span: move cursor behind the previous inline node
+                    if ((focusNodeInfo.offset === 1) || DOM.isTextSpan(node)) {
+                        jumpOverInlineNode(node);
+
+                    // offset is 0, skip the previous inline component (jump to end of its preceding inline node)
+                    } else {
+                        // jump to end of preceding text span
+                        jumpOverInlineNode(node.previousSibling);
+
+                        // try to find the correct trailing text span of the pre-preceding inline component
+                        // (this may jump from the preceding empty span over floating nodes to the trailing
+                        // text span of the previous inline component)
+                        if (DOM.isEmptySpan(node.previousSibling) && (node = findPreviousInlineNode(node))) {
+                            // skipping an inline node: jump to end of preceding text span (try to
+                            // find text span following the next preceding component)
+                            jumpOverInlineNode(node);
+                        }
+                    }
+                }
+
+                // after first character in paragraph: go to beginning of the first text span
+                else if (focusNodeInfo.offset === 1) {
+                    focusNodeInfo.offset = 0;
+                }
+
+                // try to find the previous non-empty inline node in the DOM tree (previous paragraph)
+                else if ((node = findPreviousInlineNode(focusTextNode.parentNode, { wholeTree: true }))) {
+                    jumpOverInlineNode(node);
+                }
+
+            } else {
+
+                // move ahead inside non-empty text span (always up to the end of the span)
+                if (focusNodeInfo.offset < focusTextNode.nodeValue.length) {
+                    focusNodeInfo.offset += 1;
+                }
+
+                // try to find the next non-empty inline node in the own paragraph
+                else if ((node = findNextInlineNode(focusTextNode.parentNode))) {
+                    // skip only the first character of following non-empty text span
+                    jumpOverInlineNode(node, 1);
+                }
+
+                // try to find the first non-empty inline node in the next paragraph
+                else if ((node = findNextInlineNode(focusTextNode.parentNode, { wholeTree: true }))) {
+                    jumpBeforeInlineNode(node);
+                }
+            }
+
+            // update browser selection if focusNodeInfo still valid
+            if (focusNodeInfo.node) {
+                applyBrowserSelection({ active: new DOM.Range(anchorNodeInfo, focusNodeInfo), ranges: [] });
+            }
+            return true;
         }
 
         // methods ------------------------------------------------------------
@@ -376,7 +573,6 @@ define('io.ox/office/editor/selection',
 
             var index = 0, length = Math.min(startPosition.length, endPosition.length);
 
-            // compare all array elements but the last ones
             while ((index < length) && (startPosition[index] === endPosition[index])) {
                 index += 1;
             }
@@ -428,10 +624,10 @@ define('io.ox/office/editor/selection',
          *  - {HTMLTableElement} tableNode: the table element containing the
          *      selection,
          *  - {Number[]} tablePosition: the logical position of the table,
-         *  - {Number[]} firstCellPosition: the logical position of the first
+         *  - {Number[2]} firstCellPosition: the logical position of the first
          *      cell, relative to the table (contains exactly two elements:
          *      row, column),
-         *  - {Number[]} lastCellPosition: the logical position of the last
+         *  - {Number[2]} lastCellPosition: the logical position of the last
          *      cell, relative to the table (contains exactly two elements:
          *      row, column),
          *  - {Number} width: the number of columns covered by the cell range,
@@ -542,59 +738,10 @@ define('io.ox/office/editor/selection',
             var // deferred return value
                 def = $.Deferred();
 
-            function advanceCursor(backwards) {
-
-                var // text node at the current focus position
-                    focusNodeInfo = Position.getDOMPosition(rootNode, getFocusPosition()),
-                    // text node at the current anchor position (changes with focus node without SHIFT key)
-                    anchorNodeInfo = event.shiftKey ? Position.getDOMPosition(rootNode, getAnchorPosition()) : focusNodeInfo;
-
-                function moveForwards() {
-                    var focusSpan = focusNodeInfo.node.parentNode;
-                    if (focusNodeInfo.offset < focusNodeInfo.node.nodeValue.length) {
-                        focusNodeInfo.offset += 1;
-                    } else if (DOM.isTextSpan(focusSpan.nextSibling)) {
-                        focusNodeInfo.node = focusSpan.nextSibling.firstChild;
-                        focusNodeInfo.offset = 1;
-                    } else {
-                        focusNodeInfo.node = Utils.findNextNode(rootNode, focusNodeInfo.node, function () { return DOM.isTextNodeInPortionSpan(this); }, DOM.DRAWING_NODE_SELECTOR);
-                        focusNodeInfo.offset = 0;
-                    }
-                }
-
-                function moveBackwards() {
-                    var focusSpan = focusNodeInfo.node.parentNode;
-                    if ((focusNodeInfo.offset === 1) && DOM.isTextSpan(focusSpan.previousSibling)) {
-                        focusNodeInfo.node = focusSpan.previousSibling.firstChild;
-                        focusNodeInfo.offset = focusNodeInfo.node.nodeValue.length;
-                    } else if (focusNodeInfo.offset > 0) {
-                        focusNodeInfo.offset -= 1;
-                    } else {
-                        focusNodeInfo.node = Utils.findPreviousNode(rootNode, focusNodeInfo.node, function () { return DOM.isTextNodeInPortionSpan(this); }, DOM.DRAWING_NODE_SELECTOR);
-                        focusNodeInfo.offset = focusNodeInfo.node ? focusNodeInfo.node.nodeValue.length : 0;
-                    }
-                }
-
-                // check anchor and focus position
-                if (!anchorNodeInfo || !anchorNodeInfo.node || !focusNodeInfo || !focusNodeInfo.node) {
-                    Utils.warn('Selection.advanceCursor(): missing valid text position');
-                    return false;
-                }
-
-                // update focusNodeInfo according to the passed direction
-                (backwards ? moveBackwards : moveForwards)();
-
-                // update browser selection if focusNodeInfo still valid
-                if (focusNodeInfo.node) {
-                    applyBrowserSelection({ active: new DOM.Range(anchorNodeInfo, focusNodeInfo), ranges: [] });
-                }
-                return true;
-            }
-
             // handle simple left/right cursor keys (with and without SHIFT) manually
             if ((event.type === 'keydown') && !event.ctrlKey && !event.altKey && !event.metaKey) {
                 if ((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.RIGHT_ARROW)) {
-                    if (advanceCursor(event.keyCode === KeyCodes.LEFT_ARROW)) {
+                    if (moveTextCursor({ extend: event.shiftKey, backwards: event.keyCode === KeyCodes.LEFT_ARROW })) {
                         def.resolve();
                     } else {
                         def.reject();
@@ -1130,7 +1277,7 @@ define('io.ox/office/editor/selection',
                 return Position.iterateParagraphChildNodes(contentNode, function (node, nodeStart, nodeLength, nodeOffset, offsetLength) {
 
                     // skip floating drawings (unless they are selected directly) and helper nodes
-                    if (DOM.isTextSpan(node) || DOM.isTextComponentNode(node) || DOM.isInlineDrawingNode(node) || (singleComponent && DOM.isFloatingDrawingNode(node))) {
+                    if (DOM.isTextSpan(node) || DOM.isInlineComponentNode(node) || (singleComponent && DOM.isFloatingDrawingNode(node))) {
                         // create local copy of position, iterator is allowed to change the array
                         return iterator.call(context, node, position.concat([nodeStart + nodeOffset]), nodeOffset, offsetLength);
                     }

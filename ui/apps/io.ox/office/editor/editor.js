@@ -4521,7 +4521,7 @@ define('io.ox/office/editor/editor',
                 return spanInfo.node.previousSibling;
             }
 
-            // return following span, if offset points to end of span
+            // return current span, if offset points to its end with following text span
             if ((spanInfo.offset === spanInfo.node.firstChild.nodeValue.length) && DOM.isTextSpan(spanInfo.node.nextSibling)) {
                 return spanInfo.node;
             }
@@ -5339,21 +5339,21 @@ define('io.ox/office/editor/editor',
         function implDeleteText(startPosition, endPosition) {
 
             var // info about the parent paragraph node
-                paragraphPosition = null, nodeInfo = null,
+                position = null, paragraph = null,
                 // last index in start and end position
                 startOffset = 0, endOffset = 0,
                 // next sibling text span of last visited child node
                 nextTextSpan = null;
 
             // get paragraph node from start position
-            if (!_.isArray(startPosition)) {
+            if (!_.isArray(startPosition) || (startPosition.length === 0)) {
                 Utils.warn('Editor.implDeleteText(): missing start position');
                 return false;
             }
-            paragraphPosition = startPosition.slice(0, -1);
-            nodeInfo = Position.getDOMPosition(editdiv, paragraphPosition, true);
-            if (!nodeInfo || !DOM.isParagraphNode(nodeInfo.node)) {
-                Utils.warn('Editor.implDeleteText(): no paragraph found at position ' + JSON.stringify(paragraphPosition));
+            position = startPosition.slice(0, -1);
+            paragraph = Position.getParagraphElement(editdiv, position);
+            if (!paragraph) {
+                Utils.warn('Editor.implDeleteText(): no paragraph found at position ' + JSON.stringify(position));
                 return false;
             }
 
@@ -5369,7 +5369,7 @@ define('io.ox/office/editor/editor',
             if (endOffset === -1) { endOffset = undefined; }
 
             // visit all covered child nodes (iterator allows to remove the visited node)
-            Position.iterateParagraphChildNodes(nodeInfo.node, function (node) {
+            Position.iterateParagraphChildNodes(paragraph, function (node) {
 
                 var // previous text span of current node
                     prevTextSpan = null;
@@ -5400,11 +5400,13 @@ define('io.ox/office/editor/editor',
                 // other component nodes (drawings or text components)
                 if (DOM.isTextComponentNode(node) || DOM.isDrawingNode(node)) {
 
-                    // remove preceding empty sibling text span
+                    // remove the visited node
+                    $(node).remove();
+
+                    // remove previous empty sibling text span (not next sibling which would break iteration)
                     if (DOM.isEmptySpan(prevTextSpan) && nextTextSpan) {
                         $(prevTextSpan).remove();
                     }
-                    $(node).remove();
                     return;
                 }
 
@@ -5424,7 +5426,7 @@ define('io.ox/office/editor/editor',
             }
 
             // validate paragraph node, store operation position for cursor position
-            implParagraphChanged(paragraphPosition);
+            implParagraphChanged(paragraph);
             lastOperationEnd = _.clone(startPosition);
         }
 
