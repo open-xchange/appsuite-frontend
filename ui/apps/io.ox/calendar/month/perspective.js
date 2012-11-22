@@ -81,7 +81,7 @@ define('io.ox/calendar/month/perspective',
                             .show()
                             .done(function (action) {
                                 if (action === 'cancel') {
-                                    self.refresh();
+                                    self.update();
                                     return;
                                 }
                                 if (action === 'ignore') {
@@ -101,14 +101,25 @@ define('io.ox/calendar/month/perspective',
                     .addButton('cancel', gt('Cancel'))
                     .show()
                     .done(function (action) {
-                        if (action === 'cancel') {
-                            self.refresh();
+                        switch (action) {
+                        case 'series':
+                            // get recurrence master object
+                            if (obj.old_start_date || obj.old_end_date) {
+                                api.get({id: obj.id, folder_id: obj.folder_id}).done(function (data) {
+                                    // calculate new dates if old dates are available
+                                    data.start_date += (obj.start_date - obj.old_start_date);
+                                    data.end_date += (obj.end_date - obj.old_end_date);
+                                    apiUpdate(data);
+                                });
+                            }
+                            break;
+                        case 'appointment':
+                            apiUpdate(api.removeRecurrenceInformation(obj));
+                            break;
+                        default:
+                            self.update();
                             return;
                         }
-                        if (action === 'series') {
-                            delete obj.recurrence_position;
-                        }
-                        apiUpdate(obj);
                     });
             } else {
                 apiUpdate(obj);
