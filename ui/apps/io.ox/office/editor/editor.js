@@ -2322,7 +2322,7 @@ define('io.ox/office/editor/editor',
                 if (isDrawingNode) {
                     // select the drawing
                     startPosition = Position.getOxoPosition(editdiv, drawing[0], 0);
-                    endPosition = Position.getOxoPosition(editdiv, drawing[0], 1);
+                    endPosition = Position.increaseLastIndex(startPosition);
                     selection.setTextSelection(startPosition, endPosition);
                     drawDrawingSelection(drawing);
                 }

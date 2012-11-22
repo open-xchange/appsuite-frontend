@@ -190,7 +190,7 @@ define('io.ox/office/editor/position',
      * @returns {Number[]}
      *  The calculated logical position.
      */
-    Position.getTextLevelOxoPosition = function (domposition, maindiv, isEndPoint, forwardCursor) {
+    Position.getTextLevelOxoPosition = function (domposition, maindiv, isEndPoint) {
 
         var node = domposition.node,
             offset = domposition.offset;
@@ -225,8 +225,7 @@ define('io.ox/office/editor/position',
         }
 
         if (DOM.isDrawingNode(node)) {
-            // move cursor behind the drawing, if hit by forward cursor key
-            offset = (forwardCursor === true) ? 1 : 0;
+            offset = 0;
         }
 
         if (DOM.isResizeNode(node) || DOM.isCellContentNode(node)) {
@@ -534,7 +533,7 @@ define('io.ox/office/editor/position',
         // setting some properties for drawing nodes or text component nodes like fields
         if ((DOM.isDrawingNode(localNode)) || (DOM.isTextComponentNode(localNode))) {
             foundValidNode = true;  // drawing nodes are valid
-            offset = isEndPoint ? 1 : 0;
+            offset = 0;
         }
 
         // checking, if a valid node was already found

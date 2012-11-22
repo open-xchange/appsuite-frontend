@@ -96,37 +96,6 @@ define('io.ox/office/editor/selection',
         }
 
         /**
-         * Converts the passed logical text position to a valid DOM point as
-         * used by the internal browser selection.
-         *
-         * @param {Number[]} position
-         *  The logical position of the target node. Must be the position of a
-         *  paragraph child node, either a text span, a text component (fields,
-         *  tabs), or a drawing node.
-         *
-         * @returns {DOM.Point|Null}
-         *  The DOM.Point object representing the passed logical position, or
-         *  null, if the passed position is invalid.
-         */
-        function getPointForTextPosition(position) {
-
-            var // resolve position to DOM element
-                nodeInfo = Position.getDOMPosition(rootNode, position, true);
-
-            // check that the position selects a paragraph child node
-            if (nodeInfo && nodeInfo.node && DOM.isParagraphNode(nodeInfo.node.parentNode)) {
-
-                // convert to a valid DOM point: text spans to text nodes with offset,
-                // otherwise DOM element point, consisting of parent node and own sibling index
-                return DOM.isTextSpan(nodeInfo.node) ?
-                    new DOM.Point(nodeInfo.node.firstChild, nodeInfo.offset) :
-                    new DOM.Point.createPointForNode(nodeInfo.node);
-            }
-
-            return null;
-        }
-
-        /**
          * A jQuery selector for non-empty text spans and inline component
          * nodes.
          */
@@ -248,8 +217,8 @@ define('io.ox/office/editor/selection',
             }
 
             // calculate start and end position (always text positions, also in cell range mode)
-            self.startPaM.oxoPosition = startPosition = Position.getTextLevelOxoPosition(startPoint, rootNode, false, forwardCursor);
-            self.endPaM.oxoPosition = endPosition = isCursor ? _.clone(startPosition) : Position.getTextLevelOxoPosition(endPoint, rootNode, true, forwardCursor);
+            self.startPaM.oxoPosition = startPosition = Position.getTextLevelOxoPosition(startPoint, rootNode, false);
+            self.endPaM.oxoPosition = endPosition = isCursor ? _.clone(startPosition) : Position.getTextLevelOxoPosition(endPoint, rootNode, true);
 
             // check for drawing selection
             DOM.clearDrawingSelection(selectedDrawing);
@@ -405,6 +374,42 @@ define('io.ox/office/editor/selection',
                 applyBrowserSelection({ active: new DOM.Range(anchorNodeInfo, focusNodeInfo), ranges: [] });
             }
             return true;
+        }
+
+        /**
+         * Converts the passed logical text position to a DOM point pointing to
+         * a DOM text node as used by the internal browser selection.
+         *
+         * @param {Number[]} position
+         *  The logical position of the target node. Must be the position of a
+         *  paragraph child node, either a text span, a text component (fields,
+         *  tabs), or a drawing node.
+         *
+         * @returns {DOM.Point|Null}
+         *  The DOM.Point object representing the passed logical position, or
+         *  null, if the passed position is invalid.
+         */
+        function getPointForTextPosition(position) {
+
+            var // resolve position to DOM element
+                nodeInfo = Position.getDOMPosition(rootNode, position, true),
+                node = nodeInfo ? nodeInfo.node : null;
+
+            // check that the position selects a paragraph child node
+            if (!node || !DOM.isParagraphNode(node.parentNode)) {
+                return null;
+            }
+
+            if (DOM.isTextSpan(node)) {
+                return new DOM.Point(node.firstChild, nodeInfo.offset);
+            }
+
+            node = Utils.findPreviousSiblingNode(node, function () { return DOM.isTextSpan(this); });
+            if (DOM.isTextSpan(node)) {
+                return new DOM.Point(node.firstChild, node.firstChild.nodeValue.length);
+            }
+
+            return null;
         }
 
         // methods ------------------------------------------------------------
