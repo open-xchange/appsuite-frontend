@@ -89,7 +89,9 @@
      // supported browsers
     _.browserSupport = {
         'Chrome': '20',
-        'Safari': '5'
+        'Safari': '5',
+        'Firefox': '10',
+        'IE': '9'
     };
 
     // browser detection - adopted from prototype.js
