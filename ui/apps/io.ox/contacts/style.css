@@ -19,9 +19,10 @@
 }
 
 .vgrid-cell.contact .private_flag {
-	float: right;
+	float: left;
 	color: #AAA;
-	font-size: 18px;
+	font-size: 17px;
+	margin-right: 3px;
 }
 
 .vgrid-cell.contact .fullname {
@@ -133,7 +134,9 @@
     .private-flag {
 	    color: #AAA;
 		font-size: 20pt;
-		margin-left: 8px;
+		margin-right: 5px;
+		line-height: 1.2em;
+		float: left;
     }
 
     .job {

@@ -276,8 +276,9 @@
     }
     
     .appointment .private-flag {
-    	float: right;
-    	font-size: 18px;
+    	float: left;
+		font-size: 17px;
+		margin-right: 3px;
     }
     
     .appointment.lasso {

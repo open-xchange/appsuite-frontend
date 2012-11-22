@@ -37,13 +37,10 @@
 }
 
 .vgrid-cell.calendar .private-flag {
- 	color: #AAA;
-	float: right;
-	display: inline-block;
-	line-height: 19px;
+	color: #AAA;
+	float: left;
 	font-size: 13pt;
-	position: relative;
-	top: 1px;
+	margin-right: 2px;
 }
 
 .vgrid-cell.calendar .location {
