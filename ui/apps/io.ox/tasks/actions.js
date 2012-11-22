@@ -25,7 +25,7 @@ define("io.ox/tasks/actions",
         ActionGroup = links.ActionGroup, ActionLink = links.ActionLink;
 
     new Action('io.ox/tasks/actions/create', {
-        action: function (app) {
+        action: function (baton) {
             require(['io.ox/tasks/edit/main'], function (edit) {
                 edit.getApp().launch();
             });

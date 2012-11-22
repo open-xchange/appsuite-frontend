@@ -28,9 +28,9 @@ define('io.ox/contacts/actions',
         index: 100,
         id: 'delete',
         requires: 'some delete',
-        action:  function (data) {
+        action: function (baton) {
 
-            var question;
+            var data = baton.data, question;
 
             // get proper question
             if (_.isArray(data) && data.length > 1) {
@@ -60,7 +60,8 @@ define('io.ox/contacts/actions',
         index: 100,
         id: 'edit',
         requires: 'one modify',
-        action: function (data) {
+        action: function (baton) {
+            var data = baton.data;
             if (data.mark_as_distributionlist === true) {
                 require(['io.ox/contacts/distrib/main'], function (m) {
                     m.getApp(data).launch().done(function () {
