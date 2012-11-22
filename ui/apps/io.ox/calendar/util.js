@@ -202,13 +202,15 @@ define("io.ox/calendar/util",
                     //#, c-format
                     gt.ngettext('%d day', '%d days', length), length);
             } else {
+                var L = date.locale,
+                    diff = L.intervals[(L.h12 ? 'hm' : 'Hm') +
+                                       (date.TIME & date.TIMEZONE ? 'v' : '')];
                 return new D(data.start_date).formatInterval(
-                    new D(data.end_date), date.TIME);
+                    new D(data.end_date), diff.m);
             }
         },
 
         addTimezoneLabel: function (parent, data) {
-
             var current = date.Local.getTTInfoLocal(data.start_date);
 
             parent.append(
