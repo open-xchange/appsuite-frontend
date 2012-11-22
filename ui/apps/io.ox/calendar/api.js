@@ -261,10 +261,6 @@ define("io.ox/calendar/api",
                 recurrence_master: false
             }, o || {});
 
-            // round start & end date
-//            o.start = (o.start / DAY >> 0) * DAY;
-//            o.end = (o.end / DAY >> 0) * DAY;
-
             var key = o.folder + "." + o.start + "." + o.end,
                 params = {
                     action: "updates",
@@ -306,6 +302,18 @@ define("io.ox/calendar/api",
     };
 
     Events.extend(api);
+
+    api.removeRecurrenceInformation = function (obj) {
+        var recAttr = ["change_exceptions", "delete_exceptions", "days",
+            "day_in_month", "month", "interval", "until", "occurrences"];
+        for (var i = 0; i < recAttr.length; i++) {
+            if (obj[recAttr[i]]) {
+                delete obj[recAttr[i]];
+            }
+        }
+        obj.recurrence_type = 0;
+        return obj;
+    };
 
     api.getInvites = function () {
 
