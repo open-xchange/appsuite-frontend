@@ -96,7 +96,6 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             util.buildExtensionRow(detailsTab, this.getRow(2, app, 'details'), self.baton);
             util.buildExtensionRow(detailsTab, this.getRow(3, app, 'details'), self.baton);
             util.buildExtensionRow(detailsTab, this.getRow(4, app, 'details'), self.baton);
-
             return this.$el;
         },
         getRow: function (number, app, tab) {
@@ -190,6 +189,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                             app.quit();
                         },
                         error: function (model, response) {
+                            setTimeout(function () {notifications.yell("error", gt("A severe error occurred")); }, 300);
                             console.log(model);
                             console.log(response);
                         }

@@ -22,7 +22,7 @@ define('plugins/notifications/tasks/register',
 
     'use strict';
 
-    // this file builds two notification views: OVER DUE TASKS and TASK REMINDERS
+    // this file builds three notification views: OVER DUE TASKS, TASK REMINDERS and TASK CONFIRMATIONS
 
     /*
      * OVER DUE TASKS
@@ -317,6 +317,140 @@ define('plugins/notifications/tasks/register',
             });
 
             reminderApi.getReminders(_.now());
+        }
+    });
+    
+    /*------------------------------------------
+    *
+    * CONFIRMATION TASKS
+    *
+    *------------------------------------------
+    */
+
+    ext.point('io.ox/core/notifications/task-confirmation/header').extend({
+        draw: function () {
+            this.append(
+                $('<legend class="section-title">').text(gt('Task invites')),
+                $('<div class="notifications">')
+            );
+        }
+    });
+
+    ext.point('io.ox/core/notifications/task-confirmation/item').extend({
+        draw: function (baton) {
+            var task = util.interpretTask(baton.model.toJSON());
+            this.attr('data-cid', baton.model.get('cid'))
+            .append(
+                $('<div class="title">').text(_.noI18n(task.title)),
+                $('<span class="end_date">').text(_.noI18n(task.end_date)),
+                $('<span class="status">').text(task.status).addClass(task.badge),
+                $('<div class="actions">').append(
+                    $('<select class="stateselect" data-action="selector">').append(
+                            $('<option>').text(gt('Confirm')),
+                            $('<option>').text(gt('Decline')),
+                            $('<option>').text(gt('Tentative'))),
+                    $('<button class="btn btn-inverse" data-action="change_state">').text(gt('Change state'))
+                )
+            );
+            task = null;
+        }
+    });
+
+    var ConfirmationView = Backbone.View.extend({
+
+        className: 'taskNotification item',
+
+        events: {
+            'click': 'onClickItem',
+            'click [data-action="change_state"]': 'onChangeState'
+            //'dispose': 'close'
+        },
+
+        render: function () {
+            var baton = ext.Baton({ model: this.model, view: this });
+            ext.point('io.ox/core/notifications/task-confirmation/item').invoke('draw', this.$el, baton);
+            return this;
+        },
+
+        onClickItem: function (e) {
+
+            var overlay = $('#io-ox-notifications-overlay'),
+                obj = {
+                    id: this.model.get('id'),
+                    folder: this.model.get('folder_id')
+                },
+                sidepopup = overlay.prop('sidepopup'),
+                cid = _.cid(obj);
+
+               // toggle?
+            if (sidepopup && cid === overlay.find('.tasks-detailview').attr('data-cid')) {
+                sidepopup.close();
+            } else {
+                require(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail'], function (dialogs, viewDetail) {
+                    // get task and draw detail view
+                    api.get(obj, false).done(function (taskData) {
+                        // open SidePopup without arrow
+                        new dialogs.SidePopup({ arrow: false, side: 'right' })
+                            .setTarget(overlay)
+                            .show(e, function (popup) {
+                                popup.append(viewDetail.draw(taskData));
+                            });
+                    });
+                });
+            }
+        },
+        
+        onChangeState: function (e) {
+            e.stopPropagation();
+            var model = this.model,
+                state = this.$el.find(".stateselect").prop('selectedIndex') + 1;
+            api.confirm({id: model.get('id'),
+                         folder_id: model.get("folder_id"),
+                         data: {confirmation: state }
+            }).done(function () {
+                model.collection.remove(model);
+            });
+        }
+    });
+
+    var NotificationsConfirmationView = Backbone.View.extend({
+
+        className: 'notifications',
+        id: 'io-ox-notifications-confirmation-tasks',
+
+        initialize: function () {
+            this.collection.on('reset add remove', this.render, this);
+        },
+
+        render: function () {
+
+            var baton = ext.Baton({ view: this });
+            ext.point('io.ox/core/notifications/task-confirmation/header').invoke('draw', this.$el.empty(), baton);
+
+            this.collection.each(function (model) {
+                this.$el.append(
+                    new ConfirmationView({ model: model }).render().$el
+                );
+            }, this);
+
+            return this;
+        }
+    });
+
+    ext.point('io.ox/core/notifications/register').extend({
+        id: 'confirmationTasks',
+        index: 400,
+        register: function (controller) {
+            var notifications = controller.get('io.ox/tasksconfirmation', NotificationsConfirmationView);
+            api.on('confirm-tasks', function (e, confirmationTasks) {
+                _(confirmationTasks).each(function (task) {
+                    notifications.collection.push(
+                        new Backbone.Model(task),
+                        { silent: true }
+                    );
+                });
+                notifications.collection.trigger('reset');
+            });
         }
     });
 

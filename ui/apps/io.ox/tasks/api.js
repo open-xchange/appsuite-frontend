@@ -11,8 +11,9 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 define("io.ox/tasks/api", ["io.ox/core/http",
+                           "io.ox/core/config",
                            'io.ox/core/api/factory',
-                           "io.ox/core/api/folder"], function (http, apiFactory, folderApi) {
+                           "io.ox/core/api/folder"], function (http, configApi, apiFactory, folderApi) {
 
     "use strict";
 
@@ -133,6 +134,20 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             return api.update(_.now(), task.id, {folder_id: newFolder}, folder);
         });
     };
+    
+    api.confirm =  function (options) { //options.id is the id of the task not userId
+        return http.PUT({
+            module: "tasks",
+            params: {
+                action: "confirm",
+                folder: options.folder_id || options.folder,
+                id: options.id,
+                timezone: "UTC"
+            },
+            data: options.data, // object with confirmation attribute
+            appendColumns: false
+        });
+    };
 
     api.getDefaultFolder = function () {
         return folderApi.getDefaultFolder('tasks');
@@ -145,7 +160,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             module: "tasks",
             params: {action: "all",
                 folder: api.getDefaultFolder(),
-                columns: "1,20,200,202,203,300,309",
+                columns: "1,20,200,202,220,203,300,309",
                 sort: "202",
                 order: "asc",
                 timezone: "UTC"
@@ -153,15 +168,26 @@ define("io.ox/tasks/api", ["io.ox/core/http",
         }).pipe(function (list) {
             // sorted by end_date filter over due Tasks
             var now = new Date(),
-                dueTasks = [];
+                userId = configApi.get('identifier'),
+                dueTasks = [],
+                confirmTasks = [];
             for (var i = 1; i < list.length; i++) {
                 var filterOverdue = (list[i].end_date < now.getTime() && list[i].status !== 3 && list[i].end_date !== null);
                 if (filterOverdue) {
                     dueTasks.push(list[i]);
                 }
+                for (var a = 0; a < list[i].participants.length; a++) {
+                    if (list[i].participants[a].id === userId && list[i].participants[a].confirmation === 0) {
+                        confirmTasks.push(list[i]);
+                        
+                    }
+                }
             }
             if (dueTasks.length > 0) {
                 api.trigger('new-tasks', dueTasks);
+            }
+            if (confirmTasks.length > 0) {
+                api.trigger('confirm-tasks', confirmTasks);
             }
             return list;
         });
