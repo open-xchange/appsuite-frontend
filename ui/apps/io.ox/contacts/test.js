@@ -67,7 +67,7 @@ define("io.ox/contacts/test",
                 });
 
                 j.waitsFor(function () {
-                    createButton = $(".window-toolbar button[data-action='create']");
+                    createButton = $("a[data-action='io.ox/contacts/actions/create']");
                     if (createButton[0]) {
                         return true;
                     }
@@ -194,8 +194,9 @@ define("io.ox/contacts/test",
                     }, 'looks for the list', TIMEOUT);
 
                     j.waitsFor(function () {
-                        button = $('table[data-obj-id="' + cid + '"] .io-ox-inline-links a[data-action="delete"]');
+                        button = $('.io-ox-inline-links a[data-action="delete"]');
                         if (button[0]) {
+                            console.log(button);
                             return true;
                         }
                     }, 'looks for delete button', TIMEOUT);
