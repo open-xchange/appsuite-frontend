@@ -259,17 +259,12 @@ define('io.ox/core/tk/vgrid',
         // selection
         Selection.extend(this, scrollpane);
 
+        // due to performance reasons we don't scrol but jump
         scrollToLabel = function (index) {
             var obj = labels.list[index];
             if (obj !== undefined) {
-                scrollpane
-                    .stop()
-                    .animate({
-                        scrollTop: obj.top
-                    }, 250, function () {
-                        self.selection.set(all[obj.pos]);
-                        obj = null;
-                    });
+                scrollpane.scrollTop(obj.top);
+                self.selection.set(all[obj.pos]);
             }
         };
 

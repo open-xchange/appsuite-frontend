@@ -42,10 +42,11 @@ define("io.ox/contacts/main",
         thumbs,
         gridContainer,
         right,
-        //#. Address book thumb index
-        //#. (guess translation is only needed for Asian languages)
-        //#. This string is simply split at spaces
-        fullIndex = gt('A B C D E F G H I J K L M N O P Q R S T U V W X Y Z');
+        fullIndex =
+            //#. Address book thumb index
+            //#. (guess translation is only needed for Asian languages)
+            //#. This string is simply split at spaces (can be more or less than 26 characters)
+            gt('A B C D E F G H I J K L M N O P Q R S T U V W X Y Z');
 
     // we have to fix the string first, otherwise we get false positives during i18n debug
     fullIndex = _.noI18n.fix(fullIndex).split(' ');
