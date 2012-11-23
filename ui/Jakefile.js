@@ -119,11 +119,11 @@ function jsFilter (data) {
     tree = pro.ast_mangle(tree, { defines: {
         STATIC_APPS: parse(process.env.STATIC_APPS || 'true')[1][0][1]
     } });
-    tree = pro.ast_squeeze(tree);
+    tree = pro.ast_squeeze(tree, { make_seqs: false });
     // use split_lines
     return catchParseErrors(function (data) {
         return pro.split_lines(data, 500);
-    }, pro.gen_code(tree)) + ';';
+    }, pro.gen_code(tree, { })) + ';';
 }
 utils.fileType("source").addHook("filter", jsFilter)
     .addHook("define", i18n.potScanner);
