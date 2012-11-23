@@ -61,9 +61,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             // get window
             win = ox.ui.createWindow({
                 name: 'io.ox/tasks/edit',
-                title: gt("Edit task"),
-                toolbar: false,
-                close: true
+                chromeless: true
             });
 
             win.addClass('io-ox-tasks-edit-main');
