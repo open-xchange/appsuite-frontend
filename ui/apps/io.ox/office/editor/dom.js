@@ -1464,6 +1464,17 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         $(drawings).data('drawingSelection', null);
     };
 
+    DOM.repaintDrawingSelection = function (drawing, moveable) {
+
+        var drawingSelParams = drawing.data('drawingSelection');
+
+        if (drawingSelParams) {
+            DOM.clearDrawingSelection(drawing);
+            drawingSelParams.options.moveable = moveable;
+            DOM.drawDrawingSelection(drawing, drawingSelParams.options, drawingSelParams.mousedownhandler, drawingSelParams.mousemovehandler, drawingSelParams.mouseuphandler, drawingSelParams.context);
+        }
+    };
+
     /**
      * Inserts a new resize line at the position of the specified resize nodes.
      *

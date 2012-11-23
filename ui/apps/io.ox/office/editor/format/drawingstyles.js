@@ -237,17 +237,6 @@ define('io.ox/office/editor/format/drawingstyles',
         };
     }
 
-    function repaintDrawingSelection(drawing, moveable) {
-
-        var drawingSelParams = drawing.data('drawingSelection');
-
-        if (drawingSelParams) {
-            DOM.clearDrawingSelection(drawing);
-            drawingSelParams.options.moveable = moveable;
-            DOM.drawDrawingSelection(drawing, drawingSelParams.options, drawingSelParams.mousedownhandler, drawingSelParams.mousemovehandler, drawingSelParams.mouseuphandler, drawingSelParams.context);
-        }
-    }
-
     /**
      * Will be called for every drawing node whose attributes have been changed.
      * Repositions and reformats the drawing according to the passed attributes.
@@ -290,19 +279,26 @@ define('io.ox/office/editor/format/drawingstyles',
 
         if (attributes.inline) {
 
-            // TODO: Word uses fixed predefined margins in inline mode, we too?
-            drawing.removeClass('float left right').addClass('inline').css('margin', '0 1mm');
-            // ignore other attributes in inline mode
+            // switch from floating to inline mode
+            if (drawing.hasClass('float')) {
+                // repaint the selection, convert it to a non-moveable selection
+                DOM.repaintDrawingSelection(drawing, false);
+                // TODO: Word uses fixed predefined margins in inline mode, we too?
+                drawing.removeClass('float left right').addClass('inline').css('margin', '0 1mm');
+                // ignore other attributes in inline mode
+            }
 
             // remove leading node used for positioning
             verticalOffsetNode.remove();
 
-            // repaint the non-moveable selection
-            repaintDrawingSelection(drawing, false);
-
         } else {
 
-            drawing.removeClass('inline').addClass('float');
+            // switch from inline to floating mode
+            if (drawing.hasClass('inline')) {
+                // repaint the selection, convert it to a moveable selection
+                DOM.repaintDrawingSelection(drawing, true);
+                drawing.removeClass('inline').addClass('float');
+            }
 
             // calculate top offset (only if drawing is anchored to paragraph)
             if (attributes.anchorVertBase === 'paragraph') {
@@ -416,9 +412,6 @@ define('io.ox/office/editor/format/drawingstyles',
                 marginLeft: Utils.convertHmmToCssLength(leftMargin, 'px', 0),
                 marginRight: Utils.convertHmmToCssLength(rightMargin, 'px', 0)
             });
-
-            // repaint the moveable selection
-            repaintDrawingSelection(drawing, true);
         }
 
         // using replacement data, if available (valid for all drawing types)
