@@ -121,8 +121,10 @@ define('io.ox/core/permissions/permissions',
                     gt('delete all objects')
             },
             'admin': {
-                1:  gt('Yes'), // in this order
-                0:  gt('No')
+                0:  //#. folder permissions - Is Admin? NO
+                    gt('No'),
+                1:  //#. folder permissions - Is Admin? YES
+                    gt('Yes')
             },
             'preset': {}
         },
