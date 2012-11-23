@@ -199,7 +199,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                             app.quit();
                         },
                         error: function (model, response) {
-                            setTimeout(function () {notifications.yell("error", gt("A severe error occurred")); }, 300);
+                            setTimeout(function () {notifications.yell("error", response.error); }, 300);
                             console.log(model);
                             console.log(response);
                         }

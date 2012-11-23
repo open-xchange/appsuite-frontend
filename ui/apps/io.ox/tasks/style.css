@@ -46,7 +46,7 @@
 .vgrid-cell.tasks .title {
     color: black;
     font-weight: 500;
-    display: inline;
+    //display: inline;
 }
 
 .vgrid-cell.tasks .private-flag {
@@ -64,6 +64,7 @@
 .vgrid-cell.tasks .participants {
     line-height: 1em;
     margin-right: 1em;
+    float: left;
 }
 
 .vgrid-cell.tasks .progress {

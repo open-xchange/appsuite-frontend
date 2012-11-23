@@ -27,8 +27,8 @@ define('io.ox/tasks/view-grid-template',
                     this.addClass('tasks').append(
                         $('<div class="first-row">').append(
                             end_date = $('<span>').addClass('end_date'),
-                            title = $('<div>').addClass('title'),
-                            private_flag = $('<i class="icon-lock private-flag">').hide()
+                            private_flag = $('<i class="icon-lock private-flag">').hide(),
+                            title = $('<div>').addClass('title')
                         ),
                         $('<div class="second-row">').append(
                             status = $('<span>').addClass('status'),
