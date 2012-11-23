@@ -231,12 +231,6 @@
         color: #ccc;
         color: rgba(255, 255, 255, 0.6);
     }
-
-    .appointment .private-flag {
-    	float: left;
-    	display: inline-block;
-    	font-size: 15px;
-    }
     
     /* shown_as colors */
     @appointment-reserved: #08c; /* blue */ 
@@ -249,6 +243,12 @@
     @appointment-hover-pct: 15%; 
     
     /* appointment status styles */
+    .appointment .private-flag {
+        float: left;
+        font-size: 15px;
+        margin-right: 3px;  
+    }
+    
     .appointment.reserved {
         background-color: @appointment-reserved;
     }

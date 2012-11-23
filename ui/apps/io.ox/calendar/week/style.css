@@ -245,12 +245,6 @@
         .transition(opacity 0.2s);
     }
     
-    .appointment .private-flag {
-    	float: left;
-		font-size: 17px;
-		margin-right: 3px;
-    }
-    
     .appointment.lasso {
         background-color: @appointment-lasso;
         width: 100%;
@@ -273,6 +267,12 @@
     @appointment-hover-pct: 15%; 
     
     /* appointment status styles */
+    .appointment .private-flag {
+        float: left;
+        font-size: 15px;
+        margin-right: 3px;
+    }
+    
     .appointment.reserved {
         background-color: @appointment-reserved;
     }
