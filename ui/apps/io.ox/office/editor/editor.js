@@ -2749,15 +2749,17 @@ define('io.ox/office/editor/editor',
                     }
                 }
 
-                // Selection was adjusted, so we need to use start, not end
-                self.insertText(c, startPosition);
+                undoManager.enterGroup(function () {
 
-                if (! _.isEmpty(preselectedAttributes)) {
-                    // setting selection
-                    selection.setTextSelection(startPosition, endPosition);
-                    self.setAttributes('character', preselectedAttributes);
-                    preselectedAttributes = {};
-                }
+                    self.insertText(c, startPosition);
+
+                    if (! _.isEmpty(preselectedAttributes)) {
+                        // setting selection, grouping of operations is required
+                        selection.setTextSelection(startPosition, endPosition);
+                        self.setAttributes('character', preselectedAttributes);
+                        preselectedAttributes = {};
+                    }
+                }, this);
 
                 // set cursor behind character
                 selection.setTextSelection(endPosition);
