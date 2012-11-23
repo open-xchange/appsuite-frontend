@@ -389,7 +389,8 @@ define('io.ox/core/api/folder',
                             id: opt.folder,
                             tree: '1'
                         },
-                        data: opt.changes || {}
+                        data: opt.changes || {},
+                        appendColumns: false
                     })
                     .done(function (id) {
                         // get fresh folder data (use maybe changed id)

@@ -614,6 +614,7 @@ define('io.ox/core/tk/folderviews',
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     var pane = new dialogs.ModalDialog({
                         width: 400,
+//                        height: 200,
                         easyOut: true
                     });
                     var changesArray = [];
@@ -863,7 +864,7 @@ define('io.ox/core/tk/folderviews',
             // set title
             label.text(_.noI18n(data.title));
             // set counter (mail only)
-            if (options.type === 'mail' && data.unread) {
+            if (options.type === 'mail' && data.unread && !options.checkbox) {
                 label.css('fontWeight', 'bold');
                 counter.text(gt.noI18n(data.unread || '')).show();
             } else {
