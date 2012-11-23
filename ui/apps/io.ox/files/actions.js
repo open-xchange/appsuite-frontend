@@ -99,7 +99,7 @@ define("io.ox/files/actions",
             return e.collection.has('one') && pattern.test(e.context.data.filename);
         },
         action: function (baton) {
-            ox.launch('io.ox/office/editor/main', { action: 'load', file: baton.data.data });
+            ox.launch('io.ox/office/editor/main', { action: 'load', file: baton.data });
         }
     });
 
@@ -108,7 +108,7 @@ define("io.ox/files/actions",
             return e.collection.has('one') && /\.(doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg)$/i.test(e.context.data.filename);
         },
         action: function (baton) {
-            ox.launch('io.ox/office/preview/main', { action: 'load', file: baton.data.data });
+            ox.launch('io.ox/office/preview/main', { action: 'load', file: baton.data });
         }
     });
 
@@ -118,7 +118,7 @@ define("io.ox/files/actions",
             return e.collection.has('one') && pattern.test(e.context.data.filename);
         },
         action: function (baton) {
-            ox.launch('io.ox/office/editor/main', { action: 'new', folder_id: baton.data.folder_id, template: baton.data.data });
+            ox.launch('io.ox/office/editor/main', { action: 'new', folder_id: baton.data.folder_id, template: baton.data });
         }
     });
 
