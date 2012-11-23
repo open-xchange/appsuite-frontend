@@ -324,6 +324,7 @@ define('io.ox/files/mediaplayer',
         close: function () {
             if ($('#io-ox-topbar > .minimizedmediaplayer').length === 0)
             {
+                this.mediaelement.pause();
                 this.player.empty().remove();
                 this.trackdisplay.remove(); // no empty; kills inner stuff
                 this.playlist.empty().remove();
