@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'], function (ext, http) {
+define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http', 'io.ox/core/cache'], function (ext, http, cache) {
     'use strict';
     // TODO: Caching and Update Handling
 
@@ -19,39 +19,38 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
     var def = new $.Deferred();
 
 
-    var apps = {},
-        plugins = {},
-        pluginPoints = {};
+    var manifestCache = new cache.SimpleCache("manifests", true);
 
 
 
     var manifestManager = {
         loadPluginsFor: function (pointName, cb) {
             cb = cb || $.noop;
-            if (!pluginPoints[pointName] || pluginPoints[pointName].length === 0) {
+            if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
                 cb();
                 return $.when();
             }
-            var requirements = _(pluginPoints[pointName]).pluck("path");
+            var requirements = _(this.pluginPoints[pointName]).pluck("path");
 
             return require(requirements, cb);
         },
         withPluginsFor: function (pointName, requirements) {
             requirements = requirements || [];
-            if (!pluginPoints[pointName] || pluginPoints[pointName].length === 0) {
+            if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
                 return requirements;
             }
-            return requirements.concat(_(pluginPoints[pointName]).pluck("path"));
+            return requirements.concat(_(this.pluginPoints[pointName]).pluck("path"));
         },
         pluginsFor: function (pointName) {
-            if (!pluginPoints[pointName] || pluginPoints[pointName].length === 0) {
+            if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
                 return [];
             }
-            return [].concat(_(pluginPoints[pointName]).pluck("path"));
+            return [].concat(_(this.pluginPoints[pointName]).pluck("path"));
         },
-        apps: apps,
-        plugins: plugins,
-        pluginPoints: pluginPoints
+        apps: {},
+        plugins: {},
+        pluginPoints: {},
+        loader: 'none'
     };
 
     ox.withPluginsFor = function (pointName, requirements) {
@@ -60,52 +59,86 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
 
     ox.manifests = manifestManager;
 
+    var fnStoreState = function () {
+        if (ox.session) {
+            manifestCache.add('default', [manifestManager.apps, manifestManager.plugins, manifestManager.pluginPoints]);
+        }
+    };
+
+    var fnLoadState = function () {
+        return manifestCache.get('default').done(function (o) {
+            if (manifestCache.loader === 'backend') {
+                def.resolve(manifestManager); // Whoever resolves first, wins
+                return; // Backend already fetched everything
+            }
+            if (!o) {
+                return;
+            }
+            manifestManager.apps = o[0];
+            manifestManager.plugins = o[1];
+            manifestManager.pluginPoints = o[2];
+            manifestManager.loader = 'cache';
+            def.resolve(manifestManager); // Whoever resolves first, wins
+        });
+    };
+
     var fnProcessManifest = function (manifest) {
         if (manifest.namespace) {
             // Looks like a plugin
-            if (!pluginPoints[manifest.namespace]) {
-                pluginPoints[manifest.namespace] = [];
+            if (!manifestManager.pluginPoints[manifest.namespace]) {
+                manifestManager.pluginPoints[manifest.namespace] = [];
             }
-            pluginPoints[manifest.namespace].push(manifest);
-            plugins[manifest.path] = manifest;
+            manifestManager.pluginPoints[manifest.namespace].push(manifest);
+            manifestManager.plugins[manifest.path] = manifest;
         } else {
             // Looks like an app
-            apps[manifest.path] = manifest;
+            manifestManager.apps[manifest.path] = manifest;
         }
     };
 
     var fnLoadStaticFiles = function () {
         require([ox.base + "/src/manifests.js"], function (manifests) {
+            manifestManager.loader = 'backend';
             _(manifests).each(fnProcessManifest);
-            def.resolve(manifestManager);
+            fnStoreState();
+            def.resolve(manifestManager); // Whoever resolves first, wins
         }).fail(function () {
-            def.resolve(manifestManager);
+            fnStoreState();
+            def.resolve(manifestManager); // Whoever resolves first, wins
         });
     };
 
-    // Ask the backend
-    if (ox.session) {
-        http.GET({
-            module: 'apps/manifests',
-            params: {
-                action: 'all'
-            }
-        }).done(function (manifests) {
-            _(manifests).each(fnProcessManifest);
-            // Load Manifest Extensions
-            manifestManager.loadPluginsFor('manifests').done(function () {
-                // Apply Extensions
-                ext.point("io.ox/core/manifests").invoke('customize', manifestManager);
+    var fnLoadBackendManifests = function () {
+        if (ox.session) {
+            http.GET({
+                module: 'apps/manifests',
+                params: {
+                    action: 'all'
+                }
+            }).done(function (manifests) {
+                manifestManager.loader = 'backend';
+
+                _(manifests).each(fnProcessManifest);
+                // Load Manifest Extensions
+                manifestManager.loadPluginsFor('manifests').done(function () {
+                    // Apply Extensions
+                    ext.point("io.ox/core/manifests").invoke('customize', manifestManager);
+                    fnLoadStaticFiles();
+                });
+
+            }).fail(function (resp) {
+                console.warn("Could not load backend manifests", resp);
                 fnLoadStaticFiles();
             });
-
-        }).fail(function (resp) {
-            console.warn("Could not load backend manifests", resp);
+        } else {
             fnLoadStaticFiles();
-        });
-    } else {
-        fnLoadStaticFiles();
-    }
+        }
+    };
+
+    // Try the cache and the backend
+    // First one resolves this module
+    fnLoadState();
+    fnLoadBackendManifests();
 
     return def;
     
