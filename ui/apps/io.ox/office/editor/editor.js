@@ -1752,6 +1752,10 @@ define('io.ox/office/editor/editor',
                     styleSheets = this.getStyleSheets(family),
                     // logical position
                     localPosition = null,
+                    // another logical position
+                    localDestPosition = null,
+                    // the length of the paragraph
+                    paragraphLength = null,
                     // an additional operation
                     newOperation = null;
 
@@ -1856,7 +1860,13 @@ define('io.ox/office/editor/editor',
 
                         // when switching from floated to inline, a move of the drawing might be necessary
                         if ((attributes.inline === true) && (DOM.isFloatingDrawingNode(element)) && ($(element).data('inlinePosition')) && (! _.isEqual(localPosition, $(element).data('inlinePosition')))) {
-                            newOperation = { name: Operations.MOVE, start: localPosition, end: localPosition, to: $(element).data('inlinePosition') };
+
+                            localDestPosition = $(element).data('inlinePosition'); // -> is this position still valid?
+                            paragraphLength = Position.getParagraphLength(editdiv, localDestPosition);
+                            if (paragraphLength < localDestPosition[localDestPosition.length - 1]) {
+                                localDestPosition[localDestPosition.length - 1] = paragraphLength;
+                            }
+                            newOperation = { name: Operations.MOVE, start: localPosition, end: localPosition, to: localDestPosition };
                             applyOperation(newOperation);
                             localPosition = $(element).data('inlinePosition');
                         }
