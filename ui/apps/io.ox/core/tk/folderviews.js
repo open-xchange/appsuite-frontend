@@ -614,7 +614,7 @@ define('io.ox/core/tk/folderviews',
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     var pane = new dialogs.ModalDialog({
                         width: 400,
-//                        height: 200,
+                        modalbodyheight: 200,
                         easyOut: true
                     });
                     var changesArray = [];

@@ -95,6 +95,9 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core'], func
             nodes[part] = nodes.popup.find('.modal-' + part);
         });
 
+        if (options.modalbodyheight) {
+            nodes.body.css('max-height', options.modalbodyheight + 'px');
+        }
         // add event hub
         Events.extend(this);
 
