@@ -21,6 +21,10 @@
 	margin-bottom: 2em;
  }
  
+ .io-ox-tasks-edit-main .collapsed{
+ 	display: none;
+ }
+ 
  .io-ox-tasks-edit-main .cancel{
 	float: right;
  }

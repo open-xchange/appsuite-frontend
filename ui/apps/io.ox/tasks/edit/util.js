@@ -68,6 +68,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                     $(this).attr("for", $(this).next().attr('id'));
                 }
             });
+            return row;
         },
         buildRow: function (parent, nodes, widths, fillGrid) {
 

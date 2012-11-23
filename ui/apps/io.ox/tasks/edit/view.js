@@ -46,19 +46,28 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             util.buildExtensionRow(self.$el, this.getRow(1, app), self.baton);
 
             //row 2 start date due date
-            util.buildExtensionRow(self.$el, this.getRow(2), self.baton);
+            util.buildExtensionRow(self.$el, this.getRow(2), self.baton).addClass("collapsed");
              
             //row 3 description
             util.buildExtensionRow(self.$el, this.getRow(3), self.baton);
+            
+            //expand link
+            $('<a>').text(gt("Expand form")).attr('href', '#')
+            .on('click', function (e) {
+                e.preventDefault();
+                self.$el.find('.collapsed').show();
+                $(this).remove();
+            })
+            .appendTo(this.$el);
 
             //row 4 reminder
-            util.buildExtensionRow(self.$el, this.getRow(4), self.baton);
+            util.buildExtensionRow(self.$el, this.getRow(4), self.baton).addClass("collapsed");
 
             //row 5 status progress priority privateFlag
-            util.buildExtensionRow(self.$el, this.getRow(5), self.baton);
+            util.buildExtensionRow(self.$el, this.getRow(5), self.baton).addClass("collapsed");
 
             //row 6 repeat
-            util.buildRow(this.$el, this.fields.repeatLink);
+            //util.buildRow(this.$el, this.fields.repeatLink);
 
             //tabsection
             var temp = util.buildTabs([gt('Participants'),
@@ -70,12 +79,12 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 participantsTab = temp.content.find('#edit-task-tab0'  + '-' + self.cid),
                 attachmentsTab = temp.content.find('#edit-task-tab1'  + '-' + self.cid),
                 detailsTab = temp.content.find('#edit-task-tab2'  + '-' + self.cid);
-            this.$el.append(tabs, temp.content);
+            this.$el.append(tabs.addClass("collapsed"), temp.content);
             temp = null;
 
             //partitipants tab
-            util.buildExtensionRow(participantsTab, [this.getRow(0, app, 'participants')], self.baton);
-            util.buildExtensionRow(participantsTab, [this.getRow(1, app, 'participants')], self.baton);
+            util.buildExtensionRow(participantsTab, [this.getRow(0, app, 'participants')], self.baton).addClass("collapsed");
+            util.buildExtensionRow(participantsTab, [this.getRow(1, app, 'participants')], self.baton).addClass("collapsed");
 
             //attachmentTab
             var attachmentTabheader = tabs.find('a:eq(1)');
@@ -96,6 +105,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             util.buildExtensionRow(detailsTab, this.getRow(2, app, 'details'), self.baton);
             util.buildExtensionRow(detailsTab, this.getRow(3, app, 'details'), self.baton);
             util.buildExtensionRow(detailsTab, this.getRow(4, app, 'details'), self.baton);
+            
             return this.$el;
         },
         getRow: function (number, app, tab) {
