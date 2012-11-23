@@ -25,90 +25,117 @@ define('io.ox/core/permissions/permissions',
 
     var POINT = 'io.ox/core/permissions',
 
-    folder_id,
+        folder_id,
 
-    Permission = Backbone.Model.extend({
-        idAttribute: "entity",
-        defaults: {
-            group: false,
-            bits: 0
-        }
-    }),
+        Permission = Backbone.Model.extend({
+            idAttribute: "entity",
+            defaults: {
+                group: false,
+                bits: 0
+            }
+        }),
 
-    Permissions = Backbone.Collection.extend({
-        model: Permission
-    }),
+        Permissions = Backbone.Collection.extend({
+            model: Permission
+        }),
 
-    PermissionsView = Backbone.View.extend({
+        PermissionsView = Backbone.View.extend({
 
-        className: "permission row-fluid",
+            className: "permission row-fluid",
 
-        events: {
-            'click .dropdown > ul li a': 'updateDropdown',
-            'click .remove'  : 'removeEntity'
+            events: {
+                'click a.bit': 'updateDropdown',
+                'click a.role': 'applyRole',
+                'click .remove': 'removeEntity'
+            },
+
+            render: function () {
+                ext.point(POINT + '/detail').invoke('draw', this.$el.empty(), this.model);
+                return this;
+            },
+
+            removeEntity: function () {
+                this.collection.remove(this.model);
+                this.remove();
+            },
+
+            updateDropdown: function (e) {
+                e.preventDefault();
+                var $el     = $(e.target),
+                    value   = $el.attr('data-value'),
+                    link    = $el.parent().parent().parent().children('a'),
+                    type    = link.attr('data-type'),
+                    newbits = api.Bitmask(this.model.get('bits')).set(type, value).get();
+                link.text($el.text());
+                this.model.set('bits', newbits);
+            },
+
+            applyRole: function (e) {
+                var node = $(e.target), bits = node.attr('data-value');
+                this.model.set('bits', bits);
+                this.render();
+            }
+        }),
+
+        collection = new Permissions(),
+
+        menus = {
+            'folder': {
+                1:  //#. folder permissions
+                    gt('view the folder'),
+                2:  //#. folder permissions
+                    gt('create objects'),
+                4:  //#. folder permissions
+                    gt('create objects and subfolders'),
+                64: //#. folder permissions
+                    gt('create objects and subfolders')
+            },
+            'read': {
+                0:  //#. object permissions - read
+                    gt('no read permissions'),
+                1:  //#. object permissions - read
+                    gt('read own objects'),
+                2:  //#. object permissions - read
+                    gt('read all objects'),
+                64: //#. object permissions - read
+                    gt('read all objects')
+            },
+            'write': {
+                0:  //#. object permissions - edit/modify
+                    gt('no edit permissions'),
+                1:  //#. object permissions - edit/modify
+                    gt('edit own objects'),
+                2:  //#. object permissions - edit/modify
+                    gt('edit all objects'),
+                64: //#. object permissions - edit/modify
+                    gt('edit all objects')
+            },
+            'delete': {
+                0:  //#. object permissions - delete
+                    gt('no delete permissions'),
+                1:  //#. object permissions - delete
+                    gt('delete only own objects'),
+                2:  //#. object permissions - delete
+                    gt('delete all objects'),
+                64: //#. object permissions - delete
+                    gt('delete all objects')
+            },
+            'admin': {
+                1:  gt('Yes'), // in this order
+                0:  gt('No')
+            },
+            'preset': {}
         },
+        addDropdown,
+        addRoles,
+        addRemoveButton,
+        isFolderAdmin = false;
 
-        render: function () {
-
-            ext.point(POINT + '/detail').invoke('draw', this.$el, this.model);
-            return this;
-
-        },
-
-        removeEntity: function () {
-            this.collection.remove(this.model);
-            this.remove();
-        },
-
-        updateDropdown: function (e) {
-            e.preventDefault();
-            var $el     = $(e.target),
-                value   = $el.attr('data-value'),
-                link    = $el.parent().parent().parent().children('a'),
-                type    = link.attr('data-type'),
-                newbits = api.Bitmask(this.model.get('bits')).set(type, value).get();
-            link.text($el.text());
-
-            this.model.set('bits', newbits);
-        }
-    }),
-
-    collection = window.collection = new Permissions(),
-
-    menus = {
-        'folder': {
-            0:  gt('not view'),
-            1:  gt('only view'),
-            2:  gt('create objects'),
-            4:  gt('create objects and subfolders'),
-            64: gt('create objects and subfolders')
-        },
-        'read': {
-            0:  gt('not read'),
-            1:  gt('read only own'),
-            2:  gt('read all'),
-            64: gt('read all')
-        },
-        'write': {
-            0:  gt('not modify'),
-            1:  gt('modify only own'),
-            2:  gt('modify all'),
-            64: gt('modify all')
-        },
-        'delete': {
-            0:  gt('not delete'),
-            1:  gt('delete only own'),
-            2:  gt('delete all'),
-            64: gt('delete all')
-        },
-        'admin': {
-            0:  gt('No'),
-            1:  gt('Yes')
-        }
-    },
-    addDropdown,
-    addRemoveButton,
-    isFolderAdmin = false;
+    var presets = [
+        { label: gt('Guest'), bits: 257 }, // view folder + read all
+        { label: gt('Author'), bits: 4227332 }, // create folder + read/write/delete all
+        { label: gt('Administrator'), bits: 272662788 } // plus admin
+    ];
 
     ext.point(POINT + '/detail').extend({
         index: 100,
@@ -161,22 +188,23 @@ define('io.ox/core/permissions/permissions',
         draw: function (data) {
             this.append(
                 $('<div class="entity">').append(
-                    $('<div class="name">').append(gt.noI18n(data.entity)),
                     $('<div>').append(
-                        gt('The user can '),
-                        addDropdown('folder', data),
-                        gt.noI18n(', '),
-                        addDropdown('read', data),
-                        gt.noI18n(', '),
-                        addDropdown('write', data),
-                        gt(' and '),
-                        addDropdown('delete', data),
-                        gt(' objects.')
+                        $('<span class="name">').text(_.noI18n(data.entity)),
+                        // quick change
+                        addRoles()
                     ),
                     $('<div>').append(
-                        gt('Folder admin: '),
-                        addDropdown('admin', data),
-                        gt.noI18n('.')
+                        // folder rights
+                        gt('Folder permissions'), $.txt(_.noI18n(': ')),
+                            addDropdown('folder', data), $.txt(_.noI18n('. ')),
+                        // object rights
+                        gt('Object permissions'), $.txt(_.noI18n(': ')),
+                        addDropdown('read', data), $.txt(_.noI18n(', ')),
+                        addDropdown('write', data), $.txt(_.noI18n(', ')),
+                        addDropdown('delete', data), $.txt(_.noI18n('. ')),
+                        // admin
+                        gt('The user has administrative rights'), $.txt(_.noI18n(': ')),
+                            addDropdown('admin', data), $.txt(_.noI18n('. '))
                     ),
                     addRemoveButton(data.model.get('entity'))
                 )
@@ -190,25 +218,41 @@ define('io.ox/core/permissions/permissions',
     };
 
     addDropdown = function (permission, data) {
-        var self = this,
-        bits = data.model.get('bits'),
-        selected = api.Bitmask(bits).get(permission),
+        var bits = data.model.get('bits'),
+            selected = api.Bitmask(bits).get(permission),
+            menu;
+        // folder fix
+        if (permission === 'folder' && selected === 0) selected = 1;
+        if (!isFolderAdmin) {
+            return $.txt(menus[permission][selected]);
+        }
         menu = $('<span class="dropdown">').append(
-            $('<a>', { href: '#', 'data-type': permission, 'data-toggle': 'dropdown' }).text(menus[permission][selected]),
+            $('<a href="#" data-toggle="dropdown">').attr('data-type', permission).text(menus[permission][selected]),
             $('<ul class="dropdown-menu">')
         );
-        if (!isFolderAdmin) {
-            return menus[permission][selected];
-        }
         _(menus[permission]).each(function (item, value) {
             if (value === '64') return true; // Skip maximum rights
             menu.find('ul').append(
                 $('<li>').append(
-                    $('<a>', { href: '#', 'data-value': value }).text(item)
+                    $('<a>', { href: '#', 'data-value': value }).addClass('bit').text(item)
                 )
             );
         });
         return menu;
+    };
+
+    addRoles = function () {
+        if (!isFolderAdmin) return $();
+        return $('<span class="dropdown preset">').append(
+            $('<a href="#" data-type="permission" data-toggle="dropdown">').text(gt('Apply role')),
+            $('<ul class="dropdown-menu">').append(
+                _(presets).map(function (obj) {
+                    return $('<li>').append(
+                        $('<a>', { href: '#', 'data-value': obj.bits }).addClass('role').text(obj.label)
+                    );
+                })
+            )
+        );
     };
 
     return {
@@ -219,12 +263,10 @@ define('io.ox/core/permissions/permissions',
                     isFolderAdmin = api.Bitmask(data.own_rights).get('admin') >= 1;
 
                     var dialog = new dialogs.ModalDialog({
-                        width: 800,
-                        easyOut: true
+                        width: 800
                     })
                     .header(
-                        $('<h4>').text(gt('Folder permissions')),
-                        api.getBreadcrumb(data.id, { subfolders: false })
+                        api.getBreadcrumb(data.id, { subfolders: false, prefix: gt('Folder permissions') })
                     );
 
                     if (isFolderAdmin) {
@@ -265,7 +307,7 @@ define('io.ox/core/permissions/permissions',
                         autocomplete.on('select', function (data) {
                             var obj = {
                                 group: data.type === 2,
-                                bits: 0,
+                                bits: 257, // default is 'view folder' plus 'read all'
                                 entity: data.group ? data.id : data.internal_userid
                             };
                             if (!collection.any(function (item) { return item.entity === obj.entity; })) {

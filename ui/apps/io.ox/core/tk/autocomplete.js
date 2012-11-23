@@ -149,80 +149,82 @@ define('io.ox/core/tk/autocomplete', function () {
 
             // handle key down (esc/cursor only)
             fnKeyDown = function (e) {
-                    if (isOpen) {
-                        switch (e.which) {
-                        case 27: // escape
-                            close();
-                            break;
-                        case 39: // cursor right
-                            e.preventDefault();
-                            if (!e.shiftKey) {
-                                update();
-                            }
-                            break;
-                        case 13: // enter
-                            scrollpane.find('.selected').trigger('click');
-                            break;
-                        case 9:  // tab
-                            e.preventDefault();
-                            if (!e.shiftKey) { // ignore back-tab
-                                update();
-                                $(this).trigger('selected', scrollpane.children().eq(Math.max(0, index)).data('data'));
-                                close();
-                            }
-                            break;
-                        case 38: // cursor up
-                            e.preventDefault();
-                            if (index > 0) {
-                                select(index - 1);
-                            }
-                            break;
-                        case 40: // cursor down
-                            e.preventDefault();
-                            select(index + 1);
-                            break;
+                e.stopPropagation();
+                if (isOpen) {
+                    switch (e.which) {
+                    case 27: // escape
+                        close();
+                        break;
+                    case 39: // cursor right
+                        e.preventDefault();
+                        if (!e.shiftKey) {
+                            update();
                         }
-                    } else {
-                        switch (e.which) {
-                        case 27: // escape
-                            $(this).val(''); //empty it
+                        break;
+                    case 13: // enter
+                        scrollpane.find('.selected').trigger('click');
+                        break;
+                    case 9:  // tab
+                        e.preventDefault();
+                        if (!e.shiftKey) { // ignore back-tab
+                            update();
+                            $(this).trigger('selected', scrollpane.children().eq(Math.max(0, index)).data('data'));
                             close();
-                            break;
-                        /*case 39: // cursor right
-                            e.preventDefault();
-                            if (!e.shiftKey) {
-                                update();
-                                close();
-                            }
-                            break;*/
-                        case 13:
-                        case 9:
-                            var val = $.trim($(this).val());
-                            if (val.length > 0) {
-                                $(this).trigger('selected', val);
-                            }
-                            break;
                         }
+                        break;
+                    case 38: // cursor up
+                        e.preventDefault();
+                        if (index > 0) {
+                            select(index - 1);
+                        }
+                        break;
+                    case 40: // cursor down
+                        e.preventDefault();
+                        select(index + 1);
+                        break;
                     }
-                },
+                } else {
+                    switch (e.which) {
+                    case 27: // escape
+                        $(this).val(''); //empty it
+                        close();
+                        break;
+                    /*case 39: // cursor right
+                        e.preventDefault();
+                        if (!e.shiftKey) {
+                            update();
+                            close();
+                        }
+                        break;*/
+                    case 13:
+                    case 9:
+                        var val = $.trim($(this).val());
+                        if (val.length > 0) {
+                            $(this).trigger('selected', val);
+                        }
+                        break;
+                    }
+                }
+            },
 
             // handle key up (debounced)
             fnKeyUp = _.debounce(function (e) {
-                    var val = $.trim($(this).val());
-                    if (val.length >= o.minLength) {
-                        if (val !== lastValue && val.indexOf(emptyPrefix) === -1) {
-                            // trigger search
-                            lastValue = val;
-                            scrollpane.empty();
-                            popup.busy();
-                            open();
-                            o.source(val).done(_.lfo(cbSearchResult, val));
-                        }
-                    } else {
+                e.stopPropagation();
+                var val = $.trim($(this).val());
+                if (val.length >= o.minLength) {
+                    if (val !== lastValue && val.indexOf(emptyPrefix) === -1) {
+                        // trigger search
                         lastValue = val;
-                        close();
+                        scrollpane.empty();
+                        popup.busy();
+                        open();
+                        o.source(val).done(_.lfo(cbSearchResult, val));
                     }
-                }, o.delay);
+                } else {
+                    lastValue = val;
+                    close();
+                }
+            }, o.delay);
 
 
         this.getSelectedItem = function () {

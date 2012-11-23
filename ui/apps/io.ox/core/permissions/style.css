@@ -19,7 +19,10 @@
 
     .modal-header {
         .breadcrumb {
-            margin-bottom: 5px;
+            margin-bottom: 0;
+            padding-left: 0;
+            background-color: transparent;
+            .prefix { font-weight: bold; font-size: 16px; }
         }
     }
 
@@ -39,8 +42,6 @@
         }
     }
 
-
-
     .permission {
 
         position: relative;
@@ -53,6 +54,7 @@
             background-position: center center;
             background-size: cover;
             text-align: center;
+            .border-radius(5px);
         }
 
         .contact-picture.group {
@@ -61,10 +63,16 @@
 
         .entity {
             padding-left: 64px + 13;
+            a { white-space: nowrap; }
         }
 
         .name {
             font-weight: bold;
+            margin-right: 0.5em;
+        }
+
+        .preset > a {
+            color: #888;
         }
 
         .remove {
