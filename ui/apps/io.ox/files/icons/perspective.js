@@ -134,7 +134,7 @@ define('io.ox/files/icons/perspective',
             } else if ((/^audio\/(mpeg|m4a|x-m4a)$/i).test(file.file_mimetype)) {
                 img = drawImage(getCover(file, options)).on('error', { name: file.filename }, audioIconError);
             } else if (ox.serverConfig.previewExtensions &&
-                    (/^application\/.*(ms-word|ms-excel|ms-powerpoint|openxmlformats).*$/i).test(file.file_mimetype)) {
+                    (/^application\/.*(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats).*$/i).test(file.file_mimetype)) {
                 iElement = drawGeneric(file.filename);
                 wrap.append(iElement);
                 img = drawImage(getOfficePreview(file, options)).on('error', { name: file.filename }, officeIconError);
