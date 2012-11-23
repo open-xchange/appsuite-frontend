@@ -72,9 +72,9 @@ define("io.ox/files/actions",
         requires: function (e) {
             return e.collection.has('one') && (/\.(txt|js|md)$/i).test(e.context.data.filename);
         },
-        action: function (data) {
+        action: function (baton) {
             ox.launch('io.ox/editor/main').done(function () {
-                this.load(data);
+                this.load(baton.data);
             });
         }
     });
@@ -98,8 +98,8 @@ define("io.ox/files/actions",
             var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
             return e.collection.has('one') && pattern.test(e.context.data.filename);
         },
-        action: function (data) {
-            ox.launch('io.ox/office/editor/main', { action: 'load', file: data.data });
+        action: function (baton) {
+            ox.launch('io.ox/office/editor/main', { action: 'load', file: baton.data.data });
         }
     });
 
@@ -107,8 +107,8 @@ define("io.ox/files/actions",
         requires: function (e) {
             return e.collection.has('one') && /\.(doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg)$/i.test(e.context.data.filename);
         },
-        action: function (data) {
-            ox.launch('io.ox/office/preview/main', { action: 'load', file: data.data });
+        action: function (baton) {
+            ox.launch('io.ox/office/preview/main', { action: 'load', file: baton.data.data });
         }
     });
 
@@ -117,8 +117,8 @@ define("io.ox/files/actions",
             var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
             return e.collection.has('one') && pattern.test(e.context.data.filename);
         },
-        action: function (data) {
-            ox.launch('io.ox/office/editor/main', { action: 'new', folder_id: data.folder_id, template: data.data });
+        action: function (baton) {
+            ox.launch('io.ox/office/editor/main', { action: 'new', folder_id: baton.data.folder_id, template: baton.data.data });
         }
     });
 
@@ -232,7 +232,8 @@ define("io.ox/files/actions",
     // version specific actions
 
     new Action('io.ox/files/versions/actions/makeCurrent', {
-        action: function (data) {
+        action: function (baton) {
+            var data = baton.data;
             api.update({
                 id: data.id,
                 last_modified: data.last_modified,
@@ -242,7 +243,8 @@ define("io.ox/files/actions",
     });
 
     new Action('io.ox/files/versions/actions/delete', {
-        action: function (data) {
+        action: function (baton) {
+            var data = baton.data;
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 // get proper question
                 var question = gt.ngettext(

@@ -347,10 +347,13 @@ define('io.ox/core/commons-folderview',
                         tree.busy();
                     });
                     api.on('update', function (e, id, newId, data) {
-                        tree.repaintNode(data.folder_id).done(function () {
-                            tree.idle();
-                            tree.select(newId);
-                        });
+                        // this is used by folder rename, since the id might change (mail folders)
+                        if (_.isEqual(tree.selection.get(), [id])) {
+                            tree.repaintNode(data.folder_id).done(function () {
+                                tree.idle();
+                                if (newId !== id) tree.select(newId);
+                            });
+                        }
                     });
                     api.on('delete:fail update:fail create:fail', function (e, error) {
                         tree.idle();
