@@ -280,21 +280,23 @@ define('io.ox/office/editor/format/drawingstyles',
         if (attributes.inline) {
 
             // switch from floating to inline mode
-            if (drawing.hasClass('float')) {
+            if (!drawing.hasClass('inline')) {
+
                 // repaint the selection, convert it to a non-moveable selection
                 DOM.repaintDrawingSelection(drawing, false);
+
+                // remove leading node used for positioning
+                verticalOffsetNode.remove();
+
                 // TODO: Word uses fixed predefined margins in inline mode, we too?
                 drawing.removeClass('float left right').addClass('inline').css('margin', '0 1mm');
                 // ignore other attributes in inline mode
             }
 
-            // remove leading node used for positioning
-            verticalOffsetNode.remove();
-
         } else {
 
             // switch from inline to floating mode
-            if (drawing.hasClass('inline')) {
+            if (!drawing.hasClass('float')) {
                 // repaint the selection, convert it to a moveable selection
                 DOM.repaintDrawingSelection(drawing, true);
                 drawing.removeClass('inline').addClass('float');

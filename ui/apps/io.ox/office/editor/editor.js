@@ -4693,9 +4693,9 @@ define('io.ox/office/editor/editor',
 
             if (!span) { return false; }
 
-            // insert the drawing with default settings (inline) between the two text nodes (store original URL for later use)
+            // insert the drawing with default settings between the two text nodes (store original URL for later use)
             drawingNode = $('<div>', { contenteditable: false })
-               .addClass('drawing inline')
+               .addClass('drawing')
                .data('type', type)
                .append($('<div>').addClass('content'))
                .insertAfter(span);
@@ -5815,7 +5815,7 @@ define('io.ox/office/editor/editor',
                             if (listObject.imgsrc) {
                                 var absUrl = getDocumentUrl({ get_filename: listObject.imgsrc });
                                 var image = $('<div>', { contenteditable: false })
-                                .addClass('drawing inline')
+                                .addClass('drawing')
                                 .data('url', listObject.imgsrc)
                                 .append($('<div>').addClass('content')
                                         .append($('<img>', { src: absUrl }).css('width', charAttributes.fontSize + 'pt'))
