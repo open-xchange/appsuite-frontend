@@ -425,6 +425,16 @@ define("io.ox/core/desktop",
             return ox.ui.apps.filter(function (app) {
                 return app.getName() === name;
             });
+        },
+
+        reuse: function (cid) {
+            var app = ox.ui.apps.find(function (m) { return m.cid === cid; }), win;
+            console.log('reuse', cid, app);
+            if (app) {
+                app.launch();
+                return true;
+            }
+            return false;
         }
     });
 

@@ -35,19 +35,13 @@ define('io.ox/contacts/distrib/main',
 
         app = ox.ui.createApp({
             name: 'io.ox/contacts/distrib',
-            title: 'Distribution List'
+            title: 'Distribution List',
+            userContent: true
         });
 
-        function show() {
-
-            win.show(function () {
-                container.append(view.render().$el)
-                    .find('input[type=text]:visible').eq(0).focus();
-            });
-
-        }
-
         app.create = function (folderId, initdata) {
+
+            app.cid = 'io.ox/contacts/group:create';
 
             // set state
             app.setState({ folder: folderId });
@@ -87,12 +81,13 @@ define('io.ox/contacts/distrib/main',
             });
 
             // go!
-            show();
-//            return $.when();
+            container.append(view.render().$el);
+            win.show();
         };
 
         app.edit = function (obj) {
-            // load list first
+
+            app.cid = 'io.ox/contacts/group:edit.' + _.cid(obj);
 
             return contactModel.factory.realm("edit").get(obj).done(function (data) {
 
@@ -119,7 +114,8 @@ define('io.ox/contacts/distrib/main',
                 });
 
                 // go!
-                show();
+                container.append(view.render().$el);
+                win.show();
             });
         };
 
@@ -130,6 +126,10 @@ define('io.ox/contacts/distrib/main',
                 chromeless: true,
                 name: 'io.ox/contacts/distrib'
             }));
+
+            win.on('show', function () {
+                container.find('input[type=text]:visible').eq(0).focus();
+            });
 
             container = win.nodes.main
                 .addClass('create-distributionlist')
@@ -175,7 +175,16 @@ define('io.ox/contacts/distrib/main',
     }
 
     return {
-        getApp: createInstance
+
+        getApp: createInstance,
+
+        reuse: function (type, data) {
+            if (type === 'create') {
+                return ox.ui.App.reuse('io.ox/contacts/group:create');
+            } else if (type === 'edit') {
+                return ox.ui.App.reuse('io.ox/contacts/group:edit.' + _.cid(data));
+            }
+        }
     };
 
 });

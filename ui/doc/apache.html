@@ -9,18 +9,18 @@
 
     - MacOS: <i>/Library/WebServer/Documents</i>
     - Linux: <i>/var/www</i>
-    
-3.  Create a new folder <i>ox7</i> in Apache's document root
+
+3.  Create a new folder <i>ui</i> in Apache's document root
 
 4.  Build the UI and the documentation with ant:
 
-        <i>ant -Dbuild=/Library/WebServer/Documents/ox7 all doc</i>
+        <i>ant -Dbuild=/Library/WebServer/Documents/ui all doc</i>
     or
-        <i>export BUILD="/Library/WebServer/Documents/ox7"
+        <i>export BUILD="/Library/WebServer/Documents/ui"
         ant all doc</i>
 
 5.  If everything works fine, the documentation should be at
-    <a href="http://localhost/ox7/doc">http://localhost/ox7/doc</a>.
+    <a href="http://localhost/ui/doc">http://localhost/ui/doc</a>.
 
 </pre>
 
@@ -34,29 +34,29 @@
 
     - MacOS: <i>/Library/WebServer/Documents</i>
     - Linux: <i>/var/www</i>
-    
-3.  Create a new folder <i>ox7</i> in Apache's document root
+
+3.  Create a new folder <i>ui</i> in Apache's document root
 
 4.  You need node.js to build the UI:
 
     For MacOS:
-    
+
     - Visit <a href="https://sites.google.com/site/nodejsmacosx/">https://sites.google.com/site/nodejsmacosx/</a>
       and install stable version.
-    
+
     - Open terminal
-    
+
     - Set environment variable:
-        <i>export buildir="/Library/WebServer/Documents/ox7"</i>
-        
+        <i>export buildir="/Library/WebServer/Documents/ui"</i>
+
     - Build UI:
       <i>./build.sh</i>
-      
+
     - Build documentation:
       <i>./build.sh doc</i>
-      
+
 5.  If everything works fine, the documentation should be at
-    <a href="http://localhost/ox7/doc">http://localhost/ox7/doc</a>.
+    <a href="http://localhost/ui/doc">http://localhost/ui/doc</a>.
 
 </pre>
 </div>
@@ -67,17 +67,17 @@
 
     <i>mod_proxy, mod_proxy_ajp, mod_expires, mod_deflate, mod_rewrite,
     mod_headers, mod_mime, and mod_setenvif</i>
-    
+
 2.  Tell your Apache to process .htaccess files and how to connect to backend:
 
-    <i>ProxyPass /ox7/api ajp://127.0.0.1:8009/ajax
+    <i>ProxyPass /ui/api ajp://127.0.0.1:8009/ajax
     # optional parameters: retry=0 connectiontimeout=5 timeout=10
 
-    &lt;Directory /Library/WebServer/Documents/ox7>
+    &lt;Directory /Library/WebServer/Documents/ui>
       Options None +FollowSymLinks
       AllowOverride Indexes FileInfo
     &lt;/Directory></i>
-    
+
     Use the proper document root depending on your OS or custom configuration!
 
 3.  If backend does not run on <i>localhost</i> (127.0.0.1),

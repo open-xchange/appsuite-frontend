@@ -26,7 +26,9 @@ define('io.ox/calendar/edit/main',
 
 
     function createInstance() {
-        var app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: gt('Edit Appointment')}),
+
+        var app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: gt('Edit Appointment'), userContent: true }),
+
             controller = _.extend(app, {
                 start: function () {
                     app.dropZone = new dnd.UploadZone({

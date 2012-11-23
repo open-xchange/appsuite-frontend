@@ -35,7 +35,7 @@ define("io.ox/tasks/actions",
     new Action('io.ox/tasks/actions/edit', {
         action: function (baton) {
             require(['io.ox/tasks/edit/main'], function (edit) {
-                edit.getApp().launch({taskData: baton.data});
+                edit.getApp().launch({ taskData: baton.data });
             });
         }
     });

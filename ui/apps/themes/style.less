@@ -102,109 +102,114 @@
 
 /* ------------------------------------- */
 
-#io-ox-topbar .launcher-dropdown, #io-ox-topbar .launcher {
-    font-size: @topbar-font-size;
-    color: @topbar-launcher-color;
-    padding: 0px 12px 0px 12px;
-    line-height: 40px;
-    text-align: center;
-    white-space: nowrap;
-    display: inline-block;
-    -webkit-tap-highlight-color: transparent;
-}
+#io-ox-topbar {
 
-#io-ox-topbar .launcher-dropdown {
-    float: left;
-    display: none;
-}
+    .launcher-dropdown, .launcher {
+        font-size: @topbar-font-size;
+        color: @topbar-launcher-color;
+        padding: 0px 12px 0px 12px;
+        line-height: 40px;
+        white-space: nowrap;
+        display: inline-block;
+        -webkit-tap-highlight-color: transparent;
+    }
 
-#io-ox-topbar .launcher-dropdown li {
-    text-align: left;
-}
+    .launcher.hover {
+        color: @topbar-launcher-color-hover;
+        background-color: @topbar-launcher-background-hover;
+    }
 
-#io-ox-topbar .launcher-dropdown ul {
-    left: 13px;
-}
+    .launcher.active-app {
+        color: @topbar-launcher-color-active;
+        background-color: @topbar-launcher-background-active;
+    }
 
-#io-ox-topbar .launcher-dropdown a.dropdown-toggle {
-    color: white;
-    text-decoration: none;
-    outline: none;
-}
+    .launcher.user-content i[class^="icon-"] { margin-right: 8px; color: #ccc; }
+    .launcher.active-app.user-content i[class^="icon-"] { color: @link-on-dark; }
 
-#io-ox-topbar .launcher-dropdown li.active-app a {
-    font-weight: bold;
-}
+    .launcher-dropdown {
+        float: left;
+        display: none;
+    }
 
-#io-ox-topbar .launcher {
-    max-width: 10em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: pointer;
-}
+    .launcher-dropdown li {
+        text-align: left;
+    }
 
-#io-ox-topbar i[class^="icon-"] {
-    color: white;
-    font-size: 20px;
-    text-decoration: none;
-    line-height: 1em;
-    position: relative;
-    top: 4px;
-}
+    .launcher-dropdown ul {
+        left: 13px;
+    }
 
-#io-ox-topbar .launcher.right {
-    float: right;
-    display: inline-block !important;
-    overflow: visible;
-    height: 40px;
-}
+    .launcher-dropdown a.dropdown-toggle {
+        color: white;
+        text-decoration: none;
+        outline: none;
+    }
 
-#io-ox-topbar .launcher.right .dropdown-menu {
-    left: auto; right: 0; text-align: left;
-}
+    .launcher-dropdown li.active-app a {
+        font-weight: bold;
+    }
 
-#io-ox-topbar .launcher.right .dropdown-toggle {
-    margin: 0 -12px 0 -12px;
-    display: inline-block;
-    width: 3em;
-    outline: 0;
-    border: 0px none;
-}
+    .launcher {
+        max-width: 10em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+    }
 
-#io-ox-topbar .launcher.right .dropdown-menu a { color: @link-color; }
-#io-ox-topbar .launcher.right .dropdown-menu li:hover a { color: white; }
+    i[class^="icon-"] {
+        color: white;
+        font-size: 20px;
+        text-decoration: none;
+        line-height: 1em;
+        position: relative;
+        top: 4px;
+    }
 
-#io-ox-topbar .launcher.hover {
-    color: @topbar-launcher-color-hover;
-    background-color: @topbar-launcher-background-hover;
-}
+    .launcher.right {
+        float: right;
+        display: inline-block !important;
+        overflow: visible;
+        height: 40px;
+    }
 
-#io-ox-topbar .launcher.active-app {
-    color: @topbar-launcher-color-active;
-    background-color: @topbar-launcher-background-active;
-}
+    .launcher.right .dropdown-menu {
+        left: auto; right: 0; text-align: left;
+    }
 
-@-webkit-keyframes launcherColours {
-    from { color: #fff; }
-      to { color: #555; }
-}
+    .launcher.right .dropdown-toggle {
+        margin: 0 -12px 0 -12px;
+        display: inline-block;
+        width: 3em;
+        outline: 0;
+        border: 0px none;
+    }
 
-@-moz-keyframes launcherColours {
-    from { color: #fff; }
-      to { color: #555; }
-}
+    .launcher.right .dropdown-menu a { color: @link-color; }
+    .launcher.right .dropdown-menu li:hover a { color: white; }
 
-#io-ox-topbar .launcher.io-ox-progress i {
-    -moz-animation-direction: alternate;
-    -moz-animation-duration: 0.75s;
-    -moz-animation-iteration-count: infinite;
-    -moz-animation-name: launcherColours;
-    -moz-animation-timing-function: ease-in-out;
-    -webkit-animation-direction: alternate;
-    -webkit-animation-duration: 0.75s;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-name: launcherColours;
-    -webkit-animation-timing-function: ease-in-out;
+    @-webkit-keyframes launcherColours {
+        from { color: #fff; }
+          to { color: #555; }
+    }
+
+    @-moz-keyframes launcherColours {
+        from { color: #fff; }
+          to { color: #555; }
+    }
+
+    .launcher.io-ox-progress i {
+        -moz-animation-direction: alternate;
+        -moz-animation-duration: 0.75s;
+        -moz-animation-iteration-count: infinite;
+        -moz-animation-name: launcherColours;
+        -moz-animation-timing-function: ease-in-out;
+        -webkit-animation-direction: alternate;
+        -webkit-animation-duration: 0.75s;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-name: launcherColours;
+        -webkit-animation-timing-function: ease-in-out;
+    }
 }
 
 #io-ox-welcome-upsell {

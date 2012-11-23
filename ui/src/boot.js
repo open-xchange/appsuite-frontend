@@ -515,11 +515,11 @@ $(document).ready(function () {
     // clear persistent caches due to update?
     // TODO: add indexedDB once it's getting used
     if (Modernizr.localstorage) {
-        var ui = JSON.parse(localStorage.getItem('ox7-ui') || '{}');
+        var ui = JSON.parse(localStorage.getItem('appsuite-ui') || '{}');
         if (ui.version !== ox.version) {
             console.warn('clearing localStorage due to UI update');
             localStorage.clear();
-            localStorage.setItem('ox7-ui', JSON.stringify({ version: ox.version }));
+            localStorage.setItem('appsuite-ui', JSON.stringify({ version: ox.version }));
         }
     }
 

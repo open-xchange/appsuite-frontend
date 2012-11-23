@@ -72,7 +72,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
 
         commons.wireGridAndAPI(grid, api);
         commons.wireGridAndSearch(grid, win, api);
-        
+
         //custom requests
         var allRequest = function () {
                 var datacopy,
@@ -91,7 +91,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
                     } else {
                         datacopy = util.sortTasks(data, order);
                     }
-    
+
                     if (!done) {
                         datacopy = _(datacopy).filter(function (obj) {
                             return obj.status !== 3;
@@ -107,7 +107,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
                     for (; i < listcopy.length; i++) {
                         listcopy[i] = util.interpretTask(listcopy[i]);
                     }
-    
+
                     return listcopy;
                 });
             },
@@ -128,7 +128,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
                     } else {
                         datacopy = util.sortTasks(data, order);
                     }
-    
+
                     if (!done) {
                         datacopy = _(datacopy).filter(function (obj) {
                             return obj.status !== 3;
@@ -137,15 +137,15 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
                     return datacopy;
                 });
             };
-        
+
         grid.setAllRequest(allRequest);
         grid.setListRequest(listRequest);
-        
+
         // search: all request
         grid.setAllRequest('search', searchAllRequest);
         // search: list request
         grid.setListRequest('search', listRequest);
-        
+
         var showTask, drawTask, drawFail;
 
         //detailview lfo callbacks

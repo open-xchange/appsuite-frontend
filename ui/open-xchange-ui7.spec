@@ -21,9 +21,9 @@ Requires:       httpd
 %endif
 
 %if 0%{?rhel_version} || 0%{?fedora_version}
-%define docroot /var/www/html/ox7
+%define docroot /var/www/html/ui
 %else
-%define docroot /srv/www/htdocs/ox7
+%define docroot /srv/www/htdocs/ui
 %endif
 
 %description

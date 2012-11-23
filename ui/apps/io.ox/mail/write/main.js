@@ -79,7 +79,8 @@ define('io.ox/mail/write/main',
 
         app = ox.ui.createApp({
             name: 'io.ox/mail/write',
-            title: 'Compose'
+            title: 'Compose',
+            userContent: true
         });
 
         model = new MailModel();
@@ -663,7 +664,7 @@ define('io.ox/mail/write/main',
                     content_type: 'text/html',
                     content: (app.getEditor() ? app.getEditor().getContent() : '')
                         // reverse img fix
-                        .replace(/(<img[^>]+src=")(\/ox7\/)?api\//g, '$1/ajax/')
+                        .replace(/(<img[^>]+src=")(\/ui\/)?api\//g, '$1/ajax/')
                 };
             } else {
                 content = {

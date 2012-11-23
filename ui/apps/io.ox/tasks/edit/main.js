@@ -23,7 +23,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
 
     function createApp() {
         // application object
-        var app = ox.ui.createApp({ name: 'io.ox/tasks/edit', title: "Edit task" }),
+        var app = ox.ui.createApp({ name: 'io.ox/tasks/edit', title: "Edit task", userContent: true }),
             // app window
             win,
             //app
@@ -85,7 +85,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             self.dropZone = new dnd.UploadZone({
                 ref: "io.ox/tasks/edit/dnd/actions"
             }, taskView);
-            
+
             win.on('show', function () {
                 app.dropZone.include();
                 if (taskView) {
@@ -101,7 +101,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             //ready for show
             win.show();
         });
-        
+
         // Popup on close
         app.setQuit(function () {
             var def = $.Deferred();

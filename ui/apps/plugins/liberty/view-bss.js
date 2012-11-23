@@ -1,10 +1,10 @@
 define("plugins/liberty/view-bss", ["io.ox/core/extensions"], function (ext) {
     "use strict";
-    
+
     function PeriodicRefresher() {
         var knownURLs = {};
         var token = null;
-        
+
         this.run = function () {
             if (token) {
                 return;
@@ -14,7 +14,7 @@ define("plugins/liberty/view-bss", ["io.ox/core/extensions"], function (ext) {
                 self.tick();
             }, 1000);
         };
-        
+
         this.stop = function () {
             if (!token) {
                 return;
@@ -22,11 +22,11 @@ define("plugins/liberty/view-bss", ["io.ox/core/extensions"], function (ext) {
             clearInterval(token);
             token = null;
         };
-        
+
         this.tick = function () {
             var self = this;
             // We use the AJAX method to not send the loading icon into nervous blinking
-            $.ajax("/ox7/api/noms/apps?action=list&session=" + ox.session, {
+            $.ajax("/ui/api/noms/apps?action=list&session=" + ox.session, {
                 dataType: 'json'
             }).done(function (response) {
                 _(response.data).each(function (entry) {
@@ -36,7 +36,7 @@ define("plugins/liberty/view-bss", ["io.ox/core/extensions"], function (ext) {
                 });
             });
         };
-        
+
         this.addApp = function (entry) {
             knownURLs[entry.url] = true;
             console.log("New app was purchased: " + entry.url);
@@ -50,11 +50,11 @@ define("plugins/liberty/view-bss", ["io.ox/core/extensions"], function (ext) {
                 launchArguments: [entry]
             });
         };
-        
+
     }
-    
+
     var refresher = new PeriodicRefresher();
-    
+
     return {
         draw: function () {
             refresher.run();
@@ -70,5 +70,5 @@ define("plugins/liberty/view-bss", ["io.ox/core/extensions"], function (ext) {
         },
         refresher: refresher
     };
-    
+
 });

@@ -64,6 +64,7 @@ define('io.ox/contacts/actions',
             var data = baton.data;
             if (data.mark_as_distributionlist === true) {
                 require(['io.ox/contacts/distrib/main'], function (m) {
+                    if (m.reuse('edit', data)) return;
                     m.getApp(data).launch().done(function () {
                         this.edit(data);
                     });
@@ -99,6 +100,7 @@ define('io.ox/contacts/actions',
         },
         action: function (baton) {
             require(['io.ox/contacts/distrib/main'], function (m) {
+                if (m.reuse('create')) return;
                 m.getApp().launch().done(function () {
                     this.create(baton.app.folder.get());
                 });

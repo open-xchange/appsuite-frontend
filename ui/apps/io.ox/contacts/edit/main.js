@@ -29,7 +29,8 @@ define('io.ox/contacts/edit/main',
 
         app = ox.ui.createApp({
             name: 'io.ox/contacts/edit',
-            title: 'Edit Contact'
+            title: 'Edit Contact',
+            userContent: true
         });
 
         app.setLauncher(function () {

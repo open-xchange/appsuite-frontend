@@ -1,2 +1,2 @@
-build/* var/www/ox7/
-build/.htaccess var/www/ox7/
+build/* var/www/ui/
+build/.htaccess var/www/ui/

@@ -157,6 +157,10 @@ define("io.ox/core/main",
             var node = addLauncher('left', model.get('title'), function () { model.launch(); }),
                 title = model.get('title');
             add(node, launchers, model);
+            // is user-content?
+            if (model.get('userContent')) {
+                node.addClass('user-content').prepend($('<i class="icon-pencil">'));
+            }
             // add list item
             node = $('<li>').append(
                 $('<a>', {
@@ -184,7 +188,10 @@ define("io.ox/core/main",
         });
 
         ox.ui.apps.on('change:title', function (model, value) {
-            launchers.children('[data-app-guid="' + model.guid + '"]').text(value);
+            var node = launchers.children('[data-app-guid="' + model.guid + '"]').text(value);
+            if (model.get('userContent')) {
+                node.prepend($('<i class="icon-pencil">'));
+            }
             launcherDropdown.children('[data-app-guid="' + model.guid + '"] a').text(value);
         });
 
@@ -512,7 +519,7 @@ define("io.ox/core/main",
 
                     topbar.hide();
                     $("#background_loader").idle().fadeOut();
-                    
+
                     return def;
                 }
             }
