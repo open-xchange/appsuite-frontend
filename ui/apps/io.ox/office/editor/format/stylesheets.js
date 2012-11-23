@@ -862,7 +862,7 @@ define('io.ox/office/editor/format/stylesheets',
                 attributes = null;
 
             // get the explicit element attributes (containing the style sheet reference)
-            attributes = ($element.length > 0) ? getElementAttributes($element, { family: family }) : {};
+            attributes = ($element.length > 0) ? getElementAttributes($element, { family: styleFamily }) : {};
 
             // return the attributes of the style sheet referred by the element
             return getStyleSheetAttributes(attributes.style, family, $element, sourceNode);
@@ -1059,6 +1059,7 @@ define('io.ox/office/editor/format/stylesheets',
             });
 
             // use method setElementAttributes() to do the real work
+            // TODO: pass a complete attributes object
             return this.setElementAttributes(element, Utils.makeSimpleObject(styleFamily, attributes), options);
         };
 

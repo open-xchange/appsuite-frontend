@@ -440,7 +440,7 @@ define('io.ox/office/editor/format/drawingstyles',
                 // an <svg> node can be used directly for image sources starting with '<svg'
                 useSvgNode = false;
 
-            if (! imageNode.length) {
+            if (imageNode.length === 0) {
                 // inserting the image
                 if (attributes.imageData && attributes.imageData.length) {
                     imgSrc = attributes.imageData;
@@ -462,7 +462,7 @@ define('io.ox/office/editor/format/drawingstyles',
                 }
             }
 
-            if (drawingWidth !== 0) {
+            if ((drawingWidth > 0) && (drawingHeight > 0)) {
                 horizontalSettings = calculateBitmapSettings(drawingWidth, attributes.cropLeft, attributes.cropRight);
                 verticalSettings = calculateBitmapSettings(drawingHeight, attributes.cropTop, attributes.cropBottom);
 

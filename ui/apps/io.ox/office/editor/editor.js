@@ -387,7 +387,8 @@ define('io.ox/office/editor/editor',
 
             // generate the operation to create the new table
             tableAttributes = StyleSheets.getExplicitAttributes(cellRangeInfo.tableNode);
-            tableAttributes.tableGrid = tableStyles.getElementAttributes(cellRangeInfo.tableNode).tableGrid.slice(cellRangeInfo.firstCellPosition[1], cellRangeInfo.lastCellPosition[1] + 1);
+            tableAttributes.table = tableAttributes.table || {};
+            tableAttributes.table.tableGrid = tableStyles.getElementAttributes(cellRangeInfo.tableNode).tableGrid.slice(cellRangeInfo.firstCellPosition[1], cellRangeInfo.lastCellPosition[1] + 1);
             generator.generateOperation(Operations.TABLE_INSERT, { start: [1], attrs: tableAttributes });
 
             // all covered rows in the table
@@ -624,6 +625,7 @@ define('io.ox/office/editor/editor',
 
             // remove highlighting and merge sibling text spans
             _(highlightedSpans).each(function (span) {
+                // TODO: pass a complete attributes object
                 characterStyles.setElementAttributes(span, { highlight: null }, { special: true });
                 CharacterStyles.mergeSiblingTextSpans(span);
                 CharacterStyles.mergeSiblingTextSpans(span, true);
@@ -734,6 +736,7 @@ define('io.ox/office/editor/editor',
                         }
 
                         // set highlighting to resulting text span and store it in the global list
+                        // TODO: pass a complete attributes object
                         characterStyles.setElementAttributes(spanInfo.span, { highlight: true }, { special: true });
                         highlightedSpans.push(spanInfo.span);
 
@@ -1062,7 +1065,7 @@ define('io.ox/office/editor/editor',
                 endRow = endPos.pop(),
                 tablePos = _.copy(startPos, true),
                 endPosition = null,
-                attrs = {};
+                attrs = { cell: {} };
 
             for (var i = endRow; i >= startRow; i--) {
 
@@ -1079,8 +1082,8 @@ define('io.ox/office/editor/editor',
                 localEndCol++;  // adding new cell behind existing cell
                 var cellPosition = _.copy(rowPosition, true);
                 cellPosition.push(localEndCol);
-                attrs.gridSpan = 1;  // only 1 grid for the new cell
-                var newOperation = {name: Operations.CELLS_INSERT, start: cellPosition, count: count, attrs: attrs};
+                attrs.cell.gridSpan = 1;  // only 1 grid for the new cell
+                var newOperation = { name: Operations.CELLS_INSERT, start: cellPosition, count: count, attrs: attrs };
                 applyOperation(newOperation);
 
                 // Applying new tableGrid, if the current tableGrid is not sufficient
@@ -1250,7 +1253,7 @@ define('io.ox/office/editor/editor',
                     // text offset in paragraph, first and last text position in paragraph
                     offset = 0, startOffset = 0, endOffset = 0,
                     // table attributes
-                    attributes = { tableGrid: [], width: 'auto' },
+                    attributes = { table: { tableGrid: [], width: 'auto' } },
                     // default table style
                     tableStyleId = self.getDefaultUITableStylesheet(),
                     // operations generator
@@ -1276,7 +1279,7 @@ define('io.ox/office/editor/editor',
                 }
 
                 // prepare table column widths (values are relative to each other)
-                _(size.width).times(function () { attributes.tableGrid.push(1000); });
+                _(size.width).times(function () { attributes.table.tableGrid.push(1000); });
 
                 // set default table style
                 if (_.isString(tableStyleId)) {
@@ -1295,7 +1298,7 @@ define('io.ox/office/editor/editor',
                     }
 
                     // add table style name to attributes
-                    attributes.style = tableStyleId;
+                    attributes.table.style = tableStyleId;
                 }
 
                 // insert the table, and add empty rows
@@ -1318,7 +1321,7 @@ define('io.ox/office/editor/editor',
                     name: Operations.DRAWING_INSERT,
                     start: start,
                     type: 'image',
-                    attrs: { imageUrl: imageFragment }
+                    attrs: { drawing: { imageUrl: imageFragment } }
                 };
 
             applyOperation(newOperation);
@@ -1336,7 +1339,7 @@ define('io.ox/office/editor/editor',
                     name: Operations.DRAWING_INSERT,
                     start: start,
                     type: 'image',
-                    attrs: { imageUrl: imageURL }
+                    attrs: { drawing: { imageUrl: imageURL } }
                 };
 
             applyOperation(newOperation);
@@ -1354,7 +1357,7 @@ define('io.ox/office/editor/editor',
                     name: Operations.DRAWING_INSERT,
                     start: start,
                     type: 'image',
-                    attrs: { imageData: imageData }
+                    attrs: { drawing: { imageData: imageData } }
                 };
 
             applyOperation(newOperation);
@@ -3276,8 +3279,9 @@ define('io.ox/office/editor/editor',
             }
 
             // apply the passed paragraph attributes
-            if (_.isObject(operation.attrs) && !_.isEmpty(operation.attrs)) {
-                paragraphStyles.setElementAttributes(paragraph, operation.attrs);
+            // TODO: pass the entire attributes object
+            if (_.isObject(operation.attrs) && _.isObject(operation.attrs.paragraph)) {
+                paragraphStyles.setElementAttributes(paragraph, operation.attrs.paragraph);
             }
 
             // set cursor to beginning of the new paragraph
@@ -3408,8 +3412,9 @@ define('io.ox/office/editor/editor',
             }
 
             // apply the passed table attributes
-            if (_.isObject(operation.attrs) && !_.isEmpty(operation.attrs)) {
-                tableStyles.setElementAttributes(table, operation.attrs);
+            // TODO: pass the entire attributes object
+            if (_.isObject(operation.attrs) && _.isObject(operation.attrs.table)) {
+                tableStyles.setElementAttributes(table, operation.attrs.table);
             }
         };
 
@@ -4206,6 +4211,7 @@ define('io.ox/office/editor/editor',
                 (paragraph.firstElementChild.textContent.length === 0)) {
                 var url = characterStyles.getElementAttributes(paragraph.firstElementChild).url;
                 if ((url !== null) && (url.length > 0)) {
+                    // TODO: pass a complete attributes object
                     characterStyles.setElementAttributes(paragraph.firstElementChild, { url: null, style: null });
                 }
             }
@@ -4552,8 +4558,9 @@ define('io.ox/office/editor/editor',
             textNode.nodeValue = textNode.nodeValue.slice(0, spanInfo.offset) + text + textNode.nodeValue.slice(spanInfo.offset);
 
             // apply the passed text attributes
-            if (_.isObject(attrs) && !_.isEmpty(attrs)) {
-                characterStyles.setElementAttributes(spanInfo.node, attrs);
+            // TODO: pass the entire attributes object
+            if (_.isObject(attrs) && _.isObject(attrs.character)) {
+                characterStyles.setElementAttributes(spanInfo.node, attrs.character);
             }
 
             // validate paragraph, store new cursor position
@@ -4634,8 +4641,9 @@ define('io.ox/office/editor/editor',
             DOM.createFieldNode().append(fieldSpan).insertAfter(span);
 
             // apply the passed field attributes
-            if (_.isObject(attrs) && !_.isEmpty(attrs)) {
-                characterStyles.setElementAttributes(fieldSpan, attrs);
+            // TODO: pass the entire attributes object
+            if (_.isObject(attrs) && _.isObject(attrs.character)) {
+                characterStyles.setElementAttributes(fieldSpan, attrs.character);
             }
 
             // validate paragraph, store new cursor position
@@ -4661,8 +4669,9 @@ define('io.ox/office/editor/editor',
             DOM.createTabNode().append(tabSpan).insertAfter(span);
 
             // apply the passed tab attributes
-            if (_.isObject(attrs) && !_.isEmpty(attrs)) {
-                characterStyles.setElementAttributes(tabSpan, attrs);
+            // TODO: pass the entire attributes object
+            if (_.isObject(attrs) && _.isObject(attrs.character)) {
+                characterStyles.setElementAttributes(tabSpan, attrs.character);
             }
 
             // validate paragraph, store new cursor position
@@ -4675,6 +4684,8 @@ define('io.ox/office/editor/editor',
 
             var // text span that will precede the field
                 span = getPreparedTextSpan(start),
+                // drawing attributes from attribute object
+                drawingAttrs = (_.isObject(attributes) && _.isObject(attributes.drawing)) ? attributes.drawing : {},
                 // new drawing node
                 drawingNode = null,
                 // URL from attributes, and absolute URL
@@ -4691,13 +4702,16 @@ define('io.ox/office/editor/editor',
 
             if (type === 'image') {
                 // saving the absolute image url as data object at content node
-                url = attributes.imageUrl;
+                url = drawingAttrs.imageUrl;
                 absUrl = /:\/\//.test(url) ? url : getDocumentUrl({ get_filename: url });
                 drawingNode.data('absoluteURL', absUrl);
             }
 
             // apply the passed drawing attributes
-            drawingStyles.setElementAttributes(drawingNode, attributes);
+            // TODO: pass the entire attributes object
+            if (_.isObject(attributes) && _.isObject(attributes.drawing)) {
+                drawingStyles.setElementAttributes(drawingNode, attributes.drawing);
+            }
 
             // validate paragraph, store new cursor position
             implParagraphChanged(span.parentNode);
@@ -4806,6 +4820,7 @@ define('io.ox/office/editor/editor',
                 redoOperation = null;
 
             // sets or clears the attributes using the current style sheet container
+            // TODO: pass the entire attributes object
             function setElementAttributes(element) {
                 styleSheets.setElementAttributes(element, attributes[family], options);
             }
@@ -5229,8 +5244,12 @@ define('io.ox/office/editor/editor',
                     // append the new row to the table
                     $(table).append(newRow);
                 }
+
                 // apply the passed attributes
-                tableRowStyles.setElementAttributes(newRow, attrs);
+                // TODO: pass the entire attributes object
+                if (_.isObject(attrs) && _.isObject(attrs.row)) {
+                    tableRowStyles.setElementAttributes(newRow, attrs.row);
+                }
             });
 
             // recalculating the attributes of the table cells
@@ -5272,8 +5291,11 @@ define('io.ox/office/editor/editor',
             var paragraph = DOM.createParagraphNode(),
                 cell = DOM.createTableCellNode(paragraph);
 
-            // apply the passed table attributes
-            tableCellStyles.setElementAttributes(cell, attrs);
+            // apply the passed table cell attributes
+            // TODO: pass the entire attributes object
+            if (_.isObject(attrs) && _.isObject(attrs.cell)) {
+                tableCellStyles.setElementAttributes(cell, attrs.cell);
+            }
 
             // insert empty text node into the paragraph
             validateParagraphNode(paragraph);
@@ -5735,8 +5757,9 @@ define('io.ox/office/editor/editor',
 
             sourceCells.remove();
 
-            // apply the passed table attributes
-            tableCellStyles.setElementAttributes(targetCell, { 'gridSpan' : colSpanSum });
+            // apply the passed table cell attributes
+            // TODO: pass a complete attributes object
+            tableCellStyles.setElementAttributes(targetCell, { gridSpan: colSpanSum });
         }
 
         /**
