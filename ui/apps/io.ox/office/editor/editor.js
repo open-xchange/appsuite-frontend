@@ -5609,11 +5609,22 @@ define('io.ox/office/editor/editor',
                             }
                         }
 
+                        // using empty span as reference for inserting new components
+                        if ((DOM.isDrawingNode(destNode)) && (DOM.isOffsetNode(destNode.previousSibling))) {
+                            destNode = destNode.previousSibling;  // switching temporary to offset
+                        }
+
                         // there can be empty text spans before the destination node
-                        if (DOM.isTextSpan(destNode)) {
+                        if ((DOM.isTextSpan(destNode)) || (DOM.isDrawingNode(destNode)) || (DOM.isOffsetNode(destNode))) {
                             while (DOM.isEmptySpan(destNode.previousSibling)) {
                                 destNode = destNode.previousSibling;
                             }
+                        }
+
+                        if ((insertBefore) && (DOM.isTextSpan(destNode))) {
+                            destNode = DOM.splitTextSpan(destNode, 0)[0]; // taking care of empty text span before drawing
+                            insertBefore = false;  // insert drawing behind new empty text span
+
                         }
 
                         if (insertBefore) {
