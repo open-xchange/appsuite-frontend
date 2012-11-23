@@ -21,9 +21,9 @@ Requires:       httpd
 %endif
 
 %if 0%{?rhel_version} || 0%{?fedora_version}
-%define docroot /var/www/html/ui
+%define docroot /var/www/html/appsuite
 %else
-%define docroot /srv/www/htdocs/ui
+%define docroot /srv/www/htdocs/appsuite
 %endif
 
 %description

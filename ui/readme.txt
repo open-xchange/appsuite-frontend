@@ -9,7 +9,7 @@ How to get the UI running in Debian/Ubuntu
 2.  Figure out Apache's document root (usually /var/www) and put the path for
     the UI into an environment variable
 
-        export builddir="/var/www/ui"
+        export builddir="/var/www/appsuite"
 
 3.  Create the new directory for the UI with write rights for yourself
 
@@ -22,7 +22,7 @@ How to get the UI running in Debian/Ubuntu
         ./build.sh doc
 
 5.  If everything works fine, the documentation should be at
-    http://localhost/ui/doc/apache.html. Continue reading there!
+    http://localhost/appsuite/doc/apache.html. Continue reading there!
 
 
 How to get the UI running on MacOS X
@@ -32,7 +32,7 @@ How to get the UI running on MacOS X
 
     /Library/WebServer/Documents
 
-2.  Create a new folder ui in Apache's document root
+2.  Create a new folder appsuite in Apache's document root
 
 3.  You need node.js to build the UI:
 
@@ -41,7 +41,7 @@ How to get the UI running on MacOS X
     - Open terminal
 
     - Set environment variable:
-        export builddir="/Library/WebServer/Documents/ui"
+        export builddir="/Library/WebServer/Documents/appsuite"
 
     - Build UI:
       ./build.sh
@@ -50,7 +50,7 @@ How to get the UI running on MacOS X
       ./build.sh doc
 
 4.  If everything works fine, the documentation should be at
-    http://localhost/ui/doc/apache.html. Continue reading there!
+    http://localhost/appsuite/doc/apache.html. Continue reading there!
 
 5.  If you want to work with eclipse, visit
     http://stackoverflow.com/questions/829749/launch-mac-eclipse-with-environment-variables-set
@@ -58,7 +58,7 @@ How to get the UI running on MacOS X
     Your eclipse.sh should contain:
 
     #!/bin/sh
-    export builddir="/Library/WebServer/Documents/ui"
+    export builddir="/Library/WebServer/Documents/appsuite"
     exec "`dirname \"$0\"`/eclipse" $@
 
     This is a nice trick to get automatic builds without changing project files.

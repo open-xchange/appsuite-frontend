@@ -1,2 +1,2 @@
-build/* var/www/ui/
-build/.htaccess var/www/ui/
+build/* var/www/appsuite/
+build/.htaccess var/www/appsuite/

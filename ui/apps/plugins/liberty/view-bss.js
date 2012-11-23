@@ -26,7 +26,7 @@ define("plugins/liberty/view-bss", ["io.ox/core/extensions"], function (ext) {
         this.tick = function () {
             var self = this;
             // We use the AJAX method to not send the loading icon into nervous blinking
-            $.ajax("/ui/api/noms/apps?action=list&session=" + ox.session, {
+            $.ajax("/appsuite/api/noms/apps?action=list&session=" + ox.session, {
                 dataType: 'json'
             }).done(function (response) {
                 _(response.data).each(function (entry) {

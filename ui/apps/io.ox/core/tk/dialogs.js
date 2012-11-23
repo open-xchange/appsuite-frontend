@@ -95,8 +95,8 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core'], func
             nodes[part] = nodes.popup.find('.modal-' + part);
         });
 
-        if (options && options.modalbodyheight) {
-            nodes.body.css('max-height', options.modalbodyheight + 'px');
+        if (o.modalbodyheight) {
+            nodes.body.css('max-height', o.modalbodyheight + 'px');
         }
         // add event hub
         Events.extend(this);
@@ -256,7 +256,6 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core'], func
                 // center vertically
                 nodes.popup.css({
                     width: dim.width + "px",
-//                    height: dim.height + "px",
                     top: "50%",
                     marginTop: 0 - ((dim.height + 60) / 2 >> 0) + "px"
                 });
@@ -264,7 +263,6 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core'], func
                 // use fixed top position
                 nodes.popup.css({
                     width: dim.width + "px",
-//                    height: dim.height + "px",
                     top: o.top || "0px"
                 });
             }

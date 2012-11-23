@@ -664,7 +664,7 @@ define('io.ox/mail/write/main',
                     content_type: 'text/html',
                     content: (app.getEditor() ? app.getEditor().getContent() : '')
                         // reverse img fix
-                        .replace(/(<img[^>]+src=")(\/ui\/)?api\//g, '$1/ajax/')
+                        .replace(/(<img[^>]+src=")(\/appsuite\/)?api\//g, '$1/ajax/')
                 };
             } else {
                 content = {
@@ -847,6 +847,7 @@ define('io.ox/mail/write/main',
                     editorHash[id].destroy();
                 }
                 // clear all private vars
+                previous = false;
                 app = win = editor = currentSignature = editorHash = null;
             };
 
