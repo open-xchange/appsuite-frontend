@@ -1238,6 +1238,44 @@ define('io.ox/office/editor/position',
     };
 
     /**
+     * Returns the count of previous floated images before a specified
+     * logical position inside a paragraph.
+     *
+     * @param {Node|jQuery} startnode
+     *  The start node corresponding to the logical position. if this object is
+     *  a jQuery collection, uses the first DOM node it contains.
+     *
+     * @param {Number[]} position
+     *  The logical position.
+     *
+     * @returns {Number}
+     *  The count of previous floated images inside the paragraph.
+     *  The logical length of all content nodes inside the paragraph or 0, if
+     *  the logical position does not point to a paragraph.
+     */
+    Position.getNumberOfPrevFloatedImages = function (editdiv, position) {
+
+        var domNode = Position.getDOMPosition(editdiv, position).node,
+            counter = 0;
+
+        if (domNode) {
+
+            if (domNode.nodeType === 3) {
+                domNode = domNode.parentNode;
+            }
+
+            while (domNode.previousSibling) {
+                if (DOM.isFloatingDrawingNode(domNode.previousSibling)) {
+                    counter++;
+                }
+                domNode = domNode.previousSibling;
+            }
+        }
+
+        return counter;
+    };
+
+    /**
      * Returns the logical start index of a text component node in its parent
      * paragraph. The passed node may be any child node of a paragraph (either
      * an editable content node, or a helper node such as an offset container

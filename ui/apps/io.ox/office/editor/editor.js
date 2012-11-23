@@ -1754,6 +1754,8 @@ define('io.ox/office/editor/editor',
                     localPosition = null,
                     // another logical position
                     localDestPosition = null,
+                    // another logical position
+                    oldInlinePosition = null,
                     // the length of the paragraph
                     paragraphLength = null,
                     // an additional operation
@@ -1861,14 +1863,18 @@ define('io.ox/office/editor/editor',
                         // when switching from floated to inline, a move of the drawing might be necessary
                         if ((attributes.inline === true) && (DOM.isFloatingDrawingNode(element)) && ($(element).data('inlinePosition')) && (! _.isEqual(localPosition, $(element).data('inlinePosition')))) {
 
-                            localDestPosition = $(element).data('inlinePosition'); // -> is this position still valid?
+                            oldInlinePosition = $(element).data('inlinePosition').pop();  // -> is this position still valid? The complete position could have changed.
+                            localDestPosition = _.clone(localPosition);
+
                             paragraphLength = Position.getParagraphLength(editdiv, localDestPosition);
-                            if (paragraphLength < localDestPosition[localDestPosition.length - 1]) {
+                            if (paragraphLength < oldInlinePosition) {
                                 localDestPosition[localDestPosition.length - 1] = paragraphLength;
+                            } else {
+                                localDestPosition[localDestPosition.length - 1] = oldInlinePosition;
                             }
                             newOperation = { name: Operations.MOVE, start: localPosition, end: localPosition, to: localDestPosition };
                             applyOperation(newOperation);
-                            localPosition = $(element).data('inlinePosition');
+                            localPosition = localDestPosition;
                         }
 
                         generateAttributeOperation(localPosition);
@@ -4980,6 +4986,14 @@ define('io.ox/office/editor/editor',
                 allParagraphs = Position.getAllAdjacentParagraphs(editdiv, position),
                 originalpara = allParagraphs[para],
                 paraclone = $(originalpara).clone(true);
+
+            // taking care of floated images at the beginning of the paragraph
+            if (pos > 0) {
+                if (Position.getNumberOfPrevFloatedImages(editdiv, position) === pos) {
+                    pos = 0;
+                    position[posLength] = 0;
+                }
+            }
 
             paraclone.insertAfter(allParagraphs[para]);
 
