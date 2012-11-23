@@ -215,15 +215,40 @@
         .ellipsis();
     }
     
-    @appointment-reserved: #08c; /* blue */ 
-    @appointment-temporary: #ffbb00; /* yellow */ 
-    @appointment-absent: #913f3f; /* red */ 
-    @appointment-free: #8eb360; /* green */ 
     @appointment-private: #555; /* dark grey */ 
     @appointment-out: #aaa; /* light grey */ 
-    @appointment-hover-pct: 15%; 
-    @appointment-unconfirmed-alpha:  0.4;
         
+    /* out */
+    .day.out .appointment {
+        background-color: @appointment-out;
+    }
+    
+    .day.out .appointment.hover {
+        background-color: darken(@appointment-out, @appointment-hover-pct);
+    }
+
+    .appointment .location {
+        color: #ccc;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .appointment .private-flag {
+    	float: left;
+    	display: inline-block;
+    	font-size: 15px;
+    }
+    
+    /* shown_as colors */
+    @appointment-reserved: #08c; /* blue */ 
+    @appointment-temporary: #FFBB00; /* yellow */ 
+    @appointment-absent: #913F3F; /* red */ 
+    @appointment-free: #8EB360; /* green */ 
+    
+    @appointment-unconfirmed-alpha: 0.4;
+    @appointment-declined-alpha: 0.1;
+    @appointment-hover-pct: 15%; 
+    
+    /* appointment status styles */
     .appointment.reserved {
         background-color: @appointment-reserved;
     }
@@ -240,39 +265,11 @@
         background-color: @appointment-free;
     }
     
-    .appointment.private {
-        background-color: @appointment-private;
+    .appointment.declined .appointment-content{
+        text-decoration: line-through;
     }
-    
-    .appointment .private-flag {
-    	float: left;
-    	display: inline-block;
-    	font-size: 15px;
-    }
-    
-    /* unconfirmed */
-    .appointment.reserved.unconfirmed {
-        background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved),@appointment-unconfirmed-alpha );
-    }
-    
-    .appointment.temporary.unconfirmed {
-        background-color: hsla(hue(@appointment-temporary), saturation(@appointment-temporary), lightness(@appointment-temporary),@appointment-unconfirmed-alpha );
-    }
-    
-    .appointment.absent.unconfirmed {
-        background-color: hsla(hue(@appointment-absent), saturation(@appointment-absent), lightness(@appointment-absent),@appointment-unconfirmed-alpha );
-    }
-    
-    .appointment.free.unconfirmed {
-        background-color: hsla(hue(@appointment-free), saturation(@appointment-free), lightness(@appointment-free),@appointment-unconfirmed-alpha );
-    }
-    
-    /* out */
-    .day.out .appointment {
-        background-color: @appointment-out;
-    }
-    
-    /* mouse over */
+
+    /* hover */
     .appointment.reserved.hover {
         background-color: darken(@appointment-reserved, @appointment-hover-pct);
     }
@@ -289,16 +286,37 @@
         background-color: darken(@appointment-free, @appointment-hover-pct);
     }
     
-    .appointment.private.hover {
-        background-color: darken(@appointment-private, @appointment-hover-pct);
+    /* unconfirmed */
+    .appointment.reserved.unconfirmed {
+        background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved), @appointment-unconfirmed-alpha);
     }
     
-    .day.out .appointment.hover {
-        background-color: darken(@appointment-out, @appointment-hover-pct);
+    .appointment.temporary.unconfirmed {
+        background-color: hsla(hue(@appointment-temporary), saturation(@appointment-temporary), lightness(@appointment-temporary), @appointment-unconfirmed-alpha);
     }
     
-    .appointment .location {
-        color: #ccc;
-        color: rgba(255, 255, 255, 0.6);
+    .appointment.absent.unconfirmed {
+        background-color: hsla(hue(@appointment-absent), saturation(@appointment-absent), lightness(@appointment-absent), @appointment-unconfirmed-alpha);
+    }
+    
+    .appointment.free.unconfirmed {
+        background-color: hsla(hue(@appointment-free), saturation(@appointment-free), lightness(@appointment-free), @appointment-unconfirmed-alpha);
+    }
+
+    /* declined */
+    .appointment.reserved.declined {
+        background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved), @appointment-declined-alpha);
+    }
+    
+    .appointment.temporary.declined {
+        background-color: hsla(hue(@appointment-temporary), saturation(@appointment-temporary), lightness(@appointment-temporary), @appointment-declined-alpha);
+    }
+    
+    .appointment.absent.declined {
+        background-color: hsla(hue(@appointment-absent), saturation(@appointment-absent), lightness(@appointment-absent), @appointment-declined-alpha);
+    }
+    
+    .appointment.free.declined {
+        background-color: hsla(hue(@appointment-free), saturation(@appointment-free), lightness(@appointment-free), @appointment-declined-alpha);
     }
 }

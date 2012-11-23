@@ -257,38 +257,26 @@ define('io.ox/calendar/month/view',
         index: 100,
         draw: function (baton) {
             var a = baton.model,
-                private_flag;
-                    // check confirmations
-            var state = (_(a.get('participants')).find(function (o) {
-                    return o.id === myself;
-                }) || { type: 0 }).type;
-
-            this
-                .addClass(
+                hash = util.getConfirmations(a.attributes),
+                conf = hash[myself] || { status: 1, comment: "" };
+            this.addClass(
                     util.getShownAsClass(a.attributes) +
-                    (state === 0 ? ' unconfirmed' : '') +
+                    ' ' + util.getConfirmationClass(conf.status) +
                     (folder.can('write', baton.folder, a.attributes) ? ' modify' : '')
                 )
                 .append(
                     $('<div>')
-                        .addClass('appointment-content')
-                        .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
-                        .append(private_flag = $('<i class="icon-lock private-flag">').hide())
-                        .append($('<div>').addClass('title').text(gt.noI18n(a.get('title'))))
-                        .append(function () {
-                            if (a.get('location')) {
-                                return $('<div>').addClass('location').text(gt.noI18n(a.get('location') || ''));
-                            }
-                        })
+                    .addClass('appointment-content')
+                    .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
+                    .append(
+                        $('<i class="icon-lock private-flag">')[a.get('private_flag') ? 'show' : 'hide'](),
+                        $('<div>').addClass('title').text(gt.noI18n(a.get('title'))),
+                        $('<div>').addClass('location').text(gt.noI18n(a.get('location') || ''))
+                    )
                 )
                 .attr({
                     'data-extension': 'default'
                 });
-            if (a.get('private_flag')) {
-                private_flag.show();
-            } else {
-                private_flag.hide();
-            }
         }
     });
 

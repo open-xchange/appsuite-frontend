@@ -12,16 +12,7 @@
 
 .window-content.week-view {
     
-    /* shown_as colors */
-    @appointment-reserved: #08c; /* blue */ 
-    @appointment-temporary: #FFBB00; /* yellow */ 
-    @appointment-absent: #913F3F; /* red */ 
-    @appointment-free: #8EB360; /* green */ 
-    
     @appointment-lasso: rgba(0, 0, 0, 0.4);
-    @appointment-hover-pct: 15%; 
-    @appointment-unconfirmed-alpha: 0.4;
-    @appointment-declined-alpha: 0.1;
     
     @weekview-time-with: 58px;
     @weekview-footer-height: 25px;
@@ -271,7 +262,17 @@
         color: rgba(255, 255, 255, 0.6);
     }
 
-    /* appointment status styles*/
+    /* shown_as colors */
+    @appointment-reserved: #08c; /* blue */ 
+    @appointment-temporary: #FFBB00; /* yellow */ 
+    @appointment-absent: #913F3F; /* red */ 
+    @appointment-free: #8EB360; /* green */ 
+    
+    @appointment-unconfirmed-alpha: 0.4;
+    @appointment-declined-alpha: 0.1;
+    @appointment-hover-pct: 15%; 
+    
+    /* appointment status styles */
     .appointment.reserved {
         background-color: @appointment-reserved;
     }
@@ -292,6 +293,7 @@
         text-decoration: line-through;
     }
 
+    /* hover */
     .appointment.reserved.hover {
         background-color: darken(@appointment-reserved, @appointment-hover-pct);
     }
@@ -308,6 +310,7 @@
         background-color: darken(@appointment-free, @appointment-hover-pct);
     }
     
+    /* unconfirmed */
     .appointment.reserved.unconfirmed {
         background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved), @appointment-unconfirmed-alpha);
     }
@@ -324,6 +327,7 @@
         background-color: hsla(hue(@appointment-free), saturation(@appointment-free), lightness(@appointment-free), @appointment-unconfirmed-alpha);
     }
 
+    /* declined */
     .appointment.reserved.declined {
         background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved), @appointment-declined-alpha);
     }
