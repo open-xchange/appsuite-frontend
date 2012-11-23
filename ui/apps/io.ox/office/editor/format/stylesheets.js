@@ -564,10 +564,15 @@ define('io.ox/office/editor/format/stylesheets',
         this.addStyleSheet = function (id, name, parentId, attributes, options) {
 
             var // get or create a style sheet object
-                styleSheet = styleSheets[id] || (styleSheets[id] = {});
+                styleSheet = _.isString(id) ? (styleSheets[id] || (styleSheets[id] = {})) : null;
+
+            if (!styleSheet) {
+                Utils.warn('StyleSheets.addStyleSheet(): missing style sheet identifier');
+                return;
+            }
 
             // set user-defined name of the style sheet
-            styleSheet.name = name || id || '- unnamed -';
+            styleSheet.name = name || id;
 
             // set parent of the style sheet, check for cyclic references
             styleSheet.parentId = parentId;
