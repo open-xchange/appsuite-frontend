@@ -339,7 +339,7 @@ define('io.ox/core/tk/folderviews',
                     var def = isOpen() ? paintChildren() : $.when();
                     updateArrow();
                     // add to DOM
-                    if (checkbox) {
+                    if (checkbox && (data.own_rights & 0x3f80)) {
                         nodes.folder.append(nodes.arrow, nodes.icon, nodes.counter, nodes.label, nodes.subscriber);
                     } else {
                         nodes.folder.append(nodes.arrow, nodes.icon, nodes.counter, nodes.label);
@@ -586,72 +586,71 @@ define('io.ox/core/tk/folderviews',
 
         this.subscribe = function (data) {
 //            var currentFolderArray = data.selection.get(),
-//                currentFolder,
+//                currentFolder;
             var name = data.app.getName(),
                 POINT = name + '/folderview';
 
 //            currentFolder = (currentFolderArray[0]).split('/');
-
+//
 //            currentFolder = (currentFolder[0] === 'default0') ? 1 : currentFolder;
 
-            require(['io.ox/core/tk/folderviews'], function (views) {
-                var options;
-                _(ext.point(POINT + '/options').all()).each(function (obj) {
+            var options;
+            _(ext.point(POINT + '/options').all()).each(function (obj) {
 
-                    options = _.extend(obj, options || {});
-                });
+                options = _.extend(obj, options || {});
+            });
 
-                var container = $('<div>'),
-                    tree = data.app.folderView = new views[options.view](container, {
-                    type: options.type,
+
+            var container = $('<div>').addClass('test'),
+                tree = new ApplicationFolderTree(container, {
+                type: options.type,
 //                    rootFolderId: currentFolder[0],
-                    rootFolderId: options.rootFolderId,
-                    checkbox: true,
-                    all: true
+                rootFolderId: options.rootFolderId,
+                checkbox: true,
+                all: true
+            });
+
+            tree.paint();
+
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                var pane = new dialogs.ModalDialog({
+                    width: 400,
+                    modalbodyheight: 200,
+                    easyOut: true
                 });
-                tree.paint();
+                var changesArray = [];
 
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    var pane = new dialogs.ModalDialog({
-                        width: 400,
-                        modalbodyheight: 200,
-                        easyOut: true
-                    });
-                    var changesArray = [];
+                pane.header(
+                    $('<h4>').text(gt('Subscribe IMAP folders'))
+                )
+                .build(function () {
+                    this.getContentNode().append(
+                        container
+                    );
+                })
+                .addButton('cancel', 'Cancel')
+                .addPrimaryButton('save', gt('Save'))
+                .show(function () {
+                });
 
-                    pane.header(
-                        $('<h4>').text(gt('Subscribe IMAP folders'))
-                    )
-                    .build(function () {
-                        this.getContentNode().append(
-                            container
-                        );
-                    })
-                    .addButton('cancel', 'Cancel')
-                    .addPrimaryButton('save', gt('Save'))
-                    .show(function () {
-                    });
+                tree.container.on('change', 'input', function () {
+                    var folder = $(this).val(),
+                        checkboxStatus = $(this).is(':checked'),
+                        changes = {subscribed: checkboxStatus},
+                        tobBePushed = { folder: folder, changes: changes};
+                    changesArray.push(tobBePushed);
+                });
 
-                    tree.container.on('change', 'input', function () {
-                        var folder = $(this).val(),
-                            checkboxStatus = $(this).is(':checked'),
-                            changes = {subscribed: checkboxStatus},
-                            tobBePushed = { folder: folder, changes: changes};
-                        changesArray.push(tobBePushed);
-                    });
-
-                    pane.on('save', function () {
+                pane.on('save', function () {
 //                        http.pause();
 
-                        _(changesArray).each(function (change) {
-                            api.update(change);
-                        });
-
-//                        http.resume();
+                    _(changesArray).each(function (change) {
+                        api.update(change);
                     });
+//                        http.resume();
                 });
-
             });
+
         };
     }
 
