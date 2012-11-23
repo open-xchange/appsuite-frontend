@@ -111,19 +111,6 @@ define("io.ox/tasks/actions",
         }
     });
 
-    new Action('io.ox/tasks/actions/done', {
-        action: function (baton) {
-            var data = baton.data;
-            require(['io.ox/tasks/api'], function (api) {
-                api.update(data.last_modified, data.id, {status: 3, percent_completed: 100}, data.folder_id)
-                    .done(function (result) {
-                        api.trigger("update:" + data.folder_id + '.' + data.id);
-                        notifications.yell('success', gt('Done!'));
-                    });
-            });
-        }
-    });
-
     //attachment actions
     new Action('io.ox/tasks/actions/preview-attachment', {
         id: 'preview',
@@ -247,13 +234,44 @@ define("io.ox/tasks/actions",
         ref: 'io.ox/tasks/actions/delete'
     }));
 
-    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+    ext.point('io.ox/tasks/links/inline').extend({
         id: 'done',
         index: 300,
         prio: 'hi',
-        label: gt("Done"),
-        ref: 'io.ox/tasks/actions/done'
-    }));
+        draw: function (data) {
+            var mods;
+            if (data.status === 3) {
+                mods = {label: gt('Undone'),
+                        data: {status: 1,
+                               percent_completed: 0
+                              }
+                       };
+            } else {
+                mods = {label: gt('Done'),
+                        data: {status: 3,
+                               percent_completed: 100
+                              }
+                       };
+            }
+            this.append($('<span class="io-ox-action-link">').append(
+                $('<a href="#">').text(mods.label)
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        require(['io.ox/tasks/api'], function (api) {
+                            api.update(data.last_modified || _.now(), data.id, mods.data, data.folder_id || data.folder)
+                                .done(function (result) {
+                                    api.trigger("update:" + data.folder_id + '.' + data.id);
+                                    notifications.yell('success', mods.label);
+                                })
+                                .fail(function (result) {
+                                    notifications.yell('error', gt.noI18n(result));
+                                });
+                        });
+                    })
+                )
+            );
+        }
+    });
 
     ext.point('io.ox/tasks/links/inline').extend({
         id: 'changeDueDate',
