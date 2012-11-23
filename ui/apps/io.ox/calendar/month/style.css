@@ -166,7 +166,7 @@
     
     .day.today .number {
         color: darken(#08c, 10%);
-        background-color: transparent;
+        background-color: #daefff;
         .transition(background-color 0.2s linear);
     }
 
@@ -176,7 +176,6 @@
     
     .day.today {
         background-color: #daefff;
-        background-color: rgba(0, 136, 204, 0.25);
     }
     
     .day .list {
