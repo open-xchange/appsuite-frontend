@@ -145,6 +145,30 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             if (hasDetails) {
                 node.append($details);
             }
+            
+            if (task.participants.length > 0) {
+                var table,
+                    states = [
+                        [gt('Not yet confirmed'), 'grey'],
+                        [gt('Confirmed'), 'green'],
+                        [gt('Declined'), 'red'],
+                        [gt('Tentative'), 'yellow']
+                    ];
+                node.append($('<label class="detail-label">').text(gt("Participants")),
+                            table = $('<table class="task-participants-table">'));
+                require(['io.ox/core/api/user'], function (userApi) {
+                    _(task.participants).each(function (participant) {
+                        userApi.getName(participant.id).done(function (name) {
+                            table.append($('<tr>').append(
+                                $('<td class="participants-table-name">').text(name),
+                                $('<td>').text(states[participant.confirmation][0]),
+                                $('<td>').append($('<div>').addClass("participants-table-colorsquare").css("background-color", states[participant.confirmation][1]))
+                                )
+                            );
+                        });
+                    });
+                });
+            }
 
             return node;
         }

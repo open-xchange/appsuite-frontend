@@ -129,4 +129,15 @@
 		margin-right: 12px;
 		color: #aaa;
 	}
+	
+	.participants-table-name {
+		padding-right: 10px;
+	}
+	
+	.participants-table-colorsquare {
+		width: 13px;
+		height: 13px;
+		margin-bottom: 1px;
+		margin-left: 3px;
+	}
 }
