@@ -60,7 +60,7 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
     ox.manifests = manifestManager;
 
     var fnStoreState = function () {
-        if (ox.session) {
+        if (!ox.signin) {
             manifestCache.add('default', [manifestManager.apps, manifestManager.plugins, manifestManager.pluginPoints]);
         }
     };
@@ -105,9 +105,14 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
     };
 
     var fnLoadStaticFiles = function (state) {
-        require([ox.base + "/src/manifests.js"], function (manifests) {
+        require([ox.base + "/src/manifests.js", "io.ox/core/capabilities"], function (manifests, capabilities) {
             manifestManager.loader = 'backend';
-            _(manifests).each(fnProcessManifest);
+            
+            _(manifests).each(function (manifest) {
+                if (!!! manifest.requires || capabilities.has(manifest.requires)) {
+                    fnProcessManifest(manifest);
+                }
+            });
             fnStoreState();
             def.resolve(manifestManager); // Whoever resolves first, wins
         }).fail(function () {
@@ -137,11 +142,10 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
                 });
 
             }).fail(function (resp) {
-                console.warn("Could not load backend manifests", resp);
                 fnLoadStaticFiles('fail');
             });
         } else {
-            fnLoadStaticFiles();
+            fnLoadStaticFiles('fail');
         }
     };
 

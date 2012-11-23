@@ -304,7 +304,7 @@ $(document).ready(function () {
 
         function loadCoreFiles() {
             // Set user's language (as opposed to the browser's language)
-            return require(['io.ox/core/gettext']).pipe(function (gt) {
+            return require(['io.ox/core/gettext', 'io.ox/core/manifests']).pipe(function (gt) {
                 gt.setLanguage(ox.language);
                 return require([ox.base + '/pre-core.js']);
             });
@@ -459,14 +459,16 @@ $(document).ready(function () {
             define(name, [name + ':init!'], _.identity);
         };
     }());
-
     /**
     * module definitions can be extended by plugins
     **/
 
-    require(["io.ox/core/manifests"], function (manifests) {
+    (function () {
         var originalDefine = define;
         window.define = function () {
+            if (!ox.manifests) {
+                return originalDefine.apply(this, $.makeArray(arguments));
+            }
             // Is this a define statement we understand?
             if (_.isString(arguments[0])) {
                 var name = arguments[0];
@@ -478,7 +480,7 @@ $(document).ready(function () {
                 } else if (arguments.length > 2) {
                     definitionFunction = arguments[2];
                 }
-                return originalDefine(name, manifests.withPluginsFor(name, dependencies), definitionFunction);
+                return originalDefine(name, ox.manifests.withPluginsFor(name, dependencies), definitionFunction);
             }
 
             // Just delegate everything else
@@ -487,8 +489,7 @@ $(document).ready(function () {
 
         $.extend(window.define, originalDefine);
 
-    });
-
+    })();
 
     // searchfield fix
     if (!_.browser.Chrome) {
