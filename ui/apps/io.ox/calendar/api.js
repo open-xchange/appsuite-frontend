@@ -232,6 +232,7 @@ define("io.ox/calendar/api",
                 all_cache = {};
                 delete get_cache[key];
                 api.trigger('refresh.all');
+                api.trigger('delete', resp);
             });
         },
 

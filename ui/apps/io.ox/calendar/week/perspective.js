@@ -189,7 +189,11 @@ define('io.ox/calendar/week/perspective',
                     });
 
                 // watch for api refresh
-                api.on('refresh.all', refresh, this);
+                api.on('refresh.all', refresh, this)
+                    .on('delete', function () {
+                        // Close dialog after delete
+                        self.dialog.close();
+                    });
 
                 // watch for folder change
                 app.on('folder:change', refresh, this)
