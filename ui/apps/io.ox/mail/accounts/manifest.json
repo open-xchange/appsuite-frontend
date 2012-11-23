@@ -1,12 +1,12 @@
 [
 	{
 		path: "io.ox/mail/accounts/keychain",
-		namespace: "keychain",
+		namespace: "io.ox/keychain/api",
 		requires: ["webmail", "multiple_mail_accounts"]
 	},
 	{
 		path: "io.ox/mail/accounts/settings",
-		namespace: "settings",
+		namespace: "io.ox/settings/accounts/settings/pane",
 		requires: ["webmail", "multiple_mail_accounts"]
 	}
 ]

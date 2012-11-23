@@ -451,11 +451,44 @@ $(document).ready(function () {
 
         return function (name, deps, callback) {
             // use loader plugin to defer module definition
+            if (ox.manifests) {
+                deps = ox.manifests.withPluginsFor(name, deps);
+            }
             define(name + ':init', { load: getLoader(name, deps, callback) });
             // define real module - will wait for promise
             define(name, [name + ':init!'], _.identity);
         };
     }());
+
+    /**
+    * module definitions can be extended by plugins
+    **/
+
+    require(["io.ox/core/manifests"], function (manifests) {
+        var originalDefine = define;
+        window.define = function () {
+            // Is this a define statement we understand?
+            if (_.isString(arguments[0])) {
+                var name = arguments[0];
+                var dependencies = arguments[1];
+                var definitionFunction = $.noop;
+                if (_.isFunction(dependencies)) {
+                    definitionFunction = dependencies;
+                    dependencies = [];
+                } else if (arguments.length > 2) {
+                    definitionFunction = arguments[2];
+                }
+                return originalDefine(name, manifests.withPluginsFor(name, dependencies), definitionFunction);
+            }
+
+            // Just delegate everything else
+            return originalDefine.apply(this, $.makeArray(arguments));
+        };
+
+        $.extend(window.define, originalDefine);
+
+    });
+
 
     // searchfield fix
     if (!_.browser.Chrome) {
