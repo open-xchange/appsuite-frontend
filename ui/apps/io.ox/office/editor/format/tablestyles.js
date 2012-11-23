@@ -205,12 +205,10 @@ define('io.ox/office/editor/format/tablestyles',
 
             // checking if special attribute names are deselected in table using
             // the 'exclude' attribute
-            explicitTableAttributes = StyleSheets.getExplicitAttributes(table);
+            explicitTableAttributes = StyleSheets.getExplicitAttributes(table, 'table');
 
-            if (explicitTableAttributes.exclude) {
-                if (_.isArray(explicitTableAttributes.exclude)) {
-                    excludedAttributes = explicitTableAttributes.exclude;
-                }
+            if (_.isArray(explicitTableAttributes.exclude)) {
+                excludedAttributes = explicitTableAttributes.exclude;
             }
 
             // evaluating attributes for all other optional attributes

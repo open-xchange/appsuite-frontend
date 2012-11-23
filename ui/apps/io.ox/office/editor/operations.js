@@ -197,10 +197,10 @@ define('io.ox/office/editor/operations',
          * @param {Object} [options]
          *  A map with options controlling the operation generation process.
          *  Supports the following options:
-         *  @param {String[]} [options.clearAttributes]
-         *      The names of all attributes that have to be cleared explicitly.
-         *      Only the attributes that are not set in the passed element will
-         *      be cleared by the generated operation.
+         *  @param {Object} [options.attributes]
+         *      If specified, an additional 'setAttributes' operation will be
+         *      generated before the 'setAttributes' operation for the passed
+         *      node.
          *
          * @returns {Operations.Generator}
          *  A reference to this instance.
@@ -209,22 +209,25 @@ define('io.ox/office/editor/operations',
 
             var // explicit attributes of the passed node
                 attributes = StyleSheets.getExplicitAttributes(node),
-                // names of all attributes to be cleared
-                clearAttributes = Utils.getArrayOption(options, 'clearAttributes', []),
+                // initial attributes
+                initialAttributes = Utils.getObjectOption(options, 'attributes'),
                 // the operation options
-                operationOptions = null;
+                operationOptions = { start: position };
+
+            // add optional end position
+            if (_.isArray(endPosition)) {
+                operationOptions.end = endPosition;
+            }
 
             // add all attributes that have to be cleared
-            _(clearAttributes).each(function (name) {
-                if (!(name in attributes)) {
-                    attributes[name] = null;
-                }
-            });
+            if (_.isObject(initialAttributes) && !_.isEmpty(initialAttributes)) {
+                operationOptions.attrs = initialAttributes;
+                generateOperation(Operations.ATTRS_SET, operationOptions);
+            }
 
             // no attributes, no operation
             if (!_.isEmpty(attributes)) {
-                operationOptions = { start: position, attrs: attributes };
-                if (_.isArray(endPosition)) { operationOptions.end = endPosition; }
+                operationOptions.attrs = attributes;
                 generateOperation(Operations.ATTRS_SET, operationOptions);
             }
 
@@ -256,10 +259,11 @@ define('io.ox/office/editor/operations',
          *      generated operations (closed range). By default, operations
          *      will include all contents up to the end of the paragraph.
          *  @param {Boolean} [options.clear]
-         *      If set to true, a 'clearAttributes' operation will be generated
-         *      for the first 'insertText' operation. This prevents that
-         *      applying the operations at another place in the document clones
-         *      the character formatting of the target position.
+         *      If set to true, a 'setAttributes' operation will be generated
+         *      for the first 'insertText' operation that clears all character
+         *      attributes of the inserted text. This prevents that applying
+         *      the operations at another place in the document clones the
+         *      character formatting of the target position.
          *  @param {Number} [options.targetOffset]
          *      If set to a number, the logical positions in the operations
          *      generated for the child nodes will start at this offset. If
@@ -299,10 +303,7 @@ define('io.ox/office/editor/operations',
 
             // clear all attributes of the first inserted text span
             if (Utils.getBooleanOption(options, 'clear', false)) {
-                clearAttributes = {};
-                _(CharacterStyles.getAttributeNames()).each(function (name) {
-                    clearAttributes[name] = null;
-                });
+                clearAttributes = { character: CharacterStyles.buildNullAttributes() };
             }
 
             // process all content nodes in the paragraph and create operations
@@ -410,7 +411,10 @@ define('io.ox/office/editor/operations',
 
             // operations to create the paragraph element and formatting
             if (initialParagraph === true) {
-                this.generateSetAttributesOperation(paragraph, position, undefined, { clearAttributes: ParagraphStyles.getAttributeNames() });
+                this.generateSetAttributesOperation(paragraph, position, undefined, { attributes: {
+                    paragraph: ParagraphStyles.buildNullAttributes(),
+                    character: CharacterStyles.buildNullAttributes()
+                } });
             } else {
                 this.generateOperationWithAttributes(paragraph, Operations.PARA_INSERT, { start: position });
             }

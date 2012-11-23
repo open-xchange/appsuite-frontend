@@ -90,21 +90,22 @@ define('io.ox/office/editor/format/tablecellstyles',
         // private methods ----------------------------------------------------
 
         /**
-         * Will be called for every table cell element whose attributes have been
-         * changed. Repositions and reformats the table cell according to the
-         * passed attributes.
+         * Will be called for every table cell element whose attributes have
+         * been changed. Repositions and reformats the table cell according to
+         * the passed attributes.
          *
          * @param {jQuery} cell
          *  The <td> element whose table cell attributes have been changed, as
          *  jQuery object.
          *
          * @param {Object} attributes
-         *  A map of all attributes (name/value pairs), containing the effective
-         *  attribute values merged from style sheets and explicit attributes.
+         *  A map of all attributes (name/value pairs), containing the
+         *  effective attribute values merged from style sheets and explicit
+         *  attributes.
          */
         function updateTableCellFormatting(cell, attributes) {
 
-            var cellAttributes = StyleSheets.getExplicitAttributes(cell);
+            var cellAttributes = StyleSheets.getExplicitAttributes(cell, 'cell');
 
             // fillColor
             if (! _.isUndefined(cellAttributes.fillColor)) {

@@ -49,7 +49,7 @@ define('io.ox/office/editor/table',
             tableGrid = null;
 
         if (tablePosition) {
-            tableGrid = StyleSheets.getExplicitAttributes(tablePosition.node).tableGrid;
+            tableGrid = StyleSheets.getExplicitAttributes(tablePosition.node, 'table').tableGrid;
         }
 
         return tableGrid || [];
@@ -307,7 +307,7 @@ define('io.ox/office/editor/table',
      */
     Table.getCellAttributes = function (cells) {
         return cells.map(function () {
-            return StyleSheets.getExplicitAttributes(this);
+            return StyleSheets.getExplicitAttributes(this, 'cell');
         }).get();
     };
 

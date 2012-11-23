@@ -27,15 +27,35 @@ define('io.ox/office/editor/format/stylesheets',
      * @param {jQuery} element
      *  The DOM element, as jQuery object.
      *
-     * @param {Boolean} [clone]
-     *  If set to true, the returned attribute map will be a clone of the
-     *  original map.
+     * @param {Object} [options]
+     * A map with additional options controlling the behavior of this method.
+     * the following options are supported:
+     *  @param {String} [options.family]
+     *      If specified, extracts the attributes of a specific attribute
+     *      family from the attribute map. Otherwise, returns the complete map
+     *      object with all attributes mapped by their family.
+     *  @param {Boolean} [options.clone=false]
+     *      If set to true, the returned attribute map will be a clone of the
+     *      original map.
      *
      * @returns {Object}
      *  The attribute map if existing, otherwise an empty object.
      */
-    function getElementAttributes(element, clone) {
-        var attributes = element.data('attributes');
+    function getElementAttributes(element, options) {
+
+        var // the original and complete attribute map
+            attributes = element.data('attributes'),
+            // the attribute family to be extracted from the complete map
+            family = Utils.getStringOption(options, 'family'),
+            // whether to clone the resulting object
+            clone = Utils.getBooleanOption(options, 'clone', false);
+
+        // reduce to selected family
+        if (_.isObject(attributes) && _.isString(family)) {
+            attributes = (family in attributes) ? attributes[family] : undefined;
+        }
+
+        // return attributes directly or as a deep clone
         return _.isObject(attributes) ? ((clone === true) ? _.copy(attributes, true) : attributes) : {};
     }
 
@@ -47,9 +67,31 @@ define('io.ox/office/editor/format/stylesheets',
      *
      * @param {Object} attributes
      *  The attribute map to be stored in the element.
+     *
+     * @param {Object} [options]
+     * A map with additional options controlling the behavior of this method.
+     * the following options are supported:
+     *  @param {String} [options.family]
+     *      If specified, inserts the attributes of the specified attribute
+     *      family into the existing object.
      */
-    function setElementAttributes(element, attributes) {
-        element.data('attributes', attributes);
+    function setElementAttributes(element, attributes, options) {
+
+        var // the original and complete attribute map
+            oldAttributes = element.data('attributes'),
+            // the attribute family to be inserted into the complete map
+            family = Utils.getStringOption(options, 'family');
+
+        // reduce to selected family
+        if (_.isString(family)) {
+            if (_.isObject(oldAttributes)) {
+                oldAttributes[family] = attributes;
+            } else {
+                element.data('attributes', Utils.makeSimpleObject(family, attributes));
+            }
+        } else {
+            element.data('attributes', attributes);
+        }
     }
 
     // class StyleSheets ======================================================
@@ -820,7 +862,7 @@ define('io.ox/office/editor/format/stylesheets',
                 attributes = null;
 
             // get the explicit element attributes (containing the style sheet reference)
-            attributes = ($element.length > 0) ? getElementAttributes($element) : {};
+            attributes = ($element.length > 0) ? getElementAttributes($element, { family: family }) : {};
 
             // return the attributes of the style sheet referred by the element
             return getStyleSheetAttributes(attributes.style, family, $element, sourceNode);
@@ -849,8 +891,8 @@ define('io.ox/office/editor/format/stylesheets',
 
             var // the current element, as jQuery object
                 $element = $(element),
-                // get the element attributes
-                elementAttributes = getElementAttributes($element),
+                // get the element attributes of the own family
+                elementAttributes = getElementAttributes($element, { family: styleFamily }),
                 // get attributes of the style sheets
                 mergedAttributes = getStyleSheetAttributes(elementAttributes.style, styleFamily, $element);
 
@@ -913,9 +955,9 @@ define('io.ox/office/editor/format/stylesheets',
                 // the element, as jQuery object
                 $element = $(element),
                 // the existing explicit element attributes
-                oldElementAttributes = getElementAttributes($element),
+                oldElementAttributes = getElementAttributes($element, { family: styleFamily }),
                 // new explicit element attributes (clone, there may be multiple elements pointing to the same data object)
-                elementAttributes = _.clone(oldElementAttributes),
+                elementAttributes = getElementAttributes($element, { family: styleFamily, clone: true }),
                 // attributes of the current or new style sheet
                 styleAttributes = null,
                 // names of all attributes needed to update the current element
@@ -955,7 +997,7 @@ define('io.ox/office/editor/format/stylesheets',
             if (!_.isEqual(oldElementAttributes, elementAttributes)) {
 
                 // write back new explicit attributes to the element
-                setElementAttributes($element, elementAttributes);
+                setElementAttributes($element, elementAttributes, { family: styleFamily });
 
                 // merge explicit attributes into style attributes, and update element formatting
                 this.extendAttributes(styleAttributes, elementAttributes);
@@ -1017,7 +1059,7 @@ define('io.ox/office/editor/format/stylesheets',
             });
 
             // use method setElementAttributes() to do the real work
-            return this.setElementAttributes(element, attributes, options);
+            return this.setElementAttributes(element, Utils.makeSimpleObject(styleFamily, attributes), options);
         };
 
         /**
@@ -1035,8 +1077,8 @@ define('io.ox/office/editor/format/stylesheets',
 
             var // the element, as jQuery object
                 $element = $(element),
-                // explicit element attributes
-                elementAttributes = getElementAttributes($element),
+                // explicit element attributes of the own style family
+                elementAttributes = getElementAttributes($element, { family: styleFamily }),
                 // get attributes of the style sheet
                 mergedAttributes = getStyleSheetAttributes(elementAttributes.style, styleFamily, $element, $element);
 
@@ -1094,7 +1136,7 @@ define('io.ox/office/editor/format/stylesheets',
      *      are marked with the 'special' flag in the attribute definitions)
      *      will be returned too.
      *
-     * @return {String[]}
+     * @returns {String[]}
      *  The names of all registered attributes.
      */
     StyleSheets.getAttributeNames = function (options) {
@@ -1111,6 +1153,34 @@ define('io.ox/office/editor/format/stylesheets',
         });
 
         return attributeNames;
+    };
+
+    /**
+     * Builds an attribute map containing all formatting attributes
+     * registered at the current style sheet container class, set to the null
+     * value.
+     *
+     * @param {Object} [options]
+     *  A map of options controlling the operation. Supports the following
+     *  options:
+     *  @param {Boolean} [options.special=false]
+     *      If set to true, special attributes (attributes that are marked with
+     *      the 'special' flag in the attribute definitions) will be included.
+     *
+     * @returns {Object}
+     *  An attribute map null values for all registered attributes.
+     */
+    StyleSheets.buildNullAttributes = function (options) {
+
+        var // create an attribute map null value for the 'style' attribute
+            attributes = { style: null };
+
+        // add null values for all registered attributes
+        (this.getAttributeNames(options)).each(function (name) {
+            attributes[name] = null;
+        });
+
+        return attributes;
     };
 
     /**
@@ -1153,12 +1223,17 @@ define('io.ox/office/editor/format/stylesheets',
      *  The element whose attributes will be returned. If this object is a
      *  jQuery collection, uses the first DOM node it contains.
      *
+     * @param {String} [family]
+     *  If specified, extracts the attributes of a specific attribute family
+     *  from the attribute map. Otherwise, returns the complete map object with
+     *  all attributes mapped by their family.
+     *
      * @returns {Object}
      *  The explicit attributes contained in the passed element, as a deep
      *  clone of the original attribute map.
      */
-    StyleSheets.getExplicitAttributes = function (element) {
-        return getElementAttributes($(element), true);
+    StyleSheets.getExplicitAttributes = function (element, family) {
+        return getElementAttributes($(element), { family: family, clone: true });
     };
 
     /**

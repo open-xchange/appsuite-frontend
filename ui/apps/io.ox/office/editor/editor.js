@@ -311,7 +311,10 @@ define('io.ox/office/editor/editor',
                         // selections only)
                         if (!_.isNumber(endOffset)) {
                             generator.generateOperation(Operations.PARA_SPLIT, { start: [targetPosition, 0] });
-                            generator.generateSetAttributesOperation(contentNode, [targetPosition], undefined, { clearAttributes: paragraphStyles.getAttributeNames() });
+                            generator.generateSetAttributesOperation(contentNode, [targetPosition], undefined, { attributes: {
+                                paragraph: paragraphStyles.buildNullAttributes(),
+                                character: characterStyles.buildNullAttributes()
+                            } });
                         }
 
                         // operations for the text contents covered by the selection
@@ -1096,7 +1099,7 @@ define('io.ox/office/editor/editor',
                             tableGrid = Table.getTableGridWithNewColumn(editdiv, tablePos, localEndCol, insertmode);
 
                         // Setting new table grid attribute to table
-                        newOperation = { name: Operations.ATTRS_SET, attrs: { 'tableGrid' : tableGrid }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
+                        newOperation = { name: Operations.ATTRS_SET, attrs: { table: { tableGrid: tableGrid } }, start: _.clone(tablePos) };
                         applyOperation(newOperation);
                     }
 
@@ -1172,7 +1175,7 @@ define('io.ox/office/editor/editor',
                         var // StyleSheets.getExplicitAttributes() returns deep copy of the table attributes
                             tableGrid = StyleSheets.getExplicitAttributes(tableNode).tableGrid;
                         tableGrid.splice(startGrid, endGrid - startGrid + 1);  // removing column(s) in tableGrid (automatically updated in table node)
-                        newOperation = { name: Operations.ATTRS_SET, attrs: { 'tableGrid' : tableGrid }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
+                        newOperation = { name: Operations.ATTRS_SET, attrs: { table: { tableGrid: tableGrid } }, start: _.clone(tablePos) };
                         applyOperation(newOperation);
                     }
 
@@ -1221,7 +1224,7 @@ define('io.ox/office/editor/editor',
                 applyOperation(newOperation);
 
                 // Setting new table grid attribute to table
-                newOperation = { name: Operations.ATTRS_SET, attrs: { 'tableGrid' : tableGrid }, start: _.clone(tablePos), end: _.clone(tablePos) };
+                newOperation = { name: Operations.ATTRS_SET, attrs: { table: { tableGrid: tableGrid } }, start: _.clone(tablePos) };
                 applyOperation(newOperation);
 
             }, this);
@@ -1413,9 +1416,9 @@ define('io.ox/office/editor/editor',
                             // setAttribute uses a closed range therefore -1
                             end[end.length - 1] -= 1;
                             generator.generateOperation(Operations.ATTRS_SET, {
-                                attrs: { url: null, style: null },
-                                start: _.copy(start, true),
-                                end: _.copy(end, true)
+                                attrs: { character: { url: null, style: null } },
+                                start: _.clone(start),
+                                end: _.clone(end)
                             });
                         }
                         else {
@@ -1454,7 +1457,7 @@ define('io.ox/office/editor/editor',
                             }
 
                             generator.generateOperation(Operations.ATTRS_SET, {
-                                attrs: { url: url, style: hyperlinkStyleId },
+                                attrs: { character: { url: url, style: hyperlinkStyleId } },
                                 start: _.clone(start),
                                 end: _.clone(end)
                             });
@@ -1502,9 +1505,9 @@ define('io.ox/office/editor/editor',
                     // setAttribute uses a closed range therefore -1
                     end[end.length - 1] -= 1;
                     generator.generateOperation(Operations.ATTRS_SET, {
-                        attrs: { url: null, style: null },
-                        start: _.copy(start, true),
-                        end: _.copy(end, true)
+                        attrs: { character: { url: null, style: null } },
+                        start: _.clone(start),
+                        end: _.clone(end)
                     });
 
                     // apply all collected operations
@@ -1574,7 +1577,7 @@ define('io.ox/office/editor/editor',
                 for (; index < length - 1; ++index) {
                     start[index] = options.startPosition[index];
                 }
-                var newOperation = {name: Operations.ATTRS_SET, attrs: { numId: defNumId, indentLevel: 0}, start: start, end: start };
+                var newOperation = {name: Operations.ATTRS_SET, attrs: { paragraph: { numId: defNumId, indentLevel: 0 } }, start: start, end: start };
                 applyOperation(newOperation);
                 start[start.length - 1] += 1;
                 newOperation.start = start;
@@ -1765,7 +1768,7 @@ define('io.ox/office/editor/editor',
                 function generateAttributeOperation(startPosition, endPosition) {
 
                     var // the options for the operation
-                        operationOptions = { start: startPosition, attrs: attributes };
+                        operationOptions = { start: startPosition, attrs: Utils.makeSimpleObject(family, attributes) };
 
                     // add end position if specified
                     if (_.isArray(endPosition)) {
@@ -3351,7 +3354,10 @@ define('io.ox/office/editor/editor',
             // generate undo/redo operations
             if (generator) {
                 generator.generateOperation(Operations.PARA_SPLIT, { start: paraEndPosition });
-                generator.generateSetAttributesOperation(nextParagraph, nextParaPosition, undefined, { clearAttributes: paragraphStyles.getAttributeNames() });
+                generator.generateSetAttributesOperation(nextParagraph, nextParaPosition, undefined, { attributes: {
+                    paragraph: paragraphStyles.buildNullAttributes(),
+                    character: characterStyles.buildNullAttributes()
+                } });
                 undoManager.addUndo(generator.getOperations(), operation);
             }
 
@@ -3787,7 +3793,7 @@ define('io.ox/office/editor/editor',
                         var width = Utils.convertLengthToHmm(finalWidth, 'px'),
                             height = Utils.convertLengthToHmm(finalHeight, 'px'),
                             updatePosition = Position.getOxoPosition(editdiv, drawingNode, 0),
-                            newOperation = { name: Operations.ATTRS_SET, attrs: {width: width, height: height}, start: updatePosition };
+                            newOperation = { name: Operations.ATTRS_SET, attrs: { drawing: { width: width, height: height } }, start: updatePosition };
 
                         applyOperation(newOperation);
                     }
@@ -3866,7 +3872,7 @@ define('io.ox/office/editor/editor',
 
                             if ((anchorHorOffset !== oldAnchorHorOffset) || (anchorVertOffset !== oldAnchorVertOffset)) {
 
-                                newOperation = { name: Operations.ATTRS_SET, attrs: {anchorHorOffset: anchorHorOffset, anchorVertOffset: anchorVertOffset, anchorHorAlign: anchorHorAlign, anchorVertAlign: anchorVertAlign, anchorHorBase: anchorHorBase, anchorVertBase: anchorVertBase}, start: updatePosition };
+                                newOperation = { name: Operations.ATTRS_SET, attrs: { drawing: { anchorHorOffset: anchorHorOffset, anchorVertOffset: anchorVertOffset, anchorHorAlign: anchorHorAlign, anchorVertAlign: anchorVertAlign, anchorHorBase: anchorHorBase, anchorVertBase: anchorVertBase } }, start: updatePosition };
 
                                 applyOperation(newOperation);
                             }
@@ -4088,7 +4094,7 @@ define('io.ox/office/editor/editor',
                         if ((! lastCell) && (StyleSheets.getExplicitAttributes(tableNode).width === 'auto')) { newTableWidth = 'auto'; }
                         else { newTableWidth = Utils.convertLengthToHmm(newTableWidth, 'px'); }
 
-                        var newOperation = {name: Operations.ATTRS_SET, attrs: {'tableGrid': tableGrid, 'width': newTableWidth}, start: tablePosition};
+                        var newOperation = {name: Operations.ATTRS_SET, attrs: { table: { tableGrid: tableGrid, width: newTableWidth } }, start: tablePosition};
                         applyOperation(newOperation);
                     }
                 } else if (horizontalResize) {
@@ -4101,7 +4107,7 @@ define('io.ox/office/editor/editor',
 
                         var newRowHeight = Utils.convertLengthToHmm(rowHeight, 'px'),
                             rowPosition = Position.getOxoPosition(editdiv, rowNode.get(0), 0),
-                            newOperation = { name: Operations.ATTRS_SET, attrs: {height: newRowHeight}, start: rowPosition };
+                            newOperation = { name: Operations.ATTRS_SET, attrs: { row: { height: newRowHeight } }, start: rowPosition };
 
                         applyOperation(newOperation);
                     }
@@ -4394,7 +4400,7 @@ define('io.ox/office/editor/editor',
 
                         // updating the logical position of the image div, maybe it changed in the meantime while loading the image
                         updatePosition = Position.getOxoPosition(editdiv, this, 0);
-                        newOperation = { name: Operations.ATTRS_SET, attrs: {width: width, height: height}, start: updatePosition };
+                        newOperation = { name: Operations.ATTRS_SET, attrs: { drawing: { width: width, height: height } }, start: updatePosition };
 
                         applyOperation(newOperation);
                     }
@@ -4759,13 +4765,15 @@ define('io.ox/office/editor/editor',
          *
          * @param {Object} attributes
          *  A map with formatting attribute values, mapped by the attribute
-         *  names.
+         *  names, and by attribute family names.
          */
         function implSetAttributes(start, end, attributes) {
 
             var // node info for start/end position
                 startInfo = null, endInfo = null,
-                // the style sheet container of the specified attribute family
+                // the attribute family of the target components
+                family = null,
+                // the style sheet container for the target components
                 styleSheets = null,
                 // options for StyleSheets method calls
                 options = null,
@@ -4778,7 +4786,7 @@ define('io.ox/office/editor/editor',
 
             // sets or clears the attributes using the current style sheet container
             function setElementAttributes(element) {
-                styleSheets.setElementAttributes(element, attributes, options);
+                styleSheets.setElementAttributes(element, attributes[family], options);
             }
 
             // change listener used to build the undo operations
@@ -4786,22 +4794,24 @@ define('io.ox/office/editor/editor',
 
                 var // selection object representing the passed element
                     range = Position.getPositionRangeForNode(editdiv, element),
+                    // the attributes of the current family for the undo operation
+                    undoAttributes = {},
                     // the operation used to undo the attribute changes
-                    undoOperation = { name: Operations.ATTRS_SET, start: range.start, end: range.end, attrs: {} },
+                    undoOperation = { name: Operations.ATTRS_SET, start: range.start, end: range.end, attrs: Utils.makeSimpleObject(family, undoAttributes) },
                     // last undo operation (used to merge character attributes of sibling text spans)
-                    lastUndoOperation = ((undoOperations.length > 0) && (startInfo.family === 'character')) ? _.last(undoOperations) : null;
+                    lastUndoOperation = ((undoOperations.length > 0) && (family === 'character')) ? _.last(undoOperations) : null;
 
                 // find all old attributes that have been changed or cleared
                 _(oldAttributes).each(function (value, name) {
                     if (!_.isEqual(value, newAttributes[name])) {
-                        undoOperation.attrs[name] = value;
+                        undoAttributes[name] = value;
                     }
                 });
 
                 // find all newly added attributes
                 _(newAttributes).each(function (value, name) {
                     if (!(name in oldAttributes)) {
-                        undoOperation.attrs[name] = null;
+                        undoAttributes[name] = null;
                     }
                 });
 
@@ -4811,6 +4821,11 @@ define('io.ox/office/editor/editor',
                 } else {
                     undoOperations.push(undoOperation);
                 }
+            }
+
+            // do nothing if no attribute object has been passed
+            if (!_.isObject(attributes) || _.isEmpty(attributes)) {
+                return;
             }
 
             // resolve start and end position
@@ -4846,6 +4861,12 @@ define('io.ox/office/editor/editor',
                 // check that start and end are located in the same paragraph
                 if (startInfo.node.parentNode !== endInfo.node.parentNode) {
                     Utils.warn('Editor.implSetAttributes(): end position in different paragraph');
+                    return;
+                }
+
+                // nothing to do without character attributes
+                family = 'character';
+                if (!_.isObject(attributes[family]) || _.isEmpty(attributes[family])) {
                     return;
                 }
 
@@ -4889,8 +4910,14 @@ define('io.ox/office/editor/editor',
                     return;
                 }
 
+                // nothing to do without family attributes
+                family = startInfo.family;
+                if (!_.isObject(attributes[family]) || _.isEmpty(attributes[family])) {
+                    return;
+                }
+
                 // format the (single) element
-                styleSheets = self.getStyleSheets(startInfo.family);
+                styleSheets = self.getStyleSheets(family);
                 setElementAttributes(startInfo.node);
             }
 
@@ -4900,7 +4927,7 @@ define('io.ox/office/editor/editor',
                 undoManager.addUndo(undoOperations, redoOperation);
             }
 
-            // update numberings and bullets (attributes may be null if called from clearAttributes operation)
+            // update numberings and bullets
             if ((startInfo.family === 'paragraph') && (('style' in attributes) || ('indentLevel' in attributes) || ('numId' in attributes))) {
                 implUpdateLists();
             }

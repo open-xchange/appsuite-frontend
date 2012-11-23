@@ -704,7 +704,7 @@ define('io.ox/office/editor/hyperlink',
         }
 
         generator.generateOperation(Operations.ATTRS_SET, {
-            attrs: { url: url, style: hyperlinkStyleId },
+            attrs: { character: { url: url, style: hyperlinkStyleId } },
             start: _.clone(start),
             end: _.clone(end)
         });
@@ -729,7 +729,7 @@ define('io.ox/office/editor/hyperlink',
         var generator = new Operations.Generator();
 
         generator.generateOperation(Operations.ATTRS_SET, {
-            attrs: { url: null, style: null },
+            attrs: { character: { url: null, style: null } },
             start: _.clone(start),
             end: _.clone(end)
         });
