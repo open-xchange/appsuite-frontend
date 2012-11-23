@@ -585,7 +585,7 @@ define('io.ox/calendar/week/view',
                     });
                     this.fulltimePane.append(app);
                 } else {
-                    var startLocal = new date.Local(model.get('start_date')),
+                    var startLocal = new date.Local(Math.max(model.get('start_date'), this.startDate)),
                         endLocal = new date.Local(model.get('end_date')),
                         start = new date.Local(startLocal.getYear(), startLocal.getMonth(), startLocal.getDate()).getTime(),
                         end = new date.Local(endLocal.getYear(), endLocal.getMonth(), endLocal.getDate()).getTime(),
