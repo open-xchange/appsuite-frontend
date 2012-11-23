@@ -567,12 +567,12 @@ define('io.ox/office/editor/format/stylesheets',
                 styleSheet = styleSheets[id] || (styleSheets[id] = {});
 
             // set user-defined name of the style sheet
-            styleSheet.name = name;
+            styleSheet.name = name || id || '- unnamed -';
 
             // set parent of the style sheet, check for cyclic references
             styleSheet.parentId = parentId;
             if (isDescendantStyleSheet(styleSheets[styleSheet.parentId], styleSheet)) {
-                Utils.warn('StyleSheets.addStyleSheet(): cyclic reference, cannot set style sheet parent');
+                Utils.warn('StyleSheets.addStyleSheet(): cyclic reference, cannot set style sheet parent "' + parentId + '"');
                 styleSheet.parentId = null;
             }
 

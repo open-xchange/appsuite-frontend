@@ -50,10 +50,10 @@ define('io.ox/office/editor/editor',
             { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 49804 }]}, italic: true }
         ],
 
-        DEFAULT_PARAGRAPH_DEFINTIONS = { 'default': true, styleid: 'Standard', stylename: 'Normal' },
+        DEFAULT_PARAGRAPH_DEFINTIONS = { 'default': true, styleId: 'Standard', styleName: 'Normal' },
 
         // style attributes for lateral table style
-        DEFAULT_LATERAL_TABLE_DEFINITIONS = { 'default': true, styleid: 'TableGrid', stylename: 'Table Grid', uipriority: 59 },
+        DEFAULT_LATERAL_TABLE_DEFINITIONS = { 'default': true, styleId: 'TableGrid', styleName: 'Table Grid', uiPriority: 59 },
         DEFAULT_LATERAL_TABLE_ATTRIBUTES =
         {
             wholeTable: {
@@ -70,7 +70,7 @@ define('io.ox/office/editor/editor',
             }
         },
 
-        DEFAULT_HYPERLINK_DEFINTIONS = { 'default': false, styleid: 'Hyperlink', stylename: 'Hyperlink', uipriority: 99 },
+        DEFAULT_HYPERLINK_DEFINTIONS = { 'default': false, styleId: 'Hyperlink', styleName: 'Hyperlink', uiPriority: 99 },
         DEFAULT_HYPERLINK_CHARATTRIBUTES = { color: { type: 'scheme', value: 'hyperlink' }, underline: true };
 
     // private global functions ===============================================
@@ -2182,9 +2182,9 @@ define('io.ox/office/editor/editor',
                 var hyperlinkAttr = { character: self.getDefaultLateralHyperlinkAttributes() },
                     hyperlinkDef = self.getDefaultLateralHyperlinkDefinition();
                 characterStyles.addStyleSheet(
-                        hyperlinkDef.styleid, hyperlinkDef.stylename,
+                        hyperlinkDef.styleId, hyperlinkDef.styleName,
                         parentId, hyperlinkAttr,
-                        { hidden: false, priority: hyperlinkDef.uipriority, defStyle: false, dirty: true });
+                        { hidden: false, priority: hyperlinkDef.uiPriority, defStyle: false, dirty: true });
             }
         }
 
@@ -2201,9 +2201,9 @@ define('io.ox/office/editor/editor',
             if (!hasDefaultStyle) {
                 // add a missing default paragraph style
                 var defParaDef = self.getDefaultParagraphStyleDefinition();
-                paragraphStyles.addStyleSheet(defParaDef.styleid, defParaDef.stylename, null, null,
+                paragraphStyles.addStyleSheet(defParaDef.styleId, defParaDef.styleName, null, null,
                         { hidden: false, priority: 1, defStyle: defParaDef['default'], dirty: true });
-                parentId = defParaDef.styleid;
+                parentId = defParaDef.styleId;
             }
 
             // find out which outline level paragraph styles are missing
@@ -2224,7 +2224,7 @@ define('io.ox/office/editor/editor',
                     attr.character = charAttr;
                     attr.paragraph = { outlineLevel: level };
                     attr.next = parentId;
-                    paragraphStyles.addStyleSheet("heading " + (level + 1), "heading " + (level + 1),
+                    paragraphStyles.addStyleSheet('heading ' + (level + 1), gt('Heading') + ' ' + (level + 1),
                             parentId, attr, { hidden: false, priority: 9, defStyle: false, dirty: true });
                 });
             }
@@ -2246,7 +2246,7 @@ define('io.ox/office/editor/editor',
                 // Add a missing default table style
                 var attr = _.copy(defTableAttr);
                 attr.next = null;
-                tableStyles.addStyleSheet(defTableDef.styleid, defTableDef.stylename, null, attr,
+                tableStyles.addStyleSheet(defTableDef.styleId, defTableDef.styleName, null, attr,
                         { hidden: false, priority: 59, defStyle: defTableDef['default'], dirty: true });
             }
             else {
@@ -2266,10 +2266,10 @@ define('io.ox/office/editor/editor',
                 if ((!tableStyleId) || ((tableStyleId === tableStyles.getDefaultStyleSheetId()) && (lowestUIPriority === 99))) {
                     // OOXML uses a default table style which contains no border
                     // definitions. Therfore we add our own default table style
-                    // if we only find the default style with uipriority 99
+                    // if we only find the default style with uiPriority 99
                     var attr = _.copy(defTableAttr);
                     attr.next = parentId;
-                    tableStyles.addStyleSheet(defTableDef.styleid, defTableDef.stylename, parentId, attr,
+                    tableStyles.addStyleSheet(defTableDef.styleId, defTableDef.styleName, parentId, attr,
                             { hidden: false, priority: 59, defStyle: false, dirty: true });
                 }
             }
