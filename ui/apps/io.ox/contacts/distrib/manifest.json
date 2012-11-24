@@ -1,0 +1,5 @@
+{
+	namespace: "tests",
+	requires: "contacts",
+	path: "io.ox/contacts/distrib/test"
+}

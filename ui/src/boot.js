@@ -304,7 +304,7 @@ $(document).ready(function () {
 
         function loadCoreFiles() {
             // Set user's language (as opposed to the browser's language)
-            return require(['io.ox/core/gettext']).pipe(function (gt) {
+            return require(['io.ox/core/gettext', 'io.ox/core/manifests']).pipe(function (gt) {
                 gt.setLanguage(ox.language);
                 return require([ox.base + '/pre-core.js']);
             });
@@ -397,10 +397,9 @@ $(document).ready(function () {
                 'You don&rsquo;t need administrator rights. Just restart IE after installation.</div>'
             ));
         }
-
         return $.when(
                 // load extensions
-                require(['io.ox/core/extensions']).pipe(function (ext) { return ext.loadPlugins(); }),
+                require(['io.ox/core/manifests']).pipe(function (manifests) { return manifests.loadPluginsFor(ox.signin ? 'signin' : 'core'); }),
                 // use browser language
                 setDefaultLanguage()
             )
@@ -452,11 +451,45 @@ $(document).ready(function () {
 
         return function (name, deps, callback) {
             // use loader plugin to defer module definition
+            if (ox.manifests) {
+                deps = ox.manifests.withPluginsFor(name, deps);
+            }
             define(name + ':init', { load: getLoader(name, deps, callback) });
             // define real module - will wait for promise
             define(name, [name + ':init!'], _.identity);
         };
     }());
+    /**
+    * module definitions can be extended by plugins
+    **/
+
+    (function () {
+        var originalDefine = define;
+        window.define = function () {
+            if (!ox.manifests) {
+                return originalDefine.apply(this, $.makeArray(arguments));
+            }
+            // Is this a define statement we understand?
+            if (_.isString(arguments[0])) {
+                var name = arguments[0];
+                var dependencies = arguments[1];
+                var definitionFunction = $.noop;
+                if (_.isFunction(dependencies)) {
+                    definitionFunction = dependencies;
+                    dependencies = [];
+                } else if (arguments.length > 2) {
+                    definitionFunction = arguments[2];
+                }
+                return originalDefine(name, ox.manifests.withPluginsFor(name, dependencies), definitionFunction);
+            }
+
+            // Just delegate everything else
+            return originalDefine.apply(this, $.makeArray(arguments));
+        };
+
+        $.extend(window.define, originalDefine);
+
+    })();
 
     // searchfield fix
     if (!_.browser.Chrome) {

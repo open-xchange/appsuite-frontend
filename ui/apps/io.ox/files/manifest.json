@@ -1,0 +1,8 @@
+{
+    title: "Files",
+    company: "Open-Xchange",
+    icon: "files.png",
+    category: "Productivity",
+    settings: true,
+    requires: "infostore"
+}

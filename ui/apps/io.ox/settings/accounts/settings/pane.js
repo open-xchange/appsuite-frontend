@@ -14,16 +14,17 @@
 define: true, _: true
 */
 define('io.ox/settings/accounts/settings/pane',
-      ['io.ox/core/extensions',
-       'io.ox/core/tk/view',
-       'io.ox/settings/utils',
-       'io.ox/core/tk/dialogs',
-       "io.ox/keychain/api",
-       'io.ox/core/tk/forms',
-       "io.ox/keychain/model",
-       'text!io.ox/settings/accounts/email/tpl/account_select.html',
-       'text!io.ox/settings/accounts/email/tpl/listbox.html'
-       ].concat(ox.serverConfig.plugins.keychainSettings), function (ext, View, utils, dialogs, api, forms, keychainModel, tmpl, listboxtmpl) {
+      ox.withPluginsFor('keychainSettings',
+            ['io.ox/core/extensions',
+           'io.ox/core/tk/view',
+           'io.ox/settings/utils',
+           'io.ox/core/tk/dialogs',
+           "io.ox/keychain/api",
+           'io.ox/core/tk/forms',
+           "io.ox/keychain/model",
+           'text!io.ox/settings/accounts/email/tpl/account_select.html',
+           'text!io.ox/settings/accounts/email/tpl/listbox.html'
+       ]), function (ext, View, utils, dialogs, api, forms, keychainModel, tmpl, listboxtmpl) {
 
 
     'use strict';

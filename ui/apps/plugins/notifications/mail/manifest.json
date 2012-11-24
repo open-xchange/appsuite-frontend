@@ -1,0 +1,4 @@
+{
+	namespace: "io.ox/core/notifications",
+	requires: "webmail"
+}

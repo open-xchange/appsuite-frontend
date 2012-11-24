@@ -1,0 +1,4 @@
+{
+	namespace: "tests",
+	path: "io.ox/backbone/tests/test"
+}

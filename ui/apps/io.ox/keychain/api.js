@@ -46,7 +46,7 @@
  also add your plugin to serverConfig.plugins.keychain
  **/
 
-define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event"].concat(ox.serverConfig.plugins.keychain || []), function (ext, Events) {
+define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event"], function (ext, Events) {
     "use strict";
 
     var api = {};

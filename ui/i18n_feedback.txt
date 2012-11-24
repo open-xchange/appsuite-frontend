@@ -1,6 +1,9 @@
 mail oder email oder e-mail oder E-Mail, kein Mischmasch
 Ausrufezeichen bitte vermeiden
+<<<<<<< HEAD
 
+=======
+>>>>>>> conditional_loading
 "%1$s on %2$s" -> bitte Kommentar einfügen
 Please enter a feed-url. -> kein Bindestrich
 Please enter an feed-url. -> a feed url
@@ -13,6 +16,7 @@ Delete a Blog -> Delete a blog
 Do you really want to delete the following blog(s)? -> solche Konstruktionen bitte vermeiden (besser: Pluralform)
 hot -> Kontext? Bitte Kommentar einfügen
 Do you really want to delete the following subreddit(s)? -> solche Konstruktionen bitte vermeiden (besser: Pluralform)
+<<<<<<< HEAD
 
 # Over due Tasks -> Overdue tasks
 # Ok -> OK
@@ -29,6 +33,20 @@ more -> Kontext?
 More -> Kontext?
 Enable Plugin -> Plug-in (muss nicht sein, ist aber wohl -noch- besser)
 #Miscellaneous -> Kontext? Bitte Kommentar einfügen
+=======
+Over due Tasks -> Overdue tasks
+Ok -> OK
+Invites -> Kontext? Lädt ein? Wer zu was?
+Pop3 refresh rate: -> POP3
+ on behalf of   -> bitte keine zerrissenen Sätze (falls da noch was vorne oder hinten dran kommt). Das ist ein Horror für jeden Übersetzer, und dann noch ohne Kontext.. ;-)
+HTML and Plain text -> HTML and plain text
+1_minute etc. -> warum underscore?
+more -> Kontext?
+Oops, couldn't load that email. -> wenn was schiefgeht und dann kommt oops als Meldung, täte ich mich ärgern :-)
+More -> Kontext?
+Enable Plugin -> Plug-in (muss nicht sein, ist aber wohl -noch- besser)
+Miscellaneous -> Kontext? Bitte Kommentar einfügen
+>>>>>>> conditional_loading
 List name -> Kontext? noun or verb, bitte Kommentar einfügen
 Display name -> noun or verb, bitte Kommentar einfügen, die Frage bekomm ich sonst wieder zigfach gestellt ;-)
 Title -> Anrede oder Titel? Bitte Kommentar einfügen
@@ -37,18 +55,28 @@ use Count -> Kontext? Bitte Kommentar einfügen, besser: use count
 yomi First Name -> ?
 yomi Last Name -> ?
 yomi Company -> ?
+<<<<<<< HEAD
 
 # A B C D E F G H I J K L M N O P Q R S T U V W X Y Z -> ist das für Kontakte? Da seh ich schon Probleme für Chinesisch
 
+=======
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z -> ist das für Kontakte? Da seh ich schon Probleme für Chinesisch
+>>>>>>> conditional_loading
 Empty -> Kontext? Bitte Kommentar einfügen, leeren oder leer?
 not read -> Bitte Kommentar einfügen
 not modify -> Bitte Kommentar einfügen
 not delete -> Bitte Kommentar einfügen
 delete all -> Bitte Kommentar einfügen
 
+<<<<<<< HEAD
 # msgid "The user can "
 # msgid " and "
 # msgid " objects." -> Solche Konstrukte sind kaum übersetzbar. Der Satzbau in den einzelnen Sprachen unterscheidet sich. Bitte ganze Sätze draus machen.
+=======
+msgid "The user can "
+msgid " and "
+msgid " objects." -> Solche Konstrukte sind kaum übersetzbar. Der Satzbau in den einzelnen Sprachen unterscheidet sich. Bitte ganze Sätze draus machen.
+>>>>>>> conditional_loading
 
 Accent 1 -> Kontext?
 Single -> Bitte Kommentar einfügen
@@ -57,6 +85,7 @@ Pargraph Border -> Paragraph Border
 msgid "Another user"
 msgid " is currently editing this document." -> Siehe oben. Bitte keine zerrissenen Sätze
 
+<<<<<<< HEAD
 # Do you want the start date to be set to new due date too? -> Versteh ich nicht
 # Cancelled -> Canceled (American English)
 # Estimated costs in minutes
@@ -71,6 +100,26 @@ N/A -> Not available, no answer?
 New office document -> New Office document (falls die Applikation gemeint ist)
 
 # Show more... -> Kontext?
+=======
+Do you want the start date to be set to new due date too? -> Versteh ich nicht
+
+Cancelled -> Canceled (American English)
+
+Estimated costs in minutes
+Actual costs in minutes  -> ?
+
+Oops, couldn't load that task. -> oops ist irgendwie nervig in dem Zusammenhang
+
+N/A -> Not available, no answer? 
+
+Searched for -> Kontext?
+
+Title: %1$s -> Kontext?
+
+New office document -> New Office document (falls die Applikation gemeint ist)
+
+Show more... -> Kontext?
+>>>>>>> conditional_loading
 
 last
 first
@@ -101,6 +150,7 @@ msgid ""
 "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
 "attribute=\"interval\">every <span class=\"number-control\">2</span> days</"
 "a>. "
+<<<<<<< HEAD
 -> dieses Konstrukt kommt öfter vor. Ich habe im Deutschen die Satzstellung teilweise geändert. Glücklich bin ich damit aber nicht.
 "jeden 2 Tag" etc. klingt scheußlich, in allen Sprachen. Das gilt für alle diese Sätze. Ich kann sie auch alle raussuchen, wenn das hilft.
 
@@ -114,4 +164,20 @@ msgid ""
 # @antje: würde ich gerne zusammenschreiben - scheint dir normale schreibweise zu sein. ähnlich wie weekend.
 # Workweek -> Work week
 # You are about the change your confirmation status.. -> You are about to change your confirmation status
+=======
+-> dieses Konstrukt kommt öfter vor. Ich habe im Deutschen die Satzstellung teilweise geändert. Glücklich bin ich damit aber nicht. 
+"jeden 2 Tag" etc. klingt scheußlich, in allen Sprachen. Das gilt für alle diese Sätze. Ich kann sie auch alle raussuchen, wenn das hilft. 
+
+sunday, monday etc. -> gehört jeweils groß Sunday, Monday..
+
+eveery month -> every month
+
+january, february etc. -> gehört jeweils groß January, February..
+
+series -> hatten wir mal durch recurrence ersetzt und recurring appointment etc.
+
+Workweek -> Work week
+
+You are about the change your confirmation status.. -> You are about to change your confirmation status
+>>>>>>> conditional_loading
 

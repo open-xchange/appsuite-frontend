@@ -76,8 +76,8 @@ function addMsg(map, key, msg) {
                 comments.push.apply(comments, msg.comments);
             }
         }
-        map[key].locations = utils.merge(map[key].locations, msg.locations,
-                                         cmp);
+        map[key].locations =
+            utils.mergeArrays(map[key].locations, msg.locations, cmp);
     } else {
         map[key] = msg;
     }

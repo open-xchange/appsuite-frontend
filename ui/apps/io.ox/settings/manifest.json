@@ -1,0 +1,13 @@
+[
+	{
+		title: "Settings",
+		company: "Open-Xchange",
+		icon: "files.png",
+		category: "Basic",
+		settings: false
+	},
+	{
+		namespace: "tests",
+		path: "io.ox/settings/test"
+	}
+]

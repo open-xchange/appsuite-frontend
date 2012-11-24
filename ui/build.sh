@@ -6,6 +6,7 @@ export BASEDIR=$(dirname $0)
 
 if [ -f local.conf ]; then source ./local.conf; fi
 echo $BASEDIR
+
 $NODEJS $nodeopts "$BASEDIR/lib/jake/bin/cli.js" -f "$BASEDIR/Jakefile" $*
 
 # echo -e "\033[0;35m"

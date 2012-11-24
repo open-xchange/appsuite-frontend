@@ -272,7 +272,7 @@ utils.concat("pre-core.js",
 
 
 
-//Twitter Bootstrap
+// Twitter Bootstrap
 utils.copy(utils.list("lib/bootstrap", ["css/bootstrap.min.css", "img/*"]),
     { to: utils.dest("apps/io.ox/core/bootstrap") });
 
@@ -286,7 +286,7 @@ utils.concat( "bootstrap.min.css", ["lib/bootstrap/css/bootstrap.min.css", "lib/
 utils.copy(utils.list("lib", ["jquery-ui.min.js", "jquery.mobile.touch.min.js"]),
     { to: utils.dest("apps/io.ox/core/tk") });
 
-//Mediaelement.js
+// Mediaelement.js
 
 utils.copy(utils.list("lib", "mediaelement/"), {to: utils.dest("apps") });
 
@@ -377,6 +377,43 @@ var apps = _.groupBy(utils.list("apps/"), function (f) {
 });
 if (apps.js) utils.copy(apps.js, { type: "module" });
 if (apps.rest) utils.copy(apps.rest);
+
+// manifests
+
+utils.merge(appName + '.manifest.json', utils.list('apps/**/manifest.json'), {
+    merge: function (manifests, names) {
+        var combinedManifest = [];
+        _.each(manifests, function (m, i) {
+            var prefix = /^apps\/(.*)\/manifest\.json$/.exec(names[i])[1] + '/';
+            var data = null;
+            try {
+                data = new Function('return (' + m + ')')();
+            } catch (e) {
+                fail('Invalid manifest ' + names[i], e);
+            }
+            if (!_.isArray(data)) {
+                data = [data];
+            }
+            _(data).each(function (entry) {
+                if (!entry.path) {
+                    if (entry.namespace) {
+                        // Assume Plugin
+                        if (path.existsSync("apps/" + prefix + "register.js")) {
+                            entry.path = prefix + "register";
+                        }
+                    } else {
+                        // Assume App
+                        if (path.existsSync("apps/" + prefix + "main.js")) {
+                            entry.path = prefix + "main";
+                        }
+                    }
+                }
+                combinedManifest.push(entry);
+            });
+        });
+        return JSON.stringify(combinedManifest, null, debug ? 4 : null);
+    }
+});
 
 // doc task
 

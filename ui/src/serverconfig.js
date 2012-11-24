@@ -26,16 +26,7 @@ define(function () {
         buildDate: '2012-11-01',
 
         plugins: {
-            signin: [],
-            core: ['halo'],
-            halo: ['halo/contacts', 'halo/appointments', 'halo/linkedIn', 'halo/mail'],
-            keychain: ["io.ox/mail/accounts/keychain", 'io.ox/oauth/keychain'],
-            keychainSettings: ['io.ox/mail/accounts/settings', 'io.ox/oauth/settings'],
-            // All available plugins - default-plugins moved to io.ox/portal/settings/defaults.js:
-            portal: ['appointments', 'linkedIn', 'mail', 'rss', 'facebook', 'twitter', 'tumblr', 'flickr', 'reddit', 'dummy', 'tasks', 'quota', 'birthdays'],
-            notifications: ['calendar', 'mail', 'tasks'],
-            tests: ["io.ox/mail/write", "plugins/halo", "io.ox/contacts", "io.ox/contacts/edit", "io.ox/contacts/distrib",
-                    "io.ox/core", "io.ox/files/tests/interface", "io.ox/files/tests/unit", "io.ox/settings/accounts/email", "io.ox/settings", 'io.ox/backbone/tests']
+            signin: []
         },
 
         portalPluginEditable: ['reddit', 'flickr', 'tumblr', 'rss'],

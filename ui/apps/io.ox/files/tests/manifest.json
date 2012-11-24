@@ -1,0 +1,10 @@
+[
+	{
+		namespace: "tests",
+		path: "io.ox/files/tests/interface/test"
+	},
+	{
+		namespace: "tests",
+		path: "io.ox/files/tests/unit/test"
+	}
+]
