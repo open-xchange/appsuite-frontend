@@ -107,7 +107,7 @@ define('io.ox/files/list/perspective',
 
             drawFail = function (obj) {
                 right.idle().empty().append(
-                    $.fail("Oops, couldn't load file data.", function () {
+                    $.fail(gt("Couldn't load file data."), function () {
                         showFile(obj);
                     })
                 );

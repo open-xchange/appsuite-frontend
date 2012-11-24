@@ -319,7 +319,7 @@ define('io.ox/core/permissions/permissions',
                         dialog.getFooter().prepend(node);
 
                     } else {
-                        dialog.addPrimaryButton('ok', gt('Ok'));
+                        dialog.addPrimaryButton('ok', gt('Close'));
                     }
 
                     dialog.getPopup().addClass('permissions-dialog');

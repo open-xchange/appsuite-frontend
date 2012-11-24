@@ -113,7 +113,7 @@ define('io.ox/contacts/actions',
             require(['io.ox/contacts/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (api, dialogs, views) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
                     .header($('<h3>').text(title))
-                    .addPrimaryButton('ok', gt('OK'))
+                    .addPrimaryButton('ok', title)
                     .addButton('cancel', gt('Cancel'));
                 dialog.getBody().css('height', '250px');
                 var item = _(list).first(),

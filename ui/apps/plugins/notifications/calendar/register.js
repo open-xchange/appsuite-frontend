@@ -26,7 +26,7 @@ define('plugins/notifications/calendar/register',
     ext.point('io.ox/core/notifications/invites/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Invites')),
+                $('<legend class="section-title">').text(gt('Invitations')),
                 $('<div class="notifications">')
             );
         }

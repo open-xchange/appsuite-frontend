@@ -118,7 +118,8 @@ define('io.ox/mail/util',
                         tmp.prepend(
                             this.serializeList({ sender: sender }, 'sender'),
                             $.txt(_.noI18n(' ')),
-                            gt(' on behalf of '),
+                            //#. (From) email1 on behalf of email2. Appears in email detail view.
+                            gt('on behalf of'),
                             $.txt(_.noI18n(' '))
                         );
                     }

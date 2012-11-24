@@ -105,7 +105,7 @@ function (ext, View, Model, gt, settings, api) {
                                 that.createControlsWrapper().append(
                                     that.createRadioButton({property: 'messageFormat', label: gt('HTML'), value: 'html'}),
                                     that.createRadioButton({property: 'messageFormat', label: gt('Plain text'), value: 'text' }),
-                                    that.createRadioButton({property: 'messageFormat', label: gt('HTML and Plain text'), value: 'TEXT/PLAIN'})
+                                    that.createRadioButton({property: 'messageFormat', label: gt('HTML and plain text'), value: 'TEXT/PLAIN'})
                                 )
                             ),
 

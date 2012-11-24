@@ -175,7 +175,7 @@ define('io.ox/mail/actions',
             require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
                     .header($('<h3>').text('Move'))
-                    .addPrimaryButton("ok", gt("OK"))
+                    .addPrimaryButton("ok", gt("Move"))
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css({ height: '250px' });
                 var item = _(mail).first(),
@@ -212,7 +212,7 @@ define('io.ox/mail/actions',
             require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
                     .header($('<h3>').text('Copy'))
-                    .addPrimaryButton("ok", gt("OK"))
+                    .addPrimaryButton("ok", gt("Copy"))
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css('height', '250px');
                 var item = _(mail).first(),

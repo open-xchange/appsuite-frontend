@@ -161,13 +161,13 @@ define('io.ox/calendar/model',
     };
 
     DAYS.i18n = {
-        SUNDAY: gt("sunday"),
-        MONDAY: gt("monday"),
-        TUESDAY: gt("tuesday"),
-        WEDNESDAY: gt("wednesday"),
-        THURSDAY: gt("thursday"),
-        FRIDAY: gt("friday"),
-        SATURDAY: gt("saturday")
+        SUNDAY: gt("Sunday"),
+        MONDAY: gt("Monday"),
+        TUESDAY: gt("Tuesday"),
+        WEDNESDAY: gt("Wednesday"),
+        THURSDAY: gt("Thursday"),
+        FRIDAY: gt("Friday"),
+        SATURDAY: gt("Saturday")
     };
 
     // Usage: DAYS.pack('monday', 'wednesday', 'friday') -> some bitmask

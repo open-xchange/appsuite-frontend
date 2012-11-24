@@ -81,7 +81,7 @@ define('io.ox/calendar/list/perspective',
 
         function drawFail(obj) {
             right.idle().empty().append(
-                $.fail("Oops, couldn't load appointment data.", function () {
+                $.fail(gt("Couldn't load appointment data."), function () {
                     showAppointment(obj);
                 })
             );

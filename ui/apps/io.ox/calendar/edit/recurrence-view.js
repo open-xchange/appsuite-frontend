@@ -14,7 +14,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
     "use strict";
     var DAYS = model.DAYS;
     var RECURRENCE_TYPES = model.RECURRENCE_TYPES;
-    
+
     var CalendarWidgets = {
         dayInMonth: function ($anchor, attribute, options) {
             var self = this;
@@ -219,7 +219,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             this.on("change:" + attribute, drawState);
         }
     };
-    
+
     // Mark a few translations, so the buildsystem picks up on them
     gt.ngettext("every day", "every %1$d days", 2);
     gt.ngettext("every week", "every %1$d weeks", 2);
@@ -314,13 +314,13 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         },
                         day: {
                             options: {
-                                1: gt("sunday"),
-                                2: gt("monday"),
-                                4: gt("tuesday"),
-                                8: gt("wednesday"),
-                                16: gt("thursday"),
-                                32: gt("friday"),
-                                64: gt("saturday"),
+                                1: gt("Sunday"),
+                                2: gt("Monday"),
+                                4: gt("Tuesday"),
+                                8: gt("Wednesday"),
+                                16: gt("Thursday"),
+                                32: gt("Friday"),
+                                64: gt("Saturday"),
                                 62: gt("day of the week"),
                                 65: gt("day of the weekend")
                             },
@@ -328,8 +328,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         },
                         interval: {
                             phrase: function (n) {
-                                return gt.format(gt.ngettext('eveery month',
-                                    'every %1$d months', n), n);
+                                return gt.format(gt.ngettext('every month', 'every %1$d months', n), n);
                             },
                             initial: 1,
                             gt: gt
@@ -340,18 +339,18 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         dayInMonth: CalendarWidgets.dayInMonth,
                         month: {
                             options: {
-                                0: gt("january"),
-                                1: gt("february"),
-                                2: gt("march"),
-                                3: gt("april"),
-                                4: gt("may"),
-                                5: gt("june"),
-                                6: gt("july"),
-                                7: gt("august"),
-                                8: gt("september"),
-                                9: gt("october"),
-                                10: gt("november"),
-                                11: gt("december")
+                                0: gt("January"),
+                                1: gt("February"),
+                                2: gt("March"),
+                                3: gt("April"),
+                                4: gt("May"),
+                                5: gt("June"),
+                                6: gt("July"),
+                                7: gt("August"),
+                                8: gt("September"),
+                                9: gt("October"),
+                                10: gt("November"),
+                                11: gt("Cecember")
                             },
                             initial: 2
                         }
@@ -360,22 +359,27 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         id: 'yearlyDay',
                         ordinal: {
                             options: {
-                                1: gt("first"),
-                                2: gt("second"),
-                                3: gt("third"),
-                                4: gt("fourth"),
-                                5: gt("last")
+                                1:  //#. as in: first week or first Monday
+                                    gt("first"),
+                                2:  //#. as in: second week or second Monday
+                                    gt("second"),
+                                3:  //#. as in: third week or third Monday
+                                    gt("third"),
+                                4:  //#. as in: fourth week or fourth Monday
+                                    gt("fourth"),
+                                5:  //#. as in: last week or last Monday
+                                    gt("last")
                             }
                         },
                         day: {
                             options: {
-                                1: gt("sunday"),
-                                2: gt("monday"),
-                                4: gt("tuesday"),
-                                8: gt("wednesday"),
-                                16: gt("thursday"),
-                                32: gt("friday"),
-                                64: gt("saturday"),
+                                1: gt("Sunday"),
+                                2: gt("Monday"),
+                                4: gt("Tuesday"),
+                                8: gt("Wednesday"),
+                                16: gt("Thursday"),
+                                32: gt("Friday"),
+                                64: gt("Saturday"),
                                 62: gt("day of the week"),
                                 65: gt("day of the weekend")
                             },
@@ -642,7 +646,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 this.model.unset('month');
                 this.model.unset('occurrences');
                 this.model.unset('until');
-                
+
                 if (this.controls.checkbox.is(":checked")) {
                     if (this.controls.typeRadios.daily.is(":checked")) {
                         var daily =  {
@@ -719,7 +723,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     // No Recurrence
                     this.model.set({recurrence_type: RECURRENCE_TYPES.NO_RECURRENCE});
                 }
-                
+
                 this.updatingModel = false;
 
                 this.modelChanged();
@@ -798,7 +802,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             //     if (this.choice.id === 'no-choice' || this.choice.id === 'daily') {
             //         return false;
             //     }
-                
+
             //     var startDate = new dateAPI.Local(dateAPI.Local.utc(this.model.get("start_date")));
 
             //     var dayBits = 1 << startDate.getDay();
@@ -969,6 +973,6 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             }
         }, options);
     };
-    
+
     return RecurrenceView;
 });

@@ -53,7 +53,10 @@ define('io.ox/files/icons/perspective',
             if (baton.app.getWindow().search.active) {
                 this.append(
                     $('<li class="breadcrumb">').append(
-                        $('<li class="active">').text(gt('Searched for') + ': ' + baton.app.getWindow().search.query)
+                        $('<li class="active">').text(
+                            //#. Appears in file icon view during searches
+                            gt('Searched for: %1$s', baton.app.getWindow().search.query)
+                        )
                     )
                 );
             }

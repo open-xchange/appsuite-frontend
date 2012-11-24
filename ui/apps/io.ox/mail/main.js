@@ -351,7 +351,7 @@ define("io.ox/mail/main",
 
         drawFail = function (obj) {
             right.idle().empty().append(
-                $.fail(gt("Oops, couldn't load that email."), function () {
+                $.fail(gt("Couldn't load that email."), function () {
                     showMail(obj);
                 })
             );

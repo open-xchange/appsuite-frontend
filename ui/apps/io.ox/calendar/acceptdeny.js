@@ -25,7 +25,7 @@ define('io.ox/calendar/acceptdeny',
 
         return new dialogs.ModalDialog({easyOut: true})
             .header($('<h3>').text('Change confirmation status'))
-            .append($('<p>').text(gt('You are about the change your confirmation status. Please leave a comment for other participants.')))
+            .append($('<p>').text(gt('You are about to change your confirmation status. Please leave a comment for other participants.')))
             .append(
                 $('<div>').addClass('row-fluid').css({'margin-top': '20px'}).append(
                     $('<div>').addClass('control-group span12').css({'margin-bottom': '0px'}).append(

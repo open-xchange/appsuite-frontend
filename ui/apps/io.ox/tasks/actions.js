@@ -82,7 +82,7 @@ define("io.ox/tasks/actions",
                 //build popup
                 var popup = new dialogs.ModalDialog({ easyOut: true })
                     .header($('<h3>').text('Move'))
-                    .addPrimaryButton("ok", gt("OK"))
+                    .addPrimaryButton("ok", gt("Move"))
                     .addButton("cancel", gt("Cancel"));
                 popup.getBody().css({ height: '250px' });
                 var tree = new views.FolderTree(popup.getBody(), { type: 'tasks' }),
@@ -304,13 +304,16 @@ define("io.ox/tasks/actions",
                                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                                     var popup = new dialogs.ModalDialog()
                                         .addButton('cancel', gt('Cancel'))
-                                        .addPrimaryButton('change', gt('Change start date'));
+                                        .addPrimaryButton('change', gt('Adjust start date'));
                                     //text
-                                    popup.getBody().append($("<h4>").text(gt('New due date must not be before start date.')),
-                                            $("<div>").text(
-                                                    //#. If the user changes the duedate of a task, it may happen to be before the start date, which is not allowed
-                                                    //#. If this happens the user gets the option to change the start date so it matches the due date
-                                                    gt("Do you want the start date to be set to the new due date?")));
+                                    popup.getBody().append(
+                                        $("<h4>").text(gt('Inconsistent dates')),
+                                        $("<div>").text(
+                                            //#. If the user changes the duedate of a task, it may be before the start date, which is not allowed
+                                            //#. If this happens the user gets the option to change the start date so it matches the due date
+                                            gt('The due date cannot be before start date. Adjust start date?')
+                                        )
+                                    );
                                     popup.show().done(function (action) {
                                         if (action === 'cancel') {
                                             notifications.yell('info', gt('Canceled'));
