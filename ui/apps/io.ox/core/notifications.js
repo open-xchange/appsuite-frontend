@@ -128,10 +128,8 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'io.ox/core/manifes
             this.badges.push(badgeView);
 
             // invoke plugins
-            var plugins = manifests.loadPluginsFor('notifications').done(function () {
-                ext.point('io.ox/core/notifications/register').invoke('register', self, self);
-            });
-
+            ext.point('io.ox/core/notifications/register').invoke('register', self, self);
+            
             // now register default notification handler
             /*require(['io.ox/mail/notifications',
                      'io.ox/calendar/notifications'], function (mailNotifications, calNotifications) {

@@ -124,29 +124,25 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
     };
 
     var fnLoadBackendManifests = function () {
-        if (ox.session) {
-            http.GET({
-                module: 'apps/manifests',
-                params: {
-                    action: 'all'
-                }
-            }).done(function (manifests) {
-                manifestManager.loader = 'backend';
+        http.GET({
+            module: 'apps/manifests',
+            params: {
+                action: 'all'
+            }
+        }).done(function (manifests) {
+            manifestManager.loader = 'backend';
 
-                _(manifests).each(fnProcessManifest);
-                // Load Manifest Extensions
-                manifestManager.loadPluginsFor('manifests').done(function () {
-                    // Apply Extensions
-                    ext.point("io.ox/core/manifests").invoke('customize', manifestManager);
-                    fnLoadStaticFiles('success');
-                });
-
-            }).fail(function (resp) {
-                fnLoadStaticFiles('fail');
+            _(manifests).each(fnProcessManifest);
+            // Load Manifest Extensions
+            manifestManager.loadPluginsFor('manifests').done(function () {
+                // Apply Extensions
+                ext.point("io.ox/core/manifests").invoke('customize', manifestManager);
+                fnLoadStaticFiles('success');
             });
-        } else {
+
+        }).fail(function (resp) {
             fnLoadStaticFiles('fail');
-        }
+        });
     };
 
     // Try the cache and the backend

@@ -21,8 +21,6 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http'], function (http) {
 
 	var def = new $.Deferred();
 
-	
-
 	var capabilities = {};
 
 	var capLookup = {
@@ -70,6 +68,21 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http'], function (http) {
 			return !!this.get(capName.split(/\s+/))[0];
 		}
 	};
+
+	var signinCapLookup = {
+		get: function (capName) {
+			if (capName === 'signin') {
+				return {id: 'signin', backendSupport: false};
+			}
+		},
+		has: function (capName) {
+			return capName === 'signin';
+		}
+	};
+
+	if (ox.signin) {
+		return def.resolve(signinCapLookup);
+	}
 
 
 	http.GET({
