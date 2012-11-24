@@ -399,6 +399,7 @@ $(document).ready(function () {
         }
         return $.when(
                 // load extensions
+
                 require(['io.ox/core/manifests']).pipe(function (manifests) { return manifests.loadPluginsFor(ox.signin ? 'signin' : 'core'); }),
                 // use browser language
                 setDefaultLanguage()

@@ -32,7 +32,7 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 		has: function () {
 			var self = this;
 			var result = false;
-			_(arguments).each(function (capDef) {
+			_(_(arguments).flatten()).each(function (capDef) {
 				var definition = capDef.split(/\s+/);
 				var name = definition[0];
 				var inverse = false;
@@ -67,7 +67,7 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 			return {id: capName, backendSupport: true};
 		},
 		has: function (capName) {
-			return !!this.get(capName.split(/\s+/))[0];
+			return true;
 		}
 	};
 
