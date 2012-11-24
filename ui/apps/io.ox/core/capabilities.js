@@ -16,12 +16,14 @@
 * if (capabilities.has('calendar withBackendSupport'))) { ... } else { ... }
 */
 
-define.async('io.ox/core/capabilities', ['io.ox/core/http'], function (http) {
+define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
 	'use strict';
 
 	var def = new $.Deferred();
 
-	var capabilities = {};
+	var capabilities = {},
+		capCache = new cache.SimpleCache(ox.signin ? "signinCapabilities" : "capabilities", true),
+		capSource = null;
 
 	var capLookup = {
 		get: function (capName) {
@@ -69,22 +71,18 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http'], function (http) {
 		}
 	};
 
-	var signinCapLookup = {
-		get: function (capName) {
-			if (capName === 'signin') {
-				return {id: 'signin', backendSupport: false};
-			}
-		},
-		has: function (capName) {
-			return capName === 'signin';
+	capCache.get('default').done(function (c) {
+		if (capSource === 'backend') {
+			return;
 		}
-	};
-
-	if (ox.signin) {
-		return def.resolve(signinCapLookup);
-	}
-
-
+		if (!c) {
+			return;
+		}
+		capSource = 'cache';
+		capabilities = c;
+		def.resolve(capLookup);
+	});
+	
 	http.GET({
 		module: 'capabilities',
 		params: {
@@ -94,6 +92,9 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http'], function (http) {
 		_(data).each(function (entry) {
 			capabilities[entry.id] = entry;
 		});
+		capSource = 'backend';
+		capCache.add("default", capabilities);
+		
 		def.resolve(capLookup);
 	}).fail(function (resp) {
 		console.error("Capabilities subsystem is disabled!");
