@@ -88,6 +88,16 @@ html, body {
 #io-ox-login-screen a { color: #81CFF7; }
 #io-ox-login-screen a:hover { color: #2DA6E4; }
 
+#io-ox-login-screen .btn-primary {
+    background-image: -moz-linear-gradient(top, #86C8F1, #2C7DB1);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#86C8F1), to(#2C7DB1));
+    background-image: -webkit-linear-gradient(top, #86C8F1, #2C7DB1);
+    background-image: -o-linear-gradient(top, #86C8F1, #2C7DB1);
+    background-image: linear-gradient(to bottom, #86C8F1, #2C7DB1);
+}
+
+#io-ox-login-screen .btn-primary:hover { background-color: #2C7DB1; }
+
 .wallpaper {
     background: #34749c; /* Old browsers */
     background: -moz-radial-gradient(center, ellipse cover, #34749c 0%, #2a6085 41%, #1d3f59 100%); /* FF3.6+ */

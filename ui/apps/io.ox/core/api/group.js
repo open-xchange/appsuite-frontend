@@ -44,6 +44,12 @@ define('io.ox/core/api/group',
         }
     });
 
+    api.getName = function (id) {
+        return api.get({ id: id }).pipe(function (data) {
+            return _.noI18n(data.display_name || data.name || '');
+        });
+    };
+
     api.getTextNode = function (id) {
         var node = document.createTextNode('');
         api.get({ id: id })

@@ -49,13 +49,13 @@ define("io.ox/core/api/user",
 
     api.getName = function (id) {
         return api.get({ id: id }).pipe(function (data) {
-            return gt.noI18n(data.display_name || data.email1 || '');
+            return _.noI18n(data.display_name || data.email1 || '');
         });
     };
 
     api.getGreeting = function (id) {
         return api.get({ id: id }).pipe(function (data) {
-            return gt.noI18n(data.first_name || data.display_name || data.email1 || '');
+            return _.noI18n(data.first_name || data.display_name || data.email1 || '');
         });
     };
 

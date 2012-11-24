@@ -27,6 +27,12 @@ define('io.ox/core/permissions/permissions',
 
         folder_id,
 
+        presets = [
+            { label: gt('Guest'), bits: 257 }, // view folder + read all
+            { label: gt('Author'), bits: 4227332 }, // create folder + read/write/delete all
+            { label: gt('Administrator'), bits: 272662788 } // plus admin
+        ],
+
         Permission = Backbone.Model.extend({
             idAttribute: "entity",
             defaults: {
@@ -50,7 +56,8 @@ define('io.ox/core/permissions/permissions',
             },
 
             render: function () {
-                ext.point(POINT + '/detail').invoke('draw', this.$el.empty(), this.model);
+                var baton = ext.Baton({ model: this.model, view: this });
+                ext.point(POINT + '/detail').invoke('draw', this.$el.empty(), baton);
                 return this;
             },
 
@@ -68,12 +75,24 @@ define('io.ox/core/permissions/permissions',
                     newbits = api.Bitmask(this.model.get('bits')).set(type, value).get();
                 link.text($el.text());
                 this.model.set('bits', newbits);
+                this.updateRole();
             },
 
             applyRole: function (e) {
                 var node = $(e.target), bits = node.attr('data-value');
-                this.model.set('bits', bits);
+                this.model.set('bits', parseInt(bits, 10));
                 this.render();
+            },
+
+            updateRole: function () {
+                var node = this.$el.find('.preset > a').text(gt('Apply role')),
+                    bits = this.model.get('bits');
+                _(presets).find(function (obj) {
+                    if (obj.bits === bits) {
+                        node.text(obj.label);
+                        return true;
+                    }
+                });
             }
         }),
 
@@ -133,46 +152,41 @@ define('io.ox/core/permissions/permissions',
         addRemoveButton,
         isFolderAdmin = false;
 
-    var presets = [
-        { label: gt('Guest'), bits: 257 }, // view folder + read all
-        { label: gt('Author'), bits: 4227332 }, // create folder + read/write/delete all
-        { label: gt('Administrator'), bits: 272662788 } // plus admin
-    ];
-
     ext.point(POINT + '/detail').extend({
         index: 100,
         id: 'folderpermissions',
-        draw: function (model) {
-            var self = this;
-            var entity = model.get('entity');
-            if (!model.get('group')) {
+        draw: function (baton) {
+            var self = this,
+                entity = baton.model.get('entity');
+
+            if (baton.model.get('group')) {
+                groupAPI.getName(entity)
+                .done(function (name) {
+                    baton.name = name;
+                    ext.point(POINT + '/entity').invoke('draw', self, baton);
+                });
+            } else {
                 $.when(
                     userAPI.getName(entity),
                     userAPI.getPictureURL(entity, { width: 64, height: 64, scaleType: 'cover' })
                 )
                 .done(function (name, picture) {
-                    ext.point(POINT + '/entity').invoke('draw', self, { model: model, picture: picture, entity: name });
-                });
-            } else {
-                $.when(
-                    groupAPI.getTextNode(entity)
-                )
-                .done(function (entity) {
-                    ext.point(POINT + '/entity').invoke('draw', self, { model: model, entity: entity });
+                    baton.name = name;
+                    baton.picture = picture;
+                    ext.point(POINT + '/entity').invoke('draw', self, baton);
                 });
             }
-
         }
     });
 
     ext.point(POINT + '/entity').extend({
         index: 100,
         id: 'entityimage',
-        draw: function (data) {
-            if (data.picture) {
+        draw: function (baton) {
+            if (baton.picture) {
                 this.append(
                     $('<div class="pull-left contact-picture">')
-                    .css('background-image', 'url(' + data.picture + ')')
+                    .css('background-image', 'url(' + baton.picture + ')')
                 );
             } else {
                 this.append(
@@ -187,30 +201,32 @@ define('io.ox/core/permissions/permissions',
     ext.point(POINT + '/entity').extend({
         index: 200,
         id: 'entitysentence',
-        draw: function (data) {
+        draw: function (baton) {
             this.append(
                 $('<div class="entity">').append(
                     $('<div>').append(
-                        $('<span class="name">').text(_.noI18n(data.entity)),
+                        $('<span class="name">').text(_.noI18n(baton.name)),
+                        baton.model.get('entity') === baton.view.options.owner ? $('<span class="owner">').text(gt('Owner')) : $(),
                         // quick change
-                        addRoles()
+                        addRoles(baton)
                     ),
                     $('<div>').append(
                         // folder rights
                         gt('Folder permissions'), $.txt(_.noI18n(': ')),
-                            addDropdown('folder', data), $.txt(_.noI18n('. ')),
+                            addDropdown('folder', baton), $.txt(_.noI18n('. ')),
                         // object rights
                         gt('Object permissions'), $.txt(_.noI18n(': ')),
-                        addDropdown('read', data), $.txt(_.noI18n(', ')),
-                        addDropdown('write', data), $.txt(_.noI18n(', ')),
-                        addDropdown('delete', data), $.txt(_.noI18n('. ')),
+                        addDropdown('read', baton), $.txt(_.noI18n(', ')),
+                        addDropdown('write', baton), $.txt(_.noI18n(', ')),
+                        addDropdown('delete', baton), $.txt(_.noI18n('. ')),
                         // admin
                         gt('The user has administrative rights'), $.txt(_.noI18n(': ')),
-                            addDropdown('admin', data), $.txt(_.noI18n('. '))
+                            addDropdown('admin', baton), $.txt(_.noI18n('. '))
                     ),
-                    addRemoveButton(data.model.get('entity'))
+                    addRemoveButton(baton.model.get('entity'))
                 )
             );
+            baton.view.updateRole();
         }
     });
 
@@ -219,8 +235,8 @@ define('io.ox/core/permissions/permissions',
             return $('<div class="remove">').append($('<div class="icon">').append($('<i class="icon-remove">')));
     };
 
-    addDropdown = function (permission, data) {
-        var bits = data.model.get('bits'),
+    addDropdown = function (permission, baton) {
+        var bits = baton.model.get('bits'),
             selected = api.Bitmask(bits).get(permission),
             menu;
         // folder fix
@@ -243,10 +259,10 @@ define('io.ox/core/permissions/permissions',
         return menu;
     };
 
-    addRoles = function () {
+    addRoles = function (baton) {
         if (!isFolderAdmin) return $();
         return $('<span class="dropdown preset">').append(
-            $('<a href="#" data-type="permission" data-toggle="dropdown">').text(gt('Apply role')),
+            $('<a href="#" data-type="permission" data-toggle="dropdown">'),
             $('<ul class="dropdown-menu">').append(
                 _(presets).map(function (obj) {
                     return $('<li>').append(
@@ -272,25 +288,32 @@ define('io.ox/core/permissions/permissions',
                     );
 
                     if (isFolderAdmin) {
-                        dialog.addButton('cancel', gt('Cancel'))
-                            .addPrimaryButton('save', gt('Save'));
+
+                        dialog.addButton('cancel', gt('Cancel')).addPrimaryButton('save', gt('Save'));
 
                         var node =  $('<div class="autocomplete-controls input-append">').append(
                                 $('<input type="text" class="add-participant permissions-participant-input-field">'),
                                 $('<button class="btn" type="button" data-action="add">')
                                     .append($('<i class="icon-plus">'))
-                        ),
-                        autocomplete = new AddParticipantsView({el: node});
+                            ),
+
+                            autocomplete = new AddParticipantsView({el: node}),
+
+                            // mail folders show up with "null"
+                            owner = data.created_by || ox.user_id;
+
                         collection.on('reset', function () {
                             var node = dialog.getContentNode().empty();
                             this.each(function (model) {
-                                new PermissionsView({ model: model, collection: this }).render().$el.appendTo(node);
+                                new PermissionsView({ model: model, collection: this, owner: owner })
+                                .render().$el.appendTo(node);
                             }, this);
                         });
 
                         collection.on('add', function (model, collection) {
                             var node = dialog.getContentNode();
-                            new PermissionsView({ model: model, collection: collection }).render().$el.appendTo(node);
+                            new PermissionsView({ model: model, collection: collection, owner: owner })
+                            .render().$el.appendTo(node);
                         });
 
                         collection.reset(_(data.permissions).map(function (obj) {
@@ -307,11 +330,13 @@ define('io.ox/core/permissions/permissions',
                         });
 
                         autocomplete.on('select', function (data) {
-                            var obj = {
-                                group: data.type === 2,
-                                bits: 257, // default is 'view folder' plus 'read all'
-                                entity: data.group ? data.id : data.internal_userid
-                            };
+                            var isGroup = data.type === 2,
+                                obj = {
+                                    entity: isGroup ? data.id : data.internal_userid,
+                                    bits: 257, // default is 'view folder' plus 'read all'
+                                    group: isGroup
+                                };
+                            // duplicate check
                             if (!collection.any(function (item) { return item.entity === obj.entity; })) {
                                 collection.add(new Permission(obj));
                             }
