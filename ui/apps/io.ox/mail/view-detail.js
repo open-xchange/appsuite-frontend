@@ -442,9 +442,6 @@ define('io.ox/mail/view-detail',
                 if (list.length > 1) {
                     inline = $('<div class="mail-detail thread-inline-actions">');
                     ext.point('io.ox/mail/thread').invoke('draw', inline, list);
-                    inline.children().first().prepend(
-                        $('<span class="io-ox-label">').text(gt('Entire thread'))
-                    );
                     frag.appendChild(inline.get(0));
                 }
                 // loop over thread - use fragment to be fast for tons of mails
@@ -474,12 +471,12 @@ define('io.ox/mail/view-detail',
                 var next = _.lfo(drawThread);
                 // get list data, esp. to know unseen flag - we need this list for inline link checks anyway
                 api.getList(list).done(function (list) {
-                    
+
                     var i, $i, pos, numVisible, top, bottom, defs = [];
 
                     // getList might be incomplete
                     list = _(list).compact();
-                    
+
                     // which mail to focus?
                     for (i = pos = $i = list.length - 1; i >= 0; i--) {
                         pos = i;
@@ -794,9 +791,8 @@ define('io.ox/mail/view-detail',
     }));
 
     // inline links for entire thread
-    ext.point('io.ox/mail/thread').extend(new links.InlineLinks({
-        index: 100,
-        id: 'inline-links',
+    ext.point('io.ox/mail/thread').extend(new links.DropdownLinks({
+        label: gt('Entire thread'),
         ref: 'io.ox/mail/links/inline'
     }));
 
@@ -877,7 +873,7 @@ define('io.ox/mail/view-detail',
             }, 0);
         }
     });
-    
+
     //Extensionpoint to remove read mails in notification Area
     ext.point('io.ox/mail/detail/notification').extend({
         index: 100,

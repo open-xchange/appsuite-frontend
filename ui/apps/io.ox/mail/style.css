@@ -222,14 +222,14 @@
 
     &.thread-inline-actions {
         border: 0px none;
-        padding: 18px 40px 0 40px;
+        padding: 18px 20px 0 20px;
         min-height: 0px;
         text-align: right;
         z-index: 1;
-    }
 
-    &.thread-inline-actions .io-ox-inline-links {
-        margin: 0;
+        .io-ox-inline-links { margin: 0; }
+
+        .dropdown-menu { right: 0; left: auto; text-align: left; }
     }
 
     .alert {
@@ -327,8 +327,11 @@
         color: #333;
     }
 
-    .attachment-list b {
-        opacity: 0.30;
+    .attachment-list {
+        b { opacity: 0.30; }
+        .dropdown {
+            margin-right: 1em;
+        }
     }
 
     .instant-preview {

@@ -605,7 +605,7 @@ define('io.ox/core/tk/vgrid',
                         return apply(list)
                             .always(function () {
                                 // stop being busy
-                                container.css({ visibility: '' }).parent().idle();
+                                container.show().css({ visibility: '' }).parent().idle();
                             })
                             .done(function () {
                                 firstAutoSelect = firstAutoSelect || list.length === 0;

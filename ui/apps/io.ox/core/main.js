@@ -315,7 +315,7 @@ define("io.ox/core/main",
                         m.show();
                     });
                 })
-                .css('width', '26px'); // to match side navigation
+                .addClass('left-corner'); // to match dimensions of side navigation
             }
         });
 
