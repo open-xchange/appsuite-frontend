@@ -3854,8 +3854,14 @@ define('io.ox/office/editor/editor',
                                 drawingWidth = Utils.convertLengthToHmm($(drawingNode).width(), 'px'),
                                 // the paragraph element containing the drawing node
                                 paragraph = $(drawingNode).parent(),
+                                // the paragraph node following paragraph
+                                nextPara = null,
+                                // the paragraph node preceeding paragraph
+                                prevPara = null,
                                 // total width of the paragraph, in 1/100 mm
                                 paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px'),
+                                // total height of the paragraph, in 1/100 mm
+                                paraHeight = Utils.convertLengthToHmm(paragraph.height(), 'px'),
                                 // is it necessary to move the image?
                                 moveImage = false;
 
@@ -3899,15 +3905,16 @@ define('io.ox/office/editor/editor',
                                         destPosition[destPosition.length - 1] = 0;
                                         moveImage = true;
                                     } else {
-                                        // going to previous paragraph
-                                        if (paragraph.prev().length > 0) {
+                                        prevPara = Utils.findPreviousNode(editdiv, paragraph, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR);
+                                        if (prevPara) {
                                             moveImage = true;
-                                            // var maxTopShift = Utils.convertLengthToHmm(paragraph.offset().top - $(drawingNode).offset().top, 'px');
 
-                                            // contentNode = Utils.findPreviousNode(rootNode, contentNode, DOM.CONTENT_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR);
-                                            while ((moveY < maxTopShift) && (paragraph.prev().length > 0)) {
-                                                if (paragraph.prev()) { paragraph = paragraph.prev(); }
-                                                maxTopShift = Utils.convertLengthToHmm(paragraph.offset().top - $(drawingNode).offset().top, 'px');
+                                            while ((moveY < maxTopShift) && (prevPara)) {
+                                                prevPara = Utils.findPreviousNode(editdiv, paragraph, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR);
+                                                if (prevPara) {
+                                                    paragraph = $(prevPara);
+                                                    maxTopShift = Utils.convertLengthToHmm(paragraph.offset().top - $(drawingNode).offset().top, 'px');
+                                                }
                                             }
 
                                             // moving the drawing to the beginning of one of the previous paragraphs required
@@ -3918,22 +3925,26 @@ define('io.ox/office/editor/editor',
                                             anchorVertOffset = 0; // drawing is already at the top of the document
                                         }
                                     }
-                                } else {
-                                    if ((moveY > 0) && (paragraph.next().length > 0)) {
-                                        var maxBottomShift = Utils.convertLengthToHmm(paragraph.next().offset().top - $(drawingNode).offset().top, 'px');
-
-                                        // contentNode = Utils.findNextNode(rootNode, contentNode, DOM.CONTENT_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR);
-                                        while ((moveY > maxBottomShift) && (paragraph.next().length > 0)) {
-                                            paragraph = paragraph.next();
-                                            maxBottomShift = Utils.convertLengthToHmm(paragraph.offset().top - $(drawingNode).offset().top, 'px');
+                                } else if (moveY > 0) {
+                                    var maxBottomShift = Utils.convertLengthToHmm(paragraph.offset().top + paragraph.height() - $(drawingNode).offset().top, 'px');
+                                    if (moveY > maxBottomShift) {
+                                        nextPara = Utils.findNextNode(editdiv, paragraph, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR);
+                                        if (nextPara) {
                                             moveImage = true;
-                                        }
+                                            while ((moveY > maxBottomShift) && (nextPara)) {
+                                                nextPara = Utils.findNextNode(editdiv, paragraph, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR);
+                                                if (nextPara) {
+                                                    paragraph = $(nextPara);
+                                                    maxBottomShift = Utils.convertLengthToHmm(paragraph.offset().top + paragraph.height() - $(drawingNode).offset().top, 'px');
+                                                }
+                                            }
 
-                                        // moving the drawing to the beginning of one of the following paragraphs required
-                                        if (moveImage) {
-                                            anchorVertOffset = moveY - Utils.convertLengthToHmm(paragraph.prev().offset().top - $(drawingNode).offset().top, 'px');
-                                            destPosition = Position.getOxoPosition(editdiv, paragraph.prev(), 0);
+                                            // moving the drawing to the beginning of one of the following paragraphs required
+                                            anchorVertOffset = maxBottomShift - moveY;
+                                            destPosition = Position.getOxoPosition(editdiv, paragraph, 0);
                                             destPosition.push(0);
+                                        } else {
+                                            // move the the lowest possible position
                                         }
                                     }
                                 }
