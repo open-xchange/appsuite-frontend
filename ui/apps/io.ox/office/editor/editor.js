@@ -4005,6 +4005,8 @@ define('io.ox/office/editor/editor',
                 rowNode =  null,
                 // the table node for the selected resize node
                 tableNode = null,
+                // the table node attributes object for the selected resize node
+                tableNodeAttrs = null,
                 // the maximum table width
                 maxTableWidth = 0,
                 // is the selected cell the last cell in its row
@@ -4061,8 +4063,9 @@ define('io.ox/office/editor/editor',
                     // calculating maxLeftShift and maxRightShift
                     lastCell = cellNode[0].nextSibling ? false : true;
                     tablePosition = Position.getOxoPosition(editdiv, tableNode.get(0), 0);
-                    oldTableGrid = StyleSheets.getExplicitAttributes(tableNode).tableGrid;
-                    oldTableWidth = StyleSheets.getExplicitAttributes(tableNode).width;
+                    tableNodeAttrs = StyleSheets.getExplicitAttributes(tableNode).table;
+                    oldTableGrid = tableNodeAttrs.tableGrid;
+                    oldTableWidth = tableNodeAttrs.width;
                     maxTableWidth = tableNode.parent().width();
 
                     if (oldTableWidth === 'auto') { oldTableWidth = tableNode.outerWidth(); }
