@@ -2372,7 +2372,7 @@ define('io.ox/office/editor/editor',
             preselectedAttributes = {};
 
             // click on drawing node: set browser selection to drawing node, draw selection
-            if ((drawing.length > 0) && (editdiv[0].contains(drawing[0]))) {
+            if ((drawing.length > 0) && Utils.containsNode(editdiv, drawing)) {
 
                 // prevent default click handling of the browser
                 event.preventDefault();
@@ -4485,7 +4485,7 @@ define('io.ox/office/editor/editor',
                     // Workaround for a strange Chrome behavior, even if we use .one() Chrome fires the 'load' event twice.
                     // One time for the image node rendered and the other time for a not rendered image node.
                     // We check for the rendered image node
-                    if (editdiv[0].contains(this)) {
+                    if (Utils.containsNode(editdiv, this)) {
                         width = Utils.convertLengthToHmm($(this).width(), 'px');
                         height = Utils.convertLengthToHmm($(this).height(), 'px');
 
@@ -4540,7 +4540,7 @@ define('io.ox/office/editor/editor',
             function updateParagraphs(storage) {
                 storage.paragraphs.each(function () {
                     // the paragraph may have been removed from the DOM in the meantime
-                    if (editdiv[0].contains(this)) {
+                    if (Utils.containsNode(editdiv, this)) {
                         validateParagraphNode(this);
                     }
                 });
@@ -4576,7 +4576,7 @@ define('io.ox/office/editor/editor',
             function updateTables(storage) {
                 storage.tables.each(function () {
                     // the table may have been removed from the DOM in the meantime
-                    if (editdiv[0].contains(this)) {
+                    if (Utils.containsNode(editdiv, this)) {
                         tableStyles.updateElementFormatting(this);
                     }
                 });

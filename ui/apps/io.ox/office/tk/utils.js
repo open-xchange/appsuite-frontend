@@ -737,6 +737,44 @@ define('io.ox/office/tk/utils',
     };
 
     /**
+     * Returns whether the passed outer node contains the passed inner node.
+     *
+     * @param {Node|jQuery} outerNode
+     *  The outer DOM node. If this object is a jQuery collection, uses the
+     *  first node it contains.
+     *
+     * @param {Node|jQuery} innerNode
+     *  The inner DOM node. If this object is a jQuery collection, uses the
+     *  first node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the inner node is a descendant of the outer node.
+     */
+    Utils.containsNode = function (outerNode, innerNode) {
+
+        // convert nodes to DOM node object
+        outerNode = Utils.getDomNode(outerNode);
+        innerNode = Utils.getDomNode(innerNode);
+
+        // outer node must be an element; be sure that a node does not contain itself
+        if ((outerNode.nodeType !== 1) || (outerNode === innerNode)) {
+            return false;
+        }
+
+        // IE does not accept a DOM text node as parameter for the Node.contains() method
+        if (innerNode.nodeType !== 1) {
+            innerNode = innerNode.parentNode;
+            // check if the parent of the inner text node is the outer node
+            if (outerNode === innerNode) {
+                return true;
+            }
+        }
+
+        // use the native Node.contains() method
+        return outerNode.contains(innerNode);
+    };
+
+    /**
      * Returns an integer attribute of the passed element.
      *
      * @param {HTMLElement|jQuery} node
@@ -832,7 +870,7 @@ define('io.ox/office/tk/utils',
             if (iterator.call(context, childNode) === Utils.BREAK) { return Utils.BREAK; }
 
             // iterate grand child nodes (only if the iterator did not remove the node from the DOM)
-            if (element.contains(childNode)) {
+            if (Utils.containsNode(element, childNode)) {
 
                 // refresh next sibling (iterator may have removed the old one, or may have inserted another one)
                 nextSibling = reverse ? childNode.previousSibling : childNode.nextSibling;
@@ -996,14 +1034,12 @@ define('io.ox/office/tk/utils',
      */
     Utils.findClosestParent = function (rootNode, node, selector) {
 
-        rootNode = Utils.getDomNode(rootNode);
         node = Utils.getDomNode(node).parentNode;
-
         while (node && !$(node).is(selector)) {
             node = node.parentNode;
         }
 
-        return (node && rootNode.contains(node)) ? node : null;
+        return (node && Utils.containsNode(rootNode, node)) ? node : null;
     };
 
     /**
@@ -2045,7 +2081,7 @@ define('io.ox/office/tk/utils',
                 if (_.isFunction(window.console[level])) {
                     window.console[level](message);
                 } else {
-                    window.console.log(level.toUppercase() + ': ' + message);
+                    window.console.log(level.toUpperCase() + ': ' + message);
                 }
             }
         };

@@ -225,12 +225,12 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         // to the offset of point2's ancestor node in the children of point1's
         // node. If offsets are equal, point2 is a descendant of the child node
         // pointed to by point1 and therefore located after point1.
-        if (point1.node.contains(point2.node)) {
+        if (Utils.containsNode(point1.node, point2.node)) {
             return (point1.offset <= calculateOffsetInOuterNode(point1.node, point2.node)) ? -1 : 1;
         }
 
         // Node in point2 contains the node in point1: see above, reversed.
-        if (point2.node.contains(point1.node)) {
+        if (Utils.containsNode(point2.node, point1.node)) {
             return (calculateOffsetInOuterNode(point2.node, point1.node) < point2.offset) ? -1 : 1;
         }
 
@@ -1241,7 +1241,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 // check that the nodes are inside the root node (with adjusted clone of the range)
                 adjustedRange = range.clone().adjust();
 
-            return rootNode.contains(adjustedRange.start.node) && (DOM.Point.comparePoints(adjustedRange.end, globalEndPos) <= 0) ? range : null;
+            return Utils.containsNode(rootNode, adjustedRange.start.node) && (DOM.Point.comparePoints(adjustedRange.end, globalEndPos) <= 0) ? range : null;
         }
 
         if (LOG_SELECTION) { Utils.info('DOM.getBrowserSelection(): reading browser selection...'); }

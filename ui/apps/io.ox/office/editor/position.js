@@ -120,7 +120,7 @@ define('io.ox/office/editor/position',
         }
 
         // Check, if the selected node is a descendant of the maindiv
-        if (!maindiv[0].contains(node)) { // range not in text area
+        if (!Utils.containsNode(maindiv, node)) {
             Utils.error('Position.getOxoPosition(): Invalid DOM position. It is not part of the editor DIV: ! Offset : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
             return;
         }

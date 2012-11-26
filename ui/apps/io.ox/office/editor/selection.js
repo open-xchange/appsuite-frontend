@@ -1109,7 +1109,7 @@ define('io.ox/office/editor/selection',
                 contentNode = Utils.findNextNode(rootNode, contentNode, DOM.CONTENT_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR);
 
                 // iterate into a table, if shortest-path option is off, or the end paragraph is inside the table
-                while (DOM.isTableNode(contentNode) && (!shortestPath || (lastParagraph && contentNode.contains(lastParagraph)))) {
+                while (DOM.isTableNode(contentNode) && (!shortestPath || (lastParagraph && Utils.containsNode(contentNode, lastParagraph)))) {
                     contentNode = Utils.findDescendantNode(contentNode, DOM.CONTENT_NODE_SELECTOR);
                 }
 
@@ -1151,7 +1151,7 @@ define('io.ox/office/editor/selection',
             while (contentNode) {
 
                 // check whether the parent container is completely covered
-                parentCovered = !contentNode.parentNode.contains(firstParagraph) && !contentNode.parentNode.contains(lastParagraph);
+                parentCovered = !Utils.containsNode(contentNode.parentNode, firstParagraph) && !Utils.containsNode(contentNode.parentNode, lastParagraph);
 
                 // visit current content node
                 if (visitContentNode(contentNode, parentCovered) === Utils.BREAK) { return Utils.BREAK; }
