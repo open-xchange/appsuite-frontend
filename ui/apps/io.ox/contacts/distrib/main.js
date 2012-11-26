@@ -129,6 +129,10 @@ define('io.ox/contacts/distrib/main',
 
             win.on('show', function () {
                 container.find('input[type=text]:visible').eq(0).focus();
+                container.find('[data-extension-id="displayname"] input').on('keydown', function () {
+                    var title = _.noI18n($.trim($(this).val()));
+                    app.setTitle(title);
+                });
             });
 
             container = win.nodes.main
