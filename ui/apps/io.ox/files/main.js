@@ -15,9 +15,10 @@
 define("io.ox/files/main",
     ["io.ox/core/commons",
      "gettext!io.ox/files",
+     'settings!io.ox/files',
      "io.ox/files/actions",
      "less!io.ox/files/style.less"
-    ], function (commons, gt) {
+    ], function (commons, gt, settings) {
 
     "use strict";
 
@@ -28,7 +29,6 @@ define("io.ox/files/main",
 
     // launcher
     app.setLauncher(function () {
-
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/files',
@@ -47,7 +47,7 @@ define("io.ox/files/main",
             .pipe(commons.showWindow(win))
             .done(function () {
                 // switch to view in url hash or default
-                ox.ui.Perspective.show(app, _.url.hash('perspective') || 'icons');
+                ox.ui.Perspective.show(app, _.url.hash('perspective') || settings.get('view', 'icons'));
             });
     });
 

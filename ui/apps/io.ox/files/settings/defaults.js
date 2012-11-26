@@ -19,7 +19,9 @@ function () {
     'use strict';
 
     var settingsDefaults = {
-            view: "files/split"
+            view: "icons",
+            videoEnabled: true,
+            audioEnabled: true
         };
 
     return settingsDefaults;

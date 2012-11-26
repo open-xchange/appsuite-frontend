@@ -11,12 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/files/actions",
-    ["io.ox/files/api",
-     "io.ox/core/extensions",
-     "io.ox/core/extPatterns/links",
+define('io.ox/files/actions',
+    ['io.ox/files/api',
+     'io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
      'io.ox/office/tk/config',
-     "gettext!io.ox/files"], function (api, ext, links, OfficeConfig, gt) {
+     'gettext!io.ox/files',
+     'settings!io.ox/files'], function (api, ext, links, OfficeConfig, gt, settings) {
 
     'use strict';
 
@@ -554,7 +555,7 @@ define("io.ox/files/actions",
     new Action('io.ox/files/icons/audioplayer', {
         requires: function (e) {
             return _(e.context.allIds).reduce(function (memo, obj) {
-                return memo || (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(obj.filename);
+                return memo || (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(obj.filename) && settings.get('audioEnabled');
             }, false);
         },
         action: function (e) {
@@ -574,7 +575,7 @@ define("io.ox/files/actions",
             var pattern = '\\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm|3gp)';
             if (_.browser.Chrome) pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)';
             return _(e.context.allIds).reduce(function (memo, obj) {
-                return memo || (new RegExp(pattern, 'i')).test(obj.filename);
+                return memo || (new RegExp(pattern, 'i')).test(obj.filename) && settings.get('videoEnabled');
             }, false);
         },
         action: function (e) {
