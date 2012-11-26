@@ -704,7 +704,7 @@ define('io.ox/calendar/week/view',
                     app.css({
                         top: pos.top,
                         left: left + '%',
-                        height: pos.height - (border ? 0 : 1),
+                        height: Math.max(pos.height, self.cellHeight) - (border ? 0 : 1),
                         lineHeight: self.cellHeight + 'px',
                         width: width + '%',
                         minHeight: self.cellHeight + 'px',
