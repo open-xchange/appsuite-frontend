@@ -186,8 +186,8 @@ define("io.ox/calendar/api",
             return http.PUT({
                 module: 'calendar',
                 params: {
-                    action: 'new'/*,
-                    timezone: "UTC"*/
+                    action: 'new',
+                    timezone: "UTC"
                 },
                 data: o
             })
