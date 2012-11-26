@@ -384,7 +384,8 @@ utils.merge(appName + '.manifest.json', utils.list('apps/**/manifest.json'), {
     merge: function (manifests, names) {
         var combinedManifest = [];
         _.each(manifests, function (m, i) {
-            var prefix = /^apps\/(.*)\/manifest\.json$/.exec(names[i])[1] + '/';
+            var prefix = /^apps[\\\/](.*)[\\\/]manifest\.json$/
+                         .exec(names[i])[1] + '/';
             var data = null;
             try {
                 data = new Function('return (' + m + ')')();
