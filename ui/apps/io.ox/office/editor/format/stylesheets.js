@@ -1182,7 +1182,7 @@ define('io.ox/office/editor/format/stylesheets',
             attributes = { style: null };
 
         // add null values for all registered attributes
-        (this.getAttributeNames(options)).each(function (name) {
+        _(this.getAttributeNames(options)).each(function (name) {
             attributes[name] = null;
         });
 
