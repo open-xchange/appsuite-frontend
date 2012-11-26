@@ -3860,10 +3860,10 @@ define('io.ox/office/editor/editor',
                                 prevPara = null,
                                 // total width of the paragraph, in 1/100 mm
                                 paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px'),
-                                // total height of the paragraph, in 1/100 mm
-                                paraHeight = Utils.convertLengthToHmm(paragraph.height(), 'px'),
                                 // is it necessary to move the image?
-                                moveImage = false;
+                                moveImage = false,
+                                // was the move inside the same paragraph?
+                                moveInsideParagraph = false;
 
                             if (oldAnchorHorOffset === undefined) {
                                 // anchorHorOffset has to be calculated corresponding to the left paragraph border
@@ -3878,6 +3878,17 @@ define('io.ox/office/editor/editor',
 
                             anchorHorOffset = oldAnchorHorOffset;
                             anchorVertOffset = oldAnchorVertOffset;
+
+//                            if ((moveX !== 0) || (moveY !== 0)) {
+//                                var paraTop = paragraph.offset().top,
+//                                    paraLeft = paragraph.offset().left,
+//                                    paraWidth = paragraph.outerWidth(),
+//                                    paraHeigth =paragraph.outerHeight();
+//
+//                                if ( oldAnchorHorOffset + moveX) {
+//                                    moveInsideParagraph = false;
+//                                }
+//                            }
 
                             if (moveX !== 0) {
                                 anchorHorOffset = oldAnchorHorOffset + moveX;
