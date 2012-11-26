@@ -11,15 +11,9 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 define('io.ox/calendar/edit/view-main',
-       ['io.ox/calendar/edit/binding-util',
-       'io.ox/calendar/util',
-       'io.ox/core/extensions',
-       'io.ox/core/date',
-       'io.ox/calendar/edit/view-addparticipants',
-       'io.ox/calendar/edit/template',
-       'gettext!io.ox/calendar/edit/main',
+       ['io.ox/core/extensions',
        'io.ox/backbone/views',
-       'io.ox/backbone/forms'], function (BinderUtils, util, ext, dateAPI, AddParticipantsView, tmpl, gt, views, forms) {
+       'io.ox/calendar/edit/template'], function (ext, views) {
 
     'use strict';
 
