@@ -353,6 +353,9 @@ define('io.ox/core/commons-folderview',
                                 tree.idle();
                                 if (newId !== id) tree.select(newId);
                             });
+                        } else {
+                            tree.root.repaint();
+                            tree.idle();
                         }
                     });
                     api.on('delete:fail update:fail create:fail', function (e, error) {

@@ -365,7 +365,10 @@ define('io.ox/core/api/folder',
 
         update: function (options) {
 
-            // options
+            subFolderCache.clear();
+            folderCache.clear();
+            visibleCache.clear();
+            console.log('after new clear'); // options
             var opt = $.extend({
                 folder: '1',
                 changes: {}
