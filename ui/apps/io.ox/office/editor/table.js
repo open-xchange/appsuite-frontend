@@ -294,23 +294,6 @@ define('io.ox/office/editor/table',
         });
     };
 
-
-    /**
-     * Collecting the attributes of table cells from a jQuery collection of cells.
-     *
-     * @param {jQuery} cells
-     *  The jQuery collection containing cell elements, whose attributes shall
-     *  be collected in an array.
-     *
-     * @return {any[]} allCellAttributes
-     *  An array, that contains the cell attributes in the correct order.
-     */
-    Table.getCellAttributes = function (cells) {
-        return cells.map(function () {
-            return StyleSheets.getExplicitAttributes(this, 'cell');
-        }).get();
-    };
-
     /**
      * Collecting for a collection of rows the cell positions that correspond
      * to a specific grid position.

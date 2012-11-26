@@ -1096,7 +1096,7 @@ define('io.ox/office/editor/editor',
 
                 if (tableDomPoint && DOM.isTableNode(tableDomPoint.node)) {
 
-                    var tableGridCount = StyleSheets.getExplicitAttributes(tableDomPoint.node).tableGrid.length,
+                    var tableGridCount = tableStyles.getElementAttributes(tableDomPoint.node).tableGrid.length,
                         rowGridCount = Table.getColSpanSum($(rowDomPoint.node).children());
 
                     if (rowGridCount > tableGridCount) {
@@ -1179,8 +1179,9 @@ define('io.ox/office/editor/editor',
 
                     // Setting new table grid attribute to table
                     if (! deletedAllRows) {
-                        var // StyleSheets.getExplicitAttributes() returns deep copy of the table attributes
-                            tableGrid = StyleSheets.getExplicitAttributes(tableNode).tableGrid;
+                        var // tableStyles.getElementAttributes(tableNode) returns deep copy of the table attributes
+                            tableGrid = tableStyles.getElementAttributes(tableNode).tableGrid;
+
                         tableGrid.splice(startGrid, endGrid - startGrid + 1);  // removing column(s) in tableGrid (automatically updated in table node)
                         newOperation = { name: Operations.ATTRS_SET, attrs: { table: { tableGrid: tableGrid } }, start: _.clone(tablePos) };
                         applyOperation(newOperation);
@@ -3840,7 +3841,7 @@ define('io.ox/office/editor/editor',
                                 newOperation = null,
                                 anchorHorOffset = 0,
                                 anchorVertOffset = 0,
-                                drawingNodeAttrs = StyleSheets.getExplicitAttributes(drawingNode).drawing,
+                                drawingNodeAttrs = drawingStyles.getElementAttributes(drawingNode),
                                 oldAnchorHorOffset = drawingNodeAttrs.anchorHorOffset,
                                 oldAnchorVertOffset = drawingNodeAttrs.anchorVertOffset ? drawingNodeAttrs.anchorVertOffset : 0,
                                 anchorHorBase = drawingNodeAttrs.anchorHorBase,
@@ -3903,6 +3904,7 @@ define('io.ox/office/editor/editor',
                                             moveImage = true;
                                             // var maxTopShift = Utils.convertLengthToHmm(paragraph.offset().top - $(drawingNode).offset().top, 'px');
 
+                                            // contentNode = Utils.findPreviousNode(rootNode, contentNode, DOM.CONTENT_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR);
                                             while ((moveY < maxTopShift) && (paragraph.prev().length > 0)) {
                                                 if (paragraph.prev()) { paragraph = paragraph.prev(); }
                                                 maxTopShift = Utils.convertLengthToHmm(paragraph.offset().top - $(drawingNode).offset().top, 'px');
@@ -3920,6 +3922,7 @@ define('io.ox/office/editor/editor',
                                     if ((moveY > 0) && (paragraph.next().length > 0)) {
                                         var maxBottomShift = Utils.convertLengthToHmm(paragraph.next().offset().top - $(drawingNode).offset().top, 'px');
 
+                                        // contentNode = Utils.findNextNode(rootNode, contentNode, DOM.CONTENT_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR);
                                         while ((moveY > maxBottomShift) && (paragraph.next().length > 0)) {
                                             paragraph = paragraph.next();
                                             maxBottomShift = Utils.convertLengthToHmm(paragraph.offset().top - $(drawingNode).offset().top, 'px');
@@ -4063,7 +4066,7 @@ define('io.ox/office/editor/editor',
                     // calculating maxLeftShift and maxRightShift
                     lastCell = cellNode[0].nextSibling ? false : true;
                     tablePosition = Position.getOxoPosition(editdiv, tableNode.get(0), 0);
-                    tableNodeAttrs = StyleSheets.getExplicitAttributes(tableNode).table;
+                    tableNodeAttrs = tableStyles.getElementAttributes(tableNode);
                     oldTableGrid = tableNodeAttrs.tableGrid;
                     oldTableWidth = tableNodeAttrs.width;
                     maxTableWidth = tableNode.parent().width();
@@ -4166,7 +4169,7 @@ define('io.ox/office/editor/editor',
                             tableGrid.push(Utils.roundDigits(gridSum * pixelGrid[i] / newTableWidth, 0));  // only ints
                         }
 
-                        if ((! lastCell) && (StyleSheets.getExplicitAttributes(tableNode).width === 'auto')) { newTableWidth = 'auto'; }
+                        if ((! lastCell) && (tableStyles.getElementAttributes(tableNode).width === 'auto')) { newTableWidth = 'auto'; }
                         else { newTableWidth = Utils.convertLengthToHmm(newTableWidth, 'px'); }
 
                         var newOperation = {name: Operations.ATTRS_SET, attrs: { table: { tableGrid: tableGrid, width: newTableWidth } }, start: tablePosition};
