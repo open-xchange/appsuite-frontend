@@ -3836,12 +3836,13 @@ define('io.ox/office/editor/editor',
                                 newOperation = null,
                                 anchorHorOffset = 0,
                                 anchorVertOffset = 0,
-                                oldAnchorHorOffset = StyleSheets.getExplicitAttributes(drawingNode).anchorHorOffset,
-                                oldAnchorVertOffset = StyleSheets.getExplicitAttributes(drawingNode).anchorVertOffset ? StyleSheets.getExplicitAttributes(drawingNode).anchorVertOffset : 0,
-                                anchorHorBase = StyleSheets.getExplicitAttributes(drawingNode).anchorHorBase,
-                                anchorVertBase = StyleSheets.getExplicitAttributes(drawingNode).anchorVertBase,
-                                anchorHorAlign = StyleSheets.getExplicitAttributes(drawingNode).anchorHorAlign,
-                                anchorVertAlign = StyleSheets.getExplicitAttributes(drawingNode).anchorVertAlign,
+                                drawingNodeAttrs = StyleSheets.getExplicitAttributes(drawingNode).drawing,
+                                oldAnchorHorOffset = drawingNodeAttrs.anchorHorOffset,
+                                oldAnchorVertOffset = drawingNodeAttrs.anchorVertOffset ? drawingNodeAttrs.anchorVertOffset : 0,
+                                anchorHorBase = drawingNodeAttrs.anchorHorBase,
+                                anchorVertBase = drawingNodeAttrs.anchorVertBase,
+                                anchorHorAlign = drawingNodeAttrs.anchorHorAlign,
+                                anchorVertAlign = drawingNodeAttrs.anchorVertAlign,
                                 // the logical destination for moved images
                                 destPosition = null,
                                 // current drawing width, in 1/100 mm
@@ -3879,20 +3880,37 @@ define('io.ox/office/editor/editor',
                                 anchorVertOffset = oldAnchorVertOffset + moveY;
                                 anchorVertAlign = 'offset';
                                 anchorVertBase = 'paragraph';
-                                if (anchorVertOffset < 0) {
+                                
+                                if (anchorVertOffset < 0) { // moving image to the top is required
                                     var maxTopShift = $(drawingNode).offset().top - paragraph.offset().top;  // distance from top drawing border to top paragraph border
-                                    if ((maxTopShift > 0) && (updatePosition[updatePosition.length - 1] !== 0)) {
-                                        // moving the image inside the paragraph to the beginning of the paragraph
-                                        maxTopShift = Utils.convertLengthToHmm(maxTopShift, 'px') - oldAnchorVertOffset;
-                                        // calculating the new vertical offset (anchorvoffset is < 0)
-                                        anchorVertOffset = maxTopShift + anchorVertOffset;
-                                        if (anchorVertOffset < 0) { anchorVertOffset = 0; }  // not leaving the paragraph
+                                    // moving the image inside the paragraph to the beginning of the paragraph
+                                    maxTopShift = Utils.convertLengthToHmm(maxTopShift, 'px') - oldAnchorVertOffset;
+                                    // calculating the new vertical offset (anchorvoffset is < 0)
+                                    anchorVertOffset = maxTopShift + anchorVertOffset;
+
+                                    if (anchorVertOffset >= 0) { // not leaving the paragraph
                                         // moving the drawing to the beginning of the paragraph
                                         destPosition = _.clone(updatePosition);
                                         destPosition[destPosition.length - 1] = 0;
                                         moveImage = true;
                                     } else {
-                                        anchorVertOffset = 0; // drawing is already at the top of the paragraph
+                                        // going to previous paragraph
+                                        if (paragraph.prev()) {
+                                            moveImage = true;
+                                            // var maxTopShift = Utils.convertLengthToHmm(paragraph.offset().top - $(drawingNode).offset().top, 'px');
+
+                                            while ((moveY < maxTopShift) && (paragraph.prev())) {
+                                                if (paragraph.prev()) { paragraph = paragraph.prev(); }
+                                                maxTopShift = Utils.convertLengthToHmm(paragraph.offset().top - $(drawingNode).offset().top, 'px');
+                                            }
+
+                                            // moving the drawing to the beginning of one of the previous paragraphs required
+                                            anchorVertOffset = moveY - maxTopShift;
+                                            destPosition = Position.getOxoPosition(editdiv, paragraph, 0);
+                                            destPosition.push(0);
+                                        } else {
+                                            anchorVertOffset = 0; // drawing is already at the top of the document
+                                        }
                                     }
                                 } else {
                                     if ((moveY > 0) && (paragraph.next())) {
@@ -3904,7 +3922,7 @@ define('io.ox/office/editor/editor',
                                             moveImage = true;
                                         }
 
-                                        // moving the drawing to the beginning of one of the following paragraph required
+                                        // moving the drawing to the beginning of one of the following paragraphs required
                                         if (moveImage) {
                                             anchorVertOffset = moveY - Utils.convertLengthToHmm(paragraph.prev().offset().top - $(drawingNode).offset().top, 'px');
                                             destPosition = Position.getOxoPosition(editdiv, paragraph.prev(), 0);
