@@ -2768,21 +2768,15 @@ define('io.ox/office/editor/editor',
             if ((!event.ctrlKey || (event.ctrlKey && event.altKey && !event.shiftKey)) && !event.metaKey && (c.length === 1)) {
 
                 var startPosition = selection.getStartPosition(),
-                    endPosition = _.clone(startPosition);
+                    endPosition = _.clone(startPosition),
+                    hyperlinkSelection = null;
                 endPosition[endPosition.length - 1]++;
 
                 self.deleteSelected();
 
                 if ((event.keyCode === KeyCodes.SPACE) && !selection.hasRange()) {
                     // check left text to support hyperlink auto correction
-                    var hyperlinkSelection = Hyperlink.checkForHyperlinkText(selection.getEnclosingParagraph(), startPosition);
-                    if (hyperlinkSelection !== null) {
-                        Hyperlink.insertHyperlink(self,
-                                                  hyperlinkSelection.start,
-                                                  hyperlinkSelection.end,
-                                                  (hyperlinkSelection.url === null) ? hyperlinkSelection.text : hyperlinkSelection.url);
-                        preselectedAttributes = { style: null, url: null };
-                    }
+                    hyperlinkSelection = Hyperlink.checkForHyperlinkText(selection.getEnclosingParagraph(), startPosition);
                 }
 
                 undoManager.enterGroup(function () {
@@ -2799,6 +2793,14 @@ define('io.ox/office/editor/editor',
 
                 // set cursor behind character
                 selection.setTextSelection(endPosition);
+
+                if (hyperlinkSelection !== null) {
+                    Hyperlink.insertHyperlink(self,
+                                              hyperlinkSelection.start,
+                                              hyperlinkSelection.end,
+                                              (hyperlinkSelection.url === null) ? hyperlinkSelection.text : hyperlinkSelection.url);
+                    preselectedAttributes = { style: null, url: null };
+                }
             }
             else if (c.length > 1) {
                 preselectedAttributes = {};
@@ -2813,16 +2815,13 @@ define('io.ox/office/editor/editor',
                     self.deleteSelected();
                     var startPosition = selection.getStartPosition(),
                         lastValue = startPosition.length - 1,
-                        newPosition = _.clone(startPosition);
+                        newPosition = _.clone(startPosition),
+                        hyperlinkSelection = null;
 
                     // check for a possible hyperlink text
                     if (!hasSelection) {
-
-                        var hyperlinkSelection = Hyperlink.checkForHyperlinkText(
-                                selection.getEnclosingParagraph(), selection.getStartPosition());
-                        if (hyperlinkSelection !== null) {
-                            Hyperlink.insertHyperlink(self, hyperlinkSelection.start, hyperlinkSelection.end, hyperlinkSelection.text);
-                        }
+                        hyperlinkSelection = Hyperlink.checkForHyperlinkText(
+                            selection.getEnclosingParagraph(), selection.getStartPosition());
                     }
 
                     //at first check if a paragraph has to be inserted before the current table
@@ -2898,6 +2897,11 @@ define('io.ox/office/editor/editor',
                             }
 
                         }
+                    }
+
+                    // set hyperlink style and url attribute
+                    if (hyperlinkSelection !== null) {
+                        Hyperlink.insertHyperlink(self, hyperlinkSelection.start, hyperlinkSelection.end, hyperlinkSelection.text);
                     }
                     selection.setTextSelection(newPosition);
                 }
@@ -3880,7 +3884,7 @@ define('io.ox/office/editor/editor',
                                 anchorVertOffset = oldAnchorVertOffset + moveY;
                                 anchorVertAlign = 'offset';
                                 anchorVertBase = 'paragraph';
-                                
+
                                 if (anchorVertOffset < 0) { // moving image to the top is required
                                     var maxTopShift = $(drawingNode).offset().top - paragraph.offset().top;  // distance from top drawing border to top paragraph border
                                     // moving the image inside the paragraph to the beginning of the paragraph
