@@ -3895,11 +3895,11 @@ define('io.ox/office/editor/editor',
                                         moveImage = true;
                                     } else {
                                         // going to previous paragraph
-                                        if (paragraph.prev()) {
+                                        if (paragraph.prev().length > 0) {
                                             moveImage = true;
                                             // var maxTopShift = Utils.convertLengthToHmm(paragraph.offset().top - $(drawingNode).offset().top, 'px');
 
-                                            while ((moveY < maxTopShift) && (paragraph.prev())) {
+                                            while ((moveY < maxTopShift) && (paragraph.prev().length > 0)) {
                                                 if (paragraph.prev()) { paragraph = paragraph.prev(); }
                                                 maxTopShift = Utils.convertLengthToHmm(paragraph.offset().top - $(drawingNode).offset().top, 'px');
                                             }
@@ -3913,10 +3913,10 @@ define('io.ox/office/editor/editor',
                                         }
                                     }
                                 } else {
-                                    if ((moveY > 0) && (paragraph.next())) {
+                                    if ((moveY > 0) && (paragraph.next().length > 0)) {
                                         var maxBottomShift = Utils.convertLengthToHmm(paragraph.next().offset().top - $(drawingNode).offset().top, 'px');
 
-                                        while ((moveY > maxBottomShift) && (paragraph.next())) {
+                                        while ((moveY > maxBottomShift) && (paragraph.next().length > 0)) {
                                             paragraph = paragraph.next();
                                             maxBottomShift = Utils.convertLengthToHmm(paragraph.offset().top - $(drawingNode).offset().top, 'px');
                                             moveImage = true;
