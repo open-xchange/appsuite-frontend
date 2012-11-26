@@ -17,245 +17,156 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function 
 
     'use strict';
 
-    var settingsWrapper = function () {
+    var Settings = function (path) {
 
-        var settings = {},
-            settingsCache;
+        var tree = {}, settingsCache = new cache.SimpleCache('settings', true);
 
-        var settingsInitial = function (settings, path, settingsBase, callback) {
-            var deferred = $.Deferred();
-
-            require([settingsBase + '/' + path + '/settings/defaults'], function (u) {
-                _.each(u, function (value, key) {
-                    if (settings[key] === undefined) {
-                        settings[key] = value;
-                    }
-                });
-
-                if (_.isFunction(callback)) {
-                    callback();
-                }
-
-                deferred.resolve();
-            });
-            return deferred;
-        };
-
-        var get = function (key) {
-            var parts = key.split(/\//),
-                tmp = settings || {}, i = 0, $i = parts.length;
-            if (parts[1]) {
-                for (; i < $i; i++) {
-                    var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty([i]) && typeof tmp[i] !== 'undefined' && tmp[i] !== null);
-                    if (tmpHasSubNode) {
-                        tmp = tmp[i];
-                    } else {
-                        tmp = null;
-                        return null;
-                    }
-                }
-            } else {
-                return tmp[key];
-            }
-
-        };
-
-        var set = function (key, value) {
-            var parts = typeof key === 'string' ? key.split(/\./) : key,
-                tmp = settings || {}, i = 0, $i = parts.length;
-            if (parts[1]) {
-                for (; i < $i; i++) {
-                    if (tmp[parts[i]]) {
-                        tmp = tmp[parts[i]];
-                        if (typeof tmp !== 'object') {
-                            return;
-                        }
-                    } else {
-                        tmp = (tmp[parts[i]] = {});
-                    }
+        this.get = function (key, defaultValue) {
+            // no argument?
+            if (arguments.length <= 1) { return tree; }
+            // get parts
+            var parts = key.split(/\//), tmp = tree || {};
+            while (parts.length) {
+                key = parts.shift();
+                tmp = tmp[key];
+                if (!_.isObject(tmp)) {
+                    return parts.length ? defaultValue : tmp;
                 }
             }
-            tmp[parts[$i - 1]] = value;
+            return tmp;
         };
 
-        var contains = function (key) {
-            var parts = key.split(/\//),
-                tmp = settings || {},
-                falseSwitch;
-
-            _.each(parts, function (partname, index) {
-                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
-                if (tmpHasSubNode) {
-                    tmp = tmp[partname];
-                    falseSwitch = true;
-                } else {
-                    falseSwitch = false;
-                }
-            });
-            return falseSwitch;
-        };
-
-        var remove = function (key) {
-            var parts = key.split(/\//),
-                tmp = settings || {},  i = 0, $i = parts.length - 1;
-            for (; i < $i; i++) {
-                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(i) && typeof tmp[i] !== 'undefined' && tmp[i] !== null);
-                if (tmpHasSubNode) {
-                    tmp = tmp[i];
-                    if (typeof tmp !== 'object') {
-                        console.error('settings.remove: ' + tmp + ' is a value');
+        this.contains = function (key) {
+            key = String(key);
+            var parts = key.split(/\//), tmp = tree || {};
+            while (parts.length) {
+                key = parts.shift();
+                if (parts.length) {
+                    if (_.isObject(tmp)) {
+                        tmp = tmp[key];
+                    } else {
                         return false;
                     }
                 } else {
-                    return false;
+                    return _.isObject(tmp) && key in tmp;
                 }
             }
-
-            delete tmp[parts[$i]];
-            return true;
         };
 
-        var flatten = function (obj, result, path) {
-            result = result || {};
-            path = path || '';
-            _(obj).each(function (prop, id) {
-                if (_.isObject(prop) && !_.isArray(prop)) {
-                    flatten(prop, result, path + id + '/');
+        var find = function (key, callback) {
+            key = String(key);
+            var parts = key.split(/\//), tmp = tree || {};
+            while (parts.length) {
+                key = parts.shift();
+                if (!(key in tmp)) {
+                    tmp = (tmp[key] = {});
                 } else {
-                    result[path + id] = prop;
+                    if (_.isObject(tmp)) {
+                        if (parts.length) {
+                            tmp = tmp[key];
+                        } else {
+                            callback(tmp, key);
+                        }
+                    } else {
+                        break;
+                    }
                 }
-            });
-            return result;
+            }
         };
 
-        var fnChange = function (e, path, value) {
+        this.set = function (key, value) {
+            find(key, function (tmp, key) {
+                tmp[key] = value;
+            });
+        };
+
+        this.remove = function (key) {
+            find(key, function (tmp, key) {
+                delete tmp[key];
+            });
+        };
+
+        var applyDefaults = function () {
+            return require([path + '/settings/defaults']).pipe(function (defaults) {
+                tree = _.extend(defaults, tree);
+            });
+        };
+
+        var change = function (e, path, value) {
             this.set(path, value);
         };
 
-        var that = {
+        this.createModel = function (ModelClass) {
+            return new ModelClass(tree).on('change', $.proxy(change, this));
+        };
 
-            settingsPath: null,
-            settingsBase: null,
+        this.stringify = function () {
+            return JSON.stringify(this.get());
+        };
 
-            createModel: function (ModelClass) {
+        this.load = function () {
 
-                return new ModelClass(settings)
-                    .on('change', $.proxy(fnChange, this));
-            },
-
-            get: function (path, defaultValue) {
-                if (!path) { // undefined, null, ''
-                    return settings; //get(that.settingsPath);
-                } else {
-                    if (defaultValue === undefined) {
-                        return get(path);
-                    } else {
-                        return contains(path) ? get(path) : defaultValue;
-                    }
-                }
-            },
-
-            set: function (path, value) {
-                if (path) {
-                    var orgpath = path;
-                    set(path, value);
-                }
-            },
-
-            remove: function (path) {
-                if (path) {
-                    path = (that.settingsPath + '/' + path);
-                    remove(path);
-                }
-            },
-
-            contains: function (path) {
-                path = (that.settingsPath + '/' + path);
-                return contains(path);
-            },
-
-            load: function () {
-                // loader
-                var load = function () {
-                    return http.PUT({
-                        module: 'jslob',
-                        params: {
-                            action: 'list'
-                        },
-                        data: ['apps/' + that.settingsBase + '/' + that.settingsPath]
-                    }).done(function (data) {
-                            settings = data[0].tree;
-                        }).pipe(function () {
-                            return settingsInitial(settings, that.settingsPath, that.settingsBase);
-                        }).done(function () {
-                            settingsCache.add(that.settingsPath, settings);
-                        });
-                };
-                // trick to be fast: cached?
-                if (!settingsCache) {
-                    settingsCache = new cache.SimpleCache('settings', true);
-                }
-
-                return settingsCache.get(that.settingsPath)
-                    .pipe(function (data) {
-                        if (data !== null) {
-                            settings = data;
-                            return settings;
-                        } else {
-                            return load();
-                        }
-                    });
-            },
-
-            reset: function () {
-                return settingsCache.remove(that.settingsPath).pipe(function () {
-                    return http.PUT({
-                        module: 'jslob',
-                        params: {
-                            action: 'set',
-                            id: 'apps/' + that.settingsBase + '/' + that.settingsPath
-                        },
-                        data: {}
-                    });
+            var load = function () {
+                return http.PUT({
+                    module: 'jslob',
+                    params: { action: 'list' },
+                    data: ['apps/' + path]
+                })
+                .pipe(function (data) {
+                    tree = data[0].tree;
+                    return applyDefaults();
+                })
+                .pipe(function () {
+                    return settingsCache.add(path, tree);
                 });
-            },
+            };
 
-            save: function (external) {
-                if (external !== undefined) {
-                    settings = external;
+            return settingsCache.get(path).pipe(function (data) {
+                if (data !== null) {
+                    return (tree = data);
+                } else {
+                    return load();
                 }
-//                settingsInitial(settings, that.settingsPath, that.settingsBase, function () {
-                settingsCache.add(that.settingsPath, settings);
+            });
+        };
 
+        this.reset = function () {
+            return settingsCache.remove(path).pipe(function () {
                 return http.PUT({
                     module: 'jslob',
                     params: {
                         action: 'set',
-                        id: 'apps/' + that.settingsBase + '/' + that.settingsPath //id
+                        id: 'apps/' + path
                     },
-                    data: settings
+                    data: {}
                 });
-//                });
-            }
+            });
         };
-        return that;
+
+        this.save = function (data) {
+
+            data = data || tree;
+
+            return $.when(
+                settingsCache.add(path, data),
+                http.PUT({
+                    module: 'jslob',
+                    params: {
+                        action: 'set',
+                        id: 'apps/' + path
+                    },
+                    data: data
+                })
+            );
+        };
     };
 
     return {
         load: function (name, req, load, config) {
-            var mywrapper = settingsWrapper();
-            name = name.split('/');
-            mywrapper.settingsBase = name[0];
-            name = _.rest(name).join('/');
-            mywrapper.settingsPath = name;
-            mywrapper.load()
-                .done(function () {
-                    load(mywrapper);
-                })
-                .fail(function () {
-                    console.error('failed to load settings for:' + mywrapper.settingsPath);
-                });
-
+            var settings = new Settings(name);
+            settings.load().done(function () {
+                load(settings);
+            });
         }
     };
 });

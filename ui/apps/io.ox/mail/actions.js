@@ -174,8 +174,8 @@ define('io.ox/mail/actions',
         multiple: function (mail) {
             require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
-                    .header($('<h3>').text('Move'))
-                    .addPrimaryButton("ok", gt("Move"))
+                    .header($('<h3>').text(gt('Move')))
+                    .addPrimaryButton("ok", gt('Move'))
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css({ height: '250px' });
                 var item = _(mail).first(),
@@ -193,7 +193,7 @@ define('io.ox/mail/actions',
                             // move action
                             api.move(mail, target)
                                 .done(function () {
-                                    notifications.yell('success', 'Mails have been moved');
+                                    notifications.yell('success', gt('Mails have been moved'));
                                 })
                                 .fail(notifications.yell);
                         }
@@ -211,8 +211,8 @@ define('io.ox/mail/actions',
         multiple: function (mail) {
             require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
-                    .header($('<h3>').text('Copy'))
-                    .addPrimaryButton("ok", gt("Copy"))
+                    .header($('<h3>').text(gt('Copy')))
+                    .addPrimaryButton("ok", gt('Copy'))
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css('height', '250px');
                 var item = _(mail).first(),
@@ -230,7 +230,7 @@ define('io.ox/mail/actions',
                             // move action
                             api.copy(mail, target)
                                 .done(function () {
-                                    notifications.yell('success', 'Mails have been copied');
+                                    notifications.yell('success', gt('Mails have been copied'));
                                 })
                                 .fail(notifications.yell);
                         }

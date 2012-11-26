@@ -442,6 +442,7 @@ define('io.ox/mail/view-detail',
                 if (list.length > 1) {
                     inline = $('<div class="mail-detail thread-inline-actions">');
                     ext.point('io.ox/mail/thread').invoke('draw', inline, list);
+                    inline.find('.dropdown > a').addClass('btn btn-primary');
                     frag.appendChild(inline.get(0));
                 }
                 // loop over thread - use fragment to be fast for tons of mails

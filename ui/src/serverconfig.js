@@ -26,7 +26,8 @@ define(function () {
         buildDate: '2012-11-01',
 
         plugins: {
-            signin: []
+            signin: [],
+            core: ['halo']
         },
 
         portalPluginEditable: ['reddit', 'flickr', 'tumblr', 'rss'],
