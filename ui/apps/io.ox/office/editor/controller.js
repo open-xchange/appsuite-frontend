@@ -338,6 +338,14 @@ define('io.ox/office/editor/controller',
         // methods ------------------------------------------------------------
 
         /**
+         * Set the editor to write protected mode which prevents changes
+         * to the loaded document.
+         */
+        this.setWriteProtected = function () {
+            editor.setWriteProtected();
+        };
+
+        /**
          * Changes the read-only mode at the editor and updates all controller
          * items.
          */

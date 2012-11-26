@@ -174,6 +174,9 @@ define('io.ox/office/editor/editor',
             // init with null for 'read only' and mode not yet determined by the server
             editMode = null,
 
+            // init with false for 'write permission'
+            writeProtected = false,
+
             // name of the user that currently has the edit rigths
             editUser = '',
 
@@ -1926,8 +1929,20 @@ define('io.ox/office/editor/editor',
             }
         };
 
+        this.setWriteProtected = function () {
+            if (!writeProtected) {
+                writeProtected = true;
+
+                Alert.showWriteProtectedWarning(app.getView().getToolPane().getNode(), app.getController());
+            }
+        };
+
         this.isEditMode = function () {
             return editMode;
+        };
+
+        this.isWriteProtected = function () {
+            return writeProtected;
         };
 
         this.setEditUser = function (user) {

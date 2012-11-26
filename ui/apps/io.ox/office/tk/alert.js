@@ -202,6 +202,25 @@ define('io.ox/office/tk/alert',
     // special alerts -----------------------------------------------------------
 
     /**
+     * Creates a write protected alert and inserts it at the beginning of the
+     * given dom node.
+     * Removes a present alert before adding the new one.
+     *
+     *  @param {jQuery | Object} node the dom node to add the alert to
+     *  @param {Object} controller the controller for event handling
+     */
+    Alert.showWriteProtectedWarning = function (node, controller) {
+
+        Alert.showWarning(
+            gt('Read-only mode'),
+            gt('You don\'t have permissions to change this document'),
+            true,
+            node,
+            controller,
+            3000);
+    };
+
+    /**
      * Creates a read only mode alert including the 'Acquire Edit Rights' button
      * and inserts it at the beginning of the given dom node.
      * Removes a present alert before adding the new one.

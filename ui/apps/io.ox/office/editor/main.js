@@ -376,8 +376,13 @@ define('io.ox/office/editor/main',
                             operations;
 
                         if (data && !data.serverIsBusy) {
-                            controller.setEditUser(data && data.editUser);
-                            controller.setEditMode(data && data.canEdit);
+
+                            if (data.writeProtected)
+                                controller.setWriteProtected();
+                            else {
+                                controller.setEditUser(data.editUser);
+                                controller.setEditMode(data.canEdit);
+                            }
 
                             operations = extractOperationsList(response);
                             if (_.isArray(operations) && (operations.length > 0)) {
