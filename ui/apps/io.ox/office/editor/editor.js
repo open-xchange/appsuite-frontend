@@ -28,12 +28,13 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/undo',
      'io.ox/office/editor/format/stylesheets',
      'io.ox/office/editor/format/characterstyles',
+     'io.ox/office/editor/format/paragraphstyles',
      'io.ox/office/editor/format/documentstyles',
      'io.ox/office/editor/format/lineheight',
      'io.ox/office/editor/format/color',
      'io.ox/office/tk/alert',
      'gettext!io.ox/office/main'
-    ], function (Events, Utils, DOM, Selection, Table, Image, Hyperlink, Operations, Position, UndoManager, StyleSheets, CharacterStyles, DocumentStyles, LineHeight, Color, Alert, gt) {
+    ], function (Events, Utils, DOM, Selection, Table, Image, Hyperlink, Operations, Position, UndoManager, StyleSheets, CharacterStyles, ParagraphStyles, DocumentStyles, LineHeight, Color, Alert, gt) {
 
     'use strict';
 
@@ -315,8 +316,8 @@ define('io.ox/office/editor/editor',
                         if (!_.isNumber(endOffset)) {
                             generator.generateOperation(Operations.PARA_SPLIT, { start: [targetPosition, 0] });
                             generator.generateSetAttributesOperation(contentNode, [targetPosition], undefined, { attributes: {
-                                paragraph: paragraphStyles.buildNullAttributes(),
-                                character: characterStyles.buildNullAttributes()
+                                paragraph: ParagraphStyles.buildNullAttributes(),
+                                character: CharacterStyles.buildNullAttributes()
                             } });
                         }
 
@@ -2811,7 +2812,8 @@ define('io.ox/office/editor/editor',
                     var hasSelection = selection.hasRange();
                     self.deleteSelected();
                     var startPosition = selection.getStartPosition(),
-                        lastValue = startPosition.length - 1;
+                        lastValue = startPosition.length - 1,
+                        newPosition = _.clone(startPosition);
 
                     // check for a possible hyperlink text
                     if (!hasSelection) {
@@ -2829,6 +2831,7 @@ define('io.ox/office/editor/editor',
                         _(startPosition).all(function (value) { return (value === 0); })) {
                         self.insertParagraph([0]);
                         selection.startPaM.oxoPosition = [0, 0];
+                        newPosition = _.clone(selection.startPaM.oxoPosition);
                     } else {
                         // demote or end numbering instead of creating a new paragraph
                         var // the paragraph element addressed by the
@@ -2866,7 +2869,22 @@ define('io.ox/office/editor/editor',
                             }
                         }
                         if (split === true) {
-                            self.splitParagraph(startPosition);
+                            newPosition[lastValue - 1] += 1;
+                            newPosition[lastValue] = 0;
+
+                            undoManager.enterGroup(function () {
+                                self.splitParagraph(startPosition);
+                                if (endOfParagraph) {
+                                    var paraAttributes = paragraphStyles.getElementAttributes(paragraph),
+                                        styleAttributes = paragraphStyles.getStyleSheetAttributeMap(paraAttributes.style, 'paragraph');
+                                    if (styleAttributes.next !== paraAttributes.style) {
+                                        selection.setTextSelection(newPosition);
+                                        self.setAttribute('paragraph', 'style', styleAttributes.next);
+                                        selection.setTextSelection(startPosition);
+                                    }
+                                }
+                            });
+
                             // now apply 'AutoCorrection'
                             if (numAutoCorrect.listDetection && numAutoCorrect.listDetection.numberFormat !== undefined) {
                                 undoManager.enterGroup(function () {
@@ -2878,19 +2896,10 @@ define('io.ox/office/editor/editor',
                                             });
                                 });
                             }
-                            // TODO / TBD: Should all API / Operation calls return the new position?!
-                            var lastValue = selection.startPaM.oxoPosition.length - 1;
-                            selection.startPaM.oxoPosition[lastValue - 1] += 1;
-                            selection.startPaM.oxoPosition[lastValue] = 0;
-                            if (endOfParagraph) {
-                                var paraAttributes = paragraphStyles.getElementAttributes(paragraph),
-                                    styleAttributes = paragraphStyles.getStyleSheetAttributeMap(paraAttributes.style, 'paragraph');
-                                if (styleAttributes.next !== paraAttributes.style)
-                                    self.setAttribute('paragraph', 'style', styleAttributes.next);
-                            }
+
                         }
                     }
-                    selection.setTextSelection(selection.startPaM.oxoPosition);
+                    selection.setTextSelection(newPosition);
                 }
             }
         }
@@ -3372,8 +3381,8 @@ define('io.ox/office/editor/editor',
             if (generator) {
                 generator.generateOperation(Operations.PARA_SPLIT, { start: paraEndPosition });
                 generator.generateSetAttributesOperation(nextParagraph, nextParaPosition, undefined, { attributes: {
-                    paragraph: paragraphStyles.buildNullAttributes(),
-                    character: characterStyles.buildNullAttributes()
+                    paragraph: ParagraphStyles.buildNullAttributes(),
+                    character: CharacterStyles.buildNullAttributes()
                 } });
                 undoManager.addUndo(generator.getOperations(), operation);
             }
