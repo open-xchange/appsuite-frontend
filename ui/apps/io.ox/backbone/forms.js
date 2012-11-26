@@ -645,6 +645,7 @@ define('io.ox/backbone/forms',
                     return BinderUtils._dateStrToDate(value, attribute, model);
                 }
             },
+
             convertTime: function (direction, value, attribute, model) {
                 if (direction === 'ModelToView') {
                     return BinderUtils._toTime(value, attribute, model, direction);
@@ -652,6 +653,7 @@ define('io.ox/backbone/forms',
                     return BinderUtils._timeStrToDate(value, attribute, model);
                 }
             },
+
             numToString: function (direction, value, attribute, model) {
                 if (direction === 'ModelToView') {
                     return value + '';
@@ -661,36 +663,31 @@ define('io.ox/backbone/forms',
             },
 
             _toDate: function (value, attribute, model) {
-
-                var mydate, formatted;
                 if (!value) {
                     return null;
                 }
                 if (!_.isNumber(value)) {
                     return value; //do nothing
                 }
-                mydate = date.Local.utc(parseInt(value, 10));
-
+                var mydate = parseInt(value, 10);
                 if (_.isNull(mydate)) {
                     return value;
                 }
-
-                formatted = new date.Local(mydate).format(date.DATE);
-                return formatted;
+                return new date.Local(mydate).format(date.DATE);
             },
+
             _toTime: function (value, attribute) {
-                var myTime, formatted;
                 if (!value) {
                     return null;
                 }
-                myTime = new date.Local(parseInt(value, 10));
+                var myTime = new date.Local(parseInt(value, 10));
 
                 if (_.isNull(myTime)) {
                     return value;
                 }
-                formatted =  new date.Local(myTime).format(date.TIME);
-                return formatted;
+                return new date.Local(myTime).format(date.TIME);
             },
+
             _timeStrToDate: function (value, attribute, model) {
                 var myValue = parseInt(model.get(attribute), 10) || false;
                 if (!myValue) {
@@ -713,6 +710,7 @@ define('io.ox/backbone/forms',
 
                 return mydate.getTime();
             },
+
             _dateStrToDate: function (value, attribute, model) {
 
                 var myValue = parseInt(model.get(attribute), 10) || false;
@@ -882,7 +880,6 @@ define('io.ox/backbone/forms',
                 }
                 return value;
             },
-
 
             controlGroup: {
                 date: {
