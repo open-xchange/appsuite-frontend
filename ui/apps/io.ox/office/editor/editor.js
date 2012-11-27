@@ -3714,6 +3714,10 @@ define('io.ox/office/editor/editor',
                 nodeOptions = {},
                 moveable = true,
                 sizeable = true,
+                // left distance from drawing to event point (in px)
+                leftDrawingDistance = 0,
+                // top distance from drawing to event point (in px)
+                topDrawingDistance = 0,
                 // all available cursor styles
                 cursorstyles = {
                     tl: 'nw-resize',
@@ -3755,6 +3759,9 @@ define('io.ox/office/editor/editor',
 
                     nodeOptions.isResizeEvent = false;
                     nodeOptions.isMoveEvent = true;
+
+                    leftDrawingDistance = startX - $(drawingNode).offset().left;
+                    topDrawingDistance = startY - $(drawingNode).offset().top;
                 }
 
                 // setting cursor
@@ -3825,80 +3832,178 @@ define('io.ox/office/editor/editor',
             }
 
             function mouseUpOnDrawing(event, drawingNode, moveBoxNode) {
+
                 // mouse up handler
+                var moveX = 0,
+                    moveY = 0,
+                    width = 0,
+                    height = 0,
+                    updatePosition = null,
+                    newOperation = null,
+                    anchorHorOffset = 0,
+                    anchorVertOffset = 0,
+                    drawingNodeAttrs = null,
+                    oldAnchorHorOffset = 0,
+                    oldAnchorVertOffset = 0,
+                    anchorHorBase = 0,
+                    anchorVertBase = 0,
+                    anchorHorAlign = 0,
+                    anchorVertAlign = 0,
+                    // the logical destination for moved images
+                    destPosition = null,
+                    // current drawing width, in 1/100 mm
+                    drawingWidth = 0,
+                    // the paragraph element containing the drawing node
+                    paragraph = null,
+                    // total width of the paragraph, in 1/100 mm
+                    paraWidth = 0,
+                    // the maximum shift inside a paragraph to the top
+                    maxTopShift = 0,
+                    // is it necessary to move the image?
+                    moveImage = false,
+                    // position of the mouse up event shifted into the document borders
+                    trimmedPosition = null;
+
+                function adaptPositionIntoDocument(doc, posX, posY) {
+
+                    var minLeftPosition = Math.round(doc.offset().left + Utils.convertCssLength(doc.css('paddingLeft'), 'px', 0)),
+                        maxRightPosition = Math.round(doc.offset().left + doc.outerWidth() - Utils.convertCssLength(doc.css('paddingRight'), 'px', 0)),
+                        minTopPosition = Math.round(doc.offset().top - Utils.convertCssLength(doc.css('paddingTop'), 'px', 0));
+
+                    if (posX < minLeftPosition) { posX = minLeftPosition; }
+                    if (posX > maxRightPosition) { posX = maxRightPosition; }
+                    if (posY < minTopPosition) { posY = minTopPosition; }
+
+                    return { posX: posX, posY: posY };
+                }
+
+                function isPositionInsideNode(node, posX, posY) {
+
+                    if (! (node instanceof $)) { node = $(node); }
+
+                    return ((node.offset().left < posX) && (posX < (node.offset().left + node.outerWidth())) &&
+                            (node.offset().top < posY) && (posY < (node.offset().top + node.outerHeight())));
+                }
+
+                function iterateSelektorNodes(topNode, currentNode, posX, posY, selector, skipSelector, options) {
+
+                    var selectorNode = null,
+                        reverse = Utils.getBooleanOption(options, 'reverse', false);
+
+                    while (currentNode) {
+
+                        if (isPositionInsideNode(currentNode, posX, posY)) {
+                            selectorNode = currentNode;
+                            break;
+                        }
+
+                        if (reverse) {
+                            currentNode = Utils.findPreviousNode(topNode, currentNode, selector, skipSelector);
+                        } else {
+                            currentNode = Utils.findNextNode(topNode, currentNode, selector, skipSelector);
+                        }
+                    }
+
+                    return selectorNode;
+                }
+
+                function getParagraphAtPosition(topNode, startNode, shiftX, shiftY, posX, posY) {
+
+                    var searchPrevious = true,
+                        searchFollowing = true,
+                        paragraph = null,
+                        tableCell = null;
+
+                    if ((shiftX > 0) && (shiftY > 0)) { searchPrevious = false; }
+                    if ((shiftX < 0) && (shiftY < 0)) { searchFollowing = false; }
+
+                    if (searchFollowing) {
+                        paragraph = iterateSelektorNodes(topNode, Utils.getDomNode(startNode), posX, posY, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR, {'reverse': false});
+                    }
+
+                    if (paragraph) { searchPrevious = false; }
+                    else { searchPrevious = true; }
+
+                    if (searchPrevious) {
+                        paragraph = iterateSelektorNodes(topNode, Utils.getDomNode(startNode), posX, posY, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR, {'reverse': true});
+                    }
+
+                    // maybe the paragraph is in a table cell with a cell neighbour that is much higher -> use last paragraph in this cell
+                    if (! paragraph) {
+                        tableCell = iterateSelektorNodes(topNode, Utils.getDomNode(startNode), posX, posY, DOM.TABLE_CELLNODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR, {'reverse': false});
+
+                        if (! tableCell) {
+                            tableCell = iterateSelektorNodes(topNode, Utils.getDomNode(startNode), posX, posY, DOM.TABLE_CELLNODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR, {'reverse': true});
+                        }
+
+                        if ((tableCell) && (DOM.isTableCellNode(tableCell))) {
+                            paragraph = DOM.getCellContentNode(tableCell)[0].lastChild;  // the last paragraph of the cell content
+                        }
+                    }
+
+                    if (paragraph) { paragraph = $(paragraph); }
+
+                    return paragraph;
+                }
+
                 moveBoxNode.css({'border-width': 0, 'left': 0, 'top': 0});  // making move box invisible and shifting it back into drawing
 
                 if (nodeOptions.isResizeEvent) {
 
                     if ((finalWidth > 0) && (finalHeight > 0)) {
 
-                        var width = Utils.convertLengthToHmm(finalWidth, 'px'),
-                            height = Utils.convertLengthToHmm(finalHeight, 'px'),
-                            updatePosition = Position.getOxoPosition(editdiv, drawingNode, 0),
-                            newOperation = { name: Operations.ATTRS_SET, attrs: { drawing: { width: width, height: height } }, start: updatePosition };
+                        width = Utils.convertLengthToHmm(finalWidth, 'px');
+                        height = Utils.convertLengthToHmm(finalHeight, 'px');
+                        updatePosition = Position.getOxoPosition(editdiv, drawingNode, 0);
+                        newOperation = { name: Operations.ATTRS_SET, attrs: { drawing: { width: width, height: height } }, start: updatePosition };
 
                         applyOperation(newOperation);
                     }
                 } else if (nodeOptions.isMoveEvent) {
 
-                    if ((_.isNumber(shiftX)) && (_.isNumber(shiftY)) && (shiftX !== 0) || (shiftY !== 0)) {
+                    currentX = event.pageX;
+                    currentY = event.pageY;
 
-                        undoManager.enterGroup(function () {
+                    // shifting currentX and curentY to position inside the document
+                    trimmedPosition = adaptPositionIntoDocument(editdiv, currentX, currentY);
+                    currentX = trimmedPosition.posX;
+                    currentY = trimmedPosition.posY;
 
-                            var moveX = Utils.convertLengthToHmm(shiftX, 'px'),
-                                moveY = Utils.convertLengthToHmm(shiftY, 'px'),
-                                updatePosition = Position.getOxoPosition(editdiv, drawingNode, 0),
-                                newOperation = null,
-                                anchorHorOffset = 0,
-                                anchorVertOffset = 0,
-                                drawingNodeAttrs = drawingStyles.getElementAttributes(drawingNode).drawing,
-                                oldAnchorHorOffset = drawingNodeAttrs.anchorHorOffset,
-                                oldAnchorVertOffset = drawingNodeAttrs.anchorVertOffset ? drawingNodeAttrs.anchorVertOffset : 0,
-                                anchorHorBase = drawingNodeAttrs.anchorHorBase,
-                                anchorVertBase = drawingNodeAttrs.anchorVertBase,
-                                anchorHorAlign = drawingNodeAttrs.anchorHorAlign,
-                                anchorVertAlign = drawingNodeAttrs.anchorVertAlign,
-                                // the logical destination for moved images
-                                destPosition = null,
-                                // current drawing width, in 1/100 mm
-                                drawingWidth = Utils.convertLengthToHmm($(drawingNode).width(), 'px'),
-                                // the paragraph element containing the drawing node
-                                paragraph = $(drawingNode).parent(),
-                                // the paragraph node following paragraph
-                                nextPara = null,
-                                // the paragraph node preceeding paragraph
-                                prevPara = null,
-                                // total width of the paragraph, in 1/100 mm
-                                paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px'),
-                                // is it necessary to move the image?
-                                moveImage = false,
-                                // was the move inside the same paragraph?
-                                moveInsideParagraph = false;
+                    shiftX = currentX - startX;
+                    shiftY = currentY - startY;
 
-                            if (oldAnchorHorOffset === undefined) {
-                                // anchorHorOffset has to be calculated corresponding to the left paragraph border
-                                if (anchorHorAlign === 'right') {
-                                    oldAnchorHorOffset = paraWidth - drawingWidth;
-                                } else if (anchorHorAlign === 'center') {
-                                    oldAnchorHorOffset = (paraWidth - drawingWidth) / 2;
-                                } else {
-                                    oldAnchorHorOffset = 0;
-                                }
+                    if ((_.isNumber(shiftX)) && (_.isNumber(shiftY)) && ((shiftX !== 0) || (shiftY !== 0))) {
+
+                        moveX = Utils.convertLengthToHmm(shiftX, 'px');
+                        moveY = Utils.convertLengthToHmm(shiftY, 'px');
+                        updatePosition = Position.getOxoPosition(editdiv, drawingNode, 0);
+                        drawingWidth = Utils.convertLengthToHmm($(drawingNode).width(), 'px');
+                        paragraph = $(drawingNode).parent();
+                        drawingNodeAttrs = drawingStyles.getElementAttributes(drawingNode).drawing;
+                        oldAnchorHorOffset = drawingNodeAttrs.anchorHorOffset;
+                        oldAnchorVertOffset = drawingNodeAttrs.anchorVertOffset ? drawingNodeAttrs.anchorVertOffset : 0;
+                        anchorHorBase = drawingNodeAttrs.anchorHorBase;
+                        anchorVertBase = drawingNodeAttrs.anchorVertBase;
+                        anchorHorAlign = drawingNodeAttrs.anchorHorAlign;
+                        anchorVertAlign = drawingNodeAttrs.anchorVertAlign;
+                        paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px');
+
+                        if (oldAnchorHorOffset === undefined) {
+                            // anchorHorOffset has to be calculated corresponding to the left paragraph border
+                            if (anchorHorAlign === 'right') {
+                                oldAnchorHorOffset = paraWidth - drawingWidth;
+                            } else if (anchorHorAlign === 'center') {
+                                oldAnchorHorOffset = (paraWidth - drawingWidth) / 2;
+                            } else {
+                                oldAnchorHorOffset = 0;
                             }
+                        }
 
-                            anchorHorOffset = oldAnchorHorOffset;
-                            anchorVertOffset = oldAnchorVertOffset;
+                        anchorHorOffset = oldAnchorHorOffset;
+                        anchorVertOffset = oldAnchorVertOffset;
 
-//                            if ((moveX !== 0) || (moveY !== 0)) {
-//                                var paraTop = paragraph.offset().top,
-//                                    paraLeft = paragraph.offset().left,
-//                                    paraWidth = paragraph.outerWidth(),
-//                                    paraHeigth =paragraph.outerHeight();
-//
-//                                if ( oldAnchorHorOffset + moveX) {
-//                                    moveInsideParagraph = false;
-//                                }
-//                            }
+                        // checking position of mouse up event
+                        if (isPositionInsideNode(paragraph, currentX, currentY)) {  // -> new position is in the same paragraph (or it is the last paragraph in the document)
 
                             if (moveX !== 0) {
                                 anchorHorOffset = oldAnchorHorOffset + moveX;
@@ -3913,63 +4018,52 @@ define('io.ox/office/editor/editor',
                                 anchorVertAlign = 'offset';
                                 anchorVertBase = 'paragraph';
 
-                                if (anchorVertOffset < 0) { // moving image to the top is required
-                                    var maxTopShift = $(drawingNode).offset().top - paragraph.offset().top;  // distance from top drawing border to top paragraph border
+                                if (anchorVertOffset < 0) { // moving image to the top of the paragraph is required
+                                    maxTopShift = $(drawingNode).offset().top - paragraph.offset().top;  // distance from top drawing border to top paragraph border
                                     // moving the image inside the paragraph to the beginning of the paragraph
                                     maxTopShift = Utils.convertLengthToHmm(maxTopShift, 'px') - oldAnchorVertOffset;
                                     // calculating the new vertical offset (anchorvoffset is < 0)
                                     anchorVertOffset = maxTopShift + anchorVertOffset;
-
-                                    if (anchorVertOffset >= 0) { // not leaving the paragraph
-                                        // moving the drawing to the beginning of the paragraph
-                                        destPosition = _.clone(updatePosition);
-                                        destPosition[destPosition.length - 1] = 0;
-                                        moveImage = true;
-                                    } else {
-                                        prevPara = Utils.findPreviousNode(editdiv, paragraph, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR);
-                                        if (prevPara) {
-                                            moveImage = true;
-
-                                            while ((moveY < maxTopShift) && (prevPara)) {
-                                                prevPara = Utils.findPreviousNode(editdiv, paragraph, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR);
-                                                if (prevPara) {
-                                                    paragraph = $(prevPara);
-                                                    maxTopShift = Utils.convertLengthToHmm(paragraph.offset().top - $(drawingNode).offset().top, 'px');
-                                                }
-                                            }
-
-                                            // moving the drawing to the beginning of one of the previous paragraphs required
-                                            anchorVertOffset = moveY - maxTopShift;
-                                            destPosition = Position.getOxoPosition(editdiv, paragraph, 0);
-                                            destPosition.push(0);
-                                        } else {
-                                            anchorVertOffset = 0; // drawing is already at the top of the document
-                                        }
-                                    }
-                                } else if (moveY > 0) {
-                                    var maxBottomShift = Utils.convertLengthToHmm(paragraph.offset().top + paragraph.height() - $(drawingNode).offset().top, 'px');
-                                    if (moveY > maxBottomShift) {
-                                        nextPara = Utils.findNextNode(editdiv, paragraph, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR);
-                                        if (nextPara) {
-                                            moveImage = true;
-                                            while ((moveY > maxBottomShift) && (nextPara)) {
-                                                nextPara = Utils.findNextNode(editdiv, paragraph, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR);
-                                                if (nextPara) {
-                                                    paragraph = $(nextPara);
-                                                    maxBottomShift = Utils.convertLengthToHmm(paragraph.offset().top + paragraph.height() - $(drawingNode).offset().top, 'px');
-                                                }
-                                            }
-
-                                            // moving the drawing to the beginning of one of the following paragraphs required
-                                            anchorVertOffset = maxBottomShift - moveY;
-                                            destPosition = Position.getOxoPosition(editdiv, paragraph, 0);
-                                            destPosition.push(0);
-                                        } else {
-                                            // move the the lowest possible position
-                                        }
-                                    }
+                                    // anchorVertOffset always has to be >= 0, not leaving the paragraph ('< 0' should never happen here)
+                                    if (anchorVertOffset < 0) { anchorVertOffset = 0; }
+                                    // moving the drawing to the beginning of the paragraph
+                                    destPosition = _.clone(updatePosition);
+                                    destPosition[destPosition.length - 1] = 0;
+                                    moveImage = true;
                                 }
                             }
+
+                        } else {   // -> new position is in another paragraph
+
+                            // paragraph has to be determined from the coordinates (currentX, currentY)
+                            // -> moving operation for the drawing is always required
+
+                            paragraph = getParagraphAtPosition(editdiv, paragraph, shiftX, shiftY, currentX, currentY);
+
+                            if (paragraph) {
+                                paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px');
+
+                                anchorVertAlign = 'offset';
+                                anchorVertBase = 'paragraph';
+                                if (shiftY > 0) { topDrawingDistance = 0; }
+                                anchorVertOffset = Utils.convertLengthToHmm((currentY - paragraph.offset().top - topDrawingDistance), 'px');
+                                anchorHorAlign = 'offset';
+                                anchorHorBase = 'column';
+                                anchorHorOffset = Utils.convertLengthToHmm((currentX - paragraph.offset().left - leftDrawingDistance), 'px');
+
+                                destPosition = Position.getOxoPosition(editdiv, paragraph, 0);
+                                destPosition.push(0);
+
+                                moveImage = true;
+                            } else {
+                                // do not call set Attributes and not moveImage
+                                moveImage = false;
+                                anchorHorOffset = oldAnchorHorOffset;
+                                anchorVertOffset = oldAnchorVertOffset;
+                            }
+                        }
+
+                        undoManager.enterGroup(function () {
 
                             if (moveImage) {
                                 newOperation = { name: Operations.MOVE, start: updatePosition, end: updatePosition, to: destPosition };
@@ -3978,9 +4072,7 @@ define('io.ox/office/editor/editor',
                             }
 
                             if ((anchorHorOffset !== oldAnchorHorOffset) || (anchorVertOffset !== oldAnchorVertOffset)) {
-
                                 newOperation = { name: Operations.ATTRS_SET, attrs: { drawing: { anchorHorOffset: anchorHorOffset, anchorVertOffset: anchorVertOffset, anchorHorAlign: anchorHorAlign, anchorVertAlign: anchorVertAlign, anchorHorBase: anchorHorBase, anchorVertBase: anchorVertBase } }, start: updatePosition };
-
                                 applyOperation(newOperation);
                             }
 

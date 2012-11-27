@@ -536,6 +536,25 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * A jQuery selector that matches elements representing a table cell.
+     */
+    DOM.TABLE_CELLNODE_SELECTOR = 'td';
+
+    /**
+     * Returns whether the passed node is a table cell element.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a table cell element.
+     */
+    DOM.isTableCellNode = function (node) {
+        return $(node).is(DOM.TABLE_CELLNODE_SELECTOR);
+    };
+
+    /**
      * Creates a new table cell element.
      *
      * @param {jQuery} paragraph
@@ -570,6 +589,22 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.isCellContentNode = function (node) {
         return $(node).is(DOM.CELLCONTENT_NODE_SELECTOR);
+    };
+
+    /**
+     * Returns the container node of a cell element that contains all top-level
+     * content nodes (paragraphs and tables).
+     *
+     * @param {HTMLElement|jQuery} cellNode
+     *  The page DOM node. If this object is a jQuery collection, uses the
+     *  first DOM node it contains.
+     *
+     * @returns {jQuery}
+     *  The container DOM node from the passed table cell that contains all top-level
+     *  content nodes (paragraphs and tables).
+     */
+    DOM.getCellContentNode = function (cellNode) {
+        return $(cellNode).children(DOM.CELLCONTENT_NODE_SELECTOR);
     };
 
     /**
@@ -1478,8 +1513,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 })
                 .mouseup(function (e) {
                     if (mousedownevent === true) {
-                        mouseuphandler.call(context, e, drawingNode, moveBox);
                         mousedownevent = false;
+                        mouseuphandler.call(context, e, drawingNode, moveBox);
                     }
                 });
 
