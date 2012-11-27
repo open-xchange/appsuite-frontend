@@ -74,9 +74,9 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
                 def.resolve(manifestManager); // Whoever resolves first, wins
                 return; // Backend already fetched everything
             }
-            manifestManager.apps = o[0];
-            manifestManager.plugins = o[1];
-            manifestManager.pluginPoints = o[2];
+            manifestManager.apps = o[0] || {};
+            manifestManager.plugins = o[1] || {};
+            manifestManager.pluginPoints = o[2] || {};
             manifestManager.loader = 'cache';
             def.resolve(manifestManager); // Whoever resolves first, wins
         });
