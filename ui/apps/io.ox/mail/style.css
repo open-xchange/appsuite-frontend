@@ -209,7 +209,6 @@
     padding: 30px 40px 30px 40px;
     border-bottom: 1px solid #eee;
     min-height: 200px;
-    z-index: 0;
 
     .mail-detail-clear-both {
         clear: both;
