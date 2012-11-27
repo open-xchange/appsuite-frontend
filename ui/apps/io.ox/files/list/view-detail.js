@@ -221,23 +221,18 @@ define("io.ox/files/list/view-detail",
             return true;
         },
         draw: function (file) {
-            if (file.description) {
-                this.append(
-                    $("<div>")
-                    .css({
-                        // makes it readable
-                        fontFamily: "monospace, 'Courier new'",
-                        whiteSpace: "pre-wrap",
-                        padding: "2em 0",
-                        minHeight: "30px"
-                    }).addClass("description")
-                    .text(gt.noI18n(file.description || ''))
-                );
-            } else {
-                this.append(
-                    $('<div class="alert">').text(gt("This file has no description. Click here to set one."))
-                );
-            }
+            this.append(
+                $("<div>")
+                .css({
+                    // makes it readable
+                    fontFamily: "monospace, 'Courier new'",
+                    whiteSpace: "pre-wrap",
+                    padding: "2em 0",
+                    minHeight: "30px"
+                }).addClass("description")
+                .text(gt.noI18n(file.description || gt('This file has no description')))
+            );
+            
         },
         on: {
             update: function (file, extension) {
