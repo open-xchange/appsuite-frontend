@@ -36,6 +36,12 @@ define("io.ox/core/tk/keys", ["io.ox/core/event"], function (Events) {
         
         if (!$node) {
             $node = $(window);
+        } else {
+            $node.on('dispose', function () {
+                if (included) {
+                    $node.off("keydown", handleEvent);
+                }
+            });
         }
         
         function handleEvent(evt) {

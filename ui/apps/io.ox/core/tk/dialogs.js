@@ -225,6 +225,10 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core'], func
             idle();
         };
 
+        this.busy = function () {
+            busy();
+        };
+
         this.show = function (callback) {
 
             // empty header?

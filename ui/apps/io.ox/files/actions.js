@@ -138,13 +138,6 @@ define('io.ox/files/actions',
         }
     });
 
-    new Action('io.ox/files/actions/edit', {
-        requires: 'one modify',
-        action: function (baton) {
-            baton.view.edit();
-        }
-    });
-
     new Action('io.ox/files/actions/open', {
         requires: 'some',
         multiple: function (list) {
@@ -214,22 +207,116 @@ define('io.ox/files/actions',
         }
     });
 
-    // edit mode actions
-    ext.point("io.ox/files/actions/edit/save").extend({
+    new Action('io.ox/files/actions/rename', {
+        requires: 'one',
         action: function (baton) {
-            var updatedFile = baton.view.getModifiedFile();
-            baton.view.endEdit();
-            api.update(updatedFile);
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                var $input = $('<input type="text" name="name">');
+                var dialog = null;
+                
+                function fnRename() {
+                    var name = $input.val();
+                    var update = {
+                        id: baton.data.id,
+                        folder_id: baton.data.folder_id,
+                        title: name
+                    };
+                    if (baton.data.filename) {
+                        update.filename = name;
+                    }
+
+                    return api.update(update).fail(require("io.ox/core/notifications").yell);
+                }
+
+
+                $input.val(baton.data.title || baton.data.filename);
+                var $form = $("<form>").append(
+                    $('<label for="name">').append($('<b>').text(gt("Name"))),
+                    $input
+                );
+
+                $form.on('submit', function (e) {
+                    e.preventDefault();
+                    dialog.busy();
+                    fnRename().done(function () {
+                        dialog.close();
+                    });
+                });
+
+
+                dialog = new dialogs.ModalDialog({easyOut: true}).append(
+                    $form
+                )
+                .addPrimaryButton('rename', gt('Rename'))
+                .addButton('cancel', gt('Cancel'));
+                
+                dialog.show(function () {
+                    $input.select();
+                })
+                .done(function (action) {
+                    if (action === 'rename') {
+                        fnRename();
+                    }
+                });
+            });
         }
     });
 
-    ext.point("io.ox/files/actions/edit/cancel").extend({
+    new Action('io.ox/files/actions/edit-description', {
+        requires: 'one',
         action: function (baton) {
-            baton.view.endEdit();
+            require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
+                var $input = $('<textarea class="input-xlarge" rows="5">');
+                $input.val(baton.data.description);
+                var $form = $("<form>").append(
+                    $('<label for="name">').append($('<b>').text(gt("Description"))),
+                    $input
+                );
+                var dialog = null;
+
+                var keys = new KeyListener($input);
+
+                function fnSave() {
+
+                    var description = $input.val();
+                    var update = {
+                        id: baton.data.id,
+                        folder_id: baton.data.folder_id,
+                        description: description
+                    };
+
+                    return api.update(update).fail(require("io.ox/core/notifications").yell);
+                }
+
+                keys.on('shift+enter', function () {
+                    dialog.busy();
+                    fnSave().done(function () {
+                        dialog.close();
+                    });
+                });
+
+                dialog = new dialogs.ModalDialog();
+
+                dialog.append(
+                    $form
+                )
+                .addPrimaryButton('save', gt('Save'))
+                .addButton('cancel', gt('Cancel'))
+                .show(function () {
+                    $input.select();
+                    keys.include();
+                })
+                .done(function (action) {
+                    if (action === 'save') {
+                        fnSave();
+                    }
+                });
+            });
         }
     });
 
 
+    
     // version specific actions
 
     new Action('io.ox/files/versions/actions/makeCurrent', {
@@ -334,13 +421,7 @@ define('io.ox/files/actions',
         ref: "io.ox/files/actions/editor"
     }));
 
-    ext.point("io.ox/files/links/inline").extend(new links.Link({
-        id: "edit",
-        index: 50,
-        label: gt("Edit"),
-        ref: "io.ox/files/actions/edit"
-    }));
-
+    
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: "officeeditor",
         index: 60,
@@ -388,8 +469,22 @@ define('io.ox/files/actions',
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'delete',
+        id: 'rename',
         index: 500,
+        label: gt("Rename"),
+        ref: "io.ox/files/actions/rename"
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'edit-description',
+        index: 550,
+        label: gt("Edit description"),
+        ref: "io.ox/files/actions/edit-description"
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'delete',
+        index: 600,
         prio: 'hi',
         label: gt("Delete"),
         ref: "io.ox/files/actions/delete"
@@ -397,37 +492,12 @@ define('io.ox/files/actions',
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: "officeeditasnew",
-        index: 600,
+        index: 700,
         label: gt("Edit as new"),
         ref: "io.ox/files/actions/office/editasnew"
     }));
 
-    // edit links
-
-    ext.point("io.ox/files/links/edit/inline").extend(new links.Button({
-        id: "cancel",
-        index: 100,
-        label: gt("Discard"),
-        ref: "io.ox/files/actions/edit/cancel",
-        cssClasses: "btn",
-        tabIndex: 30,
-        tagtype: 'button',
-        css: {
-            marginRight: '10px'
-        }
-    }));
-
-    ext.point("io.ox/files/links/edit/inline").extend(new links.Button({
-        id: "save",
-        index: 100000,
-        label: gt("Save"),
-        ref: "io.ox/files/actions/edit/save",
-        cssClasses: "btn btn-primary",
-        tabIndex: 40,
-        tagtype: 'button'
-    }));
-
-
+    
     // version links
 
 
@@ -494,20 +564,6 @@ define('io.ox/files/actions',
         action: function (file, app) {
             app.queues.update.offer(file);
         }
-    });
-
-    // Keyboard Shotcuts
-
-    ext.point("io.ox/files/shortcuts").extend({
-        id: "cancel",
-        shortcut: "esc",
-        ref: "io.ox/files/actions/edit/cancel"
-    });
-
-    ext.point("io.ox/files/shortcuts").extend({
-        id: "edit",
-        shortcut: "ctrl+enter",
-        ref: "io.ox/files/actions/edit"
     });
 
     // Iconview Inline Links
