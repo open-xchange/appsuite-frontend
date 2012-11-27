@@ -316,7 +316,7 @@ define('io.ox/office/editor/editor',
                         // selections only)
                         if (!_.isNumber(endOffset)) {
                             generator.generateOperation(Operations.PARA_SPLIT, { start: [targetPosition, 0] });
-                            generator.generateSetAttributesOperation(contentNode, [targetPosition], undefined, { clear: ['paragraph', 'character'] });
+                            generator.generateSetAttributesOperation(contentNode, 'paragraph', [targetPosition], undefined, { clear: true });
                         }
 
                         // operations for the text contents covered by the selection
@@ -1772,6 +1772,8 @@ define('io.ox/office/editor/editor',
 
                 var // table or drawing element contained by the selection
                     element = null,
+                    // new style identifier
+                    styleId =  _.isObject(attributes[family]) ? attributes[family].style : undefined,
                     // operations generator
                     generator = new Operations.Generator(),
                     // the style sheet container
@@ -1786,10 +1788,10 @@ define('io.ox/office/editor/editor',
                     newOperation = null;
 
                 // generates a 'setAttributes' operation with the correct attributes
-                function generateAttributeOperation(startPosition, endPosition) {
+                function generateSetAttributeOperation(startPosition, endPosition) {
 
                     var // the options for the operation
-                        operationOptions = { start: startPosition, attrs: Utils.makeSimpleObject(family, attributes) };
+                        operationOptions = { start: startPosition, attrs: attributes };
 
                     // add end position if specified
                     if (_.isArray(endPosition)) {
@@ -1802,30 +1804,26 @@ define('io.ox/office/editor/editor',
 
                 // add all attributes to be cleared
                 if (Utils.getBooleanOption(options, 'clear', false)) {
-                    _(StyleSheets.getAttributeNames(family)).each(function (name) {
-                        if (!(name in attributes)) {
-                            attributes[name] = null;
-                        }
-                    });
+                    attributes = StyleSheets.extendAttributes(StyleSheets.buildNullAttributes(family), attributes);
                 }
 
                 // nothig to do if no attributes will be changed
                 if (_.isEmpty(attributes)) { return; }
 
                 // register pending style sheet via 'insertStyleSheet' operation
-                if (_.isString(attributes.style) && styleSheets.isDirty(attributes.style)) {
+                if (_.isString(styleId) && styleSheets.isDirty(styleId)) {
 
                     generator.generateOperation(Operations.INSERT_STYLE, {
-                        attrs: styleSheets.getStyleSheetAttributeMap(attributes.style),
+                        attrs: styleSheets.getStyleSheetAttributeMap(styleId),
                         type: family,
-                        styleId: attributes.style,
-                        styleName: styleSheets.getName(attributes.style),
-                        parent: styleSheets.getParentId(attributes.style),
-                        uiPriority: styleSheets.getUIPriority(attributes.style)
+                        styleId: styleId,
+                        styleName: styleSheets.getName(styleId),
+                        parent: styleSheets.getParentId(styleId),
+                        uiPriority: styleSheets.getUIPriority(styleId)
                     });
 
                     // remove the dirty flag
-                    styleSheets.setDirty(attributes.style, false);
+                    styleSheets.setDirty(styleId, false);
                 }
 
                 // generate 'setAttribute' operations
@@ -1845,7 +1843,7 @@ define('io.ox/office/editor/editor',
                             // set the attributes at the covered text range
                             // TODO: currently, no way to set character attributes at empty paragraphs via operation...
                             if (startOffset <= endOffset) {
-                                generateAttributeOperation(position.concat([startOffset]), position.concat([endOffset]));
+                                generateSetAttributeOperation(position.concat([startOffset]), position.concat([endOffset]));
                             }
                         });
                     } else {
@@ -1856,37 +1854,38 @@ define('io.ox/office/editor/editor',
 
                 case 'paragraph':
                     selection.iterateContentNodes(function (paragraph, position) {
-                        generateAttributeOperation(position);
+                        generateSetAttributeOperation(position);
                     });
                     break;
 
                 case 'cell':
                     selection.iterateTableCells(function (cell, position) {
-                        generateAttributeOperation(position);
+                        generateSetAttributeOperation(position);
                     });
                     break;
 
                 case 'table':
                     if ((element = selection.getEnclosingTable())) {
-                        generateAttributeOperation(Position.getOxoPosition(editdiv, element, 0));
+                        generateSetAttributeOperation(Position.getOxoPosition(editdiv, element, 0));
                     }
                     break;
 
                 case 'drawing':
                     // TODO: needs change when multiple drawings can be selected
-                    if ((element = selection.getSelectedDrawing()[0]) && DOM.isDrawingNode(element)) {
+                    // TODO: this fails if a drawing style sheet changes the inline/floating mode instead of explicit attributes
+                    if ((element = selection.getSelectedDrawing()[0]) && DOM.isDrawingNode(element) && _.isObject(attributes.drawing)) {
 
                         localPosition = Position.getOxoPosition(editdiv, element, 0);
 
                         // when switching from inline to floated, saving current position in the drawing, so that it can
                         // be set correctly when switching back to inline.
                         // This is only necessary, if the drawing was moved in that way, that implMove needed to be called.
-                        if ((attributes.inline === false) && (DOM.isInlineDrawingNode(element))) {
+                        if ((attributes.drawing.inline === false) && (DOM.isInlineDrawingNode(element))) {
                             $(element).data('inlinePosition', localPosition[localPosition.length - 1]);
                         }
 
                         // when switching from floated to inline, a move of the drawing might be necessary
-                        if ((attributes.inline === true) && (DOM.isFloatingDrawingNode(element)) && ($(element).data('inlinePosition'))) {
+                        if ((attributes.drawing.inline === true) && (DOM.isFloatingDrawingNode(element)) && ($(element).data('inlinePosition'))) {
 
                             localDestPosition = _.clone(localPosition);
                             paragraphLength = Position.getParagraphLength(editdiv, localDestPosition);
@@ -1902,7 +1901,7 @@ define('io.ox/office/editor/editor',
                             }
                         }
 
-                        generateAttributeOperation(localPosition);
+                        generateSetAttributeOperation(localPosition);
 
                     }
                     break;
@@ -3422,7 +3421,7 @@ define('io.ox/office/editor/editor',
             // generate undo/redo operations
             if (generator) {
                 generator.generateOperation(Operations.PARA_SPLIT, { start: paraEndPosition });
-                generator.generateSetAttributesOperation(nextParagraph, nextParaPosition, undefined, { clear: ['paragraph', 'character'] });
+                generator.generateSetAttributesOperation(nextParagraph, 'paragraph', nextParaPosition, undefined, { clear: true });
                 undoManager.addUndo(generator.getOperations(), operation);
             }
 

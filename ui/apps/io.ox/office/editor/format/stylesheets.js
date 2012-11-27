@@ -28,14 +28,14 @@ define('io.ox/office/editor/format/stylesheets',
      * Returns an existing entry in the global attribute definition registry,
      * or creates and initializes a new entry.
      */
-    function getOrCreateRegistryEntry(family) {
+    function getOrCreateRegistryEntry(styleFamily) {
 
         // create a new entry if missing
-        if (!(family in REGISTRY)) {
-            REGISTRY[family] = { definitions: {}, parentFamilies: {}, supportedFamilies: [] };
+        if (!(styleFamily in REGISTRY)) {
+            REGISTRY[styleFamily] = { definitions: {}, parentFamilies: {}, supportedFamilies: [styleFamily] };
         }
 
-        return REGISTRY[family];
+        return REGISTRY[styleFamily];
     }
 
     /**
@@ -44,10 +44,22 @@ define('io.ox/office/editor/format/stylesheets',
      *
      * @returns {Object|Null}
      *  A reference to the static attribute definitions map, or null if the
-     *  passed attribute family is invalid.
+     *  passed style family is invalid.
      */
-    function getAttributeDefinitions(family) {
-        return (family in REGISTRY) ? REGISTRY[family].definitions : null;
+    function getAttributeDefinitions(styleFamily) {
+        return (styleFamily in REGISTRY) ? REGISTRY[styleFamily].definitions : null;
+    }
+
+    /**
+     * Returns the supported attribute families of the style sheet container
+     * class associated to the specified style family.
+     *
+     * @returns {String[]|Null}
+     *  A string array containing the supported attribute families, or null
+     *  if the passed style family is invalid.
+     */
+    function getSupportedFamilies(styleFamily) {
+        return (styleFamily in REGISTRY) ? REGISTRY[styleFamily].supportedFamilies : null;
     }
 
     /**
@@ -166,9 +178,6 @@ define('io.ox/office/editor/format/stylesheets',
             // the style attribute family of the derived class
             styleFamily = this.constructor.STYLE_FAMILY,
 
-            // all supported attribute families
-            supportedFamilies = REGISTRY[styleFamily].supportedFamilies,
-
             // style sheets, mapped by identifier
             styleSheets = {},
 
@@ -253,6 +262,8 @@ define('io.ox/office/editor/format/stylesheets',
                 $element = $(element),
                 // the matching parent element, its style family, the style sheet container, and the attributes
                 parentElement = null, parentFamily = null, parentStyleSheets = null, parentAttributes = null,
+                // array with all supported attribute families
+                supportedFamilies = getSupportedFamilies(styleFamily),
                 // the resulting merged attributes of the ancestor element
                 mergedAttributes = {};
 
@@ -324,6 +335,8 @@ define('io.ox/office/editor/format/stylesheets',
                 $element = $(element),
                 // passed source node, as jQuery object
                 $sourceNode = $(sourceNode),
+                // array with all supported attribute families
+                supportedFamilies = getSupportedFamilies(styleFamily),
                 // the resulting merged attributes of the style sheet and its ancestors
                 mergedAttributes = getBaseAttributes(element);
 
@@ -982,73 +995,46 @@ define('io.ox/office/editor/format/stylesheets',
     // static methods ---------------------------------------------------------
 
     /**
-     * Returns the names of all formatting attributes registered at the current
-     * style sheet container class.
-     *
-     * @attention
-     *  MUST be called at the correct derived style sheet container class to
-     *  get the expected result.
-     *
-     * @param {Object} [options]
-     *  A map of options controlling the operation. Supports the following
-     *  options:
-     *  @param {Boolean} [options.special=false]
-     *      If set to true, the names of special attributes (attributes that
-     *      are marked with the 'special' flag in the attribute definitions)
-     *      will be returned too.
-     *
-     * @returns {String[]}
-     *  The names of all registered attributes.
-     */
-    StyleSheets.getAttributeNames = function (family, options) {
-
-        var // the attribute definitions
-            definitions = getAttributeDefinitions(family),
-            // whether to include special attributes
-            special = Utils.getBooleanOption(options, 'special', false),
-            // all attribute names, as array
-            attributeNames = ['style'];
-
-        _(definitions).each(function (definition, name) {
-            if (special || (definition.special !== true)) {
-                attributeNames.push(name);
-            }
-        });
-
-        return attributeNames;
-    };
-
-    /**
      * Builds an attribute map containing all formatting attributes
      * registered for the specified attribute families, set to the null value.
      *
-     * @param {String|String[]} families
-     *  The attribute families to be included into the returned attribute map.
-     *
-     * @param {Object} [options]
-     *  A map of options controlling the operation. Supports the following
-     *  options:
-     *  @param {Boolean} [options.special=false]
-     *      If set to true, special attributes (attributes that are marked with
-     *      the 'special' flag in the attribute definitions) will be included.
+     * @param {String} styleFamily
+     *  The main style family of the attributes to be inserted into the
+     *  returned attribute map. The attributes of all attribute families
+     *  supported by style sheets of the passed style family will be included.
      *
      * @returns {Object}
-     *  An attribute map with null values for all attributes registered for the
-     *  specified attribute families.
+     *  An attribute set with null values for all attributes registered for the
+     *  supported attribute families.
      */
-    StyleSheets.buildNullAttributes = function (families, options) {
+    StyleSheets.buildNullAttributes = function (styleFamily) {
 
-        var // the resulting attribute map
+        var // the supported attribute families
+            supportedFamilies = getSupportedFamilies(styleFamily),
+            // the resulting attribute map
             attributes = {};
 
-        // process all specified attribute families
-        _.chain(families).getArray().each(function (family) {
-            // add null values for all registered attributes
-            attributes[family] = {};
-            _(StyleSheets.getAttributeNames(family, options)).each(function (name) {
-                attributes[family][name] = null;
+        if (_.isArray(supportedFamilies)) {
+
+            // add null value for style sheet identifier
+            attributes = Utils.makeSimpleObject(styleFamily, { style: null });
+
+            // process all supported attribute families
+            _(supportedFamilies).each(function (family) {
+
+                var // the attribute definitions of the current family
+                    definitions = getAttributeDefinitions(family),
+                    // attribute values of the current family
+                    attributeValues = attributes[family] = {};
+
+                // add null values for all registered attributes
+                _(definitions).each(function (definition, name) {
+                    if (!definition.special) {
+                        attributeValues[name] = null;
+                    }
+                });
             });
-        });
+        }
 
         return attributes;
     };
@@ -1070,8 +1056,8 @@ define('io.ox/office/editor/format/stylesheets',
      *  pairs), keyed by attribute family, whose attribute values will be
      *  inserted into the first attribute set.
      *
-     * @returns {StyleSheets}
-     *  A reference to this style sheets container.
+     * @returns {Object}
+     *  A reference to the first passed and extended attribute set.
      */
     StyleSheets.extendAttributes = function (attributes1, attributes2) {
 
@@ -1106,6 +1092,8 @@ define('io.ox/office/editor/format/stylesheets',
                 }
             });
         });
+
+        return attributes1;
     };
 
     /**
@@ -1230,7 +1218,6 @@ define('io.ox/office/editor/format/stylesheets',
         // insert information for the new style family
         registryEntry.definitions = definitions;
         registryEntry.parentFamilies = Utils.getObjectOption(options, 'parentFamilies', {});
-        registryEntry.supportedFamilies.push(styleFamily);
 
         // store references back to this style families in specified parent families
         _(registryEntry.parentFamilies).each(function (entry, parentFamily) {

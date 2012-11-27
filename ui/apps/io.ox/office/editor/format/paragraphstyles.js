@@ -21,7 +21,10 @@ define('io.ox/office/editor/format/paragraphstyles',
 
     'use strict';
 
-    var // definitions for paragraph attributes
+    var // border default
+        NO_BORDER = { style: 'none' },
+
+        // definitions for paragraph attributes
         DEFINITIONS = {
 
             alignment: {
@@ -90,35 +93,35 @@ define('io.ox/office/editor/format/paragraphstyles',
             },
 
             borderLeft: {
-                def: {},
+                def: NO_BORDER,
                 format: function (element, border) {
                     initBorder(border);
                 }
             },
 
             borderRight: {
-                def: {},
+                def: NO_BORDER,
                 format: function (element, border) {
                     initBorder(border);
                 }
             },
 
             borderTop: {
-                def: {},
+                def: NO_BORDER,
                 format: function (element, border) {
                     initBorder(border);
                 }
             },
 
             borderBottom: {
-                def: {},
+                def: NO_BORDER,
                 format: function (element, border) {
                     initBorder(border);
                 }
             },
 
             borderInside: {
-                def: {},
+                def: NO_BORDER,
                 format: function (element, border) {
                     initBorder(border);
                 }

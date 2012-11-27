@@ -185,6 +185,10 @@ define('io.ox/office/editor/operations',
          *  an operation. If this object is a jQuery collection, uses the first
          *  node it contains.
          *
+         * @param {String} family
+         *  The main attribute family of the style sheets referred by the
+         *  passed element node.
+         *
          * @param {Number[]} position
          *  The logical (start) position of the passed node.
          *
@@ -195,7 +199,7 @@ define('io.ox/office/editor/operations',
          * @param {Object} [options]
          *  A map with options controlling the operation generation process.
          *  Supports the following options:
-         *  @param {String|String[]} [options.clear]
+         *  @param {String} [options.clear]
          *      If specified, an additional 'setAttributes' operation will be
          *      generated before the 'setAttributes' operation for the passed
          *      node, that clears all attributes of the specified attribute
@@ -204,12 +208,10 @@ define('io.ox/office/editor/operations',
          * @returns {Operations.Generator}
          *  A reference to this instance.
          */
-        this.generateSetAttributesOperation = function (node, position, endPosition, options) {
+        this.generateSetAttributesOperation = function (node, family, position, endPosition, options) {
 
             var // explicit attributes of the passed node
                 elementAttributes = StyleSheets.getExplicitAttributes(node),
-                // families whose attributes will be all cleared
-                clearFamilies = Utils.getOption(options, 'clear'),
                 // the operation options
                 operationOptions = { start: position, attrs: {} };
 
@@ -218,19 +220,13 @@ define('io.ox/office/editor/operations',
                 operationOptions.end = endPosition;
             }
 
-            // insert null values for all attributes registered for the specified families
-            if (_.isString(clearFamilies) || _.isArray(clearFamilies)) {
-                operationOptions.attrs = StyleSheets.buildNullAttributes(clearFamilies);
+            // insert null values for all attributes registered for the specified style family
+            if (Utils.getOption(options, 'clear', false)) {
+                operationOptions.attrs = StyleSheets.buildNullAttributes(family);
             }
 
             // merge the explicit attributes of the passed element
-            _(elementAttributes).each(function (attributes, family) {
-                if (!(family in operationOptions.attrs)) {
-                    operationOptions.attrs[family] = {};
-                }
-                // plain _.extend() to overwrite the existing null values of all attributes
-                _(operationOptions.attrs[family]).extend(attributes);
-            });
+            StyleSheets.extendAttributes(operationOptions.attrs, elementAttributes);
 
             // no attributes, no operation
             if (!_.isEmpty(operationOptions.attrs)) {
@@ -387,7 +383,7 @@ define('io.ox/office/editor/operations',
             // operations would clone the attributes of the last text portion
             // instead of creating a clean text node as expected in this case.
             _(attributeRanges).each(function (range) {
-                this.generateSetAttributesOperation(range.node, range.start, range.end);
+                this.generateSetAttributesOperation(range.node, 'character', range.start, range.end);
             }, this);
 
             return this;
@@ -417,7 +413,7 @@ define('io.ox/office/editor/operations',
 
             // operations to create the paragraph element and formatting
             if (initialParagraph === true) {
-                this.generateSetAttributesOperation(paragraph, position, undefined, { attributes: StyleSheets.buildNullAttributes(['paragraph', 'character']) });
+                this.generateSetAttributesOperation(paragraph, 'paragraph', position, undefined, { clear: true });
             } else {
                 this.generateOperationWithAttributes(paragraph, Operations.PARA_INSERT, { start: position });
             }
