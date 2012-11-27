@@ -16,10 +16,8 @@ define('io.ox/office/editor/operations',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/position',
-     'io.ox/office/editor/format/stylesheets',
-     'io.ox/office/editor/format/characterstyles',
-     'io.ox/office/editor/format/paragraphstyles'
-    ], function (Utils, DOM, Position, StyleSheets, CharacterStyles, ParagraphStyles) {
+     'io.ox/office/editor/format/stylesheets'
+    ], function (Utils, DOM, Position, StyleSheets) {
 
     'use strict';
 
@@ -197,10 +195,11 @@ define('io.ox/office/editor/operations',
          * @param {Object} [options]
          *  A map with options controlling the operation generation process.
          *  Supports the following options:
-         *  @param {Object} [options.attributes]
+         *  @param {String|String[]} [options.clear]
          *      If specified, an additional 'setAttributes' operation will be
          *      generated before the 'setAttributes' operation for the passed
-         *      node.
+         *      node, that clears all attributes of the specified attribute
+         *      families.
          *
          * @returns {Operations.Generator}
          *  A reference to this instance.
@@ -208,26 +207,33 @@ define('io.ox/office/editor/operations',
         this.generateSetAttributesOperation = function (node, position, endPosition, options) {
 
             var // explicit attributes of the passed node
-                attributes = StyleSheets.getExplicitAttributes(node),
-                // initial attributes
-                initialAttributes = Utils.getObjectOption(options, 'attributes'),
+                elementAttributes = StyleSheets.getExplicitAttributes(node),
+                // families whose attributes will be all cleared
+                clearFamilies = Utils.getOption(options, 'clear'),
                 // the operation options
-                operationOptions = { start: position };
+                operationOptions = { start: position, attrs: {} };
 
             // add optional end position
             if (_.isArray(endPosition)) {
                 operationOptions.end = endPosition;
             }
 
-            // add all attributes that have to be cleared
-            if (_.isObject(initialAttributes) && !_.isEmpty(initialAttributes)) {
-                operationOptions.attrs = initialAttributes;
-                generateOperation(Operations.ATTRS_SET, operationOptions);
+            // insert null values for all attributes registered for the specified families
+            if (_.isString(clearFamilies) || _.isArray(clearFamilies)) {
+                operationOptions.attrs = StyleSheets.buildNullAttributes(clearFamilies);
             }
 
+            // merge the explicit attributes of the passed element
+            _(elementAttributes).each(function (attributes, family) {
+                if (!(family in operationOptions.attrs)) {
+                    operationOptions.attrs[family] = {};
+                }
+                // plain _.extend() to overwrite the existing null values of all attributes
+                _(operationOptions.attrs[family]).extend(attributes);
+            });
+
             // no attributes, no operation
-            if (!_.isEmpty(attributes)) {
-                operationOptions.attrs = attributes;
+            if (!_.isEmpty(operationOptions.attrs)) {
                 generateOperation(Operations.ATTRS_SET, operationOptions);
             }
 
@@ -303,7 +309,7 @@ define('io.ox/office/editor/operations',
 
             // clear all attributes of the first inserted text span
             if (Utils.getBooleanOption(options, 'clear', false)) {
-                clearAttributes = { character: CharacterStyles.buildNullAttributes() };
+                clearAttributes = StyleSheets.buildNullAttributes('character');
             }
 
             // process all content nodes in the paragraph and create operations
@@ -411,10 +417,7 @@ define('io.ox/office/editor/operations',
 
             // operations to create the paragraph element and formatting
             if (initialParagraph === true) {
-                this.generateSetAttributesOperation(paragraph, position, undefined, { attributes: {
-                    paragraph: ParagraphStyles.buildNullAttributes(),
-                    character: CharacterStyles.buildNullAttributes()
-                } });
+                this.generateSetAttributesOperation(paragraph, position, undefined, { attributes: StyleSheets.buildNullAttributes(['paragraph', 'character']) });
             } else {
                 this.generateOperationWithAttributes(paragraph, Operations.PARA_INSERT, { start: position });
             }

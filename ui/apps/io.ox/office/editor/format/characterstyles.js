@@ -113,6 +113,10 @@ define('io.ox/office/editor/format/characterstyles',
                 special: true
             }
 
+        },
+
+        PARENT_FAMILIES = {
+            paragraph: function (span) { return span.closest(DOM.PARAGRAPH_NODE_SELECTOR); }
         };
 
     // class CharacterStyles ==================================================
@@ -149,42 +153,37 @@ define('io.ox/office/editor/format/characterstyles',
          *  The text span whose character attributes have been changed, as
          *  jQuery object.
          *
-         * @param {Object} attributes
-         *  A map of all attributes (name/value pairs), containing the
-         *  effective attribute values merged from style sheets and explicit
-         *  attributes.
+         * @param {Object} mergedAttributes
+         *  A map of attribute maps (name/value pairs), keyed by attribute
+         *  family, containing the effective attribute values merged from style
+         *  sheets and explicit attributes.
          */
-        function updateCharacterFormatting(textSpan, attributes) {
+        function updateCharacterFormatting(textSpan, mergedAttributes) {
 
-            var // the parent paragraph of the node (may be a grandparent)
+            var // the character attributes of the passed attribute map
+                characterAttributes = mergedAttributes.character,
+                // the parent paragraph of the node (may be a grandparent)
                 paragraph = $(textSpan).closest(DOM.PARAGRAPH_NODE_SELECTOR),
                 // the current theme
                 theme = self.getDocumentStyles().getCurrentTheme(),
                 // the paragraph style container
                 paragraphStyles = self.getDocumentStyles().getStyleSheets('paragraph'),
                 // the merged attributes of the paragraph
-                paragraphAttributes = paragraphStyles.getElementAttributes(paragraph);
+                paragraphAttributes = paragraphStyles.getElementAttributes(paragraph).paragraph;
 
             // calculate text color (automatic color depends on fill colors)
-            Color.setElementTextColor(textSpan, theme, attributes, paragraphAttributes);
+            Color.setElementTextColor(textSpan, theme, characterAttributes, paragraphAttributes);
 
             // update calculated line height due to changed font settings
             LineHeight.updateElementLineHeight(textSpan, paragraphAttributes.lineHeight);
 
-            var listLabel = $(paragraph).children(DOM.LIST_LABEL_NODE_SELECTOR);
-            if (listLabel.length) {
-                listLabel.children('span').css('font-size', attributes.fontSize + 'pt');
-            }
+            // TODO: set bullet character formatting according to paragraph attributes
+            $(paragraph).find('> ' + DOM.LIST_LABEL_NODE_SELECTOR + ' > span').css('font-size', characterAttributes.fontSize + 'pt');
         }
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'character');
-
-        // initialization -----------------------------------------------------
-
-        this.registerUpdateHandler(updateCharacterFormatting);
-        this.registerParentStyleFamily('paragraph', function (span) { return span.closest(DOM.PARAGRAPH_NODE_SELECTOR); });
+        StyleSheets.call(this, documentStyles, { updateHandler: updateCharacterFormatting });
 
     } // class CharacterStyles
 
@@ -231,6 +230,6 @@ define('io.ox/office/editor/format/characterstyles',
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: CharacterStyles }, { DEFINITIONS: DEFINITIONS });
+    return StyleSheets.extend(CharacterStyles, 'character', DEFINITIONS, { parentFamilies: PARENT_FAMILIES });
 
 });

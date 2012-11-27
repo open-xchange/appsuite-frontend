@@ -105,7 +105,7 @@ define('io.ox/office/editor/hyperlink',
                 characterStyles = editor.getStyleSheets('character');
 
             if (obj && obj.node && DOM.isTextSpan(obj.node.parentNode)) {
-                var attributes = characterStyles.getElementAttributes(obj.node.parentNode);
+                var attributes = characterStyles.getElementAttributes(obj.node.parentNode).character;
                 if (attributes.url.length > 0) {
                     // Now we have to check some edge cases to prevent to show
                     // the popup for a paragraph which contains only an empty span
@@ -126,7 +126,7 @@ define('io.ox/office/editor/hyperlink',
 
                     obj = Position.getDOMPosition(editor.getNode(), nextPosition);
                     if (obj && obj.node && DOM.isTextSpan(obj.node.parentNode)) {
-                        var nextAttributes = characterStyles.getElementAttributes(obj.node.parentNode);
+                        var nextAttributes = characterStyles.getElementAttributes(obj.node.parentNode).character;
                         if (nextAttributes.url.length > 0) {
                             result.url = nextAttributes.url;
                             result.beforeHyperlink = true;
@@ -198,7 +198,7 @@ define('io.ox/office/editor/hyperlink',
             endPos,
             startNode = null,
             endNode = null,
-            styles = null,
+            attributes = null,
             obj = null,
             characterStyles = editor.getStyleSheets('character'),
             result = { start: null, end: null };
@@ -210,15 +210,15 @@ define('io.ox/office/editor/hyperlink',
             endNode = obj.node.parentNode;
 
             while (endNode && endNode.nextSibling && DOM.isTextSpan(endNode.nextSibling)) {
-                styles = characterStyles.getElementAttributes(endNode.nextSibling);
-                if (styles.url !== url)
+                attributes = characterStyles.getElementAttributes(endNode.nextSibling).character;
+                if (attributes.url !== url)
                     break;
                 endNode = endNode.nextSibling;
             }
 
             while (startNode && startNode.previousSibling && DOM.isTextSpan(startNode.previousSibling)) {
-                styles = characterStyles.getElementAttributes(startNode.previousSibling);
-                if (styles.url !== url)
+                attributes = characterStyles.getElementAttributes(startNode.previousSibling).character;
+                if (attributes.url !== url)
                     break;
                 startNode = startNode.previousSibling;
             }

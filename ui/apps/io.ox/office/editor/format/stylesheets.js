@@ -19,7 +19,65 @@ define('io.ox/office/editor/format/stylesheets',
 
     'use strict';
 
+    var // global attribute definitions registry (maps by attribute family)
+        REGISTRY = {};
+
     // private static functions ===============================================
+
+    /**
+     * Returns an existing entry in the global attribute definition registry,
+     * or creates and initializes a new entry.
+     */
+    function getOrCreateRegistryEntry(family) {
+
+        // create a new entry if missing
+        if (!(family in REGISTRY)) {
+            REGISTRY[family] = { definitions: {}, parentFamilies: {}, childFamilies: [] };
+        }
+
+        return REGISTRY[family];
+    }
+
+    /**
+     * Returns the static definitions map of all attributes registered for the
+     * specified style family.
+     *
+     * @returns {Object}
+     *  A reference to the static attribute definitions map.
+     */
+    function getAttributeDefinitions(family) {
+        return (family in REGISTRY) ? REGISTRY[family].definitions : {};
+    }
+
+    /**
+     * Returns whether the passed string is the name of a attribute that is
+     * registered in the passed attribute definition map.
+     *
+     * @param {Object} definitions
+     *  The attribute definitions map.
+     *
+     * @param {String} name
+     *  The attribute name to be checked.
+     *
+     * @param {Object} [options]
+     *  A map of options controlling the operation. Supports the following
+     *  options:
+     *  @param {Boolean} [options.special=false]
+     *      If set to true, returns true for special attributes (attributes
+     *      that are marked with the 'special' flag in the attribute
+     *      definitions). Otherwise, special attributes will not be recognized
+     *      by this function.
+     *
+     * @returns {Boolean}
+     *  Whether the attribute is registered in the attribute definitions map.
+     */
+    function isRegisteredAttribute(definitions, name, options) {
+
+        var // whether to include special attributes
+            special = Utils.getBooleanOption(options, 'special', false);
+
+        return (name in definitions) && (special || (definitions[name].special !== true));
+    }
 
     /**
      * Returns the attribute map stored in the passed DOM element.
@@ -59,79 +117,12 @@ define('io.ox/office/editor/format/stylesheets',
         return _.isObject(attributes) ? ((clone === true) ? _.copy(attributes, true) : attributes) : {};
     }
 
-    /**
-     * Stores the passed attribute map in the specified DOM element.
-     *
-     * @param {jQuery} element
-     *  The DOM element, as jQuery object.
-     *
-     * @param {Object} attributes
-     *  The attribute map to be stored in the element.
-     *
-     * @param {Object} [options]
-     * A map with additional options controlling the behavior of this method.
-     * the following options are supported:
-     *  @param {String} [options.family]
-     *      If specified, inserts the attributes of the specified attribute
-     *      family into the existing object.
-     */
-    function setElementAttributes(element, attributes, options) {
-
-        var // the original and complete attribute map
-            oldAttributes = element.data('attributes'),
-            // the attribute family to be inserted into the complete map
-            family = Utils.getStringOption(options, 'family');
-
-        // reduce to selected family
-        if (_.isString(family)) {
-            if (_.isObject(oldAttributes)) {
-                oldAttributes[family] = attributes;
-            } else {
-                element.data('attributes', Utils.makeSimpleObject(family, attributes));
-            }
-        } else {
-            element.data('attributes', attributes);
-        }
-    }
-
     // class StyleSheets ======================================================
 
     /**
      * Container for hierarchical style sheets of a specific attribute family.
      * Implements indirect element formatting via style sheets and direct
      * element formatting via explicit attribute maps.
-     *
-     * When deriving from this class, an attribute definitions map must be
-     * specified as static class field 'DEFINITIONS'. The map must contain
-     * attribute definition objects for all attributes supported by the
-     * specified style family, mapped by the names of the attributes. Each
-     * definition object contains the following entries:
-     *  - 'def': Specifies the default value of the attribute which will be
-     *      used if neither the style sheet of an element nor its explicit
-     *      attributes collection specify a value for the attribute.
-     *  - 'format': An optional function that applies the passed attribute
-     *      value to a DOM element (usually its CSS formatting). Will be called
-     *      in the context of the style sheet container instance. The function
-     *      receives the DOM element as jQuery object in the first parameter,
-     *      and the attribute value in the second parameter. An alternative way
-     *      to update the element formatting using a complete map of all
-     *      attribute values is to specify a global update handler (see options
-     *      below).
-     *  - 'merge': An optional function that will be called while resolving
-     *      attribute maps from different style sheets and explicit element
-     *      formatting. Will be called to merge two existing values of this
-     *      attributes, where the second value has to overwrite the first value
-     *      in some way. Will be called in the context of the style sheet
-     *      container instance. The function receives the 'old' attribute value
-     *      in the first parameter, and the 'new' attribute value in the second
-     *      parameter. By default, the new value wins and the first value will
-     *      be overwritten completely.
-     *  - 'preview': An optional function that initializes an options map that
-     *      will be used to create a list item in a GUI style sheet chooser
-     *      control. Will be called in the context of the style sheet container
-     *      instance. The function receives the options map to be extended in
-     *      the first parameter, and the attribute value in the second
-     *      parameter.
      *
      * @constructor
      *
@@ -141,15 +132,21 @@ define('io.ox/office/editor/format/stylesheets',
      *  Global collection with all style and formatting containers used in a
      *  document.
      *
-     * @param {String} styleFamily
-     *  The main attribute family represented by the style sheets in this
-     *  container. The style sheets MUST support all attributes of this family.
-     *  Additionally, the style sheets MAY support the attributes of other
-     *  attribute families.
-     *
      * @param {Object} [options]
      *  A map of options to control the behavior of the style sheet container.
      *  The following options are supported:
+     *  @param {Function} [options.updateHandler]
+     *      An update handler that will be called for every DOM element whose
+     *      attributes have been changed. In difference to the individual
+     *      formatter functions specified in the definitions for single
+     *      attributes, this handler will be called once for a DOM element
+     *      regardless of the number of changed attributes. Receives the
+     *      element whose attributes have been changed (as jQuery object) as
+     *      first parameter, and a map of all attributes (name/value pairs,
+     *      effective values merged from style sheets and explicit attributes)
+     *      of the element as second parameter. Only attributes of the main
+     *      style family will be passed. Will be called in the context of this
+     *      style sheet container instance.
      *  @param {Function} [options.styleAttributesResolver]
      *      If specified, a function that returns the attributes of a specific
      *      attribute family from the complete 'attributes' object of a style
@@ -161,31 +158,28 @@ define('io.ox/office/editor/format/stylesheets',
      *      as third parameter. Will be called in the context of this style
      *      sheet container instance.
      */
-    function StyleSheets(documentStyles, styleFamily, options) {
+    function StyleSheets(documentStyles, options) {
 
         var // self reference
             self = this,
 
-            // the derived class name for static functions dependent on the derived class
-            ThisClass = this.constructor,
+            // the style attribute family of the derived class
+            styleFamily = this.constructor.STYLE_FAMILY,
 
-            // attribute definitions map specified by the derived class
-            definitions = ThisClass.getAttributeDefinitions(),
+            // all supported attribute families
+            supportedFamilies = [styleFamily].concat(REGISTRY[styleFamily].childFamilies),
 
             // style sheets, mapped by identifier
             styleSheets = {},
 
             // default values for all supported attributes of the own style family
-            defaultAttributes = {},
+            defaultAttributeValues = {},
 
             // identifier of the default style sheet
             defaultStyleId = null,
 
-            // update handlers, called after attributes have been changed
-            updateHandlers = [],
-
-            // families of parent style sheets, mapping the parent element resolver functions
-            parentStyleFamilies = {},
+            // update handler, called after attributes have been changed
+            updateHandler = Utils.getFunctionOption(options, 'updateHandler'),
 
             // custom resolver for style attributes depending on a context element
             styleAttributesResolver = Utils.getFunctionOption(options, 'styleAttributesResolver');
@@ -197,24 +191,27 @@ define('io.ox/office/editor/format/stylesheets',
          * overrides the values of all attributes specified in the passed
          * attribute map.
          *
-         * @param {Object} [attributes]
+         * @param {Object} [attributeValues]
          *  The default values for some or all attributes of the main style
          *  family, as name/value pairs. Attributes not specified in this map
-         *  will use the default values from the attribute definitions.
+         *  will use the base default values from the attribute definitions.
          */
-        function initializeAttributeDefaults(attributes) {
+        function initializeAttributeDefaultValues(attributeValues) {
+
+            var // the own attribute definitions
+                definitions = getAttributeDefinitions(styleFamily);
 
             // get default attribute values from definitions
-            defaultAttributes = {};
+            defaultAttributeValues = {};
             _(definitions).each(function (definition, name) {
-                defaultAttributes[name] = definition.def;
+                defaultAttributeValues[name] = definition.def;
             });
 
             // override with passed values
-            if (_.isObject(attributes)) {
-                _(attributes).each(function (value, name) {
-                    if ((name in defaultAttributes) && !_.isNull(value) && !_.isUndefined(value)) {
-                        defaultAttributes[name] = value;
+            if (_.isObject(attributeValues)) {
+                _(attributeValues).each(function (value, name) {
+                    if ((name in defaultAttributeValues) && !_.isNull(value) && !_.isUndefined(value)) {
+                        defaultAttributeValues[name] = value;
                     }
                 });
             }
@@ -232,16 +229,82 @@ define('io.ox/office/editor/format/stylesheets',
             return false;
         }
 
+        function extendAttributes(attributes1, attributes2) {
+
+            // only add attributes of supported families
+            _(supportedFamilies).each(function (family) {
+
+                // add attributes existing in attributes2 to attributes1
+                if (_.isObject(attributes2[family])) {
+                    attributes1[family] = attributes1[family] || {};
+                    documentStyles.getStyleSheets(family).extendAttributeValues(attributes1[family], attributes2[family]);
+                }
+            });
+        }
+
         /**
-         * Returns the merged attributes of a specific attribute family from
-         * the specified style sheet, its parent style sheets, and all style
-         * sheets from other containers referred by ancestor elements.
+         * Returns the complete attributes of an ancestor of the passed
+         * element, if a parent style family has been registered and its
+         * element resolver function returns a valid ancestor element, and
+         * extends missing attributes by their current default values.
          *
-         * @param {String} id
+         * @param {HTMLElement|jQuery} [element]
+         *  An element whose ancestor will be searched and queried for its
+         *  attributes. If this object is a jQuery collection, uses the first
+         *  DOM node it contains. If missing, returns just the current default
+         *  values of all supported attribute families.
+         *
+         * @returns {Object}
+         *  The formatting attributes of an ancestor of the passed element, as
+         *  map of attribute value maps (name/value pairs), keyed by attribute
+         *  family. If no ancestor element has been found, returns the current
+         *  default values for all supported attribute families.
+         */
+        function getBaseAttributes(element) {
+
+            var // passed element, as jQuery object
+                $element = $(element),
+                // the matching parent element, its style family, the style sheet container, and the attributes
+                parentElement = null, parentFamily = null, parentStyleSheets = null, parentAttributes = null,
+                // the resulting merged attributes of the ancestor element
+                mergedAttributes = {};
+
+            // collect attributes from ancestor element if specified (only one parent style family must match at a time)
+            if ($element.length > 0) {
+
+                // find a matching ancestor element and its style family (only one parent must match at a time)
+                _(REGISTRY[styleFamily].parentFamilies).each(function (elementResolver, family) {
+                    if ($(parentElement).length === 0) {
+                        parentElement = elementResolver.call(self, $element);
+                        parentFamily = family;
+                    }
+                });
+
+                // add the element attributes of the ancestor element (only the supported attribute families)
+                if ($(parentElement).length > 0) {
+                    parentStyleSheets = documentStyles.getStyleSheets(parentFamily);
+                    parentAttributes = parentStyleSheets.getElementAttributes(parentElement, { sourceNode: $element });
+                    extendAttributes(mergedAttributes, parentAttributes);
+                }
+            }
+
+            // add missing default attribute values of supported families not found in the parent element
+            _(supportedFamilies).each(function (family) {
+                if (!(family in mergedAttributes)) {
+                    mergedAttributes[family] = documentStyles.getStyleSheets(family).getDefaultAttributeValues();
+                }
+            });
+
+            return mergedAttributes;
+        }
+
+        /**
+         * Returns the merged attributes from the specified style sheet, its
+         * parent style sheets, and all style sheets from other containers
+         * referred by ancestor elements.
+         *
+         * @param {String} styleId
          *  The unique identifier of the style sheet.
-         *
-         * @param {String} family
-         *  The attribute family whose attributes will be returned.
          *
          * @param {HTMLElement|jQuery} [element]
          *  An element referring to a style sheet in this container whose
@@ -249,29 +312,26 @@ define('io.ox/office/editor/format/stylesheets',
          *  collection, uses the first DOM node it contains.
          *
          * @param {HTMLElement|jQuery} [sourceNode]
-         *  The source DOM node corresponding to the specified attribute family
-         *  that has initiated the call to this method. Will be used to receive
-         *  attributes from style sheets in other containers, referred by the
-         *  ancestors of this node. Will be passed to a custom style attributes
-         *  resolver (see the 'options.styleAttributesResolver' option passed
-         *  to the constructor).
+         *  The source DOM node corresponding to a child attribute family that
+         *  has initiated the call to this method. Will be passed to a custom
+         *  style attributes resolver (see the 'options.styleAttributesResolver'
+         *  option passed to the constructor).
          *
          * @returns {Object}
          *  The formatting attributes contained in the style sheet and its
          *  ancestor style sheets, including the style sheets from other
          *  containers referred by ancestor elements, up to the map of default
-         *  attributes, as map of name/value pairs.
+         *  attributes, as map of attribute value maps (name/value pairs),
+         *  keyed by attribute family.
          */
-        function getStyleSheetAttributes(id, family, element, sourceNode) {
+        function getStyleSheetAttributes(styleId, element, sourceNode) {
 
-            var // the attributes of the style sheet and its ancestors
-                attributes = null,
-                // the style sheet container associated to the passed family
-                familyStyleSheets = documentStyles.getStyleSheets(family),
-                // passed element, as jQuery object
+            var // passed element, as jQuery object
                 $element = $(element),
                 // passed source node, as jQuery object
-                $sourceNode = $(sourceNode);
+                $sourceNode = $(sourceNode),
+                // the resulting merged attributes of the style sheet and its ancestors
+                mergedAttributes = getBaseAttributes(element);
 
             // collects style sheet attributes recursively through parents
             function collectStyleAttributes(styleSheet) {
@@ -282,53 +342,27 @@ define('io.ox/office/editor/format/stylesheets',
                 // call recursively to get the attributes of the parent style sheets
                 collectStyleAttributes(styleSheets[styleSheet.parentId]);
 
-                // add own attributes of the specified attribute family
-                if (_.isObject(styleSheet.attributes[family])) {
-                    // attributes directly mapped by family name in 'attributes' member of the style sheet
-                    familyStyleSheets.extendAttributes(attributes, styleSheet.attributes[family]);
-                }
+                // add all attributes of the current style sheet, mapped directly by attribute family
+                extendAttributes(mergedAttributes, styleSheet.attributes);
 
                 // try user-defined resolver for style attributes mapped in non-standard structures
                 if (_.isFunction(styleAttributesResolver) && ($element.length > 0)) {
-                    familyStyleSheets.extendAttributes(attributes, styleAttributesResolver.call(self, family, styleSheet.attributes, $element, $sourceNode));
+                    extendAttributes(mergedAttributes, styleAttributesResolver.call(self, styleSheet.attributes, $element, $sourceNode));
                 }
             }
 
-            // start with default attribute values (only if in own style family)
-            attributes = (family === styleFamily) ? _.clone(defaultAttributes) : {};
-
-            // collect styles from ancestor elements if specified
-            if ($element.length > 0) {
-                _(parentStyleFamilies).each(function (elementResolver, parentFamily) {
-
-                    var // a parent element of the passed element
-                        $parentElement = $(elementResolver.call(self, $element)),
-                        // parent style sheet container from the document styles collection
-                        parentStyleSheets = documentStyles.getStyleSheets(parentFamily),
-                        // attributes of parent element, resolved by parent style container
-                        parentAttributes = null;
-
-                    // try to get a parent element for the current parent style family
-                    if ($parentElement.length > 0) {
-                        // ask the container of the parent style family for style attributes of the passed family
-                        parentAttributes = parentStyleSheets.extractStyleAttributes($parentElement, family, $element);
-                        familyStyleSheets.extendAttributes(attributes, parentAttributes);
-                    }
-                });
-            }
-
             // fall-back to default style sheet if passed identifier is invalid
-            if (!(id in styleSheets) && (defaultStyleId in styleSheets)) {
-                id = defaultStyleId;
+            if (!(styleId in styleSheets) && (defaultStyleId in styleSheets)) {
+                styleId = defaultStyleId;
             }
 
             // collect attributes from the style sheet and its parents
-            collectStyleAttributes(styleSheets[id]);
+            collectStyleAttributes(styleSheets[styleId]);
 
-            // add style sheet identifier to attributes
-            attributes.style = id;
+            // add style sheet identifier to the attributes
+            mergedAttributes[styleFamily].style = styleId;
 
-            return attributes;
+            return mergedAttributes;
         }
 
         /**
@@ -338,40 +372,29 @@ define('io.ox/office/editor/format/stylesheets',
          *  The element whose formatting will be updated, as jQuery object.
          *
          * @param {Object} mergedAttributes
-         *  A map with all attribute values merged from style sheet and
-         *  explicit attributes, as name/value pairs.
-         *
-         * @param {String[]} [updateAttributeNames]
-         *  If specified, restricts the set of attributes updated at the passed
-         *  element. If omitted, updates all attributes passed in the parameter
-         *  mergedAttributes.
+         *  A map of attribute value maps (name/value pairs) with all attribute
+         *  values merged from style sheet and explicit attributes, keyed by
+         *  attribute family.
          */
-        function updateElementFormatting(element, mergedAttributes, updateAttributeNames) {
+        function updateElementFormatting(element, mergedAttributes) {
 
-            // updates a single attribute, if it has a registered formatter in its definition
-            function updateSingleAttribute(name, value) {
-                if ((name in definitions) && _.isFunction(definitions[name].format)) {
-                    definitions[name].format.call(self, element, value);
-                }
-            }
+            // call single format handlers for all attributes
+            _(mergedAttributes).each(function (attributeValues, family) {
 
-            // update attributes via formatter functions from definitions
-            if (_.isArray(updateAttributeNames)) {
-                _(updateAttributeNames).each(function (name) {
-                    if (name in mergedAttributes) {
-                        updateSingleAttribute(name, mergedAttributes[name]);
+                var // definitions of own attributes
+                    definitions = getAttributeDefinitions(family);
+
+                _(attributeValues).each(function (value, name) {
+                    if ((name in definitions) && _.isFunction(definitions[name].format)) {
+                        definitions[name].format.call(self, element, value);
                     }
                 });
-            } else {
-                _(mergedAttributes).each(function (value, name) {
-                    updateSingleAttribute(name, value);
-                });
-            }
+            });
 
             // call update handlers taking all attributes at once
-            _(updateHandlers).each(function (updateHandler) {
+            if (_.isFunction(updateHandler)) {
                 updateHandler.call(self, element, mergedAttributes);
-            });
+            }
         }
 
         // base constructor ---------------------------------------------------
@@ -379,93 +402,6 @@ define('io.ox/office/editor/format/stylesheets',
         Container.call(this, documentStyles);
 
         // methods ------------------------------------------------------------
-
-        /**
-         * Registers an update handler that will be called for every DOM
-         * element whose attributes have been changed. In difference to the
-         * individual formatter functions specified in the definitions for
-         * single attributes, this handler will be called once for a DOM
-         * element regardless of the number of changed attributes.
-         *
-         * @internal
-         *  Called from the constructor functions of derived classes.
-         *
-         * @param {Function} updateHandler
-         *  The update handler function. Receives the element whose attributes
-         *  have been changed (as jQuery object) as first parameter, and a map
-         *  of all attributes (name/value pairs, effective values merged from
-         *  style sheets and explicit attributes) of the element as second
-         *  parameter. Only attributes of the main style family will be passed.
-         *  Will be called in the context of this style sheet container
-         *  instance.
-         *
-         * @returns {StyleSheets}
-         *  A reference to this instance.
-         */
-        this.registerUpdateHandler = function (updateHandler) {
-            updateHandlers.push(updateHandler);
-            return this;
-        };
-
-        /**
-         * Registers a parent style family whose associated style sheets can
-         * contain attributes of the family supported by this style sheet
-         * container. The DOM elements referring to the style sheets of the
-         * specified style family must be ancestors of the DOM elements
-         * referring to the style sheets of this container.
-         *
-         * @internal
-         *  Called from the constructor functions of derived classes.
-         *
-         * @param {String} parentFamily
-         *  The attribute family of the style sheets assigned to parent
-         *  elements (or other ancestors). Used to resolve attributes from the
-         *  style sheet or explicit formatting of an ancestor of the current
-         *  element.
-         *
-         * @param {Function} parentElementResolver
-         *  A function that returns the ancestor element of a DOM element which
-         *  is associated to the passed parent style family. Receives the
-         *  descendant DOM element as jQuery object in the first parameter.
-         *  Will be called in the context of this style sheet container.
-         *
-         * @returns {StyleSheets}
-         *  A reference to this instance.
-         */
-        this.registerParentStyleFamily = function (parentFamily, parentElementResolver) {
-            parentStyleFamilies[parentFamily] = parentElementResolver;
-            return this;
-        };
-
-        /**
-         * Returns the static definitions map of all attributes registered at
-         * this style sheet container class.
-         *
-         * @return {Object}
-         *  A reference to the static attribute definition map.
-         */
-        this.getAttributeDefinitions = function () {
-            return definitions;
-        };
-
-        /**
-         * Returns the names of all formatting attributes registered at this
-         * style sheet container class.
-         *
-         * @param {Object} [options]
-         *  A map of options controlling the operation. Supports the following
-         *  options:
-         *  @param {Boolean} [options.special=false]
-         *      If set to true, the names of special attributes (attributes that
-         *      are marked with the 'special' flag in the attribute definitions)
-         *      will be returned too.
-         *
-         * @return {String[]}
-         *  The names of all registered attributes.
-         */
-        this.getAttributeNames = function (options) {
-            return ThisClass.getAttributeNames(options);
-        };
 
         /**
          * Returns the names of all style sheets in a map, keyed by their
@@ -487,11 +423,23 @@ define('io.ox/office/editor/format/stylesheets',
         /**
          * Returns the identifier of the default style sheet.
          *
-         * @return {String|Null}
+         * @returns {String|Null}
          *  The identifier of the default style sheet.
          */
         this.getDefaultStyleSheetId = function () {
             return defaultStyleId;
+        };
+
+        /**
+         * Returns the default attribute values of the own style family, as map
+         * of name/value pairs.
+         *
+         * @returns {Object}
+         *  A deep clone of the default attribute values registered at this
+         *  style sheet container.
+         */
+        this.getDefaultAttributeValues = function () {
+            return _.copy(defaultAttributeValues, true);
         };
 
         /**
@@ -508,10 +456,10 @@ define('io.ox/office/editor/format/stylesheets',
          * @returns {StyleSheets}
          *  A reference to this instance.
          */
-        this.setAttributeDefaults = function (attributes) {
+        this.setAttributeDefaultValues = function (defaultValues) {
 
             // reinitialize the default attribute values
-            initializeAttributeDefaults(attributes);
+            initializeAttributeDefaultValues(defaultValues);
 
             // notify listeners
             this.triggerChangeEvent();
@@ -523,7 +471,7 @@ define('io.ox/office/editor/format/stylesheets',
          * Adds a new style sheet to this container. An existing style sheet
          * with the specified identifier will be replaced.
          *
-         * @param {String} id
+         * @param {String} styleId
          *  The unique identifier of of the new style sheet.
          *
          * @param {String} name
@@ -561,10 +509,10 @@ define('io.ox/office/editor/format/stylesheets',
          * @returns {StyleSheets}
          *  A reference to this instance.
          */
-        this.addStyleSheet = function (id, name, parentId, attributes, options) {
+        this.addStyleSheet = function (styleId, name, parentId, attributes, options) {
 
             var // get or create a style sheet object
-                styleSheet = _.isString(id) ? (styleSheets[id] || (styleSheets[id] = {})) : null;
+                styleSheet = _.isString(styleId) ? (styleSheets[styleId] || (styleSheets[styleId] = {})) : null;
 
             if (!styleSheet) {
                 Utils.warn('StyleSheets.addStyleSheet(): missing style sheet identifier');
@@ -572,7 +520,7 @@ define('io.ox/office/editor/format/stylesheets',
             }
 
             // set user-defined name of the style sheet
-            styleSheet.name = name || id;
+            styleSheet.name = name || styleId;
 
             // set parent of the style sheet, check for cyclic references
             styleSheet.parentId = parentId;
@@ -589,8 +537,8 @@ define('io.ox/office/editor/format/stylesheets',
             // set default style sheet
             if (Utils.getBooleanOption(options, 'defStyle', false)) {
                 if (_.isNull(defaultStyleId)) {
-                    defaultStyleId = id;
-                } else if (defaultStyleId !== id) {
+                    defaultStyleId = styleId;
+                } else if (defaultStyleId !== styleId) {
                     Utils.warn('StyleSheets.addStyleSheet(): multiple default style sheets');
                 }
             }
@@ -607,18 +555,18 @@ define('io.ox/office/editor/format/stylesheets',
         /**
          * Removes an existing style sheet from this container.
          *
-         * @param {String} id
+         * @param {String} styleId
          *  The unique identifier of of the style sheet to be removed.
          *
          * @returns {StyleSheets}
          *  A reference to this instance.
          */
-        this.removeStyleSheet = function (id) {
+        this.removeStyleSheet = function (styleId) {
 
             var // the style sheet to be removed
-                styleSheet = styleSheets[id];
+                styleSheet = styleSheets[styleId];
 
-            if (id === defaultStyleId) {
+            if (styleId === defaultStyleId) {
                 Utils.warn('StyleSheets.removeStyleSheet(): cannot remove default style sheet');
                 styleSheet = null;
             }
@@ -626,13 +574,13 @@ define('io.ox/office/editor/format/stylesheets',
             if (styleSheet) {
                 // update parent of all style sheets referring to the removed style sheet
                 _(styleSheets).each(function (childSheet) {
-                    if (id === childSheet.parentId) {
+                    if (styleId === childSheet.parentId) {
                         childSheet.parentId = styleSheet.parentId;
                     }
                 });
 
                 // remove style sheet from map
-                delete styleSheets[id];
+                delete styleSheets[styleId];
 
                 // notify listeners
                 this.triggerChangeEvent();
@@ -644,7 +592,7 @@ define('io.ox/office/editor/format/stylesheets',
          * Returns the merged attributes of the own style family from the
          * specified style sheet and its parent style sheets.
          *
-         * @param {String} id
+         * @param {String} styleId
          *  The unique identifier of the style sheet.
          *
          * @returns {Object}
@@ -652,69 +600,74 @@ define('io.ox/office/editor/format/stylesheets',
          *  parent style sheets in this container up to the map of default
          *  attributes, as map of name/value pairs.
          */
-        this.getStyleSheetAttributes = function (id) {
-            return getStyleSheetAttributes(id, styleFamily);
+        this.getStyleSheetAttributes = function (styleId) {
+            return getStyleSheetAttributes(styleId);
         };
 
         /**
          * Returns the UI priority for the specified style sheet.
          *
-         * @param {String} id
+         * @param {String} styleId
          *  The unique identifier of the style sheet.
          *
          * @returns {Number}
          *  The UI priority.
          */
-        this.getUIPriority = function (id) {
-            return (id in styleSheets) ? styleSheets[id].priority : 0;
+        this.getUIPriority = function (styleId) {
+            return (styleId in styleSheets) ? styleSheets[styleId].priority : 0;
         };
 
         /**
-         * Returns the parent id for the specified style sheet.
-         * @param {String} id
+         * Returns the identifier of the parent style sheet for the specified
+         * style sheet.
+         *
+         * @param {String} styleId
+         *  The unique identifier of the style sheet.
          *
          * @returns {String}
          *  The parent id of the style sheet or null if no parent exists.
          */
-        this.getParentId = function (id) {
-            return (id in styleSheets) ? styleSheets[id].parentId : null;
+        this.getParentId = function (styleId) {
+            return (styleId in styleSheets) ? styleSheets[styleId].parentId : null;
         };
 
         /**
          * Returns the user defined name for the specified style sheet.
          *
-         * @param {String} id
+         * @param {String} styleId
          *  The unique identifier of the style sheet.
          *
          * @returns
          *  The user defined name of the style sheet or null
          */
-        this.getName = function (id) {
-            return (id in styleSheets) ? styleSheets[id].name : null;
+        this.getName = function (styleId) {
+            return (styleId in styleSheets) ? styleSheets[styleId].name : null;
         };
 
         /**
-         * Return if the specified style sheet is dirty or not.
+         * Return whether the specified style sheet is dirty.
          *
-         * @param {String} id
+         * @param {String} styleId
          *  The unique identifier of the style sheet.
          *
          * @returns {Boolean}
          *  The dirty state of the style sheet.
          */
-        this.isDirty = function (id) {
-            return (id in styleSheets) ? styleSheets[id].dirty : false;
+        this.isDirty = function (styleId) {
+            return (styleId in styleSheets) ? styleSheets[styleId].dirty : false;
         };
 
         /**
-         * Change dirty state of the specified style sheet
+         * Changes the dirty state of the specified style sheet.
          *
-         * @param {String} id
+         * @param {String} styleId
+         *  The unique identifier of the style sheet.
+         *
          * @param {Boolean} dirty
          */
-        this.setDirty = function (id, dirty) {
-            if (id in styleSheets) {
-                styleSheets[id].dirty = dirty;
+        this.setDirty = function (styleId, dirty) {
+            if (styleId in styleSheets) {
+                styleSheets[styleId].dirty = dirty;
             }
         };
 
@@ -723,15 +676,15 @@ define('io.ox/office/editor/format/stylesheets',
          * sheet as-is, without resolving the parent style sheets, or
          * converting to the attributes of a specific attribute family.
          *
-         * @param {String} id
+         * @param {String} styleId
          *  The unique identifier of the style sheet.
          *
          * @returns {Object}
          *  The complete 'attributes' object contained in the style sheet, as a
          *  deep clone.
          */
-        this.getStyleSheetAttributeMap = function (id) {
-            return (id in styleSheets) ? _.copy(styleSheets[id].attributes, true) : {};
+        this.getStyleSheetAttributeMap = function (styleId) {
+            return (styleId in styleSheets) ? _.copy(styleSheets[styleId].attributes, true) : {};
         };
 
         /**
@@ -752,7 +705,10 @@ define('io.ox/office/editor/format/stylesheets',
          * @returns {StyleSheets}
          *  A reference to this style sheets container.
          */
-        this.extendAttributes = function (attributes1, attributes2) {
+        this.extendAttributeValues = function (attributes1, attributes2) {
+
+            var // definitions of own attributes
+                definitions = getAttributeDefinitions(styleFamily);
 
             _(attributes2).each(function (value, name) {
 
@@ -762,7 +718,7 @@ define('io.ox/office/editor/format/stylesheets',
                 // copy style sheet identifier directly
                 if (name === 'style') {
                     attributes1.style = value;
-                } else if (ThisClass.isRegisteredAttribute(name)) {
+                } else if (isRegisteredAttribute(definitions, name)) {
                     // try to find merger function from attribute definition
                     merger = definitions[name].merge;
                     // either set return value from merger, or copy the attribute directly
@@ -783,41 +739,30 @@ define('io.ox/office/editor/format/stylesheets',
          * style chooser control. Uses the 'preview' entry of all attribute
          * definitions to build the options map.
          *
-         * @param {String} id
+         * @param {String} styleId
          *  The unique identifier of of the style sheet whose preview will be
          *  created.
-         *
-         * @param {String|String[]} [families]
-         *  The attribute families used to add options to the options map. If
-         *  omitted, only attributes of the own style family will be processed.
          *
          * @returns {Object}
          *  A map of options passed to the creator function of the preview
          *  button element.
          */
-        this.getPreviewButtonOptions = function (id, families) {
+        this.getPreviewButtonOptions = function (styleId) {
 
             var // the result options
-                options = { css: {}, labelCss: {} };
+                options = { css: {}, labelCss: {} },
+                // formatting attributes of the own style sheet
+                styleAttributes = getStyleSheetAttributes(styleId);
 
-            // get families to be visited
-            if (_.isString(families)) {
-                families = [families];
-            } else if (!_.isArray(families)) {
-                families = [styleFamily];
-            }
-
-            // iterate through all families and add options for all the
-            // attributes contained in the *own* style sheet
-            _(families).each(function (family) {
+            // iterate through all supported attribute families and add options
+            // for all the attributes contained in the *own* style sheet
+            _(styleAttributes).each(function (attributeValues, family) {
 
                 var // style sheet container for current family
-                    definitions = documentStyles.getStyleSheets(family).getAttributeDefinitions(),
-                    // formatting attributes of the own style sheet
-                    styleAttributes = getStyleSheetAttributes(id, family);
+                    definitions = getAttributeDefinitions(family);
 
                 // generate options for the attributes
-                _(styleAttributes).each(function (value, name) {
+                _(attributeValues).each(function (value, name) {
 
                     var // attribute definition from container corresponding to the current family
                         definition = definitions[name];
@@ -834,47 +779,7 @@ define('io.ox/office/editor/format/stylesheets',
         };
 
         /**
-         * Returns the formatting attributes of a specific attribute family
-         * from the style sheet referred by the passed element.
-         *
-         * @internal
-         *  Called from internal code of other style container instances to
-         *  resolve style attributes across multiple style families.
-         *
-         * @param {HTMLElement|jQuery} element
-         *  An element referring to a style sheet in this container whose
-         *  attributes will be extracted. If this object is a jQuery
-         *  collection, uses the first DOM node it contains.
-         *
-         * @param {String} family
-         *  The family of the attributes to be returned from the style sheet.
-         *
-         * @param {HTMLElement|jQuery} sourceNode
-         *  A descendant node embedded in the passed element which may be
-         *  required to resolve the correct attribute values of the element or
-         *  the style sheet it refers to. If this object is a jQuery
-         *  collection, uses the first DOM node it contains.
-         *
-         * @returns {Object}
-         *  A map of name/value pairs containing the attributes of the style
-         *  sheet referred by the correct ancestor element of the passed node.
-         */
-        this.extractStyleAttributes = function (element, family, sourceNode) {
-
-            var // the passed element, as jQuery object
-                $element = $(element),
-                // the explicit attributes of the ancestor element
-                attributes = null;
-
-            // get the explicit element attributes (containing the style sheet reference)
-            attributes = ($element.length > 0) ? getElementAttributes($element, { family: styleFamily }) : {};
-
-            // return the attributes of the style sheet referred by the element
-            return getStyleSheetAttributes(attributes.style, family, $element, sourceNode);
-        };
-
-        /**
-         * Returns the values of all formatting attributes in the specified DOM
+         * Returns the values of the formatting attributes in the specified DOM
          * element.
          *
          * @param {HTMLElement|jQuery} element
@@ -884,31 +789,48 @@ define('io.ox/office/editor/format/stylesheets',
          * @param {Object} [options]
          *  A map of options controlling the operation. Supports the following
          *  options:
+         *  @param {HTMLElement|jQuery} [options.sourcNode]
+         *      A descendant of the passed element associated to a child
+         *      attribute family. Will be passed to a style attribute resolver
+         *      callback function where it might be needed to resolve the
+         *      correct attributes according to the position of this source
+         *      node.
          *  @param {Boolean} [options.special=false]
          *      If set to true, includes special attributes (attributes that
          *      are marked with the 'special' flag in the attribute definitions
          *      passed to the constructor) to the result map.
          *
          * @returns {Object}
-         *  A map of attribute name/value pairs.
+         *  A map of attribute maps (name/value pairs), keyed by the attribute
+         *  families.
          */
         this.getElementAttributes = function (element, options) {
 
             var // the current element, as jQuery object
                 $element = $(element),
-                // get the element attributes of the own family
-                elementAttributes = getElementAttributes($element, { family: styleFamily }),
-                // get attributes of the style sheets
-                mergedAttributes = getStyleSheetAttributes(elementAttributes.style, styleFamily, $element);
+                // the descendant source node
+                sourceNode = Utils.getOption(options, 'sourceNode'),
+                // get the explicit attributes of the passed element
+                elementAttributes = getElementAttributes($element),
+                // the identifier of the style sheet referred by the element
+                styleId = (styleFamily in elementAttributes) ? elementAttributes[styleFamily].style : undefined,
+                // resulting merged attributes (start with defaults, parent element, and style sheet attributes)
+                mergedAttributes = getStyleSheetAttributes(styleId, element, sourceNode);
 
-            // add explicit attributes to merged attribute map
-            this.extendAttributes(mergedAttributes, elementAttributes);
+            // add explicit attributes of the element
+            extendAttributes(mergedAttributes, elementAttributes);
 
             // filter by supported attributes
-            _(mergedAttributes).each(function (value, name)  {
-                if ((name !== 'style') && !ThisClass.isRegisteredAttribute(name, options)) {
-                    delete mergedAttributes[name];
-                }
+            _(mergedAttributes).each(function (attributeValues, family) {
+
+                var // attribute definitions of the current family
+                    definitions = getAttributeDefinitions(family);
+
+                _(attributeValues).each(function (value, name)  {
+                    if ((name !== 'style') && !isRegisteredAttribute(definitions, name, options)) {
+                        delete attributeValues[name];
+                    }
+                });
             });
 
             return mergedAttributes;
@@ -922,9 +844,11 @@ define('io.ox/office/editor/format/stylesheets',
          *  jQuery collection, uses the first DOM node it contains.
          *
          * @param {Object} attributes
-         *  A map of attribute name/value pairs. To clear an explicit attribute
-         *  value from the element (thus defaulting to the current style
-         *  sheet), the value in this map can be set to null.
+         *  A map of attribute maps (name/value pairs), keyed by the attribute
+         *  families. To clear an explicit attribute value from the element
+         *  (thus defaulting to the current style sheet), the respective value
+         *  in this map can be set to null. Missing attributes, or entire
+         *  attribute maps will not be modified at the element.
          *
          * @param {Object} [options]
          *  A map of options controlling the operation. Supports the following
@@ -950,122 +874,85 @@ define('io.ox/office/editor/format/stylesheets',
          */
         this.setElementAttributes = function (element, attributes, options) {
 
-            var // the style sheet identifier
-                styleId = Utils.getOption(attributes, 'style'),
-                // whether to remove element attributes equal to style attributes
+            var // whether to remove element attributes equal to style attributes
                 clear = Utils.getBooleanOption(options, 'clear', false),
                 // change listener notified for changed attributes
                 changeListener = Utils.getFunctionOption(options, 'changeListener'),
+                // new style sheet identifier
+                styleId = _.isObject(attributes[styleFamily]) ? attributes[styleFamily].style : undefined,
 
                 // the element, as jQuery object
                 $element = $(element),
                 // the existing explicit element attributes
-                oldElementAttributes = getElementAttributes($element, { family: styleFamily }),
+                oldElementAttributes = getElementAttributes($element),
                 // new explicit element attributes (clone, there may be multiple elements pointing to the same data object)
-                elementAttributes = getElementAttributes($element, { family: styleFamily, clone: true }),
-                // attributes of the current or new style sheet
-                styleAttributes = null,
-                // names of all attributes needed to update the current element
-                updateAttributeNames = [];
+                newElementAttributes = _.copy(oldElementAttributes, true),
+                // merged attribute values from style sheets and explicit attributes
+                mergedAttributes = {};
 
-            // set or clear new style sheet identifier
-            if (_.isString(styleId) || _.isNull(styleId)) {
-                if (_.isNull(styleId)) {
-                    delete elementAttributes.style;
-                } else {
-                    elementAttributes.style = styleId;
-                }
-                // the formatting of all attributes must be updated
-                updateAttributeNames = null;
+            // add or remove a new style sheet identifier (only supported for the main style family)
+            if (_.isString(styleId)) {
+                (newElementAttributes[styleFamily] || (newElementAttributes[styleFamily] = {})).style = styleId;
+            } else if (_.isNull(styleId)) {
+                if (styleFamily in newElementAttributes) { delete newElementAttributes[styleFamily].style; }
+            } else if (styleFamily in oldElementAttributes) {
+                styleId = oldElementAttributes[styleFamily].style;
             }
 
-            // get the merged style sheet attributes
-            styleAttributes = getStyleSheetAttributes(elementAttributes.style, styleFamily, $element);
+            // collect all attributes of the parent element, and the new or current style sheet
+            mergedAttributes = getStyleSheetAttributes(styleId, element);
 
-            // add (or remove/clear) the passed explicit attributes
-            _(attributes).each(function (value, name) {
-                if (ThisClass.isRegisteredAttribute(name, options)) {
-                    // check whether to clear the attribute
-                    if (_.isNull(value) || (clear && _.isEqual(styleAttributes[name], value))) {
-                        delete elementAttributes[name];
-                    } else {
-                        elementAttributes[name] = value;
+            // add or remove the passed explicit attributes
+            _(attributes).each(function (attributeValues, family) {
+
+                var // definitions of own attributes
+                    definitions = getAttributeDefinitions(family),
+                    // passed attribute values
+                    attributeValues = attributes[family],
+                    // add an attribute map for the current family
+                    elementAttributeValues = null;
+
+                // restrict to valid attribute families
+                if (!_.isObject(attributeValues) || !(family in mergedAttributes)) { return; }
+
+                // add an attribute map for the current family
+                elementAttributeValues = newElementAttributes[family] || (newElementAttributes[family] = {});
+
+                // update the attribute map with the passed attributes
+                _(attributeValues).each(function (value, name) {
+                    if (isRegisteredAttribute(definitions, name, options)) {
+                        // check whether to clear the attribute
+                        if (_.isNull(value) || (clear && _.isEqual(mergedAttributes[family][name], value))) {
+                            delete elementAttributeValues[name];
+                        } else {
+                            elementAttributeValues[name] = value;
+                        }
                     }
-                    // collect changed attribute names if required
-                    if (updateAttributeNames) {
-                        updateAttributeNames.push(name);
-                    }
+                });
+
+                // remove empty attribute value maps completely
+                if (_.isEmpty(elementAttributeValues)) {
+                    delete newElementAttributes[family];
                 }
             });
 
             // check if any attributes have been changed
-            if (!_.isEqual(oldElementAttributes, elementAttributes)) {
+            if (!_.isEqual(oldElementAttributes, newElementAttributes)) {
 
                 // write back new explicit attributes to the element
-                setElementAttributes($element, elementAttributes, { family: styleFamily });
+                $element.data('attributes', newElementAttributes);
 
                 // merge explicit attributes into style attributes, and update element formatting
-                this.extendAttributes(styleAttributes, elementAttributes);
-                updateElementFormatting($element, styleAttributes, updateAttributeNames);
+                extendAttributes(mergedAttributes, newElementAttributes);
+                updateElementFormatting($element, mergedAttributes);
 
                 // call the passed change listener
                 if (_.isFunction(changeListener)) {
-                    changeListener.call(this, element, oldElementAttributes, elementAttributes);
+                    changeListener.call(this, element, oldElementAttributes, newElementAttributes);
                 }
             }
 
             return this;
-        };
-
-        /**
-         * Clears specific formatting attributes in the specified DOM element.
-         *
-         * @param {HTMLElement|jQuery} element
-         *  The element whose attributes will be removed. If this object is a
-         *  jQuery collection, uses the first DOM node it contains.
-         *
-         * @param {String|String[]} [attributeNames]
-         *  A single attribute name, or an an array of attribute names. If
-         *  omitted, clears all explicit element formatting attributes.
-         *
-         * @param {Object} [options]
-         *  A map of options controlling the operation. Supports the following
-         *  options:
-         *  @param {Boolean} [options.special=false]
-         *      If set to true, allows to clear special attributes (attributes
-         *      that are marked with the 'special' flag in the attribute
-         *      definitions passed to the constructor).
-         *  @param {Function} [options.changeListener]
-         *      If specified, will be called if the attributes of the element
-         *      have been changed. Will be called in the context of this style
-         *      sheet container instance. Receives the passed element as first
-         *      parameter, the old explicit attributes (name/value map) as
-         *      second parameter, and the new explicit attributes (name/value
-         *      map) as third parameter.
-         *
-         * @returns {StyleSheets}
-         *  A reference to this style sheets container.
-         */
-        this.clearElementAttributes = function (element, attributeNames, options) {
-
-            var // build a map with null values from passed name list
-                attributes = {};
-
-            // convert passed parameter to string array
-            if (_.isString(attributeNames)) {
-                attributeNames = [attributeNames];
-            } else if (!_.isArray(attributeNames)) {
-                attributeNames = ThisClass.getAttributeNames(options);
-            }
-
-            // prepare the attributes map with null values for all attributes
-            _(attributeNames).each(function (name) {
-                attributes[name] = null;
-            });
-
-            // use method setElementAttributes() to do the real work
-            // TODO: pass a complete attributes object
-            return this.setElementAttributes(element, Utils.makeSimpleObject(styleFamily, attributes), options);
         };
 
         /**
@@ -1080,51 +967,18 @@ define('io.ox/office/editor/format/stylesheets',
          *  A reference to this style sheets container.
          */
         this.updateElementFormatting = function (element) {
-
-            var // the element, as jQuery object
-                $element = $(element),
-                // explicit element attributes of the own style family
-                elementAttributes = getElementAttributes($element, { family: styleFamily }),
-                // get attributes of the style sheet
-                mergedAttributes = getStyleSheetAttributes(elementAttributes.style, styleFamily, $element, $element);
-
-            // the resulting attributes to be updated at each element
-            this.extendAttributes(mergedAttributes, elementAttributes);
-            // update element formatting according to current attribute values
-            updateElementFormatting($element, mergedAttributes);
-
+            updateElementFormatting($(element), this.getElementAttributes(element));
             return this;
         };
 
         // initialization -----------------------------------------------------
 
         // build map with default attributes from definitions
-        initializeAttributeDefaults();
+        initializeAttributeDefaultValues();
 
     } // class StyleSheets
 
     // static methods ---------------------------------------------------------
-
-    /**
-     * Returns the static definitions map of all attributes registered at the
-     * current style sheet container class.
-     *
-     * @attention
-     *  MUST be called at the correct derived style sheet container class to
-     *  get the expected result.
-     *
-     * @return {Object}
-     *  A reference to the static attribute definition map.
-     */
-    StyleSheets.getAttributeDefinitions = function () {
-
-        if (_.isObject(this.DEFINITIONS)) {
-            return this.DEFINITIONS;
-        }
-
-        Utils.error('StyleSheets.getAttributeDefinitions(): no attribute definitions found in this class');
-        return {};
-    };
 
     /**
      * Returns the names of all formatting attributes registered at the current
@@ -1145,14 +999,14 @@ define('io.ox/office/editor/format/stylesheets',
      * @returns {String[]}
      *  The names of all registered attributes.
      */
-    StyleSheets.getAttributeNames = function (options) {
+    StyleSheets.getAttributeNames = function (family, options) {
 
         var // all attribute names, as array
             attributeNames = ['style'],
             // whether to include special attributes
             special = Utils.getBooleanOption(options, 'special', false);
 
-        _(this.getAttributeDefinitions()).each(function (definition, name) {
+        _(getAttributeDefinitions(family)).each(function (definition, name) {
             if (special || (definition.special !== true)) {
                 attributeNames.push(name);
             }
@@ -1163,8 +1017,10 @@ define('io.ox/office/editor/format/stylesheets',
 
     /**
      * Builds an attribute map containing all formatting attributes
-     * registered at the current style sheet container class, set to the null
-     * value.
+     * registered for the specified attribute families, set to the null value.
+     *
+     * @param {String|String[]} families
+     *  The attribute families to be included into the returned attribute map.
      *
      * @param {Object} [options]
      *  A map of options controlling the operation. Supports the following
@@ -1174,52 +1030,24 @@ define('io.ox/office/editor/format/stylesheets',
      *      the 'special' flag in the attribute definitions) will be included.
      *
      * @returns {Object}
-     *  An attribute map null values for all registered attributes.
+     *  An attribute map with null values for all attributes registered for the
+     *  specified attribute families.
      */
-    StyleSheets.buildNullAttributes = function (options) {
+    StyleSheets.buildNullAttributes = function (families, options) {
 
-        var // create an attribute map null value for the 'style' attribute
-            attributes = { style: null };
+        var // the resulting attribute map
+            attributes = {};
 
-        // add null values for all registered attributes
-        _(this.getAttributeNames(options)).each(function (name) {
-            attributes[name] = null;
+        // process all specified attribute families
+        _.chain(families).getArray().each(function (family) {
+            // add null values for all registered attributes
+            attributes[family] = {};
+            _(StyleSheets.getAttributeNames(family, options)).each(function (name) {
+                attributes[family][name] = null;
+            });
         });
 
         return attributes;
-    };
-
-    /**
-     * Returns whether the passed string is the name of a attribute that has
-     * been registered at the current style sheet container class.
-     *
-     * @attention
-     *  MUST be called at the correct derived style sheet container class to
-     *  get the expected result.
-     *
-     * @param {String} name
-     *  The attribute name to be checked.
-     *
-     * @param {Object} [options]
-     *  A map of options controlling the operation. Supports the following
-     *  options:
-     *  @param {Boolean} [options.special=false]
-     *      If set to true, returns true for special attributes (attributes
-     *      that are marked with the 'special' flag in the attribute
-     *      definitions). Otherwise, special attributes will not be recognized
-     *      by this function.
-     *
-     * @returns {Boolean}
-     *  Whether the attribute is registered in the attribute definitions.
-     */
-    StyleSheets.isRegisteredAttribute = function (name, options) {
-
-        var // all attribute names, as array
-            definitions = this.getAttributeDefinitions(),
-            // whether to include special attributes
-            special = Utils.getBooleanOption(options, 'special', false);
-
-        return (name in definitions) && (special || (definitions[name].special !== true));
     };
 
     /**
@@ -1264,7 +1092,96 @@ define('io.ox/office/editor/format/stylesheets',
 
     // exports ================================================================
 
-    // derive this class from class Container
-    return Container.extend({ constructor: StyleSheets });
+    var // derive this class from class Container
+        StyleSheetsClass = Container.extend({ constructor: StyleSheets }),
+        // the original extend() method used to create a derived class
+        extendMethod = StyleSheetsClass.extend;
+
+    /**
+     * Derives the class represented by the specified constructor with this
+     * StyleSheets base class. Adds the passed attribute definitions to a
+     * global registry to make the information for all supported style families
+     * available in this base class.
+     *
+     * @param {Function} constructor
+     *  The constructor function of the derived class.
+     *
+     * @param {String} styleFamily
+     *  The main attribute family represented by the style sheets contained by
+     *  instances of the derived container class. The style sheets and the DOM
+     *  elements referring to the style sheets must support all attributes of
+     *  this attribute family.
+     *
+     * @param {Object} definitions
+     *  The attribute definitions map. Contains attribute definition objects
+     *  for all attributes supported by the specified style family, mapped by
+     *  the names of the attributes. Each definition object contains the
+     *  following entries:
+     *  - def
+     *      Specifies the default value of the attribute which will be used if
+     *      neither the style sheet of an element nor its explicit attributes
+     *      collection specify a value for the attribute.
+     *  - {Function} [format]
+     *      A function that applies the passed attribute value to a DOM element
+     *      (usually its CSS formatting). Will be called in the context of the
+     *      style sheet container instance. The function receives the DOM
+     *      element as jQuery object in the first parameter, and the attribute
+     *      value in the second parameter. An alternative way to update the
+     *      element formatting using a complete map of all attribute values is
+     *      to specify a global update handler (see options below).
+     *  - {Function} [merge]
+     *      A function that will be called while resolving attribute maps from
+     *      different style sheets and explicit element formatting. Will be
+     *      called to merge two existing values of this attributes, where the
+     *      second value has to overwrite the first value in some way. Will be
+     *      called in the context of the style sheet container instance. The
+     *      function receives the 'old' attribute value in the first parameter,
+     *      and the 'new' attribute value in the second parameter. By default,
+     *      the new value wins and the first value will be overwritten
+     *      completely.
+     *  - {Function} [preview]
+     *      A function that initializes an options map that will be used to
+     *      create a list item in a GUI style sheet chooser control. Will be
+     *      called in the context of the style sheet container instance. The
+     *      function receives the options map to be extended in the first
+     *      parameter, and the attribute value in the second parameter.
+     *
+     * @param {Object} [options]
+     *  A map with additional options for the derived class. Supports the
+     *  following options:
+     *  @param {Object} [options.parentFamilies]
+     *      The parent style families whose associated style sheets can contain
+     *      attributes of the family supported by this style sheet container
+     *      class. The DOM elements referring to the style sheets of the
+     *      specified style families must be ancestors of the DOM elements
+     *      referring to the style sheets of this container. The passed object
+     *      maps the attribute family to an ancestor element resolver function.
+     *      The function receives the descendant DOM element as jQuery object
+     *      in the first parameter, and returns the ancestor element of that
+     *      DOM element which is associated to the parent style family used as
+     *      map key.
+     *
+     * @returns {Function}
+     *  The constructor function of the derived class.
+     */
+    StyleSheetsClass.extend = function (constructor, styleFamily, definitions, options) {
+
+        var // get existing or create a new entry in the global registry
+            registryEntry = getOrCreateRegistryEntry(styleFamily);
+
+        // insert information for the new style family
+        registryEntry.definitions = definitions;
+        registryEntry.parentFamilies = Utils.getObjectOption(options, 'parentFamilies', {});
+
+        // store references back to this style families in specified parent families
+        _(registryEntry.parentFamilies).each(function (entry, parentFamily) {
+            getOrCreateRegistryEntry(parentFamily).childFamilies.push(styleFamily);
+        });
+
+        // create the derived class constructor
+        return extendMethod.call(this, { constructor: constructor }, { STYLE_FAMILY: styleFamily });
+    };
+
+    return StyleSheetsClass;
 
 });

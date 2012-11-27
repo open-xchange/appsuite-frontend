@@ -30,6 +30,11 @@ define('io.ox/office/editor/format/tablerowstyles',
                 def: 'auto'
             }
 
+        },
+
+        // parent families with parent element resolver functions
+        PARENT_FAMILIES = {
+            table: function (cell) { return cell.closest(DOM.TABLE_NODE_SELECTOR); }
         };
 
     // private global functions ===============================================
@@ -43,17 +48,21 @@ define('io.ox/office/editor/format/tablerowstyles',
      *  The <tr> element whose table row attributes have been changed,
      *  as jQuery object.
      *
-     * @param {Object} attributes
-     *  A map of all attributes (name/value pairs), containing the effective
-     *  attribute values merged from style sheets and explicit attributes.
+     * @param {Object} mergedAttributes
+     *  A map of attribute maps (name/value pairs), keyed by attribute family,
+     *  containing the effective attribute values merged from style sheets and
+     *  explicit attributes.
      */
-    function updateTableRowFormatting(row, attributes) {
+    function updateTableRowFormatting(row, mergedAttributes) {
 
-        if (attributes.height !== 'auto') {
+        var // the row attributes of the passed attribute map
+            rowAttributes = mergedAttributes.row;
+
+        if (rowAttributes.height !== 'auto') {
             if ($.browser.webkit) {
                 // Chrome requires row height at the cells, setting height at <tr> is ignored.
-                var rowHeight = Utils.convertHmmToLength(attributes.height, 'px', 0);
-                row.children('th, td').each(function () {
+                var rowHeight = Utils.convertHmmToLength(rowAttributes.height, 'px', 0);
+                row.children('td').each(function () {
                     var cellHeight = rowHeight -
                                      Utils.convertCssLength($(this).css('padding-top'), 'px', 0) -
                                      Utils.convertCssLength($(this).css('padding-bottom'), 'px', 0) -
@@ -64,22 +73,21 @@ define('io.ox/office/editor/format/tablerowstyles',
             } else {
                 // FireFox requires row height at the rows. Setting height at cells, makes
                 // height of cells unchanged, even if text leaves the cell.
-                row.css('height', Utils.convertHmmToCssLength(attributes.height, 'px', 0));
+                row.css('height', Utils.convertHmmToCssLength(rowAttributes.height, 'px', 0));
             }
         } else {
             // required for undo, if the table cell was not set before
             if ($.browser.webkit) {
                 // Chrome requires row height at the cells.
-                row.children('th, td').css('height', 0);
+                row.children('td').css('height', 0);
             } else {
                 // FireFox requires row height at the rows.
                 row.css('height', '');
             }
         }
-
     }
 
-    // class TableRowStyles ======================================================
+    // class TableRowStyles ===================================================
 
     /**
      * Contains the style sheets for table row formatting attributes. The CSS
@@ -101,17 +109,13 @@ define('io.ox/office/editor/format/tablerowstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'row');
-
-        // initialization -----------------------------------------------------
-
-        this.registerUpdateHandler(updateTableRowFormatting);
+        StyleSheets.call(this, documentStyles, { updateHandler: updateTableRowFormatting });
 
     } // class TableRowStyles
 
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: TableRowStyles }, { DEFINITIONS: DEFINITIONS });
+    return StyleSheets.extend(TableRowStyles, 'row', DEFINITIONS, { parentFamilies: PARENT_FAMILIES });
 
 });

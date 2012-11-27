@@ -46,7 +46,7 @@ define('io.ox/office/editor/format/themes',
          * @param {String} name
          *  The name of the scheme color.
          *
-         * @return {String|Null}
+         * @returns {String|Null}
          *  The RGB value of the scheme color as hexadecimal string, if
          *  existing, otherwise null.
          */

@@ -38,7 +38,7 @@ define('io.ox/office/editor/main',
      * @param {Object} response
      *  The response object of the AJAX request.
      *
-     * @return {Object[]|Undefined}
+     * @returns {Object[]|Undefined}
      *  The operations array, if existing, otherwise undefined.
      */
     function extractOperationsList(response) {
@@ -794,7 +794,7 @@ define('io.ox/office/editor/main',
          * return a restore point containing the current state of the
          * application.
          *
-         * @return {Object}
+         * @returns {Object}
          *  The restore point containing the application state.
          */
         this.failSave = function () {

@@ -67,26 +67,29 @@ define('io.ox/office/editor/format/pagestyles',
      *  The page container element whose character attributes have been
      *  changed, as jQuery object.
      *
-     * @param {Object} attributes
-     *  A map of all attributes (name/value pairs), containing the effective
-     *  attribute values merged from style sheets and explicit attributes.
+     * @param {Object} mergedAttributes
+     *  A map of attribute maps (name/value pairs), keyed by attribute family,
+     *  containing the effective attribute values merged from style sheets and
+     *  explicit attributes.
      */
-    function updatePageFormatting(page, attributes) {
+    function updatePageFormatting(page, mergedAttributes) {
 
-        var // effective page width (at least 2cm)
-            pageWidth = Math.max(attributes.width, 2000),
+        var // the page attributes of the passed attribute map
+            pageAttributes = mergedAttributes.page,
+            // effective page width (at least 2cm)
+            pageWidth = Math.max(pageAttributes.width, 2000),
             // effective page height (at least 2cm)
-            pageHeight = Math.max(attributes.height, 2000),
+            pageHeight = Math.max(pageAttributes.height, 2000),
             // left page margin
-            leftMargin = Math.max(attributes.marginLeft, 0),
+            leftMargin = Math.max(pageAttributes.marginLeft, 0),
             // right page margin
-            rightMargin = Math.max(attributes.marginRight, 0),
+            rightMargin = Math.max(pageAttributes.marginRight, 0),
             // total horizontal margin
             horizontalMargin = leftMargin + rightMargin,
             // top page margin
-            topMargin = Math.max(attributes.marginTop, 0),
+            topMargin = Math.max(pageAttributes.marginTop, 0),
             // bottom page margin
-            bottomMargin = Math.max(attributes.marginBottom, 0),
+            bottomMargin = Math.max(pageAttributes.marginBottom, 0),
             // total vertical margin
             verticalMargin = topMargin + bottomMargin;
 
@@ -144,11 +147,7 @@ define('io.ox/office/editor/format/pagestyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'page');
-
-        // initialization -----------------------------------------------------
-
-        this.registerUpdateHandler(updatePageFormatting);
+        StyleSheets.call(this, documentStyles, { updateHandler: updatePageFormatting });
 
         // for now, update the root node after every change event
         // TODO: page layout, update entire document formatting
@@ -159,6 +158,6 @@ define('io.ox/office/editor/format/pagestyles',
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: PageStyles }, { DEFINITIONS: DEFINITIONS });
+    return StyleSheets.extend(PageStyles, 'page', DEFINITIONS);
 
 });

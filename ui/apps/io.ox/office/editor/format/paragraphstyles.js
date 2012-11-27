@@ -146,6 +146,11 @@ define('io.ox/office/editor/format/paragraphstyles',
             contextualSpacing: {
                 def: false
             }
+        },
+
+        // parent families with parent element resolver functions
+        PARENT_FAMILIES = {
+            cell: function (paragraph) { return DOM.isCellContentNode(paragraph.parent()) ? paragraph.closest('td') : null; }
         };
 
     // private static functions ===============================================
@@ -210,24 +215,26 @@ define('io.ox/office/editor/format/paragraphstyles',
          *  The paragraph node whose attributes have been changed, as jQuery
          *  object.
          *
-         * @param {Object} attributes
-         *  A map of all attributes (name/value pairs), containing the
-         *  effective attribute values merged from style sheets and explicit
-         *  attributes.
+         * @param {Object} mergedAttributes
+         *  A map of attribute maps (name/value pairs), keyed by attribute
+         *  family, containing the effective attribute values merged from style
+         *  sheets and explicit attributes.
          */
-        function updateParagraphFormatting(paragraph, attributes) {
+        function updateParagraphFormatting(paragraph, mergedAttributes) {
 
-            var // the character styles/formatter
-                characterStyles = self.getDocumentStyles().getStyleSheets('character'),
+            var // the paragraph attributes of the passed attribute map
+                paragraphAttributes = mergedAttributes.paragraph,
+                // the character styles/formatter
+                characterStyles = documentStyles.getStyleSheets('character'),
 
                 leftMargin = 0,
                 rightMargin = 0,
 
                 prevParagraph = paragraph.prev(),
-                prevAttributes = (prevParagraph.length > 0) ? self.getElementAttributes(prevParagraph) : {},
+                prevAttributes = (prevParagraph.length > 0) ? self.getElementAttributes(prevParagraph).paragraph : {},
 
                 nextParagraph = paragraph.next(),
-                nextAttributes = (nextParagraph.length > 0) ? self.getElementAttributes(nextParagraph) : {};
+                nextAttributes = (nextParagraph.length > 0) ? self.getElementAttributes(nextParagraph).paragraph : {};
 
             function setBorder(border, position, addSpace) {
                 var space = addSpace + ((border && border.space) ? border.space : 0);
@@ -247,46 +254,46 @@ define('io.ox/office/editor/format/paragraphstyles',
             }, undefined, { children: true });
 
             // update borders
-            var leftPadding = attributes.borderLeft && attributes.borderLeft.space ? attributes.borderLeft.space : 0;
-            leftMargin += setBorder(attributes.borderLeft, 'left', 0);
-            rightMargin += setBorder(attributes.borderRight, 'right', 0);
+            var leftPadding = paragraphAttributes.borderLeft && paragraphAttributes.borderLeft.space ? paragraphAttributes.borderLeft.space : 0;
+            leftMargin += setBorder(paragraphAttributes.borderLeft, 'left', 0);
+            rightMargin += setBorder(paragraphAttributes.borderRight, 'right', 0);
 
-            var topMargin = attributes.marginTop;
-            var bottomMargin = attributes.marginBottom;
+            var topMargin = paragraphAttributes.marginTop;
+            var bottomMargin = paragraphAttributes.marginBottom;
 
             // top border is not set if previous paragraph uses the same border settings
-            if (isMergeBorders(attributes, prevAttributes)) {
+            if (isMergeBorders(paragraphAttributes, prevAttributes)) {
                 setBorder({ style: 'none' }, 'top', topMargin);
-                prevParagraph.css("padding-bottom", this.getCssBorder(attributes.borderInside.space + bottomMargin));
-                prevParagraph.css("border-bottom", this.getCssBorder(attributes.borderInside));
-                prevParagraph.css('margin-bottom', 0 + 'mm');
+                prevParagraph.css("padding-bottom", this.getCssBorder(paragraphAttributes.borderInside.space + bottomMargin));
+                prevParagraph.css("border-bottom", this.getCssBorder(paragraphAttributes.borderInside));
+                prevParagraph.css('margin-bottom', 0);
                 topMargin = 0;
             } else {
-                setBorder(attributes.borderTop, 'top', 0);
+                setBorder(paragraphAttributes.borderTop, 'top', 0);
             }
 
             // bottom border is replaced by inner border if next paragraph uses the same border settings
-            if (isMergeBorders(attributes, nextAttributes)) {
-                setBorder(attributes.borderInside, 'bottom');
+            if (isMergeBorders(paragraphAttributes, nextAttributes)) {
+                setBorder(paragraphAttributes.borderInside, 'bottom');
                 prevParagraph.css("padding-bottom", this.getCssBorder(bottomMargin));
                 bottomMargin = 0;
             } else {
-                setBorder(attributes.borderBottom, 'bottom', 0);
+                setBorder(paragraphAttributes.borderBottom, 'bottom', 0);
             }
 
             //calculate list indents
-            var numId = attributes.numId;
+            var numId = paragraphAttributes.numId;
             if (numId  !== -1) {
-                var indentLevel = attributes.indentLevel,
+                var indentLevel = paragraphAttributes.indentLevel,
                      lists = documentStyles.getLists();
                 if (indentLevel < 0) {
                     // is a numbering level assigned to the current paragraph style?
-                    indentLevel = lists.findIlvl(numId, attributes.style);
+                    indentLevel = lists.findIlvl(numId, paragraphAttributes.style);
                 }
                 if (indentLevel !== -1 && indentLevel < 9) {
                     var listItemCounter = [0, 0, 0, 0, 0, 0, 0, 0, 0];
                     //updateParaTabstops = true;
-                    var listObject = lists.formatNumber(attributes.numId, indentLevel, listItemCounter);
+                    var listObject = lists.formatNumber(paragraphAttributes.numId, indentLevel, listItemCounter);
 
                     if (listObject.indent > 0) {
                         leftPadding += listObject.firstLine;
@@ -298,7 +305,7 @@ define('io.ox/office/editor/format/paragraphstyles',
                         if (listObject.fontSize)
                             listSpan.css('font-size', listObject.fontSize + 'pt');
                         if (listObject.color)
-                            Color.setElementTextColor(listSpan, documentStyles.getCurrentTheme(),  listObject, attributes);
+                            Color.setElementTextColor(listSpan, documentStyles.getCurrentTheme(),  listObject, paragraphAttributes);
                     }
                 }
             }
@@ -306,9 +313,9 @@ define('io.ox/office/editor/format/paragraphstyles',
             // paragraph margin attributes - not applied if paragraph is in a list
             var textIndent = 0;
             if (numId < 0) {
-                leftMargin += attributes.indentLeft;
-                rightMargin += attributes.indentRight;
-                textIndent = attributes.indentFirstLine ? attributes.indentFirstLine : 0;
+                leftMargin += paragraphAttributes.indentLeft;
+                rightMargin += paragraphAttributes.indentRight;
+                textIndent = paragraphAttributes.indentFirstLine ? paragraphAttributes.indentFirstLine : 0;
                 paragraph.css('text-indent', textIndent / 100 + 'mm');
             }
 
@@ -316,14 +323,16 @@ define('io.ox/office/editor/format/paragraphstyles',
                 leftPadding -= textIndent;
                 leftMargin += textIndent;
             }
-            paragraph.css('padding-left', leftPadding / 100 + 'mm');
-            // now set left/right margins
-            paragraph.css('margin-left', leftMargin / 100 + 'mm');
-            paragraph.css('margin-right', rightMargin / 100  + 'mm');
+            paragraph.css({
+                paddingLeft: (leftPadding / 100) + 'mm',
+                // now set left/right margins
+                marginLeft: (leftMargin / 100) + 'mm',
+                marginRight: (rightMargin / 100) + 'mm'
+            });
 
             //no distance between paragraph using the same style if contextualSpacing is set
-            var noDistanceToPrev = prevAttributes.contextualSpacing && attributes.style === prevAttributes.style,
-                noDistanceToNext = attributes.contextualSpacing && attributes.style === nextAttributes.style;
+            var noDistanceToPrev = prevAttributes.contextualSpacing && (paragraphAttributes.style === prevAttributes.style),
+                noDistanceToNext = paragraphAttributes.contextualSpacing && (paragraphAttributes.style === nextAttributes.style);
             if (noDistanceToPrev) {
                 //remove bottom margin from previous paragraph
                 prevParagraph.css('margin-bottom', 0 + 'mm');
@@ -335,18 +344,15 @@ define('io.ox/office/editor/format/paragraphstyles',
                 bottomMargin = 0;
             }
 
-            paragraph.css('margin-top', topMargin / 100 + 'mm');
-            paragraph.css('margin-bottom', bottomMargin / 100  + 'mm');
+            paragraph.css({
+                marginTop: (topMargin / 100) + 'mm',
+                marginBottom: (bottomMargin / 100) + 'mm'
+            });
         }
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'paragraph');
-
-        // initialization -----------------------------------------------------
-
-        this.registerUpdateHandler(updateParagraphFormatting);
-        this.registerParentStyleFamily('cell', function (paragraph) { return paragraph.parent().filter('td'); });
+        StyleSheets.call(this, documentStyles, { updateHandler: updateParagraphFormatting });
 
     } // class ParagraphStyles
 
@@ -428,6 +434,6 @@ define('io.ox/office/editor/format/paragraphstyles',
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: ParagraphStyles }, { DEFINITIONS: DEFINITIONS });
+    return StyleSheets.extend(ParagraphStyles, 'paragraph', DEFINITIONS, { parentFamilies: PARENT_FAMILIES });
 
 });

@@ -128,30 +128,32 @@ define('io.ox/office/editor/format/tablestyles',
          *  The <table> element whose table attributes have been changed, as
          *  jQuery object.
          *
-         * @param {Object} attributes
-         *  A map of all attributes (name/value pairs), containing the
-         *  effective attribute values merged from style sheets and explicit
-         *  attributes.
+         * @param {Object} mergedAttributes
+         *  A map of attribute maps (name/value pairs), keyed by attribute
+         *  family, containing the effective attribute values merged from style
+         *  sheets and explicit attributes.
          */
-        function updateTableFormatting(table, attributes) {
+        function updateTableFormatting(table, mergedAttributes) {
 
-            Table.updateColGroup(table, attributes.tableGrid);
+            var // the table row styles/formatter
+                tableRowStyles = documentStyles.getStyleSheets('row'),
+                // the table cell styles/formatter
+                tableCellStyles = documentStyles.getStyleSheets('cell');
 
-            var // the table cell styles/formatter
-                tableCellStyles = documentStyles.getStyleSheets('cell'),
-                // the table row styles/formatter
-                tableRowStyles = documentStyles.getStyleSheets('row');
+            // update column widths
+            Table.updateColGroup(table, mergedAttributes.table.tableGrid);
 
-            // iterating over all cells in the table to set the table attributes in the cell
-            DOM.getTableRows(table).children('td').each(function () {
-                tableCellStyles.updateElementFormatting(this);
-            });
-
-            // iterating over all rows in the table to set the row attributes ('height' only)
+            // iterate over all rows in the table to set the row and cell attributes
             DOM.getTableRows(table).each(function () {
-                tableRowStyles.updateElementFormatting(this);
-            });
 
+                // update table rows
+                tableRowStyles.updateElementFormatting(this);
+
+                // update table cells
+                $(this).children('td').each(function () {
+                    tableCellStyles.updateElementFormatting(this);
+                });
+            });
         }
 
         /**
@@ -218,13 +220,13 @@ define('io.ox/office/editor/format/tablestyles',
                 if (family === 'cell') {  // table cells have to iterate over table attributes, too
                     if ((cellOrientation[name]) && (styleAttributes[name]) && (styleAttributes[name].table) && (! _.contains(excludedAttributes, name))) {
                         var tableAttributes = _.copy(styleAttributes[name].table);
-                        self.extendAttributes(tableAttributes, explicitTableAttributes);
-                        self.extendAttributes(attributes, resolveTableStylesWithCellPosition(cellOrientation, tableAttributes));
+                        self.extendAttributeValues(tableAttributes, explicitTableAttributes);
+                        self.extendAttributeValues(attributes, resolveTableStylesWithCellPosition(cellOrientation, tableAttributes));
                     }
                 }
 
                 if ((cellOrientation[name]) && (styleAttributes[name]) && (styleAttributes[name][family]) && (! _.contains(excludedAttributes, name))) {
-                    documentStyles.getStyleSheets(family).extendAttributes(attributes, styleAttributes[name][family]);
+                    documentStyles.getStyleSheets(family).extendAttributeValues(attributes, styleAttributes[name][family]);
                 }
             });
 
@@ -337,19 +339,13 @@ define('io.ox/office/editor/format/tablestyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'table', {
-            styleAttributesResolver: resolveTableStyleAttributes
-        });
-
-        // initialization -----------------------------------------------------
-
-        this.registerUpdateHandler(updateTableFormatting);
+        StyleSheets.call(this, documentStyles, { updateHandler: updateTableFormatting, styleAttributesResolver: resolveTableStyleAttributes });
 
     } // class TableStyles
 
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: TableStyles }, { DEFINITIONS: DEFINITIONS });
+    return StyleSheets.extend(TableStyles, 'table', DEFINITIONS);
 
 });

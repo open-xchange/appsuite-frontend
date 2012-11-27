@@ -111,31 +111,6 @@ define('io.ox/office/editor/format/documentstyles',
             return this;
         };
 
-        /**
-         * Builds an attribute map containing all formatting attributes
-         * registered at the specified style sheet containers, set to the null
-         * value.
-         *
-         * @param {String|String[]} families
-         *  All attribute families to be included into the result object.
-         *
-         * @returns {Object}
-         *  An attribute map containing maps for all specified attribute
-         *  families, which contain null values for all registered attributes
-         *  for the family.
-         */
-        this.buildNullAttributes = function (families) {
-
-            var attributes = {};
-
-            // process all passed attribute families
-            _.chain(families).getArray().each(function (family) {
-                attributes[family] = this.getStyleSheets(family).buildNullAttributes();
-            }, this);
-
-            return attributes;
-        };
-
         this.destroy = function () {
             lists.destroy();
             themes.destroy();

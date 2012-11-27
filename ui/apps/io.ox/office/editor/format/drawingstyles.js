@@ -244,13 +244,16 @@ define('io.ox/office/editor/format/drawingstyles',
      * @param {jQuery} drawing
      *  The drawing node whose attributes have been changed, as jQuery object.
      *
-     * @param {Object} attributes
-     *  A map of all attributes (name/value pairs), containing the effective
-     *  attribute values merged from style sheets and explicit attributes.
+     * @param {Object} mergedAttributes
+     *  A map of attribute maps (name/value pairs), keyed by attribute family,
+     *  containing the effective attribute values merged from style sheets and
+     *  explicit attributes.
      */
-    function updateDrawingFormatting(drawing, attributes) {
+    function updateDrawingFormatting(drawing, mergedAttributes) {
 
-        var // the paragraph element containing the drawing node
+        var // the drawing attributes of the passed attribute map
+            drawingAttributes = mergedAttributes.drawing,
+            // the paragraph element containing the drawing node
             paragraph = drawing.parent(),
             // total width of the paragraph, in 1/100 mm
             paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px'),
@@ -277,7 +280,7 @@ define('io.ox/office/editor/format/drawingstyles',
 
         // position
 
-        if (attributes.inline) {
+        if (drawingAttributes.inline) {
 
             // switch from floating to inline mode
             if (!drawing.hasClass('inline')) {
@@ -303,9 +306,9 @@ define('io.ox/office/editor/format/drawingstyles',
             }
 
             // calculate top offset (only if drawing is anchored to paragraph)
-            if (attributes.anchorVertBase === 'paragraph') {
-                if (attributes.anchorVertAlign === 'offset') {
-                    topOffset = Math.max(attributes.anchorVertOffset, 0);
+            if (drawingAttributes.anchorVertBase === 'paragraph') {
+                if (drawingAttributes.anchorVertAlign === 'offset') {
+                    topOffset = Math.max(drawingAttributes.anchorVertOffset, 0);
                 } else {
                     // TODO: automatic alignment (top/bottom/center/...)
                     topOffset = 0;
@@ -313,8 +316,8 @@ define('io.ox/office/editor/format/drawingstyles',
             }
 
             // calculate top/bottom drawing margins
-            topMargin = Utils.minMax(attributes.marginTop, 0, topOffset);
-            bottomMargin = Math.max(attributes.marginBottom, 0);
+            topMargin = Utils.minMax(drawingAttributes.marginTop, 0, topOffset);
+            bottomMargin = Math.max(drawingAttributes.marginBottom, 0);
 
             // add or remove leading offset node used for positioning
             // TODO: support for multiple drawings (also overlapping) per side
@@ -335,8 +338,8 @@ define('io.ox/office/editor/format/drawingstyles',
             }
 
             // calculate left/right offset (only if drawing is anchored to column)
-            if (attributes.anchorHorBase === 'column') {
-                switch (attributes.anchorHorAlign) {
+            if (drawingAttributes.anchorHorBase === 'column') {
+                switch (drawingAttributes.anchorHorAlign) {
                 case 'center':
                     leftOffset = (paraWidth - drawingWidth) / 2;
                     break;
@@ -344,7 +347,7 @@ define('io.ox/office/editor/format/drawingstyles',
                     leftOffset = paraWidth - drawingWidth;
                     break;
                 case 'offset':
-                    leftOffset = attributes.anchorHorOffset;
+                    leftOffset = drawingAttributes.anchorHorOffset;
                     break;
                 default:
                     leftOffset = 0;
@@ -356,8 +359,8 @@ define('io.ox/office/editor/format/drawingstyles',
             rightOffset = paraWidth - leftOffset - drawingWidth;
 
             // determine text wrapping side
-            if (isTextWrapped(attributes.textWrapMode)) {
-                switch (attributes.textWrapSide) {
+            if (isTextWrapped(drawingAttributes.textWrapMode)) {
+                switch (drawingAttributes.textWrapSide) {
                 case 'left':
                     wrapMode = 'left';
                     break;
@@ -370,7 +373,7 @@ define('io.ox/office/editor/format/drawingstyles',
                     wrapMode = (leftOffset > rightOffset) ? 'left' : 'right';
                     break;
                 default:
-                    Utils.warn('updateDrawingFormatting(): invalid text wrap side: ' + attributes.textWrapSide);
+                    Utils.warn('updateDrawingFormatting(): invalid text wrap side: ' + drawingAttributes.textWrapSide);
                     wrapMode = 'none';
                 }
             } else {
@@ -384,7 +387,7 @@ define('io.ox/office/editor/format/drawingstyles',
             case 'left':
                 // drawing floats at right paragraph margin
                 rightMargin = rightOffset;
-                leftMargin = Math.max(attributes.marginLeft, 0);
+                leftMargin = Math.max(drawingAttributes.marginLeft, 0);
                 // if there is less than 6mm space available for text, occupy all space (no wrapping)
                 if (leftOffset - leftMargin < 600) { leftMargin = Math.max(leftOffset, 0); }
                 break;
@@ -392,7 +395,7 @@ define('io.ox/office/editor/format/drawingstyles',
             case 'right':
                 // drawing floats at left paragraph margin
                 leftMargin = leftOffset;
-                rightMargin = Math.max(attributes.marginRight, 0);
+                rightMargin = Math.max(drawingAttributes.marginRight, 0);
                 // if there is less than 6mm space available for text, occupy all space (no wrapping)
                 if (rightOffset - rightMargin < 600) { rightMargin = Math.max(rightOffset, 0); }
                 break;
@@ -417,12 +420,12 @@ define('io.ox/office/editor/format/drawingstyles',
         }
 
         // using replacement data, if available (valid for all drawing types)
-        if (attributes.replacementData && attributes.replacementData.length) {
-            if (attributes.replacementData.indexOf(base64String) === 0) {
-                imageNode = $('<img>', { src: attributes.replacementData });
+        if (drawingAttributes.replacementData && drawingAttributes.replacementData.length) {
+            if (drawingAttributes.replacementData.indexOf(base64String) === 0) {
+                imageNode = $('<img>', { src: drawingAttributes.replacementData });
                 contentNode.append(imageNode);
-            } else if (attributes.replacementData.indexOf(svgString) === 0) {
-                contentNode[0].appendChild($(attributes.replacementData).get(0));  // do not use jQuery for this!
+            } else if (drawingAttributes.replacementData.indexOf(svgString) === 0) {
+                contentNode[0].appendChild($(drawingAttributes.replacementData));
             }
         }
 
@@ -444,8 +447,8 @@ define('io.ox/office/editor/format/drawingstyles',
 
             if (imageNode.length === 0) {
                 // inserting the image
-                if (attributes.imageData && attributes.imageData.length) {
-                    imgSrc = attributes.imageData;
+                if (drawingAttributes.imageData && drawingAttributes.imageData.length) {
+                    imgSrc = drawingAttributes.imageData;
                     if (imgSrc.indexOf(base64String) === 0) {
                         useImageNode = true;
                     } else if (imgSrc.indexOf(svgString) === 0) {
@@ -460,13 +463,13 @@ define('io.ox/office/editor/format/drawingstyles',
                     imageNode = $('<img>', { src: imgSrc });
                     contentNode.append(imageNode);
                 } else if (useSvgNode) {
-                    contentNode[0].appendChild($(imgSrc).get(0));  // do not use jQuery for this!
+                    contentNode[0].appendChild($(imgSrc));
                 }
             }
 
             if ((drawingWidth > 0) && (drawingHeight > 0)) {
-                horizontalSettings = calculateBitmapSettings(drawingWidth, attributes.cropLeft, attributes.cropRight);
-                verticalSettings = calculateBitmapSettings(drawingHeight, attributes.cropTop, attributes.cropBottom);
+                horizontalSettings = calculateBitmapSettings(drawingWidth, drawingAttributes.cropLeft, drawingAttributes.cropRight);
+                verticalSettings = calculateBitmapSettings(drawingHeight, drawingAttributes.cropTop, drawingAttributes.cropBottom);
 
                 // set CSS formatting at the <img> element
                 imageNode.css({
@@ -477,7 +480,6 @@ define('io.ox/office/editor/format/drawingstyles',
                 });
             }
         }
-
     }
 
     // class DrawingStyles =====================================================
@@ -497,11 +499,7 @@ define('io.ox/office/editor/format/drawingstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'drawing');
-
-        // initialization -----------------------------------------------------
-
-        this.registerUpdateHandler(updateDrawingFormatting);
+        StyleSheets.call(this, documentStyles, { updateHandler: updateDrawingFormatting });
 
     } // class ImageStyles
 
@@ -560,6 +558,6 @@ define('io.ox/office/editor/format/drawingstyles',
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: DrawingStyles }, { DEFINITIONS: DEFINITIONS });
+    return StyleSheets.extend(DrawingStyles, 'drawing', DEFINITIONS);
 
 });

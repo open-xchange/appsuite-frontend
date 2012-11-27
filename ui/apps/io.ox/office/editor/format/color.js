@@ -24,7 +24,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * @param {String} rgbColor
      * A hex based rgb color value (RRGGBB).
      *
-     * @return {Number}
+     * @returns {Number}
      * The integer based value of the hex string.
      */
     function convertRgbColorToNumber(rgbColor) {
@@ -37,7 +37,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * @param {Number} colorValue
      * A rgb color value.
      *
-     * @return {String}
+     * @returns {String}
      * Hex based color string (RRGGBB).
      */
     function convertNumberToRgbColor(colorValue) {
@@ -56,7 +56,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * The rgb color value to be converted to the HSL
      * color model.
      *
-     * @return {Object}
+     * @returns {Object}
      * The HSL color object which contains h,s,l attributes
      * based on the provided rgb color value.
      */
@@ -88,7 +88,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * The HSL color object which contains the color
      * attributes h, s, l
      *
-     * @return {Number} rgb color value
+     * @returns {Number}
      * The rgb color value calculated from the hsl color object.
      */
     function convertHslToRgb(hsl) {
@@ -141,7 +141,8 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      *  A value 0 - 100000 (0 - 100%) to tint the provided color.
      *  Fixed floating point number.
      *
-     * @return {Number} tint rgb color value
+     * @returns {Number}
+     *  tint rgb color value
      */
     function tintColor(rgbValue, tint) {
         var hsl = convertRgbToHsl(rgbValue);
@@ -160,7 +161,8 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * @param {String} shade
      *  A value 0 - 100000 (0 - 100%) to shade the provided color
      *
-     * @return {Number} shaded rgb color value
+     * @returns {Number}
+     *  shaded rgb color value
      */
     function shadeColor(rgbValue, shade) {
         var hsl = convertRgbToHsl(rgbValue);
@@ -318,7 +320,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * @param {String} rgbColor
      * The rgb color as hex value string (RRGGBB) with/without trailing #
      *
-     * @return {Boolean}
+     * @returns {Boolean}
      * True if the color is dark otherwise false.
      */
     Color.isDark = function (rgbColor) {

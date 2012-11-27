@@ -88,9 +88,7 @@ define('io.ox/office/editor/view/controls',
         var // self reference
             self = this,
             // the style sheet container
-            styleSheets = editor.getStyleSheets(family),
-            // attribute families used to generate preview options
-            previewFamilies = Utils.getArrayOption(options, 'previewFamilies');
+            styleSheets = editor.getStyleSheets(family);
 
         /**
          * Called for each list item to get the sorting index, which has been
@@ -109,7 +107,7 @@ define('io.ox/office/editor/view/controls',
             _(styleSheets.getStyleSheetNames()).each(function (name, id) {
 
                 var // options for the formatting preview
-                    options = styleSheets.getPreviewButtonOptions(id, previewFamilies),
+                    options = styleSheets.getPreviewButtonOptions(id),
                     // sorting priority
                     priority = styleSheets.getUIPriority(id),
                     // the sort index stored at the button for lexicographical sorting
@@ -163,10 +161,7 @@ define('io.ox/office/editor/view/controls',
 
         // base constructor ---------------------------------------------------
 
-        Controls.StyleSheetChooser.call(this, editor, 'paragraph', {
-            tooltip: gt('Paragraph Style'),
-            previewFamilies: ['paragraph', 'character']
-        });
+        Controls.StyleSheetChooser.call(this, editor, 'paragraph', { tooltip: gt('Paragraph Style') });
 
     }}); // class ParagraphStyleChooser
 

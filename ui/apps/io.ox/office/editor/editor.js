@@ -315,10 +315,7 @@ define('io.ox/office/editor/editor',
                         // selections only)
                         if (!_.isNumber(endOffset)) {
                             generator.generateOperation(Operations.PARA_SPLIT, { start: [targetPosition, 0] });
-                            generator.generateSetAttributesOperation(contentNode, [targetPosition], undefined, { attributes: {
-                                paragraph: ParagraphStyles.buildNullAttributes(),
-                                character: CharacterStyles.buildNullAttributes()
-                            } });
+                            generator.generateSetAttributesOperation(contentNode, [targetPosition], undefined, { clear: ['paragraph', 'character'] });
                         }
 
                         // operations for the text contents covered by the selection
@@ -359,8 +356,10 @@ define('io.ox/office/editor/editor',
                 generator = new Operations.Generator(),
                 // information about the cell range
                 cellRangeInfo = selection.getSelectedCellRange(),
-                // explicit table attributes
-                tableAttributes = null,
+                // merged attributes of the old table
+                oldTableAttributes = null,
+                // explicit attributes for the new table
+                newTableAttributes = null,
                 // all rows in the table
                 tableRowNodes = null,
                 // relative row offset of last visited cell
@@ -390,10 +389,11 @@ define('io.ox/office/editor/editor',
             generator.generateOperation(Operations.PARA_SPLIT, { start: [0, 0] });
 
             // generate the operation to create the new table
-            tableAttributes = StyleSheets.getExplicitAttributes(cellRangeInfo.tableNode);
-            tableAttributes.table = tableAttributes.table || {};
-            tableAttributes.table.tableGrid = tableStyles.getElementAttributes(cellRangeInfo.tableNode).tableGrid.slice(cellRangeInfo.firstCellPosition[1], cellRangeInfo.lastCellPosition[1] + 1);
-            generator.generateOperation(Operations.TABLE_INSERT, { start: [1], attrs: tableAttributes });
+            oldTableAttributes = tableStyles.getElementAttributes(cellRangeInfo.tableNode);
+            newTableAttributes = StyleSheets.getExplicitAttributes(cellRangeInfo.tableNode);
+            newTableAttributes.table = newTableAttributes.table || {};
+            newTableAttributes.table.tableGrid = oldTableAttributes.table.tableGrid.slice(cellRangeInfo.firstCellPosition[1], cellRangeInfo.lastCellPosition[1] + 1);
+            generator.generateOperation(Operations.TABLE_INSERT, { start: [1], attrs: newTableAttributes });
 
             // all covered rows in the table
             tableRowNodes = DOM.getTableRows(cellRangeInfo.tableNode).slice(cellRangeInfo.firstCellPosition[0], cellRangeInfo.lastCellPosition[0] + 1);
@@ -629,8 +629,7 @@ define('io.ox/office/editor/editor',
 
             // remove highlighting and merge sibling text spans
             _(highlightedSpans).each(function (span) {
-                // TODO: pass a complete attributes object
-                characterStyles.setElementAttributes(span, { highlight: null }, { special: true });
+                characterStyles.setElementAttributes(span, { character: { highlight: null } }, { special: true });
                 CharacterStyles.mergeSiblingTextSpans(span);
                 CharacterStyles.mergeSiblingTextSpans(span, true);
             });
@@ -740,8 +739,7 @@ define('io.ox/office/editor/editor',
                         }
 
                         // set highlighting to resulting text span and store it in the global list
-                        // TODO: pass a complete attributes object
-                        characterStyles.setElementAttributes(spanInfo.span, { highlight: true }, { special: true });
+                        characterStyles.setElementAttributes(spanInfo.span, { character: { highlight: true } }, { special: true });
                         highlightedSpans.push(spanInfo.span);
 
                         // go to next text span
@@ -1096,7 +1094,7 @@ define('io.ox/office/editor/editor',
 
                 if (tableDomPoint && DOM.isTableNode(tableDomPoint.node)) {
 
-                    var tableGridCount = tableStyles.getElementAttributes(tableDomPoint.node).tableGrid.length,
+                    var tableGridCount = tableStyles.getElementAttributes(tableDomPoint.node).table.tableGrid.length,
                         rowGridCount = Table.getColSpanSum($(rowDomPoint.node).children());
 
                     if (rowGridCount > tableGridCount) {
@@ -1179,8 +1177,7 @@ define('io.ox/office/editor/editor',
 
                     // Setting new table grid attribute to table
                     if (! deletedAllRows) {
-                        var // tableStyles.getElementAttributes(tableNode) returns deep copy of the table attributes
-                            tableGrid = tableStyles.getElementAttributes(tableNode).tableGrid;
+                        var tableGrid = _.clone(tableStyles.getElementAttributes(tableNode).table.tableGrid);
 
                         tableGrid.splice(startGrid, endGrid - startGrid + 1);  // removing column(s) in tableGrid (automatically updated in table node)
                         newOperation = { name: Operations.ATTRS_SET, attrs: { table: { tableGrid: tableGrid } }, start: _.clone(tablePos) };
@@ -1403,9 +1400,9 @@ define('io.ox/office/editor/editor',
                                 text = text.concat(nodeText.slice(start, start + length));
                             }
                             if (url.length === 0) {
-                                var styles = characterStyles.getElementAttributes(node);
-                                if (styles.url && styles.url.length > 0)
-                                    url = styles.url;
+                                var charAttributes = characterStyles.getElementAttributes(node).character;
+                                if (charAttributes.url && charAttributes.url.length > 0)
+                                    url = charAttributes.url;
                             }
                         }
                     });
@@ -1642,25 +1639,27 @@ define('io.ox/office/editor/editor',
                 // table or drawing element contained by the selection
                 element = null,
                 // resulting merged attributes
-                attributes = {};
+                mergedAttributes = {};
 
             // merges the passed element attributes into the resulting attributes
             function mergeElementAttributes(elementAttributes) {
 
                 var // whether any attribute is still unambiguous
-                    hasNonNull = false;
+                    hasNonNull = false,
+                    // extract the attributes of the passed family
+                    attributes = elementAttributes[family] || {};
 
                 // process all passed element attributes
-                _(elementAttributes).each(function (value, name) {
+                _(attributes).each(function (value, name) {
 
-                    if (!(name in attributes)) {
+                    if (!(name in mergedAttributes)) {
                         // initial iteration: store value
-                        attributes[name] = value;
-                    } else if (!_.isEqual(value, attributes[name])) {
+                        mergedAttributes[name] = value;
+                    } else if (!_.isEqual(value, mergedAttributes[name])) {
                         // value differs from previous value: ambiguous state
-                        attributes[name] = null;
+                        mergedAttributes[name] = null;
                     }
-                    hasNonNull = hasNonNull || !_.isNull(attributes[name]);
+                    hasNonNull = hasNonNull || !_.isNull(mergedAttributes[name]);
                 });
 
                 // stop iteration, if all attributes are ambiguous
@@ -1681,7 +1680,7 @@ define('io.ox/office/editor/editor',
                 });
                 if (isCursor) {
                     // add preselected attributes (text cursor selection cannot result in ambiguous attributes)
-                    characterStyles.extendAttributes(attributes, preselectedAttributes);
+                    characterStyles.extendAttributeValues(mergedAttributes, preselectedAttributes);
                 }
                 break;
 
@@ -1708,7 +1707,7 @@ define('io.ox/office/editor/editor',
                 Utils.error('Editor.getAttributes(): missing implementation for family "' + family + '"');
             }
 
-            return attributes;
+            return mergedAttributes;
         };
 
         /**
@@ -1787,7 +1786,7 @@ define('io.ox/office/editor/editor',
 
                 // add all attributes to be cleared
                 if (Utils.getBooleanOption(options, 'clear', false)) {
-                    _(styleSheets.getAttributeNames()).each(function (name) {
+                    _(StyleSheets.getAttributeNames(family)).each(function (name) {
                         if (!(name in attributes)) {
                             attributes[name] = null;
                         }
@@ -1834,7 +1833,7 @@ define('io.ox/office/editor/editor',
                             }
                         });
                     } else {
-                        characterStyles.extendAttributes(preselectedAttributes, attributes);
+                        characterStyles.extendAttributeValues(preselectedAttributes, attributes);
                     }
                     break;
 
@@ -2225,7 +2224,7 @@ define('io.ox/office/editor/editor',
 
             // find out which outline level paragraph styles are missing
             _(styleNames).each(function (name, id) {
-                var styleAttributes = paragraphStyles.getStyleSheetAttributes(id),
+                var styleAttributes = paragraphStyles.getStyleSheetAttributes(id).paragraph,
                     outlineLvl = styleAttributes.outlineLevel;
                 if (_.isNumber(outlineLvl) && (outlineLvl >= 0 && outlineLvl < 6)) {
                     headings = _(headings).without(outlineLvl);
@@ -2701,9 +2700,9 @@ define('io.ox/office/editor/editor',
                     mustInsertTab = !event.shiftKey;
                 if (!selection.hasRange() &&
                         _.last(selection.getStartPosition()) === Position.getFirstTextNodePositionInParagraph(paragraph)) {
-                    var paraAttributes = paragraphStyles.getElementAttributes(paragraph),
-                    indentLevel = paraAttributes.indentLevel,
-                        styleAttributes = paragraphStyles.getStyleSheetAttributes(paraAttributes.style, 'paragraph');
+                    var paraAttributes = paragraphStyles.getElementAttributes(paragraph).paragraph,
+                        indentLevel = paraAttributes.indentLevel,
+                        styleAttributes = paragraphStyles.getStyleSheetAttributes(paraAttributes.style).paragraph;
 
                     if (paraAttributes.numId !== -1) {
                         mustInsertTab = false;
@@ -2837,7 +2836,7 @@ define('io.ox/office/editor/editor',
                         var // the paragraph element addressed by the
                             // passed logical position
                             paragraph = Position.getLastNodeFromPositionByNodeName(editdiv, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR);
-                        var indentLevel = paragraphStyles.getElementAttributes(paragraph).indentLevel;
+                        var indentLevel = paragraphStyles.getElementAttributes(paragraph).paragraph.indentLevel;
                         var split = true;
                         var paragraphLength = Position.getParagraphLength(editdiv, selection.startPaM.oxoPosition),
                             endOfParagraph = paragraphLength ===  selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1];
@@ -2875,7 +2874,7 @@ define('io.ox/office/editor/editor',
                             undoManager.enterGroup(function () {
                                 self.splitParagraph(startPosition);
                                 if (endOfParagraph) {
-                                    var paraAttributes = paragraphStyles.getElementAttributes(paragraph),
+                                    var paraAttributes = paragraphStyles.getElementAttributes(paragraph).paragraph,
                                         styleAttributes = paragraphStyles.getStyleSheetAttributeMap(paraAttributes.style, 'paragraph');
                                     if (styleAttributes.next !== paraAttributes.style) {
                                         selection.setTextSelection(newPosition);
@@ -3110,10 +3109,10 @@ define('io.ox/office/editor/editor',
             documentStyles.setAttributes(attributes.document);
 
             // default attribute values of other style families
-            _(attributes).each(function (defaults, family) {
+            _(attributes).each(function (defaultValues, family) {
                 var styleSheets = documentStyles.getStyleSheets(family);
                 if (styleSheets) {
-                    styleSheets.setAttributeDefaults(defaults);
+                    styleSheets.setAttributeDefaultValues(defaultValues);
                 }
             });
 
@@ -3308,9 +3307,8 @@ define('io.ox/office/editor/editor',
             }
 
             // apply the passed paragraph attributes
-            // TODO: pass the entire attributes object
-            if (_.isObject(operation.attrs) && _.isObject(operation.attrs.paragraph)) {
-                paragraphStyles.setElementAttributes(paragraph, operation.attrs.paragraph);
+            if (_.isObject(operation.attrs)) {
+                paragraphStyles.setElementAttributes(paragraph, operation.attrs);
             }
 
             // set cursor to beginning of the new paragraph
@@ -3385,10 +3383,7 @@ define('io.ox/office/editor/editor',
             // generate undo/redo operations
             if (generator) {
                 generator.generateOperation(Operations.PARA_SPLIT, { start: paraEndPosition });
-                generator.generateSetAttributesOperation(nextParagraph, nextParaPosition, undefined, { attributes: {
-                    paragraph: ParagraphStyles.buildNullAttributes(),
-                    character: CharacterStyles.buildNullAttributes()
-                } });
+                generator.generateSetAttributesOperation(nextParagraph, nextParaPosition, undefined, { clear: ['paragraph', 'character'] });
                 undoManager.addUndo(generator.getOperations(), operation);
             }
 
@@ -3441,9 +3436,8 @@ define('io.ox/office/editor/editor',
             }
 
             // apply the passed table attributes
-            // TODO: pass the entire attributes object
-            if (_.isObject(operation.attrs) && _.isObject(operation.attrs.table)) {
-                tableStyles.setElementAttributes(table, operation.attrs.table);
+            if (_.isObject(operation.attrs)) {
+                tableStyles.setElementAttributes(table, operation.attrs);
             }
         };
 
@@ -3841,7 +3835,7 @@ define('io.ox/office/editor/editor',
                                 newOperation = null,
                                 anchorHorOffset = 0,
                                 anchorVertOffset = 0,
-                                drawingNodeAttrs = drawingStyles.getElementAttributes(drawingNode),
+                                drawingNodeAttrs = drawingStyles.getElementAttributes(drawingNode).drawing,
                                 oldAnchorHorOffset = drawingNodeAttrs.anchorHorOffset,
                                 oldAnchorVertOffset = drawingNodeAttrs.anchorVertOffset ? drawingNodeAttrs.anchorVertOffset : 0,
                                 anchorHorBase = drawingNodeAttrs.anchorHorBase,
@@ -4088,7 +4082,7 @@ define('io.ox/office/editor/editor',
                     // calculating maxLeftShift and maxRightShift
                     lastCell = cellNode[0].nextSibling ? false : true;
                     tablePosition = Position.getOxoPosition(editdiv, tableNode.get(0), 0);
-                    tableNodeAttrs = tableStyles.getElementAttributes(tableNode);
+                    tableNodeAttrs = tableStyles.getElementAttributes(tableNode).table;
                     oldTableGrid = tableNodeAttrs.tableGrid;
                     oldTableWidth = tableNodeAttrs.width;
                     maxTableWidth = tableNode.parent().width();
@@ -4191,7 +4185,7 @@ define('io.ox/office/editor/editor',
                             tableGrid.push(Utils.roundDigits(gridSum * pixelGrid[i] / newTableWidth, 0));  // only ints
                         }
 
-                        if ((! lastCell) && (tableStyles.getElementAttributes(tableNode).width === 'auto')) { newTableWidth = 'auto'; }
+                        if ((! lastCell) && (tableStyles.getElementAttributes(tableNode).table.width === 'auto')) { newTableWidth = 'auto'; }
                         else { newTableWidth = Utils.convertLengthToHmm(newTableWidth, 'px'); }
 
                         var newOperation = {name: Operations.ATTRS_SET, attrs: { table: { tableGrid: tableGrid, width: newTableWidth } }, start: tablePosition};
@@ -4283,10 +4277,9 @@ define('io.ox/office/editor/editor',
             // Here we always don't want to have the hyperlink formatting, we hardly reset these attributes
             if (DOM.isTextSpan(paragraph.firstElementChild) && (paragraph.children.length === 1) &&
                 (paragraph.firstElementChild.textContent.length === 0)) {
-                var url = characterStyles.getElementAttributes(paragraph.firstElementChild).url;
+                var url = characterStyles.getElementAttributes(paragraph.firstElementChild).character.url;
                 if ((url !== null) && (url.length > 0)) {
-                    // TODO: pass a complete attributes object
-                    characterStyles.setElementAttributes(paragraph.firstElementChild, { url: null, style: null });
+                    characterStyles.setElementAttributes(paragraph.firstElementChild, { character: { url: null, style: null } });
                 }
             }
 
@@ -4374,7 +4367,7 @@ define('io.ox/office/editor/editor',
             if (allTabNodes.length > 0) {
 
                 var defaultTabstop = documentStyles.getAttributes().defaultTabStop,
-                    paraAttributes = paragraphStyles.getElementAttributes(paragraph),
+                    paraAttributes = paragraphStyles.getElementAttributes(paragraph).paragraph,
                     paraTabstops = [];
 
                 // paragraph tab stop definitions
@@ -4632,9 +4625,8 @@ define('io.ox/office/editor/editor',
             textNode.nodeValue = textNode.nodeValue.slice(0, spanInfo.offset) + text + textNode.nodeValue.slice(spanInfo.offset);
 
             // apply the passed text attributes
-            // TODO: pass the entire attributes object
-            if (_.isObject(attrs) && _.isObject(attrs.character)) {
-                characterStyles.setElementAttributes(spanInfo.node, attrs.character);
+            if (_.isObject(attrs)) {
+                characterStyles.setElementAttributes(spanInfo.node, attrs);
             }
 
             // validate paragraph, store new cursor position
@@ -4715,9 +4707,8 @@ define('io.ox/office/editor/editor',
             DOM.createFieldNode().append(fieldSpan).insertAfter(span);
 
             // apply the passed field attributes
-            // TODO: pass the entire attributes object
-            if (_.isObject(attrs) && _.isObject(attrs.character)) {
-                characterStyles.setElementAttributes(fieldSpan, attrs.character);
+            if (_.isObject(attrs)) {
+                characterStyles.setElementAttributes(fieldSpan, attrs);
             }
 
             // validate paragraph, store new cursor position
@@ -4743,9 +4734,8 @@ define('io.ox/office/editor/editor',
             DOM.createTabNode().append(tabSpan).insertAfter(span);
 
             // apply the passed tab attributes
-            // TODO: pass the entire attributes object
-            if (_.isObject(attrs) && _.isObject(attrs.character)) {
-                characterStyles.setElementAttributes(tabSpan, attrs.character);
+            if (_.isObject(attrs)) {
+                characterStyles.setElementAttributes(tabSpan, attrs);
             }
 
             // validate paragraph, store new cursor position
@@ -4782,9 +4772,8 @@ define('io.ox/office/editor/editor',
             }
 
             // apply the passed drawing attributes
-            // TODO: pass the entire attributes object
-            if (_.isObject(attributes) && _.isObject(attributes.drawing)) {
-                drawingStyles.setElementAttributes(drawingNode, attributes.drawing);
+            if (_.isObject(attributes)) {
+                drawingStyles.setElementAttributes(drawingNode, attributes);
             }
 
             // validate paragraph, store new cursor position
@@ -4880,8 +4869,8 @@ define('io.ox/office/editor/editor',
 
             var // node info for start/end position
                 startInfo = null, endInfo = null,
-                // the attribute family of the target components
-                family = null,
+                // the main attribute family of the target components
+                styleFamily = null,
                 // the style sheet container for the target components
                 styleSheets = null,
                 // options for StyleSheets method calls
@@ -4894,9 +4883,8 @@ define('io.ox/office/editor/editor',
                 redoOperation = null;
 
             // sets or clears the attributes using the current style sheet container
-            // TODO: pass the entire attributes object
             function setElementAttributes(element) {
-                styleSheets.setElementAttributes(element, attributes[family], options);
+                styleSheets.setElementAttributes(element, attributes, options);
             }
 
             // change listener used to build the undo operations
@@ -4907,22 +4895,31 @@ define('io.ox/office/editor/editor',
                     // the attributes of the current family for the undo operation
                     undoAttributes = {},
                     // the operation used to undo the attribute changes
-                    undoOperation = { name: Operations.ATTRS_SET, start: range.start, end: range.end, attrs: Utils.makeSimpleObject(family, undoAttributes) },
+                    undoOperation = { name: Operations.ATTRS_SET, start: range.start, end: range.end, attrs: undoAttributes },
                     // last undo operation (used to merge character attributes of sibling text spans)
-                    lastUndoOperation = ((undoOperations.length > 0) && (family === 'character')) ? _.last(undoOperations) : null;
+                    lastUndoOperation = ((undoOperations.length > 0) && (styleFamily === 'character')) ? _.last(undoOperations) : null;
+
+                function insertUndoAttribute(family, name, value) {
+                    undoAttributes[family] = undoAttributes[family] || {};
+                    undoAttributes[family][name] = value;
+                }
 
                 // find all old attributes that have been changed or cleared
-                _(oldAttributes).each(function (value, name) {
-                    if (!_.isEqual(value, newAttributes[name])) {
-                        undoAttributes[name] = value;
-                    }
+                _(oldAttributes).each(function (attributeValues, family) {
+                    _(attributeValues).each(function (value, name) {
+                        if (!(family in newAttributes) || !_.isEqual(value, newAttributes[family][name])) {
+                            insertUndoAttribute(family, name, value);
+                        }
+                    });
                 });
 
                 // find all newly added attributes
-                _(newAttributes).each(function (value, name) {
-                    if (!(name in oldAttributes)) {
-                        undoAttributes[name] = null;
-                    }
+                _(newAttributes).each(function (attributeValues, family) {
+                    _(attributeValues).each(function (value, name) {
+                        if (!(family in oldAttributes) || !(name in oldAttributes[family])) {
+                            insertUndoAttribute(family, name, null);
+                        }
+                    });
                 });
 
                 // try to merge 'character' undo operation with last array entry, otherwise add operation to array
@@ -4974,15 +4971,10 @@ define('io.ox/office/editor/editor',
                     return;
                 }
 
-                // nothing to do without character attributes
-                family = 'character';
-                if (!_.isObject(attributes[family]) || _.isEmpty(attributes[family])) {
-                    return;
-                }
-
                 // visit all text span elements covered by the passed range
                 // (not only the direct children of the paragraph, but also
                 // text spans embedded in component nodes such as fields and tabs)
+                styleFamily = 'character';
                 styleSheets = characterStyles;
                 Position.iterateParagraphChildNodes(startInfo.node.parentNode, function (node) {
 
@@ -5020,14 +5012,9 @@ define('io.ox/office/editor/editor',
                     return;
                 }
 
-                // nothing to do without family attributes
-                family = startInfo.family;
-                if (!_.isObject(attributes[family]) || _.isEmpty(attributes[family])) {
-                    return;
-                }
-
                 // format the (single) element
-                styleSheets = self.getStyleSheets(family);
+                styleFamily = startInfo.family;
+                styleSheets = self.getStyleSheets(styleFamily);
                 setElementAttributes(startInfo.node);
             }
 
@@ -5038,16 +5025,17 @@ define('io.ox/office/editor/editor',
             }
 
             // update numberings and bullets
-            if ((startInfo.family === 'paragraph') && (('style' in attributes) || ('indentLevel' in attributes) || ('numId' in attributes))) {
+            if ((startInfo.family === 'paragraph') && _.isObject(attributes.paragraph) && (('style' in attributes.paragraph) || ('indentLevel' in attributes.paragraph) || ('numId' in attributes.paragraph))) {
                 implUpdateLists();
             }
 
             // adjust tab sizes
             var paragraph = null;
-            if (DOM.isParagraphNode(startInfo.node))
+            if (DOM.isParagraphNode(startInfo.node)) {
                 paragraph = startInfo.node;
-            else if (DOM.isParagraphNode(startInfo.node.parentNode))
+            } else if (DOM.isParagraphNode(startInfo.node.parentNode)) {
                 paragraph = startInfo.node.parentNode;
+            }
             if (paragraph) {
                 adjustTabsOfParagraph(paragraph);
             }
@@ -5320,9 +5308,8 @@ define('io.ox/office/editor/editor',
                 }
 
                 // apply the passed attributes
-                // TODO: pass the entire attributes object
-                if (_.isObject(attrs) && _.isObject(attrs.row)) {
-                    tableRowStyles.setElementAttributes(newRow, attrs.row);
+                if (_.isObject(attrs)) {
+                    tableRowStyles.setElementAttributes(newRow, attrs);
                 }
             });
 
@@ -5366,9 +5353,8 @@ define('io.ox/office/editor/editor',
                 cell = DOM.createTableCellNode(paragraph);
 
             // apply the passed table cell attributes
-            // TODO: pass the entire attributes object
-            if (_.isObject(attrs) && _.isObject(attrs.cell)) {
-                tableCellStyles.setElementAttributes(cell, attrs.cell);
+            if (_.isObject(attrs)) {
+                tableCellStyles.setElementAttributes(cell, attrs);
             }
 
             // insert empty text node into the paragraph
@@ -5832,8 +5818,7 @@ define('io.ox/office/editor/editor',
             sourceCells.remove();
 
             // apply the passed table cell attributes
-            // TODO: pass a complete attributes object
-            tableCellStyles.setElementAttributes(targetCell, { gridSpan: colSpanSum });
+            tableCellStyles.setElementAttributes(targetCell, { cell: { gridSpan: colSpanSum } });
         }
 
         /**
@@ -5849,7 +5834,7 @@ define('io.ox/office/editor/editor',
                 var listItemCounter = [];
                 Utils.iterateSelectedDescendantNodes(editdiv, DOM.PARAGRAPH_NODE_SELECTOR, function (para) {
                     // always remove an existing label
-                    var paraAttributes = paragraphStyles.getElementAttributes(para),
+                    var paraAttributes = paragraphStyles.getElementAttributes(para).paragraph,
                     oldLabel = $(para).children(DOM.LIST_LABEL_NODE_SELECTOR);
                     var updateParaTabstops = oldLabel.length > 0;
                     oldLabel.remove();
@@ -5885,7 +5870,7 @@ define('io.ox/office/editor/editor',
                             var numberingElement = DOM.createListLabelNode(listObject.text);
 
                             var span = DOM.findFirstPortionSpan(para);
-                            var charAttributes = characterStyles.getElementAttributes(span);
+                            var charAttributes = characterStyles.getElementAttributes(span).character;
                             if (listObject.imgsrc) {
                                 var absUrl = getDocumentUrl({ get_filename: listObject.imgsrc });
                                 var image = $('<div>', { contenteditable: false })
@@ -5934,7 +5919,7 @@ define('io.ox/office/editor/editor',
 
 
                                 var defaultTabstop = documentStyles.getAttributes().defaultTabStop,
-                                paraAttributes = paragraphStyles.getElementAttributes(para),
+                                paraAttributes = paragraphStyles.getElementAttributes(para).paragraph,
                                 paraTabstops = [];
                                 // paragraph tab stop definitions
                                 if (paraAttributes && paraAttributes.tabStops) {
