@@ -138,13 +138,6 @@ define('io.ox/files/actions',
         }
     });
 
-    new Action('io.ox/files/actions/edit', {
-        requires: 'one modify',
-        action: function (baton) {
-            baton.view.edit();
-        }
-    });
-
     new Action('io.ox/files/actions/open', {
         requires: 'some',
         multiple: function (list) {
@@ -214,22 +207,7 @@ define('io.ox/files/actions',
         }
     });
 
-    // edit mode actions
-    ext.point("io.ox/files/actions/edit/save").extend({
-        action: function (baton) {
-            var updatedFile = baton.view.getModifiedFile();
-            baton.view.endEdit();
-            api.update(updatedFile);
-        }
-    });
-
-    ext.point("io.ox/files/actions/edit/cancel").extend({
-        action: function (baton) {
-            baton.view.endEdit();
-        }
-    });
-
-
+    
     // version specific actions
 
     new Action('io.ox/files/versions/actions/makeCurrent', {
@@ -334,13 +312,7 @@ define('io.ox/files/actions',
         ref: "io.ox/files/actions/editor"
     }));
 
-    ext.point("io.ox/files/links/inline").extend(new links.Link({
-        id: "edit",
-        index: 50,
-        label: gt("Edit"),
-        ref: "io.ox/files/actions/edit"
-    }));
-
+    
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: "officeeditor",
         index: 60,
@@ -402,32 +374,7 @@ define('io.ox/files/actions',
         ref: "io.ox/files/actions/office/editasnew"
     }));
 
-    // edit links
-
-    ext.point("io.ox/files/links/edit/inline").extend(new links.Button({
-        id: "cancel",
-        index: 100,
-        label: gt("Discard"),
-        ref: "io.ox/files/actions/edit/cancel",
-        cssClasses: "btn",
-        tabIndex: 30,
-        tagtype: 'button',
-        css: {
-            marginRight: '10px'
-        }
-    }));
-
-    ext.point("io.ox/files/links/edit/inline").extend(new links.Button({
-        id: "save",
-        index: 100000,
-        label: gt("Save"),
-        ref: "io.ox/files/actions/edit/save",
-        cssClasses: "btn btn-primary",
-        tabIndex: 40,
-        tagtype: 'button'
-    }));
-
-
+    
     // version links
 
 
@@ -494,20 +441,6 @@ define('io.ox/files/actions',
         action: function (file, app) {
             app.queues.update.offer(file);
         }
-    });
-
-    // Keyboard Shotcuts
-
-    ext.point("io.ox/files/shortcuts").extend({
-        id: "cancel",
-        shortcut: "esc",
-        ref: "io.ox/files/actions/edit/cancel"
-    });
-
-    ext.point("io.ox/files/shortcuts").extend({
-        id: "edit",
-        shortcut: "ctrl+enter",
-        ref: "io.ox/files/actions/edit"
     });
 
     // Iconview Inline Links

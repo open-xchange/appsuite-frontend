@@ -141,17 +141,6 @@ define('io.ox/files/list/perspective',
             });
             //.on('refresh.all', grid.repaint());
 
-            // Toggle Edit Mode
-
-            right.on("dblclick", function (e) {
-                if (_(["a", "button", "input", "textarea"]).include(e.srcElement.tagName.toLowerCase())) {
-                    return;
-                }
-                if (currentDetailView) {
-                    currentDetailView.toggleEdit();
-                }
-            });
-
             // Uploads
             app.queues = {};
 

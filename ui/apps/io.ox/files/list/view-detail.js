@@ -68,96 +68,8 @@ define("io.ox/files/list/view-detail",
                     });
                 }
             },
-            registerInlineEdit: function ($node) {
-                var self = this;
-                $node.on("dblclick", function (e) {
-                    if (_(["a", "button", "input", "textarea"]).include(e.srcElement.tagName.toLowerCase())) {
-                        return;
-                    }
-                    self.toggleEdit();
-                });
-            },
-            toggleEdit: function () {
-                if (mode === 'edit') {
-                    // Trigger Save
-                    ext.point("io.ox/files/actions/edit/save").invoke("action", self, self.getModifiedFile(), {view: self, data: self.getModifiedFile()});
-                } else {
-                    self.edit();
-                }
-            },
             on: eventHub.on,
             off: eventHub.off,
-            edit: function () {
-                if (mode === 'edit') {
-                    return;
-                }
-                eventHub.trigger('edit');
-                mode = 'edit';
-                sections.each(function (sublayout, $sectionNode) {
-                    var hideSection = true;
-                    sublayout.each(function (extension, $node) {
-                        if (extension.edit) {
-                            hideSection = false;
-                            extension.edit.call($node, file, {data: file, view: self});
-                        } else {
-                            if (extension.deactivate) {
-                                hideSection = false;
-                                extension.deactivate.call($node, file, {data: file, view: self});
-                            } else {
-                                // Dim the extension, poor mans 'deactivate'
-                                if ($node) {
-                                    $node.css({opacity: "0.5" });
-                                }
-                            }
-                        }
-                    });
-
-                    if (hideSection) {
-                        $sectionNode.fadeOut();
-                        $sectionNode.data("io-ox-files-hidden", true);
-                    }
-
-                });
-            },
-            endEdit: function () {
-                if (mode === 'display') {
-                    return;
-                }
-                eventHub.trigger('endEdit');
-
-                mode = 'display';
-                sections.each(function (sublayout, $sectionNode) {
-                    sublayout.each(function (extension, $node) {
-                        if (extension.endEdit) {
-                            extension.endEdit.call($node, file, {data: file, view: self});
-                        } else {
-                            if (extension.activate) {
-                                extension.activate.call($node, file, {data: file, view: self});
-                            } else {
-                                // Activate the extension
-                                if ($node) {
-                                    $node.css({opacity: "" });
-                                }
-                            }
-                        }
-                    });
-
-                    if ($sectionNode.data("io-ox-files-hidden")) {
-                        $sectionNode.fadeIn();
-                        $sectionNode.data("io-ox-files-hidde", false);
-                    }
-                });
-            },
-            getModifiedFile: function () {
-                sections.each(function (sublayout, $sectionNode) {
-                    sublayout.each(function (extension, $node) {
-                        if (extension.process) {
-                            extension.process.call($node, file, {data: file, view: self});
-                        }
-                    });
-                });
-                return file;
-            },
             destroy: function () {
                 sections.destroy();
                 $element.empty();
@@ -226,33 +138,6 @@ define("io.ox/files/list/view-detail",
             this.append(
                 $("<div>").addClass("title clear-title").text(gt.noI18n(file.title || file.filename || '\u00A0'))
             );
-        },
-        edit: function (file, context) {
-            var size = this.find(".title").height(),
-                keyListener = new KeyListener(this).include();
-            if (size < 30) {
-                size = 30;
-            }
-            this.find(".title").empty().append(
-                $('<input>', { type: 'text', name: 'title' })
-                .addClass('editing')
-                .attr({placeholder: gt("Title"), tabIndex: 10})
-                .val(file.title));
-
-            this.find("input").focus();
-
-            keyListener.on("enter", function () {
-                context.view.toggleEdit();
-            });
-            this.data("keyListener", keyListener);
-        },
-        endEdit: function (file) {
-            this.find(".title").empty().text(gt.noI18n(file.title || file.filename || '\u00A0'));
-            this.data("keyListener").remove();
-            this.data("keyListener", null);
-        },
-        process: function (file) {
-            file.title = this.find("input").val();
         },
         on: {
             update: function (file) {
@@ -373,10 +258,6 @@ define("io.ox/files/list/view-detail",
             ref: 'io.ox/files/links/inline'
         });
 
-        var editLinks = new links.InlineLinks({
-            ref: 'io.ox/files/links/edit/inline'
-        });
-
         ext.point('io.ox/files/details/sections/header').extend({
             index: 30,
             id: 'inline-links',
@@ -385,23 +266,6 @@ define("io.ox/files/list/view-detail",
                 regularLinks.draw.call(this, {
                     data: file,
                     view: detailView,
-                    folder_id: file.folder_id // collection needs this to work!
-                });
-            },
-            edit: function (file, context) {
-                this.empty();
-                editLinks.draw.call(this, {
-                    data: file,
-                    view: context.view,
-                    folder_id: file.folder_id // collection needs this to work!
-                });
-
-            },
-            endEdit: function (file, context) {
-                this.empty();
-                regularLinks.draw.call(this, {
-                    data: file,
-                    view: context.view,
                     folder_id: file.folder_id // collection needs this to work!
                 });
             }
@@ -437,7 +301,6 @@ define("io.ox/files/list/view-detail",
         on: {
             update: function (file, extension) {
                 this.empty();
-                console.log('Sind wir hier?', file);
                 extension.draw.call(this, file, extension);
             }
         }
@@ -465,37 +328,6 @@ define("io.ox/files/list/view-detail",
                 }).addClass("description")
                 .text(gt.noI18n(file.description || ''))
             );
-        },
-        edit: function (file, context) {
-            var height = this.parent().innerHeight(),
-                keyListener = new KeyListener(this).include();
-            if (height < 220) {
-                height = 220;
-            }
-            this.empty().append($("<textarea>").css({resize: 'none', width: "100%", height: height + "px", boxSizing: "border-box"}).attr({placeholder: gt("Description"), tabIndex: 20}).val(file.description));
-            keyListener.on("shift+enter", function (evt) {
-                context.view.toggleEdit();
-            });
-            this.data("keyListener", keyListener);
-
-        },
-        endEdit: function (file) {
-            this.empty().append(
-                $("<div>")
-                .css({
-                    // makes it readable
-                    fontFamily: "monospace, 'Courier new'",
-                    whiteSpace: "pre-wrap",
-                    paddingRight: "2em"
-                }).addClass("description")
-                .text(gt.noI18n(file.description || ''))
-            );
-            this.data("keyListener").remove();
-            this.data("keyListener", null);
-
-        },
-        process: function (file) {
-            file.description = this.find("textarea").val();
         },
         on: {
             update: function (file, extension) {
