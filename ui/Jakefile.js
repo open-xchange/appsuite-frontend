@@ -13,6 +13,7 @@
 var fs = require("fs");
 var http = require("http");
 var path = require("path");
+var readline = require('readline');
 var util = require("util");
 var utils = require("./lib/build/fileutils");
 var _ = require("./lib/underscore.js");
@@ -41,9 +42,13 @@ function envBoolean(name) {
     return /^\s*(?:on|yes|true|1)/i.test(process.env[name]);
 }
 
-var appName = process.env.appName || 'open-xchange-ui7';
 var debug = envBoolean('debug');
 if (debug) console.info("Debug mode: on");
+
+var appName = process.env.appName;
+if (!appName && path.existsSync('debian/changelog')) {
+    appName = /\S+/.exec(fs.readFileSync('debian/changelog', 'utf8'))[0];
+}
 
 utils.fileType("source").addHook("filter", utils.includeFilter);
 utils.fileType("module").addHook("filter", utils.includeFilter);
@@ -307,7 +312,7 @@ if (!path.existsSync("apps/io.ox/core/date/tz/zoneinfo")) {
 
 // external apps
 
-desc('Builds an external app\nParameter: appName');
+desc('Builds an external app');
 utils.topLevelTask('app', ['buildApp'], utils.summary('app'));
 
 // common task for external apps and the GUI
@@ -380,8 +385,9 @@ if (apps.rest) utils.copy(apps.rest);
 
 // manifests
 
-utils.merge(appName + '.manifest.json', utils.list('apps/**/manifest.json'), {
-    merge: function (manifests, names) {
+utils.merge('manifests/' + appName + '.json',
+    utils.list('apps/**/manifest.json'),
+    { merge: function (manifests, names) {
         var combinedManifest = [];
         _.each(manifests, function (m, i) {
             var prefix = /^apps[\\\/](.*)[\\\/]manifest\.json$/
@@ -413,8 +419,7 @@ utils.merge(appName + '.manifest.json', utils.list('apps/**/manifest.json'), {
             });
         });
         return JSON.stringify(combinedManifest, null, debug ? 4 : null);
-    }
-});
+    } });
 
 // doc task
 
@@ -515,6 +520,105 @@ task("deps", [depsPath], function() {
     }
 });
 
+// initialization of packaging
+
+desc('Initializes packaging information for a new app.');
+utils.topLevelTask('init-packaging', [], function() {
+    utils.summary('init-packaging');
+});
+(function () {
+    var packagingVariables = {
+        appName: appName,
+        timestamp: formatDate(new Date())
+    };
+    function formatDate(d) {
+        return [
+            ['Sun,', 'Mon,', 'Tue,',
+             'Wed,', 'Thu,', 'Fri,', 'Sat,'][d.getUTCDay()],
+            pad(d.getUTCDate),
+            ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getUTCMonth()],
+            d.getUTCFullYear(),
+            [pad(d.getUTCHours()),
+             pad(d.getUTCMinutes()), pad(d.getUTCSeconds())].join(':'),
+            '+0000'
+        ].join(' ');
+    }
+    task('prompt-packaging', [], function () {
+        var varDefs = [
+            { key: 'appName', prompt: 'Package name' },
+            { key: 'version', prompt: 'Version', def: ver },
+            { key: 'maintainer', prompt: 'Maintainer (Name <e-mail>)' },
+            {
+                key: 'copyright',
+                prompt: 'Copyright line',
+                def: '2012 Open-Xchange, Inc'
+            },
+            {
+                key: 'licenseName',
+                prompt: 'License name',
+                def: 'CC-BY-NC-SA-3.0',
+                handler: function (answer) {
+                    var license = path.join(utils.source('lib/build/licenses'),
+                        answer.toLowerCase().replace(/(\.0)*\+?$/, '.txt'));
+                    if (path.existsSync(license)) {
+                        packagingVariables.license = license;
+                    }
+                }
+            },
+            { key: 'license', prompt: 'License file' },
+            {
+                key: 'description',
+                prompt: 'Description (see http://goo.gl/4D0dc)'
+            },
+        ];
+        var rl = readline.createInterface(process.stdin, process.stdout);
+        prompt(0);
+        function prompt(i) {
+            if (i < varDefs.length) {
+                var varDef = varDefs[i];
+                if (packagingVariables[varDef.key]) {
+                    prompt(i + 1);
+                } else if (varDef.key in process.env) {
+                    reply(process.env[varDef.key]);
+                } else {
+                    var question = varDef.prompt;
+                    if (varDef.def) question += ' [' + varDef.def + ']';
+                    rl.question(question + ': ', reply);
+                }
+                function reply(answer) {
+                    answer = answer || varDef.def;
+                    if (!answer) return prompt(i);
+                    packagingVariables[varDef.key] = answer;
+                    if (varDef.handler) varDef.handler(answer);
+                    prompt(i + 1);
+                }
+            } else {
+                rl.close();
+                process.stdin.destroy();
+                var text = fs.readFileSync(packagingVariables.license, 'utf8');
+                packagingVariables.license = text.replace(/^.*$/gm,
+                    function(line) {
+                        return /\S/.test(line) ? ' ' + line : ' .';
+                    });
+                complete();
+            }
+        }
+    }, { async: true });
+    
+    var files = utils.list(utils.source('lib/build/pkg-template'), '**/*');
+    utils.copy(files, { to: '.', filter: replace, mapper: replace });
+    function replace(data) {
+        return data.replace(/@(\w+)@/g, function (m, key) {
+            return packagingVariables[key];
+        });
+    }
+    _.each(files, function(name) {
+        file(replace(name), ['prompt-packaging']);
+    });
+}());
+utils.topLevelTask();
+
 // packaging
 
 var distDest = process.env.destDir || "tmp/packaging";
@@ -542,7 +646,7 @@ task("dist", [distDest], function () {
                    { cwd: distDest }, done);
     }
     function done(code) { if (code) return fail(); else complete(); }
-}, {async: true });
+}, { async: true });
 
 // clean task
 

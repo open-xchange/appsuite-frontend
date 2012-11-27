@@ -1,0 +1,18 @@
+#!/usr/bin/make -f
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+ifneq (,$(or $(filter noopt,$(DEB_BUILD_OPTIONS)),\
+             $(filter nostrip,$(DEB_BUILD_OPTIONS))))
+	FLAGS += debug=1
+endif
+
+override_dh_auto_build:
+	sh build.sh $(FLAGS)
+
+override_dh_auto_clean:
+	sh build.sh clean $(FLAGS)
+
+%:
+	dh $@

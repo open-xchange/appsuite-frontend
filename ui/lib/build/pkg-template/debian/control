@@ -1,0 +1,18 @@
+Source: @appName@
+Section: non-free/web
+Priority: optional
+Maintainer: @maintainer@
+Build-Depends: debhelper (>= 8.0.0), nodejs (>= 0.4.0)
+Standards-Version: 3.9.2
+
+Package: @appName@
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-ui7
+Description: @description@
+
+Package: @appName@-manifest
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-core
+Description: @description@
+ .
+ This package contains the manifest for installation on the backend.

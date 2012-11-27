@@ -1,0 +1,5 @@
+@appName@ (@version@-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- @maintainer@  @timestamp@

@@ -11,9 +11,9 @@ Vcs-Browser: https://gitweb.open-xchange.com/?p=wd/frontend/web;a=summary
 Package: open-xchange-ui7
 Architecture: all
 Depends: ${misc:Depends}, apache2
-Description: Open-Xchange HTML5 client
+Description: OX App Suite HTML5 client
 
-Package: open-xchange-ui7-apps
+Package: open-xchange-ui7-manifest
 Architecture: all
-Depends: ${misc:Depends}, open-xchange-ui7-backend
-Description: Default applications for the Open-Xchange HTML5 client
+Depends: ${misc:Depends}, open-xchange-core
+Description: Manifest for apps included in the OX App Suite HTML5 client
