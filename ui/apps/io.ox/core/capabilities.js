@@ -30,11 +30,16 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 	(function () {
 		var disabledList = _.url.hash('disableFeature');
 		if (disabledList) {
+
 			_(disabledList.split(/\s*[, ]\s*/)).each(function (feature) {
 				capBlacklist[feature] = true;
 			});
 		}
 	}());
+
+	if (! _.isEmpty(capBlacklist)) {
+		console.info("Blacklisted Features: ", capBlacklist);
+	}
 
 	var capLookup = {
 		get: function (capName) {
@@ -47,6 +52,9 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 			var self = this;
 			
 			var list = _(_(arguments).flatten()).map(function (def) {
+				if (!def) {
+					return '';
+				}
 				return def.split(/\s*[, ]\s*/);
 			});
 			list = _(list).flatten();

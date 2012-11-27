@@ -47,8 +47,6 @@ define('io.ox/core/api/apps',
         }
     });
 
-    console.log("AppData", appData);
-
     var bless = function (obj, id) {
             obj = _.clone(obj || {});
             obj.id = id;

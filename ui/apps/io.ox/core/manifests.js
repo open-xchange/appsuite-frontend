@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http', 'io.ox/core/cache'], function (ext, http, cache) {
+define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/capabilities'], function (ext, http, cache, capabilities) {
     'use strict';
     // TODO: Caching and Update Handling
 
@@ -84,6 +84,11 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
 
     var fnProcessManifest = function (manifest) {
         if (manifest.namespace) {
+            if (manifest.requires) {
+                if (!capabilities.has(manifest.requires)) {
+                    return;
+                }
+            }
             var namespaces = manifest.namespace;
             if (!_.isArray(namespaces)) {
                 namespaces = [manifest.namespace];
@@ -105,7 +110,7 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
     };
 
     var fnLoadStaticFiles = function (state) {
-        require([ox.base + "/src/manifests.js", "io.ox/core/capabilities"], function (manifests, capabilities) {
+        require([ox.base + "/src/manifests.js"], function (manifests) {
             manifestManager.loader = 'backend';
             _(manifests).each(function (manifest) {
                 if (!!! manifest.requires || capabilities.has(manifest.requires)) {
