@@ -253,7 +253,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     } else if (self.transform) {
                         value = self.transform(value);
                     }
-                    if (!first) {
+                    if (!first && !(/^(,\w|$)/).test(self.$el.text())) {
                         self.$el.append($.txt(", "));
                     }
 
