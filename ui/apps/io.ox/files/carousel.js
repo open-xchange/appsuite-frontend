@@ -276,9 +276,6 @@ define('io.ox/files/carousel',
             var self = this;
             if (self.closeControl.is(':visible'))
             {
-                if (BigScreen.enabled) {
-                    BigScreen.exit();
-                }
                 self.inner.empty().remove();
                 self.container.empty().remove();
                 self.list = [];
