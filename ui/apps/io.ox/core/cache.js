@@ -223,24 +223,18 @@ define('io.ox/core/cache',
             });
         };
 
+        function getData(data) {
+            return data && data.data ? data.data : null;
+        }
+
         // list values
         this.values = function () {
-
             return index.keys().pipe(function (keys) {
-                var i = 0, $i = keys.length, c = [];
-
-                var collecter = function (key) {
-                    return index.get(key).pipe(function (data) {
-                        return data.data;
-                    });
-                };
-
-                for (; i < $i; i++) {
-                    c.push(collecter(keys[i]));
-                }
-
-                return $.when.apply(null, c).pipe(function () {
-                    return _(arguments).without(null);
+                return $.when.apply($,
+                    _(keys).map(function (key) { return index.get(key).pipe(getData); })
+                )
+                .pipe(function () {
+                    return _(arguments).compact();
                 });
             });
         };

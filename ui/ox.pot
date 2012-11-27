@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
-"POT-Creation-Date: Tue Nov 27 2012 21:34:49 GMT+0100 (CET)\n"
+"POT-Creation-Date: Tue Nov 27 2012 23:02:18 GMT+0100 (CET)\n"
 "PO-Revision-Date: DATE\n"
 "Last-Translator: NAME <EMAIL>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -59,6 +59,120 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
+#: apps/io.ox/mail/view-detail.js:234
+msgid "This mail has no content"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:308
+msgid "Document"
+msgstr ""
+
+#: apps/io.ox/calendar/view-detail.js:358 apps/io.ox/contacts/view-detail.js:359
+#: apps/io.ox/mail/view-detail.js:313
+msgid "Folder"
+msgstr ""
+
+#: apps/io.ox/backbone/forms.js:583 apps/io.ox/mail/view-detail.js:365
+msgid "Show more"
+msgstr ""
+
+#: apps/io.ox/core/tk/attachments.js:197 apps/io.ox/mail/view-detail.js:597
+msgid "None"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:588 apps/io.ox/mail/view-detail.js:598
+#: apps/io.ox/office/editor/view/controls.js:31
+msgid "Red"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:589 apps/io.ox/mail/view-detail.js:599
+#: apps/io.ox/office/editor/view/controls.js:37
+msgid "Blue"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:590 apps/io.ox/mail/view-detail.js:600
+#: apps/io.ox/office/editor/view/controls.js:35
+msgid "Green"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:601
+msgid "Grey"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:592 apps/io.ox/mail/view-detail.js:602
+#: apps/io.ox/office/editor/view/controls.js:39
+msgid "Purple"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:603
+msgid "Light green"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:594 apps/io.ox/mail/view-detail.js:604
+#: apps/io.ox/office/editor/view/controls.js:32
+msgid "Orange"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:605
+msgid "Pink"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:606
+msgid "Light blue"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:597 apps/io.ox/mail/view-detail.js:607
+#: apps/io.ox/office/editor/view/controls.js:33
+msgid "Yellow"
+msgstr ""
+
+#: apps/io.ox/mail/main.js:412 apps/io.ox/mail/view-detail.js:674
+#: apps/io.ox/mail/view-detail.js:686 apps/io.ox/mail/write/view-main.js:302
+msgid "To"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:693
+msgctxt "CC"
+msgid "Copy"
+msgid_plural "Copy"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/mail/view-detail.js:700
+msgid "All recipients"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:764
+msgctxt "plural"
+msgid "Attachment"
+msgid_plural "Attachments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/mail/view-detail.js:786
+msgid "more"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:792
+msgid "All attachments"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:808
+msgid "Entire thread"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:826
+msgid "Warning: This message might be a phishing or scam mail"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:846
+msgid "Show images"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:849
+msgid "External images have been blocked to protect you against potential spam!"
+msgstr ""
+
 #: apps/io.ox/backbone/basicModel.js:120
 msgid "Invalid data"
 msgstr ""
@@ -73,10 +187,6 @@ msgstr ""
 
 #: apps/io.ox/backbone/forms.js:536
 msgid "Show less"
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:583 apps/io.ox/mail/view-detail.js:355
-msgid "Show more"
 msgstr ""
 
 #: apps/io.ox/calendar/acceptdeny.js:28
@@ -1161,11 +1271,6 @@ msgstr ""
 msgid "Show as"
 msgstr ""
 
-#: apps/io.ox/calendar/view-detail.js:358 apps/io.ox/contacts/view-detail.js:359
-#: apps/io.ox/mail/view-detail.js:303
-msgid "Folder"
-msgstr ""
-
 #: apps/io.ox/calendar/view-detail.js:375
 msgid "Created"
 msgstr ""
@@ -2150,10 +2255,6 @@ msgstr ""
 msgid "%1$d %2$s"
 msgstr ""
 
-#: apps/io.ox/core/tk/attachments.js:197 apps/io.ox/mail/view-detail.js:587
-msgid "None"
-msgstr ""
-
 #: apps/io.ox/core/tk/attachments.js:216 apps/io.ox/mail/actions.js:759
 #: apps/io.ox/tasks/actions.js:361
 msgid "Open in new tab"
@@ -2671,11 +2772,6 @@ msgstr ""
 msgid "Mail has been imported"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:412 apps/io.ox/mail/view-detail.js:674
-#: apps/io.ox/mail/view-detail.js:676 apps/io.ox/mail/write/view-main.js:302
-msgid "To"
-msgstr ""
-
 #: apps/io.ox/mail/main.js:412
 msgid "CC"
 msgstr ""
@@ -2805,102 +2901,6 @@ msgstr ""
 #. (From) email1 on behalf of email2. Appears in email detail view.
 #: apps/io.ox/mail/util.js:122
 msgid "on behalf of"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:224
-msgid "This mail has no content"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:298
-msgid "Document"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:588
-#: apps/io.ox/office/editor/view/controls.js:31
-msgid "Red"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:589
-#: apps/io.ox/office/editor/view/controls.js:37
-msgid "Blue"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:590
-#: apps/io.ox/office/editor/view/controls.js:35
-msgid "Green"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:591
-msgid "Grey"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:592
-#: apps/io.ox/office/editor/view/controls.js:39
-msgid "Purple"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:593
-msgid "Light green"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:594
-#: apps/io.ox/office/editor/view/controls.js:32
-msgid "Orange"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:595
-msgid "Pink"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:596
-msgid "Light blue"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:597
-#: apps/io.ox/office/editor/view/controls.js:33
-msgid "Yellow"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:683
-msgctxt "CC"
-msgid "Copy"
-msgid_plural "Copy"
-msgstr[0] ""
-msgstr[1] ""
-
-#: apps/io.ox/mail/view-detail.js:690
-msgid "All recipients"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:754
-msgctxt "plural"
-msgid "Attachment"
-msgid_plural "Attachments"
-msgstr[0] ""
-msgstr[1] ""
-
-#: apps/io.ox/mail/view-detail.js:776
-msgid "more"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:782
-msgid "All attachments"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:798
-msgid "Entire thread"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:816
-msgid "Warning: This message might be a phishing or scam mail"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:836
-msgid "Show images"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:839
-msgid "External images have been blocked to protect you against potential spam!"
 msgstr ""
 
 #: apps/io.ox/mail/write/main.js:414

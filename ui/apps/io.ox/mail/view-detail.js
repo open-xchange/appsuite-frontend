@@ -214,8 +214,17 @@ define('io.ox/mail/view-detail',
             // use first attachment to determine content type
             type = getContentType(att[0].content_type);
             isHTML = regHTML.test(type);
-            source = $.trim(att[0].content);
+            source = att[0].content;
             isLarge = source.length > 1024 * 512; // > 512 KB
+
+            // add other parts?
+            _(att).each(function (attachment) {
+                if (attachment.disp === 'inline' && attachment.content_type === type) {
+                    source += attachment.content;
+                }
+            });
+
+            source = $.trim(source);
 
             // empty?
             if (source === '') {
