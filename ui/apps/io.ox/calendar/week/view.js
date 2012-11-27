@@ -240,7 +240,7 @@ define('io.ox/calendar/week/view',
             }
             if ($(e.target).hasClass('day')) {
                 // calculate timestamp for current position
-                var startTS = this.getTimeFromDateTag($(e.currentTarget).attr('date'));
+                var startTS = date.Local.localTime(this.getTimeFromDateTag($(e.currentTarget).attr('date')));
                 this.trigger('openCreateAppointment', e, {start_date: startTS, end_date: startTS + date.DAY, full_time: true});
             }
         },

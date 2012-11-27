@@ -648,9 +648,16 @@ define('io.ox/backbone/forms',
 
             convertTime: function (direction, value, attribute, model) {
                 if (direction === 'ModelToView') {
+                    if (model.get('full_time')) {
+                        value = date.Local.utc(value);
+                    }
                     return BinderUtils._toTime(value, attribute, model, direction);
                 } else {
-                    return BinderUtils._timeStrToDate(value, attribute, model);
+                    value = BinderUtils._timeStrToDate(value, attribute, model);
+                    if (model.get('full_time')) {
+                        value = date.Local.localTime(value);
+                    }
+                    return value;
                 }
             },
 
@@ -712,12 +719,11 @@ define('io.ox/backbone/forms',
             },
 
             _dateStrToDate: function (value, attribute, model) {
-
                 var myValue = parseInt(model.get(attribute), 10) || false;
                 if (!myValue) {
                     return value;
                 }
-                var mydate = new date.Local(date.Local.utc(myValue));
+                var mydate = new date.Local(myValue);
                 var parsedDate = date.Local.parse(value, date.DATE);
 
                 if (_.isNull(parsedDate)) {
@@ -732,8 +738,7 @@ define('io.ox/backbone/forms',
                 mydate.setDate(parsedDate.getDate());
                 mydate.setMonth(parsedDate.getMonth());
                 mydate.setYear(parsedDate.getYear());
-
-                return date.Local.localTime(mydate.getTime());
+                return mydate.getTime();
             }
         };
 

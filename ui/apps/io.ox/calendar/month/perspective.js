@@ -57,7 +57,7 @@ define('io.ox/calendar/month/perspective',
         createAppointment: function (e, startTS) {
             // add current time to start timestamp
             var now = new date.Local(),
-                offset = 15 * date.MINUTE;
+                offset = 30 * date.MINUTE;
             startTS += Math.ceil((now.getHours() * date.HOUR + now.getMinutes() * date.MINUTE) / offset) * offset;
             ext.point('io.ox/calendar/detail/actions/create')
                 .invoke('action', this, {app: this.app}, {start_date: startTS, end_date: startTS + date.HOUR});
@@ -105,11 +105,11 @@ define('io.ox/calendar/month/perspective',
                         case 'series':
                             // get recurrence master object
                             if (obj.old_start_date || obj.old_end_date) {
-                                api.get({id: obj.id, folder_id: obj.folder_id}).done(function (data) {
+                                api.get({id: obj.id, folder_id: obj.folder_id}).done(function (app) {
                                     // calculate new dates if old dates are available
-                                    data.start_date += (obj.start_date - obj.old_start_date);
-                                    data.end_date += (obj.end_date - obj.old_end_date);
-                                    apiUpdate(data);
+                                    app.start_date += (obj.start_date - obj.old_start_date);
+                                    app.end_date += (obj.end_date - obj.old_end_date);
+                                    apiUpdate(app);
                                 });
                             }
                             break;

@@ -21,10 +21,6 @@ define('io.ox/calendar/edit/main',
 
     'use strict';
 
-
-    var EditAppointmentController = function () {};
-
-
     function createInstance() {
 
         var app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: gt('Edit Appointment'), userContent: true }),
