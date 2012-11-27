@@ -112,7 +112,7 @@ define('io.ox/calendar/week/perspective',
 
         openEditAppointment: function (e, obj) {
             ext.point('io.ox/calendar/detail/actions/edit')
-                .invoke('action', this, obj);
+                .invoke('action', this, {data: obj});
         },
 
         getAppointments: function (obj) {
