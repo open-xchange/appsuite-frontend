@@ -759,7 +759,6 @@ define('io.ox/mail/write/main',
                 mailAPI.send(mail.data, mail.files)
                     .always(function (result) {
                         if (result.error) {
-                            console.error(result);
                             win.idle().show();
                             // TODO: check if backend just says "A severe error occured"
                             notifications.yell(result);

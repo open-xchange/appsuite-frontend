@@ -16,20 +16,35 @@ define('io.ox/core/cache/localstorage', function () {
 
     var id = null,
         reg = null,
-        lastGCrun = 0,
+        lastGC = 0,
         gcTimeout = 1000 * 60 * 5, // 5 minutes
         ts_cachetimeout = (new Date()).getTime() - (2 * 24 * 60 * 60 * 1000), // 2 days
-
         // max size for persistent objects
         MAX_LENGTH = 1024 * 1024, // 1MB
-
         // fluent backup cache
-        large = {};
+        fluent = {},
+        // access time
+        access = {},
+        that;
 
-    var that = {
+    function deferredSet(cid, json) {
+        setTimeout(function () {
+            try {
+                localStorage.removeItem(cid);
+                localStorage.setItem(cid, json);
+            } catch (e) {
+                if (e.name === 'QUOTA_EXCEEDED_ERR') {
+                    console.warn('localStorage: Exceeded quota!', e, 'Object size', Math.round(json.length / 1024) + 'Kb');
+                    that.gc();
+                }
+            }
+        }, 0);
+    }
+
+    that = {
 
         dump: function () {
-            console.log(large);
+            console.log(fluent);
         },
 
         setId: function (theId) {
@@ -46,49 +61,30 @@ define('io.ox/core/cache/localstorage', function () {
         },
 
         gc: function (force) {
-            var timeStamp = (new Date()).getTime();
 
-            if (timeStamp > (lastGCrun + gcTimeout) || force === true) {
-                lastGCrun = timeStamp;
-                // TODO: make an awesome garbage collection
-                var i, $i, key, tmp = [], delCounter = 0;
+            var now = _.now(), cid, items = [], removed = 0, i = 0, $i;
 
-                // loop over all keys
-                for (i = localStorage.length - 1; i >= 0; i--) {
+            if (now > (lastGC + gcTimeout) || force) {
 
-                    try {
-                        // get key by index
-                        key = localStorage.key(i);
-                        // match?
-                        try {
-                            var rawData = localStorage.getItem(key);
-                            var item = JSON.parse(rawData);
+                // remember for next round
+                lastGC = now;
 
-                            if (!!item && !!item.accesstime) {
-                                if (item.accesstime <= ts_cachetimeout) {
-                                    delCounter++;
-                                    localStorage.removeItem(key);
-                                }
-                            }
-                        } catch (e) {
-                            console.error('GC: getItem Exception', key, i, e);
-                        }
-                    } catch (ex) {
-                        console.error('GC: key Exception', i, ex);
-                    }
+                // loop #1: get number of items
+                for (cid in access) {
+                    items.push([cid, access[cid]]);
                 }
 
-                // if garbage collection does not kill any item, do something else
-                if (delCounter === 0) {
-                    //console.debug('GC: nothing killed');
-                    if (force === true) {
-                        //console.debug('GC: forced -> clear current keyspace');
-                        that.clear();
-                    }
-                } else {
-                    console.warn('GC: removed', delCounter);
+                // sort by access date
+                items.sort(function (a, b) { return a[1] - b[1]; });
+
+                // loop #2: remove oldest 30%
+                for ($i = Math.floor(items.length / 3); i < $i; i++) {
+                    localStorage.removeItem(items[i][0]);
+                    removed++;
                 }
 
+                console.warn('GC. items', items.length, 'removed', removed);
+                items = null;
             }
         },
 
@@ -106,9 +102,9 @@ define('io.ox/core/cache/localstorage', function () {
                 localStorage.removeItem(key);
             });
             // clear backup cache
-            for (key in large) {
+            for (key in fluent) {
                 if (reg.test(id + '.' + key)) {
-                    delete large[id + '.' + key];
+                    delete fluent[id + '.' + key];
                 }
             }
             return $.when();
@@ -117,57 +113,51 @@ define('io.ox/core/cache/localstorage', function () {
         get: function (key) {
 
             // fetch first, then GC
-            var cid = id + '.' + key,
-                item = localStorage.getItem(cid);
+            var cid = id + '.' + key, inFluent = cid in fluent, data, def = $.Deferred();
 
-            if (item !== null) {
-                item = JSON.parse(item);
-                that.set(key, item.data);
-            } else if (cid in large) {
-                item = large[cid];
+            // try to be fast without blocking
+            if (inFluent) {
+                data = fluent[cid];
+                def.resolve(data);
+                access[cid] = _.now();
             } else {
-                item = { data: null };
+                setTimeout(function () {
+                    var item = localStorage.getItem(cid);
+                    if (item !== null) {
+                        data = JSON.parse(item);
+                        def.resolve(data);
+                    } else {
+                        def.resolve(null);
+                    }
+                }, 0);
             }
 
-            return $.Deferred().resolve(item.data);
+            return def;
         },
 
         set: function (key, data) {
 
-            var def = new $.Deferred(),
-                saveData = {
-                    accesstime: _.now(),
-                    data: data
-                },
-                json,
-                cid = id + '.' + key;
+            var cid = id + '.' + key, json;
 
-            localStorage.removeItem(cid);
-            that.gc();
+            // use fluent cache to be fast
+            fluent[cid] = data;
+            access[cid] = _.now();
 
-            try {
-                json = JSON.stringify(saveData);
-                if (json.length <= MAX_LENGTH) {
-                    localStorage.setItem(cid, json);
-                } else {
-                    large[cid] = saveData;
-                }
-                def.resolve(key);
-            } catch (e) {
-                if (e.name && e.name === 'QUOTA_EXCEEDED_ERR') {
-                    console.warn('localStorage: Exceeded quota!', e, 'Object size', Math.round(json.length / 1024) + 'Kb');
-                    that.gc(true);
-                }
-                def.reject(e);
+            if ((json = JSON.stringify(data)).length <= MAX_LENGTH) {
+                // don't block
+                deferredSet(cid, json);
             }
-            return def;
+
+            return $.when();
         },
 
         remove: function (key) {
             var cid = id + '.' + key;
-            localStorage.removeItem(cid);
-            delete large[cid];
-            return $.Deferred().resolve();
+            delete fluent[cid];
+            setTimeout(function () {
+                localStorage.removeItem(cid);
+            }, 0);
+            return $.when();
         },
 
         keys: function () {
@@ -182,7 +172,7 @@ define('io.ox/core/cache/localstorage', function () {
                 }
             }
             // loop over backup cache
-            for (key in large) {
+            for (key in fluent) {
                 if (reg.test(key)) {
                     tmp.push(key);
                 }

@@ -87,9 +87,10 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                             set(data);
                             // set permanent cookie
                             if (store) {
-                                that.store().done(function () {
+                                that.store().always(function (e) {
+                                    // we don't care if this fails
                                     def.resolve(data);
-                                }).fail(def.reject);
+                                });
                             } else {
                                 def.resolve(data);
                             }

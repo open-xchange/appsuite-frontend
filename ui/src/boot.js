@@ -86,9 +86,9 @@ $(document).ready(function () {
             // show loader
             $("#background_loader").fadeIn(DURATION, function () {
                 var location = "#?" + enc(
-                            _.rot("session=" + ox.session + "&user=" + ox.user +
-                                "&user_id=" + ox.user_id + "&language=" + ox.language, 1)
-                    );
+                    _.rot("session=" + ox.session + "&user=" + ox.user +
+                        "&user_id=" + ox.user_id + "&language=" + ox.language, 1)
+                );
                 // use redirect servlet for real login request
                 // this even makes chrome and safari asking for storing credentials
                 // skip this for auto-login or during offline mode
