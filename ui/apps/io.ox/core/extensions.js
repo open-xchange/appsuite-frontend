@@ -15,7 +15,6 @@
 define("io.ox/core/extensions",
     ["io.ox/core/event", "io.ox/core/async"], function (Events, async) {
 
-    // A naive extension registry.
     "use strict";
 
     // global registry
@@ -26,6 +25,18 @@ define("io.ox/core/extensions",
 
         // sort by index
         pointSorter = function (a, b) {
+            if (a.index === 'first') {
+                return -1;
+            }
+            if (b.index === 'first') {
+                return 1;
+            }
+            if (a.index === 'last') {
+                return 1;
+            }
+            if (b.index === 'last') {
+                return -1;
+            }
             return a.index - b.index;
         },
 
@@ -51,6 +62,7 @@ define("io.ox/core/extensions",
         this.description = options.description || "";
 
         var extensions = [],
+            orphans = {},
             replacements = {},
             disabled = {},
             // get enabled extensions
@@ -68,7 +80,61 @@ define("io.ox/core/extensions",
                     })
                     .length > 0;
             },
-            self = this;
+            self = this,
+            sort = function () {
+                var basicList = [];
+                var befores = orphans.before || {};
+                var afters = orphans.after || {};
+
+                _(extensions).each(function (ext) {
+                    var list;
+                    if (ext.before) {
+                        list = befores[ext.before];
+                        if (!list) {
+                            list = befores[ext.before] = [];
+                        }
+                    } else if (ext.after) {
+                        list = afters[ext.after];
+                        if (!list) {
+                            list = afters[ext.after] = [];
+                        }
+                    } else {
+                        list = basicList;
+                    }
+
+                    list.push(ext);
+                });
+
+                extensions = [];
+                basicList.sort(pointSorter);
+                var circleGuard = {};
+
+                function fnAddExtension(ext) {
+                    if (circleGuard[ext.id]) {
+                        throw "Circular References detected for extension point " + self.id + " and extension " + ext.id;
+                    }
+                    circleGuard[ext.id] = true;
+                    var before = befores[ext.id];
+                    if (before) {
+                        delete befores[ext.id];
+                        before.sort(pointSorter);
+                        _(before).each(fnAddExtension);
+                    }
+                    extensions.push(ext);
+                    var after = afters[ext.id];
+                    if (after) {
+                        delete afters[ext.id];
+                        after.sort(pointSorter);
+                        _(after).each(fnAddExtension);
+                    }
+                    delete circleGuard[ext.id];
+                }
+
+                _(basicList).each(fnAddExtension);
+
+                orphans.before = befores;
+                orphans.after = afters;
+            };
 
         Events.extend(this);
 
@@ -135,7 +201,7 @@ define("io.ox/core/extensions",
                 }
 
                 extensions.push(extension);
-                extensions.sort(pointSorter);
+                sort();
 
                 if (!extension.metadata) {
                     extension.metadata = function (name, args) {
@@ -177,7 +243,7 @@ define("io.ox/core/extensions",
             });
 
             if (replaced) {
-                extensions.sort(pointSorter);
+                sort();
             } else {
                 replacements[extension.id] = extension;
             }
@@ -198,7 +264,7 @@ define("io.ox/core/extensions",
                 .filter(function (obj) { return obj.id === id; }).first().value();
             if (extension) {
                 callback(extension);
-                extensions.sort(pointSorter);
+                sort();
             }
             return this;
         };
@@ -209,7 +275,7 @@ define("io.ox/core/extensions",
 
         // public for testing purposes
         this.sort = function () {
-            extensions.sort(pointSorter);
+            sort();
             return this;
         };
 
