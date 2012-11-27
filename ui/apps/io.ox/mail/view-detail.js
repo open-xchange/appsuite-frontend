@@ -158,7 +158,7 @@ define('io.ox/mail/view-detail',
     blockquoteMore = function (e) {
         e.preventDefault();
         blockquoteClickOpen.call($(this).prev().get(0));
-        $(this).remove();
+        $(this).hide();
     };
 
     blockquoteClickOpen = function () {
@@ -169,6 +169,7 @@ define('io.ox/mail/view-detail',
             .stop().animate({ maxHeight: h }, 300, function () {
                 $(this).removeClass('collapsed-blockquote');
             });
+        $(this).next().hide();
     };
 
     blockquoteClickClose = function () {
@@ -181,6 +182,7 @@ define('io.ox/mail/view-detail',
             .stop().animate({ maxHeight: '2em' }, 300, function () {
                 $(this).addClass('collapsed-blockquote');
             });
+        $(this).next().show();
     };
 
     mailTo = function (e) {
