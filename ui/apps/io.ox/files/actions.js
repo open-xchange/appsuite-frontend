@@ -212,32 +212,50 @@ define('io.ox/files/actions',
         action: function (baton) {
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var $input = $('<input type="text" name="name">');
+                var dialog = null;
+                
+                function fnRename() {
+                    var name = $input.val();
+                    var update = {
+                        id: baton.data.id,
+                        folder_id: baton.data.folder_id,
+                        title: name
+                    };
+                    if (baton.data.filename) {
+                        update.filename = name;
+                    }
+
+                    return api.update(update).fail(require("io.ox/core/notifications").yell);
+                }
+
+
                 $input.val(baton.data.title || baton.data.filename);
                 var $form = $("<form>").append(
                     $('<label for="name">').append($('<b>').text(gt("Name"))),
                     $input
                 );
-                new dialogs.ModalDialog().append(
+
+                $form.on('submit', function (e) {
+                    e.preventDefault();
+                    dialog.busy();
+                    fnRename().done(function () {
+                        dialog.close();
+                    });
+                });
+
+
+                dialog = new dialogs.ModalDialog({easyOut: true}).append(
                     $form
                 )
                 .addPrimaryButton('rename', gt('Rename'))
-                .addButton('cancel', gt('Cancel'))
-                .show(function () {
+                .addButton('cancel', gt('Cancel'));
+                
+                dialog.show(function () {
                     $input.select();
                 })
                 .done(function (action) {
                     if (action === 'rename') {
-                        var name = $input.val();
-                        var update = {
-                            id: baton.data.id,
-                            folder_id: baton.data.folder_id,
-                            title: name
-                        };
-                        if (baton.data.filename) {
-                            update.filename = name;
-                        }
-
-                        api.update(update).fail(require("io.ox/core/notifications").yell);
+                        fnRename();
                     }
                 });
             });
@@ -247,31 +265,50 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/edit-description', {
         requires: 'one',
         action: function (baton) {
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+            require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
                 var $input = $('<textarea class="input-xlarge" rows="5">');
                 $input.val(baton.data.description);
                 var $form = $("<form>").append(
                     $('<label for="name">').append($('<b>').text(gt("Description"))),
                     $input
                 );
-                new dialogs.ModalDialog().append(
+                var dialog = null;
+
+                var keys = new KeyListener($input);
+
+                function fnSave() {
+
+                    var description = $input.val();
+                    var update = {
+                        id: baton.data.id,
+                        folder_id: baton.data.folder_id,
+                        description: description
+                    };
+
+                    return api.update(update).fail(require("io.ox/core/notifications").yell);
+                }
+
+                keys.on('shift+enter', function () {
+                    dialog.busy();
+                    fnSave().done(function () {
+                        dialog.close();
+                    });
+                });
+
+                dialog = new dialogs.ModalDialog();
+
+                dialog.append(
                     $form
                 )
                 .addPrimaryButton('save', gt('Save'))
                 .addButton('cancel', gt('Cancel'))
                 .show(function () {
                     $input.select();
+                    keys.include();
                 })
                 .done(function (action) {
                     if (action === 'save') {
-                        var description = $input.val();
-                        var update = {
-                            id: baton.data.id,
-                            folder_id: baton.data.folder_id,
-                            description: description
-                        };
-
-                        api.update(update).fail(require("io.ox/core/notifications").yell);
+                        fnSave();
                     }
                 });
             });
