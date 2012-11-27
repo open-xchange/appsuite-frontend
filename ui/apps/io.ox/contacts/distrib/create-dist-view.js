@@ -36,7 +36,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         id: 'displayname',
         index: 100,
         attribute: 'display_name',
-        label: gt('List name'),
+        label: gt('List name'), // noun
         control: '<input type="text" class="input-xlarge">',
         buildControls: function () {
             var self = this,

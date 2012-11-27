@@ -47,9 +47,9 @@ More -> Kontext?
 Enable Plugin -> Plug-in (muss nicht sein, ist aber wohl -noch- besser)
 Miscellaneous -> Kontext? Bitte Kommentar einfügen
 >>>>>>> conditional_loading
-List name -> Kontext? noun or verb, bitte Kommentar einfügen
-Display name -> noun or verb, bitte Kommentar einfügen, die Frage bekomm ich sonst wieder zigfach gestellt ;-)
-Title -> Anrede oder Titel? Bitte Kommentar einfügen
+#List name -> Kontext? noun or verb, bitte Kommentar einfügen
+#Display name -> noun or verb, bitte Kommentar einfügen, die Frage bekomm ich sonst wieder zigfach gestellt ;-)
+#Title -> Anrede oder Titel? Bitte Kommentar einfügen
 File as -> Kontext? Bitte Kommentar einfügen
 use Count -> Kontext? Bitte Kommentar einfügen, besser: use count
 yomi First Name -> ?

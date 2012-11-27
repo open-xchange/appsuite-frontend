@@ -203,12 +203,12 @@ define('io.ox/contacts/model',
     });
 
     var fields = {
-        display_name: gt('Display name'),
+        display_name: gt('Display name'), // noun
         first_name: gt('First name'),
         last_name: gt('Last name'),
         second_name: gt('Middle name'),
         suffix: gt('Suffix'),
-        title: gt('Title'),
+        title: gt('Title'), // Anrede
         street_home: gt('Street'),
         postal_code_home: gt('Postcode'),
         city_home: gt('Town'),
