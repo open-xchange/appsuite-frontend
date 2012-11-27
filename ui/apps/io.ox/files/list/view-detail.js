@@ -228,7 +228,7 @@ define("io.ox/files/list/view-detail",
                         // makes it readable
                         fontFamily: "monospace, 'Courier new'",
                         whiteSpace: "pre-wrap",
-                        paddingRight: "2em",
+                        padding: "2em 0",
                         minHeight: "30px"
                     }).addClass("description")
                     .text(gt.noI18n(file.description || ''))
