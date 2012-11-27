@@ -34,7 +34,7 @@ define(function () {
     {
         "title": "Address Book",
         "company": "Open-Xchange",
-        "icon": "addressbook.png",
+        "icon": "addressbook.png", 
         "category": "Basic",
         "settings": false,
         "requires": "contacts",
@@ -83,7 +83,6 @@ define(function () {
         "icon": "default.png",
         "category": "Dev",
         "settings": false,
-        "requires": "dev",
         "path": "io.ox/dev/testing/main"
     },
     {
