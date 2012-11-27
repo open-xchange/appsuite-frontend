@@ -368,6 +368,9 @@ define('io.ox/backbone/forms',
     }
 
     function InputField(options) {
+        options = _.extend({
+            changeOnKeyUp: false
+        }, options);
         var modelEvents = {};
         modelEvents['change:' + options.attribute] = 'updateInputField';
         var basicImplementation = {
@@ -376,7 +379,7 @@ define('io.ox/backbone/forms',
                 this.nodes = {};
                 this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.inputField = $(this.control || '<input type="text">'));
                 this.nodes.inputField.val(this.model.get(this.attribute));
-                this.nodes.inputField.on('change', _.bind(this.updateModel, this));
+                this.nodes.inputField.on('change' + (options.changeOnKeyUp ? ', keyup' : ''), _.bind(this.updateModel, this));
             },
             modelEvents: modelEvents,
             updateInputField: function () {
@@ -603,7 +606,6 @@ define('io.ox/backbone/forms',
                         self.less();
                     }
                 });
-//                .appendTo(this.nodes.header);
 
                 if (this.state === 'collapsed') {
                     this.nodes.collapsedHeader = $('<div class="row sectionheader collapsed">').appendTo(this.$el);
@@ -614,7 +616,6 @@ define('io.ox/backbone/forms',
                         })
                     ).appendTo(this.nodes.collapsedHeader);
                 }
-
             },
 
             drawExtensions: function () {

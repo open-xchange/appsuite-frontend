@@ -126,7 +126,8 @@ define('io.ox/calendar/edit/template',
         labelClassName: 'control-label desc',
         control: '<input type="text" class="span12">',
         attribute: 'title',
-        label: gt('Subject')
+        label: gt('Subject'),
+        changeOnKeyUp: true
     }));
 
     // location input
