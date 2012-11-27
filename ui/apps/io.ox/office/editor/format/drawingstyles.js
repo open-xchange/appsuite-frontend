@@ -156,9 +156,9 @@ define('io.ox/office/editor/format/drawingstyles',
         // predefined drawing attributes for floating modes used in GUI
         FLOAT_MODE_ATTRIBUTES = {
             inline:       { inline: true },
-            leftFloated:  { inline: false, anchorHorBase: 'column', anchorHorAlign: 'left', textWrapMode: 'square', textWrapSide: 'right', anchorHorOffset: undefined, anchorVertOffset: undefined },
-            rightFloated: { inline: false, anchorHorBase: 'column', anchorHorAlign: 'right', textWrapMode: 'square', textWrapSide: 'left', anchorHorOffset: undefined, anchorVertOffset: undefined },
-            noneFloated:  { inline: false, anchorHorBase: 'column', anchorHorAlign: 'center', textWrapMode: 'none', anchorHorOffset: undefined, anchorVertOffset: undefined }
+            leftFloated:  { inline: false, anchorHorBase: 'column', anchorHorAlign: 'left', textWrapMode: 'square', textWrapSide: 'right' },
+            rightFloated: { inline: false, anchorHorBase: 'column', anchorHorAlign: 'right', textWrapMode: 'square', textWrapSide: 'left' },
+            noneFloated:  { inline: false, anchorHorBase: 'column', anchorHorAlign: 'center', textWrapMode: 'none' }
         },
 
         // values for the 'textWrapMode' attribute allowing to wrap the text around the drawing

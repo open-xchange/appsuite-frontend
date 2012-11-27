@@ -42,11 +42,12 @@ define('io.ox/office/editor/format/stylesheets',
      * Returns the static definitions map of all attributes registered for the
      * specified style family.
      *
-     * @returns {Object}
-     *  A reference to the static attribute definitions map.
+     * @returns {Object|Null}
+     *  A reference to the static attribute definitions map, or null if the
+     *  passed attribute family is invalid.
      */
     function getAttributeDefinitions(family) {
-        return (family in REGISTRY) ? REGISTRY[family].definitions : {};
+        return (family in REGISTRY) ? REGISTRY[family].definitions : null;
     }
 
     /**
@@ -148,15 +149,14 @@ define('io.ox/office/editor/format/stylesheets',
      *      style family will be passed. Will be called in the context of this
      *      style sheet container instance.
      *  @param {Function} [options.styleAttributesResolver]
-     *      If specified, a function that returns the attributes of a specific
-     *      attribute family from the complete 'attributes' object of a style
-     *      sheet. The map of attributes returned by this function may depend
-     *      on a source element (e.g. on the position of this source element in
-     *      its parents). The function receives the desired attribute family as
-     *      first parameter, the complete 'attributes' object of the style
-     *      sheet as second parameter, and the source node (as jQuery object)
-     *      as third parameter. Will be called in the context of this style
-     *      sheet container instance.
+     *      If specified, a function that extracts and returns specific
+     *      attributes from the complete 'attributes' object of a style sheet.
+     *      The attributes returned by this function may depend on a source
+     *      element (e.g. on the position of this source element in its
+     *      parents). The function receives the complete 'attributes' object of
+     *      the style sheet as first parameter, and the source node (as jQuery
+     *      object) as second parameter. Will be called in the context of this
+     *      style sheet container instance.
      */
     function StyleSheets(documentStyles, options) {
 
@@ -229,19 +229,6 @@ define('io.ox/office/editor/format/stylesheets',
             return false;
         }
 
-        function extendAttributes(attributes1, attributes2) {
-
-            // only add attributes of supported families
-            _(supportedFamilies).each(function (family) {
-
-                // add attributes existing in attributes2 to attributes1
-                if (_.isObject(attributes2[family])) {
-                    attributes1[family] = attributes1[family] || {};
-                    documentStyles.getStyleSheets(family).extendAttributeValues(attributes1[family], attributes2[family]);
-                }
-            });
-        }
-
         /**
          * Returns the complete attributes of an ancestor of the passed
          * element, if a parent style family has been registered and its
@@ -284,9 +271,16 @@ define('io.ox/office/editor/format/stylesheets',
                 if ($(parentElement).length > 0) {
                     parentStyleSheets = documentStyles.getStyleSheets(parentFamily);
                     parentAttributes = parentStyleSheets.getElementAttributes(parentElement, { sourceNode: $element });
-                    extendAttributes(mergedAttributes, parentAttributes);
+                    StyleSheets.extendAttributes(mergedAttributes, parentAttributes);
                 }
             }
+
+            // remove attribute maps of unsupported families
+            _(mergedAttributes).each(function (unused, family) {
+                if (!_(supportedFamilies).contains(family)) {
+                    delete mergedAttributes[family];
+                }
+            });
 
             // add missing default attribute values of supported families not found in the parent element
             _(supportedFamilies).each(function (family) {
@@ -343,11 +337,11 @@ define('io.ox/office/editor/format/stylesheets',
                 collectStyleAttributes(styleSheets[styleSheet.parentId]);
 
                 // add all attributes of the current style sheet, mapped directly by attribute family
-                extendAttributes(mergedAttributes, styleSheet.attributes);
+                StyleSheets.extendAttributes(mergedAttributes, styleSheet.attributes);
 
                 // try user-defined resolver for style attributes mapped in non-standard structures
                 if (_.isFunction(styleAttributesResolver) && ($element.length > 0)) {
-                    extendAttributes(mergedAttributes, styleAttributesResolver.call(self, styleSheet.attributes, $element, $sourceNode));
+                    StyleSheets.extendAttributes(mergedAttributes, styleAttributesResolver.call(self, styleSheet.attributes, $element, $sourceNode));
                 }
             }
 
@@ -361,6 +355,13 @@ define('io.ox/office/editor/format/stylesheets',
 
             // add style sheet identifier to the attributes
             mergedAttributes[styleFamily].style = styleId;
+
+            // remove attribute maps of unsupported families
+            _(mergedAttributes).each(function (unused, family) {
+                if (!_(supportedFamilies).contains(family)) {
+                    delete mergedAttributes[family];
+                }
+            });
 
             return mergedAttributes;
         }
@@ -818,7 +819,7 @@ define('io.ox/office/editor/format/stylesheets',
                 mergedAttributes = getStyleSheetAttributes(styleId, element, sourceNode);
 
             // add explicit attributes of the element
-            extendAttributes(mergedAttributes, elementAttributes);
+            StyleSheets.extendAttributes(mergedAttributes, elementAttributes);
 
             // filter by supported attributes
             _(mergedAttributes).each(function (attributeValues, family) {
@@ -913,7 +914,7 @@ define('io.ox/office/editor/format/stylesheets',
                     elementAttributeValues = null;
 
                 // restrict to valid attribute families
-                if (!_.isObject(attributeValues) || !(family in mergedAttributes)) { return; }
+                if (!definitions || !_.isObject(attributeValues) || !(family in mergedAttributes)) { return; }
 
                 // add an attribute map for the current family
                 elementAttributeValues = newElementAttributes[family] || (newElementAttributes[family] = {});
@@ -943,7 +944,7 @@ define('io.ox/office/editor/format/stylesheets',
                 $element.data('attributes', newElementAttributes);
 
                 // merge explicit attributes into style attributes, and update element formatting
-                extendAttributes(mergedAttributes, newElementAttributes);
+                StyleSheets.extendAttributes(mergedAttributes, newElementAttributes);
                 updateElementFormatting($element, mergedAttributes);
 
                 // call the passed change listener
@@ -1001,12 +1002,14 @@ define('io.ox/office/editor/format/stylesheets',
      */
     StyleSheets.getAttributeNames = function (family, options) {
 
-        var // all attribute names, as array
-            attributeNames = ['style'],
+        var // the attribute definitions
+            definitions = getAttributeDefinitions(family),
             // whether to include special attributes
-            special = Utils.getBooleanOption(options, 'special', false);
+            special = Utils.getBooleanOption(options, 'special', false),
+            // all attribute names, as array
+            attributeNames = ['style'];
 
-        _(getAttributeDefinitions(family)).each(function (definition, name) {
+        _(definitions).each(function (definition, name) {
             if (special || (definition.special !== true)) {
                 attributeNames.push(name);
             }
@@ -1048,6 +1051,61 @@ define('io.ox/office/editor/format/stylesheets',
         });
 
         return attributes;
+    };
+
+    /**
+     * Extends the passed attribute set with the existing values of the second
+     * attribute set. If the definitions of a specific attribute contain a
+     * merger function, and both attribute sets contain an attribute value,
+     * uses that merger function to merge the values from both attribute sets,
+     * otherwise the value of the second attribute set will be copied to the
+     * first attribute set.
+     *
+     * @param {Object} attributes1
+     *  (in/out) The first attribute set that will be extended in-place, as map
+     *  of attribute value maps (name/value pairs), keyed by attribute family.
+     *
+     * @param {Object} attributes2
+     *  The second attribute set, as map of attribute value maps (name/value
+     *  pairs), keyed by attribute family, whose attribute values will be
+     *  inserted into the first attribute set.
+     *
+     * @returns {StyleSheets}
+     *  A reference to this style sheets container.
+     */
+    StyleSheets.extendAttributes = function (attributes1, attributes2) {
+
+        // add attributes existing in attributes2 to attributes1
+        _(attributes2).each(function (attributeValues, family) {
+
+            var // the attribute definitions of the current family
+                definitions = getAttributeDefinitions(family);
+
+            // restrict to valid attribute families
+            if (!definitions || !_.isObject(attributeValues)) { return; }
+
+            // insert attribute values of attributes2
+            attributes1[family] = attributes1[family] || {};
+            _(attributeValues).each(function (value, name) {
+
+                var // the merger function from the attribute definition
+                    merger = null;
+
+                // copy style sheet identifier directly
+                if (name === 'style') {
+                    attributes1[family].style = value;
+                } else if (isRegisteredAttribute(definitions, name)) {
+                    // try to find merger function from attribute definition
+                    merger = definitions[name].merge;
+                    // either set return value from merger, or copy the attribute directly
+                    if ((name in attributes1[family]) && _.isFunction(merger)) {
+                        attributes1[family][name] = merger.call(this, attributes1[family][name], value);
+                    } else {
+                        attributes1[family][name] = value;
+                    }
+                }
+            });
+        });
     };
 
     /**

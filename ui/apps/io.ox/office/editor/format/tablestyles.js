@@ -57,38 +57,41 @@ define('io.ox/office/editor/format/tablestyles',
             tableGrid: { def: [] },
 
             /**
-             * Array containing information, if conditional table styles shall be used. As default
-             * value, all styles shall be used, so that this array can be empty.
+             * Array containing information, if conditional attributes will be
+             * used. As default value, all styles will be used, so that this
+             * array can be empty.
              */
             exclude: { def: [] },
 
             /**
-             * Left border of the table (set in tablecellstyles).
+             * Left border of the table (will be set in the table cells).
              */
             borderLeft: { def: NO_BORDER },
 
             /**
-             * Top border of the table (set in tablecellstyles).
+             * Top border of the table (will be set in the table cells).
              */
             borderTop: { def: NO_BORDER },
 
             /**
-             * Right border of the table (set in tablecellstyles).
+             * Right border of the table (will be set in the table cells).
              */
             borderRight: { def: NO_BORDER },
 
             /**
-             * Bottom border of the table (set in tablecellstyles).
+             * Bottom border of the table (will be set in the table cells).
              */
             borderBottom: { def: NO_BORDER },
 
             /**
-             * Horizontal borders inside the table (set in tablecellstyles).
+             * Inner horizontal borders inside the table (will be set in the
+             * table cells).
              */
             borderInsideHor: { def: NO_BORDER },
 
             /**
-             * Vertical borders inside the table (set in tablecellstyles).
+             * Inner vertical borders inside the table (will be set in the
+             * table cells).
              */
             borderInsideVert: { def: NO_BORDER }
 
@@ -98,7 +101,7 @@ define('io.ox/office/editor/format/tablestyles',
 
     /**
      * Contains the style sheets for table formatting attributes. The CSS
-     * formatting will be read from and written to <table> elements.
+     * formatting will be written to table elements and their rows and cells.
      *
      * @constructor
      *
@@ -114,10 +117,90 @@ define('io.ox/office/editor/format/tablestyles',
      */
     function TableStyles(rootNode, documentStyles) {
 
-        var // self reference
-            self = this;
-
         // private methods ----------------------------------------------------
+
+        /**
+         * Returns the attributes of the specified attribute family contained
+         * in table style sheets. Resolves the conditional attributes that
+         * match the position of the passed source element.
+         *
+         * @param {Object} styleAttributes
+         *  The complete 'attributes' object of a table style sheet.
+         *
+         * @param {jQuery} [cell]
+         *  The DOM cell node corresponding to the passed attribute family that
+         *  has initially requested the formatting attributes of a table style
+         *  sheet, as jQuery object.
+         *
+         * @returns {Object}
+         *  The formatting attributes extracted from the passed style sheet
+         *  attributes object, as map of attribute value maps (name/value
+         *  pairs), keyed by attribute family.
+         */
+        function resolveTableStyleAttributes(styleAttributes, table, cell) {
+
+            var // information about the cell position
+                cellInfo = $(cell).is('td') ? DOM.getCellPositionInfo(cell) : null,
+                // the explicit table attributes
+                explicitTableAttributes = StyleSheets.getExplicitAttributes(table, 'table'),
+                // the active conditional keys, according to cell position and the 'exclude' table attribute
+                activeConditionalKeys = ['wholeTable'],
+                // the extracted style attributes according to the position of the table cell
+                attributes = {};
+
+            // pushes the passed conditional key to the array, if it is active
+            function pushConditionalKey(conditionalKey, active) {
+                if (active) { activeConditionalKeys.push(conditionalKey); }
+            }
+
+            // copies a global table border attribute (either outer or inner) to a cell attribute
+            function updateCellBorder(borderName, innerBorderName, isOuterCell) {
+                var tableBorder = attributes.table[isOuterCell ? borderName : innerBorderName];
+                if (_.isObject(tableBorder) && !(borderName in attributes.cell)) {
+                    attributes.cell[borderName] = tableBorder;
+                }
+            }
+
+            // get conditional keys that match the position of the passed cell
+            if (cellInfo) {
+                pushConditionalKey('firstRow',      cellInfo.firstRow);
+                pushConditionalKey('lastRow',       cellInfo.lastRow);
+                pushConditionalKey('firstCol',      cellInfo.firstCol);
+                pushConditionalKey('lastCol',       cellInfo.lastCol);
+                pushConditionalKey('band1Hor',      !cellInfo.firstRow && !cellInfo.lastRow && (cellInfo.rowIndex % 2 !== 0)); // first row band *after* the header row
+                pushConditionalKey('band2Hor',      !cellInfo.firstRow && !cellInfo.lastRow && (cellInfo.rowIndex % 2 === 0));
+                pushConditionalKey('band1Vert',     !cellInfo.firstCol && !cellInfo.lastCol && (cellInfo.colIndex % 2 !== 0)); // first column band *after* the left column
+                pushConditionalKey('band2Vert',     !cellInfo.firstCol && !cellInfo.lastCol && (cellInfo.colIndex % 2 === 0));
+                pushConditionalKey('northEastCell', cellInfo.firstRow && cellInfo.lastCol);
+                pushConditionalKey('northWestCell', cellInfo.firstRow && cellInfo.firstCol);
+                pushConditionalKey('southEastCell', cellInfo.lastRow && cellInfo.lastCol);
+                pushConditionalKey('southWestCell', cellInfo.lastRow && cellInfo.firstCol);
+            }
+
+            // remove conditional keys excluded by the table using the 'exclude' attribute
+            if (_.isArray(explicitTableAttributes.exclude)) {
+                activeConditionalKeys = _(activeConditionalKeys).without(explicitTableAttributes.exclude);
+            }
+
+            // collect attributes for all remaining active conditional keys
+            _(activeConditionalKeys).each(function (conditionalKey) {
+                if (_.isObject(styleAttributes[conditionalKey])) {
+                    StyleSheets.extendAttributes(attributes, styleAttributes[conditionalKey]);
+                }
+            });
+
+            // copy global table borders to cell attributes according to the current cell position
+            if (cellInfo && _.isObject(attributes.table)) {
+                attributes.cell = attributes.cell || {};
+                updateCellBorder('borderTop', 'borderInsideHor', cellInfo.firstRow);
+                updateCellBorder('borderBottom', 'borderInsideHor', cellInfo.lastRow);
+                updateCellBorder('borderLeft', 'borderInsideVert', cellInfo.firstCol);
+                updateCellBorder('borderRight', 'borderInsideVert', cellInfo.lastCol);
+                if (_.isEmpty(attributes.cell)) { delete attributes.cell; }
+            }
+
+            return attributes;
+        }
 
         /**
          * Will be called for every table element whose attributes have been
@@ -129,9 +212,9 @@ define('io.ox/office/editor/format/tablestyles',
          *  jQuery object.
          *
          * @param {Object} mergedAttributes
-         *  A map of attribute maps (name/value pairs), keyed by attribute
-         *  family, containing the effective attribute values merged from style
-         *  sheets and explicit attributes.
+         *  A map of attribute value maps (name/value pairs), keyed by
+         *  attribute family, containing the effective attribute values merged
+         *  from style sheets and explicit attributes.
          */
         function updateTableFormatting(table, mergedAttributes) {
 
@@ -154,187 +237,6 @@ define('io.ox/office/editor/format/tablestyles',
                     tableCellStyles.updateElementFormatting(this);
                 });
             });
-        }
-
-        /**
-         * Returns the attributes of the specified attribute family contained
-         * in table style sheets. Resolves the conditional attributes that
-         * match the position of the passed source element.
-         *
-         * @param {String} family
-         *  The family of the attributes to be returned from the
-         *  styleAttributes object passed to this method.
-         *
-         * @param {Object} styleAttributes
-         *  The complete 'attributes' object of a table style sheet.
-         *
-         * @param {jQuery} [cell]
-         *  The DOM cell node corresponding to the passed attribute family that
-         *  has initially requested the formatting attributes of a table style
-         *  sheet, as jQuery object.
-         *
-         * @returns {Object}
-         *  The formatting attributes of the specified family extracted from
-         *  the passed styleAttributes object, as name/value pairs.
-         */
-        function resolveTableStyleAttributes(family, styleAttributes, table, cell) {
-
-            var // an object containing information about the cell orientation inside the table
-                cellOrientation = evaluateCellOrientationInTable(cell),
-                // an object containing the attributes set at the table explicitly
-                explicitTableAttributes = {},
-                // an array containing the style attributes names that are excluded from style using the 'exclude' attribute
-                excludedAttributes = [],
-                // an object containing the style attributes defined in table styles for the specific table cell
-                attributes = {},
-                // an array containing the names of the optional table attributes
-                // -> this is also an order of relevance from global to specific
-                // -> following attribute names overwrite values of previous attribute names
-                // -> firstRow overwrites lastRow, row overwrites column, ...
-                tableAttributeNames = ['wholeTable',
-                                       'band1Vert',
-                                       'band2Vert',
-                                       'band1Hor',
-                                       'band2Hor',
-                                       'lastCol',
-                                       'firstCol',
-                                       'lastRow',
-                                       'firstRow',
-                                       'northEastCell',
-                                       'northWestCell',
-                                       'southEastCell',
-                                       'southWestCell'];
-
-            // checking if special attribute names are deselected in table using
-            // the 'exclude' attribute
-            explicitTableAttributes = StyleSheets.getExplicitAttributes(table, 'table');
-
-            if (_.isArray(explicitTableAttributes.exclude)) {
-                excludedAttributes = explicitTableAttributes.exclude;
-            }
-
-            // evaluating attributes for all other optional attributes
-            // -> overwriting values from global ('wholeTable') to specific ('southWestCell')
-            _.each(tableAttributeNames, function (name) {
-
-                if (family === 'cell') {  // table cells have to iterate over table attributes, too
-                    if ((cellOrientation[name]) && (styleAttributes[name]) && (styleAttributes[name].table) && (! _.contains(excludedAttributes, name))) {
-                        var tableAttributes = _.copy(styleAttributes[name].table);
-                        self.extendAttributeValues(tableAttributes, explicitTableAttributes);
-                        self.extendAttributeValues(attributes, resolveTableStylesWithCellPosition(cellOrientation, tableAttributes));
-                    }
-                }
-
-                if ((cellOrientation[name]) && (styleAttributes[name]) && (styleAttributes[name][family]) && (! _.contains(excludedAttributes, name))) {
-                    documentStyles.getStyleSheets(family).extendAttributeValues(attributes, styleAttributes[name][family]);
-                }
-            });
-
-            return attributes;
-        }
-
-        /**
-         * Switching from table attributes to table cell attributes. Later no
-         * further evaluation of cell orientation is required.
-         * Especially 'borderInsideHor' and 'borderInsideVert' are valid only for inner
-         * table cells. And 'borderTop', 'borderBottom', ... are only valid for cells
-         * that have a table border.
-         *
-         * @param {Object} cellOrientation
-         *  An object containing information about the orientation of the
-         *  cell inside the table.
-         *
-         * @param tableStyleAttributes
-         *  The 'attributes' object of the 'table' family.
-         *
-         * @returns {Object} cellStyles
-         *  An object containing the table cell attributes determined from the
-         *  table attributes with the help of the orientation of the cell inside
-         *  the table.
-         */
-        function resolveTableStylesWithCellPosition(cellOrientation, tableStyleAttributes) {
-
-            var cellStyles = {};
-
-            if ((tableStyleAttributes.borderTop) && (cellOrientation.firstRow)) {
-                cellStyles.borderTop = tableStyleAttributes.borderTop;
-            }
-
-            if ((tableStyleAttributes.borderBottom) && (cellOrientation.lastRow)) {
-                cellStyles.borderBottom = tableStyleAttributes.borderBottom;
-            }
-
-            if ((tableStyleAttributes.borderLeft) && (cellOrientation.firstCol)) {
-                cellStyles.borderLeft = tableStyleAttributes.borderLeft;
-            }
-
-            if ((tableStyleAttributes.borderRight) && (cellOrientation.lastCol)) {
-                cellStyles.borderRight = tableStyleAttributes.borderRight;
-            }
-
-            if (tableStyleAttributes.borderInsideHor) {
-                if (cellOrientation.firstRow) {
-                    cellStyles.borderBottom = tableStyleAttributes.borderInsideHor;
-                } else if (cellOrientation.lastRow) {
-                    cellStyles.borderTop = tableStyleAttributes.borderInsideHor;
-                } else {
-                    cellStyles.borderTop = tableStyleAttributes.borderInsideHor;
-                    cellStyles.borderBottom = tableStyleAttributes.borderInsideHor;
-                }
-            }
-
-            if (tableStyleAttributes.borderInsideVert) {
-                if (cellOrientation.firstCol) {
-                    cellStyles.borderRight = tableStyleAttributes.borderInsideVert;
-                } else if (cellOrientation.lastCol) {
-                    cellStyles.borderLeft = tableStyleAttributes.borderInsideVert;
-                } else {
-                    cellStyles.borderRight = tableStyleAttributes.borderInsideVert;
-                    cellStyles.borderLeft = tableStyleAttributes.borderInsideVert;
-                }
-            }
-
-            return cellStyles;
-        }
-
-        /**
-         * Determines cell orientation inside a table. This includes information, if the cell is located
-         * in the first row or in the last row, or if it is the first cell in a row or the last cell in
-         * a row and if it is located in an even row or in an odd row.
-         *
-         * @param {jQuery} cell
-         *  The cell node whose orientation inside the table shall be
-         *  investigated.
-         *
-         * @returns {Object}
-         *  An object containing information about the orientation of the
-         *  cell inside the table.
-         */
-        function evaluateCellOrientationInTable(cell) {
-
-            var cellOrientation = {};
-
-            if (!$(cell).is('td')) { return cellOrientation; }
-
-            var row = $(cell).parent(),
-                rowCollection = row.parent().children('tr'),
-                cellCollection = row.children('td');
-
-            cellOrientation.wholeTable = true;  // the cell is located somewhere in the table
-            cellOrientation.firstRow = rowCollection.index(row) === 0;
-            cellOrientation.lastRow = rowCollection.index(row) === rowCollection.length - 1;
-            cellOrientation.firstCol = cellCollection.index(cell) === 0;
-            cellOrientation.lastCol = cellCollection.index(cell) === cellCollection.length - 1;
-            cellOrientation.band1Hor = rowCollection.index(row) % 2 !== 0;
-            cellOrientation.band2Hor = ! cellOrientation.band1Hor;
-            cellOrientation.band1Vert = cellCollection.index(cell) % 2 !== 0;
-            cellOrientation.band2Vert = ! cellOrientation.band1Vert;
-            cellOrientation.northEastCell = (cellOrientation.firstRow && cellOrientation.lastCol);
-            cellOrientation.northWestCell = (cellOrientation.firstRow && cellOrientation.firstCol);
-            cellOrientation.southEastCell = (cellOrientation.lastRow && cellOrientation.lastCol);
-            cellOrientation.southWestCell = (cellOrientation.lastRow && cellOrientation.firstCol);
-
-            return cellOrientation;
         }
 
         // base constructor ---------------------------------------------------

@@ -360,10 +360,10 @@ define('io.ox/office/editor/format/paragraphstyles',
 
     ParagraphStyles.getBorderModeFromAttributes = function (attributes) {
 
-        var ret = 'none',
+        var modeMap = { 0: 'none', 1: 'left', 2: 'right', 4: 'top', 8: 'bottom', 16: 'inside', 3: 'leftright', 12: 'topbottom', 15: 'outside', 31: 'full' },
             value = 0;
 
-        // return null, if any of the border attributes is null
+        // return null, if any of the border attributes is null (ambiguous)
         if (!attributes.borderLeft || !attributes.borderRight || !attributes.borderTop || !attributes.borderBottom || !attributes.borderInside) {
             return null;
         }
@@ -373,62 +373,23 @@ define('io.ox/office/editor/format/paragraphstyles',
         value += (attributes.borderTop.style !== 'none') ? 4 : 0;
         value += (attributes.borderBottom.style !== 'none') ? 8 : 0;
         value += (attributes.borderInside.style !== 'none') ? 16: 0;
-
-        switch (value) {
-        case 0:
-            ret = 'none';
-            break;
-        case 1:
-            ret = 'left';
-            break;
-        case 2:
-            ret = 'right';
-            break;
-        case 4:
-            ret = 'top';
-            break;
-        case 8:
-            ret = 'bottom';
-            break;
-        case 16:
-            ret = 'inside';
-            break;
-        case 3:
-            ret = 'leftright';
-            break;
-        case 12:
-            ret = 'topbottom';
-            break;
-        case 15:
-            ret = 'outside';
-            break;
-        case 31:
-            ret = 'full';
-            break;
-        }
-        return ret;
+        return (value in modeMap) ? modeMap[value] : 'none';
     };
 
-    ParagraphStyles.getAttributesBorderMode = function (borderMode) {
-        var value = borderMode === 'none' ? 0 :
-                borderMode === 'left' ? 1 :
-                borderMode === 'right' ? 2 :
-                borderMode === 'top' ? 4 :
-                borderMode === 'bottom' ? 8 :
-                borderMode === 'inside' ? 16 :
-                borderMode === 'leftright' ? 3 :
-                borderMode === 'topbottom' ? 12  :
-                borderMode === 'outside' ? 15 :
-                borderMode === 'full' ? 31 : -1,
-            ret = {},
-            defBorder = { style: 'single', width: 17, space: 140, color: Color.AUTO };
+    ParagraphStyles.getAttributesFromBorderMode = function (borderMode) {
 
-        ret.borderLeft = value & 1 ? defBorder : {};
-        ret.borderRight = value & 2 ? defBorder : {};
-        ret.borderTop = value & 4 ? defBorder : {};
-        ret.borderBottom = value & 8 ? defBorder : {};
-        ret.borderInside = value & 16 ? defBorder : {};
-        return ret;
+        var flagsMap = { none: 0, left: 1, right: 2, top: 4, bottom: 8, inside: 16, leftright: 3, topbottom: 12, outside: 15, full: 31 },
+            flags = (borderMode in flagsMap) ? flagsMap[borderMode] : 0,
+            DEF_BORDER = { style: 'single', width: 17, space: 140, color: Color.AUTO },
+            NO_BORDER = { style: 'none' };
+
+        return {
+            borderLeft:   (flags & 1) ? DEF_BORDER : NO_BORDER,
+            borderRight:  (flags & 2) ? DEF_BORDER : NO_BORDER,
+            borderTop:    (flags & 4) ? DEF_BORDER : NO_BORDER,
+            borderBottom: (flags & 8) ? DEF_BORDER : NO_BORDER,
+            borderInside: (flags & 16) ? DEF_BORDER : NO_BORDER
+        };
     };
 
     // exports ================================================================

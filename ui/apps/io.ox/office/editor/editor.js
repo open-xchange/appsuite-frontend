@@ -159,7 +159,7 @@ define('io.ox/office/editor/editor',
             lists = documentStyles.getLists(),
 
             // attributes that were set without a selection and are only set for a single character
-            preselectedAttributes = {},
+            preselectedAttributes = null,
 
             // all text spans that are highlighted (for quick removal)
             highlightedSpans = [],
@@ -1564,7 +1564,7 @@ define('io.ox/office/editor/editor',
                     applyOperation(listOperation);
                     defNumId = listOperation.listName;
                 }
-                this.setAttributes('paragraph', { numId: defNumId, indentLevel: 0 });
+                this.setAttributes('paragraph', { paragraph: { numId: defNumId, indentLevel: 0 } });
             }, this);
         };
 
@@ -1589,7 +1589,7 @@ define('io.ox/office/editor/editor',
                 newOperation.end = newOperation.start;
                 applyOperation(newOperation);
             } else {
-                this.setAttributes('paragraph', { numId: defNumId, indentLevel: 0 });
+                this.setAttributes('paragraph', { pragraph: { numId: defNumId, indentLevel: 0 } });
             }
 
         };
@@ -1622,15 +1622,20 @@ define('io.ox/office/editor/editor',
         };
 
         /**
-         * Returns the values of all formatting attributes of the specified
-         * attribute family in the current selection.
+         * Returns the values of all formatting attributes of the elements in
+         * the current selection associated to the specified attribute family.
          *
          * @param {String} family
-         *  The name of the attribute family containing all attributes that
-         *  will be collected and returned.
+         *  The name of the attribute family used to select specific elements
+         *  in the current selection:
+         *  - 'character': all text spans (text portions, text components),
+         *  - 'paragraph': all paragraph nodes,
+         *  - 'table': all table nodes,
+         *  - 'drawing': all drawing object nodes.
          *
          * @returns {Object}
-         *  A map of paragraph attribute name/value pairs.
+         *  A map of attribute value maps (name/value pairs), keyed by
+         *  attribute family.
          */
         this.getAttributes = function (family) {
 
@@ -1639,27 +1644,37 @@ define('io.ox/office/editor/editor',
                 // table or drawing element contained by the selection
                 element = null,
                 // resulting merged attributes
-                mergedAttributes = {};
+                mergedAttributes = null;
 
             // merges the passed element attributes into the resulting attributes
             function mergeElementAttributes(elementAttributes) {
 
                 var // whether any attribute is still unambiguous
-                    hasNonNull = false,
-                    // extract the attributes of the passed family
-                    attributes = elementAttributes[family] || {};
+                    hasNonNull = false;
+
+                // initial iteration: store attributes and return
+                if (!mergedAttributes) {
+                    mergedAttributes = elementAttributes;
+                    return;
+                }
 
                 // process all passed element attributes
-                _(attributes).each(function (value, name) {
+                _(elementAttributes).each(function (attributeValues, family) {
 
-                    if (!(name in mergedAttributes)) {
-                        // initial iteration: store value
-                        mergedAttributes[name] = value;
-                    } else if (!_.isEqual(value, mergedAttributes[name])) {
-                        // value differs from previous value: ambiguous state
-                        mergedAttributes[name] = null;
-                    }
-                    hasNonNull = hasNonNull || !_.isNull(mergedAttributes[name]);
+                    var // target attribute values
+                        mergedAttributeValues = mergedAttributes[family];
+
+                    _(attributeValues).each(function (value, name) {
+
+                        if (!(name in mergedAttributeValues)) {
+                            // initial iteration: store value
+                            mergedAttributeValues[name] = value;
+                        } else if (!_.isEqual(value, mergedAttributeValues[name])) {
+                            // value differs from previous value: ambiguous state
+                            mergedAttributeValues[name] = null;
+                        }
+                        hasNonNull = hasNonNull || !_.isNull(mergedAttributeValues[name]);
+                    });
                 });
 
                 // stop iteration, if all attributes are ambiguous
@@ -1678,9 +1693,9 @@ define('io.ox/office/editor/editor',
                         }
                     });
                 });
-                if (isCursor) {
+                if (isCursor && preselectedAttributes) {
                     // add preselected attributes (text cursor selection cannot result in ambiguous attributes)
-                    characterStyles.extendAttributeValues(mergedAttributes, preselectedAttributes);
+                    StyleSheets.extendAttributes(mergedAttributes, preselectedAttributes);
                 }
                 break;
 
@@ -1707,7 +1722,7 @@ define('io.ox/office/editor/editor',
                 Utils.error('Editor.getAttributes(): missing implementation for family "' + family + '"');
             }
 
-            return mergedAttributes;
+            return mergedAttributes || {};
         };
 
         /**
@@ -1726,7 +1741,7 @@ define('io.ox/office/editor/editor',
          *      removed from the selection, before applying the new attributes.
          */
         this.setAttribute = function (family, name, value, options) {
-            this.setAttributes(family, Utils.makeSimpleObject(name, value), options);
+            this.setAttributes(family, Utils.makeSimpleObject(family, Utils.makeSimpleObject(name, value)), options);
         };
 
         /**
@@ -1737,8 +1752,8 @@ define('io.ox/office/editor/editor',
          *  The name of the attribute family containing the passed attributes.
          *
          * @param {Object} attributes
-         *  A map with formatting attribute values, mapped by the attribute
-         *  names.
+         *  A map of attribute value maps (name/value pairs), keyed by
+         *  attribute families.
          *
          * @param {Object} [options]
          *  A map with additional options controlling the opration. The
@@ -1833,7 +1848,8 @@ define('io.ox/office/editor/editor',
                             }
                         });
                     } else {
-                        characterStyles.extendAttributeValues(preselectedAttributes, attributes);
+                        preselectedAttributes = preselectedAttributes || {};
+                        StyleSheets.extendAttributeValues(preselectedAttributes, attributes);
                     }
                     break;
 
@@ -2158,13 +2174,13 @@ define('io.ox/office/editor/editor',
                                     if (pos === startEndPos.start || result.beforeHyperlink) {
                                         // special case: at the start of a hyperlink we want to
                                         // write with normal style
-                                        preselectedAttributes = { style: null, url: null };
+                                        preselectedAttributes = { character: { style: null, url: null } };
                                     }
                                 }
                                 else {
                                     // special case: at the end of a hyperlink we want to
                                     // write with normal style and we don't show the popup
-                                    preselectedAttributes = { style: null, url: null };
+                                    preselectedAttributes = { character: { style: null, url: null } };
                                     hyperlinkPopup.hide();
                                 }
                             }
@@ -2172,7 +2188,7 @@ define('io.ox/office/editor/editor',
                         else {
                             hyperlinkPopup.hide();
                             if (result.setPreselectedAttributes)
-                                preselectedAttributes = { style: null, url: null };
+                                preselectedAttributes = { character: { style: null, url: null } };
                         }
                     });
                 }
@@ -2368,7 +2384,7 @@ define('io.ox/office/editor/editor',
                 }
             }
 
-            preselectedAttributes = {};
+            preselectedAttributes = null;
 
             // click on drawing node: set browser selection to drawing node, draw selection
             if ((drawing.length > 0) && Utils.containsNode(editdiv, drawing)) {
@@ -2445,7 +2461,7 @@ define('io.ox/office/editor/editor',
                     }
                 });
 
-                preselectedAttributes = {};
+                preselectedAttributes = null;
 
                 return;
             }
@@ -2494,7 +2510,7 @@ define('io.ox/office/editor/editor',
 
             if (event.keyCode === KeyCodes.DELETE) {
                 event.preventDefault();
-                preselectedAttributes = {};
+                preselectedAttributes = null;
                 if (selection.hasRange()) {
                     self.deleteSelected();
                 }
@@ -2573,7 +2589,7 @@ define('io.ox/office/editor/editor',
             }
             else if (event.keyCode === KeyCodes.BACKSPACE) {
                 event.preventDefault();
-                preselectedAttributes = {};
+                preselectedAttributes = null;
                 if (selection.hasRange()) {
                     self.deleteSelected();
                 }
@@ -2663,7 +2679,7 @@ define('io.ox/office/editor/editor',
                     event.preventDefault();
                 }
 
-                preselectedAttributes = {};
+                preselectedAttributes = null;
                 var c = getPrintableChar(event);
                 if (c === 'A') {
                     selection.selectAll();
@@ -2684,17 +2700,17 @@ define('io.ox/office/editor/editor',
 //                    self.paste();
 //                }
                 else if (c === 'B') {
-                    self.setAttribute('character', 'bold', !self.getAttributes('character').bold);
+                    self.setAttribute('character', 'bold', !self.getAttributes('character').character.bold);
                 }
                 else if (c === 'I') {
-                    self.setAttribute('character', 'italic', !self.getAttributes('character').italic);
+                    self.setAttribute('character', 'italic', !self.getAttributes('character').character.italic);
                 }
                 else if (c === 'U') {
-                    self.setAttribute('character', 'underline', !self.getAttributes('character').underline);
+                    self.setAttribute('character', 'underline', !self.getAttributes('character').character.underline);
                 }
             } else if (event.keyCode === KeyCodes.TAB && !event.ctrlKey && !event.metaKey) {
                 event.preventDefault();
-                preselectedAttributes = {};
+                preselectedAttributes = null;
                 // (shift)Tab: Change list indent (if in list) when selection is at first position in paragraph
                 var paragraph = Position.getLastNodeFromPositionByNodeName(editdiv, selection.getStartPosition(), DOM.PARAGRAPH_NODE_SELECTOR),
                     mustInsertTab = !event.shiftKey;
@@ -2742,7 +2758,7 @@ define('io.ox/office/editor/editor',
             }
 
             if (lastKeyDownEvent && DOM.isCursorKey(lastKeyDownEvent.keyCode)) {
-                preselectedAttributes = {};
+                preselectedAttributes = null;
                 return;
             }
 
@@ -2783,11 +2799,11 @@ define('io.ox/office/editor/editor',
 
                     self.insertText(c, startPosition);
 
-                    if (! _.isEmpty(preselectedAttributes)) {
+                    if (preselectedAttributes) {
                         // setting selection, grouping of operations is required
                         selection.setTextSelection(startPosition, endPosition);
                         self.setAttributes('character', preselectedAttributes);
-                        preselectedAttributes = {};
+                        preselectedAttributes = null;
                     }
                 }, this);
 
@@ -2799,16 +2815,16 @@ define('io.ox/office/editor/editor',
                                               hyperlinkSelection.start,
                                               hyperlinkSelection.end,
                                               (hyperlinkSelection.url === null) ? hyperlinkSelection.text : hyperlinkSelection.url);
-                    preselectedAttributes = { style: null, url: null };
+                    preselectedAttributes = { character: { style: null, url: null } };
                 }
             }
             else if (c.length > 1) {
-                preselectedAttributes = {};
+                preselectedAttributes = null;
                 // TODO?
             }
             else {
 
-                preselectedAttributes = {};
+                preselectedAttributes = null;
 
                 if (event.keyCode === KeyCodes.ENTER) {
                     var hasSelection = selection.hasRange();

@@ -96,7 +96,7 @@ define('io.ox/office/editor/controller',
 
                 'paragraph/attributes': {
                     parent: 'document/editable/text',
-                    get: function () { return editor.getAttributes('paragraph'); }
+                    get: function () { return editor.getAttributes('paragraph').paragraph || {}; }
                 },
                 'paragraph/stylesheet': {
                     parent: 'paragraph/attributes',
@@ -154,7 +154,7 @@ define('io.ox/office/editor/controller',
                         if (mode) {
                             editor.createDefaultList('bullet');
                         } else {
-                            editor.setAttributes('paragraph', { numId: -1, indentLevel: -1 });
+                            editor.setAttributes('paragraph', { paragraph: { numId: -1, indentLevel: -1 } });
                         }
                     }
                 },
@@ -167,21 +167,21 @@ define('io.ox/office/editor/controller',
                         if (mode) {
                             editor.createDefaultList('numbering');
                         } else {
-                            editor.setAttributes('paragraph', { numId: -1, indentLevel: -1 });
+                            editor.setAttributes('paragraph', { paragraph: { numId: -1, indentLevel: -1 } });
                         }
                     }
                 },
                 'paragraph/borders': {
                     parent: 'paragraph/attributes',
                     get: function (attributes) { return ParagraphStyles.getBorderModeFromAttributes(attributes); },
-                    set: function (borderMode) { editor.setAttributes('paragraph', ParagraphStyles.getAttributesBorderMode(borderMode)); }
+                    set: function (borderMode) { editor.setAttributes('paragraph', { paragraph: ParagraphStyles.getAttributesFromBorderMode(borderMode) }); }
                 },
 
                 // characters
 
                 'character/attributes': {
                     parent: 'document/editable/text',
-                    get: function () { return editor.getAttributes('character'); }
+                    get: function () { return editor.getAttributes('character').character || {}; }
                 },
                 'character/stylesheet': {
                     parent: 'character/attributes',
@@ -266,7 +266,7 @@ define('io.ox/office/editor/controller',
 
                 'table/attributes': {
                     parent: 'document/editable/table',
-                    get: function () { return editor.getAttributes('table'); }
+                    get: function () { return editor.getAttributes('table').table || {}; }
                 },
                 'table/stylesheet': {
                     parent: 'table/attributes',
@@ -287,12 +287,12 @@ define('io.ox/office/editor/controller',
 
                 'drawing/attributes': {
                     parent: 'document/editable/drawing',
-                    get: function () { return editor.getAttributes('drawing'); }
+                    get: function () { return editor.getAttributes('drawing').drawing || {}; }
                 },
                 'drawing/floatmode': {
                     parent: 'drawing/attributes',
                     get: function (attributes) { return DrawingStyles.getFloatModeFromAttributes(attributes); },
-                    set: function (floatMode) { editor.setAttributes('drawing', DrawingStyles.getAttributesFromFloatMode(floatMode)); }
+                    set: function (floatMode) { editor.setAttributes('drawing', { drawing: DrawingStyles.getAttributesFromFloatMode(floatMode) }); }
                 },
 
                 // images
