@@ -213,7 +213,7 @@ define('io.ox/files/actions',
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var $input = $('<input type="text" name="name">');
                 var dialog = null;
-                
+
                 function fnRename() {
                     var name = $input.val();
                     var update = {
@@ -249,7 +249,7 @@ define('io.ox/files/actions',
                 )
                 .addPrimaryButton('rename', gt('Rename'))
                 .addButton('cancel', gt('Cancel'));
-                
+
                 dialog.show(function () {
                     $input.select();
                 })
@@ -316,7 +316,7 @@ define('io.ox/files/actions',
     });
 
 
-    
+
     // version specific actions
 
     new Action('io.ox/files/versions/actions/makeCurrent', {
@@ -421,7 +421,7 @@ define('io.ox/files/actions',
         ref: "io.ox/files/actions/editor"
     }));
 
-    
+
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: "officeeditor",
         index: 60,
@@ -497,7 +497,7 @@ define('io.ox/files/actions',
         ref: "io.ox/files/actions/office/editasnew"
     }));
 
-    
+
     // version links
 
 
@@ -589,8 +589,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/icons/slideshow-fullscreen', {
         requires: function (e) {
-
-            return _(e.context.allIds).reduce(function (memo, obj) {
+            return BigScreen.enabled && _(e.context.allIds).reduce(function (memo, obj) {
                 return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
             }, false);
         },
