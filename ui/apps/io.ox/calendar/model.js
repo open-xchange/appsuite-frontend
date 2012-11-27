@@ -19,16 +19,13 @@ define('io.ox/calendar/model',
         'io.ox/participants/model',
         'io.ox/core/date',
         'io.ox/core/api/folder',
-        'io.ox/core/config'], function (api, ModelFactory, ext, gt, Validators, pModel, dateAPI, folderAPI, configAPI) {
+        'io.ox/core/config'], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, configAPI) {
 
     "use strict";
 
-    var defStart = new dateAPI.Local();
-    var defEnd = new dateAPI.Local();
+    var defStart = new date.Local();
     defStart.setMinutes(0);
     defStart.setHours(defStart.getHours() + 1);
-    defEnd.setMinutes(0);
-    defEnd.setHours(defEnd.getHours() + 2);
 
     var RECURRENCE_FIELDS = "recurrence_type interval days day_in_month month until occurrences".split(" ");
 
@@ -47,8 +44,8 @@ define('io.ox/calendar/model',
         },
         model: {
             defaults: {
-                start_date: dateAPI.Local.localTime(defStart.getTime()),
-                end_date: dateAPI.Local.localTime(defEnd.getTime()),
+                start_date: defStart.getTime(),
+                end_date: defStart.getTime() + date.HOUR,
                 recurrence_type: 0,
                 alarm: 15
             },
@@ -241,8 +238,8 @@ define('io.ox/calendar/model',
             });
         },
         toLocalTime: function (model) {
-            model.set('start_date', dateAPI.Local.localTime(model.get('start_date')));
-            model.set('end_date', dateAPI.Local.localTime(model.get('end_date')));
+            model.set('start_date', date.Local.localTime(model.get('start_date')));
+            model.set('end_date', date.Local.localTime(model.get('end_date')));
 
         },
         factory: factory,
