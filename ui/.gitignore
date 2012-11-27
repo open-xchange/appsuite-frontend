@@ -1,7 +1,5 @@
 /build
 /tmp
-/i18n/ox.pot
-/ox.pot
 /debian/files
 /debian/open-xchange-ui7/
 /debian/open-xchange-ui7.debhelper.log
