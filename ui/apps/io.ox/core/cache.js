@@ -433,7 +433,7 @@ define('io.ox/core/cache',
             key = localStorage.key(i);
             try {
                 value = JSON.parse(localStorage.getItem(key));
-                console.info('key', key, 'value', value);
+                console.debug('#', i, 'key', key, 'value', value);
             } catch (e) {
                 console.error('key', key, e);
             }

@@ -16,9 +16,6 @@ define('io.ox/core/cache/localstorage', function () {
 
     var id = null,
         reg = null,
-        lastGC = 0,
-        gcTimeout = 1000 * 60 * 5, // 5 minutes
-        ts_cachetimeout = (new Date()).getTime() - (2 * 24 * 60 * 60 * 1000), // 2 days
         // max size for persistent objects
         MAX_LENGTH = 1024 * 1024, // 1MB
         // fluent backup cache
@@ -44,7 +41,7 @@ define('io.ox/core/cache/localstorage', function () {
     that = {
 
         dump: function () {
-            console.log(fluent);
+            console.debug('fluent', fluent, 'access', access);
         },
 
         setId: function (theId) {
@@ -64,28 +61,22 @@ define('io.ox/core/cache/localstorage', function () {
 
             var now = _.now(), cid, items = [], removed = 0, i = 0, $i;
 
-            if (now > (lastGC + gcTimeout) || force) {
-
-                // remember for next round
-                lastGC = now;
-
-                // loop #1: get number of items
-                for (cid in access) {
-                    items.push([cid, access[cid]]);
-                }
-
-                // sort by access date
-                items.sort(function (a, b) { return a[1] - b[1]; });
-
-                // loop #2: remove oldest 30%
-                for ($i = Math.floor(items.length / 3); i < $i; i++) {
-                    localStorage.removeItem(items[i][0]);
-                    removed++;
-                }
-
-                console.warn('GC. items', items.length, 'removed', removed);
-                items = null;
+            // loop #1: get number of items
+            for (cid in access) {
+                items.push([cid, access[cid]]);
             }
+
+            // sort by access date
+            items.sort(function (a, b) { return a[1] - b[1]; });
+
+            // loop #2: remove oldest 30%
+            for ($i = Math.floor(items.length / 3); i < $i; i++) {
+                localStorage.removeItem(items[i][0]);
+                removed++;
+            }
+
+            console.warn('GC. items', items.length, 'removed', removed);
+            items = null;
         },
 
         clear: function () {
