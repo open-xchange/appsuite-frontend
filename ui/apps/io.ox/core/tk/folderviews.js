@@ -551,6 +551,10 @@ define('io.ox/core/tk/folderviews',
                     require(['io.ox/core/tk/dialogs'])
                 )
                 .done(function (folder, dialogs) {
+                    if (folder.standard_folder) {
+                        notifications.yell('error', gt('This is a standard folder, which can\'t be renamed.'));
+                        return;
+                    }
                     new dialogs.ModalDialog({
                         width: 400,
                         easyOut: true
