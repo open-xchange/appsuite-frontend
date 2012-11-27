@@ -805,6 +805,10 @@ define('io.ox/backbone/forms',
                                         return [self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
                                     } else if (options.display === "DATETIME") {
                                         self.nodes.timeField = $('<input type="text" class="input-mini">');
+                                        if (self.model.get('full_time')) {
+                                            self.nodes.timeField.hide();
+                                            self.nodes.timezoneField.hide();
+                                        }
                                         return [self.nodes.dayField, '&nbsp;', self.nodes.timeField, '&nbsp;', self.nodes.timezoneField];
                                     }
                                 }
