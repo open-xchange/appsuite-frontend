@@ -33,6 +33,7 @@ define('io.ox/calendar/edit/template',
         className: 'additional-info'
     });
 
+    // pane title and button area
     ext.point('io.ox/calendar/edit/section/buttons').extend({
         index: 100,
         id: 'title',
@@ -41,6 +42,7 @@ define('io.ox/calendar/edit/template',
         }
     });
 
+    // buttons
     ext.point('io.ox/calendar/edit/section/buttons').extend({
         index: 100,
         id: 'buttons',
@@ -98,7 +100,7 @@ define('io.ox/calendar/edit/template',
                                     )
                             )
                     );
-                   
+
             });
         }
     });
@@ -173,12 +175,12 @@ define('io.ox/calendar/edit/template',
         index: 600
     }));
 
+    // recurrence
     point.extend(new RecurrenceView({
         id: 'recurrence',
         className: 'span12',
         index: 650
     }));
-
 
     // note
     point.extend(new forms.InputField({
@@ -220,6 +222,7 @@ define('io.ox/calendar/edit/template',
             {value: 5760, format: 'days'},
             {value: 7200, format: 'days'},
             {value: 8640, format: 'days'},
+
             {value: 10080, format: 'weeks'},
             {value: 20160, format: 'weeks'},
             {value: 30240, format: 'weeks'},
