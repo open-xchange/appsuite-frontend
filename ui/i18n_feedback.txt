@@ -26,7 +26,7 @@ Do you really want to delete the following subreddit(s)? -> solche Konstruktione
 # HTML and Plain text -> HTML and plain text
 
 # christoph kopp. bitte folgendes anschauen:
-1_minute etc. -> warum underscore?
+#1_minute etc. -> warum underscore?
 
 more -> Kontext?
 # Oops, couldn't load that email. -> wenn was schiefgeht und dann kommt oops als Meldung, täte ich mich ärgern :-)
@@ -37,10 +37,10 @@ Enable Plugin -> Plug-in (muss nicht sein, ist aber wohl -noch- besser)
 Over due Tasks -> Overdue tasks
 Ok -> OK
 Invites -> Kontext? Lädt ein? Wer zu was?
-Pop3 refresh rate: -> POP3
+#Pop3 refresh rate: -> POP3
  on behalf of   -> bitte keine zerrissenen Sätze (falls da noch was vorne oder hinten dran kommt). Das ist ein Horror für jeden Übersetzer, und dann noch ohne Kontext.. ;-)
-HTML and Plain text -> HTML and plain text
-1_minute etc. -> warum underscore?
+#HTML and Plain text -> HTML and plain text
+#1_minute etc. -> warum underscore?
 more -> Kontext?
 Oops, couldn't load that email. -> wenn was schiefgeht und dann kommt oops als Meldung, täte ich mich ärgern :-)
 More -> Kontext?

@@ -47,7 +47,11 @@ define('io.ox/mail/settings/pane',
             DISPLAY_EMOTICONS: gt('Display emoticons as graphics in text E-Mails'),
             COLOR_QUOTED: gt('Color quoted lines')
         },
-        optionsAutoSave = [gt('disabled'), gt('1_minute'), gt('3_minutes'), gt('5_minutes'), gt('10_minutes')],
+        optionsAutoSave = [{label: gt('disabled'), value: 'disabled'},
+                           {label: gt('1 minute'), value: '1_minute'},
+                           {label: gt('3 minutes'), value: '3_minutes'},
+                           {label: gt('5 minutes'), value: '5_minutes'},
+                           {label: gt('10 minutes'), value: '10_minutes'}],
         mailViewSettings;
 
 
