@@ -32,7 +32,7 @@ define('io.ox/office/editor/format/stylesheets',
 
         // create a new entry if missing
         if (!(family in REGISTRY)) {
-            REGISTRY[family] = { definitions: {}, parentFamilies: {}, childFamilies: [] };
+            REGISTRY[family] = { definitions: {}, parentFamilies: {}, supportedFamilies: [] };
         }
 
         return REGISTRY[family];
@@ -167,7 +167,7 @@ define('io.ox/office/editor/format/stylesheets',
             styleFamily = this.constructor.STYLE_FAMILY,
 
             // all supported attribute families
-            supportedFamilies = [styleFamily].concat(REGISTRY[styleFamily].childFamilies),
+            supportedFamilies = REGISTRY[styleFamily].supportedFamilies,
 
             // style sheets, mapped by identifier
             styleSheets = {},
@@ -1230,10 +1230,12 @@ define('io.ox/office/editor/format/stylesheets',
         // insert information for the new style family
         registryEntry.definitions = definitions;
         registryEntry.parentFamilies = Utils.getObjectOption(options, 'parentFamilies', {});
+        registryEntry.supportedFamilies.push(styleFamily);
 
         // store references back to this style families in specified parent families
         _(registryEntry.parentFamilies).each(function (entry, parentFamily) {
-            getOrCreateRegistryEntry(parentFamily).childFamilies.push(styleFamily);
+            var parentEntry = getOrCreateRegistryEntry(parentFamily);
+            parentEntry.supportedFamilies = _.unique(parentEntry.supportedFamilies.concat(registryEntry.supportedFamilies));
         });
 
         // create the derived class constructor
