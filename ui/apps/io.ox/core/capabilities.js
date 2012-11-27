@@ -23,51 +23,79 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 
 	var capabilities = {},
 		capCache = new cache.SimpleCache(ox.signin ? "signinCapabilities" : "capabilities", true),
-		capSource = null;
+		capSource = null,
+		capBlacklist = {};
+
+
+	(function () {
+		var disabledList = _.url.hash('disableFeature');
+		if (disabledList) {
+			_(disabledList.split(/\s*[, ]\s*/)).each(function (feature) {
+				capBlacklist[feature] = true;
+			});
+		}
+	}());
 
 	var capLookup = {
 		get: function (capName) {
+			if (capBlacklist[capName]) {
+				return null;
+			}
 			return capabilities[capName.toLowerCase()];
 		},
 		has: function () {
 			var self = this;
-			var result = false;
-			_(_(arguments).flatten()).each(function (capDef) {
-				var definition = capDef.split(/\s+/);
-				var name = definition[0];
+			
+			var list = _(_(arguments).flatten()).map(function (def) {
+				return def.split(/\s*[, ]\s*/);
+			});
+			list = _(list).flatten();
+
+			return _(list).all(function (name) {
 				var inverse = false;
 				if (name[0] === '!') {
 					name = name.substr(1);
 					inverse = true;
 				}
-				var needsBackend = false;
-				if (definition[1] && (definition[1].toLowerCase() === 'withbackendsupport' || definition[1].toLowerCase() === 'backendsupport')) {
-					needsBackend = true;
-				}
+				
 				var capability = self.get(name);
 				if (inverse) {
 					return !!!capability;
 				} else {
-					if (capability) {
-						if (needsBackend) {
-							result = capability.backendSupport;
-						} else {
-							result = true;
-						}
-					}
+					return !!capability;
 				}
 			});
-
-			return result;
 		}
 	};
 
 	var dummyCapLookup = {
 		get: function (capName) {
+			if (capBlacklist[capName]) {
+				return null;
+			}
 			return {id: capName, backendSupport: true};
 		},
 		has: function (capName) {
-			return true;
+			var self = this;
+			var list = _(_(arguments).flatten()).map(function (def) {
+				return def.split(/\s*[, ]\s*/);
+			});
+			list = _(list).flatten();
+
+			return _(list).all(function (name) {
+				var inverse = false;
+				if (name[0] === '!') {
+					name = name.substr(1);
+					inverse = true;
+				}
+				
+				var capability = self.get(name);
+				if (inverse) {
+					return !!!capability;
+				} else {
+					return !!capability;
+				}
+			});
 		}
 	};
 
@@ -94,7 +122,7 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 		});
 		capSource = 'backend';
 		capCache.add("default", capabilities);
-		
+
 		def.resolve(capLookup);
 	}).fail(function (resp) {
 		console.error("Capabilities subsystem is disabled!");
