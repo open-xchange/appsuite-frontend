@@ -98,6 +98,7 @@ define("io.ox/files/list/view-detail",
     ext.point("io.ox/files/details/sections").extend({
         id: "fileDetails",
         layout: "Flow",
+        title: gt("Current version"),
         index: 300
     });
 
