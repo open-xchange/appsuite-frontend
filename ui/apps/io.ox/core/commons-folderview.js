@@ -29,7 +29,7 @@ define('io.ox/core/commons-folderview',
             type: undefined,
             view: 'ApplicationFolderTree',
             visible: false,
-            permanent: false
+            permanent: true
         });
 
         // draw container

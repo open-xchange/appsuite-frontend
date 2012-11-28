@@ -126,12 +126,19 @@ define('io.ox/core/api/folder',
                         },
                         appendColumns: true
                     })
-                    .done(function (data, timestamp) {
-                        // add to cache
-                        cache.add(opt.folder, data);
-                        // also add to folder cache
-                        _(data).each(function (folder) {
-                            folderCache.add(folder.id, folder);
+                    .pipe(function (data, timestamp) {
+                        return $.when(
+                            // add to cache
+                            cache.add(opt.folder, data, timestamp),
+                            // also add to folder cache
+                            $.when.apply($,
+                                _(data).map(function (folder) {
+                                    return folderCache.add(folder.id, folder);
+                                })
+                            )
+                        )
+                        .pipe(function () {
+                            return data;
                         });
                     })
                     .fail(function (error) {
