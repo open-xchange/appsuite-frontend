@@ -575,6 +575,9 @@ define('io.ox/office/editor/main',
 
             // disable Firefox spell checking. TODO: better solution...
             $('body').attr('spellcheck', false);
+            
+            // disable dropping of images onto the apps background area
+            self.getWindow().nodes.main.on('drop', false);
 
             if (Utils.getStringOption(options, 'action') === 'new') {
                 // 'new document' action: create the new file in InfoStore (optionally based on a template file)

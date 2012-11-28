@@ -33,8 +33,9 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/format/lineheight',
      'io.ox/office/editor/format/color',
      'io.ox/office/tk/alert',
+     'io.ox/office/tk/application',
      'gettext!io.ox/office/main'
-    ], function (Events, Utils, DOM, Selection, Table, Image, Hyperlink, Operations, Position, UndoManager, StyleSheets, CharacterStyles, ParagraphStyles, DocumentStyles, LineHeight, Color, Alert, gt) {
+    ], function (Events, Utils, DOM, Selection, Table, Image, Hyperlink, Operations, Position, UndoManager, StyleSheets, CharacterStyles, ParagraphStyles, DocumentStyles, LineHeight, Color, Alert, Application, gt) {
 
     'use strict';
 
@@ -2923,7 +2924,29 @@ define('io.ox/office/editor/editor',
                 }
             }
         }
-
+        
+        function processDroppedImages(event) {
+            
+            event.preventDefault();
+            if (!editMode) {
+                return;
+            }
+        
+            var images = event.originalEvent.dataTransfer.files;
+            
+            for (var i = 0; i < images.length; i++) {
+                var img = images[i];
+                var imgType = /image.*/;
+               
+                if (!img.type.match(imgType)) {
+                    continue;
+                }
+               
+                Application.readFileAsDataUrl(img)
+                .done(self.insertImageData);
+            }
+        }
+        
         /**
          * Parses the clipboard div for pasted text content
          * @param {jQuery} clipboard
@@ -6077,7 +6100,7 @@ define('io.ox/office/editor/editor',
 
         // forward selection change events to own listeners
         selection.on('change', function () { self.trigger('selection', selection); });
-
+		
         // hybrid edit mode
         editdiv
             .on('focus blur', processFocus)
@@ -6085,7 +6108,8 @@ define('io.ox/office/editor/editor',
             .on('keypress', processKeyPressed)
             .on('mousedown', processMouseDown)
             .on('mouseup', processMouseUp)
-            .on('dragstart dragover drop contextmenu cut', false)
+            .on('drop', processDroppedImages)
+            .on('dragstart dragover contextmenu cut', false)
             .on('paste', _.bind(this.paste, this));
 
     } // class Editor
