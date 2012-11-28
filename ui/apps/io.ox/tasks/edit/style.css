@@ -43,38 +43,13 @@
  }
  
  .task-edit-wrapper {
- 	width: 800px;
+ 	max-width: 800px;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 20px;
  }
  
- @media (min-width: 1200px) {
- 	.task-edit-wrapper {
- 		width: 1000px!important;
- 	}
- 	.io-ox-tasks-edit .alarm-date-field,
- 	.io-ox-tasks-edit .start-date-field,
- 	.io-ox-tasks-edit .end-date-field {
- 		width: 178px!important;
- 	}
- 	.io-ox-tasks-edit .progress-field {
- 		width: 86px!important;
- 	}
- 	.io-ox-tasks-edit .task-participant-input-field {
- 		width: 432px!important;
- 	}
- }
- 
  @media (max-width: 980px) {
- 	.task-edit-wrapper {
- 		width: 700px!important;
- 	}
- 	.io-ox-tasks-edit .alarm-date-field,
- 	.io-ox-tasks-edit .start-date-field,
- 	.io-ox-tasks-edit .end-date-field {
- 		width: 125px!important;
- 	}
  	.io-ox-tasks-edit .progress-field {
  		width: 49px!important;
  	}
