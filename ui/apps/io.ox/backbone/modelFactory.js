@@ -27,9 +27,22 @@ define("io.ox/backbone/modelFactory",
 
             this.syncer = this.factory.internal;
 
+            var self = this;
+            this.on('sync', function () {
+                self.touchedAttributes = {};
+            });
         },
         point: function (subpath) {
             return this.factory.point(subpath);
+        },
+        touch: function () {
+            var self = this;
+            this.touchedAttributes = this.touchedAttributes || {};
+
+            _(arguments).each(function (attribute) {
+                self.touchedAttributes[attribute] = true;
+            });
+
         },
         changedSinceLoading: function () {
             var self = this;
@@ -55,7 +68,9 @@ define("io.ox/backbone/modelFactory",
                 var c = currentAttributes[key];
                 var different = false;
 
-                if (o !== c) {
+                if (self.touchedAttributes[key]) {
+                    retval[key] = c;
+                } else if (o !== c) {
                     if (_.isArray(o) && _.isArray(c)) {
                         if (_(o).difference(c).length !== 0 || _(c).difference(o).length !== 0) {
                             if (o.length !== c.length) {

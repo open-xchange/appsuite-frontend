@@ -122,15 +122,19 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
             }
             if (this.syncer) {
                 this.trigger(action + ':start');
+                this.trigger('sync:start');
+                
                 return this.syncer[action].call(this.syncer, model)
                     .done(function (response) {
                         callbacks.success(model, response);
                         self.trigger(action, response);
+                        self.trigger('sync', response);
                     })
                     .fail(function (response) {
                         callbacks.error(model, response);
                         self.trigger('backendError', response);
                         self.trigger(action + ':fail', response);
+                        self.trigger('sync:fail', response);
                     });
             } else {
                 throw "No Syncer specified!";
