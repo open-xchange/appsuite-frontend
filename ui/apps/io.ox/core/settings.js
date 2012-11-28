@@ -13,13 +13,13 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
+define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/event'], function (http, cache, Event) {
 
     'use strict';
 
     var Settings = function (path) {
 
-        var tree = {}, settingsCache = new cache.SimpleCache('settings', true);
+        var tree = {}, self = this, settingsCache = new cache.SimpleCache('settings', true);
 
         this.get = function (key, defaultValue) {
             // no argument?
@@ -77,6 +77,7 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function 
         this.set = function (key, value) {
             find(key, function (tmp, key) {
                 tmp[key] = value;
+                self.trigger('change:' + key, value).trigger('change', key, value);
             });
         };
 
@@ -117,6 +118,7 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function 
                     return applyDefaults();
                 })
                 .pipe(function () {
+                    self.trigger('load', tree);
                     return settingsCache.add(path, tree);
                 });
             };
@@ -139,6 +141,9 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function 
                         id: 'apps/' + path
                     },
                     data: {}
+                })
+                .done(function () {
+                    self.trigger('reset');
                 });
             });
         };
@@ -157,8 +162,11 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function 
                     },
                     data: data
                 })
-            );
+            )
+            .done(function () { self.trigger('save'); });
         };
+
+        Event.extend(this);
     };
 
     return {
