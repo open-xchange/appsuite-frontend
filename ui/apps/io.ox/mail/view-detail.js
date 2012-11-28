@@ -218,8 +218,8 @@ define('io.ox/mail/view-detail',
             isLarge = source.length > 1024 * 512; // > 512 KB
 
             // add other parts?
-            _(att).each(function (attachment) {
-                if (attachment.disp === 'inline' && attachment.content_type === type) {
+            _(att).each(function (attachment, index) {
+                if (index > 0 && attachment.disp === 'inline' && attachment.content_type === type) {
                     source += attachment.content;
                 }
             });
