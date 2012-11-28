@@ -1147,7 +1147,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @param {Object} [options]
      *  A map of options to control the split operation. Supports the following
      *  options:
-     *  @param {Boolean} [options.append]
+     *  @param {Boolean} [options.append=false]
      *      If set to true, the right part of the text will be inserted after
      *      the passed text span; otherwise the left part of the text will be
      *      inserted before the passed text span. The position of the new text

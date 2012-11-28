@@ -702,53 +702,6 @@ define('io.ox/office/editor/format/stylesheets',
         };
 
         /**
-         * Extends the passed first attribute set with the attribute values of
-         * the second attribute set. If the definitions of a specific attribute
-         * contain a merger function, and both sets contain an attribute value,
-         * uses that merger function to merge the values from both attribute
-         * sets, otherwise the value of the second attribute set will be copied
-         * to the first attribute set.
-         *
-         * @param {Object} attributes1
-         *  (in/out) The first attribute set that will be extended in-place.
-         *
-         * @param {Object} attributes2
-         *  The second attribute set, whose attribute values will be inserted
-         *  into the first attribute set.
-         *
-         * @returns {StyleSheets}
-         *  A reference to this style sheets container.
-         */
-        this.extendAttributeValues = function (attributes1, attributes2) {
-
-            var // definitions of own attributes
-                definitions = getAttributeDefinitions(styleFamily);
-
-            _(attributes2).each(function (value, name) {
-
-                var // the merger function from the attribute definition
-                    merger = null;
-
-                // copy style sheet identifier directly
-                if (name === 'style') {
-                    attributes1.style = value;
-                } else if (isRegisteredAttribute(definitions, name)) {
-                    // try to find merger function from attribute definition
-                    merger = definitions[name].merge;
-                    // either set return value from merger, or copy the attribute directly
-                    if ((name in attributes1) && _.isFunction(merger)) {
-                        attributes1[name] = merger.call(this, attributes1[name], value);
-                    } else {
-                        attributes1[name] = value;
-                    }
-                }
-
-            }, this);
-
-            return this;
-        };
-
-        /**
          * Returns the options map used to create the preview list item in a
          * style chooser control. Uses the 'preview' entry of all attribute
          * definitions to build the options map.

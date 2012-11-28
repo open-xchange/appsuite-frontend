@@ -1217,12 +1217,13 @@ define('io.ox/office/tk/utils',
                 return;
             }
 
+            // for next call: always visit descendant nodes of own or parent siblings
+            visitDescendants = true;
+
             // find first node up the tree that has a next sibling
             while (node && !node.nextSibling) {
                 // do not leave the root node
                 node = (node.parentNode === rootNode) ? null : node.parentNode;
-                // always visit descendant nodes of parent siblings
-                visitDescendants = true;
             }
 
             // go to that next sibling

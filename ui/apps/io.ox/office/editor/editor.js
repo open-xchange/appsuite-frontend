@@ -1528,7 +1528,7 @@ define('io.ox/office/editor/editor',
             }
         };
 
-        this.insertTab = function () {
+        this.insertTab = function (attrs) {
             undoManager.enterGroup(function () {
                 this.deleteSelected();
                 applyOperation({ name: Operations.TAB_INSERT, start: selection.getStartPosition() });
@@ -1548,8 +1548,9 @@ define('io.ox/office/editor/editor',
             applyOperation(newOperation);
         };
 
-        this.insertText = function (text, position) {
+        this.insertText = function (text, position, attrs) {
             var newOperation = { name: Operations.TEXT_INSERT, text: text, start: _.clone(position) };
+            if (_.isObject(attrs)) { newOperation.attrs = attrs; }
             applyOperation(newOperation);
         };
 
@@ -1848,7 +1849,7 @@ define('io.ox/office/editor/editor',
                         });
                     } else {
                         preselectedAttributes = preselectedAttributes || {};
-                        StyleSheets.extendAttributeValues(preselectedAttributes, attributes);
+                        StyleSheets.extendAttributes(preselectedAttributes, attributes);
                     }
                     break;
 
@@ -2783,40 +2784,34 @@ define('io.ox/office/editor/editor',
 
             if ((!event.ctrlKey || (event.ctrlKey && event.altKey && !event.shiftKey)) && !event.metaKey && (c.length === 1)) {
 
-                var startPosition = selection.getStartPosition(),
-                    endPosition = _.clone(startPosition),
-                    hyperlinkSelection = null;
-                endPosition[endPosition.length - 1]++;
-
-                self.deleteSelected();
-
-                if ((event.keyCode === KeyCodes.SPACE) && !selection.hasRange()) {
-                    // check left text to support hyperlink auto correction
-                    hyperlinkSelection = Hyperlink.checkForHyperlinkText(selection.getEnclosingParagraph(), startPosition);
-                }
-
                 undoManager.enterGroup(function () {
 
-                    self.insertText(c, startPosition);
+                    var startPosition = null,
+                        hyperlinkSelection = null;
 
-                    if (preselectedAttributes) {
-                        // setting selection, grouping of operations is required
-                        selection.setTextSelection(startPosition, endPosition);
-                        self.setAttributes('character', preselectedAttributes);
-                        preselectedAttributes = null;
+                    self.deleteSelected();
+                    startPosition = selection.getStartPosition();
+
+                    if ((event.keyCode === KeyCodes.SPACE) && !selection.hasRange()) {
+                        // check left text to support hyperlink auto correction
+                        hyperlinkSelection = Hyperlink.checkForHyperlinkText(selection.getEnclosingParagraph(), startPosition);
                     }
+
+                    self.insertText(c, startPosition, preselectedAttributes);
+                    preselectedAttributes = null;
+
+                    // set cursor behind character
+                    selection.setTextSelection(Position.increaseLastIndex(startPosition, c.length));
+
+                    if (hyperlinkSelection !== null) {
+                        Hyperlink.insertHyperlink(self,
+                                                  hyperlinkSelection.start,
+                                                  hyperlinkSelection.end,
+                                                  (hyperlinkSelection.url === null) ? hyperlinkSelection.text : hyperlinkSelection.url);
+                        preselectedAttributes = { character: { style: null, url: null } };
+                    }
+
                 }, this);
-
-                // set cursor behind character
-                selection.setTextSelection(endPosition);
-
-                if (hyperlinkSelection !== null) {
-                    Hyperlink.insertHyperlink(self,
-                                              hyperlinkSelection.start,
-                                              hyperlinkSelection.end,
-                                              (hyperlinkSelection.url === null) ? hyperlinkSelection.text : hyperlinkSelection.url);
-                    preselectedAttributes = { character: { style: null, url: null } };
-                }
             }
             else if (c.length > 1) {
                 preselectedAttributes = null;
@@ -3165,7 +3160,7 @@ define('io.ox/office/editor/editor',
                 var undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: endPos };
                 undoManager.addUndo(undoOperation, operation);
             }
-            implInsertText(operation.text, operation.start, operation.attrs);
+            implInsertText(operation.start, operation.text, operation.attrs);
         };
 
         operationHandlers[Operations.TAB_INSERT] = function (operation) {
@@ -4739,32 +4734,6 @@ define('io.ox/office/editor/editor',
             return { node: span, offset: nodeInfo.offset };
         }
 
-        function implInsertText(text, position, attrs) {
-
-            var // text span and internal offset
-                spanInfo = getTextSpanInfo(position),
-                // the text node in the text span
-                textNode = null;
-
-            if (!spanInfo) { return false; }
-
-            // manipulate the existing DOM text node
-            textNode = spanInfo.node.firstChild;
-
-            // insert the new text into the text node
-            textNode.nodeValue = textNode.nodeValue.slice(0, spanInfo.offset) + text + textNode.nodeValue.slice(spanInfo.offset);
-
-            // apply the passed text attributes
-            if (_.isObject(attrs)) {
-                characterStyles.setElementAttributes(spanInfo.node, attrs);
-            }
-
-            // validate paragraph, store new cursor position
-            implParagraphChanged(spanInfo.node.parentNode);
-            lastOperationEnd = Position.increaseLastIndex(position, text.length);
-            return true;
-        }
-
         /**
          * Splits the text span at the specified position, if splitting is
          * required. Always splits the span, if the position points between two
@@ -4804,6 +4773,34 @@ define('io.ox/office/editor/editor',
 
             // otherwise, split the span
             return DOM.splitTextSpan(spanInfo.node, spanInfo.offset)[0];
+        }
+
+        function implInsertText(start, text, attrs) {
+
+            var // text span that will precede the field
+                span = getPreparedTextSpan(start),
+                // new new text span
+                newSpan = null;
+
+            if (!span) { return false; }
+
+            // split the text span again to get actual character formatting for
+            // the span, and insert the text
+            newSpan = DOM.splitTextSpan(span, span.firstChild.nodeValue.length, { append: true }).text(text);
+
+            // apply the passed text attributes
+            if (_.isObject(attrs)) {
+                characterStyles.setElementAttributes(newSpan, attrs);
+            }
+
+            // try to merge with preceding and following span
+            CharacterStyles.mergeSiblingTextSpans(newSpan, true);
+            CharacterStyles.mergeSiblingTextSpans(newSpan);
+
+            // validate paragraph, store new cursor position
+            implParagraphChanged(span.parentNode);
+            lastOperationEnd = Position.increaseLastIndex(start, text.length);
+            return true;
         }
 
         /**

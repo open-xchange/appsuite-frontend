@@ -43,18 +43,47 @@ define('io.ox/office/editor/undo',
      *  object, an array of operation objects, or omitted.
      */
     function Action(undoOperations, redoOperations) {
-        this.undoOperations = _.isArray(undoOperations) ? undoOperations : _.isObject(undoOperations) ? [_.copy(undoOperations, true)] : [];
-        this.redoOperations = _.isArray(redoOperations) ? redoOperations : _.isObject(redoOperations) ? [_.copy(redoOperations, true)] : [];
+        this.undoOperations = [];
+        this.redoOperations = [];
+        this.appendOperations(undoOperations, redoOperations);
     }
 
     /**
-     * Returns whether this action is an 'insertText' action (an action with a
-     * single 'insertText' redo operation and a single 'deleteText' undo
-     * operation).
+     * Appends the passed undo and redo operations to the own operations
+     * arrays. Undo operations will be inserted at the beginning of the undo
+     * operations array, and redo operations will be appended to the redo
+     * operations array.
      */
-    Action.prototype.isInsertTextAction = function () {
-        return (this.undoOperations.length === 1) && (this.undoOperations[0].name === Operations.TEXT_DELETE) &&
-            (this.redoOperations.length === 1) && (this.redoOperations[0].name === Operations.TEXT_INSERT);
+    Action.prototype.appendOperations = function (undoOperations, redoOperations) {
+
+        // add the undo operations at the beginning of the array
+        if (_.isArray(undoOperations)) {
+            this.undoOperations = _.copy(undoOperations, true).concat(this.undoOperations);
+        } else if (_.isObject(undoOperations)) {
+            this.undoOperations.unshift(_.copy(undoOperations, true));
+        }
+
+        // add the redo operations at the end of the array
+        if (_.isArray(redoOperations)) {
+            this.redoOperations = this.redoOperations.concat(_.copy(redoOperations, true));
+        } else if (_.isObject(redoOperations)) {
+            this.redoOperations.push(_.copy(redoOperations, true));
+        }
+    };
+
+    /**
+     * Returns whether this action is an 'insertText' action (an action with a
+     * 'insertText' redo operation and a 'deleteText' undo operation).
+     *
+     * @param {Boolean} single
+     *  If true, the action must contain exactly one 'deleteText' undo
+     *  operation and exactly one 'insertText' redo operation. Otherwise, the
+     *  last operations of the arrays are checked, and the arrays may contain
+     *  other operations.
+     */
+    Action.prototype.isInsertTextAction = function (single) {
+        return (single ? (this.undoOperations.length === 1) : (this.undoOperations.length >= 1)) && (_.first(this.undoOperations).name === Operations.TEXT_DELETE) &&
+            (single ? (this.redoOperations.length === 1) : (this.redoOperations.length >= 1)) && (_.last(this.redoOperations).name === Operations.TEXT_INSERT);
     };
 
     /**
@@ -73,28 +102,23 @@ define('io.ox/office/editor/undo',
     Action.prototype.tryMergeInsertCharacter = function (nextAction) {
 
         var // check if this and the passed action is an 'insertText' action
-            validActions = this.isInsertTextAction() && nextAction.isInsertTextAction(),
+            validActions = this.isInsertTextAction(false) && nextAction.isInsertTextAction(true),
 
             // the redo operation of this action and the passed action
-            thisRedo = this.redoOperations[0],
-            nextRedo = nextAction.redoOperations[0],
-
-            // last array index in logical positions (pointing to the character offset)
-            lastIndex = 0;
+            thisRedo = _.last(this.redoOperations),
+            nextRedo = nextAction.redoOperations[0];
 
         // check that the operations are valid for merging the actions
         if (validActions && (nextRedo.text.length === 1) && Position.hasSameParentComponent(thisRedo.start, nextRedo.start)) {
 
-            lastIndex = thisRedo.start.length - 1;
-
-            // check that the new action adds the character directly after the text of this action
-            if (thisRedo.start[lastIndex] + thisRedo.text.length === nextRedo.start[lastIndex]) {
+            // check that the new action adds the character directly after the text of this action and does not change the attributes
+            if ((_.last(thisRedo.start) + thisRedo.text.length === _.last(nextRedo.start)) && !('attrs' in nextRedo)) {
 
                 // check that the last character of this action is not a space character (merge actions word by word)
                 if (thisRedo.text.substr(-1) !== ' ') {
 
-                    // merge undo operation (delete one more characters)
-                    this.undoOperations[0].end[lastIndex] += 1;
+                    // merge undo operation (delete one more character)
+                    this.undoOperations[0].end[this.undoOperations[0].end.length - 1] += 1;
                     // merge redo operation (add the character)
                     thisRedo.text += nextRedo.text;
                     return true;
@@ -133,104 +157,107 @@ define('io.ox/office/editor/undo',
      */
     function UndoManager(editor) {
 
-        var actions = [],
+        var // all undo actions
+            actions = [],
+
             // maxActions = 1000,   // not clear if really wanted/needed...
+
+            // index of the next redo action in the 'actions' array
             currentAction = 0,
+
+            // number of nested action groups
             groupLevel = 0,
-            groupedActions = null,
+
+            // current undo action in grouped mode
+            groupAction = null,
+
+            // whether undo manager is currently enabled
             enabled = true,
+
+            // whether undo or redo operations are currently processed
             processing = false;
 
         // private methods ----------------------------------------------------
 
-        /**
-         * Truncates the main action stack to the current undo position, and
-         * pushes the passed object onto the stack.
-         *
-         * @param {Action|Action[]|Null} action
-         *  A single undo action, or an array of undo actions. Does not modify
-         *  the undo stack, if the passed value is null or an empty array.
-         */
-        function truncateAndPush(action) {
+        function pushAction(action) {
 
-            // do nothing, if the passed parameter is an empty array
-            if (_.isObject(action) && (!_.isArray(action) || (action.length > 0))) {
+            var // last action on action stack
+                lastAction = null;
 
-                // remove undone actions
-                if (currentAction < actions.length) {
-                    actions.splice(currentAction);
+            // truncate main undo stack and push the new action
+            if (currentAction < actions.length) {
+
+                // remove undone actions, push new action without merging
+                actions.splice(currentAction);
+
+            } else {
+
+                // try to merge with last action, if stack has not been truncated
+                lastAction = _.last(actions);
+
+                // try to merge an 'insertText' operation for a single character with the last action on stack
+                if (_.isObject(lastAction) && _.isFunction(lastAction.tryMergeInsertCharacter) && lastAction.tryMergeInsertCharacter(action)) {
+                    return;
                 }
-
-                // push the new action (or array of actions) onto the stack
-                actions.push(action);
-                currentAction += 1;
-            }
-        }
-
-        function mergeAndPush(actionStack, nextAction) {
-
-            var // last action on passed action stack
-                lastAction = actionStack[actionStack.length - 1];
-
-            // try to merge an 'insertText' operation for a single character with the last action on stack
-            if (_.isObject(lastAction) && _.isFunction(lastAction.tryMergeInsertCharacter) && lastAction.tryMergeInsertCharacter(nextAction)) {
-                return;
             }
 
-            // action has not been merged: append
-            actionStack.push(nextAction);
+            actions.push(action);
+            currentAction = actions.length;
         }
 
         function startActionGroup() {
-
-            // count nested calls but use the same array for all actions
             groupLevel += 1;
-
-            // create an array object for the grouped actions that contains
-            // custom undo() and redo() methods
-            if (!groupedActions) {
-                groupedActions = [];
-                groupedActions.undo = function (editor) {
-                    var index = this.length;
-                    while (index > 0) {
-                        index -= 1;
-                        this[index].undo(editor);
-                    }
-                };
-                groupedActions.redo = function (editor) {
-                    _(this).invoke('redo', editor);
-                };
-            }
         }
 
         function endActionGroup() {
-
-            // one level up in nested calls of startActionGroup()/endActionGroup()
             groupLevel -= 1;
-
-            // push action group array to global action stack on last call
-            if (groupLevel === 0) {
-                truncateAndPush(groupedActions);
-                groupedActions = null;
+            // push existing group action to action stack on last group level
+            if ((groupLevel === 0) && groupAction) {
+                pushAction(groupAction);
+                groupAction = null;
             }
         }
 
         // methods ------------------------------------------------------------
 
+        /**
+         * Clears the entire undo stack.
+         *
+         * @returns {UndoManager}
+         *  A reference to this instance.
+         */
         this.clear = function () {
             actions = [];
             currentAction = 0;
+            return this;
         };
 
+        /**
+         * Returns whether the undo manager is enabled and currently not
+         * processing undo or redo operations.
+         *
+         * @returns {Boolean}
+         *  Whether the undo manager is enabled.
+         */
         this.isEnabled = function () {
             return enabled && !processing;
         };
 
+        /**
+         * Enables or disables the undo manager.
+         *
+         * @param {Boolean} state
+         *  Whether to enable or disable the undo manager.
+         *
+         * @returns {UndoManager}
+         *  A reference to this instance.
+         */
         this.enable = function (state) {
             enabled = state;
             if (!enabled) {
                 this.clear();
             }
+            return this;
         };
 
         /**
@@ -302,25 +329,29 @@ define('io.ox/office/editor/undo',
          *  redo action is executed, the operations will be applied in the
          *  exact order as passed in this parameter. The parameter may be a
          *  single operation object, an array of operation objects, or omitted.
+         *
+         * @returns {UndoManager}
+         *  A reference to this instance.
          */
         this.addUndo = function (undoOperations, redoOperations) {
 
-            if (!this.isEnabled()) { return; }
+            // check that undo manager is valid and either undo or redo operations have been passed
+            if (this.isEnabled() && (_.isObject(undoOperations) || _.isObject(redoOperations))) {
 
-            var // the new action object
-                action = new Action(undoOperations, redoOperations);
-
-            if (groupedActions) {
-                // collect actions in extra array, if grouping is currently active
-                mergeAndPush(groupedActions, action);
-            } else if (currentAction < actions.length) {
-                // truncate main undo stack and push the new action
-                truncateAndPush(action);
-            } else {
-                // try to merge with last action, if stack has not been truncated
-                mergeAndPush(actions, action);
-                currentAction = actions.length;
+                if (groupLevel > 0) {
+                    // active group action: insert operations into its operation arrays
+                    if (groupAction) {
+                        groupAction.appendOperations(undoOperations, redoOperations);
+                    } else {
+                        groupAction = new Action(undoOperations, redoOperations);
+                    }
+                } else {
+                    // create and insert a new action
+                    pushAction(new Action(undoOperations, redoOperations));
+                }
             }
+
+            return this;
         };
 
         /**
