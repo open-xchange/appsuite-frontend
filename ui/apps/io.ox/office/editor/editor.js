@@ -2792,7 +2792,7 @@ define('io.ox/office/editor/editor',
                     self.deleteSelected();
                     startPosition = selection.getStartPosition();
 
-                    if ((event.keyCode === KeyCodes.SPACE) && !selection.hasRange()) {
+                    if (((event.keyCode === KeyCodes.SPACE) || (event.charCode === KeyCodes.SPACE)) && !selection.hasRange()) {
                         // check left text to support hyperlink auto correction
                         hyperlinkSelection = Hyperlink.checkForHyperlinkText(selection.getEnclosingParagraph(), startPosition);
                     }
@@ -2918,29 +2918,29 @@ define('io.ox/office/editor/editor',
                 }
             }
         }
-        
+
         function processDroppedImages(event) {
-            
+
             event.preventDefault();
             if (!editMode) {
                 return;
             }
-        
+
             var images = event.originalEvent.dataTransfer.files;
-            
+
             for (var i = 0; i < images.length; i++) {
                 var img = images[i];
                 var imgType = /image.*/;
-               
+
                 if (!img.type.match(imgType)) {
                     continue;
                 }
-               
+
                 Application.readFileAsDataUrl(img)
                 .done(self.insertImageData);
             }
         }
-        
+
         /**
          * Parses the clipboard div for pasted text content
          * @param {jQuery} clipboard
@@ -6120,7 +6120,7 @@ define('io.ox/office/editor/editor',
 
         // forward selection change events to own listeners
         selection.on('change', function () { self.trigger('selection', selection); });
-		
+
         // hybrid edit mode
         editdiv
             .on('focus blur', processFocus)
