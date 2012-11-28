@@ -115,6 +115,7 @@ define('io.ox/core/cache/localstorage', function () {
                 setTimeout(function () {
                     var item = localStorage.getItem(cid);
                     if (item !== null) {
+                        access[cid] = _.now();
                         data = JSON.parse(item);
                         def.resolve(data);
                     } else {
