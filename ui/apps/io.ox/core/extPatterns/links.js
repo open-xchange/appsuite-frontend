@@ -177,6 +177,7 @@ define("io.ox/core/extPatterns/links",
             drawLinks(self, new Collection(context), node, context, args)
             .done(function () {
                 // add toggle unless multi-selection
+                node = node.children("div:first");
                 var all = node.children(), lo = node.children('[data-prio="lo"]');
                 if (!multiple && all.length > 5 && lo.length > 1) {
                     node.append(

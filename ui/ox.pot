@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
-"POT-Creation-Date: Wed Nov 28 2012 11:28:37 GMT+0100 (CET)\n"
+"POT-Creation-Date: Wed Nov 28 2012 12:02:41 GMT+0100 (CET)\n"
 "PO-Revision-Date: DATE\n"
 "Last-Translator: NAME <EMAIL>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -60,9 +60,53 @@ msgid "Languages"
 msgstr ""
 
 #: apps/io.ox/core/extPatterns/links.js:184
-#: apps/io.ox/core/extPatterns/links.js:185
+#: apps/io.ox/core/extPatterns/links.js:186
 #: apps/io.ox/mail/write/view-main.js:399
 msgid "More"
+msgstr ""
+
+#: apps/io.ox/files/list/view-detail.js:106
+msgid "Upload a new version"
+msgstr ""
+
+#: apps/io.ox/files/list/view-detail.js:113
+msgid "Versions"
+msgstr ""
+
+#: apps/io.ox/files/list/view-detail.js:231
+msgid "This file has no description"
+msgstr ""
+
+#: apps/io.ox/files/list/view-detail.js:297
+msgid "File name:"
+msgstr ""
+
+#: apps/io.ox/files/list/view-detail.js:300
+msgid "N/A"
+msgstr ""
+
+#: apps/io.ox/files/list/view-detail.js:309
+msgid "Size:"
+msgstr ""
+
+#: apps/io.ox/files/list/view-detail.js:321
+msgid "Last Modified:"
+msgstr ""
+
+#: apps/io.ox/files/list/view-detail.js:344
+msgid "Upload"
+msgstr ""
+
+#: apps/io.ox/files/list/view-detail.js:352
+msgid "Uploading..."
+msgstr ""
+
+#: apps/io.ox/files/list/view-detail.js:362
+msgid "Upload new version"
+msgstr ""
+
+#: apps/io.ox/files/list/view-detail.js:378
+msgid "Version Comment:"
 msgstr ""
 
 #: apps/io.ox/backbone/basicModel.js:120
@@ -301,7 +345,7 @@ msgstr ""
 #: apps/io.ox/contacts/edit/view-form.js:251 apps/io.ox/editor/main.js:87
 #: apps/io.ox/editor/main.js:220 apps/io.ox/mail/write/main.js:857
 #: apps/io.ox/mail/write/main.js:858 apps/io.ox/mail/write/view-main.js:59
-#: apps/io.ox/tasks/edit/view.js:188
+#: apps/io.ox/tasks/edit/view.js:204
 msgid "Discard"
 msgstr ""
 
@@ -601,7 +645,7 @@ msgid "The series <a href=\042#\042 data-attribute=\042ending\042 data-widget=\0
 msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:507
-#: apps/io.ox/tasks/edit/view.js:275
+#: apps/io.ox/tasks/edit/view.js:291
 msgid "Repeat"
 msgstr ""
 
@@ -630,11 +674,11 @@ msgstr ""
 #: apps/io.ox/core/tk/folderviews.js:636 apps/io.ox/editor/main.js:85
 #: apps/io.ox/files/actions.js:267 apps/io.ox/files/actions.js:303
 #: apps/io.ox/files/views/create.js:177 apps/io.ox/mail/write/view-main.js:51
-#: apps/io.ox/portal/settings/pane.js:32 apps/io.ox/tasks/edit/view.js:183
+#: apps/io.ox/portal/settings/pane.js:32 apps/io.ox/tasks/edit/view.js:199
 msgid "Save"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:51 apps/io.ox/tasks/edit/view.js:179
+#: apps/io.ox/calendar/edit/template.js:51 apps/io.ox/tasks/edit/view.js:195
 msgid "Create"
 msgstr ""
 
@@ -709,49 +753,57 @@ msgstr[1] ""
 msgid "Reminder"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:273
+#: apps/io.ox/calendar/edit/template.js:274
 msgid "Shown as"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:276 apps/io.ox/calendar/util.js:33
+#: apps/io.ox/calendar/edit/template.js:276
+#: apps/io.ox/calendar/edit/template.js:277 apps/io.ox/calendar/util.js:33
 msgid "Reserved"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:277 apps/io.ox/calendar/util.js:33
+#: apps/io.ox/calendar/edit/template.js:277
+#: apps/io.ox/calendar/edit/template.js:278 apps/io.ox/calendar/util.js:33
 msgid "Temporary"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:278 apps/io.ox/calendar/util.js:34
+#: apps/io.ox/calendar/edit/template.js:278
+#: apps/io.ox/calendar/edit/template.js:279 apps/io.ox/calendar/util.js:34
 msgid "Absent"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:279 apps/io.ox/calendar/util.js:34
+#: apps/io.ox/calendar/edit/template.js:279
+#: apps/io.ox/calendar/edit/template.js:280 apps/io.ox/calendar/util.js:34
 msgid "Free"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:291
+#: apps/io.ox/calendar/edit/template.js:292
 msgid "Type"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:292 apps/io.ox/contacts/model.js:315
+#: apps/io.ox/calendar/edit/template.js:292
+#: apps/io.ox/calendar/edit/template.js:293 apps/io.ox/contacts/model.js:315
 #: apps/io.ox/core/tk/folderviews.js:880
 #: apps/io.ox/tasks/edit/view-template.js:125
 msgid "Private"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/template.js:303
+#: apps/io.ox/calendar/edit/template.js:304
 #: apps/io.ox/calendar/view-detail.js:227 apps/io.ox/tasks/edit/view.js:73
 #: apps/io.ox/tasks/view-detail.js:157
 msgid "Participants"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/template.js:385
+#: apps/io.ox/calendar/edit/template.js:386
 #: apps/io.ox/calendar/view-detail.js:416 apps/io.ox/mail/write/view-main.js:319
 #: apps/io.ox/mail/write/view-main.js:321
 msgid "Attachments"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/template.js:406
+#: apps/io.ox/calendar/edit/template.js:407
 #: apps/io.ox/tasks/edit/view-template.js:527
 #: apps/plugins/portal/flickr/settings/plugin.js:55
 #: apps/plugins/portal/flickr/settings/plugin.js:294
@@ -765,6 +817,7 @@ msgid "Add"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/template.js:421
+#: apps/io.ox/calendar/edit/template.js:422
 #: apps/io.ox/tasks/edit/view-template.js:542
 msgid "Drop here to upload a <b>new attachment</b>"
 msgstr ""
@@ -1884,21 +1937,21 @@ msgstr ""
 msgid "There are unsaved changes."
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:795 apps/io.ox/core/desktop.js:941
+#: apps/io.ox/core/desktop.js:794 apps/io.ox/core/desktop.js:940
 msgid "%1$s %2$s"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1192 apps/io.ox/core/desktop.js:1193
+#: apps/io.ox/core/desktop.js:1192
 #: apps/plugins/portal/flickr/settings/plugin.js:99
 #: apps/plugins/portal/flickr/settings/plugin.js:277
 msgid "Search"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1233
+#: apps/io.ox/core/desktop.js:1232
 msgid "Toggle search"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1291
+#: apps/io.ox/core/desktop.js:1290
 msgid "Failed to start application. Maybe you have connection problems. Please try again."
 msgstr ""
 
@@ -2292,50 +2345,6 @@ msgstr ""
 msgid "Couldn't load file data."
 msgstr ""
 
-#: apps/io.ox/files/list/view-detail.js:106
-msgid "Upload a new version"
-msgstr ""
-
-#: apps/io.ox/files/list/view-detail.js:113
-msgid "Versions"
-msgstr ""
-
-#: apps/io.ox/files/list/view-detail.js:233
-msgid "This file has no description"
-msgstr ""
-
-#: apps/io.ox/files/list/view-detail.js:299
-msgid "File name:"
-msgstr ""
-
-#: apps/io.ox/files/list/view-detail.js:302
-msgid "N/A"
-msgstr ""
-
-#: apps/io.ox/files/list/view-detail.js:311
-msgid "Size:"
-msgstr ""
-
-#: apps/io.ox/files/list/view-detail.js:323
-msgid "Last Modified:"
-msgstr ""
-
-#: apps/io.ox/files/list/view-detail.js:346
-msgid "Upload"
-msgstr ""
-
-#: apps/io.ox/files/list/view-detail.js:354
-msgid "Uploading..."
-msgstr ""
-
-#: apps/io.ox/files/list/view-detail.js:364
-msgid "Upload new version"
-msgstr ""
-
-#: apps/io.ox/files/list/view-detail.js:380
-msgid "Version Comment:"
-msgstr ""
-
 #: apps/io.ox/files/mediaplayer.js:221
 msgid "Minimize"
 msgstr ""
@@ -2520,7 +2529,7 @@ msgid "Create reminder"
 msgstr ""
 
 #: apps/io.ox/mail/actions.js:541 apps/io.ox/mail/actions.js:563
-#: apps/io.ox/tasks/edit/view.js:153
+#: apps/io.ox/tasks/edit/view.js:157
 msgid "Remind me"
 msgstr ""
 
@@ -3699,7 +3708,13 @@ msgstr ""
 msgid "Changed due date"
 msgstr ""
 
-#: apps/io.ox/tasks/edit/main.js:79 apps/io.ox/tasks/edit/view.js:180
+#: apps/io.ox/tasks/edit/main.js:26 apps/io.ox/tasks/edit/view.js:184
+#: apps/io.ox/tasks/edit/view.js:200
+msgid "Edit task"
+msgstr ""
+
+#: apps/io.ox/tasks/edit/main.js:79 apps/io.ox/tasks/edit/view.js:186
+#: apps/io.ox/tasks/edit/view.js:196
 msgid "Create task"
 msgstr ""
 
@@ -3800,19 +3815,15 @@ msgstr ""
 msgid "Attachments (%1$s)"
 msgstr ""
 
-#: apps/io.ox/tasks/edit/view.js:157
+#: apps/io.ox/tasks/edit/view.js:161
 msgid "Progress in %"
 msgstr ""
 
-#: apps/io.ox/tasks/edit/view.js:184
-msgid "Edit task"
-msgstr ""
-
-#: apps/io.ox/tasks/edit/view.js:265
+#: apps/io.ox/tasks/edit/view.js:281
 msgid "Please enter value between 0 and 100."
 msgstr ""
 
-#: apps/io.ox/tasks/edit/view.js:277
+#: apps/io.ox/tasks/edit/view.js:293
 msgid "Under construction"
 msgstr ""
 

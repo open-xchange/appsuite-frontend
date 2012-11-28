@@ -136,11 +136,30 @@ define("io.ox/files/list/view-detail",
 
 
     // Header Extensions
-
+    
+    // Title
+    ext.point("io.ox/files/details/sections/header").extend({
+        id: "title",
+        index: 10,
+        draw: function (file) {
+            this.append(
+                $("<div>").addClass("title clear-title").text(gt.noI18n(file.title || file.filename || '\u00A0'))
+            );
+        },
+        on: {
+            update: function (file) {
+                this.empty();
+                this.append(
+                    $("<div>").addClass("title clear-title").text(gt.noI18n(file.title || file.filename || '\u00A0'))
+                );
+            }
+        }
+    });
+    
     // Preview
     ext.point("io.ox/files/details/sections/header").extend(new preview.Extension({
         id: "preview",
-        index: 10,
+        index: 20,
         parseArguments: function (file) {
             if (!file.filename) {
                 return null;
@@ -164,28 +183,7 @@ define("io.ox/files/list/view-detail",
         }
     }));
 
-    // Title
-    ext.point("io.ox/files/details/sections/header").extend({
-        id: "title",
-        index: 20,
-        draw: function (file) {
-            this.append(
-                $("<div>").addClass("title clear-title").text(gt.noI18n(file.title || file.filename || '\u00A0'))
-            );
-        },
-        on: {
-            update: function (file) {
-                this.empty();
-                this.append(
-                    $("<div>").addClass("title clear-title").text(gt.noI18n(file.title || file.filename || '\u00A0'))
-                );
-            }
-        }
-    });
-
-
     
-
     // Basic Actions
     (function () {
         var regularLinks = new links.InlineLinks({
