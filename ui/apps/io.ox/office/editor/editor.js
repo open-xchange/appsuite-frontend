@@ -3878,28 +3878,36 @@ define('io.ox/office/editor/editor',
                     maxTopShift = 0,
                     // is it necessary to move the image?
                     moveImage = false,
+                    // special handling for shifts of drawings behind the last paragraph
+                    isLastParagraph = false,
+                    // special handling for shifts of drawings behind the last paragraph -> expanding last paragraph
+                    expandLastParagraph = false,
                     // position of the mouse up event shifted into the document borders
                     trimmedPosition = null;
 
                 function adaptPositionIntoDocument(doc, posX, posY) {
 
-                    var minLeftPosition = Math.round(doc.offset().left + Utils.convertCssLength(doc.css('paddingLeft'), 'px', 0)),
-                        maxRightPosition = Math.round(doc.offset().left + doc.outerWidth() - Utils.convertCssLength(doc.css('paddingRight'), 'px', 0)),
-                        minTopPosition = Math.round(doc.offset().top - Utils.convertCssLength(doc.css('paddingTop'), 'px', 0));
+                    var pageContent = DOM.getPageContentNode(doc),
+                        minLeftPosition = Math.round(pageContent.offset().left),
+                        maxRightPosition = minLeftPosition + Math.round(pageContent.width()),
+                        minTopPosition = Math.round(pageContent.offset().top),
+                        maxBottomPosition = minTopPosition + Math.round(pageContent.height()),
+                        isBehindLastParagraph = false;
 
                     if (posX < minLeftPosition) { posX = minLeftPosition; }
                     if (posX > maxRightPosition) { posX = maxRightPosition; }
                     if (posY < minTopPosition) { posY = minTopPosition; }
+                    if (posY > maxBottomPosition) { isBehindLastParagraph = true; }
 
-                    return { posX: posX, posY: posY };
+                    return { posX: posX, posY: posY, isBehindLastParagraph: isBehindLastParagraph };
                 }
 
                 function isPositionInsideNode(node, posX, posY) {
 
                     if (! (node instanceof $)) { node = $(node); }
 
-                    return ((node.offset().left < posX) && (posX < (node.offset().left + node.outerWidth())) &&
-                            (node.offset().top < posY) && (posY < (node.offset().top + node.outerHeight())));
+                    return ((Math.round(node.offset().left) <= posX) && (posX <= Math.round(node.offset().left + node.outerWidth())) &&
+                            (Math.round(node.offset().top) <= posY) && (posY <= Math.round(node.offset().top + node.outerHeight())));
                 }
 
                 function iterateSelectorNodes(topNode, currentNode, posX, posY, selector, skipSelector, options) {
@@ -3924,15 +3932,27 @@ define('io.ox/office/editor/editor',
                     return selectorNode;
                 }
 
-                function getParagraphAtPosition(topNode, startNode, shiftX, shiftY, posX, posY) {
+                function getParagraphAtPosition(topNode, startNode, shiftX, shiftY, posX, posY, isBehindLastParagraph) {
 
                     var searchPrevious = true,
                         searchFollowing = true,
                         paragraph = null,
-                        tableCell = null;
+                        tableCell = null,
+                        nextParagraph = null;
 
                     if ((shiftX > 0) && (shiftY > 0)) { searchPrevious = false; }
                     if ((shiftX < 0) && (shiftY < 0)) { searchFollowing = false; }
+
+                    if (isBehindLastParagraph) {
+                        // -> special handling for shifts behind the last paragraph
+                        nextParagraph = Utils.getDomNode(startNode);
+                        while (nextParagraph) {
+                            paragraph = nextParagraph;
+                            nextParagraph = Utils.findNextNode(topNode, nextParagraph, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR);
+                        }
+                    }
+
+                    if (paragraph) { searchFollowing = false; }
 
                     if (searchFollowing) {
                         paragraph = iterateSelectorNodes(topNode, Utils.getDomNode(startNode), posX, posY, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR, {'reverse': false});
@@ -4019,8 +4039,12 @@ define('io.ox/office/editor/editor',
                         anchorHorOffset = oldAnchorHorOffset;
                         anchorVertOffset = oldAnchorVertOffset;
 
+                        // check, if paragraph is already the last paragraph. Required for moves behind the last paragraph
+                        if (! Utils.findNextNode(editdiv, paragraph, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR)) { isLastParagraph = true; }
+                        if (isLastParagraph && trimmedPosition.isBehindLastParagraph) { expandLastParagraph = true; }
+
                         // checking position of mouse up event
-                        if (isPositionInsideNode(paragraph, currentX, currentY)) {  // -> new position is in the same paragraph (or it is the last paragraph in the document)
+                        if (isPositionInsideNode(paragraph, currentX, currentY) || expandLastParagraph) {  // -> new position is in the same paragraph (or it is the last paragraph in the document)
 
                             if (moveX !== 0) {
                                 anchorHorOffset = oldAnchorHorOffset + moveX;
@@ -4055,7 +4079,7 @@ define('io.ox/office/editor/editor',
                             // paragraph has to be determined from the coordinates (currentX, currentY)
                             // -> moving operation for the drawing is always required
 
-                            paragraph = getParagraphAtPosition(editdiv, paragraph, shiftX, shiftY, currentX, currentY);
+                            paragraph = getParagraphAtPosition(editdiv, paragraph, shiftX, shiftY, currentX, currentY, trimmedPosition.isBehindLastParagraph);
 
                             if (paragraph) {
                                 paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px');
