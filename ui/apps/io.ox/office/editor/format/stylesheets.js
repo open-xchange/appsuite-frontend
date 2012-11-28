@@ -392,17 +392,14 @@ define('io.ox/office/editor/format/stylesheets',
          */
         function updateElementFormatting(element, mergedAttributes) {
 
-            // call single format handlers for all attributes
-            _(mergedAttributes).each(function (attributeValues, family) {
+            var // definitions of own attributes
+                definitions = getAttributeDefinitions(styleFamily);
 
-                var // definitions of own attributes
-                    definitions = getAttributeDefinitions(family);
-
-                _(attributeValues).each(function (value, name) {
-                    if ((name in definitions) && _.isFunction(definitions[name].format)) {
-                        definitions[name].format.call(self, element, value);
-                    }
-                });
+            // call single format handlers for all attributes of the own style family
+            _(mergedAttributes[styleFamily]).each(function (value, name) {
+                if ((name in definitions) && _.isFunction(definitions[name].format)) {
+                    definitions[name].format.call(self, element, value);
+                }
             });
 
             // call update handlers taking all attributes at once
