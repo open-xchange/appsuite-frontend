@@ -42,6 +42,7 @@ define('io.ox/calendar/week/view',
         workEnd:        18,     // full hour for end position of working time marker
         mode:           0,      // view mode {1: day, 2: workweek, 3: week}
         workWeekStart:  1,      // workweek start (0=Sunday, 1=Monday, ..., 6=Saturday)
+        showDeclined:   false,  // show declined appointments
 
         startDate:      null,   // start of day/week as local date (use as reference point)
         clickTimer:     null,   // timer to separate single and double click
@@ -62,12 +63,19 @@ define('io.ox/calendar/week/view',
 
         // init values from prespective
         initialize: function (opt) {
+            myself = myself || ox.user_id;
             this.mode = opt.mode;
             this.setStartDate();
             this.collection
                 .on('reset', this.renderAppointments, this)
                 .on('change', this.redrawAppointment, this);
             this.bindKeys();
+            this.initSettings();
+//            settings.on('change:startTime', function (key) {
+//                console.log('settigns geaendert', key);
+//                this.initSettings();
+//                this.render();
+//            });
         },
 
         // set or get week reference start date
@@ -107,9 +115,11 @@ define('io.ox/calendar/week/view',
         // setup setting params
         initSettings: function () {
             // init settings
-            this.gridSize = 60 / settings.get('interval') | this.gridSize;
-            this.workStart = settings.get('starttime') | this.workStart;
-            this.workEnd = settings.get('endtime') | this.workEnd;
+            this.showDeclined = settings.get('showDeclinedAppointments', false);
+//            console.log('showDeclinedAppointments', this.showDeclined);
+            this.gridSize = 60 / settings.get('interval', this.gridSize);
+            this.workStart = settings.get('startTime', this.workStart);
+            this.workEnd = settings.get('endTime', this.workEnd);
         },
 
         // define view events
@@ -405,9 +415,6 @@ define('io.ox/calendar/week/view',
 
         render: function () {
 
-            // init settings
-            this.initSettings();
-
             // create timelabels
             var timeLabel = [];
             for (var i = 1; i < this.slots; i++) {
@@ -564,82 +571,87 @@ define('io.ox/calendar/week/view',
                     throw 'FIXME: start_date should not be negative';
                 }
 
-                if (model.get('full_time')) {
-                    fulltimeCount++;
-                    var app = this.renderAppointment(model),
-                        fulltimePos = (model.get('start_date') - this.startDate.getDays() * date.DAY) / date.DAY,
-                        fulltimeWidth = (model.get('end_date') - model.get('start_date')) / date.DAY + Math.min(0, fulltimePos);
-                    // loop over all column positions
-                    for (var row = 0; row < fulltimeColPos.length; row++) {
-                        if  (fulltimeColPos[row] <= model.get('start_date')) {
-                            fulltimeColPos[row] = model.get('end_date');
-                            break;
-                        }
-                    }
+                var hash = util.getConfirmations(model.attributes),
+                    conf = hash[myself] || { status: 1, comment: "" };
 
-                    if (row === fulltimeColPos.length) {
-                        fulltimeColPos.push(model.get('end_date'));
-                    }
-                    app.css({
-                        height: this.fulltimeHeight,
-                        width: (100 / this.columns) * fulltimeWidth + '%',
-                        left: (100 / this.columns) * Math.max(0, fulltimePos) + '%',
-                        top: row * (this.fulltimeHeight + 1) + 1
-                    });
-                    this.fulltimePane.append(app);
-                } else {
-                    var startLocal = new date.Local(Math.max(model.get('start_date'), this.startDate)),
-                        endLocal = new date.Local(model.get('end_date')),
-                        start = new date.Local(startLocal.getYear(), startLocal.getMonth(), startLocal.getDate()).getTime(),
-                        end = new date.Local(endLocal.getYear(), endLocal.getMonth(), endLocal.getDate()).getTime(),
-                        maxCount = 0,
-                        style = '';
+                // is declined?
+                if (conf.status !== 2 || this.showDeclined) {
 
-                    // draw across multiple days
-                    while (true && maxCount <= this.columns) {
+                    if (model.get('full_time')) {
+                        fulltimeCount++;
                         var app = this.renderAppointment(model),
-                            sel = '[date="' + Math.floor((startLocal.getTime() - this.startDate.getTime()) / date.DAY) + '"]';
-                        maxCount++;
-
-                        if (start !== end) {
-                            endLocal = new date.Local(startLocal.getTime());
-                            endLocal.setHours(23, 59, 59, 999);
-                            if (model.get('end_date') - endLocal.getTime() > 1) {
-                                style += 'rmsouth';
+                            fulltimePos = (model.get('start_date') - this.startDate.getDays() * date.DAY) / date.DAY,
+                            fulltimeWidth = (model.get('end_date') - model.get('start_date')) / date.DAY + Math.min(0, fulltimePos);
+                        // loop over all column positions
+                        for (var row = 0; row < fulltimeColPos.length; row++) {
+                            if  (fulltimeColPos[row] <= model.get('start_date')) {
+                                fulltimeColPos[row] = model.get('end_date');
+                                break;
                             }
-                        } else {
-                            endLocal = new date.Local(model.get('end_date'));
                         }
 
-                        // kill overlap appointments with length null
-                        if (startLocal.getTime() === endLocal.getTime() && maxCount > 1) {
-                            break;
+                        if (row === fulltimeColPos.length) {
+                            fulltimeColPos.push(model.get('end_date'));
                         }
+                        app.css({
+                            height: this.fulltimeHeight,
+                            width: (100 / this.columns) * fulltimeWidth + '%',
+                            left: (100 / this.columns) * Math.max(0, fulltimePos) + '%',
+                            top: row * (this.fulltimeHeight + 1) + 1
+                        });
+                        this.fulltimePane.append(app);
+                    } else {
+                        var startLocal = new date.Local(Math.max(model.get('start_date'), this.startDate)),
+                            endLocal = new date.Local(model.get('end_date')),
+                            start = new date.Local(startLocal.getYear(), startLocal.getMonth(), startLocal.getDate()).getTime(),
+                            end = new date.Local(endLocal.getYear(), endLocal.getMonth(), endLocal.getDate()).getTime(),
+                            maxCount = 0,
+                            style = '';
 
-                        app.addClass(style).pos = {
-                                id: model.id,
-                                start: startLocal.getTime(),
-                                end: endLocal.getTime()
-                            };
-                        if (!draw[sel]) {
-                            draw[sel] = [];
-                        }
-                        draw[sel].push(app);
+                        // draw across multiple days
+                        while (true && maxCount <= this.columns) {
+                            var app = this.renderAppointment(model),
+                                sel = '[date="' + Math.floor((startLocal.getTime() - this.startDate.getTime()) / date.DAY) + '"]';
+                            maxCount++;
 
-                        style = '';
-                        // inc date
-                        if (start !== end) {
-                            startLocal.setDate(startLocal.getDate() + 1);
-                            startLocal.setHours(0, 0, 0, 0);
-                            start = new date.Local(startLocal.getYear(), startLocal.getMonth(), startLocal.getDate()).getTime();
-                            style = 'rmnorth ';
-                        } else {
-                            break;
+                            if (start !== end) {
+                                endLocal = new date.Local(startLocal.getTime());
+                                endLocal.setHours(23, 59, 59, 999);
+                                if (model.get('end_date') - endLocal.getTime() > 1) {
+                                    style += 'rmsouth';
+                                }
+                            } else {
+                                endLocal = new date.Local(model.get('end_date'));
+                            }
+
+                            // kill overlap appointments with length null
+                            if (startLocal.getTime() === endLocal.getTime() && maxCount > 1) {
+                                break;
+                            }
+
+                            app.addClass(style).pos = {
+                                    id: model.id,
+                                    start: startLocal.getTime(),
+                                    end: endLocal.getTime()
+                                };
+                            if (!draw[sel]) {
+                                draw[sel] = [];
+                            }
+                            draw[sel].push(app);
+
+                            style = '';
+                            // inc date
+                            if (start !== end) {
+                                startLocal.setDate(startLocal.getDate() + 1);
+                                startLocal.setHours(0, 0, 0, 0);
+                                start = new date.Local(startLocal.getYear(), startLocal.getMonth(), startLocal.getDate()).getTime();
+                                style = 'rmnorth ';
+                            } else {
+                                break;
+                            }
                         }
                     }
-
                 }
-
             }, this);
 
             // calculate full-time appointment container height
@@ -1119,8 +1131,6 @@ define('io.ox/calendar/week/view',
 
         // render an single appointment
         renderAppointment: function (a) {
-            myself = myself || ox.user_id;
-
             var el = $('<div>')
                 .addClass('appointment')
                 .attr({
