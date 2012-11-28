@@ -110,9 +110,10 @@ define('io.ox/office/editor/hyperlink',
                     // Now we have to check some edge cases to prevent to show
                     // the popup for a paragraph which contains only an empty span
                     // having set the url attribute.
-                    if ((obj.node.parentNode.innerText.length > 0) ||
-                        (obj.node.parentNode.previousElementSibling !== null) ||
-                        (DOM.isTextSpan(obj.node.parentNode.nextElementSibling)))
+                    var span = $(obj.node.parentNode);
+                    if ((span.text().length > 0) ||
+                        (span.prev().length) ||
+                        (DOM.isTextSpan(span.next())))
                         result.url = attributes.url;
                     else {
                         result.setPreselectedAttributes = true;
