@@ -75,7 +75,7 @@ define("io.ox/contacts/test",
 
                 j.it('looks for create button and hits ', function () {
                     j.expect(createButton[0]).toBeTruthy();
-                    createButton.trigger('click');
+                    $(createButton[0]).trigger('click');
 
                 });
 

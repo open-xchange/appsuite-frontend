@@ -44,12 +44,10 @@ function (ext, contacts, api, config, date) {
             city_home: 'Olpe',
             state_home: 'NRW',
             country_home: 'Germany',
-            birthday: '10.10.1915',
             marital_status: 'married',
             number_of_children: '2',
             nickname: 'GG',
             spouse_name: 'Johanna',
-            anniversary: '11.10.1980',
             note: 'Much Ado about Nothing',
             employee_type: 'free',
             room_number: '4711',
@@ -215,7 +213,7 @@ function (ext, contacts, api, config, date) {
                     }, 'looks for the listed item', TIMEOUT);
 
                     j.waitsFor(function () {
-                        buttonUpdate = $('table[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="update"]');
+                        buttonUpdate = $('[data-cid="' + phrase + '"] .io-ox-inline-links a[data-action="edit"]');
                         if (buttonUpdate[0]) {
                             return true;
                         }
@@ -262,6 +260,12 @@ function (ext, contacts, api, config, date) {
                         _.each(testObjectLong, function (val, property) {
                             formFrame.find('[name="' + property + '"]').val(val).trigger('change');
                         });
+
+                        var birthdayFrame = formFrame.find('[data-extension-id="birthday"]');
+                        birthdayFrame.find('[name="day"]').val('10').trigger('change');
+                        birthdayFrame.find('[name="month"]').val('10').trigger('change');
+                        birthdayFrame.find('[name="year"]').val('1915').trigger('change');
+
                         j.expect(buttonSave).toBeTruthy();
                         buttonSave.trigger('click');
                     });
@@ -273,12 +277,10 @@ function (ext, contacts, api, config, date) {
                     j.runs(function () {
                         var me = this;
                         me.ready = false;
-                        api.on('edit', function (e, data) {
-                            if (data) {
-                                dataId = data.id;
-                                dataFolder = data.folder;
-                                me.ready = true;
-                            }
+                        api.on('update', function (e, data) {
+                            dataId = data.id;
+                            dataFolder = data.folder_id;
+                            me.ready = true;
                         });
 
                         j.waitsFor(function () {
@@ -302,7 +304,6 @@ function (ext, contacts, api, config, date) {
                         }, 'looks for the object', TIMEOUT);
 
                         j.runs(function () {
-
                             j.expect(dataObj.first_name).toEqual(testObjectLong.first_name);
                             j.expect(dataObj.last_name).toEqual(testObjectLong.last_name);
                             j.expect(dataObj.display_name).toEqual('Tester, Georg');
@@ -322,16 +323,11 @@ function (ext, contacts, api, config, date) {
                             j.expect(dataObj.city_home).toEqual(testObjectLong.city_home);
                             j.expect(dataObj.state_home).toEqual(testObjectLong.state_home);
                             j.expect(dataObj.country_home).toEqual(testObjectLong.country_home);
-//                            just to fix differences in datedisplay
-//                          j.expect(new date.Local(date.Local.utc(dataObj.birthday)).format(date.DATE)).toEqual(testObjectLong.birthday);
-                            j.expect(new date.Local(date.Local.utc(dataObj.birthday)).format(date.DATE)).toEqual('10/10/1915');
+                            j.expect(dataObj.birthday).toEqual(-1708646400000);
                             j.expect(dataObj.marital_status).toEqual(testObjectLong.marital_status);
                             j.expect(dataObj.number_of_children).toEqual(testObjectLong.number_of_children);
                             j.expect(dataObj.nickname).toEqual(testObjectLong.nickname);
                             j.expect(dataObj.spouse_name).toEqual(testObjectLong.spouse_name);
-//                            just to fix differences in datedisplay
-//                          j.expect(new date.Local(date.Local.utc(dataObj.anniversary)).format(date.DATE)).toEqual(testObjectLong.anniversary);
-                            j.expect(new date.Local(date.Local.utc(dataObj.anniversary)).format(date.DATE)).toEqual('10/11/1980');
                             j.expect(dataObj.note).toEqual(testObjectLong.note);
                             j.expect(dataObj.employee_type).toEqual(testObjectLong.employee_type);
                             j.expect(dataObj.room_number).toEqual(testObjectLong.room_number);
@@ -341,7 +337,6 @@ function (ext, contacts, api, config, date) {
                             j.expect(dataObj.tax_id).toEqual(testObjectLong.tax_id);
                             j.expect(dataObj.commercial_register).toEqual(testObjectLong.commercial_register);
                             j.expect(dataObj.branches).toEqual(testObjectLong.branches);
-//                            j.expect(dataObj.business_category).toEqual(testObjectLong.business_category);
                             j.expect(dataObj.info).toEqual(testObjectLong.info);
                             j.expect(dataObj.manager_name).toEqual(testObjectLong.manager_name);
                             j.expect(dataObj.assistant_name).toEqual(testObjectLong.assistant_name);
@@ -418,6 +413,8 @@ function (ext, contacts, api, config, date) {
                     var grid = app.getGrid();
                     phrase = dataFolder + '.' + dataId;
 
+                    grid.selection.clear();
+
                     j.waitsFor(function () {
                         // grid contains item?
                         if (grid.contains(phrase)) {
@@ -429,7 +426,7 @@ function (ext, contacts, api, config, date) {
                     }, 'looks for the list', TIMEOUT);
 
                     j.waitsFor(function () {
-                        buttonDelete = $('table.view[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
+                        buttonDelete = $('.scrollable-pane [data-cid="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
                         if (buttonDelete[0]) {
                             return true;
                         }

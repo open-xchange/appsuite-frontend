@@ -86,14 +86,14 @@ define("io.ox/contacts/distrib/test",
 
                 j.it('looks for the create distlist button and hits ', function () {
                     j.waitsFor(function () {
-                        buttonCreate = $('[data-action="create-dist"]');
+                        buttonCreate = $('[data-action="io.ox/contacts/actions/distrib"]');
                         if (buttonCreate[0]) {
                             return true;
                         }
                     }, 'looks for the create distlist button', TIMEOUT);
 
                     j.runs(function () {
-                        buttonCreate.trigger('click');
+                        $(buttonCreate[0]).trigger('click');
                     });
 
                 });
@@ -212,7 +212,7 @@ define("io.ox/contacts/distrib/test",
                     }, 'looks for the list', TIMEOUT);
 
                     j.waitsFor(function () {
-                        button = $('table[data-obj-id="' + cid + '"] .io-ox-inline-links a[data-action="delete"]');
+                        button = $('[data-cid="' + cid + '"] .io-ox-inline-links a[data-action="delete"]');
                         if (button[0]) {
                             return true;
                         }
