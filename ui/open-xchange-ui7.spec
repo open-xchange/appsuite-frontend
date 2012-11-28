@@ -58,7 +58,7 @@ rm -r "%{buildroot}/opt/open-xchange/ui7"
 %{docroot}
 %doc readme.txt
 
-%files apps
+%files manifest
 %defattr(-,root,root)
 %dir /opt/open-xchange
 /opt/open-xchange/ui7

@@ -535,7 +535,7 @@ utils.topLevelTask('init-packaging', [], function() {
         return [
             ['Sun,', 'Mon,', 'Tue,',
              'Wed,', 'Thu,', 'Fri,', 'Sat,'][d.getUTCDay()],
-            pad(d.getUTCDate),
+            pad(d.getUTCDate()),
             ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getUTCMonth()],
             d.getUTCFullYear(),
