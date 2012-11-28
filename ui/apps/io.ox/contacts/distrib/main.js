@@ -41,8 +41,6 @@ define('io.ox/contacts/distrib/main',
 
         app.create = function (folderId, initdata) {
 
-            app.cid = 'io.ox/contacts/group:create';
-
             // set state
             app.setState({ folder: folderId });
             // set title, init model/view
@@ -183,9 +181,7 @@ define('io.ox/contacts/distrib/main',
         getApp: createInstance,
 
         reuse: function (type, data) {
-            if (type === 'create') {
-                return ox.ui.App.reuse('io.ox/contacts/group:create');
-            } else if (type === 'edit') {
+            if (type === 'edit') {
                 return ox.ui.App.reuse('io.ox/contacts/group:edit.' + _.cid(data));
             }
         }

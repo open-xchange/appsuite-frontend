@@ -104,39 +104,37 @@ define('io.ox/calendar/actions',
             if (!_.isUndefined(params.recurrence_position)) {
                 o.recurrence_position = params.recurrence_position;
             }
-            api.get(o)
-                .done(function (data) {
-                    require(['io.ox/calendar/edit/main'], function (editmain) {
-                        if (data.recurrence_type > 0) {
-                            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                                new dialogs.ModalDialog()
-                                    .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
-                                    .addPrimaryButton('series', gt('Series'))
-                                    .addButton('appointment', gt('Appointment'))
-                                    .addButton('cancel', gt('Cancel'))
-                                    .show()
-                                    .done(function (action) {
-                                        if (action === 'cancel') {
-                                            return;
-                                        }
-                                        if (action === 'series') {
-                                            delete data.recurrence_position;
-                                        }
-                                        editmain.getApp().launch().done(function () {
-                                            this.edit(data);
-                                        });
+            api.get(o).done(function (data) {
+                require(['io.ox/calendar/edit/main'], function (m) {
+                    if (data.recurrence_type > 0) {
+                        require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                            new dialogs.ModalDialog()
+                                .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
+                                .addPrimaryButton('series', gt('Series'))
+                                .addButton('appointment', gt('Appointment'))
+                                .addButton('cancel', gt('Cancel'))
+                                .show()
+                                .done(function (action) {
+                                    if (action === 'cancel') {
+                                        return;
+                                    }
+                                    if (action === 'series') {
+                                        delete data.recurrence_position;
+                                    }
+                                    if (m.reuse('edit', data)) return;
+                                    m.getApp().launch().done(function () {
+                                        this.edit(data);
                                     });
-                            });
-                        } else {
-                            editmain.getApp().launch().done(function () {
-                                this.edit(data);
-                            });
-                        }
-                    });
-                })
-                .fail(function () {
-                    console.log('NOT FOUND');
+                                });
+                        });
+                    } else {
+                        if (m.reuse('edit', data)) return;
+                        m.getApp().launch().done(function () {
+                            this.edit(data);
+                        });
+                    }
                 });
+            });
         }
     });
 
@@ -153,50 +151,46 @@ define('io.ox/calendar/actions',
             if (!_.isUndefined(params.recurrence_position)) {
                 o.recurrence_position = params.recurrence_position;
             }
-            api.get(o)
-                .done(function (data) {
-                    require(['io.ox/calendar/model'], function (Model) {
-                        // different warnings especially for events with
-                        // external users should handled here
-                        var myModel = new Model.Appointment(data);
-                        if (data.recurrence_type > 0) {
-                            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                                new dialogs.ModalDialog()
-                                    .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
-                                    .addPrimaryButton('appointment', gt('Delete appointment'))
-                                    .addPrimaryButton('series', gt('Delete whole series'))
-                                    .addButton('cancel', gt('Cancel'))
-                                    .show()
-                                    .done(function (action) {
-                                        if (action === 'cancel') {
-                                            return;
-                                        }
-                                        if (action === 'series') {
-                                            delete data.recurrence_position;
-                                        }
-                                        myModel.destroy();
-                                    });
-                            });
-                        } else {
-                            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                                new dialogs.ModalDialog()
-                                    .text(gt('Do you want to delete this appointment?'))
-                                    .addPrimaryButton('ok', gt('Delete'))
-                                    .addButton('cancel', gt('Cancel'))
-                                    .show()
-                                    .done(function (action) {
-                                        if (action === 'cancel') {
-                                            return;
-                                        }
-                                        myModel.destroy();
-                                    });
-                            });
-                        }
-                    });
-                })
-                .fail(function (err) {
-                    console.log(err);
+            api.get(o).done(function (data) {
+                require(['io.ox/calendar/model'], function (Model) {
+                    // different warnings especially for events with
+                    // external users should handled here
+                    var myModel = new Model.Appointment(data);
+                    if (data.recurrence_type > 0) {
+                        require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                            new dialogs.ModalDialog()
+                                .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
+                                .addPrimaryButton('appointment', gt('Delete appointment'))
+                                .addPrimaryButton('series', gt('Delete whole series'))
+                                .addButton('cancel', gt('Cancel'))
+                                .show()
+                                .done(function (action) {
+                                    if (action === 'cancel') {
+                                        return;
+                                    }
+                                    if (action === 'series') {
+                                        delete data.recurrence_position;
+                                    }
+                                    myModel.destroy();
+                                });
+                        });
+                    } else {
+                        require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                            new dialogs.ModalDialog()
+                                .text(gt('Do you want to delete this appointment?'))
+                                .addPrimaryButton('ok', gt('Delete'))
+                                .addButton('cancel', gt('Cancel'))
+                                .show()
+                                .done(function (action) {
+                                    if (action === 'cancel') {
+                                        return;
+                                    }
+                                    myModel.destroy();
+                                });
+                        });
+                    }
                 });
+            });
         }
     });
 
@@ -299,7 +293,6 @@ define('io.ox/calendar/actions',
     new ActionGroup(POINT + '/links/toolbar', {
         id: 'view',
         index: 150,
-        label: gt('View'),
         icon: function () {
             return $('<i class="icon-eye-open">');
         }

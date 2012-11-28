@@ -78,12 +78,6 @@ define('io.ox/contacts/util', [], function () {
                 obj.position || obj.company || '';
         },
 
-        createEditPage: function (obj) {
-            require(['io.ox/contacts/edit/main'], function (u) {
-                u.getApp(obj).launch();
-            });
-        },
-
         nameSort: function (a, b) {
             var nameA, nameB;
             if (a.display_name === undefined) {

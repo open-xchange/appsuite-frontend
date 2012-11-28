@@ -54,7 +54,6 @@ define('io.ox/mail/actions',
                     'Do you really want to permanently delete these mails?',
                     list.length
                 );
-
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(question)

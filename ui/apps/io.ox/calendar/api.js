@@ -53,10 +53,10 @@ define("io.ox/calendar/api",
                         params: params
                     })
                     .done(function (data) {
-                        get_cache[key] = data;
+                        get_cache[key] = JSON.stringify(data);
                     });
             } else {
-                return $.Deferred().resolve(get_cache[key]);
+                return $.Deferred().resolve(JSON.parse(get_cache[key]));
             }
         },
 
@@ -95,10 +95,10 @@ define("io.ox/calendar/api",
                         params: params
                     })
                     .done(function (data) {
-                        all_cache[key] = data;
+                        all_cache[key] = JSON.stringify(data);
                     });
             } else {
-                return $.Deferred().resolve(all_cache[key]);
+                return $.Deferred().resolve(JSON.parse(all_cache[key]));
             }
         },
 
@@ -294,10 +294,10 @@ define("io.ox/calendar/api",
                         params: params
                     })
                     .done(function (data) {
-                        all_cache[key] = data;
+                        all_cache[key] = JSON.stringify(data);
                     });
             } else {
-                return $.Deferred().resolve(all_cache[key]);
+                return $.Deferred().resolve(JSON.parse(all_cache[key]));
             }
         }
     };

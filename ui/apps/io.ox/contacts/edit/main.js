@@ -53,6 +53,8 @@ define('io.ox/contacts/edit/main',
 
             var cont = function (data) {
 
+                app.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
+
                 win.show(function () {
                     var considerSaved = false;
                     // create model & view
@@ -144,10 +146,15 @@ define('io.ox/contacts/edit/main',
         return app;
     }
 
-
-
     return {
-        getApp: createInstance
+
+        getApp: createInstance,
+
+        reuse: function (type, data) {
+            if (type === 'edit') {
+                return ox.ui.App.reuse('io.ox/contacts/contact:edit.' + _.cid(data));
+            }
+        }
     };
 
 });

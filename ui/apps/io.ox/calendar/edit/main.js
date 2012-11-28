@@ -71,6 +71,10 @@ define('io.ox/calendar/edit/main',
                     this.model.off('change:title');
                 },
                 edit: function (data) {
+
+                    app.cid = 'io.ox/calendar:edit.' + _.cid(data);
+                    console.log('YEAH.edit', app.cid);
+
                     var self = this;
                     function cont(data) {
                         app.model = self.model = appointmentModel.factory.create(data);
@@ -214,6 +218,14 @@ define('io.ox/calendar/edit/main',
     }
 
     return {
-        getApp: createInstance
+
+        getApp: createInstance,
+
+        reuse: function (type, data) {
+            if (type === 'edit') {
+                console.log('calendar.edit.reuse?', _.cid(data));
+                return ox.ui.App.reuse('io.ox/calendar:edit.' + _.cid(data));
+            }
+        }
     };
 });

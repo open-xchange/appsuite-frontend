@@ -70,8 +70,9 @@ define('io.ox/contacts/actions',
                     });
                 });
             } else {
-                require(['io.ox/contacts/util'], function (util) {
-                    util.createEditPage(data);
+                require(['io.ox/contacts/edit/main'], function (m) {
+                    if (m.reuse('edit', data)) return;
+                    m.getApp(data).launch();
                 });
             }
         }
@@ -100,7 +101,6 @@ define('io.ox/contacts/actions',
         },
         action: function (baton) {
             require(['io.ox/contacts/distrib/main'], function (m) {
-                if (m.reuse('create')) return;
                 m.getApp().launch().done(function () {
                     this.create(baton.app.folder.get());
                 });

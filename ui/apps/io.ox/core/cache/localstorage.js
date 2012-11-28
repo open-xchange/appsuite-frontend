@@ -108,7 +108,7 @@ define('io.ox/core/cache/localstorage', function () {
 
             // try to be fast without blocking
             if (inFluent) {
-                data = fluent[cid];
+                data = JSON.parse(fluent[cid]);
                 def.resolve(data);
                 access[cid] = _.now();
             } else {
@@ -129,15 +129,16 @@ define('io.ox/core/cache/localstorage', function () {
 
         set: function (key, data) {
 
-            var cid = id + '.' + key, json;
+            var cid = id + '.' + key;
 
             // use fluent cache to be fast
+            data = JSON.stringify(data);
             fluent[cid] = data;
             access[cid] = _.now();
 
-            if ((json = JSON.stringify(data)).length <= MAX_LENGTH) {
+            if (data.length <= MAX_LENGTH) {
                 // don't block
-                deferredSet(cid, json);
+                deferredSet(cid, data);
             }
 
             return $.when();
