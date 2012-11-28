@@ -101,6 +101,26 @@ define('io.ox/files/actions',
             });
         }
     });
+/*
+    new Action('io.ox/files/actions/open', {
+        id: 'office',
+        // we just need to be called before 'default'
+        before: 'default',
+        // pick items you want to take care of (actually this function is called by underscore's "filter")
+        filter: function (obj) {
+            return (/\.docx$/i).test(obj.filename);
+        },
+        action: function (baton) {
+            // baton.tracker shows items that are not yet picked
+            // if this list is empty, no more actions are called
+            console.log('Do something!', baton);
+            // this is also possible to avoid the 'default' action:
+            // baton.preventDefault();
+            // however, that does not help us because all other files
+            // should still be opened by the default handler
+        }
+    });
+*/
 
     new Action('io.ox/files/actions/open', {
         requires: 'some',

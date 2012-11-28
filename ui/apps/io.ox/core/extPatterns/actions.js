@@ -39,6 +39,12 @@ define("io.ox/core/extPatterns/actions",
         ext.point(id).extend(o);
     };
 
+    var without = function (a) {
+        return !_(this).any(function (b) {
+            return _.isEqual(a, b);
+        });
+    };
+
     var invoke = function (point, scope, baton) {
 
         // make sure we have a baton
@@ -59,7 +65,7 @@ define("io.ox/core/extPatterns/actions",
             // apply filter
             if (_.isFunction(extension.filter)) {
                 tmp = _(baton.tracker).filter(extension.filter);
-                baton.tracker = _(baton.tracker).without(tmp);
+                baton.tracker = _(baton.tracker).filter(without, tmp); // _.without does not work here
             } else {
                 tmp = baton.tracker.slice();
             }
