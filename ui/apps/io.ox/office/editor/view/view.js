@@ -53,6 +53,9 @@ define('io.ox/office/editor/view/view',
             // tool pane containing all tool bars
             toolPane = null,
 
+            // side pane containing more controls
+            sidePane = null,
+
             // tool bar hovering at the top border of the application pane
             hoverBar = null,
 
@@ -294,6 +297,9 @@ define('io.ox/office/editor/view/view',
         // the tool pane for tool bars
         toolPane = new ToolPane(app);
         this.addPane('toolpane', toolPane, 'top');
+
+        sidePane = new Pane(app, { classes: 'side-pane' });
+        //this.addPane('sidepane', sidePane, 'left');
 
         // create the tool bars
 /*

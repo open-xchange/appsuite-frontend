@@ -60,8 +60,8 @@ define('io.ox/office/tk/view/view',
         // private methods ----------------------------------------------------
 
         /**
-         * Handles resize events of the browser window, and adjusts the pane
-         * nodes.
+         * Handles resize events of the browser window, and adjusts the view
+         * pane nodes.
          */
         function windowResizeHandler(event) {
 
@@ -110,41 +110,43 @@ define('io.ox/office/tk/view/view',
         // methods ------------------------------------------------------------
 
         /**
-         * Returns the central application pane.
+         * Returns the central DOM node of the application (the complete inner
+         * area between all existing view panes). This is always the parent
+         * node of the application model root node.
          *
-         * @returns {Pane}
-         *  The central application pane.
+         * @returns {jQuery}
+         *  The central DOM node of the application.
          */
-        this.getApplicationPane = function () {
-            return appPane;
+        this.getApplicationNode = function () {
+            return appPane.getNode();
         };
 
         /**
-         * Returns the specified pane which has been added with the method
+         * Returns the specified view pane which has been added with the method
          * View.createPane() before.
          *
          * @param {String} id
-         *  The unique identifier of the pane.
+         *  The unique identifier of the view pane.
          *
          * @returns {Pane|Null}
-         *  The pane with the specified identifier, or null if no pane has been
-         *  found.
+         *  The view pane with the specified identifier, or null if no view
+         *  pane has been found.
          */
         this.getPane = function (id) {
             return (id in panes.all) ? panes.all[id] : null;
         };
 
         /**
-         * Adds the passed pane instance into this view.
+         * Adds the passed view pane instance into this view.
          *
          * @param {String} id
-         *  The unique identifier of the pane.
+         *  The unique identifier of the view pane.
          *
          * @param {Pane} pane
-         *  The new pane instance.
+         *  The new view pane instance.
          *
          * @param {String} side
-         *  The border of the application window to attach the pane to.
+         *  The border of the application window to attach the view pane to.
          *  Supported values are 'top', 'bottom', 'left', and 'right'.
          *
          * @returns {View}
@@ -195,15 +197,15 @@ define('io.ox/office/tk/view/view',
         // set the window at the application instance
         app.setWindow(win);
 
-        // add the central application pane, and insert the document model root node
-        appPane = new Pane(app, { classes: 'center' });
+        // create the application pane, and insert the document model root node
+        appPane = new Pane(app, { classes: 'app-pane' });
         appPane.getNode().append(app.getModel().getNode());
 
         // move window tool bar to the right
         win.nodes.outer.addClass('toolbar-right');
 
         // add the main application pane
-        win.nodes.main.addClass(app.getName().replace(/[.\/]/g, '-') + '-main').append(appPane.getNode());
+        win.nodes.main.addClass('io-ox-office-main ' + app.getName().replace(/[.\/]/g, '-') + '-main').append(appPane.getNode());
 
         // listen to browser window resize events when the OX window is visible
         app.registerWindowResizeHandler(windowResizeHandler);

@@ -36,7 +36,7 @@ define('io.ox/office/tk/view/pane', ['io.ox/office/tk/utils'], function (Utils) 
     function Pane(app, options) {
 
         var // the container element representing the pane
-            node = $('<div>').addClass('io-ox-pane'),
+            node = $('<div>').addClass('view-pane'),
 
             // view components contained in this pane
             components = [];

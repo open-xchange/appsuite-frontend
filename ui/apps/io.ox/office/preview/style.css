@@ -14,7 +14,7 @@
 
 .io-ox-office-preview-main {
 
-    div.io-ox-pane.center {
+    .view-pane.app-pane {
         text-align: center;
 
         div.page {

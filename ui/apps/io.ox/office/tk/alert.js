@@ -37,7 +37,7 @@ define('io.ox/office/tk/alert',
     function createAlert(title, message, closeable, node, controller) {
 
         var // the new alert
-            alert = $.alert(title, message).addClass('hide in io-ox-office-alert');
+            alert = $.alert(title, message).addClass('hide in');
 
         if (closeable) {
             // alert can be closed by clicking anywhere in the alert
@@ -311,7 +311,7 @@ define('io.ox/office/tk/alert',
      * @returns
      */
     Alert.isShowing = function (node) {
-        return $(node).find('.io-ox-office-alert').length > 0;
+        return $(node).find('.alert').length > 0;
     };
 
     // exports ================================================================

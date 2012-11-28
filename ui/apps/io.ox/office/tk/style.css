@@ -137,7 +137,7 @@ i.icon-io-ox-numbering              { background-position:  -20px  -40px; }
 i.icon-io-ox-num-inc-indent         { background-position:  -40px  -40px; }
 i.icon-io-ox-num-dec-indent         { background-position:  -60px  -40px; }
 
-i.icon-io-ox-para-border-none       { background-position:  -80px  -40px; }     
+i.icon-io-ox-para-border-none       { background-position:  -80px  -40px; }
 i.icon-io-ox-para-border-leftright  { background-position: -100px  -40px; }
 i.icon-io-ox-para-border-topbottom  { background-position: -120px  -40px; }
 i.icon-io-ox-para-border-outside    { background-position: -140px  -40px; }
@@ -150,20 +150,23 @@ i.icon-io-ox-para-border-inside     { background-position: -260px  -40px; }
 
 i.icon-io-ox-hyperlink              { background-position: -280px  -40px; }
 
-i.icon-io-ox-arrow-first            { background-position:      0  -60px; }     
-i.icon-io-ox-arrow-previous         { background-position:  -20px  -60px; }     
-i.icon-io-ox-arrow-next             { background-position:  -40px  -60px; }     
-i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }     
+i.icon-io-ox-arrow-first            { background-position:      0  -60px; }
+i.icon-io-ox-arrow-previous         { background-position:  -20px  -60px; }
+i.icon-io-ox-arrow-next             { background-position:  -40px  -60px; }
+i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }
+
+/* restrict anything following to office applications */
+.io-ox-office-main {
 
 /* ========================================================================= */
 /* panes and view components                                                 */
 /* ========================================================================= */
 
 /* background color for panes */
-@pane-fill-color: #e5e5e5;
+@pane-fill-color: #f5f5f5;
 
-/* second color for pane background gradient */
-@pane-accented-fill-color: #ffffff;
+/* background color for panes */
+@app-pane-fill-color: #e5e5e5;
 
 /* border color for panes */
 @pane-border-color: #d5d5d5;
@@ -172,44 +175,28 @@ i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }
 @control-text-color: #333333;
 
 /* fill color of selected buttons */
-@button-selected-color: #8fbfff;
-
-/* lighter version of the fill color of selected buttons */
-@button-accented-selected-color: #eff7ff;
+@button-selected-color: #afcfff;
 
 /* panes =================================================================== */
 
-.io-ox-pane {
+.view-pane {
     position: absolute;
     background-color: @pane-fill-color;
-    .box-shadow(0 0 8px fade(black, 25%));
 
-    &.top {
-        border-bottom: 1px solid @pane-fill-color;
+    &.tool-pane {
+        padding: 0 12px;
     }
 
-    &.bottom {
-        border-top: 1px solid @pane-fill-color;
+    &.side-pane {
+        width: 150px;
+        padding: 6px 12px;
     }
-
-    &.left {
-        border-right: 1px solid @pane-fill-color;
-    }
-
-    &.right {
-        border-left: 1px solid @pane-fill-color;
-    }
-
-    &.toolpane {
-        padding: 0 13px;
-        .vertical-gradient(@pane-accented-fill-color, @pane-fill-color);
-    }
-
-    &.center {
+    
+    &.app-pane {
         margin: 0;
         padding: 0;
-        background-color: @pane-fill-color;
         .overflow(auto);
+        background-color: @app-pane-fill-color;
 
         /* generic design of a 'page': white background with dark box shadow */
         .page {
@@ -223,7 +210,7 @@ i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }
 
 /* view components ========================================================= */
 
-.io-ox-view-component {
+.view-component {
     position: relative;
     padding: 0;
     /* prevent multi-line layout of button groups */
@@ -233,7 +220,7 @@ i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }
     /* disabled style for any element marked with the 'disabled' class */
     .disabled {
         .opacity(0.5);
-        
+
         /* override mouse pointer for any embedded elements */
         &, * { cursor: default !important; }
     }
@@ -384,18 +371,18 @@ i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }
                             text-align: left;
 
                             /* mouse/keyboard effects */
-                            &:hover { .vertical-gradient(@pane-accented-fill-color, @pane-fill-color); }
-                            &:focus { .vertical-gradient(@pane-accented-fill-color, @pane-fill-color); }
-                            &:active { .vertical-gradient(darken(@pane-accented-fill-color, 10%), @pane-fill-color); }
+                            &:hover { background-color: fade(black, 3%); }
+                            &:focus { background-color: fade(black, 3%); }
+                            &:active { background-color: fade(black, 6%); }
 
                             /* selected list items */
                             &.selected {
-                                .vertical-gradient(@button-accented-selected-color, @button-selected-color);
+                                background-color: @button-selected-color;
 
                                 /* mouse/keyboard effects */
-                                &:hover { .vertical-gradient(darken(@button-accented-selected-color, 3%), @button-selected-color); }
-                                &:focus { .vertical-gradient(darken(@button-accented-selected-color, 3%), @button-selected-color); }
-                                &:active { .vertical-gradient(darken(@button-accented-selected-color, 6%), @button-selected-color); }
+                                &:hover { background-color: darken(@button-selected-color, 3%); }
+                                &:focus { background-color: darken(@button-selected-color, 3%); }
+                                &:active { background-color: darken(@button-selected-color, 6%); }
                             }
                         }
                     }
@@ -465,7 +452,7 @@ i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }
                             border: 1px solid fade(black, 20%);
                             .border-radius(2px);
                             .box-shadow(0 5px 10px fade(black, 30%));
-                            
+
                             + * {
                                 margin-left: 8px;
                             }
@@ -498,7 +485,7 @@ i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }
                             height: auto;
                             margin: 0;
                             padding: 0;
-                            .vertical-gradient(@pane-accented-fill-color, @pane-fill-color);
+                            background-color: @pane-fill-color;
                             border: 1px solid @pane-border-color;
 
                             /* a row in the grid */
@@ -579,24 +566,24 @@ i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }
 
             /* selected toggle/radio buttons */
             > button.selected {
-                .vertical-gradient(@button-accented-selected-color, @button-selected-color);
+                background-color: @button-selected-color;
             }
 
             /* keyboard/mouse effects (not for disabled buttons) */
             &:not(.disabled) > button:not(.disabled) {
 
                 /* mouse/keyboard effects */
-                &:hover { .vertical-gradient(darken(@pane-accented-fill-color, 10%), @pane-fill-color); }
-                &:focus { .vertical-gradient(darken(@pane-accented-fill-color, 10%), @pane-fill-color); }
-                &:active { .vertical-gradient(darken(@pane-accented-fill-color, 20%), @pane-fill-color); }
+                &:hover { background-color: fade(black, 3%); }
+                &:focus { background-color: fade(black, 3%); }
+                &:active { background-color: fade(black, 6%); }
 
                 /* selected toggle/radio buttons */
                 &.selected {
 
                     /* mouse/keyboard effects */
-                    &:hover { .vertical-gradient(darken(@button-accented-selected-color, 3%), @button-selected-color); }
-                    &:focus { .vertical-gradient(darken(@button-accented-selected-color, 3%), @button-selected-color); }
-                    &:active { .vertical-gradient(darken(@button-accented-selected-color, 6%), @button-selected-color); }
+                    &:hover { background-color: darken(@button-selected-color, 3%); }
+                    &:focus { background-color: darken(@button-selected-color, 3%); }
+                    &:active { background-color: darken(@button-selected-color, 6%); }
                 }
             }
 
@@ -620,9 +607,9 @@ i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }
                 &:not(.disabled) > button:not(.disabled) {
 
                     /* mouse/keyboard effects */
-                    &:hover { .vertical-gradient(darken(white, 5%), white); }
-                    &:focus { .vertical-gradient(darken(white, 5%), white); }
-                    &:active { .vertical-gradient(darken(white, 10%), white); }
+                    &:hover { background: white; }
+                    &:focus { background: white; }
+                    &:active { background: white; }
                 }
             }
         }
@@ -657,7 +644,8 @@ i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }
 
 /* Alerts ================================================================== */
 
-.alert.io-ox-office-alert {
+/* specific formatting for office alert banners */
+.alert {
     position: absolute;
     left: 0;
     padding: 4px 13px;
@@ -687,10 +675,6 @@ i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }
     }
 }
 
-/* Clipboard =============================================================== */
+/* ========================================================================= */
 
-.io-ox-office-clipboard {
-    position: absolute;
-    top: -10000px;
-    left: -10000px;
-}
+} /* end of .io-ox-office-main { */

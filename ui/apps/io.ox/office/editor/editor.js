@@ -2112,18 +2112,18 @@ define('io.ox/office/editor/editor',
          * hyperlink information and change/remove functions.
          */
         function insertHyperlinkPopup() {
-            var hyperlinkPopup = $('<div>', { contenteditable: false }).addClass('io-ox-office-hyperlink-popup').css({display: 'none'})
+            var hyperlinkPopup = $('<div>', { contenteditable: false }).addClass('hyperlink-popup').css({display: 'none'})
                 .append(
                     $('<a>').attr({ href: '', rel: 'noreferrer', target: '_blank' }),
                     $('<span>').text(' | '),
-                    $('<span>').addClass('io-ox-office-hyperlink-popup-links').text(gt('Edit')).click(function () { self.insertHyperlink(); }),
-                    $('<span>').text(' - '),
-                    $('<span>').addClass('io-ox-office-hyperlink-popup-links').text(gt('Remove')).click(function () { self.removeHyperlink(); })
+                    $('<span>').addClass('link').text(gt('Edit')).click(function () { self.insertHyperlink(); }),
+                    $('<span>').text(' | '),
+                    $('<span>').addClass('link').text(gt('Remove')).click(function () { self.removeHyperlink(); })
                 ),
                 page = $(self.getNode().parent()).first();
 
             if (hyperlinkPopup[0]) {
-                var found = page.children(".io-ox-office-hyperlink-popup");
+                var found = page.children('.hyperlink-popup');
                 if (!found[0]) {
                     page.append(hyperlinkPopup);
                     selection.on('change', function () {
@@ -2155,7 +2155,7 @@ define('io.ox/office/editor/editor',
                                     height = $(obj.node).height();
 
                                     // calculate position relative to the application pane
-                                    var parent = app.getView().getApplicationPane().getNode(),
+                                    var parent = app.getView().getApplicationNode(),
                                         parentLeft = parent.offset().left,
                                         parentTop = parent.offset().top,
                                         parentWidth = parent.width(),

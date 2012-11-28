@@ -40,37 +40,37 @@
     }
 }
 
-/* the label displaying the current status of the editor application */
-.io-ox-view-component .group.status-label label {
-    margin: 6px;
-    height: 20px;
-    line-height: 20px;
-    background: white;
-    .border-radius(10px);
-    .box-shadow(0 4px 8px fade(black, 25%));
-    color: #666666;
-    font-size: 11px;
-    font-weight: bold;
-
-    &[data-state="offline"] {
-        background: #eaa;
-        color: #755;
-    }
-
-    &[data-state="readonly"], &[data-state="sending"] {
-        background: #eea;
-        color: #775;
-    }
-
-    &[data-state="initial"], &[data-state="ready"] {
-        background: #aea;
-        color: #575;
-    }
-}
-
-/* editor application pane ================================================= */
+/* editor application ====================================================== */
 
 .io-ox-office-editor-main {
+
+    /* the label displaying the current status of the editor application */
+    .view-component .group.status-label label {
+        margin: 6px;
+        height: 20px;
+        line-height: 20px;
+        background: white;
+        .border-radius(10px);
+        .box-shadow(0 4px 8px fade(black, 25%));
+        color: #666666;
+        font-size: 11px;
+        font-weight: bold;
+
+        &[data-state="offline"] {
+            background: #eaa;
+            color: #755;
+        }
+
+        &[data-state="readonly"], &[data-state="sending"] {
+            background: #eea;
+            color: #775;
+        }
+
+        &[data-state="initial"], &[data-state="ready"] {
+            background: #aea;
+            color: #575;
+        }
+    }
 
     .page {
         /* default page formatting */
@@ -93,17 +93,17 @@
 				}
 	        }
         }
-        
+
         /* default paragraph formatting */
         div.p {
             position: relative;
             margin: 0;
             line-height: 0;
-        
+
             > div.field, > div.list-label {
                 display: inline-block;
             }
-            
+
             /* needs white-space: nowrap to have correct width */
             > div.tab {
                 display: inline-block;
@@ -123,7 +123,7 @@
                     color: black !important;
                 }
             }
-            
+
             &:after {
                 content: '.';
                 display: block;
@@ -132,7 +132,7 @@
                 visibility: hidden;
             }
         }
-        
+
         /* no text cursor in read-only mode */
         &:not(.user-select-text) div.p {
             cursor: default;
@@ -147,7 +147,7 @@
 
             &:first-child { margin-top: 0; }
             &:last-child { margin-bottom: 0; }
-            
+
             tr {
                 height: 100%;
             }
@@ -162,7 +162,7 @@
                     width: 100%;
                     height: 100%;
                     border: hidden;
-                    
+
                     > div.cellcontent {
                     }
 
@@ -192,7 +192,7 @@
             position: relative;
             cursor: default;
             font-size: 0;
-            
+
             /* inlined drawings */
             &.inline {
                 display: inline-block;
@@ -256,7 +256,7 @@
                     cursor: inherit;
                 }
             }
-            
+
             /* move and resize box for drawings/images */
             > div.move {
                 position: absolute;
@@ -321,13 +321,13 @@
             }
         }
     }
-    
+
     div.resizeline {
         position: absolute;
         border: 1px dotted black;
     }
 
-    div.io-ox-office-hyperlink-popup {
+    div.hyperlink-popup {
         font-family: sans-serif;
         font-size: 13px;
         line-height: normal;
@@ -337,19 +337,19 @@
         border-color: #B0B0B0;
         padding: 10px 20px;
         background-color: white;
+
+        span.link {
+            color: #08C;
+
+           &:hover {
+               color: #005580;
+               text-decoration:underline;
+               cursor: pointer;
+           }
+        }
     }
 
-    span.io-ox-office-hyperlink-popup-links {
-        color: #08C;
-
-       &:hover {
-           color: #005580;
-           text-decoration:underline;
-           cursor: pointer;
-       }
-    }
-
-    .io-ox-pane.debug > table {
+    .view-pane.debug > table {
         width: 100%;
         table-layout: fixed;
         border-collapse: separate;
@@ -393,4 +393,12 @@
             }
         }
     }
+}
+
+/* clipboard =============================================================== */
+
+.io-ox-office-clipboard {
+    position: absolute;
+    top: -10000px;
+    left: -10000px;
 }

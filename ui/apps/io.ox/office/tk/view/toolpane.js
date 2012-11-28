@@ -101,7 +101,7 @@ define('io.ox/office/tk/view/toolpane',
 
         // base constructor ---------------------------------------------------
 
-        Pane.call(this, app, { classes: 'toolpane' });
+        Pane.call(this, app, { classes: 'tool-pane' });
 
         // methods ------------------------------------------------------------
 
