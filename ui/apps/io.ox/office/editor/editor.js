@@ -99,11 +99,13 @@ define('io.ox/office/editor/editor',
 
     function getPrintableChar(event) {
         // event.char preferred. DL2, but nyi in most browsers:(
-        if (event.char) {
-            return String.fromCharCode(event.char);
+        if (_.isString(event.char)) {
+            return event.char;
         }
-        // event.which deprecated, but seems to work well
-        if (event.which && (event.which >= 32) /* && (event.which <= 255)*/) {
+        if (_.isNumber(event.charCode) && (event.CharCode >= 32)) {
+            return String.fromCharCode(event.charCode);
+        }
+        if (_.isNumber(event.which) && (event.which >= 32)) {
             return String.fromCharCode(event.which);
         }
         // TODO: Need to handle other cases - later...
