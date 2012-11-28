@@ -21,11 +21,12 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
 
         var tree = {}, self = this, settingsCache = new cache.SimpleCache('settings', true);
 
-        this.get = function (key, defaultValue) {
+        this.get = function (path, defaultValue) {
             // no argument?
             if (arguments.length === 0) { return tree; }
             // get parts
-            var parts = key.split(/\//), tmp = tree || {};
+            var key = String(path),
+                parts = key.split(/\//), tmp = tree || {};
             while (parts.length) {
                 key = parts.shift();
                 tmp = tmp[key];
@@ -36,9 +37,9 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             return tmp;
         };
 
-        this.contains = function (key) {
-            key = String(key);
-            var parts = key.split(/\//), tmp = tree || {};
+        this.contains = function (path) {
+            var key = String(path),
+                parts = key.split(/\//), tmp = tree || {};
             while (parts.length) {
                 key = parts.shift();
                 if (parts.length) {
@@ -53,9 +54,9 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             }
         };
 
-        var find = function (key, callback) {
-            key = String(key);
-            var parts = key.split(/\//), tmp = tree || {};
+        var resolve = function (path, callback) {
+            var key = String(path),
+                parts = key.split(/\//), tmp = tree || {};
             while (parts.length) {
                 key = parts.shift();
                 if (!(key in tmp)) {
@@ -74,16 +75,17 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             }
         };
 
-        this.set = function (key, value) {
-            find(key, function (tmp, key) {
+        this.set = function (path, value) {
+            resolve(path, function (tmp, key) {
                 tmp[key] = value;
-                self.trigger('change:' + key, value).trigger('change', key, value);
+                self.trigger('change:' + path, value).trigger('change', path, value);
             });
         };
 
-        this.remove = function (key) {
-            find(key, function (tmp, key) {
+        this.remove = function (path) {
+            resolve(path, function (tmp, key) {
                 delete tmp[key];
+                self.trigger('remove:' + path).trigger('remove', path);
             });
         };
 
