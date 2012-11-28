@@ -19,18 +19,19 @@ function () {
     'use strict';
 
     var settingsDefaults = {
-            interval: '30',
-            starttime: '8',
-            endtime: '18',
-            view_view: 'calendar',
-            view_calendar: 'workweek',
-            view_team: 'workweek',
-            view_list: 'workweek',
-            default_reminder: '15',
-            notifyNewModifiedDeleted: true,
-            notifyAcceptedDeclinedAsCreator: false,
-            notifyAcceptedDeclinedAsParticipant: false
-        };
+        interval: '30',
+        startTime: '8',
+        endTime: '18',
+        showDeclinedAppointments: false,
+        viewView: 'calendar',
+        viewCalendar: 'workweek',
+        viewTeam: 'workweek',
+        viewList: 'workweek',
+        defaultReminder: '15',
+        notifyNewModifiedDeleted: true,
+        notifyAcceptedDeclinedAsCreator: false,
+        notifyAcceptedDeclinedAsParticipant: false
+    };
 
     return settingsDefaults;
 });
