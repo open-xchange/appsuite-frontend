@@ -8,7 +8,7 @@
 	    requires: "contacts"
 	},
 	{
-		namespace: "tests",
+		namespace: "io.ox/dev/testing/main",
 		path: "io.ox/contacts/test",
 		requires: "contacts"
 	}

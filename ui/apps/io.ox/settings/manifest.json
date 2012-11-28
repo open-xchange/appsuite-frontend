@@ -7,7 +7,7 @@
 		settings: false
 	},
 	{
-		namespace: "tests",
+		namespace: "io.ox/dev/testing/main",
 		path: "io.ox/settings/test"
 	}
 ]

@@ -19,7 +19,7 @@ define(function () {
         "path": "io.ox/applications/main"
     },
     {
-        "namespace": "tests",
+        "namespace": "io.ox/dev/testing/main",
         "path": "io.ox/backbone/tests/test"
     },
     {
@@ -30,7 +30,8 @@ define(function () {
         "settings": true,
         "requires": "calendar",
         "path": "io.ox/calendar/main"
-    },
+
+    }, 
     {
         "title": "Address Book",
         "company": "Open-Xchange",
@@ -41,17 +42,17 @@ define(function () {
         "path": "io.ox/contacts/main"
     },
     {
-        "namespace": "tests",
+        "namespace": "io.ox/dev/testing/main",
         "path": "io.ox/contacts/test",
         "requires": "contacts"
     },
     {
-        "namespace": "tests",
+        "namespace": "io.ox/dev/testing/main",
         "requires": "contacts",
         "path": "io.ox/contacts/distrib/test"
     },
     {
-        "namespace": "tests",
+        "namespace": "io.ox/dev/testing/main",
         "requires": "contacts",
         "path": "io.ox/contacts/edit/test"
     },
@@ -65,7 +66,7 @@ define(function () {
         "path": "io.ox/conversations/main"
     },
     {
-        "namespace": "tests",
+        "namespace": "io.ox/dev/testing/main",
         "path": "io.ox/core/test"
     },
     {
@@ -113,11 +114,11 @@ define(function () {
         "path": "io.ox/files/main"
     },
     {
-        "namespace": "tests",
+        "namespace": "io.ox/dev/testing/main",
         "path": "io.ox/files/tests/interface/test"
     },
     {
-        "namespace": "tests",
+        "namespace": "io.ox/dev/testing/main",
         "path": "io.ox/files/tests/unit/test"
     },
     {
@@ -165,7 +166,7 @@ define(function () {
         "path": "io.ox/mail/write/main"
     },
     {
-        "namespace": "tests",
+        "namespace": "io.ox/dev/testing/main",
         "path": "io.ox/mail/write/test",
         "requires": "webmail"
     },
@@ -217,11 +218,11 @@ define(function () {
         "path": "io.ox/settings/main"
     },
     {
-        "namespace": "tests",
+        "namespace": "io.ox/dev/testing/main",
         "path": "io.ox/settings/test"
     },
     {
-        "namespace": "tests",
+        "namespace": "io.ox/dev/testing/main",
         "path": "io.ox/settings/accounts/email/test"
     },
     {
