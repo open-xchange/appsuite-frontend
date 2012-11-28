@@ -101,6 +101,7 @@ define('io.ox/files/actions',
             });
         }
     });
+
 /*
     new Action('io.ox/files/actions/open', {
         id: 'office',

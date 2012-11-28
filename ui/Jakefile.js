@@ -192,7 +192,8 @@ utils.copy(utils.list("src/"));
 function htmlFilter (data) {
     return data
         .replace(/@\s?version\s?@/g, version)
-        .replace(/@base@/g, 'v=' + version);
+        .replace(/@base@/g, 'v=' + version)
+        .replace(/@debug@/g, debug);
 }
 
 function bodyFilter(data) {
@@ -605,7 +606,7 @@ utils.topLevelTask('init-packaging', [], function() {
             }
         }
     }, { async: true });
-    
+
     var files = utils.list(utils.source('lib/build/pkg-template'), '**/*');
     utils.copy(files, { to: '.', filter: replace, mapper: replace });
     function replace(data) {

@@ -557,27 +557,24 @@ $(document).ready(function () {
         }
     }
 
-    // support for application cache?
-    if (Modernizr.applicationcache) {
+    // reload if files have change; need this during development
+    if (Modernizr.applicationcache && _.browser.Chrome && ox.debug) {
 
         (function () {
 
-            var ac = window.applicationCache,
-                clear, isOn, updateReady, cont, timer;
+            var ac = window.applicationCache, clear, updateReady, cont;
 
             clear = function () {
-                ac.removeEventListener("checking", isOn, false);
-                ac.removeEventListener("cached", cont, false);
-                ac.removeEventListener("noupdate", cont, false);
-                ac.removeEventListener("error", cont, false);
-                ac.removeEventListener("updateready", updateReady, false);
+                ac.removeEventListener('cached', cont, false);
+                ac.removeEventListener('noupdate', cont, false);
+                ac.removeEventListener('error', cont, false);
+                ac.removeEventListener('updateready', updateReady, false);
             };
 
             updateReady = function () {
                 // if manifest has changed, we have to swap caches and reload
                 if (ac.status === ac.UPDATEREADY) {
                     clear();
-                    ac.swapCache();
                     location.reload();
                 }
             };
@@ -585,21 +582,12 @@ $(document).ready(function () {
             cont = function (e) {
                 clear();
                 boot();
-                cont = $.noop;
             };
 
-            // fallback for denied caching
-            timer = setTimeout(cont, 500);
-
-            isOn = function (e) {
-                clearTimeout(timer);
-            };
-
-            ac.addEventListener("checking", isOn, false);
-            ac.addEventListener("cached", cont, false);
-            ac.addEventListener("noupdate", cont, false);
-            ac.addEventListener("error", cont, false);
-            ac.addEventListener("updateready", updateReady, false);
+            ac.addEventListener('cached', cont, false);
+            ac.addEventListener('noupdate', cont, false);
+            ac.addEventListener('error', cont, false);
+            ac.addEventListener('updateready', updateReady, false);
 
         }());
     } else {
