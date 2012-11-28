@@ -47,7 +47,11 @@ define("io.ox/files/main",
             .pipe(commons.showWindow(win))
             .done(function () {
                 // switch to view in url hash or default
-                ox.ui.Perspective.show(app, _.url.hash('perspective') || settings.get('view', 'icons'));
+                var p = settings.get('view', 'icons');
+                if (!/^(icons|list)$/.test(p)) {
+                    p = 'icons';
+                }
+                ox.ui.Perspective.show(app, _.url.hash('perspective') || p);
             });
     });
 
