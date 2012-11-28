@@ -15,9 +15,8 @@ define('io.ox/files/actions',
     ['io.ox/files/api',
      'io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
-     'io.ox/office/tk/config',
      'gettext!io.ox/files',
-     'settings!io.ox/files'], function (api, ext, links, OfficeConfig, gt, settings) {
+     'settings!io.ox/files'], function (api, ext, links, gt, settings) {
 
     'use strict';
 
@@ -85,41 +84,6 @@ define('io.ox/files/actions',
             ox.launch('io.ox/editor/main').done(function () {
                 this.create({ folder: baton.app.folder.get() });
             });
-        }
-    });
-
-    new Action('io.ox/files/actions/office/newdocument', {
-        action: function (baton) {
-            ox.launch('io.ox/office/editor/main', { action: 'new', folder_id: baton.app.folder.get() });
-        }
-    });
-
-    new Action('io.ox/files/actions/office/editor', {
-        requires: function (e) {
-            var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
-            return e.collection.has('one') && pattern.test(e.context.data.filename);
-        },
-        action: function (baton) {
-            ox.launch('io.ox/office/editor/main', { action: 'load', file: baton.data });
-        }
-    });
-
-    new Action('io.ox/files/actions/office/view', {
-        requires: function (e) {
-            return e.collection.has('one') && /\.(doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg)$/i.test(e.context.data.filename);
-        },
-        action: function (baton) {
-            ox.launch('io.ox/office/preview/main', { action: 'load', file: baton.data });
-        }
-    });
-
-    new Action('io.ox/files/actions/office/editasnew', {
-        requires: function (e) {
-            var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
-            return e.collection.has('one') && pattern.test(e.context.data.filename);
-        },
-        action: function (baton) {
-            ox.launch('io.ox/office/editor/main', { action: 'new', folder_id: baton.data.folder_id, template: baton.data });
         }
     });
 
@@ -373,13 +337,6 @@ define('io.ox/files/actions',
     });
 
     new ActionLink(POINT + '/links/toolbar/default', {
-        index: 200,
-        id: "officenew",
-        label: gt("New office document"),
-        ref: "io.ox/files/actions/office/newdocument"
-    });
-
-    new ActionLink(POINT + '/links/toolbar/default', {
         index: 300,
         id: "share",
         label: gt("Share current folder"),
@@ -419,23 +376,6 @@ define('io.ox/files/actions',
         prio: 'hi',
         label: gt("Edit document"),
         ref: "io.ox/files/actions/editor"
-    }));
-
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: "officeeditor",
-        index: 60,
-        prio: 'hi',
-        label: gt("Change"),
-        ref: "io.ox/files/actions/office/editor"
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: "officepreview",
-        index: 65,
-        prio: 'hi',
-        label: gt("View"),
-        ref: "io.ox/files/actions/office/view"
     }));
 
     ext.point("io.ox/files/links/inline").extend(new links.Link({
@@ -489,14 +429,6 @@ define('io.ox/files/actions',
         label: gt("Delete"),
         ref: "io.ox/files/actions/delete"
     }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: "officeeditasnew",
-        index: 700,
-        label: gt("Edit as new"),
-        ref: "io.ox/files/actions/office/editasnew"
-    }));
-
 
     // version links
 

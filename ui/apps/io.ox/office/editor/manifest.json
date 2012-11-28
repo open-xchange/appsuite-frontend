@@ -1,9 +1,16 @@
-{
-    title: "Documents",
-    company: "Open-Xchange Inc.",
-    icon: "documents.png",
-    category: "Dev",
-    settings: false,
-    createArguments: {file:"new"},
-    requires: "text"
-}
+[
+    {
+		title: "Documents",
+		company: "Open-Xchange Inc.",
+		icon: "documents.png",
+		category: "Dev",
+		settings: false,
+		createArguments: {file:"new"},
+		requires: "text"
+    },
+    {
+	    requires: "text",
+	    path: "io.ox/office/editor/fileActions",
+	    namespace: "io.ox/files/actions"
+    }
+]

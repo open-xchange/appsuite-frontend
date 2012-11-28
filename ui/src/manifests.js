@@ -1,4 +1,4 @@
-define(function () { 
+define(function () {
     return [
     {
         "title": "Plaxo Address Book",
@@ -34,7 +34,7 @@ define(function () {
     {
         "title": "Address Book",
         "company": "Open-Xchange",
-        "icon": "addressbook.png", 
+        "icon": "addressbook.png",
         "category": "Basic",
         "settings": false,
         "requires": "contacts",
@@ -188,6 +188,16 @@ define(function () {
         },
         "requires": "text",
         "path": "io.ox/office/editor/main"
+    },
+    {
+        "requires": "text",
+        "path": "io.ox/office/editor/fileActions",
+        "namespace": "io.ox/files/actions"
+    },
+    {
+        "requires": "document_preview",
+        "path": "io.ox/office/preview/fileActions",
+        "namespace": "io.ox/files/actions"
     },
     {
         "title": "Portal",
