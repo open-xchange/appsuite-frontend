@@ -23,7 +23,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
 
     function createApp() {
         // application object
-        var app = ox.ui.createApp({ name: 'io.ox/tasks/edit', title: "Edit task", userContent: true }),
+        var app = ox.ui.createApp({ name: 'io.ox/tasks/edit', title: gt("Edit task"), userContent: true }),
             // app window
             win,
             //app

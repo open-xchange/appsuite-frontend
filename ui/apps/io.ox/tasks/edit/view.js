@@ -106,6 +106,10 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             util.buildExtensionRow(detailsTab, this.getRow(3, app, 'details'), self.baton);
             util.buildExtensionRow(detailsTab, this.getRow(4, app, 'details'), self.baton);
             
+            //change title if available
+            if (self.model.get("title")) {
+                app.setTitle(self.model.get("title"));
+            }
             return this.$el;
         },
         getRow: function (number, app, tab) {
@@ -172,6 +176,18 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 //attachmentstab
                 self.rows[8].push(temp.attachment_list);
                 self.rows[8].push(temp.attachment_upload);
+                //delegate some events
+                self.$el.delegate("#task-edit-title", "keyup", function () {
+                    var newTitle = _.noI18n($(this).val());
+                    if (!newTitle) {
+                        if (self.model.get("id")) {
+                            newTitle = gt("Edit task");
+                        } else {
+                            newTitle = gt("Create task");
+                        }
+                    }
+                    app.setTitle(newTitle);
+                });
                 return this.rows[number];
             }
         },
