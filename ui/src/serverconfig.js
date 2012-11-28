@@ -32,6 +32,7 @@ define(function () {
 
         portalPluginEditable: ['reddit', 'flickr', 'tumblr', 'rss'],
         previewExtensions : ['doc', 'dot', 'docx', 'dotx', 'docm', 'dotm', 'xls', 'xlt', 'xla', 'xlsx', 'xltx', 'xlsm',
-             'xltm', 'xlam', 'xlsb', 'ppt', 'pot', 'pps', 'ppa', 'pptx', 'potx', 'ppsx', 'ppam', 'pptm', 'potm', 'ppsm', 'pdf']
+             'xltm', 'xlam', 'xlsb', 'ppt', 'pot', 'pps', 'ppa', 'pptx', 'potx', 'ppsx', 'ppam', 'pptm', 'potm', 'ppsm', 'pdf',
+             'odt', 'ods', 'odp', 'odg', 'odc', 'odf', 'odi', 'odm' ]
     };
 });
