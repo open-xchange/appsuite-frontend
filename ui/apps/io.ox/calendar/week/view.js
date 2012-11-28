@@ -1033,7 +1033,7 @@ define('io.ox/calendar/week/view',
                             app = self.collection.get($(this).data('cid')).attributes,
                             startTS = app.start_date + self.getTimeFromPos(d.my.lastTop - ui.originalPosition.top) + (move * date.DAY);
                         if (e.pageX < window.innerWidth - off.left && e.pageY < window.innerHeight) {
-                            console.log(e, ui, off);
+//                            console.log(e, ui, off);
                             // save for update calculations
                             app.old_start_date = app.start_date;
                             app.old_end_date = app.end_date;
