@@ -21,7 +21,7 @@
 			<label for="working_time_start" class="control-label">{{=it.strings.WORKING_TIME_START}}</label>
 			<div class="controls">
 				<label class="select">
-					<select data-property="starttime" id="working_time_start" class="input-xlarge">
+					<select data-property="startTime" id="working_time_start" class="input-xlarge">
 						{{~it.optionsTimeWorktime :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
 					</select>
 				</label>
@@ -31,7 +31,7 @@
 			<label for="working_time_end" class="control-label">{{=it.strings.WORKING_TIME_END}}</label>
 			<div class="controls">
 				<label class="select">
-					<select data-property="endtime" id="working_time_end" class="input-xlarge">
+					<select data-property="endTime" id="working_time_end" class="input-xlarge">
 						{{~it.optionsTimeWorktime :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
 					</select>
 				</label>
@@ -44,7 +44,7 @@
 			<label for="view" class="control-label">{{=it.strings.VIEW}}</label>
 			<div class="controls">
 				<label class="select">
-					<select data-property="view_view" id="view" class="input-xlarge">
+					<select data-property="viewView" id="view" class="input-xlarge">
 						{{~it.optionsViewDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
 					</select>
 				</label>
@@ -54,7 +54,7 @@
 			<label for="range_calendar_view" class="control-label">{{=it.strings.TR_CALENDAR_VIEW}}</label>
 			<div class="controls">
 				<label class="select">
-					<select data-property="view_calendar" id="range_calendar_view" class="input-xlarge">
+					<select data-property="viewCalendar" id="range_calendar_view" class="input-xlarge">
 						{{~it.optionsCalendarRangeDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
 					</select>
 				</label>
@@ -64,7 +64,7 @@
 			<label for="range_team_view" class="control-label">{{=it.strings.TR_TEAM_VIEW}}</label>
 			<div class="controls">
 				<label class="select">
-					<select data-property="view_team" id="range_team_view" class="input-xlarge">
+					<select data-property="viewTeam" id="range_team_view" class="input-xlarge">
 						{{~it.optionsCalendarRangeDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
 					</select>
 				</label>
@@ -74,7 +74,7 @@
 			<label for="range_list_view" class="control-label">{{=it.strings.TR_LIST_VIEW}}</label>
 			<div class="controls">
 				<label class="select">
-					<select data-property="view_list" id="range_list_view" class="input-xlarge">
+					<select data-property="viewList" id="range_list_view" class="input-xlarge">
 						{{~it.optionsCalendarRangeDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
 					</select>
 				</label>
@@ -88,7 +88,7 @@
             <label for="time_for_reminder" class="control-label">{{=it.strings.TIME_FOR_REMINDER}}</label>
             <div class="controls">
                 <label class="select">
-                    <select data-property="default_reminder" id="time_for_reminder" class="input-xlarge">
+                    <select data-property="defaultReminder" id="time_for_reminder" class="input-xlarge">
                         {{~it.optionsReminderSelection :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
                     </select>
                 </label>
