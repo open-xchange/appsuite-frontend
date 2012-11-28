@@ -12,14 +12,14 @@
  */
 
 define('io.ox/calendar/settings/pane',
-       ['settings!io.ox/calendar', 'io.ox/calendar/settings/model',
-        'dot!io.ox/calendar/settings/form.html', 'io.ox/core/extensions',
-        'gettext!io.ox/calendar/calendar'], function (settings, calendarSettingsModel, tmpl, ext, gt) {
+    ['settings!io.ox/calendar',
+     'io.ox/core/date',
+     'io.ox/calendar/settings/model',
+     'dot!io.ox/calendar/settings/form.html',
+     'io.ox/core/extensions',
+     'gettext!io.ox/calendar/calendar'], function (settings, date, calendarSettingsModel, tmpl, ext, gt) {
 
     'use strict';
-
-
-
 
     var calendarSettings =  settings.createModel(calendarSettingsModel),
         staticStrings =  {
@@ -42,40 +42,30 @@ define('io.ox/calendar/settings/pane',
             NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT: gt('E-Mail notification for appointment participant?')
 
         },
+
         optionsInterval = [gt('5'), gt('10'), gt('15'), gt('20'), gt('30'), gt('60')],
-        optionsTime = [{label: gt('00:00'), value: '0'},
-                       {label: gt('01:00'), value: '1'},
-                       {label: gt('02:00'), value: '2'},
-                       {label: gt('03:00'), value: '3'},
-                       {label: gt('04:00'), value: '4'},
-                       {label: gt('05:00'), value: '5'},
-                       {label: gt('06:00'), value: '6'},
-                       {label: gt('07:00'), value: '7'},
-                       {label: gt('08:00'), value: '8'},
-                       {label: gt('09:00'), value: '9'},
-                       {label: gt('10:00'), value: '10'},
-                       {label: gt('11:00'), value: '11'},
-                       {label: gt('12:00'), value: '12'},
-                       {label: gt('13:00'), value: '13'},
-                       {label: gt('14:00'), value: '14'},
-                       {label: gt('15:00'), value: '15'},
-                       {label: gt('16:00'), value: '16'},
-                       {label: gt('17:00'), value: '17'},
-                       {label: gt('18:00'), value: '18'},
-                       {label: gt('19:00'), value: '19'},
-                       {label: gt('20:00'), value: '20'},
-                       {label: gt('21:00'), value: '21'},
-                       {label: gt('22:00'), value: '22'},
-                       {label: gt('23:00'), value: '23'}],
+
+        optionsTime = function () {
+            var array = [];
+            for (var i = 0; i < 24; i++) {
+                array.push({
+                    label : new date.Local(0, 0, 0, i, 0, 0, 0).format(date.TIME),
+                    value : i + ''
+                });
+            }
+            return array;
+        },
 
         optionsView = [{label: gt('Calendar'), value: 'calendar'},
                        {label: gt('Team'), value: 'team'},
                        {label: gt('List'), value: 'list'}],
+
         optionsCalendarRange =  [{label: gt('Day'), value: 'day'},
                                  {label: gt('Workweek'), value: 'workweek'},
                                  {label: gt('Month'), value: 'month'},
                                  {label: gt('Week'), value: 'week'},
                                  {label: gt('Custom'), value: 'custom'}],
+
         optionsReminder = [{label: gt('no reminder'), value: '0'},
                             {label: gt('15 minutes'), value: '15'},
                             {label: gt('30 minutes'), value: '30'},
@@ -99,52 +89,47 @@ define('io.ox/calendar/settings/pane',
 
         optionsYes = {label: gt('Yes'), value: true},
         optionsNo = {label: gt('No'), value: false},
-        calendarViewSettings;
+        calendarViewSettings,
+        CalendarSettingsView = Backbone.View.extend({
+            tagName: "div",
+            _modelBinder: undefined,
+            initialize: function (options) {
+                // create template
+                this._modelBinder = new Backbone.ModelBinder();
 
-    var CalendarSettingsView = Backbone.View.extend({
-        tagName: "div",
-        _modelBinder: undefined,
-        initialize: function (options) {
-            // create template
-            this._modelBinder = new Backbone.ModelBinder();
+            },
+            render: function () {
+                var self = this;
+                self.$el.empty().append(tmpl.render('io.ox/calendar/settings', {
+                    strings: staticStrings,
+                    optionsIntervalMinutes: optionsInterval,
+                    optionsTimeWorktime: optionsTime(),
+                    optionsViewDefault: optionsView,
+                    optionsCalendarRangeDefault: optionsCalendarRange,
+                    optionsReminderSelection: optionsReminder,
+                    optionsYesAnswers: optionsYes,
+                    optionsNoAnswers: optionsNo
+                }));
 
-        },
-        render: function () {
-            var self = this;
-            self.$el.empty().append(tmpl.render('io.ox/calendar/settings', {
-                strings: staticStrings,
-                optionsIntervalMinutes: optionsInterval,
-                optionsTimeWorktime: optionsTime,
-                optionsViewDefault: optionsView,
-                optionsCalendarRangeDefault: optionsCalendarRange,
-                optionsReminderSelection: optionsReminder,
-                optionsYesAnswers: optionsYes,
-                optionsNoAnswers: optionsNo
+                var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
+                self._modelBinder.bind(self.model, self.el, defaultBindings);
 
-            }));
+                return self;
 
-            var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-            self._modelBinder.bind(self.model, self.el, defaultBindings);
-
-            return self;
-
-        }
-    });
+            }
+        });
 
     ext.point('io.ox/calendar/settings/detail').extend({
         index: 200,
         id: 'calendarsettings',
         draw: function (data) {
-
             calendarViewSettings = new CalendarSettingsView({model: calendarSettings});
-            var holder = $('<div>').css('max-width', '800px');
-            this.append(holder.append(
+            this.append($('<div>').css('max-width', '800px').append(
                 calendarViewSettings.render().el)
             );
         },
 
         save: function () {
-//            console.log(calendarViewSettings.model);
             calendarViewSettings.model.save();
         }
     });

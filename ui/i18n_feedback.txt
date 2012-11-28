@@ -77,8 +77,6 @@ second
 third
 fourth -> Kontext?
 
-Free -> Kontext?
-
 Each %s Day -> day
 
 Weekly on %s -> Kommentar, durch was wird Variable ersetzt
@@ -92,9 +90,12 @@ On %s %s each %s. months -> Kommentar, durch was wird Variable ersetzt, und Punk
 Each %s. %s -> Kommentar, durch was wird Variable ersetzt, und Punkt siehe oben
 On %s %s in %s -> Kommentar, durch was wird Variable ersetzt
 
-00:00 etc. -> sollen die druch landesspezifische strings ersetzt werden, wie 2am, 3pm etc.?
+# 00:00 etc. -> sollen die druch landesspezifische strings ersetzt werden, wie 2am, 3pm etc.?
+# strings removed, use date class instead
 
+# Appointment status (Reserved, Temporary, Absent, Free)
 Shown as -> Kontext?
+Free -> Kontext?
 
 msgid ""
 "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
