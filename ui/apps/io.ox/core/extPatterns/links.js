@@ -111,22 +111,23 @@ define("io.ox/core/extPatterns/links",
     };
 
     var drawLinks = function (self, collection, node, context, args, bootstrapMode) {
-        return getLinks(self, collection, node, context, args).always(function (links) {
+        var linkNode = $("<div>").appendTo(node);
+        return getLinks(self, collection, linkNode, context, args).always(function (links) {
             // count resolved links
             var count = 0;
             // draw links
             _(links).each(function (link) {
                 if (_.isFunction(link.draw)) {
-                    link.draw.call(bootstrapMode ? $("<li>").appendTo(node) : node, context);
+                    link.draw.call(bootstrapMode ? $("<li>").appendTo(linkNode) : linkNode, context);
                     if (_.isFunction(link.customize)) {
-                        link.customize.call(node.find('a'), context);
+                        link.customize.call(linkNode.find('a'), context);
                     }
                     count++;
                 }
             });
             // empty?
             if (count === 0) {
-                node.addClass("empty");
+                linkNode.addClass("empty");
             }
         });
     };
