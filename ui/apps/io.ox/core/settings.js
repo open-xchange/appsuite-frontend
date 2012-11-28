@@ -23,7 +23,7 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function 
 
         this.get = function (key, defaultValue) {
             // no argument?
-            if (arguments.length <= 1) { return tree; }
+            if (arguments.length === 0) { return tree; }
             // get parts
             var parts = key.split(/\//), tmp = tree || {};
             while (parts.length) {
