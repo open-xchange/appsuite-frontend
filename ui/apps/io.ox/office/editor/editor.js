@@ -3885,7 +3885,7 @@ define('io.ox/office/editor/editor',
                             (node.offset().top < posY) && (posY < (node.offset().top + node.outerHeight())));
                 }
 
-                function iterateSelektorNodes(topNode, currentNode, posX, posY, selector, skipSelector, options) {
+                function iterateSelectorNodes(topNode, currentNode, posX, posY, selector, skipSelector, options) {
 
                     var selectorNode = null,
                         reverse = Utils.getBooleanOption(options, 'reverse', false);
@@ -3918,22 +3918,22 @@ define('io.ox/office/editor/editor',
                     if ((shiftX < 0) && (shiftY < 0)) { searchFollowing = false; }
 
                     if (searchFollowing) {
-                        paragraph = iterateSelektorNodes(topNode, Utils.getDomNode(startNode), posX, posY, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR, {'reverse': false});
+                        paragraph = iterateSelectorNodes(topNode, Utils.getDomNode(startNode), posX, posY, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR, {'reverse': false});
                     }
 
                     if (paragraph) { searchPrevious = false; }
                     else { searchPrevious = true; }
 
                     if (searchPrevious) {
-                        paragraph = iterateSelektorNodes(topNode, Utils.getDomNode(startNode), posX, posY, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR, {'reverse': true});
+                        paragraph = iterateSelectorNodes(topNode, Utils.getDomNode(startNode), posX, posY, DOM.PARAGRAPH_NODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR, {'reverse': true});
                     }
 
                     // maybe the paragraph is in a table cell with a cell neighbour that is much higher -> use last paragraph in this cell
                     if (! paragraph) {
-                        tableCell = iterateSelektorNodes(topNode, Utils.getDomNode(startNode), posX, posY, DOM.TABLE_CELLNODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR, {'reverse': false});
+                        tableCell = iterateSelectorNodes(topNode, Utils.getDomNode(startNode), posX, posY, DOM.TABLE_CELLNODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR, {'reverse': false});
 
                         if (! tableCell) {
-                            tableCell = iterateSelektorNodes(topNode, Utils.getDomNode(startNode), posX, posY, DOM.TABLE_CELLNODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR, {'reverse': true});
+                            tableCell = iterateSelectorNodes(topNode, Utils.getDomNode(startNode), posX, posY, DOM.TABLE_CELLNODE_SELECTOR, DOM.DRAWING_NODE_SELECTOR, {'reverse': true});
                         }
 
                         if ((tableCell) && (DOM.isTableCellNode(tableCell))) {
