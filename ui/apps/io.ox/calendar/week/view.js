@@ -53,6 +53,7 @@ define('io.ox/calendar/week/view',
         pane:           $('<div>').addClass('scrollpane'),          // main scroll pane
         fulltimePane:   $('<div>').addClass('fulltime'),            // full-time appointments pane
         fulltimeCon:    $('<div>').addClass('fulltime-container'),  // full-time container
+        fulltimeNote:   $('<div>').addClass('note'),                // note in full-time appointment area
         timeline:       $('<div>').addClass('timeline'),            // timeline
         footer:         $('<div>').addClass('footer'),              // footer
         kwInfo:         $('<span>').addClass('info'),               // current KW
@@ -422,7 +423,7 @@ define('io.ox/calendar/week/view',
             // create and animate timeline
             this.renderTimeline(this.timeline);
             setInterval(this.renderTimeline, 60000, this.timeline);
-            this.fulltimePane.empty();
+            this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick here for whole day appointment')));
 
             // create days
             var weekCon = $('<div>').addClass('week-container').append(this.timeline);
@@ -524,7 +525,8 @@ define('io.ox/calendar/week/view',
                 fulltimeColPos = [0],
                 days = [],
                 hasToday = false,
-                tmpDate = new date.Local(self.startDate);
+                tmpDate = new date.Local(self.startDate),
+                fulltimeCount = 0;
 
             // refresh footer, timeline and today-label
             for (var d = 0; d < this.columns; d++) {
@@ -563,6 +565,7 @@ define('io.ox/calendar/week/view',
                 }
 
                 if (model.get('full_time')) {
+                    fulltimeCount++;
                     var app = this.renderAppointment(model),
                         fulltimePos = (model.get('start_date') - this.startDate.getDays() * date.DAY) / date.DAY,
                         fulltimeWidth = (model.get('end_date') - model.get('start_date')) / date.DAY + Math.min(0, fulltimePos);
@@ -644,6 +647,9 @@ define('io.ox/calendar/week/view',
             this.fulltimePane.css({ height: fulltimeColPos.length * (this.fulltimeHeight + 1) + 'px'});
             this.fulltimeCon.css({ height: ftHeight + 'px' });
             this.pane.css({ top: ftHeight + 'px' });
+
+            // control note in full-time appointment area
+            this.fulltimeNote[fulltimeCount === 0 ? 'show' : 'hide']();
 
             // fix for hidden scrollbars on small DIVs (esp. Firefox Win)
             if (this.fulltimeCon[0].clientWidth !== this.pane[0].clientWidth) {
@@ -900,16 +906,16 @@ define('io.ox/calendar/week/view',
                 .draggable({
                     grid: [colWidth, self.gridHeight()],
                     scroll: true,
-                    containment: self.$el,
                     revertDuration: 0,
                     revert: function (drop) {
+//                        console.log('drop', drop);
                         //if false then no socket object drop occurred.
                         if (drop === false) {
-                            //revert the peg by returning true
+                            //revert the appointment by returning true
                             $(this).show();
                             return true;
                         } else {
-                            //return false so that the peg does not revert
+                            //return false so that the appointment does not revert
                             return false;
                         }
                     },
@@ -1022,10 +1028,12 @@ define('io.ox/calendar/week/view',
                     },
                     stop: function (e, ui) {
                         var d = $(this).data('draggable'),
+                            off = $('.week-container', this.$el).offset(),
                             move = Math.round((ui.position.left - ui.originalPosition.left) / colWidth),
                             app = self.collection.get($(this).data('cid')).attributes,
                             startTS = app.start_date + self.getTimeFromPos(d.my.lastTop - ui.originalPosition.top) + (move * date.DAY);
-                        if (e.pageX < window.innerWidth && e.pageY < window.innerHeight) {
+                        if (e.pageX < window.innerWidth - off.left && e.pageY < window.innerHeight) {
+                            console.log(e, ui, off);
                             // save for update calculations
                             app.old_start_date = app.start_date;
                             app.old_end_date = app.end_date;

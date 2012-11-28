@@ -24,7 +24,7 @@
     }
     
     .toolbar {
-        background-color: #FFF; 
+        background-color: #fff; 
         height: @weekview-toolbar-height;
         text-align: center;
         padding: 3px;
@@ -89,6 +89,17 @@
         right: 0;
     }
     
+    .fulltime .note {
+        position: absolute;
+        background: none;
+        width: 100%;
+        font-family: @font-light;
+        text-align: center;
+        color: #ccc;
+        .ellipsis();
+        .user-select(none);
+    }
+    
     .scrollpane {
         .overflow-y(scroll);
         .overflow-x(hidden);
@@ -141,12 +152,12 @@
     }
     
     .day.today .timeslot.in { 
-        background-color: #daefFf; 
+        background-color: #daefff; 
         background-color: rgba(0, 136, 204, 0.10);
     }
 
     .day.today .timeslot.out { 
-        background-color: #daefFf; 
+        background-color: #daefff; 
         background-color: rgba(0, 136, 204, 0.20);
     }
 
