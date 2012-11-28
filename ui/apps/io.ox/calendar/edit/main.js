@@ -73,7 +73,6 @@ define('io.ox/calendar/edit/main',
                 edit: function (data) {
 
                     app.cid = 'io.ox/calendar:edit.' + _.cid(data);
-                    console.log('YEAH.edit', app.cid);
 
                     var self = this;
                     function cont(data) {
@@ -223,7 +222,6 @@ define('io.ox/calendar/edit/main',
 
         reuse: function (type, data) {
             if (type === 'edit') {
-                console.log('calendar.edit.reuse?', _.cid(data));
                 return ox.ui.App.reuse('io.ox/calendar:edit.' + _.cid(data));
             }
         }

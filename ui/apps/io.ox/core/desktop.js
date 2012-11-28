@@ -429,7 +429,6 @@ define("io.ox/core/desktop",
 
         reuse: function (cid) {
             var app = ox.ui.apps.find(function (m) { return m.cid === cid; }), win;
-            console.log('reuse', cid, app);
             if (app) {
                 app.launch();
                 return true;

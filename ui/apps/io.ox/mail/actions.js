@@ -83,6 +83,7 @@ define('io.ox/mail/actions',
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
+                if (m.reuse('replyall', baton.data)) return;
                 m.getApp().launch().done(function () {
                     this.replyall(baton.data);
                 });
@@ -97,6 +98,7 @@ define('io.ox/mail/actions',
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
+                if (m.reuse('reply', baton.data)) return;
                 m.getApp().launch().done(function () {
                     this.reply(baton.data);
                 });
@@ -111,6 +113,7 @@ define('io.ox/mail/actions',
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
+                if (m.reuse('forward', baton.data)) return;
                 m.getApp().launch().done(function () {
                     this.forward(baton.data);
                 });

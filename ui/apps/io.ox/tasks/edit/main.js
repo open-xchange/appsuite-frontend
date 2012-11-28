@@ -70,6 +70,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             //ModelView
             if (taskData) {
                 this.edit = true;
+                app.cid = 'io.ox/tasks:edit.' + _.cid(taskData);
                 model.factory.realm('edit').retain().get(taskData).done(function (task) {
                     taskModel = task;
                     taskModel.getParticipants();
@@ -148,6 +149,14 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
     }
 
     return {
-        getApp: createApp
+
+        getApp: createApp,
+
+
+        reuse: function (type, data) {
+            if (type === 'edit') {
+                return ox.ui.App.reuse('io.ox/tasks:edit.' + _.cid(data));
+            }
+        }
     };
 });

@@ -563,6 +563,8 @@ define('io.ox/mail/write/main',
                 var def = $.Deferred();
                 _.url.hash('app', 'io.ox/mail/write:' + type);
 
+                app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
+
                 function cont(obj) {
                     win.busy().show(function () {
                         mailAPI[type](obj, getDefaultEditorMode())
@@ -605,6 +607,8 @@ define('io.ox/mail/write/main',
 
             var def = $.Deferred();
             _.url.hash('app', 'io.ox/mail/write:forward');
+
+            app.cid = 'io.ox/mail:forward.' + _.cid(obj);
 
             win.busy().show(function () {
                 mailAPI.forward(obj, getDefaultEditorMode())
@@ -764,6 +768,7 @@ define('io.ox/mail/write/main',
                             notifications.yell(result);
                         } else {
                             notifications.yell('success', 'Mail has been sent');
+                            previous = false;
                             app.quit();
                         }
                         def.resolve(result);
@@ -886,7 +891,20 @@ define('io.ox/mail/write/main',
     }
 
     return {
-        getApp: createInstance
+
+        getApp: createInstance,
+
+        reuse: function (type, data) {
+            if (type === 'reply') {
+                return ox.ui.App.reuse('io.ox/mail:reply.' + _.cid(data));
+            }
+            if (type === 'replyall') {
+                return ox.ui.App.reuse('io.ox/mail:replyall.' + _.cid(data));
+            }
+            if (type === 'forward') {
+                return ox.ui.App.reuse('io.ox/mail:forward.' + _.cid(data));
+            }
+        }
     };
 
 });
