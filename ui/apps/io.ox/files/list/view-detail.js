@@ -99,7 +99,11 @@ define("io.ox/files/list/view-detail",
         id: "fileDetails",
         layout: "Flow",
         title: gt("Current version"),
-        index: 300
+        index: 300,
+        isEnabled: function (file) {
+            // show this only if there is exactly one version
+            return file.number_of_versions === 1;
+        }
     });
 
     ext.point("io.ox/files/details/sections").extend({
