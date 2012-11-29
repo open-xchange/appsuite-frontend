@@ -299,7 +299,49 @@ define('io.ox/files/actions',
             });
         }
     });
+    
 
+    var copyMove = function (type, apiAction, title) {
+        return function (list) {
+            require(['io.ox/files/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (api, dialogs, views) {
+                var dialog = new dialogs.ModalDialog({ easyOut: true })
+                    .header($('<h3>').text(title))
+                    .addPrimaryButton('ok', title)
+                    .addButton('cancel', gt('Cancel'));
+                dialog.getBody().css('height', '250px');
+                var item = _(list).first(),
+                    tree = new views.FolderTree(dialog.getBody(), { type: type });
+                tree.paint();
+                dialog.show(function () {
+                    tree.selection.set({ id: item.folder_id || item.folder });
+                })
+                .done(function (action) {
+                    if (action === 'ok') {
+                        var selectedFolder = tree.selection.get();
+                        console.log("SELECTED FOLDER", selectedFolder);
+                        if (selectedFolder.length === 1) {
+                            // move action
+                            api[apiAction](list, selectedFolder[0]).fail(require("io.ox/core/notifications").yell);
+                        }
+                    }
+                    tree.destroy();
+                    tree = dialog = null;
+                });
+            });
+        };
+    };
+
+    new Action('io.ox/files/actions/move', {
+        id: 'move',
+        requires: 'some delete',
+        multiple: copyMove('infostore', 'move', gt('Move'))
+    });
+
+    new Action('io.ox/files/actions/copy', {
+        id: 'copy',
+        requires: 'some read',
+        multiple: copyMove('infostore', 'copy', gt('Copy'))
+    });
 
 
     // version specific actions
@@ -444,8 +486,22 @@ define('io.ox/files/actions',
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'delete',
+        id: 'move',
         index: 600,
+        label: gt("Move"),
+        ref: "io.ox/files/actions/move"
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'copy',
+        index: 700,
+        label: gt("Copy"),
+        ref: "io.ox/files/actions/copy"
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'delete',
+        index: 800,
         prio: 'hi',
         label: gt("Delete"),
         ref: "io.ox/files/actions/delete"
