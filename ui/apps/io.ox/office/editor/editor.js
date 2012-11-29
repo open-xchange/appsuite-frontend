@@ -2427,9 +2427,9 @@ define('io.ox/office/editor/editor',
                 self.grabFocus();
 
                 // checking if the drawing already has a selection (nothing to do here)
-                // if (DOM.hasDrawingSelection(drawing)) {
-                //     return;
-                // }
+                if (DOM.hasDrawingSelection(drawing)) {
+                    return;
+                }
 
                 if (isDrawingNode) {
                     // select the drawing
@@ -4393,14 +4393,66 @@ define('io.ox/office/editor/editor',
 
                 // deregister event handler
                 // removing mouse event handler (mouseup and mousemove) from page div
-                $(document).off('mouseup mousemove');
-                $(document).data('mouseuphandler', null);
-                $(document).data('mousemovehandler', null);
-                $(resizeNode).off('mousedown');
+                $(document).off('mouseup', mouseUpOnResizeNodeHandler);
+                $(document).off('mousemove', mouseMoveOnResizeNodeHandler);
+                $(resizeNode).off('mousedown', mouseDownOnResizeNodeHandler);
             }
 
-            // draw the resize line at the position of the passed resize node
-            DOM.drawTablecellResizeLine(resizeObject, mouseDownOnResizeNode, mouseMoveOnResizeNode, mouseUpOnResizeNode, self);
+            /**
+             * Inserts a new resize line at the position of the specified resize nodes.
+             *
+             * @param {HTMLElement|jQuery} resizenodes
+             *  The resize node for which a resize line will be inserted.
+             *
+             * @param {Function} mousedownhandler
+             *  Callback function for mouse down event.
+             *
+             * @param {Function} mousemovehandler
+             *  Callback function for mouse move event.
+             *
+             * @param {Function} mouseuphandler
+             *  Callback function for mouse up event.
+             *
+             * @param {Object} context
+             *  The context object that is required in the callback function calls.
+             */
+
+            var resizeNode = null;
+            var mousedownevent = false;
+
+            function mouseDownOnResizeNodeHandler(e1, e2) {
+                if (mousedownevent === true) { return; }
+                var e = e1.pageX ? e1 : e2;  // from triggerHandler in editor only e2 can be used
+                mousedownevent = true;
+                mouseDownOnResizeNode.call(self, e, resizeNode);
+            }
+
+            function mouseMoveOnResizeNodeHandler(e) {
+                if (! mousedownevent) return;
+                mouseMoveOnResizeNode.call(self, e, resizeNode);
+            }
+
+            function mouseUpOnResizeNodeHandler(e) {
+                if (mousedownevent === true) {
+                    mouseUpOnResizeNode.call(self, e, resizeNode);
+                    mousedownevent = false;
+                }
+            }
+
+            $(resizeObject).each(function () {
+
+                // whether mousedown is a current event
+                mousedownevent = false;
+                // saving the selected resize node
+                resizeNode = this;
+
+                // moving the resize node
+                $(this).on('mousedown', mouseDownOnResizeNodeHandler);
+
+                // mousemove and mouseup events can be anywhere on the page -> binding to $(document)
+                $(document).on({'mousemove': mouseMoveOnResizeNodeHandler, 'mouseup': mouseUpOnResizeNodeHandler});
+            });
+
         }
 
         // End of private selection functions

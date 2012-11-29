@@ -1505,32 +1505,22 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                     });
                 }
 
-                // set classes according to passed options, and resize handles
-                moveBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
-                selectionBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
-            }
-
-            // mousemove and mouseup events can be anywhere on the page -> binding to $(document)
-            // check if handlers are still registered at $(document)
-            // They might have been removed by table resize handler
-            if (! $(document).data('mousemovehandler')) {
+                // mousemove and mouseup events can be anywhere on the page -> binding to $(document)
                 $(document)
                 .mousemove(function (e) {
                     if (! mousedownevent) return;
                     mousemovehandler.call(context, e, moveBox);
-                });
-                $(document).data('mousemovehandler', 1);
-            }
-
-            if (! $(document).data('mouseuphandler')) {
-                $(document)
+                })
                 .mouseup(function (e) {
                     if (mousedownevent === true) {
                         mousedownevent = false;
                         mouseuphandler.call(context, e, drawingNode, moveBox);
                     }
                 });
-                $(document).data('mouseuphandler', 1);
+
+                // set classes according to passed options, and resize handles
+                moveBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
+                selectionBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
             }
 
             // saving the selection parameter at the drawing object to reuse them
@@ -1552,8 +1542,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         $(drawings).children('div.move').remove();
         // removing mouse event handler (mouseup and mousemove) from page div
         $(document).off('mouseup mousemove');
-        $(document).data('mouseuphandler', null);
-        $(document).data('mousemovehandler', null);
+        // $(document).data('mouseuphandler', null);
+        // $(document).data('mousemovehandler', null);
         $(drawings).off('mousedown');
         $(drawings).data('drawingSelection', null);
     };
@@ -1567,57 +1557,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             drawingSelParams.options.moveable = moveable;
             DOM.drawDrawingSelection(drawing, drawingSelParams.options, drawingSelParams.mousedownhandler, drawingSelParams.mousemovehandler, drawingSelParams.mouseuphandler, drawingSelParams.context);
         }
-    };
-
-    /**
-     * Inserts a new resize line at the position of the specified resize nodes.
-     *
-     * @param {HTMLElement|jQuery} resizenodes
-     *  The resize node for which a resize line will be inserted.
-     *
-     * @param {Function} mousedownhandler
-     *  Callback function for mouse down event.
-     *
-     * @param {Function} mousemovehandler
-     *  Callback function for mouse move event.
-     *
-     * @param {Function} mouseuphandler
-     *  Callback function for mouse up event.
-     *
-     * @param {Object} context
-     *  The context object that is required in the callback function calls.
-     */
-    DOM.drawTablecellResizeLine = function (resizenodes, mousedownhandler, mousemovehandler, mouseuphandler, context) {
-
-        $(resizenodes).each(function () {
-
-            var // whether mousedown is a current event
-                mousedownevent = false,
-                // saving the selected resize node
-                resizeNode = this;
-
-            // moving the resize node
-            $(this).mousedown(function (e1, e2) {
-                if (mousedownevent === true) { return; }
-                var e = e1.pageX ? e1 : e2;  // from triggerHandler in editor only e2 can be used
-                mousedownevent = true;
-                mousedownhandler.call(context, e, resizeNode);
-            });
-
-            // mousemove and mouseup events can be anywhere on the page -> binding to $(document)
-            $(document)
-            .mousemove(function (e) {
-                if (! mousedownevent) return;
-                mousemovehandler.call(context, e, resizeNode);
-            })
-            .mouseup(function (e) {
-                if (mousedownevent === true) {
-                    mouseuphandler.call(context, e, resizeNode);
-                    mousedownevent = false;
-                }
-            });
-        });
-
     };
 
     // exports ================================================================
