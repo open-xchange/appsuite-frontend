@@ -191,6 +191,35 @@ define('io.ox/office/editor/editor',
         // methods ------------------------------------------------------------
 
         /**
+         * Sets the preselected attributes.
+         *
+         * Please always use this function
+         * to set the preselected attributes, instead of changing the
+         * attributes directly.
+         *
+         * @param {Object} attributes
+         *  A object containing attributes to be used for the next printable
+         *  character.
+         */
+        this.setPreselectedAttributes = function (attributes) {
+            preselectedAttributes = attributes;
+        };
+
+        /**
+         * Clears the preselected attributes.
+         */
+        this.clearPreselectedAttributes = function () {
+            preselectedAttributes = null;
+        };
+
+        /**
+         * Returns the current preselected attributes.
+         */
+        this.getPreselectedAttributes = function () {
+            return preselectedAttributes;
+        };
+
+        /**
          * Returns the root DOM element representing this editor.
          */
         this.getNode = function () {
@@ -1697,9 +1726,9 @@ define('io.ox/office/editor/editor',
                         }
                     });
                 });
-                if (isCursor && preselectedAttributes) {
+                if (isCursor && self.getPreselectedAttributes()) {
                     // add preselected attributes (text cursor selection cannot result in ambiguous attributes)
-                    StyleSheets.extendAttributes(mergedAttributes, preselectedAttributes);
+                    StyleSheets.extendAttributes(mergedAttributes, self.getPreselectedAttributes());
                 }
                 break;
 
@@ -1850,8 +1879,8 @@ define('io.ox/office/editor/editor',
                             }
                         });
                     } else {
-                        preselectedAttributes = preselectedAttributes || {};
-                        StyleSheets.extendAttributes(preselectedAttributes, attributes);
+                        self.setPreselectedAttributes(self.getPreselectedAttributes() || {});
+                        StyleSheets.extendAttributes(self.getPreselectedAttributes(), attributes);
                     }
                     break;
 
@@ -2177,13 +2206,13 @@ define('io.ox/office/editor/editor',
                                     if (pos === startEndPos.start || result.beforeHyperlink) {
                                         // special case: at the start of a hyperlink we want to
                                         // write with normal style
-                                        preselectedAttributes = { character: { style: null, url: null } };
+                                        self.setPreselectedAttributes({ character: { style: null, url: null } });
                                     }
                                 }
                                 else {
                                     // special case: at the end of a hyperlink we want to
                                     // write with normal style and we don't show the popup
-                                    preselectedAttributes = { character: { style: null, url: null } };
+                                    self.setPreselectedAttributes({ character: { style: null, url: null } });
                                     hyperlinkPopup.hide();
                                 }
                             }
@@ -2191,7 +2220,7 @@ define('io.ox/office/editor/editor',
                         else {
                             hyperlinkPopup.hide();
                             if (result.setPreselectedAttributes)
-                                preselectedAttributes = { character: { style: null, url: null } };
+                                self.setPreselectedAttributes({ character: { style: null, url: null } });
                         }
                     });
                 }
@@ -2387,7 +2416,7 @@ define('io.ox/office/editor/editor',
                 }
             }
 
-            preselectedAttributes = null;
+            self.clearPreselectedAttributes();
 
             // click on drawing node: set browser selection to drawing node, draw selection
             if ((drawing.length > 0) && Utils.containsNode(editdiv, drawing)) {
@@ -2453,6 +2482,12 @@ define('io.ox/office/editor/editor',
 
             if (DOM.isCursorKey(event.keyCode)) {
 
+                // Clear preselected attributes. Attention: must be cleared before
+                // selection.processBrowserEvent is called. We have listener which
+                // could set the preselected attributes for special cases, e.g. start/end of
+                // hyperlink we want to write with normal attributes.
+                self.clearPreselectedAttributes();
+
                 // any navigation key: change drawing selection to text selection before
                 selection.selectDrawingAsText();
 
@@ -2463,8 +2498,6 @@ define('io.ox/office/editor/editor',
                         drawDrawingSelection(selection.getSelectedDrawing());
                     }
                 });
-
-                preselectedAttributes = null;
 
                 return;
             }
@@ -2513,7 +2546,7 @@ define('io.ox/office/editor/editor',
 
             if (event.keyCode === KeyCodes.DELETE) {
                 event.preventDefault();
-                preselectedAttributes = null;
+                self.clearPreselectedAttributes();
                 if (selection.hasRange()) {
                     self.deleteSelected();
                 }
@@ -2592,7 +2625,7 @@ define('io.ox/office/editor/editor',
             }
             else if (event.keyCode === KeyCodes.BACKSPACE) {
                 event.preventDefault();
-                preselectedAttributes = null;
+                self.clearPreselectedAttributes();
                 if (selection.hasRange()) {
                     self.deleteSelected();
                 }
@@ -2682,7 +2715,7 @@ define('io.ox/office/editor/editor',
                     event.preventDefault();
                 }
 
-                preselectedAttributes = null;
+                self.clearPreselectedAttributes();
                 var c = getPrintableChar(event);
                 if (c === 'A') {
                     selection.selectAll();
@@ -2713,7 +2746,7 @@ define('io.ox/office/editor/editor',
                 }
             } else if (event.keyCode === KeyCodes.TAB && !event.ctrlKey && !event.metaKey) {
                 event.preventDefault();
-                preselectedAttributes = null;
+                self.clearPreselectedAttributes();
                 // (shift)Tab: Change list indent (if in list) when selection is at first position in paragraph
                 var paragraph = Position.getLastNodeFromPositionByNodeName(editdiv, selection.getStartPosition(), DOM.PARAGRAPH_NODE_SELECTOR),
                     mustInsertTab = !event.shiftKey;
@@ -2761,7 +2794,6 @@ define('io.ox/office/editor/editor',
             }
 
             if (lastKeyDownEvent && DOM.isCursorKey(lastKeyDownEvent.keyCode)) {
-                preselectedAttributes = null;
                 return;
             }
 
@@ -2786,10 +2818,11 @@ define('io.ox/office/editor/editor',
 
             if ((!event.ctrlKey || (event.ctrlKey && event.altKey && !event.shiftKey)) && !event.metaKey && (c.length === 1)) {
 
+                var hyperlinkSelection = null;
+
                 undoManager.enterGroup(function () {
 
-                    var startPosition = null,
-                        hyperlinkSelection = null;
+                    var startPosition = null;
 
                     self.deleteSelected();
                     startPosition = selection.getStartPosition();
@@ -2799,29 +2832,29 @@ define('io.ox/office/editor/editor',
                         hyperlinkSelection = Hyperlink.checkForHyperlinkText(selection.getEnclosingParagraph(), startPosition);
                     }
 
-                    self.insertText(c, startPosition, preselectedAttributes);
-                    preselectedAttributes = null;
+                    self.insertText(c, startPosition, self.getPreselectedAttributes());
+                    self.clearPreselectedAttributes();
 
                     // set cursor behind character
                     selection.setTextSelection(Position.increaseLastIndex(startPosition, c.length));
 
-                    if (hyperlinkSelection !== null) {
-                        Hyperlink.insertHyperlink(self,
-                                                  hyperlinkSelection.start,
-                                                  hyperlinkSelection.end,
-                                                  (hyperlinkSelection.url === null) ? hyperlinkSelection.text : hyperlinkSelection.url);
-                        preselectedAttributes = { character: { style: null, url: null } };
-                    }
-
                 }, this);
+
+                if (hyperlinkSelection !== null) {
+                    Hyperlink.insertHyperlink(self,
+                                              hyperlinkSelection.start,
+                                              hyperlinkSelection.end,
+                                              (hyperlinkSelection.url === null) ? hyperlinkSelection.text : hyperlinkSelection.url);
+                    self.setPreselectedAttributes({ character: { style: null, url: null } });
+                }
             }
             else if (c.length > 1) {
-                preselectedAttributes = null;
+                self.clearPreselectedAttributes();
                 // TODO?
             }
             else {
 
-                preselectedAttributes = null;
+                self.clearPreselectedAttributes();
 
                 if (event.keyCode === KeyCodes.ENTER) {
                     var hasSelection = selection.hasRange();
