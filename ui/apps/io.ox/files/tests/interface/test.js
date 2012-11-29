@@ -50,9 +50,12 @@ define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/file
                     });
 
                     j.waitsFor(function () {
-                        var button = $("[data-action='upload']");
+                        var button = $("[data-ref='io.ox/files/links/toolbar/default']");
                         if (button[0]) {
                             button.triggerHandler('click');
+                            _.defer(function () {
+                                $("[data-action='io.ox/files/actions/upload']").triggerHandler('click');
+                            });
                             return true;
                         }
                     }, 'waits', TIMEOUT);
