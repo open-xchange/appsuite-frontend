@@ -231,6 +231,7 @@ define('io.ox/core/commons',
             // search: all request
             grid.setAllRequest('search', function () {
                 var options = win.search.getOptions();
+                options.folder = grid.prop('folder');
                 return api.search(win.search.query, options);
             });
             // search: list request
