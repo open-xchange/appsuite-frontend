@@ -16,7 +16,7 @@
 define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/files/api"], function (ext, files, api) {
     "use strict";
 
-    var TIMEOUT = 2500;
+    var TIMEOUT = 10000;
 
     function Done() {
         var f = function () {
@@ -87,7 +87,7 @@ define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/file
                 j.it('check out the stored data ', function () {
                     var rightBox;
                     j.waitsFor(function () {
-                        var boxes = $('.vgrid-cell div.name'), found = false;
+                        var boxes = $('.title'), found = false;
                         boxes.each(function (index, box) {
                             //console.debug("[" + index + "] '" + $(this).html() + "' vs '" + testtitle + "'");
                             if ($(this).text() === testtitle) {
@@ -106,8 +106,10 @@ define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/file
                     }, 'waits', TIMEOUT);
 
                     j.runs(function () {
-                        var page = $('.file-details.view');
-                        j.expect(page.find('.title').text()).toEqual(testtitle);
+                        _.defer(function () {
+                            var page = $('.file-details.view');
+                            j.expect(page.find('.title').text()).toEqual(testtitle);
+                        });
                     });
                 });
 
