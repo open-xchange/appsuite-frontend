@@ -415,9 +415,17 @@ define('io.ox/office/editor/table',
      */
     Table.updateColGroup = function (table, tablegrid) {
 
-        var colgroup = table.children('colgroup');
+        var colgroup = table.children('colgroup'),
+            gridsum = 0;
 
         colgroup.children('col').remove(); // removing all col entries
+
+        // check if tablegrid contains valid values -> workaround for tablegrids containing only '0'.
+        for (var i = 0; i < tablegrid.length; i++) { gridsum += tablegrid[i]; }
+        if (gridsum === 0) {
+            for (var i = 0; i < tablegrid.length; i++) { tablegrid[i] += 1000; }
+        }
+
 
         for (var i = 0; i < tablegrid.length; i++) {
             var oneGridWidth = Table.getGridWidthPercentage(tablegrid, tablegrid[i])  + '%';  // converting to %
