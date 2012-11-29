@@ -270,8 +270,8 @@ define('io.ox/calendar/edit/template',
         index: 900,
         className: "span4",
         attribute: 'shown_as',
-        //#. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
-        label: gt("Shown as"),
+        label: //#. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
+               gt("Shown as"),
         labelClassName: 'control-label desc',
         selectOptions: {
             1: gt('Reserved'),
