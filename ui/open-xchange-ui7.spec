@@ -81,6 +81,7 @@ rm -r "%{buildroot}/opt/open-xchange-ui7-devel"
 %defattr(-,root,root)
 %dir /opt/open-xchange-ui7-devel
 /opt/open-xchange-ui7-devel
+%attr(644,root,root) /opt/open-xchange-ui7-devel/lib/sax-js/examples/switch-bench.js
 
 %changelog
 * Thu Nov 10 2011 viktor.pracht@open-xchange.com
