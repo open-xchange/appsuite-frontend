@@ -48,6 +48,30 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
         app.markDirty = function () {
             taskState = app.STATES.DIRTY;
         };
+        
+        app.isDirty = function () {
+            var check = true;
+            //marked as clean overides check
+            if (taskState === app.STATES.CLEAN) {
+                return false;
+            }
+            //check attributes
+            if (this.edit) {
+                check = taskModel.isDirty();
+            } else {
+                //check if only default Values are present
+                var data = taskModel.changedSinceLoading(),
+                    defaults = model.defaults;
+                check = !(_.isEqual(data, defaults));
+            }
+            
+            //now check if something changed with the attachments
+            var attachmentList = taskView.baton.attachmentList;
+            if ((attachmentList.attachmentsToAdd.length > 0) || (attachmentList.attachmentsToDelete.length > 0)) {
+                check = true;
+            }
+            return check;
+        };
 
         app.markClean = function () {
             taskState = app.STATES.CLEAN;
@@ -112,7 +136,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 app = win = taskModel = taskView = null;
             };
 
-            if (app.getState() === app.STATES.DIRTY) {
+            if (app.isDirty()) {
                 require(["io.ox/core/tk/dialogs"], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt("Do you really want to discard your changes?"))

@@ -20,51 +20,52 @@ define("io.ox/tasks/model", ['io.ox/tasks/api',
         
     "use strict";
         
-    var factory = new ModelFactory({
-        ref: 'io.ox/tasks/model',
-        api: api,
-        model: {
-            defaults: {
-                status: 1,
-                priority: 2,
-                percent_completed: 0,
-                folder_id: api.getDefaultFolder()
-            },
-            getParticipants: function () {
-                if (this._participants) {
-                    return this._participants;
-                }
-                var self = this;
-                var resetListUpdate = false;
-                var changeParticipantsUpdate = false;
-                var participants = this._participants = new pModel.Participants(this.get('participants'));
-                participants.invoke('fetch');
-
-                function resetList(participant) {
-                    if (changeParticipantsUpdate) {
-                        return;
+    var defaults = {
+            status: 1,
+            priority: 2,
+            percent_completed: 0,
+            folder_id: api.getDefaultFolder()
+        },
+        factory = new ModelFactory({
+            ref: 'io.ox/tasks/model',
+            api: api,
+            model: {
+                defaults: defaults,
+                getParticipants: function () {
+                    if (this._participants) {
+                        return this._participants;
                     }
-                    resetListUpdate = true;
-                    self.set('participants', participants.toJSON());
-                    resetListUpdate = false;
-                }
-
-                participants.on('add remove reset', resetList);
-
-                this.on('change:participants', function () {
-                    if (resetListUpdate) {
-                        return;
-                    }
-                    changeParticipantsUpdate = true;
-                    participants.reset(self.get('participants'));
+                    var self = this;
+                    var resetListUpdate = false;
+                    var changeParticipantsUpdate = false;
+                    var participants = this._participants = new pModel.Participants(this.get('participants'));
                     participants.invoke('fetch');
-                    changeParticipantsUpdate = false;
-                });
-
-                return participants;
+    
+                    function resetList(participant) {
+                        if (changeParticipantsUpdate) {
+                            return;
+                        }
+                        resetListUpdate = true;
+                        self.set('participants', participants.toJSON());
+                        resetListUpdate = false;
+                    }
+    
+                    participants.on('add remove reset', resetList);
+    
+                    this.on('change:participants', function () {
+                        if (resetListUpdate) {
+                            return;
+                        }
+                        changeParticipantsUpdate = true;
+                        participants.reset(self.get('participants'));
+                        participants.invoke('fetch');
+                        changeParticipantsUpdate = false;
+                    });
+    
+                    return participants;
+                }
             }
-        }
-    });
+        });
     
     Validations.validationFor('io.ox/tasks/model', {
         start_date: {format: 'date'},
@@ -107,6 +108,7 @@ define("io.ox/tasks/model", ['io.ox/tasks/api',
     });
         
     return {
+        defaults: defaults,
         factory: factory,
         task: factory.model,
         tasks: factory.collection
