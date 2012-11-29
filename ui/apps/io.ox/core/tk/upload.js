@@ -51,22 +51,28 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
             $overlay.detach();
             return false; // Prevent regular event handling
         };
+        if (options.actions && options.actions.length === 1) {
+            nodeGenerator = function () {
+                var $actionNode = $("<div>").addClass("row-fluid io-ox-dropzone-action").appendTo($overlay);
+                nodes.push($actionNode);
+                return $actionNode;
+            };
+        } else {
+            nodeGenerator = function () {
+                var $actionTile = $("<div>").appendTo($overlay).addClass("span6 io-ox-dropzone-action").css({height: "100%"});
+                if (currentRow) {
+                    currentRow.append($actionTile);
+                    currentRow = null;
+                } else {
+                    currentRow = $("<div>").addClass("row-fluid").appendTo($overlay);
 
-        // If we have more than 4 actions, do this in two columns, else do this in one column
-        nodeGenerator = function () {
-            var $actionTile = $("<div>").appendTo($overlay).addClass("span6 io-ox-dropzone-action").css({height: "100%"});
-            if (currentRow) {
-                currentRow.append($actionTile);
-                currentRow = null;
-            } else {
-                currentRow = $("<div>").addClass("row-fluid").appendTo($overlay);
+                    nodes.push(currentRow);
+                    currentRow.append($actionTile);
+                }
 
-                nodes.push(currentRow);
-                currentRow.append($actionTile);
-            }
-
-            return $actionTile;
-        };
+                return $actionTile;
+            };
+        }
         
 
         _(options.actions || []).each(function (action) {

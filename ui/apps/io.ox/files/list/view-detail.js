@@ -410,7 +410,7 @@ define("io.ox/files/list/view-detail",
                     filesAPI.uploadNewVersion({
                         file: fileData,
                         id: file.id,
-                        folder: file.folder,
+                        folder: file.folder_id,
                         timestamp: file.last_modified,
                         json: {version_comment: $commentArea.val()}
                     }).done(function (data) {

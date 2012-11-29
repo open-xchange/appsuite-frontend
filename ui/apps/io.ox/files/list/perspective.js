@@ -169,7 +169,7 @@ define('io.ox/files/list/perspective',
                     return api.uploadNewVersion({
                             file: data,
                             id: app.currentFile.id,
-                            folder: app.currentFile.folder,
+                            folder: app.currentFile.folder_id,
                             timestamp: app.currentFile.last_modified
                         })
                         .done(function (data) {
