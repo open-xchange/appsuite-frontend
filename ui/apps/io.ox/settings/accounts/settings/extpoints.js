@@ -3,7 +3,7 @@
  * plugin, where they belong, but it is not possible to put them there yet, because we cannot
  * ensure they are loaded at the proper time. Currently, Cisco and Vic are working on this.
  */
-define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions'], function (ext) {
+define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', 'less!io.ox/settings/style.css'], function (ext) {
     'use strict';
 
     /* * * * * * * *
@@ -32,15 +32,14 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions'], 
                         var self = this;
 
                         self.$el.empty().append(
-                            $('<div class="sortable-item listbox-item enabled">')
+                            $('<div class="io-ox-settings-item enabled">')
                             .attr({'data-subreddit': this.model.get('subreddit'), 'data-mode': this.model.get('mode')}).append(
                                 $('<span data-property="subreddit">'),
-                                $('<span class="right" data-property="mode">')
+                                $('<span data-property="mode">'),
+                                $('<i class="action-edit icon-edit">'),
+                                $('<i class="action-remove icon-remove">')
                             )
                         );
-
-                        // Used by jquery ui sortable
-                        self.$el.attr('id', this.model.get('mode') + '#' + this.model.get('subreddit'));
 
                         var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                         self._modelBinder.bind(self.model, self.el, defaultBindings);
@@ -48,172 +47,18 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions'], 
                         return self;
                     },
                     events: {
-                        'click .sortable-item': 'onSelect'
+                        'click .io-ox-reddit-settings .action-edit': 'onEdit',
+                        'click .io-ox-reddit-settings .action-remove' : 'onDelete'
                     },
-                    onSelect: function () {
-                        this.$el.parent().find('div[selected="selected"]').attr('selected', null);
-                        this.$el.find('.sortable-item').attr('selected', 'selected');
-                    }
-                }),
-
-                PluginSettingsView = Backbone.View.extend({
-                    initialize: function (options) {
-                    },
-                    render: function () {
-                        this.$el.empty().append(
-                            $('<div>').append(
-                                $('<div class="section">').append(
-                                    $('<legend class="sectiontitle">').text(staticStrings.SUBREDDITS),
-                                    $('<div class="settings-detail-pane">').append(
-                                        $('<div class="listbox">'),
-                                        $('<div class="sectioncontent">').append(
-                                            $('<button class="btn" data-action="add" style="margin-right: 15px; ">').text(staticStrings.ADD),
-                                            $('<button class="btn" data-action="edit" style="margin-right: 15px; ">').text(staticStrings.EDIT),
-                                            $('<button class="btn" data-action="del" style="margin-right: 15px; ">').text(staticStrings.DELETE)
-                                        ),
-                                        $('<div class="settings sectiondelimiter">')
-                                    )
-                                )
-                            )
-                        );
-
-                        var that = this;
-
-                        function redraw() {
-                            var $listbox = that.$el.find('.listbox'),
-                                collection = new Backbone.Collection(subreddits);
-
-                            $listbox.empty();
-
-                            collection.each(function (item) {
-                                $listbox.append(new SubredditSelectView({ model: item }).render().el);
-                            });
-
-                            if (collection.length === 0) {
-                                $listbox.hide();
-                            } else {
-                                $listbox.show();
-                            }
-
-                            $listbox.sortable({
-                                axis: 'y',
-                                containment: 'parent',
-                                update: function (event, ui) {
-                                    subreddits = [];
-
-                                    _.each($(this).sortable('toArray'), function (value) {
-                                        var i = value.indexOf('#');
-                                        var mode = value.substring(0, i),
-                                            subreddit = value.substring(i + 1);
-
-                                        subreddits.push({subreddit: subreddit, mode: mode});
-                                    });
-
-                                    settings.set('subreddits', subreddits);
-                                    settings.save();
-
-                                    ox.trigger("refresh^", [true]);
-                                }
-                            });
-                        }
-
-                        redraw();
-
-                        this.on('redraw', redraw);
-
-                        return this;
-                    },
-                    events: {
-                        'click [data-action="add"]': 'onAdd',
-                        'click [data-action="edit"]': 'onEdit',
-                        'click [data-action="del"]': 'onDelete'
-                    },
-
-                    onAdd: function (args) {
+                    onEdit: function (pEvent) {
+                        console.log("On edit called for: ", $(pEvent.target).parent());
                         var dialog = new dialogs.ModalDialog({
                             easyOut: true,
                             async: true
                         });
 
-                        var $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'});
-                        var $mode = $('<select>')
-                            .append($('<option>').attr('value', 'hot').text(gt('hot')))
-                            .append($('<option>').attr('value', 'new').text(gt('new')));
-
-                        var $error = $('<div>').addClass('alert alert-error').hide();
-
-                        var that = this;
-
-                        dialog.header($("<h4>").text(gt('Add a Subreddit')))
-                            .append($subreddit)
-                            .append($mode)
-                            .append($error)
-                            .addButton('cancel', gt('Cancel'))
-                            .addButton('add', gt('Add'), null, {classes: 'btn-primary'})
-                            .show();
-
-                        dialog.on('add', function (e) {
-                            $error.hide();
-
-                            var subreddit = String($.trim($subreddit.val())),
-                                deferred = $.Deferred();
-
-                            // No dot and url does not end with tumblr.com? Append it!
-                            if (subreddit.match(/^r\//)) {
-                                subreddit = subreddit.substring(2);
-                            }
-
-                            // TODO Check if mode is OK
-                            if (subreddit.length === 0) {
-                                $error.text(gt('Please enter a subreddit.'));
-                                deferred.reject();
-                            } else {
-                                $.ajax({
-                                    url: 'http://www.reddit.com/r/' + subreddit + '/.json?jsonp=testcallback',
-                                    type: 'HEAD',
-                                    dataType: 'jsonp',
-                                    jsonp: false,
-                                    jsonpCallback: 'testcallback',
-                                    success: function () {
-                                        deferred.resolve();
-                                    },
-                                    error: function () {
-                                        $error.text(gt('Unknown error while checking subreddit.'));
-                                        deferred.reject();
-                                    }
-                                });
-                            }
-
-                            deferred.done(function () {
-                                subreddits.push({subreddit: subreddit, mode: $mode.val()});
-                                settings.set('subreddits', subreddits);
-                                settings.save();
-
-                                var extId = 'reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + $mode.val();
-                                ext.point("io.ox/portal/widget").enable(extId);
-
-                                require(['plugins/portal/reddit/register'], function (reddit) {
-                                    reddit.reload();
-                                    that.trigger('redraw');
-                                    ox.trigger("refresh^");
-                                    dialog.close();
-                                });
-                            });
-
-                            deferred.fail(function () {
-                                $error.show();
-                                dialog.idle();
-                            });
-                        });
-                    },
-                    onEdit: function (args) {
-                        var dialog = new dialogs.ModalDialog({
-                            easyOut: true,
-                            async: true
-                        });
-
-                        var oldSubreddit = this.$el.find('[selected]').data('subreddit'),
-                            oldMode = this.$el.find('[selected]').data('mode');
+                        var oldSubreddit = $(pEvent.target).parent(),
+                            oldMode = oldSubreddit.find('[data-property]').data('mode');
 
                         if (oldSubreddit) {
                             oldSubreddit = String(oldSubreddit);
@@ -341,6 +186,155 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions'], 
                     }
                 }),
 
+                PluginSettingsView = Backbone.View.extend({
+                    initialize: function (options) {
+                    },
+                    render: function () {
+                        this.$el.empty().append(
+                            $('<div>').append(
+                                $('<div class="section">').append(
+                                    $('<div class=""io-ox-portal-title>').text(staticStrings.SUBREDDITS),
+                                    $('<div class="settings-detail-pane io-ox-reddit-settings">').append(
+                                        $('<div class="listbox">'),
+                                        $('<div class="sectioncontent">').append(
+                                            $('<button class="btn" data-action="add" style="margin-right: 15px; ">').text(staticStrings.ADD),
+                                            $('<button class="btn" data-action="edit" style="margin-right: 15px; ">').text(staticStrings.EDIT),
+                                            $('<button class="btn" data-action="del" style="margin-right: 15px; ">').text(staticStrings.DELETE)
+                                        )
+                                    )
+                                )
+                            )
+                        );
+
+                        var that = this;
+
+                        function redraw() {
+                            var $listbox = that.$el.find('.listbox'),
+                                collection = new Backbone.Collection(subreddits);
+
+                            $listbox.empty();
+
+                            collection.each(function (item) {
+                                $listbox.append(new SubredditSelectView({ model: item }).render().el);
+                            });
+
+                            if (collection.length === 0) {
+                                $listbox.hide();
+                            } else {
+                                $listbox.show();
+                            }
+
+                            $listbox.sortable({
+                                axis: 'y',
+                                containment: 'parent',
+                                update: function (event, ui) {
+                                    subreddits = [];
+
+                                    _.each($(this).sortable('toArray'), function (value) {
+                                        var i = value.indexOf('#');
+                                        var mode = value.substring(0, i),
+                                            subreddit = value.substring(i + 1);
+
+                                        subreddits.push({subreddit: subreddit, mode: mode});
+                                    });
+
+                                    settings.set('subreddits', subreddits);
+                                    settings.save();
+
+                                    ox.trigger("refresh^", [true]);
+                                }
+                            });
+                        }
+
+                        redraw();
+
+                        this.on('redraw', redraw);
+
+                        return this;
+                    },
+                    events: {
+                        'click [data-action="add"]': 'onAdd'
+                    },
+
+                    onAdd: function (args) {
+                        var dialog = new dialogs.ModalDialog({
+                            easyOut: true,
+                            async: true
+                        });
+
+                        var $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'});
+                        var $mode = $('<select>')
+                            .append($('<option>').attr('value', 'hot').text(gt('hot')))
+                            .append($('<option>').attr('value', 'new').text(gt('new')));
+
+                        var $error = $('<div>').addClass('alert alert-error').hide();
+
+                        var that = this;
+
+                        dialog.header($("<h4>").text(gt('Add a Subreddit')))
+                            .append($subreddit)
+                            .append($mode)
+                            .append($error)
+                            .addButton('cancel', gt('Cancel'))
+                            .addButton('add', gt('Add'), null, {classes: 'btn-primary'})
+                            .show();
+
+                        dialog.on('add', function (e) {
+                            $error.hide();
+
+                            var subreddit = String($.trim($subreddit.val())),
+                                deferred = $.Deferred();
+
+                            // No dot and url does not end with tumblr.com? Append it!
+                            if (subreddit.match(/^r\//)) {
+                                subreddit = subreddit.substring(2);
+                            }
+
+                            // TODO Check if mode is OK
+                            if (subreddit.length === 0) {
+                                $error.text(gt('Please enter a subreddit.'));
+                                deferred.reject();
+                            } else {
+                                $.ajax({
+                                    url: 'http://www.reddit.com/r/' + subreddit + '/.json?jsonp=testcallback',
+                                    type: 'HEAD',
+                                    dataType: 'jsonp',
+                                    jsonp: false,
+                                    jsonpCallback: 'testcallback',
+                                    success: function () {
+                                        deferred.resolve();
+                                    },
+                                    error: function () {
+                                        $error.text(gt('Unknown error while checking subreddit.'));
+                                        deferred.reject();
+                                    }
+                                });
+                            }
+
+                            deferred.done(function () {
+                                subreddits.push({subreddit: subreddit, mode: $mode.val()});
+                                settings.set('subreddits', subreddits);
+                                settings.save();
+
+                                var extId = 'reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + $mode.val();
+                                ext.point("io.ox/portal/widget").enable(extId);
+
+                                require(['plugins/portal/reddit/register'], function (reddit) {
+                                    reddit.reload();
+                                    that.trigger('redraw');
+                                    ox.trigger("refresh^");
+                                    dialog.close();
+                                });
+                            });
+
+                            deferred.fail(function () {
+                                $error.show();
+                                dialog.idle();
+                            });
+                        });
+                    }
+                }),
+
                 removeSubReddit = function (subreddits, subreddit, mode) {
                     var newSubreddits = [];
                     _.each(subreddits, function (sub) {
@@ -386,7 +380,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions'], 
                         var self = this;
 
                         self.$el.empty().append(
-                            $('<div class="io-ox-tumblr-setting">')
+                            $('<div class="io-ox-tumblr-setting io-ox-settings-item">')
                             .attr({'data-url': this.model.get('url'),  'data-description': this.model.get('description')}).append(
                                 $('<span data-property="url">'),
                                 $('<i>').attr({'class': 'icon-edit', 'data-action': 'edit-feed', title: staticStrings.EDIT_FEED}),
@@ -541,14 +535,13 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions'], 
                         this.$el.empty().append(
                             $('<div>').append(
                                 $('<div class="section">').append(
-                                    $('<legend class="sectiontitle">').text(staticStrings.TUMBLRBLOGS),
+                                    $('<div class=""io-ox-portal-title>').text(staticStrings.TUMBLRBLOGS),
                                     $('<div class="settings-detail-pane">').append(
                                         $('<div class="io-ox-tumblr-settings">')
                                     ),
                                     $('<div class="sectioncontent">').append(
                                         $('<button class="btn" data-action="add" style="margin-right: 15px; ">').text(staticStrings.ADD)
-                                    ),
-                                    $('<div class="settings sectiondelimiter">')
+                                    )
                                 )
                             )
                         );
@@ -721,7 +714,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions'], 
 
                 var streams = settings.get('streams'),
                     staticStrings = {
-                        STREAMS:    gt('Streams'),
+                        STREAMS:    gt('Flickr streams'),
                         ADD:        gt('Add'),
                         EDIT:       gt('Edit'),
                         DELETE:     gt('Delete')
@@ -736,7 +729,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions'], 
                             var self = this;
 
                             self.$el.empty().append(
-                                $('<div class="io-ox-portal-flickr-setting">')
+                                $('<div class="io-ox-portal-flickr-setting io-ox-settings-item">')
                                 .attr({'data-q': this.model.get('q'), 'data-method': this.model.get('method'), 'data-description': this.model.get('description')}).append(
                                     $('<span data-property="q">'),
                                     $('<i class="icon-edit setting-action">'),
@@ -898,14 +891,13 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions'], 
                             this.$el.empty().append(
                                 $('<div>').append(
                                     $('<div class="section">').append(
-                                        $('<legend class="sectiontitle">').text(staticStrings.STREAMS),
+                                        $('<div class=""io-ox-portal-title>').text(staticStrings.STREAMS),
                                         $('<div class="settings-detail-pane">').append(
                                             $('<div class="io-ox-portal-flickr-settings">')
                                         ),
                                         $('<div class="sectioncontent">').append(
                                             $('<button class="btn" data-action="add" style="margin-right: 15px; ">').text(staticStrings.ADD)
-                                        ),
-                                        $('<div class="settings sectiondelimiter">')
+                                        )
                                     )
                                 )
                             );
@@ -1047,7 +1039,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions'], 
         id: 'portal-settings-rss',
         draw : function (data) {
             var that = this;
-            require(['settings!plugins/portal/rss', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'io.ox/messaging/accounts/api'],
+            require(['settings!io.ox/rss', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'io.ox/messaging/accounts/api'],
             function (settings, gt, dialogs, accountApi) {
                 var feedgroups = settings.get('groups'),
                     staticStrings = {
@@ -1059,7 +1051,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions'], 
                         DELETE_FEED: gt('Delete feed'),
                         DELETE_GROUP: gt('Delete group')
                     };
-                console.log("My feedgroups", feedgroups);
                 var migrateIfNecessary = function () {
                         if (!settings.get('needsMigration')) {
                             return;
@@ -1091,7 +1082,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions'], 
                                 id = 'rss-feedgroup-' + groupname.replace(/[^A-Za-z0-9]/g, '_');
 
                             self.$el.empty().append(
-                                $('<div>').attr({'class': 'io-ox-portal-rss-settings-feedgroup', id: id, 'data-groupname': groupname}).append(
+                                $('<div>').attr({'class': 'io-ox-portal-rss-settings-feedgroup io-ox-settings-item', id: id, 'data-groupname': groupname}).append(
                                     $('<strong>').text(groupname),
                                     $('<i>').attr({'class': 'icon-edit', 'data-action': 'edit-group', title: staticStrings.EDIT_GROUP}),
                                     $('<i>').attr({'class': 'icon-remove', 'data-action': 'del-group', title: staticStrings.DELETE_GROUP}),
@@ -1149,15 +1140,14 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions'], 
                             this.$el.empty().append(
                                 $('<div>').append(
                                     $('<div class="section">').append(
-                                        $('<legend class="sectiontitle">').text(staticStrings.RSS),
+                                        $('<div class=""io-ox-portal-title>').text(staticStrings.RSS),
                                         $('<div class="settings-detail-pane">').append(
                                             $('<div class="listbox">')
                                         ),
                                         $('<div class="sectioncontent">').append(
                                             $('<button class="btn" data-action="add-feed" style="margin-right: 15px; ">').text(staticStrings.ADD_FEED),
                                             $('<button class="btn" data-action="add-group" style="margin-right: 15px; ">').text(staticStrings.ADD_GROUP)
-                                        ),
-                                        $('<div class="settings sectiondelimiter"></div>')
+                                        )
                                     )
                                 )
                             );
@@ -1547,7 +1537,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions'], 
                         });
                         return newmembers;
                     };
-                console.log("My feedgroups", feedgroups);
                 $(that).append(new PluginSettingsView().render().el);
             }); //END: require
         } //END: draw

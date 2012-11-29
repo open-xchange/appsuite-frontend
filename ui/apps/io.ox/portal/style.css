@@ -256,6 +256,13 @@
     padding: 0 6px 0 @tSpace;
     overflow: hidden;
 }
+.io-ox-portal-title {
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    text-align: center;
+    padding-top: 6px;
+    font-family: @font-light;
+}
 .io-ox-portal-typeA .io-ox-portal-content :first-child.io-ox-portal-item {
     border: none;
 }
@@ -274,11 +281,7 @@
 .io-ox-portal-typeA .io-ox-portal-title {
     width: @tWidth;
     height: @tLine;
-    background: rgba(0, 0, 0, 0.3);
-    color: white;
-    text-align: center;
-    padding-top: 6px;
-    font-family: @font-light;
+
 }
 .io-ox-portal-typeA .io-ox-portal-actions {
     height: @tLine;
@@ -366,3 +369,14 @@
     background: #432;
 }
 */
+
+
+/************
+ * SETTINGS *
+ ************
+*/
+.io-ox-portal-setting {
+    border: 1px solid black;
+    margin: 1px 0 0 1px;
+    padding: 6px;
+}

@@ -58,8 +58,7 @@ define('io.ox/portal/settings/pane',
             require(['io.ox/settings/accounts/settings/extpoints'], function () { //remove once Cisco's and Vic's new module stuff is implemented
                 $('<h1>').text(gt('Portal Squares')).appendTo(that);
                 ext.point('io.ox/portal/settings/detail/tile').each(function (extension) {
-                    var $container = $('<div class="io-ox-portal-setting">').attr({id: extension.id}).appendTo(that);
-                    console.log("Found an extension: ", extension);
+                    var $container = $('<div class="io-ox-portal-setting">').attr({id: extension.id}).addClass('tile-color' + extension.colorIndex).appendTo(that);
                     extension.draw.apply($container, []);
                 });
             });

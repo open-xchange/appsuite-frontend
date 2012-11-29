@@ -176,6 +176,7 @@ define('io.ox/portal/main',
                 .append(
                     $('<h2 class="title">').text('\u00A0')
                 );
+
         }
     });
 
