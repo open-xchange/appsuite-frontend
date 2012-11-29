@@ -71,11 +71,11 @@ New office document -> New Office document (falls die Applikation gemeint ist)
 
 # Show more... -> Kontext?
 
-last
-first
-second
-third
-fourth -> Kontext?
+#last
+#first
+#second
+#third
+#fourth -> Kontext?
 
 Each %s Day -> day
 
@@ -97,12 +97,12 @@ On %s %s in %s -> Kommentar, durch was wird Variable ersetzt
 Shown as -> Kontext?
 Free -> Kontext?
 
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> days</"
-"a>. "
--> dieses Konstrukt kommt öfter vor. Ich habe im Deutschen die Satzstellung teilweise geändert. Glücklich bin ich damit aber nicht.
-"jeden 2 Tag" etc. klingt scheußlich, in allen Sprachen. Das gilt für alle diese Sätze. Ich kann sie auch alle raussuchen, wenn das hilft.
+#msgid ""
+#"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#"attribute=\"interval\">every <span class=\"number-control\">2</span> days</"
+#"a>. "
+#-> dieses Konstrukt kommt öfter vor. Ich habe im Deutschen die Satzstellung teilweise geändert. Glücklich bin ich damit aber nicht.
+#"jeden 2 Tag" etc. klingt scheußlich, in allen Sprachen. Das gilt für alle diese Sätze. Ich kann sie auch alle raussuchen, wenn das hilft.
 
 # sunday, monday etc. -> gehört jeweils groß Sunday, Monday..
 # eveery month -> every month
