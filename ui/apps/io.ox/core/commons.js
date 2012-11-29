@@ -232,6 +232,8 @@ define('io.ox/core/commons',
             grid.setAllRequest('search', function () {
                 var options = win.search.getOptions();
                 options.folder = grid.prop('folder');
+                options.sort = grid.prop('sort');
+                options.order = grid.prop('order');
                 return api.search(win.search.query, options);
             });
             // search: list request
