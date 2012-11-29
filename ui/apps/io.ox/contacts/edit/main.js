@@ -60,6 +60,8 @@ define('io.ox/contacts/edit/main',
                     // create model & view
 
                     model.factory.realm('edit').retain().get(data).done(function (contact) {
+                        var appTitle = (contact.get('display_name')) ? contact.attributes.display_name : util.getFullName(contact.toJSON());
+                        app.setTitle(appTitle);
                         app.contact = contact;
                         var editView = new view.ContactEditView({ model: contact });
                         container.append(editView.render().$el);
