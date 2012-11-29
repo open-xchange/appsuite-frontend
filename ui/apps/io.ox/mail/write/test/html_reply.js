@@ -47,7 +47,8 @@ define('io.ox/mail/write/test/html_reply',
         test: function (j) {
 
             j.describe('Reply email', function () {
-                var app = null, ed = null, form = null;
+
+                var app = null, ed = null, form = null, cid;
 
                 j.it('opens mailer', function () {
                     var loaded = new Done();
@@ -55,25 +56,22 @@ define('io.ox/mail/write/test/html_reply',
 
                     mailer.getApp().launch().done(function () {
                         app = this;
-
                         loaded.yep();
                         j.expect(app).toBeDefined();
                     });
-
                 });
 
                 // wait for mails to apear on the left side
                 j.waitsFor(function () {
-                    var mailItems = $('.leftside .mail');
-                    if (mailItems[0]) {
-                        return true;
-                    }
-                }, 'no mails there', TIMEOUT);
+                    var mailItems = $('.leftside .mail[data-obj-id]');
+                    return !!mailItems.length;
+                }, 'no mails there', TIMEOUT * 2);
 
                 j.it('select first mail', function () {
                     var firstMailItem = $('.leftside .mail').eq(0);
-                    console.log(firstMailItem);
-                    firstMailItem.trigger("click");
+                    cid = firstMailItem.attr('data-obj-id');
+                    console.log('geil', firstMailItem, cid);
+                    firstMailItem.trigger('click');
                 });
 
                 // wait for the actions links in the first mail
@@ -88,7 +86,6 @@ define('io.ox/mail/write/test/html_reply',
                     $('.rightside .io-ox-action-link[data-action=reply]').trigger("click");
                 });
 
-
                 // waits for recipent list in reply form
                 j.waitsFor(function () {
                     if ($('.recipient-list .io-ox-mail-write-contact').length === 1) {
@@ -100,22 +97,16 @@ define('io.ox/mail/write/test/html_reply',
                     $('.recipient-list .io-ox-mail-write-contact .remove').trigger('click');
                 });
 
-
                 j.it('add recipent', function () {
                     var loaded = new Done();
                     j.waitsFor(loaded, 'adding recipent', TIMEOUT);
-
                     var myself = ox.user_id;
-                    userAPI.get({ id: myself })
-                    .done(function (myself) {
+                    userAPI.get({ id: myself }).done(function (myself) {
                         loaded.yep();
-
                         $('input[data-type=to]').val('"' + myself.display_name + '" ' + myself.email1)
                         .focus()
                         .trigger($.Event('keyup', { which: 13 }));
-
                     });
-
                 });
 
                 // check for recipent list had one entry
@@ -132,32 +123,17 @@ define('io.ox/mail/write/test/html_reply',
                     j.expect(subject).toEqual('Re:');
                 });
 
-
-                j.it('change editor to html format', function () {
-                    // checks for editor
-                    j.waitsFor(function () {
-                        var editor = $('.editor-inner-container .text-editor');
-                        if (editor[0]) {
-                            return true;
-                        }
-                    }, 'no editor there', TIMEOUT);
-
-                    $(".change-format a:contains('HTML')").trigger('click');
-                });
-
-
-                j.it('send the reply', function () {
-
-                    // checks for editor
-                    j.waitsFor(function () {
-                        var editor = $('.editor-inner-container .mceEditor');
-                        if (editor[0]) {
-                            return true;
-                        }
-                    }, 'no editor there', TIMEOUT);
-
-
-                    $('.sendbutton-wrapper .btn-primary:first').trigger('click');
+                j.it('closes compose dialog', function () {
+                    // get app via cid
+                    console.log('CLOSE', cid);
+                    app = ox.ui.App.getByCid('io.ox/mail:reply.' + cid);
+                    console.log('APP', app);
+                    if (app) {
+                        console.log('YEAH', app);
+                        app.dirty(false).quit();
+                        j.expect(app.getEditor).toBeUndefined();
+                    }
+                    app = ed = form = null;
                 });
             });
         }

@@ -18,10 +18,7 @@ define('io.ox/mail/write/test',
      'io.ox/core/extensions',
      'io.ox/mail/write/test/html_send',
      'io.ox/mail/write/test/text_send',
-     'io.ox/mail/write/test/html_reply',
-     'io.ox/mail/write/test/text_reply',
-     'io.ox/mail/write/test/html_forward',
-     'io.ox/mail/write/test/text_forward'], function (writer, mailAPI, accountAPI, ext) {
+     'io.ox/mail/write/test/html_reply'], function (writer, mailAPI, accountAPI, ext) {
 
     'use strict';
 

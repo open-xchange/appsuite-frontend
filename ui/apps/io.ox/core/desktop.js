@@ -427,6 +427,12 @@ define("io.ox/core/desktop",
             });
         },
 
+        getByCid: function (cid) {
+            return ox.ui.apps.filter(function (app) {
+                return app.cid === cid;
+            });
+        },
+
         reuse: function (cid) {
             var app = ox.ui.apps.find(function (m) { return m.cid === cid; }), win;
             if (app) {

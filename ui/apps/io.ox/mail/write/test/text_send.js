@@ -290,28 +290,25 @@ define('io.ox/mail/write/test/text_send',
                         j.waitsFor(done, 'mail being fetched', TIMEOUT);
                         mailAPI.get({ folder: split[0], id: split[1] })
                             .done(function (sent) {
-                                sent.from[0][0] = '"' + sent.from[0][0] + '"';
                                 sent.to[0][0] = '"' + sent.to[0][0] + '"';
                                 done.yep();
                                 j.expect(
-                                        _.isEqual(sent.subject, data.subject) &&
-                                        _.isEqual(sent.from, data.from) &&
-                                        _.isEqual(sent.to, data.to) &&
-                                        _.isEqual(sent.cc, data.cc) &&
-                                        _.isEqual(sent.bcc, data.bcc) &&
-                                        _.isEqual(sent.priority, data.priority) &&
-                                        _.isEqual(sent.disp_notification_to || 0, data.disp_notification_to || 0) &&
-                                        _.isEqual(sent.vcard || 0, data.vcard || 0)
-                                    )
-                                    .toEqual(true);
+                                    _.isEqual(sent.subject, data.subject) &&
+                                    _.isEqual(sent.from, data.from) &&
+                                    _.isEqual(sent.to, data.to) &&
+                                    _.isEqual(sent.cc, data.cc) &&
+                                    _.isEqual(sent.bcc, data.bcc) &&
+                                    _.isEqual(sent.priority, data.priority) &&
+                                    _.isEqual(sent.vcard || 0, data.vcard || 0)
+                                )
+                                .toEqual(true);
                             });
                     });
                 }
 
                 j.it('closes compose dialog', function () {
                     // mark app as clean so no save as draft question will pop up
-                    app.markClean();
-                    app.quit();
+                    app.dirty(false).quit();
                     j.expect(app.getEditor).toBeUndefined();
                     app = ed = form = null;
                 });
