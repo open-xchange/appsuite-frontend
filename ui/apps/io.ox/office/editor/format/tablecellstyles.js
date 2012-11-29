@@ -85,6 +85,26 @@ define('io.ox/office/editor/format/tablecellstyles',
                 format: function (element, border) {
                     element.css('border-bottom', this.getCssBorder(border));
                 }
+            },
+
+            /**
+             * Inner horizontal table cell borders, used in table style sheets
+             * to format inner borders of specific table areas (first/last
+             * column, inner vertical bands, ...).
+             */
+            borderInsideHor: {
+                def: NO_BORDER,
+                scope: 'style'
+            },
+
+            /**
+             * Inner vertical table cell borders, used in table style sheets to
+             * format inner borders of specific table areas (first/last row,
+             * inner horizontal bands, ...).
+             */
+            borderInsideVert: {
+                def: NO_BORDER,
+                scope: 'style'
             }
 
         },
@@ -114,9 +134,34 @@ define('io.ox/office/editor/format/tablecellstyles',
      */
     function TableCellStyles(rootNode, documentStyles) {
 
+        /**
+         * Will be called for every table cell element whose attributes have
+         * been changed. Reformats the table cell according to the passed
+         * attributes.
+         *
+         * @param {jQuery} cell
+         *  The table cell element whose table attributes have been changed, as
+         *  jQuery object.
+         *
+         * @param {Object} mergedAttributes
+         *  A map of attribute value maps (name/value pairs), keyed by
+         *  attribute family, containing the effective attribute values merged
+         *  from style sheets and explicit attributes.
+         */
+        function updateTableCellFormatting(cell, mergedAttributes) {
+
+            var // the paragraph style sheet container
+                paragraphStyles = documentStyles.getStyleSheets('paragraph');
+
+            // update all paragraphs in the table cell
+            Utils.iterateSelectedDescendantNodes(DOM.getCellContentNode(cell), DOM.PARAGRAPH_NODE_SELECTOR, function (paragraph) {
+                paragraphStyles.updateElementFormatting(paragraph);
+            }, undefined, { children: true });
+        }
+
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles);
+        StyleSheets.call(this, documentStyles, { updateHandler: updateTableCellFormatting });
 
     } // class TableCellStyles
 

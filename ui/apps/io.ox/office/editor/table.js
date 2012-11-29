@@ -40,8 +40,8 @@ define('io.ox/office/editor/table',
      * @param {Number[]} tablePos
      *  The logical position of the table element
      *
-     * @returns {[]}
-     *  Array of grid widths of the table in 1/100 mm
+     * @returns {Number[]}
+     *  Array of grid widths of the table as relative values.
      */
     Table.getTableGrid = function (startnode, tablePos) {
 
@@ -140,51 +140,80 @@ define('io.ox/office/editor/table',
     };
 
     /**
+     * Calculates the grid row range of the specified cell.
+     *
+     * @param {HTMLTableCellElement|jQuery} cellNode
+     *  The table cell element. If this object is a jQuery collection, uses the
+     *  first node it contains.
+     *
+     * @returns {Object}
+     *  An object with 'start' and 'end' integer attributes representing the
+     *  grid row range of the selected cell (zero-based, closed range). If
+     *  the cell has a height of one grid row, start and end will be equal.
+     */
+    Table.getGridRowRangeOfCell = function (cellNode) {
+
+        var // the parent row node of the cell
+            rowNode = $(cellNode).parent(),
+            // the start grid row index of the cell
+            start = rowNode.parent().children('tr').index(rowNode);
+
+        // find end grid row index of the cell, and return the result
+        return {
+            start: start,
+            end: start + Utils.getElementAttributeAsInteger(cellNode, 'rowspan', 1) - 1
+        };
+    };
+
+    /**
+     * Calculates the grid column range of the specified cell.
+     *
+     * @param {HTMLTableCellElement|jQuery} cellNode
+     *  The table cell element. If this object is a jQuery collection, uses the
+     *  first node it contains.
+     *
+     * @returns {Object}
+     *  An object with 'start' and 'end' integer attributes representing the
+     *  grid column range of the selected cell (zero-based, closed range). If
+     *  the cell has a width of one grid column, start and end will be equal.
+     */
+    Table.getGridColumnRangeOfCell = function (cellNode) {
+
+        var // the start grid column index of the cell
+            start = 0;
+
+        // find start index of the cell by adding the colspans of all previous cells
+        $(cellNode).prevAll('td').each(function () {
+            start += Utils.getElementAttributeAsInteger(this, 'colspan', 1);
+        });
+
+        // find end grid column index of the cell, and return the result
+        return {
+            start: start,
+            end: start + Utils.getElementAttributeAsInteger(cellNode, 'colspan', 1) - 1
+        };
+    };
+
+    /**
      * Calculating the grid position of a selected cell. The attribute
      * 'colspan' of all previous cells in the row have to be added.
      * The return value is 0-based. The first cell in a row always has
      * grid position 0.
      *
-     * @param {Number[]} rowNode
-     *  The dom position of the row element
+     * @param {HTMLTableRowElement|jQuery} rowNode
+     *  The table row element. If this object is a jQuery collection, uses the
+     *  first node it contains.
      *
-     * @param {Number} cellPosition
-     *  The cell number inside the row
+     * @param {Number} cellIndex
+     *  The DOM child index of the cell inside the row node.
      *
-     * @returns {Object} gridPosition
-     *  An array with start and end number representing the grid position
-     *  of the selected cell. If the cell has a width of one grid position,
-     *  start and end are equal.
+     * @returns {Object}
+     *  An object with 'start' and 'end' integer attributes representing the
+     *  grid range of the selected cell (closed range). If the cell has a width
+     *  of one grid position, start and end will be equal.
      */
-    Table.getGridPositionFromCellPosition = function (rowNode, cellPosition) {
-
-        var gridPosition = 0,
-            endGridPosition = 0,
-            startGridPosition = 0,
-            allCells = $(rowNode).children();
-
-        allCells.each(function (index) {
-
-            if (index <= cellPosition) {
-                var colSpan = Utils.getElementAttributeAsInteger(this, 'colspan', 1);
-
-                gridPosition += colSpan;
-
-                if (index === cellPosition) {  // last run, the specified cell
-
-                    endGridPosition = gridPosition;  // the end grid position of the selected cell
-                    startGridPosition = gridPosition - colSpan + 1;  // the start grid position of the selected cell
-
-                    endGridPosition--;  // grid position are 0-based
-                    startGridPosition--;   // grid position are 0-based
-                }
-
-            } else {
-                return false; // leaving the each-loop
-            }
-        });
-
-        return {start: startGridPosition, end: endGridPosition};
+    Table.getGridPositionFromCellPosition = function (rowNode, cellIndex) {
+        return Table.getGridColumnRangeOfCell($(rowNode).children('td').eq(cellIndex));
     };
 
     /**

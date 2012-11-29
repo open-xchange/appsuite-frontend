@@ -127,7 +127,11 @@ define('io.ox/office/editor/format/tablestyles',
          * @param {Object} styleAttributes
          *  The complete 'attributes' object of a table style sheet.
          *
-         * @param {jQuery} [cell]
+         * @param {jQuery} tableNode
+         *  The DOM table node referring to a table style sheet, as jQuery
+         *  object.
+         *
+         * @param {jQuery} [cellNode]
          *  The DOM cell node corresponding to the passed attribute family that
          *  has initially requested the formatting attributes of a table style
          *  sheet, as jQuery object.
@@ -137,66 +141,129 @@ define('io.ox/office/editor/format/tablestyles',
          *  attributes object, as map of attribute value maps (name/value
          *  pairs), keyed by attribute family.
          */
-        function resolveTableStyleAttributes(styleAttributes, table, cell) {
+        function resolveTableStyleAttributes(styleAttributes, tableNode, cellNode) {
 
-            var // information about the cell position
-                cellInfo = $(cell).is('td') ? DOM.getCellPositionInfo(cell) : null,
-                // the explicit table attributes
-                explicitTableAttributes = StyleSheets.getExplicitAttributes(table, 'table'),
-                // the active conditional keys, according to cell position and the 'exclude' table attribute
-                activeConditionalKeys = ['wholeTable'],
+            var // table size
+                lastTableRow = DOM.getTableRows(tableNode).length - 1,
+                lastTableCol = tableNode.find('> colgroup > col').length - 1,
+
+                // the grid row range covered by the cell
+                rowRange = (cellNode.length > 0) ? Table.getGridRowRangeOfCell(cellNode) : null,
+                isFirstRow = rowRange && (rowRange.start === 0),
+                isLastRow = rowRange && (rowRange.end === lastTableRow),
+
+                // the grid grid column range covered by the cell
+                colRange = (cellNode.length > 0) ? Table.getGridColumnRangeOfCell(cellNode) : null,
+                isFirstCol = colRange && (colRange.start === 0),
+                isLastCol = colRange && (colRange.end === lastTableCol),
+
+                // the excluded conditional keys
+                excludedConditionalKeys = StyleSheets.getExplicitAttributes(tableNode, 'table').exclude,
+                firstRowIncluded = isConditionalKeyIncluded('firstRow'),
+                lastRowIncluded = isConditionalKeyIncluded('lastRow'),
+                firstColIncluded = isConditionalKeyIncluded('firstCol'),
+                lastColIncluded = isConditionalKeyIncluded('lastCol'),
+
+                // conditional key of the inner horizontal/vertical bands, according to cell position
+                bandKey = null,
+
                 // the extracted style attributes according to the position of the table cell
                 attributes = {};
 
-            // pushes the passed conditional key to the array, if it is active
-            function pushConditionalKey(conditionalKey, active) {
-                if (active) { activeConditionalKeys.push(conditionalKey); }
+            // whether the passed conditional key is included according to the 'exclude' attribute
+            function isConditionalKeyIncluded(conditionalKey) {
+                return !_.isArray(excludedConditionalKeys) || !_(excludedConditionalKeys).contains(conditionalKey);
             }
 
-            // copies a global table border attribute (either outer or inner) to a cell attribute
-            function updateCellBorder(borderName, innerBorderName, isOuterCell) {
-                var tableBorder = attributes.table[isOuterCell ? borderName : innerBorderName];
-                if (_.isObject(tableBorder) && !(borderName in attributes.cell)) {
-                    attributes.cell[borderName] = tableBorder;
+            // copies a border attribute (table or cell) to an outer cell border attribute
+            function updateOuterCellBorder(sourceAttributes, outerBorderName, innerBorderName, isOuterBorder) {
+
+                var // table and cell attributes (either may be missing)
+                    tableAttributes = _.isObject(sourceAttributes.table) ? sourceAttributes.table : {},
+                    cellAttributes = _.isObject(sourceAttributes.cell) ? sourceAttributes.cell : {},
+                    // the source border attribute value
+                    border = null;
+
+                if (isOuterBorder) {
+                    // copy outer table border to cell border if border is missing in cell attributes
+                    border = _.isObject(cellAttributes[outerBorderName]) ? null : tableAttributes[outerBorderName];
+                } else {
+                    // copy inner table or cell border (cell border wins) to outer cell border
+                    border = _.isObject(cellAttributes[innerBorderName]) ? cellAttributes[innerBorderName] : tableAttributes[innerBorderName];
+                }
+
+                // insert existing border to the specified outer cell border
+                if (_.isObject(border)) {
+                    (attributes.cell || (attributes.cell = {}))[outerBorderName] = border;
                 }
             }
 
-            // get conditional keys that match the position of the passed cell
-            if (cellInfo) {
-                pushConditionalKey('firstRow',      cellInfo.firstRow);
-                pushConditionalKey('lastRow',       cellInfo.lastRow);
-                pushConditionalKey('firstCol',      cellInfo.firstCol);
-                pushConditionalKey('lastCol',       cellInfo.lastCol);
-                pushConditionalKey('band1Hor',      !cellInfo.firstRow && !cellInfo.lastRow && (cellInfo.rowIndex % 2 !== 0)); // first row band *after* the header row
-                pushConditionalKey('band2Hor',      !cellInfo.firstRow && !cellInfo.lastRow && (cellInfo.rowIndex % 2 === 0));
-                pushConditionalKey('band1Vert',     !cellInfo.firstCol && !cellInfo.lastCol && (cellInfo.colIndex % 2 !== 0)); // first column band *after* the left column
-                pushConditionalKey('band2Vert',     !cellInfo.firstCol && !cellInfo.lastCol && (cellInfo.colIndex % 2 === 0));
-                pushConditionalKey('northEastCell', cellInfo.firstRow && cellInfo.lastCol);
-                pushConditionalKey('northWestCell', cellInfo.firstRow && cellInfo.firstCol);
-                pushConditionalKey('southEastCell', cellInfo.lastRow && cellInfo.lastCol);
-                pushConditionalKey('southWestCell', cellInfo.lastRow && cellInfo.firstCol);
-            }
+            // merges the specified conditional attributes into the 'attributes' object
+            function mergeConditionalAttributes(conditionalKey, isHorizontalBand, isVerticalBand) {
 
-            // remove conditional keys excluded by the table using the 'exclude' attribute
-            if (_.isArray(explicitTableAttributes.exclude)) {
-                activeConditionalKeys = _(activeConditionalKeys).without(explicitTableAttributes.exclude);
-            }
+                var // the attributes at the passed conditional key
+                    conditionalAttributes = styleAttributes[conditionalKey];
 
-            // collect attributes for all remaining active conditional keys
-            _(activeConditionalKeys).each(function (conditionalKey) {
-                if (_.isObject(styleAttributes[conditionalKey])) {
-                    StyleSheets.extendAttributes(attributes, styleAttributes[conditionalKey]);
+                if (_.isObject(conditionalAttributes)) {
+
+                    // copy all attributes from the style sheet to the result object
+                    StyleSheets.extendAttributes(attributes, conditionalAttributes);
+
+                    // copy inner borders to outer cell borders, if cell is located inside the current table area
+                    updateOuterCellBorder(conditionalAttributes, 'borderTop', 'borderInsideHor', !isHorizontalBand || isFirstRow);
+                    updateOuterCellBorder(conditionalAttributes, 'borderBottom', 'borderInsideHor', !isHorizontalBand || isLastRow);
+                    updateOuterCellBorder(conditionalAttributes, 'borderLeft', 'borderInsideVert', !isVerticalBand || isFirstCol);
+                    updateOuterCellBorder(conditionalAttributes, 'borderRight', 'borderInsideVert', !isVerticalBand || isLastCol);
                 }
-            });
+            }
 
-            // copy global table borders to cell attributes according to the current cell position
-            if (cellInfo && _.isObject(attributes.table)) {
-                attributes.cell = attributes.cell || {};
-                updateCellBorder('borderTop', 'borderInsideHor', cellInfo.firstRow);
-                updateCellBorder('borderBottom', 'borderInsideHor', cellInfo.lastRow);
-                updateCellBorder('borderLeft', 'borderInsideVert', cellInfo.firstCol);
-                updateCellBorder('borderRight', 'borderInsideVert', cellInfo.lastCol);
-                if (_.isEmpty(attributes.cell)) { delete attributes.cell; }
+            // wholeTable: always
+            mergeConditionalAttributes('wholeTable', true, true);
+
+            // inner horizontal bands
+            if (rowRange && !(firstRowIncluded && isFirstRow) && !(lastRowIncluded && isLastRow)) {
+                // swap meaning of odd/even if first row is active
+                bandKey = ((rowRange.start % 2) === (firstRowIncluded ? 1 : 0)) ? 'band1Hor' : 'band2Hor';
+                if (isConditionalKeyIncluded(bandKey)) {
+                    mergeConditionalAttributes(bandKey, true, false);
+                }
+            }
+
+            // inner vertical bands
+            if (colRange && !(firstColIncluded && isFirstCol) && !(lastColIncluded && isLastCol)) {
+                // swap meaning of odd/even if first column is active
+                bandKey = ((colRange.start % 2) === (firstColIncluded ? 1 : 0)) ? 'band1Vert' : 'band2Vert';
+                if (isConditionalKeyIncluded(bandKey)) {
+                    mergeConditionalAttributes(bandKey, false, true);
+                }
+            }
+
+            // cell inside first/last row/column
+            if (firstColIncluded && isFirstCol) {
+                mergeConditionalAttributes('firstCol', false, true);
+            }
+            if (lastColIncluded && isLastCol) {
+                mergeConditionalAttributes('lastCol', false, true);
+            }
+            if (firstRowIncluded && isFirstRow) {
+                mergeConditionalAttributes('firstRow', true, false);
+            }
+            if (lastRowIncluded && isLastRow) {
+                mergeConditionalAttributes('lastRow', true, false);
+            }
+
+            // single corner cells (only if inside active first/last row AND column areas)
+            if (firstRowIncluded && firstColIncluded && isFirstRow && isFirstCol && isConditionalKeyIncluded('northWestCell')) {
+                mergeConditionalAttributes('northWestCell', false, false);
+            }
+            if (firstRowIncluded && lastColIncluded && isFirstRow && isLastCol && isConditionalKeyIncluded('northEastCell')) {
+                mergeConditionalAttributes('northEastCell', false, false);
+            }
+            if (lastRowIncluded && firstColIncluded && isLastRow && isFirstCol && isConditionalKeyIncluded('southWestCell')) {
+                mergeConditionalAttributes('southWestCell', false, false);
+            }
+            if (lastRowIncluded && lastColIncluded && isLastRow && isLastCol && isConditionalKeyIncluded('southEastCell')) {
+                mergeConditionalAttributes('southEastCell', false, false);
             }
 
             return attributes;

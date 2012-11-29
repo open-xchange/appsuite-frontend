@@ -642,53 +642,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return $(node).is(DOM.RESIZE_NODE_SELECTOR);
     };
 
-    /**
-     * Returns an object with information about the position of the passed
-     * table cell in its containing table.
-     *
-     * @param {HTMLElement|jQuery} cell
-     *  The cell node whose position inside its table will be investigated. If
-     *  this object is a jQuery collection, uses the first node it contains.
-     *
-     * @returns {Object}
-     *  An object with information about the passed cell. Will contain the
-     *  following attributes:
-     *  - {Integer} rowIndex
-     *      The zero-based index of the row the passed cell is located in.
-     *  - {Boolean} firstRow
-     *      Whether the cell is located in the first row of the table.
-     *  - {Boolean} lastRow
-     *      Whether the cell is located in the last row of the table.
-     *  - {Integer} colIndex
-     *      The zero-based index of the column the passed cell is located in.
-     *  - {Boolean} firstCol
-     *      Whether the cell is located in the first column of the table.
-     *  - {Boolean} lastCol
-     *      Whether the cell is located in the last column of the table.
-     */
-    DOM.getCellPositionInfo = function (cell) {
-
-        var // the row containing the passed cell
-            row = $(cell).parent(),
-
-            // the collection of all rows in the table, and the index of the own row
-            rowCollection = row.parent().children('tr'),
-            rowIndex = rowCollection.index(row),
-
-            // the collection of all cells in the current row, and the column index of the cell
-            cellCollection = row.children('td'),
-            colIndex = cellCollection.index(cell);
-
-        return {
-            rowIndex: rowIndex,
-            firstRow: rowIndex === 0,
-            lastRow: rowIndex === rowCollection.length - 1,
-            colIndex: colIndex,
-            firstCol: colIndex === 0,
-            lastCol: colIndex === cellCollection.length - 1
-        };
-    };
-
     // text spans, text nodes, text components ================================
 
     // text spans -------------------------------------------------------------
