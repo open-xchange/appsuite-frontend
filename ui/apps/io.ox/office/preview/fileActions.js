@@ -25,22 +25,21 @@ define('io.ox/office/preview/fileActions',
 
         POINT = 'io.ox/files';
 
-    new Action('io.ox/files/actions/office/view', {
-        requires: function (e) {
-            return e.collection.has('one') && /\.(doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg)$/i.test(e.context.data.filename);
+    new Action('io.ox/files/actions/open', {
+        id: 'officepreview',
+        // we just need to be called before 'default'
+        before: 'default',
+        // pick items you want to take care of (actually this function is called by underscore's "filter")
+        filter: function (obj) {
+            return (/\.(doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg)$/i.test(obj.filename));
         },
         action: function (baton) {
-            ox.launch('io.ox/office/preview/main', { action: 'load', file: baton.data });
+            if ((/\.(doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg)$/i.test(baton.data.filename))) {
+                // We are always called by the action processing although our filter
+                // reported that we cannot process the file. Just check again to prevent
+                // strange effects.
+                ox.launch('io.ox/office/preview/main', { action: 'load', file: baton.data });
+            }
         }
     });
-
-    // INLINE
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: "officepreview",
-        index: 65,
-        prio: 'hi',
-        label: gt("View"),
-        ref: "io.ox/files/actions/office/view"
-    }));
 });
