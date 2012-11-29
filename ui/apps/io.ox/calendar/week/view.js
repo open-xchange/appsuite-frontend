@@ -202,7 +202,7 @@ define('io.ox/calendar/week/view',
             if (cT.hasClass('appointment') && !this.lasso) {
                 var self = this,
                     obj = _.cid($(e.currentTarget).data('cid') + '');
-                if (!cT.hasClass('current')) {
+                if (!cT.hasClass('current') && !cT.hasClass('private')) {
                     self.trigger('showAppointment', e, obj);
                     self.$el.find('.appointment')
                         .removeClass('current opac')
@@ -1255,12 +1255,18 @@ define('io.ox/calendar/week/view',
         draw: function (baton) {
             var a = baton.model,
                 hash = util.getConfirmations(a.attributes),
-                conf = hash[myself] || { status: 1, comment: "" };
-            this.addClass(
-                    util.getShownAsClass(a.attributes) +
+                conf = hash[myself] || { status: 1, comment: "" },
+                classes = '';
+
+            if (a.get('private_flag') && myself !== a.get('created_by')) {
+                classes = 'private';
+            } else {
+                classes = util.getShownAsClass(a.attributes) +
                     ' ' + util.getConfirmationClass(conf.status) +
-                    (folder.can('write', baton.folder, a.attributes) ? ' modify' : '')
-                )
+                    (folder.can('write', baton.folder, a.attributes) ? ' modify' : '');
+            }
+
+            this.addClass(classes)
                 .append(
                     $('<div>')
                     .addClass('appointment-content')

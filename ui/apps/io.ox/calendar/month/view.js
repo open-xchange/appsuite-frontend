@@ -51,10 +51,12 @@ define('io.ox/calendar/month/view',
 
         onClickAppointment: function (e) {
             var cid = $(e.currentTarget).data('cid'),
-                el = $('[data-cid="' + cid + '"]:visible');
-            $('.appointment').removeClass('opac').not(el).addClass('opac');
-            el.add('.appointment.current').toggleClass('current');
-            this.trigger('showAppoinment', e, _.cid(cid + ''));
+                el = $('[data-cid="' + cid + '"]', this.$el);
+            if (!el.hasClass('private')) {
+                $('.appointment').removeClass('opac').not(el).addClass('opac');
+                el.add('.appointment.current').toggleClass('current');
+                this.trigger('showAppoinment', e, _.cid(cid + ''));
+            }
         },
 
         onCreateAppointment: function (e) {
@@ -258,12 +260,18 @@ define('io.ox/calendar/month/view',
         draw: function (baton) {
             var a = baton.model,
                 hash = util.getConfirmations(a.attributes),
-                conf = hash[myself] || { status: 1, comment: "" };
-            this.addClass(
-                    util.getShownAsClass(a.attributes) +
+                conf = hash[myself] || { status: 1, comment: "" },
+                classes = '';
+
+            if (a.get('private_flag') && myself !== a.get('created_by')) {
+                classes = 'private';
+            } else {
+                classes = util.getShownAsClass(a.attributes) +
                     ' ' + util.getConfirmationClass(conf.status) +
-                    (folder.can('write', baton.folder, a.attributes) ? ' modify' : '')
-                )
+                    (folder.can('write', baton.folder, a.attributes) ? ' modify' : '');
+            }
+
+            this.addClass(classes)
                 .append(
                     $('<div>')
                     .addClass('appointment-content')

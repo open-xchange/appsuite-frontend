@@ -245,6 +245,7 @@
     @appointment-temporary: #FFBB00; /* yellow */ 
     @appointment-absent: #913F3F; /* red */ 
     @appointment-free: #8EB360; /* green */ 
+    @appointment-private: #ccc; /* grey */
     
     @appointment-unconfirmed-alpha: 0.4;
     @appointment-declined-alpha: 0.1;
@@ -257,6 +258,11 @@
         margin-right: 3px;  
     }
     
+    .appointment.private {
+        cursor: normal;
+        background-color: @appointment-private;
+    }
+
     .appointment.reserved {
         background-color: @appointment-reserved;
     }
