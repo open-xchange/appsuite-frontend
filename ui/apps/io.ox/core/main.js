@@ -260,17 +260,14 @@ define("io.ox/core/main",
             id: 'fullscreen',
             index: 200,
             draw: function () {
-                this.append(
-                    $('<li>').append(
-                        $('<a href="#" data-action="fullscreen">').text(gt('Fullscreen'))
-                    )
-                    .on('click', function () {
-                        // Maximize
-                        if (BigScreen.enabled) {
-                            BigScreen.toggle();
-                        }
-                    })
-                );
+                if (BigScreen.enabled) {
+                    this.append(
+                        $('<li>').append(
+                            $('<a href="#" data-action="fullscreen">').text(gt('Fullscreen'))
+                        )
+                        .on('click', function () { BigScreen.toggle(); })
+                    );
+                }
             }
         });
 
