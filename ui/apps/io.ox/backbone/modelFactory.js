@@ -68,7 +68,7 @@ define("io.ox/backbone/modelFactory",
                 var c = currentAttributes[key];
                 var different = false;
 
-                if (self.touchedAttributes[key]) {
+                if (self.touchedAttributes && self.touchedAttributes[key]) {
                     retval[key] = c;
                 } else if (o !== c) {
                     if (_.isArray(o) && _.isArray(c)) {
