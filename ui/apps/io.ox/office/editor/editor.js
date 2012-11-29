@@ -2227,7 +2227,7 @@ define('io.ox/office/editor/editor',
         function insertHyperlinkPopup() {
             var hyperlinkPopup = $('<div>', { contenteditable: false }).addClass('hyperlink-popup').css({display: 'none'})
                 .append(
-                    $('<a>').attr({ href: '', rel: 'noreferrer', target: '_blank' }),
+                    $('<a>').addClass('textwrap').attr({ href: '', rel: 'noreferrer', target: '_blank' }),
                     $('<span>').text(' | '),
                     $('<span>').addClass('link').text(gt('Edit')).click(function () { self.insertHyperlink(); }),
                     $('<span>').text(' | '),
@@ -2285,7 +2285,9 @@ define('io.ox/office/editor/editor',
                                     width = hyperlinkPopup.width();
                                     if ((left + width) > parentWidth) {
                                         left -= (((left + width) - parentWidth) + parentLeft);
-                                        hyperlinkPopup.css({left: left});
+                                        left = Math.max(0, left);
+                                        width = Math.min(width, parentWidth);
+                                        hyperlinkPopup.css({left: left, width: width});
                                     }
                                     if (pos === startEndPos.start || result.beforeHyperlink) {
                                         // special case: at the start of a hyperlink we want to

@@ -338,6 +338,10 @@
         padding: 10px 20px;
         background-color: white;
 
+        a.textwrap {
+            word-wrap: break-word;
+        }
+
         span.link {
             color: #08C;
 
