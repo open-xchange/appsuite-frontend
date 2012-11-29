@@ -43,7 +43,7 @@ define("io.ox/core/test/cacheStorage",
         index: 100,
         test: function (j) {
 
-            _([simple, localstorage, indexeddb]).each(function (testStorage) {
+            _([simple, localstorage/*, indexeddb*/]).each(function (testStorage) {
 
                 j.describe("Caching Storagelayer: " + testStorage.getStorageLayerName(), function () {
 
@@ -66,7 +66,6 @@ define("io.ox/core/test/cacheStorage",
                         });
                     });
 
-
                     j.it('check for empty cache', function () {
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not get keys', TIMEOUT);
@@ -79,7 +78,6 @@ define("io.ox/core/test/cacheStorage",
                             j.expect(e).not.toBeDefined();
                         });
                     });
-
 
                     j.it('get a no existent cache key ', function () {
                         var loaded = new Done();
@@ -94,7 +92,6 @@ define("io.ox/core/test/cacheStorage",
                         });
                     });
 
-
                     j.it('set a cache key ', function () {
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not set key', TIMEOUT);
@@ -107,7 +104,6 @@ define("io.ox/core/test/cacheStorage",
                             j.expect(e).not.toBeDefined();
                         });
                     });
-
 
                     j.it('get a cache key ', function () {
                         var loaded = new Done();
@@ -122,7 +118,6 @@ define("io.ox/core/test/cacheStorage",
                         });
                     });
 
-
                     j.it('get all keys ', function () {
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not get keys', TIMEOUT);
@@ -135,7 +130,6 @@ define("io.ox/core/test/cacheStorage",
                             j.expect(e).not.toBeDefined();
                         });
                     });
-
 
                     j.it('check key existence ', function () {
                         var loaded = new Done();
@@ -150,7 +144,6 @@ define("io.ox/core/test/cacheStorage",
                         });
                     });
 
-
                     j.it('check key removal ', function () {
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not check key', TIMEOUT);
@@ -163,7 +156,6 @@ define("io.ox/core/test/cacheStorage",
                             j.expect(e).not.toBeDefined();
                         });
                     });
-
 
                     j.it('check for key really removed ', function () {
                         var loaded = new Done();
@@ -178,7 +170,6 @@ define("io.ox/core/test/cacheStorage",
                         });
                     });
 
-
                     j.it('check for cache clearing ', function () {
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not check key', TIMEOUT);
@@ -191,7 +182,6 @@ define("io.ox/core/test/cacheStorage",
                             j.expect(e).not.toBeDefined();
                         });
                     });
-
 
                     j.it('check for cleared cache ', function () {
                         var loaded = new Done();
@@ -209,13 +199,11 @@ define("io.ox/core/test/cacheStorage",
                 });
             });
 
-
             j.describe("Storagelayer specific bugs", function () {
 
                 j.it('check for localstorage exception with large datasets', function () {
                     var loaded = new Done();
                     j.waitsFor(loaded, 'Could not check key', TIMEOUT * 3);
-
 
                     var max = 1000;
                     var testData = (new Array(100).join('AFDGsdf gDFgDSF gdfgsdgd'));
@@ -230,14 +218,7 @@ define("io.ox/core/test/cacheStorage",
 
                     j.expect(0).toEqual(0);
                 });
-
             });
-
-
-
-
         }
     });
-
-
 });

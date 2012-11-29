@@ -257,12 +257,18 @@ utils.concat("boot.js", [
         "apps/io.ox/core/http.js",
         "apps/io.ox/core/session.js",
         "apps/io.ox/core/gettext.js",
+        "apps/io.ox/core/async.js",
+        "apps/io.ox/core/extensions.js",
+        "apps/io.ox/core/cache.js",
+        "apps/io.ox/core/cache/simple.js",
+        "apps/io.ox/core/cache/localstorage.js",
+        "apps/io.ox/core/cache/indexeddb.js",
+        "apps/io.ox/core/capabilities.js",
+        "apps/io.ox/core/manifests.js",
         "tmp/boot.js"]);
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
-        "async.js", "extensions.js",
-        "cache.js", "cache/*.js", // cache + cache storage layers
         "settings.js", // settings plugin
         "config.js",
         "tk/selection.js", "tk/vgrid.js", "tk/model.js", "tk/upload.js",

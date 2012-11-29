@@ -116,7 +116,7 @@ define('io.ox/core/cache/localstorage', function () {
                     var item = localStorage.getItem(cid);
                     if (item !== null) {
                         access[cid] = _.now();
-                        data = JSON.parse(item);
+                        data = JSON.parse(fluent[cid] = item);
                         def.resolve(data);
                     } else {
                         def.resolve(null);
@@ -141,7 +141,7 @@ define('io.ox/core/cache/localstorage', function () {
                 deferredSet(cid, data);
             }
 
-            return $.when();
+            return $.Deferred().resolve(key);
         },
 
         remove: function (key) {
@@ -167,7 +167,7 @@ define('io.ox/core/cache/localstorage', function () {
             // loop over backup cache
             for (key in fluent) {
                 if (reg.test(key)) {
-                    tmp.push(key);
+                    tmp.push(key.substr(id.length + 1));
                 }
             }
             return $.Deferred().resolve(tmp);
