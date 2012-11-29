@@ -18,6 +18,8 @@
 define('io.ox/office/editor/editor',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
+     'io.ox/office/tk/application',
+     'io.ox/office/tk/view/alert',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/selection',
      'io.ox/office/editor/table',
@@ -32,10 +34,8 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/format/documentstyles',
      'io.ox/office/editor/format/lineheight',
      'io.ox/office/editor/format/color',
-     'io.ox/office/tk/alert',
-     'io.ox/office/tk/application',
      'gettext!io.ox/office/main'
-    ], function (Events, Utils, DOM, Selection, Table, Image, Hyperlink, Operations, Position, UndoManager, StyleSheets, CharacterStyles, ParagraphStyles, DocumentStyles, LineHeight, Color, Alert, Application, gt) {
+    ], function (Events, Utils, Application, Alert, DOM, Selection, Table, Image, Hyperlink, Operations, Position, UndoManager, StyleSheets, CharacterStyles, ParagraphStyles, DocumentStyles, LineHeight, Color, gt) {
 
     'use strict';
 

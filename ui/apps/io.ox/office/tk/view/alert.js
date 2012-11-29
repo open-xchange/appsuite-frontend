@@ -8,20 +8,16 @@
  * Copyright (C) Open-Xchange Inc., 2011
  * Mail: info@open-xchange.com
  *
- * @author Mario Schröder <mario.schroeder@open-xchange.com>
+ * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 
-define('io.ox/office/tk/alert',
+define('io.ox/office/tk/view/alert',
     ['gettext!io.ox/office/main'
     ], function (gt) {
 
     'use strict';
 
-    // static class Alert ==================================================
-
-    var Alert = {};
-
-    // private functions ---------------------------------------------------------
+    // static private functions ===============================================
 
     /**
      * Creates an alert and inserts it at the beginning of the given dom node.
@@ -87,7 +83,11 @@ define('io.ox/office/tk/alert',
         return button;
     }
 
-    // static functions ---------------------------------------------------------
+    // static class Alert =====================================================
+
+    var Alert = {};
+
+    // static public methods --------------------------------------------------
 
     /**
      * Creates an error alert, inserts it at the beginning of the given dom node
@@ -199,7 +199,7 @@ define('io.ox/office/tk/alert',
         }
     };
 
-    // special alerts -----------------------------------------------------------
+    // special alerts ---------------------------------------------------------
 
     /**
      * Creates a write protected alert and inserts it at the beginning of the
@@ -317,4 +317,5 @@ define('io.ox/office/tk/alert',
     // exports ================================================================
 
     return Alert;
+
 });

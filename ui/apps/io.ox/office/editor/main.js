@@ -18,14 +18,14 @@ define('io.ox/office/editor/main',
      'io.ox/office/tk/utils',
      'io.ox/office/tk/application',
      'io.ox/office/tk/config',
+     'io.ox/office/tk/view/alert',
      'io.ox/office/editor/actions',
      'io.ox/office/editor/editor',
      'io.ox/office/editor/view/view',
      'io.ox/office/editor/controller',
-     'io.ox/office/tk/alert',
      'gettext!io.ox/office/main',
      'less!io.ox/office/editor/style.css'
-    ], function (FilesAPI, Utils, Application, Config, Actions, EditorModel, EditorView, EditorController, Alert, gt) {
+    ], function (FilesAPI, Utils, Application, Config, Alert, Actions, EditorModel, EditorView, EditorController, gt) {
 
     'use strict';
 
@@ -575,7 +575,7 @@ define('io.ox/office/editor/main',
 
             // disable Firefox spell checking. TODO: better solution...
             $('body').attr('spellcheck', false);
-            
+
             // disable dropping of images onto the apps background area
             self.getWindow().nodes.main.on('drop', false);
 

@@ -14,14 +14,14 @@
 define('io.ox/office/preview/main',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/application',
+     'io.ox/office/tk/view/alert',
      'io.ox/office/preview/actions',
      'io.ox/office/preview/model',
      'io.ox/office/preview/controller',
      'io.ox/office/preview/view',
-     'io.ox/office/tk/alert',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.css'
-    ], function (Utils, Application, Actions, PreviewModel, PreviewController, PreviewView, Alert, gt) {
+    ], function (Utils, Application, Alert, Actions, PreviewModel, PreviewController, PreviewView, gt) {
 
     'use strict';
 
