@@ -215,8 +215,10 @@ define('io.ox/office/editor/controller',
                 },
                 'character/strike': {
                     parent: 'character/attributes',
-                    get: function (attributes) { return attributes.strike; },
-                    set: function (state) { editor.setAttribute('character', 'strike', state); }
+                    get: function (attributes) { return attributes.strike !== 'none'; },
+                    set: function (state) {
+                        editor.setAttribute('character', 'strike', state ? 'single' : 'none');
+                    }
                 },
                 'character/color': {
                     parent: 'character/attributes',

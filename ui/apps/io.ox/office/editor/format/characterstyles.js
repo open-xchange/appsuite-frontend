@@ -78,17 +78,16 @@ define('io.ox/office/editor/format/characterstyles',
             },
 
             strike: {
-                def: false,
-                format: function (element, state) {
+                def: 'none',
+                format: function (element, strike) {
                     var value = element.css('text-decoration');
-                    element.css('text-decoration', Utils.toggleToken(value, 'line-through', state, 'none'));
+                    element.css('text-decoration', Utils.toggleToken(value, 'line-through', strike !== 'none', 'none'));
                 },
-                preview: function (options, state) {
+                preview: function (options, strike) {
                     var value = options.labelCss.textDecoration || '';
-                    options.labelCss.textDecoration = Utils.toggleToken(value, 'line-through', state, 'none');
+                    options.labelCss.textDecoration = Utils.toggleToken(value, 'line-through', strike !== 'none', 'none');
                 }
             },
-
             color: {
                 def: Color.AUTO,
                 // color will be set in update handler, depending on fill colors
