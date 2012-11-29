@@ -33,8 +33,17 @@ define('io.ox/calendar/edit/template',
         className: 'additional-info'
     });
 
+    ext.point('io.ox/calendar/edit/section/header').extend({
+        draw: function (baton) {
+            var row = $('<div class="row-fluid">');
+            ext.point('io.ox/calendar/edit/section/title').invoke('draw', row, baton);
+            ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', row, baton);
+            this.append(row);
+        }
+    });
+
     // pane title and button area
-    ext.point('io.ox/calendar/edit/section/buttons').extend({
+    ext.point('io.ox/calendar/edit/section/title').extend({
         index: 100,
         id: 'title',
         draw: function (baton) {
