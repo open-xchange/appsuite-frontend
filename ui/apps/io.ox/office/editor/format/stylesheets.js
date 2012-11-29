@@ -683,6 +683,19 @@ define('io.ox/office/editor/format/stylesheets',
         };
 
         /**
+         * Returns true if style sheet contains the given id.
+         *
+         * @param {String} id
+         *  The unique identifier of the style sheet.
+         *
+         * @returns {Boolean}
+         *  Returns true if style sheet contains the given id, otherwise false
+         */
+        this.containsStyleSheet = function (id) {
+            return !!(id in styleSheets);
+        };
+
+        /**
          * Returns the complete 'attributes' object of the specified style
          * sheet as-is, without resolving the parent style sheets, or
          * converting to the attributes of a specific attribute family.

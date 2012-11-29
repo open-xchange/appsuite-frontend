@@ -97,6 +97,16 @@ define('io.ox/office/editor/editor',
         return ((event.metaKey || event.ctrlKey) && !event.altKey && (event.charCode === 99 || event.keyCode === 67));
     }
 
+    /**
+     * Returns true, if the passed keyboard event is ctrl+x or meta+x.
+     *
+     * @param event
+     *  A jQuery keyboard event object.
+     */
+    function isCutKeyEvent(event) {
+        return ((event.metaKey || event.ctrlKey) && !event.altKey && (event.charCode === 120 || event.keyCode === 88));
+    }
+
     function getPrintableChar(event) {
         // event.char preferred. DL2, but nyi in most browsers:(
         if (_.isString(event.char)) {
@@ -308,13 +318,48 @@ define('io.ox/office/editor/editor',
          * Copies the current selection into the internal clipboard and deletes
          * the selection.
          */
-        this.cut = function () {
+        this.cut = function (event) {
 
-            // copy current selection to clipboard
-            this.copy();
+            var // the clipboard div
+                clipboard,
+                // the clipboard event data
+                clipboardData = event && event.originalEvent && event.originalEvent.clipboardData;
 
-            // delete current selection
-            this.deleteSelected();
+
+            // if the browser supports the clipboard api, use the copy function to add data to the clipboard
+            if (clipboardData) {
+
+                // prevent default cut handling of the browser
+                event.preventDefault();
+
+                // copy current selection to clipboard
+                this.copy(event);
+
+                // delete current selection
+                this.deleteSelected();
+
+            } else {
+
+                // copy the currently selected nodes to the clipboard div and append it to the body
+                clipboard = $('<div>', { contenteditable: true }).addClass('io-ox-office-clipboard user-select-text');
+                clipboard.append(DOM.getHtmlFromBrowserSelection);
+                $('body').append(clipboard);
+
+                // focus the clipboard node and select all of it's child nodes
+                clipboard.focus();
+                DOM.setBrowserSelection(DOM.Range.createRange(clipboard, 0, clipboard, clipboard.contents().length));
+
+                _.delay(function () {
+
+                    // restore browser selection
+                    selection.restoreBrowserSelection();
+                    // remove the clipboard node
+                    clipboard.remove();
+                    // delete restored selection
+                    self.deleteSelected();
+
+                }, 0, clipboard, selection);
+            }
         };
 
         /**
@@ -448,9 +493,13 @@ define('io.ox/office/editor/editor',
         }
 
         /**
-         * Copies the current selection into the internal clipboard.
+         * Copies the current selection into the internal clipboard and
+         * attaches the clipboard data to the copy event if the browser
+         * supports the clipboard api.
          */
-        this.copy = function () {
+        this.copy = function (event) {
+
+            var clipboardData = event && event.originalEvent && event.originalEvent.clipboardData;
 
             switch (selection.getSelectionType()) {
 
@@ -465,6 +514,17 @@ define('io.ox/office/editor/editor',
 
             default:
                 Utils.error('Editor.copy(): unsupported selection type: ' + selection.getSelectionType());
+            }
+
+            // if browser supports clipboard api add data to the event
+            if (clipboardData) {
+                // add operation data
+                clipboardData.setData('text/ox-operations', JSON.stringify(clipboardOperations));
+                // add plain text and html of the current browser selection
+                clipboardData.setData('text/plain', DOM.getTextFromBrowserSelection());
+                clipboardData.setData('text/html', DOM.getHtmlFromBrowserSelection());
+                // prevent default copy handling of the browser
+                event.preventDefault();
             }
         };
 
@@ -555,9 +615,17 @@ define('io.ox/office/editor/editor',
 
         this.paste = function (event) {
 
-            var clipboard,
-                items = event && event.originalEvent && event.originalEvent.clipboardData && event.originalEvent.clipboardData.items,
+            var // the clipboard div
+                clipboard,
+                // the clipboard event data
+                clipboardData = event && event.originalEvent && event.originalEvent.clipboardData,
+                // the list items of the clipboard event data
+                items = clipboardData && clipboardData.items,
+                // the operation data from the internal clipboard
+                eventData,
+                // the file reader
                 reader,
+                // indicates if the event contains image data to be read by the file reader
                 eventHasImageData = false;
 
             // handles the result of reading file data from the file blob received from the clipboard data api
@@ -565,7 +633,22 @@ define('io.ox/office/editor/editor',
                 var data = evt && evt.target && evt.target.result;
 
                 if (data) {
-                    createOperationsFromTextClipboard([{operation: Operations.DRAWING_INSERT, data: data, depth: 0}]);
+                    createOperationsFromExternalClipboard([{operation: Operations.DRAWING_INSERT, data: data, depth: 0}]);
+                }
+            }
+
+            // if the browser supports the clipboard api, look for operation data
+            // from the internal clipboard to handle as internal paste.
+            if (clipboardData) {
+                eventData = clipboardData.getData('text/ox-operations');
+                if (eventData) {
+                    // prevent default paste handling of the browser
+                    event.preventDefault();
+
+                    // set the operations from the event to be used for the paste
+                    clipboardOperations = (eventData.length > 0) ? JSON.parse(eventData) : [];
+                    self.pasteInternalClipboard();
+                    return;
                 }
             }
 
@@ -607,7 +690,7 @@ define('io.ox/office/editor/editor',
                 selection.restoreBrowserSelection();
                 clipboard.remove();
 
-                createOperationsFromTextClipboard(clipboardData);
+                createOperationsFromExternalClipboard(clipboardData);
 
             }, 0, clipboard, selection);
         };
@@ -2710,8 +2793,8 @@ define('io.ox/office/editor/editor',
             }
             else if (event.ctrlKey && !event.altKey) {
 
-                // don't catch ctrl+v and meta+v to make the browser send the 'paste' event
-                if (!isPasteKeyEvent(event)) {
+                // prevent browser from evaluating the key event, but allow cut, copy and paste events
+                if (!isPasteKeyEvent(event) && !isCopyKeyEvent(event) && !isCutKeyEvent(event)) {
                     event.preventDefault();
                 }
 
@@ -2726,15 +2809,6 @@ define('io.ox/office/editor/editor',
                 else if (c === 'Y') {
                     self.redo();
                 }
-                else if (c === 'X') {
-                    self.cut();
-                }
-                else if (c === 'C') {
-                    self.copy();
-                }
-//                else if (c === 'V') {
-//                    self.paste();
-//                }
                 else if (c === 'B') {
                     self.setAttribute('character', 'bold', !self.getAttributes('character').character.bold);
                 }
@@ -2805,8 +2879,8 @@ define('io.ox/office/editor/editor',
 
             implDbgOutEvent(event);
 
-            // prevent browser from evaluating the key event, but allow copy and pate events
-            if (!isPasteKeyEvent(event) && !isCopyKeyEvent(event)) {
+            // prevent browser from evaluating the key event, but allow cut, copy and paste events
+            if (!isPasteKeyEvent(event) && !isCopyKeyEvent(event) && !isCutKeyEvent(event)) {
                 event.preventDefault();
             }
 
@@ -3054,7 +3128,7 @@ define('io.ox/office/editor/editor',
          * @param {Array} clipboardData
          * @param {Selection} [sel]
          */
-        function createOperationsFromTextClipboard(clipboardData) {
+        function createOperationsFromExternalClipboard(clipboardData) {
 
             var lastPos = selection.startPaM.oxoPosition.length - 1,
                 hyperLinkInserted = false;
@@ -3070,9 +3144,8 @@ define('io.ox/office/editor/editor',
             }
 
 
-            if (selection.hasRange()) {
-                self.deleteSelected();
-            }
+            // delete current selection
+            self.deleteSelected();
 
             // to paste at the cursor position don't create a paragraph as first operation
             if (clipboardData.length > 1 && clipboardData[0].operation === Operations.PARA_INSERT) {
@@ -3139,7 +3212,7 @@ define('io.ox/office/editor/editor',
                         break;
 
                     default:
-                        Utils.log('createOperationsFromTextClipboard(...) - unhandled operation: ' + entry.operation);
+                        Utils.log('createOperationsFromExternalClipboard(...) - unhandled operation: ' + entry.operation);
                         break;
                     }
 
@@ -3493,7 +3566,8 @@ define('io.ox/office/editor/editor',
             var // the new table
                 table = $('<table>').append($('<colgroup>')),
                 // insert the table into the DOM tree
-                inserted = insertContentNode(operation.start, table);
+                inserted = insertContentNode(operation.start, table),
+                styleId;
 
             // insertContentNode() writes warning to console
             if (!inserted) { return; }
@@ -3505,6 +3579,17 @@ define('io.ox/office/editor/editor',
 
             // apply the passed table attributes
             if (_.isObject(operation.attrs)) {
+                styleId = operation.attrs.style;
+
+                // check if the table style is available and if not use the default style
+                if (styleId) {
+                    if (!tableStyles.containsStyleSheet(styleId)) {
+                        styleId = self.getDefaultUITableStylesheet();
+                    }
+                    Table.checkForLateralTableStyle(self, styleId);
+                    operation.attrs.style = styleId;
+                }
+
                 tableStyles.setElementAttributes(table, operation.attrs);
             }
         };
@@ -6218,7 +6303,9 @@ define('io.ox/office/editor/editor',
             .on('mousedown', processMouseDown)
             .on('mouseup', processMouseUp)
             .on('drop', processDroppedImages)
-            .on('dragstart dragover contextmenu cut', false)
+            .on('dragstart dragover contextmenu', false)
+            .on('cut', _.bind(this.cut, this))
+            .on('copy', _.bind(this.copy, this))
             .on('paste', _.bind(this.paste, this));
 
     } // class Editor

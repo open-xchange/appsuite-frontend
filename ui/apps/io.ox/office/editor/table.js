@@ -15,8 +15,9 @@ define('io.ox/office/editor/table',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/position',
-     'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, DOM, Position, StyleSheets) {
+     'io.ox/office/editor/format/stylesheets',
+     'io.ox/office/editor/operations'
+    ], function (Utils, DOM, Position, StyleSheets, Operations) {
 
     'use strict';
 
@@ -462,6 +463,38 @@ define('io.ox/office/editor/table',
         }
 
     };
+
+    /**
+     * Checks if the table style is dirty and
+     * if yes, insert it into the document styles.
+     *
+     * @param editor {Editor}
+     *  The editor instance to use.
+     *
+     * @param tableStyleId {String}
+     *  The table style id
+     */
+    Table.checkForLateralTableStyle = function (editor, tableStyleId) {
+
+        var generator = new Operations.Generator(),
+            tableStyles = editor.getStyleSheets('table');
+
+        if (_.isString(tableStyleId)) {
+            // insert pending table style to document
+            if (tableStyles.isDirty(tableStyleId)) {
+                generator.generateOperation(Operations.INSERT_STYLE, {
+                    attrs: tableStyles.getStyleSheetAttributeMap(tableStyleId),
+                    type: 'table',
+                    styleId: tableStyleId,
+                    styleName: tableStyles.getName(tableStyleId),
+                    parent: tableStyles.getParentId(tableStyleId),
+                    uiPriority: tableStyles.getUIPriority(tableStyleId)
+                });
+                tableStyles.setDirty(tableStyleId, false);
+            }
+        }
+    };
+
 
     // exports ================================================================
 

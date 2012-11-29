@@ -1363,6 +1363,47 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         });
     };
 
+    /**
+     * Returns the currently selected nodes as plain text String.
+     *
+     * @returns
+     *  The plain text String of the selection.
+     */
+    DOM.getTextFromBrowserSelection = function () {
+
+        var // the browser selection
+            selection = window.getSelection();
+
+        return selection ? selection.toString() : '';
+    };
+
+    /**
+     * Returns the currently selected HTML content.
+     *
+     * @returns
+     *  The selected HTML content.
+     */
+    DOM.getHtmlFromBrowserSelection = function () {
+
+        var // the browser selection
+            selection = window.getSelection(),
+            // a single range object
+            range = null,
+            // the result div
+            resultDiv = $('<div>');
+
+        if (selection && selection.rangeCount >= 1) {
+            // read all selection ranges
+            for (var index = 0; index < selection.rangeCount; index ++) {
+                // get the native selection Range object
+                range = selection.getRangeAt(index);
+                // append content to the result div
+                resultDiv.append(range.cloneContents());
+            }
+        }
+        return resultDiv.html();
+    };
+
     // drawing selection =======================================================
 
     /**
