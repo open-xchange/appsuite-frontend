@@ -235,6 +235,11 @@ define('io.ox/office/editor/controller',
                     set: function () { editor.insertHyperlink(); },
                     done: $.noop
                 },
+                'character/vertalign': {
+                    parent: 'character/attributes',
+                    get: function (attributes) { return attributes.vertAlign; },
+                    set: function (align) { editor.setAttribute('character', 'vertAlign', align); }
+                },
 
                 // tables
 

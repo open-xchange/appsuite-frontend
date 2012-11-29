@@ -103,6 +103,12 @@ define('io.ox/office/editor/format/characterstyles',
                 def: ''
             },
 
+            vertAlign: {
+                def: 'baseline',
+                format: function (element, value) {
+                    element.css('vertical-align', value);
+                }
+            },
             // special attributes
 
             highlight: {
@@ -174,6 +180,10 @@ define('io.ox/office/editor/format/characterstyles',
             // calculate text color (automatic color depends on fill colors)
             Color.setElementTextColor(textSpan, theme, characterAttributes, paragraphAttributes);
 
+            // adjust font height on sub or superscript
+            if (characterAttributes.vertAlign !== 'baseline') {
+                textSpan.css('font-size', characterAttributes.fontSize * 0.66  + 'pt');
+            }
             // update calculated line height due to changed font settings
             LineHeight.updateElementLineHeight(textSpan, paragraphAttributes.lineHeight);
 
