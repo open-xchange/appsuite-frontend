@@ -424,7 +424,13 @@ define('io.ox/office/editor/view/view',
                     .addOptionButton('right',     { icon: 'icon-io-ox-para-border-right',     label: gt('Border right') })
                     .addOptionButton('top',       { icon: 'icon-io-ox-para-border-top',       label: gt('Border top') })
                     .addOptionButton('bottom',    { icon: 'icon-io-ox-para-border-bottom',    label: gt('Border bottom') })
-                    .addOptionButton('inside',    { icon: 'icon-io-ox-para-border-inside',    label: gt('Border inside') }));
+                    .addOptionButton('inside',    { icon: 'icon-io-ox-para-border-inside',    label: gt('Border inside') }))
+                .addSeparator()
+                .addGroup('character/vertalign', new RadioGroup({ label: 'escapement', tooltip: gt('Line Spacing'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
+                    .addOptionButton('super',   { label: gt('SuperScript') })
+                    .addOptionButton('baseline', { label: gt('Normal') })
+                    .addOptionButton('sub',   { label: gt('SubScript') }))
+                .addButton('character/strike', { icon: 'icon-io-ox-strike', tooltip: gt('Strike through'), toggle: true });
         }
 
         // make the format tool bar visible

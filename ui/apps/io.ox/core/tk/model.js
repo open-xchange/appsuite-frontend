@@ -395,7 +395,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
                 },
                 fail = function (error) {
                     // fail
-                    this.trigger('error:inconsistent', error);
+                    this.trigger('error:invalid', error);
                     return error;
                 };
 

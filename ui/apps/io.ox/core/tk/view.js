@@ -56,14 +56,10 @@ define('io.ox/core/tk/view',
         });
 
         // delegate errors
-        this.model.on('error:invalid error:inconsistent', function (e, error) {
+        this.model.on('error:invalid', function (e, error) {
             getPropertyNodes(error.properties).each(function () {
                 $(this).triggerHandler('invalid', [error]);
             });
-            // TODO: remove - just for debugging
-            if (e.type === 'error:inconsistent') {
-                console.error(error.message);
-            }
         });
 
         this.initialize.apply(this, arguments);
@@ -86,7 +82,7 @@ define('io.ox/core/tk/view',
         },
 
         destroy: function () {
-            this.model.off('change error:invalid error:inconsistent');
+            this.model.off('change error:invalid');
             this.node.off('update.model');
             this.node.empty().remove();
             this.model.destroy();

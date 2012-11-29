@@ -416,8 +416,16 @@ define('io.ox/mail/write/main',
             forward: gt('Forward')
         };
 
-        app.isDirty = function () {
-            return previous !== false && !_.isEqual(previous, app.getMail());
+        app.dirty = function (flag) {
+            if (flag === true) {
+                previous = null; // always dirty this way
+                return this;
+            } else if (flag === false) {
+                previous = false; // not dirty
+                return this;
+            } else {
+                return previous !== false && !_.isEqual(previous, app.getMail());
+            }
         };
 
         app.setMail = function (mail) {
@@ -487,7 +495,7 @@ define('io.ox/mail/write/main',
             win.busy().show(function () {
                 _.url.hash('app', 'io.ox/mail/write:' + point.mode);
                 app.setMail(point).done(function () {
-                    previous = null; // always dirty this way
+                    app.dirty(true);
                     app.getEditor().focus();
                     win.idle();
                     def.resolve();
@@ -543,9 +551,8 @@ define('io.ox/mail/write/main',
                     def.resolve();
                 })
                 .fail(function () {
-                    previous = false;
                     notifications.yell('error', gt('An error occured. Please try again.'));
-                    app.quit();
+                    app.dirty(false).quit();
                     def.reject();
                 });
             });
@@ -579,9 +586,8 @@ define('io.ox/mail/write/main',
                             });
                         })
                         .fail(function () {
-                            previous = false;
                             notifications.yell('error', gt('An error occured. Please try again.'));
-                            app.quit();
+                            app.dirty(false).quit();
                             def.reject();
                         });
                     });
@@ -622,9 +628,8 @@ define('io.ox/mail/write/main',
                     });
                 })
                 .fail(function () {
-                    previous = false;
                     notifications.yell('error', gt('An error occured. Please try again.'));
-                    app.quit();
+                    app.dirty(false).quit();
                     def.reject();
                 });
             });
@@ -768,7 +773,7 @@ define('io.ox/mail/write/main',
                             notifications.yell(result);
                         } else {
                             notifications.yell('success', 'Mail has been sent');
-                            previous = false;
+                            app.dirty(false);
                             app.quit();
                         }
                         def.resolve(result);
@@ -851,11 +856,11 @@ define('io.ox/mail/write/main',
                     editorHash[id].destroy();
                 }
                 // clear all private vars
-                previous = false;
+                app.dirty(false);
                 app = win = editor = currentSignature = editorHash = null;
             };
 
-            if (app.isDirty()) {
+            if (app.dirty()) {
                 require(["io.ox/core/tk/dialogs"], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt("Do you really want to discard this mail?"))

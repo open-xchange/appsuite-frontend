@@ -146,6 +146,10 @@ define('io.ox/core/api/account',
         }
     };
 
+    api.getPrimaryAddress = function () {
+        return api.get(0).pipe(function (account) { return [account.personal || '', account.primary_address]; });
+    };
+
     /**
      * Get all mail accounts
      */

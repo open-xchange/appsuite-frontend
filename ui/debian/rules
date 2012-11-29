@@ -10,6 +10,9 @@ endif
 
 override_dh_auto_build:
 	sh build.sh $(FLAGS)
+	sed -e 's#OX_UI7_DEV=.*#OX_UI7_DEV="/opt/open-xchange-ui7-dev"#' \
+	   bin/build-ui7 > tmp/build-ui7
+	chmod +x tmp/build-ui7
 
 override_dh_auto_clean:
 	sh build.sh clean $(FLAGS)

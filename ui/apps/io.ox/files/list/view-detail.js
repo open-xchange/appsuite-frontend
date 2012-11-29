@@ -276,7 +276,7 @@ define("io.ox/files/list/view-detail",
                     padding: "2em 0",
                     minHeight: "30px"
                 }).addClass("description")
-                .text(gt.noI18n(file.description || gt('This file has no description. Double click to set one.')))
+                .text(gt.noI18n(file.description || ''))
                 .on('dblclick', function () {
                     var baton = new ext.Baton({
                         data: file,

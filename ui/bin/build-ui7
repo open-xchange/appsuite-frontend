@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ -d apps ]
+then
+    if [ ! -n "$OX_UI7_DEV" ]
+    then
+        OX_UI7_DEV="$(dirname $0)"
+    fi
+    sh "$OX_UI7_DEV/bin/build.sh" "$@"
+else
+    echo No apps directory found. Are you in the correct directory?
+    exit 1
+fi

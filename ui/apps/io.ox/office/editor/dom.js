@@ -1505,22 +1505,32 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                     });
                 }
 
-                // mousemove and mouseup events can be anywhere on the page -> binding to $(document)
+                // set classes according to passed options, and resize handles
+                moveBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
+                selectionBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
+            }
+
+            // mousemove and mouseup events can be anywhere on the page -> binding to $(document)
+            // check if handlers are still registered at $(document)
+            // They might have been removed by table resize handler
+            if (! $(document).data('mousemovehandler')) {
                 $(document)
                 .mousemove(function (e) {
                     if (! mousedownevent) return;
                     mousemovehandler.call(context, e, moveBox);
-                })
+                });
+                $(document).data('mousemovehandler', 1);
+            }
+
+            if (! $(document).data('mouseuphandler')) {
+                $(document)
                 .mouseup(function (e) {
                     if (mousedownevent === true) {
                         mousedownevent = false;
                         mouseuphandler.call(context, e, drawingNode, moveBox);
                     }
                 });
-
-                // set classes according to passed options, and resize handles
-                moveBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
-                selectionBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
+                $(document).data('mouseuphandler', 1);
             }
 
             // saving the selection parameter at the drawing object to reuse them
@@ -1542,6 +1552,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         $(drawings).children('div.move').remove();
         // removing mouse event handler (mouseup and mousemove) from page div
         $(document).off('mouseup mousemove');
+        $(document).data('mouseuphandler', null);
+        $(document).data('mousemovehandler', null);
         $(drawings).off('mousedown');
         $(drawings).data('drawingSelection', null);
     };
