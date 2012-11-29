@@ -23,7 +23,7 @@ define('io.ox/mail/write/test',
     'use strict';
 
     var base = ox.base + '/apps/io.ox/mail/write/test',
-        TIMEOUT = 5000;
+        TIMEOUT = ox.testTimeout;
 
     // helpers
     function Done() {

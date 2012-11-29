@@ -17,7 +17,7 @@ define("io.ox/core/test/cacheSimpleCache",
     "use strict";
 
     // test objects
-    var TIMEOUT = 5000,
+    var TIMEOUT = ox.testTimeout,
         testKey = 'testkey',
         testValue = 'ABC';
 

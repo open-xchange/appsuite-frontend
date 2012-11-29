@@ -94,8 +94,8 @@ define('io.ox/core/cache/localstorage', function () {
             });
             // clear backup cache
             for (key in fluent) {
-                if (reg.test(id + '.' + key)) {
-                    delete fluent[id + '.' + key];
+                if (reg.test(key)) {
+                    delete fluent[key];
                 }
             }
             return $.when();

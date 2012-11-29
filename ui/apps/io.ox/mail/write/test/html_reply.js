@@ -20,7 +20,7 @@ define('io.ox/mail/write/test/html_reply',
     'use strict';
 
     var base = ox.base + '/apps/io.ox/mail/write/test',
-        TIMEOUT = 5000;
+        TIMEOUT = ox.testTimeout;
 
     // helpers
     function Done() {
@@ -70,7 +70,6 @@ define('io.ox/mail/write/test/html_reply',
                 j.it('select first mail', function () {
                     var firstMailItem = $('.leftside .mail').eq(0);
                     cid = firstMailItem.attr('data-obj-id');
-                    console.log('geil', firstMailItem, cid);
                     firstMailItem.trigger('click');
                 });
 
@@ -125,11 +124,8 @@ define('io.ox/mail/write/test/html_reply',
 
                 j.it('closes compose dialog', function () {
                     // get app via cid
-                    console.log('CLOSE', cid);
                     app = ox.ui.App.getByCid('io.ox/mail:reply.' + cid);
-                    console.log('APP', app);
                     if (app) {
-                        console.log('YEAH', app);
                         app.dirty(false).quit();
                         j.expect(app.getEditor).toBeUndefined();
                     }

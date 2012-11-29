@@ -20,7 +20,7 @@ define("io.ox/settings/accounts/email/test",
     // test objects
 
 
-    var TIMEOUT = 5000,
+    var TIMEOUT = ox.testTimeout,
 
         TESTACCOUNT = {
             "primary_address": "oxtestermail@googlemail.com",

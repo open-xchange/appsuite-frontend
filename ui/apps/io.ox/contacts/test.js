@@ -25,7 +25,7 @@ define("io.ox/contacts/test",
             cellular_telephone1: '0815123456789'
         },
 
-        TIMEOUT = 5000;
+        TIMEOUT = ox.testTimeout;
 
     // helpers
     function Done() {

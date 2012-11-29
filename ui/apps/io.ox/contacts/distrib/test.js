@@ -41,7 +41,7 @@ define("io.ox/contacts/distrib/test",
 
         listname = 'testlist',
 
-        TIMEOUT = 5000;
+        TIMEOUT = ox.testTimeout;
 
     // helpers
     function Done() {

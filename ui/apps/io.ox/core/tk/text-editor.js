@@ -24,11 +24,6 @@ define('io.ox/core/tk/text-editor', [], function () {
 
         var def = $.when(),
 
-            resizeEditor = _.debounce(function () {
-                var p = textarea.parent(), w = p.width(), h = p.height();
-                p.find('table.mceLayout').css({ width: w + 'px', height: h + 'px' });
-            }, 100),
-
             trim = function (str) {
                 return String(str || '').replace(/^[^\S\n]+/, '').replace(/^\n{3,}/, '').replace(/\s+$/, '');
             },

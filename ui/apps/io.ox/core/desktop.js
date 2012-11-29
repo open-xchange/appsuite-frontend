@@ -428,9 +428,9 @@ define("io.ox/core/desktop",
         },
 
         getByCid: function (cid) {
-            return ox.ui.apps.filter(function (app) {
+            return ox.ui.apps.chain().filter(function (app) {
                 return app.cid === cid;
-            });
+            }).first().value();
         },
 
         reuse: function (cid) {

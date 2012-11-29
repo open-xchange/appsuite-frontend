@@ -16,7 +16,7 @@ define("io.ox/settings/test",
 
     "use strict";
 
-    var TIMEOUT = 5000;
+    var TIMEOUT = ox.testTimeout;
 
     ext.point('test/suite').extend({
         id: 'settings-get-test',

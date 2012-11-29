@@ -115,7 +115,7 @@ function (ext, contacts, api, config, date) {
             userfield20: 'userfield'
         },
 
-        TIMEOUT = 5000;
+        TIMEOUT = ox.testTimeout;
 
     // helpers
     function Done() {
