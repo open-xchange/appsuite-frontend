@@ -13,7 +13,7 @@
 
 define('io.ox/office/editor/hyperlink',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/dialogs',
+     'io.ox/office/tk/view/dialogs',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/position',
      'io.ox/office/editor/operations',

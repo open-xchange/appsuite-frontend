@@ -11,7 +11,7 @@
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  */
 
-define('io.ox/office/tk/dialogs',
+define('io.ox/office/tk/view/dialogs',
     ['io.ox/core/tk/dialogs',
      'io.ox/office/tk/utils',
      'gettext!io.ox/office/main'

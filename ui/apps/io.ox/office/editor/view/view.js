@@ -131,7 +131,8 @@ define('io.ox/office/editor/view/view',
                 caption = gt('Offline');
                 break;
             case 'readonly':
-                caption = gt('Read-only mode');
+                // do not show anything
+                // caption = gt('Read-only mode');
                 break;
             case 'sending':
                 caption = gt('Saving changes');
@@ -206,7 +207,7 @@ define('io.ox/office/editor/view/view',
                 displayName = (extensionPos !== -1 && extensionPos > 0) ? filename.substring(0, extensionPos) : filename,
                 extension = (displayName.length !== filename.length) ? filename.substring(extensionPos) : '';
 
-            require(['io.ox/office/tk/dialogs'], function (Dialogs) {
+            require(['io.ox/office/tk/view/dialogs'], function (Dialogs) {
 
                 Dialogs.showTextDialog({
                     title: gt('Rename Document'),

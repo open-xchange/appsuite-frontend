@@ -13,7 +13,7 @@
 
 define('io.ox/office/editor/image',
     ['io.ox/office/tk/application',
-     'io.ox/office/tk/dialogs',
+     'io.ox/office/tk/view/dialogs',
      'gettext!io.ox/office/main'
     ], function (Application, Dialogs, gt) {
 

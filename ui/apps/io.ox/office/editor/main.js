@@ -633,7 +633,7 @@ define('io.ox/office/editor/main',
 
                 // still pending operations: ask user whether to close the application
                 if (self.hasUnsavedChanges()) {
-                    require(['io.ox/office/tk/dialogs'], function (Dialogs) {
+                    require(['io.ox/office/tk/view/dialogs'], function (Dialogs) {
 
                         Dialogs.showYesNoDialog({
                             message: gt('This document contains unsaved changes. Do you really want to close?')
