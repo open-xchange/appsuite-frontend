@@ -199,7 +199,7 @@ define("io.ox/settings/accounts/email/test",
                 j.it('hits the add button', function () {
 
                     j.waitsFor(function () {
-                        buttonAdd = $('[data-action="add"]');
+                        buttonAdd = $('[data-actionname="mailaccount"]');
                         if (buttonAdd[0]) {
                             return true;
                         }

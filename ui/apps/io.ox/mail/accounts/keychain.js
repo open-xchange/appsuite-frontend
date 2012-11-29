@@ -11,12 +11,12 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define.async("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/core/api/account", "io.ox/core/event"], function (ext, accountAPI, Events) {
-    
+
     "use strict";
-    
+
     var moduleDeferred = $.Deferred(),
         extension;
-    
+
     require(["io.ox/mail/accounts/model"], function (AccountModel) {
         ext.point("io.ox/keychain/model").extend({
             id: 'mail',
@@ -27,9 +27,9 @@ define.async("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/co
             }
         });
     });
-    
+
     var accounts = {};
-    
+
     function init(evt) {
         return accountAPI.all().done(function (allAccounts) {
             accounts = {};
@@ -49,26 +49,27 @@ define.async("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/co
             }
         });
     }
-    
-    
+
+
     init().done(function () {
         moduleDeferred.resolve({message: 'Loaded mail keychain'});
     });
     accountAPI.on("account_created refresh.all refresh.list", init);
-    
+
     function trigger(evt) {
         return function () {
             extension.trigger(evt);
         };
     }
-    
+
     accountAPI.on("deleted", trigger("deleted"));
     accountAPI.on("updated", trigger("updated"));
-    
-    
+
+
     extension = {
         id: "mail",
         displayName: "Mail Account",
+        actionName: "mailaccount",
         getAll: function () {
             return _(accounts).map(function (account) { return account; });
         },
@@ -89,7 +90,7 @@ define.async("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/co
                     def.resolve();
                 }).fail(def.reject);
             });
-            
+
             return def;
         },
         remove: function (account) {
@@ -99,10 +100,10 @@ define.async("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/co
             return accountAPI.update(account);
         }
     };
-    
+
     Events.extend(extension);
-    
+
     ext.point("io.ox/keychain/api").extend(extension);
-    
+
     return moduleDeferred;
 });

@@ -129,7 +129,11 @@ define('io.ox/settings/accounts/settings/pane',
                         $dropDown = this.$el.find('.dropdown-menu');
 
                         _(api.submodules).each(function (submodule) {
-                            $('<li>').append($('<a href="#">').text(submodule.displayName).on("click", function (e) {
+                            var link = $('<a href="#">');
+                            if (submodule.actionName) {
+                                link.attr('data-actionname', submodule.actionName);
+                            }
+                            $('<li>').append(link.text(submodule.displayName).on("click", function (e) {
                                 submodule.createInteractively(e);
                             })).appendTo($dropDown);
                         });
