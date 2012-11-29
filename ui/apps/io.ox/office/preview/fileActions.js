@@ -23,7 +23,8 @@ define('io.ox/office/preview/fileActions',
         ActionGroup = links.ActionGroup,
         ActionLink = links.ActionLink,
 
-        POINT = 'io.ox/files';
+        POINT = 'io.ox/files',
+        SUPPORTED_EXT = /\.(doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg|dot|dotx|ott|xlt|xltx|ots|pot|potx|otp|otg|docm|xlsm|pptm|dotm|xltm|potm|xlsb)$/i;
 
     new Action('io.ox/files/actions/open', {
         id: 'officepreview',
@@ -31,14 +32,15 @@ define('io.ox/office/preview/fileActions',
         before: 'default',
         // pick items you want to take care of (actually this function is called by underscore's "filter")
         filter: function (obj) {
-            return (/\.(doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg)$/i.test(obj.filename));
+            return (SUPPORTED_EXT.test(obj.filename));
         },
         action: function (baton) {
-            if ((/\.(doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg)$/i.test(baton.data.filename))) {
+            if ((SUPPORTED_EXT.test(baton.data.filename))) {
                 // We are always called by the action processing although our filter
                 // reported that we cannot process the file. Just check again to prevent
                 // strange effects.
                 ox.launch('io.ox/office/preview/main', { action: 'load', file: baton.data });
+                baton.preventDefault();
             }
         }
     });

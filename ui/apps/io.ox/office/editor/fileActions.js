@@ -31,27 +31,15 @@ define('io.ox/office/editor/fileActions',
             ox.launch('io.ox/office/editor/main', { action: 'new', folder_id: baton.app.folder.get() });
         }
     });
-/*
-    // editor
-    new Action('io.ox/files/actions/editor', {
-        requires: function (e) {
-            var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
-            return e.collection.has('one') && pattern.test(e.context.data.filename);
-        },
-        filter: function (e) {
-            var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
-            return e.collection.has('one') && pattern.test(e.context.data.filename);
-        },
-        action: function (baton) {
-            ox.launch('io.ox/office/editor/main', { action: 'load', file: baton.data });
-        }
-    });
-*/
 
     new Action('io.ox/files/actions/office/editor', {
         requires: function (e) {
             var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
             return e.collection.has('one') && pattern.test(e.context.data.filename);
+        },
+        filter: function (obj) {
+            var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
+            return pattern.test(obj.filename);
         },
         action: function (baton) {
             ox.launch('io.ox/office/editor/main', { action: 'load', file: baton.data });
@@ -62,6 +50,10 @@ define('io.ox/office/editor/fileActions',
         requires: function (e) {
             var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
             return e.collection.has('one') && pattern.test(e.context.data.filename);
+        },
+        filter: function (obj) {
+            var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
+            return pattern.test(obj.filename);
         },
         action: function (baton) {
             ox.launch('io.ox/office/editor/main', { action: 'new', folder_id: baton.data.folder_id, template: baton.data });
