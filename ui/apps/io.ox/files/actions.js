@@ -251,7 +251,7 @@ define('io.ox/files/actions',
         requires: 'one',
         action: function (baton) {
             require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
-                var $input = $('<textarea class="input-xlarge" rows="5">');
+                var $input = $('<textarea rows="10">').css({width: "507px"});
                 $input.val(baton.data.description);
                 var $form = $("<form>").append(
                     $('<label for="name">').append($('<b>').text(gt("Description"))),

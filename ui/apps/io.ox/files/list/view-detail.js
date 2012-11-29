@@ -15,6 +15,7 @@ define("io.ox/files/list/view-detail",
     ["io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
      "io.ox/core/extPatterns/layouts",
+     "io.ox/core/extPatterns/actions",
      "io.ox/core/tk/keys",
      "io.ox/core/date",
      "io.ox/core/event",
@@ -24,7 +25,7 @@ define("io.ox/files/list/view-detail",
      "io.ox/core/tk/upload",
      "io.ox/core/api/user",
      "io.ox/core/api/folder",
-     "gettext!io.ox/files"], function (ext, links, layouts, KeyListener, date, Event, actions, filesAPI, preview, upload, userAPI, folderAPI, gt) {
+     "gettext!io.ox/files"], function (ext, links, layouts, actionPerformer, KeyListener, date, Event, actions, filesAPI, preview, upload, userAPI, folderAPI, gt) {
 
     "use strict";
 
@@ -148,7 +149,13 @@ define("io.ox/files/list/view-detail",
         index: 10,
         draw: function (file) {
             this.append(
-                $("<div>").addClass("title clear-title").text(gt.noI18n(file.title || file.filename || '\u00A0'))
+                $("<div>").addClass("title clear-title").text(gt.noI18n(file.title || file.filename || '\u00A0')).on('dblclick', function () {
+                    var baton = new ext.Baton({
+                        data: file,
+                        folder_id: file.folder_id
+                    });
+                    actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
+                })
             );
         },
         on: {
@@ -269,7 +276,14 @@ define("io.ox/files/list/view-detail",
                     padding: "2em 0",
                     minHeight: "30px"
                 }).addClass("description")
-                .text(gt.noI18n(file.description || gt('This file has no description')))
+                .text(gt.noI18n(file.description || gt('This file has no description. Double click to set one.')))
+                .on('dblclick', function () {
+                    var baton = new ext.Baton({
+                        data: file,
+                        folder_id: file.folder_id
+                    });
+                    actionPerformer.invoke('io.ox/files/actions/edit-description', null, baton);
+                })
             );
             
         },
