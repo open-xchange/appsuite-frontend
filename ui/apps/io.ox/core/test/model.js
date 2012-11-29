@@ -164,8 +164,8 @@ define("io.ox/core/test/model",
 
                 j.it('triggers inconsistency event', function () {
                     var called = false;
-                    model.off().on('error:invalid error:inconsistent', function (e, error) {
-                        j.expect(e.type).toEqual('error:inconsistent');
+                    model.off().on('error:invalid', function (e, error) {
+                        j.expect(e.type).toEqual('error:invalid');
                         j.expect(error.properties).toEqual(['age']);
                         j.expect(model.get('age')).toEqual(-1);
                         called = true;
@@ -195,7 +195,7 @@ define("io.ox/core/test/model",
 
                 j.it('passes save without errors', function () {
                     var errors = 'No errors', done = 'Not done';
-                    model.off().on('error:invalid error:inconsistent', function (e, error) {
+                    model.off().on('error:invalid', function (e, error) {
                         console.debug('Error', arguments);
                         errors = 'Errors';
                     });
