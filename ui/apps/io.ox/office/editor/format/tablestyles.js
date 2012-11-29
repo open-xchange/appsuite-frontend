@@ -165,7 +165,7 @@ define('io.ox/office/editor/format/tablestyles',
                 lastColIncluded = isConditionalKeyIncluded('lastCol'),
 
                 // conditional key of the inner horizontal/vertical bands, according to cell position
-                bandKey = null,
+                bandKey = null, bandSize = 1, bandIndex = 0,
 
                 // the extracted style attributes according to the position of the table cell
                 attributes = {};
@@ -210,10 +210,10 @@ define('io.ox/office/editor/format/tablestyles',
                     StyleSheets.extendAttributes(attributes, conditionalAttributes);
 
                     // copy inner borders to outer cell borders, if cell is located inside the current table area
-                    updateOuterCellBorder(conditionalAttributes, 'borderTop', 'borderInsideHor', !isHorizontalBand || isFirstRow);
-                    updateOuterCellBorder(conditionalAttributes, 'borderBottom', 'borderInsideHor', !isHorizontalBand || isLastRow);
-                    updateOuterCellBorder(conditionalAttributes, 'borderLeft', 'borderInsideVert', !isVerticalBand || isFirstCol);
-                    updateOuterCellBorder(conditionalAttributes, 'borderRight', 'borderInsideVert', !isVerticalBand || isLastCol);
+                    updateOuterCellBorder(conditionalAttributes, 'borderTop', 'borderInsideHor', !isVerticalBand || isFirstRow);
+                    updateOuterCellBorder(conditionalAttributes, 'borderBottom', 'borderInsideHor', !isVerticalBand || isLastRow);
+                    updateOuterCellBorder(conditionalAttributes, 'borderLeft', 'borderInsideVert', !isHorizontalBand || isFirstCol);
+                    updateOuterCellBorder(conditionalAttributes, 'borderRight', 'borderInsideVert', !isHorizontalBand || isLastCol);
                 }
             }
 
@@ -222,8 +222,12 @@ define('io.ox/office/editor/format/tablestyles',
 
             // inner horizontal bands
             if (rowRange && !(firstRowIncluded && isFirstRow) && !(lastRowIncluded && isLastRow)) {
-                // swap meaning of odd/even if first row is active
-                bandKey = ((rowRange.start % 2) === (firstRowIncluded ? 1 : 0)) ? 'band1Hor' : 'band2Hor';
+                // size of horizontal bands, TODO: replace '1' with attribute value
+                bandSize = Math.floor(Math.max(1, 1));
+                // ignore first row in calculation of band index
+                bandIndex = Math.floor((rowRange.start - (firstRowIncluded ? 1 : 0)) / bandSize);
+                // resolve odd or even band attributes
+                bandKey = ((bandIndex % 2) === 0) ? 'band1Hor' : 'band2Hor';
                 if (isConditionalKeyIncluded(bandKey)) {
                     mergeConditionalAttributes(bandKey, true, false);
                 }
@@ -231,8 +235,12 @@ define('io.ox/office/editor/format/tablestyles',
 
             // inner vertical bands
             if (colRange && !(firstColIncluded && isFirstCol) && !(lastColIncluded && isLastCol)) {
-                // swap meaning of odd/even if first column is active
-                bandKey = ((colRange.start % 2) === (firstColIncluded ? 1 : 0)) ? 'band1Vert' : 'band2Vert';
+                // size of vertical bands, TODO: replace '1' with attribute value
+                bandSize = Math.floor(Math.max(1, 1));
+                // ignore first column in calculation of band index
+                bandIndex = Math.floor((colRange.start - (firstColIncluded ? 1 : 0)) / bandSize);
+                // resolve odd or even band attributes
+                bandKey = ((bandIndex % 2) === 0) ? 'band1Vert' : 'band2Vert';
                 if (isConditionalKeyIncluded(bandKey)) {
                     mergeConditionalAttributes(bandKey, false, true);
                 }
