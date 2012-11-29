@@ -395,7 +395,7 @@ define('io.ox/files/actions',
         id: "editor",
         index: 40,
         prio: 'hi',
-        label: gt("Edit document"),
+        label: gt("Edit"),
         ref: "io.ox/files/actions/editor"
     }));
 
