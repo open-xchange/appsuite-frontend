@@ -213,6 +213,11 @@ define('io.ox/office/editor/controller',
                     get: function (attributes) { return attributes.underline; },
                     set: function (state) { editor.setAttribute('character', 'underline', state); }
                 },
+                'character/strike': {
+                    parent: 'character/attributes',
+                    get: function (attributes) { return attributes.strike; },
+                    set: function (state) { editor.setAttribute('character', 'strike', state); }
+                },
                 'character/color': {
                     parent: 'character/attributes',
                     get: function (attributes) { return attributes.color; },

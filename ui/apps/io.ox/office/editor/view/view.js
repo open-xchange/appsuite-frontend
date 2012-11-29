@@ -429,7 +429,8 @@ define('io.ox/office/editor/view/view',
                 .addGroup('character/vertalign', new RadioGroup({ label: 'escapement', tooltip: gt('Line Spacing'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
                     .addOptionButton('super',   { label: gt('SuperScript') })
                     .addOptionButton('baseline', { label: gt('Normal') })
-                    .addOptionButton('sub',   { label: gt('SubScript') }));
+                    .addOptionButton('sub',   { label: gt('SubScript') }))
+                .addButton('character/strike', { icon: 'icon-io-ox-strike', tooltip: gt('Strike through'), toggle: true });
         }
 
         // make the format tool bar visible
