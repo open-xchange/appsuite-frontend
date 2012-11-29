@@ -244,7 +244,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
 
             render: function () {
                 var self = this;
-                var first = true;
+                var lastAttribute = null;
 
                 _([this.attribute]).chain().flatten().each(function (attribute) {
                     var value = self.model.get(attribute);
@@ -253,21 +253,25 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     } else if (self.transform) {
                         value = self.transform(value);
                     }
-                    if (!first && !self.$el.text() && self.$el.text() !== '') {
-                        self.$el.append($.txt(", "));
+                    
+                    if (lastAttribute) {
+                        self.$el.append($.txt(self.separator(lastAttribute)));
                     }
-
+                    
+                    
                     if (self.model.isSet(attribute)) {
                         self.$el.append($.txt(_.noI18n(value)));
                     } else if (self.initialValue) {
                         self.$el.append($.txt(self.initialValue));
                     }
 
-                    first = false;
+                    lastAttribute = attribute;
                 });
 
             },
-
+            separator: function (attribute) {
+                return " ";
+            },
             updateNode: function () {
                 this.$el.empty();
                 this.render();
