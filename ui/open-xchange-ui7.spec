@@ -53,14 +53,14 @@ SDK for the OX App Suite HTML5 client
 %build
 
 %install
-sh build.sh builddir="%{buildroot}%{docroot}" version=%{version} revision=%{release}
+sh build.sh builddir="%{buildroot}%{docroot}" \
+    version=%{version} revision=%{release}
 mkdir -p "%{buildroot}/opt/open-xchange/ui7"
 cp -r "%{buildroot}%{docroot}/apps" "%{buildroot}/opt/open-xchange/ui7/apps"
-mkdir -p "%{buildroot}/opt/open-xchange-ui7-devel/"
-sed -e 's#OX_UI7_DEV=.*#OX_UI7_DEV="/opt/open-xchange-ui7-devel"#' \
-    bin/build-ui7 > "%{buildroot}/opt/open-xchange-ui7-devel/bin/build-ui7"
-chmod +x "%{buildroot}/opt/open-xchange-ui7-devel/bin/build-ui7"
-cp -r bin/build.sh lib Jakefile.js "%{buildroot}/opt/open-xchange-ui7-devel/"
+mkdir -p "%{buildroot}/opt/open-xchange-ui7-devel"
+cp -r bin lib Jakefile.js "%{buildroot}/opt/open-xchange-ui7-devel/"
+sed -i -e 's#OX_UI7_DEV=.*#OX_UI7_DEV="/opt/open-xchange-ui7-devel"#' \
+    "%{buildroot}/opt/open-xchange-ui7-devel/bin/build-ui7"
 
 %clean
 sh build.sh clean builddir="%{buildroot}%{docroot}" version=%{version} revision=%{release}
