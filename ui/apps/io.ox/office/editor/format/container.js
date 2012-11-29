@@ -14,23 +14,11 @@
 define('io.ox/office/editor/format/container',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
+     'io.ox/office/editor/format/color',
      'io.ox/office/editor/format/color'
-    ], function (Events, Utils, Color) {
+    ], function (Events, Utils, Color, Border) {
 
     'use strict';
-
-    var // map operation line styles to CSS line styles (anything else maps to 'solid')
-        CSS_LINE_STYLES = {
-            none: 'none',
-            double: 'double',
-            triple: 'double',
-            dashed: 'dashed',
-            dashSmallGap: 'dashed',
-            dotted: 'dotted',
-            dotDash: 'dotted',
-            dotDotDash: 'dotted',
-            dashDotStroked: 'dotted'
-        };
 
     // class Container ========================================================
 
@@ -97,7 +85,7 @@ define('io.ox/office/editor/format/container',
          *  The CSS color value converted from the passed color object.
          */
         this.getCssColor = function (color, context) {
-            // use the static helper function from module Colors, pass current theme
+            // use the static helper function from module Color, pass current theme
             return Color.getCssColor(color, context, documentStyles.getCurrentTheme());
         };
 
@@ -112,25 +100,8 @@ define('io.ox/office/editor/format/container',
          *  The CSS border value converted from the passed border object.
          */
         this.getCssBorder = function (border) {
-
-            var style = Utils.getStringOption(border, 'style', 'none'),
-                width = Utils.getIntegerOption(border, 'width', 0),
-                color = Utils.getObjectOption(border, 'color', Color.AUTO);
-
-            // convert operation line styles to CSS styles
-            style = CSS_LINE_STYLES[style] || 'solid';
-
-            // convert 1/100mm to pixels (at least one pixel)
-            width = Utils.convertHmmToLength(width, 'px', 1);
-            if (width > 0) {
-                width = Math.max(width, 1) + 'px';
-            }
-
-            // convert color object to CSS color
-            color = this.getCssColor(color, 'line');
-
-            // combine the values to a single string
-            return style + ' ' + width + ' ' + color;
+            // use the static helper function from module Border, pass current theme
+            return Border.getCssBorder(border, documentStyles.getCurrentTheme());
         };
 
         this.destroy = function () {

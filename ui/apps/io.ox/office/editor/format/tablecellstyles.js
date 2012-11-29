@@ -16,15 +16,13 @@ define('io.ox/office/editor/format/tablecellstyles',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/table',
      'io.ox/office/editor/format/color',
+     'io.ox/office/editor/format/border',
      'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, DOM, Table, Color, StyleSheets) {
+    ], function (Utils, DOM, Table, Color, Border, StyleSheets) {
 
     'use strict';
 
-    var // border default
-        NO_BORDER = { style: 'none' },
-
-        // definitions for table cell attributes
+    var // definitions for table cell attributes
         DEFINITIONS = {
 
             /**
@@ -32,6 +30,7 @@ define('io.ox/office/editor/format/tablecellstyles',
              */
             gridSpan: {
                 def: 1,
+                scope: 'element',
                 format: function (element, gridSpan) {
                     element.attr('colspan', gridSpan);
                 }
@@ -51,7 +50,7 @@ define('io.ox/office/editor/format/tablecellstyles',
              * Style, width and color of the left table cell border.
              */
             borderLeft: {
-                def: NO_BORDER,
+                def: Border.NONE,
                 format: function (element, border) {
                     element.css('border-left', this.getCssBorder(border));
                 }
@@ -61,7 +60,7 @@ define('io.ox/office/editor/format/tablecellstyles',
              * Style, width and color of the right table cell border.
              */
             borderRight: {
-                def: NO_BORDER,
+                def: Border.NONE,
                 format: function (element, border) {
                     element.css('border-right', this.getCssBorder(border));
                 }
@@ -71,7 +70,7 @@ define('io.ox/office/editor/format/tablecellstyles',
              * Style, width and color of the top table cell border.
              */
             borderTop: {
-                def: NO_BORDER,
+                def: Border.NONE,
                 format: function (element, border) {
                     element.css('border-top', this.getCssBorder(border));
                 }
@@ -81,7 +80,7 @@ define('io.ox/office/editor/format/tablecellstyles',
              * Style, width and color of the bottom table cell border.
              */
             borderBottom: {
-                def: NO_BORDER,
+                def: Border.NONE,
                 format: function (element, border) {
                     element.css('border-bottom', this.getCssBorder(border));
                 }
@@ -93,7 +92,7 @@ define('io.ox/office/editor/format/tablecellstyles',
              * column, inner vertical bands, ...).
              */
             borderInsideHor: {
-                def: NO_BORDER,
+                def: Border.NONE,
                 scope: 'style'
             },
 
@@ -103,7 +102,7 @@ define('io.ox/office/editor/format/tablecellstyles',
              * inner horizontal bands, ...).
              */
             borderInsideVert: {
-                def: NO_BORDER,
+                def: Border.NONE,
                 scope: 'style'
             }
 

@@ -14,17 +14,15 @@
 define('io.ox/office/editor/format/paragraphstyles',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
+     'io.ox/office/editor/format/color',
+     'io.ox/office/editor/format/border',
      'io.ox/office/editor/format/lineheight',
-     'io.ox/office/editor/format/stylesheets',
-     'io.ox/office/editor/format/color'
-    ], function (Utils, DOM, LineHeight, StyleSheets, Color) {
+     'io.ox/office/editor/format/stylesheets'
+    ], function (Utils, DOM, Color, Border, LineHeight, StyleSheets) {
 
     'use strict';
 
-    var // border default
-        NO_BORDER = { style: 'none' },
-
-        // definitions for paragraph attributes
+    var // definitions for paragraph attributes
         DEFINITIONS = {
 
             alignment: {
@@ -92,99 +90,54 @@ define('io.ox/office/editor/format/paragraphstyles',
                 }
             },
 
-            borderLeft: {
-                def: NO_BORDER,
-                format: function (element, border) {
-                    initBorder(border);
-                }
-            },
+            borderLeft: { def: Border.NONE },
 
-            borderRight: {
-                def: NO_BORDER,
-                format: function (element, border) {
-                    initBorder(border);
-                }
-            },
+            borderRight: { def: Border.NONE },
 
-            borderTop: {
-                def: NO_BORDER,
-                format: function (element, border) {
-                    initBorder(border);
-                }
-            },
+            borderTop: { def: Border.NONE },
 
-            borderBottom: {
-                def: NO_BORDER,
-                format: function (element, border) {
-                    initBorder(border);
-                }
-            },
+            borderBottom: { def: Border.NONE },
 
-            borderInside: {
-                def: NO_BORDER,
-                format: function (element, border) {
-                    initBorder(border);
-                }
-            },
-            indentFirstLine: {
-                def: 0
-            },
+            borderInside: { def: Border.NONE },
 
-            indentLeft: {
-                def: 0
-            },
+            indentFirstLine: { def: 0 },
 
-            indentRight: {
-                def: 0
-            },
+            indentLeft: { def: 0 },
 
-            marginTop: {
-                def: 0
-            },
+            indentRight: { def: 0 },
 
-            marginBottom: {
-                def: 0
-            },
+            marginTop: { def: 0 },
 
-            contextualSpacing: {
-                def: false
-            }
+            marginBottom: { def: 0 },
+
+            contextualSpacing: { def: false }
+
         },
 
         // parent families with parent element resolver functions
         PARENT_FAMILIES = {
             cell: function (paragraph) { return DOM.isCellContentNode(paragraph.parent()) ? paragraph.closest('td') : null; }
-        };
+        },
+
+        // maps border flags to predefined GUI border modes
+        BORDER_MODE_MAP = { 0: 'none', 1: 'left', 2: 'right', 4: 'top', 8: 'bottom', 16: 'inside', 3: 'leftright', 12: 'topbottom', 15: 'outside', 31: 'full' },
+
+        // maps GUI border modes to border flags
+        BORDER_FLAGS_MAP = { none: 0, left: 1, right: 2, top: 4, bottom: 8, inside: 16, leftright: 3, topbottom: 12, outside: 15, full: 31 };
 
     // private static functions ===============================================
 
     function isMergeBorders(attributes1, attributes2) {
-        return (attributes1.borderLeft.style !== 'none' ||
-                attributes1.borderRight.style !== 'none' ||
-                attributes1.borderTop.style  !== 'none' ||
-                attributes1.borderBottom.style  !== 'none' ||
-                attributes1.borderInside.style !== 'none') &&
-                Utils.hasEqualAttributes(attributes1, attributes2, ['borderLeft', 'borderRight', 'borderTop', 'borderBottom', 'borderInside',
-                                                                    'numId', 'indentLeft', 'indentRight', 'indentFirstLine']);
+        return (Border.isVisibleBorder(attributes1.borderLeft) ||
+            Border.isVisibleBorder(attributes1.borderRight) ||
+            Border.isVisibleBorder(attributes1.borderTop) ||
+            Border.isVisibleBorder(attributes1.borderBottom) ||
+            Border.isVisibleBorder(attributes1.borderInside)) &&
+            Utils.hasEqualAttributes(attributes1, attributes2,
+                ['borderLeft', 'borderRight', 'borderTop', 'borderBottom', 'borderInside',
+                 'numId', 'indentLeft', 'indentRight', 'indentFirstLine']);
     }
 
-    function initBorder(border) {
-        if (!border.style) {
-            border.style = 'none';
-        }
-        if (border.style === 'none') {
-            delete border.width;
-            delete border.color;
-            delete border.space;
-        } else {
-            if (!border.width)
-                border.width = 0;
-            if (!border.space)
-                border.space = 0;
-            if (!border.color)
-                border.color = 'auto';
-        }
-    }
     // class ParagraphStyles ==================================================
 
     /**
@@ -267,9 +220,11 @@ define('io.ox/office/editor/format/paragraphstyles',
             // top border is not set if previous paragraph uses the same border settings
             if (isMergeBorders(paragraphAttributes, prevAttributes)) {
                 setBorder({ style: 'none' }, 'top', topMargin);
-                prevParagraph.css("padding-bottom", this.getCssBorder(paragraphAttributes.borderInside.space + bottomMargin));
-                prevParagraph.css("border-bottom", this.getCssBorder(paragraphAttributes.borderInside));
-                prevParagraph.css('margin-bottom', 0);
+                prevParagraph.css({
+                    paddingBottom: this.getCssBorder(paragraphAttributes.borderInside.space + bottomMargin),
+                    borderBottom: this.getCssBorder(paragraphAttributes.borderInside),
+                    marginBottom: 0
+                });
                 topMargin = 0;
             } else {
                 setBorder(paragraphAttributes.borderTop, 'top', 0);
@@ -278,7 +233,7 @@ define('io.ox/office/editor/format/paragraphstyles',
             // bottom border is replaced by inner border if next paragraph uses the same border settings
             if (isMergeBorders(paragraphAttributes, nextAttributes)) {
                 setBorder(paragraphAttributes.borderInside, 'bottom');
-                prevParagraph.css("padding-bottom", this.getCssBorder(bottomMargin));
+                prevParagraph.css('padding-bottom', this.getCssBorder(bottomMargin));
                 bottomMargin = 0;
             } else {
                 setBorder(paragraphAttributes.borderBottom, 'bottom', 0);
@@ -363,35 +318,32 @@ define('io.ox/office/editor/format/paragraphstyles',
 
     ParagraphStyles.getBorderModeFromAttributes = function (attributes) {
 
-        var modeMap = { 0: 'none', 1: 'left', 2: 'right', 4: 'top', 8: 'bottom', 16: 'inside', 3: 'leftright', 12: 'topbottom', 15: 'outside', 31: 'full' },
-            value = 0;
+        var value = 0;
 
         // return null, if any of the border attributes is null (ambiguous)
         if (!attributes.borderLeft || !attributes.borderRight || !attributes.borderTop || !attributes.borderBottom || !attributes.borderInside) {
             return null;
         }
 
-        value += (attributes.borderLeft.style !== 'none') ? 1 : 0;
-        value += (attributes.borderRight.style !== 'none') ? 2 : 0;
-        value += (attributes.borderTop.style !== 'none') ? 4 : 0;
-        value += (attributes.borderBottom.style !== 'none') ? 8 : 0;
-        value += (attributes.borderInside.style !== 'none') ? 16: 0;
-        return (value in modeMap) ? modeMap[value] : 'none';
+        value += Border.isVisibleBorder(attributes.borderLeft)   ?  1 : 0;
+        value += Border.isVisibleBorder(attributes.borderRight)  ?  2 : 0;
+        value += Border.isVisibleBorder(attributes.borderTop)    ?  4 : 0;
+        value += Border.isVisibleBorder(attributes.borderBottom) ?  8 : 0;
+        value += Border.isVisibleBorder(attributes.borderInside) ? 16 : 0;
+
+        return (value in BORDER_MODE_MAP) ? BORDER_MODE_MAP[value] : 'none';
     };
 
     ParagraphStyles.getAttributesFromBorderMode = function (borderMode) {
 
-        var flagsMap = { none: 0, left: 1, right: 2, top: 4, bottom: 8, inside: 16, leftright: 3, topbottom: 12, outside: 15, full: 31 },
-            flags = (borderMode in flagsMap) ? flagsMap[borderMode] : 0,
-            DEF_BORDER = { style: 'single', width: 17, space: 140, color: Color.AUTO },
-            NO_BORDER = { style: 'none' };
+        var flags = (borderMode in BORDER_FLAGS_MAP) ? BORDER_FLAGS_MAP[borderMode] : 0;
 
         return {
-            borderLeft:   (flags & 1) ? DEF_BORDER : NO_BORDER,
-            borderRight:  (flags & 2) ? DEF_BORDER : NO_BORDER,
-            borderTop:    (flags & 4) ? DEF_BORDER : NO_BORDER,
-            borderBottom: (flags & 8) ? DEF_BORDER : NO_BORDER,
-            borderInside: (flags & 16) ? DEF_BORDER : NO_BORDER
+            borderLeft:   (flags &  1) ? Border.SINGLE : Border.NONE,
+            borderRight:  (flags &  2) ? Border.SINGLE : Border.NONE,
+            borderTop:    (flags &  4) ? Border.SINGLE : Border.NONE,
+            borderBottom: (flags &  8) ? Border.SINGLE : Border.NONE,
+            borderInside: (flags & 16) ? Border.SINGLE : Border.NONE
         };
     };
 

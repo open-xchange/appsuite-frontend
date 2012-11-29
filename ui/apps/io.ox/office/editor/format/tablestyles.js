@@ -16,15 +16,13 @@ define('io.ox/office/editor/format/tablestyles',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/table',
      'io.ox/office/editor/format/color',
+     'io.ox/office/editor/format/border',
      'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, DOM, Table, Color, StyleSheets) {
+    ], function (Utils, DOM, Table, Color, Border, StyleSheets) {
 
     'use strict';
 
-    var // border default
-        NO_BORDER = { style: 'none' },
-
-        // definitions for table attributes
+    var // definitions for table attributes
         DEFINITIONS = {
 
             /**
@@ -54,46 +52,52 @@ define('io.ox/office/editor/format/tablestyles',
             /**
              * Grid width of columns in relative units. It is an array of numbers
              */
-            tableGrid: { def: [] },
+            tableGrid: {
+                def: [],
+                scope: 'element'
+            },
 
             /**
              * Array containing information, if conditional attributes will be
              * used. As default value, all styles will be used, so that this
              * array can be empty.
              */
-            exclude: { def: [] },
+            exclude: {
+                def: [],
+                scope: 'element'
+            },
 
             /**
              * Left border of the table (will be set in the table cells).
              */
-            borderLeft: { def: NO_BORDER },
+            borderLeft: { def: Border.NONE },
 
             /**
              * Top border of the table (will be set in the table cells).
              */
-            borderTop: { def: NO_BORDER },
+            borderTop: { def: Border.NONE },
 
             /**
              * Right border of the table (will be set in the table cells).
              */
-            borderRight: { def: NO_BORDER },
+            borderRight: { def: Border.NONE },
 
             /**
              * Bottom border of the table (will be set in the table cells).
              */
-            borderBottom: { def: NO_BORDER },
+            borderBottom: { def: Border.NONE },
 
             /**
              * Inner horizontal borders inside the table (will be set in the
              * table cells).
              */
-            borderInsideHor: { def: NO_BORDER },
+            borderInsideHor: { def: Border.NONE },
 
             /**
              * Inner vertical borders inside the table (will be set in the
              * table cells).
              */
-            borderInsideVert: { def: NO_BORDER }
+            borderInsideVert: { def: Border.NONE }
 
         };
 

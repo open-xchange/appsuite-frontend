@@ -88,6 +88,7 @@ define('io.ox/office/editor/format/characterstyles',
                     options.labelCss.textDecoration = Utils.toggleToken(value, 'line-through', strike !== 'none', 'none');
                 }
             },
+
             color: {
                 def: Color.AUTO,
                 // color will be set in update handler, depending on fill colors
@@ -111,7 +112,8 @@ define('io.ox/office/editor/format/characterstyles',
             },
 
             url: {
-                def: ''
+                def: '',
+                scope: 'element'
             },
 
             vertAlign: {
@@ -120,10 +122,12 @@ define('io.ox/office/editor/format/characterstyles',
                     element.css('vertical-align', value);
                 }
             },
+
             // special attributes
 
             highlight: {
                 def: false,
+                scope: 'element',
                 format: function (element, state) {
                     element.toggleClass('highlight', state);
                 },

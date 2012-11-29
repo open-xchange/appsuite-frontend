@@ -112,7 +112,10 @@ define('io.ox/office/editor/format/drawingstyles',
              * If base64 encoded image data is used, the string begins with "data:"
              * otherwise if svg is used it begins with "<svg"
              */
-            replacementData: { def: ''},
+            replacementData: {
+                def: '',
+                scope: 'element'
+            },
 
             // Image specific attributes
 
@@ -120,12 +123,18 @@ define('io.ox/office/editor/format/drawingstyles',
              * URL pointing to the image data. If the image was embedded in the
              * document archive, the URL will be relativ to the document (image specific style).
              */
-            imageUrl: { def: ''},
+            imageUrl: {
+                def: '',
+                scope: 'element'
+            },
 
             /**
              * Image data (image specific style).
              */
-            imageData: { def: ''},
+            imageData: {
+                def: '',
+                scope: 'element'
+            },
 
             /**
              * Amount of left part of the image cropped outside the object

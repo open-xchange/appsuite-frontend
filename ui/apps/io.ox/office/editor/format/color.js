@@ -230,7 +230,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      *  colors (e.g. table borders, maps to black), and 'fill' for fill colors
      *  (e.g. paragraph background and table cells, maps to transparent).
      *
-     * @param {Themes} theme
+     * @param {Theme} theme
      *  The theme object used to map scheme color names to color values.
      *
      * @returns {String}
