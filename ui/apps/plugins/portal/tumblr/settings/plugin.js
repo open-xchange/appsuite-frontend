@@ -24,7 +24,7 @@ define('plugins/portal/tumblr/settings/plugin',
 
     var blogs = settings.get('blogs'),
         staticStrings = {
-            TUMBLRBLOGS: gt('Tumblr-Blogs'),
+            TUMBLRBLOGS: gt('Tumblr Blogs'),
             ADD:         gt('Add'),
             EDIT:        gt('Edit'),
             DELETE:      gt('Delete')
@@ -50,7 +50,7 @@ define('plugins/portal/tumblr/settings/plugin',
 
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
-                
+
                 return self;
             },
             events: {
@@ -96,7 +96,7 @@ define('plugins/portal/tumblr/settings/plugin',
                         }
 
                         if (url.length === 0) {
-                            $error.text(gt('Please enter an blog-url.'));
+                            $error.text(gt('Please enter a blog URL.'));
                             deferred.reject();
                         } else if (description.length === 0) {
                             $error.text(gt('Please enter a description.'));
@@ -113,12 +113,12 @@ define('plugins/portal/tumblr/settings/plugin',
                                         $myNode.data({url: url, description: description});
                                         deferred.resolve();
                                     } else {
-                                        $error.text(gt('Unknown error while checking tumblr-blog.'));
+                                        $error.text(gt('Unknown error while checking tumblr blog.'));
                                         deferred.reject();
                                     }
                                 },
                                 error: function () {
-                                    $error.text(gt('Unknown error while checking tumblr-blog.'));
+                                    $error.text(gt('Unknown error while checking tumblr blog.'));
                                     deferred.reject();
                                 }
                             });
@@ -160,7 +160,7 @@ define('plugins/portal/tumblr/settings/plugin',
                 if (url) {
                     var that = this;
 
-                    dialog.header($("<h4>").text(gt('Delete a Blog')))
+                    dialog.header($("<h4>").text(gt('Delete a blog')))
                     .append($('<span>').text(gt('Do you really want to delete the following blog(s)?')))
                     .append($('<ul>').append($('<li>').text(url)))
                     .addButton('cancel', gt('Cancel'))
@@ -266,7 +266,7 @@ define('plugins/portal/tumblr/settings/plugin',
                     }
 
                     if (url.length === 0) {
-                        $error.text(gt('Please enter an blog-url.'));
+                        $error.text(gt('Please enter a blog URL.'));
                         deferred.reject();
                     } else if (description.length === 0) {
                         $error.text(gt('Please enter a description.'));
@@ -282,12 +282,12 @@ define('plugins/portal/tumblr/settings/plugin',
                                 if (data.meta && data.meta.status && data.meta.status === 200) {
                                     deferred.resolve();
                                 } else {
-                                    $error.text(gt('Unknown error while checking tumblr-blog.'));
+                                    $error.text(gt('Unknown error while checking tumblr blog.'));
                                     deferred.reject();
                                 }
                             },
                             error: function () {
-                                $error.text(gt('Unknown error while checking tumblr-blog.'));
+                                $error.text(gt('Unknown error while checking tumblr blog.'));
                                 deferred.reject();
                             }
                         });

@@ -1,14 +1,14 @@
 mail oder email oder e-mail oder E-Mail, kein Mischmasch
 Ausrufezeichen bitte vermeiden
 "%1$s on %2$s" -> bitte Kommentar einfügen
-Please enter a feed-url. -> kein Bindestrich
-Please enter an feed-url. -> a feed url
+# Please enter a feed-url. -> kein Bindestrich
+# Please enter an feed-url. -> a feed url
 Do you really want to delete the following feed(s)? -> solche Konstruktionen bitte vermeiden (besser: Pluralform)
-Please enter a search-query. -> kein Bindestrich
-Tumblr-Blogs -> kein Bindestrich
-Please enter an blog-url. -> kein Bindestrich
-Unknown error while checking tumblr-blog. -> kein Bindestrich
-Delete a Blog -> Delete a blog
+# Please enter a search-query. -> kein Bindestrich
+# Tumblr-Blogs -> kein Bindestrich
+# Please enter an blog-url. -> kein Bindestrich
+# Unknown error while checking tumblr-blog. -> kein Bindestrich
+# Delete a Blog -> Delete a blog
 Do you really want to delete the following blog(s)? -> solche Konstruktionen bitte vermeiden (besser: Pluralform)
 hot -> Kontext? Bitte Kommentar einfügen
 Do you really want to delete the following subreddit(s)? -> solche Konstruktionen bitte vermeiden (besser: Pluralform)
@@ -31,11 +31,11 @@ Enable Plugin -> Plug-in (muss nicht sein, ist aber wohl -noch- besser)
 #List name -> Kontext? noun or verb, bitte Kommentar einfügen
 #Display name -> noun or verb, bitte Kommentar einfügen, die Frage bekomm ich sonst wieder zigfach gestellt ;-)
 #Title -> Anrede oder Titel? Bitte Kommentar einfügen
-File as -> Kontext? Bitte Kommentar einfügen
-use Count -> Kontext? Bitte Kommentar einfügen, besser: use count
-yomi First Name -> ?
-yomi Last Name -> ?
-yomi Company -> ?
+#File as -> Kontext? Bitte Kommentar einfügen
+#use Count -> Kontext? Bitte Kommentar einfügen, besser: use count
+#yomi First Name -> ?
+#yomi Last Name -> ?
+#yomi Company -> ?
 
 # A B C D E F G H I J K L M N O P Q R S T U V W X Y Z -> ist das für Kontakte? Da seh ich schon Probleme für Chinesisch
 

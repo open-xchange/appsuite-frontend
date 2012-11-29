@@ -224,7 +224,7 @@ define('plugins/portal/rss/settings/plugin',
                     $error.hide();
 
                     if (url.length === 0) {
-                        $error.text(gt('Please enter a feed-url.'));
+                        $error.text(gt('Please enter a feed URL.'));
                         deferred.reject();
                     } else if (description.length === 0) {
                         $error.text(gt('Please enter a description.'));

@@ -93,7 +93,7 @@ define('plugins/portal/flickr/settings/plugin',
                     oldMethod = $myNode.data('method'),
                     oldDescription = $myNode.data('description');
                 console.log("onEdit", $myNode);
-                
+
                 if (oldQ && oldMethod) {
                     oldQ = String(oldQ);
                     var $q = $('<input>').attr({type: 'text', placeholder: gt('Search')}).val(oldQ);
@@ -132,7 +132,7 @@ define('plugins/portal/flickr/settings/plugin',
 
                         deferred.done(function (nsid) {
                             if (q.length === 0) {
-                                $error.text(gt('Please enter a search-query.'));
+                                $error.text(gt('Please enter a search query.'));
                                 $error.show();
                                 dialog.idle();
                             } else if (description.length === 0) {
@@ -183,7 +183,7 @@ define('plugins/portal/flickr/settings/plugin',
                     q = String(q);
                     var that = this;
                     console.log("Bla", q, method);
-                    
+
                     dialog.header($("<h4>").text(gt('Delete a stream')))
                         .append($('<span>').text(gt('Do you really want to delete the following stream?')))
                         .append($('<ul>').append(
@@ -311,7 +311,7 @@ define('plugins/portal/flickr/settings/plugin',
 
                     deferred.done(function (nsid) {
                         if (q.length === 0) {
-                            $error.text(gt('Please enter a search-query.'));
+                            $error.text(gt('Please enter a search query.'));
                             $error.show();
                             dialog.idle();
                         } else if (description.length === 0) {
