@@ -39,8 +39,8 @@ define('io.ox/calendar/settings/pane',
             NOTIFICATIONS_FOR_APPOINTMENTS: gt('E-Mail notification for New, Changed, Deleted?'),
             TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED: gt('E-Mail notification for Accept/Declined'),
             NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR: gt('E-Mail notification for appointment creator?'),
-            NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT: gt('E-Mail notification for appointment participant?')
-
+            NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT: gt('E-Mail notification for appointment participant?'),
+            SHOW_DECLINED_APPOINTMENTS: gt('Show declined appointments')
         },
 
         optionsInterval = [gt('5'), gt('10'), gt('15'), gt('20'), gt('30'), gt('60')],
@@ -56,8 +56,10 @@ define('io.ox/calendar/settings/pane',
             return array;
         },
 
-        optionsView = [{label: gt('Calendar'), value: 'calendar'},
-                       {label: gt('Team'), value: 'team'},
+        optionsView = [{label: gt('Day'), value: 'day'},
+                       {label: gt('Workweek'), value: 'workweek'},
+                       {label: gt('Week'), value: 'week'},
+                       {label: gt('Month'), value: 'month'},
                        {label: gt('List'), value: 'list'}],
 
         optionsCalendarRange =  [{label: gt('Day'), value: 'day'},
@@ -124,7 +126,7 @@ define('io.ox/calendar/settings/pane',
         id: 'calendarsettings',
         draw: function (data) {
             calendarViewSettings = new CalendarSettingsView({model: calendarSettings});
-            this.append($('<div>').css('max-width', '800px').append(
+            this.append($('<div>').addClass('section').append(
                 calendarViewSettings.render().el)
             );
         },

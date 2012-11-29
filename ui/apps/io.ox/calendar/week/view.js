@@ -115,8 +115,7 @@ define('io.ox/calendar/week/view',
         // setup setting params
         initSettings: function () {
             // init settings
-            this.showDeclined = settings.get('showDeclinedAppointments', false);
-//            console.log('showDeclinedAppointments', this.showDeclined);
+            this.showDeclined = settings.get('showDeclinedAppointments', 'false') === 'true';
             this.gridSize = 60 / settings.get('interval', this.gridSize);
             this.workStart = settings.get('startTime', this.workStart);
             this.workEnd = settings.get('endTime', this.workEnd);
@@ -430,7 +429,7 @@ define('io.ox/calendar/week/view',
             // create and animate timeline
             this.renderTimeline(this.timeline);
             setInterval(this.renderTimeline, 60000, this.timeline);
-            this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick here for whole day appointment')));
+            this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick here for whole day appointment')).attr('unselectable', 'on'));
 
             // create days
             var weekCon = $('<div>').addClass('week-container').append(this.timeline);

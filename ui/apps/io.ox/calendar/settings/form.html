@@ -50,7 +50,20 @@
 				</label>
 			</div>
 		</div>
-		<div class="control-group">
+        <div class="form-horizontal">
+            <div class="control-group expertmode">
+                <label class="control-label">{{=it.strings.SHOW_DECLINED_APPOINTMENTS}}</label>
+                <div class="controls">
+                    <label class="radio">{{=it.optionsYesAnswers.label}}
+                        <input type="radio" name="showDeclinedAppointments" data-property="showDeclinedAppointments" value="{{=it.optionsYesAnswers.value}}">
+                    </label>
+                    <label class="radio">{{=it.optionsNoAnswers.label}}
+                        <input type="radio" name="showDeclinedAppointments" data-property="showDeclinedAppointments" value="{{=it.optionsNoAnswers.value}}">
+                    </label>
+                </div>
+            </div>
+        </div>
+		<!-- <div class="control-group">
 			<label for="range_calendar_view" class="control-label">{{=it.strings.TR_CALENDAR_VIEW}}</label>
 			<div class="controls">
 				<label class="select">
@@ -79,8 +92,7 @@
 					</select>
 				</label>
 			</div>
-		</div>
-		
+		</div> -->
 	</extension>
 	<extension id='appointment'>
 		<legend class="sectiontitle expertmode">{{=it.strings.TITLE_NEW_APPOINTMENT}}</legend>
