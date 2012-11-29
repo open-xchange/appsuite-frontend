@@ -145,21 +145,22 @@ define("io.ox/preview/main",
             id: "office",
             index: 10,
             supports: ox.serverConfig.previewExtensions,
-            draw: function (file) {
+            draw: function (file, options) {
 
                 var $a = clickableLink(file, function (e) {
                         e.preventDefault();
                         ox.launch('io.ox/office/preview/main', { action: 'load', file: file });
                     }),
+                    width = options.width || '400',
                     $img = $('<img alt="">')
-                        .css({ width: '400px', maxWidth: '100%', visibility: 'hidden' })
+                        .css({ width: width + "px", maxWidth: '100%', visibility: 'hidden' })
                         .addClass("io-ox-clickable")
                         .on({ load: previewLoaded, error: previewFailed });
 
                 this.busy();
 
                 // setting src now; just helpful for debugging/setTimeout
-                $img.attr('src', file.dataURL + '&format=preview_image&width=400&delivery=view');
+                $img.attr('src', file.dataURL + '&format=preview_image&width=' + width + '&delivery=view&scaleType=contain');
 
                 $a.append($img);
                 dragOutHandler($a);

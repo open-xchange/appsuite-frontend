@@ -162,10 +162,10 @@ define("io.ox/files/list/view-detail",
     });
     
     // Preview
-    ext.point("io.ox/files/details/sections/header").extend(new preview.Extension({
-        id: "preview",
-        index: 20,
-        parseArguments: function (file) {
+
+    (function () {
+
+        function parseArguments(file) {
             if (!file.filename) {
                 return null;
             }
@@ -179,14 +179,50 @@ define("io.ox/files/list/view-detail",
                 version: file.version,
                 id: file.id
             };
-        },
-        on: {
-            update: function (file, extension) {
-                this.empty();
-                extension.draw.call(this, file, extension);
-            }
         }
-    }));
+
+        ext.point("io.ox/files/details/sections/header").extend({
+            id: "preview",
+            index: 20,
+            isEnabled: function (file) {
+                if (!file.filename) {
+                    return false;
+                }
+                var preview = new preview.Preview(parseArguments(file));
+                return preview.supportsPreview();
+            },
+            draw: function (file) {
+                var $previewNode = $('<div>').css({width: "100%", textAlign: 'center'});
+                this.append($previewNode);
+                var lastWidth = 0;
+                function fnDrawPreview() {
+                    var width = $previewNode.innerWidth();
+
+
+                    if (width > lastWidth) {
+                        $previewNode.empty();
+                        lastWidth = width; // Must only recalculate once we get bigger
+                        var prev = new preview.Preview(parseArguments(file), { width: width, height: 'auto'});
+                        prev.appendTo($previewNode);
+                    }
+                }
+                var drawResizedPreview = _.debounce(fnDrawPreview, 300);
+                $(window).on('resize', drawResizedPreview);
+                $previewNode.on('dispose', function () {
+                    $(window).off('resize', drawResizedPreview);
+                });
+
+                _.defer(fnDrawPreview);
+            },
+            on: {
+                update: function (file, extension) {
+                    this.empty();
+                    extension.draw.call(this, file, extension);
+                }
+            }
+        });
+
+    }());
 
     
     // Basic Actions
