@@ -155,7 +155,7 @@ define('io.ox/office/editor/format/tablecellstyles',
 
             // update all paragraphs in the table cell
             Utils.iterateSelectedDescendantNodes(DOM.getCellContentNode(cell), DOM.PARAGRAPH_NODE_SELECTOR, function (paragraph) {
-                paragraphStyles.updateElementFormatting(paragraph);
+                paragraphStyles.updateElementFormatting(paragraph, mergedAttributes);
             }, undefined, { children: true });
         }
 

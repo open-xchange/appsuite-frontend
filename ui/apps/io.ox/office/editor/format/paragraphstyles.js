@@ -252,7 +252,7 @@ define('io.ox/office/editor/format/paragraphstyles',
             // containing text spans, e.g. numbering labels.
             Utils.iterateDescendantNodes(paragraph, function (node) {
                 DOM.iterateTextSpans(node, function (span) {
-                    characterStyles.updateElementFormatting(span);
+                    characterStyles.updateElementFormatting(span, mergedAttributes);
                 });
             }, undefined, { children: true });
 
