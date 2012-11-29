@@ -95,6 +95,8 @@ define('io.ox/contacts/distrib/main',
                 // set state
                 app.setState({ folder: model.get('folder_id'), id: model.get('id') });
 
+                app.setTitle(model.get('display_name'));
+
                 view = new ContactCreateDistView({ model: model });
 
                 view.on('save:start', function () {
