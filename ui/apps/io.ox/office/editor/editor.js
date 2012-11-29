@@ -2398,9 +2398,9 @@ define('io.ox/office/editor/editor',
                 self.grabFocus();
 
                 // checking if the drawing already has a selection (nothing to do here)
-                if (DOM.hasDrawingSelection(drawing)) {
-                    return;
-                }
+                // if (DOM.hasDrawingSelection(drawing)) {
+                //     return;
+                // }
 
                 if (isDrawingNode) {
                     // select the drawing
@@ -4361,6 +4361,8 @@ define('io.ox/office/editor/editor',
                 // deregister event handler
                 // removing mouse event handler (mouseup and mousemove) from page div
                 $(document).off('mouseup mousemove');
+                $(document).data('mouseuphandler', null);
+                $(document).data('mousemovehandler', null);
                 $(resizeNode).off('mousedown');
             }
 
