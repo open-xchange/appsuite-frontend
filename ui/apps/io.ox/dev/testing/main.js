@@ -17,7 +17,7 @@ define('io.ox/dev/testing/main',
      'io.ox/core/extensions'], function (jasmine, ext) {
 
     'use strict';
-    
+
     function Done() {
         var f = function () {
             return f.value;
@@ -28,7 +28,7 @@ define('io.ox/dev/testing/main',
         };
         return f;
     }
-    
+
     var app = ox.ui.createApp({
             name: 'io.ox/dev/testing',
             title: 'Unit Tests'
@@ -107,7 +107,7 @@ define('io.ox/dev/testing/main',
                             var timeout, errorMessage;
                             var deferreds = [];
                             var done = new Done();
-                            
+
                             _(arguments).each(function (arg) {
                                 if (_.isString(arg)) {
                                     errorMessage = arg;
@@ -124,12 +124,12 @@ define('io.ox/dev/testing/main',
                             } else {
                                 deferreds = $.when(deferreds);
                             }
-                            
+
                             deferreds.always(done.yep);
-                            
+
                             return jasmine.waitsFor(done, errorMessage || 'timeout', timeout || 5000);
                         }
-                        
+
                     });
                 }
             });

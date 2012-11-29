@@ -69,13 +69,15 @@ define("io.ox/core/extPatterns/actions",
             } else {
                 tmp = baton.tracker.slice();
             }
-            // call handlers
-            if (_.isFunction(extension.action)) {
-                extension.action.call(scope, baton);
-            }
-            if (_.isFunction(extension.multiple)) {
-                // make sure to always provide an array
-                extension.multiple.call(scope, tmp, baton);
+            if (tmp.length) {
+                // call handlers
+                if (_.isFunction(extension.action)) {
+                    extension.action.call(scope, baton);
+                }
+                if (_.isFunction(extension.multiple)) {
+                    // make sure to always provide an array
+                    extension.multiple.call(scope, tmp, baton);
+                }
             }
         }
     };
@@ -148,11 +150,8 @@ define("io.ox/core/extPatterns/actions",
                         def.resolve({ link: link, state: false });
                     } else {
                         // combine actions
-                        processActions(link.ref, collection, context)
-                        .done(function () {
-                            var state = _(arguments).reduce(function (memo, action) {
-                                return memo && action === true;
-                            }, true);
+                        processActions(link.ref, collection, context).done(function () {
+                            var state = _(arguments).any(function (bool) { return bool === true; });
                             def.resolve({ link: link, state: state });
                         });
                     }

@@ -299,7 +299,7 @@ define('io.ox/files/actions',
             });
         }
     });
-    
+
 
     var copyMove = function (type, apiAction, title) {
         return function (list) {
