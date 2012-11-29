@@ -17,3 +17,8 @@ Package: open-xchange-ui7-manifest
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-core
 Description: Manifest for apps included in the OX App Suite HTML5 client
+
+Package: open-xchange-ui7-dev
+Architecture: all
+Depends: nodejs (>= 0.4.0)
+Description: SDK for the OX App Suite HTML5 client

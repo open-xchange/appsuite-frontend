@@ -45,9 +45,13 @@ function envBoolean(name) {
 var debug = envBoolean('debug');
 if (debug) console.info("Debug mode: on");
 
-var appName = process.env.appName;
-if (!appName && path.existsSync('debian/changelog')) {
-    appName = /\S+/.exec(fs.readFileSync('debian/changelog', 'utf8'))[0];
+var pkgName = process.env['package'];
+if (!pkgName && path.existsSync('debian/changelog')) {
+    pkgName = /\S+/.exec(fs.readFileSync('debian/changelog', 'utf8'))[0];
+}
+if (!pkgName) {
+    console.error('Please specify the package name using package=<NAME>');
+    process.exit(1);
 }
 
 utils.fileType("source").addHook("filter", utils.includeFilter);
@@ -392,7 +396,7 @@ if (apps.rest) utils.copy(apps.rest);
 
 // manifests
 
-utils.merge('manifests/' + appName + '.json',
+utils.merge('manifests/' + pkgName + '.json',
     utils.list('apps/**/manifest.json'),
     { merge: function (manifests, names) {
         var combinedManifest = [];
@@ -535,7 +539,7 @@ utils.topLevelTask('init-packaging', [], function() {
 });
 (function () {
     var packagingVariables = {
-        appName: appName,
+        'package': pkgName,
         timestamp: formatDate(new Date())
     };
     function formatDate(d) {
@@ -553,7 +557,6 @@ utils.topLevelTask('init-packaging', [], function() {
     }
     task('prompt-packaging', [], function () {
         var varDefs = [
-            { key: 'appName', prompt: 'Package name' },
             { key: 'version', prompt: 'Version', def: ver },
             { key: 'maintainer', prompt: 'Maintainer (Name <e-mail>)' },
             {
@@ -576,7 +579,7 @@ utils.topLevelTask('init-packaging', [], function() {
             { key: 'license', prompt: 'License file' },
             {
                 key: 'description',
-                prompt: 'Description (see http://goo.gl/4D0dc)'
+                prompt: 'Short description'
             },
         ];
         var rl = readline.createInterface(process.stdin, process.stdout);
@@ -637,8 +640,8 @@ task("dist", [distDest], function () {
     var toCopy = _.reject(fs.readdirSync("."), function(f) {
         return /^(tmp|ox.pot|build)$/.test(f);
     });
-    var tarName = appName + '-' + ver;
-    var debName = appName + '_' + ver;
+    var tarName = pkgName + '-' + ver;
+    var debName = pkgName + '_' + ver;
     var dest = path.join(distDest, tarName);
     fs.mkdirSync(dest);
     utils.exec(["cp", "-r"].concat(toCopy, dest), tar);

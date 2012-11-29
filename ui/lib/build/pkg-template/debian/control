@@ -1,16 +1,16 @@
-Source: @appName@
+Source: @package@
 Section: non-free/web
 Priority: optional
 Maintainer: @maintainer@
-Build-Depends: debhelper (>= 8.0.0), nodejs (>= 0.4.0)
+Build-Depends: debhelper (>= 8.0.0), open-xchange-ui7-dev
 Standards-Version: 3.9.2
 
-Package: @appName@
+Package: @package@
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-ui7
 Description: @description@
 
-Package: @appName@-manifest
+Package: @package@-manifest
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-core
 Description: @description@

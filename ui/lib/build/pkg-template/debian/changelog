@@ -1,4 +1,4 @@
-@appName@ (@version@-1) unstable; urgency=low
+@package@ (@version@-1) unstable; urgency=low
 
   * Initial Release.
 

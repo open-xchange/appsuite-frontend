@@ -1,4 +1,4 @@
-Name:           @appName@
+Name:           @package@
 Version:        @version@
 Release:        1
 Group:          Applications/Productivity
@@ -9,7 +9,7 @@ Source:         %{name}_%{version}.orig.tar.bz2
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
-BuildRequires:  nodejs >= 0.4.0
+BuildRequires:  open-xchange-ui7-devel
 
 Requires:       open-xchange-ui7
 
@@ -38,12 +38,14 @@ This package contains the manifest for installation on the backend.
 %build
 
 %install
-sh build.sh builddir="%{buildroot}%{docroot}" version=%{version} revision=%{release}
+sh /opt/open-xchange-ui7-devel/bin/build-ui7 app \
+    builddir="%{buildroot}%{docroot}" version=%{version} revision=%{release}
 mkdir -p "%{buildroot}/opt/open-xchange/ui7"
-cp -r "%{buildroot}%{docroot}/manifests" "%{buildroot}/opt/open-xchange/ui7/manifests"
+cp -r "%{buildroot}%{docroot}/manifests" "%{buildroot}/opt/open-xchange/ui7/"
 
 %clean
-sh build.sh clean builddir="%{buildroot}%{docroot}" version=%{version} revision=%{release}
+sh /opt/open-xchange-ui7-devel/bin/build-ui7 clean \
+    builddir="%{buildroot}%{docroot}" version=%{version} revision=%{release}
 rm -r "%{buildroot}/opt/open-xchange/ui7"
 
 %files

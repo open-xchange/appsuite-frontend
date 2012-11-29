@@ -2,7 +2,7 @@
 /tmp
 /ox.pot
 /debian/files
-/debian/open-xchange-ui7/
-/debian/open-xchange-ui7.debhelper.log
-/debian/open-xchange-ui7.substvars
+/debian/open-xchange-ui7*/
+/debian/open-xchange-ui7*.debhelper.log
+/debian/open-xchange-ui7*.substvars
 /local.conf
