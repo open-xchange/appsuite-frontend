@@ -513,8 +513,6 @@ function (ext, contacts, api, config, date) {
 
                     var grid = app.getGrid();
 
-
-
                     phrase = fId + '.' + data.id;
 
                     j.waitsFor(function () {
@@ -528,7 +526,7 @@ function (ext, contacts, api, config, date) {
                     }, 'looks for the listed item', TIMEOUT);
 
                     j.waitsFor(function () {
-                        buttonUpdate = $('table[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="update"]');
+                        buttonUpdate = $('.scrollable-pane [data-cid="' + phrase + '"] .io-ox-inline-links a[data-action="edit"]');
                         if (buttonUpdate[0]) {
                             return true;
                         }
@@ -548,14 +546,14 @@ function (ext, contacts, api, config, date) {
 
                     j.waitsFor(function () {
                         formFrame =  $('.edit-contact');
-                        buttonClose = $('.window-controls .window-control').text('x');
-                        if (buttonClose[1]) {
+                        buttonClose = $('[data-action="discard"]');
+                        if (buttonClose[0]) {
                             return true;
                         }
                     }, 'waits for the form', TIMEOUT);
 
                     j.runs(function () {
-                        $(buttonClose[1]).trigger('click');
+                        $(buttonClose[0]).trigger('click');
                     });
 
 
@@ -589,7 +587,7 @@ function (ext, contacts, api, config, date) {
                     }, 'looks for the list', TIMEOUT);
 
                     j.waitsFor(function () {
-                        buttonDelete = $('table.view[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
+                        buttonDelete = $('.scrollable-pane [data-cid="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
                         if (buttonDelete[0]) {
                             return true;
                         }
@@ -672,7 +670,7 @@ function (ext, contacts, api, config, date) {
                     }, 'looks for the listed item', TIMEOUT);
 
                     j.waitsFor(function () {
-                        buttonUpdate = $('table[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="update"]');
+                        buttonUpdate = $('.scrollable-pane [data-cid="' + phrase + '"] .io-ox-inline-links a[data-action="edit"]');
                         if (buttonUpdate[0]) {
                             return true;
                         }
@@ -705,7 +703,7 @@ function (ext, contacts, api, config, date) {
 
 
                 j.runs(function () {
-                    buttonClose = $('.window-controls .window-control').text('x');
+                    buttonClose = $('[data-action="discard"]');
                     $(buttonClose[1]).trigger('click');
                 });
 
@@ -729,7 +727,7 @@ function (ext, contacts, api, config, date) {
 
 
                     j.waitsFor(function () {
-                        buttonDelete = $('table.view[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
+                        buttonDelete = $('.scrollable-pane [data-cid="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
                         //console.log(buttonDelete);
                         if (buttonDelete[0]) {
                             return true;
