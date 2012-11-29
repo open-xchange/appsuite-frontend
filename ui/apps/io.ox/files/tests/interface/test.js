@@ -13,7 +13,7 @@
  *
  */
 
-define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/files/api"], function (ext, files, api) {
+define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/files/api"], function (ext, api) {
     "use strict";
 
     var TIMEOUT = 10000;
@@ -44,7 +44,7 @@ define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/file
                 j.it('opens files app ', function () {
                     var loaded = new Done();
 
-                    files.getApp().launch().done(function () {
+                    ox.launch('io.ox/files/main', { perspective: 'list' }).done(function () {
                         app = this;
                         loaded.yep();
                     });

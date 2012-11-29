@@ -298,39 +298,33 @@ define("io.ox/settings/accounts/email/test",
         }
     });
 
-    ext.point('test/suite').extend({
-        id: 'email-validate',
-        index: 100,
-        test: function (j) {
-            j.describe("Tests the validate functions of the api", function () {
+    // reenable if backend fixes this
+    // ext.point('test/suite').extend({
+    //     id: 'email-validate',
+    //     index: 100,
+    //     test: function (j) {
+    //         j.describe("Tests the validate functions of the api", function () {
+    //             j.it('tests the validate functions', function () {
+    //                 j.runs(function () {
+    //                     var me = this;
+    //                     me.ready = false;
+    //                     api.validate(TESTACCOUNTVALDIDATION)
+    //                     .done(function (data) {
+    //                         if (data === true) {
+    //                             me.ready = true;
+    //                         }
+    //                     })
+    //                     .fail(function () {
+    //                         console.log('no configdata recived');
+    //                     });
 
-                j.it('tests the validate functions', function () {
-
-                    j.runs(function () {
-                        var me = this;
-                        me.ready = false;
-                        api.validate(TESTACCOUNTVALDIDATION)
-                        .done(function (data) {
-                            if (data === true) {
-                                me.ready = true;
-                            }
-                        })
-                        .fail(function () {
-                            console.log('no configdata recived');
-                        });
-
-                        j.waitsFor(function () {
-                            return this.ready;
-                        }, 'response from autoconfig arrived', TIMEOUT);
-
-                    });
-
-                });
-
-            });
-        }
-    });
-
-
+    //                     j.waitsFor(function () {
+    //                         return this.ready;
+    //                     }, 'response from autoconfig arrived', TIMEOUT);
+    //                 });
+    //             });
+    //         });
+    //     }
+    // });
 
 });

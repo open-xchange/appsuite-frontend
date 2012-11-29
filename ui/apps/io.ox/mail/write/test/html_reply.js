@@ -15,7 +15,9 @@ define('io.ox/mail/write/test/html_reply',
     ['io.ox/mail/main',
      'io.ox/mail/api',
      'io.ox/core/api/user',
-     'io.ox/core/extensions'], function (mailer, mailAPI, userAPI, ext) {
+     'io.ox/core/extensions',
+     'io.ox/core/extPatterns/actions'
+    ], function (mailer, mailAPI, userAPI, ext, actions) {
 
     'use strict';
 
@@ -48,48 +50,32 @@ define('io.ox/mail/write/test/html_reply',
 
             j.describe('Reply email', function () {
 
-                var app = null, ed = null, form = null, cid;
+                var app = null, ed = null, form = null, first, cid;
 
-                j.it('opens mailer', function () {
-                    var loaded = new Done();
-                    j.waitsFor(loaded, 'compose dialog', TIMEOUT);
-
-                    mailer.getApp().launch().done(function () {
-                        app = this;
-                        loaded.yep();
-                        j.expect(app).toBeDefined();
+                j.it('loads first mail in inbox', function () {
+                    var done = new Done();
+                    j.waitsFor(done, 'fetch mails', TIMEOUT);
+                    mailAPI.getAll({ folder: 'default0/INBOX' }).done(function (list) {
+                        first = _(list).first();
+                        console.debug('reply to email', first);
+                        done.yep();
+                        j.expect(first).toBeDefined();
                     });
                 });
 
-                // wait for mails to apear on the left side
-                j.waitsFor(function () {
-                    var mailItems = $('.leftside .mail[data-obj-id]');
-                    return !!mailItems.length;
-                }, 'no mails there', TIMEOUT * 2);
-
-                j.it('select first mail', function () {
-                    var firstMailItem = $('.leftside .mail').eq(0);
-                    cid = firstMailItem.attr('data-obj-id');
-                    firstMailItem.trigger('click');
-                });
-
-                // wait for the actions links in the first mail
-                j.waitsFor(function () {
-                    var actionLinks = $('.rightside .io-ox-action-link');
-                    if (actionLinks[0]) {
-                        return true;
-                    }
-                }, 'no action links there', TIMEOUT);
-
                 j.it('reply mail', function () {
-                    $('.rightside .io-ox-action-link[data-action=reply]').trigger("click");
+                    var done = new Done();
+                    j.waitsFor(done, 'trigger reply', TIMEOUT);
+                    require(['io.ox/mail/actions'], function () {
+                        actions.invoke('io.ox/mail/actions/reply', null, first);
+                        done.yep();
+                        j.expect(true).toBeDefined();
+                    });
                 });
 
                 // waits for recipent list in reply form
                 j.waitsFor(function () {
-                    if ($('.recipient-list .io-ox-mail-write-contact').length === 1) {
-                        return true;
-                    }
+                    return !!$('.recipient-list .io-ox-mail-write-contact').length;
                 }, 'recipent list is empty', TIMEOUT);
 
                 j.it('remove original recipent', function () {

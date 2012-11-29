@@ -18,39 +18,33 @@ define("io.ox/settings/test",
 
     var TIMEOUT = ox.testTimeout;
 
-    ext.point('test/suite').extend({
-        id: 'settings-get-test',
-        index: 100,
-        test: function (j) {
-            j.describe("Tests the get function of the jslob", function () {
+    // ext.point('test/suite').extend({
+    //     id: 'settings-get-test',
+    //     index: 100,
+    //     test: function (j) {
+    //         j.describe("Tests the get function of the jslob", function () {
+    //             j.it('tests the get functions', function () {
+    //                 j.runs(function () {
+    //                     var me = this;
+    //                     me.ready = false;
+    //                     api.configtestAll()
+    //                     .done(function (o) {
+    //                         if (_.isArray(o)) {
+    //                             me.ready = true;
+    //                         }
+    //                     })
+    //                     .fail(function () {
+    //                         console.log('no settingsdata recived');
+    //                     });
 
-                j.it('tests the get functions', function () {
-
-                    j.runs(function () {
-                        var me = this;
-                        me.ready = false;
-                        api.configtestGet()
-                        .done(function (o) {
-//                            console.log(o);
-                            if (_.isArray(o)) {
-                                me.ready = true;
-                            }
-                        })
-                        .fail(function () {
-                            console.log('no settingsdata recived');
-                        });
-
-                        j.waitsFor(function () {
-                            return this.ready;
-                        }, 'response from settings arrived', TIMEOUT);
-
-                    });
-
-                });
-
-            });
-        }
-    });
+    //                     j.waitsFor(function () {
+    //                         return this.ready;
+    //                     }, 'response from settings arrived', TIMEOUT);
+    //                 });
+    //             });
+    //         });
+    //     }
+    // });
 
     ext.point('test/suite').extend({
         id: 'settings-list-test',

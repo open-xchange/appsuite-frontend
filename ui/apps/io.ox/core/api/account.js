@@ -354,7 +354,6 @@ define('io.ox/core/api/account',
         });
     };
 
-
     api.autoconfig = function (data) {
         return http.GET({
             module: 'autoconfig',
@@ -367,7 +366,7 @@ define('io.ox/core/api/account',
     };
 
     // jslob testapi
-    api.configtestGet = function () {
+    api.configtestAll = function () {
         return http.GET({
             module: 'jslob',
             params: {
@@ -407,7 +406,6 @@ define('io.ox/core/api/account',
             data: data
         });
     };
-
 
     return api;
 });

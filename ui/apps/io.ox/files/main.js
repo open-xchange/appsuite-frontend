@@ -28,7 +28,7 @@ define("io.ox/files/main",
         win;
 
     // launcher
-    app.setLauncher(function () {
+    app.setLauncher(function (options) {
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/files',
@@ -51,7 +51,7 @@ define("io.ox/files/main",
                 if (!/^(icons|list)$/.test(p)) {
                     p = 'icons';
                 }
-                ox.ui.Perspective.show(app, _.url.hash('perspective') || p);
+                ox.ui.Perspective.show(app, options.perspective || _.url.hash('perspective') || p);
             });
     });
 

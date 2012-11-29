@@ -23,7 +23,6 @@ define('io.ox/files/actions',
     var Action = links.Action,
         ActionGroup = links.ActionGroup,
         ActionLink = links.ActionLink,
-
         POINT = 'io.ox/files';
 
     // actions
