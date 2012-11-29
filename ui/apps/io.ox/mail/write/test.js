@@ -14,14 +14,14 @@
 define('io.ox/mail/write/test',
     ['io.ox/mail/write/main',
      'io.ox/mail/api',
-     'io.ox/core/api/user',
+     'io.ox/core/api/account',
      'io.ox/core/extensions',
      'io.ox/mail/write/test/html_send',
      'io.ox/mail/write/test/text_send',
      'io.ox/mail/write/test/html_reply',
      'io.ox/mail/write/test/text_reply',
      'io.ox/mail/write/test/html_forward',
-     'io.ox/mail/write/test/text_forward'], function (writer, mailAPI, userAPI, ext) {
+     'io.ox/mail/write/test/text_forward'], function (writer, mailAPI, accountAPI, ext) {
 
     'use strict';
 
@@ -272,10 +272,9 @@ define('io.ox/mail/write/test',
                         var data = app.getMail().data, done = new Done(), myself = ox.user_id;
                         j.waitsFor(done, 'mail being send', TIMEOUT);
                         // get myself
-                        userAPI.get({ id: myself })
-                            .done(function (myself) {
+                        accountAPI.getPrimaryAddress().done(function (address) {
                                 // just send to myself
-                                data.to = [['"' + myself.display_name + '"', myself.email1]];
+                                data.to = [address];
                                 data.cc = [];
                                 data.bcc = [];
                                 sentOriginalData = data;
@@ -303,7 +302,6 @@ define('io.ox/mail/write/test',
                                         _.isEqual(sent.cc, data.cc) &&
                                         _.isEqual(sent.bcc, data.bcc) &&
                                         _.isEqual(sent.priority, data.priority) &&
-                                        _.isEqual(sent.disp_notification_to || undefined, data.disp_notification_to || undefined) &&
                                         _.isEqual(sent.vcard || undefined, data.vcard || undefined)
                                     )
                                     .toEqual(true);
@@ -313,8 +311,7 @@ define('io.ox/mail/write/test',
 
                 j.it('closes compose dialog', function () {
                     // mark app as clean so no save as draft question will pop up
-                    app.markClean();
-                    app.quit(true);
+                    app.dirty(false).quit();
                     j.expect(app.getEditor).toBeUndefined();
                     app = ed = form = null;
                 });
@@ -513,7 +510,7 @@ define('io.ox/mail/write/test',
                 });
 
                 j.it('closes compose dialog', function () {
-                    app.quit(true);
+                    app.dirty(false).quit();
                     j.expect(app.getEditor).toBeUndefined();
                     app = ed = null;
                 });
@@ -615,7 +612,7 @@ define('io.ox/mail/write/test',
                 });
 
                 j.it('closes compose dialog', function () {
-                    app.quit(true);
+                    app.dirty(false).quit();
                     j.expect(app.getEditor).toBeUndefined();
                     app = ed = null;
                 });
