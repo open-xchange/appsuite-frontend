@@ -136,9 +136,8 @@ define('io.ox/office/editor/format/tablestyles',
          *  object.
          *
          * @param {jQuery} [cellNode]
-         *  The DOM cell node corresponding to the passed attribute family that
-         *  has initially requested the formatting attributes of a table style
-         *  sheet, as jQuery object.
+         *  The DOM cell node that has initially requested the formatting
+         *  attributes of a table style sheet, as jQuery object.
          *
          * @returns {Object}
          *  The formatting attributes extracted from the passed style sheet
@@ -282,6 +281,30 @@ define('io.ox/office/editor/format/tablestyles',
         }
 
         /**
+         * Returns the attributes of the specified attribute family contained
+         * in table style sheets. Resolves the conditional attributes that
+         * match the position of the passed source element.
+         *
+         * @param {Object} elementAttributes
+         *  The explicit attributes of the table element, as map of attribute
+         *  value maps (name/value pairs), keyed by attribute family.
+         *
+         * @param {jQuery} tableNode
+         *  The DOM table node, as jQuery object.
+         *
+         * @param {jQuery} [cellNode]
+         *  The DOM cell node that has initially requested the formatting
+         *  attributes, as jQuery object.
+         *
+         * @returns {Object}
+         *  The resolved explicit formatting attributes, as map of attribute
+         *  value maps (name/value pairs), keyed by attribute family.
+         */
+        function resolveTableElementAttributes(elementAttributes, tableNode, cellNode) {
+            return resolveTableStyleAttributes({ wholeTable: elementAttributes }, tableNode, cellNode);
+        }
+
+        /**
          * Will be called for every table element whose attributes have been
          * changed. Repositions and reformats the table according to the passed
          * attributes.
@@ -320,7 +343,11 @@ define('io.ox/office/editor/format/tablestyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, { updateHandler: updateTableFormatting, styleAttributesResolver: resolveTableStyleAttributes });
+        StyleSheets.call(this, documentStyles, {
+            styleAttributesResolver: resolveTableStyleAttributes,
+            elementAttributesResolver: resolveTableElementAttributes,
+            updateHandler: updateTableFormatting
+        });
 
     } // class TableStyles
 

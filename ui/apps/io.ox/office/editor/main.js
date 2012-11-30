@@ -231,8 +231,12 @@ define('io.ox/office/editor/main',
 
             var // initialize the deferred to be returned
                 def = $.Deferred().always(function () {
-                    self.getWindow().idle();
                     editor.grabFocus(true);
+                    // let editor post-process (via window timeout), then leave busy state
+                    window.setTimeout(function () {
+                        self.getWindow().idle();
+                        editor.grabFocus();
+                    }, 0);
                 }),
 
                 // start time of the import process (for profiling)
