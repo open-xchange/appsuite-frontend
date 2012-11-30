@@ -74,7 +74,10 @@ define('io.ox/office/editor/editor',
         },
 
         DEFAULT_HYPERLINK_DEFINTIONS = { 'default': false, styleId: 'Hyperlink', styleName: 'Hyperlink', uiPriority: 99 },
-        DEFAULT_HYPERLINK_CHARATTRIBUTES = { color: { type: 'scheme', value: 'hyperlink' }, underline: true };
+        DEFAULT_HYPERLINK_CHARATTRIBUTES = { color: { type: 'scheme', value: 'hyperlink' }, underline: true },
+
+        // internal clipboard
+        clipboardOperations = [];
 
     // private global functions ===============================================
 
@@ -155,9 +158,6 @@ define('io.ox/office/editor/editor',
 
             //undo manager collection undo and redo operations
             undoManager = new UndoManager(this),
-
-            // internal clipboard
-            clipboardOperations = [],
 
             // container for all style sheets of all attribute families
             documentStyles = new DocumentStyles(editdiv),
@@ -326,15 +326,15 @@ define('io.ox/office/editor/editor',
                 // the clipboard event data
                 clipboardData = event && event.originalEvent && event.originalEvent.clipboardData;
 
+            // set the internal clipboard data and
+            // add the data to the clipboard event if the browser supports the clipboard api
+            this.copy(event);
 
             // if the browser supports the clipboard api, use the copy function to add data to the clipboard
             if (clipboardData) {
 
                 // prevent default cut handling of the browser
                 event.preventDefault();
-
-                // copy current selection to clipboard
-                this.copy(event);
 
                 // delete current selection
                 this.deleteSelected();
