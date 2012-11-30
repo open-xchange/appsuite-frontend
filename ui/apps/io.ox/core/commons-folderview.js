@@ -165,7 +165,7 @@ define('io.ox/core/commons-folderview',
             e.data.app.folderView.subscribe(e.data);
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+        ext.point(POINT + '/sidepanel/toolbar/add').extend({
             id: 'subscribe-folder',
             index: 200,
             draw: function (baton) {

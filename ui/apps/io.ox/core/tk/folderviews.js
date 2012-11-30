@@ -618,8 +618,8 @@ define('io.ox/core/tk/folderviews',
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var pane = new dialogs.ModalDialog({
-                    width: 400,
-                    modalbodyheight: 200,
+                    width: 500,
+                    addclass: 'subscribe-imap-folder',
                     easyOut: true
                 });
                 var changesArray = [];
