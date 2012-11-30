@@ -778,6 +778,7 @@ define('io.ox/office/editor/main',
          * @returns {String}
          *  A string representing the editor application state. Will be one of
          *  the following values:
+         *  - 'nofile': no document file loaded in editor,
          *  - 'offline': network connection missing,
          *  - 'readonly': the document cannot be changed,
          *  - 'initial': the document has not been changed yet,
@@ -785,7 +786,8 @@ define('io.ox/office/editor/main',
          *  - 'sending': local changes are currently being sent to the server.
          */
         this.getConnectionState = function () {
-            return (!ox.online || !syncMode) ? 'offline' :
+            return !this.hasFileDescriptor() ? 'nofile' :
+                (!ox.online || !syncMode) ? 'offline' :
                 !editor.isEditMode() ? 'readonly' :
                 this.hasUnsavedChanges() ? 'sending' :
                 this.isLocallyModified() ? 'ready' :

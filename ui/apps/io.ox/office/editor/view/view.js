@@ -127,6 +127,9 @@ define('io.ox/office/editor/view/view',
             }
 
             switch (value) {
+            case 'nofile':
+                caption = gt('No document');
+                break;
             case 'offline':
                 caption = gt('Offline');
                 break;

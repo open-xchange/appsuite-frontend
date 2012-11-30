@@ -69,7 +69,7 @@ define('io.ox/office/editor/format/border',
         }
 
         // convert color object to CSS color
-        color = this.getCssColor(color, 'line');
+        color = Color.getCssColor(color, 'line', theme);
 
         // combine the values to a single string
         return [style, width, color].join(' ');

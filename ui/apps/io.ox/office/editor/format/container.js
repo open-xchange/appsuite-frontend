@@ -15,7 +15,7 @@ define('io.ox/office/editor/format/container',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
      'io.ox/office/editor/format/color',
-     'io.ox/office/editor/format/color'
+     'io.ox/office/editor/format/border'
     ], function (Events, Utils, Color, Border) {
 
     'use strict';
