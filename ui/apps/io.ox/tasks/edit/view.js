@@ -16,13 +16,12 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                                  'io.ox/tasks/util',
                                  'io.ox/tasks/model',
                                  'io.ox/core/date',
-                                 'io.ox/tasks/edit/pickerPopup',
                                  'io.ox/tasks/edit/util',
                                  'io.ox/core/extensions',
                                  'io.ox/core/notifications',
                                  'io.ox/backbone/views',
                                  'io.ox/backbone/forms'],
-                                 function (gt, template, reminderUtil, model, date, picker, util, ext, notifications, views, forms) {
+                                 function (gt, template, reminderUtil, model, date, util, ext, notifications, views, forms) {
     "use strict";
 
     var point = views.point('io.ox/tasks/edit/view'),
