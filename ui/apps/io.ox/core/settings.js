@@ -11,28 +11,47 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/event'], function (http, cache, Event) {
+define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/event'], function (http, cache, Event) {
 
     'use strict';
 
+    var clone = function (obj) {
+        // simple, fast, and robust
+        return JSON.parse(JSON.stringify(obj));
+    };
+
+    var get = function (source, path, defaultValue) {
+        // no argument?
+        if (path === undefined) { return clone(source); }
+        // get parts
+        var key = String(path),
+            parts = key.split(/\//), tmp = clone(source) || {};
+        while (parts.length) {
+            key = parts.shift();
+            tmp = tmp[key];
+            if (tmp === undefined) { return defaultValue; }
+        }
+        return tmp;
+    };
+
     var Settings = function (path) {
 
-        var tree = {}, self = this, settingsCache = new cache.SimpleCache('settings', true);
+        var tree = {},
+            meta = {},
+            self = this,
+            settingsCache = new cache.SimpleCache('settings', true);
 
         this.get = function (path, defaultValue) {
-            // no argument?
-            if (arguments.length === 0) { return tree; }
-            // get parts
-            var key = String(path),
-                parts = key.split(/\//), tmp = tree || {};
-            while (parts.length) {
-                key = parts.shift();
-                tmp = tmp[key];
-                if (!_.isObject(tmp)) {
-                    return parts.length ? defaultValue : tmp;
-                }
-            }
-            return tmp;
+            return get(tree, path, defaultValue);
+        };
+
+        this.meta = function (path) {
+            return get(meta, path, {});
+        };
+
+        this.isConfigurable = function (path) {
+            var meta = this.meta(path);
+            return 'configurable' in meta ? meta.configurable : true; // default is true!
         };
 
         this.contains = function (path) {
@@ -115,20 +134,27 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                 })
                 .pipe(function (data) {
                     tree = data[0].tree;
+                    meta = data[0].meta;
                     return applyDefaults();
                 })
                 .pipe(function () {
-                    self.trigger('load', tree);
-                    return settingsCache.add(path, tree);
+                    self.trigger('load', tree, meta);
+                    var data = { tree: tree, meta: meta };
+                    return settingsCache.add(path, data).pipe(function () { return data; });
                 });
             };
 
             return settingsCache.get(path).pipe(function (data) {
-                if (data !== null) {
-                    load();
-                    return (tree = data);
-                } else {
-                    return load();
+                try {
+                    if (data !== null) {
+                        tree = data.tree;
+                        meta = data.meta;
+                        return data;
+                    } else {
+                        return load();
+                    }
+                } finally {
+                    load(); // read-through caching
                 }
             });
         };
