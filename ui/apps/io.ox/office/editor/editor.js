@@ -45,12 +45,12 @@ define('io.ox/office/editor/editor',
 
         // style attributes for heading 1 -6 based on latent styles
         HEADINGS_CHARATTRIBUTES = [
-            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 74902 }]}, bold: true, fontSize: 14 },
-            { color: { type: 'scheme', value: 'accent1'}, bold: true, fontSize: 13 },
-            { color: { type: 'scheme', value: 'accent1'}, bold: true },
-            { color: { type: 'scheme', value: 'accent1'}, bold: true, italic: true },
-            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 49804 }]} },
-            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 49804 }]}, italic: true }
+            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 74902 }], fallbackValue: '376092' }, bold: true, fontSize: 14 },
+            { color: { type: 'scheme', value: 'accent1', fallbackValue: '4F81BD' }, bold: true, fontSize: 13 },
+            { color: { type: 'scheme', value: 'accent1', fallbackValue: '4F81BD' }, bold: true },
+            { color: { type: 'scheme', value: 'accent1', fallbackValue: '4F81BD' }, bold: true, italic: true },
+            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 49804 }], fallbackValue: '244061' } },
+            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 49804 }], fallbackValue: '244061' }, italic: true }
         ],
 
         DEFAULT_PARAGRAPH_DEFINTIONS = { 'default': true, styleId: 'Standard', styleName: 'Normal' },
@@ -74,7 +74,7 @@ define('io.ox/office/editor/editor',
         },
 
         DEFAULT_HYPERLINK_DEFINTIONS = { 'default': false, styleId: 'Hyperlink', styleName: 'Hyperlink', uiPriority: 99 },
-        DEFAULT_HYPERLINK_CHARATTRIBUTES = { color: { type: 'scheme', value: 'hyperlink' }, underline: true },
+        DEFAULT_HYPERLINK_CHARATTRIBUTES = { color: { type: 'scheme', value: 'hyperlink', fallbackValue: '0080C0' }, underline: true },
 
         // internal clipboard
         clipboardOperations = [];

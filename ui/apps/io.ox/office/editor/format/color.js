@@ -247,7 +247,10 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
             rgbColor = transformRGBColor(color.value, transformations);
             break;
         case 'scheme':
-            rgbColor = transformRGBColor(theme && theme.getSchemeColor(color.value), transformations);
+            if (theme)
+                rgbColor = transformRGBColor(theme && theme.getSchemeColor(color.value), transformations);
+            else
+                rgbColor = color.fallbackValue;
             break;
         case 'auto':
             switch (context) {
@@ -264,6 +267,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
             }
             break;
         default:
+            rgbColor = _.isString(color.fallbackColor) ? color.fallbackColor : null;
             Utils.warn('Color.getCssColor(): unknown color type: ' + type);
         }
 
