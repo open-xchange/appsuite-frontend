@@ -79,17 +79,18 @@ define("io.ox/tasks/api", ["io.ox/core/http",
     api.update = function (timestamp, taskId, modifications, folder) {
                 //check if only one big array was given for exsample by modelfactory
                 if (arguments.length === 1) {
-                    timestamp = arguments[0].last_modified;
+                    var args = arguments[0];
+                    timestamp = args.last_modified;
                     if (!timestamp) {
                         timestamp = _.now();
                     }
-                    taskId = arguments[0].id;
-                    modifications = arguments[0];
-                    folder = arguments[0].folder_id;
-                    if (!folder) {
-                        folder = arguments[0].folder;
-                    }
+                    taskId = args.id;
                     
+                    folder = args.folder_id;
+                    if (!folder) {
+                        folder = args.folder;
+                    }
+                    modifications = args;
                 }
                 //go on normaly
                 var useFolder;
