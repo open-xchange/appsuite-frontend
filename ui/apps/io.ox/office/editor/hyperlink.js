@@ -738,6 +738,28 @@ define('io.ox/office/editor/hyperlink',
         editor.applyOperations(generator.getOperations());
     };
 
+    /**
+     * Shortens a hyperlink to a maximal number of
+     * characters.
+     *
+     * @param text {String} Hyperlink to shorten
+     */
+    Hyperlink.limitHyperlinkText = function (text) {
+
+        var maxChars = 255,
+            result = text;
+
+        if (_.isString(text) && text.length > maxChars) {
+            var length = text.length,
+                start = text.slice(0, Math.round(maxChars / 2)),
+                end = text.slice(length - Math.round(maxChars / 2));
+
+            result = "".concat(start, "...", end);
+        }
+
+        return result;
+    };
+
     // exports ================================================================
 
     return Hyperlink;

@@ -36,9 +36,7 @@ define('io.ox/office/preview/fileActions',
         },
         action: function (baton) {
             if ((SUPPORTED_EXT.test(baton.data.filename))) {
-                // We are always called by the action processing although our filter
-                // reported that we cannot process the file. Just check again to prevent
-                // strange effects.
+                // On Firefox we have to do this check to prevent duplicate actions (default/preview)
                 ox.launch('io.ox/office/preview/main', { action: 'load', file: baton.data });
                 baton.preventDefault();
             }

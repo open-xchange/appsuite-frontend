@@ -2278,7 +2278,7 @@ define('io.ox/office/editor/editor',
                                     left = (left + scrollLeft) - parentLeft;
                                     top = (top + scrollTop + height) - parentTop;
 
-                                    link.text(result.url);
+                                    link.text(Hyperlink.limitHyperlinkText(result.url));
                                     link.attr({href: result.url});
                                     hyperlinkPopup.show();
                                     hyperlinkPopup.css({left: left, top: top});
