@@ -26,10 +26,16 @@ define.async = (function () {
 
     return function (name, deps, callback) {
         // use loader plugin to defer module definition
+        var wrapper = null;
         if (ox.manifests) {
-            deps = ox.manifests.withPluginsFor(name, deps);
+            wrapper = ox.manifests.wrapperFor(name, deps, callback);
+        } else {
+            wrapper = {
+                dependencies: deps,
+                definitionFunction: callback
+            };
         }
-        define(name + ':init', { load: getLoader(name, deps, callback) });
+        define(name + ':init', { load: getLoader(name, wrapper.dependencies, wrapper.definitionFunction) });
         // define real module - will wait for promise
         define(name, [name + ':init!'], _.identity);
     };
@@ -55,12 +61,11 @@ define.async = (function () {
             } else if (arguments.length > 2) {
                 definitionFunction = arguments[2];
             }
-            if (name === 'io.ox/core/notifications') {
-                console.log(dependencies, ox.manifests.withPluginsFor(name, dependencies));
-                return originalDefine(name, ox.manifests.withPluginsFor(name, dependencies), definitionFunction);
-            } else {
-                return originalDefine(name, ox.manifests.withPluginsFor(name, dependencies), definitionFunction);
-            }
+            
+            var wrapper = ox.manifests.wrapperFor(name, dependencies, definitionFunction);
+
+            return originalDefine(name, wrapper.dependencies, wrapper.definitionFunction);
+            
         }
 
         // Just delegate everything else

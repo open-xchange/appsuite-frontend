@@ -12,7 +12,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/notifications', ['io.ox/core/extensions', 'io.ox/core/manifests'], function (ext, manifests) {
+define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins'], function (ext, plugins) {
 
     'use strict';
 
@@ -128,7 +128,9 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'io.ox/core/manifes
             this.badges.push(badgeView);
 
             // invoke plugins
-            ext.point('io.ox/core/notifications/register').invoke('register', self, self);
+            plugins.loading.done(function () {
+                ext.point('io.ox/core/notifications/register').invoke('register', self, self);
+            });
             
             // now register default notification handler
             /*require(['io.ox/mail/notifications',
