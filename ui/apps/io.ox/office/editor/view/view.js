@@ -264,7 +264,7 @@ define('io.ox/office/editor/view/view',
 
         // base constructor ---------------------------------------------------
 
-        View.call(this, app);
+        View.call(this, app, { modelPadding: 30 });
 
         // methods ------------------------------------------------------------
 

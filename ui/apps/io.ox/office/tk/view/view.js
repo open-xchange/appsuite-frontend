@@ -42,8 +42,15 @@ define('io.ox/office/tk/view/view',
      * Base class for the view instance of an office application. Creates the
      * application window, and provides functionality to create and control the
      * top, bottom, and side pane elements.
+     *
+     * @param {Object} [options]
+     *  Additional options to control the appearance of the view. The following
+     *  options are supported:
+     *  @param {Number} [options.modelPadding=0]
+     *      The padding of the model root node to the borders of the scrollable
+     *      application pane.
      */
-    function View(app) {
+    function View(app, options) {
 
         var // the application controller
             controller = app.getController(),
@@ -54,12 +61,17 @@ define('io.ox/office/tk/view/view',
             // centered application pane
             appPane = null,
 
+            // application model container node
+            modelContainerNode = $('<div>').addClass('app-pane-model-container'),
+
             // all pane instances, mapped by identifier, and by border side
             panes = { all: {}, top: [], bottom: [], left: [], right: [] },
 
             // shadow nodes
-            topShadowNode = $('<div>').addClass('shadow-top'),
-            leftShadowNode = $('<div>').addClass('shadow-left');
+            topShadowNode = $('<div>').addClass('app-pane-shadow top'),
+            bottomShadowNode = $('<div>').addClass('app-pane-shadow bottom'),
+            leftShadowNode = $('<div>').addClass('app-pane-shadow left'),
+            rightShadowNode = $('<div>').addClass('app-pane-shadow right');
 
         // private methods ----------------------------------------------------
 
@@ -110,7 +122,9 @@ define('io.ox/office/tk/view/view',
             // update the application pane and the shadow nodes (jQuery interprets numbers as pixels automatically)
             appPane.getNode().css(offsets);
             topShadowNode.css({ top: offsets.top - 10, height: 10, left: offsets.left, right: offsets.right });
+            bottomShadowNode.css({ bottom: offsets.bottom - 10, height: 10, left: offsets.left, right: offsets.right });
             leftShadowNode.css({ top: offsets.top, bottom: offsets.bottom, left: offsets.left - 10, width: 10 });
+            rightShadowNode.css({ top: offsets.top, bottom: offsets.bottom, right: offsets.right - 10, width: 10 });
         }
 
         // methods ------------------------------------------------------------
@@ -203,9 +217,13 @@ define('io.ox/office/tk/view/view',
         // set the window at the application instance
         app.setWindow(win);
 
-        // create the application pane, and insert the document model root node
+        // insert the document model root node into the container node
+        modelContainerNode.append(app.getModel().getNode());
+        modelContainerNode.css('margin', Utils.getIntegerOption(options, 'modelPadding', 0, 0) + 'px');
+
+        // create the application pane, and insert the model container
         appPane = new Pane(app, { classes: 'app-pane' });
-        appPane.getNode().append(app.getModel().getNode());
+        appPane.getNode().append(modelContainerNode);
 
         // move window tool bar to the right
         win.nodes.outer.addClass('toolbar-right');
@@ -213,7 +231,7 @@ define('io.ox/office/tk/view/view',
         // add the main application pane
         win.nodes.main.addClass('io-ox-office-main ' + app.getName().replace(/[.\/]/g, '-') + '-main').append(
             // add shadow nodes above application pane, but below other panes
-            appPane.getNode(), topShadowNode, leftShadowNode);
+            appPane.getNode(), topShadowNode, bottomShadowNode, leftShadowNode, rightShadowNode);
 
         // listen to browser window resize events when the OX window is visible
         app.registerWindowResizeHandler(windowResizeHandler);

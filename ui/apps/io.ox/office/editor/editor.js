@@ -200,6 +200,38 @@ define('io.ox/office/editor/editor',
 
         // private methods ----------------------------------------------------
 
+        /**
+         * Returns the scrollable application root node containing this editor.
+         */
+        function getApplicationNode() {
+            return app.getView().getApplicationNode();
+        }
+
+        /**
+         * Scrolls the application root node to make the passed document node
+         * visible.
+         */
+        function scrollToNode(node) {
+            Utils.scrollToChildNode(getApplicationNode(), node, { padding: 30 });
+        }
+
+        /**
+         * Returns the current scroll position of the application root node.
+         */
+        function getScrollPosition() {
+            var appNode = getApplicationNode();
+            return { top: appNode.scrollTop(), left: appNode.scrollLeft() };
+        }
+
+        /**
+         * Sets a new scroll position at the application root node.
+         */
+        function setScrollPosition(position) {
+            var appNode = getApplicationNode();
+            appNode.scrollTop(position.top);
+            appNode.scrollLeft(position.left);
+        }
+
         // methods ------------------------------------------------------------
 
         /**
@@ -890,7 +922,7 @@ define('io.ox/office/editor/editor',
                 // fade out entire document
                 editdiv.addClass('highlight');
                 // make first highlighted text node visible
-                Utils.scrollToChildNode(editdiv.parent(), highlightedSpans[0], { padding: 30 });
+                scrollToNode(highlightedSpans[0]);
             }
 
             // return whether any text in the document matches the passed query text
@@ -2286,15 +2318,14 @@ define('io.ox/office/editor/editor',
                                     height = $(obj.node).height();
 
                                     // calculate position relative to the application pane
-                                    var parent = app.getView().getApplicationNode(),
+                                    var parent = getApplicationNode(),
                                         parentLeft = parent.offset().left,
                                         parentTop = parent.offset().top,
                                         parentWidth = parent.width(),
-                                        scrollLeft = parent.scrollLeft(),
-                                        scrollTop = parent.scrollTop();
+                                        scrollPos = getScrollPosition();
 
-                                    left = (left + scrollLeft) - parentLeft;
-                                    top = (top + scrollTop + height) - parentTop;
+                                    left = (left + scrollPos.left) - parentLeft;
+                                    top = (top + scrollPos.top + height) - parentTop;
 
                                     link.text(Hyperlink.limitHyperlinkText(result.url));
                                     link.attr({href: result.url});
@@ -2461,7 +2492,7 @@ define('io.ox/office/editor/editor',
             var // current focus state
                 isFocused = false,
                 // current scroll position
-                scrollOffset = { top: 0, left: 0 };
+                scrollPosition = null;
 
             // return the actual processFocus() method
             return function (event) {
@@ -2473,10 +2504,10 @@ define('io.ox/office/editor/editor',
                 if (isFocused === gotFocus) { return; }
                 isFocused = gotFocus;
 
-                if (isFocused) {
+                // the view is still missing if called from its own constructor
+                if (isFocused && app.getView()) {
                     // store current scroll positions
-                    scrollOffset.top = editdiv.parent().scrollTop();
-                    scrollOffset.left = editdiv.parent().scrollLeft();
+                    scrollPosition = getScrollPosition();
                     // Chrome sets a default text cursor at the top position
                     // while processing the focus event, if the editor does
                     // not contain a valid browser selection, e.g. when a
@@ -2484,8 +2515,7 @@ define('io.ox/office/editor/editor',
                     // be restored in a timeout handler.
                     window.setTimeout(function () {
                         // restore current scroll positions
-                        editdiv.parent().scrollTop(scrollOffset.top);
-                        editdiv.parent().scrollLeft(scrollOffset.left);
+                        setScrollPosition(scrollPosition);
                         // selection is invalid until document has been initialized
                         if (selection.isValid()) {
                             selection.restoreBrowserSelection();

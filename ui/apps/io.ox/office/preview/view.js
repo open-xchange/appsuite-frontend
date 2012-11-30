@@ -34,7 +34,7 @@ define('io.ox/office/preview/view',
 
         // base constructor ---------------------------------------------------
 
-        View.call(this, app);
+        View.call(this, app, { modelPadding: 30 });
 
         // initialization -----------------------------------------------------
 
