@@ -180,6 +180,16 @@ i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }
 
 /* panes =================================================================== */
 
+.shadow-top {
+    position: absolute;
+    .box-shadow(0 5px 10px fade(black, 20%));
+}
+
+.shadow-left {
+    position: absolute;
+    .box-shadow(5px 0 10px fade(black, 20%));
+}
+
 .view-pane {
     position: absolute;
     background-color: @pane-fill-color;

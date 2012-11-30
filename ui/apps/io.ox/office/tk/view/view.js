@@ -55,7 +55,11 @@ define('io.ox/office/tk/view/view',
             appPane = null,
 
             // all pane instances, mapped by identifier, and by border side
-            panes = { all: {}, top: [], bottom: [], left: [], right: [] };
+            panes = { all: {}, top: [], bottom: [], left: [], right: [] },
+
+            // shadow nodes
+            topShadowNode = $('<div>').addClass('shadow-top'),
+            leftShadowNode = $('<div>').addClass('shadow-left');
 
         // private methods ----------------------------------------------------
 
@@ -103,8 +107,10 @@ define('io.ox/office/tk/view/view',
                 updateHorizontalPanes();
             }
 
-            // update the application pane
+            // update the application pane and the shadow nodes (jQuery interprets numbers as pixels automatically)
             appPane.getNode().css(offsets);
+            topShadowNode.css({ top: offsets.top - 10, height: 10, left: offsets.left, right: offsets.right });
+            leftShadowNode.css({ top: offsets.top, bottom: offsets.bottom, left: offsets.left - 10, width: 10 });
         }
 
         // methods ------------------------------------------------------------
@@ -205,7 +211,9 @@ define('io.ox/office/tk/view/view',
         win.nodes.outer.addClass('toolbar-right');
 
         // add the main application pane
-        win.nodes.main.addClass('io-ox-office-main ' + app.getName().replace(/[.\/]/g, '-') + '-main').append(appPane.getNode());
+        win.nodes.main.addClass('io-ox-office-main ' + app.getName().replace(/[.\/]/g, '-') + '-main').append(
+            // add shadow nodes above application pane, but below other panes
+            appPane.getNode(), topShadowNode, leftShadowNode);
 
         // listen to browser window resize events when the OX window is visible
         app.registerWindowResizeHandler(windowResizeHandler);
