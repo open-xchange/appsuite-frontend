@@ -13,13 +13,12 @@
  */
 
 define('plugins/notifications/calendar/register',
-    ['io.ox/core/notifications',
-     'io.ox/calendar/api',
+    ['io.ox/calendar/api',
      'io.ox/calendar/util',
      'io.ox/core/extensions',
      'io.ox/core/api/user',
      'gettext!plugins/notifications'
-    ], function (notificationController, calApi, util, ext, userApi, gt) {
+    ], function (calApi, util, ext, userApi, gt) {
 
     'use strict';
 

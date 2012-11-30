@@ -302,7 +302,6 @@ define(function () {
     },
     {
         "namespace": "portal",
-        "requires": "oauth",
         "path": "plugins/portal/facebook/register"
     },
     {
@@ -311,7 +310,6 @@ define(function () {
     },
     {
         "namespace": "portal",
-        "requires": "oauth",
         "path": "plugins/portal/linkedIn/register"
     },
     {
@@ -342,7 +340,6 @@ define(function () {
     },
     {
         "namespace": "portal",
-        "requires": "oauth",
         "path": "plugins/portal/twitter/register"
     }
 ]});

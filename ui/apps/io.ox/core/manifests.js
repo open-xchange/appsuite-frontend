@@ -39,7 +39,7 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
             if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
                 return requirements;
             }
-            return requirements.concat(_(this.pluginPoints[pointName]).pluck("path"));
+            return requirements.concat(_(this.pluginPoints[pointName]).chain().pluck("path").uniq().value());
         },
         pluginsFor: function (pointName) {
             if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {

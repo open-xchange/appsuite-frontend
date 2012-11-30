@@ -128,6 +128,17 @@ define('io.ox/settings/main',
                     return item.settings;
                 });
 
+                apps.unshift({
+                    category: 'Basic',
+                    company: 'Open-Xchange',
+                    description: 'Basic Settings',
+                    icon: '',
+                    id: 'io.ox/settings/basic',
+                    settings: true,
+                    title: 'Basic Settings'
+                });
+
+                // TODO: Move this to a plugin
                 apps.push({
                     category: 'Basic',
                     company: 'Open-Xchange',
@@ -137,6 +148,8 @@ define('io.ox/settings/main',
                     settings: true,
                     title: 'Keyring'
                 });
+
+                // Extend the above list by custom plugins
 
                 def.resolve(apps);
             });

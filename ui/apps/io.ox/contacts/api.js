@@ -14,10 +14,13 @@ define('io.ox/contacts/api',
 
     ['io.ox/core/http',
      'io.ox/core/api/factory',
+     'io.ox/core/notifications',
      'io.ox/core/cache'
-     ], function (http, apiFactory, cache) {
+     ], function (http, apiFactory, notifications, cache) {
 
     'use strict';
+
+    console.log("NOTIFICATIONS", notifications, cache, arguments);
 
     // generate basic API
     var api = apiFactory({

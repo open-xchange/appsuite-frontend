@@ -55,7 +55,12 @@ define.async = (function () {
             } else if (arguments.length > 2) {
                 definitionFunction = arguments[2];
             }
-            return originalDefine(name, ox.manifests.withPluginsFor(name, dependencies), definitionFunction);
+            if (name === 'io.ox/core/notifications') {
+                console.log(dependencies, ox.manifests.withPluginsFor(name, dependencies));
+                return originalDefine(name, ox.manifests.withPluginsFor(name, dependencies), definitionFunction);
+            } else {
+                return originalDefine(name, ox.manifests.withPluginsFor(name, dependencies), definitionFunction);
+            }
         }
 
         // Just delegate everything else

@@ -13,12 +13,11 @@
  */
 
 define('plugins/notifications/mail/register',
-    ['io.ox/core/notifications',
-     'io.ox/mail/api',
+    ['io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/core/extensions',
      'gettext!plugins/notifications'
-    ], function (notifications, api, util, ext, gt) {
+    ], function (api, util, ext, gt) {
 
     'use strict';
 
@@ -115,7 +114,7 @@ define('plugins/notifications/mail/register',
 
         openApp: function (e) {
             e.preventDefault();
-            notifications.hideList();
+            require("io.ox/core/notifications").hideList();
             ox.launch('io.ox/mail/main').done(function () {
                 // go to inbox
                 this.folder.set(api.getDefaultFolder());
