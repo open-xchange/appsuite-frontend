@@ -31,7 +31,7 @@ define(function () {
         "requires": "calendar",
         "path": "io.ox/calendar/main"
 
-    }, 
+    },
     {
         "title": "Address Book",
         "company": "Open-Xchange",
@@ -289,7 +289,7 @@ define(function () {
     {
         "namespace": "portal",
         "requires": "calendar",
-        "path": "plugins/portal/appointments/register"
+        "path": "plugins/portal/calendar/register"
     },
     {
         "namespace": "portal",

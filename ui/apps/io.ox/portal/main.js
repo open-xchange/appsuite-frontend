@@ -24,44 +24,52 @@ define('io.ox/portal/main',
 
     'use strict';
 
+    console.warn('PORTAL SETTINGS', settings.get());
+
     // overwrite with fresh settings
     settings.detach().set({
         widgets: {
-            mail_0: {
-                plugin: 'plugins/portal/mail/register',
-                color: 'blue',
-                index: 1
-            },
-            calendar_0: {
-                plugin: 'plugins/portal/calendar/register',
-                color: 'red',
-                index: 2
-            },
-            tasks_0: {
-                plugin: 'plugins/portal/tasks/register',
-                color: 'black',
-                index: 3
-            },
-            quota_0: {
-                plugin: 'plugins/portal/quota/register',
-                color: 'orange',
-                index: 'last'
-            },
-            facebook_0: {
-                plugin: 'plugins/portal/facebook/register',
-                color: 'blue',
-                enabled: false,
-                index: 4
-            },
-            birthdays_0: {
-                plugin: 'plugins/portal/birthdays/register',
-                color: 'blue',
-                index: 'first'
+            user: {
+                mail_0: {
+                    id: 'mail',
+                    plugin: 'plugins/portal/mail/register',
+                    color: 'blue',
+                    index: 1
+                },
+                calendar_0: {
+                    id: 'calendar',
+                    plugin: 'plugins/portal/calendar/register',
+                    color: 'red',
+                    index: 2
+                },
+                tasks_0: {
+                    id: 'tasks',
+                    plugin: 'plugins/portal/tasks/register',
+                    color: 'green',
+                    index: 3
+                },
+                quota_0: {
+                    id: 'quota',
+                    plugin: 'plugins/portal/quota/register',
+                    color: 'black',
+                    index: 'last'
+                },
+                facebook_0: {
+                    id: 'facebook',
+                    plugin: 'plugins/portal/facebook/register',
+                    color: 'blue',
+                    enabled: false,
+                    index: 4
+                },
+                birthdays_0: {
+                    id: 'birthdays',
+                    plugin: 'plugins/portal/birthdays/register',
+                    color: 'blue',
+                    index: 'first'
+                }
             }
         }
     });
-
-    console.warn('PORTAL SETTINGS', settings.get());
 
     // time-based greeting phrase
     function getGreetingPhrase(name) {
@@ -90,7 +98,7 @@ define('io.ox/portal/main',
         index: 100,
         draw: function (baton) {
             this.append(
-                $('<div>').append(
+                $('<div class="header">').append(
                     // button
                     $('<button class="btn btn-primary pull-right">')
                         .attr('data-action', 'personalize')
@@ -124,13 +132,12 @@ define('io.ox/portal/main',
     });
 
     // widget scaffold
-    ext.point('io.ox/portal/widget').extend({
+    ext.point('io.ox/portal/widget-scaffold').extend({
         draw: function (baton) {
             var data = baton.data;
-            this.addClass('widget widget-color-' + (data.color || 'white'))
-                .attr({ 'data-widget-id': data.id, 'data-widget-plugin': data.plugin })
+            this.addClass('widget widget-color-' + (data.color || 'white') + ' widget-' + data.id + ' pending')
                 .append(
-                    $('<h2>').text(data.plugin)
+                    $('<h2 class="title">').text('\u00A0')
                 );
         }
     });
@@ -140,7 +147,22 @@ define('io.ox/portal/main',
         // app window
         win,
         // app baton
-        appBaton = ext.Baton({ app: app });
+        appBaton = ext.Baton({ app: app }),
+        // all available plugins
+        availablePlugins = _(manifests.pluginsFor('portal')).uniq(),
+        // collection
+        collection = new Backbone.Collection(
+            _(settings.get('widgets/user', {}))
+            .chain()
+            .filter(function (obj) {
+                return (obj.enabled === undefined || obj.enabled === true) && _(availablePlugins).contains(obj.plugin);
+            })
+            .map(function (obj) {
+                return obj;
+            })
+            .value()
+            .sort(ext.indexSorter)
+        );
 
     app.updateTitle = function () {
         userAPI.getGreeting(ox.user_id).done(function (name) {
@@ -148,38 +170,47 @@ define('io.ox/portal/main',
         });
     };
 
-    app.getWidgetList = function () {
-        // build plugin hash
-        var plugins = manifests.pluginsFor('portal');
-        console.log('availablePlugins', plugins);
-        return _(settings.get('widgets', {}))
-            .chain()
-            .filter(function (obj) {
-                return (obj.enabled === undefined || obj.enabled === true) && _(plugins).contains(obj.plugin);
-            })
-            .map(function (obj, id) {
-                obj.id = id;
-                return obj;
-            })
-            .value()
-            .sort(ext.indexSorter);
+    app.getCollection = function () {
+        return collection;
     };
 
-    app.drawWidgets = function () {
-        _(app.getWidgetList()).each(function (data, id) {
-            var node = $('<div>'),
-                baton = ext.Baton({ data: data, app: app });
-            ext.point('io.ox/portal/widget').invoke('draw', node, baton);
+    app.drawScaffolds = function () {
+        collection.each(function (model) {
+            var node = $('<div>', { 'data-widget-cid': model.cid, 'data-widget-plugin': model.get('plugin') }),
+                baton = ext.Baton({ data: model.toJSON(), app: app });
+            ext.point('io.ox/portal/widget-scaffold').invoke('draw', node, baton);
             appBaton.$.widgets.append(node);
         });
     };
 
     app.loadPlugins = function () {
 
-        var availablePlugins = manifests.pluginsFor('portal'),
-            usedPlugins = _(app.getWidgetList()).pluck('plugin'),
-            requiredPlugins = _(availablePlugins).intersection(usedPlugins);
-        console.log('YEAH', requiredPlugins);
+        var usedPlugins = collection.pluck('plugin'),
+            dependencies = _(availablePlugins).intersection(usedPlugins);
+
+        return require(dependencies);
+    };
+
+    app.drawWidgets = function () {
+        collection.each(function (model, index) {
+            // get proper extension
+            var id = model.get('id');
+            ext.point('io.ox/portal/widget').get(id, function (widget) {
+                var node = appBaton.$.widgets.find('[data-widget-cid="' + model.cid + '"]'),
+                    delay = (index / 2 >> 0) * 2000;
+                // set title
+                node.find('h2.title').text(widget.title);
+                // simple delay approach
+                setTimeout(function () {
+                    (widget.load || widget.loadTile)().done(function (data) {
+                        if (widget.preview) {
+                            widget.preview.call(node, data);
+                            node.removeClass('pending');
+                        }
+                    });
+                }, delay);
+            });
+        });
     };
 
     // launcher
@@ -197,8 +228,10 @@ define('io.ox/portal/main',
         _.tick(1, 'hour', app.updateTitle);
 
         win.show(function () {
-            app.drawWidgets();
-            app.loadPlugins();
+            app.drawScaffolds();
+            app.loadPlugins().done(function () {
+                app.drawWidgets();
+            });
         });
     });
 

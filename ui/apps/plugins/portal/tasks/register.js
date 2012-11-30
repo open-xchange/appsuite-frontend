@@ -11,15 +11,17 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("plugins/portal/tasks/register", ["io.ox/core/extensions",
-                                         "io.ox/tasks/api",
-                                         'gettext!plugins/portal',
-                                         'io.ox/core/strings',
-                                         'io.ox/tasks/util',
-                                         'io.ox/tasks/view-grid-template',
-                                         'io.ox/core/tk/dialogs',
-                                         'less!plugins/portal/tasks/style.css'],
-                                         function (ext, taskApi, gt, strings, util, viewGrid, dialogs) {
+define("plugins/portal/tasks/register",
+    ['io.ox/core/extensions',
+     'io.ox/tasks/api',
+     'gettext!plugins/portal',
+     'io.ox/core/strings',
+     'io.ox/tasks/util',
+     'io.ox/tasks/view-grid-template',
+     'io.ox/core/tk/dialogs',
+     'less!plugins/portal/tasks/style.css'
+    ], function (ext, taskApi, gt, strings, util, viewGrid, dialogs) {
+
     "use strict";
 
     //var for detailView sidepane.Needs to be closed on DetailView delete action
@@ -33,31 +35,35 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
         return prevDef;
     },
 
-    drawTile = function (taskarray, $node) {
+    drawTile = function (taskarray) {
+
+        var content = $('<div class="content">');
+
         if (taskarray.length === 0) {
-            $node.append($('<div class="io-ox-clear io-ox-portal-content">').text(gt("You don't have any tasks.")));
+            this.append(content.text(gt("You don't have any tasks.")));
             return;
         }
-        var tasks = [];
 
+        var tasks = [];
         for (var i = 0; i < taskarray.length; i++) {
             if (taskarray[i].end_date !== null && taskarray[i].status !== 3) {
                 tasks.push(taskarray[i]);
             }
         }
-        var $preview = $('<div class="io-ox-clear io-ox-portal-content">').appendTo($node);
 
         _(tasks).each(function (task) {
             var task = util.interpretTask(task);
-            var $task = $('<div class="io-ox-portal-item">').append(
-                $("<span>").text(gt.noI18n(strings.shorten(task.title, 50) + ' ')).addClass("io-ox-portal-tasks-preview-title io-ox-portal-preview-firstline"),
-                $('<span>').text(gt("Due in %1$s ", _.noI18n(task.end_date))).addClass("io-ox-portal-tasks-preview-date io-ox-portal-preview-thirdline"),
-                $("<span>").text(gt.noI18n(strings.shorten(task.note, 100))).addClass("io-ox-portal-tasks-preview-note io-ox-portal-preview-secondline")
-            ).appendTo($preview);
-            if (task.end_date === "") {
-                $task.find(".io-ox-portal-tasks-preview-date").remove();
-            }
+            content.append(
+                $('<div class="item">').append(
+                    $('<span class="bold">').text(gt.noI18n(strings.shorten(task.title, 50))), $.txt(' '),
+                    task.end_date === '' ? $() :
+                        $('<span class="colored">').text(gt('Due in %1$s', _.noI18n(task.end_date))), $.txt(' '),
+                    $('<span class="gray">').text(gt.noI18n(strings.shorten(task.note, 100)))
+                )
+            );
         });
+
+        this.append(content);
     },
 
     load = function () {
@@ -69,8 +75,12 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
     },
 
     draw = function (tasks) {
-        var node = $('<div class="io-ox-portal-tasks">').appendTo(this);
-        $('<h1>').addClass('clear-title').text(gt("Your tasks")).appendTo(node);
+
+        var node;
+
+        this.append(
+            node = $('<div class="content">')
+        );
 
         fillGrid(tasks, node);
 
@@ -93,7 +103,6 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
             });
         };
 
-
         taskApi.on("refresh.list", {node: node}, repaint)
                .on("delete", {node: node, draw: false}, repaint);
 
@@ -105,8 +114,6 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
         if (tasks.length === 0) {
             $('<div>').text(gt("You don't have any tasks.")).appendTo(node);
         }
-
-        return $.Deferred().resolve();
     },
 
     //method to fill the grid used for initial drawing and refresh
@@ -140,18 +147,14 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
 
     ext.point("io.ox/portal/widget").extend({
         id: 'tasks',
-        index: 300,
         title: gt('Tasks'),
         load: load,
         draw: draw,
         preview: function () {
-            var deferred = $.Deferred();
-            loadTile().done(function (getTasks) {
-                var $node = $('<div>');
-                drawTile(getTasks, $node);
-                deferred.resolve($node);
+            var self = this;
+            return loadTile().done(function (data) {
+                drawTile.call(self, data);
             });
-            return deferred;
         }
     });
 });

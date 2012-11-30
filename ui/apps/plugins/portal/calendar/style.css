@@ -1,0 +1,4 @@
+.io-ox-portal .vgrid-cell.calendar {
+    padding: 6px 13px ;
+    height: 63px; //I'd be damned if I knew why 4em doesn't work. Works in the calendar vgrid...
+}

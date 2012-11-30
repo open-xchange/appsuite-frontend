@@ -66,33 +66,28 @@ define("plugins/portal/rss/register",
                     requests.push(member.url);
                 });
 
-                rss.getMany(requests, "date")
-                    .done(def.resolve)
-                    .fail(def.reject);
-                return def;
+                return rss.getMany(requests, "date");
             },
-            drawTile: function () {
+
+            preview: function () {
+
                 var data = extension.load(),
-                    $content = $('<div class="io-ox-portal-content">');
+                    $content = $('<div class="content">');
+
                 data.done(function (loaded) {
                     _(loaded).each(function (entry) {
-                        $('<a class="io-ox-portal-item">').attr({href: entry.url, target: '_blank'}).append(
-                            $('<span class="io-ox-portal-preview-firstline">').text(entry.feedTitle + ": "),
-                            $('<span class="io-ox-portal-preview-secondline">').text(entry.subject)
+                        $('<a class="item">').attr({href: entry.url, target: '_blank'}).append(
+                            $('<span class="bold">').text(entry.feedTitle + ": "),
+                            $('<span class="normal">').text(entry.subject)
                         ).appendTo($content);
                     });
                     if (!loaded || loaded.site === 0) {
-                        $('<div class="io-ox-portal-item">').text(gt('No RSS feeds found.')).appendTo($content);
+                        $('<div class="item">').text(gt('No RSS feeds found.')).appendTo($content);
                     }
                 });
-                $(this).append(
-                    $('<div class="io-ox-portal-title">').append(
-                        $('<i class="icon-rss icon-large tile-image">'),
-                        $('<h1 class="tile-heading">').text(tilegroup.groupname)
-                    ),
-                    $content
-                );
+                this.append($content);
             },
+
             draw: function (feed) {
                 var togglePreview = function () {
                     $(this).parent().find('.io-ox-portal-rss-content').toggleClass('portal-preview');

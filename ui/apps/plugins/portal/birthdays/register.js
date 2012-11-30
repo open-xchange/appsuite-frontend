@@ -41,7 +41,6 @@ define('plugins/portal/birthdays/register',
 
     ext.point("io.ox/portal/widget").extend({
         id: 'birthdays',
-        index: 950,
         title: gt('Next birthdays'),
         load: function () {
             var start = _.now(),
@@ -119,7 +118,7 @@ define('plugins/portal/birthdays/register',
 
         preview: function () {
 
-            var $list = $('<ul class="io-ox-portal-birthdays">'),
+            var $list = $('<div class="content">'),
                 start = _.now(),
                 end = start + RANGE;
 
@@ -128,20 +127,25 @@ define('plugins/portal/birthdays/register',
                 var hash = {};
 
                 if (contacts.length === 0) {
-                    $list.append($('<li class="io-ox-portal-item">').text(gt('No birthdays within the next %1$d weeks', WEEKS)));
+                    $list.append($('<div class="simple-item">').text(gt('No birthdays within the next %1$d weeks', WEEKS)));
                 } else {
                     _(contacts).each(function (contact) {
                         var birthday = new date.Local(date.Local.utc(contact.birthday)).format(date.DATE),
                             name = util.getFullName(contact);
                         if (!isDuplicate(name, hash)) {
-                            $('<li class="io-ox-portal-item">').text(gt('%1$s on %2$s', name, birthday)).appendTo($list);
+                            $list.append(
+                                $('<div class="simple-item">').append(
+                                    $('<span class="bold">').text(name), $.txt(' '),
+                                    $('<span class="normal">').text(birthday)
+                                )
+                            );
                             markDuplicate(name, hash);
                         }
                     });
                 }
             });
 
-            return $('<div class="io-ox-portal-content">').append($list);
+            this.append($list);
         }
     });
 });

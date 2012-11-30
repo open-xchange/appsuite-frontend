@@ -19,8 +19,6 @@ define('io.ox/contacts/api',
 
     'use strict';
 
-    console.log("NOTIFICATIONS", notifications, cache, arguments);
-
     // generate basic API
     var api = apiFactory({
         module: 'contacts',

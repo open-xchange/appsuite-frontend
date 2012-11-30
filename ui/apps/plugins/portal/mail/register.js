@@ -16,8 +16,10 @@ define('plugins/portal/mail/register',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/core/strings',
+     'io.ox/mail/api',
+     'io.ox/core/date',
      'gettext!plugins/portal',
-     'less!plugins/portal/mail/style.css'], function (ext, links, strings, gt) {
+     'less!plugins/portal/mail/style.css'], function (ext, links, strings, mailApi, date, gt) {
 
     'use strict';
 
@@ -52,56 +54,35 @@ define('plugins/portal/mail/register',
 
     ext.point('io.ox/portal/widget').extend({
         id: 'mail',
-        index: 300,
-        tileHeight: 2,
+        title: gt("Inbox"),
 
-        loadTile: function () {
-            var mailsLoaded = $.Deferred();
-            require(['io.ox/mail/api'], function (mailApi) {
-                mailApi.getAll({
-                    folder: mailApi.getDefaultFolder(),
-                    cache: false
-                }, false)
-                    .done(function (mails) {
-                        if (mails.length === 0) {
-                            mailsLoaded.resolve(null);
-                        } else {
-                            var mail = _.extend({ view: 'text', unseen: true }, mails);
-                            mailApi.get(mail).then(mailsLoaded.resolve, mailsLoaded.reject);
-                        }
-                    })
-                    .fail(mailsLoaded.reject);
-            });
-            return mailsLoaded;
-        },
-        drawTile: function (mails) {
-            var deferred = $.Deferred();
-            var $node = $(this);
-            var $previewbox = $('<div class="io-ox-clear io-ox-portal-preview">');
-            $node
-                .addClass('mail-portal-tile')
-                .append(
-                    $('<h1 class="tile-heading">').text(gt("Inbox")),
-                    $previewbox);
-            require(["io.ox/mail/api"], function (mailApi) {
-                _(mails).each(function (mail) {
-                    var subject = mail.subject;
-                    var from = mail.from[0][1] + ":"; //brittle, but I could not care less. Don't ask me why the fuck I cannot _(mail.from).reduce(...) this.
-                    var mailtext = mailApi.beautifyMailText(mail.attachments[0].content, 999);
-                    $previewbox.append(
-                        $('<span class="io-ox-mail-preview-from io-ox-portal-preview-firstline">').text(from),
-                        ' ',
-                        $('<span class="io-ox-mail-preview-subject io-ox-portal-preview-secondline">').text(subject),
-                        ' ',
-                        $('<span class="io-ox-mail-preview-text io-ox-portal-preview-thirdline">').html(mailtext)
-                    );
-                });
-                deferred.resolve();
-            });
-
-            return deferred;
-        },
         load: function () {
+            return mailApi.getAll({ folder: mailApi.getDefaultFolder() }, false).pipe(function (mails) {
+                return mailApi.getList(mails.slice(0, 10));
+            });
+        },
+
+        preview: function (mails) {
+
+            var $content = $('<div class="content">');
+
+            _(mails).each(function (mail) {
+                var subject = mail.subject,
+                    from = mail.from[0][1],
+                    received = new date.Local(mail.received_date).format(date.DATE);
+                $content.append(
+                    $('<div class="item">').append(
+                        $('<span class="bold">').text(from), $.txt(' '),
+                        $('<span class="normal">').text(strings.shorten(subject, 50)), $.txt(' '),
+                        $('<span class="colored">').text(received)
+                    )
+                );
+            });
+
+            this.append($content);
+        },
+
+        loadContent: function () {
             var loading = new $.Deferred();
             require(['io.ox/mail/api'], function (api) {
                 api.getAllThreads()

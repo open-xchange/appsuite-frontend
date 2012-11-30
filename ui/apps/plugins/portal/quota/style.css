@@ -10,18 +10,11 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
- 
+
 .quota-preview {
     height: 100%;
 }
 
  .quota-preview .progress {
     height: 10px;
-}
-
-.plugins-portal-quota-memory-mail,
-.plugins-portal-quota-memory-mailcount,
-.plugins-portal-quota-memory-file,  {
-    float: right;
-    color: rgba(255, 255, 255, 0.7);
 }
