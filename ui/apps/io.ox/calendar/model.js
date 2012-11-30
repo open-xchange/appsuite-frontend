@@ -237,6 +237,25 @@ define('io.ox/calendar/model',
                 length = model.get('end_date') - model.get('start_date');
             });
         },
+        fullTimeChangeBindings: function (model) {
+            var _start = model.get('start_date');
+            var _end = model.get('end_date');
+            model.on('change:full_time', function () {
+                var startDate = new date.Local(model.get('start_date')),
+                    endDate = new date.Local(model.get('end_date'));
+                if (model.get('full_time') === true) {
+
+                    startDate.setHours(0, 0, 0, 0);
+                    endDate.setDate(endDate.getDate() + 1).setHours(0, 0, 0, 0);
+
+                    model.set('start_date',  date.Local.localTime(startDate.getTime()));
+                    model.set('end_date', date.Local.localTime(endDate.getTime()));
+                } else {
+                    model.set('start_date', _start);
+                    model.set('end_date', _end);
+                }
+            });
+        },
         toLocalTime: function (model) {
             model.set('start_date', date.Local.localTime(model.get('start_date')));
             model.set('end_date', date.Local.localTime(model.get('end_date')));

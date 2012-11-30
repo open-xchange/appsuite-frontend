@@ -70,14 +70,18 @@ define('io.ox/calendar/edit/main',
                     this.view.off('save', _.bind(this.onSave, this));
                     this.model.off('change:title');
                 },
-                edit: function (data) {
+
+                edit: function (data, options) {
 
                     app.cid = 'io.ox/calendar:edit.' + _.cid(data);
 
                     var self = this;
+                    options = _.extend({}, options);
+
                     function cont(data) {
                         app.model = self.model = appointmentModel.factory.create(data);
                         appointmentModel.applyAutoLengthMagic(self.model);
+                        appointmentModel.fullTimeChangeBindings(self.model);
                         appointmentModel.setDefaultParticipants(self.model).done(function () {
                             app.view = self.view = new MainView({model: self.model, mode: data.id ? 'edit' : 'create', app: self});
                             self.model.on('create:start update:start', function () {
@@ -88,7 +92,7 @@ define('io.ox/calendar/edit/main',
                                 self.getWindow().idle();
                             });
 
-                            self.setTitle(gt('Edit Appointment'));
+                            self.setTitle(gt('Edit appointment'));
 
                             // create app window
                             var win = ox.ui.createWindow({
@@ -104,6 +108,31 @@ define('io.ox/calendar/edit/main',
                             win.on('hide', function () {
                                 app.dropZone.remove();
                             });
+                            if (options.action === 'appointment') {
+                                // ensure to create a change exception
+                                self.model.touch('recurrence_position');
+                                self.model.set('recurrence_type', 0);
+                            }
+
+                            if (options.action === 'series') {
+                                // fields for recurrences
+                                var fields = ['recurrence_date_position',
+                                            'change_exceptions',
+                                            'delete_exceptions',
+                                            'recurrence_type',
+                                            'days',
+                                            'day_in_month',
+                                            'month',
+                                            'interval',
+                                            'until',
+                                            'occurrences'];
+                                var x = 0;
+                                // ensure theses fields will be send to backend to edit the whole series
+                                for (; x < fields.length; x++) {
+                                    self.model.touch(fields[x]);
+                                }
+
+                            }
 
                             $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                             self.getWindow().show(_.bind(self.onShowWindow, self));
@@ -131,7 +160,7 @@ define('io.ox/calendar/edit/main',
                     appointmentModel.applyAutoLengthMagic(self.model);
 
                     appointmentModel.setDefaultParticipants(self.model).done(function () {
-                        app.view = self.view = new MainView({model: self.model, lasso: data.lasso || false, app: self});
+                        app.view = self.view = new MainView({model: self.model, app: self});
 
                         self.model.on('create update', _.bind(self.onSave, self));
                         self.view.on('save:success', function () {
@@ -140,7 +169,7 @@ define('io.ox/calendar/edit/main',
                             self.quit();
                         });
 
-                        self.setTitle(gt('Create Appointment'));
+                        self.setTitle(gt('Create appointment'));
 
                         // create app window
                         var win = ox.ui.createWindow({
