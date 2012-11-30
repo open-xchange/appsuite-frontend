@@ -32,40 +32,68 @@
         .box-sizing(border-box);
     }
 
-    .clear-title {
-        margin: 0.5em 0 1em 0;
-        font-size: 16pt;
-    }
-
     .vgrid-cell:last-child {
         border-bottom: 0px none;
     }
 
-    h1 {
-        font-size: 16pt;
-        font-weight: 300;
-        line-height: 1.15em;
+    h1.greeting {
         font-family: @font-light;
+        font-weight: 300;
+        font-size: 24px;
+        color: #333;
+        margin: 0;
     }
+
+    .greeting-phrase {
+        margin: 0 1em 0 0;
+    }
+
+    .signin {
+        font-size: 13px;
+        color: #555;
+    }
+
+    .widgets {
+        clear: both;
+        min-height: 200px;
+    }
+
+
+    @widget-spacing: 1px;
+    @widget-padding: 13px;
+
+    .widget {
+        display: inline-block;
+        width: 300px;
+        height: 300px;
+        padding: @widget-padding;
+        border-width: 0 @widget-spacing @widget-spacing 0;
+        border-style: solid;
+        border-color: transparent;
+        overflow: hidden;
+        float: left;
+        background-clip: padding-box;
+        .box-sizing(border-box);
+    }
+
+    .widget { background-color: #eee; }
+    .widget-color-default h2 { color: #333; }
+    .widget-color-red h2 { color: @color_red; }
+    .widget-color-orange h2 { color: @color_orange; }
+    .widget-color-lightgreen h2 { color: @color_lightgreen; }
+    .widget-color-blue h2 { color: @color_blue; }
+    .widget-color-purple h2 { color: @color_purple; }
+    .widget-color-pink h2 { color: @color_pink; }
+    .widget-color-gray h2 { color: @color_gray; }
 
     h2 {
-        font-size: 18px; /* TODO: Either all px or all pt */
-        font-family: @font-light;
+        font-size: 20px;
+        margin: 0 0 1em 0;
+        font-weight: bold;
+        line-height: 26px;
     }
-}    
+}
 
-.io-ox-portal-greeting {
-    font-family: @font-light;
-    font-size: 22px;
-    font-weight: 300;
-    color: #ccc;
-}
-.io-ox-portal-login {
-    font-family: @font-light;
-    font-weight: 300;
-    font-size: 16px;
-    color: #888;
-}
 .io-ox-portal-settings {
     float: right;
     display: block;

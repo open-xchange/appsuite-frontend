@@ -448,16 +448,16 @@
 }
 
 /* flag colors */
-.flag_1  { background-color:  #cc0000; } /* red */
-.flag_7  { background-color:  #f89406; } /* orange */
-.flag_10 { background-color:  #ffff00; } /* yellow */
-.flag_6  { background-color:  #92D050; } /* light green */
-.flag_3  { background-color:  #1A8D1A; } /* green */
-.flag_9  { background-color:  lighten(#049cdb, 25%); } /* light blue */
-.flag_2  { background-color:  darken(#049cdb, 5%); } /* blue */
-.flag_5  { background-color:  #7E16CF; } /* purple (former brown) */
-.flag_8  { background-color:  #E01CD9; } /* pink */
-.flag_4  { background-color:  #aaa; } /* dark gray */
+.flag_1  { background-color: @color_red; } /* red */
+.flag_7  { background-color: @color_orange; } /* orange */
+.flag_10 { background-color: @color_yellow; } /* yellow */
+.flag_6  { background-color: @color_lightgreen; } /* light green */
+.flag_3  { background-color: @color_green; } /* green */
+.flag_9  { background-color: @color_lightblue; } /* light blue */
+.flag_2  { background-color: @color_blue; } /* blue */
+.flag_5  { background-color: @color_purple; } /* purple (former brown) */
+.flag_8  { background-color: @color_pink; } /* pink */
+.flag_4  { background-color: @color_gray; } /* dark gray */
 
 /* attachment preview */
 

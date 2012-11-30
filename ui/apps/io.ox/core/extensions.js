@@ -24,7 +24,7 @@ define("io.ox/core/extensions",
         that,
 
         // sort by index
-        pointSorter = function (a, b) {
+        indexSorter = function (a, b) {
             if (a.index === 'first') {
                 return -1;
             }
@@ -106,7 +106,7 @@ define("io.ox/core/extensions",
                 });
 
                 extensions = [];
-                basicList.sort(pointSorter);
+                basicList.sort(indexSorter);
                 var circleGuard = {};
 
                 function fnAddExtension(ext) {
@@ -117,14 +117,14 @@ define("io.ox/core/extensions",
                     var before = befores[ext.id];
                     if (before) {
                         delete befores[ext.id];
-                        before.sort(pointSorter);
+                        before.sort(indexSorter);
                         _(before).each(fnAddExtension);
                     }
                     extensions.push(ext);
                     var after = afters[ext.id];
                     if (after) {
                         delete afters[ext.id];
-                        after.sort(pointSorter);
+                        after.sort(indexSorter);
                         _(after).each(fnAddExtension);
                     }
                     delete circleGuard[ext.id];
@@ -444,7 +444,9 @@ define("io.ox/core/extensions",
             wrappers[name] = fn;
         },
 
-        Baton: Baton
+        Baton: Baton,
+
+        indexSorter: indexSorter
     };
 
     return that;

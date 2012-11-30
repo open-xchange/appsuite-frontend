@@ -39,7 +39,8 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
         var tree = {},
             meta = {},
             self = this,
-            settingsCache = new cache.SimpleCache('settings', true);
+            settingsCache = new cache.SimpleCache('settings', true),
+            detached = false;
 
         this.get = function (path, defaultValue) {
             return get(tree, path, defaultValue);
@@ -93,10 +94,16 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
         };
 
         this.set = function (path, value) {
-            resolve(path, function (tmp, key) {
-                tmp[key] = value;
-                self.trigger('change:' + path, value).trigger('change', path, value);
-            });
+            // overwrite entire tree?
+            if (arguments.length === 1 && !_.isString(path)) {
+                tree = path;
+                self.trigger('reset', tree);
+            } else {
+                resolve(path, function (tmp, key) {
+                    tmp[key] = value;
+                    self.trigger('change:' + path, value).trigger('change', path, value);
+                });
+            }
         };
 
         this.remove = function (path) {
@@ -124,6 +131,11 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             return JSON.stringify(this.get());
         };
 
+        this.detach = function () {
+            detached = true;
+            return this;
+        };
+
         this.load = function () {
 
             var load = function () {
@@ -133,9 +145,13 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     data: ['apps/' + path]
                 })
                 .pipe(function (data) {
-                    tree = data[0].tree;
-                    meta = data[0].meta;
-                    return applyDefaults();
+                    if (!detached) {
+                        tree = data[0].tree;
+                        meta = data[0].meta;
+                        return applyDefaults();
+                    } else {
+                        return $.when();
+                    }
                 })
                 .pipe(function () {
                     self.trigger('load', tree, meta);
@@ -159,7 +175,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             });
         };
 
-        this.reset = function () {
+        this.clear = function () {
             return settingsCache.remove(path).pipe(function () {
                 return http.PUT({
                     module: 'jslob',
@@ -178,6 +194,11 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
         this.save = function (data) {
 
             data = data || tree;
+
+            if (detached) {
+                console.warn('Not saving detached settings.', path);
+                return $.when();
+            }
 
             return $.when(
                 settingsCache.add(path, data),

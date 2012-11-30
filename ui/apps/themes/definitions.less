@@ -101,33 +101,25 @@
 
 @list-highlight: #ffc;
 
-/* taken from kuler: genna mcmahon, "sunset" */
-@tile-color-0: #4D7496; // #F38326;
-@tile-color-1: #244C6F; // #B8390E;
-@tile-color-2: #18334B; // #730000;
-@tile-color-3: #7E2231; // #660445;
-@tile-color-4: #9A2538;
+// Default colors
 
-@tile-color-5: #4D7496; // grey-green
-@tile-color-6: #244C6F; // logo blue
-@tile-color-7: #18334B; // logo blue darker
-@tile-color-8: #7E2231; // logo blue darker ++
-@tile-color-9: #9A2538; // logo blue > cyan
-
-/*@tile-color-5: #6F8472; // grey-green
-@tile-color-6: #3c82be; // logo blue
-@tile-color-7: #3D678F; // logo blue darker
-@tile-color-8: #2C4A66; // logo blue darker ++
-@tile-color-9: #6E90A0; // logo blue > cyan
-*/
-@tile-hover: 8%;
+@color_red: #cc0000;
+@color_orange: #f89406;
+@color_yellow: #ffff00;
+@color_lightgreen: #92D050;
+@color_green: #1A8D1A;
+@color_lightblue: lighten(#049cdb, 25%);
+@color_blue: darken(#049cdb, 5%);
+@color_purple: #7E16CF;
+@color_pink: #E01CD9;
+@color_gray: #aaa;
 
 // Dimensions
 
 @window-head-width: 50px;
 @window-content-shift: 250px;
 
-// Copied from boostrap
+// Mixins
 
 .box-sizing(@boxmodel: content-box) {
     -webkit-box-sizing: @boxmodel;
@@ -207,17 +199,17 @@
 .overflow(@type: auto) {
     overflow: @type;
     -webkit-overflow-scrolling: touch;
-} 
+}
 
 .overflow-x(@type: auto) {
     overflow-x: @type;
     -webkit-overflow-scrolling: touch;
-} 
+}
 
 .overflow-y(@type: auto) {
     overflow-y: @type;
     -webkit-overflow-scrolling: touch;
-} 
+}
 
 .backface-visibility(@type: hidden) {
    .touch & {

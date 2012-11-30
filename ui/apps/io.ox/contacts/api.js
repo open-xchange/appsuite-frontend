@@ -11,7 +11,6 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 define('io.ox/contacts/api',
-
     ['io.ox/core/http',
      'io.ox/core/api/factory',
      'io.ox/core/notifications',

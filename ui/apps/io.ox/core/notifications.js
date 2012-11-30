@@ -71,7 +71,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins'], functio
         render: function (notifications) {
             var self = this;
             self.$el.empty();
-            
+
             if (_.size(self.subviews) < _.size(notifications)) { //make sure views are created one time only to avoid zombies
                 _(notifications).each(function (category, type) {
                     if (self.subviews[type] === undefined) {
@@ -79,13 +79,13 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins'], functio
                     }
                 });
             }
-            
+
             _(self.subviews).each(function (category) {
                 if (category.collection.length > 0) {
                     self.$el.append(category.render().el);
                 }
             });
-            
+
             return self;
         }
     });
@@ -131,7 +131,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins'], functio
             plugins.loading.done(function () {
                 ext.point('io.ox/core/notifications/register').invoke('register', self, self);
             });
-            
+
             // now register default notification handler
             /*require(['io.ox/mail/notifications',
                      'io.ox/calendar/notifications'], function (mailNotifications, calNotifications) {
