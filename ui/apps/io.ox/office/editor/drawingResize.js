@@ -184,7 +184,6 @@ define('io.ox/office/editor/drawingResize',
                 moveY = 0,
                 width = 0,
                 height = 0,
-                newOperation = null,
                 updatePosition = null,
                 anchorHorOffset = 0,
                 anchorVertOffset = 0,
@@ -552,8 +551,6 @@ define('io.ox/office/editor/drawingResize',
             // the container element used to visualize the movement and resizing
             moveBox = $(this).children('div.move');
 
-            // moveable = Utils.getBooleanOption(options, 'moveable', false);
-            // sizeable = Utils.getBooleanOption(options, 'sizeable', false);
             mousedownevent = false;
             drawingNode = this;
 
