@@ -2578,6 +2578,7 @@ define('io.ox/office/editor/editor',
 
                 if (isResizeNode) {
                     TableResize.drawTableCellResizeSelection(self, app.getWindow().nodes.main, drawing);
+                    // TableResize.drawTableCellResizeSelection(self, app.getView().getApplicationNode(), drawing);
                 }
 
                 // send initial mouse down event to the handlers registered in drawDrawingSelection()
