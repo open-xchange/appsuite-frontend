@@ -72,7 +72,7 @@ define('io.ox/office/editor/fileActions',
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: "officeeditor",
-        index: 60,
+        index: 110,
         prio: 'hi',
         label: gt("Edit"),
         ref: "io.ox/files/actions/office/editor"
