@@ -2190,10 +2190,13 @@ define('io.ox/office/editor/editor',
             var styleNames = characterStyles.getStyleSheetNames(),
                 hyperlinkId = null;
 
-            _(styleNames).each(function (name, id) {
+            _(styleNames).find(function (name, id) {
                 var lowerName = name.toLowerCase();
-                if (lowerName.indexOf('hyperlink') >= 0)
+                if (lowerName.indexOf('hyperlink') >= 0) {
                     hyperlinkId = id;
+                    return true;
+                }
+                return false;
             });
 
             return hyperlinkId;
@@ -2281,7 +2284,7 @@ define('io.ox/office/editor/editor',
                                     link.text(Hyperlink.limitHyperlinkText(result.url));
                                     link.attr({href: result.url});
                                     hyperlinkPopup.show();
-                                    hyperlinkPopup.css({left: left, top: top});
+                                    hyperlinkPopup.css({left: left, top: top, width: ''});
                                     width = hyperlinkPopup.width();
                                     if ((left + width) > parentWidth) {
                                         left -= (((left + width) - parentWidth) + parentLeft);
@@ -2322,10 +2325,13 @@ define('io.ox/office/editor/editor',
                 parentId = characterStyles.getDefaultStyleSheetId(),
                 hyperlinkMissing = true;
 
-            _(styleNames).each(function (name, id) {
+            _(styleNames).find(function (name, id) {
                 var lowerName = name.toLowerCase();
-                if (lowerName.indexOf('hyperlink') >= 0)
+                if (lowerName.indexOf('hyperlink') >= 0) {
                     hyperlinkMissing = false;
+                    return true;
+                }
+                return false;
             });
 
             if (hyperlinkMissing) {
