@@ -2547,7 +2547,7 @@ define('io.ox/office/editor/editor',
                 }
 
                 if (isResizeNode) {
-                    TableResize.drawTableCellResizeSelection(self, app.getWindow().nodes.main, tableStyles, drawing);
+                    TableResize.drawTableCellResizeSelection(self, app.getWindow().nodes.main, drawing);
                 }
 
                 // send initial mouse down event to the handlers registered in drawDrawingSelection()
@@ -2568,7 +2568,7 @@ define('io.ox/office/editor/editor',
                 event.preventDefault();
                 return;
             }
-			
+
             // mouse up while drawing selected: selection does not change
             if (selection.getSelectionType() !== 'drawing') {
                 // calculate logical selection from browser selection, after
@@ -3060,7 +3060,7 @@ define('io.ox/office/editor/editor',
             }
 
             var images = event.originalEvent.dataTransfer.files;
-            
+
             //checks if files were dropped from the browser or the file system
             if (images.length === 0) {
                 self.insertImageURL(event.originalEvent.dataTransfer.getData("text"));
@@ -3069,7 +3069,7 @@ define('io.ox/office/editor/editor',
                 for (var i = 0; i < images.length; i++) {
                     var img = images[i];
                     var imgType = /image.*/;
-                    
+
                     //cancels insertion if the file is not an image
                     if (!img.type.match(imgType)) {
                         continue;

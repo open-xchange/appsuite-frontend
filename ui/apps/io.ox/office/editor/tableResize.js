@@ -37,14 +37,11 @@ define('io.ox/office/editor/tableResize',
      * @param {jQuery} officemaindiv
      *  The main window in which the resize node will be displayed temporarely
      *
-     * @param {TableStyles} tableStyles
-     *  The object containing the table styles.
-     *
      * @param {HTMLElement|jQuery} resizeObject
      *  The drawing node to be selected. If this value is a jQuery
      *  collection, uses the first DOM node it contains.
      */
-    TableResize.drawTableCellResizeSelection = function (editor, officemaindiv, tableStyles, resizeObject) {
+    TableResize.drawTableCellResizeSelection = function (editor, officemaindiv, resizeObject) {
 
         var startX = 0,
             startY = 0,
@@ -138,7 +135,7 @@ define('io.ox/office/editor/tableResize',
                 // calculating maxLeftShift and maxRightShift
                 lastCell = cellNode[0].nextSibling ? false : true;
                 tablePosition = Position.getOxoPosition(editor.getNode(), tableNode.get(0), 0);
-                tableNodeAttrs = tableStyles.getElementAttributes(tableNode).table;
+                tableNodeAttrs = editor.getTableStyles().getElementAttributes(tableNode).table;
                 oldTableGrid = tableNodeAttrs.tableGrid;
                 oldTableWidth = tableNodeAttrs.width;
                 maxTableWidth = tableNode.parent().width();
@@ -268,7 +265,7 @@ define('io.ox/office/editor/tableResize',
                         tableGrid.push(Utils.roundDigits(gridSum * pixelGrid[i] / newTableWidth, 0));  // only ints
                     }
 
-                    if ((! lastCell) && (tableStyles.getElementAttributes(tableNode).table.width === 'auto')) { newTableWidth = 'auto'; }
+                    if ((! lastCell) && (editor.getTableStyles().getElementAttributes(tableNode).table.width === 'auto')) { newTableWidth = 'auto'; }
                     else { newTableWidth = Utils.convertLengthToHmm(newTableWidth, 'px'); }
 
                     generator.generateOperation(Operations.ATTRS_SET, {

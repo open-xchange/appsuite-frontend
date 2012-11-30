@@ -438,45 +438,28 @@ define('io.ox/office/editor/drawingResize',
                         }
                     }
 
-                    editor.getUndoManager().enterGroup(function () {
+                    if ((moveImage) && (! _.isEqual(updatePosition, destPosition))) {
 
-                        if ((moveImage) && (! _.isEqual(updatePosition, destPosition))) {
-                            newOperation = { name: Operations.MOVE, start: updatePosition, end: updatePosition, to: destPosition };
-                            editor.applyOperations(new Array(newOperation));
-                            updatePosition = destPosition; // for setting attributes required
-                        }
+                        generator.generateOperation(Operations.MOVE, {
+                            start: updatePosition,
+                            end: updatePosition,
+                            to: destPosition
+                        });
 
-                        if ((anchorHorOffset !== oldAnchorHorOffset) || (anchorVertOffset !== oldAnchorVertOffset)) {
-                            newOperation = { name: Operations.ATTRS_SET, attrs: { drawing: { anchorHorOffset: anchorHorOffset, anchorVertOffset: anchorVertOffset, anchorHorAlign: anchorHorAlign, anchorVertAlign: anchorVertAlign, anchorHorBase: anchorHorBase, anchorVertBase: anchorVertBase } }, start: updatePosition };
-                            editor.applyOperations(new Array(newOperation));
-                        }
+                        updatePosition = destPosition; // for setting attributes required
+                    }
 
-//                        if (moveImage) {
-//
-//                            generator.generateOperation(Operations.MOVE, {
-//                                start: updatePosition,
-//                                end: updatePosition,
-//                                to: destPosition
-//                            });
-//
-//                            editor.applyOperations(generator.getOperations());
-//
-//                            updatePosition = destPosition; // for setting attributes required
-//                        }
-//
-//                        if ((anchorHorOffset !== oldAnchorHorOffset) || (anchorVertOffset !== oldAnchorVertOffset)) {
-//
-//                            generator.generateOperation(Operations.ATTRS_SET, {
-//                                attrs: { drawing: { anchorHorOffset: anchorHorOffset, anchorVertOffset: anchorVertOffset, anchorHorAlign: anchorHorAlign, anchorVertAlign: anchorVertAlign, anchorHorBase: anchorHorBase, anchorVertBase: anchorVertBase } },
-//                                start: updatePosition
-//                            });
-//
-//                            editor.applyOperations(generator.getOperations());
-//
-//
-//                        }
+                    if ((anchorHorOffset !== oldAnchorHorOffset) || (anchorVertOffset !== oldAnchorVertOffset)) {
 
-                    }, this);
+                        generator.generateOperation(Operations.ATTRS_SET, {
+                            attrs: { drawing: { anchorHorOffset: anchorHorOffset, anchorVertOffset: anchorVertOffset, anchorHorAlign: anchorHorAlign, anchorVertAlign: anchorVertAlign, anchorHorBase: anchorHorBase, anchorVertBase: anchorVertBase } },
+                            start: updatePosition
+                        });
+
+                    }
+
+                    editor.applyOperations(generator.getOperations());
+
                 }
             }
 
