@@ -8,9 +8,7 @@
  * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
  *
- * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
 define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/event'], function (http, cache, Event) {
@@ -127,6 +125,7 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
 
             return settingsCache.get(path).pipe(function (data) {
                 if (data !== null) {
+                    load();
                     return (tree = data);
                 } else {
                     return load();
