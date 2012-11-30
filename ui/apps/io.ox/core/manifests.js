@@ -47,6 +47,41 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
             }
             return [].concat(_(this.pluginPoints[pointName]).pluck("path"));
         },
+        wrapperFor: function (pointName, dependencies, definitionFunction) {
+            var self = this;
+            var pluginAware = _(dependencies).contains("plugins");
+
+            if (pluginAware) {
+                // Plugin aware!
+                // Require the plugins asynchronously and pass plugin data to the module
+                var index = _(dependencies).indexOf("plugins");
+                var newDependencies = dependencies.slice(0, index).concat(dependencies.slice(index + 1));
+                return {
+                    dependencies: newDependencies,
+                    definitionFunction: function () {
+                        var args = $.makeArray(arguments),
+                            plugins = {
+                                loading: $.Deferred(),
+                                names: self.pluginsFor(pointName)
+                            };
+                        args = args.slice(0, index).concat([plugins]).concat(args.slice(index));
+                        var moduleDef = definitionFunction.apply(this, args);
+
+                        require(plugins.names).done(plugins.loading.resolve).fail(plugins.loading.reject);
+
+                        return moduleDef;
+                    }
+                };
+            } else {
+                // Not explicitely plugin aware, so, let's require everything beforehand
+                return {
+                    dependencies: this.withPluginsFor(pointName, dependencies),
+                    definitionFunction: definitionFunction
+                };
+            }
+
+
+        },
         apps: {},
         plugins: {},
         pluginPoints: {},
@@ -82,6 +117,13 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
         });
     };
 
+    var fnClear = function () {
+        manifestManager.apps = {};
+        manifestManager.plugins = {};
+        manifestManager.pluginPoints = {};
+           
+    };
+
     var fnProcessManifest = function (manifest) {
         if (manifest.namespace) {
             if (manifest.requires) {
@@ -112,6 +154,9 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
     var fnLoadStaticFiles = function (state) {
         require([ox.base + "/src/manifests.js"], function (manifests) {
             manifestManager.loader = 'backend';
+            if (state !== 'success') {
+                fnClear();
+            }
             _(manifests).each(function (manifest) {
                 if (!!! manifest.requires || capabilities.has(manifest.requires)) {
                     fnProcessManifest(manifest);
@@ -135,6 +180,7 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
             }
         }).done(function (manifests) {
             manifestManager.loader = 'backend';
+            fnClear();
             _(manifests).each(fnProcessManifest);
             // Load Manifest Extensions
             manifestManager.loadPluginsFor('manifests').done(function () {
