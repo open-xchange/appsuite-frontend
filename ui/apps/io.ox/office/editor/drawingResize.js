@@ -184,6 +184,7 @@ define('io.ox/office/editor/drawingResize',
                 moveY = 0,
                 width = 0,
                 height = 0,
+                newOperation = null,
                 updatePosition = null,
                 anchorHorOffset = 0,
                 anchorVertOffset = 0,
@@ -439,28 +440,41 @@ define('io.ox/office/editor/drawingResize',
 
                     editor.getUndoManager().enterGroup(function () {
 
-                        if (moveImage) {
-
-                            generator.generateOperation(Operations.MOVE, {
-                                start: updatePosition,
-                                end: updatePosition,
-                                to: destPosition
-                            });
-
-                            editor.applyOperations(generator.getOperations());
-
+                        if ((moveImage) && (! _.isEqual(updatePosition, destPosition))) {
+                            newOperation = { name: Operations.MOVE, start: updatePosition, end: updatePosition, to: destPosition };
+                            editor.applyOperations(new Array(newOperation));
                             updatePosition = destPosition; // for setting attributes required
                         }
 
                         if ((anchorHorOffset !== oldAnchorHorOffset) || (anchorVertOffset !== oldAnchorVertOffset)) {
-
-                            generator.generateOperation(Operations.ATTRS_SET, {
-                                attrs: { drawing: { anchorHorOffset: anchorHorOffset, anchorVertOffset: anchorVertOffset, anchorHorAlign: anchorHorAlign, anchorVertAlign: anchorVertAlign, anchorHorBase: anchorHorBase, anchorVertBase: anchorVertBase } },
-                                start: updatePosition
-                            });
-
-                            editor.applyOperations(generator.getOperations());
+                            newOperation = { name: Operations.ATTRS_SET, attrs: { drawing: { anchorHorOffset: anchorHorOffset, anchorVertOffset: anchorVertOffset, anchorHorAlign: anchorHorAlign, anchorVertAlign: anchorVertAlign, anchorHorBase: anchorHorBase, anchorVertBase: anchorVertBase } }, start: updatePosition };
+                            editor.applyOperations(new Array(newOperation));
                         }
+
+//                        if (moveImage) {
+//
+//                            generator.generateOperation(Operations.MOVE, {
+//                                start: updatePosition,
+//                                end: updatePosition,
+//                                to: destPosition
+//                            });
+//
+//                            editor.applyOperations(generator.getOperations());
+//
+//                            updatePosition = destPosition; // for setting attributes required
+//                        }
+//
+//                        if ((anchorHorOffset !== oldAnchorHorOffset) || (anchorVertOffset !== oldAnchorVertOffset)) {
+//
+//                            generator.generateOperation(Operations.ATTRS_SET, {
+//                                attrs: { drawing: { anchorHorOffset: anchorHorOffset, anchorVertOffset: anchorVertOffset, anchorHorAlign: anchorHorAlign, anchorVertAlign: anchorVertAlign, anchorHorBase: anchorHorBase, anchorVertBase: anchorVertBase } },
+//                                start: updatePosition
+//                            });
+//
+//                            editor.applyOperations(generator.getOperations());
+//
+//
+//                        }
 
                     }, this);
                 }
@@ -579,7 +593,7 @@ define('io.ox/office/editor/drawingResize',
                 }
 
                 // mousemove and mouseup events can be anywhere on the page -> binding to $(document)
-                $(document).on({'mousemove': mouseMoveOnResizeNodeHandler, mouseup: mouseUpOnResizeNodeHandler});
+                $(document).on({'mousemove': mouseMoveOnResizeNodeHandler, 'mouseup': mouseUpOnResizeNodeHandler});
 
                 // set classes according to passed options, and resize handles
                 moveBox.toggleClass('moveable', options.moveable).toggleClass('sizeable', options.sizeable);
@@ -603,11 +617,11 @@ define('io.ox/office/editor/drawingResize',
      */
     DrawingResize.clearDrawingSelection = function (drawings) {
 
-        var drawingSelParams = $(drawings).data('drawingSelection');
+        // var drawingSelParams = $(drawings).data('drawingSelection');
 
-        if (drawingSelParams) {
-            $(drawings).children('div.selection').remove();
-            $(drawings).children('div.move').remove();
+        // if (drawingSelParams) {
+        $(drawings).children('div.selection').remove();
+        $(drawings).children('div.move').remove();
 
             // Todo: Remove specific handler
             // removing mouse event handler (mouseup and mousemove) from page div
@@ -615,13 +629,13 @@ define('io.ox/office/editor/drawingResize',
             // $(document).off('mousemove', drawingSelParams.mousemovehandler);
             // $(drawings).off('mousedown', drawingSelParams.mousedownhandler);
 
-            $(document).off('mouseup');
-            $(document).off('mousemove');
-            $(drawings).off('mousedown');
+        $(document).off('mouseup');
+        $(document).off('mousemove');
+        $(drawings).off('mousedown');
 
             // removing the complete content in 'drawingSelection'
-            $(drawings).data('drawingSelection', null);
-        }
+        $(drawings).data('drawingSelection', null);
+        // }
     };
 
     /**
