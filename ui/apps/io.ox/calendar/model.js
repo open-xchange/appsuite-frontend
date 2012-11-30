@@ -212,7 +212,7 @@ define('io.ox/calendar/model',
 
                 } else if (folderAPI.is('shared', folder)) {
                     // in a shared folder the owner (created_by) will be added by default
-                    model.getParticipants.addUniquely({id: folder.created_by, type: 1});
+                    model.getParticipants().addUniquely({id: folder.created_by, type: 1});
                 }
 
             });
