@@ -5,9 +5,9 @@
 <link rel="stylesheet" href="book.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="index.html" title="OX App Suite">
-<link rel="up" href="oxhe.appsuite.user.sect.dataorganisation.rights.preset.html" title="Welche Berechtigungen sind vorgegebenen?">
+<link rel="up" href="oxhe.appsuite.user.sect.dataorganisation.rights.preset.html" title="Welche Berechtigungen sind voreingestellt?">
 <link rel="prev" href="oxhe.appsuite.user.sect.dataorganisation.rights.preset.folders.html" title="Berechtigungen an vorhandenen Ordnern">
-<link rel="next" href="oxhe.appsuite.user.sect.dataorganisation.rights.location.html" title="Wo finde ich freigegebene Ordner anderer Benutzer?">
+<link rel="next" href="oxhe.appsuite.user.sect.dataorganisation.rights.grant.html" title="Ordner freigeben">
 <link rel="copyright" href="oxhe.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -17,8 +17,8 @@
 <tr>
 <td width="20%" align="left">
 <a accesskey="p" href="oxhe.appsuite.user.sect.dataorganisation.rights.preset.folders.html">Zurück</a> </td>
-<th width="60%" align="center">Welche Berechtigungen sind vorgegebenen?</th>
-<td width="20%" align="right"> <a accesskey="n" href="oxhe.appsuite.user.sect.dataorganisation.rights.location.html">Weiter</a>
+<th width="60%" align="center">Welche Berechtigungen sind voreingestellt?</th>
+<td width="20%" align="right"> <a accesskey="n" href="oxhe.appsuite.user.sect.dataorganisation.rights.grant.html">Weiter</a>
 </td>
 </tr>
 </table>
@@ -27,27 +27,34 @@
 <div class="sect3" lang="de-DE">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="oxhe.appsuite.user.sect.dataorganisation.rights.preset.newfolders"></a>Berechtigungen an neu angelegten Ordnern</h4></div></div></div>
-<a class="indexterm" name="id2640072"></a><div class="concept">
-<a name="oxhe.appsuite.user.concept.rights.preset.foldernew"></a><p>Abhängig von dem Ort, an dem Sie einen Ordner neu anlegen, erhalten Sie und andere
-          Benutzer bestimmte Berechtigungen.</p>
-</div>
-<div class="reference">
-<a name="oxhe.appsuite.user.reference.rights.preset.personalfoldernew"></a><p>Wenn Sie in einem persönlichen Ordner einen neuen Ordner anlegen: </p>
+<a class="indexterm" name="id2640468"></a><div class="concept">
+<a name="oxhe.appsuite.user.concept.rights.preset.foldernew"></a><p>Die Berechtigungen, die Sie an einem neu angelegten Ordner erhalten, sind davon
+          abhängig, wo der Ordner erstellt wird:</p>
 <div class="itemizedlist"><ul type="disc">
-<li><p> Sie werden Ordner-Administrator und erhalten die Berechtigungen Maximum. </p></li>
-<li><p>Andere Benutzer und Gruppen erhalten die Berechtigungen, die sie am übergeordneten Ordner haben.</p></li>
+<li><p>in einem <a class="link" href="oxhe.appsuite.user.sect.dataorganisation.rights.preset.newfolders.html#oxhe.appsuite.user.reference.rights.preset.personalfoldernew">persönlichen Ordner</a></p></li>
+<li><p>in einem <a class="link" href="oxhe.appsuite.user.sect.dataorganisation.rights.preset.newfolders.html#oxhe.appsuite.user.reference.rights.preset.publicfoldernew">öffentlichen Ordner</a></p></li>
+<li><p>in einem <a class="link" href="oxhe.appsuite.user.sect.dataorganisation.rights.preset.newfolders.html#oxhe.appsuite.user.reference.rights.preset.sharedfoldernew">freigegebenen Ordner</a></p></li>
 </ul></div>
 <p>
         </p>
 </div>
 <div class="reference">
-<a name="oxhe.appsuite.user.reference.rights.preset.publicfoldernew"></a><p>Wenn Sie im Ordner <span class="guibutton"><strong>Öffentliche Ordner</strong></span>
-          oder im Ordner <span class="guibutton"><strong>InfoStore/Öffentlicher InfoStore</strong></span> einen neuen Ordner anlegen: </p>
+<a name="oxhe.appsuite.user.reference.rights.preset.personalfoldernew"></a><p>Wenn Sie in einem persönlichen Ordner einen neuen Ordner anlegen: </p>
 <div class="itemizedlist"><ul type="disc">
-<li><p> Sie werden Ordner-Administrator und erhalten die Berechtigungen Maximum. </p></li>
-<li><p>Andere Benutzer und Gruppen erhalten keine Berechtigungen. Sie müssen die Berechtigungen für den neuen Ordner vergeben. Wenn Sie anschließend in
-                diesem Ordner neue Unterordner anlegen, werden die Berechtigungen dieses Ordners an die neuen Unterordner vererbt. Informationen zum Vergeben von
-                Berechtigungen finden Sie in <a class="xref" href="oxhe.appsuite.user.sect.dataorganisation.rights.grant.html" title="Ordner freigeben">: Ordner freigeben</a>. </p></li>
+<li><p>Sie sind <a class="link" href="oxhe.appsuite.user.sect.dataorganisation.rights.defined.html#oxhe.appsuite.user.concept.rights.roles.owner" title="Eigentümer">Eigentümer</a>. </p></li>
+<li><p>Andere Benutzer erhalten die Berechtigungen, die sie am übergeordneten Ordner haben.</p></li>
+</ul></div>
+<p>
+        </p>
+</div>
+<div class="reference">
+<a name="oxhe.appsuite.user.reference.rights.preset.publicfoldernew"></a><p>Wenn Sie im Ordner <span class="guibutton"><strong>Öffentliche
+            Ordner</strong></span> oder im Ordner <span class="guibutton"><strong>InfoStore/Öffentlicher InfoStore</strong></span> einen neuen Ordner anlegen: </p>
+<div class="itemizedlist"><ul type="disc">
+<li><p>Sie sind <a class="link" href="oxhe.appsuite.user.sect.dataorganisation.rights.defined.html#oxhe.appsuite.user.concept.rights.roles.owner" title="Eigentümer">Eigentümer</a>.</p></li>
+<li><p>Andere Benutzer erhalten keine Berechtigungen. Sie müssen die Berechtigungen für den neuen Ordner vergeben. Wenn Sie anschließend in diesem Ordner
+                neue Unterordner anlegen, werden die Berechtigungen dieses Ordners an die neuen Unterordner vererbt. Informationen zum Vergeben von Berechtigungen finden
+                Sie in <a class="xref" href="oxhe.appsuite.user.sect.dataorganisation.rights.grant.html" title="Ordner freigeben">: Ordner freigeben</a>. </p></li>
 </ul></div>
 <p>
         </p>
@@ -56,8 +63,8 @@
 <a name="oxhe.appsuite.user.reference.rights.preset.sharedfoldernew"></a><p>Wenn Sie in einem freigegebenen Ordner eines Benutzers einen neuen Ordner
           anlegen: </p>
 <div class="itemizedlist"><ul type="disc">
-<li><p>Der Benutzer, der den Ordner freigegeben hat, wird Ordner-Administrator und erhält die Berechtigungen Maximum. </p></li>
-<li><p>Sie und andere Benutzer und Gruppen erhalten die Berechtigungen, die Sie am übergeordneten Ordner haben.</p></li>
+<li><p>Der Benutzer, der den Ordner freigegeben hat, ist <a class="link" href="oxhe.appsuite.user.sect.dataorganisation.rights.defined.html#oxhe.appsuite.user.concept.rights.roles.owner" title="Eigentümer">Eigentümer</a>. </p></li>
+<li><p>Sie und andere Benutzer erhalten die Berechtigungen, die Sie am übergeordneten Ordner haben.</p></li>
 </ul></div>
 <p>
         </p>
@@ -70,7 +77,7 @@
 <td width="40%" align="left">
 <a accesskey="p" href="oxhe.appsuite.user.sect.dataorganisation.rights.preset.folders.html">Zurück</a> </td>
 <td width="20%" align="center"><a accesskey="u" href="oxhe.appsuite.user.sect.dataorganisation.rights.preset.html">Nach oben</a></td>
-<td width="40%" align="right"> <a accesskey="n" href="oxhe.appsuite.user.sect.dataorganisation.rights.location.html">Weiter</a>
+<td width="40%" align="right"> <a accesskey="n" href="oxhe.appsuite.user.sect.dataorganisation.rights.grant.html">Weiter</a>
 </td>
 </tr>
 <tr>
@@ -78,7 +85,7 @@
 <td width="20%" align="center">
 <a accesskey="h" href="index.html">Zum Anfang</a> | <a accesskey="t" href="bk01-toc.html">InhV</a>
 </td>
-<td width="40%" align="right" valign="top"> Wo finde ich freigegebene Ordner anderer Benutzer?</td>
+<td width="40%" align="right" valign="top"> Ordner freigeben</td>
 </tr>
 </table>
 </div>
