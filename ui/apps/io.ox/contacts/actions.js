@@ -127,7 +127,7 @@ define('io.ox/contacts/actions',
                         var selectedFolder = tree.selection.get();
                         if (selectedFolder.length === 1) {
                             // move action
-                            api[apiAction](list, selectedFolder[0].id);
+                            api[apiAction](list, selectedFolder[0]);
                         }
                     }
                     tree.destroy();
