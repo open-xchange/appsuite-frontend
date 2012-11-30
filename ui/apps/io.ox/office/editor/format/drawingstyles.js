@@ -15,8 +15,9 @@
 define('io.ox/office/editor/format/drawingstyles',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
+     'io.ox/office/editor/drawingResize',
      'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, DOM, StyleSheets) {
+    ], function (Utils, DOM, DrawingResize, StyleSheets) {
 
     'use strict';
 
@@ -294,24 +295,24 @@ define('io.ox/office/editor/format/drawingstyles',
             // switch from floating to inline mode
             if (!drawing.hasClass('inline')) {
 
-                // repaint the selection, convert it to a non-moveable selection
-                DOM.repaintDrawingSelection(drawing, false);
-
                 // remove leading node used for positioning
                 verticalOffsetNode.remove();
 
                 // TODO: Word uses fixed predefined margins in inline mode, we too?
                 drawing.removeClass('float left right').addClass('inline').css('margin', '0 1mm');
                 // ignore other attributes in inline mode
+
+                // repaint the selection, convert it to a non-moveable selection
+                DrawingResize.repaintDrawingSelection(drawing);
             }
 
         } else {
 
             // switch from inline to floating mode
             if (!drawing.hasClass('float')) {
-                // repaint the selection, convert it to a moveable selection
-                DOM.repaintDrawingSelection(drawing, true);
                 drawing.removeClass('inline').addClass('float');
+                // repaint the selection, convert it to a moveable selection
+                DrawingResize.repaintDrawingSelection(drawing);
             }
 
             // calculate top offset (only if drawing is anchored to paragraph)

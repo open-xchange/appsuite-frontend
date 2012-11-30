@@ -14,8 +14,9 @@ define('io.ox/office/editor/selection',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
+     'io.ox/office/editor/drawingResize',
      'io.ox/office/editor/position'
-    ], function (Events, Utils, DOM, Position) {
+    ], function (Events, Utils, DOM, DrawingResize, Position) {
 
     'use strict';
 
@@ -221,7 +222,7 @@ define('io.ox/office/editor/selection',
             self.endPaM.oxoPosition = endPosition = isCursor ? _.clone(startPosition) : Position.getTextLevelOxoPosition(endPoint, rootNode, true);
 
             // check for drawing selection
-            DOM.clearDrawingSelection(selectedDrawing);
+            DrawingResize.clearDrawingSelection(selectedDrawing);
             selectedDrawing = $();
             if (!cellRangeSelected && self.isSingleComponentSelection()) {
                 nodeInfo = Position.getDOMPosition(rootNode, startPosition, true);
@@ -870,7 +871,7 @@ define('io.ox/office/editor/selection',
             if (drawingNode) {
 
                 // remove drawing selection boxes
-                DOM.clearDrawingSelection(drawingNode);
+                DrawingResize.clearDrawingSelection(drawingNode);
 
                 // start point after the last character preceding the drawing
                 if (DOM.isPortionSpan(prevTextSpan)) {

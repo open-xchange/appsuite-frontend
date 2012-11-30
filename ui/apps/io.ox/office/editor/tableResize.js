@@ -21,7 +21,7 @@ define('io.ox/office/editor/tableResize',
 
     'use strict';
 
-    // static class Position ==================================================
+    // static class TableResize ==================================================
 
     var TableResize = {};
 
@@ -38,7 +38,7 @@ define('io.ox/office/editor/tableResize',
      *  The main window in which the resize node will be displayed temporarely
      *
      * @param {TableStyles} tableStyles
-     *  The end position of the selection.
+     *  The object containing the table styles.
      *
      * @param {HTMLElement|jQuery} resizeObject
      *  The drawing node to be selected. If this value is a jQuery
@@ -308,7 +308,7 @@ define('io.ox/office/editor/tableResize',
 
         /**
          * Handler function for mouse down events. This function
-         * is bound to 'mousemove'.
+         * is bound to 'mousedown'.
          *
          * @param {Event} e1
          *  The event object.
