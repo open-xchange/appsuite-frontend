@@ -2551,7 +2551,7 @@ define('io.ox/office/editor/editor',
                 }
 
                 // send initial mouse down event to the handlers registered in drawDrawingSelection()
-                drawing.triggerHandler('mousedown', event);
+                drawing.triggerHandler(event.type, event);
 
             } else {
                 // clicked somewhere else: calculate logical selection from browser selection,
@@ -2568,7 +2568,7 @@ define('io.ox/office/editor/editor',
                 event.preventDefault();
                 return;
             }
-
+			
             // mouse up while drawing selected: selection does not change
             if (selection.getSelectionType() !== 'drawing') {
                 // calculate logical selection from browser selection, after
@@ -3060,17 +3060,24 @@ define('io.ox/office/editor/editor',
             }
 
             var images = event.originalEvent.dataTransfer.files;
+            
+            //checks if files were dropped from the browser or the file system
+            if (images.length === 0) {
+                self.insertImageURL(event.originalEvent.dataTransfer.getData("text"));
+                return;
+            } else {
+                for (var i = 0; i < images.length; i++) {
+                    var img = images[i];
+                    var imgType = /image.*/;
+                    
+                    //cancels insertion if the file is not an image
+                    if (!img.type.match(imgType)) {
+                        continue;
+                    }
 
-            for (var i = 0; i < images.length; i++) {
-                var img = images[i];
-                var imgType = /image.*/;
-
-                if (!img.type.match(imgType)) {
-                    continue;
+                    Application.readFileAsDataUrl(img)
+                    .done(self.insertImageData);
                 }
-
-                Application.readFileAsDataUrl(img)
-                .done(self.insertImageData);
             }
         }
 

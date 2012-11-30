@@ -126,6 +126,9 @@ define('io.ox/office/preview/main',
 
             // create the view (creates application window)
             view = new PreviewView(self);
+            
+            // disable dropping event in view-mode
+            self.getWindow().nodes.main.on('drop dragstart dragover', false);
 
             // disable FF spell checking
             $('body').attr('spellcheck', false);
