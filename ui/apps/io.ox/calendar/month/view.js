@@ -60,7 +60,9 @@ define('io.ox/calendar/month/view',
         },
 
         onCreateAppointment: function (e) {
-            this.trigger('createAppoinment', e, $(e.currentTarget).data('date'));
+            if (!$(e.target).hasClass('appointment')) {
+                this.trigger('createAppoinment', e, $(e.currentTarget).data('date'));
+            }
         },
 
         // handler for onmouseenter event for hover effect

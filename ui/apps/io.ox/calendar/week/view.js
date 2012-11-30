@@ -199,10 +199,10 @@ define('io.ox/calendar/week/view',
         // handler for single- and double-click events on appointments
         onClickAppointment: function (e) {
             var cT = $(e.currentTarget);
-            if (cT.hasClass('appointment') && !this.lasso) {
+            if (cT.hasClass('appointment') && !this.lasso && !cT.hasClass('private')) {
                 var self = this,
                     obj = _.cid($(e.currentTarget).data('cid') + '');
-                if (!cT.hasClass('current') && !cT.hasClass('private')) {
+                if (!cT.hasClass('current')) {
                     self.trigger('showAppointment', e, obj);
                     self.$el.find('.appointment')
                         .removeClass('current opac')
