@@ -89,34 +89,6 @@ define('plugins/portal/twitter/register',
             }
         });
     };
-    var loadTile = function () {
-        return loadFromTwitter({count: 5, include_entities: true});
-    };
-
-    var drawTile = function (tweets) {
-
-        if (!tweets) { return; }
-
-        var content = $('<div class="content">');
-
-        if (tweets.length === 0) {
-            content.append(
-                $('<div class="item">').text(gt('No tweets yet.'))
-            );
-        } else {
-            _(tweets).each(function (tweet) {
-                var message = String(tweet.text).replace(/((#|@)\w+)/g, '<span class="accent">$1</span>');
-                content.append(
-                    $('<div class="item">').append(
-                        $('<span class="bold">').text('@' + tweet.user.name + ': '),
-                        $('<span class="normal">').html(message)
-                    )
-                );
-            });
-        }
-
-        this.append(content);
-    };
 
     var loadTweets = function (count, offset, newerThanId) {
         var params = {'include_entities': true};
@@ -225,18 +197,42 @@ define('plugins/portal/twitter/register',
             return keychain.createInteractively('twitter', win);
         },
 
-        preview: function () {
-            var self = this;
-            return loadTile().done(function (tweets) {
-                drawTile.call(self, tweets);
+        load: function (baton) {
+            return loadFromTwitter({ count: loadEntriesPerPage, include_entities: true }).done(function (data) {
+                baton.data = data;
             });
         },
 
-        load: function () {
-            return loadFromTwitter({count: loadEntriesPerPage, include_entities: true});
+        preview: function (baton) {
+
+            if (!baton.data) { return; }
+
+            var content = $('<div class="content">');
+
+            if (baton.data.length === 0) {
+                content.append(
+                    $('<div class="item">').text(gt('No tweets yet.'))
+                );
+            } else {
+                _(baton.data).each(function (tweet) {
+                    var message = String(tweet.text).replace(/((#|@)\w+)/g, '<span class="accent">$1</span>');
+                    content.append(
+                        $('<div class="item">').append(
+                            $('<span class="bold">').text('@' + tweet.user.name + ': '),
+                            $('<span class="normal">').html(message)
+                        )
+                    );
+                });
+            }
+
+            this.append(content);
         },
 
-        draw: function (timeline) {
+
+        draw: function (baton) {
+
+            var timeline = baton.data;
+
             // Pull to refresh
             $(this).on('onResume', function () {
                 $(this).on('onPullToRefresh', onPullToRefresh);
@@ -255,14 +251,14 @@ define('plugins/portal/twitter/register',
 
             if (!timeline) {
                 this.remove();
-                return $.Deferred().resolve();
+                return;
             }
-            var self = this;
-            var script   = document.createElement('script');
-            script.type  = 'text/javascript';
-            script.src   = 'http://platform.twitter.com/widgets.js'; //TODO must be stored locally, even if the Twitter guys hate us
 
-            self.empty().append(
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = 'https://platform.twitter.com/widgets.js'; //TODO must be stored locally, even if the Twitter guys hate us
+
+            this.empty().append(
                 $('<a>').text(gt('Tweet')).attr({
                     href: 'https://twitter.com/intent/tweet',
                     target: '_blank',
@@ -274,17 +270,12 @@ define('plugins/portal/twitter/register',
                 script
             );
 
-            $tweets.empty();
-
-            $tweets.appendTo(self);
-            $busyIndicator.appendTo(self);
+            this.append($tweets.empty(), $busyIndicator);
 
             _(timeline).each(function (tweet) {
                 offset = tweet.id_str;
                 showTweet(tweet).appendTo($tweets);
             });
-
-            return $.Deferred().resolve();
         },
 
         loadMoreResults: function (finishFn) {

@@ -81,7 +81,9 @@ define("plugins/portal/calendar/register",
                         start = new date.Local(nextApp.start_date), end = new date.Local(nextApp.end_date),
                         timespan = start.formatInterval(end, date.DATE);
                     $content.append(
-                        $('<div class="item">').append(
+                        $('<div class="item">')
+                        .data('item', nextApp)
+                        .append(
                             $('<span class="normal accent">').text(timespan), $.txt(' '),
                             $('<span class="bold">').text(nextApp.title || ''), $.txt(' '),
                             $('<span class="gray">').text(nextApp.location || '')
@@ -98,40 +100,14 @@ define("plugins/portal/calendar/register",
             this.append($content);
         },
 
-        draw: function (appointments) {
-
-            var deferred = new $.Deferred(),
-                $node = this;
-
-            $node.addClass("io-ox-portal-appointments")
-                .append(
-                    $("<h1>").addClass("clear-title").text("Appointments")
-                );
-
-            if (appointments.length === 0) {
-                $node.append("<div><b>" + gt("You don't have any appointments in the near future. Go take a walk!") + "</b></div>");
-                deferred.resolve();
-            } else {
-                require(
-                    ["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"],
-                    function (dialogs, viewGrid) {
-
-                        viewGrid.drawSimpleGrid(appointments).appendTo($node);
-
-                        new dialogs.SidePopup({ modal: false })
-                            .delegate($node, ".vgrid-cell", function (popup, e, target) {
-                                var data = target.data("appointment");
-                                require(["io.ox/calendar/view-detail"], function (view) {
-                                    popup.append(view.draw(data));
-                                    data = null;
-                                });
-                            });
-
-                        deferred.resolve();
-                    }
-                );
-            }
-            return deferred;
+        draw: function (baton) {
+            var popup = this.busy();
+            require(['io.ox/calendar/view-detail', 'io.ox/calendar/api'], function (view, api) {
+                var obj = api.reduce(baton.item);
+                api.get(obj).done(function (data) {
+                    popup.idle().append(view.draw(data));
+                });
+            });
         },
 
         post: function (ext) {

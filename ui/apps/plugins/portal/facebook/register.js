@@ -63,58 +63,57 @@ define('plugins/portal/facebook/register',
             return keychain.createInteractively('facebook', win);
         },
 
-        preview: function () {
-            var self = this;
-            proxy.request({
-                api: 'facebook',
-                url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
-                    newsfeed: "SELECT actor_id, message, description , created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0 LIMIT 5",
-                    profiles: "SELECT id, name FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed)"
-                })
-            })
-            .pipe(JSON.parse)
-            .done(function (resultsets) {
-                var wall = resultsets.data[0].fql_result_set,
-                    profiles = resultsets.data[1].fql_result_set,
-                    $content = $('<div class="content pointer">');
-                if (!wall || wall.length === 0) {
+        preview: function (baton) {
+            var resultsets = baton.data,
+                wall = resultsets.data[0].fql_result_set,
+                profiles = resultsets.data[1].fql_result_set,
+                $content = $('<div class="content pointer">');
+            if (!wall || wall.length === 0) {
+                $content.append(
+                    $('<div class="paragraph">').text(gt('No wall posts yet.')));
+            } else {
+                _(wall).each(function (post) {
+                    var message = strings.shorten(post.message || post.description || '', 150);
                     $content.append(
-                        $('<div class="paragraph">').text(gt('No wall posts yet.')));
-                } else {
-                    _(wall).each(function (post) {
-                        var message = strings.shorten(post.message || post.description || '', 150);
-                        $content.append(
-                            $('<div class="paragraph">').append(
-                                $('<span class="bold">').text(getProfile(profiles, post.actor_id).name + ': '),
-                                $('<span class="normal">').text(message)
-                            )
-                        );
-                    });
-                }
-                self.append($content);
-            });
+                        $('<div class="paragraph">').append(
+                            $('<span class="bold">').text(getProfile(profiles, post.actor_id).name + ': '),
+                            $('<span class="normal">').text(message)
+                        )
+                    );
+                });
+            }
+            this.append($content);
         },
 
-        load: function () {
+        load: function (baton) {
             return proxy.request({
                 api: 'facebook',
                 url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
                     newsfeed: "SELECT post_id, actor_id, message, type, description, likes, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0",
                     profiles: "SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed)"
                 })
-            }).pipe(JSON.parse);
+            })
+            .pipe(JSON.parse)
+            .done(function (data) {
+                baton.data = data;
+            });
         },
 
-        draw: function (resultsets) {
-            var wall = resultsets.data[0].fql_result_set;
-            var profiles = resultsets.data[1].fql_result_set;
+        draw: function (baton) {
+
+            var resultsets = baton.data,
+                wall = resultsets.data[0].fql_result_set,
+                profiles = resultsets.data[1].fql_result_set;
 
             if (!wall) {
                 this.remove();
                 return $.Deferred().resolve();
             }
 
-            this.append($('<h1>').addClass('clear-title').text('Facebook'));
+            this.append(
+                $('<h1>').addClass('facebook clear-title').text('Facebook')
+            );
+
             _(wall).each(function (post) {
                 var profile = getProfile(profiles, post.actor_id);
                 var source = getProfile(profiles, post.source_id);
@@ -165,8 +164,6 @@ define('plugins/portal/facebook/register',
 
                 wall_content.appendTo(this);
             }, this);
-
-            return $.when();
         },
 
         drawCreationDialog: function () {

@@ -68,7 +68,9 @@ define('plugins/portal/mail/register',
             _(baton.data).each(function (mail) {
                 var received = new date.Local(mail.received_date).format(date.DATE);
                 $content.append(
-                    $('<div class="item">').append(
+                    $('<div class="item">')
+                    .data('item', mail)
+                    .append(
                         $('<span class="bold">').text(util.getDisplayName(mail.from[0])), $.txt(' '),
                         $('<span class="normal">').text(strings.shorten(mail.subject, 50)), $.txt(' '),
                         $('<span class="accent">').text(received)
@@ -78,64 +80,16 @@ define('plugins/portal/mail/register',
             this.append($content);
         },
 
-        loadContent: function () {
-            var loading = new $.Deferred();
-            require(['io.ox/mail/api'], function (api) {
-                api.getAllThreads()
-                    .done(function (response) {
-                        var ids = response.data;
-                        api.getThreads(ids.slice(0, 5))
-                            .done(loading.resolve)
-                            .fail(loading.reject);
-                    })
-                    .fail(loading.reject);
+        draw: function (baton) {
+            var popup = this.busy();
+            require(['io.ox/mail/view-detail', 'io.ox/mail/api'], function (view, api) {
+                var obj = api.reduce(baton.item);
+                api.get(obj).done(function (data) {
+                    popup.idle().append(
+                        view.draw(data).css('padding', 0)
+                    );
+                });
             });
-            return loading;
-        },
-
-        draw: function (list) {
-
-            var node = this;
-
-            node.empty()
-                .addClass('io-ox-portal-mail')
-                .append(
-                    $('<h1>').addClass('clear-title')
-                        .text(gt('Recent mails'))
-                );
-
-            ext.point('io.ox/portal/widget/mail').invoke('draw', node);
-
-            if (list.length === 0) {
-
-                node.append('<div><b>' + gt('No mails at all!') + '</b></div>');
-                return $.when();
-
-            } else {
-
-                return require(['io.ox/core/tk/dialogs',
-                                'io.ox/mail/view-grid-template'], function (dialogs, viewGrid) {
-
-                        viewGrid.drawSimpleGrid(list).appendTo(node);
-
-                        if (!sidepopup) {
-                            sidepopup = new dialogs.SidePopup({ modal: false });
-                        }
-                        sidepopup.delegate(node, '.vgrid-cell', function (pane, e, target) {
-                            var data = target.data('object-data');
-                            pane.parent().removeClass('default-content-padding');
-                            require(['io.ox/mail/view-detail', 'io.ox/mail/api'], function (view, api) {
-                                // get thread
-                                var thread = api.getThread(data);
-                                // get first mail first
-                                api.get(thread[0]).done(function (data) {
-                                    view.drawThread(pane, thread, data);
-                                });
-                            });
-                        });
-                    }
-                );
-            }
         }
     });
 });

@@ -17,11 +17,12 @@ define('io.ox/portal/main',
      'io.ox/core/api/user',
      'io.ox/core/date',
      'io.ox/core/manifests',
+     'io.ox/core/tk/dialogs',
      'gettext!io.ox/portal',
      'settings!io.ox/portal',
      'less!io.ox/portal/style.css',
      'apps/io.ox/core/tk/jquery-ui.min.js'
-    ], function (ext, userAPI, date, manifests, gt, settings) {
+    ], function (ext, userAPI, date, manifests, dialogs, gt, settings) {
 
     'use strict';
 
@@ -186,6 +187,8 @@ define('io.ox/portal/main',
         appBaton = ext.Baton({ app: app }),
         // all available plugins
         availablePlugins = _(manifests.pluginsFor('portal')).uniq(),
+        // sidepopup
+        sidepopup = new dialogs.SidePopup(),
         // collection
         collection = new Backbone.Collection(
             _(settings.get('widgets/user', {}))
@@ -214,6 +217,20 @@ define('io.ox/portal/main',
         return collection;
     };
 
+    function openSidePopup(popup, e, target) {
+        // get widget node
+        var node = target.closest('.widget'),
+            // get widget cid
+            cid = node.attr('data-widget-cid'),
+            // get model
+            model = collection.getByCid(cid), baton;
+        if (model) {
+            baton = model.get('baton');
+            baton.item = target.data('item');
+            ext.point('io.ox/portal/widget/' + model.get('type')).invoke('draw', popup.empty(), model.get('baton'));
+        }
+    }
+
     app.drawScaffolds = function () {
         collection.each(function (model) {
             var node = $('<li>'),
@@ -221,6 +238,8 @@ define('io.ox/portal/main',
             ext.point('io.ox/portal/widget-scaffold').invoke('draw', node, baton);
             appBaton.$.widgets.append(node);
         });
+        // add side popup
+        sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer', openSidePopup);
         // make sortable
         appBaton.$.widgets.sortable({
             containment: win.nodes.main,

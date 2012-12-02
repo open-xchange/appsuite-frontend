@@ -131,7 +131,7 @@ define("plugins/portal/tasks/register",
             _(tasks).each(function (task) {
                 task = util.interpretTask(task);
                 content.append(
-                    $('<div class="item">').append(
+                    $('<div class="item">').data('item', task).append(
                         $('<span class="bold">').text(gt.noI18n(strings.shorten(task.title, 50))), $.txt(' '),
                         task.end_date === '' ? $() :
                             $('<span class="accent">').text(gt('Due in %1$s', _.noI18n(task.end_date))), $.txt(' '),
@@ -143,6 +143,14 @@ define("plugins/portal/tasks/register",
             this.append(content);
         },
 
-        draw: draw
+        draw: function (baton) {
+            var popup = this.busy();
+            require(['io.ox/tasks/view-detail', 'io.ox/tasks/api'], function (view, api) {
+                var obj = api.reduce(baton.item);
+                api.get(obj).done(function (data) {
+                    popup.idle().append(view.draw(data));
+                });
+            });
+        }
     });
 });

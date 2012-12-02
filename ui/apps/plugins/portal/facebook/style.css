@@ -10,6 +10,9 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+h1.facebook {
+    margin: 0 0 26px 0;
+}
 .facebook.wall-entry {
     position: relative;
     min-height: 55px;

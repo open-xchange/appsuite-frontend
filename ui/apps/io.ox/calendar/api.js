@@ -17,7 +17,8 @@ define("io.ox/calendar/api",
     ["io.ox/core/http",
      "io.ox/core/event",
      "io.ox/core/config",
-     "io.ox/core/api/user"], function (http, Events, config, userAPI) {
+     "io.ox/core/api/user",
+     "io.ox/core/api/factory"], function (http, Events, config, userAPI, factory) {
 
     "use strict";
 
@@ -379,6 +380,8 @@ define("io.ox/calendar/api",
     api.copy = function (list, targetFolderId) {
         return copymove(list, 'copy', targetFolderId);
     };
+
+    api.reduce = factory.reduce;
 
     // global refresh
     api.refresh = function () {
