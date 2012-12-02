@@ -11,11 +11,14 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("plugins/portal/quota/register", ["io.ox/core/extensions",
-                                         'gettext!plugins/portal',
-                                         'io.ox/core/api/quota',
-                                         'io.ox/core/strings',
-                                         'less!plugins/portal/quota/style.css'], function (ext, gt, api, strings) {
+define("plugins/portal/quota/register",
+    ['io.ox/core/extensions',
+     'gettext!plugins/portal',
+     'io.ox/core/api/quota',
+     'io.ox/core/strings',
+     'less!plugins/portal/quota/style.css'
+    ], function (ext, gt, api, strings) {
+
     "use strict";
 
     var loadTile = function () {
@@ -24,23 +27,23 @@ define("plugins/portal/quota/register", ["io.ox/core/extensions",
 
     drawTile = function (quota) {
         this.append(
-            $('<div class="content">').append(
-                    $('<div class="item">').append(
-                        $("<span>").text(gt("File quota")),
-                        $('<span class="pull-right gray quota-memory-file">'),
-                        $("<div>").addClass("plugins-portal-quota-filebar")
-                    ),
-                    $('<div class="item">').append(
-                        $('<span>').text(gt("Mail quota")),
-                        $('<span class="pull-right gray quota-memory-mail">'),
-                        $("<div>").addClass("plugins-portal-quota-mailbar")
-                    ),
-                    $('<div class="item">').append(
-                        $('<span>').text(gt("Mail count quota")),
-                        $('<span class="pull-right gray quota-mailcount">'),
-                        $("<div>").addClass("plugins-portal-quota-mailcountbar")
-                    ).addClass("plugins-portal-quota-mailcount")
-                )
+            $('<div class="content no-pointer">').append(
+                $('<div class="paragraph">').append(
+                    $("<span>").text(gt("File quota")),
+                    $('<span class="pull-right gray quota-memory-file">'),
+                    $("<div>").addClass("plugins-portal-quota-filebar")
+                ),
+                $('<div class="paragraph">').append(
+                    $('<span>').text(gt("Mail quota")),
+                    $('<span class="pull-right gray quota-memory-mail">'),
+                    $("<div>").addClass("plugins-portal-quota-mailbar")
+                ),
+                $('<div class="paragraph">').append(
+                    $('<span>').text(gt("Mail count quota")),
+                    $('<span class="pull-right gray quota-mailcount">'),
+                    $("<div>").addClass("plugins-portal-quota-mailcountbar")
+                ).addClass("plugins-portal-quota-mailcount")
+            )
         );
 
         //filestorage
@@ -97,9 +100,9 @@ define("plugins/portal/quota/register", ["io.ox/core/extensions",
     buildbar = function (width) {
         var progressbar = $('<div>').addClass('bar').css('width', width + "%");
         if (width < 70) {
-            progressbar.addClass(''); // blue instead of green
+            progressbar.addClass('default'); // blue instead of green
         } else if (width < 90) {
-            progressbar.addClass(''); // still blue instead of green
+            progressbar.addClass('default'); // still blue instead of green
         } else {
             progressbar.addClass('bar-danger');
         }

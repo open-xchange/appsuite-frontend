@@ -118,7 +118,7 @@ define('plugins/portal/birthdays/register',
 
         preview: function () {
 
-            var $list = $('<div class="content">'),
+            var $list = $('<div class="content pointer">'),
                 start = _.now(),
                 end = start + RANGE;
 
@@ -127,16 +127,16 @@ define('plugins/portal/birthdays/register',
                 var hash = {};
 
                 if (contacts.length === 0) {
-                    $list.append($('<div class="simple-item">').text(gt('No birthdays within the next %1$d weeks', WEEKS)));
+                    $list.append($('<div class="line">').text(gt('No birthdays within the next %1$d weeks', WEEKS)));
                 } else {
                     _(contacts).each(function (contact) {
                         var birthday = new date.Local(date.Local.utc(contact.birthday)).format(date.DATE),
                             name = util.getFullName(contact);
                         if (!isDuplicate(name, hash)) {
                             $list.append(
-                                $('<div class="simple-item">').append(
+                                $('<div class="line">').append(
                                     $('<span class="bold">').text(name), $.txt(' '),
-                                    $('<span class="normal">').text(birthday)
+                                    $('<span class="accent">').text(birthday)
                                 )
                             );
                             markDuplicate(name, hash);

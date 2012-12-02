@@ -92,25 +92,30 @@ define('plugins/portal/twitter/register',
     var loadTile = function () {
         return loadFromTwitter({count: 5, include_entities: true});
     };
-    var drawTile = function (tweets, $node) {
-        if (!tweets) {
-            return;
-        }
+
+    var drawTile = function (tweets) {
+
+        if (!tweets) { return; }
+
+        var content = $('<div class="content">');
+
         if (tweets.length === 0) {
-            $node.append(
-                $('<div class="io-ox-portal-item">').text(gt('No tweets yet.')));
+            content.append(
+                $('<div class="item">').text(gt('No tweets yet.'))
+            );
         } else {
             _(tweets).each(function (tweet) {
-                var message = $('<div>').html(tweet.text).text(),
-                    tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str;
-                $node.append(
-                    $('<a class="io-ox-portal-item">').attr({href: tweetLink, target: '_blank'}).append(
-                        $('<span class="io-ox-portal-preview-firstline">').text('@' + tweet.user.name + ': '),
-                        $('<span class="io-ox-portal-preview-secondline">').text(message)
+                var message = String(tweet.text).replace(/((#|@)\w+)/g, '<span class="accent">$1</span>');
+                content.append(
+                    $('<div class="item">').append(
+                        $('<span class="bold">').text('@' + tweet.user.name + ': '),
+                        $('<span class="normal">').html(message)
                     )
                 );
             });
         }
+
+        this.append(content);
     };
 
     var loadTweets = function (count, offset, newerThanId) {
@@ -205,8 +210,6 @@ define('plugins/portal/twitter/register',
 
     ext.point('io.ox/portal/widget').extend({
         id: 'twitter',
-        index: 140,
-        tileHeight: 2,
         title: "Twitter",
         icon: 'apps/plugins/portal/twitter/twitter-bird-dark-bgs.png',
         isEnabled: function () {
@@ -219,21 +222,12 @@ define('plugins/portal/twitter/register',
             var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
             return keychain.createInteractively('twitter', win);
         },
+
         preview: function () {
-            var deferred = $.Deferred();
-            loadTile().done(function (tweets) {
-                if (!tweets) {
-                    deferred.resolve(control.CANCEL);
-                    return;
-                }
-                var $node = $('<div class="io-ox-portal-content">');
-                drawTile(tweets, $node);
-                deferred.resolve($node);
-            }).fail(function () {
-                deferred.resolve(control.CANCEL);
-                return;
+            var self = this;
+            return loadTile().done(function (tweets) {
+                drawTile.call(self, tweets);
             });
-            return deferred;
         },
 
         load: function () {

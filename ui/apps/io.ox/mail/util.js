@@ -158,7 +158,7 @@ define('io.ox/mail/util',
             return tmp;
         },
 
-        getDisplayName: function (pair, behalf) {
+        getDisplayName: function (pair) {
             if (!pair) {
                 return '';
             }

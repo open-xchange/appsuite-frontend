@@ -19,7 +19,8 @@ define('io.ox/portal/main',
      'io.ox/core/manifests',
      'gettext!io.ox/portal',
      'settings!io.ox/portal',
-     'less!io.ox/portal/style.css'
+     'less!io.ox/portal/style.css',
+     'apps/io.ox/core/tk/jquery-ui.min.js'
     ], function (ext, userAPI, date, manifests, gt, settings) {
 
     'use strict';
@@ -51,20 +52,26 @@ define('io.ox/portal/main',
                 quota_0: {
                     id: 'quota',
                     plugin: 'plugins/portal/quota/register',
-                    color: 'black',
+                    color: 'gray',
                     index: 'last'
                 },
                 facebook_0: {
                     id: 'facebook',
                     plugin: 'plugins/portal/facebook/register',
-                    color: 'blue',
-                    enabled: false,
+                    color: 'lightgreen',
+                    enabled: true,
                     index: 4
+                },
+                twitter_0: {
+                    id: 'twitter',
+                    plugin: 'plugins/portal/twitter/register',
+                    color: 'pink',
+                    index: 5
                 },
                 birthdays_0: {
                     id: 'birthdays',
                     plugin: 'plugins/portal/birthdays/register',
-                    color: 'blue',
+                    color: 'lightblue',
                     index: 'first'
                 }
             }
@@ -101,8 +108,8 @@ define('io.ox/portal/main',
                 $('<div class="header">').append(
                     // button
                     $('<button class="btn btn-primary pull-right">')
-                        .attr('data-action', 'personalize')
-                        .text(gt('Personalize this page'))
+                        .attr('data-action', 'customize')
+                        .text(gt('Customize this page'))
                         .on('click', openSettings),
                     // greeting
                     $('<h1 class="greeting">').append(
@@ -126,7 +133,7 @@ define('io.ox/portal/main',
         index: 200,
         draw: function (baton) {
             this.append(
-                baton.$.widgets = $('<div class="widgets">')
+                baton.$.widgets = $('<ul class="widgets">')
             );
         }
     });
@@ -134,8 +141,9 @@ define('io.ox/portal/main',
     // widget scaffold
     ext.point('io.ox/portal/widget-scaffold').extend({
         draw: function (baton) {
-            var data = baton.data;
-            this.addClass('widget widget-color-' + (data.color || 'white') + ' widget-' + data.id + ' pending')
+            var data = baton.model.toJSON();
+            this.attr({ 'data-widget-cid': baton.model.cid, 'data-widget-plugin': baton.model.get('plugin') })
+                .addClass('widget widget-color-' + (data.color || 'white') + ' widget-' + data.id + ' pending')
                 .append(
                     $('<h2 class="title">').text('\u00A0')
                 );
@@ -176,10 +184,16 @@ define('io.ox/portal/main',
 
     app.drawScaffolds = function () {
         collection.each(function (model) {
-            var node = $('<div>', { 'data-widget-cid': model.cid, 'data-widget-plugin': model.get('plugin') }),
-                baton = ext.Baton({ data: model.toJSON(), app: app });
+            var node = $('<li>'),
+                baton = ext.Baton({ model: model, app: app });
             ext.point('io.ox/portal/widget-scaffold').invoke('draw', node, baton);
             appBaton.$.widgets.append(node);
+        });
+        // make sortable
+        appBaton.$.widgets.sortable({
+            containment: win.nodes.main,
+            scroll: true,
+            delay: 300
         });
     };
 

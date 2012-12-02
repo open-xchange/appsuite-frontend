@@ -15,35 +15,27 @@
 
 .io-ox-portal {
 
-    @padding: 2px;
-    @large-padding: 13px;
-    @portal-background-alt: #333;
-    @portal-background: #555;
+    @spacing: 9px;
+    @line-height: 18px;
+    @lines: 18;
+    @widget-padding: 13px;
 
-    padding: @large-padding;
-    position: relative;
-    height: 100%;
+    padding: 13px (13px - @spacing) 13px 13px;
     .overflow(auto);
-
-    border-top: 1px solid #000;
-    background-color: white;
-
-    &, * {
-        .box-sizing(border-box);
-    }
 
     .vgrid-cell:last-child {
         border-bottom: 0px none;
     }
 
     .header {
-        margin: 0 13px 6px 13px;
+        margin: 0 13px 13px 13px;
     }
 
     h1.greeting {
         font-family: @font-light;
         font-weight: 300;
         font-size: 24px;
+        line-height: 27px;
         color: #333;
         margin: 0;
     }
@@ -55,44 +47,62 @@
     .signin {
         font-size: 13px;
         color: #555;
+        white-space: nowrap;
     }
 
     .widgets {
         clear: both;
         min-height: 200px;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
     }
-
-    @widget-spacing: 1px;
-    @widget-padding: 13px;
 
     .widget {
         position: relative;
         display: inline-block;
         width: 300px;
-        height: 300px;
-        border-width: 0 @widget-spacing @widget-spacing 0;
+        height: @line-height * @lines + 6px;
+        border-width: 0 @spacing @spacing 0;
         border-style: solid;
         border-color: transparent;
         float: left;
         background-clip: padding-box;
+        background-color: #f5f5f5;
+        .transition(background-color 0.3s linear);
+        .box-sizing(border-box);
+        .user-select(none);
     }
 
-    .widget { background-color: #f5f5f5; }
+    .widget.ui-sortable-helper {
+        background-color: #eee;
+    }
 
-    .widget-color-default { h2, .colored { color: #333; } }
-    .widget-color-red { h2, .colored { color: @color_red; } }
-    .widget-color-orange { h2, .colored { color: @color_orange; } }
-    .widget-color-green { h2, .colored { color: @color_green; } }
-    .widget-color-blue { h2, .colored { color: @color_blue; } }
-    .widget-color-purple { h2, .colored { color: @color_purple; } }
-    .widget-color-pink { h2, .colored { color: @color_pink; } }
-    .widget-color-gray { h2, .colored { color: @color_gray; } }
+    .pending {
+        background-color: #fafafa;
+        h2 { color: #ddd !important; }
+    }
+
+    .widget-color-default { h2, .accent { color: #333; } }
+    .widget-color-red { h2, .accent { color: @color_red; } }
+    .widget-color-orange { h2, .accent { color: @color_orange; } }
+    .widget-color-lightgreen { h2, .accent { color: darken(@color_lightgreen, 10%); } }
+    .widget-color-green { h2, .accent { color: @color_green; } }
+    .widget-color-lightblue { h2, .accent { color: darken(@color_lightblue, 20%); } }
+    .widget-color-blue { h2, .accent { color: @color_blue; } }
+    .widget-color-purple { h2, .accent { color: @color_purple; } }
+    .widget-color-pink { h2, .accent { color: darken(@color_pink, 10%); } }
+    .widget-color-gray { h2, .accent { color: darken(@color_gray, 20%); } }
 
     h2 {
         font-size: 20px;
         margin: @widget-padding;
         font-weight: bold;
         line-height: 26px;
+        max-height: 2em;
+        overflow: hidden;
+        cursor: default;
+        .transition(color 0.3s linear);
     }
 
     .normal { }
@@ -105,73 +115,42 @@
         right: @widget-padding;
         bottom: @widget-padding;
         left: @widget-padding;
-        top: 60px;
+        top: @line-height * 4;
         overflow: hidden;
+        &.pointer { cursor: pointer; }
+    }
+
+    .item, .paragraph {
+        line-height: @line-height;
+        margin-bottom: @line-height;
     }
 
     .item {
-        line-height: 18px;
-        margin-bottom: 10px;
+        cursor: pointer;
+    }
+
+    .line {
+        line-height: @line-height;
     }
 }
 
-.io-ox-portal-settings {
-    float: right;
-    display: block;
-    padding-right: 5px;
-    padding-bottom: 0.5em;
-}
-.io-ox-tile-container {
-    position: absolute;
-}
-.io-ox-portal-settings a {
-    color: #0AF;
-    font-size: 13px;
-}
-.io-ox-portal-tiles {
-    clear: both;
-    text-align: left;
-    vertical-align: top;
-    position: relative;
-    background: #999;
-}
-
-@tHeight: 300px;
-@tWidth: 260px;
-@tSpace: 12px;
-@tLine: @tSpace * 3;
-
-.io-ox-portal-widget-tile {
-    display: inline-block;
-    width: @tWidth;
-    height: @tHeight;
-    margin: 0 1px 1px 0;
-    overflow: hidden;
-    float: left;
-    .box-sizing(border-box);
-}
-.io-ox-portal-widget-phototile {
-    padding: 0 !important;
-}
-
-/* LATER:
 @media all and (min-width: 0px ) {
-    .io-ox-portal-widget-tile-border { width: 100%; }
+    .io-ox-portal .widget { width: 100%; }
 }
-@media all and (min-width: 300px) {
-    .io-ox-portal-widget-tile-border { width: 50%; }
+@media all and (min-width: 560px) {
+    .io-ox-portal .widget { width: 100% / 2; }
 }
-@media all and (min-width: 600px) {
-    .io-ox-portal-widget-tile-border { width: 33.33%; }
+@media all and (min-width: 840px) {
+    .io-ox-portal .widget { width: 100% / 3; }
 }
-@media all and (min-width: 900px) {
-    .io-ox-portal-widget-tile-border { width: 25%; }
+@media all and (min-width: 1120px) {
+    .io-ox-portal .widget { width: 100% / 4; }
 }
-@media all and (min-width: 1200px) {
-    .io-ox-portal-widget-tile-border { width: 20%; }
+@media all and (min-width: 1400px) {
+    .io-ox-portal .widget { width: 100% / 5; }
 }
-*/
 
+/*
 .io-ox-portal-typeA .io-ox-portal-item {
     display: inline-block;
     text-decoration: none;
@@ -192,7 +171,7 @@
     font-weight: 200;
 }
 .io-ox-portal-typeA .io-ox-portal-content {
-    height: @tHeight - @tLine - @tLine; /* height - title - action */
+    height: @tHeight - @tLine - @tLine;
     overflow: hidden;
     line-height: 1.5em;
     text-overflow: ellipsis;
@@ -230,12 +209,12 @@
     visibility: hidden;
 }
 .io-ox-portal-typeB .io-ox-portal-image {
-    height: @tHeight - @tLine; /* height - title */
+    height: @tHeight - @tLine;
     background: no-repeat center;
     background-size: cover;
 }
 .io-ox-portal-typeB .io-ox-portal-actions {
-    margin-top: @tHeight - @tLine - @tLine; /* box_height - header_height - footer_height*/
+    margin-top: @tHeight - @tLine - @tLine;
     height: @tLine;
     background: rgba(0, 0, 0, 0.5);
     color: white;
@@ -260,8 +239,6 @@
     margin-right: 6px;
 }
 
-/* Remove this to make Matthias happy */
-/*
 .io-ox-typeA-action, .io-ox-typeB-title {
     border-bottom-left-radius: @tSpace;
     border-bottom-right-radius: @tSpace;
@@ -273,7 +250,6 @@
 .io-ox-portal-widget-tile {
     border-radius: @tSpace;
 }
-*/
 
 .invisible {
     visibility: hidden;
@@ -296,3 +272,4 @@
 .tile-color5, .tile-color11 {
     background: #432;
 }
+*/

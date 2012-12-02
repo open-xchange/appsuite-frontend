@@ -17,9 +17,10 @@ define('plugins/portal/mail/register',
      'io.ox/core/extPatterns/links',
      'io.ox/core/strings',
      'io.ox/mail/api',
+     'io.ox/mail/util',
      'io.ox/core/date',
      'gettext!plugins/portal',
-     'less!plugins/portal/mail/style.css'], function (ext, links, strings, mailApi, date, gt) {
+     'less!plugins/portal/mail/style.css'], function (ext, links, strings, mailApi, util, date, gt) {
 
     'use strict';
 
@@ -63,22 +64,17 @@ define('plugins/portal/mail/register',
         },
 
         preview: function (mails) {
-
             var $content = $('<div class="content">');
-
             _(mails).each(function (mail) {
-                var subject = mail.subject,
-                    from = mail.from[0][1],
-                    received = new date.Local(mail.received_date).format(date.DATE);
+                var received = new date.Local(mail.received_date).format(date.DATE);
                 $content.append(
                     $('<div class="item">').append(
-                        $('<span class="bold">').text(from), $.txt(' '),
-                        $('<span class="normal">').text(strings.shorten(subject, 50)), $.txt(' '),
-                        $('<span class="colored">').text(received)
+                        $('<span class="bold">').text(util.getDisplayName(mail.from[0])), $.txt(' '),
+                        $('<span class="normal">').text(strings.shorten(mail.subject, 50)), $.txt(' '),
+                        $('<span class="accent">').text(received)
                     )
                 );
             });
-
             this.append($content);
         },
 

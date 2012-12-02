@@ -11,10 +11,13 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-.quota-preview {
-    height: 100%;
-}
+.widget-quota {
 
- .quota-preview .progress {
-    height: 10px;
+	.progress {
+		height: 16px;
+	}
+
+	.progress-striped .bar.default {
+		background-color: #ccc;
+	}
 }

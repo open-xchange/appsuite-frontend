@@ -12,13 +12,29 @@
  */
 
 define('plugins/portal/tumblr/register',
-    ['io.ox/portal/mediaplugin',
+    ['io.ox/core/extensions',
+     'io.ox/portal/mediaplugin',
      'io.ox/mail/util',
      'settings!plugins/portal/tumblr',
      'io.ox/core/date',
-     'gettext!io.ox/portal'], function (MediaPlayer, mailUtil, settings, date, gt) {
+     'gettext!io.ox/portal'], function (ext, MediaPlayer, mailUtil, settings, date, gt) {
 
     'use strict';
+
+    var apiUrl = "https://api.tumblr.com/v2/blog/##blog##/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=";
+
+    ext.point('io.ox/portal/widget').extend({
+        id: 'facebook',
+        title: 'Tumblr',
+
+        load: function () {
+
+        },
+
+        preview: function () {
+
+        }
+    });
 
     var drawPlugin = function (index) {
         if (!index) {
@@ -26,8 +42,6 @@ define('plugins/portal/tumblr/register',
         }
 
         var mp = new MediaPlayer();
-        var apiUrl = "https://api.tumblr.com/v2/blog/##blog##/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=";
-
         var blogs = settings.get('blogs');
 
         _.each(blogs, function (v) {

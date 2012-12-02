@@ -84,7 +84,7 @@ define("plugins/portal/calendar/register", [
                     timespan = start.formatInterval(end, date.DATE);
                 $content.append(
                     $('<div class="item">').append(
-                        $('<span class="normal colored">').text(timespan), $.txt(' '),
+                        $('<span class="normal accent">').text(timespan), $.txt(' '),
                         $('<span class="bold">').text(nextApp.title || ''), $.txt(' '),
                         $('<span class="gray">').text(nextApp.location || '')
                     )
