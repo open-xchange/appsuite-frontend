@@ -13,29 +13,75 @@
 
 define('plugins/portal/tumblr/register',
     ['io.ox/core/extensions',
-     'io.ox/portal/mediaplugin',
+     'io.ox/portal/feed',
      'io.ox/mail/util',
      'settings!plugins/portal/tumblr',
      'io.ox/core/date',
-     'gettext!io.ox/portal'], function (ext, MediaPlayer, mailUtil, settings, date, gt) {
+     'gettext!io.ox/portal'], function (ext, Feed, mailUtil, settings, date, gt) {
 
     'use strict';
 
-    var apiUrl = "https://api.tumblr.com/v2/blog/##blog##/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=";
+    var apiUrl = ['https://api.tumblr.com/v2/blog/', '/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter='];
 
-    ext.point('io.ox/portal/widget').extend({
-        id: 'facebook',
+    ext.point('io.ox/portal/widget/tumblr').extend({
+
         title: 'Tumblr',
 
-        load: function () {
-
+        initialize: function (baton) {
+            var url = baton.model.get('props').url;
+            baton.feed = new Feed({
+                url: apiUrl.join(url) + "&jsonp="
+            });
         },
 
-        preview: function () {
+        load: function (baton) {
+            return baton.feed.load().done(function (data) {
+                baton.data = data.response;
+            });
+        },
 
+        preview: function (baton) {
+
+            var data = baton.data,
+                title = data.blog ? data.blog.name : '###',
+                sizes, url = '', width = 0,
+                post = _(data.posts).first();
+
+            if (title) {
+                this.find('h2').text(title);
+            }
+
+            if (post) {
+                // has photos?
+                if (_.isArray(post.photos) && post.photos.length && (sizes = post.photos[0].alt_sizes)) {
+                    // add photo
+                    // find proper size
+                    _(sizes).each(function (photo) {
+                        if (width === 0 || (photo.width > 250 && photo.width < 1000)) {
+                            url = photo.url;
+                            width = photo.width;
+                        }
+                    });
+                    this.addClass('photo-stream').append(
+                        $('<div class="content pointer">').css('backgroundImage', 'url(' + url + ')')
+                    );
+
+                } else {
+                    // use text
+                    var body = [];
+                    $('<div>').html(post.body).contents().each(function () {
+                        var text = _.escape($.trim($(this).text()));
+                        if (text !== '') { body.push(text); }
+                    });
+                    this.append(
+                        $('<div class="content pointer">').html(body.join(' <span class="accent">&bull;</span> '))
+                    );
+                }
+            }
         }
     });
 
+/*
     var drawPlugin = function (index) {
         if (!index) {
             index = 100;
@@ -219,4 +265,5 @@ define('plugins/portal/tumblr/register',
     return {
         reload: drawPlugin
     };
+*/
 });

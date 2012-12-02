@@ -25,6 +25,8 @@ define('io.ox/portal/main',
 
     'use strict';
 
+    var READY = $.when();
+
     console.warn('PORTAL SETTINGS', settings.get());
 
     // overwrite with fresh settings
@@ -32,47 +34,66 @@ define('io.ox/portal/main',
         widgets: {
             user: {
                 mail_0: {
-                    id: 'mail',
                     plugin: 'plugins/portal/mail/register',
                     color: 'blue',
+                    //enabled: false,
                     index: 1
                 },
                 calendar_0: {
-                    id: 'calendar',
                     plugin: 'plugins/portal/calendar/register',
                     color: 'red',
                     index: 2
                 },
                 tasks_0: {
-                    id: 'tasks',
                     plugin: 'plugins/portal/tasks/register',
                     color: 'green',
                     index: 3
                 },
                 quota_0: {
-                    id: 'quota',
                     plugin: 'plugins/portal/quota/register',
                     color: 'gray',
                     index: 'last'
                 },
                 facebook_0: {
-                    id: 'facebook',
                     plugin: 'plugins/portal/facebook/register',
                     color: 'lightgreen',
-                    enabled: true,
+                    //enabled: false,
                     index: 4
                 },
                 twitter_0: {
-                    id: 'twitter',
                     plugin: 'plugins/portal/twitter/register',
                     color: 'pink',
+                    //enabled: false,
                     index: 5
                 },
                 birthdays_0: {
-                    id: 'birthdays',
                     plugin: 'plugins/portal/birthdays/register',
                     color: 'lightblue',
                     index: 'first'
+                },
+                tumblr_0: {
+                    plugin: 'plugins/portal/tumblr/register',
+                    color: 'orange',
+                    index: 'first',
+                    props: {
+                        url: 'open-xchange.tumblr.com'
+                    }
+                },
+                tumblr_1: {
+                    plugin: 'plugins/portal/tumblr/register',
+                    color: 'lightblue',
+                    index: 'first',
+                    props: {
+                        url: 'vodvon.tumblr.com'
+                    }
+                },
+                tumblr_2: {
+                    plugin: 'plugins/portal/tumblr/register',
+                    color: 'gray',
+                    index: 4,
+                    props: {
+                        url: 'staff.tumblr.com'
+                    }
                 }
             }
         }
@@ -143,7 +164,7 @@ define('io.ox/portal/main',
         draw: function (baton) {
             var data = baton.model.toJSON();
             this.attr({ 'data-widget-cid': baton.model.cid, 'data-widget-plugin': baton.model.get('plugin') })
-                .addClass('widget widget-color-' + (data.color || 'white') + ' widget-' + data.id + ' pending')
+                .addClass('widget widget-color-' + (data.color || 'white') + ' widget-' + data.type + ' pending')
                 .append(
                     $('<h2 class="title">').text('\u00A0')
                 );
@@ -162,11 +183,15 @@ define('io.ox/portal/main',
         collection = new Backbone.Collection(
             _(settings.get('widgets/user', {}))
             .chain()
+            // map first since we need the object keys
+            .map(function (obj, id) {
+                obj.id = id;
+                obj.type = id.split('_')[0];
+                obj.props = obj.props || {};
+                return obj;
+            })
             .filter(function (obj) {
                 return (obj.enabled === undefined || obj.enabled === true) && _(availablePlugins).contains(obj.plugin);
-            })
-            .map(function (obj) {
-                return obj;
             })
             .value()
             .sort(ext.indexSorter)
@@ -198,32 +223,38 @@ define('io.ox/portal/main',
     };
 
     app.loadPlugins = function () {
-
         var usedPlugins = collection.pluck('plugin'),
             dependencies = _(availablePlugins).intersection(usedPlugins);
-
         return require(dependencies);
     };
+
+    function ensureDeferreds(ret) {
+        return ret && ret.promise ? ret : READY;
+    }
 
     app.drawWidgets = function () {
         collection.each(function (model, index) {
             // get proper extension
-            var id = model.get('id');
-            ext.point('io.ox/portal/widget').get(id, function (widget) {
-                var node = appBaton.$.widgets.find('[data-widget-cid="' + model.cid + '"]'),
-                    delay = (index / 2 >> 0) * 2000;
-                // set title
-                node.find('h2.title').text(widget.title);
-                // simple delay approach
-                setTimeout(function () {
-                    (widget.load || widget.loadTile)().done(function (data) {
-                        if (widget.preview) {
-                            widget.preview.call(node, data);
-                            node.removeClass('pending');
-                        }
-                    });
-                }, delay);
-            });
+            var type = model.get('type'),
+                node = appBaton.$.widgets.find('[data-widget-cid="' + model.cid + '"]'),
+                delay = (index / 2 >> 0) * 2000,
+                point = ext.point('io.ox/portal/widget/' + type),
+                baton = ext.Baton({ model: model });
+            // remember baton
+            model.set('baton', baton);
+            // set title
+            node.find('h2.title').text(point.prop('title'));
+            // simple delay approach
+            setTimeout(function () {
+                // initialize first
+                point.invoke('initialize', node, baton);
+                // load
+                var defs = point.invoke('load', node, baton).map(ensureDeferreds).value();
+                $.when.apply($, defs).done(function () {
+                    point.invoke('preview', node, baton);
+                    node.removeClass('pending');
+                });
+            }, delay);
         });
     };
 

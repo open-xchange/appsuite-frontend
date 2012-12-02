@@ -118,9 +118,7 @@ define("plugins/portal/quota/register",
         return $.Deferred().resolve();
     };
 
-    ext.point("io.ox/portal/widget").extend({
-        id: 'quota',
-        index: 900,
+    ext.point("io.ox/portal/widget/quota").extend({
         title: gt('Quota'),
         load: load,
         draw: draw,

@@ -95,17 +95,18 @@
     .widget-color-gray { h2, .accent { color: darken(@color_gray, 20%); } }
 
     h2 {
+        position: relative;
         font-size: 20px;
         margin: @widget-padding;
         font-weight: bold;
         line-height: 26px;
-        max-height: 2em;
+        height: 26px;
         overflow: hidden;
         cursor: default;
+        z-index: 2;
         .transition(color 0.3s linear);
     }
 
-    .normal { }
     .bold { font-weight: bold; }
     .italic { font-style: italic; }
     .gray { color: rgba(0, 0, 0, 0.5); }
@@ -116,8 +117,28 @@
         bottom: @widget-padding;
         left: @widget-padding;
         top: @line-height * 4;
+        line-height: @line-height;
         overflow: hidden;
         &.pointer { cursor: pointer; }
+    }
+
+    .photo-stream {
+        .content {
+            top: 0; right: 0; bottom: 0; left: 0;
+            z-index: 1;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+        h2 {
+            position: absolute;
+            bottom: 0; right: 0; left: 0;
+            margin: 0;
+            height: 30px;
+            padding: 13px;
+            background-color: rgba(0, 0, 0, 0.50);
+        }
+        &.widget-color-gray h2 { color: lighten(@color_gray, 30%); }
     }
 
     .item, .paragraph {
@@ -134,8 +155,30 @@
     }
 }
 
-@media all and (min-width: 0px ) {
-    .io-ox-portal .widget { width: 100%; }
+/* RESPONSIVE */
+
+@media all and (max-width: 560px) {
+    /* smartphone reduction */
+    .io-ox-portal {
+        padding-right: 0;
+        .header {
+            margin: 0 13px 13px 0;
+        }
+        .widget {
+            width: 100%;
+            border-right-width: 0;
+            background-color: transparent;
+        }
+        h2 {
+            margin: 26px 0 0 0;
+        }
+        .content {
+            left: 0;
+        }
+        .photo-stream {
+            .content, h2 { right: 13px; }
+        }
+    }
 }
 @media all and (min-width: 560px) {
     .io-ox-portal .widget { width: 100% / 2; }

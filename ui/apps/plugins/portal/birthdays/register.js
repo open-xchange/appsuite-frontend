@@ -39,15 +39,19 @@ define('plugins/portal/birthdays/register',
         return name in hash;
     }
 
-    ext.point("io.ox/portal/widget").extend({
-        id: 'birthdays',
+    ext.point('io.ox/portal/widget/birthdays').extend({
+
         title: gt('Next birthdays'),
-        load: function () {
+
+        load: function (baton) {
             var start = _.now(),
                 end = start + RANGE;
-            return api.birthdays(start, end);
+            return api.birthdays(start, end).done(function (data) {
+                baton.data = data;
+            });
         },
-        draw: function (contacts) {
+
+        draw: function (baton) {
 
             var hash = {}, $list;
 
@@ -55,7 +59,7 @@ define('plugins/portal/birthdays/register',
                 $('<h1>').text(gt('Next birthdays'))
             );
 
-            if (contacts.length === 0) {
+            if (baton.data.length === 0) {
                 $list.append(
                     $('<div>').text(gt('No birthdays within the next %1$d weeks', WEEKS))
                 );
@@ -68,7 +72,7 @@ define('plugins/portal/birthdays/register',
                     )
                 );
                 // loop
-                _(contacts).each(function (contact) {
+                _(baton.data).each(function (contact) {
                     var utc = date.Local.utc(contact.birthday), birthday, next, now, days, delta,
                         // we use fullname here to avoid haveing duplicates like "Jon Doe" and "Doe, Jon"
                         name = util.getFullName(contact);
@@ -113,7 +117,6 @@ define('plugins/portal/birthdays/register',
                 });
             }
             this.append($list);
-            return $.Deferred().resolve();
         },
 
         preview: function () {

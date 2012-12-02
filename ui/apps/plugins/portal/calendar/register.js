@@ -12,17 +12,16 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
+define("plugins/portal/calendar/register",
+    ["io.ox/core/extensions",
+     "io.ox/core/date",
+     "gettext!plugins/portal",
+     'io.ox/core/strings',
+     'io.ox/calendar/api',
+     "less!plugins/portal/calendar/style.css"
+    ], function (ext, date, gt, strings, api) {
 
-define("plugins/portal/calendar/register", [
-    "io.ox/core/extensions",
-    "io.ox/core/date",
-    "gettext!plugins/portal",
-    'io.ox/core/strings',
-    "less!plugins/portal/calendar/style.css"
-], function (ext, date, gt, strings) {
-
-    "use strict";
-
+    'use strict';
 
     //this should be in our date library. And it could probably be done much nicer, e.g. using two lists
     var printTimespan = function (timestamp1, timestamp2) {
@@ -53,78 +52,52 @@ define("plugins/portal/calendar/register", [
         return unit.replace("%s", Math.round(delta));
     };
 
-    var loadTile = function () {
-        var loadingTile = new $.Deferred();
-        require(["io.ox/calendar/api"], function (api) {
-            api.getAll()
-                .done(function (ids) {
-                    api.getList(ids.slice(0, 10))
-                        .done(loadingTile.resolve)
-                        .fail(loadingTile.reject);
-                })
-                .fail(loadingTile.reject); // This should be easier
-        });
-        return loadingTile;
-    };
+    ext.point("io.ox/portal/widget/calendar").extend({
 
-    var drawTile = function (appointments) {
-        var startSpan = new date.Local();
-        var endSpan = startSpan + (24 * 60 * 60 * 1000);
-
-        var nextAppointments = _(appointments).filter(function (app) {
-            return app.start_date > endSpan || app.end_date < startSpan;
-        });
-
-        var $content = $('<div class="content">');
-
-        if (nextAppointments.length > 0) {
-            _(nextAppointments).each(function (nextApp) {
-                var deltaT = printTimespan(nextApp.start_date, new Date().getTime()),
-                    start = new date.Local(nextApp.start_date), end = new date.Local(nextApp.end_date),
-                    timespan = start.formatInterval(end, date.DATE);
-                $content.append(
-                    $('<div class="item">').append(
-                        $('<span class="normal accent">').text(timespan), $.txt(' '),
-                        $('<span class="bold">').text(nextApp.title || ''), $.txt(' '),
-                        $('<span class="gray">').text(nextApp.location || '')
-                    )
-                );
-            });
-        } else {
-            $content.append(
-                $('<div class="item">')
-                .text(gt("You don't have any appointments in the near future."))
-            );
-        }
-
-        this.append($content);
-    };
-
-    var appointmentPortal = {
-        id: "calendar",
-        index: 100,
-        tileWidth: 1,
-        tileHeight: 2,
         title: gt('Appointments'),
-        preview: function () {
-            var self = this;
-            return loadTile().done(function (appointments) {
-                drawTile.call(self, appointments);
+
+        load: function (baton) {
+            return api.getAll().pipe(function (ids) {
+                return api.getList(ids.slice(0, 10)).done(function (data) {
+                    baton.data = data;
+                });
             });
         },
-        load: function () {
-            var loading = new $.Deferred();
-            require(["io.ox/calendar/api"], function (api) {
-                api.getAll()
-                    .done(function (ids) {
-                        api.getList(ids.slice(0, 10))
-                            .done(loading.resolve)
-                            .fail(loading.reject);
-                    })
-                    .fail(loading.reject); // This should be easier
-            });
-            return loading;
+
+        preview: function (baton) {
+
+            var startSpan = new date.Local(),
+                endSpan = startSpan + (24 * 60 * 60 * 1000),
+
+                appointments = _(baton.data).filter(function (app) {
+                    return app.start_date > endSpan || app.end_date < startSpan;
+                }),
+
+                $content = $('<div class="content">');
+
+            if (appointments.length > 0) {
+                _(appointments).each(function (nextApp) {
+                    var deltaT = printTimespan(nextApp.start_date, new Date().getTime()),
+                        start = new date.Local(nextApp.start_date), end = new date.Local(nextApp.end_date),
+                        timespan = start.formatInterval(end, date.DATE);
+                    $content.append(
+                        $('<div class="item">').append(
+                            $('<span class="normal accent">').text(timespan), $.txt(' '),
+                            $('<span class="bold">').text(nextApp.title || ''), $.txt(' '),
+                            $('<span class="gray">').text(nextApp.location || '')
+                        )
+                    );
+                });
+            } else {
+                $content.append(
+                    $('<div class="item">')
+                    .text(gt("You don't have any appointments in the near future."))
+                );
+            }
+
+            this.append($content);
         },
+
         draw: function (appointments) {
 
             var deferred = new $.Deferred(),
@@ -160,6 +133,7 @@ define("plugins/portal/calendar/register", [
             }
             return deferred;
         },
+
         post: function (ext) {
             var self = this;
             require(["io.ox/calendar/api"], function (api) {
@@ -168,7 +142,5 @@ define("plugins/portal/calendar/register", [
                 });
             });
         }
-    };
-
-    ext.point("io.ox/portal/widget").extend(appointmentPortal);
+    });
 });

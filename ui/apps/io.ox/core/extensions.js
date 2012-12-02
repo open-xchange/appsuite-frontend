@@ -304,9 +304,9 @@ define("io.ox/core/extensions",
             return list().inject(cb, memo).value();
         };
 
-        this.invoke = function (name, context) {
+        this.invoke = function (/* name, context */) {
             var o = list(),
-                args = ["invoke"].concat($.makeArray(arguments));
+                args = ['invoke'].concat($.makeArray(arguments));
             return o.invoke.apply(o, args);
         };
 
@@ -348,6 +348,10 @@ define("io.ox/core/extensions",
                 options = _.extend(options, obj);
             });
             return options;
+        };
+
+        this.prop = function (id) {
+            return list().pluck(id).first().value();
         };
     };
 

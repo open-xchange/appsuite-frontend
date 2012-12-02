@@ -208,16 +208,18 @@ define('plugins/portal/twitter/register',
             });
     };
 
-    ext.point('io.ox/portal/widget').extend({
-        id: 'twitter',
+    ext.point('io.ox/portal/widget/twitter').extend({
+
         title: "Twitter",
-        icon: 'apps/plugins/portal/twitter/twitter-bird-dark-bgs.png',
+
         isEnabled: function () {
             return keychain.isEnabled('twitter');
         },
+
         requiresSetUp: function () {
             return keychain.isEnabled('twitter') && ! keychain.hasStandardAccount('twitter');
         },
+
         performSetUp: function () {
             var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
             return keychain.createInteractively('twitter', win);
@@ -233,6 +235,7 @@ define('plugins/portal/twitter/register',
         load: function () {
             return loadFromTwitter({count: loadEntriesPerPage, include_entities: true});
         },
+
         draw: function (timeline) {
             // Pull to refresh
             $(this).on('onResume', function () {
@@ -283,6 +286,7 @@ define('plugins/portal/twitter/register',
 
             return $.Deferred().resolve();
         },
+
         loadMoreResults: function (finishFn) {
             $busyIndicator.addClass('io-ox-busy');
 
@@ -299,6 +303,7 @@ define('plugins/portal/twitter/register',
                     finishFn($busyIndicator);
                 });
         },
+
         drawCreationDialog: function () {
             var $node = $(this);
             $node.append(

@@ -46,16 +46,18 @@ define('plugins/portal/facebook/register',
         return _.find(profiles, function (profile) { return profile.id === actor_id; });
     };
 
-    ext.point('io.ox/portal/widget').extend({
-        id: 'facebook',
+    ext.point('io.ox/portal/widget/facebook').extend({
+
         title: 'Facebook',
-        icon: 'apps/plugins/portal/facebook/f_logo.png',
+
         isEnabled: function () {
             return keychain.isEnabled('facebook');
         },
+
         requiresSetUp: function () {
             return keychain.isEnabled('facebook') && ! keychain.hasStandardAccount('facebook');
         },
+
         performSetUp: function () {
             var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
             return keychain.createInteractively('facebook', win);
@@ -180,7 +182,6 @@ define('plugins/portal/facebook/register',
         }
     });
 
-
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'photo',
         index: 128,
@@ -194,7 +195,6 @@ define('plugins/portal/facebook/register',
                     .append($('<img>', {'class': "posted-image", 'src': media.src, alt: media.alt, title: media.alt})));
         }
     });
-
 
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'status',
@@ -244,7 +244,6 @@ define('plugins/portal/facebook/register',
             }
         }
     });
-
 
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'app_story',

@@ -26,135 +26,123 @@ define("plugins/portal/tasks/register",
 
     //var for detailView sidepane.Needs to be closed on DetailView delete action
     var sidepane,
-    loadTile = function () {
-        var prevDef = new $.Deferred();
-        taskApi.getAll({}, false).done(function (taskarray) {
-                prevDef.resolve(taskarray);
+
+        load = function () {
+            var def = new $.Deferred();
+            taskApi.getAll({}, false).done(function (taskarray) {
+                def.resolve(taskarray);
+            });
+            return def;
+        },
+
+        draw = function (tasks) {
+
+            var node;
+
+            this.append(
+                node = $('<div class="content">')
+            );
+
+            fillGrid(tasks, node);
+
+            //repaint function called on done and delete events
+            var repaint = function (e) {
+                var dom = e.data.node,
+                    draw = e.data.draw;
+
+                load().done(function (inputTasks) {
+                    if (sidepane && draw === false) {
+                        sidepane.close();
+                    }
+                    dom.find(".portal-tasks-grid").remove();
+                    dom.find("div").remove();
+                    if (inputTasks.length === 0) {
+                        $('<div>').text(gt("You don't have any tasks.")).appendTo(dom);
+                    } else {
+                        fillGrid(inputTasks, node);
+                    }
+                });
+            };
+
+            taskApi.on("refresh.list", {node: node}, repaint)
+                   .on("delete", {node: node, draw: false}, repaint);
+
+            node.on("dispose", function () {
+                taskApi.off("refresh.list", repaint)
+                       .off("delete", repaint);
             });
 
-        return prevDef;
-    },
-
-    drawTile = function (taskarray) {
-
-        var content = $('<div class="content">');
-
-        if (taskarray.length === 0) {
-            this.append(content.text(gt("You don't have any tasks.")));
-            return;
-        }
-
-        var tasks = [];
-        for (var i = 0; i < taskarray.length; i++) {
-            if (taskarray[i].end_date !== null && taskarray[i].status !== 3) {
-                tasks.push(taskarray[i]);
+            if (tasks.length === 0) {
+                $('<div>').text(gt("You don't have any tasks.")).appendTo(node);
             }
-        }
+        },
 
-        _(tasks).each(function (task) {
-            var task = util.interpretTask(task);
-            content.append(
-                $('<div class="item">').append(
-                    $('<span class="bold">').text(gt.noI18n(strings.shorten(task.title, 50))), $.txt(' '),
-                    task.end_date === '' ? $() :
-                        $('<span class="accent">').text(gt('Due in %1$s', _.noI18n(task.end_date))), $.txt(' '),
-                    $('<span class="gray">').text(gt.noI18n(strings.shorten(task.note, 100)))
-                )
-            );
-        });
+        //method to fill the grid used for initial drawing and refresh
+        fillGrid = function (tasks, node) {
 
-        this.append(content);
-    },
+            //interpret values for status etc
+            tasks = util.sortTasks(tasks);
+            for (var i = 0; i < tasks.length; i++) {
+                tasks[i] = util.interpretTask(tasks[i]);
+            }
+            viewGrid.drawSimpleGrid(tasks).addClass("portal-tasks-grid").appendTo(node);
 
-    load = function () {
-        var def = new $.Deferred();
-        taskApi.getAll({}, false).done(function (taskarray) {
-            def.resolve(taskarray);
-        });
-        return def;
-    },
+            //detailView Popup
+            if (!sidepane) {
+                sidepane = new dialogs.SidePopup({ modal: false });
+            }
+            sidepane.delegate(node, '.vgrid-cell', function (pane, e, target) {
+                var data = target.data('object-data'),
+                    folder = (data.folder_id || data.folder);
+                require(['io.ox/tasks/view-detail'], function (viewDetail) {
+                    // get task and draw detailview
+                    taskApi.get({folder: folder,
+                                 id: data.id}).done(function (taskData) {
+                        viewDetail.draw(taskData).appendTo(pane);
+                    });
 
-    draw = function (tasks) {
-
-        var node;
-
-        this.append(
-            node = $('<div class="content">')
-        );
-
-        fillGrid(tasks, node);
-
-        //repaint function called on done and delete events
-        var repaint = function (e) {
-            var dom = e.data.node,
-                draw = e.data.draw;
-
-            load().done(function (inputTasks) {
-                if (sidepane && draw === false) {
-                    sidepane.close();
-                }
-                dom.find(".portal-tasks-grid").remove();
-                dom.find("div").remove();
-                if (inputTasks.length === 0) {
-                    $('<div>').text(gt("You don't have any tasks.")).appendTo(dom);
-                } else {
-                    fillGrid(inputTasks, node);
-                }
+                });
             });
         };
 
-        taskApi.on("refresh.list", {node: node}, repaint)
-               .on("delete", {node: node, draw: false}, repaint);
+    ext.point("io.ox/portal/widget/tasks").extend({
 
-        node.on("dispose", function () {
-            taskApi.off("refresh.list", repaint)
-                   .off("delete", repaint);
-        });
-
-        if (tasks.length === 0) {
-            $('<div>').text(gt("You don't have any tasks.")).appendTo(node);
-        }
-    },
-
-    //method to fill the grid used for initial drawing and refresh
-    fillGrid = function (tasks, node) {
-
-        //interpret values for status etc
-        tasks = util.sortTasks(tasks);
-        for (var i = 0; i < tasks.length; i++) {
-            tasks[i] = util.interpretTask(tasks[i]);
-        }
-        viewGrid.drawSimpleGrid(tasks).addClass("portal-tasks-grid").appendTo(node);
-
-        //detailView Popup
-        if (!sidepane) {
-            sidepane = new dialogs.SidePopup({ modal: false });
-        }
-        sidepane.delegate(node, '.vgrid-cell', function (pane, e, target) {
-            var data = target.data('object-data'),
-                folder = (data.folder_id || data.folder);
-            require(['io.ox/tasks/view-detail'], function (viewDetail) {
-                // get task and draw detailview
-                taskApi.get({folder: folder,
-                             id: data.id}).done(function (taskData) {
-                    viewDetail.draw(taskData).appendTo(pane);
-                });
-
-            });
-        });
-    };
-
-
-    ext.point("io.ox/portal/widget").extend({
-        id: 'tasks',
         title: gt('Tasks'),
-        load: load,
-        draw: draw,
-        preview: function () {
-            var self = this;
-            return loadTile().done(function (data) {
-                drawTile.call(self, data);
+
+        load: function (baton) {
+            return taskApi.getAll({}, false).done(function (data) {
+                baton.data = data;
             });
-        }
+        },
+
+        preview: function (baton) {
+
+            var content = $('<div class="content">');
+
+            if (baton.data.length === 0) {
+                this.append(content.text(gt("You don't have any tasks")));
+                return;
+            }
+
+            var tasks = _(baton.data).filter(function (task) {
+                return task.end_date !== null && task.status !== 3;
+            });
+
+            _(tasks).each(function (task) {
+                task = util.interpretTask(task);
+                content.append(
+                    $('<div class="item">').append(
+                        $('<span class="bold">').text(gt.noI18n(strings.shorten(task.title, 50))), $.txt(' '),
+                        task.end_date === '' ? $() :
+                            $('<span class="accent">').text(gt('Due in %1$s', _.noI18n(task.end_date))), $.txt(' '),
+                        $('<span class="gray">').text(gt.noI18n(strings.shorten(task.note, 100)))
+                    )
+                );
+            });
+
+            this.append(content);
+        },
+
+        draw: draw
     });
 });

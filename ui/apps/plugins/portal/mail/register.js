@@ -46,26 +46,26 @@ define('plugins/portal/mail/register',
     }));
 
     // inline links
-    ext.point('io.ox/portal/widget/mail').extend(new links.InlineLinks({
-        index: 200,
-        id: 'inline-links',
+    ext.point('io.ox/portal/widget/mail/links').extend(new links.InlineLinks({
         ref: 'io.ox/portal/widget/mail/links/inline'
     }));
 
 
-    ext.point('io.ox/portal/widget').extend({
-        id: 'mail',
+    ext.point('io.ox/portal/widget/mail').extend({
+
         title: gt("Inbox"),
 
-        load: function () {
+        load: function (baton) {
             return mailApi.getAll({ folder: mailApi.getDefaultFolder() }, false).pipe(function (mails) {
-                return mailApi.getList(mails.slice(0, 10));
+                return mailApi.getList(mails.slice(0, 10)).done(function (data) {
+                    baton.data = data;
+                });
             });
         },
 
-        preview: function (mails) {
+        preview: function (baton) {
             var $content = $('<div class="content">');
-            _(mails).each(function (mail) {
+            _(baton.data).each(function (mail) {
                 var received = new date.Local(mail.received_date).format(date.DATE);
                 $content.append(
                     $('<div class="item">').append(
@@ -92,6 +92,7 @@ define('plugins/portal/mail/register',
             });
             return loading;
         },
+
         draw: function (list) {
 
             var node = this;
@@ -121,17 +122,17 @@ define('plugins/portal/mail/register',
                             sidepopup = new dialogs.SidePopup({ modal: false });
                         }
                         sidepopup.delegate(node, '.vgrid-cell', function (pane, e, target) {
-                                var data = target.data('object-data');
-                                pane.parent().removeClass('default-content-padding');
-                                require(['io.ox/mail/view-detail', 'io.ox/mail/api'], function (view, api) {
-                                    // get thread
-                                    var thread = api.getThread(data);
-                                    // get first mail first
-                                    api.get(thread[0]).done(function (data) {
-                                        view.drawThread(pane, thread, data);
-                                    });
+                            var data = target.data('object-data');
+                            pane.parent().removeClass('default-content-padding');
+                            require(['io.ox/mail/view-detail', 'io.ox/mail/api'], function (view, api) {
+                                // get thread
+                                var thread = api.getThread(data);
+                                // get first mail first
+                                api.get(thread[0]).done(function (data) {
+                                    view.drawThread(pane, thread, data);
                                 });
                             });
+                        });
                     }
                 );
             }
