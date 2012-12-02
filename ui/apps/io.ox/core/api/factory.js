@@ -188,7 +188,7 @@ define("io.ox/core/api/factory",
                         .done(o.done.list || $.noop);
                 } else if (ids.length === 1) {
                     // if just one item, we use get request
-                    return this.get({id: http.simplify(ids)[0]})
+                    return this.get(http.simplify(ids)[0])
                         .pipe(function (data) { return [data]; })
                         .pipe(o.pipe.listPost)
                         .done(o.done.list || $.noop);
