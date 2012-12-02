@@ -275,7 +275,7 @@ define('io.ox/office/editor/main',
                         if (_.isArray(operations)) {
                             editor.enableUndo(false);
                             applyOperations(operations);
-                            dumpElapsedTime('operations applied');
+                            dumpElapsedTime(operations.length + ' operations applied');
                             editor.documentLoaded();
                             window.setTimeout(function () { dumpElapsedTime('postprocessing finished'); }, 0);
                             editor.enableUndo(true);

@@ -2255,11 +2255,15 @@ define('io.ox/office/editor/editor',
          * processed document.
          */
         this.documentLoaded = function () {
-            var postProcessingTasks = [insertHyperlinkPopup, insertMissingCharacterStyles, insertMissingParagraphStyles, insertMissingTableStyle];
+            insertHyperlinkPopup();
+            insertMissingCharacterStyles();
+            insertMissingParagraphStyles();
+            insertMissingTableStyles();
 
-            _(postProcessingTasks).each(function (task) {
-                task.call(self);
-            });
+            Utils.info('Edtor.documentLoaded(): ' + editdiv.find('span').filter(function () { return DOM.isPortionSpan(this); }).length + ' text spans in ' + editdiv.find(DOM.PARAGRAPH_NODE_SELECTOR).length + ' paragraphs');
+            Utils.info('Edtor.documentLoaded(): ' + editdiv.find('td').length + ' cells in ' + editdiv.find(DOM.TABLE_NODE_SELECTOR).length + ' tables');
+            Utils.info('Edtor.documentLoaded(): called validateParagraphNode() ' + (validateParagraphNode.DBG_COUNT || 0) + ' times');
+            Utils.info('Edtor.documentLoaded(): called adjustTabsOfParagraph() ' + (adjustTabsOfParagraph.DBG_COUNT || 0) + ' times');
         };
 
         // ==================================================================
@@ -2437,7 +2441,7 @@ define('io.ox/office/editor/editor',
          * default table style. This ensures that we can insert tables that
          * are based on a reasonable default style.
          */
-        function insertMissingTableStyle() {
+        function insertMissingTableStyles() {
             var styleNames = tableStyles.getStyleSheetNames(),
                 parentId = tableStyles.getDefaultStyleSheetId(),
                 hasDefaultStyle = _.isString(parentId) && (parentId.length > 0),
@@ -3908,6 +3912,8 @@ define('io.ox/office/editor/editor',
                 // whether the last child node is the dummy element
                 hasLastDummy = false;
 
+            validateParagraphNode.DBG_COUNT = (validateParagraphNode.DBG_COUNT || 0) + 1;
+
             // convert parameter to a DOM node
             paragraph = Utils.getDomNode(paragraph);
 
@@ -4026,6 +4032,8 @@ define('io.ox/office/editor/editor',
          */
         function adjustTabsOfParagraph(paragraph) {
             var allTabNodes = [];
+
+            adjustTabsOfParagraph.DBG_COUNT = (adjustTabsOfParagraph.DBG_COUNT || 0) + 1;
 
             Position.iterateParagraphChildNodes(paragraph, function (node) {
                 if (DOM.isTabNode(node)) {
@@ -5619,8 +5627,9 @@ define('io.ox/office/editor/editor',
 
                             }
                         }
-                        if (updateParaTabstops)
+                        if (updateParaTabstops) {
                             adjustTabsOfParagraph(para);
+                        }
                     }
                 });
             }

@@ -264,16 +264,16 @@ define('io.ox/office/editor/format/tablestyles',
             }
 
             // single corner cells (only if inside active first/last row AND column areas)
-            if (firstRowIncluded && firstColIncluded && isFirstRow && isFirstCol && isConditionalKeyIncluded('northWestCell')) {
+            if (firstRowIncluded && firstColIncluded && isFirstRow && isFirstCol) {
                 mergeConditionalAttributes('northWestCell', false, false);
             }
-            if (firstRowIncluded && lastColIncluded && isFirstRow && isLastCol && isConditionalKeyIncluded('northEastCell')) {
+            if (firstRowIncluded && lastColIncluded && isFirstRow && isLastCol) {
                 mergeConditionalAttributes('northEastCell', false, false);
             }
-            if (lastRowIncluded && firstColIncluded && isLastRow && isFirstCol && isConditionalKeyIncluded('southWestCell')) {
+            if (lastRowIncluded && firstColIncluded && isLastRow && isFirstCol) {
                 mergeConditionalAttributes('southWestCell', false, false);
             }
-            if (lastRowIncluded && lastColIncluded && isLastRow && isLastCol && isConditionalKeyIncluded('southEastCell')) {
+            if (lastRowIncluded && lastColIncluded && isLastRow && isLastCol) {
                 mergeConditionalAttributes('southEastCell', false, false);
             }
 
