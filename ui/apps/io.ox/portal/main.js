@@ -27,8 +27,6 @@ define('io.ox/portal/main',
 
     var READY = $.when();
 
-    console.warn('PORTAL SETTINGS', settings.get());
-
     // overwrite with fresh settings
     settings.detach().set({
         widgets: {
@@ -93,6 +91,15 @@ define('io.ox/portal/main',
                     index: 4,
                     props: {
                         url: 'staff.tumblr.com'
+                    }
+                },
+                flickr_0: {
+                    plugin: 'plugins/portal/flickr/register',
+                    color: 'purple',
+                    index: 6,
+                    props: {
+                        method: 'flickr.photos.search',
+                        query: 'xjrlokix'
                     }
                 }
             }

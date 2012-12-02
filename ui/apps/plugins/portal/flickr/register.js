@@ -1,24 +1,90 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
- *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
 define('plugins/portal/flickr/register',
-    ['io.ox/portal/mediaplugin',
+    ['io.ox/core/extensions',
      'io.ox/mail/util',
-     'settings!plugins/portal/flickr',
      'io.ox/core/date',
-     'gettext!io.ox/portal'], function (MediaPlayer, mailUtil, settings, date, gt) {
+     'io.ox/portal/feed',
+     'settings!plugins/portal/flickr',
+     'gettext!io.ox/portal'
+    ], function (ext, mailUtil, date, Feed, settings, gt) {
 
     'use strict';
+
+    var API_KEY = '7fcde3ae5ad6ecf2dfc1d3128f4ead81',
+        // order of elements is the crucial factor of presenting the image in the sidepopups
+        imagesizes = ['url_l', 'url_c', 'url_z', 'url_o', 'url_n', 'url_m', 'url_q', 'url_s', 'url_sq', 'url_t'],
+        sizes = 'l m n o q s sq t z'.split(' '),
+        baseUrl = 'https://www.flickr.com/services/rest/?api_key=' + API_KEY + '&format=json&extras=date_upload,' + imagesizes.join(','),
+        apiUrl = {
+            'flickr.photos.search': baseUrl + '&method=flickr.photos.search&text=',
+            'flickr.people.getPublicPhotos': baseUrl + '&method=flickr.people.getPublicPhotos&user_id='
+        };
+
+    ext.point('io.ox/portal/widget/flickr').extend({
+
+        title: 'Flickr',
+
+        initialize: function (baton) {
+
+            var props = baton.model.get('props');
+
+            baton.feed = new Feed({
+                url: apiUrl[props.method] + props.query + '&jsoncallback='
+            });
+
+            baton.feed.process = function (data) {
+                return data && data.stat === "ok" ? data.photos : {};
+            };
+        },
+
+        load: function (baton) {
+            return baton.feed.load().done(function (data) {
+                baton.data = data;
+            });
+        },
+
+        preview: function (baton) {
+
+            var photo, size = '', url;
+
+            // set title
+            this.find('h2').text(baton.model.get('props').query || 'Flickr');
+
+            // get a photo
+            if (_.isArray((photo = baton.data.photo)) && photo.length > 0) {
+                // try to pick a random photo
+                photo = photo[Math.min(photo.length - 1, Math.random() * 10 >> 0)];
+            }
+
+            if (photo) {
+                // find proper image size
+                _(sizes).each(function (s) {
+                    if (size === '' || (photo['width_' + s] > 250 && photo['width_' + s] < 1000)) {
+                        size = s;
+                        url = photo['url_' + s];
+                    }
+                });
+                // use size
+                this.addClass('photo-stream').append(
+                    $('<div class="content pointer">').css('backgroundImage', 'url(' + url + ')')
+                );
+            }
+        }
+    });
+
+/*
     var drawPlugin = function (index) {
         if (!index) {
             index = 100;
@@ -26,15 +92,6 @@ define('plugins/portal/flickr/register',
 
         var mp = new MediaPlayer();
 
-        // order of elements is the crucial factor of presenting the image in the sidepopups
-        var imagesizes = ['url_l', 'url_c', 'url_z', 'url_o', 'url_n', 'url_m', 'url_q', 'url_s', 'url_sq', 'url_t'];
-
-        var baseUrl = 'https://www.flickr.com/services/rest/?api_key=7fcde3ae5ad6ecf2dfc1d3128f4ead81&format=json&extras=date_upload,' + imagesizes.join(',');
-
-        var apiUrl = {
-                'flickr.photos.search': baseUrl + '&method=flickr.photos.search&text=',
-                'flickr.people.getPublicPhotos': baseUrl + '&method=flickr.people.getPublicPhotos&user_id='
-            };
 
         var streams = settings.get('streams');
 
@@ -158,4 +215,5 @@ define('plugins/portal/flickr/register',
     return {
         reload: drawPlugin
     };
+*/
 });

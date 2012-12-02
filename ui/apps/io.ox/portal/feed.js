@@ -39,11 +39,11 @@ define('io.ox/portal/feed', ['io.ox/core/extensions'], function (ext) {
             jsonpCallback: callback
         })
         .pipe(function (data) {
-			return self.processResponse(data);
+			return self.process(data);
         });
 	};
 
-	Feed.prototype.processResponse = function (response) {
+	Feed.prototype.process = function (response) {
 		return response;
 	};
 

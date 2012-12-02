@@ -15,7 +15,8 @@
 
 .io-ox-portal {
 
-    @spacing: 9px;
+    @spacing: 13px;
+    @vert-spacing: 39px;
     @line-height: 18px;
     @lines: 18;
     @widget-padding: 13px;
@@ -62,8 +63,8 @@
         position: relative;
         display: inline-block;
         width: 300px;
-        height: @line-height * @lines + 6px;
-        border-width: 0 @spacing @spacing 0;
+        height: @line-height * @lines + 13px + @vert-spacing;
+        border-width: 0 @spacing @vert-spacing 0;
         border-style: solid;
         border-color: transparent;
         float: left;
@@ -136,9 +137,9 @@
             margin: 0;
             height: 30px;
             padding: 13px;
-            background-color: rgba(0, 0, 0, 0.50);
+            color: #111;
+            background-color: rgba(255, 255, 255, 0.50);
         }
-        &.widget-color-gray h2 { color: lighten(@color_gray, 30%); }
     }
 
     .item, .paragraph {
