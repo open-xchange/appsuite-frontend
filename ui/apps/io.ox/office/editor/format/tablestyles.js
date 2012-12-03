@@ -224,29 +224,25 @@ define('io.ox/office/editor/format/tablestyles',
             mergeConditionalAttributes('wholeTable', true, true);
 
             // inner horizontal bands
-            if (rowRange && !(firstRowIncluded && isFirstRow) && !(lastRowIncluded && isLastRow)) {
+            if (rowRange && !(firstRowIncluded && isFirstRow) && !(lastRowIncluded && isLastRow) && isConditionalKeyIncluded('bandsHor')) {
                 // size of horizontal bands, TODO: replace '1' with attribute value
                 bandSize = Math.floor(Math.max(1, 1));
                 // ignore first row in calculation of band index
                 bandIndex = Math.floor((rowRange.start - (firstRowIncluded ? 1 : 0)) / bandSize);
                 // resolve odd or even band attributes
                 bandKey = ((bandIndex % 2) === 0) ? 'band1Hor' : 'band2Hor';
-                if (isConditionalKeyIncluded(bandKey)) {
-                    mergeConditionalAttributes(bandKey, true, false);
-                }
+                mergeConditionalAttributes(bandKey, true, false);
             }
 
             // inner vertical bands
-            if (colRange && !(firstColIncluded && isFirstCol) && !(lastColIncluded && isLastCol)) {
+            if (colRange && !(firstColIncluded && isFirstCol) && !(lastColIncluded && isLastCol) && isConditionalKeyIncluded('bandsVert')) {
                 // size of vertical bands, TODO: replace '1' with attribute value
                 bandSize = Math.floor(Math.max(1, 1));
                 // ignore first column in calculation of band index
                 bandIndex = Math.floor((colRange.start - (firstColIncluded ? 1 : 0)) / bandSize);
                 // resolve odd or even band attributes
                 bandKey = ((bandIndex % 2) === 0) ? 'band1Vert' : 'band2Vert';
-                if (isConditionalKeyIncluded(bandKey)) {
-                    mergeConditionalAttributes(bandKey, false, true);
-                }
+                mergeConditionalAttributes(bandKey, false, true);
             }
 
             // cell inside first/last row/column
