@@ -102,6 +102,14 @@ define('io.ox/portal/main',
                         method: 'flickr.photos.search',
                         query: 'xjrlokix'
                     }
+                },
+                rss_0: {
+                    plugin: 'plugins/portal/rss/register',
+                    color: 'lightblue',
+                    index: 'first',
+                    props: {
+                        url: ['http://www.spiegel.de/schlagzeilen/tops/index.rss']
+                    }
                 }
             }
         }

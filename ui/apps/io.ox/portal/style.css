@@ -166,6 +166,7 @@
 
     h1 {
         font-family: @font-light;
+        font-size: 26px;
         font-weight: 300;
         text-align: center;
         margin: 0 0 26px 0;
@@ -175,6 +176,7 @@
         font-size: 20px;
         line-height: 24px;
         margin: 26px 0 13px 0;
+        clear: both;
     }
 
     .photo {
@@ -188,6 +190,13 @@
 
     .post-url {
         margin: 0 0 13px 0;
+        clear: both;
+    }
+
+    .rss-url {
+        text-align: right;
+        margin: 0 0 13px 0;
+        clear: both;
     }
 
     .text {
