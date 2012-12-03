@@ -351,10 +351,6 @@ define('io.ox/office/editor/position',
             returnObj = Position.getTextSpanFromNode(returnObj);
         }
 
-//        if (forcePositionCounting && returnObj && returnObj.node && returnObj.node.previousSibling && returnObj.offset === 0) {
-//            returnObj.node = returnObj.node.previousSibling;
-//        }
-
         if (returnObj && returnObj.node) {
             node = returnObj.node;
         }
