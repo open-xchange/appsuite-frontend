@@ -412,7 +412,7 @@ define('io.ox/calendar/edit/template',
             var $input = $("<input>", {
                 type: "file"
             });
-
+            $input.css('line-height', '0');
             var $button = $("<button/>").attr('data-action', 'add').text(gt("Add")).addClass("btn btn-primary pull-right").on("click", function (e) {
                 e.preventDefault();
                 _($input[0].files).each(function (fileData) {
@@ -434,6 +434,14 @@ define('io.ox/calendar/edit/template',
                 app.view.baton.attachmentList.addFile(fileData);
             });
 
+        }
+    });
+
+    point.basicExtend({
+        id: 'dummy_spacer',
+        index: 10000,
+        draw: function () {
+            this.append('<div>').css('height', '100px');
         }
     });
 
