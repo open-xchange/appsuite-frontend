@@ -582,7 +582,7 @@ define('io.ox/office/editor/drawingResize',
 
             // saving the selection parameter at the drawing object to reuse them
             // when switching from 'floated' to 'inline' and vice versa
-            $(this).data('drawingSelection', {editor: editor, options: options, mousedownhandler: mouseDownOnDrawing, mousemovehandler: mouseMoveOnDrawing, mouseuphandler: mouseUpOnDrawing});
+            $(this).data('drawingSelection', {editor: editor, options: options, mousedownhandler: mouseDownOnMoveableNodeHandler, mousemovehandler: mouseMoveOnResizeNodeHandler, mouseuphandler: mouseUpOnResizeNodeHandler});
         });
 
     };
@@ -597,25 +597,20 @@ define('io.ox/office/editor/drawingResize',
      */
     DrawingResize.clearDrawingSelection = function (drawings) {
 
-        // var drawingSelParams = $(drawings).data('drawingSelection');
+        var drawingSelParams = $(drawings).data('drawingSelection');
 
-        // if (drawingSelParams) {
-        $(drawings).children('div.selection').remove();
-        $(drawings).children('div.move').remove();
+        if (drawingSelParams) {
+            $(drawings).children('div.selection').remove();
+            $(drawings).children('div.move').remove();
 
-            // Todo: Remove specific handler
-            // removing mouse event handler (mouseup and mousemove) from page div
-            // $(document).off('mouseup', drawingSelParams.mouseuphandler);
-            // $(document).off('mousemove', drawingSelParams.mousemovehandler);
-            // $(drawings).off('mousedown', drawingSelParams.mousedownhandler);
-
-        $(document).off('mouseup');
-        $(document).off('mousemove');
-        $(drawings).off('mousedown');
+            // removing mouseup and mousemove event handler from document and mousedown event handler from drawing
+            $(document).off('mouseup', drawingSelParams.mouseuphandler);
+            $(document).off('mousemove', drawingSelParams.mousemovehandler);
+            $(drawings).off('mousedown', drawingSelParams.mousedownhandler);
 
             // removing the complete content in 'drawingSelection'
-        $(drawings).data('drawingSelection', null);
-        // }
+            $(drawings).data('drawingSelection', null);
+        }
     };
 
     /**
