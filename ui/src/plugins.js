@@ -38,16 +38,21 @@
         function defaultImpl(name, parentRequire, load, config) {
             $.ajax({ url: config.baseUrl + name, dataType: "text" }).done(load);
         };
+        var req = require, oldload = req.load;
         if (STATIC_APPS) {
             define("text", { load: defaultImpl });
             define("raw", { load: defaultImpl });
+            req.load = function (context, modulename, url) {
+                oldload(context, modulename, url.replace(
+                    /io.ox\/(mail|contacts|tasks|files|calendar)\/main.js$/,
+                    'io.ox/static/$1.js'));
+            };
             return;
         }
         var queue = [];
         var timeout = null;
         var deps = window.dependencies;
         window.dependencies = undefined;
-        var req = require, oldload = req.load;
         req.load = function (context, modulename, url) {
             var prefix = context.config.baseUrl;
             if (modulename.charAt(0) !== '/') {

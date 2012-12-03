@@ -286,7 +286,49 @@ utils.concat("pre-core.js",
     ]), { type: "source" }
 );
 
+// statically concatenated apps
 
+utils.concat('apps/io.ox/static/mail.js', [
+    utils.string("define('io.ox/static/mail');"),
+    'apps/io.ox/contacts/api.js',
+    'apps/io.ox/mail/util.js', 
+    'apps/io.ox/mail/api.js',
+    'apps/io.ox/mail/actions.js',
+    'apps/io.ox/mail/view-grid-template.js',
+    'apps/io.ox/mail/view-detail.js',
+    'apps/io.ox/mail/main.js'
+]);
+utils.concat('apps/io.ox/static/contacts.js', [
+    utils.string("define('io.ox/static/contacts');"),
+    'apps/io.ox/contacts/api.js',
+    'apps/io.ox/contacts/actions.js',
+    'apps/io.ox/contacts/util.js',
+    'apps/io.ox/contacts/view-detail.js',
+    'apps/io.ox/help/hints.js',
+    'apps/io.ox/contacts/main.js' 
+]);
+utils.concat('apps/io.ox/static/tasks.js', [
+    utils.string("define('io.ox/static/tasks');"),
+    'apps/io.ox/tasks/util.js',
+    'apps/io.ox/tasks/actions.js',
+    'apps/io.ox/tasks/api.js',
+    'apps/io.ox/tasks/view-detail.js',
+    'apps/io.ox/tasks/view-grid-template.js',
+    'apps/io.ox/tasks/main.js'
+]);
+utils.concat('apps/io.ox/static/files.js', [
+    utils.string("define('io.ox/static/files');"),
+    'apps/io.ox/files/api.js',
+    'apps/io.ox/files/actions.js',
+    'apps/io.ox/files/main.js'
+]);
+utils.concat('apps/io.ox/static/calendar.js', [
+    utils.string("define('io.ox/static/calendar');"),
+    'apps/io.ox/contacts/api.js',
+    'apps/io.ox/calendar/util.js',
+    'apps/io.ox/calendar/actions.js',
+    'apps/io.ox/calendar/main.js'
+]);
 
 // Twitter Bootstrap
 utils.copy(utils.list("lib/bootstrap", ["css/bootstrap.min.css", "img/*"]),
