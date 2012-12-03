@@ -82,6 +82,7 @@
     .pending {
         background-color: #fafafa;
         h2 { color: #ddd !important; }
+        .content { opacity: 0; }
     }
 
     .widget-color-default { h2, .accent { color: #333; } }
@@ -125,6 +126,7 @@
         top: @line-height * 4;
         line-height: @line-height;
         overflow: hidden;
+        .transition(opacity 0.3s linear);
         &.pointer { cursor: pointer; }
     }
 
@@ -160,21 +162,35 @@
     .line {
         line-height: @line-height;
     }
+
+    .widget.requires-setup {
+        background-color: #eee;
+        h2 { color: #555; }
+        .content {
+            text-align: center;
+            padding-top: 7em;
+            color: #888;
+            cursor: pointer;
+        }
+        .content:hover {
+            text-decoration: underline;
+        }
+    }
 }
 
 .portal-feed {
 
     h1 {
         font-family: @font-light;
-        font-size: 26px;
+        font-size: 24px;
         font-weight: 300;
-        text-align: center;
+        text-align: left;
         margin: 0 0 26px 0;
     }
 
     h2 {
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 18px;
+        line-height: 22px;
         margin: 26px 0 13px 0;
         clear: both;
     }
@@ -201,6 +217,14 @@
 
     .text {
         margin-bottom: 26px;
+
+        img[hspace][align="left"] {
+            margin: 0 1em 0 0;
+        }
+
+        img[hspace][align="right"] {
+            margin: 0 0 0 1em;
+        }
     }
 
     .text-delimiter {

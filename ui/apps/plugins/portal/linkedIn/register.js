@@ -21,6 +21,7 @@ define("plugins/portal/linkedIn/register",
      'less!plugins/portal/linkedIn/style.css'], function (ext, http, proxy, strings, keychain, gt) {
 
     "use strict";
+
     function fnClick(e) {
 
         var person = e.data;
@@ -86,7 +87,7 @@ define("plugins/portal/linkedIn/register",
             if (activity.updateContent.person.connections) {
                 $updateEntry.append(
                     displayName(activity.updateContent.person),
-                    $("<span />").text(" is now connected with "),
+                    $("<span>").text(" is now connected with "),
                     displayName(activity.updateContent.person.connections.values[0])
                 );
             }
@@ -95,112 +96,103 @@ define("plugins/portal/linkedIn/register",
         }
     });
 
-    var updatesPortal = {
-        id: "linkedinUpdates",
-        index: 200,
-        title: 'LinkedIn updates',
+    ext.point("io.ox/portal/widget/linkedin").extend({
+
+        title: 'LinkedIn',
+
         isEnabled: function () {
             return keychain.isEnabled('linkedin');
         },
+
         requiresSetUp: function () {
-            return keychain.isEnabled('linkedin') && ! keychain.hasStandardAccount('linkedin');
+            return keychain.isEnabled('linkedin') && !keychain.hasStandardAccount('linkedin');
         },
+
         performSetUp: function () {
             var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
             return keychain.createInteractively('linkedin', win);
         },
-        loadTile: function () {
+
+        load: function (baton) {
             return proxy.request({
                 api: 'linkedin',
                 url: 'http://api.linkedin.com/v1/people/~/mailbox:(id,folder,from:(person:(id,first-name,last-name,picture-url,headline)),recipients:(person:(id,first-name,last-name,picture-url,headline)),subject,short-body,last-modified,timestamp,mailbox-item-actions,body)?message-type=message-connections,invitation-request,invitation-reply,inmail-direct-connection&format=json'
-            }).pipe(function (msgs) { return JSON.parse(msgs).values; });
+            })
+            .pipe(function (msgs) {
+                return (baton.data = JSON.parse(msgs).values);
+            })
+            .fail(function (err) {
+                console.log('Nope', err);
+            });
         },
-        drawTile: function (values) {
-            var message = values ? values[0] : null;
 
-            $(this).append(
-                $('<div class="io-ox-portal-title">').append(
-                    $('<img class="tile-image">').attr({src: 'apps/plugins/portal/linkedIn/glyphicons_377_linked_in.png'}),
-                    $('<h1 class="tile-heading">').text('LinkedIn')
-                )
-            ).addClass('io-ox-portal-tile-linkedin');
-            var $content = $('<div class="io-ox-portal-content">').appendTo(this);
+        preview: function (baton) {
 
-            if (values && values.length > 0) {
-                console.log("Values:", values);
-                _(values).each(function (message) {
-                    $('<div class="io-ox-portal-item">').append(
-                        $('<span class="io-ox-portal-preview-firstline">').text(message.from.person.firstName + " " + message.from.person.lastName + ": "),
-                        $('<span class="io-ox-portal-preview-secondline">').text(message.subject),
-                        $('<span class="">').text(' '),
-                        $('<span class="io-ox-portal-preview-thirdline">').text(message.body)
-                    ).appendTo($content);
+            var message = baton.data ? baton.data[0] : null;
+
+            var content = $('<div class="content pointer">');
+
+            if (baton.data && baton.data.length) {
+                _(baton.data).each(function (message) {
+                    content.append(
+                        $('<div class="paragraph">').append(
+                            $('<span class="bold">').text(message.from.person.firstName + " " + message.from.person.lastName + ": "),
+                            $('<span class="normal">').text(message.subject), $.txt(' '),
+                            $('<span class="gray">').text(message.body)
+                        )
+                    );
                 });
             } else {
-                $('<div class="io-ox-portal-item centered">').text(gt('You have no new messages.')).appendTo($content);
+                this.append(
+                    $('<div class="content">').text(gt('You have no new messages'))
+                );
             }
+
+            this.append(content);
         },
-        load: function () {
-            var activityFeed = $.Deferred(),
-                messages = $.Deferred();
+
+        draw: function (baton) {
+
+            var node = $('<div class="portal-feed linkedin-content">');
+
+            node.append(
+                $("<h1>").text(gt("LinkedIn Network Updates"))
+            );
+
+            if (baton.data) {
+                node.append(
+                    $('<h2 class="linkedin-messages-header">').text(gt("Your messages"))
+                );
+                _(baton.data).each(function (message, index) {
+                    node.addClass(index % 2 ? 'odd' : 'even')
+                    .append(
+                        $('<div class="linkedin-message">').append(
+                            $('<span class="linkedin-name">').append(displayName(message.from.person), ": "),
+                            $('<span class="linkedin-subject">').html(_.escape(message.subject)),
+                            $('<div class="linkedin-body">').html(_.escape(message.body).replace(/\n/g, '<br>'))
+                        )
+                    );
+                });
+            }
 
             http.GET({
                 module: "integrations/linkedin/portal",
-                params: {
-                    action: "updates"
-                }
+                params: { action: "updates" }
             })
             .done(function (activities) {
-                activityFeed.resolve(activities);
-            })
-            .fail(activityFeed.reject);
+                if (activities.values && activities.values !== 0) {
+                    node.append(
+                        $('<h2 class="linkedin-activities-header">').text(gt("Recent activities"))
+                    );
+                    _(activities.values).each(function (activity) {
+                        ext.point("portal/linkedIn/updates/renderer").invoke("draw", node, activity);
+                    });
+                }
+            });
 
-            proxy.request({
-                api: 'linkedin',
-                url: 'http://api.linkedin.com/v1/people/~/mailbox:(id,folder,from:(person:(id,first-name,last-name,picture-url,headline)),recipients:(person:(id,first-name,last-name,picture-url,headline)),subject,short-body,last-modified,timestamp,mailbox-item-actions,body)?message-type=message-connections,invitation-request,invitation-reply,inmail-direct-connection&format=json'
-            })
-            .done(function (msgs) {
-                messages.resolve(JSON.parse(msgs).values);
-            })
-            .fail(messages.reject);
-
-            return $.when(activityFeed, messages);
-
+            this.append(node);
         },
-        draw: function (activityFeed, messages) {
-            var drawing = new $.Deferred(),
-                $node = this;
 
-            $node.addClass("linkedin-content");
-
-            $node.append(
-                    $("<h1>").addClass("clear-title")
-                    .text(gt("LinkedIn Network Updates"))
-                );
-
-            if (messages) {
-                $('<h2 class="linkedin-messages-header">').text(gt("Your messages:")).appendTo($node);
-                var  thisIsOn =  false;
-                _(messages).each(function (message) {
-                    thisIsOn = !thisIsOn;
-                    $node.append($('<div class="linkedin-message">').append(
-                        $('<span class="linkedin-name">').append(displayName(message.from.person), ": "),
-                        $('<span class="linkedin-subject">').html(_.escape(message.subject)),
-                        $('<div class="linkedin-body">').html(_.escape(message.body).replace(/\n/g, '<br/>'))
-                    ).addClass(thisIsOn ? 'odd' : 'even'));
-                });
-            }
-
-            if (activityFeed.values && activityFeed.values !== 0) {
-                $('<h2 class="linkedin-activities-header">').text(gt("Recent activities:")).appendTo($node);
-                _(activityFeed.values).each(function (activity) {
-                    ext.point("portal/linkedIn/updates/renderer")
-                        .invoke("draw", $node, activity);
-                });
-            }
-
-            return drawing.resolve();
-        },
         drawCreationDialog: function () {
             var $node = $(this);
             $node.append(
@@ -210,17 +202,5 @@ define("plugins/portal/linkedIn/register",
                 )
             );
         }
-    };
-
-
-    var inboxPortal = {
-        id: "linkedinInbox",
-        load: function () {
-        },
-        draw: function () {
-        }
-    };
-
-    ext.point("io.ox/portal/widget").extend(updatesPortal);
-
+    });
 });

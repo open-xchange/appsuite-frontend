@@ -74,8 +74,8 @@ define("plugins/portal/rss/register",
             _(data.items).each(function (entry) {
                 $content.append(
                     $('<div class="paragraph">').append(
-                        $('<span class="bold">').text(entry.feedTitle + ": "),
-                        $('<span class="normal">').text(entry.subject)
+                        $('<span class="gray">').text(entry.feedTitle + ' '),
+                        $('<span class="bold">').text(entry.subject), $.txt('')
                     )
                 );
             });
@@ -94,7 +94,7 @@ define("plugins/portal/rss/register",
                 this.append(
                     $('<div class="text">').append(
                         $('<h2>').text(item.subject),
-                        $('<div class="">').html(item.body),
+                        $('<div class="text-body">').html(item.body),
                         $('<div class="rss-url">').append(
                             $('<a>').attr({ href: item.url, target: '_blank' }).text(item.feedTitle + ' - ' + publishedDate)
                         )
