@@ -161,7 +161,7 @@ define('plugins/portal/tumblr/settings/plugin',
                     var that = this;
 
                     dialog.header($("<h4>").text(gt('Delete a blog')))
-                    .append($('<span>').text(gt('Do you really want to delete the following blog(s)?')))
+                    .append($('<span>').text(gt('Do you really want to delete the following blog?')))
                     .append($('<ul>').append($('<li>').text(url)))
                     .addButton('cancel', gt('Cancel'))
                     .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})

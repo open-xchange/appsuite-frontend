@@ -300,7 +300,7 @@ define('plugins/portal/reddit/settings/plugin',
                     var that = this;
 
                     dialog.header($("<h4>").text(gt('Delete a Subreddit')))
-                        .append($('<span>').text(gt('Do you really want to delete the following subreddit(s)?')))
+                        .append($('<span>').text(gt('Do you really want to delete the following subreddit?')))
                         .append($('<ul>').append($('<li>').text(subreddit + " (" + mode + ")")))
                         .addButton('cancel', gt('Cancel'))
                         .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})

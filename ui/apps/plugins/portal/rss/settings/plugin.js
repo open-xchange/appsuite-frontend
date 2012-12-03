@@ -440,7 +440,7 @@ define('plugins/portal/rss/settings/plugin',
                 var that = this;
 
                 dialog.header($("<h4>").text(gt('Delete a feed')))
-                    .append($('<span>').text(gt('Do you really want to delete the following feed(s)?'))) //TODO i18n
+                    .append($('<span>').text(gt('Do you really want to delete the following feed?'))) //TODO i18n
                     .append($('<ul>').append($('<li>').text(url)))
                     .addButton('cancel', gt('Cancel'))
                     .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
