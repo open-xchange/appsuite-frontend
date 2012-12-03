@@ -247,6 +247,8 @@ define('io.ox/office/editor/editor',
          */
         this.setPreselectedAttributes = function (attributes) {
             preselectedAttributes = attributes;
+            // update view (mutually exclusive buttons may switch state)
+            this.trigger('selection', selection);
         };
 
         /**

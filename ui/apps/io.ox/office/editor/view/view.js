@@ -88,6 +88,28 @@ define('io.ox/office/editor/view/view',
         }
 
         /**
+         * Creates a new tool box in the side pane.
+         *
+         * @param {String} id
+         *  The unique identifier of the tool box.
+         *
+         * @param {Object} [options]
+         *  A map of options for the tool box in the side pane. Supports all
+         *  options for labels (see class Label for details).
+         */
+        function createToolBox(id, options) {
+
+            var // create a new tool box object, and store it in the map
+                toolBox = new Component(app, { classes: 'toolbox'});
+
+            // add the tool box to the side pane, add a heading label to the tool box
+            sidePane.addViewComponent(toolBox);
+            toolBox.addLabel(id, Utils.extendOptions(options, { classes: 'heading' }));
+
+            return toolBox;
+        }
+
+        /**
          * Update handler for the editor status label. Will be called in the
          * context of the status label instance.
          */
@@ -298,14 +320,10 @@ define('io.ox/office/editor/view/view',
 
         // initialization -----------------------------------------------------
 
-        // the tool pane for tool bars
+        // create the tool bars
         toolPane = new ToolPane(app);
         this.addPane('toolpane', toolPane, 'top');
 
-        sidePane = new Pane(app, { classes: 'side-pane' });
-        //this.addPane('sidepane', sidePane, 'left');
-
-        // create the tool bars
 /*
         createToolBar('insert', { label: gt('Insert') })
             .addGroup('table/insert', new TableSizeChooser())
@@ -373,6 +391,25 @@ define('io.ox/office/editor/view/view',
                 .addOptionButton('leftFloated',  { icon: 'icon-io-ox-image-float-left',  label: gt('Float Left') })
                 .addOptionButton('rightFloated', { icon: 'icon-io-ox-image-float-right', label: gt('Float Right') })
                 .addOptionButton('noneFloated',  { icon: 'icon-io-ox-image-center',      label: gt('Center') }));
+
+        // create the tool boxes
+        sidePane = new Pane(app);
+        this.addPane('sidepane', sidePane, 'left').hidePane('sidepane');
+
+        createToolBox('table', { label: gt('Table') })
+            .addButton('table/insert/row',    { icon: 'icon-io-ox-table-insert-row',    tooltip: gt('Insert row') })
+            .addButton('table/insert/column', { icon: 'icon-io-ox-table-insert-column', tooltip: gt('Insert column') })
+            .addButton('table/delete/row',    { icon: 'icon-io-ox-table-delete-row',    tooltip: gt('Delete selected rows') })
+            .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete selected columns') });
+
+        createToolBox('drawing', { label: gt('Drawing') })
+            .addButton('drawing/delete', { icon: 'icon-io-ox-image-delete', tooltip: gt('Delete drawing object') })
+            .addSeparator()
+            .addGroup('drawing/floatmode', new RadioGroup({ icon: 'icon-io-ox-image-inline', tooltip: gt('Drawing position'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
+                .addOptionButton('inline',       { icon: 'icon-io-ox-image-inline',      label: gt('Inline with text') })
+                .addOptionButton('leftFloated',  { icon: 'icon-io-ox-image-float-left',  label: gt('Left aligned, text wraps at right side') })
+                .addOptionButton('rightFloated', { icon: 'icon-io-ox-image-float-right', label: gt('Right aligned, text wraps at left side') })
+                .addOptionButton('noneFloated',  { icon: 'icon-io-ox-image-center',      label: gt('Centered, no text wrapping') }));
 
         // additions for debug mode
         if (Config.isDebugAvailable()) {

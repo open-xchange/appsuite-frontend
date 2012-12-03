@@ -188,11 +188,6 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
         padding: 0 12px;
     }
 
-    &.side-pane {
-        width: 150px;
-        padding: 6px 12px;
-    }
-    
     &.app-pane {
         margin: 0;
         padding: 0;
@@ -215,16 +210,14 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
 
 .app-pane-shadow {
     position: absolute;
-
-    &.top { .box-shadow(0 5px 10px fade(black, 20%)); }
-    &.bottom { .box-shadow(0 -5px 10px fade(black, 20%)); }
-    &.left { .box-shadow(5px 0 10px fade(black, 20%)); }
-    &.right { .box-shadow(-5px 0 10px fade(black, 20%)); }
+    .box-shadow(0 0 10px fade(black, 20%));
 }
 
 /* view components ========================================================= */
 
 .view-component {
+    @control-height: 32px;
+
     position: relative;
     padding: 0;
     /* prevent multi-line layout of button groups */
@@ -256,6 +249,7 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
             display: inline-block;
             position: relative;
             .box-sizing(border-box);
+            height: @control-height;
             margin: 0;
             padding: 0;
             background: none;
@@ -280,6 +274,7 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
         label, button {
             /* lousy attempt to prevent overflowing captions. TODO: better solution */
             overflow: hidden;
+            line-height: @control-height;
 
             > span {
                 display: inline-block;
@@ -315,6 +310,25 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
                 padding-left: 4px;
                 padding-right: 4px;
             }
+
+            /* selected toggle/radio buttons */
+            &.selected {
+                background-color: @button-selected-color;
+            }
+        }
+
+        /* keyboard/mouse effects (not for disabled buttons or groups) */
+        &:not(.disabled) button:not(.disabled) {
+            &:hover { background-color: fade(black, 3%); }
+            &:focus { background-color: fade(black, 3%); }
+            &:active { background-color: fade(black, 6%); }
+
+            /* selected toggle/radio buttons */
+            &.selected {
+                &:hover { background-color: darken(@button-selected-color, 3%); }
+                &:focus { background-color: darken(@button-selected-color, 3%); }
+                &:active { background-color: darken(@button-selected-color, 6%); }
+            }
         }
 
         /* text fields ----------------------------------------------------- */
@@ -333,6 +347,33 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
             /* drop-down button over text field */
             + button {
                 z-index: 1;
+            }
+        }
+
+        /* groups with white background and shadowed borders --------------- */
+
+        &.white {
+            @offset: 4px;
+
+            top: @offset;
+            .box-shadow(0 0 4px fade(black, 15%));
+
+            > label, > button, > input {
+                height: @control-height - 2 * @offset;
+                background: white;
+            }
+
+            > label, > button {
+                line-height: @control-height - 2 * @offset;
+            }
+
+            /* keyboard/mouse effects (not for disabled buttons) */
+            &:not(.disabled) > button:not(.disabled) {
+
+                /* mouse/keyboard effects */
+                &:hover { background: white; }
+                &:focus { background: white; }
+                &:active { background: white; }
             }
         }
 
@@ -383,21 +424,6 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
                             height: 26px;
                             line-height: 26px;
                             text-align: left;
-
-                            /* mouse/keyboard effects */
-                            &:hover { background-color: fade(black, 3%); }
-                            &:focus { background-color: fade(black, 3%); }
-                            &:active { background-color: fade(black, 6%); }
-
-                            /* selected list items */
-                            &.selected {
-                                background-color: @button-selected-color;
-
-                                /* mouse/keyboard effects */
-                                &:hover { background-color: darken(@button-selected-color, 3%); }
-                                &:focus { background-color: darken(@button-selected-color, 3%); }
-                                &:active { background-color: darken(@button-selected-color, 6%); }
-                            }
                         }
                     }
                 }
@@ -409,6 +435,7 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
                     > label {
                         display: block;
                         width: 100%;
+                        height: auto;
                         margin: 0;
                         padding: 4px 0;
                         font-size: 10px;
@@ -442,15 +469,19 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
 
                     button {
                         overflow: visible;
+                        height: auto;
                         padding: 1px;
+                        background: none;
                         border: 3px solid transparent;
                         .border-radius(5px);
+                        line-height: 22px;
 
                         &:hover { border-color: darken(@pane-fill-color, 5%); }
                         &:focus { border-color: darken(@pane-fill-color, 5%); }
                         &:active { border-color: darken(@pane-fill-color, 10%); }
 
                         &.selected {
+                            //background: none;
                             border-color: darken(@button-selected-color, 5%);
 
                             &:hover { border-color: darken(@button-selected-color, 10%); }
@@ -556,8 +587,6 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
     /* tool bars ----------------------------------------------------------- */
 
     &.toolbar {
-        @control-height: 32px;
-
         padding: 0;
 
         /* show groups in a horizontal bar */
@@ -568,89 +597,37 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
             &.separator {
                 width: 10px;
             }
-
-            > label, > button, > input {
-                height: @control-height;
-                border: none;
-            }
-
-            > label, > button {
-                line-height: @control-height;
-            }
-
-            /* selected toggle/radio buttons */
-            > button.selected {
-                background-color: @button-selected-color;
-            }
-
-            /* keyboard/mouse effects (not for disabled buttons) */
-            &:not(.disabled) > button:not(.disabled) {
-
-                /* mouse/keyboard effects */
-                &:hover { background-color: fade(black, 3%); }
-                &:focus { background-color: fade(black, 3%); }
-                &:active { background-color: fade(black, 6%); }
-
-                /* selected toggle/radio buttons */
-                &.selected {
-
-                    /* mouse/keyboard effects */
-                    &:hover { background-color: darken(@button-selected-color, 3%); }
-                    &:focus { background-color: darken(@button-selected-color, 3%); }
-                    &:active { background-color: darken(@button-selected-color, 6%); }
-                }
-            }
-
-            /* groups with white background and shadowed borders */
-            &.white {
-                @offset: 4px;
-
-                top: @offset;
-                .box-shadow(0 0 4px fade(black, 15%));
-
-                > label, > button, > input {
-                    height: @control-height - 2 * @offset;
-                    background: white;
-                }
-
-                > label, > button {
-                    line-height: @control-height - 2 * @offset;
-                }
-
-                /* keyboard/mouse effects (not for disabled buttons) */
-                &:not(.disabled) > button:not(.disabled) {
-
-                    /* mouse/keyboard effects */
-                    &:hover { background: white; }
-                    &:focus { background: white; }
-                    &:active { background: white; }
-                }
-            }
         }
     }
 
-    /* menu box ------------------------------------------------------------ */
+    /* tool boxes ---------------------------------------------------------- */
 
-    &.menubox {
-        display: inline-block;
+    &.toolbox {
+        display: block;
+        .box-sizing(border-box);
+        width: 150px;
+        padding: 8px 6px 0;
 
         > .group {
-            display: list-item;
+            display: inline-block;
 
             /* group spacing */
             &.separator {
-                height: 6px;
+                width: 10px;
             }
 
-            /* menu items as buttons */
-            > button {
+            &.heading {
+                display: block;
                 width: 100%;
-                text-align: left;
+                line-height: 0;
+                text-align: center;
 
-                /* mouse/keyboard effects */
-                &:hover { background-color: fade(@pane-border-color, 25%); }
-                &:focus { background-color: fade(@pane-border-color, 25%); }
-                &:active { background-color: fade(@pane-border-color, 50%); }
+                > label {
+                    height: auto;
+                    line-height: 14px;
+                    font-size: 10px;
+                    font-weight: bold;
+                }
             }
         }
     }
