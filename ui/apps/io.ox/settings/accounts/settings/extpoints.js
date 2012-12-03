@@ -1,7 +1,7 @@
 /* REMOVE THIS AS SOON AS POSSIBLE:
  * This is a holder for all portal-related settings. These are supposed to be in each portal
- * plugin, where they belong, but it is not possible to put them there yet, because we cannot
- * ensure they are loaded at the proper time. Currently, Cisco and Vic are working on this.
+ * plugin (where they belong), but it is not possible to put them there yet, because we cannot
+ * ensure they are loaded at the proper time. Cisco and Vic are working on this right now.
  */
 define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', 'less!io.ox/settings/style.css'], function (ext) {
     'use strict';
@@ -152,7 +152,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             var that = this;
 
                             dialog.header($("<h4>").text(gt('Delete a Subreddit')))
-                                .append($('<span>').text(gt('Do you really want to delete the following subreddit(s)?')))
+                                .append($('<span>').text(gt('Do you really want to delete the following subreddit?')))
                                 .append($('<ul>').append($('<li>').text(subreddit + " (" + mode + ")")))
                                 .addButton('cancel', gt('Cancel'))
                                 .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
@@ -366,7 +366,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
             require(['settings!plugins/portal/tumblr', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs'], function (settings, gt, dialogs) {
                 var blogs = settings.get('blogs'),
                 staticStrings = {
-                    TUMBLRBLOGS: gt('Tumblr-Blogs'),
+                    TUMBLRBLOGS: gt('Tumblr blogs'),
                     ADD:         gt('Add'),
                     EDIT:        gt('Edit'),
                     DELETE:      gt('Delete')
@@ -438,7 +438,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                 }
 
                                 if (url.length === 0) {
-                                    $error.text(gt('Please enter an blog-url.'));
+                                    $error.text(gt('Please enter an blog url.'));
                                     deferred.reject();
                                 } else if (description.length === 0) {
                                     $error.text(gt('Please enter a description.'));
@@ -455,12 +455,12 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                                 $myNode.data({url: url, description: description});
                                                 deferred.resolve();
                                             } else {
-                                                $error.text(gt('Unknown error while checking tumblr-blog.'));
+                                                $error.text(gt('Unknown error while checking tumblr blog.'));
                                                 deferred.reject();
                                             }
                                         },
                                         error: function () {
-                                            $error.text(gt('Unknown error while checking tumblr-blog.'));
+                                            $error.text(gt('Unknown error while checking tumblr blog.'));
                                             deferred.reject();
                                         }
                                     });
@@ -503,7 +503,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             var that = this;
 
                             dialog.header($("<h4>").text(gt('Delete a Blog')))
-                            .append($('<span>').text(gt('Do you really want to delete the following blog(s)?')))
+                            .append($('<span>').text(gt('Do you really want to delete the following blog?')))
                             .append($('<ul>').append($('<li>').text(url)))
                             .addButton('cancel', gt('Cancel'))
                             .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
@@ -607,7 +607,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             }
 
                             if (url.length === 0) {
-                                $error.text(gt('Please enter an blog-url.'));
+                                $error.text(gt('Please enter an blog url.'));
                                 deferred.reject();
                             } else if (description.length === 0) {
                                 $error.text(gt('Please enter a description.'));
@@ -795,7 +795,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
 
                                     deferred.done(function (nsid) {
                                         if (q.length === 0) {
-                                            $error.text(gt('Please enter a search-query.'));
+                                            $error.text(gt('Please enter a search query.'));
                                             $error.show();
                                             dialog.idle();
                                         } else if (description.length === 0) {
@@ -1250,7 +1250,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                 $error.hide();
 
                                 if (url.length === 0) {
-                                    $error.text(gt('Please enter a feed-url.'));
+                                    $error.text(gt('Please enter a feed url.'));
                                     deferred.reject();
                                 } else if (description.length === 0) {
                                     $error.text(gt('Please enter a description.'));
@@ -1369,7 +1369,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                     deferred = $.Deferred();
 
                                 if (url.length === 0) {
-                                    $error.text(gt('Please enter an feed-url.'));
+                                    $error.text(gt('Please enter a feed url.'));
                                     deferred.reject();
                                 } else if (feedname.length === 0) {
                                     $error.text(gt('Please enter a name for the feed.'));
@@ -1466,7 +1466,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             var that = this;
 
                             dialog.header($("<h4>").text(gt('Delete a feed')))
-                                .append($('<span>').text(gt('Do you really want to delete the following feed(s)?'))) //TODO i18n
+                                .append($('<span>').text(gt('Do you really want to delete the following feed?')))
                                 .append($('<ul>').append($('<li>').text(url)))
                                 .addButton('cancel', gt('Cancel'))
                                 .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
