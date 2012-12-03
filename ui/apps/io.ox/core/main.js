@@ -241,17 +241,11 @@ define("io.ox/core/main",
             id: 'help',
             index: 200,
             draw: function () {
+                var helpLink = "/appsuite/help/" + ox.language + "/index.htm";
                 this.append(
                     $('<li>').append(
-                        $('<a href="#" data-app-name="io.ox/help">').text(gt('Help'))
+                        $('<a target="_blank">').attr({href: helpLink}).text(gt('Help'))
                     )
-                    .on('click', function () {
-                        require(['io.ox/help/center'], function (center) {
-                            setTimeout(function () {
-                                center.toggle();
-                            }, 1);
-                        });
-                    })
                 );
             }
         });
