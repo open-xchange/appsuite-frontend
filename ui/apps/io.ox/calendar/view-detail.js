@@ -78,7 +78,7 @@ define("io.ox/calendar/view-detail",
             ext.point('io.ox/calendar/detail/actions').invoke('draw', this, data);
         }
     });
-    
+
     // draw private flag
     ext.point("io.ox/calendar/detail").extend({
         index: 150,

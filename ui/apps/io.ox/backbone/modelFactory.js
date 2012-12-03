@@ -103,7 +103,6 @@ define("io.ox/backbone/modelFactory",
                 }
 
             });
-            console.log('retval', retval);
             return retval;
         },
 
