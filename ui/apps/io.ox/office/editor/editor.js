@@ -5421,7 +5421,10 @@ define('io.ox/office/editor/editor',
                 sourcePos = Position.getDOMPosition(editdiv, start, true),
                 destPos = Position.getDOMPosition(editdiv, to, true),
                 insertBefore = true,
-                splitNode = false;
+                splitNode = false,
+                removeFollowingEmptySpan = false,
+                removePreviousEmptySpan = false,
+                removePrevPrevEmptySpan = false;
 
             if (destPos.offset === 0) {
                 insertBefore = true;
@@ -5482,6 +5485,24 @@ define('io.ox/office/editor/editor',
 
                         }
 
+                        // removing empty text spans behind or after the source node
+                        if ((sourceNode.previousSibling) && (sourceNode.nextSibling)) {
+                            if ((DOM.isTextSpan(sourceNode.previousSibling)) && (DOM.isEmptySpan(sourceNode.nextSibling))) {
+                                $(sourceNode.nextSibling).remove();
+                            } else if ((DOM.isEmptySpan(sourceNode.previousSibling)) && (DOM.isTextSpan(sourceNode.nextSibling))) {
+                                $(sourceNode.previousSibling).remove();
+                            }
+                        }
+
+                        if ((sourceNode.previousSibling) && (sourceNode.previousSibling.previousSibling) && (sourceNode.nextSibling) && (DOM.isOffsetNode(sourceNode.previousSibling))) {
+                            if ((DOM.isTextSpan(sourceNode.previousSibling.previousSibling)) && (DOM.isEmptySpan(sourceNode.nextSibling))) {
+                                $(sourceNode.nextSibling).remove();
+                            } else if ((DOM.isEmptySpan(sourceNode.previousSibling.previousSibling)) && (DOM.isTextSpan(sourceNode.nextSibling))) {
+                                $(sourceNode.previousSibling.previousSibling).remove();
+                            }
+                        }
+
+                        // moving the drawing
                         if (insertBefore) {
                             $(sourceNode).insertBefore(destNode);
                         } else {
