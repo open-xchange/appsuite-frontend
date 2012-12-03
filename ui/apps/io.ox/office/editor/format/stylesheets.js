@@ -481,6 +481,8 @@ define('io.ox/office/editor/format/stylesheets',
             var // definitions of own attributes
                 definitions = getAttributeDefinitions(styleFamily);
 
+            self.DBG_COUNT = (self.DBG_COUNT || 0) + 1;
+
             // call single format handlers for all attributes of the own style family
             _(mergedAttributes[styleFamily]).each(function (value, name) {
                 if ((name in definitions) && _.isFunction(definitions[name].format)) {
@@ -1044,7 +1046,14 @@ define('io.ox/office/editor/format/stylesheets',
             var // the identifier of the style sheet referred by the element
                 styleId = getElementStyleId(element),
                 // the merged attributes of the passed element
-                mergedAttributes = _.isObject(baseAttributes) ? _.copy(baseAttributes, true) : resolveBaseAttributes(element);
+                mergedAttributes = null;
+
+            if (_.isObject(baseAttributes)) {
+                mergedAttributes = Utils.makeSimpleObject(styleFamily, this.getDefaultAttributeValues());
+                StyleSheets.extendAttributes(mergedAttributes, baseAttributes);
+            } else {
+                mergedAttributes = resolveBaseAttributes(element);
+            }
 
             // add attributes of the style sheet and its parents, and the explicit attributes of the element
             StyleSheets.extendAttributes(mergedAttributes, resolveStyleSheetAttributes(styleId, element));

@@ -2260,10 +2260,14 @@ define('io.ox/office/editor/editor',
             insertMissingParagraphStyles();
             insertMissingTableStyles();
 
-            Utils.info('Edtor.documentLoaded(): ' + editdiv.find('span').filter(function () { return DOM.isPortionSpan(this); }).length + ' text spans in ' + editdiv.find(DOM.PARAGRAPH_NODE_SELECTOR).length + ' paragraphs');
+            Utils.info('Edtor.documentLoaded(): ' + editdiv.find('span').filter(function () { return DOM.isPortionSpan(this) || DOM.isTextComponent(this.parentNode); }).length + ' text spans in ' + editdiv.find(DOM.PARAGRAPH_NODE_SELECTOR).length + ' paragraphs');
             Utils.info('Edtor.documentLoaded(): ' + editdiv.find('td').length + ' cells in ' + editdiv.find(DOM.TABLE_NODE_SELECTOR).length + ' tables');
-            Utils.info('Edtor.documentLoaded(): called validateParagraphNode() ' + (validateParagraphNode.DBG_COUNT || 0) + ' times');
-            Utils.info('Edtor.documentLoaded(): called adjustTabsOfParagraph() ' + (adjustTabsOfParagraph.DBG_COUNT || 0) + ' times');
+            Utils.info('Edtor.validateParagraphNode(): called ' + (validateParagraphNode.DBG_COUNT || 0) + ' times');
+            Utils.info('Edtor.adjustTabsOfParagraph(): called ' + (adjustTabsOfParagraph.DBG_COUNT || 0) + ' times');
+            Utils.info('CharacterStyles.updateElementFormatting(): called ' + (characterStyles.DBG_COUNT || 0) + ' times');
+            Utils.info('ParagraphStyles.updateElementFormatting(): called ' + (paragraphStyles.DBG_COUNT || 0) + ' times');
+            Utils.info('TableCellStyles.updateElementFormatting(): called ' + (tableCellStyles.DBG_COUNT || 0) + ' times');
+            Utils.info('TableStyles.updateElementFormatting(): called ' + (tableStyles.DBG_COUNT || 0) + ' times');
         };
 
         // ==================================================================
