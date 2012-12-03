@@ -140,6 +140,7 @@
             color: #111;
             text-shadow: 0px 0px 5px #fff;
             background-color: rgba(255, 255, 255, 0.50);
+            border-top: 1px solid rgba(0, 0, 0, 0.20);
         }
     }
 
@@ -148,9 +149,8 @@
         margin-bottom: @line-height;
     }
 
-    .item {
-        cursor: pointer;
-    }
+    .item { cursor: pointer; }
+    .item:hover { text-decoration: underline; }
 
     .line {
         line-height: @line-height;

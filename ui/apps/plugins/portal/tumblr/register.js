@@ -14,10 +14,7 @@
 define('plugins/portal/tumblr/register',
     ['io.ox/core/extensions',
      'io.ox/portal/feed',
-     'io.ox/mail/util',
-     'settings!plugins/portal/tumblr',
-     'io.ox/core/date',
-     'gettext!io.ox/portal'], function (ext, Feed, mailUtil, settings, date, gt) {
+     'less!plugins/portal/tumblr/style.css'], function (ext, Feed) {
 
     'use strict';
 
@@ -44,7 +41,7 @@ define('plugins/portal/tumblr/register',
         preview: function (baton) {
 
             var data = baton.data,
-                title = data.blog ? data.blog.name : '###',
+                title = data.blog ? data.blog.name : '',
                 sizes, url = '', width = 0,
                 post = _(data.posts).first();
 
@@ -79,7 +76,68 @@ define('plugins/portal/tumblr/register',
                     );
                 }
             }
-        }
+        },
+
+        draw: (function () {
+
+            function drawPost(post) {
+
+                var sizes, url = '', width = 0, img;
+
+                if (_.isArray(post.photos) && post.photos.length && (sizes = post.photos[0].alt_sizes)) {
+                    // add photo
+                    // find proper size
+                    _(sizes).each(function (photo) {
+                        if (width === 0 || (photo.width > 500 && photo.width < 1200)) {
+                            url = photo.url;
+                            width = photo.width;
+                        }
+                    });
+                    this.append(img = $('<div class="photo">').css('backgroundImage', 'url(' + url + ')'));
+                    if (post.post_url || post.link_url) {
+                        img.wrap($('<a>', { href: post.post_url || post.link_url, target: '_blank' }));
+                    }
+
+                } else {
+                    // use text
+                    if (post.title) {
+                        this.append(
+                            $('<h2>').text(post.title)
+                        );
+                    }
+                    if (post.post_url) {
+                        this.append(
+                            $('<div class="post-url">').append(
+                                $('<a>', { href: post.post_url, target: '_blank' }).text(post.post_url)
+                            )
+                        );
+                    }
+                    var body = [];
+                    $('<div>').html(post.body).contents().each(function () {
+                        var text = _.escape($.trim($(this).text()));
+                        if (text !== '') { body.push(text); }
+                    });
+                    this.append(
+                        $('<div class="text">').html(body.join('<span class="text-delimiter">&bull;</span>'))
+                    );
+                }
+            }
+
+            return function (baton) {
+
+                var data = baton.data,
+                    title = data.blog ? data.blog.name : '',
+                    node = $('<div class="tumblr-feed">');
+
+                if (title) {
+                    node.append($('<h1>').text(title));
+                }
+
+                _(baton.data.posts).each(drawPost, node);
+                this.append(node);
+            };
+
+        }())
     });
 
 /*

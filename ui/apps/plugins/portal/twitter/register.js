@@ -207,17 +207,17 @@ define('plugins/portal/twitter/register',
 
             if (!baton.data) { return; }
 
-            var content = $('<div class="content">');
+            var content = $('<div class="content pointer">');
 
             if (baton.data.length === 0) {
                 content.append(
-                    $('<div class="item">').text(gt('No tweets yet.'))
+                    $('<div class="paragraph">').text(gt('No tweets yet.'))
                 );
             } else {
                 _(baton.data).each(function (tweet) {
                     var message = String(tweet.text).replace(/((#|@)\w+)/g, '<span class="accent">$1</span>');
                     content.append(
-                        $('<div class="item">').append(
+                        $('<div class="paragraph">').append(
                             $('<span class="bold">').text('@' + tweet.user.name + ': '),
                             $('<span class="normal">').html(message)
                         )

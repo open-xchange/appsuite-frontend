@@ -19,8 +19,7 @@ define('plugins/portal/mail/register',
      'io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/core/date',
-     'gettext!plugins/portal',
-     'less!plugins/portal/mail/style.css'], function (ext, links, strings, mailApi, util, date, gt) {
+     'gettext!plugins/portal'], function (ext, links, strings, mailApi, util, date, gt) {
 
     'use strict';
 
