@@ -150,17 +150,21 @@ define('io.ox/calendar/list/perspective',
         });
 
         grid.setAllRequest(function () {
-
             var prop = grid.prop(),
                 start = new date.Local().setHours(0, 0, 0, 0),
                 end = new date.Local(start).setMonth(start.getMonth() + 1);
 
-            return api.getAll({
-                start: start.getTime(),
-                end: end.getTime(),
-                folder: prop.all ? undefined : prop.folder,
-                order: prop.order
+            return app.folder.getData().pipe(function (folder) {
+                // set folder data to view and update
+                return api.getAll({
+                    start: start.getTime(),
+                    end: end.getTime(),
+                    folder: prop.all && folder.type === 1 ? undefined : prop.folder,
+                    order: prop.order
+                });
             });
+
+
         });
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/calendar', showAppointment, right, api);
@@ -176,6 +180,7 @@ define('io.ox/calendar/list/perspective',
             return $.Deferred().resolve(ids);
         });
 
+        grid.prop('folder', app.folder.get());
         grid.paint();
     };
 
