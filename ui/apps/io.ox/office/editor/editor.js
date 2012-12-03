@@ -2260,14 +2260,16 @@ define('io.ox/office/editor/editor',
             insertMissingParagraphStyles();
             insertMissingTableStyles();
 
-            Utils.info('Edtor.documentLoaded(): ' + editdiv.find('span').filter(function () { return DOM.isPortionSpan(this) || DOM.isTextComponentNode(this.parentNode); }).length + ' text spans in ' + editdiv.find(DOM.PARAGRAPH_NODE_SELECTOR).length + ' paragraphs');
-            Utils.info('Edtor.documentLoaded(): ' + editdiv.find('td').length + ' cells in ' + editdiv.find(DOM.TABLE_NODE_SELECTOR).length + ' tables');
-            Utils.info('Edtor.validateParagraphNode(): called ' + (validateParagraphNode.DBG_COUNT || 0) + ' times');
-            Utils.info('Edtor.adjustTabsOfParagraph(): called ' + (adjustTabsOfParagraph.DBG_COUNT || 0) + ' times');
-            Utils.info('CharacterStyles.updateElementFormatting(): called ' + (characterStyles.DBG_COUNT || 0) + ' times');
-            Utils.info('ParagraphStyles.updateElementFormatting(): called ' + (paragraphStyles.DBG_COUNT || 0) + ' times');
-            Utils.info('TableCellStyles.updateElementFormatting(): called ' + (tableCellStyles.DBG_COUNT || 0) + ' times');
-            Utils.info('TableStyles.updateElementFormatting(): called ' + (tableStyles.DBG_COUNT || 0) + ' times');
+            window.setTimeout(function () {
+                Utils.info('Edtor.documentLoaded(): ' + editdiv.find('span').filter(function () { return DOM.isPortionSpan(this) || DOM.isTextComponentNode(this.parentNode); }).length + ' text spans in ' + editdiv.find(DOM.PARAGRAPH_NODE_SELECTOR).length + ' paragraphs');
+                Utils.info('Edtor.documentLoaded(): ' + editdiv.find('td').length + ' cells in ' + editdiv.find(DOM.TABLE_NODE_SELECTOR).length + ' tables');
+                Utils.info('Edtor.validateParagraphNode(): called ' + (validateParagraphNode.DBG_COUNT || 0) + ' times');
+                Utils.info('Edtor.adjustTabsOfParagraph(): called ' + (adjustTabsOfParagraph.DBG_COUNT || 0) + ' times');
+                Utils.info('CharacterStyles.updateElementFormatting(): called ' + (characterStyles.DBG_COUNT || 0) + ' times');
+                Utils.info('ParagraphStyles.updateElementFormatting(): called ' + (paragraphStyles.DBG_COUNT || 0) + ' times');
+                Utils.info('TableCellStyles.updateElementFormatting(): called ' + (tableCellStyles.DBG_COUNT || 0) + ' times');
+                Utils.info('TableStyles.updateElementFormatting(): called ' + (tableStyles.DBG_COUNT || 0) + ' times');
+            }, 0);
         };
 
         // ==================================================================
@@ -3330,26 +3332,6 @@ define('io.ox/office/editor/editor',
             // setting default attributes is not undoable
         };
 
-        operationHandlers[Operations.TEXT_INSERT] = function (operation) {
-            if (undoManager.isEnabled()) {
-                var endPos = _.clone(operation.start, true);
-                endPos[endPos.length - 1] += operation.text.length;
-                endPos[endPos.length - 1] -= 1;    // switching from range mode to operation mode
-                var undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: endPos };
-                undoManager.addUndo(undoOperation, operation);
-            }
-            implInsertText(operation.start, operation.text, operation.attrs);
-        };
-
-        operationHandlers[Operations.TAB_INSERT] = function (operation) {
-            if (implInsertTab(operation.start, operation.attrs)) {
-                if (undoManager.isEnabled()) {
-                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: operation.start };
-                    undoManager.addUndo(undoOperation, operation);
-                }
-            }
-        };
-
         operationHandlers[Operations.DELETE] = function (operation) {
             var // node info about the paragraph to be deleted
                 nodeInfo = null,
@@ -3432,6 +3414,43 @@ define('io.ox/office/editor/editor',
                 undoManager.addUndo(undoOperation, operation);
             }
             implMove(operation.start, operation.end, operation.to);
+        };
+
+        operationHandlers[Operations.TEXT_INSERT] = function (operation) {
+            if (implInsertText(operation.start, operation.text, operation.attrs)) {
+                if (undoManager.isEnabled()) {
+                    var end = Position.increaseLastIndex(operation.start, operation.text.length - 1),
+                        undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: end };
+                    undoManager.addUndo(undoOperation, operation);
+                }
+            }
+        };
+
+        operationHandlers[Operations.FIELD_INSERT] = function (operation) {
+            if (implInsertField(operation.start, operation.type, operation.representation, operation.attrs)) {
+                if (undoManager.isEnabled()) {
+                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: operation.start };
+                    undoManager.addUndo(undoOperation, operation);
+                }
+            }
+        };
+
+        operationHandlers[Operations.TAB_INSERT] = function (operation) {
+            if (implInsertTab(operation.start, operation.attrs)) {
+                if (undoManager.isEnabled()) {
+                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: operation.start };
+                    undoManager.addUndo(undoOperation, operation);
+                }
+            }
+        };
+
+        operationHandlers[Operations.DRAWING_INSERT] = function (operation) {
+            if (implInsertDrawing(operation.type, operation.start, operation.attrs)) {
+                if (undoManager.isEnabled()) {
+                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: operation.start };
+                    undoManager.addUndo(undoOperation, operation);
+                }
+            }
         };
 
         operationHandlers[Operations.TEXT_DELETE] = function (operation) {
@@ -3816,24 +3835,6 @@ define('io.ox/office/editor/editor',
                 undoManager.endGroup();
             }
             implInsertColumn(operation.start, operation.gridPosition, operation.insertMode);
-        };
-
-        operationHandlers[Operations.DRAWING_INSERT] = function (operation) {
-            if (implInsertDrawing(operation.type, operation.start, operation.attrs)) {
-                if (undoManager.isEnabled()) {
-                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: operation.start };
-                    undoManager.addUndo(undoOperation, operation);
-                }
-            }
-        };
-
-        operationHandlers[Operations.FIELD_INSERT] = function (operation) {
-            if (implInsertField(operation.start, operation.type, operation.representation, operation.attrs)) {
-                if (undoManager.isEnabled()) {
-                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: operation.start };
-                    undoManager.addUndo(undoOperation, operation);
-                }
-            }
         };
 
         /**
@@ -4263,40 +4264,14 @@ define('io.ox/office/editor/editor',
         ); // implTableChanged()
 
         /**
-         * Returns a text span and its internal offset for the specified
-         * logical position.
-         *
-         * @param {Number[]} position
-         *  The logical text position.
-         *
-         * @returns {Object|Null}
-         *  An object with the attributes 'node' pointing to the text span DOM
-         *  node, and an attribute 'offset' containing the internal character
-         *  offset in the text span. Returns null, if the passed logical
-         *  position is invalid.
-         */
-        function getTextSpanInfo(position) {
-
-            var // node info at passed position (DOM text node level)
-                nodeInfo = Position.getDOMPosition(editdiv, position),
-                // the parent text span
-                span = (nodeInfo && nodeInfo.node) ? nodeInfo.node.parentNode : null;
-
-            if (!DOM.isPortionSpan(span)) {
-                Utils.warn('Editor.getTextSpanInfo(): expecting text span at position ' + JSON.stringify(position));
-                return null;
-            }
-
-            return { node: span, offset: nodeInfo.offset };
-        }
-
-        /**
-         * Splits the text span at the specified position, if splitting is
-         * required. Always splits the span, if the position points between two
-         * characters of the span. Additionally splits the span, if there is no
-         * previous sibling text span while the position points to the
-         * beginning of the span, or if there is no next text span while the
-         * position points to the end of the span.
+         * Prepares the text span at the specified logical position for
+         * insertion of a new text component or character. Splits the text span
+         * at the position, if splitting is required. Always splits the span,
+         * if the position points between two characters of the span.
+         * Additionally splits the span, if there is no previous sibling text
+         * span while the position points to the beginning of the span, or if
+         * there is no next text span while the position points to the end of
+         * the span.
          *
          * @param {Number[]} position
          *  The logical text position.
@@ -4310,31 +4285,52 @@ define('io.ox/office/editor/editor',
          *  there is a following text span available. Returns null, if the
          *  passed logical position is invalid.
          */
-        function getPreparedTextSpan(position) {
+        function prepareTextSpanForInsertion(position) {
 
-            var // resolve position to text span and offset
-                spanInfo = getTextSpanInfo(position);
+            var // node info at passed position (DOM text node level)
+                nodeInfo = Position.getDOMPosition(editdiv, position);
 
-            if (!spanInfo) { return null; }
+            // check that the parent is a text span
+            if (!nodeInfo || !nodeInfo.node || !DOM.isPortionSpan(nodeInfo.node.parentNode)) {
+                Utils.warn('Editor.prepareTextSpanForInsertion(): expecting text span at position ' + JSON.stringify(position));
+                return null;
+            }
+            nodeInfo.node = nodeInfo.node.parentNode;
 
             // do not split at beginning with existing preceding text span
-            if ((spanInfo.offset === 0) && DOM.isTextSpan(spanInfo.node.previousSibling)) {
-                return spanInfo.node.previousSibling;
+            if ((nodeInfo.offset === 0) && DOM.isTextSpan(nodeInfo.node.previousSibling)) {
+                return nodeInfo.node.previousSibling;
             }
 
             // return current span, if offset points to its end with following text span
-            if ((spanInfo.offset === spanInfo.node.firstChild.nodeValue.length) && DOM.isTextSpan(spanInfo.node.nextSibling)) {
-                return spanInfo.node;
+            if ((nodeInfo.offset === nodeInfo.node.firstChild.nodeValue.length) && DOM.isTextSpan(nodeInfo.node.nextSibling)) {
+                return nodeInfo.node;
             }
 
             // otherwise, split the span
-            return DOM.splitTextSpan(spanInfo.node, spanInfo.offset)[0];
+            return DOM.splitTextSpan(nodeInfo.node, nodeInfo.offset)[0];
         }
 
+        /**
+         * Inserts a simple text portion into the document DOM.
+         *
+         * @param {Number[]} start
+         *  The logical start position for the new text portion.
+         *
+         * @param {String} text
+         *  The text to be inserted.
+         *
+         * @param {Object} [attrs]
+         *  Attributes to be applied at the new text portion, as map of
+         *  attribute maps (name/value pairs), keyed by attribute family.
+         *
+         * @returns {Boolean}
+         *  Whether the text portion has been inserted successfully.
+         */
         function implInsertText(start, text, attrs) {
 
             var // text span that will precede the field
-                span = getPreparedTextSpan(start),
+                span = prepareTextSpanForInsertion(start),
                 // new new text span
                 newSpan = null;
 
@@ -4354,16 +4350,16 @@ define('io.ox/office/editor/editor',
             CharacterStyles.mergeSiblingTextSpans(newSpan);
 
             // validate paragraph, store new cursor position
-            implParagraphChanged(span.parentNode);
+            implParagraphChanged(newSpan.parent());
             lastOperationEnd = Position.increaseLastIndex(start, text.length);
             return true;
         }
 
         /**
-         * Implementation function for inserting fields.
+         * Inserts a text field component into the document DOM.
          *
-         * @param {Number[]} position
-         *  The logical position for the new text field.
+         * @param {Number[]} start
+         *  The logical start position for the new text field.
          *
          * @param {String} type
          *  A property describing the field type.
@@ -4371,11 +4367,18 @@ define('io.ox/office/editor/editor',
          * @param {String} representation
          *  A fallback value, if the placeholder cannot be substituted with a
          *  reasonable value.
+         *
+         * @param {Object} [attrs]
+         *  Attributes to be applied at the new text field, as map of attribute
+         *  maps (name/value pairs), keyed by attribute family.
+         *
+         * @returns {Boolean}
+         *  Whether the text field has been inserted successfully.
          */
         function implInsertField(start, type, representation, attrs) {
 
             var // text span that will precede the field
-                span = getPreparedTextSpan(start),
+                span = prepareTextSpanForInsertion(start),
                 // new text span for the field node
                 fieldSpan = null;
 
@@ -4400,10 +4403,23 @@ define('io.ox/office/editor/editor',
             return true;
         }
 
+        /**
+         * Inserts a horizontal tabulator component into the document DOM.
+         *
+         * @param {Number[]} start
+         *  The logical start position for the new tabulator.
+         *
+         * @param {Object} [attrs]
+         *  Attributes to be applied at the new tabulator component, as map of
+         *  attribute maps (name/value pairs), keyed by attribute family.
+         *
+         * @returns {Boolean}
+         *  Whether the tabulator has been inserted successfully.
+         */
         function implInsertTab(start, attrs) {
 
             var // text span that will precede the field
-                span = getPreparedTextSpan(start),
+                span = prepareTextSpanForInsertion(start),
                 // new text span for the tabulator node
                 tabSpan = null;
 
@@ -4430,7 +4446,7 @@ define('io.ox/office/editor/editor',
         function implInsertDrawing(type, start, attributes) {
 
             var // text span that will precede the field
-                span = getPreparedTextSpan(start),
+                span = prepareTextSpanForInsertion(start),
                 // drawing attributes from attribute object
                 drawingAttrs = (_.isObject(attributes) && _.isObject(attributes.drawing)) ? attributes.drawing : {},
                 // new drawing node

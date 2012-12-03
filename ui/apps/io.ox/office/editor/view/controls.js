@@ -51,6 +51,25 @@ define('io.ox/office/editor/view/controls',
             { name: 'accent4',     label: gt('Accent 4'),     transformations: [   51,  102,  153,    0, -191, -128 ] },
             { name: 'accent5',     label: gt('Accent 5'),     transformations: [   51,  102,  153,    0, -191, -128 ] },
             { name: 'accent6',     label: gt('Accent 6'),     transformations: [   51,  102,  153,    0, -191, -128 ] }
+        ],
+
+        BUILTIN_LOCALES = [
+            { locale: 'en-US', lang: gt('English (US)') },
+            { locale: 'de-DE', lang: gt('German') },
+            { locale: 'fr',    lang: gt('French') },
+            { locale: 'es-ES', lang: gt('Spanish') },
+            { locale: 'cs-CZ', lang: gt('Czech') },
+            { locale: 'da-DK', lang: gt('Danish') },
+            { locale: 'nl-NL', lang: gt('Dutch (Netherlands)') },
+            { locale: 'fi-FI', lang: gt('Finnish') },
+            { locale: 'el-GR', lang: gt('Greek') },
+            { locale: 'hu-HU', lang: gt('Hungarian') },
+            { locale: 'it-IT', lang: gt('Italian (Italy)') },
+            { locale: 'pl-PL', lang: gt('Polish') },
+            { locale: 'pt-PT', lang: gt('Portuguese (Portugal)') },
+            { locale: 'ro-RO', lang: gt('Romanian') },
+            { locale: 'ru-RU', lang: gt('Russian') },
+            { locale: 'sv-SE', lang: gt('Swedish (Sweden)') }
         ];
 
     // static class Controls ==================================================
@@ -323,28 +342,9 @@ define('io.ox/office/editor/view/controls',
 
         // initialization -----------------------------------------------------
 
-        var locales = [ {lang: gt('English (US)'), locale: "en-US"},
-                        {lang: gt('German'), locale: "de-DE"},
-                        {lang: gt('French'), locale: "fr"},
-                        {lang: gt('Spanish'), locale: "es-ES"},
-                        {lang: gt('Czech'), locale: 'cs-CZ'},
-                        {lang: gt('Danish'), locale: 'da-DK'},
-                        {lang: gt('Dutch (Netherlands)'), locale: 'nl-NL'},
-                        {lang: gt('Finnish'), locale: 'fi-FI'},
-                        {lang: gt('Greek'), locale: 'el-GR'},
-                        {lang: gt('Hungarian'), locale: 'hu-HU'},
-                        {lang: gt('Italian (Italy)'), locale: 'it-IT'},
-                        {lang: gt('Polish'), locale: 'pl-PL'},
-                        {lang: gt('Portuguese (Portugal)'), locale: 'pt-PT'},
-                        {lang: gt('Romanian'), locale: 'ro-RO'},
-                        {lang: gt('Russian'), locale: 'ru-RU'},
-                        {lang: gt('Swedish (Sweden)'), locale: 'sv-SE'}
-                        ];
         function fillList() {
             self.clearOptionButtons();
-            _(locales).each(function (entry) {
-
-                // create the list item, pass sorting index as user data
+            _(BUILTIN_LOCALES).each(function (entry) {
                 self.addOptionButton(entry.locale, { label: entry.lang });
             });
         }

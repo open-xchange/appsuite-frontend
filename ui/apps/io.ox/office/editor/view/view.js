@@ -241,7 +241,7 @@ define('io.ox/office/editor/view/view',
             if (debugNodes) {
                 operation = _.clone(operation);
                 delete operation.name;
-                operation = JSON.stringify(operation).replace(/^\{(.*)\}$/, '$1');
+                operation = JSON.stringify(operation).replace(/^\{(.*)\}$/, '$1').replace(/ /g, '\xb7');
                 debugNodes.ops.append($('<tr>').append(
                     $('<td>').text(debugNodes.ops.find('tr').length + 1),
                     $('<td>').text(name),
