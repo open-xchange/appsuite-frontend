@@ -11,10 +11,7 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define('plugins/portal/tumblr/register',
-    ['io.ox/core/extensions',
-     'io.ox/portal/feed',
-     'less!plugins/portal/tumblr/style.css'], function (ext, Feed) {
+define('plugins/portal/tumblr/register', ['io.ox/core/extensions', 'io.ox/portal/feed'], function (ext, Feed) {
 
     'use strict';
 
@@ -127,7 +124,7 @@ define('plugins/portal/tumblr/register',
 
                 var data = baton.data,
                     title = data.blog ? data.blog.name : '',
-                    node = $('<div class="tumblr-feed">');
+                    node = $('<div class="portal-feed">');
 
                 if (title) {
                     node.append($('<h1>').text(title));

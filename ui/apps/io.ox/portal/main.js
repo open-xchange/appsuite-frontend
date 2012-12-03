@@ -96,7 +96,7 @@ define('io.ox/portal/main',
                 },
                 flickr_0: {
                     plugin: 'plugins/portal/flickr/register',
-                    color: 'purple',
+                    color: 'pink',
                     index: 6,
                     props: {
                         method: 'flickr.photos.search',
