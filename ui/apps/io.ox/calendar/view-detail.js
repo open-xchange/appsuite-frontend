@@ -171,8 +171,7 @@ define("io.ox/calendar/view-detail",
         index: 500,
         id: "participants",
         draw: function (data) {
-
-            var list = data.participants, $i = list.length, MIN = 0,
+            var list = data.participants || {}, $i = list.length, MIN = 0,
                 participants = $i > MIN ? $("<div>").addClass("participants") : $(),
                 confirmations = {};
 
@@ -304,7 +303,7 @@ define("io.ox/calendar/view-detail",
         index: 550,
         id: 'inline-actions-participantrelated',
         draw: function (data) {
-            if (data.participants.length > 1) {
+            if (data.participants && data.participants.length > 1) {
                 ext.point('io.ox/calendar/detail/actions-participantrelated').invoke('draw', this, data);
             }
 
