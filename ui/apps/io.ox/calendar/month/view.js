@@ -211,6 +211,9 @@ define('io.ox/calendar/month/view',
                 },
                 start: function (e, ui) {
                     $(this).hide();
+                },
+                stop: function () {
+                    $(this).draggable('disable');
                 }
             });
 
@@ -218,7 +221,7 @@ define('io.ox/calendar/month/view',
                 accept: '.appointment',
                 drop: function (e, ui) {
                     $('.list', this).append(
-                            ui.draggable.show()
+                        ui.draggable.show().busy()
                     );
                     var app = ui.draggable.data('app').attributes,
                         s = new date.Local(app.start_date),
