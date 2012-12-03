@@ -184,6 +184,10 @@ define('plugins/portal/twitter/register',
 
         title: "Twitter",
 
+        action: function (baton) {
+            window.open('https://twitter.com/', 'twitter');
+        },
+
         isEnabled: function () {
             return keychain.isEnabled('twitter');
         },

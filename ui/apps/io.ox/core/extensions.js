@@ -351,7 +351,7 @@ define("io.ox/core/extensions",
         };
 
         this.prop = function (id) {
-            return list().pluck(id).first().value();
+            return list().pluck(id).compact().first().value();
         };
     };
 

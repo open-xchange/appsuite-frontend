@@ -109,6 +109,10 @@ define("plugins/portal/tasks/register",
 
         title: gt('Tasks'),
 
+        action: function (baton) {
+            ox.launch('io.ox/tasks/main');
+        },
+
         load: function (baton) {
             return taskApi.getAll({}, false).done(function (data) {
                 baton.data = data;

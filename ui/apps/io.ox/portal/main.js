@@ -244,7 +244,7 @@ define('io.ox/portal/main',
         appBaton.$.widgets.sortable({
             containment: win.nodes.main,
             scroll: true,
-            delay: 300
+            delay: 150
         });
     };
 
@@ -258,18 +258,27 @@ define('io.ox/portal/main',
         return ret && ret.promise ? ret : READY;
     }
 
+    function runAction(e) {
+        ext.point(e.data.baton.point).invoke('action', $(this).closest('.widget'), e.data.baton);
+    }
+
     app.drawWidgets = function () {
         collection.each(function (model, index) {
             // get proper extension
             var type = model.get('type'),
                 node = appBaton.$.widgets.find('[data-widget-cid="' + model.cid + '"]'),
                 delay = (index / 2 >> 0) * 2000,
-                point = ext.point('io.ox/portal/widget/' + type),
-                baton = ext.Baton({ model: model });
+                baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + type }),
+                point = ext.point(baton.point),
+                title;
             // remember baton
             model.set('baton', baton);
             // set title
-            node.find('h2.title').text(point.prop('title'));
+            title = node.find('h2.title').text(point.prop('title'));
+            // add link?
+            if (point.prop('action') !== undefined) {
+                title.addClass('action-link').on('click', { baton: baton }, runAction);
+            }
             // simple delay approach
             setTimeout(function () {
                 // initialize first

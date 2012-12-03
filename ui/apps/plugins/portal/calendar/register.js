@@ -56,6 +56,10 @@ define("plugins/portal/calendar/register",
 
         title: gt('Appointments'),
 
+        action: function (baton) {
+            ox.launch('io.ox/calendar/main', { perspective: 'list' });
+        },
+
         load: function (baton) {
             return api.getAll().pipe(function (ids) {
                 return api.getList(ids.slice(0, 10)).done(function (data) {

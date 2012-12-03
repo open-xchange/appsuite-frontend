@@ -11,7 +11,11 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define('plugins/portal/tumblr/register', ['io.ox/core/extensions', 'io.ox/portal/feed'], function (ext, Feed) {
+define('plugins/portal/tumblr/register',
+    ['io.ox/core/extensions',
+     'io.ox/portal/feed',
+     'gettext!io.ox/portal'
+    ], function (ext, Feed, gt) {
 
     'use strict';
 
@@ -21,6 +25,10 @@ define('plugins/portal/tumblr/register', ['io.ox/core/extensions', 'io.ox/portal
     ext.point('io.ox/portal/widget/tumblr').extend({
 
         title: 'Tumblr',
+
+        action: function (baton) {
+            window.open('http://' + baton.model.get('props').url, 'tumblr');
+        },
 
         initialize: function (baton) {
             var url = baton.model.get('props').url;
@@ -105,7 +113,7 @@ define('plugins/portal/tumblr/register', ['io.ox/core/extensions', 'io.ox/portal
                     if (post.post_url) {
                         this.append(
                             $('<div class="post-url">').append(
-                                $('<a>', { href: post.post_url, target: '_blank' }).text(post.post_url)
+                                $('<a>', { href: post.post_url, target: '_blank' }).text(gt('Read article on tumblr.com'))
                             )
                         );
                     }

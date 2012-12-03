@@ -16,7 +16,7 @@
 .io-ox-portal {
 
     @spacing: 13px;
-    @vert-spacing: 39px;
+    @vert-spacing: 13px;
     @line-height: 18px;
     @lines: 18;
     @widget-padding: 13px;
@@ -108,6 +108,11 @@
         .transition(color 0.3s linear);
     }
 
+    h2.action-link {
+        cursor: pointer;
+        &:hover { text-decoration: underline; }
+    }
+
     .bold { font-weight: bold; }
     .italic { font-style: italic; }
     .gray { color: rgba(0, 0, 0, 0.5); }
@@ -182,7 +187,6 @@
     }
 
     .post-url {
-        text-align: right;
         margin: 0 0 13px 0;
     }
 
