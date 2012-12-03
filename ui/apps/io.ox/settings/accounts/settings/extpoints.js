@@ -30,9 +30,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                     },
                     render: function () {
                         var self = this;
-
                         self.$el.empty().append(
-                            $('<div class="io-ox-settings-item enabled">')
+                            $('<div class="io-ox-settings-item io-ox-reddit-setting">')
                             .attr({'data-subreddit': this.model.get('subreddit'), 'data-mode': this.model.get('mode')}).append(
                                 $('<span data-property="subreddit">'),
                                 $('<span data-property="mode">'),
@@ -47,8 +46,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         return self;
                     },
                     events: {
-                        'click .io-ox-reddit-settings .action-edit': 'onEdit',
-                        'click .io-ox-reddit-settings .action-remove' : 'onDelete'
+                        'click .io-ox-reddit-setting .action-edit': 'onEdit',
+                        'click .io-ox-reddit-setting .action-remove' : 'onDelete'
                     },
                     onEdit: function (pEvent) {
                         console.log("On edit called for: ", $(pEvent.target).parent());
@@ -193,13 +192,11 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         this.$el.empty().append(
                             $('<div>').append(
                                 $('<div class="section">').append(
-                                    $('<div class=""io-ox-portal-title>').text(staticStrings.SUBREDDITS),
-                                    $('<div class="settings-detail-pane io-ox-reddit-settings">').append(
-                                        $('<div class="listbox">'),
+                                    $('<div class="io-ox-portal-settings-title">').text(staticStrings.SUBREDDITS),
+                                    $('<div class="settings-detail-pane">').append(
+                                        $('<div class="io-ox-reddit-settings">'),
                                         $('<div class="sectioncontent">').append(
-                                            $('<button class="btn" data-action="add" style="margin-right: 15px; ">').text(staticStrings.ADD),
-                                            $('<button class="btn" data-action="edit" style="margin-right: 15px; ">').text(staticStrings.EDIT),
-                                            $('<button class="btn" data-action="del" style="margin-right: 15px; ">').text(staticStrings.DELETE)
+                                            $('<button class="btn" data-action="add" style="margin-right: 15px; ">').text(staticStrings.ADD)
                                         )
                                     )
                                 )
@@ -209,7 +206,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         var that = this;
 
                         function redraw() {
-                            var $listbox = that.$el.find('.listbox'),
+                            var $listbox = that.$el.find('.io-ox-reddit-settings'),
                                 collection = new Backbone.Collection(subreddits);
 
                             $listbox.empty();
@@ -224,26 +221,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                 $listbox.show();
                             }
 
-                            $listbox.sortable({
-                                axis: 'y',
-                                containment: 'parent',
-                                update: function (event, ui) {
-                                    subreddits = [];
-
-                                    _.each($(this).sortable('toArray'), function (value) {
-                                        var i = value.indexOf('#');
-                                        var mode = value.substring(0, i),
-                                            subreddit = value.substring(i + 1);
-
-                                        subreddits.push({subreddit: subreddit, mode: mode});
-                                    });
-
-                                    settings.set('subreddits', subreddits);
-                                    settings.save();
-
-                                    ox.trigger("refresh^", [true]);
-                                }
-                            });
                         }
 
                         redraw();
@@ -383,8 +360,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             $('<div class="io-ox-tumblr-setting io-ox-settings-item">')
                             .attr({'data-url': this.model.get('url'),  'data-description': this.model.get('description')}).append(
                                 $('<span data-property="url">'),
-                                $('<i>').attr({'class': 'icon-edit', 'data-action': 'edit-feed', title: staticStrings.EDIT_FEED}),
-                                $('<i>').attr({'class': 'icon-remove', 'data-action': 'del-feed', title: staticStrings.DELETE_FEED})
+                                $('<i>').attr({'class': 'action-edit icon-edit', 'data-action': 'edit-feed', title: staticStrings.EDIT_FEED}),
+                                $('<i>').attr({'class': 'action-remove icon-remove', 'data-action': 'del-feed', title: staticStrings.DELETE_FEED})
                             )
                         );
 
@@ -396,8 +373,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         return self;
                     },
                     events: {
-                        'click .icon-remove': 'onDelete',
-                        'click .icon-edit': 'onEdit'
+                        'click .io-ox-tumblr-setting .action-remove': 'onDelete',
+                        'click .io-ox-tumblr-setting .action-edit': 'onEdit'
                     },
                     onEdit: function (pEvent) {
                         var dialog = new dialogs.ModalDialog({
@@ -535,7 +512,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         this.$el.empty().append(
                             $('<div>').append(
                                 $('<div class="section">').append(
-                                    $('<div class=""io-ox-portal-title>').text(staticStrings.TUMBLRBLOGS),
+                                    $('<div class="io-ox-portal-settings-title">').text(staticStrings.TUMBLRBLOGS),
                                     $('<div class="settings-detail-pane">').append(
                                         $('<div class="io-ox-tumblr-settings">')
                                     ),
@@ -732,8 +709,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                 $('<div class="io-ox-portal-flickr-setting io-ox-settings-item">')
                                 .attr({'data-q': this.model.get('q'), 'data-method': this.model.get('method'), 'data-description': this.model.get('description')}).append(
                                     $('<span data-property="q">'),
-                                    $('<i class="icon-edit setting-action">'),
-                                    $('<i class="icon-remove setting-action">')
+                                    $('<i class="icon-edit action-edit">'),
+                                    $('<i class="icon-remove action-remove">')
                                 )
                             );
 
@@ -743,7 +720,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             return self;
                         },
                         events: {
-                            'click .icon-edit': 'onEdit',
+                            'click .io-ox-portal-flickr-setting .icon-edit': 'onEdit',
                             'click .icon-remove': 'onDelete'
                         },
                         onEdit: function (pEvent) {
@@ -891,7 +868,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             this.$el.empty().append(
                                 $('<div>').append(
                                     $('<div class="section">').append(
-                                        $('<div class=""io-ox-portal-title>').text(staticStrings.STREAMS),
+                                        $('<div class="io-ox-portal-settings-title">').text(staticStrings.STREAMS),
                                         $('<div class="settings-detail-pane">').append(
                                             $('<div class="io-ox-portal-flickr-settings">')
                                         ),
@@ -1039,8 +1016,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
         id: 'portal-settings-rss',
         draw : function (data) {
             var that = this;
-            require(['settings!io.ox/rss', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'io.ox/messaging/accounts/api'],
-            function (settings, gt, dialogs, accountApi) {
+            require(['settings!io.ox/rss', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'io.ox/messaging/accounts/api', 'io.ox/core/strings'],
+            function (settings, gt, dialogs, accountApi, strings) {
                 var feedgroups = settings.get('groups'),
                     staticStrings = {
                         RSS: gt('RSS'),
@@ -1084,20 +1061,19 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             self.$el.empty().append(
                                 $('<div>').attr({'class': 'io-ox-portal-rss-settings-feedgroup io-ox-settings-item', id: id, 'data-groupname': groupname}).append(
                                     $('<strong>').text(groupname),
-                                    $('<i>').attr({'class': 'icon-edit', 'data-action': 'edit-group', title: staticStrings.EDIT_GROUP}),
-                                    $('<i>').attr({'class': 'icon-remove', 'data-action': 'del-group', title: staticStrings.DELETE_GROUP}),
-                                    $('<i>').attr({'class': 'icon-plus', 'data-action': 'add-feed', title: staticStrings.ADD_FEED})
+                                    $('<i>').attr({'class': 'icon-edit action-edit', 'data-action': 'edit-group', title: staticStrings.EDIT_GROUP}),
+                                    $('<i>').attr({'class': 'icon-remove action-remove', 'data-action': 'del-group', title: staticStrings.DELETE_GROUP}),
+                                    $('<i>').attr({'class': 'icon-plus action-add', 'data-action': 'add-feed', title: staticStrings.ADD_FEED})
                                 ),
                                 $('<div class="io-ox-portal-rss-settings-members">').append(_(members).map(function (member) {
                                     return $('<div>').attr({'id': 'rss-feed-' + member.feedname.replace(/[^A-Za-z0-9]/g, '_'),
-                                            'class': 'io-ox-portal-rss-settings-member sortable-item',
+                                            'class': 'io-ox-portal-rss-settings-member io-ox-settings-item',
                                             'data-url': member.url,
                                             'data-feedname': member.feedname,
                                             'data-group': groupname}).append(
-                                        $('<span class="io-ox-portal-rss-feedname">').text(member.feedname),
-                                        $('<span class="io-ox-portal-rss-feedurl">').text(member.url),
-                                        $('<i>').attr({'class': 'icon-edit', 'data-action': 'edit-feed', title: staticStrings.EDIT_FEED}),
-                                        $('<i>').attr({'class': 'icon-remove', 'data-action': 'del-feed', title: staticStrings.DELETE_FEED})
+                                        $('<span class="io-ox-setting-title">').text(strings.shorten(member.feedname, 30)),
+                                        $('<i>').attr({'class': 'icon-edit action-edit', 'data-action': 'edit-feed', title: staticStrings.EDIT_FEED}),
+                                        $('<i>').attr({'class': 'icon-remove action-remove', 'data-action': 'del-feed', title: staticStrings.DELETE_FEED})
                                     );
                                 }))
                             );
@@ -1111,11 +1087,195 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             return self;
                         },
                         events: {
-                            'click .sortable-item': 'onSelect'
+                            'click [data-action="edit-feed"]': 'onEditFeed',
+                            'click [data-action="del-feed"]': 'onDeleteFeed',
+                            'click [data-action="edit-group"]': 'onEditGroup',
+                            'click [data-action="del-group"]': 'onDeleteGroup'
                         },
-                        onSelect: function (args) {
-                            this.$el.parent().find('[selected]').removeAttr('selected');
-                            $(args.srcElement).parent().attr('selected', 'selected');
+
+                        onEditFeed: function (pEvent) {
+                            var dialog = new dialogs.ModalDialog({easyOut: true, async: true }),
+                                $changed = $(pEvent.target).parent();
+
+                            var oldUrl = $changed.data('url'),
+                                oldFeedname = $changed.data('feedname'),
+                                oldGroupname = $changed.data('group');
+
+                            if (!oldUrl) {
+                                return;
+                            }
+                            var $url = $('<input>').attr({type: 'text'}).val(oldUrl),
+                                $feedname = $('<input>').attr({type: 'text', placeholder: gt('Name of feed')}).val(oldFeedname),
+                                $groups = makeFeedgroupSelection(oldGroupname),
+                                $error = $('<div>').addClass('alert alert-error').hide(),
+                                that = this;
+
+                            dialog.header($("<h4>").text(gt('Edit a feed')))
+                                .append($url)
+                                .append($feedname)
+                                .append($groups)
+                                .append($error)
+                                .addButton('cancel', gt('Cancel'))
+                                .addButton('edit', gt('Edit'), null, {classes: 'btn-primary'})
+                                .show();
+
+                            dialog.on('edit', function (e) {
+                                $error.hide();
+
+                                var url = $.trim($url.val()),
+                                    feedname = $.trim($feedname.val()),
+                                    groups = $groups.val(),
+                                    deferred = $.Deferred();
+
+                                if (url.length === 0) {
+                                    $error.text(gt('Please enter a feed url.'));
+                                    deferred.reject();
+                                } else if (feedname.length === 0) {
+                                    $error.text(gt('Please enter a name for the feed.'));
+                                    deferred.reject();
+                                } else {
+                                    //TODO add test for existence of feed
+                                    deferred.resolve();
+                                }
+
+                                deferred.done(function () {
+                                    var oldGroup = _(feedgroups).find(function (g) {return g.groupname === oldGroupname; }),
+                                        newGroup = _(feedgroups).find(function (g) {return g.groupname === groups; });
+                                    oldGroup.members = removeFeed(oldGroup.members, oldUrl);
+                                    newGroup.members.push({url: url, feedname: feedname});
+
+                                    settings.set('groups', feedgroups);
+                                    settings.save();
+
+                                    that.trigger('redraw');
+                                    ox.trigger("refresh^");
+                                    dialog.close();
+                                });
+
+                                deferred.fail(function () {
+                                    $error.show();
+                                    dialog.idle();
+                                });
+                            });
+                        },
+
+                        onEditGroup: function (pEvent) {
+                            var dialog = new dialogs.ModalDialog({easyOut: true, async: true }),
+                                $changed = $(pEvent.target).parent();
+                            var oldGroupname = $changed.data('groupname');
+
+                            if (!oldGroupname) {
+                                return;
+                            }
+                            var $groupname = $('<input>').attr({type: 'text', placeholder: gt('Name for group of feeds')}).val(oldGroupname),
+                                $error = $('<div>').addClass('alert alert-error').hide(),
+                                that = this;
+
+                            dialog.header($("<h4>").text(gt('Edit a group of feeds')))
+                                .append($groupname)
+                                .append($error)
+                                .addButton('cancel', gt('Cancel'))
+                                .addButton('edit', gt('Edit'), null, {classes: 'btn-primary'})
+                                .show();
+
+                            dialog.on('edit', function (e) {
+                                $error.hide();
+
+                                var groupname = $.trim($groupname.val()),
+                                    deferred = $.Deferred();
+
+                                if (groupname.length === 0) {
+                                    $error.text(gt('Please enter a name for the group of feeds.'));
+                                    deferred.reject();
+                                } else {
+                                    deferred.resolve();
+                                }
+
+                                deferred.done(function () {
+                                    var oldGroup = _(feedgroups).find(function (g) {return g.groupname === oldGroupname; });
+                                    oldGroup.groupname = groupname;
+
+                                    settings.set('groups', feedgroups);
+                                    settings.save();
+
+                                    that.trigger('redraw');
+                                    ox.trigger("refresh^");
+                                    dialog.close();
+                                });
+
+                                deferred.fail(function () {
+                                    $error.show();
+                                    dialog.idle();
+                                });
+                            });
+                        },
+
+
+                        onDeleteFeed: function (pEvent) {
+                            var dialog = new dialogs.ModalDialog({
+                                easyOut: true
+                            });
+                            var deleteme = $(pEvent.target).parent(),
+                                url = deleteme.data('url'),
+                                groupname = deleteme.data('group');
+
+                            if (!url) {
+                                return;
+                            }
+                            var that = this;
+
+                            dialog.header($("<h4>").text(gt('Delete a feed')))
+                                .append($('<span>').text(gt('Do you really want to delete the following feed?')))
+                                .append($('<ul>').append($('<li>').text(url)))
+                                .addButton('cancel', gt('Cancel'))
+                                .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
+                                .show()
+                                .done(function (action) {
+                                    if (action === 'delete') {
+                                        var newGroup = _(feedgroups).find(function (g) {return g.groupname === groupname; });
+                                        newGroup.members = removeFeed(newGroup.members, url);
+
+                                        settings.set('groups', feedgroups);
+                                        settings.save();
+
+                                        that.trigger('redraw');
+                                        ox.trigger("refresh^");
+                                        dialog.close();
+                                    }
+                                    return false;
+                                });
+                        },
+
+
+                        onDeleteGroup: function (pEvent) {
+                            var dialog = new dialogs.ModalDialog({
+                                easyOut: true
+                            });
+                            var deleteme = $(pEvent.target).parent(),
+                                groupname = deleteme.data('groupname');
+                            if (!groupname) {
+                                return;
+                            }
+                            var that = this;
+
+                            dialog.header($("<h4>").text(gt('Delete a group of feeds')))
+                                .append($('<span>').text(gt('Do you really want to delete the following group of feeds?'))) //TODO i18n
+                                .append($('<ul>').append(
+                                    $('<li>').text(groupname)))
+                                .addButton('cancel', gt('Cancel'))
+                                .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
+                                .show()
+                                .done(function (action) {
+                                    if (action === 'delete') {
+                                        feedgroups = feedgroups.filter(function (groups) { return groups.groupname !== groupname; });
+                                        settings.set('groups', feedgroups);
+                                        settings.save();
+
+                                        that.trigger('redraw');
+                                        ox.trigger("refresh^");
+                                    }
+                                    return false;
+                                });
                         }
                     }),
 
@@ -1140,9 +1300,9 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             this.$el.empty().append(
                                 $('<div>').append(
                                     $('<div class="section">').append(
-                                        $('<div class=""io-ox-portal-title>').text(staticStrings.RSS),
+                                        $('<div class="io-ox-portal-settings-title">').text(staticStrings.RSS),
                                         $('<div class="settings-detail-pane">').append(
-                                            $('<div class="listbox">')
+                                            $('<div class="io-ox-rss-settings">')
                                         ),
                                         $('<div class="sectioncontent">').append(
                                             $('<button class="btn" data-action="add-feed" style="margin-right: 15px; ">').text(staticStrings.ADD_FEED),
@@ -1155,7 +1315,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             var that = this;
 
                             function redraw() {
-                                var $listbox = that.$el.find('.listbox');
+                                var $listbox = that.$el.find('.io-ox-rss-settings');
                                 var collection = new Backbone.Collection(feedgroups);
                                 $listbox.empty();
 
@@ -1169,26 +1329,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                     $listbox.show();
                                 }
 
-                                $listbox.sortable({
-                                    axis: 'y',
-                                    containment: 'parent',
-                                    update: function (event, ui) {
-                                        var newfeedgroups = [];
-
-                                        _.each($(this).sortable('toArray'), function (url) {
-                                            var oldData = _.find(feedgroups, function (blog) { return (blog.url === url); });
-
-                                            if (oldData) {
-                                                newfeedgroups.push(oldData);
-                                            }
-                                        });
-                                        feedgroups = newfeedgroups;
-                                        settings.set('groups', feedgroups);
-                                        settings.save();
-
-                                        ox.trigger("refresh^", [true]);
-                                    }
-                                });
                             }
 
                             redraw();
@@ -1199,35 +1339,14 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         },
                         events: {
                             'click [data-action="add-feed"]': 'onAddFeed',
-                            'click [data-action="edit-feed"]': 'onEditFeed',
-                            'click [data-action="del-feed"]': 'onDeleteFeed',
-                            'click [data-action="add-group"]': 'onAddGroup',
-                            'click [data-action="edit-group"]': 'onEditGroup',
-                            'click [data-action="del-group"]': 'onDeleteGroup'
-                        },
-                        makeFeedgroupSelection: function (highlight) {
-                            var $select = $('<select>');
-
-                            _(feedgroups).each(function (feedgroup) {
-                                var $option = $('<option>').text(feedgroup.groupname);
-                                if (feedgroup.groupname === highlight) {
-                                    $option.attr({selected: 'selected'});
-                                }
-                                $select.append($option);
-                            });
-
-                            if (!feedgroups || feedgroups.length === 0) {
-                                $select.append($('<option>').attr({value: 'Default group'}).text('Default group'));
-                            }
-
-                            return $select;
+                            'click [data-action="add-group"]': 'onAddGroup'
                         },
                         onAddFeed: function (args) {
                             var dialog = new dialogs.ModalDialog({ easyOut: true, async: true }),
                                 $url = $('<input>').attr({type: 'text', placeholder: gt('http://')}),
                                 $feedname = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
                                 callerGroupname = $(this.$el.find('[selected]')).data('groupname'),
-                                $group = this.makeFeedgroupSelection(callerGroupname),
+                                $group = makeFeedgroupSelection(callerGroupname),
                                 $error = $('<div>').addClass('alert alert-error').hide(),
                                 that = this;
 
@@ -1331,192 +1450,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                     dialog.idle();
                                 });
                             });
-                        },
-
-
-                        onEditFeed: function (args) {
-                            var dialog = new dialogs.ModalDialog({easyOut: true, async: true }),
-                                $changed = $(this.$el.find('[selected]'));
-
-                            var oldUrl = $changed.data('url'),
-                                oldFeedname = $changed.data('feedname'),
-                                oldGroupname = $changed.data('group');
-
-                            if (!oldUrl) {
-                                return;
-                            }
-                            var $url = $('<input>').attr({type: 'text'}).val(oldUrl),
-                                $feedname = $('<input>').attr({type: 'text', placeholder: gt('Name of feed')}).val(oldFeedname),
-                                $groups = this.makeFeedgroupSelection(oldGroupname),
-                                $error = $('<div>').addClass('alert alert-error').hide(),
-                                that = this;
-
-                            dialog.header($("<h4>").text(gt('Edit a feed')))
-                                .append($url)
-                                .append($feedname)
-                                .append($groups)
-                                .append($error)
-                                .addButton('cancel', gt('Cancel'))
-                                .addButton('edit', gt('Edit'), null, {classes: 'btn-primary'})
-                                .show();
-
-                            dialog.on('edit', function (e) {
-                                $error.hide();
-
-                                var url = $.trim($url.val()),
-                                    feedname = $.trim($feedname.val()),
-                                    groups = $groups.val(),
-                                    deferred = $.Deferred();
-
-                                if (url.length === 0) {
-                                    $error.text(gt('Please enter a feed url.'));
-                                    deferred.reject();
-                                } else if (feedname.length === 0) {
-                                    $error.text(gt('Please enter a name for the feed.'));
-                                    deferred.reject();
-                                } else {
-                                    //TODO add test for existence of feed
-                                    deferred.resolve();
-                                }
-
-                                deferred.done(function () {
-                                    var oldGroup = _(feedgroups).find(function (g) {return g.groupname === oldGroupname; }),
-                                        newGroup = _(feedgroups).find(function (g) {return g.groupname === groups; });
-                                    oldGroup.members = removeFeed(oldGroup.members, oldUrl);
-                                    newGroup.members.push({url: url, feedname: feedname});
-
-                                    settings.set('groups', feedgroups);
-                                    settings.save();
-
-                                    that.trigger('redraw');
-                                    ox.trigger("refresh^");
-                                    dialog.close();
-                                });
-
-                                deferred.fail(function () {
-                                    $error.show();
-                                    dialog.idle();
-                                });
-                            });
-                        },
-                        onEditGroup: function (pEvent) {
-                            var dialog = new dialogs.ModalDialog({easyOut: true, async: true }),
-                                $changed = $(pEvent.target).parent();
-
-                            var oldGroupname = $changed.data('groupname');
-
-                            if (!oldGroupname) {
-                                return;
-                            }
-                            var $groupname = $('<input>').attr({type: 'text', placeholder: gt('Name for group of feeds')}).val(oldGroupname),
-                                $error = $('<div>').addClass('alert alert-error').hide(),
-                                that = this;
-
-                            dialog.header($("<h4>").text(gt('Edit a group of feeds')))
-                                .append($groupname)
-                                .append($error)
-                                .addButton('cancel', gt('Cancel'))
-                                .addButton('edit', gt('Edit'), null, {classes: 'btn-primary'})
-                                .show();
-
-                            dialog.on('edit', function (e) {
-                                $error.hide();
-
-                                var groupname = $.trim($groupname.val()),
-                                    deferred = $.Deferred();
-
-                                if (groupname.length === 0) {
-                                    $error.text(gt('Please enter a name for the group of feeds.'));
-                                    deferred.reject();
-                                } else {
-                                    deferred.resolve();
-                                }
-
-                                deferred.done(function () {
-                                    var oldGroup = _(feedgroups).find(function (g) {return g.groupname === oldGroupname; });
-                                    oldGroup.groupname = groupname;
-
-                                    settings.set('groups', feedgroups);
-                                    settings.save();
-
-                                    that.trigger('redraw');
-                                    ox.trigger("refresh^");
-                                    dialog.close();
-                                });
-
-                                deferred.fail(function () {
-                                    $error.show();
-                                    dialog.idle();
-                                });
-                            });
-                        },
-
-
-                        onDeleteFeed: function (args) {
-                            var dialog = new dialogs.ModalDialog({
-                                easyOut: true
-                            });
-                            var deleteme = this.$el.find('[selected]'),
-                                url = deleteme.data('url'),
-                                groupname = deleteme.data('group');
-
-                            if (!url) {
-                                return;
-                            }
-                            var that = this;
-
-                            dialog.header($("<h4>").text(gt('Delete a feed')))
-                                .append($('<span>').text(gt('Do you really want to delete the following feed?')))
-                                .append($('<ul>').append($('<li>').text(url)))
-                                .addButton('cancel', gt('Cancel'))
-                                .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
-                                .show()
-                                .done(function (action) {
-                                    if (action === 'delete') {
-                                        var newGroup = _(feedgroups).find(function (g) {return g.groupname === groupname; });
-                                        newGroup.members = removeFeed(newGroup.members, url);
-
-                                        settings.set('groups', feedgroups);
-                                        settings.save();
-
-                                        that.trigger('redraw');
-                                        ox.trigger("refresh^");
-                                        dialog.close();
-                                    }
-                                    return false;
-                                });
-                        },
-
-
-                        onDeleteGroup: function (pEvent) {
-                            var dialog = new dialogs.ModalDialog({
-                                easyOut: true
-                            });
-                            var deleteme = $(pEvent.target).parent(),
-                                groupname = deleteme.data('groupname');
-                            if (!groupname) {
-                                return;
-                            }
-                            var that = this;
-
-                            dialog.header($("<h4>").text(gt('Delete a group of feeds')))
-                                .append($('<span>').text(gt('Do you really want to delete the following group of feeds?'))) //TODO i18n
-                                .append($('<ul>').append(
-                                    $('<li>').text(groupname)))
-                                .addButton('cancel', gt('Cancel'))
-                                .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
-                                .show()
-                                .done(function (action) {
-                                    if (action === 'delete') {
-                                        feedgroups = feedgroups.filter(function (groups) { return groups.groupname !== groupname; });
-                                        settings.set('groups', feedgroups);
-                                        settings.save();
-
-                                        that.trigger('redraw');
-                                        ox.trigger("refresh^");
-                                    }
-                                    return false;
-                                });
                         }
                     }),
                     removeFeedgroup = function (feedgroups, groupname) {
@@ -1536,6 +1469,23 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             }
                         });
                         return newmembers;
+                    },
+                    makeFeedgroupSelection =  function (highlight) {
+                        var $select = $('<select>');
+
+                        _(feedgroups).each(function (feedgroup) {
+                            var $option = $('<option>').text(feedgroup.groupname);
+                            if (feedgroup.groupname === highlight) {
+                                $option.attr({selected: 'selected'});
+                            }
+                            $select.append($option);
+                        });
+
+                        if (!feedgroups || feedgroups.length === 0) {
+                            $select.append($('<option>').attr({value: 'Default group'}).text('Default group'));
+                        }
+
+                        return $select;
                     };
                 $(that).append(new PluginSettingsView().render().el);
             }); //END: require
