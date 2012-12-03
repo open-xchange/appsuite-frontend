@@ -20,8 +20,7 @@ define("plugins/portal/rss/register",
     'io.ox/keychain/api',
     'io.ox/rss/api',
     'io.ox/core/date',
-    'gettext!io.ox/portal',
-    'less!plugins/portal/rss/style.css'], function (ext, strings, accountApi, serviceApi, messageApi, keychain, rss, date, gt) {
+    'gettext!io.ox/portal'], function (ext, strings, accountApi, serviceApi, messageApi, keychain, rss, date, gt) {
 
     "use strict";
 

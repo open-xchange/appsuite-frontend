@@ -17,8 +17,7 @@ define("plugins/portal/calendar/register",
      "io.ox/core/date",
      "gettext!plugins/portal",
      'io.ox/core/strings',
-     'io.ox/calendar/api',
-     "less!plugins/portal/calendar/style.css"
+     'io.ox/calendar/api'
     ], function (ext, date, gt, strings, api) {
 
     'use strict';

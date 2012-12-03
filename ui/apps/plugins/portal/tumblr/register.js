@@ -72,6 +72,8 @@ define('plugins/portal/tumblr/register',
                 } else {
                     // use text
                     var body = [];
+                    // remove external links (breaks https)
+                    post.body = post.body.replace(/src=/g, 'nosrc=');
                     $('<div>').html(post.body).contents().each(function () {
                         var text = _.escape($.trim($(this).text()));
                         if (text !== '') { body.push(text); }
