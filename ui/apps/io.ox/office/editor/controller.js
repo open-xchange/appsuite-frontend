@@ -216,9 +216,7 @@ define('io.ox/office/editor/controller',
                 'character/strike': {
                     parent: 'character/attributes',
                     get: function (attributes) { return attributes.strike !== 'none'; },
-                    set: function (state) {
-                        editor.setAttribute('character', 'strike', state ? 'single' : 'none');
-                    }
+                    set: function (state) { editor.setAttribute('character', 'strike', state ? 'single' : 'none'); }
                 },
                 'character/color': {
                     parent: 'character/attributes',
@@ -246,6 +244,16 @@ define('io.ox/office/editor/controller',
                     parent: 'character/attributes',
                     get: function (attributes) { return attributes.vertAlign; },
                     set: function (align) { editor.setAttribute('character', 'vertAlign', align); }
+                },
+                'character/subscript': {
+                    parent: 'character/vertalign',
+                    get: function (align) { return align === 'sub'; },
+                    set: function (state) { editor.setAttribute('character', 'vertAlign', state ? 'sub' : 'baseline'); }
+                },
+                'character/superscript': {
+                    parent: 'character/vertalign',
+                    get: function (align) { return align === 'super'; },
+                    set: function (state) { editor.setAttribute('character', 'vertAlign', state ? 'super' : 'baseline'); }
                 },
 
                 // tables

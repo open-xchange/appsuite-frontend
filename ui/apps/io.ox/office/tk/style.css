@@ -109,16 +109,17 @@ i.icon-io-ox-italic                 { background-position: -120px      0; }
 i.icon-io-ox-italic.de_DE           { background-position: -140px      0; }
 i.icon-io-ox-underline              { background-position: -160px      0; }
 i.icon-io-ox-underline.fr_FR        { background-position: -180px      0; }
-i.icon-io-ox-font-height            { background-position: -200px      0; }
+i.icon-io-ox-strikeout              { background-position: -200px      0; }
+i.icon-io-ox-superscript            { background-position: -220px      0; }
+i.icon-io-ox-subscript              { background-position: -240px      0; }
 
-i.icon-io-ox-line-spacing-1         { background-position: -220px      0; }
-i.icon-io-ox-line-spacing-1-5       { background-position: -240px      0; }
-i.icon-io-ox-line-spacing-2         { background-position: -260px      0; }
-i.icon-io-ox-align-left             { background-position: -280px      0; }
-i.icon-io-ox-align-center           { background-position: -300px      0; }
-i.icon-io-ox-align-right            { background-position: -320px      0; }
-i.icon-io-ox-align-justify          { background-position: -340px      0; }
-i.icon-io-ox-strike                 { background-position: -360px      0; }
+i.icon-io-ox-line-spacing-1         { background-position: -260px      0; }
+i.icon-io-ox-line-spacing-1-5       { background-position: -280px      0; }
+i.icon-io-ox-line-spacing-2         { background-position: -300px      0; }
+i.icon-io-ox-align-left             { background-position: -320px      0; }
+i.icon-io-ox-align-center           { background-position: -340px      0; }
+i.icon-io-ox-align-right            { background-position: -360px      0; }
+i.icon-io-ox-align-justify          { background-position: -380px      0; }
 
 i.icon-io-ox-table                  { background-position:      0  -20px; }
 i.icon-io-ox-table-insert-row       { background-position:  -20px  -20px; }
@@ -149,12 +150,11 @@ i.icon-io-ox-para-border-top        { background-position: -220px  -40px; }
 i.icon-io-ox-para-border-bottom     { background-position: -240px  -40px; }
 i.icon-io-ox-para-border-inside     { background-position: -260px  -40px; }
 
-i.icon-io-ox-hyperlink              { background-position: -280px  -40px; }
-
 i.icon-io-ox-arrow-first            { background-position:      0  -60px; }
 i.icon-io-ox-arrow-previous         { background-position:  -20px  -60px; }
 i.icon-io-ox-arrow-next             { background-position:  -40px  -60px; }
 i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }
+i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
 
 /* restrict anything following to office applications */
 .io-ox-office-main {

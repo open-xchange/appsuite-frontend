@@ -321,9 +321,13 @@ define('io.ox/office/editor/view/view',
             .addSeparator()
             .addGroup('character/fontsize', new Controls.FontHeightChooser())
             .addSeparator()
-            .addButton('character/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
-            .addButton('character/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
-            .addButton('character/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
+            .addButton('character/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),           toggle: true })
+            .addButton('character/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),         toggle: true })
+            .addButton('character/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'),      toggle: true })
+            .addButton('character/strike',    { icon: 'icon-io-ox-strikeout', tooltip: gt('Strike through'), toggle: true })
+            .addSeparator()
+            .addButton('character/subscript',   { icon: 'icon-io-ox-subscript',   tooltip: gt('Subscript'),   toggle: true })
+            .addButton('character/superscript', { icon: 'icon-io-ox-superscript', tooltip: gt('Superscript'), toggle: true })
             .addSeparator()
             .addGroup('character/fillcolor', new Controls.ColorChooser(editor, 'fill', { label: 'ab', tooltip: gt('Text Fill Color') }))
             .addSeparator()
@@ -427,13 +431,7 @@ define('io.ox/office/editor/view/view',
                     .addOptionButton('right',     { icon: 'icon-io-ox-para-border-right',     label: gt('Border right') })
                     .addOptionButton('top',       { icon: 'icon-io-ox-para-border-top',       label: gt('Border top') })
                     .addOptionButton('bottom',    { icon: 'icon-io-ox-para-border-bottom',    label: gt('Border bottom') })
-                    .addOptionButton('inside',    { icon: 'icon-io-ox-para-border-inside',    label: gt('Border inside') }))
-                .addSeparator()
-                .addGroup('character/vertalign', new RadioGroup({ label: 'escapement', tooltip: gt('Line Spacing'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
-                    .addOptionButton('super',   { label: gt('SuperScript') })
-                    .addOptionButton('baseline', { label: gt('Normal') })
-                    .addOptionButton('sub',   { label: gt('SubScript') }))
-                .addButton('character/strike', { icon: 'icon-io-ox-strike', tooltip: gt('Strike through'), toggle: true });
+                    .addOptionButton('inside',    { icon: 'icon-io-ox-para-border-inside',    label: gt('Border inside') }));
         }
 
         // make the format tool bar visible
