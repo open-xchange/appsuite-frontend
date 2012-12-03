@@ -589,14 +589,8 @@ define('io.ox/core/tk/folderviews',
         };
 
         this.subscribe = function (data) {
-//            var currentFolderArray = data.selection.get(),
-//                currentFolder,
             var name = data.app.getName(),
                 POINT = name + '/folderview';
-
-//            currentFolder = (currentFolderArray[0]).split('/');
-
-//            currentFolder = (currentFolder[0] === 'default0') ? 1 : currentFolder;
 
             var options;
             _(ext.point(POINT + '/options').all()).each(function (obj) {
@@ -604,11 +598,9 @@ define('io.ox/core/tk/folderviews',
                 options = _.extend(obj, options || {});
             });
 
-
             var container = $('<div>'),
                 tree = new ApplicationFolderTree(container, {
                 type: options.type,
-//                rootFolderId: currentFolder[0],
                 rootFolderId: options.rootFolderId,
                 checkbox: true,
                 all: true
@@ -646,12 +638,10 @@ define('io.ox/core/tk/folderviews',
                 });
 
                 pane.on('save', function () {
-//                        http.pause();
 
                     _(changesArray).each(function (change) {
                         api.update(change);
                     });
-//                        http.resume();
                 });
             });
 
