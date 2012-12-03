@@ -11,14 +11,7 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define('plugins/portal/flickr/register',
-    ['io.ox/core/extensions',
-     'io.ox/mail/util',
-     'io.ox/core/date',
-     'io.ox/portal/feed',
-     'settings!plugins/portal/flickr',
-     'gettext!io.ox/portal'
-    ], function (ext, mailUtil, date, Feed, settings, gt) {
+define('plugins/portal/flickr/register', ['io.ox/core/extensions', 'io.ox/portal/feed'], function (ext, Feed) {
 
     'use strict';
 
@@ -72,8 +65,10 @@ define('plugins/portal/flickr/register',
                 // find proper image size
                 _(sizes).each(function (s) {
                     if (size === '' || (photo['width_' + s] > 250 && photo['width_' + s] < 1000)) {
-                        size = s;
-                        url = photo['url_' + s];
+                        if (photo['url_' + s]) {
+                            size = s;
+                            url = photo['url_' + s];
+                        }
                     }
                 });
                 // use size
@@ -81,7 +76,63 @@ define('plugins/portal/flickr/register',
                     $('<div class="content pointer">').css('backgroundImage', 'url(' + url + ')')
                 );
             }
-        }
+        },
+
+        draw: (function () {
+
+            function drawPhoto(photo, flickrUrl) {
+
+                var size = '', url, img;
+
+                // find proper image size
+                _(sizes).each(function (s) {
+                    if (size === '' || (photo['width_' + s] >= 500 && photo['width_' + s] < 1200)) {
+                        if (photo['url_' + s]) {
+                            size = s;
+                            url = photo['url_' + s];
+                        }
+                    }
+                });
+                // use size
+                if (size) {
+                    this.append(
+                        img = $('<div class="photo">').css('backgroundImage', 'url(' + url + ')')
+                    );
+                    if (flickrUrl) {
+                        img.wrap(
+                            $('<a>', { href: flickrUrl + photo.id, target: '_blank' })
+                        );
+                    }
+                    if (photo.title) {
+                        this.append(
+                            $('<caption>').text(photo.title)
+                        );
+                    }
+                }
+            }
+
+            return function (baton) {
+
+                var data = baton.data,
+                    node = $('<div class="portal-feed">'),
+                    flickrUrl = '';
+
+                if (baton.model.get('props').method === 'flickr.photos.search') {
+                    flickrUrl = 'http://www.flickr.com/photos/' + baton.model.get('props').query + '/';
+                }
+
+                console.log('FLICKR.data', data, flickrUrl);
+
+                node.append($('<h1>').text(baton.model.get('props').query));
+
+                _(baton.data.photo).each(function (photo) {
+                    drawPhoto.call(node, photo, flickrUrl);
+                });
+
+                this.append(node);
+            };
+
+        }())
     });
 
 /*

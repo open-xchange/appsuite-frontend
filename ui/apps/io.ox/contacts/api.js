@@ -17,6 +17,7 @@ define('io.ox/contacts/api',
      'io.ox/core/cache'
      ], function (http, apiFactory, notifications, cache) {
 
+
     'use strict';
 
     // generate basic API
@@ -436,7 +437,13 @@ define('io.ox/contacts/api',
         });
         // resume & trigger refresh
         return http.resume()
-            .pipe(function () {
+            .pipe(function (result) {
+                _(result).each(function (val) {
+                    if (val.error) {
+                        notifications.yell('error', val.error.error);
+                    }
+                });
+
                 return $.when.apply($,
                     _(list).map(function (o) {
                         return $.when(
@@ -447,7 +454,7 @@ define('io.ox/contacts/api',
                     })
                 );
             })
-            .done(function () {
+            .done(function (data) {
                 api.trigger('refresh.all');
             });
     };
