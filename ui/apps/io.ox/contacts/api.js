@@ -438,11 +438,12 @@ define('io.ox/contacts/api',
         // resume & trigger refresh
         return http.resume()
             .pipe(function (result) {
-//                console.log(result);
-//                console.log(notifications);
-//                if (result[0].error) {
-//                    notifications.yell(result);
-//                }
+                _(result).each(function (val) {
+                    if (val.error) {
+                        notifications.yell('error', val.error.error);
+                    }
+                });
+
                 return $.when.apply($,
                     _(list).map(function (o) {
                         return $.when(
@@ -453,7 +454,7 @@ define('io.ox/contacts/api',
                     })
                 );
             })
-            .done(function () {
+            .done(function (data) {
                 api.trigger('refresh.all');
             });
     };
