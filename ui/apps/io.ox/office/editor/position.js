@@ -325,7 +325,8 @@ define('io.ox/office/editor/position',
 
         var oxoPos = _.copy(oxoPosition, true),
             node = startnode,
-            offset = null;
+            offset = null,
+            returnObj = null;
 
         forcePositionCounting = forcePositionCounting ? true : false;
 
@@ -336,21 +337,30 @@ define('io.ox/office/editor/position',
 
         while (oxoPos.length > 0) {
 
-            var returnObj = Position.getNextChildNode(node, oxoPos.shift());
-
-            // child node of a paragraph: resolve element to DOM text node
-            if (!forcePositionCounting && returnObj && returnObj.node && DOM.isParagraphNode(returnObj.node.parentNode)) {
-                returnObj = Position.getTextSpanFromNode(returnObj);
-            }
+            returnObj = Position.getNextChildNode(node, oxoPos.shift());
 
             if (returnObj && returnObj.node) {
                 node = returnObj.node;
-                if (_.isNumber(returnObj.offset)) {
-                    offset = returnObj.offset;
-                }
             } else {
                 return;
             }
+        }
+
+        // child node of a paragraph: resolve element to DOM text node
+        if (!forcePositionCounting && returnObj && returnObj.node && DOM.isParagraphNode(returnObj.node.parentNode)) {
+            returnObj = Position.getTextSpanFromNode(returnObj);
+        }
+
+//        if (forcePositionCounting && returnObj && returnObj.node && returnObj.node.previousSibling && returnObj.offset === 0) {
+//            returnObj.node = returnObj.node.previousSibling;
+//        }
+
+        if (returnObj && returnObj.node) {
+            node = returnObj.node;
+        }
+
+        if (returnObj && _.isNumber(returnObj.offset)) {
+            offset = returnObj.offset;
         }
 
         return new DOM.Point(node, offset);

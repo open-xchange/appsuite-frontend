@@ -2052,15 +2052,15 @@ define('io.ox/office/editor/editor',
 
                             localDestPosition = _.clone(localPosition);
                             paragraphLength = Position.getParagraphLength(editdiv, localDestPosition);
-                            if (paragraphLength < $(element).data('inlinePosition')) {  // -> is this position still valid?
-                                localDestPosition[localDestPosition.length - 1] = paragraphLength;
+                            if ((paragraphLength - 1) < $(element).data('inlinePosition')) {  // -> is this position still valid?
+                                localDestPosition[localDestPosition.length - 1] = paragraphLength - 1;
                             } else {
                                 localDestPosition[localDestPosition.length - 1] = $(element).data('inlinePosition');
                             }
                             if (! _.isEqual(localPosition, localDestPosition)) {
                                 newOperation = { name: Operations.MOVE, start: localPosition, end: localPosition, to: localDestPosition };
                                 applyOperation(newOperation);
-                                localPosition = localDestPosition;
+                                localPosition = _.clone(localDestPosition);
                             }
                         }
 
@@ -5421,10 +5421,7 @@ define('io.ox/office/editor/editor',
                 sourcePos = Position.getDOMPosition(editdiv, start, true),
                 destPos = Position.getDOMPosition(editdiv, to, true),
                 insertBefore = true,
-                splitNode = false,
-                removeFollowingEmptySpan = false,
-                removePreviousEmptySpan = false,
-                removePrevPrevEmptySpan = false;
+                splitNode = false;
 
             if (destPos.offset === 0) {
                 insertBefore = true;
@@ -5460,7 +5457,7 @@ define('io.ox/office/editor/editor',
                     if (doMove) {
 
                         if (splitNode) {
-                            destNode = DOM.splitTextSpan(destNode, destPos.offset + 1)[0];
+                            destNode = DOM.splitTextSpan(destNode, destPos.offset)[0];
                         } else {
                             if (destNode.nodeType === 3) {
                                 destNode = destNode.parentNode;
