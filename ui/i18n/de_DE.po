@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: Mon Dec 03 2012 10:34:17 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2012-11-29 13:12+0100\n"
+"PO-Revision-Date: 2012-12-03 14:16+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -234,7 +234,6 @@ msgid "Add"
 msgstr "Hinzufügen"
 
 #: apps/plugins/portal/rss/settings/plugin.js:227
-#, fuzzy
 msgid "Please enter a feed URL."
 msgstr "Geben Sie eine Feed URL ein."
 
@@ -301,9 +300,8 @@ msgid "Delete a feed"
 msgstr "Einen Feed löschen"
 
 #: apps/plugins/portal/rss/settings/plugin.js:443
-#, fuzzy
 msgid "Do you really want to delete the following feed?"
-msgstr "Wollen Sie die folgenden Feeds wirklich löschen?"
+msgstr "Wollen Sie den folgenden Feed wirklich löschen?"
 
 #: apps/io.ox/calendar/actions.js:207 apps/io.ox/calendar/actions.js:398
 #: apps/io.ox/contacts/actions.js:47 apps/io.ox/contacts/actions.js:308
@@ -347,14 +345,12 @@ msgid "Tasks"
 msgstr "Aufgaben"
 
 #: apps/plugins/portal/tasks/register.js:123
-#, fuzzy
 msgid "You don't have any tasks"
-msgstr "Sie haben keine Aufgaben."
+msgstr "Sie haben keine Aufgaben"
 
 #: apps/plugins/portal/tasks/register.js:137
-#, fuzzy
 msgid "Due in %1$s"
-msgstr "Fällig am %1$s"
+msgstr "Fällig in %1$s"
 
 #: apps/plugins/portal/facebook/register.js:29
 msgid "Hide comments"
@@ -499,7 +495,6 @@ msgid "Recent activities:"
 msgstr "Kürzliche Aktivitäten:"
 
 #: apps/plugins/portal/tumblr/settings/plugin.js:27
-#, fuzzy
 msgid "Tumblr Blogs"
 msgstr "Tumblr-Blogs"
 
@@ -509,7 +504,6 @@ msgstr "Einen Blog bearbeiten"
 
 #: apps/plugins/portal/tumblr/settings/plugin.js:99
 #: apps/plugins/portal/tumblr/settings/plugin.js:269
-#, fuzzy
 msgid "Please enter a blog URL."
 msgstr "Geben Sie eine Blog-URL ein."
 
@@ -517,19 +511,16 @@ msgstr "Geben Sie eine Blog-URL ein."
 #: apps/plugins/portal/tumblr/settings/plugin.js:121
 #: apps/plugins/portal/tumblr/settings/plugin.js:285
 #: apps/plugins/portal/tumblr/settings/plugin.js:290
-#, fuzzy
 msgid "Unknown error while checking tumblr blog."
 msgstr "Unbekannter Fehler beim Prüfen des tumblr-Blog."
 
 #: apps/plugins/portal/tumblr/settings/plugin.js:163
-#, fuzzy
 msgid "Delete a blog"
 msgstr "Einen Blog löschen"
 
 #: apps/plugins/portal/tumblr/settings/plugin.js:164
-#, fuzzy
 msgid "Do you really want to delete the following blog?"
-msgstr "Wollen Sie die folgenden Blogs wirklich löschen?"
+msgstr "Wollen Sie den folgenden Blog wirklich löschen?"
 
 #: apps/plugins/portal/tumblr/settings/plugin.js:245
 msgid "Add a blog"
@@ -566,7 +557,6 @@ msgstr "Einen Stream bearbeiten"
 
 #: apps/plugins/portal/flickr/settings/plugin.js:135
 #: apps/plugins/portal/flickr/settings/plugin.js:314
-#, fuzzy
 msgid "Please enter a search query."
 msgstr "Geben Sie einen Suchbegriff ein."
 
@@ -627,9 +617,8 @@ msgid "Delete a Subreddit"
 msgstr "Einen Subreddit löschen"
 
 #: apps/plugins/portal/reddit/settings/plugin.js:303
-#, fuzzy
 msgid "Do you really want to delete the following subreddit?"
-msgstr "Wollen Sie die folgenden Subreddits wirklich löschen?"
+msgstr "Wollen Sie den folgenden Subreddit wirklich löschen?"
 
 #: apps/plugins/portal/reddit/register.js:112
 #: apps/plugins/portal/reddit/register.js:141
@@ -693,7 +682,6 @@ msgid "Tentative"
 msgstr "Vorläufig"
 
 #: apps/plugins/notifications/tasks/register.js:352
-#, fuzzy
 msgid "Change state"
 msgstr "Status ändern"
 
@@ -727,7 +715,7 @@ msgstr "Keine Nachricht von Ihnen an diesen Kontakt gefunden"
 
 #: apps/io.ox/calendar/week/view.js:432
 msgid "Doubleclick here for whole day appointment"
-msgstr ""
+msgstr "Für ganztägigen Termin hier doppelklicken"
 
 #: apps/io.ox/calendar/list/perspective.js:131
 #: apps/io.ox/calendar/month/perspective.js:311
@@ -1374,12 +1362,10 @@ msgid "Do you really want to discard your changes?"
 msgstr "Wollen Sie Ihre Änderungen wirklich verwerfen?"
 
 #: apps/io.ox/calendar/edit/main.js:95
-#, fuzzy
 msgid "Edit appointment"
 msgstr "Termin bearbeiten"
 
 #: apps/io.ox/calendar/edit/main.js:172
-#, fuzzy
 msgid "Create appointment"
 msgstr "Termin erstellen"
 
@@ -1515,9 +1501,8 @@ msgid "E-Mail notification for appointment participant?"
 msgstr "E-Mail-Benachrichtigung für Terminteilnehmer?"
 
 #: apps/io.ox/calendar/settings/pane.js:43
-#, fuzzy
 msgid "Show declined appointments"
-msgstr "Termin löschen"
+msgstr "Abgelehnte Termine anzeigen"
 
 #: apps/io.ox/calendar/settings/pane.js:69
 msgid "Custom"
@@ -3620,9 +3605,8 @@ msgid "Restore Last Operation"
 msgstr "Letzte Aktion wiederherstellen"
 
 #: apps/io.ox/office/editor/view/view.js:131
-#, fuzzy
 msgid "No document"
-msgstr "Dokument bearbeiten"
+msgstr "Kein Dokument"
 
 #: apps/io.ox/office/editor/view/view.js:134
 msgid "Offline"
@@ -3843,7 +3827,7 @@ msgstr "Subreddits"
 
 #: apps/io.ox/office/editor/view/view.js:436
 msgid "Strike through"
-msgstr ""
+msgstr "Durchstreichen"
 
 #: apps/io.ox/office/editor/view/view.js:459
 msgid "Quick Search"
@@ -3874,15 +3858,13 @@ msgid "Hello %s"
 msgstr "Hallo %s"
 
 #: apps/io.ox/portal/main.js:141
-#, fuzzy
 msgid "Customize this page"
 msgstr "Diese Seite personalisieren"
 
 #. Portal. Logged in as user
 #: apps/io.ox/portal/main.js:150
-#, fuzzy
 msgid "Signed in as %1$s"
-msgstr "Fällig am %1$s"
+msgstr "Angemeldet als %1$s"
 
 #: apps/io.ox/portal/settings/pane.js:30
 msgid "Enable Plugin"
