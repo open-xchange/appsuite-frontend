@@ -72,23 +72,24 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             }
         };
 
-        var resolve = function (path, callback) {
+        var resolve = function (path, callback, create) {
             var key = String(path),
-                parts = key.split(/\//), tmp = tree || {};
+                parts = key.split(/\//),
+                tmp = tree || {};
             while (parts.length) {
                 key = parts.shift();
-                if (!(key in tmp)) {
-                    tmp = (tmp[key] = {});
-                } else {
-                    if (_.isObject(tmp)) {
-                        if (parts.length) {
-                            tmp = tmp[key];
+                if (_.isObject(tmp)) {
+                    if (parts.length) {
+                        if (!(key in tmp) && !!create) {
+                            tmp = (tmp[key] = {});
                         } else {
-                            callback(tmp, key);
+                            tmp = tmp[key];
                         }
                     } else {
-                        break;
+                        callback(tmp, key);
                     }
+                } else {
+                    break;
                 }
             }
         };
@@ -102,15 +103,18 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                 resolve(path, function (tmp, key) {
                     tmp[key] = value;
                     self.trigger('change:' + path, value).trigger('change', path, value);
-                });
+                }, true);
             }
+            return this;
         };
 
         this.remove = function (path) {
             resolve(path, function (tmp, key) {
+                var value = tmp[key];
                 delete tmp[key];
-                self.trigger('remove:' + path).trigger('remove', path);
+                self.trigger('remove:' + path).trigger('remove change', path, value);
             });
+            return this;
         };
 
         var applyDefaults = function () {
