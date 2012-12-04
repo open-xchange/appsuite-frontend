@@ -465,7 +465,7 @@ define('io.ox/mail/write/main',
             // set format
             return app.setFormat(mail.format).done(function () {
                 // set body
-                var content = data.attachments && data.attachments.length ? data.attachments[0].content : '';
+                var content = data.attachments && data.attachments.length ? (data.attachments[0].content || '') : '';
                 if (mail.format === 'text') {
                     content = content.replace(/<br>\n?/g, '\n');
                 }
@@ -528,10 +528,8 @@ define('io.ox/mail/write/main',
                 data = {
                     to: [['', tmp[1]]],
                     subject: params.subject,
-                    attachments: [{ content: params.body }]
+                    attachments: [{ content: params.body || '' }]
                 };
-                // clear hash
-                _.url.hash('mailto', null);
             }
 
             _.url.hash('app', 'io.ox/mail/write:compose');
