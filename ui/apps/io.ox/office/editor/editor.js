@@ -162,6 +162,9 @@ define('io.ox/office/editor/editor',
             // list of operations
             operations = [],
 
+            // counting the operations
+            operationsCounter = 0,
+
             //undo manager collection undo and redo operations
             undoManager = new UndoManager(this),
 
@@ -364,8 +367,22 @@ define('io.ox/office/editor/editor',
          *      notified.
          */
         this.applyOperations = function (operations, options) {
+            var proceed = true,
+                message = null;
+
             _(operations).each(function (operation) {
-                applyOperation(operation, options);
+                if (proceed) {
+                    operationsCounter++;
+                    try {
+                        applyOperation(operation, options);
+                    } catch (ex) {
+                        proceed = false;
+                        message = "ERROR: Stop applying operations: " + ex;
+                        Utils.error(message);
+                        message = "Failed operation (" + operationsCounter + ") : " + JSON.stringify(operation);
+                        Utils.error(message);
+                    }
+                }
             });
         };
 
