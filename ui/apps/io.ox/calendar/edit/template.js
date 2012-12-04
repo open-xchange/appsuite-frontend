@@ -85,7 +85,7 @@ define('io.ox/calendar/edit/template',
             var self = this;
             require(["io.ox/calendar/conflicts/conflictList"], function (c) {
                 var conflictList = c.drawList(conflicts);
-                self.$el.append(
+                self.$el.empty().append(
                     conflictList,
                     $('<div class="row">')
                         .css('margin-top', '10px').append(
