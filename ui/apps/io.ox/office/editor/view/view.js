@@ -467,13 +467,13 @@ define('io.ox/office/editor/view/view',
                 .addButton('debug/sync',   { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
                 .addSeparator()
                 .addButton('file/editrights', { icon: 'icon-pencil', tooltip: 'Acquire Edit Rights' })
-                .addSeparator()
+                .addSeparator({ classes: 'break' })
                 .addButton('document/cut',   { label: 'Cut',   tooltip: 'Cut To Clipboard' })
                 .addButton('document/copy',  { label: 'Copy',  tooltip: 'Copy To Clipboard' })
                 .addButton('document/paste', { label: 'Paste', tooltip: 'Paste From Clipboard' })
-                .addSeparator()
+                .addSeparator({ classes: 'break' })
                 .addGroup('character/language', new Controls.LanguageChooser())
-                .addSeparator()
+                .addSeparator({ classes: 'break' })
                 .addGroup('paragraph/borders', new Controls.ParagraphBorderChooser());
         }
 

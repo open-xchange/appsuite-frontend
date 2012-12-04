@@ -74,7 +74,7 @@
  */
 i[class^="icon-io-ox-"] {
     display: inline-block;
-    width: 14px;
+    width: 14px !important;
     height: 14px;
     margin: 0;
     background-image: url(img/ox-icons-black.png);
@@ -90,7 +90,7 @@ i[class^="icon-io-ox-"] {
 /* special icon for the drop-down caret */
 i.icon-io-ox-caret {
     background-position: 0 0;
-    width: 7px;
+    width: 7px !important;
 
     &.up {
         background-position: -7px 0;
@@ -614,6 +614,12 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
             /* group spacing */
             &.separator {
                 width: 10px;
+
+                &.break {
+                    display: block;
+                    width: 100%;
+                    height: 1px;
+                }
             }
 
             &.heading {

@@ -210,7 +210,7 @@ define('io.ox/office/tk/control/group',
          * keyboard focus navigation.
          */
         this.getFocusableControls = function () {
-            return groupNode.find(Group.FOCUSABLE_SELECTOR + ':visible');
+            return groupNode.find(Group.FOCUSABLE_SELECTOR);
         };
 
         /**

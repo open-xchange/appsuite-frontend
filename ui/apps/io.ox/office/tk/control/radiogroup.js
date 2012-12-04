@@ -195,20 +195,24 @@ define('io.ox/office/tk/control/radiogroup',
 
             var // options for the new button, including the passed value
                 buttonOptions = Utils.extendOptions(options, { value: value }),
+                // whether the option button will be hidden
+                hidden = Utils.getBooleanOption(options, 'hidden', false),
                 // the new button
                 button = null;
 
             // insert the button depending on the drop-down mode
             if (this.hasDropDown) {
                 button = this.createListItem(buttonOptions);
+                if (hidden) {
+                    button.hide();
+                }
             } else {
                 button = Utils.createButton(buttonOptions);
-                this.addFocusableControl(button);
-            }
-
-            // hide the option button if specified
-            if (Utils.getBooleanOption(options, 'hidden', false)) {
-                button.hide();
+                if (hidden) {
+                    this.addChildNodes(button.hide());
+                } else {
+                    this.addFocusableControl(button);
+                }
             }
 
             // add tool tip
