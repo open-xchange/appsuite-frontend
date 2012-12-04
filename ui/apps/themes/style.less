@@ -1293,10 +1293,8 @@ input.nice-input {
         text-overflow: ellipsis;
     }
 
-    .folder.expandable:hover, .folder.selectable:hover {
-        background-color: #efefef;
-        cursor: pointer;
-    }
+    .folder.selectable, .folder.expandable { cursor: pointer; }
+    .folder.selectable:hover { background-color: #efefef; }
 
     .folder.selected {
         background-color: @selected-background !important;
@@ -1389,10 +1387,10 @@ input.nice-input {
         &.io-ox-foldertree {
 
             .section .section-title { color: #888; }
-            .folder .folder-label { color: #ccc; }
+            .folder.selectable .folder-label { color: #ccc; }
+            .folder.unselectable .folder-label { color: #888; }
             .folder-icon { display: none; }
 
-            .folder.expandable:hover,
             .folder.selectable:hover {
                 background-color: #555;
             }

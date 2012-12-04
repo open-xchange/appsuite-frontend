@@ -141,11 +141,16 @@ define('io.ox/core/tk/folderviews',
             // open/close tree node
             toggleState = function (e) {
                 // not valid click?
-                if (e.type !== 'dblclick' && $(this).hasClass('selectable')) {
-                    return;
+                if (e.type !== 'dblclick') {
+                    var node = $(this),
+                        isArrow = node.hasClass('folder-arrow'),
+                        isLabel = node.hasClass('folder-label');
+                    if (isArrow || (isLabel && node.closest('.folder').hasClass('unselectable'))) {
+                        // avoid selection; allow for unselectable
+                        e.preventDefault();
+                        if (!open) { openNode(); } else { closeNode(); }
+                    }
                 }
-                e.preventDefault();
-                if (!open) { openNode(); } else { closeNode(); }
             };
 
         // make accessible
@@ -307,7 +312,8 @@ define('io.ox/core/tk/folderviews',
 
         // paint tree node - loads and paints sub folder if open
         this.paint = function () {
-            nodes.folder = tmplFolder.clone().on('dblclick click', toggleState);
+
+            nodes.folder = tmplFolder.clone().on('dblclick click', '.folder-arrow, .folder-label', toggleState);
 
             if (level > 0) {
                 nodes.folder.css('paddingLeft', (0 + level * 30) + 'px');
@@ -327,7 +333,7 @@ define('io.ox/core/tk/folderviews',
                     // store data
                     data = promise;
                     // create DOM nodes
-                    nodes.arrow = $('<a href="#" class="folder-arrow"><i class="icon-chevron-right"></i></a>').on('click', toggleState);
+                    nodes.arrow = $('<a href="#" class="folder-arrow"><i class="icon-chevron-right"></i></a>');
                     nodes.label = $('<span>').addClass('folder-label');
                     nodes.counter = $('<span>').addClass('folder-counter');
                     nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', 'value': data.id }).css('float', 'right');
@@ -755,11 +761,7 @@ define('io.ox/core/tk/folderviews',
             }
 
             if (!isSelectable) {
-                this.removeClass('selectable');
-                // userstore?
-                if (data.folder_id === '10') {
-                    this.css('opacity', 0.60);
-                }
+                this.removeClass('selectable').addClass('unselectable');
             }
 
             // set title
