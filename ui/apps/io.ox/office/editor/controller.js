@@ -218,6 +218,11 @@ define('io.ox/office/editor/controller',
                     get: function (attributes) { return attributes.strike !== 'none'; },
                     set: function (state) { editor.setAttribute('character', 'strike', state ? 'single' : 'none'); }
                 },
+                'character/vertalign': {
+                    parent: 'character/attributes',
+                    get: function (attributes) { return attributes.vertAlign; },
+                    set: function (align) { editor.setAttribute('character', 'vertAlign', align); }
+                },
                 'character/color': {
                     parent: 'character/attributes',
                     get: function (attributes) { return attributes.color; },
@@ -239,21 +244,6 @@ define('io.ox/office/editor/controller',
                     get: function (attributes) { return attributes.url; },
                     set: function () { editor.insertHyperlink(); },
                     done: $.noop
-                },
-                'character/vertalign': {
-                    parent: 'character/attributes',
-                    get: function (attributes) { return attributes.vertAlign; },
-                    set: function (align) { editor.setAttribute('character', 'vertAlign', align); }
-                },
-                'character/subscript': {
-                    parent: 'character/vertalign',
-                    get: function (align) { return align === 'sub'; },
-                    set: function (state) { editor.setAttribute('character', 'vertAlign', state ? 'sub' : 'baseline'); }
-                },
-                'character/superscript': {
-                    parent: 'character/vertalign',
-                    get: function (align) { return align === 'super'; },
-                    set: function (state) { editor.setAttribute('character', 'vertAlign', state ? 'super' : 'baseline'); }
                 },
 
                 // tables

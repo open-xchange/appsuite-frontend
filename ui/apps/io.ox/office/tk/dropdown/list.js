@@ -115,7 +115,7 @@ define('io.ox/office/tk/dropdown/list',
          * Returns all button elements representing the list items.
          */
         this.getListItems = function () {
-            return listNode.find('button');
+            return listNode.find('button:visible');
         };
 
         /**

@@ -344,8 +344,10 @@ define('io.ox/office/editor/view/view',
             .addButton('character/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'),      toggle: true })
             .addButton('character/strike',    { icon: 'icon-io-ox-strikeout', tooltip: gt('Strike through'), toggle: true })
             .addSeparator()
-            .addButton('character/subscript',   { icon: 'icon-io-ox-subscript',   tooltip: gt('Subscript'),   toggle: true })
-            .addButton('character/superscript', { icon: 'icon-io-ox-superscript', tooltip: gt('Superscript'), toggle: true })
+            .addGroup('character/vertalign', new RadioGroup({ toggleValue: 'baseline' })
+                .addOptionButton('baseline', { hidden: true })
+                .addOptionButton('sub',      { icon: 'icon-io-ox-subscript',   tooltip: gt('Subscript') })
+                .addOptionButton('super',    { icon: 'icon-io-ox-superscript', tooltip: gt('Superscript') }))
             .addSeparator()
             .addGroup('character/fillcolor', new Controls.ColorChooser(editor, 'fill', { label: 'ab', tooltip: gt('Text Fill Color') }))
             .addSeparator()
@@ -458,17 +460,21 @@ define('io.ox/office/editor/view/view',
                 .addSeparator()
                 .addGroup('character/language', new Controls.LanguageChooser())
                 .addSeparator()
-                .addGroup('paragraph/borders', new RadioGroup({ icon: 'icon-io-ox-para-border-outside', tooltip: gt('Pargraph Border'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
-                    .addOptionButton('none',      { icon: 'icon-io-ox-para-border-none',      label: gt('No border') })
-                    .addOptionButton('leftright', { icon: 'icon-io-ox-para-border-leftright', label: gt('Border left and right') })
-                    .addOptionButton('topbottom', { icon: 'icon-io-ox-para-border-topbottom', label: gt('Border top and bottom') })
-                    .addOptionButton('outside',   { icon: 'icon-io-ox-para-border-outside',   label: gt('Border outside') })
-                    .addOptionButton('full',      { icon: 'icon-io-ox-para-border-full',      label: gt('Border outside and inside') })
-                    .addOptionButton('left',      { icon: 'icon-io-ox-para-border-left',      label: gt('Border left') })
-                    .addOptionButton('right',     { icon: 'icon-io-ox-para-border-right',     label: gt('Border right') })
-                    .addOptionButton('top',       { icon: 'icon-io-ox-para-border-top',       label: gt('Border top') })
-                    .addOptionButton('bottom',    { icon: 'icon-io-ox-para-border-bottom',    label: gt('Border bottom') })
-                    .addOptionButton('inside',    { icon: 'icon-io-ox-para-border-inside',    label: gt('Border inside') }));
+                .addGroup('paragraph/borders', new Controls.ParagraphBorderChooser());
+
+            createToolBox('debug', { label: gt('Debug') })
+                .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
+                .addButton('debug/sync',   { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
+                .addSeparator()
+                .addButton('file/editrights', { icon: 'icon-pencil', tooltip: 'Acquire Edit Rights' })
+                .addSeparator()
+                .addButton('document/cut',   { label: 'Cut',   tooltip: 'Cut To Clipboard' })
+                .addButton('document/copy',  { label: 'Copy',  tooltip: 'Copy To Clipboard' })
+                .addButton('document/paste', { label: 'Paste', tooltip: 'Paste From Clipboard' })
+                .addSeparator()
+                .addGroup('character/language', new Controls.LanguageChooser())
+                .addSeparator()
+                .addGroup('paragraph/borders', new Controls.ParagraphBorderChooser());
         }
 
         // make the format tool bar visible

@@ -41,6 +41,11 @@ define('io.ox/office/tk/control/radiogroup',
      *      If set to true, the drop-down button will be highlighted if a list
      *      item in the drop-down menu is active. Has no effect, if the radio
      *      group is not in drop-down mode.
+     *  @param [options.toggleValue]
+     *      If set to a value different to null or undefined, the option button
+     *      that is currently active can be clicked to be switched off. In that
+     *      case, this radio group will activate the button associated to the
+     *      value specified in this option.
      *  @param {String} [options.updateCaptionMode='all']
      *      Specifies how to update the caption of the drop-down button when a
      *      list item in the drop-down menu has been activated. If set to
@@ -68,6 +73,9 @@ define('io.ox/office/tk/control/radiogroup',
 
             // whether to highlight the drop-down menu button
             highlight = Utils.getBooleanOption(options, 'highlight', false),
+
+            // fall-back value for toggle click
+            toggleValue = Utils.getOption(options, 'toggleValue'),
 
             // which parts of a list item caption will be copied to the menu button
             updateCaptionMode = Utils.getStringOption(options, 'updateCaptionMode', 'all'),
@@ -125,16 +133,20 @@ define('io.ox/office/tk/control/radiogroup',
 
         /**
          * Click handler for an option button in this radio group. Will
-         * activate the clicked button, and return its value.
+         * activate the clicked button (or deactivate if clicked on an active
+         * button in toggle mode), and return the value of the new active
+         * option button.
          *
          * @param {jQuery} button
          *  The clicked button, as jQuery object.
          *
          * @returns
-         *  The button value that has been passed to the addButton() method.
+         *  The button value that has been passed to the addOptionButton()
+         *  method.
          */
         function clickHandler(button) {
-            var value = Utils.getControlValue(button);
+            var toggleClick = Utils.isButtonSelected(button) && !_.isNull(toggleValue) && !_.isUndefined(toggleValue),
+                value = toggleClick ? toggleValue : Utils.getControlValue(button);
             updateHandler(value);
             return value;
         }
@@ -192,6 +204,11 @@ define('io.ox/office/tk/control/radiogroup',
             } else {
                 button = Utils.createButton(buttonOptions);
                 this.addFocusableControl(button);
+            }
+
+            // hide the option button if specified
+            if (Utils.getBooleanOption(options, 'hidden', false)) {
+                button.hide();
             }
 
             // add tool tip
