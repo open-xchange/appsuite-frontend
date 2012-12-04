@@ -25,9 +25,10 @@ define("io.ox/mail/main",
      "io.ox/core/extPatterns/dnd",
      "io.ox/core/notifications",
      "io.ox/core/api/folder",
+     "settings!io.ox/mail",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
-    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd, notifications, folderAPI) {
+    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd, notifications, folderAPI, settings) {
 
     'use strict';
 
@@ -73,6 +74,7 @@ define("io.ox/mail/main",
         });
 
         app.setWindow(win);
+        app.settings = settings;
 
         // folder tree
         commons.addFolderView(app, { type: 'mail' });

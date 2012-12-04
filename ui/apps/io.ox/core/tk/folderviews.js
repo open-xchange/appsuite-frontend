@@ -65,11 +65,7 @@ define('io.ox/core/tk/folderviews',
 
             isOpen = function () {
                 if (open === undefined) {
-                    // TODO: save/restore tree state
-                    open = data.id === 'default0/INBOX' ||
-                        (tree.options.type === 'infostore' && data.id === '9') ||
-                        (tree.options.type === 'contacts' && data.id === '2');
-                    //open = (data.module === 'system' || data.module === tree.options.type);
+                    open = _(tree.options.open || []).contains(data.id);
                 }
                 return hasChildren() && (skip() || open);
             },
@@ -128,6 +124,7 @@ define('io.ox/core/tk/folderviews',
                 open = true;
                 nodes.sub.show();
                 updateArrow();
+                tree.toggle();
                 return children === null ? paintChildren() : $.when();
             },
 
@@ -136,6 +133,7 @@ define('io.ox/core/tk/folderviews',
                 open = false;
                 nodes.sub.hide();
                 updateArrow();
+                tree.toggle();
             },
 
             // open/close tree node
@@ -162,6 +160,18 @@ define('io.ox/core/tk/folderviews',
         // open & close
         this.open = openNode;
         this.close = closeNode;
+
+        this.isOpen = function () {
+            return hasChildren() && open === true;
+        };
+
+        this.getOpenNodes = function () {
+            if (this.isOpen()) {
+                return [id].concat(_(children || []).invoke('getOpenNodes'));
+            } else {
+                return [];
+            }
+        };
 
         // get sub folders
         this.getChildren = function () {
@@ -381,7 +391,9 @@ define('io.ox/core/tk/folderviews',
             id: 'default',
             rootFolderId: '1',
             skipRoot: true,
-            type: null
+            type: null,
+            open: [],
+            toggle: $.noop
         }, opt);
 
         this.internal = { destroy: $.noop };
@@ -681,6 +693,11 @@ define('io.ox/core/tk/folderviews',
             return this.root.repaint();
         };
 
+        this.toggle = function () {
+            var open = _(this.root.getOpenNodes()).flatten();
+            this.options.toggle(open);
+        };
+
         this.getNode = function (id) {
             id = String(id);
             return this.treeNodes[id];
@@ -700,7 +717,7 @@ define('io.ox/core/tk/folderviews',
 
         function deferredEach(list, done) {
             var top = list.shift(), node, self = this;
-            if (top && (node = this.getNode(top))) {
+            if (list.length && top && (node = this.getNode(top))) {
                 node.open().done(function () {
                     deferredEach.call(self, list, done);
                 });

@@ -530,6 +530,8 @@ define('io.ox/mail/write/main',
                     subject: params.subject,
                     attachments: [{ content: params.body || '' }]
                 };
+                // clear hash
+                _.url.hash('mailto', null);
             }
 
             _.url.hash('app', 'io.ox/mail/write:compose');
