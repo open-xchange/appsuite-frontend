@@ -143,8 +143,9 @@ define('plugins/iceCream/register', ['io.ox/core/extensions'], function (ext) {
                  
         }
     });
-
     
+
+    /*
     ext.point("io.ox/portal/widget").extend({
         id: 'iceCream1',
         index: 301,
@@ -199,5 +200,5 @@ define('plugins/iceCream/register', ['io.ox/core/extensions'], function (ext) {
             return $('<div>').append('Based on your past ratings, the ice cream experience team suggests you try ', randomIce(), ' ice cream.');
         }
     });
-
+    */
 });

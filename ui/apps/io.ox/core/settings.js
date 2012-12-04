@@ -123,12 +123,16 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             });
         };
 
-        var change = function (e, path, value) {
-            this.set(path, value);
+        var change = function (model, e) {
+            _(e.changes).each(function (changed, path) {
+                if (changed) {
+                    self.set(path, model.get(path));
+                }
+            });
         };
 
         this.createModel = function (ModelClass) {
-            return new ModelClass(tree).on('change', $.proxy(change, this));
+            return new ModelClass(tree).on('change', change);
         };
 
         this.stringify = function () {
@@ -146,7 +150,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                 return http.PUT({
                     module: 'jslob',
                     params: { action: 'list' },
-                    data: ['apps/' + path]
+                    data: [path]
                 })
                 .pipe(function (data) {
                     if (!detached) {
@@ -185,7 +189,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     module: 'jslob',
                     params: {
                         action: 'set',
-                        id: 'apps/' + path
+                        id: path
                     },
                     data: {}
                 })
@@ -210,7 +214,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     module: 'jslob',
                     params: {
                         action: 'set',
-                        id: 'apps/' + path
+                        id: path
                     },
                     data: data
                 })

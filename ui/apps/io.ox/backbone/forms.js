@@ -164,6 +164,30 @@ define('io.ox/backbone/forms',
         _.extend(this, options); // May override any of the above aspects
     }
 
+    function SelectControlGroup(options) {
+        _.extend(this, new ControlGroup({}), {
+            buildElement: function () {
+                var self = this;
+                if (this.nodes.element) {
+                    return this.nodes.element;
+                }
+
+                this.nodes.element = $('<select>').addClass('control');
+                _(this.selectOptions).each(function (label, value) {
+                    self.nodes.element.append(
+                        $("<option>", {value: value}).text(label)
+                    );
+                });
+
+                this.nodes.element.on('change', function () {
+                    self.updateModel();
+                });
+
+                return this.nodes.element;
+            }
+        }, options);
+    }
+
     function DateControlGroup(options) {
 
         this.tagName = 'div';
@@ -881,6 +905,7 @@ define('io.ox/backbone/forms',
     var forms = {
         ErrorAlert: ErrorAlert,
         ControlGroup: ControlGroup,
+        SelectControlGroup: SelectControlGroup,
         DateControlGroup: DateControlGroup,
         Section: Section,
         InputField: InputField,

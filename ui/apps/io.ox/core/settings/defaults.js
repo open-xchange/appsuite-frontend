@@ -11,9 +11,11 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/settings/basic/settings/pane', ['io.ox/core/extensions'], function (ext) {
+define('io.ox/core/settings/defaults', function (ext) {
 	'use strict';
 
-	
+	return {
+		language: ''
+	};
 	
 });

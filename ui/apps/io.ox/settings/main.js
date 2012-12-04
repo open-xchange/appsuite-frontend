@@ -133,7 +133,7 @@ define('io.ox/settings/main',
                     company: 'Open-Xchange',
                     description: 'Basic Settings',
                     icon: '',
-                    id: 'io.ox/settings/basic',
+                    id: 'io.ox/core',
                     settings: true,
                     title: 'Basic Settings'
                 });
