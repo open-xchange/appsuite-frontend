@@ -94,7 +94,7 @@ define('io.ox/core/commons-folderview',
             index: 900,
             draw: function (baton) {
                 this.append(
-                    $('<a href="#" class="toolbar-action pull-right"><i class="icon-remove"></a>')
+                    $('<a h ef="#" class="toolbar-action pull-right"><i class="icon-remove"></a>')
                     .on('click', { app: baton.app }, fnClose)
                 );
             }
@@ -102,14 +102,14 @@ define('io.ox/core/commons-folderview',
 
         function fnToggle(e) {
             e.preventDefault();
-            $(this).find('i').attr('class', e.data.app.togglePermanentFolderView() ? 'icon-chevron-right' : 'icon-chevron-left');
+            $(this).find('i').attr('class', e.data.app.togglePermanentFolderView() ? 'icon-pushpin' : 'icon-pushpin disabled');
         }
 
         ext.point(POINT + '/sidepanel/toolbar').extend({
             id: 'toggle',
             index: 1000,
             draw: function (baton) {
-                var className = baton.options.permanent ? 'icon-chevron-right' : 'icon-chevron-left';
+                var className = baton.options.permanent ? 'icon-pushpin' : 'icon-pushpin disabled';
                 this.append(
                     $('<a href="#" class="toolbar-action pull-right"><i class="' + className + '"></a>')
                     .on('click', { app: baton.app }, fnToggle)

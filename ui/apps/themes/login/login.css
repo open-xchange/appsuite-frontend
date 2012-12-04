@@ -65,13 +65,13 @@ html, body {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 64002;
+    z-index: 65102;
     background-color: white;
 }
 
 #io-ox-login-screen-decorator {
     background-color: black;
-    z-index: 64001;
+    z-index: 65101;
     opacity: 0.25;
 }
 

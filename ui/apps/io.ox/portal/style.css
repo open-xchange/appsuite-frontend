@@ -24,10 +24,6 @@
     padding: 13px (13px - @spacing) 13px 13px;
     .overflow(auto);
 
-    .vgrid-cell:last-child {
-        border-bottom: 0px none;
-    }
-
     .header {
         margin: 0 13px @vert-spacing 13px;
     }
@@ -271,135 +267,11 @@
     .io-ox-portal .widget { width: 100% / 2; }
 }
 @media all and (min-width: 840px) {
-    .io-ox-portal .widget { width: 100% / 3; }
+    .io-ox-portal .widget { width: 100% / 3 - 0.05%; } /* -0.50% = floating fix */
 }
 @media all and (min-width: 1120px) {
-    .io-ox-portal .widget { width: 100% / 4; }
+    .io-ox-portal .widget { width: 100% / 4 - 0.05%; } /* -0.50% = floating fix */
 }
 @media all and (min-width: 1400px) {
-    .io-ox-portal .widget { width: 100% / 5; }
+    .io-ox-portal .widget { width: 100% / 5 - 0.05%; } /* -0.50% = floating fix */
 }
-
-/*
-.io-ox-portal-typeA .io-ox-portal-item {
-    display: inline-block;
-    text-decoration: none;
-    max-height: 4.5em;
-    line-height: 1.5em;
-    font-size: 1em;
-    border-top: 1px solid rgba(255,255,255,0.3);
-    width: 100%;
-    color: #eee;
-    padding: 0 6px 0 @tSpace;
-    overflow: hidden;
-}
-.io-ox-portal-typeA .io-ox-portal-content :first-child.io-ox-portal-item {
-    border: none;
-}
-.io-ox-portal-typeA :hover.io-ox-portal-item {
-    background: rgba(255, 255, 255, 0.75);
-    font-weight: 200;
-}
-.io-ox-portal-typeA .io-ox-portal-content {
-    height: @tHeight - @tLine - @tLine;
-    overflow: hidden;
-    line-height: 1.5em;
-    text-overflow: ellipsis;
-    clear: both;
-    color: white;
-}
-.io-ox-portal-typeA .io-ox-portal-title {
-    width: @tWidth;
-    height: @tLine;
-    background: rgba(0, 0, 0, 0.3);
-    color: white;
-    text-align: center;
-    padding-top: 6px;
-    font-family: @font-light;
-}
-.io-ox-portal-typeA .io-ox-portal-actions {
-    height: @tLine;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    padding-top: @tSpace/2;
-}
-.io-ox-portal-actions .action-text {
-    display: inline-block;
-    height: 100%;
-    cursor: pointer;
-    padding-left: .5em;
-    font-weight: 100;
-    font-size: 13pt;
-}
-
-.io-ox-portal-typeB .io-ox-portal-title {
-    width: @tWidth;
-    height: @tLine;
-    padding-top: 6px;
-    visibility: hidden;
-}
-.io-ox-portal-typeB .io-ox-portal-image {
-    height: @tHeight - @tLine;
-    background: no-repeat center;
-    background-size: cover;
-}
-.io-ox-portal-typeB .io-ox-portal-actions {
-    margin-top: @tHeight - @tLine - @tLine;
-    height: @tLine;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    padding-top: @tSpace/2;
-    opacity: 0.75;
-}
-.io-ox-portal-typeB .io-ox-portal-actions .action-text, .io-ox-portal-typeB .io-ox-portal-title  {
-    font-weight: 200;
-}
-
-.io-ox-portal-action {
-    display: block;
-    float: right;
-    margin-right: 6px;
-}
-.io-ox-portal-title h1 {
-    font-size: 16pt;
-    line-height: 0;
-}
-.io-ox-portal-title .tile-image {
-    float: right;
-    margin-right: 6px;
-}
-
-.io-ox-typeA-action, .io-ox-typeB-title {
-    border-bottom-left-radius: @tSpace;
-    border-bottom-right-radius: @tSpace;
-}
-.io-ox-typeA-title {
-    border-top-left-radius: @tSpace;
-    border-top-right-radius: @tSpace;
-}
-.io-ox-portal-widget-tile {
-    border-radius: @tSpace;
-}
-
-.invisible {
-    visibility: hidden;
-}
-.tile-color0, .tile-color6 {
-    background: #234;
-}
-.tile-color1, .tile-color7 {
-    background: #243;
-}
-.tile-color2, .tile-color8 {
-    background: #324;
-}
-.tile-color3, .tile-color9 {
-    background: #342;
-}
-.tile-color4, .tile-color10 {
-    background: #423;
-}
-.tile-color5, .tile-color11 {
-    background: #432;
-}
-*/
