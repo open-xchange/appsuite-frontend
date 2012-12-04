@@ -8,7 +8,10 @@ define(function () {
         pageHeaderPrefix: 'OX',
         pageHeader: 'App Suite',
 
+        productName: 'Open-Xchange App Suite',
         productNameMail: 'OX Mail',
+
+        contact: 'Open-Xchange AG, Rollnerstr. 14, D-90408 Nürnberg, E-Mail: info@open-xchange.com',
 
         autoLogin: true,
         forgotPassword: false, //'https://iforgot.apple.com',
@@ -23,6 +26,7 @@ define(function () {
 
         copyright: '\u00A9 2012 Open-Xchange.',
         version: '7.0.0 Drop #6',
+        serverVersion: '6.22.0 Rev 42',
         buildDate: '2012-11-01',
 
         plugins: {

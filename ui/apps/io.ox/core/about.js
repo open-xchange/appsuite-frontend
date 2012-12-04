@@ -1,0 +1,44 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+define('io.ox/core/about', ['io.ox/core/extensions', 'io.ox/core/tk/dialogs', 'gettext!io.ox/core'], function (ext, dialogs, gt) {
+
+	'use strict';
+
+	ext.point('io.ox/core/about').extend({
+		draw: function (data) {
+			console.warn('YEP!', data);
+			this.append(
+				$('<h4>').text(gt.noI18n(data.productName)),
+				$('<p>').append(
+					$('<span>').text('UI version:'), $.txt(' '), $('<b>').text(data.version), $('<br>'),
+					$('<span>').text('Server version:'), $.txt(' '), $('<b>').text(data.serverVersion)
+				),
+				$('<p>').text(gt('Contact: %1$s', data.contact)),
+				$('<p>').text(gt.noI18n(data.copyright))
+			);
+		}
+	});
+
+	return {
+
+		show: function () {
+			new dialogs.ModalDialog()
+                .build(function () {
+					this.getHeader().append($("<h3>").text(gt('About')));
+					ext.point('io.ox/core/about').invoke('draw', this.getContentNode(), ox.serverConfig || {});
+                })
+                .addPrimaryButton("cancel", gt('Close'))
+                .show();
+		}
+	};
+});

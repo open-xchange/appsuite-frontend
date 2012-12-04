@@ -266,6 +266,23 @@ define("io.ox/core/main",
         });
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'about',
+            index: 300,
+            draw: function () {
+                this.append(
+                    $('<li>').append(
+                        $('<a href="#" data-action="about">').text(gt('About'))
+                    )
+                    .on('click', function () {
+                        require(['io.ox/core/about'], function (about) {
+                            about.show();
+                        });
+                    })
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'logout',
             index: 1000,
             draw: function () {
