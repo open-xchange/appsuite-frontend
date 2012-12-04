@@ -46,6 +46,13 @@ $(document).ready(function () {
         // shortcut
         enc = encodeURIComponent;
 
+    // suppress context menu
+    $(document).on('contextmenu', function (e) {
+        if (!/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) {
+            e.preventDefault();
+        }
+    });
+
     // check for supported browser
     function browserCheck() {
         var supp = false;
