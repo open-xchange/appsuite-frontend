@@ -16,8 +16,9 @@ define("io.ox/calendar/main",
      "io.ox/calendar/util",
      "io.ox/core/config",
      "io.ox/core/commons",
+     "settings!io.ox/calendar",
      "io.ox/calendar/actions",
-     "less!io.ox/calendar/style.css"], function (api, util, config, commons, VGrid, tmpl) {
+     "less!io.ox/calendar/style.css"], function (api, util, config, commons, settings) {
 
     "use strict";
 
@@ -25,7 +26,7 @@ define("io.ox/calendar/main",
     var app = ox.ui.createApp({ name: 'io.ox/calendar', title: 'Calendar' }),
         // app window
         win,
-        lastPerspective = 'week:workweek';
+        lastPerspective = 'week:' + settings.get('viewView', 'workweek');
 
     // launcher
     app.setLauncher(function (options) {
