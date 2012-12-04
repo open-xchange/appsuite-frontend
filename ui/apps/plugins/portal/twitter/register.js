@@ -122,9 +122,18 @@ define('plugins/portal/twitter/register',
         return renderTweet(tweet);
     };
 
+    function parseDate(str) {
+        var v = str.split(' ');
+        return new Date(Date.parse(v[1] + ' ' + v[2] + ', ' + v[5] + ' ' + v[3] + ' UTC'));
+        // thx for having exactly the same problem:
+        // http://stackoverflow.com/questions/3243546/problem-with-javascript-date-function-in-ie-7-returns-nan
+    }
+
     var renderTweet = function (tweet) {
         var tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str;
         var profileLink = 'https://twitter.com/' + tweet.user.screen_name;
+        console.log('date', tweet.created_at);
+        var tweeted = new date.Local(parseDate(tweet.created_at)).format(date.DATE_TIME);
         var $myTweet = $('<div class="tweet">').data('entry', tweet).append(
             $('<a class="io-ox-twitter-follow btn btn-small" href="https://twitter.com/intent/user">').append(
                 '<i>&nbsp;</i>',
@@ -141,7 +150,7 @@ define('plugins/portal/twitter/register',
                 parseTweet(tweet.text, tweet.entities)
             ),
             $('<div class="io-ox-twitter-details">').append(
-                $('<a>').attr({'class': 'io-ox-twitter-date', 'href': tweetLink, 'target': '_blank'}).text(new date.Local(new Date(tweet.created_at)).format(date.DATE_TIME)), //TODO format correctly
+                $('<a>').attr({'class': 'io-ox-twitter-date', 'href': tweetLink, 'target': '_blank'}).text(tweeted),
                 $('<a>').attr({'class': 'io-ox-twitter-reply', 'href': 'https://twitter.com/intent/tweet?in_reply_to=' + tweet.id_str}).text(gt('Reply')),
                 $('<a>').attr({'class': 'io-ox-twitter-retweet', 'href': "https://twitter.com/intent/retweet?tweet_id=" + tweet.id_str}).text(gt('Retweet')),
                 $('<a>').attr({'class': 'io-ox-twitter-favorite', 'href': "https://twitter.com/intent/favorite?tweet_id=" + tweet.id_str}).text(gt('Favorite'))

@@ -304,7 +304,10 @@ define('io.ox/portal/main',
         if (model) {
             baton = model.get('baton');
             baton.item = target.data('item');
-            ext.point('io.ox/portal/widget/' + model.get('type')).invoke('draw', popup.empty(), model.get('baton'));
+            // defer to get visual feedback first (e.g. script errors)
+            _.defer(function () {
+                ext.point('io.ox/portal/widget/' + model.get('type')).invoke('draw', popup.empty(), model.get('baton'));
+            });
         }
     }
 
