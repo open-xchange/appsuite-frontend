@@ -19,11 +19,9 @@ define('io.ox/calendar/settings/model',
 
 
         initialize: function (options) {
-
         },
 
         save: function () {
-
             settings.save(this.attributes);
         },
 
