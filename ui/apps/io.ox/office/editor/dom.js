@@ -703,6 +703,22 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * Internet Explorer removes empty text nodes from text spans inside
+     * table cells.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a span element without a text node.
+     */
+    DOM.isTextSpanWithoutTextNode = function (node) {
+        var contents = $(node).contents();
+        return $(node).is('span') && (contents.length === 0) && DOM.isParagraphNode(Utils.getDomNode(node).parentNode) && (node.nextSibling) && $(node.nextSibling).is('br');
+    };
+
+    /**
      * Returns whether the passed node is a text node embedded in a text
      * portion span (see DOM.isPortionSpan() method).
      *

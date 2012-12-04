@@ -641,6 +641,10 @@ define('io.ox/office/editor/position',
                 // text span for a position pointing behind the last character
                 if (DOM.isTextSpan(_node)) {
                     lastTextSpanInfo = { node: _node, start: nodeStart, length: nodeLength };
+                } else if (DOM.isTextSpanWithoutTextNode(_node)) {  // IE 9 -> special case to be removed again
+                    // append empty text node
+                    $(_node).text('');
+                    lastTextSpanInfo = { node: _node, start: nodeStart, length: nodeLength };
                 }
             }, undefined, { allNodes: true });
 

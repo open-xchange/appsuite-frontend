@@ -5032,7 +5032,11 @@ define('io.ox/office/editor/editor',
         function implInsertCells(start, count, attrs) {
 
             var localPosition = _.clone(start),
-                tableNode = Position.getLastNodeFromPositionByNodeName(editdiv, start, DOM.TABLE_NODE_SELECTOR);
+                tableNode = Position.getLastNodeFromPositionByNodeName(editdiv, start, DOM.TABLE_NODE_SELECTOR),
+                tableCellDomPos = null,
+                tableCellNode = null,
+                paragraph = null,
+                cell = null;
 
             if (!tableNode) {
                 return;
@@ -5042,24 +5046,24 @@ define('io.ox/office/editor/editor',
                 count = 1; // setting default for number of rows
             }
 
-            var tableCellDomPos = Position.getDOMPosition(editdiv, localPosition),
-                tableCellNode = null;
+            tableCellDomPos = Position.getDOMPosition(editdiv, localPosition);
 
             if (tableCellDomPos) {
                 tableCellNode = tableCellDomPos.node;
             }
 
             // prototype elements for row, cell, and paragraph
-            var paragraph = DOM.createParagraphNode(),
-                cell = DOM.createTableCellNode(paragraph);
+            paragraph = DOM.createParagraphNode();
+
+            // insert empty text node into the paragraph
+            validateParagraphNode(paragraph);
+
+            cell = DOM.createTableCellNode(paragraph);
 
             // apply the passed table cell attributes
             if (_.isObject(attrs)) {
                 tableCellStyles.setElementAttributes(cell, attrs);
             }
-
-            // insert empty text node into the paragraph
-            validateParagraphNode(paragraph);
 
             if (tableCellNode) {
                 _.times(count, function () { $(tableCellNode).before(cell.clone(true)); });
