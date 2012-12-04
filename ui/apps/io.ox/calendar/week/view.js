@@ -1048,6 +1048,7 @@ define('io.ox/calendar/week/view',
                             // save for update calculations
                             app.old_start_date = app.start_date;
                             app.old_end_date = app.end_date;
+                            app.drag_move = move;
                             _.extend(app, {
                                 start_date: startTS,
                                 end_date: startTS + (app.end_date - app.start_date)

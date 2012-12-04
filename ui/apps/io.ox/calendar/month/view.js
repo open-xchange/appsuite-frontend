@@ -211,9 +211,6 @@ define('io.ox/calendar/month/view',
                 },
                 start: function (e, ui) {
                     $(this).hide();
-                },
-                stop: function () {
-                    $(this).draggable('disable');
                 }
             });
 
@@ -221,19 +218,16 @@ define('io.ox/calendar/month/view',
                 accept: '.appointment',
                 drop: function (e, ui) {
                     $('.list', this).append(
-                        ui.draggable.show().busy()
+                        ui.draggable.show()
                     );
                     var app = ui.draggable.data('app').attributes,
                         s = new date.Local(app.start_date),
                         start = new date.Local($(this).data('date')).setHours(s.getHours(), s.getMinutes(), s.getSeconds(), s.getMilliseconds()).getTime(),
                         end = start + app.end_date - app.start_date;
                     if (app.start_date !== start || app.end_date !== end) {
-                        // save for update calculations
-                        app.old_start_date = app.start_date;
-                        app.old_end_date = app.end_date;
-
                         app.start_date = start;
                         app.end_date = end;
+                        ui.draggable.busy().draggable('disable');
                         self.trigger('updateAppointment', app);
                     }
                 }

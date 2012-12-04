@@ -95,30 +95,15 @@ define('io.ox/calendar/month/perspective',
 
             if (obj.recurrence_type > 0) {
                 new dialogs.ModalDialog()
-                    .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
-                    .addPrimaryButton('series', gt('Series'))
-                    .addButton('appointment', gt('Appointment'))
+                    .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
+                    .addButton('appointment', gt('OK'))
                     .addButton('cancel', gt('Cancel'))
                     .show()
                     .done(function (action) {
-                        switch (action) {
-                        case 'series':
-                            // get recurrence master object
-                            if (obj.old_start_date || obj.old_end_date) {
-                                api.get({id: obj.id, folder_id: obj.folder_id}).done(function (app) {
-                                    // calculate new dates if old dates are available
-                                    app.start_date += (obj.start_date - obj.old_start_date);
-                                    app.end_date += (obj.end_date - obj.old_end_date);
-                                    apiUpdate(app);
-                                });
-                            }
-                            break;
-                        case 'appointment':
+                        if (action === 'appointment') {
                             apiUpdate(api.removeRecurrenceInformation(obj));
-                            break;
-                        default:
+                        } else {
                             self.update();
-                            return;
                         }
                     });
             } else {
