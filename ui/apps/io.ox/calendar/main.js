@@ -28,7 +28,7 @@ define("io.ox/calendar/main",
         lastPerspective = 'week:workweek';
 
     // launcher
-    app.setLauncher(function () {
+    app.setLauncher(function (options) {
 
         // get window
         app.setWindow(win = ox.ui.createWindow({
@@ -46,7 +46,7 @@ define("io.ox/calendar/main",
         commons.addFolderSupport(app, null, 'calendar')
             .pipe(commons.showWindow(win))
             .done(function () {
-                ox.ui.Perspective.show(app, _.url.hash('perspective') || lastPerspective);
+                ox.ui.Perspective.show(app, options.perspective || _.url.hash('perspective') || lastPerspective);
             });
 
         win.on('search:open', function () {

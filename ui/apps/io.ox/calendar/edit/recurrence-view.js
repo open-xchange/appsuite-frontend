@@ -113,7 +113,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 var selectedDays = [];
                 _(DAYS.values).each(function (day) {
                     if (value[day]) {
-                        selectedDays.push(day.toLowerCase());
+                        selectedDays.push(DAYS.i18n[day]);
                     }
                 });
                 $anchor.text(selectedDays.join(", "));

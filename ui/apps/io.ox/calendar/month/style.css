@@ -217,15 +217,13 @@
         width: 100%;
         font-size: 12px;
         color: white;
-        overflow: hidden;
         padding: 2px 0px;
+        .ellipsis();
     }
     
     .appointment-content * {
         padding-left: 5px;
-        max-width: 100%;
-        display: inline-block;
-        .ellipsis();
+        display: inline;
     }
     
     @appointment-private: #555; /* dark grey */ 

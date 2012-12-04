@@ -23,36 +23,13 @@ define('plugins/portal/mail/register',
 
     'use strict';
 
-    var sidepopup; //only one detailsidepopup is needed
-    // actions
-    ext.point('io.ox/portal/widget/mail/actions/compose').extend({
-        id: 'compose',
-        action: function (data) {
-            require(['io.ox/mail/write/main'], function (m) {
-                m.getApp().launch().done(function () {
-                    this.compose();
-                });
-            });
-        }
-    });
-
-    // link
-    ext.point('io.ox/portal/widget/mail/links/inline').extend(new links.Link({
-        index: 100,
-        id: 'compose',
-        label: gt('Compose new email'),
-        ref: 'io.ox/portal/widget/mail/actions/compose'
-    }));
-
-    // inline links
-    ext.point('io.ox/portal/widget/mail/links').extend(new links.InlineLinks({
-        ref: 'io.ox/portal/widget/mail/links/inline'
-    }));
-
-
     ext.point('io.ox/portal/widget/mail').extend({
 
         title: gt("Inbox"),
+
+        action: function (baton) {
+            ox.launch('io.ox/mail/main', { folder: mailApi.getDefaultFolder() });
+        },
 
         load: function (baton) {
             return mailApi.getAll({ folder: mailApi.getDefaultFolder() }, false).pipe(function (mails) {

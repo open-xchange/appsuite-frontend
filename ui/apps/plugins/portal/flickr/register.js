@@ -29,6 +29,10 @@ define('plugins/portal/flickr/register', ['io.ox/core/extensions', 'io.ox/portal
 
         title: 'Flickr',
 
+        action: function (baton) {
+            window.open('http://www.flickr.com/', 'flickr');
+        },
+
         initialize: function (baton) {
 
             var props = baton.model.get('props');
