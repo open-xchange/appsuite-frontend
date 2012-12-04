@@ -202,9 +202,13 @@ define('io.ox/calendar/model',
         setDefaultParticipants: function (model) {
             return folderAPI.get({folder: model.get('folder_id')}).done(function (folder) {
                 if (folderAPI.is('private', folder)) {
+                    var userID = configAPI.get('identifier');
                     // it's a private folder for the current user, add him by default
                     // as participant
-                    model.getParticipants().addUniquely({id: configAPI.get('identifier'), type: 1, ui_removable: false});
+                    model.getParticipants().addUniquely({id: userID, type: 1});
+
+                    // use a new, custom and unused property in his model to specify that he can't be removed
+                    model.getParticipants().get(userID).set('ui_removable', false);
 
                 } else if (folderAPI.is('public', folder)) {
                     // if public folder, current user will be added
