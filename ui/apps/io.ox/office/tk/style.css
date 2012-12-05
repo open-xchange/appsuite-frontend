@@ -169,8 +169,8 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
 /* background color for panes */
 @app-pane-fill-color: #e5e5e5;
 
-/* border color for panes */
-@pane-border-color: #d5d5d5;
+/* line color for borders of pane child elements */
+@pane-line-color: #d5d5d5;
 
 /* base text color for controls */
 @control-text-color: #333333;
@@ -272,8 +272,13 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
 
         /* control caption elements (always spans as children) */
         label, button {
+            @padding: 8px;
+            @distance: 5px;
+
             /* lousy attempt to prevent overflowing captions. TODO: better solution */
             overflow: hidden;
+            padding-left: @padding;
+            padding-right: @padding;
             line-height: @control-height;
 
             > span {
@@ -285,7 +290,13 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
                 }
 
                 + span {
-                    margin-left: 5px;
+                    margin-left: @distance;
+                }
+
+                &[data-role="caret"] {
+                    position: absolute;
+                    top: 0;
+                    right: @padding;
                 }
             }
         }
@@ -293,23 +304,13 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
         /* labels ---------------------------------------------------------- */
 
         label {
-            padding-left: 8px;
-            padding-right: 8px;
             text-align: center;
         }
 
         /* buttons --------------------------------------------------------- */
 
         button {
-            padding-left: 8px;
-            padding-right: 8px;
             text-align: left;
-
-            /* adjust margins for e.g. caret buttons in drop-down split mode */
-            &.narrow-padding {
-                padding-left: 4px;
-                padding-right: 4px;
-            }
 
             /* selected toggle/radio buttons */
             &.selected {
@@ -356,6 +357,7 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
             @offset: 4px;
 
             top: @offset;
+            margin-bottom: 2 * @offset;
             .box-shadow(0 0 4px fade(black, 15%));
 
             > label, > button, > input {
@@ -481,7 +483,7 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
                         &:active { border-color: darken(@pane-fill-color, 10%); }
 
                         &.selected {
-                            //background: none;
+                            background: none;
                             border-color: darken(@button-selected-color, 5%);
 
                             &:hover { border-color: darken(@button-selected-color, 10%); }
@@ -531,7 +533,7 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
                             margin: 0;
                             padding: 0;
                             background-color: @pane-fill-color;
-                            border: 1px solid @pane-border-color;
+                            border: 1px solid @pane-line-color;
 
                             /* a row in the grid */
                             > div {
@@ -546,12 +548,12 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
                                     vertical-align: top;
 
                                     &:not(:last-child) {
-                                        border-right: 1px solid @pane-border-color;
+                                        border-right: 1px solid @pane-line-color;
                                     }
                                 }
 
                                 &:not(:last-child) > div {
-                                    border-bottom: 1px solid @pane-border-color;
+                                    border-bottom: 1px solid @pane-line-color;
                                 }
 
                                 /* height for last row (again, especially for Firefox) */
@@ -615,16 +617,14 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
             &.separator {
                 width: 10px;
 
-                &.break {
-                    display: block;
-                    width: 100%;
-                    height: 1px;
-                }
+                &.break { height: 2px; }
             }
 
+            /* heading label of the tool box */
             &.heading {
-                display: block;
-                width: 100%;
+                margin-bottom: 2px;
+                padding-bottom: 2px;
+                border-bottom: 1px solid @pane-line-color;
                 line-height: 0;
                 text-align: center;
 
@@ -634,6 +634,12 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
                     font-size: 10px;
                     font-weight: bold;
                 }
+            }
+
+            /* groups spanning the full width of the pane */
+            &.full-width, &.separator.break, &.heading {
+                display: block;
+                width: 100%;
             }
         }
     }

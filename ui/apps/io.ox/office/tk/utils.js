@@ -1564,7 +1564,6 @@ define('io.ox/office/tk/utils',
      */
     Utils.removeControlCaption = function (control) {
         control.children(CAPTION_SELECTOR).remove();
-        control.addClass('narrow-padding');
     };
 
     /**
@@ -1602,7 +1601,7 @@ define('io.ox/office/tk/utils',
 
         // prepend the label
         if (_.isString(label)) {
-            control.removeClass('narrow-padding').prepend($('<span>')
+            control.prepend($('<span>')
                 .attr('data-role', 'label')
                 .text(label || '')
                 .css(labelCss || {}));
@@ -1610,7 +1609,7 @@ define('io.ox/office/tk/utils',
 
         // prepend the icon
         if (icon) {
-            control.removeClass('narrow-padding').prepend($('<span>')
+            control.prepend($('<span>')
                 .attr('data-role', 'icon')
                 .attr('data-icon', icon)
                 .append(Utils.createIcon(icon, whiteIcon).addClass(language))

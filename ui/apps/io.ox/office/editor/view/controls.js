@@ -14,28 +14,28 @@
 define('io.ox/office/editor/view/controls',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/fonts',
-     'io.ox/office/tk/control/button',
+     'io.ox/office/tk/control/group',
      'io.ox/office/tk/control/radiogroup',
      'io.ox/office/tk/control/combofield',
      'io.ox/office/tk/control/colorchooser',
      'io.ox/office/tk/dropdown/gridsizer',
      'io.ox/office/editor/format/color',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, Button, RadioGroup, ComboField, ColorChooser, GridSizer, Color, gt) {
+    ], function (Utils, Fonts, Group, RadioGroup, ComboField, ColorChooser, GridSizer, Color, gt) {
 
     'use strict';
 
     var // predefined color definitions
         BUILTIN_COLOR_DEFINITIONS = [
-            { label: gt('Dark Red'),    color: { type: 'rgb', value: 'C00000' } },
+            { label: gt('Dark red'),    color: { type: 'rgb', value: 'C00000' } },
             { label: gt('Red'),         color: { type: 'rgb', value: 'FF0000' } },
             { label: gt('Orange'),      color: { type: 'rgb', value: 'FFC000' } },
             { label: gt('Yellow'),      color: { type: 'rgb', value: 'FFFF00' } },
-            { label: gt('Light Green'), color: { type: 'rgb', value: '92D050' } },
+            { label: gt('Light green'), color: { type: 'rgb', value: '92D050' } },
             { label: gt('Green'),       color: { type: 'rgb', value: '00B050' } },
-            { label: gt('Light Blue'),  color: { type: 'rgb', value: '00B0F0' } },
+            { label: gt('Light blue'),  color: { type: 'rgb', value: '00B0F0' } },
             { label: gt('Blue'),        color: { type: 'rgb', value: '0070C0' } },
-            { label: gt('Dark Blue'),   color: { type: 'rgb', value: '002060' } },
+            { label: gt('Dark blue'),   color: { type: 'rgb', value: '002060' } },
             { label: gt('Purple'),      color: { type: 'rgb', value: '7030A0' } }
         ],
 
@@ -180,7 +180,7 @@ define('io.ox/office/editor/view/controls',
 
         // base constructor ---------------------------------------------------
 
-        Controls.StyleSheetChooser.call(this, editor, 'paragraph', { tooltip: gt('Paragraph Style') });
+        Controls.StyleSheetChooser.call(this, editor, 'paragraph', { tooltip: gt('Paragraph style') });
 
     }}); // class ParagraphStyleChooser
 
@@ -248,18 +248,18 @@ define('io.ox/office/editor/view/controls',
             self.clearColorTable();
 
             // add automatic color
-            self.addWideColorButton(Color.AUTO, { label: Color.isTransparentColor(Color.AUTO, context) ? gt('No Color') : gt('Automatic Color') });
+            self.addWideColorButton(Color.AUTO, { label: Color.isTransparentColor(Color.AUTO, context) ? gt('No color') : gt('Automatic color') });
 
             // add scheme colors
             if (theme && theme.hasSchemeColors()) {
-                self.addSectionHeader({ label: gt('Theme Colors') });
+                self.addSectionHeader({ label: gt('Theme colors') });
                 for (rowIndex = 0, rowCount = SCHEME_COLOR_DEFINITIONS[0].transformations.length; rowIndex < rowCount; rowIndex += 1) {
                     fillSchemeColorRow();
                 }
             }
 
             // add predefined colors
-            self.addSectionHeader({ label: gt('Standard Colors') });
+            self.addSectionHeader({ label: gt('Standard colors') });
             _(BUILTIN_COLOR_DEFINITIONS).each(function (definition) {
                 self.addColorButton(definition.color, { tooltip: definition.label });
             });
@@ -287,7 +287,7 @@ define('io.ox/office/editor/view/controls',
 
         ComboField.call(this, {
             width: 150,
-            tooltip: gt('Font Name'),
+            tooltip: gt('Font name'),
             sorted: true,
             typeAhead: true
         });
@@ -309,7 +309,7 @@ define('io.ox/office/editor/view/controls',
 
         ComboField.call(this, {
             width: 35,
-            tooltip: gt('Font Size'),
+            tooltip: gt('Font size'),
             css: { textAlign: 'right' },
             validator: new ComboField.NumberValidator({ min: 1, max: 999.9, digits: 1 })
         });
@@ -352,21 +352,20 @@ define('io.ox/office/editor/view/controls',
 
     // class LanguageChooser ================================================
 
-    Controls.LanguageChooser = RadioGroup.extend({ constructor: function () {
+    Controls.LanguageChooser = RadioGroup.extend({ constructor: function (options) {
 
         var // self reference
             self = this;
 
         // base constructor ---------------------------------------------------
 
-        RadioGroup.call(this, {
+        RadioGroup.call(this, Utils.extendOptions(options, {
             white: true,
-            width: 100,
             dropDown: true,
             sorted: true,
             tooltip: gt('Language'),
             css: { textAlign: 'left' }
-        });
+        }));
 
         // initialization -----------------------------------------------------
 
@@ -382,21 +381,19 @@ define('io.ox/office/editor/view/controls',
 
     // class TableSizeChooser =================================================
 
-    Controls.TableSizeChooser = Button.extend({ constructor: function () {
+    Controls.TableSizeChooser = Group.extend({ constructor: function () {
 
         var options = {
                 icon: 'icon-io-ox-table',
-                tooltip: gt('Insert Table'),
+                tooltip: gt('Insert table'),
                 defaultSize: { width: 5, height: 3 },
                 maxSize: { width: 15, height: 15 }
             };
 
         // base constructors --------------------------------------------------
 
-        // create the default button (set value to default size, will be returned by click handler)
-        Button.call(this, Utils.extendOptions(options, { value: options.defaultSize }));
-        // create the grid sizer
-        GridSizer.call(this, Utils.extendOptions(options, { plainCaret: true }));
+        Group.call(this, options);
+        GridSizer.call(this, options);
 
     }}); // class TableSizeChooser
 

@@ -67,7 +67,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             plainCaret = Utils.getBooleanOption(options, 'plainCaret', false),
 
             // the drop-down button
-            menuButton = Utils.createButton(plainCaret ? {} : options).append(caretSpan),
+            menuButton = Utils.createButton(plainCaret ? {} : options).append($('<span>').width(7)).append(caretSpan),
 
             // the drop-down menu element
             menuNode = $('<div>').addClass('dropdown-menu').append(contentNode),
@@ -95,7 +95,7 @@ define('io.ox/office/tk/dropdown/dropdown',
                 groupNode.addClass(MENUOPEN_CLASS);
                 self.trigger('menuopen');
                 // Add a global click handler to close the menu automatically
-                // when clicking somewhere in the page. Listeining to the
+                // when clicking somewhere in the page. Listening to the
                 // 'mousedown' event will catch all real mouse clicks and close
                 // the menu immediately ('click' events will not be generated
                 // by the browser when selecting a text range over several text
@@ -299,11 +299,6 @@ define('io.ox/office/tk/dropdown/dropdown',
         };
 
         // initialization -----------------------------------------------------
-
-        // move caret span to right border, if drop-down button has fixed width
-        if (!plainCaret && ('width' in options)) {
-            caretSpan.css({ position: 'absolute', top: '1px', right: '9px' });
-        }
 
         // marker class for extended formatting
         groupNode.addClass('dropdown-group');

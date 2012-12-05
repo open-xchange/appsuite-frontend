@@ -395,7 +395,13 @@ define('io.ox/office/editor/view/view',
 
         // create the tool boxes
         sidePane = new Pane(app);
-        this.addPane('sidepane', sidePane, 'left').hidePane('sidepane');
+        this.addPane('sidepane', sidePane, 'right');
+
+        createToolBox('insert', { label: gt('Insert') })
+            .addGroup('table/insert', new Controls.TableSizeChooser())
+            .addSeparator()
+            .addButton('image/insert/file', { icon: 'icon-io-ox-image-insert', tooltip: gt('Insert image file') })
+            .addButton('image/insert/url',  { icon: 'icon-io-ox-image-insert', tooltip: gt('Insert image URL') });
 
         createToolBox('table', { label: gt('Table') })
             .addButton('table/insert/row',    { icon: 'icon-io-ox-table-insert-row',    tooltip: gt('Insert row') })
@@ -457,7 +463,7 @@ define('io.ox/office/editor/view/view',
                 .addButton('document/copy',  { label: 'Copy',  tooltip: 'Copy To Clipboard' })
                 .addButton('document/paste', { label: 'Paste', tooltip: 'Paste From Clipboard' })
                 .addSeparator()
-                .addGroup('character/language', new Controls.LanguageChooser())
+                .addGroup('character/language', new Controls.LanguageChooser({ width: 100 }))
                 .addSeparator()
                 .addGroup('paragraph/borders', new Controls.ParagraphBorderChooser());
 
@@ -466,13 +472,13 @@ define('io.ox/office/editor/view/view',
                 .addButton('debug/sync',   { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
                 .addSeparator()
                 .addButton('file/editrights', { icon: 'icon-pencil', tooltip: 'Acquire Edit Rights' })
-                .addSeparator({ classes: 'break' })
+                .addSeparator('break')
                 .addButton('document/cut',   { label: 'Cut',   tooltip: 'Cut To Clipboard' })
                 .addButton('document/copy',  { label: 'Copy',  tooltip: 'Copy To Clipboard' })
                 .addButton('document/paste', { label: 'Paste', tooltip: 'Paste From Clipboard' })
-                .addSeparator({ classes: 'break' })
-                .addGroup('character/language', new Controls.LanguageChooser())
-                .addSeparator({ classes: 'break' })
+                .addSeparator('break')
+                .addGroup('character/language', new Controls.LanguageChooser({ classes: 'full-width' }))
+                .addSeparator('break')
                 .addGroup('paragraph/borders', new Controls.ParagraphBorderChooser());
         }
 

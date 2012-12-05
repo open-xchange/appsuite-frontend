@@ -251,9 +251,18 @@ define('io.ox/office/tk/view/component',
 
         /**
          * Adds separation space following the last inserted group.
+         *
+         * @param {String} [type]
+         *  The type of the separator to be inserted. The resulting design of
+         *  the separator is dependent on the type of this view component. The
+         *  type will be added as CSS class name to the group node representing
+         *  the separator.
+         *
+         * @returns {Component}
+         *  A reference to this view component.
          */
-        this.addSeparator = function () {
-            insertGroup(new Group({ classes: 'separator' }));
+        this.addSeparator = function (type) {
+            insertGroup(new Group({ classes: 'separator' + (_.isString(type) ? (' ' + type) : '') }));
             return this;
         };
 
@@ -267,6 +276,9 @@ define('io.ox/office/tk/view/component',
          *
          * @param {Group} group
          *  The control group object to be inserted.
+         *
+         * @returns {Component}
+         *  A reference to this view component.
          */
         this.addGroup = function (key, group) {
 

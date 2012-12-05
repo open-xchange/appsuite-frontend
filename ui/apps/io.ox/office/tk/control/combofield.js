@@ -58,8 +58,7 @@ define('io.ox/office/tk/control/combofield',
         function initHandler() {
 
             var menuButton = self.getMenuButton(),
-                textField = self.getTextField(),
-                paddingRight = Utils.convertCssLength(textField.css('padding-right'), 'px', 0);
+                textField = self.getTextField();
 
             // move the menu button over the text field, attached to the right border
             menuButton.css({ position: 'absolute', right: 0 });
@@ -67,7 +66,7 @@ define('io.ox/office/tk/control/combofield',
             // extend width and right padding of the text field
             textField
                 .width(textField.outerWidth() + menuButton.outerWidth())
-                .css('padding-right', (menuButton.outerWidth() + paddingRight) + 'px');
+                .css('padding-right', menuButton.outerWidth() + 'px');
         }
 
         /**
