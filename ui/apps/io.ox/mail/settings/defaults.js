@@ -32,7 +32,8 @@ function (util) {
             'allowHtmlMessages': true,
             'allowHtmlImages': false,
             'displayEmomticons': false,
-            'isColorQuoted': false
+            'isColorQuoted': false,
+            'selectFirstMessage': true
         };
 
     return settingsDefaults;
