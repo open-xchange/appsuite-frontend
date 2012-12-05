@@ -41,29 +41,32 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             if (task.end_date) {
                 infoPanel.append(
                         $('<br>'),
-
-                        $('<div>').text(//#. %1$s due date of a task
-                                        //#, c-format
-                                        gt("Due %1$s", _.noI18n(task.end_date))).addClass("end-date")
+                        $('<div>').addClass("end-date").text(
+                            //#. %1$s due date of a task
+                            //#, c-format
+                            gt("Due %1$s", _.noI18n(task.end_date))
+                        )
                 );
             }
 
             if (task.alarm) {
                 infoPanel.append(
                         $('<br>'),
-
-                        $('<div>').text(//#. %1$s reminder date of a task
-                                        //#, c-format
-                                        gt("Remind date %1$s", _.noI18n(task.alarm))).addClass("alarm-date")
+                        $('<div>').addClass("alarm-date").text(
+                            //#. %1$s reminder date of a task
+                            //#, c-format
+                            gt("Remind date %1$s", _.noI18n(task.alarm))
+                        )
                 );
             }
             if (task.percent_completed && task.percent_completed !== 0) {
                 infoPanel.append(
                         $('<br>'),
-
-                        $('<div>').text(//#. %1$s how much of a task is completed in percent, values from 0-100
-                                        //#, c-format
-                                        gt("Progress %1$s %", _.noI18n(task.percent_completed))).addClass("task-progress")
+                        $('<div>').addClass("task-progress").text(
+                            //#. %1$s how much of a task is completed in percent, values from 0-100
+                            //#, c-format
+                            gt("Progress %1$s %", _.noI18n(task.percent_completed))
+                        )
                     );
             }
             infoPanel.append(
@@ -73,7 +76,7 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
 
             var blackStars,
                 greyStars;
-            
+
             switch (data.priority) {
             case 1:
                 blackStars = "\u2605";
@@ -92,7 +95,7 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             $('<div>').append($('<span>').text(gt.noI18n(greyStars)).css('color', '#aaa'),
                               $('<span>').text(gt.noI18n(blackStars))).addClass("priority").appendTo(infoPanel);
             blackStars = greyStars = null;
-            
+
             //check to see if there is a leading <br> and remove it
             var firstBr = infoPanel.find("br:first");
             if (firstBr.is(infoPanel.find("*:first"))) {
@@ -103,9 +106,9 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             if (data.private_flag) {
                 $('<i>').addClass("icon-lock private-flag").appendTo(node);
             }
-            
+
             $('<div>').text(gt.noI18n(task.title)).addClass("title clear-title").appendTo(node);
-             
+
             if (task.number_of_attachments > 0) {
                 ext.point("io.ox/tasks/detail-attach").invoke("draw", node, task);
             }
@@ -145,7 +148,7 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             if (hasDetails) {
                 node.append($details);
             }
-            
+
             if (task.participants.length > 0) {
                 var table,
                     states = [

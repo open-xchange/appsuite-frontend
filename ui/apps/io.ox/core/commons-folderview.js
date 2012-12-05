@@ -19,7 +19,7 @@ define('io.ox/core/commons-folderview',
 
     'use strict';
 
-    function initExtensions(POINT) {
+    function initExtensions(POINT, app) {
 
         // default options
         ext.point(POINT + '/options').extend({
@@ -28,8 +28,8 @@ define('io.ox/core/commons-folderview',
             rootFolderId: '1',
             type: undefined,
             view: 'ApplicationFolderTree',
-            visible: false,
-            permanent: true
+            visible: app.settings.get('folderview/visible', false),
+            permanent: app.settings.get('folderview/permanent', true)
         });
 
         // draw container
@@ -277,7 +277,9 @@ define('io.ox/core/commons-folderview',
 
         togglePermanent = function () {
             if (options.permanent) { disablePermanent(); } else { enablePermanent(); }
-            return (options.permanent = !options.permanent);
+            options.permanent = !options.permanent;
+            app.settings.set('folderview/permanent', options.permanent).save();
+            return options.permanent;
         };
 
         fnHide = function () {
@@ -290,7 +292,9 @@ define('io.ox/core/commons-folderview',
                 app.getWindow().off('search:open', fnHide);
                 sidepanel.fadeOut();
             }
-            visible = false;
+            if (visible) {
+                app.settings.set('folderview/visible', visible = false).save();
+            }
         };
 
         fnShow = function () {
@@ -304,7 +308,7 @@ define('io.ox/core/commons-folderview',
                     sidepanel.fadeIn();
                 }
                 container.scrollTop(top);
-                visible = true;
+                app.settings.set('folderview/visible', visible = true).save();
             }
             return $.when();
         };
@@ -389,7 +393,7 @@ define('io.ox/core/commons-folderview',
         app.togglePermanentFolderView = togglePermanent;
         app.folderView = null;
 
-        initExtensions(POINT);
+        initExtensions(POINT, app);
 
         // apply all options
         _(ext.point(POINT + '/options').all()).each(function (obj) {

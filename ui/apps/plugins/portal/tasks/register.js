@@ -54,7 +54,11 @@ define("plugins/portal/tasks/register",
                     $('<div class="item">').data('item', task).append(
                         $('<span class="bold">').text(gt.noI18n(strings.shorten(task.title, 50))), $.txt(' '),
                         task.end_date === '' ? $() :
-                            $('<span class="accent">').text(gt('Due in %1$s', _.noI18n(task.end_date))), $.txt(' '),
+                            $('<span class="accent">').text(
+                                //#. Due on date
+                                gt('Due on %1$s', _.noI18n(task.end_date))
+                            ),
+                        $.txt(' '),
                         $('<span class="gray">').text(gt.noI18n(strings.shorten(task.note, 100)))
                     )
                 );

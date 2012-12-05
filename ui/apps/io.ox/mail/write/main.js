@@ -44,9 +44,7 @@ define('io.ox/mail/write/main',
     // actions (define outside of multi-instance app)
     ext.point(ACTIONS + '/draft').extend({
         action: function (baton) {
-            baton.app.saveDraft().done(function (data) {
-                baton.app.setMsgRef(data.data);
-            });
+            baton.app.saveDraft();
         }
     });
 
@@ -423,10 +421,11 @@ define('io.ox/mail/write/main',
                 previous = null; // always dirty this way
                 return this;
             } else if (flag === false) {
-                previous = false; // not dirty
+                previous = app.getMail();
                 return this;
             } else {
-                return previous !== false && !_.isEqual(previous, app.getMail());
+                console.warn('dirty?', !_.isEqual(previous, app.getMail()), '>', app.getMail());
+                return !_.isEqual(previous, app.getMail());
             }
         };
 
@@ -807,9 +806,11 @@ define('io.ox/mail/write/main',
         };
 
         app.saveDraft = function () {
+
             // get mail
             var mail = this.getMail(),
                 def = new $.Deferred();
+
             // send!
             mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
 
@@ -825,6 +826,8 @@ define('io.ox/mail/write/main',
                         notifications.yell(result);
                         def.reject(result);
                     } else {
+                        app.setMsgRef(result.data);
+                        app.dirty(false);
                         notifications.yell('success', gt('Mail saved as draft'));
                         def.resolve(result);
                     }
@@ -850,12 +853,13 @@ define('io.ox/mail/write/main',
             var def = $.Deferred();
 
             var clean = function () {
+                // mark as not dirty
+                app.dirty(false);
                 // clean up editors
                 for (var id in editorHash) {
                     editorHash[id].destroy();
                 }
                 // clear all private vars
-                app.dirty(false);
                 app = win = editor = currentSignature = editorHash = null;
             };
 
