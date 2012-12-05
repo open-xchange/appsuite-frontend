@@ -61,6 +61,7 @@ define('io.ox/calendar/edit/template',
                 .css({float: 'right', marginLeft: '13px'})
                 .on('click', function () {
                     baton.model.save();
+                    //baton.app.getWindow().busy();
                 })
             );
             this.append($('<button class="btn" data-action="discard" >')
@@ -85,7 +86,7 @@ define('io.ox/calendar/edit/template',
             var self = this;
             require(["io.ox/calendar/conflicts/conflictList"], function (c) {
                 var conflictList = c.drawList(conflicts);
-                self.$el.append(
+                self.$el.empty().append(
                     conflictList,
                     $('<div class="row">')
                         .css('margin-top', '10px').append(
@@ -412,7 +413,7 @@ define('io.ox/calendar/edit/template',
             var $input = $("<input>", {
                 type: "file"
             });
-
+            $input.css('line-height', '0');
             var $button = $("<button/>").attr('data-action', 'add').text(gt("Add")).addClass("btn btn-primary pull-right").on("click", function (e) {
                 e.preventDefault();
                 _($input[0].files).each(function (fileData) {
@@ -434,6 +435,14 @@ define('io.ox/calendar/edit/template',
                 app.view.baton.attachmentList.addFile(fileData);
             });
 
+        }
+    });
+
+    point.basicExtend({
+        id: 'dummy_spacer',
+        index: 10000,
+        draw: function () {
+            this.append('<div>').css('height', '100px');
         }
     });
 

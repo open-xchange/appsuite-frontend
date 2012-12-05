@@ -28,13 +28,15 @@
 
 	var Datepicker = function(element, options) {
 		var that = this;
+		this.parentEl = (options.parentEl && $(options.parentEl)) || $('body');
 
 		this.element = $(element);
 		this.language = options.language||this.element.data('date-language')||"en";
 		this.language = this.language in dates ? this.language : "en";
 		this.format = DPGlobal.parseFormat(options.format||this.element.data('date-format')||'mm/dd/yyyy');
+
 		this.picker = $(DPGlobal.template)
-							.appendTo('body')
+							.appendTo(this.parentEl)
 							.on({
 								click: $.proxy(this.click, this)
 							});
@@ -182,11 +184,13 @@
 		place: function(){
 			var zIndex = parseInt(this.element.parents().filter(function() {
 							return $(this).css('z-index') != 'auto';
-						}).first().css('z-index'))+10;
-			var offset = this.component ? this.component.offset() : this.element.offset();
+						}).first().css('z-index')) + 10;
+
+			var scrollTopContainer = $(this.element).closest('.window-content.scrollable').scrollTop();
+
 			this.picker.css({
-				top: offset.top + this.height,
-				left: offset.left,
+				top: $(this.element).offset().top + scrollTopContainer,
+				left: $(this.element).offset().left,
 				zIndex: zIndex
 			});
 		},
@@ -720,7 +724,7 @@
 				}
 				for (var i=0, s; i<setters_order.length; i++){
 					s = setters_order[i];
-					if (s in parsed)
+					if (s in parsed && !isNaN(parsed[s]))
 						setters_map[s](date, parsed[s])
 				}
 			}

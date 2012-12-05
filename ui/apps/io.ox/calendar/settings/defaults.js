@@ -22,15 +22,15 @@ function () {
         interval: '30',
         startTime: '8',
         endTime: '18',
-        showDeclinedAppointments: false,
         viewView: 'calendar',
-        viewCalendar: 'workweek',
-        viewTeam: 'workweek',
-        viewList: 'workweek',
+        showDeclinedAppointments: 'false',
         defaultReminder: '15',
-        notifyNewModifiedDeleted: true,
-        notifyAcceptedDeclinedAsCreator: false,
-        notifyAcceptedDeclinedAsParticipant: false
+        notifyNewModifiedDeleted: 'true',
+        notifyAcceptedDeclinedAsCreator: 'false',
+        notifyAcceptedDeclinedAsParticipant: 'false'
+//        viewCalendar: 'workweek',
+//        viewTeam: 'workweek',
+//        viewList: 'workweek',
     };
 
     return settingsDefaults;

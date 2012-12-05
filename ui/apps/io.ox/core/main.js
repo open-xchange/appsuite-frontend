@@ -120,7 +120,6 @@ define("io.ox/core/main",
         // trigger global event
         if (ox.online && ox.session !== '') {
             try {
-                console.debug('triggering automatic refresh ...');
                 ox.trigger("refresh^");
             } catch (e) {
                 console.error('globalRefresh()', e);
@@ -262,6 +261,23 @@ define("io.ox/core/main",
                         .on('click', function () { BigScreen.toggle(); })
                     );
                 }
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'about',
+            index: 300,
+            draw: function () {
+                this.append(
+                    $('<li>').append(
+                        $('<a href="#" data-action="about">').text(gt('About'))
+                    )
+                    .on('click', function () {
+                        require(['io.ox/core/about'], function (about) {
+                            about.show();
+                        });
+                    })
+                );
             }
         });
 

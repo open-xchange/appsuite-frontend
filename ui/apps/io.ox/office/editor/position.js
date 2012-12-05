@@ -325,7 +325,8 @@ define('io.ox/office/editor/position',
 
         var oxoPos = _.copy(oxoPosition, true),
             node = startnode,
-            offset = null;
+            offset = null,
+            returnObj = null;
 
         forcePositionCounting = forcePositionCounting ? true : false;
 
@@ -336,21 +337,26 @@ define('io.ox/office/editor/position',
 
         while (oxoPos.length > 0) {
 
-            var returnObj = Position.getNextChildNode(node, oxoPos.shift());
-
-            // child node of a paragraph: resolve element to DOM text node
-            if (!forcePositionCounting && returnObj && returnObj.node && DOM.isParagraphNode(returnObj.node.parentNode)) {
-                returnObj = Position.getTextSpanFromNode(returnObj);
-            }
+            returnObj = Position.getNextChildNode(node, oxoPos.shift());
 
             if (returnObj && returnObj.node) {
                 node = returnObj.node;
-                if (_.isNumber(returnObj.offset)) {
-                    offset = returnObj.offset;
-                }
             } else {
                 return;
             }
+        }
+
+        // child node of a paragraph: resolve element to DOM text node
+        if (!forcePositionCounting && returnObj && returnObj.node && DOM.isParagraphNode(returnObj.node.parentNode)) {
+            returnObj = Position.getTextSpanFromNode(returnObj);
+        }
+
+        if (returnObj && returnObj.node) {
+            node = returnObj.node;
+        }
+
+        if (returnObj && _.isNumber(returnObj.offset)) {
+            offset = returnObj.offset;
         }
 
         return new DOM.Point(node, offset);
@@ -634,6 +640,10 @@ define('io.ox/office/editor/position',
                 // store temporary text span info, will be used to find the last
                 // text span for a position pointing behind the last character
                 if (DOM.isTextSpan(_node)) {
+                    lastTextSpanInfo = { node: _node, start: nodeStart, length: nodeLength };
+                } else if (DOM.isTextSpanWithoutTextNode(_node)) {  // IE 9 -> special case to be removed again
+                    // append empty text node
+                    $(_node).text('');
                     lastTextSpanInfo = { node: _node, start: nodeStart, length: nodeLength };
                 }
             }, undefined, { allNodes: true });

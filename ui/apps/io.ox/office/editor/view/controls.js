@@ -322,6 +322,34 @@ define('io.ox/office/editor/view/controls',
 
     }}); // class FontHeightChooser
 
+    // class ParagraphBorderChooser ===========================================
+
+    Controls.ParagraphBorderChooser = RadioGroup.extend({ constructor: function () {
+
+        // base constructor ---------------------------------------------------
+
+        RadioGroup.call(this, {
+            icon: 'icon-io-ox-para-border-outside',
+            tooltip: gt('Paragraph borders'),
+            dropDown: true,
+            highlight: true,
+            updateCaptionMode: 'icon'
+        });
+
+        // initialization -----------------------------------------------------
+
+        this.addOptionButton('none',      { icon: 'icon-io-ox-para-border-none',      label: gt('No border') })
+            .addOptionButton('leftright', { icon: 'icon-io-ox-para-border-leftright', label: gt('Border left and right') })
+            .addOptionButton('topbottom', { icon: 'icon-io-ox-para-border-topbottom', label: gt('Border top and bottom') })
+            .addOptionButton('outside',   { icon: 'icon-io-ox-para-border-outside',   label: gt('Border outside') })
+            .addOptionButton('full',      { icon: 'icon-io-ox-para-border-full',      label: gt('Border outside and inside') })
+            .addOptionButton('left',      { icon: 'icon-io-ox-para-border-left',      label: gt('Border left') })
+            .addOptionButton('right',     { icon: 'icon-io-ox-para-border-right',     label: gt('Border right') })
+            .addOptionButton('top',       { icon: 'icon-io-ox-para-border-top',       label: gt('Border top') })
+            .addOptionButton('bottom',    { icon: 'icon-io-ox-para-border-bottom',    label: gt('Border bottom') })
+            .addOptionButton('inside',    { icon: 'icon-io-ox-para-border-inside',    label: gt('Border inside') });
+    }});
+
     // class LanguageChooser ================================================
 
     Controls.LanguageChooser = RadioGroup.extend({ constructor: function () {

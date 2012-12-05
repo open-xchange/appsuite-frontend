@@ -28,10 +28,10 @@ define('io.ox/core/tk/folderviews',
 
     var PATH = ox.base + '/apps/themes/default/icons/',
         DEFAULT = PATH + 'folder-default.png',
-        OPEN = 'url(' + PATH + 'folder-open.png)',
-        CLOSE = 'url(' + PATH + 'folder-close.png)',
+        OPEN = 'icon-chevron-right',
+        CLOSE = 'icon-chevron-down',
 
-        tmplFolder = $('<div>').addClass('folder selectable').css('paddingLeft', '13px'),
+        tmplFolder = $('<div>').addClass('folder selectable'),
         tmplSub = $('<div>').addClass('subfolders').hide(),
 
         refreshHash = {},
@@ -65,11 +65,7 @@ define('io.ox/core/tk/folderviews',
 
             isOpen = function () {
                 if (open === undefined) {
-                    // TODO: save/restore tree state
-                    open = data.id === 'default0/INBOX' ||
-                        (tree.options.type === 'infostore' && data.id === '9') ||
-                        (tree.options.type === 'contacts' && data.id === '2');
-                    //open = (data.module === 'system' || data.module === tree.options.type);
+                    open = _(tree.options.open || []).contains(data.id);
                 }
                 return hasChildren() && (skip() || open);
             },
@@ -115,12 +111,12 @@ define('io.ox/core/tk/folderviews',
             },
 
             updateArrow = function () {
-                var image = hasChildren() ? (isOpen() ? CLOSE : OPEN) : 'none';
-                nodes.arrow.css('backgroundImage', image);
+                var className = hasChildren() ? (isOpen() ? CLOSE : OPEN) : 'icon-none';
+                nodes.arrow.find('i').attr('class', className);
             },
 
             hideArrow = function () {
-                nodes.arrow.css('backgroundImage', 'none');
+                nodes.arrow.find('i').attr('class', 'icon-none');
             },
 
             openNode = function () {
@@ -128,6 +124,7 @@ define('io.ox/core/tk/folderviews',
                 open = true;
                 nodes.sub.show();
                 updateArrow();
+                tree.toggle();
                 return children === null ? paintChildren() : $.when();
             },
 
@@ -136,16 +133,22 @@ define('io.ox/core/tk/folderviews',
                 open = false;
                 nodes.sub.hide();
                 updateArrow();
+                tree.toggle();
             },
 
             // open/close tree node
             toggleState = function (e) {
                 // not valid click?
-                if (e.type !== 'dblclick' && $(this).hasClass('selectable')) {
-                    return;
+                if (e.type !== 'dblclick') {
+                    var node = $(this),
+                        isArrow = node.hasClass('folder-arrow'),
+                        isLabel = node.hasClass('folder-label');
+                    if (isArrow || (isLabel && node.closest('.folder').hasClass('unselectable'))) {
+                        // avoid selection; allow for unselectable
+                        e.preventDefault();
+                        if (!open) { openNode(); } else { closeNode(); }
+                    }
                 }
-                e.preventDefault();
-                if (!open) { openNode(); } else { closeNode(); }
             };
 
         // make accessible
@@ -157,6 +160,18 @@ define('io.ox/core/tk/folderviews',
         // open & close
         this.open = openNode;
         this.close = closeNode;
+
+        this.isOpen = function () {
+            return hasChildren() && open === true;
+        };
+
+        this.getOpenNodes = function () {
+            if (this.isOpen()) {
+                return [id].concat(_(children || []).invoke('getOpenNodes'));
+            } else {
+                return [];
+            }
+        };
 
         // get sub folders
         this.getChildren = function () {
@@ -307,10 +322,11 @@ define('io.ox/core/tk/folderviews',
 
         // paint tree node - loads and paints sub folder if open
         this.paint = function () {
-            nodes.folder = tmplFolder.clone().on('dblclick click', toggleState);
+
+            nodes.folder = tmplFolder.clone().on('dblclick click', '.folder-arrow, .folder-label', toggleState);
 
             if (level > 0) {
-                nodes.folder.css('paddingLeft', (13 + level * 22) + 'px');
+                nodes.folder.css('paddingLeft', (0 + level * 30) + 'px');
             }
 
             nodes.sub = tmplSub.clone();
@@ -327,11 +343,10 @@ define('io.ox/core/tk/folderviews',
                     // store data
                     data = promise;
                     // create DOM nodes
-                    nodes.arrow = $('<div>').addClass('folder-arrow').on('click', toggleState);
-                    nodes.icon = $('<img>', { src: '', alt: '' }).addClass('folder-icon');
+                    nodes.arrow = $('<a href="#" class="folder-arrow"><i class="icon-chevron-right"></i></a>');
                     nodes.label = $('<span>').addClass('folder-label');
                     nodes.counter = $('<span>').addClass('folder-counter');
-                    nodes.subscriber = $('<input>').attr({'type': 'checkbox', 'name': 'folder', 'value': data.id}).css('float', 'right');
+                    nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', 'value': data.id }).css('float', 'right');
                     if (data.subscribed) {
                         nodes.subscriber.attr('checked', 'checked');
                     }
@@ -340,9 +355,9 @@ define('io.ox/core/tk/folderviews',
                     updateArrow();
                     // add to DOM
                     if (checkbox && (data.own_rights & 0x3f80)) {
-                        nodes.folder.append(nodes.arrow, nodes.icon, nodes.counter, nodes.label, nodes.subscriber);
+                        nodes.folder.append(nodes.arrow, nodes.counter, nodes.label, nodes.subscriber);
                     } else {
-                        nodes.folder.append(nodes.arrow, nodes.icon, nodes.counter, nodes.label);
+                        nodes.folder.append(nodes.arrow, nodes.counter, nodes.label);
                     }
 
                     // customize
@@ -376,7 +391,9 @@ define('io.ox/core/tk/folderviews',
             id: 'default',
             rootFolderId: '1',
             skipRoot: true,
-            type: null
+            type: null,
+            open: [],
+            toggle: $.noop
         }, opt);
 
         this.internal = { destroy: $.noop };
@@ -676,6 +693,11 @@ define('io.ox/core/tk/folderviews',
             return this.root.repaint();
         };
 
+        this.toggle = function () {
+            var open = _(this.root.getOpenNodes()).flatten();
+            this.options.toggle(open);
+        };
+
         this.getNode = function (id) {
             id = String(id);
             return this.treeNodes[id];
@@ -695,7 +717,7 @@ define('io.ox/core/tk/folderviews',
 
         function deferredEach(list, done) {
             var top = list.shift(), node, self = this;
-            if (top && (node = this.getNode(top))) {
+            if (list.length && top && (node = this.getNode(top))) {
                 node.open().done(function () {
                     deferredEach.call(self, list, done);
                 });
@@ -742,97 +764,8 @@ define('io.ox/core/tk/folderviews',
         id: 'default',
         customize: function (data, options) {
 
-            var src,
-                icon = this.find('.folder-icon'),
-                label = this.find('.folder-label'),
+            var label = this.find('.folder-label'),
                 counter = this.find('.folder-counter');
-
-            (function () {
-
-                var accountId, a = {}, cont, id;
-
-                if (data.module === 'mail') {
-
-                    cont = function () {
-                        switch (data.id) {
-                        case a.inbox_fullname:
-                            src = PATH + 'inbox.png';
-                            break;
-                        case a.trash_fullname:
-                            src = PATH + 'trash.png';
-                            break;
-                        case a.sent_fullname:
-                            src = PATH + 'outbox.png';
-                            break;
-                        case a.drafts_fullname:
-                            src = PATH + 'draft.png';
-                            break;
-                        case a.spam_fullname:
-                            src = PATH + 'spam.png';
-                            break;
-                        case a.confirmed_ham_fullname:
-                            src = PATH + 'ham.png';
-                            break;
-                        case a.confirmed_spam_fullname:
-                            src = PATH + 'spam.png';
-                            break;
-                        default:
-                            src = DEFAULT;
-                            break;
-                        }
-                        // update src
-                        icon.attr('src', src);
-                    };
-
-                    // get account id
-                    accountId = /^default(\d*)\b/.exec(data.id);
-                    if ($.isArray(accountId)) {
-                        accountId = accountId[1];
-                        // default0?
-                        if (accountId === '0') {
-                            // use config from api!
-                            var f = config.get('mail.folder');
-                            if (f) { // might be undefined when mail module is down
-                                a.inbox_fullname = f.inbox;
-                                a.trash_fullname = f.trash;
-                                a.sent_fullname = f.sent;
-                                a.drafts_fullname = f.drafts;
-                                a.spam_fullname = f.spam;
-                                cont();
-                            }
-                        } else {
-                            // get account data from cache
-                            id = 'default' + accountId;
-                            account.get(accountId).done(function (data) {
-                                // unified inbox, e.g. behaves like an account but is not
-                                if (!data) {
-                                    a = {
-                                        inbox_fullname: id + '/INBOX',
-                                        trash_fullname: id + '/Trash',
-                                        sent_fullname: id + '/Sent',
-                                        drafts_fullname: id + '/Drafts',
-                                        spam_fullname: id + '/Spam'
-                                    };
-                                } else {
-                                    a = data;
-                                }
-                                // inbox still not set?
-                                if (a.inbox_fullname === undefined) {
-                                    a.inbox_fullname = id + '/INBOX';
-                                }
-                                cont();
-                            });
-                        }
-                    }
-                } else {
-                    // id specific
-                    if (data.id === '6') {
-                        src = PATH + 'user.png';
-                    } else {
-                        src = DEFAULT;
-                    }
-                }
-            }());
 
             // selectable?
             var hasProperType = !options.type || options.type === data.module,
@@ -845,15 +778,9 @@ define('io.ox/core/tk/folderviews',
             }
 
             if (!isSelectable) {
-                this.removeClass('selectable');
-                // userstore?
-                if (data.folder_id === '10') {
-                    this.css('opacity', 0.60);
-                }
+                this.removeClass('selectable').addClass('unselectable');
             }
 
-            // set icon
-            icon.attr('src', src);
             // set title
             label.text(_.noI18n(data.title));
             // set counter (mail only)

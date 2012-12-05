@@ -73,11 +73,22 @@ define('io.ox/calendar/week/perspective',
             };
 
             if (obj.recurrence_type > 0) {
-                new dialogs.ModalDialog()
-                    .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
-                    .addPrimaryButton('series', gt('Series'))
-                    .addButton('appointment', gt('Appointment'))
-                    .addButton('cancel', gt('Cancel'))
+                var noSeriesEdit = obj.drag_move && obj.drag_move !== 0,
+                    dialog = new dialogs.ModalDialog();
+                if (noSeriesEdit) {
+                    dialog
+                        .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
+                        .addButton('appointment', gt('OK'))
+                        .addButton('cancel', gt('Cancel'));
+                } else {
+                    dialog
+                        .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
+                        //#. Use singular in this context
+                        .addPrimaryButton('series', gt('Series'))
+                        .addButton('appointment', gt('Appointment'))
+                        .addButton('cancel', gt('Cancel'));
+                }
+                dialog
                     .show()
                     .done(function (action) {
                         switch (action) {

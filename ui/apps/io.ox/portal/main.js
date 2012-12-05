@@ -26,7 +26,7 @@ define('io.ox/portal/main',
 
     'use strict';
 
-    var READY = $.when();
+    var READY = $.when(), DEV_PLUGINS = ['plugins/portal/helloworld/register'];
 
     // overwrite with fresh settings
     settings.detach().set({
@@ -102,6 +102,24 @@ define('io.ox/portal/main',
                         method: 'flickr.photos.search',
                         query: 'xjrlokix'
                     }
+                },
+                rss_0: {
+                    plugin: 'plugins/portal/rss/register',
+                    color: 'lightblue',
+                    index: 'first',
+                    props: {
+                        url: ['http://www.spiegel.de/schlagzeilen/tops/index.rss']
+                    }
+                },
+                linkedin_0: {
+                    plugin: 'plugins/portal/linkedIn/register',
+                    color: 'blue',
+                    index: 3
+                },
+                helloworld_0: {
+                    plugin: 'plugins/portal/helloworld/register',
+                    color: 'pink',
+                    index: -1
                 }
             }
         }
@@ -171,27 +189,37 @@ define('io.ox/portal/main',
     ext.point('io.ox/portal/widget-scaffold').extend({
         draw: function (baton) {
             var data = baton.model.toJSON();
-            this.attr({ 'data-widget-cid': baton.model.cid, 'data-widget-plugin': baton.model.get('plugin') })
-                .addClass('widget widget-color-' + (data.color || 'white') + ' widget-' + data.type + ' pending')
-                .append(
-                    $('<h2 class="title">').text('\u00A0')
-                );
+            this.attr({
+                'data-widget-cid': baton.model.cid,
+                'data-widget-id': baton.model.get('id'),
+                'data-widget-type': baton.model.get('type')
+            })
+            .addClass('widget widget-color-' + (data.color || 'black') + ' widget-' + data.type + ' pending')
+            .append(
+                $('<h2 class="title">').text('\u00A0')
+            );
         }
     });
 
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/portal', title: 'Portal' }),
-        // app window
         win,
-        // app baton
         appBaton = ext.Baton({ app: app }),
-        // all available plugins
-        availablePlugins = _(manifests.pluginsFor('portal')).uniq(),
-        // sidepopup
         sidepopup = new dialogs.SidePopup(),
-        // collection
-        collection = new Backbone.Collection(
-            _(settings.get('widgets/user', {}))
+        availablePlugins = _(manifests.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
+        collection = new Backbone.Collection([]);
+
+    // for debugging
+    window.portal = app;
+
+    collection.comparator = function (a, b) {
+        return ext.indexSorter({ index: a.get('index') }, { index: b.get('index') });
+    };
+
+    app.settings = settings;
+
+    app.getWidgetSettings = function () {
+        return _(settings.get('widgets/user', {}))
             .chain()
             // map first since we need the object keys
             .map(function (obj, id) {
@@ -203,18 +231,72 @@ define('io.ox/portal/main',
             .filter(function (obj) {
                 return (obj.enabled === undefined || obj.enabled === true) && _(availablePlugins).contains(obj.plugin);
             })
-            .value()
-            .sort(ext.indexSorter)
+            .value();
+    };
+
+    collection.reset(app.getWidgetSettings());
+
+    collection.on('remove', function (model) {
+        // remove DOM node
+        appBaton.$.widgets.find('[data-widget-cid="' + model.cid + '"]').remove();
+        // clean up
+        if (model.baton) {
+            delete model.baton.model;
+            delete model.baton;
+        }
+    });
+
+    collection.on('add', function (model) {
+        app.drawScaffold(model);
+        app.loadPlugins().done(function () {
+            app.drawWidget(model);
+        });
+    });
+
+    settings.on('change', function () {
+
+        // adopt current DOM order
+        collection.each(function (model) {
+            var node = app.getWidgetNode(model);
+            model.set('index', node.index());
+        });
+
+        var ids = collection.pluck('id');
+
+        _(app.getWidgetSettings()).each(function (obj) {
+            // added?
+            if (!_(ids).contains(obj.id)) {
+                collection.add(obj);
+            } else {
+                // remove from list
+                ids = _(ids).without(obj.id);
+            }
+        });
+
+        // all remaining ids need to be removed
+        collection.remove(
+            collection.filter(function (model) {
+                return _(ids).contains(model.id);
+            })
         );
+
+        collection.sort({ silent: true });
+
+        // loop over collection for resorting DOM tree
+        collection.each(function (model) {
+            // just re-append all in proper order
+            appBaton.$.widgets.append(app.getWidgetNode(model));
+        });
+    });
+
+    app.getWidgetCollection = function () {
+        return collection;
+    };
 
     app.updateTitle = function () {
         userAPI.getGreeting(ox.user_id).done(function (name) {
             appBaton.$.greeting.text(getGreetingPhrase(name));
         });
-    };
-
-    app.getCollection = function () {
-        return collection;
     };
 
     function openSidePopup(popup, e, target) {
@@ -227,62 +309,134 @@ define('io.ox/portal/main',
         if (model) {
             baton = model.get('baton');
             baton.item = target.data('item');
-            ext.point('io.ox/portal/widget/' + model.get('type')).invoke('draw', popup.empty(), model.get('baton'));
+            // defer to get visual feedback first (e.g. script errors)
+            _.defer(function () {
+                ext.point('io.ox/portal/widget/' + model.get('type')).invoke('draw', popup.empty(), model.get('baton'));
+            });
         }
     }
 
-    app.drawScaffolds = function () {
-        collection.each(function (model) {
-            var node = $('<li>'),
-                baton = ext.Baton({ model: model, app: app });
-            ext.point('io.ox/portal/widget-scaffold').invoke('draw', node, baton);
-            appBaton.$.widgets.append(node);
-        });
-        // add side popup
-        sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer', openSidePopup);
-        // make sortable
-        appBaton.$.widgets.sortable({
-            containment: win.nodes.main,
-            scroll: true,
-            delay: 300
-        });
+    app.drawScaffold = function (model) {
+        var node = $('<li>'),
+            baton = ext.Baton({ model: model, app: app });
+        ext.point('io.ox/portal/widget-scaffold').invoke('draw', node, baton);
+        appBaton.$.widgets.append(node);
+    };
+
+    app.getWidgetNode = function (model) {
+        return appBaton.$.widgets.find('[data-widget-cid="' + model.cid + '"]');
     };
 
     app.loadPlugins = function () {
         var usedPlugins = collection.pluck('plugin'),
             dependencies = _(availablePlugins).intersection(usedPlugins);
-        return require(dependencies);
+        return require(dependencies).done(function () {
+            app.removeDisabledWidgets();
+        });
+    };
+
+    function setup(e) {
+        var baton = e.data.baton;
+        ext.point(baton.point).invoke('performSetUp');
+    }
+
+    app.drawDefaultSetup = function (baton) {
+        this.getWidgetNode(baton.model)
+            .addClass('requires-setup')
+            .append(
+                $('<div class="content">').text(gt('Click here to add your account'))
+                .on('click', { baton: baton }, setup)
+            );
     };
 
     function ensureDeferreds(ret) {
         return ret && ret.promise ? ret : READY;
     }
 
-    app.drawWidgets = function () {
-        collection.each(function (model, index) {
-            // get proper extension
-            var type = model.get('type'),
-                node = appBaton.$.widgets.find('[data-widget-cid="' + model.cid + '"]'),
-                delay = (index / 2 >> 0) * 2000,
-                point = ext.point('io.ox/portal/widget/' + type),
-                baton = ext.Baton({ model: model });
-            // remember baton
-            model.set('baton', baton);
-            // set title
-            node.find('h2.title').text(point.prop('title'));
+    function reduceBool(memo, bool) {
+        return memo && bool;
+    }
+
+    function runAction(e) {
+        ext.point(e.data.baton.point).invoke('action', $(this).closest('.widget'), e.data.baton);
+    }
+
+    function loadAndPreview(point, node, baton) {
+        var defs = point.invoke('load', node, baton).map(ensureDeferreds).value();
+        return $.when.apply($, defs).done(function () {
+            node.find('.content').remove();
+            point.invoke('preview', node, baton);
+            node.removeClass('pending');
+        });
+    }
+
+    app.removeDisabledWidgets = function () {
+        collection.remove(
+            collection.filter(function (model) {
+                return ext.point('io.ox/portal/widget/' + model.get('type'))
+                    .invoke('isEnabled').reduce(reduceBool, true).value() === false;
+            })
+        );
+    };
+
+    app.drawWidget = function (model, index) {
+
+        index = index || 0;
+
+        var type = model.get('type'),
+            node = app.getWidgetNode(model),
+            delay = (index / 2 >> 0) * 2000,
+            baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + type }),
+            point = ext.point(baton.point),
+            requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value(),
+            title;
+
+        // remember baton
+        model.set('baton', baton);
+
+        // set title
+        title = node.find('h2.title').text(point.prop('title'));
+
+        // setup?
+        if (requiresSetUp) {
+            node.removeClass('pending');
+            app.drawDefaultSetup(baton, node);
+        } else {
+            // add link?
+            if (point.prop('action') !== undefined) {
+                title.addClass('action-link').on('click', { baton: baton }, runAction);
+            }
             // simple delay approach
             setTimeout(function () {
                 // initialize first
                 point.invoke('initialize', node, baton);
-                // load
-                var defs = point.invoke('load', node, baton).map(ensureDeferreds).value();
-                $.when.apply($, defs).done(function () {
-                    point.invoke('preview', node, baton);
-                    node.removeClass('pending');
-                });
+                // load & preview
+                loadAndPreview(point, node, baton);
+            }, delay);
+        }
+    };
+
+    // can be called every 30 seconds
+    app.refresh = _.throttle(function () {
+        collection.each(function (model, index) {
+            var type = model.get('type'),
+                node = app.getWidgetNode(model),
+                delay = Math.random() * (collection.length / 2) * 1000,
+                baton = model.get('baton'),
+                point = ext.point(baton.point);
+            setTimeout(function () {
+                node.addClass('pending');
+                setTimeout(function () {
+                    loadAndPreview(point, node, model.get('baton'));
+                    node = baton = point = null;
+                }, 300);
             }, delay);
         });
-    };
+    }, 30000);
+
+    ox.on('refresh^', function () {
+        app.refresh();
+    });
 
     // launcher
     app.setLauncher(function () {
@@ -299,9 +453,33 @@ define('io.ox/portal/main',
         _.tick(1, 'hour', app.updateTitle);
 
         win.show(function () {
-            app.drawScaffolds();
+
+            // draw scaffolds now for responsiveness
+            collection.each(app.drawScaffold);
+
+            // add side popup
+            sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer', openSidePopup);
+
+            // make sortable
+            appBaton.$.widgets.sortable({
+                containment: win.nodes.main,
+                scroll: true,
+                delay: 150,
+                stop: function (e, ui) {
+                    // update all indexes
+                    var widgets = settings.get('widgets/user');
+                    $(this).children('.widget').each(function (index) {
+                        var node = $(this), id = node.attr('data-widget-id');
+                        if (id in widgets) {
+                            widgets[id].index = index;
+                        }
+                    });
+                    settings.set('widgets/user', widgets).save();
+                }
+            });
+
             app.loadPlugins().done(function () {
-                app.drawWidgets();
+                collection.each(app.drawWidget);
             });
         });
     });
@@ -309,408 +487,4 @@ define('io.ox/portal/main',
     return {
         getApp: app.getInstance
     };
-
-//     // wait for plugin dependencies
-//     var plugins = manifests.pluginsFor('portal');
-//     var pluginSettings = _.sortBy(settings.get('pluginSettings') || {}, function (obj) { return obj.index; });
-
-//     var allActivePluginIds = {};
-//     _.each(pluginSettings, function (obj) {
-//         if (obj.active) {
-//             allActivePluginIds[obj.id] = obj;
-//         }
-//     });
-
-//     var allActivePlugins = _.map(allActivePluginIds, function (obj) {
-//         return 'plugins/portal/' + obj.id + '/register';
-//     });
-
-//     var reqPlugins = _.intersection(allActivePlugins, plugins);
-
-//     var setOrder = function (extensions) {
-//         var index = 100;
-
-//         // Load plugin with given index (for sub-tiles)
-//         _.each(extensions, function (obj) {
-//             if (obj && _.isFunction(obj.reload)) {
-//                 obj.reload(index);
-//             }
-//             index += 100;
-//         });
-
-//         var indices = {};
-
-//         // Apply index to normal portal-plugins
-//         ext.point('io.ox/portal/widget').each(function (extension) {
-//             if (allActivePluginIds[extension.id]) {
-//                 extension.index = allActivePluginIds[extension.id].index;
-//             } else {
-//                 var i = extension.id.indexOf('-');
-//                 if (i !== -1) {
-//                     var extensionName = extension.id.substring(0, i);
-//                     if (!indices[extensionName]) {
-//                         indices[extensionName] = allActivePluginIds[extensionName].index;
-//                     }
-//                     extension.index = indices[extensionName]++;
-//                 }
-//             }
-//         });
-//         ext.point('io.ox/portal/widget').sort();
-//     };
-
-//     return require(reqPlugins).pipe(function () {
-
-//         setOrder(arguments);
-
-
-
-
-//         var contentQueue = new tasks.Queue();
-
-
-//         function createContentTask(extension) {
-//             return {
-//                 id: extension.id,
-//                 perform: function () {
-//                     var def = $.Deferred(),
-//                         $node = $('<div/>');
-
-//                     extension.invoke('load')
-//                         .pipe(function () {
-//                             return (extension.invoke.apply(extension, ['draw', $node].concat($.makeArray(arguments))) || $.Deferred())
-//                                 .done(function () {
-//                                     extension.invoke('post', $node, extension);
-//                                     def.resolve($node);
-//                                 });
-//                         })
-//                         .fail(function (e) {
-//                             $node.remove();
-//                             contentSide.idle();
-//                             def.reject(e);
-//                         });
-
-//                     return def;
-//                 }
-//             };
-//         }
-
-//         function drawContent(extension, e) {
-
-//             new dialogs.SidePopup({ modal: true }).show(e, function (popup) {
-
-//                 var self = this;
-//                 popup.busy();
-
-//                 contentQueue.fasttrack(extension.id).done(function (node) {
-
-//                     contentSide.children().trigger('onPause').detach();
-//                     $(node).trigger('onResume');
-//                     popup.idle();
-//                     popup.append(node);
-//                     $(node).trigger('onAppended');
-
-//                     self.on('close', function () {
-//                         $(node).trigger('onPause');
-//                     });
-
-//                     if (extension.loadMoreResults) {
-//                         var $o = $('div.io-ox-sidepopup-pane');
-//                         $o.bind('scroll', function (event) {
-//                             // TODO tidy enough? (loadingMoreResults + active tile)
-//                             if (!extension.isLoadingMoreResults && $('div[widget-id="' + extension.id + '"]').hasClass('io-ox-portal-tile-active') && !extension.timer) {
-//                                 extension.timer = setTimeout(function () {
-//                                     // Position + Height + Tolerance
-//                                     var distance = $o.scrollTop() + $o.height() + 50;
-
-//                                     if ($('div.scrollable-pane').height() <= distance) {
-//                                         extension.isLoadingMoreResults = true;
-//                                         extension.loadMoreResults(extension.finishLoadingMoreResults);
-//                                     }
-//                                     extension.timer = 0;
-//                                 }, 250);
-//                             }
-//                         });
-//                     }
-
-//                     $('div[widget-id]').removeClass('io-ox-portal-tile-active');
-//                     $('div[widget-id="' + extension.id + '"]').addClass('io-ox-portal-tile-active');
-//                     contentSide.idle();
-//                 });
-//             });
-//         }
-
-//         function makeClickHandler(extension) {
-//             return function (event) {
-//                 contentSide.find(":first").trigger('onPause').detach();
-//                 contentSide.busy();
-//                 app.active = extension;
-//                 app.activeEvent = event;
-//                 return drawContent(extension, event);
-//             };
-//         }
-
-//         var getKulerIndex = (function () {
-
-//             var list = '0123456789'.split(''), tmp = [];
-
-//             function randomSort() { return Math.round(Math.random()) - 0.5; }
-
-//             return function () {
-//                 if (tmp.length === 0) {
-//                     tmp = list.slice(0, 10).sort(randomSort);
-//                 }
-//                 return tmp.shift();
-//             };
-//         }());
-
-//         function addFillers(num, start, minIndex, maxIndex) {
-//             var load = function () {
-//                     return $.Deferred().resolve($('<div>'));
-//                 },
-//                 i = 0;
-//             for (; i < num; i++) {
-//                 var index = Math.round(Math.random() * (maxIndex - minIndex) + minIndex);
-//                 ext.point('io.ox/portal/widget').extend({
-//                     id: 'filler' + (start + i),
-//                     index: index,
-//                     title: '',
-//                     colorIndex: 'X',
-//                     load: load
-//                 });
-//             }
-//         }
-
-//         function getColorIndex(extension) {
-//             if (extension.colorIndex) {
-//                 return extension.colorIndex;
-//             }
-//             var haystack = settings.get('pluginSettings');
-//             var needle = _(haystack).find(function (prop) {return prop.id === extension.id; });
-//             if (!needle) {
-//                 needle = {id: extension.id};
-//                 haystack.push(needle);
-//             }
-//             if (!needle.colorIndex) {
-//                 needle.colorIndex = getKulerIndex();
-//                 settings.set('pluginProperties', haystack);
-//                 settings.save();
-//             }
-//             return needle.colorIndex;
-//         }
-
-//         function initExtensions() {
-//             // add dummy widgets
-//             var point = ext.point('io.ox/portal/widget'),
-//                 count = point.count(),
-//                 fillers = 12 - count,
-//                 minIndex, maxIndex;
-//             point.each(function (extension) { //underscore does not work on this enum...
-//                 if (!minIndex && extension.index || minIndex > extension.index) { minIndex = extension.index; }
-//                 if (!maxIndex && extension.index || maxIndex < extension.index) { maxIndex = extension.index; }
-//             });
-
-//             addFillers(fillers, count, minIndex, maxIndex);
-//             point.sort();
-//             addFillers(fillers, count, maxIndex, maxIndex + 100);
-
-//             point.each(function (extension) {
-//                 var $actionbar = $('<div class="io-ox-portal-actions">').append(
-//                     $('<span class="action-text io-ox-portal-action-view">').text(gt("View %s", extension.title || extension.id)),
-//                     $('<i class="icon-remove io-ox-portal-action">'));
-
-//                 if (!extension.isEnabled) {
-//                     extension.isEnabled = function () { return true; };
-//                 }
-//                 if (!extension.isEnabled()) {
-//                     return;
-//                 }
-//                 if (!extension.requiresSetUp) {
-//                     extension.requiresSetUp = function () { return false; };
-//                 }
-
-//                 contentQueue.enqueue(createContentTask(extension));
-
-//                 var $tile = $('<div class="io-ox-portal-widget-tile io-ox-portal-typeA">')
-//                     // experimental
-//                     .addClass('tile-color' + getColorIndex(extension))
-//                     .attr('widget-id', extension.id)
-//                     .appendTo(tileSide)
-//                     .busy();
-
-//                 if (extension.tileClass) {
-//                     $tile.addClass(extension.tileClass);
-//                 }
-
-//                 if (extension.requiresSetUp()) {
-//                     if (extension.performSetUp) {
-//                         $tile.on('click', extension.performSetUp);
-//                     } else {
-//                         $tile.on('click', function () { return keychain.createInteractively(extension.id); });
-//                     }
-//                 } else if (!extension.hideSidePopup) {
-//                     $actionbar.find('.io-ox-portal-action-view').on('click', makeClickHandler(extension));
-//                 }
-
-//                 if (!extension.loadTile) {
-//                     extension.loadTile = function () {
-//                         return $.Deferred().resolve();
-//                     };
-//                 }
-//                 if (extension.tileType) {
-//                     $tile.removeClass('io-ox-portal-typeA').addClass('io-ox-portal-type' + extension.tileType);
-//                 }
-
-//                 if (!extension.drawTile) {
-//                     extension.drawTile = function () {
-//                         var $node = $(this);
-
-//                         if (! (/^filler/.test(extension.id) || (extension.type && extension.type !== 'A'))) {
-//                             $(this).append(
-//                                 $('<div class="io-ox-portal-title">').append(
-//                                     $('<img class="tile-image">'),
-//                                     $('<h1 class="tile-heading"/>')
-//                                 )
-//                             );
-//                         }
-//                         extension.asyncMetadata("title").done(function (title) {
-//                             if (title === control.CANCEL) {
-//                                 $tile.remove();
-//                                 return;
-//                             }
-//                             $node.find(".tile-heading").text(title);
-//                         });
-//                         extension.asyncMetadata("icon").done(function (icon) {
-//                             if (icon === control.CANCEL) {
-//                                 $tile.remove();
-//                                 return;
-//                             }
-//                             if (icon) {
-//                                 $node.find(".tile-image").attr("src", icon);
-//                             } else {
-//                                 $node.find(".tile-image").remove();
-//                             }
-//                         });
-//                         extension.asyncMetadata("preview").done(function (preview) {
-//                             if (preview === control.CANCEL) {
-//                                 $tile.remove();
-//                                 return;
-//                             }
-//                             if (preview) {
-//                                 $node.append(preview);
-//                             }
-//                         });
-//                         extension.asyncMetadata("tileColor").done(function (color) {
-//                             if (color === control.CANCEL) {
-//                                 $tile.remove();
-//                                 return;
-//                             }
-//                             if (color !== undefined) {
-// //                                    $node[0].className = $node[0].className.replace(/tile-color\d/g, '');
-// //                                    $node.addClass('tile-color' + color);
-//                             }
-//                         });
-//                     };
-//                 } //END of "is draw method missing?"
-
-//                 if (/^filler/.test(extension.id)) {
-//                     $tile.off('click');
-//                 }
-
-//                 if (extension.requiresSetUp()) {
-//                     $tile.addClass("io-ox-portal-createMe");
-//                     return (extension.invoke.apply(extension, ['drawCreationDialog', $tile].concat($.makeArray(arguments))) || $.Deferred())
-//                         .done(function () {
-//                             $tile.idle();
-//                             extension.invoke('postTile', $tile, extension);
-//                         })
-//                         .fail(function (e) {
-//                             $tile.idle().remove();
-//                         });
-//                 }
-//                 return extension.invoke('loadTile')
-//                 .pipe(function (a1, a2) {
-//                     var $content = $('<div>').appendTo($tile);
-//                     return (extension.invoke.apply(extension, ['drawTile', $content].concat($.makeArray(arguments))) || $.Deferred().resolve())
-//                         .done(function () {
-//                             $tile.idle();
-//                             extension.invoke('postTile', $content, extension);
-//                             if (!/^filler/.test(extension.id)) {
-//                                 $actionbar.appendTo($tile);
-//                             }
-//                         });
-//                 }).fail(function (e) {
-//                     $tile.idle().remove();
-//                 });
-//             });
-//         }
-
-//         // launcher
-//         app.setLauncher(function () {
-
-//             var formerlyActivePluginIds = {};
-
-//             contentQueue.start();
-//             // get window
-//             app.setWindow(win = ox.ui.createWindow({
-//                 name: 'io.ox/portal',
-//                 chromeless: true,
-//                 toolbar: true,
-//                 titleWidth: '100%'
-//             }));
-
-//             updateTitle();
-//             _.tick(1, 'hour', updateTitle);
-
-//             initExtensions();
-
-//             app.active = null;
-
-//             win.nodes.main
-//                 .addClass('io-ox-portal')
-//                 .append(intro)
-//                 .append(tileSide);
-//             ox.on('refresh^ refresh-portal', function (event, completeReload) {
-//                 if (completeReload) {
-//                     pluginSettings = _.sortBy(settings.get('pluginSettings', []), function (obj) { return obj.index; });
-//                     formerlyActivePluginIds = allActivePluginIds;
-//                     allActivePluginIds = {};
-//                     _.each(pluginSettings, function (obj) {
-//                         if (obj.active) {
-//                             allActivePluginIds[obj.id] = obj;
-//                         }
-//                     });
-
-//                     allActivePlugins = _.map(allActivePluginIds, function (obj) {
-//                         return 'plugins/portal/' + obj.id + '/register';
-//                     });
-//                     var formerlyActivePlugins = _.map(formerlyActivePluginIds, function (obj) {
-//                         return 'plugins/portal/' + obj.id + '/register';
-//                     });
-
-//                     reqPlugins = _.intersection(allActivePlugins, plugins);
-//                     reqPlugins = _(reqPlugins).without(formerlyActivePlugins);
-
-//                     require(reqPlugins).pipe(function () {
-//                         setOrder(arguments);
-//                     });
-
-//                     app.active = null;
-//                     app.activeEvent = null;
-//                 }
-//                 tileSide.empty();
-//                 contentQueue = new tasks.Queue();
-//                 contentQueue.start();
-//                 initExtensions();
-//                 if (app.activeEvent) {
-//                     drawContent(app.active, app.activeEvent);
-//                 }
-//             });
-
-//             win.show();
-//         });
-
-//         return {
-//             getApp: app.getInstance
-//         };
-//     });
 });

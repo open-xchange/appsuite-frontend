@@ -420,7 +420,7 @@ define('io.ox/office/editor/selection',
          * position.
          */
         this.isValid = function () {
-            return (startPosition.length > 0) && (endPosition.length > 0);
+            return (startPosition) && (endPosition) && (startPosition.length > 0) && (endPosition.length > 0);
         };
 
         /**

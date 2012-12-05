@@ -113,6 +113,10 @@ define('io.ox/office/editor/editor',
     }
 
     function getPrintableChar(event) {
+
+        if (event.keyCode === KeyCodes.ENTER) {
+            return '';  // in IE 9 event.char is '\n'
+        }
         // event.char preferred. DL2, but nyi in most browsers:(
         if (_.isString(event.char)) {
             return event.char;
@@ -123,6 +127,7 @@ define('io.ox/office/editor/editor',
         if (_.isNumber(event.which) && (event.which >= 32)) {
             return String.fromCharCode(event.which);
         }
+
         // TODO: Need to handle other cases - later...
         return '';
     }
@@ -156,6 +161,9 @@ define('io.ox/office/editor/editor',
 
             // list of operations
             operations = [],
+
+            // counting the operations
+            operationsCounter = 0,
 
             //undo manager collection undo and redo operations
             undoManager = new UndoManager(this),
@@ -247,6 +255,8 @@ define('io.ox/office/editor/editor',
          */
         this.setPreselectedAttributes = function (attributes) {
             preselectedAttributes = attributes;
+            // update view (mutually exclusive buttons may switch state)
+            this.trigger('selection', selection);
         };
 
         /**
@@ -357,8 +367,31 @@ define('io.ox/office/editor/editor',
          *      notified.
          */
         this.applyOperations = function (operations, options) {
+            var proceed = true,
+                message = null;
+
+            /**
+             * Shows an error box if a document could not be loaded completely without error.
+             */
+            function insertLoadError() {
+                alert(gt("Sorry, failed to load the document successfully."));
+            }
+
+
             _(operations).each(function (operation) {
-                applyOperation(operation, options);
+                if (proceed) {
+                    operationsCounter++;
+                    try {
+                        applyOperation(operation, options);
+                    } catch (ex) {
+                        proceed = false;
+                        message = "ERROR: Stop applying operations: " + ex;
+                        Utils.error(message);
+                        message = "Failed operation (" + operationsCounter + ") : " + JSON.stringify(operation);
+                        Utils.error(message);
+                        insertLoadError();
+                    }
+                }
             });
         };
 
@@ -2052,15 +2085,15 @@ define('io.ox/office/editor/editor',
 
                             localDestPosition = _.clone(localPosition);
                             paragraphLength = Position.getParagraphLength(editdiv, localDestPosition);
-                            if (paragraphLength < $(element).data('inlinePosition')) {  // -> is this position still valid?
-                                localDestPosition[localDestPosition.length - 1] = paragraphLength;
+                            if ((paragraphLength - 1) < $(element).data('inlinePosition')) {  // -> is this position still valid?
+                                localDestPosition[localDestPosition.length - 1] = paragraphLength - 1;
                             } else {
                                 localDestPosition[localDestPosition.length - 1] = $(element).data('inlinePosition');
                             }
                             if (! _.isEqual(localPosition, localDestPosition)) {
                                 newOperation = { name: Operations.MOVE, start: localPosition, end: localPosition, to: localDestPosition };
                                 applyOperation(newOperation);
-                                localPosition = localDestPosition;
+                                localPosition = _.clone(localDestPosition);
                             }
                         }
 
@@ -5030,7 +5063,11 @@ define('io.ox/office/editor/editor',
         function implInsertCells(start, count, attrs) {
 
             var localPosition = _.clone(start),
-                tableNode = Position.getLastNodeFromPositionByNodeName(editdiv, start, DOM.TABLE_NODE_SELECTOR);
+                tableNode = Position.getLastNodeFromPositionByNodeName(editdiv, start, DOM.TABLE_NODE_SELECTOR),
+                tableCellDomPos = null,
+                tableCellNode = null,
+                paragraph = null,
+                cell = null;
 
             if (!tableNode) {
                 return;
@@ -5040,24 +5077,24 @@ define('io.ox/office/editor/editor',
                 count = 1; // setting default for number of rows
             }
 
-            var tableCellDomPos = Position.getDOMPosition(editdiv, localPosition),
-                tableCellNode = null;
+            tableCellDomPos = Position.getDOMPosition(editdiv, localPosition);
 
             if (tableCellDomPos) {
                 tableCellNode = tableCellDomPos.node;
             }
 
             // prototype elements for row, cell, and paragraph
-            var paragraph = DOM.createParagraphNode(),
-                cell = DOM.createTableCellNode(paragraph);
+            paragraph = DOM.createParagraphNode();
+
+            // insert empty text node into the paragraph
+            validateParagraphNode(paragraph);
+
+            cell = DOM.createTableCellNode(paragraph);
 
             // apply the passed table cell attributes
             if (_.isObject(attrs)) {
                 tableCellStyles.setElementAttributes(cell, attrs);
             }
-
-            // insert empty text node into the paragraph
-            validateParagraphNode(paragraph);
 
             if (tableCellNode) {
                 _.times(count, function () { $(tableCellNode).before(cell.clone(true)); });
@@ -5457,7 +5494,7 @@ define('io.ox/office/editor/editor',
                     if (doMove) {
 
                         if (splitNode) {
-                            destNode = DOM.splitTextSpan(destNode, destPos.offset + 1)[0];
+                            destNode = DOM.splitTextSpan(destNode, destPos.offset)[0];
                         } else {
                             if (destNode.nodeType === 3) {
                                 destNode = destNode.parentNode;
@@ -5482,6 +5519,24 @@ define('io.ox/office/editor/editor',
 
                         }
 
+                        // removing empty text spans behind or after the source node
+                        if ((sourceNode.previousSibling) && (sourceNode.nextSibling)) {
+                            if ((DOM.isTextSpan(sourceNode.previousSibling)) && (DOM.isEmptySpan(sourceNode.nextSibling))) {
+                                $(sourceNode.nextSibling).remove();
+                            } else if ((DOM.isEmptySpan(sourceNode.previousSibling)) && (DOM.isTextSpan(sourceNode.nextSibling))) {
+                                $(sourceNode.previousSibling).remove();
+                            }
+                        }
+
+                        if ((sourceNode.previousSibling) && (sourceNode.previousSibling.previousSibling) && (sourceNode.nextSibling) && (DOM.isOffsetNode(sourceNode.previousSibling))) {
+                            if ((DOM.isTextSpan(sourceNode.previousSibling.previousSibling)) && (DOM.isEmptySpan(sourceNode.nextSibling))) {
+                                $(sourceNode.nextSibling).remove();
+                            } else if ((DOM.isEmptySpan(sourceNode.previousSibling.previousSibling)) && (DOM.isTextSpan(sourceNode.nextSibling))) {
+                                $(sourceNode.previousSibling.previousSibling).remove();
+                            }
+                        }
+
+                        // moving the drawing
                         if (insertBefore) {
                             $(sourceNode).insertBefore(destNode);
                         } else {

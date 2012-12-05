@@ -88,6 +88,28 @@ define('io.ox/office/editor/view/view',
         }
 
         /**
+         * Creates a new tool box in the side pane.
+         *
+         * @param {String} id
+         *  The unique identifier of the tool box.
+         *
+         * @param {Object} [options]
+         *  A map of options for the tool box in the side pane. Supports all
+         *  options for labels (see class Label for details).
+         */
+        function createToolBox(id, options) {
+
+            var // create a new tool box object, and store it in the map
+                toolBox = new Component(app, { classes: 'toolbox'});
+
+            // add the tool box to the side pane, add a heading label to the tool box
+            sidePane.addViewComponent(toolBox);
+            toolBox.addLabel(id, Utils.extendOptions(options, { classes: 'heading' }));
+
+            return toolBox;
+        }
+
+        /**
          * Update handler for the editor status label. Will be called in the
          * context of the status label instance.
          */
@@ -298,14 +320,10 @@ define('io.ox/office/editor/view/view',
 
         // initialization -----------------------------------------------------
 
-        // the tool pane for tool bars
+        // create the tool bars
         toolPane = new ToolPane(app);
         this.addPane('toolpane', toolPane, 'top');
 
-        sidePane = new Pane(app, { classes: 'side-pane' });
-        //this.addPane('sidepane', sidePane, 'left');
-
-        // create the tool bars
 /*
         createToolBar('insert', { label: gt('Insert') })
             .addGroup('table/insert', new TableSizeChooser())
@@ -321,9 +339,14 @@ define('io.ox/office/editor/view/view',
             .addSeparator()
             .addGroup('character/fontsize', new Controls.FontHeightChooser())
             .addSeparator()
-            .addButton('character/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
-            .addButton('character/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
-            .addButton('character/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
+            .addButton('character/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),           toggle: true })
+            .addButton('character/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),         toggle: true })
+            .addButton('character/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'),      toggle: true })
+            .addButton('character/strike',    { icon: 'icon-io-ox-strikeout', tooltip: gt('Strike through'), toggle: true })
+            .addSeparator()
+            .addGroup('character/vertalign', new RadioGroup({ toggleValue: 'baseline' })
+                .addOptionButton('sub',      { icon: 'icon-io-ox-subscript',   tooltip: gt('Subscript') })
+                .addOptionButton('super',    { icon: 'icon-io-ox-superscript', tooltip: gt('Superscript') }))
             .addSeparator()
             .addGroup('character/fillcolor', new Controls.ColorChooser(editor, 'fill', { label: 'ab', tooltip: gt('Text Fill Color') }))
             .addSeparator()
@@ -369,6 +392,25 @@ define('io.ox/office/editor/view/view',
                 .addOptionButton('leftFloated',  { icon: 'icon-io-ox-image-float-left',  label: gt('Float Left') })
                 .addOptionButton('rightFloated', { icon: 'icon-io-ox-image-float-right', label: gt('Float Right') })
                 .addOptionButton('noneFloated',  { icon: 'icon-io-ox-image-center',      label: gt('Center') }));
+
+        // create the tool boxes
+        sidePane = new Pane(app);
+        this.addPane('sidepane', sidePane, 'left').hidePane('sidepane');
+
+        createToolBox('table', { label: gt('Table') })
+            .addButton('table/insert/row',    { icon: 'icon-io-ox-table-insert-row',    tooltip: gt('Insert row') })
+            .addButton('table/insert/column', { icon: 'icon-io-ox-table-insert-column', tooltip: gt('Insert column') })
+            .addButton('table/delete/row',    { icon: 'icon-io-ox-table-delete-row',    tooltip: gt('Delete selected rows') })
+            .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete selected columns') });
+
+        createToolBox('drawing', { label: gt('Drawing') })
+            .addButton('drawing/delete', { icon: 'icon-io-ox-image-delete', tooltip: gt('Delete drawing object') })
+            .addSeparator()
+            .addGroup('drawing/floatmode', new RadioGroup({ icon: 'icon-io-ox-image-inline', tooltip: gt('Drawing position'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
+                .addOptionButton('inline',       { icon: 'icon-io-ox-image-inline',      label: gt('Inline with text') })
+                .addOptionButton('leftFloated',  { icon: 'icon-io-ox-image-float-left',  label: gt('Left aligned, text wraps at right side') })
+                .addOptionButton('rightFloated', { icon: 'icon-io-ox-image-float-right', label: gt('Right aligned, text wraps at left side') })
+                .addOptionButton('noneFloated',  { icon: 'icon-io-ox-image-center',      label: gt('Centered, no text wrapping') }));
 
         // additions for debug mode
         if (Config.isDebugAvailable()) {
@@ -417,23 +459,21 @@ define('io.ox/office/editor/view/view',
                 .addSeparator()
                 .addGroup('character/language', new Controls.LanguageChooser())
                 .addSeparator()
-                .addGroup('paragraph/borders', new RadioGroup({ icon: 'icon-io-ox-para-border-outside', tooltip: gt('Pargraph Border'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
-                    .addOptionButton('none',      { icon: 'icon-io-ox-para-border-none',      label: gt('No border') })
-                    .addOptionButton('leftright', { icon: 'icon-io-ox-para-border-leftright', label: gt('Border left and right') })
-                    .addOptionButton('topbottom', { icon: 'icon-io-ox-para-border-topbottom', label: gt('Border top and bottom') })
-                    .addOptionButton('outside',   { icon: 'icon-io-ox-para-border-outside',   label: gt('Border outside') })
-                    .addOptionButton('full',      { icon: 'icon-io-ox-para-border-full',      label: gt('Border outside and inside') })
-                    .addOptionButton('left',      { icon: 'icon-io-ox-para-border-left',      label: gt('Border left') })
-                    .addOptionButton('right',     { icon: 'icon-io-ox-para-border-right',     label: gt('Border right') })
-                    .addOptionButton('top',       { icon: 'icon-io-ox-para-border-top',       label: gt('Border top') })
-                    .addOptionButton('bottom',    { icon: 'icon-io-ox-para-border-bottom',    label: gt('Border bottom') })
-                    .addOptionButton('inside',    { icon: 'icon-io-ox-para-border-inside',    label: gt('Border inside') }))
+                .addGroup('paragraph/borders', new Controls.ParagraphBorderChooser());
+
+            createToolBox('debug', { label: gt('Debug') })
+                .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
+                .addButton('debug/sync',   { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
                 .addSeparator()
-                .addGroup('character/vertalign', new RadioGroup({ label: 'escapement', tooltip: gt('Line Spacing'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
-                    .addOptionButton('super',   { label: gt('SuperScript') })
-                    .addOptionButton('baseline', { label: gt('Normal') })
-                    .addOptionButton('sub',   { label: gt('SubScript') }))
-                .addButton('character/strike', { icon: 'icon-io-ox-strike', tooltip: gt('Strike through'), toggle: true });
+                .addButton('file/editrights', { icon: 'icon-pencil', tooltip: 'Acquire Edit Rights' })
+                .addSeparator({ classes: 'break' })
+                .addButton('document/cut',   { label: 'Cut',   tooltip: 'Cut To Clipboard' })
+                .addButton('document/copy',  { label: 'Copy',  tooltip: 'Copy To Clipboard' })
+                .addButton('document/paste', { label: 'Paste', tooltip: 'Paste From Clipboard' })
+                .addSeparator({ classes: 'break' })
+                .addGroup('character/language', new Controls.LanguageChooser())
+                .addSeparator({ classes: 'break' })
+                .addGroup('paragraph/borders', new Controls.ParagraphBorderChooser());
         }
 
         // make the format tool bar visible

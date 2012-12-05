@@ -17,8 +17,7 @@ define("plugins/portal/calendar/register",
      "io.ox/core/date",
      "gettext!plugins/portal",
      'io.ox/core/strings',
-     'io.ox/calendar/api',
-     "less!plugins/portal/calendar/style.css"
+     'io.ox/calendar/api'
     ], function (ext, date, gt, strings, api) {
 
     'use strict';
@@ -55,6 +54,10 @@ define("plugins/portal/calendar/register",
     ext.point("io.ox/portal/widget/calendar").extend({
 
         title: gt('Appointments'),
+
+        action: function (baton) {
+            ox.launch('io.ox/calendar/main', { perspective: 'list' });
+        },
 
         load: function (baton) {
             return api.getAll().pipe(function (ids) {

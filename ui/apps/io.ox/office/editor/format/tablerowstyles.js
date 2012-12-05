@@ -59,7 +59,7 @@ define('io.ox/office/editor/format/tablerowstyles',
             rowAttributes = mergedAttributes.row;
 
         if (rowAttributes.height !== 'auto') {
-            if ($.browser.webkit) {
+            if (($.browser.webkit) || ($.browser.msie)) {
                 // Chrome requires row height at the cells, setting height at <tr> is ignored.
                 var rowHeight = Utils.convertHmmToLength(rowAttributes.height, 'px', 0);
                 row.children('td').each(function () {

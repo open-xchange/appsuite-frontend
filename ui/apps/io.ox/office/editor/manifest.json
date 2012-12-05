@@ -5,7 +5,7 @@
 		icon: "documents.png",
 		category: "Dev",
 		settings: false,
-		createArguments: {file:"new"},
+		createArguments: {action: "new"},
 		requires: "text"
     },
     {

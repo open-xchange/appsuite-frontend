@@ -185,7 +185,7 @@ define(function () {
         "category": "Dev",
         "settings": false,
         "createArguments": {
-            "file": "new"
+            action: "new"
         },
         "requires": "text",
         "path": "io.ox/office/editor/main"

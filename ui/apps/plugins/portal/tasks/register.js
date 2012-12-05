@@ -16,98 +16,18 @@ define("plugins/portal/tasks/register",
      'io.ox/tasks/api',
      'gettext!plugins/portal',
      'io.ox/core/strings',
-     'io.ox/tasks/util',
-     'io.ox/tasks/view-grid-template',
-     'io.ox/core/tk/dialogs',
-     'less!plugins/portal/tasks/style.css'
-    ], function (ext, taskApi, gt, strings, util, viewGrid, dialogs) {
+     'io.ox/tasks/util'
+    ], function (ext, taskApi, gt, strings, util) {
 
     "use strict";
-
-    //var for detailView sidepane.Needs to be closed on DetailView delete action
-    var sidepane,
-
-        load = function () {
-            var def = new $.Deferred();
-            taskApi.getAll({}, false).done(function (taskarray) {
-                def.resolve(taskarray);
-            });
-            return def;
-        },
-
-        draw = function (tasks) {
-
-            var node;
-
-            this.append(
-                node = $('<div class="content">')
-            );
-
-            fillGrid(tasks, node);
-
-            //repaint function called on done and delete events
-            var repaint = function (e) {
-                var dom = e.data.node,
-                    draw = e.data.draw;
-
-                load().done(function (inputTasks) {
-                    if (sidepane && draw === false) {
-                        sidepane.close();
-                    }
-                    dom.find(".portal-tasks-grid").remove();
-                    dom.find("div").remove();
-                    if (inputTasks.length === 0) {
-                        $('<div>').text(gt("You don't have any tasks.")).appendTo(dom);
-                    } else {
-                        fillGrid(inputTasks, node);
-                    }
-                });
-            };
-
-            taskApi.on("refresh.list", {node: node}, repaint)
-                   .on("delete", {node: node, draw: false}, repaint);
-
-            node.on("dispose", function () {
-                taskApi.off("refresh.list", repaint)
-                       .off("delete", repaint);
-            });
-
-            if (tasks.length === 0) {
-                $('<div>').text(gt("You don't have any tasks.")).appendTo(node);
-            }
-        },
-
-        //method to fill the grid used for initial drawing and refresh
-        fillGrid = function (tasks, node) {
-
-            //interpret values for status etc
-            tasks = util.sortTasks(tasks);
-            for (var i = 0; i < tasks.length; i++) {
-                tasks[i] = util.interpretTask(tasks[i]);
-            }
-            viewGrid.drawSimpleGrid(tasks).addClass("portal-tasks-grid").appendTo(node);
-
-            //detailView Popup
-            if (!sidepane) {
-                sidepane = new dialogs.SidePopup({ modal: false });
-            }
-            sidepane.delegate(node, '.vgrid-cell', function (pane, e, target) {
-                var data = target.data('object-data'),
-                    folder = (data.folder_id || data.folder);
-                require(['io.ox/tasks/view-detail'], function (viewDetail) {
-                    // get task and draw detailview
-                    taskApi.get({folder: folder,
-                                 id: data.id}).done(function (taskData) {
-                        viewDetail.draw(taskData).appendTo(pane);
-                    });
-
-                });
-            });
-        };
 
     ext.point("io.ox/portal/widget/tasks").extend({
 
         title: gt('Tasks'),
+
+        action: function (baton) {
+            ox.launch('io.ox/tasks/main');
+        },
 
         load: function (baton) {
             return taskApi.getAll({}, false).done(function (data) {

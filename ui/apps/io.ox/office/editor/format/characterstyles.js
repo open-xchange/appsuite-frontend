@@ -37,9 +37,6 @@ define('io.ox/office/editor/format/characterstyles',
 
             fontSize: {
                 def: 12,
-                format: function (element, fontSize) {
-                    element.css('font-size', fontSize + 'pt');
-                },
                 preview: function (options, fontSize) {
                     options.labelCss.fontSize = Utils.minMax(fontSize, 8, 24) + 'pt';
                 }
@@ -89,6 +86,8 @@ define('io.ox/office/editor/format/characterstyles',
                 }
             },
 
+            vertAlign: { def: 'baseline' },
+
             color: {
                 def: Color.AUTO,
                 // color will be set in update handler, depending on fill colors
@@ -114,13 +113,6 @@ define('io.ox/office/editor/format/characterstyles',
             url: {
                 def: '',
                 scope: 'element'
-            },
-
-            vertAlign: {
-                def: 'baseline',
-                format: function (element, value) {
-                    element.css('vertical-align', value);
-                }
             },
 
             // special attributes
@@ -183,10 +175,15 @@ define('io.ox/office/editor/format/characterstyles',
 
             var // the character attributes of the passed attribute map
                 characterAttributes = mergedAttributes.character,
-                // the parent paragraph of the node (may be a grandparent)
-                paragraph = $(textSpan).closest(DOM.PARAGRAPH_NODE_SELECTOR),
+                // effective font size and vertical offset for escapement
+                fontSize = characterAttributes.fontSize,
+                verticalAlign = 'baseline',
+
                 // the current theme
                 theme = self.getDocumentStyles().getCurrentTheme(),
+
+                // the parent paragraph of the node (may be a grandparent)
+                paragraph = $(textSpan).closest(DOM.PARAGRAPH_NODE_SELECTOR),
                 // the paragraph style container
                 paragraphStyles = self.getDocumentStyles().getStyleSheets('paragraph'),
                 // the merged attributes of the paragraph
@@ -195,10 +192,19 @@ define('io.ox/office/editor/format/characterstyles',
             // calculate text color (automatic color depends on fill colors)
             Color.setElementTextColor(textSpan, theme, characterAttributes, paragraphAttributes);
 
-            // adjust font height on sub or superscript
-            if (characterAttributes.vertAlign !== 'baseline') {
-                textSpan.css('font-size', characterAttributes.fontSize * 0.66  + 'pt');
+            // set font height and vertical alignment
+            switch (characterAttributes.vertAlign) {
+            case 'sub':
+                fontSize = Utils.roundDigits(fontSize * 0.66, 1);
+                verticalAlign = '-30%';
+                break;
+            case 'super':
+                fontSize = Utils.roundDigits(fontSize * 0.66, 1);
+                verticalAlign = '50%';
+                break;
             }
+            textSpan.css({ fontSize: fontSize + 'pt', verticalAlign: verticalAlign });
+
             // update calculated line height due to changed font settings
             LineHeight.updateElementLineHeight(textSpan, paragraphAttributes.lineHeight);
 

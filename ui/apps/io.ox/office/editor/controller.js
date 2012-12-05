@@ -216,9 +216,12 @@ define('io.ox/office/editor/controller',
                 'character/strike': {
                     parent: 'character/attributes',
                     get: function (attributes) { return attributes.strike !== 'none'; },
-                    set: function (state) {
-                        editor.setAttribute('character', 'strike', state ? 'single' : 'none');
-                    }
+                    set: function (state) { editor.setAttribute('character', 'strike', state ? 'single' : 'none'); }
+                },
+                'character/vertalign': {
+                    parent: 'character/attributes',
+                    get: function (attributes) { return attributes.vertAlign; },
+                    set: function (align) { editor.setAttribute('character', 'vertAlign', align); }
                 },
                 'character/color': {
                     parent: 'character/attributes',
@@ -241,11 +244,6 @@ define('io.ox/office/editor/controller',
                     get: function (attributes) { return attributes.url; },
                     set: function () { editor.insertHyperlink(); },
                     done: $.noop
-                },
-                'character/vertalign': {
-                    parent: 'character/attributes',
-                    get: function (attributes) { return attributes.vertAlign; },
-                    set: function (align) { editor.setAttribute('character', 'vertAlign', align); }
                 },
 
                 // tables

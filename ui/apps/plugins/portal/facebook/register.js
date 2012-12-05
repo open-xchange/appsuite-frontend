@@ -50,6 +50,10 @@ define('plugins/portal/facebook/register',
 
         title: 'Facebook',
 
+        action: function (baton) {
+            window.open('https://www.facebook.com/me', 'facebook');
+        },
+
         isEnabled: function () {
             return keychain.isEnabled('facebook');
         },

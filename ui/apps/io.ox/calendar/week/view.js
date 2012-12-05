@@ -911,6 +911,8 @@ define('io.ox/calendar/week/view',
                             break;
                         }
                         el.busy();
+                        // disable widget
+                        d.options.disabled = true;
                         self.onUpdateAppointment(app);
                     }
                 })
@@ -919,7 +921,6 @@ define('io.ox/calendar/week/view',
                     scroll: true,
                     revertDuration: 0,
                     revert: function (drop) {
-//                        console.log('drop', drop);
                         //if false then no socket object drop occurred.
                         if (drop === false) {
                             //revert the appointment by returning true
@@ -1044,15 +1045,17 @@ define('io.ox/calendar/week/view',
                             app = self.collection.get($(this).data('cid')).attributes,
                             startTS = app.start_date + self.getTimeFromPos(d.my.lastTop - ui.originalPosition.top) + (move * date.DAY);
                         if (e.pageX < window.innerWidth - off.left && e.pageY < window.innerHeight) {
-//                            console.log(e, ui, off);
                             // save for update calculations
                             app.old_start_date = app.start_date;
                             app.old_end_date = app.end_date;
+                            app.drag_move = move;
                             _.extend(app, {
                                 start_date: startTS,
                                 end_date: startTS + (app.end_date - app.start_date)
                             });
                             d.my.all.busy();
+                            // disable widget
+                            d.options.disabled = true;
                             self.onUpdateAppointment(app);
                         } else {
                             self.trigger('onRefresh');
@@ -1077,7 +1080,7 @@ define('io.ox/calendar/week/view',
                     zIndex: 2,
                     stop: function (e, ui) {
                         if (e.pageX < window.innerWidth && e.pageY < window.innerHeight) {
-                            $(this).busy();
+                            $(this).draggable('disable').busy();
                             var newPos = Math.round($(this).position().left / (self.fulltimePane.width() / self.columns)),
                                 startTS = self.startDate.getDays() * date.DAY + newPos * date.DAY,
                                 cid = $(this).data('cid'),
@@ -1122,7 +1125,7 @@ define('io.ox/calendar/week/view',
                                 end_date: app.start_date + (newDayCount * date.DAY)
                             });
                         }
-                        el.busy();
+                        el.resizable('disable').busy();
                         self.onUpdateAppointment(app);
                     }
                 });

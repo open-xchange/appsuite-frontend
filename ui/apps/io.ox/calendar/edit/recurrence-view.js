@@ -113,7 +113,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 var selectedDays = [];
                 _(DAYS.values).each(function (day) {
                     if (value[day]) {
-                        selectedDays.push(day.toLowerCase());
+                        selectedDays.push(DAYS.i18n[day]);
                     }
                 });
                 $anchor.text(selectedDays.join(", "));
@@ -163,14 +163,13 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             }
 
             $anchor.on('click', function (e) {
-                console.log("prevendDefault");
                 e.preventDefault();
                 var $dateInput = $('<input type="text" class="input-small no-clone">').css({
                     marginBottom: 0
                 }).val(renderDate());
                 var keys = new KeyListener($dateInput);
 
-                $dateInput.datepicker({format: CalendarWidgets.dateFormat});
+                $dateInput.datepicker({format: CalendarWidgets.dateFormat, parentEl: $anchor.parent()});
 
                 $anchor.after($dateInput);
                 $anchor.hide();
@@ -321,7 +320,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                             options: {
                                 1:  //#. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
                                     gt("first"),
-                                
+
                                 2:  //#. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
                                     gt("second"),
 
@@ -330,7 +329,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
                                 4:  //#. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
                                     gt("fourth"),
-                                
+
                                 5:  //#. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
                                     gt("last")
                             }

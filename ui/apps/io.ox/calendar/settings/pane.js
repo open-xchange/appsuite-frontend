@@ -91,6 +91,7 @@ define('io.ox/calendar/settings/pane',
 
         optionsYes = {label: gt('Yes'), value: true},
         optionsNo = {label: gt('No'), value: false},
+
         calendarViewSettings,
         CalendarSettingsView = Backbone.View.extend({
             tagName: "div",
@@ -117,7 +118,6 @@ define('io.ox/calendar/settings/pane',
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
 
                 return self;
-
             }
         });
 

@@ -15,6 +15,8 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
 
     'use strict';
 
+    var TIMEOUTS = { AUTOLOGIN: 3000, LOGIN: 10000 };
+
     var getBrowserLanguage = function () {
         var language = (navigator.language || navigator.userLanguage).substr(0, 2);
         return _.chain(ox.serverConfig.languages).keys().find(function (id) {
@@ -42,7 +44,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                 appendColumns: false,
                 appendSession: false,
                 processResponse: false,
-                timeout: 3000, // just try that for 3 secs
+                timeout: TIMEOUTS.AUTOLOGIN,
                 params: {
                     action: 'autologin',
                     client: that.client()
@@ -79,7 +81,8 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                                 action: 'login',
                                 name: username,
                                 password: password,
-                                client: that.client()
+                                client: that.client(),
+                                timeout: TIMEOUTS.LOGIN
                             }
                         })
                         .done(function (data) {

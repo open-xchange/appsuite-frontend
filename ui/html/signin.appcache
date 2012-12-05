@@ -16,6 +16,7 @@ CACHE:
 @base@/apps/themes/login/fonts/OpenSans-Light-webfont.woff
 @base@/apps/themes/login/fonts/OpenSans-Light-webfont.ttf
 @base@/apps/themes/login/fonts/fontawesome-webfont.woff
+@base@/apps/io.ox/core/bootstrap/css/bootstrap.min.css
 
 NETWORK:
 *

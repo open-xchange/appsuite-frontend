@@ -819,7 +819,12 @@ define('io.ox/backbone/forms',
                 this.setValueInField();
                 // get the right date format
                 var dateFormat = date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase();
-                this.nodes.dayField.datepicker({format: dateFormat});
+                this.nodes.dayField.datepicker({
+                    format: dateFormat,
+                    parentEl: self.nodes.controlGroup,
+                    todayHighlight: true,
+                    todayBtn: true
+                });
                 this.nodes.timeField.combobox(comboboxHours);
 
                 this.nodes.dayField.on("change", _.bind(this.updateModelDate, this));

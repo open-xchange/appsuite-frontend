@@ -132,7 +132,11 @@ define("io.ox/participants/model",
         },
         getImage: function () {
             return util.getImage(this.toJSON());
+        },
+        markAsUnremovable: function () {
+            this.set('ui_removable', false);
         }
+
     });
 
     var ParticipantsCollection = Backbone.Collection.extend({

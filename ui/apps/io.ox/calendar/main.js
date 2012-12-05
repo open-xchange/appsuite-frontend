@@ -16,8 +16,9 @@ define("io.ox/calendar/main",
      "io.ox/calendar/util",
      "io.ox/core/config",
      "io.ox/core/commons",
+     "settings!io.ox/calendar",
      "io.ox/calendar/actions",
-     "less!io.ox/calendar/style.css"], function (api, util, config, commons, VGrid, tmpl) {
+     "less!io.ox/calendar/style.css"], function (api, util, config, commons, settings) {
 
     "use strict";
 
@@ -25,10 +26,10 @@ define("io.ox/calendar/main",
     var app = ox.ui.createApp({ name: 'io.ox/calendar', title: 'Calendar' }),
         // app window
         win,
-        lastPerspective = 'week:workweek';
+        lastPerspective = 'week:' + settings.get('viewView', 'workweek');
 
     // launcher
-    app.setLauncher(function () {
+    app.setLauncher(function (options) {
 
         // get window
         app.setWindow(win = ox.ui.createWindow({
@@ -37,6 +38,7 @@ define("io.ox/calendar/main",
             search: true
         }));
 
+        app.settings = settings;
         win.addClass("io-ox-calendar-main");
 
         // folder tree
@@ -46,7 +48,7 @@ define("io.ox/calendar/main",
         commons.addFolderSupport(app, null, 'calendar')
             .pipe(commons.showWindow(win))
             .done(function () {
-                ox.ui.Perspective.show(app, _.url.hash('perspective') || lastPerspective);
+                ox.ui.Perspective.show(app, options.perspective || _.url.hash('perspective') || lastPerspective);
             });
 
         win.on('search:open', function () {

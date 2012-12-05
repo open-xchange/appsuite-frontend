@@ -33,7 +33,7 @@ define('io.ox/settings/main',
                 return { title: title };
             },
             set: function (data, fields, index) {
-                fields.title.text(data.title);
+                fields.title.text(gt(data.title));
             }
         },
         label: {

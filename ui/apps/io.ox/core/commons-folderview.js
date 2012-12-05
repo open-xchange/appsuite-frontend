@@ -75,19 +75,12 @@ define('io.ox/core/commons-folderview',
                     $('<div class="toolbar-action pull-left dropdown dropup">').append(
                         $('<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></a>'),
                         ul = $('<ul class="dropdown-menu">').append(
-                            $('<li class="dropdown-header">')
+                            $('<li class="dropdown-header">').text(_.noI18n(baton.data.title))
                         )
                     )
                 );
+
                 ext.point(POINT + '/sidepanel/toolbar/options').invoke('draw', ul, baton);
-                // listen to selection event to update dropdown header
-                baton.tree.selection.on('change', function (e, selection) {
-                    if (selection.length) {
-                        api.get({ folder: selection[0] }).done(function (data) {
-                            ul.find('.dropdown-header').text(_.noI18n(data.title));
-                        });
-                    }
-                });
             }
         });
 
@@ -101,7 +94,7 @@ define('io.ox/core/commons-folderview',
             index: 900,
             draw: function (baton) {
                 this.append(
-                    $('<a href="#" class="toolbar-action pull-right"><i class="icon-remove"></a>')
+                    $('<a h ef="#" class="toolbar-action pull-right"><i class="icon-remove"></a>')
                     .on('click', { app: baton.app }, fnClose)
                 );
             }
@@ -109,14 +102,14 @@ define('io.ox/core/commons-folderview',
 
         function fnToggle(e) {
             e.preventDefault();
-            $(this).find('i').attr('class', e.data.app.togglePermanentFolderView() ? 'icon-chevron-right' : 'icon-chevron-left');
+            $(this).find('i').attr('class', e.data.app.togglePermanentFolderView() ? 'icon-pushpin' : 'icon-pushpin disabled');
         }
 
         ext.point(POINT + '/sidepanel/toolbar').extend({
             id: 'toggle',
             index: 1000,
             draw: function (baton) {
-                var className = baton.options.permanent ? 'icon-chevron-right' : 'icon-chevron-left';
+                var className = baton.options.permanent ? 'icon-pushpin' : 'icon-pushpin disabled';
                 this.append(
                     $('<a href="#" class="toolbar-action pull-right"><i class="' + className + '"></a>')
                     .on('click', { app: baton.app }, fnToggle)
@@ -187,10 +180,14 @@ define('io.ox/core/commons-folderview',
             id: 'rename',
             index: 100,
             draw: function (baton) {
-                this.append($('<li>').append(
-                    $('<a href="#" data-action="rename">').text(gt('Rename'))
-                    .on('click', { app: baton.app }, renameFolder)
-                ));
+                var link = $('<a href="#" data-action="rename">').text(gt('Rename'));
+                this.append($('<li>').append(link));
+
+                if (api.can('rename', baton.data)) {
+                    link.on('click', { app: baton.app }, renameFolder);
+                } else {
+                    link.addClass('disabled');
+                }
             }
         });
 
@@ -203,20 +200,21 @@ define('io.ox/core/commons-folderview',
             id: 'delete',
             index: 1000,
             draw: function (baton) {
-                this.append(
-                    $('<li>').append(
-                        $('<a href="#" data-action="delete">').text(gt('Delete'))
-                        .on('click', { app: baton.app }, deleteFolder)
-                    )
-                );
+                var link = $('<a href="#" data-action="delete">').text(gt('Delete'));
+                this.append($('<li>').append(link));
+
+                if (api.can('deleteFolder', baton.data)) {
+                    link.on('click', { app: baton.app }, deleteFolder);
+                } else {
+                    link.addClass('disabled');
+                }
             }
         });
 
         function setFolderPermissions(e) {
             e.preventDefault();
             require(['io.ox/core/permissions/permissions'], function (permissions) {
-                var folder_id = String(e.data.app.folderView.selection.get());
-                permissions.show(folder_id);
+                permissions.show(String(e.data.app.folderView.selection.get()));
             });
         }
 
@@ -224,13 +222,10 @@ define('io.ox/core/commons-folderview',
             id: 'permissions',
             index: 200,
             draw: function (baton) {
-                this.append($('<li>').append(
-                    $('<a href="#">').text(gt('Permissions'))
-                    .on('click', { app: baton.app }, setFolderPermissions)
-                ));
+                var link = $('<a href="#" data-action="permissions">').text(gt('Permissions'));
+                this.append($('<li>').append(link.on('click', { app: baton.app }, setFolderPermissions)));
             }
         });
-
     }
 
     /**
@@ -323,11 +318,23 @@ define('io.ox/core/commons-folderview',
             // init tree before running toolbar extensions
             var tree = baton.tree = app.folderView = new views[options.view](container, {
                     type: options.type,
-                    rootFolderId: options.rootFolderId
+                    rootFolderId: options.rootFolderId,
+                    open: app.settings.get('folderview/open', []),
+                    toggle: function (open) {
+                        app.settings.set('folderview/open', open).save();
+                    }
                 });
 
             // draw toolbar
-            ext.point(POINT + '/sidepanel/toolbar').invoke('draw', baton.$.toolbar, baton);
+
+            tree.selection.on('change', function (e, selection) {
+                if (selection.length) {
+                    api.get({ folder: selection[0] }).done(function (data) {
+                        baton.data = data;
+                        ext.point(POINT + '/sidepanel/toolbar').invoke('draw', baton.$.toolbar.empty(), baton);
+                    });
+                }
+            });
 
             // paint now
             return tree.paint().pipe(function () {

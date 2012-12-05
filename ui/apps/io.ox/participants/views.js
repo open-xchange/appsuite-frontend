@@ -49,6 +49,7 @@ define("io.ox/participants/views",
                 $text.text(this.model.getDisplayName()),
                 $mail
             );
+
             if (this.options.closeButton || _.isUndefined(this.options.closeButton)) {
                 if (this.model.get('ui_removable') !== false) {
                     $wrapper.append($removeButton);

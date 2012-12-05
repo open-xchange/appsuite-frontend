@@ -170,7 +170,7 @@ define('io.ox/core/cache/localstorage', function () {
                     tmp.push(key.substr(id.length + 1));
                 }
             }
-            return $.Deferred().resolve(tmp);
+            return $.Deferred().resolve(_(tmp).uniq());
         }
     };
 

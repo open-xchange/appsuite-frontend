@@ -240,12 +240,17 @@ define('io.ox/office/tk/view/dialogs',
         addDialogButtons(dialog, options);
 
         // register a change handler at the input field that extracts the file descriptor
-        input.change(function (event) { file = event.target.files[0] || null; });
+        input.change(function (event) {
+            file = (event.target && event.target.files && event.target.files[0]) || null;  // requires IE 10+
+            if ((file === null) && (event.target.value)) {
+                file = event.target.value;
+            }
+        });
 
         // show the dialog and register listeners for the results
         dialog.show(function () { input.focus(); })
         .done(function (action, data, node) {
-            if ((action === 'ok') && _.isObject(file)) {
+            if ((action === 'ok') && (_.isObject(file) || _.isString(file))) {
                 def.resolve(file);
             } else {
                 def.reject();
