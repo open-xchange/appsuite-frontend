@@ -330,7 +330,7 @@ define('io.ox/office/editor/view/controls',
 
         RadioGroup.call(this, {
             icon: 'icon-io-ox-para-border-outside',
-            tooltip: gt('Pargraph borders'),
+            tooltip: gt('Paragraph borders'),
             dropDown: true,
             highlight: true,
             updateCaptionMode: 'icon'
