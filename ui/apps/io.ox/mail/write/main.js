@@ -537,7 +537,6 @@ define('io.ox/mail/write/main',
             _.url.hash('app', 'io.ox/mail/write:compose');
 
             win.busy().show(function () {
-
                 app.setMail({ data: data, mode: 'compose', initial: true })
                 .done(function () {
                     if (mailto) {
@@ -683,7 +682,6 @@ define('io.ox/mail/write/main',
                         .replace(/\n/g, '<br>\n') // escape line-breaks
                 };
             }
-            // transform raw data
 
             mail = {
                 from: [data.from] || [],
@@ -703,33 +701,32 @@ define('io.ox/mail/write/main',
             // sendtype
             mail.sendtype = data.sendtype || mailAPI.SENDTYPE.NORMAL;
             // get files
-            view.form.find(':input[name][type=file]')
-                .each(function () {
-                    // link to existing attachments (e.g. in forwards)
-                    var attachment = $(this).prop('attachment'),
-                        // get file via property (DND) or files array and add to list
-                        file = $(this).prop('file'),
-                        // get nested messages
-                        nested = $(this).prop('nested');
-                    if (attachment) {
-                        // add linked attachment
-                        mail.attachments.push(attachment);
-                    } else if (nested) {
-                        // add nested message (usually multiple mail forward)
-                        mail.nested_msgs.push(nested.message);
-                    } else if (file instanceof window.File) {
-                        // add dropped file
+            view.form.find(':input[name][type=file]').each(function () {
+                // link to existing attachments (e.g. in forwards)
+                var attachment = $(this).prop('attachment'),
+                    // get file via property (DND) or files array and add to list
+                    file = $(this).prop('file'),
+                    // get nested messages
+                    nested = $(this).prop('nested');
+                if (attachment) {
+                    // add linked attachment
+                    mail.attachments.push(attachment);
+                } else if (nested) {
+                    // add nested message (usually multiple mail forward)
+                    mail.nested_msgs.push(nested.message);
+                } else if ('File' in window && file instanceof window.File) {
+                    // add dropped file
+                    files.push(file);
+                } else if (file && 'id' in file) {
+                    // infostore id
+                    (mail.infostore_ids = (mail.infostore_ids || [])).push(file);
+                } else if (this.files && this.files.length) {
+                    // process normal upload
+                    _(this.files).each(function (file) {
                         files.push(file);
-                    } else if (file && 'id' in file) {
-                        // infostore id
-                        (mail.infostore_ids = (mail.infostore_ids || [])).push(file);
-                    } else if (this.files && this.files.length) {
-                        // process normal upload
-                        _(this.files).each(function (file) {
-                            files.push(file);
-                        });
-                    }
-                });
+                    });
+                }
+            });
             // return data, file references, mode, format
             return {
                 data: mail,
