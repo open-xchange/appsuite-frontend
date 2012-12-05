@@ -82,7 +82,7 @@ define('io.ox/office/editor/undo',
      *  other operations.
      */
     Action.prototype.isInsertTextAction = function (single) {
-        return (single ? (this.undoOperations.length === 1) : (this.undoOperations.length >= 1)) && (_.first(this.undoOperations).name === Operations.TEXT_DELETE) &&
+        return (single ? (this.undoOperations.length === 1) : (this.undoOperations.length >= 1)) && (_.first(this.undoOperations).name === Operations.DELETE) &&
             (single ? (this.redoOperations.length === 1) : (this.redoOperations.length >= 1)) && (_.last(this.redoOperations).name === Operations.TEXT_INSERT);
     };
 

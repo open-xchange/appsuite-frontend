@@ -21,9 +21,6 @@ define('io.ox/office/editor/operations',
 
     'use strict';
 
-    var // the exported module (forward declaration to suppress warnings in private functions)
-        Operations = null;
-
     // static class Operations ================================================
 
     /**
@@ -38,22 +35,17 @@ define('io.ox/office/editor/operations',
         MOVE: 'move',
 
         TEXT_INSERT: 'insertText',
-        TEXT_DELETE: 'deleteText',
         DRAWING_INSERT: 'insertDrawing',
         FIELD_INSERT: 'insertField',
         TAB_INSERT: 'insertTab',
 
         PARA_INSERT: 'insertParagraph',
-        PARA_DELETE: 'deleteParagraph',
         PARA_SPLIT: 'splitParagraph',
         PARA_MERGE: 'mergeParagraph',
 
         TABLE_INSERT: 'insertTable',
-        TABLE_DELETE: 'deleteTable',
         ROWS_INSERT: 'insertRows',
-        ROWS_DELETE: 'deleteRows',
         CELLS_INSERT: 'insertCells',
-        CELLS_DELETE: 'deleteCells',
         CELL_SPLIT: 'splitCell',
         CELL_MERGE: 'mergeCell',
         COLUMN_INSERT: 'insertColumn',

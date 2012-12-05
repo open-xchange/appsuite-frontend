@@ -1002,19 +1002,21 @@ define('io.ox/office/editor/editor',
 
                             // 'deleteText' operation needs valid start and end position
                             startOffset = _.isNumber(startOffset) ? startOffset : 0;
-                            endOffset = _.isNumber(endOffset) ? endOffset : (Position.getParagraphLength(editdiv, position) - 1);
+                            // endOffset = _.isNumber(endOffset) ? endOffset : (Position.getParagraphLength(editdiv, position) - 1);
+                            endOffset = _.isNumber(endOffset) ? endOffset : (Position.getParagraphLength(editdiv, position));
 
                             // delete the covered part of the paragraph
                             if (startOffset <= endOffset) {
-                                generator.generateOperation(Operations.TEXT_DELETE, { start: position.concat([startOffset]), end: position.concat([endOffset]) });
+                                // generator.generateOperation(Operations.TEXT_DELETE, { start: position.concat([startOffset]), end: position.concat([endOffset]) });
+                                generator.generateOperation(Operations.DELETE, { start: position.concat([startOffset]), end: position.concat([endOffset]) });
                             }
                         } else {
-                            generator.generateOperation(Operations.PARA_DELETE, { start: position });
+                            generator.generateOperation(Operations.DELETE, { start: position });
                         }
 
                     } else if (DOM.isTableNode(node)) {
                         // delete entire table
-                        generator.generateOperation(Operations.TABLE_DELETE, { start: position });
+                        generator.generateOperation(Operations.DELETE, { start: position });
                     } else {
                         Utils.error('Editor.deleteSelected(): unsupported content node');
                         return Utils.BREAK;
@@ -1048,15 +1050,10 @@ define('io.ox/office/editor/editor',
          * This is a generic function, that can be used to delete any component (text, paragraph,
          * cell, row, table, ...). Deleting columns is not supported, because columns cannot
          * be described with a logical position.
-         * The parameter 'start' and 'end' are used to specify the range of the components that
+         * The parameter 'start' and 'end' are used to specify the position of the components that
          * shall be deleted. For all components except 'text' the 'end' position will be ignored.
          * For paragraphs, cells, ... only one specific component can be deleted within this
          * operation. Only on text level a complete range can be deleted.
-         * ???
-         * For deleting a range, a 'real text range' has to be specified by the parameters
-         * 'start' and 'end', not the component counting used in operations. Therefore the 'end'
-         * position is reduced by '1' within this deleteRange function.
-         * ???
          *
          * @param {Number[]} start
          *  The logical start position.
@@ -1067,7 +1064,7 @@ define('io.ox/office/editor/editor',
          *  but must be contained in a single paragraph.
          */
         this.deleteRange = function (start, end) {
-
+            end = end || _.clone(start);
             // Using end as it is, not subtracting '1' like in 'deleteText'
             var newOperation = { name: Operations.DELETE, start: _.clone(start), end: _.clone(end) };
             applyOperation(newOperation);
@@ -1076,37 +1073,11 @@ define('io.ox/office/editor/editor',
             selection.setTextSelection(lastOperationEnd);
         };
 
-        this.deleteText = function (startposition, endposition) {
-            if (startposition !== endposition) {
-
-                var _endPosition = _.copy(endposition, true);
-                if (_endPosition[_endPosition.length - 1] > 0) {
-                    _endPosition[_endPosition.length - 1] -= 1;  // switching from range mode to operation mode
-                }
-
-                var newOperation = { name: Operations.TEXT_DELETE, start: startposition, end: _endPosition };
-                // var newOperation = { name: Operations.TEXT_DELETE, start: startposition, end: endposition };
-                applyOperation(newOperation);
-                // setting the cursor position
-                selection.setTextSelection(lastOperationEnd);
-            }
-        };
-
-        this.deleteParagraph = function (position) {
-            applyOperation({ name: Operations.PARA_DELETE, start: _.clone(position) });
-        };
-
-        this.deleteTable = function (position) {
-            applyOperation({ name: Operations.TABLE_DELETE, start: _.clone(position) });
-
-            // setting the cursor position
-            selection.setTextSelection(lastOperationEnd);
-        };
-
         this.deleteRows = function () {
             var position = selection.getStartPosition(),
                 start = Position.getRowIndexInTable(editdiv, position),
-                end = start;
+                end = start,
+                rowPosition = null;
 
             if (selection.hasRange()) {
                 end = Position.getRowIndexInTable(editdiv, selection.getEndPosition());
@@ -1115,15 +1086,21 @@ define('io.ox/office/editor/editor',
             var tablePos = Position.getLastPositionFromPositionByNodeName(editdiv, position, DOM.TABLE_NODE_SELECTOR),
                 lastRow = Position.getLastRowIndexInTable(editdiv, position),
                 isCompleteTable = ((start === 0) && (end === lastRow)) ? true : false,
-                newOperation;
+                newOperation = null;
 
             if (isCompleteTable) {
-                newOperation = { name: Operations.TABLE_DELETE, start: _.copy(tablePos, true) };
+                newOperation = { name: Operations.DELETE, start: _.copy(tablePos, true) };
+                applyOperation(newOperation);
             } else {
-                newOperation = { name: Operations.ROWS_DELETE, position: tablePos, start: start, end: end };
+                undoManager.enterGroup(function () {
+                    for (var i = end; i >= start; i--) {
+                        rowPosition = _.clone(tablePos);
+                        rowPosition.push(i);
+                        newOperation = { name: Operations.DELETE, start: rowPosition };
+                        applyOperation(newOperation);
+                    }
+                });
             }
-
-            applyOperation(newOperation);
 
             // setting the cursor position
             selection.setTextSelection(lastOperationEnd);
@@ -1133,7 +1110,9 @@ define('io.ox/office/editor/editor',
 
             var isCellSelection = selection.getSelectionType() === 'cell',
                 startPos = selection.getStartPosition(),
-                endPos = selection.getEndPosition();
+                endPos = selection.getEndPosition(),
+                localPos = null,
+                newOperation = null;
 
             startPos.pop();  // removing character position and paragraph
             startPos.pop();
@@ -1162,20 +1141,26 @@ define('io.ox/office/editor/editor',
                     localEndCol = Position.getLastColumnIndexInRow(editdiv, rowPosition);
                 }
 
-                var newOperation = {name: Operations.CELLS_DELETE, position: rowPosition, start: localStartCol, end: localEndCol};
-                applyOperation(newOperation);
+                for (var j = localEndCol; j >= localStartCol; j--) {
+                    localPos = _.clone(rowPosition);
+                    localPos.push(j);
+                    newOperation = { name: Operations.DELETE, start: localPos };
+                    applyOperation(newOperation);
+                }
 
                 // removing empty row
                 var rowNode = Position.getDOMPosition(editdiv, rowPosition).node;
                 if ($(rowNode).children().length === 0) {
-                    newOperation = { name: Operations.ROWS_DELETE, position: _.copy(tablePos, true), start: i, end: i };
+                    localPos = _.clone(tablePos);
+                    localPos.push(i);
+                    newOperation = { name: Operations.DELETE, start: localPos };
                     applyOperation(newOperation);
                 }
 
                 // checking if the table is empty
                 var tableNode = Position.getDOMPosition(editdiv, tablePos).node;
                 if (DOM.getTableRows(tableNode).length === 0) {
-                    newOperation = { name: Operations.TABLE_DELETE, start: _.copy(tablePos, true) };
+                    newOperation = { name: Operations.DELETE, start: _.copy(tablePos, true) };
                     applyOperation(newOperation);
                 }
 
@@ -1342,7 +1327,7 @@ define('io.ox/office/editor/editor',
             undoManager.enterGroup(function () {
 
                 if (isCompleteTable) {
-                    newOperation = { name: Operations.TABLE_DELETE, start: _.copy(tablePos, true) };
+                    newOperation = { name: Operations.DELETE, start: _.copy(tablePos, true) };
                     applyOperation(newOperation);
                 } else {
                     newOperation = { name: Operations.COLUMNS_DELETE, start: tablePos, startGrid: startGrid, endGrid: endGrid };
@@ -1353,12 +1338,11 @@ define('io.ox/office/editor/editor',
                         deletedAllRows = true;
 
                     for (var i = maxRow; i >= 0; i--) {
-                        var rowPos = _.copy(tablePos, true);
+                        var rowPos = _.clone(tablePos);
                         rowPos.push(i);
                         var currentRowNode = Position.getDOMPosition(editdiv, rowPos).node;
-
                         if ($(currentRowNode).children().length === 0) {
-                            newOperation = {  name: Operations.ROWS_DELETE, position: _.copy(tablePos, true), start: i, end: i };
+                            newOperation = {  name: Operations.DELETE, start: rowPos };
                             applyOperation(newOperation);
                         } else {
                             deletedAllRows = false;
@@ -1367,7 +1351,7 @@ define('io.ox/office/editor/editor',
 
                     // Checking, if now the complete table is empty
                     if (deletedAllRows) {
-                        newOperation = { name: Operations.TABLE_DELETE, start: _.copy(tablePos, true) };
+                        newOperation = { name: Operations.DELETE, start: _.copy(tablePos, true) };
                         applyOperation(newOperation);
                     }
 
@@ -2752,8 +2736,7 @@ define('io.ox/office/editor/editor',
                     }
 
                     if (startPosition[lastValue] < paraLen) {
-                        selection.endPaM.oxoPosition[lastValue]++;
-                        self.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
+                        self.deleteRange(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
                     } else {
                         var mergeselection = _.clone(selection.startPaM.oxoPosition),
                             characterPos = mergeselection.pop();
@@ -2783,7 +2766,7 @@ define('io.ox/office/editor/editor',
                                 // removing empty paragraph
                                 var localPos = _.clone(selection.startPaM.oxoPosition);
                                 localPos.pop();
-                                self.deleteParagraph(localPos);
+                                self.deleteRange(localPos);
                                 nextParagraphPosition[lastValue] -= 1;
                             }
                             selection.startPaM.oxoPosition = Position.getFirstPositionInParagraph(editdiv, nextParagraphPosition);
@@ -2833,7 +2816,8 @@ define('io.ox/office/editor/editor',
                         var startPosition = _.copy(selection.startPaM.oxoPosition, true),
                             endPosition = _.copy(selection.startPaM.oxoPosition, true);
                         startPosition[lastValue] -= 1;
-                        self.deleteText(startPosition, endPosition);
+                        endPosition[lastValue] -= 1;
+                        self.deleteRange(startPosition, endPosition);
 
                     } else if (selection.startPaM.oxoPosition[lastValue - 1] >= 0) {
 
@@ -3105,7 +3089,7 @@ define('io.ox/office/editor/editor',
                             // now apply 'AutoCorrection'
                             if (numAutoCorrect.listDetection && numAutoCorrect.listDetection.numberFormat !== undefined) {
                                 undoManager.enterGroup(function () {
-                                    self.deleteText(numAutoCorrect.startPosition, numAutoCorrect.endPosition);
+                                    self.deleteRange(numAutoCorrect.startPosition, numAutoCorrect.endPosition);
                                     self.createList(numAutoCorrect.listDetection.numberFormat === 'bullet' ? 'bullet' : 'numbering',
                                             {levelStart: numAutoCorrect.listDetection.levelStart, symbol: numAutoCorrect.listDetection.symbol,
                                              startPosition: numAutoCorrect.startPosition,
@@ -3397,40 +3381,17 @@ define('io.ox/office/editor/editor',
                     break;
 
                 case 'cell':
-                    var tableRow = Position.getTableRowElement(editdiv, operation.position),
-                        cells = $(tableRow).children(),
-                        start = operation.start,
-                        end = operation.end || start;
-
-                    if ((start <= 0) && (end + 1 >= cells.length)) {
-                        // deleting the entire row element
-                        generator.generateTableRowOperations(tableRow, operation.position);
-                    } else {
-                        // deleting a few cells in the row
-                        cells.slice(start, end + 1).each(function (index) {
-                            generator.generateTableCellOperations(this, operation.position.concat([start + index]));
-                        });
-                    }
+                    generator.generateTableCellOperations(nodeInfo.node, operation.start);
                     undoManager.addUndo(generator.getOperations(), operation);
                     break;
 
                 case 'row':
-                    var start = operation.start,
-                        end = operation.end || start;
-
-                    for (var i = start; i <= end; i += 1) {
-                        var localPos = operation.position.concat([i]),
-                            tableRow = Position.getTableRowElement(editdiv, localPos);
-                        if (tableRow) {
-                            generator.generateTableRowOperations(tableRow, localPos);
-                        }
-                    }
+                    generator.generateTableRowOperations(nodeInfo.node, operation.start);
                     undoManager.addUndo(generator.getOperations(), operation);
                     break;
 
                 case 'table':
-                    var table = Position.getTableElement(editdiv, operation.start);
-                    generator.generateTableOperations(table, operation.start); // generate undo operations for the entire table
+                    generator.generateTableOperations(nodeInfo.node, operation.start); // generate undo operations for the entire table
                     undoManager.addUndo(generator.getOperations(), operation);
                     break;
                 }
@@ -3452,8 +3413,8 @@ define('io.ox/office/editor/editor',
         operationHandlers[Operations.TEXT_INSERT] = function (operation) {
             if (implInsertText(operation.start, operation.text, operation.attrs)) {
                 if (undoManager.isEnabled()) {
-                    var end = Position.increaseLastIndex(operation.start, operation.text.length - 1),
-                        undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: end };
+                    var end = Position.increaseLastIndex(operation.start, operation.text.length),
+                        undoOperation = { name: Operations.DELETE, start: operation.start, end: end };
                     undoManager.addUndo(undoOperation, operation);
                 }
             }
@@ -3462,7 +3423,7 @@ define('io.ox/office/editor/editor',
         operationHandlers[Operations.FIELD_INSERT] = function (operation) {
             if (implInsertField(operation.start, operation.type, operation.representation, operation.attrs)) {
                 if (undoManager.isEnabled()) {
-                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: operation.start };
+                    var undoOperation = { name: Operations.DELETE, start: operation.start, end: operation.start };
                     undoManager.addUndo(undoOperation, operation);
                 }
             }
@@ -3471,7 +3432,7 @@ define('io.ox/office/editor/editor',
         operationHandlers[Operations.TAB_INSERT] = function (operation) {
             if (implInsertTab(operation.start, operation.attrs)) {
                 if (undoManager.isEnabled()) {
-                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: operation.start };
+                    var undoOperation = { name: Operations.DELETE, start: operation.start, end: operation.start };
                     undoManager.addUndo(undoOperation, operation);
                 }
             }
@@ -3480,24 +3441,10 @@ define('io.ox/office/editor/editor',
         operationHandlers[Operations.DRAWING_INSERT] = function (operation) {
             if (implInsertDrawing(operation.type, operation.start, operation.attrs)) {
                 if (undoManager.isEnabled()) {
-                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.start, end: operation.start };
+                    var undoOperation = { name: Operations.DELETE, start: operation.start, end: operation.start };
                     undoManager.addUndo(undoOperation, operation);
                 }
             }
-        };
-
-        operationHandlers[Operations.TEXT_DELETE] = function (operation) {
-            if (undoManager.isEnabled()) {
-                var position = operation.start.slice(0, -1),
-                    paragraph = Position.getCurrentParagraph(editdiv, position),
-                    start = operation.start[operation.start.length - 1],
-                    end = operation.end[operation.end.length - 1],
-                    generator = new Operations.Generator();
-
-                generator.generateParagraphChildOperations(paragraph, position, { start: start, end: end, clear: true });
-                undoManager.addUndo(generator.getOperations(), operation);
-            }
-            implDeleteText(operation.start, operation.end);
         };
 
         operationHandlers[Operations.INSERT_STYLE] = function (operation) {
@@ -3566,7 +3513,7 @@ define('io.ox/office/editor/editor',
 
             // generate undo/redo operations
             if (undoManager.isEnabled()) {
-                undoManager.addUndo({ name: Operations.PARA_DELETE, start: operation.start }, operation);
+                undoManager.addUndo({ name: Operations.DELETE, start: operation.start }, operation);
             }
 
             // apply the passed paragraph attributes
@@ -3579,29 +3526,6 @@ define('io.ox/office/editor/editor',
 
             // the paragraph can be part of a list, update all lists
             implUpdateLists();
-        };
-
-        operationHandlers[Operations.PARA_DELETE] = function (operation) {
-
-            var // node info about the paragraph to be deleted
-                nodeInfo = Position.getDOMPosition(editdiv, operation.start, true),
-                // the undo/redo operations
-                generator = undoManager.isEnabled() ? new Operations.Generator() : null;
-
-            // get current paragraph
-            if (!nodeInfo || !DOM.isParagraphNode(nodeInfo.node)) {
-                Utils.warn('Editor.deleteParagraph(): no paragraph found at position ' + JSON.stringify(operation.start));
-                return;
-            }
-
-            // generate undo/redo operations
-            if (generator) {
-                generator.generateParagraphOperations(nodeInfo.node, operation.start);
-                undoManager.addUndo(generator.getOperations(), operation);
-            }
-
-            // remove the paragraph from the DOM
-            $(nodeInfo.node).remove();
         };
 
         operationHandlers[Operations.PARA_SPLIT] = function (operation) {
@@ -3696,7 +3620,7 @@ define('io.ox/office/editor/editor',
 
             // generate undo/redo operations
             if (undoManager.isEnabled()) {
-                undoManager.addUndo({ name: Operations.TABLE_DELETE, start: operation.start }, operation);
+                undoManager.addUndo({ name: Operations.DELETE, start: operation.start }, operation);
             }
 
             // apply the passed table attributes
@@ -3714,61 +3638,6 @@ define('io.ox/office/editor/editor',
 
                 tableStyles.setElementAttributes(table, operation.attrs);
             }
-        };
-
-        operationHandlers[Operations.TABLE_DELETE] = function (operation) {
-            var table = Position.getTableElement(editdiv, operation.start);
-            if (table) {
-                if (undoManager.isEnabled()) {
-                    // generate undo operations for the entire table
-                    var generator = new Operations.Generator();
-                    generator.generateTableOperations(table, operation.start);
-                    undoManager.addUndo(generator.getOperations(), operation);
-                }
-                implDeleteTable(operation.start);
-            }
-        };
-
-        operationHandlers[Operations.CELLS_DELETE] = function (operation) {
-            var tableRow = Position.getTableRowElement(editdiv, operation.position);
-            if (tableRow) {
-                if (undoManager.isEnabled()) {
-                    var cells = $(tableRow).children(),
-                        start = operation.start,
-                        end = operation.end || start,
-                        generator = new Operations.Generator();
-
-                    if ((start <= 0) && (end + 1 >= cells.length)) {
-                        // deleting the entire row element
-                        generator.generateTableRowOperations(tableRow, operation.position);
-                    } else {
-                        // deleting a few cells in the row
-                        cells.slice(start, end + 1).each(function (index) {
-                            generator.generateTableCellOperations(this, operation.position.concat([start + index]));
-                        });
-                    }
-                    undoManager.addUndo(generator.getOperations(), operation);
-                }
-                implDeleteCells(operation.position, operation.start, operation.end);
-            }
-        };
-
-        operationHandlers[Operations.ROWS_DELETE] = function (operation) {
-            if (undoManager.isEnabled()) {
-                var start = operation.start,
-                    end = operation.end || start,
-                    generator = new Operations.Generator();
-
-                for (var i = start; i <= end; i += 1) {
-                    var localPos = operation.position.concat([i]),
-                        tableRow = Position.getTableRowElement(editdiv, localPos);
-                    if (tableRow) {
-                        generator.generateTableRowOperations(tableRow, localPos);
-                    }
-                }
-                undoManager.addUndo(generator.getOperations(), operation);
-            }
-            implDeleteRows(operation.position, operation.start, operation.end);
         };
 
         operationHandlers[Operations.COLUMNS_DELETE] = function (operation) {
@@ -3827,8 +3696,15 @@ define('io.ox/office/editor/editor',
                     start = pos.pop(),
                     count = operation.count || 1,
                     end = start + count - 1,
-                    undoOperation = { name: Operations.CELLS_DELETE, position: pos, start: start, end: end };
-                undoManager.addUndo(undoOperation, operation);
+                    localStart = null,
+                    undoOperation = null;
+
+                for (var i = start; i <= end; i++) {
+                    localStart = _.clone(pos);
+                    localStart.push(i);
+                    undoOperation = { name: Operations.DELETE, start: localStart };
+                    undoManager.addUndo(undoOperation, operation);
+                }
             }
             implInsertCells(_.copy(operation.start, true), operation.count, operation.attrs);
         };
@@ -3838,8 +3714,15 @@ define('io.ox/office/editor/editor',
                 var pos = _.copy(operation.start, true),
                     start = pos.pop(),
                     end = start,
-                    undoOperation = { name: Operations.ROWS_DELETE, position: pos, start: start, end: end };
-                undoManager.addUndo(undoOperation, operation);
+                    undoOperation = null,
+                    rowPosition = null;
+
+                for (var i = start; i <= end; i++) {
+                    rowPosition = _.clone(pos);
+                    rowPosition.push(i);
+                    undoOperation = { name: Operations.DELETE, start: rowPosition };
+                    undoManager.addUndo(undoOperation, operation);
+                }
             }
             implInsertRows(operation.start, operation.count, operation.insertDefaultCells, operation.referenceRow, operation.attrs);
         };
@@ -3849,17 +3732,18 @@ define('io.ox/office/editor/editor',
                 undoManager.startGroup();
                 // COLUMNS_DELETE cannot be the answer to COLUMN_INSERT, because the cells of the new column may be inserted
                 // at very different grid positions. It is only possible to remove the new cells with deleteCells operation.
-                var localPos = _.copy(operation.start, true),
+                var localPos = _.clone(operation.start),
                     table = Position.getDOMPosition(editdiv, localPos).node,  // -> this is already the new grid with the new column!
                     allRows = DOM.getTableRows(table),
-                    allCellInsertPositions = Table.getAllInsertPositions(allRows, operation.gridPosition, operation.insertMode);
+                    allCellInsertPositions = Table.getAllInsertPositions(allRows, operation.gridPosition, operation.insertMode),
+                    undoOperation = null,
+                    cellPosition = null;
 
                 for (var i = (allCellInsertPositions.length - 1); i >= 0; i--) {
-                    var rowPos = _.copy(localPos, true),
-                        start = allCellInsertPositions[i],
-                        end = start;  // only one cell within each operation
-                    rowPos.push(i);
-                    var undoOperation = { name: Operations.CELLS_DELETE, position: rowPos, start: start, end: end };
+                    cellPosition = _.clone(localPos);
+                    cellPosition.push(i);
+                    cellPosition.push(allCellInsertPositions[i]);
+                    undoOperation = { name: Operations.DELETE, start: cellPosition };
                     undoManager.addUndo(undoOperation);
                 }
 
@@ -4924,8 +4808,8 @@ define('io.ox/office/editor/editor',
             DOM.getTableRows(table).slice(startRow, endRow + 1).remove();
 
             if (DOM.getTableRows(table).length === 0) {
-                // This code should never be reached. If last row shall be deleted, deleteTable is called.
-                self.deleteTable(localPosition);
+                // This code should never be reached. If last row shall be deleted, deleteRange is called.
+                self.deleteRange(localPosition);
                 $(table).remove();
                 localPosition.push(0);
             } else {
@@ -5194,7 +5078,7 @@ define('io.ox/office/editor/editor',
             );
 
             if (DOM.getTableRows(table).children('td').length === 0) {   // no more columns
-                // This code should never be reached. If last column shall be deleted, deleteTable is called.
+                // This code should never be reached. If last column shall be deleted, deleteRange is called.
                 $(table).remove();
                 localPosition.push(0);
             } else {
