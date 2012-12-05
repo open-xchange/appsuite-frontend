@@ -61,6 +61,7 @@ define('io.ox/calendar/edit/template',
                 .css({float: 'right', marginLeft: '13px'})
                 .on('click', function () {
                     baton.model.save();
+                    //baton.app.getWindow().busy();
                 })
             );
             this.append($('<button class="btn" data-action="discard" >')
