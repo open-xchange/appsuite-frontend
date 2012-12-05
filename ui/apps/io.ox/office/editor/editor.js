@@ -370,6 +370,14 @@ define('io.ox/office/editor/editor',
             var proceed = true,
                 message = null;
 
+            /**
+             * Shows an error box if a document could not be loaded completely without error.
+             */
+            function insertLoadError() {
+                alert(gt("Sorry, failed to load the document successfully."));
+            }
+
+
             _(operations).each(function (operation) {
                 if (proceed) {
                     operationsCounter++;
@@ -381,6 +389,7 @@ define('io.ox/office/editor/editor',
                         Utils.error(message);
                         message = "Failed operation (" + operationsCounter + ") : " + JSON.stringify(operation);
                         Utils.error(message);
+                        insertLoadError();
                     }
                 }
             });
