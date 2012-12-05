@@ -14,7 +14,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
         id: 'portal-settings-reddit',
         draw: function (data) {
             var that = this;
-            require(['settings!plugins/portal/reddit', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs'], function (settings, gt, dialogs) {
+            require(['settings!plugins/portal/reddit', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'less!plugins/portal/reddit/style.css'], function (settings, gt, dialogs) {
                 var subreddits = settings.get('subreddits'),
                 staticStrings = {
                     SUBREDDITS: gt('Subreddits'),
@@ -33,8 +33,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         self.$el.empty().append(
                             $('<div class="io-ox-settings-item io-ox-reddit-setting">')
                             .attr({'data-subreddit': this.model.get('subreddit'), 'data-mode': this.model.get('mode')}).append(
-                                $('<span data-property="subreddit">'),
-                                $('<span data-property="mode">'),
+                                $('<span data-property="subreddit" class="io-ox-reddit-name">'),
+                                $('<span data-property="mode" class="io-ox-reddit-mode">'),
                                 $('<i class="action-edit icon-edit">'),
                                 $('<i class="action-remove icon-remove">')
                             )
@@ -50,25 +50,26 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         'click .io-ox-reddit-setting .action-remove' : 'onDelete'
                     },
                     onEdit: function (pEvent) {
-                        console.log("On edit called for: ", $(pEvent.target).parent());
                         var dialog = new dialogs.ModalDialog({
                             easyOut: true,
                             async: true
                         });
 
                         var oldSubreddit = $(pEvent.target).parent(),
-                            oldMode = oldSubreddit.find('[data-property]').data('mode');
+                            oldMode = oldSubreddit.data('mode'),
+                            oldName = oldSubreddit.data('subreddit');
 
                         if (oldSubreddit) {
                             oldSubreddit = String(oldSubreddit);
-                            var $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'}).val(oldSubreddit),
+                            var $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'}).val(oldName),
                                 $error = $('<div>').addClass('alert alert-error').hide(),
                                 that = this;
 
                             var $mode = $('<select>')
                                 .append($('<option>').attr('value', 'hot').text(gt('hot')))
-                                .append($('<option>').attr('value', 'new').text(gt('new')))
-                                .val(oldMode);
+                                .append($('<option>').attr('value', 'new').text(gt('new')));
+
+                            $mode.find('[value=' + oldMode + ']').attr({selected: 'selected'});
 
                             dialog.header($("<h4>").text(gt('Edit a Subreddit')))
                                 .append($subreddit)
@@ -81,23 +82,23 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             dialog.on('edit', function (e) {
                                 $error.hide();
 
-                                var subreddit = String($.trim($subreddit.val())),
-                                    mode = $mode.val(),
+                                var newName = $.trim($subreddit.val()),
+                                    newMode = $.trim($mode.val()),
                                     deferred = $.Deferred();
 
                                 // No dot and url does not end with tumblr.com? Append it!
-                                if (subreddit.match(/^r\//)) {
-                                    subreddit = subreddit.substring(2);
+                                if (newName.match(/^r\//)) {
+                                    newName = newName.substring(2);
                                 }
 
                                 // TODO Check if mode is OK
 
-                                if (subreddit.length === 0) {
+                                if (newName.length === 0) {
                                     $error.text(gt('Please enter a subreddit.'));
                                     deferred.reject();
                                 } else {
                                     $.ajax({
-                                        url: 'http://www.reddit.com/r/' + subreddit + '/.json?jsonp=testcallback',
+                                        url: 'http://www.reddit.com/r/' + newName + '/.json?jsonp=testcallback',
                                         type: 'HEAD',
                                         dataType: 'jsonp',
                                         jsonp: false,
@@ -113,15 +114,15 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                 }
 
                                 deferred.done(function () {
-                                    ext.point("io.ox/portal/widget").disable('reddit-' + oldSubreddit.replace(/[^a-z0-9]/g, '_') + '-' + oldMode.replace(/[^a-z0-9]/g, '_'));
+                                    ext.point("io.ox/portal/widget").disable('reddit-' + oldName.replace(/[^a-z0-9]/g, '_') + '-' + oldMode.replace(/[^a-z0-9]/g, '_'));
 
-                                    subreddits = removeSubReddit(subreddits, oldSubreddit, oldMode);
+                                    subreddits = removeSubReddit(subreddits, oldName, oldMode);
 
-                                    subreddits.push({subreddit: subreddit, mode: mode});
+                                    subreddits.push({subreddit: newName, mode: newMode});
                                     settings.set('subreddits', subreddits);
                                     settings.save();
 
-                                    ext.point("io.ox/portal/widget").enable('reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + mode.replace(/[^a-z0-9]/g, '_'));
+                                    ext.point("io.ox/portal/widget").enable('reddit-' + newName.replace(/[^a-z0-9]/g, '_') + '-' + newMode.replace(/[^a-z0-9]/g, '_'));
 
                                     require(['plugins/portal/reddit/register'], function (reddit) {
                                         reddit.reload();
@@ -138,13 +139,14 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             });
                         }
                     },
-                    onDelete: function (args) {
+                    onDelete: function (pEvent) {
                         var dialog = new dialogs.ModalDialog({
                             easyOut: true
                         });
 
-                        var subreddit = this.$el.find('[selected]').data('subreddit'),
-                            mode = this.$el.find('[selected]').data('mode');
+                        var subreddit = $(pEvent.target).parent(),
+                            name = subreddit.data('subreddit'),
+                            mode = subreddit.data('mode');
 
                         if (subreddit) {
                             subreddit = String(subreddit);
@@ -152,7 +154,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
 
                             dialog.header($("<h4>").text(gt('Delete a Subreddit')))
                                 .append($('<span>').text(gt('Do you really want to delete the following subreddit?')))
-                                .append($('<ul>').append($('<li>').text(subreddit + " (" + mode + ")")))
+                                .append($('<ul>').append($('<li>').text(name + " (" + mode + ")")))
                                 .addButton('cancel', gt('Cancel'))
                                 .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
                                 .show()
@@ -160,16 +162,16 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                     if (action === 'delete') {
                                         var newSubreddits = [];
                                         _.each(subreddits, function (sub) {
-                                            if (sub.subreddit !== subreddit || sub.subreddit === subreddit && sub.mode !== mode) {
+                                            if (sub.subreddit !== name || sub.subreddit === name && sub.mode !== mode) {
                                                 newSubreddits.push(sub);
                                             }
                                         });
 
-                                        subreddits = removeSubReddit(subreddits, subreddit, mode);
+                                        subreddits = removeSubReddit(subreddits, name, mode);
                                         settings.set('subreddits', subreddits);
                                         settings.save();
 
-                                        var extId = 'reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + mode.replace(/[^a-z0-9]/g, '_');
+                                        var extId = 'reddit-' + name.replace(/[^a-z0-9]/g, '_') + '-' + mode.replace(/[^a-z0-9]/g, '_');
 
                                         ext.point("io.ox/portal/widget").disable(extId);
 
