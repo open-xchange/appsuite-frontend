@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
-"POT-Creation-Date: Wed Dec 05 2012 09:50:39 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2012-12-05 10:43+0100\n"
+"POT-Creation-Date: Wed Dec 05 2012 10:59:21 GMT+0100 (CET)\n"
+"PO-Revision-Date: 2012-12-05 11:04+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -69,6 +69,676 @@ msgstr "Passwort vergessen?"
 #: html/core_body.html:96
 msgid "Languages"
 msgstr "Sprachen"
+
+#. Address book thumb index
+#. (guess translation is only needed for Asian languages)
+#. This string is simply split at spaces (can be more or less than 26 characters)
+#: apps/io.ox/contacts/main.js:50
+msgid "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
+msgstr "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
+
+#: apps/io.ox/contacts/main.js:102 apps/io.ox/contacts/main.js:104
+#: apps/io.ox/contacts/model.js:297 apps/io.ox/contacts/view-detail.js:152
+#: apps/io.ox/participants/views.js:93
+msgid "Distribution list"
+msgstr "Verteilerliste"
+
+#: apps/io.ox/contacts/main.js:156
+msgid "Couldn't load contact data."
+msgstr "Kontaktdaten konnten nicht geladen werden"
+
+#: apps/io.ox/office/editor/editor.js:377
+msgid "Sorry, failed to load the document successfully."
+msgstr "Das Dokument konnte leider nicht erfolgreich geladen werden."
+
+#: apps/io.ox/calendar/actions.js:374
+#: apps/io.ox/calendar/edit/recurrence-view.js:238
+#: apps/io.ox/calendar/edit/recurrence-view.js:816
+#: apps/io.ox/contacts/actions.js:300 apps/io.ox/files/actions.js:439
+#: apps/io.ox/mail/actions.js:651 apps/io.ox/office/editor/editor.js:2316
+#: apps/io.ox/office/editor/editor.js:2325
+#: apps/io.ox/office/editor/fileActions.js:77 apps/io.ox/tasks/actions.js:226
+#: apps/plugins/portal/flickr/settings/plugin.js:56
+#: apps/plugins/portal/flickr/settings/plugin.js:115
+#: apps/plugins/portal/reddit/settings/plugin.js:29
+#: apps/plugins/portal/reddit/settings/plugin.js:227
+#: apps/plugins/portal/rss/settings/plugin.js:334
+#: apps/plugins/portal/rss/settings/plugin.js:393
+#: apps/plugins/portal/tumblr/settings/plugin.js:29
+#: apps/plugins/portal/tumblr/settings/plugin.js:80
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: apps/io.ox/office/editor/editor.js:2327
+#: apps/io.ox/office/editor/hyperlink.js:469
+msgid "Remove"
+msgstr "Entfernen"
+
+#: apps/io.ox/office/editor/editor.js:2472
+msgid "Heading"
+msgstr "Überschrift"
+
+#: apps/io.ox/office/editor/view/controls.js:30
+msgid "Dark Red"
+msgstr "Dunkelrot"
+
+#: apps/io.ox/mail/view-detail.js:597
+#: apps/io.ox/office/editor/view/controls.js:31
+msgid "Red"
+msgstr "Rot"
+
+#: apps/io.ox/mail/view-detail.js:603
+#: apps/io.ox/office/editor/view/controls.js:32
+msgid "Orange"
+msgstr "Orange"
+
+#: apps/io.ox/mail/view-detail.js:606
+#: apps/io.ox/office/editor/view/controls.js:33
+msgid "Yellow"
+msgstr "Gelb"
+
+#: apps/io.ox/office/editor/view/controls.js:34
+msgid "Light Green"
+msgstr "Hellgrün"
+
+#: apps/io.ox/mail/view-detail.js:599
+#: apps/io.ox/office/editor/view/controls.js:35
+msgid "Green"
+msgstr "Green"
+
+#: apps/io.ox/office/editor/view/controls.js:36
+msgid "Light Blue"
+msgstr "Hellblau"
+
+#: apps/io.ox/mail/view-detail.js:598
+#: apps/io.ox/office/editor/view/controls.js:37
+msgid "Blue"
+msgstr "Blau"
+
+#: apps/io.ox/office/editor/view/controls.js:38
+msgid "Dark Blue"
+msgstr "Dunkelblau"
+
+#: apps/io.ox/mail/view-detail.js:601
+#: apps/io.ox/office/editor/view/controls.js:39
+msgid "Purple"
+msgstr "Lila"
+
+#: apps/io.ox/office/editor/view/controls.js:44
+msgid "Background 1"
+msgstr "Hintergrund 1"
+
+#: apps/io.ox/office/editor/view/controls.js:45
+msgid "Text 1"
+msgstr "Text 1"
+
+#: apps/io.ox/office/editor/view/controls.js:46
+msgid "Background 2"
+msgstr "Hintergrund 2"
+
+#: apps/io.ox/office/editor/view/controls.js:47
+msgid "Text 2"
+msgstr "Text 2"
+
+#: apps/io.ox/office/editor/view/controls.js:48
+msgid "Accent 1"
+msgstr "Akzent 1"
+
+#: apps/io.ox/office/editor/view/controls.js:49
+msgid "Accent 2"
+msgstr "Akzent 2"
+
+#: apps/io.ox/office/editor/view/controls.js:50
+msgid "Accent 3"
+msgstr "Akzent 3"
+
+#: apps/io.ox/office/editor/view/controls.js:51
+msgid "Accent 4"
+msgstr "Akzent 4"
+
+#: apps/io.ox/office/editor/view/controls.js:52
+msgid "Accent 5"
+msgstr "Akzent 5"
+
+#: apps/io.ox/office/editor/view/controls.js:53
+msgid "Accent 6"
+msgstr "Akzent 6"
+
+#: apps/io.ox/office/editor/view/controls.js:57
+msgid "English (US)"
+msgstr "Englisch (US)"
+
+#: apps/io.ox/office/editor/view/controls.js:58
+msgid "German"
+msgstr "Deutsch"
+
+#: apps/io.ox/office/editor/view/controls.js:59
+msgid "French"
+msgstr "Französisch"
+
+#: apps/io.ox/office/editor/view/controls.js:60
+msgid "Spanish"
+msgstr "Spanisch"
+
+#: apps/io.ox/office/editor/view/controls.js:61
+msgid "Czech"
+msgstr "Tschechisch"
+
+#: apps/io.ox/office/editor/view/controls.js:62
+msgid "Danish"
+msgstr "Dänisch"
+
+#: apps/io.ox/office/editor/view/controls.js:63
+msgid "Dutch (Netherlands)"
+msgstr "Niederländisch (Niederlande)"
+
+#: apps/io.ox/office/editor/view/controls.js:64
+msgid "Finnish"
+msgstr "Finnisch"
+
+#: apps/io.ox/office/editor/view/controls.js:65
+msgid "Greek"
+msgstr "Griechisch"
+
+#: apps/io.ox/office/editor/view/controls.js:66
+msgid "Hungarian"
+msgstr "Ungarisch"
+
+#: apps/io.ox/office/editor/view/controls.js:67
+msgid "Italian (Italy)"
+msgstr "Italienisch (Italien)"
+
+#: apps/io.ox/office/editor/view/controls.js:68
+msgid "Polish"
+msgstr "Polnisch"
+
+#: apps/io.ox/office/editor/view/controls.js:69
+msgid "Portuguese (Portugal)"
+msgstr "Portugiesisch (Portugal)"
+
+#: apps/io.ox/office/editor/view/controls.js:70
+msgid "Romanian"
+msgstr "Rumänisch"
+
+#: apps/io.ox/office/editor/view/controls.js:71
+msgid "Russian"
+msgstr "Russisch"
+
+#: apps/io.ox/office/editor/view/controls.js:72
+msgid "Swedish (Sweden)"
+msgstr "Schwedisch (Schweden)"
+
+#: apps/io.ox/office/editor/view/controls.js:183
+msgid "Paragraph Style"
+msgstr "Absatzstil"
+
+#: apps/io.ox/office/editor/view/controls.js:241
+msgid "Lighter"
+msgstr "Heller"
+
+#: apps/io.ox/office/editor/view/controls.js:241
+msgid "Darker"
+msgstr "Dunkler"
+
+#: apps/io.ox/office/editor/view/controls.js:251
+msgid "No Color"
+msgstr "Keine Farbe"
+
+#: apps/io.ox/office/editor/view/controls.js:251
+msgid "Automatic Color"
+msgstr "Standardfarbe"
+
+#: apps/io.ox/office/editor/view/controls.js:255
+msgid "Theme Colors"
+msgstr "Theme-Farben"
+
+#: apps/io.ox/office/editor/view/controls.js:262
+msgid "Standard Colors"
+msgstr "Standardfarben"
+
+#: apps/io.ox/office/editor/view/controls.js:290
+msgid "Font Name"
+msgstr "Schriftart"
+
+#: apps/io.ox/office/editor/view/controls.js:312
+msgid "Font Size"
+msgstr "Schriftgröße"
+
+#: apps/io.ox/office/editor/view/controls.js:333
+msgid "Paragraph borders"
+msgstr "Absatzumrandung"
+
+#: apps/io.ox/office/editor/view/controls.js:341
+msgid "No border"
+msgstr "Keine Umrandung"
+
+#: apps/io.ox/office/editor/view/controls.js:342
+msgid "Border left and right"
+msgstr "Linker und rechter Rand"
+
+#: apps/io.ox/office/editor/view/controls.js:343
+msgid "Border top and bottom"
+msgstr "Oberer und unterer Rand"
+
+#: apps/io.ox/office/editor/view/controls.js:344
+msgid "Border outside"
+msgstr "Äußerer Rand"
+
+#: apps/io.ox/office/editor/view/controls.js:345
+msgid "Border outside and inside"
+msgstr "Äußerer und innerer Rand"
+
+#: apps/io.ox/office/editor/view/controls.js:346
+msgid "Border left"
+msgstr "Linker Rand"
+
+#: apps/io.ox/office/editor/view/controls.js:347
+msgid "Border right"
+msgstr "Rechter Rand"
+
+#: apps/io.ox/office/editor/view/controls.js:348
+msgid "Border top"
+msgstr "Oberer Rand"
+
+#: apps/io.ox/office/editor/view/controls.js:349
+msgid "Border bottom"
+msgstr "Unterer Rand"
+
+#: apps/io.ox/office/editor/view/controls.js:350
+msgid "Border inside"
+msgstr "Innerer Rand"
+
+#: apps/io.ox/office/editor/view/controls.js:367
+msgid "Language"
+msgstr "Sprache"
+
+#: apps/io.ox/office/editor/view/controls.js:389
+msgid "Insert Table"
+msgstr "Tabelle einfügen"
+
+#: apps/io.ox/office/editor/view/view.js:85
+msgid "Revert Last Operation"
+msgstr "Letzte Aktion rückgängig machen"
+
+#: apps/io.ox/office/editor/view/view.js:86
+msgid "Restore Last Operation"
+msgstr "Letzte Aktion wiederherstellen"
+
+#: apps/io.ox/office/editor/view/view.js:153
+msgid "No document"
+msgstr "Kein Dokument"
+
+#: apps/io.ox/office/editor/view/view.js:156
+msgid "Offline"
+msgstr "Offline"
+
+#: apps/io.ox/office/editor/view/view.js:163
+msgid "Saving changes"
+msgstr "Änderungen speichern"
+
+#: apps/io.ox/office/editor/view/view.js:166
+msgid "All changes saved"
+msgstr "Alle Änderungen gespeichert"
+
+#: apps/io.ox/office/editor/main.js:146
+#: apps/io.ox/office/editor/view/view.js:230
+#: apps/io.ox/office/preview/main.js:53
+msgid "Unnamed"
+msgstr "Unbenannt"
+
+#: apps/io.ox/office/editor/view/view.js:238
+#: apps/io.ox/office/editor/view/view.js:490
+msgid "Rename Document"
+msgstr "Dokument umbenennen"
+
+#: apps/io.ox/office/editor/view/view.js:240
+msgid "Document name"
+msgstr "Dokumententitel"
+
+#: apps/io.ox/core/commons-folderview.js:183
+#: apps/io.ox/core/tk/folderviews.js:595 apps/io.ox/files/actions.js:234
+#: apps/io.ox/files/actions.js:476 apps/io.ox/office/editor/view/view.js:241
+msgid "Rename"
+msgstr "Umbenennen"
+
+#: apps/io.ox/office/editor/view/view.js:335
+msgid "Format"
+msgstr "Format"
+
+#: apps/io.ox/office/editor/view/view.js:342
+msgid "Bold"
+msgstr "Fett"
+
+#: apps/io.ox/office/editor/view/view.js:343
+msgid "Italic"
+msgstr "Kursiv"
+
+#: apps/io.ox/office/editor/view/view.js:344
+msgid "Underline"
+msgstr "Unterstrichen"
+
+#: apps/io.ox/office/editor/view/view.js:345
+msgid "Strike through"
+msgstr "Durchstreichen"
+
+#: apps/io.ox/office/editor/view/view.js:348
+msgid "Subscript"
+msgstr "Tiefstellung"
+
+#: apps/io.ox/office/editor/view/view.js:349
+msgid "Superscript"
+msgstr "Hochstellung"
+
+#: apps/io.ox/office/editor/view/view.js:351
+msgid "Text Fill Color"
+msgstr "Texthintergrundfarbe"
+
+#: apps/io.ox/office/editor/view/view.js:353
+msgid "Text Color"
+msgstr "Textfarbe"
+
+#: apps/io.ox/office/editor/view/view.js:355
+msgid "Paragraph Alignment"
+msgstr "Absatzausrichtung"
+
+#: apps/io.ox/office/editor/view/view.js:356
+msgid "Left"
+msgstr "Linksbündig"
+
+#: apps/io.ox/office/editor/view/view.js:357
+#: apps/io.ox/office/editor/view/view.js:394
+msgid "Center"
+msgstr "Zentriert"
+
+#: apps/io.ox/office/editor/view/view.js:358
+msgid "Right"
+msgstr "Rechtsbündig"
+
+#: apps/io.ox/office/editor/view/view.js:359
+msgid "Justify"
+msgstr "Blocksatz"
+
+#: apps/io.ox/office/editor/view/view.js:361
+msgid "Line Spacing"
+msgstr "Zeilenabstand"
+
+#: apps/io.ox/office/editor/view/view.js:362
+msgid "Single"
+msgstr "Einfach"
+
+#: apps/io.ox/office/editor/view/view.js:363
+msgid "One and a Half"
+msgstr "Eineinhalb"
+
+#: apps/io.ox/office/editor/view/view.js:364
+msgid "Double"
+msgstr "Doppelt"
+
+#: apps/io.ox/office/editor/view/view.js:366
+msgid "Paragraph Fill Color"
+msgstr "Absatz-Hintergrundfarbe"
+
+#: apps/io.ox/office/editor/view/view.js:370
+msgid "Bullets On/Off"
+msgstr "Aufzählung an/aus"
+
+#: apps/io.ox/office/editor/view/view.js:371
+msgid "Numbering On/Off"
+msgstr "Nummerierung an/aus"
+
+#: apps/io.ox/office/editor/view/view.js:372
+msgid "Demote One Level"
+msgstr "Eine Ebene nach unten verschieben"
+
+#: apps/io.ox/office/editor/view/view.js:373
+msgid "Promote One Level"
+msgstr "Eine Ebene nach oben verschieben"
+
+#: apps/io.ox/office/editor/view/view.js:376
+#: apps/io.ox/office/editor/view/view.js:400
+msgid "Table"
+msgstr "Tabelle"
+
+#: apps/io.ox/office/editor/view/view.js:379
+msgid "Insert Row"
+msgstr "Zeile einfügen"
+
+#: apps/io.ox/office/editor/view/view.js:380
+msgid "Insert Column"
+msgstr "Spalte einfügen"
+
+#: apps/io.ox/office/editor/view/view.js:381
+msgid "Delete Rows"
+msgstr "Zeilen löschen"
+
+#: apps/io.ox/office/editor/view/view.js:382
+msgid "Delete Columns"
+msgstr "Spalten löschen"
+
+#: apps/io.ox/office/editor/view/view.js:384
+msgid "Image"
+msgstr "Bild"
+
+#: apps/io.ox/office/editor/view/view.js:385
+msgid "Insert Image File"
+msgstr "Bilddatei einfügen"
+
+#: apps/io.ox/office/editor/view/view.js:386
+msgid "Insert Image URL"
+msgstr "Bild-URL einfügen"
+
+#: apps/io.ox/office/editor/view/view.js:388
+msgid "Delete Drawing"
+msgstr "Zeichnung löschen"
+
+#: apps/io.ox/office/editor/view/view.js:390
+msgid "Drawing Position"
+msgstr "Zeichnungsausrichtung"
+
+#: apps/io.ox/office/editor/view/view.js:391
+msgid "Inline With Text"
+msgstr "In Text einfügen"
+
+#: apps/io.ox/office/editor/view/view.js:392
+msgid "Float Left"
+msgstr "Links im Text"
+
+#: apps/io.ox/office/editor/view/view.js:393
+msgid "Float Right"
+msgstr "Rechts im Text"
+
+#: apps/io.ox/office/editor/view/view.js:401
+msgid "Insert row"
+msgstr "Zeile einfügen"
+
+#: apps/io.ox/office/editor/view/view.js:402
+msgid "Insert column"
+msgstr "Spalte einfügen"
+
+#: apps/io.ox/office/editor/view/view.js:403
+msgid "Delete selected rows"
+msgstr "Markierte Zeilen löschen"
+
+#: apps/io.ox/office/editor/view/view.js:404
+msgid "Delete selected columns"
+msgstr "Markierte Spalten löschen"
+
+#: apps/io.ox/office/editor/view/view.js:406
+msgid "Drawing"
+msgstr "Zeichnung"
+
+#: apps/io.ox/office/editor/view/view.js:407
+msgid "Delete drawing object"
+msgstr "Zeichnung löschen"
+
+#: apps/io.ox/office/editor/view/view.js:409
+msgid "Drawing position"
+msgstr "Zeichnungsausrichtung"
+
+#: apps/io.ox/office/editor/view/view.js:410
+msgid "Inline with text"
+msgstr "In Text einfügen"
+
+#: apps/io.ox/office/editor/view/view.js:411
+msgid "Left aligned, text wraps at right side"
+msgstr "Links ausgerichtet, Textumlauf rechts"
+
+#: apps/io.ox/office/editor/view/view.js:412
+msgid "Right aligned, text wraps at left side"
+msgstr "Rechts ausgerichtet, Textumlauf links"
+
+#: apps/io.ox/office/editor/view/view.js:413
+msgid "Centered, no text wrapping"
+msgstr "Zentriert, kein Textumlauf"
+
+#: apps/io.ox/office/editor/view/view.js:448
+#: apps/io.ox/office/editor/view/view.js:464
+msgid "Debug"
+msgstr "Fehlerbehebung"
+
+#: apps/io.ox/office/editor/view/view.js:499
+msgid "Quick Search"
+msgstr "Schnellsuche"
+
+#: apps/io.ox/mail/settings/pane.js:25 apps/io.ox/mail/write/main.js:488
+msgid "Mail"
+msgstr "Mail"
+
+#: apps/io.ox/mail/settings/old_pane.js:42 apps/io.ox/mail/settings/pane.js:26
+#: apps/io.ox/tasks/settings/pane.js:27
+msgid "Common"
+msgstr "Allgemein"
+
+#: apps/io.ox/mail/settings/old_pane.js:46 apps/io.ox/mail/settings/pane.js:27
+msgid "Permanently remove deleted E-Mails?"
+msgstr "Gelöschte E-Mails unwiderruflich entfernen?"
+
+#: apps/io.ox/mail/settings/old_pane.js:47 apps/io.ox/mail/settings/pane.js:28
+msgid ""
+"Automatically collect contacts in the folder \"Collected addresses\" while "
+"sending?"
+msgstr ""
+"Beim Versenden Kontakte automatisch im Ordner \"Gesammelte Adressen\" "
+"speichern?"
+
+#: apps/io.ox/mail/settings/old_pane.js:48 apps/io.ox/mail/settings/pane.js:29
+msgid ""
+"Automatically collect contacts in the folder \"Collected addresses\" while "
+"reading?"
+msgstr ""
+"Beim Lesen Kontakte automatisch im Ordner \"Gesammelte Adressen\" speichern?"
+
+#: apps/io.ox/mail/settings/pane.js:30
+msgid "Automatically select first E-Mail"
+msgstr "Erste E-Mail automatisch selektieren"
+
+#: apps/io.ox/mail/settings/old_pane.js:78 apps/io.ox/mail/settings/pane.js:31
+msgid "Compose"
+msgstr "Verfassen"
+
+#: apps/io.ox/mail/settings/old_pane.js:80 apps/io.ox/mail/settings/pane.js:32
+msgid "Append vcard"
+msgstr "Visitenkarte anhängen"
+
+#: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:33
+msgid "Insert the original E-Mail text to a reply"
+msgstr "Ursprünglichen Mailtext in Antwort zitieren"
+
+#: apps/io.ox/mail/settings/old_pane.js:92 apps/io.ox/mail/settings/pane.js:34
+msgid "Forward E-Mails as:"
+msgstr "Nachrichten weiterleiten als "
+
+#: apps/io.ox/mail/settings/old_pane.js:94 apps/io.ox/mail/settings/pane.js:35
+msgid "Inline"
+msgstr "Inliegend"
+
+#: apps/io.ox/mail/settings/old_pane.js:95 apps/io.ox/mail/settings/pane.js:36
+msgid "Attachment"
+msgstr "Anlage"
+
+#: apps/io.ox/mail/settings/old_pane.js:104
+#: apps/io.ox/mail/settings/pane.js:37
+msgid "Format E-Mails as:"
+msgstr "Nachrichten formatieren als "
+
+#: apps/io.ox/mail/settings/old_pane.js:106
+#: apps/io.ox/mail/settings/pane.js:38 apps/io.ox/mail/write/view-main.js:414
+msgid "HTML"
+msgstr "HTML"
+
+#: apps/io.ox/mail/settings/old_pane.js:107
+#: apps/io.ox/mail/settings/pane.js:39
+msgid "Plain text"
+msgstr "Nur Text"
+
+#: apps/io.ox/mail/settings/old_pane.js:108
+#: apps/io.ox/mail/settings/pane.js:40
+msgid "HTML and plain text"
+msgstr "HTML und Text"
+
+#: apps/io.ox/mail/settings/old_pane.js:117
+#: apps/io.ox/mail/settings/pane.js:41
+msgid "Line wrap when sending text mails after: "
+msgstr "Beim Senden von Text-E-Mails Zeilenumbruch nach"
+
+#: apps/io.ox/mail/settings/pane.js:42
+msgid " characters"
+msgstr " Zeichen"
+
+#: apps/io.ox/mail/settings/old_pane.js:124
+#: apps/io.ox/mail/settings/pane.js:43
+msgid "Default sender address:"
+msgstr "Standard-Absender-Adresse:"
+
+#: apps/io.ox/mail/settings/old_pane.js:130
+#: apps/io.ox/mail/settings/pane.js:44
+msgid "Auto-save Email drafts?"
+msgstr "E-Mail-Entwürfe automatisch speichern?"
+
+#: apps/io.ox/mail/settings/old_pane.js:156
+#: apps/io.ox/mail/settings/pane.js:45
+msgid "Display"
+msgstr "Anzeigen"
+
+#: apps/io.ox/mail/settings/old_pane.js:160
+#: apps/io.ox/mail/settings/pane.js:46
+msgid "Allow html formatted E-Mails"
+msgstr "HTML-formatierte Nachrichten zulassen"
+
+#: apps/io.ox/mail/settings/old_pane.js:161
+#: apps/io.ox/mail/settings/pane.js:47
+msgid "Block pre-loading of externally linked images"
+msgstr "Laden extern verlinkter Bilder sperren"
+
+#: apps/io.ox/mail/settings/old_pane.js:162
+#: apps/io.ox/mail/settings/pane.js:48
+msgid "Display emoticons as graphics in text E-Mails"
+msgstr "In Text-E-Mails Emoticons als Bilder darstellen"
+
+#: apps/io.ox/mail/settings/old_pane.js:163
+#: apps/io.ox/mail/settings/pane.js:49
+msgid "Color quoted lines"
+msgstr "Zitierte Zeilen farbig hervorheben "
+
+#: apps/io.ox/mail/settings/pane.js:51
+msgid "disabled"
+msgstr "deaktiviert"
+
+#: apps/io.ox/mail/settings/pane.js:52
+msgid "1 minute"
+msgstr "1 Minute"
+
+#: apps/io.ox/mail/settings/pane.js:53
+msgid "3 minutes"
+msgstr "3 Minuten"
+
+#: apps/io.ox/mail/settings/pane.js:54
+msgid "5 minutes"
+msgstr "5 Minuten"
+
+#: apps/io.ox/mail/settings/pane.js:55
+msgid "10 minutes"
+msgstr "10 Minuten"
 
 #: apps/plugins/portal/calendar/register.js:29
 msgid "Started %s milliseconds ago:"
@@ -259,23 +929,6 @@ msgstr "Feed-Name"
 msgid "Edit a feed"
 msgstr "Einen Feed bearbeiten"
 
-#: apps/io.ox/calendar/actions.js:374
-#: apps/io.ox/calendar/edit/recurrence-view.js:238
-#: apps/io.ox/calendar/edit/recurrence-view.js:816
-#: apps/io.ox/contacts/actions.js:300 apps/io.ox/files/actions.js:439
-#: apps/io.ox/mail/actions.js:651 apps/io.ox/office/editor/editor.js:2316
-#: apps/io.ox/office/editor/fileActions.js:77 apps/io.ox/tasks/actions.js:226
-#: apps/plugins/portal/flickr/settings/plugin.js:56
-#: apps/plugins/portal/flickr/settings/plugin.js:115
-#: apps/plugins/portal/reddit/settings/plugin.js:29
-#: apps/plugins/portal/reddit/settings/plugin.js:227
-#: apps/plugins/portal/rss/settings/plugin.js:334
-#: apps/plugins/portal/rss/settings/plugin.js:393
-#: apps/plugins/portal/tumblr/settings/plugin.js:29
-#: apps/plugins/portal/tumblr/settings/plugin.js:80
-msgid "Edit"
-msgstr "Bearbeiten"
-
 #: apps/plugins/portal/rss/settings/plugin.js:346
 msgid "Please enter an feed-url."
 msgstr "Geben Sie eine Feed URL ein."
@@ -457,6 +1110,12 @@ msgstr "E-Mail-Quota"
 msgid "unlimited"
 msgstr "unbegrenzt"
 
+#. #-#-#-#-#-#-#-#-#-#
+#. %1$s is the storagespace in use
+#. %2$s is the max storagespace
+#. #-#-#-#-#-#-#-#-#-#
+#. %1$s is the number of mails
+#. %2$s is the maximum number of mails
 #. #-#-#-#-#-#-#-#-#-#
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
@@ -737,8 +1396,8 @@ msgid ""
 "By changing the date of this appointment you are creating an appointment "
 "exception to the series. Do you want to continue?"
 msgstr ""
-"Das Ändern des Termindatums führt zum Erstellen einer Terminausnahme "
-"für den Serientermin. Wollen Sie fortfahren?"
+"Das Ändern des Termindatums führt zum Erstellen einer Terminausnahme für den "
+"Serientermin. Wollen Sie fortfahren?"
 
 #: apps/io.ox/calendar/actions.js:113
 #: apps/io.ox/calendar/week/perspective.js:85
@@ -749,6 +1408,7 @@ msgstr ""
 "Wollen Sie die komplette Serie oder einen einzelnen Termin aus der Serie "
 "bearbeiten?"
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. Use singular in this context
@@ -1598,6 +2258,7 @@ msgstr "4 Wochen"
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/settings/pane.js:92
 #: apps/io.ox/core/permissions/permissions.js:146
@@ -1606,6 +2267,7 @@ msgstr "4 Wochen"
 msgid "Yes"
 msgstr "Ja"
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? NO
@@ -1713,22 +2375,6 @@ msgstr "E-Mail versenden"
 #: apps/io.ox/contacts/actions.js:292 apps/io.ox/mail/actions.js:789
 msgid "Invite to appointment"
 msgstr "Zu Termin einladen"
-
-#. Address book thumb index
-#. (guess translation is only needed for Asian languages)
-#. This string is simply split at spaces (can be more or less than 26 characters)
-#: apps/io.ox/contacts/main.js:49
-msgid "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
-msgstr "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
-
-#: apps/io.ox/contacts/main.js:102 apps/io.ox/contacts/model.js:297
-#: apps/io.ox/contacts/view-detail.js:152 apps/io.ox/participants/views.js:93
-msgid "Distribution list"
-msgstr "Verteilerliste"
-
-#: apps/io.ox/contacts/main.js:154
-msgid "Couldn't load contact data."
-msgstr "Kontaktdaten konnten nicht geladen werden"
 
 #: apps/io.ox/contacts/edit/view-form.js:82
 msgid "Personal information"
@@ -2217,12 +2863,6 @@ msgid "Do you really want to delete this file?"
 msgid_plural "Do you really want to delete these files?"
 msgstr[0] "Wollen Sie diese Datei wirklich löschen?"
 msgstr[1] "Wollen Sie diese Dateien wirklich löschen?"
-
-#: apps/io.ox/core/commons-folderview.js:183
-#: apps/io.ox/core/tk/folderviews.js:595 apps/io.ox/files/actions.js:234
-#: apps/io.ox/files/actions.js:476 apps/io.ox/office/editor/view/view.js:241
-msgid "Rename"
-msgstr "Umbenennen"
 
 #: apps/io.ox/files/actions.js:397
 msgid "Upload new file"
@@ -2713,11 +3353,6 @@ msgstr "in einer Woche"
 #: apps/io.ox/tasks/util.js:215
 msgid "Over due"
 msgstr "Überfällig"
-
-#: apps/io.ox/mail/settings/old_pane.js:42 apps/io.ox/mail/settings/pane.js:26
-#: apps/io.ox/tasks/settings/pane.js:27
-msgid "Common"
-msgstr "Allgemein"
 
 #: apps/io.ox/tasks/settings/pane.js:29
 msgid "Interval of the reminder in minutes"
@@ -3256,12 +3891,6 @@ msgstr "Nächste Seite"
 msgid "Last page"
 msgstr "Letzte Seite"
 
-#: apps/io.ox/office/editor/main.js:146
-#: apps/io.ox/office/editor/view/view.js:230
-#: apps/io.ox/office/preview/main.js:53
-msgid "Unnamed"
-msgstr "Unbenannt"
-
 #: apps/io.ox/office/preview/main.js:95
 msgid "An error occurred while loading the document."
 msgstr "Beim Laden des Dokuments trat ein Fehler auf."
@@ -3359,11 +3988,6 @@ msgstr "Text:"
 msgid "URL:"
 msgstr "URL:"
 
-#: apps/io.ox/office/editor/editor.js:2318
-#: apps/io.ox/office/editor/hyperlink.js:469
-msgid "Remove"
-msgstr "Entfernen"
-
 #: apps/io.ox/office/editor/fileActions.js:67
 msgid "New office document"
 msgstr "Neues Office-Dokument"
@@ -3402,10 +4026,6 @@ msgstr ""
 "Dieses Dokument enthält ungesicherte Änderungen. Wollen Sie es wirklich "
 "schließen?"
 
-#: apps/io.ox/office/editor/editor.js:2463
-msgid "Heading"
-msgstr "Überschrift"
-
 #: apps/io.ox/office/editor/image.js:26
 msgid "Sorry, image could not be inserted."
 msgstr "Das Bild konnte leider nicht eingefügt werden."
@@ -3417,477 +4037,6 @@ msgstr "Bilddatei wählen"
 #: apps/io.ox/office/editor/image.js:116
 msgid "Enter Image URL"
 msgstr "Bild-URL eingeben"
-
-#: apps/io.ox/office/editor/view/controls.js:30
-msgid "Dark Red"
-msgstr "Dunkelrot"
-
-#: apps/io.ox/mail/view-detail.js:597
-#: apps/io.ox/office/editor/view/controls.js:31
-msgid "Red"
-msgstr "Rot"
-
-#: apps/io.ox/mail/view-detail.js:603
-#: apps/io.ox/office/editor/view/controls.js:32
-msgid "Orange"
-msgstr "Orange"
-
-#: apps/io.ox/mail/view-detail.js:606
-#: apps/io.ox/office/editor/view/controls.js:33
-msgid "Yellow"
-msgstr "Gelb"
-
-#: apps/io.ox/office/editor/view/controls.js:34
-msgid "Light Green"
-msgstr "Hellgrün"
-
-#: apps/io.ox/mail/view-detail.js:599
-#: apps/io.ox/office/editor/view/controls.js:35
-msgid "Green"
-msgstr "Green"
-
-#: apps/io.ox/office/editor/view/controls.js:36
-msgid "Light Blue"
-msgstr "Hellblau"
-
-#: apps/io.ox/mail/view-detail.js:598
-#: apps/io.ox/office/editor/view/controls.js:37
-msgid "Blue"
-msgstr "Blau"
-
-#: apps/io.ox/office/editor/view/controls.js:38
-msgid "Dark Blue"
-msgstr "Dunkelblau"
-
-#: apps/io.ox/mail/view-detail.js:601
-#: apps/io.ox/office/editor/view/controls.js:39
-msgid "Purple"
-msgstr "Lila"
-
-#: apps/io.ox/office/editor/view/controls.js:44
-msgid "Background 1"
-msgstr "Hintergrund 1"
-
-#: apps/io.ox/office/editor/view/controls.js:45
-msgid "Text 1"
-msgstr "Text 1"
-
-#: apps/io.ox/office/editor/view/controls.js:46
-msgid "Background 2"
-msgstr "Hintergrund 2"
-
-#: apps/io.ox/office/editor/view/controls.js:47
-msgid "Text 2"
-msgstr "Text 2"
-
-#: apps/io.ox/office/editor/view/controls.js:48
-msgid "Accent 1"
-msgstr "Akzent 1"
-
-#: apps/io.ox/office/editor/view/controls.js:49
-msgid "Accent 2"
-msgstr "Akzent 2"
-
-#: apps/io.ox/office/editor/view/controls.js:50
-msgid "Accent 3"
-msgstr "Akzent 3"
-
-#: apps/io.ox/office/editor/view/controls.js:51
-msgid "Accent 4"
-msgstr "Akzent 4"
-
-#: apps/io.ox/office/editor/view/controls.js:52
-msgid "Accent 5"
-msgstr "Akzent 5"
-
-#: apps/io.ox/office/editor/view/controls.js:53
-msgid "Accent 6"
-msgstr "Akzent 6"
-
-#: apps/io.ox/office/editor/view/controls.js:57
-msgid "English (US)"
-msgstr "Englisch (US)"
-
-#: apps/io.ox/office/editor/view/controls.js:58
-msgid "German"
-msgstr "Deutsch"
-
-#: apps/io.ox/office/editor/view/controls.js:59
-msgid "French"
-msgstr "Französisch"
-
-#: apps/io.ox/office/editor/view/controls.js:60
-msgid "Spanish"
-msgstr "Spanisch"
-
-#: apps/io.ox/office/editor/view/controls.js:61
-msgid "Czech"
-msgstr "Tschechisch"
-
-#: apps/io.ox/office/editor/view/controls.js:62
-msgid "Danish"
-msgstr "Dänisch"
-
-#: apps/io.ox/office/editor/view/controls.js:63
-msgid "Dutch (Netherlands)"
-msgstr "Niederländisch (Niederlande)"
-
-#: apps/io.ox/office/editor/view/controls.js:64
-msgid "Finnish"
-msgstr "Finnisch"
-
-#: apps/io.ox/office/editor/view/controls.js:65
-msgid "Greek"
-msgstr "Griechisch"
-
-#: apps/io.ox/office/editor/view/controls.js:66
-msgid "Hungarian"
-msgstr "Ungarisch"
-
-#: apps/io.ox/office/editor/view/controls.js:67
-msgid "Italian (Italy)"
-msgstr "Italienisch (Italien)"
-
-#: apps/io.ox/office/editor/view/controls.js:68
-msgid "Polish"
-msgstr "Polnisch"
-
-#: apps/io.ox/office/editor/view/controls.js:69
-msgid "Portuguese (Portugal)"
-msgstr "Portugiesisch (Portugal)"
-
-#: apps/io.ox/office/editor/view/controls.js:70
-msgid "Romanian"
-msgstr "Rumänisch"
-
-#: apps/io.ox/office/editor/view/controls.js:71
-msgid "Russian"
-msgstr "Russisch"
-
-#: apps/io.ox/office/editor/view/controls.js:72
-msgid "Swedish (Sweden)"
-msgstr "Schwedisch (Schweden)"
-
-#: apps/io.ox/office/editor/view/controls.js:183
-msgid "Paragraph Style"
-msgstr "Absatzstil"
-
-#: apps/io.ox/office/editor/view/controls.js:241
-msgid "Lighter"
-msgstr "Heller"
-
-#: apps/io.ox/office/editor/view/controls.js:241
-msgid "Darker"
-msgstr "Dunkler"
-
-#: apps/io.ox/office/editor/view/controls.js:251
-msgid "No Color"
-msgstr "Keine Farbe"
-
-#: apps/io.ox/office/editor/view/controls.js:251
-msgid "Automatic Color"
-msgstr "Standardfarbe"
-
-#: apps/io.ox/office/editor/view/controls.js:255
-msgid "Theme Colors"
-msgstr "Theme-Farben"
-
-#: apps/io.ox/office/editor/view/controls.js:262
-msgid "Standard Colors"
-msgstr "Standardfarben"
-
-#: apps/io.ox/office/editor/view/controls.js:290
-msgid "Font Name"
-msgstr "Schriftart"
-
-#: apps/io.ox/office/editor/view/controls.js:312
-msgid "Font Size"
-msgstr "Schriftgröße"
-
-#: apps/io.ox/office/editor/view/controls.js:333
-#, fuzzy
-msgid "Pargraph borders"
-msgstr "Absatzumrandung"
-
-#: apps/io.ox/office/editor/view/controls.js:341
-msgid "No border"
-msgstr "Keine Umrandung"
-
-#: apps/io.ox/office/editor/view/controls.js:342
-msgid "Border left and right"
-msgstr "Linker und rechter Rand"
-
-#: apps/io.ox/office/editor/view/controls.js:343
-msgid "Border top and bottom"
-msgstr "Oberer und unterer Rand"
-
-#: apps/io.ox/office/editor/view/controls.js:344
-msgid "Border outside"
-msgstr "Äußerer Rand"
-
-#: apps/io.ox/office/editor/view/controls.js:345
-msgid "Border outside and inside"
-msgstr "Äußerer und innerer Rand"
-
-#: apps/io.ox/office/editor/view/controls.js:346
-msgid "Border left"
-msgstr "Linker Rand"
-
-#: apps/io.ox/office/editor/view/controls.js:347
-msgid "Border right"
-msgstr "Rechter Rand"
-
-#: apps/io.ox/office/editor/view/controls.js:348
-msgid "Border top"
-msgstr "Oberer Rand"
-
-#: apps/io.ox/office/editor/view/controls.js:349
-msgid "Border bottom"
-msgstr "Unterer Rand"
-
-#: apps/io.ox/office/editor/view/controls.js:350
-msgid "Border inside"
-msgstr "Innerer Rand"
-
-#: apps/io.ox/office/editor/view/controls.js:367
-msgid "Language"
-msgstr "Sprache"
-
-#: apps/io.ox/office/editor/view/controls.js:389
-msgid "Insert Table"
-msgstr "Tabelle einfügen"
-
-#: apps/io.ox/office/editor/view/view.js:85
-msgid "Revert Last Operation"
-msgstr "Letzte Aktion rückgängig machen"
-
-#: apps/io.ox/office/editor/view/view.js:86
-msgid "Restore Last Operation"
-msgstr "Letzte Aktion wiederherstellen"
-
-#: apps/io.ox/office/editor/view/view.js:153
-msgid "No document"
-msgstr "Kein Dokument"
-
-#: apps/io.ox/office/editor/view/view.js:156
-msgid "Offline"
-msgstr "Offline"
-
-#: apps/io.ox/office/editor/view/view.js:163
-msgid "Saving changes"
-msgstr "Änderungen speichern"
-
-#: apps/io.ox/office/editor/view/view.js:166
-msgid "All changes saved"
-msgstr "Alle Änderungen gespeichert"
-
-#: apps/io.ox/office/editor/view/view.js:238
-#: apps/io.ox/office/editor/view/view.js:491
-msgid "Rename Document"
-msgstr "Dokument umbenennen"
-
-#: apps/io.ox/office/editor/view/view.js:240
-msgid "Document name"
-msgstr "Dokumententitel"
-
-#: apps/io.ox/office/editor/view/view.js:335
-msgid "Format"
-msgstr "Format"
-
-#: apps/io.ox/office/editor/view/view.js:342
-msgid "Bold"
-msgstr "Fett"
-
-#: apps/io.ox/office/editor/view/view.js:343
-msgid "Italic"
-msgstr "Kursiv"
-
-#: apps/io.ox/office/editor/view/view.js:344
-msgid "Underline"
-msgstr "Unterstrichen"
-
-#: apps/io.ox/office/editor/view/view.js:345
-msgid "Strike through"
-msgstr "Durchstreichen"
-
-#: apps/io.ox/office/editor/view/view.js:349
-msgid "Subscript"
-msgstr "Tiefstellung"
-
-#: apps/io.ox/office/editor/view/view.js:350
-msgid "Superscript"
-msgstr "Hochstellung"
-
-#: apps/io.ox/office/editor/view/view.js:352
-msgid "Text Fill Color"
-msgstr "Texthintergrundfarbe"
-
-#: apps/io.ox/office/editor/view/view.js:354
-msgid "Text Color"
-msgstr "Textfarbe"
-
-#: apps/io.ox/office/editor/view/view.js:356
-msgid "Paragraph Alignment"
-msgstr "Absatzausrichtung"
-
-#: apps/io.ox/office/editor/view/view.js:357
-msgid "Left"
-msgstr "Linksbündig"
-
-#: apps/io.ox/office/editor/view/view.js:358
-#: apps/io.ox/office/editor/view/view.js:395
-msgid "Center"
-msgstr "Zentriert"
-
-#: apps/io.ox/office/editor/view/view.js:359
-msgid "Right"
-msgstr "Rechtsbündig"
-
-#: apps/io.ox/office/editor/view/view.js:360
-msgid "Justify"
-msgstr "Blocksatz"
-
-#: apps/io.ox/office/editor/view/view.js:362
-msgid "Line Spacing"
-msgstr "Zeilenabstand"
-
-#: apps/io.ox/office/editor/view/view.js:363
-msgid "Single"
-msgstr "Einfach"
-
-#: apps/io.ox/office/editor/view/view.js:364
-msgid "One and a Half"
-msgstr "Eineinhalb"
-
-#: apps/io.ox/office/editor/view/view.js:365
-msgid "Double"
-msgstr "Doppelt"
-
-#: apps/io.ox/office/editor/view/view.js:367
-msgid "Paragraph Fill Color"
-msgstr "Absatz-Hintergrundfarbe"
-
-#: apps/io.ox/office/editor/view/view.js:371
-msgid "Bullets On/Off"
-msgstr "Aufzählung an/aus"
-
-#: apps/io.ox/office/editor/view/view.js:372
-msgid "Numbering On/Off"
-msgstr "Nummerierung an/aus"
-
-#: apps/io.ox/office/editor/view/view.js:373
-msgid "Demote One Level"
-msgstr "Eine Ebene nach unten verschieben"
-
-#: apps/io.ox/office/editor/view/view.js:374
-msgid "Promote One Level"
-msgstr "Eine Ebene nach oben verschieben"
-
-#: apps/io.ox/office/editor/view/view.js:377
-#: apps/io.ox/office/editor/view/view.js:401
-msgid "Table"
-msgstr "Tabelle"
-
-#: apps/io.ox/office/editor/view/view.js:380
-msgid "Insert Row"
-msgstr "Zeile einfügen"
-
-#: apps/io.ox/office/editor/view/view.js:381
-msgid "Insert Column"
-msgstr "Spalte einfügen"
-
-#: apps/io.ox/office/editor/view/view.js:382
-msgid "Delete Rows"
-msgstr "Zeilen löschen"
-
-#: apps/io.ox/office/editor/view/view.js:383
-msgid "Delete Columns"
-msgstr "Spalten löschen"
-
-#: apps/io.ox/office/editor/view/view.js:385
-msgid "Image"
-msgstr "Bild"
-
-#: apps/io.ox/office/editor/view/view.js:386
-msgid "Insert Image File"
-msgstr "Bilddatei einfügen"
-
-#: apps/io.ox/office/editor/view/view.js:387
-msgid "Insert Image URL"
-msgstr "Bild-URL einfügen"
-
-#: apps/io.ox/office/editor/view/view.js:389
-msgid "Delete Drawing"
-msgstr "Zeichnung löschen"
-
-#: apps/io.ox/office/editor/view/view.js:391
-msgid "Drawing Position"
-msgstr "Zeichnungsausrichtung"
-
-#: apps/io.ox/office/editor/view/view.js:392
-msgid "Inline With Text"
-msgstr "In Text einfügen"
-
-#: apps/io.ox/office/editor/view/view.js:393
-msgid "Float Left"
-msgstr "Links im Text"
-
-#: apps/io.ox/office/editor/view/view.js:394
-msgid "Float Right"
-msgstr "Rechts im Text"
-
-#: apps/io.ox/office/editor/view/view.js:402
-msgid "Insert row"
-msgstr "Zeile einfügen"
-
-#: apps/io.ox/office/editor/view/view.js:403
-msgid "Insert column"
-msgstr "Spalte einfügen"
-
-#: apps/io.ox/office/editor/view/view.js:404
-msgid "Delete selected rows"
-msgstr "Markierte Zeilen löschen"
-
-#: apps/io.ox/office/editor/view/view.js:405
-msgid "Delete selected columns"
-msgstr "Markierte Spalten löschen"
-
-#: apps/io.ox/office/editor/view/view.js:407
-msgid "Drawing"
-msgstr "Zeichnung"
-
-#: apps/io.ox/office/editor/view/view.js:408
-msgid "Delete drawing object"
-msgstr "Zeichnung löschen"
-
-#: apps/io.ox/office/editor/view/view.js:410
-msgid "Drawing position"
-msgstr "Zeichnungsausrichtung"
-
-#: apps/io.ox/office/editor/view/view.js:411
-msgid "Inline with text"
-msgstr "In Text einfügen"
-
-#: apps/io.ox/office/editor/view/view.js:412
-msgid "Left aligned, text wraps at right side"
-msgstr "Links ausgerichtet, Textumlauf rechts"
-
-#: apps/io.ox/office/editor/view/view.js:413
-msgid "Right aligned, text wraps at left side"
-msgstr "Rechts ausgerichtet, Textumlauf links"
-
-#: apps/io.ox/office/editor/view/view.js:414
-msgid "Centered, no text wrapping"
-msgstr "Zentriert, kein Textumlauf"
-
-#: apps/io.ox/office/editor/view/view.js:449
-#: apps/io.ox/office/editor/view/view.js:465
-msgid "Debug"
-msgstr "Fehlerbehebung"
-
-#: apps/io.ox/office/editor/view/view.js:500
-msgid "Quick Search"
-msgstr "Schnellsuche"
 
 #: apps/io.ox/lessons/lessons/basic_requirejs/register.js:16
 msgid "Hello"
@@ -4088,10 +4237,6 @@ msgstr "E-Mail-Text"
 msgid "Reply all"
 msgstr "Allen antworten"
 
-#: apps/io.ox/mail/settings/pane.js:25 apps/io.ox/mail/write/main.js:488
-msgid "Mail"
-msgstr "Mail"
-
 #: apps/io.ox/mail/write/main.js:488
 msgid "No subject"
 msgstr "Keine Betreff"
@@ -4174,11 +4319,6 @@ msgstr "Textformat"
 msgid "Text"
 msgstr "Text"
 
-#: apps/io.ox/mail/settings/old_pane.js:106
-#: apps/io.ox/mail/settings/pane.js:37 apps/io.ox/mail/write/view-main.js:414
-msgid "HTML"
-msgstr "HTML"
-
 #: apps/io.ox/mail/write/view-main.js:490
 msgid "No signature"
 msgstr "Keine Signatur"
@@ -4187,128 +4327,6 @@ msgstr "Keine Signatur"
 #: apps/io.ox/mail/util.js:122
 msgid "on behalf of"
 msgstr "im Auftrag von "
-
-#: apps/io.ox/mail/settings/old_pane.js:46 apps/io.ox/mail/settings/pane.js:27
-msgid "Permanently remove deleted E-Mails?"
-msgstr "Gelöschte E-Mails unwiderruflich entfernen?"
-
-#: apps/io.ox/mail/settings/old_pane.js:47 apps/io.ox/mail/settings/pane.js:28
-msgid ""
-"Automatically collect contacts in the folder \"Collected addresses\" while "
-"sending?"
-msgstr ""
-"Beim Versenden Kontakte automatisch im Ordner \"Gesammelte Adressen\" "
-"speichern?"
-
-#: apps/io.ox/mail/settings/old_pane.js:48 apps/io.ox/mail/settings/pane.js:29
-msgid ""
-"Automatically collect contacts in the folder \"Collected addresses\" while "
-"reading?"
-msgstr ""
-"Beim Lesen Kontakte automatisch im Ordner \"Gesammelte Adressen\" speichern?"
-
-#: apps/io.ox/mail/settings/old_pane.js:78 apps/io.ox/mail/settings/pane.js:30
-msgid "Compose"
-msgstr "Verfassen"
-
-#: apps/io.ox/mail/settings/old_pane.js:80 apps/io.ox/mail/settings/pane.js:31
-msgid "Append vcard"
-msgstr "Visitenkarte anhängen"
-
-#: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:32
-msgid "Insert the original E-Mail text to a reply"
-msgstr "Ursprünglichen Mailtext in Antwort zitieren"
-
-#: apps/io.ox/mail/settings/old_pane.js:92 apps/io.ox/mail/settings/pane.js:33
-msgid "Forward E-Mails as:"
-msgstr "Nachrichten weiterleiten als "
-
-#: apps/io.ox/mail/settings/old_pane.js:94 apps/io.ox/mail/settings/pane.js:34
-msgid "Inline"
-msgstr "Inliegend"
-
-#: apps/io.ox/mail/settings/old_pane.js:95 apps/io.ox/mail/settings/pane.js:35
-msgid "Attachment"
-msgstr "Anlage"
-
-#: apps/io.ox/mail/settings/old_pane.js:104
-#: apps/io.ox/mail/settings/pane.js:36
-msgid "Format E-Mails as:"
-msgstr "Nachrichten formatieren als "
-
-#: apps/io.ox/mail/settings/old_pane.js:107
-#: apps/io.ox/mail/settings/pane.js:38
-msgid "Plain text"
-msgstr "Nur Text"
-
-#: apps/io.ox/mail/settings/old_pane.js:108
-#: apps/io.ox/mail/settings/pane.js:39
-msgid "HTML and plain text"
-msgstr "HTML und Text"
-
-#: apps/io.ox/mail/settings/old_pane.js:117
-#: apps/io.ox/mail/settings/pane.js:40
-msgid "Line wrap when sending text mails after: "
-msgstr "Beim Senden von Text-E-Mails Zeilenumbruch nach"
-
-#: apps/io.ox/mail/settings/old_pane.js:124
-#: apps/io.ox/mail/settings/pane.js:42
-msgid "Default sender address:"
-msgstr "Standard-Absender-Adresse:"
-
-#: apps/io.ox/mail/settings/old_pane.js:130
-#: apps/io.ox/mail/settings/pane.js:43
-msgid "Auto-save Email drafts?"
-msgstr "E-Mail-Entwürfe automatisch speichern?"
-
-#: apps/io.ox/mail/settings/old_pane.js:156
-#: apps/io.ox/mail/settings/pane.js:44
-msgid "Display"
-msgstr "Anzeigen"
-
-#: apps/io.ox/mail/settings/old_pane.js:160
-#: apps/io.ox/mail/settings/pane.js:45
-msgid "Allow html formatted E-Mails"
-msgstr "HTML-formatierte Nachrichten zulassen"
-
-#: apps/io.ox/mail/settings/old_pane.js:161
-#: apps/io.ox/mail/settings/pane.js:46
-msgid "Block pre-loading of externally linked images"
-msgstr "Laden extern verlinkter Bilder sperren"
-
-#: apps/io.ox/mail/settings/old_pane.js:162
-#: apps/io.ox/mail/settings/pane.js:47
-msgid "Display emoticons as graphics in text E-Mails"
-msgstr "In Text-E-Mails Emoticons als Bilder darstellen"
-
-#: apps/io.ox/mail/settings/old_pane.js:163
-#: apps/io.ox/mail/settings/pane.js:48
-msgid "Color quoted lines"
-msgstr "Zitierte Zeilen farbig hervorheben "
-
-#: apps/io.ox/mail/settings/pane.js:41
-msgid " characters"
-msgstr " Zeichen"
-
-#: apps/io.ox/mail/settings/pane.js:50
-msgid "disabled"
-msgstr "deaktiviert"
-
-#: apps/io.ox/mail/settings/pane.js:51
-msgid "1 minute"
-msgstr "1 Minute"
-
-#: apps/io.ox/mail/settings/pane.js:52
-msgid "3 minutes"
-msgstr "3 Minuten"
-
-#: apps/io.ox/mail/settings/pane.js:53
-msgid "5 minutes"
-msgstr "5 Minuten"
-
-#: apps/io.ox/mail/settings/pane.js:54
-msgid "10 minutes"
-msgstr "10 Minuten"
 
 #: apps/io.ox/mail/accounts/view-form.js:24
 msgid "Account Settings"
