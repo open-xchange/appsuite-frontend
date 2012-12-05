@@ -38,6 +38,7 @@ define("io.ox/calendar/main",
             search: true
         }));
 
+        app.settings = settings;
         win.addClass("io-ox-calendar-main");
 
         // folder tree

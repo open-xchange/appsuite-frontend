@@ -23,8 +23,9 @@ define("io.ox/contacts/main",
      "io.ox/core/extensions",
      "io.ox/core/commons",
      "gettext!io.ox/contacts",
+     "settings!io.ox/contacts",
      "less!io.ox/contacts/style.css"
-    ], function (util, api, VGrid, hints, viewDetail, config, ext, commons, gt) {
+    ], function (util, api, VGrid, hints, viewDetail, config, ext, commons, gt, settings) {
 
     "use strict";
 
@@ -61,6 +62,7 @@ define("io.ox/contacts/main",
         });
 
         app.setWindow(win);
+        app.settings = settings;
 
         var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left;
