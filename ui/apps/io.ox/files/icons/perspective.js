@@ -327,16 +327,18 @@ define('io.ox/files/icons/perspective',
                     win.idle();
                 }
             });
-
-            var dropZone = new dnd.UploadZone({
-                ref: "io.ox/files/dnd/actions"
-            }, app);
+            var dropZone;
+            if (_.browser.IE === undefined || _.browser.IE > 9) {
+                dropZone = new dnd.UploadZone({
+                    ref: "io.ox/files/dnd/actions"
+                }, app);
+            }
 
             var shortcutPoint = new shortcuts.Shortcuts({
                 ref: "io.ox/files/shortcuts"
             });
 
-            dropZone.include();
+            if (dropZone) {dropZone.include(); }
 
             $(window).resize(_.debounce(recalculateLayout, 300));
 
@@ -350,7 +352,7 @@ define('io.ox/files/icons/perspective',
             });
 
             win.on("hide", function () {
-                dropZone.remove();
+                if (dropZone) {dropZone.remove(); }
                 shortcutPoint.deactivate();
             });
 

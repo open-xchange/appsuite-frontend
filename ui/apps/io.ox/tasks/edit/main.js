@@ -105,19 +105,21 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 taskModel = model.factory.create();
                 taskView = view.getView(taskModel, win.nodes.main, app);
             }
-            self.dropZone = new dnd.UploadZone({
-                ref: "io.ox/tasks/edit/dnd/actions"
-            }, taskView);
+            if (_.browser.IE === undefined || _.browser.IE > 9) {
+                self.dropZone = new dnd.UploadZone({
+                    ref: "io.ox/tasks/edit/dnd/actions"
+                }, taskView);
+            }
 
             win.on('show', function () {
-                app.dropZone.include();
+                if (app.dropZone) {app.dropZone.include(); }
                 if (taskView) {
                     taskView.$el.find(".title-field").focus();
                 }
             });
 
             win.on('hide', function () {
-                if (app) {
+                if (app && app.dropZone) {
                     app.dropZone.remove();
                 }
             });
@@ -132,7 +134,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 // clear private vars
                 taskView.trigger('dispose');
                 taskModel.off();//important so no events are executed on non existing models
-                app.dropZone.remove();
+                if (app.dropZone) {app.dropZone.remove(); }
                 app = win = taskModel = taskView = null;
             };
 

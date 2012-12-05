@@ -99,6 +99,7 @@
             position: relative;
             margin: 0;
             line-height: 0;
+            word-wrap: break-word;
 
             > div.field, > div.list-label {
                 display: inline-block;

@@ -26,7 +26,7 @@ define('io.ox/portal/main',
 
     'use strict';
 
-    var READY = $.when(), DEV_PLUGINS = ['plugins/portal/helloworld/register'];
+    var READY = $.when(), DEV_PLUGINS = ['plugins/portal/helloworld/register', 'plugins/portal/updater/register'];
 
     // overwrite with fresh settings
     settings.detach().set({
@@ -120,6 +120,11 @@ define('io.ox/portal/main',
                     plugin: 'plugins/portal/helloworld/register',
                     color: 'pink',
                     index: -1
+                },
+                updater_0: {
+                    plugin: 'plugins/portal/updater/register',
+                    color: 'pink',
+                    index: 'last'
                 }
             }
         }
@@ -381,7 +386,7 @@ define('io.ox/portal/main',
 
     app.drawWidget = function (model, index) {
 
-        index = index || 0;
+        index = index || 0;
 
         var type = model.get('type'),
             node = app.getWidgetNode(model),

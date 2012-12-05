@@ -147,25 +147,29 @@ define("io.ox/mail/write/view-main",
         },
 
         addUpload: function () {
-
             var inputOptions, self = this;
-
-            if (Modernizr.file) {
-                inputOptions = { type: 'file', name: 'upload', multiple: 'multiple', tabindex: '2' };
-            } else {
-                inputOptions = { type: 'file', name: 'upload', tabindex: '2' };
-            }
-
-            return $('<div>')
-                .addClass('section-item upload')
-                .append(
-                    $.labelize(
-                        $('<input>', inputOptions)
-                        .on('change', function (e) { handleFileSelect(e, self); }),
-                        'mail_attachment'
+            if (_.browser.IE === undefined || _.browser.IE > 9) {
+    
+                if (Modernizr.file) {
+                    inputOptions = { type: 'file', name: 'upload', multiple: 'multiple', tabindex: '2' };
+                } else {
+                    inputOptions = { type: 'file', name: 'upload', tabindex: '2' };
+                }
+    
+                return $('<div>')
+                    .addClass('section-item upload')
+                    .append(
+                        $.labelize(
+                            $('<input>', inputOptions)
+                            .on('change', function (e) { handleFileSelect(e, self); }),
+                            'mail_attachment'
+                        )
                     )
-                )
-                .appendTo(self.sections.attachments);
+                    .appendTo(self.sections.attachments);
+            } else if (_.browser.IE === 9) { //if browser is IE 9 show update suggestion
+                return $("<div>").text(gt("Internet Explorer 9 does not support attachment uploads. Please upgrade to Internet Explorer 10."))
+                                      .css('text-align', 'center').appendTo(self.sections.attachments);
+            }
         },
 
         createField: function (id) {

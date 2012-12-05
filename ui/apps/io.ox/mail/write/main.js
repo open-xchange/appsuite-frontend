@@ -167,27 +167,29 @@ define('io.ox/mail/write/main',
                     view.rightside
                 )
             );
-
-            var dropZone = upload.dnd.createDropZone({'type': 'single'});
-            dropZone.on('drop', function (e, file) {
-                view.form.find('input[type=file]').last()
-                    .prop('file', file)
-                    .trigger('change');
-                view.showSection('attachments');
-            });
+            
+            if (_.browser.IE === undefined || _.browser.IE > 9) {
+                var dropZone = upload.dnd.createDropZone({'type': 'single'});
+                dropZone.on('drop', function (e, file) {
+                    view.form.find('input[type=file]').last()
+                        .prop('file', file)
+                        .trigger('change');
+                    view.showSection('attachments');
+                });
+            }
 
             win.on('show', function () {
                 if (app.getEditor()) {
                     app.getEditor().handleShow();
                 }
-                dropZone.include();
+                if (dropZone) {dropZone.include(); }
             });
 
             win.on('hide', function () {
                 if (app && app.getEditor()) {
                     app.getEditor().handleHide();
                 }
-                dropZone.remove();
+                if (dropZone) { dropZone.remove(); }
             });
         });
 

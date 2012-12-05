@@ -48,13 +48,22 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/upload', {
         requires: 'create',
         action: function (baton) {
-            require(['io.ox/files/views/create'], function (create) {
-                create.show(baton.app, {
-                    uploadedFile: function (data) {
-                        baton.app.invalidateFolder(data);
-                    }
+            if (_.browser.IE === undefined || _.browser.IE > 9) {
+                require(['io.ox/files/views/create'], function (create) {
+                    create.show(baton.app, {
+                        uploadedFile: function (data) {
+                            baton.app.invalidateFolder(data);
+                        }
+                    });
                 });
-            });
+            } else if (_.browser.IE === 9) { //if browser is IE 9 show update suggestion
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog()
+                    .text(gt("Internet Explorer 9 does not support file uploads. Please upgrade to Internet Explorer 10."))
+                    .addPrimaryButton("ok", gt("OK"))
+                    .show();
+                });
+            }
         }
     });
 
