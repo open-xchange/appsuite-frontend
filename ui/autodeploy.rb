@@ -28,4 +28,4 @@ watch("\.js$") { build }
 watch("\.css$") { build }
 watch("\.less$") { build }
 watch("\.html$") { build }
-watch("^doc") { build }
+watch("^docs") { build }

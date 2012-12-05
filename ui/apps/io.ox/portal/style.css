@@ -275,3 +275,31 @@
 @media all and (min-width: 1400px) {
     .io-ox-portal .widget { width: 100% / 5 - 0.05%; } /* -0.50% = floating fix */
 }
+
+
+/************
+ * SETTINGS *
+ ************
+*/
+.io-ox-portal-setting {
+    margin-bottom: 2.5em;
+}
+.io-ox-portal-settings-title {
+    font-size: 16pt;
+    font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 300;
+}
+.io-ox-settings-item {
+    clear: both;
+    width: 20em;
+}
+.io-ox-setting-title {
+    width: 15em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.io-ox-settings-item .action-edit, .io-ox-settings-item .action-remove, .io-ox-settings-item .action-add {
+    display: inline-block;
+    margin-left: .25em;
+    float: right;
+}
