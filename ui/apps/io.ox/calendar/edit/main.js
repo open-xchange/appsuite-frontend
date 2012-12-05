@@ -27,10 +27,11 @@ define('io.ox/calendar/edit/main',
 
             controller = _.extend(app, {
                 start: function () {
-                    app.dropZone = new dnd.UploadZone({
-                        ref: "io.ox/calendar/edit/dnd/actions"
-                    }, app);
-
+                    if (_.browser.IE === undefined || _.browser.IE > 9) {
+                        app.dropZone = new dnd.UploadZone({
+                            ref: "io.ox/calendar/edit/dnd/actions"
+                        }, app);
+                    }
                 },
                 stop: function () {
                     var self = this,
@@ -101,13 +102,15 @@ define('io.ox/calendar/edit/main',
                             });
 
                             self.setWindow(win);
-                            win.on('show', function () {
-                                app.dropZone.include();
-                            });
-
-                            win.on('hide', function () {
-                                app.dropZone.remove();
-                            });
+                            if (app.dropZone) {
+                                win.on('show', function () {
+                                    app.dropZone.include();
+                                });
+    
+                                win.on('hide', function () {
+                                    app.dropZone.remove();
+                                });
+                            }
                             if (options.action === 'appointment') {
                                 // ensure to create a change exception
                                 self.model.touch('recurrence_position');
@@ -180,14 +183,16 @@ define('io.ox/calendar/edit/main',
 
                         self.setWindow(win);
 
-                        win.on('show', function () {
-                            app.dropZone.include();
-                        });
-
-                        win.on('hide', function () {
-                            app.dropZone.remove();
-                        });
-
+                        if (app.dropZone) {
+                            win.on('show', function () {
+                                app.dropZone.include();
+                            });
+    
+                            win.on('hide', function () {
+                                app.dropZone.remove();
+                            });
+                        }
+                        
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));
 

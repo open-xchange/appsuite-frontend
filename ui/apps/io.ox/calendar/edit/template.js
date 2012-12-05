@@ -409,20 +409,26 @@ define('io.ox/calendar/edit/template',
         id: 'attachments_upload',
         index: 1800,
         draw: function (baton) {
-            var $node = $("<form>").appendTo(this);
-            var $input = $("<input>", {
-                type: "file"
-            });
-            $input.css('line-height', '0');
-            var $button = $("<button/>").attr('data-action', 'add').text(gt("Add")).addClass("btn btn-primary pull-right").on("click", function (e) {
-                e.preventDefault();
-                _($input[0].files).each(function (fileData) {
-                    baton.attachmentList.addFile(fileData);
+            //browsercheck
+            if (_.browser.IE === undefined || _.browser.IE > 9) {
+                var $node = $("<form>").appendTo(this);
+                var $input = $("<input>", {
+                    type: "file"
                 });
-            });
-
-            $node.append($("<div>").addClass("span6").append($input));
-            $node.append($("<div>").addClass("span6 pull-right").append($button));
+                $input.css('line-height', '0');
+                var $button = $("<button/>").attr('data-action', 'add').text(gt("Add")).addClass("btn btn-primary pull-right").on("click", function (e) {
+                    e.preventDefault();
+                    _($input[0].files).each(function (fileData) {
+                        baton.attachmentList.addFile(fileData);
+                    });
+                });
+    
+                $node.append($("<div>").addClass("span6").append($input));
+                $node.append($("<div>").addClass("span6 pull-right").append($button));
+            } else if (_.browser.IE === 9) { //if browser is IE 9 show update suggestion
+                this.append($("<div>").text(gt("Internet Explorer 9 does not support attachment uploads. Please upgrade to Internet Explorer 10."))
+                                      .css('text-align', 'center'));
+            }
         }
     });
 

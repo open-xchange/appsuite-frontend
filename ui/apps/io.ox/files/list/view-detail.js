@@ -391,59 +391,64 @@ define("io.ox/files/list/view-detail",
         index: 10,
         draw: function (file) {
             var self = this;
-            var $node = $("<form>").appendTo(this);
-            var $input = $("<input>", {
-                type: "file"
-            });
-
-            var $button = $("<button>").text(gt("Upload"))
-            .addClass("btn btn-primary")
-            .attr({
-                'disabled': 'disabled',
-                'data-action': 'upload'
-            })
-            .on("click", function () {
-                _($input[0].files).each(function (fileData) {
-                    $button.addClass("disabled").text(gt("Uploading..."));
-                    $commentArea.addClass("disabled");
-                    $input.addClass("disabled");
-                    filesAPI.uploadNewVersion({
-                        file: fileData,
-                        id: file.id,
-                        folder: file.folder_id,
-                        timestamp: file.last_modified,
-                        json: {version_comment: $commentArea.val()}
-                    }).done(function (data) {
-                        $button.removeClass("disabled").text(gt("Upload new version"));
-                        $commentArea.removeClass("disabled");
-                        $input.removeClass("disabled");
-                        $comment.hide();
-                        $commentArea.val("");
-                    });
+            if (_.browser.IE === undefined || _.browser.IE > 9) {
+                var $node = $("<form>").appendTo(this);
+                var $input = $("<input>", {
+                    type: "file"
                 });
-
-                return false;
-            });
-
-            $node.append(
-                $input, $button
-            );
-
-            var $comment = $("<div>").addClass("row-fluid").hide().appendTo($node);
-            $comment.append($("<label>").text(gt("Version Comment:")));
-            var $commentArea = $('<textarea rows="5">').css({ resize: 'none', width: "100%" }).appendTo($comment);
-
-            $input.on("change", function () {
-                $button.removeAttr('disabled');
-                $comment.show();
-                $commentArea.focus();
-            });
-
-            new KeyListener($comment).on("shift+enter", function (evt) {
-                evt.preventDefault();
-                evt.stopImmediatePropagation();
-                $button.click();
-            }).include();
+    
+                var $button = $("<button>").text(gt("Upload"))
+                .addClass("btn btn-primary")
+                .attr({
+                    'disabled': 'disabled',
+                    'data-action': 'upload'
+                })
+                .on("click", function () {
+                    _($input[0].files).each(function (fileData) {
+                        $button.addClass("disabled").text(gt("Uploading..."));
+                        $commentArea.addClass("disabled");
+                        $input.addClass("disabled");
+                        filesAPI.uploadNewVersion({
+                            file: fileData,
+                            id: file.id,
+                            folder: file.folder_id,
+                            timestamp: file.last_modified,
+                            json: {version_comment: $commentArea.val()}
+                        }).done(function (data) {
+                            $button.removeClass("disabled").text(gt("Upload new version"));
+                            $commentArea.removeClass("disabled");
+                            $input.removeClass("disabled");
+                            $comment.hide();
+                            $commentArea.val("");
+                        });
+                    });
+    
+                    return false;
+                });
+    
+                $node.append(
+                    $input, $button
+                );
+    
+                var $comment = $("<div>").addClass("row-fluid").hide().appendTo($node);
+                $comment.append($("<label>").text(gt("Version Comment:")));
+                var $commentArea = $('<textarea rows="5">').css({ resize: 'none', width: "100%" }).appendTo($comment);
+    
+                $input.on("change", function () {
+                    $button.removeAttr('disabled');
+                    $comment.show();
+                    $commentArea.focus();
+                });
+    
+                new KeyListener($comment).on("shift+enter", function (evt) {
+                    evt.preventDefault();
+                    evt.stopImmediatePropagation();
+                    $button.click();
+                }).include();
+            } else if (_.browser.IE === 9) { //if browser is IE 9 show update suggestion
+                this.append($("<div>").text(gt("Internet Explorer 9 does not support file uploads. Please upgrade to Internet Explorer 10."))
+                        .css('text-align', 'center'));
+            }
         }
     });
 
