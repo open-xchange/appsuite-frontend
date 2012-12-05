@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: Wed Dec 05 2012 10:59:21 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2012-12-05 11:04+0100\n"
+"PO-Revision-Date: 2012-12-05 13:48+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -3625,7 +3625,7 @@ msgstr "Berechtigungen"
 
 #: apps/io.ox/core/commons-folderview.js:423
 msgid "Toggle folder"
-msgstr "Ordner umschalten"
+msgstr "Ordner an/aus"
 
 #: apps/io.ox/core/permissions/permissions.js:31
 msgid "Guest"
@@ -3852,7 +3852,7 @@ msgstr "%1$s %2$s"
 
 #: apps/io.ox/core/desktop.js:1237
 msgid "Toggle search"
-msgstr "Suche umschalten"
+msgstr "Suche an/aus"
 
 #: apps/io.ox/core/desktop.js:1295
 msgid ""
