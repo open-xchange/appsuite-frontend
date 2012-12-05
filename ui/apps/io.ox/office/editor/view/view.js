@@ -345,7 +345,6 @@ define('io.ox/office/editor/view/view',
             .addButton('character/strike',    { icon: 'icon-io-ox-strikeout', tooltip: gt('Strike through'), toggle: true })
             .addSeparator()
             .addGroup('character/vertalign', new RadioGroup({ toggleValue: 'baseline' })
-                .addOptionButton('baseline', { hidden: true })
                 .addOptionButton('sub',      { icon: 'icon-io-ox-subscript',   tooltip: gt('Subscript') })
                 .addOptionButton('super',    { icon: 'icon-io-ox-superscript', tooltip: gt('Superscript') }))
             .addSeparator()
