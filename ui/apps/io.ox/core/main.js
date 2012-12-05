@@ -21,8 +21,9 @@ define("io.ox/core/main",
      "io.ox/core/date",
      'io.ox/core/notifications',
      'io.ox/core/commons', // defines jQuery plugin
+     "settings!io.ox/core",
      "gettext!io.ox/core",
-     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, gt) {
+     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, settings, gt) {
 
     "use strict";
 
@@ -127,7 +128,7 @@ define("io.ox/core/main",
         }
     }
 
-    setInterval(globalRefresh, 60000 * 5); // 5 minute refresh interval!
+    setInterval(globalRefresh, settings.get("refreshInterval"));
 
     function launch() {
 
@@ -449,7 +450,7 @@ define("io.ox/core/main",
 
         var baton = ext.Baton({
             block: $.Deferred(),
-            autoLaunch: _.url.hash("app") ? _.url.hash("app").split(/,/) : ['io.ox/mail']
+            autoLaunch: _.url.hash("app") ? _.url.hash("app").split(/,/) : []
         });
 
         baton.autoLaunchModules = _(baton.autoLaunch).map(function (m) { return m.split(/:/)[0] + '/main'; });

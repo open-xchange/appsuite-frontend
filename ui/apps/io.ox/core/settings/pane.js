@@ -16,15 +16,17 @@ define('io.ox/core/settings/pane',
          'io.ox/backbone/basicModel',
          'io.ox/backbone/views',
          'io.ox/backbone/forms',
+         'io.ox/core/http',
+         'io.ox/core/api/apps',
          'settings!io.ox/core',
          'gettext!io.ox/core/settings'],
-         function (ext, BasicModel, views, forms, settings, gt) {
+         function (ext, BasicModel, views, forms, http, appAPI, settings, gt) {
     
     'use strict';
     
     var point = views.point("io.ox/core/settings/entry"),
         SettingView = point.createView({ tagName: 'form', className: 'form-horizontal'}),
-        reloadMe = ['language'];
+        reloadMe = ['language', 'timezone', 'theme', 'refreshInterval'];
 
 
 
@@ -43,6 +45,10 @@ define('io.ox/core/settings/pane',
                     }
                 }).fail(require("io.ox/core/notifications").yell);
             });
+            this.append(
+                $('<div class="clear-title">').text(gt("Basic settings")),
+                $('<div class="settings sectiondelimiter">')
+            );
             new SettingView({model: model}).render().$el.appendTo(this);
         }
     });
@@ -55,7 +61,92 @@ define('io.ox/core/settings/pane',
         selectOptions: ox.serverConfig.languages
     }));
 
+    http.GET({
+        module: 'jslob',
+        params: {
+            action: 'get',
+            id: 'io.ox/core/settingOptions'
+        }
+    }).done(function (settingOptions) {
+        // Timezones
+        var available = settingOptions.tree.availableTimeZones;
+
+        // Sort the technical names by the alphabetic position of their
+        // values
+
+        var technicalNames = _(available).keys();
+        technicalNames.sort(function (a, b) {
+            var va = available[a];
+            var vb = available[b];
+            return va === vb ? 0 : va < vb ? -1 : 1;
+        });
+
+        var sorted = {};
+        _(technicalNames).each(function (key) {
+            sorted[key] = available[key];
+        });
 
 
+        point.extend(new forms.SelectControlGroup({
+            id: 'timezones',
+            index: 200,
+            attribute: 'timezone',
+            label: gt("Timezone"),
+            selectOptions: sorted
+        }));
+
+        // Themes
+        var availableThemes = settingOptions.tree.themes;
+       
+        if (!_(availableThemes).isEmpty() && settings.isConfigurable('theme')) {
+            point.extend(new forms.SelectControlGroup({
+                id: 'theme',
+                index: 400,
+                attribute: 'theme',
+                label: gt("Theme"),
+                selectOptions: availableThemes
+            }));
+        }
+
+    });
+
+    (function () {
+        if (settings.isConfigurable('refreshInterval')) {
+            var MINUTES = 60000;
+            var options = {};
+
+            options[5 * MINUTES] = gt("5 minutes");
+            options[10 * MINUTES] = gt("10 minutes");
+            options[15 * MINUTES] = gt("15 minutes");
+            options[30 * MINUTES] = gt("30 minutes");
+
+
+            point.extend(new forms.SelectControlGroup({
+                id: 'refreshInterval',
+                index: 300,
+                attribute: 'refreshInterval',
+                label: gt("Refresh interval"),
+                selectOptions: options
+            }));
+        }
+    }());
+
+    // Auto Start App
+
+    (function () {
+        if (settings.isConfigurable('autoStart')) {
+            var options = {};
+            _(appAPI.getFavorites()).each(function (app) {
+                options[app.path] = gt(app.title);
+            });
+            point.extend(new forms.SelectControlGroup({
+                id: 'autoStart',
+                index: 500,
+                attribute: 'autoStart',
+                label: gt("Default App after login?"),
+                selectOptions: options
+            }));
+        }
+    }());
 
 });

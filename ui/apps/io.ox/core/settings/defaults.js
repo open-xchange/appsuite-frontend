@@ -15,7 +15,9 @@ define('io.ox/core/settings/defaults', function (ext) {
 	'use strict';
 
 	return {
-		language: ''
+		language: 'en_US',
+		refreshInterval: 5 * 60000,
+		autoStart: 'io.ox/mail/main'
 	};
 	
 });

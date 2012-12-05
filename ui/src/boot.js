@@ -126,11 +126,11 @@ $(document).ready(function () {
         $("#io-ox-login-screen").hide();
         $(this).busy();
         // get configuration & core
-        require(['io.ox/core/config', 'themes']).done(function (config, themes) {
+        require(['io.ox/core/config', 'themes', 'settings!io.ox/core']).done(function (config, themes, settings) {
             config.load().done(function () {
                 $.when(
                     require(['io.ox/core/main']),
-                    themes.set("default")
+                    themes.set(settings.get('theme'))
                 ).done(function (core) {
                     // go!
                     core.launch();
