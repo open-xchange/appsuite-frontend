@@ -4397,7 +4397,7 @@ msgstr "Alle Anlagen"
 
 #: apps/io.ox/mail/view-detail.js:807
 msgid "Entire thread"
-msgstr "Gesamter Thread"
+msgstr "Gesamten Thread"
 
 #: apps/io.ox/mail/view-detail.js:825
 msgid "Warning: This message might be a phishing or scam mail"
