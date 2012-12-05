@@ -3382,7 +3382,7 @@ msgstr "H-Split-Ansicht"
 #: apps/io.ox/tasks/view-detail.js:47
 #, c-format
 msgid "Due %1$s"
-msgstr "Fällig %1$s"
+msgstr "Fällig am %1$s"
 
 #. %1$s reminder date of a task
 #: apps/io.ox/tasks/view-detail.js:57
