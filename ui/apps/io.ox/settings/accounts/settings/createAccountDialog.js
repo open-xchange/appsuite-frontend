@@ -11,35 +11,38 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/settings/accounts/settings/createAccountDialog", ["io.ox/core/tk/dialogs", "io.ox/keychain/api"], function (dialogs, keychain) {
+define("io.ox/settings/accounts/settings/createAccountDialog",
+    ["io.ox/core/tk/dialogs", "io.ox/keychain/api"], function (dialogs, keychain) {
+
     "use strict";
-    
+
     function chooseService() {
+
         var def = $.Deferred(),
             dialog,
             $servicesPane = $('<div class="container-fluid">'),
             newRow = 0,
             $currentRow = null;
-        
+
         function selectService(serviceId) {
             return function () {
                 def.resolve(serviceId);
                 dialog.close();
             };
         }
-        
+
         _(keychain.submodules).each(function (submodule) {
             if (newRow === 0) {
                 $currentRow = $('<div class="row-fluid">').css({
                     padding: "10px"
                 }).appendTo($servicesPane);
             }
-            
+
             newRow = (newRow + 1) % 2;
-            
+
             $('<div class="span6">').append($('<a href="#">').text(submodule.displayName).on("click", selectService(submodule.id))).appendTo($currentRow);
         });
-        
+
         dialog = new dialogs.ModalDialog({
             easyOut: true
         });
@@ -49,12 +52,13 @@ define("io.ox/settings/accounts/settings/createAccountDialog", ["io.ox/core/tk/d
         }).done(function () {
             def.resolve();
         });
-        
+
         return def;
     }
-    
+
     function createAccountInteractively(e) {
         var def = $.Deferred();
+        console.log('createAccountInteractively...');
         chooseService().done(function (serviceId) {
             if (!serviceId) {
                 def.resolve();
@@ -62,13 +66,12 @@ define("io.ox/settings/accounts/settings/createAccountDialog", ["io.ox/core/tk/d
             }
             keychain.createInteractively(serviceId, e).done(def.done).fail(def.fail);
         }).fail(def.fail);
-        
+
         return def;
     }
-    
-    
+
     return {
         createAccountInteractively: createAccountInteractively
     };
-    
+
 });

@@ -129,13 +129,22 @@ define('io.ox/settings/accounts/settings/pane',
                         $dropDown = this.$el.find('.dropdown-menu');
 
                         _(api.submodules).each(function (submodule) {
-                            var link = $('<a href="#">');
-                            if (submodule.actionName) {
-                                link.attr('data-actionname', submodule.actionName);
-                            }
-                            $('<li>').append(link.text(submodule.displayName).on("click", function (e) {
-                                submodule.createInteractively(e);
-                            })).appendTo($dropDown);
+                            $dropDown.append(
+                                $('<li>').append(
+                                    $('<a>', { href: '#', 'data-actionname': submodule.actionName || submodule.id || '' })
+                                    .text(submodule.displayName)
+                                    .on('click', function (e) {
+                                        e.preventDefault();
+                                        // looks like oauth?
+                                        if ('reauthorize' in submodule) {
+                                            var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+                                            submodule.createInteractively(win);
+                                        } else {
+                                            submodule.createInteractively(e);
+                                        }
+                                    })
+                                )
+                            );
                         });
 
                         return this;
@@ -147,6 +156,7 @@ define('io.ox/settings/accounts/settings/pane',
                     },
 
                     onAdd: function (args) {
+                        console.log('Hier?', args);
                         require(["io.ox/settings/accounts/settings/createAccountDialog"], function (accountDialog) {
                             accountDialog.createAccountInteractively(args);
                         });
