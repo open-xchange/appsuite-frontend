@@ -56,7 +56,7 @@ Loader = function () {
         fail('CoffeeScript is missing! Try `npm install coffee-script`');
       }
     }
-    if (jakefile.indexOf('/') != 0) {
+    if ((jakefile.indexOf('/') != 0) && !/^[a-zA-Z]:[\/\\]/.test(jakefile)) {
       jakefile = path.join(process.cwd(), jakefile);
     }
     require(jakefile);
