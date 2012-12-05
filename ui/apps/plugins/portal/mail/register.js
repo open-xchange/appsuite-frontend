@@ -41,18 +41,22 @@ define('plugins/portal/mail/register',
 
         preview: function (baton) {
             var $content = $('<div class="content">');
-            _(baton.data).each(function (mail) {
-                var received = new date.Local(mail.received_date).format(date.DATE);
-                $content.append(
-                    $('<div class="item">')
-                    .data('item', mail)
-                    .append(
-                        $('<span class="bold">').text(util.getDisplayName(mail.from[0])), $.txt(' '),
-                        $('<span class="normal">').text(strings.shorten(mail.subject, 50)), $.txt(' '),
-                        $('<span class="accent">').text(received)
-                    )
-                );
-            });
+            if (baton.data && baton.data.length) {
+                _(baton.data).each(function (mail) {
+                    var received = new date.Local(mail.received_date).format(date.DATE);
+                    $content.append(
+                        $('<div class="item">')
+                        .data('item', mail)
+                        .append(
+                            $('<span class="bold">').text(util.getDisplayName(mail.from[0])), $.txt(' '),
+                            $('<span class="normal">').text(strings.shorten(mail.subject, 50)), $.txt(' '),
+                            $('<span class="accent">').text(received)
+                        )
+                    );
+                });
+            } else {
+                $content.text(gt('No mails at all!'));
+            }
             this.append($content);
         },
 
