@@ -165,7 +165,7 @@ define('io.ox/mail/write/main',
                     view.rightside
                 )
             );
-            
+
             if (_.browser.IE === undefined || _.browser.IE > 9) {
                 var dropZone = upload.dnd.createDropZone({'type': 'single'});
                 dropZone.on('drop', function (e, file) {
@@ -424,7 +424,6 @@ define('io.ox/mail/write/main',
                 previous = app.getMail();
                 return this;
             } else {
-                console.warn('dirty?', !_.isEqual(previous, app.getMail()), '>', app.getMail());
                 return !_.isEqual(previous, app.getMail());
             }
         };

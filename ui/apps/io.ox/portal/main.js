@@ -116,11 +116,11 @@ define('io.ox/portal/main',
                     color: 'blue',
                     index: 3
                 },
-                helloworld_0: {
-                    plugin: 'plugins/portal/helloworld/register',
-                    color: 'pink',
-                    index: -1
-                },
+                // helloworld_0: {
+                //     plugin: 'plugins/portal/helloworld/register',
+                //     color: 'pink',
+                //     index: -1
+                // },
                 updater_0: {
                     plugin: 'plugins/portal/updater/register',
                     color: 'pink',

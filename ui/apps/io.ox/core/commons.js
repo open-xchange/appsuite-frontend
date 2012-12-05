@@ -177,6 +177,7 @@ define('io.ox/core/commons',
                 } else if (mode === 'search') {
                     node.append(
                         $('<a href="#" data-action="cancel-search">')
+                        .addClass('btn btn-danger')
                         .text(gt('Cancel search'))
                         .on('click', fnCancel)
                     );
