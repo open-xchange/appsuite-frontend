@@ -37,6 +37,10 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions"], function (ext) {
                 'Please enter a bool';
         },
         date: function (val) {
+            // val: timestamp
+            if (!_.isNumber(val) || val > 253402214400008) {
+                return 'Please enter a valid date';
+            }
             return true;
         },
         pastDate: function (val) {
