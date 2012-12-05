@@ -83,6 +83,7 @@ define('io.ox/calendar/week/perspective',
                 } else {
                     dialog
                         .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
+                        //#. Use singular in this context
                         .addPrimaryButton('series', gt('Series'))
                         .addButton('appointment', gt('Appointment'))
                         .addButton('cancel', gt('Cancel'));
