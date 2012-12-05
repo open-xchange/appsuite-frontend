@@ -422,6 +422,27 @@ define('io.ox/core/api/folder',
             });
         },
 
+        move: function (sourceFolder, targetFolder) {
+            var self = this,
+                 def = $.Deferred();
+            $.when(api.get({folder: sourceFolder[0]}), api.get({folder: targetFolder})).then(function (source, target) {
+                self.canMove(source, target).done(function (data) {
+                    console.log(source, target);
+                    self.update({ folder: source.id, changes: { folder_id: target.id } }).done(function (id) {
+                        console.log('updated');
+                        api.get({ folder: target.id}, false).done(function (data) {
+                            // trigger event
+                            console.log(data);
+                            api.trigger('update', target.id, id, data);
+                            def.resolve(data);
+                        });
+                    });
+                }).fail(def.reject);
+            }).fail(def.reject);
+
+            return def;
+        },
+
         Bitmask: (function () {
 
             var parts = { folder: 0, read: 7, write: 14, modify: 14, 'delete': 21, admin: 28 },
@@ -541,6 +562,74 @@ define('io.ox/core/api/folder',
                     }
                 }
             }
+        },
+
+        canMove: function (folder, target) {
+            var def = $.Deferred();
+            if (folder.folder_id === target.id) {
+                return def.reject({error: gt('Cannot move folder into itself.')});
+            }
+            // Prevent moving into folder itself
+            if (folder.id === target.id) {
+                return def.reject({error: gt('Cannot move folder into itself.')});
+            }
+            // Prevent moving shared folders
+            if (folder.type === 3 || target.type === 3) {
+                return def.reject({error: gt('Cannot move shared folder.')});
+            }
+            // Prevent moving system folders
+            if (folder.type === 5) {
+                return def.reject({error: gt('Cannot move system folder.')});
+            }
+            // Prevent moving default folders
+            if (this.is("defaultfolder", folder)) {
+                return def.reject({error: gt('Cannot move default folders.')});
+            }
+
+            // Prevent moving private folders to other folders than
+            // private folders
+            if (folder.type === 1 && target.type !== 1 && target.id !== 1 && (target.type !== 7)) {
+                return def.reject();
+            }
+            // Prevent moving public folders to other folders than
+            // public folders
+            if (folder.type === 2 && target.type !== 2 && !(target.id in { 2: 1, 10: 1, 15: 1 })) {
+                return def.reject();
+            }
+            // Prevent moving folders to other not allowed modules
+            if (folder.module !== target.module) {
+                if (folder.module === "infostore") {
+                    return def.reject();
+                }
+                if (folder.module === "mail" && target.module !== "system") {
+                    return def.reject();
+                }
+                if (target.module !== "system") {
+                    return def.reject();
+                }
+            }
+
+            // Check rights Admin right source folder and create
+            // subfolders in target
+            if (!api.can('createFolder', folder) && !api.can('createFolder', target)) {
+                return def.reject();
+            }
+
+            // Check target is subfolder of folder
+            /*this.getParents({
+                folder: target.id,
+                success: function (ancestors) {
+                    var i;
+                    for (i = 0; i < ancestors.length; i++) {
+                        if (ancestors[i].id === folder.id) {
+                            return false;
+                        }
+                    }
+                    success();
+                }
+            });
+            */
+            return def.resolve();
         },
 
         /**

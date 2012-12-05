@@ -226,6 +226,51 @@ define('io.ox/core/commons-folderview',
                 this.append($('<li>').append(link.on('click', { app: baton.app }, setFolderPermissions)));
             }
         });
+
+        function moveFolder(e) {
+            e.preventDefault();
+            var baton = e.data.baton,
+            folder_id = baton.app.folderView.selection.get();
+            require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
+                var title = gt('Move'),
+                apiAction = 'move',
+                dialog = new dialogs.ModalDialog({ easyOut: true })
+                        .header($('<h3>').text(title))
+                        .addPrimaryButton('ok', title)
+                        .addButton('cancel', gt('Cancel'));
+                dialog.getBody().css('height', '250px');
+                var tree = new views.FolderTree(dialog.getBody(), { type: baton.options.type });
+                tree.paint();
+                dialog.show(function () {
+                    tree.selection.set({ id: folder_id });
+                })
+                .done(function (action) {
+                    if (action === 'ok') {
+                        var selectedFolder = tree.selection.get();
+                        if (selectedFolder.length === 1) {
+                            // move action
+                            api[apiAction](folder_id, selectedFolder[0]).fail(require("io.ox/core/notifications").yell);
+                        }
+                    }
+                    tree.destroy();
+                    tree = dialog = null;
+                });
+            });
+        }
+
+        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+            id: 'move',
+            draw: function (baton) {
+                var link = $('<a href="#" data-action="delete">').text(gt('Move'));
+                this.append($('<li>').append(link));
+
+                if (api.can('deleteFolder', baton.data)) {
+                    link.on('click', { baton: baton }, moveFolder);
+                } else {
+                    link.addClass('disabled');
+                }
+            }
+        });
     }
 
     /**
@@ -369,6 +414,7 @@ define('io.ox/core/commons-folderview',
                             tree.idle();
                         }
                     });
+
                     api.on('delete:fail update:fail create:fail', function (e, error) {
                         tree.idle();
                         notifications.yell(error);
