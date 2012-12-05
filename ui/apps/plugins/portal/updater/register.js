@@ -21,18 +21,21 @@ define('plugins/portal/updater/register',
         title: _.noI18n('Updater'),
 
         preview: function (baton) {
-            var contentText = $('<span>').text(gt('The updater provides a simple installation wizard. Follow the instructions to install the application. ' +
-                'The updater will inform you of any updates for the Connector for Microsoft Outlook and the Notifier. ' +
-                'You can download the updates from within the updater.')),
-                link = ox.base + '/api/updater/installer/oxupdater-install.exe?session=' + ox.session,
-                updaterLink = $('<div>').append($('<a href="' + link + '">').text('Updater')),
-                content = $('<div class="content">').append(
-                    contentText,
-                    updaterLink
-                );
 
-            this.append(content);
+            var href = ox.apiRoot + '/updater/installer/oxupdater-install.exe?session=' + ox.session;
+
+            this.append(
+                $('<div class="content">').append(
+                    $('<div class="paragraph">').text(
+                        gt('The updater provides a simple installation wizard. Follow the instructions to install the application. ' +
+                        'The updater will inform you of any updates for the Connector for Microsoft Outlook and the Notifier. ' +
+                        'You can download the updates from within the updater.')
+                    ),
+                    $('<div class="paragraph">').append(
+                        $('<a>', { href: href, target: '_blank' }).text(gt('Download'))
+                    )
+                )
+            );
         }
-
     });
 });
