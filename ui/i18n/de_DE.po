@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: Wed Dec 05 2012 10:59:21 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2012-12-05 13:48+0100\n"
+"PO-Revision-Date: 2012-12-05 14:16+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -629,8 +629,7 @@ msgstr ""
 msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "reading?"
-msgstr ""
-"Beim Lesen Kontakte automatisch im Ordner \"Gesammelte Adressen\" speichern?"
+msgstr "Beim Lesen Kontakte automatisch im Ordner \"Gesammelte Adressen\" speichern?"
 
 #: apps/io.ox/mail/settings/pane.js:30
 msgid "Automatically select first E-Mail"
@@ -1007,7 +1006,7 @@ msgstr "Sie haben keine Aufgaben"
 
 #: apps/plugins/portal/tasks/register.js:57
 msgid "Due in %1$s"
-msgstr "Fällig in %1$s"
+msgstr "Fällig am %1$s"
 
 #: apps/plugins/portal/facebook/register.js:29
 msgid "Hide comments"
@@ -2916,8 +2915,7 @@ msgstr "Zum Hochladen einer <b>neuen Datei</b> hier fallenlassen"
 
 #: apps/io.ox/files/actions.js:563
 msgid "Drop here to upload a <b>new version</b> of \"%1$s\""
-msgstr ""
-"Zum Hochladen einer <b>neuen Version</b> von \"%1$s\" hier fallenlassen"
+msgstr "Zum Hochladen einer <b>neuen Version</b> von \"%1$s\" hier fallenlassen"
 
 #: apps/io.ox/files/actions.js:569
 msgid "Drop here to upload a <b>new version</b>"
@@ -3868,8 +3866,7 @@ msgstr ""
 
 #: apps/io.ox/preview/main.js:75
 msgid "Click to open. Drag to your desktop to download."
-msgstr ""
-"Zum Öffnen bitte klicken. Zum Herunterladen bitte auf ihren Desktop ziehen."
+msgstr "Zum Öffnen bitte klicken. Zum Herunterladen bitte auf ihren Desktop ziehen."
 
 #: apps/io.ox/preview/main.js:77
 msgid "Click to open."
@@ -4404,8 +4401,7 @@ msgstr "Es wird versucht, Ihren E-Mail-Account automatisch zu konfigurieren"
 
 #: apps/io.ox/mail/accounts/settings.js:119
 msgid "There was no suitable server found for this mail/password combination"
-msgstr ""
-"Es wurde kein passender Server für diese E-Mail/Passwort-Kombination gefunden"
+msgstr "Es wurde kein passender Server für diese E-Mail/Passwort-Kombination gefunden"
 
 #: apps/io.ox/mail/accounts/settings.js:139
 msgid "Failed to connect."
@@ -4496,8 +4492,7 @@ msgid "Show images"
 msgstr "Bilder anzeigen"
 
 #: apps/io.ox/mail/view-detail.js:848
-msgid ""
-"External images have been blocked to protect you against potential spam!"
+msgid "External images have been blocked to protect you against potential spam!"
 msgstr ""
 "Das Laden extern verlinkter Bilder wurde zum Schutz vor potentiellem Spam "
 "gesperrt."
