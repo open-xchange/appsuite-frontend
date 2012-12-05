@@ -10,7 +10,7 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/backbone/validation", ["io.ox/core/extensions"], function (ext) {
+define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/backbone/validation'], function (ext, gt) {
     "use strict";
 
     var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -39,14 +39,14 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions"], function (ext) {
         date: function (val) {
             // val: timestamp
             if (!_.isNumber(val) || val > 253402214400008) {
-                return 'Please enter a valid date';
+                return gt('Please enter a valid date');
             }
             return true;
         },
         pastDate: function (val) {
             if (_.isString(val)) {
                 if (val !== '') {
-                    return 'Please enter a valid date';
+                    return gt('Please enter a valid date');
                 }
             }
             return _.now() > val || 'Please enter a date in the past';
