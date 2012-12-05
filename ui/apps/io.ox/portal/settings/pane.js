@@ -161,7 +161,7 @@ define('io.ox/portal/settings/pane',
             },
             onColorChange = function (pEvent) {
                 var $elem = $(pEvent.target);
-                console.log("onColorChange", $elem, $elem.data('colorValue'));
+                console.log("onColorChange", $elem, $elem.data('color'));
             };
 
 
@@ -178,16 +178,16 @@ define('io.ox/portal/settings/pane',
                 $colorSelect = $('<div class="btn-group io-ox-portal-colorAction">').append(
                     $('<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">' + gt('Color') + ' <span class="caret"></span></a>'),
                     $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">').append(
-                        $('<li class="io-ox-portal-color-default" data-colorValue="default">'),
-                        $('<li class="io-ox-portal-color-red" data-colorValue="red">'),
-                        $('<li class="io-ox-portal-color-orange" data-colorValue="orange">'),
-                        $('<li class="io-ox-portal-color-lightgreen" data-colorValue="lightgreen">'),
-                        $('<li class="io-ox-portal-color-green" data-colorValue="green">'),
-                        $('<li class="io-ox-portal-color-lightblue" data-colorValue="lightblue">'),
-                        $('<li class="io-ox-portal-color-blue" data-colorValue="blue">'),
-                        $('<li class="io-ox-portal-color-purple" data-colorValue="purple">'),
-                        $('<li class="io-ox-portal-color-pink" data-colorValue="pink">'),
-                        $('<li class="io-ox-portal-color-gray" data-colorValue="gray">')
+                        $('<li class="io-ox-portal-color-default" data-color="default">'),
+                        $('<li class="io-ox-portal-color-red" data-color="red">'),
+                        $('<li class="io-ox-portal-color-orange" data-color="orange">'),
+                        $('<li class="io-ox-portal-color-lightgreen" data-color="lightgreen">'),
+                        $('<li class="io-ox-portal-color-green" data-color="green">'),
+                        $('<li class="io-ox-portal-color-lightblue" data-color="lightblue">'),
+                        $('<li class="io-ox-portal-color-blue" data-color="blue">'),
+                        $('<li class="io-ox-portal-color-purple" data-color="purple">'),
+                        $('<li class="io-ox-portal-color-pink" data-color="pink">'),
+                        $('<li class="io-ox-portal-color-gray" data-color="gray">')
                     ).on('click', 'li', onColorChange)
                 ),
                 $optionsButton = $('<div class="btn-group io-ox-portal-optionsAction">').append(
