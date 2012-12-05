@@ -198,7 +198,10 @@ define('io.ox/core/tk/folderviews',
 
         // update promise
         this.reload = function () {
-            ready = api.get({ folder: id });
+            return (ready = api.get({ folder: id })).done(function () {
+                children = _.isArray(children) && children.length === 0 ? null : children;
+                updateArrow();
+            });
         };
 
         // load sub folders - creates instances of TreeNode - does not yet paint them
@@ -294,27 +297,26 @@ define('io.ox/core/tk/folderviews',
                 if (container.index(nodes.folder) === -1) { container.append(nodes.folder); }
                 if (container.index(nodes.sub) === -1) { container.append(nodes.sub); }
                 // get folder
-                return ready
-                    .pipe(function (promise) {
-                        // get data
-                        data = promise;
-                        // customize, re-add to index, update arrow
-                        self.customize();
-                        if (nodes.folder.hasClass('selectable')) {
-                            tree.selection.addToIndex(data.id);
-                        }
-                        updateArrow();
-                        // draw children
-                        if (isOpen()) {
-                            return repaintChildren();
-                        } else {
-                            nodes.sub.empty().hide();
-                            return $.when();
-                        }
-                    })
-                    .done(function () {
-                        container.idle();
-                    });
+                return this.reload().pipe(function (promise) {
+                    // get data
+                    data = promise;
+                    // customize, re-add to index, update arrow
+                    self.customize();
+                    if (nodes.folder.hasClass('selectable')) {
+                        tree.selection.addToIndex(data.id);
+                    }
+                    updateArrow();
+                    // draw children
+                    if (isOpen()) {
+                        return repaintChildren();
+                    } else {
+                        nodes.sub.empty().hide();
+                        return $.when();
+                    }
+                })
+                .done(function () {
+                    container.idle();
+                });
             } else {
                 return this.paint();
             }
@@ -338,42 +340,40 @@ define('io.ox/core/tk/folderviews',
             // we have to add nodes now! (otherwise we get an arbitrary order)
             container.append(nodes.folder, nodes.sub);
 
-            return ready
-                .pipe(function (promise) {
-                    // store data
-                    data = promise;
-                    // create DOM nodes
-                    nodes.arrow = $('<a href="#" class="folder-arrow"><i class="icon-chevron-right"></i></a>');
-                    nodes.label = $('<span>').addClass('folder-label');
-                    nodes.counter = $('<span>').addClass('folder-counter');
-                    nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', 'value': data.id }).css('float', 'right');
-                    if (data.subscribed) {
-                        nodes.subscriber.attr('checked', 'checked');
-                    }
-                    // draw children
-                    var def = isOpen() ? paintChildren() : $.when();
-                    updateArrow();
-                    // add to DOM
-                    if (checkbox && (data.own_rights & 0x3f80)) {
-                        nodes.folder.append(nodes.arrow, nodes.counter, nodes.label, nodes.subscriber);
-                    } else {
-                        nodes.folder.append(nodes.arrow, nodes.counter, nodes.label);
-                    }
-
-                    // customize
-                    self.customize();
-                    // work with selection
-                    nodes.folder.attr('data-obj-id', data.id);
-                    if (nodes.folder.hasClass('selectable')) {
-                        tree.selection.addToIndex(data.id);
-                    }
-                    // Done
-                    return def;
-                })
-                .done(function () {
-                    container.idle();
-                    painted = true;
-                });
+            return ready.pipe(function (promise) {
+                // store data
+                data = promise;
+                // create DOM nodes
+                nodes.arrow = $('<a href="#" class="folder-arrow"><i class="icon-chevron-right"></i></a>');
+                nodes.label = $('<span>').addClass('folder-label');
+                nodes.counter = $('<span>').addClass('folder-counter');
+                nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', 'value': data.id }).css('float', 'right');
+                if (data.subscribed) {
+                    nodes.subscriber.attr('checked', 'checked');
+                }
+                // draw children
+                var def = isOpen() ? paintChildren() : $.when();
+                updateArrow();
+                // add to DOM
+                if (checkbox && (data.own_rights & 0x3f80)) {
+                    nodes.folder.append(nodes.arrow, nodes.counter, nodes.label, nodes.subscriber);
+                } else {
+                    nodes.folder.append(nodes.arrow, nodes.counter, nodes.label);
+                }
+                // customize
+                self.customize();
+                // work with selection
+                nodes.folder.attr('data-obj-id', data.id);
+                if (nodes.folder.hasClass('selectable')) {
+                    tree.selection.addToIndex(data.id);
+                }
+                // Done
+                return def;
+            })
+            .done(function () {
+                container.idle();
+                painted = true;
+            });
         };
 
         this.customize = function () {

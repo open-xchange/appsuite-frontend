@@ -354,12 +354,18 @@ define('io.ox/core/api/folder',
                 .pipe(function (data) {
                     // wait for updating sub folder cache
                     return $.when(
+                        // get new folder
                         api.get({ folder: data, cache: false }),
+                        // refresh parent folder
+                        api.get({ folder: opt.folder, cache: false }),
+                        // refresh parent folder's subfolder list
                         api.getSubFolders({ folder: opt.folder, cache: false }),
+                        // refresh flat lists
                         !/^(mail|infostore)$/.test(module) ? api.getVisible({ type: module, cache: false }) : $.when()
                     )
-                    .pipe(function (getRequest) {
+                    .pipe(function (getRequest, parentRequest) {
                         // return proper data
+                        console.warn('parent', parentRequest[0]);
                         return getRequest[0];
                     });
                 });
