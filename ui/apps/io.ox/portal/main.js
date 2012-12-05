@@ -26,7 +26,7 @@ define('io.ox/portal/main',
 
     'use strict';
 
-    var READY = $.when();
+    var READY = $.when(), DEV_PLUGINS = ['plugins/portal/helloworld/register'];
 
     // overwrite with fresh settings
     settings.detach().set({
@@ -115,6 +115,11 @@ define('io.ox/portal/main',
                     plugin: 'plugins/portal/linkedIn/register',
                     color: 'blue',
                     index: 3
+                },
+                helloworld_0: {
+                    plugin: 'plugins/portal/helloworld/register',
+                    color: 'pink',
+                    index: -1
                 }
             }
         }
@@ -201,7 +206,7 @@ define('io.ox/portal/main',
         win,
         appBaton = ext.Baton({ app: app }),
         sidepopup = new dialogs.SidePopup(),
-        availablePlugins = _(manifests.pluginsFor('portal')).uniq(),
+        availablePlugins = _(manifests.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
         collection = new Backbone.Collection([]);
 
     // for debugging
