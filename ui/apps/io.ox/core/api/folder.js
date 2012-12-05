@@ -21,7 +21,6 @@ define('io.ox/core/api/folder',
     'use strict';
 
     var // folder object cache
-        myself = null,
         folderCache = new cache.SimpleCache('folder', true),
         subFolderCache = new cache.SimpleCache('subfolder', true),
         visibleCache = new cache.SimpleCache('visible-folder', true),
@@ -490,7 +489,7 @@ define('io.ox/core/api/folder',
                     case 'private':
                         return data.type === 1;
                     case 'public':
-                        return data.type === 2;
+                        return data.type === 2 || /^(10|14|15)$/.test(data.id); // special file folder: regard as public
                     case 'shared':
                         return data.type === 3;
                     case 'system':
@@ -542,14 +541,8 @@ define('io.ox/core/api/folder',
          * Can?
          */
         can: function (action, data, obj) {
-            var compareValue = 1;
-            if (obj) {
-                myself = myself || ox.user_id;
-                if (myself === _.firstOf(obj.created_by, 0)) {
-                    compareValue--;
-                }
-            }
-
+            // is my folder?
+            var compareValue = (obj && ox.user_id === _.firstOf(obj.created_by, 0)) ? 0 : 1;
             // check multiple folder?
             if (_.isArray(data)) {
                 // for multiple folders, all folders must satisfy the condition
@@ -568,8 +561,8 @@ define('io.ox/core/api/folder',
             case 'read':
                 // can read?
                 // 256 = read own, 512 = read all, 8192 = admin
-                //return (rights & 256 || rights & 512 || rights & 8192) > 0;
-                return perm(rights, 7) > compareValue;
+                // return (rights & 256 || rights & 512 || rights & 8192) > 0;
+                return perm(rights, 7) > compareValue || this.is('public', data);
             case 'create':
                 // can create objects?
                 return perm(rights, 0) > 1;
