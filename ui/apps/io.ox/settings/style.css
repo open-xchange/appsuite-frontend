@@ -14,13 +14,13 @@
 /* Grid */
 
 .io-ox-settings-main {
-    
+
     .window-controls label {
         display: inline-block;
         margin-bottom: 0;
     }
-    
-    
+
+
 }
 
 .vgrid-cell.settings {
@@ -175,7 +175,7 @@
 }
 
 .io-ox-dialog-popup input.input-large {
-	width: 360px;	
+	width: 360px;
 }
 
 .io-ox-dialog-popup .busynotice {

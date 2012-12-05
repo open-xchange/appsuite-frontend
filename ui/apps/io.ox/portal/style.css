@@ -281,9 +281,6 @@
  * SETTINGS *
  ************
 */
-.io-ox-portal-setting {
-    margin-bottom: 2.5em;
-}
 .io-ox-portal-settings-title {
     font-size: 16pt;
     font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -297,9 +294,51 @@
     width: 15em;
     white-space: nowrap;
     text-overflow: ellipsis;
-}
-.io-ox-settings-item .action-edit, .io-ox-settings-item .action-remove, .io-ox-settings-item .action-add {
     display: inline-block;
-    margin-left: .25em;
-    float: right;
+}
+.io-ox-portal-colorAction li {
+    display: block;
+    width: 100%;
+    height: 24px;
+    margin: 2px;
+}
+li.io-ox-portal-setting {
+    list-style-position: inside;
+    list-style-type: none;
+    background: lightgrey;
+    padding: 1em;
+    margin: .25em 0;
+}
+.io-ox-portal-optionsAction, .io-ox-portal-colorAction {
+    display: inline-block;
+}
+.io-ox-portal-color-default {
+    background: #333;
+}
+.io-ox-portal-color-red {
+    background: @color_red;
+}
+.io-ox-portal-color-orange {
+    background: @color_orange;
+}
+.io-ox-portal-color-lightgreen {
+    background: darken(@color_lightgreen, 10%);
+}
+.io-ox-portal-color-green {
+    background: @color_green;
+}
+.io-ox-portal-color-lightblue {
+    background: darken(@color_lightblue, 20%);
+}
+.io-ox-portal-color-blue {
+    background: @color_blue;
+}
+.io-ox-portal-color-purple {
+    background: @color_purple;
+}
+.io-ox-portal-color-pink {
+    background: darken(@color_pink, 10%);
+}
+.io-ox-portal-color-gray {
+    background: darken(@color_gray, 20%);
 }
