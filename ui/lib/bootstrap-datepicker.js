@@ -34,7 +34,6 @@
 		this.language = options.language||this.element.data('date-language')||"en";
 		this.language = this.language in dates ? this.language : "en";
 		this.format = DPGlobal.parseFormat(options.format||this.element.data('date-format')||'mm/dd/yyyy');
-
 		this.picker = $(DPGlobal.template)
 							.appendTo(this.parentEl)
 							.on({
@@ -698,29 +697,31 @@
 			date = UTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0);
 			if (parts.length == format.parts.length) {
 				for (var i=0, cnt = format.parts.length; i < cnt; i++) {
-					val = parseInt(parts[i], 10);
-					part = format.parts[i];
-					if (isNaN(val)) {
-						switch(part) {
-							case 'MM':
-								filtered = $(dates[language].months).filter(function(){
-									var m = this.slice(0, parts[i].length),
-										p = parts[i].slice(0, m.length);
-									return m == p;
-								});
-								val = $.inArray(filtered[0], dates[language].months) + 1;
-								break;
-							case 'M':
-								filtered = $(dates[language].monthsShort).filter(function(){
-									var m = this.slice(0, parts[i].length),
-										p = parts[i].slice(0, m.length);
-									return m == p;
-								});
-								val = $.inArray(filtered[0], dates[language].monthsShort) + 1;
-								break;
-						}
-					}
-					parsed[part] = val;
+				    if (parts[i].length < 5) {
+    					val = parseInt(parts[i], 10);
+    					part = format.parts[i];
+    					if (isNaN(val)) {
+    						switch(part) {
+    							case 'MM':
+    								filtered = $(dates[language].months).filter(function(){
+    									var m = this.slice(0, parts[i].length),
+    										p = parts[i].slice(0, m.length);
+    									return m == p;
+    								});
+    								val = $.inArray(filtered[0], dates[language].months) + 1;
+    								break;
+    							case 'M':
+    								filtered = $(dates[language].monthsShort).filter(function(){
+    									var m = this.slice(0, parts[i].length),
+    										p = parts[i].slice(0, m.length);
+    									return m == p;
+    								});
+    								val = $.inArray(filtered[0], dates[language].monthsShort) + 1;
+    								break;
+    						}
+    					}
+    					parsed[part] = val;
+				    }
 				}
 				for (var i=0, s; i<setters_order.length; i++){
 					s = setters_order[i];
