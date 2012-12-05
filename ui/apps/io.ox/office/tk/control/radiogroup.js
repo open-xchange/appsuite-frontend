@@ -45,7 +45,9 @@ define('io.ox/office/tk/control/radiogroup',
      *      If set to a value different to null or undefined, the option button
      *      that is currently active can be clicked to be switched off. In that
      *      case, this radio group will activate the button associated to the
-     *      value specified in this option.
+     *      value specified in this option, and the action handler will return
+     *      this value instead of the value of the button that has been
+     *      switched off.
      *  @param {String} [options.updateCaptionMode='all']
      *      Specifies how to update the caption of the drop-down button when a
      *      list item in the drop-down menu has been activated. If set to
@@ -195,24 +197,15 @@ define('io.ox/office/tk/control/radiogroup',
 
             var // options for the new button, including the passed value
                 buttonOptions = Utils.extendOptions(options, { value: value }),
-                // whether the option button will be hidden
-                hidden = Utils.getBooleanOption(options, 'hidden', false),
                 // the new button
                 button = null;
 
             // insert the button depending on the drop-down mode
             if (this.hasDropDown) {
                 button = this.createListItem(buttonOptions);
-                if (hidden) {
-                    button.hide();
-                }
             } else {
                 button = Utils.createButton(buttonOptions);
-                if (hidden) {
-                    this.addChildNodes(button.hide());
-                } else {
-                    this.addFocusableControl(button);
-                }
+                this.addFocusableControl(button);
             }
 
             // add tool tip
