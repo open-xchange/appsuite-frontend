@@ -720,6 +720,48 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             return ajax(options, "UPLOAD");
         },
 
+        FORM: function (options) {
+
+            options = _.extend({
+                form: $(),
+                url: 'infostore?action=new',
+                data: {},
+                field: 'json'
+            }, options);
+
+            var name = 'formpost_' + _.now(), def = $.Deferred(), data, form = options.form;
+
+            $('#tmp').append(
+                $('<iframe>', { name: name, id: name, height: 1, width: 1}).hide()
+            );
+
+            window.callback_new = function (response) {
+                $('#' + name).remove();
+                def[(response && response.error ? 'reject' : 'resolve')](response);
+                window.callback_new = data = form = def = null;
+            };
+
+            data = JSON.stringify(options.data);
+
+            if (form.find('input[name="' + options.field + '"]').length) {
+                form.find('input[name="' + options.field + '"]').val(data);
+            } else {
+                form.append(
+                    $('<input type="hidden" name="' + options.field + '">').val(data)
+                );
+            }
+
+            form.attr({
+                method: 'post',
+                enctype: 'multipart/form-data',
+                action: ox.apiRoot + '/' + options.url + '&session=' + ox.session,
+                target: name
+            })
+            .submit();
+
+            return def;
+        },
+
         /**
          * Get all columns of a module
          * @param {string} module Module name

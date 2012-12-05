@@ -114,7 +114,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         index: 10,
         label: gt("Title"),
         draw: function (element, state) {
-            state.node = $("<input type='text' name='title'></input>");
+            state.node = $("<input type='text' name='title'>");
             element.append(state.node);
         },
         process: function (file, state) {
@@ -125,30 +125,12 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         }
     });
 
-    // URL
-    controlsPoint.extend({
-        id: "url",
-        extendedForm: true,
-        index: 20,
-        label: gt("Link / URL"),
-        draw: function (element, state) {
-            state.node = $("<input type='text' name='title'></input>");
-            element.append(state.node);
-        },
-        process: function (file, state) {
-            var val = state.node.val();
-            if (val) {
-                file.url = state.node.val();
-            }
-        }
-    });
-
     // File
     controlsPoint.extend({
         id: "file",
         index: 30,
         draw: function (element, state) {
-            state.node = $("<input type='file' name='title'></input>");
+            state.node = $("<input type='file' name='file'>");
             element.append(state.node);
         }
     });
@@ -160,7 +142,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         index: 40,
         label: gt("Comment"),
         draw: function (element, state) {
-            state.node = $("<textarea rows='10'></textarea>").addClass("input-xlarge");
+            state.node = $('<textarea rows="5" name="comment" class="input-xlarge">');
             element.append(state.node);
         },
         process: function (file, state) {
@@ -177,22 +159,15 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         label: gt("Save"),
         type: "primary",
         perform: function (fileEntry, states, cb) {
-            var savedOnce = false;
-            _(states.file.node[0].files).each(function (file) {
-                savedOnce = true;
-                filesApi.uploadFile({
-                    file: file,
-                    json: fileEntry,
-                    folder: fileEntry.folder
-                }).done(function (data) {
-                    cb(data);
-                });
-            });
-            if (!savedOnce && ! $.isEmptyObject(fileEntry)) {
-                filesApi.create({json: fileEntry}).done(function (data) {
-                    cb(data);
-                });
-            }
+            // since I have no clue what this all does I get the form this way;
+            var form = $(states.file.node[0]).closest('form');
+            filesApi.uploadFile({
+                file: _(states.file.node[0].files).first(),
+                json: fileEntry,
+                folder: fileEntry.folder,
+                form: form
+            })
+            .done(cb);
         }
     });
 

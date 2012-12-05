@@ -130,41 +130,57 @@ define('io.ox/files/api',
     // 'file' - the file object to upload
     // The method returns a deferred that is resolved once the file has been uploaded
     api.uploadFile = function (options) {
+
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
             folder: config.get('folder.infostore')
         }, options || {});
 
-        var formData = new FormData();
-        if ('filename' in options) {
-            formData.append('file', options.file, options.filename);
-        } else {
-            formData.append('file', options.file);
-        }
-
-        if (options.json && !$.isEmptyObject(options.json)) {
-            if (!options.json.folder_id) {
-                options.json.folder_id = options.folder;
+        function fixOptions() {
+            if (options.json && !$.isEmptyObject(options.json)) {
+                if (!options.json.folder_id) {
+                    options.json.folder_id = options.folder;
+                }
+            } else {
+                options.json = { folder_id: options.folder };
             }
-        } else {
-            options.json = { folder_id: options.folder };
         }
-        formData.append('json', JSON.stringify(options.json));
 
-        return http.UPLOAD({
-                module: 'infostore',
-                params: { action: 'new' },
-                data: formData,
-                fixPost: true
-            })
-            .pipe(function (data) {
-                // clear folder cache
-                var fid = String(options.json.folder_id);
-                return api.propagate('new', { folder_id: fid }).pipe(function () {
-                    api.trigger('create.file');
-                    return { folder_id: fid, id: parseInt(data.data, 10) };
-                });
+        function success(data) {
+            // clear folder cache
+            var fid = String(options.json.folder_id);
+            return api.propagate('new', { folder_id: fid }).pipe(function () {
+                api.trigger('create.file');
+                return { folder_id: fid, id: parseInt(data.data, 10) };
             });
+        }
+
+        if ('FormData' in window) {
+
+            var formData = new FormData();
+            if ('filename' in options) {
+                formData.append('file', options.file, options.filename);
+            } else {
+                formData.append('file', options.file);
+            }
+
+            fixOptions();
+            formData.append('json', JSON.stringify(options.json));
+
+            return http.UPLOAD({
+                    module: 'infostore',
+                    params: { action: 'new' },
+                    data: formData,
+                    fixPost: true
+                })
+                .pipe(success);
+
+        } else {
+
+            // good old form post
+            fixOptions();
+            return http.FORM({ form: options.form, data: options.json }).pipe(success);
+        }
     };
 
     // Upload a file and store it

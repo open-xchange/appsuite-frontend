@@ -519,25 +519,28 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         id: 'attachment_upload',
         index: 2000,
         draw: function (baton) {
-            //browsercheck
-            if (_.browser.IE === undefined || _.browser.IE > 9) {
+            // browsercheck
+            if (_.browser.IE === 9) { //if browser is IE 9 show update suggestion
+                this.append(
+                    $("<div>").css('textAlign', 'center').append(
+                        $.txt(gt("Attachment uploads are not supported in Internet Explorer 9. Please upgrade to Internet Explorer 10.")),
+                        $('<a>', { href: 'http://ie.microsoft.com', target: '_blank' })
+                    )
+                );
+            } else {
                 var $node = $("<form>").appendTo(this),
                     $input = $("<input>", {
                         type: "file"
                     }),
-    
                     $button = $("<button/>").attr('data-action', 'add').text(gt("Add")).addClass("btn btn-primary span12").on("click", function (e) {
                         e.preventDefault();
                         _($input[0].files).each(function (fileData) {
                             baton.attachmentList.addFile(fileData);
                         });
                     });
-    
+
                 $node.append($("<div>").addClass("span6").append($input));
                 $node.append($("<div>").addClass("span3 offset3").append($button));
-            } else if (_.browser.IE === 9) { //if browser is IE 9 show update suggestion
-                this.append($("<div>").text(gt("Internet Explorer 9 does not support attachment uploads. Please upgrade to Internet Explorer 10."))
-                                      .css('text-align', 'center'));
             }
         }
     });
