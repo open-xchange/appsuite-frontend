@@ -61,6 +61,7 @@ define('io.ox/calendar/edit/template',
                 .css({float: 'right', marginLeft: '13px'})
                 .on('click', function () {
                     baton.model.save();
+                    //baton.app.getWindow().busy();
                 })
             );
             this.append($('<button class="btn" data-action="discard" >')
@@ -85,7 +86,7 @@ define('io.ox/calendar/edit/template',
             var self = this;
             require(["io.ox/calendar/conflicts/conflictList"], function (c) {
                 var conflictList = c.drawList(conflicts);
-                self.$el.append(
+                self.$el.empty().append(
                     conflictList,
                     $('<div class="row">')
                         .css('margin-top', '10px').append(

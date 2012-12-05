@@ -435,7 +435,7 @@ define('io.ox/office/editor/format/drawingstyles',
                 imageNode = $('<img>', { src: drawingAttributes.replacementData });
                 contentNode.append(imageNode);
             } else if (drawingAttributes.replacementData.indexOf(svgString) === 0) {
-                contentNode[0].appendChild($(drawingAttributes.replacementData));
+                Utils.getDomNode(contentNode).appendChild($(drawingAttributes.replacementData)[0]);
             }
         }
 

@@ -92,6 +92,10 @@ define("io.ox/mail/main",
         left = vsplit.left.addClass('border-right');
         right = vsplit.right.addClass('mail-detail-pane').scrollable();
 
+        ext.point('io.ox/mail/vgrid/options').extend({
+            selectFirstItem: settings.get('selectFirstMessage', true)
+        });
+
         // grid
         var options = ext.point('io.ox/mail/vgrid/options').options();
         grid = new VGrid(left, options);

@@ -66,6 +66,10 @@ msgstr "Angemeldet bleiben"
 msgid "Forgot your password?"
 msgstr "Passwort vergessen?"
 
+#: html/core_body.html:91
+msgid "No connection to server. Please check your internet connection and retry."
+msgstr "Keine Verbindung zum Server. Bitte überprufen Sie Ihre Internetverbindung und versuchen es erneut."
+
 #: html/core_body.html:96
 msgid "Languages"
 msgstr "Sprachen"

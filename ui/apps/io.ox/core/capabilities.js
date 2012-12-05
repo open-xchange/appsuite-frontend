@@ -17,6 +17,7 @@
 */
 
 define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
+
 	'use strict';
 
 	var def = new $.Deferred();
@@ -50,7 +51,7 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 		},
 		has: function () {
 			var self = this;
-			
+
 			var list = _(_(arguments).flatten()).map(function (def) {
 				if (!def) {
 					return '';
@@ -65,7 +66,7 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 					name = name.substr(1);
 					inverse = true;
 				}
-				
+
 				var capability = self.get(name);
 				if (inverse) {
 					return !!!capability;
@@ -77,17 +78,21 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 	};
 
 	var dummyCapLookup = {
+
 		get: function (capName) {
 			if (capBlacklist[capName]) {
 				return null;
 			}
-			return {id: capName, backendSupport: true};
+			return { id: capName, backendSupport: true };
 		},
+
 		has: function (capName) {
+
 			var self = this;
 			var list = _(_(arguments).flatten()).map(function (def) {
 				return def.split(/\s*[, ]\s*/);
 			});
+
 			list = _(list).flatten();
 
 			return _(list).all(function (name) {
@@ -96,7 +101,6 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 					name = name.substr(1);
 					inverse = true;
 				}
-				
 				var capability = self.get(name);
 				if (inverse) {
 					return !!!capability;
@@ -118,26 +122,32 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 		capabilities = c;
 		def.resolve(capLookup);
 	});
-	
-	http.GET({
-		module: 'capabilities',
-		params: {
-			action: 'all'
-		}
-	}).done(function (data) {
-		_(data).each(function (entry) {
-			capabilities[entry.id] = entry;
+
+	if (ox.online) {
+		http.GET({
+			module: 'capabilities',
+			params: {
+				action: 'all'
+			}
+		})
+		.done(function (data) {
+			_(data).each(function (entry) {
+				capabilities[entry.id] = entry;
+			});
+			capSource = 'backend';
+			capCache.add("default", capabilities);
+
+			def.resolve(capLookup);
+		})
+		.fail(function (resp) {
+			console.warn("Capabilities subsystem is disabled!");
+			def.resolve(dummyCapLookup);
 		});
-		capSource = 'backend';
-		capCache.add("default", capabilities);
-
-		def.resolve(capLookup);
-	}).fail(function (resp) {
-		console.error("Capabilities subsystem is disabled!");
+	} else {
+		console.warn("Capabilities subsystem is disabled!");
 		def.resolve(dummyCapLookup);
-	});
-
+	}
 
 	return def;
-	
+
 });

@@ -514,6 +514,10 @@ define('io.ox/core/tk/vgrid',
             return { folder_id: c[0], id: c[1], recurrence_position: c[2] };
         };
 
+        function autoSelect() {
+            return options.selectFirstItem !== false && $(document).width() > 700;
+        }
+
         function updateSelection(changed) {
             // vars
             var id = _.url.hash('id'), ids, cid, index, selectionChanged;
@@ -540,15 +544,19 @@ define('io.ox/core/tk/vgrid',
                             setIndex(index - 2); // not at the very top
                         }
                     }
-                } else if (firstAutoSelect) {
-                    // select first or previous selection
-                    //console.debug('case #2: smart');
-                    self.selection.selectSmart();
-                    firstAutoSelect = false;
                 } else {
-                    // set selection based on last index
-                    //console.debug('case #3: last index');
-                    self.selection.selectLastIndex();
+                    if (autoSelect()) {
+                        if (firstAutoSelect) {
+                            // select first or previous selection
+                            //console.debug('case #2: smart');
+                            self.selection.selectSmart();
+                            firstAutoSelect = false;
+                        } else {
+                            // set selection based on last index
+                            //console.debug('case #3: last index');
+                            self.selection.selectLastIndex();
+                        }
+                    }
                 }
             }
         }
