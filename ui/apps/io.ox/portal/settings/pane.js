@@ -19,35 +19,15 @@ define('io.ox/portal/settings/pane',
        'io.ox/portal/settings/plugin/model',
        'io.ox/core/tk/dialogs',
        'settings!io.ox/portal',
-       'text!io.ox/portal/settings/tpl/listbox.html',
-       'text!io.ox/portal/settings/tpl/plugin.html',
        'gettext!io.ox/portal',
        'apps/io.ox/core/tk/jquery-ui.min.js',
-       'less!io.ox/portal/style.css'], function (ext, manifests, utils, PluginModel, dialogs, settings, tmplListBox, tmplPlugin, gt) {
+       'less!io.ox/portal/style.css'], function (ext, manifests, utils, PluginModel, dialogs, settings, gt) {
 
     'use strict';
 
 
     var pluginSettings = settings.get('pluginSettings', []),
         MAX_INDEX = 99999;
-
-    function getPluginById(id) {
-        return _(pluginSettings).chain().filter(function (obj) { return obj.id === id; }).first().value();
-    }
-
-    var getPlugins = function () {
-        // get plugins
-        var plugins = _(manifests.pluginsFor('portal')).map(function (id) {
-            // apply defaults
-            var plugin = _.extend({ id: id, name: id, active: false, index: MAX_INDEX }, getPluginById(id));
-            if (!plugin.active) {
-                plugin.index = MAX_INDEX;
-            }
-            return plugin;
-        });
-
-        return plugins.sort(function (a, b) { return a.index - b.index;  }); // sort by index
-    };
 
 
     ext.point("io.ox/portal/settings/detail").extend({
