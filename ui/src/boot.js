@@ -15,7 +15,7 @@
 require({
     // inject version
     baseUrl: ox.base + "/apps",
-    waitSeconds: 60 //_.browser.IE ? 20 : 10
+    waitSeconds: 30 //_.browser.IE ? 20 : 10
 });
 
 // add fake console (esp. for IE)
@@ -164,7 +164,10 @@ $(document).ready(function () {
                 // visual response (shake sucks on touch devices)
                 $("#io-ox-login-form").css('opacity', '');
                 // show error
-                feedback('error', $.txt(_.formatError(error, "%1$s")));
+                if (error && error.error === '0 general') {
+                    error = { error: $('#io-ox-login-feedback-strings').find('[data-i18n-id="no-connection"]').text() };
+                }
+                feedback('info', $.txt(_.formatError(error, "%1$s")));
                 // restore form
                 restore();
                 // reset focus

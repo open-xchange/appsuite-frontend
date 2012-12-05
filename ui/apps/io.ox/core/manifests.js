@@ -12,16 +12,12 @@
  */
 
 define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/capabilities'], function (ext, http, cache, capabilities) {
+
     'use strict';
+
     // TODO: Caching and Update Handling
-
-
     var def = new $.Deferred();
-
-
     var manifestCache = new cache.SimpleCache("manifests", true);
-
-
 
     var manifestManager = {
         loadPluginsFor: function (pointName, cb) {
@@ -79,8 +75,6 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
                     definitionFunction: definitionFunction
                 };
             }
-
-
         },
         apps: {},
         plugins: {},
@@ -121,7 +115,6 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
         manifestManager.apps = {};
         manifestManager.plugins = {};
         manifestManager.pluginPoints = {};
-           
     };
 
     var fnProcessManifest = function (manifest) {
@@ -197,8 +190,12 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
     // Try the cache and the backend
     // First one resolves this module
     fnLoadState();
-    fnLoadBackendManifests();
+
+    if (ox.online) {
+        fnLoadBackendManifests();
+    } else {
+        def.resolve(manifestManager);
+    }
 
     return def;
-    
 });
