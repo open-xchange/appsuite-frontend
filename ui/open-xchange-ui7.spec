@@ -39,12 +39,12 @@ OX App Suite HTML5 client
 
 This package contains the manifest for installation on the backend.
 
-%package        devel
+%package        dev
 Group:          Applications/Productivity
 Summary:        SDK for the OX App Suite HTML5 client
 Requires:       nodejs >= 0.4.0
 
-%description    devel
+%description    dev
 SDK for the OX App Suite HTML5 client
 
 %prep
@@ -57,15 +57,15 @@ sh build.sh builddir="%{buildroot}%{docroot}" \
     version=%{version} revision=%{release}
 mkdir -p "%{buildroot}/opt/open-xchange/ui7"
 cp -r "%{buildroot}%{docroot}/apps" "%{buildroot}/opt/open-xchange/ui7/apps"
-mkdir -p "%{buildroot}/opt/open-xchange-ui7-devel"
-cp -r bin lib Jakefile.js "%{buildroot}/opt/open-xchange-ui7-devel/"
-sed -i -e 's#OX_UI7_DEV=.*#OX_UI7_DEV="/opt/open-xchange-ui7-devel"#' \
-    "%{buildroot}/opt/open-xchange-ui7-devel/bin/build-ui7"
+mkdir -p "%{buildroot}/opt/open-xchange-ui7-dev"
+cp -r bin lib Jakefile.js "%{buildroot}/opt/open-xchange-ui7-dev/"
+sed -i -e 's#OX_UI7_DEV=.*#OX_UI7_DEV="/opt/open-xchange-ui7-dev"#' \
+    "%{buildroot}/opt/open-xchange-ui7-dev/bin/build-ui7"
 
 %clean
 sh build.sh clean builddir="%{buildroot}%{docroot}" version=%{version} revision=%{release}
 rm -r "%{buildroot}/opt/open-xchange/ui7"
-rm -r "%{buildroot}/opt/open-xchange-ui7-devel"
+rm -r "%{buildroot}/opt/open-xchange-ui7-dev"
 
 %files
 %defattr(-,root,root)
@@ -77,11 +77,11 @@ rm -r "%{buildroot}/opt/open-xchange-ui7-devel"
 %dir /opt/open-xchange
 /opt/open-xchange/ui7
 
-%files devel
+%files dev
 %defattr(-,root,root)
-%dir /opt/open-xchange-ui7-devel
-/opt/open-xchange-ui7-devel
-%attr(644,root,root) /opt/open-xchange-ui7-devel/lib/sax-js/examples/switch-bench.js
+%dir /opt/open-xchange-ui7-dev
+/opt/open-xchange-ui7-dev
+%attr(644,root,root) /opt/open-xchange-ui7-dev/lib/sax-js/examples/switch-bench.js
 
 %changelog
 * Thu Nov 10 2011 viktor.pracht@open-xchange.com
