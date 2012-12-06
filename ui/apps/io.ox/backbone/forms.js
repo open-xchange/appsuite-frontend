@@ -140,6 +140,7 @@ define('io.ox/backbone/forms',
         };
 
         this.onValidationError = function (messages) {
+            this.nodes.controls.find('.help-block.error').remove();
             var helpBlock =  $('<div class="help-block error">');
             _(messages).each(function (msg) {
                 helpBlock.append($.txt(msg));
