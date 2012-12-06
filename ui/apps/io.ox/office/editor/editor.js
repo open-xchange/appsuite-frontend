@@ -963,6 +963,8 @@ define('io.ox/office/editor/editor',
          */
         this.deleteSelected = function () {
 
+            window.console.log("AAA1: " + selection.startPaM.oxoPosition + " : " + selection.endPaM.oxoPosition);
+
             if (!selection.hasRange()) { return; }
 
             undoManager.enterGroup(function () {
@@ -994,7 +996,9 @@ define('io.ox/office/editor/editor',
                             endOffset = _.isNumber(endOffset) ? endOffset : (Position.getParagraphLength(editdiv, position));
 
                             // delete the covered part of the paragraph
-                            if (startOffset <= endOffset) {
+                            if ((startOffset === 0) && (endOffset === 0) && (Position.getParagraphLength(editdiv, position) === 0)) {  // -> do not delete from [1,0] to [1,0]
+                                generator.generateOperation(Operations.DELETE, { start: position });
+                            } else if (startOffset <= endOffset) {
                                 generator.generateOperation(Operations.DELETE, { start: position.concat([startOffset]), end: position.concat([endOffset]) });
                             }
                         } else {
