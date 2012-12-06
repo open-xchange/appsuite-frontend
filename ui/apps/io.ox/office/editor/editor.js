@@ -963,8 +963,6 @@ define('io.ox/office/editor/editor',
          */
         this.deleteSelected = function () {
 
-            window.console.log("AAA1: " + selection.startPaM.oxoPosition + " : " + selection.endPaM.oxoPosition);
-
             if (!selection.hasRange()) { return; }
 
             undoManager.enterGroup(function () {
