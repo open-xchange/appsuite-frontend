@@ -115,7 +115,7 @@ define('io.ox/office/tk/dropdown/list',
          * Returns all button elements representing the list items.
          */
         this.getListItems = function () {
-            return listNode.find('button');
+            return listNode.find(Utils.BUTTON_SELECTOR);
         };
 
         /**
@@ -170,10 +170,6 @@ define('io.ox/office/tk/dropdown/list',
 
             // find insertion index for sorted lists
             if (sorted) {
-                var items = this.getListItems().get(),
-                    sortvalues = _(items).map(function (button) { return sortFunctor.call(self, $(button)); }),
-                    sortvalue = sortFunctor.call(this, button),
-                    i = _(sortvalues).sortedIndex(sortvalue);
                 index = _.chain(this.getListItems().get())
                     // convert array of button elements to strings returned by sort functor
                     .map(function (button) { return sortFunctor.call(self, $(button)); })

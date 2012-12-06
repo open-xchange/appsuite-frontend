@@ -112,17 +112,12 @@ define('io.ox/office/editor/editor',
         return ((event.metaKey || event.ctrlKey) && !event.altKey && (event.charCode === 120 || event.keyCode === 88));
     }
 
+    function getPrintableCharFromCharCode(charCode) {
+        return (_.isNumber(charCode) && (charCode >= 32)) ? String.fromCharCode(charCode) : undefined;
+    }
+
     function getPrintableChar(event) {
-
-        if (_.isNumber(event.charCode) && (event.CharCode >= 32)) {
-            return String.fromCharCode(event.charCode);
-        }
-        if (_.isNumber(event.which) && (event.which >= 32)) {
-            return String.fromCharCode(event.which);
-        }
-
-        // TODO: Need to handle other cases - later...
-        return '';
+        return getPrintableCharFromCharCode(event.charCode) || getPrintableCharFromCharCode(event.which) || '';
     }
 
     // class Editor ===========================================================

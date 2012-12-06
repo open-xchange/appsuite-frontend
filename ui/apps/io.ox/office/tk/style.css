@@ -68,18 +68,21 @@
 /* OX icons                                                                  */
 /* ========================================================================= */
 
+@icon-size: 14px;
+@caret-size: 7px;
+
 /*
  * Replace images for icon classes starting with "icon-io-ox-". Icons are
  * 14x14px with a 6px grid spacing.
  */
 i[class^="icon-io-ox-"] {
     display: inline-block;
-    width: 14px !important;
-    height: 14px;
+    width: @icon-size !important;
+    height: @icon-size;
     margin: 0;
     background-image: url(img/ox-icons-black.png);
     background-origin: content-box;
-    line-height: 14px;
+    line-height: @icon-size;
     vertical-align: text-top;
 
     &.icon-white {
@@ -90,10 +93,10 @@ i[class^="icon-io-ox-"] {
 /* special icon for the drop-down caret */
 i.icon-io-ox-caret {
     background-position: 0 0;
-    width: 7px !important;
+    width: @caret-size !important;
 
     &.up {
-        background-position: -7px 0;
+        background-position: -@caret-size 0;
     }
 }
 
@@ -217,12 +220,13 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
 
 .view-component {
     @control-height: 32px;
+    /* horizontal paddings in control elements */
+    @control-padding: 8px;
+    /* space between control caption elements */
+    @caption-spacing: 5px;
 
     position: relative;
     padding: 0;
-    /* prevent multi-line layout of button groups */
-    white-space: nowrap;
-    text-align: left;
 
     /* disabled style for any element marked with the 'disabled' class */
     .disabled {
@@ -245,7 +249,7 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
 
         /* common controls ------------------------------------------------- */
 
-        label, button, input {
+        label, a.button, input {
             display: inline-block;
             position: relative;
             .box-sizing(border-box);
@@ -271,32 +275,23 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
         }
 
         /* control caption elements (always spans as children) */
-        label, button {
-            @padding: 8px;
-            @distance: 5px;
-
-            /* lousy attempt to prevent overflowing captions. TODO: better solution */
-            overflow: hidden;
-            padding-left: @padding;
-            padding-right: @padding;
+        label, a.button {
+            padding-left: @control-padding;
+            padding-right: @control-padding;
             line-height: @control-height;
 
-            > span {
+            span {
                 display: inline-block;
                 vertical-align: top;
+            }
 
-                > i[class^="icon-"] {
-                    vertical-align: center;
-                }
+            > div.caption {
+                .box-sizing(border-box);
+                width: 100%;
+                overflow: hidden;
 
-                + span {
-                    margin-left: @distance;
-                }
-
-                &[data-role="caret"] {
-                    position: absolute;
-                    top: 0;
-                    right: @padding;
+                > span + span {
+                    margin-left: @caption-spacing;
                 }
             }
         }
@@ -309,7 +304,7 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
 
         /* buttons --------------------------------------------------------- */
 
-        button {
+        a.button {
             text-align: left;
 
             /* selected toggle/radio buttons */
@@ -319,7 +314,7 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
         }
 
         /* keyboard/mouse effects (not for disabled buttons or groups) */
-        &:not(.disabled) button:not(.disabled) {
+        &:not(.disabled) a.button:not(.disabled) {
             &:hover { background-color: fade(black, 3%); }
             &:focus { background-color: fade(black, 3%); }
             &:active { background-color: fade(black, 6%); }
@@ -329,6 +324,20 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
                 &:hover { background-color: darken(@button-selected-color, 3%); }
                 &:focus { background-color: darken(@button-selected-color, 3%); }
                 &:active { background-color: darken(@button-selected-color, 6%); }
+            }
+        }
+
+        a.button.dropdown-button {
+            padding-right: @caret-size + @control-padding;
+
+            > div.caption > span:last-child {
+                margin-right: @caption-spacing;
+            }
+
+            > span.dropdown-caret {
+                position: absolute;
+                top: 0;
+                right: @control-padding;
             }
         }
 
@@ -346,7 +355,7 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
             }
 
             /* drop-down button over text field */
-            + button {
+            + a.button {
                 z-index: 1;
             }
         }
@@ -360,17 +369,17 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
             margin-bottom: 2 * @offset;
             .box-shadow(0 0 4px fade(black, 15%));
 
-            > label, > button, > input {
+            > label, > a.button, > input {
                 height: @control-height - 2 * @offset;
                 background: white;
             }
 
-            > label, > button {
+            > label, > a.button {
                 line-height: @control-height - 2 * @offset;
             }
 
             /* keyboard/mouse effects (not for disabled buttons) */
-            &:not(.disabled) > button:not(.disabled) {
+            &:not(.disabled) > a.button:not(.disabled) {
 
                 /* mouse/keyboard effects */
                 &:hover { background: white; }
@@ -421,7 +430,7 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
                         margin: 0;
                         padding: 0;
 
-                        > button {
+                        > a.button {
                             width: 100%;
                             height: 26px;
                             line-height: 26px;
@@ -453,7 +462,7 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
                         margin: 0 4px;
                         padding: 4px 0;
 
-                        > button {
+                        > a.button {
                             width: 100%;
                         }
                     }
@@ -469,7 +478,7 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
                         margin-top: 0;
                     }
 
-                    button {
+                    a.button {
                         overflow: visible;
                         height: auto;
                         padding: 1px;
@@ -528,7 +537,7 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
                         line-height: 1px;
 
                         /* grid layout (done with embedded divs instead of a table to prevent grid flicker */
-                        > button {
+                        > a.button {
                             height: auto;
                             margin: 0;
                             padding: 0;
@@ -590,6 +599,9 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
 
     &.toolbar {
         padding: 0;
+        /* prevent multi-line layout */
+        white-space: nowrap;
+        text-align: left;
 
         /* show groups in a horizontal bar */
         > .group {
@@ -609,6 +621,7 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
         .box-sizing(border-box);
         width: 150px;
         padding: 8px 6px 0;
+        text-align: center;
 
         > .group {
             display: inline-block;

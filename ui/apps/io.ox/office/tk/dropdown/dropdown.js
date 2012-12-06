@@ -61,13 +61,13 @@ define('io.ox/office/tk/dropdown/dropdown',
             caretIcon = Utils.createIcon('icon-io-ox-caret', Utils.getBooleanOption(options, 'whiteIcon')),
 
             // the drop-down caret
-            caretSpan = $('<span>').attr('data-role', 'caret').append(caretIcon),
+            caretSpan = $('<span>').addClass('dropdown-caret').append(caretIcon),
 
             // plain caret button, or button with caption and formatting
             plainCaret = Utils.getBooleanOption(options, 'plainCaret', false),
 
             // the drop-down button
-            menuButton = Utils.createButton(plainCaret ? {} : options).append($('<span>').width(7)).append(caretSpan),
+            menuButton = Utils.createButton(plainCaret ? {} : options).addClass('dropdown-button').append(caretSpan),
 
             // the drop-down menu element
             menuNode = $('<div>').addClass('dropdown-menu').append(contentNode),

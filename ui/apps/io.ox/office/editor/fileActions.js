@@ -21,10 +21,24 @@ define('io.ox/office/editor/fileActions',
     'use strict';
 
     var Action = links.Action,
-        ActionGroup = links.ActionGroup,
-        ActionLink = links.ActionLink,
+        ActionLink = links.ActionLink;
 
-        POINT = 'io.ox/files';
+    /**
+     * Returns whether the passed file name is a text file supported by the OX
+     * Text application.
+     */
+    var isSupportedTextFile = (function () {
+
+        var // all extensions of supported text files
+            FILE_EXTENSIONS = ['docx', 'docm'].concat(OfficeConfig.isODFSupported() ? ['odt'] : []),
+
+            // regular expression pattern matching supported text files
+            FILE_PATTERN = new RegExp('\\.(' + FILE_EXTENSIONS.join('|') + ')$', 'i');
+
+        return function (fileName) {
+            return _.isString(fileName) && FILE_PATTERN.test(fileName);
+        };
+    }());
 
     new Action('io.ox/files/actions/office/newdocument', {
         action: function (baton) {
@@ -34,12 +48,10 @@ define('io.ox/office/editor/fileActions',
 
     new Action('io.ox/files/actions/office/editor', {
         requires: function (e) {
-            var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
-            return e.collection.has('one') && pattern.test(e.context.data.filename);
+            return e.collection.has('one') && isSupportedTextFile(e.context.data.filename);
         },
         filter: function (obj) {
-            var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
-            return pattern.test(obj.filename);
+            return isSupportedTextFile(obj.filename);
         },
         action: function (baton) {
             ox.launch('io.ox/office/editor/main', { action: 'load', file: baton.data });
@@ -48,12 +60,10 @@ define('io.ox/office/editor/fileActions',
 
     new Action('io.ox/files/actions/office/editasnew', {
         requires: function (e) {
-            var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
-            return e.collection.has('one') && pattern.test(e.context.data.filename);
+            return e.collection.has('one') && isSupportedTextFile(e.context.data.filename);
         },
         filter: function (obj) {
-            var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
-            return pattern.test(obj.filename);
+            return isSupportedTextFile(obj.filename);
         },
         action: function (baton) {
             ox.launch('io.ox/office/editor/main', { action: 'new', folder_id: baton.data.folder_id, template: baton.data });
@@ -61,7 +71,7 @@ define('io.ox/office/editor/fileActions',
     });
 
     // groups
-    new ActionLink(POINT + '/links/toolbar/default', {
+    new ActionLink('io.ox/files/links/toolbar/default', {
         index: 200,
         id: "officenew",
         label: gt("New office document"),

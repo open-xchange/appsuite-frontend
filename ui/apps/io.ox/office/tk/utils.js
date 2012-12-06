@@ -43,11 +43,11 @@ define('io.ox/office/tk/utils',
     Utils.BREAK = {};
 
     /**
-     * CSS selector for visible elements.
+     * CSS selector for button elements.
      *
      * @constant
      */
-    Utils.VISIBLE_SELECTOR = ':visible';
+    Utils.BUTTON_SELECTOR = '.button';
 
     /**
      * CSS class for disabled controls.
@@ -1370,9 +1370,9 @@ define('io.ox/office/tk/utils',
      *      A value or object that will be copied to the 'data-userdata'
      *      attribute of the control. May contain any user-defined data.
      *  @param {Number} [options.width]
-     *      The fixed total width of the control element (including padding and
-     *      border), in pixels. If omitted, the size will be set automatically
-     *      according to the contents of the control.
+     *      The fixed total width of the control element (including padding),
+     *      in pixels. If omitted, the size will be set automatically according
+     *      to the contents of the control.
      *  @param {Object} [options.css]
      *      A map with CSS formatting attributes to be added to the control.
      *
@@ -1382,16 +1382,16 @@ define('io.ox/office/tk/utils',
     Utils.createControl = function (elementName, attributes, options) {
 
         var // create the DOM element
-            control = $('<' + elementName + '>', attributes),
-            // total width of the control
-            width = Utils.getIntegerOption(options, 'width', undefined, 1),
-            // CSS formatting attributes
-            css = Utils.getObjectOption(options, 'css', {});
+            control = $('<' + elementName + '>', attributes);
+
+        control
+            .width(Utils.getOption(options, 'width', ''))
+            .css(Utils.getObjectOption(options, 'css', {}));
 
         Utils.setControlValue(control, Utils.getOption(options, 'value'));
         Utils.setControlUserData(control, Utils.getOption(options, 'userData'));
-        if (_.isNumber(width)) { control.width(width); }
-        return control.css(css);
+
+        return control;
     };
 
     /**
@@ -1541,8 +1541,21 @@ define('io.ox/office/tk/utils',
 
     // control captions -------------------------------------------------------
 
+    /**
+     * Create and returns a new <i> DOM element representing an icon.
+     *
+     * @param {String} icon
+     *  The CSS class name of the icon. Will be set at the created element.
+     *
+     * @param {Boolean} [white]
+     *  If set to true, the icon will be shown in white color instead in black
+     *  color.
+     *
+     * @returns {jQuery}
+     *  The new icon element, as jQuery object.
+     */
     Utils.createIcon = function (icon, white) {
-        return $('<i>').addClass(icon + ' ' + (white ? ' icon-white' : ''));
+        return $('<i>').addClass(icon + ((white === true) ? ' icon-white' : ''));
     };
 
     /**
@@ -1553,17 +1566,7 @@ define('io.ox/office/tk/utils',
      *  The control, as jQuery collection.
      */
     Utils.hasControlCaption = function (control) {
-        return control.children(CAPTION_SELECTOR).length > 0;
-    };
-
-    /**
-     * Removes the icon and the text label from the passed form control.
-     *
-     * @param {jQuery} control
-     *  The control to be manipulated, as jQuery collection.
-     */
-    Utils.removeControlCaption = function (control) {
-        control.children(CAPTION_SELECTOR).remove();
+        return control.first().children('div.caption').length > 0;
     };
 
     /**
@@ -1594,26 +1597,43 @@ define('io.ox/office/tk/utils',
             icon = Utils.getStringOption(options, 'icon'),
             whiteIcon = Utils.getBooleanOption(options, 'whiteIcon'),
             label = Utils.getStringOption(options, 'label'),
-            labelCss = Utils.getObjectOption(options, 'labelCss');
+            labelCss = Utils.getObjectOption(options, 'labelCss'),
 
-        // remove the old spans
-        Utils.removeControlCaption(control);
+            // the caption container node
+            caption = null;
 
-        // prepend the label
+        // restrict to one element in the passed collection
+        control = control.first();
+
+        // create a caption container if missing
+        caption = control.children('div.caption');
+        if (caption.length === 0) {
+            control.prepend(caption = $('<div>').addClass('caption'));
+        }
+
+        // remove the old caption spans
+        caption.empty();
+
+        // append the icon
+        if (icon) {
+            caption.append($('<span>')
+                .attr('data-role', 'icon')
+                .attr('data-icon', icon)
+                .append(Utils.createIcon(icon, whiteIcon).addClass(language))
+            );
+        }
+
+        // append the label
         if (_.isString(label)) {
-            control.prepend($('<span>')
+            caption.append($('<span>')
                 .attr('data-role', 'label')
                 .text(label || '')
                 .css(labelCss || {}));
         }
 
-        // prepend the icon
-        if (icon) {
-            control.prepend($('<span>')
-                .attr('data-role', 'icon')
-                .attr('data-icon', icon)
-                .append(Utils.createIcon(icon, whiteIcon).addClass(language))
-            );
+        // remove the caption from the control if it is empty
+        if (caption.children().length === 0) {
+            caption.remove();
         }
     };
 
@@ -1629,7 +1649,7 @@ define('io.ox/office/tk/utils',
      *  undefined.
      */
     Utils.getControlIcon = function (control) {
-        var icon = control.first().find(ICON_SELECTOR);
+        var icon = control.first().children('div.caption').children(ICON_SELECTOR);
         return icon.length ? icon.attr('data-icon') : undefined;
     };
 
@@ -1644,7 +1664,7 @@ define('io.ox/office/tk/utils',
      *  The text label of the control, if existing, otherwise undefined.
      */
     Utils.getControlLabel = function (control) {
-        var label = control.first().find(LABEL_SELECTOR);
+        var label = control.first().children('div.caption').children(LABEL_SELECTOR);
         return label.length ? label.text() : undefined;
     };
 
@@ -1663,7 +1683,7 @@ define('io.ox/office/tk/utils',
      *  'left', and 'right'.
      */
     Utils.setControlTooltip = function (control, tooltip, placement) {
-        control.attr('title', tooltip || '');
+        control.first().attr('title', tooltip || '');
     };
 
     // label elements ---------------------------------------------------------
@@ -1699,12 +1719,14 @@ define('io.ox/office/tk/utils',
      *  all caption options supported by the method Utils.setControlLabel().
      *
      * @returns {jQuery}
-     *  A jQuery object containing the new button element.
+     *  A jQuery object containing the new button element. The button element
+     *  will be represented by an <a> DOM element due to rendering bugs in
+     *  FireFox with <button> elements.
      */
     Utils.createButton = function (options) {
 
-        var // create the DOM button element
-            button = Utils.createControl('button', undefined, options);
+        var // create the DOM anchor element representing the button
+            button = Utils.createControl('a', undefined, options).addClass('button');
 
         Utils.setControlCaption(button, options);
         return button;

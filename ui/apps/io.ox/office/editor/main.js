@@ -95,7 +95,7 @@ define('io.ox/office/editor/main',
             debugMode = false,
 
             // if true, editor synchronizes operations with backend server
-            syncMode = true,
+            syncMode = false,
 
             // if true, the synchronization of operations with the server failed
             serverSyncError = false;
@@ -105,7 +105,6 @@ define('io.ox/office/editor/main',
         function initializeFromOptions(options) {
             self.setFileDescriptor(Utils.getObjectOption(options, 'file'));
             debugMode = Utils.getBooleanOption(options, 'debugMode', false);
-            syncMode = Utils.getBooleanOption(options, 'syncMode', true);
         }
 
         /**
@@ -126,8 +125,7 @@ define('io.ox/office/editor/main',
                 })
                 .pipe(function () {
                     if (invalidateDriveCacheOnClose === true) {
-                        var file = self.getFileDescriptor();
-                        return FilesAPI.propagate('change', file);
+                        return FilesAPI.propagate('change', self.getFileDescriptor());
                     } else {
                         return $.when();
                     }
@@ -227,7 +225,7 @@ define('io.ox/office/editor/main',
          *  The promise of a deferred that reflects the result of the load
          *  operation.
          */
-        function loadAndShow() {
+        function loadAndShow(enableSyncMode) {
 
             var // initialize the deferred to be returned
                 def = $.Deferred().always(function () {
@@ -279,7 +277,7 @@ define('io.ox/office/editor/main',
                             editor.documentLoaded();
                             window.setTimeout(function () { dumpElapsedTime('postprocessing finished'); }, 0);
                             editor.enableUndo(true);
-                            startOperationsTimer(0);
+                            self.setSynchronizedMode(enableSyncMode);
                             def.resolve();
                         } else {
                             Alert.showGenericError(view.getToolPane().getNode(), gt('An error occurred while importing the document.'), gt('Load Error'));
@@ -528,7 +526,7 @@ define('io.ox/office/editor/main',
             stopOperationsTimer();
 
             // do not start a new timer in debug offline mode
-            if (syncMode && self.hasFileDescriptor()) {
+            if (syncMode) {
                 operationsTimer = window.setTimeout(function () {
                     operationsTimer = null;
                     synchronizeOperations();
@@ -593,7 +591,7 @@ define('io.ox/office/editor/main',
 
             // load the file
             initFileDef.done(function () {
-                loadAndShow().then(function () { def.resolve(); }, function () { def.reject(); });
+                loadAndShow(true).then(function () { def.resolve(); }, function () { def.reject(); });
             }).fail(function () {
                 def.reject();
             });
@@ -809,7 +807,6 @@ define('io.ox/office/editor/main',
         this.failSave = function () {
             var point = {
                 file: this.getFileDescriptor(),
-                toolBarId: view.getToolPane().getVisibleToolBarId(),
                 debugMode: debugMode,
                 syncMode: syncMode
             };
@@ -827,9 +824,7 @@ define('io.ox/office/editor/main',
             initializeFromOptions(point);
             this.newVersion(0);  // Get top-level version
             updateDebugMode();
-            return loadAndShow().always(function () {
-                view.getToolPane().showToolBar(Utils.getStringOption(point, 'toolBarId'));
-            });
+            return loadAndShow(Utils.getBooleanOption(point, 'syncMode', true));
         };
 
         /**
@@ -859,6 +854,7 @@ define('io.ox/office/editor/main',
         };
 
         this.setSynchronizedMode = function (state) {
+            state = state && this.hasFileDescriptor();
             if (syncMode !== state) {
                 syncMode = state;
                 controller.update('file/connection/state');

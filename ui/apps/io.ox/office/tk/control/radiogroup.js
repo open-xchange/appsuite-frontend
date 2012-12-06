@@ -91,7 +91,7 @@ define('io.ox/office/tk/control/radiogroup',
          * Returns all option buttons as jQuery collection.
          */
         function getOptionButtons() {
-            return self.hasDropDown ? self.getListItems() : self.getNode().children('button');
+            return self.hasDropDown ? self.getListItems() : self.getNode().children(Utils.BUTTON_SELECTOR);
         }
 
         /**
@@ -218,7 +218,7 @@ define('io.ox/office/tk/control/radiogroup',
 
         // register event handlers
         this.registerUpdateHandler(updateHandler)
-            .registerActionHandler(this.hasDropDown ? this.getMenuNode() : this.getNode(), 'click', 'button', clickHandler);
+            .registerActionHandler(this.hasDropDown ? this.getMenuNode() : this.getNode(), 'click', Utils.BUTTON_SELECTOR, clickHandler);
 
     } // class RadioGroup
 
