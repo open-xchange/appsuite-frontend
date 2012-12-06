@@ -14,16 +14,17 @@
 define('io.ox/core/settings/user', ['io.ox/core/extensions', 'io.ox/core/api/user', 'io.ox/contacts/model', 'io.ox/contacts/edit/view-form'], function (ext, api, contactModel, ViewForm) {
 	'use strict';
 
+
 	// Model Factory for use with the edit dialog
 	var factory = contactModel.protectedMethods.buildFactory('io.ox/core/user/model', api);
 
 	// The edit dialog
-	var UserEdit = ViewForm.protectedMethods.createContactEidt('io.ox/core/user');
+	var UserEdit = ViewForm.protectedMethods.createContactEdit('io.ox/core/user');
 
 	return {
 		editCurrentUser: function ($node) {
 			// Load the user
-			factory.realm('edit').get().done(function (user) {
+			factory.realm('edit').get({}).done(function (user) {
 				$node.append(new UserEdit({model: user}).render().$el);
 			});
 		}
