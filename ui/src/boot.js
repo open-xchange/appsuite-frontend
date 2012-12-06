@@ -204,6 +204,7 @@ $(document).ready(function () {
     };
 
     changeLanguage = function (id) {
+        // if the user sets a language on the login page, it will be used for the rest of the session, too
         return require(['io.ox/core/login.' + id]).done(function (gt) {
             // get all nodes
             $("[data-i18n]").each(function () {
@@ -229,8 +230,16 @@ $(document).ready(function () {
         e.preventDefault();
         // change language
         changeLanguage(e.data.id);
-    };
+        // the user forced a language
+        ox.forcedLanguage = e.data.id;
+    }
 
+    var getBrowserLanguage = function () {
+        var language = (navigator.language || navigator.userLanguage).substr(0, 2);
+        return _.chain(ox.serverConfig.languages).keys().find(function (id) {
+                return id.substr(0, 2) === language;
+            }).value();
+    };
     /**
      * Set default language
      */
