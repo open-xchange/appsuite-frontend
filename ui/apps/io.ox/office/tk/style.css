@@ -15,36 +15,6 @@
 /* generic mix-in classes                                                    */
 /* ========================================================================= */
 
-.border-top-left-radius(@radius) {
-    -webkit-border-top-left-radius: @radius;
-    -moz-border-radius-topleft: @radius;
-    border-top-left-radius: @radius;
-}
-
-.border-top-right-radius(@radius) {
-    -webkit-border-top-right-radius: @radius;
-    -moz-border-radius-topright: @radius;
-    border-top-right-radius: @radius;
-}
-
-.border-bottom-left-radius(@radius) {
-    -webkit-border-bottom-left-radius: @radius;
-    -moz-border-radius-bottomleft: @radius;
-    border-bottom-left-radius: @radius;
-}
-
-.border-bottom-right-radius(@radius) {
-    -webkit-border-bottom-right-radius: @radius;
-    -moz-border-radius-bottomright: @radius;
-    border-bottom-right-radius: @radius;
-}
-
-.box-shadow(@outset-shadow, @inset-shadow) {
-    -webkit-box-shadow: @outset-shadow, inset @inset-shadow;
-    -moz-box-shadow: @outset-shadow, inset @inset-shadow;
-    box-shadow: @outset-shadow, inset @inset-shadow;
-}
-
 .opacity(@opacity) {
     @opacity-percent: @opacity * 100;
     opacity: @opacity;
@@ -64,103 +34,47 @@
     -o-transition-property: none;
 }
 
+/* restrict all definitions to office applications */
+.io-ox-office-main {
+
 /* ========================================================================= */
 /* OX icons                                                                  */
 /* ========================================================================= */
 
 @icon-size: 14px;
-@caret-size: 7px;
+@caret-width: 7px;
 
 /*
- * Replace images for icon classes starting with "icon-io-ox-". Icons are
- * 14x14px with a 6px grid spacing.
+ * Replace images for office icons with CSS class "io-ox-office-icon". Icons
+ * are 14x14px with a 6px grid spacing.
  */
-i[class^="icon-io-ox-"] {
+i.io-ox-office-icon {
     display: inline-block;
-    width: @icon-size !important;
+    width: @icon-size;
     height: @icon-size;
     margin: 0;
-    background-image: url(img/ox-icons-black.png);
+    background-image: url(img/ox-office-icons-black.png);
     background-origin: content-box;
     line-height: @icon-size;
     vertical-align: text-top;
 
     &.icon-white {
-        background-image: url(img/ox-icons-white.png);
+        background-image: url(img/ox-office-icons-white.png);
     }
-}
 
-/* special icon for the drop-down caret */
-i.icon-io-ox-caret {
-    background-position: 0 0;
-    width: @caret-size !important;
-
-    &.up {
-        background-position: -@caret-size 0;
+    &.caret-icon {
+        width: @caret-width;
+        &.down              { background-position:      0      0; }
+        &.up                { background-position:  -20px      0; }
+        &.left              { background-position:  -40px      0; }
+        &.right             { background-position:  -60px      0; }
     }
+
+    &.arrow-first           { background-position:  -80px      0; }
+    &.arrow-previous        { background-position: -100px      0; }
+    &.arrow-next            { background-position: -120px      0; }
+    &.arrow-last            { background-position: -140px      0; }
 }
-
-/*
- * Define class names for all icons.
- */
-i.icon-io-ox-undo                   { background-position:  -20px      0; }
-i.icon-io-ox-redo                   { background-position:  -40px      0; }
-i.icon-io-ox-bold                   { background-position:  -60px      0; }
-i.icon-io-ox-bold.de_DE             { background-position:  -80px      0; }
-i.icon-io-ox-bold.fr_FR             { background-position: -100px      0; }
-i.icon-io-ox-italic                 { background-position: -120px      0; }
-i.icon-io-ox-italic.de_DE           { background-position: -140px      0; }
-i.icon-io-ox-underline              { background-position: -160px      0; }
-i.icon-io-ox-underline.fr_FR        { background-position: -180px      0; }
-i.icon-io-ox-strikeout              { background-position: -200px      0; }
-i.icon-io-ox-superscript            { background-position: -220px      0; }
-i.icon-io-ox-subscript              { background-position: -240px      0; }
-
-i.icon-io-ox-line-spacing-1         { background-position: -260px      0; }
-i.icon-io-ox-line-spacing-1-5       { background-position: -280px      0; }
-i.icon-io-ox-line-spacing-2         { background-position: -300px      0; }
-i.icon-io-ox-align-left             { background-position: -320px      0; }
-i.icon-io-ox-align-center           { background-position: -340px      0; }
-i.icon-io-ox-align-right            { background-position: -360px      0; }
-i.icon-io-ox-align-justify          { background-position: -380px      0; }
-
-i.icon-io-ox-table                  { background-position:      0  -20px; }
-i.icon-io-ox-table-insert-row       { background-position:  -20px  -20px; }
-i.icon-io-ox-table-insert-column    { background-position:  -40px  -20px; }
-i.icon-io-ox-table-delete-row       { background-position:  -60px  -20px; }
-i.icon-io-ox-table-delete-column    { background-position:  -80px  -20px; }
-
-i.icon-io-ox-image-insert           { background-position: -180px  -20px; }
-i.icon-io-ox-image-delete           { background-position: -200px  -20px; }
-i.icon-io-ox-image-float-left       { background-position: -220px  -20px; }
-i.icon-io-ox-image-float-right      { background-position: -240px  -20px; }
-i.icon-io-ox-image-center           { background-position: -260px  -20px; }
-i.icon-io-ox-image-inline           { background-position: -280px  -20px; }
-
-i.icon-io-ox-bullets                { background-position:      0  -40px; }
-i.icon-io-ox-numbering              { background-position:  -20px  -40px; }
-i.icon-io-ox-num-inc-indent         { background-position:  -40px  -40px; }
-i.icon-io-ox-num-dec-indent         { background-position:  -60px  -40px; }
-
-i.icon-io-ox-para-border-none       { background-position:  -80px  -40px; }
-i.icon-io-ox-para-border-leftright  { background-position: -100px  -40px; }
-i.icon-io-ox-para-border-topbottom  { background-position: -120px  -40px; }
-i.icon-io-ox-para-border-outside    { background-position: -140px  -40px; }
-i.icon-io-ox-para-border-full       { background-position: -160px  -40px; }
-i.icon-io-ox-para-border-left       { background-position: -180px  -40px; }
-i.icon-io-ox-para-border-right      { background-position: -200px  -40px; }
-i.icon-io-ox-para-border-top        { background-position: -220px  -40px; }
-i.icon-io-ox-para-border-bottom     { background-position: -240px  -40px; }
-i.icon-io-ox-para-border-inside     { background-position: -260px  -40px; }
-
-i.icon-io-ox-arrow-first            { background-position:      0  -60px; }
-i.icon-io-ox-arrow-previous         { background-position:  -20px  -60px; }
-i.icon-io-ox-arrow-next             { background-position:  -40px  -60px; }
-i.icon-io-ox-arrow-last             { background-position:  -60px  -60px; }
-i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
-
-/* restrict anything following to office applications */
-.io-ox-office-main {
 
 /* ========================================================================= */
 /* panes and view components                                                 */
@@ -285,7 +199,7 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
                 vertical-align: top;
             }
 
-            > div.caption {
+            > .caption {
                 .box-sizing(border-box);
                 width: 100%;
                 overflow: hidden;
@@ -328,9 +242,9 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
         }
 
         a.button.dropdown-button {
-            padding-right: @caret-size + @control-padding;
+            padding-right: @caret-width + @control-padding;
 
-            > div.caption > span:last-child {
+            > .caption > span:last-child {
                 margin-right: @caption-spacing;
             }
 
@@ -509,9 +423,13 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
                             .border-radius(2px);
                             .box-shadow(0 5px 10px fade(black, 30%));
 
-                            + * {
-                                margin-left: 8px;
+                            &:not(:last-child) {
+                                margin-right: 8px;
                             }
+                        }
+
+                        > .caption {
+                            width: auto;
                         }
                     }
                 }
@@ -671,20 +589,20 @@ i.icon-io-ox-hyperlink              { background-position:  -80px  -60px; }
     .box-sizing(border-box);
 
     > .close {
-    	right: 0;
+        right: 0;
     }
 
     h4 {
-		float: left;
-	}
+        float: left;
+    }
 
-	p {
-		float: left;
-		position: relative;
+    p {
+        float: left;
+        position: relative;
         right: -10px;
-	}
+    }
 
-	button {
+    button {
         float: left;
         position: relative;
         right: -21px;

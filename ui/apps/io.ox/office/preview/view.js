@@ -44,11 +44,11 @@ define('io.ox/office/preview/view',
 
         // create the tool bar
         toolPane.createToolBar('pages')
-            .addButton('pages/first',    { icon: 'icon-io-ox-arrow-first',    tooltip: gt('First page') })
-            .addButton('pages/previous', { icon: 'icon-io-ox-arrow-previous', tooltip: gt('Previous page') })
+            .addButton('pages/first',    { icon: 'arrow-first',    tooltip: gt('First page') })
+            .addButton('pages/previous', { icon: 'arrow-previous', tooltip: gt('Previous page') })
             .addLabel('pages/current',   { width: 100 })
-            .addButton('pages/next',     { icon: 'icon-io-ox-arrow-next',     tooltip: gt('Next page') })
-            .addButton('pages/last',     { icon: 'icon-io-ox-arrow-last',     tooltip: gt('Last page') })
+            .addButton('pages/next',     { icon: 'arrow-next',     tooltip: gt('Next page') })
+            .addButton('pages/last',     { icon: 'arrow-last',     tooltip: gt('Last page') })
             .getNode().css('text-align', 'center');
 
     } // class PreviewView
