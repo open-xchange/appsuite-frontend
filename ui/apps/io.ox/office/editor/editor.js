@@ -114,13 +114,6 @@ define('io.ox/office/editor/editor',
 
     function getPrintableChar(event) {
 
-        if (event.keyCode === KeyCodes.ENTER) {
-            return '';  // in IE 9 event.char is '\n'
-        }
-        // event.char preferred. DL2, but nyi in most browsers:(
-        if (_.isString(event.char)) {
-            return event.char;
-        }
         if (_.isNumber(event.charCode) && (event.CharCode >= 32)) {
             return String.fromCharCode(event.charCode);
         }
