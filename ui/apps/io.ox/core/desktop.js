@@ -161,6 +161,8 @@ define("io.ox/core/desktop",
                                         } else {
                                             grid.refresh();
                                         }
+                                        // load fresh folder & trigger update event
+                                        api.reload(id);
                                     }
                                     // update hash
                                     _.url.hash('folder', folder);
