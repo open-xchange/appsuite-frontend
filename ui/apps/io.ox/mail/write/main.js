@@ -510,7 +510,10 @@ define('io.ox/mail/write/main',
         app.compose = function (data) {
 
             // register mailto!
-            if (navigator.registerProtocolHandler) {
+            // only for browsers != firefox due to a bug in firefox
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=440620
+            // maybe this will be fixed in the future by mozilla
+            if (navigator.registerProtocolHandler && !_.browser.Firefox) {
                 var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
                 navigator.registerProtocolHandler(
                     'mailto', url + '#app=io.ox/mail/write:compose&mailto=%s', ox.serverConfig.productNameMail
