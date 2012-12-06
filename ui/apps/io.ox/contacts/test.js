@@ -80,7 +80,7 @@ define("io.ox/contacts/test",
                 });
 
                 j.waitsFor(function () {
-                    formFrame = $('.io-ox-dialog-popup');
+                    formFrame = $('.edit-contact');
                     if (formFrame[0]) {
                         return true;
                     }
@@ -128,7 +128,7 @@ define("io.ox/contacts/test",
                 });
 
                 j.it('looks for the save button and hits', function () {
-                    saveButton = formFrame.find(".btn.btn-primary");
+                    saveButton = formFrame.find('[data-action="save"]');
                     saveButton.trigger('click');
                     j.expect(saveButton[0]).toBeTruthy();
                 });
