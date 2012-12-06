@@ -186,7 +186,7 @@ define('io.ox/core/commons-folderview',
                 if (api.can('rename', baton.data)) {
                     link.on('click', { app: baton.app }, renameFolder);
                 } else {
-                    link.addClass('disabled');
+                    link.addClass('disabled').on('click', $.preventDefault);
                 }
             }
         });
@@ -206,7 +206,7 @@ define('io.ox/core/commons-folderview',
                 if (api.can('deleteFolder', baton.data)) {
                     link.on('click', { app: baton.app }, deleteFolder);
                 } else {
-                    link.addClass('disabled');
+                    link.addClass('disabled').on('click', $.preventDefault);
                 }
             }
         });
@@ -282,7 +282,7 @@ define('io.ox/core/commons-folderview',
                 if (api.can('deleteFolder', baton.data)) {
                     link.on('click', { baton: baton }, moveFolder);
                 } else {
-                    link.addClass('disabled');
+                    link.addClass('disabled').on('click', $.preventDefault);
                 }
             }
         });
