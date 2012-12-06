@@ -217,7 +217,9 @@ define("io.ox/core/main",
                 // we don't need this right from the start,
                 // so let's delay this for responsiveness
                 setTimeout(function () {
-                    notifications.attach(addLauncher);
+                    if (ox.online) {
+                        notifications.attach(addLauncher);
+                    }
                 }, 5000);
             }
         });

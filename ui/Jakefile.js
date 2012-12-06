@@ -102,6 +102,7 @@ function jsFilter (data) {
         var filename = self.getSrc(this[0].start.line).name;
         var mod = filename.slice(5, -3);
         if (filename.slice(0, 5) === 'apps/' && (!name || name[1] !== mod)) {
+            console.log('filename', filename, name, mod);
             if (name === undefined) {
                 var newName = parse('(' + JSON.stringify(mod) + ')',
                                     self.task.name)[1][0][1];
@@ -272,17 +273,43 @@ utils.concat("boot.js", [
         "tmp/boot.js"]);
 
 utils.concat("pre-core.js",
-    utils.list("apps/io.ox/core", [
-        "settings.js", // settings plugin
-        "config.js",
-        "tk/selection.js", "tk/vgrid.js", "tk/model.js", "tk/upload.js",
-        "api/factory.js", "api/user.js", "api/resource.js", "api/group.js", "api/account.js",
-        "api/folder.js", "api/apps.js", "desktop.js",
-        "commons.js",
-        "commons-folderview.js",
-        "collection.js", "notifications.js", "date.js",
-        "extPatterns/actions.js", "extPatterns/links.js",
-        "extPatterns/stage.js"
+    utils.list("apps", [
+        "io.ox/core/settings.js", // settings plugin
+        "io.ox/core/config.js",
+        "io.ox/core/tk/selection.js",
+        "io.ox/core/tk/vgrid.js",
+        "io.ox/core/tk/model.js",
+        "io.ox/core/tk/upload.js",
+        "io.ox/core/api/factory.js",
+        "io.ox/core/api/user.js",
+        "io.ox/core/api/resource.js",
+        "io.ox/core/api/group.js",
+        "io.ox/core/api/account.js",
+        "io.ox/core/api/folder.js",
+        "io.ox/core/api/apps.js",
+        "io.ox/core/api/reminder",
+        "io.ox/core/desktop.js",
+        "io.ox/core/commons.js",
+        "io.ox/core/commons-folderview.js",
+        "io.ox/core/collection.js",
+        "io.ox/core/notifications.js",
+        "io.ox/core/date.js",
+        "io.ox/core/extPatterns/actions.js",
+        "io.ox/core/extPatterns/links.js",
+        // don't know why but these two files crash build process
+        //"cio.ox/ore/extPatterns/stage.js",
+        //"cio.ox/ore/extPatterns/dnd.js",
+        "io.ox/core/tk/folderviews",
+        "io.ox/mail/api.js",
+        "io.ox/mail/util.js",
+        "io.ox/contacts/api.js",
+        "io.ox/tasks/api.js",
+        "io.ox/tasks/util.js",
+        "io.ox/calendar/api.js",
+        "io.ox/calendar/util.js",
+        "plugins/notifications/mail/register.js",
+        "plugins/notifications/calendar/register.js",
+        "plugins/notifications/taks/register.js"
     ]), { type: "source" }
 );
 
@@ -294,28 +321,41 @@ utils.concat("pre-core.js",
         list.dir = root;
         return list;
     }
-    
+
+    utils.concat('apps/io.ox/static/core.js', rel([
+            'core/bootstrap/basics.js',
+            'mail/actions.js',
+            'core/settings/defaults.js',
+            'core/main.js'
+        ]), { type: 'none' }
+    );
+
     utils.concat('apps/io.ox/static/mail.js',
-        rel(['contacts/api.js', 'mail/util.js', 'mail/api.js',
-             'mail/actions.js', 'mail/view-grid-template.js',
-             'mail/view-detail.js', 'mail/main.js']),
+        rel(['contacts/api.js',
+             'mail/util.js',
+             'mail/api.js',
+             'mail/actions.js',
+             'mail/view-grid-template.js',
+             'mail/view-detail.js',
+             'mail/settings/defaults.js',
+             'mail/main.js']),
         { type: 'none' });
-    
+
     utils.concat('apps/io.ox/static/contacts.js',
         rel(['contacts/api.js', 'contacts/actions.js', 'contacts/util.js',
              'contacts/view-detail.js', 'help/hints.js', 'contacts/main.js']),
         { type: 'none' });
-    
+
     utils.concat('apps/io.ox/static/tasks.js',
         rel(['tasks/util.js', 'tasks/actions.js', 'tasks/api.js',
              'tasks/view-detail.js', 'tasks/view-grid-template.js',
              'tasks/main.js']),
         { type: 'none' });
-    
+
     utils.concat('apps/io.ox/static/files.js',
         rel(['files/api.js', 'files/actions.js', 'files/main.js']),
         { type: 'none' });
-    
+
     utils.concat('apps/io.ox/static/calendar.js',
         rel(['contacts/api.js', 'calendar/util.js', 'calendar/actions.js',
              'calendar/main.js']),

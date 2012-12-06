@@ -253,21 +253,21 @@ define(function () {
         "path": "plugins/halo/test"
     },
     {
-        "namespace": "plugins/halo/register",
+        "namespace": "plugins/halo",
         "requires": "calendar",
         "path": "plugins/halo/appointments/register"
     },
     {
-        "namespace": "plugins/halo/register",
+        "namespace": "plugins/halo",
         "requires": "contacts",
         "path": "plugins/halo/contacts/register"
     },
     {
-        "namespace": "plugins/halo/register",
+        "namespace": "plugins/halo",
         "path": "plugins/halo/linkedIn/register"
     },
     {
-        "namespace": "plugins/halo/register",
+        "namespace": "plugins/halo",
         "requires": "webmail",
         "path": "plugins/halo/mail/register"
     },

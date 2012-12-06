@@ -27,11 +27,9 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 		capSource = null,
 		capBlacklist = {};
 
-
 	(function () {
 		var disabledList = _.url.hash('disableFeature');
 		if (disabledList) {
-
 			_(disabledList.split(/\s*[, ]\s*/)).each(function (feature) {
 				capBlacklist[feature] = true;
 			});
@@ -66,7 +64,6 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 					name = name.substr(1);
 					inverse = true;
 				}
-
 				var capability = self.get(name);
 				if (inverse) {
 					return !!!capability;
@@ -136,7 +133,6 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 			});
 			capSource = 'backend';
 			capCache.add("default", capabilities);
-
 			def.resolve(capLookup);
 		})
 		.fail(function (resp) {
@@ -144,6 +140,12 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 			def.resolve(dummyCapLookup);
 		});
 	} else {
+		// guarantee mail
+		capabilities.webmail = {
+			attributes: {},
+			backendSupport: false,
+			id: 'webmail'
+		};
 		console.warn("Capabilities subsystem is disabled!");
 		def.resolve(dummyCapLookup);
 	}

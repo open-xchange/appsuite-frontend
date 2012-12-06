@@ -32,6 +32,8 @@ define("io.ox/mail/main",
 
     'use strict';
 
+    console.log('Yep!');
+
     var draftFolderId = config.get('modules.mail.defaultFolder.drafts'),
 
         hToolbarOptions = function (e) {

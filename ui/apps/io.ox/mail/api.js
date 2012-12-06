@@ -973,7 +973,7 @@ define("io.ox/mail/api",
             _(cacheControl).each(function (val, cid) {
                 cacheControl[cid] = false;
             });
-            api.checkInbox().done(function () {
+            api.checkInbox().always(function () {
                 // trigger
                 api.trigger('refresh.all');
             });
