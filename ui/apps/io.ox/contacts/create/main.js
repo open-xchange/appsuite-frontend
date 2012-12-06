@@ -21,15 +21,15 @@ define('io.ox/contacts/create/main',
     ], function (model, view, util, ext) {
 
     'use strict';
-    
+
     var show = function (app) {
-        
+
         var pane,
             def = $.Deferred(),
             contact = model.factory.create({
                 folder_id: app.folder.get()
             });
-        
+
         pane = view.getPopup(contact);
         pane.on('save', function (action) {
             contact.save().done(function (result) {
@@ -42,14 +42,14 @@ define('io.ox/contacts/create/main',
         pane.on('cancel', function () {
             def.resolve();
         });
-        
+
         ext.point('io.ox/contacts/create/main/model').invoke('customizeModel', contact, contact);
-        
+
         pane.show();
-        
+
         return def;
     };
-    
+
     ext.point('io.ox/contacts/create/main/model').extend({
         id: 'io.ox/contacts/create/main/model/auto_display_name',
         customizeModel: function (contact) {
@@ -58,7 +58,7 @@ define('io.ox/contacts/create/main',
             });
         }
     });
-    
+
     return {
         show: show
     };

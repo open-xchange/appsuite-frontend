@@ -33,8 +33,7 @@ define('io.ox/contacts/edit/main',
             userContent: true
         });
 
-        app.setLauncher(function () {
-
+        app.setLauncher(function (def) {
             var win;
 
             win = ox.ui.createWindow({
@@ -56,40 +55,54 @@ define('io.ox/contacts/edit/main',
                 app.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
 
                 win.show(function () {
-                    var considerSaved = false;
+                    var considerSaved = false,
+                        handelContact = function (contact) {
+                            var appTitle = (contact.get('display_name')) ? contact.get('display_name') : util.getFullName(contact.toJSON());
+                            app.setTitle(appTitle || gt('Create contact'));
+                            app.contact = contact;
+                            var editView = new view.ContactEditView({ model: contact });
+                            container.append(editView.render().$el);
+                            container.find('input[type=text]:visible').eq(0).focus();
+
+                            container.find('[data-extension-id="display_name"] input').on('keydown', function () {
+                                app.setTitle(_.noI18n($(this).val()));
+                            });
+
+                            editView.on('save:start', function () {
+                                win.busy();
+                            });
+
+                            editView.on('save:fail', function () {
+                                win.idle();
+                            });
+
+                            editView.on('save:success', function (e, data) {
+                                if (def.resolve) {
+                                    def.resolve(data);
+                                }
+                                considerSaved = true;
+                                win.idle();
+                                app.quit();
+                            });
+                            ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
+                        };
+
                     // create model & view
 
-                    model.factory.realm('edit').retain().get(data).done(function (contact) {
-                        var appTitle = (contact.get('display_name')) ? contact.attributes.display_name : util.getFullName(contact.toJSON());
-                        app.setTitle(appTitle);
-                        app.contact = contact;
-                        var editView = new view.ContactEditView({ model: contact });
-                        container.append(editView.render().$el);
-                        container.find('input[type=text]:visible').eq(0).focus();
-
-                        container.find('[data-extension-id="display_name"] input').on('keydown', function () {
-                            app.setTitle(_.noI18n($(this).val()));
+                    if (data.id) {
+                        model.factory.realm('edit').retain().get(data).done(function (contact) {
+                            handelContact(contact);
                         });
-
-                        editView.on('save:start', function () {
-                            win.busy();
-                        });
-
-                        editView.on('save:fail', function () {
-                            win.idle();
-                        });
-
-                        editView.on('save:success', function () {
-                            considerSaved = true;
-                            win.idle();
-                            app.quit();
-                        });
-                        ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
-                    });
-
+                    } else {
+                        handelContact(model.factory.create(data));
+                    }
 
                     getDirtyStatus = function () {
+                        var changes = app.contact.changedSinceLoading();
                         if (considerSaved) {
+                            return false;
+                        }
+                        if (changes.folder_id && _(changes).size() === 1) {
                             return false;
                         }
                         return app.contact && !_.isEmpty(app.contact.changedSinceLoading());
