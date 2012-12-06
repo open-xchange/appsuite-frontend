@@ -118,7 +118,7 @@ define('io.ox/calendar/actions',
                                 .addButton('cancel', gt('Cancel'))
                                 .show()
                                 .done(function (action) {
-                                    console.log('do edit', action);
+
                                     if (action === 'cancel') {
                                         return;
                                     }

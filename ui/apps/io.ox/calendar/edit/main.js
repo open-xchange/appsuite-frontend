@@ -118,6 +118,7 @@ define('io.ox/calendar/edit/main',
                             }
 
                             if (options.action === 'series') {
+
                                 // fields for recurrences
                                 var fields = ['recurrence_date_position',
                                             'change_exceptions',
