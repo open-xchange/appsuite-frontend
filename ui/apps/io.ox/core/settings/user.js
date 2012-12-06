@@ -24,7 +24,7 @@ define('io.ox/core/settings/user', ['io.ox/core/extensions', 'io.ox/core/api/use
 	return {
 		editCurrentUser: function ($node) {
 			// Load the user
-			factory.realm('edit').get({}).done(function (user) {
+			return factory.realm('edit').get({}).done(function (user) {
 				$node.append(new UserEdit({model: user}).render().$el);
 			});
 		}
