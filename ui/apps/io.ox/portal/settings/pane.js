@@ -144,54 +144,44 @@ define('io.ox/portal/settings/pane',
 
     collection.reset(getWidgetSettings());
 
-    console.log("DEBUG:", collection);
-
     ext.point("io.ox/portal/settings/detail").extend({
         index: 200,
         id: "portalsettings",
         draw: function (data) {
             var onEdit = function (pEvent) {
-                console.log("onEdit");
+                var $elem = $(pEvent.target).parents('.io-ox-portal-setting').find('.io-ox-setting-details').toggle('hidden');
             },
             onDisable = function (pEvent) {
-                console.log("onDisable");
+                var $elem = $(pEvent.target).parents('.io-ox-portal-setting');
+                console.log("onDisable", $elem.id);
             },
             onDelete = function (pEvent) {
-                console.log("onDelete");
+                var $elem = $(pEvent.target).parents('.io-ox-portal-setting');
+                console.log("onDelete", $elem.id);
             },
             onColorChange = function (pEvent) {
                 var $elem = $(pEvent.target);
                 console.log("onColorChange", $elem, $elem.data('color'));
             };
 
-
-
             var that = this,
+                $addDropdown = $('<ul class="dropdown-menu" role="menu">'),
                 $addButton = $('<div class="btn-group io-ox-portal-addAction">').append(
                     $('<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">' + gt('Add') + ' <span class="caret"></span></a>'),
-                    $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">').append(
-                        $('<li>').text(gt('Mail')),
-                        $('<li>').text(gt('Flickr')),
-                        $('<li>').text(gt('Tumblr'))
-                    )
+                    $addDropdown
                 ),
+
                 $colorSelect = $('<div class="btn-group io-ox-portal-colorAction">').append(
-                    $('<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">' + gt('Color') + ' <span class="caret"></span></a>'),
-                    $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">').append(
-                        $('<li class="io-ox-portal-color-default" data-color="default">'),
-                        $('<li class="io-ox-portal-color-red" data-color="red">'),
-                        $('<li class="io-ox-portal-color-orange" data-color="orange">'),
-                        $('<li class="io-ox-portal-color-lightgreen" data-color="lightgreen">'),
-                        $('<li class="io-ox-portal-color-green" data-color="green">'),
-                        $('<li class="io-ox-portal-color-lightblue" data-color="lightblue">'),
-                        $('<li class="io-ox-portal-color-blue" data-color="blue">'),
-                        $('<li class="io-ox-portal-color-purple" data-color="purple">'),
-                        $('<li class="io-ox-portal-color-pink" data-color="pink">'),
-                        $('<li class="io-ox-portal-color-gray" data-color="gray">')
+                    $('<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">' + gt('Color') + ' <span class="caret"></span></a>'),
+                    $('<ul class="dropdown-menu" role="menu">').append(
+                        _(['default', 'red', 'orange', 'lightgreen', 'green', 'lightblue', 'blue', 'purple', 'pink', 'gray']).map(function (color) {
+                            return $('<li class="io-ox-portal-color-' + color + '" data-color="' + color + '">');
+                        })
                     ).on('click', 'li', onColorChange)
                 ),
+
                 $optionsButton = $('<div class="btn-group io-ox-portal-optionsAction">').append(
-                    $('<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">' + gt('Options') + ' <span class="caret"></span></a>'),
+                    $('<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">' + gt('Options') + ' <span class="caret"></span></a>'),
                     $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">').append(
                         $('<li class="io-ox-portal-action io-ox-portal-action-edit">').append(
                             $('<a>').text(gt('Edit')).on('click', onEdit)
@@ -207,24 +197,31 @@ define('io.ox/portal/settings/pane',
                 ),
                 $extensions = $('<ul class="io-ox-portal-settings">');
 
-
-            $(that).append(
-                $('<h1>').text(gt('Portal Squares')),
-                $addButton.clone(true),
-                $extensions,
-                $addButton.clone(true)
-            );
-
             require(['io.ox/settings/accounts/settings/extpoints'], function () { //remove once Cisco's and Vic's new module stuff is implemented
-                ext.point('io.ox/portal/settings/detail/tile').each(function (extension) {
-                    //var $container = $('<li class="io-ox-portal-setting">').attr({id: extension.id}).addClass('tile-color' + extension.colorIndex).appendTo($extensions);
-                    //extension.draw.apply($container, []);
+                ext.point('io.ox/portal/settings/add').each(function (extension) { //add option to "add" button
+                    $('<li>').append(
+                        $('<a>').text(extension.description)
+                    ).on('click', extension.action)
+                    .appendTo($addDropdown);
+                });
+
+                ext.point('io.ox/portal/settings/detail/tile').each(function (extension) { //add setting for extension to list of extensions
+                    var $additionalContent = $('<div class="io-ox-setting-details">');
+                    extension.draw.apply($additionalContent, []);
                     $('<li class="io-ox-portal-setting">').attr({id: extension.id}).append(
-                        $('<span class="io-ox-setting-title">').text(extension.id),
+                        $('<span class="io-ox-setting-title io-ox-portal-settings-title">').text(extension.id),
                         $colorSelect.clone(true),
-                        $optionsButton.clone(true)
+                        $optionsButton.clone(true),
+                        $additionalContent.hide()
                     ).appendTo($extensions);
                 });
+
+                $(that).append( //building the actual settings page from its components
+                    $('<h1>').text(gt('Portal Squares')),
+                    $addButton.clone(true),
+                    $extensions,
+                    $addButton.clone(true)
+                );
             });
         }
     });

@@ -282,13 +282,13 @@
  ************
 */
 .io-ox-portal-settings-title {
-    font-size: 16pt;
+    font-size: 14pt;
     font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 300;
 }
 .io-ox-settings-item {
     clear: both;
-    width: 20em;
+    width: 30em;
 }
 .io-ox-setting-title {
     width: 15em;
@@ -302,12 +302,20 @@
     height: 24px;
     margin: 2px;
 }
+ul.io-ox-portal-settings {
+    margin: 0;
+    padding: 0;
+}
 li.io-ox-portal-setting {
     list-style-position: inside;
     list-style-type: none;
     background: lightgrey;
     padding: 1em;
     margin: .25em 0;
+}
+.io-ox-setting-description {
+    width: 20em;
+    display: inline-block;
 }
 .io-ox-portal-optionsAction, .io-ox-portal-colorAction {
     display: inline-block;

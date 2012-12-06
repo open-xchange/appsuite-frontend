@@ -3,12 +3,95 @@
  * plugin (where they belong), but it is not possible to put them there yet, because we cannot
  * ensure they are loaded at the proper time. Cisco and Vic are working on this right now.
  */
-define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', 'less!io.ox/settings/style.css'], function (ext) {
+define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', 'gettext!io.ox/portal', 'less!io.ox/settings/style.css'], function (ext, gt) {
     'use strict';
 
     /* * * * * * * *
      * REDDIT
      */
+    ext.point('io.ox/portal/settings/add').extend({
+        index: 100,
+        id: 'settings-portal-reddit-add-action',
+        description: gt('Reddit'),
+        action: function (args) {
+            require(['settings!plugins/portal/reddit', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'less!plugins/portal/reddit/style.css'], function (settings, gt, dialogs) {
+                var subreddits = settings.get('subreddits'),
+                    dialog = new dialogs.ModalDialog({
+                        easyOut: true,
+                        async: true
+                    }),
+                    $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'}),
+                    $mode = $('<select>').append(
+                        $('<option>').attr('value', 'hot').text(gt('hot')),
+                        $('<option>').attr('value', 'new').text(gt('new'))
+                    ),
+                    $error = $('<div>').addClass('alert alert-error').hide(),
+                    that = this;
+
+                dialog.header($("<h4>").text(gt('Add a Subreddit')))
+                    .append($subreddit)
+                    .append($mode)
+                    .append($error)
+                    .addButton('cancel', gt('Cancel'))
+                    .addButton('add', gt('Add'), null, {classes: 'btn-primary'})
+                    .show();
+
+                dialog.on('add', function (e) {
+                    $error.hide();
+
+                    var subreddit = String($.trim($subreddit.val())),
+                        deferred = $.Deferred();
+
+                    // No dot and url does not end with tumblr.com? Append it!
+                    if (subreddit.match(/^r\//)) {
+                        subreddit = subreddit.substring(2);
+                    }
+
+                    // TODO Check if mode is OK
+                    if (subreddit.length === 0) {
+                        $error.text(gt('Please enter a subreddit.'));
+                        deferred.reject();
+                    } else {
+                        $.ajax({
+                            url: 'http://www.reddit.com/r/' + subreddit + '/.json?jsonp=testcallback',
+                            type: 'HEAD',
+                            dataType: 'jsonp',
+                            jsonp: false,
+                            jsonpCallback: 'testcallback',
+                            success: function () {
+                                deferred.resolve();
+                            },
+                            error: function () {
+                                $error.text(gt('Unknown error while checking subreddit.'));
+                                deferred.reject();
+                            }
+                        });
+                    }
+
+                    deferred.done(function () {
+                        subreddits.push({subreddit: subreddit, mode: $mode.val()});
+                        settings.set('subreddits', subreddits);
+                        settings.save();
+
+                        var extId = 'reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + $mode.val();
+                        ext.point("io.ox/portal/widget").enable(extId);
+
+                        require(['plugins/portal/reddit/register'], function (reddit) {
+                            reddit.reload();
+                            that.trigger('redraw');
+                            ox.trigger("refresh^");
+                            dialog.close();
+                        });
+                    });
+
+                    deferred.fail(function () {
+                        $error.show();
+                        dialog.idle();
+                    });
+                });
+            });
+        }
+    });
     ext.point('io.ox/portal/settings/detail/tile').extend({
         index: 100,
         id: 'portal-settings-reddit',
@@ -22,7 +105,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                     EDIT:       gt('Edit'),
                     DELETE:     gt('Delete')
                 },
-
                 SubredditSelectView = Backbone.View.extend({
                     _modelBinder: undefined,
                     initialize: function (options) {
@@ -33,8 +115,10 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         self.$el.empty().append(
                             $('<div class="io-ox-settings-item io-ox-reddit-setting">')
                             .attr({'data-subreddit': this.model.get('subreddit'), 'data-mode': this.model.get('mode')}).append(
-                                $('<span data-property="subreddit" class="io-ox-reddit-name">'),
-                                $('<span data-property="mode" class="io-ox-reddit-mode">'),
+                                $('<div class="io-ox-setting-description">').append(
+                                    $('<span data-property="subreddit" class="io-ox-reddit-name">'),
+                                    $('<span data-property="mode" class="io-ox-reddit-mode">')
+                                ),
                                 $('<i class="action-edit icon-edit">'),
                                 $('<i class="action-remove icon-remove">')
                             )
@@ -194,7 +278,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         this.$el.empty().append(
                             $('<div>').append(
                                 $('<div class="section">').append(
-                                    $('<div class="io-ox-portal-settings-title">').text(staticStrings.SUBREDDITS),
                                     $('<div class="settings-detail-pane">').append(
                                         $('<div class="io-ox-reddit-settings">'),
                                         $('<div class="sectioncontent">').append(
@@ -233,84 +316,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                     },
                     events: {
                         'click [data-action="add"]': 'onAdd'
-                    },
-
-                    onAdd: function (args) {
-                        var dialog = new dialogs.ModalDialog({
-                            easyOut: true,
-                            async: true
-                        });
-
-                        var $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'});
-                        var $mode = $('<select>')
-                            .append($('<option>').attr('value', 'hot').text(gt('hot')))
-                            .append($('<option>').attr('value', 'new').text(gt('new')));
-
-                        var $error = $('<div>').addClass('alert alert-error').hide();
-
-                        var that = this;
-
-                        dialog.header($("<h4>").text(gt('Add a Subreddit')))
-                            .append($subreddit)
-                            .append($mode)
-                            .append($error)
-                            .addButton('cancel', gt('Cancel'))
-                            .addButton('add', gt('Add'), null, {classes: 'btn-primary'})
-                            .show();
-
-                        dialog.on('add', function (e) {
-                            $error.hide();
-
-                            var subreddit = String($.trim($subreddit.val())),
-                                deferred = $.Deferred();
-
-                            // No dot and url does not end with tumblr.com? Append it!
-                            if (subreddit.match(/^r\//)) {
-                                subreddit = subreddit.substring(2);
-                            }
-
-                            // TODO Check if mode is OK
-                            if (subreddit.length === 0) {
-                                $error.text(gt('Please enter a subreddit.'));
-                                deferred.reject();
-                            } else {
-                                $.ajax({
-                                    url: 'http://www.reddit.com/r/' + subreddit + '/.json?jsonp=testcallback',
-                                    type: 'HEAD',
-                                    dataType: 'jsonp',
-                                    jsonp: false,
-                                    jsonpCallback: 'testcallback',
-                                    success: function () {
-                                        deferred.resolve();
-                                    },
-                                    error: function () {
-                                        $error.text(gt('Unknown error while checking subreddit.'));
-                                        deferred.reject();
-                                    }
-                                });
-                            }
-
-                            deferred.done(function () {
-                                subreddits.push({subreddit: subreddit, mode: $mode.val()});
-                                settings.set('subreddits', subreddits);
-                                settings.save();
-
-                                var extId = 'reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + $mode.val();
-                                ext.point("io.ox/portal/widget").enable(extId);
-
-                                require(['plugins/portal/reddit/register'], function (reddit) {
-                                    reddit.reload();
-                                    that.trigger('redraw');
-                                    ox.trigger("refresh^");
-                                    dialog.close();
-                                });
-                            });
-
-                            deferred.fail(function () {
-                                $error.show();
-                                dialog.idle();
-                            });
-                        });
                     }
                 }),
 
@@ -324,7 +329,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                     return newSubreddits;
                 };
 
-
+                console.log("SUBREDDITS:", subreddits);
                 $(that).append(new PluginSettingsView().render().el);
 
             }); //END: require
@@ -337,6 +342,98 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
     /* * * * * *
      * TUMBLR
      */
+    ext.point('io.ox/portal/settings/add').extend({
+        index: 200,
+        id: 'settings-portal-tumblr-add-action',
+        description: gt('Tumblr'),
+        action: function (args) {
+            require(['settings!plugins/portal/tumblr', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs'], function (settings, gt, dialogs) {
+                var blogs = settings.get('blogs'),
+                    dialog = new dialogs.ModalDialog({
+                        easyOut: true,
+                        async: true
+                    }),
+                    $url = $('<input>').attr({type: 'text', placeholder: '.tumblr.com'}),
+                    $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
+                    $error = $('<div>').addClass('alert alert-error').hide(),
+                    that = this;
+
+                dialog.header($("<h4>").text(gt('Add a blog')))
+                    .append($url)
+                    .append($description)
+                    .append($error)
+                    .addButton('cancel', gt('Cancel'))
+                    .addButton('add', gt('Add'), null, {classes: 'btn-primary'})
+                    .show();
+
+                dialog.on('add', function (e) {
+                    $error.hide();
+
+                    var url = $.trim($url.val()),
+                        description = $.trim($description.val()),
+                        deferred = $.Deferred();
+
+                    // No dot and url does not end with tumblr.com? Append it!
+                    if (url.indexOf('.') === -1 && !url.match(/\.tumblr\.com$/)) {
+                        url = url + '.tumblr.com';
+                    }
+                    if (url.match(/http:\/\//)) {
+                        url = url.substring('http://'.length);
+                    }
+
+                    if (url.length === 0) {
+                        $error.text(gt('Please enter an blog url.'));
+                        deferred.reject();
+                    } else if (description.length === 0) {
+                        $error.text(gt('Please enter a description.'));
+                        deferred.reject();
+                    } else {
+                        $.ajax({
+                            url: 'https://api.tumblr.com/v2/blog/' + url + '/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=&jsonp=testcallback',
+                            type: 'HEAD',
+                            dataType: 'jsonp',
+                            jsonp: false,
+                            jsonpCallback: 'testcallback',
+                            success: function (data) {
+                                if (data.meta && data.meta.status && data.meta.status === 200) {
+                                    deferred.resolve();
+                                } else {
+                                    $error.text(gt('Unknown error while checking tumblr-blog.'));
+                                    deferred.reject();
+                                }
+                            },
+                            error: function () {
+                                $error.text(gt('Unknown error while checking tumblr-blog.'));
+                                deferred.reject();
+                            }
+                        });
+                    }
+
+                    deferred.done(function () {
+                        blogs.push({url: url, description: description});
+                        settings.set('blogs', blogs);
+                        settings.save();
+
+                        var extId = 'tumblr-' + url.replace(/[^a-zA-Z0-9]/g, '_');
+                        ext.point("io.ox/portal/widget").enable(extId);
+
+                        require(['plugins/portal/tumblr/register'], function (tumblr) {
+                            tumblr.reload();
+                            that.trigger('redraw');
+                            ox.trigger("refresh^");
+                            dialog.close();
+                        });
+                    });
+
+                    deferred.fail(function () {
+                        $error.show();
+                        dialog.idle();
+                    });
+                });
+            });
+        }
+    });
+
     ext.point('io.ox/portal/settings/detail/tile').extend({
         index: 200,
         id: 'portal-settings-tumblr',
@@ -361,7 +458,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         self.$el.empty().append(
                             $('<div class="io-ox-tumblr-setting io-ox-settings-item">')
                             .attr({'data-url': this.model.get('url'),  'data-description': this.model.get('description')}).append(
-                                $('<span data-property="url">'),
+                                $('<span data-property="url" class="io-ox-setting-description">'),
                                 $('<i>').attr({'class': 'action-edit icon-edit', 'data-action': 'edit-feed', title: staticStrings.EDIT_FEED}),
                                 $('<i>').attr({'class': 'action-remove icon-remove', 'data-action': 'del-feed', title: staticStrings.DELETE_FEED})
                             )
@@ -514,7 +611,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         this.$el.empty().append(
                             $('<div>').append(
                                 $('<div class="section">').append(
-                                    $('<div class="io-ox-portal-settings-title">').text(staticStrings.TUMBLRBLOGS),
                                     $('<div class="settings-detail-pane">').append(
                                         $('<div class="io-ox-tumblr-settings">')
                                     ),
@@ -546,94 +642,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         this.on('redraw', redraw);
 
                         return this;
-                    },
-                    events: {
-                        'click [data-action="add"]': 'onAdd'
-                    },
-
-                    onAdd: function (args) {
-                        var dialog = new dialogs.ModalDialog({
-                            easyOut: true,
-                            async: true
-                        });
-
-                        var $url = $('<input>').attr({type: 'text', placeholder: '.tumblr.com'}),
-                            $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
-                            $error = $('<div>').addClass('alert alert-error').hide(),
-                            that = this;
-
-                        dialog.header($("<h4>").text(gt('Add a blog')))
-                            .append($url)
-                            .append($description)
-                            .append($error)
-                            .addButton('cancel', gt('Cancel'))
-                            .addButton('add', gt('Add'), null, {classes: 'btn-primary'})
-                            .show();
-
-                        dialog.on('add', function (e) {
-                            $error.hide();
-
-                            var url = $.trim($url.val()),
-                                description = $.trim($description.val()),
-                                deferred = $.Deferred();
-
-                            // No dot and url does not end with tumblr.com? Append it!
-                            if (url.indexOf('.') === -1 && !url.match(/\.tumblr\.com$/)) {
-                                url = url + '.tumblr.com';
-                            }
-                            if (url.match(/http:\/\//)) {
-                                url = url.substring('http://'.length);
-                            }
-
-                            if (url.length === 0) {
-                                $error.text(gt('Please enter an blog url.'));
-                                deferred.reject();
-                            } else if (description.length === 0) {
-                                $error.text(gt('Please enter a description.'));
-                                deferred.reject();
-                            } else {
-                                $.ajax({
-                                    url: 'https://api.tumblr.com/v2/blog/' + url + '/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=&jsonp=testcallback',
-                                    type: 'HEAD',
-                                    dataType: 'jsonp',
-                                    jsonp: false,
-                                    jsonpCallback: 'testcallback',
-                                    success: function (data) {
-                                        if (data.meta && data.meta.status && data.meta.status === 200) {
-                                            deferred.resolve();
-                                        } else {
-                                            $error.text(gt('Unknown error while checking tumblr-blog.'));
-                                            deferred.reject();
-                                        }
-                                    },
-                                    error: function () {
-                                        $error.text(gt('Unknown error while checking tumblr-blog.'));
-                                        deferred.reject();
-                                    }
-                                });
-                            }
-
-                            deferred.done(function () {
-                                blogs.push({url: url, description: description});
-                                settings.set('blogs', blogs);
-                                settings.save();
-
-                                var extId = 'tumblr-' + url.replace(/[^a-zA-Z0-9]/g, '_');
-                                ext.point("io.ox/portal/widget").enable(extId);
-
-                                require(['plugins/portal/tumblr/register'], function (tumblr) {
-                                    tumblr.reload();
-                                    that.trigger('redraw');
-                                    ox.trigger("refresh^");
-                                    dialog.close();
-                                });
-                            });
-
-                            deferred.fail(function () {
-                                $error.show();
-                                dialog.idle();
-                            });
-                        });
                     }
                 }),
 
@@ -657,6 +665,120 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
     /* * * * * *
      * FLICKR
      */
+    ext.point('io.ox/portal/settings/add').extend({
+        index: 300,
+        id: 'settings-portal-flickr-add-action',
+        description: gt('Flickr'),
+        action: function (args) {
+            var getFlickrNsid = function (username, $error) { //TODO: Duplicate. Refactor once this has moved to plugin
+                var callback = 'getFlickerNsid';
+                var myurl = 'https://www.flickr.com/services/rest/?api_key=7fcde3ae5ad6ecf2dfc1d3128f4ead81&format=json&method=flickr.people.findByUsername&username=' + username + '&jsoncallback=' + callback;
+
+                var deferred = $.Deferred();
+
+                $.ajax({
+                    url: myurl,
+                    dataType: 'jsonp',
+                    jsonp: false,
+                    jsonpCallback: callback,
+                    success: function (data) {
+                        if (data && data.stat && data.stat === 'ok') {
+                            deferred.resolve(data.user.nsid);
+                        } else {
+                            deferred.reject();
+                            $error.text(gt('Cannot find user with given name.'));
+                        }
+                    },
+                    error: function () {
+                        deferred.reject();
+                        $error.text(gt('Cannot find user with given name.'));
+                    }
+                });
+
+                return deferred;
+            };
+            require(['settings!plugins/portal/flickr', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs'], function (settings, gt, dialogs) {
+                var streams = settings.get('streams'),
+                    dialog = new dialogs.ModalDialog({
+                        easyOut: true,
+                        async: true
+                    }),
+                    $q = $('<input>').attr({type: 'text', placeholder: gt('Search')}),
+                    $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
+                    $method = $('<select>').append(
+                        $('<option>').attr('value', 'flickr.photos.search').text(gt('flickr.photos.search')),
+                        $('<option>').attr('value', 'flickr.people.getPublicPhotos').text(gt('flickr.people.getPublicPhotos'))
+                    );
+
+                var $error = $('<div>').addClass('alert alert-error').hide();
+
+                var that = this;
+
+                dialog.header($("<h4>").text(gt('Add a stream')))
+                    .append($q)
+                    .append($description)
+                    .append($method)
+                    .append($error)
+                    .addButton('cancel', gt('Cancel'))
+                    .addButton('add', gt('Add'), null, {classes: 'btn-primary'})
+                    .show();
+
+                dialog.on('add', function (e) {
+                    $error.hide();
+
+                    var q = String($.trim($q.val())),
+                        method = $.trim($method.val()),
+                        description = $.trim($description.val()),
+                        deferred;
+
+                    if (method === 'flickr.people.getPublicPhotos') {
+                        deferred = getFlickrNsid(q, $error);
+                    } else {
+                        deferred = $.Deferred();
+                        deferred.resolve();
+                    }
+
+                    deferred.done(function (nsid) {
+                        if (q.length === 0) {
+                            $error.text(gt('Please enter a search-query.'));
+                            $error.show();
+                            dialog.idle();
+                        } else if (description.length === 0) {
+                            $error.text(gt('Please enter a description.'));
+                            $error.show();
+                            dialog.idle();
+                        } else {
+                            var newStream = {q: q, method: method, description: description};
+
+                            if (nsid) {
+                                newStream.nsid = nsid;
+                            }
+
+                            streams.push(newStream);
+                            settings.set('streams', streams);
+                            settings.save();
+
+                            var extId = 'flickr-' + q.replace(/[^a-z0-9]/g, '_') + '-' + method.replace(/[^a-z0-9]/g, '_');
+                            ext.point("io.ox/portal/widget").enable(extId);
+
+                            require(['plugins/portal/flickr/register'], function (flickr) {
+                                flickr.reload();
+                                that.trigger('redraw');
+                                ox.trigger("refresh^");
+                                dialog.close();
+                            });
+                        }
+                    });
+
+                    deferred.fail(function () {
+                        $error.show();
+                        dialog.idle();
+                    });
+                });
+            });
+        }
+    });
+
     ext.point('io.ox/portal/settings/detail/tile').extend({
         index: 300,
         id: 'portal-settings-flickr',
@@ -710,7 +832,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             self.$el.empty().append(
                                 $('<div class="io-ox-portal-flickr-setting io-ox-settings-item">')
                                 .attr({'data-q': this.model.get('q'), 'data-method': this.model.get('method'), 'data-description': this.model.get('description')}).append(
-                                    $('<span data-property="q">'),
+                                    $('<span class="io-ox-setting-description" data-property="q">'),
                                     $('<i class="icon-edit action-edit">'),
                                     $('<i class="icon-remove action-remove">')
                                 )
@@ -870,7 +992,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             this.$el.empty().append(
                                 $('<div>').append(
                                     $('<div class="section">').append(
-                                        $('<div class="io-ox-portal-settings-title">').text(staticStrings.STREAMS),
                                         $('<div class="settings-detail-pane">').append(
                                             $('<div class="io-ox-portal-flickr-settings">')
                                         ),
@@ -904,89 +1025,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             this.on('redraw', redraw);
 
                             return this;
-                        },
-                        events: {
-                            'click [data-action="add"]': 'onAdd'
-                        },
-
-                        onAdd: function (args) {
-                            var dialog = new dialogs.ModalDialog({
-                                easyOut: true,
-                                async: true
-                            });
-
-                            var $q = $('<input>').attr({type: 'text', placeholder: gt('Search')});
-                            var $description = $('<input>').attr({type: 'text', placeholder: gt('Description')});
-                            var $method = $('<select>')
-                                .append($('<option>').attr('value', 'flickr.photos.search').text(gt('flickr.photos.search')))
-                                .append($('<option>').attr('value', 'flickr.people.getPublicPhotos').text(gt('flickr.people.getPublicPhotos')))
-                                ;
-
-                            var $error = $('<div>').addClass('alert alert-error').hide();
-
-                            var that = this;
-
-                            dialog.header($("<h4>").text(gt('Add a stream')))
-                                .append($q)
-                                .append($description)
-                                .append($method)
-                                .append($error)
-                                .addButton('cancel', gt('Cancel'))
-                                .addButton('add', gt('Add'), null, {classes: 'btn-primary'})
-                                .show();
-
-                            dialog.on('add', function (e) {
-                                $error.hide();
-
-                                var q = String($.trim($q.val())),
-                                    method = $.trim($method.val()),
-                                    description = $.trim($description.val()),
-                                    deferred;
-
-                                if (method === 'flickr.people.getPublicPhotos') {
-                                    deferred = getFlickrNsid(q, $error);
-                                } else {
-                                    deferred = $.Deferred();
-                                    deferred.resolve();
-                                }
-
-                                deferred.done(function (nsid) {
-                                    if (q.length === 0) {
-                                        $error.text(gt('Please enter a search-query.'));
-                                        $error.show();
-                                        dialog.idle();
-                                    } else if (description.length === 0) {
-                                        $error.text(gt('Please enter a description.'));
-                                        $error.show();
-                                        dialog.idle();
-                                    } else {
-                                        var newStream = {q: q, method: method, description: description};
-
-                                        if (nsid) {
-                                            newStream.nsid = nsid;
-                                        }
-
-                                        streams.push(newStream);
-                                        settings.set('streams', streams);
-                                        settings.save();
-
-                                        var extId = 'flickr-' + q.replace(/[^a-z0-9]/g, '_') + '-' + method.replace(/[^a-z0-9]/g, '_');
-                                        ext.point("io.ox/portal/widget").enable(extId);
-
-                                        require(['plugins/portal/flickr/register'], function (flickr) {
-                                            flickr.reload();
-                                            that.trigger('redraw');
-                                            ox.trigger("refresh^");
-                                            dialog.close();
-                                        });
-                                    }
-                                });
-
-                                deferred.fail(function () {
-                                    $error.show();
-                                    dialog.idle();
-                                });
-                            });
                         }
                     }),
 
@@ -1007,12 +1045,151 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
     }); //END: extend
 
 
-
-
-
     /* * * * * *
      * RSS
      */
+    ext.point('io.ox/portal/settings/add').extend({
+        index: 400,
+        id: 'settings-portal-rss-add-action',
+        description: gt('RSS'),
+        action: function (args) {
+            require(['settings!io.ox/rss', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'io.ox/messaging/accounts/api', 'io.ox/core/strings'], function (settings, gt, dialogs, accountApi, strings) {
+                var makeFeedgroupSelection =  function (highlight) {
+                    var $select = $('<select>');
+
+                    _(feedgroups).each(function (feedgroup) {
+                        var $option = $('<option>').text(feedgroup.groupname);
+                        if (feedgroup.groupname === highlight) {
+                            $option.attr({selected: 'selected'});
+                        }
+                        $select.append($option);
+                    });
+
+                    if (!feedgroups || feedgroups.length === 0) {
+                        $select.append($('<option>').attr({value: 'Default group'}).text('Default group'));
+                    }
+
+                    return $select;
+                };
+                var feedgroups = settings.get('groups'),
+                    dialog = new dialogs.ModalDialog({ easyOut: true, async: true }),
+                    $url = $('<input>').attr({type: 'text', placeholder: gt('http://')}),
+                    $feedname = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
+                    callerGroupname = $(this.$el.find('[selected]')).data('groupname'),
+                    $group = makeFeedgroupSelection(callerGroupname),
+                    $error = $('<div>').addClass('alert alert-error').hide(),
+                    that = this;
+
+                dialog.header($("<h4>").text(gt('Add a feed')))
+                    .append($url)
+                    .append($feedname)
+                    .append($group)
+                    .append($error)
+                    .addButton('cancel', gt('Cancel'))
+                    .addButton('add', gt('Add'), null, {classes: 'btn-primary'})
+                    .show();
+
+                dialog.on('add', function (e) {
+                    var url = $.trim($url.val()),
+                        description = $.trim($feedname.val()),
+                        groupname = $.trim($group.val()),
+                        deferred = $.Deferred(),
+                        newFeed;
+
+                    $error.hide();
+
+                    if (url.length === 0) {
+                        $error.text(gt('Please enter a feed url.'));
+                        deferred.reject();
+                    } else if (description.length === 0) {
+                        $error.text(gt('Please enter a description.'));
+                        deferred.reject();
+                    } else {
+                        //TODO add test for existence of feed
+                        newFeed = {feedname: description, url: url, index: 100};
+                        deferred.resolve();
+                    }
+
+                    deferred.done(function () { //TODO
+                        if (_(feedgroups).any(function (group) { return group.groupname === groupname; })) {
+                            var group = _(feedgroups).find(function (group) {return group.groupname === groupname; });
+                            group.members.push(newFeed);
+                        } else {
+                            feedgroups.push({ groupname: groupname, index: 100, members: [newFeed]});
+                        }
+                        settings.set('groups', feedgroups);
+                        settings.save();
+
+                        that.trigger('redraw');
+                        ox.trigger("refresh^");
+
+                        dialog.close();
+                    });
+
+                    deferred.fail(function () {
+                        $error.show();
+                        dialog.idle();
+                    });
+                });
+            });
+        }
+    });
+
+    ext.point('io.ox/portal/settings/add').extend({
+        index: 410,
+        id: 'settings-portal-rss-addgroup-action',
+        description: gt('RSS group'),
+        action: function (args) {
+            require(['settings!io.ox/rss', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'io.ox/messaging/accounts/api', 'io.ox/core/strings'], function (settings, gt, dialogs, accountApi, strings) {
+                var feedgroups = settings.get('groups'),
+                    dialog = new dialogs.ModalDialog({ easyOut: true, async: true }),
+                    $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
+                    $error = $('<div>').addClass('alert alert-error').hide(),
+                    that = this;
+
+                dialog.header($("<h4>").text(gt('Add a new group for your feeds')))
+                    .append($description)
+                    .append($error)
+                    .addButton('cancel', gt('Cancel'))
+                    .addButton('add', gt('Add'), null, {classes: 'btn-primary'})
+                    .show();
+
+                dialog.on('add', function (e) {
+                    var description = $.trim($description.val()),
+                        deferred = $.Deferred(),
+                        newFeedgroup;
+
+                    $error.hide();
+
+                    if (description.length === 0) {
+                        $error.text(gt('Please enter a description.'));
+                        deferred.reject();
+                    } else {
+                        //TODO add test for existence of group name
+                        newFeedgroup = {groupname: description, index: 100, members: []};
+                        deferred.resolve();
+                    }
+
+                    deferred.done(function () { //TODO
+                        feedgroups.push(newFeedgroup);
+                        settings.set('groups', feedgroups);
+                        settings.save();
+
+                        that.trigger('redraw');
+                        ox.trigger("refresh^");
+
+                        dialog.close();
+                    });
+
+                    deferred.fail(function () {
+                        $error.show();
+                        dialog.idle();
+                    });
+                });
+            });
+        }
+    });
+
     ext.point('io.ox/portal/settings/detail/tile').extend({
         index: 400,
         id: 'portal-settings-rss',
@@ -1062,7 +1239,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
 
                             self.$el.empty().append(
                                 $('<div>').attr({'class': 'io-ox-portal-rss-settings-feedgroup io-ox-settings-item', id: id, 'data-groupname': groupname}).append(
-                                    $('<strong>').text(groupname),
+                                    $('<strong class="io-ox-setting-description">').text(groupname),
                                     $('<i>').attr({'class': 'icon-edit action-edit', 'data-action': 'edit-group', title: staticStrings.EDIT_GROUP}),
                                     $('<i>').attr({'class': 'icon-remove action-remove', 'data-action': 'del-group', title: staticStrings.DELETE_GROUP}),
                                     $('<i>').attr({'class': 'icon-plus action-add', 'data-action': 'add-feed', title: staticStrings.ADD_FEED})
@@ -1073,7 +1250,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                             'data-url': member.url,
                                             'data-feedname': member.feedname,
                                             'data-group': groupname}).append(
-                                        $('<span class="io-ox-setting-title">').text(strings.shorten(member.feedname, 30)),
+                                        $('<span class="io-ox-setting-title io-ox-setting-description">').text(strings.shorten(member.feedname, 30)),
                                         $('<i>').attr({'class': 'icon-edit action-edit', 'data-action': 'edit-feed', title: staticStrings.EDIT_FEED}),
                                         $('<i>').attr({'class': 'icon-remove action-remove', 'data-action': 'del-feed', title: staticStrings.DELETE_FEED})
                                     );
@@ -1302,7 +1479,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             this.$el.empty().append(
                                 $('<div>').append(
                                     $('<div class="section">').append(
-                                        $('<div class="io-ox-portal-settings-title">').text(staticStrings.RSS),
                                         $('<div class="settings-detail-pane">').append(
                                             $('<div class="io-ox-rss-settings">')
                                         ),
@@ -1338,120 +1514,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             this.on('redraw', redraw);
 
                             return this;
-                        },
-                        events: {
-                            'click [data-action="add-feed"]': 'onAddFeed',
-                            'click [data-action="add-group"]': 'onAddGroup'
-                        },
-                        onAddFeed: function (args) {
-                            var dialog = new dialogs.ModalDialog({ easyOut: true, async: true }),
-                                $url = $('<input>').attr({type: 'text', placeholder: gt('http://')}),
-                                $feedname = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
-                                callerGroupname = $(this.$el.find('[selected]')).data('groupname'),
-                                $group = makeFeedgroupSelection(callerGroupname),
-                                $error = $('<div>').addClass('alert alert-error').hide(),
-                                that = this;
-
-                            dialog.header($("<h4>").text(gt('Add a feed')))
-                                .append($url)
-                                .append($feedname)
-                                .append($group)
-                                .append($error)
-                                .addButton('cancel', gt('Cancel'))
-                                .addButton('add', gt('Add'), null, {classes: 'btn-primary'})
-                                .show();
-
-                            dialog.on('add', function (e) {
-                                var url = $.trim($url.val()),
-                                    description = $.trim($feedname.val()),
-                                    groupname = $.trim($group.val()),
-                                    deferred = $.Deferred(),
-                                    newFeed;
-
-                                $error.hide();
-
-                                if (url.length === 0) {
-                                    $error.text(gt('Please enter a feed url.'));
-                                    deferred.reject();
-                                } else if (description.length === 0) {
-                                    $error.text(gt('Please enter a description.'));
-                                    deferred.reject();
-                                } else {
-                                    //TODO add test for existence of feed
-                                    newFeed = {feedname: description, url: url, index: 100};
-                                    deferred.resolve();
-                                }
-
-                                deferred.done(function () { //TODO
-                                    if (_(feedgroups).any(function (group) { return group.groupname === groupname; })) {
-                                        var group = _(feedgroups).find(function (group) {return group.groupname === groupname; });
-                                        group.members.push(newFeed);
-                                    } else {
-                                        feedgroups.push({ groupname: groupname, index: 100, members: [newFeed]});
-                                    }
-                                    settings.set('groups', feedgroups);
-                                    settings.save();
-
-                                    that.trigger('redraw');
-                                    ox.trigger("refresh^");
-
-                                    dialog.close();
-                                });
-
-                                deferred.fail(function () {
-                                    $error.show();
-                                    dialog.idle();
-                                });
-                            });
-                        },
-
-
-                        onAddGroup: function (args) {
-                            var dialog = new dialogs.ModalDialog({ easyOut: true, async: true });
-
-                            var $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
-                                $error = $('<div>').addClass('alert alert-error').hide(),
-                                that = this;
-
-                            dialog.header($("<h4>").text(gt('Add a new group for your feeds')))
-                                .append($description)
-                                .append($error)
-                                .addButton('cancel', gt('Cancel'))
-                                .addButton('add', gt('Add'), null, {classes: 'btn-primary'})
-                                .show();
-
-                            dialog.on('add', function (e) {
-                                var description = $.trim($description.val()),
-                                    deferred = $.Deferred(),
-                                    newFeedgroup;
-
-                                $error.hide();
-
-                                if (description.length === 0) {
-                                    $error.text(gt('Please enter a description.'));
-                                    deferred.reject();
-                                } else {
-                                    //TODO add test for existence of group name
-                                    newFeedgroup = {groupname: description, index: 100, members: []};
-                                    deferred.resolve();
-                                }
-
-                                deferred.done(function () { //TODO
-                                    feedgroups.push(newFeedgroup);
-                                    settings.set('groups', feedgroups);
-                                    settings.save();
-
-                                    that.trigger('redraw');
-                                    ox.trigger("refresh^");
-
-                                    dialog.close();
-                                });
-
-                                deferred.fail(function () {
-                                    $error.show();
-                                    dialog.idle();
-                                });
-                            });
                         }
                     }),
                     removeFeedgroup = function (feedgroups, groupname) {
