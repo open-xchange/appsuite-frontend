@@ -60,7 +60,8 @@ define('io.ox/core/tk/folderviews',
             },
 
             hasChildren = function () {
-                return children === null ? (data.subfolders || data.subscr_subflds) : !!children.length;
+                var isCut = _([].concat(tree.options.cut)).contains(data.id);
+                return !isCut && (children === null ? (data.subfolders || data.subscr_subflds) : !!children.length);
             },
 
             isOpen = function () {
@@ -381,6 +382,9 @@ define('io.ox/core/tk/folderviews',
         this.customize = function () {
             // invoke extension points
             ext.point('io.ox/foldertree/folder').invoke('customize', nodes.folder, data, tree.options);
+            if (_.isFunction(tree.options.customize)) {
+                tree.options.customize.call(nodes.folder, data, tree.options);
+            }
         };
     }
 

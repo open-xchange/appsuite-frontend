@@ -230,30 +230,45 @@ define('io.ox/core/commons-folderview',
         function moveFolder(e) {
             e.preventDefault();
             var baton = e.data.baton,
-            folder_id = baton.app.folderView.selection.get();
-            require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
-                var title = gt('Move'),
-                apiAction = 'move',
-                dialog = new dialogs.ModalDialog({ easyOut: true })
-                        .header($('<h3>').text(title))
-                        .addPrimaryButton('ok', title)
-                        .addButton('cancel', gt('Cancel'));
-                dialog.getBody().css('height', '250px');
-                var tree = new views.FolderTree(dialog.getBody(), { type: baton.options.type });
-                tree.paint();
-                dialog.show(function () {
-                    tree.selection.set({ id: folder_id });
-                })
-                .done(function (action) {
-                    if (action === 'ok') {
-                        var selectedFolder = tree.selection.get();
-                        if (selectedFolder.length === 1) {
-                            // move action
-                            api[apiAction](folder_id, selectedFolder[0]).fail(require("io.ox/core/notifications").yell);
+                id = _(baton.app.folderView.selection.get()).first();
+            api.get({ folder: id }).done(function (folder) {
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
+                    var title = gt('Move folder'),
+                        dialog = new dialogs.ModalDialog({ easyOut: true })
+                            .header(
+                                api.getBreadcrumb(folder.id, { prefix: title }).css({ margin: '0' })
+                            )
+                            .addPrimaryButton('ok', title)
+                            .addButton('cancel', gt('Cancel'));
+                    dialog.getBody().css('height', '250px');
+                    var tree = new views.FolderTree(dialog.getBody(), {
+                        type: baton.options.type,
+                        rootFolderId: '9',
+                        skipRoot: true,
+                        cut: folder.id,
+                        customize: function (data) {
+                            var canMove = api.can('moveFolder', folder, data);
+                            if (!canMove) {
+                                this.removeClass('selectable').addClass('disabled');
+                            }
                         }
-                    }
-                    tree.destroy();
-                    tree = dialog = null;
+                    });
+                    dialog.show(function () {
+                        tree.paint().done(function () {
+                            tree.select(folder.id);
+                        });
+                    })
+                    .done(function (action) {
+                        if (action === 'ok') {
+                            var selectedFolder = tree.selection.get();
+                            if (selectedFolder.length === 1) {
+                                // move action
+                                api.move(folder.id, selectedFolder[0]).fail(notifications.yell);
+                            }
+                        }
+                        tree.destroy();
+                        tree = dialog = null;
+                    });
                 });
             });
         }

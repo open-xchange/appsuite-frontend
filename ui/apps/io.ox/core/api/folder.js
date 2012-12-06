@@ -57,6 +57,49 @@ define('io.ox/core/api/folder',
             return opt.cache === false ? getter() : cache.get(id, getter);
         };
 
+    var canMove = function (folder, target) {
+
+        if (folder.folder_id === target.id) {
+            return false;
+        }
+        // Prevent moving into folder itself
+        if (folder.id === target.id) {
+            return false;
+        }
+        // Prevent moving shared folders
+        if (folder.type === 3 || target.type === 3) {
+            return false;
+        }
+        // Prevent moving system folders
+        if (folder.type === 5) {
+            return false;
+        }
+        // Prevent moving default folders
+        if (this.is("defaultfolder", folder)) {
+            return false;
+        }
+        // Prevent moving private folders to other folders than
+        // private folders
+        if (folder.type === 1 && target.type !== 1 && target.id !== 1 && (target.type !== 7)) {
+            return false;
+        }
+        // Prevent moving public folders to other folders than
+        // public folders
+        if (folder.type === 2 && target.type !== 2 && !(target.id in { 2: 1, 10: 1, 15: 1 })) {
+            return false;
+        }
+        // Prevent moving folders to other not allowed modules
+        if (folder.module !== target.module) {
+            return false;
+        }
+        // Check rights Admin right source folder and create
+        // subfolders in target
+        if (!api.can('createFolder', folder) || !api.can('createFolder', target)) {
+            return false;
+        }
+        return true;
+    };
+
     var api = {
 
         get: function (options) {
@@ -363,9 +406,8 @@ define('io.ox/core/api/folder',
                         // refresh flat lists
                         !/^(mail|infostore)$/.test(module) ? api.getVisible({ type: module, cache: false }) : $.when()
                     )
-                    .pipe(function (getRequest, parentRequest) {
+                    .pipe(function (getRequest) {
                         // return proper data
-                        console.warn('parent', parentRequest[0]);
                         return getRequest[0];
                     });
                 });
@@ -422,22 +464,14 @@ define('io.ox/core/api/folder',
             });
         },
 
-        move: function (sourceFolder, targetFolder) {
-            var self = this,
-                 def = $.Deferred();
-            $.when(api.get({folder: sourceFolder[0]}), api.get({folder: targetFolder})).then(function (source, target) {
-                self.canMove(source, target).done(function (data) {
-                    self.update({ folder: source.id, changes: { folder_id: target.id } }).done(function (id) {
-                        api.get({ folder: target.id}, false).done(function (data) {
-                            // trigger event
-                            api.trigger('update', target.id, id, data);
-                            def.resolve(data);
-                        });
-                    });
-                }).fail(def.reject);
-            }).fail(def.reject);
-
-            return def;
+        move: function (sourceId, targetId) {
+            return this.update({ folder: sourceId, changes: { folder_id: targetId } }).pipe(function (id) {
+                return api.get({ folder: sourceId, cache: false }).done(function (data) {
+                    // trigger event
+                    api.trigger('update', sourceId, data.id, data);
+                    return data;
+                });
+            });
         },
 
         Bitmask: (function () {
@@ -561,74 +595,6 @@ define('io.ox/core/api/folder',
             }
         },
 
-        canMove: function (folder, target) {
-            var def = $.Deferred();
-            if (folder.folder_id === target.id) {
-                return def.reject({error: gt('Cannot move folder into itself.')});
-            }
-            // Prevent moving into folder itself
-            if (folder.id === target.id) {
-                return def.reject({error: gt('Cannot move folder into itself.')});
-            }
-            // Prevent moving shared folders
-            if (folder.type === 3 || target.type === 3) {
-                return def.reject({error: gt('Cannot move shared folder.')});
-            }
-            // Prevent moving system folders
-            if (folder.type === 5) {
-                return def.reject({error: gt('Cannot move system folder.')});
-            }
-            // Prevent moving default folders
-            if (this.is("defaultfolder", folder)) {
-                return def.reject({error: gt('Cannot move default folders.')});
-            }
-
-            // Prevent moving private folders to other folders than
-            // private folders
-            if (folder.type === 1 && target.type !== 1 && target.id !== 1 && (target.type !== 7)) {
-                return def.reject();
-            }
-            // Prevent moving public folders to other folders than
-            // public folders
-            if (folder.type === 2 && target.type !== 2 && !(target.id in { 2: 1, 10: 1, 15: 1 })) {
-                return def.reject();
-            }
-            // Prevent moving folders to other not allowed modules
-            if (folder.module !== target.module) {
-                if (folder.module === "infostore") {
-                    return def.reject();
-                }
-                if (folder.module === "mail" && target.module !== "system") {
-                    return def.reject();
-                }
-                if (target.module !== "system") {
-                    return def.reject();
-                }
-            }
-
-            // Check rights Admin right source folder and create
-            // subfolders in target
-            if (!api.can('createFolder', folder) && !api.can('createFolder', target)) {
-                return def.reject();
-            }
-
-            // Check target is subfolder of folder
-            /*this.getParents({
-                folder: target.id,
-                success: function (ancestors) {
-                    var i;
-                    for (i = 0; i < ancestors.length; i++) {
-                        if (ancestors[i].id === folder.id) {
-                            return false;
-                        }
-                    }
-                    success();
-                }
-            });
-            */
-            return def.resolve();
-        },
-
         /**
          * Can?
          */
@@ -639,7 +605,7 @@ define('io.ox/core/api/folder',
             if (_.isArray(data)) {
                 // for multiple folders, all folders must satisfy the condition
                 return _(data).reduce(function (memo, folder) {
-                    return memo && api.can(action, folder);
+                    return memo && api.can(action, folder, obj);
                 }, true);
             }
             // vars
@@ -686,6 +652,8 @@ define('io.ox/core/api/folder',
             case 'deleteFolder':
                 // must be admin; system and default folder cannot be deleted
                 return isAdmin && !isSystem && !this.is('defaultfolder', data);
+            case 'moveFolder':
+                return canMove.call(this, data, obj);
             case 'import':
                 // import data
                 return (rights & 127) >= 2 && this.is('calendar|contacts|tasks', data);
