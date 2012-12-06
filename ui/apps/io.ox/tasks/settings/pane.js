@@ -25,7 +25,6 @@ define('io.ox/tasks/settings/pane',
         staticStrings =  {
         TITLE_TASKS: gt('Tasks'),
         TITLE_COMMON: gt('Common'),
-        DEFAULT_VIEW: gt('Default view'),
         INTERVAL_IN_MINUTES: gt('Interval of the reminder in minutes'),
         TITLE_NOTIFICATIONS_FOR_TASKS: gt('E-Mail notification for task'),
         TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED: gt('E-Mail notification for Accept/Declined'),
@@ -34,8 +33,6 @@ define('io.ox/tasks/settings/pane',
     },
         optionsYes = {label: gt('Yes'), value: true},
         optionsNo = {label: gt('No'), value: false},
-        optionsView = [{label: gt('H-split view'), value: 'tasks/split'},
-                       {label: gt('List view'), value: 'tasks/list'}],
         optionsInterval = [gt('5'), gt('10'), gt('15'), gt('20'), gt('30'), gt('60')],
 
         tasksViewSettings;
@@ -54,7 +51,6 @@ define('io.ox/tasks/settings/pane',
                 strings: staticStrings,
                 optionsYesAnswers: optionsYes,
                 optionsNoAnswers: optionsNo,
-                optionsViewDefault: optionsView,
                 optionsIntervalMinutes: optionsInterval
             }));
 
