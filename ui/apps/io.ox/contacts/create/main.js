@@ -17,8 +17,9 @@ define('io.ox/contacts/create/main',
     ['io.ox/contacts/model',
      'io.ox/contacts/create/view',
      'io.ox/contacts/util',
+     'io.ox/contacts/api',
      'io.ox/core/extensions'
-    ], function (model, view, util, ext) {
+    ], function (model, view, util, api, ext) {
 
     'use strict';
 

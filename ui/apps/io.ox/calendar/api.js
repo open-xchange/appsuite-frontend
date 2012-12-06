@@ -211,7 +211,7 @@ define("io.ox/calendar/api",
                 return api.get(getObj)
                         .pipe(function (data) {
                             api.trigger('refresh.all');
-                            api.trigger('created', getObj);
+                            api.trigger('create', getObj);
                             return data;
                         });
             });

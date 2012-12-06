@@ -55,7 +55,7 @@ define('io.ox/calendar/list/perspective',
         // requires new label?
         grid.requiresLabel = tmpl.requiresLabel;
 
-        api.on('created', function (e, data) {
+        api.on('create', function (e, data) {
             if (app.folder.get() === data.folder) {
                 grid.selection.set(data);
             }

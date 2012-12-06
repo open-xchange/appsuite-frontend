@@ -85,7 +85,7 @@ define('io.ox/core/event', function () {
         };
 
         this.list = function () {
-            return hub.data('events');
+            return $._data(hub.get(0), 'events');
         };
     };
 
