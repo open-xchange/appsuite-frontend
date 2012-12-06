@@ -27,8 +27,6 @@ define("io.ox/core/desktop",
      * Core UI
      */
 
-    console.warn(gt('i18n test string - do not translate this'));
-
     // current window
     var currentWindow = null;
 

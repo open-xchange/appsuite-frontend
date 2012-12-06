@@ -165,11 +165,11 @@ define('io.ox/core/tk/folderviews',
         this.close = closeNode;
 
         this.isOpen = function () {
-            return hasChildren() && open === true;
+            return hasChildren() && (open === true || (tree.options.skipRoot && tree.options.rootFolderId === id));
         };
 
         this.getOpenNodes = function () {
-            if (this.isOpen()) {
+            if (isOpen()) {
                 return [id].concat(_(children || []).invoke('getOpenNodes'));
             } else {
                 return [];
