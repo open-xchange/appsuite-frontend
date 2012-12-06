@@ -130,7 +130,7 @@ $(document).ready(function () {
             config.load().done(function () {
                 $.when(
                     require(['io.ox/core/main']),
-                    themes.set(settings.get('theme'))
+                    themes.set(settings.get('theme') || 'default')
                 ).done(function (core) {
                     // go!
                     core.launch();
