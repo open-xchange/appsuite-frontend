@@ -39,7 +39,6 @@ define('io.ox/settings/accounts/settings/pane',
 
         removeSelectedItem = function (account) {
             var def = $.Deferred();
-
             require(["io.ox/core/tk/dialogs"], function (dialogs) {
                 new dialogs.ModalDialog()
                     .text("Do you really want to delete this account?")
@@ -49,8 +48,8 @@ define('io.ox/settings/accounts/settings/pane',
                     .done(function (action) {
                         if (action === 'delete') {
                             def.resolve();
+                            console.log('api.remove', account);
                             api.remove(account);
-
                         } else {
                             def.reject();
                         }
@@ -122,7 +121,9 @@ define('io.ox/settings/accounts/settings/pane',
                             $dropDown;
                         self.$el.empty().append(self.template({}));
                         this.collection.each(function (item) {
-                            self.$el.find('.listbox').append(new AccountSelectView({ model: item }).render().el);
+                            self.$el.find('.listbox').append(
+                                new AccountSelectView({ model: item }).render().el
+                            );
                         });
 
                         // Enhance Add... options

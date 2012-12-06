@@ -21,11 +21,12 @@ define('io.ox/office/editor/view/view',
      'io.ox/office/tk/view/component',
      'io.ox/office/tk/view/pane',
      'io.ox/office/tk/view/toolpane',
+     'io.ox/office/tk/view/sidepane',
      'io.ox/office/tk/view/view',
      'io.ox/office/editor/view/controls',
      'io.ox/office/editor/format/lineheight',
      'gettext!io.ox/office/main'
-    ], function (Utils, Config, Fonts, Label, TextField, RadioGroup, Component, Pane, ToolPane, View, Controls, LineHeight, gt) {
+    ], function (Utils, Config, Fonts, Label, TextField, RadioGroup, Component, Pane, ToolPane, SidePane, View, Controls, LineHeight, gt) {
 
     'use strict';
 
@@ -66,48 +67,6 @@ define('io.ox/office/editor/view/view',
             debugNodes = null;
 
         // private methods ----------------------------------------------------
-
-        /**
-         * Creates a new tool bar in the tool pane and inserts common controls.
-         *
-         * @param {String} id
-         *  The unique identifier of the tool bar.
-         *
-         * @param {Object} [options]
-         *  A map of options to control the properties of the new tab in the
-         *  tab bar representing the tool bar. Supports all options for buttons
-         *  in radio groups (see method RadioGroup.addOptionButton() for
-         *  details).
-         */
-        function createToolBar(id, options) {
-            // create common controls present in all tool bars
-            return toolPane.createToolBar(id, options)
-                .addButton('document/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert Last Operation') })
-                .addButton('document/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore Last Operation') })
-                .addSeparator();
-        }
-
-        /**
-         * Creates a new tool box in the side pane.
-         *
-         * @param {String} id
-         *  The unique identifier of the tool box.
-         *
-         * @param {Object} [options]
-         *  A map of options for the tool box in the side pane. Supports all
-         *  options for labels (see class Label for details).
-         */
-        function createToolBox(id, options) {
-
-            var // create a new tool box object, and store it in the map
-                toolBox = new Component(app, { classes: 'toolbox'});
-
-            // add the tool box to the side pane, add a heading label to the tool box
-            sidePane.addViewComponent(toolBox);
-            toolBox.addLabel(id, Utils.extendOptions(options, { classes: 'heading' }));
-
-            return toolBox;
-        }
 
         /**
          * Update handler for the editor status label. Will be called in the
@@ -324,15 +283,10 @@ define('io.ox/office/editor/view/view',
         toolPane = new ToolPane(app);
         this.addPane('toolpane', toolPane, 'top');
 
-/*
-        createToolBar('insert', { label: gt('Insert') })
-            .addGroup('table/insert', new TableSizeChooser())
+        toolPane.createToolBar('format', { label: gt('Format') })
+            .addButton('document/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert Last Operation') })
+            .addButton('document/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore Last Operation') })
             .addSeparator()
-            .addButton('image/insert/file', { icon: 'icon-io-ox-image-insert', tooltip: gt('Insert Image File') })
-            .addButton('image/insert/url',  { icon: 'icon-io-ox-image-insert', tooltip: gt('Insert Image URL') });
-*/
-
-        createToolBar('format', { label: gt('Format') })
             .addGroup('paragraph/stylesheet', new Controls.ParagraphStyleChooser(editor))
             .addSeparator()
             .addGroup('character/fontname', new Controls.FontFamilyChooser())
@@ -348,68 +302,48 @@ define('io.ox/office/editor/view/view',
                 .addOptionButton('sub',      { icon: 'icon-io-ox-subscript',   tooltip: gt('Subscript') })
                 .addOptionButton('super',    { icon: 'icon-io-ox-superscript', tooltip: gt('Superscript') }))
             .addSeparator()
-            .addGroup('character/fillcolor', new Controls.ColorChooser(editor, 'fill', { label: 'ab', tooltip: gt('Text Fill Color') }))
+            .addGroup('character/fillcolor', new Controls.ColorChooser(editor, 'fill', { label: 'ab', tooltip: gt('Text fill color') }))
             .addSeparator()
-            .addGroup('character/color', new Controls.ColorChooser(editor, 'text', { icon: 'icon-font', tooltip: gt('Text Color') }))
+            .addGroup('character/color', new Controls.ColorChooser(editor, 'text', { icon: 'icon-font', tooltip: gt('Text color') }))
             .addSeparator()
-            .addGroup('paragraph/alignment', new RadioGroup({ icon: 'icon-io-ox-align-left', tooltip: gt('Paragraph Alignment'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
+            .addGroup('paragraph/alignment', new RadioGroup({ icon: 'icon-io-ox-align-left', tooltip: gt('Paragraph alignment'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
                 .addOptionButton('left',    { icon: 'icon-io-ox-align-left',    label: gt('Left') })
                 .addOptionButton('center',  { icon: 'icon-io-ox-align-center',  label: gt('Center') })
                 .addOptionButton('right',   { icon: 'icon-io-ox-align-right',   label: gt('Right') })
                 .addOptionButton('justify', { icon: 'icon-io-ox-align-justify', label: gt('Justify') }))
             .addSeparator()
-            .addGroup('paragraph/lineheight', new RadioGroup({ icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
+            .addGroup('paragraph/lineheight', new RadioGroup({ icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line spacing'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
                 .addOptionButton(LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   label: gt('Single') })
-                .addOptionButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', label: gt('One and a Half') })
+                .addOptionButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', label: gt('One and a half') })
                 .addOptionButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   label: gt('Double') }))
             .addSeparator()
             .addGroup('paragraph/fillcolor', new Controls.ColorChooser(editor, 'fill', { icon: 'icon-tint', tooltip: gt('Paragraph Fill Color') }))
             .addSeparator()
             .addButton('character/hyperlink', { icon: 'icon-io-ox-hyperlink', tooltip : 'Hyperlink' })
             .addSeparator()
-            .addButton('paragraph/list/bullets',   { icon: 'icon-io-ox-bullets',        tooltip: gt('Bullets On/Off'),   toggle: true })
-            .addButton('paragraph/list/numbering', { icon: 'icon-io-ox-numbering',      tooltip: gt('Numbering On/Off'), toggle: true })
-            .addButton('paragraph/list/decindent', { icon: 'icon-io-ox-num-dec-indent', tooltip: gt('Demote One Level') })
-            .addButton('paragraph/list/incindent', { icon: 'icon-io-ox-num-inc-indent', tooltip: gt('Promote One Level') })
+            .addButton('paragraph/list/bullets',   { icon: 'icon-io-ox-bullets',        tooltip: gt('Bullets on/off'),   toggle: true })
+            .addButton('paragraph/list/numbering', { icon: 'icon-io-ox-numbering',      tooltip: gt('Numbering on/off'), toggle: true })
+            .addButton('paragraph/list/decindent', { icon: 'icon-io-ox-num-dec-indent', tooltip: gt('Demote one level') })
+            .addButton('paragraph/list/incindent', { icon: 'icon-io-ox-num-inc-indent', tooltip: gt('Promote one level') })
             .addSeparator();
 
-        createToolBar('table', { label: gt('Table') })
-            .addGroup('table/insert', new Controls.TableSizeChooser())
-            .addSeparator()
-            .addButton('table/insert/row',    { icon: 'icon-io-ox-table-insert-row',    tooltip: gt('Insert Row') })
-            .addButton('table/insert/column', { icon: 'icon-io-ox-table-insert-column', tooltip: gt('Insert Column') })
-            .addButton('table/delete/row',    { icon: 'icon-io-ox-table-delete-row',    tooltip: gt('Delete Rows') })
-            .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Columns') });
-
-        createToolBar('image', { label: gt('Image') })
-            .addButton('image/insert/file', { icon: 'icon-io-ox-image-insert', tooltip: gt('Insert Image File') })
-            .addButton('image/insert/url',  { icon: 'icon-io-ox-image-insert', tooltip: gt('Insert Image URL') })
-            .addSeparator()
-            .addButton('drawing/delete', { icon: 'icon-io-ox-image-delete', tooltip: gt('Delete Drawing') })
-            .addSeparator()
-            .addGroup('drawing/floatmode', new RadioGroup({ icon: 'icon-io-ox-image-inline', tooltip: gt('Drawing Position'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
-                .addOptionButton('inline',       { icon: 'icon-io-ox-image-inline',      label: gt('Inline With Text') })
-                .addOptionButton('leftFloated',  { icon: 'icon-io-ox-image-float-left',  label: gt('Float Left') })
-                .addOptionButton('rightFloated', { icon: 'icon-io-ox-image-float-right', label: gt('Float Right') })
-                .addOptionButton('noneFloated',  { icon: 'icon-io-ox-image-center',      label: gt('Center') }));
-
         // create the tool boxes
-        sidePane = new Pane(app);
-        this.addPane('sidepane', sidePane, 'right');
+        sidePane = new SidePane(app);
+        this.addPane('sidepane', sidePane, 'left');
 
-        createToolBox('insert', { label: gt('Insert') })
+        sidePane.createToolBox('insert', { label: gt('Insert') })
             .addGroup('table/insert', new Controls.TableSizeChooser())
             .addSeparator()
             .addButton('image/insert/file', { icon: 'icon-io-ox-image-insert', tooltip: gt('Insert image file') })
             .addButton('image/insert/url',  { icon: 'icon-io-ox-image-insert', tooltip: gt('Insert image URL') });
 
-        createToolBox('table', { label: gt('Table') })
+        sidePane.createToolBox('table', { label: gt('Table') })
             .addButton('table/insert/row',    { icon: 'icon-io-ox-table-insert-row',    tooltip: gt('Insert row') })
             .addButton('table/insert/column', { icon: 'icon-io-ox-table-insert-column', tooltip: gt('Insert column') })
             .addButton('table/delete/row',    { icon: 'icon-io-ox-table-delete-row',    tooltip: gt('Delete selected rows') })
             .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete selected columns') });
 
-        createToolBox('drawing', { label: gt('Drawing') })
+        sidePane.createToolBox('drawing', { label: gt('Drawing') })
             .addButton('drawing/delete', { icon: 'icon-io-ox-image-delete', tooltip: gt('Delete drawing object') })
             .addSeparator()
             .addGroup('drawing/floatmode', new RadioGroup({ icon: 'icon-io-ox-image-inline', tooltip: gt('Drawing position'), dropDown: true, highlight: true, updateCaptionMode: 'icon' })
@@ -451,39 +385,22 @@ define('io.ox/office/editor/view/view',
             editor.on('operation', function (event, operation) { logOperation(operation); })
                 .on('selection', function (event, selection) { logSelection(selection); });
 
-            createToolBar('debug', { label: gt('Debug') })
-                .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
-                .addButton('debug/sync',   { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
+            sidePane.createToolBox('debug', { label: gt('Debug') })
+                .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug mode',               toggle: true })
+                .addButton('debug/sync',   { icon: 'icon-refresh',  tooltip: 'Synchronize with backend', toggle: true })
                 .addSeparator()
-                .addButton('file/editrights', { icon: 'icon-pencil', tooltip: 'Acquire Edit Rights' })
-                .addSeparator()
-                .addGroup('document/quicksearch', new TextField({ tooltip: 'Quick Search' }))
-                .addSeparator()
-                .addButton('document/cut',   { label: 'Cut',   tooltip: 'Cut To Clipboard' })
-                .addButton('document/copy',  { label: 'Copy',  tooltip: 'Copy To Clipboard' })
-                .addButton('document/paste', { label: 'Paste', tooltip: 'Paste From Clipboard' })
-                .addSeparator()
-                .addGroup('character/language', new Controls.LanguageChooser({ width: 100 }))
-                .addSeparator()
-                .addGroup('paragraph/borders', new Controls.ParagraphBorderChooser());
-
-            createToolBox('debug', { label: gt('Debug') })
-                .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
-                .addButton('debug/sync',   { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
-                .addSeparator()
-                .addButton('file/editrights', { icon: 'icon-pencil', tooltip: 'Acquire Edit Rights' })
+                .addButton('file/editrights', { icon: 'icon-pencil', tooltip: 'Acquire edit rights' })
                 .addSeparator('break')
-                .addButton('document/cut',   { label: 'Cut',   tooltip: 'Cut To Clipboard' })
-                .addButton('document/copy',  { label: 'Copy',  tooltip: 'Copy To Clipboard' })
-                .addButton('document/paste', { label: 'Paste', tooltip: 'Paste From Clipboard' })
+                .addGroup('document/quicksearch', new TextField({ tooltip: 'Quick search', classes: 'full-width', width: '100%' }))
                 .addSeparator('break')
-                .addGroup('character/language', new Controls.LanguageChooser({ classes: 'full-width' }))
+                .addButton('document/cut',   { label: 'Cut',   tooltip: 'Cut to clipboard' })
+                .addButton('document/copy',  { label: 'Copy',  tooltip: 'Copy to clipboard' })
+                .addButton('document/paste', { label: 'Paste', tooltip: 'Paste from clipboard' })
+                .addSeparator('break')
+                .addGroup('character/language', new Controls.LanguageChooser({ classes: 'full-width', width: '100%' }))
                 .addSeparator('break')
                 .addGroup('paragraph/borders', new Controls.ParagraphBorderChooser());
         }
-
-        // make the format tool bar visible
-        toolPane.showToolBar('format');
 
         // create and add the application status label
         hoverBar = new Component(app);
@@ -493,7 +410,7 @@ define('io.ox/office/editor/view/view',
 
         // add 'rename document' functionality to title field
         app.getWindow().nodes.title.addClass('io-ox-office-title').click(renameDocumentHandler);
-        Utils.setControlTooltip(app.getWindow().nodes.title, gt('Rename Document'), 'bottom');
+        Utils.setControlTooltip(app.getWindow().nodes.title, gt('Rename document'), 'bottom');
 
         // override the limited functionality of the quick-search text field
         app.getWindow().nodes.search
@@ -502,7 +419,7 @@ define('io.ox/office/editor/view/view',
             .data('tooltip', null); // remove old tooltip
 
         // set the quick-search tooltip
-        Utils.setControlTooltip(app.getWindow().nodes.search, gt('Quick Search'), 'bottom');
+        Utils.setControlTooltip(app.getWindow().nodes.search, gt('Quick search'), 'bottom');
 
     } // class EditorView
 

@@ -251,8 +251,6 @@ define("io.ox/mail/api",
                 // reset tracker! if we get a seen mail here, although we have it in 'explicit unseen' hash,
                 // another devices might have set it back to seen.
                 tracker.reset(response.data);
-                // apply unread count
-                folderAPI.setUnread(opt.folder, tracker.getUnreadCount(response.data));
                 return response;
             },
             get: function (data, options) {
@@ -536,7 +534,10 @@ define("io.ox/mail/api",
             })
             .done(function () { api.trigger('refresh.list'); }),
             local ? DONE : update(list, { flags: api.FLAGS.SEEN, value: false })
-        );
+        )
+        .done(function () {
+            folderAPI.reload(list);
+        });
     };
 
     api.markRead = function (list, local) {
@@ -550,7 +551,10 @@ define("io.ox/mail/api",
             })
             .done(function () { api.trigger('refresh.list'); }),
             local ? DONE : update(list, { flags: api.FLAGS.SEEN, value: true })
-        );
+        )
+        .done(function () {
+            folderAPI.reload(list);
+        });
     };
 
     api.markSpam = function (list) {

@@ -60,7 +60,8 @@ define('io.ox/core/tk/folderviews',
             },
 
             hasChildren = function () {
-                return children === null ? (data.subfolders || data.subscr_subflds) : !!children.length;
+                var isCut = _([].concat(tree.options.cut)).contains(data.id);
+                return !isCut && (children === null ? (data.subfolders || data.subscr_subflds) : !!children.length);
             },
 
             isOpen = function () {
@@ -142,9 +143,11 @@ define('io.ox/core/tk/folderviews',
                 if (e.type !== 'dblclick') {
                     var node = $(this),
                         isArrow = node.hasClass('folder-arrow'),
-                        isLabel = node.hasClass('folder-label');
-                    if (isArrow || (isLabel && node.closest('.folder').hasClass('unselectable'))) {
-                        // avoid selection; allow for unselectable
+                        isLabel = node.hasClass('folder-label'),
+                        folder = node.closest('.folder'),
+                        isUnselectable = folder.hasClass('unselectable');
+                    if (isArrow || (isLabel && isUnselectable)) {
+                        // avoid selection; allow for unreadable
                         e.preventDefault();
                         if (!open) { openNode(); } else { closeNode(); }
                     }
@@ -379,6 +382,9 @@ define('io.ox/core/tk/folderviews',
         this.customize = function () {
             // invoke extension points
             ext.point('io.ox/foldertree/folder').invoke('customize', nodes.folder, data, tree.options);
+            if (_.isFunction(tree.options.customize)) {
+                tree.options.customize.call(nodes.folder, data, tree.options);
+            }
         };
     }
 
@@ -769,17 +775,13 @@ define('io.ox/core/tk/folderviews',
 
             // selectable?
             var hasProperType = !options.type || options.type === data.module,
-                isReadable = api.can('read', data),
-                isExpandable = !!data.subfolders,
-                isSelectable = hasProperType && isReadable;
+                isSelectable = hasProperType, // so: all folder that I can see
+                isReadable = isSelectable && api.can('read', data),
+                isExpandable = !!data.subfolders;
 
-            if (isExpandable) {
-                this.addClass('expandable');
-            }
-
-            if (!isSelectable) {
-                this.removeClass('selectable').addClass('unselectable');
-            }
+            if (isExpandable) { this.addClass('expandable'); }
+            if (!isReadable) { this.addClass('unreadable'); }
+            if (!isSelectable) { this.removeClass('selectable').addClass('unselectable'); }
 
             // set title
             label.text(_.noI18n(data.title));

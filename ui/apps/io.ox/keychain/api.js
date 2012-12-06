@@ -78,7 +78,6 @@ define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event"], func
 
     function invokeExtension(accountType, method) {
         var extension = api.submodules[accountType];
-
         if (!extension) {
             throw new Error("I do not know keys of accountType " + accountType + "! I suppose a needed plugin was not registered in the server configuration.");
         }
@@ -120,7 +119,6 @@ define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event"], func
         if (account.attributes) {
             account = account.toJSON();
         }
-
         return invokeExtension(account.accountType, "remove", account);
     };
 

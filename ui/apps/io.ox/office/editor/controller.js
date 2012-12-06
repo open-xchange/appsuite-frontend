@@ -34,8 +34,12 @@ define('io.ox/office/editor/controller',
             // all the little controller items
             items = {
 
+                'document/hasfile': {
+                    enable: function () { return app.getConnectionState() !== 'nofile'; }
+                },
                 'document/editable': {
-                    enable: function () { return editor.isEditMode(); }
+                    parent: 'document/hasfile',
+                    enable: function (enabled) { return enabled && editor.isEditMode(); }
                 },
                 'document/editable/text': {
                     parent: 'document/editable',
@@ -50,7 +54,8 @@ define('io.ox/office/editor/controller',
                     set: function (fileName) { app.rename(fileName); }
                 },
                 'file/editrights': {
-                    enable: function () { return !editor.isEditMode() && app.hasFileDescriptor(); },
+                    parent: 'document/hasfile',
+                    enable: function (enabled) { return enabled && !editor.isEditMode() && app.hasFileDescriptor(); },
                     set: function (state) { app.acquireEditRights(); }
                 },
                 'file/connection/state': {
@@ -70,7 +75,7 @@ define('io.ox/office/editor/controller',
                     set: function () { editor.redo(1); }
                 },
                 'document/quicksearch': {
-                    // enabled in read-only mode
+                    parent: 'document/hasfile', // enabled in read-only mode
                     //get: function () { return editor.hasHighlighting(); },
                     set: function (query) { editor.quickSearch(query); },
                     done: $.noop // do not focus editor
@@ -82,8 +87,8 @@ define('io.ox/office/editor/controller',
                     set: function () { editor.cut(); }
                 },
                 'document/copy': {
-                    // enabled in read-only mode
-                    enable: function () { return editor.hasSelectedRange(); },
+                    parent: 'document/hasfile', // enabled in read-only mode
+                    enable: function (enabled) { return enabled && editor.hasSelectedRange(); },
                     set: function () { editor.copy(); }
                 },
                 'document/paste': {
@@ -324,6 +329,7 @@ define('io.ox/office/editor/controller',
                     set: function (state) { app.setDebugMode(state); }
                 },
                 'debug/sync': {
+                    parent: 'document/hasfile', // disable if no file exists
                     get: function () { return app.isSynchronizedMode(); },
                     set: function (state) { app.setSynchronizedMode(state); }
                 }

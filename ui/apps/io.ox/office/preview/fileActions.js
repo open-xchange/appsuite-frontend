@@ -20,10 +20,7 @@ define('io.ox/office/preview/fileActions',
     'use strict';
 
     var Action = links.Action,
-        ActionGroup = links.ActionGroup,
-        ActionLink = links.ActionLink,
 
-        POINT = 'io.ox/files',
         SUPPORTED_EXT = /\.(doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg|dot|dotx|ott|xlt|xltx|ots|pot|potx|otp|otg|docm|xlsm|pptm|dotm|xltm|potm|xlsb)$/i;
 
     new Action('io.ox/files/actions/open', {
@@ -32,11 +29,11 @@ define('io.ox/office/preview/fileActions',
         before: 'default',
         // pick items you want to take care of (actually this function is called by underscore's "filter")
         filter: function (obj) {
-            return (SUPPORTED_EXT.test(obj.filename));
+            return SUPPORTED_EXT.test(obj.filename);
         },
         action: function (baton) {
-            if ((SUPPORTED_EXT.test(baton.data.filename))) {
-                // On Firefox we have to do this check to prevent duplicate actions (default/preview)
+            // on Firefox we have to do this check to prevent duplicate actions (default/preview)
+            if (SUPPORTED_EXT.test(baton.data.filename)) {
                 ox.launch('io.ox/office/preview/main', { action: 'load', file: baton.data });
                 baton.preventDefault();
             }

@@ -237,7 +237,7 @@ define('io.ox/office/tk/control/combofield',
         this.on('init', initHandler)
             .on('menuopen', menuOpenHandler)
             .registerUpdateHandler(updateHandler)
-            .registerActionHandler(this.getMenuNode(), 'click', 'button', clickHandler);
+            .registerActionHandler(this.getMenuNode(), 'click', Utils.BUTTON_SELECTOR, clickHandler);
         this.getTextField()
             .on('keydown keypress keyup', textFieldKeyHandler)
             .on('readonly', textFieldReadOnlyHandler)

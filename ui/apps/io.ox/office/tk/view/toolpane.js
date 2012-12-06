@@ -14,24 +14,15 @@
 define('io.ox/office/tk/view/toolpane',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/view/pane',
-     'io.ox/office/tk/view/component',
-     'io.ox/office/tk/control/radiogroup'
-    ], function (Utils, Pane, Component, RadioGroup) {
+     'io.ox/office/tk/view/component'
+    ], function (Utils, Pane, Component) {
 
     'use strict';
-
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes,
-
-        // the controller key used to switch the visible tool bar
-        KEY_SHOW_TOOLBAR = 'tk/toolpane/show';
 
     // class ToolPane =========================================================
 
     /**
-     * Represents a container element with multiple tool bars where one tool
-     * bar is visible at a time. Tool bars can be selected with a tab control
-     * shown above the visible tool bar.
+     * Represents a container element with multiple tool bars.
      *
      * @constructor
      *
@@ -42,62 +33,8 @@ define('io.ox/office/tk/view/toolpane',
      */
     function ToolPane(app) {
 
-        var // self reference
-            self = this,
-
-            // the application controller
-            controller = app.getController(),
-
-            // tab bar to switch the tool bars (temporary)
-            tabBar = new Component(app, { classes: 'toolbar' }),
-
-            // radio group to switch the tool bars (temporary)
-            tabBarGroup = new RadioGroup(),
-
-            // all registered tool bars, mapped by tool bar key
-            toolBars = {},
-
-            // identifiers of all registered tool bars, in registration order
-            toolBarIds = [],
-
-            // identifier of the tool bar currently visible
-            visibleToolBarId = '';
-
-        // private methods ----------------------------------------------------
-
-        /**
-         * Activates the tool bar with the specified identifier.
-         */
-        function showToolBar(id) {
-            if (id in toolBars) {
-                if (visibleToolBarId in toolBars) {
-                    toolBars[visibleToolBarId].hide();
-                }
-                visibleToolBarId = id;
-                toolBars[id].show();
-            }
-        }
-
-        /**
-         * Handles keyboard events in the tool pane.
-         */
-        function toolPaneKeyHandler(event) {
-
-            var // distinguish between event types (ignore keypress events)
-                keydown = event.type === 'keydown',
-                // index of the visible tool bar
-                index = _(toolBarIds).indexOf(visibleToolBarId);
-
-            if (event.keyCode === KeyCodes.F7) {
-                if (keydown) {
-                    index = event.shiftKey ? (index - 1) : (index + 1);
-                    index = Utils.minMax(index, 0, toolBarIds.length - 1);
-                    self.showToolBar(toolBarIds[index]);
-                    self.grabFocus();
-                }
-                return false;
-            }
-        }
+        var // all registered tool bars, mapped by tool bar key
+            toolBars = {};
 
         // base constructor ---------------------------------------------------
 
@@ -105,102 +42,25 @@ define('io.ox/office/tk/view/toolpane',
 
         // methods ------------------------------------------------------------
 
-        this.getTabBar = function () {
-            return tabBar;
-        };
-
         /**
-         * Creates a new tool bar object and registers it at the controller
-         * passed to the constructor of this tool pane.
+         * Creates a new tool bar component.
          *
          * @param {String} id
          *  The unique identifier of the new tool bar.
          *
-         * @param {Object} [options]
-         *  A map of options to control the properties of the new tab in the
-         *  tab bar representing the tool bar. Supports all options for buttons
-         *  in radio groups (see method RadioGroup.addOptionButton() for
-         *  details).
-         *
-         * @returns {ToolBar}
-         *  The new tool bar object.
+         * @returns {Component}
+         *  The new tool bar instance.
          */
-        this.createToolBar = function (id, options) {
+        this.createToolBar = function (id) {
 
             var // create a new tool bar object, and store it in the map
                 toolBar = toolBars[id] = new Component(app, { classes: 'toolbar'});
 
-            // add the tool bar to the pane, and an option button to the tab bar
+            // add the tool bar to this tool pane
             this.addViewComponent(toolBar);
-            tabBarGroup.addOptionButton(id, options);
-
-            // hide all tool bars but the first
-            toolBarIds.push(id);
-            if (toolBarIds.length > 1) {
-                toolBar.hide();
-                // show tab bar if at least two tool bars have been created
-                tabBar.show();
-            } else {
-                visibleToolBarId = id;
-            }
 
             return toolBar;
         };
-
-        /**
-         * Returns the identifier of the tool bar currently visible.
-         */
-        this.getVisibleToolBarId = function () {
-            return visibleToolBarId;
-        };
-
-        /**
-         * Activates the tool bar with the specified identifier.
-         *
-         * @param {String} id
-         *  The identifier of the tool bar to be shown.
-         *
-         * @returns {ToolPane}
-         *  A reference to this tool pane.
-         */
-        this.showToolBar = function (id) {
-            controller.change(KEY_SHOW_TOOLBAR, id);
-            return this;
-        };
-
-        /**
-         * Returns whether this tool pane contains the control that is
-         * currently focused. Searches in the visible tool bar and in the tool
-         * bar tabs.
-         */
-        this.hasFocus = function () {
-            return (visibleToolBarId in toolBars) && toolBars[visibleToolBarId].hasFocus();
-        };
-
-        /**
-         * Sets the focus to the visible tool bar.
-         */
-        this.grabFocus = function () {
-            if (visibleToolBarId in toolBars) {
-                toolBars[visibleToolBarId].grabFocus();
-            }
-            return this;
-        };
-
-        // initialization -----------------------------------------------------
-
-        // insert the tab bar into this tool pane, but hide it initially
-        this.addViewComponent(tabBar);
-        tabBar.addGroup(KEY_SHOW_TOOLBAR, tabBarGroup).hide();
-
-        // add item definition for the tab bar
-        controller.addDefinition(KEY_SHOW_TOOLBAR, {
-            get: function () { return visibleToolBarId; },
-            set: showToolBar
-        });
-
-        // change visible tool bar with keyboard
-        this.getNode().on('keydown keypress keyup', toolPaneKeyHandler);
 
     } // class ToolPane
 

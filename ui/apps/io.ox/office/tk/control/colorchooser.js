@@ -82,7 +82,7 @@ define('io.ox/office/tk/control/colorchooser',
          * Returns all color button elements.
          */
         function getColorButtons() {
-            return colorTable.find('button');
+            return colorTable.find(Utils.BUTTON_SELECTOR);
         }
 
         /**
@@ -279,7 +279,7 @@ define('io.ox/office/tk/control/colorchooser',
 
         // register event handlers
         this.registerUpdateHandler(updateHandler)
-            .registerActionHandler(this.getMenuNode(), 'click', 'button', clickHandler);
+            .registerActionHandler(this.getMenuNode(), 'click', Utils.BUTTON_SELECTOR, clickHandler);
 
     } // class ColorChooser
 
