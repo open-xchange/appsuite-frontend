@@ -427,12 +427,9 @@ define('io.ox/core/api/folder',
                  def = $.Deferred();
             $.when(api.get({folder: sourceFolder[0]}), api.get({folder: targetFolder})).then(function (source, target) {
                 self.canMove(source, target).done(function (data) {
-                    console.log(source, target);
                     self.update({ folder: source.id, changes: { folder_id: target.id } }).done(function (id) {
-                        console.log('updated');
                         api.get({ folder: target.id}, false).done(function (data) {
                             // trigger event
-                            console.log(data);
                             api.trigger('update', target.id, id, data);
                             def.resolve(data);
                         });
