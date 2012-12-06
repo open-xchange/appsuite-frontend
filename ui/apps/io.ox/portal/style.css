@@ -162,6 +162,9 @@
     .widget.requires-setup {
         background-color: #eee;
         h2 { color: #555; }
+    }
+
+    .widget.requires-setup, .widget.error-occurred {
         .content {
             text-align: center;
             padding-top: 7em;

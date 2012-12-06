@@ -369,10 +369,20 @@ define('io.ox/portal/main',
     function loadAndPreview(point, node, baton) {
         var defs = point.invoke('load', node, baton).map(ensureDeferreds).value();
         return $.when.apply($, defs).done(function () {
-            node.find('.content').remove();
-            point.invoke('preview', node, baton);
-            node.removeClass('pending');
-        });
+                node.find('.content').remove();
+                point.invoke('preview', node, baton);
+                node.removeClass('pending error-occurred');
+            }).fail(function () {
+                node.find('.content').remove();
+                node.append(
+                    $('<div class="content">').text(gt('An error occurred. Click to try again')).bind('click', function () {
+                                node.addClass('pending');
+                                loadAndPreview(point, node, baton);
+                            })
+                );
+                node.addClass('error-occurred');
+                node.removeClass('pending');
+            });
     }
 
     app.removeDisabledWidgets = function () {
