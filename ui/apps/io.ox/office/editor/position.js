@@ -1831,6 +1831,8 @@ define('io.ox/office/editor/position',
      */
     Position.hasSameParentComponent = function (position1, position2, parentLevel) {
 
+        if ((! position1) || (! position2)) { return false; }
+
         var index = 0, length = position1.length;
 
         // length of both positions must be equal

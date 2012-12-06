@@ -2100,6 +2100,10 @@ define('io.ox/office/editor/editor',
 
             // disable IE table manipulation handlers in edit mode
             Utils.getDomNode(editdiv).onresizestart = function () { return false; };
+            // The resizestart event does not appear to bubble in IE9+, so we use the selectionchange event to bind
+            // the resizestart handler directly once the user selects an object (as this is when the handles appear).
+            // The MS docs (http://msdn.microsoft.com/en-us/library/ie/ms536961%28v=vs.85%29.aspx) say it's not
+            // cancelable, but it seems to work in practice.
 
             if (editMode) {
                 // focus back to editor
@@ -3601,6 +3605,10 @@ define('io.ox/office/editor/editor',
                 // insert the table into the DOM tree
                 inserted = insertContentNode(operation.start, table),
                 styleId;
+
+            // Utils.getDomNode(table).onresizestart = function () {
+            //    return false;
+            //};
 
             // insertContentNode() writes warning to console
             if (!inserted) { return; }

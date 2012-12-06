@@ -565,11 +565,18 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  A table cell element, as jQuery object.
      */
     DOM.createTableCellNode = function (paragraph) {
+
         return $('<td>')
-                .append($('<div>').addClass('cell')
-                    .append($('<div>').addClass('bottomborder resize'))
-                    .append($('<div>').addClass('rightborder resize'))
-                    .append($('<div>').addClass('cellcontent').append(paragraph)));
+        .append($('<div>').addClass('cell')
+            .append($('<div>').addClass('bottomborder resize'))
+            .append($('<div>').addClass('rightborder resize'))
+            .append($('<div>').addClass('cellcontent').append(paragraph)));
+
+//        Utils.getDomNode(tableCell).onresizestart = function (event) {
+//            return false;
+//        };
+//        return tableCell;
+
     };
 
     /**
