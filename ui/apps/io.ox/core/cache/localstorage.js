@@ -47,6 +47,7 @@ define('io.ox/core/cache/localstorage', function () {
         setId: function (theId) {
             id = theId;
             reg = new RegExp('^' + id.replace(/\./g, '\\.') + '\\.');
+            return this;
         },
 
         getStorageLayerName: function () {

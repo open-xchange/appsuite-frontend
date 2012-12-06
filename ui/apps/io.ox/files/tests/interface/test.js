@@ -73,12 +73,13 @@ define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/file
 
                 j.it('fill out form an save ', function () {
                     j.waitsFor(function () {
-                        var titleField = $('.create-file input[name="title"]'), commentField = $('.create-file textarea.input-xlarge'), saveButton = $('button[data-action="save"]');
-                        if (titleField[0] && titleField[1]) {
-                            titleField.first().val(testtitle);
-                            titleField.eq(1).val("http://www.somethingawful.com"); //yes, the link field is also titled "title"
+                        var titleField = $('.create-file input[name="title"]'),
+                            commentField = $('.create-file textarea.input-xlarge'),
+                            saveButton = $('button[data-action="save"]');
+                        if (titleField[0]) {
+                            titleField.eq(0).val(testtitle);
                             commentField.val('This is something totally awesome!');
-                            saveButton.triggerHandler('click');
+                            saveButton.trigger('click');
                             return true;
                         }
                     }, 'waits', TIMEOUT);

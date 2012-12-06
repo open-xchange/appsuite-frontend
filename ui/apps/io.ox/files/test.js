@@ -87,9 +87,6 @@ define("io.ox/files/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/
                 });
             });
 
-
-
-
             j.describe("Unit test for creating and reading info item via GET request ", function () {
                 var expected = { title : "expected Title", description : "expected Description"};
 
