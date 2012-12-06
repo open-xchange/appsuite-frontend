@@ -1209,7 +1209,7 @@ define('io.ox/office/editor/position',
             cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'td');
 
         if (cell) {
-            lastPara = Position.getCellContentNode(cell)[0].childNodes.length - 1;
+            lastPara = DOM.getCellContentNode(cell)[0].childNodes.length - 1;
         }
 
         return lastPara;

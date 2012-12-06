@@ -1000,7 +1000,6 @@ define('io.ox/office/editor/editor',
 
                             // delete the covered part of the paragraph
                             if (startOffset <= endOffset) {
-                                // generator.generateOperation(Operations.TEXT_DELETE, { start: position.concat([startOffset]), end: position.concat([endOffset]) });
                                 generator.generateOperation(Operations.DELETE, { start: position.concat([startOffset]), end: position.concat([endOffset]) });
                             }
                         } else {
