@@ -35,7 +35,6 @@ define("io.ox/settings/accounts/email/test",
             "personal": "oxtestermail",
             "unified_inbox_enabled": false,
             "mail_secure": true,
-            "password": "supersicher0815",
             "transport_secure": true,
             "pop3_storage": "mailaccount",
             "spam_handler": "NoSpamHandler"
@@ -51,7 +50,6 @@ define("io.ox/settings/accounts/email/test",
             "mail_server": "imap.googlemail.com",
             "mail_port": "993",
             "login": "oxtestermail@googlemail.com",
-            "password": "supersicher0815",
             "transport_secure": true,
             "transport_server": "smtp.googlemail.com",
             "transport_port": "465",
@@ -59,8 +57,7 @@ define("io.ox/settings/accounts/email/test",
         },
 
         TESTMAILAUTOCONFIG = {
-            'email': 'oxtestermail@googlemail.com',
-            'password': 'supersicher0815'
+            'email': 'oxtestermail@googlemail.com'
         };
 
 
@@ -88,6 +85,8 @@ define("io.ox/settings/accounts/email/test",
             j.describe("Creates a new Emailaccount via api", function () {
 
                 var dataId, obj;
+
+                TESTACCOUNT.password = prompt('Password');
 
                 j.it('creates a new account', function () {
                     api.create(TESTACCOUNT);
@@ -166,6 +165,8 @@ define("io.ox/settings/accounts/email/test",
 
                 var app = null, accountPane, buttonAdd, buttonAddAutoconf, buttonAddPassword, dialogAutoconf, dialogPassword,
                     buttonSave, detailPane, dataId, dialogSuccess, buttonClose;
+
+                TESTMAILAUTOCONFIG.password = prompt('Password');
 
                 j.it('opens settings app ', function () {
 
@@ -272,6 +273,8 @@ define("io.ox/settings/accounts/email/test",
         test: function (j) {
             j.describe("Tests the mail-autoconfig api", function () {
 
+                TESTMAILAUTOCONFIG.password = prompt('Password');
+
                 j.it('tests the autoconfig api', function () {
 
                     j.runs(function () {
@@ -279,7 +282,7 @@ define("io.ox/settings/accounts/email/test",
                         me.ready = false;
                         api.autoconfig(TESTMAILAUTOCONFIG)
                         .done(function (data) {
-                            console.log(data);
+//                            console.log(data);
                             me.ready = true;
                         })
                         .fail(function () {
@@ -304,6 +307,7 @@ define("io.ox/settings/accounts/email/test",
     //     index: 100,
     //     test: function (j) {
     //         j.describe("Tests the validate functions of the api", function () {
+    //             TESTACCOUNTVALDIDATION.password = prompt('Password');
     //             j.it('tests the validate functions', function () {
     //                 j.runs(function () {
     //                     var me = this;
