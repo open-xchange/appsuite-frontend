@@ -83,17 +83,101 @@
 
     .action {
         color: white;
+        text-align: center;
+        padding: 5px 0;
+        margin: 10px;
+        cursor: pointer;
     }
-    .widget-color-default { h2, .accent { color: #333; } .action { background-color: #333; } }
-    .widget-color-red { h2, .accent { color: @color_red; } .action { background-color: @color_red; }}
-    .widget-color-orange { h2, .accent { color: @color_orange; } .action { background-color: @color_orange; }}
-    .widget-color-lightgreen { h2, .accent { color: darken(@color_lightgreen, 10%); } .action { background-color: darken(@color_lightgreen, 10%); }}
-    .widget-color-green { h2, .accent { color: @color_green; } .action { background-color: #@color_green; }}
-    .widget-color-lightblue { h2, .accent { color: darken(@color_lightblue, 20%); } .action { background-color: darken(@color_lightblue, 20%); }}
-    .widget-color-blue { h2, .accent { color: @color_blue; } .action { background-color: @color_blue; }}
-    .widget-color-purple { h2, .accent { color: @color_purple; } .action { background-color: @color_purple; }}
-    .widget-color-pink { h2, .accent { color: darken(@color_pink, 10%); } .action { background-color: darken(@color_pink, 10%); }}
-    .widget-color-gray { h2, .accent { color: darken(@color_gray, 20%); } .action { background-color: darken(@color_gray, 20%); }}
+
+    .widget-color-default { 
+        h2, .accent {
+         color: #333; 
+        } 
+        .action { 
+            background-color: #333; 
+        } 
+    }
+    
+    .widget-color-red { 
+        h2, .accent { 
+            color: @color_red; 
+        } 
+        .action {
+            background-color: @color_red;
+        }
+    }
+    
+    .widget-color-orange { 
+        h2, .accent { 
+            color: @color_orange;
+        }
+        .action {
+            background-color: @color_orange;
+        }
+    }
+    
+    .widget-color-lightgreen { 
+        h2, .accent {
+            color: darken(@color_lightgreen, 10%);
+        }
+        .action {
+            background-color: darken(@color_lightgreen, 10%);
+        }
+    }
+    
+    .widget-color-green {
+        h2, .accent {
+            color: @color_green;
+        }
+        .action {
+            background-color: @color_green;
+        }
+    }
+
+    .widget-color-lightblue {
+        h2, .accent {
+            color: darken(@color_lightblue, 20%);
+        }
+        .action {
+            background-color: darken(@color_lightblue, 20%);
+        }
+    }
+    
+    .widget-color-blue {
+        h2, .accent {
+            color: @color_blue;
+        }
+        .action {
+            background-color: @color_blue;
+        }
+    }
+    
+    .widget-color-purple {
+        h2, .accent {
+            color: @color_purple;
+        }
+        .action {
+            background-color: @color_purple;
+        }
+    }
+
+    .widget-color-pink {
+        h2, .accent {
+            color: darken(@color_pink, 10%);
+        }
+        .action {
+            background-color: darken(@color_pink, 10%);
+        }
+    }
+    
+    .widget-color-gray {
+        h2, .accent {
+            color: darken(@color_gray, 20%);
+        }
+        .action {
+            background-color: darken(@color_gray, 20%);
+        }
+    }
 
     h2 {
         position: relative;

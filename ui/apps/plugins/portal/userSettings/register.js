@@ -13,21 +13,35 @@
 
 define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettext!io.ox/core'], function (ext, gt) {
 	'use strict';
-	
     ext.point('io.ox/portal/widget/userSettings').extend({
 
         title: gt('User Settings'),
 
         preview: function (baton) {
-
             this.append(
                 $('<div class="content">').append(
                     $('<div class="action">').text(
                         gt("My contact data")
-                    ),
-                    $('<div class="action">').text(
-                        gt("Change password")
-                    )
+                    ).on('click', function (e) {
+                        require(['io.ox/core/tk/dialogs', 'io.ox/core/settings/user'], function (dialogs, userEdit) {
+                            var popup = new dialogs.SidePopup({
+                                easyOut: true
+                            });
+
+                            var $node = $('<div>');
+
+                            userEdit.editCurrentUser($node).done(function (user) {
+                                user.on('update', function () {
+                                    popup.close();
+                                });
+                            });
+
+                            popup.show(e, function (pane) {
+                                pane.append($node);
+                                pane.closest('.io-ox-sidepopup').find('.io-ox-sidepopup-close').hide();
+                            });
+                        });
+                    })
                 )
             );
         }

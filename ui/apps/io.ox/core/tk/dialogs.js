@@ -688,7 +688,15 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
         ModalDialog: Dialog,
         CreateDialog: CreateDialog,
         SlidingPane: SlidingPane,
-        SidePopup: SidePopup
+        SidePopup: SidePopup,
+        busy: function (node) {
+            node.find('button').attr('disabled', 'disabled');
+            node.find('input').attr('disabled', 'disabled');
+        },
+        idle: function (node) {
+            node.find('button').removeAttr('disabled');
+            node.find('input').removeAttr('disabled');
+        }
     };
 });
 

@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/settings/user', ['io.ox/core/extensions', 'io.ox/core/api/user', 'io.ox/contacts/model', 'io.ox/contacts/edit/view-form'], function (ext, api, contactModel, ViewForm) {
+define('io.ox/core/settings/user', ['io.ox/core/extensions', 'io.ox/core/api/user', 'io.ox/contacts/model', 'io.ox/contacts/edit/view-form', 'io.ox/core/tk/dialogs'], function (ext, api, contactModel, ViewForm, dialogs) {
 	'use strict';
 
 
@@ -26,6 +26,13 @@ define('io.ox/core/settings/user', ['io.ox/core/extensions', 'io.ox/core/api/use
 			// Load the user
 			return factory.realm('edit').get({}).done(function (user) {
 				$node.append(new UserEdit({model: user}).render().$el);
+				user.on('sync:start', function () {
+					dialogs.busy($node);
+				});
+
+				user.on('sync:always', function () {
+					dialogs.idle($node);
+				});
 			});
 		}
 	};
