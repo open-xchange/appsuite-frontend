@@ -182,7 +182,9 @@ define('plugins/notifications/calendar/register',
                 min = $(e.target).data('value'),
                 reminder = self.model;
             self.collection.remove(self.model);
+            self.collection.hidden.push(self.model.get('cid'));
             setTimeout(function () {
+                self.collection.hidden = _.without(self.collection.hidden, reminder.get('cid'));
                 self.collection.add(reminder);
             }, min * 60000);
         },
@@ -228,6 +230,7 @@ define('plugins/notifications/calendar/register',
 
         initialize: function () {
             this.collection.on('reset add remove', this.render, this);
+            this.collection.hidden = [];
         },
 
         render: function () {
@@ -309,8 +312,11 @@ define('plugins/notifications/calendar/register',
                                 remdata: remObj,
                                 caldata: data
                             };
-                            tmp.push(inObj);
 
+                            // do not add user suppressed ('remind me later') reminders
+                            if (_.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
+                                tmp.push(inObj);
+                            }
                         });
                     });
                     ReminderNotifications.collection.reset(tmp);
