@@ -2177,7 +2177,7 @@ msgstr "Verteilerliste anlegen"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:39
 msgid "List name"
-msgstr "Name anzeigen"
+msgstr "Name der Liste"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:43
 msgid "Create list"
@@ -2201,7 +2201,7 @@ msgstr "E-Mail-Adresse"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:169
 #: apps/io.ox/contacts/view-detail.js:284
 msgid "This list has no members yet"
-msgstr "Diese Gruppe hat noch keine Mitglieder"
+msgstr "Diese Liste hat noch keine Mitglieder"
 
 #: apps/io.ox/contacts/view-detail.js:153 apps/io.ox/participants/views.js:81
 msgid "Resource"
