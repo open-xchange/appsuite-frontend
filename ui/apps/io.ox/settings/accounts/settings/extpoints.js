@@ -926,15 +926,13 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
         id: 'settings-portal-rss-add-action',
         description: gt('RSS'),
         action: function (args) {
+            console.log("Action called");
             require(['settings!io.ox/rss', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'io.ox/messaging/accounts/api', 'io.ox/core/strings'], function (settings, gt, dialogs, accountApi, strings) {
-                var makeFeedgroupSelection =  function (highlight) {
+                var feedgroupSelect =  function () {
                     var $select = $('<select>');
 
                     _(feedgroups).each(function (feedgroup) {
                         var $option = $('<option>').text(feedgroup.groupname);
-                        if (feedgroup.groupname === highlight) {
-                            $option.attr({selected: 'selected'});
-                        }
                         $select.append($option);
                     });
 
@@ -944,15 +942,16 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
 
                     return $select;
                 };
+                console.log("Function created");
                 var feedgroups = settings.get('groups'),
                     dialog = new dialogs.ModalDialog({ easyOut: true, async: true }),
                     $url = $('<input>').attr({type: 'text', placeholder: gt('http://')}),
                     $feedname = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
-                    callerGroupname = $(this.$el.find('[selected]')).data('groupname'),
-                    $group = makeFeedgroupSelection(callerGroupname),
+                    $group = feedgroupSelect(),
                     $error = $('<div>').addClass('alert alert-error').hide(),
                     that = this;
 
+                console.log("Initialized variables");
                 dialog.header($("<h4>").text(gt('Add a feed')))
                     .append($url)
                     .append($feedname)
@@ -1340,6 +1339,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         });
                         return newfeedgroups;
                     },
+
                     removeFeed = function (members, url) {
                         var newmembers = [];
                         _.each(members, function (member) {
@@ -1349,6 +1349,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         });
                         return newmembers;
                     },
+
                     makeFeedgroupSelection =  function (highlight) {
                         var $select = $('<select>');
 
