@@ -23,6 +23,10 @@ define(function () {
         "path": "io.ox/backbone/tests/test"
     },
     {
+        "namespace": "io.ox/settings/main",
+        "path": "io.ox/core/settings/register"
+    },
+    {
         "title": "Calendar",
         "company": "Open-Xchange",
         "icon": "calendar.png",
@@ -341,5 +345,9 @@ define(function () {
     {
         "namespace": "portal",
         "path": "plugins/portal/twitter/register"
+    },
+    {
+        "namespace": "portal",
+        "path": "plugins/portal/userSettings/register"
     }
 ]});

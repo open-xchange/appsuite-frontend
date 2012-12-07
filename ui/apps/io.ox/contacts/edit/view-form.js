@@ -19,12 +19,11 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/core/extPatterns/links',
     'io.ox/contacts/widgets/pictureUpload',
     'io.ox/contacts/widgets/cityControlGroup',
-    'gettext!io.ox/contacts'
+    'gettext!io.ox/contacts',
+    'less!io.ox/contacts/edit/style.css'
 ], function (model, views, forms, actions, links, PictureUpload, CityControlGroup, gt) {
 
     "use strict";
-
-    // TODO: more compact layout, correct handling of existing images
 
     var dateField, city;
 
@@ -167,190 +166,199 @@ define('io.ox/contacts/edit/view-form', [
         };
     }
 
-    var point = views.point('io.ox/contacts/edit/view'),
-        ContactEditView = point.createView({
-            tagName: 'div',
-            className: 'edit-contact'
-        });
-
-    point.extend(new PictureUpload({
-        id: 'io.ox/contacts/edit/view/picture',
-        index: 100,
-        customizeNode: function () {
-            this.$el.css({
-                display: 'inline-block',
-                height: "100px"
-            }).addClass("span2 header-pic");
-        }
-    }));
-
-
-    point.extend(new views.AttributeView({
-        id: 'io.ox/contacts/edit/view/display_name_header',
-        index: 150,
-        tagName: 'span',
-        className: 'clear-title',
-        attribute: 'display_name'
-    }));
-
-    point.extend(new views.AttributeView({
-        id: 'io.ox/contacts/edit/view/profession_header',
-        index: 170,
-        tagName: 'div',
-        className: 'clear-title job',
-        attribute: ['company', 'position', 'profession']
-    }));
-
-    point.basicExtend({
-        id: 'io.ox/contacts/edit/view/headerBreak',
-        index: 200,
-        draw: function () {
-            this.append($('<div>').css({clear: 'both'}));
-        }
-    });
-
-    // Show backend errors
-    point.extend(new forms.ErrorAlert({
-        id: 'io.ox/contacts/edit/view/backendErrors',
-        className: 'span7',
-        index: 250,
-        customizeNode: function () {
-            this.$el.css({
-                marginTop: '15px'
+    function createContactEdit(ref) {
+        var point = views.point(ref + '/edit/view'),
+            ContactEditView = point.createView({
+                tagName: 'div',
+                className: 'edit-contact'
             });
-        }
-    }));
 
-    // Actions
-    point.basicExtend(new links.InlineLinks({
-        index: 300,
-        id: 'inline-actions',
-        ref: 'io.ox/contacts/edit/view/inline',
-        customizeNode: function ($node) {
-            $node.addClass("span9");
-            $node.css({marginBottom: '20px'});
-        }
-    }));
-
-    //cancel
-
-//    views.ext.point("io.ox/contacts/edit/view/inline").extend(new links.Button({
-//        id: "imagereset",
-//        index: 100,
-//        label: gt("Reset image"),
-//        ref: "io.ox/contacts/actions/edit/reset-image",
-//        cssClasses: "btn",
-//        tabIndex: 10,
-//        tagtype: "button"
-//    }));
-
-
-    views.ext.point("io.ox/contacts/edit/view/inline").extend(new links.Button({
-        id: "discard",
-        index: 100,
-        label: gt("Discard"),
-        ref: "io.ox/contacts/actions/edit/discard",
-        cssClasses: "btn",
-        tabIndex: 11,
-        tagtype: "button"
-    }));
-
-    // Save
-
-    views.ext.point("io.ox/contacts/edit/view/inline").extend(new links.Button({
-        id: "save",
-        index: 100,
-        label: gt("Save"),
-        ref: "io.ox/contacts/actions/edit/save",
-        cssClasses: "btn btn-primary",
-        tabIndex: 10,
-        tagtype: "button"
-    }));
-
-    // Edit Actions
-
-    new actions.Action('io.ox/contacts/actions/edit/save', {
-        id: 'save',
-        action: function (options, baton) {
-            options.parentView.trigger('save:start');
-            options.model.save().done(function (data) {
-                options.parentView.trigger('save:success', data);
-            }).fail(function () {
-                options.parentView.trigger('save:fail');
-            });
-        }
-    });
-
-    new actions.Action('io.ox/contacts/actions/edit/discard', {
-        id: 'discard',
-        action: function (options, baton) {
-            options.parentView.$el.find('[data-action="discard"]').trigger('controller:quit');
-        }
-    });
-
-//    new actions.Action('io.ox/contacts/actions/edit/reset-image', {
-//        id: 'imagereset',
-//        action: function (baton) {
-//            baton.model.set("image1", '');
-//            var imageUrl =  ox.base + '/apps/themes/default/dummypicture.png';
-//            baton.parentView.$el.find('.picture-uploader').css('background-image', 'url(' + imageUrl + ')');
-//        }
-//    });
-
-    var index = 400;
-
-    _(meta.sections).each(function (fields, id) {
-        var uid = 'io.ox/contacts/edit/' + id,
-            section = {};
-        point.extend(new forms.Section({
-            id: id,
-            index: index,
-            title: meta.i18n[id],
-            ref: uid
+        point.extend(new PictureUpload({
+            id: ref + '/edit/view/picture',
+            index: 100,
+            customizeNode: function () {
+                this.$el.css({
+                    display: 'inline-block',
+                    height: "100px"
+                }).addClass("span2 header-pic");
+            }
         }));
 
-        section.point = views.point(uid);
-        index += 100;
 
-        var fieldIndex = 100;
-        _(fields).each(function (field) {
+        point.extend(new views.AttributeView({
+            id: ref + '/edit/view/display_name_header',
+            index: 150,
+            tagName: 'span',
+            className: 'clear-title',
+            attribute: 'display_name'
+        }));
 
-            var isAlwaysVisible = _(meta.alwaysVisible).indexOf(field) > -1,
-                isRare = _(meta.rare).indexOf(field) > -1;
+        point.extend(new views.AttributeView({
+            id: ref + '/edit/view/profession_header',
+            index: 170,
+            tagName: 'div',
+            className: 'clear-title job',
+            attribute: ['company', 'position', 'profession']
+        }));
 
-
-            if (meta.special[field]) {
-                meta.special[field]({
-                    point: section.point,
-                    uid: id,
-                    field: field,
-                    index: fieldIndex,
-                    isAlwaysVisible: isAlwaysVisible,
-                    isRare: isRare
-                });
-            } else {
-                section.point.extend(new forms.ControlGroup({
-                    id: field,
-                    index: fieldIndex,
-                    label: model.fields[field],
-                    control: '<input type="text" class="input-xlarge" name="' + field + '">',
-                    rare: isRare,
-                    attribute: field
-                }), {
-                    hidden: isAlwaysVisible ? false : isRare ? true : function (model) {
-                        return !model.isSet(field);
-                    }
-                });
+        point.basicExtend({
+            id: ref + '/edit/view/headerBreak',
+            index: 200,
+            draw: function () {
+                this.append($('<div>').css({clear: 'both'}));
             }
-
-            fieldIndex += 100;
         });
 
-    });
 
+        // Show backend errors
+        point.extend(new forms.ErrorAlert({
+            id: ref + '/edit/view/backendErrors',
+            className: 'span7',
+            index: 250,
+            customizeNode: function () {
+                this.$el.css({
+                    marginTop: '15px'
+                });
+            }
+        }));
+
+        // Actions
+        point.basicExtend(new links.InlineLinks({
+            index: 300,
+            id: 'inline-actions',
+            ref: ref + '/edit/view/inline',
+            customizeNode: function ($node) {
+                $node.addClass("span9");
+                $node.css({marginBottom: '20px'});
+            }
+        }));
+
+        //cancel
+
+//        views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
+//            id: "imagereset",
+//            index: 100,
+//            label: gt("Reset image"),
+//            ref: ref + "/actions/edit/reset-image",
+//            cssClasses: "btn",
+//            tabIndex: 10,
+//            tagtype: "button"
+//        }));
+
+
+        views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
+            id: "discard",
+            index: 100,
+            label: gt("Discard"),
+            ref: ref + "/actions/edit/discard",
+            cssClasses: "btn",
+            tabIndex: 11,
+            tagtype: "button"
+        }));
+
+        // Save
+
+        views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
+            id: "save",
+            index: 100,
+            label: gt("Save"),
+            ref: ref + "/actions/edit/save",
+            cssClasses: "btn btn-primary",
+            tabIndex: 10,
+            tagtype: "button"
+        }));
+
+        // Edit Actions
+
+        new actions.Action(ref + '/actions/edit/save', {
+            id: 'save',
+            action: function (options, baton) {
+                options.parentView.trigger('save:start');
+                options.model.save().done(function () {
+                    options.parentView.trigger('save:success');
+                }).fail(function () {
+                    options.parentView.trigger('save:fail');
+                });
+            }
+        });
+
+        new actions.Action(ref + '/actions/edit/discard', {
+            id: 'discard',
+            action: function (options, baton) {
+                options.parentView.$el.find('[data-action="discard"]').trigger('controller:quit');
+            }
+        });
+
+        new actions.Action(ref + '/actions/edit/reset-image', {
+            id: 'imagereset',
+            action: function (baton) {
+                baton.model.set("image1", '');
+                var imageUrl =  ox.base + '/apps/themes/default/dummypicture.png';
+                baton.parentView.$el.find('.picture-uploader').css('background-image', 'url(' + imageUrl + ')');
+            }
+        });
+
+        var index = 400;
+
+        _(meta.sections).each(function (fields, id) {
+            var uid = ref + '/edit/' + id,
+                section = {};
+            point.extend(new forms.Section({
+                id: id,
+                index: index,
+                title: meta.i18n[id],
+                ref: uid
+            }));
+
+            section.point = views.point(uid);
+            index += 100;
+
+            var fieldIndex = 100;
+            _(fields).each(function (field) {
+
+                var isAlwaysVisible = _(meta.alwaysVisible).indexOf(field) > -1,
+                    isRare = _(meta.rare).indexOf(field) > -1;
+
+
+                if (meta.special[field]) {
+                    meta.special[field]({
+                        point: section.point,
+                        uid: id,
+                        field: field,
+                        index: fieldIndex,
+                        isAlwaysVisible: isAlwaysVisible,
+                        isRare: isRare
+                    });
+                } else {
+                    section.point.extend(new forms.ControlGroup({
+                        id: field,
+                        index: fieldIndex,
+                        label: model.fields[field],
+                        control: '<input type="text" class="input-xlarge" name="' + field + '">',
+                        rare: isRare,
+                        attribute: field
+                    }), {
+                        hidden: isAlwaysVisible ? false : isRare ? true : function (model) {
+                            return !model.isSet(field);
+                        }
+                    });
+                }
+
+                fieldIndex += 100;
+            });
+
+        });
+        
+        return ContactEditView;
+    }
+
+    var ContactEditView = createContactEdit('io.ox/contacts');
 
     return {
-        ContactEditView: ContactEditView
+        ContactEditView: ContactEditView,
+        protectedMethods: {
+            createContactEdit: createContactEdit
+        }
     };
 
 });
