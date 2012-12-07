@@ -3592,7 +3592,7 @@ msgstr "Neue Datei hinzufügen"
 
 #: apps/io.ox/contacts/model.js:211 apps/io.ox/files/views/create.js:115
 msgid "Title"
-msgstr "Anrede"
+msgstr "Beschreibung"
 
 #: apps/io.ox/contacts/edit/view-form.js:89 apps/io.ox/contacts/model.js:224
 #: apps/io.ox/files/views/create.js:143
