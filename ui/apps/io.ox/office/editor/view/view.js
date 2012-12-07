@@ -284,8 +284,8 @@ define('io.ox/office/editor/view/view',
         this.addPane('toolpane', toolPane, 'top');
 
         toolPane.createToolBar('format', { label: gt('Format') })
-            .addButton('document/undo', { icon: 'docs-undo', tooltip: gt('Revert Last Operation') })
-            .addButton('document/redo', { icon: 'docs-redo', tooltip: gt('Restore Last Operation') })
+            .addButton('document/undo', { icon: 'docs-undo', tooltip: gt('Revert last operation') })
+            .addButton('document/redo', { icon: 'docs-redo', tooltip: gt('Restore last operation') })
             .addSeparator()
             .addGroup('paragraph/stylesheet', new Controls.ParagraphStyleChooser(editor))
             .addSeparator()

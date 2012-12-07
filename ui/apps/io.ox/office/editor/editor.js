@@ -2527,46 +2527,41 @@ define('io.ox/office/editor/editor',
          * @param {jQuery.Event} event
          *  The jQuery event object.
          */
-        var processFocus = (function () {
+        var processFocus = deferredMethods.createMethod(
 
-            var // current focus state
-                isFocused = false,
-                // current scroll position
-                scrollPosition = null;
-
-            // return the actual processFocus() method
-            return function (event) {
+            // direct callback: called every time when processFocus() has been called
+            function (storage, event) {
 
                 var // the new focus state
                     gotFocus = event.type === 'focus';
 
                 // do nothing for repeated calls without changed state
-                if (isFocused === gotFocus) { return; }
-                isFocused = gotFocus;
-
-                // the view is still missing if called from its own constructor
-                if (isFocused && app.getView()) {
-                    // store current scroll positions
-                    scrollPosition = getScrollPosition();
-                    // Chrome sets a default text cursor at the top position
-                    // while processing the focus event, if the editor does
-                    // not contain a valid browser selection, e.g. when a
-                    // drawing object is selected. Thus, selection needs to
-                    // be restored in a timeout handler.
-                    window.setTimeout(function () {
-                        // restore current scroll positions
-                        setScrollPosition(scrollPosition);
-                        // selection is invalid until document has been initialized
-                        if (selection.isValid()) {
-                            selection.restoreBrowserSelection();
-                        }
-                    });
-                }
+                if (storage.isFocused === gotFocus) { return; }
+                storage.isFocused = gotFocus;
+                storage.scrollPosition = getScrollPosition();
 
                 // notify listeners
-                self.trigger('focus', isFocused);
-            };
-        }());
+                self.trigger('focus', gotFocus);
+            },
+
+            // deferred callback: called once, after current script ends
+            function (storage) {
+
+                // Chrome sets a default text cursor at the top position and
+                // scrolls the application node to the top while processing the
+                // focus event, if the editor does not contain a valid browser
+                // selection, e.g. when a drawing object is selected. Thus,
+                // selection needs to be restored in a deferred method.
+                setScrollPosition(storage.scrollPosition);
+                if (storage.isFocused) {
+                    selection.restoreBrowserSelection();
+                }
+            },
+
+            // storage object passed to all callbacks
+            { isFocused: false, scrollPosition: null }
+
+        ); // processFocus()
 
         function processMouseDown(event) {
 

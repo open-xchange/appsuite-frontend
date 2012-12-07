@@ -859,7 +859,7 @@ define('io.ox/office/editor/format/stylesheets',
          * @param {Object} [options]
          *  A map of options controlling the operation. Supports the following
          *  options:
-         *  @param {HTMLElement|jQuery} [options.sourcNode]
+         *  @param {HTMLElement|jQuery} [options.sourceNode]
          *      A descendant of the passed element associated to a child
          *      attribute family. Will be passed to a style attribute resolver
          *      callback function where it might be needed to resolve the
@@ -1160,7 +1160,7 @@ define('io.ox/office/editor/format/stylesheets',
                 // copy style sheet identifier directly
                 if (name === 'style') {
                     attributes1[family].style = value;
-                } else if (isRegisteredAttribute(definitions, name)) {
+                } else if (isRegisteredAttribute(definitions, name, { special: true })) {
                     // try to find merger function from attribute definition
                     merger = definitions[name].merge;
                     // either set return value from merger, or copy the attribute directly
