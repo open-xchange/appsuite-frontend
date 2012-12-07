@@ -193,6 +193,8 @@ function (date, ext) {
                 zoneData[zones[i]] = arguments[i];
             }
             zones = zoneData;
-            ext.point('test/suite').extend({ id: 'date', test: test });
+            if (ox.language === 'de_DE') {
+                ext.point('test/suite').extend({ id: 'date', test: test });
+            }
         });
 });
