@@ -353,12 +353,12 @@ define("io.ox/mail/main",
         };
 
         drawThread = function (baton) {
-            viewDetail.drawThread.call(right, baton);
+            viewDetail.drawThread.call(right, baton, { decorator: true });
         };
 
         drawMail = function (data) {
             var baton = ext.Baton({ data: data, app: app });
-            right.idle().empty().append(viewDetail.draw(baton).addClass('page'));
+            right.idle().empty().append(viewDetail.draw(baton, { decorator: true }).addClass('page'));
         };
 
         drawFail = function (obj) {

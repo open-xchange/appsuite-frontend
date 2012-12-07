@@ -264,10 +264,11 @@ define('io.ox/mail/view-detail',
                     .end()
                     // images with attribute width/height
                     .find('img[width], img[height]').each(function () {
-                        var node = $(this), w = node.attr('width');
+                        var node = $(this), w = node.attr('width'), h = node.attr('height');
                         node.removeAttr('width height');
                         // just set width; max-width=100% should still apply
                         if (w) { node.css({ width: w + 'px' }); }
+                        if (h) { node.css({ height: h + 'px'}); }
                     })
                     .end();
                     // nested message?
@@ -379,14 +380,13 @@ define('io.ox/mail/view-detail',
             return content;
         },
 
-        drawScaffold: function (obj, resolver) {
-            return $('<div>')
-                .addClass('mail-detail')
+        drawScaffold: function (data, options, resolver) {
+            return $('<div class="mail-detail"></div>')
                 .busy()
-                .one('resolve', obj, resolver);
+                .one('resolve', { cid: _.cid(data), thread: data, options: options }, resolver);
         },
 
-        draw: function (baton) {
+        draw: function (baton, options) {
 
             if (!baton) {
                 return $('<div>');
@@ -395,15 +395,14 @@ define('io.ox/mail/view-detail',
             // ensure baton
             baton = ext.Baton.ensure(baton);
 
-            // outer node
             var data = baton.data,
                 self = this,
-                node = $.createViewContainer(data, api)
+                node = $('<div class="mail-detail">'),
+                container = $.createViewContainer(data, api)
                     .on('redraw', function (e, tmp) {
                         copyThreadData(tmp, data);
-                        node.replaceWith(self.draw(tmp));
-                    })
-                    .addClass('mail-detail');
+                        container.replaceWith(self.draw(tmp));
+                    });
 
             // threaded & send by myself (and not in sent folder)?
             if (data.threadSize > 1 && util.byMyself(data) && !account.is('sent', data.folder_id)) {
@@ -420,15 +419,21 @@ define('io.ox/mail/view-detail',
             // invoke extensions
             ext.point('io.ox/mail/detail').invoke('draw', node, baton);
 
-            return node;
+            options = options || {};
+
+            if (options.decorator) {
+                container.addClass('mail-detail-decorator');
+            }
+
+            return container.append(node);
         },
 
         autoResolveThreads: function (e) {
             var self = $(this), parents = self.parents();
-            api.get(api.reduce(e.data)).done(function (data) {
+            api.get(_.cid(e.data.cid)).done(function (data) {
                 // replace placeholder with mail content
-                copyThreadData(data, e.data);
-                self.replaceWith(that.draw(data));
+                copyThreadData(data, e.data.thread);
+                self.replaceWith(that.draw(data, e.data.options));
             });
         },
 
@@ -449,14 +454,14 @@ define('io.ox/mail/view-detail',
                 }
             }
 
-            function drawThread(node, baton, pos, top, bottom, mails) {
+            function drawThread(options, node, baton, pos, top, bottom, mails) {
                 var i, obj, frag = document.createDocumentFragment(),
                     scrollpane = node.closest('.scrollable').off('scroll'),
                     nodes, inline, top, mail,
                     list = baton.data;
                 // draw inline links for whole thread
                 if (list.length > 1) {
-                    inline = $('<div class="mail-detail thread-inline-actions">');
+                    inline = $('<div class="thread-inline-actions">');
                     ext.point('io.ox/mail/thread').invoke('draw', inline, baton);
                     inline.find('.dropdown > a').addClass('btn btn-primary');
                     frag.appendChild(inline.get(0));
@@ -466,9 +471,9 @@ define('io.ox/mail/view-detail',
                     if (i >= top && i <= bottom) {
                         mail = mails.shift();
                         copyThreadData(mail, obj);
-                        frag.appendChild(that.draw(ext.Baton({ data: mail, app: baton.app })).get(0));
+                        frag.appendChild(that.draw(ext.Baton({ data: mail, app: baton.app }), options).get(0));
                     } else {
-                        frag.appendChild(that.drawScaffold(obj, that.autoResolveThreads).get(0));
+                        frag.appendChild(that.drawScaffold(obj, options, that.autoResolveThreads).get(0));
                     }
                 }
                 node.idle().empty().get(0).appendChild(frag);
@@ -483,10 +488,10 @@ define('io.ox/mail/view-detail',
                 nodes = frag = node = scrollpane = list = mail = mails = null;
             }
 
-            return function (baton) {
+            return function (baton, options) {
                 // define next step now
                 var list = baton.data,
-                    next = _.lfo(drawThread),
+                    next = _.lfo(drawThread, options),
                     node = this;
                 // get list data, esp. to know unseen flag - we need this list for inline link checks anyway
                 api.getList(list).done(function (list) {
@@ -873,7 +878,7 @@ define('io.ox/mail/view-detail',
                                 .done(function (unmodifiedData) {
                                     // keep outer node due to custom CSS classes (e.g. page)
                                     var content = that.draw(unmodifiedData);
-                                    self.empty().append(content.children());
+                                    self.parent().empty().append(content.children());
                                 });
                         });
                     })

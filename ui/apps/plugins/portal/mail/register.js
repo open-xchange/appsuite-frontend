@@ -65,9 +65,7 @@ define('plugins/portal/mail/register',
             require(['io.ox/mail/view-detail', 'io.ox/mail/api'], function (view, api) {
                 var obj = api.reduce(baton.item);
                 api.get(obj).done(function (data) {
-                    popup.idle().append(
-                        view.draw(data).css('padding', 0)
-                    );
+                    popup.idle().append(view.draw(data));
                 });
             });
         }

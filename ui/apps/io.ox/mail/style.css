@@ -184,42 +184,54 @@
     height: 110%; /* allows hiding "Entire thread" */
 }
 
-.mail-detail-pane .mail-detail.view {
-    background-color: white;
-    padding: 20px 20px 20px 20px;
-    margin: 20px 20px 0px 20px;
-    .box-shadow(0px 3px 10px -3px black);
-}
+
 
 .mail-detail-pane .mail-detail.view.by-myself {
     background-color: #f5f5f5;
 }
 
-.mail-detail-pane .mail-detail.thread-inline-actions {
+.mail-detail-pane .thread-inline-actions {
     background-color: #eee;
+    padding: 20px 0 0px 20px;
 }
 
 /* --- */
+
+.mail-detail-decorator {
+
+    padding: 20px 20px 0px 20px;
+    display: table;
+    width: 100%;
+    .box-sizing(border-box);
+
+    .mail-detail  {
+        background-color: white;
+        padding: 30px 20px 30px 20px;
+        .box-shadow(0px 3px 10px -3px black);
+    }
+}
 
 .mail-detail {
 
     position: relative;
     overflow-y: visible;
     clear: both;
-    padding: 30px 40px 30px 40px;
-    border-bottom: 1px solid #eee;
-    min-height: 200px;
+
+    display: table;
+    width: 100%;
+    .box-sizing(border-box);
+
+    &.io-ox-busy {
+        min-height: 200px;
+        display: block;
+    }
 
     .mail-detail-clear-both {
         clear: both;
         height: 0px;
     }
 
-    &:last-child {
-        border-bottom: 0px none;
-    }
-
-    &.thread-inline-actions {
+    .thread-inline-actions {
         border: 0px none;
         padding: 18px 20px 0 20px;
         min-height: 0px;
@@ -249,11 +261,11 @@
         margin: @inline-links-margin;
     }
 
-    &.unread .from .person-link {
+    .unread .from .person-link {
         font-weight: bold;
     }
 
-    &.unread .subject {
+    .unread .subject {
         font-family: @font-normal;
         font-weight: bold;
     }
@@ -381,6 +393,7 @@
         max-width: 1000px;
         margin-top: 1em;
         cursor: auto;
+        display: table; /* for large images */
         position: relative;
         overflow: hidden; /* helper for absolutely positioned elements */
 
@@ -402,6 +415,7 @@
 
         img {
             width: auto;
+            max-width: 10000px;
             vertical-align: middle;
         }
 
