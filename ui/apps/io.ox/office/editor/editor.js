@@ -771,6 +771,9 @@ define('io.ox/office/editor/editor',
                 // the initial paragraph node in an empty document
                 paragraph = DOM.createParagraphNode();
 
+            // this paragraph is created without operation
+            paragraph = DOM.setImplicitToParagraphNode(paragraph);
+
             // create empty page with single paragraph
             pageContentNode.empty().append(paragraph);
             validateParagraphNode(paragraph);
@@ -1717,7 +1720,23 @@ define('io.ox/office/editor/editor',
         };
 
         this.insertText = function (text, position, attrs) {
-            var newOperation = { name: Operations.TEXT_INSERT, text: text, start: _.clone(position) };
+
+            var newOperation = null,
+                paragraph = null,
+                paraPosition = _.clone(position);
+
+            if (paraPosition.pop() === 0) {  // is this an empty paragraph?
+                paragraph = Position.getDOMPosition(editdiv, paraPosition).node;
+                if (DOM.isImplicitParagraphNode(paragraph)) {
+                    // removing implicit paragraph node
+                    $(paragraph).remove();
+                    // creating new paragraph explicitely
+                    newOperation = {name: Operations.PARA_INSERT, start: paraPosition};
+                    applyOperation(newOperation);
+                }
+            }
+
+            newOperation = { name: Operations.TEXT_INSERT, text: text, start: _.clone(position) };
             if (_.isObject(attrs)) { newOperation.attrs = attrs; }
             applyOperation(newOperation);
         };
