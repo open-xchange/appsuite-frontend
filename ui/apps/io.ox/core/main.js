@@ -57,8 +57,8 @@ define("io.ox/core/main",
         var node = $('<div class="launcher">')
             .append(_.isString(label) ? $.txt(gt(label)) : label)
             .hover(
-                function () { $(this).addClass('hover'); },
-                function () { $(this).removeClass('hover'); }
+                function () { if (!Modernizr.touch) { $(this).addClass('hover'); } },
+                function () { if (!Modernizr.touch) { $(this).removeClass('hover'); } }
             )
             .on('click', function () {
                 var self = $(this), content;
@@ -73,7 +73,7 @@ define("io.ox/core/main",
             });
 
         // tooltip
-        if (tooltip) {
+        if (tooltip && !Modernizr.touch) {
             node.tooltip({ title: tooltip, placement: 'bottom', animation: false });
         }
 
