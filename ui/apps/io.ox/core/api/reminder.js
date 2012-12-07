@@ -13,10 +13,10 @@
 define("io.ox/core/api/reminder", ["io.ox/core/http",
                                    "io.ox/core/event"], function (http, Events) {
     "use strict";
-    
+
     var api = {
         deleteReminder: function (reminderId) {
-    
+
             return http.PUT({
                 module: "reminder",
                 params: {action: "delete"},
@@ -24,7 +24,7 @@ define("io.ox/core/api/reminder", ["io.ox/core/http",
             });
 
         },
-    
+
         remindMeAgain: function (remindDate, reminderId) {
             return http.PUT({
                 module: "reminder",
@@ -35,53 +35,60 @@ define("io.ox/core/api/reminder", ["io.ox/core/http",
             });
 
         },
-        
+
         getReminders: function (range, module) {
 
             return http.GET({
                 module: "reminder",
-                params: {action: "range",
-                    end: range
+                params: {
+                    action: "range",
+                    end: range || _.now()
                 }
             }).pipe(function (list) {
-            
+
                 if (module === undefined || module === 4) {
                     //seperate task reminders from overall reminders
                     var reminderTaskId = [],
+                        reminderCalId = [],
                         reminderId = [];
                     for (var i = 0; i < list.length; i++) {
                         if (list[i].module === 4) {
                             reminderTaskId.push(list[i].target_id);
                             reminderId.push(list[i].id);
                         }
+                        if (list[i].module === 1) {
+                            reminderCalId.push(list[i]);
+                        }
                     }
                     if (reminderTaskId.length > 0) {
                         api.trigger('reminder-tasks', reminderTaskId, reminderId);
                     }
+                    if (reminderCalId.length > 0) {
+                        api.trigger('reminder-calender', reminderCalId);
+                    }
                 }
-                
+
                 return list;
             });
         }
     };
-    
+
     Events.extend(api);
-    
+
     // global refresh
     api.refresh = function () {
-        var now = new Date();
-        api.getReminders(now.getTime()).done(function () {
+        api.getReminders().done(function () {
             // trigger local refresh
             api.trigger("refresh.all");
         });
     };
-    
+
 
     ox.on('refresh^', function () {
         api.refresh();
     });
-    
-    
+
+
     return api;
 
 });
