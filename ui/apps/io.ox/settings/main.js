@@ -150,6 +150,15 @@ define('io.ox/settings/main',
                 });
 
                 // Extend the above list by custom plugins
+                ext.point("io.ox/settings/pane").each(function (ext) {
+                    apps.push({
+                        description: ext.title,
+                        id: ext.ref,
+                        settings: true,
+                        title: ext.title,
+                        loadSettingPane: ext.loadSettingPane
+                    });
+                });
 
                 def.resolve(apps);
             });
@@ -164,11 +173,17 @@ define('io.ox/settings/main',
             var settingsPath = obj.id + '/settings/pane',
                 extPointPart = obj.id + '/settings';
             right.empty().busy();
-            require([settingsPath], function (m) {
+            if (obj.loadSettingPane || _.isUndefined(obj.loadSettingPane)) {
+                require([settingsPath], function (m) {
+                    right.empty().idle(); // again, since require makes this async
+                    ext.point(extPointPart + '/detail').invoke('draw', right, obj);
+                    updateExpertMode();
+                });
+            } else {
                 right.empty().idle(); // again, since require makes this async
                 ext.point(extPointPart + '/detail').invoke('draw', right, obj);
                 updateExpertMode();
-            });
+            }
         };
 
         // trigger auto save

@@ -29,6 +29,13 @@ define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/wid
                 this.$el.find('input').trigger('click');
             },
 
+            resetImage: function (e) {
+                e.stopImmediatePropagation();
+                this.model.set("image1", '');
+                var imageUrl =  ox.base + '/apps/themes/default/dummypicture.png';
+                this.$el.find('.picture-uploader').css('background-image', 'url(' + imageUrl + ')');
+            },
+
             handleFileSelect: function (e) {
                 var file = e.target.files[0];
                 this.model.set("pictureFile", file);
@@ -63,12 +70,21 @@ define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/wid
 
 
                 this.$el.append(
-                    $('<div class="picture-uploader">').css({
+                    $('<div class="picture-uploader thumbnail">').css({
                         backgroundImage: 'url(' + imageUrl + ')',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        position: 'relative'
                     }).on('click', function () {
                         self.openFileChooser();
-                    })
+                    }).append(
+                        $('<div>').addClass('close').css({
+                            position: 'absolute',
+                            top: '1px',
+                            right: '7px'
+                        }).html('&times;').on('click', function (e) {
+                            self.resetImage(e);
+                        })
+                    )
                 );
 
                 this.$el.append(

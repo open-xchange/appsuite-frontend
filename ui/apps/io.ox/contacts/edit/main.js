@@ -95,6 +95,7 @@ define('io.ox/contacts/edit/main',
                         });
                     } else {
                         handelContact(model.factory.create(data));
+                        container.find('[data-extension-id="io.ox/contacts/edit/view/display_name_header"]').text(gt('New contact'));
                     }
 
                     getDirtyStatus = function () {

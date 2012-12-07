@@ -111,7 +111,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         this._modelBinder = new Backbone.ModelBinder();
                     },
                     render: function () {
-                        console.log("RENDERING");
                         var self = this;
                         self.$el.empty().append(
                             $('<div class="io-ox-settings-item io-ox-reddit-setting">')
@@ -286,7 +285,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                 (new Backbone.Collection(subreddits)).each(function (item) {
                     $(that).append(new SubredditSelectView({model: item}).render().el);
                 });
-
 
             }); //END: require
         } //END: draw
@@ -560,47 +558,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                     }
                 }),
 
-                PluginSettingsView = Backbone.View.extend({
-                    initialize: function (options) {
-                    },
-                    render: function () {
-                        this.$el.empty().append(
-                            $('<div>').append(
-                                $('<div class="section">').append(
-                                    $('<div class="settings-detail-pane">').append(
-                                        $('<div class="io-ox-tumblr-settings">')
-                                    ),
-                                    $('<div class="sectioncontent">').append(
-                                        $('<button class="btn" data-action="add" style="margin-right: 15px; ">').text(staticStrings.ADD)
-                                    )
-                                )
-                            )
-                        );
-                        var that = this;
-                        function redraw() {
-                            var $settings = that.$el.find('.io-ox-tumblr-settings');
-                            var collection = new Backbone.Collection(blogs);
-                            $settings.empty();
-
-                            collection.each(function (item) {
-                                $settings.append(new BlogSelectView({ model: item }).render().el);
-                            });
-
-                            if (collection.length === 0) {
-                                $settings.hide();
-                            } else {
-                                $settings.show();
-                            }
-                        }
-
-                        redraw();
-
-                        this.on('redraw', redraw);
-
-                        return this;
-                    }
-                }),
-
                 removeBlog = function (blogs, url) {
                     var newblogs = [];
                     _.each(blogs, function (sub) {
@@ -611,7 +568,9 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                     return newblogs;
                 };
 
-                $(that).append(new PluginSettingsView().render().el);
+                (new Backbone.Collection(blogs)).each(function (item) {
+                    $(that).append(new BlogSelectView({model: item}).render().el);
+                });
             }); //END: require
         } //END: draw
     }); //END: extend
@@ -941,49 +900,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         }
                     }),
 
-                    PluginSettingsView = Backbone.View.extend({
-                        initialize: function (options) {
-                        },
-                        render: function () {
-                            this.$el.empty().append(
-                                $('<div>').append(
-                                    $('<div class="section">').append(
-                                        $('<div class="settings-detail-pane">').append(
-                                            $('<div class="io-ox-portal-flickr-settings">')
-                                        ),
-                                        $('<div class="sectioncontent">').append(
-                                            $('<button class="btn" data-action="add" style="margin-right: 15px; ">').text(staticStrings.ADD)
-                                        )
-                                    )
-                                )
-                            );
-
-                            var that = this;
-
-                            function redraw() {
-                                var $listbox = that.$el.find('.io-ox-portal-flickr-settings');
-                                var collection = new Backbone.Collection(streams);
-                                $listbox.empty();
-
-                                collection.each(function (item) {
-                                    $listbox.append(new StreamSelectView({ model: item }).render().el);
-                                });
-
-                                if (collection.length === 0) {
-                                    $listbox.hide();
-                                } else {
-                                    $listbox.show();
-                                }
-                            }
-
-                            redraw();
-
-                            this.on('redraw', redraw);
-
-                            return this;
-                        }
-                    }),
-
                     removeStream = function (streams, q, method) {
                         var newStreams = [];
 
@@ -994,8 +910,9 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         });
                         return newStreams;
                     };
-
-                $(that).append(new PluginSettingsView().render().el);
+                (new Backbone.Collection(streams)).each(function (item) {
+                    $(that).append(new StreamSelectView({model: item}).render().el);
+                });
             }); //END: require
         } //END: draw
     }); //END: extend
@@ -1414,64 +1331,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         }
                     }),
 
-
-
-                    PluginSettingsView = Backbone.View.extend({
-                        initialize: function (options) {
-                            if (feedgroups) {
-                                return;
-                            }
-                            migrateIfNecessary();
-
-                            feedgroups = settings.get('groups');
-                            if (feedgroups) {
-                                return;
-                            }
-                            feedgroups = [];
-                            settings.set('groups', feedgroups);
-                            settings.save();
-                        },
-                        render: function () {
-                            this.$el.empty().append(
-                                $('<div>').append(
-                                    $('<div class="section">').append(
-                                        $('<div class="settings-detail-pane">').append(
-                                            $('<div class="io-ox-rss-settings">')
-                                        ),
-                                        $('<div class="sectioncontent">').append(
-                                            $('<button class="btn" data-action="add-feed" style="margin-right: 15px; ">').text(staticStrings.ADD_FEED),
-                                            $('<button class="btn" data-action="add-group" style="margin-right: 15px; ">').text(staticStrings.ADD_GROUP)
-                                        )
-                                    )
-                                )
-                            );
-
-                            var that = this;
-
-                            function redraw() {
-                                var $listbox = that.$el.find('.io-ox-rss-settings');
-                                var collection = new Backbone.Collection(feedgroups);
-                                $listbox.empty();
-
-                                collection.each(function (item) {
-                                    $listbox.append(new FeedGroupView({ model: item }).render().el);
-                                });
-
-                                if (collection.length === 0) {
-                                    $listbox.hide();
-                                } else {
-                                    $listbox.show();
-                                }
-
-                            }
-
-                            redraw();
-
-                            this.on('redraw', redraw);
-
-                            return this;
-                        }
-                    }),
                     removeFeedgroup = function (feedgroups, groupname) {
                         var newfeedgroups = [];
                         _.each(feedgroups, function (group) {
@@ -1507,7 +1366,11 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
 
                         return $select;
                     };
-                $(that).append(new PluginSettingsView().render().el);
+
+                (new Backbone.Collection(feedgroups)).each(function (item) {
+                    $(that).append(new FeedGroupView({model: item}).render().el);
+                });
+
             }); //END: require
         } //END: draw
     }); //END: extend
