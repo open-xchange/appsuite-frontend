@@ -280,7 +280,8 @@
     @appointment-private: #ccc; /* grey */
     
     @appointment-unconfirmed-alpha: 0.4;
-    @appointment-declined-alpha: 0.1;
+    @appointment-declined-alpha: 0.3;
+    @appointment-declined-font: #888;
     @appointment-hover-pct: 15%; 
     
     /* appointment status styles */
@@ -311,8 +312,9 @@
         background-color: @appointment-free;
     }
     
-    .appointment.declined .appointment-content{
+    .appointment.declined .appointment-content * {
         text-decoration: line-through;
+        color: @appointment-declined-font;
     }
 
     /* hover */
