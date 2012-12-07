@@ -16,9 +16,10 @@ define('io.ox/calendar/month/view',
      'io.ox/core/extensions',
      'io.ox/core/api/folder',
      'gettext!io.ox/calendar',
+     'settings!io.ox/calendar',
      'less!io.ox/calendar/month/style.css',
      'apps/io.ox/core/tk/jquery-ui.min.js',
-     'apps/io.ox/core/tk/jquery.mobile.touch.min.js'], function (util, date, ext, folder, gt) {
+     'apps/io.ox/core/tk/jquery.mobile.touch.min.js'], function (util, date, ext, folder, gt, settings) {
 
     'use strict';
 
@@ -147,38 +148,45 @@ define('io.ox/calendar/month/view',
             // loop over all appointments
             this.collection.each(function (model) {
 
-                var startTSUTC = Math.max(model.get('start_date'), this.weekStart),
-                    endTSUTC = Math.min(model.get('end_date'), this.weekEnd) - 1;
+                var hash = util.getConfirmations(model.attributes),
+                    conf = hash[myself] || { status: 1, comment: "" };
 
-                // fix full-time UTC timestamps
-                if (model.get('full_time')) {
-                    startTSUTC = date.Local.utc(startTSUTC);
-                    endTSUTC = date.Local.utc(endTSUTC);
-                }
+                // is declined?
+                if (conf.status !== 2 || settings.get('showDeclinedAppointments', 'false') === 'true') {
 
-                var startDate = new date.Local(startTSUTC),
-                    endDate = new date.Local(endTSUTC),
-                    start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime(),
-                    end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime(),
-                    maxCount = 7;
+                    var startTSUTC = Math.max(model.get('start_date'), this.weekStart),
+                        endTSUTC = Math.min(model.get('end_date'), this.weekEnd) - 1;
 
-                if (model.get('start_date') < 0) {
-                    console.error('FIXME: start_date should not be negative');
-                    throw 'FIXME: start_date should not be negative';
-                }
+                    // fix full-time UTC timestamps
+                    if (model.get('full_time')) {
+                        startTSUTC = date.Local.utc(startTSUTC);
+                        endTSUTC = date.Local.utc(endTSUTC);
+                    }
 
-                // draw across multiple days
-                while (maxCount >= 0) {
-                    maxCount--;
-                    this.$('#' + formatDate(startDate) + ' .list').append(this.renderAppointment(model));
+                    var startDate = new date.Local(startTSUTC),
+                        endDate = new date.Local(endTSUTC),
+                        start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime(),
+                        end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime(),
+                        maxCount = 7;
 
-                    // inc date
-                    if (start !== end) {
-                        startDate.setDate(startDate.getDate() + 1);
-                        startDate.setHours(0, 0, 0, 0);
-                        start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime();
-                    } else {
-                        break;
+                    if (model.get('start_date') < 0) {
+                        console.error('FIXME: start_date should not be negative');
+                        throw 'FIXME: start_date should not be negative';
+                    }
+
+                    // draw across multiple days
+                    while (maxCount >= 0) {
+                        maxCount--;
+                        this.$('#' + formatDate(startDate) + ' .list').append(this.renderAppointment(model));
+
+                        // inc date
+                        if (start !== end) {
+                            startDate.setDate(startDate.getDate() + 1);
+                            startDate.setHours(0, 0, 0, 0);
+                            start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime();
+                        } else {
+                            break;
+                        }
                     }
                 }
             }, this);
