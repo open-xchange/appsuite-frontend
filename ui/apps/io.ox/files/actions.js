@@ -71,7 +71,7 @@ define('io.ox/files/actions',
     // editor
     new Action('io.ox/files/actions/editor', {
         requires: function (e) {
-            return e.collection.has('one') && (/\.(txt|js|md)$/i).test(e.context.data.filename);
+            return e.collection.has('one') && (/\.(txt|js|md)$/i).test(e.context.filename);
         },
         action: function (baton) {
             ox.launch('io.ox/editor/main').done(function () {

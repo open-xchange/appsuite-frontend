@@ -331,7 +331,7 @@ define("io.ox/mail/main",
             }, []);
         };
 
-        var showMail, drawMail, drawFail;
+        var showMail, drawMail, drawFail, drawThread;
 
         showMail = function (obj) {
             // be busy
@@ -339,10 +339,11 @@ define("io.ox/mail/main",
             // which mode?
             if (grid.getMode() === "all" && grid.prop('sort') === 'thread' && !isInOpenThreadSummary(obj)) {
                 // get thread
-                var thread = api.getThread(obj);
+                var thread = api.getThread(obj),
+                    baton = ext.Baton({ data: thread, app: app });
                 // get first mail first
                 api.get(api.reduce(thread[0]))
-                    .done(_.lfo(viewDetail.drawThread, right, thread))
+                    .done(_.lfo(drawThread, baton))
                     .fail(_.lfo(drawFail, obj));
             } else {
                 api.get(api.reduce(obj))
@@ -351,8 +352,13 @@ define("io.ox/mail/main",
             }
         };
 
+        drawThread = function (baton) {
+            viewDetail.drawThread.call(right, baton);
+        };
+
         drawMail = function (data) {
-            right.idle().empty().append(viewDetail.draw(data).addClass('page'));
+            var baton = ext.Baton({ data: data, app: app });
+            right.idle().empty().append(viewDetail.draw(baton).addClass('page'));
         };
 
         drawFail = function (obj) {

@@ -258,7 +258,6 @@ define('plugins/notifications/calendar/register',
         register: function (controller) {
             var InviteNotifications = controller.get('io.ox/calendar', InviteNotificationsView),
                 ReminderNotifications = controller.get('io.ox/calendarreminder', ReminderNotificationsView);
-
             calApi
                 .on('new-invites', function (e, invites) {
                     var tmp = [];
@@ -314,12 +313,12 @@ define('plugins/notifications/calendar/register',
                             };
 
                             // do not add user suppressed ('remind me later') reminders
-                            if (_.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
+                            if (ReminderNotifications.collection.hidden.length === 0 || _.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
                                 tmp.push(inObj);
                             }
+                            ReminderNotifications.collection.reset(tmp);
                         });
                     });
-                    ReminderNotifications.collection.reset(tmp);
                 })
                 .getReminders();
         }

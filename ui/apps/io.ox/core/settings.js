@@ -202,28 +202,31 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             });
         };
 
-        this.save = function (data) {
+        this.save = (function () {
 
-            data = data || tree;
-
-            if (detached) {
-                console.warn('Not saving detached settings.', path);
-                return $.when();
-            }
-
-            return $.when(
-                settingsCache.add(path, data),
+            var save = _.throttle(function (data) {
                 http.PUT({
                     module: 'jslob',
-                    params: {
-                        action: 'set',
-                        id: path
-                    },
+                    params: { action: 'set', id: path },
                     data: data
                 })
-            )
-            .done(function () { self.trigger('save'); });
-        };
+                .done(function () { self.trigger('save'); });
+            }, 10000); // limit to 10 seconds
+
+            return function (data) {
+
+                data = data || tree;
+
+                if (detached) {
+                    console.warn('Not saving detached settings.', path);
+                }
+
+                settingsCache.add(path, data);
+                save(data);
+
+                return this;
+            };
+        }());
 
         Event.extend(this);
     };
