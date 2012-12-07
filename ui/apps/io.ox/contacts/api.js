@@ -10,13 +10,13 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
+
 define('io.ox/contacts/api',
     ['io.ox/core/http',
      'io.ox/core/api/factory',
      'io.ox/core/notifications',
      'io.ox/core/cache'
      ], function (http, apiFactory, notifications, cache) {
-
 
     'use strict';
 
@@ -116,8 +116,8 @@ define('io.ox/contacts/api',
                     contactPictures.clear()
                 )
                 .pipe(function () {
+                    api.trigger('create', { id: d.id, folder: d.folder_id });
                     api.trigger('refresh.all');
-                    api.trigger('created', { id: d.id, folder: d.folder_id });
                     return d;
                 });
             });

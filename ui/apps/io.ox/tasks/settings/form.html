@@ -7,16 +7,6 @@
     </extension>
     <extension id='common'>
         <legend class="sectiontitle">{{=it.strings.TITLE_COMMON}}</legend>
-        <div class="control-group">
-            <label for="default_view" class="control-label">{{=it.strings.DEFAULT_VIEW}}</label>
-            <div class="controls">
-                <label class="select">
-                    <select data-property="view" id="default_view" class="input-xlarge">
-                        {{~it.optionsViewDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
-                    </select>
-                </label>
-            </div>
-        </div>
         <div class="control-group expertmode">
             <label for="interval" class="control-label">{{=it.strings.INTERVAL_IN_MINUTES}}</label>
             <div class="controls">

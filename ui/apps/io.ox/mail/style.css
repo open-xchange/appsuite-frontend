@@ -224,7 +224,6 @@
         padding: 18px 20px 0 20px;
         min-height: 0px;
         text-align: right;
-        z-index: 1;
 
         .io-ox-inline-links { margin: 0; }
         .dropdown-menu { right: 0; left: auto; text-align: left; }

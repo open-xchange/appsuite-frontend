@@ -16,7 +16,6 @@ define('io.ox/core/about', ['io.ox/core/extensions', 'io.ox/core/tk/dialogs', 'g
 
 	ext.point('io.ox/core/about').extend({
 		draw: function (data) {
-			console.warn('YEP!', data);
 			this.append(
 				$('<h4>').text(gt.noI18n(data.productName)),
 				$('<p>').append(

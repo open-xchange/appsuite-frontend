@@ -24,6 +24,7 @@ define('io.ox/core/cache/simple',
                     if (_(storage[id]).isUndefined()) {
                         storage[id] = {};
                     }
+                    return this;
                 },
                 getStorageLayerName: function () {
                     return 'cache/simple';

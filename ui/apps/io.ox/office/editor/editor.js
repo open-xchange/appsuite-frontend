@@ -771,6 +771,9 @@ define('io.ox/office/editor/editor',
                 // the initial paragraph node in an empty document
                 paragraph = DOM.createParagraphNode();
 
+            // this paragraph is created without operation
+            paragraph = DOM.setImplicitToParagraphNode(paragraph);
+
             // create empty page with single paragraph
             pageContentNode.empty().append(paragraph);
             validateParagraphNode(paragraph);
@@ -994,7 +997,9 @@ define('io.ox/office/editor/editor',
                             endOffset = _.isNumber(endOffset) ? endOffset : (Position.getParagraphLength(editdiv, position));
 
                             // delete the covered part of the paragraph
-                            if (startOffset <= endOffset) {
+                            if ((startOffset === 0) && (endOffset === 0) && (Position.getParagraphLength(editdiv, position) === 0)) {  // -> do not delete from [1,0] to [1,0]
+                                generator.generateOperation(Operations.DELETE, { start: position });
+                            } else if (startOffset <= endOffset) {
                                 generator.generateOperation(Operations.DELETE, { start: position.concat([startOffset]), end: position.concat([endOffset]) });
                             }
                         } else {
@@ -1715,7 +1720,23 @@ define('io.ox/office/editor/editor',
         };
 
         this.insertText = function (text, position, attrs) {
-            var newOperation = { name: Operations.TEXT_INSERT, text: text, start: _.clone(position) };
+
+            var newOperation = null,
+                paragraph = null,
+                paraPosition = _.clone(position);
+
+            if (paraPosition.pop() === 0) {  // is this an empty paragraph?
+                paragraph = Position.getDOMPosition(editdiv, paraPosition).node;
+                if (DOM.isImplicitParagraphNode(paragraph)) {
+                    // removing implicit paragraph node
+                    $(paragraph).remove();
+                    // creating new paragraph explicitely
+                    newOperation = {name: Operations.PARA_INSERT, start: paraPosition};
+                    applyOperation(newOperation);
+                }
+            }
+
+            newOperation = { name: Operations.TEXT_INSERT, text: text, start: _.clone(position) };
             if (_.isObject(attrs)) { newOperation.attrs = attrs; }
             applyOperation(newOperation);
         };
@@ -2100,6 +2121,10 @@ define('io.ox/office/editor/editor',
 
             // disable IE table manipulation handlers in edit mode
             Utils.getDomNode(editdiv).onresizestart = function () { return false; };
+            // The resizestart event does not appear to bubble in IE9+, so we use the selectionchange event to bind
+            // the resizestart handler directly once the user selects an object (as this is when the handles appear).
+            // The MS docs (http://msdn.microsoft.com/en-us/library/ie/ms536961%28v=vs.85%29.aspx) say it's not
+            // cancelable, but it seems to work in practice.
 
             if (editMode) {
                 // focus back to editor
@@ -3601,6 +3626,10 @@ define('io.ox/office/editor/editor',
                 // insert the table into the DOM tree
                 inserted = insertContentNode(operation.start, table),
                 styleId;
+
+            // Utils.getDomNode(table).onresizestart = function () {
+            //    return false;
+            //};
 
             // insertContentNode() writes warning to console
             if (!inserted) { return; }

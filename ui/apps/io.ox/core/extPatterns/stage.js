@@ -9,7 +9,7 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
- 
+
 define('io.ox/core/extPatterns/stage', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';

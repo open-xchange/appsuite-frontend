@@ -14,13 +14,13 @@
 /* Grid */
 
 .io-ox-settings-main {
-    
+
     .window-controls label {
         display: inline-block;
         margin-bottom: 0;
     }
-    
-    
+
+
 }
 
 .vgrid-cell.settings {
@@ -101,7 +101,6 @@
 }
 
 .settings-detail-pane .listbox.ui-sortable .enabled .listbox-item {
-    cursor: move;
 }
 
 .settings-detail-pane .listbox:focus {
@@ -168,6 +167,10 @@
 .settings-detail-pane .listbox .deletable-item {
 	height:  16px;
 	padding: 12px 5px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 
 .settings-detail-pane .listbox .deletable-item div {
@@ -175,7 +178,7 @@
 }
 
 .io-ox-dialog-popup input.input-large {
-	width: 360px;	
+	width: 360px;
 }
 
 .io-ox-dialog-popup .busynotice {

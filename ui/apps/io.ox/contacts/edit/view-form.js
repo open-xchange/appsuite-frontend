@@ -273,8 +273,8 @@ define('io.ox/contacts/edit/view-form', [
         id: 'save',
         action: function (options, baton) {
             options.parentView.trigger('save:start');
-            options.model.save().done(function () {
-                options.parentView.trigger('save:success');
+            options.model.save().done(function (data) {
+                options.parentView.trigger('save:success', data);
             }).fail(function () {
                 options.parentView.trigger('save:fail');
             });

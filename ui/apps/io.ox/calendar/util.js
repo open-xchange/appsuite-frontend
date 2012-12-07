@@ -56,9 +56,15 @@ define("io.ox/calendar/util",
 
     var zones;
     $.when.apply($, _.map(
-        ['America/Los_Angeles', 'America/New_York', 'America/Sao_Paulo',
-         'Europe/London', 'Europe/Berlin', 'Europe/Moscow', 'Asia/Kolkata',
-         'Asia/Shanghai', 'Australia/Sydney'], date.getTimeZone))
+        ['America/Los_Angeles',
+         'America/New_York',
+         //'America/Sao_Paulo',
+         'Europe/London',
+         'Europe/Berlin',
+         //'Europe/Moscow',
+         //'Asia/Kolkata',
+         //'Asia/Shanghai',
+         'Australia/Sydney'], date.getTimeZone))
         .done(function () {
             zones = Array.prototype.slice.call(arguments);
         });

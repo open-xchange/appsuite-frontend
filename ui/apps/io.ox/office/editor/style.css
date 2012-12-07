@@ -24,6 +24,79 @@
     background-color: fade(lighten(@color, 10%), 50%) !important;
 }
 
+/* special icons =========================================================== */
+
+i.io-ox-office-icon[class^="docs-"] {
+
+    background-image: url(img/ox-docs-icons-black.png);
+
+    &.icon-white {
+        background-image: url(img/ox-docs-icons-white.png);
+    }
+
+    &.docs-undo                     { background-position:      0      0; }
+    &.docs-redo                     { background-position:  -20px      0; }
+    &.docs-bold                     { background-position:  -40px      0; }
+    &.docs-bold.de_DE               { background-position:  -60px      0; }
+    &.docs-bold.fr_FR               { background-position:  -80px      0; }
+    &.docs-italic                   { background-position: -100px      0; }
+    &.docs-italic.de_DE             { background-position: -120px      0; }
+    &.docs-underline                { background-position: -140px      0; }
+    &.docs-underline.fr_FR          { background-position: -160px      0; }
+    &.docs-strikeout                { background-position: -180px      0; }
+    &.docs-superscript              { background-position: -200px      0; }
+    &.docs-subscript                { background-position: -220px      0; }
+
+    &.docs-line-spacing-1           { background-position: -240px      0; }
+    &.docs-line-spacing-1-5         { background-position: -260px      0; }
+    &.docs-line-spacing-2           { background-position: -280px      0; }
+    &.docs-align-left               { background-position: -300px      0; }
+    &.docs-align-center             { background-position: -320px      0; }
+    &.docs-align-right              { background-position: -340px      0; }
+    &.docs-align-justify            { background-position: -360px      0; }
+
+    &.docs-table-insert             { background-position:      0  -20px; }
+    &.docs-table-insert-row         { background-position:  -20px  -20px; }
+    &.docs-table-insert-column      { background-position:  -40px  -20px; }
+    &.docs-table-delete-row         { background-position:  -60px  -20px; }
+    &.docs-table-delete-column      { background-position:  -80px  -20px; }
+
+    &.docs-image-insert             { background-position: -180px  -20px; }
+    &.docs-image-delete             { background-position: -200px  -20px; }
+    &.docs-image-float-left         { background-position: -220px  -20px; }
+    &.docs-image-float-right        { background-position: -240px  -20px; }
+    &.docs-image-center             { background-position: -260px  -20px; }
+    &.docs-image-inline             { background-position: -280px  -20px; }
+
+    &.docs-border-none              { background-position:      0  -40px; }
+    &.docs-border-left-right        { background-position:  -20px  -40px; }
+    &.docs-border-top-bottom        { background-position:  -40px  -40px; }
+    &.docs-border-outside           { background-position:  -60px  -40px; }
+    &.docs-border-left              { background-position:  -80px  -40px; }
+    &.docs-border-right             { background-position: -100px  -40px; }
+    &.docs-border-top               { background-position: -120px  -40px; }
+    &.docs-border-bottom            { background-position: -140px  -40px; }
+
+    &.docs-para-border-inside-h     { background-position: -160px  -40px; }
+    &.docs-para-border-all-h        { background-position: -180px  -40px; }
+    &.docs-para-border-full         { background-position: -200px  -40px; }
+
+    &.docs-table-border-inside-h    { background-position: -220px  -40px; }
+    &.docs-table-border-inside-v    { background-position: -240px  -40px; }
+    &.docs-table-border-all-h       { background-position: -260px  -40px; }
+    &.docs-table-border-all-v       { background-position: -280px  -40px; }
+    &.docs-table-border-full-h      { background-position: -300px  -40px; }
+    &.docs-table-border-full-v      { background-position: -320px  -40px; }
+    &.docs-table-border-inside      { background-position: -340px  -40px; }
+    &.docs-table-border-full        { background-position: -360px  -40px; }
+
+    &.docs-bullets                  { background-position:      0  -60px; }
+    &.docs-numbering                { background-position:  -20px  -60px; }
+    &.docs-num-inc-indent           { background-position:  -40px  -60px; }
+    &.docs-num-dec-indent           { background-position:  -60px  -60px; }
+    &.docs-hyperlink                { background-position:  -80px  -60px; }
+}
+
 /* editor GUI elements ===================================================== */
 
 .io-ox-office-title {
@@ -83,15 +156,15 @@
         &.io-ox-office-edit-mode {
             cursor: text;
 
-	        /* resize cursor for table cells, but not in read-only mode */
-	        table td > div.cell {
-		        > div.bottomborder {
-		           	cursor: row-resize;
-		        }
-				> div.rightborder {
-					cursor: col-resize;
-				}
-	        }
+            /* resize cursor for table cells, but not in read-only mode */
+            table td > div.cell {
+                > div.bottomborder {
+                    cursor: row-resize;
+                }
+                > div.rightborder {
+                    cursor: col-resize;
+                }
+            }
         }
 
         /* default paragraph formatting */
@@ -332,7 +405,7 @@
         font-family: sans-serif;
         font-size: 13px;
         line-height: normal;
-	    position: absolute;
+        position: absolute;
         border: 1px solid;
         .box-shadow(0 5px 10px fade(black, 25%));
         border-color: #B0B0B0;

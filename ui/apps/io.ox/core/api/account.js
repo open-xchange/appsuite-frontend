@@ -169,12 +169,14 @@ define('io.ox/core/api/account',
         return accountsAllCache.keys().pipe(function (keys) {
             if (keys.length > 0) {
                 return accountsAllCache.values();
-            } else {
+            } else if (ox.online) {
                 return getter().pipe(function (data) {
                     data = process(data);
                     accountsAllCache.add(data);
                     return data;
                 });
+            } else {
+                return [];
             }
         })
         .pipe(function (list) {

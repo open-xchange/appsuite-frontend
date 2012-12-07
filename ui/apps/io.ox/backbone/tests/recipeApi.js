@@ -75,7 +75,7 @@ define("io.ox/backbone/tests/recipeApi", ["io.ox/core/event"], function (Events)
             nextId++;
 
             db[element.id] = element;
-            this.trigger("created", element);
+            this.trigger('create', element);
 
             return $.Deferred().resolve({id: element.id});
         },

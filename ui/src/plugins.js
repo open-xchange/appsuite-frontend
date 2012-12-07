@@ -44,7 +44,7 @@
             define("raw", { load: defaultImpl });
             req.load = function (context, modulename, url) {
                 oldload(context, modulename, url.replace(
-                    /io.ox\/(mail|contacts|tasks|files|calendar)\/main.js$/,
+                    /io.ox\/(core|mail|contacts|tasks|files|calendar)\/main.js$/,
                     'io.ox/static/$1.js'));
             };
             return;

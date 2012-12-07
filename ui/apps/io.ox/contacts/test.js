@@ -11,7 +11,8 @@
  */
 
 define("io.ox/contacts/test",
-    ["io.ox/core/extensions", "io.ox/contacts/main",
+    ["io.ox/core/extensions",
+     "io.ox/contacts/main",
      "io.ox/contacts/api"], function (ext, contacts, api) {
 
     "use strict";
@@ -80,7 +81,7 @@ define("io.ox/contacts/test",
                 });
 
                 j.waitsFor(function () {
-                    formFrame = $('.io-ox-dialog-popup');
+                    formFrame = $('.edit-contact');
                     if (formFrame[0]) {
                         return true;
                     }
@@ -116,11 +117,9 @@ define("io.ox/contacts/test",
                     j.runs(function () {
                         j.expect(alert).toBeTruthy();
                     });
-
                 });
 
                 j.it('corrects the value and skips the alert', function () {
-
                     j.runs(function () {
                         testfield.val('tester@test.de').trigger('change');
                     });
@@ -128,7 +127,7 @@ define("io.ox/contacts/test",
                 });
 
                 j.it('looks for the save button and hits', function () {
-                    saveButton = formFrame.find(".btn.btn-primary");
+                    saveButton = formFrame.find('[data-action="save"]');
                     saveButton.trigger('click');
                     j.expect(saveButton[0]).toBeTruthy();
                 });
@@ -138,7 +137,7 @@ define("io.ox/contacts/test",
                     j.runs(function () {
                         var me = this;
                         me.ready = false;
-                        api.on('created', function (e, data) {
+                        api.on('create', function (e, data) {
                             if (data) {
                                 dataId = data.id;
                                 dataFolder = data.folder;
@@ -149,7 +148,6 @@ define("io.ox/contacts/test",
                         j.waitsFor(function () {
                             return this.ready;
                         }, 'catches the id', TIMEOUT);
-
                     });
 
                     j.runs(function () {
@@ -196,7 +194,6 @@ define("io.ox/contacts/test",
                     j.waitsFor(function () {
                         button = $('.io-ox-inline-links a[data-action="delete"]');
                         if (button[0]) {
-                            console.log(button);
                             return true;
                         }
                     }, 'looks for delete button', TIMEOUT);

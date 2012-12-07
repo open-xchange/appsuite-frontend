@@ -1074,6 +1074,8 @@ span.hint {
 
 /* inline links */
 .io-ox-inline-links {
+    position:relative;
+    z-index:10000;
     font-size: @inline-link-font-size;
     text-align: right;
     margin: @inline-links-margin;
@@ -1552,9 +1554,11 @@ div.external-user-image {
     li [class^="icon-"], li [class*=" icon-"] { width: 2em; text-align: left; }
 }
 
+.to-cc { position:relative }
+
 ul.dropdown-menu li a.disabled { color:#999; }
 
-.popover {
+.popover, .to-cc {
     z-index: 65002 !important;
 }
 

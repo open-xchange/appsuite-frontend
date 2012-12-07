@@ -1555,7 +1555,8 @@ define('io.ox/office/tk/utils',
      *  The new icon element, as jQuery object.
      */
     Utils.createIcon = function (icon, white) {
-        return $('<i>').addClass(icon + ((white === true) ? ' icon-white' : ''));
+        // icon class name must be first to be able to select icon subsets in CSS
+        return $('<i>').addClass(icon + (/^icon-/.test(icon) ? '' : ' io-ox-office-icon') + ((white === true) ? ' icon-white' : ''));
     };
 
     /**

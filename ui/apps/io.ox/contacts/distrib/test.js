@@ -154,7 +154,7 @@ define("io.ox/contacts/distrib/test",
                     j.runs(function () {
                         var me = this;
                         me.ready = false;
-                        api.on('created', function (e, data) {
+                        api.on('create', function (e, data) {
                             if (data) {
                                 dataId = data.id;
                                 dataFolder = data.folder;

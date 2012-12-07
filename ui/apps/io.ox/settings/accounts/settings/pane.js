@@ -22,9 +22,12 @@ define('io.ox/settings/accounts/settings/pane',
            "io.ox/keychain/api",
            'io.ox/core/tk/forms',
            "io.ox/keychain/model",
+           //'gettext!io.ox/settings/accounts/keyring', does not work at the moment
            'text!io.ox/settings/accounts/email/tpl/account_select.html',
            'text!io.ox/settings/accounts/email/tpl/listbox.html'
-       ]), function (ext, View, utils, dialogs, api, forms, keychainModel, tmpl, listboxtmpl) {
+
+
+       ]), function (ext, View, utils, dialogs, api, forms, keychainModel, /* gt,*/ tmpl, listboxtmpl) {
 
 
     'use strict';
@@ -41,9 +44,9 @@ define('io.ox/settings/accounts/settings/pane',
             var def = $.Deferred();
             require(["io.ox/core/tk/dialogs"], function (dialogs) {
                 new dialogs.ModalDialog()
-                    .text("Do you really want to delete this account?")
-                    .addPrimaryButton("delete", 'Delete account')
-                    .addButton("cancel", 'Cancel')
+                    .text('Do you really want to delete this account?')
+                    .addPrimaryButton('delete', 'Delete account')
+                    .addButton('cancel', 'Cancel')
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
@@ -157,7 +160,6 @@ define('io.ox/settings/accounts/settings/pane',
                     },
 
                     onAdd: function (args) {
-                        console.log('Hier?', args);
                         require(["io.ox/settings/accounts/settings/createAccountDialog"], function (accountDialog) {
                             accountDialog.createAccountInteractively(args);
                         });
@@ -172,12 +174,24 @@ define('io.ox/settings/accounts/settings/pane',
                         createExtpointForSelectedAccount(args);
                     },
                     onDelete: function () {
-                        var $selected = this.$el.find('[selected]');
-                        var account = {
-                            id: $selected.data('id'),
-                            accountType: $selected.data('accounttype')
-                        };
-                        removeSelectedItem(account);
+                        var $selected = this.$el.find('[selected]'),
+                            id = $selected.data('id'),
+                            account = {
+                                id: id,
+                                accountType: $selected.data('accounttype')
+                            };
+
+                        if (id !== 0) {
+                            removeSelectedItem(account);
+                        } else {
+                            require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                                new dialogs.ModalDialog()
+                                    .text('Your primary mail account can not be deleted.')
+                                    .addPrimaryButton('ok', 'Ok')
+                                    .show();
+                            });
+                        }
+
                     }
 
                 });
@@ -195,7 +209,8 @@ define('io.ox/settings/accounts/settings/pane',
             });
         },
         save: function () {
-            console.log('now accounts get saved?');
+            // TODO
+            //console.log('now accounts get saved?');
         }
     });
 

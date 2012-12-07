@@ -174,11 +174,14 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                         tree = data.tree;
                         meta = data.meta;
                         return data;
-                    } else {
+                    } else if (ox.online) {
                         return load();
+                    } else {
+                        self.detach();
+                        return { tree: tree, meta: meta };
                     }
                 } finally {
-                    load(); // read-through caching
+                    if (ox.online) load(); // read-through caching
                 }
             });
         };

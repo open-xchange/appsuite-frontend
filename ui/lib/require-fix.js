@@ -45,10 +45,13 @@ define.async = (function () {
 * module definitions can be extended by plugins
 **/
 (function () {
+
+    var defined = {};
     var originalDefine = define;
+
     window.define = function () {
         if (!ox.manifests) {
-            return originalDefine.apply(this, $.makeArray(arguments));
+            return originalDefine.apply(this, arguments);
         }
         // Is this a define statement we understand?
         if (_.isString(arguments[0])) {
@@ -61,15 +64,18 @@ define.async = (function () {
             } else if (arguments.length > 2) {
                 definitionFunction = arguments[2];
             }
-            
-            var wrapper = ox.manifests.wrapperFor(name, dependencies, definitionFunction);
-
-            return originalDefine(name, wrapper.dependencies, wrapper.definitionFunction);
-            
+            // already defined?
+            if (!(name in defined)) {
+                var wrapper = ox.manifests.wrapperFor(name, dependencies, definitionFunction);
+                defined[name] = true;
+                return originalDefine(name, wrapper.dependencies, wrapper.definitionFunction);
+            } else {
+                return;
+            }
         }
 
         // Just delegate everything else
-        return originalDefine.apply(this, $.makeArray(arguments));
+        return originalDefine.apply(this, arguments);
     };
 
     $.extend(window.define, originalDefine);

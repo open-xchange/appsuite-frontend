@@ -382,7 +382,7 @@ define('io.ox/core/commons-folderview',
             // init tree before running toolbar extensions
             var tree = baton.tree = app.folderView = new views[options.view](container, {
                     type: options.type,
-                    rootFolderId: options.rootFolderId,
+                    rootFolderId: String(options.rootFolderId),
                     open: app.settings.get('folderview/open', []),
                     toggle: function (open) {
                         app.settings.set('folderview/open', open).save();

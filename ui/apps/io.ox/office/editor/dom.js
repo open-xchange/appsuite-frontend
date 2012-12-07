@@ -502,6 +502,54 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return $('<div>').addClass('p');
     };
 
+
+    /**
+     * Returns whether the passed paragraph node is an implicit paragraph
+     * node that is used to allow text insertion into document (into empty
+     * document or cells). This paragraph nodes were created without sending
+     * an operation to the server.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is an implicit paragraph node.
+     */
+    DOM.isImplicitParagraphNode = function (node) {
+        return $(node).data('implicit') === true;
+    };
+
+    /**
+     * Marks an already existing paragraph as 'implicit'. This is used in
+     * in empty documents or table cells to allow text insertion in browser.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The jQuery node that needs the data element to be registered as
+     *  implicit.
+     *
+     * @returns {jQuery}
+     *  An implicit paragraph node, as jQuery object.
+     */
+    DOM.setImplicitToParagraphNode = function (node) {
+        return $(node).data('implicit', true);
+    };
+
+    /**
+     * Removes the 'implicit' tag from an existing paragraph. For not-implicit
+     * paragraph nodes an operation was created and sent to the server.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The jQuery node that needs the data element to be no longer registered as
+     *  implicit.
+     *
+     * @returns {jQuery}
+     *  A no longer implicit paragraph node, as jQuery object.
+     */
+    DOM.removeImplicitFromParagraphNode = function (node) {
+        return $(node).data('implicit', false);
+    };
+
     /**
      * A jQuery selector that matches elements representing a table.
      */
@@ -565,11 +613,18 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  A table cell element, as jQuery object.
      */
     DOM.createTableCellNode = function (paragraph) {
+
         return $('<td>')
-                .append($('<div>').addClass('cell')
-                    .append($('<div>').addClass('bottomborder resize'))
-                    .append($('<div>').addClass('rightborder resize'))
-                    .append($('<div>').addClass('cellcontent').append(paragraph)));
+        .append($('<div>').addClass('cell')
+            .append($('<div>').addClass('bottomborder resize'))
+            .append($('<div>').addClass('rightborder resize'))
+            .append($('<div>').addClass('cellcontent').append(paragraph)));
+
+//        Utils.getDomNode(tableCell).onresizestart = function (event) {
+//            return false;
+//        };
+//        return tableCell;
+
     };
 
     /**

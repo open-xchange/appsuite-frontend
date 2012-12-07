@@ -1,4 +1,4 @@
 {
-	namespace: "plugins/halo/register",
+	namespace: "plugins/halo",
 	requires: "contacts"
 }
