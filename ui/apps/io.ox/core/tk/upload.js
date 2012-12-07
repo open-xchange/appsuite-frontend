@@ -17,7 +17,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
 
     function hasLeftViewport(evt) {
         evt = evt.originalEvent || evt;
-        if (_.browser.Safari) return true; // Safari's behaviour is different. evt.clientXY is never 0
+        if (_.browser.Firefox || _.browser.Safari) return true;
         return (evt.clientX === 0 && evt.clientY === 0);
     }
 
@@ -73,7 +73,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                 return $actionTile;
             };
         }
-        
+
 
         _(options.actions || []).each(function (action) {
             var $actionNode = nodeGenerator();
@@ -82,7 +82,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                     self.trigger("dragenter", action.id, action);
                     // make sure it's file oriented
                     e = e.originalEvent || e;
-                    //console.log('YEAH', e.dataTransfer.files, e);
+
                     //TODO: get date about dragged object
                     if (highlightedAction) {
                         highlightedAction.removeClass("io-ox-dropzone-hover");
