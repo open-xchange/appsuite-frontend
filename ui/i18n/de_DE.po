@@ -4046,7 +4046,7 @@ msgstr "Klicken Sie hier, um Ihren Account hinzuzufügen"
 
 #: apps/io.ox/portal/main.js:378
 msgid "An error occurred. Click to try again"
-msgstr "Es trat ein Fehler auf. Für einen erneuten Versuch, bitte klicken."
+msgstr "Es trat ein Fehler auf. Für einen erneuten Versuch bitte klicken."
 
 #: apps/io.ox/portal/settings/pane.js:30
 msgid "Enable Plugin"
