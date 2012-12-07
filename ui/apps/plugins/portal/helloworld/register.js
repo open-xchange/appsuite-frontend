@@ -16,18 +16,24 @@ define('plugins/portal/helloworld/register',
 
     'use strict';
 
+    // most common trap is that you plugin is not loaded at all.
+    // there are different ways to enabled a plugin. simple hack is to
+    // register it manually in io.ox/portal/main.js by adding it to the
+    // DEV_PLUGINS array.
+
     ext.point('io.ox/portal/widget/helloworld').extend({
 
+        // widget title (fills <h2> title node)
         title: 'Hello World',
 
         // if 'action' is implemented the widget title becomes clickable
         action: function (baton) {
-            alert('Hello World');
+            alert(baton.hello);
         },
 
-        // called first. You can create instances here and put them into the baton
+        // called first. Optional. You can create instances here and put them into the baton
         initialize: function (baton) {
-            console.log('Hello World');
+            baton.hello = String('Hello World');
         },
 
         // called right after initialize. Should return a deferred object when done
@@ -38,18 +44,17 @@ define('plugins/portal/helloworld/register',
         // called to draw the preview stuff on the portal. waits for load().
         // usually a widget creates a "content" div
         preview: function (baton) {
-            var content = $('<div class="content">').text('Hello World');
-            // you could something great here
+            var content = $('<div class="content pointer">').text(baton.hello);
+            // you could do something great here
             this.append(content);
         },
 
-        // this is called to draw content into the side-popup
-        // click handlers to the porta are set if - given in css selector pseudo syntax:
-        // a) find('.content') has class pointer
-        // b) find('.item) has class pointer
+        // 'draw' is called to put content into the side-popup
+        // the side-popup uses the following delegate: '.item, .content.pointer'
+        // so you have to you proper CSS classes in preview
         draw: function (baton) {
             this.append(
-                $('<h1>').text('Hello World')
+                $('<h1>').text(baton.hello)
             );
         }
     });

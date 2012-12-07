@@ -26,7 +26,8 @@ define('io.ox/portal/main',
 
     'use strict';
 
-    var READY = $.when(), DEV_PLUGINS = ['plugins/portal/helloworld/register', 'plugins/portal/updater/register'];
+    var READY = $.when(),
+        DEV_PLUGINS = ['plugins/portal/helloworld/register', 'plugins/portal/updater/register'];
 
     // overwrite with fresh settings
     settings.detach().set({
