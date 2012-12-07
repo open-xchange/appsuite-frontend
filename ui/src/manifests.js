@@ -188,11 +188,11 @@ define(function () {
             action: "new"
         },
         "requires": "text",
-        "path": "io.ox/office/editor/main"
+        "path": "io.ox/office/text/main"
     },
     {
         "requires": "text",
-        "path": "io.ox/office/editor/fileActions",
+        "path": "io.ox/office/text/fileActions",
         "namespace": "io.ox/files/actions"
     },
     {
