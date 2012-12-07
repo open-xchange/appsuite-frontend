@@ -77,7 +77,6 @@ define("io.ox/contacts/test",
                 j.it('looks for create button and hits ', function () {
                     j.expect(createButton[0]).toBeTruthy();
                     $(createButton[0]).trigger('click');
-
                 });
 
                 j.waitsFor(function () {
@@ -171,7 +170,6 @@ define("io.ox/contacts/test",
                             j.expect(dataObj.email1).toEqual(testObject.email1);
                             j.expect(dataObj.cellular_telephone1).toEqual(testObject.cellular_telephone1);
                         });
-
                     });
                 });
 
@@ -215,7 +213,6 @@ define("io.ox/contacts/test",
 
                     j.runs(function () {
                         dialog.trigger('click');
-
                         app = id = dataId = dataFolder = dataObj = createButton = saveButton = formFrame = testfield = alert = closeButton = null;
                     });
 

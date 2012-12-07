@@ -131,6 +131,33 @@ define('io.ox/office/tk/application', ['io.ox/office/tk/utils'], function (Utils
         };
 
         /**
+         * Returns the URL passed to AJAX calls used to access spell checking functions
+         *
+         * @param {String} action
+         *  The name of the action to be passed to the spell checker.
+         *
+         * @param {Object} [options]
+         *  Additional options that affect the creation of the spell checker URL. Each
+         *  option will be inserted into the URL as name/value pair separated
+         *  by an equality sign. The different options are separated by
+         *  ampersand characters.
+         *
+         * @returns {String}
+         *  The spell check URL.
+         */
+        this.getSpellCheckerUrl = function (action, options) {
+
+            // build a default options map, and add the passed options
+            options = Utils.extendOptions({
+                action: action,
+                session: ox.session//,
+//                uid: app.getUniqueId()
+            }, options);
+
+            // build and return the result URL
+            return ox.apiRoot + '/spellchecker?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
+        };
+        /**
          * Registers an event handler for specific events at the passed target
          * object. The event handler will be unregistered automatically when
          * the application has been closed.

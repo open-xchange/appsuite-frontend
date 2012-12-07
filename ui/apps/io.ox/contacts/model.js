@@ -33,6 +33,7 @@ define('io.ox/contacts/model',
 
                     if (currentDistListArray === undefined) {
                         this.set('distribution_list', [member]);
+                    } else {
                         currentDistListArray.push(member);
                         this.set('distribution_list', currentDistListArray);
                     }
@@ -321,7 +322,7 @@ define('io.ox/contacts/model',
     };
 
     var factory = buildFactory('io.ox/contacts/model', api);
-    
+
     return {
         Contact: factory.model,
         Contacts: factory.collection,

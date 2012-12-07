@@ -160,9 +160,7 @@ define('io.ox/files/icons/perspective',
     function iconClick(popup, e, target) {
         var cid = target.attr('data-cid');
         api.get(_.cid(cid)).done(function (file) {
-            var view = viewDetail.draw(file);
-            popup.append(view.element);
-
+            popup.append(viewDetail.draw(file));
         });
     }
 
@@ -464,6 +462,10 @@ define('io.ox/files/icons/perspective',
                 }, app);
             }
             if (dropZone) { dropZone.include(); }
+
+            app.getWindow().on('change:perspective', function (e) {
+                dropZone.remove();
+            });
 
             app.on('folder:change', function (e, id, folder) {
                 dropZone.remove();

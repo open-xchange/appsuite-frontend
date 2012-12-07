@@ -399,7 +399,8 @@ define('io.ox/core/tk/folderviews',
             skipRoot: true,
             type: null,
             open: [],
-            toggle: $.noop
+            toggle: $.noop,
+            select: $.noop
         }, opt);
 
         this.internal = { destroy: $.noop };
@@ -676,6 +677,8 @@ define('io.ox/core/tk/folderviews',
      */
     function FolderTree(container, opt) {
 
+        var self = this;
+
         // add hard filter for trees (e.g. just show mail folders)
         opt = $.extend({
             filter: function (obj) {
@@ -721,8 +724,13 @@ define('io.ox/core/tk/folderviews',
             return id in this.treeNodes ? this.treeNodes[id].repaint() : $.when();
         };
 
+        this.selection.on('change', function (e, selection) {
+            var id = _(selection).first();
+            if (id) { self.options.select(id); }
+        });
+
         function deferredEach(list, done) {
-            var top = list.shift(), node, self = this;
+            var top = list.shift(), node;
             if (list.length && top && (node = this.getNode(top))) {
                 node.open().done(function () {
                     deferredEach.call(self, list, done);
@@ -737,7 +745,6 @@ define('io.ox/core/tk/folderviews',
             data = _.isArray(data) ? data[0] : data;
             data = _.isString(data) ? data : String(data.id);
             // get path
-            var self = this;
             return api.getPath({ folder: data }).pipe(function (list) {
                 var def = $.Deferred();
                 deferredEach.call(self, _(list).pluck('id'), function () {

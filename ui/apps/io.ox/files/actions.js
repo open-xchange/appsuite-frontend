@@ -71,7 +71,7 @@ define('io.ox/files/actions',
     // editor
     new Action('io.ox/files/actions/editor', {
         requires: function (e) {
-            return e.collection.has('one') && (/\.(txt|js|md)$/i).test(e.context.data.filename);
+            return e.collection.has('one') && (/\.(txt|js|md)$/i).test(e.context.filename);
         },
         action: function (baton) {
             ox.launch('io.ox/editor/main').done(function () {
@@ -348,6 +348,9 @@ define('io.ox/files/actions',
     // version specific actions
 
     new Action('io.ox/files/versions/actions/makeCurrent', {
+        requires: function (e) {
+            return !e.context.current_version;
+        },
         action: function (baton) {
             var data = baton.data;
             api.update({
@@ -529,10 +532,7 @@ define('io.ox/files/actions',
         id: 'makeCurrent',
         index: 250,
         label: gt("Make this the current version"),
-        ref: "io.ox/files/versions/actions/makeCurrent",
-        isEnabled: function (file) {
-            return !file.current_version;
-        }
+        ref: "io.ox/files/versions/actions/makeCurrent"
     }));
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
