@@ -217,7 +217,9 @@ define('plugins/portal/twitter/register',
         },
 
         preview: function (baton) {
-
+            // TODO missing error handling
+            // if oauth token expires this will simply crash as baton.data does not contain
+            // valid tweets
             if (!baton.data) { return; }
 
             var content = $('<div class="content pointer">');
