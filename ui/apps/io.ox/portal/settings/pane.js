@@ -197,7 +197,68 @@ define('io.ox/portal/settings/pane',
                 ),
                 $extensions = $('<ul class="io-ox-portal-settings">');
 
-            require(['io.ox/settings/accounts/settings/extpoints'], function () { //remove once Cisco's and Vic's new module stuff is implemented
+            var widgets = _(settings.get('widgets/user')).sortBy(function (widget) {
+                if (!widget.index) {
+                    return 512;
+                }
+                if (widget.index === 'last') {
+                    return 1024;
+                }
+                if (widget.index === 'first') {
+                    return 1;
+                }
+                return widget.index;
+            });
+
+
+            require(['io.ox/settings/accounts/settings/extpoints'], function () { //TODO remove once Cisco's and Vic's new module stuff is implemented
+                ext.point('io.ox/portal/settings/add').each(function (extension) { //add option to "add" button
+                    $('<li>').append(
+                        $('<a>').text(extension.description)
+                    ).on('click', extension.action)
+                    .appendTo($addDropdown);
+                });
+
+                _(widgets).each(function (widget) { //now draw the setting box for every plugin
+                    var $additionalContent = $('<div class="io-ox-setting-details">'),
+                        id = widget.plugin.replace(/[^A-Za-z0-9]/g, '-'),
+                        name = widget.plugin.split(/\//)[2]; //TODO fragile
+
+                    $('<li class="io-ox-portal-setting">').attr({id: id}).append( //basics
+                        $('<span class="io-ox-setting-title io-ox-portal-settings-title">').text(name),
+                        $colorSelect.clone(true),
+                        $optionsButton.clone(true),
+                        $additionalContent.hide()
+                    ).appendTo($extensions);
+
+                    if (widget.color) { //color
+                        $additionalContent.parent().css('color', widget.color);
+                    }
+
+                    ext.point('io.ox/portal/settings/detail/' + name).each(function (extension) { //add advanced settings to extensions
+                        console.log("DEBUG", extension.id);
+                        extension.draw.apply($additionalContent, []);
+                    });
+                }); //end: widget.each
+
+
+                $(that).append( //building the actual settings page from its components
+                    $('<h1>').text(gt('Portal Squares')),
+                    $addButton.clone(true),
+                    $extensions,
+                    $addButton.clone(true)
+                );
+            }); //end: require
+
+
+        } //end: draw
+    }); //end: extpoint
+
+    return {};
+}); //end: define
+
+/*
+            require(['io.ox/settings/accounts/settings/extpoints'], function () { //TODO remove once Cisco's and Vic's new module stuff is implemented
                 ext.point('io.ox/portal/settings/add').each(function (extension) { //add option to "add" button
                     $('<li>').append(
                         $('<a>').text(extension.description)
@@ -226,8 +287,4 @@ define('io.ox/portal/settings/pane',
                     $addButton.clone(true)
                 );
             });
-        }
-    });
-
-    return {};
-});
+*/

@@ -89,34 +89,34 @@
         cursor: pointer;
     }
 
-    .widget-color-default { 
+    .widget-color-default {
         h2, .accent {
-         color: #333; 
-        } 
-        .action { 
-            background-color: #333; 
-        } 
+         color: #333;
+        }
+        .action {
+            background-color: #333;
+        }
     }
-    
-    .widget-color-red { 
-        h2, .accent { 
-            color: @color_red; 
-        } 
+
+    .widget-color-red {
+        h2, .accent {
+            color: @color_red;
+        }
         .action {
             background-color: @color_red;
         }
     }
-    
-    .widget-color-orange { 
-        h2, .accent { 
+
+    .widget-color-orange {
+        h2, .accent {
             color: @color_orange;
         }
         .action {
             background-color: @color_orange;
         }
     }
-    
-    .widget-color-lightgreen { 
+
+    .widget-color-lightgreen {
         h2, .accent {
             color: darken(@color_lightgreen, 10%);
         }
@@ -124,7 +124,7 @@
             background-color: darken(@color_lightgreen, 10%);
         }
     }
-    
+
     .widget-color-green {
         h2, .accent {
             color: @color_green;
@@ -142,7 +142,7 @@
             background-color: darken(@color_lightblue, 20%);
         }
     }
-    
+
     .widget-color-blue {
         h2, .accent {
             color: @color_blue;
@@ -151,7 +151,7 @@
             background-color: @color_blue;
         }
     }
-    
+
     .widget-color-purple {
         h2, .accent {
             color: @color_purple;
@@ -169,7 +169,7 @@
             background-color: darken(@color_pink, 10%);
         }
     }
-    
+
     .widget-color-gray {
         h2, .accent {
             color: darken(@color_gray, 20%);
@@ -372,9 +372,8 @@
  ************
 */
 .io-ox-portal-settings-title {
-    font-size: 14pt;
-    font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-weight: 300;
+    font-size: 20px;
+    font-weight: bold;
 }
 .io-ox-settings-item {
     clear: both;
@@ -399,7 +398,7 @@ ul.io-ox-portal-settings {
 li.io-ox-portal-setting {
     list-style-position: inside;
     list-style-type: none;
-    background: lightgrey;
+    background: whiteSmoke;
     padding: 1em;
     margin: .25em 0;
 }
