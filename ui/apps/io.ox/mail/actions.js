@@ -186,6 +186,7 @@ define('io.ox/mail/actions',
                     var id = settings.get('folderpopup/last') || String(mail[0].folder_id);
                     var tree = new views.FolderTree(dialog.getBody(), {
                         type: 'mail',
+                        open: settings.get('folderpopup/open', []),
                         toggle: function (open) {
                             settings.set('folderpopup/open', open).save();
                         },
