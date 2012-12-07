@@ -19,276 +19,213 @@ define('io.ox/portal/settings/pane',
        'io.ox/portal/settings/plugin/model',
        'io.ox/core/tk/dialogs',
        'settings!io.ox/portal',
-       'text!io.ox/portal/settings/tpl/listbox.html',
-       'text!io.ox/portal/settings/tpl/plugin.html',
        'gettext!io.ox/portal',
-       'apps/io.ox/core/tk/jquery-ui.min.js'], function (ext, manifests, utils, PluginModel, dialogs, settings, tmplListBox, tmplPlugin, gt) {
+       'apps/io.ox/core/tk/jquery-ui.min.js',
+       'less!io.ox/portal/style.css'], function (ext, manifests, utils, PluginModel, dialogs, settings, gt) {
 
     'use strict';
 
-    var staticStrings =  {
-        ACTIVATE_PLUGIN: gt('Enable Plugin'),
-        PLUGIN_SETTINGS: gt('Properties'),
-        SAVE:            gt('Save'),
-        PORTAL:          gt('Portal'),
-        PORTAL_PLUGINS:  gt('Portal Squares'),
-        PROPERTIES:      gt('Properties')
-    };
+    //this is how the new settings look
+    settings.detach().set({
+        widgets: {
+            user: {
+                mail_0: {
+                    plugin: 'plugins/portal/mail/register',
+                    color: 'blue',
+                    //enabled: false,
+                    index: 1
+                },
+                calendar_0: {
+                    plugin: 'plugins/portal/calendar/register',
+                    color: 'red',
+                    index: 2
+                },
+                tasks_0: {
+                    plugin: 'plugins/portal/tasks/register',
+                    color: 'green',
+                    index: 3
+                },
+                quota_0: {
+                    plugin: 'plugins/portal/quota/register',
+                    color: 'gray',
+                    index: 'last'
+                },
+                facebook_0: {
+                    plugin: 'plugins/portal/facebook/register',
+                    color: 'lightgreen',
+                    //enabled: false,
+                    index: 4
+                },
+                twitter_0: {
+                    plugin: 'plugins/portal/twitter/register',
+                    color: 'pink',
+                    //enabled: false,
+                    index: 5
+                },
+                birthdays_0: {
+                    plugin: 'plugins/portal/birthdays/register',
+                    color: 'lightblue',
+                    index: 'first'
+                },
+                tumblr_0: {
+                    plugin: 'plugins/portal/tumblr/register',
+                    color: 'orange',
+                    index: 'first',
+                    props: {
+                        url: 'open-xchange.tumblr.com'
+                    }
+                },
+                tumblr_1: {
+                    plugin: 'plugins/portal/tumblr/register',
+                    color: 'lightblue',
+                    index: 'first',
+                    props: {
+                        url: 'vodvon.tumblr.com'
+                    }
+                },
+                tumblr_2: {
+                    plugin: 'plugins/portal/tumblr/register',
+                    color: 'gray',
+                    index: 4,
+                    props: {
+                        url: 'staff.tumblr.com'
+                    }
+                },
+                flickr_0: {
+                    plugin: 'plugins/portal/flickr/register',
+                    color: 'pink',
+                    index: 6,
+                    props: {
+                        method: 'flickr.photos.search',
+                        query: 'xjrlokix'
+                    }
+                },
+                rss_0: {
+                    plugin: 'plugins/portal/rss/register',
+                    color: 'lightblue',
+                    index: 'first',
+                    props: {
+                        url: ['http://www.spiegel.de/schlagzeilen/tops/index.rss']
+                    }
+                },
+                linkedin_0: {
+                    plugin: 'plugins/portal/linkedIn/register',
+                    color: 'blue',
+                    index: 3
+                }
+            }
+        }
+    });
 
     var pluginSettings = settings.get('pluginSettings', []),
+        MAX_INDEX = 99999,
+        availablePlugins = _(manifests.pluginsFor('portal')).uniq(),
+        collection = new Backbone.Collection([]);
 
-        MAX_INDEX = 99999;
-
-    function getPluginById(id) {
-        return _(pluginSettings).chain().filter(function (obj) { return obj.id === id; }).first().value();
-    }
-
-    var sortByIndex = function (a, b) {
-        return a.index - b.index;
+    collection.comparator = function (a, b) {
+        return ext.indexSorter({ index: a.get('index') }, { index: b.get('index') });
     };
 
-    var getPlugins = function () {
-        // get plugins
-        var plugins = _(manifests.pluginsFor('portal')).map(function (id) {
-            // apply defaults
-            var plugin = _.extend({ id: id, name: id, active: false, index: MAX_INDEX }, getPluginById(id));
-            // put disabled plugins to end of list
-            if (!plugin.active) {
-                plugin.index = MAX_INDEX;
-            }
-            return plugin;
-        });
-        // sort by index
-        return plugins.sort(sortByIndex);
+    var getWidgetSettings = function () {
+        return _(settings.get('widgets/user', {}))
+            .chain()
+            // map first since we need the object keys
+            .map(function (obj, id) {
+                obj.id = id;
+                obj.type = id.split('_')[0];
+                obj.props = obj.props || {};
+                return obj;
+            })
+            .filter(function (obj) {
+                return (obj.enabled === undefined || obj.enabled === true) && _(availablePlugins).contains(obj.plugin);
+            })
+            .value();
     };
 
-    var collection,
-        plugins,
-
-        changePluginState = function (id, active) {
-
-            // update local settings
-            var plugin = getPluginById(id);
-            if (plugin) {
-                plugin.active = !!active;
-            } else if (active === true) {
-                // add a new one
-                pluginSettings.push({ id: id, name: id, active: true, index: MAX_INDEX });
-            }
-
-            // even if we don't find a plugin we track the change for new plugins
-            settings.set('pluginSettings', pluginSettings);
-            settings.save();
-
-            var plugins = ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' }),
-                activePlugins = _.filter(pluginSettings, function (obj) { return obj.active; }),
-                allActivePlugins = _.map(activePlugins, function (obj) {
-                    return 'plugins/portal/' + obj.id + '/register';
-                });
-
-            // disable/enable corresponding extension point
-            ext.point("io.ox/portal/widget")[active === true ? 'enable' : 'disable'](id);
-
-            plugins = _.intersection(plugins, allActivePlugins);
-
-            // Load all active plugins since the portal just relies on existing extension points
-            require(plugins).pipe(function () {
-                var index = 100;
-                // Load plugin with given index (for sub-tiles)
-                _.each(arguments, function (obj) {
-                    if (obj && _.isFunction(obj.reload)) {
-                        obj.reload(index);
-                    }
-                    index += 100;
-                });
-                // trigger portal refresh
-                ox.trigger("refresh-portal", [true]);
-            });
-        },
-
-        PluginSelectView = Backbone.View.extend({
-            _modelBinder: undefined,
-            isEditable: false,
-            isSelected: false,
-            initialize: function (options) {
-                this.template = doT.template(tmplPlugin);
-                this._modelBinder = new Backbone.ModelBinder();
-            },
-            renderState: function () {
-                var toggle = this.$el.find('.toggle-state');
-                if (toggle) {
-                    if (this.model.get('active')) {
-                        toggle.text(gt('Disable'));//.removeClass('btn-inverse');
-                        this.$el.removeClass('disabled').addClass('enabled');
-                    } else {
-                        toggle.text(gt('Enable'));//.addClass('btn-inverse');
-                        this.$el.removeClass('enabled').addClass('disabled');
-                    }
-                }
-            },
-            render: function () {
-                var self = this;
-                self.$el.empty().append(self.template({
-                    id: this.model.get('id'),
-                    strings: staticStrings
-                }));
-
-                this.renderState();
-
-                // Used by jquery ui sortable
-                self.$el.attr('id', this.model.get('id'));
-
-                var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-                self._modelBinder.bind(self.model, self.el, defaultBindings);
-
-                if (_.include(ox.serverConfig.portalPluginEditable, this.model.get('id'))) {
-                    this.isEditable = true;
-                    this.$el.find('div.sortable-item').addClass('editable-item');
-                }
-                return self;
-            },
-            events: {
-                'click .sortable-item': 'onSelect',
-                'click .toggle-state': 'changeState'
-            },
-            changeState: function (e) {
-                var active = !this.model.get('active');
-                this.model.set('active', active);
-                changePluginState(this.model.get('id'), active);
-                this.renderState();
-            },
-            onSelect: function () {
-                this.$el.parent().find('div[selected="selected"]').attr('selected', null);
-                this.$el.find('.sortable-item').attr('selected', 'selected');
-            }
-        }),
-
-        PluginSettingsView = Backbone.View.extend({
-            initialize: function (options) {
-                this.plugin = options.plugin;
-                this.deferred = new $.Deferred();
-                this.strings = staticStrings;
-                var that = this;
-                require(['plugins/portal/' + this.plugin.id + '/settings/plugin'], function (pluginFeatures) {
-                    that.pluginFeatures = pluginFeatures;
-                    that.deferred.resolve();
-                });
-            },
-            render: function () {
-                var that = this;
-
-                this.deferred.done(function () {
-                    that.$el.empty();
-
-                    if (that.pluginFeatures) {
-                        if (that.pluginFeatures.renderSettings) {
-                            that.$el.append(that.pluginFeatures.renderSettings());
-                        }
-                    }
-                });
-
-                return that;
-            },
-            events: {
-                'click .save': 'onSave'
-            },
-            onSave: function () {
-                var active = this.$el.find('input#plugin-active').is(':checked');
-                this.plugin.set('active', active);
-                changePluginState(this.plugin.get('id'), active);
-                this.dialog.close();
-            }
-        });
+    collection.reset(getWidgetSettings());
 
     ext.point("io.ox/portal/settings/detail").extend({
         index: 200,
         id: "portalsettings",
         draw: function (data) {
-            var that = this;
-            plugins = getPlugins();
-            collection = new Backbone.Collection(plugins);
-            var PluginsView = Backbone.View.extend({
-                initialize: function () {
-                    this.template = doT.template(tmplListBox);
-                    _.bindAll(this);
-                    this.collection = collection;
-                },
-                redraw: function ($listbox) {
-                    if (!$listbox) {
-                        $listbox = this.$el.find('.listbox');
+            var onEdit = function (pEvent) {
+                var $elem = $(pEvent.target).parents('.io-ox-portal-setting').find('.io-ox-setting-details').toggle('hidden');
+            },
+            onDisable = function (pEvent) {
+                var $elem = $(pEvent.target).parents('.io-ox-portal-setting');
+                console.log("onDisable", $elem.id);
+            },
+            onDelete = function (pEvent) {
+                var $elem = $(pEvent.target).parents('.io-ox-portal-setting');
+                console.log("onDelete", $elem.id);
+            },
+            onColorChange = function (pEvent) {
+                var $elem = $(pEvent.target);
+                console.log("onColorChange", $elem, $elem.data('color'));
+            };
+
+            var that = this,
+                $addDropdown = $('<ul class="dropdown-menu" role="menu">'),
+                $addButton = $('<div class="btn-group io-ox-portal-addAction">').append(
+                    $('<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">' + gt('Add') + ' <span class="caret"></span></a>'),
+                    $addDropdown
+                ),
+
+                $colorSelect = $('<div class="btn-group io-ox-portal-colorAction">').append(
+                    $('<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">' + gt('Color') + ' <span class="caret"></span></a>'),
+                    $('<ul class="dropdown-menu" role="menu">').append(
+                        _(['default', 'red', 'orange', 'lightgreen', 'green', 'lightblue', 'blue', 'purple', 'pink', 'gray']).map(function (color) {
+                            return $('<li class="io-ox-portal-color-' + color + '" data-color="' + color + '">');
+                        })
+                    ).on('click', 'li', onColorChange)
+                ),
+
+                $optionsButton = $('<div class="btn-group io-ox-portal-optionsAction">').append(
+                    $('<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">' + gt('Options') + ' <span class="caret"></span></a>'),
+                    $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">').append(
+                        $('<li class="io-ox-portal-action io-ox-portal-action-edit">').append(
+                            $('<a>').text(gt('Edit')).on('click', onEdit)
+                        ),
+                        $('<li class="io-ox-portal-action io-ox-portal-action-disable">').append(
+                            $('<a>').text(gt('Disable')).on('click', onDisable)
+                        ),
+                        $('<li class="divider">'),
+                        $('<li class="io-ox-portal-action io-ox-portal-action-delete ">').append(
+                            $('<a href="#">').text(gt('Delete')).on('click', onDelete)
+                        )
+                    )
+                ),
+                $extensions = $('<ul class="io-ox-portal-settings">');
+
+            require(['io.ox/settings/accounts/settings/extpoints'], function () { //remove once Cisco's and Vic's new module stuff is implemented
+                ext.point('io.ox/portal/settings/add').each(function (extension) { //add option to "add" button
+                    $('<li>').append(
+                        $('<a>').text(extension.description)
+                    ).on('click', extension.action)
+                    .appendTo($addDropdown);
+                });
+
+                ext.point('io.ox/portal/settings/detail/tile').each(function (extension) { //add advanced settings to extensions
+                    var $additionalContent = $('<div class="io-ox-setting-details">');
+                    extension.draw.apply($additionalContent, []);
+                    $('<li class="io-ox-portal-setting">').attr({id: extension.id}).append(
+                        $('<span class="io-ox-setting-title io-ox-portal-settings-title">').text(extension.id),
+                        $colorSelect.clone(true),
+                        $optionsButton.clone(true),
+                        $additionalContent.hide()
+                    ).appendTo($extensions);
+                    if (extension.color) {
+                        $additionalContent.find('io-ox-portal-settings-title').css('color', extension.color);
                     }
-                    $listbox.empty();
+                });
 
-                    this.collection.each(function (item) {
-                        $listbox.append(new PluginSelectView({ model: item }).render().el);
-                    });
-                },
-                render: function () {
-                    var self = this,
-                        $listbox;
-
-                    self.$el.empty().append(self.template({strings: staticStrings}));
-
-                    $listbox = self.$el.find('.listbox');
-
-                    this.redraw($listbox);
-
-                    $listbox.sortable({
-                        axis: 'y',
-                        items: 'div.enabled',
-                        opacity: 0.5,
-                        containment: 'parent',
-                        update: function (event, ui) {
-
-                            var index = 100, array = $(this).sortable('toArray');
-
-                            _(array).each(function (id) {
-                                var plugin = getPluginById(id);
-                                if (plugin) {
-                                    plugin.index = index;
-                                    ext.point("io.ox/portal/widget").get(id, function (e) {
-                                        e.index = index;
-                                    });
-                                    index += 100;
-                                }
-                            });
-
-                            pluginSettings.sort(sortByIndex);
-                            settings.set('pluginSettings', pluginSettings);
-                            settings.save();
-
-                            ox.trigger('refresh-portal', [true]);
-//                            ox.trigger('refresh-portal');
-                        }
-                    });
-
-                    return this;
-                },
-                events: {
-                    'click [data-action="prop"]': 'onShowProperties'
-                },
-                onShowProperties: function (e) {
-                    var $sel = this.$el.find('[selected]');
-                    e.data = {id: $sel.data('id'), node: this.el};
-                    e.target = $sel;
-
-                    var view = new PluginSettingsView({
-                        plugin: collection.get([e.data.id])
-                    });
-
-                    var d = view.dialog = new dialogs.SidePopup().show(e, function (popup) {
-                        popup.append(view.render().el);
-                    });
-
-                    var self = this;
-                    d.on('close', function () {
-                        self.redraw();
-                    });
-                }
+                $(that).append( //building the actual settings page from its components
+                    $('<h1>').text(gt('Portal Squares')),
+                    $addButton.clone(true),
+                    $extensions,
+                    $addButton.clone(true)
+                );
             });
-
-            var view = new PluginsView();
-            that.append(view.render().el);
         }
     });
 
