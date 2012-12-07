@@ -502,6 +502,16 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return $('<div>').addClass('p');
     };
 
+    /**
+     * Creates a new paragraph marked as 'implicit'. This is used in
+     * empty documents or table cells to allow text insertion in browser.
+     *
+     * @returns {jQuery}
+     *  An implicit paragraph node, as jQuery object.
+     */
+    DOM.createImplicitParagraphNode = function () {
+        return DOM.createParagraphNode().data('implicit', true);
+    };
 
     /**
      * Returns whether the passed paragraph node is an implicit paragraph
@@ -510,8 +520,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * an operation to the server.
      *
      * @param {Node|jQuery|Null} [node]
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains. If missing or null, returns false.
+     *  The DOM node to be checked.
      *
      * @returns {Boolean}
      *  Whether the passed node is an implicit paragraph node.
@@ -521,33 +530,17 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * Marks an already existing paragraph as 'implicit'. This is used in
-     * in empty documents or table cells to allow text insertion in browser.
+     * Returns whether the passed paragraph node is a paragraph without
+     * neighbours (other paragraphs or tables).
      *
      * @param {Node|jQuery|Null} [node]
-     *  The jQuery node that needs the data element to be registered as
-     *  implicit.
+     *  The DOM node to be checked.
      *
-     * @returns {jQuery}
-     *  An implicit paragraph node, as jQuery object.
+     * @returns {Boolean}
+     *  Whether the passed node is a paragraph without neighbours.
      */
-    DOM.setImplicitToParagraphNode = function (node) {
-        return $(node).data('implicit', true);
-    };
-
-    /**
-     * Removes the 'implicit' tag from an existing paragraph. For not-implicit
-     * paragraph nodes an operation was created and sent to the server.
-     *
-     * @param {Node|jQuery|Null} [node]
-     *  The jQuery node that needs the data element to be no longer registered as
-     *  implicit.
-     *
-     * @returns {jQuery}
-     *  A no longer implicit paragraph node, as jQuery object.
-     */
-    DOM.removeImplicitFromParagraphNode = function (node) {
-        return $(node).data('implicit', false);
+    DOM.isParagraphWithoutNeighbour = function (node) {
+        return (($(node).prev().length === 0) && ($(node).next().length === 0));
     };
 
     /**

@@ -769,10 +769,7 @@ define('io.ox/office/editor/editor',
             var // container for the top-level paragraphs
                 pageContentNode = DOM.getPageContentNode(editdiv),
                 // the initial paragraph node in an empty document
-                paragraph = DOM.createParagraphNode();
-
-            // this paragraph is created without operation
-            paragraph = DOM.setImplicitToParagraphNode(paragraph);
+                paragraph = DOM.createImplicitParagraphNode();
 
             // create empty page with single paragraph
             pageContentNode.empty().append(paragraph);
@@ -1725,20 +1722,24 @@ define('io.ox/office/editor/editor',
                 paragraph = null,
                 paraPosition = _.clone(position);
 
-            if (paraPosition.pop() === 0) {  // is this an empty paragraph?
-                paragraph = Position.getDOMPosition(editdiv, paraPosition).node;
-                if (DOM.isImplicitParagraphNode(paragraph)) {
-                    // removing implicit paragraph node
-                    $(paragraph).remove();
-                    // creating new paragraph explicitely
-                    newOperation = {name: Operations.PARA_INSERT, start: paraPosition};
-                    applyOperation(newOperation);
-                }
-            }
+            undoManager.enterGroup(function () {
 
-            newOperation = { name: Operations.TEXT_INSERT, text: text, start: _.clone(position) };
-            if (_.isObject(attrs)) { newOperation.attrs = attrs; }
-            applyOperation(newOperation);
+                if (paraPosition.pop() === 0) {  // is this an empty paragraph?
+                    paragraph = Position.getParagraphElement(editdiv, paraPosition);
+                    if (DOM.isImplicitParagraphNode(paragraph)) {
+                        // removing implicit paragraph node
+                        $(paragraph).remove(); // -> only remove, if paragraph is really empty -> length === 0
+                        // creating new paragraph explicitely
+                        newOperation = {name: Operations.PARA_INSERT, start: paraPosition};
+                        applyOperation(newOperation);
+                    }
+                }
+
+                newOperation = { name: Operations.TEXT_INSERT, text: text, start: _.clone(position) };
+                if (_.isObject(attrs)) { newOperation.attrs = attrs; }
+                applyOperation(newOperation);
+
+            }, this);
         };
 
         /**
@@ -5274,7 +5275,9 @@ define('io.ox/office/editor/editor',
                 // position description for cells
                 rowPosition, startCell, endCell,
                 // position description for rows
-                tablePosition, startRow, endRow;
+                tablePosition, startRow, endRow,
+                // a new implicit paragraph node
+                newParagraph = null;
 
             // resolve start and end position
             if (!_.isArray(start)) {
@@ -5324,6 +5327,11 @@ define('io.ox/office/editor/editor',
                 break;
 
             case 'paragraph':
+                if (DOM.isParagraphWithoutNeighbour(startInfo.node)) {
+                    newParagraph = DOM.createImplicitParagraphNode();
+                    $(startInfo.node).parent().append(newParagraph);
+                    validateParagraphNode(newParagraph);
+                }
                 $(startInfo.node).remove(); // remove the paragraph from the DOM
                 break;
 
