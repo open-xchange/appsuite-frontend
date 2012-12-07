@@ -73,13 +73,13 @@ define('io.ox/files/list/perspective',
             commons.wireGridAndSearch(grid, win, api);
 
             // LFO callback
-            var currentDetailView = null;
+            app.currentFile = null;
 
             var showFile, selectFile, drawFail;
 
             showFile = function (obj) {
                 // get file
-                if (currentDetailView && currentDetailView.file.id === obj.id) {
+                if (_.cid(app.currentFile) === _.cid(obj)) {
                     return;
                 }
                 right.busy(true);
@@ -89,21 +89,15 @@ define('io.ox/files/list/perspective',
             };
 
             selectFile = function (data) {
-                if (currentDetailView) {
-                    currentDetailView.destroy();
-                }
-                console.log('draw', currentDetailView);
-                currentDetailView = viewDetail.draw(data);
-                right.idle().empty().append(currentDetailView);
+                right.idle().empty().append(viewDetail.draw(data));
                 right.parent().scrollTop(0);
                 app.currentFile = data;
-                app.detailView = currentDetailView;
                 dropZone.update();
-                shortcutPoint.activateForContext({
-                    data: data,
-                    view: app.detailView,
-                    folder: data.folder_id
-                });
+                // shortcutPoint.activateForContext({
+                //     data: data,
+                //     view: app.detailView,
+                //     folder: data.folder_id
+                // });
             };
 
             drawFail = function (obj) {
@@ -117,10 +111,6 @@ define('io.ox/files/list/perspective',
             commons.wireGridAndSelectionChange(grid, 'io.ox/files', showFile, right);
 
             grid.selection.on('empty', function () {
-                if (currentDetailView) {
-                    currentDetailView.destroy();
-                    currentDetailView = null;
-                }
                 app.currentFile = null;
                 dropZone.update();
             })
@@ -133,14 +123,7 @@ define('io.ox/files/list/perspective',
             // delete item
             api.on("beforedelete", function () {
                 grid.selection.selectNext();
-            })
-            .on("triggered", function () {
-                var args = $.makeArray(arguments), source = args.shift();
-                if (currentDetailView) {
-                    currentDetailView.trigger.apply(currentDetailView, args);
-                }
             });
-            //.on('refresh.all', grid.repaint());
 
             // Uploads
             app.queues = {};
@@ -192,15 +175,15 @@ define('io.ox/files/list/perspective',
                 }, app);
             }
 
-            var shortcutPoint = new shortcuts.Shortcuts({
-                ref: "io.ox/files/shortcuts"
-            });
+            // var shortcutPoint = new shortcuts.Shortcuts({
+            //     ref: "io.ox/files/shortcuts"
+            // });
 
             if (dropZone) {dropZone.include(); }
 
             win.on("hide", function () {
                 if (dropZone) {dropZone.remove(); }
-                shortcutPoint.deactivate();
+                // shortcutPoint.deactivate();
             });
 
             // Add status for uploads

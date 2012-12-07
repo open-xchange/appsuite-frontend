@@ -234,6 +234,9 @@ define("io.ox/core/api/factory",
                         _.call(o.fail.get, e, opt, o);
                     });
                 };
+                if (o.module === 'contacts' && !(opt.folder || opt.folder_id)) {
+                    debugger;
+                }
                 return (useCache ? caches.get.get(opt, getter, o.pipe.getCache) : getter())
                     .pipe(o.pipe.getPost)
                     .done(o.done.get || $.noop);
