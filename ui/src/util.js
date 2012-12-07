@@ -489,27 +489,47 @@
         }()),
 
         // simple composite-key constructor/parser
-        cid: function (o) {
-            var tmp, r = 'recurrence_position', split, m, f;
-            if (typeof o === 'string') {
-                // mail folder?
-                if (/^default/.test(o)) {
-                    split = o.split('.');
-                    tmp = { folder_id: split.slice(0, -1).join('.'), id: split.slice(-1) + '' };
-                } else if ((m = o.match(/^(\d*?)\.(\d+)(\.(\d+))?$/)) && m.length) {
-                    // integer based ids
-                    tmp = { folder_id: String(m[1]), id: m[2] + '' };
-                    if (m[4] !== undefined) { tmp[r] = m[4] + ''; }
-                }
-            } else if (typeof o === 'object' && o !== null) {
-                // join
-                tmp = o.id;
-                f = o.folder_id !== undefined ? o.folder_id : o.folder;
-                if (f !== undefined) { tmp = f + '.' + tmp; }
-                if (o[r] !== undefined && o[r] !== null) { tmp += '.' + o[r]; }
+        cid: (function () {
+
+            function encode(s) {
+                return String(s).replace(/\./g, '\\.');
             }
-            return tmp;
-        },
+
+            function decode(s) {
+                // find first unescaped dot
+                s = String(s);
+                var pos = s.search(/([^\\])\./);
+                if (pos === -1) {
+                    return { id: s };
+                } else {
+                    return {
+                        folder_id: s.substr(0, pos + 1).replace(/\\(\\?)/g, '$1'),
+                        id: s.substr(pos + 2).replace(/\\(\\?)/g, '$1')
+                    };
+                }
+            }
+
+            return function (o) {
+                var tmp, r = 'recurrence_position', split, m, f;
+                if (typeof o === 'string') {
+                    // integer based ids?
+                    if ((m = o.match(/^(\d*?)\.(\d+)(\.(\d+))?$/)) && m.length) {
+                        tmp = { folder_id: String(m[1]), id: m[2] + '' };
+                        if (m[4] !== undefined) { tmp[r] = m[4] + ''; }
+                        return tmp;
+                    }
+                    // character based? (double tuple)
+                    return decode(o);
+                } else if (typeof o === 'object' && o !== null) {
+                    // join
+                    tmp = encode(o.id);
+                    f = o.folder_id !== undefined ? o.folder_id : o.folder;
+                    if (f !== undefined) { tmp = encode(f) + '.' + tmp; }
+                    if (o[r] !== undefined && o[r] !== null) { tmp += '.' + encode(o[r]); }
+                    return tmp;
+                }
+            };
+        }()),
 
         // if someone has a better name ...
         isSet: function (o) {
