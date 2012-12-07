@@ -205,7 +205,7 @@ define('io.ox/portal/settings/pane',
                     .appendTo($addDropdown);
                 });
 
-                ext.point('io.ox/portal/settings/detail/tile').each(function (extension) { //add setting for extension to list of extensions
+                ext.point('io.ox/portal/settings/detail/tile').each(function (extension) { //add advanced settings to extensions
                     var $additionalContent = $('<div class="io-ox-setting-details">');
                     extension.draw.apply($additionalContent, []);
                     $('<li class="io-ox-portal-setting">').attr({id: extension.id}).append(
@@ -214,6 +214,9 @@ define('io.ox/portal/settings/pane',
                         $optionsButton.clone(true),
                         $additionalContent.hide()
                     ).appendTo($extensions);
+                    if (extension.color) {
+                        $additionalContent.find('io-ox-portal-settings-title').css('color', extension.color);
+                    }
                 });
 
                 $(that).append( //building the actual settings page from its components

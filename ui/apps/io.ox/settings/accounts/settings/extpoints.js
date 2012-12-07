@@ -111,6 +111,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         this._modelBinder = new Backbone.ModelBinder();
                     },
                     render: function () {
+                        console.log("RENDERING");
                         var self = this;
                         self.$el.empty().append(
                             $('<div class="io-ox-settings-item io-ox-reddit-setting">')
@@ -271,53 +272,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                     }
                 }),
 
-                PluginSettingsView = Backbone.View.extend({
-                    initialize: function (options) {
-                    },
-                    render: function () {
-                        this.$el.empty().append(
-                            $('<div>').append(
-                                $('<div class="section">').append(
-                                    $('<div class="settings-detail-pane">').append(
-                                        $('<div class="io-ox-reddit-settings">'),
-                                        $('<div class="sectioncontent">').append(
-                                            $('<button class="btn" data-action="add" style="margin-right: 15px; ">').text(staticStrings.ADD)
-                                        )
-                                    )
-                                )
-                            )
-                        );
-
-                        var that = this;
-
-                        function redraw() {
-                            var $listbox = that.$el.find('.io-ox-reddit-settings'),
-                                collection = new Backbone.Collection(subreddits);
-
-                            $listbox.empty();
-
-                            collection.each(function (item) {
-                                $listbox.append(new SubredditSelectView({ model: item }).render().el);
-                            });
-
-                            if (collection.length === 0) {
-                                $listbox.hide();
-                            } else {
-                                $listbox.show();
-                            }
-
-                        }
-
-                        redraw();
-
-                        this.on('redraw', redraw);
-
-                        return this;
-                    },
-                    events: {
-                        'click [data-action="add"]': 'onAdd'
-                    }
-                }),
 
                 removeSubReddit = function (subreddits, subreddit, mode) {
                     var newSubreddits = [];
@@ -330,7 +284,12 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                 };
 
                 console.log("SUBREDDITS:", subreddits);
-                $(that).append(new PluginSettingsView().render().el);
+
+                (new Backbone.Collection(subreddits)).each(function (item) {
+                    console.log("ITEM:", item);
+                    $(that).append(new SubredditSelectView({model: item}).render().el);
+                });
+
 
             }); //END: require
         } //END: draw
