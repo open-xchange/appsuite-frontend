@@ -92,8 +92,9 @@ define('io.ox/files/list/perspective',
                 if (currentDetailView) {
                     currentDetailView.destroy();
                 }
+                console.log('draw', currentDetailView);
                 currentDetailView = viewDetail.draw(data);
-                right.idle().empty().append(currentDetailView.element);
+                right.idle().empty().append(currentDetailView);
                 right.parent().scrollTop(0);
                 app.currentFile = data;
                 app.detailView = currentDetailView;

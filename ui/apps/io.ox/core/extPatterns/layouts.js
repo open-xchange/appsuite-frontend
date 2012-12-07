@@ -1,4 +1,18 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2012
+ * Mail: info@open-xchange.com
+ *
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ */
+
 define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ext) {
+
     "use strict";
 
     var that = {};
@@ -21,166 +35,6 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
         }
         return 'done';
     }
-
-    var Flow = function (options) {
-        var self = this,
-            point = ext.point(options.ref),
-            nodes = {};
-
-
-        self.draw = function () {
-            var args = $.makeArray(arguments),
-            $node = this;
-
-            point.each(function (extension) {
-                var $div = $("<div>").addClass("row-fluid").appendTo($node);
-                extension.draw.apply($div, args);
-                nodes[extension.id] = $div;
-            });
-
-        };
-
-        self.trigger = function () {
-            var args = $.makeArray(arguments),
-                $node = args.shift(),
-                type = args.shift();
-
-            var reflow = false;
-            point.each(function (extension) {
-                if (reflow) {
-                    return;
-                }
-                var result = invokeEventHandler(nodes[extension.id], extension, type, args);
-                reflow = reflow || result === 'draw' || result === 'remove';
-            });
-            if (reflow) {
-                $node.empty();
-                self.draw.apply($node, args);
-            }
-        };
-
-        self.each = function (fn) {
-            point.each(function (extension) {
-                fn(extension, nodes[extension.id]);
-            });
-        };
-
-        self.destroy = function () {
-            nodes = null;
-        };
-    };
-    that.Flow = Flow;
-
-    var Sections = function (options) {
-        var self = this,
-            point = ext.point(options.ref),
-            sublayouts = {},
-            nodes = {};
-
-        self.draw = function () {
-            var args = $.makeArray(arguments),
-                $node = this;
-            point.each(function (sectionDef) {
-                if (sectionDef.isEnabled && !sectionDef.isEnabled.apply(sectionDef, args)) {
-                    return;
-                }
-                var $sectionNode = $("<div>").addClass("io-ox-section").appendTo($node);
-                nodes[sectionDef.id] = $sectionNode;
-
-                var title = sectionDef.metadata("title", args);
-                if (title) {
-                    $sectionNode.append($("<div>").addClass("io-ox-sectionTitle").text(title));
-                }
-                if (sectionDef.draw) {
-                    sectionDef.draw.apply($sectionNode, args);
-                    return;
-                }
-                // Invoke Sublayout
-                var layout = sectionDef.metadata("layout", args) || 'Flow';
-                var layoutName, layoutOptions;
-
-                if (_.isString(layout) || _.isArray(layout)) {
-                    layoutName = layout;
-                    layoutOptions = {ref: options.ref + "/" + sectionDef.id};
-                } else if (_.isObject(layout)) {
-                    layoutName = layout.name;
-                    layoutOptions = _(layout.options || {}).clone().defaults({ref: options.ref + "/" + sectionDef.id});
-                }
-
-                // Draw
-                if (_.isString(layoutName)) {
-                    sublayouts[sectionDef.id] = new that[layoutName](layoutOptions);
-                    sublayouts[sectionDef.id].draw.apply($sectionNode, args);
-                } else if (_.isArray(layoutName)) {
-                    require([layout.shift()], function (Loaded) {
-                        var name = layout.shift();
-                        if (name) {
-                            sublayouts[sectionDef.id] = new Loaded[name](layoutOptions);
-                        } else {
-                            sublayouts[sectionDef.id] = new Loaded(layoutOptions);
-                        }
-                        sublayouts[sectionDef.id].draw.apply($sectionNode, args);
-                    });
-                    return;
-                }
-
-            });
-        };
-
-        self.each = function (fn) {
-            _(sublayouts).each(function (sublayout, sectionId) {
-                fn(sublayout, nodes[sectionId]);
-            });
-        };
-
-        self.trigger = function () {
-            var args = $.makeArray(arguments),
-                $node = args.shift(),
-                type = args.shift(),
-                reflow = false;
-
-            point.each(function (sectionDef) {
-                if (reflow) {
-                    return;
-                }
-                var layout = sublayouts[sectionDef.id];
-                var $node = nodes[sectionDef.id];
-                var enabled = true;
-
-                if (sectionDef.isEnabled) {
-                    enabled = sectionDef.isEnabled.apply(sectionDef, args);
-                    if ($node && !enabled) {
-                        $node.empty().remove();
-                        return;
-                    }
-                    if (!$node && enabled) {
-                        // Redraw everything;
-                        reflow = true;
-                        return;
-                    }
-                }
-
-                if (layout && layout.trigger) {
-                    layout.trigger.apply(layout, _([$node, type, args]).flatten()); // TODO: Rethink _.flatten, destroys regularly passed arrays
-                }
-            });
-
-            if (reflow) {
-                $node.empty();
-                self.draw.apply($node, args);
-            }
-        };
-
-        self.destroy = function () {
-            _(sublayouts).invoke("destroy");
-            self.trigger = self.draw = $.noop;
-            sublayouts = nodes = null;
-        };
-
-    };
-
-
-    that.Sections = Sections;
 
     var Grid = function (options) {
         var self = this,
@@ -291,11 +145,9 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
             });
         };
 
-
         self.destroy = function () {
             nodes = null;
         };
-
     };
 
     that.Grid = Grid;

@@ -206,14 +206,17 @@ define("io.ox/core/extPatterns/links",
     };
 
     var z = 0;
-    var drawDropDown = function (options, context) {
+    var drawDropDown = function (options, baton) {
+
+        baton = ext.Baton.ensure(baton);
+
         var args = $.makeArray(arguments),
             $parent = $('<div>').addClass('dropdown')
                 .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 70000) })
                 .appendTo(this),
             $toggle = $('<a href="#" data-toggle="dropdown">')
-                .data('context', context)
-                .text(options.label)
+                .data('context', baton.data)
+                .text(options.label || baton.label || '###')
                 .append(
                     $('<span>').text(_.noI18n(' ')),
                     $('<b>').addClass('caret')
@@ -225,7 +228,7 @@ define("io.ox/core/extPatterns/links",
 
         // create & add node first, since the rest is async
         var node = $('<ul>').addClass('dropdown-menu').appendTo($parent);
-        drawLinks(options, new Collection(context), node, context, args, true);
+        drawLinks(options, new Collection(baton.data), node, baton.data, args, true);
 
         $toggle.dropdown();
 

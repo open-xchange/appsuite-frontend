@@ -487,7 +487,7 @@ function (ext, contacts, api, config, date) {
                 });
 
                 j.it('creates a fresh obj', function () {
-
+                    console.warn('creates a fresh obj');
                     j.runs(function () {
                         var me = this;
                         me.ready = false;
@@ -510,7 +510,7 @@ function (ext, contacts, api, config, date) {
                 });
 
                 j.it('catches the form and checks for testfield', function () {
-
+                    console.warn('catches the form and checks for testfield');
                     var grid = app.getGrid();
 
                     phrase = fId + '.' + data.id;
@@ -559,7 +559,8 @@ function (ext, contacts, api, config, date) {
 
                 });
 
-                j.it('opens contact app ', function () {
+                j.it('opens contact app', function () {
+                    console.warn('opens contact app');
 
                     var loaded = new Done();
 
@@ -573,7 +574,7 @@ function (ext, contacts, api, config, date) {
                 });
 
                 j.it('looks for the created item / selects and deletes', function () {
-
+                    console.warn('looks for the created item / selects and deletes');
                     var grid = app.getGrid();
 
                     j.waitsFor(function () {
@@ -609,8 +610,8 @@ function (ext, contacts, api, config, date) {
                     });
                 });
 
-                j.it('opens contact app ', function () {
-
+                j.it('opens contact app', function () {
+                    console.warn('opens contact app');
                     var loaded = new Done();
 
                     j.waitsFor(loaded, 'Could not load app', TIMEOUT);
@@ -625,7 +626,7 @@ function (ext, contacts, api, config, date) {
                 });
 
                 j.it('creates a fresh obj', function () {
-
+                    console.warn('creates a fresh obj');
                     j.runs(function () {
                         var me = this;
                         me.ready = false;
@@ -648,7 +649,7 @@ function (ext, contacts, api, config, date) {
                 });
 
                 j.it('catches the form and checks for absence of testfield', function () {
-
+                    console.warn('catches the form and checks for absence of testfield');
                     app.launch();
                     j.runs(function () {
                         ext.point("io.ox/contacts/edit/form/phone").disable("cellular_telephone1");
@@ -693,14 +694,7 @@ function (ext, contacts, api, config, date) {
                         testfield = $('input[dname="cellular_telephone1"]');
                         j.expect(testfield[0]).toBeFalsy();
                     });
-
-
                 });
-
-
-
-
-
 
                 j.runs(function () {
                     buttonClose = $('[data-action="discard"]');
@@ -708,7 +702,7 @@ function (ext, contacts, api, config, date) {
                 });
 
                 j.it('looks for the created item / selects and deletes', function () {
-
+                    console.warn('looks for the created item / selects and deletes');
                     var grid = app.getGrid();
                     app.launch();
                     j.waitsFor(function () {
@@ -750,8 +744,6 @@ function (ext, contacts, api, config, date) {
                     });
 
                 });
-
-
             });
         }
     });
