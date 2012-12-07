@@ -220,6 +220,8 @@ define('io.ox/files/list/perspective',
             this.drawPublicationFlag(app, win);
 
             app.on('folder:change', function (e, id, folder) {
+                dropZone.remove();
+                if (dropZone) { dropZone.include(); }
                 // reset first
                 win.nodes.title.find('.has-publications').remove();
                 // published?

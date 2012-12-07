@@ -465,6 +465,10 @@ define('io.ox/files/icons/perspective',
             }
             if (dropZone) { dropZone.include(); }
 
+            app.getWindow().on('change:perspective', function (e) {
+                dropZone.remove();
+            });
+
             app.on('folder:change', function (e, id, folder) {
                 dropZone.remove();
                 if (dropZone) { dropZone.include(); }
