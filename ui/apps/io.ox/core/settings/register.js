@@ -25,7 +25,11 @@ define('io.ox/core/settings/register', ['io.ox/core/extensions', 'gettext!io.ox/
 		draw: function () {
 			var $node = this;
 			require(["io.ox/core/settings/user"], function (users) {
-				users.editCurrentUser($node);
+				users.editCurrentUser($node).done(function (user) {
+					user.on('update', function () {
+						require("io.ox/core/notifications").yell("success", gt("Your data has been saved"));
+					});
+				});
 			});
 		}
 	});

@@ -49,10 +49,10 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
                     return gt('Please enter a valid date');
                 }
             }
-            return _.now() > val || 'Please enter a date in the past';
+            return _.now() > val || gt('Please enter a date in the past');
         },
         email: function (val) {
-            var result = (regEmail.test(val) || val === '') ? true : 'Please enter a valid email address';
+            var result = (regEmail.test(val) || val === '') ? true : gt('Please enter a valid email address');
             return result;
 
         },

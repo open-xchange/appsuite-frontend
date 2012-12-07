@@ -47,6 +47,73 @@ define("io.ox/core/api/user",
         }
     });
 
+    // Update
+    api.update =  function (o) {
+
+        if (_.isEmpty(o.data)) {
+            return $.when();
+        } else {
+            return http.PUT({
+                    module: 'user',
+                    params: {
+                        action: 'update',
+                        id: o.id,
+                        folder: o.folder,
+                        timestamp: o.timestamp
+                    },
+                    data: o.data,
+                    appendColumns: false
+                })
+                .pipe(function () {
+                    // get updated contact
+                    return api.get({ id: o.id }, false)
+                        .pipe(function (data) {
+                            return $.when(
+                                api.caches.get.add(data),
+                                api.caches.all.clear(),
+                                api.caches.list.remove({ id: o.id })
+                                // TODO: What about the contacts cache?
+                            )
+                            .done(function () {
+                                api.trigger('update:' + _.cid(data), data);
+                                api.trigger('update', data);
+                                api.trigger('refresh.list');
+                                // TODO: What about the corresponding contact events?
+                            });
+                        });
+                });
+        }
+    };
+
+
+    api.editNewImage = function (o, changes, file) {
+        console.log("EDIT NEW IMAGE ENTERED");
+        var form = new FormData();
+        form.append('file', file);
+        form.append('json', JSON.stringify(changes));
+
+        return http.UPLOAD({
+                module: 'user',
+                params: { action: 'update', id: o.id, timestamp: o.timestamp || _.now() },
+                data: form,
+                fixPost: true
+            })
+            .pipe(function (data) {
+                $.when(
+                    api.caches.get.clear(),
+                    api.caches.all.clear(),
+                    api.caches.list.clear()
+                ).pipe(function () {
+                    api.trigger('refresh.list');
+                    api.trigger('update', {
+                        id: o.id
+                    });
+                });
+
+                return data;
+            });
+    };
+
     api.getName = function (id) {
         return api.get({ id: id }).pipe(function (data) {
             return _.noI18n(data.display_name || data.email1 || '');
