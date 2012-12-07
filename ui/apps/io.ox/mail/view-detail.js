@@ -386,14 +386,18 @@ define('io.ox/mail/view-detail',
                 .one('resolve', obj, resolver);
         },
 
-        draw: function (data) {
+        draw: function (baton) {
 
-            if (!data) {
+            if (!baton) {
                 return $('<div>');
             }
 
+            // ensure baton
+            baton = ext.Baton.ensure(baton);
+
             // outer node
-            var self = this,
+            var data = baton.data,
+                self = this,
                 node = $.createViewContainer(data, api)
                     .on('redraw', function (e, tmp) {
                         copyThreadData(tmp, data);
@@ -414,7 +418,7 @@ define('io.ox/mail/view-detail',
             }
 
             // invoke extensions
-            ext.point('io.ox/mail/detail').invoke('draw', node, data);
+            ext.point('io.ox/mail/detail').invoke('draw', node, baton);
 
             return node;
         },
@@ -445,14 +449,15 @@ define('io.ox/mail/view-detail',
                 }
             }
 
-            function drawThread(node, list, pos, top, bottom, mails) {
+            function drawThread(node, baton, pos, top, bottom, mails) {
                 var i, obj, frag = document.createDocumentFragment(),
                     scrollpane = node.closest('.scrollable').off('scroll'),
-                    nodes, inline, top, mail;
+                    nodes, inline, top, mail,
+                    list = baton.data;
                 // draw inline links for whole thread
                 if (list.length > 1) {
                     inline = $('<div class="mail-detail thread-inline-actions">');
-                    ext.point('io.ox/mail/thread').invoke('draw', inline, list);
+                    ext.point('io.ox/mail/thread').invoke('draw', inline, baton);
                     inline.find('.dropdown > a').addClass('btn btn-primary');
                     frag.appendChild(inline.get(0));
                 }
@@ -461,7 +466,7 @@ define('io.ox/mail/view-detail',
                     if (i >= top && i <= bottom) {
                         mail = mails.shift();
                         copyThreadData(mail, obj);
-                        frag.appendChild(that.draw(mail).get(0));
+                        frag.appendChild(that.draw(ext.Baton({ data: mail, app: baton.app })).get(0));
                     } else {
                         frag.appendChild(that.drawScaffold(obj, that.autoResolveThreads).get(0));
                     }
@@ -478,9 +483,11 @@ define('io.ox/mail/view-detail',
                 nodes = frag = node = scrollpane = list = mail = mails = null;
             }
 
-            return function (node, list) {
+            return function (baton) {
                 // define next step now
-                var next = _.lfo(drawThread);
+                var list = baton.data,
+                    next = _.lfo(drawThread),
+                    node = this;
                 // get list data, esp. to know unseen flag - we need this list for inline link checks anyway
                 api.getList(list).done(function (list) {
 
@@ -508,7 +515,8 @@ define('io.ox/mail/view-detail',
                         defs.push(api.get(api.reduce(list[i])));
                     }
                     $.when.apply($, defs).done(function () {
-                        next(node, list, pos, top, bottom, $.makeArray(arguments));
+                        baton = ext.Baton({ data: list, app: baton.app });
+                        next(node, baton, pos, top, bottom, $.makeArray(arguments));
                     });
                 });
             };
@@ -520,8 +528,8 @@ define('io.ox/mail/view-detail',
     ext.point('io.ox/mail/detail').extend({
         index: 100,
         id: 'contact-picture',
-        draw: function (data) {
-            var picture;
+        draw: function (baton) {
+            var data = baton.data, picture;
             this.append(
                 picture = $('<div>').addClass('contact-picture')
             );
@@ -544,8 +552,9 @@ define('io.ox/mail/view-detail',
     ext.point('io.ox/mail/detail').extend({
         index: 110,
         id: 'receiveddate',
-        draw: function (data) {
+        draw: function (baton) {
             // some mails just have a sent_date, e.g. nested EMLs
+            var data = baton.data;
             var date = util.getDateTime(data.received_date || data.sent_date || 0);
             this.append(
                 $('<div>').addClass('date list').text(_.noI18n(date))
@@ -564,8 +573,8 @@ define('io.ox/mail/view-detail',
     ext.point('io.ox/mail/detail').extend({
         index: 120,
         id: 'fromlist',
-        draw: function (data) {
-            var list = util.serializeList(data, 'from'), node;
+        draw: function (baton) {
+            var data = baton.data, list = util.serializeList(data, 'from'), node;
             this.append($('<div class="from list">').append(list));
             if (ox.ui.App.get('io.ox/mail').length) {
                 node = list.last();
@@ -581,7 +590,8 @@ define('io.ox/mail/view-detail',
     ext.point('io.ox/mail/detail').extend({
         index: 124,
         id: 'thread-position',
-        draw: function (data) {
+        draw: function (baton) {
+            var data = baton.data;
             if (data.threadSize > 1) {
                 this.append(
                     $('<div>')
@@ -614,7 +624,8 @@ define('io.ox/mail/view-detail',
     ext.point('io.ox/mail/detail').extend({
         index: 125,
         id: 'flag',
-        draw: function (data) {
+        draw: function (baton) {
+            var data = baton.data;
             this.append(
                 $('<div class="dropdown flag-dropdown clear-title flag">')
                 .addClass('flag_' + util.getFlag(data))
@@ -643,7 +654,8 @@ define('io.ox/mail/view-detail',
     ext.point('io.ox/mail/detail').extend({
         index: 130,
         id: 'subject',
-        draw: function (data) {
+        draw: function (baton) {
+            var data = baton.data;
             this.append(
                 $('<div>')
                     .addClass('subject clear-title')
@@ -666,7 +678,9 @@ define('io.ox/mail/view-detail',
     ext.point('io.ox/mail/detail').extend({
         index: 150,
         id: 'tocopy',
-        draw: function (data) {
+        draw: function (baton) {
+
+            var data = baton.data;
 
             // figure out if 'to' just contains myself - might be a mailing list, for example
             var justMe = _(data.to).reduce(function (memo, to) {
@@ -753,8 +767,9 @@ define('io.ox/mail/view-detail',
     ext.point('io.ox/mail/detail').extend({
         index: 160,
         id: 'attachments',
-        draw: function (data) {
+        draw: function (baton) {
 
+            var data = baton.data;
             var attachments = util.getAttachments(data), length = attachments.length;
 
             if (length > 0) {
@@ -811,7 +826,8 @@ define('io.ox/mail/view-detail',
     ext.point('io.ox/mail/detail').extend({
         index: 90,
         id: 'phishing-warning',
-        draw: function (data) {
+        draw: function (baton) {
+            var data = baton.data;
             if ('headers' in data) {
                 // TODO: get proper settings here
                 var headers = settings.get('phishing/headers', []), key;
@@ -836,7 +852,8 @@ define('io.ox/mail/view-detail',
     ext.point('io.ox/mail/detail').extend({
         index: 195,
         id: 'externalresources-warning',
-        draw: function (data) {
+        draw: function (baton) {
+            var data = baton.data;
             var self = this;
             if (data.modified === 1) {
                 this.append(
@@ -868,7 +885,9 @@ define('io.ox/mail/view-detail',
     ext.point('io.ox/mail/detail').extend({
         index: 200,
         id: 'content',
-        draw: function (data) {
+        draw: function (baton) {
+
+            var data = baton.data;
 
             this.addClass('view')
             .attr('data-cid', data.folder_id + '.' + data.id)

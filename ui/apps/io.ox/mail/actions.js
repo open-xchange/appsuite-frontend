@@ -21,7 +21,8 @@ define('io.ox/mail/actions',
      'io.ox/core/config',
      'io.ox/core/notifications',
      'io.ox/contacts/api',
-     'io.ox/core/api/account'], function (ext, links, api, util, gt, config, notifications, contactAPI, account) {
+     'io.ox/core/api/account',
+     'settings!io.ox/mail'], function (ext, links, api, util, gt, config, notifications, contactAPI, account, settings) {
 
     'use strict';
 
@@ -170,42 +171,54 @@ define('io.ox/mail/actions',
         }
     });
 
-    new Action('io.ox/mail/actions/move', {
-        id: 'move',
-        requires: 'toplevel some',
-        multiple: function (mail) {
-            require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
-                var dialog = new dialogs.ModalDialog({ easyOut: true })
-                    .header($('<h3>').text(gt('Move')))
-                    .addPrimaryButton("ok", gt('Move'))
-                    .addButton("cancel", gt("Cancel"));
-                dialog.getBody().css({ height: '250px' });
-                var item = _(mail).first(),
-                    id = String(item.folder_id || item.folder),
-                    tree = new views.FolderTree(dialog.getBody(), { type: 'mail' });
-                dialog.show(function () {
-                    tree.paint().done(function () {
-                        tree.select(id);
-                    });
-                })
-                .done(function (action) {
-                    if (action === 'ok') {
-                        var target = _(tree.selection.get()).first();
-                        if (target && target !== id) {
-                            // move action
-                            api.move(mail, target)
-                                .done(function () {
-                                    notifications.yell('success', gt('Mails have been moved'));
-                                })
-                                .fail(notifications.yell);
+    function moveAndCopy(type, label, success) {
+
+        new Action('io.ox/mail/actions/' + type, {
+            id: type,
+            requires: 'toplevel some',
+            multiple: function (mail, baton) {
+                require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
+                    var dialog = new dialogs.ModalDialog({ easyOut: true })
+                        .header($('<h3>').text(label))
+                        .addPrimaryButton("ok", label)
+                        .addButton("cancel", gt("Cancel"));
+                    dialog.getBody().css({ height: '250px' });
+                    var id = settings.get('folderpopup/last') || String(mail[0].folder_id);
+                    var tree = new views.FolderTree(dialog.getBody(), {
+                        type: 'mail',
+                        toggle: function (open) {
+                            settings.set('folderpopup/open', open).save();
+                        },
+                        select: function (id) {
+                            settings.set('folderpopup/last', id).save();
                         }
-                    }
-                    tree.destroy();
-                    tree = dialog = null;
+                    });
+                    dialog.show(function () {
+                        tree.paint().done(function () {
+                            tree.select(id);
+                        });
+                    })
+                    .done(function (action) {
+                        if (action === 'ok') {
+                            var target = _(tree.selection.get()).first();
+                            if (target && target !== id) {
+                                api[type](mail, target)
+                                    .done(function () {
+                                        notifications.yell('success', success);
+                                    })
+                                    .fail(notifications.yell);
+                            }
+                        }
+                        tree.destroy();
+                        tree = dialog = null;
+                    });
                 });
-            });
-        }
-    });
+            }
+        });
+    }
+
+    moveAndCopy('move', gt('Move'), gt('Mails have been moved'));
+    moveAndCopy('copy', gt('copy'), gt('Mails have been copied'));
 
     new Action('io.ox/mail/actions/copy', {
         id: 'copy',
