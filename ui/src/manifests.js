@@ -345,5 +345,9 @@ define(function () {
     {
         "namespace": "portal",
         "path": "plugins/portal/twitter/register"
+    },
+    {
+        "namespace": "portal",
+        "path": "plugins/portal/userSettings/register"
     }
 ]});
