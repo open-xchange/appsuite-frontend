@@ -315,11 +315,9 @@ define('plugins/notifications/tasks/register',
                     notifications.collection.trigger('reset');
                 });
             });
-
-            reminderApi.getReminders(_.now());
         }
     });
-    
+
     /*------------------------------------------
     *
     * CONFIRMATION TASKS
@@ -399,7 +397,7 @@ define('plugins/notifications/tasks/register',
                 });
             }
         },
-        
+
         onChangeState: function (e) {
             e.stopPropagation();
             var model = this.model,
