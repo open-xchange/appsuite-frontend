@@ -16,7 +16,7 @@ define('io.ox/core/collection',
 
     'use strict';
 
-    var myself = 0,
+    var empty = {},
 
         // helper
         getRight = function (folder, owner, offset) {
@@ -28,8 +28,7 @@ define('io.ox/core/collection',
                 return false;
             } else if (bits === 1) {
                 // only own objects
-                myself = myself || ox.user_id;
-                return owner === myself;
+                return owner === ox.user_id;
             } else {
                 // all objects or admin
                 return true;
@@ -37,11 +36,7 @@ define('io.ox/core/collection',
         },
 
         getFolderId = function (obj) {
-            if ('folder_id' in obj || 'folder' in obj) {
-                return obj.folder_id || obj.folder;
-            } else {
-                return undefined;
-            }
+            return obj ? obj.folder_id || obj.folder : undefined;
         },
 
         // get properties of object collection (async)
@@ -66,9 +61,7 @@ define('io.ox/core/collection',
                 // get all folders first
                 folders = _.chain(collection)
                     .map(getFolderId)
-                    .filter(function (item) {
-                        return item !== null && item !== undefined;
-                    })
+                    .filter(function (item) { return !!item; }) // null, undefined, 0, ''
                     .value();
 
             // mail specific: toplevel? (in contrast to nested mails)
@@ -77,47 +70,52 @@ define('io.ox/core/collection',
                 return memo && 'folder_id' in item && !('filename' in item);
             }, true);
 
-            return api.get({ folder: folders })
-                .pipe(function (hash) {
-                    var i = 0, item = null, folder = null;
-                    for (; i < $l; i++) {
-                        item = collection[i];
-                        if ((folder = hash[getFolderId(item)])) {
-                            // get properties
-                            props.read = props.read && getRight(folder, item.created_by, 7); // read
-                            props.modify = props.modify && getRight(folder, item.created_by, 14); // write
-                            props['delete'] = props['delete'] && getRight(folder, item.created_by, 21); // delete
-                            props.create = props.create && (folder.own_rights & 127) >= 2; // create new objects
-                        } else {
-                            // folder unknown
-                            props.unknown = true;
-                            props.read = props.modify = props['delete'] = props.create = false;
-                            break;
-                        }
+            if (folders.length === 0) {
+                return $.Deferred().reject(empty);
+            }
+
+            return api.get({ folder: folders }).pipe(function (hash) {
+                var i = 0, item = null, folder = null;
+                for (; i < $l; i++) {
+                    item = collection[i];
+                    if ((folder = hash[getFolderId(item)])) {
+                        // get properties
+                        props.read = props.read && getRight(folder, item.created_by, 7); // read
+                        props.modify = props.modify && getRight(folder, item.created_by, 14); // write
+                        props['delete'] = props['delete'] && getRight(folder, item.created_by, 21); // delete
+                        props.create = props.create && (folder.own_rights & 127) >= 2; // create new objects
+                    } else {
+                        // folder unknown
+                        props.unknown = true;
+                        props.read = props.modify = props['delete'] = props.create = false;
+                        break;
                     }
-                    return props;
-                });
+                }
+                return props;
+            });
         };
 
     function Collection(list) {
 
         var items = _.compact([].concat(list)),
-            empty = {},
             properties = empty;
 
         // resolve properties (async).
         // Must be done upfront before 'has' checks for example
         this.getProperties = function () {
-            return getProperties(items)
-                .done(function (props) {
-                    properties = props;
-                });
+            return getProperties(items).always(function (props) {
+                properties = props;
+            });
+        };
+
+        this.isEmpty = function () {
+            return properties === empty;
         };
 
         // check if collection satisfies a set of properties
         // e.g. has('some') or has('one', 'read')
         this.has = function () {
-            if (properties === empty) {
+            if (this.isEmpty()) {
                 console.error('Using Collection.has before properties are resolved!', list, arguments);
             }
             return _(arguments).inject(function (memo, key) {

@@ -348,6 +348,7 @@ define('io.ox/contacts/api',
 
         var deferred = $.Deferred(),
             defaultUrl = ox.base + '/apps/themes/default/dummypicture.png',
+            id,
             fail = function () {
                 deferred.resolve(defaultUrl);
             };
@@ -368,17 +369,23 @@ define('io.ox/contacts/api',
                 defaultUrl = ox.base + '/apps/themes/default/dummypicture_group.xpng';
             }
             // also look for contact_id to support user objects directly
-            api.get({ id: obj.contact_id || obj.id, folder: obj.folder_id || obj.folder })
-                .done(function (data) {
-                    var url;
-                    if (data.image1_url) {
-                        url = data.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param($.extend({}, options));
-                        deferred.resolve(url);
-                    } else {
-                        fail();
-                    }
-                })
-                .fail(fail);
+            id = obj.contact_id || obj.id;
+            if (id) {
+                api.get({ id: id, folder: obj.folder_id || obj.folder }).then(
+                    function (data) {
+                        var url;
+                        if (data.image1_url) {
+                            url = data.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param($.extend({}, options));
+                            deferred.resolve(url);
+                        } else {
+                            fail();
+                        }
+                    },
+                    fail
+                );
+            } else {
+                fail();
+            }
         } else {
             fail();
         }

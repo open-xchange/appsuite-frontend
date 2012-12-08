@@ -25,15 +25,15 @@ define('io.ox/mail/util',
         HOUR = MINUTE * 60,
 
         ngettext = function (s, p, n) {
-                return n > 1 ? p : s;
-            },
+            return n > 1 ? p : s;
+        },
 
         fnClickPerson = function (e) {
-                e.preventDefault();
-                ext.point('io.ox/core/person:action').each(function (ext) {
-                    _.call(ext.action, e.data, e);
-                });
-            },
+            e.preventDefault();
+            ext.point('io.ox/core/person:action').each(function (ext) {
+                _.call(ext.action, e.data, e);
+            });
+        },
 
         // regex: split list at non-quoted ',' or ';'
         rRecipientList = /([^,;"]+|"(\\.|[^"])+")+/,

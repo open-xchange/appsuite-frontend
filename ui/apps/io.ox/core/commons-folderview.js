@@ -94,7 +94,7 @@ define('io.ox/core/commons-folderview',
             index: 900,
             draw: function (baton) {
                 this.append(
-                    $('<a h ef="#" class="toolbar-action pull-right"><i class="icon-remove"></a>')
+                    $('<a href="#" class="toolbar-action pull-right"><i class="icon-remove"></a>')
                     .on('click', { app: baton.app }, fnClose)
                 );
             }
