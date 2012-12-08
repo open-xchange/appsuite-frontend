@@ -514,7 +514,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         // slow mode
         slow = _.url.hash("slow"),
         // fail mode
-        fail = _.url.hash("fail");
+        fail = _.url.hash('fail') !== undefined;
 
     var ajax = (function () {
 
@@ -639,7 +639,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             }
             // continuation
             function cont() {
-                if (fail && o.module !== "login" && Math.random() < Number(fail)) {
+                if (fail && o.module !== "login" && Math.random() < Number(_.url.hash('fail'))) {
                     // simulate broken connection
                     console.error("HTTP fail", r.o.url, r.xhr);
                     r.def.reject({ error: "0 simulated fail" });
@@ -807,28 +807,27 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
          */
         fixList: function (ids, deferred) {
 
-            return deferred
-                .pipe(function (data) {
-                    // simplify
-                    ids = that.simplify(ids);
-                    // build hash (uses folder_id!)
-                    var i, obj, hash = {}, tmp = new Array(data.length), key;
-                    // use internal_userid?
-                    var useInternalUserId = _(ids).reduce(function (memo, obj) {
-                        return memo && _.isNumber(obj);
-                    }, true);
-                    for (i = 0; (obj = data[i]); i++) {
-                        key = useInternalUserId ? obj.internal_userid : _.cid(obj);
-                        hash[key] = obj;
-                    }
-                    // fix order (uses folder!)
-                    for (i = 0; (obj = ids[i]); i++) {
-                        key = useInternalUserId ? obj : _.cid(obj);
-                        tmp[i] = hash[key];
-                    }
-                    hash = obj = ids = null;
-                    return tmp;
-                });
+            return deferred.pipe(function (data) {
+                // simplify
+                ids = that.simplify(ids);
+                // build hash (uses folder_id!)
+                var i, obj, hash = {}, tmp = new Array(data.length), key;
+                // use internal_userid?
+                var useInternalUserId = _(ids).reduce(function (memo, obj) {
+                    return memo && _.isNumber(obj);
+                }, true);
+                for (i = 0; (obj = data[i]); i++) {
+                    key = useInternalUserId ? obj.internal_userid : _.cid(obj);
+                    hash[key] = obj;
+                }
+                // fix order (uses folder!)
+                for (i = 0; (obj = ids[i]); i++) {
+                    key = useInternalUserId ? obj : _.cid(obj);
+                    tmp[i] = hash[key];
+                }
+                hash = obj = ids = null;
+                return tmp;
+            });
         },
 
         /**

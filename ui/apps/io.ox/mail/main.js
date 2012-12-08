@@ -335,7 +335,7 @@ define("io.ox/mail/main",
 
         showMail = function (obj) {
             // be busy
-            right.busy(true);
+            right.idle().busy(true);
             // which mode?
             if (grid.getMode() === "all" && grid.prop('sort') === 'thread' && !isInOpenThreadSummary(obj)) {
                 // get thread
@@ -353,12 +353,18 @@ define("io.ox/mail/main",
         };
 
         drawThread = function (baton) {
-            viewDetail.drawThread.call(right, baton, { decorator: true });
+            viewDetail.drawThread.call(right.idle().empty(), baton.set('options', {
+                decorator: true,
+                failMessage: gt('Couldn\'t load that email.'),
+                retry: drawThread
+            }));
         };
 
         drawMail = function (data) {
             var baton = ext.Baton({ data: data, app: app });
-            right.idle().empty().append(viewDetail.draw(baton, { decorator: true }).addClass('page'));
+            right.idle().empty().append(
+                viewDetail.draw(baton.set('options', { decorator: true }))
+            );
         };
 
         drawFail = function (obj) {

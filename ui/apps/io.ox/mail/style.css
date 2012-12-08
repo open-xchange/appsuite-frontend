@@ -226,6 +226,10 @@
         display: block;
     }
 
+    .io-ox-center {
+        height: 200px;
+    }
+
     .mail-detail-clear-both {
         clear: both;
         height: 0px;

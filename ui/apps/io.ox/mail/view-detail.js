@@ -209,184 +209,198 @@ define('io.ox/mail/view-detail',
                 return $();
             }
 
-            var att = data.attachments, source = '', type, isHTML, isLarge, content;
+            var att = data.attachments, source = '', type = 'text/plain',
+                isHTML = false, isLarge = false, content = '';
 
-            // use first attachment to determine content type
-            type = getContentType(att[0].content_type);
-            isHTML = regHTML.test(type);
-            source = att[0].content;
-            isLarge = source.length > 1024 * 512; // > 512 KB
+            try {
 
-            // add other parts?
-            _(att).each(function (attachment, index) {
-                if (index > 0 && attachment.disp === 'inline' && attachment.content_type === type) {
-                    source += attachment.content;
+                // find first text/html attachment to determine content type
+                _(att).find(function (obj) {
+                    if ((/^text\/(plain|html)$/i).test(obj.content_type)) {
+                        type = obj.content_type;
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+
+                isHTML = regHTML.test(type);
+
+                // add other parts?
+                _(att).each(function (attachment, index) {
+                    if (attachment.disp === 'inline' && attachment.content_type === type) {
+                        source += attachment.content;
+                    }
+                });
+
+                source = $.trim(source);
+                isLarge = source.length > 1024 * 512; // > 512 KB
+
+                // empty?
+                if (source === '') {
+                    return $('<div class="content">').append(
+                        $('<div class="alert alert-info">')
+                        .text(gt('This mail has no content'))
+                    );
                 }
-            });
 
-            source = $.trim(source);
+                // replace images on source level
+                source = source.replace(regImageSrc, '$1' + ox.apiRoot);
 
-            // empty?
-            if (source === '') {
-                return $('<div class="content">').append(
-                    $('<div class="alert alert-info">')
-                    .text(gt('This mail has no content'))
-                );
-            }
+                // robust constructor for large HTML
+                content = document.createElement('DIV');
+                content.className = 'content noI18n';
+                content.innerHTML = source;
+                content = $(content);
 
-            // replace images on source level
-            source = source.replace(regImageSrc, '$1' + ox.apiRoot);
+                if (isHTML) {
+                    // HTML
+                    if (!isLarge) {
+                        // remove stupid tags
+                        content.find('meta').remove();
+                        // transform outlook's pseudo blockquotes
+                        content.find('div[style*="none none none solid"][style*="1.5pt"]').each(function () {
+                            $(this).replaceWith($('<blockquote>').append($(this).contents()));
+                        })
+                        .end()
+                        // base tag
+                        .find('base').remove().end()
+                        // blockquote
+                        .find('blockquote')
+                            // remove white-space: pre/nowrap
+                            .find('[style*="white-space: "]').css('whiteSpace', '').end()
+                            // remove color inside blockquotes
+                            .find('*').css('color', '').end()
+                        .end()
+                        // images with attribute width/height
+                        .find('img[width], img[height]').each(function () {
+                            var node = $(this), w = node.attr('width'), h = node.attr('height');
+                            node.removeAttr('width height');
+                            // just set width; max-width=100% should still apply
+                            if (w) { node.css({ width: w + 'px' }); }
+                            if (h) { node.css({ height: h + 'px'}); }
+                        })
+                        .end();
+                        // nested message?
+                        if (!('folder_id' in data) && 'filename' in data) {
+                            // fix inline images in nested message
+                            content.find('img[src^="cid:"]').each(function () {
+                                var node = $(this), cid = '<' + String(node.attr('src') || '').substr(4) + '>', src,
+                                    // get proper attachment
+                                    attachment = _.chain(data.attachments).filter(function (a) {
+                                        return a.cid === cid;
+                                    }).first().value();
+                                if  (attachment) {
+                                    src = api.getUrl(_.extend(attachment, { mail: data.parent }), 'view');
+                                    node.attr('src', src);
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    // plain TEXT
+                    content.addClass('plain-text').html(beautifyText(source));
+                }
 
-            // robust constructor for large HTML
-            content = document.createElement('DIV');
-            content.className = 'content noI18n';
-            content.innerHTML = source;
-            content = $(content);
-
-            if (isHTML) {
-                // HTML
+                // process all text nodes unless mail is too large (> 512 KB)
                 if (!isLarge) {
-                    // remove stupid tags
-                    content.find('meta').remove();
-                    // transform outlook's pseudo blockquotes
-                    content.find('div[style*="none none none solid"][style*="1.5pt"]').each(function () {
-                        $(this).replaceWith($('<blockquote>').append($(this).contents()));
-                    })
-                    .end()
-                    // base tag
-                    .find('base').remove().end()
-                    // blockquote
-                    .find('blockquote')
-                        // remove white-space: pre/nowrap
-                        .find('[style*="white-space: "]').css('whiteSpace', '').end()
-                        // remove color inside blockquotes
-                        .find('*').css('color', '').end()
-                    .end()
-                    // images with attribute width/height
-                    .find('img[width], img[height]').each(function () {
-                        var node = $(this), w = node.attr('width'), h = node.attr('height');
-                        node.removeAttr('width height');
-                        // just set width; max-width=100% should still apply
-                        if (w) { node.css({ width: w + 'px' }); }
-                        if (h) { node.css({ height: h + 'px'}); }
-                    })
-                    .end();
-                    // nested message?
-                    if (!('folder_id' in data) && 'filename' in data) {
-                        // fix inline images in nested message
-                        content.find('img[src^="cid:"]').each(function () {
-                            var node = $(this), cid = '<' + String(node.attr('src') || '').substr(4) + '>', src,
-                                // get proper attachment
-                                attachment = _.chain(data.attachments).filter(function (a) {
-                                    return a.cid === cid;
-                                }).first().value();
-                            if  (attachment) {
-                                src = api.getUrl(_.extend(attachment, { mail: data.parent }), 'view');
-                                node.attr('src', src);
+                    content.contents().add(content.find('*').not('style').contents()).each(function () {
+                        if (this.nodeType === 3) {
+                            var node = $(this), text = this.nodeValue, length = text.length, m;
+                            // split long character sequences for better wrapping
+                            if (length >= 60 && /\S{60}/.test(text)) {
+                                this.nodeValue = text.replace(/(\S{60})/g, '$1\u200B'); // zero width space
                             }
-                        });
-                    }
+                            // some replacements
+                            if (((m = text.match(regDocument)) && m.length) || ((m = text.match(regDocumentAlt)) && m.length)) {
+                                // link to document
+                                node.replaceWith(
+                                     $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Document'))).add($.txt(m[3]))
+                                );
+                            } else if ((m = text.match(regFolder)) && m.length) {
+                                // link to folder
+                                node.replaceWith(
+                                    $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Folder'))).add($.txt(m[3]))
+                                );
+                            } else if ((m = text.match(regLink)) && m.length && node.closest('a').length === 0) {
+                                node.replaceWith(
+                                    $($.txt(m[1] || '')).add(drawLink(m[2])).add($.txt(m[3]))
+                                );
+                            } else if (regMail.test(text) && node.closest('a').length === 0) {
+                                // links
+                                // escape first
+                                text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                                // try the "NAME" <ADDRESS> pattern
+                                if (regMailComplex.test(text)) {
+                                    node.replaceWith(
+                                        $('<div>')
+                                        .html(text.replace(regMailComplexReplace, '<a href="mailto:$6">$2$3</a>'))
+                                        .contents()
+                                    );
+                                } else {
+                                    node.replaceWith(
+                                        $('<div>')
+                                        .html(text.replace(regMailReplace, '<a href="mailto:$1">$1</a>'))
+                                        .contents()
+                                    );
+                                }
+                            }
+                        }
+                    });
                 }
-            } else {
-                // plain TEXT
-                content.addClass('plain-text').html(beautifyText(source));
-            }
 
-            // process all text nodes unless mail is too large (> 512 KB)
-            if (!isLarge) {
-                content.contents().add(content.find('*').not('style').contents()).each(function () {
-                    if (this.nodeType === 3) {
-                        var node = $(this), text = this.nodeValue, length = text.length, m;
-                        // split long character sequences for better wrapping
-                        if (length >= 60 && /\S{60}/.test(text)) {
-                            this.nodeValue = text.replace(/(\S{60})/g, '$1\u200B'); // zero width space
-                        }
-                        // some replacements
-                        if (((m = text.match(regDocument)) && m.length) || ((m = text.match(regDocumentAlt)) && m.length)) {
-                            // link to document
-                            node.replaceWith(
-                                 $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Document'))).add($.txt(m[3]))
+                // further fixes
+                // for support for very large mails we do the following stuff manually,
+                // otherwise jQuery explodes with "Maximum call stack size exceeded"
+
+                _(content.get(0).getElementsByTagName('BLOCKQUOTE')).each(function (node) {
+                    node.removeAttribute('style');
+                    node.removeAttribute('type');
+                });
+
+                _(content.get(0).getElementsByTagName('A')).each(function (node) {
+                    $(node).attr('target', '_blank')
+                        .filter('[href^="mailto:"]').on('click', mailTo);
+                });
+
+                if (!isLarge) {
+                    // blockquotes (top-level only)
+                    content.find('blockquote').not(content.find('blockquote blockquote')).each(function () {
+                        var node = $(this);
+                        node.addClass('collapsed-blockquote')
+                            .css({ opacity: 0.75, maxHeight: '2em' })
+                            .on('click.open', blockquoteClickOpen)
+                            .on('dblclick.close', blockquoteClickClose)
+                            .after(
+                                $('<a href="#" class="toggle-blockquote">').text(gt('Show more'))
+                                .on('click', blockquoteMore)
                             );
-                        } else if ((m = text.match(regFolder)) && m.length) {
-                            // link to folder
-                            node.replaceWith(
-                                $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Folder'))).add($.txt(m[3]))
-                            );
-                        } else if ((m = text.match(regLink)) && m.length && node.closest('a').length === 0) {
-                            node.replaceWith(
-                                $($.txt(m[1] || '')).add(drawLink(m[2])).add($.txt(m[3]))
-                            );
-                        } else if (regMail.test(text) && node.closest('a').length === 0) {
-                            // links
-                            // escape first
-                            text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                            // try the "NAME" <ADDRESS> pattern
-                            if (regMailComplex.test(text)) {
-                                node.replaceWith(
-                                    $('<div>')
-                                    .html(text.replace(regMailComplexReplace, '<a href="mailto:$6">$2$3</a>'))
-                                    .contents()
-                                );
-                            } else {
-                                node.replaceWith(
-                                    $('<div>')
-                                    .html(text.replace(regMailReplace, '<a href="mailto:$1">$1</a>'))
-                                    .contents()
-                                );
+                        setTimeout(function () {
+                            if (node.prop('scrollHeight') < 60) { // 3 rows a 20px line-height
+                                node.removeClass('collapsed-blockquote')
+                                    .css('maxHeight', '')
+                                    .off('click.open dblclick.close')
+                                    .next().remove();
                             }
-                        }
-                    }
-                });
-            }
+                            node = null;
+                        }, 0);
+                    });
+                }
 
-            // further fixes
-            // for support for very large mails we do the following stuff manually,
-            // otherwise jQuery explodes with "Maximum call stack size exceeded"
-
-            _(content.get(0).getElementsByTagName('BLOCKQUOTE')).each(function (node) {
-                node.removeAttribute('style');
-                node.removeAttribute('type');
-            });
-
-            _(content.get(0).getElementsByTagName('A')).each(function (node) {
-                $(node).attr('target', '_blank')
-                    .filter('[href^="mailto:"]').on('click', mailTo);
-            });
-
-            if (!isLarge) {
-                // blockquotes (top-level only)
-                content.find('blockquote').not(content.find('blockquote blockquote')).each(function () {
-                    var node = $(this);
-                    node.addClass('collapsed-blockquote')
-                        .css({ opacity: 0.75, maxHeight: '2em' })
-                        .on('click.open', blockquoteClickOpen)
-                        .on('dblclick.close', blockquoteClickClose)
-                        .after(
-                            $('<a href="#" class="toggle-blockquote">').text(gt('Show more'))
-                            .on('click', blockquoteMore)
-                        );
-                    setTimeout(function () {
-                        if (node.prop('scrollHeight') < 60) { // 3 rows a 20px line-height
-                            node.removeClass('collapsed-blockquote')
-                                .css('maxHeight', '')
-                                .off('click.open dblclick.close')
-                                .next().remove();
-                        }
-                        node = null;
-                    }, 0);
-                });
+            } catch (e) {
+                console.error('mail.getContent', e.message, data);
             }
 
             return content;
         },
 
-        drawScaffold: function (data, options, resolver) {
+        drawScaffold: function (baton, resolver) {
             return $('<div class="mail-detail"></div>')
                 .busy()
-                .one('resolve', { cid: _.cid(data), thread: data, options: options }, resolver);
+                .one('resolve', { baton: baton }, resolver);
         },
 
-        draw: function (baton, options) {
+        draw: function (baton) {
 
             if (!baton) {
                 return $('<div>');
@@ -419,23 +433,39 @@ define('io.ox/mail/view-detail',
             // invoke extensions
             ext.point('io.ox/mail/detail').invoke('draw', node, baton);
 
-            options = options || {};
-
-            if (options.decorator) {
+            if (baton.options.decorator) {
                 container.addClass('mail-detail-decorator');
             }
 
             return container.append(node);
         },
 
-        autoResolveThreads: function (e) {
-            var self = $(this), parents = self.parents();
-            api.get(_.cid(e.data.cid)).done(function (data) {
-                // replace placeholder with mail content
-                copyThreadData(data, e.data.thread);
-                self.replaceWith(that.draw(data, e.data.options));
-            });
-        },
+        autoResolveThreads: (function () {
+
+            function resolve(node, baton) {
+                api.get(api.reduce(baton.data)).then(
+                    function (data) {
+                        // replace placeholder with mail content
+                        copyThreadData(data, baton.data);
+                        node.replaceWith(that.draw(ext.Baton({ data: data, options: baton.options })));
+                        baton = null;
+                    },
+                    function (err) {
+                        node.idle().empty().append(
+                            $.fail(baton.options.failMessage, function () {
+                                resolve(node, baton);
+                                baton = null;
+                            })
+                        );
+                    }
+                );
+            }
+
+            return function (e) {
+                resolve($(this), e.data.baton);
+            };
+
+        }()),
 
         drawThread: (function () {
 
@@ -454,76 +484,109 @@ define('io.ox/mail/view-detail',
                 }
             }
 
-            function drawThread(options, node, baton, pos, top, bottom, mails) {
+            function fail(node, baton) {
+                node.idle().empty().append($.fail(baton.options.failMessage, function () {
+                    baton.options.retry(baton);
+                }));
+            }
+
+            function drawThread(node, baton, pos, top, bottom, mails) {
                 var i, obj, frag = document.createDocumentFragment(),
                     scrollpane = node.closest('.scrollable').off('scroll'),
                     nodes, inline, top, mail,
                     list = baton.data;
-                // draw inline links for whole thread
-                if (list.length > 1) {
-                    inline = $('<div class="thread-inline-actions">');
-                    ext.point('io.ox/mail/thread').invoke('draw', inline, baton);
-                    inline.find('.dropdown > a').addClass('btn btn-primary');
-                    frag.appendChild(inline.get(0));
-                }
-                // loop over thread - use fragment to be fast for tons of mails
-                for (i = 0; (obj = list[i]); i++) {
-                    if (i >= top && i <= bottom) {
-                        mail = mails.shift();
-                        copyThreadData(mail, obj);
-                        frag.appendChild(that.draw(ext.Baton({ data: mail, app: baton.app }), options).get(0));
-                    } else {
-                        frag.appendChild(that.drawScaffold(obj, options, that.autoResolveThreads).get(0));
+                try {
+                    // draw inline links for whole thread
+                    if (list.length > 1) {
+                        inline = $('<div class="thread-inline-actions">');
+                        ext.point('io.ox/mail/thread').invoke('draw', inline, baton);
+                        inline.find('.dropdown > a').addClass('btn btn-primary');
+                        frag.appendChild(inline.get(0));
                     }
+                    // loop over thread - use fragment to be fast for tons of mails
+                    for (i = 0; (obj = list[i]); i++) {
+                        if (i >= top && i <= bottom) {
+                            mail = mails.shift();
+                            copyThreadData(mail, obj);
+                            frag.appendChild(that.draw(
+                                ext.Baton({ data: mail, app: baton.app, options: baton.options })
+                            ).get(0));
+                        } else {
+                            frag.appendChild(that.drawScaffold(
+                                ext.Baton({ data: obj, app: baton.app, options: baton.options }),
+                                that.autoResolveThreads).get(0)
+                            );
+                        }
+                    }
+                    node.get(0).appendChild(frag);
+                    // get nodes
+                    nodes = node.find('.mail-detail').not('.thread-inline-actions');
+                    // set initial scroll position (37px not to see thread's inline links)
+                    top = nodes.eq(pos).position().top - 20;
+                    scrollpane.scrollTop(list.length === 1 ? 0 : top);
+                    scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100));
+                    scrollpane.one('scroll.now', { nodes: nodes, node: node }, autoResolve);
+                    scrollpane.trigger('scroll.now'); // to be sure
+                    nodes = frag = node = scrollpane = list = mail = mails = null;
+                } catch (e) {
+                    console.error('mail.drawThread', e.message);
+                    fail(node, baton);
                 }
-                node.idle().empty().get(0).appendChild(frag);
-                // get nodes
-                nodes = node.find('.mail-detail').not('.thread-inline-actions');
-                // set initial scroll position (37px not to see thread's inline links)
-                top = nodes.eq(pos).position().top;
-                scrollpane.scrollTop(list.length === 1 ? 0 : top);
-                scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100));
-                scrollpane.one('scroll.now', { nodes: nodes, node: node }, autoResolve);
-                scrollpane.trigger('scroll.now'); // to be sure
-                nodes = frag = node = scrollpane = list = mail = mails = null;
             }
 
-            return function (baton, options) {
+            return function (baton) {
+
                 // define next step now
                 var list = baton.data,
-                    next = _.lfo(drawThread, options),
+                    next = _.lfo(drawThread),
                     node = this;
+
                 // get list data, esp. to know unseen flag - we need this list for inline link checks anyway
-                api.getList(list).done(function (list) {
+                api.getList(list).then(
+                    function (list) {
 
-                    var i, $i, pos, numVisible, top, bottom, defs = [];
+                        var i, $i, pos, numVisible, top, bottom, defs = [];
 
-                    // getList might be incomplete
-                    list = _(list).compact();
+                        try {
+                            // getList might be incomplete
+                            list = _(list).compact();
 
-                    // which mail to focus?
-                    for (i = pos = $i = list.length - 1; i >= 0; i--) {
-                        pos = i;
-                        if (util.isUnread(list[i])) { break; }
+                            // which mail to focus?
+                            for (i = pos = $i = list.length - 1; i >= 0; i--) {
+                                pos = i;
+                                if (util.isUnread(list[i])) { break; }
+                            }
+                            // how many visible?
+                            if (pos === 0) {
+                                numVisible = 1;
+                                top = bottom = 0;
+                            } else {
+                                numVisible = Math.ceil(node.parent().height() / 300);
+                                bottom = Math.min(pos + numVisible, $i);
+                                top = Math.max(0, pos - (pos + numVisible - bottom));
+                            }
+                            // fetch mails we will display
+                            for (i = top; i <= bottom; i++) {
+                                defs.push(api.get(api.reduce(list[i])));
+                            }
+                            $.when.apply($, defs).then(
+                                function () {
+                                    baton = ext.Baton({ data: list, app: baton.app, options: baton.options });
+                                    next(node, baton, pos, top, bottom, $.makeArray(arguments));
+                                },
+                                function () {
+                                    fail(node, baton);
+                                }
+                            );
+                        } catch (e) {
+                            console.error('mail.drawThread', e.message);
+                            fail(node, baton);
+                        }
+                    },
+                    function () {
+                        fail(node, baton);
                     }
-                    // how many visible?
-                    if (pos === 0) {
-                        numVisible = 1;
-                        top = bottom = 0;
-                    } else {
-                        numVisible = Math.ceil(node.parent().height() / 300);
-                        bottom = Math.min(pos + numVisible, $i);
-                        top = Math.max(0, pos - (pos + numVisible - bottom));
-                    }
-                    // fetch mails we will display
-                    for (i = top; i <= bottom; i++) {
-                        defs.push(api.get(api.reduce(list[i])));
-                    }
-                    $.when.apply($, defs).done(function () {
-                        baton = ext.Baton({ data: list, app: baton.app });
-                        next(node, baton, pos, top, bottom, $.makeArray(arguments));
-                    });
-                });
+                );
             };
         }())
     };

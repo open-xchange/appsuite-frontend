@@ -369,6 +369,7 @@ define("io.ox/core/extensions",
         if (this instanceof Baton) {
             // to be safe
             this.data = {};
+            this.options = {};
             this.$ = {};
             // just copy given object
             _.extend(this, obj);
@@ -395,6 +396,11 @@ define("io.ox/core/extensions",
 
         stopPropagation: function () {
             this.isPropagationStopped = returnTrue;
+        },
+
+        set: function (property, obj) {
+            _.extend(this[property], obj);
+            return this;
         }
     };
 
