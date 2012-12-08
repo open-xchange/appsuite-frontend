@@ -130,11 +130,7 @@ define('io.ox/mail/actions',
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
-                    var self = this;
-                    this.compose(baton.data).done(function () {
-                        self.setMsgRef(baton.data.folder_id + '/' + baton.data.id);
-                        self.markClean();
-                    });
+                    this.edit(baton.data);
                 });
             });
         }

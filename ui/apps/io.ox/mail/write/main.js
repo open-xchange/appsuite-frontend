@@ -483,6 +483,7 @@ define('io.ox/mail/write/main',
         app.failSave = function () {
             var mail = app.getMail();
             delete mail.files;
+            console.log('failSave', mail);
             return {
                 module: 'io.ox/mail/write',
                 description: gt('Mail') + ': ' + (mail.data.subject || gt('No subject')),
@@ -493,6 +494,7 @@ define('io.ox/mail/write/main',
         app.failRestore = function (point) {
             var def = $.Deferred();
             win.busy().show(function () {
+                console.log('restore', point);
                 _.url.hash('app', 'io.ox/mail/write:' + point.mode);
                 app.setMail(point).done(function () {
                     app.dirty(true);
@@ -635,6 +637,33 @@ define('io.ox/mail/write/main',
                     def.reject();
                 });
             });
+            return def;
+        };
+
+        // edit draft
+        app.edit = function (data) {
+
+            var def = $.Deferred();
+
+            _.url.hash('app', 'io.ox/mail/write:compose'); // yep, edit is same as compose
+
+            app.cid = 'io.ox/mail:edit.' + _.cid(data); // here, for reuse it's edit!
+            data.msgref = data.folder_id + '/' + data.id;
+
+            win.busy().show(function () {
+                app.setMail({ data: data, mode: 'compose', initial: false })
+                .done(function () {
+                    app.getEditor().focus();
+                    win.idle();
+                    def.resolve();
+                })
+                .fail(function () {
+                    notifications.yell('error', gt('An error occured. Please try again.'));
+                    app.dirty(false).quit();
+                    def.reject();
+                });
+            });
+
             return def;
         };
 
@@ -913,6 +942,10 @@ define('io.ox/mail/write/main',
             }
             if (type === 'forward') {
                 return ox.ui.App.reuse('io.ox/mail:forward.' + _.cid(data));
+            }
+            if (type === 'edit') {
+                console.log('Hier?');
+                return ox.ui.App.reuse('io.ox/mail:edit.' + _.cid(data));
             }
         }
     };
