@@ -748,11 +748,8 @@ define('io.ox/mail/view-detail',
             var data = baton.data;
 
             // figure out if 'to' just contains myself - might be a mailing list, for example
-            var justMe = _(data.to).reduce(function (memo, to) {
-                    return memo && to[1] === config.get('mail.defaultaddress');
-                }, true),
-                showCC = data.cc && data.cc.length > 0,
-                showTO = data.to && (data.to.length > 1 || !justMe),
+            var showCC = data.cc && data.cc.length > 0,
+                showTO = data.to && data.to.length > 0,
                 show = showTO || showCC,
                 container = $('<div>').addClass('to-cc list');
 
@@ -786,7 +783,7 @@ define('io.ox/mail/view-detail',
                 label: label,
                 classes: 'attachment-link',
                 ref: 'io.ox/mail/attachment/links'
-            }).draw.call(node, data),
+            }).draw.call(node, ext.Baton({ data: data })),
             contentType = getContentType(data.content_type),
             url,
             filename;
@@ -852,6 +849,7 @@ define('io.ox/mail/view-detail',
                             return match.toLowerCase();
                         });
                     // draw
+                    console.log('attachment', a);
                     var dd = drawAttachmentDropDown(outer, _.noI18n(label), a);
                     // cut off long lists?
                     if (i > 3 && length > 5) {

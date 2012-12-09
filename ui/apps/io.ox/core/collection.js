@@ -16,7 +16,7 @@ define('io.ox/core/collection',
 
     'use strict';
 
-    var empty = {},
+    var unresolved = {},
 
         // helper
         getRight = function (folder, owner, offset) {
@@ -71,7 +71,7 @@ define('io.ox/core/collection',
             }, true);
 
             if (folders.length === 0) {
-                return $.Deferred().reject(empty);
+                return $.Deferred().resolve(props);
             }
 
             return api.get({ folder: folders }).pipe(function (hash) {
@@ -98,7 +98,7 @@ define('io.ox/core/collection',
     function Collection(list) {
 
         var items = _.compact([].concat(list)),
-            properties = empty;
+            properties = unresolved;
 
         // resolve properties (async).
         // Must be done upfront before 'has' checks for example
@@ -108,14 +108,14 @@ define('io.ox/core/collection',
             });
         };
 
-        this.isEmpty = function () {
-            return properties === empty;
+        this.isResolved = function () {
+            return properties !== unresolved;
         };
 
         // check if collection satisfies a set of properties
         // e.g. has('some') or has('one', 'read')
         this.has = function () {
-            if (this.isEmpty()) {
+            if (!this.isResolved()) {
                 console.error('Using Collection.has before properties are resolved!', list, arguments);
             }
             return _(arguments).inject(function (memo, key) {
