@@ -310,7 +310,6 @@ define('io.ox/core/commons-folderview',
             var id = _(selection).first();
             api.get({ folder: id }).done(function (data) {
                 if (data.module === options.type) {
-                    app.folder.unset();
                     if (options.permanent) {
                         app.folder.set(id);
                     } else {

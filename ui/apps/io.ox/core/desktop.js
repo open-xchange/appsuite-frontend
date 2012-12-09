@@ -152,8 +152,7 @@ define("io.ox/core/desktop",
                                     }
                                     // update grid?
                                     if (grid && grid.prop('folder') !== folder) {
-                                        grid.clear();
-                                        grid.prop('folder', folder);
+                                        grid.busy().prop('folder', folder);
                                         if (win && win.search.active) {
                                             win.search.close();
                                         } else {

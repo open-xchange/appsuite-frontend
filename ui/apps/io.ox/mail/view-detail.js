@@ -413,6 +413,7 @@ define('io.ox/mail/view-detail',
                 self = this,
                 node = $('<div class="mail-detail">'),
                 container = $.createViewContainer(data, api)
+                    .addClass('mail-detail-decorator')
                     .on('redraw', function (e, tmp) {
                         copyThreadData(tmp, data);
                         container.replaceWith(self.draw(tmp));
@@ -432,10 +433,6 @@ define('io.ox/mail/view-detail',
 
             // invoke extensions
             ext.point('io.ox/mail/detail').invoke('draw', node, baton);
-
-            if (baton.options.decorator) {
-                container.addClass('mail-detail-decorator');
-            }
 
             return container.append(node);
         },
@@ -957,8 +954,7 @@ define('io.ox/mail/view-detail',
 
             var data = baton.data;
 
-            this.addClass('view')
-            .attr('data-cid', data.folder_id + '.' + data.id)
+            this.attr('data-cid', data.folder_id + '.' + data.id)
             .append(that.getContent(data), $('<div>').addClass('mail-detail-clear-both'));
 
             var content = this.find('.content');

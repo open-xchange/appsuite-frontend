@@ -77,11 +77,7 @@ define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/wid
                     }).on('click', function () {
                         self.openFileChooser();
                     }).append(
-                        $('<div>').addClass('close').css({
-                            position: 'absolute',
-                            top: '1px',
-                            right: '7px'
-                        }).html('&times;').on('click', function (e) {
+                        $('<div class="close">').html('&times;').on('click', function (e) {
                             self.resetImage(e);
                         })
                     )

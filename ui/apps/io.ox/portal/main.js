@@ -479,7 +479,7 @@ define('io.ox/portal/main',
             collection.each(app.drawScaffold);
 
             // add side popup
-            sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer', openSidePopup);
+            sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer, .action.pointer', openSidePopup);
 
             // make sortable
             appBaton.$.widgets.sortable({
