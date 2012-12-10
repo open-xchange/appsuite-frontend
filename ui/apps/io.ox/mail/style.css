@@ -535,7 +535,11 @@ h4.mail-attachment-preview {
     z-index: 2;
 }
 
+
 .mail-detail {
+
+    position:static;
+
     .io-ox-inline-links {
         z-index:10000;
     }
@@ -550,7 +554,7 @@ h4.mail-attachment-preview {
         z-index: 11002;
     }
     div.flag-dropdown {
-        z-index: auto; // to be above attachment dropdowns
+        z-index: 11003; // to be above attachment dropdowns
         ul.dropdown-menu {
             z-index:11004;
         }
