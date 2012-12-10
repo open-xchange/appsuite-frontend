@@ -369,66 +369,6 @@ define("io.ox/core/main",
             }
         });
 
-        /**
-         * Exemplary upsell widget
-         */
-        ext.point("io.ox/core/desktop").extend({
-            id: "upsell",
-            draw: function () {
-                // does nothing - just to demo an exemplary upsell path
-                this.append(
-                    $('<div>').css({
-                        position: "absolute",
-                        width: "270px",
-                        height: "140px",
-                        right: "50px",
-                        bottom: "50px"
-                    })
-                    .append(
-                        $("<div>", { id: "io-ox-welcome-upsell" })
-                        .addClass('abs')
-                        .css({
-                            padding: "30px",
-                            zIndex: 1
-                        })
-                        .text("Confidential! Not to be disclosed to third parties.")
-                    )
-                );
-            }
-        });
-
-        /*
-        ext.point("io.ox/core/desktop").extend({
-            id: "welcome",
-            draw: function () {
-
-                var d, update;
-
-                this.append(
-                    $("<div>", { id: "io-ox-welcome" })
-                    .addClass("abs")
-                    .append(
-                        $("<div>").addClass("clear-title")
-                        .append(
-                            // split user into three parts, have to use inject here to get proper node set
-                            _(String(ox.user).split(/(\@)/)).inject(function (tmp, s, i) {
-                                    return tmp.add($("<span>").text(String(s)).addClass(i === 1 ? "accent": ""));
-                                }, $())
-                        )
-                    )
-                    .append(
-                        d = $("<div>").addClass("clock clear-title").text("")
-                    )
-                );
-                update = function () {
-                    //d.text(new date.Local().format(date.FULL_DATE)); // FIXME: Seems to die on android
-                };
-                update();
-                _.tick(1, "minute", update);
-            }
-        });
-        */
-
         var drawDesktop = function () {
             ext.point("io.ox/core/desktop").invoke("draw", $("#io-ox-desktop"), {});
             drawDesktop = $.noop;
