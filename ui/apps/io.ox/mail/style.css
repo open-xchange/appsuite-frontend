@@ -51,10 +51,28 @@
     float: right;
 }
 
-/* unread */
+/* flags */
 
-.vgrid-cell.mail i.icon-bookmark { display: none; }
-.vgrid-cell.mail.unread i.icon-bookmark { display: inline-block; margin-right: 0.5em; }
+.vgrid-cell.mail {
+
+    .subject i {
+        display: none;
+        width: 1.25em;
+        font-size: 18px;
+        line-height: 18px;
+        position: relative;
+        top: 2px;
+    }
+
+    /* unread */
+    &.unread i.icon-bookmark { display: inline-block; }
+
+    /* answered */
+    &.answered i.icon-circle-arrow-left { display: inline-block; color: darken(@color_lightgreen, 20%); }
+
+    /* forward */
+    &.forwarded i.icon-circle-arrow-right { display: inline-block; color: darken(@color_pink, 10%); }
+}
 
 .vgrid-cell.mail.unread .subject {
     color: #08c;

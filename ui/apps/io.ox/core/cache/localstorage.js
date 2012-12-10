@@ -157,9 +157,7 @@ define('io.ox/core/cache/localstorage', function () {
         remove: function (key) {
             var cid = id + '.' + key;
             delete fluent[cid];
-            setTimeout(function () {
-                localStorage.removeItem(cid);
-            }, 0);
+            localStorage.removeItem(cid); // do this sync
             return $.when();
         },
 

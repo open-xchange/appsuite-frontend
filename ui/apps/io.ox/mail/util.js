@@ -261,6 +261,14 @@ define('io.ox/mail/util',
             return (data.flags & 2) === 2;
         },
 
+        isAnswered: function (data) {
+            return (data.flags & 1) === 1;
+        },
+
+        isForwarded: function (data) {
+            return (data.flags & 256) === 256;
+        },
+
         byMyself: function (data) {
             return data.from && data.from.length && String(data.from[0][1] || '').toLowerCase() in addresses;
         },
