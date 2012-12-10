@@ -109,7 +109,6 @@
     display: inline-block;
     float: right;
     position: relative;
-    z-index: 2;
     cursor: pointer;
     overflow: visible;
 }
@@ -289,7 +288,6 @@
         margin-left: 1em;
         border: 1px solid rgba(0, 0, 0, 0.2);
         cursor: pointer;
-        z-index: 10001; // to be above attachment dropdowns
     }
 
     .flag-dropdown ul {
@@ -529,4 +527,29 @@ h4.mail-attachment-preview {
     width: 100%;
     visibility: hidden;
     .box-sizing(border-box);
+}
+
+/* z-indexes */
+
+.vgrid-cell.mail .thread-size {
+    z-index: 2;
+}
+
+.mail-detail {
+    .io-ox-inline-links {
+        z-index:10000;
+    }
+    div.dropdown ul.dropdown-menu {
+        z-index:auto; // reset bootstraps z-index
+    }
+    div.dropdown,
+    ul.dropdown {
+        z-index: 11001;
+    }
+    div.to-cc {
+        z-index: 11002;
+    }
+    div.flag-dropdown {
+        z-index: 11003; // to be above attachment dropdowns
+    }
 }

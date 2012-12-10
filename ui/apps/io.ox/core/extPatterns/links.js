@@ -212,7 +212,7 @@ define("io.ox/core/extPatterns/links",
 
         var args = $.makeArray(arguments),
             $parent = $('<div>').addClass('dropdown')
-                .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 70000) })
+                .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 11000) })
                 .appendTo(this),
             $toggle = $('<a href="#" data-toggle="dropdown">')
                 .data('context', baton.data)
