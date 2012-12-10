@@ -882,6 +882,7 @@ define('io.ox/mail/view-detail',
     // inline links for entire thread
     ext.point('io.ox/mail/thread').extend(new links.DropdownLinks({
         label: gt('Entire thread'),
+        zIndex: 12001,
         ref: 'io.ox/mail/links/inline'
     }));
 

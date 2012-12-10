@@ -108,7 +108,6 @@
     margin-left: 1em;
     display: inline-block;
     float: right;
-    position: relative;
     cursor: pointer;
     overflow: visible;
 }
@@ -213,7 +212,6 @@
 
 .mail-detail {
 
-    position: relative;
     overflow-y: visible;
     clear: both;
 
@@ -282,7 +280,6 @@
     }
 
     .flag-dropdown {
-        position: relative;
         width: 30px;
         height: 24px;
         margin-left: 1em;
@@ -537,8 +534,6 @@ h4.mail-attachment-preview {
 
 
 .mail-detail {
-
-    position:static;
 
     .io-ox-inline-links {
         z-index:10000;

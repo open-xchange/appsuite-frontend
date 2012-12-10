@@ -207,9 +207,10 @@ define("io.ox/core/extPatterns/links",
 
     var z = 0;
     var drawDropDown = function (options, baton) {
-
+        if (options.zIndex !== undefined) {
+            z = options.zIndex;
+        }
         baton = ext.Baton.ensure(baton);
-
         var args = $.makeArray(arguments),
             $parent = $('<div>').addClass('dropdown')
                 .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 11000) })
