@@ -31,10 +31,13 @@ define('io.ox/calendar/month/view',
 
     var View = Backbone.View.extend({
 
-        className: 'week',
-        weekStart: 0,
-        weekEnd: 0,
-        folder: null,
+        className:      'week',
+        weekStart:      0,
+        weekEnd:        0,
+        folder:         null,
+        clickTimer:     null,   // timer to separate single and double click
+        clicks:         0,      // click counter
+        pane:           $(),
 
         events: {
             'click .appointment': 'onClickAppointment',
@@ -48,20 +51,50 @@ define('io.ox/calendar/month/view',
             this.weekStart = options.day;
             this.weekEnd = options.day + date.WEEK;
             this.folder = options.folder;
+            this.pane = options.pane;
         },
 
         onClickAppointment: function (e) {
             var cid = $(e.currentTarget).data('cid'),
-                el = $('[data-cid="' + cid + '"]', this.$el);
-            if (!el.hasClass('private')) {
-                $('.appointment').removeClass('opac').not(el).addClass('opac');
-                el.add('.appointment.current').toggleClass('current');
-                this.trigger('showAppoinment', e, _.cid(cid + ''));
+                cT = $('[data-cid="' + cid + '"]', this.pane);
+            if (cT.hasClass('appointment') && !cT.hasClass('private')) {
+                var self = this,
+                    obj = _.cid(cid + '');
+                
+                if (!cT.hasClass('current')) {
+                    self.trigger('showAppointment', e, obj);
+                    self.pane.find('.appointment')
+                        .removeClass('current opac')
+                        .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane))
+                        .addClass('opac');
+                    $('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane).addClass('current');
+                } else {
+                    $('.appointment', self.pane).removeClass('opac');
+                }
+
+                if (self.clickTimer === null && self.clicks === 0) {
+                    self.clickTimer = setTimeout(function () {
+                        clearTimeout(self.clickTimer);
+                        self.clicks = 0;
+                        self.clickTimer = null;
+                    }, 300);
+                }
+                self.clicks++;
+
+                if (self.clickTimer !== null && self.clicks === 2) {
+                    clearTimeout(self.clickTimer);
+                    self.clicks = 0;
+                    self.clickTimer = null;
+                    self.trigger('openEditAppointment', e, obj);
+                }
             }
         },
 
         onCreateAppointment: function (e) {
-            if (!$(e.target).hasClass('appointment')) {
+            if (!folder.can('create', this.folder)) {
+                return;
+            }
+            if ($(e.target).hasClass('list')) {
                 this.trigger('createAppoinment', e, $(e.currentTarget).data('date'));
             }
         },
