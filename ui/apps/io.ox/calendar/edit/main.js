@@ -141,8 +141,13 @@ define('io.ox/calendar/edit/main',
                             }
                             // init alarm
                             if (!self.model.get('alarm')) {
-                                self.model.set('alarm', -1);
+                                self.model.set('alarm', -1, {silent: true});
                             }
+
+                            self.considerSaved = true;
+                            self.model.on('change', function () {
+                                self.considerSaved = false;
+                            });
                             $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                             self.getWindow().show(_.bind(self.onShowWindow, self));
                         });
@@ -199,6 +204,11 @@ define('io.ox/calendar/edit/main',
                         }
 
                         self.model.set('alarm', calendarSettings.get('defaultReminder', 15));
+
+                        self.considerSaved = true;
+                        self.model.on('change', function () {
+                            self.considerSaved = false;
+                        });
 
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));
