@@ -849,7 +849,6 @@ define('io.ox/mail/view-detail',
                             return match.toLowerCase();
                         });
                     // draw
-                    console.log('attachment', a);
                     var dd = drawAttachmentDropDown(outer, _.noI18n(label), a);
                     // cut off long lists?
                     if (i > 3 && length > 5) {
