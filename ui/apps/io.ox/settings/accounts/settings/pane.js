@@ -51,7 +51,6 @@ define('io.ox/settings/accounts/settings/pane',
                     .done(function (action) {
                         if (action === 'delete') {
                             def.resolve();
-                            console.log('api.remove', account);
                             api.remove(account);
                         } else {
                             def.reject();

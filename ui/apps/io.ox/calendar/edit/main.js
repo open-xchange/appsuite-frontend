@@ -17,7 +17,8 @@ define('io.ox/calendar/edit/main',
        'io.ox/core/extPatterns/dnd',
        'io.ox/calendar/edit/view-main',
        'gettext!io.ox/calendar/edit/main',
-       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, dnd, MainView, gt) {
+       'settings!io.ox/calendar',
+       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, dnd, MainView, gt, calendarSettings) {
 
     'use strict';
 
@@ -93,6 +94,7 @@ define('io.ox/calendar/edit/main',
                                 self.getWindow().idle();
                             });
 
+
                             self.setTitle(gt('Edit appointment'));
 
                             // create app window
@@ -106,7 +108,7 @@ define('io.ox/calendar/edit/main',
                                 win.on('show', function () {
                                     app.dropZone.include();
                                 });
-    
+
                                 win.on('hide', function () {
                                     app.dropZone.remove();
                                 });
@@ -121,15 +123,15 @@ define('io.ox/calendar/edit/main',
 
                                 // fields for recurrences
                                 var fields = ['recurrence_date_position',
-                                            'change_exceptions',
-                                            'delete_exceptions',
-                                            'recurrence_type',
-                                            'days',
-                                            'day_in_month',
-                                            'month',
-                                            'interval',
-                                            'until',
-                                            'occurrences'];
+                                    'change_exceptions',
+                                    'delete_exceptions',
+                                    'recurrence_type',
+                                    'days',
+                                    'day_in_month',
+                                    'month',
+                                    'interval',
+                                    'until',
+                                    'occurrences'];
                                 var x = 0;
                                 // ensure theses fields will be send to backend to edit the whole series
                                 for (; x < fields.length; x++) {
@@ -137,10 +139,12 @@ define('io.ox/calendar/edit/main',
                                 }
 
                             }
-
+                            // init alarm
+                            if (!self.model.get('alarm')) {
+                                self.model.set('alarm', -1);
+                            }
                             $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                             self.getWindow().show(_.bind(self.onShowWindow, self));
-
                         });
                     }
 
@@ -188,12 +192,14 @@ define('io.ox/calendar/edit/main',
                             win.on('show', function () {
                                 app.dropZone.include();
                             });
-    
+
                             win.on('hide', function () {
                                 app.dropZone.remove();
                             });
                         }
-                        
+
+                        self.model.set('alarm', calendarSettings.get('defaultReminder', 15));
+
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));
 

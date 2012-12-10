@@ -61,7 +61,6 @@ define('io.ox/calendar/edit/template',
                 .css({float: 'right', marginLeft: '13px'})
                 .on('click', function () {
                     baton.model.save();
-                    //baton.app.getWindow().busy();
                 })
             );
             this.append($('<button class="btn" data-action="discard" >')
@@ -215,6 +214,7 @@ define('io.ox/calendar/edit/template',
     // alarms
     (function () {
         var reminderListValues = [
+            {value: -1, format: 'string'},
             {value: 0, format: 'minutes'},
             {value: 15, format: 'minutes'},
             {value: 30, format: 'minutes'},
@@ -244,6 +244,9 @@ define('io.ox/calendar/edit/template',
         _(reminderListValues).each(function (item, index) {
             var i;
             switch (item.format) {
+            case 'string':
+                options[item.value] = gt('No reminder');
+                break;
             case 'minutes':
                 options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), gt.noI18n(item.value));
                 break;
@@ -261,7 +264,6 @@ define('io.ox/calendar/edit/template',
                 break;
             }
         });
-
         point.extend(new forms.SelectBoxField({
             id: 'alarm',
             index: 800,
@@ -422,7 +424,7 @@ define('io.ox/calendar/edit/template',
                         baton.attachmentList.addFile(fileData);
                     });
                 });
-    
+
                 $node.append($("<div>").addClass("span6").append($input));
                 $node.append($("<div>").addClass("span6 pull-right").append($button));
             } else if (_.browser.IE === 9) { //if browser is IE 9 show update suggestion
