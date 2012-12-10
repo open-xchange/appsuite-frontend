@@ -117,7 +117,7 @@ define('io.ox/mail/write/main',
             // add signature?
             if (index < view.signatures.length) {
                 signature = view.signatures[index];
-                text = $.trim(signature.signature_text);
+                text = $.trim(signature.content);
                 if (isHTML) {
                     ed.appendContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
                 } else {
