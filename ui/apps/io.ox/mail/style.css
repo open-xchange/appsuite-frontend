@@ -550,6 +550,9 @@ h4.mail-attachment-preview {
         z-index: 11002;
     }
     div.flag-dropdown {
-        z-index: 11003; // to be above attachment dropdowns
+        z-index: auto; // to be above attachment dropdowns
+        ul.dropdown-menu {
+            z-index:11004;
+        }
     }
 }
