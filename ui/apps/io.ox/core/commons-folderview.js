@@ -424,7 +424,7 @@ define('io.ox/core/commons-folderview',
                                 if (newId !== id) tree.select(newId);
                             });
                         } else {
-                            tree.root.repaint();
+                            tree.repaint();
                             tree.idle();
                         }
                     });
