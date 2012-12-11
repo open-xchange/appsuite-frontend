@@ -66,7 +66,7 @@ define('io.ox/core/tk/folderviews',
 
             isOpen = function () {
                 if (open === undefined) {
-                    open = _(tree.options.open || []).contains(data.id);
+                    open = _(tree.options.open || []).contains(data.id);
                 }
                 return hasChildren() && (skip() || open);
             },
@@ -651,7 +651,17 @@ define('io.ox/core/tk/folderviews',
                 .addButton('cancel', 'Cancel')
                 .addPrimaryButton('save', gt('Save'))
                 .show(function () {
-                });
+                }).done(function (action) {
+                    if (action === 'save') {
+                        _(changesArray).each(function (change) {
+                            api.update(change);
+                        });
+
+                        tree.destroy();
+                        tree = pane = null;
+                    }
+                }
+                );
 
                 tree.container.on('change', 'input', function () {
                     var folder = $(this).val(),
@@ -661,12 +671,6 @@ define('io.ox/core/tk/folderviews',
                     changesArray.push(tobBePushed);
                 });
 
-                pane.on('save', function () {
-
-                    _(changesArray).each(function (change) {
-                        api.update(change);
-                    });
-                });
             });
 
         };
