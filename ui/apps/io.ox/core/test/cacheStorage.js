@@ -96,8 +96,11 @@ define("io.ox/core/test/cacheStorage",
                         j.waitsFor(loaded, 'Could not set key', TIMEOUT);
 
                         testStorage.setId('TEST').set(testKey, testValue).done(function (key) {
-                            loaded.yep();
-                            j.expect(key).toEqual(testKey);
+                            // set is deferred internally, so we defer too
+                            _.defer(function () {
+                                loaded.yep();
+                                j.expect(key).toEqual(testKey);
+                            });
                         }).fail(function (e) {
                             loaded.yep();
                             j.expect(e).not.toBeDefined();
@@ -198,26 +201,26 @@ define("io.ox/core/test/cacheStorage",
                 });
             });
 
-            j.describe("Storagelayer specific bugs", function () {
+            // j.describe("Storagelayer specific bugs", function () {
 
-                j.it('check for localstorage exception with large datasets', function () {
-                    var loaded = new Done();
-                    j.waitsFor(loaded, 'Could not check key', TIMEOUT * 3);
+            //     j.it('check for localstorage exception with large datasets', function () {
+            //         var loaded = new Done();
+            //         j.waitsFor(loaded, 'Could not check key', TIMEOUT * 3);
 
-                    var max = 1000;
-                    var testData = (new Array(100).join('AFDGsdf gDFgDSF gdfgsdgd'));
+            //         var max = 1000;
+            //         var testData = (new Array(100).join('AFDGsdf gDFgDSF gdfgsdgd'));
 
-                    for (var i = 0 ; i <= max ; i++) {
-                        localstorage.set('testkey' + i, testData);
+            //         for (var i = 0 ; i <= max ; i++) {
+            //             localstorage.set('testkey' + i, testData);
 
-                        if (i === max) {
-                            loaded.yep();
-                        }
-                    }
+            //             if (i === max) {
+            //                 loaded.yep();
+            //             }
+            //         }
 
-                    j.expect(0).toEqual(0);
-                });
-            });
+            //         j.expect(0).toEqual(0);
+            //     });
+            // });
         }
     });
 });
