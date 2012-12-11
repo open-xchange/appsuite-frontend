@@ -32,6 +32,15 @@ Requires:       open-xchange-core
 
 This package contains the manifest for installation on the backend.
 
+## l10n ##
+#%package l10n-## lang ##
+#Summary: ## lang ## translation of @package@\n' +
+#Requires: open-xchange-ui7
+#
+#%description l10n-## lang ##
+### lang ## translation of @package@
+## end l10n ##
+
 %prep
 %setup -q
 
@@ -56,3 +65,9 @@ rm -r "%{buildroot}/opt/open-xchange/ui7"
 %defattr(-,root,root)
 %dir /opt/open-xchange
 /opt/open-xchange/ui7
+
+## l10n ##
+#%files l10n-## lang ##
+#%defattr(-,root,root)
+#%{docroot}/apps/**/*.## lang ##.js
+## end l10n ##

@@ -31,7 +31,6 @@ Requires:       httpd
 OX App Suite HTML5 client
 
 %package        manifest
-Group:          Applications/Productivity
 Summary:        Manifest for apps included in the OX App Suite HTML5 client
 Requires:       open-xchange-core
 
@@ -41,12 +40,20 @@ OX App Suite HTML5 client
 This package contains the manifest for installation on the backend.
 
 %package        dev
-Group:          Applications/Productivity
 Summary:        SDK for the OX App Suite HTML5 client
 Requires:       nodejs >= 0.4.0
 
 %description    dev
 SDK for the OX App Suite HTML5 client
+
+## l10n ##
+#%package l10n-## lang ##
+#Summary: ## Lang ## translation of the OX App Suite HTML5 client
+#Requires: open-xchange-ui7
+#
+#%description l10n-## lang ##
+### Lang ## translation of the OX App Suite HTML5 client
+## end l10n ##
 
 %prep
 %setup -q
@@ -71,6 +78,7 @@ rm -r "%{buildroot}/opt/open-xchange-ui7-dev"
 %files
 %defattr(-,root,root)
 %{docroot}
+%exclude %{docroot}/apps/**/*.??_??.js
 %doc readme.txt
 
 %files manifest
@@ -83,6 +91,12 @@ rm -r "%{buildroot}/opt/open-xchange-ui7-dev"
 %dir /opt/open-xchange-ui7-dev
 /opt/open-xchange-ui7-dev
 %attr(644,root,root) /opt/open-xchange-ui7-dev/lib/sax-js/examples/switch-bench.js
+
+## l10n ##
+#%files l10n-## lang ##
+#%defattr(-,root,root)
+#%{docroot}/apps/**/*.## Lang ##.js
+## end l10n ##
 
 %changelog
 * Thu Nov 10 2011 viktor.pracht@open-xchange.com

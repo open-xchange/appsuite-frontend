@@ -1,0 +1,8 @@
+/build
+/tmp
+/ox.pot
+/debian/files
+/debian/@package@*/
+/debian/@package@*.debhelper.log
+/debian/@package@*.substvars
+/local.conf

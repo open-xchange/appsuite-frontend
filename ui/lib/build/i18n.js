@@ -160,6 +160,11 @@ function poFiles() {
 // TODO: language distinction in modifiedModules
 var gtModules = {}, modifiedModules = {}, gtModulesFilename;
 
+function langFile(name, lang) {
+    return name.replace(/@lang@/g, lang.toLowerCase().replace('_', '-')) +
+        '.' + lang + '.js';
+}
+
 function writeModule(target) {
     var pofiles = poFiles();
     for (var lang in pofiles) {
@@ -173,12 +178,45 @@ function writeModule(target) {
             dictionary: dict
         }, null, process.env.debug ? 4 : 0);
         var name = gtModules[target].name;
-        fs.writeFileSync(target + "." + lang + ".js",
+        var destName = langFile(target, lang);
+        mkdirsSync(path.dirname(destName));
+        fs.writeFileSync(destName,
             'define("' + name + "." + lang +
             '",["io.ox/core/gettext"],function(g){return g("' + name + '",' +
             js + ');});');
     }
 }
+
+// Recursive mkdir from https://gist.github.com/319051
+// mkdirsSync(path, [mode=(0777^umask)]) -> pathsCreated
+function mkdirsSync(dirname, mode) {
+    if (mode === undefined) mode = 0x1ff ^ process.umask();
+    var pathsCreated = [], pathsFound = [];
+    var fn = dirname;
+    while (true) {
+        try {
+            var stats = fs.statSync(fn);
+            if (stats.isDirectory())
+                break;
+            throw new Error('Unable to create directory at '+fn);
+        }
+        catch (e) {
+            if (e.code === 'ENOENT') {
+                pathsFound.push(fn);
+                fn = path.dirname(fn);
+            }
+            else {
+                throw e;
+            }
+        }
+    }
+    for (var i=pathsFound.length-1; i>-1; i--) {
+        var fn = pathsFound[i];
+        fs.mkdirSync(fn, mode);
+        pathsCreated.push(fn);
+    }
+    return pathsCreated;
+};
 
 exports.modules = {
     load: function(filename) {
@@ -188,14 +226,15 @@ exports.modules = {
         }
     },
     add: function(moduleName, source, target) {
-        var dest = utils.dest(path.join("apps", moduleName));
+        var dest = path.join(process.env.l10nDir || utils.builddir,
+                             'apps', moduleName);
         var module = gtModules[dest];
         if (!module) module = gtModules[dest] = { name: moduleName, files: {} };
         module.files[source] = _.keys(exports.potFiles[target] || {});
         modifiedModules[dest] = true;
         _.each(exports.languages(), function(lang) {
-            utils.includes.set(dest + "." + lang + ".js",
-                ["i18n/" + lang + ".po"], "lang.js");
+            var destName = langFile(dest, lang);
+            utils.includes.set(destName, ['i18n/' + lang + '.po'], 'lang.js');
         });
     },
     save: function() {
