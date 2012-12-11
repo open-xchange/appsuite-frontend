@@ -413,8 +413,23 @@ define("io.ox/core/main",
         });
 
         new Stage('io.ox/core/stages', {
-            id: 'restore-check',
+            id: 'update-tasks',
             index: 200,
+            run: function () {
+                if (ox.online) {
+                    var def = $.Deferred();
+                    require(['io.ox/core/updates/updater'], function (updater) {
+                        updater.runUpdates().done(def.resolve).fail(def.reject);
+                    }).fail(def.reject);
+                    
+                    return def;
+                }
+            }
+        });
+
+        new Stage('io.ox/core/stages', {
+            id: 'restore-check',
+            index: 300,
             run: function (baton) {
                 return ox.ui.App.canRestore().done(function (canRestore) {
                     baton.canRestore = canRestore;
@@ -424,7 +439,7 @@ define("io.ox/core/main",
 
         new Stage('io.ox/core/stages', {
             id: 'restore-confirm',
-            index: 300,
+            index: 400,
             run: function (baton) {
 
                 if (baton.canRestore) {
@@ -477,7 +492,7 @@ define("io.ox/core/main",
 
         new Stage('io.ox/core/stages', {
             id: 'restore',
-            index: 400,
+            index: 500,
             run: function (baton) {
                 if (baton.canRestore) {
                     // clear auto start stuff (just conflicts)
@@ -500,7 +515,7 @@ define("io.ox/core/main",
 
         new Stage('io.ox/core/stages', {
             id: 'load',
-            index: 500,
+            index: 600,
             run: function (baton) {
 
                 return baton.loaded.done(function (instantFadeOut) {

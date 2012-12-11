@@ -70,7 +70,7 @@ define(function () {
         "path": "io.ox/conversations/main"
     },
     {
-        namespace: 'io.ox/mail/settings/pane',
+        namespace: ['io.ox/mail/settings/pane', 'io.ox/core/updates/updater'],
         path: 'io.ox/mail/settings/signatures/register'
     },
     {

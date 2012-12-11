@@ -17,7 +17,15 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
 
     var clone = function (obj) {
         // simple, fast, and robust
-        return JSON.parse(JSON.stringify(obj));
+        if (_.isUndefined(obj)) {
+            return undefined;
+        }
+        try {
+            return JSON.parse(JSON.stringify(obj));
+        } catch (e) {
+            console.error(obj, JSON.stringify(obj), e, e.stack);
+            throw e;
+        }
     };
 
     var get = function (source, path, defaultValue) {
