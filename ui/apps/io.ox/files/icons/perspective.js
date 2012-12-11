@@ -461,16 +461,21 @@ define('io.ox/files/icons/perspective',
                 dropZone = new dnd.UploadZone({
                     ref: "io.ox/files/dnd/actions"
                 }, app);
+                if (dropZone) { dropZone.include(); }
             }
-            if (dropZone) { dropZone.include(); }
+
 
             app.getWindow().on('change:perspective', function (e) {
-                dropZone.remove();
+                if (_.browser.IE === undefined || _.browser.IE > 9) {
+                    dropZone.remove();
+                }
             });
 
             app.on('folder:change', function (e, id, folder) {
-                dropZone.remove();
-                if (dropZone) { dropZone.include(); }
+                if (_.browser.IE === undefined || _.browser.IE > 9) {
+                    dropZone.remove();
+                    if (dropZone) { dropZone.include(); }
+                }
                 that.main.empty();
                 that.draw(app);
             });

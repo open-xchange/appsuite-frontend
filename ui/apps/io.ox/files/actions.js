@@ -30,18 +30,14 @@ define('io.ox/files/actions',
 	new Action('io.ox/files/actions/switch-to-list-view', {
         requires: true,
         action: function (baton) {
-            require(['io.ox/files/list/perspective'], function (perspective) {
-                perspective.show(baton.app, { perspective: 'list' });
-            });
+            ox.ui.Perspective.show(baton.app, 'list');
         }
     });
 
     new Action('io.ox/files/actions/switch-to-icon-view', {
         requires: true,
         action: function (baton) {
-            require(['io.ox/files/icons/perspective'], function (perspective) {
-                perspective.show(baton.app, { perspective: 'icons' });
-            });
+            ox.ui.Perspective.show(baton.app, 'icons');
         }
     });
 
