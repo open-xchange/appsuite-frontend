@@ -388,7 +388,7 @@ define('io.ox/mail/view-detail',
                 }
 
             } catch (e) {
-                console.error('mail.getContent', e.message, data);
+                console.error('mail.getContent', e.message, e, data);
             }
 
             return content;
@@ -419,20 +419,26 @@ define('io.ox/mail/view-detail',
                         container.replaceWith(self.draw(tmp));
                     });
 
-            // threaded & send by myself (and not in sent folder)?
-            if (data.threadSize > 1 && util.byMyself(data) && !account.is('sent', data.folder_id)) {
-                node.addClass('by-myself');
-            }
+            try {
 
-            if (api.tracker.isUnseen(data)) {
-                node.addClass('unread');
-            }
-            if (api.tracker.canAutoRead(data)) {
-                delayedRead(data, node);
-            }
+                // threaded & send by myself (and not in sent folder)?
+                if (data.threadSize > 1 && util.byMyself(data) && !account.is('sent', data.folder_id)) {
+                    node.addClass('by-myself');
+                }
 
-            // invoke extensions
-            ext.point('io.ox/mail/detail').invoke('draw', node, baton);
+                if (api.tracker.isUnseen(data)) {
+                    node.addClass('unread');
+                }
+                if (api.tracker.canAutoRead(data)) {
+                    delayedRead(data, node);
+                }
+
+                // invoke extensions
+                ext.point('io.ox/mail/detail').invoke('draw', node, baton);
+
+            } catch (e) {
+                console.error('mail.draw', e.message, e, baton);
+            }
 
             return container.append(node);
         },
@@ -526,7 +532,7 @@ define('io.ox/mail/view-detail',
                     scrollpane.trigger('scroll.now'); // to be sure
                     nodes = frag = node = scrollpane = list = mail = mails = null;
                 } catch (e) {
-                    console.error('mail.drawThread', e.message);
+                    console.error('mail.drawThread', e.message, e);
                     fail(node, baton);
                 }
             }
@@ -576,7 +582,7 @@ define('io.ox/mail/view-detail',
                                 }
                             );
                         } catch (e) {
-                            console.error('mail.drawThread', e.message);
+                            console.error('mail.drawThread', e.message, e);
                             fail(node, baton);
                         }
                     },

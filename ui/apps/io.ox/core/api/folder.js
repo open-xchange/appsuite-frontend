@@ -42,7 +42,8 @@ define('io.ox/core/api/folder',
                     params: {
                         action: 'get',
                         id: id,
-                        tree: '1'
+                        tree: '1',
+                        altNames: true
                     }
                 })
                 .done(function (data, timestamp) {
@@ -164,7 +165,8 @@ define('io.ox/core/api/folder',
                             action: 'list',
                             parent: opt.folder,
                             tree: '1',
-                            all: opt.all ? '1' : '0'
+                            all: opt.all ? '1' : '0',
+                            altNames: true
                         },
                         appendColumns: true
                     })
@@ -197,7 +199,8 @@ define('io.ox/core/api/folder',
                     folder: '1',
                     event: false,
                     cache: true,
-                    storage: null
+                    storage: null,
+                    altNames: true
                 }, options || {}),
                 // get cache
                 cache = opt.storage || folderCache,
@@ -261,7 +264,8 @@ define('io.ox/core/api/folder',
                             params: {
                                 action: 'allVisible',
                                 content_type: opt.type,
-                                tree: '1'
+                                tree: '1',
+                                altNames: true
                             }
                         })
                         .pipe(function (data, timestamp) {

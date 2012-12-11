@@ -20,17 +20,15 @@ define('io.ox/core/api/apps',
 
     // simple plain cache
     var appData = {
-        favorites: [],
-        installed: [],
-        categories: [],
-        apps: {}
-
-    },
+            favorites: [],
+            installed: [],
+            categories: [],
+            apps: {}
+        },
         api;
 
     // Construct App Data
-
-    _(manifests.apps).each(function (appManifest) {
+    _(manifests.manager.apps).each(function (appManifest) {
         var id = appManifest.path.substr(0, appManifest.path.length - 5);
 
         appData.installed.push(id);

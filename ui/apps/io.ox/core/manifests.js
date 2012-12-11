@@ -11,15 +11,20 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/capabilities'], function (ext, http, cache, capabilities) {
+define('io.ox/core/manifests',
+    ['io.ox/core/extensions',
+     'io.ox/core/http',
+     'io.ox/core/cache',
+     'io.ox/core/capabilities'
+    ], function (ext, http, cache, capabilities) {
 
     'use strict';
 
     // TODO: Caching and Update Handling
-    var def = new $.Deferred();
     var manifestCache = new cache.SimpleCache("manifests", true);
 
     var manifestManager = {
+
         loadPluginsFor: function (pointName, cb) {
             cb = cb || $.noop;
             if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
@@ -27,9 +32,9 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
                 return $.when();
             }
             var requirements = _(this.pluginPoints[pointName]).pluck("path");
-
             return require(requirements, cb);
         },
+
         withPluginsFor: function (pointName, requirements) {
             requirements = requirements || [];
             if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
@@ -37,12 +42,14 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
             }
             return requirements.concat(_(this.pluginPoints[pointName]).chain().pluck("path").uniq().value());
         },
+
         pluginsFor: function (pointName) {
             if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
                 return [];
             }
             return [].concat(_(this.pluginPoints[pointName]).pluck("path"));
         },
+
         wrapperFor: function (pointName, dependencies, definitionFunction) {
             var self = this;
             var pluginAware = _(dependencies).contains("plugins");
@@ -78,8 +85,7 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
         },
         apps: {},
         plugins: {},
-        pluginPoints: {},
-        loader: 'none'
+        pluginPoints: {}
     };
 
     ox.withPluginsFor = function (pointName, requirements) {
@@ -88,36 +94,54 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
 
     ox.manifests = manifestManager;
 
-    var fnStoreState = function () {
-        if (!ox.signin) {
-            manifestCache.add('default', [manifestManager.apps, manifestManager.plugins, manifestManager.pluginPoints]);
-        }
-    };
+    // var fnClear = function () {
+    //     manifestManager.apps = {};
+    //     manifestManager.plugins = {};
+    //     manifestManager.pluginPoints = {};
+    // };
 
-    var fnLoadState = function () {
-        return manifestCache.get('default').done(function (o) {
-            if (!o) {
-                return;
-            }
-            if (manifestCache.loader === 'backend') {
-                def.resolve(manifestManager); // Whoever resolves first, wins
-                return; // Backend already fetched everything
-            }
-            manifestManager.apps = o[0] || {};
-            manifestManager.plugins = o[1] || {};
-            manifestManager.pluginPoints = o[2] || {};
-            manifestManager.loader = 'cache';
-            def.resolve(manifestManager); // Whoever resolves first, wins
-        });
-    };
+    // var fnLoadStaticFiles = function (state) {
+    //     require([ox.base + "/src/manifests.js"], function (manifests) {
+    //         manifestManager.loader = 'backend';
+    //         if (state !== 'success') {
+    //             fnClear();
+    //         }
+    //         _(manifests).each(function (manifest) {
+    //             if (!!! manifest.requires || capabilities.has(manifest.requires)) {
+    //                 fnProcessManifest(manifest);
+    //             }
+    //         });
+    //         fnStoreState();
+    //         def.resolve(manifestManager); // Whoever resolves first, wins
+    //     }).fail(function () {
+    //         if (state === 'success') {
+    //             fnStoreState();
+    //         }
+    //         def.resolve(manifestManager); // Whoever resolves first, wins
+    //     });
+    // };
 
-    var fnClear = function () {
-        manifestManager.apps = {};
-        manifestManager.plugins = {};
-        manifestManager.pluginPoints = {};
-    };
+    // var fnLoadBackendManifests = function () {
+    //     http.GET({
+    //         module: 'apps/manifests',
+    //         params: {
+    //             action: 'all'
+    //         }
+    //     }).done(function (manifests) {
+    //         _(manifests).each(fnProcessManifest);
+    //         // Load Manifest Extensions
+    //         manifestManager.loadPluginsFor('manifests').done(function () {
+    //             // Apply Extensions
+    //             ext.point("io.ox/core/manifests").invoke('customize', manifestManager);
+    //             fnLoadStaticFiles('success');
+    //         });
 
-    var fnProcessManifest = function (manifest) {
+    //     }).fail(function (resp) {
+    //         fnLoadStaticFiles('fail');
+    //     });
+    // };
+
+    function process(manifest) {
         if (manifest.namespace) {
             if (manifest.requires) {
                 if (!capabilities.has(manifest.requires)) {
@@ -142,60 +166,61 @@ define.async('io.ox/core/manifests', ['io.ox/core/extensions', 'io.ox/core/http'
             // Looks like an app
             manifestManager.apps[manifest.path] = manifest;
         }
-    };
-
-    var fnLoadStaticFiles = function (state) {
-        require([ox.base + "/src/manifests.js"], function (manifests) {
-            manifestManager.loader = 'backend';
-            if (state !== 'success') {
-                fnClear();
-            }
-            _(manifests).each(function (manifest) {
-                if (!!! manifest.requires || capabilities.has(manifest.requires)) {
-                    fnProcessManifest(manifest);
-                }
-            });
-            fnStoreState();
-            def.resolve(manifestManager); // Whoever resolves first, wins
-        }).fail(function () {
-            if (state === 'success') {
-                fnStoreState();
-            }
-            def.resolve(manifestManager); // Whoever resolves first, wins
-        });
-    };
-
-    var fnLoadBackendManifests = function () {
-        http.GET({
-            module: 'apps/manifests',
-            params: {
-                action: 'all'
-            }
-        }).done(function (manifests) {
-            manifestManager.loader = 'backend';
-            fnClear();
-            _(manifests).each(fnProcessManifest);
-            // Load Manifest Extensions
-            manifestManager.loadPluginsFor('manifests').done(function () {
-                // Apply Extensions
-                ext.point("io.ox/core/manifests").invoke('customize', manifestManager);
-                fnLoadStaticFiles('success');
-            });
-
-        }).fail(function (resp) {
-            fnLoadStaticFiles('fail');
-        });
-    };
-
-    // Try the cache and the backend
-    // First one resolves this module
-    fnLoadState();
-
-    if (ox.online) {
-        fnLoadBackendManifests();
-    } else {
-        def.resolve(manifestManager);
     }
 
-    return def;
+    var self = {
+
+        load: function () {
+
+            function load() {
+                return $.when(
+                    http.GET({ module: 'apps/manifests', params: { action: 'all' } }),
+                    ox.signin ? $.when() : require([ox.base + "/src/manifests.js"])
+                )
+                .pipe(function (server, source) {
+                    return ox.signin ? server[0] : server[0].length ? server[0] : source;
+                });
+            }
+
+            if (ox.online) {
+                return load();
+            } else {
+                // use cache in offline mode only
+                return manifestCache.get('default').done(function (data) {
+                    if (data !== null) {
+                        _.extend(manifestManager, data);
+                    }
+                });
+            }
+        },
+
+        initialize: function () {
+
+            return $.when(
+                self.load(),
+                capabilities.initialize()
+            )
+            .done(function (data) {
+                if (data !== null) {
+                    _(data).each(process);
+                    if (!ox.signin) {
+                        manifestCache.add('default', {
+                            apps: manifestManager.apps,
+                            plugins: manifestManager.plugins,
+                            pluginPoints: manifestManager.pluginPoints
+                        });
+                    }
+                }
+                // Load Manifest Extensions
+                manifestManager.loadPluginsFor('manifests').done(function () {
+                    // Apply Extensions
+                    ext.point("io.ox/core/manifests").invoke('customize', manifestManager);
+                });
+            });
+        },
+
+        manager: manifestManager
+    };
+
+    return self;
 });

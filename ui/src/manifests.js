@@ -198,16 +198,16 @@ define(function () {
         "requires": "text",
         "path": "io.ox/office/text/main"
     },
-    {
-        "requires": "text",
-        "path": "io.ox/office/text/fileActions",
-        "namespace": "io.ox/files/actions"
-    },
-    {
-        "requires": "document_preview",
-        "path": "io.ox/office/preview/fileActions",
-        "namespace": "io.ox/files/actions"
-    },
+    // {
+    //     "requires": "text",
+    //     "path": "io.ox/office/text/fileActions",
+    //     "namespace": "io.ox/files/actions"
+    // },
+    // {
+    //     "requires": "document_preview",
+    //     "path": "io.ox/office/preview/fileActions",
+    //     "namespace": "io.ox/files/actions"
+    // },
     {
         "title": "Portal",
         "company": "Open-Xchange",

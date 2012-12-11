@@ -119,7 +119,7 @@ define('io.ox/portal/settings/pane',
 
     var pluginSettings = settings.get('pluginSettings', []),
         MAX_INDEX = 99999,
-        availablePlugins = _(manifests.pluginsFor('portal')).uniq(),
+        availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq(),
         collection = new Backbone.Collection([]);
 
     collection.comparator = function (a, b) {

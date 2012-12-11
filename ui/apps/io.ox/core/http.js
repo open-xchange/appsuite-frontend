@@ -190,7 +190,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "408" : "timezone",
             "410" : "recurrence_start"
         },
-        "infostore" : {
+        "files" : {
             "700" : "title",
             "701" : "url",
             "702" : "filename",
@@ -327,9 +327,9 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
     // extend with commons (not all modules use common columns, e.g. folders)
     $.extend(idMapping.contacts, idMapping.common);
     $.extend(idMapping.calendar, idMapping.common);
-    $.extend(idMapping.infostore, idMapping.common);
-    delete idMapping.infostore["101"]; // not "common" here (exception)
-    delete idMapping.infostore["104"];
+    $.extend(idMapping.files, idMapping.common);
+    delete idMapping.files["101"]; // not "common" here (exception)
+    delete idMapping.files["104"];
     $.extend(idMapping.tasks, idMapping.common);
     $.extend(idMapping.user, idMapping.contacts, idMapping.common);
 
@@ -393,7 +393,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         // prepend root
         o.url = ox.apiRoot + "/" + o.module;
         // add session
-        if (o.appendSession === true) {
+        if (o.appendSession === true && ox.session) {
             o.params.session = ox.session;
         }
         // add columns
@@ -724,7 +724,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
             options = _.extend({
                 form: $(),
-                url: 'infostore?action=new',
+                url: 'files?action=new',
                 data: {},
                 field: 'json'
             }, options);

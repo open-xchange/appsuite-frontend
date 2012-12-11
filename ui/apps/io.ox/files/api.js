@@ -57,7 +57,7 @@ define('io.ox/files/api',
 
     // generate basic API
     var api = apiFactory({
-        module: 'infostore',
+        module: 'files',
         requests: {
             all: {
                 action: 'all',
@@ -116,12 +116,12 @@ define('io.ox/files/api',
         };
 
         return http.GET({
-            module: 'infostore',
+            module: 'files',
             params: params
         });
     };
 
-    api.caches.versions = new cache.SimpleCache('infostore-versions', true);
+    api.caches.versions = new cache.SimpleCache('files-versions', true);
 
     // Upload a file and store it
     // As options, we expect:
@@ -168,7 +168,7 @@ define('io.ox/files/api',
             formData.append('json', JSON.stringify(options.json));
 
             return http.UPLOAD({
-                    module: 'infostore',
+                    module: 'files',
                     params: { action: 'new' },
                     data: formData,
                     fixPost: true
@@ -212,7 +212,7 @@ define('io.ox/files/api',
         formData.append('json', JSON.stringify(options.json));
 
         return http.UPLOAD({
-                module: 'infostore',
+                module: 'files',
                 params: { action: 'update', timestamp: _.now(), id: options.id },
                 data: formData,
                 fixPost: true // TODO: temp. backend fix
@@ -231,7 +231,7 @@ define('io.ox/files/api',
     api.update = function (file) {
         var obj = { id: file.id, folder: file.folder_id };
         return http.PUT({
-                module: 'infostore',
+                module: 'files',
                 params: { action: 'update', id: file.id, timestamp: _.now() },
                 data: file,
                 appendColumns: false
@@ -252,7 +252,7 @@ define('io.ox/files/api',
         }
 
         return http.PUT({
-                module: 'infostore',
+                module: 'files',
                 params: { action: 'new' },
                 data: options.json,
                 appendColumns: false
@@ -335,7 +335,7 @@ define('io.ox/files/api',
     };
 
     api.getUrl = function (file, mode) {
-        var url = ox.apiRoot + '/infostore',
+        var url = ox.apiRoot + '/files',
             query = '?action=document&id=' + file.id + '&folder=' + file.folder_id +
                 (file.version !== undefined ? '&version=' + file.version : ''),
             name = (file.filename ? '/' + encodeURIComponent(file.filename) : '');
@@ -351,7 +351,7 @@ define('io.ox/files/api',
 
     api.detach = function (version) {
         return http.PUT({
-            module: 'infostore',
+            module: 'files',
             params: { action: 'detach', id: version.id, folder: version.folder_id, timestamp: _.now() },
             data: [version.version],
             appendColumns: false
@@ -372,7 +372,7 @@ define('io.ox/files/api',
         // process all updates
         _(list).map(function (o) {
             return http.PUT({
-                module: 'infostore',
+                module: 'files',
                 params: {
                     action: action || 'update',
                     id: o.id,

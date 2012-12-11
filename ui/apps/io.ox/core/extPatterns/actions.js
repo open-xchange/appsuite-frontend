@@ -82,13 +82,13 @@ define("io.ox/core/extPatterns/actions",
         }
     };
 
-    var processActions = function (ref, collection, context) {
+    var processActions = function (ref, collection, baton) {
         // combine actions
         return $.when.apply($,
             ext.point(ref).map(function (action) {
                 // get return value
                 var ret = _.isFunction(action.requires) ?
-                        action.requires({ collection: collection, context: context || {} }) : true;
+                        action.requires({ collection: collection, context: baton.data, baton: baton }) : true;
                 // is not deferred?
                 if (!ret.promise) {
                     ret = $.Deferred().resolve(ret);
@@ -133,9 +133,11 @@ define("io.ox/core/extPatterns/actions",
         });
     };
 
-    var applyCollection = function (ref, collection, context, args) {
+    var applyCollection = function (ref, collection, baton, args) {
 
         if (!ref) return $.when();
+
+        baton = ext.Baton.ensure(baton);
 
         // resolve collection's properties
         var linksResolved = new $.Deferred();
@@ -151,7 +153,7 @@ define("io.ox/core/extPatterns/actions",
                         def.resolve({ link: link, state: false });
                     } else {
                         // combine actions
-                        processActions(link.ref, collection, context).done(function () {
+                        processActions(link.ref, collection, baton).done(function () {
                             var state = _(arguments).any(function (bool) { return bool === true; });
                             def.resolve({ link: link, state: state });
                         });

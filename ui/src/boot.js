@@ -127,10 +127,11 @@ $(document).ready(function () {
         $(this).busy();
         // get configuration & core
         require(['io.ox/core/config', 'themes', 'settings!io.ox/core']).done(function (config, themes, settings) {
+            var theme = settings.get('theme') || 'default';
             config.load().done(function () {
                 $.when(
                     require(['io.ox/core/main']),
-                    themes.set(settings.get('theme') || 'default')
+                    themes.set(theme)
                 ).done(function (core) {
                     // go!
                     core.launch();
@@ -313,45 +314,57 @@ $(document).ready(function () {
      */
     autoLogin = function () {
 
-        function fail() {
-            if (ox.signin) {
-                initialize();
-            } else {
-                _.url.redirect('signin');
-            }
-        }
-
         function loadCoreFiles() {
             // Set user's language (as opposed to the browser's language)
-            return require(['io.ox/core/gettext', 'io.ox/core/manifests']).pipe(function (gt) {
+            return require(['io.ox/core/gettext']).pipe(function (gt) {
                 gt.setLanguage(ox.language);
                 return require([ox.base + '/pre-core.js']);
             });
         }
 
-        // got session via hash?
-        if (_.url.hash('session')) {
-            ox.session = _.url.hash('session');
-            ox.user = _.url.hash('user');
-            ox.user_id = parseInt(_.url.hash('user_id') || '0', 10);
-            ox.language = _.url.hash('language');
-            _.url.redirect('#');
-            loadCoreFiles().done(function () {
-                loadCore();
-            });
-        } else if (ox.serverConfig.autoLogin === true && ox.online) {
-            // try auto login
-            return require(['io.ox/core/session']).pipe(function (session) {
-                return session.autoLogin().done(function () {
-                    loadCoreFiles().done(function () {
-                        gotoCore(true);
+        require(['io.ox/core/session', 'io.ox/core/manifests']).done(function (session, manifests) {
+
+            var useAutoLogin = ox.serverConfig.autoLogin === true && ox.online, initialized;
+
+            function continueWithoutAutoLogin() {
+                if (ox.signin) {
+                    initialize();
+                } else {
+                    _.url.redirect('signin');
+                }
+            }
+
+            // got session via hash?
+            if (_.url.hash('session')) {
+
+                ox.session = _.url.hash('session');
+                ox.user = _.url.hash('user');
+                ox.user_id = parseInt(_.url.hash('user_id') || '0', 10);
+                ox.language = _.url.hash('language');
+                _.url.redirect('#');
+
+                initialized = manifests.initialize();
+
+                $.when(loadCoreFiles(), initialized).done(loadCore);
+
+            } else {
+
+                // try auto login!?
+                (useAutoLogin ? session.autoLogin() : $.when())
+                .done(function () {
+                    manifests.initialize().done(function () {
+                        if (useAutoLogin) {
+                            loadCoreFiles().done(function () { gotoCore(true); });
+                        } else {
+                            continueWithoutAutoLogin();
+                        }
                     });
                 })
-                .fail(fail);
-            });
-        } else {
-            fail();
-        }
+                .fail(function () {
+                    manifests.initialize().done(continueWithoutAutoLogin);
+                });
+            }
+        });
     };
 
     /**
@@ -418,8 +431,9 @@ $(document).ready(function () {
         }
         return $.when(
                 // load extensions
-
-                require(['io.ox/core/manifests']).pipe(function (manifests) { return manifests.loadPluginsFor(ox.signin ? 'signin' : 'core'); }),
+                require(['io.ox/core/manifests']).pipe(function (manifests) {
+                    return manifests.manager.loadPluginsFor(ox.signin ? 'signin' : 'core');
+                }),
                 // use browser language
                 setDefaultLanguage()
             )

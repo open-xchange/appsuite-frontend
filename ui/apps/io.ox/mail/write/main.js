@@ -483,7 +483,6 @@ define('io.ox/mail/write/main',
         app.failSave = function () {
             var mail = app.getMail();
             delete mail.files;
-            console.log('failSave', mail);
             return {
                 module: 'io.ox/mail/write',
                 description: gt('Mail') + ': ' + (mail.data.subject || gt('No subject')),
@@ -494,7 +493,6 @@ define('io.ox/mail/write/main',
         app.failRestore = function (point) {
             var def = $.Deferred();
             win.busy().show(function () {
-                console.log('restore', point);
                 _.url.hash('app', 'io.ox/mail/write:' + point.mode);
                 app.setMail(point).done(function () {
                     app.dirty(true);

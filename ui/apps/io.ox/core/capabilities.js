@@ -16,11 +16,9 @@
 * if (capabilities.has('calendar withBackendSupport'))) { ... } else { ... }
 */
 
-define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
+define('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
 
 	'use strict';
-
-	var def = new $.Deferred();
 
 	var capabilities = {},
 		capCache = new cache.SimpleCache(ox.signin ? "signinCapabilities" : "capabilities", true),
@@ -39,6 +37,8 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 	if (! _.isEmpty(capBlacklist)) {
 		console.info("Blacklisted Features: ", capBlacklist);
 	}
+
+	var api = null;
 
 	var capLookup = {
 		get: function (capName) {
@@ -108,48 +108,50 @@ define.async('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'],
 		}
 	};
 
-	capCache.get('default').done(function (c) {
-		if (capSource === 'backend') {
-			return;
-		}
-		if (!c) {
-			return;
-		}
-		capSource = 'cache';
-		capabilities = c;
-		def.resolve(capLookup);
-	});
+	var raw = null;
 
-	if (ox.online) {
-		http.GET({
-			module: 'capabilities',
-			params: {
-				action: 'all'
+	var api = {
+
+		initialize: function () {
+
+			function load() {
+				return http.GET({
+					module: 'capabilities',
+					params: { action: 'all' }
+				})
+				.pipe(function (data) {
+					_.extend(api, capLookup);
+					_(data).each(function (entry) {
+						capabilities[entry.id] = entry;
+					});
+					return capCache.add('default', capabilities);
+                });
 			}
-		})
-		.done(function (data) {
-			_(data).each(function (entry) {
-				capabilities[entry.id] = entry;
-			});
-			capSource = 'backend';
-			capCache.add("default", capabilities);
-			def.resolve(capLookup);
-		})
-		.fail(function (resp) {
-			console.warn("Capabilities subsystem is disabled!");
-			def.resolve(dummyCapLookup);
-		});
-	} else {
-		// guarantee mail
-		capabilities.webmail = {
-			attributes: {},
-			backendSupport: false,
-			id: 'webmail'
-		};
-		console.warn("Capabilities subsystem is disabled!");
-		def.resolve(dummyCapLookup);
-	}
 
-	return def;
+			// always load fresh for sign-in
+			if (ox.online) {
+				return load();
+			} else {
+				// use cache in offline mode only
+				return capCache.get('default').done(function (data) {
+					if (data === null) {
+						// guarantee mail
+						capabilities.webmail = {
+							attributes: {},
+							backendSupport: false,
+							id: 'webmail'
+						};
+						console.warn("Capabilities subsystem is disabled!");
+						_.extend(api, dummyCapLookup);
+					} else {
+						capabilities = data;
+						_.extend(api, capLookup);
+					}
+				});
+			}
+		}
+	};
+
+	return api;
 
 });

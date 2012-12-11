@@ -15,7 +15,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
 
     'use strict';
 
-    var TIMEOUTS = { AUTOLOGIN: 3000, LOGIN: 10000 };
+    var TIMEOUTS = { AUTOLOGIN: 5000, LOGIN: 10000 };
 
     var getBrowserLanguage = function () {
         var language = (navigator.language || navigator.userLanguage).substr(0, 2);

@@ -217,7 +217,7 @@ define('io.ox/portal/main',
         win,
         appBaton = ext.Baton({ app: app }),
         sidepopup = new dialogs.SidePopup(),
-        availablePlugins = _(manifests.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
+        availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
         collection = new Backbone.Collection([]);
 
     // for debugging
