@@ -21,8 +21,9 @@ define('io.ox/files/icons/perspective',
      'io.ox/core/commons',
      'io.ox/core/api/folder',
      'gettext!io.ox/files',
-     'io.ox/core/http'
-     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, commons, folderAPI, gt, http) {
+     'io.ox/core/http',
+     'io.ox/core/capabilities'
+     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, commons, folderAPI, gt, http, Caps) {
 
     'use strict';
 
@@ -136,7 +137,7 @@ define('io.ox/files/icons/perspective',
                 img = drawImage(getIcon(file, options)).on('error', { name: file.filename }, imageIconError);
             } else if ((/^audio\/(mpeg|m4a|x-m4a)$/i).test(file.file_mimetype)) {
                 img = drawImage(getCover(file, options)).on('error', { name: file.filename }, audioIconError);
-            } else if (ox.serverConfig.previewExtensions &&
+            } else if (Caps.has('document_preview') &&
                     (/^application\/.*(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument).*$/i).test(file.file_mimetype)) {
                 iElement = drawGeneric(file.filename);
                 wrap.append(iElement);
