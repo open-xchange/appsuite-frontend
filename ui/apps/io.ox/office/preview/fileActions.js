@@ -35,7 +35,6 @@ define('io.ox/office/preview/fileActions',
             // on Firefox we have to do this check to prevent duplicate actions (default/preview)
             if (SUPPORTED_EXT.test(baton.data.filename)) {
                 ox.launch('io.ox/office/preview/main', { action: 'load', file: baton.data });
-                baton.preventDefault();
             }
         }
     });
