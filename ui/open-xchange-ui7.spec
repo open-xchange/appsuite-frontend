@@ -31,6 +31,7 @@ Requires:       httpd
 OX App Suite HTML5 client
 
 %package        manifest
+Group:          Applications/Productivity
 Summary:        Manifest for apps included in the OX App Suite HTML5 client
 Requires:       open-xchange-core
 
@@ -40,6 +41,7 @@ OX App Suite HTML5 client
 This package contains the manifest for installation on the backend.
 
 %package        dev
+Group:          Development/Libraries
 Summary:        SDK for the OX App Suite HTML5 client
 Requires:       nodejs >= 0.4.0
 
@@ -48,6 +50,7 @@ SDK for the OX App Suite HTML5 client
 
 ## l10n ##
 #%package l10n-## lang ##
+#Group: Applications/Productivity
 #Summary: ## Lang ## translation of the OX App Suite HTML5 client
 #Requires: open-xchange-ui7
 #

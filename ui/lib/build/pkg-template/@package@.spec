@@ -34,6 +34,7 @@ This package contains the manifest for installation on the backend.
 
 ## l10n ##
 #%package l10n-## lang ##
+#Group: Applications/Productivity
 #Summary: ## lang ## translation of @package@\n' +
 #Requires: open-xchange-ui7
 #
