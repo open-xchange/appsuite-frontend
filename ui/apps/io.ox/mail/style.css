@@ -65,13 +65,13 @@
     }
 
     /* unread */
-    &.unread i.icon-bookmark { display: inline-block; }
+    &.unread i.icon-bookmark { display: inline-block; float:left; }
 
     /* answered */
-    &.answered i.icon-circle-arrow-left { display: inline-block; color: darken(@color_lightgreen, 20%); }
+    &.answered i.icon-circle-arrow-left { display: inline-block; color: darken(@color_lightgreen, 20%); float:left; }
 
     /* forward */
-    &.forwarded i.icon-circle-arrow-right { display: inline-block; color: darken(@color_pink, 10%); }
+    &.forwarded i.icon-circle-arrow-right { display: inline-block; color: darken(@color_pink, 10%); float:left;}
 }
 
 .vgrid-cell.mail.unread .subject {
