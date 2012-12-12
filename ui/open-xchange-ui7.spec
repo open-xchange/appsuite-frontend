@@ -9,6 +9,7 @@ Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
 License:        CC-BY-NC-SA
 Summary:        OX App Suite HTML5 client
 Source:         %{name}_%{version}.orig.tar.bz2
+Requires:       open-xchange-ui7-l10n
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
@@ -52,7 +53,7 @@ SDK for the OX App Suite HTML5 client
 #%package l10n-## lang ##
 #Group: Applications/Productivity
 #Summary: ## Lang ## translation of the OX App Suite HTML5 client
-#Requires: open-xchange-ui7
+#Provides: open-xchange-ui7-l10n
 #
 #%description l10n-## lang ##
 ### Lang ## translation of the OX App Suite HTML5 client
