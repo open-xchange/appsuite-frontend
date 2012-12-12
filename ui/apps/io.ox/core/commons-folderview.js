@@ -424,6 +424,9 @@ define('io.ox/core/commons-folderview',
                                 if (newId !== id) tree.select(newId);
                             });
                         } else {
+                            if (!id && !newId) {
+                                tree.select('default0/INBOX');
+                            }
                             tree.repaint();
                             tree.idle();
                         }
