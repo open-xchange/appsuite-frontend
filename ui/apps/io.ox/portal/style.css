@@ -402,6 +402,9 @@ li.io-ox-portal-setting {
     padding: 1em;
     margin: .25em 0;
 }
+li.io-ox-portal-setting.disabled {
+    background: #fafafa;
+}
 .io-ox-setting-description {
     width: 20em;
     display: inline-block;
@@ -411,31 +414,4 @@ li.io-ox-portal-setting {
 }
 .io-ox-portal-color-default {
     background: #333;
-}
-.io-ox-portal-color-red {
-    background: @color_red;
-}
-.io-ox-portal-color-orange {
-    background: @color_orange;
-}
-.io-ox-portal-color-lightgreen {
-    background: darken(@color_lightgreen, 10%);
-}
-.io-ox-portal-color-green {
-    background: @color_green;
-}
-.io-ox-portal-color-lightblue {
-    background: darken(@color_lightblue, 20%);
-}
-.io-ox-portal-color-blue {
-    background: @color_blue;
-}
-.io-ox-portal-color-purple {
-    background: @color_purple;
-}
-.io-ox-portal-color-pink {
-    background: darken(@color_pink, 10%);
-}
-.io-ox-portal-color-gray {
-    background: darken(@color_gray, 20%);
 }

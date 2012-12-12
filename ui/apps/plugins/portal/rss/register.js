@@ -30,20 +30,21 @@ define("plugins/portal/rss/register",
             return $.when();
         }
 
-        var members = [],
-            group = { groupname: gt('RSS Feeds'), index: 100, members: members };
-
         return accountApi.all('com.openexchange.messaging.rss').pipe(function (accounts) {
             var index = 0;
             _(accounts).each(function (account) {
-                console.log('migrate.account', account);
                 index += 100;
-                members.push({ url: account.configuration.url, feedname: account.displayName, index: index });
+                settings.set('widgets/user/rss-migrated-' + index, {
+                    plugin: 'plugins/portal/rss/register',
+                    color: 'lightblue',
+                    index: index,
+                    props: {
+                        url: account.configuration.url,
+                        description: account.displayName
+                    }
+                });
             });
-            return settings
-                .set('groups', [group])
-                .set('rss-migrated', false)
-                .save();
+            return settings.save();
         });
     };
 

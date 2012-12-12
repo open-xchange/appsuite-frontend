@@ -6,6 +6,12 @@
 define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', 'gettext!io.ox/portal', 'less!io.ox/settings/style.css'], function (ext, gt) {
     'use strict';
 
+    function generateGUID() {
+        var S4 = function () {
+            return (((1 + Math.random()) * 0x10000)|0).toString(16).substring(1);
+        };
+        return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+    }
     /* * * * * * * *
      * REDDIT
      */
@@ -14,8 +20,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
         id: 'settings-portal-reddit-add-action',
         description: gt('Reddit'),
         action: function (args) {
-            require(['settings!plugins/portal/reddit', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'less!plugins/portal/reddit/style.css'], function (settings, gt, dialogs) {
-                var subreddits = settings.get('subreddits'),
+            require(['settings!io.ox/portal', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'less!plugins/portal/reddit/style.css'], function (settings, gt, dialogs) {
+                var subreddits = settings.get('widgets/user'),
                     dialog = new dialogs.ModalDialog({
                         easyOut: true,
                         async: true
@@ -97,7 +103,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
         id: 'portal-settings-reddit',
         draw: function (data) {
             var that = this;
-            require(['settings!plugins/portal/reddit', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'less!plugins/portal/reddit/style.css'], function (settings, gt, dialogs) {
+            require(['settings!io.ox/portal', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'less!plugins/portal/reddit/style.css'], function (settings, gt, dialogs) {
                 var subreddits = settings.get('subreddits'),
                 staticStrings = {
                     SUBREDDITS: gt('Subreddits'),
@@ -301,9 +307,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
         id: 'settings-portal-tumblr-add-action',
         description: gt('Tumblr'),
         action: function (args) {
-            require(['settings!plugins/portal/tumblr', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs'], function (settings, gt, dialogs) {
-                var blogs = settings.get('blogs'),
-                    dialog = new dialogs.ModalDialog({
+            require(['settings!io.ox/portal', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs'], function (settings, gt, dialogs) {
+                var dialog = new dialogs.ModalDialog({
                         easyOut: true,
                         async: true
                     }),
@@ -312,7 +317,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                     $error = $('<div>').addClass('alert alert-error').hide(),
                     that = this;
 
-                dialog.header($("<h4>").text(gt('Add a blog')))
+                dialog.header($("<h4>").text(gt('Add a Tumblr feed')))
                     .append($url)
                     .append($description)
                     .append($error)
@@ -364,16 +369,23 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                     }
 
                     deferred.done(function () {
-                        blogs.push({url: url, description: description});
-                        settings.set('blogs', blogs);
+                        var guid = 'tumblr_' + generateGUID(),
+                            newTumblr = {
+                                plugin: 'plugins/portal/tumblr/register',
+                                color: 'orange',
+                                index: 'first',
+                                props: {
+                                    url: url,
+                                    description: description
+                                }
+                            };
+                        settings.set('widgets/user/' + guid, newTumblr);
                         settings.save();
 
                         var extId = 'tumblr-' + url.replace(/[^a-zA-Z0-9]/g, '_');
                         ext.point("io.ox/portal/widget").enable(extId);
 
                         require(['plugins/portal/tumblr/register'], function (tumblr) {
-                            tumblr.reload();
-                            that.trigger('redraw');
                             ox.trigger("refresh^");
                             dialog.close();
                         });
@@ -393,9 +405,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
         id: 'portal-settings-tumblr',
         draw : function (data) {
             var that = this;
-            require(['settings!plugins/portal/tumblr', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs'], function (settings, gt, dialogs) {
-                var blogs = settings.get('blogs'),
-                staticStrings = {
+            require(['settings!io.ox/portal', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs'], function (settings, gt, dialogs) {
+                var staticStrings = {
                     TUMBLRBLOGS: gt('Tumblr blogs'),
                     ADD:         gt('Add'),
                     EDIT:        gt('Edit'),
@@ -407,22 +418,19 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         this._modelBinder = new Backbone.ModelBinder();
                     },
                     render: function () {
-                        var self = this;
-
+                        console.log("DATA", data);
+                        var self = this,
+                            url = data.props.url,
+                            key = data.key,
+                            description = data.props.description || data.key;
                         self.$el.empty().append(
                             $('<div class="io-ox-tumblr-setting io-ox-settings-item">')
-                            .attr({'data-url': this.model.get('url'),  'data-description': this.model.get('description')}).append(
-                                $('<span data-property="url" class="io-ox-setting-description">'),
-                                $('<i>').attr({'class': 'action-edit icon-edit', 'data-action': 'edit-feed', title: staticStrings.EDIT_FEED}),
-                                $('<i>').attr({'class': 'action-remove icon-remove', 'data-action': 'del-feed', title: staticStrings.DELETE_FEED})
+                            .attr({'data-url': url,  'data-description': description, 'data-key': key, id: url}).append(
+                                $('<span class="io-ox-setting-description">').text(description),
+                                $('<i>').attr({'class': 'action-edit icon-edit', 'data-action': 'edit-feed', title: staticStrings.EDIT_FEED})
+                                //$('<i>').attr({'class': 'action-remove icon-remove', 'data-action': 'del-feed', title: staticStrings.DELETE_FEED}) //removed, new design means there can be only one, so deleting the tile does it
                             )
                         );
-
-                        self.$el.attr('id', this.model.get('url'));
-
-                        var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-                        self._modelBinder.bind(self.model, self.el, defaultBindings);
-
                         return self;
                     },
                     events: {
@@ -436,7 +444,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         });
                         var $myNode = $(pEvent.target).parent(),
                             oldUrl = $myNode.data('url'),
-                            oldDescription = $myNode.data('description');
+                            oldDescription = $myNode.data('description'),
+                            key = $myNode.data('key');
 
                         if (oldUrl) {
                             var $url = $('<input>').attr({type: 'text', placeholder: '.tumblr.com'}).val(oldUrl),
@@ -499,20 +508,13 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                 deferred.done(function () {
                                     ext.point("io.ox/portal/widget").disable('tumblr-' + oldUrl.replace(/[^a-zA-Z0-9]/g, '_'));
 
-                                    blogs = removeBlog(blogs, oldUrl);
-
-                                    blogs.push({url: url, description: description});
-                                    settings.set('blogs', blogs);
+                                    settings.set('widgets/user/' + key + '/props/url', url);
+                                    settings.set('widgets/user/' + key + '/props/description', description);
                                     settings.save();
 
                                     ext.point("io.ox/portal/widget").enable('tumblr-' + url.replace(/[^a-zA-Z0-9]/g, '_'));
 
-                                    require(['plugins/portal/tumblr/register'], function (tumblr) {
-                                        tumblr.reload();
-                                        that.trigger('redraw');
-                                        ox.trigger("refresh^");
-                                        dialog.close();
-                                    });
+                                    dialog.close();
                                 });
 
                                 deferred.fail(function () {
@@ -527,7 +529,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             easyOut: true
                         });
                         var $myNode = $(pEvent.target).parent(),
-                            url = $myNode.data('url');
+                            url = $myNode.data('url'),
+                            key = $myNode.data('key');
 
                         if (url) {
                             var that = this;
@@ -540,17 +543,10 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             .show()
                             .done(function (action) {
                                 if (action === 'delete') {
-                                    blogs = removeBlog(blogs, url);
-                                    settings.set('blogs', blogs);
+                                    settings.remove('widgets/user/' + key);
                                     settings.save();
                                     $myNode.remove();
-                                    var extId = 'tumblr-' + url.replace(/[^a-zA-Z0-9]/g, '_');
-
-                                    ext.point("io.ox/portal/widget").disable(extId);
-                                    require(['plugins/portal/tumblr/register'], function (tumblr) {
-                                        ox.trigger("refresh^");
-                                        tumblr.reload();
-                                    });
+                                    ox.trigger("refresh^");
                                 }
                                 return false;
                             });
@@ -568,9 +564,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                     return newblogs;
                 };
 
-                (new Backbone.Collection(blogs)).each(function (item) {
-                    $(that).append(new BlogSelectView({model: item}).render().el);
-                });
+                $(that).append(new BlogSelectView().render().el);
             }); //END: require
         } //END: draw
     }); //END: extend
@@ -612,9 +606,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
 
                 return deferred;
             };
-            require(['settings!plugins/portal/flickr', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs'], function (settings, gt, dialogs) {
-                var streams = settings.get('streams'),
-                    dialog = new dialogs.ModalDialog({
+            require(['settings!io.ox/portal', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs'], function (settings, gt, dialogs) {
+                var dialog = new dialogs.ModalDialog({
                         easyOut: true,
                         async: true
                     }),
@@ -663,14 +656,21 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             $error.show();
                             dialog.idle();
                         } else {
-                            var newStream = {q: q, method: method, description: description};
-
+                            var newStream = {
+                                plugin: 'plugins/portal/flickr/register',
+                                color: 'pink', //TODO
+                                index: 6, //TODO
+                                props: {
+                                    method: method,
+                                    query: q,
+                                    description: description
+                                }
+                            };
                             if (nsid) {
-                                newStream.nsid = nsid;
+                                newStream.props.nsid = nsid;
                             }
 
-                            streams.push(newStream);
-                            settings.set('streams', streams);
+                            settings.set('widgets/user/flickr_' +  generateGUID, newStream);
                             settings.save();
 
                             var extId = 'flickr-' + q.replace(/[^a-z0-9]/g, '_') + '-' + method.replace(/[^a-z0-9]/g, '_');
@@ -678,9 +678,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
 
                             require(['plugins/portal/flickr/register'], function (flickr) {
                                 flickr.reload();
-                                that.trigger('redraw');
-                                ox.trigger("refresh^");
                                 dialog.close();
+                                //TODO refresh
                             });
                         }
                     });
@@ -699,7 +698,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
         id: 'portal-settings-flickr',
         draw : function (data) {
             var that = this;
-            require(['settings!plugins/portal/flickr', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs'], function (settings, gt, dialogs) {
+            require(['settings!io.ox/portal', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs'], function (settings, gt, dialogs) {
                 var getFlickrNsid = function (username, $error) {
                     var callback = 'getFlickerNsid';
                     var myurl = 'https://www.flickr.com/services/rest/?api_key=7fcde3ae5ad6ecf2dfc1d3128f4ead81&format=json&method=flickr.people.findByUsername&username=' + username + '&jsoncallback=' + callback;
@@ -728,8 +727,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                     return deferred;
                 };
 
-                var streams = settings.get('streams'),
-                    staticStrings = {
+                var staticStrings = {
                         STREAMS:    gt('Flickr streams'),
                         ADD:        gt('Add'),
                         EDIT:       gt('Edit'),
@@ -742,19 +740,20 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             this._modelBinder = new Backbone.ModelBinder();
                         },
                         render: function () {
-                            var self = this;
+                            var self = this,
+                                key = data.key,
+                                description = data.props.description || data.key,
+                                method = data.props.method,
+                                query = data.props.query;
 
                             self.$el.empty().append(
                                 $('<div class="io-ox-portal-flickr-setting io-ox-settings-item">')
-                                .attr({'data-q': this.model.get('q'), 'data-method': this.model.get('method'), 'data-description': this.model.get('description')}).append(
-                                    $('<span class="io-ox-setting-description" data-property="q">'),
-                                    $('<i class="icon-edit action-edit">'),
-                                    $('<i class="icon-remove action-remove">')
+                                .data({query: query, method: method, description: description, key: key}).append(
+                                    $('<span class="io-ox-setting-description">').text(description),
+                                    $('<i class="icon-edit action-edit">')
+//                                    $('<i class="icon-remove action-remove">') //removed, since there is only one stream now...
                                 )
                             );
-
-                            var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-                            self._modelBinder.bind(self.model, self.el, defaultBindings);
 
                             return self;
                         },
@@ -768,10 +767,11 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                 async: true
                             }),
                                 $myNode = $(pEvent.target).parent(),
-                                oldQ = $myNode.data('q'),
+                                oldQ = $myNode.data('query'),
                                 oldMethod = $myNode.data('method'),
-                                oldDescription = $myNode.data('description');
-                            console.log("onEdit", $myNode);
+                                oldDescription = $myNode.data('description'),
+                                key = $myNode.data('key');
+                            console.log("onEdit", key, oldQ, oldMethod, oldDescription, $myNode);
 
                             if (oldQ && oldMethod) {
                                 oldQ = String(oldQ);
@@ -798,9 +798,9 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                     $error.hide();
 
                                     var q = String($.trim($q.val())),
-                                    method = $.trim($method.val()),
-                                    description = $.trim($description.val()),
-                                    deferred;
+                                        method = $.trim($method.val()),
+                                        description = $.trim($description.val()),
+                                        deferred;
 
                                     if (method === 'flickr.people.getPublicPhotos') {
                                         deferred = getFlickrNsid(q, $error);
@@ -820,26 +820,22 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                             dialog.idle();
                                         } else {
                                             ext.point("io.ox/portal/widget").disable('flickr-' + oldQ.replace(/[^a-z0-9]/g, '_') + '-' + oldMethod.replace(/[^a-z0-9]/g, '_'));
-                                            streams = removeStream(streams, oldQ, oldMethod);
 
-                                            var newStream = {q: q, method: method, description: description};
+                                            var path = 'widgets/user/' + key + '/props/';
+                                            settings.set(path + 'query', q);
+                                            settings.set(path + 'method', method);
+                                            settings.set(path + 'description', description);
 
                                             if (nsid) {
-                                                newStream.nsid = nsid;
+                                                settings.set(path + 'nsid', nsid);
                                             }
 
-                                            streams.push(newStream);
-                                            settings.set('streams', streams);
                                             settings.save();
 
                                             ext.point("io.ox/portal/widget").enable('flickr-' + q.replace(/[^a-z0-9]/g, '_') + '-' + method.replace(/[^a-z0-9]/g, '_'));
 
-                                            require(['plugins/portal/flickr/register'], function (flickr) {
-                                                flickr.reload();
-                                                that.trigger('redraw');
-                                                ox.trigger("refresh^");
-                                                dialog.close();
-                                            });
+                                            dialog.close();
+                                            //TODO refresh
                                         }
                                     });
 
@@ -855,64 +851,44 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                     easyOut: true
                                 }),
                                  $myNode = $(pEvent.target).parent(),
-                                 q = $myNode.data('q'),
+                                 query = $myNode.data('query'),
+                                 key = $myNode.data('key'),
                                  method = $myNode.data('method');
-                            console.log("Bla", q, method);
-                            if (q && method) {
-                                q = String(q);
+                            console.log("onDelete", key, query, method);
+
+                            if (key && query && method) {
+                                query = String(query);
                                 var that = this;
-                                console.log("Bla", q, method);
 
                                 dialog.header($("<h4>").text(gt('Delete a stream')))
                                     .append($('<span>').text(gt('Do you really want to delete the following stream?')))
                                     .append($('<ul>').append(
-                                        $('<li>').text(q + " (" + method + ")")
+                                        $('<li>').text(query + " (" + method + ")")
                                     ))
                                 .addButton('cancel', gt('Cancel'))
                                 .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
                                 .show()
                                 .done(function (action) {
                                     if (action === 'delete') {
-                                        var newStreams = [];
-                                        _.each(streams, function (sub) {
-                                            if (sub.q !== q || (sub.q === q && sub.method !== method)) {
-                                                newStreams.push(sub);
-                                            }
-                                        });
 
-                                        streams = removeStream(streams, q, method);
-                                        settings.set('streams', streams);
+                                        settings.remove('widgets/user/' + key);
                                         settings.save();
 
                                         $myNode.remove();
-                                        var extId = 'flickr-' + q.replace(/[^a-z0-9]/g, '_') + '-' + method.replace(/[^a-z0-9]/g, '_');
+                                        var extId = 'flickr-' + query.replace(/[^a-z0-9]/g, '_') + '-' + method.replace(/[^a-z0-9]/g, '_');
 
                                         ext.point("io.ox/portal/widget").disable(extId);
 
-                                        require(['plugins/portal/flickr/register'], function (flickr) {
-                                            flickr.reload();
-                                            ox.trigger("refresh^");
-                                        });
+                                        ox.trigger("refresh^");
                                     }
                                     return false;
                                 });
                             }
                         }
-                    }),
+                    });
 
-                    removeStream = function (streams, q, method) {
-                        var newStreams = [];
+                $(that).append(new StreamSelectView().render().el);
 
-                        _.each(streams, function (sub) {
-                            if (sub.q !== q || sub.q === q && sub.method !== method) {
-                                newStreams.push(sub);
-                            }
-                        });
-                        return newStreams;
-                    };
-                (new Backbone.Collection(streams)).each(function (item) {
-                    $(that).append(new StreamSelectView({model: item}).render().el);
-                });
             }); //END: require
         } //END: draw
     }); //END: extend
@@ -927,7 +903,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
         description: gt('RSS'),
         action: function (args) {
             console.log("Action called");
-            require(['settings!io.ox/rss', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'io.ox/messaging/accounts/api', 'io.ox/core/strings'], function (settings, gt, dialogs, accountApi, strings) {
+            require(['settings!io.ox/portal', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'io.ox/messaging/accounts/api', 'io.ox/core/strings'], function (settings, gt, dialogs, accountApi, strings) {
                 var feedgroupSelect =  function () {
                     var $select = $('<select>');
 
@@ -1012,7 +988,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
         id: 'settings-portal-rss-addgroup-action',
         description: gt('RSS group'),
         action: function (args) {
-            require(['settings!io.ox/rss', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'io.ox/messaging/accounts/api', 'io.ox/core/strings'], function (settings, gt, dialogs, accountApi, strings) {
+            require(['settings!io.ox/portal', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'io.ox/messaging/accounts/api', 'io.ox/core/strings'], function (settings, gt, dialogs, accountApi, strings) {
                 var feedgroups = settings.get('groups'),
                     dialog = new dialogs.ModalDialog({ easyOut: true, async: true }),
                     $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
@@ -1067,7 +1043,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
         id: 'portal-settings-rss',
         draw : function (data) {
             var that = this;
-            require(['settings!io.ox/rss', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'io.ox/messaging/accounts/api', 'io.ox/core/strings'],
+            require(['settings!io.ox/portal', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'io.ox/messaging/accounts/api', 'io.ox/core/strings'],
             function (settings, gt, dialogs, accountApi, strings) {
                 var feedgroups = settings.get('groups'),
                     staticStrings = {
