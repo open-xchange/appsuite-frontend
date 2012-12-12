@@ -120,7 +120,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         var self = this;
                         self.$el.empty().append(
                             $('<div class="io-ox-settings-item io-ox-reddit-setting">')
-                            .attr({'data-subreddit': this.model.get('subreddit'), 'data-mode': this.model.get('mode')}).append(
+                            .data({subreddit: this.model.get('subreddit'), mode: this.model.get('mode'), key: data.key}).append(
                                 $('<div class="io-ox-setting-description">').append(
                                     $('<span data-property="subreddit" class="io-ox-reddit-name">'),
                                     $('<span data-property="mode" class="io-ox-reddit-mode">')
@@ -136,8 +136,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         return self;
                     },
                     events: {
-                        'click .io-ox-reddit-setting .action-edit': 'onEdit',
-                        'click .io-ox-reddit-setting .action-remove' : 'onDelete'
+                        'click .io-ox-reddit-setting .action-edit': 'onEdit'
                     },
                     onEdit: function (pEvent) {
                         var dialog = new dialogs.ModalDialog({
@@ -228,57 +227,10 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                 });
                             });
                         }
-                    },
-                    onDelete: function (pEvent) {
-                        var dialog = new dialogs.ModalDialog({
-                            easyOut: true
-                        });
-
-                        var subreddit = $(pEvent.target).parent(),
-                            name = subreddit.data('subreddit'),
-                            mode = subreddit.data('mode');
-
-                        if (subreddit) {
-                            subreddit = String(subreddit);
-                            var that = this;
-
-                            dialog.header($("<h4>").text(gt('Delete a Subreddit')))
-                                .append($('<span>').text(gt('Do you really want to delete the following subreddit?')))
-                                .append($('<ul>').append($('<li>').text(name + " (" + mode + ")")))
-                                .addButton('cancel', gt('Cancel'))
-                                .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
-                                .show()
-                                .done(function (action) {
-                                    if (action === 'delete') {
-                                        var newSubreddits = [];
-                                        _.each(subreddits, function (sub) {
-                                            if (sub.subreddit !== name || sub.subreddit === name && sub.mode !== mode) {
-                                                newSubreddits.push(sub);
-                                            }
-                                        });
-
-                                        subreddits = removeSubReddit(subreddits, name, mode);
-                                        settings.set('subreddits', subreddits);
-                                        settings.save();
-
-                                        var extId = 'reddit-' + name.replace(/[^a-z0-9]/g, '_') + '-' + mode.replace(/[^a-z0-9]/g, '_');
-
-                                        ext.point("io.ox/portal/widget").disable(extId);
-
-                                        require(['plugins/portal/reddit/register'], function (reddit) {
-                                            reddit.reload();
-                                            that.trigger('redraw');
-                                            ox.trigger("refresh^");
-                                        });
-                                    }
-                                    return false;
-                                });
-                        }
                     }
-                }),
+                });
 
-
-                removeSubReddit = function (subreddits, subreddit, mode) {
+                var removeSubReddit = function (subreddits, subreddit, mode) {
                     var newSubreddits = [];
                     _.each(subreddits, function (sub) {
                         if (sub.subreddit !== subreddit || sub.subreddit === subreddit && sub.mode !== mode) {
@@ -428,13 +380,11 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             .attr({'data-url': url,  'data-description': description, 'data-key': key, id: url}).append(
                                 $('<span class="io-ox-setting-description">').text(description),
                                 $('<i>').attr({'class': 'action-edit icon-edit', 'data-action': 'edit-feed', title: staticStrings.EDIT_FEED})
-                                //$('<i>').attr({'class': 'action-remove icon-remove', 'data-action': 'del-feed', title: staticStrings.DELETE_FEED}) //removed, new design means there can be only one, so deleting the tile does it
                             )
                         );
                         return self;
                     },
                     events: {
-                        'click .io-ox-tumblr-setting .action-remove': 'onDelete',
                         'click .io-ox-tumblr-setting .action-edit': 'onEdit'
                     },
                     onEdit: function (pEvent) {
@@ -523,46 +473,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                 });
                             });
                         }
-                    },
-                    onDelete: function (pEvent) {
-                        var dialog = new dialogs.ModalDialog({
-                            easyOut: true
-                        });
-                        var $myNode = $(pEvent.target).parent(),
-                            url = $myNode.data('url'),
-                            key = $myNode.data('key');
-
-                        if (url) {
-                            var that = this;
-
-                            dialog.header($("<h4>").text(gt('Delete a Blog')))
-                            .append($('<span>').text(gt('Do you really want to delete the following blog?')))
-                            .append($('<ul>').append($('<li>').text(url)))
-                            .addButton('cancel', gt('Cancel'))
-                            .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
-                            .show()
-                            .done(function (action) {
-                                if (action === 'delete') {
-                                    settings.remove('widgets/user/' + key);
-                                    settings.save();
-                                    $myNode.remove();
-                                    ox.trigger("refresh^");
-                                }
-                                return false;
-                            });
-                        }
                     }
-                }),
-
-                removeBlog = function (blogs, url) {
-                    var newblogs = [];
-                    _.each(blogs, function (sub) {
-                        if (sub.url !== url) {
-                            newblogs.push(sub);
-                        }
-                    });
-                    return newblogs;
-                };
+                });
 
                 $(that).append(new BlogSelectView().render().el);
             }); //END: require
@@ -751,15 +663,13 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                 .data({query: query, method: method, description: description, key: key}).append(
                                     $('<span class="io-ox-setting-description">').text(description),
                                     $('<i class="icon-edit action-edit">')
-//                                    $('<i class="icon-remove action-remove">') //removed, since there is only one stream now...
                                 )
                             );
 
                             return self;
                         },
                         events: {
-                            'click .io-ox-portal-flickr-setting .icon-edit': 'onEdit',
-                            'click .icon-remove': 'onDelete'
+                            'click .io-ox-portal-flickr-setting .icon-edit': 'onEdit'
                         },
                         onEdit: function (pEvent) {
                             var dialog = new dialogs.ModalDialog({
@@ -843,45 +753,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                         $error.show();
                                         dialog.idle();
                                     });
-                                });
-                            }
-                        },
-                        onDelete: function (pEvent) {
-                            var dialog = new dialogs.ModalDialog({
-                                    easyOut: true
-                                }),
-                                 $myNode = $(pEvent.target).parent(),
-                                 query = $myNode.data('query'),
-                                 key = $myNode.data('key'),
-                                 method = $myNode.data('method');
-                            console.log("onDelete", key, query, method);
-
-                            if (key && query && method) {
-                                query = String(query);
-                                var that = this;
-
-                                dialog.header($("<h4>").text(gt('Delete a stream')))
-                                    .append($('<span>').text(gt('Do you really want to delete the following stream?')))
-                                    .append($('<ul>').append(
-                                        $('<li>').text(query + " (" + method + ")")
-                                    ))
-                                .addButton('cancel', gt('Cancel'))
-                                .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
-                                .show()
-                                .done(function (action) {
-                                    if (action === 'delete') {
-
-                                        settings.remove('widgets/user/' + key);
-                                        settings.save();
-
-                                        $myNode.remove();
-                                        var extId = 'flickr-' + query.replace(/[^a-z0-9]/g, '_') + '-' + method.replace(/[^a-z0-9]/g, '_');
-
-                                        ext.point("io.ox/portal/widget").disable(extId);
-
-                                        ox.trigger("refresh^");
-                                    }
-                                    return false;
                                 });
                             }
                         }
