@@ -789,22 +789,23 @@ define('io.ox/mail/write/main',
             delete mail.data.nested_msgs;
 
             function cont() {
+                // start being busy
+                win.busy();
                 // close window now (!= quit / might be reopened)
-                win.busy().preQuit();
+                win.preQuit();
                 // send!
-                mailAPI.send(mail.data, mail.files)
-                    .always(function (result) {
-                        if (result.error) {
-                            win.idle().show();
-                            // TODO: check if backend just says "A severe error occured"
-                            notifications.yell(result);
-                        } else {
-                            notifications.yell('success', 'Mail has been sent');
-                            app.dirty(false);
-                            app.quit();
-                        }
-                        def.resolve(result);
-                    });
+                mailAPI.send(mail.data, mail.files, view.form.find('.oldschool')).always(function (result) {
+                    if (result.error) {
+                        win.idle().show();
+                        // TODO: check if backend just says "A severe error occured"
+                        notifications.yell(result);
+                    } else {
+                        notifications.yell('success', 'Mail has been sent');
+                        app.dirty(false);
+                        app.quit();
+                    }
+                    def.resolve(result);
+                });
             }
 
             // ask for empty subject

@@ -732,13 +732,13 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             var name = 'formpost_' + _.now(), def = $.Deferred(), data, form = options.form;
 
             $('#tmp').append(
-                $('<iframe>', { name: name, id: name, height: 1, width: 1}).hide()
+                $('<iframe>', { name: name, id: name, height: 1, width: 1, src: ox.base + '/blank.html' })
             );
 
             window.callback_new = function (response) {
-                $('#' + name).remove();
                 def[(response && response.error ? 'reject' : 'resolve')](response);
                 window.callback_new = data = form = def = null;
+                $('#' + name).remove();
             };
 
             data = JSON.stringify(options.data);

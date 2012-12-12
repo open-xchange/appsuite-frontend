@@ -243,7 +243,7 @@ define("io.ox/core/extPatterns/links",
         var o = _.extend(this, options);
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
-            return drawDropDown(o, baton);
+            return drawDropDown.call(this, o, baton);
         };
     };
 

@@ -843,22 +843,25 @@ define('io.ox/mail/view-detail',
             if (length > 0) {
                 var outer = $('<div>').addClass('list attachment-list').append(
                     $('<span>').addClass('io-ox-label').append(
-                        $.txt(gt.npgettext('plural', 'Attachment',
-                                           'Attachments', length)),
+                        $.txt(gt.npgettext('plural', 'Attachment', 'Attachments', length)),
                         $.txt('\u00A0\u00A0')
                     )
                 );
                 _(attachments).each(function (a, i) {
-                    var label = (a.filename || ('Attachment #' + i))
-                        // lower case file extensions for better readability
-                        .replace(/\.(\w+)$/, function (match) {
-                            return match.toLowerCase();
-                        });
-                    // draw
-                    var dd = drawAttachmentDropDown(outer, _.noI18n(label), a);
-                    // cut off long lists?
-                    if (i > 3 && length > 5) {
-                        dd.hide();
+                    try {
+                        var label = (a.filename || ('Attachment #' + i))
+                            // lower case file extensions for better readability
+                            .replace(/\.(\w+)$/, function (match) {
+                                return match.toLowerCase();
+                            });
+                        // draw
+                        var dd = drawAttachmentDropDown(outer, _.noI18n(label), a);
+                        // cut off long lists?
+                        if (i > 3 && length > 5) {
+                            dd.hide();
+                        }
+                    } catch (e) {
+                        console.error('mail.drawAttachment', e.message);
                     }
                 });
                 // add "[n] more ..."

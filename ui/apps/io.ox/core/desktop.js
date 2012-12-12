@@ -870,7 +870,7 @@ define("io.ox/core/desktop",
                     return this;
                 };
 
-                var BUSY_SELECTOR = 'input, select, textarea, button',
+                var BUSY_SELECTOR = 'input:not([type="file"], [type="hidden"]), select, textarea, button',
                     TOGGLE_CLASS = 'toggle-disabled';
 
                 this.busy = function (pct, sub) {
