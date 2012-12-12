@@ -125,7 +125,7 @@ define('io.ox/portal/main',
                 userSettings_0: {
                     plugin: 'plugins/portal/userSettings/register',
                     color: 'lightblue',
-                    index: 10
+                    index: -1
                 },
                 updater_0: {
                     plugin: 'plugins/portal/updater/register',

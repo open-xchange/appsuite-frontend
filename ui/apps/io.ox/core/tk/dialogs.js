@@ -81,7 +81,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
                     busy();
                 }
                 // trigger action event
-                self.trigger('action ' + action, data);
+                self.trigger('action ' + action, data, self);
                 // resolve & close?
                 if (!async) {
                     deferred.resolveWith(nodes.popup, [action, data, self.getContentNode().get(0)]);
