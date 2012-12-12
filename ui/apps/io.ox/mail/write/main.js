@@ -117,7 +117,7 @@ define('io.ox/mail/write/main',
             // add signature?
             if (index < view.signatures.length) {
                 signature = view.signatures[index];
-                text = $.trim(signature.signature_text);
+                text = $.trim(signature.content);
                 if (isHTML) {
                     ed.appendContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
                 } else {
@@ -638,6 +638,33 @@ define('io.ox/mail/write/main',
             return def;
         };
 
+        // edit draft
+        app.edit = function (data) {
+
+            var def = $.Deferred();
+
+            _.url.hash('app', 'io.ox/mail/write:compose'); // yep, edit is same as compose
+
+            app.cid = 'io.ox/mail:edit.' + _.cid(data); // here, for reuse it's edit!
+            data.msgref = data.folder_id + '/' + data.id;
+
+            win.busy().show(function () {
+                app.setMail({ data: data, mode: 'compose', initial: false })
+                .done(function () {
+                    app.getEditor().focus();
+                    win.idle();
+                    def.resolve();
+                })
+                .fail(function () {
+                    notifications.yell('error', gt('An error occured. Please try again.'));
+                    app.dirty(false).quit();
+                    def.reject();
+                });
+            });
+
+            return def;
+        };
+
         /**
          * Get mail
          */
@@ -913,6 +940,10 @@ define('io.ox/mail/write/main',
             }
             if (type === 'forward') {
                 return ox.ui.App.reuse('io.ox/mail:forward.' + _.cid(data));
+            }
+            if (type === 'edit') {
+                console.log('Hier?');
+                return ox.ui.App.reuse('io.ox/mail:edit.' + _.cid(data));
             }
         }
     };

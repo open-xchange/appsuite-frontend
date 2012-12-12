@@ -130,11 +130,7 @@ define('io.ox/mail/actions',
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
-                    var self = this;
-                    this.compose(baton.data).done(function () {
-                        self.setMsgRef(baton.data.folder_id + '/' + baton.data.id);
-                        self.markClean();
-                    });
+                    this.edit(baton.data);
                 });
             });
         }
@@ -186,6 +182,7 @@ define('io.ox/mail/actions',
                     var id = settings.get('folderpopup/last') || String(mail[0].folder_id);
                     var tree = new views.FolderTree(dialog.getBody(), {
                         type: 'mail',
+                        open: settings.get('folderpopup/open', []),
                         toggle: function (open) {
                             settings.set('folderpopup/open', open).save();
                         },

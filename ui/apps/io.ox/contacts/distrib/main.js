@@ -31,7 +31,8 @@ define('io.ox/contacts/distrib/main',
             container,
             model,
             view,
-            considerSaved = false;
+            considerSaved = false,
+            initialDistlist;
 
         app = ox.ui.createApp({
             name: 'io.ox/contacts/distrib',
@@ -40,6 +41,11 @@ define('io.ox/contacts/distrib/main',
         });
 
         app.create = function (folderId, initdata) {
+            initialDistlist = {
+                folder_id: folderId,
+                mark_as_distributionlist: true,
+                last_name: ''
+            };
 
             // set state
             app.setState({ folder: folderId });
@@ -54,11 +60,7 @@ define('io.ox/contacts/distrib/main',
                     last_name: ''
                 });
             } else {
-                model = contactModel.factory.create({
-                    folder_id: folderId,
-                    mark_as_distributionlist: true,
-                    last_name: ''
-                });
+                model = contactModel.factory.create(initialDistlist);
             }
 
             view = new ContactCreateDistView({ model: model });
@@ -152,21 +154,26 @@ define('io.ox/contacts/distrib/main',
         app.setQuit(function () {
             var def = $.Deferred();
             if (model.isDirty() && considerSaved === false) {
-                require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                    new dialogs.ModalDialog()
-                        .text(gt("Do you really want to discard your changes?"))
-                        .addPrimaryButton("delete", gt('Discard'))
-                        .addButton("cancel", gt('Cancel'))
-                        .show()
-                        .done(function (action) {
-                            console.debug("Action", action);
-                            if (action === 'delete') {
-                                def.resolve();
-                            } else {
-                                def.reject();
-                            }
-                        });
-                });
+                if (_.isEqual(initialDistlist, model.changedSinceLoading())) {
+                    def.resolve();
+                } else {
+                    require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                        new dialogs.ModalDialog()
+                            .text(gt("Do you really want to discard your changes?"))
+                            .addPrimaryButton("delete", gt('Discard'))
+                            .addButton("cancel", gt('Cancel'))
+                            .show()
+                            .done(function (action) {
+                                console.debug("Action", action);
+                                if (action === 'delete') {
+                                    def.resolve();
+                                } else {
+                                    def.reject();
+                                }
+                            });
+                    });
+                }
+
             } else {
                 def.resolve();
             }

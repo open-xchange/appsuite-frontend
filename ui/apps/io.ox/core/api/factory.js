@@ -161,7 +161,7 @@ define("io.ox/core/api/factory",
             getList: function (ids, useCache) {
                 // be robust
                 ids = ids ? [].concat(ids) : [];
-                // filter
+                // custom filter
                 if (o.filter) { ids = _(ids).filter(o.filter); }
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
@@ -184,8 +184,7 @@ define("io.ox/core/api/factory",
                 };
                 // empty?
                 if (ids.length === 0) {
-                    return $.Deferred().resolve([])
-                        .done(o.done.list || $.noop);
+                    return $.Deferred().resolve([]).done(o.done.list || $.noop);
                 } else if (ids.length === 1) {
                     // if just one item, we use get request
                     if (typeof ids[0] === 'number') {

@@ -92,7 +92,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
             });
         }
     });
-    ext.point('io.ox/portal/settings/detail/tile').extend({
+    ext.point('io.ox/portal/settings/detail/reddit').extend({
         index: 100,
         id: 'portal-settings-reddit',
         draw: function (data) {
@@ -388,7 +388,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
         }
     });
 
-    ext.point('io.ox/portal/settings/detail/tile').extend({
+    ext.point('io.ox/portal/settings/detail/tumblr').extend({
         index: 200,
         id: 'portal-settings-tumblr',
         draw : function (data) {
@@ -694,7 +694,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
         }
     });
 
-    ext.point('io.ox/portal/settings/detail/tile').extend({
+    ext.point('io.ox/portal/settings/detail/flickr').extend({
         index: 300,
         id: 'portal-settings-flickr',
         draw : function (data) {
@@ -1062,7 +1062,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
         }
     });
 
-    ext.point('io.ox/portal/settings/detail/tile').extend({
+    ext.point('io.ox/portal/settings/detail/rss').extend({
         index: 400,
         id: 'portal-settings-rss',
         draw : function (data) {

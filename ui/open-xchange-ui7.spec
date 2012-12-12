@@ -1,6 +1,7 @@
 Name:           open-xchange-ui7
 Version:        7.0.0
-Release:        1
+%define         ox_release 8
+Release:        %{ox_release}
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
 URL:            http://open-xchange.com
@@ -40,12 +41,22 @@ OX App Suite HTML5 client
 This package contains the manifest for installation on the backend.
 
 %package        dev
-Group:          Applications/Productivity
+Group:          Development/Libraries
 Summary:        SDK for the OX App Suite HTML5 client
 Requires:       nodejs >= 0.4.0
 
 %description    dev
 SDK for the OX App Suite HTML5 client
+
+## l10n ##
+#%package l10n-## lang ##
+#Group: Applications/Productivity
+#Summary: ## Lang ## translation of the OX App Suite HTML5 client
+#Requires: open-xchange-ui7
+#
+#%description l10n-## lang ##
+### Lang ## translation of the OX App Suite HTML5 client
+## end l10n ##
 
 %prep
 %setup -q
@@ -70,6 +81,7 @@ rm -r "%{buildroot}/opt/open-xchange-ui7-dev"
 %files
 %defattr(-,root,root)
 %{docroot}
+%exclude %{docroot}/apps/**/*.??_??.js
 %doc readme.txt
 
 %files manifest
@@ -82,6 +94,12 @@ rm -r "%{buildroot}/opt/open-xchange-ui7-dev"
 %dir /opt/open-xchange-ui7-dev
 /opt/open-xchange-ui7-dev
 %attr(644,root,root) /opt/open-xchange-ui7-dev/lib/sax-js/examples/switch-bench.js
+
+## l10n ##
+#%files l10n-## lang ##
+#%defattr(-,root,root)
+#%{docroot}/apps/**/*.## Lang ##.js
+## end l10n ##
 
 %changelog
 * Thu Nov 10 2011 viktor.pracht@open-xchange.com

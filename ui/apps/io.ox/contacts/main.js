@@ -141,9 +141,13 @@ define("io.ox/contacts/main",
             // get contact
             right.busy(true);
             app.currentContact = obj;
-            api.get(api.reduce(obj))
-                .done(_.lfo(drawContact))
-                .fail(_.lfo(drawFail, obj));
+            if (obj && obj.id !== undefined) {
+                api.get(api.reduce(obj))
+                    .done(_.lfo(drawContact))
+                    .fail(_.lfo(drawFail, obj));
+            } else {
+                console.error('showContact', obj);
+            }
         };
 
         drawContact = function (data) {

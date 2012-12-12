@@ -24,18 +24,22 @@ define('io.ox/core/cache/localstorage', function () {
         access = {},
         that;
 
-    function deferredSet(cid, json) {
-        setTimeout(function () {
-            try {
-                localStorage.removeItem(cid);
-                localStorage.setItem(cid, json);
-            } catch (e) {
-                if (e.name === 'QUOTA_EXCEEDED_ERR') {
-                    console.warn('localStorage: Exceeded quota!', e, 'Object size', Math.round(json.length / 1024) + 'Kb');
-                    that.gc();
-                }
+    function syncSet(cid, json) {
+        try {
+            localStorage.removeItem(cid);
+            localStorage.setItem(cid, json);
+        } catch (e) {
+            if (e.name === 'QUOTA_EXCEEDED_ERR') {
+                console.warn('localStorage: Exceeded quota!', e, 'Object size', Math.round(json.length / 1024) + 'Kb');
+                that.gc();
             }
-        }, 0);
+        }
+    }
+
+    function deferredSet(cid, json) {
+        _.defer(function () {
+            syncSet(cid, json);
+        });
     }
 
     that = {
@@ -138,8 +142,13 @@ define('io.ox/core/cache/localstorage', function () {
             access[cid] = _.now();
 
             if (data.length <= MAX_LENGTH) {
-                // don't block
-                deferredSet(cid, data);
+                if (/app-cache\.index\.savepoints$/.test(cid)) {
+                    // need to be sync here; otherwise failover fails
+                    syncSet(cid, data);
+                } else {
+                    // don't block
+                    deferredSet(cid, data);
+                }
             }
 
             return $.Deferred().resolve(key);
@@ -148,9 +157,7 @@ define('io.ox/core/cache/localstorage', function () {
         remove: function (key) {
             var cid = id + '.' + key;
             delete fluent[cid];
-            setTimeout(function () {
-                localStorage.removeItem(cid);
-            }, 0);
+            localStorage.removeItem(cid); // do this sync
             return $.when();
         },
 

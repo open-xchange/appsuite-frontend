@@ -8,10 +8,14 @@ ifneq (,$(or $(filter noopt,$(DEB_BUILD_OPTIONS)),\
 	FLAGS += debug=1
 endif
 
-override_dh_auto_build:
-	sh build.sh $(FLAGS)
+override_dh_auto_install:
+	sh build.sh \
+	    builddir=debian/open-xchange-ui7/var/www/appsuite \
+	    l10nDir=debian/open-xchange-ui7-l10n-@lang@/var/www/appsuite \
+	    manifestDir=debian/open-xchange-ui7-manifest/opt/open-xchange/ui7 \
+	    $(FLAGS) --trace
 	sed -e 's#OX_UI7_DEV=.*#OX_UI7_DEV="/opt/open-xchange-ui7-dev"#' \
-	   bin/build-ui7 > tmp/build-ui7
+	    bin/build-ui7 > tmp/build-ui7
 	chmod +x tmp/build-ui7
 
 override_dh_auto_clean:

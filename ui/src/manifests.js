@@ -70,6 +70,10 @@ define(function () {
         "path": "io.ox/conversations/main"
     },
     {
+        namespace: ['io.ox/mail/settings/pane', 'io.ox/core/updates/updater'],
+        path: 'io.ox/mail/settings/signatures/register'
+    },
+    {
         "namespace": "io.ox/dev/testing/main",
         "path": "io.ox/core/test"
     },
@@ -194,16 +198,16 @@ define(function () {
         "requires": "text",
         "path": "io.ox/office/text/main"
     },
-    {
-        "requires": "text",
-        "path": "io.ox/office/text/fileActions",
-        "namespace": "io.ox/files/actions"
-    },
-    {
-        "requires": "document_preview",
-        "path": "io.ox/office/preview/fileActions",
-        "namespace": "io.ox/files/actions"
-    },
+    // {
+    //     "requires": "text",
+    //     "path": "io.ox/office/text/fileActions",
+    //     "namespace": "io.ox/files/actions"
+    // },
+    // {
+    //     "requires": "document_preview",
+    //     "path": "io.ox/office/preview/fileActions",
+    //     "namespace": "io.ox/files/actions"
+    // },
     {
         "title": "Portal",
         "company": "Open-Xchange",

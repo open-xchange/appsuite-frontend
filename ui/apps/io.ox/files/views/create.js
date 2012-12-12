@@ -1,3 +1,16 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2012
+ * Mail: info@open-xchange.com
+ *
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ */
+
 define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensions", "io.ox/files/api", "text!io.ox/files/views/snippets.html", "gettext!io.ox/files/files"], function (dialogs, ext, filesApi, snippetsHTML, gt) {
 
     "use strict";
@@ -160,12 +173,14 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         type: "primary",
         perform: function (fileEntry, states, cb) {
             // since I have no clue what this all does I get the form this way;
-            var form = $(states.file.node[0]).closest('form');
+            var node = states.file.node.first(),
+                files = node.prop('files') || [],
+                form = node.closest('form');
             filesApi.uploadFile({
-                file: _(states.file.node[0].files).first(),
+                form: form,
+                file: _(files).first(),
                 json: fileEntry,
-                folder: fileEntry.folder,
-                form: form
+                folder: fileEntry.folder
             })
             .done(cb);
         }

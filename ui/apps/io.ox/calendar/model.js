@@ -46,11 +46,12 @@ define('io.ox/calendar/model',
             defaults: {
                 start_date: defStart.getTime(),
                 end_date: defStart.getTime() + date.HOUR,
-                recurrence_type: 0,
-                alarm: 15
+                recurrence_type: 0
             },
             init: function () {
+
                 var self = this;
+
                 this.on('create:fail update:fail', function (response) {
                     if (response.conflicts) {
                         self.trigger('conflicts', response.conflicts);

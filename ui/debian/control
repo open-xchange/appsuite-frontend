@@ -22,3 +22,10 @@ Package: open-xchange-ui7-dev
 Architecture: all
 Depends: nodejs (>= 0.4.0)
 Description: SDK for the OX App Suite HTML5 client
+
+## l10n ##
+#Package: open-xchange-ui7-l10n-## lang ##
+#Architecture: all
+#Depends: open-xchange-ui7
+#Description: ## Lang ## translation of the OX App Suite HTML5 client
+## end l10n ##

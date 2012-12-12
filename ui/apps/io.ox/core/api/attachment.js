@@ -15,11 +15,11 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                                      "io.ox/core/event",
                                      'io.ox/core/config'], function (http, Events, config) {
     "use strict";
-    
+
     var api = {
         //gets all attachments for a specific object, for exsample a task
         getAll: function (options) {
-            
+
             return http.GET({
                 module: "attachment",
                 params: {
@@ -36,7 +36,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                 return _(data).reject(function (attachment) { return attachment.rtf_flag; }); // Filter out outlook-special attachments
             });
         },
-        
+
         //removes attachments. data contains attachment ids
         remove: function (options, data) {
             var self = this;
@@ -57,7 +57,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                 });
             });
         },
-        
+
         create: function (options, data) {
             var self = this;
             var params = {action: "attach"},
@@ -65,7 +65,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                         attached: options.id,
                         folder: options.folder || options.folder_id},
                 formData = new FormData();
-            
+
             data = data || [];
             data = _.isArray(data) ? data : [data];
             for (var i = 0; i < data.length; i++) {
@@ -85,10 +85,10 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                 });
             });
         },
-        
+
         //builds URL to download/preview File
         getUrl: function (data, mode) {
-            
+
             var url = ox.apiRoot + '/attachment';
             // inject filename for more convenient file downloads
             url += (data.filename ? '/' + encodeURIComponent(data.filename) : '') + '?' +
@@ -110,14 +110,14 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                 return url;
             }
         },
-        
+
         save: function (data, target) {
             //multiple does not work, because module overides module in params. So we need to do it one by one
             // be robust
             target = target || config.get('folder.infostore');
-            
+
             http.PUT({
-                module: 'infostore',
+                module: 'files',
                 params: {
                     action: 'saveAs',
                     folder: data.folder,
@@ -134,9 +134,9 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                 });
             });
         }
-        
+
     };
-    
+
     Events.extend(api);
 
     return api;

@@ -369,66 +369,6 @@ define("io.ox/core/main",
             }
         });
 
-        /**
-         * Exemplary upsell widget
-         */
-        ext.point("io.ox/core/desktop").extend({
-            id: "upsell",
-            draw: function () {
-                // does nothing - just to demo an exemplary upsell path
-                this.append(
-                    $('<div>').css({
-                        position: "absolute",
-                        width: "270px",
-                        height: "140px",
-                        right: "50px",
-                        bottom: "50px"
-                    })
-                    .append(
-                        $("<div>", { id: "io-ox-welcome-upsell" })
-                        .addClass('abs')
-                        .css({
-                            padding: "30px",
-                            zIndex: 1
-                        })
-                        .text("Confidential! Not to be disclosed to third parties.")
-                    )
-                );
-            }
-        });
-
-        /*
-        ext.point("io.ox/core/desktop").extend({
-            id: "welcome",
-            draw: function () {
-
-                var d, update;
-
-                this.append(
-                    $("<div>", { id: "io-ox-welcome" })
-                    .addClass("abs")
-                    .append(
-                        $("<div>").addClass("clear-title")
-                        .append(
-                            // split user into three parts, have to use inject here to get proper node set
-                            _(String(ox.user).split(/(\@)/)).inject(function (tmp, s, i) {
-                                    return tmp.add($("<span>").text(String(s)).addClass(i === 1 ? "accent": ""));
-                                }, $())
-                        )
-                    )
-                    .append(
-                        d = $("<div>").addClass("clock clear-title").text("")
-                    )
-                );
-                update = function () {
-                    //d.text(new date.Local().format(date.FULL_DATE)); // FIXME: Seems to die on android
-                };
-                update();
-                _.tick(1, "minute", update);
-            }
-        });
-        */
-
         var drawDesktop = function () {
             ext.point("io.ox/core/desktop").invoke("draw", $("#io-ox-desktop"), {});
             drawDesktop = $.noop;
@@ -473,8 +413,23 @@ define("io.ox/core/main",
         });
 
         new Stage('io.ox/core/stages', {
-            id: 'restore-check',
+            id: 'update-tasks',
             index: 200,
+            run: function () {
+                if (ox.online) {
+                    var def = $.Deferred();
+                    require(['io.ox/core/updates/updater'], function (updater) {
+                        updater.runUpdates().done(def.resolve).fail(def.reject);
+                    }).fail(def.reject);
+                    
+                    return def;
+                }
+            }
+        });
+
+        new Stage('io.ox/core/stages', {
+            id: 'restore-check',
+            index: 300,
             run: function (baton) {
                 return ox.ui.App.canRestore().done(function (canRestore) {
                     baton.canRestore = canRestore;
@@ -484,7 +439,7 @@ define("io.ox/core/main",
 
         new Stage('io.ox/core/stages', {
             id: 'restore-confirm',
-            index: 300,
+            index: 400,
             run: function (baton) {
 
                 if (baton.canRestore) {
@@ -537,7 +492,7 @@ define("io.ox/core/main",
 
         new Stage('io.ox/core/stages', {
             id: 'restore',
-            index: 400,
+            index: 500,
             run: function (baton) {
                 if (baton.canRestore) {
                     // clear auto start stuff (just conflicts)
@@ -560,7 +515,7 @@ define("io.ox/core/main",
 
         new Stage('io.ox/core/stages', {
             id: 'load',
-            index: 500,
+            index: 600,
             run: function (baton) {
 
                 return baton.loaded.done(function (instantFadeOut) {

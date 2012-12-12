@@ -94,7 +94,7 @@ define('io.ox/core/commons-folderview',
             index: 900,
             draw: function (baton) {
                 this.append(
-                    $('<a h ef="#" class="toolbar-action pull-right"><i class="icon-remove"></a>')
+                    $('<a href="#" class="toolbar-action pull-right"><i class="icon-remove"></a>')
                     .on('click', { app: baton.app }, fnClose)
                 );
             }
@@ -310,7 +310,6 @@ define('io.ox/core/commons-folderview',
             var id = _(selection).first();
             api.get({ folder: id }).done(function (data) {
                 if (data.module === options.type) {
-                    app.folder.unset();
                     if (options.permanent) {
                         app.folder.set(id);
                     } else {
@@ -425,7 +424,7 @@ define('io.ox/core/commons-folderview',
                                 if (newId !== id) tree.select(newId);
                             });
                         } else {
-                            tree.root.repaint();
+                            tree.repaint();
                             tree.idle();
                         }
                     });

@@ -279,7 +279,7 @@ define('io.ox/core/cache',
                         }, false);
                     if (containsNull) {
                         if (getter) {
-                            getter().done(def.resolve);
+                            getter().then(def.resolve, def.reject);
                         } else {
                             def.resolve(null);
                         }
@@ -289,7 +289,6 @@ define('io.ox/core/cache',
                         def.resolve(args);
                     }
                 });
-
                 return def;
             } else {
                 // simple value

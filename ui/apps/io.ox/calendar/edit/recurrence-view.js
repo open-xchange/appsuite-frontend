@@ -10,7 +10,7 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/core/tk/config-sentence", "io.ox/core/date", 'io.ox/core/tk/keys', 'gettext!io.ox/calendar/edit/main'], function (model, ConfigSentence, dateAPI, KeyListener, gt) {
+define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/core/tk/config-sentence", "io.ox/core/date", 'io.ox/core/tk/keys', 'gettext!io.ox/calendar/edit/main', 'less!io.ox/calendar/edit/style.less'], function (model, ConfigSentence, dateAPI, KeyListener, gt) {
     "use strict";
     var DAYS = model.DAYS;
     var RECURRENCE_TYPES = model.RECURRENCE_TYPES;
@@ -90,7 +90,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             });
 
             $dayList.append($('<li>').append(
-                "close",
+                gt("close"),
                 $('<i class="icon-remove">')
             ).on("click", function () {
                 $anchor.popover('hide');
@@ -228,14 +228,14 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
     var RecurrenceView = function (options) {
         _.extend(this, {
-
             init: function () {
                 var self = this;
+                this.$el.addClass("io-ox-recurrence-view");
 
                 // Construct the UI
                 this.controls = {
                     checkbox: $('<input type="checkbox">'),
-                    detailToggle: $('<a href="#">').text(gt("Edit")).hide(),
+                    detailToggle: $('<a href="#" class="recurrence-detail-toggle">').css({'float': 'right'}).text(gt("Edit")).hide(),
                     typeRadios: {
                         daily: $('<input type="radio" name="recurrence_type" value="daily">'),
                         weekly: $('<input type="radio" name="recurrence_type" value="weekly">'),
@@ -246,11 +246,11 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
                 this.nodes = {
                     summary: $('<span>'),
-                    typeChoice: $('<div class="row-fluid">').hide(),
-                    hint: $('<div class="row-fluid muted">').hide(),
-                    alternative1: $('<div class="row-fluid">').hide(),
-                    alternative2: $('<div class="row-fluid">').hide(),
-                    endsChoice: $('<div class="row-fluid">').hide()
+                    typeChoice: $('<div class="row-fluid inset">').hide(),
+                    hint: $('<div class="row-fluid muted inset">').hide(),
+                    alternative1: $('<div class="row-fluid inset">').hide(),
+                    alternative2: $('<div class="row-fluid inset">').hide(),
+                    endsChoice: $('<div class="row-fluid inset">').hide()
                 };
 
                 this.nodes.typeChoice.append(
@@ -372,7 +372,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                                 8: gt("September"),
                                 9: gt("October"),
                                 10: gt("November"),
-                                11: gt("Cecember")
+                                11: gt("December")
                             },
                             initial: 2
                         }
@@ -802,8 +802,9 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             },
             showMore: function () {
                 this.more = true;
+                this.$el.addClass("io-ox-recurrence-view-active");
                 this.controls.detailToggle.show();
-                this.controls.detailToggle.text(gt("Hide"));
+                this.controls.detailToggle.empty().append($('<i class="icon-remove">'));
                 this.nodes.summary.show();
                 this.nodes.typeChoice.show();
                 this.nodes.hint.show();
@@ -813,6 +814,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             },
             showLess: function () {
                 this.more = false;
+                this.$el.removeClass("io-ox-recurrence-view-active");
                 this.controls.detailToggle.text(gt("Edit"));
                 this.nodes.typeChoice.hide();
                 this.nodes.hint.hide();
@@ -980,9 +982,9 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     $('<div class="row-fluid">').append(
                         $('<label class="checkbox control-label desc">').append(
                             this.controls.checkbox,
-                            this.nodes.summary
-                        ),
-                        this.controls.detailToggle
+                            this.nodes.summary,
+                            this.controls.detailToggle
+                        )
                     ),
                     $('<div class="row-fluid">&nbsp;</div>'),
                     this.nodes.typeChoice,

@@ -18,7 +18,7 @@
 }
 
 .edit-contact {
-	
+
 	.form-horizontal input.span3.control {
     width: 206px;
     }
@@ -30,7 +30,7 @@
     .form-horizontal .control-group {
         margin-bottom: 10px;
     }
-    
+
    	.form-horizontal .private-flag {
    		margin-left: 180px;
    	}
@@ -77,5 +77,27 @@
 
     .span2.header-pic {
     	width: 160px;
+    }
+
+    .picture-uploader {
+        width: 100px;
+        height: 100px;
+        display: inline-block;
+        float: left;
+        background-position: right top;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-clip: content-box;
+    }
+
+    .picture-uploader .close {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        opacity: 0.6;
+        width: 24px;
+        height: 24px;
+        text-align: center;
+        background-color: #fff;
     }
 }

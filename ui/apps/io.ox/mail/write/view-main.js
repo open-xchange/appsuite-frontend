@@ -27,9 +27,10 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/tk/autocomplete',
      'io.ox/core/api/autocomplete',
      'io.ox/core/api/account',
+     'io.ox/core/api/snippets',
      'io.ox/core/strings',
      'gettext!io.ox/mail'
-    ], function (ext, links, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, dialogs, autocomplete, AutocompleteAPI, accountAPI, strings, gt) {
+    ], function (ext, links, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, gt) {
 
     'use strict';
 
@@ -68,7 +69,7 @@ define("io.ox/mail/write/view-main",
     var view = View.extend({
 
         initialize: function () {
-            this.signatures = [];
+            var self = this;
             this.sections = {};
         },
 
@@ -328,39 +329,61 @@ define("io.ox/mail/write/view-main",
             }
 
             // Signatures
-            if (this.signatures.length) {
-                this.addSection('signatures', gt('Signatures'), false, true)
-                .append(
-                    _(this.signatures.concat(dummySignature))
-                    .inject(function (memo, o, index) {
-                        var preview = (o.signature_text || '')
-                            .replace(/\s\s+/g, ' ') // remove subsequent white-space
-                            .replace(/(\W\W\W)\W+/g, '$1 '); // reduce special char sequences
-                        preview = preview.length > 150 ? preview.substr(0, 150) + ' ...' : preview;
-                        return memo.add(
-                            $('<div>').addClass('section-item pointer')
-                            .addClass(index >= this.signatures.length ? 'signature-remove' : '')
-                            .append(
-                                $('<a>', { href: '#', tabindex: '5' })
-                                .on('click dragstart', $.preventDefault)
-                                .text(o.signature_name)
-                            )
-                            .append(
-                                preview.length ?
-                                    $('<div>').addClass('signature-preview')
-                                    .text(_.noI18n(' ' + preview)) :
-                                    $()
-                            )
-                            .on('click', { index: index }, function (e) {
-                                e.preventDefault();
-                                app.setSignature(e);
-                            })
-                        );
-                    }, $(), this)
-                );
+            (function () {
+                var signatureNode = self.addSection('signatures', gt('Signatures'), false, true);
 
-                this.addLink('signatures', gt('Signatures'));
-            }
+                function fnDrawSignatures() {
+                    snippetAPI.getAll('signature').done(function (signatures) {
+                        self.signatures = signatures;
+                        signatureNode.empty();
+                        signatureNode.append(
+                            _(signatures.concat(dummySignature))
+                            .inject(function (memo, o, index) {
+                                var preview = (o.content || '')
+                                    .replace(/\s\s+/g, ' ') // remove subsequent white-space
+                                    .replace(/(\W\W\W)\W+/g, '$1 '); // reduce special char sequences
+                                preview = preview.length > 150 ? preview.substr(0, 150) + ' ...' : preview;
+                                return memo.add(
+                                    $('<div>').addClass('section-item pointer')
+                                    .addClass(index >= signatures.length ? 'signature-remove' : '')
+                                    .append(
+                                        $('<a>', { href: '#', tabindex: '5' })
+                                        .on('click dragstart', $.preventDefault)
+                                        .text(o.displayname)
+                                    )
+                                    .append(
+                                        preview.length ?
+                                            $('<div>').addClass('signature-preview')
+                                            .text(_.noI18n(' ' + preview)) :
+                                            $()
+                                    )
+                                    .on('click', { index: index }, function (e) {
+                                        e.preventDefault();
+                                        app.setSignature(e);
+                                    })
+                                );
+                            }, $(), self)
+                        );
+                        if (signatures.length === 0) {
+                            self.sections.signaturesLink.hide();
+                        } else {
+                            self.sections.signaturesLink.show();
+                        }
+
+                    });
+                }
+
+                self.addLink('signatures', gt('Signatures'));
+            
+                fnDrawSignatures();
+                snippetAPI.on('refresh.all', fnDrawSignatures);
+                signatureNode.on('dispose', function () {
+                    snippetAPI.off('refresh.all', fnDrawSignatures);
+                });
+
+            }());
+        
+
 
             // FROM
             this.addSection('from', gt('From'), false, true)
@@ -491,7 +514,7 @@ define("io.ox/mail/write/view-main",
         }
     });
 
-    var dummySignature = { signature_name: gt('No signature') };
+    var dummySignature = { displayname: gt('No signature') };
     var handleFileSelect, addUpload, supportsPreview, previewAttachment, createPreview;
 
     supportsPreview = function (file) {

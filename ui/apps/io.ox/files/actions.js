@@ -30,18 +30,14 @@ define('io.ox/files/actions',
 	new Action('io.ox/files/actions/switch-to-list-view', {
         requires: true,
         action: function (baton) {
-            require(['io.ox/files/list/perspective'], function (perspective) {
-                perspective.show(baton.app, { perspective: 'list' });
-            });
+            ox.ui.Perspective.show(baton.app, 'list');
         }
     });
 
     new Action('io.ox/files/actions/switch-to-icon-view', {
         requires: true,
         action: function (baton) {
-            require(['io.ox/files/icons/perspective'], function (perspective) {
-                perspective.show(baton.app, { perspective: 'icons' });
-            });
+            ox.ui.Perspective.show(baton.app, 'icons');
         }
     });
 
@@ -60,7 +56,11 @@ define('io.ox/files/actions',
         }
     });
 
-    new Action('io.ox/files/actions/share', {
+    new Action('io.ox/files/actions/publish', {
+        requires: function () {
+            // DISABLED, since for no given full PUB/SUB support
+            return false;
+        },
         action: function (baton) {
             require(['io.ox/publications/wizard'], function (wizard) {
                 wizard.oneClickAdd(baton.app.folder.get());
@@ -348,6 +348,9 @@ define('io.ox/files/actions',
     // version specific actions
 
     new Action('io.ox/files/versions/actions/makeCurrent', {
+        requires: function (e) {
+            return !e.context.current_version;
+        },
         action: function (baton) {
             var data = baton.data;
             api.update({
@@ -400,13 +403,6 @@ define('io.ox/files/actions',
         ref: POINT + '/actions/upload'
     });
 
-    new ActionLink(POINT + '/links/toolbar/default', {
-        index: 300,
-        id: "share",
-        label: gt("Share current folder"),
-        ref: "io.ox/files/actions/share"
-    });
-
     // VIEWS
 
     new ActionGroup(POINT + '/links/toolbar', {
@@ -431,6 +427,24 @@ define('io.ox/files/actions',
         label: gt('List'),
         ref: 'io.ox/files/actions/switch-to-list-view'
     });
+
+    // PUBLISH
+
+    // disabled until we have full pub/sub support
+    // new ActionGroup(POINT + '/links/toolbar', {
+    //     id: 'publish',
+    //     index: 150,
+    //     label: gt('Publish'),
+    //     icon: function () {
+    //         return $('<i class="icon-rss">');
+    //     }
+    // });
+
+    // new ActionLink(POINT + '/links/toolbar/publish', {
+    //     id: "publish",
+    //     label: gt("Publish current folder"),
+    //     ref: "io.ox/files/actions/publish"
+    // });
 
     // INLINE
 
@@ -529,10 +543,7 @@ define('io.ox/files/actions',
         id: 'makeCurrent',
         index: 250,
         label: gt("Make this the current version"),
-        ref: "io.ox/files/versions/actions/makeCurrent",
-        isEnabled: function (file) {
-            return !file.current_version;
-        }
+        ref: "io.ox/files/versions/actions/makeCurrent"
     }));
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
