@@ -394,7 +394,7 @@ define('io.ox/backbone/forms',
 
     function InputField(options) {
         options = _.extend({
-            changeOnKeyUp: false
+            changeAppTitleOnKeyUp: false
         }, options);
         var modelEvents = {};
         modelEvents['change:' + options.attribute] = 'updateInputField';
