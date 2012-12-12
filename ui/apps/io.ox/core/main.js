@@ -243,7 +243,7 @@ define("io.ox/core/main",
             id: 'help',
             index: 200,
             draw: function () {
-                var helpLink = "/appsuite/help/" + ox.language + "/index.htm";
+                var helpLink = "help/" + ox.language + "/index.html";
                 this.append(
                     $('<li>').append(
                         $('<a target="_blank">').attr({href: helpLink}).text(gt('Help'))
