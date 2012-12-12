@@ -322,6 +322,9 @@ define("io.ox/core/main",
             draw: function () {
                 addLauncher("left", $('<i class="icon-th icon-white">'), function () {
                     return require(["io.ox/launchpad/main"], function (m) {
+                        launchers.children().removeClass('active-app');
+                        launcherDropdown.children().removeClass('active-app');
+                        launchers.children().first().addClass('active-app');
                         m.show();
                     });
                 })
