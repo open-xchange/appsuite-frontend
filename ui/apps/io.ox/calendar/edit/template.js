@@ -136,7 +136,7 @@ define('io.ox/calendar/edit/template',
         control: '<input type="text" class="span12">',
         attribute: 'title',
         label: gt('Subject'),
-        changeOnKeyUp: true
+        changeAppTitleOnKeyUp: true
     }));
 
     // location input
