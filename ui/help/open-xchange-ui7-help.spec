@@ -53,9 +53,11 @@ rm -r "%{buildroot}%{docroot}"
 %files en-us
 %defattr(-,root,root)
 %dir %{docroot}
+%dir %{docroot}/help
 %{docroot}/help/en_US
 
 %files de-de
 %defattr(-,root,root)
 %dir %{docroot}
+%dir %{docroot}/help
 %{docroot}/help/de_DE
