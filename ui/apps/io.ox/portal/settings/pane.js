@@ -89,7 +89,6 @@ define('io.ox/portal/settings/pane',
             var $elem = $(pEvent.target),
                 color = $elem.data('color'),
                 key = $elem.parents('.io-ox-portal-setting').data('key');
-            console.log("ELEM", key, color, $elem);
             settings.set('widgets/user/' + key + '/color', color);
             settings.save();
         };
@@ -152,16 +151,16 @@ define('io.ox/portal/settings/pane',
             });
 
             _(widgets).each(function (widget) { //now draw the setting box for every plugin
-                console.log("WiDGET", widget);
 
                 var $additionalContent = $('<div class="io-ox-setting-details">'),
                     id = widget.plugin.replace(/[^A-Za-z0-9]/g, '-'),
                     type = widget.key.substring(0, widget.key.lastIndexOf('_')),
-                    name = widget.key, //TODO
+                    name = widget.description,
                     key = widget.key;
+                console.log("DEBUG", id, type, name, key, widget);
 
                 var $thisSetting = $('<li class="io-ox-portal-setting">').attr({id: id }).data({name: name, type: type, key: key}).append( //basics
-                    $('<span class="io-ox-setting-title io-ox-portal-settings-title">').text(name),
+                    $('<span class="io-ox-setting-title io-ox-portal-settings-title">').text(name || key),
                     $colorSelect.clone(true),
                     $optionsButton.clone(true),
                     $additionalContent.hide()
@@ -170,12 +169,16 @@ define('io.ox/portal/settings/pane',
                 if (!widget.enabled) {
                     $thisSetting.addClass('disabled');
                 }
-                require([widget.plugin], function () {
-                    var list = ext.point('io.ox/portal/widget/' + type).list();
-                    if (list.length) {
-                        $thisSetting.find('.io-ox-portal-settings-title').text(list[0].title);
-                    }
-                });
+
+                if (!name) {
+                    require([widget.plugin], function () {
+                        var list = ext.point('io.ox/portal/widget/' + type).list();
+                        if (list.length) {
+                            name = list[0].title;
+                            $thisSetting.find('.io-ox-portal-settings-title').text(name).data('name', name);
+                        }
+                    });
+                }
 
                 if (widget.color) { //color
                     $thisSetting.css('color', widget.color);
