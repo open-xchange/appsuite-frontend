@@ -30,7 +30,7 @@ define('io.ox/core/extPatterns/stage', ['io.ox/core/extensions'], function (ext)
                 try {
                     ((list.shift().run || $.noop)(baton) || READY).then(next, def.reject);
                 } catch (e) {
-                    console.error('Stage', id, e);
+                    console.error('Stage', e, 'id', id, 'baton', baton, 'list', list);
                 }
             } else {
                 def.resolve();

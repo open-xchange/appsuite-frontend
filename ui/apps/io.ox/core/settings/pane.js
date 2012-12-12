@@ -21,9 +21,9 @@ define('io.ox/core/settings/pane',
          'settings!io.ox/core',
          'gettext!io.ox/core/settings'],
          function (ext, BasicModel, views, forms, http, appAPI, settings, gt) {
-    
+
     'use strict';
-    
+
     var point = views.point("io.ox/core/settings/entry"),
         SettingView = point.createView({ tagName: 'form', className: 'form-horizontal'}),
         reloadMe = ['language', 'timezone', 'theme', 'refreshInterval'];
@@ -36,14 +36,13 @@ define('io.ox/core/settings/pane',
         draw: function () {
             var model = settings.createModel(BasicModel);
             model.on('change', function (model, e) {
-                settings.save().done(function () {
-                    var showNotice = _(reloadMe).any(function (attr) {
-                        return e.changes[attr];
-                    });
-                    if (showNotice) {
-                        require("io.ox/core/notifications").yell("success", gt("The setting has been saved and will become active when you enter the application the next time."));
-                    }
-                }).fail(require("io.ox/core/notifications").yell);
+                settings.save();
+                var showNotice = _(reloadMe).any(function (attr) {
+                    return e.changes[attr];
+                });
+                if (showNotice) {
+                    require("io.ox/core/notifications").yell("success", gt("The setting has been saved and will become active when you enter the application the next time."));
+                }
             });
             this.append(
                 $('<div class="clear-title">').text(gt("Basic settings")),
@@ -97,7 +96,7 @@ define('io.ox/core/settings/pane',
 
         // Themes
         var availableThemes = settingOptions.tree.themes;
-       
+
         if (!_(availableThemes).isEmpty() && settings.isConfigurable('theme')) {
             point.extend(new forms.SelectControlGroup({
                 id: 'theme',

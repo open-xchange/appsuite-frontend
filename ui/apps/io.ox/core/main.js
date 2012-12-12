@@ -128,7 +128,7 @@ define("io.ox/core/main",
         }
     }
 
-    setInterval(globalRefresh, settings.get("refreshInterval"));
+    setInterval(globalRefresh, settings.get("refreshInterval", 30000));
 
     function launch() {
 
@@ -392,16 +392,23 @@ define("io.ox/core/main",
 
         var baton = ext.Baton({
             block: $.Deferred(),
-            autoLaunch: _.url.hash("app") ? _.url.hash("app").split(/,/) : []
+            autoLaunch: _.url.hash("app") ? _.url.hash("app").split(/,/) : [].concat(settings.get('autoStart'))
         });
 
-        baton.autoLaunchModules = _(baton.autoLaunch).map(function (m) { return m.split(/:/)[0] + '/main'; });
+        var getAutoLaunchDetails = function (str) {
+            var pair = str.split(/:/), app = pair[0], method = pair[1] || '';
+            return { app: (/\/main$/).test(app) ? app : app + '/main', method: method };
+        };
+
+        baton.autoLaunchApps = _(baton.autoLaunch).map(function (m) {
+            return getAutoLaunchDetails(m).app;
+        });
 
         // start loading stuff
         baton.loaded = $.when(
             baton.block,
             ext.loadPlugins(),
-            require(baton.autoLaunchModules),
+            require(baton.autoLaunchApps),
             require(['io.ox/core/api/account']).pipe(function (api) { return api.all(); })
         );
 
@@ -421,7 +428,7 @@ define("io.ox/core/main",
                     require(['io.ox/core/updates/updater'], function (updater) {
                         updater.runUpdates().done(def.resolve).fail(def.reject);
                     }).fail(def.reject);
-                    
+
                     return def;
                 }
             }
@@ -497,7 +504,7 @@ define("io.ox/core/main",
                 if (baton.canRestore) {
                     // clear auto start stuff (just conflicts)
                     baton.autoLaunch = [];
-                    baton.autoLaunchModules = [];
+                    baton.autoLaunchApps = [];
                 }
                 if (baton.autoLaunch.length === 0 && !baton.canRestore) {
                     drawDesktop();
@@ -532,14 +539,14 @@ define("io.ox/core/main",
                     // auto launch
                     _(baton.autoLaunch).each(function (id) {
                         // split app/call
-                        var pair = id.split(/:/),
-                            launch = require(pair[0] + '/main').getApp().launch(),
-                            call = pair[1];
+                        var details = getAutoLaunchDetails(id), launch, method;
+                        launch = require(details.app).getApp().launch();
+                        method = details.method;
                         // explicit call?
-                        if (call) {
+                        if (method) {
                             launch.done(function () {
-                                if (this[call]) {
-                                    this[call]();
+                                if (_.isFunction(this[method])) {
+                                    this[method]();
                                 }
                             });
                         }
