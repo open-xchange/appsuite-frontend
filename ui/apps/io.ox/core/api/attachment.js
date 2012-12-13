@@ -85,6 +85,48 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                 });
             });
         },
+        
+        createOldWay: function (options, form) {
+            var json = {module: options.module,
+                        attached: options.id,
+                        folder: options.folder || options.folder_id},
+                uploadCounter = 0,
+                self = this,
+                deferred = $.Deferred();
+            
+            $(':input.add-attachment', form).each(function (index, field) {
+                var jqField = $(field);
+                if (jqField.attr('type') === 'file') {
+                    jqField.attr('name', 'file_' + uploadCounter);
+                    $(form).append($('<input>', {'type': 'hidden', 'name': 'json_' + uploadCounter, 'value': JSON.stringify(json)}));
+                    uploadCounter++;
+                }
+            });
+            
+            var tmpName = 'iframe_' + _.now(),
+                frame = $('<iframe>', {'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
+            
+            $('#tmp').append(frame);
+            window.callback_attach = function (response) {
+                $('#' + tmpName).remove();
+                self.trigger('attach', {
+                    module: options.module,
+                    id: options.id,
+                    folder: options.folder || options.folder_id
+                });
+                deferred[(response && response.error ? 'reject' : 'resolve')](response);
+                window.callback_attach = null;
+            };
+            
+            $(form).attr({
+                method: 'post',
+                enctype: 'multipart/form-data',
+                action: ox.apiRoot + '/attachment?action=attach&session=' + ox.session,
+                target: tmpName
+            });
+            $(form).submit();
+            return deferred;
+        },
 
         //builds URL to download/preview File
         getUrl: function (data, mode) {
