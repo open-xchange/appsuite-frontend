@@ -21,7 +21,7 @@ define('io.ox/office/preview/fileActions',
 
     var Action = links.Action,
 
-        SUPPORTED_EXT = /\.(doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg|dot|dotx|ott|xlt|xltx|ots|pot|potx|otp|otg|docm|xlsm|pptm|dotm|xltm|potm|xlsb)$/i;
+        SUPPORTED_EXT = /\.(doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg|dot|dotx|ott|xlt|xltx|ots|pot|potx|otp|otg|docm|xlsm|pptm|dotm|xltm|potm|xlsb|pdf)$/i;
 
     new Action('io.ox/files/actions/open', {
         id: 'officepreview',
@@ -35,7 +35,6 @@ define('io.ox/office/preview/fileActions',
             // on Firefox we have to do this check to prevent duplicate actions (default/preview)
             if (SUPPORTED_EXT.test(baton.data.filename)) {
                 ox.launch('io.ox/office/preview/main', { action: 'load', file: baton.data });
-                baton.preventDefault();
             }
         }
     });

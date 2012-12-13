@@ -117,7 +117,7 @@ define('io.ox/mail/write/main',
             // add signature?
             if (index < view.signatures.length) {
                 signature = view.signatures[index];
-                text = $.trim(signature.signature_text);
+                text = $.trim(signature.content);
                 if (isHTML) {
                     ed.appendContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
                 } else {
@@ -638,6 +638,33 @@ define('io.ox/mail/write/main',
             return def;
         };
 
+        // edit draft
+        app.edit = function (data) {
+
+            var def = $.Deferred();
+
+            _.url.hash('app', 'io.ox/mail/write:compose'); // yep, edit is same as compose
+
+            app.cid = 'io.ox/mail:edit.' + _.cid(data); // here, for reuse it's edit!
+            data.msgref = data.folder_id + '/' + data.id;
+
+            win.busy().show(function () {
+                app.setMail({ data: data, mode: 'compose', initial: false })
+                .done(function () {
+                    app.getEditor().focus();
+                    win.idle();
+                    def.resolve();
+                })
+                .fail(function () {
+                    notifications.yell('error', gt('An error occured. Please try again.'));
+                    app.dirty(false).quit();
+                    def.reject();
+                });
+            });
+
+            return def;
+        };
+
         /**
          * Get mail
          */
@@ -762,22 +789,23 @@ define('io.ox/mail/write/main',
             delete mail.data.nested_msgs;
 
             function cont() {
+                // start being busy
+                win.busy();
                 // close window now (!= quit / might be reopened)
-                win.busy().preQuit();
+                win.preQuit();
                 // send!
-                mailAPI.send(mail.data, mail.files)
-                    .always(function (result) {
-                        if (result.error) {
-                            win.idle().show();
-                            // TODO: check if backend just says "A severe error occured"
-                            notifications.yell(result);
-                        } else {
-                            notifications.yell('success', 'Mail has been sent');
-                            app.dirty(false);
-                            app.quit();
-                        }
-                        def.resolve(result);
-                    });
+                mailAPI.send(mail.data, mail.files, view.form.find('.oldschool')).always(function (result) {
+                    if (result.error) {
+                        win.idle().show();
+                        // TODO: check if backend just says "A severe error occured"
+                        notifications.yell(result);
+                    } else {
+                        notifications.yell('success', 'Mail has been sent');
+                        app.dirty(false);
+                        app.quit();
+                    }
+                    def.resolve(result);
+                });
             }
 
             // ask for empty subject
@@ -913,6 +941,10 @@ define('io.ox/mail/write/main',
             }
             if (type === 'forward') {
                 return ox.ui.App.reuse('io.ox/mail:forward.' + _.cid(data));
+            }
+            if (type === 'edit') {
+                console.log('Hier?');
+                return ox.ui.App.reuse('io.ox/mail:edit.' + _.cid(data));
             }
         }
     };

@@ -11,14 +11,17 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("io.ox/tasks/main", ["io.ox/tasks/api",
-                            'io.ox/core/extensions',
-                            'gettext!io.ox/tasks',
-                            'io.ox/core/tk/vgrid',
-                            'io.ox/tasks/view-grid-template',
-                            "io.ox/core/commons",
-                            'io.ox/tasks/util',
-                            'io.ox/tasks/view-detail'], function (api, ext, gt, VGrid, template, commons, util, viewDetail) {
+define("io.ox/tasks/main",
+    ["io.ox/tasks/api",
+     'io.ox/core/extensions',
+     'gettext!io.ox/tasks',
+     'io.ox/core/tk/vgrid',
+     'io.ox/tasks/view-grid-template',
+     "io.ox/core/commons",
+     'io.ox/tasks/util',
+     'io.ox/tasks/view-detail',
+     'settings!io.ox/tasks'
+    ], function (api, ext, gt, VGrid, template, commons, util, viewDetail, settings) {
 
     "use strict";
 
@@ -47,6 +50,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
 
     // launcher
     app.setLauncher(function () {
+
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/tasks',
@@ -57,6 +61,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
 
         win.addClass('io-ox-tasks-main');
         app.setWindow(win);
+        app.settings = settings;
 
         // folder tree
         commons.addFolderView(app, { type: 'tasks', view: 'FolderList' });

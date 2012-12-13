@@ -51,7 +51,6 @@ define("io.ox/files/tests/unit/test", ["io.ox/core/extensions", "io.ox/files/mai
                                 if (file.id === id) {
                                     found = true;
                                     actual = file;
-                                    console.log(actual);
                                 }
                             });
                             ready.yep();

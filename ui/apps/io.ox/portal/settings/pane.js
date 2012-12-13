@@ -27,13 +27,9 @@ define('io.ox/portal/settings/pane',
 
     //this is how the new settings look
 
-    var MAX_INDEX = 99999,
-        availablePlugins = _(manifests.pluginsFor('portal')).uniq(),
-        collection = new Backbone.Collection([]);
 
-    collection.comparator = function (a, b) {
-        return ext.indexSorter({ index: a.get('index') }, { index: b.get('index') });
-    };
+    var MAX_INDEX = 99999,
+        availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq();
 
     var draw = function (data, that) {
         var redraw = function () {
@@ -224,7 +220,6 @@ define('io.ox/portal/settings/pane',
             })
             .value();
     };
-    collection.reset(getWidgetSettings());
 
     ext.point("io.ox/portal/settings/detail").extend({
         index: 200,

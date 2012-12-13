@@ -10,7 +10,7 @@ Vcs-Browser: https://gitweb.open-xchange.com/?p=wd/frontend/web;a=summary
 
 Package: open-xchange-ui7
 Architecture: all
-Depends: ${misc:Depends}, apache2
+Depends: ${misc:Depends}, apache2, open-xchange-ui7-l10n
 Description: OX App Suite HTML5 client
 
 Package: open-xchange-ui7-manifest
@@ -22,3 +22,10 @@ Package: open-xchange-ui7-dev
 Architecture: all
 Depends: nodejs (>= 0.4.0)
 Description: SDK for the OX App Suite HTML5 client
+
+## l10n ##
+#Package: open-xchange-ui7-l10n-## lang ##
+#Architecture: all
+#Provides: open-xchange-ui7-l10n
+#Description: ## Lang ## translation of the OX App Suite HTML5 client
+## end l10n ##

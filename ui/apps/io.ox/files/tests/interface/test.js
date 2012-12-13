@@ -16,7 +16,7 @@
 define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/files/api"], function (ext, api) {
     "use strict";
 
-    var TIMEOUT = 10000;
+    var TIMEOUT = ox.testTimeout;
 
     function Done() {
         var f = function () {
@@ -41,7 +41,7 @@ define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/file
                 var app = null,
                     id, dataId, dataFolder, dataObj;
 
-                j.it('opens files app ', function () {
+                j.it('opens files app', function () {
                     var loaded = new Done();
 
                     ox.launch('io.ox/files/main', { perspective: 'list' }).done(function () {
@@ -61,7 +61,7 @@ define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/file
                     }, 'waits', TIMEOUT);
                 });
 
-                j.it('looks for "show more" button and hits ', function () {
+                j.it('looks for "show more" button and hits', function () {
                     j.waitsFor(function () {
                         var button = $(".create-file a[class='more']");
                         if (button[0]) {
@@ -71,7 +71,7 @@ define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/file
                     }, 'waits', TIMEOUT);
                 });
 
-                j.it('fill out form an save ', function () {
+                j.it('fill out form an save', function () {
                     j.waitsFor(function () {
                         var titleField = $('.create-file input[name="title"]'),
                             commentField = $('.create-file textarea.input-xlarge'),
@@ -85,8 +85,10 @@ define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/file
                     }, 'waits', TIMEOUT);
                 });
 
-                j.it('check out the stored data ', function () {
+                j.it('check out the stored data', function () {
+
                     var rightBox;
+
                     j.waitsFor(function () {
                         var boxes = $('.title'), found = false;
                         boxes.each(function (index, box) {

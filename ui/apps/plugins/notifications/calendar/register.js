@@ -131,7 +131,11 @@ define('plugins/notifications/calendar/register',
             e.stopPropagation();
             var self = this;
             require(['io.ox/calendar/acceptdeny']).done(function (acceptdeny) {
-                acceptdeny(self.model.get('data'));
+                acceptdeny(self.model.get('data')).done(function (status) {
+                    if (status !== 'cancel') {
+                        self.collection.remove(self.model);
+                    }
+                });
             });
         }
     });
@@ -215,7 +219,7 @@ define('plugins/notifications/calendar/register',
 
             this.collection.each(function (model) {
                 this.$el.append(
-                    new InviteView({ model: model }).render().$el
+                    new InviteView({ model: model, collection: this.collection }).render().$el
                 );
             }, this);
 

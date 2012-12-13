@@ -128,7 +128,7 @@ define("io.ox/core/main",
         }
     }
 
-    setInterval(globalRefresh, settings.get("refreshInterval"));
+    setInterval(globalRefresh, settings.get("refreshInterval", 30000));
 
     function launch() {
 
@@ -243,7 +243,7 @@ define("io.ox/core/main",
             id: 'help',
             index: 200,
             draw: function () {
-                var helpLink = "/appsuite/help/" + ox.language + "/index.htm";
+                var helpLink = "help/" + ox.language + "/index.html";
                 this.append(
                     $('<li>').append(
                         $('<a target="_blank">').attr({href: helpLink}).text(gt('Help'))
@@ -322,6 +322,9 @@ define("io.ox/core/main",
             draw: function () {
                 addLauncher("left", $('<i class="icon-th icon-white">'), function () {
                     return require(["io.ox/launchpad/main"], function (m) {
+                        launchers.children().removeClass('active-app');
+                        launcherDropdown.children().removeClass('active-app');
+                        launchers.children().first().addClass('active-app');
                         m.show();
                     });
                 })
@@ -369,66 +372,6 @@ define("io.ox/core/main",
             }
         });
 
-        /**
-         * Exemplary upsell widget
-         */
-        ext.point("io.ox/core/desktop").extend({
-            id: "upsell",
-            draw: function () {
-                // does nothing - just to demo an exemplary upsell path
-                this.append(
-                    $('<div>').css({
-                        position: "absolute",
-                        width: "270px",
-                        height: "140px",
-                        right: "50px",
-                        bottom: "50px"
-                    })
-                    .append(
-                        $("<div>", { id: "io-ox-welcome-upsell" })
-                        .addClass('abs')
-                        .css({
-                            padding: "30px",
-                            zIndex: 1
-                        })
-                        .text("Confidential! Not to be disclosed to third parties.")
-                    )
-                );
-            }
-        });
-
-        /*
-        ext.point("io.ox/core/desktop").extend({
-            id: "welcome",
-            draw: function () {
-
-                var d, update;
-
-                this.append(
-                    $("<div>", { id: "io-ox-welcome" })
-                    .addClass("abs")
-                    .append(
-                        $("<div>").addClass("clear-title")
-                        .append(
-                            // split user into three parts, have to use inject here to get proper node set
-                            _(String(ox.user).split(/(\@)/)).inject(function (tmp, s, i) {
-                                    return tmp.add($("<span>").text(String(s)).addClass(i === 1 ? "accent": ""));
-                                }, $())
-                        )
-                    )
-                    .append(
-                        d = $("<div>").addClass("clock clear-title").text("")
-                    )
-                );
-                update = function () {
-                    //d.text(new date.Local().format(date.FULL_DATE)); // FIXME: Seems to die on android
-                };
-                update();
-                _.tick(1, "minute", update);
-            }
-        });
-        */
-
         var drawDesktop = function () {
             ext.point("io.ox/core/desktop").invoke("draw", $("#io-ox-desktop"), {});
             drawDesktop = $.noop;
@@ -452,16 +395,23 @@ define("io.ox/core/main",
 
         var baton = ext.Baton({
             block: $.Deferred(),
-            autoLaunch: _.url.hash("app") ? _.url.hash("app").split(/,/) : []
+            autoLaunch: _.url.hash("app") ? _.url.hash("app").split(/,/) : [].concat(settings.get('autoStart'))
         });
 
-        baton.autoLaunchModules = _(baton.autoLaunch).map(function (m) { return m.split(/:/)[0] + '/main'; });
+        var getAutoLaunchDetails = function (str) {
+            var pair = str.split(/:/), app = pair[0], method = pair[1] || '';
+            return { app: (/\/main$/).test(app) ? app : app + '/main', method: method };
+        };
+
+        baton.autoLaunchApps = _(baton.autoLaunch).map(function (m) {
+            return getAutoLaunchDetails(m).app;
+        });
 
         // start loading stuff
         baton.loaded = $.when(
             baton.block,
             ext.loadPlugins(),
-            require(baton.autoLaunchModules),
+            require(baton.autoLaunchApps),
             require(['io.ox/core/api/account']).pipe(function (api) { return api.all(); })
         );
 
@@ -473,8 +423,23 @@ define("io.ox/core/main",
         });
 
         new Stage('io.ox/core/stages', {
-            id: 'restore-check',
+            id: 'update-tasks',
             index: 200,
+            run: function () {
+                if (ox.online) {
+                    var def = $.Deferred();
+                    require(['io.ox/core/updates/updater'], function (updater) {
+                        updater.runUpdates().done(def.resolve).fail(def.reject);
+                    }).fail(def.reject);
+
+                    return def;
+                }
+            }
+        });
+
+        new Stage('io.ox/core/stages', {
+            id: 'restore-check',
+            index: 300,
             run: function (baton) {
                 return ox.ui.App.canRestore().done(function (canRestore) {
                     baton.canRestore = canRestore;
@@ -484,7 +449,7 @@ define("io.ox/core/main",
 
         new Stage('io.ox/core/stages', {
             id: 'restore-confirm',
-            index: 300,
+            index: 400,
             run: function (baton) {
 
                 if (baton.canRestore) {
@@ -537,12 +502,12 @@ define("io.ox/core/main",
 
         new Stage('io.ox/core/stages', {
             id: 'restore',
-            index: 400,
+            index: 500,
             run: function (baton) {
                 if (baton.canRestore) {
                     // clear auto start stuff (just conflicts)
                     baton.autoLaunch = [];
-                    baton.autoLaunchModules = [];
+                    baton.autoLaunchApps = [];
                 }
                 if (baton.autoLaunch.length === 0 && !baton.canRestore) {
                     drawDesktop();
@@ -560,7 +525,7 @@ define("io.ox/core/main",
 
         new Stage('io.ox/core/stages', {
             id: 'load',
-            index: 500,
+            index: 600,
             run: function (baton) {
 
                 return baton.loaded.done(function (instantFadeOut) {
@@ -577,14 +542,14 @@ define("io.ox/core/main",
                     // auto launch
                     _(baton.autoLaunch).each(function (id) {
                         // split app/call
-                        var pair = id.split(/:/),
-                            launch = require(pair[0] + '/main').getApp().launch(),
-                            call = pair[1];
+                        var details = getAutoLaunchDetails(id), launch, method;
+                        launch = require(details.app).getApp().launch();
+                        method = details.method;
                         // explicit call?
-                        if (call) {
+                        if (method) {
                             launch.done(function () {
-                                if (this[call]) {
-                                    this[call]();
+                                if (_.isFunction(this[method])) {
+                                    this[method]();
                                 }
                             });
                         }

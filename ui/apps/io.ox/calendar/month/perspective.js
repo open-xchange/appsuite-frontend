@@ -63,6 +63,11 @@ define('io.ox/calendar/month/perspective',
                 .invoke('action', this, {app: this.app}, {start_date: startTS, end_date: startTS + date.HOUR});
         },
 
+        openEditAppointment: function (e, obj) {
+            ext.point('io.ox/calendar/detail/actions/edit')
+                .invoke('action', this, {data: obj});
+        },
+
         updateAppointment: function (obj) {
             var self = this;
             _.each(obj, function (el, i) {
@@ -163,9 +168,10 @@ define('io.ox/calendar/month/perspective',
                 // add collection for week
                 self.collections[day] = new Backbone.Collection([]);
                 // new view
-                var view = new View({ collection: self.collections[day], day: day, folder: self.folder });
-                view.on('showAppoinment', self.showAppointment, self)
+                var view = new View({ collection: self.collections[day], day: day, folder: self.folder, pane: this.pane });
+                view.on('showAppointment', self.showAppointment, self)
                     .on('createAppoinment', self.createAppointment, self)
+                    .on('openEditAppointment', self.openEditAppointment, self)
                     .on('updateAppointment', self.updateAppointment, self);
                 views.push(view.render().el);
             }

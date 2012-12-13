@@ -152,8 +152,7 @@ define("io.ox/core/desktop",
                                     }
                                     // update grid?
                                     if (grid && grid.prop('folder') !== folder) {
-                                        grid.clear();
-                                        grid.prop('folder', folder);
+                                        grid.busy().prop('folder', folder);
                                         if (win && win.search.active) {
                                             win.search.close();
                                         } else {
@@ -526,7 +525,6 @@ define("io.ox/core/desktop",
                 if (options.perspective === win.currentPerspective) {
                     return;
                 }
-
                 // make sure it's initialized
                 if (!initialized) {
                     this.main = win.addPerspective(name);
@@ -535,15 +533,15 @@ define("io.ox/core/desktop",
 
                 // trigger change event
                 if (win.currentPerspective !== 'main') {
-                    win.trigger('change:perspective', options.perspective);
+                    win.trigger('change:perspective', name);
                 }
-
                 // set perspective
                 win.setPerspective(name);
 
                 _.url.hash('perspective', options.perspective);
 
                 // render?
+
                 if (!rendered || options.perspective.split(":").length > 1) {
                     options.rendered = rendered;
                     this.render(app, options);
@@ -562,7 +560,10 @@ define("io.ox/core/desktop",
         };
 
         Perspective.show = function (app, p) {
-            var per = p.split(":")[0];
+            var per = p;
+            if (_.isString(p) && (/:/).test(p)) {
+                per = p.split(":")[0];
+            }
             require([app.get('name') + '/' + per + '/perspective'], function (perspective) {
                 if (cur && (per === 'month' || per === 'week')) {
                     cur.save();
@@ -869,7 +870,7 @@ define("io.ox/core/desktop",
                     return this;
                 };
 
-                var BUSY_SELECTOR = 'input, select, textarea, button',
+                var BUSY_SELECTOR = 'input:not([type="file"], [type="hidden"]), select, textarea, button',
                     TOGGLE_CLASS = 'toggle-disabled';
 
                 this.busy = function (pct, sub) {

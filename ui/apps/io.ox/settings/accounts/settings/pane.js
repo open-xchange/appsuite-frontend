@@ -22,12 +22,13 @@ define('io.ox/settings/accounts/settings/pane',
            "io.ox/keychain/api",
            'io.ox/core/tk/forms',
            "io.ox/keychain/model",
+           "io.ox/core/api/folder",
            //'gettext!io.ox/settings/accounts/keyring', does not work at the moment
            'text!io.ox/settings/accounts/email/tpl/account_select.html',
            'text!io.ox/settings/accounts/email/tpl/listbox.html'
 
 
-       ]), function (ext, View, utils, dialogs, api, forms, keychainModel, /* gt,*/ tmpl, listboxtmpl) {
+       ]), function (ext, View, utils, dialogs, api, forms, keychainModel, folderAPI, /* gt,*/ tmpl, listboxtmpl) {
 
 
     'use strict';
@@ -51,8 +52,11 @@ define('io.ox/settings/accounts/settings/pane',
                     .done(function (action) {
                         if (action === 'delete') {
                             def.resolve();
-                            console.log('api.remove', account);
-                            api.remove(account);
+                            api.remove(account).done(function () {
+                                folderAPI.subFolderCache.remove('1');
+                                folderAPI.folderCache.remove('default' + account);
+                                folderAPI.trigger('update');
+                            });
                         } else {
                             def.reject();
                         }
@@ -135,7 +139,7 @@ define('io.ox/settings/accounts/settings/pane',
                         _(api.submodules).each(function (submodule) {
                             $dropDown.append(
                                 $('<li>').append(
-                                    $('<a>', { href: '#', 'data-actionname': submodule.actionName || submodule.id || '' })
+                                    $('<a>', { href: '#', 'data-actionname': submodule.actionName || submodule.id || '' })
                                     .text(submodule.displayName)
                                     .on('click', function (e) {
                                         e.preventDefault();

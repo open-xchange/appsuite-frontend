@@ -110,7 +110,7 @@ define('io.ox/portal/main',
         win,
         appBaton = ext.Baton({ app: app }),
         sidepopup = new dialogs.SidePopup(),
-        availablePlugins = _(manifests.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
+        availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
         collection = new Backbone.Collection([]);
 
     // for debugging
@@ -372,7 +372,7 @@ define('io.ox/portal/main',
             collection.each(app.drawScaffold);
 
             // add side popup
-            sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer', openSidePopup);
+            sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer, .action.pointer', openSidePopup);
 
             // make sortable
             appBaton.$.widgets.sortable({

@@ -85,7 +85,7 @@ define('plugins/notifications/mail/register',
                 baton = ext.Baton({ model: this.collection.at(i), view: this });
                 ext.point('io.ox/core/notifications/mail/item').invoke('draw', this.$('.notifications'), baton);
             }
-            
+
             return this;
         },
 
@@ -104,8 +104,7 @@ define('plugins/notifications/mail/register',
                         new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay.empty())
                             .show(e, function (popup) {
-                                popup.append(view.draw(data))
-                                    .parent().removeClass('default-content-padding');
+                                popup.append(view.draw(data));
                             });
                     });
                 });
@@ -120,7 +119,7 @@ define('plugins/notifications/mail/register',
                 this.folder.set(api.getDefaultFolder());
             });
         },
-        
+
         removeNotification: function (e) {
             e.preventDefault();
             var cid = $(e.target).attr('data-cid'),

@@ -73,6 +73,52 @@ define("io.ox/tasks/actions",
             });
         }
     });
+    
+    new Action('io.ox/tasks/actions/done', {
+        requires: function (e) {
+            return e.baton.data.status !== 3;
+        },
+        action: function (baton) {
+            changeState(baton);
+        }
+    });
+    
+    new Action('io.ox/tasks/actions/undone', {
+        requires: function (e) {
+            return e.baton.data.status === 3;
+        },
+        action: function (baton) {
+            changeState(baton);
+        }
+    });
+    
+    function changeState(baton) {
+        var mods,
+            data = baton.data;
+        if (data.status === 3) {
+            mods = {label: gt('Undone'),
+                    data: {status: 1,
+                           percent_completed: 0
+                          }
+                   };
+        } else {
+            mods = {label: gt('Done'),
+                    data: {status: 3,
+                           percent_completed: 100
+                          }
+                   };
+        }
+        require(['io.ox/tasks/api'], function (api) {
+            api.update(data.last_modified || _.now(), data.id, mods.data, data.folder_id || data.folder)
+                .done(function (result) {
+                    api.trigger("update:" + data.folder_id + '.' + data.id);
+                    notifications.yell('success', mods.label);
+                })
+                .fail(function (result) {
+                    notifications.yell('error', gt.noI18n(result));
+                });
+        });
+    }
 
     new Action('io.ox/tasks/actions/move', {
         requires: 'one',
@@ -235,50 +281,34 @@ define("io.ox/tasks/actions",
         ref: 'io.ox/tasks/actions/delete'
     }));
 
-    ext.point('io.ox/tasks/links/inline').extend({
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'done',
         index: 300,
         prio: 'hi',
-        draw: function (data) {
-            var mods;
-            if (data.status === 3) {
-                mods = {label: gt('Undone'),
-                        data: {status: 1,
-                               percent_completed: 0
-                              }
-                       };
-            } else {
-                mods = {label: gt('Done'),
-                        data: {status: 3,
-                               percent_completed: 100
-                              }
-                       };
-            }
-            this.append($('<span class="io-ox-action-link">').append(
-                $('<a href="#">').text(mods.label)
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        require(['io.ox/tasks/api'], function (api) {
-                            api.update(data.last_modified || _.now(), data.id, mods.data, data.folder_id || data.folder)
-                                .done(function (result) {
-                                    api.trigger("update:" + data.folder_id + '.' + data.id);
-                                    notifications.yell('success', mods.label);
-                                })
-                                .fail(function (result) {
-                                    notifications.yell('error', gt.noI18n(result));
-                                });
-                        });
-                    })
-                )
-            );
-        }
+        label: gt("Done"),
+        ref: 'io.ox/tasks/actions/done'
+    }));
+    
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'unDone',
+        index: 310,
+        prio: 'hi',
+        label: gt("Undone"),
+        ref: 'io.ox/tasks/actions/undone'
+    }));
+    
+    //strange workaround because extend only takes new links instead of plain objects with draw method
+    new Action('io.ox/tasks/actions/placeholder', {
+        action: function (baton) {}
     });
 
-    ext.point('io.ox/tasks/links/inline').extend({
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'changeDueDate',
         index: 400,
-        prio: 'lo',
-        draw: function (data) {
+        prio: 'hi',
+        ref: 'io.ox/tasks/actions/placeholder',
+        draw: function (baton) {
+            var data = baton.data;
             this.append(
                 $('<span class="dropdown io-ox-action-link">').append(
                     // link
@@ -338,7 +368,7 @@ define("io.ox/tasks/actions",
                 )
             );
         }
-    });
+    }));
 
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'move',

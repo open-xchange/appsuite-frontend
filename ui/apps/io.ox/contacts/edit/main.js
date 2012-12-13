@@ -34,13 +34,11 @@ define('io.ox/contacts/edit/main',
         });
 
         app.setLauncher(function (def) {
-            var win;
 
-            win = ox.ui.createWindow({
+            var win = ox.ui.createWindow({
                 name: 'io.ox/contacts/edit',
                 title: gt('Edit Contact'),
-                toolbar: true,
-                close: true
+                chromeless: true
             });
 
             app.setWindow(win);

@@ -472,39 +472,44 @@ if (apps.rest) utils.copy(apps.rest);
 
 utils.merge('manifests/' + pkgName + '.json',
     utils.list('apps/**/manifest.json'),
-    { merge: function (manifests, names) {
-        var combinedManifest = [];
-        _.each(manifests, function (m, i) {
-            var prefix = /^apps[\\\/](.*)[\\\/]manifest\.json$/
-                         .exec(names[i])[1] + '/';
-            var data = null;
-            try {
-                data = new Function('return (' + m + ')')();
-            } catch (e) {
-                fail('Invalid manifest ' + names[i], e);
-            }
-            if (!_.isArray(data)) {
-                data = [data];
-            }
-            _(data).each(function (entry) {
-                if (!entry.path) {
-                    if (entry.namespace) {
-                        // Assume Plugin
-                        if (path.existsSync("apps/" + prefix + "register.js")) {
-                            entry.path = prefix + "register";
-                        }
-                    } else {
-                        // Assume App
-                        if (path.existsSync("apps/" + prefix + "main.js")) {
-                            entry.path = prefix + "main";
+    {
+        to: process.env.manifestDir || utils.builddir,
+        merge: function (manifests, names) {
+            var combinedManifest = [];
+            _.each(manifests, function (m, i) {
+                var prefix = /^apps[\\\/](.*)[\\\/]manifest\.json$/
+                             .exec(names[i])[1] + '/';
+                var data = null;
+                try {
+                    data = new Function('return (' + m + ')')();
+                } catch (e) {
+                    fail('Invalid manifest ' + names[i], e);
+                }
+                if (!_.isArray(data)) {
+                    data = [data];
+                }
+                _(data).each(function (entry) {
+                    if (!entry.path) {
+                        if (entry.namespace) {
+                            // Assume Plugin
+                            if (path.existsSync("apps/" + prefix +
+                                                "register.js"))
+                            {
+                                entry.path = prefix + "register";
+                            }
+                        } else {
+                            // Assume App
+                            if (path.existsSync("apps/" + prefix + "main.js")) {
+                                entry.path = prefix + "main";
+                            }
                         }
                     }
-                }
-                combinedManifest.push(entry);
+                    combinedManifest.push(entry);
+                });
             });
-        });
-        return JSON.stringify(combinedManifest, null, debug ? 4 : null);
-    } });
+            return JSON.stringify(combinedManifest, null, debug ? 4 : null);
+        }
+    });
 
 // doc task
 
@@ -613,6 +618,7 @@ utils.topLevelTask('init-packaging', [], function() {
 });
 (function () {
     var packagingVariables = {
+        '': '',
         'package': pkgName,
         timestamp: formatDate(new Date())
     };
@@ -693,7 +699,7 @@ utils.topLevelTask('init-packaging', [], function() {
     var files = utils.list(utils.source('lib/build/pkg-template'), '**/*');
     utils.copy(files, { to: '.', filter: replace, mapper: replace });
     function replace(data) {
-        return data.replace(/@(\w+)@/g, function (m, key) {
+        return data.replace(/@(\w*)@/g, function (m, key) {
             return packagingVariables[key];
         });
     }
@@ -719,8 +725,26 @@ task("dist", [distDest], function () {
     var dest = path.join(distDest, tarName);
     fs.mkdirSync(dest);
     utils.exec(["cp", "-r"].concat(toCopy, dest), tar);
+    function addL10n(spec) {
+        return spec.replace(/## l10n ##.*\n([\s\S]+?)^## end l10n ##.*/gm,
+            function (m, block) {
+                block = block.replace(/^#/gm, '');
+                return _.map(i18n.languages(), function (Lang) {
+                    var lang = Lang.toLowerCase().replace('_', '-');
+                    return block.replace(/## ([Ll])ang ##/g, function (m, L) {
+                        return L === 'L' ? Lang : lang;
+                    });
+                }).join('\n');
+            });
+    }
     function tar(code) {
         if (code) return fail();
+        
+        _.each([pkgName + '.spec', 'debian/control'], function (name) {
+            var file = path.join(dest, name);
+            fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
+        });
+        
         utils.exec(['tar', 'cjf', debName + '.orig.tar.bz2', tarName],
                    { cwd: distDest }, dpkgSource);
     }

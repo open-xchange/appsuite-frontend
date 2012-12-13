@@ -147,6 +147,7 @@ define('io.ox/core/tk/vgrid',
             // states
             initialized = false,
             loaded = false,
+            responsiveChange = true,
             firstRun = true,
             firstAutoSelect = true,
             paused = false,
@@ -445,6 +446,7 @@ define('io.ox/core/tk/vgrid',
                         lfo(new Array(subset.length));
                     });
             };
+
         }());
 
         resize = function () {
@@ -510,8 +512,7 @@ define('io.ox/core/tk/vgrid',
         }
 
         deserialize = function (cid) {
-            var c = cid.split(/\./);
-            return { folder_id: c[0], id: c[1], recurrence_position: c[2] };
+            return _.cid(cid);
         };
 
         function autoSelect() {
@@ -561,15 +562,9 @@ define('io.ox/core/tk/vgrid',
             }
         }
 
-        loadAll = function () {
+        loadAll = (function () {
 
-            if (all.length === 0) {
-                // be busy
-                scrollpane.find('.io-ox-center').remove().end();
-                container.css({ visibility: 'hidden' }).parent().busy();
-            }
-
-            function handleFail() {
+            function fail() {
                 // clear grid
                 apply([]);
                 // inform user
@@ -583,50 +578,53 @@ define('io.ox/core/tk/vgrid',
                     );
             }
 
-            // get all IDs
-            var load = loadIds[currentMode] || loadIds.all;
+            function success(list) {
+                // mark as loaded
+                loaded = true;
+                responsiveChange = false;
+                // get list
+                if (!isArray(list)) {
+                    // try to use 'data' property
+                    self.prop('total', list.more);
+                    list = list.data;
+                }
+                // is pause? (only allow new items)
+                if (paused) {
+                    var hash = {}, tmp = [];
+                    _(all).each(function (obj) {
+                        hash[_.cid(obj)] = true;
+                    });
+                    _(list).each(function (obj) {
+                        if (!(_.cid(obj) in hash)) {
+                            tmp.push(obj);
+                        }
+                    });
+                    list = tmp.concat(all);
+                }
+                if (isArray(list)) {
+                    return apply(list)
+                        .always(function () {
+                            self.idle();
+                        })
+                        .done(function () {
+                            firstAutoSelect = firstAutoSelect || list.length === 0;
+                            updateSelection(list.length !== all.length || !_.isEqual(all, list));
+                        });
+                } else {
+                    console.warn('VGrid.all() must provide an array!');
+                    return $.Deferred().reject();
+                }
+            }
 
-            return load.call(self).then(
-                function (list) {
-                    // mark as loaded
-                    loaded = true;
-                    // get list
-                    if (!isArray(list)) {
-                        // try to use 'data' property
-                        self.prop('total', list.more);
-                        list = list.data;
-                    }
-                    // is pause? (only allow new items)
-                    if (paused) {
-                        var hash = {}, tmp = [];
-                        _(all).each(function (obj) {
-                            hash[_.cid(obj)] = true;
-                        });
-                        _(list).each(function (obj) {
-                            if (!(_.cid(obj) in hash)) {
-                                tmp.push(obj);
-                            }
-                        });
-                        list = tmp.concat(all);
-                    }
-                    if (isArray(list)) {
-                        return apply(list)
-                            .always(function () {
-                                // stop being busy
-                                container.show().css({ visibility: '' }).parent().idle();
-                            })
-                            .done(function () {
-                                firstAutoSelect = firstAutoSelect || list.length === 0;
-                                updateSelection(list.length !== all.length || !_.isEqual(all, list));
-                            });
-                    } else {
-                        console.warn('VGrid.all() must provide an array!');
-                        return $.Deferred().reject();
-                    }
-                },
-                handleFail
-            );
-        };
+            return function () {
+                if (responsiveChange || all.length === 0) {
+                    self.busy();
+                }
+                // get all IDs
+                var load = loadIds[currentMode] || loadIds.all;
+                return load.call(self).then(_.lfo(success), _.lfo(fail));
+            };
+        }());
 
         init = function () {
             // get sizes
@@ -739,6 +737,18 @@ define('io.ox/core/tk/vgrid',
             return false;
         };
 
+        this.busy = function () {
+            // remove error messages & hide container
+            scrollpane.find('.io-ox-center').remove();
+            container.css({ visibility: 'hidden' }).parent().busy();
+            return this;
+        };
+
+        this.idle = function () {
+            container.show().css({ visibility: '' }).parent().idle();
+            return this;
+        };
+
         this.paint = function () {
             if (firstRun) {
                 scrollpane.on('selectstart', false)
@@ -783,6 +793,7 @@ define('io.ox/core/tk/vgrid',
             this.trigger('change:mode', currentMode);
             _.url.hash('id', null);
             firstAutoSelect = true;
+            responsiveChange = true;
             return this.refresh();
         };
 
@@ -857,6 +868,7 @@ define('io.ox/core/tk/vgrid',
                     props[key] = value;
                     this.trigger('change:prop', key, value);
                     this.trigger('change:prop:' + key, value);
+                    responsiveChange = true;
                     return this;
                 } else {
                     return props[key];

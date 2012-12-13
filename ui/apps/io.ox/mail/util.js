@@ -15,7 +15,8 @@
 define('io.ox/mail/util',
     ['io.ox/core/extensions',
      'io.ox/core/config',
-     'gettext!io.ox/core'], function (ext, config, gt) {
+     'io.ox/core/date',
+     'gettext!io.ox/core'], function (ext, config, date, gt) {
 
     'use strict';
 
@@ -25,15 +26,33 @@ define('io.ox/mail/util',
         HOUR = MINUTE * 60,
 
         ngettext = function (s, p, n) {
-                return n > 1 ? p : s;
-            },
+            return n > 1 ? p : s;
+        },
 
         fnClickPerson = function (e) {
-                e.preventDefault();
-                ext.point('io.ox/core/person:action').each(function (ext) {
-                    _.call(ext.action, e.data, e);
-                });
-            },
+            e.preventDefault();
+            ext.point('io.ox/core/person:action').each(function (ext) {
+                _.call(ext.action, e.data, e);
+            });
+        },
+
+        getDateFormated = function (timestamp, fulldate) {
+            var now = new date.Local(),
+                d = new date.Local(date.Local.utc(timestamp)),
+                timestr = function () {
+                    return d.format(date.TIME);
+                },
+                datestr = function () {
+                    return d.format(date.DATE) + fulldate ? timestr() : '';
+                },
+                isSameDay = function () {
+                    return d.getDate() === now.getDate() &&
+                        d.getMonth() === now.getMonth() &&
+                        d.getYear() === now.getYear();
+                };
+            return isSameDay() ? timestr() : datestr();
+        },
+
 
         // regex: split list at non-quoted ',' or ';'
         rRecipientList = /([^,;"]+|"(\\.|[^"])+")+/,
@@ -48,13 +67,13 @@ define('io.ox/mail/util',
 
         // mail addresses hash
         addresses = {};
-
+    
     _(config.get('mail.addresses', [])).each(function (address) {
         addresses[address.toLowerCase()] = true;
     });
 
-    that = {
 
+    that = {
         parseRecipient: function (s) {
             var recipient = $.trim(s), match, name, email;
             if ((match = recipient.match(rRecipient)) !== null) {
@@ -184,37 +203,11 @@ define('io.ox/mail/util',
         },
 
         getTime: function (timestamp) {
-            var now = new Date(),
-                d = new Date(timestamp),
-                time = function () {
-                    return _.pad(d.getUTCHours(), 2) + ':' + _.pad(d.getUTCMinutes(), 2);
-                },
-                date = function () {
-                    return _.pad(d.getUTCDate(), 2) + '.' + _.pad(d.getUTCMonth() + 1, 2) + '.' + d.getUTCFullYear();
-                },
-                isSameDay = function () {
-                    return d.getUTCDate() === now.getUTCDate() &&
-                        d.getUTCMonth() === now.getUTCMonth() &&
-                        d.getUTCFullYear() === now.getUTCFullYear();
-                };
-            // today?
-            return isSameDay() ? time() : date();
+            return getDateFormated(timestamp, false);
         },
 
         getDateTime: function (timestamp) {
-            var now = new Date(),
-                d = new Date(timestamp),
-                time = function () {
-                    return _.pad(d.getUTCHours(), 2) + ':' + _.pad(d.getUTCMinutes(), 2);
-                },
-                date = function () {
-                    return _.pad(d.getUTCDate(), 2) + '.' + _.pad(d.getUTCMonth() + 1, 2) + '.' + d.getUTCFullYear();
-                },
-                isSameDay = function () {
-                    return d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-                };
-             // today?
-            return isSameDay() ? time() : date() + ' ' + time();
+            return getDateFormated(timestamp, true);
         },
 
         getSmartTime: function (timestamp) {
@@ -259,6 +252,14 @@ define('io.ox/mail/util',
 
         isDeleted: function (data) {
             return (data.flags & 2) === 2;
+        },
+
+        isAnswered: function (data) {
+            return (data.flags & 1) === 1;
+        },
+
+        isForwarded: function (data) {
+            return (data.flags & 256) === 256;
         },
 
         byMyself: function (data) {

@@ -726,21 +726,9 @@ define("io.ox/mail/api",
         return react('forward', obj, view);
     };
 
-    api.send = function (data, files) {
+    api.send = function (data, files, form) {
 
-        var deferred = $.Deferred();
-
-        if (Modernizr.file) {
-            handleSendXHR2(data, files, deferred);
-        } else {
-            handleSendTheGoodOldWay(data, files, deferred);
-        }
-
-        return deferred;
-    };
-
-    function handleSendXHR2(data, files, deferred) {
-        var form = new FormData(),
+        var deferred,
             flatten = function (recipient) {
                 return '"' + (recipient[0] || '').replace(/^["']+|["']+$/g, '') + '" <' + recipient[1] + '>';
             };
@@ -754,6 +742,18 @@ define("io.ox/mail/api",
         data.cc = _(data.cc).map(flatten).join(', ');
         data.bcc = _(data.bcc).map(flatten).join(', ');
 
+        if (Modernizr.file && 'FormData' in window) {
+            deferred = handleSendXHR2(data, files, deferred);
+        } else {
+            deferred = handleSendTheGoodOldWay(data, form);
+        }
+
+        return deferred;
+    };
+
+    function handleSendXHR2(data, files) {
+
+        var form = new FormData();
         // add mail data
         form.append('json_0', JSON.stringify(data));
         // add files
@@ -761,90 +761,43 @@ define("io.ox/mail/api",
             form.append('file_' + index, file);
         });
 
-        http.UPLOAD({
-                module: 'mail',
-                params: { action: 'new' },
-                data: form,
-                dataType: 'text'
-            })
-            .done(function (text) {
-                // process HTML-ish non-JSONP response
-                var a = text.indexOf('{'),
+        return http.UPLOAD({
+            module: 'mail',
+            params: { action: 'new' },
+            data: form,
+            dataType: 'text'
+        })
+        .pipe(function (text) {
+            // wait a moment, then update mail index
+            setTimeout(function () {
+                // clear inbox & sent folder
+                var folders = [].concat(
+                    accountAPI.getFoldersByType('inbox'),
+                    accountAPI.getFoldersByType('sent')
+                );
+                $.when.apply(
+                    _(folders).map(function (id) {
+                        return api.caches.all.grepRemove(id + DELIM);
+                    })
+                )
+                .done(function () {
+                    api.trigger('refresh.all');
+                });
+            }, 3000);
+            // process HTML-ish non-JSONP response
+            var a = text.indexOf('{'),
                 b = text.lastIndexOf('}');
-                if (a > -1 && b > -1) {
-                    deferred.resolve(JSON.parse(text.substr(a, b - a + 1)));
-                } else {
-                    deferred.resolve({});
-                }
-                // wait a moment, then update mail index
-                setTimeout(function () {
-                    // clear inbox & sent folder
-                    var folders = [].concat(
-                        accountAPI.getFoldersByType('inbox'),
-                        accountAPI.getFoldersByType('sent')
-                    );
-                    $.when.apply(
-                        _(folders).map(function (id) {
-                            return api.caches.all.grepRemove(id + DELIM);
-                        })
-                    )
-                    .done(function () {
-                        api.trigger('refresh.all');
-                    });
-                }, 3000);
-            })
-            .fail(deferred.reject);
-    }
-
-    function handleSendTheGoodOldWay(data, files, deferred) {
-        var form = $('.io-ox-mail-write form'),
-            flatten = function (recipient) {
-                return '"' + (recipient[0] || '').replace(/^["']+|["']+$/g, '') + '" <' + recipient[1] + '>';
-            };
-
-        // clone data (to avoid side-effects)
-        data = _.clone(data);
-
-        // flatten from, to, cc, bcc
-        data.from = _(data.from).map(flatten).join(', ');
-        data.to = _(data.to).map(flatten).join(', ');
-        data.cc = _(data.cc).map(flatten).join(', ');
-        data.bcc = _(data.bcc).map(flatten).join(', ');
-
-
-        var uploadCounter = 0;
-        $(':input:enabled', form).each(function (index, field) {
-            var jqField = $(field);
-            if (jqField.attr('type') === 'file') {
-                jqField.attr('name', 'file_' + uploadCounter);
-                uploadCounter++;
+            if (a > -1 && b > -1) {
+                return JSON.parse(text.substr(a, b - a + 1));
+            } else {
+                return {};
             }
         });
+    }
 
-        // add mail data
-        if ($('input[name="json_0"]', form).length === 0) {
-            $(form).append($('<input>', {'type': 'hidden', 'name': 'json_0', 'value': JSON.stringify(data)}));
-        } else {
-            $('input[name="json_0"]', form).val(JSON.stringify(data));
-        }
-
-        var tmpName = 'iframe_' + _.now(),
-            frame = $('<iframe>', {'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1});
-        $('.io-ox-mail-write').append(frame);
-
-        $(form).attr({
-            method: 'post',
-            action: ox.apiRoot + '/mail?action=new&session=' + ox.session,
-            target: tmpName
-        });
-
-        $(form).submit();
-
-        window.callback_new = function (response) {
-            $('#' + tmpName).remove();
-            deferred[(response && response.error ? 'reject' : 'resolve')](response);
-            window.callback_new = null;
-        };
+    function handleSendTheGoodOldWay(data, form) {
+        console.log('SENDMAIL oldschool', data, form);
+        return http.FORM({ data: data, form: form, field: 'json_0', url: 'mail?action=new' });
     }
 
     api.saveAttachments = function (list, target) {

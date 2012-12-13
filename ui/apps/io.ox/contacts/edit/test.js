@@ -11,9 +11,12 @@
  */
 
 define('io.ox/contacts/edit/test',
-    ['io.ox/core/extensions', 'io.ox/contacts/main',
-     'io.ox/contacts/api', 'io.ox/core/config', 'io.ox/core/date'],
-function (ext, contacts, api, config, date) {
+    ['io.ox/core/extensions',
+     'io.ox/contacts/main',
+     'io.ox/contacts/api',
+     'io.ox/core/config',
+     'io.ox/core/date'
+    ], function (ext, contacts, api, config, date) {
 
     "use strict";
 
@@ -205,7 +208,7 @@ function (ext, contacts, api, config, date) {
                     j.waitsFor(function () {
                         // grid contains item?
                         if (grid.contains(phrase)) {
-                            grid.selection.set({ folder_id: fId, id: data.id });
+                            grid.selection.set(_.cid(phrase));
                             return true;
                         } else {
                             return false;
@@ -418,7 +421,7 @@ function (ext, contacts, api, config, date) {
                     j.waitsFor(function () {
                         // grid contains item?
                         if (grid.contains(phrase)) {
-                            grid.selection.set({ folder_id: dataFolder, id: dataId });
+                            grid.selection.set(_.cid(phrase));
                             return true;
                         } else {
                             return false;
@@ -470,7 +473,7 @@ function (ext, contacts, api, config, date) {
                 buttonDelete, dialog, testfield, testfield2, formFrame = null,
                 dataId, dataFolder, dataObj, phrase;
 
-                j.it('opens contact app ', function () {
+                j.it('opens contact app', function () {
 
                     var loaded = new Done();
 
@@ -478,16 +481,12 @@ function (ext, contacts, api, config, date) {
 
                     contacts.getApp().launch().done(function () {
                         app = this;
-                        //console.log(app);
-                        app.folder.setDefault().done(function () {
-                            loaded.yep();
-                            j.expect(app).toBeTruthy();
-                        });
+                        loaded.yep();
+                        j.expect(app).toBeTruthy();
                     });
                 });
 
                 j.it('creates a fresh obj', function () {
-                    console.warn('creates a fresh obj');
                     j.runs(function () {
                         var me = this;
                         me.ready = false;
@@ -510,7 +509,7 @@ function (ext, contacts, api, config, date) {
                 });
 
                 j.it('catches the form and checks for testfield', function () {
-                    console.warn('catches the form and checks for testfield');
+
                     var grid = app.getGrid();
 
                     phrase = fId + '.' + data.id;
@@ -518,7 +517,7 @@ function (ext, contacts, api, config, date) {
                     j.waitsFor(function () {
                         // grid contains item?
                         if (grid.contains(phrase)) {
-                            grid.selection.set({ folder_id: fId, id: data.id });
+                            grid.selection.set(_.cid(phrase));
                             return true;
                         } else {
                             return false;
@@ -560,7 +559,6 @@ function (ext, contacts, api, config, date) {
                 });
 
                 j.it('opens contact app', function () {
-                    console.warn('opens contact app');
 
                     var loaded = new Done();
 
@@ -574,13 +572,13 @@ function (ext, contacts, api, config, date) {
                 });
 
                 j.it('looks for the created item / selects and deletes', function () {
-                    console.warn('looks for the created item / selects and deletes');
+
                     var grid = app.getGrid();
 
                     j.waitsFor(function () {
                         // grid contains item?
                         if (grid.contains(phrase)) {
-                            grid.selection.set({ folder_id: dataFolder, id: dataId });
+                            grid.selection.set(_.cid(phrase));
                             return true;
                         } else {
                             return false;
@@ -611,22 +609,19 @@ function (ext, contacts, api, config, date) {
                 });
 
                 j.it('opens contact app', function () {
-                    console.warn('opens contact app');
+
                     var loaded = new Done();
 
                     j.waitsFor(loaded, 'Could not load app', TIMEOUT);
 
                     contacts.getApp().launch().done(function () {
                         app = this;
-                        app.folder.setDefault().done(function () {
-                            loaded.yep();
-                            j.expect(app).toBeTruthy();
-                        });
+                        loaded.yep();
+                        j.expect(app).toBeTruthy();
                     });
                 });
 
                 j.it('creates a fresh obj', function () {
-                    console.warn('creates a fresh obj');
                     j.runs(function () {
                         var me = this;
                         me.ready = false;
@@ -636,7 +631,6 @@ function (ext, contacts, api, config, date) {
                                 me.obj = data;
                             }
                         });
-
                         j.waitsFor(function () {
                             return this.ready;
                         }, 'it happens', TIMEOUT);
@@ -649,7 +643,7 @@ function (ext, contacts, api, config, date) {
                 });
 
                 j.it('catches the form and checks for absence of testfield', function () {
-                    console.warn('catches the form and checks for absence of testfield');
+
                     app.launch();
                     j.runs(function () {
                         ext.point("io.ox/contacts/edit/form/phone").disable("cellular_telephone1");
@@ -657,13 +651,11 @@ function (ext, contacts, api, config, date) {
 
                     var grid = app.getGrid();
                     phrase = fId + '.' + data.id;
-//                    console.log(grid);
 
                     j.waitsFor(function () {
                         // grid contains item?
-                        //console.log(data.id);
                         if (grid.contains(phrase)) {
-                            grid.selection.set({ folder_id: fId, id: data.id });
+                            grid.selection.set(_.cid(phrase));
                             return true;
                         } else {
                             return false;
@@ -682,10 +674,8 @@ function (ext, contacts, api, config, date) {
                     });
 
                     j.waitsFor(function () {
-                        //console.log(phrase);
                         formFrame = $('.edit-contact');
                         if (formFrame[0]) {
-                            //console.log('form');
                             return true;
                         }
                     }, 'the form', TIMEOUT);
@@ -702,27 +692,21 @@ function (ext, contacts, api, config, date) {
                 });
 
                 j.it('looks for the created item / selects and deletes', function () {
-                    console.warn('looks for the created item / selects and deletes');
+
                     var grid = app.getGrid();
                     app.launch();
                     j.waitsFor(function () {
                         // grid contains item?
                         if (grid.contains(phrase)) {
-                            grid.selection.set({ folder_id: dataFolder, id: dataId });
+                            grid.selection.set(_.cid(phrase));
                             return true;
                         } else {
                             return false;
                         }
                     }, 'looks for the list', TIMEOUT);
 
-//                    j.runs(function () {
-//                        console.log($('.launcher').text('Address Book'));
-//                    });
-
-
                     j.waitsFor(function () {
                         buttonDelete = $('.scrollable-pane [data-cid="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
-                        //console.log(buttonDelete);
                         if (buttonDelete[0]) {
                             return true;
                         }

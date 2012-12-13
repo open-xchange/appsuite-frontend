@@ -38,6 +38,7 @@ define("io.ox/core/extPatterns/links",
             };
 
         this.draw = this.draw || function (baton) {
+            baton = ext.Baton.ensure(baton);
             this.append(
                 $("<a>", { href: "#", tabindex: "1", "data-action": self.id })
                 .addClass(self.cssClasses || 'io-ox-action-link')
@@ -68,6 +69,7 @@ define("io.ox/core/extPatterns/links",
         extension = _.extend({
             ref: id + '/' + extension.id,
             draw: function (baton) {
+                baton = ext.Baton.ensure(baton);
                 this.append(
                     $('<li>').append(
                         $('<a href="#">').attr('data-action', extension.ref).text(extension.label)
@@ -93,7 +95,7 @@ define("io.ox/core/extPatterns/links",
             };
 
         this.draw = function (baton) {
-
+            baton = ext.Baton.ensure(baton);
             this.append(
                 $('<' + tag + ' href="#" class="btn">')
                 .attr({ "data-action": self.id, tabIndex: self.tabIndex })
@@ -106,14 +108,14 @@ define("io.ox/core/extPatterns/links",
         };
     };
 
-    var getLinks = function (self, collection, node, context, args) {
-        return actions.applyCollection(self.ref, collection, context, args);
+    var getLinks = function (self, collection, node, baton, args) {
+        return actions.applyCollection(self.ref, collection, baton, args);
     };
 
     var drawLinks = function (self, collection, node, baton, args, bootstrapMode) {
         var linkNode = $("<div>").appendTo(node);
         baton = ext.Baton.ensure(baton);
-        return getLinks(self, collection, linkNode, baton.data, args).always(function (links) {
+        return getLinks(self, collection, linkNode, baton, args).always(function (links) {
             // count resolved links
             var count = 0;
             // draw links
@@ -135,21 +137,22 @@ define("io.ox/core/extPatterns/links",
 
     var ToolbarLinks = function (options) {
         var self = _.extend(this, options);
-
-        this.draw = function (context) {
+        this.draw = function (baton) {
             // paint on current node
             var args = $.makeArray(arguments);
-            drawLinks(self, new Collection(context), this, context, args);
+            baton = ext.Baton.ensure(baton);
+            drawLinks(self, new Collection(baton.data), this, baton, args);
         };
 
     };
 
     var ToolbarButtons = function (options) {
         var self = _.extend(this, options);
-        this.draw = function (context) {
+        this.draw = function (baton) {
             // paint on current node
             var args = $.makeArray(arguments);
-            drawLinks(self, new Collection(context), this, context, args);
+            baton = ext.Baton.ensure(baton);
+            drawLinks(self, new Collection(baton.data), this, baton, args);
             // add classes to get button style
             this.children('a').addClass('btn btn-primary');
             this.children('.dropdown').children('a').addClass('btn btn-primary');
@@ -161,7 +164,9 @@ define("io.ox/core/extPatterns/links",
     };
 
     var InlineLinks = function (options) {
+
         var self = _.extend(this, options);
+
         this.draw = function (baton) {
 
             baton = ext.Baton.ensure(baton);
@@ -178,8 +183,7 @@ define("io.ox/core/extPatterns/links",
                     node.addClass(cl);
                 });
             }
-            drawLinks(self, new Collection(baton.data), node, baton, args)
-            .done(function () {
+            drawLinks(self, new Collection(baton.data), node, baton, args).done(function () {
                 // add toggle unless multi-selection
                 node = node.children("div:first");
                 var all = node.children(), lo = node.children('[data-prio="lo"]');
@@ -207,12 +211,12 @@ define("io.ox/core/extPatterns/links",
 
     var z = 0;
     var drawDropDown = function (options, baton) {
-
-        baton = ext.Baton.ensure(baton);
-
+        if (options.zIndex !== undefined) {
+            z = options.zIndex;
+        }
         var args = $.makeArray(arguments),
             $parent = $('<div>').addClass('dropdown')
-                .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 70000) })
+                .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 11000) })
                 .appendTo(this),
             $toggle = $('<a href="#" data-toggle="dropdown">')
                 .data('context', baton.data)
@@ -228,7 +232,7 @@ define("io.ox/core/extPatterns/links",
 
         // create & add node first, since the rest is async
         var node = $('<ul>').addClass('dropdown-menu').appendTo($parent);
-        drawLinks(options, new Collection(baton.data), node, baton.data, args, true);
+        drawLinks(options, new Collection(baton.data), node, baton, args, true);
 
         $toggle.dropdown();
 
@@ -237,8 +241,9 @@ define("io.ox/core/extPatterns/links",
 
     var DropdownLinks = function (options) {
         var o = _.extend(this, options);
-        this.draw = function () {
-            return drawDropDown.apply(this, [o].concat($.makeArray(arguments)));
+        this.draw = function (baton) {
+            baton = ext.Baton.ensure(baton);
+            return drawDropDown.call(this, o, baton);
         };
     };
 
@@ -248,14 +253,15 @@ define("io.ox/core/extPatterns/links",
         ext.point(id).extend(
             _.extend({
                 ref: o.ref,
-                draw: function (context) {
-                    drawDropDown.call(this, o, context);
+                draw: function (baton) {
+                    baton = ext.Baton.ensure(baton);
+                    drawDropDown.call(this, o, baton);
                 }
             }, o)
         );
     };
 
-    var drawButtonGroup = function (options, context) {
+    var drawButtonGroup = function (options, baton) {
         var args = $.makeArray(arguments),
             $parent = $("<div>").addClass('btn-group')
                 .css({ display: 'inline-block' })
@@ -264,7 +270,7 @@ define("io.ox/core/extPatterns/links",
                 .appendTo(this);
         // create & add node first, since the rest is async
         var node = $parent;
-        drawLinks(options, new Collection(context), node, context, args, false);
+        drawLinks(options, new Collection(baton.data), node, baton, args, false);
         return $parent;
     };
 
@@ -274,8 +280,9 @@ define("io.ox/core/extPatterns/links",
         ext.point(id).extend(
             _.extend({
                 ref: o.ref,
-                draw: function (context) {
-                    drawButtonGroup.call(this, o, context);
+                draw: function (baton) {
+                    baton = ext.Baton.ensure(baton);
+                    drawButtonGroup.call(this, o, baton);
                 }
             }, o)
         );
@@ -299,7 +306,7 @@ define("io.ox/core/extPatterns/links",
                 )
             );
             // get links
-            return getLinks(extension, new Collection(baton), ul, baton, args).done(function (links) {
+            return getLinks(extension, new Collection(baton.data), ul, baton, args).done(function (links) {
                 if (links.length > 1) {
                     // call draw method to fill dropdown
                     _(links).chain()
@@ -343,6 +350,7 @@ define("io.ox/core/extPatterns/links",
                 ref: id + '/' + (extension.id || 'default'),
                 icon: icon,
                 draw: function (baton) {
+                    baton = ext.Baton.ensure(baton);
                     draw.call(this, extension, baton);
                 }
             }, extension);

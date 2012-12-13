@@ -19,6 +19,7 @@ define("io.ox/settings/accounts/email/test",
 
     // test objects
 
+    var password;
 
     var TIMEOUT = ox.testTimeout,
 
@@ -74,7 +75,6 @@ define("io.ox/settings/accounts/email/test",
         return f;
     }
 
-
     /*
      * Suite: Contacts Test
      */
@@ -86,7 +86,7 @@ define("io.ox/settings/accounts/email/test",
 
                 var dataId, obj;
 
-                TESTACCOUNT.password = prompt('Password');
+                TESTACCOUNT.password = password || (password = prompt('PasswMail Account Password'));
 
                 j.it('creates a new account', function () {
                     api.create(TESTACCOUNT);
@@ -166,7 +166,7 @@ define("io.ox/settings/accounts/email/test",
                 var app = null, accountPane, buttonAdd, buttonAddAutoconf, buttonAddPassword, dialogAutoconf, dialogPassword,
                     buttonSave, detailPane, dataId, dialogSuccess, buttonClose;
 
-                TESTMAILAUTOCONFIG.password = prompt('Password');
+                TESTMAILAUTOCONFIG.password = password || (password = prompt('Mail Account Password'));
 
                 j.it('opens settings app ', function () {
 
@@ -273,7 +273,7 @@ define("io.ox/settings/accounts/email/test",
         test: function (j) {
             j.describe("Tests the mail-autoconfig api", function () {
 
-                TESTMAILAUTOCONFIG.password = prompt('Password');
+                TESTMAILAUTOCONFIG.password = password || (password = prompt('PasswMail Account Password'));
 
                 j.it('tests the autoconfig api', function () {
 

@@ -372,7 +372,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                                 8: gt("September"),
                                 9: gt("October"),
                                 10: gt("November"),
-                                11: gt("Cecember")
+                                11: gt("December")
                             },
                             initial: 2
                         }

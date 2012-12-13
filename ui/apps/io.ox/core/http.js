@@ -190,7 +190,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "408" : "timezone",
             "410" : "recurrence_start"
         },
-        "infostore" : {
+        "files" : {
             "700" : "title",
             "701" : "url",
             "702" : "filename",
@@ -327,9 +327,9 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
     // extend with commons (not all modules use common columns, e.g. folders)
     $.extend(idMapping.contacts, idMapping.common);
     $.extend(idMapping.calendar, idMapping.common);
-    $.extend(idMapping.infostore, idMapping.common);
-    delete idMapping.infostore["101"]; // not "common" here (exception)
-    delete idMapping.infostore["104"];
+    $.extend(idMapping.files, idMapping.common);
+    delete idMapping.files["101"]; // not "common" here (exception)
+    delete idMapping.files["104"];
     $.extend(idMapping.tasks, idMapping.common);
     $.extend(idMapping.user, idMapping.contacts, idMapping.common);
 
@@ -393,7 +393,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         // prepend root
         o.url = ox.apiRoot + "/" + o.module;
         // add session
-        if (o.appendSession === true) {
+        if (o.appendSession === true && ox.session) {
             o.params.session = ox.session;
         }
         // add columns
@@ -514,7 +514,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         // slow mode
         slow = _.url.hash("slow"),
         // fail mode
-        fail = _.url.hash("fail");
+        fail = _.url.hash('fail') !== undefined;
 
     var ajax = (function () {
 
@@ -639,7 +639,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             }
             // continuation
             function cont() {
-                if (fail && o.module !== "login" && Math.random() < Number(fail)) {
+                if (fail && o.module !== "login" && Math.random() < Number(_.url.hash('fail'))) {
                     // simulate broken connection
                     console.error("HTTP fail", r.o.url, r.xhr);
                     r.def.reject({ error: "0 simulated fail" });
@@ -724,7 +724,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
             options = _.extend({
                 form: $(),
-                url: 'infostore?action=new',
+                url: 'files?action=new',
                 data: {},
                 field: 'json'
             }, options);
@@ -732,13 +732,13 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             var name = 'formpost_' + _.now(), def = $.Deferred(), data, form = options.form;
 
             $('#tmp').append(
-                $('<iframe>', { name: name, id: name, height: 1, width: 1}).hide()
+                $('<iframe>', { name: name, id: name, height: 1, width: 1, src: ox.base + '/blank.html' })
             );
 
             window.callback_new = function (response) {
-                $('#' + name).remove();
                 def[(response && response.error ? 'reject' : 'resolve')](response);
                 window.callback_new = data = form = def = null;
+                $('#' + name).remove();
             };
 
             data = JSON.stringify(options.data);
@@ -807,28 +807,27 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
          */
         fixList: function (ids, deferred) {
 
-            return deferred
-                .pipe(function (data) {
-                    // simplify
-                    ids = that.simplify(ids);
-                    // build hash (uses folder_id!)
-                    var i, obj, hash = {}, tmp = new Array(data.length), key;
-                    // use internal_userid?
-                    var useInternalUserId = _(ids).reduce(function (memo, obj) {
-                        return memo && _.isNumber(obj);
-                    }, true);
-                    for (i = 0; (obj = data[i]); i++) {
-                        key = useInternalUserId ? obj.internal_userid : _.cid(obj);
-                        hash[key] = obj;
-                    }
-                    // fix order (uses folder!)
-                    for (i = 0; (obj = ids[i]); i++) {
-                        key = useInternalUserId ? obj : _.cid(obj);
-                        tmp[i] = hash[key];
-                    }
-                    hash = obj = ids = null;
-                    return tmp;
-                });
+            return deferred.pipe(function (data) {
+                // simplify
+                ids = that.simplify(ids);
+                // build hash (uses folder_id!)
+                var i, obj, hash = {}, tmp = new Array(data.length), key;
+                // use internal_userid?
+                var useInternalUserId = _(ids).reduce(function (memo, obj) {
+                    return memo && _.isNumber(obj);
+                }, true);
+                for (i = 0; (obj = data[i]); i++) {
+                    key = useInternalUserId ? obj.internal_userid : _.cid(obj);
+                    hash[key] = obj;
+                }
+                // fix order (uses folder!)
+                for (i = 0; (obj = ids[i]); i++) {
+                    key = useInternalUserId ? obj : _.cid(obj);
+                    tmp[i] = hash[key];
+                }
+                hash = obj = ids = null;
+                return tmp;
+            });
         },
 
         /**

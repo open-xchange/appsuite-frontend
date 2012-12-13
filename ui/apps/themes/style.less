@@ -1075,7 +1075,6 @@ span.hint {
 /* inline links */
 .io-ox-inline-links {
     position:relative;
-    z-index:10000;
     font-size: @inline-link-font-size;
     text-align: right;
     margin: @inline-links-margin;
@@ -1406,7 +1405,7 @@ input.nice-input {
 
             .folder.selected {
                 background-image: none !important;
-                background-color: #333 !important;
+                background-color: #2a2a2a !important;
                 font-weight: bold;
             }
 
@@ -1553,13 +1552,10 @@ div.external-user-image {
     li [class^="icon-"], li [class*=" icon-"] { width: 2em; text-align: left; }
 }
 
-.to-cc { position:relative }
+.to-cc { position: relative }
 
 ul.dropdown-menu li a.disabled { color:#999; }
 
-.popover, .to-cc {
-    z-index: 65002 !important;
-}
 
 /** MEDIA QUERIES AT THE VERY BOTTOM -- EITHER MISTRANSFORMED OR EATEN BY LESS.JS **/
 

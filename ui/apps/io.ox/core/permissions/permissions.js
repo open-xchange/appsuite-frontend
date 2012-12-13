@@ -328,7 +328,6 @@ define('io.ox/core/permissions/permissions',
                             resources: false,
                             distributionlists: false
                         });
-
                         autocomplete.on('select', function (data) {
                             var isGroup = data.type === 2,
                                 obj = {
@@ -342,18 +341,16 @@ define('io.ox/core/permissions/permissions',
                             }
                         });
                         dialog.getFooter().prepend(node);
-
                     } else {
                         dialog.addPrimaryButton('ok', gt('Close'));
                     }
-
                     dialog.getPopup().addClass('permissions-dialog');
                     dialog.show(function () {
                         this.find('input').focus();
                     })
                     .done(function (action) {
                         if (isFolderAdmin && action === 'save') {
-                            api.update({ folder: folder_id, changes: { permissions: collection.toJSON() }}).done(function () {
+                            api.update({ folder: folder_id, changes: { permissions: collection.toJSON() }}).always(function () {
                                 collection.off();
                             });
                         } else if (action === 'cancel') {

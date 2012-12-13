@@ -20,8 +20,9 @@ define('io.ox/mail/accounts/settings',
        "io.ox/mail/accounts/model",
        'io.ox/mail/accounts/view-form',
        'io.ox/core/tk/dialogs',
+       'io.ox/core/api/folder',
        'gettext!io.ox/mail/accounts/settings'
-       ], function (ext, utils, api, AccountModel, AccountDetailView, dialogs, gt) {
+       ], function (ext, utils, api, AccountModel, AccountDetailView, dialogs, folderAPI, gt) {
     'use strict';
 
     ext.point("io.ox/settings/accounts/mail/settings/detail").extend({
@@ -131,6 +132,9 @@ define('io.ox/mail/accounts/settings',
                                 collection.add([response]);
                             }
                             successDialog();
+                            folderAPI.subFolderCache.clear();
+                            folderAPI.folderCache.clear();
+                            folderAPI.trigger('update');
                             def.resolve(response);
                         }
                     });

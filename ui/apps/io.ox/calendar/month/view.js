@@ -16,9 +16,10 @@ define('io.ox/calendar/month/view',
      'io.ox/core/extensions',
      'io.ox/core/api/folder',
      'gettext!io.ox/calendar',
+     'settings!io.ox/calendar',
      'less!io.ox/calendar/month/style.css',
      'apps/io.ox/core/tk/jquery-ui.min.js',
-     'apps/io.ox/core/tk/jquery.mobile.touch.min.js'], function (util, date, ext, folder, gt) {
+     'apps/io.ox/core/tk/jquery.mobile.touch.min.js'], function (util, date, ext, folder, gt, settings) {
 
     'use strict';
 
@@ -30,10 +31,13 @@ define('io.ox/calendar/month/view',
 
     var View = Backbone.View.extend({
 
-        className: 'week',
-        weekStart: 0,
-        weekEnd: 0,
-        folder: null,
+        className:      'week',
+        weekStart:      0,
+        weekEnd:        0,
+        folder:         null,
+        clickTimer:     null,   // timer to separate single and double click
+        clicks:         0,      // click counter
+        pane:           $(),
 
         events: {
             'click .appointment': 'onClickAppointment',
@@ -47,20 +51,50 @@ define('io.ox/calendar/month/view',
             this.weekStart = options.day;
             this.weekEnd = options.day + date.WEEK;
             this.folder = options.folder;
+            this.pane = options.pane;
         },
 
         onClickAppointment: function (e) {
             var cid = $(e.currentTarget).data('cid'),
-                el = $('[data-cid="' + cid + '"]', this.$el);
-            if (!el.hasClass('private')) {
-                $('.appointment').removeClass('opac').not(el).addClass('opac');
-                el.add('.appointment.current').toggleClass('current');
-                this.trigger('showAppoinment', e, _.cid(cid + ''));
+                cT = $('[data-cid="' + cid + '"]', this.pane);
+            if (cT.hasClass('appointment') && !cT.hasClass('private')) {
+                var self = this,
+                    obj = _.cid(cid + '');
+                
+                if (!cT.hasClass('current')) {
+                    self.trigger('showAppointment', e, obj);
+                    self.pane.find('.appointment')
+                        .removeClass('current opac')
+                        .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane))
+                        .addClass('opac');
+                    $('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane).addClass('current');
+                } else {
+                    $('.appointment', self.pane).removeClass('opac');
+                }
+
+                if (self.clickTimer === null && self.clicks === 0) {
+                    self.clickTimer = setTimeout(function () {
+                        clearTimeout(self.clickTimer);
+                        self.clicks = 0;
+                        self.clickTimer = null;
+                    }, 300);
+                }
+                self.clicks++;
+
+                if (self.clickTimer !== null && self.clicks === 2) {
+                    clearTimeout(self.clickTimer);
+                    self.clicks = 0;
+                    self.clickTimer = null;
+                    self.trigger('openEditAppointment', e, obj);
+                }
             }
         },
 
         onCreateAppointment: function (e) {
-            if (!$(e.target).hasClass('appointment')) {
+            if (!folder.can('create', this.folder)) {
+                return;
+            }
+            if ($(e.target).hasClass('list')) {
                 this.trigger('createAppoinment', e, $(e.currentTarget).data('date'));
             }
         },
@@ -147,38 +181,45 @@ define('io.ox/calendar/month/view',
             // loop over all appointments
             this.collection.each(function (model) {
 
-                var startTSUTC = Math.max(model.get('start_date'), this.weekStart),
-                    endTSUTC = Math.min(model.get('end_date'), this.weekEnd) - 1;
+                var hash = util.getConfirmations(model.attributes),
+                    conf = hash[myself] || { status: 1, comment: "" };
 
-                // fix full-time UTC timestamps
-                if (model.get('full_time')) {
-                    startTSUTC = date.Local.utc(startTSUTC);
-                    endTSUTC = date.Local.utc(endTSUTC);
-                }
+                // is declined?
+                if (conf.status !== 2 || settings.get('showDeclinedAppointments', 'false') === 'true') {
 
-                var startDate = new date.Local(startTSUTC),
-                    endDate = new date.Local(endTSUTC),
-                    start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime(),
-                    end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime(),
-                    maxCount = 7;
+                    var startTSUTC = Math.max(model.get('start_date'), this.weekStart),
+                        endTSUTC = Math.min(model.get('end_date'), this.weekEnd) - 1;
 
-                if (model.get('start_date') < 0) {
-                    console.error('FIXME: start_date should not be negative');
-                    throw 'FIXME: start_date should not be negative';
-                }
+                    // fix full-time UTC timestamps
+                    if (model.get('full_time')) {
+                        startTSUTC = date.Local.utc(startTSUTC);
+                        endTSUTC = date.Local.utc(endTSUTC);
+                    }
 
-                // draw across multiple days
-                while (maxCount >= 0) {
-                    maxCount--;
-                    this.$('#' + formatDate(startDate) + ' .list').append(this.renderAppointment(model));
+                    var startDate = new date.Local(startTSUTC),
+                        endDate = new date.Local(endTSUTC),
+                        start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime(),
+                        end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime(),
+                        maxCount = 7;
 
-                    // inc date
-                    if (start !== end) {
-                        startDate.setDate(startDate.getDate() + 1);
-                        startDate.setHours(0, 0, 0, 0);
-                        start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime();
-                    } else {
-                        break;
+                    if (model.get('start_date') < 0) {
+                        console.error('FIXME: start_date should not be negative');
+                        throw 'FIXME: start_date should not be negative';
+                    }
+
+                    // draw across multiple days
+                    while (maxCount >= 0) {
+                        maxCount--;
+                        this.$('#' + formatDate(startDate) + ' .list').append(this.renderAppointment(model));
+
+                        // inc date
+                        if (start !== end) {
+                            startDate.setDate(startDate.getDate() + 1);
+                            startDate.setHours(0, 0, 0, 0);
+                            start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime();
+                        } else {
+                            break;
+                        }
                     }
                 }
             }, this);
