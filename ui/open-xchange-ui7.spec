@@ -89,6 +89,7 @@ rm -r "%{buildroot}/opt/open-xchange-ui7-dev"
 
 %files -f tmp/files
 %defattr(-,root,root)
+%dir %{docroot}
 %doc readme.txt
 
 %files manifest
