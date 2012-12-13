@@ -18,7 +18,8 @@ define("io.ox/mail/api",
      "io.ox/core/api/factory",
      "io.ox/core/api/folder",
      "io.ox/core/api/account",
-     "io.ox/core/notifications"], function (http, cache, config, apiFactory, folderAPI, accountAPI, notifications) {
+     "io.ox/core/notifications",
+     'settings!io.ox/mail'], function (http, cache, config, apiFactory, folderAPI, accountAPI, notifications, settings) {
 
     'use strict';
 
@@ -197,7 +198,7 @@ define("io.ox/mail/api",
             },
             get: {
                 action: "get",
-                view: "noimg",
+                view: settings.get('allowHtmlMessages', true) ? 'noimg' : 'text',
                 embedded: "true"
             },
             getUnmodified: {
@@ -1022,6 +1023,11 @@ define("io.ox/mail/api",
                 });
             });
     };
+
+    // change API's default options if allowHtmlMessages changes
+    settings.on('change:allowHtmlMessages', function (e, value) {
+        api.options.requests.get.view = value ? 'noimg' : 'text';
+    });
 
     return api;
 });
