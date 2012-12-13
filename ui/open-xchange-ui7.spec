@@ -69,8 +69,10 @@ sh build.sh builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
     manifestDir="%{buildroot}/opt/open-xchange/ui7" \
     version=%{version} revision=%{release}
 
+find "%{buildroot}%{docroot}" -type d \
+    | sed -e 's,%{buildroot},%dir ,' > tmp/files
 find "%{buildroot}%{docroot}" \( -type f -o -type l \) \
-    | sed -e 's,%{buildroot},,' > tmp/files
+    | sed -e 's,%{buildroot},,' >> tmp/files
 ## l10n ##
 #find tmp/l10n \( -type f -o -type l \) -name '*.## Lang ##.js' \
 #    | sed -e 's,tmp/l10n,%{docroot},' > tmp/files-## lang ##
@@ -89,7 +91,6 @@ rm -r "%{buildroot}/opt/open-xchange-ui7-dev"
 
 %files -f tmp/files
 %defattr(-,root,root)
-%dir %{docroot}
 %doc readme.txt
 
 %files manifest
