@@ -201,9 +201,11 @@ define('io.ox/core/tk/folderviews',
 
         // update promise
         this.reload = function () {
-            return (ready = api.get({ folder: id })).done(function () {
+            return (ready = api.get({ folder: id })).done(function (promise) {
+                data = promise;
                 children = _.isArray(children) && children.length === 0 ? null : children;
                 updateArrow();
+                self.customize();
             });
         };
 
@@ -720,6 +722,13 @@ define('io.ox/core/tk/folderviews',
             id = String(id);
             if (id in this.treeNodes) {
                 this.treeNodes[id].destroy();
+            }
+        };
+
+        this.reloadNode = function (id) {
+            id = String(id);
+            if (id in this.treeNodes) {
+                this.treeNodes[id].reload();
             }
         };
 

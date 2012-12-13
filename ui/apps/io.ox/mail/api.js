@@ -188,7 +188,7 @@ define("io.ox/mail/api",
                 columns: "601,600,611", // + flags
                 sort: "610", // received_date
                 order: "desc",
-                deleted: 'false',
+                deleted: 'true',
                 cache: false // allow DB cache
             },
             list: {
@@ -523,7 +523,7 @@ define("io.ox/mail/api",
 
     };
 
-    api.markUnread = function (list, local) {
+    api.markUnread = function (list) {
 
         list = [].concat(list);
 
@@ -533,14 +533,13 @@ define("io.ox/mail/api",
                 obj.flags = obj.flags & ~32;
             })
             .done(function () { api.trigger('refresh.list'); }),
-            local ? DONE : update(list, { flags: api.FLAGS.SEEN, value: false })
-        )
-        .done(function () {
-            folderAPI.reload(list);
-        });
+            update(list, { flags: api.FLAGS.SEEN, value: false }).done(function () {
+                folderAPI.reload(list);
+            })
+        );
     };
 
-    api.markRead = function (list, local) {
+    api.markRead = function (list) {
 
         list = [].concat(list);
 
@@ -550,11 +549,10 @@ define("io.ox/mail/api",
                 obj.flags = obj.flags | 32;
             })
             .done(function () { api.trigger('refresh.list'); }),
-            local ? DONE : update(list, { flags: api.FLAGS.SEEN, value: true })
-        )
-        .done(function () {
-            folderAPI.reload(list);
-        });
+            update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
+                folderAPI.reload(list);
+            })
+        );
     };
 
     api.markSpam = function (list) {
@@ -796,7 +794,6 @@ define("io.ox/mail/api",
     }
 
     function handleSendTheGoodOldWay(data, form) {
-        console.log('SENDMAIL oldschool', data, form);
         return http.FORM({ data: data, form: form, field: 'json_0', url: 'mail?action=new' });
     }
 
@@ -893,7 +890,7 @@ define("io.ox/mail/api",
                 folder: 'default0/INBOX',
                 columns: '610,600,601', //received_date, id, folder_id
                 unseen: 'true',
-                deleted: 'false',
+                deleted: 'true',
                 sort: '610',
                 order: 'desc'
             }

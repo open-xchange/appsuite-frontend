@@ -402,20 +402,25 @@ define('io.ox/core/commons-folderview',
             // paint now
             return tree.paint().pipe(function () {
                 return tree.select(app.folder.get()).done(function () {
+
                     tree.selection.on('change', fnChangeFolder);
                     toggleTree = toggle;
                     sidepanel.idle();
+
                     api.on('delete:prepare', function (e, id, folder_id) {
                         tree.select(folder_id);
                         tree.busy();
                     });
+
                     api.on('delete', function (e, id) {
                         tree.removeNode(id);
                         tree.idle();
                     });
+
                     api.on('update:prepare', function () {
                         tree.busy();
                     });
+
                     api.on('update', function (e, id, newId, data) {
                         // this is used by folder rename, since the id might change (mail folders)
                         if (_.isEqual(tree.selection.get(), [id])) {
@@ -436,6 +441,11 @@ define('io.ox/core/commons-folderview',
                         tree.idle();
                         notifications.yell(error);
                     });
+
+                    api.on('update:unread', function (e, id, data) {
+                        tree.reloadNode(id);
+                    });
+
                     initTree = loadTree = null;
                 });
             });
