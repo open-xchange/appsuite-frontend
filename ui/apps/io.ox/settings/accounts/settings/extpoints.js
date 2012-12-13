@@ -20,7 +20,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         easyOut: true,
                         async: true
                     }),
-                    $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'}),
+                    $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'}).placeholder(),
                     $mode = $('<select>').append(
                         $('<option>').attr('value', 'hot').text(gt('hot')),
                         $('<option>').attr('value', 'new').text(gt('new'))
@@ -145,7 +145,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
 
                         if (oldSubreddit) {
                             oldSubreddit = String(oldSubreddit);
-                            var $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'}).val(oldName),
+                            var $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'}).val(oldName).placeholder(),
                                 $error = $('<div>').addClass('alert alert-error').hide(),
                                 that = this;
 
@@ -307,8 +307,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         easyOut: true,
                         async: true
                     }),
-                    $url = $('<input>').attr({type: 'text', placeholder: '.tumblr.com'}),
-                    $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
+                    $url = $('<input>').attr({type: 'text', placeholder: '.tumblr.com'}).placeholder(),
+                    $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}).placeholder(),
                     $error = $('<div>').addClass('alert alert-error').hide(),
                     that = this;
 
@@ -439,8 +439,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             oldDescription = $myNode.data('description');
 
                         if (oldUrl) {
-                            var $url = $('<input>').attr({type: 'text', placeholder: '.tumblr.com'}).val(oldUrl),
-                            $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}).val(oldDescription),
+                            var $url = $('<input>').attr({type: 'text', placeholder: '.tumblr.com'}).val(oldUrl).placeholder(),
+                            $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}).val(oldDescription).placeholder(),
                             $error = $('<div>').addClass('alert alert-error').hide(),
                             that = this;
 
@@ -618,8 +618,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                         easyOut: true,
                         async: true
                     }),
-                    $q = $('<input>').attr({type: 'text', placeholder: gt('Search')}),
-                    $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
+                    $q = $('<input>').attr({type: 'text', placeholder: gt('Search')}).placeholder(),
+                    $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}).placeholder(),
                     $method = $('<select>').append(
                         $('<option>').attr('value', 'flickr.photos.search').text(gt('flickr.photos.search')),
                         $('<option>').attr('value', 'flickr.people.getPublicPhotos').text(gt('flickr.people.getPublicPhotos'))
@@ -775,8 +775,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
 
                             if (oldQ && oldMethod) {
                                 oldQ = String(oldQ);
-                                var $q = $('<input>').attr({type: 'text', placeholder: gt('Search')}).val(oldQ);
-                                var $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}).val(oldDescription);
+                                var $q = $('<input>').attr({type: 'text', placeholder: gt('Search')}).val(oldQ).placeholder();
+                                var $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}).val(oldDescription).placeholder();
                                 var $method = $('<select>')
                                 .append($('<option>').attr('value', 'flickr.photos.search').text(gt('flickr.photos.search')))
                                 .append($('<option>').attr('value', 'flickr.people.getPublicPhotos').text(gt('flickr.people.getPublicPhotos')))
@@ -945,8 +945,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                 console.log("Function created");
                 var feedgroups = settings.get('groups'),
                     dialog = new dialogs.ModalDialog({ easyOut: true, async: true }),
-                    $url = $('<input>').attr({type: 'text', placeholder: gt('http://')}),
-                    $feedname = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
+                    $url = $('<input>').attr({type: 'text', placeholder: gt('http://')}).placeholder(),
+                    $feedname = $('<input>').attr({type: 'text', placeholder: gt('Description')}).placeholder(),
                     $group = feedgroupSelect(),
                     $error = $('<div>').addClass('alert alert-error').hide(),
                     that = this;
@@ -1015,7 +1015,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
             require(['settings!io.ox/rss', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'io.ox/messaging/accounts/api', 'io.ox/core/strings'], function (settings, gt, dialogs, accountApi, strings) {
                 var feedgroups = settings.get('groups'),
                     dialog = new dialogs.ModalDialog({ easyOut: true, async: true }),
-                    $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
+                    $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}).placeholder(),
                     $error = $('<div>').addClass('alert alert-error').hide(),
                     that = this;
 
@@ -1155,8 +1155,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             if (!oldUrl) {
                                 return;
                             }
-                            var $url = $('<input>').attr({type: 'text'}).val(oldUrl),
-                                $feedname = $('<input>').attr({type: 'text', placeholder: gt('Name of feed')}).val(oldFeedname),
+                            var $url = $('<input>').attr({type: 'text'}).val(oldUrl).placeholder(),
+                                $feedname = $('<input>').attr({type: 'text', placeholder: gt('Name of feed')}).val(oldFeedname).placeholder(),
                                 $groups = makeFeedgroupSelection(oldGroupname),
                                 $error = $('<div>').addClass('alert alert-error').hide(),
                                 that = this;
@@ -1218,7 +1218,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             if (!oldGroupname) {
                                 return;
                             }
-                            var $groupname = $('<input>').attr({type: 'text', placeholder: gt('Name for group of feeds')}).val(oldGroupname),
+                            var $groupname = $('<input>').attr({type: 'text', placeholder: gt('Name for group of feeds')}).val(oldGroupname).placeholder(),
                                 $error = $('<div>').addClass('alert alert-error').hide(),
                                 that = this;
 
