@@ -689,6 +689,7 @@ define('io.ox/mail/view-detail',
 
     function changeLabel(e) {
         e.preventDefault();
+        $(this).closest('.flag-dropdown').removeClass(e.data.flagclass).addClass('flag_' + e.data.color);
         return api.changeColor(e.data.data, e.data.color);
     }
 
@@ -696,10 +697,11 @@ define('io.ox/mail/view-detail',
         index: 105,
         id: 'flag',
         draw: function (baton) {
-            var data = baton.data;
+            var data = baton.data,
+            flagclass = 'flag_' + util.getFlag(data);
             this.append(
                 $('<div class="dropdown flag-dropdown clear-title flag">')
-                .addClass('flag_' + util.getFlag(data))
+                .addClass(flagclass)
                 .append(
                     // box
                     $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown">'),
@@ -712,7 +714,7 @@ define('io.ox/mail/view-detail',
                                     index > 0 ? $('<span class="flag-example">').addClass('flag_' + index) : $(),
                                     $.txt(colorNames[color])
                                 )
-                                .on('click', { data: data, color: index }, changeLabel)
+                                .on('click', { data: data, color: index, flagclass: flagclass }, changeLabel)
                                 .addClass(data.color_label === index ? 'active-label' : undefined)
                             ));
                         }, $())
