@@ -475,8 +475,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                     if (o.module === "multiple") {
                         var i = 0, $l = response.length, tmp;
                         for (; i < $l; i++) {
-                            // time
-                            if (response[i]) {
+                            if (response[i]) { // to bypass temp. [null] bug
+                                // time
                                 timestamp = response[i].timestamp !== undefined ? response[i].timestamp : _.now();
                                 // data/error
                                 if (response[i].data !== undefined) {

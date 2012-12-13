@@ -705,29 +705,43 @@ define('io.ox/core/api/folder',
 
         reload: (function () {
 
+            var pending = {};
+
             function get(id, a) {
-                getFolder(id, { cache: false }).done(function (b) {
-                    // compare folder data. Might be different due to differences in get & list requests (sadly),
-                    // so we cannot use _.isEqual(). Actually we are just interested in some fields:
-                    // unread, title, subfolders, subscr_subflds
-                    var equalUnread = a.unread === b.unread,
-                        equalData = a.title === b.title && a.subfolders === b.subfolders && a.subscr_subflds === b.subscr_subflds;
-                    if (equalData && !equalUnread) {
-                        api.trigger('update:unread', id, b);
-                    } else if (!equalData) {
-                        api.trigger('update', id, id, b);
-                    }
-                });
+                pending[id] = true;
+                getFolder(id, { cache: false })
+                    .done(function (b) {
+                        // compare folder data. Might be different due to differences in get & list requests (sadly),
+                        // so we cannot use _.isEqual(). Actually we are just interested in some fields:
+                        // unread, title, subfolders, subscr_subflds
+                        var equalUnread = a.unread === b.unread,
+                            equalData = a.title === b.title && a.subfolders === b.subfolders && a.subscr_subflds === b.subscr_subflds;
+                        if (equalData && !equalUnread) {
+                            api.trigger('update:unread', id, b);
+                        } else if (!equalData) {
+                            api.trigger('update', id, id, b);
+                        }
+                    })
+                    .always(function () {
+                        delete pending[id];
+                    });
             }
 
             return function (list) {
                 if (ox.online) {
-                    _([].concat(list)).each(function (obj) {
-                        var id = _.isString(obj) ? obj : obj.folder_id;
-                        folderCache.get(id).done(function (data) {
-                            if (data !== null) { get(id, data); }
+                    _([].concat(list))
+                        .chain()
+                        .map(function (obj) {
+                            return _.isString(obj) ? obj : obj.folder_id;
+                        })
+                        .uniq()
+                        .each(function (id) {
+                            if (!(id in pending)) {
+                                folderCache.get(id).done(function (data) {
+                                    if (data !== null) { get(id, data); }
+                                });
+                            }
                         });
-                    });
                 }
             };
 

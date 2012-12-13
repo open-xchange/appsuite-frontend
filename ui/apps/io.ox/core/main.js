@@ -513,13 +513,7 @@ define("io.ox/core/main",
                     drawDesktop();
                     return baton.block.resolve(true);
                 }
-                if (baton.autoLaunch.length || baton.canRestore || location.hash === '#!') {
-                    return baton.block.resolve(true);
-                } else {
-                    // fade out animation
-                    $("#background_loader").idle().fadeOut(DURATION, baton.block.resolve);
-                    return baton.block;
-                }
+                return baton.block.resolve(baton.autoLaunch.length || baton.canRestore || location.hash === '#!');
             }
         });
 
@@ -557,11 +551,24 @@ define("io.ox/core/main",
                     // restore apps
                     ox.ui.App.restore();
 
-                    if (instantFadeOut === true) {
-                        // instant fade out
-                        $("#background_loader").idle().hide();
-                    }
+                    baton.instantFadeOut = instantFadeOut;
                 });
+            }
+        });
+
+        new Stage('io.ox/core/stages', {
+            id: 'curtain',
+            index: 700,
+            run: function (baton) {
+                if (baton.instantFadeOut) {
+                    // instant fade out
+                    $("#background_loader").idle().hide();
+                    return $.when();
+                } else {
+                    var def = $.Deferred();
+                    $("#background_loader").idle().fadeOut(DURATION, def.resolve);
+                    return def;
+                }
             }
         });
 
