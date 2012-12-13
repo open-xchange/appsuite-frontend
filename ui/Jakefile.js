@@ -102,12 +102,12 @@ function jsFilter (data) {
         var filename = self.getSrc(this[0].start.line).name;
         var mod = filename.slice(5, -3);
         if (filename.slice(0, 5) === 'apps/' && (!name || name[1] !== mod)) {
-            console.log('filename', filename, name, mod);
             if (name === undefined) {
                 var newName = parse('(' + JSON.stringify(mod) + ')',
                                     self.task.name)[1][0][1];
                 return [this[0], this[1], [newName].concat(args)];
             } else {
+                fs.writeFileSync('tmp/errorfile.js', data, 'utf8');
                 fail('Invalid module name: ' + (name ? name[1] : "''") +
                     ' should be ' + mod);
             }
@@ -293,12 +293,10 @@ utils.concat("pre-core.js",
         "io.ox/core/commons-folderview.js",
         "io.ox/core/collection.js",
         "io.ox/core/notifications.js",
-        "io.ox/core/date.js",
         "io.ox/core/extPatterns/actions.js",
         "io.ox/core/extPatterns/links.js",
-        // don't know why but these two files crash build process
-        //"cio.ox/ore/extPatterns/stage.js",
-        //"cio.ox/ore/extPatterns/dnd.js",
+        "io.ox/core/extPatterns/stage.js",
+        "io.ox/core/extPatterns/dnd.js",
         "io.ox/core/tk/folderviews",
         "io.ox/mail/api.js",
         "io.ox/mail/util.js",
@@ -307,6 +305,7 @@ utils.concat("pre-core.js",
         "io.ox/tasks/util.js",
         "io.ox/calendar/api.js",
         "io.ox/calendar/util.js",
+        "io.ox/core/date.js",
         "plugins/notifications/mail/register.js",
         "plugins/notifications/calendar/register.js",
         "plugins/notifications/taks/register.js"
