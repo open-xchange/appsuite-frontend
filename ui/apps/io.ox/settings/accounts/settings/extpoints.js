@@ -904,7 +904,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                     };
                 var FeedGroupView = Backbone.View.extend({
                         render: function () {
-                            console.log("MYDATA2:", data);
                             var self = this,
                                 feeds = data.props.url;
 
@@ -939,8 +938,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             }
 
                             var $url = $('<input>').css({width: '95%'}).attr({type: 'text'}).val(oldUrl),
-                                $error = $('<div>').addClass('alert alert-error').hide(),
-                                that = this;
+                                $error = $('<div>').addClass('alert alert-error').hide();
 
                             dialog.header($("<h4>").text(gt('Edit a feed')))
                                 .append($url)
@@ -964,9 +962,9 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                 }
 
                                 deferred.done(function () {
-                                    var urls = [url];
+                                    var newUrls = _(urls).chain().without(oldUrl).push(url).value();
 
-                                    settings.set('widgets/user/' + key + '/props/url', urls);
+                                    settings.set('widgets/user/' + key + '/props/url', newUrls);
                                     settings.save();
 
                                     dialog.close();
@@ -986,7 +984,6 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             var deleteme = $(pEvent.target).parent(),
                                 urls = deleteme.parent().data('feeds'),
                                 url = deleteme.data('url');
-                            console.log("DELETEME", urls, deleteme.data());
                             if (!url) {
                                 return;
                             }

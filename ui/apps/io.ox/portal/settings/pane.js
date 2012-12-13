@@ -153,7 +153,6 @@ define('io.ox/portal/settings/pane',
                     type = widget.key.substring(0, widget.key.lastIndexOf('_')),
                     name = widget.description,
                     key = widget.key;
-                console.log("DEBUG", id, type, name, key, widget);
 
                 var $thisSetting = $('<li class="io-ox-portal-setting">').attr({id: id }).data({name: name, type: type, key: key}).append( //basics
                     $('<span class="io-ox-setting-title io-ox-portal-settings-title">').text(name || key),
