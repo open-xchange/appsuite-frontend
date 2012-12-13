@@ -25,12 +25,6 @@ define('io.ox/portal/settings/pane',
 
     'use strict';
 
-    //this is how the new settings look
-
-
-    var MAX_INDEX = 99999,
-        availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq();
-
     var draw = function (data, that) {
         var redraw = function () {
             that.empty();
@@ -187,9 +181,14 @@ define('io.ox/portal/settings/pane',
                     $thisSetting.find('.io-ox-portal-action-disable a').text(gt('Enable')).on('click', onEnable);
                 }
 
-                ext.point('io.ox/portal/settings/detail/' + type).each(function (extension) { //add advanced settings to extensions
-                    extension.draw.apply($additionalContent, [widget]);
-                });
+                if (ext.point('io.ox/portal/settings/detail/' + type).list().length > 0) { //add advanced settings to extensions
+                    ext.point('io.ox/portal/settings/detail/' + type).each(function (extension) {
+                        extension.draw.apply($additionalContent, [widget]);
+                    });
+                } else { //remove edit button and advanced settings
+                    $additionalContent.empty();
+                    $thisSetting.find('.io-ox-portal-action-edit').remove();
+                }
 
 
             }); //end: widget.each
@@ -202,22 +201,6 @@ define('io.ox/portal/settings/pane',
                 $addButton.clone(true)
             );
         }); //end: require
-    };
-
-    var getWidgetSettings = function () {
-        return _(settings.get('widgets/user', {}))
-            .chain()
-            // map first since we need the object keys
-            .map(function (obj, id) {
-                obj.id = id;
-                obj.type = id.split('_')[0];
-                obj.props = obj.props || {};
-                return obj;
-            })
-            .filter(function (obj) {
-                return (obj.enabled === undefined || obj.enabled === true) && _(availablePlugins).contains(obj.plugin);
-            })
-            .value();
     };
 
     ext.point("io.ox/portal/settings/detail").extend({
