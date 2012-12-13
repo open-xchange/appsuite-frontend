@@ -313,7 +313,8 @@
 
     .flag-dropdown ul {
         font: 14px/20 @font-normal;
-        right: -22px;
+        /* right: -22px; */
+        right: 165px;
         left: auto;
         top: 125%;
         width: 200px;
@@ -570,12 +571,18 @@ h4.mail-attachment-preview {
         z-index: 11001;
     }
     div.to-cc {
+        z-index: 11003;
+    }
+    div.attachment-list {
+        position: relative;
         z-index: 11002;
     }
     div.flag-dropdown {
-        z-index: 11003; // to be above attachment dropdowns
+        position:relative;
+        z-index: 12004; // to be above attachment dropdowns
         ul.dropdown-menu {
-            z-index:11004;
+            position:relative;
+            z-index:12005;
         }
     }
 }
