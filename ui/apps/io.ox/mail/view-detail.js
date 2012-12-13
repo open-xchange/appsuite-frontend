@@ -646,7 +646,7 @@ define('io.ox/mail/view-detail',
         id: 'fromlist',
         draw: function (baton) {
             var data = baton.data, list = util.serializeList(data, 'from'), node;
-            this.append($('<div class="from list">').append(list));
+            this.append($('<div class="from list">').append(list.removeAttr('style')));
             if (ox.ui.App.get('io.ox/mail').length) {
                 node = list.last();
                 node.after(

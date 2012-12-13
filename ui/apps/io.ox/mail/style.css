@@ -277,7 +277,7 @@
     }
 
     .from.list {
-        display:inline-block;
+        display:block;
     }
 
     .subject, .thread-size {
