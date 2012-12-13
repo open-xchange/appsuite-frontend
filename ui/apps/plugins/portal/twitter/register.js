@@ -230,7 +230,7 @@ define('plugins/portal/twitter/register',
                 );
             } else {
                 _(baton.data).each(function (tweet) {
-                    var message = String(tweet.text).replace(/((#|@)\w+)/g, '<span class="accent">$1</span>');
+                    var message = String(tweet.text).replace(/((#|@)[\wäöüß]+)/ig, '<span class="accent">$1</span>');
                     content.append(
                         $('<div class="paragraph">').append(
                             $('<span class="bold">').text('@' + tweet.user.name + ': '),
