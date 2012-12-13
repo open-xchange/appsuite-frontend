@@ -67,7 +67,7 @@ define('io.ox/mail/util',
 
         // mail addresses hash
         addresses = {};
-    
+
     _(config.get('mail.addresses', [])).each(function (address) {
         addresses[address.toLowerCase()] = true;
     });
@@ -255,11 +255,15 @@ define('io.ox/mail/util',
         },
 
         isAnswered: function (data) {
-            return (data.flags & 1) === 1;
+            return _([].concat(data)).reduce(function (memo, data) {
+                return memo || (data.flags & 1) === 1;
+            }, false);
         },
 
         isForwarded: function (data) {
-            return (data.flags & 256) === 256;
+            return _([].concat(data)).reduce(function (memo, data) {
+                return memo || (data.flags & 256) === 256;
+            }, false);
         },
 
         byMyself: function (data) {

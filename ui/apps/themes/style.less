@@ -808,12 +808,13 @@ a.button {
 }
 
 .vgrid-cell.selected {
-    .vertical-gradient(lighten(@selected-background, 20%), darken(@selected-background, 5%));
-    border-bottom-color: rgba(0, 0, 0, 0.5);
+    background-color: @selected-background;
+    border-bottom-color: rgba(0, 0, 0, 0.25);
 }
 
 .vgrid-cell.selected * {
-    color: white !important;
+    color: #F0FAFF !important;
+    -webkit-font-smoothing: antialiased;
 }
 
 .vgrid-cell.relative {

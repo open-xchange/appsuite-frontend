@@ -208,16 +208,18 @@ define('io.ox/office/tk/view/alert',
      *
      *  @param {jQuery | Object} node the dom node to add the alert to
      *  @param {Object} controller the controller for event handling
+     *  @param {String} message to message be displayed in alert
+     *  @param {Number} duration the duration the alert is shown
      */
-    Alert.showWriteProtectedWarning = function (node, controller) {
+    Alert.showWriteProtectedWarning = function (node, controller, message, duration) {
 
         Alert.showWarning(
             gt('Read-only mode'),
-            gt('You don\'t have permissions to change this document'),
+            message,
             true,
             node,
             controller,
-            3000);
+            duration);
     };
 
     /**

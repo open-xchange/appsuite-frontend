@@ -32,7 +32,6 @@
     padding: 0 0.5em 0 0.5em;
     margin-left: 1em;
     border-radius: 5px;
-    display: inline-block;
     float: right;
     .box-sizing(border-box);
 }
@@ -267,8 +266,9 @@
 
     .date {
         color: #888;
-        display: inline-block;
+        display: block;
         float: right;
+        margin-right: -56px;
     }
 
     .subject {
@@ -276,7 +276,11 @@
         word-break: break-word;
     }
 
-    .subject, .thread-size, .flag {
+    .from.list {
+        display:block;
+    }
+
+    .subject, .thread-size {
         font-size: 16pt;
         margin: @inline-links-margin;
     }
@@ -301,13 +305,16 @@
         width: 30px;
         height: 24px;
         margin-left: 1em;
+        margin-top: 40px;
         border: 1px solid rgba(0, 0, 0, 0.2);
         cursor: pointer;
+        float:right;
     }
 
     .flag-dropdown ul {
         font: 14px/20 @font-normal;
-        right: -22px;
+        /* right: -22px; */
+        right: 165px;
         left: auto;
         top: 125%;
         width: 200px;
@@ -564,12 +571,18 @@ h4.mail-attachment-preview {
         z-index: 11001;
     }
     div.to-cc {
+        z-index: 11003;
+    }
+    div.attachment-list {
+        position: relative;
         z-index: 11002;
     }
     div.flag-dropdown {
-        z-index: 11003; // to be above attachment dropdowns
+        position:relative;
+        z-index: 12004; // to be above attachment dropdowns
         ul.dropdown-menu {
-            z-index:11004;
+            position:relative;
+            z-index:12005;
         }
     }
 }

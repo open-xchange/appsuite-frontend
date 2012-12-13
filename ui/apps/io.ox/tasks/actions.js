@@ -305,7 +305,7 @@ define("io.ox/tasks/actions",
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'changeDueDate',
         index: 400,
-        prio: 'hi',
+        prio: 'lo',
         ref: 'io.ox/tasks/actions/placeholder',
         draw: function (baton) {
             var data = baton.data;

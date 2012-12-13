@@ -90,7 +90,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             });
 
             $dayList.append($('<li>').append(
-                gt("close"),
+                gt("Close"),
                 $('<i class="icon-remove">')
             ).on("click", function () {
                 $anchor.popover('hide');
@@ -630,12 +630,14 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
                     if (this.model.get('occurrences')) {
                         this.nodes.endsChoice.append(this.ends.after.$el);
-                        this.setEnding(this.ends.after);
+                        // workaround: swapped lines to avoid problems via endingChanged (see bug 24138)
                         this.endsChoice.set('occurrences', this.model.get("occurrences"));
+                        this.setEnding(this.ends.after);
                     } else if (this.model.get('until')) {
                         this.nodes.endsChoice.append(this.ends.date.$el);
-                        this.setEnding(this.ends.date);
+                        // workaround: swapped lines to avoid problems via endingChanged (see bug 24138)
                         this.endsChoice.set("until", this.model.get("until"));
+                        this.setEnding(this.ends.date);
                     } else {
                         this.nodes.endsChoice.append(this.ends.never.$el);
                         this.setEnding(this.ends.never);

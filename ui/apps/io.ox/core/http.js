@@ -476,19 +476,21 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                         var i = 0, $l = response.length, tmp;
                         for (; i < $l; i++) {
                             // time
-                            timestamp = response[i].timestamp !== undefined ? response[i].timestamp : _.now();
-                            // data/error
-                            if (response[i].data !== undefined) {
-                                // data
-                                tmp = sanitize(response[i].data, o.data[i].columnModule, o.data[i].columns);
-                                data.push({ data: tmp, timestamp: timestamp });
-                                // handle warnings within multiple
-                                if (response[i].error !== undefined) {
-                                    console.warn("TODO: warning");
+                            if (response[i]) {
+                                timestamp = response[i].timestamp !== undefined ? response[i].timestamp : _.now();
+                                // data/error
+                                if (response[i].data !== undefined) {
+                                    // data
+                                    tmp = sanitize(response[i].data, o.data[i].columnModule, o.data[i].columns);
+                                    data.push({ data: tmp, timestamp: timestamp });
+                                    // handle warnings within multiple
+                                    if (response[i].error !== undefined) {
+                                        console.warn("TODO: warning");
+                                    }
+                                } else {
+                                    // error
+                                    data.push({ error: response[i], timestamp: timestamp });
                                 }
-                            } else {
-                                // error
-                                data.push({ error: response[i], timestamp: timestamp });
                             }
                         }
                         deferred.resolve(data);

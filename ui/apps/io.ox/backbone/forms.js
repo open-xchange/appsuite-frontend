@@ -394,7 +394,7 @@ define('io.ox/backbone/forms',
 
     function InputField(options) {
         options = _.extend({
-            changeOnKeyUp: false
+            changeAppTitleOnKeyUp: false
         }, options);
         var modelEvents = {};
         modelEvents['change:' + options.attribute] = 'updateInputField';
@@ -404,7 +404,12 @@ define('io.ox/backbone/forms',
                 this.nodes = {};
                 this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.inputField = $(this.control || '<input type="text">'));
                 this.nodes.inputField.val(this.model.get(this.attribute));
-                this.nodes.inputField.on('change' + (options.changeOnKeyUp ? ', keyup' : ''), _.bind(this.updateModel, this));
+                if (options.changeAppTitleOnKeyUp) {
+                    this.nodes.inputField.on('keyup', $.proxy(function (e) {
+                        this.baton.app.setTitle(this.nodes.inputField.val());
+                    }, this));
+                }
+                this.nodes.inputField.on('change', _.bind(this.updateModel, this));
             },
             modelEvents: modelEvents,
             updateInputField: function () {

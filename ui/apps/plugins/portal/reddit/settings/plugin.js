@@ -130,8 +130,8 @@ define('plugins/portal/reddit/settings/plugin',
 
                 var $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'});
                 var $mode = $('<select>')
-                    .append($('<option>').attr('value', 'hot').text(gt('hot')))
-                    .append($('<option>').attr('value', 'new').text(gt('new')));
+                    .append($('<option>').attr('value', 'hot').text('hot'))
+                    .append($('<option>').attr('value', 'new').text('new'));
 
                 var $error = $('<div>').addClass('alert alert-error').hide();
 
@@ -215,8 +215,8 @@ define('plugins/portal/reddit/settings/plugin',
                         that = this;
 
                     var $mode = $('<select>')
-                        .append($('<option>').attr('value', 'hot').text(gt('hot')))
-                        .append($('<option>').attr('value', 'new').text(gt('new')))
+                        .append($('<option>').attr('value', 'hot').text('hot'))
+                        .append($('<option>').attr('value', 'new').text('new'))
                         .val(oldMode);
 
                     dialog.header($("<h4>").text(gt('Edit a Subreddit')))

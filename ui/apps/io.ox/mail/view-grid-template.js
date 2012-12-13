@@ -70,10 +70,11 @@ define('io.ox/mail/view-grid-template',
                 if (util.isDeleted(data)) {
                     this.addClass('deleted');
                 }
-                if (util.isAnswered(data)) {
+                var thread = api.tracker.getThread(data) || data;
+                if (util.isAnswered(thread)) {
                     this.addClass('answered');
                 }
-                if (util.isForwarded(data)) {
+                if (util.isForwarded(thread)) {
                     this.addClass('forwarded');
                 }
                 this.attr('data-index', index);

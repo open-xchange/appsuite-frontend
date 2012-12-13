@@ -328,7 +328,7 @@ define('plugins/notifications/tasks/register',
     ext.point('io.ox/core/notifications/task-confirmation/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Task invites')),
+                $('<legend class="section-title">').text(gt('Task invitations')),
                 $('<div class="notifications">')
             );
         }

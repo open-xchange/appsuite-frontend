@@ -519,29 +519,35 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         id: 'attachment_upload',
         index: 2000,
         draw: function (baton) {
-            // browsercheck
-            if (_.browser.IE === 9) { //if browser is IE 9 show update suggestion
-                this.append(
-                    $("<div>").css('textAlign', 'center').append(
-                        $.txt(gt("Attachment uploads are not supported in Internet Explorer 9. Please upgrade to Internet Explorer 10.")),
-                        $('<a>', { href: 'http://ie.microsoft.com', target: '_blank' })
-                    )
-                );
-            } else {
-                var $node = $("<form>").appendTo(this),
-                    $input = $("<input>", {
-                        type: "file"
-                    }),
-                    $button = $("<button/>").attr('data-action', 'add').text(gt("Add")).addClass("btn btn-primary span12").on("click", function (e) {
-                        e.preventDefault();
-                        _($input[0].files).each(function (fileData) {
-                            baton.attachmentList.addFile(fileData);
-                        });
+            var $node = $("<form>").appendTo(this).attr('id', 'attachmentsForm'),
+                $input = $("<input>", { type: "file" }),
+                $button = $("<button/>").attr('data-action', 'add').text(gt("Add")).addClass("btn btn-primary span12");
+           
+            if (_.browser.IE !== 9) {
+                $button.on("click", function (e) {
+                    e.preventDefault();
+                    _($input[0].files).each(function (fileData) {
+                        baton.attachmentList.addFile(fileData);
                     });
-
-                $node.append($("<div>").addClass("span6").append($input));
-                $node.append($("<div>").addClass("span3 offset3").append($button));
+                });
+            } else {
+                $button.on("click", function (e) {
+                    if ($input.val()) {
+                        var fileData = {
+                                name: $input.val().match(/[^\/\\]+$/),
+                                size: 0,
+                                hiddenField: $input
+                            };
+                        e.preventDefault();
+                        baton.attachmentList.addFile(fileData);
+                        $input.addClass("add-attachment").hide();
+                        $input = $("<input>", { type: "file" }).appendTo($input.parent());
+                    }
+                });
             }
+
+            $node.append($("<div>").addClass("span6").append($input));
+            $node.append($("<div>").addClass("span3 offset3").append($button));
         }
     });
 

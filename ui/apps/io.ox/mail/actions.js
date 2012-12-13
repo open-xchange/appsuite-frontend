@@ -216,7 +216,7 @@ define('io.ox/mail/actions',
     }
 
     moveAndCopy('move', gt('Move'), gt('Mails have been moved'));
-    moveAndCopy('copy', gt('copy'), gt('Mails have been copied'));
+    moveAndCopy('copy', gt('Copy'), gt('Mails have been copied'));
 
     new Action('io.ox/mail/actions/copy', {
         id: 'copy',

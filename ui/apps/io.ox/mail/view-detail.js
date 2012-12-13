@@ -646,7 +646,7 @@ define('io.ox/mail/view-detail',
         id: 'fromlist',
         draw: function (baton) {
             var data = baton.data, list = util.serializeList(data, 'from'), node;
-            this.append($('<div class="from list">').append(list));
+            this.append($('<div class="from list">').append(list.removeAttr('style')));
             if (ox.ui.App.get('io.ox/mail').length) {
                 node = list.last();
                 node.after(
@@ -689,17 +689,19 @@ define('io.ox/mail/view-detail',
 
     function changeLabel(e) {
         e.preventDefault();
+        $(this).closest('.flag-dropdown').removeClass(e.data.flagclass).addClass('flag_' + e.data.color);
         return api.changeColor(e.data.data, e.data.color);
     }
 
     ext.point('io.ox/mail/detail').extend({
-        index: 125,
+        index: 105,
         id: 'flag',
         draw: function (baton) {
-            var data = baton.data;
+            var data = baton.data,
+            flagclass = 'flag_' + util.getFlag(data);
             this.append(
                 $('<div class="dropdown flag-dropdown clear-title flag">')
-                .addClass('flag_' + util.getFlag(data))
+                .addClass(flagclass)
                 .append(
                     // box
                     $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown">'),
@@ -712,7 +714,7 @@ define('io.ox/mail/view-detail',
                                     index > 0 ? $('<span class="flag-example">').addClass('flag_' + index) : $(),
                                     $.txt(colorNames[color])
                                 )
-                                .on('click', { data: data, color: index }, changeLabel)
+                                .on('click', { data: data, color: index, flagclass: flagclass }, changeLabel)
                                 .addClass(data.color_label === index ? 'active-label' : undefined)
                             ));
                         }, $())

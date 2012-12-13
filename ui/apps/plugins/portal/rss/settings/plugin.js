@@ -224,7 +224,7 @@ define('plugins/portal/rss/settings/plugin',
                     $error.hide();
 
                     if (url.length === 0) {
-                        $error.text(gt('Please enter a feed-url.'));
+                        $error.text(gt('Please enter a feed URL.'));
                         deferred.reject();
                     } else if (description.length === 0) {
                         $error.text(gt('Please enter a description.'));
@@ -343,7 +343,7 @@ define('plugins/portal/rss/settings/plugin',
                         deferred = $.Deferred();
 
                     if (url.length === 0) {
-                        $error.text(gt('Please enter an feed-url.'));
+                        $error.text(gt('Please enter a feed URL.'));
                         deferred.reject();
                     } else if (feedname.length === 0) {
                         $error.text(gt('Please enter a name for the feed.'));
@@ -439,8 +439,10 @@ define('plugins/portal/rss/settings/plugin',
                 }
                 var that = this;
 
+                // TODO i18n: figure out how many would be deleted; then use singular/plural stuff
+
                 dialog.header($("<h4>").text(gt('Delete a feed')))
-                    .append($('<span>').text(gt('Do you really want to delete the following feed(s)?'))) //TODO i18n
+                    .append($('<span>').text(gt('Do you really want to delete the following feed?')))
                     .append($('<ul>').append($('<li>').text(url)))
                     .addButton('cancel', gt('Cancel'))
                     .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})

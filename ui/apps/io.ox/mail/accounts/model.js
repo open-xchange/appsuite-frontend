@@ -59,7 +59,9 @@ define("io.ox/mail/accounts/model", ["io.ox/core/extensions", "io.ox/keychain/mo
             // We should consider using something like this: https://code.google.com/p/isemail/
             // For now validation checks only if there is an @.
 
-            var regEmail = /\@/i.test(newMailaddress);
+            // See also io.ox/backbone/validation.js
+
+            var regEmail = /\@/.test(newMailaddress);
 
             if (!regEmail) {
                 return 'This is not a valid email address';

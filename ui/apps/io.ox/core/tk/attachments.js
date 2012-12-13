@@ -28,6 +28,7 @@ define('io.ox/core/tk/attachments',
             _.extend(this, {
 
                 init: function () {
+                    this.oldMode = _.browser.IE < 10;
                     var self = this;
                     this.attachmentsToAdd = [];
                     this.attachmentsToDelete = [];
@@ -54,6 +55,7 @@ define('io.ox/core/tk/attachments',
                 },
                 renderAttachment: function (attachment) {
                     var self = this;
+                    var size;
                     var $el = $('<div class="io-ox-core-tk-attachment">');
                     $el.append(
                         $('<table width="100%">').append(
@@ -65,7 +67,7 @@ define('io.ox/core/tk/attachments',
                                             $('<td class="filename">').text(attachment.filename)
                                         ),
                                         $('<tr>').append(
-                                            $('<td class="filesize muted">').text(strings.fileSize(attachment.file_size))
+                                            size = $('<td class="filesize muted">').text(strings.fileSize(attachment.file_size))
                                         )
                                     )
                                 ),
@@ -75,6 +77,8 @@ define('io.ox/core/tk/attachments',
                             )
                         )
                     );
+                    if (size.text() === "0 B") {size.text(" "); }
+                    
                     return $el;
                 },
                 loadAttachments: function () {
@@ -102,7 +106,11 @@ define('io.ox/core/tk/attachments',
                     this.render();
                 },
                 addFile: function (file) {
-                    this.addAttachment({file: file, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size});
+                    if (this.oldMode) {
+                        this.addAttachment({file: file.hiddenField, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size});
+                    } else {
+                        this.addAttachment({file: file, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size});
+                    }
                 },
                 addAttachment: function (attachment) {
                     this.attachmentsToAdd.push(attachment);
@@ -114,6 +122,9 @@ define('io.ox/core/tk/attachments',
                         this.attachmentsToAdd = _(this.attachmentsToAdd).reject(function (att) {
                             return att.cid === attachment.cid;
                         });
+                        if (this.oldMode) {
+                            attachment.file.remove();
+                        }
                     } else {
                         this.attachmentsToDelete.push(attachment);
                     }
@@ -144,12 +155,21 @@ define('io.ox/core/tk/attachments',
                     }
 
                     if (this.attachmentsToAdd.length) {
-                        attachmentAPI.create(apiOptions, _(this.attachmentsToAdd).pluck('file')).fail(function (resp) {
-                            self.model.trigger('backendError', resp);
-                        }).done(function () {
-                            allDone -= 2;
-                            if (allDone <= 0) { self.model.trigger("finishedAttachmentHandling"); }
-                        });
+                        if (this.oldMode) {
+                            attachmentAPI.createOldWay(apiOptions, self.baton.parentView.$el.find('#attachmentsForm')[0]).fail(function (resp) {
+                                self.model.trigger('backendError', resp);
+                            }).done(function () {
+                                allDone -= 2;
+                                if (allDone <= 0) { self.model.trigger("finishedAttachmentHandling"); }
+                            });
+                        } else {
+                            attachmentAPI.create(apiOptions, _(this.attachmentsToAdd).pluck('file')).fail(function (resp) {
+                                self.model.trigger('backendError', resp);
+                            }).done(function () {
+                                allDone -= 2;
+                                if (allDone <= 0) { self.model.trigger("finishedAttachmentHandling"); }
+                            });
+                        }
                     }
                     if (allDone <= 0) { self.model.trigger("finishedAttachmentHandling"); }
                     this.attachmentsToAdd = [];
