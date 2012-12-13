@@ -21,8 +21,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
         description: gt('Reddit'),
         action: function (args) {
             require(['settings!io.ox/portal', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'less!plugins/portal/reddit/style.css'], function (settings, gt, dialogs) {
-                var subreddits = settings.get('widgets/user'),
-                    dialog = new dialogs.ModalDialog({
+                var dialog = new dialogs.ModalDialog({
                         easyOut: true,
                         async: true
                     }),
@@ -46,9 +45,8 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                     $error.hide();
 
                     var subreddit = String($.trim($subreddit.val())),
+                        mode = String($.trim($mode.val())),
                         deferred = $.Deferred();
-
-                    // No dot and url does not end with tumblr.com? Append it!
                     if (subreddit.match(/^r\//)) {
                         subreddit = subreddit.substring(2);
                     }
@@ -75,19 +73,20 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                     }
 
                     deferred.done(function () {
-                        subreddits.push({subreddit: subreddit, mode: $mode.val()});
-                        settings.set('subreddits', subreddits);
+                        var newReddit = {
+                                plugin: 'plugins/portal/reddit/register',
+                                color: 'orange', //TODO
+                                index: 'first', //TODO
+                                description: subreddit,
+                                props: {
+                                    url: subreddit,
+                                    mode: mode
+                                }
+                            };
+                        settings.set('widgets/user/reddit_' + generateGUID(), newReddit);
                         settings.save();
 
-                        var extId = 'reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + $mode.val();
-                        ext.point("io.ox/portal/widget").enable(extId);
-
-                        require(['plugins/portal/reddit/register'], function (reddit) {
-                            reddit.reload();
-                            that.trigger('redraw');
-                            ox.trigger("refresh^");
-                            dialog.close();
-                        });
+                        dialog.close();
                     });
 
                     deferred.fail(function () {
@@ -103,36 +102,28 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
         id: 'portal-settings-reddit',
         draw: function (data) {
             var that = this;
+            console.log("DEBUG1:", data);
             require(['settings!io.ox/portal', 'gettext!io.ox/portal', 'io.ox/core/tk/dialogs', 'less!plugins/portal/reddit/style.css'], function (settings, gt, dialogs) {
-                var subreddits = settings.get('subreddits'),
-                staticStrings = {
+                var staticStrings = {
                     SUBREDDITS: gt('Subreddits'),
                     ADD:        gt('Add'),
                     EDIT:       gt('Edit'),
                     DELETE:     gt('Delete')
                 },
                 SubredditSelectView = Backbone.View.extend({
-                    _modelBinder: undefined,
-                    initialize: function (options) {
-                        this._modelBinder = new Backbone.ModelBinder();
-                    },
                     render: function () {
                         var self = this;
+                        console.log("DEBUG2:", data);
                         self.$el.empty().append(
                             $('<div class="io-ox-settings-item io-ox-reddit-setting">')
-                            .data({subreddit: this.model.get('subreddit'), mode: this.model.get('mode'), key: data.key}).append(
+                            .data({url: data.props.url, mode: data.props.mode, key: data.key}).append(
                                 $('<div class="io-ox-setting-description">').append(
-                                    $('<span data-property="subreddit" class="io-ox-reddit-name">'),
-                                    $('<span data-property="mode" class="io-ox-reddit-mode">')
+                                    $('<span class="io-ox-reddit-name">').text(data.props.url),
+                                    $('<span class="io-ox-reddit-mode">').text(data.props.mode)
                                 ),
-                                $('<i class="action-edit icon-edit">'),
-                                $('<i class="action-remove icon-remove">')
+                                $('<i class="action-edit icon-edit">')
                             )
                         );
-
-                        var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-                        self._modelBinder.bind(self.model, self.el, defaultBindings);
-
                         return self;
                     },
                     events: {
@@ -146,11 +137,12 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
 
                         var oldSubreddit = $(pEvent.target).parent(),
                             oldMode = oldSubreddit.data('mode'),
-                            oldName = oldSubreddit.data('subreddit');
+                            oldUrl = oldSubreddit.data('url'),
+                            key = oldSubreddit.data('key');
 
                         if (oldSubreddit) {
                             oldSubreddit = String(oldSubreddit);
-                            var $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'}).val(oldName).placeholder(),
+                            var $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'}).val(oldUrl).placeholder(),
                                 $error = $('<div>').addClass('alert alert-error').hide(),
                                 that = this;
 
@@ -171,23 +163,23 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                             dialog.on('edit', function (e) {
                                 $error.hide();
 
-                                var newName = $.trim($subreddit.val()),
+                                var newUrl = $.trim($subreddit.val()),
                                     newMode = $.trim($mode.val()),
                                     deferred = $.Deferred();
 
                                 // No dot and url does not end with tumblr.com? Append it!
-                                if (newName.match(/^r\//)) {
-                                    newName = newName.substring(2);
+                                if (newUrl.match(/^r\//)) {
+                                    newUrl = newUrl.substring(2);
                                 }
 
                                 // TODO Check if mode is OK
 
-                                if (newName.length === 0) {
+                                if (newUrl.length === 0) {
                                     $error.text(gt('Please enter a subreddit.'));
                                     deferred.reject();
                                 } else {
                                     $.ajax({
-                                        url: 'http://www.reddit.com/r/' + newName + '/.json?jsonp=testcallback',
+                                        url: 'http://www.reddit.com/r/' + newUrl + '/.json?jsonp=testcallback',
                                         type: 'HEAD',
                                         dataType: 'jsonp',
                                         jsonp: false,
@@ -203,22 +195,16 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                 }
 
                                 deferred.done(function () {
-                                    ext.point("io.ox/portal/widget").disable('reddit-' + oldName.replace(/[^a-z0-9]/g, '_') + '-' + oldMode.replace(/[^a-z0-9]/g, '_'));
+                                    ext.point("io.ox/portal/widget").disable('reddit-' + oldUrl.replace(/[^a-z0-9]/g, '_') + '-' + oldMode.replace(/[^a-z0-9]/g, '_'));
 
-                                    subreddits = removeSubReddit(subreddits, oldName, oldMode);
-
-                                    subreddits.push({subreddit: newName, mode: newMode});
-                                    settings.set('subreddits', subreddits);
+                                    settings.set('widgets/user/' + key + '/props/url', newUrl);
+                                    settings.set('widgets/user/' + key + '/description', newUrl);
+                                    settings.set('widgets/user/' + key + '/props/mode', newMode);
                                     settings.save();
 
-                                    ext.point("io.ox/portal/widget").enable('reddit-' + newName.replace(/[^a-z0-9]/g, '_') + '-' + newMode.replace(/[^a-z0-9]/g, '_'));
+                                    ext.point("io.ox/portal/widget").enable('reddit-' + newUrl.replace(/[^a-z0-9]/g, '_') + '-' + newMode.replace(/[^a-z0-9]/g, '_'));
 
-                                    require(['plugins/portal/reddit/register'], function (reddit) {
-                                        reddit.reload();
-                                        that.trigger('redraw');
-                                        ox.trigger("refresh^");
-                                        dialog.close();
-                                    });
+                                    dialog.close();
                                 });
 
                                 deferred.fail(function () {
@@ -230,19 +216,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                     }
                 });
 
-                var removeSubReddit = function (subreddits, subreddit, mode) {
-                    var newSubreddits = [];
-                    _.each(subreddits, function (sub) {
-                        if (sub.subreddit !== subreddit || sub.subreddit === subreddit && sub.mode !== mode) {
-                            newSubreddits.push(sub);
-                        }
-                    });
-                    return newSubreddits;
-                };
-
-                (new Backbone.Collection(subreddits)).each(function (item) {
-                    $(that).append(new SubredditSelectView({model: item}).render().el);
-                });
+                $(that).append(new SubredditSelectView().render().el);
 
             }); //END: require
         } //END: draw
@@ -326,6 +300,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                 plugin: 'plugins/portal/tumblr/register',
                                 color: 'orange',
                                 index: 'first',
+                                description: description,
                                 props: {
                                     url: url,
                                     description: description
