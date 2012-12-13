@@ -253,6 +253,9 @@ define('io.ox/mail/view-detail',
                 content.innerHTML = source;
                 content = $(content);
 
+                // last line of defense
+                content.find('script').remove();
+
                 if (isHTML) {
                     // HTML
                     if (!isLarge) {
@@ -963,8 +966,10 @@ define('io.ox/mail/view-detail',
 
             var data = baton.data;
 
-            this.attr('data-cid', data.folder_id + '.' + data.id)
-            .append(that.getContent(data), $('<div>').addClass('mail-detail-clear-both'));
+            this.attr('data-cid', data.folder_id + '.' + data.id).append(
+                that.getContent(data),
+                $('<div>').addClass('mail-detail-clear-both')
+            );
 
             var content = this.find('.content');
 
