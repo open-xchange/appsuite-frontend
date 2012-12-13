@@ -971,7 +971,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                     $error.hide();
 
                     if (url.length === 0) {
-                        $error.text(gt('Please enter a feed url.'));
+                        $error.text(gt('Please enter a feed URL.'));
                         deferred.reject();
                     } else if (description.length === 0) {
                         $error.text(gt('Please enter a description.'));
@@ -1179,7 +1179,7 @@ define('io.ox/settings/accounts/settings/extpoints', ['io.ox/core/extensions', '
                                     deferred = $.Deferred();
 
                                 if (url.length === 0) {
-                                    $error.text(gt('Please enter a feed url.'));
+                                    $error.text(gt('Please enter a feed URL.'));
                                     deferred.reject();
                                 } else if (feedname.length === 0) {
                                     $error.text(gt('Please enter a name for the feed.'));

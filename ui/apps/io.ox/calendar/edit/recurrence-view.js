@@ -90,7 +90,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             });
 
             $dayList.append($('<li>').append(
-                gt("close"),
+                gt("Close"),
                 $('<i class="icon-remove">')
             ).on("click", function () {
                 $anchor.popover('hide');
