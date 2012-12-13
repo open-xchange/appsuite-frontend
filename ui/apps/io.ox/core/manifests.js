@@ -13,15 +13,10 @@
 
 define('io.ox/core/manifests',
     ['io.ox/core/extensions',
-     'io.ox/core/http',
-     'io.ox/core/cache',
      'io.ox/core/capabilities'
-    ], function (ext, http, cache, capabilities) {
+    ], function (ext, capabilities) {
 
     'use strict';
-
-    // TODO: Caching and Update Handling
-    var manifestCache = new cache.SimpleCache("manifests", true);
 
     var manifestManager = {
 
@@ -94,53 +89,6 @@ define('io.ox/core/manifests',
 
     ox.manifests = manifestManager;
 
-    // var fnClear = function () {
-    //     manifestManager.apps = {};
-    //     manifestManager.plugins = {};
-    //     manifestManager.pluginPoints = {};
-    // };
-
-    // var fnLoadStaticFiles = function (state) {
-    //     require([ox.base + "/src/manifests.js"], function (manifests) {
-    //         manifestManager.loader = 'backend';
-    //         if (state !== 'success') {
-    //             fnClear();
-    //         }
-    //         _(manifests).each(function (manifest) {
-    //             if (!!! manifest.requires || capabilities.has(manifest.requires)) {
-    //                 fnProcessManifest(manifest);
-    //             }
-    //         });
-    //         fnStoreState();
-    //         def.resolve(manifestManager); // Whoever resolves first, wins
-    //     }).fail(function () {
-    //         if (state === 'success') {
-    //             fnStoreState();
-    //         }
-    //         def.resolve(manifestManager); // Whoever resolves first, wins
-    //     });
-    // };
-
-    // var fnLoadBackendManifests = function () {
-    //     http.GET({
-    //         module: 'apps/manifests',
-    //         params: {
-    //             action: 'all'
-    //         }
-    //     }).done(function (manifests) {
-    //         _(manifests).each(fnProcessManifest);
-    //         // Load Manifest Extensions
-    //         manifestManager.loadPluginsFor('manifests').done(function () {
-    //             // Apply Extensions
-    //             ext.point("io.ox/core/manifests").invoke('customize', manifestManager);
-    //             fnLoadStaticFiles('success');
-    //         });
-
-    //     }).fail(function (resp) {
-    //         fnLoadStaticFiles('fail');
-    //     });
-    // };
-
     function process(manifest) {
         if (manifest.namespace) {
             if (manifest.requires) {
@@ -168,58 +116,17 @@ define('io.ox/core/manifests',
         }
     }
 
+    _(ox.serverConfig.manifests).each(process);
+
     var self = {
-
-        load: function () {
-
-            function load() {
-                return $.when(
-                    http.GET({ module: 'apps/manifests', params: { action: 'all' } }),
-                    ox.signin ? $.when() : require([ox.base + "/src/manifests.js"])
-                )
-                .pipe(function (server, source) {
-                    return ox.signin ? server[0] : server[0].length ? server[0] : source;
-                });
-            }
-
-            if (ox.online) {
-                return load();
-            } else {
-                // use cache in offline mode only
-                return manifestCache.get('default').done(function (data) {
-                    if (data !== null) {
-                        _.extend(manifestManager, data);
-                    }
-                });
-            }
-        },
-
-        initialize: function () {
-
-            return $.when(
-                self.load(),
-                capabilities.initialize()
-            )
-            .done(function (data) {
-                if (data !== null) {
-                    _(data).each(process);
-                    if (!ox.signin) {
-                        manifestCache.add('default', {
-                            apps: manifestManager.apps,
-                            plugins: manifestManager.plugins,
-                            pluginPoints: manifestManager.pluginPoints
-                        });
-                    }
-                }
-                // Load Manifest Extensions
-                manifestManager.loadPluginsFor('manifests').done(function () {
-                    // Apply Extensions
-                    ext.point("io.ox/core/manifests").invoke('customize', manifestManager);
-                });
-            });
-        },
-
-        manager: manifestManager
+        manager: manifestManager,
+        reset: function () {
+            manifestManager.pluginPoints = {};
+            manifestManager.plugins = {};
+            manifestManager.apps = {};
+            
+            _(ox.serverConfig.manifests).each(process);
+        }
     };
 
     return self;

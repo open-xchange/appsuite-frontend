@@ -322,9 +322,9 @@ $(document).ready(function () {
             });
         }
 
-        require(['io.ox/core/session', 'io.ox/core/manifests']).done(function (session, manifests) {
+        require(['io.ox/core/session', 'io.ox/core/capabilities', 'io.ox/core/manifests']).done(function (session, capabilities, manifests) {
 
-            var useAutoLogin = ox.serverConfig.autoLogin === true && ox.online, initialized;
+            var useAutoLogin = capabilities.has("autologin") && ox.online, initialized;
 
             function continueWithoutAutoLogin() {
                 if (ox.signin) {
@@ -332,6 +332,24 @@ $(document).ready(function () {
                 } else {
                     _.url.redirect('signin');
                 }
+            }
+
+            function fetchUserSpecificServerConfig() {
+                var def = $.Deferred();
+                require(['io.ox/core/http'], function (http) {
+                    http.GET({
+                        module: 'apps/manifests',
+                        params: {
+                            action: 'config'
+                        }
+                    }).done(function (data) {
+                        ox.serverConfig = data;
+                        capabilities.reset();
+                        manifests.reset();
+                        def.resolve();
+                    }).fail(def.reject);
+                }).fail(def.reject);
+                return def;
             }
 
             // got session via hash?
@@ -343,25 +361,25 @@ $(document).ready(function () {
                 ox.language = _.url.hash('language');
                 _.url.redirect('#');
 
-                initialized = manifests.initialize();
+                initialized = fetchUserSpecificServerConfig();
 
                 $.when(loadCoreFiles(), initialized).done(loadCore);
 
             } else {
-
                 // try auto login!?
                 (useAutoLogin ? session.autoLogin() : $.when())
                 .done(function () {
-                    manifests.initialize().done(function () {
-                        if (useAutoLogin) {
+
+                    if (useAutoLogin) {
+                        fetchUserSpecificServerConfig().done(function () {
                             loadCoreFiles().done(function () { gotoCore(true); });
-                        } else {
-                            continueWithoutAutoLogin();
-                        }
-                    });
+                        });
+                    } else {
+                        continueWithoutAutoLogin();
+                    }
                 })
                 .fail(function () {
-                    manifests.initialize().done(continueWithoutAutoLogin);
+                    continueWithoutAutoLogin();
                 });
             }
         });

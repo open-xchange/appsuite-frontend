@@ -16,14 +16,16 @@
 * if (capabilities.has('calendar withBackendSupport'))) { ... } else { ... }
 */
 
-define('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
+define('io.ox/core/capabilities', function () {
 
 	'use strict';
 
 	var capabilities = {},
-		capCache = new cache.SimpleCache(ox.signin ? "signinCapabilities" : "capabilities", true),
-		capSource = null,
 		capBlacklist = {};
+
+	_(ox.serverConfig.capabilities).each(function (cap) {
+		capabilities[cap.id] = cap;
+	});
 
 	(function () {
 		var disabledList = _.url.hash('disableFeature');
@@ -71,87 +73,15 @@ define('io.ox/core/capabilities', ['io.ox/core/http', 'io.ox/core/cache'], funct
 					return !!capability;
 				}
 			});
-		}
-	};
-
-	var dummyCapLookup = {
-
-		get: function (capName) {
-			if (capBlacklist[capName]) {
-				return null;
-			}
-			return { id: capName, backendSupport: true };
 		},
-
-		has: function (capName) {
-
-			var self = this;
-			var list = _(_(arguments).flatten()).map(function (def) {
-				return def.split(/\s*[, ]\s*/);
-			});
-
-			list = _(list).flatten();
-
-			return _(list).all(function (name) {
-				var inverse = false;
-				if (name[0] === '!') {
-					name = name.substr(1);
-					inverse = true;
-				}
-				var capability = self.get(name);
-				if (inverse) {
-					return !!!capability;
-				} else {
-					return !!capability;
-				}
+		reset: function () {
+			capabilities = {};
+			_(ox.serverConfig.capabilities).each(function (cap) {
+				capabilities[cap.id] = cap;
 			});
 		}
 	};
 
-	var raw = null;
-
-	var api = {
-
-		initialize: function () {
-
-			function load() {
-				return http.GET({
-					module: 'capabilities',
-					params: { action: 'all' }
-				})
-				.pipe(function (data) {
-					_.extend(api, capLookup);
-					_(data).each(function (entry) {
-						capabilities[entry.id] = entry;
-					});
-					return capCache.add('default', capabilities);
-                });
-			}
-
-			// always load fresh for sign-in
-			if (ox.online) {
-				return load();
-			} else {
-				// use cache in offline mode only
-				return capCache.get('default').done(function (data) {
-					if (data === null) {
-						// guarantee mail
-						capabilities.webmail = {
-							attributes: {},
-							backendSupport: false,
-							id: 'webmail'
-						};
-						console.warn("Capabilities subsystem is disabled!");
-						_.extend(api, dummyCapLookup);
-					} else {
-						capabilities = data;
-						_.extend(api, capLookup);
-					}
-				});
-			}
-		}
-	};
-
-	return api;
+	return capLookup;
 
 });
