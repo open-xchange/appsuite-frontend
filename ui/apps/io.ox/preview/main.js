@@ -144,7 +144,9 @@ define("io.ox/preview/main",
         Renderer.point.extend(new Engine({
             id: "office",
             index: 10,
-            supports: ox.serverConfig.previewExtensions,
+            supports:  ['doc', 'dot', 'docx', 'dotx', 'docm', 'dotm', 'xls', 'xlt', 'xla', 'xlsx', 'xltx', 'xlsm',
+             'xltm', 'xlam', 'xlsb', 'ppt', 'pot', 'pps', 'ppa', 'pptx', 'potx', 'ppsx', 'ppam', 'pptm', 'potm', 'ppsm', 'pdf',
+             'odt', 'ods', 'odp', 'odg', 'odc', 'odf', 'odi', 'odm' ],
             draw: function (file, options) {
 
                 var $a = clickableLink(file, function (e) {

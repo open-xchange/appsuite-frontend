@@ -483,14 +483,22 @@ $(document).ready(function () {
     var boot = function () {
 
         // get pre core & server config -- and init http & session
-        require([ox.base + '/src/serverconfig.js', 'io.ox/core/http', 'io.ox/core/session'])
-            .done(function (data) {
-                // store server config
-                ox.serverConfig = data;
-                // set page title now
-                document.title = _.noI18n(ox.serverConfig.pageTitle || '');
-                // continue
-                autoLogin();
+        require(['io.ox/core/http', 'io.ox/core/session'])
+            .done(function (http) {
+                // TODO: caching
+                http.GET({
+                    module: 'apps/manifests',
+                    params: {
+                        action: 'config'
+                    }
+                }).done(function (data) {
+                    // store server config
+                    ox.serverConfig = data;
+                    // set page title now
+                    document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+                    // continue
+                    autoLogin();
+                });
             });
     };
 
