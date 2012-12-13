@@ -65,10 +65,18 @@ SDK for the OX App Suite HTML5 client
 %build
 
 %install
-sh build.sh builddir="%{buildroot}%{docroot}" \
+sh build.sh builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
+    manifestDir="%{buildroot}/opt/open-xchange/ui7" \
     version=%{version} revision=%{release}
-mkdir -p "%{buildroot}/opt/open-xchange/ui7"
-cp -r "%{buildroot}%{docroot}/apps" "%{buildroot}/opt/open-xchange/ui7/apps"
+
+find "%{buildroot}%{docroot}" \( -type f -o -type l \) \
+    | sed -e 's,%{buildroot},,' > tmp/files
+## l10n ##
+#find tmp/l10n \( -type f -o -type l \) -name '*.## Lang ##.js' \
+#    | sed -e 's,tmp/l10n,%{docroot},' > tmp/files-## lang ##
+## end l10n ##
+cp -r tmp/l10n/apps "%{buildroot}%{docroot}/"
+
 mkdir -p "%{buildroot}/opt/open-xchange-ui7-dev"
 cp -r bin lib Jakefile.js "%{buildroot}/opt/open-xchange-ui7-dev/"
 sed -i -e 's#OX_UI7_DEV=.*#OX_UI7_DEV="/opt/open-xchange-ui7-dev"#' \
@@ -79,10 +87,8 @@ sh build.sh clean builddir="%{buildroot}%{docroot}" version=%{version} revision=
 rm -r "%{buildroot}/opt/open-xchange/ui7"
 rm -r "%{buildroot}/opt/open-xchange-ui7-dev"
 
-%files
+%files -f tmp/files
 %defattr(-,root,root)
-%{docroot}
-%exclude %{docroot}/apps/**/*.??_??.js
 %doc readme.txt
 
 %files manifest
@@ -97,9 +103,8 @@ rm -r "%{buildroot}/opt/open-xchange-ui7-dev"
 %attr(644,root,root) /opt/open-xchange-ui7-dev/lib/sax-js/examples/switch-bench.js
 
 ## l10n ##
-#%files l10n-## lang ##
+#%files l10n-## lang ## -f tmp/files-## lang ##
 #%defattr(-,root,root)
-#%{docroot}/apps/**/*.## Lang ##.js
 ## end l10n ##
 
 %changelog
