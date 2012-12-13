@@ -1,19 +1,19 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Which permissions are defined?</title>
+<title>Which permissions can be granted?</title>
 <link rel="stylesheet" type="text/css" href="book.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.76.1-RC1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="OX App Suite Server">
 <link rel="up" href="oxhe.appsuite.user.sect.dataorganisation.rights.html" title="Permissions">
 <link rel="prev" href="oxhe.appsuite.user.sect.dataorganisation.rights.html" title="Permissions">
-<link rel="next" href="oxhe.appsuite.user.sect.dataorganisation.rights.preset.html" title="Which folder permissions are preset?">
-<link rel="copyright" href="ox.ox7.user.legalnotice.html" title="Legal Notice">
+<link rel="next" href="oxhe.appsuite.user.sect.dataorganisation.rights.preset.html" title="Which permissions are preset?">
+<link rel="copyright" href="oxhe.ox7.user.legalnotice.html" title="Legal Notice">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="navheader">
 <table width="100%" summary="Navigation header">
-<tr><th colspan="3" align="center">Which permissions are defined?</th></tr>
+<tr><th colspan="3" align="center">Which permissions can be granted?</th></tr>
 <tr>
 <td width="20%" align="left">
 <a accesskey="p" href="oxhe.appsuite.user.sect.dataorganisation.rights.html">Prev</a> </td>
@@ -24,64 +24,104 @@
 </table>
 <hr>
 </div>
-<div class="sect2" title="Which permissions are defined?">
+<div class="sect2" title="Which permissions can be granted?">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="oxhe.appsuite.user.sect.dataorganisation.rights.defined"></a>Which permissions are defined?</h3></div></div></div>
+<a name="oxhe.appsuite.user.sect.dataorganisation.rights.defined"></a>Which permissions can be granted?</h3></div></div></div>
 <div class="concept">
-<a name="oxhe.appsuite.user.concept.folder.rights.note"></a><p>Note the following: </p>
+<a name="oxhe.appsuite.user.concept.rights.roles"></a><p>In order to easily grant logic permission combinations, there are particular 
+      user roles preset: </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem"><p>If a user belongs to several groups with different rights for a folder, the user will always get the permission highest in the ranking.</p></li>
-<li class="listitem"><p>There is a permission hierarchy. The permission that is higher in the ranking comprises the permissions that are lower in the ranking.</p></li>
+<li class="listitem"><p>
+		<a class="link" href="oxhe.appsuite.user.sect.dataorganisation.rights.defined.html#oxhe.appsuite.user.concept.rights.roles.owner" title="Owner">Owner</a>
+	      </p></li>
+<li class="listitem"><p>
+              <a class="link" href="oxhe.appsuite.user.sect.dataorganisation.rights.defined.html#oxhe.appsuite.user.concept.rights.roles.administrator" title="Administrator">Administrator</a>
+            </p></li>
+<li class="listitem"><p>
+		<a class="link" href="oxhe.appsuite.user.sect.dataorganisation.rights.defined.html#oxhe.appsuite.user.concept.rights.roles.author" title="Author">Author</a>
+	      </p></li>
+<li class="listitem"><p>
+              <a class="link" href="oxhe.appsuite.user.sect.dataorganisation.rights.defined.html#oxhe.appsuite.user.concept.rights.roles.guest" title="Guest">Guest</a>
+            </p></li>
 </ul></div>
 <p>
       </p>
 </div>
+<div class="concept">
+<a name="oxhe.appsuite.user.concept.rights.roles.owner"></a><p title="Owner"><b>Owner. </b>A folder's owner has all permissions for this folder. The owner can grant other users permissions to the folder.</p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>Folder permission: create objects and subfolders</p></li>
+<li class="listitem"><p>Object permissions: read all objects, edit all objects, delete all objects</p></li>
+<li class="listitem"><p>Administrative rights: Yes</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="oxhe.appsuite.user.concept.rights.roles.administrator"></a><p title="Administrator"><b>Administrator. </b>A folder's administrator owns all permissions for this folder. The administrator can grant other users permissions for the folder.</p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>Folder permission: create objects and subfolders</p></li>
+<li class="listitem"><p>Object permissions: read all objects, edit all objects, delete all objects</p></li>
+<li class="listitem"><p>Administrative rights: Yes</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="oxhe.appsuite.user.concept.rights.roles.author"></a><p title="Author"><b>Author. </b>An author is allowed to change already existing objects, to create and edit new objects, and to create subfolders.</p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>Folder permissions: create objects and subfolders</p></li>
+<li class="listitem"><p>Object permissions: read all objects, edit all objects, delete all objects</p></li>
+<li class="listitem"><p>Administrative rights: No</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="oxhe.appsuite.user.concept.rights.roles.guest"></a><p title="Guest"><b>Guest. </b>A guest is allowed to read already existing objects but not to modify them. The guest is allowed to create subfolders though and to create and edit new objects there.</p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>Folder permission: new folder</p></li>
+<li class="listitem"><p>Object permission: read all objects, no edit permissions, no delete permissions</p></li>
+<li class="listitem"><p>Administrative rights: No</p></li>
+</ul></div>
+</div>
 <div class="reference">
-<a name="oxhe.appsuite.user.reference.rights"></a><p>The following overview always lists the permission highest in the ranking on the bottom.
-        The following permissions exist: </p>
+<a name="oxhe.appsuite.user.reference.folder.rights"></a><p>The preset permissions of the user roles can be refined. 
+        The following permissions can be granted. </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-<p><span class="phrase"><strong>Folder admin</strong></span>  Defines whether a user is the folder administrator.</p>
+<p>Folder permissions</p>
 <div class="itemizedlist"><ul class="itemizedlist" type="circle">
-<li class="listitem"><p><span class="guibutton"><strong>No</strong></span>  The user is not the administrator.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Yes</strong></span>  The user is the administrator.</p></li>
+<li class="listitem"><p>New folder</p></li>
+<li class="listitem"><p>create objects</p></li>
+<li class="listitem"><p>create objects and subfolders</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem">
+<p>Object permissions, read</p>
+<div class="itemizedlist"><ul class="itemizedlist" type="circle">
+<li class="listitem"><p>no read permissions</p></li>
+<li class="listitem"><p>read own objects</p></li>
+<li class="listitem"><p>read all objects</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p><span class="phrase"><strong>Folder rights</strong></span>  Defines what a user can do with the folder.</p>
+<p>Object permissions, edit</p>
 <div class="itemizedlist"><ul class="itemizedlist" type="circle">
-<li class="listitem"><p><span class="guibutton"><strong>None</strong></span>  The user has no rights for the folder.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Visible folder</strong></span>  The user can see the folder.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Create objects</strong></span>  The user can create objects in the folder.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Create subfolder</strong></span>  The user can create subfolders in the folder.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Maximum</strong></span>  The user can create subfolders in the folder.</p></li>
+<li class="listitem"><p>no edit permissions</p></li>
+<li class="listitem"><p>edit own objects</p></li>
+<li class="listitem"><p>edit all objects</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p><span class="phrase"><strong>Read objects</strong></span>  They define which folder objects are visible to a user.</p>
+<p>Folder permissions, delete</p>
 <div class="itemizedlist"><ul class="itemizedlist" type="circle">
-<li class="listitem"><p><span class="guibutton"><strong>None</strong></span>  The user can not see the objects.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Read own</strong></span>  The user can only see the objects created by him/her.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Read all</strong></span>  The user can see all objects.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Maximum</strong></span>  The user can see all objects.</p></li>
+<li class="listitem"><p>no delete permissions</p></li>
+<li class="listitem"><p>delete own objects</p></li>
+<li class="listitem"><p>delete all objects</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p><span class="phrase"><strong>Modify objects</strong></span>  Defines which folder objects can be modified by the user.</p>
+<p>Administrative rights</p>
 <div class="itemizedlist"><ul class="itemizedlist" type="circle">
-<li class="listitem"><p><span class="guibutton"><strong>None</strong></span>  The user can not modify any objects.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Modify own</strong></span>  The user can only modify objects created by him/her.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Modify all</strong></span>  The user can modify all objects.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Maximum</strong></span>  The user can modify all objects.</p></li>
-</ul></div>
-</li>
-<li class="listitem">
-<p><span class="phrase"><strong>Delete objects</strong></span>  Defines which folder objects can be deleted by the user.</p>
-<div class="itemizedlist"><ul class="itemizedlist" type="circle">
-<li class="listitem"><p><span class="guibutton"><strong>None</strong></span>  The user can not delete any objects.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Delete own</strong></span>  The user can only delete objects created by him/her.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Delete all</strong></span>  The user can delete all objects.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Maximum</strong></span>  The user can delete all objects.</p></li>
+<li class="listitem"><p>Yes</p></li>
+<li class="listitem"><p>No</p></li>
 </ul></div>
 </li>
 </ul></div>
@@ -104,7 +144,7 @@
 <td width="20%" align="center">
 <a accesskey="h" href="index.html">Home</a> | <a accesskey="t" href="bk01-toc.html">ToC</a>
 </td>
-<td width="40%" align="right" valign="top"> Which folder permissions are preset?</td>
+<td width="40%" align="right" valign="top"> Which permissions are preset?</td>
 </tr>
 </table>
 </div>
