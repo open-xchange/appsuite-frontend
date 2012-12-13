@@ -32,7 +32,6 @@
     padding: 0 0.5em 0 0.5em;
     margin-left: 1em;
     border-radius: 5px;
-    display: inline-block;
     float: right;
     .box-sizing(border-box);
 }
@@ -267,8 +266,9 @@
 
     .date {
         color: #888;
-        display: inline-block;
+        display: block;
         float: right;
+        margin-right: -56px;
     }
 
     .subject {
@@ -276,7 +276,11 @@
         word-break: break-word;
     }
 
-    .subject, .thread-size, .flag {
+    .from.list {
+        display:inline-block;
+    }
+
+    .subject, .thread-size {
         font-size: 16pt;
         margin: @inline-links-margin;
     }
@@ -301,8 +305,10 @@
         width: 30px;
         height: 24px;
         margin-left: 1em;
+        margin-top: 40px;
         border: 1px solid rgba(0, 0, 0, 0.2);
         cursor: pointer;
+        float:right;
     }
 
     .flag-dropdown ul {

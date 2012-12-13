@@ -693,7 +693,7 @@ define('io.ox/mail/view-detail',
     }
 
     ext.point('io.ox/mail/detail').extend({
-        index: 125,
+        index: 105,
         id: 'flag',
         draw: function (baton) {
             var data = baton.data;
