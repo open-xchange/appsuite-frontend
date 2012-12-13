@@ -21,7 +21,7 @@ define('io.ox/office/preview/fileActions',
 
     var Action = links.Action,
 
-        SUPPORTED_EXT = /\.(doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg|dot|dotx|ott|xlt|xltx|ots|pot|potx|otp|otg|docm|xlsm|pptm|dotm|xltm|potm|xlsb|pdf)$/i;
+        SUPPORTED_EXT = /\.(pdf|doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg|dot|dotx|ott|xlt|xltx|ots|pot|potx|otp|otg|docm|xlsm|pptm|dotm|xltm|potm|xlsb|pdf)$/i;
 
     new Action('io.ox/files/actions/open', {
         id: 'officepreview',
