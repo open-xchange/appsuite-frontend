@@ -302,6 +302,9 @@ define('io.ox/mail/view-detail',
                     }
                 } else {
                     // plain TEXT
+                    if (settings.get('useFixedWidthFont', false)) {
+                        content.addClass('fixed-width-font');
+                    }
                     content.addClass('plain-text').html(beautifyText(source));
                 }
 

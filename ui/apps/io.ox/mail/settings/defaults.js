@@ -22,6 +22,7 @@ function (util) {
             'removeDeletedPermanently': false,
             'contactCollectOnMailTransport': false,
             'contactCollectOnMailAccess': false,
+            'useFixedWidthFont': false,
             'appendVcard': false,
             'appendMailTextOnReply': false,
             'forwardMessageAs': 'Inline',

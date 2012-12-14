@@ -45,7 +45,8 @@ function (ext, View, Model, gt, settings, api) {
                         this.createControlsWrapper().append(
                             this.createCheckbox({property: 'removeDeletedPermanently', label: gt('Permanently remove deleted E-Mails?')}).addClass('expertmode'),
                             this.createCheckbox({property: 'contactCollectOnMailTransport', label: gt('Automatically collect contacts in the folder "Collected addresses" while sending?')}).addClass('expertmode'),
-                            this.createCheckbox({property: 'contactCollectOnMailAccess', label: gt('Automatically collect contacts in the folder "Collected addresses" while reading?')}).addClass('expertmode')
+                            this.createCheckbox({property: 'contactCollectOnMailAccess', label: gt('Automatically collect contacts in the folder "Collected addresses" while reading?')}).addClass('expertmode'),
+                            this.createCheckbox({property: 'useFixedWidthFont', label: gt('Use fixed-width font for text mails')}).addClass('expertmode')
                         )
                     ),
                     this.createSectionDelimiter().addClass('expertmode')
