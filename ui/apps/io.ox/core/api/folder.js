@@ -34,7 +34,7 @@ define('io.ox/core/api/folder',
         getFolder = function (id, opt) {
             // get cache
             opt = opt || {};
-            var cache = opt.storage || folderCache;
+            var cache = opt.storage ? opt.storage.folderCache : folderCache;
             // cache miss?
             var getter = function () {
                 return http.GET({
@@ -156,7 +156,7 @@ define('io.ox/core/api/folder',
                     storage: null
                 }, options || {}),
                 // get cache
-                cache = opt.storage || subFolderCache,
+                cache = opt.storage ? opt.storage.subFolderCache : subFolderCache,
                 // cache miss?
                 getter = function () {
                     return http.GET({
@@ -421,7 +421,12 @@ define('io.ox/core/api/folder',
             });
         },
 
-        update: function (options) {
+        update: function (options, storage) {
+
+            if (storage) {
+                storage.subFolderCache.clear();
+                storage.folderCache.clear();
+            }
 
             subFolderCache.clear();
             folderCache.clear();

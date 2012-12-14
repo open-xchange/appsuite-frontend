@@ -21,8 +21,9 @@ define('io.ox/core/tk/folderviews',
      'io.ox/core/config',
      'io.ox/core/notifications',
      'io.ox/core/http',
+     'io.ox/core/cache',
      'gettext!io.ox/core'
-    ], function (Selection, api, account, userAPI, ext, Events, config, notifications, http, gt) {
+    ], function (Selection, api, account, userAPI, ext, Events, config, notifications, http, cache, gt) {
 
     'use strict';
 
@@ -41,9 +42,9 @@ define('io.ox/core/tk/folderviews',
     /**
      * Tree node class
      */
-    function TreeNode(tree, id, container, level, checkbox, all) {
+    function TreeNode(tree, id, container, level, checkbox, all, storage) {
         // load folder data immediately
-        var ready = api.get({ folder: id }),
+        var ready = api.get({ folder: id, storage: storage }),
             nodes = {},
             children = null,
             painted = false,
@@ -190,7 +191,7 @@ define('io.ox/core/tk/folderviews',
             // might have a new id
             id = newId;
             return $.when(
-                ready = api.get({ folder: newId }),
+                ready = api.get({ folder: newId, storage: storage }),
                 this.loadChildren(true)
             )
             .pipe(function (data) {
@@ -201,7 +202,7 @@ define('io.ox/core/tk/folderviews',
 
         // update promise
         this.reload = function () {
-            return (ready = api.get({ folder: id })).done(function (promise) {
+            return (ready = api.get({ folder: id, storage: storage})).done(function (promise) {
                 data = promise;
                 children = _.isArray(children) && children.length === 0 ? null : children;
                 updateArrow();
@@ -222,7 +223,7 @@ define('io.ox/core/tk/folderviews',
                 // check cache
                 needsRefresh = refreshHash[id] === undefined && api.needsRefresh(id);
                 // get sub folders
-                return api.getSubFolders({ folder: id, all: all })
+                return api.getSubFolders({ folder: id, all: all, storage: storage })
                     .done(function (list) {
                         // needs refresh?
                         if (needsRefresh) {
@@ -254,7 +255,7 @@ define('io.ox/core/tk/folderviews',
                                     return node;
                                 } else {
                                     // new node
-                                    return new TreeNode(tree, folder.id, nodes.sub, skip() ? level : level + 1, checkbox, all);
+                                    return new TreeNode(tree, folder.id, nodes.sub, skip() ? level : level + 1, checkbox, all, storage);
                                 }
                             })
                             .value();
@@ -621,7 +622,13 @@ define('io.ox/core/tk/folderviews',
 
         this.subscribe = function (data) {
             var name = data.app.getName(),
-                POINT = name + '/folderview';
+                POINT = name + '/folderview',
+                folderCache = new cache.SimpleCache('folder-all', true),
+                subFolderCache = new cache.SimpleCache('subfolder-all', true),
+                storage = {
+                folderCache: folderCache,
+                subFolderCache: subFolderCache
+            };
 
             var options;
             _(ext.point(POINT + '/options').all()).each(function (obj) {
@@ -634,7 +641,8 @@ define('io.ox/core/tk/folderviews',
                 type: options.type,
                 rootFolderId: options.rootFolderId,
                 checkbox: true,
-                all: true
+                all: true,
+                storage: storage
             });
 
             tree.paint();
@@ -659,11 +667,16 @@ define('io.ox/core/tk/folderviews',
                 .addPrimaryButton('save', gt('Save'))
                 .show(function () {
                 }).done(function (action) {
+
                     if (action === 'save') {
                         _(changesArray).each(function (change) {
-                            api.update(change);
+                            api.update(change, storage);
                         });
 
+                        tree.destroy();
+                        tree = pane = null;
+                    }
+                    if (action === 'cancel') {
                         tree.destroy();
                         tree = pane = null;
                     }
@@ -703,7 +716,7 @@ define('io.ox/core/tk/folderviews',
         // tree node hash
         this.treeNodes = {};
         // root tree node
-        this.root = new TreeNode(this, this.options.rootFolderId, this.container, 0, opt.checkbox, opt.all);
+        this.root = new TreeNode(this, this.options.rootFolderId, this.container, 0, opt.checkbox, opt.all, opt.storage);
 
         this.internal.paint = function () {
             return this.root.paint();
