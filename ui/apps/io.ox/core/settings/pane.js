@@ -147,5 +147,37 @@ define('io.ox/core/settings/pane',
             }));
         }
     }());
+    
+    // Auto open notification area
+    (function () {
+        if (settings.isConfigurable('autoOpenNotificationarea')) {
+            point.extend(new forms.ControlGroup({
+                id: 'autoOpenNotfication',
+                index: 600,
+                attribute: 'autoOpenNotification',
+                label: gt("Automatic opening of notification area on new notifications."),
+                control: $('<input type="checkbox">'),
+                updateElement: function () {
+                    var value = this.model.get(this.attribute);
+                    if (value) {
+                        value = 'checked';
+                    } else {
+                        value = undefined;
+                    }
+                    this.nodes.element.attr('checked', value);
+                },
+                updateModel: function () {
+                    this.setValueInModel();
+                    var value = this.nodes.element.attr('checked');
+                    if (value) {
+                        value = true;
+                    } else {
+                        value = false;
+                    }
+                    this.model.set(this.attribute, value);
+                }
+            }));
+        }
+    }());
 
 });
