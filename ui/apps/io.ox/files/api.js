@@ -278,7 +278,7 @@ define('io.ox/files/api',
 
             if (/^(new|delete)$/.test(type) && fid) {
                 // if we have a new file or an existing file was deleted, we have to clear the proper folder cache.
-                all = caches.all.grepRemove(fid + '\t');
+                all = caches.all.grepRemove(fid + api.DELIM);
             } else {
                 all = ready;
             }
@@ -389,8 +389,8 @@ define('io.ox/files/api',
                 return $.when.apply($,
                     _(list).map(function (o) {
                         return $.when(
-                            api.caches.all.grepRemove(targetFolderId + '\t'),
-                            api.caches.all.grepRemove(o.folder_id + '\t'),
+                            api.caches.all.grepRemove(targetFolderId + api.DELIM),
+                            api.caches.all.grepRemove(o.folder_id + api.DELIM),
                             api.caches.list.remove({ id: o.id, folder: o.folder_id })
                         );
                     })

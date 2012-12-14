@@ -141,7 +141,7 @@
 }
 
 .borderradius .vgrid-cell.mail.selected .thread-size {
-    background-color: darken(@selected-background, 10%);
+    background-color: darken(@selected-background, 15%);
 }
 
 .vgrid-cell.thread-summary {

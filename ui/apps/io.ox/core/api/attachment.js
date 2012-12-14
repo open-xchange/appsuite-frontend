@@ -85,7 +85,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                 });
             });
         },
-        
+
         createOldWay: function (options, form) {
             var json = {module: options.module,
                         attached: options.id,
@@ -93,7 +93,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                 uploadCounter = 0,
                 self = this,
                 deferred = $.Deferred();
-            
+
             $(':input.add-attachment', form).each(function (index, field) {
                 var jqField = $(field);
                 if (jqField.attr('type') === 'file') {
@@ -102,10 +102,10 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                     uploadCounter++;
                 }
             });
-            
+
             var tmpName = 'iframe_' + _.now(),
                 frame = $('<iframe>', {'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
-            
+
             $('#tmp').append(frame);
             window.callback_attach = function (response) {
                 $('#' + tmpName).remove();
@@ -117,7 +117,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                 deferred[(response && response.error ? 'reject' : 'resolve')](response);
                 window.callback_attach = null;
             };
-            
+
             $(form).attr({
                 method: 'post',
                 enctype: 'multipart/form-data',
@@ -171,7 +171,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                 appendColumns: false
             }).done(function () {
                 require(['io.ox/files/api'], function (fileAPI) {
-                    fileAPI.caches.all.grepRemove(target + '\t');
+                    fileAPI.caches.all.grepRemove(target + api.DELIM);
                     fileAPI.trigger('refresh.all');
                 });
             });

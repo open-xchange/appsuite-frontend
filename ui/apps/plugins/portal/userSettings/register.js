@@ -46,7 +46,7 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
                     $('<input type="password" class="input-large current-password">'),
                     $('<label>').text(gt('New pasword')),
                     $('<input type="password" class="input-large new-password">'),
-                    $('<label>').text(gt('Repeat new pasword')),
+                    $('<label>').text(gt('Repeat new password')),
                     $('<input type="password" class="input-large repeat-new-password">')
                 );
             })

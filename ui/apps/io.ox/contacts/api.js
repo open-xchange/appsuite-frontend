@@ -112,7 +112,7 @@ define('io.ox/contacts/api',
             })
             .pipe(function (d) {
                 return $.when(
-                    api.caches.all.grepRemove(d.folder_id + '\t'),
+                    api.caches.all.grepRemove(d.folder_id + api.DELIM),
                     contactPictures.clear()
                 )
                 .pipe(function () {
@@ -147,7 +147,7 @@ define('io.ox/contacts/api',
                         .pipe(function (data) {
                             return $.when(
                                 api.caches.get.add(data),
-                                api.caches.all.grepRemove(o.folder + '\t'),
+                                api.caches.all.grepRemove(o.folder + api.DELIM),
                                 api.caches.list.remove({ id: o.id, folder: o.folder }),
                                 contactPictures.clear()
                             )
@@ -454,8 +454,8 @@ define('io.ox/contacts/api',
                 return $.when.apply($,
                     _(list).map(function (o) {
                         return $.when(
-                            api.caches.all.grepRemove(targetFolderId + '\t'),
-                            api.caches.all.grepRemove(o.folder_id + '\t'),
+                            api.caches.all.grepRemove(targetFolderId + api.DELIM),
+                            api.caches.all.grepRemove(o.folder_id + api.DELIM),
                             api.caches.list.remove({ id: o.id, folder: o.folder_id })
                         );
                     })
