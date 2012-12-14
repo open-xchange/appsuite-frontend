@@ -416,7 +416,7 @@ define('io.ox/calendar/edit/template',
                 type: "file"
             });
             $input.css('line-height', '0');
-            var $button = $("<button/>").attr('data-action', 'add').text(gt("Add")).addClass("btn btn-primary pull-right");
+            var $button = $("<button/>").attr('data-action', 'add').text(gt("Upload file")).addClass("btn");
             
             if (_.browser.IE !== 9) {
                 $button.on("click", function (e) {
@@ -441,8 +441,8 @@ define('io.ox/calendar/edit/template',
                 });
             }
 
+            $node.append($("<div>").addClass("span6").append($button));
             $node.append($("<div>").addClass("span6").append($input));
-            $node.append($("<div>").addClass("span6 pull-right").append($button));
 
         }
     });

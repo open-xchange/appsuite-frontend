@@ -86,9 +86,12 @@ define('io.ox/calendar/edit/main',
                         appointmentModel.fullTimeChangeBindings(self.model);
                         appointmentModel.setDefaultParticipants(self.model).done(function () {
                             app.view = self.view = new MainView({model: self.model, mode: data.id ? 'edit' : 'create', app: self});
-                            self.model.on('create:start update:start', function () {
-                                self.getWindow().busy();
-                            });
+                            //window.busy breaks oldschool upload, iframe needs to be enabled until all files are uploaded
+                            if (_.browser.IE === undefined || _.browser.IE > 9) {
+                                self.model.on('create:start update:start', function () {
+                                    self.getWindow().busy();
+                                });
+                            }
                             self.model.on('create update', _.bind(self.onSave, self));
                             self.model.on('backendError', function () {
                                 self.getWindow().idle();
@@ -238,7 +241,17 @@ define('io.ox/calendar/edit/main',
                 onSave: function () {
                     this.considerSaved = true;
                     this.getWindow().idle();
-                    this.quit();
+                    var tmpFrame = $('#tmp'),
+                        self = this,
+                        attList = this.view.baton.attachmentList;
+                    if (attList.oldMode && attList.attachmentsToAdd.length > 0) {
+                        tmpFrame.on('attachmentsSaved', function () {
+                            tmpFrame.off('attachmentsSaved');
+                            self.quit();
+                        });
+                    } else {
+                        this.quit();
+                    }
                 },
                 failSave: function () {
                     if (this.model) {

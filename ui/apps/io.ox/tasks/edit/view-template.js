@@ -521,7 +521,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         draw: function (baton) {
             var $node = $("<form>").appendTo(this).attr('id', 'attachmentsForm'),
                 $input = $("<input>", { type: "file" }),
-                $button = $("<button/>").attr('data-action', 'add').text(gt("Add")).addClass("btn btn-primary span12");
+                $button = $("<button/>").attr('data-action', 'add').text(gt("Upload file")).addClass("btn span12");
            
             if (_.browser.IE !== 9) {
                 $button.on("click", function (e) {
@@ -546,8 +546,8 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                 });
             }
 
+            $node.append($("<div>").addClass("span3").append($button));
             $node.append($("<div>").addClass("span6").append($input));
-            $node.append($("<div>").addClass("span3 offset3").append($button));
         }
     });
 
