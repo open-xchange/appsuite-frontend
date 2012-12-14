@@ -469,6 +469,11 @@ define('io.ox/core/tk/folderviews',
             return this;
         };
 
+        this.getNode = $.noop;
+        this.removeNode = $.noop;
+        this.reloadNode = $.noop;
+        this.repaintNode = $.noop;
+
         this.destroy = function () {
             this.events.destroy();
             this.selection.destroy();
@@ -853,6 +858,8 @@ define('io.ox/core/tk/folderviews',
 
         function paint() {
 
+            self.busy();
+
             return api.getVisible({ type: opt.type }).done(function (data) {
                 var id, section,
                     drawSection = function (node, list) {
@@ -861,6 +868,8 @@ define('io.ox/core/tk/folderviews',
                             node.append(drawFolder(data));
                         });
                     };
+                // idle
+                self.idle();
                 // loop over sections
                 for (id in sections) {
                     if (data[id]) {
