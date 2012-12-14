@@ -43,7 +43,7 @@ define('io.ox/mail/util',
                     return d.format(date.TIME);
                 },
                 datestr = function () {
-                    return d.format(date.DATE) + fulldate ? timestr() : '';
+                    return d.format(date.DATE) + (fulldate ? ' ' + timestr() : '');
                 },
                 isSameDay = function () {
                     return d.getDate() === now.getDate() &&
