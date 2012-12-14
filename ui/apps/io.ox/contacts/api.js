@@ -445,11 +445,16 @@ define('io.ox/contacts/api',
         // resume & trigger refresh
         return http.resume()
             .pipe(function (result) {
+
+                var def = $.Deferred();
+
                 _(result).each(function (val) {
-                    if (val.error) {
-                        notifications.yell('error', val.error.error);
-                    }
+                    if (val.error) { notifications.yell(val.error); def.reject(val.error); }
                 });
+
+                if (def.state() === 'rejected') {
+                    return def;
+                }
 
                 return $.when.apply($,
                     _(list).map(function (o) {

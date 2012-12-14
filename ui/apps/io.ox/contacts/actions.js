@@ -16,7 +16,8 @@ define('io.ox/contacts/actions',
      'io.ox/core/extPatterns/links',
      'io.ox/contacts/api',
      'io.ox/core/config',
-     'gettext!io.ox/contacts'], function (ext, links, api, config, gt) {
+     'io.ox/core/notifications',
+     'gettext!io.ox/contacts'], function (ext, links, api, config, notifications, gt) {
 
     'use strict';
 
@@ -120,7 +121,7 @@ define('io.ox/contacts/actions',
         }
     });
 
-    var copyMove = function (type, apiAction, title) {
+    var copyMove = function (type, apiAction, title, success) {
         return function (list) {
             require(['io.ox/contacts/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (api, dialogs, views) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
@@ -132,14 +133,19 @@ define('io.ox/contacts/actions',
                     tree = new views.FolderTree(dialog.getBody(), { type: type });
                 tree.paint();
                 dialog.show(function () {
-                    tree.selection.set({ id: item.folder_id || item.folder });
+                    tree.selection.set(item.folder_id || item.folder);
                 })
                 .done(function (action) {
                     if (action === 'ok') {
                         var selectedFolder = tree.selection.get();
                         if (selectedFolder.length === 1) {
                             // move action
-                            api[apiAction](list, selectedFolder[0]);
+                            api[apiAction](list, selectedFolder[0]).then(
+                                function () {
+                                    notifications.yell('success', success);
+                                },
+                                notifications.yell
+                            );
                         }
                     }
                     tree.destroy();
@@ -152,13 +158,13 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/move', {
         id: 'move',
         requires: 'some delete',
-        multiple: copyMove('contacts', 'move', gt('Move'))
+        multiple: copyMove('contacts', 'move', gt('Move'), gt('Contacts have been moved'))
     });
 
     new Action('io.ox/contacts/actions/copy', {
         id: 'copy',
         requires: 'some read',
-        multiple: copyMove('contacts', 'copy', gt('Copy'))
+        multiple: copyMove('contacts', 'copy', gt('Copy'), gt('Contacts have been copied'))
     });
 
     new Action('io.ox/contacts/actions/send', {
