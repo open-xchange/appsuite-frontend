@@ -18,6 +18,8 @@ define("io.ox/core/api/factory",
 
     "use strict";
 
+    var DELIM = '//';
+
     var fix = function (obj) {
         var clone = _.copy(obj, true);
         clone.folder = clone.folder || clone.folder_id;
@@ -55,7 +57,7 @@ define("io.ox/core/api/factory",
                 remove: { action: "delete" }
             },
             cid: function (o) {
-                return o.folder + '\t' + (o.sortKey || o.sort) + '.' + o.order + '.' + (o.max || o.limit || 0);
+                return o.folder + DELIM + (o.sortKey || o.sort) + '.' + o.order + '.' + (o.max || o.limit || 0);
             },
             done: {},
             fail: {},
@@ -81,6 +83,8 @@ define("io.ox/core/api/factory",
         var lastModified = {};
 
         var api = {
+
+            DELIM: DELIM,
 
             options: o,
 
@@ -257,20 +261,23 @@ define("io.ox/core/api/factory",
                 var defs = _(folders).map(function (value, folder_id) {
                     // grep keys
                     var cache = api.caches.all;
-                    return cache.grepKeys(folder_id + '\t').pipe(function (key) {
-                        // now get cache entry
-                        return cache.get(key).pipe(function (data) {
-                            if (data) {
-                                if ('data' in data) {
-                                    data.data = api.localRemove(data.data, hash, getKey);
+                    return cache.grepKeys(folder_id + DELIM).pipe(function (keys) {
+                        // loop
+                        return $.when.apply($, _(keys).map(function (key) {
+                            // now get cache entry
+                            return cache.get(key).pipe(function (data) {
+                                if (data) {
+                                    if ('data' in data) {
+                                        data.data = api.localRemove(data.data, hash, getKey);
+                                    } else {
+                                        data = api.localRemove(data, hash, getKey);
+                                    }
+                                    return cache.add(key, data);
                                 } else {
-                                    data = api.localRemove(data, hash, getKey);
+                                    return $.when();
                                 }
-                                return cache.add(key, data);
-                            } else {
-                                return $.when();
-                            }
-                        });
+                            });
+                        }));
                     });
                 });
                 // remove from object caches
@@ -317,7 +324,7 @@ define("io.ox/core/api/factory",
                             var folders = {};
                             _(ids).each(function (o) { folders[o.folder_id] = o.folder_id; });
                             return $.when.apply($, _(folders).map(function (id) {
-                                return api.caches.all.grepRemove(id + '\t');
+                                return api.caches.all.grepRemove(id + DELIM);
                             }));
                         })
                         .done(done);
@@ -329,7 +336,7 @@ define("io.ox/core/api/factory",
 
             needsRefresh: function (folder, sort, desc) {
                 // has entries in 'all' cache for specific folder
-                return caches.all.keys(folder + '\t' + sort + '.' + desc).pipe(function (data) {
+                return caches.all.keys(folder + DELIM + sort + '.' + desc).pipe(function (data) {
                     return data !== null;
                 });
             },

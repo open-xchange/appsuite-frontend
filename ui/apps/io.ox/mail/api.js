@@ -582,6 +582,7 @@ define("io.ox/mail/api",
                 })
                 .done(function () {
                     notifications.yell('success', 'Mail has been moved');
+                    folderAPI.reload([{ folder_id: targetFolderId }].concat(list));
                 });
         });
     };
@@ -592,6 +593,7 @@ define("io.ox/mail/api",
             .done(refreshAll)
             .done(function () {
                 notifications.yell('success', 'Mail has been copied');
+                folderAPI.reload(list);
             });
     };
 
@@ -1019,6 +1021,7 @@ define("io.ox/mail/api",
             .pipe(function (data) {
                 return api.caches.all.grepRemove(options.folder + DELIM).pipe(function () {
                     api.trigger('refresh.all');
+                    folderAPI.reload(options.folder);
                     return data;
                 });
             });

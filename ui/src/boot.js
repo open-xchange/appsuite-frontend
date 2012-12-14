@@ -247,8 +247,9 @@ $(document).ready(function () {
     setDefaultLanguage = function () {
         // look at navigator.language with en_US as fallback
         var navLang = (navigator.language || navigator.userLanguage).substr(0, 2),
+            languages = ox.serverConfig.languages || {},
             lang = "en_US", id = "";
-        for (id in ox.serverConfig.languages) {
+        for (id in languages) {
             // match?
             if (id.substr(0, 2) === navLang) {
                 lang = id;

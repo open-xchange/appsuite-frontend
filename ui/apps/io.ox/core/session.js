@@ -25,7 +25,8 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
     };
 
     var check = function (language) {
-        return language in ox.serverConfig.languages ? language : false;
+        var languages = ox.serverConfig.languages || {};
+        return language in languages ? language : false;
     };
 
     var set = function (data) {
