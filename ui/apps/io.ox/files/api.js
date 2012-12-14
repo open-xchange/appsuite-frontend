@@ -227,6 +227,58 @@ define('io.ox/files/api',
                 });
             });
     };
+    
+    api.uploadNewVersionOldSchool = function (options) {
+        // Alright, let's simulate a multipart formdata form
+        options = $.extend({
+            folder: config.get('folder.infostore')
+        }, options || {});
+
+        var formData = options.form,
+            self = this,
+            deferred = $.Deferred();
+
+        if (options.json && !$.isEmptyObject(options.json)) {
+            if (!options.json.folder_id) {
+                options.json.folder_id = options.folder;
+            }
+        } else {
+            options.json = { folder_id: options.folder };
+        }
+        formData.append($('<input>', {'type': 'hidden', 'name': 'json', 'value': JSON.stringify(options.json)}));
+        
+        /*return http.UPLOAD({
+                module: 'files',
+                params: { action: 'update', timestamp: _.now(), id: options.id },
+                data: formData,
+                fixPost: true // TODO: temp. backend fix
+            });*/
+        var tmpName = 'iframe_' + _.now(),
+        frame = $('<iframe>', {'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
+    
+        $('#tmp').append(frame);
+        window.callback_update = function (data) {
+                var id = options.json.id || options.id,
+                    folder_id = String(options.json.folder_id),
+                    obj = { folder_id: folder_id, id: id };
+                $('#' + tmpName).remove();
+                deferred[(data && data.error ? 'reject' : 'resolve')](data);
+                window.callback_update = null;
+                return api.propagate('change', obj).pipe(function () {
+                    api.trigger('create.version', obj);
+                    return { folder_id: folder_id, id: id, timestamp: data.timestamp};
+                });
+            };
+            
+        formData.attr({
+            method: 'post',
+            enctype: 'multipart/form-data',
+            action: ox.apiRoot + '/files?action=update&id=' + options.id + '&timestamp=' + options.timestamp + '&session=' + ox.session,
+            target: tmpName
+        });
+        formData.submit();
+        return deferred;
+    };
 
     api.update = function (file) {
         var obj = { id: file.id, folder: file.folder_id };
