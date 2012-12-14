@@ -623,8 +623,8 @@ define('io.ox/core/tk/folderviews',
         this.subscribe = function (data) {
             var name = data.app.getName(),
                 POINT = name + '/folderview',
-                folderCache = new cache.SimpleCache('folder-all', true),
-                subFolderCache = new cache.SimpleCache('subfolder-all', true),
+                folderCache = new cache.SimpleCache('folder-all', false),
+                subFolderCache = new cache.SimpleCache('subfolder-all', false),
                 storage = {
                 folderCache: folderCache,
                 subFolderCache: subFolderCache

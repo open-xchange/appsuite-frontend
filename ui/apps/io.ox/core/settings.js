@@ -205,6 +205,8 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     data: {}
                 })
                 .done(function () {
+                    tree = {};
+                    meta = {};
                     self.trigger('reset');
                 });
             });
