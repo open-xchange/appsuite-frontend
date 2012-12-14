@@ -57,7 +57,7 @@ define('io.ox/core/settings/pane',
         index: 100,
         attribute: 'language',
         label: gt("Language"),
-        selectOptions: ox.serverConfig.languages
+        selectOptions: ox.serverConfig.languages || {}
     }));
 
     http.GET({
