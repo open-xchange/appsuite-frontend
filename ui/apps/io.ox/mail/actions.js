@@ -202,7 +202,7 @@ define('io.ox/mail/actions',
                                 api[type](list, target).then(
                                     function () {
                                         notifications.yell('success', success);
-                                        folderAPI.reload(list);
+                                        folderAPI.reload(target, list);
                                     },
                                     notifications.yell
                                 );

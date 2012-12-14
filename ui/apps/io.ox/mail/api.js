@@ -582,7 +582,7 @@ define("io.ox/mail/api",
                 })
                 .done(function () {
                     notifications.yell('success', 'Mail has been moved');
-                    folderAPI.reload([{ folder_id: targetFolderId }].concat(list));
+                    folderAPI.reload(targetFolderId, list);
                 });
         });
     };
@@ -593,7 +593,7 @@ define("io.ox/mail/api",
             .done(refreshAll)
             .done(function () {
                 notifications.yell('success', 'Mail has been copied');
-                folderAPI.reload(list);
+                folderAPI.reload(targetFolderId, list);
             });
     };
 

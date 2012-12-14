@@ -721,9 +721,8 @@ define('io.ox/core/api/folder',
                         // unread, title, subfolders, subscr_subflds
                         var equalUnread = a.unread === b.unread,
                             equalData = a.title === b.title && a.subfolders === b.subfolders && a.subscr_subflds === b.subscr_subflds;
-                        if (equalData && !equalUnread) {
-                            api.trigger('update:unread', id, b);
-                        } else if (!equalData) {
+                        api.trigger('update:unread', id, b);
+                        if (!equalData) {
                             api.trigger('update', id, id, b);
                         }
                     })
@@ -732,12 +731,12 @@ define('io.ox/core/api/folder',
                     });
             }
 
-            return function (list) {
+            return function () {
                 if (ox.online) {
-                    _([].concat(list))
-                        .chain()
-                        .map(function (obj) {
-                            return _.isString(obj) ? obj : obj.folder_id;
+                    _.chain(arguments)
+                        .flatten()
+                        .map(function (arg) {
+                            return _.isString(arg) ? arg : arg.folder_id;
                         })
                         .uniq()
                         .each(function (id) {

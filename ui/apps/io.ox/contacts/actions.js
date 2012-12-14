@@ -84,25 +84,14 @@ define('io.ox/contacts/actions',
         id: 'create',
 		requires: 'create',
         action: function (baton) {
-
             require(['io.ox/contacts/edit/main'], function (m) {
                 var def = $.Deferred();
-
                 baton.data.folder_id = baton.folder;
                 m.getApp(baton.data).launch(def);
-
                 def.done(function (data) {
                     baton.app.getGrid().selection.set(data);
                 });
             });
-//            require(['io.ox/contacts/create/main'], function (create) {
-//                create.show(baton.app).done(function (data) {
-//                    console.log(data);
-//                    if (data) {
-//                        baton.app.getGrid().selection.set(data);
-//                    }
-//                });
-//            });
         }
     });
 
