@@ -202,7 +202,7 @@ define('plugins/portal/tumblr/register',
                 deferred.reject();
             } else {
                 $.ajax({
-                    url: 'https://api.tumblr.com/v2/blog/' + url + '/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=&jsonp=testcallback',
+                    url: 'https://api.tumblr.com/v2/blog/' + url + '/posts/?api_key=' + API_KEY + '&notes_info=&filter=&jsonp=testcallback',
                     type: 'HEAD',
                     dataType: 'jsonp',
                     jsonp: false,

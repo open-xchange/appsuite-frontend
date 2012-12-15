@@ -23,7 +23,7 @@ define('io.ox/portal/settings/pane',
 
     'use strict';
 
-    var POINT = 'io.ox/portal/settings/detail';
+    var POINT = 'io.ox/portal/settings/detail', pane;
 
     // application object
     var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq(),
@@ -57,8 +57,8 @@ define('io.ox/portal/settings/pane',
 
     ext.point(POINT).extend({
         draw: function () {
-            var self = this,
-                pane = $('<div class="io-ox-portal-settings">').busy();
+            var self = this;
+            pane = $('<div class="io-ox-portal-settings">').busy();
             self.append(pane);
             loadPlugins().done(function () {
                 ext.point(POINT + '/pane').invoke('draw', pane);
@@ -115,8 +115,6 @@ define('io.ox/portal/settings/pane',
             props: {},
             type: type
         };
-
-        console.error('Add', type, id);
 
         settings.set('widgets/user/' + id, widget).save();
 
@@ -315,6 +313,23 @@ define('io.ox/portal/settings/pane',
         return (views[id] = new WidgetSettingsView({ model: model }));
     }
 
+    function saveWidgets() {
+        // get latest values
+        var widgets = {};
+        collection.each(function (model) {
+            var id = model.get('id');
+            widgets[id] = model.toJSON();
+        });
+        // update all indexes
+        pane.find('.widget-settings-view').each(function (index) {
+            var node = $(this), id = node.attr('data-widget-id');
+            if (id in widgets) {
+                widgets[id].index = index;
+            }
+        });
+        settings.set('widgets/user', widgets).save();
+    }
+
     ext.point(POINT + '/pane').extend({
         index: 300,
         id: "list",
@@ -335,26 +350,13 @@ define('io.ox/portal/settings/pane',
                 scroll: true,
                 delay: 150,
                 stop: function (e, ui) {
-                    // update all indexes
-                    var widgets = settings.get('widgets/user');
-                    $(this).children('.widget-settings-view').each(function (index) {
-                        var node = $(this), id = node.attr('data-widget-id');
-                        if (id in widgets) {
-                            widgets[id].index = index;
-                        }
-                    });
-                    settings.set('widgets/user', widgets).save();
+                    saveWidgets();
                 }
             });
 
             collection.on('change', function () {
                 // save settings
-                var widgets = {};
-                this.each(function (model) {
-                    var id = model.get('id');
-                    widgets[id] = model.toJSON();
-                });
-                settings.set('widgets/user', widgets).save();
+                saveWidgets();
                 // re-render all views
                 _(views).each(function (view) {
                     view.render();

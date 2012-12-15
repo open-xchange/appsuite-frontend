@@ -156,12 +156,6 @@ define('io.ox/portal/main',
 
     settings.on('change', function () {
 
-        // adopt current DOM order
-        collection.each(function (model) {
-            var node = app.getWidgetNode(model);
-            model.set('index', node.index());
-        });
-
         var ids = collection.pluck('id');
 
         _(app.getWidgetSettings()).each(function (obj) {
@@ -169,6 +163,13 @@ define('io.ox/portal/main',
             if (!_(ids).contains(obj.id)) {
                 collection.add(obj);
             } else {
+                // update model
+                collection.find(function (model) {
+                    if (model.get('id') === obj.id) {
+                        model.set(obj);
+                        return true;
+                    }
+                });
                 // remove from list
                 ids = _(ids).without(obj.id);
             }
@@ -385,6 +386,12 @@ define('io.ox/portal/main',
                             widgets[id].index = index;
                         }
                     });
+                    // adopt current DOM order
+                    collection.each(function (model) {
+                        var node = app.getWidgetNode(model);
+                        model.set('index', node.index());
+                    });
+                    // trigger save
                     settings.set('widgets/user', widgets).save();
                 }
             });
