@@ -21,7 +21,6 @@ define('io.ox/portal/settings/defaults', [], function () {
                 mail_0: {
                     plugin: 'plugins/portal/mail/register',
                     color: 'blue',
-                    //enabled: false,
                     index: 1
                 },
                 calendar_0: {
@@ -34,73 +33,20 @@ define('io.ox/portal/settings/defaults', [], function () {
                     color: 'green',
                     index: 3
                 },
-                quota_0: {
-                    plugin: 'plugins/portal/quota/register',
-                    color: 'gray',
-                    index: 'last'
+                birthdays_0: {
+                    plugin: 'plugins/portal/birthdays/register',
+                    color: 'lightblue',
+                    index: 4
                 },
                 facebook_0: {
                     plugin: 'plugins/portal/facebook/register',
-                    color: 'lightgreen',
-                    //enabled: false,
+                    color: 'blue',
                     index: 4
                 },
                 twitter_0: {
                     plugin: 'plugins/portal/twitter/register',
                     color: 'pink',
-                    //enabled: false,
                     index: 5
-                },
-                birthdays_0: {
-                    plugin: 'plugins/portal/birthdays/register',
-                    color: 'lightblue',
-                    index: 'first'
-                },
-                tumblr_0: {
-                    plugin: 'plugins/portal/tumblr/register',
-                    color: 'orange',
-                    index: 'first',
-                    props: {
-                        url: 'open-xchange.tumblr.com'
-                    }
-                },
-                tumblr_1: {
-                    plugin: 'plugins/portal/tumblr/register',
-                    color: 'lightblue',
-                    index: 'first',
-                    props: {
-                        url: 'vodvon.tumblr.com'
-                    }
-                },
-                tumblr_2: {
-                    plugin: 'plugins/portal/tumblr/register',
-                    color: 'gray',
-                    index: 4,
-                    props: {
-                        url: 'staff.tumblr.com'
-                    }
-                },
-                flickr_0: {
-                    plugin: 'plugins/portal/flickr/register',
-                    color: 'pink',
-                    index: 6,
-                    props: {
-                        method: 'flickr.photos.search',
-                        query: 'xjrlokix'
-                    }
-                },
-                rss_0: {
-                    plugin: 'plugins/portal/rss/register',
-                    color: 'lightblue',
-                    index: 'first',
-                    props: {
-                        url: ['http://www.spiegel.de/schlagzeilen/tops/index.rss']
-                    }
-                },
-                linkedin_0: {
-                    plugin: 'plugins/portal/linkedIn/register',
-                    color: 'blue',
-                    index: 3
                 }
             }
         }

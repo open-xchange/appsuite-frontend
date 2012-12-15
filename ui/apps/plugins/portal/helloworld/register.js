@@ -58,4 +58,10 @@ define('plugins/portal/helloworld/register',
             );
         }
     });
+
+    ext.point('io.ox/portal/widget/helloworld/settings').extend({
+        title: gt('Hello World'),
+        type: 'helloworld',
+        editable: false
+    });
 });

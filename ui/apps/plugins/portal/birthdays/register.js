@@ -151,4 +151,10 @@ define('plugins/portal/birthdays/register',
             this.append($list);
         }
     });
+
+    ext.point('io.ox/portal/widget/birthdays/settings').extend({
+        title: gt('Birthdays'),
+        type: 'birthdays',
+        editable: false
+    });
 });

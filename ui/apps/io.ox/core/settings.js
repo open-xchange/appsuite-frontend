@@ -177,19 +177,16 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             };
 
             return settingsCache.get(path).pipe(function (data) {
-                try {
-                    if (data !== null) {
-                        tree = data.tree;
-                        meta = data.meta;
-                        return data;
-                    } else if (ox.online) {
-                        return load();
-                    } else {
-                        self.detach();
-                        return { tree: tree, meta: meta };
-                    }
-                } finally {
+                if (data !== null) {
+                    tree = data.tree;
+                    meta = data.meta;
                     if (ox.online) load(); // read-through caching
+                    return data;
+                } else if (ox.online) {
+                    return load();
+                } else { // offline
+                    self.detach();
+                    return { tree: tree, meta: meta };
                 }
             });
         };

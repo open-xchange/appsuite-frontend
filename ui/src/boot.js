@@ -327,7 +327,7 @@ $(document).ready(function () {
 
         require(['io.ox/core/session', 'io.ox/core/capabilities', 'io.ox/core/manifests']).done(function (session, capabilities, manifests) {
 
-            var useAutoLogin = capabilities.has("autologin") && ox.online, initialized;
+            var useAutoLogin = (true || capabilities.has("autologin")) && ox.online, initialized;
 
             function continueWithoutAutoLogin() {
                 if (ox.signin) {

@@ -11,7 +11,11 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define('plugins/portal/flickr/register', ['io.ox/core/extensions', 'io.ox/portal/feed'], function (ext, Feed) {
+define('plugins/portal/flickr/register',
+    ['io.ox/core/extensions',
+     'io.ox/portal/feed',
+     'io.ox/core/tk/dialogs',
+     'gettext!plugins/portal'], function (ext, Feed, dialogs, gt) {
 
     'use strict';
 
@@ -139,136 +143,119 @@ define('plugins/portal/flickr/register', ['io.ox/core/extensions', 'io.ox/portal
         }())
     });
 
-/*
-    var drawPlugin = function (index) {
-        if (!index) {
-            index = 100;
-        }
+    function getFlickrNsid(username, $error) {
 
-        var mp = new MediaPlayer();
+        var callback = 'getFlickerNsid',
+            myurl = 'https://www.flickr.com/services/rest/?api_key=' + API_KEY +
+                '&format=json&method=flickr.people.findByUsername&username=' + username + '&jsoncallback=' + callback,
+            deferred = $.Deferred();
 
-
-        var streams = settings.get('streams');
-
-        _.each(streams, function (v) {
-            if (apiUrl[v.method]) {
-                var myurl;
-
-                if (v.method === 'flickr.people.getPublicPhotos') {
-                    myurl = apiUrl[v.method] + v.nsid + '&jsoncallback=';
+        $.ajax({
+            url: myurl,
+            dataType: 'jsonp',
+            jsonp: false,
+            jsonpCallback: callback,
+            success: function (data) {
+                if (data && data.stat && data.stat === 'ok') {
+                    deferred.resolve(data.user.nsid);
                 } else {
-                    myurl = apiUrl[v.method] + v.q + '&jsoncallback=';
+                    deferred.reject();
+                    $error.text(gt('Cannot find user with given name.'));
                 }
-
-                mp.addFeed({
-                    id: 'flickr-' + v.q.replace(/[^a-z0-9]/g, '_') + '-' + v.method.replace(/[^a-z0-9]/g, '_'),
-                    description: v.description,
-                    url: myurl,
-                    index: index++
-                });
+            },
+            error: function () {
+                deferred.reject();
+                $error.text(gt('Cannot find user with given name.'));
             }
         });
 
-        mp.setOptions({bigPreview: true});
+        return deferred;
+    }
 
-        mp.init({
-            appendLimitOffset: function (myurl, count, offset) {
-                if (count) {
-                    myurl += "&per_page=" + count;
-                }
+    function edit(model, view) {
 
-                if (offset) {
-                    myurl += "&page=" + (offset + 1);
-                }
+        var dialog = new dialogs.ModalDialog({ easyOut: true, async: true, width: 400 }),
+            $q = $('<input type="text" class="input-block-level">'),
+            $description = $('<input type="text" class="input-block-level">'),
+            $method = $('<select class="input-block-level">').append(
+                $('<option>').attr('value', 'flickr.photos.search').text(gt('flickr.photos.search')),
+                $('<option>').attr('value', 'flickr.people.getPublicPhotos').text(gt('flickr.people.getPublicPhotos'))
+            ),
+            $error = $('<div>').addClass('alert alert-error').hide(),
+            that = this,
+            props = model.get('props') || {};
 
-                return myurl;
-            },
-            determineSuccessfulResponse: function (j) {
-                return j && j.stat && j.stat === "ok" ? j.photos : {};
-            },
-            getDataArray: function (j) {
-                return j.photo;
-            },
-            elementPreview: function ($node, entry) {
-                var big = mp.getOption('bigPreview');
+        dialog.header($("<h4>").text(gt('Edit Flickr photo stream')))
+            .build(function () {
+                this.getContentNode().append(
+                    $('<label>').text(gt('Search')),
+                    $q.val(props.query),
+                    $('<br>'),
+                    $method.val(props.method),
+                    $('<label>').text(gt('Description (optional)')),
+                    $description.val(props.description),
+                    $error
+                );
+            })
+            .addPrimaryButton('save', gt('Save'))
+            .addButton('cancel', gt('Cancel'))
+            .show(function () {
+                $q.focus();
+            });
 
-                if (entry.title) {
-                    var $title = $("<div>").addClass("mediaplugin-title").text(entry.title);
-                    $node.append($title);
-                }
-                $node.append($("<div>").addClass("mediaplugin-content").text(entry.dateupload ? new date.Local(entry.dateupload * 1000).format(date.DATE_TIME) : ""));
-
-                if (big) {
-                    var foundImage = _.find(imagesizes, function (value) {
-                        if (entry[value]) {
-                            return true;
-                        }
-                        return false;
-                    });
-
-                    if (foundImage) {
-                        var urlName = foundImage.replace(/^http:\/\//i, 'https://');
-                        var widthName = 'width' + urlName.replace(/url/, ''),
-                            heightName = 'height' + urlName.replace(/url/, '');
-
-                        var $img = $('<img/>', {'data-original': entry[urlName], width: entry[widthName], height: entry[heightName]});
-                        return $img;
-                    }
-                } else {
-                    if (entry.url_sq && entry.width_sq && entry.height_sq) {
-                        var $img = $('<img/>', {src: entry.url_sq, width: entry.width_sq, height: entry.height_sq});
-                        return $img;
-                    }
-                }
-
-                return false;
-            },
-            popupContent: function ($popup, entry, $busyIndicator) {
-                var maxWidth = $popup.width();
-                var maxHeight = $popup.height();
-
-                var foundImage = _.find(imagesizes, function (value) {
-                        var urlName = value;
-                        var widthName = 'width' + urlName.replace(/url/, ''),
-                            heightName = 'height' + urlName.replace(/url/, '');
-
-                        if (entry[urlName] && entry[widthName] && entry[heightName]) {
-                            var $img = $('<img/>', {src: entry[urlName].replace(/^http:\/\//i, 'https://'), width: entry[widthName], height: entry[heightName]}).css({display: 'none'})
-                                .load(function () {
-                                    if ($busyIndicator) {
-                                        $busyIndicator.detach();
-                                        $(this).fadeIn();
-                                    }
-                                });
-
-                            mp.resizeImage($img, maxWidth, maxHeight);
-                            $popup.append($img);
-                            return true;
-                        }
-                        return false;
-                    });
-
-                if (!foundImage) {
-                    $popup.append($("<div>").addClass("flickr-content").text(gt('No picture found.')));
-                    if ($busyIndicator) {
-                        $busyIndicator.detach();
-                    }
-                }
-
-                if (entry.title) {
-                    $popup.append($("<div>").addClass("flickr-title").text(entry.title));
-                }
-            },
-            getImagesFromEntry: function (entry, imageCollection) {
-                if (entry.url_l) {
-                    imageCollection.push(entry.url_l);
-                }
+        dialog.on('cancel', function () {
+            if (model.candidate) {
+                console.error('just a candidate');
+                view.removeWidget();
             }
         });
-    };
 
-    return {
-        reload: drawPlugin
-    };
-*/
+        dialog.on('save', function (e) {
+
+            $error.hide();
+
+            var q = String($.trim($q.val())),
+                method = $.trim($method.val()),
+                description = $.trim($description.val()),
+                deferred;
+
+            if (method === 'flickr.people.getPublicPhotos') {
+                deferred = getFlickrNsid(q, $error);
+            } else {
+                deferred = $.Deferred().resolve();
+            }
+
+            deferred.done(function (nsid) {
+                if (q.length === 0) {
+                    $error.text(gt('Please enter a search query'));
+                    $error.show();
+                    dialog.idle();
+                } else if (description.length === 0) {
+                    $error.text(gt('Please enter a description'));
+                    $error.show();
+                    dialog.idle();
+                } else {
+                    props = { method: method, query: q, description: description };
+                    if (nsid) { props.nsid = nsid; }
+                    model.candidate = false;
+                    model.set({ title: description, props: props });
+                    dialog.close();
+                }
+            });
+
+            deferred.fail(function () {
+                $error.show();
+                dialog.idle();
+            });
+
+            return deferred;
+        });
+    }
+
+    ext.point('io.ox/portal/widget/flickr/settings').extend({
+        title: gt('Flickr'),
+        type: 'flickr',
+        editable: true,
+        edit: edit
+    });
 });

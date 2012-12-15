@@ -17,12 +17,11 @@ define('plugins/portal/twitter/register',
      'io.ox/oauth/proxy',
      'io.ox/core/flowControl',
      'io.ox/core/strings',
-     'io.ox/portal/pulltorefresh',
      'io.ox/keychain/api',
      'gettext!plugins/portal',
      'io.ox/core/notifications',
      'io.ox/core/date',
-     'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, strings, ptr, keychain, gt, notifications, date) {
+     'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, strings, keychain, gt, notifications, date) {
 
     'use strict';
 
@@ -253,7 +252,7 @@ define('plugins/portal/twitter/register',
                 $(this).on('onPullToRefresh', onPullToRefresh);
             }).on('onPause', function () {
                 $(this).off('onPullToRefresh', onPullToRefresh);
-                ptr.detachEvents();
+                //ptr.detachEvents();
             }).on('onPullToRefreshDown', function () {
                 $('div.tweet > div.text').addClass('pulltorefresh-unselectable');
                 $('div.tweet > div.text > span').addClass('pulltorefresh-unselectable');
@@ -261,7 +260,7 @@ define('plugins/portal/twitter/register',
                 $('div.tweet > div.text').removeClass('pulltorefresh-unselectable');
                 $('div.tweet > div.text > span').removeClass('pulltorefresh-unselectable');
             }).on('onAppended', function () {
-                ptr.attachEvents($('div.io-ox-sidepopup-pane'), $(this), $tweets);
+                //ptr.attachEvents($('div.io-ox-sidepopup-pane'), $(this), $tweets);
             });
 
             if (!timeline) {
@@ -319,5 +318,11 @@ define('plugins/portal/twitter/register',
                 )
             );
         }
+    });
+
+    ext.point('io.ox/portal/widget/twitter/settings').extend({
+        title: gt('Twitter'),
+        type: 'twitter',
+        editable: false
     });
 });

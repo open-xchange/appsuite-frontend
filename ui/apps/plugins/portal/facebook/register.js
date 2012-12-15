@@ -294,4 +294,10 @@ define('plugins/portal/facebook/register',
 //            this.html('<em style="color: red;">This message is of the type <b>' + post.type + '</b>. We do not know how to render this yet. Please tell us about it!</em>');
         }
     });
+
+    ext.point('io.ox/portal/widget/facebook/settings').extend({
+        title: gt('Facebook'),
+        type: 'facebook',
+        editable: false
+    });
 });

@@ -113,9 +113,6 @@ define('io.ox/portal/main',
         availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
         collection = new Backbone.Collection([]);
 
-    // for debugging
-    window.portal = app;
-
     collection.comparator = function (a, b) {
         return ext.indexSorter({ index: a.get('index') }, { index: b.get('index') });
     };
