@@ -15,14 +15,20 @@ define('plugins/portal/tumblr/register',
     ['io.ox/core/extensions',
      'io.ox/portal/feed',
      'gettext!io.ox/portal',
-     'io.ox/core/tk/dialogs'
-    ], function (ext, Feed, gt, dialogs) {
+     'io.ox/core/tk/dialogs',
+     'settings!io.ox/portal'
+    ], function (ext, Feed, gt, dialogs, settings) {
 
     'use strict';
 
-    var API_KEY = 'gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow',
+    var API_KEY = settings.get("apiKeys/tumblr"),
         apiUrl = ['https://api.tumblr.com/v2/blog/', '/posts/?api_key=' + API_KEY + '&notes_info=&filter='];
 
+    if (_.isUndefined(API_KEY)) {
+        // No API key, no extension;
+        return;
+    }
+    
     ext.point('io.ox/portal/widget/tumblr').extend({
 
         title: 'Tumblr',

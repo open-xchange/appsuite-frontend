@@ -15,11 +15,12 @@ define('plugins/portal/flickr/register',
     ['io.ox/core/extensions',
      'io.ox/portal/feed',
      'io.ox/core/tk/dialogs',
-     'gettext!plugins/portal'], function (ext, Feed, dialogs, gt) {
+     'settings!io.ox/portal',
+     'gettext!plugins/portal'], function (ext, Feed, dialogs, settings, gt) {
 
     'use strict';
 
-    var API_KEY = '7fcde3ae5ad6ecf2dfc1d3128f4ead81',
+    var API_KEY = settings.get('apiKeys/flickr'),
         // order of elements is the crucial factor of presenting the image in the sidepopups
         imagesizes = ['url_l', 'url_c', 'url_z', 'url_o', 'url_n', 'url_m', 'url_q', 'url_s', 'url_sq', 'url_t'],
         sizes = 'l m n o q s sq t z'.split(' '),
@@ -29,6 +30,11 @@ define('plugins/portal/flickr/register',
             'flickr.people.getPublicPhotos': baseUrl + '&method=flickr.people.getPublicPhotos&user_id='
         };
 
+    if (_.isUndefined(API_KEY)) {
+        // No API key, no extension;
+        return;
+    }
+    
     ext.point('io.ox/portal/widget/flickr').extend({
 
         title: 'Flickr',
