@@ -34,7 +34,7 @@ define('plugins/portal/flickr/register',
         // No API key, no extension;
         return;
     }
-    
+
     ext.point('io.ox/portal/widget/flickr').extend({
 
         title: 'Flickr',
@@ -211,7 +211,6 @@ define('plugins/portal/flickr/register',
 
         dialog.on('cancel', function () {
             if (model.candidate) {
-                console.error('just a candidate');
                 view.removeWidget();
             }
         });

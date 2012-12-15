@@ -28,7 +28,7 @@ define('plugins/portal/tumblr/register',
         // No API key, no extension;
         return;
     }
-    
+
     ext.point('io.ox/portal/widget/tumblr').extend({
 
         title: 'Tumblr',
@@ -154,7 +154,7 @@ define('plugins/portal/tumblr/register',
         }())
     });
 
-    function edit(model) {
+    function edit(model, view) {
 
         var dialog = new dialogs.ModalDialog({ easyOut: true, async: true, width: 400 }),
             $url = $('<input type="text" class="input-block-level" placeholder=".tumblr.com">').placeholder(),
@@ -178,6 +178,12 @@ define('plugins/portal/tumblr/register',
             .show(function () {
                 $url.focus();
             });
+
+        dialog.on('cancel', function () {
+            if (model.candidate) {
+                view.removeWidget();
+            }
+        });
 
         dialog.on('save', function (e) {
 
@@ -224,6 +230,7 @@ define('plugins/portal/tumblr/register',
 
             deferred.done(function () {
                 dialog.close();
+                model.candidate = false;
                 model.set({
                     title: description,
                     props: { url: url, description: description }
