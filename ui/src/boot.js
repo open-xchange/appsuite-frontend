@@ -190,6 +190,7 @@ $(document).ready(function () {
         }
         // login
         require(['io.ox/core/session']).done(function (session) {
+            console.log("FORCED LANGUAGE", ox.forcedLanguage);
             session.login(
                 username,
                 password,

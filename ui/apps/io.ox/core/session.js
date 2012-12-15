@@ -62,7 +62,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
 
             return function (username, password, store) {
 
-                var def = $.Deferred();
+                var def = $.Deferred(), multiple = [];
 
                 // online?
                 if (ox.online) {
@@ -75,6 +75,16 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                             pending = null;
                         });
                         // POST request
+                        if (ox.forcedLanguage) {
+                            multiple.push({
+                                module: 'jslob',
+                                action: 'update',
+                                id: 'io.ox/core',
+                                data: {
+                                    language: ox.forcedLanguage
+                                }
+                            });
+                        }
                         http.POST({
                             module: 'login',
                             appendColumns: false,
@@ -85,7 +95,8 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                                 name: username,
                                 password: password,
                                 client: that.client(),
-                                timeout: TIMEOUTS.LOGIN
+                                timeout: TIMEOUTS.LOGIN,
+                                multiple: JSON.stringify(multiple)
                             }
                         })
                         .done(function (data) {
