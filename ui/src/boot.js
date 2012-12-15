@@ -338,18 +338,34 @@ $(document).ready(function () {
 
             function fetchUserSpecificServerConfig() {
                 var def = $.Deferred();
-                require(['io.ox/core/http'], function (http) {
-                    http.GET({
-                        module: 'apps/manifests',
-                        params: {
-                            action: 'config'
-                        }
-                    }).done(function (data) {
-                        ox.serverConfig = data;
-                        capabilities.reset();
-                        manifests.reset();
-                        def.resolve();
-                    }).fail(def.reject);
+                require(['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
+                    var configCache = new cache.SimpleCache('serverconfig', true);
+                    if (ox.online) {
+                        http.GET({
+                            module: 'apps/manifests',
+                            params: {
+                                action: 'config'
+                            }
+                        }).done(function (data) {
+                            configCache.add('userconfig', data);
+                            ox.serverConfig = data;
+                            capabilities.reset();
+                            manifests.reset();
+                            def.resolve();
+                        }).fail(def.reject);
+                    } else {
+                        configCache.get('userconfig').done(function (data) {
+                            if (data) {
+                                ox.serverConfig = data;
+                                capabilities.reset();
+                                manifests.reset();
+                                def.resolve();
+                            } else {
+                                def.reject();
+                            }
+                        });
+                    }
+                    
                 }).fail(def.reject);
                 return def;
             }
@@ -503,15 +519,35 @@ $(document).ready(function () {
     var boot = function () {
 
         // get pre core & server config -- and init http & session
-        require(['io.ox/core/http', 'io.ox/core/session'])
-            .done(function (http) {
-                // TODO: caching
-                http.GET({
-                    module: 'apps/manifests',
-                    params: {
-                        action: 'config'
-                    }
-                }).done(function (data) {
+        require(['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/session'])
+            .done(function (http, cache) {
+                var configCache = new cache.SimpleCache('serverconfig', true),
+                    loadConfig = $.Deferred();
+
+                if (ox.online) {
+                    loadConfig = http.GET({
+                        module: 'apps/manifests',
+                        params: {
+                            action: 'config'
+                        }
+                    }).done(function (data) {
+                        configCache.add('generalconfig', data);
+                    });
+                } else {
+                    configCache.get('generalconfig').done(function (data) {
+                        if (data) {
+                            loadConfig.resolve(data);
+                        } else {
+                            loadConfig.resolve({
+                                capabilities: [],
+                                manifests: []
+                            });
+                        }
+                    });
+                }
+                
+
+                loadConfig.done(function (data) {
                     // store server config
                     ox.serverConfig = data;
                     // set page title now
