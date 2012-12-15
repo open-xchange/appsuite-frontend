@@ -160,7 +160,7 @@ define('io.ox/launchpad/main',
 
             api.getInstalled('cached').done(function (installed) {
                 secInstalled.empty();
-                secInstalled.append(
+                /*secInstalled.append(
                     $('<div>').addClass('manage-apps')
                     .append(
                         $('<a>', { href: '#', tabindex: '1' })
@@ -168,18 +168,20 @@ define('io.ox/launchpad/main',
                         .text(gt('Manage applications'))
                         .on('click', fnOpenAppStore)
                     )
-                );
+                );*/
                 _(installed).each(function (data) {
                     // draw installed app
-                    secInstalled.append(
-                        drawApp(data).on('click', data, launchApp)
-                    );
+                    if (data.visible || _.isUndefined(data.visible)) {
+                        secInstalled.append(
+                            drawApp(data).on('click', data, launchApp)
+                        );
+                    }
                 });
             });
             
             api.getInstalled().done(function (installed) {
                 secInstalled.empty();
-                secInstalled.append(
+                /*secInstalled.append(
                     $('<div>').addClass('manage-apps')
                     .append(
                         $('<a>', { href: '#', tabindex: '1' })
@@ -187,12 +189,14 @@ define('io.ox/launchpad/main',
                         .text(gt('Manage applications'))
                         .on('click', fnOpenAppStore)
                     )
-                );
+                );*/
                 _(installed).each(function (data) {
                     // draw installed app
-                    secInstalled.append(
-                        drawApp(data).on('click', data, launchApp)
-                    );
+                    if (data.visible || _.isUndefined(data.visible)) {
+                        secInstalled.append(
+                            drawApp(data).on('click', data, launchApp)
+                        );
+                    }
                 });
             });
 
