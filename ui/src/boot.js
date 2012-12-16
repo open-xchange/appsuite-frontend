@@ -190,7 +190,6 @@ $(document).ready(function () {
         }
         // login
         require(['io.ox/core/session']).done(function (session) {
-            console.log("FORCED LANGUAGE", ox.forcedLanguage);
             session.login(
                 username,
                 password,
@@ -319,9 +318,15 @@ $(document).ready(function () {
 
         function loadCoreFiles() {
             // Set user's language (as opposed to the browser's language)
-            return require(['io.ox/core/gettext']).pipe(function (gt) {
+            // Load core plugins
+            return require(['io.ox/core/gettext', 'io.ox/core/manifests']).pipe(function (gt, manifests) {
                 gt.setLanguage(ox.language);
-                return require([ox.base + '/pre-core.js']);
+                if (!ox.online) {
+                    return require([ox.base + '/pre-core.js']);
+                }
+                return manifests.manager.loadPluginsFor('core').pipe(function () {
+                    return require([ox.base + '/pre-core.js']);
+                });
             });
         }
 
