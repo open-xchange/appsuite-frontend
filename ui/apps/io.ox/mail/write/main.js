@@ -118,13 +118,26 @@ define('io.ox/mail/write/main',
             if (index < view.signatures.length) {
                 signature = view.signatures[index];
                 text = $.trim(signature.content);
+                if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
+
                 if (isHTML) {
-                    ed.appendContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
+                    if (signature.misc.insertion === 'below') {
+                        ed.appendContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
+                        ed.scrollTop('bottom');
+                    } else {
+                        ed.prependContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
+                        ed.scrollTop('top');
+                    }
                 } else {
-                    ed.appendContent(text);
+                    if (signature.misc.insertion === 'below') {
+                        ed.appendContent(text);
+                        ed.scrollTop('bottom');
+                    } else {
+                        ed.prependContent(text);
+                        ed.scrollTop('top');
+                    }
                 }
                 currentSignature = text;
-                ed.scrollTop('bottom');
             }
 
             ed.focus();
@@ -292,19 +305,28 @@ define('io.ox/mail/write/main',
             // get default signature
             var ds = _(view.signatures)
                     .find(function (o) {
-                        return o.signature_default === true;
+                        return o.id === settings.get('defaultSignature');
                     }),
-                signature = ds ? $.trim(ds.signature_text) : '',
-                pos = ds ? ds.position : 'below',
                 content = $.trim(str);
+
             // set signature?
             if (ds) {
+
+                var ln2br = function (str) {
+                    return String(str || '').replace(/\r/g, '')
+                      .replace(new RegExp('\\n', 'g'), '<br>'); // '\n' is for IE
+                };
+
+                if (_.isString(ds.misc)) { ds.misc = JSON.parse(ds.misc); }
+
+                var signature = ds ? $.trim(ds.content) : '',
+                pos = ds ? ds.misc.insertion : 'below';
                 // remember as current signature
                 currentSignature = signature;
                 // yep
                 if (editorMode === 'html') {
                     // prepare signature for html
-                    signature = '<p>' + signature.replace(/\n/g, '<br>') + '</p>';
+                    signature = '<p class="io-ox-signature">' + ln2br(signature) + '</p>';
                     // text/html
                     content = '<p></p>' + (pos === 'above' ? signature + content : content + signature);
                 } else {
@@ -943,7 +965,6 @@ define('io.ox/mail/write/main',
                 return ox.ui.App.reuse('io.ox/mail:forward.' + _.cid(data));
             }
             if (type === 'edit') {
-                console.log('Hier?');
                 return ox.ui.App.reuse('io.ox/mail:edit.' + _.cid(data));
             }
         }

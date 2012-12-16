@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'gettext!io.ox/mail'], function (ext, gt) {
+define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'gettext!io.ox/mail', 'settings!io.ox/mail'], function (ext, gt, settings) {
     'use strict';
 
     function fnMigrateClassicSignatures() {
@@ -20,9 +20,9 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
             var classicSignatures = config.get('gui.mail.signatures');
 
             var deferreds = _(classicSignatures).map(function (classicSignature) {
-                console.log("Importing signature " + classicSignature.signature_name);
+                // console.log("Importing signature " + classicSignature.signature_name);
                 return snippets.create({
-                            
+
                     type: 'signature',
                     module: 'io.ox/mail',
                     displayname: classicSignature.signature_name,
@@ -52,12 +52,13 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
 
 
         require(['io.ox/core/tk/dialogs'], function (dialogs) {
-            var $name, $signature, popup;
-            
+            var $name, $signature, $insertion, popup;
+
             popup = new dialogs.SidePopup({
                 modal: true
             })
             .show(evt, function ($pane) {
+                if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
                 var $entirePopup = $pane.closest('.io-ox-sidepopup');
                 $('<form>').append(
                     $('<div class="row-fluid">').append(
@@ -65,11 +66,21 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                     ),
                     $('<div class="row-fluid">').append(
                         $signature = $('<textarea class="span12" rows="10">')
+                    ),
+                    $('<div class="row-fluid">').append(
+                        $('<label>').text(gt('Signature insertion:')),
+                        $insertion = $('<select>').append(
+                            $('<option value="above">').text(gt('Above content')),
+                            $('<option value="below">').text(gt('Below content'))
+                        )
                     )
                 ).appendTo($pane);
 
                 $name.val(signature.displayname);
                 $signature.val(signature.content);
+                if (_.isObject(signature.misc) && signature.misc.insertion) {
+                    $insertion.val(signature.misc.insertion);
+                }
 
                 _.defer(function () {
                     if (signature.displayname) {
@@ -93,14 +104,17 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                 }
 
                 $buttonDiv.append(
-                    $('<button class="btn">').text('Discard').on('click', function () {
+                    $('<button class="btn">').text(gt('Discard')).on('click', function () {
                         popup.close();
                         return false;
                     }),
-                    $('<button class="btn btn-primary">').text('Save').on('click', function () {
+                    $('<button class="btn btn-primary">').text(gt('Save')).on('click', function () {
                         busy();
-                        var update = signature.id ? {} : {type: 'signature', module: 'io.ox/mail', displayname: '', content: ''};
-                        
+
+                        if (signature.id && _.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
+
+                        var update = signature.id ? {} : {type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: {insertion: 'below'}};
+
                         if ($signature.val() !== signature.content) {
                             update.content = $signature.val();
                         }
@@ -108,6 +122,9 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                         if ($name.val() !== signature.displayname) {
                             update.displayname = $name.val();
                         }
+
+
+                        update.misc = { insertion: $insertion.val() };
 
                         update.id = signature.id;
 
@@ -137,7 +154,7 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
 
 
         require(['io.ox/core/tk/dialogs', 'io.ox/core/api/snippets', 'less!io.ox/mail/settings/signatures/style.less'], function (dialogs, snippets) {
-            
+
             var popup = new dialogs.SidePopup({
                 modal: true
             })
@@ -145,8 +162,8 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                 $pane.addClass('io-ox-signature-import');
                 var $container;
                 var $entirePopup = $pane.closest('.io-ox-sidepopup');
-                
-                
+
+
                 function busy() {
                     dialogs.busy($entirePopup);
                 }
@@ -157,7 +174,7 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
 
                 $container = $('<table>').appendTo($pane);
                 _(signatures).each(function (classicSignature, index) {
-                    
+
                     var $row = $('<tr>').addClass('sig-row').appendTo($container);
                     var preview = (classicSignature.signature_text || '')
                                     .replace(/\s\s+/g, ' ') // remove subsequent white-space
@@ -169,7 +186,7 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                         ),
                         $('<td>').css({width: "80%", padding: '10px'}).append(
                             classicSignature.signature_name, $('<br>'),
-                            $('<div>').text(preview).addClass('classic-sig-preview')
+                            $('<div>').text(gt.noI18n(preview)).addClass('classic-sig-preview')
                         )
                     );
 
@@ -196,11 +213,11 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                     });
                     return false;
                 }));
-                
+
                 $pane.append($('<br>'), $('<br>'), $('<br>'));
 
-                var $button = $('<button class="btn btn-primary">').text("Import signatures").appendTo($pane);
-                
+                var $button = $('<button class="btn btn-primary">').text(gt('Import signatures')).appendTo($pane);
+
                 $button.on('click', function () {
                     busy();
                     var deferreds = [];
@@ -210,7 +227,7 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
 
                         deferreds.push(
                             snippets.create({
-                            
+
                             type: 'signature',
                             module: 'io.ox/mail',
                             displayname: classicSignature.signature_name,
@@ -242,7 +259,11 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                         signatures = {};
                         $list.empty();
                         _(sigs).each(function (signature) {
-                            $list.append($('<div class="selectable deletable-item">').attr('data-id', signature.id).text(signature.displayname));
+                            var $item = $('<div class="selectable deletable-item">').attr('data-id', signature.id).text(gt.noI18n(signature.displayname));
+                            if (settings.get('defaultSignature') === signature.id) {
+                                $item.append($('<span>').attr('data-default', 'default').text(gt('(Default)')).css({color: '#999', 'padding-left': '10px'}));
+                            }
+                            $list.append($item);
                             signatures[signature.id] = signature;
                         });
                     });
@@ -252,7 +273,7 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                     $node.append($('<legend class="sectiontitle">').text(gt("Signatures")));
 
                     // List
-                    $list = $('<div class="listbox">').css({minHeight: "250px"}).appendTo($node);
+                    $list = $('<div class="listbox">').css({minHeight: "80px", maxHeight: "200px"}).appendTo($node);
 
 
                     fnDrawAll();
@@ -276,6 +297,18 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                         $('<button class="btn">').text(gt('Delete')).on('click', function (evt) {
                             var id = $list.find('div[selected="selected"]').first().attr('data-id');
                             snippets.destroy(id).fail(require("io.ox/core/notifications").yell);
+                        }).css({marginRight: '15px'}),
+                        $('<button class="btn">').text(gt('Set as default')).on('click', function (evt) {
+                            var selected = $list.find('div[selected="selected"]'),
+                            current = $list.find('span[data-default="default"]');
+                            if (current.parent().attr('data-id') === selected.attr('data-id')) {
+                                settings.set('defaultSignature', false).save();
+                                current.remove();
+                            } else {
+                                current.remove();
+                                selected.append($('<span>').attr('data-default', 'default').text(gt('(Default)')).css({color: '#999', 'padding-left': '10px'}));
+                                settings.set('defaultSignature', selected.attr('data-id')).save();
+                            }
                         }).css({marginRight: '15px'})
                     ).appendTo($node);
 

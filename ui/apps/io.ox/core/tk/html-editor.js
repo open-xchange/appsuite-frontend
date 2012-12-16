@@ -561,6 +561,12 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             this.setContent(content + str);
         };
 
+        this.prependContent = function (str) {
+            var content = this.getContent();
+            str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
+            this.setContent(str + content);
+        };
+
         this.replaceParagraph = function (str, rep) {
             var content = this.getContent(), pos, top;
             str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';

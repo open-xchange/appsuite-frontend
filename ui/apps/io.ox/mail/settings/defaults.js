@@ -34,7 +34,8 @@ function (util) {
             'allowHtmlImages': false,
             'displayEmomticons': false,
             'isColorQuoted': false,
-            'selectFirstMessage': true
+            'selectFirstMessage': true,
+            'defaultSignature': false
         };
 
     return settingsDefaults;

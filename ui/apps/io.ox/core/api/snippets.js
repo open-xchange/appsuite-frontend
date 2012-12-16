@@ -14,9 +14,10 @@
 	{
 		id: 12, // Set by the backend
 		type: 'signature',   // The type of snippet, for easy lookup
-		module: 'io.ox/mail' // The module that created the snippet
-		displayname: 'My Signature' // A display name
-		content: 'This email contains the absolute unchangeable truth, questioning its content is discouraged. \n The Mgt.' // The content of the snippet
+		module: 'io.ox/mail', // The module that created the snippet
+		displayname: 'My Signature', // A display name
+		content: 'This email contains the absolute unchangeable truth, questioning its content is discouraged. \n The Mgt.', // The content of the snippet
+		misc: { insertion: above } // Object with misc options
 	}
 */
 define('io.ox/core/api/snippets', ['io.ox/core/http', 'io.ox/core/event'], function (http, Events) {
@@ -94,8 +95,8 @@ define('io.ox/core/api/snippets', ['io.ox/core/http', 'io.ox/core/event'], funct
 			}
 		}).done(fnTrigger('refresh.all'));
 	};
-	
+
 
 	return api;
-	
+
 });
