@@ -479,15 +479,15 @@ define('io.ox/contacts/api',
         return copymove(list, 'copy', targetFolderId);
     };
 
-    api.birthdays = function (start, end, columns) {
+    api.birthdays = function (options) {
+        var params = _.extend({
+            action: 'birthdays',
+            columns: '1,20,500,501,502,503,504,505,511'
+        }, options || {});
+
         return http.GET({
             module: 'contacts',
-            params: {
-                action: 'birthdays',
-                start: start,
-                end: end,
-                columns: columns || '1,20,500,501,502,503,504,505,511'
-            }
+            params: params
         });
     };
 
