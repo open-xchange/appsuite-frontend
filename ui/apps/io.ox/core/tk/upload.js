@@ -21,6 +21,11 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
         return (evt.clientX === 0 && evt.clientY === 0);
     }
 
+    function isFileDND(evt) {
+        // Learned from: http://stackoverflow.com/questions/6848043/how-do-i-detect-a-file-is-being-dragged-rather-than-a-draggable-element-on-my-pa
+        return evt.originalEvent && evt.originalEvent.dataTransfer && (_(evt.originalEvent.dataTransfer.types).contains("Files") || _(evt.originalEvent.dataTransfer.types).contains("application/x-moz-file"));
+    }
+
     // We provide a few events:
     // "dragover" if someone threatens to drop a file into the window
     // "dragend" when she released the file
@@ -36,7 +41,10 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
 
         $overlay = $("<div>").addClass("abs io-ox-dropzone-multiple-overlay");
 
-        showOverlay = function () {
+        showOverlay = function (e) {
+            if (!isFileDND(e)) {
+                return;
+            }
             $overlay.appendTo("body").css({height: "100%"});
             height = 100 / nodes.length;
             height = height + "%";
@@ -48,6 +56,9 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
         };
 
         removeOverlay = function (event) {
+            if (!isFileDND(event)) {
+                return;
+            }
             $overlay.detach();
             return false; // Prevent regular event handling
         };
@@ -74,11 +85,15 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
             };
         }
 
-
+        
         _(options.actions || []).each(function (action) {
             var $actionNode = nodeGenerator();
             $actionNode.append($("<div>").html(action.label).center()).on({
                 dragenter: function (e) {
+                    if (!isFileDND(e)) {
+                        return;
+                    }
+
                     self.trigger("dragenter", action.id, action);
                     // make sure it's file oriented
                     e = e.originalEvent || e;
@@ -91,11 +106,17 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                     highlightedAction = $actionNode;
                     return false; // Prevent regular event handling
                 },
-                dragover: function () {
+                dragover: function (e) {
+                    if (!isFileDND(e)) {
+                        return;
+                    }
                     self.trigger("dragover", action.id, action);
                     return false; // Prevent regular event handling
                 },
-                dragend: function () {
+                dragend: function (e) {
+                    if (!isFileDND(e)) {
+                        return;
+                    }
                     self.trigger("dragend", action.id, action);
                     if (highlightedAction) {
                         highlightedAction.removeClass("io-ox-dropzone-hover");
@@ -103,13 +124,19 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                     return false; // Prevent regular event handling
 
                 },
-                dragleave: function () {
+                dragleave: function (e) {
+                    if (!isFileDND(e)) {
+                        return;
+                    }
                     self.trigger("dragleave", action.id, action);
                     $actionNode.removeClass("io-ox-dropzone-hover");
                     return true; // Prevent regular event handling
 
                 },
                 drop: function (event) {
+                    if (!isFileDND(event)) {
+                        return;
+                    }
                     event = event.originalEvent || event;
                     var files = event.dataTransfer.files;
                     // And the pass them on
@@ -150,21 +177,21 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                 dragover: function () {
                     return false; // Prevent regular event handling
                 },
-                dragend: function () {
-                    removeOverlay();
+                dragend: function (e) {
+                    removeOverlay(e);
                     return false; // Prevent regular event handling
 
                 },
                 dragleave: function (evt) {
                     if (hasLeftViewport(evt)) {
-                        removeOverlay();
+                        removeOverlay(evt);
                     }
                     return false; // Prevent regular event handling
 
                 },
                 drop: function (evt) {
                     evt.preventDefault();
-                    removeOverlay();
+                    removeOverlay(evt);
                     return false;
                 }
             });
@@ -182,7 +209,10 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
     function DropZone($node) {
         var self = this;
         var globalMode = false;
-        var appendOverlay = function () {
+        var appendOverlay = function (e) {
+            if (!isFileDND(e)) {
+                return;
+            }
             $node.appendTo("body");
             return false;
         };
@@ -208,23 +238,35 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
 
         // Now let's add the regular event handlers to fulfill our promises
         $node.on({
-            dragenter: function () {
+            dragenter: function (e) {
+                if (!isFileDND(e)) {
+                    return;
+                }
                 // We'll just hand this over. A few layers of indirection are always fun
                 self.trigger("dragenter");
                 return false; // Prevent regular event handling
             },
-            dragover: function () {
+            dragover: function (e) {
+                if (!isFileDND(e)) {
+                    return;
+                }
                 // We'll just hand this over. A few layers of indirection are always fun
                 self.trigger("dragover");
                 return false; // Prevent regular event handling
             },
-            dragend: function () {
+            dragend: function (e) {
+                if (!isFileDND(e)) {
+                    return;
+                }
                 // We'll just hand this over. A few layers of indirection are always fun
                 self.trigger("dragend");
                 return false; // Prevent regular event handling
 
             },
-            dragleave: function () {
+            dragleave: function (e) {
+                if (!isFileDND(e)) {
+                    return;
+                }
                 // We'll just hand this over. A few layers of indirection are always fun
                 if (globalMode) {
                     $node.detach();
@@ -234,6 +276,9 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
 
             },
             drop: function (event) {
+                if (!isFileDND(event)) {
+                    return;
+                }
                 if (globalMode) {
                     $node.detach();
                 }
