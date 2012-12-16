@@ -27,9 +27,7 @@ define('io.ox/core/tk/folderviews',
 
     'use strict';
 
-    var PATH = ox.base + '/apps/themes/default/icons/',
-        DEFAULT = PATH + 'folder-default.png',
-        OPEN = 'icon-chevron-right',
+    var OPEN = 'icon-chevron-right',
         CLOSE = 'icon-chevron-down',
 
         tmplFolder = $('<div>').addClass('folder selectable'),

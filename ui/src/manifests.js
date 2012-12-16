@@ -12,7 +12,7 @@ define(function () {
     {
         "title": "Application Manager",
         "company": "Open-Xchange",
-        "icon": "apps.png",
+        "icon": "app-store.png",
         "category": "Basic",
         "settings": false,
         "visible": false,
@@ -63,7 +63,7 @@ define(function () {
     {
         "title": "Conversations",
         "company": "Open-Xchange",
-        "icon": "conversations.png",
+        "icon": "default.png",
         "category": "Productivity",
         "settings": false,
         "requires": "conversations",
@@ -97,7 +97,7 @@ define(function () {
     {
         "title": "Theme Maker",
         "company": "Mattes Inc.",
-        "icon": "theme-maker.png",
+        "icon": "default.png",
         "category": "Dev",
         "settings": false,
         "requires": "dev",
@@ -166,7 +166,7 @@ define(function () {
     {
         "title": "Compose email",
         "company": "Open-Xchange",
-        "icon": "mail-write.png",
+        "icon": "mail.png",
         "category": "Basic",
         "settings": false,
         "visible": false,
