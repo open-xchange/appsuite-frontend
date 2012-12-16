@@ -279,11 +279,13 @@ define("io.ox/mail/api",
     // publish tracker
     api.tracker = tracker;
 
+    api.separator = config.get('modules.mail.defaultseparator', '/');
+
     api.SENDTYPE = {
-        NORMAL:  0,
-        REPLY:   1,
-        FORWARD: 2,
-        DRAFT:   3
+        NORMAL:  '0',
+        REPLY:   '1',
+        FORWARD: '2',
+        DRAFT:   '3'
     };
 
     api.FLAGS = {

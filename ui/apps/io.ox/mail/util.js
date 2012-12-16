@@ -254,16 +254,16 @@ define('io.ox/mail/util',
             return (data.flags & 2) === 2;
         },
 
-        isAnswered: function (data) {
-            return _([].concat(data)).reduce(function (memo, data) {
+        isAnswered: function () {
+            return _.chain(arguments).flatten().compact().reduce(function (memo, data) {
                 return memo || (data.flags & 1) === 1;
-            }, false);
+            }, false).value();
         },
 
-        isForwarded: function (data) {
-            return _([].concat(data)).reduce(function (memo, data) {
+        isForwarded: function () {
+            return _.chain(arguments).flatten().compact().reduce(function (memo, data) {
                 return memo || (data.flags & 256) === 256;
-            }, false);
+            }, false).value();
         },
 
         byMyself: function (data) {

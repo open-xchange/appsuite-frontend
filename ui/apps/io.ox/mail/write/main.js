@@ -823,6 +823,24 @@ define('io.ox/mail/write/main',
                         notifications.yell(result);
                     } else {
                         notifications.yell('success', 'Mail has been sent');
+                        // update base mail
+                        var isReply = mail.data.sendtype === mailAPI.SENDTYPE.REPLY,
+                            isForward = mail.data.sendtype === mailAPI.SENDTYPE.FORWARD,
+                            sep = mailAPI.separator,
+                            base, folder, id;
+                        if (isReply || isForward) {
+                            base = _(mail.data.msgref.split(sep));
+                            folder = base.initial().join(sep);
+                            id = base.last();
+                            mailAPI.get({ folder: folder, id: id }).done(function (data) {
+                                // update answered/forwarded flag
+                                if (isReply) data.flags |= 1;
+                                if (isForward) data.flags |= 256;
+                                $.when(mailAPI.caches.list.merge(data), mailAPI.caches.get.merge(data)).done(function () {
+                                    mailAPI.trigger('refresh.list');
+                                });
+                            });
+                        }
                         app.dirty(false);
                         app.quit();
                     }
