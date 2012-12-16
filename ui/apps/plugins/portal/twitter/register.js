@@ -15,13 +15,12 @@
 define('plugins/portal/twitter/register',
     ['io.ox/core/extensions',
      'io.ox/oauth/proxy',
-     'io.ox/core/flowControl',
      'io.ox/core/strings',
      'io.ox/keychain/api',
      'gettext!plugins/portal',
      'io.ox/core/notifications',
      'io.ox/core/date',
-     'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, strings, keychain, gt, notifications, date) {
+     'less!plugins/portal/twitter/style.css'], function (ext, proxy, strings, keychain, gt, notifications, date) {
 
     'use strict';
 

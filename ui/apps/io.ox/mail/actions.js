@@ -23,7 +23,9 @@ define('io.ox/mail/actions',
      'io.ox/core/notifications',
      'io.ox/contacts/api',
      'io.ox/core/api/account',
-     'settings!io.ox/mail'], function (ext, links, api, util, gt, config, folderAPI, notifications, contactAPI, account, settings) {
+     'io.ox/core/capabilities',
+     'settings!io.ox/mail'
+    ], function (ext, links, api, util, gt, config, folderAPI, notifications, contactAPI, account, capabilites, settings) {
 
     'use strict';
 
@@ -365,7 +367,9 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/save-attachment', {
         id: 'save',
-        requires: 'some',
+        requires: function (e) {
+            return e.collection.has('some') && capabilites.has('infostore');
+        },
         multiple: function (list) {
             notifications.yell('info', 'Attachments will be saved!');
             api.saveAttachments(list)
@@ -384,11 +388,28 @@ define('io.ox/mail/actions',
         }
     });
 
-    //all actions
+    // all actions
+
+    new Action('io.ox/mail/actions/sendmail', {
+        requires: 'some',
+        action: function (baton) {
+
+            var data = baton.data,
+                recipients = data.to.concat(data.cc).concat(data.from);
+
+            require(['io.ox/mail/write/main'], function (m) {
+                m.getApp().launch().done(function () {
+                    this.compose({ folder_id: data.folder_id, to: recipients });
+                });
+            });
+        }
+    });
 
     new Action('io.ox/mail/actions/createdistlist', {
         id: 'create-distlist',
-        requires: 'some',
+        requires: function (e) {
+            return e.collection.has('some') && capabilites.has('contacts');
+        },
         action: function (baton) {
 
             var data = baton.data,
@@ -443,7 +464,9 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/invite', {
         id: 'invite',
-        requires: 'some',
+        requires: function (e) {
+            return e.collection.has('some') && capabilites.has('calendar');
+        },
         action: function (baton) {
             var data = baton.data,
                 collectedRecipients = [],
@@ -453,7 +476,6 @@ define('io.ox/mail/actions',
                 collectedRecipientsArray = data.to.concat(data.cc).concat(data.from),
                 dev = $.Deferred(),
                 lengthValue,
-
                 createCalendarApp = function (participants, notetext) {
                     require(['io.ox/calendar/edit/main'], function (m) {
                         m.getApp().launch().done(function () {
@@ -503,6 +525,9 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/reminder', {
         id: 'reminder',
+        requires: function () {
+            return capabilites.has('tasks');
+        },
         action: function (baton) {
             var data = baton.data;
             require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'],
@@ -752,15 +777,22 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/all/actions').extend(new links.Link({
-        id: 'save-as-distlist',
+        id: 'sendmail',
         index: 100,
+        label: gt('Send new mail'),
+        ref: 'io.ox/mail/actions/sendmail'
+    }));
+
+    ext.point('io.ox/mail/all/actions').extend(new links.Link({
+        id: 'save-as-distlist',
+        index: 200,
         label: gt('Save as distribution list'),
         ref: 'io.ox/mail/actions/createdistlist'
     }));
 
     ext.point('io.ox/mail/all/actions').extend(new links.Link({
         id: 'invite-to-appointment',
-        index: 200,
+        index: 300,
         label: gt('Invite to appointment'),
         ref: 'io.ox/mail/actions/invite'
     }));

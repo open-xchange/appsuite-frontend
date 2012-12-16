@@ -21,36 +21,40 @@ define('io.ox/core/capabilities', function () {
 	'use strict';
 
 	var capabilities = {},
-		capBlacklist = {};
+		disabled = {};
 
 	_(ox.serverConfig.capabilities).each(function (cap) {
 		capabilities[cap.id] = cap;
 	});
 
 	(function () {
-		var disabledList = _.url.hash('disableFeature');
-		if (disabledList) {
-			_(disabledList.split(/\s*[, ]\s*/)).each(function (feature) {
-				capBlacklist[feature] = true;
+		var hash = _.url.hash('disableFeature');
+		if (hash) {
+			_(hash.split(/\s*[, ]\s*/)).each(function (id) {
+				disabled[id] = true;
 			});
 		}
 	}());
 
-	if (! _.isEmpty(capBlacklist)) {
-		console.info("Blacklisted Features: ", capBlacklist);
+	if (!_.isEmpty(disabled)) {
+		console.info("Disabled features", disabled);
 	}
 
-	var api = null;
+	var api = {
 
-	var capLookup = {
-		get: function (capName) {
-			if (capBlacklist[capName]) {
-				return null;
+		get: function (id) {
+			if (arguments.length === 0) {
+				return capabilities;
 			}
-			return capabilities[capName.toLowerCase()];
+			id = String(id).toLowerCase();
+			return capabilities[id];
 		},
+
+		isDisabled: function (id) {
+			return id in disabled;
+		},
+
 		has: function () {
-			var self = this;
 
 			var list = _(_(arguments).flatten()).map(function (def) {
 				if (!def) {
@@ -58,22 +62,20 @@ define('io.ox/core/capabilities', function () {
 				}
 				return def.split(/\s*[, ]\s*/);
 			});
+
 			list = _(list).flatten();
 
-			return _(list).all(function (name) {
-				var inverse = false;
-				if (name[0] === '!') {
-					name = name.substr(1);
+			return _(list).all(function (id) {
+				var inverse = false, result;
+				if (id[0] === '!') {
+					id = id.substr(1);
 					inverse = true;
 				}
-				var capability = self.get(name);
-				if (inverse) {
-					return !!!capability;
-				} else {
-					return !!capability;
-				}
+				result = api.isDisabled(id) ? false : (id in capabilities);
+				return inverse ? !result : result;
 			});
 		},
+
 		reset: function () {
 			capabilities = {};
 			_(ox.serverConfig.capabilities).each(function (cap) {
@@ -82,6 +84,5 @@ define('io.ox/core/capabilities', function () {
 		}
 	};
 
-	return capLookup;
-
+	return api;
 });

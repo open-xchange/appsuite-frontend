@@ -14,7 +14,8 @@
 define('io.ox/core/api/apps',
     ['io.ox/core/event',
      'io.ox/core/extensions',
-     'io.ox/core/manifests'], function (Events, ext, manifests) {
+     'io.ox/core/manifests',
+     'io.ox/core/capabilities'], function (Events, ext, manifests, capabilities) {
 
     'use strict';
 
@@ -39,9 +40,10 @@ define('io.ox/core/api/apps',
     appData.categories = _(appData.categories).uniq();
 
     // TODO: Make favourites dynamic
-    _(["io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar", "io.ox/files", "io.ox/tasks"]).each(function (appId) {
-        if (appData.apps[appId]) {
-            appData.favorites.push(appId);
+    _(["io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar", "io.ox/files", "io.ox/tasks"]).each(function (id) {
+        var app = appData.apps[id];
+        if (app && capabilities.has(app.requires)) {
+            appData.favorites.push(id);
         }
     });
 
@@ -81,13 +83,6 @@ define('io.ox/core/api/apps',
                         id: 'upgrades',
                         title: 'Upgrades',
                         count: 1,
-                        group: 'Your Apps'
-                    },
-                    {
-                        // special 'Augenwischerei' category
-                        id: 'mockIntegration',
-                        title: 'Parallels Marketplace',
-                        count: 2,
                         group: 'Your Apps'
                     }
                 ].concat(
