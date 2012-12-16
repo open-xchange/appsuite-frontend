@@ -179,7 +179,7 @@ define('io.ox/mail/view-detail',
         }
         $(this).off('dblclick.close')
             .on('click.open', blockquoteClickOpen)
-            .stop().animate({ maxHeight: '2em' }, 300, function () {
+            .stop().animate({ maxHeight: '60px' }, 300, function () {
                 $(this).addClass('collapsed-blockquote');
             });
         $(this).next().show();
@@ -374,7 +374,7 @@ define('io.ox/mail/view-detail',
                     content.find('blockquote').not(content.find('blockquote blockquote')).each(function () {
                         var node = $(this);
                         node.addClass('collapsed-blockquote')
-                            .css({ opacity: 0.75, maxHeight: '2em' })
+                            .css({ opacity: 0.75, maxHeight: '60px' })
                             .on('click.open', blockquoteClickOpen)
                             .on('dblclick.close', blockquoteClickClose)
                             .after(
