@@ -251,6 +251,37 @@ define('io.ox/core/commons',
             });
         },
 
+        wirePerspectiveEvents: function (app) {
+            var win = app.getWindow();
+            var oldPerspective = null;
+            win.on('show', function () {
+                oldPerspective = win.currentPerspective;
+                if (win.currentPerspective) {
+                    app.trigger('perspective:' + win.currentPerspective + ":show");
+                }
+            });
+
+            win.on('hide', function () {
+                oldPerspective = win.currentPerspective;
+                if (win.currentPerspective) {
+                    app.trigger('perspective:' + win.currentPerspective + ":hide");
+                }
+            });
+
+            win.on('change:perspective', function (e, newPerspective) {
+                if (oldPerspective) {
+                    app.trigger('perspective:' + oldPerspective + ":hide");
+                }
+                oldPerspective = newPerspective;
+                app.trigger('perspective:' + newPerspective + ":show");
+            });
+
+            win.on('change:initialPerspective', function (e, newPerspective) {
+                oldPerspective = newPerspective;
+                app.trigger('perspective:' + newPerspective + ":show");
+            });
+        },
+
         /**
          * Add folder support
          */
