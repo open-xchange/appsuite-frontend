@@ -81,8 +81,8 @@ cp -r tmp/l10n/apps "%{buildroot}%{docroot}/"
 
 mkdir -p "%{buildroot}/opt/open-xchange-appsuite-dev"
 cp -r bin lib Jakefile.js "%{buildroot}/opt/open-xchange-appsuite-dev/"
-sed -i -e 's#OX_UI7_DEV=.*#OX_UI7_DEV="/opt/open-xchange-appsuite-dev"#' \
-    "%{buildroot}/opt/open-xchange-appsuite-dev/bin/build-ui7"
+sed -i -e 's#OX_APPSUITE_DEV=.*#OX_APPSUITE_DEV="/opt/open-xchange-appsuite-dev"#' \
+    "%{buildroot}/opt/open-xchange-appsuite-dev/bin/build-appsuite"
 
 %clean
 sh build.sh clean builddir="%{buildroot}%{docroot}" version=%{version} revision=%{release}
