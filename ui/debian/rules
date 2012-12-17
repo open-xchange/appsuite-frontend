@@ -10,11 +10,11 @@ endif
 
 override_dh_auto_install:
 	sh build.sh \
-	    builddir=debian/open-xchange-ui7/var/www/appsuite \
-	    l10nDir=debian/open-xchange-ui7-l10n-@lang@/var/www/appsuite \
-	    manifestDir=debian/open-xchange-ui7-manifest/opt/open-xchange/ui7 \
+	    builddir=debian/open-xchange-appsuite/var/www/appsuite \
+	    l10nDir=debian/open-xchange-appsuite-l10n-@lang@/var/www/appsuite \
+	    manifestDir=debian/open-xchange-appsuite-manifest/opt/open-xchange/appsuite \
 	    $(FLAGS) --trace
-	sed -e 's#OX_UI7_DEV=.*#OX_UI7_DEV="/opt/open-xchange-ui7-dev"#' \
+	sed -e 's#OX_UI7_DEV=.*#OX_UI7_DEV="/opt/open-xchange-appsuite-dev"#' \
 	    bin/build-ui7 > tmp/build-ui7
 	chmod +x tmp/build-ui7
 

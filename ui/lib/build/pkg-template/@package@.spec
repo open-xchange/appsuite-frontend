@@ -9,9 +9,9 @@ Source:         %{name}_%{version}.orig.tar.bz2
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
-BuildRequires:  open-xchange-ui7-devel
+BuildRequires:  open-xchange-appsuite-devel
 
-Requires:       open-xchange-ui7
+Requires:       open-xchange-appsuite
 
 %if 0%{?rhel_version} || 0%{?fedora_version}
 %define docroot /var/www/html/appsuite
@@ -36,7 +36,7 @@ This package contains the manifest for installation on the backend.
 #%package l10n-## lang ##
 #Group: Applications/Productivity
 #Summary: ## lang ## translation of @package@\n' +
-#Requires: open-xchange-ui7
+#Requires: open-xchange-appsuite
 #
 #%description l10n-## lang ##
 ### lang ## translation of @package@
@@ -48,15 +48,15 @@ This package contains the manifest for installation on the backend.
 %build
 
 %install
-sh /opt/open-xchange-ui7-devel/bin/build-ui7 app \
+sh /opt/open-xchange-appsuite-devel/bin/build-ui7 app \
     builddir="%{buildroot}%{docroot}" version=%{version} revision=%{release}
-mkdir -p "%{buildroot}/opt/open-xchange/ui7"
-cp -r "%{buildroot}%{docroot}/manifests" "%{buildroot}/opt/open-xchange/ui7/"
+mkdir -p "%{buildroot}/opt/open-xchange/appsuite"
+cp -r "%{buildroot}%{docroot}/manifests" "%{buildroot}/opt/open-xchange/appsuite/"
 
 %clean
-sh /opt/open-xchange-ui7-devel/bin/build-ui7 clean \
+sh /opt/open-xchange-appsuite-devel/bin/build-ui7 clean \
     builddir="%{buildroot}%{docroot}" version=%{version} revision=%{release}
-rm -r "%{buildroot}/opt/open-xchange/ui7"
+rm -r "%{buildroot}/opt/open-xchange/appsuite"
 
 %files
 %defattr(-,root,root)
@@ -65,7 +65,7 @@ rm -r "%{buildroot}/opt/open-xchange/ui7"
 %files manifest
 %defattr(-,root,root)
 %dir /opt/open-xchange
-/opt/open-xchange/ui7
+/opt/open-xchange/appsuite
 
 ## l10n ##
 #%files l10n-## lang ##
