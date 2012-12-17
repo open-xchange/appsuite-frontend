@@ -17,9 +17,8 @@ define('io.ox/calendar/settings/pane',
      'io.ox/calendar/settings/model',
      'dot!io.ox/calendar/settings/form.html',
      'io.ox/core/extensions',
-     'io.ox/core/capabilities',
      'gettext!io.ox/calendar/calendar'
-    ], function (settings, date, calendarSettingsModel, tmpl, ext, capabilities, gt) {
+    ], function (settings, date, calendarSettingsModel, tmpl, ext, gt) {
 
     'use strict';
 
@@ -124,19 +123,17 @@ define('io.ox/calendar/settings/pane',
             }
         });
 
-    if (capabilities.has('calendar')) {
-        ext.point('io.ox/calendar/settings/detail').extend({
-            index: 200,
-            id: 'calendarsettings',
-            draw: function (data) {
-                calendarViewSettings = new CalendarSettingsView({model: calendarSettings});
-                this.append($('<div>').addClass('section').append(
-                    calendarViewSettings.render().el)
-                );
-            },
-            save: function () {
-                calendarViewSettings.model.save();
-            }
-        });
-    }
+    ext.point('io.ox/calendar/settings/detail').extend({
+        index: 200,
+        id: 'calendarsettings',
+        draw: function (data) {
+            calendarViewSettings = new CalendarSettingsView({model: calendarSettings});
+            this.append($('<div>').addClass('section').append(
+                calendarViewSettings.render().el)
+            );
+        },
+        save: function () {
+            calendarViewSettings.model.save();
+        }
+    });
 });

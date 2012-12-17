@@ -137,7 +137,7 @@ define("io.ox/files/list/view-detail",
             this.append(
                 $('<h4>').text(gt("Upload a new version"))
             );
-            
+
             var $node = $("<form>").appendTo(this);
             var $input = $("<input>", {
                 type: "file"

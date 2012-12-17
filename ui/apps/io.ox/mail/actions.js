@@ -25,7 +25,7 @@ define('io.ox/mail/actions',
      'io.ox/core/api/account',
      'io.ox/core/capabilities',
      'settings!io.ox/mail'
-    ], function (ext, links, api, util, gt, config, folderAPI, notifications, contactAPI, account, capabilites, settings) {
+    ], function (ext, links, api, util, gt, config, folderAPI, notifications, contactAPI, account, capabilities, settings) {
 
     'use strict';
 
@@ -368,7 +368,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/save-attachment', {
         id: 'save',
         requires: function (e) {
-            return e.collection.has('some') && capabilites.has('infostore');
+            return e.collection.has('some') && capabilities.has('infostore');
         },
         multiple: function (list) {
             notifications.yell('info', 'Attachments will be saved!');
@@ -408,7 +408,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/createdistlist', {
         id: 'create-distlist',
         requires: function (e) {
-            return e.collection.has('some') && capabilites.has('contacts');
+            return e.collection.has('some') && capabilities.has('contacts');
         },
         action: function (baton) {
 
@@ -465,7 +465,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/invite', {
         id: 'invite',
         requires: function (e) {
-            return e.collection.has('some') && capabilites.has('calendar');
+            return e.collection.has('some') && capabilities.has('calendar');
         },
         action: function (baton) {
             var data = baton.data,
@@ -526,7 +526,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/reminder', {
         id: 'reminder',
         requires: function () {
-            return capabilites.has('tasks');
+            return capabilities.has('tasks');
         },
         action: function (baton) {
             var data = baton.data;
