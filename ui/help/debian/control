@@ -1,4 +1,4 @@
-Source: open-xchange-ui7-help
+Source: open-xchange-appsuite-help
 Section: non-free/web
 Priority: optional
 Maintainer: Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -8,14 +8,14 @@ Homepage: http://open-xchange.com
 Vcs-Svn: https://svn.open-xchange.com/Documentation/guides-appsuite-ready/oxhe
 Vcs-Browser: https://websvn.open-xchange.com/listing.php?repname=Documentation&path=%2Fguides-appsuite-ready%2Foxhe%2F&
 
-Package: open-xchange-ui7-help-de-de
+Package: open-xchange-appsuite-help-de-de
 Architecture: all
 Depends: ${misc:Depends}
-Provides: open-xchange-ui7-help
+Provides: open-xchange-appsuite-help
 Description: de_DE online help for OX App Suite
 
-Package: open-xchange-ui7-help-en-us
+Package: open-xchange-appsuite-help-en-us
 Architecture: all
 Depends: ${misc:Depends}
-Provides: open-xchange-ui7-help
+Provides: open-xchange-appsuite-help
 Description: en_US online help for OX App Suite
