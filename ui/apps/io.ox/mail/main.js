@@ -234,7 +234,7 @@ define("io.ox/mail/main",
                 }, 'auto')
                 .pipe(function (response) {
                     if (unread) {
-                        response.data = _(response.data).filter(util.isUnread);
+                        response.data = _(response.data).filter(util.isUnseen);
                     }
                     return response;
                 });

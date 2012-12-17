@@ -93,7 +93,7 @@ define('io.ox/mail/view-grid-template',
                     _(list.slice(1)).each(function (data, index) {
                         self.append(
                             $('<div class="thread-summary-item selectable">')
-                            .addClass(util.isUnread(data) ? 'unread' : undefined)
+                            .addClass(util.isUnseen(data) ? 'unread' : undefined)
                             .attr('data-obj-id', _.cid(data))
                             .append(
                                 $('<div class="thread-summary-right">')
