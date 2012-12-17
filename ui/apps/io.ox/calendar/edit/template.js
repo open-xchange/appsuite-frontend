@@ -325,6 +325,16 @@ define('io.ox/calendar/edit/template',
             this.append(new pViews.UserContainer({collection: options.model.getParticipants()}).render().$el);
         }
     });
+    point.extend(new forms.CheckBoxField({
+        id: 'notify',
+        labelClassName: 'control-label desc',
+        //headerClassName: 'control-label desc',
+        className: 'span4',
+        //header: gt('Notify all participants via e-mail.'),
+        label: gt('Notify all participants by E-mail.'),
+        attribute: 'notification',
+        index: 1410
+    }));
 
     // add participants
     point.basicExtend({
@@ -417,7 +427,7 @@ define('io.ox/calendar/edit/template',
             });
             $input.css('line-height', '0');
             var $button = $("<button/>").attr('data-action', 'add').text(gt("Upload file")).addClass("btn");
-            
+
             if (_.browser.IE !== 9) {
                 $button.on("click", function (e) {
                     e.preventDefault();

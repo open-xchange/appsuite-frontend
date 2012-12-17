@@ -208,6 +208,7 @@ define('io.ox/calendar/edit/main',
 
                         self.model.set('alarm', calendarSettings.get('defaultReminder', 15));
 
+
                         self.considerSaved = true;
                         self.model.on('change', function () {
                             self.considerSaved = false;
