@@ -259,7 +259,9 @@ $(document).ready(function () {
             }
         }
         if (!found) {
-            lang = ox.serverConfig.languages[0];
+            if (!_.isEmpty(languages)) {
+                lang = languages[_(languages).keys()[0]];
+            }
         }
         return changeLanguage(lang);
     };
