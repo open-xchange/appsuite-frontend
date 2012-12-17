@@ -316,7 +316,7 @@ define('io.ox/files/actions',
                     .addButton('cancel', gt('Cancel'));
                 dialog.getBody().css('height', '250px');
                 var item = _(list).first(),
-                    tree = new views.FolderTree(dialog.getBody(), { type: type });
+                    tree = new views.FolderList(dialog.getBody(), { type: type });
                 tree.paint();
                 dialog.show(function () {
                     tree.selection.set({ id: item.folder_id || item.folder });

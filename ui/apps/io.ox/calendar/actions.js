@@ -272,7 +272,7 @@ define('io.ox/calendar/actions',
                 dialog.getBody().css('height', '250px');
                 var item = _(list).first(),
                     id = String(item.folder_id || item.folder),
-                    tree = new views.FolderTree(dialog.getBody(), { type: type });
+                    tree = new views.FolderList(dialog.getBody(), { type: type });
                 dialog.show(function () {
                     tree.paint().done(function () {
                         tree.select(id);
