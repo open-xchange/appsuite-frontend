@@ -67,14 +67,14 @@ define("io.ox/tasks/api", ["io.ox/core/http",
 
 
     api.create = function (task) {
-                return http.PUT({
-                    module: "tasks",
-                    params: {action: "new",
-                             timezone: "UTC"},
-                    data: task,
-                    appendColumns: false
-                });
-            };
+        return http.PUT({
+            module: "tasks",
+            params: {action: "new",
+                     timezone: "UTC"},
+            data: task,
+            appendColumns: false
+        });
+    };
 
     api.update = function (timestamp, taskId, modifications, folder) {
                 //check if only one big array was given for exsample by modelfactory

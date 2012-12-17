@@ -27,7 +27,7 @@ define("io.ox/tasks/actions",
     new Action('io.ox/tasks/actions/create', {
         action: function (baton) {
             require(['io.ox/tasks/edit/main'], function (edit) {
-                edit.getApp().launch();
+                edit.getApp().launch({ folderid: baton.app.folder.get()});
             });
         }
     });
