@@ -48,13 +48,13 @@ This package contains the manifest for installation on the backend.
 %build
 
 %install
-sh /opt/open-xchange-appsuite-devel/bin/build-ui7 app \
+sh /opt/open-xchange-appsuite-devel/bin/build-appsuite app \
     builddir="%{buildroot}%{docroot}" version=%{version} revision=%{release}
 mkdir -p "%{buildroot}/opt/open-xchange/appsuite"
 cp -r "%{buildroot}%{docroot}/manifests" "%{buildroot}/opt/open-xchange/appsuite/"
 
 %clean
-sh /opt/open-xchange-appsuite-devel/bin/build-ui7 clean \
+sh /opt/open-xchange-appsuite-devel/bin/build-appsuite clean \
     builddir="%{buildroot}%{docroot}" version=%{version} revision=%{release}
 rm -r "%{buildroot}/opt/open-xchange/appsuite"
 
