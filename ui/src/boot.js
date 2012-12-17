@@ -377,7 +377,7 @@ $(document).ready(function () {
                             }
                         });
                     }
-                    
+
                 }).fail(def.reject);
                 return def;
             }
@@ -487,7 +487,7 @@ $(document).ready(function () {
                 // use browser language
                 setDefaultLanguage()
             )
-            .done(function () {
+            .always(function () {
                 // show login dialog
                 $("#io-ox-login-blocker").on("mousedown", false);
                 $("#io-ox-login-form").on("submit", fnSubmit);
@@ -559,7 +559,7 @@ $(document).ready(function () {
                         }
                     });
                 }
-                
+
 
                 loadConfig.done(function (data) {
                     // store server config
