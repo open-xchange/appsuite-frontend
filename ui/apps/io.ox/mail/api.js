@@ -279,11 +279,13 @@ define("io.ox/mail/api",
     // publish tracker
     api.tracker = tracker;
 
+    api.separator = config.get('modules.mail.defaultseparator', '/');
+
     api.SENDTYPE = {
-        NORMAL:  0,
-        REPLY:   1,
-        FORWARD: 2,
-        DRAFT:   3
+        NORMAL:  '0',
+        REPLY:   '1',
+        FORWARD: '2',
+        DRAFT:   '3'
     };
 
     api.FLAGS = {
@@ -582,6 +584,7 @@ define("io.ox/mail/api",
                 })
                 .done(function () {
                     notifications.yell('success', 'Mail has been moved');
+                    folderAPI.reload(targetFolderId, list);
                 });
         });
     };
@@ -592,6 +595,7 @@ define("io.ox/mail/api",
             .done(refreshAll)
             .done(function () {
                 notifications.yell('success', 'Mail has been copied');
+                folderAPI.reload(targetFolderId, list);
             });
     };
 
@@ -772,7 +776,8 @@ define("io.ox/mail/api",
                 // clear inbox & sent folder
                 var folders = [].concat(
                     accountAPI.getFoldersByType('inbox'),
-                    accountAPI.getFoldersByType('sent')
+                    accountAPI.getFoldersByType('sent'),
+                    accountAPI.getFoldersByType('drafts')
                 );
                 $.when.apply(
                     _(folders).map(function (id) {
@@ -1019,6 +1024,7 @@ define("io.ox/mail/api",
             .pipe(function (data) {
                 return api.caches.all.grepRemove(options.folder + DELIM).pipe(function () {
                     api.trigger('refresh.all');
+                    folderAPI.reload(options.folder);
                     return data;
                 });
             });

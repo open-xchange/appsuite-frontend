@@ -15,8 +15,9 @@ define('io.ox/files/actions',
     ['io.ox/files/api',
      'io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
+     'io.ox/core/capabilities',
      'gettext!io.ox/files',
-     'settings!io.ox/files'], function (api, ext, links, gt, settings) {
+     'settings!io.ox/files'], function (api, ext, links, capabilities, gt, settings) {
 
     'use strict';
 
@@ -140,7 +141,9 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/sendlink', {
-        requires: 'some',
+        requires: function (e) {
+            return e.collection.has('some') && capabilities.has('webmail');
+        },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
                 api.getList(list).done(function (list) {
@@ -157,7 +160,9 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/send', {
-        requires: 'some',
+        requires: function (e) {
+            return e.collection.has('some') && capabilities.has('webmail');
+        },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
                 api.getList(list).done(function (list) {
@@ -311,7 +316,7 @@ define('io.ox/files/actions',
                     .addButton('cancel', gt('Cancel'));
                 dialog.getBody().css('height', '250px');
                 var item = _(list).first(),
-                    tree = new views.FolderTree(dialog.getBody(), { type: type });
+                    tree = new views.FolderList(dialog.getBody(), { type: type });
                 tree.paint();
                 dialog.show(function () {
                     tree.selection.set({ id: item.folder_id || item.folder });

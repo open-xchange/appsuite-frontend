@@ -16,7 +16,9 @@ define('io.ox/contacts/actions',
      'io.ox/core/extPatterns/links',
      'io.ox/contacts/api',
      'io.ox/core/config',
-     'gettext!io.ox/contacts'], function (ext, links, api, config, gt) {
+     'io.ox/core/notifications',
+     'io.ox/core/capabilities',
+     'gettext!io.ox/contacts'], function (ext, links, api, config, notifications, capabilities, gt) {
 
     'use strict';
 
@@ -83,25 +85,14 @@ define('io.ox/contacts/actions',
         id: 'create',
 		requires: 'create',
         action: function (baton) {
-
             require(['io.ox/contacts/edit/main'], function (m) {
                 var def = $.Deferred();
-
                 baton.data.folder_id = baton.folder;
                 m.getApp(baton.data).launch(def);
-
                 def.done(function (data) {
                     baton.app.getGrid().selection.set(data);
                 });
             });
-//            require(['io.ox/contacts/create/main'], function (create) {
-//                create.show(baton.app).done(function (data) {
-//                    console.log(data);
-//                    if (data) {
-//                        baton.app.getGrid().selection.set(data);
-//                    }
-//                });
-//            });
         }
     });
 
@@ -120,7 +111,7 @@ define('io.ox/contacts/actions',
         }
     });
 
-    var copyMove = function (type, apiAction, title) {
+    var copyMove = function (type, apiAction, title, success) {
         return function (list) {
             require(['io.ox/contacts/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (api, dialogs, views) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
@@ -129,17 +120,22 @@ define('io.ox/contacts/actions',
                     .addButton('cancel', gt('Cancel'));
                 dialog.getBody().css('height', '250px');
                 var item = _(list).first(),
-                    tree = new views.FolderTree(dialog.getBody(), { type: type });
+                    tree = new views.FolderList(dialog.getBody(), { type: type });
                 tree.paint();
                 dialog.show(function () {
-                    tree.selection.set({ id: item.folder_id || item.folder });
+                    tree.selection.set(item.folder_id || item.folder);
                 })
                 .done(function (action) {
                     if (action === 'ok') {
                         var selectedFolder = tree.selection.get();
                         if (selectedFolder.length === 1) {
                             // move action
-                            api[apiAction](list, selectedFolder[0]);
+                            api[apiAction](list, selectedFolder[0]).then(
+                                function () {
+                                    notifications.yell('success', success);
+                                },
+                                notifications.yell
+                            );
                         }
                     }
                     tree.destroy();
@@ -152,24 +148,30 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/move', {
         id: 'move',
         requires: 'some delete',
-        multiple: copyMove('contacts', 'move', gt('Move'))
+        multiple: copyMove('contacts', 'move', gt('Move'), gt('Contacts have been moved'))
     });
 
     new Action('io.ox/contacts/actions/copy', {
         id: 'copy',
         requires: 'some read',
-        multiple: copyMove('contacts', 'copy', gt('Copy'))
+        multiple: copyMove('contacts', 'copy', gt('Copy'), gt('Contacts have been copied'))
     });
 
     new Action('io.ox/contacts/actions/send', {
+
         requires: function (e) {
-            var list = [].concat(e.context);
-            return api.getList(list).pipe(function (list) {
-                return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
-                    return memo + (obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
-                }, 0).value() > 0;
-            });
+            if (!capabilities.has('webmail')) {
+                return false;
+            } else {
+                var list = [].concat(e.context);
+                return api.getList(list).pipe(function (list) {
+                    return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
+                        return memo + (obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
+                    }, 0).value() > 0;
+                });
+            }
         },
+
         multiple: function (list) {
 
             function mapList(obj) {
@@ -204,12 +206,16 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/invite', {
 
         requires: function (e) {
-            var list = [].concat(e.context);
-            return api.getList(list).pipe(function (list) {
-                return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
-                    return memo + (obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
-                }, 0).value() > 0;
-            });
+            if (!capabilities.has('calendar')) {
+                return false;
+            } else {
+                var list = [].concat(e.context);
+                return api.getList(list).pipe(function (list) {
+                    return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
+                        return memo + (obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
+                    }, 0).value() > 0;
+                });
+            }
         },
 
         multiple: function (list) {

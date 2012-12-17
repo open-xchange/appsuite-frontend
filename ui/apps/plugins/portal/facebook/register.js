@@ -15,11 +15,10 @@
 define('plugins/portal/facebook/register',
     ['io.ox/core/extensions',
      'io.ox/oauth/proxy',
-     'io.ox/core/flowControl',
      'io.ox/core/strings',
      'io.ox/keychain/api',
      'gettext!plugins/portal',
-     'less!plugins/portal/facebook/style.css'], function (ext, proxy, control, strings, keychain, gt) {
+     'less!plugins/portal/facebook/style.css'], function (ext, proxy, strings, keychain, gt) {
 
     'use strict';
 
@@ -293,5 +292,11 @@ define('plugins/portal/facebook/register',
             this.text(post.message);
 //            this.html('<em style="color: red;">This message is of the type <b>' + post.type + '</b>. We do not know how to render this yet. Please tell us about it!</em>');
         }
+    });
+
+    ext.point('io.ox/portal/widget/facebook/settings').extend({
+        title: gt('Facebook'),
+        type: 'facebook',
+        editable: false
     });
 });

@@ -46,7 +46,8 @@ define('io.ox/calendar/model',
             defaults: {
                 start_date: defStart.getTime(),
                 end_date: defStart.getTime() + date.HOUR,
-                recurrence_type: 0
+                recurrence_type: 0,
+                notification: true
             },
             init: function () {
 
@@ -200,16 +201,23 @@ define('io.ox/calendar/model',
     DAYS.values = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
 
     return {
-        setDefaultParticipants: function (model) {
+        setDefaultParticipants: function (model, options) {
             return folderAPI.get({folder: model.get('folder_id')}).done(function (folder) {
                 if (folderAPI.is('private', folder)) {
-                    var userID = configAPI.get('identifier');
-                    // it's a private folder for the current user, add him by default
-                    // as participant
-                    model.getParticipants().addUniquely({id: userID, type: 1});
+                    if (options.create) {
+                        var userID = configAPI.get('identifier');
+                        // it's a private folder for the current user, add him by default
+                        // as participant
+                        model.getParticipants().addUniquely({id: userID, type: 1});
 
-                    // use a new, custom and unused property in his model to specify that he can't be removed
-                    model.getParticipants().get(userID).set('ui_removable', false);
+                        // use a new, custom and unused property in his model to specify that he can't be removed
+                        model.getParticipants().get(userID).set('ui_removable', false);
+                    } else {
+                        var userID = configAPI.get('identifier');
+                        if (model.get('organizerId') === userID) {
+                            model.getParticipants().get(userID).set('ui_removable', false);
+                        }
+                    }
 
                 } else if (folderAPI.is('public', folder)) {
                     // if public folder, current user will be added

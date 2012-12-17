@@ -4,5 +4,6 @@
     icon: "default.png",
     category: "Productivity",
     settings: false,
-    requires: "infostore"
+    requires: "infostore",
+    visible: false
 }

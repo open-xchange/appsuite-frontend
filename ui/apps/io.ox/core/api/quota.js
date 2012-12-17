@@ -41,7 +41,7 @@ define("io.ox/core/api/quota", ["io.ox/core/http"], function (http) {
                 })
                 // for demo purposes
                 // TODO: comment out or remove later
-                .pipe(function (quotas) {
+                /*.pipe(function (quotas) {
                     // create fake values for testing
                     quotas.file.quota = 50 * 1024 * 1024; // 50mb limit
                     quotas.file.use = 26 * 1024 * 1024; // 26mb in use
@@ -50,7 +50,7 @@ define("io.ox/core/api/quota", ["io.ox/core/http"], function (http) {
                     quotas.mail.countquota = 200; // 200 limit
                     quotas.mail.countuse = 191;  // 191 in use
                     return quotas;
-                });
+                })*/;
         }
     };
 

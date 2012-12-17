@@ -25,17 +25,15 @@ define('io.ox/files/list/perspective',
     'use strict';
 
     var perspective = new ox.ui.Perspective('list');
-
+    var firstTime = false;
     perspective.render = function (app) {
 
-        console.log('render');
         var win = app.getWindow(),
         vsplit = commons.vsplit(this.main, app),
         left = vsplit.left.addClass('border-right'),
         right = vsplit.right.addClass('default-content-padding').scrollable(),
-        grid = new VGrid(left);
-
-        console.log('perspective lust');
+        grid = new VGrid(left),
+        dropZone;
 
         grid.addTemplate({
             build: function () {
@@ -73,7 +71,9 @@ define('io.ox/files/list/perspective',
             right.idle().empty().append(viewDetail.draw(data));
             right.parent().scrollTop(0);
             app.currentFile = data;
-
+            if (dropZone) {
+                dropZone.update();
+            }
             // shortcutPoint.activateForContext({
             //     data: data,
             //     view: app.detailView,
@@ -151,7 +151,6 @@ define('io.ox/files/list/perspective',
             }
         });
 
-        var dropZone;
         if (_.browser.IE === undefined || _.browser.IE > 9) {
             dropZone = new dnd.UploadZone({
                 ref: "io.ox/files/dnd/actions"
@@ -164,8 +163,13 @@ define('io.ox/files/list/perspective',
             if (dropZone) {dropZone.include(); }
 
 
-            win.on("hide", function () {
+            app.on("perspective:list:hide", function () {
                 if (dropZone) {dropZone.remove(); }
+                // shortcutPoint.deactivate();
+            });
+
+            app.on("perspective:list:show", function () {
+                if (dropZone) {dropZone.include(); }
                 // shortcutPoint.deactivate();
             });
 
@@ -185,21 +189,6 @@ define('io.ox/files/list/perspective',
             }
             grid.refresh();
         };
-
-        app.folder.getData().done(function (data) {
-            win.nodes.title.find('.has-publications').remove();
-            // published?
-            if (data['com.openexchange.publish.publicationFlag']) {
-                win.nodes.title.prepend(
-                    $('<img>', {
-                        src: ox.base + '/apps/themes/default/glyphicons_232_cloud_white.png',
-                        title: gt('This folder has publications'),
-                        alt: ''
-                    })
-                    .addClass('has-publications')
-                );
-            }
-        });
 
         app.on('folder:change', function (e, id, folder) {
             if (_.browser.IE === undefined || _.browser.IE > 9) {

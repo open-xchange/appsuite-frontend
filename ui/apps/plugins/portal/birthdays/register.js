@@ -46,7 +46,7 @@ define('plugins/portal/birthdays/register',
         load: function (baton) {
             var start = _.now(),
                 end = start + RANGE;
-            return api.birthdays(start, end).done(function (data) {
+            return api.birthdays({start: start, end: end, right_hand_limit: 14}).done(function (data) {
                 baton.data = data;
             });
         },
@@ -125,7 +125,7 @@ define('plugins/portal/birthdays/register',
                 start = _.now(),
                 end = start + RANGE;
 
-            api.birthdays(start, end).done(function (contacts) {
+            api.birthdays({start: start, end: end, right_hand_limit: 14}).done(function (contacts) {
 
                 var hash = {};
 
@@ -150,5 +150,11 @@ define('plugins/portal/birthdays/register',
 
             this.append($list);
         }
+    });
+
+    ext.point('io.ox/portal/widget/birthdays/settings').extend({
+        title: gt('Birthdays'),
+        type: 'birthdays',
+        editable: false
     });
 });

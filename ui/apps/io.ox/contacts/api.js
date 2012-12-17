@@ -112,7 +112,7 @@ define('io.ox/contacts/api',
             })
             .pipe(function (d) {
                 return $.when(
-                    api.caches.all.grepRemove(d.folder_id + '\t'),
+                    api.caches.all.grepRemove(d.folder_id + api.DELIM),
                     contactPictures.clear()
                 )
                 .pipe(function () {
@@ -147,7 +147,7 @@ define('io.ox/contacts/api',
                         .pipe(function (data) {
                             return $.when(
                                 api.caches.get.add(data),
-                                api.caches.all.grepRemove(o.folder + '\t'),
+                                api.caches.all.grepRemove(o.folder + api.DELIM),
                                 api.caches.list.remove({ id: o.id, folder: o.folder }),
                                 contactPictures.clear()
                             )
@@ -445,17 +445,22 @@ define('io.ox/contacts/api',
         // resume & trigger refresh
         return http.resume()
             .pipe(function (result) {
+
+                var def = $.Deferred();
+
                 _(result).each(function (val) {
-                    if (val.error) {
-                        notifications.yell('error', val.error.error);
-                    }
+                    if (val.error) { notifications.yell(val.error); def.reject(val.error); }
                 });
+
+                if (def.state() === 'rejected') {
+                    return def;
+                }
 
                 return $.when.apply($,
                     _(list).map(function (o) {
                         return $.when(
-                            api.caches.all.grepRemove(targetFolderId + '\t'),
-                            api.caches.all.grepRemove(o.folder_id + '\t'),
+                            api.caches.all.grepRemove(targetFolderId + api.DELIM),
+                            api.caches.all.grepRemove(o.folder_id + api.DELIM),
                             api.caches.list.remove({ id: o.id, folder: o.folder_id })
                         );
                     })
@@ -474,15 +479,15 @@ define('io.ox/contacts/api',
         return copymove(list, 'copy', targetFolderId);
     };
 
-    api.birthdays = function (start, end, columns) {
+    api.birthdays = function (options) {
+        var params = _.extend({
+            action: 'birthdays',
+            columns: '1,20,500,501,502,503,504,505,511'
+        }, options || {});
+
         return http.GET({
             module: 'contacts',
-            params: {
-                action: 'birthdays',
-                start: start,
-                end: end,
-                columns: columns || '1,20,500,501,502,503,504,505,511'
-            }
+            params: params
         });
     };
 

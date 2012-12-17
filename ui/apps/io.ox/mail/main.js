@@ -25,10 +25,11 @@ define("io.ox/mail/main",
      "io.ox/core/extPatterns/dnd",
      "io.ox/core/notifications",
      "io.ox/core/api/folder",
+     "io.ox/core/api/account",
      "settings!io.ox/mail",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
-    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd, notifications, folderAPI, settings) {
+    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd, notifications, folderAPI, account, settings) {
 
     'use strict';
 
@@ -93,6 +94,7 @@ define("io.ox/mail/main",
         right = vsplit.right.addClass('mail-detail-pane').scrollable();
 
         ext.point('io.ox/mail/vgrid/options').extend({
+            threadView: settings.get('threadView') !== 'off',
             selectFirstItem: settings.get('selectFirstMessage', true)
         });
 
@@ -110,6 +112,33 @@ define("io.ox/mail/main",
 
         commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads'); // getAllThreads is redefined below!
         commons.wireGridAndSearch(grid, win, api);
+
+        function drawGridOptions(e, type) {
+            var ul = grid.getToolbar().find('ul.dropdown-menu'),
+                threadView = settings.get('threadView'),
+                isInbox = account.is('inbox', grid.prop('folder')),
+                isOn = threadView === 'on' || (threadView === 'inbox' && isInbox);
+            // some auto toggling
+            if (grid.prop('sort') === 'thread' && !isOn) {
+                grid.prop('sort', '610');
+            } else if (grid.prop('sort') === '610' && type === 'folder' && isOn && isInbox) {
+                grid.prop('sort', 'thread');
+            }
+            // draw list
+            ul.empty().append(
+                isOn ? buildOption('thread', gt('Conversations')) : $(),
+                buildOption(610, gt('Date')),
+                buildOption(603, gt('From')),
+                buildOption(102, gt('Label')),
+                buildOption(607, gt('Subject')),
+                $('<li class="divider">'),
+                buildOption('asc', gt('Ascending')),
+                buildOption('desc', gt('Descending')),
+                $('<li class="divider">'),
+                buildOption('unread', gt('Unread only'))
+            );
+            updateGridOptions();
+        }
 
         function updateGridOptions() {
             var dropdown = grid.getToolbar().find('.grid-options'),
@@ -153,18 +182,6 @@ define("io.ox/mail/main",
                         )
                         .dropdown(),
                         $('<ul>').addClass("dropdown-menu")
-                        .append(
-                            options.threadView !== false ? buildOption('thread', gt('Conversations')) : $(),
-                            buildOption(610, gt('Date')),
-                            buildOption(603, gt('From')),
-                            buildOption(102, gt('Label')),
-                            buildOption(607, gt('Subject')),
-                            $('<li class="divider">'),
-                            buildOption('asc', gt('Ascending')),
-                            buildOption('desc', gt('Descending')),
-                            $('<li class="divider">'),
-                            buildOption('unread', gt('Unread only'))
-                        )
                         .on('click', 'a', { grid: grid }, hToolbarOptions)
                     )
                 );
@@ -179,8 +196,8 @@ define("io.ox/mail/main",
             }
         });
 
-        grid.on('change:prop', updateGridOptions);
-        updateGridOptions();
+        grid.on('change:prop', drawGridOptions);
+        drawGridOptions();
 
         commons.addGridToolbarFolder(app, grid);
 

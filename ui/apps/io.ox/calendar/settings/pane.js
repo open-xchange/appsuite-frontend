@@ -17,7 +17,8 @@ define('io.ox/calendar/settings/pane',
      'io.ox/calendar/settings/model',
      'dot!io.ox/calendar/settings/form.html',
      'io.ox/core/extensions',
-     'gettext!io.ox/calendar/calendar'], function (settings, date, calendarSettingsModel, tmpl, ext, gt) {
+     'gettext!io.ox/calendar/calendar'
+    ], function (settings, date, calendarSettingsModel, tmpl, ext, gt) {
 
     'use strict';
 
@@ -131,10 +132,8 @@ define('io.ox/calendar/settings/pane',
                 calendarViewSettings.render().el)
             );
         },
-
         save: function () {
             calendarViewSettings.model.save();
         }
     });
-
 });

@@ -130,4 +130,10 @@ define("plugins/portal/quota/register",
             });
         }
     });
+
+    ext.point('io.ox/portal/widget/quota/settings').extend({
+        title: gt('Quota'),
+        type: 'quota',
+        editable: false
+    });
 });

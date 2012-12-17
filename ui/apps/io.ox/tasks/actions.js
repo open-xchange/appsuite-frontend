@@ -132,7 +132,7 @@ define("io.ox/tasks/actions",
                     .addPrimaryButton("ok", gt("Move"))
                     .addButton("cancel", gt("Cancel"));
                 popup.getBody().css({ height: '250px' });
-                var tree = new views.FolderTree(popup.getBody(), { type: 'tasks' }),
+                var tree = new views.FolderList(popup.getBody(), { type: 'tasks' }),
                     id = String(task.folder || task.folder_id);
                 //go
                 popup.show(function () {
@@ -146,9 +146,11 @@ define("io.ox/tasks/actions",
                         // move only if folder differs from old folder
                         if (target && target !== id) {
                             // move action
-                            api.move(task, target).done(function () {
+                            api.move(task, target)
+                            .done(function () {
                                 notifications.yell('success', gt('Task moved.'));
-                            });
+                            })
+                            .fail(notifications.yell);
                         }
                     }
                     tree.destroy();

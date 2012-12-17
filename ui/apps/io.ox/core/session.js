@@ -18,14 +18,16 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
     var TIMEOUTS = { AUTOLOGIN: 5000, LOGIN: 10000 };
 
     var getBrowserLanguage = function () {
-        var language = (navigator.language || navigator.userLanguage).substr(0, 2);
-        return _.chain(ox.serverConfig.languages).keys().find(function (id) {
+        var language = (navigator.language || navigator.userLanguage).substr(0, 2),
+            languages = ox.serverConfig.languages || {};
+        return _.chain(languages).keys().find(function (id) {
                 return id.substr(0, 2) === language;
             }).value();
     };
 
     var check = function (language) {
-        return language in ox.serverConfig.languages ? language : false;
+        var languages = ox.serverConfig.languages || {};
+        return language in languages ? language : false;
     };
 
     var set = function (data) {
@@ -60,7 +62,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
 
             return function (username, password, store) {
 
-                var def = $.Deferred();
+                var def = $.Deferred(), multiple = [];
 
                 // online?
                 if (ox.online) {
@@ -73,6 +75,16 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                             pending = null;
                         });
                         // POST request
+                        if (ox.forcedLanguage) {
+                            multiple.push({
+                                module: 'jslob',
+                                action: 'update',
+                                id: 'io.ox/core',
+                                data: {
+                                    language: ox.forcedLanguage
+                                }
+                            });
+                        }
                         http.POST({
                             module: 'login',
                             appendColumns: false,
@@ -83,7 +95,8 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                                 name: username,
                                 password: password,
                                 client: that.client(),
-                                timeout: TIMEOUTS.LOGIN
+                                timeout: TIMEOUTS.LOGIN,
+                                multiple: JSON.stringify(multiple)
                             }
                         })
                         .done(function (data) {
@@ -140,7 +153,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
         },
 
         client: function () {
-            return 'open-xchange-ui7';
+            return 'open-xchange-appsuite';
         }
     };
 

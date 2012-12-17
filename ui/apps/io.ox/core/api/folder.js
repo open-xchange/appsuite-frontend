@@ -34,7 +34,7 @@ define('io.ox/core/api/folder',
         getFolder = function (id, opt) {
             // get cache
             opt = opt || {};
-            var cache = opt.storage || folderCache;
+            var cache = opt.storage ? opt.storage.folderCache : folderCache;
             // cache miss?
             var getter = function () {
                 return http.GET({
@@ -156,7 +156,7 @@ define('io.ox/core/api/folder',
                     storage: null
                 }, options || {}),
                 // get cache
-                cache = opt.storage || subFolderCache,
+                cache = opt.storage ? opt.storage.subFolderCache : subFolderCache,
                 // cache miss?
                 getter = function () {
                     return http.GET({
@@ -421,7 +421,12 @@ define('io.ox/core/api/folder',
             });
         },
 
-        update: function (options) {
+        update: function (options, storage) {
+
+            if (storage) {
+                storage.subFolderCache.clear();
+                storage.folderCache.clear();
+            }
 
             subFolderCache.clear();
             folderCache.clear();
@@ -716,9 +721,8 @@ define('io.ox/core/api/folder',
                         // unread, title, subfolders, subscr_subflds
                         var equalUnread = a.unread === b.unread,
                             equalData = a.title === b.title && a.subfolders === b.subfolders && a.subscr_subflds === b.subscr_subflds;
-                        if (equalData && !equalUnread) {
-                            api.trigger('update:unread', id, b);
-                        } else if (!equalData) {
+                        api.trigger('update:unread', id, b);
+                        if (!equalData) {
                             api.trigger('update', id, id, b);
                         }
                     })
@@ -727,12 +731,12 @@ define('io.ox/core/api/folder',
                     });
             }
 
-            return function (list) {
+            return function () {
                 if (ox.online) {
-                    _([].concat(list))
-                        .chain()
-                        .map(function (obj) {
-                            return _.isString(obj) ? obj : obj.folder_id;
+                    _.chain(arguments)
+                        .flatten()
+                        .map(function (arg) {
+                            return _.isString(arg) ? arg : arg.folder_id;
                         })
                         .uniq()
                         .each(function (id) {

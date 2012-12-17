@@ -3,5 +3,6 @@
     company: "CompuGlobalHyperMegaNet",
     icon: "default.png",
     category: "Dev",
-    settings: false
+    settings: false,
+    requires: "dev"
 }

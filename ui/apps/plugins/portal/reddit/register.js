@@ -12,12 +12,13 @@
  */
 
 define('plugins/portal/reddit/register',
-    ['io.ox/portal/mediaplugin',
-     'settings!plugins/portal/reddit',
-     'io.ox/core/date',
-     'gettext!io.ox/portal'], function (MediaPlayer, settings, date, gt) {
+    ['io.ox/core/date',
+     'gettext!io.ox/portal'], function (date, gt) {
 
     'use strict';
+
+    // avoid JSHINT errors
+    var MediaPlayer = function () { }, settings = {};
 
     var drawPlugin = function (index) {
         if (!index) {

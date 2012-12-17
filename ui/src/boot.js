@@ -236,8 +236,9 @@ $(document).ready(function () {
     }
 
     var getBrowserLanguage = function () {
-        var language = (navigator.language || navigator.userLanguage).substr(0, 2);
-        return _.chain(ox.serverConfig.languages).keys().find(function (id) {
+        var language = (navigator.language || navigator.userLanguage).substr(0, 2),
+            languages = ox.serverConfig.languages || {};
+        return _.chain(languages).keys().find(function (id) {
                 return id.substr(0, 2) === language;
             }).value();
     };
@@ -247,8 +248,9 @@ $(document).ready(function () {
     setDefaultLanguage = function () {
         // look at navigator.language with en_US as fallback
         var navLang = (navigator.language || navigator.userLanguage).substr(0, 2),
+            languages = ox.serverConfig.languages || {},
             lang = "en_US", id = "";
-        for (id in ox.serverConfig.languages) {
+        for (id in languages) {
             // match?
             if (id.substr(0, 2) === navLang) {
                 lang = id;
@@ -316,15 +318,21 @@ $(document).ready(function () {
 
         function loadCoreFiles() {
             // Set user's language (as opposed to the browser's language)
-            return require(['io.ox/core/gettext']).pipe(function (gt) {
+            // Load core plugins
+            return require(['io.ox/core/gettext', 'io.ox/core/manifests']).pipe(function (gt, manifests) {
                 gt.setLanguage(ox.language);
-                return require([ox.base + '/pre-core.js']);
+                if (!ox.online) {
+                    return require([ox.base + '/pre-core.js']);
+                }
+                return manifests.manager.loadPluginsFor('core').pipe(function () {
+                    return require([ox.base + '/pre-core.js']);
+                });
             });
         }
 
         require(['io.ox/core/session', 'io.ox/core/capabilities', 'io.ox/core/manifests']).done(function (session, capabilities, manifests) {
 
-            var useAutoLogin = capabilities.has("autologin") && ox.online, initialized;
+            var useAutoLogin = (true || capabilities.has("autologin")) && ox.online, initialized;
 
             function continueWithoutAutoLogin() {
                 if (ox.signin) {
@@ -336,18 +344,34 @@ $(document).ready(function () {
 
             function fetchUserSpecificServerConfig() {
                 var def = $.Deferred();
-                require(['io.ox/core/http'], function (http) {
-                    http.GET({
-                        module: 'apps/manifests',
-                        params: {
-                            action: 'config'
-                        }
-                    }).done(function (data) {
-                        ox.serverConfig = data;
-                        capabilities.reset();
-                        manifests.reset();
-                        def.resolve();
-                    }).fail(def.reject);
+                require(['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
+                    var configCache = new cache.SimpleCache('serverconfig', true);
+                    if (ox.online) {
+                        http.GET({
+                            module: 'apps/manifests',
+                            params: {
+                                action: 'config'
+                            }
+                        }).done(function (data) {
+                            configCache.add('userconfig', data);
+                            ox.serverConfig = data;
+                            capabilities.reset();
+                            manifests.reset();
+                            def.resolve();
+                        }).fail(def.reject);
+                    } else {
+                        configCache.get('userconfig').done(function (data) {
+                            if (data) {
+                                ox.serverConfig = data;
+                                capabilities.reset();
+                                manifests.reset();
+                                def.resolve();
+                            } else {
+                                def.reject();
+                            }
+                        });
+                    }
+                    
                 }).fail(def.reject);
                 return def;
             }
@@ -361,9 +385,11 @@ $(document).ready(function () {
                 ox.language = _.url.hash('language');
                 _.url.redirect('#');
 
-                initialized = fetchUserSpecificServerConfig();
-
-                $.when(loadCoreFiles(), initialized).done(loadCore);
+                fetchUserSpecificServerConfig().done(function () {
+                    loadCoreFiles().done(function () {
+                        loadCore();
+                    });
+                });
 
             } else {
                 // try auto login!?
@@ -501,15 +527,35 @@ $(document).ready(function () {
     var boot = function () {
 
         // get pre core & server config -- and init http & session
-        require(['io.ox/core/http', 'io.ox/core/session'])
-            .done(function (http) {
-                // TODO: caching
-                http.GET({
-                    module: 'apps/manifests',
-                    params: {
-                        action: 'config'
-                    }
-                }).done(function (data) {
+        require(['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/session'])
+            .done(function (http, cache) {
+                var configCache = new cache.SimpleCache('serverconfig', true),
+                    loadConfig = $.Deferred();
+
+                if (ox.online) {
+                    loadConfig = http.GET({
+                        module: 'apps/manifests',
+                        params: {
+                            action: 'config'
+                        }
+                    }).done(function (data) {
+                        configCache.add('generalconfig', data);
+                    });
+                } else {
+                    configCache.get('generalconfig').done(function (data) {
+                        if (data) {
+                            loadConfig.resolve(data);
+                        } else {
+                            loadConfig.resolve({
+                                capabilities: [],
+                                manifests: []
+                            });
+                        }
+                    });
+                }
+                
+
+                loadConfig.done(function (data) {
                     // store server config
                     ox.serverConfig = data;
                     // set page title now

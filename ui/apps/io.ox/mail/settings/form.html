@@ -19,6 +19,9 @@
 				<label class="checkbox expertmode" >{{=it.strings.COLLECT_CONTACTS_READING}}
 					<input type="checkbox" data-property="contactCollectOnMailAccess">
 				</label>
+				<label class="checkbox expertmode" >{{=it.strings.USE_FIXED_WIDTH_FONT}}
+					<input type="checkbox" data-property="useFixedWidthFont">
+				</label>
 				<label class="checkbox expertmode" >{{=it.strings.SELECT_FIRST_MAIL}}
                     <input type="checkbox" data-property="selectFirstMessage">
                 </label>
@@ -36,6 +39,21 @@
 					</label>
 					<label class="checkbox expertmode">{{=it.strings.INSERT_ORG_TO_REPLY}}
 						<input type="checkbox" data-property="appendMailTextOnReply">
+					</label>
+				</div>
+			</div>
+			<div class="settings sectiondelimiter"></div>
+			<div class="control-group">
+				<label class="control-label">{{=it.strings.TITLE_THREADVIEW}}</label>
+				<div class="controls">
+					<label class="radio">{{=it.strings.THREADVIEW_INBOX}}
+						<input type="radio" name="threadView" data-property="threadView" value="inbox">
+					</label>
+					<label class="radio">{{=it.strings.THREADVIEW_ON}}
+						<input type="radio" name="threadView" data-property="threadView" value="on">
+					</label>
+					<label class="radio">{{=it.strings.THREADVIEW_OFF}}
+						<input type="radio" name="threadView" data-property="threadView" value="off">
 					</label>
 				</div>
 			</div>

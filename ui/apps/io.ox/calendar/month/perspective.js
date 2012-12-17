@@ -101,8 +101,8 @@ define('io.ox/calendar/month/perspective',
             if (obj.recurrence_type > 0) {
                 new dialogs.ModalDialog()
                     .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
-                    .addButton('appointment', gt('OK'))
-                    .addButton('cancel', gt('Cancel'))
+                    .addButton('appointment', gt('Yes'))
+                    .addButton('cancel', gt('No'))
                     .show()
                     .done(function (action) {
                         if (action === 'appointment') {

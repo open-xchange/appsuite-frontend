@@ -40,6 +40,8 @@ define("io.ox/files/main",
         win.addClass("io-ox-files-main");
         app.settings = settings;
 
+        commons.wirePerspectiveEvents(app);
+
         // folder tree
         commons.addFolderView(app, { type: 'infostore', rootFolderId: 9 });
 

@@ -17,7 +17,8 @@ define('io.ox/core/settings/defaults', function (ext) {
 	return {
 		language: 'en_US',
 		refreshInterval: 5 * 60000,
-		autoStart: 'io.ox/mail/main'
+		autoStart: 'io.ox/mail/main',
+		autoOpenNotification: true
 	};
 	
 });

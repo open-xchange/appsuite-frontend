@@ -1,7 +1,7 @@
 {
     title: "Conversations",
     company: "Open-Xchange",
-    icon: "conversations.png",
+    icon: "default.png",
     category: "Productivity",
     settings: false,
     requires: "conversations"

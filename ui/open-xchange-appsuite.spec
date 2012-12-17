@@ -1,4 +1,4 @@
-Name:           open-xchange-ui7
+Name:           open-xchange-appsuite
 Version:        7.0.0
 %define         ox_release 8
 Release:        %{ox_release}
@@ -9,7 +9,7 @@ Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
 License:        CC-BY-NC-SA
 Summary:        OX App Suite HTML5 client
 Source:         %{name}_%{version}.orig.tar.bz2
-Requires:       open-xchange-ui7-l10n
+Requires:       open-xchange-appsuite-l10n
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
@@ -53,7 +53,7 @@ SDK for the OX App Suite HTML5 client
 #%package l10n-## lang ##
 #Group: Applications/Productivity
 #Summary: ## Lang ## translation of the OX App Suite HTML5 client
-#Provides: open-xchange-ui7-l10n
+#Provides: open-xchange-appsuite-l10n
 #
 #%description l10n-## lang ##
 ### Lang ## translation of the OX App Suite HTML5 client
@@ -66,7 +66,7 @@ SDK for the OX App Suite HTML5 client
 
 %install
 sh build.sh builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
-    manifestDir="%{buildroot}/opt/open-xchange/ui7" \
+    manifestDir="%{buildroot}/opt/open-xchange/appsuite" \
     version=%{version} revision=%{release}
 
 find "%{buildroot}%{docroot}" -type d \
@@ -79,15 +79,15 @@ find "%{buildroot}%{docroot}" \( -type f -o -type l \) \
 ## end l10n ##
 cp -r tmp/l10n/apps "%{buildroot}%{docroot}/"
 
-mkdir -p "%{buildroot}/opt/open-xchange-ui7-dev"
-cp -r bin lib Jakefile.js "%{buildroot}/opt/open-xchange-ui7-dev/"
-sed -i -e 's#OX_UI7_DEV=.*#OX_UI7_DEV="/opt/open-xchange-ui7-dev"#' \
-    "%{buildroot}/opt/open-xchange-ui7-dev/bin/build-ui7"
+mkdir -p "%{buildroot}/opt/open-xchange-appsuite-dev"
+cp -r bin lib Jakefile.js "%{buildroot}/opt/open-xchange-appsuite-dev/"
+sed -i -e 's#OX_APPSUITE_DEV=.*#OX_APPSUITE_DEV="/opt/open-xchange-appsuite-dev"#' \
+    "%{buildroot}/opt/open-xchange-appsuite-dev/bin/build-appsuite"
 
 %clean
 sh build.sh clean builddir="%{buildroot}%{docroot}" version=%{version} revision=%{release}
-rm -r "%{buildroot}/opt/open-xchange/ui7"
-rm -r "%{buildroot}/opt/open-xchange-ui7-dev"
+rm -r "%{buildroot}/opt/open-xchange/appsuite"
+rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
 
 %files -f tmp/files
 %defattr(-,root,root)
@@ -96,13 +96,13 @@ rm -r "%{buildroot}/opt/open-xchange-ui7-dev"
 %files manifest
 %defattr(-,root,root)
 %dir /opt/open-xchange
-/opt/open-xchange/ui7
+/opt/open-xchange/appsuite
 
 %files dev
 %defattr(-,root,root)
-%dir /opt/open-xchange-ui7-dev
-/opt/open-xchange-ui7-dev
-%attr(644,root,root) /opt/open-xchange-ui7-dev/lib/sax-js/examples/switch-bench.js
+%dir /opt/open-xchange-appsuite-dev
+/opt/open-xchange-appsuite-dev
+%attr(644,root,root) /opt/open-xchange-appsuite-dev/lib/sax-js/examples/switch-bench.js
 
 ## l10n ##
 #%files l10n-## lang ## -f tmp/files-## lang ##

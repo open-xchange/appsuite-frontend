@@ -79,6 +79,11 @@ define('io.ox/core/tk/text-editor', [], function () {
             this.setContent(content + '\n\n' + str);
         };
 
+        this.prependContent = function (str) {
+            var content = this.getContent();
+            this.setContent(str + '\n\n' + content);
+        };
+
         this.replaceParagraph = function (str, rep) {
             var content = this.getContent(), pos, top;
             // exists?
