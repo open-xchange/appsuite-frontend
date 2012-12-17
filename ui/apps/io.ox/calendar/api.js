@@ -388,6 +388,7 @@ define("io.ox/calendar/api",
         api.getInvites().done(function () {
             // clear caches
             all_cache = {};
+            get_cache = {};
             // trigger local refresh
             api.trigger("refresh.all");
         });
