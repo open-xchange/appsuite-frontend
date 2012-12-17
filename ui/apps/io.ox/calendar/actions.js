@@ -17,7 +17,9 @@ define('io.ox/calendar/actions',
      'io.ox/calendar/util',
      'gettext!io.ox/calendar/actions',
      'io.ox/core/config',
-     'io.ox/core/notifications'], function (ext, links, api, util, gt, config, notifications) {
+     'io.ox/core/notifications',
+     'io.ox/core/capabilities'
+    ], function (ext, links, api, util, gt, config, notifications, capabilities) {
 
     'use strict';
 
@@ -64,6 +66,9 @@ define('io.ox/calendar/actions',
     });
 
     new Action('io.ox/calendar/detail/actions/sendmail', {
+        requires: function () {
+            return capabilities.has('webmail');
+        },
         action: function (baton) {
             var def = $.Deferred();
             util.createArrayOfRecipients(baton.data.participants, def);
@@ -78,6 +83,9 @@ define('io.ox/calendar/actions',
     });
 
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
+        requires: function () {
+            return capabilities.has('contacts');
+        },
         action: function (baton) {
             var contactsFolder = config.get('folder.contacts'),
                 def = $.Deferred();
@@ -421,25 +429,4 @@ define('io.ox/calendar/actions',
         label: gt('Save as distribution list'),
         ref: 'io.ox/calendar/detail/actions/save-as-distlist'
     }));
-
-
-
-
-
-    /*ext.point('io.ox/calendar/links/inline').extend(new links.DropdownLinks({
-        index: 200,
-        prio: 'lo',
-        id: 'changestatus',
-        label: gt('Change Status'),
-        ref: 'io.ox/calendar/actions/changestatus'
-    }));
-
-    new Link('io.ox/calendar/actions/changestatus', {
-        id: 'list',
-        index: 100,
-        label: gt('List'),
-        ref: 'io.ox/calendar/actions/switch-to-list-view'
-    });*/
-
-    window.ext = ext;
 });
