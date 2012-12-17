@@ -28,15 +28,12 @@ define('io.ox/files/list/perspective',
     var firstTime = false;
     perspective.render = function (app) {
 
-        console.log('render');
         var win = app.getWindow(),
         vsplit = commons.vsplit(this.main, app),
         left = vsplit.left.addClass('border-right'),
         right = vsplit.right.addClass('default-content-padding').scrollable(),
         grid = new VGrid(left),
         dropZone;
-
-        console.log('perspective lust');
 
         grid.addTemplate({
             build: function () {

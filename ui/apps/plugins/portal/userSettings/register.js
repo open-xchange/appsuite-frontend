@@ -42,9 +42,9 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
             .header($('<h4>').text('Change password'))
             .build(function () {
                 this.getContentNode().append(
-                    $('<label>').text(gt('Your current pasword')),
+                    $('<label>').text(gt('Your current password')),
                     $('<input type="password" class="input-large current-password">'),
-                    $('<label>').text(gt('New pasword')),
+                    $('<label>').text(gt('New password')),
                     $('<input type="password" class="input-large new-password">'),
                     $('<label>').text(gt('Repeat new password')),
                     $('<input type="password" class="input-large repeat-new-password">')
