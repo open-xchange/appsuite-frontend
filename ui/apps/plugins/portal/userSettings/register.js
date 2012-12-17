@@ -24,6 +24,7 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
 
             userEdit.editCurrentUser($node).done(function (user) {
                 user.on('update', function () {
+                    require("io.ox/core/notifications").yell("success", gt("Your data has been saved"));
                     popup.close();
                 });
             });
