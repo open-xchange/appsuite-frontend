@@ -249,13 +249,17 @@ $(document).ready(function () {
         // look at navigator.language with en_US as fallback
         var navLang = (navigator.language || navigator.userLanguage).substr(0, 2),
             languages = ox.serverConfig.languages || {},
-            lang = "en_US", id = "";
+            lang = "en_US", id = "", found = false;
         for (id in languages) {
             // match?
             if (id.substr(0, 2) === navLang) {
                 lang = id;
+                found = true;
                 break;
             }
+        }
+        if (!found) {
+            lang = ox.serverConfig.languages[0];
         }
         return changeLanguage(lang);
     };
