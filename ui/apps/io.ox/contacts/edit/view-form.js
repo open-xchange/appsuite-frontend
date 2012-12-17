@@ -285,7 +285,12 @@ define('io.ox/contacts/edit/view-form', [
         new actions.Action(ref + '/actions/edit/discard', {
             id: 'discard',
             action: function (options, baton) {
-                options.parentView.$el.find('[data-action="discard"]').trigger('controller:quit');
+                if (ref === 'io.ox/core/user') {
+                    //invoked by sidepopup (portal); uses event of hidden sidebar-close button
+                    $('.io-ox-sidepopup').find('[data-action="close"]').trigger('click');
+                }
+                else
+                    options.parentView.$el.find('[data-action="discard"]').trigger('controller:quit');
             }
         });
 
