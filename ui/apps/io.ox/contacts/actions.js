@@ -17,7 +17,8 @@ define('io.ox/contacts/actions',
      'io.ox/contacts/api',
      'io.ox/core/config',
      'io.ox/core/notifications',
-     'gettext!io.ox/contacts'], function (ext, links, api, config, notifications, gt) {
+     'io.ox/core/capabilities',
+     'gettext!io.ox/contacts'], function (ext, links, api, config, notifications, capabilities, gt) {
 
     'use strict';
 
@@ -157,14 +158,20 @@ define('io.ox/contacts/actions',
     });
 
     new Action('io.ox/contacts/actions/send', {
+
         requires: function (e) {
-            var list = [].concat(e.context);
-            return api.getList(list).pipe(function (list) {
-                return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
-                    return memo + (obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
-                }, 0).value() > 0;
-            });
+            if (!capabilities.has('webmail')) {
+                return false;
+            } else {
+                var list = [].concat(e.context);
+                return api.getList(list).pipe(function (list) {
+                    return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
+                        return memo + (obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
+                    }, 0).value() > 0;
+                });
+            }
         },
+
         multiple: function (list) {
 
             function mapList(obj) {
@@ -199,12 +206,16 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/invite', {
 
         requires: function (e) {
-            var list = [].concat(e.context);
-            return api.getList(list).pipe(function (list) {
-                return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
-                    return memo + (obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
-                }, 0).value() > 0;
-            });
+            if (!capabilities.has('calendar')) {
+                return false;
+            } else {
+                var list = [].concat(e.context);
+                return api.getList(list).pipe(function (list) {
+                    return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
+                        return memo + (obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
+                    }, 0).value() > 0;
+                });
+            }
         },
 
         multiple: function (list) {
