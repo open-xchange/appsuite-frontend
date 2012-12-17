@@ -146,9 +146,11 @@ define("io.ox/tasks/actions",
                         // move only if folder differs from old folder
                         if (target && target !== id) {
                             // move action
-                            api.move(task, target).done(function () {
+                            api.move(task, target)
+                            .done(function () {
                                 notifications.yell('success', gt('Task moved.'));
-                            });
+                            })
+                            .fail(notifications.yell);
                         }
                     }
                     tree.destroy();
