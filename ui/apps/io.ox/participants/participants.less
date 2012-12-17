@@ -1,4 +1,5 @@
 .participant-wrapper {
+    cursor: pointer;
     position: relative;
     margin: 5px 0;
 }
@@ -9,7 +10,7 @@
     right: 1px;
     bottom: 1px;
     width: 36px;
-    height: 40px;
+    height: 60px;
     line-height: 1em;
     background-color: white;
     color: #CCC;
@@ -21,6 +22,10 @@
     text-decoration: none;
 }
 
+.participant-wrapper .participant-email{
+    color: @link-color;
+}
+
 .participant-wrapper .remove .icon {
     position: absolute;
     top: 50%;
@@ -28,4 +33,11 @@
     right: 0;
     margin-top: -0.5em;
     text-align: center;
+}
+.participant-wrapper .extra-decorator {
+    color: #888;
+
+}
+.participant-wrapper .participant-name {
+    font-weight: bold;
 }

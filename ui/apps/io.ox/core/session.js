@@ -153,7 +153,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
         },
 
         client: function () {
-            return 'open-xchange-ui7';
+            return 'open-xchange-appsuite';
         }
     };
 

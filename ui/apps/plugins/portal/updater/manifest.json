@@ -1,3 +1,4 @@
 {
-    namespace: "portal"
+    namespace: "portal",
+    requires: "oxupdater"
 }

@@ -1,4 +1,4 @@
-tmp/build-ui7 opt/open-xchange-appsuite-dev/bin/
+tmp/build-appsuite opt/open-xchange-appsuite-dev/bin/
 bin/build.sh opt/open-xchange-appsuite-dev/bin/
 lib opt/open-xchange-appsuite-dev/
 Jakefile.js opt/open-xchange-appsuite-dev/

@@ -385,9 +385,11 @@ $(document).ready(function () {
                 ox.language = _.url.hash('language');
                 _.url.redirect('#');
 
-                initialized = fetchUserSpecificServerConfig();
-
-                $.when(loadCoreFiles(), initialized).done(loadCore);
+                fetchUserSpecificServerConfig().done(function () {
+                    loadCoreFiles().done(function () {
+                        loadCore();
+                    });
+                });
 
             } else {
                 // try auto login!?

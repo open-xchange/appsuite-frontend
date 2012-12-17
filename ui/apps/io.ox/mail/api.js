@@ -776,7 +776,8 @@ define("io.ox/mail/api",
                 // clear inbox & sent folder
                 var folders = [].concat(
                     accountAPI.getFoldersByType('inbox'),
-                    accountAPI.getFoldersByType('sent')
+                    accountAPI.getFoldersByType('sent'),
+                    accountAPI.getFoldersByType('drafts')
                 );
                 $.when.apply(
                     _(folders).map(function (id) {
