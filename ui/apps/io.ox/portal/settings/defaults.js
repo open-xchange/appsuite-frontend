@@ -35,7 +35,7 @@ define('io.ox/portal/settings/defaults', [], function () {
                 },
                 birthdays_0: {
                     plugin: 'plugins/portal/birthdays/register',
-                    color: 'lightblue',
+                    color: 'lightgreen',
                     index: 4
                 },
                 facebook_0: {
@@ -47,6 +47,11 @@ define('io.ox/portal/settings/defaults', [], function () {
                     plugin: 'plugins/portal/twitter/register',
                     color: 'pink',
                     index: 5
+                },
+                linkedin_0: {
+                    plugin: 'plugins/portal/linkedin/register',
+                    color: 'lightblue',
+                    index: 6
                 }
             }
         }
