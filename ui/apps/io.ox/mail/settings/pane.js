@@ -52,7 +52,7 @@ define('io.ox/mail/settings/pane',
 
             TITLE_THREADVIEW: gt('Thread view'),
             THREADVIEW_INBOX: gt('Enabled for inbox only'),
-            THREADVIEW_ON: gt('Enabled'),
+            THREADVIEW_ON: gt('Enabled for all mail folders'),
             THREADVIEW_OFF: gt('Disabled')
         },
 
