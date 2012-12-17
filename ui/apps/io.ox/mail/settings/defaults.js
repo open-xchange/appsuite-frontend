@@ -11,10 +11,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/settings/defaults',
-       ['io.ox/mail/util'],
-
-function (util) {
+define('io.ox/mail/settings/defaults', ['io.ox/mail/util'], function (util) {
 
     'use strict';
 
@@ -35,7 +32,8 @@ function (util) {
             'displayEmomticons': false,
             'isColorQuoted': false,
             'selectFirstMessage': true,
-            'defaultSignature': false
+            'defaultSignature': false,
+            'threadView': 'inbox'
         };
 
     return settingsDefaults;

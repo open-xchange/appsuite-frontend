@@ -21,6 +21,7 @@ define('io.ox/mail/settings/pane',
 
 
     var mailSettings =  settings.createModel(mailSettingsModel),
+
         staticStrings =  {
             TITLE_MAIL: gt('Mail'),
             TITLE_COMMON: gt('Common'),
@@ -47,8 +48,14 @@ define('io.ox/mail/settings/pane',
             ALLOW_HTML: gt('Allow html formatted E-Mails'),
             BLOCK_PRE: gt('Block pre-loading of externally linked images'),
             DISPLAY_EMOTICONS: gt('Display emoticons as graphics in text E-Mails'),
-            COLOR_QUOTED: gt('Color quoted lines')
+            COLOR_QUOTED: gt('Color quoted lines'),
+
+            TITLE_THREADVIEW: gt('Thread view'),
+            THREADVIEW_INBOX: gt('Enabled for inbox only'),
+            THREADVIEW_ON: gt('Enabled'),
+            THREADVIEW_OFF: gt('Disabled')
         },
+
         optionsAutoSave = [{label: gt('disabled'), value: 'disabled'},
                            {label: gt('1 minute'), value: '1_minute'},
                            {label: gt('3 minutes'), value: '3_minutes'},
