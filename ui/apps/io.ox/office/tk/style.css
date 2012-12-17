@@ -537,8 +537,9 @@ i.io-ox-office-icon {
     &.toolbox {
         display: block;
         .box-sizing(border-box);
+        .box-shadow(0 4px 8px fade(black, 20%));
         width: 150px;
-        padding: 8px 6px 0;
+        padding: 8px 6px 2px;
         text-align: center;
 
         > .group {
@@ -554,8 +555,8 @@ i.io-ox-office-icon {
             /* heading label of the tool box */
             &.heading {
                 margin-bottom: 2px;
-                padding-bottom: 2px;
-                border-bottom: 1px solid @pane-line-color;
+                //padding-bottom: 2px;
+                //border-bottom: 1px solid @pane-line-color;
                 line-height: 0;
                 text-align: center;
 
