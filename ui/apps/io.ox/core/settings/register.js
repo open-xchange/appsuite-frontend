@@ -12,6 +12,7 @@
  */
 
 define('io.ox/core/settings/register', ['io.ox/core/extensions', 'gettext!io.ox/core/settings'], function (ext, gt) {
+
 	'use strict';
 
 	ext.point("io.ox/settings/pane").extend({

@@ -132,7 +132,7 @@ define('io.ox/core/api/apps',
             );
         };
 
-    var cachedInstalled = [];
+    var cachedInstalled = null;
 
     // public module interface
     api = {
@@ -146,7 +146,8 @@ define('io.ox/core/api/apps',
         getByCategory: getByCategory,
 
         getInstalled: function (mode) {
-            if (mode === 'cached') {
+            // TODO: not this way please!
+            if (mode === 'cached' && cachedInstalled !== null) {
                 return $.Deferred().resolve(cachedInstalled);
             }
             var installedLoaded = [];
@@ -157,12 +158,9 @@ define('io.ox/core/api/apps',
                 }
             });
             return $.when.apply($, installedLoaded).pipe(function () {
-                var all = [];
-                _(arguments).each(function (apps) {
-                    all = all.concat(apps);
-                });
-                cachedInstalled = all;
-                return all;
+                return (cachedInstalled = _.chain(arguments).flatten().filter(function (app) {
+                    return 'requires' in app ? capabilities.has(app.requires) : true;
+                }).value());
             });
         },
 
