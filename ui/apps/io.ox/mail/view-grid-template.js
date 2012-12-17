@@ -61,7 +61,7 @@ define('io.ox/mail/view-grid-template',
                 fields.date.text(_.noI18n(util.getTime(data.received_date)));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
                 fields.flag.get(0).className = 'flag flag_' + (data.color_label || 0);
-                if (api.tracker.isPartiallyUnseen(data)) {
+                if (util.isUnseen(data) || api.tracker.isPartiallyUnseen(data)) {
                     this.addClass('unread');
                 }
                 if (util.byMyself(data)) {

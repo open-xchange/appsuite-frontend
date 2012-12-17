@@ -73,7 +73,7 @@ define("io.ox/tasks/actions",
             });
         }
     });
-    
+
     new Action('io.ox/tasks/actions/done', {
         requires: function (e) {
             return e.baton.data.status !== 3;
@@ -82,7 +82,7 @@ define("io.ox/tasks/actions",
             changeState(baton);
         }
     });
-    
+
     new Action('io.ox/tasks/actions/undone', {
         requires: function (e) {
             return e.baton.data.status === 3;
@@ -91,7 +91,7 @@ define("io.ox/tasks/actions",
             changeState(baton);
         }
     });
-    
+
     function changeState(baton) {
         var mods,
             data = baton.data;
@@ -111,7 +111,7 @@ define("io.ox/tasks/actions",
         require(['io.ox/tasks/api'], function (api) {
             api.update(data.last_modified || _.now(), data.id, mods.data, data.folder_id || data.folder)
                 .done(function (result) {
-                    api.trigger("update:" + data.folder_id + '.' + data.id);
+                    api.trigger("update:" + encodeURIComponent(data.folder_id + '.' + data.id));
                     notifications.yell('success', mods.label);
                 })
                 .fail(function (result) {
@@ -290,7 +290,7 @@ define("io.ox/tasks/actions",
         label: gt("Done"),
         ref: 'io.ox/tasks/actions/done'
     }));
-    
+
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'unDone',
         index: 310,
@@ -298,7 +298,7 @@ define("io.ox/tasks/actions",
         label: gt("Undone"),
         ref: 'io.ox/tasks/actions/undone'
     }));
-    
+
     //strange workaround because extend only takes new links instead of plain objects with draw method
     new Action('io.ox/tasks/actions/placeholder', {
         action: function (baton) {}
@@ -353,7 +353,7 @@ define("io.ox/tasks/actions",
                                         } else {
                                             modifications.start_date = modifications.end_date;
                                             api.update(_.now(), e.data.task.id, modifications, folder).done(function () {
-                                                api.trigger("update:" + folder + '.' + e.data.task.id);
+                                                api.trigger("update:" + encodeURIComponent(folder + '.' + e.data.task.id));
                                                 notifications.yell('success', gt('Changed due date'));
                                             });
                                         }
@@ -361,7 +361,7 @@ define("io.ox/tasks/actions",
                                 });
                             } else {
                                 api.update(_.now(), e.data.task.id, modifications, folder).done(function () {
-                                    api.trigger("update:" + folder + '.' + e.data.task.id);
+                                    api.trigger("update:" + encodeURIComponent(folder + '.' + e.data.task.id));
                                     notifications.yell('success', gt('Changed due date'));
                                 });
                             }

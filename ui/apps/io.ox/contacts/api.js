@@ -152,7 +152,7 @@ define('io.ox/contacts/api',
                                 contactPictures.clear()
                             )
                             .done(function () {
-                                api.trigger('update:' + _.cid(data), data);
+                                api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
                                 api.trigger('update', data);
                                 api.trigger('refresh.list');
                             });

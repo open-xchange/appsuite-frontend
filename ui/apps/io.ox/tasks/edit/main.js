@@ -48,7 +48,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
         app.markDirty = function () {
             taskState = app.STATES.DIRTY;
         };
-        
+
         app.isDirty = function () {
             var check = true;
             //marked as clean overides check
@@ -64,7 +64,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     defaults = model.defaults;
                 check = !(_.isEqual(data, defaults));
             }
-            
+
             //now check if something changed with the attachments
             var attachmentList = taskView.baton.attachmentList;
             if ((attachmentList.attachmentsToAdd.length > 0) || (attachmentList.attachmentsToDelete.length > 0)) {
@@ -158,7 +158,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             } else {
                 if (app.edit) {
                     require(['io.ox/tasks/api'], function (api) {
-                        api.trigger("update:" + taskModel.attributes.folder_id + '.' + taskModel.attributes.id);
+                        api.trigger("update:" + encodeURIComponent(taskModel.attributes.folder_id + '.' + taskModel.attributes.id));
                         clean();
                         model.factory.realm('edit').release();//old model no longer needed
                         def.resolve();

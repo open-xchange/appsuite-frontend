@@ -563,7 +563,7 @@ define('io.ox/mail/view-detail',
                             // which mail to focus?
                             for (i = pos = $i = list.length - 1; i >= 0; i--) {
                                 pos = i;
-                                if (util.isUnread(list[i])) { break; }
+                                if (util.isUnseen(list[i])) { break; }
                             }
                             // how many visible?
                             if (pos === 0) {
