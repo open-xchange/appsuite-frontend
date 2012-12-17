@@ -227,7 +227,7 @@ define('io.ox/files/api',
                 });
             });
     };
-    
+
     api.uploadNewVersionOldSchool = function (options) {
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
@@ -246,7 +246,7 @@ define('io.ox/files/api',
             options.json = { folder_id: options.folder };
         }
         formData.append($('<input>', {'type': 'hidden', 'name': 'json', 'value': JSON.stringify(options.json)}));
-        
+
         /*return http.UPLOAD({
                 module: 'files',
                 params: { action: 'update', timestamp: _.now(), id: options.id },
@@ -255,7 +255,7 @@ define('io.ox/files/api',
             });*/
         var tmpName = 'iframe_' + _.now(),
         frame = $('<iframe>', {'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
-    
+
         $('#tmp').append(frame);
         window.callback_update = function (data) {
                 var id = options.json.id || options.id,
@@ -269,7 +269,7 @@ define('io.ox/files/api',
                     return { folder_id: folder_id, id: id, timestamp: data.timestamp};
                 });
             };
-            
+
         formData.attr({
             method: 'post',
             enctype: 'multipart/form-data',
@@ -364,23 +364,22 @@ define('io.ox/files/api',
     };
 
     api.versions = function (options) {
-        var getOptions = {action: 'versions'};
-        options = options || {};
+        options = _.extend({ action: 'versions' }, options);
         if (!options.id) {
             throw new Error('Please specify an id for which to fetch versions');
         }
-        getOptions.id = options.id;
-        return api.caches.versions.get(options.id).pipe(function (data) {
+        var id = String(options.id);
+        return api.caches.versions.get(id).pipe(function (data) {
             if (data !== null) {
                 return data;
             } else {
                 return http.GET({
-                    module: 'infostore',
-                    params: getOptions,
+                    module: 'files',
+                    params: options,
                     appendColumns: true
                 })
                 .done(function (data) {
-                    api.caches.versions.add(String(options.id), data);
+                    api.caches.versions.add(id, data);
                 });
             }
         });
