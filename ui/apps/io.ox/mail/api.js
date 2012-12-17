@@ -245,13 +245,9 @@ define("io.ox/mail/api",
         },
         pipe: {
             all: function (response, opt) {
-                // debug flags
-//                _(response.data.slice(0, 7)).each(function (obj, i) {
-//                    console.warn('server > all', i, _.cid(obj), 'seen?', (obj.flags & 32) === 32);
-//                });
                 // reset tracker! if we get a seen mail here, although we have it in 'explicit unseen' hash,
                 // another devices might have set it back to seen.
-                tracker.reset(response.data);
+                tracker.reset(response.data || response); // threadedAll || all
                 return response;
             },
             get: function (data, options) {
