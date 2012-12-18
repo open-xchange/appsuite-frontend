@@ -36,7 +36,8 @@
     // dynamically concatenated files.
     (function () {
         function defaultImpl(name, parentRequire, load, config) {
-            $.ajax({ url: config.baseUrl + name, dataType: "text" }).done(load);
+            $.ajax({ url: config.baseUrl + name, dataType: "text" })
+                .done(load).fail(load.error);
         };
         var req = require, oldload = req.load;
         if (STATIC_APPS) {
@@ -248,12 +249,20 @@
 define("gettext", function (gettext) {
     return {
         load: function (name, parentRequire, load, config) {
+            var gt;
             require(["io.ox/core/gettext"]).pipe(function (gettext) {
+                gt = gettext;
                 assert(gettext.language.state() !== 'pending', _.printf(
                     'Invalid gettext dependency on %s (before login).', name));
                 return gettext.language;
             }).done(function (language) {
-                parentRequire([name + "." + language], load);
+                parentRequire([name + '.' + language], load, function (err) {
+                    load(gt(name + '.' + language, {
+                        nplurals: 2,
+                        plural: 'n != 1',
+                        dictionary: {}
+                    }));
+                });
             });
         }
     };
