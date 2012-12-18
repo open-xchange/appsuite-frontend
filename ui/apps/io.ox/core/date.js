@@ -969,7 +969,7 @@ define.async('io.ox/core/date',
     });
 
     // TODO: load the entire locale config
-    return $.when(api.getTimeZone('Europe/Berlin'), locale/*, config */)
+    return $.when(api.getTimeZone(config.get('timezone', 'Europe/Berlin')), locale/*, config */)
         .pipe(function (tz) {
             api.Local = tz;
             return api;

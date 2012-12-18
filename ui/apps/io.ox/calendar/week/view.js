@@ -71,11 +71,6 @@ define('io.ox/calendar/week/view',
                 .on('change', this.redrawAppointment, this);
             this.bindKeys();
             this.initSettings();
-//            settings.on('change:startTime', function (key) {
-//                console.log('settigns geaendert', key);
-//                this.initSettings();
-//                this.render();
-//            });
         },
 
         // set or get week reference start date
