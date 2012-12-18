@@ -311,6 +311,79 @@ $(document).ready(function () {
         };
     }());
 
+    function updateServerConfig(data) {
+        ox.serverConfig = data;
+        require(['io.ox/core/capabilities', 'io.ox/core/manifests']).done(function (capabilities, manifests) {
+            capabilities.reset();
+            manifests.reset();
+        });
+    }
+
+    function setFallbackConfig() {
+        var webmail = {  path: "io.ox/mail/main", requires: "webmail", title: "Mail" };
+        updateServerConfig({
+            buildDate: '',
+            contact: '',
+            copyright: '',
+            capabilities: [{ attributes: {}, backendSupport: false, id: 'webmail' }],
+            forgotPassword: false,
+            languages: {},
+            manifests: [webmail],
+            pageHeader: '',
+            pageHeaderPrefix: '',
+            pageTitle: '',
+            productName: '',
+            productNameMail: '',
+            serverVersion: '',
+            version: ''
+        });
+    }
+
+    function getCachedServerConfig(configCache, cacheKey, def) {
+        configCache.get(cacheKey).done(function (data) {
+            if (data !== null) {
+                updateServerConfig(data);
+            } else {
+                setFallbackConfig();
+            }
+            def.resolve();
+        });
+    }
+
+    function fetchServerConfig(cacheKey) {
+        var def = $.Deferred();
+        require(['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
+            var configCache = new cache.SimpleCache(cacheKey, true);
+            if (ox.online) {
+                http.GET({
+                    module: 'apps/manifests',
+                    params: {
+                        action: 'config'
+                    }
+                })
+                .done(function (data) {
+                    configCache.add(cacheKey, data);
+                    updateServerConfig(data);
+                    def.resolve();
+                })
+                .fail(function () {
+                    getCachedServerConfig(configCache, cacheKey, def);
+                });
+            } else {
+                getCachedServerConfig(configCache, cacheKey, def);
+            }
+        })
+        return def;
+    }
+
+    function fetchUserSpecificServerConfig() {
+        return fetchServerConfig('userconfig');
+    }
+
+    function fetchGeneralServerConfig() {
+        return fetchServerConfig('generalconfig');
+    }
+
     /**
      * Auto login
      */
@@ -340,40 +413,6 @@ $(document).ready(function () {
                 } else {
                     _.url.redirect('signin');
                 }
-            }
-
-            function fetchUserSpecificServerConfig() {
-                var def = $.Deferred();
-                require(['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
-                    var configCache = new cache.SimpleCache('serverconfig', true);
-                    if (ox.online) {
-                        http.GET({
-                            module: 'apps/manifests',
-                            params: {
-                                action: 'config'
-                            }
-                        }).done(function (data) {
-                            configCache.add('userconfig', data);
-                            ox.serverConfig = data;
-                            capabilities.reset();
-                            manifests.reset();
-                            def.resolve();
-                        }).fail(def.reject);
-                    } else {
-                        configCache.get('userconfig').done(function (data) {
-                            if (data) {
-                                ox.serverConfig = data;
-                                capabilities.reset();
-                                manifests.reset();
-                                def.resolve();
-                            } else {
-                                def.reject();
-                            }
-                        });
-                    }
-                    
-                }).fail(def.reject);
-                return def;
             }
 
             // got session via hash?
@@ -418,7 +457,7 @@ $(document).ready(function () {
         // shortcut
         var sc = ox.serverConfig, lang = sc.languages, node, id = "", footer = "";
         // show languages
-        if (lang !== false) {
+        if (!_.isEmpty(lang)) {
             node = $("#io-ox-language-list");
             for (id in lang) {
                 node.append(
@@ -526,44 +565,12 @@ $(document).ready(function () {
 
     var boot = function () {
 
-        // get pre core & server config -- and init http & session
-        require(['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/session'])
-            .done(function (http, cache) {
-                var configCache = new cache.SimpleCache('serverconfig', true),
-                    loadConfig = $.Deferred();
-
-                if (ox.online) {
-                    loadConfig = http.GET({
-                        module: 'apps/manifests',
-                        params: {
-                            action: 'config'
-                        }
-                    }).done(function (data) {
-                        configCache.add('generalconfig', data);
-                    });
-                } else {
-                    configCache.get('generalconfig').done(function (data) {
-                        if (data) {
-                            loadConfig.resolve(data);
-                        } else {
-                            loadConfig.resolve({
-                                capabilities: [],
-                                manifests: []
-                            });
-                        }
-                    });
-                }
-                
-
-                loadConfig.done(function (data) {
-                    // store server config
-                    ox.serverConfig = data;
-                    // set page title now
-                    document.title = _.noI18n(ox.serverConfig.pageTitle || '');
-                    // continue
-                    autoLogin();
-                });
-            });
+        fetchGeneralServerConfig().done(function () {
+            // set page title now
+            document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+            // continue
+            autoLogin();
+        });
     };
 
     // handle online/offline mode
