@@ -62,6 +62,15 @@
             i { font-size: 64px; line-height: 64px; color: #eee; }
         }
 
+        .readonly {
+            color: #888;
+
+            i {
+                font-style:normal;
+                color: #333;
+            }
+        }
+
         .entity {
             padding-left: 64px + 13;
             a { white-space: nowrap; }
