@@ -12,14 +12,15 @@
  */
 
 define('io.ox/core/settings/defaults', function (ext) {
+
 	'use strict';
+
 	var defaultLanguage = _(ox.serverConfig.languages).contains("en_US") ? 'en_US' : ox.serverConfig.languages[0];
 
 	return {
 		language: defaultLanguage,
 		refreshInterval: 5 * 60000,
 		autoStart: 'io.ox/mail/main',
-		autoOpenNotification: true
+		autoOpenNotification: false
 	};
-	
 });
