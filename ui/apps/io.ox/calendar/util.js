@@ -150,6 +150,10 @@ define("io.ox/calendar/util",
                 diff = 0,
                 diffWeek = 0;
 
+            if (d.getTime() < now.getTime()) {
+                d = now;
+            }
+
             // normalize
             d.setHours(0, 0, 0, 0);
             now.setHours(0, 0, 0, 0);
@@ -184,7 +188,7 @@ define("io.ox/calendar/util",
 
         getDateInterval: function (data) {
             var length = (data.end_date - data.start_date) / DAY >> 0;
-            if (data.full_time && length > 1) {
+            if (length > 1) {
                 // \u2013= &ndash;
                 return this.getDate(data.start_date) + " \u2013 " + this.getDate(data.end_date - 1);
             } else {
