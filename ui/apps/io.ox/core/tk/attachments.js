@@ -247,8 +247,8 @@ define('io.ox/core/tk/attachments',
         new links.Action('io.ox/core/tk/attachment/actions/open-attachment', {
             id: 'open',
             requires: 'one',
-            action: function (data) {
-                var url = attachmentAPI.getUrl(data, 'view');
+            action: function (baton) {
+                var url = attachmentAPI.getUrl(baton.data, 'view');
                 window.open(url);
             }
         });
@@ -256,8 +256,8 @@ define('io.ox/core/tk/attachments',
         new links.Action('io.ox/core/tk/attachment/actions/download-attachment', {
             id: 'download',
             requires: 'one',
-            action: function (data) {
-                var url = attachmentAPI.getUrl(data, 'download');
+            action: function (baton) {
+                var url = attachmentAPI.getUrl(baton.data, 'download');
                 window.open(url);
             }
         });
