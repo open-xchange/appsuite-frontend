@@ -70,7 +70,14 @@ define('plugins/notifications/tasks/register',
         },
 
         initialize: function () {
+            var self = this;
             this.collection.on('reset add remove', this.render, this);
+            //be responsive
+            api.on('delete', function (e, ids) {
+                _(ids).each(function (id) {
+                    self.collection.remove(self.collection._byId[id.id]);
+                });
+            });
         },
 
         render: function () {
@@ -267,7 +274,14 @@ define('plugins/notifications/tasks/register',
         id: 'io-ox-notifications-reminder-tasks',
 
         initialize: function () {
+            var self = this;
             this.collection.on('reset add remove', this.render, this);
+            //be responsive
+            api.on('delete', function (e, ids) {
+                _(ids).each(function (id) {
+                    self.collection.remove(self.collection._byId[id.id]);
+                });
+            });
         },
 
         render: function () {
@@ -359,7 +373,7 @@ define('plugins/notifications/tasks/register',
             'click [data-action="change_state"]': 'onChangeState'
             //'dispose': 'close'
         },
-
+        
         render: function () {
             var baton = ext.Baton({ model: this.model, view: this });
             ext.point('io.ox/core/notifications/task-confirmation/item').invoke('draw', this.$el, baton);
@@ -404,7 +418,8 @@ define('plugins/notifications/tasks/register',
                     .addButton('cancel', gt('Cancel')),
                     body = popup.getBody();
                 
-                body.append($("<h4>").text(_.noI18n(model.get("title"))));
+                body.append($("<h4>").text(_.noI18n(model.get("title") || '\u2014')),
+                            $('<div>').text(_.noI18n(model.get("note") || '\u2014')).css({color: '#888', 'margin-bottom': '5px'}));
                 editUtil.buildRow(body, [[editUtil.buildLabel(gt("Confirmation status", "confStateInput")),
                             $('<select class="stateselect" data-action="selector">').attr("id", "confStateInput").append(
                             $('<option>').text(gt('Confirm')),
@@ -422,6 +437,8 @@ define('plugins/notifications/tasks/register',
                                      data: {confirmation: state,
                                             confirmMessage: message}
                         }).done(function () {
+                            //update detailview
+                            api.trigger("update:" + model.get('folder_id') + '.' + model.get('id'));
                             model.collection.remove(model);
                         });
                     }
@@ -436,7 +453,14 @@ define('plugins/notifications/tasks/register',
         id: 'io-ox-notifications-confirmation-tasks',
 
         initialize: function () {
+            var self = this;
             this.collection.on('reset add remove', this.render, this);
+            //be responsive
+            api.on('delete', function (e, ids) {
+                _(ids).each(function (id) {
+                    self.collection.remove(self.collection._byId[id.id]);
+                });
+            });
         },
 
         render: function () {

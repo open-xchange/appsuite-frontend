@@ -137,6 +137,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
     };
     
     api.confirm =  function (options) { //options.id is the id of the task not userId
+        var key = (options.folder_id || options.folder) + "." + options.id;
         return http.PUT({
             module: "tasks",
             params: {
@@ -147,6 +148,9 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             },
             data: options.data, // object with confirmation attribute
             appendColumns: false
+        }).pipe(function (response) {
+            // update cache
+            return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
         });
     };
 
