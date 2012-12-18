@@ -23,7 +23,10 @@ define('io.ox/office/tk/view/component',
     'use strict';
 
     var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
+        KeyCodes = Utils.KeyCodes,
+
+        // CSS class for hidden components
+        HIDDEN_CLASS = 'hidden';
 
     // class Component ========================================================
 
@@ -53,6 +56,12 @@ define('io.ox/office/tk/view/component',
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of
      *      this instance.
+     *  @param {Function} [options.insertGroupHandler]
+     *      A function that will be called to insert a new group into the DOM
+     *      of the view component. Receives the group instance as first
+     *      parameter (not the DOM node of the group). If not specified, the
+     *      group node will be appended to the children of the root node of the
+     *      view component.
      *  @param {String} [options.visible]
      *      The key of the controller item that controls the visibility of the
      *      view component. The visibility will be bound to the 'enabled' state
@@ -79,6 +88,9 @@ define('io.ox/office/tk/view/component',
             // whether the application window has been shown at least once
             windowShown = false,
 
+            // callback for insertion of new groups
+            insertGroupHandler = Utils.getFunctionOption(options, 'insertGroupHandler'),
+
             // the controller item controlling the visibility of this view component
             visibleKey = Utils.getStringOption(options, 'visible');
 
@@ -89,7 +101,7 @@ define('io.ox/office/tk/view/component',
          * application window are both visible.
          */
         function initialize() {
-            if (windowShown && (node.css('display') !== 'none')) {
+            if (windowShown && self.isVisible()) {
                 deferredInit.resolve();
             }
         }
@@ -117,7 +129,11 @@ define('io.ox/office/tk/view/component',
             deferredInit.done(function () { group.trigger('init'); });
 
             // insert the group into this view component
-            node.append(group.getNode());
+            if (_.isFunction(insertGroupHandler)) {
+                insertGroupHandler.call(self, group);
+            } else {
+                node.append(group.getNode());
+            }
 
             // always forward 'cancel' events (e.g. closed drop-down menu)
             group.on('cancel', function () { self.trigger('cancel'); });
@@ -204,13 +220,20 @@ define('io.ox/office/tk/view/component',
         };
 
         /**
+         * Returns whether this view component is visible.
+         */
+        this.isVisible = function () {
+            return !node.hasClass(HIDDEN_CLASS);
+        };
+
+        /**
          * Displays this view component, if it is currently hidden.
          *
          * @returns {Component}
          *  A reference to this view component.
          */
         this.show = function () {
-            node.show();
+            node.removeClass(HIDDEN_CLASS);
             initialize();
             return this;
         };
@@ -222,7 +245,7 @@ define('io.ox/office/tk/view/component',
          *  A reference to this view component.
          */
         this.hide = function () {
-            node.hide();
+            node.addClass(HIDDEN_CLASS);
             return this;
         };
 
@@ -254,6 +277,23 @@ define('io.ox/office/tk/view/component',
                 }
             }
 
+            return this;
+        };
+
+        /**
+         * Adds the passed control group as a 'private group' to this view
+         * component. Change events of the group will not be forwarded to the
+         * listeners of this view component. Instead, the caller has to
+         * register a change listener at the group by itself.
+         *
+         * @param {Group} group
+         *  The control group object to be inserted.
+         *
+         * @returns {Component}
+         *  A reference to this view component.
+         */
+        this.addPrivateGroup = function (group) {
+            insertGroup(group);
             return this;
         };
 
@@ -303,8 +343,8 @@ define('io.ox/office/tk/view/component',
         };
 
         /**
-         * Creates a new dynamic label control, and inserts it into this view component. The label text will be updated according to calls
-         * of the method ToolBar.update().
+         * Creates a new label control, and inserts it into this view
+         * component.
          *
          * @param {String} key
          *  The unique key of the label.
@@ -353,6 +393,8 @@ define('io.ox/office/tk/view/component',
          *  A reference to this view component.
          */
         this.enable = function (key, state) {
+
+            // change own visibility if specified in options of own constructor
             if (key === visibleKey) {
                 if (_.isUndefined(state) || (state === true)) {
                     this.show();
@@ -360,9 +402,12 @@ define('io.ox/office/tk/view/component',
                     this.hide();
                 }
             }
+
+            // invoke the enable() method of all groups with the specified key
             if (key in groupsByKey) {
                 _(groupsByKey[key]).invoke('enable', state);
             }
+
             return this;
         };
 

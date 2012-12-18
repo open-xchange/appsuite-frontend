@@ -86,9 +86,6 @@ i.io-ox-office-icon {
 /* background color for panes */
 @app-pane-fill-color: #e5e5e5;
 
-/* line color for borders of pane child elements */
-@pane-line-color: #d5d5d5;
-
 /* base text color for controls */
 @control-text-color: #333333;
 
@@ -133,14 +130,21 @@ i.io-ox-office-icon {
 /* view components ========================================================= */
 
 .view-component {
+    
+    /* standard height of controls */
     @control-height: 32px;
     /* horizontal paddings in control elements */
-    @control-padding: 8px;
+    @control-padding: 9px;
     /* space between control caption elements */
     @caption-spacing: 5px;
 
     position: relative;
     padding: 0;
+
+    /* hidden components ('important' to overrule display modes from other rules) */
+    &.hidden {
+        display: none !important;
+    }
 
     /* disabled style for any element marked with the 'disabled' class */
     .disabled {
@@ -219,6 +223,7 @@ i.io-ox-office-icon {
         /* buttons --------------------------------------------------------- */
 
         a.button {
+            //.transition(background-color 0.1s linear);
             text-align: left;
 
             /* selected toggle/radio buttons */
@@ -229,15 +234,16 @@ i.io-ox-office-icon {
 
         /* keyboard/mouse effects (not for disabled buttons or groups) */
         &:not(.disabled) a.button:not(.disabled) {
-            &:hover { background-color: fade(black, 3%); }
-            &:focus { background-color: fade(black, 3%); }
-            &:active { background-color: fade(black, 6%); }
+
+            &:hover { background-color: fade(black, 5%); }
+            &:focus { background-color: fade(black, 5%); }
+            &:active { background-color: fade(black, 10%); }
 
             /* selected toggle/radio buttons */
             &.selected {
-                &:hover { background-color: darken(@button-selected-color, 3%); }
-                &:focus { background-color: darken(@button-selected-color, 3%); }
-                &:active { background-color: darken(@button-selected-color, 6%); }
+                &:hover { background-color: darken(@button-selected-color, 5%); }
+                &:focus { background-color: darken(@button-selected-color, 5%); }
+                &:active { background-color: darken(@button-selected-color, 10%); }
             }
         }
 
@@ -441,6 +447,9 @@ i.io-ox-office-icon {
                     @cell-width: 18px;
                     @cell-height: 16px;
 
+                    /* border color for the grid */
+                    @grid-line-color: #d5d5d5;
+
                     /* minimum dimensions for the outer container (in cells) */
                     min-width: 5 * (@cell-width + 1px) + 1px;
                     min-height: 3 * (@cell-height + 1px) + 1px;
@@ -460,7 +469,7 @@ i.io-ox-office-icon {
                             margin: 0;
                             padding: 0;
                             background-color: @pane-fill-color;
-                            border: 1px solid @pane-line-color;
+                            border: 1px solid @grid-line-color;
 
                             /* a row in the grid */
                             > div {
@@ -475,12 +484,12 @@ i.io-ox-office-icon {
                                     vertical-align: top;
 
                                     &:not(:last-child) {
-                                        border-right: 1px solid @pane-line-color;
+                                        border-right: 1px solid @grid-line-color;
                                     }
                                 }
 
                                 &:not(:last-child) > div {
-                                    border-bottom: 1px solid @pane-line-color;
+                                    border-bottom: 1px solid @grid-line-color;
                                 }
 
                                 /* height for last row (again, especially for Firefox) */
@@ -535,12 +544,29 @@ i.io-ox-office-icon {
     /* tool boxes ---------------------------------------------------------- */
 
     &.toolbox {
+
+        @heading-height: 22px;
+        @heading-padding: 8px;
+
         display: block;
         .box-sizing(border-box);
-        .box-shadow(0 4px 8px fade(black, 20%));
         width: 150px;
-        padding: 8px 6px 2px;
-        text-align: center;
+        padding: @heading-padding 6px 4px;
+
+        &.collapsed {
+            height: @heading-padding + @heading-height;
+            margin-bottom: @heading-padding;
+            overflow: hidden;
+        }
+
+        > div.top-shadow {
+            position: absolute;
+            top: 0;
+            height: 10px;
+            left: 0;
+            right: 0;
+            .vertical-gradient(darken(@pane-fill-color, 10%), @pane-fill-color);
+        }
 
         > .group {
             display: inline-block;
@@ -554,15 +580,12 @@ i.io-ox-office-icon {
 
             /* heading label of the tool box */
             &.heading {
-                margin-bottom: 2px;
-                //padding-bottom: 2px;
-                //border-bottom: 1px solid @pane-line-color;
-                line-height: 0;
-                text-align: center;
+                margin-bottom: 4px;
+                //border-bottom: 1px solid fade(black, 5%);
 
-                > label {
-                    height: auto;
-                    line-height: 14px;
+                > a.button {
+                    height: @heading-height;
+                    line-height: @heading-height;
                     font-size: 10px;
                     font-weight: bold;
                 }

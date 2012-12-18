@@ -18,24 +18,6 @@ define('io.ox/office/tk/view/view',
 
     'use strict';
 
-    // private global functions ===============================================
-
-    /**
-     * Translates the two passed boolean flags describing a pane position to
-     * the correct name of a window border side.
-     *
-     * @param {Boolean} horizontal
-     *  If true, selects horizontal panes (top or bottom); otherwise, selects
-     *  vertical panes (left or right).
-     *
-     * @param {Boolean} leading
-     *  If true, selects the leading pane (top or left); otherwise, selects the
-     *  trailing pane (bottom or right).
-     */
-    function getPaneSide(horizontal, leading) {
-        return horizontal ? (leading ? 'top' : 'bottom') : (leading ? 'left' : 'right');
-    }
-
     // class View =============================================================
 
     /**
@@ -64,8 +46,11 @@ define('io.ox/office/tk/view/view',
             // application model container node
             modelContainerNode = $('<div>').addClass('app-pane-model-container'),
 
-            // all pane instances, mapped by identifier, and by border side
-            panes = { all: {}, top: [], bottom: [], left: [], right: [] },
+            // all pane instances, in insertion order
+            panes = [],
+
+            // all pane instances, mapped by identifier
+            panesById = {},
 
             // inner shadows for application pane
             shadowNodes = {};
@@ -81,40 +66,22 @@ define('io.ox/office/tk/view/view',
             var // current offsets representing available space in the application window
                 offsets = { top: 0, bottom: 0, left: 0, right: 0 };
 
-            // updates the position of a single pane, and updates the 'offsets' object
-            function updatePane(pane, horizontal, leading) {
+            // update the position of all panes (updates the 'offsets' object accordingly)
+            _(panes).each(function (pane) {
 
                 var paneNode = pane.getNode(),
+                    paneSide = paneNode.data('pane-side'),
+                    horizontal = (paneSide === 'top') || (paneSide === 'bottom'),
+                    leading = (paneSide === 'top') || (paneSide === 'left'),
                     paneOffsets = null;
 
                 if (paneNode.css('display') !== 'none') {
                     paneOffsets = _.clone(offsets);
-                    paneOffsets[getPaneSide(horizontal, !leading)] = 'auto';
+                    paneOffsets[horizontal ? (leading ? 'bottom' : 'top') : (leading ? 'right' : 'left')] = 'auto';
                     paneNode.css(paneOffsets);
-                    offsets[getPaneSide(horizontal, leading)] += (horizontal ? paneNode.outerHeight() : paneNode.outerWidth());
+                    offsets[paneSide] += (horizontal ? paneNode.outerHeight() : paneNode.outerWidth());
                 }
-            }
-
-            // updates the top and bottom panes
-            function updateHorizontalPanes() {
-                _(panes.top).each(function (pane) { updatePane(pane, true, true); });
-                _(panes.bottom).each(function (pane) { updatePane(pane, true, false); });
-            }
-
-            // updates the left and right panes
-            function updateVerticalPanes() {
-                _(panes.left).each(function (pane) { updatePane(pane, false, true); });
-                _(panes.right).each(function (pane) { updatePane(pane, false, false); });
-            }
-
-            // start with panes located at the smaller sides of the window
-            if (win.nodes.main.width() < win.nodes.main.height()) {
-                updateHorizontalPanes();
-                updateVerticalPanes();
-            } else {
-                updateVerticalPanes();
-                updateHorizontalPanes();
-            }
+            });
 
             // update the application pane and the shadow nodes (jQuery interprets numbers as pixels automatically)
             appPane.getNode().css(offsets);
@@ -150,7 +117,7 @@ define('io.ox/office/tk/view/view',
          *  pane has been found.
          */
         this.getPane = function (id) {
-            return (id in panes.all) ? panes.all[id] : null;
+            return (id in panesById) ? panesById[id] : null;
         };
 
         /**
@@ -170,43 +137,41 @@ define('io.ox/office/tk/view/view',
          *  A reference to this instance.
          */
         this.addPane = function (id, pane, side) {
-            if (_.isArray(panes[side])) {
-                panes.all[id] = pane;
-                panes[side].push(pane);
-                win.nodes.main.append(pane.getNode().addClass(side));
-                windowResizeHandler();
-            }
+            panes.push(pane);
+            panesById[id] = pane;
+            win.nodes.main.append(pane.getNode().data('pane-side', side));
+            windowResizeHandler();
             return this;
         };
 
         this.showPane = function (id) {
-            if (id in panes.all) {
-                panes.all[id].getNode().show();
+            if (id in panesById) {
+                panesById[id].getNode().show();
                 windowResizeHandler();
             }
             return this;
         };
 
         this.hidePane = function (id) {
-            if (id in panes.all) {
-                panes.all[id].getNode().hide();
+            if (id in panesById) {
+                panesById[id].getNode().hide();
                 windowResizeHandler();
             }
             return this;
         };
 
         this.togglePane = function (id, state) {
-            if (id in panes.all) {
-                panes.all[id].getNode().toggle(state);
+            if (id in panesById) {
+                panesById[id].getNode().toggle(state);
                 windowResizeHandler();
             }
             return this;
         };
 
         this.destroy = function () {
-            _(panes.all).invoke('destroy');
+            _(panes).invoke('destroy');
             appPane.destroy();
-            win = appPane = panes = null;
+            win = appPane = panes = panesById = null;
         };
 
         // initialization -----------------------------------------------------

@@ -1609,7 +1609,7 @@ define('io.ox/office/tk/utils',
         // create a caption container if missing
         caption = control.children('div.caption');
         if (caption.length === 0) {
-            control.prepend(caption = $('<div>').addClass('caption'));
+            control.prepend(caption = $('<div>').addClass('caption unselectable'));
         }
 
         // remove the old caption spans
@@ -1727,7 +1727,7 @@ define('io.ox/office/tk/utils',
     Utils.createButton = function (options) {
 
         var // create the DOM anchor element representing the button
-            button = Utils.createControl('a', undefined, options).addClass('button');
+            button = Utils.createControl('a', { tabindex: 0 }, options).addClass('button');
 
         Utils.setControlCaption(button, options);
         return button;
