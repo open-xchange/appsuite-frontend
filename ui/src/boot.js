@@ -599,7 +599,9 @@ $(document).ready(function () {
     if (Modernizr.localstorage) {
         var ui = JSON.parse(localStorage.getItem('appsuite-ui') || '{}');
         if (ui.version !== ox.version) {
-            console.warn('clearing localStorage due to UI update');
+            if (ox.debug === true) {
+                console.warn('clearing localStorage due to UI update');
+            }
             localStorage.clear();
             localStorage.setItem('appsuite-ui', JSON.stringify({ version: ox.version }));
         }
