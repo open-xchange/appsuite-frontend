@@ -22,7 +22,7 @@ function () {
         interval: '30',
         startTime: '8',
         endTime: '18',
-        viewView: 'calendar',
+        viewView: 'week:workweek',
         showDeclinedAppointments: 'false',
         defaultReminder: '15',
         notifyNewModifiedDeleted: 'true',
