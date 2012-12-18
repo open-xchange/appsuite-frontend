@@ -57,9 +57,9 @@ define('io.ox/calendar/settings/pane',
             return array;
         },
 
-        optionsView = [{label: gt('Day'), value: 'day'},
-                       {label: gt('Workweek'), value: 'workweek'},
-                       {label: gt('Week'), value: 'week'},
+        optionsView = [{label: gt('Day'), value: 'week:day'},
+                       {label: gt('Workweek'), value: 'week:workweek'},
+                       {label: gt('Week'), value: 'week:week'},
                        {label: gt('Month'), value: 'month'},
                        {label: gt('List'), value: 'list'}],
 
