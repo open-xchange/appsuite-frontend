@@ -219,7 +219,7 @@ define('io.ox/core/api/folder',
                         appendColumns: true
                     })
                     .done(function (data) {
-                        // loop over folders to remove root & update cache
+                        // loop over folders to remove root & 1 cache
                         data = _(data).filter(function (folder) {
                             cache.add(folder.id, folder);
                             return folder.id !== '1';
@@ -418,6 +418,21 @@ define('io.ox/core/api/folder',
             })
             .fail(function (error) {
                 api.trigger('create:fail', error, opt.folder);
+            });
+        },
+
+        sync: function () {
+            // action=update doesn't inform us about new unread mails, so we need another approach
+            // get all folders from subfolder cache
+            return subFolderCache.keys().pipe(function (keys) {
+                // we can use http.pause() here to create a multiple once backend stops crashing on multiples
+                return $.when.apply($, _(keys).map(function (id) {
+                    return api.getSubFolders({ folder: id, cache: false }).done(function (list) {
+                        _(list).each(function (folder) {
+                            api.trigger('update:unread', folder.id, folder);
+                        });
+                    });
+                }));
             });
         },
 
@@ -882,6 +897,10 @@ define('io.ox/core/api/folder',
     }());
 
     Events.extend(api);
+
+    ox.on('refresh^', function () {
+        api.sync();
+    });
 
     return api;
 });
