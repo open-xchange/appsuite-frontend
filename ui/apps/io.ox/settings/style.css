@@ -192,3 +192,17 @@
 	height: 11px;
 	background-repeat: no-repeat;
 }
+
+.settings-detail-pane legend.sectiontitle {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-weight: 400;
+	display: block;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 20px;
+    font-size: 21px;
+    line-height: 40px;
+    color: #333;
+    border: 0;
+    border-bottom: 1px solid #E5E5E5;
+}
