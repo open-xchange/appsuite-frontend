@@ -40,6 +40,9 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'setting
         setCount: function (count) {
             if (this.model.get('count') < count) {
                 this.trigger('newNotifications');
+            } else //just trigger if count is set to 0, not if it was 0 already
+                if (count === 0 && this.model.get('count') > count) {
+                this.trigger('lastItemDeleted');
             }
             this.model.set('count', count);
         }
@@ -128,6 +131,8 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'setting
                     }
                 })
             );
+            
+            //auto open on new notification
             this.badges.push(badgeView);
             var set = settings.get('autoOpenNotification', true);
             function toggle(value) {
@@ -145,6 +150,10 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'setting
                 toggle(value);
             });
             
+            //close if count set to 0
+            badgeView.on('lastItemDeleted', function () {
+                self.hideList();
+            });
             
             // invoke plugins
             plugins.loading.done(function () {
