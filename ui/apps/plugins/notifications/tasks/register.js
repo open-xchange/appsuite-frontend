@@ -343,11 +343,7 @@ define('plugins/notifications/tasks/register',
                 $('<span class="end_date">').text(_.noI18n(task.end_date)),
                 $('<span class="status">').text(task.status).addClass(task.badge),
                 $('<div class="actions">').append(
-                    $('<select class="stateselect" data-action="selector">').append(
-                            $('<option>').text(gt('Confirm')),
-                            $('<option>').text(gt('Decline')),
-                            $('<option>').text(gt('Tentative'))),
-                    $('<button class="btn btn-inverse" data-action="change_state">').text(gt('Change state'))
+                    $('<button class="btn btn-inverse" data-action="change_state">').text(gt('Accept/Decline'))
                 )
             );
             task = null;
@@ -400,13 +396,36 @@ define('plugins/notifications/tasks/register',
 
         onChangeState: function (e) {
             e.stopPropagation();
-            var model = this.model,
-                state = this.$el.find(".stateselect").prop('selectedIndex') + 1;
-            api.confirm({id: model.get('id'),
-                         folder_id: model.get("folder_id"),
-                         data: {confirmation: state }
-            }).done(function () {
-                model.collection.remove(model);
+            var model = this.model;
+            require(['io.ox/core/tk/dialogs', 'io.ox/tasks/edit/util'], function (dialogs, editUtil) {
+                //build popup
+                var popup = new dialogs.ModalDialog()
+                    .addPrimaryButton('ChangeConfState', gt('Change state'))
+                    .addButton('cancel', gt('Cancel')),
+                    body = popup.getBody();
+                
+                body.append($("<h4>").text(_.noI18n(model.get("title"))));
+                editUtil.buildRow(body, [[editUtil.buildLabel(gt("Confirmation status", "confStateInput")),
+                            $('<select class="stateselect" data-action="selector">').attr("id", "confStateInput").append(
+                            $('<option>').text(gt('Confirm')),
+                            $('<option>').text(gt('Decline')),
+                            $('<option>').text(gt('Tentative')))],
+                            [editUtil.buildLabel(gt("Confirmation message", "confMessageInput")), $('<input>')
+                                 .attr({type: 'text', id: "confMessageInput"})]]);
+                //go
+                popup.show().done(function (action) {
+                    if (action === "ChangeConfState") {
+                        var state = body.find(".stateselect").prop('selectedIndex') + 1,
+                            message = body.find("#confMessageInput").val();
+                        api.confirm({id: model.get('id'),
+                                     folder_id: model.get("folder_id"),
+                                     data: {confirmation: state,
+                                            confirmMessage: message}
+                        }).done(function () {
+                            model.collection.remove(model);
+                        });
+                    }
+                });
             });
         }
     });
