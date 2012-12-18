@@ -21,7 +21,7 @@ define('plugins/portal/birthdays/register',
     'use strict';
 
     var WEEKS = 8,
-        RANGE = WEEKS * 7 * 24 * 60 * 60 * 1000,
+        RANGE = WEEKS * date.WEEK,
         sidepopup;
 
     function unifySpelling(name) {

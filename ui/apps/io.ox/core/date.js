@@ -968,7 +968,6 @@ define.async('io.ox/core/date',
         dayMap = makeMap(api.locale.days, api.locale.daysShort);
     });
 
-    // TODO: load the entire locale config
     return $.when(api.getTimeZone(config.get('timezone', 'Europe/Berlin')), locale/*, config */)
         .pipe(function (tz) {
             api.Local = tz;
