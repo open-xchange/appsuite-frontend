@@ -943,7 +943,7 @@ define("io.ox/mail/api",
         });
         // loop over list and check occurence via hash
         return _(list).filter(function (obj) {
-            var cid = _.cid(obj), found = cid in hash, length = obj.thread.length, s, entire;
+            var cid = _.cid(obj), found = cid in hash, length = obj.thread ? obj.thread.length : 1, s, entire;
             // case #1: found in hash; no thread
             if (found && length <= 1) {
                 return false;
