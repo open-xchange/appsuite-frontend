@@ -20,7 +20,6 @@ define("io.ox/calendar/view-grid-template",
 
     "use strict";
     var fnClickPerson = function (e) {
-        console.log('clicked person, ', e);
         e.preventDefault();
         ext.point("io.ox/core/person:action").each(function (ext) {
             _.call(ext.action, e.data, e);

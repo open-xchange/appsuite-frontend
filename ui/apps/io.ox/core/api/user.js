@@ -87,7 +87,7 @@ define("io.ox/core/api/user",
 
 
     api.editNewImage = function (o, changes, file) {
-        console.log("EDIT NEW IMAGE ENTERED");
+        // console.log("EDIT NEW IMAGE ENTERED");
         var form = new FormData();
         form.append('file', file);
         form.append('json', JSON.stringify(changes));
