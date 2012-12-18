@@ -207,21 +207,26 @@ $(document).ready(function () {
     changeLanguage = function (id) {
         // if the user sets a language on the login page, it will be used for the rest of the session, too
         return require(['io.ox/core/login.' + id]).done(function (gt) {
-            // get all nodes
-            $("[data-i18n]").each(function () {
-                var node = $(this),
-                    val = gt(node.attr("data-i18n")),
-                    target = node.attr("data-i18n-attr") || 'text';
-                switch (target) {
-                case 'value': node.val(val); break;
-                case 'text': node.text(val); break;
-                case 'label': node.contents().get(-1).nodeValue = val; break;
-                default: node.attr(target, val); break;
+            // 404 are a success for IE
+            // "except for some of the error ones on IE (since it triggers success callbacks on scripts that load 404s)
+            // (see https://github.com/jrburke/requirejs/wiki/Requirejs-2.0-draft)
+            if (gt !== undefined) {
+                // get all nodes
+                $("[data-i18n]").each(function () {
+                    var node = $(this),
+                        val = gt(node.attr("data-i18n")),
+                        target = node.attr("data-i18n-attr") || 'text';
+                    switch (target) {
+                    case 'value': node.val(val); break;
+                    case 'text': node.text(val); break;
+                    case 'label': node.contents().get(-1).nodeValue = val; break;
+                    default: node.attr(target, val); break;
+                    }
+                });
+                // update placeholder (IE9 fix)
+                if (_.browser.IE) {
+                    $('input[type=text], input[type=password]').val('').placeholder();
                 }
-            });
-            // update placeholder (IE9 fix)
-            if (_.browser.IE) {
-                $('input[type=text], input[type=password]').val('').placeholder();
             }
         });
     };
@@ -249,12 +254,18 @@ $(document).ready(function () {
         // look at navigator.language with en_US as fallback
         var navLang = (navigator.language || navigator.userLanguage).substr(0, 2),
             languages = ox.serverConfig.languages || {},
-            lang = "en_US", id = "";
+            lang = "en_US", id = "", found = false;
         for (id in languages) {
             // match?
             if (id.substr(0, 2) === navLang) {
                 lang = id;
+                found = true;
                 break;
+            }
+        }
+        if (!found) {
+            if (!_.isEmpty(languages)) {
+                lang = _(languages).keys()[0];
             }
         }
         return changeLanguage(lang);
@@ -520,7 +531,7 @@ $(document).ready(function () {
                 // use browser language
                 setDefaultLanguage()
             )
-            .done(function () {
+            .always(function () {
                 // show login dialog
                 $("#io-ox-login-blocker").on("mousedown", false);
                 $("#io-ox-login-form").on("submit", fnSubmit);

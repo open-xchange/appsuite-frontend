@@ -101,7 +101,7 @@ define('plugins/notifications/tasks/register',
             // this is a very strange API signature; just to have that said
             api.update(_.now(), obj.id, { status: 3, percent_completed: 100 }, obj.folder_id)
                 .done(function (result) {
-                    api.trigger('update:' + cid, result);
+                    api.trigger('update:' + encodeURIComponent(cid), result);
                 });
             model = this.collection.getByCid(item.attr('model-cid'));
             this.collection.remove(model);

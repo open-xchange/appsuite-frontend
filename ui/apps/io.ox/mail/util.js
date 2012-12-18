@@ -240,14 +240,8 @@ define('io.ox/mail/util',
             }, 0);
         },
 
-        isUnread: function (data) {
-            if (data && data.thread) {
-                return _(data.thread).reduce(function (memo, obj) {
-                    return memo || (obj.flags & 32) !== 32;
-                }, false);
-            } else {
-                return (data.flags & 32) !== 32;
-            }
+        isUnseen: function (data) {
+            return (data.flags & 32) !== 32;
         },
 
         isDeleted: function (data) {

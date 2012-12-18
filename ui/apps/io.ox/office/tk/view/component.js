@@ -53,6 +53,11 @@ define('io.ox/office/tk/view/component',
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of
      *      this instance.
+     *  @param {String} [options.visible]
+     *      The key of the controller item that controls the visibility of the
+     *      view component. The visibility will be bound to the 'enabled' state
+     *      of the respective controller item. If omitted, the view component
+     *      will be visible initially, and will not control its visibility.
      */
     function Component(app, options) {
 
@@ -72,7 +77,10 @@ define('io.ox/office/tk/view/component',
             deferredInit = $.Deferred(),
 
             // whether the application window has been shown at least once
-            windowShown = false;
+            windowShown = false,
+
+            // the controller item controlling the visibility of this view component
+            visibleKey = Utils.getStringOption(options, 'visible');
 
         // private methods ----------------------------------------------------
 
@@ -345,6 +353,13 @@ define('io.ox/office/tk/view/component',
          *  A reference to this view component.
          */
         this.enable = function (key, state) {
+            if (key === visibleKey) {
+                if (_.isUndefined(state) || (state === true)) {
+                    this.show();
+                } else {
+                    this.hide();
+                }
+            }
             if (key in groupsByKey) {
                 _(groupsByKey[key]).invoke('enable', state);
             }

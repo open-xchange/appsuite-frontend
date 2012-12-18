@@ -53,7 +53,7 @@ define("io.ox/core/extensions",
         _(registry).each(function (ext) {
             ext.clear();
         });
-        registry = null;
+        registry = {};
     });
 
     var Point = function (options) {

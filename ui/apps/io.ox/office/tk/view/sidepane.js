@@ -50,12 +50,17 @@ define('io.ox/office/tk/view/sidepane',
          *
          * @param {Object} [options]
          *  A map of options for the tool box in the side pane. Supports all
-         *  options for labels (see class Label for details).
+         *  options for labels (see class Label for details), and the following
+         *  additional options:
+         *  @param {String} [options.visible]
+         *      The key of the controller item that controls the visibility of
+         *      the tool box. The visibility will be bound to the 'enabled'
+         *      state of the respective controller item.
          */
         this.createToolBox = function (id, options) {
 
             var // create a new tool box object, and store it in the map
-                toolBox = toolBoxes[id] = new Component(app, { classes: 'toolbox'});
+                toolBox = toolBoxes[id] = new Component(app, { classes: 'toolbox', visible: Utils.getStringOption(options, 'visible') });
 
             // add the tool box to this side pane, add a heading label to the tool box
             this.addViewComponent(toolBox);

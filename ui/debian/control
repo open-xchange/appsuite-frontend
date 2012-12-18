@@ -10,7 +10,7 @@ Vcs-Browser: https://gitweb.open-xchange.com/?p=wd/frontend/web;a=summary
 
 Package: open-xchange-appsuite
 Architecture: all
-Depends: ${misc:Depends}, apache2, open-xchange-appsuite-l10n
+Depends: ${misc:Depends}, apache2, open-xchange-appsuite-l10n-en-us | open-xchange-appsuite-l10n
 Description: OX App Suite HTML5 client
 
 Package: open-xchange-appsuite-manifest

@@ -129,7 +129,7 @@ define("io.ox/core/api/factory",
                                             api.caches.get.remove(cid)
                                         )
                                         .done(function () {
-                                            api.trigger('update:' + cid, obj);
+                                            api.trigger('update:' + encodeURIComponent(cid), obj);
                                         });
                                     }
                                 })
@@ -248,7 +248,7 @@ define("io.ox/core/api/factory",
                 });
             },
 
-            updateCaches: function (ids) {
+            updateCaches: function (ids, silent) {
                 // be robust
                 ids = ids || [];
                 ids = _.isArray(ids) ? ids : [ids];
@@ -288,9 +288,11 @@ define("io.ox/core/api/factory",
                 // clear
                 return $.when.apply($, defs).done(function () {
                     // trigger item specific events to be responsive
-                    _(ids).each(function (obj) {
-                        api.trigger('delete:' + _.cid(obj));
-                    });
+                    if (!silent) {
+                        _(ids).each(function (obj) {
+                            api.trigger('delete:' + encodeURIComponent(_.cid(obj)));
+                        });
+                    }
                     hash = folders = defs = ids = null;
                 });
             },

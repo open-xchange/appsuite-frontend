@@ -349,7 +349,7 @@ define('io.ox/files/api',
                 if (!silent) {
                     if (type === 'change') {
                         return api.get(obj).done(function (data) {
-                            api.trigger('update update:' + _.cid(data), data);
+                            api.trigger('update update:' + encodeURIComponent(_.cid(data)), data);
                             api.trigger('refresh.list');
                         });
                     } else {

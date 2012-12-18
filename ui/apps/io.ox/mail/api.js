@@ -432,7 +432,7 @@ define("io.ox/mail/api",
         return http.resume().pipe(function () {
             // trigger update events
             _(list).each(function (obj) {
-                api.trigger('update:' + _.cid(obj), obj);
+                api.trigger('update:' + encodeURIComponent(_.cid(obj)), obj);
             });
             // return list
             return list;
@@ -526,6 +526,12 @@ define("io.ox/mail/api",
 
         list = [].concat(list);
 
+        _(list).each(function (obj) {
+            obj.flags = obj.flags & ~32;
+            api.caches.get.merge(obj);
+            api.caches.list.merge(obj);
+        });
+
         return $.when(
             tracker.update(list, function (obj) {
                 tracker.setUnseen(obj);
@@ -541,6 +547,12 @@ define("io.ox/mail/api",
     api.markRead = function (list) {
 
         list = [].concat(list);
+
+        _(list).each(function (obj) {
+            obj.flags = obj.flags | 32;
+            api.caches.get.merge(obj);
+            api.caches.list.merge(obj);
+        });
 
         return $.when(
             tracker.update(list, function (obj) {
