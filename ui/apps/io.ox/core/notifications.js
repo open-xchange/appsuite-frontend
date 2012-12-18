@@ -130,11 +130,22 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'setting
             );
             this.badges.push(badgeView);
             var set = settings.get('autoOpenNotification', true);
-            if (set) {
-                badgeView.on('newNotifications', function () {
-                    self.showList();
-                });
+            function toggle(value) {
+                if (value) {
+                    badgeView.on('newNotifications', function () {
+                        self.showList();
+                    });
+                } else {
+                    badgeView.off('newNotifications');
+                }
             }
+            
+            toggle(set);
+            settings.on('change:autoOpenNotification', function (e, value) {
+                toggle(value);
+            });
+            
+            
             // invoke plugins
             plugins.loading.done(function () {
                 ext.point('io.ox/core/notifications/register').invoke('register', self, self);
