@@ -26,9 +26,6 @@ var jshint = require("./lib/jshint").JSHINT;
 var less = require("./lib/build/less");
 var showdown = require('./lib/showdown/src/showdown');
 
-//temporary workaround for release-7.0.0
-i18n.languages.value = ['en_US', 'de_DE'];
-
 console.info("Build path: " + utils.builddir);
 
 function pad (n) { return n < 10 ? "0" + n : n; }
