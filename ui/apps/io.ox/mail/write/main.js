@@ -603,7 +603,9 @@ define('io.ox/mail/write/main',
                             data.sendtype = mailAPI.SENDTYPE.REPLY;
                             app.setMail({ data: data, mode: type, initial: true })
                             .done(function () {
-                                app.getEditor().focus();
+                                var ed = app.getEditor();
+                                ed.setCaretPosition(0);
+                                ed.focus();
                                 view.scrollpane.scrollTop(0);
                                 win.idle();
                                 def.resolve();
@@ -646,6 +648,8 @@ define('io.ox/mail/write/main',
                     data.sendtype = mailAPI.SENDTYPE.FORWARD;
                     app.setMail({ data: data, mode: 'forward', initial: true })
                     .done(function () {
+                        var ed = app.getEditor();
+                        ed.setCaretPosition(0);
                         focus('to');
                         win.idle();
                         def.resolve();

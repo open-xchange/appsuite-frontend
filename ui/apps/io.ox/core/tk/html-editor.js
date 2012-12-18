@@ -555,6 +555,10 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             }
         };
 
+        this.setCaretPosition = function (pos) {
+            $(ed.getDoc()).scrollTop(0);
+        };
+
         this.appendContent = function (str) {
             var content = this.getContent();
             str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
