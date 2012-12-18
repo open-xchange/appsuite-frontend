@@ -373,7 +373,7 @@ define('io.ox/core/permissions/permissions',
                             api.update({ folder: folder_id, changes: { permissions: collection.toJSON() }}).always(function () {
                                 collection.off();
                             });
-                        } else if (action === 'cancel') {
+                        } else if (action === 'cancel' || action === 'ok') {
                             collection.off();
                         }
                     });
