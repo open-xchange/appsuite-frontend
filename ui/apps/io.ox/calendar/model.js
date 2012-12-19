@@ -59,14 +59,17 @@ define('io.ox/calendar/model',
                     }
                 });
             },
-            getParticipants: function () {
+            getParticipants: function (options) {
+
                 if (this._participants) {
                     return this._participants;
                 }
                 var self = this;
+                var defaults = _.extend({sortBy: 'display_name'}, options);
                 var resetListUpdate = false;
                 var changeParticipantsUpdate = false;
                 var participants = this._participants = new pModel.Participants(this.get('participants'));
+
                 participants.invoke('fetch');
 
                 function resetList(participant) {

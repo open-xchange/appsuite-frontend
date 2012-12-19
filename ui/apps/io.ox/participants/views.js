@@ -94,8 +94,9 @@ define("io.ox/participants/views",
                 this.nodes.$img.addClass('contact-image');
                 var m = this.model.getEmail();
                 this.nodes.$mail.text(m);
-
-                this.nodes.$wrapper.data({email1: m}).addClass('halo-link');
+                if (this.options.halo) {
+                    this.nodes.$wrapper.data({email1: m}).addClass('halo-link');
+                }
                 break;
             case 2:
                 this.nodes.$img.addClass('group-image');
@@ -112,7 +113,7 @@ define("io.ox/participants/views",
             case 5:
                 this.nodes.$img.addClass('external-user-image');
                 this.nodes.$mail.text(this.model.getEmail() || gt('External user'));
-                if (this.model.getEmail()) {
+                if (this.model.getEmail() && this.options.halo) {
                     this.nodes.$wrapper.data({email1: this.model.getEmail()}).addClass('halo-link');
                 }
                 this.nodes.$extra.text(gt('External user'));
@@ -165,7 +166,8 @@ define("io.ox/participants/views",
             return new ParticipantEntryView({
                 model: participant,
                 baton: self.options.baton,
-                className: 'span6'
+                className: 'span6',
+                halo: true
             }).render().$el;
         },
         updateContainer: function () {
