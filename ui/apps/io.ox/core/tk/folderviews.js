@@ -528,7 +528,7 @@ define('io.ox/core/tk/folderviews',
                             )
                         );
                     })
-                    .addButton('cancel', 'Cancel')
+                    .addButton('cancel', gt('Cancel'))
                     .addPrimaryButton('add', gt('Add folder'))
                     .show(function () {
                         this.find('input').focus();
