@@ -70,16 +70,16 @@ define('io.ox/office/tk/view/view',
             _(panes).each(function (pane) {
 
                 var paneNode = pane.getNode(),
-                    paneSide = paneNode.data('pane-side'),
-                    horizontal = (paneSide === 'top') || (paneSide === 'bottom'),
-                    leading = (paneSide === 'top') || (paneSide === 'left'),
+                    panePosition = paneNode.data('pane-pos'),
+                    horizontal = (panePosition === 'top') || (panePosition === 'bottom'),
+                    leading = (panePosition === 'top') || (panePosition === 'left'),
                     paneOffsets = null;
 
                 if (paneNode.css('display') !== 'none') {
                     paneOffsets = _.clone(offsets);
                     paneOffsets[horizontal ? (leading ? 'bottom' : 'top') : (leading ? 'right' : 'left')] = 'auto';
                     paneNode.css(paneOffsets);
-                    offsets[paneSide] += (horizontal ? paneNode.outerHeight() : paneNode.outerWidth());
+                    offsets[panePosition] += (horizontal ? paneNode.outerHeight() : paneNode.outerWidth());
                 }
             });
 
@@ -129,18 +129,38 @@ define('io.ox/office/tk/view/view',
          * @param {Pane} pane
          *  The new view pane instance.
          *
-         * @param {String} side
+         * @param {String} position
          *  The border of the application window to attach the view pane to.
          *  Supported values are 'top', 'bottom', 'left', and 'right'.
          *
          * @returns {View}
          *  A reference to this instance.
          */
-        this.addPane = function (id, pane, side) {
+        this.addPane = function (id, pane, position) {
             panes.push(pane);
             panesById[id] = pane;
-            win.nodes.main.append(pane.getNode().data('pane-side', side));
-            windowResizeHandler();
+            win.nodes.main.append(pane.getNode());
+            return this.setPanePosition(id, position);
+        };
+
+        /**
+         * Changes the position of the pane.
+         *
+         * @param {String} id
+         *  The unique identifier of the view pane.
+         *
+         * @param {String} position
+         *  The border of the application window to attach the view pane to.
+         *  Supported values are 'top', 'bottom', 'left', and 'right'.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
+        this.setPanePosition = function (id, position) {
+            if (id in panesById) {
+                panesById[id].getNode().data('pane-pos', position);
+                windowResizeHandler();
+            }
             return this;
         };
 

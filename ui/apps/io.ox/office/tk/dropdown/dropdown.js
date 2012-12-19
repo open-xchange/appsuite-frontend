@@ -39,6 +39,9 @@ define('io.ox/office/tk/dropdown/dropdown',
      *
      * @constructor
      *
+     * @param {HTMLElement|jQuery} contentNode
+     *  The contents of the drop down menu.
+     *
      * @param {Object} [options]
      *  A map of options to control the properties of the drop-down button.
      *  Supports all generic button formatting options (see method

@@ -223,7 +223,6 @@ i.io-ox-office-icon {
         /* buttons --------------------------------------------------------- */
 
         a.button {
-            //.transition(background-color 0.1s linear);
             text-align: left;
 
             /* selected toggle/radio buttons */
@@ -544,20 +543,13 @@ i.io-ox-office-icon {
     /* tool boxes ---------------------------------------------------------- */
 
     &.toolbox {
-
         @heading-height: 22px;
         @heading-padding: 8px;
 
         display: block;
-        .box-sizing(border-box);
+        .box-sizing(content-box);
         width: 150px;
         padding: @heading-padding 6px 4px;
-
-        &.collapsed {
-            height: @heading-padding + @heading-height;
-            margin-bottom: @heading-padding;
-            overflow: hidden;
-        }
 
         > div.top-shadow {
             position: absolute;
@@ -578,10 +570,9 @@ i.io-ox-office-icon {
                 &.break { height: 2px; }
             }
 
-            /* heading label of the tool box */
+            /* heading button of the tool box, used to collapse/expand */
             &.heading {
                 margin-bottom: 4px;
-                //border-bottom: 1px solid fade(black, 5%);
 
                 > a.button {
                     height: @heading-height;
@@ -595,6 +586,17 @@ i.io-ox-office-icon {
             &.full-width, &.separator.break, &.heading {
                 display: block;
                 width: 100%;
+            }
+        }
+
+        &.collapsed {
+            padding-bottom: @heading-padding;
+            
+            > .group.heading {
+                margin-bottom: 0;
+
+                /* hide all groups following the heading button */
+                ~ * { display: none; }
             }
         }
     }
