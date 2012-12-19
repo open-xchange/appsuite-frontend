@@ -18,7 +18,7 @@ define('io.ox/portal/widgets',
 	'use strict';
 
 	// use for temporary hacks
-	var DEV_PLUGINS = [];
+	var DEV_PLUGINS = ['plugins/portal/contacts/register'];
 
     // application object
     var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
@@ -29,6 +29,14 @@ define('io.ox/portal/widgets',
     };
 
     var api = {
+
+        getAvailablePlugins: function () {
+            return availablePlugins;
+        },
+
+        getCollection: function () {
+            return collection;
+        },
 
         getSettings: function () {
             return _(settings.get('widgets/user', {}))
@@ -69,6 +77,10 @@ define('io.ox/portal/widgets',
             return 'black red orange lightgreen green lightblue blue purple pink gray'.split(' ');
         },
 
+        getTitle: function (data, fallback) {
+            return data.title || (data.props ? (data.props.description || data.props.title) : '') || fallback || '';
+        },
+
         add: function (type, plugin, props) {
 
             // find free id
@@ -86,7 +98,7 @@ define('io.ox/portal/widgets',
                 enabled: true,
                 id: id,
                 index: 0,
-                plugin: 'plugins/portal/' + plugin + '/register',
+                plugin: 'plugins/portal/' + (plugin || type) + '/register',
                 props: props || {},
                 type: type
             };

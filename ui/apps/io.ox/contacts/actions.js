@@ -259,6 +259,22 @@ define('io.ox/contacts/actions',
         }
     });
 
+    new Action('io.ox/contacts/actions/add-to-portal', {
+        requires: function (e) {
+            return e.collection.has('one') && !!e.context.mark_as_distributionlist;
+        },
+        action: function (baton) {
+            require(['io.ox/portal/widgets'], function (widgets) {
+                widgets.add('stickycontact', 'contacts', {
+                    id: baton.data.id,
+                    folder_id: baton.data.folder_id,
+                    title: baton.data.display_name
+                });
+                notifications.yell('success', gt('This distribution list has been added to the portal'));
+            });
+        }
+    });
+
     //  points
 
     ext.point('io.ox/contacts/detail/actions').extend(new links.InlineLinks({
@@ -324,8 +340,14 @@ define('io.ox/contacts/actions',
         index: INDEX += 100,
         prio: 'hi',
         label: gt('Delete'),
-        ref: 'io.ox/contacts/actions/delete',
-        special: 'danger'
+        ref: 'io.ox/contacts/actions/delete'
+    }));
+
+    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
+        id: 'add-to-portal',
+        index: INDEX += 100,
+        label: gt('Add to portal'),
+        ref: 'io.ox/contacts/actions/add-to-portal'
     }));
 
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({

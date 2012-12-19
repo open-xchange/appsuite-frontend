@@ -16,51 +16,25 @@ define('io.ox/portal/settings/pane',
        'io.ox/core/manifests',
        'io.ox/settings/utils',
        'io.ox/core/tk/dialogs',
+       'io.ox/portal/widgets',
        'settings!io.ox/portal',
        'gettext!io.ox/portal',
        'apps/io.ox/core/tk/jquery-ui.min.js',
-       'less!io.ox/portal/style.css'], function (ext, manifests, utils, dialogs, settings, gt) {
+       'less!io.ox/portal/style.css'], function (ext, manifests, utils, dialogs, widgets, settings, gt) {
 
     'use strict';
 
     var POINT = 'io.ox/portal/settings/detail', pane;
 
-    // application object
-    var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq(),
-        collection = new Backbone.Collection([]);
-
-    collection.comparator = function (a, b) {
-        return ext.indexSorter({ index: a.get('index') }, { index: b.get('index') });
-    };
-
-    var getWidgetSettings = function () {
-        return _(settings.get('widgets/user', {}))
-            .chain()
-            // map first since we need the object keys
-            .map(function (obj, id) {
-                obj.id = id;
-                obj.type = id.split('_')[0];
-                obj.props = obj.props || {};
-                return obj;
-            })
-            .filter(function (obj) {
-                return _(availablePlugins).contains(obj.plugin);
-            })
-            .value();
-    };
-
-    collection.reset(getWidgetSettings());
-
-    function loadPlugins() {
-        return require(availablePlugins);
-    }
+    var availablePlugins = widgets.getAvailablePlugins(),
+        collection = widgets.getCollection();
 
     ext.point(POINT).extend({
         draw: function () {
             var self = this;
             pane = $('<div class="io-ox-portal-settings">').busy();
             self.append(pane);
-            loadPlugins().done(function () {
+            widgets.loadPlugins().done(function () {
                 ext.point(POINT + '/pane').invoke('draw', pane);
                 pane.idle();
             });
@@ -77,48 +51,10 @@ define('io.ox/portal/settings/pane',
         }
     });
 
-    function getAllTypes() {
-        return _.chain(availablePlugins)
-            .map(function (id) {
-                var type = id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1').toLowerCase();
-                return ext.point('io.ox/portal/widget/' + type + '/settings').options();
-            })
-            .filter(function (obj) {
-                return obj.type !== undefined;
-            })
-            .value()
-            .sort(function (a, b) {
-                return a.title < b.title ? -1 : +1;
-            });
-    }
-
     function addWidget(e) {
-
         e.preventDefault();
-
-        // find free id
-        var type = $(this).attr('data-type'),
-            widgets = settings.get('widgets/user', {}),
-            widget,
-            i = 0, id = type + '_0';
-
-        while (id in widgets) {
-            id = type + '_' + (++i);
-        }
-
-        widget = {
-            color: 'lightblue',
-            enabled: true,
-            id: id,
-            index: 0,
-            plugin: 'plugins/portal/' + type + '/register',
-            props: {},
-            type: type
-        };
-
-        settings.set('widgets/user/' + id, widget).save();
-
-        collection.add(widget);
+        var type = $(this).attr('data-type');
+        widgets.add(type);
     }
 
     function drawAddButton() {
@@ -130,7 +66,7 @@ define('io.ox/portal/settings/pane',
                         $('<span class="caret">')
                     ),
                     $('<ul class="dropdown-menu">').append(
-                        _(getAllTypes()).map(function (options) {
+                        _(widgets.getAllTypes()).map(function (options) {
                             return $('<li>').append(
                                 $('<a>', { href: '#', 'data-type': options.type }).text(options.title)
                             );
@@ -181,10 +117,6 @@ define('io.ox/portal/settings/pane',
         };
     }());
 
-    function getTitle(data, view) {
-        return data.title || (data.props ? (data.props.description || data.props.title) : '') || view.options.title || '';
-    }
-
     ext.point(POINT + '/view').extend({
         draw: function (baton) {
 
@@ -196,7 +128,7 @@ define('io.ox/portal/settings/pane',
                 // widget title
                 $('<div>')
                 .addClass('widget-title pull-left widget-color-' + (data.color || 'black') + ' widget-' + data.type)
-                .text(getTitle(data, baton.view)),
+                .text(widgets.getTitle(data, baton.view.options.title)),
                 // close (has float: right)
                 $('<a href="#" class="close" data-action="remove">').html('&times;')
             );

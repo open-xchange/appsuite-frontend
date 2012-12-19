@@ -26,7 +26,8 @@ define('io.ox/portal/main',
 
     'use strict';
 
-    var READY = $.when();
+    var READY = $.when(),
+        DEV_PLUGINS = ['plugins/portal/contacts/register'];
 
     // time-based greeting phrase
     function getGreetingPhrase(name) {
@@ -109,7 +110,7 @@ define('io.ox/portal/main',
         win,
         appBaton = ext.Baton({ app: app }),
         sidepopup = new dialogs.SidePopup(),
-        availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq(),
+        availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
         collection = new Backbone.Collection([]);
 
     collection.comparator = function (a, b) {
