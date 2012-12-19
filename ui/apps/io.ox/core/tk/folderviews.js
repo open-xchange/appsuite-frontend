@@ -30,7 +30,7 @@ define('io.ox/core/tk/folderviews',
     var OPEN = 'icon-chevron-right',
         CLOSE = 'icon-chevron-down',
 
-        tmplFolder = $('<div>').addClass('folder selectable'),
+        tmplFolder = $('<div class="folder selectable">').append('<div class="folder-row">'),
         tmplSub = $('<div>').addClass('subfolders').hide(),
 
         refreshHash = {},
@@ -348,9 +348,9 @@ define('io.ox/core/tk/folderviews',
                 // store data
                 data = promise;
                 // create DOM nodes
-                nodes.arrow = $('<a href="#" class="folder-arrow"><i class="icon-chevron-right"></i></a>');
-                nodes.label = $('<span>').addClass('folder-label');
-                nodes.counter = $('<span>').addClass('folder-counter');
+                nodes.arrow = $('<div class="folder-arrow"><i class="icon-chevron-right"></i></div>');
+                nodes.label = $('<div class="folder-label">');
+                nodes.counter = $('<div class="folder-counter">').append('<span class="folder-counter-badge">');
                 nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', 'value': data.id }).css('float', 'right');
                 if (data.subscribed) {
                     nodes.subscriber.attr('checked', 'checked');
@@ -360,9 +360,9 @@ define('io.ox/core/tk/folderviews',
                 updateArrow();
                 // add to DOM
                 if (checkbox && (data.own_rights & 0x3f80)) {
-                    nodes.folder.append(nodes.arrow, nodes.counter, nodes.label, nodes.subscriber);
+                    nodes.folder.find('.folder-row').append(nodes.arrow, nodes.label, nodes.counter, nodes.subscriber);
                 } else {
-                    nodes.folder.append(nodes.arrow, nodes.counter, nodes.label);
+                    nodes.folder.find('.folder-row').append(nodes.arrow, nodes.label, nodes.counter);
                 }
                 // customize
                 self.customize();
@@ -412,7 +412,7 @@ define('io.ox/core/tk/folderviews',
         $(container)
             .addClass('io-ox-foldertree')
             // add tree container
-            .append(this.container = $('<div>'));
+            .append(this.container = $('<div class="folder-root">'));
 
         // selection
         Selection.extend(this, container) // not this.container!
@@ -823,11 +823,10 @@ define('io.ox/core/tk/folderviews',
             label.text(_.noI18n(data.title));
             // set counter (mail only)
             if (options.type === 'mail' && data.unread && !options.checkbox) {
-                label.css('fontWeight', 'bold');
-                counter.text(gt.noI18n(data.unread || '')).show();
+                this.addClass('show-counter');
+                counter.find('span').text(gt.noI18n(data.unread || ''));
             } else {
-                label.css('fontWeight', '');
-                counter.hide();
+                this.removeClass('show-counter');
             }
         }
     });

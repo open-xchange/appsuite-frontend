@@ -80,7 +80,7 @@ define('io.ox/portal/settings/pane',
     function getAllTypes() {
         return _.chain(availablePlugins)
             .map(function (id) {
-                var type = id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1');
+                var type = id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1').toLowerCase();
                 return ext.point('io.ox/portal/widget/' + type + '/settings').options();
             })
             .filter(function (obj) {
