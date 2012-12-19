@@ -612,8 +612,26 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         return function (o, type) {
             // process options
             o = processOptions(o, type);
+
             // vars
             var r, def = $.Deferred();
+
+            // whitelisting sessionless actions (config, login, autologin)
+            if (!o.params.session) {
+                // check whitelist
+                var whiteList = ['login#*', 'capabilities#*', 'apps/manifests#*', 'files#document', 'office#getFile'],
+                    req = o.module + '#' + o.params.action,
+                    found = _.find(whiteList, function (moduleAction) {
+                        var e = moduleAction.split('#');
+                        return (o.module === e[0] && (e[1] === '*' || o.params.action === e[1]));
+                    });
+                if (!found) {
+                    def.reject({ error: "invalid session" });
+                    ox.relogin(o, def);
+                    return def;
+                }
+            }
+
             // paused?
             if (paused === true) {
                 queue.push({ deferred: def, options: o });
