@@ -26,7 +26,7 @@ define('io.ox/core/settings/pane',
 
     var point = views.point("io.ox/core/settings/entry"),
         SettingView = point.createView({ tagName: 'form', className: 'form-horizontal'}),
-        reloadMe = ['language', 'timezone', 'theme', 'refreshInterval'];
+        reloadMe = ['language', 'timezone', 'theme', 'refreshInterval', 'autoOpenNotification'];
 
 
 
@@ -40,7 +40,10 @@ define('io.ox/core/settings/pane',
                 var showNotice = _(reloadMe).any(function (attr) {
                     return e.changes[attr];
                 });
-                if (showNotice) {
+                
+                if (e.changes.autoOpenNotification) {//AutonOpenNotification updates directly
+                    require("io.ox/core/notifications").yell("success", gt("The setting has been saved."));
+                } else if (showNotice) {
                     require("io.ox/core/notifications").yell("success", gt("The setting has been saved and will become active when you enter the application the next time."));
                 }
             });
@@ -167,7 +170,6 @@ define('io.ox/core/settings/pane',
                     this.nodes.element.attr('checked', value);
                 },
                 updateModel: function () {
-                    this.setValueInModel();
                     var value = this.nodes.element.attr('checked');
                     if (value) {
                         value = true;
