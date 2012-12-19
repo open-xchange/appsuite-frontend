@@ -150,7 +150,7 @@ define('io.ox/core/settings/pane',
             }));
         }
     }());
-    
+
     // Auto open notification area
     (function () {
         if (settings.isConfigurable('autoOpenNotificationarea')) {
