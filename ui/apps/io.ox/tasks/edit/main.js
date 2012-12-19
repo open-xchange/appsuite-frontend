@@ -103,7 +103,9 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             } else {
                 app.attributes.title = gt("Create task");
                 taskModel = model.factory.create();
-                taskModel.set('folder_id', options.folderid);
+                if (options.folderid) {//on reload there is no options.folderid so it would crash on saving. Leave default
+                    taskModel.set('folder_id', options.folderid);
+                }
                 taskView = view.getView(taskModel, win.nodes.main, app);
             }
             if (_.browser.IE === undefined || _.browser.IE > 9) {

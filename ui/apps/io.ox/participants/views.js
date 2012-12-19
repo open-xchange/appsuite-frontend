@@ -146,18 +146,28 @@ define("io.ox/participants/views",
         },
         render: function () {
             var self = this,
-                counter = 1;
-
+                counter = 1,
+                tasksMode = self.$el.parent().hasClass('task-edit-row');//tasks don't have an organizer
+            
             this.nodes = {};
-            // bring organizer up
-            this.collection.each(function (participant) {
-                if (participant.get('id') === self.options.baton.model.get('organizerId')) {
-                    self.nodes[0] = self.createParticipantNode(participant); // 0 is reserved for the organizer
-                } else {
+            
+            if (tasksMode) {
+                counter = 0;
+                this.collection.each(function (participant) {
                     self.nodes[counter] = self.createParticipantNode(participant);
                     counter++;
-                }
-            });
+                });
+            } else {
+                // bring organizer up
+                this.collection.each(function (participant) {
+                    if (participant.get('id') === self.options.baton.model.get('organizerId')) {
+                        self.nodes[0] = self.createParticipantNode(participant); // 0 is reserved for the organizer
+                    } else {
+                        self.nodes[counter] = self.createParticipantNode(participant);
+                        counter++;
+                    }
+                });
+            }
             var row = null;
             var c = 0;
             _(this.nodes).chain().values().each(function (node) {
