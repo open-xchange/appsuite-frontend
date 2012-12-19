@@ -417,7 +417,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             o.url += "?" + _.serialize(o.params);
             o.original = o.data;
             o.data = typeof o.data !== "string" ? JSON.stringify(o.data) : o.data;
-            o.contentType = "text/javascript; charset=UTF-8";
+            o.contentType = 'text/javascript; charset=UTF-8';
         }
         else if (type === "UPLOAD") {
             // POST with FormData object

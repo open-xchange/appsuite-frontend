@@ -26,8 +26,7 @@ define('io.ox/portal/main',
 
     'use strict';
 
-    var READY = $.when(),
-        DEV_PLUGINS = ['plugins/portal/helloworld/register', 'plugins/portal/updater/register'];
+    var READY = $.when();
 
     // time-based greeting phrase
     function getGreetingPhrase(name) {
@@ -110,7 +109,7 @@ define('io.ox/portal/main',
         win,
         appBaton = ext.Baton({ app: app }),
         sidepopup = new dialogs.SidePopup(),
-        availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
+        availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq(),
         collection = new Backbone.Collection([]);
 
     collection.comparator = function (a, b) {
@@ -291,6 +290,10 @@ define('io.ox/portal/main',
         );
     };
 
+    function getTitle(data, fallback) {
+        return data.title || (data.props ? (data.props.description || data.props.title) : '') || fallback || '';
+    }
+
     app.drawWidget = function (model, index) {
 
         index = index || 0;
@@ -307,7 +310,7 @@ define('io.ox/portal/main',
         model.set('baton', baton);
 
         // set title
-        title = node.find('h2.title').text(point.prop('title'));
+        title = node.find('h2.title').text(getTitle(model.toJSON(), point.prop('title')));
 
         // setup?
         if (requiresSetUp) {

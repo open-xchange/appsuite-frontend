@@ -388,6 +388,22 @@ define('io.ox/mail/actions',
         }
     });
 
+    new Action('io.ox/mail/actions/add-to-portal', {
+        require: function (e) {
+            return e.collection.has('one') && capabilities.has('!disablePortal');
+        },
+        action: function (baton) {
+            require(['io.ox/portal/widgets'], function (widgets) {
+                widgets.add('stickymail', 'mail', {
+                    id: baton.data.id,
+                    folder_id: baton.data.folder_id,
+                    title: baton.data.subject
+                });
+                notifications.yell('success', gt('This mail has been added to the portal'));
+            });
+        }
+    });
+
     // all actions
 
     new Action('io.ox/mail/actions/sendmail', {
@@ -733,6 +749,15 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 1200,
+        prio: 'lo',
+        id: 'add-to-portal',
+        label: gt('Add to portal'),
+        ref: 'io.ox/mail/actions/add-to-portal'
+    }));
+
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: 1300,
         prio: 'lo',
         id: 'saveEML',
         label: gt('Save as file'),

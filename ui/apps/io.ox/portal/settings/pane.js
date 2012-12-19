@@ -182,7 +182,7 @@ define('io.ox/portal/settings/pane',
     }());
 
     function getTitle(data, view) {
-        return data.title || (data.props ? data.props.description : '') || view.options.title || '';
+        return data.title || (data.props ? (data.props.description || data.props.title) : '') || view.options.title || '';
     }
 
     ext.point(POINT + '/view').extend({

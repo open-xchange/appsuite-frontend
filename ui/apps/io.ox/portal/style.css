@@ -148,10 +148,10 @@
         font-weight: bold;
         line-height: 26px;
         height: 26px;
-        overflow: hidden;
         cursor: default;
         z-index: 2;
         .transition(color 0.3s linear);
+        .ellipsis();
     }
 
     h2.action-link {
