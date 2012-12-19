@@ -115,7 +115,7 @@ define('io.ox/office/tk/view/alert',
         if (_.isNumber(duration) && duration >= 0) {
             _.delay(function () {
                 // application may already be dead...
-                if (Utils.contains(document, alert)) {
+                if (Utils.containsNode(document, alert)) {
                     alert.slideUp();
                     if (controller) {
                         controller.done();

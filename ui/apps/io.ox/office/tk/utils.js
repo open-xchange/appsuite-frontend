@@ -757,7 +757,7 @@ define('io.ox/office/tk/utils',
         innerNode = Utils.getDomNode(innerNode);
 
         // outer node must be an element; be sure that a node does not contain itself
-        if ((outerNode.nodeType !== 1) || (outerNode === innerNode)) {
+        if (((outerNode.nodeType !== 1) && (outerNode.nodeType !== 9)) || (outerNode === innerNode)) {
             return false;
         }
 
