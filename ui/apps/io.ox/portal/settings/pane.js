@@ -34,7 +34,7 @@ define('io.ox/portal/settings/pane',
             var self = this;
             pane = $('<div class="io-ox-portal-settings">').busy();
             self.append(pane);
-            widgets.loadPlugins().done(function () {
+            widgets.loadAllPlugins().done(function () {
                 ext.point(POINT + '/pane').invoke('draw', pane);
                 pane.idle();
             });
@@ -246,20 +246,18 @@ define('io.ox/portal/settings/pane',
     }
 
     function saveWidgets() {
-        // get latest values
-        var widgets = {};
-        collection.each(function (model) {
-            var id = model.get('id');
-            widgets[id] = model.toJSON();
-        });
+        var obj = widgets.toJSON();
         // update all indexes
         pane.find('.widget-settings-view').each(function (index) {
             var node = $(this), id = node.attr('data-widget-id');
-            if (id in widgets) {
-                widgets[id].index = index;
+            if (id in obj) {
+                console.log('reset index', id, index);
+                obj[id].index = index;
             }
         });
-        settings.set('widgets/user', widgets).save();
+        widgets.update(obj);
+        collection.trigger('sort');
+        widgets.save(obj);
     }
 
     ext.point(POINT + '/pane').extend({
@@ -287,16 +285,10 @@ define('io.ox/portal/settings/pane',
             });
 
             collection.on('change', function () {
-                // save settings
-                saveWidgets();
                 // re-render all views
                 _(views).each(function (view) {
                     view.render();
                 });
-            });
-
-            collection.on('remove', function (model) {
-                settings.remove('widgets/user/' + model.get('id')).save();
             });
 
             collection.on('add', function (model) {

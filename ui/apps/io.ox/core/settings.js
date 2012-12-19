@@ -23,7 +23,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
         try {
             return JSON.parse(JSON.stringify(obj));
         } catch (e) {
-            console.error(obj, JSON.stringify(obj), e, e.stack);
+            console.error(obj, e, e.stack);
             throw e;
         }
     };

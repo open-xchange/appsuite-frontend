@@ -18,7 +18,7 @@ define('io.ox/portal/widgets',
 	'use strict';
 
 	// use for temporary hacks
-	var DEV_PLUGINS = ['plugins/portal/contacts/register'];
+	var DEV_PLUGINS = ['plugins/portal/contacts/register', 'plugins/portal/files/register'];
 
     // application object
     var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
@@ -28,6 +28,10 @@ define('io.ox/portal/widgets',
         return ext.indexSorter({ index: a.get('index') }, { index: b.get('index') });
     };
 
+    function reduceBool(memo, bool) {
+        return memo && bool;
+    }
+
     var api = {
 
         getAvailablePlugins: function () {
@@ -36,6 +40,12 @@ define('io.ox/portal/widgets',
 
         getCollection: function () {
             return collection;
+        },
+
+        getEnabled: function () {
+            return collection.chain().filter(function (model) {
+                return !model.has('enabled') || model.get('enabled') === true;
+            });
         },
 
         getSettings: function () {
@@ -49,13 +59,21 @@ define('io.ox/portal/widgets',
                     return obj;
                 })
                 .filter(function (obj) {
-                    return (obj.enabled === undefined || obj.enabled === true) && _(availablePlugins).contains(obj.plugin);
+                    return _(availablePlugins).contains(obj.plugin);
                 })
                 .value();
         },
 
-        loadPlugins: function () {
+        loadAllPlugins: function () {
             return require(availablePlugins);
+        },
+
+        loadUsedPlugins: function () {
+            var usedPlugins = collection.pluck('plugin'),
+                dependencies = _(availablePlugins).intersection(usedPlugins);
+            return require(dependencies).done(function () {
+                api.removeDisabled();
+            });
         },
 
         getAllTypes: function () {
@@ -106,10 +124,51 @@ define('io.ox/portal/widgets',
             settings.set('widgets/user/' + id, widget).save();
 
             collection.add(widget);
+        },
+
+        removeDisabled: function () {
+            collection.remove(
+                collection.filter(function (model) {
+                    return ext.point('io.ox/portal/widget/' + model.get('type'))
+                        .invoke('isEnabled').reduce(reduceBool, true).value() === false;
+                })
+            );
+        },
+
+        toJSON: function () {
+            // get latest values
+            var widgets = {};
+            collection.each(function (model) {
+                var id = model.get('id');
+                widgets[id] = model.toJSON();
+                delete widgets[id].baton;
+            });
+            return widgets;
+        },
+
+        update: function (obj) {
+            collection.each(function (model) {
+                var id = model.get('id');
+                if (id in obj) {
+                    model.set(obj[id], { silent: true });
+                }
+            });
+        },
+
+        save: function (widgets) {
+            settings.set('widgets/user', widgets).save();
         }
     };
 
     collection.reset(api.getSettings());
+
+    collection.on('change', function () {
+        api.save(api.toJSON());
+    });
+
+    collection.on('remove', function (model) {
+        settings.remove('widgets/user/' + model.get('id')).save();
+    });
 
     return api;
 });

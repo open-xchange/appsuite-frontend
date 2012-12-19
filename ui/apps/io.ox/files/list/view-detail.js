@@ -26,7 +26,8 @@ define("io.ox/files/list/view-detail",
      "io.ox/core/tk/upload",
      "io.ox/core/api/user",
      "io.ox/core/api/folder",
-     "gettext!io.ox/files"], function (ext, links, layouts, actionPerformer, KeyListener, date, Event, actions, filesAPI, preview, upload, userAPI, folderAPI, gt) {
+     "gettext!io.ox/files",
+     "less!io.ox/files/style.less"], function (ext, links, layouts, actionPerformer, KeyListener, date, Event, actions, filesAPI, preview, upload, userAPI, folderAPI, gt) {
 
     "use strict";
 

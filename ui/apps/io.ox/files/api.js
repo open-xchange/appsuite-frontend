@@ -392,6 +392,7 @@ define('io.ox/files/api',
             name = (file.filename ? '/' + encodeURIComponent(file.filename) : '');
         switch (mode) {
         case 'open':
+        case 'view':
             return url + name + query + '&delivery=view';
         case 'download':
             return url + name + query + '&delivery=download';

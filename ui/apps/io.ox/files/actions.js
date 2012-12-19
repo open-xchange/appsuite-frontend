@@ -5,7 +5,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -16,8 +16,9 @@ define('io.ox/files/actions',
      'io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/core/capabilities',
+     'io.ox/core/notifications',
      'gettext!io.ox/files',
-     'settings!io.ox/files'], function (api, ext, links, capabilities, gt, settings) {
+     'settings!io.ox/files'], function (api, ext, links, capabilities, notifications, gt, settings) {
 
     'use strict';
 
@@ -349,6 +350,21 @@ define('io.ox/files/actions',
         multiple: copyMove('infostore', 'copy', gt('Copy'))
     });
 
+    new Action('io.ox/files/actions/add-to-portal', {
+        require: function (e) {
+            return e.collection.has('one') && capabilities.has('!disablePortal');
+        },
+        action: function (baton) {
+            require(['io.ox/portal/widgets'], function (widgets) {
+                widgets.add('stickyfile', 'files', {
+                    id: baton.data.id,
+                    folder_id: baton.data.folder_id,
+                    title: baton.data.filename || baton.data.title
+                });
+                notifications.yell('success', gt('This file has been added to the portal'));
+            });
+        }
+    });
 
     // version specific actions
 
@@ -525,6 +541,14 @@ define('io.ox/files/actions',
         prio: 'hi',
         label: gt("Delete"),
         ref: "io.ox/files/actions/delete"
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'add-to-portal',
+        index: 900,
+        prio: 'lo',
+        label: gt('Add to portal'),
+        ref: "io.ox/files/actions/add-to-portal"
     }));
 
     // version links
