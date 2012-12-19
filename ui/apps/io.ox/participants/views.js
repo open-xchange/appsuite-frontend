@@ -138,16 +138,25 @@ define("io.ox/participants/views",
         tagName: 'div',
         className: 'participantsrow',
         initialize: function (options) {
-
+            var self = this;
             options.collection.on('add', _.bind(this.onAdd, this));
             options.collection.on('remove', _.bind(this.onRemove, this));
             options.collection.on('reset', _.bind(this.updateContainer, this));
+
         },
         render: function () {
-            var self = this;
+            var self = this,
+                counter = 1;
+
             this.nodes = {};
+            // bring organizer up
             this.collection.each(function (participant) {
-                self.nodes[participant.id] = self.createParticipantNode(participant);
+                if (participant.get('id') === self.options.baton.model.get('organizerId')) {
+                    self.nodes[0] = self.createParticipantNode(participant); // 0 is reserved for the organizer
+                } else {
+                    self.nodes[counter] = self.createParticipantNode(participant);
+                    counter++;
+                }
             });
             var row = null;
             var c = 0;

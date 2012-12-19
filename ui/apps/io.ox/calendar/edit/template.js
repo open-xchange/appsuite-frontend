@@ -324,7 +324,8 @@ define('io.ox/calendar/edit/template',
         draw: function (baton) {
             this.append(new pViews.UserContainer({
                     collection: baton.model.getParticipants(),
-                    baton: baton
+                    baton: baton,
+                    sortBy: 'organizer'
                 }).render().$el);
         }
     });
