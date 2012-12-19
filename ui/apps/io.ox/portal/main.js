@@ -50,6 +50,13 @@ define('io.ox/portal/main',
         });
     }
 
+    function setColor(node, model) {
+        var color = node.attr('data-color');
+        node.removeClass('widget-color-' + color);
+        color = model.get('color') || 'black';
+        node.addClass('widget-color-' + color).attr('data-color', color);
+    }
+
     // portal header
     ext.point('io.ox/portal/sections').extend({
         id: 'header',
@@ -98,10 +105,11 @@ define('io.ox/portal/main',
                 'data-widget-id': baton.model.get('id'),
                 'data-widget-type': baton.model.get('type')
             })
-            .addClass('widget widget-color-' + (data.color || 'black') + ' pending')
+            .addClass('widget pending')
             .append(
                 $('<h2 class="title">').text('\u00A0')
             );
+            setColor(this, baton.model);
         }
     });
 
@@ -141,7 +149,7 @@ define('io.ox/portal/main',
                 app.getWidgetNode(model).hide();
             }
         } else if ('color' in e.changes) {
-            app.getWidgetNode(model).attr('class', 'widget widget-color-' + (model.get('color') || 'black'));
+            setColor(app.getWidgetNode(model), model);
         } else {
             app.drawWidget(model);
             app.refreshWidget(model);
