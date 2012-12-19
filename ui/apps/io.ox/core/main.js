@@ -412,9 +412,17 @@ define("io.ox/core/main",
             location.hash = '#!';
         }
 
+        var autoLaunchArray = function () {
+            if (settings.get('autoStart') === 'none') {
+                return [];
+            } else {
+                return [].concat(settings.get('autoStart'));
+            }
+        };
+
         var baton = ext.Baton({
             block: $.Deferred(),
-            autoLaunch: _.url.hash("app") ? _.url.hash("app").split(/,/) : [].concat(settings.get('autoStart'))
+            autoLaunch: _.url.hash("app") ? _.url.hash("app").split(/,/) : autoLaunchArray()
         });
 
         var getAutoLaunchDetails = function (str) {

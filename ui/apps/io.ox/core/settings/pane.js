@@ -141,6 +141,9 @@ define('io.ox/core/settings/pane',
             _(appAPI.getFavorites()).each(function (app) {
                 options[app.path] = gt(app.title);
             });
+
+            options.none = gt('None');
+
             point.extend(new forms.SelectControlGroup({
                 id: 'autoStart',
                 index: 500,
