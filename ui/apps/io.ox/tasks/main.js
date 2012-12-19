@@ -174,7 +174,7 @@ define("io.ox/tasks/main",
             );
         };
 
-        commons.wireGridAndSelectionChange(grid, 'io.ox/task', showTask, right);
+        commons.wireGridAndSelectionChange(grid, 'io.ox/tasks', showTask, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api, win);
