@@ -20,8 +20,8 @@ var _ = require("../underscore");
 /**
  * Default destination directory.
  * @type String
- * @name exports.builddir
  */
+exports.builddir = process.env.builddir || "build";
 
 /**
  * Resolves a filename relative to the build directory.
@@ -30,6 +30,18 @@ var _ = require("../underscore");
  * @return The filename in the build directory.
  */
 exports.dest = function(name) { return path.join(exports.builddir, name); };
+
+/**
+ * Resolves a filename relative to the source directory.
+ * When building an external app this is not the same as the current directory.
+ * @param {String} name The filename to resolve
+ * @type String
+ * @return The filename in the source directory.
+ */
+exports.source = function(name) {
+    if (process.env.BASEDIR) return process.env.BASEDIR + "/" + name;
+    return name;
+};
 
 /**
  * Number of generated files.
@@ -91,6 +103,7 @@ var topLevelTaskName = null;
  * task as dependencies.
  * @param {String} name An optional name of the new task. If not specified,
  * no new task is created and automatic dependencies won't be created anymore.
+ * All parameters are passed unmodified to the task() function.
  */
 exports.topLevelTask = function(name) {
     topLevelTaskName = name;
@@ -190,13 +203,14 @@ exports.file = function(dest, deps, callback, options, type) {
         type = options;
         options = {};
     }
+    dest = dest.replace(/\\/g, '/');
     var dir = path.dirname(dest);
     directory(dir);
     file(dest, deps, function() {
         callback.apply(this, arguments);
         counter++;
     }, options);
-    file(dest, [dir, "Jakefile.js"]);
+    file(dest, [dir, exports.source("Jakefile.js")]);
     var obj = { type: exports.fileType(type || path.extname(dest)) };
     var handlers = obj.type.getHooks("handler");
     for (var i = 0; i < handlers.length; i++) handlers[i].call(obj, dest);
@@ -228,6 +242,45 @@ exports.copyFile = function(src, dest, options) {
 };
 
 /**
+ * Helper function for concat and merge.
+ * @private
+ * @ignore
+ * @param merge The part doing the actual merging of files. Its parameters are
+ * this, the type from getType, the array of strings with contents of input
+ * files and the files and options parameters to merge/concat.
+ * @returns {Function} The merge or concat function for the API.
+ */
+function makeMerge(merge) {
+    return function (name, files, options) {
+        var srcDir = files.dir || "";
+        var dest = path.join(options && options.to || exports.builddir, name);
+        var destDir = path.dirname(dest);
+        var deps = [];
+        var type = getType(dest, options);
+        for (var i = 0; i < files.length; i++) {
+            if (typeof files[i] == "string") deps.push(path.join(srcDir, files[i]));
+        }
+        deps.push(destDir);
+        deps.push(exports.source("Jakefile.js"));
+        directory(destDir);
+        file(dest, deps, function() {
+            var data = [];
+            for (var i = 0; i < files.length; i++) {
+                var contents = typeof files[i] == "string" ?
+                    fs.readFileSync(path.join(srcDir, files[i]), "utf8") :
+                    files[i].getData();
+                var last = contents.charAt(contents.length - 1);
+                if (last != "\r" && last != "\n") contents += "\n";
+                data.push(contents);
+            }
+            fs.writeFileSync(dest, merge(this, type, data, files, options));
+            counter++;
+        });
+        type.handler(dest);
+    };
+}
+
+/**
  * Concatenates one or more files and strings to a single file.
  * Any missing directories are created automatically.
  * @param {String} name The name of the destination file relative to the build
@@ -246,66 +299,33 @@ exports.copyFile = function(src, dest, options) {
  * @param {String} options.type An optional file type. Defaults to the file
  * extension of the destination.
  */
-exports.concat = function(name, files, options) {
+exports.concat = makeMerge(function (self, type, data, files) {
     var srcDir = files.dir || "";
-    var dest = path.join(options && options.to || exports.builddir, name);
-    var destDir = path.dirname(dest);
-    var deps = [];
-    var type = getType(dest, options);
-    for (var i = 0; i < files.length; i++) {
-        if (typeof files[i] == "string") deps.push(path.join(srcDir, files[i]));
+    return type.filter ? type.filter(self, data.join(''), getSrc)
+                       : data.join('');
+    function getSrc(line) {
+        var defs = fileDefs();
+        var def = defs[_.sortedIndex(defs, line, getStart) - 1];
+        function getStart(x) {
+            return typeof x == 'number' ? x : x.start;
+        }
+        return { name: def.name, line: line - def.start };
     }
-    deps.push(destDir);
-    deps.push("Jakefile.js");
-    directory(destDir);
-    file(dest, deps, function() {
-        var data = [];
-        function fileDefs() {
-            if (fileDefs.value) return fileDefs.value;
-            fileDefs.value = [];
-            var start = 0;
-            for (var i = 0; i < data.length; i++) {
-                fileDefs.value.push({
-                    name: typeof files[i] !== "string" ? "" :
-                        path.join(srcDir, files[i]),
-                    start: start
-                });
-                start += data[i].split(/\r?\n|\r/g).length - 1;
-            }
-            return fileDefs.value;
+    function fileDefs() {
+        if (fileDefs.value) return fileDefs.value;
+        fileDefs.value = [];
+        var start = 0;
+        for (var i = 0; i < data.length; i++) {
+            fileDefs.value.push({
+                name: typeof files[i] !== 'string' ? '' :
+                    path.join(srcDir, files[i]),
+                start: start
+            });
+            start += data[i].split(/\r?\n|\r/g).length - 1;
         }
-        function getSrc(line) {
-            var defs = fileDefs();
-            var def = defs[_.sortedIndex(defs, line, getStart) - 1];
-            function getStart(x) {
-                return typeof x == "number" ? x : x.start;
-            }
-            return { name: def.name, line: line - def.start };
-        }
-        if (type.filter) {
-            for (var i = 0; i < files.length; i++) {
-                var contents = typeof files[i] == "string" ?
-                    fs.readFileSync(path.join(srcDir, files[i]), "utf8") :
-                    files[i].getData();
-                var last = contents.charAt(contents.length - 1);
-                if (last != "\r" && last != "\n") contents += "\n";
-                data.push(contents);
-            }
-            fs.writeFileSync(dest, type.filter(this, data.join(""), getSrc));
-        } else {
-            var fd = fs.openSync(dest, "w");
-            for (var i = 0; i < files.length; i++) {
-                var data = typeof files[i] == "string" ?
-                    fs.readFileSync(path.join(srcDir, files[i])) :
-                    new Buffer(files[i].getData());
-                fs.writeSync(fd, data, 0, data.length, null);
-            }
-            fs.closeSync(fd);
-        }
-        counter++;
-    });
-    type.handler(dest);
-};
+        return fileDefs.value;
+    }
+});    
 
 /**
  * Converts a string to a pseudo-file for use by concat().
@@ -315,6 +335,47 @@ exports.concat = function(name, files, options) {
  * concat(). It has one method: getData(), which returns the string s.
  */
 exports.string = function(s) { return { getData: function() { return s; } }; };
+
+/**
+ * Merges one or more files and strings to a single file using a custom merge
+ * function. The filters are applied to the contents of the input files
+ * individually.
+ * Any missing directories are created automatically.
+ * @param {String} name The name of the destination file relative to the build
+ * directory.
+ * @param {Array} files An array of things to merge.
+ * Plain strings are interpreted as filenames relative to files.dir,
+ * objects having a method getData should return the contents as a string.
+ * @param {String} files.dir An optional common parent directory. All filenames
+ * in files are relative to it. Defaults to the project root.
+ * @param {Object} options An optional object containing various options.
+ * @param {String} options.to An optional target directory. The target
+ * filenames are generated by resolving each filename from files relative to
+ * options.to instead of files.dir. Defaults to the build directory.
+ * @param {Function} options.filter An optional filter function which takes
+ * the contents of each input file as parameter and returns the filtered
+ * contents.
+ * @param {String} options.type An optional file type. Defaults to the file
+ * extension of the destination.
+ * @param {Function} options.merge The merge function which receives
+ * the filtered contents of all input files as an array of strings and
+ * the files parameter as parameters and should return the merged contents as
+ * a single string.
+ */
+exports.merge = makeMerge(function (self, type, data, files, options) {
+    if (type.filter) {
+        data = _.map(data, function (input, i) {
+            return type.filter(self, input, getSrc);
+            function getSrc(line) {
+                return {
+                    name: typeof files[i] === 'string' ? files[i] : '',
+                    line: line
+                };
+            }
+        });
+    }
+    return options.merge(data, files);
+});
 
 /**
  * Returns a list of filenames specified by a root directory and one or more
@@ -368,11 +429,12 @@ exports.gzip = function(src, dest, callback) {
  * (like Array.prototype.sort).
  * @param {Array} a The first array.
  * @param {Array} b The second array.
+ * @param {Function} cmp An optional comparison function like in Array.sort().
  * @type Array
  * @return A sorted array with elements from a and b, except for duplicates
  * from b. All entries from a are included. 
  */
-exports.merge = function(a, b, cmp) {
+exports.mergeArrays = function(a, b, cmp) {
     if (!cmp) cmp = function(x, y) { return x < y ? -1 : x > y ? 1 : 0; };
     var c = Array(a.length + b.length);
     var ai = 0, bi = 0, ci = 0;
@@ -447,4 +509,26 @@ exports.includes = {
         fs.writeFileSync(includesFile, JSON.stringify(includes));
     }
     
+};
+
+/**
+ * A filter which processes //@include directives and takes care of dependencies
+ */
+exports.includeFilter = function (data) {
+    var dest = this.task.name;
+    exports.includes.set(dest, []);
+    var self = this, line = 1;
+    return data.replace(/(\/\/@include\s+(.*?)(\S*)(;?))?\r?\n/g,
+        function(m, include, prefix, name, semicolon) {
+            if (!include) {
+                line++;
+                return m;
+            }
+            var dir = path.dirname(self.getSrc(line).name);
+            return (prefix || "") + exports.list(dir, name).map(function(file) {
+                var include = path.join(dir, file);
+                exports.includes.add(dest, include);
+                return fs.readFileSync(include, "utf8");
+            }).join("\n") + (semicolon + "\n");
+        });
 };

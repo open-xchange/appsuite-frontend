@@ -85,11 +85,15 @@ less.Parser = function Parser(env) {
             //
             less.Parser.importer(path, this.paths, function (e, root, contents) {
                 that.queue.splice(that.queue.indexOf(path), 1); // Remove the path from the queue
+
+                var imported = path in that.files;
+
                 that.files[path] = root;                        // Store the root
                 that.contents[path] = contents;
 
                 if (e && !that.error) { that.error = e }
-                callback(e, root);
+
+                callback(e, root, imported);
 
                 if (that.queue.length === 0) { finish() }       // Call `finish` if we're done importing
             }, env);
@@ -228,8 +232,8 @@ less.Parser = function Parser(env) {
         this.filename = e.filename || env.filename;
         this.index = e.index;
         this.line = typeof(line) === 'number' ? line + 1 : null;
-        this.callLine = e.call && (getLocation(e.call, input) + 1);
-        this.callExtract = lines[getLocation(e.call, input)];
+        this.callLine = e.call && (getLocation(e.call, input).line + 1);
+        this.callExtract = lines[getLocation(e.call, input).line];
         this.stack = e.stack;
         this.column = col;
         this.extract = [
@@ -763,7 +767,7 @@ less.Parser = function Parser(env) {
                     }
 
                     if (elements.length > 0 && ($(';') || peek('}'))) {
-                        return new(tree.mixin.Call)(elements, args, index, env.filename, important);
+                        return new(tree.mixin.Call)(elements, args || [], index, env.filename, important);
                     }
                 },
 
@@ -787,7 +791,7 @@ less.Parser = function Parser(env) {
                 // the `{...}` block.
                 //
                 definition: function () {
-                    var name, params = [], match, ruleset, param, value, cond;
+                    var name, params = [], match, ruleset, param, value, cond, variadic = false;
                     if ((input.charAt(i) !== '.' && input.charAt(i) !== '#') ||
                         peek(/^[^{]*(;|})/)) return;
 
@@ -796,21 +800,32 @@ less.Parser = function Parser(env) {
                     if (match = $(/^([#.](?:[\w-]|\\(?:[a-fA-F0-9]{1,6} ?|[^a-fA-F0-9]))+)\s*\(/)) {
                         name = match[1];
 
-                        while (param = $(this.entities.variable) || $(this.entities.literal)
-                                                                 || $(this.entities.keyword)) {
-                            // Variable
-                            if (param instanceof tree.Variable) {
-                                if ($(':')) {
-                                    value = expect(this.expression, 'expected expression');
-                                    params.push({ name: param.name, value: value });
+                        do {
+                            if (input.charAt(i) === '.' && $(/^\.{3}/)) {
+                                variadic = true;
+                                break;
+                            } else if (param = $(this.entities.variable) || $(this.entities.literal)
+                                                                         || $(this.entities.keyword)) {
+                                // Variable
+                                if (param instanceof tree.Variable) {
+                                    if ($(':')) {
+                                        value = expect(this.expression, 'expected expression');
+                                        params.push({ name: param.name, value: value });
+                                    } else if ($(/^\.{3}/)) {
+                                        params.push({ name: param.name, variadic: true });
+                                        variadic = true;
+                                        break;
+                                    } else {
+                                        params.push({ name: param.name });
+                                    }
                                 } else {
-                                    params.push({ name: param.name });
+                                    params.push({ value: param });
                                 }
                             } else {
-                                params.push({ value: param });
+                                break;
                             }
-                            if (! $(',')) { break }
-                        }
+                        } while ($(','))
+
                         expect(')');
 
                         if ($(/^when/)) { // Guard
@@ -820,7 +835,7 @@ less.Parser = function Parser(env) {
                         ruleset = $(this.block);
 
                         if (ruleset) {
-                            return new(tree.mixin.Definition)(name, params, ruleset, cond);
+                            return new(tree.mixin.Definition)(name, params, ruleset, cond, variadic);
                         } else {
                             restore();
                         }
@@ -916,10 +931,6 @@ less.Parser = function Parser(env) {
                     }
                     while (input.charAt(i) === ' ') { i++ }
                     return new(tree.Combinator)(match);
-                } else if (c === ':' && input.charAt(i + 1) === ':') {
-                    i += 2;
-                    while (input.charAt(i) === ' ') { i++ }
-                    return new(tree.Combinator)('::');
                 } else if (input.charAt(i - 1) === ' ') {
                     return new(tree.Combinator)(" ");
                 } else {
@@ -937,6 +948,12 @@ less.Parser = function Parser(env) {
             //
             selector: function () {
                 var sel, e, elements = [], c, match;
+
+                if ($('(')) {
+                    sel = $(this.entity);
+                    expect(')');
+                    return new(tree.Selector)([new(tree.Element)('', sel, i)]);
+                }
 
                 while (e = $(this.element)) {
                     c = input.charAt(i);
@@ -993,7 +1010,7 @@ less.Parser = function Parser(env) {
                 }
 
                 if (selectors.length > 0 && (rules = $(this.block))) {
-                    return new(tree.Ruleset)(selectors, rules);
+                    return new(tree.Ruleset)(selectors, rules, env.strictImports);
                 } else {
                     // Backtrack
                     furthest = i;
@@ -1038,17 +1055,18 @@ less.Parser = function Parser(env) {
             //
             "import": function () {
                 var path, features, index = i;
-                if ($(/^@import\s+/) &&
-                    (path = $(this.entities.quoted) || $(this.entities.url))) {
+                var dir = $(/^@import(?:-(once))?\s+/);
+
+                if (dir && (path = $(this.entities.quoted) || $(this.entities.url))) {
                     features = $(this.mediaFeatures);
                     if ($(';')) {
-                        return new(tree.Import)(path, imports, features, index);
+                        return new(tree.Import)(path, imports, features, (dir[1] === 'once'), index);
                     }
                 }
             },
 
             mediaFeature: function () {
-                var nodes = [];
+                var e, p, nodes = [];
 
                 do {
                     if (e = $(this.entities.keyword)) {
@@ -1074,22 +1092,29 @@ less.Parser = function Parser(env) {
             },
 
             mediaFeatures: function () {
-                var f, features = [];
-                while (f = $(this.mediaFeature)) {
-                    features.push(f);
-                    if (! $(',')) { break }
-                }
+                var e, features = [];
+                
+                do {
+                  if (e = $(this.mediaFeature)) {
+                      features.push(e);
+                      if (! $(',')) { break }
+                  } else if (e = $(this.entities.variable)) {
+                      features.push(e);
+                      if (! $(',')) { break }
+                  }
+                } while (e);
+                
                 return features.length > 0 ? features : null;
             },
 
             media: function () {
-                var features;
+                var features, rules;
 
                 if ($(/^@media/)) {
                     features = $(this.mediaFeatures);
 
                     if (rules = $(this.block)) {
-                        return new(tree.Directive)('@media', rules, features);
+                        return new(tree.Media)(rules, features);
                     }
                 }
             },

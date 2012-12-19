@@ -15,14 +15,28 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
 
     'use strict';
 
-    var setSession = function (session) {
-            ox.session = session;
-        },
+    var TIMEOUTS = { AUTOLOGIN: 5000, LOGIN: 10000 };
 
-        setUser = function (username) {
-            ox.user = username.indexOf('@') > -1 ?
-                username : username + '@' + ox.serverConfig.defaultContext;
-        };
+    var getBrowserLanguage = function () {
+        var language = (navigator.language || navigator.userLanguage).substr(0, 2),
+            languages = ox.serverConfig.languages || {};
+        return _.chain(languages).keys().find(function (id) {
+                return id.substr(0, 2) === language;
+            }).value();
+    };
+
+    var check = function (language) {
+        var languages = ox.serverConfig.languages || {};
+        return language in languages ? language : false;
+    };
+
+    var set = function (data) {
+        ox.session = data.session || '';
+        ox.user = data.user; // might have a domain; depends on what the user entered on login
+        ox.user_id = data.user_id || 0;
+        // if the user has set the language on the login page, use this language instead of server settings lang
+        ox.language = ox.forcedLanguage || check(data.locale) || check(getBrowserLanguage()) || 'en_US';
+    };
 
     var that = {
 
@@ -33,17 +47,13 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                 appendColumns: false,
                 appendSession: false,
                 processResponse: false,
-                timeout: 3000, // just try that for 3 secs
+                timeout: TIMEOUTS.AUTOLOGIN,
                 params: {
                     action: 'autologin',
-                    client: 'com.openexchange.ox.gui.dhtml'
+                    client: that.client()
                 }
             })
-            .done(function (data) {
-                // store session
-                ox.session = data.session;
-                ox.user = data.user;
-            });
+            .done(set);
         },
 
         login: (function () {
@@ -52,7 +62,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
 
             return function (username, password, store) {
 
-                var def = $.Deferred();
+                var def = $.Deferred(), multiple = [];
 
                 // online?
                 if (ox.online) {
@@ -65,6 +75,16 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                             pending = null;
                         });
                         // POST request
+                        if (ox.forcedLanguage) {
+                            multiple.push({
+                                module: 'jslob',
+                                action: 'update',
+                                id: 'io.ox/core',
+                                data: {
+                                    language: ox.forcedLanguage
+                                }
+                            });
+                        }
                         http.POST({
                             module: 'login',
                             appendColumns: false,
@@ -73,18 +93,21 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                             params: {
                                 action: 'login',
                                 name: username,
-                                password: password
+                                password: password,
+                                client: that.client(),
+                                timeout: TIMEOUTS.LOGIN,
+                                multiple: JSON.stringify(multiple)
                             }
                         })
                         .done(function (data) {
                             // store session
-                            setSession(data.session);
-                            setUser(username);
+                            set(data);
                             // set permanent cookie
                             if (store) {
-                                that.store().done(function () {
+                                that.store().always(function (e) {
+                                    // we don't care if this fails
                                     def.resolve(data);
-                                }).fail(def.reject);
+                                });
                             } else {
                                 def.resolve(data);
                             }
@@ -93,8 +116,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                     }
                 } else {
                     // offline
-                    setSession('offline');
-                    setUser(username);
+                    set({ session: 'offline', user: username });
                     def.resolve({ session: ox.session, user: ox.user });
                 }
 
@@ -128,6 +150,10 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
             } else {
                 return $.Deferred().resolve();
             }
+        },
+
+        client: function () {
+            return 'open-xchange-appsuite';
         }
     };
 

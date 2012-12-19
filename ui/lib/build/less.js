@@ -25,17 +25,24 @@ function noChildren() { return []; }
     less.tree[name].prototype.getChildren = noChildren;
 });
 less.tree.Alpha.prototype.getChildren =
+    less.tree.Assignment.prototype.getChildren =
+    less.tree.Paren.prototype.getChildren =
     less.tree.Rule.prototype.getChildren = function() { return [this.value]; };
 less.tree.Call.prototype.getChildren = function() { return this.args; };
+less.tree.Condition.prototype.getChildren =
+    function() { return [this.lvalue, this.rvalue]; };
 less.tree.Directive.prototype.getChildren =
     function() { return [this.ruleset || this.value]; };
 less.tree.Element.prototype.getChildren =
     function() { return [this.combinator]; };
 less.tree.Expression.prototype.getChildren =
     less.tree.Value.prototype.getChildren = function() { return this.value; };
-less.tree.Import.prototype.getChildren = function() { return [this._path]; };
+less.tree.Import.prototype.getChildren =
+    function() { return [this._path, this.features]; };
+less.tree.Media.prototype.getChildren =
+    function() { return [this.features, this.ruleset]; };
 less.tree.mixin.Call.prototype.getChildren =
-    function() { return [].concat(this.selector, this.args); };
+    function() { return [].concat(this.selector, this.arguments); };
 less.tree.mixin.Definition.prototype.getChildren = function() {
     return this.selectors.concat(_.compact(_.pluck(this.params, "value")),
                                  this.rules);
@@ -61,10 +68,13 @@ less.tree.URL.prototype.getChildren =
             _.map(defs[i], function(field) {
                 switch (field.charAt(0)) {
                 case "!":
-                    return "this." + field.slice(1) + ".clone()";
+                    return "this.#.clone ? this.#.clone() : console.error(JSON.stringify(this.features.value, null, 2))".replace(/#/g, field.slice(1));
+                case "?":
+                    return "this.# && this.#.clone ? this.#.clone() : this.#"
+                        .replace(/#/g, field.slice(1));
                 case "[":
-                    field = "this." + field.slice(1);
-                    return field + " && _.map(" + field + ", callClone)";
+                    return "this.# && _.map(this.#, callClone)"
+                        .replace(/#/g, field.slice(1)); 
                 default:
                     return "this." + field;
                 }
@@ -72,20 +82,24 @@ less.tree.URL.prototype.getChildren =
     }
     eval(code.join("\n"));
 }({
-    Alpha: ["value && this.value.clone ? this.value.clone() : this.value"],
-    Anonymous: ["value"], Call: ["name", "[args", "index"],
+    Alpha: ["?value"], Anonymous: ["value"], Assignment: ["key", "?value"],
+    Call: ["name", "[args", "index", "filename"],
     Color: ["rgb.slice()", "alpha"], Comment: ["value", "silent"],
+    Condition: ["op", "!lvalue", "!rvalue", "index", "negate"],
     Combinator: ["value"], Dimension: ["value", "unit"],
-    Directive: ["name", "ruleset ? this.ruleset.rules : this.value.clone()"],
-    Element: ["!combinator", "value"], Expression: ["[value"],
+    Directive: ["name",
+                "ruleset ? this.ruleset.clone().rules : this.value.clone()"],
+    Element: ["!combinator", "value", "index"], Expression: ["[value"],
     JavaScript: ["expression", "index", "escaped"], Keyword: ["value"],
-    "mixin.Call": ["selector.elements", "[arguments", "index"],
-    Operation: ["op", "[operands"],
+    Media: ["ruleset.clone().rules", "[features.value"],
+    "mixin.Call": ["[selector.elements", "[arguments", "index", "filename",
+                   "important"],
+    Operation: ["op", "[operands"], Paren: ["!value"],
     Quoted: ["quote", "value", "escaped", "index"],
-    Rule: ["name", "!value", "important", "index"],
-    Ruleset: ["[selectors", "[rules"], Selector: ["[elements"],
+    Rule: ["name", "!value", "important", "index", "inline"],
+    Ruleset: ["[selectors", "[rules", "strictImports"], Selector: ["[elements"],
     Shorthand: ["!a", "!b"], URL: ["attrs || this.value.clone()", "paths"],
-    Value: ["[value"], Variable: ["name", "index"]
+    Value: ["[value"], Variable: ["name", "index", "file"]
 }));
 
 less.tree.mixin.Definition.prototype.clone = function() {
@@ -94,9 +108,12 @@ less.tree.mixin.Definition.prototype.clone = function() {
             var clone = {};
             if (param.name) clone.name = param.name;
             if (param.value) clone.value = param.value.clone();
+            if (param.variadic) clone.variadic = param.variadic;
             return clone;
         }),
-        _.map(this.rules, function(rule) { return rule.clone(); }));
+        _.map(this.rules, function(rule) { return rule.clone(); }),
+        this.condition && this.condition.clone(),
+        this.variadic);
 };
 
 // Printing mixins
@@ -112,14 +129,16 @@ function mapIntersperse(list, f, separator) {
 }
 
 function printList(list, separator, prec) {
-    return mapIntersperse(list, function(n) { return n.print(prec); },
-                          separator);
+    return mapIntersperse(list,
+        function(n) { return n.print ? n.print(prec) : n; },
+        separator);
 }
 
 function printParam(param) {
     return !param.name ? param.value.print() :
-        !param.value ? param.name.print() :
-        [param.name.print(), ":", param.value.print()];
+        param.value ? [param.name, ":", param.value.print()] :
+        param.variadic ? [param.name, "..."] :
+            param.name;
 }
 
 less.tree.Alpha.prototype.print = function() {
@@ -130,31 +149,49 @@ less.tree.Anonymous.prototype.print =
     less.tree.Combinator.prototype.print =
     less.tree.Comment.prototype.print =
     less.tree.Keyword.prototype.print = function() { return this.value; };
+less.tree.Assignment.prototype.print = function() {
+    return [this.key, "=", this.value.print ? this.value.print() : this.value];
+};
 less.tree.Call.prototype.print =
     function() { return [this.name, "(", printList(this.args), ")"]; };
 less.tree.Color.prototype.print = less.tree.Dimension.prototype.print =
     function() { return this.toCSS(); };
+less.tree.Condition.prototype.print = function() {
+    return [this.negate ? "not (" : "(", this.lvalue.print(), this.op,
+            this.rvalue.print(), ")"];
+};
 less.tree.Directive.prototype.print = function() {
     return this.ruleset ?
         [this.name, "{\n", this.ruleset.print(true), "}\n"] :
         [this.name, " ", this.valule.print()];
 };
-less.tree.Element.prototype.print =
-    function() { return [this.combinator.print(), this.value]; };
+less.tree.Element.prototype.print = function() {
+    return [this.combinator.print(),
+            this.value.print ? this.value.print() : this.value];
+};
 less.tree.Expression.prototype.print =
     function(prec) { return printList(this.value, " ", prec); };
-less.tree.Import.prototype.print =
-    function() { return ["@import ", this._path.print()]; };
+less.tree.Import.prototype.print = function() {
+    return [this.once ? "@import-once " : "@import ", this._path.print(),
+            this.features ? printList(this.features) : ""];
+};
 less.tree.JavaScript.prototype.print =
     function() { return [this.escaped ? "~`" : "`", this.expression, "`"]; };
+less.tree.Media.prototype.print = function() {
+    return ["@media ", this.features ? printList(this.features) : "",
+            this.ruleset.print()];
+};
 less.tree.mixin.Call.prototype.print = function() {
-    return this.args ? 
-        [printList(this.elements, ""), "(", printList(this.args), ")"] :
-        printList(this.elements, "");
+    return [printList(this.elements, ""),
+            this.args ? ["(", printList(this.args), ")"] : "",
+            this.important ? " !important" : ""];
 };
 less.tree.mixin.Definition.prototype.print = function() {
-    return [this.name, "(", mapIntersperse(this.params, printParam), "){\n",
-            printList(this.rules, "\n"), "}\n"];
+    var addVariadic = this.variadic && !_.any(_.pluck(this.params, "variadic"));
+    return [this.name, "(", mapIntersperse(this.params, printParam),
+            addVariadic ? ", ...)" : ")",
+            this.condition ? [" when ", this.condition.print()] : "",
+            "{\n", printList(this.rules, "\n"), "}\n"];
 };
 less.tree.Operation.prototype.print = function(prec) {
     return this.op === "*" || this.op === "/" ?
@@ -162,11 +199,14 @@ less.tree.Operation.prototype.print = function(prec) {
         prec ? ["(", printList(this.operands, this.op), ")"] :
                      printList(this.operands, this.op);
 };
+less.tree.Paren.prototype.print =
+    function() { return ["(", this.value.print(), ")"]; };
 less.tree.Quoted.prototype.print = function() {
     return [this.escaped ? "~" : "", this.quote, this.value, this.quote];
 };
 less.tree.Rule.prototype.print = function() {
-    return [this.name, ":", this.value.print(), this.important, ";"];
+    return [this.name, ":", this.value.print(), this.important,
+            this.inline ? "" : ";"];
 };
 less.tree.Ruleset.prototype.print = function(root) {
     return root || this.root ? printList(this.rules, "\n") :

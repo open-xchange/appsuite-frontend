@@ -8,117 +8,177 @@
  * Copyright (C) Open-Xchange Inc., 2006-2011
  * Mail: info@open-xchange.com
  *
- * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define("io.ox/portal/rss/register",
-    ["io.ox/core/extensions"], function (ext, api) {
+define("plugins/portal/rss/register",
+    ["io.ox/core/extensions",
+    "io.ox/core/strings",
+    "io.ox/messaging/accounts/api",
+    "io.ox/messaging/services/api",
+    "io.ox/messaging/messages/api",
+    'io.ox/keychain/api',
+    'io.ox/rss/api',
+    'io.ox/core/date',
+    'io.ox/core/tk/dialogs',
+    'gettext!io.ox/portal'], function (ext, strings, accountApi, serviceApi, messageApi, keychain, rss, date, dialogs, gt) {
 
     "use strict";
 
-    var feeds = [];
+    var migrate = function (settings) {
 
-    // SPIEGEL Online
-    feeds.push({
-        id: "rss-spiegel",
-        url: "http://www.spiegel.de/international/europe/index.rss",
-        index: 400,
-        cssClass: "spiegel"
-    });
+        if (true || !settings.get('rss-migrated')) {
+            return $.when();
+        }
 
-    // Engadget
-    feeds.push({
-        id: "rss-engadget",
-        url: "http://www.engadget.com/rss.xml",
-        num: 2,
-        index: 500
-    });
-
-    // Another one...
-    feeds.push({
-        id: "rss-a",
-        url: "http://golem.de.dynamic.feedsportal.com/pf/578068/http://rss.golem.de/rss.php?feed=RSS1.0",
-        index: 550
-    });
-
-    // Another one...
-    feeds.push({
-        id: "rss-nyt",
-        url: "http://www.nytimes.com/services/xml/rss/nyt/GlobalHome.xml",
-        index: 550
-    });
-
-    // Another one...
-//    feeds.push({
-//        id: "rss-handelsblatt",
-//        url: "http://www.handelsblatt.com/contentexport/feed/schlagzeilen",
-//        index: 600
-//    });
-
-    _(feeds).each(function (extension) {
-
-        ext.point("io.ox/portal/widget").extend({
-            id: extension.id,
-            index: extension.index,
-            load: function () {
-                // get RSS feed via Google Feed API
-                var url = "http://ajax.googleapis.com/ajax/services/feed/" +
-                    "load?v=1.0&num=" + (extension.num || 4) +
-                    "&callback=?&q=" + encodeURIComponent(extension.url);
-                return $.getJSON(url)
-                    .pipe(function (data) {
-                        return data && data.responseData ? data.responseData.feed : {};
-                    });
-            },
-            draw: function (feed) {
-
-                var self = this;
-
-                this.addClass(
-                        "io-ox-portal-rss" + (extension.cssClass ? " " + extension.cssClass : "")
-                    )
-                    .append(
-                        $("<div/>").addClass("clear-title")
-                            .text(feed.title.replace(/&gt;/g, '>') || "RSS")
-                    );
-
-                _(feed.entries).each(function (entry) {
-                    self.append(
-                        $("<div>").addClass("rss-entry")
-                        .append(
-                            $("<div>").addClass("rss-title").text(entry.title || "")
-                        )
-                        .append(
-                            $("<div>").addClass("rss-content").html(entry.content || "")
-                            .find("a")
-                                .attr("target", "_blank")
-                            .end()
-                            .find("img")
-                                .removeAttr("hspace vspace align height")
-                                .attr('alt', 'alt')
-                                .css({ clear: "both", float: "", height: "auto", margin: "", border: "" })
-                            .end()
-                            .find(":header:empty")
-                                .remove()
-                                .end()
-                            .find("iframe")
-                                .attr("frameborder", "0")
-                                .attr("border", "0")
-                                .attr("width", "405")
-                                .attr("height", "230")
-                            .end()
-                            .append($.txt(" "))
-                            .append(
-                                $("<a>", { href: entry.link, target: "_blank"})
-                                .css("whiteSpace", "nowrap")
-                                .text("Read full article")
-                            )
-                        )
-                    );
+        return accountApi.all('com.openexchange.messaging.rss').pipe(function (accounts) {
+            var index = 0;
+            _(accounts).each(function (account) {
+                index += 100;
+                settings.set('widgets/user/rss-migrated-' + index, {
+                    plugin: 'plugins/portal/rss/register',
+                    color: 'lightblue',
+                    index: index,
+                    props: {
+                        url: account.configuration.url,
+                        description: account.displayName
+                    }
                 });
-
-                return $.Deferred().resolve();
-            }
+            });
+            return settings.save();
         });
+    };
+
+    ext.point('io.ox/portal/widget/rss').extend({
+
+        title: gt('RSS Feed'),
+
+        load: function (baton) {
+            return migrate().pipe(function () {
+                var urls = baton.model.get('props').url || [];
+                return rss.getMany(urls, 'date').done(function (data) {
+                    baton.data = { items: data, title: '', link: '' };
+                    // get title & link
+                    _(data).find(function (item) {
+                        baton.data.title = item.feedTitle || '';
+                        baton.data.link = item.feedLink || '';
+                    });
+                });
+            });
+        },
+
+        preview: function (baton) {
+
+            var data = baton.data,
+                $content = $('<div class="content pointer">');
+
+            _(data.items).each(function (entry) {
+                $content.append(
+                    $('<div class="paragraph">').append(
+                        $('<span class="gray">').text(entry.feedTitle + ' '),
+                        $('<span class="bold">').text(entry.subject), $.txt('')
+                    )
+                );
+            });
+
+            if (data.items.length === 0) {
+                $('<div class="item">').text(gt('No RSS feeds found.')).appendTo($content);
+            }
+
+            this.append($content);
+        },
+
+        draw: (function () {
+
+            function drawItem(item) {
+                var publishedDate = new date.Local(item.date).format(date.DATE);
+                this.append(
+                    $('<div class="text">').append(
+                        $('<h2>').text(item.subject),
+                        $('<div class="text-body">').html(item.body),
+                        $('<div class="rss-url">').append(
+                            $('<a>').attr({ href: item.url, target: '_blank' }).text(item.feedTitle + ' - ' + publishedDate)
+                        )
+                    )
+                );
+            }
+
+            return function (baton) {
+
+                var data = baton.data,
+                    node = $('<div class="portal-feed">');
+
+                if (data.title) {
+                    node.append($('<h1>').text(data.title));
+                }
+
+                _(data.items).each(drawItem, node);
+
+                this.append(node);
+            };
+
+        }())
+    });
+
+    function edit(model) {
+
+        var dialog = new dialogs.ModalDialog({ easyOut: true, async: true }),
+            $url = $('<textarea class="input-block-level" rows="5">').attr('placeholder', 'http://').placeholder(),
+            $description = $('<input type="text" class="input-block-level">'),
+            $error = $('<div class="alert alert-error">').hide(),
+            props = model.get('props') || {},
+            that = this;
+
+        dialog.header($("<h4>").text(gt('RSS Feeds')))
+            .build(function () {
+                this.getContentNode().append(
+                    $('<label>').text(gt('URL')),
+                    $url.val((props.url || []).join('\n')),
+                    $('<label>').text(gt('Description (optional)')),
+                    $description.val(props.description),
+                    $error
+                );
+            })
+            .addPrimaryButton('save', gt('Save'))
+            .addButton('cancel', gt('Cancel'))
+            .show(function () {
+                $url.focus();
+            });
+
+        dialog.on('save', function (e) {
+
+            var url = $.trim($url.val()),
+                description = $.trim($description.val()),
+                deferred = $.Deferred();
+
+            $error.hide();
+
+            if (url.length === 0) {
+                $error.text(gt('Please enter a feed URL.'));
+                deferred.reject();
+            } else {
+                deferred.resolve();
+            }
+
+            deferred.done(function () {
+                dialog.close();
+                model.set({
+                    title: description,
+                    props: { url: url.split(/\n/), description: description }
+                });
+            });
+
+            deferred.fail(function () {
+                $error.show();
+                dialog.idle();
+            });
+        });
+    }
+
+    ext.point('io.ox/portal/widget/rss/settings').extend({
+        title: gt('RSS Feed'),
+        type: 'rss',
+        editable: true,
+        edit: edit
     });
 });

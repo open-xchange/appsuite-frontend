@@ -13,40 +13,44 @@
 
 define("io.ox/contacts/view-detail",
     ["io.ox/core/extensions",
-     "gettext!io.ox/contacts/contacts",
+     "gettext!io.ox/contacts",
      "io.ox/contacts/util",
      "io.ox/contacts/api",
-     "io.ox/contacts/actions"
-    ], function (ext, gt, util, api, actions) {
+     "io.ox/contacts/actions",
+     "io.ox/core/api/folder",
+     "less!io.ox/contacts/style.css"
+    ], function (ext, gt, util, api, actions, folderAPI) {
 
     "use strict";
 
     // smart join
     var join = function () {
         return _(arguments)
-        .select(function (obj, i) {
-            return i > 0 && !!obj;
-        })
-        .join(arguments[0] || "");
+            .select(function (obj, i) {
+                return i > 0 && !!obj;
+            })
+            .join(arguments[0] || "");
     };
 
     function addField(label, value, node, fn) {
+        var node;
         if (value) {
-            var td = $("<td>").addClass("value"),
-                tr = $("<tr>")
-                    .append(
-                        $("<td>").addClass("io-ox-label").text(label)
-                    )
-                    .append(td);
+            node.append(
+                $('<div class="row-fluid">').append(
+                     // label
+                    $('<div class="span4 field-label">').text(label),
+                    // value
+                    node = $('<div class="span8 field-value">')
+                )
+            );
             if (_.isFunction(fn)) {
-                fn(td);
+                fn(node);
             } else {
                 if (typeof fn === "string") {
-                    td.addClass(fn);
+                    node.addClass(fn);
                 }
-                td.text(value);
+                node.text(_.noI18n(value));
             }
-            tr.appendTo(node);
             return 1;
         } else {
             return 0;
@@ -54,19 +58,19 @@ define("io.ox/contacts/view-detail",
     }
 
     function addDistribMail(label, name, mail, node) {
-//        if (name) {
-        var td = $("<td>").addClass("value"),
-            tr = $("<tr>")
-                .append(
-                    $("<td>").addClass("io-ox-label").text(label), td
-                ),
-            blueName = $('<span>').addClass('blue').text(name);
-        td.append(blueName, ' ', mail);
-        tr.appendTo(node);
+        node.append(
+            $('<div class="row-fluid">').append(
+                // label
+                $('<div class="span4 field-label">').text(label),
+                // value
+                $('<div class="span8 field-value">').append(
+                    $('<a href="#" class="halo-link">').data({ email1: mail })
+                        .text(_.noI18n(name)), $.txt(_.noI18n(' ')),
+                    $('<span>').text(_.noI18n(mail))
+                )
+            )
+        );
         return 1;
-//        } else {
-//            return 0;
-//        }
     }
 
     function clickMail(e) {
@@ -84,10 +88,10 @@ define("io.ox/contacts/view-detail",
     function addMail(label, value, data) {
         return addField(label, value, this, function (node) {
             node
-            .addClass("blue")
+            .addClass('blue')
             .append(
-                $("<a>", { href: "mailto: " + value })
-                .addClass("blue").text(value)
+                $('<a href="#" class="blue">')
+                .attr({ href: 'mailto:' + value }).text(_.noI18n(value))
                 .on('click', { email: value, display_name: data.display_name }, clickMail)
             );
         });
@@ -98,8 +102,8 @@ define("io.ox/contacts/view-detail",
             node
             .addClass("blue")
             .append(
-                $("<a>", { href: "callto: " + value })
-                .addClass("blue").text(value)
+                $('<a href="#" class="blue">')
+                .attr({ href: 'callto:' + value }).text(_.noI18n(value))
             );
         });
     }
@@ -111,22 +115,26 @@ define("io.ox/contacts/view-detail",
                     target: "_blank"
                 }).addClass("nolink");
             if (street) {
-                a.append($("<span>").text(street));
+                a.append($("<span>").text(_.noI18n(street)));
                 if (city) {
                     a.append($("<br>"));
                 }
             }
             if (code) {
-                a.append($("<span>").text(code + " "));
+                a.append($("<span>").text(_.noI18n(code + ' ')));
             }
             if (city) {
-                a.append($("<span>").text(city));
+                a.append($("<span>").text(_.noI18n(city)));
             }
             if (country) {
                 a.append($("<br>"));
-                a.append($("<span>").text(country));
+                a.append($("<span>").text(_.noI18n(country)));
             }
-            a.append($("<br><small class='blue'>(Google Maps&trade;)</small>"));
+            a.append(
+                $('<br>').append(
+                    $('<small class="blue">').text(_.noI18n('(Google Maps \u2122)')) // \u2122 = &trade;
+                )
+            );
             node.append(a);
         });
     }
@@ -134,128 +142,124 @@ define("io.ox/contacts/view-detail",
     ext.point("io.ox/contacts/detail").extend({
         index: 100,
         id: "contact-details",
-        draw: function (data) {
-            var node = $("<tr>").appendTo(this);
-            ext.point("io.ox/contacts/detail/head").invoke("draw", node, data);
+        draw: function (baton) {
+            var node = $('<div class="row-fluid contact-header">').appendTo(this);
+            ext.point('io.ox/contacts/detail/head').invoke('draw', node, baton);
         }
     });
+
+    function getDescription(data) {
+        if (api.looksLikeDistributionList(data)) return gt('Distribution list');
+        if (api.looksLikeResource(data)) return gt('Resource');
+        return _.noI18n((data.company || data.position || data.profession) ?
+            join(", ", data.company, data.position, data.profession) + "\u00A0" : util.getMail(data) + "\u00A0");
+    }
 
     ext.point("io.ox/contacts/detail/head").extend({
         index: 100,
         id: 'contact-picture',
-        draw: function (data) {
-
+        draw: function (baton) {
             this.append(
-                $("<td>")
-                .css({ verticalAlign: "top", paddingBottom: "0" })
-                .append(
-                    api.getPicture(data).addClass("picture")
-                )
-            )
-            .append(
-                $("<td>")
-                .css({ verticalAlign: "top" })
-                .append(
-                    $("<div>")
-                    .addClass("name clear-title")
-                    .text(util.getFullName(data))
-                )
-                .append(
-                    $("<div>")
-                    .addClass("job clear-title")
-                    .text(
-                        data.mark_as_distributionlist ?
-                            gt("Distribution list") :
-                            (data.company || data.position || data.profession) ?
-                                    join(", ", data.company, data.position, data.profession) + "\u00A0" :
-                                    (data.email1 || data.email2 || data.email3) + "\u00A0"
-                    )
+                // left side / picture
+                $('<div class="span4 field-label">').append(
+                    api.getPicture(baton.data, { scaleType: 'contain', width: 80, height: 80 }).addClass('picture')
                 )
             );
         }
     });
 
+    ext.point("io.ox/contacts/detail/head").extend({
+        index: 200,
+        id: 'contact-title',
+        draw: function (baton) {
+            var private_flag,
+                nameText = baton.data.display_name ? baton.data.display_name : util.getFullName(baton.data);
+            this.append(
+                // right side
+                $('<div class="span8 field-value">').append(
+                    $('<div class="name clear-title">')
+                        .text(_.noI18n(nameText)),
+                    private_flag = $('<i class="icon-lock private-flag">').hide(),
+                    $('<div class="job clear-title">')
+                        .text(getDescription(baton.data))
+                )
+            );
+            if (baton.data.private_flag) {
+                private_flag.show();
+            } else {
+                private_flag.hide();
+            }
+        }
+    });
 
     ext.point("io.ox/contacts/detail").extend({
-        index: 150,
+        index: 200,
         id: "inline-actions",
-        draw: function (data) {
-            var td = $('<td>', { colspan: '2' });
-            ext.point("io.ox/contacts/detail/actions").invoke("draw", td, data);
-            this.append($('<tr>').append(td));
+        draw: function (baton) {
+            var node;
+            this.append(
+                $('<div class="row-fluid">').append(
+                    node = $('<div class="span12">')
+                )
+            );
+            ext.point("io.ox/contacts/detail/actions").invoke("draw", node, baton.data);
+        }
+    });
+
+    function looksLikeHTML(str) {
+        return (/<\w/).test(str);
+    }
+
+    ext.point("io.ox/contacts/detail").extend({
+        index: 250,
+        id: "description", // only for resources
+        draw: function (baton) {
+            if ('description' in baton.data) {
+                addField(gt('Description'), true, this, function (node) {
+                    var text = $.trim(baton.data.description);
+                    if (looksLikeHTML(text)) {
+                        node.html(text);
+                    } else {
+                        node.html(text.replace(/\n/g, '<br>'));
+                    }
+                });
+                addField('', '\u00A0', this);
+            }
         }
     });
 
     ext.point("io.ox/contacts/detail").extend({
-        index: 160,
-        id: "address",
-        draw: function (data) {
-            ext.point("io.ox/contacts/detail/address").invoke("draw", this, data);
+        index: 300,
+        id: 'company',
+        draw: function (baton) {
+            var r = 0, data = baton.data;
+            r += addField(gt("Department"), data.department, this);
+            r += addField(gt("Position"), data.position, this);
+            r += addField(gt("Profession"), data.profession, this);
+            if (r > 0) { addField("", "\u00A0", this); }
         }
     });
 
     ext.point("io.ox/contacts/detail").extend({
-        index: 200,
-        id: "phones",
-        draw: function (data) {
-            ext.point("io.ox/contacts/detail/phones").invoke("draw", this, data);
-        }
-    });
-
-    ext.point("io.ox/contacts/detail").extend({
-        index: 200,
-        id: "mails",
-        draw: function (data) {
-            ext.point("io.ox/contacts/detail/mails").invoke("draw", this, data);
-        }
-    });
-
-    ext.point("io.ox/contacts/detail").extend({
-        index: 200,
-        id: "birthday",
-        draw: function (data) {
-            ext.point("io.ox/contacts/detail/birthday").invoke("draw", this, data);
-        }
-    });
-
-    ext.point("io.ox/contacts/detail").extend({
-        index: 200,
-        id: "qr",
-        draw: function (data) {
-            ext.point("io.ox/contacts/detail/qr").invoke("draw", this, data);
-        }
-    });
-
-
-    ext.point("io.ox/contacts/detail/address").extend({
-        index: 100,
-        id: 'contact-address',
-        draw: function (data) {
-            /*$("<td>").addClass("io-ox-label").text("MEIN LABLE").appendTo(this);
-            $("<td>").addClass("value").text(data.telephone_business1).appendTo(this);*/
-            addField(gt("Department"), data.department, this);
-            addField(gt("Position"), data.position, this);
-            addField(gt("Profession"), data.profession, this);
-
-            var r = 0;
-
+        index: 400,
+        id: 'address',
+        draw: function (baton) {
+            var r = 0, data = baton.data;
             if (data.street_business || data.city_business) {
-                r += addAddress(gt("Work"), data.street_business, data.postal_code_business, data.city_business, null, this);
+                r += addAddress(gt.pgettext("address", "Work"), data.street_business, data.postal_code_business, data.city_business, null, this);
             }
             if (data.street_home || data.city_home) {
-                r += addAddress(gt("Home"), data.street_home, data.postal_code_home, data.city_home, null, this);
+                r += addAddress(gt.pgettext("address", "Home"), data.street_home, data.postal_code_home, data.city_home, null, this);
             }
-            if (r > 0) {
-                addField("", "\u00A0", this);
-            }
+            if (r > 0) { addField("", "\u00A0", this); }
         }
     });
 
-    ext.point("io.ox/contacts/detail/phones").extend({
-        index: 100,
-        id: 'contact-phone',
-        draw: function (data) {
-            var r = 0;
+    ext.point("io.ox/contacts/detail").extend({
+        index: 500,
+        id: 'phone',
+        draw: function (baton) {
+            var r = 0, data = baton.data;
             r += addPhone(gt("Phone (business)"), data.telephone_business1, this);
             r += addPhone(gt("Phone (business)"), data.telephone_business2, this);
             r += addPhone(gt("Phone (private)"), data.telephone_home1, this);
@@ -267,104 +271,130 @@ define("io.ox/contacts/view-detail",
             }
         }
     });
-    ext.point("io.ox/contacts/detail/mails").extend({
-        index: 100,
-        id: 'contact-mails',
-        draw: function (data) {
-            if (data.mark_as_distributionlist === true) {
-                var i = 0, list = _.deepClone(data.distribution_list), $i = list.length,
-                    that = this;
-                list = list.sort(util.nameSort);
 
+    ext.point("io.ox/contacts/detail").extend({
+        index: 600,
+        id: 'mail-address',
+        draw: function (baton) {
+            var data = baton.data;
+            if (data.mark_as_distributionlist === true) {
+                var list = _.copy(data.distribution_list || [], true);
+                // if there are no members in the list
+                if (list.length === 0) {
+                    addDistribMail(gt('Members'), gt('This list has no members yet'), "\u00A0", this);
+                }
                 _.each(list, function (val, key) {
                     if (key === 0) {
-                        addDistribMail('Members', val.display_name, val.mail, that);
+                        addDistribMail(gt('Members'), val.display_name, val.mail, this);
                     } else {
-                        addDistribMail('', val.display_name, val.mail, that);
+                        addDistribMail('', val.display_name, val.mail, this);
                     }
-                });
-
+                }, this);
             } else {
                 var dupl = {},
                 r = 0;
-                r += addMail.call(this, gt("E-Mail"), data.email1, data);
+                r += addMail.call(this, gt("Primary Email"), data.email1, data);
                 dupl[data.email1] = true;
                 if (dupl[data.email2] !== true) {
-                    r += addMail.call(this, gt("E-Mail"), data.email2, data);
+                    r += addMail.call(this, gt("Alternative Email"), data.email2, data);
                     dupl[data.email2] = true;
                 }
                 if (dupl[data.email3] !== true) {
-                    r += addMail.call(this, gt("E-Mail"), data.email3, data);
+                    r += addMail.call(this, gt("Alternative Email"), data.email3, data);
                 }
                 if (r > 0) {
                     addField("", "\u00A0", this);
                 }
             }
-
-
-
         }
-
     });
 
-    ext.point("io.ox/contacts/detail/birthday").extend({
-        index: 100,
-        id: 'contact-birthdays',
-        draw: function (data) {
-            var r = 0,
+    ext.point("io.ox/contacts/detail").extend({
+        index: 700,
+        id: 'birthday',
+        draw: function (baton) {
+            var r = 0, data = baton.data,
                 date = new Date(data.birthday);
-            if (!isNaN(date.getDate())) {
+            if (data.birthday !== null && !isNaN(date.getDate())) {
                 r += addField(gt("Birthday"), date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear(), this);
+            }
+            if (r > 0) {
+                addField("", "\u00A0", this);
             }
         }
     });
-    ext.point("io.ox/contacts/detail/qr").extend({
-        index: 100,
+
+    ext.point("io.ox/contacts/detail").extend({
+        index: 10000,
         id: 'qr',
-        draw: function (data) {
-            var r = 0;
+        draw: function (baton) {
+            var data = baton.data;
             if (Modernizr.canvas && !data.mark_as_distributionlist) {
-                if (r > 0) {
-                    addField("\u00A0", "\u00A0", this);
-                    r = 0;
-                }
-                addField("\u00A0", true, this, function (td) {
-                    td.append(
-                        $("<a>").addClass("action-link")
-                        .text("Show QR-code")
+                addField("\u00A0", true, this, function (node) {
+                    node.append(
+                        $('<i class="icon-qrcode">'), $.txt(' '),
+                        $("<a>", { href: '#' })
+                        .text(gt('Show QR code'))
                         .on("click", function (e) {
                             e.preventDefault();
-                            td.empty().busy();
+                            node.empty().busy();
                             require(["io.ox/contacts/view-qrcode"], function (qr) {
                                 var vc = qr.getVCard(data);
-                                td.idle().qrcode(vc);
-                                vc = td = qr = null;
+                                node.idle().qrcode(vc);
+                                vc = node = qr = null;
                             });
                         })
                     );
                 });
+                addField("", "\u00A0", this);
             }
         }
-
     });
 
+    ext.point("io.ox/contacts/detail").extend({
+        index: 20000,
+        id: 'breadcrumb',
+        draw: function (baton) {
+
+            var options = { subfolder: false, prefix: gt('Folder'), module: 'contacts' };
+
+            // this is also used by halo, so we might miss a folder id
+            if (baton.data.folder_id) {
+                // do we know the app?
+                if (baton.app) {
+                    options.handler = baton.app.folder.set;
+                }
+                this.append(
+                    folderAPI.getBreadcrumb(baton.data.folder_id, options)
+                );
+            }
+        }
+    });
+
+    function redraw(e, data) {
+        $(this).replaceWith(e.data.view.draw(data));
+    }
 
     return {
-        draw: function (data) {
-            var node;
-            if (!data) {
-                node = $();
-            } else {
-                // TMP backend bug fix
-                if (data.distribution_list && data.distribution_list.length) {
-                    data.mark_as_distributionlist = true;
-                }
-                node = $("<table>", {border: 0, cellpadding: 0, cellspacing: 0})
-                    .addClass("contact-detail view")
-                    .attr('data-obj-id', data.folder_id + '.' + data.id);
-                ext.point("io.ox/contacts/detail").invoke("draw", node, data);
+
+        draw: function (baton) {
+
+            if (!baton) return $();
+
+            try {
+
+                // make sure we have a baton
+                baton = ext.Baton.ensure(baton);
+
+                var node = $.createViewContainer(baton.data, api).on('redraw', { view: this }, redraw);
+                node.addClass('contact-detail view');
+                ext.point('io.ox/contacts/detail').invoke('draw', node, baton);
+
+                return node;
+
+            } catch (e) {
+                console.error('io.ox/contacts/view-detail:draw()', e);
             }
-            return node;
         }
     };
 });

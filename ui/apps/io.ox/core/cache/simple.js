@@ -24,6 +24,7 @@ define('io.ox/core/cache/simple',
                     if (_(storage[id]).isUndefined()) {
                         storage[id] = {};
                     }
+                    return this;
                 },
                 getStorageLayerName: function () {
                     return 'cache/simple';
@@ -32,22 +33,20 @@ define('io.ox/core/cache/simple',
                     return true;
                 },
                 gc: function () {
-
                 },
                 clear: function () {
                     storage[id] = {};
                     return $.Deferred().resolve();
                 },
                 get: function (key) {
-                    return $.Deferred().resolve(storage[id][String(key)]);
+                    var key = String(key);
+                    return $.Deferred().resolve(
+                        key in storage[id] ? storage[id][key] : null
+                    );
                 },
                 set: function (key, data) {
                     storage[id][String(key)] = data;
                     return $.Deferred().resolve(key);
-                },
-                contains: function (key) {
-                    return $.Deferred().resolve(
-                            storage[id][String(key)] !== undefined);
                 },
                 remove: function (key) {
                     delete storage[id][String(key)];
@@ -55,7 +54,6 @@ define('io.ox/core/cache/simple',
                 },
                 keys: function () {
                     var key, tmp = [];
-
                     for (key in storage[id]) {
                         tmp.push(key);
                     }

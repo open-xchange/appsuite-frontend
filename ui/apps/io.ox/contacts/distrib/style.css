@@ -1,70 +1,65 @@
 
-.section-group.header {
-	padding-top: 20px;
+.create-distributionlist .section-group.header {
+	padding-top: 10px;
 	min-height: 60px;
 }
 
-.section-group.header .input{
+.create-distributionlist .section-group.header .input {
 	float: left;
 	width: auto;
 }
 
-.section.last{
+.create-distributionlist .section.last {
 	border: none;
 }
 
-.item-list{
-}
-
-.sectiontitle{
-	margin: 25px 0 15px 0;
-	font-size: 1.25em;
+.create-distributionlist .sectiontitle {
+	font-size: 13px;
+	margin: 20px 0 15px 0;
 	color: #888;
-	font-family: OpenSans, Helvetica, Arial, sans-serif;
-	font-weight: 200;
-	line-height: 1.15em;
+	font-weight: 300;
+	border-bottom: 1px solid #E5E5E5;
 }
 
-.item-list-header {
+.create-distributionlist .item-list-header {
 	margin-bottom: 20px;
 	overflow: hidden;
 }
 
-.create-distributionlist .btn.btn-primary{
-	margin-top: 0px;
+.create-distributionlist .controls .btn {
 	float: right;
+	margin-left: 13px;
 }
 
-
-.create-distributionlist .item-list{
+.create-distributionlist .item-list {
 	/*height: 200px;*/
 	overflow-x: hidden;
 	overflow-y: auto;
 }
 
-.create-distributionlist label{
+.create-distributionlist label {
+    color: #888;
+    font-weight: 300;
 	display: block;
 }
 
-.create-distributionlist input{
-	width: 280px;
+.create-distributionlist input {
+	width: 310px;
 }
 
 .create-distributionlist .item-list .listet-item {
-	width: 693px;
+	width: 700px;
 	float: left;
-	padding: 3px;
-	/*border: 1px solid #ccc;*/
-	height: 3em;
 	margin-bottom: 3px;
 }
+
 .create-distributionlist .item-list .listet-item .person-link.ellipsis {
-	width: 240px;
+	width: 260px;
 	margin-top: 12px;
-	margin-left: 20px;
 	float: left;
 }
-.create-distributionlist .item-list .listet-item .person-selected-mail{
+
+.create-distributionlist .item-list .listet-item .person-selected-mail {
 	width: 240px;
 	margin-top: 12px;
 	margin-left: 20px;
@@ -90,45 +85,38 @@
 	width: 230px;
 }
 
-.create-distributionlist .item-list .listet-item .delete-button {
-	margin-top: 12px;
-	margin-right: 12px;
-	float: right;
-	display: inline-block;
-	-webkit-transition: .15s opacity;
-	background-color: transparent;
-	background-image: url(../images/close_button.png);
-	border: none;
-	display: block;
-	height: 16px;
-	opacity: 1;
-	width: 16px
-}
-.create-distributionlist .item-list .listet-item .delete-button:hover {
-	background-image: url(../images/close_button_hover.png);
+.create-distributionlist .contact-image,
+.create-distributionlist-contact-image {
+    height: 3em;
+    width: 3em;
+    margin: 0 1em 0 5px;
+    display: inline-block;
+    background-size: cover;
+    background-repeat: no-repeat;
+    float: left;
 }
 
-.create-distributionlist .btn.btn-inverse{
+.create-distributionlist-contact-image {
+    margin-left: 0;
+}
+
+.create-distributionlist .item-list .listet-item a.close {
+	margin-top: 8px;
+	margin-right: 4px;
 	float: right;
-	margin-top: 33px;
+	display: inline-block;
+	height: 16px;
+	width: 16px
+}
+
+.create-distributionlist .btn.btn-inverse {
+	float: right;
+	margin-top: 37px;
 	margin-right: 0px;
 }
 
-.create-distributionlist .alert .close {
-	position: relative;
-	top: 1px;
-	right: -20px;
-	line-height: 18px;
-}
-
-a.close .delete-button{
-	float: right;
-	display: inline-block;
-	background-image: url(../images/close_button.png);
-	border: none;
-	display: block;
-	height: 16px;
-	width: 16px
+.create-distributionlist .alert {
+    margin-top: 18px;
 }
 
 .listet-item.backstripes[data-mail="empty"] {

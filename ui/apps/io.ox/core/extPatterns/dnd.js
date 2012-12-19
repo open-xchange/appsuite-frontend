@@ -1,3 +1,15 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ */
+
 define("io.ox/core/extPatterns/dnd", ["io.ox/core/extensions", "io.ox/core/tk/upload"], function (ext, upload) {
 
     "use strict";
@@ -14,6 +26,12 @@ define("io.ox/core/extPatterns/dnd", ["io.ox/core/extensions", "io.ox/core/tk/up
             });
             if (action.extension && action.extension.action) {
                 action.extension.action.apply(action.extension, newArgs);
+            }
+        }
+
+        function handleMultiDrop(e, action, files) {
+            if (action.extension && action.extension.multiple) {
+                action.extension.multiple.apply(action.extension, [files].concat(args));
             }
         }
 
@@ -46,6 +64,7 @@ define("io.ox/core/extPatterns/dnd", ["io.ox/core/extensions", "io.ox/core/tk/up
             });
 
             dropZone.on("drop", handleDrop);
+            dropZone.on("drop-multiple", handleMultiDrop);
 
             if (included) {
                 dropZone.include();

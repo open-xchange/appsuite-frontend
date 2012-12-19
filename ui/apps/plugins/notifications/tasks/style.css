@@ -1,0 +1,37 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
+ */
+ 
+ .taskNotification .status{
+ float: right;
+ }
+ 
+ .tasknote .dateselect{
+ margin-top: 0.5em;
+ width: 100%; 
+ }
+ 
+#io-ox-notifications-confirmation-tasks .stateselect{
+	margin-top: 1px;
+	float: left;
+	width: 50%;
+}
+ 
+#io-ox-notifications-reminder-tasks .smallertitle{
+	font-size: 18px;
+	line-height: 27px;
+}
+
+.taskremindbtn{
+white-space: nowrap;
+width: 77%;
+}

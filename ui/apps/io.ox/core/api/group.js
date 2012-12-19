@@ -11,41 +11,47 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/api/group",
-    ["io.ox/core/http", "io.ox/core/api/factory"], function (http, apiFactory) {
-    
-    "use strict";
-    
+define('io.ox/core/api/group',
+    ['io.ox/core/http', 'io.ox/core/api/factory'], function (http, apiFactory) {
+
+    'use strict';
+
     // generate basic API
     var api = apiFactory({
-        module: "group",
+        module: 'group',
         keyGenerator: function (obj) {
             return String(obj.id);
         },
         requests: {
             all: {
-                columns: "1,20",
-                sort: "500", // display_name
-                order: "asc"
+                columns: '1,20',
+                sort: '500', // display_name
+                order: 'asc'
             },
             list: {
             },
             get: {
             },
             search: {
-                action: "search",
-                columns: "1,20,500,524",
-                sort: "500",
-                order: "asc",
+                action: 'search',
+                columns: '1,20,500,524',
+                sort: '500',
+                order: 'asc',
                 getData: function (query) {
                     return { pattern: query };
                 }
             }
         }
     });
-    
+
+    api.getName = function (id) {
+        return api.get({ id: id }).pipe(function (data) {
+            return _.noI18n(data.display_name || data.name || '');
+        });
+    };
+
     api.getTextNode = function (id) {
-        var node = document.createTextNode("");
+        var node = document.createTextNode('');
         api.get({ id: id })
             .done(function (data) {
                 node.nodeValue = data.display_name;
@@ -57,6 +63,6 @@ define("io.ox/core/api/group",
             });
         return node;
     };
-    
+
     return api;
 });

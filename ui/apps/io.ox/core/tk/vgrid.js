@@ -11,9 +11,15 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], function (Selection, Events) {
+define('io.ox/core/tk/vgrid',
+    ['io.ox/core/tk/selection',
+     'io.ox/core/event',
+     'gettext!io.ox/core'
+    ], function (Selection, Events, gt) {
 
     'use strict';
+
+    var DONE = $.when();
 
     /**
      * Template class
@@ -69,17 +75,17 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             this.detached = true;
         }
 
-        Row.prototype.update = function (data, index, id) {
+        Row.prototype.update = function (data, index, id, prev) {
             // loop over setters
-            var i = 0, setters = this.set, $i = setters.length;
+            var i = 0, setters = this.set, $i = setters.length, rets = [];
             for (; i < $i; i++) {
-                setters[i].call(this.node, data, this.fields, index);
+                rets.push(setters[i].call(this.node, data, this.fields, index, prev) || DONE);
             }
             // set composite id?
             if (id !== undefined) {
                 this.node.attr('data-obj-id', id);
             }
-            return this;
+            return rets;
         };
 
         Row.prototype.appendTo = function (target) {
@@ -97,9 +103,13 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             return this;
         };
 
-        this.getClone = function () {
+        this.getClone = function (prebuild) {
             var i = 0, $i = template.length, tmpl,
                 row = new Row(this.node.clone());
+            // pre build
+            if (prebuild) {
+                _.extend(row.fields, prebuild.call(row.node) || {});
+            }
             // build
             for (; i < $i; i++) {
                 tmpl = template[i];
@@ -110,7 +120,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             row.node.add(row.node.find('div, span, p, td')).each(function () {
                 var node = $(this);
                 if (node.children().length === 0 && node.text() === '') {
-                    node.text('\u00A0');
+                    node.text(_.noI18n('\u00A0'));
                 }
             });
             row.node.find('img').each(function () {
@@ -126,14 +136,21 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         };
     }
 
-    var VGrid = function (target) {
+    var VGrid = function (target, options) {
+
+        options = options || {};
 
         // target node
         var node = $(target).empty().addClass('vgrid'),
             // reference for private functions
             self = this,
-            // first run
+            // states
+            initialized = false,
+            loaded = false,
+            responsiveChange = true,
             firstRun = true,
+            firstAutoSelect = true,
+            paused = false,
             // inner container
             scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node),
             container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
@@ -143,10 +160,29 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                     var grid = e.data.grid;
                     grid.setEditable(!grid.getEditable());
                 },
+            fnShowAll = function (e) {
+                    var grid = e.data.grid;
+                    if ($(this).prop('checked')) {
+                        grid.selection.selectAll();
+                    } else {
+                        grid.selection.selectFirst();
+                    }
+                },
             toolbar = $('<div>').addClass('vgrid-toolbar')
                 .append(
-                    $('<a>', { href: '#' }).addClass('action-link').text('Edit')
-                    .on('click', { grid: this }, fnToggleEditable)
+                    // select all
+                    options.showSelectAll === true ?
+                        $('<input type="checkbox">')
+                        .css({ 'float': 'left', 'margin-right': '13px' })
+                        .on('change', { grid: this }, fnShowAll) :
+                        $(),
+                    // show toggle
+                    options.showToggle === false ?
+                        $() :
+                        $('<a>', { href: '#' })
+                        .css('float', 'left')
+                        .append($('<i class="icon-th-list">'))
+                        .on('click', { grid: this }, fnToggleEditable)
                 )
                 .appendTo(node),
             // item template
@@ -189,8 +225,6 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             props = {},
             // shortcut
             isArray = _.isArray,
-            // pending fetch
-            pending = false,
             // edit mode
             editable = false,
             // private methods
@@ -204,8 +238,12 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             resize,
             loadAll,
             init,
+            isVisible,
+            setIndex,
             getIndex,
-            fnScroll;
+            fnScroll,
+            deserialize,
+            emptyMessage;
 
         // add label class
         template.node.addClass('selectable');
@@ -222,17 +260,12 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         // selection
         Selection.extend(this, scrollpane);
 
+        // due to performance reasons we don't scrol but jump
         scrollToLabel = function (index) {
             var obj = labels.list[index];
             if (obj !== undefined) {
-                scrollpane
-                    .stop()
-                    .animate({
-                        scrollTop: obj.top
-                    }, 250, function () {
-                        self.selection.set(all[obj.pos]);
-                        obj = null;
-                    });
+                scrollpane.scrollTop(obj.top);
+                self.selection.set(all[obj.pos]);
             }
         };
 
@@ -244,53 +277,62 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
 
         paintLabels = function () {
             // loop
-            var i = 0, $i = labels.list.length, clone = null, obj, text = '';
+            var i = 0, $i = labels.list.length, clone = null,
+                obj, cumulatedLabelHeight = 0, text = '', defs = [];
             for (; i < $i; i++) {
                 // get
                 obj = labels.list[i];
                 // draw
                 clone = label.getClone();
-                clone.update(all[obj.pos], obj.pos);
+                clone.node.addClass('vgrid-label').data('label-index', i);
+                defs.concat(clone.update(all[obj.pos], obj.pos, '', all[obj.pos - 1] || {}));
                 text = clone.node.text();
+                // add node
+                labels.nodes = labels.nodes.add(clone.node.appendTo(container));
                 // meta data
-                obj.top = i * labelHeight + obj.pos * itemHeight;
                 obj.text = text;
                 labels.index[obj.pos] = i;
                 labels.textIndex[text] = i;
-                // add node
-                labels.nodes = labels.nodes.add(
-                    clone.node.css({
-                        top: obj.top + 'px'
-                    })
-                    .addClass('vgrid-label')
-                    .data('label-index', i)
-                );
-                clone.node.appendTo(container);
             }
-            clone = null;
+            // reloop to get proper height
+            return $.when.apply($, defs).pipe(function () {
+                var i, obj, node;
+                for (i = 0; i < $i; i++) {
+                    obj = labels.list[i];
+                    node = labels.nodes.eq(i);
+                    obj.top = cumulatedLabelHeight + obj.pos * itemHeight;
+                    node.css({ top: obj.top + 'px' });
+                    cumulatedLabelHeight += (obj.height = node.outerHeight(true) || labelHeight);
+                }
+                node = clone = defs = null;
+                return cumulatedLabelHeight;
+            });
         };
 
         cloneRow = (function () {
 
             var guid = 0,
                 createCheckbox = function () {
-                    var id = 'grid_cb_' + (guid++);
-                    return $('<div>')
+                    var id = 'grid_cb_' + (guid++), fields = {};
+                    this.prepend(
+                        fields.div = $('<div>')
                         .addClass('vgrid-cell-checkbox')
                         .append(
-                            $('<label>', { 'for': id })
+                            fields.label = $('<label>', { 'for': id })
                             .append(
-                                $('<input>', { type: 'checkbox', id: id }).addClass('reflect-selection')
+                                fields.input = $('<input>', { type: 'checkbox', id: id }).addClass('reflect-selection')
                             )
-                        );
+                        )
+                    );
+                    return { checkbox: fields };
                 };
 
             return function (template) {
                 // get clone
-                var clone = template.getClone();
-                // add checkbox for edit mode
-                clone.node.prepend(createCheckbox());
-                return clone;
+                return template.getClone(function () {
+                    // add checkbox for edit mode
+                    return createCheckbox.call(this);
+                });
             };
         }());
 
@@ -317,65 +359,35 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             }
         };
 
-        paint = function (offset) {
+        paint = (function () {
 
-            // keep positive
-            offset = Math.max(0, offset);
-
-            if (offset === currentOffset) {
-                return $.when();
-            } else {
-                currentOffset = offset;
-            }
-
-            // pending?
-            var def;
-            if (paint.pending) {
-                // enqueue latest paint
-                paint.pending = [offset, (def = $.Deferred())];
-                return def;
-            } else {
-                paint.pending = true;
-            }
-
-            // continuation
-            var cont = function (data) {
-
-                // pending?
-                if (isArray(paint.pending)) {
-                    // process latest paint
-                    offset = paint.pending[0];
-                    def = paint.pending[1];
-                    paint.pending = false;
-                    //currentOffset = offset;
-                    paint(offset).done(def.resolve);
-                    return;
-                } else {
-                    paint.pending = false;
-                }
+            // calling this via LFO, so that we always get the latest data
+            function cont(offset, data) {
 
                 // vars
                 var i, $i, shift = 0, j = '', row,
                     defaultClassName = template.getDefaultClassName(),
                     tmp = new Array(data.length),
-                    node, clone;
+                    node, index;
 
                 // get shift (top down)
                 for (j in labels.index) {
                     if (offset > j) {
-                        shift++;
+                        index = labels.index[j];
+                        shift += labels.list[index].height || labelHeight;
                     }
                 }
 
                 // loop
                 for (i = 0, $i = data.length; i < $i; i++) {
                     // shift?
-                    if (labels.index[offset + i] !== undefined) {
-                        shift++;
+                    index = labels.index[offset + i];
+                    if (index !== undefined) {
+                        shift += labels.list[index].height || labelHeight;
                     }
                     // no data? (happens if list request fails)
                     if (!data[i]) {
-                        pool[i] = clone = cloneRow(template);
+                        pool[i] = cloneRow(template);
                     }
                     row = pool[i];
                     row.appendTo(container);
@@ -384,9 +396,9 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                     node.className = defaultClassName + ' ' + ((offset + i) % 2 ? 'odd' : 'even');
                     if (data[i]) {
                         // update fields
-                        row.update(data[i], offset + i, self.selection.serialize(data[i]));
+                        row.update(data[i], offset + i, self.selection.serialize(data[i]), data[i - 1] || {});
                     }
-                    node.style.top = shift * labelHeight + (offset + i) * itemHeight + 'px';
+                    node.style.top = shift + (offset + i) * itemHeight + 'px';
                     tmp[i] = row.node;
                 }
 
@@ -398,27 +410,44 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                     }
                 }
 
-                // update selection
+                // update selection (just to get css classes back)
                 self.selection.update();
                 tmp = null;
 
                 // remember bounds
                 bounds.top = offset;
                 bounds.bottom = offset + numRows;
+            }
+
+            return function (offset) {
+
+                if (!initialized) {
+                    return;
+                }
+
+                // keep positive
+                offset = Math.max(offset, 0);
+
+                if (offset === currentOffset) {
+                    return DONE;
+                } else {
+                    currentOffset = offset;
+                }
+
+                // get all items
+                var load = loadData[currentMode] || loadData.all,
+                    subset = all.slice(offset, offset + numRows),
+                    lfo = _.lfo(cont, offset);
+
+                return load.call(self, subset)
+                    .done(lfo)
+                    .fail(function () {
+                        // continue with dummy array
+                        lfo(new Array(subset.length));
+                    });
             };
 
-            // get item
-
-            var load = loadData[currentMode] || loadData.all,
-                subset = all.slice(offset, offset + numRows);
-
-            return load.call(self, subset)
-                .done(cont)
-                .fail(function () {
-                    // continue with dummy array
-                    cont(new Array(subset.length));
-                });
-        };
+        }());
 
         resize = function () {
             // get num of rows
@@ -447,6 +476,16 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             frag = null;
         };
 
+        function initLabels() {
+            // process labels first (determines numLabels), then set height
+            processLabels();
+            return paintLabels().done(function (cumulatedLabelHeight) {
+                container.css({
+                    height: (cumulatedLabelHeight + all.length * itemHeight) + 'px'
+                });
+            });
+        }
+
         function apply(list, quiet) {
             // changed?
             if (list.length !== all.length || !_.isEqual(all, list)) {
@@ -455,79 +494,137 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 currentOffset = null;
                 // initialize selection
                 self.selection.init(all);
-                // process labels first (determines numLabels), then set height
-                processLabels();
-                container.css({
-                    height: (numLabels * labelHeight + all.length * itemHeight) + 'px'
-                });
-                paintLabels();
+                // labels
+                initLabels();
+            }
+            // empty?
+            scrollpane.find('.io-ox-center').remove().end();
+            if (list.length === 0 && loaded) {
+                scrollpane.append($.fail(emptyMessage ? emptyMessage(self.getMode()) : gt('Empty')));
             }
             // trigger event
             if (!quiet) {
-                self.trigger('ids-loaded');
+                self.trigger('change:ids', all);
             }
             // paint items
-            var offset = getIndex(node.scrollTop()) - (numRows - numVisible);
+            var offset = currentOffset || (getIndex(node.scrollTop()) - (numRows - numVisible));
             return paint(offset);
         }
 
-        loadAll = function () {
+        deserialize = function (cid) {
+            return _.cid(cid);
+        };
 
-            if (all.length === 0) {
-                // be busy
-                container.css({ visibility: 'hidden' }).parent().busy();
+        function autoSelect() {
+            return options.selectFirstItem !== false && $(document).width() > 700;
+        }
+
+        function updateSelection(changed) {
+            // vars
+            var id = _.url.hash('id'), ids, cid, index, selectionChanged;
+            // use url?
+            ids = id !== undefined ? id.split(/,/) : [];
+            if (all.length) {
+                if (ids.length && self.selection.contains(ids)) {
+                    // convert ids to objects first - avoids problems with
+                    // non-existing items that cannot be resolved in selections
+                    //console.debug('case #1:', ids);
+                    ids = _(ids).map(deserialize);
+                    selectionChanged = !self.selection.equals(ids);
+                    if (selectionChanged) {
+                        // set
+                        self.selection.set(ids);
+                        firstAutoSelect = false;
+                    }
+                    //changed = true;
+                    if (selectionChanged || changed) {
+                        // scroll to first selected item
+                        cid = _(ids).first();
+                        index = self.selection.getIndex(cid) || 0;
+                        if (!isVisible(index)) {
+                            setIndex(index - 2); // not at the very top
+                        }
+                    }
+                } else {
+                    if (autoSelect()) {
+                        if (firstAutoSelect) {
+                            // select first or previous selection
+                            //console.debug('case #2: smart');
+                            self.selection.selectSmart();
+                            firstAutoSelect = false;
+                        } else {
+                            // set selection based on last index
+                            //console.debug('case #3: last index');
+                            self.selection.selectLastIndex();
+                        }
+                    }
+                }
             }
+        }
 
-            function handleFail() {
+        loadAll = (function () {
+
+            function fail() {
                 // clear grid
                 apply([]);
                 // inform user
-                container.hide().parent().idle().append(
-                    $.fail('Could not load content.', function () {
-                        container.show();
-                        loadAll();
-                    })
-                );
+                container.hide().parent().idle()
+                    .find('.io-ox-fail').parent().remove().end().end()
+                    .append(
+                        $.fail(gt('Could not load this list'), function () {
+                            container.show();
+                            loadAll();
+                        })
+                    );
             }
 
-            // get all IDs
-            var load = loadIds[currentMode] || loadIds.all,
-                def = $.Deferred();
+            function success(list) {
+                // mark as loaded
+                loaded = true;
+                responsiveChange = false;
+                // get list
+                if (!isArray(list)) {
+                    // try to use 'data' property
+                    self.prop('total', list.more);
+                    list = list.data;
+                }
+                // is pause? (only allow new items)
+                if (paused) {
+                    var hash = {}, tmp = [];
+                    _(all).each(function (obj) {
+                        hash[_.cid(obj)] = true;
+                    });
+                    _(list).each(function (obj) {
+                        if (!(_.cid(obj) in hash)) {
+                            tmp.push(obj);
+                        }
+                    });
+                    list = tmp.concat(all);
+                }
+                if (isArray(list)) {
+                    return apply(list)
+                        .always(function () {
+                            self.idle();
+                        })
+                        .done(function () {
+                            firstAutoSelect = firstAutoSelect || list.length === 0;
+                            updateSelection(list.length !== all.length || !_.isEqual(all, list));
+                        });
+                } else {
+                    console.warn('VGrid.all() must provide an array!');
+                    return $.Deferred().reject();
+                }
+            }
 
-            load.call(self)
-                .done(function (list) {
-                    if (isArray(list)) {
-                        apply(list)
-                            .always(function () {
-                                // stop being busy
-                                container.css({ visibility: '' }).parent().idle();
-                            })
-                            .done(function () {
-                                // use url?
-                                if (_.url.hash('id') !== undefined) {
-                                    var ids = _.url.hash('id').split(/,/);
-                                    // convert ids to objects first - avoids problems with
-                                    // non-existing items that cannot be resolved in selections
-                                    self.selection.set(_(ids).map(function (cid) {
-                                        var c = cid.split(/\./);
-                                        return { folder_id: c[0], id: c[1] };
-                                    }));
-                                } else {
-                                    // select first or previous selection
-                                    self.selection.selectSmart();
-                                }
-                            })
-                            .done(def.resolve)
-                            .fail(def.reject);
-                    } else {
-                        console.warn('VGrid.all() must provide an array!');
-                        def.fail(def.reject);
-                    }
-                })
-                .fail(handleFail);
-
-            return def;
-        };
+            return function () {
+                if (responsiveChange || all.length === 0) {
+                    self.busy();
+                }
+                // get all IDs
+                var load = loadIds[currentMode] || loadIds.all;
+                return load.call(self).then(_.lfo(success), _.lfo(fail));
+            };
+        }());
 
         init = function () {
             // get sizes
@@ -535,15 +632,40 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             labelHeight = label.getHeight();
             // resize
             resize();
+            initialized = true;
             // load all IDs
             return loadAll();
         };
 
+        // is index visible?
+        isVisible = function (index) {
+            var top = scrollpane.scrollTop(),
+                height = scrollpane.height();
+            return index >= getIndex(top) && index < (getIndex(top + height) - 1);
+        };
+
+        // set scrollTop via index
+        setIndex = function (index) {
+            var i = 0, $i = Math.min(Math.max(0, index), all.length), j = 0, y = 0, label;
+            for (; i < $i; i++) {
+                label = labels.list[j];
+                if (label && label.pos === i) {
+                    y += label.height || labelHeight;
+                    j++;
+                }
+                y += itemHeight;
+            }
+            scrollpane.scrollTop(y);
+        };
+
+        // get index via scrollTop
         getIndex = function (top) {
-            var i = 0, $i = all.length, y = 0;
+            var i = 0, $i = all.length, j = 0, y = 0, label;
             for (; i < $i && y < top; i++) {
-                if (labels.index[i] !== undefined) {
-                    y += labelHeight;
+                label = labels.list[j];
+                if (label && label.pos === i) {
+                    y += label.height || labelHeight;
+                    j++;
                 }
                 y += itemHeight;
             }
@@ -551,27 +673,37 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         };
 
         fnScroll = _.throttle(function () {
-            if (paint.pending === false) {
-                var top = scrollpane.scrollTop(),
-                    index = getIndex(top);
-                // checks bounds
-                if (index >= bounds.bottom - numVisible - 2) {
-                    // below bottom
-                    paint(index - (numVisible >> 1));
-                } else if (index < bounds.top + 2 && bounds.top !== 0) {
-                    // above top
-                    paint(index - numVisible * 1.5);
-                }
+            var top = scrollpane.scrollTop(),
+                index = getIndex(top);
+            // checks bounds
+            if (index >= bounds.bottom - numVisible - 2) {
+                // below bottom (scroll down)
+                paint(index - (numVisible >> 1));
+            } else if (index < bounds.top + 2 && bounds.top !== 0) {
+                // above top (scroll up)
+                paint(index - numVisible * 1.5, 'above');
             }
-        }, 100);
+        }, 50);
 
-        // routing
-        this.selection.on('change', function (e, list) {
-            var id = _(list).map(function (obj) {
-                    return self.selection.serialize(obj);
-                }).join(',');
-            _.url.hash('id', id !== '' ? id : null);
-        });
+        // selection events
+        this.selection
+            .on('change', function (e, list) {
+                var id = _(list).map(function (obj) {
+                        return self.selection.serialize(obj);
+                    }).join(',');
+                _.url.hash('id', id !== '' ? id : null);
+                // propagate DOM-based select event?
+                if (list.length >= 1) {
+                    node.trigger('select', list);
+                }
+            })
+            .on('select:first', function () {
+                setIndex(0);
+            })
+            .on('select:last', function () {
+                setIndex(all.length - 1);
+            });
+
 
         // public methods
 
@@ -605,6 +737,18 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             return false;
         };
 
+        this.busy = function () {
+            // remove error messages & hide container
+            scrollpane.find('.io-ox-center').remove();
+            container.css({ visibility: 'hidden' }).parent().busy();
+            return this;
+        };
+
+        this.idle = function () {
+            container.show().css({ visibility: '' }).parent().idle();
+            return this;
+        };
+
         this.paint = function () {
             if (firstRun) {
                 scrollpane.on('selectstart', false)
@@ -615,19 +759,26 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             return init();
         };
 
-        this.repaint = function () {
-            var offset = getIndex(node.scrollTop()) - (numRows - numVisible);
-            currentOffset = null;
-            return paint(offset);
+        this.repaintLabels = function () {
+            return initLabels();
         };
+
+        this.repaint = _.debounce(function () {
+            var offset = currentOffset || 0;
+            currentOffset = null;
+            // cannot hand over deferred due to debounce;
+            // don't remove debouce cause repaint is likely wired with APIs' refresh.list
+            // which may be called many times in a row
+            paint(offset);
+        }, 100, true);
 
         this.clear = function () {
-            apply([], true);
+            return paused ? $.when() : apply([], true);
         };
 
-        this.refresh = function () {
+        this.refresh = function (force) {
             // load all (if painted before)
-            return firstRun ? $.when : loadAll();
+            return !firstRun ? loadAll() : (force === true ? this.paint() : DONE);
         };
 
         this.getMode = function () {
@@ -639,6 +790,10 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             // otherwise subsequent search queries are impossible
             // if this function gets called too often, fix it elsewhere
             currentMode = mode;
+            this.trigger('change:mode', currentMode);
+            _.url.hash('id', null);
+            firstAutoSelect = true;
+            responsiveChange = true;
             return this.refresh();
         };
 
@@ -690,10 +845,10 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             return editable;
         };
 
-        this.setEditable = function (flag) {
+        this.setEditable = function (flag, selector) {
             if (flag) {
                 node.addClass('editable');
-                this.selection.setEditable(true);
+                this.selection.setEditable(true, options.simple ? '.vgrid-cell-checkbox' : '.vgrid-cell');
                 editable = true;
             } else {
                 node.removeClass('editable');
@@ -708,12 +863,68 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         };
 
         this.prop = function (key, value) {
-            if (value !== undefined) {
-                props[key] = value;
+            if (key !== undefined) {
+                if (value !== undefined) {
+                    props[key] = value;
+                    this.trigger('change:prop', key, value);
+                    this.trigger('change:prop:' + key, value);
+                    responsiveChange = true;
+                    return this;
+                } else {
+                    return props[key];
+                }
             } else {
-                return props[key];
+                return props;
             }
         };
+
+        this.scrollTop = function (t) {
+            return t !== undefined ? scrollpane.scrollTop(t) : scrollpane.scrollTop();
+        };
+
+        this.getContainer = function () {
+            return container;
+        };
+
+        this.setDeserialize = function (fn) {
+            if (_.isFunction(fn)) {
+                deserialize = fn;
+            }
+        };
+
+        this.pause = function () {
+            paused = true;
+            return self;
+        };
+
+        this.resume = function () {
+            paused = false;
+            return self;
+        };
+
+        this.isVisible = isVisible;
+        this.setIndex = setIndex;
+        this.getIndex = getIndex;
+
+        this.setEmptyMessage = function (fn) {
+            emptyMessage = fn;
+        };
+
+        this.updateTemplates = function () {
+            _(pool).each(function (node) {
+                node.detach();
+            });
+            pool = [];
+            init();
+            this.repaint();
+        };
+
+        // apply options
+        if (options.editable) {
+            this.setEditable(true);
+        }
+
+        node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');
     };
 
     // make Template accessible

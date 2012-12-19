@@ -1,0 +1,8 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: @package@
+Upstream-Contact: @maintainer@
+
+Files: *
+Copyright: @copyright@
+License: @licenseName@
+@license@

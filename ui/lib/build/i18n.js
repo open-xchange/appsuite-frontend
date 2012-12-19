@@ -21,12 +21,6 @@ var rimraf = require("../rimraf/rimraf");
 var jshint = require("../jshint").JSHINT;
 var _ = require("../underscore.js");
 
-var gtWalker = ast("gt").any("gt").asCall().walker();
-var gtMethodWalker = ast("gt.gt").any("gt").asCall().walker();
-var getGt = ast("gt").asCall().getter("gt");
-var getMethod = ast("gt.gt").asCall().getter("gt");
-var getStr = ast("'str'").getter("str");
-
 var potHeader = 'msgid ""\nmsgstr ""\n' +
     '"Project-Id-Version: Open-Xchange 7\\n"\n' +
     '"POT-Creation-Date: ' + utils.startTime + '\\n"\n' +
@@ -75,15 +69,23 @@ function addMsg(map, key, msg) {
     }
     if (key in map) {
         if (!_.isEqual(map[key].comments, msg.comments)) {
-            throw new Error("Different comments for the same text:\n\n" +
-                            generateComment(msg) + "\n\nvs\n\n" +
-                            generateComment(map[key]) + "\n");
+            var comments = map[key].comments;
+            addSeparator(comments);
+            addSeparator(msg.comments);
+            if (comments.join('\n').indexOf(msg.comments.join('\n')) < 0) {
+                comments.push.apply(comments, msg.comments);
+            }
         }
-        map[key].locations = utils.merge(map[key].locations, msg.locations,
-                                         cmp);
+        map[key].locations =
+            utils.mergeArrays(map[key].locations, msg.locations, cmp);
     } else {
         map[key] = msg;
     }
+}
+
+function addSeparator(comments) {
+    if (comments[0] ===   '#. #-#-#-#-#-#-#-#-#-#') return;
+    comments.splice(0, 0, '#. #-#-#-#-#-#-#-#-#-#');
 }
 
 exports.addMessage = function(msg, filename) {
@@ -108,7 +110,7 @@ function warn(message, src) {
 function addMessage(filename, node, method, getSrc) {
     var src = getSrc(node[0].start.line + 1);
     var args = node[2];
-    if (args.length != method.length) {
+    if (method.length > 1 && args.length != method.length) {
         return warn("Invalid number of arguments to i18n function", src);
     }
     var msg = {
@@ -118,7 +120,12 @@ function addMessage(filename, node, method, getSrc) {
         locations: [src]
     };
     for (var i = 0; i < method.length; i++) {
-        if (method[i]) msg[method[i]] = getStr(args[i]);
+        if (!method[i]) continue;
+        if (!pro.when_constant(args[i], addArg)) return pro.MAP.skip;
+    }
+    function addArg(ast, val) {
+        msg[method[i]] = val;
+        return true;
     }
     
     exports.addMessage(msg, filename);
@@ -153,6 +160,11 @@ function poFiles() {
 // TODO: language distinction in modifiedModules
 var gtModules = {}, modifiedModules = {}, gtModulesFilename;
 
+function langFile(name, lang) {
+    return name.replace(/@lang@/g, lang.toLowerCase().replace('_', '-')) +
+        '.' + lang + '.js';
+}
+
 function writeModule(target) {
     var pofiles = poFiles();
     for (var lang in pofiles) {
@@ -166,12 +178,45 @@ function writeModule(target) {
             dictionary: dict
         }, null, process.env.debug ? 4 : 0);
         var name = gtModules[target].name;
-        fs.writeFileSync(target + "." + lang + ".js",
+        var destName = langFile(target, lang);
+        mkdirsSync(path.dirname(destName));
+        fs.writeFileSync(destName,
             'define("' + name + "." + lang +
             '",["io.ox/core/gettext"],function(g){return g("' + name + '",' +
             js + ');});');
     }
 }
+
+// Recursive mkdir from https://gist.github.com/319051
+// mkdirsSync(path, [mode=(0777^umask)]) -> pathsCreated
+function mkdirsSync(dirname, mode) {
+    if (mode === undefined) mode = 0x1ff ^ process.umask();
+    var pathsCreated = [], pathsFound = [];
+    var fn = dirname;
+    while (true) {
+        try {
+            var stats = fs.statSync(fn);
+            if (stats.isDirectory())
+                break;
+            throw new Error('Unable to create directory at '+fn);
+        }
+        catch (e) {
+            if (e.code === 'ENOENT') {
+                pathsFound.push(fn);
+                fn = path.dirname(fn);
+            }
+            else {
+                throw e;
+            }
+        }
+    }
+    for (var i=pathsFound.length-1; i>-1; i--) {
+        var fn = pathsFound[i];
+        fs.mkdirSync(fn, mode);
+        pathsCreated.push(fn);
+    }
+    return pathsCreated;
+};
 
 exports.modules = {
     load: function(filename) {
@@ -181,14 +226,15 @@ exports.modules = {
         }
     },
     add: function(moduleName, source, target) {
-        var dest = utils.dest(path.join("apps", moduleName));
+        var dest = path.join(process.env.l10nDir || utils.builddir,
+                             'apps', moduleName);
         var module = gtModules[dest];
         if (!module) module = gtModules[dest] = { name: moduleName, files: {} };
         module.files[source] = _.keys(exports.potFiles[target] || {});
         modifiedModules[dest] = true;
         _.each(exports.languages(), function(lang) {
-            utils.includes.set(dest + "." + lang + ".js",
-                ["i18n/" + lang + ".po"], "lang.js");
+            var destName = langFile(dest, lang);
+            utils.includes.set(destName, ['i18n/' + lang + '.po'], 'lang.js');
         });
     },
     save: function() {
@@ -196,7 +242,7 @@ exports.modules = {
             if (modifiedModules[target]) writeModule(target);
         }
         modifiedModules = {};
-        fs.writeFileSync(gtModulesFilename, JSON.stringify(gtModules));
+        fs.writeFileSync(gtModulesFilename, JSON.stringify(gtModules, null, 4));
     }
 };
 
@@ -218,14 +264,14 @@ exports.potScanner = function(name, deps, f) {
     // find gettext calls
     // results are stored in pot and exports.potFiles
     var gtScope = f[3].scope;
-    ast.scanner(gtWalker, function(scope) {
-        if (getGt(this) !== apiName) return;
+    ast.scanner(ast.walker.call, function(scope) {
+        if (ast.getter.call(this) !== apiName) return;
         if (scope.refs[apiName] !== gtScope) return;
         return addMessage(self.task.name, this, gtMethods.gettext, self.getSrc);
-    }).scanner(gtMethodWalker, function(scope) {
-        if (getMethod[0](this) !== apiName) return;
+    }).scanner(ast.walker.method, function(scope) {
+        if (ast.getter.methodObj(this) !== apiName) return;
         if (scope.refs[apiName] !== gtScope) return;
-        var method = gtMethods[getMethod[1](this)];
+        var method = gtMethods[ast.getter.methodName(this)];
         if (!method) return;
         return addMessage(self.task.name, this, method, self.getSrc);
     }).scan(f);
@@ -251,8 +297,8 @@ exports.potHandler = function(filename) {
 
 function escapePO(s) {
     return s.replace(/[\x00-\x1f\\"]/g, function(c) {
-        var n = Number(c.charCodeAt(0)).toString(16);
-        return "\\u00" + (n.length < 2 ? "0" + n : n);
+        var n = Number(c.charCodeAt(0)).toString(8);
+        return "\\000".slice(0, -n.length) + n;
     });
 }
 
@@ -327,7 +373,7 @@ exports.parsePO = function(file) {
             if (t[3]) return t[3];
             if (t[4]) return t[4];
             if (t[5]) throw new Error(format(
-                "Invalid character in line %s.", line_no));
+                "Invalid character in line %s.", [line_no]));
         }
     }
 
@@ -345,7 +391,7 @@ exports.parsePO = function(file) {
         } else if (!optional) {
             throw new Error(format(
                 "Unexpected '%1$s' in line %3$s, expected '%2$s'.",
-                lookahead, name, line_no));
+                [lookahead, name, line_no]));
         }
     }
     

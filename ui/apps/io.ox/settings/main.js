@@ -16,7 +16,9 @@ define('io.ox/settings/main',
       'io.ox/core/extensions',
       'io.ox/core/tk/forms',
       'io.ox/core/tk/view',
-      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms, View) {
+      'io.ox/core/commons',
+      'gettext!io.ox/core',
+      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms, View, commons, gt) {
 
     'use strict';
 
@@ -31,7 +33,7 @@ define('io.ox/settings/main',
                 return { title: title };
             },
             set: function (data, fields, index) {
-                fields.title.text(data.title);
+                fields.title.text(gt(data.title));
             }
         },
         label: {
@@ -47,19 +49,12 @@ define('io.ox/settings/main',
         }
     };
 
-
-
-
-
-
-
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/settings' }),
         // app window
         win,
         // grid
         grid,
-        GRID_WIDTH = 330,
         // nodes
         left,
         right,
@@ -75,58 +70,51 @@ define('io.ox/settings/main',
         }
     }
 
-
     app.setLauncher(function () {
+
         app.setWindow(win = ox.ui.createWindow({
-            title: 'Settings',
-            toolbar: true,
-            titleWidth: (GRID_WIDTH + 27) + "px",
-            name: 'io.ox/settings'
+            name: 'io.ox/settings',
+            title: gt('Settings'),
+            chromeless: true
         }));
 
-        var onHideSettingsPane = function () {
-            var settingsID = currentSelection.id + '/settings';
-            ext.point(settingsID + '/detail').invoke('save');
-        };
-        win.on('hide', onHideSettingsPane);
-
-
-
-
-        ext.point('io.ox/settings/links/toolbar').extend({
-            id: 'io.ox/settings/expertcb',
-            draw: function (context) {
-                this.append(
-                    forms.createCheckbox({
-                        dataid: 'settings-expertcb',
-                        initialValue: expertmode,
-                        label: 'Expertmode'
-                    })
-                    .on('update.model', function (e, options) {
-                        expertmode = options.value;
-                        updateExpertMode();
-                    })
-                );
+        var saveSettings = function () {
+            if (currentSelection !== null) {
+                var settingsID = currentSelection.id + '/settings';
+                ext.point(settingsID + '/detail').invoke('save');
             }
-        });
+        };
 
+        win.on('hide', saveSettings);
+
+        win.nodes.controls.append(
+            forms.createCheckbox({
+                dataid: 'settings-expertcb',
+                initialValue: expertmode,
+                label: gt('Expert mode')
+            })
+            .on('update.model', function (e, options) {
+                expertmode = options.value;
+                updateExpertMode();
+            })
+        );
 
         win.addClass('io-ox-settings-main');
 
-        left = $('<div/>')
+        left = $('<div>')
             .addClass('leftside border-right')
-            .css({
-                width: GRID_WIDTH + 'px',
-                overflow: 'auto'
-            })
             .appendTo(win.nodes.main);
 
-        right = $('<div/>')
-            .css({ left: GRID_WIDTH + 1 + 'px', overflow: 'auto' })
+        right = $('<div>')
             .addClass('rightside default-content-padding settings-detail-pane')
             .appendTo(win.nodes.main);
 
         grid = new VGrid(left);
+
+        // disable the Deserializer
+        grid.setDeserialize(function (cid) {
+            return cid;
+        });
 
         grid.addTemplate(tmpl.main);
         grid.addLabelTemplate(tmpl.label);
@@ -134,66 +122,87 @@ define('io.ox/settings/main',
         grid.requiresLabel = tmpl.requiresLabel;
 
         grid.setAllRequest(function () {
-            var apps = _.filter(appsApi.getInstalled(), function (item) {
-                return item.settings;
+            var def = $.Deferred();
+            appsApi.getInstalled().done(function (installed) {
+                var apps = _.filter(installed, function (item) {
+                    return item.settings;
+                });
+
+                apps.unshift({
+                    category: 'Basic',
+                    company: 'Open-Xchange',
+                    description: 'Basic Settings',
+                    icon: '',
+                    id: 'io.ox/core',
+                    settings: true,
+                    title: 'Basic Settings'
+                });
+
+                // TODO: Move this to a plugin
+                apps.push({
+                    category: 'Basic',
+                    company: 'Open-Xchange',
+                    description: 'Manage Accounts',
+                    icon: '',
+                    id: 'io.ox/settings/accounts',
+                    settings: true,
+                    title: 'Keyring'
+                });
+
+                // Extend the above list by custom plugins
+                ext.point("io.ox/settings/pane").each(function (ext) {
+                    apps.push({
+                        description: ext.title,
+                        id: ext.ref,
+                        settings: true,
+                        title: ext.title,
+                        loadSettingPane: ext.loadSettingPane
+                    });
+                });
+
+                def.resolve(apps);
             });
 
-            apps.push({
-                category: 'Basic',
-                company: 'Open-Xchange',
-                description: 'Manage Accounts',
-                icon: '',
-                id: 'io.ox/settings/accounts',
-                settings: true,
-                title: 'Accounts'
-            });
-            console.log('listing apps');
-            console.log(apps);
 
-            return $.Deferred().resolve(apps);
-        });
-
-        var showSettings = function (obj) {
-            var settingsID = obj.id + '/settings';
-            console.log('load:' + settingsID);
-            right.empty().busy();
-            require([ settingsID ], function (m) {
-                console.log("extpoint:" + settingsID + '/detail');
-                ext.point(settingsID + '/detail').invoke('draw', right, obj);
-                updateExpertMode();
-                right.idle();
-            });
-        };
-        grid.selection.on('change', function (e, selection) {
-            if (selection.length === 1) {
-                var isOpenedTheFirstTime = (currentSelection === null);
-                if (!isOpenedTheFirstTime) {
-                    onHideSettingsPane();
-                }
-                currentSelection = selection[0];
-                showSettings(currentSelection);
-            } else {
-                right.empty();
-            }
+            return def;
         });
 
         grid.setMultiple(false);
 
-        win.on('show', function () {
-            grid.selection.keyboard(true);
-        });
-        win.on('hide', function () {
-            grid.selection.keyboard(false);
+        var showSettings = function (obj) {
+            var settingsPath = obj.id + '/settings/pane',
+                extPointPart = obj.id + '/settings';
+            right.empty().busy();
+            if (obj.loadSettingPane || _.isUndefined(obj.loadSettingPane)) {
+                require([settingsPath], function (m) {
+                    right.empty().idle(); // again, since require makes this async
+                    ext.point(extPointPart + '/detail').invoke('draw', right, obj);
+                    updateExpertMode();
+                });
+            } else {
+                right.empty().idle(); // again, since require makes this async
+                ext.point(extPointPart + '/detail').invoke('draw', right, obj);
+                updateExpertMode();
+            }
+        };
+
+        // trigger auto save
+        grid.selection.on('change', function (e, selection) {
+            if (selection.length === 1) {
+                saveSettings();
+                currentSelection = selection[0];
+            }
         });
 
+        commons.wireGridAndSelectionChange(grid, 'io.ox/settings', showSettings, right);
+        commons.wireGridAndWindow(grid, win);
 
         // go!
         win.show(function () {
             grid.paint();
         });
-        grid.refresh();
-
     });
+
     return {
         getApp: app.getInstance
     };

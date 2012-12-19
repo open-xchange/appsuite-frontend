@@ -1,0 +1,56 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.io-ox-office-preview-page-indicator {
+    position: absolute;
+    font-size: 30pt;
+    bottom: 26px;
+    right: 13px;
+    color: #aaa;
+    z-index: 1;
+}
+
+.io-ox-office-preview-controls {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.io-ox-office-preview-loading {
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.io-ox-office-preview-page {
+    width: 21cm;
+    padding: 2cm;
+    margin: 1cm auto 1cm auto;
+    .box-sizing(border-box);
+}
+
+.io-ox-office-preview-presentation {
+    width: 720pt;
+    margin: 1cm auto 1cm auto;
+    .box-sizing(border-box);
+}
+
+.io-ox-office-preview-content {
+    .box-shadow(0px 0px 30px -5px #aaa);
+    background-color: white;
+}
+
+/*
+.io-ox-office-preview-background {
+    background-color: #ddd;
+}
+*/

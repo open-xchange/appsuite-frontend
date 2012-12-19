@@ -11,18 +11,41 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define.async('io.ox/core/api/apps',
-    ['io.ox/core/cache',
-     'io.ox/core/event'], function (cache, Events) {
+define('io.ox/core/api/apps',
+    ['io.ox/core/event',
+     'io.ox/core/extensions',
+     'io.ox/core/manifests',
+     'io.ox/core/capabilities'], function (Events, ext, manifests, capabilities) {
 
     'use strict';
 
     // simple plain cache
-    var appCache = null,
-        appData = {},
-        // wait for init
-        wait = $.Deferred(),
+    var appData = {
+            favorites: [],
+            installed: [],
+            categories: [],
+            apps: {}
+        },
         api;
+
+    // Construct App Data
+    _(manifests.manager.apps).each(function (appManifest) {
+        var id = appManifest.path.substr(0, appManifest.path.length - 5);
+
+        appData.installed.push(id);
+        appData.apps[id] = appManifest;
+        appData.categories.push(appManifest.category);
+    });
+
+    appData.categories = _(appData.categories).uniq();
+
+    // TODO: Make favourites dynamic
+    _(["io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar", "io.ox/files", "io.ox/tasks"]).each(function (id) {
+        var app = appData.apps[id];
+        if (app && capabilities.has(app.requires)) {
+            appData.favorites.push(id);
+        }
+    });
 
     var bless = function (obj, id) {
             obj = _.clone(obj || {});
@@ -61,13 +84,6 @@ define.async('io.ox/core/api/apps',
                         title: 'Upgrades',
                         count: 1,
                         group: 'Your Apps'
-                    },
-                    {
-                        // special 'Augenwischerei' category
-                        id: 'mockIntegration',
-                        title: 'Parallels Marketplace',
-                        count: 2,
-                        group: 'Your Apps'
                     }
                 ].concat(
                     // loop over categories and add count per category
@@ -79,6 +95,14 @@ define.async('io.ox/core/api/apps',
                             group: 'Categories'
                         };
                     })
+                ).concat(
+                    // Add extension point categories
+                    ext.point("io.ox/core/apps/category").map(function (ext) {
+                        if (ext.category) {
+                            return ext.metadata("category");
+                        }
+                        return ext;
+                    }).value()
                 );
         },
 
@@ -97,8 +121,18 @@ define.async('io.ox/core/api/apps',
         getSpecial = function (prop) {
             return _(appData[prop]).map(function (id) {
                 return bless(appData.apps[id], id);
-            });
+            }).concat(
+                // Add extension point categories
+                ext.point("io.ox/core/apps/" + prop).map(function (ext) {
+                    if (ext.app) {
+                        return ext.metadata("app");
+                    }
+                    return ext;
+                }).value()
+            );
         };
+
+    var cachedInstalled = null;
 
     // public module interface
     api = {
@@ -111,8 +145,23 @@ define.async('io.ox/core/api/apps',
 
         getByCategory: getByCategory,
 
-        getInstalled: function () {
-            return getSpecial('installed');
+        getInstalled: function (mode) {
+            // TODO: not this way please!
+            if (mode === 'cached' && cachedInstalled !== null) {
+                return $.Deferred().resolve(cachedInstalled);
+            }
+            var installedLoaded = [];
+            installedLoaded.push(new $.Deferred().resolve(getSpecial('installed')));
+            ext.point("io.ox/core/apps/store").each(function (extension) {
+                if (extension.installed) {
+                    installedLoaded.push(extension.installed());
+                }
+            });
+            return $.when.apply($, installedLoaded).pipe(function () {
+                return (cachedInstalled = _.chain(arguments).flatten().filter(function (app) {
+                    return 'requires' in app ? capabilities.has(app.requires) : true;
+                }).value());
+            });
         },
 
         getFavorites: function () {
@@ -141,28 +190,5 @@ define.async('io.ox/core/api/apps',
 
     Events.extend(api);
 
-    // initialize
-    appCache = new cache.SimpleCache('apps', true);
-
-    function fetch() {
-        return require([ox.base + '/src/userconfig.js'])
-            .pipe(function (data) {
-                // add to cache & local var
-                return appCache.add('default', appData = data);
-            });
-    }
-
-    return appCache.contains('default').pipe(function (check) {
-        if (check) {
-            return appCache.get('default').pipe(function (data) {
-                appData = data;
-                fetch();
-                return api;
-            });
-        } else {
-            return fetch().pipe(function () {
-                return api;
-            });
-        }
-    });
+    return api;
 });

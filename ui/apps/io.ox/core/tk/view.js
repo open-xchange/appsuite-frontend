@@ -16,20 +16,22 @@ define: true
 
 define('io.ox/core/tk/view',
       ['io.ox/core/tk/forms',
-       'io.ox/core/tk/model'], function (forms, Model) {
+       'io.ox/core/tk/model',
+       'io.ox/core/event'], function (forms, Model, Event) {
 
     'use strict';
 
     var View = function (options) {
 
-        options = options || {};
-        options.node = options.node || $('<div>');
+        // options become properties
+        _(options || {}).each(function (value, key) {
+            this[key] = value;
+        }, this);
 
-        if (options.model) {
-            this.model = options.model || new Model();
-        }
+        this.model = this.model || new Model();
+        this.node = this.node ? $(this.node) : $('<div>');
 
-        this.node = $(options.node);
+        Event.extend(this);
 
         var self = this,
             getPropertyNodes = function (names) {
@@ -54,32 +56,39 @@ define('io.ox/core/tk/view',
         });
 
         // delegate errors
-        this.model.on('error:invalid error:inconsistent', function (e, error) {
+        this.model.on('error:invalid', function (e, error) {
             getPropertyNodes(error.properties).each(function () {
                 $(this).triggerHandler('invalid', [error]);
             });
-            // TODO: remove - just for debugging
-            if (e.type === 'error:inconsistent') {
-                console.error(error.message);
-            }
         });
 
-        window.horst = this.model;
+        this.initialize.apply(this, arguments);
     };
 
     View.prototype = {
+
+        initialize: $.noop,
+
         setModel: function (model) {
             this.model = model;
         },
+
         getModel: function () {
             return this.model;
         },
-        append: function (jqWrapped) {
-            this.node.append(jqWrapped);
+
+        append: function () {
+            this.node.append.apply(this.node, arguments);
+        },
+
+        destroy: function () {
+            this.model.off('change error:invalid');
+            this.node.off('update.model');
+            this.node.empty().remove();
+            this.model.destroy();
+            this.node = this.model = null;
         }
     };
-
-
 
     // still ugly
     _.each(forms, function (item, itemname) {
@@ -93,6 +102,7 @@ define('io.ox/core/tk/view',
             };
         }
     });
+
     _.makeExtendable(View);
 
     return View;

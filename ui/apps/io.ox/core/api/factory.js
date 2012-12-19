@@ -18,13 +18,27 @@ define("io.ox/core/api/factory",
 
     "use strict";
 
+    var DELIM = '//';
+
     var fix = function (obj) {
-        var clone = _.deepClone(obj);
+        var clone = _.copy(obj, true);
         clone.folder = clone.folder || clone.folder_id;
+        delete clone.folder_id; // to avoid trash in requests
         return clone;
     };
 
-    return function (o) {
+    var GET_IDS = 'id: folder_id:folder folder: recurrence_position:'.split(' ');
+
+    // reduce object to id, folder, recurrence_position
+    var reduce = function (obj) {
+        return !_.isObject(obj) ? obj : _(GET_IDS).reduce(function (memo, prop) {
+            var p = prop.split(':'), source = p[0], target = p[1] || p[0];
+            if (source in obj) { memo[target] = obj[source]; }
+            return memo;
+        }, {});
+    };
+
+    var factory = function (o) {
 
         // extend default options (deep)
         o = $.extend(true, {
@@ -42,7 +56,14 @@ define("io.ox/core/api/factory",
                 search: { action: "search" },
                 remove: { action: "delete" }
             },
-            fail: { }
+            cid: function (o) {
+                return o.folder + DELIM + (o.sortKey || o.sort) + '.' + o.order + '.' + (o.max || o.limit || 0);
+            },
+            done: {},
+            fail: {},
+            pipe: {},
+            params: {},
+            filter: null
         }, o || {});
 
         // use module as id?
@@ -55,56 +76,97 @@ define("io.ox/core/api/factory",
             get: new cache.ObjectCache(o.id + "-get", true, o.keyGenerator)
         };
 
+        // hash to track very first cache hit
+        var readThrough = {};
+
+        // track last_modified
+        var lastModified = {};
+
         var api = {
 
-            getAll: function (options, useCache, cache) {
+            DELIM: DELIM,
+
+            options: o,
+
+            cid: o.cid,
+
+            getAll: function (options, useCache, cache, processResponse) {
+
                 // merge defaults for "all"
-                var opt = $.extend({}, o.requests.all, options || {});
+                var opt = $.extend({}, o.requests.all, options || {}),
+                    cid = o.cid(opt);
+
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 cache = cache || caches.all;
+
                 // cache miss?
                 var getter = function () {
+                    var params = o.params.all ? o.params.all(_.copy(opt, true)) : opt;
                     return http.GET({
                         module: o.module,
-                        params: opt
+                        params: params,
+                        processResponse: processResponse === undefined ? true : processResponse
                     })
-                    .done(function (data, timestamp) {
-                        // remove deprecated entries
-                        // TODO: consider folder_id
-                        caches.get.keys().done(function (keys) {
-                            var diff = _(keys)
-                            .difference(
+                    .pipe(function (data) {
+                        // deferred
+                        var ready = $.when();
+                        // do we have the last_modified columns?
+                        if (/(^5,|,5,|5$)/.test(params.columns)) {
+                            return $.when.apply($,
                                 _(data).map(function (obj) {
-                                    return caches.get.keyGenerator(obj);
+                                    var cid = _.cid(obj);
+                                    // do we see this item for the first time?
+                                    if (lastModified[cid] === undefined) {
+                                        lastModified[cid] = obj.last_modified;
+                                        return ready;
+                                    }
+                                    // do we see a newer item now?
+                                    else if (obj.last_modified > lastModified[cid]) {
+                                        lastModified[cid] = obj.last_modified;
+                                        return $.when(
+                                            api.caches.list.remove(cid),
+                                            api.caches.get.remove(cid)
+                                        )
+                                        .done(function () {
+                                            api.trigger('update:' + encodeURIComponent(cid), obj);
+                                        });
+                                    }
                                 })
-                            );
-                            caches.list.remove(diff);
-                            caches.get.remove(diff);
-                        });
-                        // clear cache
-                        cache.clear(); //TODO: remove affected folder only
+                            )
+                            .pipe(function () { return data; });
+                        } else {
+                            return data;
+                        }
+                    })
+                    .pipe(function (data) {
+                        return (o.pipe.all || _.identity)(data, opt);
+                    })
+                    .done(function (data) {
                         // add to cache
-                        cache.add(opt.folder, data, timestamp);
+                        cache.add(cid, data);
                     });
                 };
 
-                if (useCache) {
-                    return cache.contains(opt.folder).pipe(function (check) {
-                        if (check) {
-                            return cache.get(opt.folder);
-                        } else {
-                            return getter();
-                        }
-                    });
-                } else {
-                    return getter();
-                }
+                var hit = function (data) {
+                    if (!(cid in readThrough)) {
+                        readThrough[cid] = true;
+                        setTimeout(function () {
+                            api.refresh();
+                        }, 5000); // wait some secs
+                    }
+                };
+
+                return (useCache ? cache.get(cid, getter, hit) : getter())
+                    .pipe(o.pipe.allPost)
+                    .done(o.done.all || $.noop);
             },
 
             getList: function (ids, useCache) {
                 // be robust
                 ids = ids ? [].concat(ids) : [];
+                // custom filter
+                if (o.filter) { ids = _(ids).filter(o.filter); }
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 // async getter
@@ -114,6 +176,9 @@ define("io.ox/core/api/factory",
                         params: o.requests.list,
                         data: http.simplify(ids)
                     }))
+                    .pipe(function (data) {
+                        return (o.pipe.list || _.identity)(data);
+                    })
                     .done(function (data) {
                         // add to cache
                         caches.list.add(data);
@@ -123,119 +188,162 @@ define("io.ox/core/api/factory",
                 };
                 // empty?
                 if (ids.length === 0) {
-                    return $.Deferred().resolve([]);
-                } else {
-                    if (useCache) {
-                        // cache miss?
-                        return caches.list.contains(ids).pipe(function (check) {
-                            if (check) {
-                                return caches.list.get(ids);
-                            } else {
-                                return getter();
-                            }
-                        });
-                    } else {
-                        return getter();
+                    return $.Deferred().resolve([]).done(o.done.list || $.noop);
+                } else if (ids.length === 1) {
+                    // if just one item, we use get request
+                    if (typeof ids[0] === 'number') {
+                        ids = [{id: ids[0]}];
                     }
+                    return this.get(http.simplify(ids)[0])
+                        .pipe(function (data) { return [data]; })
+                        .pipe(o.pipe.listPost)
+                        .done(o.done.list || $.noop);
+                } else {
+                    // cache miss?
+                    return (useCache ? caches.list.get(ids, getter) : getter())
+                        .pipe(o.pipe.listPost)
+                        .done(o.done.list || $.noop);
                 }
             },
 
             get: function (options, useCache) {
                 // merge defaults for get
-                var opt = $.extend({}, o.requests.get, options || {});
+                var opt = $.extend({}, o.requests.get, options);
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 // cache miss?
-
                 var getter = function () {
                     return http.GET({
                         module: o.module,
                         params: fix(opt)
                     })
-                    .done(function (data, timestamp) {
-                        // add to cache
-                        caches.get.add(data, timestamp);
-                        // update list cache
-                        caches.list.merge(data).done(function (ok) {
-                            if (ok) {
-                                api.trigger("refresh.list", data);
-                            }
-                        });
+                    .pipe(function (data) {
+                        return (o.pipe.get || _.identity)(data, opt);
+                    })
+                    .done(function (data) {
+                        // use cache?
+                        if (useCache) {
+                            // add to cache
+                            caches.get.add(data);
+                            // update list cache
+                            caches.list.merge(data).done(function (ok) {
+                                if (ok) {
+                                    api.trigger('refresh.list');
+                                }
+                            });
+                        }
                     })
                     .fail(function (e) {
                         _.call(o.fail.get, e, opt, o);
                     });
                 };
+                return (useCache ? caches.get.get(opt, getter, o.pipe.getCache) : getter())
+                    .pipe(o.pipe.getPost)
+                    .done(o.done.get || $.noop);
+            },
 
+            localRemove: function (list, hash, getKey) {
+                return _(list).filter(function (o) {
+                    return hash[getKey(o)] !== true;
+                });
+            },
 
-                if (useCache) {
-                    return caches.get.contains(opt).pipe(function (check) {
-                        if (check) {
-                            return caches.get.get(opt);
-                        } else {
-                            return getter();
-                        }
+            updateCaches: function (ids, silent) {
+                // be robust
+                ids = ids || [];
+                ids = _.isArray(ids) ? ids : [ids];
+                // find affected mails in simple cache
+                var hash = {}, folders = {}, getKey = cache.defaultKeyGenerator;
+                _(ids).each(function (o) {
+                    hash[getKey(o)] = folders[o.folder_id] = true;
+                });
+                // loop over each folder and look for items to remove
+                var defs = _(folders).map(function (value, folder_id) {
+                    // grep keys
+                    var cache = api.caches.all;
+                    return cache.grepKeys(folder_id + DELIM).pipe(function (keys) {
+                        // loop
+                        return $.when.apply($, _(keys).map(function (key) {
+                            // now get cache entry
+                            return cache.get(key).pipe(function (data) {
+                                if (data) {
+                                    if ('data' in data) {
+                                        data.data = api.localRemove(data.data, hash, getKey);
+                                    } else {
+                                        data = api.localRemove(data, hash, getKey);
+                                    }
+                                    return cache.add(key, data);
+                                } else {
+                                    return $.when();
+                                }
+                            });
+                        }));
                     });
-                } else {
-                    return getter();
+                });
+                // remove from object caches
+                if (ids.length) {
+                    defs.push(api.caches.list.remove(ids));
+                    defs.push(api.caches.get.remove(ids));
                 }
+                // clear
+                return $.when.apply($, defs).done(function () {
+                    // trigger item specific events to be responsive
+                    if (!silent) {
+                        _(ids).each(function (obj) {
+                            api.trigger('delete:' + encodeURIComponent(_.cid(obj)));
+                        });
+                    }
+                    hash = folders = defs = ids = null;
+                });
             },
 
             remove: function (ids, local) {
                 // be robust
                 ids = ids || [];
                 ids = _.isArray(ids) ? ids : [ids];
-                var opt = $.extend({}, o.requests.remove, { timestamp: _.now() });
+                var opt = $.extend({}, o.requests.remove, { timestamp: _.now() }),
+                    data = http.simplify(ids);
                 // done
                 var done = function () {
-                    // find affected mails in simple cache
-                    var hash = {}, folders = {}, getKey = cache.defaultKeyGenerator;
-                    _(ids).each(function (o) {
-                        hash[getKey(o)] = true;
-                        folders[o.folder_id] = true;
-                    });
-                    // loop over each folder and look for items to remove
-                    _(folders).each(function (value, folder_id) {
-
-                        caches.all.get(folder_id).done(function (items) {
-                            if (items) {
-                                caches.all.add(
-                                    folder_id,
-                                    _(items).select(function (o) {
-                                        return hash[getKey(o)] !== true;
-                                    })
-                                );
-                            }
-                        });
-                    });
-                    // clear
-                    hash = folders = null;
-                    // remove from object caches
-                    caches.list.remove(ids);
-                    caches.get.remove(ids);
-                    // trigger local refresh
-                    api.trigger("afterdelete");
-                    api.trigger("refresh.all");
+                    api.trigger('refresh.all');
+                    api.trigger('delete', ids);
                 };
-                api.trigger("beforedelete");
-                // delete on server?
-                if (local !== true) {
-                    return http.PUT({
-                        module: o.module,
-                        params: opt,
-                        data: http.simplify(ids),
-                        appendColumns: false
-                    })
-                    .done(done);
-                } else {
-                    return $.Deferred().resolve().done(done);
-                }
+                api.trigger('beforedelete', ids);
+                // remove from caches first
+                return api.updateCaches(ids).pipe(function () {
+                    // trigger visual refresh
+                    api.trigger('refresh:all:local');
+                    // delete on server?
+                    if (local !== true) {
+                        return http.PUT({
+                            module: o.module,
+                            params: opt,
+                            data: data,
+                            appendColumns: false
+                        })
+                        .pipe(function () {
+                            // remove affected folder from cache
+                            var folders = {};
+                            _(ids).each(function (o) { folders[o.folder_id] = o.folder_id; });
+                            return $.when.apply($, _(folders).map(function (id) {
+                                return api.caches.all.grepRemove(id + DELIM);
+                            }));
+                        })
+                        .done(done);
+                    } else {
+                        return done();
+                    }
+                });
             },
 
-            needsRefresh: function (folder) {
+            needsRefresh: function (folder, sort, desc) {
                 // has entries in 'all' cache for specific folder
-                return caches.all.contains(folder);
+                return caches.all.keys(folder + DELIM + sort + '.' + desc).pipe(function (data) {
+                    return data !== null;
+                });
             },
+
+            reduce: reduce,
 
             caches: caches
         };
@@ -252,7 +360,7 @@ define("io.ox/core/api/factory",
                 return http.PUT({
                     module: o.module,
                     params: opt,
-                    data: getData(query)
+                    data: getData(query, options)
                 });
             };
         }
@@ -260,7 +368,7 @@ define("io.ox/core/api/factory",
         Events.extend(api);
 
         // bind to global refresh
-        ox.on("refresh", function () {
+        api.refresh = function () {
             if (ox.online) {
                 // clear "all & list" caches
                 api.caches.all.clear();
@@ -268,9 +376,16 @@ define("io.ox/core/api/factory",
                 // trigger local refresh
                 api.trigger("refresh.all");
             }
+        };
+
+        ox.on('refresh^', function () {
+            api.refresh(); // write it this way so that API's can overwrite refresh
         });
 
         return api;
     };
 
+    factory.reduce = reduce;
+
+    return factory;
 });

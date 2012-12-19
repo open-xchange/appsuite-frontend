@@ -13,6 +13,16 @@
 
 /* Grid */
 
+.io-ox-settings-main {
+
+    .window-controls label {
+        display: inline-block;
+        margin-bottom: 0;
+    }
+
+
+}
+
 .vgrid-cell.settings {
     height: 3.5em;
     padding: 0.75em 13px 0.75em 13px;
@@ -31,9 +41,7 @@
     bottom: 5px;
     left: 3px;
     border-right: 0px none;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    border-radius: 4px 4px 4px 4px;
+    .border-radius(4px 4px 4px 4px);
 }
 
 .sectiondelimiter {
@@ -45,273 +53,142 @@
     height: 1px;
 }
 
-
-.settings-detail-pane .expertmode {
-    
-}
-
 .settings-detail-pane .section {
     max-width: 800px;
 }
-.settings-detail-pane .section-group {
-    margin: 10px 0;
-}
-.settings-detail-pane  .sectiontitle {
-    float: left;
-    width: 100px;
-    font-size: 1.2em;
-    font-weight: bold;
-}
-.settings-detail-pane .sectioncontent {
-    margin-top: 0px;
-    padding-top: 0px;
-    float: left;
-    width: 600px;
+
+.settings-detail-pane .form-horizontal .control-group > label {
+	float: left;
+	width: 150px;
+	padding-top: 5px;
+	text-align: right;
 }
 
-.settings-detail-pane .informational-text {
-    margin: 0px 0px 10px 0px;
+.settings-detail-pane  .form-horizontal .controls,
+.settings-detail-pane .help-inline {
+	margin-left: 170px;
 }
 
-.settings-detail-pane label.select,
-.settings-detail-pane select {
-    min-width: 145px;
+.settings-detail-pane .form-inline .controls {
+	margin-left: 0px;
+	text-align: right;
+	width: 440px;
 }
-.settings-detail-pane label.select > span:only-of-type {
-    display: inline-block;
-    min-width: 100px;
-}
-
-.settings-detail-pane label {
-    cursor: default;
-}
-
-
-.settings-detail-pane .checkbox {
-    margin: 5px 0px;
-    display: block;
-}
-.settings-detail-pane .radio {
-    margin: 5px 0px;
-    display: block;
-
-}
-.settings-detail-pane input[type="checkbox"] {
-    margin: 0px 5px 0px 0px;
-}
-
-
-
-
-.settings-detail-pane .button-leftspacing {
-    margin-left: 10px;
-}
-.settings-detail-pane button,
-.settings-detail-pane input[type='button'],
-.settings-detail-pane input[type='submit'] {
-  -webkit-border-radius: 2px;
-  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-  -webkit-user-select: none;
-  background: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
-  border: 1px solid #aaa;
-  color: #444;
-  font-size: inherit;
-  margin-bottom: 0px;
-  min-width: 4em;
-  padding: 3px 12px 3px 12px;
-  margin: 0px;
-}
-
-.settings-detail-pane button:hover,
-.settings-detail-pane input[type='button']:hover,
-.settings-detail-pane input[type='submit']:hover {
-  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
-  background: #ebebeb -webkit-linear-gradient(#fefefe, #f8f8f8 40%, #e9e9e9);
-  border-color: #999;
-  color: #222;
-}
-
-.settings-detail-pane button:active,
-.settings-detail-pane input[type='button']:active,
-.settings-detail-pane input[type='submit']:active {
-  -webkit-box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2);
-  background: #ebebeb -webkit-linear-gradient(#f4f4f4, #efefef 40%, #dcdcdc);
-  color: #333;
-}
-
-.settings-detail-pane button[disabled],
-.settings-detail-pane input[type='button'][disabled],
-.settings-detail-pane input[type='submit'][disabled],
-.settings-detail-pane button[disabled]:hover,
-.settings-detail-pane input[type='button'][disabled]:hover,
-.settings-detail-pane input[type='submit'][disabled]:hover {
-  -webkit-box-shadow: none;
-  background: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
-  border-color: #aaa;
-  color: #888;
-}
-
-
-.settings-detail-pane select {
-  -webkit-appearance: button;
-  -webkit-border-radius: 2px;
-  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  -webkit-padding-end: 20px;
-  -webkit-padding-start: 2px;
-  -webkit-user-select: none;
-  background-image: url(images/select.png),
-                    -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
-  background-position: center right;
-  background-repeat: no-repeat;
-  border: 1px solid #aaa;
-  color: #555;
-  font-size: inherit;
-  margin: 0;
-  overflow: hidden;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.settings-detail-pane html[dir='rtl'] select {
-  background-position: center left;
-}
-
-
-.settings-detail-pane select:disabled {
-  color: graytext;
-}
-
-.settings-detail-pane select:enabled:hover {
-  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  background-image: url(images/select.png),
-                    -webkit-linear-gradient(#fefefe, #f8f8f8 40%, #e9e9e9);
-  color: #333;
-}
-
-.settings-detail-pane select:enabled:active {
-  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
-  background-image: url(images/select.png),
-                    -webkit-linear-gradient(#f4f4f4, #efefef 40%, #dcdcdc);
-  color: #444;
-}
-
-.settings-detail-pane input[type="text"],
-.settings-detail-pane input[type="password"] {
-  font-size: 12px;
-  line-height: 18px;
-  height: 22px;
-  border: 1px solid #DDD;
-  background-color: white;
-  color: black;
-  outline: 0;
-  margin: 0;
-  padding: 5px 5px 4px 5px;
-  width: 100%;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
-  border-image: initial;
-}
-
 
 .settings-detail-pane .listbox {
-  overflow: auto;
-  position: relative;
-  border: 1px solid #D9D9D9;
-  border-radius: 2px;
-  margin-bottom: 10px;
+	max-width: 540px;
+	overflow-x: hidden;
+  	overflow-y: auto;
+  	position: relative;
+  	border: 1px solid #D9D9D9;
+  	margin-bottom: 10px;
+    .border-radius(3px 3px 3px 3px);
 }
 
-.settings-detail-pane .listbox > * {
-  height: 40px;
-  -webkit-transition: .15s background-color;
-  -webkit-user-select: none;
-  box-sizing: border-box;
-  border-radius: 0;
-  display: -webkit-box;
-  border: none;
-  margin: 0;
-
-  background-color: rgba(255, 255, 255, 0);
-  border: 1px solid rgba(255, 255, 255, 0);
-  border-radius: 2px;
-  cursor: default;
-  line-height: 20px;
-  margin: -1px 0;
-  overflow: hidden;
-  padding: 0px 3px;
-  position: relative; /* to allow overlap */
-  text-overflow: ellipsis;
-  white-space: pre;
-
+.settings-detail-pane .listbox.ui-sortable {
+    border: 0px none;
 }
+
+.settings-detail-pane .listbox .listbox-item {
+    background-color: #eee;
+    margin-bottom: 1px;
+    color: @enabled-color;
+}
+
+.settings-detail-pane .listbox .listbox-item button {
+    float: right;
+    margin-left: 13px;
+}
+
+.settings-detail-pane .listbox.ui-sortable .enabled .listbox-item {
+}
+
 .settings-detail-pane .listbox:focus {
   border-color: hsl(214, 91%, 65%);
   z-index: 2;
 }
-.settings-detail-pane .listbox > [selected] {
-  border-color: hsl(0, 0%, 85%);
-  background-color: hsl(0,0%,90%);
-  z-index: 2;
-  background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0.8),
-                                            rgba(255, 255, 255, 0));
+
+.settings-detail-pane .listbox .selectable[selected] {
+	background-color: @selected-background !important;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0, lighten(@selected-background, 20%)),
+        color-stop(1, darken(@selected-background, 5%))
+    ) !important;
+    background-image: -o-linear-gradient(top, lighten(@selected-background, 20%) 0%, darken(@selected-background, 5%) 100%) !important;
+    background-image: -moz-linear-gradient(
+        center top,
+        lighten(@selected-background, 20%) 0%,
+        darken(@selected-background, 5%) 100%
+    ) !important;
+    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="lighten(@selected-background, 20%)", endColorstr="darken(@selected-background, 5%)~")";
+    border-bottom-color: black;
+    color: #fff;
 }
-.settings-detail-pane .listbox:not([disabled]) > :hover {
-  border-color: hsl(214, 91%, 85%);
-  z-index: 1;
-  background-color: hsl(214, 91%, 97%);
-}
-.settings-detail-pane .listbox:focus > [selected] {
-  background-color: hsl(214,91%,89%);
-  border-color: hsl(214, 91%, 65%);
-}
+
 .settings-detail-pane .listbox > .spacer {
-  border: 0;
-  box-sizing: border-box;
-  display: block;
-  overflow: hidden;
-  visibility: hidden;
-  margin: 0;
+	border: 0;
+  	display: block;
+  	overflow: hidden;
+  	visibility: hidden;
+  	margin: 0;
+    .box-sizing(border-box);
+}
+
+.settings-detail-pane .listbox .sortable-item {
+	padding: 13px;
+    color: #000;
+    background-color: #eee;
+    .box-sizing(border-box);
+}
+
+.settings-detail-pane .listbox .disabled .sortable-item {
+    color: #999;
+    background-color: #ddd;
+    font-weight: 300;
+}
+
+.settings-detail-pane .listbox .sortable-item:hover { background-color: #ccc; }
+.settings-detail-pane .listbox .disabled .sortable-item:hover { background-color: #ddd; }
+
+.settings-detail-pane .listbox .requires-enabled { display: none; }
+.settings-detail-pane .listbox .enabled .editable-item .requires-enabled { display: inline-block; }
+
+.settings-detail-pane .listbox .sortable-item div {
+    line-height: 2em;
+}
+
+.settings-detail-pane .listbox .sortable-item span.right {
+	float:right;
 }
 
 .settings-detail-pane .listbox .deletable-item {
-  -webkit-box-align: center;
-}
-.settings-detail-pane .listbox .deletable-item > :first-child {
-  -webkit-box-align: center;
-  -webkit-box-flex: 1;
-  -webkit-padding-end: 5px;
-  display: -webkit-box;
-}
-
-.settings-detail-pane .listbox .close-button {
-  -webkit-transition: .15s opacity;
-  background-color: transparent;
-  background-image: url(images/close_button.png);
-  border: none;
-  display: block;
-  height: 16px;
-  opacity: 1;
-  width: 16px;
+	height:  16px;
+	padding: 12px 5px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 
-.settings-detail-pane .listbox > *:not(:hover):not([lead]) .close-button,
-.settings-detail-pane .listbox > *:not(:hover):not([selected]) .close-button,
-.listbox:not([hasElementFocus]) > *:not(:hover) .close-button,
-.settings-detail-pane .listbox[disabled] .close-button,
-.settings-detail-pane .listbox .close-button[disabled] {
-  opacity: 0;
-  pointer-events: none;
+.settings-detail-pane .listbox .deletable-item div {
+	width: auto;
 }
 
-.settings-detail-pane .listbox .close-button:hover {
-  background-image: url(images/close_button_hover.png);
+.io-ox-dialog-popup input.input-large {
+	width: 360px;
 }
 
-.settings-detail-pane .listbox .close-button:active {
-  background-image: url(images/close_button_active.png);
+.io-ox-dialog-popup .busynotice {
+	text-align: center;
 }
 
+.io-ox-dialog-popup .busy_pic {
+	margin: 10px auto 10px auto;
+	background-image: url(v=7.0.0-1.20120601.132924/apps/io.ox/settings/busy.gif);
+	width: 45px;
+	height: 11px;
+	background-repeat: no-repeat;
+}

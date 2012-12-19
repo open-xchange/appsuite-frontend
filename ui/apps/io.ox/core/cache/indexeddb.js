@@ -278,7 +278,7 @@ define('io.ox/core/cache/indexeddb', function () {
                     getRequest.onsuccess = function (event) {
 
                         if (_.isUndefined(event.target.result) || _.isUndefined(event.target.result.data)) {
-                            def.resolve(undefined);
+                            def.resolve(null);
                         } else {
                             that.set(key, null, true);
                             def.resolve(event.target.result.data);
@@ -344,28 +344,6 @@ define('io.ox/core/cache/indexeddb', function () {
                     def.reject(e);
                 };
 
-                return def;
-            });
-        },
-
-        contains : function (key) {
-            that.gc();
-            return getObjectstore().pipe(function (store) {
-                var def = new $.Deferred();
-
-                var request = store.get(key);
-
-                request.onsuccess = function (event) {
-                    if (!event.target.result) {
-                        def.resolve(false);
-                    } else {
-                        def.resolve(true);
-                    }
-                };
-
-                request.onerror = function () {
-                    def.reject();
-                };
                 return def;
             });
         },

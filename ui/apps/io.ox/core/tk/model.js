@@ -38,9 +38,14 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             // always true!
             return true;
         },
+        text: function () {
+            return true;
+        },
         number: function (prop, val, def) {
-            return _.isNumber(val) ||
-                new Error(prop, _.printf('%s must be a number', def.i18n || prop));
+            var regex = /^\d+$/;
+//            return _.isNumber(val) ||
+            return regex.test(val) ||
+            new Error(prop, _.printf('%s must be a number', def.i18n || prop));
         },
         array: function (prop, val, def) {
             return _.isArray(val) ||
@@ -54,14 +59,10 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             return true;
         },
         pastDate: function (prop, val, def) {
-            var now = _.now();
-            if (isNaN(val) && val !== '') {
+            if (_.isString(val)) {
                 return new Error(prop, _.printf('%s is not a valide date', def.i18n || prop));
-            } else {
-                return now > val ||
-                new Error(prop, _.printf('%s must be in the past', def.i18n || prop));
             }
-
+            return _.now() > val || new Error(prop, _.printf('%s must be in the past', def.i18n || prop));
         },
         email: function (prop, val, def) {
             return regEmail.test(val) ||
@@ -91,8 +92,8 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
 
         formats: formats,
 
-        get: function (prop) {
-            return this._definitions[prop] || {};
+        get: function (key) {
+            return this._definitions[key] || {};
         },
 
         getDefaults: function () {
@@ -103,6 +104,16 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
                 }
             });
             return defaults;
+        },
+
+        getMandatories: function () {
+            var tmp = [];
+            _(this._definitions).each(function (def, prop) {
+                if (def.mandatory) {
+                    tmp.push(prop);
+                }
+            });
+            return tmp;
         },
 
         isMandatory: function (key) {
@@ -121,17 +132,17 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             return this.get(key).trim !== false;
         },
 
-        validate: function (prop, value) {
-            var def = this.get(prop),
+        validate: function (key, value) {
+            var def = this.get(key),
                 format = def.format || 'string',
-                isEmpty = value === '',
+                isEmpty = value === '' || value === null,
                 isNotMandatory = def.mandatory !== true;
             if (isEmpty) {
                 return isNotMandatory ||
-                    new Error(prop, _.printf('%s is mandatory', def.i18n || prop));
+                    new Error(key, _.printf('%s is mandatory', def.i18n || key));
             }
             if (_.isFunction(this.formats[format])) {
-                return this.formats[format](prop, value, def);
+                return this.formats[format](key, value, def);
             }
             // undefined format
             console.error('Unknown format used in model schema', format);
@@ -167,9 +178,10 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         this._previous = {};
         this._defaults = this.schema.getDefaults();
         this._memoize = {};
+        this.cid = _.uniqueId('c');  // automatically clientid
         Events.extend(this);
         // TODO: we ALWAYS need data! do we have any options? I always forget to use key/value here
-        this.initialize(options.data || options);
+        this.initialize(options.data || options || {});
     };
 
     Model.addComputed = function (key, /* optional */ deps, callback) {
@@ -186,6 +198,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
     Model.prototype = {
 
         _computed: {},
+        idAttribute: 'id',
 
         schema: new Schema(),
 
@@ -195,10 +208,25 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             // due to defaultValues, data and previous might differ.
             // however, the model is not dirty
             this._data = _.extend({}, this._defaults, _.copy(data || {}, true));
+
+            // set the id additionally if possible (useful for identifying duplicates and the likes
+            if (this.idAttribute in this._data) {
+                this.id = this._data[this.idAttribute];
+            }
             // memoize computed properties
             _(this._computed).each(function (o, key) {
                 this.get(key);
             }, this);
+        },
+
+        isEmpty: function (key) {
+            // check if value would appear as empty string in UI
+            var value = this._data[key];
+            return value === '' || value === undefined || value === null;
+        },
+
+        has: function (key) {
+            return key in this._data;
         },
 
         get: function (key) {
@@ -233,12 +261,16 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             // validate only if really changed - yes, initial value might conflict with schema
             // but we validate each field again during final consistency checks
             var result = this.schema.validate(key, value);
+            // update value first
+            this._data[key] = value;
+
+
+            // trigger now
             if (result !== true) {
                 this.trigger('error:invalid', result);
-                return;
+                // yep, we continue here to actually get invalid data
+                // we need this for a proper final check during save
             }
-            // update
-            this._data[key] = value;
             // trigger change event for property and global change
             this.trigger('change:' + key + ' change', key, value);
             // trigger change event for computed properties
@@ -250,7 +282,8 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             var key, value, previous = this._previous, defaults = this._defaults, changed;
             for (key in this._data) {
                 value = this._data[key];
-                changed = !(isEqual(value, previous[key]) || isEqual(value, defaults[key]));
+                // use 'soft' isEqual for previous, 'hard' isEqual for default values
+                changed = !(isEqual(value, previous[key]) || _.isEqual(value, defaults[key]));
                 if (changed) {
                     return true;
                 }
@@ -262,13 +295,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             var changes = {}, previous = this._previous;
             _(this._data).each(function (value, key) {
                 if (!isEqual(value, previous[key])) {
-                    changes[key] = value;
-                }
-                if (key === 'distribution_list') {
-                    console.log(value);
-                    console.log(previous[key]);
-//                    console.log(_.difference(value, previous[key]));
-//                    changes[key] = 'dirty';
+                    changes[key] = _.copy(value, true);
                 }
             });
             return changes;
@@ -277,11 +304,14 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         toString: function () {
             return JSON.stringify(this._data);
         },
+        toJSON: function () {
+            return this.toString(); //just for compability with collection (backbone)
+        },
 
         // DEPRECATED
         setData: function (data) {
             console.warn('DEPRECATED: setData - use initialize()');
-            this.init(data);
+            this.initialize(data);
         },
 
         /* DEPRECATED - get() without any parameter returns all data as well */
@@ -289,6 +319,11 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             console.warn('DEPRECATED: getData - use get()');
             // return deep copy
             return _.copy(this._data, true);
+        },
+
+        //just for compability with collection
+        _validate: function () {
+            return true;
         },
 
 
@@ -303,6 +338,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             console.warn('DEPRECATED: validate -> schema.validate()');
             return this.schema.validate(prop, value);
         },
+
 
         // DEPRECATED
         // can return deferred object / otherwise just instance of Error or nothing
@@ -336,16 +372,41 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
                 },
                 success = function () {
                     // trigger store - expects deferred object
-                    return (this.store(this._data, this.getChanges()) || $.when())
-                        .done(_.bind(this.initialize, this, this._data));
+                    var def = $.Deferred().notify(), self = this;
+                    this.trigger('save:progress');
+                    (this.store(this.get(), this.getChanges()) || $.when())
+                        .done(function () {
+                            // not yet destroyed?
+                            if ('trigger' in self) {
+                                self.initialize(self._data);
+                                self.trigger.apply(self, ['save:beforedone'].concat($.makeArray(arguments)));
+                                self.trigger.apply(self, ['save:done'].concat($.makeArray(arguments)));
+                            }
+                            def.resolve.apply(def, arguments);
+                        })
+                        .fail(function () {
+                            if ('trigger' in self) {
+                                self.trigger.apply(self, ['save:beforefail'].concat($.makeArray(arguments)));
+                                self.trigger.apply(self, ['save:fail'].concat($.makeArray(arguments)));
+                            }
+                            def.reject.apply(def, arguments);
+                        });
+                    return def;
                 },
                 fail = function (error) {
                     // fail
-                    this.trigger('error:inconsistent', error);
+                    this.trigger('error:invalid', error);
                     return error;
                 };
 
             return function () {
+
+                // add mandatory fields to force validation
+                _(this.schema.getMandatories()).each(function (key) {
+                    if (!(key in this._data)) {
+                        this._data[key] = '';
+                    }
+                }, this);
 
                 // check all properties
                 if (!_(this._data).inject(checkValid, true, this)) {

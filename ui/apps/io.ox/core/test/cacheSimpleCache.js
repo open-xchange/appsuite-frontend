@@ -17,7 +17,7 @@ define("io.ox/core/test/cacheSimpleCache",
     "use strict";
 
     // test objects
-    var TIMEOUT = 5000,
+    var TIMEOUT = ox.testTimeout,
         testKey = 'testkey',
         testValue = 'ABC';
 
@@ -79,7 +79,7 @@ define("io.ox/core/test/cacheSimpleCache",
 
                     testStorage.get('notexistent').done(function (data) {
                         loaded.yep();
-                        j.expect(data).not.toBeDefined();
+                        j.expect(data).toBeNull();
                     }).fail(function (e) {
                         loaded.yep();
                         j.expect(e).not.toBeDefined();
@@ -132,12 +132,9 @@ define("io.ox/core/test/cacheSimpleCache",
                     var loaded = new Done();
                     j.waitsFor(loaded, 'Could not get key', TIMEOUT);
 
-                    testStorage.contains(testKey).done(function (check) {
+                    testStorage.get(testKey).done(function (data) {
                         loaded.yep();
-                        j.expect(check).toBeTruthy();
-                    }).fail(function (e) {
-                        loaded.yep();
-                        j.expect(e).not.toBeDefined();
+                        j.expect(data).not.toBeNull();
                     });
                 });
 
@@ -205,20 +202,6 @@ define("io.ox/core/test/cacheSimpleCache",
                     testStorage.values().done(function (values) {
                         loaded.yep();
                         j.expect(values).toEqual([testData3]);
-                    }).fail(function (e) {
-                        loaded.yep();
-                        j.expect(e).not.toBeDefined();
-                    });
-                });
-
-
-                j.it('grepContains check', function () {
-                    var loaded = new Done();
-                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
-
-                    testStorage.grepContains([testKey, 'A.B']).done(function (keys) {
-                        loaded.yep();
-                        j.expect(keys).toEqual([testKey]);
                     }).fail(function (e) {
                         loaded.yep();
                         j.expect(e).not.toBeDefined();

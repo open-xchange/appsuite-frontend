@@ -13,239 +13,50 @@
  */
 
 define("io.ox/files/main",
-    ["io.ox/files/view-detail",
-     "io.ox/files/api",
-     "io.ox/core/commons",
-     "io.ox/core/tk/vgrid",
-     "io.ox/core/tk/upload",
-     "io.ox/core/extPatterns/dnd",
-     "io.ox/core/tk/dialogs",
-     "io.ox/help/hints",
-     "gettext!io.ox/files/files",
-     "io.ox/core/bootstrap/basics",
+    ["io.ox/core/commons",
+     "gettext!io.ox/files",
+     'settings!io.ox/files',
      "io.ox/files/actions",
-     "less!io.ox/files/style.css"
-    ], function (viewDetail, api, commons, VGrid, upload, dnd, dialogs, hints, gt) {
+     "less!io.ox/files/style.less"
+    ], function (commons, gt, settings) {
 
     "use strict";
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/files' }),
+    var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Files' }),
         // app window
-        win,
-        // vgrid
-        grid,
-        GRID_WIDTH = 330,
-        // nodes
-        left,
-        right;
+        win;
 
     // launcher
-    app.setLauncher(function () {
-
+    app.setLauncher(function (options) {
         // get window
-        win = ox.ui.createWindow({
+        app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/files',
             title: gt("Files"),
-            titleWidth: (GRID_WIDTH + 27) + "px",
             toolbar: true,
             search: true
-        });
+        }));
 
-        app.setWindow(win);
+        win.addClass("io-ox-files-main");
+        app.settings = settings;
+
+        commons.wirePerspectiveEvents(app);
 
         // folder tree
-        commons.addFolderTree(app, GRID_WIDTH, 'infostore', 9);
-
-        // left side
-        left = $("<div>").addClass("leftside border-right")
-            .css({
-                width: GRID_WIDTH + "px",
-                overflow: "auto"
-            })
-            .appendTo(win.nodes.main);
-
-        right = $("<div>")
-            .css({ left: GRID_WIDTH + 1 + "px", overflow: "auto" })
-            .addClass("rightside default-content-padding")
-            .appendTo(win.nodes.main);
-
-        
-        // Grid
-        grid = new VGrid(left);
-
-        // add template
-        grid.addTemplate({
-            build: function () {
-                var name;
-                this
-                    .addClass("file")
-                    .append(name = $("<div>").addClass("name"));
-                return { name: name };
-            },
-            set: function (data, fields, index) {
-                fields.name.text(data.title);
-            }
-        });
-
-        commons.wireGridAndAPI(grid, api);
-        commons.wireGridAndSearch(grid, win, api);
-
-        // LFO callback
-        var currentDetailView = null;
-        function drawDetail(data) {
-            if (currentDetailView) {
-                currentDetailView.destroy();
-            }
-            currentDetailView = viewDetail.draw(data);
-            right.idle().empty().append(currentDetailView.element);
-            right.parent().scrollTop(0);
-            app.currentFile = data;
-            app.detailView = currentDetailView;
-            dropZone.update();
-        }
-
-        var drawFile = function (obj) {
-            // get file
-            if (currentDetailView && currentDetailView.file.id === obj.id) {
-                return;
-            }
-            right.busy(true);
-            api.get(obj).done(_.lfo(drawDetail));
-        };
-
-        commons.wireGridAndSelectionChange(grid, 'io.ox/files', drawFile, right);
-        
-        
-        grid.selection.on('empty', function () {
-            if (currentDetailView) {
-                currentDetailView.destroy();
-                currentDetailView = null;
-            }
-            app.currentFile = null;
-            dropZone.update();
-        });
-        
-        grid.selection.on("change", function (evt, selected) {
-            if (selected.length > 1) {
-                app.currentFile = null;
-            }
-        });
-
-        // delete item
-        api.on("beforedelete", function () {
-            grid.selection.selectNext();
-        });
-
-        api.on("triggered", function () {
-            var args = $.makeArray(arguments), source = args.shift();
-            if (currentDetailView) {
-                currentDetailView.trigger.apply(currentDetailView, args);
-            }
-        });
-        
-        // Toggle Edit Mode
-        
-        right.on("dblclick", function () {
-            if (currentDetailView) {
-                currentDetailView.edit();
-            }
-        });
-        
-        
-
-        // Uploads
-        
-        
-        app.queues = {};
-        
-        app.queues.create = upload.createQueue({
-            processFile: function (file) {
-                var uploadIndicator = new dialogs.ModalDialog();
-                uploadIndicator.getContentNode().append($("<div>").text(gt("Uploading ...")).addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
-                uploadIndicator.getContentControls().css({
-                    visibility: "hidden"
-                });
-                uploadIndicator.show();
-                return api.uploadFile({file: file, folder: app.folder.get()})
-                    .done(function (data) {
-                        uploadIndicator.close();
-                        // select new item
-                        grid.selection.set([data]);
-                        grid.refresh();
-                        // TODO: Error Handling
-                    });
-            }
-        });
-        
-        app.queues.update = upload.createQueue({
-            processFile: function (fileData) {
-                var uploadIndicator = new dialogs.ModalDialog();
-                uploadIndicator.getContentNode().append($("<div>").text(gt("Uploading ...")).addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
-                uploadIndicator.getContentControls().css({
-                    visibility: "hidden"
-                });
-                uploadIndicator.show();
-                return api.uploadNewVersion({
-                    file: fileData,
-                    id: app.currentFile.id,
-                    folder: app.currentFile.folder,
-                    timestamp: app.currentFile.last_modified
-                }).done(function (data) {
-                    // select new item
-                    uploadIndicator.close();
-                    grid.selection.set([data]);
-                    grid.refresh();
-                    // TODO: Error Handling
-                });
-            }
-        });
-
-        var dropZone = new dnd.UploadZone({
-            ref: "io.ox/files/dnd/actions"
-        }, app);
-
-        win.on("show", function () {
-            dropZone.include();
-        });
-
-        win.on("hide", function () {
-            dropZone.remove();
-        });
-
-        // Add status for uploads
-
-        commons.wireGridAndWindow(grid, win);
-        commons.wireFirstRefresh(app, api);
-        commons.wireGridAndRefresh(grid, api);
-
-        app.on('change:folder', function (e, id, folder) {
-            // reset first
-            win.nodes.title.find('.has-publications').remove();
-            // published?
-            if (folder['com.openexchange.publish.publicationFlag']) {
-                win.nodes.title.prepend(
-                    $('<img>', {
-                        src: ox.base + '/apps/themes/default/glyphicons_232_cloud.png',
-                        title: gt('This folder has publications'),
-                        alt: ''
-                    })
-                    .addClass('has-publications')
-                );
-            }
-        });
+        commons.addFolderView(app, { type: 'infostore', rootFolderId: 9 });
 
         // go!
-        commons.addFolderSupport(app, grid, 'infostore')
-            .done(commons.showWindow(win, grid));
+        commons.addFolderSupport(app, null, 'infostore')
+            .pipe(commons.showWindow(win))
+            .done(function () {
+                // switch to view in url hash or default
+                var p = settings.get('view', 'icons');
+                if (!/^(icons|list)$/.test(p)) {
+                    p = 'icons';
+                }
+                ox.ui.Perspective.show(app, options.perspective || _.url.hash('perspective') || p);
+            });
     });
-
-    app.invalidateFolder = function (data) {
-        if (data) {
-            grid.selection.set([data]);
-        }
-        grid.refresh();
-    };
 
     return {
         getApp: app.getInstance

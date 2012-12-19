@@ -14,8 +14,15 @@
 /* VGrid elements */
 
 .vgrid-cell.contact {
-    height: 4em;
+    height: 40px;
     padding: 0.75em 13px 0.75em 13px;
+}
+
+.vgrid-cell.contact .private_flag {
+	float: left;
+	color: #AAA;
+	font-size: 17px;
+	margin-right: 3px;
 }
 
 .vgrid-cell.contact .fullname {
@@ -24,7 +31,13 @@
 
 /* Tabs */
 
+.abs.contact-grid-container {
+    left: 37px;
+    overflow: auto;
+}
+
 .contact-grid-index {
+    width: 35px;
     overflow: hidden;
 }
 
@@ -91,195 +104,73 @@
     width: 100%;
 }
 
-.contact-detail td {
-    padding: 0 3em 1em 0;
-}
+.contact-detail {
 
-.contact-detail td:last-child {
-    padding-right: 0em;
-}
+    .contact-header {
+        min-height: 90px;
+    }
 
-.contact-detail td.io-ox-label,
-.contact-detail div.io-ox-label,
-.create-contact div.io-ox-label {
-    font-size: 0.9em;
-    line-height: 1em;
-    color: #888;
-    font-weight: normal;
-    text-align: right;
-    vertical-align: top;
-    width: 100px;
-}
+    .field-label {
+        font-family: @font-light;
+        font-weight: 300;
+        color: #555;
+        text-align: right;
+        vertical-align: top;
+        // fix spans
+        padding-right: 2em;
+    }
 
-.contact-detail .value {
-    font-weight: normal;
-    vertical-align: top;
-}
+    .field-value {
+        font-weight: normal;
+        vertical-align: top;
+        padding-bottom: 0.5em;
+    }
 
-.contact-detail .name {
-    margin-bottom: 0.25em;
-}
+    .name {
+        margin-bottom: 0.25em;
+        display: inline-block;
+    }
 
-.contact-detail .job {
-    font-size: 1.25em;
-    color: #888;
-}
+    .private-flag {
+	    color: #AAA;
+		font-size: 20pt;
+		margin-right: 5px;
+		line-height: 1.2em;
+		float: left;
+    }
 
-.contact-detail .picture {
-    width: 100px;
-    height: 80px;
-    display: inline-block;
-    float: right;
-    background-position: right top;
-    background-repeat: no-repeat;
-    background-size: cover;
+    .job {
+        font-size: 1.25em;
+        color: #888;
+    }
+
+    .picture {
+        width: 80px;
+        height: 80px;
+        display: inline-block;
+        float: right;
+        background-position: right top;
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+
+    .io-ox-inline-links {
+        margin: 2em 0;
+    }
+
+    .breadcrumb {
+        margin: 3em 0 0 0;
+    }
 }
 
 /*new contact form*/
 
-.create-contact .block {
-	background-image: -moz-linear-gradient(center top , #FFFFFF, #EEEEEE);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffffff), to(#eeeeee));
-	border: 1px solid #EEEEEE;
-	margin-bottom: 15px;
-	padding: 5px;
-	/*height: auto;*/
-	clear: both;
-	overflow: hidden;
-}
-
-.create-contact .block .field {
-	float: left;
-	margin-bottom:20px;
-	padding-top: 2px;
-	width: 230px;
-}
-
-.create-contact .block .field.even {
-	float: right;
-}
-
-.create-contact .block .field label {
-	width: auto;
-	float: left;
-	line-height: 15pt;
-}
-
-.create-contact #image1 {
-	margin-left: 28px;
-}
-
-
-.create-contact .block .field input {
-	width: 120px;
-	float: right;
-}
-
-
-.create-contact .picture {
-    width: 100px;
-    height: 80px;
-    display: inline-block;
-    float: left;
-    background-position: right top;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.create-contact .sectiontitle {
-	margin: 0px 0 15px 0;
-	font-size: 1.25em;
-	color: #888;
-	font-family: OpenSans, Helvetica, Arial, sans-serif;
-	font-weight: 200;
-	line-height: 1.15em;
-}
-
-.create-contact div.io-ox-label {
-	margin-right: 15px;
-	padding-top: 7px;
-	width: 100px;
-	float:left;
-	text-align: right;
-	font-size: 0.9em;
-    line-height: 1em;
-    color: #888;
-    font-weight: normal;
-    vertical-align: top;
-}
 
 .btn.btn-inverse {
 	vertical-align: top;
 }
 
-
-/*update form*/
-
-/*.edit1 {
-	float: left;
-	width: 400px;
-}*/
-
-/*.edit2 {
-	float: right;
-	width: 400px;
-}*/
- .contact_edit_frame {
-	font-size: 14px;
-	line-height: 21px;
-	color: black;
-	background-color: none;
-	border: 0px none;
-	outline: none;
-	/*width: 100%;*/
-	width: 900px;
-	height: 100%;
-	resize: none;
-	padding: 1em;
-	margin: 0px;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
-	-webkit-font-smoothing: antialiased;
-	overflow: auto;
-}
-
-.contact_edit_frame .block .field {
-	
-	margin-bottom:5px;
-	padding-top: 2px;
-	width: 333px;
-	overflow: hidden;
-}
-
-.contact_edit_frame .block .field label {
-	width: auto;
-	float: left;
-	line-height: 15pt;
-}
-
-.contact_edit_frame .block .field input {
-	width: 120px;
-	float: right;
-}
-
- .contact_edit_frame .block {
- width: 400px;
- margin-bottom: 25px;
- }
-
-/*scrollabel unsortet*/
-
-.block.edit_contact.unsortedfields{ 
-	overflow: scroll;
-	height: 300px;
-	width: 400px;
-	padding: 5px;
-	border: solid 1px #888;
-}
-
-
- .hidden{
+.hidden{
 	display: none;
 }
 
@@ -299,150 +190,28 @@
 	overflow: auto;
 }
 
- .change-pic-link {
+.change-pic-link {
 	width: auto;
 	float: right;
-}
-
-.picture{
-	cursor: pointer;
 }
 
 input#image1 {
 	width: 300px;
 }
 
-.contact-detail input, .create-contact input{
-	width: 200px;
+.contact-detail input {
+	width: 270px;
 }
 
-.contact-detail.edit .section, .create-contact .section {
-	margin-bottom: 20px;
-}
-	
-.contact-detail.edit .sectiontitle {
-	margin: 25px 0 15px 0;
-	padding-left: 165px;
-	font-size: 1.25em;
-	color: #888;
-	font-family: OpenSans, Helvetica, Arial, sans-serif;
-	font-weight: 200;
-	line-height: 1.15em;
-}
-
-
-.contact-detail.edit .sectioncontent,
-.contact-detail.edit .section-group,
-.create-contact .section-group {
-	margin-bottom: 5px;
-}
-
-.contact-detail.edit div.input > input[type="text"]{
-	font-size: 14px;
-	width: 300px;
-    color: black;
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 0.25em 0.5em 0.25em 0.5em;
-    -webkit-appearance: 'none';
-    -moz-appearance: 'none';
-    border-radius: 0.25em;
-    outline: 0; 	
-}
-
-.contact-detail.edit div.input.inline{
-	display: inline;
-}
-
-.contact-detail.edit div.input.inline.nr0 input[type="text"] {
-	width: 75px;
-	margin-right: 10px;
-	float: left;
-}
-
-.contact-detail.edit div.input.inline.nr1 input[type="text"] {
-	width: 106px;
-}
-
-.contact-detail.edit .input > input[type="text"]:focus{
-	border-color: transparent;
-    box-shadow: 0px 0px 5px 1px @accent1;
-}
-
-.contact-detail.edit div.io-ox-label {
-	margin-right: 15px;
-	padding-top: 7px;
-	width: 150px;
-	float:left;
-	text-align: right;
-}
-
-.contact-detail.edit div.io-ox-label label{
-	display: inline;
-}
-
-.contact-detail.edit div.inlinelabel {
-	margin-right: 15px;
-	padding-top: 7px;
-	width: 150px;
-	float:left;
-	text-align: right;
-}
-
-.contact-detail.edit div.inlinelabel div.io-ox-label{
-	margin-right: 0px;
-	padding-top: 0px;
-	width: auto;
-	display: inline;
-	float: none;
-}
-
-.contact-detail.edit div.inlinelabel div.io-ox-label:nth-child(1) {
-	margin-right: 5px;
-}
-	
-/*form head*/
-
-.contact-detail.edit .section.formheader, .create-contact .section.formheader {
-	height: 100px;
-	border-bottom: 1px solid #eee;
-}
-
-.contact-detail.edit .section.formheader .picture{
-	margin-right: 36px;
-	float: left;
-}
-
-.contact-detail.edit .section.formheader span{
-	display: block;
-}
-
-.contact-detail.edit .section.formheader .btn.btn-primary{
-	float: right;
-}
-
- .create-contact .section.formheader .saveButton {
- 	margin-top: 50px;
- 	float: right;
- }
-	
-.contact-detail.edit #contactUploadImage, .contact-detail.edit #contactUploadImage input,
-.create-contact #contactUploadImage, .create-contact #contactUploadImage input{
-	width: 0px;
-	height: 0px;
-}
-
-/*switches*/
-.contact-detail.edit a.switcher {
-	padding-left: 165px;	
-}
-
-.io-ox-contact-create-dist .contact-image,  .create-distributionlist .contact-image{
-    height: 3em;
-    width: 3em;
-    margin-right: 1em;
+.picture-uploader {
+    width: 100px;
+    height: 100px;
     display: inline-block;
-    background-size: cover;
-    background-repeat: no-repeat;
     float: left;
+    background-position: right top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-clip: content-box;
 }
+
+

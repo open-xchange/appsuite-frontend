@@ -1,0 +1,8 @@
+{
+    title: "Calendar",
+    company: "Open-Xchange",
+    icon: "calendar.png",
+    category: "Productivity",
+    settings: true,
+    requires: "calendar"
+}

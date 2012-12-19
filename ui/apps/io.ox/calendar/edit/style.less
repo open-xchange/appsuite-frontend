@@ -1,0 +1,346 @@
+@fluidGridColumnWidth:    6.382978723%;
+@fluidGridGutterWidth:    2.127659574%;
+
+#fluidGridSystem {
+  // Setup the mixins to be used
+  .columns(@fluidGridGutterWidth, @fluidGridColumnWidth, @columns) {
+    width: 1% * (@fluidGridColumnWidth * @columns) + (@fluidGridGutterWidth * (@columns - 1));
+    margin-left: @fluidGridGutterWidth;
+  }
+}
+div.io-ox-calendar-edit {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+
+    label.desc {
+        font-size: 13px;
+        color: #888;
+        font-family: @font-light;
+    }
+
+    div.section {
+        display: block;
+        clear: both;
+        padding: 20px;
+    }
+
+    h1.title {
+        font-family: @font-light;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 30px;
+        height: 30px;
+        margin: 0 0 13px 0;
+        float: left;
+    }
+
+    input.title {
+        width: 99%;
+        font-weight: bold;
+        font-size: 14px;
+        text-overflow: ellipsis;
+    }
+
+    .help-block.error {
+        font-weight:bold;
+        color:red;
+    }
+
+    input.location {
+        width: 100%;
+    }
+
+    .inner-margin {
+        margin: 10px 17px;
+    }
+
+    .input-extra-small {
+        width: 25px;
+    }
+
+    a.save {
+        width:94%;
+        padding: 4px;
+        position: relative;
+        top: 20px;
+    }
+
+    input.startsat-date, input.endsat-date {
+        margin-right: 8px;
+        margin-bottom: 0px;
+    }
+
+    input.startsat-time, input.endsat-time {
+        margin-right: 8px;
+        margin-bottom: 0px;
+    }
+
+    .label {
+        padding: 1px 3px 2px;
+        font-size: 9.75px;
+        font-weight: bold;
+        color: white;
+        text-transform: uppercase;
+        .border-radius(3px);
+    }
+
+    textarea.note {
+        font-family: @font-normal;
+        font-size: 13px;
+        line-height: 18px;
+        color: black;
+        background-color: transparent;
+        border: 1px solid #CCC;
+        outline: none;
+        width: 100%;
+        height: 100%;
+        resize: vertical;
+        padding: 10px;
+        margin: 0px;
+        min-height: 120px;
+        .box-sizing(border-box);
+    }
+
+    textarea.note:focus {
+        border-color: white;
+        .box-shadow(0px 0px 4px 0px #006897);
+    }
+
+    ul {
+        list-style: none;
+    }
+
+    ul, ol {
+        margin: 0 0 9px 0px
+    }
+
+    div.edit-appointment-participant {
+        /*    clear: both;*/
+        position: relative;
+        line-height: 1.5em;
+        background-color: white;
+        margin-bottom: 2px;
+        padding: 4px 0px 4px 0px;
+        /*background-color: #feb;*/
+    }
+
+    div.edit-appointment-participant.odd {
+        margin-left: 0px;
+    }
+
+    div.edit-appointment-participant.even {
+        #fluidGridSystem > .columns(@fluidGridGutterWidth, @fluidGridColumnWidth, 6);
+    }
+
+
+    div.recurrence {
+        display: none;
+    }
+
+    div.recurrence {
+        background: whitesmoke;
+        padding: 20px;
+
+        div.recurrence_details {
+            display: none;
+        }
+        input[type=text].short {
+            width: 20px;
+        }
+        select {
+
+        }
+        select.months {
+            width: 100px;
+        }
+        select.days {
+            width: 100px;
+        }
+        select.sequence {
+            width: 80px;
+        }
+    }
+
+    .sectiontitle {
+        font-size: 13px;
+        font-family: @font-light;
+        margin: 20px 0 15px 0;
+        color: #888;
+    }
+
+    legend {
+        display: block;
+        width: 100%;
+        padding: 0;
+        margin-bottom: 27px;
+        font-size: 19.5px;
+        line-height: 26px;
+        color: #333;
+        border: 0;
+        border-bottom: 1px solid #AAA;
+    }
+
+    input.add-participant {
+        width: 345px;
+    }
+
+    select {
+        width: 100%;
+    }
+
+    .autocomplete-popup .autocomplete-item {
+        padding: 0px 5px 5px 1px;
+        line-height: 1.5em;
+        cursor: pointer;
+    }
+
+    .autocomplete-popup .autocomplete-item.selected {
+        background-color: #EEE;
+    }
+
+    .notify-participants {
+        text-align: right;
+        margin-top: 5px;
+    }
+
+    .participantsrow {
+        margin-bottom: 30px;
+    }
+
+    .add-participants {
+        margin-bottom: 200px;
+
+        .help {
+            color: #888;
+            margin-top: 5px;
+        }
+    }
+
+    label.label-inline {
+        display: inline;
+    }
+
+    .margin-left {
+        margin-left: 5px;
+    }
+
+    .margin-right {
+        margin-right: 5px;
+    }
+}
+
+.typeahead.calendaredit {
+    height: 200px;
+    overflow: auto;
+    min-width: 70px;
+    max-width: 70px;
+}
+
+.typeahead.calendaredit a {
+    text-align: right;
+    padding: 3px 15px 3px 3px;
+}
+
+
+.io-ox-calendar-edit-sidepanel {
+  padding: 13px;
+  background-color: whiteSmoke;
+}
+
+div.edit-appointment-participants {
+    margin-bottom: 5px;
+}
+
+div.edit-appointment-participant .contact-image {
+    height: 3em;
+    width: 3em;
+    margin-right: 1em;
+    display: inline-block;
+    background-size: cover;
+    background-repeat: no-repeat;
+    float: left;
+}
+
+div.edit-appointment-participant .remove {
+    display: inline-block;
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    bottom: 1px;
+    width: 36px;
+    line-height: 1em;
+    background-color: white;
+    color: #CCC;
+    cursor: pointer;
+}
+
+div.edit-appointment-participant .remove i.icon-remove {
+    pointer-events: none;
+}
+
+div.edit-appointment-participant .remove:hover {
+    background-color: #a00;
+    color: #fff;
+    text-decoration: none;
+}
+
+div.edit-appointment-participant .icon {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin-top: -0.5em;
+    text-align: center;
+}
+
+div.edit-appointment-participant div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.edit-appointment input[type="text"].discreet:focus {
+    font-size: 12px;
+    line-height: 18px;
+    height: 29px;
+    border: 1px solid #CCC;
+    background-color: white;
+    color: black;
+    outline: 0;
+    margin: 0;
+    padding: 5px 5px 4px 5px;
+    width: 100%;
+    .box-sizing(border-box);
+    -webkit-border-radius: 0;
+    -webkit-appearance: none;
+}
+
+.io-ox-recurrence-view-active {
+    background-color: #eee;
+    padding-right: 10px;
+}
+
+.io-ox-recurrence-view {
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    .inset {
+        padding-left: 18px;
+    }
+}
+
+.io-ox-recurrence-type-choice a:hover {
+    text-decoration: none;
+    outline: 0;
+}
+
+.io-ox-recurrence-type-choice li {
+    cursor: pointer;
+}
+
+.io-ox-recurrence-day-picker li {
+    list-style-type: none;
+    cursor: pointer;
+}

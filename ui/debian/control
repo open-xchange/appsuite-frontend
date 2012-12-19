@@ -1,4 +1,4 @@
-Source: open-xchange-gui
+Source: open-xchange-appsuite
 Section: non-free/web
 Priority: optional
 Maintainer: Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -6,9 +6,26 @@ Build-Depends: debhelper (>= 8.0.0), nodejs (>= 0.4.0)
 Standards-Version: 3.9.2
 Homepage: http://open-xchange.com
 Vcs-Git: https://git.open-xchange.com/git/wd/frontend/web
-Vcs-Browser: https://git.open-xchange.com/gitweb/?p=wd/frontend/web;a=summary
+Vcs-Browser: https://gitweb.open-xchange.com/?p=wd/frontend/web;a=summary
 
-Package: open-xchange-gui
+Package: open-xchange-appsuite
 Architecture: all
-Depends: ${misc:Depends}, apache2
-Description: Open-Xchange HTML5 client
+Depends: ${misc:Depends}, apache2, open-xchange-appsuite-l10n-en-us
+Description: OX App Suite HTML5 client
+
+Package: open-xchange-appsuite-manifest
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-core
+Description: Manifest for apps included in the OX App Suite HTML5 client
+
+Package: open-xchange-appsuite-dev
+Architecture: all
+Depends: nodejs (>= 0.4.0)
+Description: SDK for the OX App Suite HTML5 client
+
+## l10n ##
+#Package: open-xchange-appsuite-l10n-## lang ##
+#Architecture: all
+#Provides: open-xchange-appsuite-l10n
+#Description: ## Lang ## translation of the OX App Suite HTML5 client
+## end l10n ##

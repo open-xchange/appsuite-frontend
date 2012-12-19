@@ -1,144 +1,199 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
+ *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
- *
  */
 
 define('io.ox/contacts/distrib/main',
-    ['io.ox/contacts/util', 'io.ox/contacts/api',
-     'io.ox/core/tk/dialogs', 'io.ox/core/config',
-     'io.ox/core/tk/forms', 'io.ox/contacts/model',
-     'io.ox/contacts/distrib/create-dist-view', 'gettext!io.ox/contacts/contacts',
-     "io.ox/core/commons",
+    ['io.ox/contacts/api',
+     'io.ox/contacts/model',
+     'io.ox/contacts/distrib/create-dist-view',
+     'gettext!io.ox/contacts',
+     'io.ox/contacts/util',
      'less!io.ox/contacts/distrib/style.css'
-     ], function (util, api, dialogs, config, forms, ContactModel, ContactCreateDistView, gt, commons) {
+     ], function (api, contactModel, ContactCreateDistView, gt, util) {
 
     'use strict';
 
+    // multi instance pattern
     function createInstance(data, mainapp) {
-        var app, getDirtyStatus,
-            dirtyStatus = {
-                byApi: true
-            };
+
+        var app,
+            win,
+            container,
+            model,
+            view,
+            considerSaved = false,
+            initialDistlist;
+
         app = ox.ui.createApp({
             name: 'io.ox/contacts/distrib',
-            title: 'Distribution List'
+            title: 'Distribution List',
+            userContent: true
         });
 
-        app.setLauncher(function () {
-            var win,
-                container, distribState;
+        app.create = function (folderId, initdata) {
+            initialDistlist = {
+                folder_id: folderId,
+                mark_as_distributionlist: true,
+                last_name: ''
+            };
 
-            win =  data ? ox.ui.createWindow({title: gt(' Edit distribution list'), toolbar: true, close: true}) : ox.ui.createWindow({title: gt('Create distribution list'), toolbar: true, close: true});
+            // set state
+            app.setState({ folder: folderId });
+            // set title, init model/view
+            win.setTitle(gt('Create distribution list'));
 
-            app.setWindow(win);
+            if (initdata) {
+                model = contactModel.factory.create({
+                    folder_id: folderId,
+                    mark_as_distributionlist: true,
+                    distribution_list: initdata.distribution_list,
+                    last_name: ''
+                });
+            } else {
+                model = contactModel.factory.create(initialDistlist);
+            }
 
-            container = win.nodes.main
-                .css({ backgroundColor: '#fff' })
-                .addClass('create-distributionlist')
-                .scrollable()
-                .css({ maxWidth: '700px', margin: '20px auto 20px auto' });
+            view = new ContactCreateDistView({ model: model });
 
-            //what about the hash support?
-            win.show(function () {
-
-                var myModel = data ? new ContactModel({data: data}) : new ContactModel({data: {}});
-
-                var myView = new ContactCreateDistView({model: myModel});
-
-                getDirtyStatus = function () {
-                    var status = myModel.isDirty();
-                    return status;
-                };
-
-                if (data) {
-                    myModel.store = function update(data, changes) {
-                        return api.edit({
-                            id: data.id,
-                            folder: data.folder_id,
-                            timestamp: _.now(),
-                            data: data //needs a fix in the model for array
-                        }).done(function () {
-                            dirtyStatus.byApi = false;
-                            app.quit();
-                        });
-                    };
-                } else {myModel.store = function create(data, changes) {
-                        var fId = mainapp.folder.get();
-                        if (!_.isEmpty(data)) {
-                            data.folder_id = fId;
-                            if (data.display_name === '') {
-                                data.display_name =  util.createDisplayName(data);
-                            }
-                            data.mark_as_distributionlist = true;
-                            return api.create(data).done(function () {
-                                dirtyStatus.byApi = false;
-                                app.quit();
-                            });
-                        }
-                    };
-                }
-
-                container.append(myView.draw().node);
-                container.find('input[type=text]:visible').eq(0).focus();
-
+            view.on('save:start', function () {
+                win.busy();
             });
 
-//            commons.addFolderSupport(app, null, 'contacts', '6');
+            view.on('save:fail', function () {
+                win.idle();
+            });
+
+            view.on('save:success', function () {
+
+                considerSaved = true;
+                win.idle();
+                app.quit();
+            });
+
+            // go!
+            container.append(view.render().$el);
+            win.show();
+        };
+
+        app.edit = function (obj) {
+
+            app.cid = 'io.ox/contacts/group:edit.' + _.cid(obj);
+
+            return contactModel.factory.realm("edit").get(obj).done(function (data) {
+
+                // actually data IS a model
+                model = data;
+
+                // set state
+                app.setState({ folder: model.get('folder_id'), id: model.get('id') });
+
+                app.setTitle(model.get('display_name'));
+
+                view = new ContactCreateDistView({ model: model });
+
+                view.on('save:start', function () {
+                    win.busy();
+                });
+
+                view.on('save:fail', function () {
+                    win.idle();
+                });
+
+                view.on('save:success', function () {
+                    considerSaved = true;
+                    win.idle();
+                    app.quit();
+                });
+
+                // go!
+                container.append(view.render().$el);
+                win.show();
+            });
+        };
+
+        app.setLauncher(function () {
+
+            app.setWindow(win = ox.ui.createWindow({
+                title: '',
+                chromeless: true,
+                name: 'io.ox/contacts/distrib'
+            }));
+
+            win.on('show', function () {
+                container.find('input[type=text]:visible').eq(0).focus();
+                container.find('[data-extension-id="displayname"] input').on('keydown', function () {
+                    var title = _.noI18n($.trim($(this).val()));
+                    app.setTitle(title);
+                });
+            });
+
+            container = win.nodes.main
+                .addClass('create-distributionlist')
+                .scrollable()
+                .css({ width: '700px', margin: '20px auto 20px auto' });
+
+            // hash state support
+            var state = app.getState();
+            if ('id' in state) {
+                app.edit(state);
+            } else if ('folder' in state) {
+                app.create(state.folder);
+            }
         });
 
         app.setQuit(function () {
-
-            var def = $.Deferred(),
-                listetItem =  $('.listet-item');
-
-            dirtyStatus.byModel = getDirtyStatus();
-
-            if (dirtyStatus.byModel === true) {
-                if (dirtyStatus.byApi === true) {
+            var def = $.Deferred();
+            if (model.isDirty() && considerSaved === false) {
+                if (_.isEqual(initialDistlist, model.changedSinceLoading())) {
+                    def.resolve();
+                } else {
                     require(["io.ox/core/tk/dialogs"], function (dialogs) {
                         new dialogs.ModalDialog()
-                            .text(gt("Do you really want to lose your changes?"))
+                            .text(gt("Do you really want to discard your changes?"))
+                            .addPrimaryButton("delete", gt('Discard'))
                             .addButton("cancel", gt('Cancel'))
-                            .addButton("delete", gt('Lose changes'))
                             .show()
                             .done(function (action) {
                                 console.debug("Action", action);
                                 if (action === 'delete') {
                                     def.resolve();
-                                    listetItem.remove();
                                 } else {
                                     def.reject();
                                 }
                             });
                     });
-                } else {
-                    def.resolve();
-                    listetItem.remove();
                 }
+
             } else {
                 def.resolve();
-                listetItem.remove();
             }
+
             //clean
             return def;
         });
-
 
         return app;
     }
 
     return {
-        getApp: createInstance
+
+        getApp: createInstance,
+
+        reuse: function (type, data) {
+            if (type === 'edit') {
+                return ox.ui.App.reuse('io.ox/contacts/group:edit.' + _.cid(data));
+            }
+        }
     };
 
 });

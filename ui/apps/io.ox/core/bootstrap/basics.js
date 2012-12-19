@@ -1,16 +1,15 @@
+// NOJSHINT
+//@include ../../../../lib/bootstrap/js/bootstrap.js
+//@include ../../../../lib/bootstrap-datepicker.js
+//@include ../../../../lib/bootstrap-combobox.js
 
-(function () {
+define('io.ox/core/bootstrap/basics', function () {
 
     'use strict';
 
-    var p = 'io.ox/core/bootstrap/', js = ox.base + '/apps/' + p + 'js/bootstrap';
+    // fix bootstrap dropdown (close on click)
+    $('body').off('click.dropdown touchstart.dropdown.data-api', '.dropdown');
 
-    define(p + 'basics',
-        [js + '-transition.js',
-         js + '-tooltip.js',
-         js + '-dropdown.js',
-         js + '-button.js',
-         js + '-alert.js',
-         'less!' + p + 'less/bootstrap.less'], $.noop);
-
-}());
+    // temporary fix (see https://github.com/twitter/bootstrap/issues/4550)
+    $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropagation(); });
+});

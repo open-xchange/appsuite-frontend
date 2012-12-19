@@ -9,136 +9,329 @@
  * Mail: info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/contacts/model',
-      ['io.ox/core/tk/model'], function (Model) {
+      ['io.ox/backbone/modelFactory',
+       'io.ox/backbone/validation',
+       'io.ox/contacts/api',
+       'gettext!io.ox/contacts'
+       ], function (ModelFactory, Validators, api, gt) {
 
     'use strict';
 
-    var contactSchema = new Model.Schema({
+    function buildFactory(ref, api) {
+        var factory = new ModelFactory({
+            api: api,
+            ref: ref,
 
-        'display_name': {format: 'string', label: 'Display name'}, //defaultValue: 'Mrs. Bean'
-        'first_name': { format: 'string', label: 'First name', mandatory: true},
-        'last_name': {  format: 'string', label: 'Last name'},
-        'second_name': { format: 'string', label: 'Middle name'},
-        'suffix': { format: 'string', label: 'Suffix'},
-        'title': { format: 'string', label: 'Title'},
-        'street_home': { format: 'string', label: 'Street', mandatory: true},
-        'postal_code_home': { format: 'string', label: 'Postcode'},
-        'city_home': { format: 'string', label: 'Town'},
-        'state_home': { format: 'string', label: 'State'},
-        'country_home': { format: 'string', label: 'Country'},
-        'birthday': { format: 'pastDate', label: 'Date of birth'},
-        'marital_status': { format: 'string', label: 'Marital status'},
-        'number_of_children': { format: 'string', label: 'Children'},
-        'profession': { format: 'string', label: 'Profession'},
-        'nickname': { format: 'string', label: 'Nickname'},
-        'spouse_name': { format: 'string', label: 'Spouse\'s name'},
-        'anniversary': { format: 'pastDate', label: 'Anniversary'},
-        'note': { format: 'string', label: 'Comments'},
-        'department': { format: 'string', label: 'Department'},
-        'position': { format: 'string', label: 'Position'},
-        'employee_type': { format: 'string', label: 'Employee type'},
-        'room_number': { format: 'string', label: 'Room number'},
-        'street_business': { format: 'string', label: 'Street'},
-        'postal_code_business': { format: 'string', label: 'Postcode'},
-        'city_business': { format: 'string', label: 'Town'},
-        'state_business': { format: 'string', label: 'State'},
-        'country_business': { format: 'string', label: 'Country'},
-        'number_of_employees': { format: 'string', label: 'Employee ID'},
-        'sales_volume': { format: 'string', label: 'Sales Volume'},
-        'tax_id': { format: 'string', label: 'TAX ID'},
-        'commercial_register': { format: 'string', label: 'Commercial Register'},
-        'branches': { format: 'string', label: 'Branches'},
-        'business_category': { format: 'string', label: 'Business category'},
-        'info': { format: 'string', label: 'Info'},
-        'manager_name': { format: 'string', label: 'Manager'},
-        'assistant_name': { format: 'string', label: 'Assistant'},
-        'street_other': { format: 'string', label: 'Street'},
-        'city_other': { format: 'string', label: 'Town'},
-        'postal_code_other': { format: 'string', label: 'Postcode'},
-        'country_other': { format: 'string', label: 'Country'},
-        'telephone_business1': { format: 'string', label: 'Phone'},
-        'telephone_business2': { format: 'string', label: 'Phone 2'},
-        'fax_business': { format: 'string', label: 'Fax'},
-        'telephone_callback': { format: 'string', label: 'Telephone callback'},
-        'telephone_car': { format: 'string', label: 'Phone (car)'},
-        'telephone_company': { format: 'string', label: 'Phone (company)'},
-        'telephone_home1': { format: 'string', label: 'Phone'},
-        'telephone_home2': { format: 'string', label: 'Phone 2'},
-        'fax_home': { format: 'string', label: 'Fax'},
-        'cellular_telephone1': { format: 'string', label: 'Cell phone', mandatory: true},
-        'cellular_telephone2': { format: 'string', label: 'Cell phone'},
-        'telephone_other': { format: 'string', label: 'Phone (other)'},
-        'fax_other': { format: 'string', label: 'Fax (other)'},
-        'email1': { format: 'email', label: 'Email 1', mandatory: true},
-        'email2': { format: 'email', label: 'Email 2'},
-        'email3': { format: 'email', label: 'Email 3'},
-        'url': { format: 'url', label: 'URL'},
-        'telephone_isdn': { format: 'string', label: 'Telephone isdn'},
-        'telephone_pager': { format: 'string', label: 'Pager'},
-        'telephone_primary': { format: 'string', label: 'Telephone primary'},
-        'telephone_radio': { format: 'string', label: 'Telephone radio'},
-        'telephone_telex': { format: 'string', label: 'Telex'},
-        'telephone_ttytdd': { format: 'string', label: 'TTY/TDD'},
-        'instant_messenger1': { format: 'string', label: 'Instant Messenger'},
-        'instant_messenger2': { format: 'string', label: 'Instant Messenger'},
-        'telephone_ip': { format: 'string', label: 'IP phone'},
-        'telephone_assistant': { format: 'string', label: 'Phone (assistant)'},
-        'company': { format: 'string', label: 'Company'},
-        'image1': { format: 'string', label: 'Image 1'},
+            model: {
 
-        'userfield01': { format: 'string', label: 'Optional 01'},
-        'userfield02': { format: 'string', label: 'Optional 02'},
-        'userfield03': { format: 'string', label: 'Optional 03'},
-        'userfield04': { format: 'string', label: 'Optional 04'},
-        'userfield05': { format: 'string', label: 'Optional 05'},
-        'userfield06': { format: 'string', label: 'Optional 06'},
-        'userfield07': { format: 'string', label: 'Optional 07'},
-        'userfield08': { format: 'string', label: 'Optional 08'},
-        'userfield09': { format: 'string', label: 'Optional 09'},
-        'userfield10': { format: 'string', label: 'Optional 10'},
-        'userfield11': { format: 'string', label: 'Optional 11'},
-        'userfield12': { format: 'string', label: 'Optional 12'},
-        'userfield13': { format: 'string', label: 'Optional 13'},
-        'userfield14': { format: 'string', label: 'Optional 14'},
-        'userfield15': { format: 'string', label: 'Optional 15'},
-        'userfield16': { format: 'string', label: 'Optional 16'},
-        'userfield17': { format: 'string', label: 'Optional 17'},
-        'userfield18': { format: 'string', label: 'Optional 18'},
-        'userfield19': { format: 'string', label: 'Optional 19'},
-        'userfield20': { format: 'string', label: 'Optional 20'},
+                addMember: function (member) {
 
-        //deprecated
-        'links': { format: 'array', label: 'Links'},
+                    var currentDistListArray = this.get('distribution_list');
 
-        'distribution_list': { format: 'array', label: 'Distribution list'},
+                    if (currentDistListArray === undefined) {
+                        this.set('distribution_list', [member]);
+                    } else {
+                        currentDistListArray.push(member);
+                        this.set('distribution_list', currentDistListArray);
+                    }
 
-        //deprecated
-        'number_of_links': { format: 'number', label: 'Number of links'},
+                    this.trigger("change");
+                    this.trigger("change:distribution_list");
+                },
 
-        'number_of_images': { format: 'number', label: 'Number of images'},
-        'image_last_modified': {format: 'timestamp', label: 'Image last modified'},
+                removeMember: function (mail, name) {
 
-        'state_other': { format: 'string', label: 'State'},
-        'file_as': { format: 'string', label: 'File as'},
-        'image1_content_type': { format: 'string', label: 'Image1 content type'},
-        'mark_as_distributionlist': { format: 'boolean', label: 'Mark as distributionlist'},
-        'default_address': { format: 'number', label: 'Default address'},
-        'image1_url': { format: 'url', label: 'Image1 url'},
-        'internal_userid': { format: 'number', label: 'Internal userid'},
-        'useCount': { format: 'number', label: 'use Count'},
+                    var currentDistlist = this.get('distribution_list');
 
-        'yomiFirstName': { format: 'string', label: 'yomi First Name'},
-        'yomiLastName': { format: 'string', label: 'yomi Last Name'},
-        'yomiCompany': { format: 'string', label: 'yomi Company'},
-        'addressHome': { format: 'string', label: 'Address Home'},
-        'addressBusiness': { format: 'string', label: 'Address Business'},
-        'addressOther': { format: 'string', label: 'Address Other'}
+                    _(currentDistlist).each(function (val, key) {
+                        if (val.mail === mail && val.display_name === name) {
+                            currentDistlist.splice(key, 1);
+                        }
+                    });
 
-        // what about contact link data
-        // what about distribution list member
-    });
+                    this.set('distribution_list', currentDistlist);
 
-    return Model.extend({ schema: contactSchema });
+                    this.trigger("change");
+                    this.trigger("change:distribution_list");
+
+                }
+            },
+
+            update: function (model) {
+                // Some special handling for profile pictures
+                var data = model.changedSinceLoading();
+                var file = data.pictureFile;
+                if (file) {
+                    delete data.pictureFile;
+                    return api.editNewImage({id: model.id, folder_id: model.get('folder_id'), timestamp: model.get('last_modified')}, data, file);
+                } else {
+                    return api.update({id: model.id, folder: model.get('folder_id'), timestamp: model.get('last_modified'), data: data});
+                }
+            },
+            updateEvents: ['edit'],
+            create: function (model) {
+                // Some special handling for profile pictures
+                var json, file;
+                if (model.attributes.pictureFile) {
+                    file = model.get("pictureFile");
+                    json = model.toJSON();
+                    delete json.pictureFile;
+                } else {
+                    json = model.toJSON();
+                }
+
+                return api.create(json, file);
+            },
+            destroy: function (model) {
+                return api.remove({id: model.id, folder_id: model.get('folder_id')});
+            }
+        });
+
+        Validators.validationFor(ref, {
+            display_name: { format: 'string', mandatory: true},
+            first_name: { format: 'string'},
+            last_name: { format: 'string'},
+            second_name: { format: 'string'},
+            suffix: { format: 'string'},
+            title: { format: 'string'},
+            street_home: { format: 'string'},
+            postal_code_home: { format: 'string'},
+            city_home: { format: 'string'},
+            state_home: { format: 'string'},
+            country_home: { format: 'string'},
+            birthday: { format: 'pastDate'},
+            marital_status: { format: 'string'},
+            number_of_children: { format: 'string'},
+            profession: { format: 'string'},
+            nickname: { format: 'string'},
+            spouse_name: { format: 'string'},
+            anniversary: { format: 'pastDate'},
+            note: { format: 'text'},
+            department: { format: 'string'},
+            position: { format: 'string'},
+            employee_type: { format: 'string'},
+            room_number: { format: 'string'},
+            street_business: { format: 'string'},
+            postal_code_business: { format: 'string'},
+            city_business: { format: 'string'},
+            state_business: { format: 'string'},
+            country_business: { format: 'string'},
+            number_of_employees: { format: 'string'},
+            sales_volume: { format: 'string'},
+            tax_id: { format: 'string'},
+            commercial_register: { format: 'string'},
+            branches: { format: 'string'},
+            business_category: { format: 'string'},
+            info: { format: 'string'},
+            manager_name: { format: 'string'},
+            assistant_name: { format: 'string'},
+            street_other: { format: 'string'},
+            city_other: { format: 'string'},
+            postal_code_other: { format: 'string'},
+            country_other: { format: 'string'},
+            telephone_business1: { format: 'string'},
+            telephone_business2: { format: 'string'},
+            fax_business: { format: 'string'},
+            telephone_callback: { format: 'string'},
+            telephone_car: { format: 'string'},
+            telephone_company: { format: 'string'},
+            telephone_home1: { format: 'string'},
+            telephone_home2: { format: 'string'},
+            fax_home: { format: 'string'},
+            cellular_telephone1: { format: 'string'},
+            cellular_telephone2: { format: 'string'},
+            telephone_other: { format: 'string'},
+            fax_other: { format: 'string'},
+            email1: { format: 'email'},
+            email2: { format: 'email'},
+            email3: { format: 'email'},
+            url: { format: 'url'},
+            telephone_isdn: { format: 'string'},
+            telephone_pager: { format: 'string'},
+            telephone_primary: { format: 'string'},
+            telephone_radio: { format: 'string'},
+            telephone_telex: { format: 'string'},
+            telephone_ttytdd: { format: 'string'},
+            instant_messenger1: { format: 'string'},
+            instant_messenger2: { format: 'string'},
+            telephone_ip: { format: 'string'},
+            telephone_assistant: { format: 'string'},
+            company: { format: 'string'},
+            image1: { format: 'string'},
+            userfield01: { format: 'string'},
+            userfield02: { format: 'string'},
+            userfield03: { format: 'string'},
+            userfield04: { format: 'string'},
+            userfield05: { format: 'string'},
+            userfield06: { format: 'string'},
+            userfield07: { format: 'string'},
+            userfield08: { format: 'string'},
+            userfield09: { format: 'string'},
+            userfield10: { format: 'string'},
+            userfield11: { format: 'string'},
+            userfield12: { format: 'string'},
+            userfield13: { format: 'string'},
+            userfield14: { format: 'string'},
+            userfield15: { format: 'string'},
+            userfield16: { format: 'string'},
+            userfield17: { format: 'string'},
+            userfield18: { format: 'string'},
+            userfield19: { format: 'string'},
+            userfield20: { format: 'string'},
+            links: { format: 'array'},
+            distribution_list: { format: 'array'},
+            number_of_links: { format: 'number'},
+            number_of_images: { format: 'number'},
+            image_last_modified: { format: 'number'},
+            state_other: { format: 'string'},
+            file_as: { format: 'string'},
+            image1_content_type: { format: 'string'},
+            mark_as_distributionlist: { format: 'boolean'},
+            default_address: { format: 'number'},
+            image1_url: { format: 'url'},
+            internal_userid: { format: 'number'},
+            useCount: { format: 'number'},
+            yomiFirstName: { format: 'string'},
+            yomiLastName: { format: 'string'},
+            yomiCompany: { format: 'string'},
+            addressHome: { format: 'string'},
+            addressBusiness: { format: 'string'},
+            addressOther: { format: 'string'},
+            private_flag: { format: 'boolean'}
+        });
+
+        return factory;
+
+    }
+
+    var fields = {
+        display_name: gt('Display name'), // noun
+        first_name: gt('First name'),
+        last_name: gt('Last name'),
+        second_name: gt('Middle name'),
+        suffix: gt('Suffix'),
+        title: gt('Title'), // Anrede
+        street_home: gt('Street'),
+        postal_code_home: gt('Postcode'),
+        city_home: gt('Town'),
+        state_home: gt('State'),
+        country_home: gt('Country'),
+        birthday: gt('Date of birth'),
+        marital_status: gt('Marital status'),
+        number_of_children: gt('Children'),
+        profession: gt('Profession'),
+        nickname: gt('Nickname'),
+        spouse_name: gt('Spouse\'s name'),
+        anniversary: gt('Anniversary'),
+        note: gt('Comment'),
+        department: gt('Department'),
+        position: gt('Position'),
+        employee_type: gt('Employee type'),
+        room_number: gt('Room number'),
+        street_business: gt('Street'),
+        postal_code_business: gt('Postcode'),
+        city_business: gt('Town'),
+        state_business: gt('State'),
+        country_business: gt('Country'),
+        number_of_employees: gt('Employee ID'),
+        sales_volume: gt('Sales Volume'),
+        tax_id: gt('TAX ID'),
+        commercial_register: gt('Commercial Register'),
+        branches: gt('Branches'),
+        business_category: gt('Business category'),
+        info: gt('Info'),
+        manager_name: gt('Manager'),
+        assistant_name: gt('Assistant'),
+        street_other: gt('Street'),
+        city_other: gt('Town'),
+        postal_code_other: gt('Postcode'),
+        country_other: gt('Country'),
+        telephone_business1: gt('Phone'),
+        telephone_business2: gt('Phone alt'),
+        fax_business: gt('Fax'),
+        telephone_callback: gt('Telephone callback'),
+        telephone_car: gt('Phone (car)'),
+        telephone_company: gt('Phone (company)'),
+        telephone_home1: gt('Phone (Home)'),
+        telephone_home2: gt('Phone (Home alt)'),
+        fax_home: gt('Fax'),
+        cellular_telephone1: gt('Cell phone'),
+        cellular_telephone2: gt('Cell phone alt'),
+        telephone_other: gt('Phone (other)'),
+        fax_other: gt('Fax (alt)'),
+        email1: gt('Email 1'),
+        email2: gt('Email 2'),
+        email3: gt('Email 3'),
+        url: gt('URL'),
+        telephone_isdn: gt('Telephone (ISDN)'),
+        telephone_pager: gt('Pager'),
+        telephone_primary: gt('Telephone primary'),
+        telephone_radio: gt('Telephone radio'),
+        telephone_telex: gt('Telex'),
+        telephone_ttytdd: gt('TTY/TDD'),
+        instant_messenger1: gt('Instant Messenger 1'),
+        instant_messenger2: gt('Instant Messenger 2'),
+        telephone_ip: gt('IP phone'),
+        telephone_assistant: gt('Phone (assistant)'),
+        company: gt('Company'),
+        image1: gt('Image 1'),
+        userfield01: gt('Optional 01'),
+        userfield02: gt('Optional 02'),
+        userfield03: gt('Optional 03'),
+        userfield04: gt('Optional 04'),
+        userfield05: gt('Optional 05'),
+        userfield06: gt('Optional 06'),
+        userfield07: gt('Optional 07'),
+        userfield08: gt('Optional 08'),
+        userfield09: gt('Optional 09'),
+        userfield10: gt('Optional 10'),
+        userfield11: gt('Optional 11'),
+        userfield12: gt('Optional 12'),
+        userfield13: gt('Optional 13'),
+        userfield14: gt('Optional 14'),
+        userfield15: gt('Optional 15'),
+        userfield16: gt('Optional 16'),
+        userfield17: gt('Optional 17'),
+        userfield18: gt('Optional 18'),
+        userfield19: gt('Optional 19'),
+        userfield20: gt('Optional 20'),
+        links: gt('Links'),
+        distribution_list: gt('Distribution list'),
+        state_other: gt('State'),
+        mark_as_distributionlist: gt('Mark as distributionlist'),
+        default_address: gt('Default address'),
+        addressHome: gt('Address Home'),
+        addressBusiness: gt('Address Business'),
+        addressOther: gt('Address Other'),
+        private_flag: gt('Private'),
+        // don't think we show this anywhere so we don't use gt here not to nerf translators
+        number_of_links: 'Number of links',
+        number_of_images: 'Number of images',
+        image_last_modified: 'Image last modified',
+        file_as: 'File as',
+        image1_content_type: 'Image1 content type',
+        image1_url: 'Image1 url',
+        internal_userid: 'Internal userid',
+        useCount: 'use Count',
+        yomiFirstName: 'yomi First Name',
+        yomiLastName: 'yomi Last Name',
+        yomiCompany: 'yomi Company'
+    };
+
+    var factory = buildFactory('io.ox/contacts/model', api);
+
+    return {
+        Contact: factory.model,
+        Contacts: factory.collection,
+        factory: factory,
+        api: api,
+        fields: fields,
+        protectedMethods: {
+            buildFactory: buildFactory
+        }
+    };
 });
+

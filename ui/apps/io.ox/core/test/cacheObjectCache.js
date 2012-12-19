@@ -17,7 +17,7 @@ define("io.ox/core/test/cacheObjectCache",
     "use strict";
 
     // test objects
-    var TIMEOUT = 5000,
+    var TIMEOUT = ox.testTimeout,
         testKey = 'testkey',
         testValue = 'ABC';
 
@@ -70,7 +70,8 @@ define("io.ox/core/test/cacheObjectCache",
                     testStorage.clear().done(function (check) {
                         loaded.yep();
                         j.expect(check).not.toBeDefined();
-                    }).fail(function (e) {
+                    })
+                    .fail(function (e) {
                         loaded.yep();
                         j.expect(e).not.toBeDefined();
                     });
@@ -83,7 +84,7 @@ define("io.ox/core/test/cacheObjectCache",
 
                     testStorage.get('notexistent').done(function (data) {
                         loaded.yep();
-                        j.expect(data).not.toBeDefined();
+                        j.expect(data).toBeNull();
                     }).fail(function (e) {
                         loaded.yep();
                         j.expect(e).not.toBeDefined();
@@ -179,9 +180,9 @@ define("io.ox/core/test/cacheObjectCache",
                     var loaded = new Done();
                     j.waitsFor(loaded, 'Could not get key', TIMEOUT);
 
-                    testStorage.contains(testKey).done(function (check) {
+                    testStorage.get(testKey).done(function (check) {
                         loaded.yep();
-                        j.expect(check).toBeTruthy();
+                        j.expect(check).not.toBeNull();
                     }).fail(function (e) {
                         loaded.yep();
                         j.expect(e).not.toBeDefined();
@@ -193,9 +194,9 @@ define("io.ox/core/test/cacheObjectCache",
                     var loaded = new Done();
                     j.waitsFor(loaded, 'Could not get key', TIMEOUT);
 
-                    testStorage.contains('fdfsgagsdg').done(function (check) {
+                    testStorage.get('fdfsgagsdg').done(function (check) {
                         loaded.yep();
-                        j.expect(check).toBeFalsy();
+                        j.expect(check).toBeNull();
                     }).fail(function (e) {
                         loaded.yep();
                         j.expect(e).not.toBeDefined();
@@ -207,9 +208,9 @@ define("io.ox/core/test/cacheObjectCache",
                     var loaded = new Done();
                     j.waitsFor(loaded, 'Could not get key', TIMEOUT);
 
-                    testStorage.contains(['A.ABC', 'A.ABD']).done(function (check) {
+                    testStorage.get(['A.ABC', 'A.ABD']).done(function (check) {
                         loaded.yep();
-                        j.expect(check).toBeTruthy();
+                        j.expect(check).not.toBeNull();
                     }).fail(function (e) {
                         loaded.yep();
                         j.expect(e).not.toBeDefined();
@@ -221,9 +222,9 @@ define("io.ox/core/test/cacheObjectCache",
                     var loaded = new Done();
                     j.waitsFor(loaded, 'Could not get key', TIMEOUT);
 
-                    testStorage.contains(testData1).done(function (check) {
+                    testStorage.get(testData1).done(function (check) {
                         loaded.yep();
-                        j.expect(check).toBeTruthy();
+                        j.expect(check).not.toBeNull();
                     }).fail(function (e) {
                         loaded.yep();
                         j.expect(e).not.toBeDefined();
@@ -235,9 +236,9 @@ define("io.ox/core/test/cacheObjectCache",
                     var loaded = new Done();
                     j.waitsFor(loaded, 'Could not get key', TIMEOUT);
 
-                    testStorage.contains([testData1, testDataA]).done(function (check) {
+                    testStorage.get([testData1, testDataA]).done(function (check) {
                         loaded.yep();
-                        j.expect(check).toBeTruthy();
+                        j.expect(check).not.toBeNull();
                     }).fail(function (e) {
                         loaded.yep();
                         j.expect(e).not.toBeDefined();
@@ -249,9 +250,9 @@ define("io.ox/core/test/cacheObjectCache",
                     var loaded = new Done();
                     j.waitsFor(loaded, 'Could not get key', TIMEOUT);
 
-                    testStorage.contains([testData1, 'A.ABE']).done(function (check) {
+                    testStorage.get([testData1, 'A.ABE']).done(function (check) {
                         loaded.yep();
-                        j.expect(check).toBeTruthy();
+                        j.expect(check).not.toBeNull();
                     }).fail(function (e) {
                         loaded.yep();
                         j.expect(e).not.toBeDefined();
@@ -263,9 +264,9 @@ define("io.ox/core/test/cacheObjectCache",
                     var loaded = new Done();
                     j.waitsFor(loaded, 'Could not get key', TIMEOUT);
 
-                    testStorage.contains([testData1, 'A.ABX']).done(function (check) {
+                    testStorage.get([testData1, 'A.ABX']).done(function (check) {
                         loaded.yep();
-                        j.expect(check).toBeFalsy();
+                        j.expect(check).toBeNull();
                     }).fail(function (e) {
                         loaded.yep();
                         j.expect(e).not.toBeDefined();

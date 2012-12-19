@@ -11,7 +11,7 @@
 }
 
 #io-ox-launchpad h1 {
-    font-family: OpenSans, Helvetica, Arial, sans-serif;
+    font-family: @font-light;
     font-size: 1.5em;
     font-weight: normal;
     line-height: 2em;
@@ -25,7 +25,7 @@
     text-align: right;
 }
 
-#io-ox-launchpad .manage-apps .default-action {
+#io-ox-launchpad .manage-apps .btn {
     margin-right: 0;
     margin-bottom: 2em;
 }
@@ -43,7 +43,7 @@
 
 #io-ox-launchpad a.app:focus {
     outline: 0;
-    box-shadow: none;
+    .box-shadow(none);
 }
 
 #io-ox-launchpad a.app:active {

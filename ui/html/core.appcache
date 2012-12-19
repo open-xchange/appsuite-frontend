@@ -9,21 +9,22 @@ CACHE:
 @base@/blank.html
 @base@/src/serverconfig.js
 @base@/src/offline.js
-# core - bootstrap
-@base@/apps/io.ox/core/bootstrap/js/bootstrap-transition.js
-@base@/apps/io.ox/core/bootstrap/js/bootstrap-tooltip.js
-@base@/apps/io.ox/core/bootstrap/js/bootstrap-dropdown.js
-@base@/apps/io.ox/core/bootstrap/js/bootstrap-button.js
-@base@/apps/io.ox/core/bootstrap/less/bootstrap.less
+# bootstrap
+@base@/apps/io.ox/core/bootstrap/basics.js
+@base@/apps/io.ox/core/bootstrap/css/bootstrap.min.css
 # theme
 @base@/apps/themes/login/login.css
+@base@/apps/themes/login/font-awesome.css
 @base@/apps/themes/login/busy.gif
-@base@/apps/themes/login/fonts/OpenSans-Light.ttf
-@base@/apps/themes/default/style.css
+@base@/apps/themes/login/fonts/OpenSans-Light-webfont.woff
+@base@/apps/themes/login/fonts/OpenSans-Light-webfont.ttf
+@base@/apps/themes/login/fonts/fontawesome-webfont.woff
 @base@/apps/themes/default/style.less
 @base@/apps/themes/default/definitions.less
 @base@/apps/themes/default/dummypicture.png
-@base@/apps/themes/default/logo-small.xpng
+@base@/apps/themes/default/logo-small.png
+# core
+@base@/apps/io.ox/core/main.js
 # mail
 @base@/apps/io.ox/mail/actions.js
 @base@/apps/io.ox/mail/api.js
@@ -32,6 +33,15 @@ CACHE:
 @base@/apps/io.ox/mail/util.js
 @base@/apps/io.ox/mail/view-detail.js
 @base@/apps/io.ox/mail/view-grid-template.js
+@base@/apps/io.ox/mail/images/ping.mp3
+@base@/apps/io.ox/core.en_US.js
+@base@/apps/io.ox/core.de_DE.js
+@base@/apps/io.ox/core/date/date.en_US.json
+@base@/apps/io.ox/core/date/date.de_DE.json
+@base@/apps/io.ox/core/date/tz/zoneinfo/Europe/Berlin
+@base@/apps/io.ox/contacts/api.js
+@base@/apps/io.ox/mail/settings/defaults.js
+@base@/apps/io.ox/core/tk/upload.less
 # plugins
 @base@/apps/plugins/halo/register.js
 

@@ -1,0 +1,15 @@
+[
+	{
+	    title: "Address Book",
+	    company: "Open-Xchange",
+	    icon: "addressbook.png",
+	    category: "Basic",
+	    settings: false,
+	    requires: "contacts"
+	},
+	{
+		namespace: "io.ox/dev/testing/main",
+		path: "io.ox/contacts/test",
+		requires: "contacts"
+	}
+]

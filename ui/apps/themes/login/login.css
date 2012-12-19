@@ -11,29 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-html {
+html, body {
     height: 100%;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    overflow: hidden;
-    font-size: 100%;
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    color: #333; /* yep, not #000 */
-    height: 100%;
-    overflow: hidden;
-    background-color: #000;
-    cursor: default;
-}
+.css-table { display: table; width: 100%; }
+.css-table-row { display: table-row; }
+.css-table-cell { display: table-cell; vertical-align: middle; }
 
 .unselectable {
     -moz-user-select: -moz-none;
@@ -48,30 +32,19 @@ body {
     cursor: default;
 }
 
-a {
-    color: #08c;
-    text-decoration: none;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.boxshadow a:focus {
-    outline: 0;
-    box-shadow: 0px 0px 4px 0px #00a0cd;
-}
-
-a:hover, .link:hover {
-    text-decoration: underline;
-    cursor: pointer;
-}
-
 @font-face {
-    font-family: OpenSans; src: url(fonts/OpenSans-Light.ttf);
+    font-family: 'OpenSans';
+    src: local('Open Sans Light'),
+         local('OpenSans-Light'),
+         url('fonts/OpenSans-Light-webfont.woff') format('woff'),
+         url('fonts/OpenSans-Light-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 
 .clear-title {
-    font-family: OpenSans, Helvetica, Arial, sans-serif;
-    font-weight: 200;
+    font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 300;
     font-size: 20pt;
     line-height: 1.15em;
 }
@@ -92,13 +65,13 @@ a:hover, .link:hover {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 64002;
+    z-index: 65102;
     background-color: white;
 }
 
 #io-ox-login-screen-decorator {
     background-color: black;
-    z-index: 64001;
+    z-index: 65101;
     opacity: 0.25;
 }
 
@@ -112,139 +85,97 @@ a:hover, .link:hover {
     box-shadow: 0px 0px 70px 5px #000;
 }
 
-/*
-.wallpaper {
-    background-color: #333;
-    background: url(raining_2-wallpaper-1280x800.jpg) no-repeat center center fixed;
-    background-size: cover;
+#io-ox-login-screen a { color: #81CFF7; }
+#io-ox-login-screen a:hover { color: #2DA6E4; }
+
+#io-ox-login-screen .btn-primary {
+    background-image: -moz-linear-gradient(top, #86C8F1, #2C7DB1);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#86C8F1), to(#2C7DB1));
+    background-image: -webkit-linear-gradient(top, #86C8F1, #2C7DB1);
+    background-image: -o-linear-gradient(top, #86C8F1, #2C7DB1);
+    background-image: linear-gradient(to bottom, #86C8F1, #2C7DB1);
 }
-*/
+
+#io-ox-login-screen .btn-primary:hover { background-color: #2C7DB1; }
 
 .wallpaper {
-background: rgb(255,255,255); /* Old browsers */
-background: -moz-radial-gradient(center, circle cover, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 40%, rgba(168,168,168,1) 100%); /* FF3.6+ */
-background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(255,255,255,1)), color-stop(31%,rgba(246,246,246,1)), color-stop(100%,rgba(168,168,168,1))); /* Chrome,Safari4+ */
-background: -webkit-radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 31%,rgba(168,168,168,1) 100%); /* Chrome10+,Safari5.1+ */
-background: -o-radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 31%,rgba(168,168,168,1) 100%); /* Opera 12+ */
-background: -ms-radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 31%,rgba(168,168,168,1) 100%); /* IE10+ */
-background: radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 31%,rgba(168,168,168,1) 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#a8a8a8',GradientType=1 );
+    background: #34749c; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover, #34749c 0%, #2a6085 41%, #1d3f59 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#34749c), color-stop(41%,#2a6085), color-stop(100%,#1d3f59)); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover, #34749c 0%,#2a6085 41%,#1d3f59 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover, #34749c 0%,#2a6085 41%,#1d3f59 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover, #34749c 0%,#2a6085 41%,#1d3f59 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center, #34749c 0%,#2a6085 41%,#1d3f59 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34749c', endColorstr='#1d3f59',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    background-size: 100% 130%;
 }
 
 #io-ox-login-background {
     position: absolute;
-    bottom: 50%;
+    bottom: 0;
     right: 0;
     top: 0;
     left: 0;
     z-index: 0;
-    border-bottom: 1px solid #bbb;
 }
 
 #io-ox-login-form-background {
     display: none;
 }
 
-#io-ox-login-container {
+#io-ox-login-container-scrollpane {
     position: absolute;
-    top: 0;
-    width: 680px;
-    bottom: 0;
-    left: 50%;
-    margin-left: -340px;
+    top: 0; right: 0; bottom: 0; left: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#io-ox-login-container {
+    color: white;
+    height: 100%;
+    width: 100%;
+    max-width: 680px;
     z-index: 2;
+    margin: 0 auto 0 auto;
+    padding: 0 30px 0 30px;
+    box-sizing: border-box;
+}
+
+#io-ox-login-container .css-table {
+    width: 100%;
+    height: 100%;
 }
 
 #io-ox-login-header {
-    position: absolute;
-    top: 25%;
-    left: 0;
-    right: 0;
-    margin-top: -1.5em;
-    font-size: 28pt;
-    color: #555;
+    height: 45%;
     text-align: right;
-    text-shadow: 0px 1px 1px #fff;
-    z-index: 1;
+    vertical-align: middle;
 }
 
-#login-box-content {
-    position: absolute;
-    bottom: 50%;
-    margin-bottom: -35px;
-    font-size: 10pt;
-    z-index: 3;
+#io-ox-login-header h1 {
+    font-size: 24pt;
+    color: #fff;
+    margin: 1em 0 1em 0;
+}
+
+#io-ox-login-header h1 small { color: #6FBBEC; }
+
+#io-ox-login-header-prefix {
+    color: #5DAADB;
+}
+
+#io-ox-login-header-label {
+    text-shadow: 0px 1px 3px #1E405A;
+}
+
+#io-ox-login-form-container {
+    height: 40%;
+    margin: 0;
+    vertical-align: top;
 }
 
 #login-box-content td {
     padding: 0 15px 8px 0;
-}
-
-.login-credential {
-    width: 300px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px 5px 5px 5px;
-    font-size: 12pt;
-    padding: 7px;
-    margin-top: 5px;
-    outline: none;
-    -moz-user-select: text;
-    -webkit-user-select: text;
-}
-
-.login-credential:focus {
-    border-color: #ccc;
-    -webkit-box-shadow: 0px 0px 10px 0px #aaa;
-    -moz-box-shadow: 0px 0px 10px 0px #aaa;
-    box-shadow: 0px 0px 10px 0px #aaa;
-}
-
-.login-credential[type="password"] {
-    width: 200px;
-}
-
-.login-button {
-    
-    font-size: 10pt;
-    font-weight: normal;
-    line-height: 12pt;
-    padding: 7px;
-    text-align: center;
-    width: 120px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px 5px 5px 5px;
-    margin-top: 5px;
-    
-    outline: none;
-    cursor: pointer;
-    
-    color: #fff;
-    border: 1px solid #007CBA;
-    background-color: #006897; /* 006897 00a0cd */
-    background-image: -moz-linear-gradient(center top, #00a0cd, #006897);
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#00a0cd), to(#006897));
-    background-image: -o-linear-gradient(top, #00a0cd 0%, #006897 100%);}
-
-.login-button:focus, .login-button:hover {
-    -webkit-box-shadow: 0px 0px 10px 1px #00a0cd;
-    -moz-box-shadow: 0px 0px 10px 1px #00a0cd;
-    box-shadow: 0px 0px 10px 1px #00a0cd;
-}
-
-.login-button:active {
-    background-image: none;
-    background-color: #00a0cd;
-    -webkit-box-shadow: 1px 1px 10px 0px #00a0cd;
-    -moz-box-shadow: 1px 1px 10px 0px #00a0cd;
-    box-shadow: 1px 1px 10px 0px #00a0cd;
-}
-
-.login-label {
-    color: #555;
 }
 
 #io-ox-login-blocker {
@@ -256,36 +187,35 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
     z-index: 65000;
 }
 
-#io-ox-login-feedback {
-    position: absolute;
-    top: 50%;
-    margin-top: 40px;
-    bottom: 60px;
-    right: 0;
-    left: 0;
-    font-size: 18pt;
-    padding-top: 1em;
-    color: #aaa;
-    text-align: center;
-}
-
 .io-ox-busy {
     background-image: url(busy.gif);
     background-repeat: no-repeat;
     background-position: center center;
 }
 
+#io-ox-login-feedback {
+    min-height: 3em; /* for busy animation */
+}
+
 #io-ox-login-footer {
-    position: absolute;
-    right: 0;
-    bottom: 1em;
-    left: 0;
+    height: 15%;
+    line-height: 1.2em;
+    vertical-align: bottom;
+}
+
+#io-ox-languages {
+    margin-bottom: 0.7em;
+}
+
+#io-ox-languages i {
+    font-style: normal;
 }
 
 #io-ox-copyright {
-    line-height: 1.5em;
-    color: #aaa;
+    color: #072131;
     text-align: right;
+    font-weight: 300;
+    margin-bottom: 1em;
 }
 
 #io-ox-offline {
@@ -316,11 +246,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe36b', endColorstr='#fcbb3a',GradientType=0 );
 }
 
-/* ipad
-@media screen and (orientation: portrait) {
-    body { width: 768px; }
+.io-ox-ui-disabled {
+    cursor: default !important;
+    pointer-events: none;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(opacity=30)";
+    filter: alpha(opacity=30);
+    opacity: .3;
 }
-@media screen and (orientation: landscape) {
-    body { width: 1024px; }
+
+@media (max-width: 767px) {
+    #io-ox-login-header { height: 15%; }
+    #io-ox-login-header h1 { font-size: 14pt; margin: 2em 0 2em 0; }
 }
-*/

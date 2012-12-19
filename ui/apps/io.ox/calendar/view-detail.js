@@ -18,13 +18,16 @@ define("io.ox/calendar/view-detail",
      "io.ox/core/api/group",
      "io.ox/core/api/resource",
      "io.ox/core/api/folder",
-     "gettext!io.ox/calendar/calendar",
+     "io.ox/core/tk/attachments",
+     "io.ox/core/extPatterns/links",
+     "gettext!io.ox/calendar",
      "less!io.ox/calendar/style.css"
-    ], function (ext, util, userAPI, groupAPI, resourceAPI, folderAPI) {
+    ], function (ext, util, userAPI, groupAPI, resourceAPI, folderAPI, attachments, links, gt) {
 
     "use strict";
 
     var fnClickPerson = function (e) {
+        e.preventDefault();
         ext.point("io.ox/core/person:action").each(function (ext) {
             _.call(ext.action, e.data, e);
         });
@@ -48,7 +51,7 @@ define("io.ox/calendar/view-detail",
         id: "time",
         draw: function (data) {
             this.append(
-                $("<div>").addClass("interval").text(util.getTimeInterval(data))
+                util.addTimezoneLabel($("<div>").addClass("interval"), data)
             );
         }
     });
@@ -60,11 +63,30 @@ define("io.ox/calendar/view-detail",
         draw: function (data) {
             var recurrenceString = util.getRecurrenceString(data);
             this.append(
-                $("<div>").addClass("day").text(
-                    util.getDateInterval(data) +
-                    (recurrenceString !== "" ? " \u2013 " + recurrenceString : "")
+                $("<div>").addClass("day").append(
+                    $.txt(gt.noI18n(util.getDateInterval(data))),
+                    $.txt(gt.noI18n((recurrenceString !== "" ? " \u2013 " + recurrenceString : "")))
                 )
             );
+        }
+    });
+
+    ext.point('io.ox/calendar/detail').extend({
+        index: 350,
+        id: 'inline-actions',
+        draw: function (data) {
+            ext.point('io.ox/calendar/detail/actions').invoke('draw', this, data);
+        }
+    });
+
+    // draw private flag
+    ext.point("io.ox/calendar/detail").extend({
+        index: 150,
+        id: "private-flag",
+        draw: function (data) {
+            if (data.private_flag) {
+                $('<i>').addClass("icon-lock private-flag").appendTo(this);
+            }
         }
     });
 
@@ -74,7 +96,7 @@ define("io.ox/calendar/view-detail",
         id: "title",
         draw: function (data) {
             this.append(
-                $("<div>").addClass("title clear-title").text(data.title || "")
+                $("<div>").addClass("title clear-title").text(gt.noI18n(data.title || ""))
             );
         }
     });
@@ -85,7 +107,7 @@ define("io.ox/calendar/view-detail",
         id: "location",
         draw: function (data) {
             this.append(
-                $("<div>").addClass("location").text(data.location || "\u00A0")
+                $("<div>").addClass("location").text(gt.noI18n(data.location || "\u00A0"))
             );
         }
     });
@@ -103,7 +125,10 @@ define("io.ox/calendar/view-detail",
         }
     });
 
-    // draw participants
+    // duck test
+    function looksLikeResource(obj) {
+        return 'mailaddress' in obj && 'description' in obj;
+    }
 
     function drawParticipant(obj, hash) {
         // initialize vars
@@ -114,7 +139,7 @@ define("io.ox/calendar/view-detail",
             isPerson = hash[key] || obj.folder_id,
             personClass = isPerson ? "person" : "",
             display_name, name, node, name_lc,
-            mail_lc = String(obj.mail).toLowerCase();
+            mail_lc = String(obj.mail || obj.mailaddress || '').toLowerCase();
         // external participant?
         if (obj.type === 5) {
             // beautify
@@ -126,34 +151,32 @@ define("io.ox/calendar/view-detail",
                 display_name = obj.display_name || mail_lc;
             }
         } else {
-            name = display_name = obj.display_name || String(obj.mail).toLowerCase();
+            name = display_name = obj.display_name || mail_lc;
         }
-        node = $("<div>").addClass("participant")
-            .append($("<span>").addClass(personClass).text(name))
-            .append($("<span>").addClass("status " + statusClass).text(" " + confirm))
-            .on("click", {
-                display_name: display_name,
-                email1: mail_lc,
-                internal_userid: obj.internal_userid
-            }, fnClickPerson);
+        node = $('<div class="participant">')
+            .addClass(looksLikeResource(obj) ? 'halo-resource-link' : 'halo-link')
+            .append($('<a href="#">').addClass(personClass + ' ' + statusClass).text(gt.noI18n(name)))
+            .append($('<span>').addClass("status " + statusClass).html(" " + confirm))
+            .data(_.extend(obj, { display_name: display_name, email1: mail_lc }));
         // has confirmation comment?
-        if (conf.comment !== "") {
-            node.append($("<span>").addClass("comment").text(conf.comment));
+        if (conf.comment !== '') {
+            node.append($("<span>").addClass("comment").text(gt.noI18n(conf.comment)));
         }
         return node;
     }
+
+
 
     ext.point("io.ox/calendar/detail").extend({
         index: 500,
         id: "participants",
         draw: function (data) {
-
-            var list = data.participants, $i = list.length,
-                participants = $i > 1 ? $("<div>").addClass("participants") : $(),
+            var list = data.participants || {}, $i = list.length, MIN = 0,
+                participants = $i > MIN ? $("<div>").addClass("participants") : $(),
                 confirmations = {};
 
-            // has more than one participant?
-            if ($i > 1) {
+            // has participants? should always be true. Was $i > 1 (see bug #23295).
+            if ($i > MIN) {
 
                 confirmations = util.getConfirmations(data);
                 participants.busy();
@@ -199,9 +222,8 @@ define("io.ox/calendar/view-detail",
                     })
                     .value();
 
-
                 participants.append($("<div>")
-                        .addClass("io-ox-label").text("Participants"));
+                        .addClass("io-ox-label participants-block").text(gt("Participants")));
 
                 var plist = $("<div>").addClass("participant-list").appendTo(participants);
 
@@ -233,7 +255,7 @@ define("io.ox/calendar/view-detail",
                             if (memberList.length) {
                                 // new section
                                 participants
-                                    .append($("<div>").addClass("group").text(obj.display_name + ":"))
+                                    .append($("<div>").addClass("group").text(gt.noI18n(obj.display_name + ":")))
                                     .append(glist = $("<div>").addClass("participant-list"));
                                 userAPI.getList(memberList)
                                     .done(function (members) {
@@ -252,7 +274,7 @@ define("io.ox/calendar/view-detail",
                     // resources
                     if (resourceList.length) {
                         participants
-                            .append($("<div>").addClass("io-ox-label").text("Resources"))
+                            .append($("<div>").addClass("io-ox-label").text(gt("Resources")))
                             .append(plist = $("<div>").addClass("participant-list"));
                         // loop over resources
                         _(resourceList)
@@ -276,13 +298,25 @@ define("io.ox/calendar/view-detail",
         }
     });
 
+
+    ext.point('io.ox/calendar/detail').extend({
+        index: 550,
+        id: 'inline-actions-participantrelated',
+        draw: function (data) {
+            if (data.participants && data.participants.length > 1) {
+                ext.point('io.ox/calendar/detail/actions-participantrelated').invoke('draw', this, data);
+            }
+
+        }
+    });
+
     // draw details
     ext.point("io.ox/calendar/detail").extend({
-        index: 600,
+        index: 700,
         id: "details",
         draw: function (data) {
             var node = $("<div>").addClass('details')
-                .append($("<div>").addClass("io-ox-label").text("Details"))
+                .append($("<div>").addClass("io-ox-label").text(gt("Details")))
                 .appendTo(this);
             ext.point("io.ox/calendar/detail/details").invoke("draw", node, data);
         }
@@ -296,7 +330,7 @@ define("io.ox/calendar/view-detail",
             this.append(
                 $("<span>")
                     .addClass("detail-label")
-                    .text("Show as" + ":\u00A0")
+                    .append($.txt(gt("Show as")), $.txt(gt.noI18n(":\u00A0")))
             )
             .append(
                 $("<span>")
@@ -306,7 +340,7 @@ define("io.ox/calendar/view-detail",
             .append(
                 $("<span>")
                     .addClass("detail")
-                    .text(" " + util.getShownAs(data))
+                    .append($.txt(gt.noI18n(" ")), $.txt(gt.noI18n(util.getShownAs(data))))
             )
             .append($("<br>"));
         }
@@ -318,8 +352,12 @@ define("io.ox/calendar/view-detail",
         id: "folder",
         draw: function (data) {
             this.append(
-                $("<span>").addClass("detail-label").text("Folder" + ":\u00A0"),
-                $("<span>").addClass("detail").append(folderAPI.getTextNode(data.folder_id)),
+                $("<span>")
+                    .addClass("detail-label")
+                    .append($.txt(gt("Folder")), $.txt(gt.noI18n(":\u00A0"))),
+                $("<span>")
+                    .addClass("detail")
+                    .text(gt.noI18n(folderAPI.getTextNode(data.folder_id).data)),
                 $("<br>")
             );
         }
@@ -333,13 +371,13 @@ define("io.ox/calendar/view-detail",
             this.append(
                 $("<span>")
                     .addClass("detail-label")
-                    .text("Created" + ":\u00A0")
+                    .append($.txt(gt("Created")), $.txt(gt.noI18n(":\u00A0")))
             )
             .append(
                 $("<span>")
                     .addClass("detail")
-                    .append($("<span>").text(util.getDate(data.creation_date)))
-                    .append($("<span>").text(" \u2013 "))
+                    .append($("<span>").text(gt.noI18n(util.getDate(data.creation_date))))
+                    .append($("<span>").text(gt.noI18n(" \u2013 ")))
                     .append($("<span>").append(userAPI.getTextNode(data.created_by)))
              )
              .append($("<br>"));
@@ -354,18 +392,39 @@ define("io.ox/calendar/view-detail",
             this.append(
                 $("<span>")
                     .addClass("detail-label")
-                    .text("Modified" + ":\u00A0")
+                    .append($.txt(gt("Modified")), $.txt(gt.noI18n(":\u00A0")))
             )
             .append(
                 $("<span>")
                     .addClass("detail")
-                    .append($("<span>").text(util.getDate(data.last_modified)))
-                    .append($("<span>").text(" \u2013 "))
+                    .append($("<span>").text(gt.noI18n(util.getDate(data.last_modified))))
+                    .append($("<span>").text(gt.noI18n(" \u2013 ")))
                     .append($("<span>").append(userAPI.getTextNode(data.modified_by)))
              )
              .append($("<br>"));
         }
     });
+
+    ext.point("io.ox/calendar/detail").extend({
+        id: 'attachments',
+        index: 600,
+        draw: function (data) {
+            var $node;
+            if (data.number_of_attachments) {
+                this.append(
+                    $('<div class="io-ox-label">').text(gt('Attachments')),
+                    $node = $('<div>')
+                );
+                ext.point("io.ox/calendar/detail/attachments").invoke('draw', $node, new ext.Baton({ data: data }));
+            }
+        }
+    });
+
+    ext.point("io.ox/calendar/detail/attachments").extend(new attachments.AttachmentList({
+        id: 'attachment-list',
+        index: 200,
+        module: 1
+    }));
 
     return {
 
@@ -377,6 +436,7 @@ define("io.ox/calendar/view-detail",
                 node = $();
             } else {
                 node = $("<div>").addClass("calendar-detail");
+                node.attr('data-cid', String(_.cid(data)));
                 ext.point("io.ox/calendar/detail").invoke("draw", node, data);
             }
 

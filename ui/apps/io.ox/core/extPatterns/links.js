@@ -13,32 +13,16 @@
  */
 
 define("io.ox/core/extPatterns/links",
-    ["io.ox/core/extensions", "io.ox/core/collection"], function (ext, Collection) {
+    ["io.ox/core/extensions",
+     "io.ox/core/collection",
+     "io.ox/core/extPatterns/actions",
+     "gettext!io.ox/core"], function (ext, Collection, actions, gt) {
 
     "use strict";
 
     // common extension classes
 
-    var requires = function (str) {
-        return function (e) {
-            return e.collection.has.apply(e.collection, str.split(/ /));
-        };
-    };
-
-    var requiresOne = function (e) {
-        return e.collection.has('one');
-    };
-
-    var Action = function (id, options) {
-        // get options - use 'requires one' as default
-        var o = _.extend({ requires: requiresOne }, options);
-        // string?
-        if (_.isString(o.requires)) {
-            o.requires = requires(o.requires);
-        }
-        // extend point
-        ext.point(id).extend(o);
-    };
+    var Action = actions.Action;
 
     var Link = function (options) {
 
@@ -48,155 +32,347 @@ define("io.ox/core/extPatterns/links",
             click = function (e) {
                 e.preventDefault();
                 var node = $(this),
-                    context = node.data("context"),
-                    p = ext.point(node.data("ref"));
-                // general handler
-                p.invoke('action', self, context);
-                // handler for multi selection - always provides an array
-                p.invoke('multiple', self, _.isArray(context) ? context : [context]);
+                    baton = node.data("baton"),
+                    ref = node.data("ref");
+                actions.invoke(ref, this, baton, e);
             };
 
-        this.draw = function (context) {
+        this.draw = this.draw || function (baton) {
+            baton = ext.Baton.ensure(baton);
             this.append(
                 $("<a>", { href: "#", tabindex: "1", "data-action": self.id })
-                .addClass('io-ox-action-link' + (options.attention === true ? ' attention': ''))
-                .data({ ref: self.ref, context: context })
+                .addClass(self.cssClasses || 'io-ox-action-link')
+                .attr({
+                    'data-prio': options.prio || 'lo',
+                    'data-ref': self.ref
+                })
+                .data({ ref: self.ref, baton: baton })
                 .click(click)
                 .text(String(self.label))
             );
         };
     };
-    
+
+    var XLink = function (id, options) {
+        ext.point(id).extend(new Link(options));
+    };
+
+    function actionClick(e) {
+        e.preventDefault();
+        var extension = e.data.extension, baton = e.data.baton;
+        baton.e = e;
+        actions.invoke(extension.ref, extension, baton);
+    }
+
+    var ActionLink = function (id, extension) {
+        extension = extension || {};
+        extension = _.extend({
+            ref: id + '/' + extension.id,
+            draw: function (baton) {
+                baton = ext.Baton.ensure(baton);
+                this.append(
+                    $('<li>').append(
+                        $('<a href="#">').attr('data-action', extension.ref).text(extension.label)
+                        .on('click', { baton: baton, extension: extension }, actionClick)
+                    )
+                );
+            }
+        }, extension);
+        ext.point(id).extend(extension);
+    };
+
     var Button = function (options) {
 
         _.extend(this, options);
 
         var self = this,
+            tag = options.tagtype ? options.tagtype : 'a',
+
             click = function (e) {
-                var node = $(this);
                 e.preventDefault();
-                // TODO: don't know if using self for context makes sense
-                ext.point(node.data("ref")).invoke("action", self, node.data("context"));
+                var extension = e.data.extension;
+                actions.invoke(extension.ref, extension, e.data.baton);
             };
 
-        this.draw = function (context) {
+        this.draw = function (baton) {
+            baton = ext.Baton.ensure(baton);
             this.append(
-                $("<button>", { "data-action": self.id })
-                .addClass(self.cssClasses || 'btn')
-                .data({ ref: self.ref, context: context })
-                .click(click)
-                .text(String(self.label))
-            ).append("&nbsp;");
+                $('<' + tag + ' href="#" class="btn">')
+                .attr({ "data-action": self.id, tabIndex: self.tabIndex })
+                .addClass(self.cssClasses)
+                .css(self.css || {})
+                .on('click', { extension: self, baton: baton }, click)
+                .append(_.isString(self.label) ? $.txt(self.label) : $())
+                .append(_.isString(self.icon) ? $('<i>').addClass(self.icon) : $())
+            );
         };
     };
-    
 
-    var applyCollection = function (self, collection, node, context, args, bootstrapMode) {
-        // resolve collection's properties
-        collection.getProperties()
-            .done(function () {
-                // get links (check for requirements)
-                var links = ext.point(self.ref).map(function (link) {
-                    // defer decision
-                    var def = $.Deferred();
-                    // process actions
-                    if (link.isEnabled && !link.isEnabled.apply(link, args)) {
-                        return def.reject();
+    var getLinks = function (self, collection, node, baton, args) {
+        return actions.applyCollection(self.ref, collection, baton, args);
+    };
+
+    var drawLinks = function (self, collection, node, baton, args, bootstrapMode) {
+        var linkNode = $("<div>").appendTo(node);
+        baton = ext.Baton.ensure(baton);
+        return getLinks(self, collection, linkNode, baton, args).always(function (links) {
+            // count resolved links
+            var count = 0;
+            // draw links
+            _(links).each(function (link) {
+                if (_.isFunction(link.draw)) {
+                    link.draw.call(bootstrapMode ? $("<li>").appendTo(linkNode) : linkNode, baton);
+                    if (_.isFunction(link.customize)) {
+                        link.customize.call(linkNode.find('a'), baton);
                     }
-                    // combine actions
-                    $.when.apply($,
-                        ext.point(link.ref).map(function (action) {
-                            // get return value
-                            var ret = _.isFunction(action.requires) ?
-                                    action.requires({ collection: collection, context: context }) : true;
-                            // is not deferred?
-                            if (!ret.promise) {
-                                ret = $.Deferred().resolve(ret);
-                            }
-                            return ret;
-                        })
-                        .value()
-                    )
-                    .done(function () {
-                        var reduced = _(arguments).reduce(function (memo, action) {
-                            return memo && action === true;
-                        }, true);
-                        if (reduced) {
-                            def.resolve(link);
-                        } else {
-                            def.reject(link);
-                        }
-                    });
-                    return def;
-                });
-                // wait for all links
-                $.when.apply($, links.value()).always(function () {
-                    // count resolved links
-                    var count = 0;
-                    // draw links
-                    _(links.value()).each(function (def) {
-                        def.done(function (link) {
-                            if (_.isFunction(link.draw)) {
-                                link.draw.call(bootstrapMode ? $("<li>").appendTo(node) : node, context);
-                                if (_.isFunction(link.customize)) {
-                                    link.customize.call(node.find('a'), context);
-                                }
-                                count++;
-                            }
-                        });
-                    });
-                    // empty?
-                    if (count === 0) {
-                        node.addClass("empty");
-                    }
-                });
+                    count++;
+                }
             });
+            // empty?
+            if (count === 0) {
+                linkNode.addClass("empty");
+            }
+        });
     };
 
     var ToolbarLinks = function (options) {
         var self = _.extend(this, options);
-        this.draw = function (context) {
+        this.draw = function (baton) {
             // paint on current node
             var args = $.makeArray(arguments);
-            applyCollection(self, new Collection(context), this, context, args);
+            baton = ext.Baton.ensure(baton);
+            drawLinks(self, new Collection(baton.data), this, baton, args);
         };
+
+    };
+
+    var ToolbarButtons = function (options) {
+        var self = _.extend(this, options);
+        this.draw = function (baton) {
+            // paint on current node
+            var args = $.makeArray(arguments);
+            baton = ext.Baton.ensure(baton);
+            drawLinks(self, new Collection(baton.data), this, baton, args);
+            // add classes to get button style
+            this.children('a').addClass('btn btn-primary');
+            this.children('.dropdown').children('a').addClass('btn btn-primary');
+        };
+    };
+
+    var wrapAsListItem = function () {
+        return $('<li>').append(this).get(0);
     };
 
     var InlineLinks = function (options) {
+
         var self = _.extend(this, options);
-        this.draw = function (context) {
+
+        this.draw = function (baton) {
+
+            baton = ext.Baton.ensure(baton);
+
             // create & add node first, since the rest is async
             var args = $.makeArray(arguments),
-                node = $("<div>").addClass("io-ox-inline-links").appendTo(this);
-            applyCollection(self, new Collection(context), node, context, args);
-        };
-    };
-
-    var DropdownLinks = function (options) {
-        var self = _.extend(this, options);
-        this.draw = function () {
-            var args = $.makeArray(arguments),
-                context = args[0],
-                $parent = $("<div>").addClass("dropdown").appendTo(this),
-                $toggle = $("<a>", {href: '#'}).text(options.label + " ").append($("<b>").addClass("caret")).appendTo($parent);
-
-            // create & add node first, since the rest is async
-            var node = $("<ul>").addClass("dropdown-menu").appendTo($parent);
-            applyCollection(self, new Collection(context), node, context, args, true);
-
-            $toggle.dropdown();
-            $toggle.on("click", function () {
-                $toggle.dropdown('toggle');
+                node = $("<div>").addClass("io-ox-inline-links").appendTo(this),
+                multiple = _.isArray(baton.data) && baton.data.length > 1;
+            if (options.attributes) {
+                node.attr(options.attributes);
+            }
+            if (options.classes) {
+                _(options.classes).each(function (cl) {
+                    node.addClass(cl);
+                });
+            }
+            drawLinks(self, new Collection(baton.data), node, baton, args).done(function () {
+                // add toggle unless multi-selection
+                node = node.children("div:first");
+                var all = node.children(), lo = node.children('[data-prio="lo"]');
+                if (!multiple && all.length > 5 && lo.length > 1) {
+                    node.append(
+                        $('<span class="io-ox-action-link dropdown">').append(
+                            $('<a href="#" data-toggle="dropdown" data-action="more">').append(
+                                $.txt(gt('More')),
+                                $.txt(_.noI18n(' ...')),
+                                $('<b class="caret">')
+                            ),
+                            $('<ul class="dropdown-menu dropdown-right">').append(
+                                lo.map(wrapAsListItem)
+                            )
+                        )
+                    );
+                }
+                all = lo = null;
+                if (options.customizeNode) {
+                    options.customizeNode(node);
+                }
             });
         };
     };
 
+    var z = 0;
+    var drawDropDown = function (options, baton) {
+        if (options.zIndex !== undefined) {
+            z = options.zIndex;
+        }
+        var args = $.makeArray(arguments),
+            $parent = $('<div>').addClass('dropdown')
+                .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 11000) })
+                .appendTo(this),
+            $toggle = $('<a href="#" data-toggle="dropdown">')
+                .data('context', baton.data)
+                .text(options.label || baton.label || '###')
+                .append(
+                    $('<span>').text(_.noI18n(' ')),
+                    $('<b>').addClass('caret')
+                )
+                .appendTo($parent);
+
+        $toggle.addClass(options.classes);
+        $parent.append($.txt(_.noI18n('\u00A0\u00A0 '))); // a bit more space
+
+        // create & add node first, since the rest is async
+        var node = $('<ul>').addClass('dropdown-menu').appendTo($parent);
+        drawLinks(options, new Collection(baton.data), node, baton, args, true);
+
+        $toggle.dropdown();
+
+        return $parent;
+    };
+
+    var DropdownLinks = function (options) {
+        var o = _.extend(this, options);
+        this.draw = function (baton) {
+            baton = ext.Baton.ensure(baton);
+            return drawDropDown.call(this, o, baton);
+        };
+    };
+
+    var Dropdown = function (id, options) {
+        var o = options || {};
+        o.ref = id + '/' + o.id;
+        ext.point(id).extend(
+            _.extend({
+                ref: o.ref,
+                draw: function (baton) {
+                    baton = ext.Baton.ensure(baton);
+                    drawDropDown.call(this, o, baton);
+                }
+            }, o)
+        );
+    };
+
+    var drawButtonGroup = function (options, baton) {
+        var args = $.makeArray(arguments),
+            $parent = $("<div>").addClass('btn-group')
+                .css({ display: 'inline-block' })
+                .addClass(options.classes)
+                .attr('data-toggle', (options.radio ? 'buttons-radio' : ''))
+                .appendTo(this);
+        // create & add node first, since the rest is async
+        var node = $parent;
+        drawLinks(options, new Collection(baton.data), node, baton, args, false);
+        return $parent;
+    };
+
+    var ButtonGroup = function (id, options) {
+        var o = options || {};
+        o.ref = id + '/' + o.id;
+        ext.point(id).extend(
+            _.extend({
+                ref: o.ref,
+                draw: function (baton) {
+                    baton = ext.Baton.ensure(baton);
+                    drawButtonGroup.call(this, o, baton);
+                }
+            }, o)
+        );
+    };
+
+    var ActionGroup = (function () {
+
+        function preventDefault(e) {
+            e.preventDefault();
+        }
+
+        function draw(extension, baton) {
+            var args = $.makeArray(arguments), a, ul, title = [];
+            this.append(
+                $('<div class="toolbar-button dropdown">').append(
+                    a = $('<a href="#" data-toggle="dropdown" title="">')
+                        .attr('data-ref', extension.ref)
+                        .addClass(extension.addClass)
+                        .append(extension.icon()),
+                    ul = $('<ul class="dropdown-menu dropdown-right-side">')
+                )
+            );
+            // get links
+            return getLinks(extension, new Collection(baton.data), ul, baton, args).done(function (links) {
+                if (links.length > 1) {
+                    // call draw method to fill dropdown
+                    _(links).chain()
+                        .filter(function (x) {
+                            return _.isFunction(x.draw);
+                        })
+                        .each(function (x) {
+                            title.push(x.label);
+                            x.draw.call(ul, baton);
+                        });
+                    // set title attribute
+                    a.attr('title', extension.label || title.join(', '));
+                    // add footer label?
+                    if (extension.label) {
+                        ul.append(
+                            $('<li class="dropdown-footer">').text(extension.label)
+                        );
+                    }
+                } else {
+                    // disable dropdown
+                    a.removeAttr('data-toggle');
+                    ul.remove();
+                    if (links.length === 1) {
+                        // directly link actions
+                        a.attr('title', links[0].label || '')
+                            .on('click', { baton: baton, extension: links[0] }, actionClick);
+                    } else {
+                        a.addClass('disabled').on('click', preventDefault);
+                    }
+                }
+            });
+        }
+
+        function icon() {
+            return $('<i class="icon-magic">');
+        }
+
+        return function ActionGroup(id, extension) {
+            extension = extension || {};
+            extension = _.extend({
+                ref: id + '/' + (extension.id || 'default'),
+                icon: icon,
+                draw: function (baton) {
+                    baton = ext.Baton.ensure(baton);
+                    draw.call(this, extension, baton);
+                }
+            }, extension);
+            // register extension
+            ext.point(id).extend(extension);
+        };
+
+    }());
+
     return {
         Action: Action,
         Link: Link,
+        XLink: XLink, // TODO: consolidate Link/XLink
         Button: Button,
+        ActionLink: ActionLink,
+        ToolbarButtons: ToolbarButtons,
         ToolbarLinks: ToolbarLinks,
         InlineLinks: InlineLinks,
-        DropdownLinks: DropdownLinks
+        DropdownLinks: DropdownLinks,
+        Dropdown: Dropdown,
+        ButtonGroup: ButtonGroup,
+        ActionGroup: ActionGroup
     };
 });
+

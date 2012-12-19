@@ -1,0 +1,85 @@
+/**
+ *
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author David Bauer <david.bauer@open-xchange.com>
+ *
+ */
+
+.carousel {
+
+    background-color: #000;
+    margin-bottom: 0;
+    z-index: 10000;
+    
+    .closecarousel {
+        position: absolute;
+        bottom: 26px;
+        right: 13px;
+    }
+
+    .item {
+        height: 100%;
+        -webkit-backface-visibility: hidden; // for ipad!
+        -webkit-transition: 0.6s ease-in-out left;
+        -moz-transition: 0.6s ease-in-out left;
+        -o-transition: 0.6s ease-in-out left;
+        transition: 0.6s ease-in-out left;
+
+        .carousel-caption {
+
+            .breadcrumb {
+                opacity:0.8;
+                padding:0;
+                margin:0;
+                background:transparent;
+                text-align: center;
+                li {
+                    text-shadow: none;
+                    word-wrap: break-word;
+                    a { color: @link-on-dark; }
+                }
+                li.active {
+                    display:inline;
+                }
+                .divider { color: #fff; }
+            }
+            
+            h4 { text-align: center; }
+        }
+    }
+
+    .item > img {
+        position: absolute;
+        margin: auto;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .item > i {
+        position: absolute;
+        margin: auto;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width:200px;
+        font-size:200px;
+        height:200px;
+    }
+
+    .carousel-control {
+        cursor: pointer;
+    }
+}
+
+

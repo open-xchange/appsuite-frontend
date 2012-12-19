@@ -1,0 +1,151 @@
+<part id='io.ox/calendar/settings'>
+	<extension id='title'>
+		<div>
+			<div class="clear-title">{{=it.strings.TITLE_CALENDAR}}</div>
+			<div class="settings sectiondelimiter"></div>
+		</div>
+	</extension>
+	<extension id='time'>
+		<legend class="sectiontitle expertmode">{{=it.strings.TITLE_TIME}}</legend>
+		<div class="control-group expertmode">
+			<label for="interval_in_minutes" class="control-label">{{=it.strings.INTERVAL_IN_MINUTES}}</label>
+			<div class="controls">
+				<label class="select">
+					<select data-property="interval" id="interval_in_minutes" class="input-xlarge">
+						{{~it.optionsIntervalMinutes :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
+					</select>
+				</label>
+			</div>
+		</div>
+		<div class="control-group expertmode">
+			<label for="working_time_start" class="control-label">{{=it.strings.WORKING_TIME_START}}</label>
+			<div class="controls">
+				<label class="select">
+					<select data-property="startTime" id="working_time_start" class="input-xlarge">
+						{{~it.optionsTimeWorktime :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
+					</select>
+				</label>
+			</div>
+		</div>
+		<div class="control-group expertmode">
+			<label for="working_time_end" class="control-label">{{=it.strings.WORKING_TIME_END}}</label>
+			<div class="controls">
+				<label class="select">
+					<select data-property="endTime" id="working_time_end" class="input-xlarge">
+						{{~it.optionsTimeWorktime :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
+					</select>
+				</label>
+			</div>
+		</div>
+	</extension>
+	<extension id='calendar_view'>
+		<legend class="sectiontitle">{{=it.strings.TITLE_VIEW}}</legend>
+		<div class="control-group">
+			<label for="view" class="control-label">{{=it.strings.VIEW}}</label>
+			<div class="controls">
+				<label class="select">
+					<select data-property="viewView" id="view" class="input-xlarge">
+						{{~it.optionsViewDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
+					</select>
+				</label>
+			</div>
+		</div>
+        <div class="form-horizontal">
+            <div class="control-group expertmode">
+                <label class="control-label">{{=it.strings.SHOW_DECLINED_APPOINTMENTS}}</label>
+                <div class="controls">
+                    <label class="radio">{{=it.optionsYesAnswers.label}}
+                        <input type="radio" name="showDeclinedAppointments" data-property="showDeclinedAppointments" value="{{=it.optionsYesAnswers.value}}">
+                    </label>
+                    <label class="radio">{{=it.optionsNoAnswers.label}}
+                        <input type="radio" name="showDeclinedAppointments" data-property="showDeclinedAppointments" value="{{=it.optionsNoAnswers.value}}">
+                    </label>
+                </div>
+            </div>
+        </div>
+		<!-- <div class="control-group">
+			<label for="range_calendar_view" class="control-label">{{=it.strings.TR_CALENDAR_VIEW}}</label>
+			<div class="controls">
+				<label class="select">
+					<select data-property="viewCalendar" id="range_calendar_view" class="input-xlarge">
+						{{~it.optionsCalendarRangeDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
+					</select>
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label for="range_team_view" class="control-label">{{=it.strings.TR_TEAM_VIEW}}</label>
+			<div class="controls">
+				<label class="select">
+					<select data-property="viewTeam" id="range_team_view" class="input-xlarge">
+						{{~it.optionsCalendarRangeDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
+					</select>
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label for="range_list_view" class="control-label">{{=it.strings.TR_LIST_VIEW}}</label>
+			<div class="controls">
+				<label class="select">
+					<select data-property="viewList" id="range_list_view" class="input-xlarge">
+						{{~it.optionsCalendarRangeDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
+					</select>
+				</label>
+			</div>
+		</div> -->
+	</extension>
+	<extension id='appointment'>
+		<legend class="sectiontitle expertmode">{{=it.strings.TITLE_NEW_APPOINTMENT}}</legend>
+		<div class="control-group expertmode">
+            <label for="time_for_reminder" class="control-label">{{=it.strings.TIME_FOR_REMINDER}}</label>
+            <div class="controls">
+                <label class="select">
+                    <select data-property="defaultReminder" id="time_for_reminder" class="input-xlarge">
+                        {{~it.optionsReminderSelection :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
+                    </select>
+                </label>
+            </div>
+        </div>
+	</extension>
+	<extension id='notifications'>
+        <legend class="sectiontitle expertmode">{{=it.strings.TITLE_NOTIFICATIONS_FOR_APPOINTMENT}}</legend>
+        <div class="form-horizontal">
+            <div class="control-group expertmode">
+                <label class="control-label">{{=it.strings.NOTIFICATIONS_FOR_APPOINTMENTS}}</label>
+                <div class="controls">
+                    <label class="radio">{{=it.optionsYesAnswers.label}}
+                        <input type="radio" name="notifyNewModifiedDeleted" data-property="notifyNewModifiedDeleted" value="{{=it.optionsYesAnswers.value}}">
+                    </label>
+                    <label class="radio">{{=it.optionsNoAnswers.label}}
+                        <input type="radio" name="notifyNewModifiedDeleted" data-property="notifyNewModifiedDeleted" value="{{=it.optionsNoAnswers.value}}">
+                    </label>
+                </div>
+            </div>
+        </div>
+        <legend class="sectiontitle expertmode">{{=it.strings.TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED}}</legend>
+        <div class="form-horizontal">
+            <div class="control-group expertmode">
+                <label class="control-label">{{=it.strings.NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR}}</label>
+                <div class="controls">
+                    <label class="radio">{{=it.optionsYesAnswers.label}}
+                        <input type="radio" name="notifyAcceptedDeclinedAsCreator" data-property="notifyAcceptedDeclinedAsCreator" value="{{=it.optionsYesAnswers.value}}">
+                    </label>
+                    <label class="radio">{{=it.optionsNoAnswers.label}}
+                        <input type="radio" name="notifyAcceptedDeclinedAsCreator" data-property="notifyAcceptedDeclinedAsCreator" value="{{=it.optionsNoAnswers.value}}">
+                    </label>
+                </div>
+            </div>
+            <div class="control-group expertmode">
+                <label class="control-label">{{=it.strings.NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT}}</label>
+                <div class="controls">
+                    <label class="radio">{{=it.optionsYesAnswers.label}}
+                        <input type="radio" name="notifyAcceptedDeclinedAsParticipant" data-property="notifyAcceptedDeclinedAsParticipant" value="{{=it.optionsYesAnswers.value}}">
+                    </label>
+                    <label class="radio">{{=it.optionsNoAnswers.label}}
+                        <input type="radio" name="notifyAcceptedDeclinedAsParticipant" data-property="notifyAcceptedDeclinedAsParticipant" value="{{=it.optionsNoAnswers.value}}">
+                    </label>
+                </div>
+            </div>
+        </div>
+    </extension>
+</part>

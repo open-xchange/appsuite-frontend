@@ -8,8 +8,15 @@ ifneq (,$(or $(filter noopt,$(DEB_BUILD_OPTIONS)),\
 	FLAGS += debug=1
 endif
 
-override_dh_auto_build:
-	sh build.sh $(FLAGS)
+override_dh_auto_install:
+	sh build.sh \
+	    builddir=debian/open-xchange-appsuite/var/www/appsuite \
+	    l10nDir=debian/open-xchange-appsuite-l10n-@lang@/var/www/appsuite \
+	    manifestDir=debian/open-xchange-appsuite-manifest/opt/open-xchange/appsuite \
+	    $(FLAGS) --trace
+	sed -e 's#OX_APPSUITE_DEV=.*#OX_APPSUITE_DEV="/opt/open-xchange-appsuite-dev"#' \
+	    bin/build-appsuite > tmp/build-appsuite
+	chmod +x tmp/build-appsuite
 
 override_dh_auto_clean:
 	sh build.sh clean $(FLAGS)

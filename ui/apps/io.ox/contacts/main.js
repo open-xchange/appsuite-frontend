@@ -22,92 +22,94 @@ define("io.ox/contacts/main",
      "io.ox/core/config",
      "io.ox/core/extensions",
      "io.ox/core/commons",
+     "gettext!io.ox/contacts",
+     "settings!io.ox/contacts",
      "less!io.ox/contacts/style.css"
-    ], function (util, api, VGrid, hints, viewDetail, config, ext, commons) {
+    ], function (util, api, VGrid, hints, viewDetail, config, ext, commons, gt, settings) {
 
     "use strict";
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/contacts' }),
+    var app = ox.ui.createApp({
+            name: 'io.ox/contacts',
+            title: 'Address Book'
+        }),
         // app window
         win,
         // grid
         grid,
-        GRID_WIDTH = 330,
         // nodes
         left,
         thumbs,
+        gridContainer,
         right,
-        foldertree,
-        // full thumb index
-        fullIndex = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        fullIndex =
+            //#. Address book thumb index
+            //#. (guess translation is only needed for Asian languages)
+            //#. This string is simply split at spaces (can be more or less than 26 characters)
+            gt('A B C D E F G H I J K L M N O P Q R S T U V W X Y Z');
+
+    // we have to fix the string first, otherwise we get false positives during i18n debug
+    fullIndex = _.noI18n.fix(fullIndex).split(' ');
 
     // launcher
-    app.setLauncher(function () {
+    app.setLauncher(function (options) {
 
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/contacts',
-            title: "Global Address Book",
-            titleWidth: (GRID_WIDTH + 27) + "px",
-            toolbar: true,
             search: true
         });
 
         app.setWindow(win);
+        app.settings = settings;
+
+        var vsplit = commons.vsplit(win.nodes.main, app);
+        left = vsplit.left;
+        right = vsplit.right.addClass('default-content-padding').scrollable();
 
         // left panel
-        left = $("<div>")
-            .addClass("leftside border-left border-right")
-            .css({
-                left: 38 + "px",
-                width: GRID_WIDTH - 40 + "px",
-                overflow: "auto"
-            })
-            .appendTo(win.nodes.main);
+        left.append(
+            // grid container
+            gridContainer = $('<div class="abs border-left border-right contact-grid-container">'),
+            // thumb index
+            thumbs = $('<div class="atb contact-grid-index border-right">')
+        );
 
         // folder tree
-        commons.addFolderTree(app, GRID_WIDTH, 'contacts');
-
-        // thumb index
-        thumbs = $("<div>")
-            .addClass("atb contact-grid-index border-right")
-            .css({
-                left: "0px",
-                width: "35px"
-            })
-            .appendTo(win.nodes.main);
-
-        // right panel
-        right = $("<div>")
-            .css({ left: GRID_WIDTH + "px", overflow: "auto" })
-            .addClass("rightside default-content-padding")
-            .appendTo(win.nodes.main)
-            .scrollable();
+        commons.addFolderView(app, { type: 'contacts', view: 'FolderList' });
 
         // grid
-        grid = new VGrid(left);
+        grid = new VGrid(gridContainer);
 
         // add template
         grid.addTemplate({
             build: function () {
-                var name, email, job;
-                this
-                    .addClass("contact")
-                    .append(name = $("<div>").addClass("fullname"))
-                    .append(email = $("<div>"))
-                    .append(job = $("<div>").addClass("bright-text"));
-                return { name: name, job: job, email: email };
+                var name, description, private_flag;
+                this.addClass('contact').append(
+                    private_flag = $('<i class="icon-lock private_flag">').hide(),
+                    name = $('<div class="fullname">'),
+                    description = $('<div class="bright-text">')
+                );
+                return { name: name, private_flag: private_flag, description: description };
             },
             set: function (data, fields, index) {
                 if (data.mark_as_distributionlist === true) {
-                    fields.name.text(data.display_name || "");
-                    fields.email.text("");
-                    fields.job.text("Distribution list");
+                    fields.name.text(_.noI18n(data.display_name || ''));
+                    if (data.private_flag) {
+                        fields.private_flag.show();
+                    } else {
+                        fields.private_flag.hide();
+                    }
+                    fields.description.text(gt('Distribution list'));
                 } else {
-                    fields.name.text(util.getFullName(data));
-                    fields.email.text(util.getMail(data));
-                    fields.job.text(util.getJob(data));
+                    fields.name.text(_.noI18n(util.getFullName(data)));
+                    if (data.private_flag) {
+                        fields.private_flag.show();
+                    } else {
+                        fields.private_flag.hide();
+                    }
+                    fields.description.text(_.noI18n(util.getDescription(data)));
                 }
             }
         });
@@ -118,14 +120,14 @@ define("io.ox/contacts/main",
             },
             set: function (data, fields, index) {
                 var name = data.last_name || data.display_name || "#";
-                this.text(name.substr(0, 1).toUpperCase());
+                this.text(_.noI18n(name.substr(0, 1).toUpperCase()));
             }
         });
 
         // requires new label?
         grid.requiresLabel = function (i, data, current) {
             var name = data.last_name || data.display_name || "#",
-                prefix = name.substr(0, 1).toUpperCase();
+                prefix = _.noI18n(name.substr(0, 1).toUpperCase());
             return (i === 0 || prefix !== current) ? prefix : false;
         };
 
@@ -138,19 +140,24 @@ define("io.ox/contacts/main",
         showContact = function (obj) {
             // get contact
             right.busy(true);
-            api.get(obj)
-                .done(_.lfo(drawContact))
-                .fail(_.lfo(drawFail, obj));
+            app.currentContact = obj;
+            if (obj && obj.id !== undefined) {
+                api.get(api.reduce(obj))
+                    .done(_.lfo(drawContact))
+                    .fail(_.lfo(drawFail, obj));
+            } else {
+                console.error('showContact', obj);
+            }
         };
 
         drawContact = function (data) {
-            //right.idle().empty().append(base.draw(data));
-            right.idle().empty().append(viewDetail.draw(data));
+            var baton = ext.Baton({ data: data, app: app });
+            right.idle().empty().append(viewDetail.draw(baton));
         };
 
         drawFail = function (obj) {
             right.idle().empty().append(
-                $.fail("Couldn't load contact data.", function () {
+                $.fail(gt("Couldn't load contact data."), function () {
                     showContact(obj);
                 })
             );
@@ -162,7 +169,7 @@ define("io.ox/contacts/main",
         function drawThumb(char, enabled) {
             var node = $('<div>')
                 .addClass('thumb-index border-bottom' + (enabled ? '' : ' thumb-index-disabled'))
-                .text(char);
+                .text(_.noI18n(char));
             if (enabled) {
                 node.on('click', { text: char }, grid.scrollToLabelText);
             }
@@ -170,7 +177,7 @@ define("io.ox/contacts/main",
         }
 
         // draw thumb index
-        grid.on('ids-loaded', function () {
+        grid.on('change:ids', function () {
             // get labels
             thumbs.empty();
             var textIndex = grid.getLabels().textIndex || {};
@@ -183,14 +190,22 @@ define("io.ox/contacts/main",
         commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
-        commons.wireGridAndRefresh(grid, api);
+        commons.wireGridAndRefresh(grid, api, win);
+        commons.addGridToolbarFolder(app, grid);
+
+        api.on("edit", function (evt, updated) {
+            if (updated.folder === app.currentContact.folder_id && updated.id === app.currentContact.id) {
+                // Reload
+                showContact(app.currentContact);
+            }
+        });
 
         app.getGrid = function () {
             return grid;
         };
 
         // go!
-        commons.addFolderSupport(app, grid, 'contacts', '6')
+        commons.addFolderSupport(app, grid, 'contacts', options.folder)
             .done(commons.showWindow(win, grid));
     });
 

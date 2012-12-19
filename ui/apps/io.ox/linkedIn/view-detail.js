@@ -48,10 +48,12 @@ define("io.ox/linkedIn/view-detail",
 
         var $actionsNode = $("<div>").addClass("actions").appendTo($node);
         actionPoint.each(function (ext) {
-            $actionsNode.append($("<a>", { href: '#' }).text(ext.label).click(function (e) {
-                e.preventDefault(); // don't change url hash
-                ext.action();
-            }));
+            if (!ext.available || ext.available(data)) {
+                $actionsNode.append($("<a>", { href: '#' }).text(ext.label).click(function (e) {
+                    e.preventDefault(); // don't change url hash
+                    ext.action(data);
+                }));
+            }
         });
 
         rendererPoint.each(function (ext) {
@@ -61,19 +63,16 @@ define("io.ox/linkedIn/view-detail",
         return $node;
     }
 
-    // Mock Actions
     actionPoint.extend({
         id: "linkedin/details/connect",
-        label: "Connect",
-        action: todo,
+        label: "Open on LinkedIn",
+        action: function (data) {
+            window.open(data.publicProfileUrl);
+        },
+        available: function (data) {
+            return !!data.publicProfileUrl;
+        },
         index: 100
-    });
-
-    actionPoint.extend({
-        id: "linkedin/details/compose",
-        label: "Write a message",
-        action: todo,
-        index: 200
     });
 
     // Detail renderers
@@ -149,8 +148,9 @@ define("io.ox/linkedIn/view-detail",
                     .text("Connections you share with " + data.firstName + " " + data.lastName)
                     .appendTo($myNode);
 
-                var open = function (popup) {
-                        var person = $(this).data("object-data");
+                var open = function (popup, e, target) {
+
+                        var person = target.data("object-data");
                         popup.append(draw(person));
                         var busy = $("<div/>").css("min-height", "100px").busy().appendTo(popup);
 

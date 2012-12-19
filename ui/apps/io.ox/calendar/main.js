@@ -14,112 +14,61 @@
 define("io.ox/calendar/main",
     ["io.ox/calendar/api",
      "io.ox/calendar/util",
-     "io.ox/calendar/view-detail",
      "io.ox/core/config",
      "io.ox/core/commons",
-     "io.ox/core/tk/vgrid",
-     "io.ox/calendar/view-grid-template",
-     "less!io.ox/calendar/style.css"], function (api, util, viewDetail, config, commons, VGrid, tmpl) {
+     "settings!io.ox/calendar",
+     "io.ox/calendar/actions",
+     "less!io.ox/calendar/style.css"], function (api, util, config, commons, settings) {
 
     "use strict";
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/calendar' }),
+    var app = ox.ui.createApp({ name: 'io.ox/calendar', title: 'Calendar' }),
         // app window
         win,
-        // grid
-        grid,
-        GRID_WIDTH = 330,
-        // nodes
-        left,
-        right;
+        lastPerspective = 'week:' + settings.get('viewView', 'workweek');
 
     // launcher
-    app.setLauncher(function () {
+    app.setLauncher(function (options) {
 
         // get window
         app.setWindow(win = ox.ui.createWindow({
+            name: 'io.ox/calendar',
+            toolbar: true,
             search: true
         }));
 
+        app.settings = settings;
         win.addClass("io-ox-calendar-main");
 
         // folder tree
-        commons.addFolderTree(app, GRID_WIDTH, 'calendar');
-
-        // DOM scaffold
-
-        // left panel
-        left = $("<div/>")
-            .addClass("leftside border-right")
-            .css({
-                width: GRID_WIDTH + "px",
-                overflow: "auto"
-            })
-            .appendTo(win.nodes.main);
-
-        // right panel
-        right = $("<div/>")
-            .css({ left: GRID_WIDTH + 1 + "px", overflow: "auto" })
-            .addClass("rightside default-content-padding calendar-detail-pane")
-            .appendTo(win.nodes.main);
-
-        // grid
-        grid = new VGrid(left);
-
-        // fix selection's serialize
-        grid.selection.serialize = function (obj) {
-            return typeof obj === "object" ? (obj.folder_id || 0) + "." + obj.id + "." + (obj.recurrence_position || 0) : obj;
-        };
-
-        // add template
-        grid.addTemplate(tmpl.main);
-
-        // add label template
-        grid.addLabelTemplate(tmpl.label);
-
-        // requires new label?
-        grid.requiresLabel = tmpl.requiresLabel;
-
-        commons.wireGridAndAPI(grid, api);
-        commons.wireGridAndSearch(grid, win, api);
-
-        // special search: list request
-        grid.setListRequest("search", function (ids) {
-            return $.Deferred().resolve(ids);
-        });
-
-        var showAppointment, drawAppointment, drawFail;
-
-        showAppointment = function (obj) {
-            // be busy
-            right.busy(true);
-            // get appointment
-            api.get(obj)
-                .done(_.lfo(drawAppointment))
-                .fail(_.lfo(drawFail, obj));
-        };
-
-        drawAppointment = function (data) {
-            right.idle().empty().append(viewDetail.draw(data));
-        };
-
-        drawFail = function (obj) {
-            right.idle().empty().append(
-                $.fail("Couldn't load appointment data.", function () {
-                    showAppointment(obj);
-                })
-            );
-        };
-
-        commons.wireGridAndSelectionChange(grid, 'io.ox/calendar', showAppointment, right);
-        commons.wireGridAndWindow(grid, win);
-        commons.wireFirstRefresh(app, api);
-        commons.wireGridAndRefresh(grid, api);
+        commons.addFolderView(app, { type: 'calendar', view: 'FolderList' });
 
         // go!
-        commons.addFolderSupport(app, grid, 'calendar')
-            .done(commons.showWindow(win, grid));
+        commons.addFolderSupport(app, null, 'calendar')
+            .pipe(commons.showWindow(win))
+            .done(function () {
+                ox.ui.Perspective.show(app, options.perspective || _.url.hash('perspective') || lastPerspective);
+            });
+
+        win.on('search:open', function () {
+            lastPerspective = win.currentPerspective;
+            ox.ui.Perspective.show(app, 'list');
+        });
+
+        win.on('search:close', function () {
+            if (lastPerspective) {
+                ox.ui.Perspective.show(app, lastPerspective);
+            }
+        });
+
+        win.on('change:perspective', function (e, name) {
+            if (name !== 'list') {
+                lastPerspective = null;
+                win.search.close();
+            }
+        });
+
     });
 
     return {

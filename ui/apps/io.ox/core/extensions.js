@@ -13,9 +13,8 @@
  */
 
 define("io.ox/core/extensions",
-    ["io.ox/core/event", "io.ox/core/collection"], function (Events, Collection) {
+    ["io.ox/core/event", "io.ox/core/async"], function (Events, async) {
 
-    // A naive extension registry.
     "use strict";
 
     // global registry
@@ -25,8 +24,20 @@ define("io.ox/core/extensions",
         that,
 
         // sort by index
-        pointSorter = function (a, b) {
-            return (a.index || 1000000000) - (b.index || 1000000000);
+        indexSorter = function (a, b) {
+            if (a.index === 'first') {
+                return -1;
+            }
+            if (b.index === 'first') {
+                return 1;
+            }
+            if (a.index === 'last') {
+                return 1;
+            }
+            if (b.index === 'last') {
+                return -1;
+            }
+            return a.index - b.index;
         },
 
         // for debugging purposes
@@ -42,7 +53,7 @@ define("io.ox/core/extensions",
         _(registry).each(function (ext) {
             ext.clear();
         });
-        registry = null;
+        registry = {};
     });
 
     var Point = function (options) {
@@ -51,6 +62,7 @@ define("io.ox/core/extensions",
         this.description = options.description || "";
 
         var extensions = [],
+            orphans = {},
             replacements = {},
             disabled = {},
             // get enabled extensions
@@ -68,7 +80,61 @@ define("io.ox/core/extensions",
                     })
                     .length > 0;
             },
-            self = this;
+            self = this,
+            sort = function () {
+                var basicList = [];
+                var befores = orphans.before || {};
+                var afters = orphans.after || {};
+
+                _(extensions).each(function (ext) {
+                    var list;
+                    if (ext.before) {
+                        list = befores[ext.before];
+                        if (!list) {
+                            list = befores[ext.before] = [];
+                        }
+                    } else if (ext.after) {
+                        list = afters[ext.after];
+                        if (!list) {
+                            list = afters[ext.after] = [];
+                        }
+                    } else {
+                        list = basicList;
+                    }
+
+                    list.push(ext);
+                });
+
+                extensions = [];
+                basicList.sort(indexSorter);
+                var circleGuard = {};
+
+                function fnAddExtension(ext) {
+                    if (circleGuard[ext.id]) {
+                        throw "Circular References detected for extension point " + self.id + " and extension " + ext.id;
+                    }
+                    circleGuard[ext.id] = true;
+                    var before = befores[ext.id];
+                    if (before) {
+                        delete befores[ext.id];
+                        before.sort(indexSorter);
+                        _(before).each(fnAddExtension);
+                    }
+                    extensions.push(ext);
+                    var after = afters[ext.id];
+                    if (after) {
+                        delete afters[ext.id];
+                        after.sort(indexSorter);
+                        _(after).each(fnAddExtension);
+                    }
+                    delete circleGuard[ext.id];
+                }
+
+                _(basicList).each(fnAddExtension);
+
+                orphans.before = befores;
+                orphans.after = afters;
+            };
 
         Events.extend(this);
 
@@ -97,13 +163,20 @@ define("io.ox/core/extensions",
             };
         }
 
+        this.has = has;
+
         this.extend = function (extension) {
 
             if (extension.invoke) {
+                console.error(extension);
                 throw "Extensions must not have their own invoke method";
             }
+
             if (!extension.id) {
-                throw "Extensions must have an id!";
+                extensions.id = 'default';
+                extension.index = extension.index || 100;
+            } else {
+                extension.index = extension.index || 1000000000;
             }
 
             // skip duplicates (= same id)
@@ -117,8 +190,8 @@ define("io.ox/core/extensions",
                 }
 
                 extensions.push(extension);
-                extensions.sort(pointSorter);
-                
+                sort();
+
                 if (!extension.metadata) {
                     extension.metadata = function (name, args) {
                         if (this[name]) {
@@ -153,7 +226,7 @@ define("io.ox/core/extensions",
             });
 
             if (replaced) {
-                extensions.sort(pointSorter);
+                sort();
             } else {
                 replacements[extension.id] = extension;
             }
@@ -169,16 +242,28 @@ define("io.ox/core/extensions",
             return extensions;
         };
 
+        this.get = function (id, callback) {
+            var extension = _(extensions).chain()
+                .filter(function (obj) { return obj.id === id; }).first().value();
+            if (extension) {
+                callback(extension);
+                sort();
+            }
+            return this;
+        };
+
         this.keys = function () {
-            return _(extensions).map(function (obj) {
-                    return obj.id;
-                });
+            return _(extensions).pluck('id');
         };
 
         // public for testing purposes
         this.sort = function () {
-            extensions.sort(pointSorter);
+            sort();
             return this;
+        };
+
+        this.list = function () {
+            return list().value();
         };
 
         this.chain = function () {
@@ -202,9 +287,9 @@ define("io.ox/core/extensions",
             return list().inject(cb, memo).value();
         };
 
-        this.invoke = function (name, context) {
+        this.invoke = function (/* name, context */) {
             var o = list(),
-                args = ["invoke"].concat($.makeArray(arguments));
+                args = ['invoke'].concat($.makeArray(arguments));
             return o.invoke.apply(o, args);
         };
 
@@ -219,8 +304,95 @@ define("io.ox/core/extensions",
         };
 
         this.isEnabled = function (id) {
-            return !!disabled[id];
+            return !disabled[id];
         };
+
+        this.inspect = function () {
+            console.debug('Extension point', this.id, JSON.stringify(this.all()));
+        };
+
+        this.count = function () {
+            return list().value().length;
+        };
+
+        function randomSort() { return Math.round(Math.random()) - 0.5; }
+
+        this.shuffle = function () {
+            extensions.sort(randomSort);
+            _(extensions).each(function (ext, index) {
+                ext.index = 100 + 100 * index;
+            });
+            return this;
+        };
+
+        this.options = function (defaults) {
+            var options = defaults || {};
+            this.each(function (obj) {
+                options = _.extend(options, obj);
+            });
+            // remove extension stuff
+            delete options.index;
+            delete options.invoke;
+            delete options.metadata;
+            return options;
+        };
+
+        this.prop = function (id) {
+            return list().pluck(id).compact().first().value();
+        };
+    };
+
+    /*
+     * Baton class
+     * (returnFalse/returnTrue trick adopted from jQuery event object)
+     */
+    function returnFalse() { return false; }
+    function returnTrue() { return true; }
+
+    function Baton(obj) {
+        // bypass?
+        if (obj instanceof Baton) return obj;
+        // called via new?
+        if (this instanceof Baton) {
+            // to be safe
+            this.data = {};
+            this.options = {};
+            this.$ = {};
+            // just copy given object
+            _.extend(this, obj);
+        } else {
+            // for the lazy way: b = Baton() instead of b = new Baton()
+            return new Baton(obj);
+        }
+    }
+
+    Baton.ensure = function (obj) {
+        if (obj instanceof Baton) return obj;
+        if ('data' in obj) return new Baton(obj);
+        return new Baton({ data: obj });
+    };
+
+    Baton.prototype = {
+
+        isDefaultPrevented: returnFalse,
+        isPropagationStopped: returnFalse,
+
+        preventDefault: function () {
+            this.isDefaultPrevented = returnTrue;
+        },
+
+        stopPropagation: function () {
+            this.isPropagationStopped = returnTrue;
+        },
+
+        set: function (property, obj) {
+            _.extend(this[property], obj);
+            return this;
+        }
+    };
+
+    Baton.wrap = function (object) {
+        return object instanceof Baton ? object : new Baton(object);
     };
 
     that = {
@@ -245,26 +417,33 @@ define("io.ox/core/extensions",
             var o = _.extend({
                     name: ox.signin ? 'signin' : 'core',
                     prefix: 'plugins/',
-                    suffix: 'register'
+                    suffix: 'register',
+                    nameOnly : false
                 }, options),
                 // all plugins
                 plugins = ox.serverConfig.plugins || {};
             // transform to proper URLs
             return _(plugins[o.name] || []).map(function (i) {
-                    return o.prefix + i + '/' + o.suffix;
+                    return o.nameOnly ? i : o.prefix + i + '/' + o.suffix;
                 });
         },
 
         // plugin loader
         loadPlugins: function (options) {
             // require plugins
-            return require(this.getPlugins(options));
+            return require(this.getPlugins(options)).fail(function (e) {
+                console.error(e);
+            });
         },
 
         // add wrapper
         addWrapper: function (name, fn) {
             wrappers[name] = fn;
-        }
+        },
+
+        Baton: Baton,
+
+        indexSorter: indexSorter
     };
 
     return that;

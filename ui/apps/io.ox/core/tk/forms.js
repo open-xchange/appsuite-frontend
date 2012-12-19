@@ -15,7 +15,7 @@
 define: true
 */
 define('io.ox/core/tk/forms',
-      ['io.ox/core/i18n'], function (i18n) {
+      ['io.ox/core/date'], function (date) {
 
     'use strict';
 
@@ -45,17 +45,15 @@ define('io.ox/core/tk/forms',
             self.trigger('update.model', { property: self.attr('data-property'), value: self.val() });
         },
         selectChangeByModel = function (e, value) {
-            // small fix for headerdisplay in contact edit
-            if ($('span[data-property="display_name"]').text() === '') {
-                var spacer = '&nbsp;';
-                $('span[data-property="display_name"]').html(spacer);
-            }
+
             $(this).val(value);
+
         },
 
         dateChange = function () {
-            var self = $(this);
-            if (self.val() !== '') {
+            var self = $(this),
+                reg = /((\d{2})|(\d))\.((\d{2})|(\d))\.((\d{4})|(\d{2}))/;
+            if (self.val() !== '' && reg.test(self.val())) {
                 var dateArray = self.val().split('.'),
                 date =  Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0]));
                 self.trigger('update.model', { property: self.attr('data-property'), value: date });
@@ -64,10 +62,10 @@ define('io.ox/core/tk/forms',
             }
         },
         dateChangeByModel = function (e, value) {
-            if (value) {
-                var formatetValue = require('io.ox/core/i18n').date('dd.MM.YYYY', value);
-                $(this).val(formatetValue);
+            if (_.isNumber(value)) {
+                value = new date.Local(date.Local.utc(value)).format(date.DATE);
             }
+            $(this).val(value);
         },
 
         radioChange = selectChange,
@@ -105,24 +103,30 @@ define('io.ox/core/tk/forms',
     var Field = function (options, type) {
         // store options
         this.options = options || {};
-        this.options.id = this.options.id || _.uniqueId(type);
+        this.options.id = this.options.id;
         // node
         this.node = null;
+        this.options.fieldtype = type;
     };
 
     Field.prototype.create = function (tag, onChange) {
-        var o = this.options;
-        this.node = $(tag)
+        var o = this.options,
+
+            id = utils.connectLabelToField(o.id),
+
+            element = $(tag)
             .attr({
                 'data-property': o.property,
                 name: o.name,
-                id: o.id,
+
+                id: id,
                 value: o.value
             })
             .on('change', onChange)
             .addClass(o.classes);
-    };
+        this.node = element;
 
+    };
 
     Field.prototype.applyModel = function (handler) {
         var o = this.options, model = o.model, val = o.initialValue;
@@ -134,24 +138,15 @@ define('io.ox/core/tk/forms',
         }
     };
 
-    Field.prototype.finish = function (order, classes) {
-        // local reference
-        var o = this.options, node = this.node;
-        // wrap label tag around field
+    Field.prototype.wrapLabel = function () {
+        var o = this.options;
         if (o.label !== false) {
-            var label = $('<label>', { 'for': o.id }),
-                space = $.txt(' '),
+            var label = $('<label>').addClass(o.fieldtype),
                 text = $.txt(o.label || '');
-            node = label.append.apply(label, order === 'append' ? [node, space, text] : [text, space, node]);
+            this.node = label.append(text, this.node);
         }
-        // wrap DIV around field & label
-        if (this.options.wrap !== false) {
-            node = $('<div>').addClass(classes).append(node);
-        }
-        // clean up
-        this.node = this.options = o = null;
-        return node;
     };
+
 
     // allows global lookup
     var lastLabelId = '';
@@ -159,53 +154,64 @@ define('io.ox/core/tk/forms',
     var utils = {
 
         createCheckbox: function (options) {
-            var f = new Field(options, 'box');
+            var f = new Field(options, 'checkbox');
             f.create('<input type="checkbox">', boxChange);
             f.applyModel(boxChangeByModel);
-            return f.finish('append', 'checkbox');
+            f.wrapLabel();
+            return f.node;
         },
 
         createSelectbox: function (options) {
             var f = new Field(options, 'select');
-            f.create('<select size="1">', selectChange);
+            f.create('<select>', selectChange);
             // add options
             f.node.append(_(options.items).inject(function (memo, text, value) {
                 return memo.add($('<option>').attr('value', value).text(text));
             }, $()));
             f.applyModel(selectChangeByModel);
-            return f.finish('prepend');
+            f.wrapLabel();
+            return f.node;
         },
 
         createRadioButton: function (options) {
             var f = new Field(options, 'radio');
             f.create('<input type="radio">', radioChange);
             f.applyModel(radioChangeByModel);
-            return f.finish('append', 'radio');
+            f.wrapLabel();
+            return f.node;
         },
 
         createTextField: function (options) {
             var f = new Field(options, 'text');
             f.create('<input type="text">', textChange);
             f.applyModel(textChangeByModel);
-            return f.finish('prepend', 'input');
+            f.wrapLabel();
+            return f.node;
         },
+
+
         createTextArea: function (options) {
             var f = new Field(options, 'text');
-            f.create('<textarea >', textChange);
+            f.create('<textarea>', textChange);
             f.applyModel(textChangeByModel);
-            return f.finish('prepend', 'textarea');
+            f.wrapLabel();
+            return f.node;
         },
+
         createDateField: function (options) {
             var f = new Field(options, 'date');
-            f.create('<input type="date">', dateChange);
+            f.create('<input type="text">', dateChange); // changed to text again for validation reasons
             f.applyModel(dateChangeByModel);
-            return f.finish('prepend', 'input');
+            f.wrapLabel();
+            return f.node;
         },
+
         createPasswordField: function (options) {
             var f = new Field(options, 'text');
             f.create('<input type="password">', textChange);
             f.applyModel(textChangeByModel);
-            return f.finish('prepend');
+            f.wrapLabel();
+            return f.node;
         },
 
         createFileField: function (options) {
@@ -215,26 +221,27 @@ define('io.ox/core/tk/forms',
                 'accept': options.accept
             });
             f.applyModel(textChangeByModel);
-            return f.finish('prepend');
+            f.wrapLabel();
+            return f.node;
         },
 
         createLabeledTextField: function (options) {
             return utils.createLabel(options)
                 .css({ width: '100%', display: 'inline-block' })
                 .append(utils.createText({ text: options.label }))
-                .append(utils.createTextField({ property: options.property, value: options.value, model: options.model})
+                .append(utils.createTextField({ property: options.property, value: options.value, model: options.model, span: options.span})
                         .css({ width: options.width + 'px', display: 'inline-block' })
                 );
         },
-        createLabeledTextArea: function (options) {
-            return utils.createLabel(options)
-                .css({ width: '100%', display: 'inline-block' })
-                .append(utils.createText({ text: options.label }))
-                .append(utils.createTextArea({ property: options.property, value: options.value, model: options.model})
-                        .css({ width: options.width + 'px', display: 'inline-block' })
-                );
-
-        },
+//        createLabeledTextArea: function (options) {
+//            return utils.createLabel(options)
+//                .css({ width: '100%', display: 'inline-block' })
+//                .append(utils.createText({ text: options.label }))
+//                .append(utils.createTextArea({ property: options.property, value: options.value, model: options.model})
+//                        .css({ width: options.width + 'px', display: 'inline-block' })
+//                );
+//
+//        },
 
         createLabeledPasswordField: function (options) {
             var l = utils.createLabel(options).css({width: '100%', display: 'inline-block'});
@@ -244,28 +251,18 @@ define('io.ox/core/tk/forms',
         },
 
         createLabel: function (options) {
-            var labelDiv,
-                label;
-            options.id = lastLabelId = options.id || _.uniqueId('label');
+            var label,
+                forTag = utils.connectLabelToField(options['for']);
             options.text = options.text || "";
 
-            labelDiv = $('<div>');
-            labelDiv.addClass('io-ox-label');
-            if (options.classes) {
-                labelDiv.addClass(options.classes);
-            }
-
             label = $('<label>');
-            label.attr('for', options.id);
+            label.attr('for', forTag);
             label.text(options.text);
 
-            labelDiv.append(label);
-
-            return labelDiv;
+            return label;
         },
 
         createText: function (options) {
-
             var node = $('<span>')
                 .addClass('text')
                 .addClass(options.classes)
@@ -279,12 +276,41 @@ define('io.ox/core/tk/forms',
             return node;
         },
 
+        createInfoText: function (options) {
+            var d = $('<div>').addClass('informational-text');
+            if (options.html) {
+                d.html(options.html);
+            } else {
+                d.text(options.text);
+            }
+            return d;
+        },
+
+        // settings
+
+        createSectionDelimiter: function () {
+            return $('<div>')
+                .addClass('settings sectiondelimiter');
+        },
+
+        createApplicationTitle: function (options) {
+            return $('<div>')
+                .addClass('clear-title')
+                .text(options.text);
+        },
+
+        createSettingsHead: function (app) {
+            return $('<div>')
+                .append(utils.createApplicationTitle({ text: app.title }))
+                .append(utils.createSectionDelimiter());
+        },
+
         createSection: function (options) {
             return $('<div>').addClass('section');
         },
 
         createSectionTitle: function (options) {
-            return $('<div>').addClass('sectiontitle').text(options.text);
+            return $('<legend>').addClass('sectiontitle').text(options.text);
         },
 
         createSectionContent: function (options) {
@@ -295,38 +321,121 @@ define('io.ox/core/tk/forms',
             return $('<div>').addClass('section-group');
         },
 
-        createSectionDelimiter: function () {
-            return $('<div>').addClass('settings sectiondelimiter');
+        createSectionHorizontalWrapper: function () {
+            return $('<div>').addClass('form-horizontal');
         },
+
+        createControlGroup: function () {
+            return $('<div>').addClass('control-group');
+        },
+
+        createInlineControlGroup: function () {
+            return $('<div>').addClass('control-group form-inline');
+        },
+
+        createControlGroupLabel: function (options) {
+            if (options) {
+                var forTag = utils.connectLabelToField(options['for']);
+
+                return $('<label>', {'for': forTag})
+                .text(options.text).addClass('control-label');
+            } else {
+                return $('<label>');
+            }
+
+        },
+
+        createControlsWrapper: function () {
+            return $('<div>').addClass('controls');
+        },
+
 
         createPicUpload: function (options) {
-            var o = options,
-                form = $('<form>', {
-                'id': o.id,
-                'name': o.formname,
-                'accept-charset': o.charset,
-                'enctype': o.enctype,
-                'method': o.method,
-                'target': o.target
-            });
-            form.append(utils.createFileField({
-                'wrap': false,
-                id: 'file',
-                'accept': 'image/*',
-                "data-property": o.name,
-                name: o.name
-
-            }));
-            form.append($('<iframe>', {
-                name: 'hiddenframePicture',
-                'src': 'blank.html'
-            }).css('display', 'none'));
-
-            return form;
+            var o = _.extend({
+                target: 'picture-upload',
+                name: 'picture-upload-file'
+            }, options);
+            // make target unique
+            o.target += '-' + _.now();
+            return $('<form>', {
+                    'accept-charset': 'UTF-8',
+                    enctype: 'multipart/form-data',
+                    method: 'POST',
+                    target: o.target
+                })
+                .append(
+                    utils.createFileField({
+                        wrap: false,
+                        accept: 'image/*',
+                        "data-property": o.name,
+                        name: o.name
+                    })
+                )
+                .append(
+                    $('<iframe>', {
+                        name: o.target,
+                        src: 'blank.html'
+                    }).hide()
+                );
         },
+
         getLastLabelId: function () {
             return lastLabelId;
+        },
+
+        connectLabelToField: function (tagValue) {
+            var CreatedId;
+            if (tagValue === 'auto') {
+                CreatedId = lastLabelId = _.uniqueId('label_');
+                return CreatedId;
+            } else if (tagValue === 'last') {
+                return utils.getLastLabelId();
+            } else {
+                return tagValue;
+            }
+        },
+
+        createListBox: function (options) {
+            var ldiv = $('<div>').addClass('listbox');
+            ldiv.append(utils.createListSpacer());
+            _.each(options.model.get(options.dataid), function (item, k) {
+//                console.log(k + ':' + item.dataid);
+                ldiv.append(utils.createListItem({ dataid: item.dataid, html: item.html }));
+            });
+            ldiv.append(utils.createListSpacer());
+            return ldiv;
+        },
+
+        createListItem: function (options) {
+            options.classStr = options.classStr || 'deletable-item';
+            var item = $('<div>');
+            item.addClass(options.classStr);
+            item.attr('data-item-id', options.dataid);
+
+            item.append(
+                    $('<a>').html('&times;').addClass('close')
+                  );
+
+            item.append($('<div>').html(options.html));
+
+
+            item.on('click', function () {
+                console.log('click');
+                item.parent().find('div[selected="selected"]').attr('selected', null);
+                item.attr('selected', 'selected');
+            });
+            return item;
+        },
+
+        createListSpacer: function () {
+            return $('<div>').addClass('spacer').css({height: '0px'});
+        },
+
+        createButton: function (options) {
+            return $('<button>').addClass(options.btnclass).text(options.label);
         }
+
+
     };
 
     return utils;

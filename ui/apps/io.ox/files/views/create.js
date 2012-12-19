@@ -1,3 +1,16 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2012
+ * Mail: info@open-xchange.com
+ *
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ */
+
 define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensions", "io.ox/files/api", "text!io.ox/files/views/snippets.html", "gettext!io.ox/files/files"], function (dialogs, ext, filesApi, snippetsHTML, gt) {
 
     "use strict";
@@ -7,7 +20,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         buttonsPoint = ext.point("io.ox/files/create/action");
 
     //assemble create form
-    var newCreatePane = function (delegate) {
+    var show = function (app, delegate) {
 
         delegate = delegate || {};
 
@@ -78,13 +91,9 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
 
         // And display it all
         pane.show().done(function (action) {
-            var handler = buttonHandlers[action];
+            var handler = buttonHandlers[action], fileEntry;
             if (handler) {
-                var fileEntry = {
-                    folder: delegate.folder
-                },
-                uploadIndicator = new dialogs.ModalDialog();
-
+                fileEntry = { folder: app.folder.get() };
                 controlsPoint.each(function (controlExtension) {
                     if (controlExtension.process) {
                         controlExtension.process(fileEntry, controlStates[controlExtension.id]);
@@ -93,18 +102,9 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
                 if (delegate.modifyFile) {
                     delegate.modifyFile(fileEntry);
                 }
-
-                uploadIndicator.getContentControls().css({
-                    visibility: "hidden"
-                });
-
-                uploadIndicator.getContentNode().append($("<div>").text(gt("Uploading...")).addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
-
-                uploadIndicator.show();
-
+                app.getWindow().busy();
                 handler.perform(fileEntry, controlStates, function (data) {
-                    uploadIndicator.close();
-
+                    app.getWindow().idle();
                     if (delegate.uploadedFile) {
                         delegate.uploadedFile(data);
                     }
@@ -127,7 +127,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         index: 10,
         label: gt("Title"),
         draw: function (element, state) {
-            state.node = $("<input type='text' name='title'></input>");
+            state.node = $("<input type='text' name='title'>");
             element.append(state.node);
         },
         process: function (file, state) {
@@ -138,30 +138,12 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         }
     });
 
-    // URL
-    controlsPoint.extend({
-        id: "url",
-        extendedForm: true,
-        index: 20,
-        label: gt("Link / URL"),
-        draw: function (element, state) {
-            state.node = $("<input type='text' name='title'></input>");
-            element.append(state.node);
-        },
-        process: function (file, state) {
-            var val = state.node.val();
-            if (val) {
-                file.url = state.node.val();
-            }
-        }
-    });
-
     // File
     controlsPoint.extend({
         id: "file",
         index: 30,
         draw: function (element, state) {
-            state.node = $("<input type='file' name='title'></input>");
+            state.node = $("<input type='file' name='file'>");
             element.append(state.node);
         }
     });
@@ -173,7 +155,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         index: 40,
         label: gt("Comment"),
         draw: function (element, state) {
-            state.node = $("<textarea rows='10'></textarea>").addClass("input-xlarge");
+            state.node = $('<textarea rows="5" name="comment" class="input-xlarge">');
             element.append(state.node);
         },
         process: function (file, state) {
@@ -190,27 +172,22 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         label: gt("Save"),
         type: "primary",
         perform: function (fileEntry, states, cb) {
-            var savedOnce = false;
-            _(states.file.node[0].files).each(function (file) {
-                savedOnce = true;
-                filesApi.uploadFile({
-                    file: file,
-                    json: fileEntry,
-                    folder: fileEntry.folder
-                }).done(function (data) {
-                    cb(data);
-                });
-            });
-            if (!savedOnce && ! $.isEmptyObject(fileEntry)) {
-                filesApi.create({json: fileEntry}).done(function (data) {
-                    cb(data);
-                });
-            }
+            // since I have no clue what this all does I get the form this way;
+            var node = states.file.node.first(),
+                files = node.prop('files') || [],
+                form = node.closest('form');
+            filesApi.uploadFile({
+                form: form,
+                file: _(files).first(),
+                json: fileEntry,
+                folder: fileEntry.folder
+            })
+            .done(cb);
         }
     });
 
     return {
-        show: newCreatePane
+        show: show
     };
 
 });

@@ -15,14 +15,8 @@
 
     "use strict";
 
-    // browser detection
-    // adopted from prototype.js
-    var ua = navigator.userAgent,
-        isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]",
-        webkit = ua.indexOf('AppleWebKit/') > -1,
-        chrome = ua.indexOf('Chrome/') > -1,
-        // shortcut
-        slice = Array.prototype.slice,
+    // shortcut
+    var slice = Array.prototype.slice,
         // deserialize
         deserialize = function (str, delimiter) {
             var pairs = (str || "").split(delimiter === undefined ? "&" : delimiter);
@@ -92,69 +86,40 @@
             return ExtendableClass;
         };
 
+     // supported browsers
+    _.browserSupport = {
+        'Chrome': '20',
+        'Safari': '5',
+        'Firefox': '10',
+        'IE': '9'
+    };
+
+    // browser detection - adopted from prototype.js
+    var ua = navigator.userAgent,
+        isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]",
+        webkit = ua.indexOf('AppleWebKit/') > -1,
+        chrome = ua.indexOf('Chrome/') > -1;
+
     // add namespaces
     _.browser = {
         /** is IE? */
         IE: navigator.appName !== "Microsoft Internet Explorer" ? undefined
             : Number(navigator.appVersion.match(/MSIE (\d+\.\d+)/)[1]),
         /** is Opera? */
-        Opera: isOpera,
+        Opera: isOpera ? ua.split('Opera/')[1].split(' ')[0].split('.')[0]: undefined,
         /** is WebKit? */
         WebKit: webkit,
         /** Safari */
-        Safari: webkit && !chrome,
+        Safari: webkit && !chrome ? ua.split('AppleWebKit/')[1].split(' ')[0].split('.')[0]: undefined,
         /** Chrome */
-        Chrome: webkit && chrome,
+        Chrome: webkit && chrome ? ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
         /** is Firefox? */
-        Firefox:  ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1,
+        Firefox:  (ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1) ? ua.split('Firefox/')[1].split('.')[0] : undefined,
         /** MacOS **/
-        MacOS: ua.indexOf('Macintosh') > -1
+        MacOS: ua.indexOf('Macintosh') > -1,
+        /** iOS **/
+        iOS: !!navigator.userAgent.match(/(iPad|iPhone|iPod)/i)
     };
-
-    _.url = {
-        /**
-         * @param name {string} [Name] of the query parameter
-         * @returns {Object} Value or all values
-         */
-        param: function (name) {
-            return name === undefined ? queryData : queryData[name];
-        },
-        /**
-         * @param {string} [name] Name of the hash parameter
-         * @returns {Object} Value or all values
-         */
-        hash: function (name, value) {
-            // since the hash might change we decode it for every request
-            var hashData = document.location.hash.substr(1);
-            hashData = deserialize(
-                 hashData.substr(0, 1) === "?" ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData
-            );
-            if (value !== undefined) {
-                if (value === null) {
-                    delete hashData[name];
-                } else {
-                    hashData[name] = value;
-                }
-                // update hash
-                var hashStr = _.serialize(hashData, '&', function (v) {
-                    return v.replace(/\=/g, '%3D').replace(/\&/g, '%26');
-                });
-                // be persistent
-                document.location.hash = hashStr;
-                _.setCookie('hash', hashStr);
-            } else {
-                return name === undefined ? hashData : hashData[name];
-            }
-        },
-        /**
-         * Redirect
-         */
-        redirect: function (path) {
-            var l = location, href = l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, "/" + path);
-            location.href = href;
-        }
-    };
-
 
     // extend underscore utilities
     _.mixin({
@@ -187,7 +152,89 @@
          * @example
          * _.deserialize("a=1&b=2&c=text");
          */
-        deserialize: deserialize,
+        deserialize: deserialize
+    });
+
+    _.url = {
+        /**
+         * @param name {string} [Name] of the query parameter
+         * @returns {Object} Value or all values
+         */
+        param: function (name) {
+            return name === undefined ? queryData : queryData[name];
+        },
+        /**
+         * @param {string} [name] Name of the hash parameter
+         * @returns {Object} Value or all values
+         */
+        hash: (function () {
+
+            var hashData = {};
+
+            function decode() {
+                // since the hash might change we decode it for every request
+                // firefox has a bug and already decodes the hash string, so we use href
+                hashData = location.href.split(/#/)[1] || '';
+                hashData = deserialize(
+                     hashData.substr(0, 1) === "?" ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData
+                );
+            }
+
+            function set(name, value) {
+                if (value === null) {
+                    delete hashData[name];
+                } else {
+                    hashData[name] = value;
+                }
+            }
+
+            function update() {
+                // update hash
+                var hashStr = _.serialize(hashData, '&', function (v) {
+                    return v.replace(/\=/g, '%3D').replace(/\&/g, '%26');
+                });
+                // be persistent
+                document.location.hash = hashStr;
+            }
+
+            decode();
+            $(window).on('hashchange', decode);
+
+            return function (name, value) {
+                if (arguments.length === 0) {
+                    return hashData;
+                } else if (arguments.length === 1) {
+                    if (_.isString(name)) {
+                        return hashData[name];
+                    } else {
+                        _(name).each(function (value, name) {
+                            set(name, value);
+                        });
+                        update();
+                    }
+                } else if (arguments.length === 2) {
+                    set(name, value);
+                    update();
+                }
+            };
+        }()),
+
+        /**
+         * Redirect
+         */
+        redirect: function (path) {
+            location.href = _.url.get(path);
+        },
+
+        get: function (path) {
+            var l = location;
+            return l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, "/" + path);
+        }
+    };
+
+
+    // extend underscore utilities
+    _.mixin({
 
         rot: rot,
 
@@ -201,7 +248,7 @@
                     return pair.substr(0, key.length) === key;
                 })
                 .map(function (pair) {
-                    return pair.substr(key.length + 1);
+                    return decodeURIComponent(pair.substr(key.length + 1));
                 })
                 .first()
                 .value();
@@ -209,7 +256,7 @@
 
         setCookie: function (key, value) {
             // yep, works this way:
-            document.cookie = key + "=" + value;
+            document.cookie = key + "=" + encodeURIComponent(value);
         },
 
         /**
@@ -221,7 +268,7 @@
          */
         inspect: function (first) {
             var args = slice.call(arguments);
-            args.unshift("Inspect");
+            args.unshift('Inspect');
             console.debug.apply(console, args);
             return first;
         },
@@ -282,13 +329,13 @@
                         var tmp = isArray(elem) ? new Array(elem.length) : {}, prop, i;
                         for (i in elem) {
                             prop = elem[i];
-                            tmp[i] = deep && typeof prop === 'object' ? copy(prop, deep) : prop;
+                            tmp[i] = deep && typeof prop === 'object' && prop !== null ? copy(prop, deep) : prop;
                         }
                         return tmp;
                     };
 
             return function (elem, deep) {
-                return typeof elem !== 'object' ? elem : copy(elem, !!deep);
+                return typeof elem !== 'object' || elem === null ? elem : copy(elem, !!deep);
             };
         }()),
 
@@ -380,18 +427,24 @@
             );
         },
 
-        prewrap: function (text) {
-            return String(text).replace(/([\/\.\,\-]+)/g, "$1\u200B");
-        },
-
         // good for leading-zeros for example
         pad: function (val, length, fill) {
             var str = String(val), n = length || 1, diff = n - str.length;
             return (diff > 0 ? new Array(diff + 1).join(fill || "0") : "") + str;
         },
 
+        ellipsis: function (str, length) {
+            str = String(str || '');
+            return str.length > length ? str.substr(0, length - 4) + ' ...' : str;
+        },
+
+        // makes sure you have an array
+        getArray: function (o) {
+            return _.isArray(o) ? o : [o];
+        },
+
         // call function 'every' 1 hour or 5 seconds
-        every: function (num, type, fn) {
+        tick: function (num, type, fn) {
             var interval = 1000;
             if (type === "hour") {
                 interval *= 3600;
@@ -433,7 +486,82 @@
                 console.debug('clock.t' + (i++), t - (last || ox.t0), label || '');
                 last = t;
             };
-        }())
+        }()),
+
+        // simple composite-key constructor/parser
+        cid: (function () {
+
+            function encode(s) {
+                return String(s).replace(/\./g, '\\.');
+            }
+
+            function decode(s) {
+                // find first unescaped dot
+                s = String(s);
+                var pos = s.search(/([^\\])\./);
+                if (pos === -1) {
+                    return { id: s };
+                } else {
+                    return {
+                        folder_id: s.substr(0, pos + 1).replace(/\\(\\?)/g, '$1'),
+                        id: s.substr(pos + 2).replace(/\\(\\?)/g, '$1')
+                    };
+                }
+            }
+
+            return function (o) {
+                var tmp, r = 'recurrence_position', split, m, f;
+                if (typeof o === 'string') {
+                    // integer based ids?
+                    if ((m = o.match(/^(\d*?)\.(\d+)(\.(\d+))?$/)) && m.length) {
+                        tmp = { folder_id: String(m[1]), id: m[2] + '' };
+                        if (m[4] !== undefined) { tmp[r] = m[4] + ''; }
+                        return tmp;
+                    }
+                    // character based? (double tuple)
+                    return decode(o);
+                } else if (typeof o === 'object' && o !== null) {
+                    // join
+                    tmp = encode(o.id);
+                    f = o.folder_id !== undefined ? o.folder_id : o.folder;
+                    if (f !== undefined) { tmp = encode(f) + '.' + tmp; }
+                    if (o[r] !== undefined && o[r] !== null) { tmp += '.' + encode(o[r]); }
+                    return tmp;
+                }
+            };
+        }()),
+
+        // if someone has a better name ...
+        isSet: function (o) {
+            return o !== null && o !== undefined && o !== '';
+        },
+
+        fallback: function (o, defaultValue) {
+            return _.isSet(o) ? o : defaultValue;
+        },
+
+        noI18n: !_.url.hash('debug-i18n') ? _.identity : function (text) {
+            return '\u200b' + String(text).replace(/[\u200b\u200c]/g, '') + '\u200c';
+        }
     });
+
+    _.noI18n.fix = !_.url.hash('debug-i18n') ? _.identity : function (text) {
+        return text.replace(/^\u200b|\u200c$/g, '');
+    };
+
+    _.noI18n.text = function () {
+        return _(arguments).reduce(function (memo, str) {
+            return memo.add($.txt(_.noI18n(str)));
+        }, $());
+    };
+
+
+
+    window.assert = function (value, message) {
+        if (value) return;
+        console.error(message || 'Assertion failed!');
+        if (console.trace) console.trace();
+    };
+    if (assert(true) === 0) delete window.assert; // Available only in debug builds
 
 }());

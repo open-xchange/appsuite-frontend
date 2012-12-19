@@ -620,7 +620,7 @@ function ast_mangle(ast, options) {
 var warn = function(){};
 
 function best_of(ast1, ast2) {
-        return gen_code(ast1).length > gen_code(ast2[0] == "stat" ? ast2[1] : ast2).length ? ast2 : ast1;
+        return (gen_code(ast1) || "").length > (gen_code(ast2[0] == "stat" ? ast2[1] : ast2) || "").length ? ast2 : ast1;
 };
 
 function last_stat(b) {
@@ -682,7 +682,7 @@ var when_constant = (function(){
         // this can only evaluate constant expressions.  If it finds anything
         // not constant, it throws $NOT_CONSTANT.
         function evaluate(expr) {
-                switch (expr[0]) {
+                switch (String(expr[0])) {
                     case "string":
                     case "num":
                         return expr[1];
@@ -1997,6 +1997,7 @@ exports.set_logger = function(logger) { warn = logger };
 exports.make_string = make_string;
 exports.split_lines = split_lines;
 exports.MAP = MAP;
+exports.when_constant = when_constant;
 
 // keep this last!
 exports.ast_squeeze_more = require("./squeeze-more").ast_squeeze_more;

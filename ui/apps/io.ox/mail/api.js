@@ -13,47 +13,199 @@
 
 define("io.ox/mail/api",
     ["io.ox/core/http",
-     "io.ox/core/config",
      "io.ox/core/cache",
-     "io.ox/core/api/factory"], function (http, config, cache, apiFactory) {
+     "io.ox/core/config",
+     "io.ox/core/api/factory",
+     "io.ox/core/api/folder",
+     "io.ox/core/api/account",
+     "io.ox/core/notifications",
+     'settings!io.ox/mail'], function (http, cache, config, apiFactory, folderAPI, accountAPI, notifications, settings) {
 
-    "use strict";
+    'use strict';
 
-    // simple temporary thread cache
-    var threads = {};
+    var DONE = $.when(),
+        DELAY = 1000 * 3, // 3 seconds
+        DELIM = '//';
 
-    // helper: get number of mails in thread
-    var threadSize = function (obj) {
-        var key = obj.folder_id + "." + obj.id;
-        return (threads[key] || []).length;
-    };
+    var tracker = (function () {
 
-    // helper: sort by received date
-    var dateSort = function (a, b) {
-        return b.received_date - a.received_date;
-    };
+        // simple temporary thread cache
+        var threads = {},
+
+            // stores CIDs to find items in threads
+            // key is item CID, value is top-level item CID
+            threadHash = {},
+
+            // track mails that are manually marked as unseen
+            explicitUnseen = {},
+            unseen = {};
+
+        var extend = function (a, b) {
+            return _.extend(a, { flags: b.flags, color_label: b.color_label });
+        };
+
+        var calculateUnread = function (memo, obj) {
+            return memo + ((obj.flags & 32) !== 32 ? 1 : 0);
+        };
+
+        var getCID = function (param) {
+            return _.isString(param) ? param : _.cid(param);
+        };
+
+        var self = {
+
+            addThread: function (obj) {
+                var cid = getCID(obj);
+                threads[cid] = obj.thread;
+                _(obj.thread).each(function (o) {
+                    threadHash[_.cid(o)] = cid;
+                });
+            },
+
+            hasThread: function (obj) {
+                var cid = getCID(obj);
+                return cid in threads;
+            },
+
+            getThread: function (obj, copy) {
+                var cid = getCID(obj),
+                    thread = threads[cid] || [];
+                return copy ? _.deepCopy(thread) : thread;
+            },
+
+            getThreadCID: function (obj) {
+                var cid = getCID(obj);
+                return threadHash[cid];
+            },
+
+            getThreadSize: function (obj) {
+                var cid = getCID(obj);
+                return cid in threads ? threads[cid].length : 0;
+            },
+
+            getUnreadCount: function (obj) {
+                var cid = getCID(obj), root = threads[cid];
+                return root === undefined ? 0 : _(root.thread).inject(calculateUnread, 0);
+            },
+
+            update: function (list, callback) {
+
+                var hash = {};
+
+                list = _(list).chain()
+                    .map(function (obj) {
+                        var cid = _.cid(obj), top = threadHash[cid];
+                        hash[cid] = true;
+                        return top in threads ? _(threads[top]).first() : null;
+                    })
+                    .compact().value();
+
+                function process(obj) {
+                    var cid = _.cid(obj);
+                    if (cid in hash) {
+                        callback(obj);
+                    }
+                }
+
+                return api.updateAllCache(list, function (obj) {
+                    process(obj);
+                    _(obj.thread).each(process);
+                });
+            },
+
+            reset: (function () {
+
+                function reset(obj) {
+                    var cid = _.cid(obj);
+                    unseen[cid] = (obj.flags & 32) !== 32;
+                }
+
+                return function (list) {
+                    _(list).each(function (obj) {
+                        reset(obj);
+                        _(obj.thread).each(reset);
+                    });
+                };
+
+            }()),
+
+            setUnseen: function (obj) {
+                var cid = getCID(obj);
+                explicitUnseen[cid] = _.now();
+                unseen[cid] = true;
+            },
+
+            setSeen: function (obj) {
+                var cid = getCID(obj);
+                delete explicitUnseen[cid];
+                unseen[cid] = false;
+            },
+
+            // use this to check if mails in a thread are unseen
+            isPartiallyUnseen: function (obj) {
+                var cid = getCID(obj), top = threads[threadHash[cid]];
+                if (top) {
+                    return _(top).reduce(function (memo, obj) {
+                        return memo || unseen[_.cid(obj)] === true;
+                    }, false);
+                } else {
+                    return false;
+                }
+            },
+
+            isUnseen: function (obj) {
+                var cid = getCID(obj);
+                return !!unseen[cid];
+            },
+
+            applyAutoRead: function (obj) {
+                var cid = getCID(obj);
+                if (unseen[cid] === true) {
+                    unseen[cid] = false;
+                    delete explicitUnseen[cid];
+                    api.markRead(obj);
+                }
+            },
+
+            canAutoRead: function (obj) {
+                var cid = getCID(obj);
+                return this.isUnseen(cid) && (!(cid in explicitUnseen) || explicitUnseen[cid] < (_.now() - DELAY));
+            }
+        };
+
+        return self;
+
+    }());
 
     // generate basic API
     var api = apiFactory({
         module: "mail",
+        keyGenerator: function (obj) {
+            return obj ? (obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.view || 'noimg') : '';
+        },
         requests: {
             all: {
                 folder: "default0/INBOX",
-                columns: "601,600",
+                columns: "601,600,611", // + flags
                 sort: "610", // received_date
-                order: "desc"
+                order: "desc",
+                deleted: 'true',
+                cache: false // allow DB cache
             },
             list: {
                 action: "list",
-                columns: "102,600,601,602,603,607,610,611,614"
+                columns: "102,600,601,602,603,604,605,607,610,611,614"
             },
             get: {
                 action: "get",
-                view: "noimg"
+                view: settings.get('allowHtmlMessages', true) ? 'noimg' : 'text',
+                embedded: "true"
             },
             getUnmodified: {
                 action: "get",
-                view: "html"
+                unseen: "true",
+                view: "html",
+                embedded: "true"
             },
             search: {
                 action: "search",
@@ -61,146 +213,184 @@ define("io.ox/mail/api",
                 columns: "601,600",
                 sort: "610",
                 order: "desc",
-                getData: function (query) {
-                    return [
-                        { col: 603, pattern: query }, // from
-                        { col: 607, pattern: query }  // subject
-                    ];
+                getData: function (query, options) {
+                    var map = { from: 603, to: 604, cc: 605, subject: 607, text: -1 }, composite = [];
+                    _(options).each(function (value, key) {
+                        if (key in map && value === 'on') {
+                            composite.push({ col: map[key], pattern: query });
+                        }
+                    });
+                    return composite;
                 }
             }
         },
+        // composite key for "all" cache
+        cid: function (o) {
+            return (o.action || 'all') + ':' + o.folder + DELIM + [o.sort, o.order, o.max || 0, !!o.unseen, !!o.deleted].join('.');
+        },
+
         fail: {
             get: function (e, params) {
                 if (e.code === "MSG-0032") {
                     // mail no longer exists, so we remove it locally
-                    api.remove([params], true);
+                    api.remove([params], true).done(function () {
+                        api.trigger('not-found');
+                    });
                 }
+            }
+        },
+        // filter list request (special fix for nested messages; don't have folder; inline action checks fail)
+        filter: function (obj) {
+            return obj.folder_id !== undefined;
+        },
+        pipe: {
+            all: function (response, opt) {
+                // debug flags
+//                _(response.data.slice(0, 7)).each(function (obj, i) {
+//                    console.warn('server > all', i, _.cid(obj), 'seen?', (obj.flags & 32) === 32);
+//                });
+                // reset tracker! if we get a seen mail here, although we have it in 'explicit unseen' hash,
+                // another devices might have set it back to seen.
+                tracker.reset(response.data);
+                return response;
+            },
+            get: function (data, options) {
+                // inject view (text/html/noimg). need this to generate proper cache keys.
+                data.view = options.view;
+                // a mail should be always marked as seen on fetch
+                data.flags = data.flags | 32;
+                // was unseen?
+                if (data.unseen) {
+                    folderAPI.decUnread(data);
+                }
+                return data;
+            }
+        },
+        params: {
+            all: function (options) {
+                if (options.sort === 'thread') {
+                    options.sort = 610;
+                }
+                return options;
             }
         }
     });
 
+    // publish tracker
+    api.tracker = tracker;
+
+    api.separator = config.get('modules.mail.defaultseparator', '/');
+
     api.SENDTYPE = {
-        'NORMAL':  1,
-        'REPLY':   2,
-        'FORWARD': 3,
-        'DRAFT':   4
+        NORMAL:  '0',
+        REPLY:   '1',
+        FORWARD: '2',
+        DRAFT:   '3'
     };
 
     api.FLAGS = {
-        'ANSWERD':     1,
-        'DELETED':     2,
-        'DRAFT':       4,
-        'FLAGGED':     8,
-        'RECENT':     16,
-        'SEEN':       32,
-        'USER':       64,
-        'FORWARDED': 128
+        ANSWERD:     1,
+        DELETED:     2,
+        DRAFT:       4,
+        FLAGGED:     8,
+        RECENT:     16,
+        SEEN:       32,
+        USER:       64,
+        SPAM:      128,
+        FORWARDED: 256
     };
 
     api.COLORS = {
-        'NONE':      0,
-        'RED':       1,
-        'BLUE':      2,
-        'GREEN':     3,
-        'GREY':      4,
-        'BROWN':     5,
-        'AQUA':      6,
-        'ORANGE':    7,
-        'PINK':      8,
-        'LIGHTBLUE': 9,
-        'YELLOW':   10
+        NONE:        0,
+        RED:         1,
+        ORANGE:      7,
+        YELLOW:     10,
+        LIGHTGREEN:  6,
+        GREEN:       3,
+        LIGHTBLUE:   9,
+        BLUE:        2,
+        PURPLE:      5,
+        PINK:        8,
+        GREY:        4
     };
 
-    // add all thread cache
-    api.caches.allThreaded = new cache.SimpleCache('mail-all-threaded', true);
+    // control for each folder:
+    // undefined -> first fetch
+    // true -> has been fetched in this session
+    // false -> caused by refresh
+    var cacheControl = {}, getAll = api.getAll;
+
+    api.getAll = function (options, useCache) {
+        // use cache?
+        var cid = api.cid(options);
+        if (useCache === 'auto') {
+            useCache = (cacheControl[cid] !== false);
+        }
+        return getAll.call(this, options, useCache).done(function () {
+            cacheControl[cid] = true;
+        });
+    };
 
     // ~ all
     api.getAllThreads = function (options, useCache) {
-
+        // request for brand new thread support
         options = options || {};
-
-        if (2 > 1) {
-            // old manual request - wait for backend update
-            options.action = 'all';
-            options.columns = '601,600,610,612'; // +level, +received_date
-            options.sort = 'thread';
-
-            return this.getAll(options, useCache)
-                .pipe(function (data) {
-                    // loop over data
-                    var i = 0, obj, tmp = null, all = [], first,
-                        // store thread
-                        store = function () {
-                            if (tmp) {
-                                // sort
-                                tmp.sort(dateSort);
-                                // add most recent element to list
-                                all.push(first = tmp[0]);
-                                // add to hash
-                                threads[first.folder_id + "." + first.id] = tmp;
-                            }
-                        };
-                    for (; (obj = data[i]); i++) {
-                        if (obj.level === 0) {
-                            store();
-                            tmp = [obj];
-                        } else if (tmp) {
-                            tmp.push(obj);
-                        }
-                    }
-                    // store last thread
-                    store();
-                    // resort all
-                    all.sort(dateSort);
-                    return all;
-                });
-
-        } else {
-            // request for brand new thread support
-            options.action = 'threadedAll';
-            options.columns = '601,600';
-            options.sort = '612';
-
-            return this.getAll(options, useCache, api.caches.allThreaded)
-                .pipe(function (data) {
-                    _(data).each(function (obj) {
-                        threads[obj.folder_id + "." + obj.id] = obj.thread;
-                    });
-                    return data;
-                });
+        options = $.extend(options, {
+            action: 'threadedAll',
+            columns: '601,600,611,102', // +flags +color_label
+            sort: options.sort || '610',
+            sortKey: 'threaded-' + (options.sort || '610'),
+            konfetti: true,
+            order: options.order || 'desc',
+            includeSent: !accountAPI.is('sent', options.folder),
+            cache: false, // never use server cache
+            max: 500 // apply internal limit to build threads fast enough
+        });
+        // use cache?
+        var cid = api.cid(options);
+        if (useCache === 'auto') {
+            useCache = (cacheControl[cid] !== false);
         }
+        return getAll.call(this, options, useCache, null, false)
+            .done(function (response) {
+                _(response.data).each(tracker.addThread);
+                cacheControl[cid] = true;
+            });
     };
 
     // get mails in thread
     api.getThread = function (obj) {
-        var key = obj.folder_id + "." + obj.id;
-        return threads[key] || [obj];
-    };
 
-    // ~ get
-    api.getFullThread = function (obj) {
-        // get list of IDs
-        var key = obj.folder_id + "." + obj.id,
-            thread = threads[key] || [obj],
-            defs = [],
-            self = this;
-        // get each mail
-        _.each(thread, function (t) {
-            defs.push(self.get(t));
-        });
-        // join all deferred objects
-        var result = $.Deferred();
-        $.when.apply($, defs).done(function () {
-            var args = $.makeArray(arguments), tmp = [];
-            args = defs.length > 1 ? args : [args];
-            // loop over results
-            _.each(args, function (obj) {
-                tmp.push(obj[0] || obj);
+        var cid, thread, len;
+
+        if (typeof obj === 'string') {
+            cid = obj;
+            obj = _.cid(obj);
+        } else {
+            cid = _.cid(obj);
+            obj = api.reduce(obj);
+        }
+
+        if ((thread = tracker.getThread(cid)).length) {
+            len = thread.length;
+            return _(thread).map(function (obj, i) {
+                return {
+                    folder_id: obj.folder_id,
+                    id: obj.id,
+                    threadKey: cid,
+                    threadPosition: len - i,
+                    threadSize: len
+                };
             });
-            // resolve
-            result.resolve(tmp);
-        });
-        return result;
+        } else {
+            return [{
+                folder_id: obj.folder_id || obj.folder,
+                id: obj.id,
+                threadKey: cid,
+                threadPosition: 1,
+                threadSize: 1
+            }];
+        }
     };
 
     // ~ list
@@ -213,71 +403,237 @@ define("io.ox/mail/api",
                 // inject thread size
                 var i = 0, obj;
                 for (; (obj = data[i]); i++) {
-                    obj.threadSize = threadSize(obj);
+                    obj.threadSize = tracker.getThreadSize(obj);
+                    obj.unreadCount = tracker.getUnreadCount(obj);
                 }
                 return data;
             });
     };
 
-    api.update = function (list, data) {
+    var update = function (list, data, apiAction) {
+
         // allow single object and arrays
         list = _.isArray(list) ? list : [list];
+
         // pause http layer
         http.pause();
-        // process all updates
+
+        // now talk to server
         _(list).map(function (obj) {
             return http.PUT({
                 module: 'mail',
                 params: {
-                    action: 'update',
+                    action: apiAction || 'update',
                     id: obj.id,
-                    folder: obj.folder || obj.folder_id
+                    folder: obj.folder || obj.folder_id,
+                    timestamp: _.now() // to be safe
                 },
                 data: data,
                 appendColumns: false
-            })
-            .pipe(function () {
-                // update flags locally?
-                if ('flags' in data && 'value' in data && 'flags' in obj) {
-                    if (data.value) {
-                        obj.flags = obj.flags | data.flags;
-                    } else {
-                        obj.flags = obj.flags & ~data.flags;
-                    }
-                    return $.when(
-                         api.caches.list.merge(obj),
-                         api.caches.get.merge(obj)
-                    );
-                } else {
-                    // remove affected object from caches
-                    return $.when(
-                        api.caches.get.remove(obj),
-                        api.caches.list.remove(obj)
-                    );
-                }
             });
         });
         // resume & trigger refresh
-        return http.resume().done(function () {
-            api.trigger('refresh.list');
+        return http.resume().pipe(function () {
+            // trigger update events
+            _(list).each(function (obj) {
+                api.trigger('update:' + encodeURIComponent(_.cid(obj)), obj);
+            });
+            // return list
+            return list;
         });
     };
 
+    var clearCaches = function (obj, targetFolderId) {
+            return function () {
+                var id = obj.folder_id || obj.folder;
+                return $.when(
+                    api.caches.get.remove(obj),
+                    api.caches.get.remove(id),
+                    api.caches.list.remove(obj),
+                    api.caches.list.remove(id),
+                    api.caches.all.grepRemove(targetFolderId + DELIM) // clear target folder
+                );
+            };
+        };
+
+    var refreshAll = function (obj) {
+        $.when.apply($, obj).done(function () {
+            api.trigger('refresh.all');
+        });
+    };
+
+    api.update = function () {
+        console.error('Do not call this directly because mail is so special');
+    };
+
+    api.updateAllCache = (function () {
+
+        function update(folder_id, hash, callback) {
+            // get proper keys (differ due to sort/order suffix)
+            return api.caches.all.grepKeys(folder_id + DELIM).pipe(function (keys) {
+                return $.when.apply($, _(keys).map(function (folder_id) {
+                    return api.caches.all.get(folder_id).pipe(function (co) {
+                        if (co && co.data) {
+                            // update affected items
+                            return $.when.apply($,
+                                _(co.data).map(function (obj) {
+                                    if (_.cid(obj) in hash) {
+                                        callback(obj);
+                                        return $.when(
+                                            api.caches.list.merge(obj),
+                                            api.caches.get.merge(obj)
+                                        );
+                                    } else {
+                                        return DONE;
+                                    }
+                                })
+                            ).pipe(function () {
+                                return api.caches.all.add(folder_id, co);
+                            });
+                        } else {
+                            return DONE;
+                        }
+                    });
+                }));
+            });
+        }
+
+        return function (list, callback) {
+            // get affected folders first
+            var folders = {}, hash = {};
+            _([].concat(list)).each(function (obj) {
+                hash[_.cid(obj)] = true;
+                folders[obj.folder_id] = true;
+            });
+            // run update for each folder
+            return $.when.apply($, _(folders).map(function (value, folder_id) {
+                return update(folder_id, hash, callback || _.identity);
+            }));
+        };
+    }());
+
+    api.changeColor = function (list, label, local) {
+
+        list = [].concat(list);
+
+        return $.when(
+            tracker.update(list, function (obj) {
+                obj.color_label = label;
+            })
+            .done(function () { api.trigger('refresh.list'); }),
+            local ? DONE : update(list, { color_label: label })
+        );
+
+    };
+
+    api.markUnread = function (list) {
+
+        list = [].concat(list);
+
+        _(list).each(function (obj) {
+            obj.flags = obj.flags & ~32;
+            api.caches.get.merge(obj);
+            api.caches.list.merge(obj);
+        });
+
+        return $.when(
+            tracker.update(list, function (obj) {
+                tracker.setUnseen(obj);
+                obj.flags = obj.flags & ~32;
+            })
+            .done(function () { api.trigger('refresh.list'); }),
+            update(list, { flags: api.FLAGS.SEEN, value: false }).done(function () {
+                folderAPI.reload(list);
+            })
+        );
+    };
+
+    api.markRead = function (list) {
+
+        list = [].concat(list);
+
+        _(list).each(function (obj) {
+            obj.flags = obj.flags | 32;
+            api.caches.get.merge(obj);
+            api.caches.list.merge(obj);
+        });
+
+        return $.when(
+            tracker.update(list, function (obj) {
+                tracker.setSeen(obj);
+                obj.flags = obj.flags | 32;
+            })
+            .done(function () { api.trigger('refresh.list'); }),
+            update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
+                folderAPI.reload(list);
+            })
+        );
+    };
+
+    api.markSpam = function (list) {
+        return update(list, { flags: api.FLAGS.SPAM, value: true })
+            .pipe(function () {
+                return $.when(
+                    // clear source folder
+                    api.caches.all.grepRemove(_(list).first().folder_id + DELIM)
+                );
+            })
+            .done(refreshAll);
+    };
+
+    api.move = function (list, targetFolderId) {
+        // call updateCaches (part of remove process) to be responsive
+        return api.updateCaches(list).pipe(function () {
+            // trigger visual refresh
+            api.trigger('refresh.all');
+            // start update on server
+            return update(list, { folder_id: targetFolderId })
+                .pipe(function () {
+                    list = _.isArray(list) ? list : [list];
+                    return _(list).map(function (obj) {
+                        return (clearCaches(obj, targetFolderId))();
+                    });
+                })
+                .done(function () {
+                    notifications.yell('success', 'Mail has been moved');
+                    folderAPI.reload(targetFolderId, list);
+                });
+        });
+    };
+
+    api.copy = function (list, targetFolderId) {
+        return update(list, { folder_id: targetFolderId }, 'copy')
+            .pipe(clearCaches(list, targetFolderId))
+            .done(refreshAll)
+            .done(function () {
+                notifications.yell('success', 'Mail has been copied');
+                folderAPI.reload(targetFolderId, list);
+            });
+    };
+
     var react = function (action, obj, view) {
-        return http.GET({
+        // get proper view first
+        view = $.trim(view || 'text').toLowerCase();
+        view = view === 'text/plain' ? 'text' : view;
+        view = view === 'text/html' ? 'html' : view;
+        return http.PUT({
                 module: 'mail',
                 params: {
                     action: action || '',
-                    id: obj.id,
-                    folder: obj.folder || obj.folder_id,
-                    view: view || 'text'
-                }
+                    view: view
+                },
+                data: _([].concat(obj)).map(function (obj) {
+                    return api.reduce(obj);
+                }),
+                appendColumns: false
             })
             .pipe(function (data) {
+                var text = '', quote = '', tmp = '';
                 // transform pseudo-plain text to real text
                 if (data.attachments && data.attachments.length) {
-                    var text = '', tmp = '', quote = '';
-                    if (data.attachments[0].content_type === 'text/plain') {
+                    if (data.attachments[0].content === '') {
+                        // nothing to do - nothing to break
+                    } else if (data.attachments[0].content_type === 'text/plain') {
                         $('<div>')
                             // escape everything but BR tags
                             .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
@@ -290,15 +646,6 @@ define("io.ox/mail/api",
                             });
                         // remove white space
                         text = $.trim(text);
-                        // fix reply/forward quoting
-                        // TODO: remove when backend does this properly
-                        if (action === 'replyall' || action === 'reply') {
-                            // OK: reply is fixed
-                            //text = '> ' + text.replace(/\n/, "\n> ");
-                        } else if (action === 'forward') {
-                            // still waiting for backend
-                            text = '> ' + text.replace(/\n/g, "\n> ");
-                        }
                         // polish for html editing
                         if (view === 'html') {
                             // escape '<'
@@ -319,12 +666,14 @@ define("io.ox/mail/api",
                             data.attachments[0].content = $.trim(text);
                         }
                     } else if (data.attachments[0].content_type === 'text/html') {
-
-                        data.attachments[0].content = $('<div>')
-                            .html(data.attachments[0].content)
-                            .find('blockquote').removeAttr('style')
-                            .end()
-                            .html();
+                        // robust approach for large mails
+                        tmp = document.createElement('DIV');
+                        tmp.innerHTML = data.attachments[0].content;
+                        _(tmp.getElementsByTagName('BLOCKQUOTE')).each(function (node) {
+                            node.removeAttribute('style');
+                        });
+                        data.attachments[0].content = tmp.innerHTML;
+                        tmp = null;
                     }
                 } else {
                     data.attachments = data.attachments || [{}];
@@ -335,12 +684,39 @@ define("io.ox/mail/api",
     };
 
     api.getUnmodified = function (obj) {
-        return this.get({
-            action: 'get',
-            id: obj.id,
-            folder: obj.folder || obj.folder_id,
-            view: 'html'
-        }, false);
+        // has folder?
+        if ('folder_id' in obj || 'folder' in obj) {
+            return this.get({
+                action: 'get',
+                id: obj.id,
+                folder: obj.folder || obj.folder_id,
+                view: 'html'
+            }, false);
+        } else if ('parent' in obj) {
+            // nested message!?
+            var id = obj.id, parent = obj.parent;
+            return this.get({
+                    action: 'get',
+                    id: obj.parent.id,
+                    folder: obj.parent.folder || obj.parent.folder_id,
+                    view: 'html'
+                }, false)
+                .pipe(function (data) {
+                    return _.chain(data.nested_msgs)
+                        .filter(function (obj) {
+                            if (obj.id === id) {
+                                obj.parent = parent;
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        })
+                        .first().value();
+                });
+        } else {
+            console.error('api.getUnmodified(). Invalid case.', obj);
+            return $.Deferred().resolve(obj);
+        }
     };
 
     api.getSource = function (obj) {
@@ -365,22 +741,11 @@ define("io.ox/mail/api",
         return react('forward', obj, view);
     };
 
-    api.send = function (data, files) {
-        var deferred = $.Deferred();
+    api.send = function (data, files, form) {
 
-        if (Modernizr.file) {
-            handleSendXHR2(data, files, deferred);
-        } else {
-            handleSendTheGoodOldWay(data, files, deferred);
-        }
-
-        return deferred;
-    };
-
-    function handleSendXHR2(data, files, deferred) {
-        var form = new FormData(),
+        var deferred,
             flatten = function (recipient) {
-                return '"' + recipient[0].replace(/^["']+|["']+$/g, '') + '" <' + recipient[1] + '>';
+                return '"' + (recipient[0] || '').replace(/^["']+|["']+$/g, '') + '" <' + recipient[1] + '>';
             };
 
         // clone data (to avoid side-effects)
@@ -392,6 +757,18 @@ define("io.ox/mail/api",
         data.cc = _(data.cc).map(flatten).join(', ');
         data.bcc = _(data.bcc).map(flatten).join(', ');
 
+        if (Modernizr.file && 'FormData' in window) {
+            deferred = handleSendXHR2(data, files, deferred);
+        } else {
+            deferred = handleSendTheGoodOldWay(data, form);
+        }
+
+        return deferred;
+    };
+
+    function handleSendXHR2(data, files) {
+
+        var form = new FormData();
         // add mail data
         form.append('json_0', JSON.stringify(data));
         // add files
@@ -399,91 +776,275 @@ define("io.ox/mail/api",
             form.append('file_' + index, file);
         });
 
-        http.UPLOAD({
-                module: 'mail',
-                params: { action: 'new' },
-                data: form,
-                dataType: 'text'
-            })
-            .done(function (text) {
-                // process HTML-ish non-JSONP response
-                var a = text.indexOf('{'),
-                b = text.lastIndexOf('}');
-                if (a > -1 && b > -1) {
-                    deferred.resolve(JSON.parse(text.substr(a, b - a + 1)));
-                } else {
-                    deferred.resolve({});
-                }
-                // wait a moment, then update mail index
-                setTimeout(function () {
-                    api.getAllThreads({}, false)
-                        .done(function (data) {
-                            api.trigger('refresh.all');
-                        });
-                }, 3000);
-            })
-            .fail(deferred.reject);
-    }
-
-    function handleSendTheGoodOldWay(data, files, deferred) {
-        var form = $('.io-ox-mail-write form'),
-            flatten = function (recipient) {
-                return '"' + recipient[0].replace(/^["']+|["']+$/g, '') + '" <' + recipient[1] + '>';
-            };
-
-        // clone data (to avoid side-effects)
-        data = _.clone(data);
-
-        // flatten from, to, cc, bcc
-        data.from = _(data.from).map(flatten).join(', ');
-        data.to = _(data.to).map(flatten).join(', ');
-        data.cc = _(data.cc).map(flatten).join(', ');
-        data.bcc = _(data.bcc).map(flatten).join(', ');
-
-
-        var uploadCounter = 0;
-        $(':input:enabled', form).each(function (index, field) {
-            var jqField = $(field);
-            if (jqField.attr('type') === 'file') {
-                jqField.attr('name', 'file_' + uploadCounter);
-                uploadCounter++;
-            }
-        });
-
-        // add mail data
-        if ($('input[name="json_0"]', form).length === 0) {
-            $(form).append($('<input>', {'type': 'hidden', 'name': 'json_0', 'value': JSON.stringify(data)}));
-        } else {
-            $('input[name="json_0"]', form).val(JSON.stringify(data));
-        }
-
-        var tmpName = 'iframe_' + _.now(),
-            frame = $('<iframe>', {'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1});
-        $('.io-ox-mail-write').append(frame);
-
-        $(form).attr({
-            'method': 'post',
-            'action': '/ox7/api/mail?action=new&session=' + ox.session,
-            'target': tmpName
-        });
-
-        $(form).submit();
-
-        window.callback_new = function (newMailId) {
-            $('#' + tmpName).remove();
-            deferred.resolve(newMailId);
-            window.callback_new = null;
-        };
-    }
-
-    // refresh
-    api.on('refresh!', function (e, folder) {
-        if (ox.online) {
-            api.getAllThreads({ folder: folder }, false)
+        return http.UPLOAD({
+            module: 'mail',
+            params: { action: 'new' },
+            data: form,
+            dataType: 'text'
+        })
+        .pipe(function (text) {
+            // wait a moment, then update mail index
+            setTimeout(function () {
+                // clear inbox & sent folder
+                var folders = [].concat(
+                    accountAPI.getFoldersByType('inbox'),
+                    accountAPI.getFoldersByType('sent'),
+                    accountAPI.getFoldersByType('drafts')
+                );
+                $.when.apply(
+                    _(folders).map(function (id) {
+                        return api.caches.all.grepRemove(id + DELIM);
+                    })
+                )
                 .done(function () {
                     api.trigger('refresh.all');
                 });
+            }, 3000);
+            // process HTML-ish non-JSONP response
+            var a = text.indexOf('{'),
+                b = text.lastIndexOf('}');
+            if (a > -1 && b > -1) {
+                return JSON.parse(text.substr(a, b - a + 1));
+            } else {
+                return {};
+            }
+        });
+    }
+
+    function handleSendTheGoodOldWay(data, form) {
+        return http.FORM({ data: data, form: form, field: 'json_0', url: 'mail?action=new' });
+    }
+
+    api.saveAttachments = function (list, target) {
+        // be robust
+        target = target || config.get('folder.infostore');
+        // support for multiple attachments
+        list = _.isArray(list) ? list : [list];
+        http.pause();
+        // loop
+        _(list).each(function (data) {
+            http.PUT({
+                module: 'mail',
+                params: {
+                    action: 'attachment',
+                    id: data.mail.id,
+                    folder: data.mail.folder_id,
+                    dest_folder: target,
+                    attachment: data.id
+                },
+                data: { folder_id: target, description: 'Saved mail attachment' },
+                appendColumns: false
+            });
+        });
+        return http.resume().done(function () {
+            require(['io.ox/files/api'], function (fileAPI) {
+                fileAPI.caches.all.grepRemove(target + DELIM);
+                fileAPI.trigger('refresh.all');
+            });
+        });
+    };
+
+    api.getUrl = function (data, mode) {
+        var url = ox.apiRoot + '/mail', first;
+        if (mode === 'zip') {
+            first = _(data).first();
+            return url + '?' + $.param({
+                action: 'zip_attachments',
+                folder: (first.parent || first.mail).folder_id,
+                id: (first.parent || first.mail).id,
+                attachment: _(data).pluck('id').join(','),
+                session: ox.session // required here!
+            });
+        } else if (mode === 'eml') {
+            data = [].concat(data);
+            first = _(data).first();
+            // multiple?
+            if (data.length > 1) {
+               // zipped
+                return url + '?' + $.param({
+                    action: 'zip_messages',
+                    folder: first.folder_id,
+                    id: _(data).pluck('id').join(','),
+                    session: ox.session
+                });
+            } else {
+                // single EML
+                return url + '?' + $.param($.extend(api.reduce(first), {
+                    action: 'get',
+                    src: 1,
+                    save: 1,
+                    session: ox.session
+                }));
+            }
+        } else {
+            // inject filename for more convenient file downloads
+            url += (data.filename ? '/' + encodeURIComponent(data.filename) : '') + '?' +
+                $.param({
+                    action: 'attachment',
+                    folder: (data.parent || data.mail).folder_id,
+                    id: (data.parent || data.mail).id,
+                    attachment: data.id
+                });
+            switch (mode) {
+            case 'view':
+            case 'open':
+                return url + '&delivery=view';
+            case 'download':
+                return url + '&delivery=download';
+            default:
+                return url;
+            }
         }
+    };
+
+    var lastUnseenMail = 0;
+
+    api.checkInbox = function () {
+        // look for new unseen mails in INBOX
+        return http.GET({
+            module: 'mail',
+            params: {
+                action: 'all',
+                folder: 'default0/INBOX',
+                columns: '610,600,601', //received_date, id, folder_id
+                unseen: 'true',
+                deleted: 'true',
+                sort: '610',
+                order: 'desc'
+            }
+        })
+        .pipe(function (unseen) {
+            var recent;
+            // found unseen mails?
+            if (unseen.length) {
+                // check most recent mail
+                recent = _(unseen).filter(function (obj) {
+                    return obj.received_date > lastUnseenMail;
+                });
+                if (recent.length > 0) {
+                    api.trigger('new-mail', recent);
+                    lastUnseenMail = recent[0].received_date;
+                }
+                api.trigger('unseen-mail', unseen);
+            }
+            return {
+                unseen: unseen,
+                recent: recent || []
+            };
+        });
+    };
+
+    // refresh
+    api.refresh = function (e) {
+        if (ox.online) {
+            // reset cache control
+            _(cacheControl).each(function (val, cid) {
+                cacheControl[cid] = false;
+            });
+            api.checkInbox().always(function () {
+                // trigger
+                api.trigger('refresh.all');
+            });
+        }
+    };
+
+    api.localRemove = function (list, hash) {
+        // reverse lookup first to get affacted top-level elements
+        var reverse = {};
+        _(hash).each(function (obj) {
+            var threadCID = tracker.getThreadCID(obj);
+            if (threadCID !== undefined) {
+                reverse[threadCID] = true;
+            }
+        });
+        // loop over list and check occurence via hash
+        return _(list).filter(function (obj) {
+            var cid = _.cid(obj), found = cid in hash, length = obj.thread.length, s, entire;
+            // case #1: found in hash; no thread
+            if (found && length <= 1) {
+                return false;
+            }
+            // case #2: found in hash; root element
+            if (found && length > 1) {
+                // delete entire thread?
+                entire = _(obj.thread).chain().map(_.cid)
+                    .inject(function (sum, cid) { return sum + (cid in hash ? 1 : 0); }, 0).value() === length;
+                if (entire) {
+                    return false;
+                } else {
+                    // copy props from second thread item
+                    s = obj.thread[1];
+                    _.extend(obj, { folder_id: s.folder_id, id: s.id, flags: s.flags, color_label: s.color_label });
+                    obj.thread.splice(0, 1);
+                    return true;
+                }
+            }
+            // case #3: found via reverse lookup
+            if (cid in reverse) {
+                obj.thread = _(obj.thread).filter(function (o) {
+                    return _.cid(o) !== cid;
+                });
+                return true;
+            }
+            // otherwise
+            return true;
+        });
+    };
+
+    api.getDefaultFolder = function () {
+        return folderAPI.getDefaultFolder('mail');
+    };
+
+    api.getAccountIDFromFolder = function (inintialFolder) {
+        var accountId = /^default(\d*)\b/.exec(inintialFolder);
+        return accountId[1];
+    };
+
+    api.beautifyMailText = function (str, lengthLimit) {
+        lengthLimit = lengthLimit || 500;
+        str = String(str)
+            .substr(0, lengthLimit) // limit overall length
+            .replace(/-{3,}/g, '---') // reduce dashes
+            .replace(/<br\s?\/?>(&gt;)+/ig, ' ') // remove quotes after line breaks
+            .replace(/<br\s?\/?>/ig, ' ') // remove line breaks
+            .replace(/<[^>]+(>|$)/g, '') // strip tags
+            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank">http$2://...</a>') // links
+            .replace(/&#160;/g, ' ') // convert to simple white space
+            .replace(/\s{2,}/g, ' '); // reduce consecutive white space
+        // trim
+        return $.trim(str);
+    };
+
+    // import mail as EML
+    api.importEML = function (options) {
+
+        options.folder = options.folder || api.getDefaultFolder();
+
+        var form = new FormData();
+        form.append('file', options.file);
+
+        return http.UPLOAD({
+                module: 'mail',
+                params: {
+                    action: 'import',
+                    folder: options.folder,
+                    force: true // don't check from address!
+                },
+                data: form,
+                fixPost: true
+            })
+            .pipe(function (data) {
+                return api.caches.all.grepRemove(options.folder + DELIM).pipe(function () {
+                    api.trigger('refresh.all');
+                    folderAPI.reload(options.folder);
+                    return data;
+                });
+            });
+    };
+
+    // change API's default options if allowHtmlMessages changes
+    settings.on('change:allowHtmlMessages', function (e, value) {
+        api.options.requests.get.view = value ? 'noimg' : 'text';
     });
 
     return api;

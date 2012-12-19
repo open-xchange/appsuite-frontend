@@ -1,0 +1,226 @@
+<div style="padding: 20px">
+	<div class="row">
+		<div class="span3 navigation">&nbsp;</div>
+		<div class="content span9">
+			<div class="page-header">
+				<h1>RequireJS <small>Loading and defining modules and dependencies</small></h1>
+			</div>
+
+			<p class="lead">
+                RequireJS is a framework for defining and loading modules in JavaScript. It does so without us having to pollute the global namespace – a common disease in JavaScript programs. Learn how to define your own modules and bring in their dependencies.
+			</p>
+			<section id="defining">
+			    <h2>Defining a module and its dependencies</h2>
+			    <p>
+			        Let us define a simple module:
+			        <pre class="experiment">
+// #define defines a module. The first argument here is the name
+// of the module. Next is the "definition function" that builds the object
+// that is supposed to be used by other modules
+define("io.ox/lessons/myModule1", function () {
+    // By convention, though enforced by our buildscript all our code
+    // is supposed to run in javascript strict mode, which is
+    // a little bit pickier about
+    // common javascript pitfalls
+    "use strict";
+
+
+    // The definition function returns an object with a #greet method
+    // This is the functionality that other code using this module can use
+    return {
+        greet: function () {
+            print("Hello there!");
+        }
+    };
+});
+
+// Let's load the above module and call the greet function:
+// The require calls first argument is an array of all the
+// modules we want to load.
+// The second argument is a function with as many parameters
+// as the dependency array. The result of calling the definition function
+// is placed in the corresponding argument.
+require(["io.ox/lessons/myModule1"], function (myModule1) {
+    // myModule1 is the object we created in the upper definition function
+    // So we can now call its greet method.
+    myModule1.greet();
+});
+</pre>
+                    <span class="label label-warning">Note:</span> Since the definition function is only run once and its result is cached, if you want
+                    to change an example in this lesson, you will have to reload the page once before doing so, so that older definitions are cleared. Reload -> Make changes -> Run the experiment.
+			    </p>
+
+			    <p>
+			        When you define a module, you can also bring in dependencies of the module. RequireJS will take care of loading (if they haven't been loaded yet) these and passing the
+			        result of their definition functions. Just the same as with the require call:
+
+			        <pre class="experiment">
+// Let's define a module that chooses a greeting based
+// on the current time
+// It depends on our core date library.
+// As you can see, exactly like in the require call you can list the dependencies
+// of a module in the second argument, the definition function then becomes
+// the third argument and takes as parameters
+// the resolved modules.
+define("io.ox/lessons/greeting", ["io.ox/core/date"], function (date) {
+    "use strict";
+    return {
+        getProperGreeting: function () {
+            var hour = new date.Local().getHours();
+            // find proper phrase
+            if (hour >= 4 &amp;&amp; hour &lt;= 11) {
+                return 'Good morning';
+            } else if (hour >= 18 &amp;&amp; hour &lt;= 23) {
+                return 'Good evening';
+            } else {
+                return 'Hello';
+            }
+        }
+    };
+});
+
+// Similarly here, let's define our module with a dependency on the
+// greeting module we just wrote
+define("io.ox/lessons/myModule2", ["io.ox/lessons/greeting"], function (greeting) {
+    "use strict";
+    return {
+        greet: function (name) {
+            print(greeting.getProperGreeting() + ", " + name + "!");
+        }
+    };
+});
+
+// ... and use that via require
+require(["io.ox/lessons/myModule2"], function (myModule2) {
+    myModule2.greet("Traveller");
+});
+</pre>
+			        Every file in our codebase follows this convention of defining a module. When choosing when to <code>require</code> something or when to declare it as a dependency in the
+			        <code>define</code> call, these are a few rules of thumb:
+                    <div class="alert alert-info">
+                        Use <code>require</code> if this is something that is rarely used by the user. In this case use <code>require</code> to postpone loading the code for as long as possible.
+                    </div>
+                    conversely:
+                    <div class="alert alert-info">
+                        Use <code>define</code> to declare a basic an commonly used dependency to keep the code readable (lot's of require calls with their callback functions will render every module pretty unreadable in a very short while).
+                    </div>
+			    </p>
+
+			    <p>
+			        Here is something you can try: Write a module that offers a function for turning an integer between 0 and 10 into its proper number word. 1 become 'one', 2 becomes 'two' and so on. Then load the module with require and print out any numbers number word.
+			        <div class="experiment" style="height:500px">
+// Rock on!
+			        </div>
+			    </p>
+			 </section>
+
+
+			 <section id="loading_other_content">
+			     <h2>Loading other content with RequireJS</h2>
+			     <p>
+			         Apart from loading JavaScript modules we use RequireJS to load other types of content, like simple text files, translations for our internationalisation and include css files. Let's look at all three:
+			         <pre class="experiment">
+// You can invoke requirejs plugins to load different types of data by prefixing
+// the file to load with the name of the plugin and an exclamation point.
+// Use 'text' for text files, 'gettext' for translation data and 'less' for CSS files.
+require([
+    "text!io.ox/lessons/lessons/basic_requirejs/placeholder.txt",
+    'gettext!io.ox/lessons/lessons/basic_requirejs/lang',
+    'less!io.ox/lessons/lessons/basic_requirejs/example.css'],
+    function (placeholderText, gt) {
+    // placeholderText contains the content of the placeholder.txt file
+    // gt is a function returned by our translation system
+    // The css call doesn't wind up in an argument, instead the css definitions
+    // are simply loaded and activated.
+
+    // Let's see the contents of the placeholder.txt file
+    parentNode.append($("&lt;div&gt;").text(placeholderText));
+
+    // Invoke gt (the translation function) to translate "Good morning".
+    // Normally our buildsystem will collect all these
+    // gt calls to figure out which strings need to be translated.
+    // I've set things up so you can translate
+    // 'Good morning', 'Good evening' and 'Hello'. The texts will
+    // be tranlated into the language you've configured for your OX account.
+    parentNode.append($("&lt;div&gt;").text(gt("Good morning") + " Traveller!"));
+
+    // Also we're adding a class that is defined in the CSS file.
+    // It's best to avoid inline styles and rather put them in CSS files.
+    parentNode.addClass("require_lesson_highlight");
+});
+</pre>
+                    Note that not only can you use these in a require call, but also when defining a module. Let's define a version of the greeting module that is internationalized:
+
+                    <pre class="experiment">
+define("io.ox/lessons/multilingualGreeting",
+    ["io.ox/core/date",
+    'gettext!io.ox/lessons/lessons/basic_requirejs/lang'],
+
+    function (date, gt) {
+        "use strict";
+        return {
+            getProperGreeting: function () {
+                var hour = new date.Local().getHours();
+                // find proper phrase
+                if (hour >= 4 &amp;&amp; hour &lt;= 11) {
+                    return gt('Good morning');
+                } else if (hour >= 18 &amp;&amp; hour &lt;= 23) {
+                    return gt('Good evening');
+                } else {
+                    return gt('Hello');
+                }
+            }
+        };
+});
+
+require(["io.ox/lessons/multilingualGreeting"], function (greeting) {
+    print(greeting.getProperGreeting() + ", Traveller!");
+});
+</pre>
+			     </p>
+			 </section>
+
+			 <section id="advanced">
+			     <h2>Asynchronously defining modules</h2>
+			     <p>
+			         Normally RequireJS assumes that the definition function runs synchronously. It is expected to immediately return the object that will henceforth be the defined module. What if you want to, say, load configuration data from the backend that is essential for the proper function of your module? The backend call is asynchronous, meaning, no one should use your module before the backend call has terminated. To solve this you can use <code>define.async</code> which is expected to return a deferred object which resolves to the module object. Let me demonstrate:
+			         <pre class="experiment">
+// Define async takes the same arguments as define, though it insists on a dependency array (even if it is empty).
+define.async("io.ox/lessons/myModule4", [], function () {
+    // This is the deferred we'll be returning.
+    // It will be resolved, once we've successfully loaded
+    // the username from the backend. If this looks mysterious
+    // to you, please read our tutorial on Deferred Objects.
+    var def = $.Deferred();
+
+    $.ajax({
+        url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
+        dataType: 'json'
+    }).done(function (response) {
+        // Resolve to the real module content
+        def.resolve({
+            greet: function () {
+                print("Hello, " + response.data.first_name + "!");
+            }
+        });
+    }).fail(def.reject);
+
+    // Return the deferred
+    return def;
+});
+
+require(["io.ox/lessons/myModule4"], function (myModule4) {
+    // The object that the deferred resolved to winds up
+    // as the argument to our function here
+    myModule4.greet();
+});
+</pre>
+                    Just for fun, try putting it all together: Define an internationalised greeting module that is used in an asynchronously defined module that prints out a greeting to
+                    the currently locked in user. Use that module in a require block to print out such a greeting!
+                    <div class="experiment" style="height:800px"></div>
+			     </p>
+
+			 </section>
+		</div>
+	</div>
+</div>

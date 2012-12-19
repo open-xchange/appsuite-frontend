@@ -87,7 +87,7 @@ define("io.ox/core/test/model",
                         called = true;
                     });
                     model.set('firstName', 'Matthias B.');
-                    called = true;
+                    j.expect(called).toEqual(true);
                 });
 
                 j.it('triggers specific change event', function () {
@@ -145,14 +145,17 @@ define("io.ox/core/test/model",
 
                 j.it('clearing mandatory property', function () {
                     model.set('familyName', '');
-                    j.expect(model.get('familyName')).toEqual('B.');
+                    j.expect(model.get('familyName')).toEqual(''); // invalid states are allowed!
                 });
 
                 j.it('triggers invalid format event', function () {
                     var called = false;
+                    // set value back
+                    model.set('familyName', 'B.');
+                    // catch error
                     model.off().on('error:invalid', function (e, error) {
                         j.expect(error.properties).toEqual(['familyName']);
-                        j.expect(model.get('familyName')).toEqual('B.');
+                        j.expect(model.get('familyName')).toEqual('');
                         called = true;
                     });
                     model.set('familyName', '');
@@ -161,12 +164,13 @@ define("io.ox/core/test/model",
 
                 j.it('triggers inconsistency event', function () {
                     var called = false;
-                    model.off().on('error:invalid error:inconsistent', function (e, error) {
-                        j.expect(e.type).toEqual('error:inconsistent');
+                    model.off().on('error:invalid', function (e, error) {
+                        j.expect(e.type).toEqual('error:invalid');
                         j.expect(error.properties).toEqual(['age']);
                         j.expect(model.get('age')).toEqual(-1);
                         called = true;
                     });
+                    model.set('familyName', 'B.');
                     model.set('age', -1);
                     model.save();
                     j.expect(called).toEqual(true);
@@ -191,8 +195,8 @@ define("io.ox/core/test/model",
 
                 j.it('passes save without errors', function () {
                     var errors = 'No errors', done = 'Not done';
-                    model.off().on('error:invalid error:inconsistent', function (e, error) {
-                        console.log('Error', arguments);
+                    model.off().on('error:invalid', function (e, error) {
+                        console.debug('Error', arguments);
                         errors = 'Errors';
                     });
                     model.save().done(function () {

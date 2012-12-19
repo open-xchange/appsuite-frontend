@@ -1,0 +1,207 @@
+<div style="padding: 20px">
+	<div class="row">
+		<div class="span3 navigation">&nbsp;</div>
+		<div class="content span9">
+
+			<div class="page-header">
+				<h1>Extension Points</h1>
+			</div>
+
+			<p class="lead">
+                Abstractly speaking extension points are an architecture for letting plugins contribute functionality to other parts of the program. They form the core of the OX App Suite plugin architecture.
+			</p>
+
+
+            <section id="extending_the_ui">
+                <h2>Extending the UI</h2>
+                <p>
+                    Let's start with some example code:
+                    <pre class="experiment">
+// The extension point system lives in the
+// 'io.ox/core/extensions' module
+require(["io.ox/core/extensions"], function (ext) {
+    // An extension point represents the system that can be extended
+    // It has an id (in this case 'io.ox/lessons/floatingWidget')
+    var point = ext.point("io.ox/lessons/floatingWidget");
+
+
+    // Now, let's extend that extension point. Every extension point
+    // has some kind of contract about what it expects its extensions to provide.
+    // In this case, the extension is supposed to provide a #draw method
+    // and is passed the node to draw into as the 'this' variable
+    point.extend({
+        id: 'example1', // Every extension is supposed to have an id
+        index: 100, // Extensions are ordered based on their indexes
+        draw: function () {
+            // This function is called by the part of the code that
+            // offers this extension point
+            this.append($("&lt;h3&gt;").text("Hello, Traveller!"));
+        }
+    });
+});
+</pre>
+
+                    Like the little floating rectangle to the left, many parts of the UI offer extension points. For example, the following code will add a new lesson to this tutorial app:
+
+                    <pre class="experiment">
+require(["io.ox/core/extensions"], function (ext) {
+    // The lesson extension point expects
+    // the lessons title, a description, which section it belongs to
+    // and a method called that starts the lesson
+    ext.point("io.ox/lessons/lesson").extend({
+        id: 'very_good_lesson',
+        title: 'A very excellent lesson',
+        description: 'In which interesting parts of the architecture will be explored',
+        section: 'Custom',
+        start: function (options) {
+            options.win.nodes.main.empty();
+            options.win.nodes.main.append($("&lt;h1&gt;").text("Hello there, traveller!"));
+        }
+    });
+    print("New lesson registered");
+});
+</pre>
+                    Run the above code, then look at the Table of contents again, and the new lesson turns up there. Go now! I'll wait right here.
+                </p>
+
+                <p>
+                    Let's extend the OX App Suite UI in a few other places. For example, let's customize the mail app a bit. First, let us add a button to the toolbar
+                    <span class="label label-important">Attention</span> This example will only work if you haven't visited the mail app yet. If you have, just reload this page, then run the example and then visit the mail app.
+                    <pre class="experiment">
+
+require(['io.ox/core/extensions', 'io.ox/core/extPatterns/links'], function (ext, links) {
+
+    // Firstly we'll add a new button to the toolbar
+
+    // This addas a new button to the toolbar and offers itself an extension point 'io.ox/mail/actions/exampleAction', which
+    // can be extended to contain the functionality for this button
+    // This way, more than one button or link can reference the same
+    // action
+    ext.point('io.ox/mail/links/toolbar').extend(new links.Link({
+        index: 200,
+        id: 'example',
+        label: 'Do something',
+        ref: 'io.ox/mail/actions/exampleAction'
+    }));
+
+    // This defines the extension for the above newly created extension point
+    // and contains the code to run, once the button is clicked
+    new links.Action('io.ox/mail/actions/exampleAction', {
+        id: 'exampleAction',
+        action: function () {
+            alert("Hello, traveller!");
+        }
+    });
+
+    print("Extension registered, you can go to the mail app to see it in action");
+});
+
+</pre>
+                <p>
+
+                    Let's try and add a section to the mails detail view:
+                    <pre class="experiment">
+require(['io.ox/core/extensions'], function (ext) {
+
+    ext.point("io.ox/mail/detail").extend({
+        id: "lessonExample",
+        index: 300,
+        draw: function(data) {
+            this.append("&lt;br&gt;");
+            this.append($("&lt;em&gt;").append(
+                $.txt("The eMail '"),
+                $("&lt;b&gt;").text(data.subject),
+                $.txt("' was brought to you by: "),
+                $("&lt;b&gt;").text("Your Name Inc.")
+            ));
+        }
+    });
+
+    print("Extension registered, you can go to the mail app to see it in action.");
+});
+
+    </pre>
+
+    After switching to the mail app, you might have to select another mail to once again run through the rendering process that calls on the extensions. As you can see in the example above, the code calling the extension passes along the eMail in the <code>data</code> parameter. The <code>index</code> of the extension means that it is rendered after the mail body, who's extensions index is <b>300</b>. Currently (until we have more comprehensive documentation) you can only find the indexes (and the way an extension is supposed to behave) by reading our code. Reload the page (to clear out the registered extensions) and try switching the index to 190 and see where the added sentence shows up now.
+                </p>
+            </section>
+
+            <section id="providing_an_extension_point">
+                <h2>Providing an extension point</h2>
+                <p>
+                    <b>TODO: Somebody write this</b>
+                </p>
+            </section>
+
+            <section id="customizing_available_extensions">
+                <h2>Customizing extensions</h2>
+                <p>
+                    Since extensions are a property of the runtime system, you can also modify them. The extension system offers a couple of things you can do with existing extensions like <b>changing their order</b>, <b>disabling them</b> or <b>replacing them</b>. Let's look at how to accomplish all of these, again by modifying the mail detail view. First, let's switch off the inline links
+
+<pre class="experiment">
+require(["io.ox/core/extensions"], function (ext) {
+    // Here the id of the extension comes into play again.
+    // If you look at the code of the mail detail view (in io.ox/mail/view-detail)
+    // You can see the extension registers itself with the id 'inline-links'
+    // So that is the argument we pass to #disable
+    ext.point("io.ox/mail/detail").disable('inline-links');
+
+    print("All done, no more inline-links");
+
+});
+</pre>
+                    Again: When navigating back to the email view you might have to select another mail to make this change visible.
+
+                </p>
+
+                <p>
+                    Next, let's replace the way the time is rendered:
+<pre class="experiment">
+require(["io.ox/core/extensions", "io.ox/mail/util", "io.ox/core/date"], function (ext, util, date) {
+    ext.point("io.ox/mail/detail").replace({
+        id: 'receiveddate', // The extension we want to replace has this id as well
+        draw: function (data) {
+            var timeToRender = (data.received_date || data.sent_date || 0);
+
+            this.append(
+                $('&lt;div&gt;').addClass('date list').text(timeToRender)
+            );
+        }
+    });
+
+    print("All done, replaced time rendering method");
+
+});
+</pre>
+                </p>
+                <p>
+                    And now let's switch the order around:
+                    <pre class="experiment">
+require(["io.ox/core/extensions"], function (ext) {
+    // From the extension point 'io.ox/mail/detail' get the extension with
+    // the id 'subject' (which is passed to the callback)
+
+    ext.point("io.ox/mail/detail").get("subject", function (extension) {
+        // Put it last
+        extension.index = 300;
+    });
+
+    print("All done, subject is now shown after the body");
+
+});
+</pre>
+                </p>
+
+                <p>
+                    As you can see, unlike adding functionality, customizing and modifying existing extensions is always more of a grey box operation and might incur some risks when updating the software. For example when replacing a certain functionality parts of the original functionality will have to be reimplemented, and all that extra code will have to be maintained in the future. In essence extension points are better suited to integrating new functionality into the product rather than customizing existing functionality, but, when in a pinch or really wanting to change a certain part of the software, this is certainly a way to consider. At its most extreme use you could even disable all extensions for the mail detail view to register a set of your own extensions to completely change the way mails are displayed, at the cost of having to maintain your own detail view.
+                </p>
+
+            </section>
+
+            <p>
+                This wraps up our little tour of the OX App Suite extension point system. It is used to integrate new functionality into the OX App Suite and provides a system for 3rd party applications to become extensible themselves. It can be used to customize the existing UI at the cost of havint to know a bit more about the internals of our application. For now until more comprehensive documentation becomes available, look at the existing OX App Suite code to see concrete extensions and extension points in action.
+            </p>
+
+        </div>
+    </div>
+</div>

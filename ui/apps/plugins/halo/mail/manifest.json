@@ -1,0 +1,4 @@
+{
+	namespace: "plugins/halo",
+	requires: "webmail"
+}

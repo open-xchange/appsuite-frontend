@@ -18,20 +18,19 @@ define("io.ox/conversations/main",
      "io.ox/core/api/user",
      "io.ox/core/config",
      "io.ox/core/extensions",
-     "io.ox/core/i18n",
+     "io.ox/core/date",
      "less!io.ox/conversations/style.css",
      "io.ox/conversations/actions"
-    ], function (util, api, VGrid, userAPI, config, ext, i18n) {
+    ], function (util, api, VGrid, userAPI, config, ext, date) {
 
     "use strict";
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/conversations' }),
+    var app = ox.ui.createApp({ name: 'io.ox/conversations', title: 'Conversations' }),
         // app window
         win,
         // grid
         grid,
-        GRID_WIDTH = 330,
         // nodes
         left,
         right,
@@ -45,8 +44,7 @@ define("io.ox/conversations/main",
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/conversations',
-            title: "Conversations",
-            titleWidth: (GRID_WIDTH + 27) + "px",
+            title: 'Conversations',
             toolbar: true
         });
 
@@ -73,16 +71,12 @@ define("io.ox/conversations/main",
         }
 
         // left panel
-        left = $("<div/>")
+        left = $("<div>")
             .addClass("leftside border-right")
-            .css({
-                width: GRID_WIDTH + "px"
-            })
             .appendTo(win.nodes.main);
 
         // right panel
-        right = $("<div/>")
-            .css({ left: GRID_WIDTH + 1 + "px" })
+        right = $("<div>")
             .addClass("rightside io-ox-conversation")
             .appendTo(win.nodes.main);
 
@@ -132,7 +126,7 @@ define("io.ox/conversations/main",
             // const
             POLL_FREQ = 2000,
             // current user id
-            myself = String(config.get("identifier")),
+            myself = String(ox.user_id),
             // DOM nodes
             pane, controls, textarea,
             // functions
@@ -239,12 +233,10 @@ define("io.ox/conversations/main",
                 emoticons[str] + '.gif" class="emoticon">';
         };
 
-        var getTime = function (t) {
-            // copied from calendar/util -- should be all part of date.js soon
-            function isToday(timestamp) {
-                return new Date(timestamp).toDateString() === new Date().toDateString();
-            }
-            return isToday(t) ? i18n.date('HH:mm', t) : i18n.date('dd.MM.YY HH:mm', t);
+        var getTime = function (lt) {
+            var fmt = date.TIME, d = new date.Local(date.Local.utc(lt));
+            if (d.getDays() === new date.Local().getDays()) fmt += date.DATE;
+            return d.format(fmt);
         };
 
         drawMessages = function (list) {

@@ -13,20 +13,27 @@
 
 /* assignments */
 
-@link-color: @accent1;
+@link-color: #08c;
+@link-on-dark: #3BF;
 @link-color-dark: @accent1-dark;
 @inline-link-color: @accent1-bright;
 @action-link-color: @accent1;
 @person-link-color: @accent1-bright;
 
 @toolbar: #08c;
-@toolbar-control: #555;
 @app-favorites: @accent2;
 @outline-color: @accent1;
+
+@topbar-font-size: 13px;
+@window-head-font-size: 13px;
+@vgrid-font-size: 13px;
+@inline-link-font-size: 14px;
+@inline-links-margin: 18px 0;
 
 /* individual definitions */
 
 @font-light: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+@font-normal: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
 @wallpaper-fallback-color: #ffffff;
 @wallpaper-color1: rgba(255, 255, 255, 1);
@@ -38,8 +45,14 @@
 
 @background: #fff;
 
-@selected-background: #08c;
-@selected-color: #5C9CCC;
+@selected-background: #39A9E1;
+@selected-color: #F0FAFF;
+
+@enabled-background: #ddd;
+@enabled-color: #000;
+
+@disabled-background: #ccc;
+@disabled-color: #999;
 
 @status-background: #F0F0F0;
 @status-color: #000;
@@ -47,8 +60,12 @@
 @head-background: @menu-background;
 @head-color: @menu-color;
 
-@window-title-color: #000;
-@toolbar-link-color: @toolbar;
+@window-head-top: #222;
+@window-head-bottom: #111;
+@foldertree-sidepanel-background: #333;
+
+@window-title-color: #fff;
+@toolbar-link-color: lighten(@toolbar, 20%);
 
 @topbar-background: #222;
 @topbar-background-alt: lighten(@topbar-background, 8%);
@@ -58,13 +75,13 @@
 @topbar-launcher-color-active: #fff;
 @topbar-launcher-background-hover: #333;
 @topbar-launcher-background-active: #000;
-@topbar-progress-color: #555;
+@topbar-progress-color: #444;
 
-@window-control-color: @toolbar-control;
-@window-control-border-color: @toolbar-control;
-@window-control-background-hover: rgba(255, 255, 255, 0.5);
-@window-control-border-color-hover: #111;
-@window-control-color-hover: #111;
+@window-control-color: #aaa;
+@window-control-border-color: #ccc;
+@window-control-color-hover: #333;
+@window-control-border-color-hover: #aaa;
+@window-control-background-hover: #fff;
 
 @welcome-background: #eee;
 @welcome-background-rgba: rgba(255, 255, 255, 0.25);
@@ -79,5 +96,125 @@
 @inline-link-border-color: #eee;
 
 @mail-priority: #fc0;
+@mail-attachment-link-color: #333;
+@mail-attachment-link-color-hover: #000;
 
 @list-highlight: #ffc;
+
+// Default colors
+
+@color_red: #cc0000;
+@color_orange: #f89406;
+@color_yellow: #ffff00;
+@color_lightgreen: #92D050;
+@color_green: #1A8D1A;
+@color_lightblue: lighten(#049cdb, 25%);
+@color_blue: darken(#049cdb, 5%);
+@color_purple: #7E16CF;
+@color_pink: #E01CD9;
+@color_gray: #aaa;
+
+// Dimensions
+
+@window-head-width: 50px;
+@window-content-shift: 250px;
+
+// Mixins
+
+.box-sizing(@boxmodel: content-box) {
+    -webkit-box-sizing: @boxmodel;
+    -moz-box-sizing: @boxmodel;
+    -ms-box-sizing: @boxmodel;
+    box-sizing: @boxmodel;
+}
+
+.user-select(@select: none) {
+    -webkit-user-select: @select;
+    -moz-user-select: @select;
+    -ms-user-select: @select;
+    user-select: @select;
+}
+
+.border-radius(@radius: 0px) {
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    -ms-border-radius: @radius;
+    border-radius: @radius;
+}
+
+.box-shadow(@shadow: none) {
+    -webkit-box-shadow: @shadow;
+    -moz-box-shadow: @shadow;
+    -ms-box-shadow: @shadow;
+    box-shadow: @shadow;
+}
+
+.vertical-gradient(@startColor: #888888, @endColor: #333333) {
+    background-color: mix(@startColor, @endColor, 60%);
+    background-image: -moz-linear-gradient(top, @startColor, @endColor);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@startColor), to(@endColor));
+    background-image: -webkit-linear-gradient(top, @startColor, @endColor);
+    background-image: -o-linear-gradient(top, @startColor, @endColor);
+    background-image: linear-gradient(to bottom, @startColor, @endColor);
+    background-repeat: repeat-x;
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@startColor),argb(@endColor)));
+}
+
+.radial-gradient(@color1: #000000, @color2: #555555, @color3: #ffffff) {
+    background: mix(@color1, @color3, 60%); /* Old browsers */
+    background: -moz-radial-gradient(center, circle cover, @color1 0%, @color2 40%, @color3 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,@color1), color-stop(31%,@color2), color-stop(100%,@color3)); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover,  @color1 0%,@color2 31%,@color3 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover,  @color1 0%,@color2 31%,@color3 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover,  @color1 0%,@color2 31%,@color3 100%); /* IE10+ */
+    background: radial-gradient(center, ellipse cover,  @color1 0%,@color2 31%,@color3 100%); /* W3C */
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@color1),argb(@color3)));
+}
+
+.transition(@transition: all 1s linear) {
+    -webkit-transition: @transition;
+    -moz-transition: @transition;
+    -ms-transition: @transition;
+    transition: @transition;
+}
+
+.animation(@animation) {
+    -webkit-animation: @animation;
+    animation: @animation;
+}
+
+.animation-name(@name) {
+    -webkit-animation-name: @name;
+    -moz-animation-name: @name;
+    -ms-animation-name: @name;
+    animation-name: @name;
+}
+
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.overflow(@type: auto) {
+    overflow: @type;
+    -webkit-overflow-scrolling: touch;
+}
+
+.overflow-x(@type: auto) {
+    overflow-x: @type;
+    -webkit-overflow-scrolling: touch;
+}
+
+.overflow-y(@type: auto) {
+    overflow-y: @type;
+    -webkit-overflow-scrolling: touch;
+}
+
+.backface-visibility(@type: hidden) {
+   .touch & {
+        backface-visibility: @type;
+        -webkit-backface-visibility: @type;
+        -moz-backface-visibility: @type;
+    }
+}

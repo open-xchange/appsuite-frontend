@@ -12,7 +12,7 @@
  */
 
 define("io.ox/core/api/user",
-    ["io.ox/core/http", "io.ox/core/api/factory"], function (http, apiFactory) {
+    ["io.ox/core/http", "io.ox/core/api/factory", "gettext!io.ox/core"], function (http, apiFactory, gt) {
 
     "use strict";
 
@@ -30,7 +30,7 @@ define("io.ox/core/api/user",
             },
             list: {
                 action: "list",
-                columns: "1,20,500,524"
+                columns: "1,20,500,524,555"
             },
             get: {
                 action: "get"
@@ -47,11 +47,90 @@ define("io.ox/core/api/user",
         }
     });
 
+    // Update
+    api.update =  function (o) {
+
+        if (_.isEmpty(o.data)) {
+            return $.when();
+        } else {
+            return http.PUT({
+                    module: 'user',
+                    params: {
+                        action: 'update',
+                        id: o.id,
+                        folder: o.folder,
+                        timestamp: o.timestamp
+                    },
+                    data: o.data,
+                    appendColumns: false
+                })
+                .pipe(function () {
+                    // get updated contact
+                    return api.get({ id: o.id }, false)
+                        .pipe(function (data) {
+                            return $.when(
+                                api.caches.get.add(data),
+                                api.caches.all.clear(),
+                                api.caches.list.remove({ id: o.id })
+                                // TODO: What about the contacts cache?
+                            )
+                            .done(function () {
+                                api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
+                                api.trigger('update', data);
+                                api.trigger('refresh.list');
+                                // TODO: What about the corresponding contact events?
+                            });
+                        });
+                });
+        }
+    };
+
+
+    api.editNewImage = function (o, changes, file) {
+        console.log("EDIT NEW IMAGE ENTERED");
+        var form = new FormData();
+        form.append('file', file);
+        form.append('json', JSON.stringify(changes));
+
+        return http.UPLOAD({
+                module: 'user',
+                params: { action: 'update', id: o.id, timestamp: o.timestamp || _.now() },
+                data: form,
+                fixPost: true
+            })
+            .pipe(function (data) {
+                $.when(
+                    api.caches.get.clear(),
+                    api.caches.all.clear(),
+                    api.caches.list.clear()
+                ).pipe(function () {
+                    api.trigger('refresh.list');
+                    api.trigger('update', {
+                        id: o.id
+                    });
+                });
+
+                return data;
+            });
+    };
+
+    api.getName = function (id) {
+        return api.get({ id: id }).pipe(function (data) {
+            return _.noI18n(data.display_name || data.email1 || '');
+        });
+    };
+
+    api.getGreeting = function (id) {
+        return api.get({ id: id }).pipe(function (data) {
+            return _.noI18n(data.first_name || data.display_name || data.email1 || '');
+        });
+    };
+
     api.getTextNode = function (id) {
-        var node = document.createTextNode("");
+        var node = document.createTextNode(_.noI18n(''));
         api.get({ id: id })
             .done(function (data) {
-                node.nodeValue = data.display_name || data.email1;
+                node.nodeValue = _.noI18n(data.display_name || data.email1);
             })
             .always(function () {
                 _.defer(function () { // use defer! otherwise we return null on cache hit
@@ -60,23 +139,17 @@ define("io.ox/core/api/user",
             });
         return node;
     };
-    
-    api.getLink = function (id, options) {
-        return $("<a>", {href: '#'}).append(api.getTextNode(id)).on("click", function (e) {
-            e.preventDefault();
-            require(["io.ox/core/extensions"], function (ext) {
-                ext.point("io.ox/core/person:action").each(function (ext) {
-                    _.call(ext.action, {internal_userid: id}, e);
-                });
-            });
-        });
+
+    api.getLink = function (id, text) {
+        text = text ? $.txt(_.noI18n(text)) : api.getTextNode(id);
+        return $('<a href="#" class="halo-link">').append(text).data({ internal_userid: id });
     };
 
-    api.getPictureURL = function (id) {
+    api.getPictureURL = function (id, options) {
         return $.when(api.get({ id: id }), require(["io.ox/contacts/api"]))
             .pipe(
                 function (data, contactsAPI) {
-                    return contactsAPI.getPictureURL(data[0] || data);
+                    return contactsAPI.getPictureURL(data[0] || data, options);
                 },
                 function () {
                     return ox.base + "/apps/themes/default/dummypicture.png";
@@ -84,14 +157,14 @@ define("io.ox/core/api/user",
             );
     };
 
-    api.getPicture = function (id) {
+    api.getPicture = function (id, options) {
         var node = $("<div>"),
             clear = function () {
                 _.defer(function () { // use defer! otherwise we return null on cache hit
                     node = clear = null; // don't leak
                 });
             };
-        api.getPictureURL(id)
+        api.getPictureURL(id, options)
             .done(function (url) {
                 node.css("backgroundImage", "url(" + url + ")");
             })

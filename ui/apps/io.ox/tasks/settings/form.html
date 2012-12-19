@@ -1,0 +1,62 @@
+<part id='io.ox/tasks/settings'>
+    <extension id='title'>
+        <div>
+            <div class="clear-title">{{=it.strings.TITLE_TASKS}}</div>
+            <div class="settings sectiondelimiter"></div>
+        </div>
+    </extension>
+    <extension id='common'>
+        <legend class="sectiontitle">{{=it.strings.TITLE_COMMON}}</legend>
+        <div class="control-group expertmode">
+            <label for="interval" class="control-label">{{=it.strings.INTERVAL_IN_MINUTES}}</label>
+            <div class="controls">
+                <label class="select">
+                    <select data-property="interval" id="interval" class="input-xlarge">
+                        {{~it.optionsIntervalMinutes :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
+                    </select>
+                </label>
+            </div>
+        </div>
+    </extension>
+    <extension id='notifications'>
+        <legend class="sectiontitle expertmode">{{=it.strings.TITLE_NOTIFICATIONS_FOR_TASKS}}</legend>
+        <div class="form-horizontal">
+            <div class="control-group expertmode">
+                <label class="control-label">{{=it.strings.TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED}}</label>
+                <div class="controls">
+                    <label class="radio">{{=it.optionsYesAnswers.label}}
+                        <input type="radio" name="notifyNewModifiedDeleted" data-property="notifyNewModifiedDeleted" value="{{=it.optionsYesAnswers.value}}">
+                    </label>
+                    <label class="radio">{{=it.optionsNoAnswers.label}}
+                        <input type="radio" name="notifyNewModifiedDeleted" data-property="notifyNewModifiedDeleted" value="{{=it.optionsNoAnswers.value}}">
+                    </label>
+                </div>
+            </div>
+        </div>
+        <legend class="sectiontitle expertmode">{{=it.strings.TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED}}</legend>
+        <div class="form-horizontal">
+            <div class="control-group expertmode">
+                <label class="control-label">{{=it.strings.NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR}}</label>
+                <div class="controls">
+                    <label class="radio">{{=it.optionsYesAnswers.label}}
+                        <input type="radio" name="notifyAcceptedDeclinedAsCreator" data-property="notifyAcceptedDeclinedAsCreator" value="{{=it.optionsYesAnswers.value}}">
+                    </label>
+                    <label class="radio">{{=it.optionsNoAnswers.label}}
+                        <input type="radio" name="notifyAcceptedDeclinedAsCreator" data-property="notifyAcceptedDeclinedAsCreator" value="{{=it.optionsNoAnswers.value}}">
+                    </label>
+                </div>
+            </div>
+            <div class="control-group expertmode">
+                <label class="control-label">{{=it.strings.NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT}}</label>
+                <div class="controls">
+                    <label class="radio">{{=it.optionsYesAnswers.label}}
+                        <input type="radio" name="notifyAcceptedDeclinedAsParticipant" data-property="notifyAcceptedDeclinedAsParticipant" value="{{=it.optionsYesAnswers.value}}">
+                    </label>
+                    <label class="radio">{{=it.optionsNoAnswers.label}}
+                        <input type="radio" name="notifyAcceptedDeclinedAsParticipant" data-property="notifyAcceptedDeclinedAsParticipant" value="{{=it.optionsNoAnswers.value}}">
+                    </label>
+                </div>
+            </div>
+        </div>
+    </extension>
+</part>

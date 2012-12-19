@@ -12,63 +12,49 @@
  * @author Martin Holzhauer <martin.holzhauer@open-xchange.com>
  */
 
-define.async('io.ox/mail/write/main',
+define('io.ox/mail/write/main',
     ['io.ox/mail/api',
      'io.ox/mail/util',
-     'io.ox/mail/write/textile',
      'io.ox/core/extensions',
      'io.ox/core/config',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
-     'io.ox/core/i18n',
      'io.ox/core/api/user',
+     'io.ox/core/api/account',
      'io.ox/core/tk/upload',
-     'io.ox/core/tk/autocomplete',
      'io.ox/mail/model',
      'io.ox/mail/write/view-main',
-     'gettext!io.ox/mail/mail',
+     'io.ox/core/notifications',
+     'settings!io.ox/mail',
+     'gettext!io.ox/mail',
      'less!io.ox/mail/style.css',
-     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n, userAPI, upload, autocomplete, MailModel, WriteView, gt) {
+     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, notifications, settings, gt) {
 
     'use strict';
 
-    // actions (define outside of multi-instance app)
-    ext.point('io.ox/mail/write/actions/send').extend({
-        id: 'send',
-        action: function (app) {
-            app.send();
-        }
-    });
+    var ACTIONS = 'io.ox/mail/write/actions';
 
     // actions (define outside of multi-instance app)
-    ext.point('io.ox/mail/write/actions/draft').extend({
-        id: 'send',
-        action: function (app) {
-            app.saveDraft().done(function (data) {
-                app.setMsgRef(data.data);
-            }).fail(function (e) {
-
-            });
+    ext.point(ACTIONS + '/send').extend({
+        action: function (baton) {
+            baton.app.send();
         }
     });
 
-    ext.point('io.ox/mail/write/actions/proofread').extend({
-        id: 'proofread',
-        action: function (app) {
-            app.proofread();
+    // actions (define outside of multi-instance app)
+    ext.point(ACTIONS + '/draft').extend({
+        action: function (baton) {
+            baton.app.saveDraft();
         }
     });
 
-    // links
-//    ext.point('io.ox/mail/write/links/toolbar').extend(new ext.Link({
-//        index: 200,
-//        id: 'proofread',
-//        label: 'Proofread',
-//        ref: 'io.ox/mail/write/actions/proofread'
-//    }));
+    ext.point(ACTIONS + '/discard').extend({
+        action: function (baton) {
+            baton.app.quit();
+        }
+    });
 
-    // default sender (used to set from address)
-    var defaultSender = [];
+    var UUID = 1;
 
     // multi instance pattern
     function createInstance() {
@@ -77,19 +63,28 @@ define.async('io.ox/mail/write/main',
             editor,
             editorHash = {},
             currentSignature = '',
-            editorMode = '',
-            mailState,
+            editorMode,
+            defaultEditorMode = settings.get('messageFormat'),
             composeMode,
             view,
-            model;
+            model,
+            previous;
 
-        model = new MailModel();
-        view = new WriteView({model: model});
+        function getDefaultEditorMode() {
+            if (defaultEditorMode === 'text') return 'text';
+            return 'html';
+        }
 
         app = ox.ui.createApp({
             name: 'io.ox/mail/write',
-            title: 'Compose'
+            title: 'Compose',
+            userContent: true
         });
+
+        model = new MailModel();
+        view = new WriteView({ model: model, app: app });
+
+        view.ID = 'YEAH #' + (UUID++);
 
         app.getView = function () {
             return view;
@@ -97,54 +92,59 @@ define.async('io.ox/mail/write/main',
 
         window.newmailapp = function () { return app; };
 
-        app.STATES = {
-            'CLEAN': 1,
-            'DIRTY': 2
-        };
-
-        mailState = app.STATES.CLEAN;
-
-        app.getState = function () {
-            return mailState;
-        };
-
-        app.markDirty = function () {
-            mailState = app.STATES.DIRTY;
-        };
-
-        app.markClean = function () {
-            mailState = app.STATES.CLEAN;
-        };
-
-
-        app.getView().signatures = config.get('gui.mail.signatures', []);
+        view.signatures = _(config.get('gui.mail.signatures') || []).map(function (obj) {
+            obj.signature_name = _.noI18n(obj.signature_name);
+            return obj;
+        });
 
         app.setSignature = function (e) {
 
-            var self = this;
-
             var index = e.data.index,
-                signature, text;
+                signature, text,
+                ed = this.getEditor(),
+                isHTML = !!ed.removeBySelector;
 
-            if (currentSignature) {
-                // remove current signature from editor
-                self.getEditor().replaceParagraph(currentSignature, '');
-                currentSignature = '';
+            // remove current signature from editor
+            if (isHTML) {
+                ed.removeBySelector('.io-ox-signature');
+            } else {
+                if (currentSignature) {
+                    ed.replaceParagraph(currentSignature, '');
+                    currentSignature = '';
+                }
             }
 
             // add signature?
-            if (index < app.getView().signatures.length) {
-                signature = app.getView().signatures[index];
-                text = $.trim(signature.signature_text);
-                self.getEditor().appendContent(text);
-                self.getEditor().scrollTop('bottom');
+            if (index < view.signatures.length) {
+                signature = view.signatures[index];
+                text = $.trim(signature.content);
+                if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
+
+                if (isHTML) {
+                    if (signature.misc.insertion === 'below') {
+                        ed.appendContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
+                        ed.scrollTop('bottom');
+                    } else {
+                        ed.prependContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
+                        ed.scrollTop('top');
+                    }
+                } else {
+                    if (signature.misc.insertion === 'below') {
+                        ed.appendContent(text);
+                        ed.scrollTop('bottom');
+                    } else {
+                        ed.prependContent(text);
+                        ed.scrollTop('top');
+                    }
+                }
                 currentSignature = text;
             }
+
+            ed.focus();
         };
 
-        function showMessage(msg, header, sticky) {
-            console.log(arguments);
-            $('#myGrowl').jGrowl(msg, {header: header, sticky: sticky});
+        function focus(name) {
+            app.getWindowNode().find('input[name="' + name + '"], input[data-type="' + name + '"]').focus().select();
         }
 
         // launcher
@@ -152,23 +152,20 @@ define.async('io.ox/mail/write/main',
 
             win = ox.ui.createWindow({
                 name: 'io.ox/mail/write',
-                title: '',
-                titleWidth: (app.getView().GRID_WIDTH + 10) + 'px',
-                toolbar: true,
-                close: true
+                chromeless: true
             });
 
+            // due to tinyMCE's iframe
+            win.detachable = false;
+
             app.setWindow(win);
-
-            app.getView().render(app);
-
-
+            view.render();
 
             // add panels to windows
             win.nodes.main
             .addClass('io-ox-mail-write')
             .append(
-                app.getView().form = $('<form>', {
+                view.form = $('<form>', {
                     name: 'compose',
                     method: 'post',
                     enctype: 'multipart/form-data'
@@ -176,31 +173,34 @@ define.async('io.ox/mail/write/main',
                 .addClass('form-inline')
                 .append(
                     $('<input>', { type: 'hidden', name: 'msgref', value: '' }),
-                    app.getView().main,
-                    app.getView().scrollpane
+                    $('<input>', { type: 'hidden', name: 'sendtype', value: mailAPI.SENDTYPE.NORMAL }),
+                    view.leftside,
+                    view.rightside
                 )
             );
 
-            var dropZone = upload.dnd.createDropZone({'type': 'single'});
-            dropZone.on('drop', function (e, file) {
-                app.getView().form.find('input[type=file]').last()
-                    .prop('file', file)
-                    .trigger('change');
-                app.getView().showSection('attachments');
-            });
+            if (_.browser.IE === undefined || _.browser.IE > 9) {
+                var dropZone = upload.dnd.createDropZone({'type': 'single'});
+                dropZone.on('drop', function (e, file) {
+                    view.form.find('input[type=file]').last()
+                        .prop('file', file)
+                        .trigger('change');
+                    view.showSection('attachments');
+                });
+            }
 
             win.on('show', function () {
                 if (app.getEditor()) {
                     app.getEditor().handleShow();
                 }
-                dropZone.include();
+                if (dropZone) {dropZone.include(); }
             });
 
             win.on('hide', function () {
                 if (app && app.getEditor()) {
                     app.getEditor().handleHide();
                 }
-                dropZone.remove();
+                if (dropZone) { dropZone.remove(); }
             });
         });
 
@@ -209,12 +209,10 @@ define.async('io.ox/mail/write/main',
          */
         app.setFormat = (function () {
 
-            app.markDirty();
-
             function load(mode, content) {
                 var editorSrc = 'io.ox/core/tk/' + (mode === 'html' ? 'html-editor' : 'text-editor');
                 return require([editorSrc]).pipe(function (Editor) {
-                    return (editorHash[mode] = new Editor(app.getView().textarea))
+                    return (editorHash[mode] = new Editor(view.textarea))
                         .done(function () {
                             app.setEditor(editorHash[mode]);
                             app.getEditor().setPlainText(content);
@@ -232,7 +230,7 @@ define.async('io.ox/mail/write/main',
 
             function changeMode(mode) {
                 // be busy
-                app.getView().textarea.attr('disabled', 'disabled').busy();
+                view.textarea.attr('disabled', 'disabled').busy();
                 if (app.getEditor()) {
                     var content = app.getEditor().getPlainText();
                     app.getEditor().clear();
@@ -274,70 +272,95 @@ define.async('io.ox/mail/write/main',
         }());
 
         app.setSubject = function (str) {
-            app.markDirty();
-            app.getView().subject.val(str || '');
+            view.subject.val(str || '');
         };
 
         app.setRawBody = function (str) {
-            app.markDirty();
             app.getEditor().setContent(str);
         };
 
+        app.getPrimaryAddressFromFolder = function (data) {
+
+            var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
+                accountID = mailAPI.getAccountIDFromFolder(folder_id);
+
+            return accountAPI.get(accountID).pipe(function (data) {
+                return [data.personal || '', data.primary_address];
+            });
+        };
+
+        app.getFrom = function () {
+            return (view.leftside.find('.fromselect-wrapper select').val() || '')
+                .split(/\|/).reverse();
+        };
+
+        app.setFrom = function (data) {
+            return this.getPrimaryAddressFromFolder(data).done(function (from) {
+                var value = from[1] + '|' + (from[0] || from[1]);
+                view.leftside.find('select').val(value);
+            });
+        };
+
         app.setBody = function (str) {
-            app.markDirty();
             // get default signature
-            var ds = _(app.getView().signatures)
+            var ds = _(view.signatures)
                     .find(function (o) {
-                        return o.signature_default === true;
+                        return o.id === settings.get('defaultSignature');
                     }),
-                signature = ds ? $.trim(ds.signature_text) : '',
-                pos = ds ? ds.position : 'below',
                 content = $.trim(str);
+
             // set signature?
             if (ds) {
+
+                var ln2br = function (str) {
+                    return String(str || '').replace(/\r/g, '')
+                      .replace(new RegExp('\\n', 'g'), '<br>'); // '\n' is for IE
+                };
+
+                if (_.isString(ds.misc)) { ds.misc = JSON.parse(ds.misc); }
+
+                var signature = ds ? $.trim(ds.content) : '',
+                pos = ds ? ds.misc.insertion : 'below';
                 // remember as current signature
                 currentSignature = signature;
                 // yep
                 if (editorMode === 'html') {
                     // prepare signature for html
-                    signature = '<p>' + signature.replace(/\n/g, '<br>') + '</p>';
-                    // html
-                    app.getEditor().setContent('<p></p>' + (pos === 'above' ? signature + content : content + signature));
+                    signature = '<p class="io-ox-signature">' + ln2br(signature) + '</p>';
+                    // text/html
+                    content = '<p></p>' + (pos === 'above' ? signature + content : content + signature);
                 } else {
-                    // plain text
-                    if (pos === 'above') {
-                        app.getEditor().setContent('\n\n' + signature + (content !== '' ? '\n\n' + content : ''));
-                    } else {
-                        app.getEditor().setContent('\n\n' + (content !== '' ? content + '\n\n' : '') + signature);
-                    }
+                    // text/plain
+                    content = pos === 'above' ?
+                        '\n\n' + signature + (content !== '' ? '\n\n' + content : '') :
+                        '\n\n' + (content !== '' ? content + '\n\n' : '') + signature;
                 }
-
             } else {
                 // no signature
-                app.getEditor().setContent(content !== '' ? (editorMode === 'html' ? '<p></p>' : '\n\n') + content : '');
+                content = content !== '' ? (editorMode === 'html' ? '<p></p>' : '\n\n') + content : '';
             }
+            app.getEditor().setContent(content);
         };
 
         app.setTo = function (list) {
-            app.getView().addRecipients('to', list || []);
+            view.addRecipients('to', list || []);
         };
 
         app.setCC = function (list) {
-            app.getView().addRecipients('cc', list || []);
+            view.addRecipients('cc', list || []);
             if (list && list.length) {
-                app.getView().showSection('cc');
+                view.showSection('cc', false);
             }
         };
 
         app.setBCC = function (list) {
-            app.getView().addRecipients('bcc', list || []);
+            view.addRecipients('bcc', list || []);
             if (list && list.length) {
-                app.getView().showSection('bcc');
+                view.showSection('bcc', false);
             }
         };
 
         app.setAttachments = function (list) {
-            app.markDirty();
             // look for real attachments
             var found = false;
             _(list || []).each(function (attachment) {
@@ -345,53 +368,86 @@ define.async('io.ox/mail/write/main',
                     // add as linked attachment
                     attachment.type = 'file';
                     found = true;
-                    app.getView().form.find('input[type=file]').last()
+                    view.form.find('input[type=file]').last()
                         .prop('attachment', attachment)
                         .trigger('change');
                 }
             });
             if (found) {
-                app.getView().showSection('attachments');
+                view.showSection('attachments');
+            }
+        };
+
+        app.setNestedMessages = function (list) {
+            var found = false;
+            _(list || []).each(function (obj) {
+                found = true;
+                view.form.find('input[type=file]').last()
+                    .prop('nested', { message: obj, name: obj.subject, content_type: 'message/rfc822' })
+                    .trigger('change');
+            });
+            if (found) {
+                view.showSection('attachments');
+            }
+        };
+
+        app.addFiles = function (list) {
+            var found = false;
+            _(list || []).each(function (obj) {
+                found = true;
+                view.form.find('input[type=file]').last()
+                    .prop('file', obj)
+                    .trigger('change');
+            });
+            if (found) {
+                view.showSection('attachments');
             }
         };
 
         app.setPriority = function (prio) {
-            app.markDirty();
             // be robust
             prio = parseInt(prio, 10) || 3;
             prio = prio < 3 ? 1 : prio;
             prio = prio > 3 ? 5 : prio;
             // set
-            app.getView().form.find('input[name=priority][value=' + prio + ']')
+            view.form.find('input[name=priority][value=' + prio + ']')
                 .prop('checked', true);
             // high priority?
             if (prio === 1) {
-                app.getView().priorityOverlay.addClass('high');
+                view.priorityOverlay.addClass('high');
             }
         };
 
         app.setAttachVCard = function (bool) {
-            app.markDirty();
             // set
-            app.getView().form.find('input[name=vcard]').prop('checked', !!bool);
-        };
-
-        app.setDeliveryReceipt = function (bool) {
-            app.markDirty();
-            // set
-            app.getView().form.find('input[name=receipt]').prop('checked', !!bool);
+            view.form.find('input[name=vcard]').prop('checked', !!bool);
         };
 
         app.setMsgRef = function (ref) {
-            app.markDirty();
-            app.getView().form.find('input[name=msgref]').val(ref || '');
+            view.form.find('input[name=msgref]').val(ref || '');
+        };
+
+        app.setSendType = function (type) {
+            view.form.find('input[name=sendtype]').val(type || mailAPI.SENDTYPE.NORMAL);
         };
 
         var windowTitles = {
-            compose: 'Compose new email',
-            replyall: 'Reply all',
-            reply: 'Reply',
-            forward: 'Forward'
+            compose: gt('Compose new mail'),
+            replyall: gt('Reply all'),
+            reply: gt('Reply'),
+            forward: gt('Forward')
+        };
+
+        app.dirty = function (flag) {
+            if (flag === true) {
+                previous = null; // always dirty this way
+                return this;
+            } else if (flag === false) {
+                previous = app.getMail();
+                return this;
+            } else {
+                return !_.isEqual(previous, app.getMail());
+            }
         };
 
         app.setMail = function (mail) {
@@ -399,35 +455,51 @@ define.async('io.ox/mail/write/main',
             mail = mail || {};
             mail.data = mail.data || {};
             mail.mode = mail.mode || 'compose';
-            mail.format = mail.format || 'text';
+            mail.format = mail.format || getDefaultEditorMode();
             mail.initial = mail.initial || false;
+
+            //config settings
+            mail.data.vcard = settings.get('appendVcard');
+
             // call setters
             var data = mail.data;
+
+            this.setFrom(data);
             this.setSubject(data.subject);
             this.setTo(data.to);
             this.setCC(data.cc);
             this.setBCC(data.bcc);
             this.setAttachments(data.attachments);
+            this.setNestedMessages(data.nested_msgs);
             this.setPriority(data.priority || 3);
             this.setAttachVCard(data.vcard !== undefined ? data.vcard : config.get('mail.vcard', false));
-            this.setDeliveryReceipt(data.disp_notification_to !== undefined ? data.disp_notification_to : false);
             this.setMsgRef(data.msgref);
-            // apply mode
-            var title = data.subject ? data.subject : windowTitles[composeMode = mail.mode];
-            win.setTitle(title);
+            this.setSendType(data.sendtype);
+            // add files (from file storage)
+            this.addFiles(data.infostore_ids);
+            // app title
+            var title = windowTitles[composeMode = mail.mode];
+            win.nodes.main.find('h1.title').text(title);
+            title = data.subject ? _.noI18n(data.subject) : title;
             app.setTitle(title);
             // set signature
             currentSignature = mail.signature || '';
             // set format
-            return app.setFormat(mail.format)
-                .done(function () {
-                    // set body
-                    var content = data.attachments && data.attachments.length ? data.attachments[0].content : '';
-                    if (mail.format === 'text') {
-                        content = content.replace(/<br>\n?/g, '\n');
-                    }
-                    app[mail.initial ? 'setBody' : 'setRawBody'](content);
-                });
+            return app.setFormat(mail.format).done(function () {
+                // set body
+                var content = data.attachments && data.attachments.length ? (data.attachments[0].content || '') : '';
+                if (mail.format === 'text') {
+                    content = content.replace(/<br>\n?/g, '\n');
+                }
+                // image URL fix
+                if (editorMode === 'html') {
+                    content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
+                }
+                app[mail.initial ? 'setBody' : 'setRawBody'](content);
+
+                // remember this state for dirty check
+                previous = app.getMail();
+            });
         };
 
         app.failSave = function () {
@@ -435,16 +507,19 @@ define.async('io.ox/mail/write/main',
             delete mail.files;
             return {
                 module: 'io.ox/mail/write',
+                description: gt('Mail') + ': ' + (mail.data.subject || gt('No subject')),
                 point: mail
             };
         };
 
         app.failRestore = function (point) {
             var def = $.Deferred();
-            win.show(function () {
-                app.setMail(point)
-                .done(function () {
+            win.busy().show(function () {
+                _.url.hash('app', 'io.ox/mail/write:' + point.mode);
+                app.setMail(point).done(function () {
+                    app.dirty(true);
                     app.getEditor().focus();
+                    win.idle();
                     def.resolve();
                 });
             });
@@ -457,10 +532,13 @@ define.async('io.ox/mail/write/main',
         app.compose = function (data) {
 
             // register mailto!
-            if (navigator.registerProtocolHandler) {
+            // only for browsers != firefox due to a bug in firefox
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=440620
+            // maybe this will be fixed in the future by mozilla
+            if (navigator.registerProtocolHandler && !_.browser.Firefox) {
                 var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
                 navigator.registerProtocolHandler(
-                    'mailto', url + '#app=io.ox/mail/write:compose&mailto=%s', 'OX7 Mailer'
+                    'mailto', url + '#app=io.ox/mail/write:compose&mailto=%s', ox.serverConfig.productNameMail
                 );
             }
 
@@ -475,23 +553,31 @@ define.async('io.ox/mail/write/main',
                 data = {
                     to: [['', tmp[1]]],
                     subject: params.subject,
-                    attachments: [{ content: params.body }]
+                    attachments: [{ content: params.body || '' }]
                 };
                 // clear hash
                 _.url.hash('mailto', null);
             }
 
-            win.show(function () {
+            _.url.hash('app', 'io.ox/mail/write:compose');
+
+            win.busy().show(function () {
                 app.setMail({ data: data, mode: 'compose', initial: true })
                 .done(function () {
                     if (mailto) {
                         app.getEditor().focus();
                     } else if (data && data.to) {
-                        $('input[name=subject]').focus().select();
+                        focus('subject');
                     } else {
-                        $('input[data-type=to]').focus().select();
+                        focus('to');
                     }
+                    win.idle();
                     def.resolve();
+                })
+                .fail(function () {
+                    notifications.yell('error', gt('An error occured. Please try again.'));
+                    app.dirty(false).quit();
+                    def.reject();
                 });
             });
 
@@ -499,78 +585,106 @@ define.async('io.ox/mail/write/main',
         };
 
         /**
-         * Reply all
+         * Reply (all)
          */
-        app.replyall = function (obj) {
-            var def = $.Deferred();
-            win.show(function () {
-                mailAPI.replyall(obj, editorMode || 'text')
-                .done(function (data) {
-                    app.setMail({ data: data, mode: 'replyall', initial: true })
-                    .done(function () {
-                        app.getEditor().focus();
-                        def.resolve();
-                    });
-                });
-            });
-            return def;
-        };
+        function reply(type) {
 
-        /**
-         * Reply
-         */
-        app.reply = function (obj) {
-            var def = $.Deferred();
-            win.show(function () {
-                mailAPI.reply(obj, editorMode || 'text')
-                .done(function (data) {
-                    app.setMail({ data: data, mode: 'reply', initial: true })
-                    .done(function () {
-                        app.getEditor().focus();
-                        def.resolve();
+            return function (obj) {
+
+                var def = $.Deferred();
+                _.url.hash('app', 'io.ox/mail/write:' + type);
+
+                app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
+
+                function cont(obj) {
+                    win.busy().show(function () {
+                        mailAPI[type](obj, getDefaultEditorMode())
+                        .done(function (data) {
+                            data.sendtype = mailAPI.SENDTYPE.REPLY;
+                            app.setMail({ data: data, mode: type, initial: true })
+                            .done(function () {
+                                app.getEditor().focus();
+                                view.scrollpane.scrollTop(0);
+                                win.idle();
+                                def.resolve();
+                            });
+                        })
+                        .fail(function () {
+                            notifications.yell('error', gt('An error occured. Please try again.'));
+                            app.dirty(false).quit();
+                            def.reject();
+                        });
                     });
-                });
-            });
-            return def;
-        };
+                }
+
+                if (obj === undefined) {
+                    cont({ folder: _.url.hash('folder'), id: _.url.hash('id') });
+                } else {
+                    cont(obj);
+                }
+
+                return def;
+            };
+        }
+
+        app.replyall = reply('replyall');
+        app.reply = reply('reply');
 
         /**
          * Forward
          */
         app.forward = function (obj) {
+
             var def = $.Deferred();
-            win.show(function () {
-                mailAPI.forward(obj, editorMode || 'text')
+            _.url.hash('app', 'io.ox/mail/write:forward');
+
+            app.cid = 'io.ox/mail:forward.' + _.cid(obj);
+
+            win.busy().show(function () {
+                mailAPI.forward(obj, getDefaultEditorMode())
                 .done(function (data) {
+                    data.sendtype = mailAPI.SENDTYPE.FORWARD;
                     app.setMail({ data: data, mode: 'forward', initial: true })
                     .done(function () {
-                        $('input[data-type=to]').focus().select();
+                        focus('to');
+                        win.idle();
                         def.resolve();
                     });
+                })
+                .fail(function () {
+                    notifications.yell('error', gt('An error occured. Please try again.'));
+                    app.dirty(false).quit();
+                    def.reject();
                 });
             });
             return def;
         };
 
-        /**
-         * Proof read view
-         */
-        app.proofread = function () {
-            // create reader
-            var reader = $('<div>').addClass('abs io-ox-mail-proofread');
-            // load detail view
-            require(['io.ox/mail/view-detail'], function (view) {
-                // get data
-                var mail = app.getMail();
-                // add missing data
-                _.extend(mail.data, {
-                    folder_id: 'default0/INBOX',
-                    received_date: _.now()
+        // edit draft
+        app.edit = function (data) {
+
+            var def = $.Deferred();
+
+            _.url.hash('app', 'io.ox/mail/write:compose'); // yep, edit is same as compose
+
+            app.cid = 'io.ox/mail:edit.' + _.cid(data); // here, for reuse it's edit!
+            data.msgref = data.folder_id + '/' + data.id;
+
+            win.busy().show(function () {
+                app.setMail({ data: data, mode: 'compose', initial: false })
+                .done(function () {
+                    app.getEditor().focus();
+                    win.idle();
+                    def.resolve();
+                })
+                .fail(function () {
+                    notifications.yell('error', gt('An error occured. Please try again.'));
+                    app.dirty(false).quit();
+                    def.reject();
                 });
-                // draw mail
-                reader.append(view.draw(mail.data))
-                    .appendTo('body');
             });
+
+            return def;
         };
 
         /**
@@ -578,7 +692,7 @@ define.async('io.ox/mail/write/main',
          */
         app.getMail = function () {
             var // get relevant fields
-                fields = app.getView().form
+                fields = view.form
                     .find(':input[name]')
                     .filter('textarea, [type=text], [type=hidden], [type=radio]:checked, [type=checkbox]:checked'),
                 // get raw data
@@ -601,11 +715,16 @@ define.async('io.ox/mail/write/main',
                             return ['"' + recipient[0] + '"', recipient[1]];
                         });
                 };
+
+            data.from = this.getFrom();
+
             // get content
             if (editorMode === 'html') {
                 content = {
                     content_type: 'text/html',
-                    content: app.getEditor() ? app.getEditor().getContent() : ''
+                    content: (app.getEditor() ? app.getEditor().getContent() : '')
+                        // reverse img fix
+                        .replace(/(<img[^>]+src=")(\/appsuite\/)?api\//g, '$1/ajax/')
                 };
             } else {
                 content = {
@@ -615,42 +734,51 @@ define.async('io.ox/mail/write/main',
                         .replace(/\n/g, '<br>\n') // escape line-breaks
                 };
             }
-            // transform raw data
+
             mail = {
-                from: [defaultSender] || [],
+                from: [data.from] || [],
                 to: parse(data.to),
                 cc: parse(data.cc),
                 bcc: parse(data.bcc),
                 subject: data.subject + '',
                 priority: parseInt(data.priority, 10) || 3,
                 vcard: parseInt(data.vcard, 10) || 0,
-                disp_notification_to: parseInt(data.receipt, 10) || 0,
-                attachments: [content]
+                attachments: [content],
+                nested_msgs: []
             };
             // add msgref?
             if (data.msgref) {
                 mail.msgref = data.msgref;
             }
+            // sendtype
+            mail.sendtype = data.sendtype || mailAPI.SENDTYPE.NORMAL;
             // get files
-            app.getView().form.find(':input[name][type=file]')
-                .each(function () {
-                    // link to existing attachments (e.g. in forwards)
-                    var attachment = $(this).prop('attachment'),
-                        // get file via property (DND) or files array and add to list
-                        file = $(this).prop('file');
-                    if (attachment) {
-                        // add linked attachment
-                        mail.attachments.push(attachment);
-                    } else if (file) {
-                        // add dropped file
+            view.form.find(':input[name][type=file]').each(function () {
+                // link to existing attachments (e.g. in forwards)
+                var attachment = $(this).prop('attachment'),
+                    // get file via property (DND) or files array and add to list
+                    file = $(this).prop('file'),
+                    // get nested messages
+                    nested = $(this).prop('nested');
+                if (attachment) {
+                    // add linked attachment
+                    mail.attachments.push(attachment);
+                } else if (nested) {
+                    // add nested message (usually multiple mail forward)
+                    mail.nested_msgs.push(nested.message);
+                } else if ('File' in window && file instanceof window.File) {
+                    // add dropped file
+                    files.push(file);
+                } else if (file && 'id' in file) {
+                    // infostore id
+                    (mail.infostore_ids = (mail.infostore_ids || [])).push(file);
+                } else if (this.files && this.files.length) {
+                    // process normal upload
+                    _(this.files).each(function (file) {
                         files.push(file);
-                    } else if (this.files && this.files.length) {
-                        // process normal upload
-                        _(this.files).each(function (file) {
-                            files.push(file);
-                        });
-                    }
-                });
+                    });
+                }
+            });
             // return data, file references, mode, format
             return {
                 data: mail,
@@ -666,29 +794,94 @@ define.async('io.ox/mail/write/main',
          */
         app.send = function () {
             // get mail
-            var mail = this.getMail();
-            // hide app
-            //win.hide();
-            // send!
-            mailAPI.send(mail.data, mail.files)
-                .always(function (result) {
+            var mail = this.getMail(), def = $.Deferred();
+            // get flat ids for data.infostore_ids
+            if (mail.data.infostore_ids) {
+                mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
+            }
+            // move nested messages into attachment array
+            _(mail.data.nested_msgs).each(function (obj) {
+                mail.data.attachments.push({
+                    id: mail.data.attachments.length + 1,
+                    filemname: obj.subject,
+                    content_type: 'message/rfc822',
+                    msgref: obj.msgref
+                });
+            });
+            delete mail.data.nested_msgs;
+
+            function cont() {
+                // start being busy
+                win.busy();
+                // close window now (!= quit / might be reopened)
+                win.preQuit();
+                // send!
+                mailAPI.send(mail.data, mail.files, view.form.find('.oldschool')).always(function (result) {
                     if (result.error) {
-                        console.error(result);
-                        win.show();
-                        alert('Server error - see console :(');
+                        win.idle().show();
+                        // TODO: check if backend just says "A severe error occured"
+                        notifications.yell(result);
                     } else {
-                        app.markClean();
+                        notifications.yell('success', 'Mail has been sent');
+                        // update base mail
+                        var isReply = mail.data.sendtype === mailAPI.SENDTYPE.REPLY,
+                            isForward = mail.data.sendtype === mailAPI.SENDTYPE.FORWARD,
+                            sep = mailAPI.separator,
+                            base, folder, id;
+                        if (isReply || isForward) {
+                            base = _(mail.data.msgref.split(sep));
+                            folder = base.initial().join(sep);
+                            id = base.last();
+                            mailAPI.get({ folder: folder, id: id }).done(function (data) {
+                                // update answered/forwarded flag
+                                if (isReply) data.flags |= 1;
+                                if (isForward) data.flags |= 256;
+                                $.when(mailAPI.caches.list.merge(data), mailAPI.caches.get.merge(data)).done(function () {
+                                    mailAPI.trigger('refresh.list');
+                                });
+                            });
+                        }
+                        app.dirty(false);
                         app.quit();
                     }
+                    def.resolve(result);
                 });
+            }
+
+            // ask for empty subject
+            if ($.trim(mail.data.subject) === '') {
+                // show dialog
+                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(gt("Mail has empty subject. Send it anyway?"))
+                        .addPrimaryButton("send", gt('Yes, send without subject'))
+                        .addButton("subject", gt('Add subject'))
+                        .show(function () {
+                            def.notify('empty subject');
+                        })
+                        .done(function (action) {
+                            if (action === 'send') {
+                                cont();
+                            } else {
+                                focus('subject');
+                                def.reject();
+                            }
+                        });
+                });
+            } else {
+                cont();
+            }
+
+            return def;
         };
 
         app.saveDraft = function () {
+
             // get mail
             var mail = this.getMail(),
                 def = new $.Deferred();
-            // send!
 
+            // send!
             mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
 
             if (_(mail.data.flags).isUndefined()) {
@@ -700,13 +893,13 @@ define.async('io.ox/mail/write/main',
             mailAPI.send(mail.data, mail.files)
                 .always(function (result) {
                     if (result.error) {
-                        console.error(result);
-                        def.reject('Server error - see console :(');
-                        showMessage('Mail is NOT saved', 'Mail Error', true);
+                        notifications.yell(result);
+                        def.reject(result);
                     } else {
-                        showMessage('Mail is saved', 'Mail', false);
+                        app.setMsgRef(result.data);
+                        app.dirty(false);
+                        notifications.yell('success', gt('Mail saved as draft'));
                         def.resolve(result);
-                        app.markClean();
                     }
                 });
 
@@ -730,32 +923,32 @@ define.async('io.ox/mail/write/main',
             var def = $.Deferred();
 
             var clean = function () {
+                // mark as not dirty
+                app.dirty(false);
                 // clean up editors
                 for (var id in editorHash) {
                     editorHash[id].destroy();
                 }
                 // clear all private vars
-                app = win = editor = currentSignature = null;
+                app = win = editor = currentSignature = editorHash = null;
             };
 
-            if (app.getState() === app.STATES.DIRTY) {
+            if (app.dirty()) {
                 require(["io.ox/core/tk/dialogs"], function (dialogs) {
                     new dialogs.ModalDialog()
-                        .text(gt("Do you really want to cancel editing this mail?"))
-                        .addPrimaryButton("delete", gt('Lose changes'))
-                        .addAlternativeButton('savedraft', gt('Save as draft'))
+                        .text(gt("Do you really want to discard this mail?"))
+                        .addPrimaryButton("delete", gt('Discard'))
+                        .addAlternativeButton('savedraft', gt("Save as draft"))
                         .addButton("cancel", gt('Cancel'))
                         .show()
                         .done(function (action) {
-                            console.debug("Action", action);
                             if (action === 'delete') {
+                                clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
                                 def.resolve();
-                                clean();
                             } else if (action === 'savedraft') {
                                 app.saveDraft().done(function (mail) {
-                                    console.log(mail);
-                                    def.resolve();
                                     clean();
+                                    def.resolve();
                                 }).fail(function (e) {
                                     def.reject(e);
                                 });
@@ -775,19 +968,26 @@ define.async('io.ox/mail/write/main',
         return app;
     }
 
-    var module = {
-        getApp: createInstance
+    return {
+
+        getApp: createInstance,
+
+        reuse: function (type, data) {
+            if (type === 'reply') {
+                return ox.ui.App.reuse('io.ox/mail:reply.' + _.cid(data));
+            }
+            if (type === 'replyall') {
+                return ox.ui.App.reuse('io.ox/mail:replyall.' + _.cid(data));
+            }
+            if (type === 'forward') {
+                return ox.ui.App.reuse('io.ox/mail:forward.' + _.cid(data));
+            }
+            if (type === 'edit') {
+                return ox.ui.App.reuse('io.ox/mail:edit.' + _.cid(data));
+            }
+        }
     };
 
-    // load user
-    return userAPI.get(config.get('identifier'))
-        .done(function (sender) {
-            // inject 'from'
-            defaultSender = ['"' + sender.display_name + '"', sender.email1];
-        })
-        .pipe(function () {
-            return module;
-        });
 });
 
 

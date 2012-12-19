@@ -1,0 +1,204 @@
+/**
+ *
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author David Bauer <david.bauer@open-xchange.com>
+ *
+ */
+
+@playerWidth: 480px;
+@playerMargin: 13px;
+@windowTopHeight: 60px;
+
+
+@playerBg:                  rgba(0,0,0,0.1);
+@playerPrimaryColor:        #fff;
+@playerSecondaryColor:      #444;
+@playerHighlightColor:      #555;
+@playerHighlightTextColor:  #fff;
+
+@playerTextColor:           #fff;
+
+@playerSelectionColor:      #08c;
+@playerSelectionTextColor:  #fff;
+
+@playerTrackColor:          #222;
+
+
+.mediaplayer_container {
+
+    z-index: 10001; /* at least 1 higher than slideshow overlay */
+
+    background-color:@playerBg;
+
+    .mediaplayer_inner {
+
+        left: 50%;
+        width: @playerWidth;
+        margin-left: 0 - (@playerWidth / 2) - @playerMargin;
+        padding: @playerMargin;
+
+        .box-shadow(0px 0px 50px 5px #000);
+        .vertical-gradient(#111, #333);
+
+        .mediaplayer_buttons {
+            margin-bottom:@playerMargin;
+            text-align: right;
+            button { margin-left:@playerMargin; }
+        }
+
+        .mediaplayer_track {
+            height: 120px;
+            vertical-align: middle;
+            width: 100%;
+            background: @playerTrackColor;
+
+            .album {
+                width: 120px;
+                text-align: center;
+                font-size: 75px;
+                color: #333;
+            }
+
+            .track {
+                color: @playerTextColor;
+                font-family: @font-light;
+                font-size: 18px;
+                line-height: 24px;
+                font-weight: 300;
+                max-height: 24px * 3;
+                overflow: hidden;
+            }
+        }
+
+        .mediaplayer_player {
+
+            // background: @playerSecondaryColor;
+            width: 100%;
+            margin-bottom: @playerMargin;
+
+            .mejs-video {
+                margin-top:43px;
+            }
+            // MediaElement Container
+            .mejs-container {
+
+                .mejs-mediaelement {
+                    text-align:center;
+                }
+                // Controls Background
+                .mejs-controls {
+
+                    @mediaplayerSliderBackground: darken(@link-color, 10%);
+
+                    background-color: #333;
+
+                    .mejs-time-rail {
+                        .mejs-time-total {
+                                background:@mediaplayerSliderBackground;
+                            .mejs-time-loaded {
+
+                                background: lighten(@link-color, 10%);
+                            }
+                            .mejs-time-current { }
+                        }
+                    }
+                    .mejs-horizontal-volume-slider {
+                        .mejs-horizontal-volume-total {
+                            background:@mediaplayerSliderBackground;
+                        }
+                        .mejs-horizontal-volume-current { }
+                    }
+                }
+            }
+
+        }
+
+        .mediaplayer_playlist {
+            position: absolute;
+            left: 13px;
+            right: 13px;
+            bottom: 13px;
+            width: 480px;
+            margin: 0;
+            overflow-y: scroll;
+
+            li {
+                list-style: none;
+                color: @playerTextColor;
+                background-color: @playerSecondaryColor;
+                margin-bottom: 1px;
+                padding: @playerMargin;
+                cursor: pointer;
+                .ellipsis;
+                &:hover {
+                    background-color: @playerHighlightColor;
+                }
+                &.active {
+                    color: @playerSelectionTextColor;
+                    background-color: @playerSelectionColor;
+                }
+            }
+        }
+    }
+}
+.audioplayer .mediaplayer_playlist {
+    top: 219px;
+}
+
+.videoplayer .mediaplayer_playlist {
+    top: 340px;
+}
+
+// Animation for minimized button in launcher
+@-webkit-keyframes playerColours {
+    from { color: #fff; }
+      to { color: #bbb; }
+}
+
+@-moz-keyframes playerColours {
+    from { color: #fff; }
+      to { color: #bbb; }
+}
+#io-ox-topbar .launcher.minimizedmediaplayer i {
+    -moz-animation-direction: alternate;
+    -moz-animation-duration: 1.25s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-name: playerColours;
+    -moz-animation-timing-function: ease-in-out;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-duration: 1.25s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-name: playerColours;
+    -webkit-animation-timing-function: ease-in-out;
+}
+
+// SMALL DEVICES
+
+@media (max-width: 700px) {
+    .mejs-video { width:290px;}
+    .mediaplayer_container .mediaplayer_inner {
+        @width: 320px - 2 * @playerMargin;
+        width: @width;
+        margin-left: 0 - @width / 2 - @playerMargin;
+    }
+
+    .mediaplayer_container .mediaplayer_inner {
+        .mediaplayer_track {
+            height: 60px;
+            .album { width: 70px; font-size: 50px; }
+            .track { font-size: 14px; }
+        }
+        .mediaplayer_playlist {
+            top: 219px - 60px;
+            width: 290px;
+        }
+    }
+}

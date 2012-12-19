@@ -11,429 +11,359 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/contacts/edit/view-form',
-    ['io.ox/core/extensions',
-     'gettext!io.ox/contacts/contacts',
-     'io.ox/contacts/util',
-     'io.ox/contacts/api',
-     'io.ox/core/tk/view',
-     'io.ox/core/tk/model'
-    ], function (ext, gt, util, api, View, Model) {
-
-    'use strict';
-
-    /*
-    * urgh, if you want to improve it, do it without that many dom operations
-    */
-
-
-    var checkEl = function (c) {
-        var parent = $(c).parent(),
-        el = parent.find('input').filter(function () {
-            return $(this).val() !== "";
-        }),
-        man = (parent.find('.mandatory')).length,
-        filled = el.length + man;
-        return filled;
-    };
-
-    var fieldCount = function (c) {
-        var parent = $(c).parent(),
-        el = parent.find('input').filter(function () {
-            return $(this).val() === "";
-        }),
-        empty = el.length;
-        return empty;
-    };
-
-    var lessSwitch = function (evt) {
-        var parent = $(evt.currentTarget).parent();
-        parent.find('.hidden').removeClass('hidden').addClass('visible');
-        parent.find('.sectiontitle').removeClass('hidden');
-        parent.addClass('expanded');
-        $(evt.currentTarget).text('- less');
-    };
-
-    var namedSwitch = function (txt, evt) {
-        var parent = $(evt.currentTarget).parent();
-        parent.removeClass('expanded');
-        parent.find('.sectiontitle').addClass('hidden');
-        parent.find('input').filter(
-            function () {
-                return $(this).val() !== "";
-            }
-        ).parent().parent().removeClass('visible');
-        parent.find('input').filter(
-            function () {
-                return $(this).val() === "";
-            }
-        ).parent().parent().parent().removeClass('visible').addClass('hidden');
-        parent.find('.visible').removeClass('visible').addClass('hidden');
-        $(evt.currentTarget).text(txt);
-    };
-
-
-    var moreSwitch = function (txt, evt) {
-        var parent = $(evt.currentTarget).parent();
-        parent.removeClass('expanded');
-        parent.find('.sectiontitle').addClass('visible');
-        parent.find('input').filter(
-            function () {
-                return $(this).val() !== "";
-            }
-        ).parent().parent().removeClass('visible');
-        parent.find('input').filter(
-            function () {
-                return $(this).val() === "";
-            }
-        ).parent().parent().parent().removeClass('visible').addClass('hidden');
-        $(evt.currentTarget).text(txt);
-    };
-
-    var toggleFields = function (evt) {
-        var target;
-        target = evt.currentTarget;
-
-        var filled = checkEl(target),
-            empty = fieldCount(target),
-            parent = $(target).parent(),
-            status;
-
-
-        if (filled === 0) {
-            status = parent.hasClass('expanded') ? '1' :  '2';
-        } else {
-            status = !parent.hasClass('expanded') ? '3' : '4';
-        }
-
-        switch (status) {
-        case "1":
-            namedSwitch('+ ' + evt.data.pointName, evt);
-            break;
-        case "2":
-            lessSwitch(evt);
-            break;
-        case "3":
-            lessSwitch(evt);
-            break;
-        case "4":
-            moreSwitch('+ more', evt);
-            break;
-        }
-    };
-
-    var pointRecalc = function (pointName) {
-        var recalc = (pointName.toLowerCase()).replace(/ /g, "_");
-        return recalc;
-    };
-
-    var drawSection = function (pointName) {
-        return function (options) {
-            var section = options.view.createSection(),
-                sectionTitle = options.view.createSectionTitle({text: gt(pointName)}),
-                sectionContent = options.view.createSectionContent(),
-                pointNameRecalc = pointRecalc(pointName);
-
-            section.append(sectionTitle);
-            section.append(sectionContent);
-            this.append(section);
-
-
-            if (/^(.*_address)$/.test(pointNameRecalc)) {
-                options.pointName = pointNameRecalc;
-                ext.point('io.ox/contacts/edit/form/address').invoke('draw', sectionContent, options);
-
-            } else {
-                ext.point('io.ox/contacts/edit/form/' + pointNameRecalc).invoke('draw', sectionContent, options);
-            }
-            if (checkEl(sectionContent) !== 0) {
-                if (fieldCount(sectionContent) !== 0) {
-                    section.append($('<a>').addClass('switcher').text('+ more').on('click', {pointName: pointName}, toggleFields));
-                }
-
-            } else {
-                section.append($('<a>').addClass('switcher').text('+ ' + pointName).on('click', {pointName: pointName}, toggleFields));
-                sectionTitle.addClass('hidden');
-            }
-
-        };
-    };
-
-    var drawField = function (subPointName) {
-        return function (options) {
-
-            var myId = _.uniqueId('c'),
-
-                view = options.view,
-                model = view.getModel(),
-                sectionGroup = view.createSectionGroup(),
-                fieldtype = model.schema.getFieldType(subPointName),
-                label = model.schema.getFieldLabel(subPointName),
-                createFunction;
-
-            switch (fieldtype) {
-            case "string":
-                createFunction = view.createTextField({ id: myId, property: subPointName, classes: 'form-vertical' });
-                break;
-            case "pastDate":
-                createFunction = view.createDateField({ id: myId, property: subPointName, classes: 'form-vertical' });
-                break;
-            default:
-                createFunction = view.createTextField({ id: myId, property: subPointName, classes: 'form-vertical' });
-                break;
-            }
-
-            sectionGroup.append(
-                 view.createLabel({ id: myId, text: gt(label) }),
-                 createFunction
-            );
-
-            if (!model.get(subPointName) && !model.schema.isMandatory(subPointName)) {
-                sectionGroup.addClass('hidden');
-            }
-            if (model.schema.isMandatory(subPointName)) {
-                sectionGroup.addClass('mandatory');
-            }
-
-            this.append(sectionGroup);
-        };
-    };
-
-    var drawFields = function (pointName, subPointName) {
-        return function (options) {
-            ext.point('io.ox/contacts/edit/form/' + pointName + '/' + subPointName).invoke('draw', this, options);
-        };
-    };
-
-    var drawAddress = function (options) {
-        var addressFormat = 'street,postal_code/city,country,state'.split(','),
-            addressGroop = '_' + (options.pointName.split('_'))[1],
-            self = this,
-            view = options.view,
-            model = view.getModel();
-//            label = model.schema.getFieldLabel(subPointName);
-
-        _.each(addressFormat, function (line, index) {
-            var lineFormat = line.split(/\//);
-            if (lineFormat.length === 1) {
-                line = line + addressGroop;
-                //normal mode
-                //ext.point('io.ox/contacts/edit/form/' + options.pointName + '/' + line).invoke('draw', self, options);
-                var dr = drawField(line);
-                dr.apply(self, [options]);
-            } else {
-                var sectionGroup = options.view.createSectionGroup(),
-                    labels = [],
-                    fields = [],
-                    hide = true;
-
-                self.append(sectionGroup);
-
-                _.each(lineFormat, function (multiline, index) {
-                    var myId = _.uniqueId('c');
-                    labels.push(options.view.createLabel({ id: myId, text: options.view.getModel().schema.getFieldLabel(multiline + addressGroop)}));
-                    fields.push(options.view.createTextField({ id: myId, property: multiline + addressGroop, classes: 'form-vertical' }));
-                    hide = (options.view.getModel().get(multiline + addressGroop)) ? false : true;
-                });
-
-                var outterLabel = $('<div>').addClass('inlinelabel');
-                _.each(labels, function (label) {
-                    outterLabel.append(label);
-                });
-                sectionGroup.append(outterLabel);
-                _.each(fields, function (field, index) {
-                    sectionGroup.append(field.addClass('inline ' + 'nr' + index));
-                });
-                if (hide) {
-                    sectionGroup.addClass('hidden');
-                }
-
-            }
-        });
-    };
-
-    var createSaveButton = function (options) {
-        var saveButton = $('<a>');
-
-        window.ursel = saveButton;
-        saveButton.attr('data-action', 'save');
-        saveButton.attr('id', 'testid');
-        saveButton.addClass('btn btn-primary').text('Save');
-        saveButton.on('click', function () {
-            options.view.saveForm();
-
-        });
-        return saveButton;
-    };
-
-
-
-
-    var picTrigger = function () {
-        $('input[type="file"]').trigger('click');
-    };
-
-    var drawFormHead = function (options) {
-        var section,
-          picture,
-          picForm,
-          title,
-          jobDescription,
-          calculatedModel,
-          saveButton;
-
-        section = options.view.createSection({}).addClass('formheader');
-
-        title = options.view.createText({property: 'display_name', classes: 'name clear-title'});
-
-
-        calculatedModel = new Model({});
-        _.extend(calculatedModel, {
-            get: function () {
-                return util.getJob(options.view.getModel().get());
-            },
-            update: function () {
-                $(this).trigger('change:calculated.jobdescription', util.getJob(options.view.getModel().get()));
-            },
-            set: function () {}
-        });
-
-        // just bridge the event
-        $(options.view.getModel()).on('change:calculated.jobdescription', function () {
-            calculatedModel.update();
-        });
-
-        jobDescription = options.view.createText({property: 'jobdescription.calculated', classes: 'job clear-title', model: calculatedModel});
-
-
-        saveButton = createSaveButton(options);
-
-        picture = (api.getPicture(options.view.getModel().get())).addClass('picture');
-        picture.on('click', picTrigger);
-        function handleFileSelect(evt) {
-            var file = evt.target.files,
-                reader = new FileReader();
-            console.log(reader);
-            reader.onload = (function (theFile) {
-                return function (e) {
-                    $('.picture').css('background-image', 'url(' + e.target.result + ')');
-                };
-            }(file[0]));
-            reader.readAsDataURL(file[0]);
-            options.view.getModel().dirty = true;
-        }
-        picForm = options.view.createPicUpload({
-            wrap: false,
-            label: false,
-            charset: 'UTF-8',
-            enctype: 'multipart/form-data',
-            id: 'contactUploadImage',
-            method: 'POST',
-            formname: 'contactUploadImage',
-            name: 'file',
-            target: 'hiddenframePicture'
-        });
-        picForm.find('input').on('change', handleFileSelect);
-
-        section.append(picture);
-        section.append(title);
-        section.append(jobDescription);
-        section.append(saveButton);
-        section.append(picForm);
-        section.append(options.view.createSectionDelimiter({}));
-
-        this.append(section);
-    };
-
-    var handleField = function (pointName) {
-        return function (subPointName, index) {
-            ext.point('io.ox/contacts/edit/form/' + pointName + '/' + subPointName).extend({
-                id: subPointName,
-                draw: drawField(subPointName)
-            });
-            ext.point('io.ox/contacts/edit/form/' + pointName).extend({
-                id: subPointName,
-                draw: drawFields(pointName, subPointName)
-            });
-        };
-    };
-    var handleSection = function (section, pointName) {
-        var pointNameRecalc = pointRecalc(pointName);
-
-        ext.point('io.ox/contacts/edit/form').extend({id: pointNameRecalc, draw: drawSection(pointName), index: 120});
-        _.each(section, handleField(pointNameRecalc));
-    };
-
-    var initExtensionPoints = function (meta) {
-        ext.point('io.ox/contacts/edit/form').extend({
-            index: 1,  //should be the first one
-            id: 'formhead',
-            draw: drawFormHead
-        });
-
-        _.each(meta, handleSection);
-        ext.point('io.ox/contacts/edit/form/address').extend({
-            id: 'address',
-            draw: drawAddress
-        });
-    };
-
-
-    var ContactEditView = View.extend({
-
-        draw: function (app) {
-            var self = this,
-                meta;
-//            console.log(this);
-            if (this.getModel()) {
-                meta = {
-                    'Contact personal': ['title', 'first_name', 'last_name', 'display_name', 'second_name', 'suffix', 'nickname', 'birthday'],
-                    'Contact email': ['email1', 'email2', 'email3'],
-                    'Contact phone': ['telephone_business1', 'telephone_business2', 'fax_business', 'telephone_car', 'telephone_company', 'telephone_home1', 'telephone_home2', 'fax_home', 'cellular_telephone1', 'cellular_telephone2', 'telephone_other', 'fax_other', 'telephone_isdn', 'telephone_pager', 'telephone_primary', 'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'instant_messenger1', 'instant_messenger2', 'telephone_ip', 'telephone_assistant', 'telephone_callback'],
-                    'Contact home address': ['street_home', 'postal_code_home', 'city_home', 'state_home', 'country_home'],
-                    'Contact business address': ['street_business', 'postal_code_business', 'city_business', 'state_business', 'country_business'],
-                    'Contact other address': ['street_other', 'postal_code_other', 'city_other', 'state_other', 'country_other'],
-                    'Contact job descriptions': ['room_number', 'profession', 'position', 'company', 'department', 'employee_type', 'number_of_employees', 'sales_volume', 'tax_id', 'commercial_register', 'branches', 'business_category', 'info', 'manager_name', 'assistant_name'],
-                    'Special information': ['marital_status', 'number_of_children', 'spouse_name', 'note', 'url', 'anniversary'],
-                    'Optional fields': ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05', 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10', 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15', 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20']
-                };
-
-                var updateDisplayName = function () {
-                    console.log('update displayname');
-                    self.getModel().set('display_name', util.getFullName(self.getModel().get()));
-                };
-
-                var updateJobDescription = function () {
-                    self.getModel().trigger('change:calculated.jobdescription', util.getJob(self.getModel().get()));
-                };
-
-                this.getModel().on('change:title change:first_name change:last_name', updateDisplayName);
-                this.getModel().on('change:company change:position change:profession', updateJobDescription);
-
-                initExtensionPoints(meta);
-                this.node.addClass('contact-detail edit').attr('data-property', self.getModel().get('folder_id') + '.' + self.getModel().get('id'));
-
-
-
-                ext.point('io.ox/contacts/edit/form').invoke('draw', self.node, {view: self});
-                self.node.append($('<div>', {id: 'myGrowl'}).addClass('jGrowl').css({position: 'absolute', right: '0', top: '0'}));
-
-                this.getModel().on('error:invalid', function (evt, err) {
-                    console.log('error validation');
-                    console.log(arguments);
-                    $('#myGrowl').jGrowl(err.message, {header: 'Make an educated guess!', sticky: true});
-                });
-            }
-            return self;
+define('io.ox/contacts/edit/view-form', [
+    'io.ox/contacts/model',
+    'io.ox/backbone/views',
+    'io.ox/backbone/forms',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/contacts/widgets/pictureUpload',
+    'io.ox/contacts/widgets/cityControlGroup',
+    'gettext!io.ox/contacts',
+    'less!io.ox/contacts/edit/style.css'
+], function (model, views, forms, actions, links, PictureUpload, CityControlGroup, gt) {
+
+    "use strict";
+
+    var dateField, city;
+
+    var meta = {
+        sections: {
+            personal: ['title', 'first_name', 'last_name', 'display_name',
+                         'second_name', 'suffix', 'nickname', 'birthday',
+                         'marital_status', 'number_of_children', 'spouse_name',
+                         'anniversary', 'url'],
+            messaging: ['email1', 'email2', 'email3', 'instant_messenger1', 'instant_messenger2'],
+            phone:  ['cellular_telephone1', 'cellular_telephone2',
+                      'telephone_business1', 'telephone_business2',
+                      'telephone_home1', 'telephone_home2',
+                      'telephone_company', 'telephone_other',
+                      'fax_business', 'fax_home', 'fax_other',
+                      'telephone_car', 'telephone_isdn', 'telephone_pager',
+                      'telephone_primary', 'telephone_radio',
+                      'telephone_telex', 'telephone_ttytdd',
+                      'telephone_ip', 'telephone_assistant', 'telephone_callback'],
+            home_address: ['street_home', 'city_home', 'state_home', 'country_home'],
+            business_address: ['street_business', 'city_business',
+                               'state_business', 'country_business'],
+            other_address: ['street_other', 'city_other', 'state_other', 'country_other'],
+            job: ['profession', 'position', 'department', 'company', 'room_number',
+                    'employee_type', 'number_of_employees', 'sales_volume', 'tax_id',
+                    'commercial_register', 'branches', 'business_category', 'info',
+                    'manager_name', 'assistant_name'],
+            userfields: ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05',
+                        'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10',
+                        'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
+                        'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'],
+            comment: ['note'],
+            misc: ['private_flag']
         },
-        saveForm: function () {
-            console.log('saveForm -> save', this);
-            this.getModel().save();
-            //$(this).trigger('save');
+
+        rare: ['nickname', 'marital_status', 'number_of_children', 'spouse_name', 'url', 'anniversary',
+               // phone
+               'telephone_company', 'fax_home', 'fax_other',
+               'telephone_car', 'telephone_isdn', 'telephone_pager', 'telephone_primary',
+               'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'telephone_assistant',
+               'telephone_callback', 'telephone_ip',
+               // job
+               'number_of_employees', 'sales_volume', 'tax_id', 'commercial_register', 'branches',
+               'business_category', 'info', 'manager_name', 'assistant_name', 'employee_type',
+               // optional
+               'userfield04', 'userfield05',
+               'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10',
+               'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
+               'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'
+               ],
+
+        alwaysVisible: ['first_name', 'last_name', 'display_name', 'email1', 'cellular_telephone1'],
+
+        i18n: {
+            personal: gt('Personal information'),
+            messaging: gt('Messaging'),
+            phone: gt('Phone & fax numbers'),
+            home_address: gt('Home address'),
+            business_address: gt('Business address'),
+            other_address: gt('Other address'),
+            job: gt('Job description'),
+            comment: gt('Comment'),
+            userfields: gt('User fields'),
+            misc: //#. section name for contact inputfields that does not fit somewhere else
+                  gt('Miscellaneous')
+        },
+
+        special: {
+            note: function (options) {
+                options.point.extend(new forms.ControlGroup({
+                    id: options.field,
+                    index: options.index,
+                    label: model.fields[options.field],
+                    control: '<textarea rows="12" class="span6" name="' + options.field + '">',
+                    rare: options.isRare,
+                    attribute: options.field
+                }), {
+                    hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
+                        return !model.isSet(options.field);
+                    }
+                });
+            },
+
+            birthday: dateField,
+            anniversary: dateField,
+            private_flag: function (options) {
+                options.point.extend(new forms.CheckBoxField({
+                    id: options.field,
+                    index: options.index,
+                    label: model.fields[options.field],
+                    labelClassName: 'private-flag',
+                    rare: options.isRare,
+                    attribute: options.field
+                }), {
+                    hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
+                        return (model.attributes.private_flag === undefined || model.attributes.private_flag === false);
+                    }
+                });
+            },
+            city_home: city('city_home', 'postal_code_home'),
+            city_business: city('city_business', 'postal_code_business'),
+            city_other: city('city_other', 'postal_code_other')
         }
+    };
 
-    });
 
-    // my happy place
-    return ContactEditView;
+    function dateField(options) {
+        options.point.extend(new forms.DateControlGroup({
+            id: options.field,
+            index: options.index,
+            label: model.fields[options.field],
+            control: '<input type="text" class="input-xlarge" name="' + options.field + '">',
+            attribute: options.field,
+            rare: options.isRare,
+            setValueInElement: forms.utils.controlGroup.date.setValueInElement,
+            setValueInModel: forms.utils.controlGroup.date.setValueInModel
+        }), {
+            hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
+                return !model.isSet(options.field);
+            }
+        });
+    }
+
+    function city(cityAttribute, postalCodeAttribute) {
+        return function (options) {
+            options.point.extend(new CityControlGroup({
+                id: cityAttribute,
+                index: options.index,
+                label: _.noI18n(model.fields[postalCodeAttribute] + '/' + model.fields[cityAttribute]),
+                zipControl: '<input type="text" class="span1" name="' + postalCodeAttribute + '">',
+                control: '<input type="text" class="span3" name="' + cityAttribute + '">',
+                zipAttribute: postalCodeAttribute,
+                attribute: cityAttribute,
+                rare: options.isRare
+            }), {
+                hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
+                    return !model.isAnySet(cityAttribute, postalCodeAttribute);
+                }
+            });
+        };
+    }
+
+    function createContactEdit(ref) {
+        var point = views.point(ref + '/edit/view'),
+            ContactEditView = point.createView({
+                tagName: 'div',
+                className: 'edit-contact'
+            });
+
+        point.extend(new PictureUpload({
+            id: ref + '/edit/view/picture',
+            index: 100,
+            customizeNode: function () {
+                this.$el.css({
+                    display: 'inline-block',
+                    height: "100px"
+                }).addClass("span2 header-pic");
+            }
+        }));
+
+
+        point.extend(new views.AttributeView({
+            id: ref + '/edit/view/display_name_header',
+            index: 150,
+            tagName: 'span',
+            className: 'clear-title',
+            attribute: 'display_name'
+        }));
+
+        point.extend(new views.AttributeView({
+            id: ref + '/edit/view/profession_header',
+            index: 170,
+            tagName: 'div',
+            className: 'clear-title job',
+            attribute: ['company', 'position', 'profession']
+        }));
+
+        point.basicExtend({
+            id: ref + '/edit/view/headerBreak',
+            index: 200,
+            draw: function () {
+                this.append($('<div>').css({clear: 'both'}));
+            }
+        });
+
+
+        // Show backend errors
+        point.extend(new forms.ErrorAlert({
+            id: ref + '/edit/view/backendErrors',
+            className: 'span7',
+            index: 250,
+            customizeNode: function () {
+                this.$el.css({
+                    marginTop: '15px'
+                });
+            }
+        }));
+
+        // Actions
+        point.basicExtend(new links.InlineLinks({
+            index: 300,
+            id: 'inline-actions',
+            ref: ref + '/edit/view/inline',
+            customizeNode: function ($node) {
+                $node.addClass("span9");
+                $node.css({marginBottom: '20px'});
+            }
+        }));
+
+        //cancel
+
+//        views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
+//            id: "imagereset",
+//            index: 100,
+//            label: gt("Reset image"),
+//            ref: ref + "/actions/edit/reset-image",
+//            cssClasses: "btn",
+//            tabIndex: 10,
+//            tagtype: "button"
+//        }));
+
+
+        views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
+            id: "discard",
+            index: 100,
+            label: gt("Discard"),
+            ref: ref + "/actions/edit/discard",
+            cssClasses: "btn",
+            tabIndex: 11,
+            tagtype: "button"
+        }));
+
+        // Save
+
+        views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
+            id: "save",
+            index: 100,
+            label: gt("Save"),
+            ref: ref + "/actions/edit/save",
+            cssClasses: "btn btn-primary",
+            tabIndex: 10,
+            tagtype: "button"
+        }));
+
+        // Edit Actions
+
+        new actions.Action(ref + '/actions/edit/save', {
+            id: 'save',
+            action: function (options, baton) {
+                options.parentView.trigger('save:start');
+                options.model.save().done(function () {
+                    options.parentView.trigger('save:success');
+                }).fail(function () {
+                    options.parentView.trigger('save:fail');
+                });
+            }
+        });
+
+        new actions.Action(ref + '/actions/edit/discard', {
+            id: 'discard',
+            action: function (options, baton) {
+                if (ref === 'io.ox/core/user') {
+                    //invoked by sidepopup (portal); uses event of hidden sidebar-close button
+                    $('.io-ox-sidepopup').find('[data-action="close"]').trigger('click');
+                }
+                else
+                    options.parentView.$el.find('[data-action="discard"]').trigger('controller:quit');
+            }
+        });
+
+        new actions.Action(ref + '/actions/edit/reset-image', {
+            id: 'imagereset',
+            action: function (baton) {
+                baton.model.set("image1", '');
+                var imageUrl =  ox.base + '/apps/themes/default/dummypicture.png';
+                baton.parentView.$el.find('.picture-uploader').css('background-image', 'url(' + imageUrl + ')');
+            }
+        });
+
+        var index = 400;
+
+        _(meta.sections).each(function (fields, id) {
+            var uid = ref + '/edit/' + id,
+                section = {};
+            point.extend(new forms.Section({
+                id: id,
+                index: index,
+                title: meta.i18n[id],
+                ref: uid
+            }));
+
+            section.point = views.point(uid);
+            index += 100;
+
+            var fieldIndex = 100;
+            _(fields).each(function (field) {
+
+                var isAlwaysVisible = _(meta.alwaysVisible).indexOf(field) > -1,
+                    isRare = _(meta.rare).indexOf(field) > -1;
+
+
+                if (meta.special[field]) {
+                    meta.special[field]({
+                        point: section.point,
+                        uid: id,
+                        field: field,
+                        index: fieldIndex,
+                        isAlwaysVisible: isAlwaysVisible,
+                        isRare: isRare
+                    });
+                } else {
+                    section.point.extend(new forms.ControlGroup({
+                        id: field,
+                        index: fieldIndex,
+                        label: model.fields[field],
+                        control: '<input type="text" class="input-xlarge" name="' + field + '">',
+                        rare: isRare,
+                        attribute: field
+                    }), {
+                        hidden: isAlwaysVisible ? false : isRare ? true : function (model) {
+                            return !model.isSet(field);
+                        }
+                    });
+                }
+
+                fieldIndex += 100;
+            });
+
+        });
+        
+        return ContactEditView;
+    }
+
+    var ContactEditView = createContactEdit('io.ox/contacts');
+
+    return {
+        ContactEditView: ContactEditView,
+        protectedMethods: {
+            createContactEdit: createContactEdit
+        }
+    };
+
 });

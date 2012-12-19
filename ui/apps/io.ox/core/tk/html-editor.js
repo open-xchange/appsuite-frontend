@@ -202,6 +202,145 @@ define.async('io.ox/core/tk/html-editor', [], function () {
         node.find('p').each(removeEmptyParagraphs);
     }
 
+    function isInsideBlockquote(range) {
+        // get ancestor/parent container
+        var container = range.commonAncestorContainer || range.parentElement();
+        // loop for blockquote
+        var bq = $(container).parents('blockquote').last(),
+            is = bq.length > 0;
+        //console.debug('inside?', is, bq);
+        return is;
+    }
+
+    function splitContent_IE(ed) {
+        // get current range
+        var range = ed.selection.getRng(),
+            // get body
+            body = ed.getBody(),
+            // get two text ranges
+            before = body.createTextRange(),
+            after = body.createTextRange(),
+            mark, markHTML;
+        // initialize first range & get its content
+        before.setEndPoint('EndToStart', range);
+        before = before.htmlText;
+        // initialize second range & get its content
+        after.setEndPoint('StartToEnd', range);
+        // BR fix (remove unwanted newline)
+        // leading white space in regexp is necessary (don't ask)
+        after = after.htmlText.replace(/^(\s*<[^>]+>\s*)<BR\s*\/?>(.*)$/im, '$1$2');
+        // create a unique mark
+        mark = '#cursor~mark^';
+        // check uniqueness
+        while (before.indexOf(mark) >= 0 || after.indexOf(mark) >= 0) {
+            // add random characters until its unique
+            mark += String.fromCharCode(64 + Math.random() * 63);
+        }
+        // replace editor content
+        markHTML = '<p>' + mark + '</p>';
+        body.innerHTML = before + markHTML + after;
+        // select mark
+        range.findText(mark);
+        range.select();
+        // delete mark (this way!)
+        range.pasteHTML('');
+        range.collapse(true);
+    }
+
+    function splitContent_W3C(ed) {
+        // get current range
+        var range = ed.selection.getRng();
+        // range collapsed?
+        if (!range.collapsed) {
+            // delete selected content now
+            ed.execCommand("Delete", false, null);
+            // reselect new range
+            range = ed.selection.getRng();
+        }
+        // do magic
+        var container = range.commonAncestorContainer;
+        var lastBR = null,
+            traverse;
+        // helper
+        traverse = function (node) {
+            var i;
+            if (node) {
+                if (node.hasChildNodes()) {
+                    // skip text nodes
+                    for (i = 0; i < node.childNodes.length; i++) {
+                        if (node.childNodes[i].nodeType === 1) {
+                            // follow this node
+                            traverse(node.childNodes[i]);
+                            return;
+                        } else if (node.childNodes[i].nodeType === 3) {
+                            // remove zero width space (good for safari)
+                            node.childNodes[i].nodeValue = node.childNodes[i].nodeValue.replace('\u200B', '');
+                        }
+                    }
+                } else if (node.nodeName === "BR") {
+                    // remember node
+                    lastBR = node;
+                }
+            }
+        };
+        while (container && container.nodeName !== "BODY") {
+            // set range to end of container
+            range.setEndAfter(container);
+            // get parent node
+            var p = container.parentNode;
+            // add range content before next sibling (or at the end of the parent
+            // node)
+            var contents = range.extractContents();
+            // BR fix (remove unwanted newline)
+            traverse(contents.firstChild);
+            // now insert contents
+            if ($(contents).text().length > 0) {
+                // insert this content only if it includes something visible
+                // Actually this allows to split a quote after the very last
+                // character
+                // without getting empty gray blocks below the split
+                p.insertBefore(contents, container.nextSibling);
+            }
+            // climb up
+            container = p;
+        }
+        // last BR?
+        if (lastBR) {
+            try {
+                lastBR.parentNode.removeChild(lastBR);
+            } catch (e) {
+            }
+        }
+        // create new elements
+        var dummySpan = ed.getDoc().createElement("span");
+        dummySpan.innerHTML = "&nbsp;";
+        var para = ed.getDoc().createElement("p");
+        // and both elements to editor
+        para.appendChild(dummySpan);
+        range.insertNode(para);
+        // select the span
+        ed.selection.select(dummySpan);
+        // and delete it
+        ed.execCommand("Delete", false, null);
+    }
+
+    function splitContent(ed, e) {
+        // get current range
+        var range = ed.selection.getRng();
+        // inside blockquote?
+        if (isInsideBlockquote(range)) {
+            // W3C or IE?
+            if (range.startContainer) {
+                // strategy #1 (W3C compliant)
+                splitContent_W3C(ed);
+            } else {
+                // strategy #2 (IE-specific / IE7 & IE8)
+                splitContent_IE(ed);
+            }
+            ed.dom.events.cancel(e);
+        }
+    }
+
     function Editor(textarea) {
 
         var def = $.Deferred(), ed;
@@ -229,11 +368,11 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             },
 
             theme_advanced_buttons1:
-                'bold,italic,underline,|,' +
-                'undo,redo,|,' +
+                'bold,italic,underline,strikethrough,|,' +
                 'bullist,numlist,indent,outdent,|,' +
                 'justifyleft,justifycenter,justifyright,|,' +
-                'forecolor,backcolor,|,formatselect',
+                'forecolor,backcolor,|,formatselect,|,' +
+                'undo,redo,',
             theme_advanced_buttons2: '',
             theme_advanced_buttons3: '',
             theme_advanced_toolbar_location: 'top',
@@ -263,7 +402,21 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             // post processing (string-based)
             paste_preprocess: paste_preprocess,
             // post processing (DOM-based)
-            paste_postprocess: paste_postprocess
+            paste_postprocess: paste_postprocess,
+
+            setup: function (ed) {
+                ed.onKeyDown.add(function (ed, e) {
+                    // pressed enter?
+                    if ((e.keyCode || e.which) === 13) {
+                        try {
+                            // split content
+                            splitContent(ed, e);
+                        } catch (e) {
+                            console.error('Ooops! setup.onKeyDown()', e);
+                        }
+                    }
+                });
+            }
         });
 
         var resizeEditor = _.debounce(function () {
@@ -295,7 +448,7 @@ define.async('io.ox/core/tk/html-editor', [], function () {
 
             ln2br = function (str) {
                 return String(str || '').replace(/\r/g, '')
-                    .replace('\n', '<br>'); // '\n' is for IE
+                    .replace(new RegExp('\\n', 'g'), '<br>'); // '\n' is for IE
             },
 
             // get editor content
@@ -316,6 +469,8 @@ define.async('io.ox/core/tk/html-editor', [], function () {
         this.focus = function () {
             ed.focus();
         };
+
+        this.ln2br = ln2br;
 
         this.clear = clear;
 
@@ -406,6 +561,12 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             this.setContent(content + str);
         };
 
+        this.prependContent = function (str) {
+            var content = this.getContent();
+            str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
+            this.setContent(str + content);
+        };
+
         this.replaceParagraph = function (str, rep) {
             var content = this.getContent(), pos, top;
             str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
@@ -423,6 +584,10 @@ define.async('io.ox/core/tk/html-editor', [], function () {
 
         this.removeContent = function (str) {
             this.replaceContent(str, '');
+        };
+
+        this.removeBySelector = function (selector) {
+            $(selector, ed.getDoc()).remove();
         };
 
         this.replaceContent = function (str, rep) {
@@ -454,6 +619,8 @@ define.async('io.ox/core/tk/html-editor', [], function () {
                 }
             }
 
+            window.lala = win;
+
             return found;
         };
 
@@ -467,6 +634,7 @@ define.async('io.ox/core/tk/html-editor', [], function () {
         };
 
         this.handleShow = function () {
+            textarea.parents('.window-content').find('.editor-print-margin').hide();
             textarea.removeAttr('disabled').idle().next().show();
             textarea.hide();
             resizeEditor();
@@ -479,9 +647,12 @@ define.async('io.ox/core/tk/html-editor', [], function () {
 
         this.destroy = function () {
             this.handleHide();
-            this.setContent('');
-            $(ed.getWin()).off('focus blur');
-            textarea.tinymce().remove();
+            if (ed) {
+                $(ed.getWin()).off('focus blur');
+            }
+            if (textarea.tinymce()) {
+                textarea.tinymce().remove();
+            }
             textarea = textarea.tinymce = def = ed = null;
         };
     }

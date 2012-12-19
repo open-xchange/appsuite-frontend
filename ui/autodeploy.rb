@@ -8,16 +8,24 @@
 
 def build 
   retval = system("./build.sh debug=true")
-  failure unless retval
+  if(retval)
+    success
+  else
+    failure
+  end
   true
 end
 
 def failure
-  system("growlnotify -n \"OX 7 UI Build\" -m \"Build failed!\"")
+  system("growlnotify -n \"OX 7 UI Build\" -m \"Build failed!\" -p 1")
+end
+
+def success
+  system("growlnotify -n \"OX 7 UI Build\" -m \"Build succeeded!!\" -p -1")
 end
 
 watch("\.js$") { build }
 watch("\.css$") { build }
 watch("\.less$") { build }
 watch("\.html$") { build }
-watch("^doc") { build }
+watch("^docs") { build }

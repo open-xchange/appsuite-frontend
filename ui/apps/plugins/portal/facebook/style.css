@@ -1,0 +1,105 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+h1.facebook {
+    margin: 0 0 26px 0;
+}
+.facebook.wall-entry {
+    position: relative;
+    min-height: 55px;
+    margin: 0 0 20px 65px;
+}
+
+.facebook.wall-entry a.profile-picture {
+    position: absolute;
+    top: 2px;
+    left: -65px;
+}
+
+.facebook.wall-entry a.profile-picture img.picture{
+    .border-radius(5px);
+}
+
+.facebook .from {
+    display: inline;
+}
+
+.facebook .wall-comment {
+    position: relative;
+    padding: 1em;
+}
+
+.facebook .wall-comment-content {
+    position: relative;
+    margin-left: 55px;
+}
+
+.facebook .wall-comment .picture {
+    display: block;
+    position: absolute;
+    left: 0px;
+    top: 1em;
+    width: 50px;
+}
+
+
+.facebook a.action {
+    margin: 0 1em 0 0;
+    font-size: 80%;
+}
+
+.facebook a.picture {
+    display: block;
+}
+
+.facebook a.picture img.picture {
+    border: 1px solid #ccc;
+    padding: 4px;
+}
+
+.facebook img.posted-image {
+    display: block;
+    border: 1px solid #ccc;
+    padding: 4px;
+}
+
+.facebook .datetime  {
+    display: block;
+    font-size: 80%;
+    clear: both;
+}
+
+.facebook img.video-preview {
+    display: block;
+    padding-right: 1em;
+}
+
+.facebook .caption {
+    font-size: 80%;
+    line-height: 80%;
+    text-decoration: none;
+}
+
+.facebook .caption.title {
+    font-weight: bold;
+}
+
+.facebook .wall-img-left {
+    float: left;
+    padding-right: .5em;
+}
+
+.facebook .debugging-info {
+    font-size: 90%;
+    font-weight: bold;
+    color: #c33;
+}

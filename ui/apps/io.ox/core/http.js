@@ -77,6 +77,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "521" : "employee_type",
             "522" : "room_number",
             "523" : "street_business",
+            "524" : "internal_userid",
             "525" : "postal_code_business",
             "526" : "city_business",
             "527" : "state_business",
@@ -153,7 +154,6 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "601" : "image1_content_type",
             "602" : "mark_as_distributionlist",
             "605" : "default_address",
-            "524" : "internal_userid",
             "606" : "image1_url"
         },
         "calendar" : {
@@ -162,21 +162,35 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "202" : "end_date",
             "203" : "note",
             "204" : "alarm",
+            "206" : "recurrence_id",
             "207" : "recurrence_position",
             "208" : "recurrence_date_position",
             "209" : "recurrence_type",
+            "210" : "change_exceptions",
+            "211" : "delete_exceptions",
             "212" : "days",
             "213" : "day_in_month",
             "214" : "month",
             "215" : "interval",
             "216" : "until",
+            "217" : "notification",
             "220" : "participants",
             "221" : "users",
+            "222" : "occurrences",
+            "223" : "uid",
+            "224" : "organizer",
+            "225" : "sequence",
+            "226" : "confirmations",
+            "227" : "organizerId",
+            "228" : "principal",
+            "229" : "principalId",
             "400" : "location",
             "401" : "full_time",
-            "402" : "shown_as"
+            "402" : "shown_as",
+            "408" : "timezone",
+            "410" : "recurrence_start"
         },
-        "infostore" : {
+        "files" : {
             "700" : "title",
             "701" : "url",
             "702" : "filename",
@@ -295,15 +309,27 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "1035": "pop3_storage ",
             "1036": "pop3_path",
             "1037": "personal"
+        },
+        "attachment": {
+            "1": "id",
+            "2": "created_by",
+            "4": "creation_date",
+            "800": "folder",
+            "801": "attached",
+            "802": "module",
+            "803": "filename",
+            "804": "file_size",
+            "805": "file_mimetype",
+            "806": "rtf_flag"
         }
     };
 
     // extend with commons (not all modules use common columns, e.g. folders)
     $.extend(idMapping.contacts, idMapping.common);
     $.extend(idMapping.calendar, idMapping.common);
-    $.extend(idMapping.infostore, idMapping.common);
-    delete idMapping.infostore["101"]; // not "common" here (exception)
-    delete idMapping.infostore["104"];
+    $.extend(idMapping.files, idMapping.common);
+    delete idMapping.files["101"]; // not "common" here (exception)
+    delete idMapping.files["104"];
     $.extend(idMapping.tasks, idMapping.common);
     $.extend(idMapping.user, idMapping.contacts, idMapping.common);
 
@@ -334,12 +360,13 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         // columns set?
         columns = columns !== undefined ? columns : getAllColumns(module);
         // get ids
-        var ids = idMapping[module] || {};
-        var obj = {}, i = 0, $l = data.length;
+        var ids = idMapping[module] || {},
+            obj = {}, i = 0, $i = data.length, column, id;
         // loop through data
-        for (; i < $l; i++) {
+        for (; i < $i; i++) {
             // get id
-            var id = ids[columns[i]];
+            column = columns[i];
+            id = ids[column] || column;
             // extend object
             obj[id] = data[i];
         }
@@ -366,7 +393,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         // prepend root
         o.url = ox.apiRoot + "/" + o.module;
         // add session
-        if (o.appendSession === true) {
+        if (o.appendSession === true && ox.session) {
             o.params.session = ox.session;
         }
         // add columns
@@ -425,7 +452,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         if (response && response.error !== undefined && !response.data) {
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
-                isAutoLogin = o.module === "login" && o.data && o.data.action === "autologin";
+                isAutoLogin = o.module === "login" && o.data && /^(autologin|store)$/.test(o.data.action);
             if (isSessionError && !isAutoLogin) {
                 // login dialog
                 ox.session = "";
@@ -448,25 +475,28 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                     if (o.module === "multiple") {
                         var i = 0, $l = response.length, tmp;
                         for (; i < $l; i++) {
-                            // time
-                            timestamp = response[i].timestamp !== undefined ? response[i].timestamp : _.now();
-                            // data/error
-                            if (response[i].data !== undefined) {
-                                // data
-                                tmp = sanitize(response[i].data, o.data[i].columnModule, o.data[i].columns);
-                                data.push({ data: tmp, timestamp: timestamp });
-                                // handle warnings within multiple
-                                if (response[i].error !== undefined) {
-                                    console.warn("TODO: warning");
+                            if (response[i]) { // to bypass temp. [null] bug
+                                // time
+                                timestamp = response[i].timestamp !== undefined ? response[i].timestamp : _.now();
+                                // data/error
+                                if (response[i].data !== undefined) {
+                                    // data
+                                    tmp = sanitize(response[i].data, o.data[i].columnModule, o.data[i].columns);
+                                    data.push({ data: tmp, timestamp: timestamp });
+                                    // handle warnings within multiple
+                                    if (response[i].error !== undefined) {
+                                        console.warn("TODO: warning");
+                                    }
+                                } else {
+                                    // error
+                                    data.push({ error: response[i], timestamp: timestamp });
                                 }
-                            } else {
-                                // error
-                                data.push({ error: response[i], timestamp: timestamp });
                             }
                         }
                         deferred.resolve(data);
                     } else {
-                        data = sanitize(response.data, o.columnModule, o.params.columns);
+                        var columns = o.params.columns || (o.processResponse === true ? getAllColumns(o.columnModule, true) : '');
+                        data = sanitize(response.data, o.columnModule, columns);
                         timestamp = response.timestamp !== undefined ? response.timestamp : _.now();
                         deferred.resolve(data, timestamp);
                     }
@@ -486,7 +516,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         // slow mode
         slow = _.url.hash("slow"),
         // fail mode
-        fail = _.url.hash("fail");
+        fail = _.url.hash('fail') !== undefined;
 
     var ajax = (function () {
 
@@ -494,19 +524,49 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         var requests = {};
 
         function lowLevelSend(r) {
-            $.ajax(r.xhr)
+            // TODO: remove backend fix
+            var fixPost = r.o.fixPost && r.xhr.type === 'POST',
+                ajaxOptions = _.extend({}, r.xhr, { dataType: fixPost ? 'text' : r.xhr.dataType });
+
+            // extend xhr to support upload/progress notifications
+            var xhr = $.ajaxSettings.xhr();
+            if (xhr.upload) {
+                ajaxOptions.xhr = function () { return xhr; };
+                xhr.upload.addEventListener('progress', function (e) {
+                    r.def.notify(e);
+                }, false);
+            }
+
+            $.ajax(ajaxOptions)
+                // TODO: remove backend fix
+                .pipe(function (response) {
+                    if (fixPost) {
+                        // Extract the JSON text
+                        var matches = /\((\{.*?\})\)/.exec(response);
+                        return matches && matches[1] ? JSON.parse(matches[1]) : JSON.parse(response);
+                    } else {
+                        return response;
+                    }
+                })
                 .done(function (data) {
+                    // trigger event first since HTTP layer finishes work
+                    that.trigger("stop done", r.xhr);
+                    // process response
                     if (r.o.processData) {
                         processResponse(r.def, data, r.o, r.o.type);
                     } else {
-                        r.def.resolve(data);
+                        // error handling if JSON (e.g. for UPLOAD)
+                        if (r.xhr.dataType === 'json' && data.error !== undefined) {
+                            r.def.reject(data);
+                        } else {
+                            r.def.resolve(data);
+                        }
                     }
-                    that.trigger("stop done", r.xhr);
                     r = null;
                 })
                 .fail(function (xhr, textStatus, errorThrown) {
-                    r.def.reject({ error: xhr.status + " " + (errorThrown || "general") }, xhr);
                     that.trigger("stop fail", r.xhr);
+                    r.def.reject({ error: xhr.status + " " + (errorThrown || "general") }, xhr);
                     r = null;
                 });
         }
@@ -581,7 +641,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             }
             // continuation
             function cont() {
-                if (fail && o.module !== "login" && Math.random() < Number(fail)) {
+                if (fail && o.module !== "login" && Math.random() < Number(_.url.hash('fail'))) {
                     // simulate broken connection
                     console.error("HTTP fail", r.o.url, r.xhr);
                     r.def.reject({ error: "0 simulated fail" });
@@ -662,6 +722,48 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             return ajax(options, "UPLOAD");
         },
 
+        FORM: function (options) {
+
+            options = _.extend({
+                form: $(),
+                url: 'files?action=new',
+                data: {},
+                field: 'json'
+            }, options);
+
+            var name = 'formpost_' + _.now(), def = $.Deferred(), data, form = options.form;
+
+            $('#tmp').append(
+                $('<iframe>', { name: name, id: name, height: 1, width: 1, src: ox.base + '/blank.html' })
+            );
+
+            window.callback_new = function (response) {
+                def[(response && response.error ? 'reject' : 'resolve')](response);
+                window.callback_new = data = form = def = null;
+                $('#' + name).remove();
+            };
+
+            data = JSON.stringify(options.data);
+
+            if (form.find('input[name="' + options.field + '"]').length) {
+                form.find('input[name="' + options.field + '"]').val(data);
+            } else {
+                form.append(
+                    $('<input type="hidden" name="' + options.field + '">').val(data)
+                );
+            }
+
+            form.attr({
+                method: 'post',
+                enctype: 'multipart/form-data',
+                action: ox.apiRoot + '/' + options.url + '&session=' + ox.session,
+                target: name
+            })
+            .submit();
+
+            return def;
+        },
+
         /**
          * Get all columns of a module
          * @param {string} module Module name
@@ -684,11 +786,13 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         simplify: function (list) {
             var i = 0, item = null, tmp = new Array(list.length);
             for (; (item = list[i]); i++) {
-                if (typeof item === "object") {
+                if (typeof item === 'object') {
                     tmp[i] = { id: item.id };
+                    // look for folder(_id) - e.g. groups/users don't have one
                     if (item.folder || item.folder_id) {
                         tmp[i].folder = item.folder || item.folder_id;
                     }
+                    // calendar support:
                     if (item.recurrence_position) {
                         tmp[i].recurrence_position = item.recurrence_position;
                     }
@@ -705,24 +809,27 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
          */
         fixList: function (ids, deferred) {
 
-            return deferred
-                .pipe(function (data) {
-                    // simplify
-                    ids = that.simplify(ids);
-                    // build hash (uses folder_id!)
-                    var i, obj, hash = {}, tmp = new Array(data.length), key;
-                    for (i = 0; (obj = data[i]); i++) {
-                        key = String(obj.internal_userid ? obj.internal_userid : (obj.folder_id || 0) + "." + (obj.internal_userid || obj.id) + "." + (obj.recurrence_position || 0));
-                        hash[key] = obj;
-                    }
-                    // fix order (uses folder!)
-                    for (i = 0; (obj = ids[i]); i++) {
-                        key = String(typeof obj === "object" ? (obj.folder || 0) + "." + (obj.internal_userid || obj.id) + "." + (obj.recurrence_position || 0) : obj);
-                        tmp[i] = hash[key];
-                    }
-                    hash = obj = ids = null;
-                    return tmp;
-                });
+            return deferred.pipe(function (data) {
+                // simplify
+                ids = that.simplify(ids);
+                // build hash (uses folder_id!)
+                var i, obj, hash = {}, tmp = new Array(data.length), key;
+                // use internal_userid?
+                var useInternalUserId = _(ids).reduce(function (memo, obj) {
+                    return memo && _.isNumber(obj);
+                }, true);
+                for (i = 0; (obj = data[i]); i++) {
+                    key = useInternalUserId ? obj.internal_userid : _.cid(obj);
+                    hash[key] = obj;
+                }
+                // fix order (uses folder!)
+                for (i = 0; (obj = ids[i]); i++) {
+                    key = useInternalUserId ? obj : _.cid(obj);
+                    tmp[i] = hash[key];
+                }
+                hash = obj = ids = null;
+                return tmp;
+            });
         },
 
         /**

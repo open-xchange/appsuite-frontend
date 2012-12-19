@@ -1,0 +1,3 @@
+[submodule "build"]
+	path = build
+	url = https://git.open-xchange.com/git/build

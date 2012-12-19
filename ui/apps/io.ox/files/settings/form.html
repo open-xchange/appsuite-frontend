@@ -1,0 +1,34 @@
+<part id='io.ox/files/settings'>
+    <extension id='title'>
+        <div>
+            <div class="clear-title">{{=it.strings.TITLE_FILES}}</div>
+            <div class="settings sectiondelimiter"></div>
+        </div>
+    </extension>
+    <extension id='common'>
+        <div class="control-group">
+            <label for="default_view" class="control-label">{{=it.strings.DEFAULT_VIEW}}</label>
+            <div class="controls">
+                <label class="select">
+                    <select data-property="view" id="default_view" class="input-xlarge">
+                        {{~it.optionsViewDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
+                    </select>
+                </label>
+            </div>
+        </div>
+    </extension>
+    <extension id='mediaplayer'>
+        <legend class="sectiontitle expertmode">{{=it.strings.TITLE_MEDIAPLAYER}}</legend>
+        <div class="control-group">
+            <label class="control-label"></label>
+            <div class="controls">
+                <label class="checkbox expertmode">{{=it.strings.AUDIO_ENABLED}}
+                    <input type="checkbox" data-property="audioEnabled">
+                </label>
+                <label class="checkbox expertmode">{{=it.strings.VIDEO_ENABLED}}
+                    <input type="checkbox" data-property="videoEnabled">
+                </label>
+            </div>
+        </div>
+    </extension>
+</part>

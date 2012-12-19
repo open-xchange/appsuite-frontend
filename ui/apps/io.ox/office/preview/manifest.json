@@ -1,0 +1,7 @@
+[
+    {
+        "requires": "document_preview",
+        "path": "io.ox/office/preview/fileActions",
+        "namespace": "io.ox/files/actions"
+    },
+]

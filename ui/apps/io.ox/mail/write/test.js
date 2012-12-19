@@ -14,14 +14,16 @@
 define('io.ox/mail/write/test',
     ['io.ox/mail/write/main',
      'io.ox/mail/api',
-     'io.ox/core/api/user',
-     'io.ox/core/config',
-     'io.ox/core/extensions'], function (writer, mailAPI, userAPI, config, ext) {
+     'io.ox/core/api/account',
+     'io.ox/core/extensions',
+     'io.ox/mail/write/test/html_send',
+     'io.ox/mail/write/test/text_send',
+     'io.ox/mail/write/test/html_reply'], function (writer, mailAPI, accountAPI, ext) {
 
     'use strict';
 
     var base = ox.base + '/apps/io.ox/mail/write/test',
-        TIMEOUT = 5000;
+        TIMEOUT = ox.testTimeout;
 
     // helpers
     function Done() {
@@ -226,12 +228,6 @@ define('io.ox/mail/write/test',
                         .toEqual(true);
                 });
 
-                j.it('has correct mail props (delivery receipt)', function () {
-                    var data = app.getMail().data;
-                    j.expect(data.disp_notification_to === 0)
-                        .toEqual(true);
-                });
-
                 j.it('has correct mail props (from)', function () {
                     var data = app.getMail().data;
                     j.expect(_.isArray(data.from) && data.from.length === 1)
@@ -270,14 +266,12 @@ define('io.ox/mail/write/test',
                 if (!_.browser.IE) {
 
                     j.it('sends mail successfully', function () {
-                        var data = app.getMail().data, done = new Done(),
-                            myself = config.get('identifier');
+                        var data = app.getMail().data, done = new Done(), myself = ox.user_id;
                         j.waitsFor(done, 'mail being send', TIMEOUT);
                         // get myself
-                        userAPI.get({ id: myself })
-                            .done(function (myself) {
+                        accountAPI.getPrimaryAddress().done(function (address) {
                                 // just send to myself
-                                data.to = [['"' + myself.display_name + '"', myself.email1]];
+                                data.to = [address];
                                 data.cc = [];
                                 data.bcc = [];
                                 sentOriginalData = data;
@@ -305,7 +299,6 @@ define('io.ox/mail/write/test',
                                         _.isEqual(sent.cc, data.cc) &&
                                         _.isEqual(sent.bcc, data.bcc) &&
                                         _.isEqual(sent.priority, data.priority) &&
-                                        _.isEqual(sent.disp_notification_to || undefined, data.disp_notification_to || undefined) &&
                                         _.isEqual(sent.vcard || undefined, data.vcard || undefined)
                                     )
                                     .toEqual(true);
@@ -315,8 +308,7 @@ define('io.ox/mail/write/test',
 
                 j.it('closes compose dialog', function () {
                     // mark app as clean so no save as draft question will pop up
-                    app.markClean();
-                    app.quit();
+                    app.dirty(false).quit();
                     j.expect(app.getEditor).toBeUndefined();
                     app = ed = form = null;
                 });
@@ -515,7 +507,7 @@ define('io.ox/mail/write/test',
                 });
 
                 j.it('closes compose dialog', function () {
-                    app.quit();
+                    app.dirty(false).quit();
                     j.expect(app.getEditor).toBeUndefined();
                     app = ed = null;
                 });
@@ -617,7 +609,7 @@ define('io.ox/mail/write/test',
                 });
 
                 j.it('closes compose dialog', function () {
-                    app.quit();
+                    app.dirty(false).quit();
                     j.expect(app.getEditor).toBeUndefined();
                     app = ed = null;
                 });

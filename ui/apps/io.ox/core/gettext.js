@@ -35,11 +35,11 @@ define("io.ox/core/gettext", [], function () {
     }
 
     function debugNode(e) {
-        if (e.target.tagName in { TITLE: 1, SCRIPT: 1, STYLE: 1 }) return;
+        if (e.target.tagName in { SCRIPT: 1, STYLE: 1 }) return;
         debug(e.target);
         function debug(node) {
             if (node.nodeType === 3) {
-                verify(node.data, node);
+                verify(node.data, node.parentNode);
             } else if (node.nodeType === 1) {
                 _.each(node.childNodes, debug);
             }
@@ -47,43 +47,70 @@ define("io.ox/core/gettext", [], function () {
     }
 
     function verify(s, node) {
-        if (s.charCodeAt(s.length - 1) !== 0x200b) {
-            console.error("Untranslated string", s, node.parentNode);
-            $(node.parentNode).css('backgroundColor', 'rgba(255, 192, 0, 0.5)');
-        }
+        if (isTranslated(s) || $(node).closest('.noI18n').length) return;
+        console.error(isDoubleTranslated(s) ? 'Double translated string' : 'Untranslated string', s, encodeURIComponent(s), node);
+        $(node).css('backgroundColor', 'rgba(255, 192, 0, 0.5)');
+    }
+
+    function markTranslated(text) {
+        return '\u200b' + text + '\u200c';
+    }
+
+    function isTranslated(text) {
+        return (/^(\u200b[^\u200b\u200c]*\u200c|\s*)$/).test(text);
+    }
+
+    function isDoubleTranslated(text) {
+        return (/^\u200b\u200b.+\u200c\u200c$/).test(text);
     }
 
     function gt(id, po) {
-
         po.plural = new Function("n", "return " + po.plural + ";");
 
         function gettext(text) {
-            return gettext.pgettext("", text);
+            var args;
+            text = gettext.pgettext("", text);
+            if (arguments.length < 2) {
+                return text;
+            } else {
+                args = Array.prototype.slice.call(arguments);
+                args.splice(0, 1, text);
+                return gettext.format.apply(gettext, args);
+            }
         }
 
-        gettext.gettext = gettext;
+        if (_.url.hash('debug-i18n')) {
+            gettext.format = function (text) {
+                var args = new Array(arguments.length);
+                for (var i = 0; i < arguments.length; i++) {
+                    var arg = String(arguments[i]);
+                    if (isTranslated(arg)) {
+                        arg = arg.slice(1, -1);
+                    } else {
+                        console.error("Untranslated printf parameter", i, arg);
+                        console.trace();
+                    }
+                    args[i] = arg;
+                }
+                return markTranslated(_.printf.apply(this, args));
+            };
+            gettext.noI18n = markTranslated;
+            gettext.pgettext = _.compose(markTranslated, pgettext);
+            gettext.npgettext = _.compose(markTranslated, npgettext);
+        } else {
+            gettext.format = _.printf;
+            gettext.noI18n = _.identity;
+            gettext.pgettext = pgettext;
+            gettext.npgettext = npgettext;
+        }
+
+        gettext.gettext = function (text) {
+            return gettext.pgettext("", text);
+        };
 
         gettext.ngettext = function (singular, plural, n) {
             return gettext.npgettext("", singular, plural, n);
         };
-
-        if (_.url.hash('debug-i18n')) {
-            gettext.noI18n = function (text) {
-                return text + '\u200b';
-            };
-            gettext.pgettext = function () {
-                return pgettext.apply(this, arguments) + '\u200b';
-            };
-            gettext.npgettext = function () {
-                return npgettext.apply(this, arguments) + '\u200b';
-            };
-        } else {
-            gettext.noI18n = function (text) {
-                return text;
-            };
-            gettext.pgettext = pgettext;
-            gettext.npgettext = npgettext;
-        }
 
         function pgettext(context, text) {
             var key = context ? context + "\x00" + text : text;
@@ -102,6 +129,7 @@ define("io.ox/core/gettext", [], function () {
         return gettext;
     }
 
+    // probably we can clean that up here since we now have "ox.language" right from the start
     var lang = new $.Deferred();
 
     gt.setLanguage = function (language) {

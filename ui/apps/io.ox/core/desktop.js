@@ -14,65 +14,14 @@
  */
 
 define("io.ox/core/desktop",
-    ["io.ox/core/event", "io.ox/core/extensions", "io.ox/core/extPatterns/links", "io.ox/core/cache"], function (Events, ext, links, cache) {
+    ["io.ox/core/event",
+     "io.ox/core/extensions",
+     "io.ox/core/extPatterns/links",
+     "io.ox/core/cache",
+     "io.ox/core/notifications",
+     "gettext!io.ox/core"], function (Events, ext, links, cache, notifications, gt) {
 
     "use strict";
-
-    /**
-     * Quick settings for application windows
-     */
-    $.quickSettings = (function () {
-
-        return function (containerSelector, configSelector, link) {
-
-            var container = $(containerSelector);
-            var config = $(configSelector);
-
-            link = $(link);
-
-            if (!config.hasClass("quick-settings")) {
-                // adjust container
-                container.css({
-                    position: "absolute",
-                    zIndex: 2
-                });
-                // remember top position
-                container.data("top", parseInt(container.css("top") || 0, 10));
-                // adjust settings area
-                config.addClass("quick-settings").css({
-                    position: "absolute",
-                    zIndex: 1,
-                    top: (config.css("top") || 0) + "px",
-                    right: "0px",
-                    height: "auto",
-                    left: "0px",
-                    minHeight: "100px"
-                });
-            }
-
-            // rebind events
-            link.off("click")
-                .on("dblclick", false)
-                .on("click", function (e) {
-                    window.container = container;
-                    window.config = config;
-                    // open
-                    var top = container.data("top");
-                    if (link.data("open") !== true) {
-                        link.data("open", true);
-                        config.show();
-                        var h = Math.max(config.outerHeight(), 25);
-                        container.stop().animate({ top: (top + h) + "px" }, 250);
-                    } else {
-                        link.data("open", false);
-                        container.stop().animate({ top: top + "px" }, 250, function () {
-                            config.hide();
-                        });
-                    }
-                    return false;
-                });
-        };
-    }());
 
     /**
      * Core UI
@@ -81,163 +30,94 @@ define("io.ox/core/desktop",
     // current window
     var currentWindow = null;
 
-    // ref to core screen
-    var core = $("#io-ox-core"),
-        // top bar
-        topBar = $("#io-ox-topbar"),
-        // add launcher
-        addLauncher = function (side, label, fn) {
-            // construct
-            var node = $("<div>")
-            .addClass("launcher")
-            .text(label + '')
-            .hover(
-                function () {
-                    $(this).addClass("hover");
-                },
-                function () {
-                    $(this).removeClass("hover");
-                }
-            )
-            .on("click", function () {
-                var self = $(this), title;
-                if (!_.isFunction(fn)) {
-                    // for development only - should never happen
-                    self.css("backgroundColor", "#800000");
-                    setTimeout(function () {
-                        self.css("backgroundColor", "");
-                    }, 500);
-                } else {
-                    // set fixed width, hide label, be busy
-                    title = self.text() || label;
-                    self.css("width", self.width() + "px").text("\u00A0").busy();
-                    // call launcher
-                    (fn.call(this) || $.when()).done(function () {
-                        // revert visual changes
-                        self.idle().text(title + '').css("width", "");
-                    });
-                }
-            });
+    // top bar
+    var topbar = $("#io-ox-topbar"),
+        launchers = topbar.find('.launchers'),
 
-            function getTarget(app) {
-                var topbar = $("#io-ox-topbar"), target,
-                    id = app.getName() || app.id;
-                if ((target = topbar.find('.launcher[data-app-id=' + $.escape(id) + ']')).length) {
-                    return target;
-                } else {
-                    return null;
-                }
-            }
+        appGuid = 0,
+        appCache = new cache.SimpleCache('app-cache', true);
 
-            // add
-            var c = currentWindow, target;
-            if (side === "left" && c && c.app && (target = getTarget(c.app))) {
-                // animate space
-                node.hide().insertAfter(target).fadeIn(1000);
-            } else {
-                // just add
-                if (side === "left") {
-                    node.appendTo(topBar);
-                } else {
-                    node.addClass("right").appendTo(topBar);
-                }
-            }
+    // Apps collection
+    ox.ui.apps = new Backbone.Collection();
 
-            return node;
-        };
+    var AbstractApp = Backbone.Model.extend({
 
-    // show
-    core.show();
+        defaults: {
+            title: ''
+        },
 
-    // TODO: improve this stupid approach
-    ox.ui.running = [];
+        initialize: function () {
+            var self = this;
+            this.guid = appGuid++;
+            this.id = this.id || 'app-' + appGuid;
+            this.getInstance = function () {
+                return self;
+            };
+        },
 
-    /**
-     * Create app
-     */
-    ox.ui.createApp = (function () {
+        getName: function () {
+            return this.get('name');
+        },
 
-        var appCache = new cache.SimpleCache('app-cache', true),
-            appGuid = 0;
+        setTitle: function (title) {
+            this.set('title', title);
+            return this;
+        },
 
-        function App(options) {
+        getTitle: function () {
+            return this.get('title');
+        },
 
-            var opt = $.extend({
-                title: "",
-                icon: null,
-                id: 'app-' + (appGuid++)
-            }, options || {});
+        call: $.noop
+    });
 
-            // dummy function
-            var dummyFn = function () {
-                    return $.Deferred().resolve();
-                },
-                // launcher function
-                launchFn = dummyFn,
-                // quit function
-                quitFn = dummyFn,
-                // app main window
-                win = null,
-                // running
-                running = false,
-                runningId = null,
-                // save/restore
-                savePointUniqueID = _.now(),
-                savePoint = '',
-                saveRestorePointTimer = null,
-                // self
-                self = this;
+    ox.ui.AppPlaceholder = AbstractApp.extend({
 
-            function saveRestorePoint() {
-                if (self.failSave) {
-                    appCache.get('savepoints').done(function (list) {
-                        list = list || [];
+        initialize: function () {
+            // call super constructor
+            AbstractApp.prototype.initialize.apply(this, arguments);
+        },
 
-                        var data = self.failSave(),
-                            ids = _(list).pluck('id'),
-                            pos = _(ids).indexOf(savePointUniqueID);
+        launch: function () {
+            var self = this, id = (this.get('name') || this.id) + '/main';
+            return ox.launch(id).done(function () { self.quit(); });
+        },
 
-                        data.id = savePointUniqueID;
+        quit: function (force) {
+            // mark as not running
+            this.set('state', 'stopped');
+            // remove from list
+            ox.ui.apps.remove(this);
+        }
+    });
 
-                        if (pos > -1) {
-                            // replace
-                            list.splice(pos, 1, data);
-                        } else {
-                            // add
-                            list.push(data);
-                        }
-                        appCache.add('savepoints', list);
-                    });
-                }
-            }
+    ox.ui.App = AbstractApp.extend({
 
-            function removeRestorePoint() {
-                appCache.get('savepoints').done(function (list) {
-                    list = list || [];
-                    var ids = _(list).pluck('id'),
-                        pos = _(ids).indexOf(savePointUniqueID);
+        defaults: {
+            window: null,
+            state: 'ready',
+            saveRestorePointTimer: null,
+            launch: function () { return $.when(); },
+            quit: function () { return $.when(); }
+        },
 
-                    if (pos > -1) {
-                        list.splice(pos, 1);
-                    }
-                    appCache.add('savepoints', list);
-                });
-            }
+        initialize: function () {
 
-            $(window).on('unload', saveRestorePoint);
-            saveRestorePointTimer = setInterval(saveRestorePoint, 10000);
+            var self = this;
 
-            // add event hub
-            Events.extend(this);
+            // call super constructor
+            AbstractApp.prototype.initialize.apply(this, arguments);
+
+            this.set('uniqueID', _.now() + '.' + String(Math.random()).substr(3, 4));
+
+            var save = $.proxy(this.saveRestorePoint, this);
+            $(window).on('unload', save);
+            this.set('saveRestorePointTimer', setInterval(save, 10 * 1000)); // 10 secs
 
             // add folder management
             this.folder = (function () {
 
-                var folder = null, that, win = null, grid = null, type, hChanged;
-
-                hChanged = function (e) {
-                    that.set(e.data.folder);
-                };
+                var folder = null, that, win = null, grid = null, type;
 
                 that = {
 
@@ -246,12 +126,13 @@ define("io.ox/core/desktop",
                         folder = null;
                         // update window title?
                         if (win) {
-                            win.setTitle('');
+                            win.setTitle(_.noI18n(''));
                         }
                         // update grid?
                         if (grid) {
                             grid.clear();
                         }
+
                     },
 
                     set: function (id) {
@@ -264,23 +145,25 @@ define("io.ox/core/desktop",
                                     api.off('change:' + folder);
                                     // remember
                                     folder = String(id);
-                                    // process change
-                                    // look for change folder event
-                                    api.on('change:' + folder, { folder: folder }, hChanged);
                                     // update window title & toolbar?
                                     if (win) {
-                                        win.setTitle(data.title);
+                                        win.setTitle(_.noI18n(data.title));
                                         win.updateToolbar();
                                     }
                                     // update grid?
-                                    if (grid) {
-                                        grid.clear();
-                                        grid.prop('folder', folder);
-                                        grid.refresh();
-                                        // update hash
-                                        _.url.hash('folder', folder);
+                                    if (grid && grid.prop('folder') !== folder) {
+                                        grid.busy().prop('folder', folder);
+                                        if (win && win.search.active) {
+                                            win.search.close();
+                                        } else {
+                                            grid.refresh();
+                                        }
+                                        // load fresh folder & trigger update event
+                                        api.reload(id);
                                     }
-                                    self.trigger('change:folder', folder, data);
+                                    // update hash
+                                    _.url.hash('folder', folder);
+                                    self.trigger('folder:change', folder, data);
                                     def.resolve(data);
                                 })
                                 .fail(def.reject);
@@ -317,6 +200,12 @@ define("io.ox/core/desktop",
                         return folder;
                     },
 
+                    getData: function () {
+                        return require(['io.ox/core/api/folder']).pipe(function (api) {
+                            return api.get({ folder: folder });
+                        });
+                    },
+
                     updateTitle: function (w) {
                         win = w;
                         return this;
@@ -334,169 +223,248 @@ define("io.ox/core/desktop",
 
                 return that;
             }());
+        },
 
-            this.getInstance = function () {
-                return self; // not this!
-            };
+        setLauncher: function (fn) {
+            this.set('launch', fn);
+            return this;
+        },
 
-            this.getId = function () {
-                return opt.id;
-            };
+        setQuit: function (fn) {
+            this.set('quit', fn);
+            return this;
+        },
 
-            this.setLauncher = function (fn) {
-                launchFn = fn;
-                return this;
-            };
+        setWindow: function (win) {
+            this.set('window', win);
+            win.app = this;
+            // add app name
+            if (this.has('name')) {
+                win.nodes.outer.attr('data-app-name', this.get('name'));
+            }
+            return this;
+        },
 
-            this.setQuit = function (fn) {
-                quitFn = fn;
-                return this;
-            };
+        getWindow: function () {
+            return this.get('window');
+        },
 
-            this.setWindow = function (w) {
-                win = w;
-                win.app = this;
-                return this;
-            };
+        getWindowNode: function () {
+            return this.has('window') ? this.get('window').nodes.main : $();
+        },
 
-            this.getName = function () {
-                return opt.name;
-            };
+        getWindowTitle: function () {
+            return this.has('window') ? this.has('window').getTitle() : '';
+        },
 
-            this.setTitle = function (title) {
-                opt.title = title;
-                ox.trigger('application:change:title', this, title);
-                return this;
-            };
+        setState: function (obj) {
+            for (var id in obj) {
+                _.url.hash(id, String(obj[id]));
+            }
+        },
 
-            this.getTitle = function () {
-                return opt.title;
-            };
+        getState: function () {
+            return _.url.hash();
+        },
 
-            this.getWindow = function () {
-                return win;
-            };
+        launch: function (options) {
 
-            this.getWindowTitle = function () {
-                return win ? win.getTitle() : '';
-            };
+            var deferred = $.when(), self = this;
 
-            this.setState = function (obj) {
-                for (var id in obj) {
-                    _.url.hash(id, String(obj[id]));
-                }
-            };
+            // update hash
+            if (this.get('name') !== _.url.hash('app')) {
+                _.url.hash({ folder: null, perspective: null, id: null });
+            }
+            if (this.has('name')) {
+                _.url.hash('app', this.get('name'));
+            }
 
-            this.getName = function () {
-                return opt.name;
-            };
-
-            this.getState = function () {
-                return _.url.hash();
-            };
-
-            this.launch = function () {
-
-                var deferred;
-
-                // update hash
-                if (opt.name !== _.url.hash('app')) {
-                    _.url.hash('folder', null);
-                    _.url.hash('id', null);
-                }
-                if (opt.name) {
-                    _.url.hash('app', opt.name);
-                }
-
-                if (!running) {
-                    // mark as running
-                    running = true;
-                    // go!
-                    (deferred = launchFn() || $.when())
-                    .done(function () {
-                        ox.ui.running.push(self);
-                        ox.trigger('application:launch', self);
-                    });
-
-                } else if (win) {
-                    // toggle app window
-                    win.show();
-                    deferred = $.when();
-                    ox.trigger('application:resume', self);
-                }
-
-                return deferred.pipe(function () {
-                    return $.Deferred().resolveWith(self, arguments);
+            if (this.get('state') === 'ready') {
+                this.set('state', 'initializing');
+                (deferred = this.get('launch').call(this, options || {}) || $.when())
+                .done(function () {
+                    ox.ui.apps.add(self);
+                    self.set('state', 'running');
+                    self.trigger('launch', self);
                 });
-            };
+            } else if (this.has('window')) {
+                // toggle app window
+                this.get('window').show();
+                this.trigger('resume', this);
+            }
 
-            this.quit = function () {
+            return deferred.pipe(function () {
+                return $.Deferred().resolveWith(self, arguments);
+            });
+        },
+
+        quit: function (force) {
+            // call quit function
+            var def = force ? $.when() : (this.get('quit').call(this) || $.when()), win, self = this;
+            return def.done(function () {
+                // not destroyed?
+                if (force && self.destroy) {
+                    self.destroy();
+                }
                 // update hash
-                _.url.hash('app', null);
-                _.url.hash('folder', null);
-                _.url.hash('id', null);
+                _.url.hash({ app: null, folder: null, perspective: null, id: null });
+                // don't save
+                clearInterval(self.get('saveRestorePointTimer'));
+                self.removeRestorePoint();
+                $(window).off('unload', $.proxy(self.saveRestorePoint, self));
+                // destroy stuff
+                self.folder.destroy();
+                if (self.has('window')) {
+                    win = self.get('window');
+                    win.trigger("quit");
+                    ox.ui.windowManager.trigger("window.quit", win);
+                    win.destroy();
+                }
                 // remove from list
-                ox.ui.running = _(ox.ui.running).without(this);
-                // call quit function
-                var def = quitFn() || $.Deferred().resolve();
-                return def.done(function () {
-                    // mark as not running
-                    running = false;
-                    // don't save
-                    clearInterval(saveRestorePointTimer);
-                    removeRestorePoint();
-                    $(window).off('unload', saveRestorePoint);
-                    // event
-                    ox.trigger('application:quit', self);
-                    // destroy stuff
-                    self.events.destroy();
-                    self.folder.destroy();
-                    if (win) {
-                        ox.ui.windowManager.trigger("window.quit", win);
-                        win.destroy();
+                ox.ui.apps.remove(self);
+                // mark as not running
+                self.set('state', 'stopped');
+                // remove app's properties
+                for (var id in self) {
+                    delete self[id];
+                }
+                // don't leak
+                self = win = null;
+            });
+        },
+
+        saveRestorePoint: function () {
+            var self = this, uniqueID = self.get('uniqueID');
+            if (this.failSave) {
+                appCache.get('savepoints').done(function (list) {
+                    // might be null, so:
+                    list = list || [];
+                    var data, ids, pos;
+                    try {
+                        data = self.failSave();
+                        ids = _(list).pluck('id');
+                        pos = _(ids).indexOf(uniqueID);
+                        data.id = uniqueID;
+                        if (pos > -1) {
+                            // replace
+                            list.splice(pos, 1, data);
+                        } else {
+                            // add
+                            list.push(data);
+                        }
+                    } catch (e) {
+                        // looks broken, so remove from list
+                        if (pos > -1) { list.splice(pos, 1); delete self.failSave; }
                     }
-                    // remove app's properties
-                    for (var id in self) {
-                        delete self[id];
-                    }
-                    // don't leak
-                    self = win = launchFn = quitFn = null;
+                    appCache.add('savepoints', list);
                 });
-            };
+            }
+        },
+
+        removeRestorePoint: function () {
+            var uniqueID = this.get('uniqueID');
+            ox.ui.App.removeRestorePoint(uniqueID);
         }
+    });
 
-        ox.ui.App = App;
+    // static methods
+    _.extend(ox.ui.App, {
 
-        App.canRestore = function () {
-            return appCache.contains('savepoints');
-        };
+        canRestore: function () {
+            // use get instead of contains since it might exist as empty list
+            return this.getSavePoints().pipe(function (list) {
+                return list && list.length;
+            });
+        },
 
-        App.getSavePoints = function () {
+        getSavePoints: function () {
             return appCache.get('savepoints').pipe(function (list) {
-                return list || [];
+                return _(list || []).filter(function (obj) { return 'point' in obj; });
             });
-        };
+        },
 
-        App.restore = function () {
-            App.getSavePoints().done(function (data) {
-                _(data).each(function (obj) {
-                    require([obj.module + '/main'], function (m) {
-                        m.getApp().launch().done(function () {
-                            if (this.failRestore) {
-                                this.failRestore(obj.point);
-                            }
+        removeRestorePoint: function (id) {
+            return appCache.get('savepoints').pipe(function (list) {
+                list = list || [];
+                var ids = _(list).pluck('id'),
+                    pos = _(ids).indexOf(id);
+                list = list.slice();
+                if (pos > -1) {
+                    list.splice(pos, 1);
+                }
+                return appCache.add('savepoints', list);
+            });
+        },
+
+        restore: function () {
+            this.getSavePoints().done(function (data) {
+                $.when.apply($,
+                    _(data).map(function (obj) {
+                        return require([obj.module + '/main']).pipe(function (m) {
+                            return m.getApp().launch().done(function () {
+                                // update unique id
+                                obj.id = this.get('uniqueID');
+                                if (this.failRestore) {
+                                    // restore
+                                    this.failRestore(obj.point);
+                                }
+                            });
                         });
-                    });
+                    })
+                )
+                .done(function () {
+                    // we don't remove that savepoint now because the app might crash during restore!
+                    // in this case, data would be lost
+                    appCache.add('savepoints', data || []);
                 });
-                appCache.remove('savepoints');
             });
-        };
+        },
 
-        return function (options) {
-            return new App(options);
-        };
+        get: function (name) {
+            return ox.ui.apps.filter(function (app) {
+                return app.getName() === name;
+            });
+        },
 
-    }());
+        getByCid: function (cid) {
+            return ox.ui.apps.chain().filter(function (app) {
+                return app.cid === cid;
+            }).first().value();
+        },
+
+        reuse: function (cid) {
+            var app = ox.ui.apps.find(function (m) { return m.cid === cid; }), win;
+            if (app) {
+                app.launch();
+                return true;
+            }
+            return false;
+        }
+    });
+
+    // show
+    $("#io-ox-core").show();
+
+    // check if any open application has unsaved changes
+    window.onbeforeunload = function () {
+
+        var // find all applications with unsaved changes
+            dirtyApps = ox.ui.apps.filter(function (app) {
+                return _.isFunction(app.hasUnsavedChanges) && app.hasUnsavedChanges();
+            });
+
+        // browser will show a confirmation dialog, if onbeforeunload returns a string
+        if (dirtyApps.length > 0) {
+            return gt('There are unsaved changes.');
+        }
+    };
+
+    /**
+     * Create app
+     */
+    ox.ui.createApp = function (options) {
+        return new ox.ui.App(options);
+    };
 
     ox.ui.screens = (function () {
 
@@ -524,7 +492,8 @@ define("io.ox/core/desktop",
 
                 show: function (id) {
                     $('#io-ox-screens').children().each(function (i, node) {
-                        var screenId = $(this).attr('id').substr(6);
+                        var attr = $(this).attr('id'),
+                            screenId = String(attr || '').substr(6);
                         if (screenId !== id) {
                             that.hide(screenId);
                         }
@@ -541,6 +510,78 @@ define("io.ox/core/desktop",
 
     }());
 
+    ox.ui.Perspective = (function () {
+        var cur = null;
+        var Perspective = function (name) {
+            // init
+            var rendered = false,
+                initialized = false;
+
+            this.main = $();
+
+            this.show = function (app, options) {
+                var win = app.getWindow();
+
+                if (options.perspective === win.currentPerspective) {
+                    return;
+                }
+                // make sure it's initialized
+                if (!initialized) {
+                    this.main = win.addPerspective(name);
+                    initialized = true;
+                }
+
+                // trigger change event
+                if (win.currentPerspective !== 'main') {
+                    win.trigger('change:perspective', name);
+                } else {
+                    win.trigger('change:initialPerspective', name);
+                }
+                // set perspective
+                win.setPerspective(name);
+
+                _.url.hash('perspective', options.perspective);
+
+                // render?
+
+                if (!rendered || options.perspective.split(":").length > 1) {
+                    options.rendered = rendered;
+                    this.render(app, options);
+                    rendered = true;
+                }
+                win.currentPerspective = options.perspective;
+            };
+
+            this.render = $.noop;
+            this.save = $.noop;
+            this.restore = $.noop;
+
+            this.setRendered = function (value) {
+                rendered = value;
+            };
+        };
+
+        Perspective.show = function (app, p) {
+            var per = p;
+            if (_.isString(p) && (/:/).test(p)) {
+                per = p.split(":")[0];
+            }
+            require([app.get('name') + '/' + per + '/perspective'], function (perspective) {
+                if (cur && (per === 'month' || per === 'week')) {
+                    cur.save();
+                }
+                cur = perspective;
+                perspective.show(app, { perspective: p });
+                if (per === 'month' || per === 'week') {
+                    cur.restore();
+                }
+            });
+        };
+
+        return Perspective;
+
+    }());
+
     ox.ui.windowManager = (function () {
 
         var that = Events.extend({}),
@@ -552,6 +593,10 @@ define("io.ox/core/desktop",
                     return count + (obj.state.open ? 1 : 0);
                 }, 0);
             };
+
+        that.getWindows = function () {
+            return windows.slice();
+        };
 
         ox.ui.screens.on('hide-windowmanager', function () {
             if (currentWindow) {
@@ -579,7 +624,7 @@ define("io.ox/core/desktop",
             that.trigger("empty", false);
         });
 
-        that.on("window.close window.quit", function (e, win, type) {
+        that.on("window.close window.quit window.pre-quit", function (e, win, type) {
 
             var pos = _(windows).indexOf(win), i, $i, w;
             if (pos !== -1) {
@@ -588,7 +633,7 @@ define("io.ox/core/desktop",
                     windows.splice(pos, 1);
                 }
                 // close?
-                else if (type === "window.close") {
+                else if (type === "window.close" || type === 'window.pre-quit') {
                     windows = _(windows).without(win);
                     windows.push(win);
                 }
@@ -625,9 +670,7 @@ define("io.ox/core/desktop",
 
             scrollTo = function (node, cont) {
 
-                var children = pane.find(".window-container-center"),
-                    center = node.find(".window-container-center").show(),
-                    index = node.data("index") || 0,
+                var index = node.data("index") || 0,
                     left = (-index * 101),
                     done = function () {
                         // use timeout for smoother animations
@@ -663,24 +706,73 @@ define("io.ox/core/desktop",
             // window class
             Window = function (id, name) {
 
+                name = name || 'generic';
+
                 this.id = id;
                 this.name = name;
-                this.nodes = {};
-                this.search = { query: "" };
+                this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $() };
+                this.search = { query: '', active: false };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
+                this.detachable = true;
 
                 var quitOnClose = false,
-                    // views
-                    views = { main: true },
-                    currentView = "main",
+                    // perspectives
+                    perspectives = { main: true },
                     self = this,
                     firstShow = true;
 
                 this.updateToolbar = function () {
-                    ext.point(this.name + "/toolbar")
-                        .invoke('draw', this.nodes.toolbar.empty(), this.app || this);
+                    var folder = this.app && this.app.folder ? this.app.folder.get() : null,
+                        baton = ext.Baton({ window: this, $: this.nodes, app: this.app, folder: folder });
+                    ext.point(name + '/toolbar').invoke('draw', this.nodes.toolbar.empty(), baton);
                 };
+
+                ext.point(name + '/window-title').extend({
+                    id: 'default',
+                    draw: function () {
+                        return $('<h1 class="window-title">').append(
+                            ext.point(name + '/window-title-label')
+                                .invoke('draw', this).first().value() || $()
+                        );
+                    }
+                });
+
+                ext.point(name + '/window-title-label').extend({
+                    id: 'default',
+                    draw: function () {
+                        return $('<span class="window-title-label">');
+                    }
+                });
+
+                ext.point(name + '/window-toolbar').extend({
+                    id: 'default',
+                    draw: function () {
+                        return $('<div class="window-toolbar">');
+                    }
+                });
+
+                ext.point(name + '/window-head').extend({
+                    id: 'default',
+                    draw: function () {
+                        return this.head.append(
+                            this.toolbar = ext.point(name + '/window-toolbar')
+                                .invoke('draw', this).first().value() || $()
+                        );
+                    }
+                });
+
+                ext.point(name + '/window-body').extend({
+                    id: 'default',
+                    draw: function () {
+                        return this.body.append(
+                            // default perspective
+                            this.main = $('<div class="abs window-content">'),
+                            // search area
+                            this.search = $('<div class="window-search">')
+                        );
+                    }
+                });
 
                 this.show = function (cont) {
                     // get node and its parent node
@@ -694,8 +786,9 @@ define("io.ox/core/desktop",
                         if (node.parent().length === 0) {
                             node.appendTo(pane);
                         }
-                        this.updateToolbar();
                         ox.ui.windowManager.trigger("window.beforeshow", self);
+                        this.trigger("beforeshow");
+                        this.updateToolbar();
                         node.show();
                         scrollTo(node, function () {
                             if (currentWindow && currentWindow !== self) {
@@ -706,6 +799,7 @@ define("io.ox/core/desktop",
                             self.state.visible = true;
                             self.state.open = true;
                             self.trigger("show");
+                            document.title = gt('%1$s %2$s', _.noI18n(ox.serverConfig.pageTitle), self.getTitle());
                             if (firstShow) {
                                 self.trigger("open");
                                 self.state.running = true;
@@ -722,7 +816,9 @@ define("io.ox/core/desktop",
 
                 this.hide = function () {
                     // detach if there are no iframes
-                    if (this.nodes.outer.find("iframe").length === 0) {
+                    this.trigger("beforehide");
+                    // TODO: decide on whether or not to detach nodes
+                    if (false && this.detachable && this.nodes.outer.find("iframe").length === 0) {
                         this.nodes.outer.detach();
                     } else {
                         this.nodes.outer.hide();
@@ -732,6 +828,7 @@ define("io.ox/core/desktop",
                     ox.ui.windowManager.trigger("window.hide", this);
                     if (currentWindow === this) {
                         currentWindow = null;
+                        document.title = _.noI18n(ox.serverConfig.pageTitle);
                     }
                     return this;
                 };
@@ -745,22 +842,71 @@ define("io.ox/core/desktop",
                     return this;
                 };
 
+                this.preQuit = function () {
+                    this.hide();
+                    this.state.open = false;
+                    this.trigger("pre-quit");
+                    ox.ui.windowManager.trigger("window.pre-quit", this);
+                    return this;
+                };
+
                 this.close = function () {
 
-                    $('#myGrowl').jGrowl('shutdown'); // maybe needs a better solution to trigger the jGrowl shutdown
+                    // local self
+                    var self = this;
 
                     if (quitOnClose && this.app !== null) {
-                        this.trigger("quit");
+                        this.trigger("beforequit");
                         this.app.quit()
                             .done(function () {
                                 self.state.open = false;
                                 self.state.running = false;
+                                self = null;
                             });
                     } else {
                         this.hide();
                         this.state.open = false;
                         this.trigger("close");
                         ox.ui.windowManager.trigger("window.close", this);
+                    }
+                    return this;
+                };
+
+                var BUSY_SELECTOR = 'input:not([type="file"], [type="hidden"]), select, textarea, button',
+                    TOGGLE_CLASS = 'toggle-disabled';
+
+                this.busy = function (pct, sub) {
+                    // use self instead of this to make busy/idle robust for callback use
+                    var blocker;
+                    if (self) {
+                        blocker = self.nodes.blocker;
+                        $('body').focus(); // steal focus
+                        self.nodes.main.find(BUSY_SELECTOR)
+                            .not(':disabled').attr('disabled', 'disabled').addClass(TOGGLE_CLASS);
+                        if (_.isNumber(pct)) {
+                            pct = Math.max(0, Math.min(pct, 1));
+                            blocker.idle().find('.bar').eq(0).css('width', (pct * 100) + '%').parent().show();
+                            if (_.isNumber(sub)) {
+                                blocker.find('.bar').eq(1).css('width', (sub * 100) + '%').parent().show();
+                            }
+                            blocker.show();
+
+                        } else {
+                            blocker.find('.progress').hide();
+                            blocker.busy().show();
+                        }
+                        self.trigger('busy');
+                    }
+                    return this;
+                };
+
+                this.idle = function (enable) {
+                    // use self instead of this to make busy/idle robust for callback use
+                    if (self) {
+                        self.nodes.blocker.find('.progress').hide().end().idle().hide();
+                        self.nodes.main.find(BUSY_SELECTOR).filter('.' + TOGGLE_CLASS)
+                            .removeAttr('disabled').removeClass(TOGGLE_CLASS);
+                        self.trigger('idle');
                     }
                     return this;
                 };
@@ -777,36 +923,97 @@ define("io.ox/core/desktop",
                     }
                     // destroy everything
                     this.events.destroy();
+                    this.show = this.busy = this.idle = $.noop;
                     this.nodes.outer.remove();
-                    this.nodes = null;
-                    this.show = $.noop;
+                    this.nodes = self = null;
                     return this;
                 };
 
                 this.setQuitOnClose = function (flag) {
                     quitOnClose = !!flag;
+                    return this;
                 };
 
                 var title = "";
 
-                function applyTitle() {
-                    var spans = self.nodes.title.find("span");
-                    spans.eq(0).empty().append(
-                        typeof title === "string" ?
-                            document.createTextNode(title) :
-                            title
-                    );
-                }
-
                 this.getTitle = function () {
-                    return self.nodes.title.find("span").eq(0).contents().text();
+                    return title;
                 };
 
-                this.setTitle = function (t) {
-                    title = t;
-                    applyTitle();
-                    this.trigger('change:title');
+                this.setTitle = function (str) {
+                    if (_.isString(str)) {
+                        title = str;
+                        self.nodes.title.find('span').first().text(title);
+                        if (this === currentWindow) {
+                            document.title = gt('%1$s %2$s', _.noI18n(ox.serverConfig.pageTitle), title);
+                        }
+                        this.trigger('change:title');
+                    } else {
+                        console.error('window.setTitle(str) exprects string!', str);
+                    }
                     return this;
+                };
+
+                this.search = {
+
+                    active: false,
+                    query: '',
+                    previous: '',
+
+                    open: function () {
+                        if (!this.active) {
+                            self.trigger('search:open');
+                            self.nodes.body.addClass('search-open');
+                            self.nodes.searchField.focus();
+                            this.active = true;
+                        }
+                        return this;
+                    },
+
+                    close: function () {
+                        if (this.active) {
+                            self.trigger('search:close');
+                            self.nodes.body.removeClass('search-open');
+                            this.active = false;
+                            self.nodes.searchField.val('');
+                            self.trigger('search:cancel cancel-search');
+                            this.query = this.previous = '';
+                        }
+                        return this;
+                    },
+
+                    toggle: function () {
+                        if (this.active) { this.close(); } else { this.open(); }
+                        return this;
+                    },
+
+                    getOptions: function () {
+                        var tmp = {};
+                        _(self.nodes.search.find('form').serializeArray()).each(function (element) {
+                            tmp[element.name] = $.trim(element.value);
+                        });
+                        return tmp;
+                    },
+
+                    getQuery: function () {
+                        return $.trim(self.nodes.searchField.val());
+                    },
+
+                    setQuery: function (query) {
+                        self.nodes.searchField.val(this.query = query);
+                        return this;
+                    },
+
+                    start: function (query) {
+                        this.open().setQuery(query);
+                        self.trigger('search', query);
+                        return this;
+                    },
+
+                    stop: function () {
+                        this.close();
+                        return this;
+                    }
                 };
 
                 this.addClass = function () {
@@ -828,39 +1035,38 @@ define("io.ox/core/desktop",
                         .appendTo(this.nodes.toolbar);
                 };
 
-                this.addView = function (id) {
+                this.addPerspective = function (id) {
                     if (this.nodes[id] === undefined) {
-                        var node = $("<div>")
-                            .addClass("window-content").hide()
-                            .appendTo(this.nodes.body);
-                        return (this.nodes[id] = views[id] = node);
+                        var node = $('<div class="abs window-content">').hide().appendTo(this.nodes.body);
+                        return (this.nodes[id] = perspectives[id] = node);
                     }
                 };
 
-                this.setView = function (id) {
-                    if (id !== currentView) {
-                        if (views[id] !== undefined) {
-                            this.nodes[currentView].hide();
-                            this.nodes[currentView = id].show();
+                this.setPerspective = function (id) {
+                    if (id !== this.currentPerspective.split(':')[0]) {
+                        if (perspectives[id] !== undefined) {
+                            this.nodes[this.currentPerspective.split(':')[0]].hide();
+                            this.nodes[this.currentPerspective.split(':')[0] = id].show();
                         }
                     }
                     return this;
                 };
+
+                this.currentPerspective = 'main';
             };
 
         // window factory
         return function (options) {
 
             var opt = $.extend({
-                id: "window-" + guid,
-                name: "",
-                width: 0,
-                title: "",
-                titleWidth: '300px',
+                chromeless: false,
+                classic: false,
+                id: 'window-' + guid,
+                name: '',
                 search: false,
+                title: '',
                 toolbar: false,
-                settings: false,
-                chromesless: false
+                width: 0
             }, options);
 
             // get width
@@ -875,73 +1081,42 @@ define("io.ox/core/desktop",
                 };
 
             // window container
-            win.nodes.outer = $("<div>")
-            .attr({
-                id: opt.id,
-                "data-window-nr": guid
-            })
-            .addClass("window-container")
-            .append(
-                $("<div>")
-                .addClass("window-container-center")
-                .data({
-                    width: width + unit
-                }).css({
-                    width: width + unit
+            win.nodes.outer = $('<div class="window-container">')
+                .attr({
+                    id: opt.id,
+                    "data-window-nr": guid
                 })
                 .append(
-                // window HEAD
-                win.nodes.head = $("<div>")
-                    .addClass("window-head")
+                    $('<div class="window-container-center">')
+                    .data({ width: width + unit })
+                    .css({ width: width + unit })
                     .append(
-                        // title
-                        win.nodes.title = $("<h1>")
-                        .css("width", opt.titleWidth)
-                        .addClass("window-title")
-                        .append($("<span>"))
+                        // blocker
+                        win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide()
+                            .append($('<div class="progress progress-striped active"><div class="bar" style="width: 0%;"></div></div>').hide())
+                            .append($('<div class="progress progress-striped progress-warning active"><div class="bar" style="width: 0%;"></div></div>').hide()),
+                        // window HEAD
+                        win.nodes.head = $('<div class="window-head">'),
+                        // window BODY
+                        win.nodes.body = $('<div class="window-body">')
                     )
-                    .append(
-                        // toolbar
-                        win.nodes.toolbar = $("<div>")
-                        .css("left", opt.titleWidth)
-                        .addClass("window-toolbar")
-                    )
-                    .append(
-                        // controls
-                        win.nodes.controls = $("<div>")
-                        .addClass("window-controls")
-                        .append(
-                            // settings
-                            win.nodes.settingsButton = $("<div>").hide()
-                            .addClass("window-control")
-                            .text("\u270E")
-                        )
-                        .append(
-                            // close
-                            win.nodes.closeButton = $("<div>").hide()
-                            .addClass("window-control")
-                            .text("\u2715")
-                        )
-                    )
-                )
-                .append(
-                    // window BODY
-                    win.nodes.body = $("<div>")
-                    .addClass("window-body")
-                    .append(
-                        // quick settings
-                        win.nodes.settings = $("<div>")
-                        .hide()
-                        .addClass("window-settings")
-                        .html("<h2>Each window can have a quick settings area</h2>")
-                    )
-                    .append(
-                        // content
-                        win.nodes.main = $("<div>")
-                        .addClass("window-content")
-                    )
-                )
-            );
+                    // capture controller events
+                    .on('controller:quit', function () {
+                        if (win.app) { win.app.quit(); }
+                    })
+                );
+
+            // classic window header?
+            if (opt.classic) win.nodes.outer.addClass('classic');
+
+            // add default css class
+            if (opt.name) {
+                win.nodes.outer.addClass(opt.name.replace(/[.\/]/g, '-') + '-window');
+            }
+
+            // draw window head
+            ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
+            ext.point(opt.name + '/window-body').invoke('draw', win.nodes);
 
             // add event hub
             Events.extend(win);
@@ -949,47 +1124,26 @@ define("io.ox/core/desktop",
             // search?
             if (opt.search) {
                 // search
-                var lastQuery = "",
-                    triggerSearch = function (query) {
+                var triggerSearch = function (query) {
                         // yeah, waiting for the one who reports this :)
                         if (/^porn$/i.test(query)) {
                             $("body").append(
-                                $("<div>")
-                                .addClass("abs")
-                                .css({
-                                    backgroundColor: "black",
-                                    zIndex: 65000
-                                })
+                                $('<div class="abs">')
+                                .css({ backgroundColor: "black", zIndex: 65000 })
                                 .append(
-                                    $("<div>")
-                                    .addClass("abs").css({
-                                        top: "25%",
-                                        textAlign: "center",
-                                        color: "#aaa",
-                                        fontWeight: "bold",
-                                        fontSize: "50px",
-                                        fontFamily: "'Comic Sans MS', Arial"
-                                    })
+                                    $('<div class="abs">')
+                                    .css({ top: "25%", textAlign: "center", color: "#aaa", fontWeight: "bold", fontSize: "50px", fontFamily: "'Comic Sans MS', Arial" })
                                     .html('<span style="color: rgb(230,110,110)">YOU</span> SEARCHED FOR WHAT?')
                                 )
                                 .append(
-                                    $("<div>")
-                                    .addClass("abs")
-                                    .css({
-                                        top: "50%",
-                                        width: "670px",
-                                        textAlign: "center",
-                                        margin: "0 auto 0 auto",
-                                        color: "#666"
-                                    })
+                                    $('<div class="abs">')
+                                    .css({ top: "50%", width: "670px", textAlign: "center", margin: "0 auto 0 auto", color: "#666" })
                                     .html(
                                         '<div style="font-size: 26px">WARNING: This website contains explicit adult material.</div>' +
                                         '<div style="font-size: 18px">You may only enter this Website if you are at least 18 years of age, or at least the age of majority in the jurisdiction where you reside or from which you access this Website. If you do not meet these requirements, then you do not have permission to use the Website.</div>'
                                     )
                                 )
-                                .click(function () {
-                                        $(this).remove();
-                                    })
+                                .click(function () { $(this).remove(); })
                             );
                         } else if (/^use the force$/i.test(query) && currentWindow) {
                             // star wars!
@@ -1015,86 +1169,109 @@ define("io.ox/core/desktop",
 
                 var searchId = 'search_' + _.now(); // acccessibility
 
-                $('<form>')
-                .on('submit', false)
-                .addClass('form-search')
-                .css({ 'float': 'right' })
-                .append(
-                    $('<label>', { 'for': searchId })
-                    .append(
-                        $("<input>", {
-                            type: "text",
-                            placeholder: "Search ...",
-                            tabindex: '1',
-                            size: "40",
-                            id: searchId
-                        })
-                        .tooltip({
-                            animation: false,
-                            title: 'Press enter to search',
-                            placement: 'bottom',
-                            trigger: 'focus'
-                        })
-                        .addClass('input-large search-query')
-                        .on({
-                            keypress: function (e) {
-                                e.stopPropagation();
-                            },
-                            search: function (e) {
-                                e.stopPropagation();
-                                if ($(this).val() === "") {
-                                    $(this).blur();
-                                }
-                            },
-                            change: function (e) {
-                                e.stopPropagation();
-                                win.search.query = $(this).val();
-                                // trigger search?
-                                if (win.search.query !== "") {
-                                    if (win.search.query !== lastQuery) {
-                                        triggerSearch(lastQuery = win.search.query);
-                                    }
-                                } else if (lastQuery !== "") {
-                                    win.trigger("cancel-search", lastQuery = "");
-                                }
-                            }
-                        })
+                var searchHandler = {
+                    keydown: function (e) {
+                        e.stopPropagation();
+                        if (e.which === 27) {
+                            win.search.close();
+                        } else if (e.which === 13 && $(this).val() === '') {
+                            win.search.close();
+                        }
+                    },
+                    change: function (e) {
+                        e.stopPropagation();
+                        win.search.query = win.search.getQuery();
+                        // trigger search?
+                        if (win.search.query !== '' && win.search.query !== win.search.previous) {
+                            triggerSearch(win.search.previous = win.search.query);
+                        }
+                        else if (win.search.query === '') {
+                            win.search.close();
+                        }
+                    }
+                };
+
+                $('<form class="form-search form-inline">').append(
+                    $('<div class="input-append">').append(
+                        $('<label>', { 'for': searchId }).append(
+                            win.nodes.searchField = $('<input type="text" class="input-xlarge search-query" name="query">')
+                            .attr({
+                                tabindex: '1',
+                                placeholder: gt('Search') + ' ...',
+                                id: searchId
+                            })
+                            .on(searchHandler)
+                            .placeholder()
+                        ),
+                        $('<button type="submit" data-action="search" class="btn margin-right"><i class="icon-search"></i></button>')
+                        .on('click', searchHandler.change)
                     )
                 )
-                .prependTo(win.nodes.controls);
-            }
-
-            // toolbar extension point
-            if (opt.toolbar === true && opt.name) {
-                // add "create" link
-                ext.point(opt.name + '/toolbar').extend(new links.ToolbarLinks({
-                    id: 'links',
-                    ref: opt.name + '/links/toolbar'
-                }));
+                .on('change', 'input', function () { win.search.previous = ''; })
+                .on('submit', false)
+                .appendTo(win.nodes.search);
             }
 
             // fix height/position/appearance
             if (opt.chromeless) {
 
-                win.nodes.head.remove();
-                win.nodes.toolbar.remove();
-                win.nodes.body.css("top", "0px");
+                win.nodes.outer.addClass('chromeless-window');
+                win.nodes.head.hide();
+                win.nodes.body.css('left', '0px');
 
-            } else {
+            } else if (opt.name) {
 
-                // add close handler
-                if (opt.close === true) {
-                    win.nodes.closeButton.show().on("click", close);
-                    win.setQuitOnClose(true);
+                // toolbar
+                ext.point(opt.name + '/toolbar').extend(new links.ToolbarLinks({
+                    id: 'links',
+                    ref: opt.name + '/links/toolbar'
+                }));
+
+                // add search
+                if (opt.search === true) {
+
+                    new links.Action(opt.name + '/actions/search', {
+                        action:  function (baton) {
+                            baton.window.search.toggle();
+                        }
+                    });
+
+                    new links.ActionLink(opt.name + '/links/toolbar/search', {
+                        label: gt('Toggle search'),
+                        ref: opt.name + '/actions/search'
+                    });
+
+                    new links.ActionGroup(opt.name + '/links/toolbar', {
+                        id: 'search',
+                        index: 900,
+                        icon: function () {
+                            return $('<i class="icon-search">');
+                        }
+                    });
                 }
 
-                // set title
-                win.setTitle(opt.title);
+                // add fullscreen handler
+                if (opt.fullscreen === true) {
 
-                // quick settings?
-                if (opt.settings) {
-                    $.quickSettings(win.nodes.main, win.nodes.settings, win.nodes.settingsButton);
-                    win.nodes.settingsButton.show();
+                    new links.Action(opt.name + '/actions/fullscreen', {
+                        action:  function (baton) {
+                            if (BigScreen.enabled) {
+                                BigScreen.toggle(baton.$.outer.get(0));
+                            }
+                        }
+                    });
+
+                    new links.ActionLink(opt.name + '/links/toolbar/fullscreen', {
+                        ref: opt.name + '/actions/fullscreen'
+                    });
+
+                    new links.ActionGroup(opt.name + '/links/toolbar', {
+                        id: 'fullscreen',
+                        index: 1000,
+                        icon: function () {
+                            return $('<i class="icon-resize-full">');
+                        }
+                    });
                 }
             }
 
@@ -1107,8 +1284,27 @@ define("io.ox/core/desktop",
 
     }());
 
-    return {
-        addLauncher: addLauncher
+    // simple launch
+    ox.launch = function (id, data) {
+        var def = $.Deferred();
+        if (_.isString(id)) {
+            require([id]).then(
+                function (m) {
+                    m.getApp(data).launch(data).done(function () {
+                        def.resolveWith(this, arguments);
+                    });
+                },
+                function (err) {
+                    notifications.yell('error', gt('Failed to start application. Maybe you have connection problems. Please try again.'));
+                    requirejs.undef(id);
+                }
+            );
+        } else {
+            def.resolve({});
+        }
+        return def;
     };
+
+    return {};
 
 });

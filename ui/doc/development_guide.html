@@ -1,5 +1,5 @@
 
-<h1>OX7 UI Development Style Guide</h1>
+<h1>AppSuite UI Development Style Guide</h1>
 
 <div style="width: 600px">
 
@@ -153,7 +153,7 @@ have to do stuff twice.
 if (true) {
   console.log('winning');
 }
-</script>  
+</script>
 <p><i>Wrong:</i></p>
 <script type="text/example">
 if (true)
@@ -174,13 +174,13 @@ var isAuthorized = (user.isAdmin() || user.isModerator());
 if (isAuthorized) {
   console.log('winning');
 }
-</script> 
+</script>
 <p><i>Wrong:</i></p>
 <script type="text/example">
 if (user.isAdmin() || user.isModerator()) {
   console.log('losing');
 }
-</script> 
+</script>
 
 <h2>Function length</h2>
 <p>Keep your functions short. A good function fits on a slide that the
@@ -205,7 +205,7 @@ function isPercentage(val) {
 
   return true;
 }
-</script> 
+</script>
 <p><i>Wrong:</i></p>
 <script type="text/example">
 function isPercentage(val) {
@@ -219,14 +219,14 @@ function isPercentage(val) {
     return false;
   }
 }
-</script> 
+</script>
 <p>Or for this particular example it may also be fine to shorten things even further:</p>
 <script type="text/example">
 function isPercentage(val) {
   var isInRange = (val >= 0 && val <= 100);
   return isInRange;
 }
-</script> 
+</script>
 
 <h2>Creating instances</h2>
 <p>Simple one-time instances</p>

@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,40 +9,36 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- *
  */
 
 define('io.ox/contacts/edit/main',
-    ['io.ox/contacts/api',
-     'io.ox/core/cache',
-     'io.ox/contacts/edit/view-form',
+    ['io.ox/contacts/edit/view-form',
      'io.ox/contacts/model',
-     'gettext!io.ox/contacts/contacts',
-     'less!io.ox/contacts/style.css'
-     ], function (api, cache, ContactEditView, ContactModel, gt) {
+     'gettext!io.ox/contacts',
+     'io.ox/core/extensions',
+     'io.ox/contacts/util',
+     'less!io.ox/contacts/edit/style.css'
+     ], function (view, model, gt, ext, util) {
 
     'use strict';
 
     // multi instance pattern
     function createInstance(data) {
-        var app, getDirtyStatus,
-            dirtyStatus = {
-            byApi: true
-        };
+
+        var app, getDirtyStatus, container;
 
         app = ox.ui.createApp({
             name: 'io.ox/contacts/edit',
-            title: 'Edit Contact'
+            title: 'Edit Contact',
+            userContent: true
         });
 
-        app.setLauncher(function () {
-            var win,
-                container;
+        app.setLauncher(function (def) {
 
-            win = ox.ui.createWindow({
-                title: 'Edit Contact',
-                toolbar: true,
-                close: true
+            var win = ox.ui.createWindow({
+                name: 'io.ox/contacts/edit',
+                title: gt('Edit Contact'),
+                chromeless: true
             });
 
             app.setWindow(win);
@@ -51,53 +46,67 @@ define('io.ox/contacts/edit/main',
             container = win.nodes.main
                 .css({ backgroundColor: '#fff' })
                 .scrollable()
-                .css({ maxWidth: '600px', margin: '20px auto 20px auto' });
+                .css({ width: '700px', margin: '20px auto 20px auto' });
 
             var cont = function (data) {
 
+                app.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
+
                 win.show(function () {
+                    var considerSaved = false,
+                        handelContact = function (contact) {
+                            var appTitle = (contact.get('display_name')) ? contact.get('display_name') : util.getFullName(contact.toJSON());
+                            app.setTitle(appTitle || gt('Create contact'));
+                            app.contact = contact;
+                            var editView = new view.ContactEditView({ model: contact });
+                            container.append(editView.render().$el);
+                            container.find('input[type=text]:visible').eq(0).focus();
+
+                            container.find('[data-extension-id="display_name"] input').on('keydown', function () {
+                                app.setTitle(_.noI18n($(this).val()));
+                            });
+
+                            editView.on('save:start', function () {
+                                win.busy();
+                            });
+
+                            editView.on('save:fail', function () {
+                                win.idle();
+                            });
+
+                            editView.on('save:success', function (e, data) {
+                                if (def.resolve) {
+                                    def.resolve(data);
+                                }
+                                considerSaved = true;
+                                win.idle();
+                                app.quit();
+                            });
+                            ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
+                        };
 
                     // create model & view
-                    var myModel = new ContactModel({ data: data }),
-                        myView = new ContactEditView({ model: myModel });
+
+                    if (data.id) {
+                        model.factory.realm('edit').retain().get(data).done(function (contact) {
+                            handelContact(contact);
+                        });
+                    } else {
+                        handelContact(model.factory.create(data));
+                        container.find('[data-extension-id="io.ox/contacts/edit/view/display_name_header"]').text(gt('New contact'));
+                    }
 
                     getDirtyStatus = function () {
-                        var status;
-                        if (myModel.dirty !== true) {
-                            status =  myModel.isDirty();
-                        } else {
-                            status = true;
+                        var changes = app.contact.changedSinceLoading();
+                        if (considerSaved) {
+                            return false;
                         }
-                        return status;
+                        if (changes.folder_id && _(changes).size() === 1) {
+                            return false;
+                        }
+                        return app.contact && !_.isEmpty(app.contact.changedSinceLoading());
                     };
 
-                    myModel.store = function (data, changes) {
-                        // TODO: replace image upload with a field in formsjs method
-                        var image = $('#contactUploadImage').find("input[type=file]").get(0);
-                        if (image.files && image.files[0]) {
-                            return api.editNewImage(data, changes, image.files[0])
-                            .done(function () {
-                                dirtyStatus.byApi = false;
-                                app.quit();
-                            });
-
-                        } else {
-                            return api.edit({
-                                id: data.id,
-                                folder: data.folder_id,
-                                timestamp: _.now(),
-                                data: changes
-                            }).done(function () {
-                                dirtyStatus.byApi = false;
-                                app.quit();
-                            });
-                        }
-                    };
-
-//                    window.model = myModel;
-//                    window.view = myView;
-                    container.append(myView.draw(app).node);
-                    container.find('input[type=text]:visible').eq(0).focus();
                 });
             };
 
@@ -106,51 +115,60 @@ define('io.ox/contacts/edit/main',
                 app.setState({ folder: data.folder_id, id: data.id });
                 cont(data);
             } else {
-                api.get(app.getState()).done(cont);
+                cont({folder_id: app.getState().folder, id: app.getState().id});
             }
         });
 
         app.setQuit(function () {
-            var def = $.Deferred(),
-                listetItem =  $('.listet-item');
+            var def = $.Deferred();
 
-            dirtyStatus.byModel = getDirtyStatus();
-
-            if (dirtyStatus.byModel === true) {
-                if (dirtyStatus.byApi === true) {
-                    require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                        new dialogs.ModalDialog()
-                            .text(gt("Do you really want to lose your changes?"))
-                            .addButton("cancel", gt('Cancel'))
-                            .addButton("delete", gt('Lose changes'))
-                            .show()
-                            .done(function (action) {
-                                console.debug("Action", action);
-                                if (action === 'delete') {
-                                    def.resolve();
-                                    listetItem.remove();
-                                } else {
-                                    def.reject();
-                                }
-                            });
-                    });
-                } else {
-                    def.resolve();
-                    listetItem.remove();
-                }
+            if (getDirtyStatus()) {
+                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(gt("Do you really want to discard your changes?"))
+                        .addPrimaryButton("delete", gt('Discard'))
+                        .addButton("cancel", gt('Cancel'))
+                        .show()
+                        .done(function (action) {
+                            console.debug("Action", action);
+                            if (action === 'delete') {
+                                def.resolve();
+                                model.factory.realm('edit').release();
+                            } else {
+                                def.reject();
+                            }
+                        });
+                });
             } else {
                 def.resolve();
-                listetItem.remove();
+                model.factory.realm('edit').release();
             }
             //clean
             return def;
+        });
+
+        ext.point('io.ox/contacts/edit/main/model').extend({
+            id: 'io.ox/contacts/edit/main/model/auto_display_name',
+            customizeModel: function (contact) {
+                contact.on('change:first_name change:last_name', function () {
+                    contact.set('display_name', util.getFullName(contact.toJSON()));
+                    app.setTitle(util.getFullName(contact.toJSON()));
+                });
+            }
         });
 
         return app;
     }
 
     return {
-        getApp: createInstance
+
+        getApp: createInstance,
+
+        reuse: function (type, data) {
+            if (type === 'edit') {
+                return ox.ui.App.reuse('io.ox/contacts/contact:edit.' + _.cid(data));
+            }
+        }
     };
 
 });

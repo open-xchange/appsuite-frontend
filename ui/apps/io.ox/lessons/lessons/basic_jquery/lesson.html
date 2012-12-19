@@ -1,0 +1,510 @@
+<div style="padding: 20px">
+	<div class="row">
+		<div class="span3 navigation">&nbsp;</div>
+		<div class="content span9">
+			<div class="page-header">
+				<h1>JQuery Basics <small>Touring the API</small></h1>
+			</div>
+
+			<p class="lead">
+				JQuery is used extensively in OX App Suite. In this tutorial we will look at how to select elements how to listen to events and how to create and manipulate DOM structures.
+			</p>
+
+			<section id="who">
+				<h2>Who should read this document?</h2>
+				<p>
+					When developing the OX App Suite frontend we chose to forego more complex widget based libraries in favor of direct DOM manipulations and in favor of plain old HTML and CSS. This gives us a lot of flexibility and since, philosophically, OX App Suite aims to be a citizen of the web, and not simulate desktop apps, it seems wise to stay close to web technologies. This means, to create the visuals of any piece of the OX App Suite frontend, you need to manipulate the DOM structure. You'll need a good understanding of <strong>HTML</strong> and <strong>CSS</strong> as well as a good understanding of <strong>JQuery</strong>, since we use this pretty much everywhere, and so will you. Also, knowing this has never hurt anyones resumé. If you've already worked with JQuery you can probably skip this tutorial, everyone else, please stay around for a whirlwind tour of JQuery DOM manipulation, element navigation and event handling.
+				</p>
+			</section>
+
+			<section id="creating_a_structure">
+				<h2>Creating a structure </h2>
+				<p>
+					To create a dom node in JQuery simply call the <code>$</code> function with the html text that describes your node:
+					<pre class="code">var theDiv = $('&lt;div&gt;');
+var theOtherDiv = $('&lt;div&gt;Hello, I am a new div!&lt;/div&gt;'); </pre>
+
+				</p>
+				<p>
+					In order for the node to show up on screen it will have to be appended somewhere:
+					<pre class="node_experiment">// var parentNode = ...
+$('&lt;div&gt;Hello, I am a new div!&lt;/div&gt;').appendTo(parentNode);
+</pre>
+				</p>
+				<p>
+					<span class="label label-important">Attention</span> Make sure to never leave off the closing tag or the &gt; at the end of the html snippet. Some browsers will just silently ignore the element you are trying to create and you will ask yourself why your element doesn't show up anywhere. Some browsers will at least blurp out an error message into the console.
+					<pre class="node_experiment"> $('&lt;div class="someClass"').text("Hello").appendTo(parentNode);</pre>
+				</p>
+				<p>
+					Though this may look a bit unusual on first glance, sometimes the node that you should draw stuff into will be passed to you as the <code>this</code> variable, so, reading through our codebase you will often find something like this:
+					<pre class="node_experiment">
+$('&lt;div&gt;Hello, I am a new div!&lt;/div&gt;').appendTo(this);
+</pre>
+				</p>
+				<p>
+					To build more complex structures, liberally use the <code>#append</code> method:
+
+<pre class="node_experiment"> this.append(
+	$("&lt;div&gt;").append(
+		$('&lt;span class="label label-info"&gt;').text("A Label"),
+		$('&lt;span&gt;').text(" The value")
+	) // End of div
+);</pre>
+				</p>
+				<p>
+					You can indeed build very complex nested structures this way. Just make sure, that at least you still understand what is going on, if you write a block like this:
+
+<pre class="node_experiment">this.append(
+	$("&lt;h4&gt;").text("Behold a more complex structure!"),
+	$('&lt;div class="row"&gt;').append(
+		$('&lt;span class="span3"&gt;').append(
+			$("&lt;strong&gt;").text("Lo and behold")
+		), // end of span
+		$('&lt;span class="span9"&gt;').text("This is twitter bootstraps grid system in action.")
+	), // end of row
+	$('&lt;div class="row"&gt;').append(
+		$('&lt;span class="span12"&gt;').text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ")
+	) // end of row
+).addClass("container");// end of this</pre>
+				<span class="label label-info">Hint</span> Right-click on the result of these experiments and choose <strong>Inspect element</strong> (or similar) to look at the resulting DOM structure. <br> <span class="label label-info">Hint</span> Modify the code shown above and rerun the examples to experiment yourself!
+				</p>
+				<h3> Some recommendations </h3>
+				<dl>
+					<dt>Always use ampersands instead of quotes for your snippet string</dt>
+					<dd>
+						This way you can directly specify attributes for the element. <code>$('&lt;div class="myClass"&gt;')</code> is much more readable than <code>$("&lt;div class=\"someClass\"&gt;")</code>
+					</dd>
+
+					<dt>Specify the classes immediately in the html snippet</dt>
+					<dd>Since specifying classes is such a common operation – especially considering twitter bootstrap likes to work with classes a lot – don't bother with <code>#addClass</code> or the <code>#attr</code> method. Just specify them directly: <br/><code>$('&lt;div class="myClass"&gt;')</code> </dd>
+
+					<dt>Avoid inline styles</dt>
+					<dd>While jQuery allows developers to specify css style information with the <code>#css</code> method, in the interest of branding it is usually better to stow them away in a proper .css file. How css files are loaded is discussed in the RequireJS tutorial.</dd>
+
+					<dt>Use the <code>#text</code> method for content</dt>
+					<dd>
+						Instead of specifying text for elements inline, or, worse, concatenating a value you've been passed with strings to obtain a snippet ( <code> $('&lt;div&gt;' + myValue + '&lt;/div&gt;')</code>), use the <code>#text</code> method. This won't leave you open to cross-site-scripting attacks. <br><code>$("&lt;div&gt;").text(myValue); </code>
+					</dd>
+				</dl>
+				<h3>Further reading</h3>
+				<dl>
+					<dt><a href="http://api.jquery.com/category/manipulation/" target="_blank">JQuery Manipulation API</a></dt>
+					<dd>We've only glanced at one method used for manipulation of the DOM <code>#append</code>. There are lot's more. Reading through the whole of the JQuery Manipultation API is certainly time well spent.</dd>
+
+					<dt><a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a></dt>
+					<dd>
+						Twitter bootstrap is the lightweight frontend framework used in OX App Suite. It provides beautiful and useful css and html based utilities for building good looking apps. Read through the documentation at least once so you won't need to invent something we already have available via this nice framework.
+					</dd>
+				</dl>
+			</section>
+
+			<section id="event_handling">
+				<h2>Event handling</h2>
+				<p>
+					Being able to draw form controls (like buttons and input fields) is only half the fun. Doing something when a button is clicked or text is changed is the other half. To register an event handler, use jQuerys <code>#on</code> method:
+
+					<pre class="node_experiment">this.append(
+	$('&lt;button class="btn btn-primary"&gt;').text('Open alert').on("click", function () {
+		alert("Button was clicked!");
+	})
+);</pre>
+				</p>
+				<p>
+					You can also reuse the event handler. This might come in handy when you want to react to events on very many elements:
+
+<pre class="node_experiment">function showAlert() {
+	alert("Button was clicked!");
+}
+$('&lt;button class="btn"&gt;').text('Button 1').on("click", showAlert).appendTo(this);
+$("&lt;br&gt;").appendTo(this);
+$("&lt;br&gt;").appendTo(this);
+$('&lt;button class="btn"&gt;').text('Button 2').on("click", showAlert).appendTo(this);</pre>
+				</p>
+
+				<p>
+					You may also customize what an event handler does by passing an object to the <code>#on</code> call:
+<pre class="node_experiment">function showAlert(e) {
+	alert("Button was clicked: " + e.data.message);
+}
+
+$('&lt;button class="btn"&gt;').text('Button 1').on("click", {message: 'Hello'}, showAlert).appendTo(this);
+$("&lt;br&gt;").appendTo(this);
+$("&lt;br&gt;").appendTo(this);
+$('&lt;button class="btn"&gt;').text('Button 2').on("click", {message: 'Namaste'}, showAlert).appendTo(this);</pre>
+ 				</p>
+				<p>
+					Sometimes it is also useful to suppress the action the browser would normally take on a certain event. Typically this is used to prevent the browser from following links, when you do something else once the user clicks:
+<pre class="node_experiment">$('&lt;a href="#"&gt;').text("A link").on('click', function (e) {
+	e.preventDefault(); // Do not follow the link
+	alert("What trickery is this? The link was clicked, but not followed!");
+}).appendTo(this);</pre>
+				</p>
+
+				<h3>Further Reading</h3>
+				<dl>
+					<dt><a href="http://api.jquery.com/category/events/" target="_blank">JQuery Event API</a></dt>
+					<dd>The complete list of events and event related methods in the jQuery documentation certainly warrants some quality time spent on it.</dd>
+
+					<dt><a href="http://api.jquery.com/on/" target="_blank">The on() method</a></dt>
+					<dd>
+						Find out everything else the <code>#on</code> method can do (and that's a lot). Wield events with confidence.
+					</dd>
+				</dl>
+
+			</section>
+
+			<section id="selecting_elements">
+				<h2>Selecting elements</h2>
+				<p>
+					Traversing the DOM structure and finding nodes to work on is traditionally one of the most cumbersome tasks in JavaScript. jQuery, on the other hand, makes this almost ridiculously convenient and easy. It accomplishes this by allowing you to run <strong>selectors</strong> on either the entire DOM or a subtree (Always do the latter!). These selectors work the same way CSS selectors do. Consider the following snippet of CSS:
+					<pre>
+.highlighted {
+	background-color: yellow
+}
+					</pre>
+					The <code>.highlighted</code> essentially means: "Select all nodes that have a class attribute containing 'highlighted'". These CSS selectors (more specifically CSS3 selectors) work with jQuery as well. Let us look at a few examples, that will all look very familliar if you know your CSS:
+				</p>
+
+				<p>
+					You can select elements by their ID:
+					<pre class="selector_experiment" data-selector="#frank">
+<div id="frank">Frank</div>
+<div id="max">Max</div>
+<div id="Ginnie">Ginnie</div>
+</pre>
+					<span class="label label-information">Note</span> We're running the selector only on the subtree that is created here. This is good practice, since you can never know what kinds of DOM structures other apps may use internally, and when running your selector globally an overeager selector may also select elements in other parts of the program (we're all working in the same DOM tree).
+				</p>
+				<p>
+					As in our CSS example, you can also select elements by their class attribute:
+					<pre class="selector_experiment" data-selector=".highlight">
+<div class="highlight">Frank</div>
+<div class="other">Max</div>
+<div class="other">Samantha</div>
+<div class="highlight">Ginnie</div>
+</pre>
+					Try changing the selector to select the 'others' instead!
+				</p>
+
+				<p>
+					Perhaps less usefully – but true to CSS – you can select all elements of a given type:
+					<pre class="selector_experiment" data-selector="span">
+This is a <span>Text</span> with some <strong>elements</strong> that are <span>marked</span>
+					</pre>
+				</p>
+
+				<p>
+					More usefully you can (as per CSS3) select elements in which a certain attribute has a certain value:
+				</p>
+				<pre class="selector_experiment" data-selector="[data-sex=male]">
+<div data-sex="male">Frank</div>
+<div data-sex="male">Max</div>
+<div data-sex="female">Samantha</div>
+<div data-sex="female">Ginnie</div>
+</pre>
+				Try selecting all the ladies!
+				<p>
+					Or a value begins with a certain string
+				<pre class="selector_experiment" data-selector="[data-nickname^=Honey]">
+<div data-nickname="HoneyFranky">Frank</div>
+<div data-nickname="SuperHoneyMax">Max</div>
+<div data-nickname="HoneySam">Samantha</div>
+<div data-nickname="GinTonic">Ginnie</div>
+</pre>
+				</p>
+
+				<p>
+					Or contains a certain string
+					<pre class="selector_experiment" data-selector="[data-nickname*=Honey]">
+<div data-nickname="HoneyFranky">Frank</div>
+<div data-nickname="SuperHoneyMax">Max</div>
+<div data-nickname="HoneySam">Samantha</div>
+<div data-nickname="GinTonic">Ginnie</div>
+</pre>
+				</p>
+
+				<p>
+					Or contains a space delimited string. All of these are especially powerful when combined (like here) with data attributes:
+					<pre class="selector_experiment" data-selector="[data-drinks~=gin]">
+<div data-drinks="vodka gin cognac">Frank</div>
+<div data-drinks="whiskey vodka">Max</div>
+<div data-drinks="absinthe gin">Samantha</div>
+<div data-drinks="cognac wine">Ginnie</div>
+</pre>
+					Select the cognac drinkers!
+				</p>
+
+				<p>
+					jQuery also adds a few pseudo-classes that operate on previous sets: Like selecting the first div
+					<pre class="selector_experiment" data-selector="div:first">
+<div>Frank</div>
+<div>Max</div>
+<div>Samantha</div>
+<div>Ginnie</div>
+</pre>
+				</p>
+
+				<p>
+					... or the last div
+					<pre class="selector_experiment" data-selector="div:last">
+<div>Frank</div>
+<div>Max</div>
+<div>Samantha</div>
+<div>Ginnie</div>
+</pre>
+				</p>
+
+				<p>
+					or odd divs
+					<pre class="selector_experiment" data-selector="div:odd">
+<div>Frank</div>
+<div>Max</div>
+<div>Samantha</div>
+<div>Ginnie</div>
+</pre>
+				</p>
+
+				<p>
+					or even divs
+					<pre class="selector_experiment" data-selector="div:even">
+<div>Frank</div>
+<div>Max</div>
+<div>Samantha</div>
+<div>Ginnie</div>
+</pre>
+				</p>
+
+				<p>
+					or the second div (Note: we're counting 0 based)
+					<pre class="selector_experiment" data-selector="div:eq(1)">
+<div>Frank</div>
+<div>Max</div>
+<div>Samantha</div>
+<div>Ginnie</div>
+</pre>
+				</p>
+
+				<p>
+					or every div starting with the second
+					<pre class="selector_experiment" data-selector="div:gt(0)">
+<div>Frank</div>
+<div>Max</div>
+<div>Samantha</div>
+<div>Ginnie</div>
+</pre>
+				</p>
+
+				<p>
+					you can even combine selectors. For example like this (the second gin drinker)
+					<pre class="selector_experiment" data-selector="[data-drinks~=gin]:eq(1)">
+<div data-drinks="vodka gin cognac">Frank</div>
+<div data-drinks="whiskey vodka">Max</div>
+<div data-drinks="absinthe gin">Samantha</div>
+<div data-drinks="cognac wine">Ginnie</div>
+</pre>
+				</p>
+
+				<p>
+					or like this
+					<pre class="selector_experiment" data-selector="[data-drinks~=gin]:even">
+<div data-drinks="vodka gin cognac water">Frank</div>
+<div data-drinks="whiskey vodka water">Max</div>
+<div data-drinks="absinthe gin water">Samantha</div>
+<div data-drinks="cognac wine">Ginnie</div>
+</pre>
+
+				</p>
+
+				<p>
+					or like this
+					<pre class="selector_experiment" data-selector="[data-drinks~=gin][data-sex=female]">
+<div data-sex="male" data-drinks="vodka gin cognac">Frank</div>
+<div data-sex="male" data-drinks="whiskey vodka">Max</div>
+<div data-sex="female" data-drinks="absinthe gin">Samantha</div>
+<div data-sex="female" data-drinks="cognac wine">Ginnie</div>
+</pre>
+				</p>
+
+				<p>
+					here: have some room to run you own experiments or play around with the ones above
+					<pre class="selector_experiment" data-selector="my-selector" style="height: 200px" />
+				</p>
+
+				<p>The are even more options than this. I suggest you read up on them in the <a href="http://api.jquery.com/category/selectors/" target="_blank">jQuery documentation</a></p>
+
+				<h3>Operating on selections</h3>
+				<p>
+					Once you've selected a bunch of DOM elements you probably want to do something with them. The nice thing about jQuery is, that whenever you call a method on the entire set, the method in turn will be called of every element of the stack. Let's select three elements and then change their content with jQueries <code>#append</code> method. To tie this in with the event example, we'll do this only after a button was clicked:
+<pre class="node_experiment" data-padding=30>// First let's construct a few elements
+this.append(
+	$('&lt;div data-drinks="vodka gin cognac"&gt;').text("Frank"),
+	$('&lt;div data-drinks="whiskey vodka"&gt;').text("Max"),
+	$('&lt;div data-drinks="absinthe gin"&gt;').text("Samantha"),
+	$('&lt;div data-drinks="cognac wine"&gt;').text("Ginnie"),
+	$('&lt;button&gt;').text("Mark gin drinkers")
+);
+// Attention! 'this' is reassigned in callback methods to something completely different
+// So we keep a reference lying around
+var self = this;
+this.find('button').on("click", function () {
+	// Find all gin drinkers and a append ' likes gin!'
+	// Since two nodes will be found, the append method is called on both nodes
+	// No need for fancy loops!
+	self.find("[data-drinks~=gin]").append(" likes gin!");
+	self.find("div:not([data-drinks~=gin])").append(" does not like gin!");
+
+});</pre>
+				</p>
+				<p>
+					This is also a good place to talk about <strong>method chaining</strong>. In jQuery (and other libraries) you can usually string together a sequence of method calls. So instead of writing:
+					<pre class="code">
+self.find("[data-drinks~=gin]").append(" likes gin");
+self.find("[data-drinks~=gin]").addClass("text-success");
+self.find("[data-drinks~=gin]").css({fontWeight: "bold"});</pre>
+					you can simlpy chain the three method calls:
+					<pre class="code">
+self.find("[data-drinks~=gin]").append(" likes gin").addClass("text-information").css({fontWeight: "bold"});</pre>
+					or, for readability:
+					<pre class="code">
+self.find("[data-drinks~=gin]")
+	.append(" likes gin")
+	.addClass("text-success")
+	.css({fontWeight: "bold"});</pre>
+					Let's use this in our example:
+<pre class="node_experiment">// First let's construct a few elements
+this.append(
+	$('&lt;div data-drinks="vodka gin cognac"&gt;').text("Frank"),
+	$('&lt;div data-drinks="whiskey vodka"&gt;').text("Max"),
+	$('&lt;div data-drinks="absinthe gin"&gt;').text("Samantha"),
+	$('&lt;div data-drinks="cognac wine"&gt;').text("Ginnie"),
+	$('&lt;button&gt;').text("Mark gin drinkers")
+);
+// Attention! 'this' is reassigned in callback methods to something completely different
+// So we keep a reference lying around
+var self = this;
+this.find('button').on("click", function () {
+	// Find all gin drinkers and a append ' likes gin!'
+	// Since two nodes will be found, the append method is called on both nodes
+	// No need for fancy loops!
+	self.find("[data-drinks~=gin]")
+		.append(" likes gin!")
+		.addClass("text-success")
+		.css({fontWeight: "bold"});
+
+	self.find("div:not([data-drinks~=gin])")
+		.append(" does not like gin!")
+		.addClass("text-error");
+
+});</pre>
+				</p>
+				<h3>Remembering nodes when assembling the dom structure</h3>
+				<p>
+					Alternatively to assembling the DOM structure in total and then using jQuery to look up nodes it might be useful to save a reference to a node so you can then directly call methods on it. As a rule of thumb, if you want to do similar things to many elements use a selector, if you want to do specific things to a certain element, try to hold onto a reference. In our above example, the button is a good candidate for keeping a reference to:
+<pre class="node_experiment">// First let's construct a few elements
+var button;
+this.append(
+	$('&lt;div data-drinks="vodka gin cognac"&gt;').text("Frank"),
+	$('&lt;div data-drinks="whiskey vodka"&gt;').text("Max"),
+	$('&lt;div data-drinks="absinthe gin"&gt;').text("Samantha"),
+	$('&lt;div data-drinks="cognac wine"&gt;').text("Ginnie"),
+	button = $('&lt;button&gt;').text("Mark gin drinkers")
+);
+// Attention! 'this' is reassigned in callback methods to something completely different
+// So we keep a reference lying around
+var self = this;
+button.on("click", function () {
+	// Find all gin drinkers and a append ' likes gin!'
+	// Since two nodes will be found, the append method is called on both nodes
+	// No need for fancy loops!
+	self.find("[data-drinks~=gin]")
+		.append(" likes gin!")
+		.addClass("text-success")
+		.css({fontWeight: "bold"});
+
+	self.find("div:not([data-drinks~=gin])")
+		.append(" does not like gin!")
+		.addClass("text-error");
+
+});</pre>
+				</p>
+				<p>
+					Similarly, let's add a sentence that shows the number of gin drinkers. Again, since this is a special treatment of a special node, we opt for keeping a reference:
+<pre class="node_experiment">// First let's construct a few elements
+var button, numberSpan;
+this.append(
+	$('&lt;div data-drinks="vodka gin cognac"&gt;').text("Frank"),
+	$('&lt;div data-drinks="whiskey vodka"&gt;').text("Max"),
+	$('&lt;div data-drinks="absinthe gin"&gt;').text("Samantha"),
+	$('&lt;div data-drinks="cognac wine"&gt;').text("Ginnie"),
+	button = $('&lt;button&gt;').text("Mark gin drinkers"),
+	$("&lt;br&gt;"),
+	numberSpan = $("&lt;span&gt;").hide()
+);
+// Attention! 'this' is reassigned in callback methods to something completely different
+// So we keep a reference lying around
+var self = this;
+button.on("click", function () {
+	// Find all gin drinkers and a append ' likes gin!'
+	// Since two nodes will be found, the append method is called on both nodes
+	// No need for fancy loops!
+	var number = self.find("[data-drinks~=gin]")
+		.append(" likes gin!")
+		.addClass("text-success")
+		.css({fontWeight: "bold"}).length;
+	numberSpan.text(number + ' people like gin!').show();
+
+	self.find("div:not([data-drinks~=gin])")
+		.append(" does not like gin!")
+		.addClass("text-error");
+
+});</pre>
+				</p>
+			</section>
+
+			<section id="putting_it_together">
+				<h2>Putting it all together</h2>
+				<p>
+					As a final exercise try to modify the above code so that instead of a button, a pulldown list of drinks is shown that highlights the
+					corresponding people as soon as a value is selected.
+
+<pre class="node_experiment" data-padding="50">// First let's construct a few elements
+var button, numberSpan;
+this.append(
+	$('&lt;div data-drinks="vodka gin cognac"&gt;').text("Frank"),
+	$('&lt;div data-drinks="whiskey vodka"&gt;').text("Max"),
+	$('&lt;div data-drinks="absinthe gin"&gt;').text("Samantha"),
+	$('&lt;div data-drinks="cognac wine"&gt;').text("Ginnie"),
+	button = $('&lt;button&gt;').text("Mark gin drinkers"),
+	$("&lt;br&gt;"),
+	numberSpan = $("&lt;span&gt;").hide()
+);
+// Attention! 'this' is reassigned in callback methods to something completely different
+// So we keep a reference lying around
+var self = this;
+button.on("click", function () {
+	// Find all gin drinkers and a append ' likes gin!'
+	// Since two nodes will be found, the append method is called on both nodes
+	// No need for fancy loops!
+	var number = self.find("[data-drinks~=gin]")
+		.append(" likes gin!")
+		.addClass("text-success")
+		.css({fontWeight: "bold"}).length;
+	numberSpan.text(number + ' people like gin!').show();
+
+	self.find("div:not([data-drinks~=gin])")
+		.append(" does not like gin!")
+		.addClass("text-error");
+
+});</pre>
+				</p>
+
+				<p>
+					This concludes our whirlwind tour of jQuery. As you can see, jQuery is a powerful library for writing very concise and browser-portable
+					UI code. A minute spent learning to wield this library is a minute well spent, so, at the risk of sounding like a broken record, I urge you to thoroughly read through jQueries <a href="http://docs.jquery.com/Main_Page" target="_blank">documentation</a>.
+				</p>
+			</section>
+
+
+		</div>
+	</div>
+
+</div>

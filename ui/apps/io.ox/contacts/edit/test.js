@@ -7,12 +7,16 @@
  *
  * Copyright (C) Open-Xchange Inc., 2006-2011 Mail: info@open-xchange.com
  *
- * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define("io.ox/contacts/edit/test",
-    ["io.ox/core/extensions", "io.ox/contacts/main",
-     "io.ox/contacts/api", "io.ox/core/config"], function (ext, contacts, api, config) {
+define('io.ox/contacts/edit/test',
+    ['io.ox/core/extensions',
+     'io.ox/contacts/main',
+     'io.ox/contacts/api',
+     'io.ox/core/config',
+     'io.ox/core/date'
+    ], function (ext, contacts, api, config, date) {
 
     "use strict";
 
@@ -20,21 +24,16 @@ define("io.ox/contacts/edit/test",
     var testObject = {
             first_name: 'Georg',
             last_name: 'Tester',
-            company: 'OX',
-            department: 'OX7-dev',
-            position: 'small cog in a big wheel',
-            profession: 'developer',
-            street_business: 'Martinstr. 41',
-            postal_code_business: '57462',
-            city_business: 'Olpe',
-            telephone_business1: '+49 2761-8385-0'
+            email1: 'tester@test.de',
+            cellular_telephone1: '0815123456789'
         },
 
         testObjectLong = {
             first_name: 'Georg',
             last_name: 'Tester',
+            display_name: 'Tester, Georg', // just to skip missing autocreate
             company: 'OX',
-            department: 'OX7-dev',
+            department: 'OX-dev',
             position: 'small cog in a big wheel',
             profession: 'developer',
             street_business: 'Martinstr. 41',
@@ -48,12 +47,10 @@ define("io.ox/contacts/edit/test",
             city_home: 'Olpe',
             state_home: 'NRW',
             country_home: 'Germany',
-            birthday: '10.10.1915',
             marital_status: 'married',
             number_of_children: '2',
             nickname: 'GG',
             spouse_name: 'Johanna',
-            anniversary: '11.10.1980',
             note: 'Much Ado about Nothing',
             employee_type: 'free',
             room_number: '4711',
@@ -121,7 +118,7 @@ define("io.ox/contacts/edit/test",
             userfield20: 'userfield'
         },
 
-        TIMEOUT = 5000;
+        TIMEOUT = ox.testTimeout;
 
     // helpers
     function Done() {
@@ -201,16 +198,17 @@ define("io.ox/contacts/edit/test",
                     });
                 });
 
-                j.it('catches the form and autofills', function () {
+                j.it('catches the form and autofills / checks for alert div', function () {
 
-                    var grid = app.getGrid();
+                    var grid = app.getGrid(),
+                        field, alert;
 
                     phrase = fId + '.' + data.id;
 
                     j.waitsFor(function () {
                         // grid contains item?
                         if (grid.contains(phrase)) {
-                            grid.selection.set({ folder_id: fId, id: data.id });
+                            grid.selection.set(_.cid(phrase));
                             return true;
                         } else {
                             return false;
@@ -218,48 +216,74 @@ define("io.ox/contacts/edit/test",
                     }, 'looks for the listed item', TIMEOUT);
 
                     j.waitsFor(function () {
-                        buttonUpdate = $('table[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="update"]');
+                        buttonUpdate = $('[data-cid="' + phrase + '"] .io-ox-inline-links a[data-action="edit"]');
                         if (buttonUpdate[0]) {
                             return true;
                         }
                     }, 'looks for update button', TIMEOUT);
 
                     j.runs(function () {
-                        buttonUpdate.triggerHandler('click');
+                        buttonUpdate.trigger('click');
                     });
 
                     j.waitsFor(function () {
-                        formFrame =  $('.contact-detail.edit[data-property="' + phrase + '"]');
-                        buttonSave = formFrame.find('.btn.btn-primary[data-action="save"]');
-                        if (buttonSave[0]) {
+                        formFrame = $('.edit-contact');
+                        if (formFrame[0]) {
                             return true;
                         }
                     }, 'the form', TIMEOUT);
 
-                    j.runs(function () {
-                        formFrame =  $('.contact-detail.edit[data-property="' + phrase + '"]');
-//                        formFrame.find('input[data-property="first_name"]').val('test').trigger('change');
-
-                        _.each(testObjectLong, function (val, property) {
-//                            console.log(property + ' ' + val);
-                            formFrame.find('input[data-property="' + property + '"]').val(val).trigger('change');
-                        });
-                        buttonSave.triggerHandler('click');
-
+                    j.waitsFor(function () {
+                        field = formFrame.find(('[name="email1"]'));
+                        if (field[0]) {
+                            return true;
+                        }
                     });
+
+                    j.runs(function () {
+                        field.val('wrong_mail').trigger('change');
+                    });
+
+                    j.waitsFor(function () {
+                        // TODO: fix this for new yell() notifications
+                        alert = formFrame.find('.help-block.error');
+                        if (alert[0]) {
+                            return true;
+                        }
+                    });
+
+                    j.waitsFor(function () {
+                        buttonSave = formFrame.find('.btn.btn-primary[data-action="save"]');
+                        if (buttonSave[0]) {
+                            return true;
+                        }
+                    });
+
+                    j.runs(function () {
+                        _.each(testObjectLong, function (val, property) {
+                            formFrame.find('[name="' + property + '"]').val(val).trigger('change');
+                        });
+
+                        var birthdayFrame = formFrame.find('[data-extension-id="birthday"]');
+                        birthdayFrame.find('[name="day"]').val('10').trigger('change');
+                        birthdayFrame.find('[name="month"]').val('10').trigger('change');
+                        birthdayFrame.find('[name="year"]').val('1915').trigger('change');
+
+                        j.expect(buttonSave).toBeTruthy();
+                        buttonSave.trigger('click');
+                    });
+
                 });
 
-                j.it('loads the saved item and compares', function () {
+                j.it('loads the saved item and compares incl. autogenerated displayname', function () {
 
                     j.runs(function () {
                         var me = this;
                         me.ready = false;
-                        api.on('edit', function (e, data) {
-                            if (data) {
-                                dataId = data.id;
-                                dataFolder = data.folder;
-                                me.ready = true;
-                            }
+                        api.on('update', function (e, data) {
+                            dataId = data.id;
+                            dataFolder = data.folder_id;
+                            me.ready = true;
                         });
 
                         j.waitsFor(function () {
@@ -283,9 +307,9 @@ define("io.ox/contacts/edit/test",
                         }, 'looks for the object', TIMEOUT);
 
                         j.runs(function () {
-
                             j.expect(dataObj.first_name).toEqual(testObjectLong.first_name);
                             j.expect(dataObj.last_name).toEqual(testObjectLong.last_name);
+                            j.expect(dataObj.display_name).toEqual('Tester, Georg');
                             j.expect(dataObj.company).toEqual(testObjectLong.company);
                             j.expect(dataObj.department).toEqual(testObjectLong.department);
                             j.expect(dataObj.position).toEqual(testObjectLong.position);
@@ -302,12 +326,11 @@ define("io.ox/contacts/edit/test",
                             j.expect(dataObj.city_home).toEqual(testObjectLong.city_home);
                             j.expect(dataObj.state_home).toEqual(testObjectLong.state_home);
                             j.expect(dataObj.country_home).toEqual(testObjectLong.country_home);
-                            j.expect(require('io.ox/core/i18n').date('dd.MM.YYYY', dataObj.birthday)).toEqual(testObjectLong.birthday);
+                            j.expect(dataObj.birthday).toEqual(-1708646400000);
                             j.expect(dataObj.marital_status).toEqual(testObjectLong.marital_status);
                             j.expect(dataObj.number_of_children).toEqual(testObjectLong.number_of_children);
                             j.expect(dataObj.nickname).toEqual(testObjectLong.nickname);
                             j.expect(dataObj.spouse_name).toEqual(testObjectLong.spouse_name);
-                            j.expect(require('io.ox/core/i18n').date('dd.MM.YYYY', dataObj.anniversary)).toEqual(testObjectLong.anniversary);
                             j.expect(dataObj.note).toEqual(testObjectLong.note);
                             j.expect(dataObj.employee_type).toEqual(testObjectLong.employee_type);
                             j.expect(dataObj.room_number).toEqual(testObjectLong.room_number);
@@ -317,7 +340,6 @@ define("io.ox/contacts/edit/test",
                             j.expect(dataObj.tax_id).toEqual(testObjectLong.tax_id);
                             j.expect(dataObj.commercial_register).toEqual(testObjectLong.commercial_register);
                             j.expect(dataObj.branches).toEqual(testObjectLong.branches);
-//                            j.expect(dataObj.business_category).toEqual(testObjectLong.business_category);
                             j.expect(dataObj.info).toEqual(testObjectLong.info);
                             j.expect(dataObj.manager_name).toEqual(testObjectLong.manager_name);
                             j.expect(dataObj.assistant_name).toEqual(testObjectLong.assistant_name);
@@ -394,10 +416,12 @@ define("io.ox/contacts/edit/test",
                     var grid = app.getGrid();
                     phrase = dataFolder + '.' + dataId;
 
+                    grid.selection.clear();
+
                     j.waitsFor(function () {
                         // grid contains item?
                         if (grid.contains(phrase)) {
-                            grid.selection.set({ folder_id: dataFolder, id: dataId });
+                            grid.selection.set(_.cid(phrase));
                             return true;
                         } else {
                             return false;
@@ -405,7 +429,7 @@ define("io.ox/contacts/edit/test",
                     }, 'looks for the list', TIMEOUT);
 
                     j.waitsFor(function () {
-                        buttonDelete = $('table.view[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
+                        buttonDelete = $('.scrollable-pane [data-cid="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
                         if (buttonDelete[0]) {
                             return true;
                         }
@@ -423,10 +447,13 @@ define("io.ox/contacts/edit/test",
                     }, 'delete dialog to be there', TIMEOUT);
 
                     j.runs(function () {
+                        j.expect(dialog).toBeTruthy();
                         dialog.trigger('click');
-                    });
 
-                    j.waits(500); // need a better solution
+                        app = data = itemFill = itemDelete = buttonUpdate = buttonSave = null;
+                        buttonDelete = dialog = formFrame = null;
+                        dataId = dataFolder = dataObj = phrase = null;
+                    });
 
                 });
             });
@@ -446,7 +473,7 @@ define("io.ox/contacts/edit/test",
                 buttonDelete, dialog, testfield, testfield2, formFrame = null,
                 dataId, dataFolder, dataObj, phrase;
 
-                j.it('opens contact app ', function () {
+                j.it('opens contact app', function () {
 
                     var loaded = new Done();
 
@@ -454,16 +481,12 @@ define("io.ox/contacts/edit/test",
 
                     contacts.getApp().launch().done(function () {
                         app = this;
-                        //console.log(app);
-                        app.folder.setDefault().done(function () {
-                            loaded.yep();
-                            j.expect(app).toBeTruthy();
-                        });
+                        loaded.yep();
+                        j.expect(app).toBeTruthy();
                     });
                 });
 
                 j.it('creates a fresh obj', function () {
-
                     j.runs(function () {
                         var me = this;
                         me.ready = false;
@@ -489,14 +512,12 @@ define("io.ox/contacts/edit/test",
 
                     var grid = app.getGrid();
 
-
-
                     phrase = fId + '.' + data.id;
 
                     j.waitsFor(function () {
                         // grid contains item?
                         if (grid.contains(phrase)) {
-                            grid.selection.set({ folder_id: fId, id: data.id });
+                            grid.selection.set(_.cid(phrase));
                             return true;
                         } else {
                             return false;
@@ -504,7 +525,7 @@ define("io.ox/contacts/edit/test",
                     }, 'looks for the listed item', TIMEOUT);
 
                     j.waitsFor(function () {
-                        buttonUpdate = $('table[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="update"]');
+                        buttonUpdate = $('.scrollable-pane [data-cid="' + phrase + '"] .io-ox-inline-links a[data-action="edit"]');
                         if (buttonUpdate[0]) {
                             return true;
                         }
@@ -515,29 +536,29 @@ define("io.ox/contacts/edit/test",
                     });
 
                     j.waitsFor(function () {
-                        formFrame =   $('.contact-detail.edit[data-property="' + phrase + '"]');
-                        testfield = formFrame.find('input[data-property="cellular_telephone1"]');
+                        formFrame =   $('.edit-contact');
+                        testfield = formFrame.find('input[name="cellular_telephone1"]');
                         if (testfield[0]) {
                             return true;
                         }
                     }, 'the form', TIMEOUT);
 
                     j.waitsFor(function () {
-                        formFrame =  $('.contact-detail.edit[data-property="' + phrase + '"]');
-                        buttonClose = $('.window-controls .window-control').text('x');
-                        if (buttonClose[1]) {
+                        formFrame =  $('.edit-contact');
+                        buttonClose = $('[data-action="discard"]');
+                        if (buttonClose[0]) {
                             return true;
                         }
                     }, 'waits for the form', TIMEOUT);
 
                     j.runs(function () {
-                        $(buttonClose[1]).trigger('click');
+                        $(buttonClose[0]).trigger('click');
                     });
 
 
                 });
 
-                j.it('opens contact app ', function () {
+                j.it('opens contact app', function () {
 
                     var loaded = new Done();
 
@@ -557,7 +578,7 @@ define("io.ox/contacts/edit/test",
                     j.waitsFor(function () {
                         // grid contains item?
                         if (grid.contains(phrase)) {
-                            grid.selection.set({ folder_id: dataFolder, id: dataId });
+                            grid.selection.set(_.cid(phrase));
                             return true;
                         } else {
                             return false;
@@ -565,7 +586,7 @@ define("io.ox/contacts/edit/test",
                     }, 'looks for the list', TIMEOUT);
 
                     j.waitsFor(function () {
-                        buttonDelete = $('table.view[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
+                        buttonDelete = $('.scrollable-pane [data-cid="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
                         if (buttonDelete[0]) {
                             return true;
                         }
@@ -587,7 +608,7 @@ define("io.ox/contacts/edit/test",
                     });
                 });
 
-                j.it('opens contact app ', function () {
+                j.it('opens contact app', function () {
 
                     var loaded = new Done();
 
@@ -595,15 +616,12 @@ define("io.ox/contacts/edit/test",
 
                     contacts.getApp().launch().done(function () {
                         app = this;
-                        app.folder.setDefault().done(function () {
-                            loaded.yep();
-                            j.expect(app).toBeTruthy();
-                        });
+                        loaded.yep();
+                        j.expect(app).toBeTruthy();
                     });
                 });
 
                 j.it('creates a fresh obj', function () {
-
                     j.runs(function () {
                         var me = this;
                         me.ready = false;
@@ -613,7 +631,6 @@ define("io.ox/contacts/edit/test",
                                 me.obj = data;
                             }
                         });
-
                         j.waitsFor(function () {
                             return this.ready;
                         }, 'it happens', TIMEOUT);
@@ -629,18 +646,16 @@ define("io.ox/contacts/edit/test",
 
                     app.launch();
                     j.runs(function () {
-                        ext.point("io.ox/contacts/edit/form/contact_phone").disable("cellular_telephone1");
+                        ext.point("io.ox/contacts/edit/form/phone").disable("cellular_telephone1");
                     });
 
                     var grid = app.getGrid();
                     phrase = fId + '.' + data.id;
-//                    console.log(grid);
 
                     j.waitsFor(function () {
                         // grid contains item?
-                        //console.log(data.id);
                         if (grid.contains(phrase)) {
-                            grid.selection.set({ folder_id: fId, id: data.id });
+                            grid.selection.set(_.cid(phrase));
                             return true;
                         } else {
                             return false;
@@ -648,7 +663,7 @@ define("io.ox/contacts/edit/test",
                     }, 'looks for the listed item', TIMEOUT);
 
                     j.waitsFor(function () {
-                        buttonUpdate = $('table[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="update"]');
+                        buttonUpdate = $('.scrollable-pane [data-cid="' + phrase + '"] .io-ox-inline-links a[data-action="edit"]');
                         if (buttonUpdate[0]) {
                             return true;
                         }
@@ -659,29 +674,20 @@ define("io.ox/contacts/edit/test",
                     });
 
                     j.waitsFor(function () {
-                        //console.log(phrase);
-                        formFrame = $('.contact-detail.edit[data-property="' + phrase + '"]');
+                        formFrame = $('.edit-contact');
                         if (formFrame[0]) {
-                            //console.log('form');
                             return true;
                         }
                     }, 'the form', TIMEOUT);
 
                     j.runs(function () {
-                        testfield = $('input[data-property="cellular_telephone1"]');
+                        testfield = $('input[dname="cellular_telephone1"]');
                         j.expect(testfield[0]).toBeFalsy();
                     });
-
-
                 });
 
-
-
-
-
-
                 j.runs(function () {
-                    buttonClose = $('.window-controls .window-control').text('x');
+                    buttonClose = $('[data-action="discard"]');
                     $(buttonClose[1]).trigger('click');
                 });
 
@@ -692,21 +698,15 @@ define("io.ox/contacts/edit/test",
                     j.waitsFor(function () {
                         // grid contains item?
                         if (grid.contains(phrase)) {
-                            grid.selection.set({ folder_id: dataFolder, id: dataId });
+                            grid.selection.set(_.cid(phrase));
                             return true;
                         } else {
                             return false;
                         }
                     }, 'looks for the list', TIMEOUT);
 
-//                    j.runs(function () {
-//                        console.log($('.launcher').text('Address Book'));
-//                    });
-
-
                     j.waitsFor(function () {
-                        buttonDelete = $('table.view[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
-                        //console.log(buttonDelete);
+                        buttonDelete = $('.scrollable-pane [data-cid="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
                         if (buttonDelete[0]) {
                             return true;
                         }
@@ -728,8 +728,6 @@ define("io.ox/contacts/edit/test",
                     });
 
                 });
-
-
             });
         }
     });

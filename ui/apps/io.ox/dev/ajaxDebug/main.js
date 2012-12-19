@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,14 +9,46 @@
  * Mail: info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
- *
  */
 
 define("io.ox/dev/ajaxDebug/main",
-    ["io.ox/core/tk/vgrid", "io.ox/dev/ajaxDebug/callHandling",
-     "io.ox/dev/ajaxDebug/callViews"], function (VGrid, callHandler, callViews) {
+    ["io.ox/core/tk/vgrid",
+     "io.ox/dev/ajaxDebug/callHandling",
+     "io.ox/dev/ajaxDebug/callViews",
+     'io.ox/core/extensions',
+     'io.ox/core/extPatterns/links'], function (VGrid, callHandler, callViews, ext, links) {
 
     "use strict";
+
+    // toolbar actions
+
+    new links.Action('io.ox/dev/ajaxDebug/actions/dump', {
+        id: 'dump',
+        action: function (app) {
+            app.dump();
+        }
+    });
+
+    ext.point('io.ox/dev/ajaxDebug/links/toolbar').extend(new links.Link({
+        index: 100,
+        id: 'dump',
+        label: 'Dump to console',
+        ref: 'io.ox/dev/ajaxDebug/actions/dump'
+    }));
+
+    new links.Action('io.ox/dev/ajaxDebug/actions/repeat', {
+        id: 'repeat',
+        action: function (app) {
+            app.repeat();
+        }
+    });
+
+    ext.point('io.ox/dev/ajaxDebug/links/toolbar').extend(new links.Link({
+        index: 200,
+        id: 'repeat',
+        label: 'Auto repeat',
+        ref: 'io.ox/dev/ajaxDebug/actions/repeat'
+    }));
 
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/dev/ajaxDebug' }),
@@ -35,27 +66,19 @@ define("io.ox/dev/ajaxDebug/main",
 
         // get window
         app.setWindow(win = ox.ui.createWindow({
-            title: "AJAX Debugger",
-            search: true
+            name: 'io.ox/dev/ajaxDebug',
+            title: "API debug",
+            toolbar: true,
+            search: false
         }));
 
-        // toolbar
-        /*win.addButton({
-            label: "Repeat",
-            action: deleteItems
-        }); */
-
         // left side
-        left = $("<div/>").addClass("leftside border-right")
-            .css({
-                width: "309px",
-                overflow: "auto"
-            })
+        left = $("<div>").addClass("leftside border-right")
             .appendTo(win.nodes.main);
 
-        right = $("<div/>")
-            .css({ left: "310px", overflow: "auto", padding: "20px 40px 20px 40px" })
+        right = $("<div>")
             .addClass("rightside")
+            .css({ padding: "20px 40px 20px 40px" })
             .appendTo(win.nodes.main);
 
 
@@ -63,13 +86,21 @@ define("io.ox/dev/ajaxDebug/main",
 
         // Grid
         grid = new VGrid(left);
+
+        grid.setMultiple(false);
+
+        // fix selection's serialize
+        grid.selection.serialize = function (obj) {
+            console.log('yep', obj);
+            return obj ? obj.id : '';
+        };
+
         // add template
         grid.addTemplate({
             build: function () {
                 var name;
-                this
-                    .addClass("ajaxRequest")
-                    .append(name = $("<div/>").addClass("name"));
+                this.addClass("ajaxRequest")
+                    .append(name = $("<div>").addClass("name"));
                 return { name: name };
             },
             set: function (data, fields, index) {
@@ -93,61 +124,47 @@ define("io.ox/dev/ajaxDebug/main",
             return new $.Deferred().resolve(entries);
         });
 
-
-
         grid.selection.on("change", function (e, selection) {
             if (selection.length === 1) {
                 viewer.draw(selection[0]);
             }
         });
 
-        // explicit keyboard support
-        //win.on("show", function () { grid.selection.keyboard(true); });
-        //win.on("hide", function () { grid.selection.keyboard(false); });
-
         callHandler.on("historychanged", function () {
             grid.refresh();
             grid.selection.set(_(callHandler.history).last());
         });
 
-        // Buttons
-        win.addButton({
-            label: "Dump to Console",
-            action: function () {
-                if (viewer.dirty) {
-                    console.debug({query: viewer.getQuery()});
+        // auto repeat
+        var autorepeat = false,
+            repeat = function () {
+                if (autorepeat) {
+                    callHandler.perform(viewer.getQuery()).deferred.always(repeat);
+                }
+            };
+
+        app.autoRepeat = function () {
+            autorepeat = !autorepeat;
+            repeat();
+        };
+
+        app.dump = function () {
+            if (viewer.dirty) {
+                console.debug({query: viewer.getQuery()});
+            } else {
+                var selection = grid.selection.get();
+                if (selection.length === 1) {
+                    console.debug(selection[0]);
                 } else {
-                    var selection = grid.selection.get();
-                    if (selection.length === 1) {
-                        console.debug(selection[0]);
-                    } else {
-                        console.debug(selection);
-                    }
+                    console.debug(selection);
                 }
             }
-        });
-
-        var autorepeat = false;
-        function repeat() {
-            if (autorepeat) {
-                callHandler.perform(viewer.getQuery(), repeat);
-            }
-        }
-
-        win.addButton({
-            label: "Autorepeat",
-            action: function () {
-                autorepeat = !autorepeat;
-                repeat();
-            }
-        });
-
+        };
 
         // go!
         win.show(function () {
             grid.paint();
         });
-
     });
 
     return {

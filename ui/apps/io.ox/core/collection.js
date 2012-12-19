@@ -12,11 +12,11 @@
  */
 
 define('io.ox/core/collection',
-    ['io.ox/core/config', 'io.ox/core/api/folder'], function (config, api) {
+    ['io.ox/core/api/folder'], function (api) {
 
     'use strict';
 
-    var myself = 0,
+    var unresolved = {},
 
         // helper
         getRight = function (folder, owner, offset) {
@@ -28,8 +28,7 @@ define('io.ox/core/collection',
                 return false;
             } else if (bits === 1) {
                 // only own objects
-                myself = myself || config.get('identifier');
-                return owner === myself;
+                return owner === ox.user_id;
             } else {
                 // all objects or admin
                 return true;
@@ -37,15 +36,7 @@ define('io.ox/core/collection',
         },
 
         getFolderId = function (obj) {
-            // is app (pseudo collection used by window toolbar)?
-            if (_.isObject(obj.folder) && _.isFunction(obj.folder.get)) {
-                return obj.folder.get();
-            } else if ('folder_id' in obj || 'folder' in obj) {
-                return obj.folder_id || obj.folder;
-            } else {
-                console.error('collection.getFolderId: Object has no folder');
-                return undefined;
-            }
+            return obj ? obj.folder_id || obj.folder : undefined;
         },
 
         // get properties of object collection (async)
@@ -70,53 +61,61 @@ define('io.ox/core/collection',
                 // get all folders first
                 folders = _.chain(collection)
                     .map(getFolderId)
-                    .filter(function (item) {
-                        return item !== null && item !== undefined;
-                    })
+                    .filter(function (item) { return !!item; }) // null, undefined, 0, ''
                     .value();
 
-            return api.get({ folder: folders })
-                .pipe(function (hash) {
-                    var i = 0, item = null, folder = null;
-                    for (; i < $l; i++) {
-                        item = collection[i];
-                        if ((folder = hash[getFolderId(item)])) {
-                            // get properties
-                            props.read = props.read && getRight(folder, item.created_by, 7); // read
-                            props.modify = props.modify && getRight(folder, item.created_by, 14); // write
-                            props['delete'] = props['delete'] && getRight(folder, item.created_by, 21); // delete
-                            props.create = props.create && (folder.own_rights & 127) >= 2; // create new objects
-                        } else {
-                            // folder unknown
-                            props.unknown = true;
-                            props.read = props.modify = props['delete'] = props.create = false;
-                            console.error("AHA!", folder);
-                            break;
-                        }
+            // mail specific: toplevel? (in contrast to nested mails)
+            props.toplevel = _(collection).reduce(function (memo, item) {
+                // nested mails don't have a folder_id but a filename
+                return memo && 'folder_id' in item && !('filename' in item);
+            }, true);
+
+            if (folders.length === 0) {
+                return $.Deferred().resolve(props);
+            }
+
+            return api.get({ folder: folders }).pipe(function (hash) {
+                var i = 0, item = null, folder = null;
+                for (; i < $l; i++) {
+                    item = collection[i];
+                    if ((folder = hash[getFolderId(item)])) {
+                        // get properties
+                        props.read = props.read && getRight(folder, item.created_by, 7); // read
+                        props.modify = props.modify && getRight(folder, item.created_by, 14); // write
+                        props['delete'] = props['delete'] && getRight(folder, item.created_by, 21); // delete
+                        props.create = props.create && (folder.own_rights & 127) >= 2; // create new objects
+                    } else {
+                        // folder unknown
+                        props.unknown = true;
+                        props.read = props.modify = props['delete'] = props.create = false;
+                        break;
                     }
-                    return props;
-                });
+                }
+                return props;
+            });
         };
 
     function Collection(list) {
 
         var items = _.compact([].concat(list)),
-            empty = {},
-            properties = empty;
+            properties = unresolved;
 
         // resolve properties (async).
         // Must be done upfront before 'has' checks for example
         this.getProperties = function () {
-            return getProperties(items)
-                .done(function (props) {
-                    properties = props;
-                });
+            return getProperties(items).always(function (props) {
+                properties = props;
+            });
+        };
+
+        this.isResolved = function () {
+            return properties !== unresolved;
         };
 
         // check if collection satisfies a set of properties
         // e.g. has('some') or has('one', 'read')
         this.has = function () {
-            if (properties === empty) {
+            if (!this.isResolved()) {
                 console.error('Using Collection.has before properties are resolved!', list, arguments);
             }
             return _(arguments).inject(function (memo, key) {

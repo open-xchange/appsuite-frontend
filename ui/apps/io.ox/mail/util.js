@@ -12,7 +12,11 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
+define('io.ox/mail/util',
+    ['io.ox/core/extensions',
+     'io.ox/core/config',
+     'io.ox/core/date',
+     'gettext!io.ox/core'], function (ext, config, date, gt) {
 
     'use strict';
 
@@ -22,14 +26,33 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
         HOUR = MINUTE * 60,
 
         ngettext = function (s, p, n) {
-                return n > 1 ? p : s;
-            },
+            return n > 1 ? p : s;
+        },
 
         fnClickPerson = function (e) {
-                ext.point('io.ox/core/person:action').each(function (ext) {
-                    _.call(ext.action, e.data, e);
-                });
-            },
+            e.preventDefault();
+            ext.point('io.ox/core/person:action').each(function (ext) {
+                _.call(ext.action, e.data, e);
+            });
+        },
+
+        getDateFormated = function (timestamp, fulldate) {
+            var now = new date.Local(),
+                d = new date.Local(date.Local.utc(timestamp)),
+                timestr = function () {
+                    return d.format(date.TIME);
+                },
+                datestr = function () {
+                    return d.format(date.DATE) + (fulldate ? ' ' + timestr() : '');
+                },
+                isSameDay = function () {
+                    return d.getDate() === now.getDate() &&
+                        d.getMonth() === now.getMonth() &&
+                        d.getYear() === now.getYear();
+                };
+            return isSameDay() ? timestr() : datestr();
+        },
+
 
         // regex: split list at non-quoted ',' or ';'
         rRecipientList = /([^,;"]+|"(\\.|[^"])+")+/,
@@ -40,10 +63,17 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
         // regex: remove < > from mail address
         rMailCleanup = /(^<|>$)/g,
         // regex: clean up display name
-        rDisplayNameCleanup = /(^["'\\\s]+|["'\\\s]+$)/g;
+        rDisplayNameCleanup = /(^["'\\\s]+|["'\\\s]+$)/g,
+
+        // mail addresses hash
+        addresses = {};
+
+    _(config.get('mail.addresses', [])).each(function (address) {
+        addresses[address.toLowerCase()] = true;
+    });
+
 
     that = {
-
         parseRecipient: function (s) {
             var recipient = $.trim(s), match, name, email;
             if ((match = recipient.match(rRecipient)) !== null) {
@@ -79,22 +109,47 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
             return list;
         },
 
-        serializeList: function (list, addHandlers) {
-            var i = 0, $i = list.length, tmp = $(), node, display_name = '';
+        serializeList: function (data, field) {
+
+            field = field || 'from';
+            var list = data[field] || [['', '']],
+                i = 0, $i = list.length,
+                tmp = $('<div>'), obj, sender;
+
             for (; i < $i; i++) {
-                display_name = this.getDisplayName(list[i]);
-                node = $('<span>').addClass(addHandlers ? 'person-link' : 'person')
-                    .css('whiteSpace', 'nowrap').text(display_name);
-                if (addHandlers) {
-                    node.on('click', { display_name: display_name, email1: list[i][1] }, fnClickPerson)
-                        .css('cursor', 'pointer');
+                obj = {
+                    display_name: this.getDisplayName(list[i]),
+                    email1: String(list[i][1] || '').toLowerCase()
+                };
+                $('<a>', { href: '#', title: obj.email1 })
+                    .addClass('person-link')
+                    .css('whiteSpace', 'nowrap')
+                    .text(_.noI18n(obj.display_name))
+                    .data('person', obj)
+                    .on('click', obj, fnClickPerson).css('cursor', 'pointer')
+                    .appendTo(tmp);
+
+                // add 'on behalf of'?
+                if (field === 'from' && 'headers' in data && 'Sender' in data.headers) {
+                    sender = this.parseRecipients(data.headers.Sender);
+                    // only show if display names differ (otherwise it looks like a senseless duplicate)
+                    if (sender[0][0] !== data.from[0][0]) {
+                        tmp.prepend(
+                            this.serializeList({ sender: sender }, 'sender'),
+                            $.txt(_.noI18n(' ')),
+                            //#. (From) email1 on behalf of email2. Appears in email detail view.
+                            gt('on behalf of'),
+                            $.txt(_.noI18n(' '))
+                        );
+                    }
                 }
-                tmp = tmp.add(node);
+
                 if (i < $i - 1) {
-                    tmp = tmp.add($('<span>').addClass('delimiter').html('&nbsp;&bull; '));
+                    tmp.append($('<span>').addClass('delimiter')
+                        .append($.txt(_.noI18n('\u00A0\u00A0\u2022\u00A0 ')))); // '&nbsp;&nbsp;&bull;&nbsp; '
                 }
             }
-            return tmp;
+            return tmp.contents();
         },
 
         serializeAttachments: function (data, list) {
@@ -106,16 +161,16 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
                     folder: data.folder_id,
                     id: data.id,
                     attachment: list[i].id,
-                    save: '1',
-                    session: ox.session
+                    delivery: 'download'
                 });
                 tmp = tmp.add(
                     $('<a>', { href: href, target: '_blank' })
-                    .addClass('attachment-link').text(filename)
+                    .addClass('attachment-link').text(_.noI18n(filename))
                 );
                 if (i < $i - 1) {
                     tmp = tmp.add(
-                        $('<span>').addClass('delimiter').html('&nbsp;&bull; ')
+                        $('<span>').addClass('delimiter')
+                            .append($.txt(_.noI18n('\u00A0\u2022 '))) // '&nbsp;&bull; '
                     );
                 }
             }
@@ -123,13 +178,19 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
         },
 
         getDisplayName: function (pair) {
-            var display_name = (pair[0] || '').replace(rDisplayNameCleanup, '');
-            return display_name || pair[1];
+            if (!pair) {
+                return '';
+            }
+            var name = pair[0], email = pair[1].toLowerCase(),
+                display_name = _.isString(name) ? name.replace(rDisplayNameCleanup, '') : '';
+            return display_name || email;
         },
 
-        getFrom: function (list, prewrap) {
-            var dn = that.getDisplayName(list[0]);
-            return $('<span>').addClass('person').text(prewrap ? _.prewrap(dn) : dn);
+        getFrom: function (data, field) {
+            field = field || 'from';
+            var list = data[field] || [['', '']],
+                dn = that.getDisplayName(list[0]);
+            return $('<span>').addClass('person').text(_.noI18n(dn));
         },
 
         getFlag: function (data) {
@@ -137,20 +198,16 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
         },
 
         getPriority: function (data) {
-            return data.priority < 3 ? " \u2605\u2605\u2605 " : '';
+            var i = '<i class="icon-star"></i>';
+            return data.priority < 3 ? $('<span>').append(_.noI18n('\u00A0'), i, i, i) : $();
         },
 
         getTime: function (timestamp) {
-            var now = new Date(),
-                d = new Date(timestamp),
-                time = function () {
-                    return _.pad(d.getUTCHours(), 2) + ':' + _.pad(d.getUTCMinutes(), 2);
-                },
-                date = function () {
-                    return _.pad(d.getUTCDate(), 2) + '.' + _.pad(d.getUTCMonth() + 1, 2) + '.' + d.getUTCFullYear();
-                };
-            // today?
-            return d.toString() === now.toString() ? time() : date();
+            return getDateFormated(timestamp, false);
+        },
+
+        getDateTime: function (timestamp) {
+            return getDateFormated(timestamp, true);
         },
 
         getSmartTime: function (timestamp) {
@@ -177,7 +234,13 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
             }
         },
 
-        isUnread: function (data) {
+        count: function (data) {
+            return _(data).reduce(function (memo, obj) {
+                return memo + (obj.thread ? obj.thread.length : 1);
+            }, 0);
+        },
+
+        isUnseen: function (data) {
             return (data.flags & 32) !== 32;
         },
 
@@ -185,10 +248,82 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
             return (data.flags & 2) === 2;
         },
 
-        isMe: function (data) {
-            // hard wired
-            return data.from && data.from.length && data.from[0][1] === ox.user;
-        }
+        isAnswered: function () {
+            return _.chain(arguments).flatten().compact().reduce(function (memo, data) {
+                return memo || (data.flags & 1) === 1;
+            }, false).value();
+        },
+
+        isForwarded: function () {
+            return _.chain(arguments).flatten().compact().reduce(function (memo, data) {
+                return memo || (data.flags & 256) === 256;
+            }, false).value();
+        },
+
+        byMyself: function (data) {
+            return data.from && data.from.length && String(data.from[0][1] || '').toLowerCase() in addresses;
+        },
+
+        hasOtherRecipients: function (data) {
+            var list = [].concat(data.to, data.cc, data.bcc);
+            return 0 < _(list).reduce(function (memo, arr) {
+                var email = String(arr[1] || '').toLowerCase();
+                return memo + (email && !(email in addresses) ? 1 : 0);
+            }, 0);
+        },
+
+        getInitialDefaultSender: function () {
+            var mailArray = _(config.get('mail.addresses', []));
+            return mailArray._wrapped[0];
+        },
+
+        getAttachments: (function () {
+
+            var isWinmailDATPart = function (obj) {
+                return !('filename' in obj) && obj.attachments &&
+                    obj.attachments.length === 1 && obj.attachments[0].content === null;
+            };
+
+            return function (data) {
+
+                var i, $i, obj, dat, attachments = [],
+                mail = { id: data.id, folder_id: data.folder_id };
+
+                // get nested messages
+                for (i = 0, $i = (data.nested_msgs || []).length; i < $i; i++) {
+                    obj = data.nested_msgs[i];
+                    // is wrapped attachment? (winmail.dat stuff)
+                    if (isWinmailDATPart(obj)) {
+                        dat = obj.attachments[0];
+                        attachments.push(
+                            _.extend({}, dat, { mail: mail, title: obj.filename || '' })
+                        );
+                    } else {
+                        attachments.push({
+                            id: obj.id,
+                            content_type: 'message/rfc822',
+                            filename: obj.filename ||
+                                _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), 50), // remove consecutive white-space
+                            title: obj.filename || obj.subject || '',
+                            mail: mail,
+                            nested_message: _.extend({}, obj, { parent: mail })
+                        });
+                    }
+                }
+
+                // get non-inline attachments
+                for (i = 0, $i = (data.attachments || []).length; i < $i; i++) {
+                    obj = data.attachments[i];
+                    if (obj.disp === 'attachment') {
+                        attachments.push(
+                            _.extend(obj, { mail: mail, title: obj.filename || '' })
+                        );
+                    }
+                }
+
+                return attachments;
+            };
+        }())
     };
     return that;
 });

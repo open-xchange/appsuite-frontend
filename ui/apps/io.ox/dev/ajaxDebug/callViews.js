@@ -19,29 +19,37 @@ define("io.ox/dev/ajaxDebug/callViews", function () {
     "use strict";
 
     function CallView($node, callHandling) {
-        var self = this;
-        $node = $("<form/>").appendTo($node);
 
-        var $address = $('<input/>').css({
-            width: "500px",
-            "margin-left": "2px" // ???
-        }).attr({
-            type: "text",
-            placeholder: "module.action?param1=param2"
-        });
-        var $body = $('<textarea cols="80" rows="20"/>').attr("placeholder", "['the', 'body']"),
-            $resp = $('<textarea cols="80", rows="30" readonly="readonly"/>').hide(),
-            $submit = $('<button>').text("Send");
+        var self = this,
 
-        $node.append($("<div/>").append($address));
-        $node.append($("<div/>").append($body));
-        $node.append($("<div/>").append($submit));
-        $node.append($("<div/>").append($resp));
+            $address = $('<input>', {
+                    type: "text",
+                    placeholder: "module.action?param1=value&param2=value"
+                }).css({
+                    width: '500px'
+                }),
 
-        this.draw = function (entry, options) {
-            if (!options) {
-                options = {};
-            }
+            $body = $('<textarea>', {
+                    placeholder: "{ the: 'body', json: data }"
+                })
+                .css({ width: '500px', height: '200px' }),
+
+            $resp = $('<textarea>', {
+                    readonly: 'readonly'
+                })
+                .css({ width: '500px', height: '200px', marginTop: '10px' }).hide(),
+
+            $submit = $('<button>').addClass('btn btn-primary').text("Send");
+
+        $node.append(
+            $("<div>").append($address),
+            $("<div>").append($body),
+            $("<div>").append($submit),
+            $("<div>").append($resp)
+        );
+
+        this.draw = function (entry) {
+
             this.id = entry.id;
             // Address Text
             $address.focus();
@@ -68,17 +76,12 @@ define("io.ox/dev/ajaxDebug/callViews", function () {
                 $body.val("");
             }
 
-            // Result
-            if (entry.response) {
-                $resp.idle();
+            $resp.busy().show();
+            console.log('entry', entry);
+            entry.deferred.always(function () {
                 $resp.val(JSON.stringify(entry.response, null, 4));
-                $resp.show();
-            } else if (options.inProgress) {
-                $resp.show().busy();
-            } else {
-                $resp.hide();
-            }
-
+                $resp.idle();
+            });
 
             this.dirty = false;
             $address.css("border", '');
@@ -119,43 +122,40 @@ define("io.ox/dev/ajaxDebug/callViews", function () {
             return query;
         };
 
-        function submit() {
-            var query = self.getQuery();
-            var entry = callHandling.perform(query);
-            self.draw(entry, {inProgress: true});
-            return false;
+        function submit(e) {
+            e.preventDefault();
+            var query = self.getQuery(),
+                entry = callHandling.perform(query);
+            console.log('DRAW!', entry);
+            self.draw(entry);
         }
-
 
         function changed() {
             if ($address.val().match(addrRegex)) {
-                $address.css("border", "green solid 3px");
+                $address.css("border", "green solid 1px");
             } else {
-                $address.css("border", "red solid 3px");
+                $address.css("border", "red solid 1px");
             }
             if ($body.val()) {
                 try {
                     new Function("return " + $body.val())(); // The JSON parser is too anal
-                    $body.css("border", "green solid 3px");
+                    $body.css("border", "green solid 1px");
                 } catch (err) {
-                    $body.css("border", "red solid 3px");
+                    $body.css("border", "red solid 1px");
                 }
             }
             self.dirty = true;
         }
 
         $submit.click(submit);
-
         $address.change(changed);
         $body.change(changed);
 
-        callHandling.on("entrychanged", function (entry) {
+        callHandling.on("entrychanged", function (e, entry) {
             if (entry.id === self.id && !self.dirty) {
                 self.draw(entry);
             }
         });
-
-
     }
 
     return {

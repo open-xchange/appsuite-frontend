@@ -1,0 +1,143 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
+ */
+
+//grid
+
+.vgrid-cell.tasks .end_date {
+    color: #777;
+    margin-left: 0.5em;
+    font-weight: 300;
+    display: inline-block;
+    float: right;
+}
+
+.vgrid-cell.tasks .status {
+    margin-left: 0.5em;
+    float: right;
+	index: 2;
+}
+
+.vgrid-cell.tasks .priority,
+.io-ox-task-preview .priority {
+    font-size: 16;
+    font-weight: bold;
+    padding: 0 0.5em 0 0.5em;
+    display: inline-block;
+    float: right;
+    position: relative;
+    overflow:visible;
+    
+}
+
+.vgrid-cell.tasks .priority i.icon-star { 
+	display: inline-block;	
+}
+
+.vgrid-cell.tasks .title {
+    color: black;
+    font-weight: 500;
+    //display: inline;
+}
+
+.vgrid-cell.tasks .private-flag {
+	float: left;
+	font-size: 18px;
+	margin-right: 3px;
+	color: #aaa;
+}
+
+.vgrid-cell.tasks .second-row {
+    margin-top: 5px;
+    height: 17px;
+}
+
+.vgrid-cell.tasks .participants {
+    line-height: 1em;
+    margin-right: 1em;
+    float: left;
+}
+
+.vgrid-cell.tasks .progress {
+    width: 100px;
+    height: 13px;
+    margin: 0 1em 0 0;
+}
+
+//detailview
+
+.tasks-detailview {
+	.info-panel {
+	    margin-left: 2em;
+	    margin-bottom: 1em;
+		display: inline;
+	    float: right;
+	}
+	.priority,
+	.status,
+	.end-date,
+	.alarm-date,
+	.task-progress {
+		float: right;
+	}
+	br {
+		line-height: 21px; //to correctstrange behavior of priority
+	}
+	.status {
+		margin-top: 4px;
+	}
+	.attachments {
+		font-family: @font-light;
+	    color: #aaa;
+	}
+	.attachments-container {
+		margin-top: 0.8em;
+	}
+	.attachment-item{
+		color: #333;
+	}
+	.task-details {
+		margin: 1em 0 1em 0;
+	}
+	.detail-label{
+		color: #aaa;
+		display: inline-block;
+		margin-right: 0.5em;
+	}
+	.detail-value {
+		display: inline-block;
+		margin-right: 1em;	
+	}
+	.tasks-detailview .note,
+	.tasks-detailview .tasks-inline-links {
+		margin-top: 1em;
+	}
+	.title {
+		display: inline;
+	}
+	.private-flag {
+		font-size: 20pt;
+		margin-right: 12px;
+		color: #aaa;
+	}
+	
+	.participants-table-name {
+		padding-right: 10px;
+	}
+	
+	.participants-table-colorsquare {
+		width: 13px;
+		height: 13px;
+		margin-bottom: 1px;
+		margin-left: 3px;
+	}
+}

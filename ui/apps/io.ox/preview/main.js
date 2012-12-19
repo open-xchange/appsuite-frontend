@@ -5,134 +5,221 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
  *
  * @author Stefan Preuss <stefan.preuss@open-xchange.com>
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
 define("io.ox/preview/main",
-    ["io.ox/preview/util"], function (util) {
+    ["io.ox/core/extensions", "gettext!io.ox/preview", 'io.ox/core/capabilities'], function (ext, gt, caps) {
 
     "use strict";
 
+    var supportsDragOut = Modernizr.draganddrop && _.browser.Chrome;
+    var dragOutHandler = $.noop;
+    var clickableLink = $.noop;
+
+    if (supportsDragOut) {
+        dragOutHandler = function ($node, desc) {
+            $node.on('dragstart', function (e) {
+                e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
+            });
+        };
+        clickableLink = function (desc, clickHandler) {
+            var $a = $('<a>', { draggable: true })
+                .attr('data-downloadurl', desc.mimetype + ':' + desc.name + ':' + ox.abs + desc.dataURL + "&delivery=download");
+            if (clickHandler) {
+                $a.on("click", clickHandler);
+            } else {
+                $a.attr({ href: desc.dataURL + "&delivery=view", target: '_blank'});
+            }
+            return $a;
+        };
+    } else {
+        clickableLink = function (desc, clickHandler) {
+            var link = $('<a>', { href: desc.dataURL + "&delivery=view", target: '_blank'});
+            if (clickHandler) {
+                link.on("click", clickHandler);
+            }
+            return link;
+        };
+
+    }
+
     var Renderer = {
 
-        // a map file ending <-> renderer id
-        map: {},
+        point: ext.point("io.ox/preview/engine"),
 
-        // available render engines
-        engines: [],
+        getByExtension: function (fileExtension) {
+            return this.point.chain().find(function (ext) {
+                var tmp = ext.metadata("supports");
+                tmp = _.isArray(tmp) ? tmp : [tmp];
+                return _(tmp).contains(fileExtension);
+            }).value();
+        }
+    };
 
-        register: function (Engine) {
-            var Self = this;
-            $.each(Engine.endings, function (index, element) {
-                Self.map[element] = Engine.id;
-            });
-            this.engines.push(Engine);
-            return true;
-        },
+    var Engine = function (options) {
+        _.extend(this, options);
+        if (!options.omitDragoutAndClick) {
+            this.draw = function (file) {
 
-        get: function (id) {
-            for (var i = 0; i < this.engines.length; i++) {
-                var Engine = this.engines[i];
-                if (Engine.id === id) {
-                    return Engine;
+                var $node;
+
+                if (!options.omitClick) {
+                    $node = clickableLink(file);
+                    if (supportsDragOut) {
+                        $node.attr('title', gt('Click to open. Drag to your desktop to download.'));
+                    } else {
+                        $node.attr("title", gt("Click to open."));
+                    }
+                } else {
+                    $node = $("<div>");
                 }
-            }
-            return null;
-        },
 
-        getByFileType: function (fileType) {
-            return this.get(this.map[fileType]) || null;
+                options.draw.apply($node, arguments);
+                dragOutHandler($node, file);
+
+                this.append($node);
+            };
         }
     };
 
     // register image typed renderer
-    Renderer.register({
+    Renderer.point.extend(new Engine({
         id: "image",
-        endings: ["png", "jpg", "jpeg", "gif"],
-        canRender: function (file) {
-            return $.inArray(util.FileTypesMap.getFileType(file.name), this.endings) !== -1;
-        },
-        paint: function (file, node) {
-            node.append(
-                $("<img>", { src: file.dataURL + "&width=400&height=300", alt: 'Preview' })
-                .css({
-                    width: "400px",
-                    maxWidth: "100%"
-                })
-            );
+        index: 10,
+        supports: ["png", "jpg", "jpeg", "gif", "bmp"],
+        draw: function (file, options) {
+            var param = {
+                width: options.width || 400,
+                height: options.height || 400,
+                scaleType: options.scaleType || 'contain',
+                delivery: 'view'
+            };
+            if (options.height === 'auto') {
+                delete param.height;
+            }
+            this.append(
+                $("<img>", { src: file.dataURL + "&" + $.param(param), alt: 'Preview' }));
         }
-    });
+    }));
 
     // register audio typed renderer
     if (Modernizr.audio) {
-        Renderer.register({
+        Renderer.point.extend(new Engine({
             id: "audio",
-            endings: (function () {
-                var endings = [];
+            index: 10,
+            supports: (function () {
+                var tmp = [];
                 $.each(Modernizr.audio, function (id, elem) {
-                    endings.push(id);
+                    tmp.push(id);
                 });
-                return endings;
+                return tmp;
             }()),
-            canRender: function (file) {
-                return $.inArray(util.FileTypesMap.getFileType(file.name), this.endings) !== -1;
-            },
-            paint: function (file, node) {
-                if (this.canRender(file)) {
-                    $("<audio/>").attr({
-                        controls: "controls",
-                        src: file.dataURL
-                    }).appendTo(node);
-                }
+            draw: function (file) {
+                $("<audio>").attr({
+                    controls: "controls",
+                    src: file.dataURL
+                }).appendTo(this);
             }
-        });
+        }));
+    }
+
+    function previewLoaded() {
+        $(this).css('visibility', '').closest('div').idle();
+    }
+
+    function previewFailed() {
+        $(this).closest('div').empty().append(
+            $('<div class="alert alert-info">').text(gt("Preview could not be loaded"))
+        );
     }
 
     // if available register office typed renderer
-    if (ox.serverConfig.previewMimeTypes) {
-        Renderer.register({
+    if (caps.has('document_preview')) {
+        Renderer.point.extend(new Engine({
             id: "office",
-            endings: (function () {
-                var endings = [];
-                $.each(ox.serverConfig.previewMimeTypes, function (id, ct) {
-                    endings.push(id);
-                });
-                return endings;
-            }()),
-            canRender: function (file) {
-                return util.FileTypesMap.previewSupported(file.name);
+            index: 10,
+            supports:  ['doc', 'dot', 'docx', 'dotx', 'docm', 'dotm', 'xls', 'xlt', 'xla', 'xlsx', 'xltx', 'xlsm',
+             'xltm', 'xlam', 'xlsb', 'ppt', 'pot', 'pps', 'ppa', 'pptx', 'potx', 'ppsx', 'ppam', 'pptm', 'potm', 'ppsm', 'pdf',
+             'odt', 'ods', 'odp', 'odg', 'odc', 'odf', 'odi', 'odm' ],
+            draw: function (file, options) {
+
+                var $a = clickableLink(file, function (e) {
+                        e.preventDefault();
+                        ox.launch('io.ox/office/preview/main', { action: 'load', file: file });
+                    }),
+                    width = options.width || '400',
+                    $img = $('<img alt="">')
+                        .css({ width: width + "px", maxWidth: '100%', visibility: 'hidden' })
+                        .addClass("io-ox-clickable")
+                        .on({ load: previewLoaded, error: previewFailed });
+
+                this.busy();
+
+                // setting src now; just helpful for debugging/setTimeout
+                $img.attr('src', file.dataURL + '&format=preview_image&width=' + width + '&delivery=view&scaleType=contain');
+
+                $a.append($img);
+                dragOutHandler($a);
+                this.append($a);
             },
-            paint: function (file, node) {
-                $.get(file.dataURL + "&format=preview").done(function (html) {
-                    node.css({ border: "1px dotted silver", padding: "10px" }).append(html);
-                });
-//                node.append($("<iframe/>").css({ width: "100%", height: "100%"}).attr({ src: file.dataURL + "&format=preview_filtered" }));
-            }
-        });
+            omitDragoutAndClick: true
+        }));
     }
 
-    Renderer.register({
-        id: "text",
-        endings: [ "txt", "js" ],
-        canRender: function (file) {
-            return $.inArray(util.FileTypesMap.getFileType(file.name), this.endings) !== -1;
+    Renderer.point.extend(new Engine({
+        id: 'eml',
+        supports: ['eml', 'message/rfc822'],
+        draw: function (file) {
+            var self = this;
+            require(['io.ox/mail/view-detail'], function (view) {
+                var data = file.data.nested_message;
+                self.append(view.draw(data).css('padding', 0));
+            });
         },
-        paint: function (file, node) {
-            if (this.canRender(file)) {
-                $.ajax({ url: file.dataURL, dataType: "html" }).done(function (txt) {
-                    node.css({ border: "1px dotted silver", padding: "10px", whiteSpace: "pre-wrap" }).text(txt);
-                });
-            }
-        }
-    });
+        omitClick: true
+    }));
 
-    var Preview = function (file) {
+    Renderer.point.extend(new Engine({
+        id: 'text',
+        supports: ['txt', 'plain/text', 'asc', 'js', 'md'],
+        draw: function (file) {
+            var node = this;
+            $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
+                // plain text preview
+                node.css({
+                    fontFamily: 'monospace',
+                    fontSize: '13px',
+                    width: '100%',
+                    padding: '13px',
+                    border: "1px dotted silver",
+                    boxSizing: 'border-box',
+                    MozBoxSizing: 'border-box',
+                    whiteSpace: 'pre-wrap',
+                    MozUserSelect: 'text',
+                    webkitUserSelect: 'text',
+                    userSelect: 'text',
+                    cursor: 'auto'
+                })
+                .text(text);
+            });
+        },
+        omitClick: true
+    }));
 
-        this.file = file;
-        this.Renderer = null;
+    var Preview = function (file, options) {
+
+        var self = this;
+
+        this.file = _.copy(file, true); // work with a copy
+        this.options = options || {};
+
+        this.renderer = null;
 
         if (this.file.file_mimetype) {
             this.file.mimetype = this.file.file_mimetype;
@@ -144,45 +231,76 @@ define("io.ox/preview/main",
             this.file.name = this.file.filename;
         }
 
-        if (this.file.name) {
-            // get matching renderer
-            this.Renderer = Renderer.getByFileType(util.FileTypesMap.getFileType(this.file.name));
-        }
+        this.extension = (function () {
+            var extension = String(self.file.name || '').match(/\.([a-z0-9]{2,})$/i);
+            if (extension && extension.length > 0) {
+                return String(extension[1]).toLowerCase();
+            }
+            return '';
+        }());
 
-        this.ContentType = new util.ContentType(this.file.mimetype);
+        // get matching renderer
+        if (this.extension || this.file.mimetype) {
+            this.renderer = Renderer.getByExtension(this.extension || this.file.mimetype);
+        }
     };
 
     Preview.prototype = {
 
-        getContentType: function () {
-            return this.ContentType;
-        },
-
         getRenderer: function () {
-            return this.Renderer;
+            return this.renderer;
         },
 
         supportsPreview: function () {
-            if (this.Renderer !== null) {
-                return this.Renderer.canRender(this.file);
-            } else {
-                return false;
-            }
+            return !!this.renderer;
         },
 
         appendTo: function (node) {
             if (this.supportsPreview()) {
-                this.Renderer.paint(this.file, node);
+                this.renderer.invoke("draw", node, this.file, this.options);
             }
         }
     };
 
-//    var ct = new util.ContentType('application/vnd.openxmlformats-officedocument.wordprocessingml.document; charset="UTF-8"; name="My testing document.docx";');
-//    console.debug(ct, ct.getBaseType(), ct.getSubType(), ct.getPrimaryType(), ct.getParameterList(), ct.previewSupported());
-//
-//    var ftm = util.FileTypesMap;
-//    console.debug(ftm, ftm.getContentType('My testing document.docx'), ftm.getFileType('My testing document.docx'), ftm.previewSupported('My testing document.docx'));
+    function Extension(options) {
+        _.extend(this, options);
 
-    return Preview;
+        var self = this;
 
+        if (!this.isEnabled) {
+            this.isEnabled = function (fileDescription) {
+                if (options.parseArguments) {
+                    fileDescription = options.parseArguments.apply(self, arguments);
+                }
+                if (!fileDescription) {
+                    return false;
+                }
+                var prev = new Preview(fileDescription, options);
+                return prev.supportsPreview();
+            };
+        }
+
+        if (!this.draw) {
+            this.draw = function (fileDescription) {
+                if (options.parseArguments) {
+                    fileDescription = options.parseArguments.apply(self, arguments);
+                }
+                if (!fileDescription) {
+                    return false;
+                }
+                var prev = new Preview(fileDescription, options);
+                prev.appendTo(this);
+            };
+        }
+    }
+
+    return {
+        Preview: Preview,
+        Engine: Engine,
+        Extension: Extension,
+        protectedMethods: {
+            clickableLink: clickableLink,
+            dragOutHandler: dragOutHandler
+        }
+    };
 });

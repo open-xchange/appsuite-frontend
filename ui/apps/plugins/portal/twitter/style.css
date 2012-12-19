@@ -1,0 +1,97 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author Tobias Prinz <tobias.prinz@open-xchange.com>
+ */
+.twitter {
+    margin-top: 26px;
+}
+.twitter .tweet {
+    position: relative;
+    min-height: 55px;
+    margin: 0 0 26px 65px;
+}
+
+.twitter .profilePicture {
+    position: absolute;
+    top: 4px;
+    left: -65px;
+    .border-radius(5px);
+    max-width: 48px;
+}
+
+.twitter .name {
+    font-weight: normal;
+    color: gray;
+    display: inline-block;
+    padding-bottom: 3px;
+}
+.io-ox-twitter-action-tweet {
+    display: block;
+    float: right;
+}
+.io-ox-twitter-reply, .io-ox-twitter-retweet, .io-ox-twitter-favorite {
+    display: inline-block;
+    float: right;
+    margin-left: 1em;
+    overflow: hidden;
+    padding-left: 16px;
+}
+.io-ox-twitter-reply:before, .io-ox-twitter-retweet:before, .io-ox-twitter-favorite:before {
+    content: " ";
+    background: url('everything-spritev2.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    margin-left: -20px;
+}
+.io-ox-twitter-reply:before {
+    background-position: 0 0;
+}
+.io-ox-twitter-reply:hover:before {
+    background-position: -16px 0;
+}
+.io-ox-twitter-favorite:before {
+    background-position: -32px 0;
+} 
+.io-ox-twitter-favorite:hover:before {
+    background-position: -48px 0;
+}
+.io-ox-twitter-favorite.favorited:before {
+    background-position: -64px 0;
+}
+.io-ox-twitter-retweet:before {
+    background-position: -80px 0;
+}
+.io-ox-twitter-retweet:hover:before {
+    background-position: -96px 0;
+} 
+.io-ox-twitter-retweet.retweeted:before {
+    background-position: -112px 0;
+} 
+.io-ox-twitter-follow {
+    display: block;
+    float: right;
+}
+.io-ox-twitter-follow i {
+    background: url('bird_blue_16.png') no-repeat; /* It's really 14px x 11px */
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-position: center center;
+}
+.io-ox-twitter-retweet-source span, .io-ox-twitter-date, .io-ox-twitter-reply, .io-ox-twitter-retweet, .io-ox-twitter-favorite {
+    font-size: 90%;
+    color: gray;
+    font-weight: 300;
+}

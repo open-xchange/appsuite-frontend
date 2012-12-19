@@ -16,8 +16,10 @@
 define('io.ox/launchpad/main',
     ['io.ox/core/desktop',
      'io.ox/core/api/apps',
-     'gettext!io.ox/core/launchpad',
-     'less!io.ox/launchpad/style.css'], function (desktop, api, gt) {
+     'io.ox/core/config',
+     'io.ox/core/extensions',
+     'gettext!io.ox/core',
+     'less!io.ox/launchpad/style.css'], function (desktop, api, config, ext, gt) {
 
     'use strict';
 
@@ -29,7 +31,7 @@ define('io.ox/launchpad/main',
 
         // app template
         appTmpl = _.template(
-            '<a href="#" class="app" tabindex="1">' +
+            '<a href="#" class="app" tabindex="1" data-app-name="<%= id %>">' +
             '  <img src="<%= icon %>" class="icon" alt="">' +
             '  <div class="title ellipsis"><%= title %></div>' +
             '</a>'
@@ -52,6 +54,7 @@ define('io.ox/launchpad/main',
                 .map(function (app) {
                     var data = api.get(app.getName());
                     data.title = app.getTitle() || data.title || app.getWindowTitle() || app.getName();
+                    data.appId = app.getId();
                     return { data: data, app: app };
                 })
                 .value();
@@ -77,24 +80,52 @@ define('io.ox/launchpad/main',
             // animate & launch
             parent.focus();
             // look for running app
-            if ((running = getRunningApps(e.data.id)).length) {
-                running[0].app.launch();
+            if (e.data.appId && (running = getRunningApps(e.data.id)).length) {
+                var runIndex = 0;
+                if (running.length > 1) {
+                    for (var i = 0; i < running.length; ++i) {
+                        if (running[i].app.getId() === e.data.appId) {
+                            runIndex = i;
+                            break;
+                        }
+                    }
+                }
+                running[runIndex].app.launch();
             } else {
                 $.when(
-                    require([e.data.id + "/main"]),
+                    require([e.data.entryModule || e.data.id + "/main"]),
                     pad.fadeOut(FADE_DURATION >> 1)
                 )
                 .done(function (m) {
-                    m.getApp().launch();
+                    if (e.data.launchArguments) {
+                        var app = m.getApp();
+                        app.launch.apply(app, e.data.launchArguments);
+                    } else if (e.data.createArguments) {
+                        //documents need a parameter to create a new document
+                        e.data.createArguments.folder_id = config.get("folder.infostore");
+                        m.getApp(e.data.createArguments).launch();
+                    } else {
+                        m.getApp().launch();
+                    }
                 });
             }
         },
 
         fnOpenAppStore = function (e) {
             e.preventDefault();
-            require(['io.ox/applications/main'], function (m) {
-                m.getApp().launch();
+            var openedStore = false;
+            ext.point("io.ox/core/apps/manage").each(function (extension) {
+                if (openedStore) {
+                    return;
+                }
+                extension.openStore();
+                openedStore = true;
             });
+            if (!openedStore) {
+                require(['io.ox/applications/main'], function (m) {
+                    m.getApp().launch();
+                });
+            }
         },
 
         drawApp = function (data) {
@@ -111,9 +142,9 @@ define('io.ox/launchpad/main',
 
             clear();
 
-            var hRunning = $('<h1>').text('Running applications'),
+            var hRunning = $('<h1>').text(gt('Running applications')),
                 secRunning = $('<div>').addClass('section'),
-                hApps = $('<h1>').text('Your applications'),
+                hApps = $('<h1>').text(gt('Your applications')),
                 secInstalled = $('<div>').addClass('section'),
                 running;
 
@@ -121,26 +152,52 @@ define('io.ox/launchpad/main',
             _(running).each(function (o) {
                 // draw running app
                 secRunning.append(
-                    drawApp(o.data).on('click', { id: o.data.id }, launchApp)
+                    drawApp(o.data).on('click', o.data, launchApp)
                 );
             });
 
             // add link to app store
-            secInstalled.append(
-                $('<div>').addClass('manage-apps')
-                .append(
-                    $('<a>', { href: '#', tabindex: '1' })
-                    .addClass('button default-action')
-                    .text('Manage applications')
-                    .on('click', fnOpenAppStore)
-                )
-            );
 
-            _(api.getInstalled()).each(function (data) {
-                // draw installed app
-                secInstalled.append(
-                    drawApp(data).on('click', { id: data.id }, launchApp)
-                );
+            api.getInstalled('cached').done(function (installed) {
+                secInstalled.empty();
+                /*secInstalled.append(
+                    $('<div>').addClass('manage-apps')
+                    .append(
+                        $('<a>', { href: '#', tabindex: '1' })
+                        .addClass('btn btn-primary')
+                        .text(gt('Manage applications'))
+                        .on('click', fnOpenAppStore)
+                    )
+                );*/
+                _(installed).each(function (data) {
+                    // draw installed app
+                    if (data.visible || _.isUndefined(data.visible)) {
+                        secInstalled.append(
+                            drawApp(data).on('click', data, launchApp)
+                        );
+                    }
+                });
+            });
+            
+            api.getInstalled().done(function (installed) {
+                secInstalled.empty();
+                /*secInstalled.append(
+                    $('<div>').addClass('manage-apps')
+                    .append(
+                        $('<a>', { href: '#', tabindex: '1' })
+                        .addClass('btn btn-primary')
+                        .text(gt('Manage applications'))
+                        .on('click', fnOpenAppStore)
+                    )
+                );*/
+                _(installed).each(function (data) {
+                    // draw installed app
+                    if (data.visible || _.isUndefined(data.visible)) {
+                        secInstalled.append(
+                            drawApp(data).on('click', data, launchApp)
+                        );
+                    }
+                });
             });
 
             if (running.length) {

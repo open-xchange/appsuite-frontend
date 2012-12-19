@@ -1,14 +1,15 @@
 (function (tree) {
 
-tree.Ruleset = function (selectors, rules) {
+tree.Ruleset = function (selectors, rules, strictImports) {
     this.selectors = selectors;
     this.rules = rules;
     this._lookups = {};
+    this.strictImports = strictImports;
 };
 tree.Ruleset.prototype = {
     eval: function (env) {
         var selectors = this.selectors && this.selectors.map(function (s) { return s.eval(env) });
-        var ruleset = new(tree.Ruleset)(selectors, this.rules.slice(0));
+        var ruleset = new(tree.Ruleset)(selectors, this.rules.slice(0), this.strictImports);
 
         ruleset.root = this.root;
         ruleset.allowImports = this.allowImports;
@@ -17,7 +18,7 @@ tree.Ruleset.prototype = {
         env.frames.unshift(ruleset);
 
         // Evaluate imports
-        if (ruleset.root || ruleset.allowImports) {
+        if (ruleset.root || ruleset.allowImports || !ruleset.strictImports) {
             for (var i = 0; i < ruleset.rules.length; i++) {
                 if (ruleset.rules[i] instanceof tree.Import) {
                     Array.prototype.splice
@@ -113,6 +114,7 @@ tree.Ruleset.prototype = {
     toCSS: function (context, env) {
         var css = [],      // The CSS output
             rules = [],    // node.Rule instances
+           _rules = [],    //
             rulesets = [], // node.Ruleset instances
             paths = [],    // Current selectors
             selector,      // The fully rendered selector
@@ -130,7 +132,7 @@ tree.Ruleset.prototype = {
         for (var i = 0; i < this.rules.length; i++) {
             rule = this.rules[i];
 
-            if (rule.rules || (rule instanceof tree.Directive)) {
+            if (rule.rules || (rule instanceof tree.Directive) || (rule instanceof tree.Media)) {
                 rulesets.push(rule.toCSS(paths, env));
             } else if (rule instanceof tree.Comment) {
                 if (!rule.silent) {
@@ -162,7 +164,15 @@ tree.Ruleset.prototype = {
                     return p.map(function (s) {
                         return s.toCSS(env);
                     }).join('').trim();
-                }).join( env.compress ? ',' : ',\n');
+                }).join(env.compress ? ',' : ',\n');
+
+                // Remove duplicates
+                for (var i = rules.length - 1; i >= 0; i--) {
+                    if (_rules.indexOf(rules[i]) === -1) {
+                        _rules.unshift(rules[i]);
+                    }
+                }
+                rules = _rules;
 
                 css.push(selector,
                         (env.compress ? '{' : ' {\n  ') +

@@ -10,18 +10,32 @@
 <script>
 $(document).ready(function () {
     // script to pre trick
-    $("body script").each(function () {
+    $('body script').each(function () {
         var node = $(this);
-        $("<pre>").addClass("prettyprint lang-js")
-            .text($.trim(node.text()).replace(/[ ]{4}/g, "  "))
+        $('<pre>').addClass('prettyprint lang-js')
+            .text($.trim(node.text()).replace(/[ ]{4}/g, '  '))
             .insertBefore(node);
         node.remove();
     });
     // apply pretty print
     prettyPrint();
+    // add reference anchors
+    var anchors = {};
+    $('h2,h3').add($('dt')).each(function () {
+        var node = $(this), text = node.text().replace(/\(.*\)\s*$/, '()');
+        if (anchors[text]) return;
+        node.prepend($('<a>').attr('name', text));
+        anchors[text] = true;
+    });
+    $('code,ul.params>li>i').each(function () {
+        var node = $(this), text = node.text();
+        if (anchors[text]) {
+            node.empty().append($('<a>').attr('href', '#' + text).text(text));
+        }
+    });
 });
 </script>
 </head>
 <body>
 
-<p class="header">ox7 &ndash; Developer Documentation &ndash; <a href="index.html">Index</a></p>
+<p class="header">Open-Xchange Appsuite &ndash; Developer Documentation &ndash; <a href="index.html">Index</a></p>

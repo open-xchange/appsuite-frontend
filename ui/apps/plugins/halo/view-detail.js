@@ -12,46 +12,33 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("plugins/halo/view-detail",
-    ["plugins/halo/api", "io.ox/core/extensions",
-     "less!plugins/halo/style.css"], function (api, ext) {
+define('plugins/halo/view-detail',
+    ['plugins/halo/api', 'less!plugins/halo/style.css'], function (api) {
 
-    "use strict";
+    'use strict';
 
     return {
 
         draw: function (data) {
 
-            var $container = $("<div>").addClass("io-ox-halo");
+            var container = $('<div>').addClass('io-ox-halo');
 
-            if (api) {
-                var investigations = api.halo.investigate(data),
-                    drawingFinished = [];
-                _(investigations).each(function (promise, providerName) {
+            _(api.halo.investigate(data)).each(function (promise, providerName) {
 
-                    var $node = $("<div/>")
-                            .css({"min-width": "100px"})
-                            .addClass("ray")
-                            .busy()
-                            .appendTo($container),
-                        drawn = new $.Deferred();
+                var node = $('<div>')
+                    .css('minHeight', '100px')
+                    .addClass('ray').busy().appendTo(container);
 
-                    drawingFinished.push(drawn);
-                    promise.done(function (response) {
-                        $node.idle();
-                        var deferred = api.viewer.draw($node, providerName, response);
-                        if (deferred) {
-                            deferred.done(drawn.resolve);
-                        } else {
-                            drawn.resolve();
-                        }
-                    }).fail(function (response) {
-                        $node.idle();
-                    });
+                promise.done(function (response) {
+                    api.viewer.draw(node, providerName, response);
+                })
+                .always(function () {
+                    node.idle().css('minHeight', '');
+                    node = null;
                 });
-            }
+            });
 
-            return $container;
+            return container;
         }
     };
 });

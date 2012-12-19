@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
+define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less!io.ox/core/tk/dialog.less'], function (Events, gt) {
 
     'use strict';
 
@@ -44,6 +44,7 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
                 defaultAction: null,
                 easyOut: false,
                 center: true,
+                async: false,
                 top: "50%"
                 // width (px), height (px),
                 // maxWidth (px), maxHeight (px)
@@ -57,18 +58,50 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
                 for (var prop in self) {
                     delete self[prop];
                 }
+                self.close = self.idle = $.noop;
                 nodes.header = nodes.body = nodes.footer = null;
                 nodes = deferred = self = data = o = null;
             },
 
+            busy = function () {
+                nodes.footer.find('button').attr('disabled', 'disabled');
+                nodes.body.find('input').attr('disabled', 'disabled');
+            },
+
+            idle = function () {
+                nodes.footer.find('button').removeAttr('disabled');
+                nodes.body.find('input').removeAttr('disabled');
+            },
+
             process = function (e) {
-                deferred.resolve(e.data ? e.data.action : e, data);
-                close();
+                var action = e.data ? e.data.action : e,
+                    async = o.async && action !== 'cancel';
+                // be busy?
+                if (async) {
+                    busy();
+                }
+                // trigger action event
+                self.trigger('action ' + action, data, self);
+                // resolve & close?
+                if (!async) {
+                    deferred.resolveWith(nodes.popup, [action, data, self.getContentNode().get(0)]);
+                    close();
+                }
+
+                (e.originalEvent || e).processed = true;
             };
 
         _(['header', 'body', 'footer']).each(function (part) {
             nodes[part] = nodes.popup.find('.modal-' + part);
         });
+
+        if (o.addclass) {
+            nodes.popup.addClass(o.addclass);
+        }
+        // add event hub
+        Events.extend(this);
+
+        this.process = process;
 
         this.data = function (d) {
             data = d !== undefined ? d : {};
@@ -80,11 +113,19 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
             return this;
         };
 
-        this.getContentNode = function () {
+        this.getHeader = function () {
+            return nodes.header;
+        };
+
+        this.getPopup = function () {
+            return nodes.popup;
+        };
+
+        this.getContentNode = this.getBody = function () {
             return nodes.body;
         };
 
-        this.getContentControls = function () {
+        this.getContentControls = this.getFooter = function () {
             return nodes.footer;
         };
 
@@ -92,6 +133,13 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
             var p = nodes.body;
             p.find(".plain-text").remove();
             p.append($("<h4>").addClass("plain-text").text(str || ""));
+            return this;
+        };
+
+        this.build = function (fn) {
+            if (_.isFunction(fn)) {
+                fn.call(this);
+            }
             return this;
         };
 
@@ -123,14 +171,32 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
 
         this.addButton = function (action, label, dataaction, options) {
             var button = addButton(action, label, dataaction, options);
-            nodes.footer.append(button);
+            nodes.footer.prepend(button);
             return this;
         };
 
+        this.addDangerButton = function (action, label, dataaction, options) {
+            var button = addButton(action, label, dataaction, options);
+            button.addClass('btn-danger');
+            nodes.footer.prepend(button);
+            return this;
+        };
+        this.addSuccessButton = function (action, label, dataaction, options) {
+            var button = addButton(action, label, dataaction, options);
+            button.addClass('btn-success');
+            nodes.footer.prepend(button);
+            return this;
+        };
+        this.addWarningButton = function (action, label, dataaction, options) {
+            var button = addButton(action, label, dataaction, options);
+            button.addClass('btn-warning');
+            nodes.footer.prepend(button);
+            return this;
+        };
         this.addPrimaryButton = function (action, label, dataaction, options) {
             var button = addButton(action, label, dataaction, options);
             button.addClass('btn-primary');
-            nodes.footer.prepend(button);
+            nodes.footer.append(button);
             return this;
         };
 
@@ -148,7 +214,19 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
         };
 
         this.close = function () {
-            process("cancel");
+            if (!o || o.async)  {
+                close();
+            } else {
+                process('cancel');
+            }
+        };
+
+        this.idle = function () {
+            idle();
+        };
+
+        this.busy = function () {
+            busy();
         };
 
         this.show = function (callback) {
@@ -159,8 +237,8 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
             }
 
             var dim = {
-                width: o.width || nodes.popup.width(),
-                height: o.height || nodes.popup.height()
+                width: parseInt(o.width || nodes.popup.width() * 1.1, 10),
+                height: parseInt(o.height || nodes.popup.height(), 10)
             };
 
             // limit width & height
@@ -196,6 +274,12 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
             nodes.underlay.show();
             nodes.popup.show();
 
+            // focus button (if available)
+            var button = nodes.popup.find('.btn-primary').first().focus();
+            if (!button.length) {
+                nodes.popup.find('.btn').not('.btn-danger').first().focus();
+            }
+
             if (o.easyOut) {
                 $(document).on("keydown", closeViaEscapeKey);
             }
@@ -204,19 +288,21 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
                 callback.call(nodes.popup);
             }
 
+            this.trigger('show');
+
             return deferred;
         };
 
         nodes.underlay.click(function () {
-            if (o.underlayAction) {
+            if (o && o.underlayAction) {
                 process(o.underlayAction);
-            } else if (o.easyOut) {
+            } else if (o && o.easyOut) {
                 process("cancel");
             }
         });
 
         nodes.popup.click(function () {
-            if (o.defaultAction) {
+            if (o && o.defaultAction) {
                 process(o.defaultAction);
             }
         });
@@ -241,47 +327,64 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
         Dialog.call(this, options);
     };
 
-    var SidePopup = function (width) {
+    var SidePopup = function (options) {
 
-        // default minimum width
-        width = width || 400;
+        options = _.extend({
+            modal: false
+        }, options || {});
 
         var processEvent,
             isProcessed,
             open,
             close,
+            closeAll,
             closeByEscapeKey,
             closeByScroll,
             closeByClick,
+            previousProp,
             timer = null,
 
-            pane = $("<div>")
-                .addClass("io-ox-sidepopup-pane default-content-padding abs"),
-            popup = $("<div>")
-                .addClass("io-ox-sidepopup abs")
-                .append(pane)
-                .on("click", function (e) {
-                    processEvent(e);
-                }),
-            arrow = $("<div>")
-                .addClass("io-ox-sidepopup-arrow")
-                .append($("<div>").addClass("border"))
-                .append($("<div>").addClass("triangle")),
+            overlay,
+
+            pane = $('<div class="io-ox-sidepopup-pane default-content-padding abs">'),
+
+            closer = $('<div class="io-ox-sidepopup-close">').append(
+                    $('<button class="btn btn-small btn-primary" data-action="close" >').text(gt('Close'))
+                ),
+
+            popup = $('<div class="io-ox-sidepopup abs">').append(closer, pane),
+
+            arrow = options.arrow === false ? $() :
+                $('<div class="io-ox-sidepopup-arrow">').append(
+                    $('<div class="border">'),
+                    $('<div class="triangle">')
+                ),
+
+            target = null,
 
             self = this;
 
         pane = pane.scrollable();
+
+        // add event hub
+        Events.extend(this);
+
+        if (options.modal) {
+            overlay = $('<div class="io-ox-sidepopup-overlay abs">').append(popup, arrow);
+        }
 
         // public nodes
         this.nodes = {};
         this.lastTrigger = null;
 
         processEvent = function (e) {
-            e.preventDefault();
+            if (!(e.target && $(e.target).attr('data-process-event') === 'true')) {
+                (e.originalEvent || e).processed = true;
+            }
         };
 
         isProcessed = function (e) {
-            return e.isDefaultPrevented();
+            return (e.originalEvent || e).processed === true;
         };
 
         closeByEscapeKey = function (e) {
@@ -291,43 +394,67 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
         };
 
         closeByScroll = function (e) {
-            close(e);
+            if (!options.disableCloseByScroll) {
+                close(e);
+            }
         };
 
         closeByClick = function (e) {
-            if (!isProcessed(e)) {
+            if (!(e.target && $(e.target).attr('data-process-event') === 'true') && !isProcessed(e)) {
                 processEvent(e);
                 close(e);
             }
         };
 
         close = function (e) {
-            // remove handlers & avoid leaks
-            $(document).off("keydown", closeByEscapeKey);
-            self.nodes.closest.off("scroll", closeByScroll);
-            self.nodes.click.off("click", closeByClick);
-            self.lastTrigger = null;
-            // use time to avoid flicker
-            timer = setTimeout(function () {
-                arrow.detach();
-                pane.empty();
-                popup.detach();
-            }, 100);
+            // use this to check if it's open
+            if (self.nodes.closest) {
+                // remove handlers & avoid leaks
+                $(document).off("keydown", closeByEscapeKey);
+                self.nodes.closest.off("scroll", closeByScroll).prop('sidepopup', previousProp);
+                self.nodes.click.off("click", closeByClick);
+                self.lastTrigger = previousProp = null;
+                // use time to avoid flicker
+                timer = setTimeout(function () {
+                    if (options.modal) {
+                        overlay.detach();
+                    } else {
+                        arrow.detach();
+                        popup.detach();
+                    }
+                    pane.empty();
+                    self.trigger('close');
+                }, 100);
+            }
         };
+
+        closeAll = function (e) {
+            e.data.target.find('.io-ox-sidepopup').trigger('close');
+        };
+
+        popup.on('close', close);
+
+        closer.find('.btn').on('click', function (e) {
+            pane.trigger('click'); // route click to 'pane' since closer is above pane
+            close(e); // close side popup
+            return false;
+        });
+
+        popup.on("click", processEvent);
 
         open = function (e, handler) {
             // get proper elements
-            var my = $(this), current, zIndex, sidepopup;
+            var my = $(this), zIndex, sidepopup;
             self.nodes = {
-                closest: my.parents(".io-ox-sidepopup-pane, .window-content"),
-                click: my.parents(".io-ox-sidepopup-pane, .window-body"),
-                target: my.parents(".window-body")
+                closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .notifications-overlay"),
+                click: my.parents(".io-ox-sidepopup-pane, .window-body, .notifications-overlay"),
+                target: target || my.parents(".window-body, .notifications-overlay")
             };
             // get active side popup & triggering element
             sidepopup = self.nodes.closest.prop("sidepopup") || null;
             self.lastTrigger = sidepopup ? sidepopup.lastTrigger : null;
             // get zIndex for visual stacking
-            zIndex = (my.parents(".io-ox-sidepopup, .window-content").css("zIndex") || 1) + 2;
+            zIndex = (my.parents(".io-ox-sidepopup, .window-content, .notifications-overlay").css("zIndex") || 1) + 2;
             // second click?
             if (self.lastTrigger === this) {
                 close(e);
@@ -340,6 +467,7 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
 
                 // remember as current trigger
                 self.lastTrigger = this;
+                previousProp = sidepopup;
                 self.nodes.closest.prop("sidepopup", self);
 
                 // prevent default to avoid close
@@ -347,86 +475,76 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
                 // clear timer
                 clearTimeout(timer);
 
+                // add "Close all"
+                if (self.nodes.closest.is('.io-ox-sidepopup-pane')) {
+                    closer.find('.close-all').remove();
+                    closer.prepend(
+                        $('<button class="btn btn-small close-all" data-action="close-all">').text(gt('Close all'))
+                        .on('click', { target: self.nodes.target }, closeAll)
+                    );
+                }
+
                 // add handlers to close popup
                 self.nodes.click.on("click", closeByClick);
                 self.nodes.closest.on("scroll", closeByScroll);
                 $(document).on("keydown", closeByEscapeKey);
 
                 // decide for proper side
-                var docWidth = $(document).width(),
-                    max = (docWidth * 0.50 >> 0) + 1,
-                    w, distance, mode, right, left, pos,
+                var docWidth = $('body').width(), mode,
                     parentPopup = my.parents(".io-ox-sidepopup").first(),
                     firstPopup = parentPopup.length === 0;
 
-                if (firstPopup) {
-                    // get initial side
-                    distance = my.offset().left + my.outerWidth() - (docWidth / 2 >> 0);
-                    mode = distance < 0 ? "right" : "left";
+                // get side
+                if (/^(left|right)$/.test(options.side)) {
+                    mode = options.side;
                 } else {
-                    // toggle side for next popup
-                    mode = parentPopup.hasClass("right") ? "left" : "right";
+                    mode = (firstPopup && e.pageX > docWidth / 2) ||
+                        parentPopup.hasClass("right")  ? 'left' : 'right';
                 }
 
-                // min-width greater than max-width?
-                if (width > max) {
-                    max = width;
-                }
+                popup.add(arrow).removeClass("left right").addClass(mode).css('zIndex', zIndex);
+                arrow.css('zIndex', zIndex + 1);
 
-                if (mode === "left") {
-                    // pops up on the left side
-                    w = my.offset().left - 25;
-                    w = Math.max(width, w);
-                    w = Math.min(max, w);
-                    pos = Math.max(50, docWidth - w); // hard limit
-                    right = pos;
-                    left = 0;
-                } else {
-                    // pops up on the right side
-                    w = docWidth - (my.offset().left + my.outerWidth() + 25);
-                    w = Math.max(width, w);
-                    w = Math.min(max, w);
-                    pos = Math.max(50, docWidth - w); // hard limit
-                    right = 0;
-                    left = pos;
-                }
-
-                // convert to percent (nice for dynamic resizing)
-                left = !left ? "0" : (left / docWidth * 100 >> 0) + "%";
-                right = !right ? "0" : (right / docWidth * 100 >> 0) + "%";
-
-                //pane.css("maxWidth", max + "px");
-
-                popup.removeClass("left right")
-                    .addClass(mode)
-                    .css({ right: right, left: left, zIndex: zIndex });
-
-                arrow.removeClass("left right")
-                    .addClass(mode)
-                    .css({ right: right, left: left, zIndex: zIndex + 1 });
+                // add popup to proper element
+                self.nodes.target.append((options.modal ? overlay : popup).css('visibility', 'hidden'));
 
                 // call custom handler
-                (handler || $.noop).call(this, pane.empty(), e);
+                (handler || $.noop).call(self, pane.empty(), e, my);
 
                 // set arrow top
                 var halfHeight = (my.outerHeight(true) / 2 >> 0),
-                    top = my.offset().top + halfHeight - self.nodes.target.offset().top;
+                    targetOffset = self.nodes.target.offset() ? self.nodes.target.offset().top : 0,
+                    top = my.offset().top + halfHeight - targetOffset;
                 arrow.css("top", top);
 
-                // finally, add popup to proper element
-                self.nodes.target.append(popup).append(arrow);
+                // finally, add arrow
+                (options.modal ? overlay : popup).css('visibility', '');
+                if (!options.modal) {
+                    self.nodes.target.append(arrow);
+                }
+
+                self.trigger('show');
             }
         };
 
         this.delegate = function (node, selector, handler) {
             $(node).on("click", selector, function (e) {
-                open.call(this, e, handler);
+                if ((e.originalEvent || e).processed !== true) {
+                    open.call(this, e, handler);
+                }
             });
             return this;
         };
 
+        this.setTarget = function (t) {
+            target = $(t);
+            return this;
+        };
+
         this.show = function (e, handler) {
-            open.call(e.target, e, handler);
+            setTimeout(function () {
+                open.call(e.target, e, handler);
+            }, 0);
             return this;
         };
 
@@ -570,7 +688,15 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
         ModalDialog: Dialog,
         CreateDialog: CreateDialog,
         SlidingPane: SlidingPane,
-        SidePopup: SidePopup
+        SidePopup: SidePopup,
+        busy: function (node) {
+            node.find('button').attr('disabled', 'disabled');
+            node.find('input').attr('disabled', 'disabled');
+        },
+        idle: function (node) {
+            node.find('button').removeAttr('disabled');
+            node.find('input').removeAttr('disabled');
+        }
     };
 });
 

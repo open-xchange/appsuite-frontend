@@ -2,10 +2,10 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0,  minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="msapplication-tap-highlight" content="no" />
 
+<link rel="stylesheet" href="v=@ version @/apps/io.ox/core/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="v=@ version @/apps/themes/login/login.css">
-
-<title>&#160;</title>
 
 <style type="text/css">
 html, body { background-color: #fff; margin: 0; padding: 0; border: 0; overflow: hidden; }
@@ -16,18 +16,25 @@ html, body { background-color: #fff; margin: 0; padding: 0; border: 0; overflow:
 </style>
 
 <script>
+var root = location.pathname.replace(/\/[^\/]*$/, '');
 window.ox = {
     abs: location.protocol + '//' + location.host,
-    apiRoot: "/ox7/api",
-    base: "v=@ version @",
+    apiRoot: root + '/api',
+    base: 'v=@ version @',
+    debug: @debug@,
+    language: 'en_US',
     online: navigator.onLine !== undefined ? navigator.onLine : true,
+    root: root,
     serverConfig: {},
-    session: "",
+    session: '',
     signin: false,
     t0: new Date().getTime(), // for profiling
+    testTimeout: 30000,
     ui: { session: {} },
-    user: "",
-    windowState: "foreground"
+    user: '',
+    user_id: 0,
+    version: '@ version @',
+    windowState: 'foreground'
 };
 </script>
 
@@ -36,7 +43,9 @@ window.ox = {
 <link rel="shortcut icon" href="v=@ version @/favicon.ico">
 
 <!-- iOS home button support -->
-<link rel="apple-touch-icon" href="v=@ version @/apps/themes/default/logo-small.xpng">
+<link rel="apple-touch-icon" href="v=@ version @/apps/themes/default/icon57.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="v=@ version @/apps/themes/default/icon72.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="v=@ version @/apps/themes/default/icon114.png" />
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <!-- Never change status-bar-style! There is an iOS bug that freezes home screen apps once this changes. -->

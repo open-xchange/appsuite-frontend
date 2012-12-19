@@ -1,7 +1,10 @@
 # Compress static data
 AddOutputFilterByType DEFLATE text/html text/plain text/javascript application/javascript text/css text/xml application/xml text/x-js application/x-javascript
 
+# be sure to have those
 AddType text/cache-manifest .appcache
+AddType application/x-font-ttf .ttf
+AddType application/x-font-woff .woff
 
 # Define pre-compressed files
 AddType text/javascript .jsz
@@ -26,6 +29,7 @@ ExpiresByType text/xml "access plus 6 months"
 ExpiresByType text/javascript "access plus 6 months"
 ExpiresByType application/x-javascript "access plus 6 months"
 ExpiresByType text/cache-manifest "access plus 0 seconds"
+ExpiresByType audio/mp3 "access plus 6 months"
 
 # cache buster (exclude cache manifests and main pages)
 <FilesMatch "^(?!(core|signin)).*$">
@@ -49,7 +53,8 @@ ExpiresByType text/cache-manifest "access plus 0 seconds"
 <FilesMatch "^(core|signin)$">
     # must be done this way otherwise firefox does not put these files into application cache
     Header set Content-type "text/html"
-    ExpiresDefault "access plus 1 seconds"
+    ForceType "text/html"
+    ExpiresByType text/html "now"
 </FilesMatch>
 
 RewriteEngine On

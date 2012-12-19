@@ -16,18 +16,13 @@ define('io.ox/core/tk/text-editor', [], function () {
     'use strict';
 
     // save jQuery val() - since tinyMCE is a bit too aggressive
-    var val = $.fn.val;
+    var val = $.original.val;
 
     function Editor(textarea) {
 
         textarea = $(textarea);
 
         var def = $.when(),
-
-            resizeEditor = _.debounce(function () {
-                var p = textarea.parent(), w = p.width(), h = p.height();
-                p.find('table.mceLayout').css({ width: w + 'px', height: h + 'px' });
-            }, 100),
 
             trim = function (str) {
                 return String(str || '').replace(/^[^\S\n]+/, '').replace(/^\n{3,}/, '').replace(/\s+$/, '');
@@ -84,6 +79,11 @@ define('io.ox/core/tk/text-editor', [], function () {
             this.setContent(content + '\n\n' + str);
         };
 
+        this.prependContent = function (str) {
+            var content = this.getContent();
+            this.setContent(str + '\n\n' + content);
+        };
+
         this.replaceParagraph = function (str, rep) {
             var content = this.getContent(), pos, top;
             // exists?
@@ -105,7 +105,7 @@ define('io.ox/core/tk/text-editor', [], function () {
                 var w = Math.max(10, textarea.outerWidth() - 12 - 750);
                 textarea.css('paddingRight', w + 'px');
                 textarea.parents('.window-content').find('.editor-print-margin')
-                    .css('right', Math.max(0, w - 10) + 'px');
+                    .css('right', Math.max(0, w - 10) + 'px').show();
                 // force reflow
                 textarea.css('display', (alt = !alt) ? 'block' : '');
             }, 100);

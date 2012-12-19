@@ -1,17 +1,21 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
- * Copyright (C) 2004-2012 Open-Xchange, Inc.
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLinks) {
+define('io.ox/core/commons',
+    ['io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
+     'gettext!io.ox/core',
+     'io.ox/core/commons-folderview',
+     'io.ox/core/api/folder'], function (ext, links, gt, folderview, folderAPI) {
 
     'use strict';
 
@@ -20,15 +24,10 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
         /**
          * Common show window routine
          */
-        showWindow: function (win, grid) {
+        showWindow: function (win) {
             return function () {
                 var def = $.Deferred();
-                win.show(function () {
-                    if (grid) {
-                        grid.paint();
-                    }
-                    def.resolve();
-                });
+                win.show(def.resolve);
                 return def;
             };
         },
@@ -40,37 +39,56 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
 
             var points = {};
 
-            return function (id, node, selection) {
+            function draw(id, selection) {
+                // inline links
+                var node = $('<div>');
+                (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
+                    .draw.call(node, selection);
+                return $().add(
+                    $('<div>').addClass('summary').html(
+                        gt('<b>%1$d</b> elements selected', selection.length)
+                    )
+                )
+                .add(node.children().first());
+            }
+
+            return function (id, node, selection, api) {
                 if (selection.length > 1) {
-                    // clear
-                    node.empty();
-                    // inline links
-                    var links = $('<div>');
-                    (points[id] || (points[id] = new extLinks.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
-                        .draw.call(links, selection);
                     // draw
-                    node.append(
-                        $('<div>')
+                    node.idle().empty().append(
+                        (api ? $.createViewContainer(selection, api) : $('<div>'))
+                        .on('redraw', function () {
+                            $(this).empty().append(draw(id, selection));
+                        })
                         .addClass('io-ox-multi-selection')
-                        .append(
-                            $('<div>').addClass('summary').html('<b>' + selection.length + '</b> elements selected'),
-                            links.children().first()
-                        )
+                        .append(draw(id, selection))
                         .center()
                     );
                 }
             };
         }()),
 
-        wireGridAndSelectionChange: function (grid, id, draw, node) {
+        wireGridAndSelectionChange: function (grid, id, draw, node, api) {
+            var last = '';
             grid.selection.on('change', function (e, selection) {
-                var len = selection.length;
-                if (len === 1) {
-                    draw(selection[0]);
-                } else if (len > 1) {
-                    commons.multiSelection(id, node, this.unfold());
-                } else {
-                    node.empty();
+                var len = selection.length,
+                    // work with reduced string-based set
+                    flat = JSON.stringify(_([].concat(selection)).map(function (o) {
+                        return { folder_id: String(o.folder_id || o.folder), id: String(o.id), recurrence_position: String(o.recurrence_position || 0) };
+                    }));
+                // has anything changed?
+                if (flat !== last) {
+                    if (len === 1) {
+                        node.css('height', '');
+                        draw(selection[0]);
+                    } else if (len > 1) {
+                        node.css('height', '100%');
+                        commons.multiSelection(id, node, this.unique(this.unfold()), api);
+                    } else {
+                        node.css('height', '').idle().empty();
+                    }
+                    // remember current selection
+                    last = flat;
                 }
             });
         },
@@ -87,21 +105,86 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             grid.setListRequest(function (ids) {
                 return api[getList || 'getList'](ids);
             });
+            // handle 'not-found'
+            api.on('not-found', function () {
+                grid.selection.selectFirst();
+            });
         },
 
         /**
          * Wire grid & window
          */
         wireGridAndWindow: function (grid, win) {
+            var top = 0, on = function () {
+                    grid.selection.keyboard(true);
+                    if (grid.selection.get().length) {
+                        // only retrigger if selection is not empty; hash gets broken if caches are empty
+                        // TODO: figure out why this was important
+                        grid.selection.retriggerUnlessEmpty();
+                    }
+                };
             // show
-            win.on('show', function () {
-                grid.selection.keyboard(true);
-                grid.selection.retrigger();
+            win.on('show idle', on)
+                // hide
+                .on('hide busy', function () {
+                    grid.selection.keyboard(false);
+                })
+                .on('beforeshow', function () {
+                    if (top !== null) { grid.scrollTop(top); }
+                })
+                .on('beforehide', function () {
+                    top = grid.scrollTop();
+                });
+            // publish grid
+            if (win.app) {
+                win.app.getGrid = function () {
+                    return grid;
+                };
+            }
+            // already visible?
+            if (win.state.visible) { on(); }
+        },
+
+        addGridToolbarFolder: function (app, grid) {
+
+            ext.point(app.get('name') + '/vgrid/toolbar').extend({
+                id: 'info',
+                index: 200,
+                draw: function () {
+                    this.append($('<div class="grid-info">'));
+                }
             });
-            // hide
-            win.on('hide', function () {
-                grid.selection.keyboard(false);
+
+            function fnOpen(e) {
+                e.preventDefault();
+                app.showFolderView();
+            }
+
+            function fnCancel(e) {
+                e.preventDefault();
+                app.getWindow().search.stop();
+            }
+
+            grid.on('change:prop:folder change:mode', function (e, value) {
+                var folder_id = grid.prop('folder'), mode = grid.getMode(),
+                    node = grid.getToolbar().find('.grid-info').empty();
+                if (mode === 'all') {
+                    node.append(
+                        $('<a href="#" data-action="open-folderview">')
+                        .append(folderAPI.getTextNode(folder_id))
+                        .on('click', fnOpen)
+                    );
+                } else if (mode === 'search') {
+                    node.append(
+                        $('<a href="#" data-action="cancel-search">')
+                        .addClass('btn btn-danger')
+                        .text(gt('Cancel search'))
+                        .on('click', fnCancel)
+                    );
+                }
             });
+
+            ext.point(app.get('name') + '/vgrid/toolbar').invoke('draw', grid.getToolbar());
         },
 
         /**
@@ -111,7 +194,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             // open (first show)
             app.getWindow().on('open', function () {
                 if (api.needsRefresh(app.folder.get())) {
-                    api.trigger('refresh!', app.folder.get());
+                    api.trigger('refresh^', app.folder.get());
                 }
             });
         },
@@ -119,17 +202,27 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
         /**
          * Wire grid and API refresh
          */
-        wireGridAndRefresh: function (grid, api) {
-            // bind all refresh
-            api.on('refresh.all', function () {
-                grid.refresh();
-            });
-            // bind list refresh
-            api.on('refresh.list', function () {
-                grid.repaint().done(function () {
+        wireGridAndRefresh: function (grid, api, win) {
+            var refreshAll = function () {
+                    grid.refresh(true);
+                },
+                refreshList = function () {
+                    grid.repaint();
                     grid.selection.retrigger();
-                });
-            });
+                },
+                off = function () {
+                    api.off('refresh.all refresh:all:local', refreshAll)
+                        .off('refresh.list', refreshList);
+                },
+                on = function () {
+                    off();
+                    api.on('refresh.all refresh:all:local', refreshAll)
+                        .on('refresh.list', refreshList)
+                        .trigger('refresh.all');
+                };
+            win.on({ show: on, hide: off });
+            // already visible?
+            if (win.state.visible) { on(); }
         },
 
         /**
@@ -138,7 +231,11 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
         wireGridAndSearch: function (grid, win, api) {
             // search: all request
             grid.setAllRequest('search', function () {
-                return api.search(win.search.query);
+                var options = win.search.getOptions();
+                options.folder = grid.prop('folder');
+                options.sort = grid.prop('sort');
+                options.order = grid.prop('order');
+                return api.search(win.search.query, options);
             });
             // search: list request
             grid.setListRequest('search', function (ids) {
@@ -154,22 +251,60 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             });
         },
 
+        wirePerspectiveEvents: function (app) {
+            var win = app.getWindow();
+            var oldPerspective = null;
+            win.on('show', function () {
+                oldPerspective = win.currentPerspective;
+                if (win.currentPerspective) {
+                    app.trigger('perspective:' + win.currentPerspective + ":show");
+                }
+            });
+
+            win.on('hide', function () {
+                oldPerspective = win.currentPerspective;
+                if (win.currentPerspective) {
+                    app.trigger('perspective:' + win.currentPerspective + ":hide");
+                }
+            });
+
+            win.on('change:perspective', function (e, newPerspective) {
+                if (oldPerspective) {
+                    app.trigger('perspective:' + oldPerspective + ":hide");
+                }
+                oldPerspective = newPerspective;
+                app.trigger('perspective:' + newPerspective + ":show");
+            });
+
+            win.on('change:initialPerspective', function (e, newPerspective) {
+                oldPerspective = newPerspective;
+                app.trigger('perspective:' + newPerspective + ":show");
+            });
+        },
+
         /**
          * Add folder support
          */
         addFolderSupport: function (app, grid, type, defaultFolderId) {
+
             app.folder
                 .updateTitle(app.getWindow())
                 .updateGrid(grid)
                 .setType(type);
-            // add visual caret
-            app.getWindow().nodes.title.append($('<b>').addClass('caret'));
+            if (grid) {
+                app.folder.updateGrid(grid);
+            }
+
             // hash support
             app.getWindow().on('show', function () {
-                grid.selection.retrigger();
+                if (grid) {
+                    grid.selection.retriggerUnlessEmpty();
+                }
                 _.url.hash('folder', app.folder.get());
             });
+
             defaultFolderId = _.url.hash('folder') || defaultFolderId;
+
             // explicit vs. default
             if (defaultFolderId !== undefined) {
                 return app.folder.set(defaultFolderId);
@@ -178,87 +313,128 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             }
         },
 
-        /**
-         * Add visual folder tree
-         */
-        addFolderTree: function (app, width, type, rootFolderId) {
+        addGridFolderSupport: function (app, grid) {
+            app.folder.updateGrid(grid);
+            app.getWindow().on('show', function () {
+                grid.selection.retriggerUnlessEmpty();
+            });
+        },
 
-            var container,
-                visible = false,
-                top = 0,
-                fnChangeFolder, fnShow, fnToggle, loadTree, initTree;
+        addFolderView: folderview.add,
 
-            container = $('<div>')
-                .addClass('abs border-right')
-                .css({
-                    backgroundColor: 'white',
-                    right: 'auto',
-                    width: width + 'px',
-                    zIndex: 3
-                })
-                .hide()
-                .appendTo(app.getWindow().nodes.main);
+        vsplit: (function () {
 
-            fnChangeFolder = function (e, selection) {
-                var folder = selection[0];
-                if (folder.module === type) {
-                    app.folder.unset();
-                    top = container.scrollTop();
-                    container.fadeOut('fast', function () {
-                        app.folder.set(folder.id);
+            var click = function (e) {
+                e.preventDefault();
+                $(this).closest('.vsplit').addClass('vsplit-reverse').removeClass('vsplit-slide');
+                if (e.data.app) {
+                    e.data.app.getGrid().selection.clear();
+                }
+            };
+
+            var select = function (e) {
+                var node = $(this);
+                setTimeout(function () {
+                    node.closest('.vsplit').addClass('vsplit-slide').removeClass('vsplit-reverse');
+                }, 100);
+            };
+
+            return function (parent, app) {
+                var sides = {};
+                parent.addClass('vsplit').append(
+                    // left
+                    sides.left = $('<div class="leftside">').on('select', select),
+                    // navigation
+                    $('<div class="rightside-navbar">').append(
+                        $('<a href="#" class="btn">').append(
+                            $('<i class="icon-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
+                        ).on('click', { app: app }, click)
+                    ),
+                    // right
+                    sides.right = $('<div class="rightside">')
+                );
+                //
+                return sides;
+            };
+        }())
+    };
+
+    /*
+     * View container
+     */
+
+    // view container with dispose capability
+    var originalCleanData = $.cleanData,
+        triggerDispose = function (elem) {
+            return $(elem).triggerHandler('dispose');
+        };
+
+    $.cleanData = function (list) {
+        return originalCleanData(_(list).map(triggerDispose));
+    };
+
+    // factory
+    $.createViewContainer = function (baton, api, getter) {
+
+        var data = baton instanceof ext.Baton ? baton.data : baton,
+
+            cid,
+
+            node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
+
+            update = function () {
+                if ((getter = getter || (api ? api.get : null))) {
+                    getter(api.reduce(data)).done(function (data) {
+                        if (baton instanceof ext.Baton) {
+                            baton.data = data;
+                        } else {
+                            baton = data;
+                        }
+                        if (node) node.triggerHandler('redraw', baton);
                     });
-                    visible = false;
                 }
+            },
+
+            // we use redraw directly if we're in multiple mode
+            // each redraw handler must get the data on its own
+            redraw = _.debounce(function () {
+                if (node) node.triggerHandler('redraw', baton);
+            }, 10),
+
+            remove = function () {
+                if (node) node.remove();
             };
 
-            fnShow = function () {
-                if (!visible) {
-                    container.show().scrollTop(top);
-                    visible = true;
-                }
-                return $.when();
-            };
-
-            fnToggle = function () {
-                if (visible) {
-                    top = container.scrollTop();
-                    container.hide();
-                    visible = false;
-                } else {
-                    fnShow();
-                }
-            };
-
-            initTree = function (FolderTree) {
-                var tree = app.folderTree = new FolderTree(container, {
-                    type: type,
-                    rootFolderId: rootFolderId
-                });
-                tree.selection.on('change', fnChangeFolder);
-                return tree.paint()
-                    .done(function () {
-                        tree.selection.set(app.folder.get(), true);
-                        app.getWindow().nodes.title.on('click', fnToggle);
-                        container.idle();
-                        initTree = loadTree = null;
-                    });
-            };
-
-            loadTree = function () {
-                container.busy();
-                fnToggle();
-                app.showFolderTree = fnShow;
-                app.getWindow().nodes.title.off('click', loadTree);
-                return require(['io.ox/core/tk/foldertree']).pipe(initTree);
-            };
-
-            app.showFolderTree = loadTree;
-            app.folderTree = null;
-
-            app.getWindow().nodes.title
-                .css('cursor', 'pointer')
-                .on('click', loadTree);
+        if (_.isArray(data)) {
+            // multiple items
+            _.chain(data).map(_.cid).each(function (cid) {
+                cid = encodeURIComponent(cid);
+                api.on('delete:' + cid, redraw);
+                api.on('update:' + cid, redraw);
+            });
+        } else {
+            // single item
+            cid = _.cid(data);
+            cid = encodeURIComponent(cid);
+            api.on('delete:' + cid, remove);
+            api.on('update:' + cid, update);
         }
+
+        return node.one('dispose', function () {
+                if (_.isArray(data)) {
+                    _.chain(data).map(_.cid).each(function (cid) {
+                        cid = encodeURIComponent(cid);
+                        api.off('delete:' + cid, redraw);
+                        api.off('update:' + cid, redraw);
+                    });
+                } else {
+                    cid = _.cid(data);
+                    cid = encodeURIComponent(cid);
+                    api.off('delete:' + cid, remove);
+                    api.off('update:' + cid, update);
+                }
+                api = update = data = node = getter = null;
+            });
     };
 
     return commons;

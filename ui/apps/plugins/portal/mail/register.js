@@ -12,94 +12,68 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/portal/mail/register',
-    ['io.ox/core/extensions', "io.ox/core/extPatterns/links"], function (ext, links, api) {
+define('plugins/portal/mail/register',
+    ['io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
+     'io.ox/core/strings',
+     'io.ox/mail/api',
+     'io.ox/mail/util',
+     'io.ox/core/date',
+     'gettext!plugins/portal'], function (ext, links, strings, mailApi, util, date, gt) {
 
     'use strict';
 
-    // actions
-    ext.point('io.ox/portal/widget/mail/actions/compose').extend({
-        id: 'compose',
-        action: function (data) {
-            require(['io.ox/mail/write/main'], function (m) {
-                m.getApp().launch().done(function () {
-                    this.compose();
+    ext.point('io.ox/portal/widget/mail').extend({
+
+        title: gt("Inbox"),
+
+        action: function (baton) {
+            ox.launch('io.ox/mail/main', { folder: mailApi.getDefaultFolder() });
+        },
+
+        load: function (baton) {
+            return mailApi.getAll({ folder: mailApi.getDefaultFolder() }, false).pipe(function (mails) {
+                return mailApi.getList(mails.slice(0, 10)).done(function (data) {
+                    baton.data = data;
+                });
+            });
+        },
+
+        preview: function (baton) {
+            var $content = $('<div class="content">');
+            if (baton.data && baton.data.length) {
+                _(baton.data).each(function (mail) {
+                    var received = new date.Local(mail.received_date).format(date.DATE);
+                    $content.append(
+                        $('<div class="item">')
+                        .data('item', mail)
+                        .append(
+                            $('<span class="bold">').text(util.getDisplayName(mail.from[0])), $.txt(' '),
+                            $('<span class="normal">').text(strings.shorten(mail.subject, 50)), $.txt(' '),
+                            $('<span class="accent">').text(received)
+                        )
+                    );
+                });
+            } else {
+                $content.text(gt('No mails at all!'));
+            }
+            this.append($content);
+        },
+
+        draw: function (baton) {
+            var popup = this.busy();
+            require(['io.ox/mail/view-detail', 'io.ox/mail/api'], function (view, api) {
+                var obj = api.reduce(baton.item);
+                api.get(obj).done(function (data) {
+                    popup.idle().append(view.draw(data));
                 });
             });
         }
     });
 
-    // link
-    ext.point('io.ox/portal/widget/mail/links/inline').extend(new links.Link({
-        index: 100,
-        id: 'compose',
-        label: 'Compose new email',
-        ref: 'io.ox/portal/widget/mail/actions/compose'
-    }));
-
-    // inline links
-    ext.point('io.ox/portal/widget/mail').extend(new links.InlineLinks({
-        index: 200,
-        id: 'inline-links',
-        ref: 'io.ox/portal/widget/mail/links/inline'
-    }));
-
-
-    ext.point('io.ox/portal/widget').extend({
-        id: 'mail',
-        index: 300,
-        load: function () {
-            var loading = new $.Deferred();
-            require(['io.ox/mail/api'], function (api) {
-                api.getAll()
-                    .done(function (ids) {
-                        api.getList(ids.slice(0, 5))
-                            .done(loading.resolve)
-                            .fail(loading.reject);
-                    })
-                    .fail(loading.reject);
-            });
-            return loading;
-        },
-        draw: function (list) {
-
-            var node = this;
-
-            node.addClass('io-ox-portal-mail')
-                .append(
-                    $('<div>').addClass('clear-title')
-                        .text('New E-Mails')
-                );
-
-            ext.point('io.ox/portal/widget/mail').invoke('draw', node);
-
-            if (list.length === 0) {
-
-                node.append('<div><b>No mails at all!</b></div>');
-                return $.when();
-
-            } else {
-
-                return require(
-                    ['io.ox/core/tk/dialogs', 'io.ox/mail/view-grid-template'],
-                    function (dialogs, viewGrid) {
-
-                        viewGrid.drawSimpleGrid(list).appendTo(node);
-
-                        new dialogs.SidePopup(600)
-                        .delegate(node, '.vgrid-cell', function (popup) {
-                            var data = $(this).data('object-data');
-                            require(['io.ox/mail/view-detail', 'io.ox/mail/api'], function (view, api) {
-                                api.get(data).done(function (data) {
-                                    popup.append(
-                                        view.draw(data).removeClass('page')
-                                    );
-                                });
-                            });
-                        });
-                    }
-                );
-            }
-        }
+    ext.point('io.ox/portal/widget/mail/settings').extend({
+        title: gt('E-mail'),
+        type: 'mail',
+        editable: false
     });
 });

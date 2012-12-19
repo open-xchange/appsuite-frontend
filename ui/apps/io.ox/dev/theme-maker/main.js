@@ -22,7 +22,6 @@ define("io.ox/dev/theme-maker/main", ["themes", "io.ox/core/tk/simple-colorpicke
         }),
         // app window
         win,
-        GRID_WIDTH = 330,
         // nodes
         left,
         right,
@@ -86,7 +85,6 @@ define("io.ox/dev/theme-maker/main", ["themes", "io.ox/core/tk/simple-colorpicke
         left = $("<div>")
             .addClass("leftside")
             .css({
-                width: GRID_WIDTH + "px",
                 backgroundColor: 'transparent'
             })
             .appendTo(win.nodes.main);
@@ -95,7 +93,6 @@ define("io.ox/dev/theme-maker/main", ["themes", "io.ox/core/tk/simple-colorpicke
         right = $("<div>")
             .addClass("rightside")
             .css({
-                left: GRID_WIDTH + 1 + "px",
                 backgroundColor: 'transparent'
             })
             .append(

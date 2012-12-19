@@ -1,0 +1,24 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Kai Ahrens <kai.ahrens@open-xchange.com>
+ * @author Daniel Rentz <daniel.rentz@open-xchange.com>
+ */
+
+.io-ox-office-preview-main {
+
+    .view-pane.app-pane {
+        text-align: center;
+
+        div.page {
+            display: inline-block;
+        }
+    }
+}
