@@ -110,7 +110,6 @@ define('io.ox/calendar/week/view',
         // setup setting params
         initSettings: function () {
             // init settings
-            this.showDeclined = settings.get('showDeclinedAppointments', 'false') === 'true';
             this.gridSize = 60 / settings.get('interval', this.gridSize);
             this.workStart = settings.get('startTime', this.workStart);
             this.workEnd = settings.get('endTime', this.workEnd);
@@ -517,6 +516,8 @@ define('io.ox/calendar/week/view',
         },
 
         renderAppointments: function () {
+            this.showDeclined = settings.get('showDeclinedAppointments', 'false') === 'true';
+
             // clear all first
             $('.appointment', this.$el).remove();
             $('.day.today', this.$el).removeClass('today');
