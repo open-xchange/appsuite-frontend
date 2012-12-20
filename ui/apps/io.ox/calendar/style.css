@@ -54,6 +54,14 @@
     border: 1px solid rgba(0, 0, 0, 0.4);
 }
 
+.vgrid-cell.calendar.declined .title {
+    text-decoration: line-through;
+}
+
+.vgrid-cell.calendar.declined .location {
+    text-decoration: line-through;
+}
+
 .vgrid-cell.calendar .time {
     color: #555;
     float: right;
