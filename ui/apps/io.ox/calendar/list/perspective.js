@@ -170,15 +170,11 @@ define('io.ox/calendar/list/perspective',
                         return _.filter(data, function (obj) {
                             var hash = util.getConfirmations(obj),
                                 conf = hash[ox.user_id] || { status: 1, comment: "" };
-                            
-                            console.log('api all', obj, conf.status);
                             return conf.status !== 2;
                         });
                     }
                 });
             });
-
-
         });
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/calendar', showAppointment, right, api);
