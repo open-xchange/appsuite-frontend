@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
-"POT-Creation-Date: Fri Dec 21 2012 04:14:46 GMT+0100 (CET)\n"
+"POT-Creation-Date: Sat Dec 22 2012 04:14:45 GMT+0100 (CET)\n"
 "PO-Revision-Date: DATE\n"
 "Last-Translator: NAME <EMAIL>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -67,40 +67,6 @@ msgstr ""
 
 #: html/core_body.html:100
 msgid "Languages"
-msgstr ""
-
-#: apps/io.ox/calendar/list/perspective.js:86
-msgid "Couldn't load appointment data."
-msgstr ""
-
-#: apps/io.ox/calendar/list/perspective.js:130 apps/io.ox/mail/main.js:135
-#: apps/io.ox/tasks/main.js:242
-msgid "Ascending"
-msgstr ""
-
-#: apps/io.ox/calendar/list/perspective.js:131 apps/io.ox/mail/main.js:136
-#: apps/io.ox/tasks/main.js:243
-msgid "Descending"
-msgstr ""
-
-#: apps/io.ox/calendar/list/perspective.js:133
-#: apps/io.ox/calendar/month/perspective.js:302
-#: apps/io.ox/calendar/week/view.js:463
-msgid "show all"
-msgstr ""
-
-#: apps/io.ox/calendar/week/view.js:426
-msgid "Doubleclick here for whole day appointment"
-msgstr ""
-
-#: apps/io.ox/calendar/month/perspective.js:327
-#: apps/io.ox/calendar/week/view.js:479
-#: apps/plugins/portal/birthdays/register.js:91
-msgid "Today"
-msgstr ""
-
-#: apps/io.ox/calendar/view-grid-template.js:70
-msgid "Conflicts:"
 msgstr ""
 
 #: apps/plugins/portal/rss/register.js:54
@@ -353,6 +319,12 @@ msgstr ""
 
 #: apps/plugins/portal/birthdays/register.js:71
 msgid "Buy a gift"
+msgstr ""
+
+#: apps/io.ox/calendar/month/perspective.js:327
+#: apps/io.ox/calendar/week/view.js:479
+#: apps/plugins/portal/birthdays/register.js:91
+msgid "Today"
 msgstr ""
 
 #: apps/plugins/portal/birthdays/register.js:91
@@ -1222,6 +1194,16 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
+#: apps/io.ox/calendar/list/perspective.js:130 apps/io.ox/mail/main.js:135
+#: apps/io.ox/tasks/main.js:242
+msgid "Ascending"
+msgstr ""
+
+#: apps/io.ox/calendar/list/perspective.js:131 apps/io.ox/mail/main.js:136
+#: apps/io.ox/tasks/main.js:243
+msgid "Descending"
+msgstr ""
+
 #: apps/io.ox/mail/main.js:138
 msgid "Unread only"
 msgstr ""
@@ -1763,6 +1745,20 @@ msgstr ""
 msgid "No"
 msgstr ""
 
+#: apps/io.ox/calendar/list/perspective.js:86
+msgid "Couldn't load appointment data."
+msgstr ""
+
+#: apps/io.ox/calendar/list/perspective.js:133
+#: apps/io.ox/calendar/month/perspective.js:302
+#: apps/io.ox/calendar/week/view.js:463
+msgid "show all"
+msgstr ""
+
+#: apps/io.ox/calendar/week/view.js:426
+msgid "Doubleclick here for whole day appointment"
+msgstr ""
+
 #: apps/io.ox/calendar/edit/template.js:103
 #: apps/io.ox/calendar/month/perspective.js:84
 #: apps/io.ox/calendar/week/perspective.js:58
@@ -1818,6 +1814,10 @@ msgstr ""
 
 #: apps/io.ox/calendar/conflicts/conflictList.js:20
 msgid "Conflicts detected"
+msgstr ""
+
+#: apps/io.ox/calendar/view-grid-template.js:70
+msgid "Conflicts:"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:223
