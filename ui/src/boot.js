@@ -414,7 +414,7 @@ $(document).ready(function () {
             });
         }
 
-        require(['io.ox/core/session', 'io.ox/core/capabilities', 'io.ox/core/manifests']).done(function (session, capabilities, manifests) {
+        require(['io.ox/core/session', 'io.ox/core/capabilities']).done(function (session, capabilities) {
 
             var useAutoLogin = (true || capabilities.has("autologin")) && ox.online, initialized;
 
@@ -445,7 +445,6 @@ $(document).ready(function () {
                 // try auto login!?
                 (useAutoLogin ? session.autoLogin() : $.when())
                 .done(function () {
-
                     if (useAutoLogin) {
                         fetchUserSpecificServerConfig().done(function () {
                             loadCoreFiles().done(function () { gotoCore(true); });

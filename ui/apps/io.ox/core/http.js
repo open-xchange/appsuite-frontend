@@ -452,10 +452,11 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         if (response && response.error !== undefined && !response.data) {
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
+                isServerConfig = o.module === 'apps/manifests' && o.data && /^config$/.test(o.data.action),
                 isAutoLogin = o.module === "login" && o.data && /^(autologin|store)$/.test(o.data.action);
-            if (isSessionError && !isAutoLogin) {
+            if (isSessionError && !isAutoLogin && !isServerConfig) {
                 // login dialog
-                ox.session = "";
+                ox.session = '';
                 ox.relogin(o, deferred);
             } else {
                 deferred.reject(response);
