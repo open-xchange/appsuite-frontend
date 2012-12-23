@@ -902,5 +902,12 @@ define('io.ox/core/api/folder',
         api.sync();
     });
 
+    // publish caches
+    api.caches = {
+        folderCache: folderCache,
+        subFolderCache: subFolderCache,
+        visibleCache: visibleCache
+    };
+
     return api;
 });

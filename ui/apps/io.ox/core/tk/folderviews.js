@@ -46,6 +46,7 @@ define('io.ox/core/tk/folderviews',
             nodes = {},
             children = null,
             painted = false,
+            detached = true,
             open,
             self = this,
             data = {},
@@ -76,13 +77,13 @@ define('io.ox/core/tk/folderviews',
                 // load
                 return self.loadChildren(reload)
                     // next pipe() makes it slow for debugging
-//                    .pipe(function (children) {
-//                        var def = $.Deferred();
-//                        setTimeout(function () {
-//                            def.resolve(children);
-//                        }, 1000);
-//                        return def;
-//                    })
+                    // .pipe(function (children) {
+                    //    var def = $.Deferred();
+                    //    setTimeout(function () {
+                    //        def.resolve(children);
+                    //    }, 1000);
+                    //    return def;
+                    // })
                     .fail(function (error) {
                         // reset folder and show global error
                         nodes.sub.idle().hide();
@@ -219,57 +220,67 @@ define('io.ox/core/tk/folderviews',
                     });
                 }
                 // check cache
-                needsRefresh = refreshHash[id] === undefined && api.needsRefresh(id);
-                // get sub folders
-                return api.getSubFolders({ folder: id, all: all, storage: storage })
-                    .done(function (list) {
-                        // needs refresh?
-                        if (needsRefresh) {
-                            _.defer(function () {
-                                // get fresh data
-                                api.getSubFolders({ folder: id, cache: false })
-                                    .done(function (freshList) {
+                return api.caches.subFolderCache.get(id).pipe(function (data) {
+                    var wasCached = data !== null,
+                        needsRefresh = wasCached && refreshHash[id] === undefined;
+                    // get sub folders
+                    return api.getSubFolders({ folder: id, all: all, storage: storage })
+                        .done(function (list) {
+                            // needs refresh?
+                            if (needsRefresh) {
+                                _.defer(function () {
+                                    // get fresh data
+                                    api.getSubFolders({ folder: id, cache: false }).done(function (freshList) {
                                         // compare
                                         if (!_.isEqual(list, freshList)) {
-                                            self.reload();
+                                            self.repaint();
                                         }
                                         refreshHash[id] = false;
                                     });
+                                });
+                            }
+                        })
+                        .pipe(function (data) {
+                            // create new children array
+                            children = _.chain(data)
+                                .filter(function (folder) {
+                                    // ignore system folders without sub folders, e.g. 'Shared folders'
+                                    return (folder.module !== 'system' || folder.subfolders) && filter(folder);
+                                })
+                                .map(function (folder) {
+                                    if (reload && hash[folder.id] !== undefined) {
+                                        // reuse
+                                        var node = hash[folder.id];
+                                        delete hash[folder.id];
+                                        return node;
+                                    } else {
+                                        // new node
+                                        return new TreeNode(tree, folder.id, nodes.sub, skip() ? level : level + 1, checkbox, all, storage);
+                                    }
+                                })
+                                .value();
+                            // destroy deprecated tree nodes
+                            _(hash).each(function (child) {
+                                child.destroy();
                             });
-                        }
-                    })
-                    .pipe(function (data) {
-                        // create new children array
-                        children = _.chain(data)
-                            .filter(function (folder) {
-                                // ignore system folders without sub folders, e.g. 'Shared folders'
-                                return (folder.module !== 'system' || folder.subfolders) && filter(folder);
-                            })
-                            .map(function (folder) {
-                                if (reload && hash[folder.id] !== undefined) {
-                                    // reuse
-                                    var node = hash[folder.id];
-                                    delete hash[folder.id];
-                                    return node;
-                                } else {
-                                    // new node
-                                    return new TreeNode(tree, folder.id, nodes.sub, skip() ? level : level + 1, checkbox, all, storage);
-                                }
-                            })
-                            .value();
-                        // destroy deprecated tree nodes
-                        _(hash).each(function (child) {
-                            child.destroy();
+                            hash = null;
+                            return children;
                         });
-                        hash = null;
-                        return children;
-                    });
+                });
             } else {
                 return $.Deferred().resolve(children);
             }
         };
 
+        this.append = function () {
+            if (detached) {
+                container.append(nodes.folder, nodes.sub);
+                detached = false;
+            }
+        };
+
         this.detach = function () {
+            detached = true;
             nodes.folder.detach();
             nodes.sub.detach();
             return this;
@@ -297,9 +308,8 @@ define('io.ox/core/tk/folderviews',
 
         this.repaint = function () {
             if (painted) {
-                // add now
-                if (container.index(nodes.folder) === -1) { container.append(nodes.folder); }
-                if (container.index(nodes.sub) === -1) { container.append(nodes.sub); }
+                // adD?
+                self.append();
                 // get folder
                 return this.reload().pipe(function (promise) {
                     // get data
@@ -314,7 +324,6 @@ define('io.ox/core/tk/folderviews',
                     if (isOpen()) {
                         return repaintChildren();
                     } else {
-                        nodes.sub.empty().hide();
                         return $.when();
                     }
                 })
@@ -342,7 +351,7 @@ define('io.ox/core/tk/folderviews',
             }
 
             // we have to add nodes now! (otherwise we get an arbitrary order)
-            container.append(nodes.folder, nodes.sub);
+            this.append();
 
             return ready.pipe(function (promise) {
                 // store data
