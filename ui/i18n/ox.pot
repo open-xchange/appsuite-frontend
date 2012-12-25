@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
-"POT-Creation-Date: Sun Dec 23 2012 04:14:46 GMT+0100 (CET)\n"
+"POT-Creation-Date: Tue Dec 25 2012 04:14:46 GMT+0100 (CET)\n"
 "PO-Revision-Date: DATE\n"
 "Last-Translator: NAME <EMAIL>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -69,31 +69,16 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:154
-msgid "File: %1$s"
+#: apps/io.ox/core/tk/folderviews.js:507
+msgid "New folder"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:154
-msgid "Direct link: %1$s"
+#: apps/io.ox/core/tk/folderviews.js:527
+msgid "Add new subfolder"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:181 apps/io.ox/files/actions.js:390
-msgid "Do you really want to delete this file?"
-msgid_plural "Do you really want to delete these files?"
-msgstr[0] ""
-msgstr[1] ""
-
-#: apps/io.ox/calendar/actions.js:215 apps/io.ox/calendar/actions.js:406
-#: apps/io.ox/contacts/actions.js:49 apps/io.ox/contacts/actions.js:342
-#: apps/io.ox/core/commons-folderview.js:203
-#: apps/io.ox/core/tk/folderviews.js:559 apps/io.ox/files/actions.js:190
-#: apps/io.ox/files/actions.js:398 apps/io.ox/files/actions.js:542
-#: apps/io.ox/mail/actions.js:64 apps/io.ox/mail/actions.js:722
-#: apps/io.ox/mail/actions.js:738
-#: apps/io.ox/mail/settings/signatures/register.js:297
-#: apps/io.ox/portal/settings/pane.js:223 apps/io.ox/tasks/actions.js:52
-#: apps/io.ox/tasks/actions.js:308
-msgid "Delete"
+#: apps/io.ox/core/tk/folderviews.js:534 apps/io.ox/core/tk/folderviews.js:610
+msgid "Folder name"
 msgstr ""
 
 #: apps/io.ox/calendar/acceptdeny.js:41 apps/io.ox/calendar/actions.js:118
@@ -113,23 +98,24 @@ msgstr ""
 #: apps/io.ox/core/commons-folderview.js:242
 #: apps/io.ox/core/permissions/permissions.js:292
 #: apps/io.ox/core/permissions/permissions.js:334
-#: apps/io.ox/core/tk/folderviews.js:531 apps/io.ox/core/tk/folderviews.js:556
-#: apps/io.ox/core/tk/folderviews.js:560 apps/io.ox/core/tk/folderviews.js:603
-#: apps/io.ox/core/tk/folderviews.js:607 apps/io.ox/editor/main.js:221
-#: apps/io.ox/files/actions.js:185 apps/io.ox/files/actions.js:191
-#: apps/io.ox/files/actions.js:237 apps/io.ox/files/actions.js:243
-#: apps/io.ox/files/actions.js:290 apps/io.ox/files/actions.js:296
-#: apps/io.ox/files/actions.js:311 apps/io.ox/files/actions.js:317
-#: apps/io.ox/files/actions.js:378 apps/io.ox/files/actions.js:399
-#: apps/io.ox/mail/actions.js:63 apps/io.ox/mail/actions.js:65
-#: apps/io.ox/mail/actions.js:179 apps/io.ox/mail/actions.js:181
-#: apps/io.ox/mail/actions.js:513 apps/io.ox/mail/actions.js:538
-#: apps/io.ox/mail/actions.js:554 apps/io.ox/mail/write/main.js:902
-#: apps/io.ox/mail/write/main.js:942 apps/io.ox/mail/write/main.js:946
-#: apps/io.ox/office/tk/view/dialogs.js:49 apps/io.ox/portal/settings/pane.js:63
-#: apps/io.ox/portal/settings/pane.js:224 apps/io.ox/tasks/actions.js:53
-#: apps/io.ox/tasks/actions.js:150 apps/io.ox/tasks/actions.js:365
-#: apps/io.ox/tasks/edit/main.js:149
+#: apps/io.ox/core/tk/folderviews.js:531 apps/io.ox/core/tk/folderviews.js:540
+#: apps/io.ox/core/tk/folderviews.js:556 apps/io.ox/core/tk/folderviews.js:560
+#: apps/io.ox/core/tk/folderviews.js:569 apps/io.ox/core/tk/folderviews.js:603
+#: apps/io.ox/core/tk/folderviews.js:607 apps/io.ox/core/tk/folderviews.js:616
+#: apps/io.ox/editor/main.js:221 apps/io.ox/files/actions.js:185
+#: apps/io.ox/files/actions.js:191 apps/io.ox/files/actions.js:237
+#: apps/io.ox/files/actions.js:243 apps/io.ox/files/actions.js:290
+#: apps/io.ox/files/actions.js:296 apps/io.ox/files/actions.js:311
+#: apps/io.ox/files/actions.js:317 apps/io.ox/files/actions.js:378
+#: apps/io.ox/files/actions.js:399 apps/io.ox/mail/actions.js:63
+#: apps/io.ox/mail/actions.js:65 apps/io.ox/mail/actions.js:179
+#: apps/io.ox/mail/actions.js:181 apps/io.ox/mail/actions.js:513
+#: apps/io.ox/mail/actions.js:538 apps/io.ox/mail/actions.js:554
+#: apps/io.ox/mail/write/main.js:902 apps/io.ox/mail/write/main.js:942
+#: apps/io.ox/mail/write/main.js:946 apps/io.ox/office/tk/view/dialogs.js:49
+#: apps/io.ox/portal/settings/pane.js:63 apps/io.ox/portal/settings/pane.js:224
+#: apps/io.ox/tasks/actions.js:53 apps/io.ox/tasks/actions.js:150
+#: apps/io.ox/tasks/actions.js:365 apps/io.ox/tasks/edit/main.js:149
 #: apps/plugins/notifications/tasks/register.js:418
 #: apps/plugins/portal/flickr/register.js:207
 #: apps/plugins/portal/flickr/settings/plugin.js:114
@@ -154,30 +140,44 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:79
-#: apps/io.ox/files/actions.js:220 apps/io.ox/files/actions.js:226
-#: apps/io.ox/mail/settings/signatures/register.js:64
-#: apps/io.ox/mail/settings/signatures/register.js:65
-msgid "Name"
+#: apps/io.ox/core/tk/folderviews.js:541
+msgid "Add folder"
+msgstr ""
+
+#: apps/io.ox/core/tk/folderviews.js:567
+msgid "Do you really want to delete folder \042%s\042?"
+msgstr ""
+
+#: apps/io.ox/calendar/actions.js:215 apps/io.ox/calendar/actions.js:406
+#: apps/io.ox/contacts/actions.js:49 apps/io.ox/contacts/actions.js:342
+#: apps/io.ox/core/commons-folderview.js:203
+#: apps/io.ox/core/tk/folderviews.js:559 apps/io.ox/core/tk/folderviews.js:568
+#: apps/io.ox/files/actions.js:190 apps/io.ox/files/actions.js:398
+#: apps/io.ox/files/actions.js:542 apps/io.ox/mail/actions.js:64
+#: apps/io.ox/mail/actions.js:722 apps/io.ox/mail/actions.js:738
+#: apps/io.ox/mail/settings/signatures/register.js:297
+#: apps/io.ox/portal/settings/pane.js:223 apps/io.ox/tasks/actions.js:52
+#: apps/io.ox/tasks/actions.js:308
+msgid "Delete"
+msgstr ""
+
+#: apps/io.ox/core/tk/folderviews.js:594
+msgid "This is a standard folder, which can't be renamed."
+msgstr ""
+
+#: apps/io.ox/core/tk/folderviews.js:602
+msgid "Rename folder"
 msgstr ""
 
 #: apps/io.ox/core/commons-folderview.js:183
-#: apps/io.ox/core/tk/folderviews.js:608 apps/io.ox/files/actions.js:242
-#: apps/io.ox/files/actions.js:513
+#: apps/io.ox/core/tk/folderviews.js:608 apps/io.ox/core/tk/folderviews.js:617
+#: apps/io.ox/files/actions.js:242 apps/io.ox/files/actions.js:513
 msgid "Rename"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:203
-#: apps/io.ox/contacts/view-detail.js:218 apps/io.ox/files/actions.js:258
-#: apps/io.ox/files/actions.js:263 apps/io.ox/files/actions.js:264
-#: apps/io.ox/tasks/edit/view-template.js:47
-#: apps/plugins/portal/flickr/settings/plugin.js:100
-#: apps/plugins/portal/flickr/settings/plugin.js:278
-#: apps/plugins/portal/rss/settings/plugin.js:202
-#: apps/plugins/portal/rss/settings/plugin.js:265
-#: apps/plugins/portal/tumblr/settings/plugin.js:71
-#: apps/plugins/portal/tumblr/settings/plugin.js:241
-msgid "Description"
+#: apps/io.ox/core/commons-folderview.js:167
+#: apps/io.ox/core/tk/folderviews.js:657 apps/io.ox/core/tk/folderviews.js:666
+msgid "Subscribe IMAP folders"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/template.js:60
@@ -187,9 +187,9 @@ msgstr ""
 #: apps/io.ox/core/permissions/permissions.js:292
 #: apps/io.ox/core/permissions/permissions.js:334
 #: apps/io.ox/core/tk/folderviews.js:654 apps/io.ox/core/tk/folderviews.js:665
-#: apps/io.ox/editor/main.js:85 apps/io.ox/files/actions.js:289
-#: apps/io.ox/files/actions.js:294 apps/io.ox/files/actions.js:295
-#: apps/io.ox/files/views/create.js:172
+#: apps/io.ox/core/tk/folderviews.js:674 apps/io.ox/editor/main.js:85
+#: apps/io.ox/files/actions.js:289 apps/io.ox/files/actions.js:294
+#: apps/io.ox/files/actions.js:295 apps/io.ox/files/views/create.js:172
 #: apps/io.ox/mail/settings/signatures/register.js:111
 #: apps/io.ox/mail/write/view-main.js:52 apps/io.ox/tasks/edit/view.js:198
 #: apps/plugins/portal/flickr/register.js:206
@@ -198,124 +198,23 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: apps/io.ox/calendar/actions.js:270 apps/io.ox/calendar/actions.js:306
-#: apps/io.ox/calendar/actions.js:398 apps/io.ox/contacts/actions.js:151
-#: apps/io.ox/contacts/actions.js:356 apps/io.ox/core/commons-folderview.js:279
-#: apps/io.ox/files/actions.js:344 apps/io.ox/files/actions.js:527
-#: apps/io.ox/mail/actions.js:221 apps/io.ox/mail/actions.js:697
-#: apps/io.ox/mail/actions.js:713 apps/io.ox/tasks/actions.js:149
-#: apps/io.ox/tasks/actions.js:405
-msgid "Move"
+#: apps/io.ox/calendar/edit/template.js:305 apps/io.ox/contacts/model.js:309
+#: apps/io.ox/core/tk/folderviews.js:819 apps/io.ox/core/tk/folderviews.js:835
+#: apps/io.ox/core/tk/folderviews.js:843
+#: apps/io.ox/tasks/edit/view-template.js:125
+msgid "Private"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:157 apps/io.ox/contacts/actions.js:363
-#: apps/io.ox/files/actions.js:350 apps/io.ox/files/actions.js:534
-#: apps/io.ox/mail/actions.js:222 apps/io.ox/mail/actions.js:721
-msgid "Copy"
+#: apps/io.ox/core/tk/folderviews.js:843
+msgid "Public"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:364
-msgid "This file has been added to the portal"
+#: apps/io.ox/core/tk/folderviews.js:843
+msgid "Shared"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:423
-msgid "Upload new file"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:33 apps/io.ox/files/actions.js:432
-msgid "View"
-msgstr ""
-
-#: apps/io.ox/files/actions.js:441
-msgid "Icons"
-msgstr ""
-
-#: apps/io.ox/calendar/actions.js:367 apps/io.ox/calendar/settings/pane.js:64
-#: apps/io.ox/files/actions.js:448
-msgid "List"
-msgstr ""
-
-#: apps/io.ox/calendar/actions.js:382
-#: apps/io.ox/calendar/edit/recurrence-view.js:238
-#: apps/io.ox/calendar/edit/recurrence-view.js:820
-#: apps/io.ox/contacts/actions.js:334 apps/io.ox/files/actions.js:476
-#: apps/io.ox/mail/actions.js:626 apps/io.ox/mail/actions.js:651
-#: apps/io.ox/mail/actions.js:667
-#: apps/io.ox/mail/settings/signatures/register.js:272
-#: apps/io.ox/mail/settings/signatures/register.js:293
-#: apps/io.ox/portal/settings/pane.js:140 apps/io.ox/tasks/actions.js:300
-#: apps/plugins/portal/flickr/settings/plugin.js:56
-#: apps/plugins/portal/flickr/settings/plugin.js:115
-#: apps/plugins/portal/reddit/settings/plugin.js:29
-#: apps/plugins/portal/reddit/settings/plugin.js:227
-#: apps/plugins/portal/rss/settings/plugin.js:334
-#: apps/plugins/portal/rss/settings/plugin.js:393
-#: apps/plugins/portal/tumblr/settings/plugin.js:29
-#: apps/plugins/portal/tumblr/settings/plugin.js:80
-msgid "Edit"
-msgstr ""
-
-#: apps/io.ox/files/actions.js:484 apps/io.ox/files/actions.js:560
-msgid "Open"
-msgstr ""
-
-#: apps/io.ox/core/tk/attachments.js:243 apps/io.ox/files/actions.js:492
-#: apps/io.ox/files/actions.js:567 apps/io.ox/mail/actions.js:793
-#: apps/io.ox/tasks/actions.js:427 apps/plugins/portal/updater/register.js:35
-msgid "Download"
-msgstr ""
-
-#: apps/io.ox/files/actions.js:499
-msgid "Send as link"
-msgstr ""
-
-#: apps/io.ox/files/actions.js:506
-msgid "Send by mail"
-msgstr ""
-
-#: apps/io.ox/files/actions.js:520
-msgid "Edit description"
-msgstr ""
-
-#: apps/io.ox/contacts/actions.js:349 apps/io.ox/files/actions.js:550
-#: apps/io.ox/mail/actions.js:754
-msgid "Add to portal"
-msgstr ""
-
-#: apps/io.ox/files/actions.js:574
-msgid "Make this the current version"
-msgstr ""
-
-#: apps/io.ox/files/actions.js:581
-msgid "Delete version"
-msgstr ""
-
-#: apps/io.ox/files/actions.js:591
-msgid "Drop here to upload a <b>new file</b>"
-msgstr ""
-
-#: apps/io.ox/files/actions.js:605
-msgid "Drop here to upload a <b>new version</b> of \042%1$s\042"
-msgstr ""
-
-#: apps/io.ox/files/actions.js:611
-msgid "Drop here to upload a <b>new version</b>"
-msgstr ""
-
-#: apps/io.ox/files/actions.js:708
-msgid "View Slideshow"
-msgstr ""
-
-#: apps/io.ox/core/main.js:281 apps/io.ox/files/actions.js:717
-msgid "Fullscreen"
-msgstr ""
-
-#: apps/io.ox/files/actions.js:725
-msgid "Play audio files"
-msgstr ""
-
-#: apps/io.ox/files/actions.js:732
-msgid "Play video files"
+#: apps/io.ox/core/api/folder.js:370
+msgid "New Folder"
 msgstr ""
 
 #: apps/plugins/portal/rss/register.js:54
@@ -673,6 +572,12 @@ msgstr ""
 msgid "The updater provides a simple installation wizard. Follow the instructions to install the application. The updater will inform you of any updates for the Connector for Microsoft Outlook and the Notifier. You can download the updates from within the updater."
 msgstr ""
 
+#: apps/io.ox/core/tk/attachments.js:243 apps/io.ox/files/actions.js:492
+#: apps/io.ox/files/actions.js:567 apps/io.ox/mail/actions.js:793
+#: apps/io.ox/tasks/actions.js:427 apps/plugins/portal/updater/register.js:35
+msgid "Download"
+msgstr ""
+
 #: apps/plugins/portal/updater/register.js:43
 msgid "Updater"
 msgstr ""
@@ -1019,6 +924,13 @@ msgstr ""
 msgid "10 minutes"
 msgstr ""
 
+#: apps/io.ox/contacts/distrib/create-dist-view.js:79
+#: apps/io.ox/files/actions.js:220 apps/io.ox/files/actions.js:226
+#: apps/io.ox/mail/settings/signatures/register.js:64
+#: apps/io.ox/mail/settings/signatures/register.js:65
+msgid "Name"
+msgstr ""
+
 #: apps/io.ox/mail/settings/signatures/register.js:71
 msgid "Signature insertion:"
 msgstr ""
@@ -1065,6 +977,26 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/register.js:292
 msgid "Add"
+msgstr ""
+
+#: apps/io.ox/calendar/actions.js:382
+#: apps/io.ox/calendar/edit/recurrence-view.js:238
+#: apps/io.ox/calendar/edit/recurrence-view.js:820
+#: apps/io.ox/contacts/actions.js:334 apps/io.ox/files/actions.js:476
+#: apps/io.ox/mail/actions.js:626 apps/io.ox/mail/actions.js:651
+#: apps/io.ox/mail/actions.js:667
+#: apps/io.ox/mail/settings/signatures/register.js:272
+#: apps/io.ox/mail/settings/signatures/register.js:293
+#: apps/io.ox/portal/settings/pane.js:140 apps/io.ox/tasks/actions.js:300
+#: apps/plugins/portal/flickr/settings/plugin.js:56
+#: apps/plugins/portal/flickr/settings/plugin.js:115
+#: apps/plugins/portal/reddit/settings/plugin.js:29
+#: apps/plugins/portal/reddit/settings/plugin.js:227
+#: apps/plugins/portal/rss/settings/plugin.js:334
+#: apps/plugins/portal/rss/settings/plugin.js:393
+#: apps/plugins/portal/tumblr/settings/plugin.js:29
+#: apps/plugins/portal/tumblr/settings/plugin.js:80
+msgid "Edit"
 msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/register.js:301
@@ -1503,8 +1435,24 @@ msgstr[1] ""
 msgid "Mail source"
 msgstr ""
 
+#: apps/io.ox/calendar/actions.js:270 apps/io.ox/calendar/actions.js:306
+#: apps/io.ox/calendar/actions.js:398 apps/io.ox/contacts/actions.js:151
+#: apps/io.ox/contacts/actions.js:356 apps/io.ox/core/commons-folderview.js:279
+#: apps/io.ox/files/actions.js:344 apps/io.ox/files/actions.js:527
+#: apps/io.ox/mail/actions.js:221 apps/io.ox/mail/actions.js:697
+#: apps/io.ox/mail/actions.js:713 apps/io.ox/tasks/actions.js:149
+#: apps/io.ox/tasks/actions.js:405
+msgid "Move"
+msgstr ""
+
 #: apps/io.ox/mail/actions.js:221
 msgid "Mails have been moved"
+msgstr ""
+
+#: apps/io.ox/contacts/actions.js:157 apps/io.ox/contacts/actions.js:363
+#: apps/io.ox/files/actions.js:350 apps/io.ox/files/actions.js:534
+#: apps/io.ox/mail/actions.js:222 apps/io.ox/mail/actions.js:721
+msgid "Copy"
 msgstr ""
 
 #: apps/io.ox/mail/actions.js:222
@@ -1551,6 +1499,11 @@ msgstr ""
 
 #: apps/io.ox/mail/actions.js:730
 msgid "View source"
+msgstr ""
+
+#: apps/io.ox/contacts/actions.js:349 apps/io.ox/files/actions.js:550
+#: apps/io.ox/mail/actions.js:754
+msgid "Add to portal"
 msgstr ""
 
 #: apps/io.ox/mail/actions.js:763
@@ -1662,6 +1615,10 @@ msgstr ""
 msgid "Default calendar view"
 msgstr ""
 
+#: apps/io.ox/calendar/settings/pane.js:33 apps/io.ox/files/actions.js:432
+msgid "View"
+msgstr ""
+
 #: apps/io.ox/calendar/settings/pane.js:34
 msgid "Time range for the calender view"
 msgstr ""
@@ -1725,6 +1682,11 @@ msgstr ""
 #: apps/io.ox/calendar/actions.js:360 apps/io.ox/calendar/settings/pane.js:63
 #: apps/io.ox/calendar/settings/pane.js:68
 msgid "Month"
+msgstr ""
+
+#: apps/io.ox/calendar/actions.js:367 apps/io.ox/calendar/settings/pane.js:64
+#: apps/io.ox/files/actions.js:448
+msgid "List"
 msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js:70
@@ -2234,6 +2196,19 @@ msgstr ""
 msgid "All day"
 msgstr ""
 
+#: apps/io.ox/calendar/edit/template.js:203
+#: apps/io.ox/contacts/view-detail.js:218 apps/io.ox/files/actions.js:258
+#: apps/io.ox/files/actions.js:263 apps/io.ox/files/actions.js:264
+#: apps/io.ox/tasks/edit/view-template.js:47
+#: apps/plugins/portal/flickr/settings/plugin.js:100
+#: apps/plugins/portal/flickr/settings/plugin.js:278
+#: apps/plugins/portal/rss/settings/plugin.js:202
+#: apps/plugins/portal/rss/settings/plugin.js:265
+#: apps/plugins/portal/tumblr/settings/plugin.js:71
+#: apps/plugins/portal/tumblr/settings/plugin.js:241
+msgid "Description"
+msgstr ""
+
 #: apps/io.ox/calendar/edit/template.js:251
 msgid "%1$d Minute"
 msgid_plural "%1$d Minutes"
@@ -2281,13 +2256,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/template.js:304
 msgid "Type"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/template.js:305 apps/io.ox/contacts/model.js:309
-#: apps/io.ox/core/tk/folderviews.js:819 apps/io.ox/core/tk/folderviews.js:834
-#: apps/io.ox/core/tk/folderviews.js:835
-#: apps/io.ox/tasks/edit/view-template.js:125
-msgid "Private"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/template.js:338
@@ -2461,47 +2429,6 @@ msgstr ""
 
 #: apps/io.ox/core/tk/vgrid.js:574
 msgid "Could not load this list"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:498
-msgid "New folder"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:518
-msgid "Add new subfolder"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:525 apps/io.ox/core/tk/folderviews.js:601
-msgid "Folder name"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:532
-msgid "Add folder"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:558
-msgid "Do you really want to delete folder \042%s\042?"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:585
-msgid "This is a standard folder, which can't be renamed."
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:593
-msgid "Rename folder"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:167
-#: apps/io.ox/core/tk/folderviews.js:657
-msgid "Subscribe IMAP folders"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:834
-msgid "Public"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:834
-msgid "Shared"
 msgstr ""
 
 #: apps/io.ox/core/permissions/permissions.js:31
@@ -2781,6 +2708,10 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
+#: apps/io.ox/core/main.js:281 apps/io.ox/files/actions.js:717
+msgid "Fullscreen"
+msgstr ""
+
 #: apps/io.ox/core/about.js:36 apps/io.ox/core/main.js:276
 #: apps/io.ox/core/main.js:295
 msgid "About"
@@ -2816,10 +2747,6 @@ msgstr ""
 
 #: apps/io.ox/core/about.js:25
 msgid "Contact: %1$s"
-msgstr ""
-
-#: apps/io.ox/core/api/folder.js:370
-msgid "New Folder"
 msgstr ""
 
 #: apps/io.ox/core/desktop.js:458
@@ -3107,6 +3034,80 @@ msgstr ""
 #. Appears in file icon view during searches
 #: apps/io.ox/files/icons/perspective.js:59
 msgid "Searched for: %1$s"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:154
+msgid "File: %1$s"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:154
+msgid "Direct link: %1$s"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:181 apps/io.ox/files/actions.js:390
+msgid "Do you really want to delete this file?"
+msgid_plural "Do you really want to delete these files?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/files/actions.js:364
+msgid "This file has been added to the portal"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:423
+msgid "Upload new file"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:441
+msgid "Icons"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:484 apps/io.ox/files/actions.js:560
+msgid "Open"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:499
+msgid "Send as link"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:506
+msgid "Send by mail"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:520
+msgid "Edit description"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:574
+msgid "Make this the current version"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:581
+msgid "Delete version"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:591
+msgid "Drop here to upload a <b>new file</b>"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:605
+msgid "Drop here to upload a <b>new version</b> of \042%1$s\042"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:611
+msgid "Drop here to upload a <b>new version</b>"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:708
+msgid "View Slideshow"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:725
+msgid "Play audio files"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:732
+msgid "Play video files"
 msgstr ""
 
 #: apps/io.ox/help/center.js:128
