@@ -54,7 +54,7 @@ define('io.ox/office/tk/view/sidepane',
         this.createToolBox = function (id, options) {
 
             var // create a new tool box object
-                toolBox = new ToolBox(app, options);
+                toolBox = new ToolBox(options);
 
             // add the tool box to this side pane
             this.addViewComponent(toolBox);

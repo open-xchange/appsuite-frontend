@@ -14,11 +14,10 @@
 define('io.ox/office/tk/view/component',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
-     'io.ox/office/tk/dropdown/scrollable',
      'io.ox/office/tk/control/group',
      'io.ox/office/tk/control/label',
      'io.ox/office/tk/control/button'
-    ], function (Events, Utils, Scrollable, Group, Label, Button) {
+    ], function (Events, Utils, Group, Label, Button) {
 
     'use strict';
 
@@ -32,10 +31,7 @@ define('io.ox/office/tk/view/component',
 
     /**
      * Base class for view components that can be registered at a controller.
-     * Contains instances of Group objects (controls or groups of controls),
-     * receives UI update events from the controller to update the state of the
-     * control groups, and forwards change actions from the control groups to
-     * the controller.
+     * Contains instances of Group objects (controls or groups of controls).
      *
      * Instances of this class trigger the following events:
      * - 'change': If a control has been activated. The event handler receives
@@ -46,9 +42,6 @@ define('io.ox/office/tk/view/component',
      *  closes the opened drop-down menu).
      *
      * @constructor
-     *
-     * @param {Application} app
-     *  The application instance.
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the new view component.
@@ -68,7 +61,7 @@ define('io.ox/office/tk/view/component',
      *      of the respective controller item. If omitted, the view component
      *      will be visible initially, and will not control its visibility.
      */
-    function Component(app, options) {
+    function Component(options) {
 
         var // self reference
             self = this,
@@ -82,12 +75,6 @@ define('io.ox/office/tk/view/component',
             // all control groups, mapped by key
             groupsByKey = {},
 
-            // group initializer waiting for the first window 'show' event
-            deferredInit = $.Deferred(),
-
-            // whether the application window has been shown at least once
-            windowShown = false,
-
             // callback for insertion of new groups
             insertGroupHandler = Utils.getFunctionOption(options, 'insertGroupHandler'),
 
@@ -95,16 +82,6 @@ define('io.ox/office/tk/view/component',
             visibleKey = Utils.getStringOption(options, 'visible');
 
         // private methods ----------------------------------------------------
-
-        /**
-         * Resolves the deferred initializer, if this view component and the
-         * application window are both visible.
-         */
-        function initialize() {
-            if (windowShown && self.isVisible()) {
-                deferredInit.resolve();
-            }
-        }
 
         /**
          * Inserts the passed control group into this view component, either by
@@ -119,14 +96,6 @@ define('io.ox/office/tk/view/component',
 
             // remember the group object
             groups.push(group);
-
-            // Trigger an 'init' event at the group when the container window
-            // becomes visible the first time. The 'deferredInit' object will
-            // be resolved on the first window 'show' event and will execute
-            // all done handlers attached here. If the window is already
-            // visible when calling this method, the deferred is resolved and
-            // will execute the new done handler immediately.
-            deferredInit.done(function () { group.trigger('init'); });
 
             // insert the group into this view component
             if (_.isFunction(insertGroupHandler)) {
@@ -234,7 +203,6 @@ define('io.ox/office/tk/view/component',
          */
         this.show = function () {
             node.removeClass(HIDDEN_CLASS);
-            initialize();
             return this;
         };
 
@@ -450,9 +418,8 @@ define('io.ox/office/tk/view/component',
          */
         this.destroy = function () {
             node.off().remove();
-            app.getController().unregisterViewComponent(this);
             this.events.destroy();
-            self = node = groups = groupsByKey = deferredInit = null;
+            self = node = groups = groupsByKey = null;
         };
 
         // initialization -----------------------------------------------------
@@ -462,12 +429,6 @@ define('io.ox/office/tk/view/component',
 
         // additional CSS classes
         node.addClass(Utils.getStringOption(options, 'classes', ''));
-
-        // register this view component at the application controller
-        app.getController().registerViewComponent(this);
-
-        // wait for the first window 'show' event and trigger an 'init' event at all groups
-        app.getWindow().one('show', function () { windowShown = true; initialize(); });
 
         // listen to key events for keyboard focus navigation
         node.on('keydown keypress keyup', keyHandler);

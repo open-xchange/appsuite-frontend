@@ -198,7 +198,7 @@ define('io.ox/office/tk/control/textfield',
         /**
          * Returns the text control element, as jQuery object.
          */
-        this.getTextField = function () {
+        this.getTextFieldNode = function () {
             return textField;
         };
 

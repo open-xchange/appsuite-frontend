@@ -13,16 +13,24 @@
 
 define('io.ox/office/tk/dropdown/dropdown',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/view/component',
      'io.ox/office/tk/control/group'
-    ], function (Utils, Group) {
+    ], function (Utils, Component, Group) {
 
     'use strict';
 
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
 
-        // CSS class for the group node, if drop-down menu is opened
-        MENUOPEN_CLASS = 'menu-open';
+        // width and height of system scroll bars, in pixels
+        SCROLLBAR_WIDTH = 0,
+        SCROLLBAR_HEIGHT = 0,
+
+        // padding of drop-down menu to browser window borders, in pixels
+        WINDOW_BORDER_PADDING = 6,
+
+        // padding of drop-down menu to parent group node, in pixels
+        GROUP_BORDER_PADDING = 1;
 
     // class DropDown =========================================================
 
@@ -39,20 +47,26 @@ define('io.ox/office/tk/dropdown/dropdown',
      *
      * @constructor
      *
-     * @param {HTMLElement|jQuery} contentNode
-     *  The contents of the drop down menu.
-     *
      * @param {Object} [options]
      *  A map of options to control the properties of the drop-down button.
      *  Supports all generic button formatting options (see method
      *  Utils.createButton() for details). Additionally, the following options
      *  are supported:
-     *  @param {Boolean} [options.plainCaret]
+     *  @param {Boolean} [options.plainCaret=false]
      *      If set to true, the drop-down button will not contain a caption or
      *      any other formatting, regardless of the other settings in the
-     *      options object.
+     *      options object. Can be used to mix-in the drop-down button into a
+     *      complex control group where the options object contains the
+     *      formatting for the main group contents.
+     *  @param {Boolean} [options.autoLayout=false]
+     *      If set to true, the drop-down menu will be positioned and sized
+     *      automatically. If the available space is not sufficient for the
+     *      contents of the drop-down menu, scroll bars will be displayed. If
+     *      set to false (or omitted), the drop-down menu will appear below the
+     *      group node and will be sized according to the drop-down menu
+     *      contents even if the menu exceeds the browser window.
      */
-    function DropDown(contentNode, options) {
+    function DropDown(options) {
 
         var // self reference (the Group instance)
             self = this,
@@ -60,25 +74,50 @@ define('io.ox/office/tk/dropdown/dropdown',
             // the root node of the group object
             groupNode = this.getNode(),
 
+            // plain caret button, or button with caption and formatting
+            plainCaret = Utils.getBooleanOption(options, 'plainCaret', false),
+
+            // automatic position and size of the drop-down menu
+            autoLayout = Utils.getBooleanOption(options, 'autoLayout', false),
+
             // the icon for the drop-down caret
             caretIcon = Utils.createIcon('caret-icon', Utils.getBooleanOption(options, 'whiteIcon')).addClass('down'),
 
             // the drop-down caret
             caretSpan = $('<span>').addClass('dropdown-caret').append(caretIcon),
 
-            // plain caret button, or button with caption and formatting
-            plainCaret = Utils.getBooleanOption(options, 'plainCaret', false),
-
             // the drop-down button
             menuButton = Utils.createButton(plainCaret ? {} : options).addClass('dropdown-button').append(caretSpan),
 
-            // the drop-down menu element
-            menuNode = $('<div>').addClass('dropdown-menu').append(contentNode),
+            // the view component embedded in the drop-down menu
+            menuComponent = new Component(),
+
+            // the drop-down menu element containing the menu view component
+            menuNode = $('<div>').addClass('io-ox-office-dropdown-container').append(menuComponent.getNode()),
 
             // additional controls that toggle the drop-down menu
             menuToggleControls = $();
 
         // private methods ----------------------------------------------------
+
+        /**
+         * Returns the absolute position of the group node in the browser
+         * window.
+         *
+         * @returns {Object}
+         *  An object with 'left', 'top', 'width', and 'height' attributes.
+         */
+        function getGroupDimensions() {
+
+            var // get position of the group
+                groupDim = groupNode.offset();
+
+            // add group size
+            groupDim.width = groupNode.outerWidth();
+            groupDim.height = groupNode.outerHeight();
+
+            return groupDim;
+        }
 
         /**
          * Changes the visibility of the drop-down menu. Triggers a 'menuopen'
@@ -92,10 +131,16 @@ define('io.ox/office/tk/dropdown/dropdown',
         function toggleMenu(state) {
 
             var // whether to show or hide the menu
-                show = (state === true) || ((state !== false) && !self.isMenuVisible());
+                show = (state === true) || ((state !== false) && !self.isMenuVisible()),
+                // position and size of the group node
+                groupDim = getGroupDimensions();
 
             if (show && !self.isMenuVisible()) {
-                groupNode.addClass(MENUOPEN_CLASS);
+                $('body').append(menuNode);
+                menuNode.css({
+                    top: groupDim.top + groupDim.height + GROUP_BORDER_PADDING,
+                    left: groupDim.left
+                });
                 self.trigger('menuopen');
                 // Add a global click handler to close the menu automatically
                 // when clicking somewhere in the page. Listening to the
@@ -117,9 +162,9 @@ define('io.ox/office/tk/dropdown/dropdown',
                 if (Utils.containsFocusedControl(menuNode)) {
                     menuButton.focus();
                 }
-                groupNode.removeClass(MENUOPEN_CLASS);
                 self.trigger('menuclose');
                 $(document).off('mousedown click', globalClickHandler);
+                menuNode.detach();
             }
         }
 
@@ -223,13 +268,55 @@ define('io.ox/office/tk/dropdown/dropdown',
             }
         }
 
-        // methods ------------------------------------------------------------
-
         /**
-         * A simple boolean marker to test whether the group contains a
-         * drop-down menu.
+         * Initializes the size and position of the drop-down menu.
          */
-        this.hasDropDown = true;
+        function windowResizeHandler() {
+
+            var // position and size of the parent group node
+                groupDim = getGroupDimensions(),
+                // available width for contents of the drop-down menu
+                availableWidth = window.innerWidth - 2 * WINDOW_BORDER_PADDING,
+                // available height for contents of the drop-down menu
+                availableHeight = 0,
+                // vertical space above the group node
+                availableAbove = groupDim.top - WINDOW_BORDER_PADDING - GROUP_BORDER_PADDING,
+                // vertical space above the group node
+                availableBelow = window.innerHeight - groupDim.top - groupDim.height - WINDOW_BORDER_PADDING - GROUP_BORDER_PADDING;
+
+            // set size of menu node to 'auto' to be able to obtain the effective size
+            menuNode.css({ width: 'auto', height: 'auto', top: 0, bottom: '', left: 0, right: '' });
+
+            // decide whether to position the drop-down menu above or below the group node
+            if ((menuNode.height() <= availableBelow) || (availableAbove <= availableBelow)) {
+                menuNode.css({ top: (groupDim.top + groupDim.height + GROUP_BORDER_PADDING) + 'px', bottom: '' });
+                availableHeight = availableBelow;
+            } else {
+                menuNode.css({ top: '', bottom: (window.innerHeight - groupDim.top + GROUP_BORDER_PADDING) + 'px' });
+                availableHeight = availableAbove;
+            }
+
+            // add space for scroll bars if available width or height is not sufficient
+            menuNode.css({
+                width: Math.min(availableWidth, menuNode.width() + ((menuNode.height() > availableHeight) ? SCROLLBAR_WIDTH : 0)) + 'px',
+                height: Math.min(availableHeight, menuNode.height() + ((menuNode.width() > availableWidth) ? SCROLLBAR_HEIGHT : 0)) + 'px'
+            });
+
+            // horizontal position: prefer left-aligned, but do not exceed right border of browser window
+            menuNode.css('left', Math.min(groupDim.left, window.innerWidth - WINDOW_BORDER_PADDING - menuNode.width()) + 'px');
+        }
+
+        function menuOpenHandler() {
+            $(window).on('resize', windowResizeHandler);
+            windowResizeHandler();
+            menuNode.scrollTop(0).scrollLeft(0);
+        }
+
+        function menuCloseHandler() {
+            $(window).off('resize', windowResizeHandler);
+        }
+
+        // methods ------------------------------------------------------------
 
         /**
          * Returns the drop-down button added to the group.
@@ -246,31 +333,76 @@ define('io.ox/office/tk/dropdown/dropdown',
         };
 
         /**
+         * Returns the view component embedded in the drop-down menu.
+         */
+        this.getMenuComponent = function () {
+            return menuComponent;
+        };
+
+        /**
          * Returns whether the drop-down menu is currently visible.
          */
         this.isMenuVisible = function () {
-            return groupNode.hasClass(MENUOPEN_CLASS);
+            return menuNode.parent().length > 0;
         };
 
         /**
          * Shows the drop-down menu.
+         *
+         * @returns {DropDown}
+         *  A reference to this instance.
          */
         this.showMenu = function () {
             toggleMenu(true);
+            return this;
         };
 
         /**
          * Shows the drop-down menu.
+         *
+         * @returns {DropDown}
+         *  A reference to this instance.
          */
         this.hideMenu = function () {
             toggleMenu(false);
+            return this;
         };
 
         /**
          * Sets the focus into the first control element of the drop-down menu
-         * element. Intended to be overwritten by derived classes.
+         * element.
+         *
+         * @returns {DropDown}
+         *  A reference to this instance.
          */
         this.grabMenuFocus = function () {
+            menuComponent.grabFocus();
+            return this;
+        };
+
+        /**
+         * Adds a private group into the view component of the drop-down menu.
+         * The events of this group will be forwarded to the listeners of this
+         * group instance. Listeners of the view component embedded in the
+         * drop-down menu will not be notified.
+         *
+         * @param {Group} group
+         *  The group that will be inserted into the drop-down menu.
+         *
+         * @returns {DropDown}
+         *  A reference to this instance.
+         */
+        this.addPrivateMenuGroup = function (group) {
+
+            // insert the passed group into the view component of the drop-down menu
+            menuComponent.addPrivateGroup(group);
+
+            // forward events of the embedded group to listeners of this group
+            group.on('change cancel', function (event, value) {
+                self.trigger(event.type, value);
+            });
+
+            return this;
         };
 
         /**
@@ -279,12 +411,16 @@ define('io.ox/office/tk/dropdown/dropdown',
          *
          * @param {jQuery} controls
          *  The controls to be registered as menu toggle controls.
+         *
+         * @returns {DropDown}
+         *  A reference to this instance.
          */
         this.addMenuToggleControls = function (controls) {
             controls
                 .on('click', menuButtonClickHandler)
                 .on('keydown keypress keyup', menuButtonKeyHandler);
             menuToggleControls = menuToggleControls.add(controls);
+            return this;
         };
 
         /**
@@ -293,21 +429,22 @@ define('io.ox/office/tk/dropdown/dropdown',
          *
          * @param {jQuery} controls
          *  The controls to be unregistered as menu toggle controls.
+         *
+         * @returns {DropDown}
+         *  A reference to this instance.
          */
         this.removeMenuToggleControls = function (controls) {
             controls
                 .off('click', menuButtonClickHandler)
                 .off('keydown keypress keyup', menuButtonKeyHandler);
             menuToggleControls = menuToggleControls.not(controls);
+            return this;
         };
 
         // initialization -----------------------------------------------------
 
-        // marker class for extended formatting
-        groupNode.addClass('dropdown-group');
-
         // append menu button and menu to the group container
-        this.addFocusableControl(menuButton).addChildNodes(menuNode);
+        this.addFocusableControl(menuButton);
 
         // register event handlers, prepare drop-down button
         this.on('change cancel', function () { toggleMenu(false); });
@@ -319,7 +456,26 @@ define('io.ox/office/tk/dropdown/dropdown',
             .on('keydown keypress keyup', menuButtonKeyHandler);
         menuNode.on('keydown keypress keyup', menuKeyHandler);
 
+        if (autoLayout) {
+            this.on('menuopen', menuOpenHandler).on('menuclose', menuCloseHandler);
+        }
+
     } // class DropDown
+
+    // global initialization ==================================================
+
+    // calculate size of system scroll bars
+    (function () {
+
+        var // dummy containers used to calculate the scroll bar sizes
+            innerDiv = $('<div>').css({ width: '100%', height: '100%' }),
+            outerDiv = $('<div>').css({ width: '100px', height: '100px', overflow: 'scroll' }).append(innerDiv);
+
+        $('body').append(outerDiv);
+        SCROLLBAR_WIDTH = 100 - innerDiv.width();
+        SCROLLBAR_HEIGHT = 100 - innerDiv.height();
+        outerDiv.remove();
+    }());
 
     // exports ================================================================
 

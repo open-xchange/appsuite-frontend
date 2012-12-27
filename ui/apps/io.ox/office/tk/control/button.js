@@ -82,6 +82,13 @@ define('io.ox/office/tk/control/button',
         // methods ------------------------------------------------------------
 
         /**
+         * Returns the DOM button control node, as jQuery object.
+         */
+        this.getButtonNode = function () {
+            return button;
+        };
+
+        /**
          * Changes the icon of this button control.
          *
          * @param {String} [icon]

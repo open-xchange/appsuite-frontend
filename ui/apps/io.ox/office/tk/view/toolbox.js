@@ -28,11 +28,8 @@ define('io.ox/office/tk/view/toolbox',
      * @constructor
      *
      * @extends Component
-     *
-     * @param {Application} app
-     *  The application instance.
      */
-    function ToolBox(app, options) {
+    function ToolBox(options) {
 
         var // self reference
             self = this,
@@ -57,7 +54,7 @@ define('io.ox/office/tk/view/toolbox',
 
         // base constructor ---------------------------------------------------
 
-        Component.call(this, app, Utils.extendOptions(options, {
+        Component.call(this, Utils.extendOptions(options, {
             classes: Utils.getStringOption(options, 'classes', '') + ' toolbox'
         }));
 

@@ -13,9 +13,8 @@
 
 define('io.ox/office/tk/control/radiogroup',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/control/group',
-     'io.ox/office/tk/dropdown/list'
-    ], function (Utils, Group, List) {
+     'io.ox/office/tk/control/group'
+    ], function (Utils, Group) {
 
     'use strict';
 
@@ -27,20 +26,11 @@ define('io.ox/office/tk/control/radiogroup',
      * @constructor
      *
      * @extends Group
-     * @extends List
      *
      * @param {Object} [options]
-     *  A map of options to control the properties of the drop-down button and
-     *  menu. Supports all options of the Group base class, and of the List
-     *  mix-in class. Additionally, the following options are supported:
-     *  @param {String} [options.dropDown=false]
-     *      If set to true, a drop-down button will be created, showing a list
-     *      with all option buttons when opened. Otherwise, the option buttons
-     *      will be inserted directly into this group.
-     *  @param {Boolean} [options.highlight=false]
-     *      If set to true, the drop-down button will be highlighted if a list
-     *      item in the drop-down menu is active. Has no effect, if the radio
-     *      group is not in drop-down mode.
+     *  A map of options to control the properties of the radio group. Supports
+     *  all options of the Group base class. Additionally, the following
+     *  options are supported:
      *  @param [options.toggleValue]
      *      If set to a value different to null or undefined, the option button
      *      that is currently active can be clicked to be switched off. In that
@@ -48,42 +38,14 @@ define('io.ox/office/tk/control/radiogroup',
      *      value specified in this option, and the action handler will return
      *      this value instead of the value of the button that has been
      *      switched off.
-     *  @param {String} [options.updateCaptionMode='all']
-     *      Specifies how to update the caption of the drop-down button when a
-     *      list item in the drop-down menu has been activated. If set to
-     *      'label', only the label text of the list item will be copied. If
-     *      set to 'icon', only the icon will be copied. If set to 'none',
-     *      nothing will be copied. By default, icon and label of the list item
-     *      will be copied. Has no effect, if the radio group is not in
-     *      drop-down mode.
-     *  @param {Function} [options.updateCaptionHandler]
-     *      A function that will be called after a list item has been
-     *      activated, and the caption of the drop-down button has been updated
-     *      according to the 'options.updateCaptionMode' option. Receives the
-     *      button element of the activated list item (as jQuery object) in the
-     *      first parameter (empty jQuery object, if no list item is active),
-     *      and the value of the selected/activated list item in the second
-     *      parameter (also if this value does not correspond to any existing
-     *      list item). Will be called in the context of this radio group
-     *      instance. Has no effect, if the radio group is not in drop-down
-     *      mode.
      */
     function RadioGroup(options) {
 
         var // self reference
             self = this,
 
-            // whether to highlight the drop-down menu button
-            highlight = Utils.getBooleanOption(options, 'highlight', false),
-
             // fall-back value for toggle click
-            toggleValue = Utils.getOption(options, 'toggleValue'),
-
-            // which parts of a list item caption will be copied to the menu button
-            updateCaptionMode = Utils.getStringOption(options, 'updateCaptionMode', 'all'),
-
-            // custom update handler for the caption of the menu button
-            updateCaptionHandler = Utils.getFunctionOption(options, 'updateCaptionHandler');
+            toggleValue = Utils.getOption(options, 'toggleValue');
 
         // private methods ----------------------------------------------------
 
@@ -91,7 +53,7 @@ define('io.ox/office/tk/control/radiogroup',
          * Returns all option buttons as jQuery collection.
          */
         function getOptionButtons() {
-            return self.hasDropDown ? self.getListItems() : self.getNode().children(Utils.BUTTON_SELECTOR);
+            return self.getNode().children(Utils.BUTTON_SELECTOR);
         }
 
         /**
@@ -102,35 +64,7 @@ define('io.ox/office/tk/control/radiogroup',
          *  does not activate any button (ambiguous state).
          */
         function updateHandler(value) {
-
-            var // activate a radio button
-                button = Utils.selectOptionButton(getOptionButtons(), value),
-                // the options used to set the caption of the drop-down menu button
-                captionOptions = options;
-
-            if (self.hasDropDown) {
-
-                // highlight the drop-down button
-                Utils.toggleButtons(self.getMenuButton(), highlight && (button.length > 0));
-
-                // update the caption of the drop-down menu button
-                if (updateCaptionMode !== 'none') {
-                    if (button.length) {
-                        if (updateCaptionMode !== 'label') {
-                            captionOptions = Utils.extendOptions(captionOptions, { icon: Utils.getControlIcon(button) });
-                        }
-                        if (updateCaptionMode !== 'icon') {
-                            captionOptions = Utils.extendOptions(captionOptions, { label: Utils.getControlLabel(button) });
-                        }
-                    }
-                    Utils.setControlCaption(self.getMenuButton(), captionOptions);
-                }
-
-                // call custom update handler
-                if (_.isFunction(updateCaptionHandler)) {
-                    updateCaptionHandler.call(self, button, value);
-                }
-            }
+            Utils.selectOptionButton(getOptionButtons(), value);
         }
 
         /**
@@ -156,22 +90,14 @@ define('io.ox/office/tk/control/radiogroup',
         // base constructor ---------------------------------------------------
 
         Group.call(this, options);
-        // add drop-down list if specified
-        if (Utils.getBooleanOption(options, 'dropDown')) {
-            List.call(this, options);
-        }
 
         // methods ------------------------------------------------------------
 
         /**
-         * Removes all option buttons from this control.
+         * Removes all option buttons from this radio group.
          */
         this.clearOptionButtons = function () {
-            if (this.hasDropDown) {
-                this.clearListItems();
-            } else {
-                getOptionButtons().remove();
-            }
+            getOptionButtons().remove();
         };
 
         /**
@@ -198,19 +124,11 @@ define('io.ox/office/tk/control/radiogroup',
             var // options for the new button, including the passed value
                 buttonOptions = Utils.extendOptions(options, { value: value }),
                 // the new button
-                button = null;
-
-            // insert the button depending on the drop-down mode
-            if (this.hasDropDown) {
-                button = this.createListItem(buttonOptions);
-            } else {
                 button = Utils.createButton(buttonOptions);
-                this.addFocusableControl(button);
-            }
 
-            // add tool tip
+            // insert the button, add tool tip
+            this.addFocusableControl(button);
             Utils.setControlTooltip(button, Utils.getStringOption(options, 'tooltip'), 'bottom');
-
             return this;
         };
 
@@ -218,7 +136,7 @@ define('io.ox/office/tk/control/radiogroup',
 
         // register event handlers
         this.registerUpdateHandler(updateHandler)
-            .registerActionHandler(this.hasDropDown ? this.getMenuNode() : this.getNode(), 'click', Utils.BUTTON_SELECTOR, clickHandler);
+            .registerActionHandler(this.getNode(), 'click', Utils.BUTTON_SELECTOR, clickHandler);
 
     } // class RadioGroup
 

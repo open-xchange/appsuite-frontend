@@ -25,10 +25,7 @@ define('io.ox/office/tk/utils',
         ICON_SELECTOR = 'span[data-role="icon"]',
 
         // selector for the label <span> element in a control caption
-        LABEL_SELECTOR = 'span[data-role="label"]',
-
-        // selector for <span> elements in a control caption
-        CAPTION_SELECTOR = ICON_SELECTOR + ', ' + LABEL_SELECTOR;
+        LABEL_SELECTOR = 'span[data-role="label"]';
 
     // static class Utils =====================================================
 
@@ -1363,9 +1360,9 @@ define('io.ox/office/tk/utils',
      *  A map of options to control the properties of the new element. The
      *  following options are supported:
      *  @param [options.value]
-     *      A value or object that will be copied to the 'data-value' attribute
-     *      of the control. Will be converted to a JSON string. Must not be
-     *      null. The undefined value will be ignored.
+     *      A value, object, or function that will be copied to the
+     *      'data-value' attribute of the control. Must not be null or
+     *      undefined.
      *  @param [options.userData]
      *      A value or object that will be copied to the 'data-userdata'
      *      attribute of the control. May contain any user-defined data.
@@ -1396,13 +1393,15 @@ define('io.ox/office/tk/utils',
 
     /**
      * Returns the value stored in the 'value' data attribute of the first
-     * control in the passed jQuery collection.
+     * control in the passed jQuery collection. If the stored value is a
+     * function, calls that function and returns its result.
      *
      * @param {jQuery} control
      *  A jQuery collection containing a control element.
      */
     Utils.getControlValue = function (control) {
-        return control.first().data('value');
+        var value = control.first().data('value');
+        return _.isFunction(value) ? value() : value;
     };
 
     /**
@@ -1413,8 +1412,8 @@ define('io.ox/office/tk/utils',
      *  A jQuery collection containing a control element.
      *
      * @param value
-     *  A value or object that will be copied to the 'value' data attribute of
-     *  the control. Must not be null. The undefined value will be ignored.
+     *  A value, object, or function that will be copied to the 'value' data
+     *  attribute of the control. Must not be null or undefined.
      */
     Utils.setControlValue = function (control, value) {
         if (!_.isUndefined(value) && !_.isNull(value)) {

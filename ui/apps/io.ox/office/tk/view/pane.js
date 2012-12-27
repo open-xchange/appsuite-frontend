@@ -51,7 +51,8 @@ define('io.ox/office/tk/view/pane', ['io.ox/office/tk/utils'], function (Utils) 
         };
 
         /**
-         * Adds the passed view component into this pane.
+         * Adds the passed view component into this pane, and registers it at
+         * the application controller.
          *
          * @param {Component} component
          *  The view component to be added to this pane.
@@ -62,11 +63,15 @@ define('io.ox/office/tk/view/pane', ['io.ox/office/tk/utils'], function (Utils) 
         this.addViewComponent = function (component) {
             components.push(component);
             node.append(component.getNode());
+            app.getController().registerViewComponent(component);
             return this;
         };
 
         this.destroy = function () {
-            _(components).invoke('destroy');
+            _(components).each(function (component) {
+                app.getController().unregisterViewComponent(component);
+                component.destroy();
+            });
             node = components = null;
         };
 

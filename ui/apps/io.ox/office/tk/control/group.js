@@ -35,6 +35,14 @@ define('io.ox/office/tk/control/group',
      * the base class for specialized groups and does not add any specific
      * functionality to the inserted controls.
      *
+     * Instances of this class trigger the following events:
+     * - 'change': If the control has been activated in a special way depending
+     *  on the type of the control group. The event handler receives the value
+     *  of the activated control.
+     * - 'cancel': When the focus needs to be returned to the application (e.g.
+     *  when the Escape key is pressed, or when a click on a drop-down button
+     *  closes the opened drop-down menu).
+     *
      * @constructor
      *
      * @param {Object} [options]

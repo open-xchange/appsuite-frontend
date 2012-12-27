@@ -14,8 +14,8 @@
 define('io.ox/office/tk/control/colorchooser',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/group',
-     'io.ox/office/tk/dropdown/scrollable'
-    ], function (Utils, Group, Scrollable) {
+     'io.ox/office/tk/dropdown/dropdown'
+    ], function (Utils, Group, DropDown) {
 
     'use strict';
 
@@ -31,12 +31,12 @@ define('io.ox/office/tk/control/colorchooser',
      * @constructor
      *
      * @extends Group
-     * @extends Scrollable
+     * @extends DropDown
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the drop-down button and
      *  menu. Supports all options of the Group base class, and of the
-     *  Scrollable mix-in class. Additionally, the following options are
+     *  DropDown mix-in class. Additionally, the following options are
      *  supported:
      *  @param {Number} [options.columns=10]
      *      The number of color buttons shown in a single row.
@@ -49,11 +49,11 @@ define('io.ox/office/tk/control/colorchooser',
      */
     function ColorChooser(options) {
 
-        var // the drop-down menu container element
-            colorTable = $('<div>'),
+        var // the color table control in the drop-down menu
+            colorGroup = new Group(options),
 
             // the color box in the drop-down button
-            colorBox = $('<div>'),
+            colorBox = $('<div>').addClass('color-box'),
 
             // number of color buttons per table row
             columns = Utils.getIntegerOption(options, 'columns', 10, 1),
@@ -69,10 +69,10 @@ define('io.ox/office/tk/control/colorchooser',
         function createColorButton(value, options) {
 
             var // create the button element
-                button = Utils.createButton(Utils.extendOptions(options, { value: value }));
+                button = Utils.createButton(Utils.extendOptions(options, { value: value })).addClass(Group.FOCUSABLE_CLASS);
 
             // add the colored box and the tool tip
-            button.prepend($('<div>').addClass('color-box').css('background-color', cssColorResolver.call(this, value)));
+            button.prepend($('<div>').addClass('color-button').css('background-color', cssColorResolver.call(this, value)));
             Utils.setControlTooltip(button, Utils.getStringOption(options, 'tooltip'), 'top');
 
             return button;
@@ -82,7 +82,7 @@ define('io.ox/office/tk/control/colorchooser',
          * Returns all color button elements.
          */
         function getColorButtons() {
-            return colorTable.find(Utils.BUTTON_SELECTOR);
+            return colorGroup.getNode().find(Utils.BUTTON_SELECTOR);
         }
 
         /**
@@ -169,19 +169,9 @@ define('io.ox/office/tk/control/colorchooser',
         // base constructor ---------------------------------------------------
 
         Group.call(this, options);
-        Scrollable.call(this, colorTable, options);
+        DropDown.call(this, Utils.extendOptions(options, { autoLayout: true }));
 
         // methods ------------------------------------------------------------
-
-        /**
-         * Sets the focus to the first color button in the drop-down menu.
-         */
-        this.grabMenuFocus = function () {
-            if (!Utils.containsFocusedControl(colorTable)) {
-                getColorButtons().first().focus();
-            }
-            return this;
-        };
 
         /**
          * Removes all color buttons and section headers from the drop-down
@@ -191,7 +181,7 @@ define('io.ox/office/tk/control/colorchooser',
          *  A reference to this instance.
          */
         this.clearColorTable = function () {
-            colorTable.empty();
+            colorGroup.getNode().empty();
             return this;
         };
 
@@ -202,16 +192,35 @@ define('io.ox/office/tk/control/colorchooser',
          *  A reference to this instance.
          */
         this.addSectionHeader = function (options) {
-            return Utils.createLabel(options).appendTo(colorTable);
+            return Utils.createLabel(options).appendTo(colorGroup.getNode());
         };
 
+        /**
+         * Adds a new color button to the current section. The color button
+         * will take the full width of the color chooser control.
+         *
+         * @param value
+         *  The unique value associated to the color button. Must not be null
+         *  or undefined. If no CSS color resolver function has been passed to
+         *  the constructor options, this value MUST be a valid CSS color
+         *  string.
+         *
+         * @param {Object} [options]
+         *  A map of options to control the properties of the new color button.
+         *  The following options are supported:
+         *  @param {String} [options.tooltip]
+         *      Tool tip text shown when the mouse hovers the color button.
+         *
+         * @returns {ColorChooser}
+         *  A reference to this instance.
+         */
         this.addWideColorButton = function (value, options) {
 
             var // create the button element
                 button = createColorButton(value, options);
 
             // add the button in its own node to the color table
-            colorTable.append($('<div>').append(button));
+            colorGroup.getNode().append($('<div>').append(button));
 
             return this;
         };
@@ -242,9 +251,9 @@ define('io.ox/office/tk/control/colorchooser',
                 button = createColorButton(value, { tooltip: Utils.getStringOption(options, 'tooltip') });
 
             // create a new table element for the button if required
-            table = colorTable.children().last();
+            table = colorGroup.getNode().children().last();
             if (!table.is('table')) {
-                table = $('<table>').appendTo(colorTable);
+                table = $('<table>').appendTo(colorGroup.getNode());
             }
 
             // create a new table row element for the button if required
@@ -261,25 +270,20 @@ define('io.ox/office/tk/control/colorchooser',
 
         // initialization -----------------------------------------------------
 
-        // initialize the drop-down element
-        this.getMenuNode().addClass('color-table');
-
-        // add the color box to the menu button
-        this.getMenuButton().append(colorBox.css({
-            position: 'absolute',
-            bottom: '2px',
-            height: '3px',
-            left: '6px',
-            right: '6px',
-            border: '1px solid rgba(0, 0, 0, 0.2)'
-        }));
+        // add the color picker control to the drop-down view component
+        this.addPrivateMenuGroup(colorGroup);
 
         // register event handlers
-        colorTable.on('keydown keypress keyup', menuKeyHandler);
+        colorGroup.getNode()
+            .addClass('color-chooser')
+            .on('keydown keypress keyup', menuKeyHandler);
+
+        // add the color preview box to the menu button
+        this.getMenuButton().append(colorBox);
 
         // register event handlers
         this.registerUpdateHandler(updateHandler)
-            .registerActionHandler(this.getMenuNode(), 'click', Utils.BUTTON_SELECTOR, clickHandler);
+            .registerActionHandler(colorGroup.getNode(), 'click', Utils.BUTTON_SELECTOR, clickHandler);
 
     } // class ColorChooser
 

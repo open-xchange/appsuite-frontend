@@ -11,6 +11,9 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
+/* restrict all definitions to office applications */
+.io-ox-office-main, .io-ox-office-dropdown-container {
+
 /* ========================================================================= */
 /* generic mix-in classes                                                    */
 /* ========================================================================= */
@@ -34,11 +37,8 @@
     -o-transition-property: none;
 }
 
-/* restrict all definitions to office applications */
-.io-ox-office-main {
-
 /* ========================================================================= */
-/* OX icons                                                                  */
+/* icons                                                                     */
 /* ========================================================================= */
 
 @icon-size: 14px;
@@ -62,18 +62,22 @@ i.io-ox-office-icon {
         background-image: url(img/ox-office-icons-white.png);
     }
 
-    &.caret-icon {
-        width: @caret-width;
-        &.down              { background-position:      0      0; }
-        &.up                { background-position:  -20px      0; }
-        &.left              { background-position:  -40px      0; }
-        &.right             { background-position:  -60px      0; }
+    .icon-position(@x, @y) {
+        background-position: -(20px * @x) -(20px * @y);
     }
 
-    &.arrow-first           { background-position:  -80px      0; }
-    &.arrow-previous        { background-position: -100px      0; }
-    &.arrow-next            { background-position: -120px      0; }
-    &.arrow-last            { background-position: -140px      0; }
+    &.caret-icon {
+        width: @caret-width;
+        &.down              { .icon-position(0, 0); }
+        &.up                { .icon-position(1, 0); }
+        &.left              { .icon-position(2, 0); }
+        &.right             { .icon-position(3, 0); }
+    }
+
+    &.arrow-first           { .icon-position(4, 0); }
+    &.arrow-previous        { .icon-position(5, 0); }
+    &.arrow-next            { .icon-position(6, 0); }
+    &.arrow-last            { .icon-position(7, 0); }
 }
 
 /* ========================================================================= */
@@ -229,6 +233,17 @@ i.io-ox-office-icon {
             &.selected {
                 background-color: @button-selected-color;
             }
+
+            /* color box below the button caption */
+            > div.color-box {
+                position: absolute;
+                bottom: 2px;
+                height: 3px;
+                left: 6px;
+                right: 6px;
+                background: none;
+                border: 1px solid fade(black, 20%);
+            }
         }
 
         /* keyboard/mouse effects (not for disabled buttons or groups) */
@@ -307,217 +322,14 @@ i.io-ox-office-icon {
             }
         }
 
-        /* drop-down groups ------------------------------------------------ */
+        /* vertical button lists ------------------------------------------- */
 
-        &.dropdown-group {
-
-            /* show drop-down menu element */
-            &.menu-open:not(.disabled) > .dropdown-menu {
-                display: block;
-            }
-
-            /* the drop-down menu element */
-            > .dropdown-menu {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                min-width: 0;
-                max-width: none;
-                z-index: 1000;
-                margin: 1px 0 0 0;
-                padding: 0;
-                background-color: white;
-                border: none;
-                .border-radius(0);
-                .box-shadow(0 5px 10px fade(black, 25%));
-
-                /* the Scrollable mix-in class (override 'important' settings of Bootstrap) */
-                &.scrollable {
-                    overflow-x: hidden !important;
-                    overflow-y: auto !important;
-                }
-
-                /* the List mix-in class */
-                &.list > ul {
-                    display: inline-block;
-                    margin: 0;
-                    padding: 0;
-                    list-style: none;
-
-                    > li {
-                        margin: 0;
-                        padding: 0;
-
-                        > a.button {
-                            width: 100%;
-                            height: 26px;
-                            line-height: 26px;
-                            text-align: left;
-                        }
-                    }
-                }
-
-                /* the ColorTable mix-in class */
-                &.color-table > div {
-                    display: inline-block;
-
-                    > label {
-                        display: block;
-                        width: 100%;
-                        height: auto;
-                        margin: 0;
-                        padding: 4px 0;
-                        font-size: 10px;
-                        line-height: normal;
-                        font-weight: bold;
-
-                        &:first-child {
-                            margin-top: 4px;
-                        }
-                    }
-
-                    > div {
-                        margin: 0 4px;
-                        padding: 4px 0;
-
-                        > a.button {
-                            width: 100%;
-                        }
-                    }
-
-                    > table {
-                        margin: 4px;
-
-                        td { padding: 0; }
-                    }
-
-                    /* do not add margin between heading label and table */
-                    > label + table {
-                        margin-top: 0;
-                    }
-
-                    a.button {
-                        overflow: visible;
-                        height: auto;
-                        padding: 1px;
-                        background: none;
-                        border: 3px solid transparent;
-                        .border-radius(5px);
-                        line-height: 22px;
-
-                        &:hover { border-color: darken(@pane-fill-color, 5%); }
-                        &:focus { border-color: darken(@pane-fill-color, 5%); }
-                        &:active { border-color: darken(@pane-fill-color, 10%); }
-
-                        &.selected {
-                            background: none;
-                            border-color: darken(@button-selected-color, 5%);
-
-                            &:hover { border-color: darken(@button-selected-color, 10%); }
-                            &:focus { border-color: darken(@button-selected-color, 10%); }
-                            &:active { border-color: darken(@button-selected-color, 15%); }
-                        }
-
-                        /* inner container in buttons with displayed color */
-                        > .color-box {
-                            width: 20px;
-                            height: 20px;
-                            float: left;
-                            border: 1px solid fade(black, 20%);
-                            .border-radius(2px);
-                            .box-shadow(0 5px 10px fade(black, 30%));
-
-                            &:not(:last-child) {
-                                margin-right: 8px;
-                            }
-                        }
-
-                        > .caption {
-                            width: auto;
-                        }
-                    }
-                }
-
-                /* the GridSizer mix-in class */
-                &.grid-sizer {
-
-                    /* inner size (pixels between grid lines) of one cell in the size chooser */
-                    @cell-width: 18px;
-                    @cell-height: 16px;
-
-                    /* border color for the grid */
-                    @grid-line-color: #d5d5d5;
-
-                    /* minimum dimensions for the outer container (in cells) */
-                    min-width: 5 * (@cell-width + 1px) + 1px;
-                    min-height: 3 * (@cell-height + 1px) + 1px;
-                    background-color: white;
-                    text-align: left;
-
-                    > div {
-                        display: inline-block;
-                        position: relative;
-                        vertical-align: top;
-                        font-size: 1px;
-                        line-height: 1px;
-
-                        /* grid layout (done with embedded divs instead of a table to prevent grid flicker */
-                        > a.button {
-                            height: auto;
-                            margin: 0;
-                            padding: 0;
-                            background-color: @pane-fill-color;
-                            border: 1px solid @grid-line-color;
-
-                            /* a row in the grid */
-                            > div {
-                                /* need to set height explicitly for Firefox */
-                                height: @cell-height + 1px;
-
-                                /* a cell in the grid */
-                                > div {
-                                    display: inline-block;
-                                    width: @cell-width;
-                                    height: @cell-height;
-                                    vertical-align: top;
-
-                                    &:not(:last-child) {
-                                        border-right: 1px solid @grid-line-color;
-                                    }
-                                }
-
-                                &:not(:last-child) > div {
-                                    border-bottom: 1px solid @grid-line-color;
-                                }
-
-                                /* height for last row (again, especially for Firefox) */
-                                &:last-child {
-                                    height: @cell-height;
-                                }
-                            }
-                        }
-
-                        /* the badge labels showing the width and height of the grid */
-                        > span {
-                            position: absolute;
-                            top: 100%;
-                            right: @cell-width;
-                            z-index: 1020;
-                            margin: 5px 0 0 0;
-                            padding: 4px 6px;
-                            background-color: black;
-                            .opacity(0.8);
-                            .border-radius(9px);
-                            .box-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-                            font-size: 11px;
-                            line-height: 100%;
-                            color: white;
-                            text-shadow: none;
-                        }
-                    }
-                }
-            }
+        &.button-list > a.button {
+            display: block;
+            width: 100%;
+            height: 26px;
+            line-height: 26px;
+            text-align: left;
         }
     }
 
@@ -600,19 +412,31 @@ i.io-ox-office-icon {
             }
         }
     }
+
+    /* drop-down lists ----------------------------------------------------- */
+
+    &.dropdown-list {
+        display: block;
+        .box-sizing(content-box);
+
+        > .group {
+            display: block;
+            width: 100%;
+        }
+    }
 }
 
-/* Alerts ================================================================== */
+/* alerts ================================================================== */
 
 /* specific formatting for office alert banners */
 .alert {
     position: absolute;
+    .box-sizing(border-box);
+    width: 100%;
+    height: 100%;
     left: 0;
     padding: 4px 13px;
     z-index: 100;
-    width: 100%;
-    height: 100%;
-    .box-sizing(border-box);
 
     > .close {
         right: 0;
@@ -632,6 +456,106 @@ i.io-ox-office-icon {
         float: left;
         position: relative;
         right: -21px;
+    }
+}
+
+/* ========================================================================= */
+/* drop-down menu elements                                                   */
+/* ========================================================================= */
+
+&.io-ox-office-dropdown-container {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    background-color: white;
+    border: none;
+    .box-shadow(0 5px 10px fade(black, 25%));
+    
+    /* the ColorChooser control ============================================ */
+
+    .view-component .group.color-chooser {
+        display: inline-block;
+
+        > label {
+            display: block;
+            width: 100%;
+            height: auto;
+            margin: 0;
+            padding: 4px 0;
+            font-size: 10px;
+            line-height: normal;
+            font-weight: bold;
+
+            &:first-child {
+                margin-top: 4px;
+            }
+        }
+
+        > div {
+            margin: 0 4px;
+            padding: 4px 0;
+
+            > a.button {
+                width: 100%;
+            }
+        }
+
+        > table {
+            margin: 4px;
+
+            td { padding: 0; }
+        }
+
+        /* do not add margin between heading label and table */
+        > label + table {
+            margin-top: 0;
+        }
+
+        a.button {
+            overflow: visible;
+            height: auto;
+            padding: 1px;
+            background: none;
+            border: 3px solid transparent;
+            .border-radius(5px);
+            line-height: 22px;
+
+            &:hover { border-color: darken(@pane-fill-color, 5%); }
+            &:focus { border-color: darken(@pane-fill-color, 5%); }
+            &:active { border-color: darken(@pane-fill-color, 10%); }
+
+            &.selected {
+                background: none;
+                border-color: darken(@button-selected-color, 5%);
+
+                &:hover { background: none; border-color: darken(@button-selected-color, 10%); }
+                &:focus { background: none; border-color: darken(@button-selected-color, 10%); }
+                &:active { background: none; border-color: darken(@button-selected-color, 15%); }
+            }
+
+            /* inner container in buttons with displayed color */
+            > .color-button {
+                width: 20px;
+                height: 20px;
+                float: left;
+                border: 1px solid fade(black, 20%);
+                .border-radius(2px);
+                .box-shadow(0 5px 10px fade(black, 30%));
+
+                &:not(:last-child) {
+                    margin-right: 8px;
+                }
+            }
+
+            > .caption {
+                width: auto;
+            }
+        }
     }
 }
 
