@@ -84,10 +84,19 @@ define('io.ox/office/tk/control/radiolist',
         // private methods ----------------------------------------------------
 
         /**
-         * Returns all option buttons as jQuery collection.
+         * Scrolls the drop-down menu to make the specified list item visible.
          */
-        function getOptionButtons() {
-            return self.getListItems();
+        function scrollToListItem(button) {
+            if (button.length && self.isMenuVisible()) {
+                Utils.scrollToChildNode(self.getMenuNode(), button);
+            }
+        }
+
+        /**
+         * Handles 'menuopen' events.
+         */
+        function menuOpenHandler() {
+            scrollToListItem(Utils.getSelectedButtons(self.getListItems()));
         }
 
         /**
@@ -100,7 +109,7 @@ define('io.ox/office/tk/control/radiolist',
         function updateHandler(value) {
 
             var // activate a radio button
-                button = Utils.selectOptionButton(getOptionButtons(), value),
+                button = Utils.selectOptionButton(self.getListItems(), value),
                 // the options used to set the caption of the drop-down menu button
                 captionOptions = options;
 
@@ -194,7 +203,8 @@ define('io.ox/office/tk/control/radiolist',
         // initialization -----------------------------------------------------
 
         // register event handlers
-        this.registerUpdateHandler(updateHandler)
+        this.on('menuopen', menuOpenHandler)
+            .registerUpdateHandler(updateHandler)
             .registerActionHandler(this.getMenuNode(), 'click', Utils.BUTTON_SELECTOR, clickHandler);
 
     } // class RadioList

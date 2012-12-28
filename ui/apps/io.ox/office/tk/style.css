@@ -412,18 +412,6 @@ i.io-ox-office-icon {
             }
         }
     }
-
-    /* drop-down lists ----------------------------------------------------- */
-
-    &.dropdown-list {
-        display: block;
-        .box-sizing(content-box);
-
-        > .group {
-            display: block;
-            width: 100%;
-        }
-    }
 }
 
 /* alerts ================================================================== */
@@ -464,10 +452,8 @@ i.io-ox-office-icon {
 /* ========================================================================= */
 
 &.io-ox-office-dropdown-container {
-    display: block;
+    display: inline-block;
     position: absolute;
-    top: 0;
-    left: 0;
     z-index: 1000;
     margin: 0;
     padding: 0;
@@ -475,7 +461,23 @@ i.io-ox-office-icon {
     background-color: white;
     border: none;
     .box-shadow(0 5px 10px fade(black, 25%));
-    
+    font-size: 0;
+    line-height: 0;
+
+    .view-component {
+        display: inline-block;
+        width: auto;
+
+        &.dropdown-list {
+            .box-sizing(content-box);
+
+            > .group {
+                display: inline-block;
+                width: 100%;
+            }
+        }
+    }
+
     /* the ColorChooser control ============================================ */
 
     .view-component .group.color-chooser {

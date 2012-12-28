@@ -753,8 +753,16 @@ define('io.ox/office/tk/utils',
         outerNode = Utils.getDomNode(outerNode);
         innerNode = Utils.getDomNode(innerNode);
 
+        // IE does not support contains() method at document
+        if (outerNode === document) {
+            outerNode = document.body;
+            if (innerNode === outerNode) {
+                return true;
+            }
+        }
+
         // outer node must be an element; be sure that a node does not contain itself
-        if (((outerNode.nodeType !== 1) && (outerNode.nodeType !== 9)) || (outerNode === innerNode)) {
+        if ((outerNode.nodeType !== 1) || (outerNode === innerNode)) {
             return false;
         }
 

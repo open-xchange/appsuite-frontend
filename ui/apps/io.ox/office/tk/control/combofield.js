@@ -53,12 +53,22 @@ define('io.ox/office/tk/control/combofield',
         // private methods ----------------------------------------------------
 
         /**
+         * Scrolls the drop-down menu to make the specified list item visible.
+         */
+        function scrollToListItem(button) {
+            if (button.length && self.isMenuVisible()) {
+                Utils.scrollToChildNode(self.getMenuNode(), button);
+            }
+        }
+
+        /**
          * Handles 'menuopen' events and moves the focus to the text field.
          */
         function menuOpenHandler() {
             if (!self.isReadOnly()) {
                 self.getTextFieldNode().focus();
             }
+            scrollToListItem(Utils.getSelectedButtons(self.getListItems()));
         }
 
         /**
@@ -70,9 +80,7 @@ define('io.ox/office/tk/control/combofield',
                 button = Utils.selectOptionButton(self.getListItems(), value);
 
             // scroll to make the element visible
-            if (button.length && self.isMenuVisible()) {
-                Utils.scrollToChildNode(self.getMenuNode(), button);
-            }
+            scrollToListItem(button);
         }
 
         /**

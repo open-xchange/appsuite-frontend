@@ -92,8 +92,11 @@ define('io.ox/office/tk/dropdown/dropdown',
             // the view component embedded in the drop-down menu
             menuComponent = new Component(),
 
+            // the content node of the menu view component
+            contentNode = menuComponent.getNode(),
+
             // the drop-down menu element containing the menu view component
-            menuNode = $('<div>').addClass('io-ox-office-dropdown-container').append(menuComponent.getNode()),
+            menuNode = $('<div>').addClass('io-ox-office-dropdown-container').append(contentNode),
 
             // additional controls that toggle the drop-down menu
             menuToggleControls = $();
@@ -282,28 +285,33 @@ define('io.ox/office/tk/dropdown/dropdown',
                 // vertical space above the group node
                 availableAbove = groupDim.top - WINDOW_BORDER_PADDING - GROUP_BORDER_PADDING,
                 // vertical space above the group node
-                availableBelow = window.innerHeight - groupDim.top - groupDim.height - WINDOW_BORDER_PADDING - GROUP_BORDER_PADDING;
+                availableBelow = window.innerHeight - groupDim.top - groupDim.height - WINDOW_BORDER_PADDING - GROUP_BORDER_PADDING,
+                // new CSS properties of the menu node
+                menuNodeProps = { top: '', bottom: '', left: '', right: '', minWidth: menuNode.css('min-width'), minHeight: menuNode.css('min-height') };
 
             // set size of menu node to 'auto' to be able to obtain the effective size
-            menuNode.css({ width: 'auto', height: 'auto', top: 0, bottom: '', left: 0, right: '' });
+            contentNode.css('width', 'auto');
+            menuNode.css({ width: 'auto', minWidth: '', height: 'auto', minHeight: '', top: 0, bottom: '', left: 0, right: '' });
 
             // decide whether to position the drop-down menu above or below the group node
             if ((menuNode.height() <= availableBelow) || (availableAbove <= availableBelow)) {
-                menuNode.css({ top: (groupDim.top + groupDim.height + GROUP_BORDER_PADDING) + 'px', bottom: '' });
+                menuNodeProps.top = groupDim.top + groupDim.height + GROUP_BORDER_PADDING;
                 availableHeight = availableBelow;
             } else {
-                menuNode.css({ top: '', bottom: (window.innerHeight - groupDim.top + GROUP_BORDER_PADDING) + 'px' });
+                menuNodeProps.bottom = window.innerHeight - groupDim.top + GROUP_BORDER_PADDING;
                 availableHeight = availableAbove;
             }
 
             // add space for scroll bars if available width or height is not sufficient
-            menuNode.css({
-                width: Math.min(availableWidth, menuNode.width() + ((menuNode.height() > availableHeight) ? SCROLLBAR_WIDTH : 0)) + 'px',
-                height: Math.min(availableHeight, menuNode.height() + ((menuNode.width() > availableWidth) ? SCROLLBAR_HEIGHT : 0)) + 'px'
-            });
+            menuNodeProps.width = Math.min(availableWidth, menuNode.width() + ((menuNode.height() > availableHeight) ? SCROLLBAR_WIDTH : 0));
+            menuNodeProps.height = Math.min(availableHeight, menuNode.height() + ((menuNode.width() > availableWidth) ? SCROLLBAR_HEIGHT : 0));
 
             // horizontal position: prefer left-aligned, but do not exceed right border of browser window
-            menuNode.css('left', Math.min(groupDim.left, window.innerWidth - WINDOW_BORDER_PADDING - menuNode.width()) + 'px');
+            menuNodeProps.left = Math.min(groupDim.left, window.innerWidth - WINDOW_BORDER_PADDING - menuNodeProps.width);
+
+            // apply final CSS formatting
+            menuNode.css(menuNodeProps);
+            contentNode.css('width', '100%');
         }
 
         function menuOpenHandler() {
@@ -343,7 +351,7 @@ define('io.ox/office/tk/dropdown/dropdown',
          * Returns whether the drop-down menu is currently visible.
          */
         this.isMenuVisible = function () {
-            return menuNode.parent().length > 0;
+            return menuNode.parent('body').length > 0;
         };
 
         /**
@@ -446,7 +454,7 @@ define('io.ox/office/tk/dropdown/dropdown',
         // append menu button and menu to the group container
         this.addFocusableControl(menuButton);
 
-        // register event handlers, prepare drop-down button
+        // register event handlers
         this.on('change cancel', function () { toggleMenu(false); });
         groupNode
             .on('keydown keypress keyup', groupKeyHandler)
