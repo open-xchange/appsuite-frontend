@@ -52,8 +52,8 @@ define('io.ox/office/tk/control/group',
      *      Tool tip text shown when the mouse hovers the control. If omitted,
      *      the control will not show a tool tip.
      *  @param {Boolean} [options.white]
-     *      If set to true, control embedded in the group will get a white
-     *      background instead of being transparent.
+     *      If set to true, the group has a white background instead of being
+     *      transparent.
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of
      *      this instance.

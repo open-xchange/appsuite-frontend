@@ -1374,10 +1374,10 @@ define('io.ox/office/tk/utils',
      *  @param [options.userData]
      *      A value or object that will be copied to the 'data-userdata'
      *      attribute of the control. May contain any user-defined data.
-     *  @param {Number} [options.width]
-     *      The fixed total width of the control element (including padding),
-     *      in pixels. If omitted, the size will be set automatically according
-     *      to the contents of the control.
+     *  @param {Number|String} [options.width]
+     *      The total width of the control element (including padding). If
+     *      omitted, the size will be set automatically according to the
+     *      contents of the control.
      *  @param {Object} [options.css]
      *      A map with CSS formatting attributes to be added to the control.
      *

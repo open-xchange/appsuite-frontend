@@ -58,6 +58,19 @@ define('io.ox/office/tk/view/toolbox',
             classes: Utils.getStringOption(options, 'classes', '') + ' toolbox'
         }));
 
+        // methods ------------------------------------------------------------
+
+        /**
+         * Adds a line break after the last inserted group.
+         *
+         * @returns {ToolBox}
+         *  A reference to this tool box instance.
+         */
+        this.addLineBreak = function () {
+            this.getNode().append($('<br>'));
+            return this;
+        };
+
         // initialization -----------------------------------------------------
 
         // add the top 'shadow'

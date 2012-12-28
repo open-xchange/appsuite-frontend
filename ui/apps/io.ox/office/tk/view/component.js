@@ -49,12 +49,6 @@ define('io.ox/office/tk/view/component',
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of
      *      this instance.
-     *  @param {Function} [options.insertGroupHandler]
-     *      A function that will be called to insert a new group into the DOM
-     *      of the view component. Receives the group instance as first
-     *      parameter (not the DOM node of the group). If not specified, the
-     *      group node will be appended to the children of the root node of the
-     *      view component.
      *  @param {String} [options.visible]
      *      The key of the controller item that controls the visibility of the
      *      view component. The visibility will be bound to the 'enabled' state
@@ -74,9 +68,6 @@ define('io.ox/office/tk/view/component',
 
             // all control groups, mapped by key
             groupsByKey = {},
-
-            // callback for insertion of new groups
-            insertGroupHandler = Utils.getFunctionOption(options, 'insertGroupHandler'),
 
             // the controller item controlling the visibility of this view component
             visibleKey = Utils.getStringOption(options, 'visible');
@@ -98,11 +89,7 @@ define('io.ox/office/tk/view/component',
             groups.push(group);
 
             // insert the group into this view component
-            if (_.isFunction(insertGroupHandler)) {
-                insertGroupHandler.call(self, group);
-            } else {
-                node.append(group.getNode());
-            }
+            node.append(group.getNode());
 
             // always forward 'cancel' events (e.g. closed drop-down menu)
             group.on('cancel', function () { self.trigger('cancel'); });
@@ -268,17 +255,11 @@ define('io.ox/office/tk/view/component',
         /**
          * Adds separation space following the last inserted group.
          *
-         * @param {String} [type]
-         *  The type of the separator to be inserted. The resulting design of
-         *  the separator is dependent on the type of this view component. The
-         *  type will be added as CSS class name to the group node representing
-         *  the separator.
-         *
          * @returns {Component}
          *  A reference to this view component.
          */
-        this.addSeparator = function (type) {
-            insertGroup(new Group({ classes: 'separator' + (_.isString(type) ? (' ' + type) : '') }));
+        this.addSeparator = function () {
+            insertGroup(new Group({ classes: 'separator' }));
             return this;
         };
 

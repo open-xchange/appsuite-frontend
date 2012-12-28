@@ -29,9 +29,12 @@ define('io.ox/office/tk/view/sidepane',
      * @extends Pane
      *
      * @param {Application} app
-     *  The application.
+     *  The application instance.
+     *
+     * @param {Number} [width=100]
+     *  The width of the side pane, in pixels.
      */
-    function SidePane(app) {
+    function SidePane(app, width) {
 
         // base constructor ---------------------------------------------------
 
@@ -60,6 +63,10 @@ define('io.ox/office/tk/view/sidepane',
             this.addViewComponent(toolBox);
             return toolBox;
         };
+
+        // initialization -----------------------------------------------------
+
+        this.getNode().width(_.isNumber(width) ? width : 100);
 
     } // class SidePane
 

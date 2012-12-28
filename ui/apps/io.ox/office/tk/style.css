@@ -297,19 +297,15 @@ i.io-ox-office-icon {
         /* groups with white background and shadowed borders --------------- */
 
         &.white {
-            @offset: 4px;
-
-            top: @offset;
-            margin-bottom: 2 * @offset;
             .box-shadow(0 0 4px fade(black, 15%));
 
             > label, > a.button, > input {
-                height: @control-height - 2 * @offset;
+                height: @control-height - 8;
                 background: white;
             }
 
             > label, > a.button {
-                line-height: @control-height - 2 * @offset;
+                line-height: @control-height - 8;
             }
 
             /* keyboard/mouse effects (not for disabled buttons) */
@@ -337,17 +333,21 @@ i.io-ox-office-icon {
 
     &.toolbar {
         padding: 0;
-        /* prevent multi-line layout */
-        white-space: nowrap;
-        text-align: left;
+        clear: both;
 
         /* show groups in a horizontal bar */
         > .group {
             display: inline-block;
+            float: left;
+
+            &.white {
+                top: 4px;
+            }
 
             /* group spacing */
             &.separator {
                 width: 10px;
+                height: @control-height;
             }
         }
     }
@@ -356,12 +356,10 @@ i.io-ox-office-icon {
 
     &.toolbox {
         @heading-height: 22px;
-        @heading-padding: 8px;
 
         display: block;
         .box-sizing(content-box);
-        width: 150px;
-        padding: @heading-padding 6px 4px;
+        padding: 8px 6px 4px;
 
         > div.top-shadow {
             position: absolute;
@@ -374,43 +372,30 @@ i.io-ox-office-icon {
 
         > .group {
             display: inline-block;
+            margin-bottom: 4px;
+            vertical-align: middle;
 
             /* group spacing */
             &.separator {
                 width: 10px;
-
-                &.break { height: 2px; }
             }
 
             /* heading button of the tool box, used to collapse/expand */
-            &.heading {
-                margin-bottom: 4px;
-
-                > a.button {
-                    height: @heading-height;
-                    line-height: @heading-height;
-                    font-size: 10px;
-                    font-weight: bold;
-                }
+            &.heading > a.button {
+                height: @heading-height;
+                line-height: @heading-height;
+                font-size: 10px;
+                font-weight: bold;
             }
 
             /* groups spanning the full width of the pane */
-            &.full-width, &.separator.break, &.heading {
-                display: block;
+            &.full-width, &.heading {
                 width: 100%;
             }
         }
 
-        &.collapsed {
-            padding-bottom: @heading-padding;
-            
-            > .group.heading {
-                margin-bottom: 0;
-
-                /* hide all groups following the heading button */
-                ~ * { display: none; }
-            }
-        }
+        /* collapsed: hide all groups following the heading button */
+        &.collapsed > .group.heading ~ * { display: none; }
     }
 }
 
