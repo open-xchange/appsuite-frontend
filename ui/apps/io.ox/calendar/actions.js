@@ -203,7 +203,7 @@ define('io.ox/calendar/actions',
                                         return;
                                     }
                                     if (action === 'series') {
-                                        delete data.recurrence_position;
+                                        delete myModel.attributes.recurrence_position;
                                     }
                                     myModel.destroy();
                                 });
