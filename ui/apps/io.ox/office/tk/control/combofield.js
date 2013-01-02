@@ -226,13 +226,13 @@ define('io.ox/office/tk/control/combofield',
 
         // prepare group and register event handlers
         this.on('menuopen', menuOpenHandler)
+            .on('validated', textFieldValidationHandler)
+            .on('readonly', textFieldReadOnlyHandler)
             .registerUpdateHandler(updateHandler)
             .registerActionHandler(this.getMenuNode(), 'click', Utils.BUTTON_SELECTOR, clickHandler);
         this.getTextFieldNode()
             .css('padding-right', 0)
-            .on('keydown keypress keyup', textFieldKeyHandler)
-            .on('readonly', textFieldReadOnlyHandler)
-            .on('validated', textFieldValidationHandler);
+            .on('keydown keypress keyup', textFieldKeyHandler);
 
         // initialize read-only mode
         textFieldReadOnlyHandler();

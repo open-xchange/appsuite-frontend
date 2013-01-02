@@ -182,7 +182,7 @@ define('io.ox/office/tk/control/textfield',
                 }
 
                 // trigger 'validated' event to all listeners, pass old field state
-                textField.trigger('validated', validationFieldState);
+                self.trigger('validated', validationFieldState);
 
                 // save current state of the text field
                 validationFieldState = getFieldState();
@@ -191,7 +191,7 @@ define('io.ox/office/tk/control/textfield',
 
         // base constructor ---------------------------------------------------
 
-        Group.call(this, Utils.extendOptions(options, { white: true }));
+        Group.call(this, options);
 
         // methods ------------------------------------------------------------
 
@@ -248,7 +248,7 @@ define('io.ox/office/tk/control/textfield',
                         .off('mousedown dragover drop contextmenu');
                 }
                 // trigger listeners
-                textField.trigger('readonly', readOnly);
+                this.trigger('readonly', readOnly);
             }
             return this;
         };
