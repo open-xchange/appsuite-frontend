@@ -99,7 +99,10 @@ define('io.ox/office/tk/dropdown/dropdown',
             menuNode = $('<div>').addClass('io-ox-office-dropdown-container').append(contentNode),
 
             // additional controls that toggle the drop-down menu
-            menuToggleControls = $();
+            menuToggleControls = $(),
+
+            // current size of the drop-down menu (calculated when opening the menu)
+            menuNodeSize = null;
 
         // private methods ----------------------------------------------------
 
@@ -287,14 +290,10 @@ define('io.ox/office/tk/dropdown/dropdown',
                 // vertical space above the group node
                 availableBelow = window.innerHeight - groupDim.top - groupDim.height - WINDOW_BORDER_PADDING - GROUP_BORDER_PADDING,
                 // new CSS properties of the menu node
-                menuNodeProps = { top: '', bottom: '', left: '', right: '', minWidth: menuNode.css('min-width'), minHeight: menuNode.css('min-height') };
-
-            // set size of menu node to 'auto' to be able to obtain the effective size
-            contentNode.css('width', 'auto');
-            menuNode.css({ width: 'auto', minWidth: '', height: 'auto', minHeight: '', top: 0, bottom: '', left: 0, right: '' });
+                menuNodeProps = { top: '', bottom: '', left: '', right: '' };
 
             // decide whether to position the drop-down menu above or below the group node
-            if ((menuNode.height() <= availableBelow) || (availableAbove <= availableBelow)) {
+            if ((menuNodeSize.height <= availableBelow) || (availableAbove <= availableBelow)) {
                 menuNodeProps.top = groupDim.top + groupDim.height + GROUP_BORDER_PADDING;
                 availableHeight = availableBelow;
             } else {
@@ -303,21 +302,33 @@ define('io.ox/office/tk/dropdown/dropdown',
             }
 
             // add space for scroll bars if available width or height is not sufficient
-            menuNodeProps.width = Math.min(availableWidth, menuNode.width() + ((menuNode.height() > availableHeight) ? SCROLLBAR_WIDTH : 0));
-            menuNodeProps.height = Math.min(availableHeight, menuNode.height() + ((menuNode.width() > availableWidth) ? SCROLLBAR_HEIGHT : 0));
+            menuNodeProps.width = Math.min(availableWidth, menuNodeSize.width + ((menuNodeSize.height > availableHeight) ? SCROLLBAR_WIDTH : 0));
+            menuNodeProps.height = Math.min(availableHeight, menuNodeSize.height + ((menuNodeSize.width > availableWidth) ? SCROLLBAR_HEIGHT : 0));
 
             // horizontal position: prefer left-aligned, but do not exceed right border of browser window
             menuNodeProps.left = Math.min(groupDim.left, window.innerWidth - WINDOW_BORDER_PADDING - menuNodeProps.width);
 
             // apply final CSS formatting
             menuNode.css(menuNodeProps);
-            contentNode.css('width', '100%');
         }
 
         function menuOpenHandler() {
+
+            var // store original min-width and min-height of the menu node
+                menuMinSize = { minWidth: menuNode.css('min-width'), minHeight: menuNode.css('min-height') };
+
+            // set size of menu node to 'auto' to be able to obtain the effective size
+            contentNode.css('width', 'auto');
+            menuNode.css({ width: 'auto', minWidth: '', height: 'auto', minHeight: '', top: 0, bottom: '', left: 0, right: '' });
+            menuNodeSize = { width: menuNode.outerWidth(), height: menuNode.outerHeight() };
+
+            // restore min-width and min-height of the menu node, and other CSS properties
+            menuNode.css(menuMinSize);
+            contentNode.css('width', '100%');
+
+            // enable window resize handler which recalculates position and size of the menu node
             $(window).on('resize', windowResizeHandler);
             windowResizeHandler();
-            menuNode.scrollTop(0).scrollLeft(0);
         }
 
         function menuCloseHandler() {
@@ -465,6 +476,7 @@ define('io.ox/office/tk/dropdown/dropdown',
         menuNode.on('keydown keypress keyup', menuKeyHandler);
 
         if (autoLayout) {
+            menuNode.css('overflow', 'auto');
             this.on('menuopen', menuOpenHandler).on('menuclose', menuCloseHandler);
         }
 
