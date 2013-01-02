@@ -378,7 +378,7 @@ define('io.ox/files/actions',
                 id: data.id,
                 last_modified: data.last_modified,
                 version: data.version
-            });
+            }, true);
         }
     });
 
