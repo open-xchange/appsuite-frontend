@@ -90,12 +90,6 @@ i.io-ox-office-icon {
 /* background color for panes */
 @app-pane-fill-color: #e5e5e5;
 
-/* base text color for controls */
-@control-text-color: #333333;
-
-/* fill color of selected buttons */
-@button-selected-color: #afcfff;
-
 /* panes =================================================================== */
 
 .view-pane {
@@ -186,7 +180,7 @@ i.io-ox-office-icon {
             white-space: nowrap;
             font-size: 13px;
             font-weight: normal;
-            color: @control-text-color;
+            color: @color;
             text-shadow: none;
             vertical-align: top;
 
@@ -231,18 +225,7 @@ i.io-ox-office-icon {
 
             /* selected toggle/radio buttons */
             &.selected {
-                background-color: @button-selected-color;
-            }
-
-            /* color box below the button caption */
-            > div.color-box {
-                position: absolute;
-                bottom: 2px;
-                height: 3px;
-                left: 6px;
-                right: 6px;
-                background: none;
-                border: 1px solid fade(black, 20%);
+                background-color: fade(@selected-background, 50%);
             }
         }
 
@@ -255,9 +238,9 @@ i.io-ox-office-icon {
 
             /* selected toggle/radio buttons */
             &.selected {
-                &:hover { background-color: darken(@button-selected-color, 5%); }
-                &:focus { background-color: darken(@button-selected-color, 5%); }
-                &:active { background-color: darken(@button-selected-color, 10%); }
+                &:hover { background-color: fade(@selected-background, 60%); }
+                &:focus { background-color: fade(@selected-background, 60%); }
+                &:active { background-color: fade(@selected-background, 70%); }
             }
         }
 
@@ -399,9 +382,42 @@ i.io-ox-office-icon {
     }
 }
 
-/* alerts ================================================================== */
+/* ========================================================================= */
+/* drop-down menu elements                                                   */
+/* ========================================================================= */
 
-/* specific formatting for office alert banners */
+&.io-ox-office-dropdown-container {
+    display: inline-block;
+    position: absolute;
+    z-index: 1000;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    background-color: white;
+    border: none;
+    .box-shadow(0 5px 10px fade(black, 25%));
+    font-size: 0;
+    line-height: 0;
+
+    > .view-component {
+        display: inline-block;
+        width: auto;
+
+        &.dropdown-list {
+            .box-sizing(content-box);
+
+            > .group {
+                display: inline-block;
+                width: 100%;
+            }
+        }
+    }
+}
+
+/* ========================================================================= */
+/* alerts                                                                    */
+/* ========================================================================= */
+
 .alert {
     position: absolute;
     .box-sizing(border-box);
@@ -429,120 +445,6 @@ i.io-ox-office-icon {
         float: left;
         position: relative;
         right: -21px;
-    }
-}
-
-/* ========================================================================= */
-/* drop-down menu elements                                                   */
-/* ========================================================================= */
-
-&.io-ox-office-dropdown-container {
-    display: inline-block;
-    position: absolute;
-    z-index: 1000;
-    margin: 0;
-    padding: 0;
-    overflow: auto;
-    background-color: white;
-    border: none;
-    .box-shadow(0 5px 10px fade(black, 25%));
-    font-size: 0;
-    line-height: 0;
-
-    .view-component {
-        display: inline-block;
-        width: auto;
-
-        &.dropdown-list {
-            .box-sizing(content-box);
-
-            > .group {
-                display: inline-block;
-                width: 100%;
-            }
-        }
-    }
-
-    /* the ColorChooser control ============================================ */
-
-    .view-component .group.color-chooser {
-        display: inline-block;
-
-        > label {
-            display: block;
-            width: 100%;
-            height: auto;
-            margin: 0;
-            padding: 4px 0;
-            font-size: 10px;
-            line-height: normal;
-            font-weight: bold;
-
-            &:first-child {
-                margin-top: 4px;
-            }
-        }
-
-        > div {
-            margin: 0 4px;
-            padding: 4px 0;
-
-            > a.button {
-                width: 100%;
-            }
-        }
-
-        > table {
-            margin: 4px;
-
-            td { padding: 0; }
-        }
-
-        /* do not add margin between heading label and table */
-        > label + table {
-            margin-top: 0;
-        }
-
-        a.button {
-            overflow: visible;
-            height: auto;
-            padding: 1px;
-            background: none;
-            border: 3px solid transparent;
-            .border-radius(5px);
-            line-height: 22px;
-
-            &:hover { border-color: darken(@pane-fill-color, 5%); }
-            &:focus { border-color: darken(@pane-fill-color, 5%); }
-            &:active { border-color: darken(@pane-fill-color, 10%); }
-
-            &.selected {
-                background: none;
-                border-color: darken(@button-selected-color, 5%);
-
-                &:hover { background: none; border-color: darken(@button-selected-color, 10%); }
-                &:focus { background: none; border-color: darken(@button-selected-color, 10%); }
-                &:active { background: none; border-color: darken(@button-selected-color, 15%); }
-            }
-
-            /* inner container in buttons with displayed color */
-            > .color-button {
-                width: 20px;
-                height: 20px;
-                float: left;
-                border: 1px solid fade(black, 20%);
-                .border-radius(2px);
-                .box-shadow(0 5px 10px fade(black, 30%));
-
-                &:not(:last-child) {
-                    margin-right: 8px;
-                }
-            }
-
-            > .caption {
-                width: auto;
-            }
-        }
     }
 }
 

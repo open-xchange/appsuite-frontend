@@ -37,7 +37,7 @@ define('io.ox/calendar/model',
                 id: model.id,
                 folder: model.get('folder_id') || model.get('folder')
             };
-            if (model.recurrence_position) {
+            if (model.attributes.recurrence_position) {
                 _.extend(options, {recurrence_position: model.get('recurrence_position')});
             }
             return api.remove(options);

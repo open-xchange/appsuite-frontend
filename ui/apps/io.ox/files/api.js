@@ -280,12 +280,17 @@ define('io.ox/files/api',
         return deferred;
     };
 
-    api.update = function (file) {
-        var obj = { id: file.id, folder: file.folder_id };
+    api.update = function (file, makeCurrent) { //special handling for mark as current version
+        var obj = { id: file.id, folder: file.folder_id },
+            updateData = file;
+        
+        if (makeCurrent) {//if there is only version, the request works. If the other fields are present theres a backend error
+            updateData = {version: file.version};
+        }
         return http.PUT({
                 module: 'files',
                 params: { action: 'update', id: file.id, timestamp: _.now() },
-                data: file,
+                data: updateData,
                 appendColumns: false
             })
             .pipe(function () {

@@ -137,8 +137,8 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
         },
         dateFormat: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
         datePicker: function ($anchor, attribute, options) {
-            var self = this;
-            var originalContent = $anchor.html();
+            var self = this,
+                originalContent = $anchor.html();
             self[attribute] = options.initial || _.now();
 
             function renderDate() {
@@ -166,10 +166,10 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 e.preventDefault();
                 var $dateInput = $('<input type="text" class="input-small no-clone">').css({
                     marginBottom: 0
-                }).val(renderDate());
-                var keys = new KeyListener($dateInput);
+                }).val(renderDate()),
+                    keys = new KeyListener($dateInput);
 
-                $dateInput.datepicker({format: CalendarWidgets.dateFormat, parentEl: $anchor.parent()});
+                $dateInput.datepicker({format: CalendarWidgets.dateFormat, parentEl: $(this).parent(), autoclose: true});
 
                 $anchor.after($dateInput);
                 $anchor.hide();
@@ -187,12 +187,12 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     }
                     keys.destroy();
                     try {
-                        $dateInput.datepicker("hide");
+                        $dateInput.datepicker('remove');
                         $dateInput.remove();
                     } catch (e) { }
                     $anchor.show();
-
                 }
+
                 $dateInput.on("change", function () {
                     updateValue();
                 });
