@@ -519,9 +519,9 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         id: 'attachment_upload',
         index: 2000,
         draw: function (baton) {
-            var $node = $("<form>").appendTo(this).attr('id', 'attachmentsForm'),
+            var $node = $("<form>").appendTo(this).attr('id', 'attachmentsForm').addClass("span12"),
                 $input = $("<input>", { type: "file" }),
-                $button = $("<button/>").attr('data-action', 'add').text(gt("Upload file")).addClass("btn span12");
+                $button = $("<button/>").attr('data-action', 'add').text(gt("Upload file")).addClass("btn");
            
             if (_.browser.IE !== 9) {
                 $button.on("click", function (e) {
@@ -546,8 +546,8 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                 });
             }
 
-            $node.append($("<div>").addClass("span3").append($button));
-            $node.append($("<div>").addClass("span6").append($input));
+            $node.append($("<div>").addClass("task-add-attachments-button").append($button));
+            $node.append($("<div>").addClass("task-add-attachments-input").append($input));
         }
     });
 
