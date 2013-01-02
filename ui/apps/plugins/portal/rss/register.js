@@ -120,7 +120,7 @@ define("plugins/portal/rss/register",
         }())
     });
 
-    function edit(model) {
+    function edit(model, view) {
 
         var dialog = new dialogs.ModalDialog({ easyOut: true, async: true }),
             $url = $('<textarea class="input-block-level" rows="5">').attr('placeholder', 'http://').placeholder(),
@@ -145,6 +145,12 @@ define("plugins/portal/rss/register",
                 $url.focus();
             });
 
+        dialog.on('cancel', function () {
+            if (model.candidate) {
+                view.removeWidget();
+            }
+        });
+
         dialog.on('save', function (e) {
 
             var url = $.trim($url.val()),
@@ -162,6 +168,7 @@ define("plugins/portal/rss/register",
 
             deferred.done(function () {
                 dialog.close();
+                model.candidate = false;
                 model.set({
                     title: description,
                     props: { url: url.split(/\n/), description: description }
