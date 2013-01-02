@@ -155,6 +155,7 @@ define('plugins/portal/birthdays/register',
     ext.point('io.ox/portal/widget/birthdays/settings').extend({
         title: gt('Birthdays'),
         type: 'birthdays',
-        editable: false
+        editable: false,
+        unique: true
     });
 });

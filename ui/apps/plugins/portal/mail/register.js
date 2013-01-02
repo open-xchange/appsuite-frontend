@@ -74,7 +74,8 @@ define('plugins/portal/mail/register',
     ext.point('io.ox/portal/widget/mail/settings').extend({
         title: gt('E-mail'),
         type: 'mail',
-        editable: false
+        editable: false,
+        unique: true
     });
 
     ext.point('io.ox/portal/widget/stickymail').extend({

@@ -119,7 +119,8 @@ define("plugins/portal/calendar/register",
     ext.point('io.ox/portal/widget/calendar/settings').extend({
         title: gt('Calendar'),
         type: 'calendar',
-        editable: false
+        editable: false,
+        unique: true
     });
 
 });

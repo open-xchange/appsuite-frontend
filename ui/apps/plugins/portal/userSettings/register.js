@@ -105,6 +105,7 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
     ext.point('io.ox/portal/widget/userSettings/settings').extend({
         title: gt('User data'),
         type: 'userSettings',
-        editable: false
+        editable: false,
+        unique: true
     });
 });
