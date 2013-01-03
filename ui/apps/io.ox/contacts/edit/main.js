@@ -150,7 +150,7 @@ define('io.ox/contacts/edit/main',
         ext.point('io.ox/contacts/edit/main/model').extend({
             id: 'io.ox/contacts/edit/main/model/auto_display_name',
             customizeModel: function (contact) {
-                contact.on('change:first_name change:last_name', function () {
+                contact.on('change:first_name change:last_name change:title', function () {
                     contact.set('display_name', util.getFullName(contact.toJSON()));
                 });
             }
