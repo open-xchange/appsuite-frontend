@@ -247,8 +247,10 @@ define("io.ox/mail/write/view-main",
             accountAPI.all().done(function (array) {
                 var select = node.find('select');
                 _.each(array, function (obj, index) {
-                    var option = $('<option>').text(_.noI18n(obj.primary_address));
-
+                    var display_name = obj.personal || obj.primary_address,
+                        value = obj.primary_address + '|' + display_name,
+                        option = $('<option>', { 'data-displayname': display_name, value: value })
+                            .text(_.noI18n(obj.primary_address));
                     if (index === 0) {
                         option.attr('selected', 'selected');
                     }

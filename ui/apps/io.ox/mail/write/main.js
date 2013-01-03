@@ -285,23 +285,19 @@ define('io.ox/mail/write/main',
                 accountID = mailAPI.getAccountIDFromFolder(folder_id);
 
             return accountAPI.get(accountID).pipe(function (data) {
-                return userAPI.getName(ox.user_id).pipe(function (name) {
-                    return {'displayname'    : data.personal || name,
-                            'primaryaddress' : data.primary_address};
-                });
-
+                return [data.personal || '', data.primary_address];
             });
         };
 
         app.getFrom = function () {
-            var from_field = view.leftside.find('.fromselect-wrapper select > option[selected=selected]');
-
-            return [from_field.data('displayname'), from_field.data('primaryaddress')];
+            return (view.leftside.find('.fromselect-wrapper select').val() || '')
+                .split(/\|/).reverse();
         };
 
         app.setFrom = function (data) {
             return this.getPrimaryAddressFromFolder(data).done(function (from) {
-                view.leftside.find('.fromselect-wrapper select > option[selected=selected]').data(from);
+                var value = from[1] + '|' + (from[0] || from[1]);
+                view.leftside.find('select').val(value);
             });
         };
 
