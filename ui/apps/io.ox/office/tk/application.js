@@ -524,7 +524,7 @@ define('io.ox/office/tk/application',
     Application.createApplication = function (moduleName, ApplicationMixinClass, options) {
 
         var // the base application object
-            app = ox.ui.createApp({ name: moduleName });
+            app = ox.ui.createApp({ name: moduleName, userContent: Utils.getBooleanOption(options, 'icon', false) });
 
         // mix-in constructor for common methods
         OfficeApplication.call(app, options);
