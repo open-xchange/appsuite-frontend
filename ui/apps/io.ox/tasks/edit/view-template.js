@@ -294,8 +294,9 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
     point.basicExtend({
         id: 'participants_list',
         index: 1400,
-        draw: function (options) {
-            this.append(new pViews.UserContainer({collection: options.model.getParticipants()}).render().$el);
+        draw: function (baton) {
+            this.append(new pViews.UserContainer({collection: baton.model.getParticipants(),
+                                                  baton: baton}).render().$el);
         }
     });
 

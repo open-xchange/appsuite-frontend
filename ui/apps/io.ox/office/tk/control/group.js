@@ -72,6 +72,14 @@ define('io.ox/office/tk/control/group',
         // private methods ----------------------------------------------------
 
         /**
+         * Shows or hides this group.
+         */
+        function showGroup(visible) {
+            groupNode.toggleClass(HIDDEN_CLASS, !visible);
+            self.trigger('show', visible);
+        }
+
+        /**
          * Keyboard handler for the entire group.
          */
         function keyHandler(event) {
@@ -92,6 +100,27 @@ define('io.ox/office/tk/control/group',
          */
         this.getNode = function () {
             return groupNode;
+        };
+
+        /**
+         * Returns the absolute position and size of the group node in the
+         * browser window.
+         *
+         * @returns {Object}
+         *  An object with numeric 'left', 'top', 'width', and 'height'
+         *  attributes representing the position and size of the group node in
+         *  pixels.
+         */
+        this.getDimensions = function () {
+
+            var // get position of the group
+                groupDim = groupNode.offset();
+
+            // add group size
+            groupDim.width = groupNode.outerWidth();
+            groupDim.height = groupNode.outerHeight();
+
+            return groupDim;
         };
 
         /**
@@ -257,7 +286,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.show = function () {
-            groupNode.removeClass(HIDDEN_CLASS);
+            showGroup(true);
             return this;
         };
 
@@ -268,7 +297,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.hide = function () {
-            groupNode.addClass(HIDDEN_CLASS);
+            showGroup(false);
             return this;
         };
 
@@ -284,8 +313,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.toggle = function (state) {
-            var hidden = (state === false) || ((state !== true) && !this.isVisible());
-            groupNode.toggleClass(HIDDEN_CLASS, hidden);
+            showGroup((state === true) || ((state !== false) && this.isVisible()));
             return this;
         };
 

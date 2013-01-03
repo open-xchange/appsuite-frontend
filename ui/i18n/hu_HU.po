@@ -1,0 +1,4631 @@
+# Gabor Kelemen <gabor@bureau-cornavin.com>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: oxappsuite\n"
+"POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
+"PO-Revision-Date: 2012-12-16 12:03+0100\n"
+"Last-Translator: Gabor Kelemen <gabor@bureau-cornavin.com>\n"
+"Language-Team: Hungarian <hu@bureau-cornavin.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: apps/io.ox/calendar/settings/pane.js:46
+#: apps/io.ox/tasks/settings/pane.js:39
+msgid "5"
+msgstr "5"
+
+#: apps/io.ox/calendar/settings/pane.js:46
+#: apps/io.ox/tasks/settings/pane.js:39
+msgid "10"
+msgstr "10"
+
+#: apps/io.ox/calendar/settings/pane.js:46
+#: apps/io.ox/tasks/settings/pane.js:39
+msgid "15"
+msgstr "15"
+
+#: apps/io.ox/calendar/settings/pane.js:46
+#: apps/io.ox/tasks/settings/pane.js:39
+msgid "20"
+msgstr "20"
+
+#: apps/io.ox/calendar/settings/pane.js:46
+#: apps/io.ox/tasks/settings/pane.js:39
+msgid "30"
+msgstr "30"
+
+#: apps/io.ox/calendar/settings/pane.js:46
+#: apps/io.ox/tasks/settings/pane.js:39
+msgid "60"
+msgstr "60"
+
+#: html/core_body.html:60
+msgid "User name"
+msgstr "Felhasználónév"
+
+#: apps/io.ox/mail/accounts/view-form.js:34
+#: apps/io.ox/mail/accounts/view-form.js:44 html/core_body.html:65
+msgid "Password"
+msgstr "Jelszó"
+
+#: html/core_body.html:70
+msgid "Sign in"
+msgstr "Bejelentkezés"
+
+#: html/core_body.html:77
+msgid "Stay signed in"
+msgstr "Maradjon bejelentkezve"
+
+#: html/core_body.html:83
+msgid "Forgot your password?"
+msgstr "Elfelejtette a jelszót?"
+
+#: html/core_body.html:91
+msgid "No connection to server. Please check your internet connection and retry."
+msgstr ""
+"Nincs kapcsolat a kiszolgálóhoz. Ellenőrizze internetkapcsolatát, és próbálja "
+"újra."
+
+#: html/core_body.html:100
+msgid "Languages"
+msgstr "Nyelvek"
+
+#: apps/plugins/portal/calendar/register.js:29
+msgid "Started %s milliseconds ago:"
+msgstr "Elindítva %s ezredmásodperce:"
+
+#: apps/plugins/portal/calendar/register.js:29
+msgid "In %s milliseconds:"
+msgstr "%s ezredmásodperc múlva:"
+
+#: apps/plugins/portal/calendar/register.js:33
+msgid "Started %s seconds ago:"
+msgstr "%s másodperce indult:"
+
+#: apps/plugins/portal/calendar/register.js:33
+msgid "In %s seconds:"
+msgstr "%s másodperc múlva:"
+
+#: apps/plugins/portal/calendar/register.js:37
+msgid "Started %s minutes ago:"
+msgstr "%s perce indult:"
+
+#: apps/plugins/portal/calendar/register.js:37
+msgid "In %s minutes:"
+msgstr "%s perc múlva:"
+
+#: apps/plugins/portal/calendar/register.js:41
+msgid "Started %s hours ago:"
+msgstr "%s órája indult:"
+
+#: apps/plugins/portal/calendar/register.js:41
+msgid "In %s hours:"
+msgstr "%s óra múlva:"
+
+#: apps/plugins/portal/calendar/register.js:45
+msgid "Started %s days ago:"
+msgstr "%s napja indult:"
+
+#: apps/plugins/portal/calendar/register.js:45
+msgid "In %s days:"
+msgstr "%s nap múlva:"
+
+#: apps/plugins/portal/calendar/register.js:49
+msgid "Started %s weeks ago:"
+msgstr "%s hete indult:"
+
+#: apps/plugins/portal/calendar/register.js:49
+msgid "In %s weeks:"
+msgstr "%s hét múlva:"
+
+#: apps/plugins/portal/calendar/register.js:56
+msgid "Appointments"
+msgstr "Találkozók"
+
+#: apps/plugins/portal/calendar/register.js:99
+msgid "You don't have any appointments in the near future."
+msgstr "A közeljövőben nincsenek találkozói."
+
+#: apps/plugins/portal/rss/settings/plugin.js:28
+msgid "RSS"
+msgstr "RSS"
+
+#: apps/plugins/portal/rss/settings/plugin.js:29
+msgid "Add feed"
+msgstr "Hírforrás hozzáadása"
+
+#: apps/plugins/portal/rss/settings/plugin.js:30
+msgid "Add group"
+msgstr "Csoport hozzáadása"
+
+#: apps/plugins/portal/rss/settings/plugin.js:31
+msgid "Edit feed"
+msgstr "Hírforrás hozzáadása"
+
+#: apps/plugins/portal/rss/settings/plugin.js:32
+msgid "Edit group"
+msgstr "Csoport szerkesztése"
+
+#: apps/plugins/portal/rss/settings/plugin.js:33
+msgid "Delete feed"
+msgstr "Hírforrás törlése"
+
+#: apps/plugins/portal/rss/settings/plugin.js:34
+msgid "Delete group"
+msgstr "Csoport törlése"
+
+#: apps/plugins/portal/rss/register.js:34
+#: apps/plugins/portal/rss/settings/plugin.js:41
+msgid "RSS Feeds"
+msgstr "RSS hírforrások"
+
+#: apps/plugins/portal/rss/settings/plugin.js:201
+msgid "http://"
+msgstr "http://"
+
+#: apps/io.ox/calendar/edit/template.js:204
+#: apps/io.ox/contacts/view-detail.js:218 apps/io.ox/files/actions.js:258
+#: apps/io.ox/tasks/edit/view-template.js:47
+#: apps/plugins/portal/flickr/settings/plugin.js:100
+#: apps/plugins/portal/flickr/settings/plugin.js:278
+#: apps/plugins/portal/rss/settings/plugin.js:202
+#: apps/plugins/portal/rss/settings/plugin.js:265
+#: apps/plugins/portal/tumblr/settings/plugin.js:71
+#: apps/plugins/portal/tumblr/settings/plugin.js:241
+msgid "Description"
+msgstr "Leírás"
+
+#: apps/plugins/portal/rss/settings/plugin.js:208
+msgid "Add a feed"
+msgstr "Hírforrás hozzáadása"
+
+#: apps/io.ox/calendar/acceptdeny.js:41 apps/io.ox/calendar/actions.js:118
+#: apps/io.ox/calendar/actions.js:191 apps/io.ox/calendar/actions.js:208
+#: apps/io.ox/calendar/actions.js:263 apps/io.ox/calendar/edit/main.js:46
+#: apps/io.ox/calendar/edit/template.js:96
+#: apps/io.ox/calendar/month/perspective.js:80
+#: apps/io.ox/calendar/month/perspective.js:100
+#: apps/io.ox/calendar/week/perspective.js:59
+#: apps/io.ox/calendar/week/perspective.js:82
+#: apps/io.ox/calendar/week/perspective.js:89
+#: apps/io.ox/contacts/actions.js:48 apps/io.ox/contacts/actions.js:117
+#: apps/io.ox/contacts/create/view.js:102
+#: apps/io.ox/contacts/distrib/main.js:159
+#: apps/io.ox/contacts/edit/main.js:118
+#: apps/io.ox/core/commons-folderview.js:240
+#: apps/io.ox/core/permissions/permissions.js:292
+#: apps/io.ox/core/tk/folderviews.js:547 apps/io.ox/core/tk/folderviews.js:594
+#: apps/io.ox/editor/main.js:221 apps/io.ox/files/actions.js:185
+#: apps/io.ox/files/actions.js:237 apps/io.ox/files/actions.js:290
+#: apps/io.ox/files/actions.js:311 apps/io.ox/files/actions.js:375
+#: apps/io.ox/mail/actions.js:61 apps/io.ox/mail/actions.js:181
+#: apps/io.ox/mail/actions.js:218 apps/io.ox/mail/actions.js:538
+#: apps/io.ox/mail/write/main.js:871 apps/io.ox/office/editor/hyperlink.js:467
+#: apps/io.ox/office/tk/view/dialogs.js:49 apps/io.ox/tasks/actions.js:51
+#: apps/io.ox/tasks/actions.js:87 apps/io.ox/tasks/actions.js:307
+#: apps/io.ox/tasks/edit/main.js:146
+#: apps/plugins/portal/flickr/settings/plugin.js:114
+#: apps/plugins/portal/flickr/settings/plugin.js:192
+#: apps/plugins/portal/flickr/settings/plugin.js:293
+#: apps/plugins/portal/reddit/settings/plugin.js:144
+#: apps/plugins/portal/reddit/settings/plugin.js:226
+#: apps/plugins/portal/reddit/settings/plugin.js:305
+#: apps/plugins/portal/rss/settings/plugin.js:213
+#: apps/plugins/portal/rss/settings/plugin.js:272
+#: apps/plugins/portal/rss/settings/plugin.js:333
+#: apps/plugins/portal/rss/settings/plugin.js:392
+#: apps/plugins/portal/rss/settings/plugin.js:445
+#: apps/plugins/portal/rss/settings/plugin.js:479
+#: apps/plugins/portal/tumblr/settings/plugin.js:79
+#: apps/plugins/portal/tumblr/settings/plugin.js:166
+#: apps/plugins/portal/tumblr/settings/plugin.js:249
+msgid "Cancel"
+msgstr "Mégse"
+
+#: apps/io.ox/calendar/edit/template.js:419
+#: apps/io.ox/tasks/edit/view-template.js:535
+#: apps/plugins/portal/flickr/settings/plugin.js:55
+#: apps/plugins/portal/flickr/settings/plugin.js:294
+#: apps/plugins/portal/reddit/settings/plugin.js:28
+#: apps/plugins/portal/reddit/settings/plugin.js:145
+#: apps/plugins/portal/rss/settings/plugin.js:214
+#: apps/plugins/portal/rss/settings/plugin.js:273
+#: apps/plugins/portal/tumblr/settings/plugin.js:28
+#: apps/plugins/portal/tumblr/settings/plugin.js:250
+msgid "Add"
+msgstr "Hozzáadás"
+
+#: apps/plugins/portal/rss/settings/plugin.js:227
+msgid "Please enter a feed URL."
+msgstr "Adjon meg egy hírforrás URL-t."
+
+#: apps/plugins/portal/flickr/settings/plugin.js:139
+#: apps/plugins/portal/flickr/settings/plugin.js:318
+#: apps/plugins/portal/rss/settings/plugin.js:230
+#: apps/plugins/portal/rss/settings/plugin.js:284
+#: apps/plugins/portal/tumblr/settings/plugin.js:102
+#: apps/plugins/portal/tumblr/settings/plugin.js:272
+msgid "Please enter a description."
+msgstr "Adjon meg egy leírást."
+
+#: apps/plugins/portal/rss/settings/plugin.js:269
+msgid "Add a new group for your feeds"
+msgstr "Vegyen fel új csoportot a hírforrásokhoz"
+
+#: apps/plugins/portal/rss/settings/plugin.js:323
+msgid "Name of feed"
+msgstr "Hírforrás neve"
+
+#: apps/plugins/portal/rss/settings/plugin.js:328
+msgid "Edit a feed"
+msgstr "Hírforrás szerkesztése"
+
+#: apps/io.ox/calendar/actions.js:374
+#: apps/io.ox/calendar/edit/recurrence-view.js:238
+#: apps/io.ox/calendar/edit/recurrence-view.js:816
+#: apps/io.ox/contacts/actions.js:300 apps/io.ox/files/actions.js:441
+#: apps/io.ox/mail/actions.js:651 apps/io.ox/office/editor/editor.js:2302
+#: apps/io.ox/office/editor/fileActions.js:77 apps/io.ox/tasks/actions.js:226
+#: apps/plugins/portal/flickr/settings/plugin.js:56
+#: apps/plugins/portal/flickr/settings/plugin.js:115
+#: apps/plugins/portal/reddit/settings/plugin.js:29
+#: apps/plugins/portal/reddit/settings/plugin.js:227
+#: apps/plugins/portal/rss/settings/plugin.js:334
+#: apps/plugins/portal/rss/settings/plugin.js:393
+#: apps/plugins/portal/tumblr/settings/plugin.js:29
+#: apps/plugins/portal/tumblr/settings/plugin.js:80
+msgid "Edit"
+msgstr "Szerkesztés"
+
+#: apps/plugins/portal/rss/settings/plugin.js:346
+msgid "Please enter an feed-url."
+msgstr "Adjon meg egy hírforrás URL-t."
+
+#: apps/plugins/portal/rss/settings/plugin.js:349
+msgid "Please enter a name for the feed."
+msgstr "Adja meg a hírforrás nevét."
+
+#: apps/plugins/portal/rss/settings/plugin.js:385
+msgid "Name for group of feeds"
+msgstr "Hírforráscsoport neve"
+
+#: apps/plugins/portal/rss/settings/plugin.js:389
+msgid "Edit a group of feeds"
+msgstr "Hírforráscsoport szerkesztése"
+
+#: apps/plugins/portal/rss/settings/plugin.js:403
+msgid "Please enter a name for the group of feeds."
+msgstr "Adja meg a hírforráscsoport nevét."
+
+#: apps/plugins/portal/rss/settings/plugin.js:442
+msgid "Delete a feed"
+msgstr "Hírforrás törlése"
+
+#: apps/plugins/portal/rss/settings/plugin.js:443
+msgid "Do you really want to delete the following feed?"
+msgstr "Biztos, hogy törölni szeretné a következő hírforrást?"
+
+#: apps/io.ox/calendar/actions.js:207 apps/io.ox/calendar/actions.js:398
+#: apps/io.ox/contacts/actions.js:47 apps/io.ox/contacts/actions.js:308
+#: apps/io.ox/core/commons-folderview.js:203
+#: apps/io.ox/core/tk/folderviews.js:546 apps/io.ox/files/actions.js:184
+#: apps/io.ox/files/actions.js:374 apps/io.ox/files/actions.js:507
+#: apps/io.ox/mail/actions.js:60 apps/io.ox/mail/actions.js:722
+#: apps/io.ox/tasks/actions.js:50 apps/io.ox/tasks/actions.js:234
+#: apps/plugins/portal/flickr/settings/plugin.js:57
+#: apps/plugins/portal/flickr/settings/plugin.js:193
+#: apps/plugins/portal/reddit/settings/plugin.js:30
+#: apps/plugins/portal/reddit/settings/plugin.js:306
+#: apps/plugins/portal/rss/settings/plugin.js:446
+#: apps/plugins/portal/rss/settings/plugin.js:480
+#: apps/plugins/portal/tumblr/settings/plugin.js:30
+#: apps/plugins/portal/tumblr/settings/plugin.js:167
+msgid "Delete"
+msgstr "Törlés"
+
+#: apps/plugins/portal/rss/settings/plugin.js:476
+msgid "Delete a group of feeds"
+msgstr "Hírforráscsoport törlése"
+
+#: apps/plugins/portal/rss/settings/plugin.js:477
+msgid "Do you really want to delete the following group of feeds?"
+msgstr "Biztos, hogy törölni szeretné a következő hírforráscsoportot?"
+
+#: apps/plugins/portal/rss/register.js:52
+msgid "RSS Feed"
+msgstr "RSS hírforrás"
+
+#: apps/plugins/portal/rss/register.js:83
+msgid "No RSS feeds found."
+msgstr "Nem találhatók RSS hírforrások."
+
+#: apps/io.ox/core/main.js:50 apps/io.ox/tasks/settings/pane.js:26
+#: apps/plugins/notifications/tasks/register.js:169
+#: apps/plugins/portal/tasks/register.js:26
+msgid "Tasks"
+msgstr "Feladatok"
+
+#: apps/plugins/portal/tasks/register.js:43
+msgid "You don't have any tasks"
+msgstr "Nincsenek feladatai"
+
+#. Due on date
+#: apps/plugins/portal/tasks/register.js:59
+msgid "Due on %1$s"
+msgstr "Határidő: %1$s"
+
+#: apps/plugins/portal/facebook/register.js:29
+msgid "Hide comments"
+msgstr "Megjegyzések elrejtése"
+
+#: apps/plugins/portal/facebook/register.js:29
+#: apps/plugins/portal/facebook/register.js:158
+msgid "Show comments"
+msgstr "Megjegyzések megjelenítése"
+
+#: apps/plugins/portal/facebook/register.js:77
+msgid "No wall posts yet."
+msgstr "Még nincsenek üzenetek a falon."
+
+#: apps/plugins/portal/facebook/register.js:179
+#: apps/plugins/portal/linkedIn/register.js:200
+#: apps/plugins/portal/twitter/register.js:316
+msgid "Add your account"
+msgstr "Fiók hozzáadása"
+
+#: apps/plugins/portal/twitter/register.js:117
+msgid "Retweeted by %s"
+msgstr "%s újracsiripelte"
+
+#: apps/plugins/portal/twitter/register.js:140
+msgid "Follow"
+msgstr "Követés"
+
+#: apps/io.ox/mail/actions.js:634 apps/io.ox/mail/write/main.js:415
+#: apps/plugins/portal/twitter/register.js:154
+msgid "Reply"
+msgstr "Válasz"
+
+#: apps/plugins/portal/twitter/register.js:155
+msgid "Retweet"
+msgstr "Újracsiripelés"
+
+#: apps/plugins/portal/twitter/register.js:156
+msgid "Favorite"
+msgstr "Kedvenc"
+
+#: apps/plugins/portal/twitter/register.js:160
+msgid "Favorited"
+msgstr "Kedvenc"
+
+#: apps/plugins/portal/twitter/register.js:163
+msgid "Retweeted"
+msgstr "Újracsiripelte"
+
+#: apps/plugins/portal/twitter/register.js:188
+msgid "Could not load new tweets."
+msgstr "Nem tölthetők be az új tweetek."
+
+#: apps/plugins/portal/twitter/register.js:227
+msgid "No tweets yet."
+msgstr "Még nincsenek tweetek."
+
+#: apps/plugins/portal/twitter/register.js:275
+msgid "Tweet"
+msgstr "Tweet"
+
+#: apps/plugins/portal/birthdays/register.js:44
+#: apps/plugins/portal/birthdays/register.js:59
+msgid "Next birthdays"
+msgstr "Következő születésnapok"
+
+#: apps/plugins/portal/birthdays/register.js:64
+#: apps/plugins/portal/birthdays/register.js:133
+msgid "No birthdays within the next %1$d weeks"
+msgstr "Nincsenek születésnapok a következő %1$d héten"
+
+#: apps/plugins/portal/birthdays/register.js:71
+msgid "Buy a gift"
+msgstr "Ajándék vásárlása"
+
+#: apps/io.ox/calendar/month/perspective.js:321
+#: apps/io.ox/calendar/week/view.js:485
+#: apps/plugins/portal/birthdays/register.js:91
+msgid "Today"
+msgstr "Ma"
+
+#: apps/plugins/portal/birthdays/register.js:91
+msgid "Tomorrow"
+msgstr "Holnap"
+
+#: apps/plugins/portal/birthdays/register.js:91
+msgid "In %1$d days"
+msgstr "%1$d nap múlva"
+
+#: apps/plugins/portal/quota/register.js:32
+msgid "File quota"
+msgstr "Fájlkvóta"
+
+#: apps/plugins/portal/quota/register.js:37
+msgid "Mail quota"
+msgstr "Levélkvóta"
+
+#: apps/plugins/portal/quota/register.js:42
+msgid "Mail count quota"
+msgstr "Levélszámkvóta"
+
+#: apps/plugins/portal/quota/register.js:51
+#: apps/plugins/portal/quota/register.js:68
+msgid "unlimited"
+msgstr "korlátlan"
+
+#. #-#-#-#-#-#-#-#-#-#
+#. %1$s is the storagespace in use
+#. %2$s is the max storagespace
+#. #-#-#-#-#-#-#-#-#-#
+#. %1$s is the number of mails
+#. %2$s is the maximum number of mails
+#. #-#-#-#-#-#-#-#-#-#
+#. %1$s is the current page index in office document preview
+#. %2$s is the number of pages in office document preview
+#: apps/io.ox/office/preview/controller.js:61
+#: apps/plugins/portal/quota/register.js:58
+#: apps/plugins/portal/quota/register.js:75
+#: apps/plugins/portal/quota/register.js:91
+#, c-format
+msgid "%1$s of %2$s"
+msgstr "%1$s / %2$s"
+
+#: apps/plugins/portal/quota/register.js:122
+msgid "Quota"
+msgstr "Kvóta"
+
+#: apps/plugins/portal/linkedIn/register.js:146
+msgid "You have no new messages"
+msgstr "Nincsenek új üzenetei"
+
+#: apps/plugins/portal/linkedIn/register.js:158
+msgid "LinkedIn Network Updates"
+msgstr "LinkedIn hálózat frissítései"
+
+#: apps/plugins/portal/linkedIn/register.js:163
+msgid "Your messages"
+msgstr "Üzenetei"
+
+#: apps/plugins/portal/linkedIn/register.js:184
+msgid "Recent activities"
+msgstr "Legutóbbi tevékenységek"
+
+#: apps/plugins/portal/tumblr/settings/plugin.js:27
+msgid "Tumblr Blogs"
+msgstr "Tumblr blogok"
+
+#: apps/plugins/portal/tumblr/settings/plugin.js:75
+msgid "Edit a blog"
+msgstr "Blog szerkesztése"
+
+#: apps/plugins/portal/tumblr/settings/plugin.js:99
+#: apps/plugins/portal/tumblr/settings/plugin.js:269
+msgid "Please enter a blog URL."
+msgstr "Adjon meg egy blog URL-t."
+
+#: apps/plugins/portal/tumblr/settings/plugin.js:116
+#: apps/plugins/portal/tumblr/settings/plugin.js:121
+#: apps/plugins/portal/tumblr/settings/plugin.js:285
+#: apps/plugins/portal/tumblr/settings/plugin.js:290
+msgid "Unknown error while checking tumblr blog."
+msgstr "Ismeretlen hiba a tumblr blog ellenőrzésekor."
+
+#: apps/plugins/portal/tumblr/settings/plugin.js:163
+msgid "Delete a blog"
+msgstr "Blog törlése"
+
+#: apps/plugins/portal/tumblr/settings/plugin.js:164
+msgid "Do you really want to delete the following blog?"
+msgstr "Biztos, hogy törölni szeretné a következő blogot?"
+
+#: apps/plugins/portal/tumblr/settings/plugin.js:245
+msgid "Add a blog"
+msgstr "Blog hozzáadása"
+
+#: apps/plugins/portal/tumblr/register.js:118
+msgid "Read article on tumblr.com"
+msgstr "Cikk olvasása a tumblr.com-on"
+
+#: apps/plugins/portal/flickr/settings/plugin.js:40
+#: apps/plugins/portal/flickr/settings/plugin.js:45
+msgid "Cannot find user with given name."
+msgstr "Nem található a megadott nevű felhasználó."
+
+#: apps/plugins/portal/flickr/settings/plugin.js:54
+msgid "Streams"
+msgstr "Folyamok"
+
+#: apps/io.ox/core/desktop.js:1197
+#: apps/plugins/portal/flickr/settings/plugin.js:99
+#: apps/plugins/portal/flickr/settings/plugin.js:277
+msgid "Search"
+msgstr "Keresés"
+
+#: apps/plugins/portal/flickr/settings/plugin.js:102
+#: apps/plugins/portal/flickr/settings/plugin.js:280
+msgid "flickr.photos.search"
+msgstr "flickr.photos.search"
+
+#: apps/plugins/portal/flickr/settings/plugin.js:103
+#: apps/plugins/portal/flickr/settings/plugin.js:281
+msgid "flickr.people.getPublicPhotos"
+msgstr "flickr.people.getPublicPhotos"
+
+#: apps/plugins/portal/flickr/settings/plugin.js:109
+msgid "Edit a stream"
+msgstr "Folyam szerkesztése"
+
+#: apps/plugins/portal/flickr/settings/plugin.js:135
+#: apps/plugins/portal/flickr/settings/plugin.js:314
+msgid "Please enter a search query."
+msgstr "Adjon meg egy keresőkifejezést."
+
+#: apps/plugins/portal/flickr/settings/plugin.js:187
+msgid "Delete a stream"
+msgstr "Folyam törlése"
+
+#: apps/plugins/portal/flickr/settings/plugin.js:188
+msgid "Do you really want to delete the following stream?"
+msgstr "Biztos, hogy törölni szeretné a következő folyamot?"
+
+#: apps/plugins/portal/flickr/settings/plugin.js:288
+msgid "Add a stream"
+msgstr "Folyam hozzáadása"
+
+#: apps/io.ox/mail/main.js:72 apps/plugins/portal/mail/register.js:28
+msgid "Inbox"
+msgstr "Beérkezett üzenetek"
+
+#: apps/plugins/portal/mail/register.js:58
+msgid "No mails at all!"
+msgstr "Egyáltalán nincsenek levelek!"
+
+#: apps/plugins/portal/reddit/settings/plugin.js:27
+msgid "Subreddits"
+msgstr "Subredditek"
+
+#: apps/plugins/portal/reddit/settings/plugin.js:133
+#: apps/plugins/portal/reddit/settings/plugin.js:218
+msgid "hot"
+msgstr "Forró"
+
+#: apps/plugins/portal/reddit/settings/plugin.js:134
+#: apps/plugins/portal/reddit/settings/plugin.js:219
+msgid "new"
+msgstr "Új"
+
+#: apps/plugins/portal/reddit/settings/plugin.js:140
+msgid "Add a Subreddit"
+msgstr "Subreddit hozzáadása"
+
+#: apps/plugins/portal/reddit/settings/plugin.js:161
+#: apps/plugins/portal/reddit/settings/plugin.js:245
+msgid "Please enter a subreddit."
+msgstr "Adjon meg egy subredditet."
+
+#: apps/plugins/portal/reddit/settings/plugin.js:174
+#: apps/plugins/portal/reddit/settings/plugin.js:258
+msgid "Unknown error while checking subreddit."
+msgstr "Ismeretlen hiba a subreddit ellenőrzésekor."
+
+#: apps/plugins/portal/reddit/settings/plugin.js:222
+msgid "Edit a Subreddit"
+msgstr "Subreddit szerkesztése"
+
+#: apps/plugins/portal/reddit/settings/plugin.js:302
+msgid "Delete a Subreddit"
+msgstr "Subreddit törlése"
+
+#: apps/plugins/portal/reddit/settings/plugin.js:303
+msgid "Do you really want to delete the following subreddit?"
+msgstr "Biztos, hogy törölni szeretné a következő subredditet?"
+
+#: apps/plugins/portal/reddit/register.js:112
+#: apps/plugins/portal/reddit/register.js:141
+msgid "No title."
+msgstr "Nincs cím."
+
+#: apps/plugins/portal/reddit/register.js:173
+msgid "Comments"
+msgstr "Megjegyzések"
+
+#: apps/plugins/portal/updater/register.js:30
+msgid ""
+"The updater provides a simple installation wizard. Follow the instructions "
+"to install the application. The updater will inform you of any updates for "
+"the Connector for Microsoft Outlook and the Notifier. You can download the "
+"updates from within the updater."
+msgstr ""
+"A frissítő egy egyszerű telepítővarázslót biztosít. Kövesse annak utasításait "
+"az alkalmazás telepítéséhez. A frissítő értesíti a Connector for Microsoft "
+"Outlook és az értesítő frissítéseiről. A frissítéseket a frissítőből töltheti "
+"le."
+
+#: apps/io.ox/core/tk/attachments.js:223 apps/io.ox/files/actions.js:457
+#: apps/io.ox/files/actions.js:524 apps/io.ox/mail/actions.js:768
+#: apps/io.ox/office/editor/actions.js:71 apps/io.ox/tasks/actions.js:369
+#: apps/plugins/portal/updater/register.js:35
+msgid "Download"
+msgstr "Letöltés"
+
+#: apps/plugins/notifications/calendar/register.js:28
+msgid "Invitations"
+msgstr "Meghívók"
+
+#: apps/plugins/notifications/calendar/register.js:44
+msgid "Accept / Decline"
+msgstr "Elfogadás/visszautasítás"
+
+#: apps/plugins/notifications/tasks/register.js:34
+msgid "Overdue Tasks"
+msgstr "Lejárt határidejű feladatok"
+
+#: apps/io.ox/tasks/actions.js:251 apps/io.ox/tasks/edit/view-template.js:82
+#: apps/io.ox/tasks/util.js:208
+#: apps/plugins/notifications/tasks/register.js:50
+msgid "Done"
+msgstr "Kész"
+
+#: apps/io.ox/calendar/edit/template.js:271 apps/io.ox/mail/actions.js:730
+#: apps/plugins/notifications/tasks/register.js:168
+msgid "Reminder"
+msgstr "Emlékeztető"
+
+#: apps/plugins/notifications/tasks/register.js:184
+msgid "Remind me again"
+msgstr "Emlékeztessen újra"
+
+#: apps/io.ox/calendar/month/perspective.js:99
+#: apps/io.ox/calendar/week/perspective.js:81
+#: apps/io.ox/office/editor/hyperlink.js:468
+#: apps/io.ox/office/tk/view/dialogs.js:50
+#: apps/plugins/notifications/tasks/register.js:185
+msgid "OK"
+msgstr "OK"
+
+#: apps/plugins/notifications/tasks/register.js:333
+msgid "Task invites"
+msgstr "Feladatmeghívók"
+
+#: apps/plugins/notifications/tasks/register.js:349
+msgid "Confirm"
+msgstr "Megerősítés"
+
+#: apps/io.ox/calendar/acceptdeny.js:42
+#: apps/plugins/notifications/tasks/register.js:350
+msgid "Decline"
+msgstr "Visszautasítás"
+
+#: apps/io.ox/calendar/acceptdeny.js:43 apps/io.ox/tasks/view-detail.js:158
+#: apps/plugins/notifications/tasks/register.js:351
+msgid "Tentative"
+msgstr "Feltételes"
+
+#: apps/plugins/notifications/tasks/register.js:352
+msgid "Change state"
+msgstr "Állapot módosítása"
+
+#: apps/plugins/notifications/mail/register.js:27
+msgid "New Mails"
+msgstr "Új levelek"
+
+#: apps/plugins/notifications/mail/register.js:30
+msgid "Show Inbox"
+msgstr "Beérkezett üzenetek megjelenítése"
+
+#: apps/plugins/halo/mail/register.js:41
+msgid "Recent conversations"
+msgstr "Legutóbbi társalgások"
+
+#: apps/plugins/halo/mail/register.js:46
+msgid "Received mails"
+msgstr "Kapott levelek"
+
+#: apps/plugins/halo/mail/register.js:48
+msgid "Cannot find any messages this contact sent to you."
+msgstr "Nem találhatók a partner által küldött üzenetek."
+
+#: apps/plugins/halo/mail/register.js:55
+msgid "Sent mails"
+msgstr "Elküldött levelek"
+
+#: apps/plugins/halo/mail/register.js:57
+msgid "Cannot find any messages you sent to this contact."
+msgstr "Nem találhatók a partnernek küldött üzenetek."
+
+#: apps/io.ox/calendar/week/view.js:432
+msgid "Doubleclick here for whole day appointment"
+msgstr "Egész napos találkozóért kattintson duplán ide"
+
+#: apps/io.ox/calendar/list/perspective.js:131
+#: apps/io.ox/calendar/month/perspective.js:296
+#: apps/io.ox/calendar/week/view.js:469
+msgid "show all"
+msgstr "összes megjelenítése"
+
+#: apps/io.ox/calendar/edit/template.js:104
+#: apps/io.ox/calendar/month/perspective.js:79
+#: apps/io.ox/calendar/week/perspective.js:58
+msgid "Ignore conflicts"
+msgstr "Ütközések figyelmen kívül hagyása"
+
+#: apps/io.ox/calendar/month/perspective.js:98
+#: apps/io.ox/calendar/week/perspective.js:80
+msgid ""
+"By changing the date of this appointment you are creating an appointment "
+"exception to the series. Do you want to continue?"
+msgstr ""
+"A találkozó dátumának módosításakor egy, az ismétlődő találkozókba nem "
+"illeszkedő találkozót hoz létre. Szeretné folytatni ezt a műveletet?"
+
+#: apps/io.ox/calendar/actions.js:113
+#: apps/io.ox/calendar/week/perspective.js:85
+msgid ""
+"Do you want to edit the whole series or just one appointment within the "
+"series?"
+msgstr ""
+"A teljes sorozatot, vagy csak a sorozaton belüli egyik találkozót kívánja "
+"szerkeszteni?"
+
+#. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
+#. Use singular in this context
+#: apps/io.ox/calendar/actions.js:116
+#: apps/io.ox/calendar/week/perspective.js:87
+msgid "Series"
+msgstr "Ismétlődések"
+
+#: apps/io.ox/calendar/actions.js:117
+#: apps/io.ox/calendar/week/perspective.js:88
+msgid "Appointment"
+msgstr "Találkozó"
+
+#: apps/io.ox/calendar/conflicts/conflictList.js:20
+msgid "Conflicts detected"
+msgstr "Ütközés történt"
+
+#: apps/io.ox/calendar/month/view.js:88
+msgid "CW"
+msgstr "NH"
+
+#: apps/io.ox/calendar/actions.js:188
+msgid ""
+"Do you want to delete the whole series or just one appointment within the "
+"series?"
+msgstr ""
+"A teljes sorozatot, vagy csak a sorozaton belüli egyik találkozót kívánja "
+"törölni?"
+
+#: apps/io.ox/calendar/actions.js:189
+msgid "Delete appointment"
+msgstr "Találkozó törlése"
+
+#: apps/io.ox/calendar/actions.js:190
+msgid "Delete whole series"
+msgstr "Teljes sorozat törlése"
+
+#: apps/io.ox/calendar/actions.js:206
+msgid "Do you want to delete this appointment?"
+msgstr "Valóban törölni akarja ezt a találkozót?"
+
+#: apps/io.ox/calendar/actions.js:262 apps/io.ox/calendar/actions.js:298
+#: apps/io.ox/calendar/actions.js:390 apps/io.ox/contacts/actions.js:143
+#: apps/io.ox/contacts/actions.js:316
+#: apps/io.ox/core/commons-folderview.js:235
+#: apps/io.ox/core/commons-folderview.js:264 apps/io.ox/files/actions.js:338
+#: apps/io.ox/files/actions.js:492 apps/io.ox/mail/actions.js:179
+#: apps/io.ox/mail/actions.js:180 apps/io.ox/mail/actions.js:697
+#: apps/io.ox/tasks/actions.js:86 apps/io.ox/tasks/actions.js:347
+msgid "Move"
+msgstr "Mozgatás"
+
+#: apps/io.ox/calendar/actions.js:281
+msgid "Appointment has been moved"
+msgid_plural "Appointments have been moved"
+msgstr[0] "A találkozó áthelyezve"
+msgstr[1] "A találkozók áthelyezve"
+
+#: apps/io.ox/calendar/actions.js:282
+msgid "Appointment has been copied"
+msgid_plural "Appointments have been copied"
+msgstr[0] "A találkozó átmásolva"
+msgstr[1] "A találkozók átmásolva"
+
+#: apps/io.ox/calendar/actions.js:314 apps/io.ox/calendar/settings/pane.js:36
+msgid "New appointment"
+msgstr "Új találkozó"
+
+#: apps/io.ox/calendar/actions.js:331 apps/io.ox/calendar/settings/pane.js:59
+#: apps/io.ox/calendar/settings/pane.js:65 apps/io.ox/calendar/util.js:289
+msgid "Day"
+msgstr ". nap"
+
+#: apps/io.ox/calendar/actions.js:338 apps/io.ox/calendar/settings/pane.js:60
+#: apps/io.ox/calendar/settings/pane.js:66
+msgid "Workweek"
+msgstr "Munkahét"
+
+#: apps/io.ox/calendar/actions.js:345 apps/io.ox/calendar/settings/pane.js:61
+#: apps/io.ox/calendar/settings/pane.js:68
+msgid "Week"
+msgstr "Hét"
+
+#: apps/io.ox/calendar/actions.js:352 apps/io.ox/calendar/settings/pane.js:62
+#: apps/io.ox/calendar/settings/pane.js:67
+msgid "Month"
+msgstr "Hónap"
+
+#: apps/io.ox/calendar/actions.js:359 apps/io.ox/calendar/settings/pane.js:63
+#: apps/io.ox/files/actions.js:431
+msgid "List"
+msgstr "Lista"
+
+#: apps/io.ox/calendar/actions.js:382
+msgid "Change status"
+msgstr "Állapotváltoztatás"
+
+#: apps/io.ox/calendar/actions.js:412
+msgid "Send mail to all participants"
+msgstr "Levél küldése minden résztvevőnek"
+
+#: apps/io.ox/calendar/actions.js:421 apps/io.ox/mail/actions.js:782
+msgid "Save as distribution list"
+msgstr "Mentés disztribúciós listaként"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:223
+#: apps/io.ox/calendar/edit/recurrence-view.js:275
+#: apps/io.ox/calendar/edit/recurrence-view.js:278
+msgid "every day"
+msgid_plural "every %1$d days"
+msgstr[0] "minden nap"
+msgstr[1] "%1$d naponta"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:224
+#: apps/io.ox/calendar/edit/recurrence-view.js:290
+#: apps/io.ox/calendar/edit/recurrence-view.js:293
+msgid "every week"
+msgid_plural "every %1$d weeks"
+msgstr[0] "minden héten"
+msgstr[1] "%1$d hetente"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:225
+#: apps/io.ox/calendar/edit/recurrence-view.js:307
+#: apps/io.ox/calendar/edit/recurrence-view.js:309
+#: apps/io.ox/calendar/edit/recurrence-view.js:353
+msgid "every month"
+msgid_plural "every %1$d months"
+msgstr[0] "minden hónapban"
+msgstr[1] "%1$d havonta"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:226
+#: apps/io.ox/calendar/edit/recurrence-view.js:460
+msgid "after %1$d appointment"
+msgid_plural "after %1$d appointments"
+msgstr[0] "%1$d találkozó után"
+msgstr[1] "%1$d találkozó után"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:257
+msgid "Daily"
+msgstr "Naponta"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:258
+msgid "Weekly"
+msgstr "Hetente"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:259
+msgid "Monthly"
+msgstr "Havonta"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:260
+msgid "Yearly"
+msgstr "Évente"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:270
+msgid ""
+"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+"attribute=\"interval\">every <span class=\"number-control\">2</span> days</"
+"a>. "
+msgstr ""
+"A találkozó <a href=\"#\"  data-widget=\"number\" data-"
+"attribute=\"interval\"><span class=\"number-control\">2</span> naponta</"
+"a> ismétlődik. "
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:284
+msgid ""
+"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+"attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</"
+"a> on <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">monday</"
+"a>. "
+msgstr ""
+"A találkozó <a href=\"#\"  data-widget=\"number\" data-"
+"attribute=\"interval\"><span class=\"number-control\">2</span> hetente</"
+"a> ismétlődik <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">"
+"hétfőnként</"
+"a>. "
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:301
+msgid ""
+"The appointment is repeated on day <a href=\"#\"  data-widget=\"custom\" "
+"data-attribute=\"dayInMonth\">10</a> <a href=\"#\"  data-widget=\"number\" "
+"data-attribute=\"interval\">every <span class=\"number-control\">2</span> "
+"months</a>. "
+msgstr ""
+"A találkozó <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">"
+"minden <span class=\"number-control\">2</span>. hónap</a> <a href=\"#\"  "
+"data-widget=\"custom\" data-attribute=\"dayInMonth\">10</a>. napján "
+"ismétlődik. "
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:317
+msgid ""
+"The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-"
+"attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options\" data-"
+"attribute=\"day\">wednesday</a> <a href=\"#\" data-widget=\"number\" data-"
+"attribute=\"interval\">every <span class=\"number-control\">2</span> months</"
+"a>. "
+msgstr ""
+"A találkozó <a href=\"#\" data-widget=\"number\" data-"
+"attribute=\"interval\">minden <span class=\"number-control\">2</span>. hónap</"
+"a> <a href=\"#\" data-widget=\"options\" data-"
+"attribute=\"ordinal\">második</a> <a href=\"#\" data-widget=\"options\" data-"
+"attribute=\"day\">szerdáján</a> ismétlődik. "
+
+#. #-#-#-#-#-#-#-#-#-#
+#. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
+#. #-#-#-#-#-#-#-#-#-#
+#. as in: first week or first Monday
+#: apps/io.ox/calendar/edit/recurrence-view.js:322
+#: apps/io.ox/calendar/edit/recurrence-view.js:385
+#: apps/io.ox/calendar/util.js:29
+msgid "first"
+msgstr "első"
+
+#. #-#-#-#-#-#-#-#-#-#
+#. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
+#. #-#-#-#-#-#-#-#-#-#
+#. as in: second week or second Monday
+#: apps/io.ox/calendar/edit/recurrence-view.js:325
+#: apps/io.ox/calendar/edit/recurrence-view.js:387
+#: apps/io.ox/calendar/util.js:29
+msgid "second"
+msgstr "második"
+
+#. #-#-#-#-#-#-#-#-#-#
+#. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
+#. #-#-#-#-#-#-#-#-#-#
+#. as in: third week or third Monday
+#: apps/io.ox/calendar/edit/recurrence-view.js:328
+#: apps/io.ox/calendar/edit/recurrence-view.js:389
+#: apps/io.ox/calendar/util.js:30
+msgid "third"
+msgstr "harmadik"
+
+#. #-#-#-#-#-#-#-#-#-#
+#. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
+#. #-#-#-#-#-#-#-#-#-#
+#. as in: fourth week or fourth Monday
+#: apps/io.ox/calendar/edit/recurrence-view.js:331
+#: apps/io.ox/calendar/edit/recurrence-view.js:391
+#: apps/io.ox/calendar/util.js:30
+msgid "fourth"
+msgstr "negyedik"
+
+#. #-#-#-#-#-#-#-#-#-#
+#. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
+#. #-#-#-#-#-#-#-#-#-#
+#. as in: last week or last Monday
+#: apps/io.ox/calendar/edit/recurrence-view.js:334
+#: apps/io.ox/calendar/edit/recurrence-view.js:393
+#: apps/io.ox/calendar/util.js:29 apps/io.ox/calendar/util.js:30
+msgid "last"
+msgstr "utolsó"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:339
+#: apps/io.ox/calendar/edit/recurrence-view.js:398
+#: apps/io.ox/calendar/model.js:161 apps/io.ox/calendar/util.js:293
+msgid "Sunday"
+msgstr "vasárnap"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:340
+#: apps/io.ox/calendar/edit/recurrence-view.js:399
+#: apps/io.ox/calendar/model.js:162 apps/io.ox/calendar/util.js:296
+msgid "Monday"
+msgstr "hétfő"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:341
+#: apps/io.ox/calendar/edit/recurrence-view.js:400
+#: apps/io.ox/calendar/model.js:163 apps/io.ox/calendar/util.js:299
+msgid "Tuesday"
+msgstr "kedd"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:342
+#: apps/io.ox/calendar/edit/recurrence-view.js:401
+#: apps/io.ox/calendar/model.js:164 apps/io.ox/calendar/util.js:302
+msgid "Wednesday"
+msgstr "szerda"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:343
+#: apps/io.ox/calendar/edit/recurrence-view.js:402
+#: apps/io.ox/calendar/model.js:165 apps/io.ox/calendar/util.js:305
+msgid "Thursday"
+msgstr "csütörtök"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:344
+#: apps/io.ox/calendar/edit/recurrence-view.js:403
+#: apps/io.ox/calendar/model.js:166 apps/io.ox/calendar/util.js:308
+msgid "Friday"
+msgstr "péntek"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:345
+#: apps/io.ox/calendar/edit/recurrence-view.js:404
+#: apps/io.ox/calendar/model.js:167 apps/io.ox/calendar/util.js:311
+msgid "Saturday"
+msgstr "szombat"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:346
+#: apps/io.ox/calendar/edit/recurrence-view.js:405
+msgid "day of the week"
+msgstr "hét napja"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:347
+#: apps/io.ox/calendar/edit/recurrence-view.js:406
+msgid "day of the weekend"
+msgstr "hétvége napja"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:359
+msgid ""
+"The appointment is repeated every year on day <a href=\"#\"  data-widget="
+"\"custom\" data-attribute=\"dayInMonth\">10</a> of <a href=\"#\" data-widget="
+"\"options\" data-attribute=\"month\">october</a>. "
+msgstr ""
+"A találkozó minden év <a href=\"#\" data-widget=\"options\" "
+"data-attribute=\"month\">október</a> <a href=\"#\"  data-widget=\"custom\" "
+"data-attribute=\"dayInMonth\">10</a>. napján ismétlődik. "
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:364
+msgid "January"
+msgstr "Január"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:365
+msgid "February"
+msgstr "Február"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:366
+msgid "March"
+msgstr "Március"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:367
+msgid "April"
+msgstr "Április"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:368
+msgid "May"
+msgstr "Május"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:369
+msgid "June"
+msgstr "Június"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:370
+msgid "July"
+msgstr "Július"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:371
+msgid "August"
+msgstr "Augusztus"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:372
+msgid "September"
+msgstr "Szeptember"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:373
+msgid "October"
+msgstr "Október"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:374
+msgid "November"
+msgstr "November"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:375
+msgid "Cecember"
+msgstr "December"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:380
+msgid ""
+"The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
+"attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
+"attribute=\"day\">wednesday</a> in <a href=\"#\" data-widget=\"options\" "
+"data-attribute=\"month\">october</a>. "
+msgstr ""
+"A találkozó <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">"
+"október</a> minden <a href=\"#\" data-widget=\"options\" "
+"data-attribute=\"ordinal\">első</a> <a href=\"#\" data-widget=\"options\" "
+"data-"
+"attribute=\"day\">szerdáján</a> ismétlődik. "
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:412
+msgid "january"
+msgstr "január"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:413
+msgid "february"
+msgstr "február"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:414
+msgid "march"
+msgstr "március"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:415
+msgid "april"
+msgstr "április"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:416
+msgid "may"
+msgstr "május"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:417
+msgid "june"
+msgstr "június"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:418
+msgid "july"
+msgstr "július"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:419
+msgid "august"
+msgstr "augusztus"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:420
+msgid "september"
+msgstr "szeptember"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:421
+msgid "october"
+msgstr "október"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:422
+msgid "november"
+msgstr "november"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:423
+msgid "december"
+msgstr "december"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:432
+#: apps/io.ox/calendar/edit/recurrence-view.js:446
+msgid "never ends"
+msgstr "soha nem fejeződik be"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:433
+msgid "ends on a specific date"
+msgstr "adott dátumon fejeződik be"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:434
+msgid "ends after a certain number of appointments"
+msgstr "adott számú találkozó után fejeződik be"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:437
+msgid "ends"
+msgstr "befejeződik"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:442
+msgid ""
+"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+"\">never ends</a>."
+msgstr ""
+"A sorozat <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">"
+"soha nem fejeződik be</a>."
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:450
+msgid ""
+"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+"\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget=\"custom"
+"\">11/03/2013</a>."
+msgstr ""
+"A sorozat <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+"\">befejeződik</a> ekkor: <a href=\"#\" data-attribute=\"until\" "
+"data-widget=\"custom"
+"\">11/03/2013</a>."
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:455
+msgid ""
+"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+"\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number"
+"\">after <span class=\"number-control\">2</span> appointments</a>."
+msgstr ""
+"A sorozat <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+"\">befejeződik</a> <a href=\"#\" data-attribute=\"occurrences\" "
+"data-widget=\"number"
+"\"><span class=\"number-control\">2</span> találkozó után</a>."
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:529
+#: apps/io.ox/tasks/edit/view.js:290
+msgid "Repeat"
+msgstr "Ismétlés"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:542
+msgid "Click on the links to change the values."
+msgstr "Kattintson a hivatkozásokra az értékek megváltoztatásához."
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:543
+msgid "Click on a sentence to choose when to repeat the appointment."
+msgstr "Kattintson egy mondatra a találkozó megismétlési idejének kiválasztásához."
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:793
+msgid "Please choose a sentence below."
+msgstr "Válasszon egy mondatot alább."
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:806
+#: apps/io.ox/mail/write/view-main.js:89
+msgid "Hide"
+msgstr "Elrejtés"
+
+#: apps/io.ox/calendar/edit/template.js:60
+#: apps/io.ox/contacts/create/view.js:101
+#: apps/io.ox/contacts/distrib/create-dist-view.js:43
+#: apps/io.ox/contacts/edit/view-form.js:263
+#: apps/io.ox/core/permissions/permissions.js:292
+#: apps/io.ox/core/tk/folderviews.js:645 apps/io.ox/editor/main.js:85
+#: apps/io.ox/files/actions.js:289 apps/io.ox/files/views/create.js:159
+#: apps/io.ox/mail/write/view-main.js:51 apps/io.ox/portal/settings/pane.js:32
+#: apps/io.ox/tasks/edit/view.js:198
+msgid "Save"
+msgstr "Mentés"
+
+#: apps/io.ox/calendar/edit/template.js:60 apps/io.ox/tasks/edit/view.js:194
+msgid "Create"
+msgstr "Létrehozás"
+
+#: apps/io.ox/calendar/edit/main.js:45 apps/io.ox/calendar/edit/template.js:68
+#: apps/io.ox/contacts/distrib/create-dist-view.js:58
+#: apps/io.ox/contacts/distrib/main.js:158
+#: apps/io.ox/contacts/edit/main.js:117
+#: apps/io.ox/contacts/edit/view-form.js:251 apps/io.ox/editor/main.js:87
+#: apps/io.ox/editor/main.js:220 apps/io.ox/mail/write/main.js:869
+#: apps/io.ox/mail/write/view-main.js:59 apps/io.ox/tasks/edit/view.js:203
+msgid "Discard"
+msgstr "Eldobás"
+
+#: apps/io.ox/calendar/edit/template.js:139 apps/io.ox/mail/actions.js:548
+#: apps/io.ox/mail/main.js:161 apps/io.ox/mail/main.js:418
+#: apps/io.ox/mail/write/view-main.js:447
+#: apps/io.ox/tasks/edit/view-template.js:36 apps/io.ox/tasks/main.js:234
+msgid "Subject"
+msgstr "Tárgy"
+
+#: apps/io.ox/calendar/edit/template.js:151
+msgid "Location"
+msgstr "Hely"
+
+#: apps/io.ox/calendar/edit/template.js:163
+#: apps/io.ox/tasks/edit/view-template.js:442
+msgid "Starts on"
+msgstr "Kezdődik"
+
+#: apps/io.ox/calendar/edit/template.js:174
+msgid "Ends on"
+msgstr "Befejeződik"
+
+#: apps/io.ox/calendar/edit/template.js:184
+msgid "All day"
+msgstr "Egész nap"
+
+#: apps/io.ox/calendar/edit/template.js:248
+msgid "%1$d Minute"
+msgid_plural "%1$d Minutes"
+msgstr[0] "%d perc"
+msgstr[1] "%d perc"
+
+#: apps/io.ox/calendar/edit/template.js:252
+msgid "%1$d Hour"
+msgid_plural "%1$d Hours"
+msgstr[0] "%d óra"
+msgstr[1] "%d óra"
+
+#: apps/io.ox/calendar/edit/template.js:256
+msgid "%1$d Day"
+msgid_plural "%1$d Days"
+msgstr[0] "%d nap"
+msgstr[1] "%d nap"
+
+#: apps/io.ox/calendar/edit/template.js:260
+msgid "%1$d Week"
+msgid_plural "%1$d Weeks"
+msgstr[0] "%d hét"
+msgstr[1] "%d hét"
+
+#. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
+#: apps/io.ox/calendar/edit/template.js:284
+msgid "Shown as"
+msgstr "Megjelenik mint"
+
+#: apps/io.ox/calendar/edit/template.js:287 apps/io.ox/calendar/util.js:33
+msgid "Reserved"
+msgstr "Foglalt"
+
+#: apps/io.ox/calendar/edit/template.js:288 apps/io.ox/calendar/util.js:33
+msgid "Temporary"
+msgstr "ideiglenes"
+
+#: apps/io.ox/calendar/edit/template.js:289 apps/io.ox/calendar/util.js:34
+msgid "Absent"
+msgstr "Hiányzik"
+
+#: apps/io.ox/calendar/edit/template.js:290 apps/io.ox/calendar/util.js:34
+msgid "Free"
+msgstr "Szabad"
+
+#: apps/io.ox/calendar/edit/template.js:302
+msgid "Type"
+msgstr "Típus"
+
+#: apps/io.ox/calendar/edit/template.js:303 apps/io.ox/contacts/model.js:304
+#: apps/io.ox/core/tk/folderviews.js:797
+#: apps/io.ox/tasks/edit/view-template.js:125
+msgid "Private"
+msgstr "Személyes"
+
+#: apps/io.ox/calendar/edit/template.js:314
+#: apps/io.ox/calendar/view-detail.js:226 apps/io.ox/tasks/edit/view.js:72
+#: apps/io.ox/tasks/view-detail.js:160
+msgid "Participants"
+msgstr "Résztvevők"
+
+#: apps/io.ox/calendar/edit/template.js:396
+#: apps/io.ox/calendar/view-detail.js:415
+#: apps/io.ox/mail/write/view-main.js:323
+#: apps/io.ox/mail/write/view-main.js:325
+msgid "Attachments"
+msgstr "Mellékletek"
+
+#: apps/io.ox/calendar/edit/template.js:429
+#: apps/io.ox/mail/write/view-main.js:170
+msgid ""
+"Internet Explorer 9 does not support attachment uploads. Please upgrade to "
+"Internet Explorer 10."
+msgstr ""
+"Az Internet Explorer 9 nem támogatja a mellékletek feltöltését. Frissítsen "
+"Internet Explorer 10-re."
+
+#: apps/io.ox/calendar/edit/template.js:438
+#: apps/io.ox/tasks/edit/view-template.js:551
+msgid "Drop here to upload a <b>new attachment</b>"
+msgstr "Ejtse ide a feltöltendő <b>új mellékletet</b>"
+
+#: apps/io.ox/calendar/edit/main.js:26
+msgid "Edit Appointment"
+msgstr "Találkozó szerkesztése"
+
+#: apps/io.ox/calendar/edit/main.js:44 apps/io.ox/contacts/distrib/main.js:157
+#: apps/io.ox/contacts/edit/main.js:116 apps/io.ox/editor/main.js:219
+#: apps/io.ox/tasks/edit/main.js:144
+msgid "Do you really want to discard your changes?"
+msgstr "Eldobja ezeket a módosításokat?"
+
+#: apps/io.ox/calendar/edit/main.js:96
+msgid "Edit appointment"
+msgstr "Találkozó szerkesztése"
+
+#: apps/io.ox/calendar/edit/main.js:176
+msgid "Create appointment"
+msgstr "Találkozó létrehozása"
+
+#: apps/io.ox/calendar/edit/main.js:181
+msgid "Create Appointment"
+msgstr "Találkozó létrehozása"
+
+#: apps/io.ox/calendar/model.js:122 apps/io.ox/calendar/model.js:123
+#: apps/io.ox/tasks/model.js:95 apps/io.ox/tasks/model.js:96
+msgid "The start date must be before the end date."
+msgstr "A kezdő dátumnak a befejező dátum előtt kell lennie."
+
+#: apps/io.ox/calendar/util.js:199
+msgid "Whole day"
+msgstr "Egész nap"
+
+#. General duration (nominative case): X days
+#. %d is the number of days
+#: apps/io.ox/calendar/util.js:203 apps/io.ox/core/date.js:106
+#, c-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d nap"
+msgstr[1] "%d nap"
+
+#: apps/io.ox/calendar/util.js:283
+msgid "Work Day"
+msgstr "Munkanap"
+
+#: apps/io.ox/calendar/util.js:286
+msgid "Weekend Day"
+msgstr "Hétvége"
+
+#: apps/io.ox/calendar/util.js:329
+msgid "Each %s Day"
+msgstr "Minden %s nap"
+
+#: apps/io.ox/calendar/util.js:333
+msgid "Weekly on %s"
+msgstr "Hetente ekkor: %s"
+
+#: apps/io.ox/calendar/util.js:334
+msgid "Each %s weeks on %s"
+msgstr "Minden %1$s. hét %2$s napján"
+
+#: apps/io.ox/calendar/util.js:339
+msgid "On %s. day every month"
+msgstr "Minden hónap %s. napján"
+
+#: apps/io.ox/calendar/util.js:340
+msgid "On %s. day every %s. month"
+msgstr "A(z) %s. napon, minden %s. hónapban"
+
+#: apps/io.ox/calendar/util.js:343
+msgid "On %s %s every month"
+msgstr "A(z) %s %s napon, minden hónapban"
+
+#: apps/io.ox/calendar/util.js:344
+msgid "On %s %s each %s. months"
+msgstr "A(z) %s %s, minden %s. hónapban"
+
+#: apps/io.ox/calendar/util.js:349
+msgid "Each %s. %s"
+msgstr "Minden %s. %s"
+
+#: apps/io.ox/calendar/util.js:351
+msgid "On %s %s in %s"
+msgstr "A(z) %s %s %s hónapban"
+
+#: apps/io.ox/calendar/settings/pane.js:26 apps/io.ox/core/main.js:49
+msgid "Calendar"
+msgstr "Naptár"
+
+#: apps/io.ox/calendar/settings/pane.js:27
+msgid "Time"
+msgstr "Idő"
+
+#: apps/io.ox/calendar/settings/pane.js:28
+msgid "Interval in minutes"
+msgstr "Időköz percben"
+
+#: apps/io.ox/calendar/settings/pane.js:29
+msgid "Start of working time"
+msgstr "Munkaidő kezdete"
+
+#: apps/io.ox/calendar/settings/pane.js:30
+msgid "End of working time"
+msgstr "Munkaidő vége"
+
+#: apps/io.ox/calendar/settings/pane.js:31
+msgid "Default calendar view"
+msgstr "Alapértelmezett naptárnézet"
+
+#: apps/io.ox/calendar/settings/pane.js:32 apps/io.ox/files/actions.js:415
+msgid "View"
+msgstr "Nézet"
+
+#: apps/io.ox/calendar/settings/pane.js:33
+msgid "Time range for the calender view"
+msgstr "Naptárnézet időtartama"
+
+#: apps/io.ox/calendar/settings/pane.js:34
+msgid "Time range for the team view"
+msgstr "Csoportnézet időtartama"
+
+#: apps/io.ox/calendar/settings/pane.js:35
+msgid "Time range for the list view"
+msgstr "Listanézet időtartama"
+
+#: apps/io.ox/calendar/settings/pane.js:37
+msgid "Default time for reminder"
+msgstr "Alapértelmezett emlékeztetési idő"
+
+#: apps/io.ox/calendar/settings/pane.js:38
+msgid "E-Mail notification for appointment"
+msgstr "E-mail értesítés találkozóról"
+
+#: apps/io.ox/calendar/settings/pane.js:39
+msgid "E-Mail notification for New, Changed, Deleted?"
+msgstr "E-mail értesítés új, módosított és törölt elemekről?"
+
+#: apps/io.ox/calendar/settings/pane.js:40
+#: apps/io.ox/tasks/settings/pane.js:31
+msgid "E-Mail notification for Accept/Declined"
+msgstr "E-mail értesítés elfogadásról és visszautasításról"
+
+#: apps/io.ox/calendar/settings/pane.js:41
+msgid "E-Mail notification for appointment creator?"
+msgstr "E-mail értesítés a találkozó szervezőjének?"
+
+#: apps/io.ox/calendar/settings/pane.js:42
+msgid "E-Mail notification for appointment participant?"
+msgstr "E-mail értesítés a találkozó résztvevőinek?"
+
+#: apps/io.ox/calendar/settings/pane.js:43
+msgid "Show declined appointments"
+msgstr "Elutasított találkozók megjelenítése"
+
+#: apps/io.ox/calendar/settings/pane.js:69
+msgid "Custom"
+msgstr "Egyéni"
+
+#: apps/io.ox/calendar/settings/pane.js:71
+msgid "no reminder"
+msgstr "nincs emlékeztető"
+
+#: apps/io.ox/calendar/settings/pane.js:72
+#: apps/io.ox/core/settings/pane.js:120
+msgid "15 minutes"
+msgstr "15 perc"
+
+#: apps/io.ox/calendar/settings/pane.js:73
+#: apps/io.ox/core/settings/pane.js:121
+msgid "30 minutes"
+msgstr "30 perc"
+
+#: apps/io.ox/calendar/settings/pane.js:74
+msgid "45 minutes"
+msgstr "45 perc"
+
+#: apps/io.ox/calendar/settings/pane.js:75
+msgid "1 hour"
+msgstr "1 óra"
+
+#: apps/io.ox/calendar/settings/pane.js:76
+msgid "2 hour"
+msgstr "2 óra"
+
+#: apps/io.ox/calendar/settings/pane.js:77
+msgid "4 hour"
+msgstr "4 óra"
+
+#: apps/io.ox/calendar/settings/pane.js:78
+msgid "6 hour"
+msgstr "6 óra"
+
+#: apps/io.ox/calendar/settings/pane.js:79
+msgid "8 hour"
+msgstr "8 óra"
+
+#: apps/io.ox/calendar/settings/pane.js:80
+msgid "12 hour"
+msgstr "12 óra"
+
+#: apps/io.ox/calendar/settings/pane.js:81
+msgid "1 day"
+msgstr "1 nap"
+
+#: apps/io.ox/calendar/settings/pane.js:82
+msgid "2 days"
+msgstr "2 nap"
+
+#: apps/io.ox/calendar/settings/pane.js:83
+msgid "3 days"
+msgstr "3 nap"
+
+#: apps/io.ox/calendar/settings/pane.js:84
+msgid "4 days"
+msgstr "4 nap"
+
+#: apps/io.ox/calendar/settings/pane.js:85
+msgid "5 days"
+msgstr "5 nap"
+
+#: apps/io.ox/calendar/settings/pane.js:86
+msgid "6 days"
+msgstr "6 nap"
+
+#: apps/io.ox/calendar/settings/pane.js:87
+msgid "1 week"
+msgstr "1 hét"
+
+#: apps/io.ox/calendar/settings/pane.js:88
+msgid "2 weeks"
+msgstr "2 hét"
+
+#: apps/io.ox/calendar/settings/pane.js:89
+msgid "3 weeks"
+msgstr "3 hét"
+
+#: apps/io.ox/calendar/settings/pane.js:90
+msgid "4 weeks"
+msgstr "4 hét"
+
+#. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
+#. folder permissions - Is Admin? YES
+#: apps/io.ox/calendar/settings/pane.js:92
+#: apps/io.ox/core/permissions/permissions.js:146
+#: apps/io.ox/office/tk/view/dialogs.js:133
+#: apps/io.ox/tasks/settings/pane.js:35
+msgid "Yes"
+msgstr "Igen"
+
+#. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
+#. folder permissions - Is Admin? NO
+#: apps/io.ox/calendar/settings/pane.js:93
+#: apps/io.ox/core/permissions/permissions.js:144
+#: apps/io.ox/office/tk/view/dialogs.js:133
+#: apps/io.ox/tasks/settings/pane.js:36
+msgid "No"
+msgstr "Nem"
+
+#: apps/io.ox/calendar/list/perspective.js:84
+msgid "Couldn't load appointment data."
+msgstr "A találkozó adatai nem tölthetők be."
+
+#: apps/io.ox/calendar/list/perspective.js:128 apps/io.ox/mail/main.js:163
+#: apps/io.ox/tasks/main.js:237
+msgid "Ascending"
+msgstr "Növekvő"
+
+#: apps/io.ox/calendar/list/perspective.js:129 apps/io.ox/mail/main.js:164
+#: apps/io.ox/tasks/main.js:238
+msgid "Descending"
+msgstr "Csökkenő"
+
+#: apps/io.ox/calendar/view-detail.js:277
+msgid "Resources"
+msgstr "Erőforrások"
+
+#: apps/io.ox/calendar/view-detail.js:319 apps/io.ox/tasks/edit/view.js:76
+msgid "Details"
+msgstr "Részletek"
+
+#: apps/io.ox/calendar/view-detail.js:333
+msgid "Show as"
+msgstr "Megjelenítés mint:"
+
+#: apps/io.ox/calendar/view-detail.js:357
+#: apps/io.ox/contacts/view-detail.js:359 apps/io.ox/mail/view-detail.js:312
+msgid "Folder"
+msgstr "Mappa"
+
+#: apps/io.ox/calendar/view-detail.js:374
+msgid "Created"
+msgstr "Létrehozva"
+
+#: apps/io.ox/calendar/view-detail.js:395
+msgid "Modified"
+msgstr "Módosítva"
+
+#: apps/io.ox/calendar/view-grid-template.js:58
+msgid "Conflicts:"
+msgstr "Ütközik:"
+
+#: apps/io.ox/calendar/acceptdeny.js:28
+msgid ""
+"You are about to change your confirmation status. Please leave a comment for "
+"other participants."
+msgstr ""
+"A megerősítési állapotának megváltoztatására készül. Hagyjon egy megjegyzést "
+"a többi résztvevőnek."
+
+#: apps/io.ox/calendar/acceptdeny.js:32
+msgid "Comment:"
+msgstr "Megjegyzés:"
+
+#: apps/io.ox/calendar/acceptdeny.js:44
+msgid "Accept"
+msgstr "Elfogadás"
+
+#: apps/io.ox/contacts/create/view.js:95
+msgid "Add new contact"
+msgstr "Új névjegy létrehozása"
+
+#: apps/io.ox/contacts/actions.js:37
+msgid "Do you really want to delete these items?"
+msgstr "Biztos, hogy törölni szeretné ezeket az elemeket?"
+
+#: apps/io.ox/contacts/actions.js:39
+msgid "Do you really want to delete this distribution list?"
+msgstr "Biztos, hogy törölni szeretné ezt a disztribúciós listát?"
+
+#: apps/io.ox/contacts/actions.js:41
+msgid "Do you really want to delete this contact?"
+msgstr "Biztos, hogy törölni szeretné ezt a névjegyet?"
+
+#: apps/io.ox/contacts/actions.js:149 apps/io.ox/contacts/actions.js:323
+#: apps/io.ox/files/actions.js:344 apps/io.ox/files/actions.js:499
+#: apps/io.ox/mail/actions.js:216 apps/io.ox/mail/actions.js:217
+#: apps/io.ox/mail/actions.js:705
+msgid "Copy"
+msgstr "Másolás"
+
+#: apps/io.ox/contacts/actions.js:265
+msgid "Add contact"
+msgstr "Névjegy hozzáadása"
+
+#: apps/io.ox/contacts/actions.js:272
+msgid "Add distribution list"
+msgstr "Disztribúciós lista hozzáadása"
+
+#: apps/io.ox/contacts/actions.js:284
+msgid "Send mail"
+msgstr "Levél küldése"
+
+#: apps/io.ox/contacts/actions.js:292 apps/io.ox/mail/actions.js:789
+msgid "Invite to appointment"
+msgstr "Meghívás találkozóra"
+
+#. Address book thumb index
+#. (guess translation is only needed for Asian languages)
+#. This string is simply split at spaces (can be more or less than 26 characters)
+#: apps/io.ox/contacts/main.js:50
+msgid "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
+msgstr ""
+"A Á B C CS D DZ DZS E É F G GY H I Í J K L LY M N NY O Ó Ö Ő P Q R S SZ T U Ú "
+"Ü Ű V W X Y Z ZS"
+
+#: apps/io.ox/contacts/main.js:104 apps/io.ox/contacts/model.js:297
+#: apps/io.ox/contacts/view-detail.js:152 apps/io.ox/participants/views.js:93
+msgid "Distribution list"
+msgstr "Disztribúciós lista"
+
+#: apps/io.ox/contacts/main.js:156
+msgid "Couldn't load contact data."
+msgstr "A partner adatai nem tölthetők be."
+
+#: apps/io.ox/contacts/edit/view-form.js:82
+msgid "Personal information"
+msgstr "Személyes adatok"
+
+#: apps/io.ox/contacts/edit/view-form.js:83
+msgid "Messaging"
+msgstr "Üzenetküldés"
+
+#: apps/io.ox/contacts/edit/view-form.js:84
+msgid "Phone & fax numbers"
+msgstr "Telefon- és faxszámok"
+
+#: apps/io.ox/contacts/edit/view-form.js:85
+msgid "Home address"
+msgstr "Otthoni cím"
+
+#: apps/io.ox/contacts/edit/view-form.js:86
+msgid "Business address"
+msgstr "Munkahelyi cím"
+
+#: apps/io.ox/contacts/edit/view-form.js:87
+msgid "Other address"
+msgstr "Egyéb cím"
+
+#: apps/io.ox/contacts/edit/view-form.js:88
+msgid "Job description"
+msgstr "Munkaköri leírás"
+
+#: apps/io.ox/contacts/edit/view-form.js:89 apps/io.ox/contacts/model.js:224
+#: apps/io.ox/files/views/create.js:143
+msgid "Comment"
+msgstr "Megjegyzés"
+
+#: apps/io.ox/contacts/edit/view-form.js:90
+msgid "User fields"
+msgstr "Felhasználói mezők"
+
+#. section name for contact inputfields that does not fit somewhere else
+#: apps/io.ox/contacts/edit/view-form.js:92
+msgid "Miscellaneous"
+msgstr "Egyebek"
+
+#: apps/io.ox/contacts/edit/view-form.js:240
+msgid "Reset image"
+msgstr "Kép visszaállítása"
+
+#: apps/io.ox/contacts/edit/main.js:42
+msgid "Edit Contact"
+msgstr "Kapcsolat szerkesztése"
+
+#: apps/io.ox/contacts/model.js:206
+msgid "Display name"
+msgstr "Megjelenő név"
+
+#: apps/io.ox/contacts/model.js:207
+msgid "First name"
+msgstr "Utónév"
+
+#: apps/io.ox/contacts/model.js:208
+msgid "Last name"
+msgstr "Vezetéknév"
+
+#: apps/io.ox/contacts/model.js:209
+msgid "Middle name"
+msgstr "Középső név"
+
+#: apps/io.ox/contacts/model.js:210
+msgid "Suffix"
+msgstr "Utótag"
+
+#: apps/io.ox/contacts/model.js:211 apps/io.ox/files/views/create.js:115
+msgid "Title"
+msgstr "Cím"
+
+#: apps/io.ox/contacts/model.js:212 apps/io.ox/contacts/model.js:229
+#: apps/io.ox/contacts/model.js:243
+msgid "Street"
+msgstr "Utca"
+
+#: apps/io.ox/contacts/model.js:213 apps/io.ox/contacts/model.js:230
+#: apps/io.ox/contacts/model.js:245
+msgid "Postcode"
+msgstr "Irányítószám"
+
+#: apps/io.ox/contacts/model.js:214 apps/io.ox/contacts/model.js:231
+#: apps/io.ox/contacts/model.js:244
+msgid "Town"
+msgstr "Város"
+
+#: apps/io.ox/contacts/model.js:215 apps/io.ox/contacts/model.js:232
+#: apps/io.ox/contacts/model.js:298
+msgid "State"
+msgstr "Állam"
+
+#: apps/io.ox/contacts/model.js:216 apps/io.ox/contacts/model.js:233
+#: apps/io.ox/contacts/model.js:246
+msgid "Country"
+msgstr "Ország"
+
+#: apps/io.ox/contacts/model.js:217
+msgid "Date of birth"
+msgstr "Születési idő"
+
+#: apps/io.ox/contacts/model.js:218
+msgid "Marital status"
+msgstr "Családi állapot"
+
+#: apps/io.ox/contacts/model.js:219
+msgid "Children"
+msgstr "Gyermekek"
+
+#: apps/io.ox/contacts/model.js:220 apps/io.ox/contacts/view-detail.js:238
+msgid "Profession"
+msgstr "Foglalkozás"
+
+#: apps/io.ox/contacts/model.js:221
+msgid "Nickname"
+msgstr "Becenév"
+
+#: apps/io.ox/contacts/model.js:222
+msgid "Spouse's name"
+msgstr "Házastárs neve"
+
+#: apps/io.ox/contacts/model.js:223
+msgid "Anniversary"
+msgstr "Évforduló"
+
+#: apps/io.ox/contacts/model.js:225 apps/io.ox/contacts/view-detail.js:236
+msgid "Department"
+msgstr "Osztály"
+
+#: apps/io.ox/contacts/model.js:226 apps/io.ox/contacts/view-detail.js:237
+msgid "Position"
+msgstr "Beosztás"
+
+#: apps/io.ox/contacts/model.js:227
+msgid "Employee type"
+msgstr "Alkalmazott típusa"
+
+#: apps/io.ox/contacts/model.js:228
+msgid "Room number"
+msgstr "Szobaszám"
+
+#: apps/io.ox/contacts/model.js:234
+msgid "Employee ID"
+msgstr "Alkalmazotti azonosító"
+
+#: apps/io.ox/contacts/model.js:235
+msgid "Sales Volume"
+msgstr "Értékesítési mennyiség"
+
+#: apps/io.ox/contacts/model.js:236
+msgid "TAX ID"
+msgstr "Adószám"
+
+#: apps/io.ox/contacts/model.js:237
+msgid "Commercial Register"
+msgstr "Cégjegyzékszám"
+
+#: apps/io.ox/contacts/model.js:238
+msgid "Branches"
+msgstr "Fiókirodák"
+
+#: apps/io.ox/contacts/model.js:239
+msgid "Business category"
+msgstr "Cégkategória"
+
+#: apps/io.ox/contacts/model.js:240
+msgid "Info"
+msgstr "Információ"
+
+#: apps/io.ox/contacts/model.js:241
+msgid "Manager"
+msgstr "Főnök"
+
+#: apps/io.ox/contacts/model.js:242
+msgid "Assistant"
+msgstr "Asszisztens"
+
+#: apps/io.ox/contacts/model.js:247
+msgid "Phone"
+msgstr "Telefon"
+
+#: apps/io.ox/contacts/model.js:248
+msgid "Phone alt"
+msgstr "Másik telefon"
+
+#: apps/io.ox/contacts/model.js:249 apps/io.ox/contacts/model.js:255
+msgid "Fax"
+msgstr "Fax"
+
+#: apps/io.ox/contacts/model.js:250
+msgid "Telephone callback"
+msgstr "Visszahívási telefon"
+
+#: apps/io.ox/contacts/model.js:251
+msgid "Phone (car)"
+msgstr "Telefon (autó)"
+
+#: apps/io.ox/contacts/model.js:252
+msgid "Phone (company)"
+msgstr "Telefon (cég)"
+
+#: apps/io.ox/contacts/model.js:253
+msgid "Phone (Home)"
+msgstr "Telefon (otthoni)"
+
+#: apps/io.ox/contacts/model.js:254
+msgid "Phone (Home alt)"
+msgstr "Telefon (másik otthoni)"
+
+#: apps/io.ox/contacts/model.js:256
+msgid "Cell phone"
+msgstr "Mobiltelefon"
+
+#: apps/io.ox/contacts/model.js:257
+msgid "Cell phone alt"
+msgstr "Másik mobiltelefon"
+
+#: apps/io.ox/contacts/model.js:258
+msgid "Phone (other)"
+msgstr "Telefon (egyéb)"
+
+#: apps/io.ox/contacts/model.js:259
+msgid "Fax (alt)"
+msgstr "Fax (másik)"
+
+#: apps/io.ox/contacts/model.js:260
+msgid "Email 1"
+msgstr "1. e-mail"
+
+#: apps/io.ox/contacts/model.js:261
+msgid "Email 2"
+msgstr "2. e-mail"
+
+#: apps/io.ox/contacts/model.js:262
+msgid "Email 3"
+msgstr "3. e-mail"
+
+#: apps/io.ox/contacts/model.js:263 apps/io.ox/office/editor/image.js:48
+#: apps/io.ox/office/editor/image.js:117
+msgid "URL"
+msgstr "URL"
+
+#: apps/io.ox/contacts/model.js:264
+msgid "Telephone (ISDN)"
+msgstr "Telefon (ISDN)"
+
+#: apps/io.ox/contacts/model.js:265
+msgid "Pager"
+msgstr "Személyhívó"
+
+#: apps/io.ox/contacts/model.js:266
+msgid "Telephone primary"
+msgstr "Telefon (elsődleges)"
+
+#: apps/io.ox/contacts/model.js:267
+msgid "Telephone radio"
+msgstr "Telefon (rádiós)"
+
+#: apps/io.ox/contacts/model.js:268
+msgid "Telex"
+msgstr "Telex"
+
+#: apps/io.ox/contacts/model.js:269
+msgid "TTY/TDD"
+msgstr "TTY/TDD"
+
+#: apps/io.ox/contacts/model.js:270
+msgid "Instant Messenger 1"
+msgstr "1. azonnali üzenetküldő"
+
+#: apps/io.ox/contacts/model.js:271
+msgid "Instant Messenger 2"
+msgstr "2. azonnali üzenetküldő"
+
+#: apps/io.ox/contacts/model.js:272
+msgid "IP phone"
+msgstr "IP-telefon"
+
+#: apps/io.ox/contacts/model.js:273
+msgid "Phone (assistant)"
+msgstr "Telefon (asszisztens)"
+
+#: apps/io.ox/contacts/model.js:274 apps/io.ox/tasks/view-detail.js:133
+msgid "Company"
+msgstr "Cég"
+
+#: apps/io.ox/contacts/model.js:275
+msgid "Image 1"
+msgstr "1. kép"
+
+#: apps/io.ox/contacts/model.js:276
+msgid "Optional 01"
+msgstr "Opcionális 01"
+
+#: apps/io.ox/contacts/model.js:277
+msgid "Optional 02"
+msgstr "Opcionális 02"
+
+#: apps/io.ox/contacts/model.js:278
+msgid "Optional 03"
+msgstr "Opcionális 03"
+
+#: apps/io.ox/contacts/model.js:279
+msgid "Optional 04"
+msgstr "Opcionális 04"
+
+#: apps/io.ox/contacts/model.js:280
+msgid "Optional 05"
+msgstr "Opcionális 05"
+
+#: apps/io.ox/contacts/model.js:281
+msgid "Optional 06"
+msgstr "Opcionális 06"
+
+#: apps/io.ox/contacts/model.js:282
+msgid "Optional 07"
+msgstr "Opcionális 07"
+
+#: apps/io.ox/contacts/model.js:283
+msgid "Optional 08"
+msgstr "Opcionális 08"
+
+#: apps/io.ox/contacts/model.js:284
+msgid "Optional 09"
+msgstr "Opcionális 09"
+
+#: apps/io.ox/contacts/model.js:285
+msgid "Optional 10"
+msgstr "Opcionális 10"
+
+#: apps/io.ox/contacts/model.js:286
+msgid "Optional 11"
+msgstr "Opcionális 11"
+
+#: apps/io.ox/contacts/model.js:287
+msgid "Optional 12"
+msgstr "Opcionális 12"
+
+#: apps/io.ox/contacts/model.js:288
+msgid "Optional 13"
+msgstr "Opcionális 13"
+
+#: apps/io.ox/contacts/model.js:289
+msgid "Optional 14"
+msgstr "Opcionális 14"
+
+#: apps/io.ox/contacts/model.js:290
+msgid "Optional 15"
+msgstr "Opcionális 15"
+
+#: apps/io.ox/contacts/model.js:291
+msgid "Optional 16"
+msgstr "Opcionális 16"
+
+#: apps/io.ox/contacts/model.js:292
+msgid "Optional 17"
+msgstr "Opcionális 17"
+
+#: apps/io.ox/contacts/model.js:293
+msgid "Optional 18"
+msgstr "Opcionális 18"
+
+#: apps/io.ox/contacts/model.js:294
+msgid "Optional 19"
+msgstr "Opcionális 19"
+
+#: apps/io.ox/contacts/model.js:295
+msgid "Optional 20"
+msgstr "Opcionális 20"
+
+#: apps/io.ox/contacts/model.js:296
+msgid "Links"
+msgstr "Hivatkozások"
+
+#: apps/io.ox/contacts/model.js:299
+msgid "Mark as distributionlist"
+msgstr "Megjelölés disztribúciós listaként"
+
+#: apps/io.ox/contacts/model.js:300
+msgid "Default address"
+msgstr "Alapértelmezett cím"
+
+#: apps/io.ox/contacts/model.js:301
+msgid "Address Home"
+msgstr "Cím (otthoni)"
+
+#: apps/io.ox/contacts/model.js:302
+msgid "Address Business"
+msgstr "Cím (üzleti)"
+
+#: apps/io.ox/contacts/model.js:303
+msgid "Address Other"
+msgstr "Cím (egyéb)"
+
+#: apps/io.ox/contacts/distrib/main.js:47
+msgid "Create distribution list"
+msgstr "Disztribúciós lista létrehozása"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:39
+msgid "List name"
+msgstr "Lista neve"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:43
+msgid "Create list"
+msgstr "Lista létrehozása"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:75
+#: apps/io.ox/contacts/view-detail.js:284
+#: apps/io.ox/contacts/view-detail.js:288
+msgid "Members"
+msgstr "Tagok"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:79
+#: apps/io.ox/files/actions.js:220
+msgid "Name"
+msgstr "Név"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:80
+msgid "Email address"
+msgstr "E-mail cím"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:169
+#: apps/io.ox/contacts/view-detail.js:284
+msgid "This list has no members yet"
+msgstr "A listának még nincsenek tagjai"
+
+#: apps/io.ox/contacts/view-detail.js:153 apps/io.ox/participants/views.js:81
+msgid "Resource"
+msgstr "Erőforrás"
+
+#: apps/io.ox/contacts/view-detail.js:249
+msgctxt "address"
+msgid "Work"
+msgstr "Munkahelyi"
+
+#: apps/io.ox/contacts/view-detail.js:252
+msgctxt "address"
+msgid "Home"
+msgstr "Otthoni"
+
+#: apps/io.ox/contacts/view-detail.js:263
+#: apps/io.ox/contacts/view-detail.js:264
+msgid "Phone (business)"
+msgstr "Telefon (üzleti)"
+
+#: apps/io.ox/contacts/view-detail.js:265
+#: apps/io.ox/contacts/view-detail.js:266
+msgid "Phone (private)"
+msgstr "Telefon (személyes)"
+
+#: apps/io.ox/contacts/view-detail.js:267
+#: apps/io.ox/contacts/view-detail.js:268
+msgid "Mobile"
+msgstr "Mobil"
+
+#: apps/io.ox/contacts/view-detail.js:296
+msgid "Primary Email"
+msgstr "Elsődleges e-mail"
+
+#: apps/io.ox/contacts/view-detail.js:299
+#: apps/io.ox/contacts/view-detail.js:303
+msgid "Alternative Email"
+msgstr "Alternatív e-mail"
+
+#: apps/io.ox/contacts/view-detail.js:319
+msgid "Birthday"
+msgstr "Születésnap"
+
+#: apps/io.ox/contacts/view-detail.js:337
+msgid "Show QR code"
+msgstr "QR kód megjelenítése"
+
+#: apps/io.ox/files/actions.js:150
+msgid "File: %1$s"
+msgstr "Fájl: %1$s"
+
+#: apps/io.ox/files/actions.js:150
+msgid "Direct link: %1$s"
+msgstr "Közvetlen hivatkozás: %1$s"
+
+#: apps/io.ox/files/actions.js:175 apps/io.ox/files/actions.js:366
+msgid "Do you really want to delete this file?"
+msgid_plural "Do you really want to delete these files?"
+msgstr[0] "Biztos, hogy törölni szeretné ezt a fájlt?"
+msgstr[1] "Biztos, hogy törölni szeretné ezeket a fájlokat?"
+
+#: apps/io.ox/core/commons-folderview.js:183
+#: apps/io.ox/core/tk/folderviews.js:595 apps/io.ox/files/actions.js:236
+#: apps/io.ox/files/actions.js:478 apps/io.ox/office/editor/view/view.js:241
+msgid "Rename"
+msgstr "Átnevezés"
+
+#: apps/io.ox/files/actions.js:399
+msgid "Upload new file"
+msgstr "Új fájl feltöltése"
+
+#: apps/io.ox/files/actions.js:406
+msgid "Share current folder"
+msgstr "Aktuális mappa megosztása"
+
+#: apps/io.ox/files/actions.js:424
+msgid "Icons"
+msgstr "Ikonok"
+
+#: apps/io.ox/files/actions.js:449 apps/io.ox/files/actions.js:517
+msgid "Open"
+msgstr "Megnyitás"
+
+#: apps/io.ox/files/actions.js:464
+msgid "Send as link"
+msgstr "Küldés hivatkozásként"
+
+#: apps/io.ox/files/actions.js:471
+msgid "Send by mail"
+msgstr "Küldés e-mailben"
+
+#: apps/io.ox/files/actions.js:485
+msgid "Edit description"
+msgstr "Leírás szerkesztése"
+
+#: apps/io.ox/files/actions.js:531
+msgid "Make this the current version"
+msgstr "Legyen ez az aktuális verzió"
+
+#: apps/io.ox/files/actions.js:541
+msgid "Delete version"
+msgstr "Verzió törlése"
+
+#: apps/io.ox/files/actions.js:551
+msgid "Drop here to upload a <b>new file</b>"
+msgstr "Ejtse ide a feltöltendő <b>új fájlt</b>"
+
+#: apps/io.ox/files/actions.js:565
+msgid "Drop here to upload a <b>new version</b> of \"%1$s\""
+msgstr "Ejtse ide a(z) „%1$s” feltöltendő <b>új verzióját</b>"
+
+#: apps/io.ox/files/actions.js:571
+msgid "Drop here to upload a <b>new version</b>"
+msgstr "Ejtse ide a feltöltendő <b>új verziót</b>"
+
+#: apps/io.ox/files/actions.js:668
+msgid "View Slideshow"
+msgstr "Diavetítés"
+
+#: apps/io.ox/core/main.js:260 apps/io.ox/files/actions.js:677
+#: apps/io.ox/portal/mediaplugin.js:123
+msgid "Fullscreen"
+msgstr "Teljes képernyő"
+
+#: apps/io.ox/files/actions.js:685
+msgid "Play audio files"
+msgstr "Hangfájlok lejátszása"
+
+#: apps/io.ox/files/actions.js:692
+msgid "Play video files"
+msgstr "Videofájlok lejátszása"
+
+#: apps/io.ox/core/main.js:51 apps/io.ox/files/main.js:35
+#: apps/io.ox/files/settings/pane.js:26
+msgid "Files"
+msgstr "Fájlok"
+
+#. Appears in file icon view during searches
+#: apps/io.ox/files/icons/perspective.js:58
+msgid "Searched for: %1$s"
+msgstr "Keresve: %1$s"
+
+#: apps/io.ox/files/mediaplayer.js:221
+msgid "Minimize"
+msgstr "Minimalizálás"
+
+#: apps/io.ox/core/about.js:40 apps/io.ox/core/permissions/permissions.js:347
+#: apps/io.ox/core/tk/dialogs.js:352 apps/io.ox/files/carousel.js:47
+#: apps/io.ox/files/mediaplayer.js:222
+#: apps/io.ox/mail/accounts/settings.js:255
+#: apps/io.ox/mail/accounts/settings.js:279 apps/io.ox/mail/actions.js:149
+#: apps/io.ox/office/editor/actions.js:49
+#: apps/io.ox/office/preview/actions.js:49
+#: apps/io.ox/publications/wizard.js:57
+msgid "Close"
+msgstr "Bezárás"
+
+#: apps/io.ox/files/settings/pane.js:27 apps/io.ox/tasks/settings/pane.js:28
+msgid "Default view"
+msgstr "Alapértelmezett nézet"
+
+#: apps/io.ox/files/settings/pane.js:28
+msgid "Mediaplayer"
+msgstr "Médialejátszó"
+
+#: apps/io.ox/files/settings/pane.js:29
+msgid "Audio enabled"
+msgstr "Hang engedélyezve"
+
+#: apps/io.ox/files/settings/pane.js:30
+msgid "Video enabled"
+msgstr "Videó engedélyezve"
+
+#: apps/io.ox/files/settings/pane.js:32
+msgid "Icon view"
+msgstr "Ikonnézet"
+
+#: apps/io.ox/files/settings/pane.js:33 apps/io.ox/tasks/settings/pane.js:38
+msgid "List view"
+msgstr "Listanézet"
+
+#: apps/io.ox/files/list/perspective.js:39
+#: apps/io.ox/files/list/perspective.js:230
+msgid "This folder has publications"
+msgstr "A mappa tartalmaz publikációkat"
+
+#: apps/io.ox/files/list/perspective.js:110
+msgid "Couldn't load file data."
+msgstr "A fájl adatai nem tölthetők be."
+
+#: apps/io.ox/files/list/view-detail.js:102
+msgid "Current version"
+msgstr "Aktuális verzió"
+
+#: apps/io.ox/files/list/view-detail.js:112
+msgid "Upload a new version"
+msgstr "Új verzió feltöltése"
+
+#: apps/io.ox/files/list/view-detail.js:119
+msgid "Versions"
+msgstr "Verziók"
+
+#: apps/io.ox/files/list/view-detail.js:352
+msgid "File name:"
+msgstr "Fájlnév:"
+
+#: apps/io.ox/files/list/view-detail.js:355
+msgid "N/A"
+msgstr "---"
+
+#: apps/io.ox/files/list/view-detail.js:364
+msgid "Size:"
+msgstr "Méret:"
+
+#: apps/io.ox/files/list/view-detail.js:376
+msgid "Last Modified:"
+msgstr "Utoljára módosítva:"
+
+#: apps/io.ox/files/list/view-detail.js:400
+msgid "Upload"
+msgstr "Feltöltés"
+
+#: apps/io.ox/files/list/view-detail.js:408
+msgid "Uploading..."
+msgstr "Feltöltés…"
+
+#: apps/io.ox/files/list/view-detail.js:418
+msgid "Upload new version"
+msgstr "Új verzió feltöltése"
+
+#: apps/io.ox/files/list/view-detail.js:434
+msgid "Version Comment:"
+msgstr "Megjegyzés a verzióhoz:"
+
+#: apps/io.ox/files/list/view-detail.js:449
+msgid ""
+"Internet Explorer 9 does not support file uploads. Please upgrade to "
+"Internet Explorer 10."
+msgstr ""
+"Az Internet Explorer 9 nem támogatja a fájlok feltöltését. Frissítsen "
+"Internet Explorer 10-re."
+
+#. Show more fields in the file creation dialog
+#: apps/io.ox/files/views/create.js:55
+msgid "Show more..."
+msgstr "Több megjelenítése…"
+
+#: apps/io.ox/files/views/create.js:58
+msgid "Add new file"
+msgstr "Új fájl hozzáadása"
+
+#: apps/io.ox/tasks/actions.js:56
+msgid "Do you really want to delete this task?"
+msgstr "Biztos, hogy törölni szeretné a feladatot?"
+
+#: apps/io.ox/tasks/actions.js:65
+msgid "Task has been deleted!"
+msgstr "A feladat törlésre került!"
+
+#: apps/io.ox/tasks/actions.js:67
+msgid "Failure! Please refresh."
+msgstr "Hiba! Frissítsen."
+
+#: apps/io.ox/tasks/actions.js:104
+msgid "Task moved."
+msgstr "Feladat áthelyezve."
+
+#: apps/io.ox/tasks/actions.js:157
+msgid "No preview available"
+msgstr "Nem érhető el előnézet"
+
+#: apps/io.ox/tasks/actions.js:199
+msgid "Attachments have been saved!"
+msgstr "Mellékletei mentésre kerültek!"
+
+#: apps/io.ox/tasks/actions.js:217
+msgid "Create new task"
+msgstr "Új feladat létrehozása"
+
+#: apps/io.ox/tasks/actions.js:245
+msgid "Undone"
+msgstr "Visszavonva"
+
+#: apps/io.ox/tasks/actions.js:286
+msgid "Change due date"
+msgstr "Esedékesség dátumának módosítása"
+
+#: apps/io.ox/tasks/actions.js:308
+msgid "Adjust start date"
+msgstr "Kezdés dátumának módosítása"
+
+#: apps/io.ox/tasks/actions.js:311
+msgid "Inconsistent dates"
+msgstr "Inkonzisztens dátumok"
+
+#. If the user changes the duedate of a task, it may be before the start date, which is not allowed
+#. If this happens the user gets the option to change the start date so it matches the due date
+#: apps/io.ox/tasks/actions.js:315
+msgid "The due date cannot be before start date. Adjust start date?"
+msgstr ""
+"Az esedékesség dátuma nem lehet a kezdés dátuma előtt. Módosítja a kezdés "
+"dátumát?"
+
+#: apps/io.ox/tasks/actions.js:320
+msgid "Canceled"
+msgstr "Megszakítva"
+
+#: apps/io.ox/tasks/actions.js:325 apps/io.ox/tasks/actions.js:333
+msgid "Changed due date"
+msgstr "Esedékesség dátuma módosítva"
+
+#: apps/io.ox/mail/actions.js:754 apps/io.ox/mail/write/view-main.js:548
+#: apps/io.ox/tasks/actions.js:355
+msgid "Preview"
+msgstr "Előnézet"
+
+#: apps/io.ox/core/tk/attachments.js:216 apps/io.ox/mail/actions.js:761
+#: apps/io.ox/tasks/actions.js:362
+msgid "Open in new tab"
+msgstr "Megnyitás új lapon"
+
+#: apps/io.ox/mail/actions.js:775 apps/io.ox/tasks/actions.js:376
+msgid "Save in file store"
+msgstr "Mentés fájltárolóba"
+
+#: apps/io.ox/tasks/main.js:166
+msgid "Couldn't load that task."
+msgstr "Az a feladat nem tölthető be."
+
+#: apps/io.ox/tasks/edit/view-template.js:86 apps/io.ox/tasks/main.js:232
+msgid "Status"
+msgstr "Állapot"
+
+#: apps/io.ox/tasks/edit/view-template.js:459 apps/io.ox/tasks/main.js:233
+msgid "Due date"
+msgstr "Lejárat"
+
+#: apps/io.ox/mail/write/view-main.js:382
+#: apps/io.ox/tasks/edit/view-template.js:116 apps/io.ox/tasks/main.js:235
+msgid "Priority"
+msgstr "Prioritás"
+
+#: apps/io.ox/tasks/main.js:240
+msgid "Show done tasks"
+msgstr "Kész feladatok megjelenítése"
+
+#: apps/io.ox/tasks/edit/view.js:54
+msgid "Expand form"
+msgstr "Űrlap kibontása"
+
+#. %1$s is the number of currently attached attachments
+#: apps/io.ox/tasks/edit/view.js:75 apps/io.ox/tasks/edit/view.js:95
+#, c-format
+msgid "Attachments (%1$s)"
+msgstr "Mellékletek (%1$s)"
+
+#: apps/io.ox/mail/actions.js:543 apps/io.ox/mail/actions.js:565
+#: apps/io.ox/tasks/edit/view.js:156
+msgid "Remind me"
+msgstr "Emlékeztessen"
+
+#: apps/io.ox/tasks/edit/view.js:160
+msgid "Progress in %"
+msgstr "Előrehaladás %-ban"
+
+#: apps/io.ox/tasks/edit/main.js:26 apps/io.ox/tasks/edit/view.js:183
+#: apps/io.ox/tasks/edit/view.js:199
+msgid "Edit task"
+msgstr "Feladat szerkesztése"
+
+#: apps/io.ox/tasks/edit/main.js:104 apps/io.ox/tasks/edit/view.js:185
+#: apps/io.ox/tasks/edit/view.js:195
+msgid "Create task"
+msgstr "Feladat létrehozása"
+
+#: apps/io.ox/tasks/edit/view.js:280
+msgid "Please enter value between 0 and 100."
+msgstr "Adjon meg egy 0 és 100 közti értéket."
+
+#: apps/io.ox/tasks/edit/view.js:292
+msgid "Under construction"
+msgstr "Fejlesztés alatt"
+
+#: apps/io.ox/tasks/edit/main.js:145
+msgid "Discard changes"
+msgstr "Módosítások elvetése"
+
+#: apps/io.ox/tasks/edit/view-template.js:80 apps/io.ox/tasks/util.js:220
+msgid "Not started"
+msgstr "Nem indult el"
+
+#: apps/io.ox/tasks/edit/view-template.js:81 apps/io.ox/tasks/util.js:224
+msgid "In progress"
+msgstr "Folyamatban"
+
+#: apps/io.ox/tasks/edit/view-template.js:83 apps/io.ox/tasks/util.js:228
+msgid "Waiting"
+msgstr "Várakozás"
+
+#: apps/io.ox/tasks/edit/view-template.js:84 apps/io.ox/tasks/util.js:232
+msgid "Deferred"
+msgstr "Elhalasztott"
+
+#: apps/io.ox/mail/write/view-main.js:386
+#: apps/io.ox/tasks/edit/view-template.js:112
+msgid "Low"
+msgstr "Alacsony"
+
+#: apps/io.ox/tasks/edit/view-template.js:113
+msgid "Medium"
+msgstr "Közepes"
+
+#: apps/io.ox/mail/write/view-main.js:384
+#: apps/io.ox/tasks/edit/view-template.js:114
+msgid "High"
+msgstr "Magas"
+
+#: apps/io.ox/tasks/edit/view-template.js:137
+#: apps/io.ox/tasks/view-detail.js:126
+msgid "Estimated duration in minutes"
+msgstr "Becsült időtartam percben"
+
+#: apps/io.ox/tasks/edit/view-template.js:146
+#: apps/io.ox/tasks/edit/view-template.js:169
+#: apps/io.ox/tasks/edit/view-template.js:192
+#: apps/io.ox/tasks/edit/view-template.js:215
+msgid "Please enter a correct number."
+msgstr "Adjon meg egy helyes számot."
+
+#: apps/io.ox/tasks/edit/view-template.js:160
+#: apps/io.ox/tasks/view-detail.js:127
+msgid "Actual duration in minutes"
+msgstr "Tényleges időtartam percben"
+
+#: apps/io.ox/tasks/edit/view-template.js:183
+#: apps/io.ox/tasks/view-detail.js:128
+msgid "Estimated costs"
+msgstr "Becsült költségek"
+
+#: apps/io.ox/tasks/edit/view-template.js:206
+#: apps/io.ox/tasks/view-detail.js:129
+msgid "Actual costs"
+msgstr "Tényleges költségek"
+
+#: apps/io.ox/tasks/edit/view-template.js:257
+#: apps/io.ox/tasks/view-detail.js:130
+msgid "Currency"
+msgstr "Pénznem"
+
+#: apps/io.ox/tasks/edit/view-template.js:268
+#: apps/io.ox/tasks/view-detail.js:131
+msgid "Distance"
+msgstr "Távolság"
+
+#: apps/io.ox/tasks/edit/view-template.js:279
+#: apps/io.ox/tasks/view-detail.js:132
+msgid "Billing information"
+msgstr "Számlázási adatok"
+
+#: apps/io.ox/tasks/edit/view-template.js:290
+msgid "Companies"
+msgstr "Cégek"
+
+#: apps/io.ox/tasks/edit/view-template.js:388
+#: apps/io.ox/tasks/edit/view-template.js:423
+msgid "Please enter a valid date."
+msgstr "Érvényes dátumot adjon meg."
+
+#: apps/io.ox/mail/main.js:158 apps/io.ox/tasks/edit/view-template.js:476
+msgid "Date"
+msgstr "Dátum"
+
+#: apps/io.ox/tasks/edit/view-template.js:526
+msgid ""
+"Attachment uploads are not supported in Internet Explorer 9. Please upgrade "
+"to Internet Explorer 10."
+msgstr ""
+"Az Internet Explorer 9 nem támogatja a mellékletek feltöltését. Frissítsen "
+"Internet Explorer 10-re."
+
+#: apps/io.ox/tasks/model.js:105
+msgid "Progress must be a valid number between 0 and 100"
+msgstr "Az előrehaladásnak 0 és 100 közötti érvényes számnak kell lennie"
+
+#: apps/io.ox/tasks/util.js:24
+msgid "this morning"
+msgstr "ma reggel"
+
+#: apps/io.ox/tasks/util.js:25
+msgid "by noon"
+msgstr "este"
+
+#: apps/io.ox/tasks/util.js:26
+msgid "this afternoon"
+msgstr "ma délután"
+
+#: apps/io.ox/tasks/util.js:27
+msgid "tonight"
+msgstr "este"
+
+#: apps/io.ox/tasks/util.js:28
+msgid "late in the evening"
+msgstr "késő este"
+
+#: apps/io.ox/tasks/util.js:30
+msgid "next Sunday"
+msgstr "jövő vasárnap"
+
+#: apps/io.ox/tasks/util.js:31
+msgid "next Monday"
+msgstr "jövő hétfő"
+
+#: apps/io.ox/tasks/util.js:32
+msgid "next Tuesday"
+msgstr "jövő kedd"
+
+#: apps/io.ox/tasks/util.js:33
+msgid "next Wednesday"
+msgstr "jövő szerda"
+
+#: apps/io.ox/tasks/util.js:34
+msgid "next Thursday"
+msgstr "jövő csütörtök"
+
+#: apps/io.ox/tasks/util.js:35
+msgid "next Friday"
+msgstr "jövő péntek"
+
+#: apps/io.ox/tasks/util.js:36
+msgid "next Saturday"
+msgstr "jövő szombat"
+
+#: apps/io.ox/tasks/util.js:144
+msgid "in 5 minutes"
+msgstr "5 percen belül"
+
+#: apps/io.ox/tasks/util.js:145
+msgid "in 15 minutes"
+msgstr "15 percen belül"
+
+#: apps/io.ox/tasks/util.js:146
+msgid "in 30 minutes"
+msgstr "30 percen belül"
+
+#: apps/io.ox/tasks/util.js:147
+msgid "in one hour"
+msgstr "egy órán belül"
+
+#: apps/io.ox/tasks/util.js:177
+msgid "tomorrow"
+msgstr "holnap"
+
+#: apps/io.ox/tasks/util.js:189
+msgid "in one week"
+msgstr "egy héten belül"
+
+#: apps/io.ox/tasks/util.js:215
+msgid "Over due"
+msgstr "Lejárt"
+
+#: apps/io.ox/mail/settings/old_pane.js:42 apps/io.ox/mail/settings/pane.js:26
+#: apps/io.ox/tasks/settings/pane.js:27
+msgid "Common"
+msgstr "Általános"
+
+#: apps/io.ox/tasks/settings/pane.js:29
+msgid "Interval of the reminder in minutes"
+msgstr "Emlékeztető időköze percben"
+
+#: apps/io.ox/tasks/settings/pane.js:30
+msgid "E-Mail notification for task"
+msgstr "E-mail értesítés feladatról"
+
+#: apps/io.ox/tasks/settings/pane.js:32
+msgid "E-Mail notification for task creator?"
+msgstr "E-mail értesítés a feladat létrehozójának?"
+
+#: apps/io.ox/tasks/settings/pane.js:33
+msgid "E-Mail notification for task participant?"
+msgstr "E-mail értesítés a feladat résztvevőinek?"
+
+#: apps/io.ox/tasks/settings/pane.js:37
+msgid "H-split view"
+msgstr "Vízszintes osztású nézet"
+
+#. %1$s due date of a task
+#: apps/io.ox/tasks/view-detail.js:47
+#, c-format
+msgid "Due %1$s"
+msgstr "Határidő: %1$s"
+
+#. %1$s reminder date of a task
+#: apps/io.ox/tasks/view-detail.js:58
+#, c-format
+msgid "Remind date %1$s"
+msgstr "Emlékeztető dátuma: %1$s"
+
+#. %1$s how much of a task is completed in percent, values from 0-100
+#: apps/io.ox/tasks/view-detail.js:68
+#, c-format
+msgid "Progress %1$s %"
+msgstr "Előrehaladás: %1$s %"
+
+#: apps/io.ox/tasks/view-detail.js:125
+msgid "Start date"
+msgstr "Kezdés dátuma"
+
+#: apps/io.ox/tasks/view-detail.js:155
+msgid "Not yet confirmed"
+msgstr "Még nincs megerősítve"
+
+#: apps/io.ox/tasks/view-detail.js:156
+msgid "Confirmed"
+msgstr "Megerősítve"
+
+#: apps/io.ox/tasks/view-detail.js:157
+msgid "Declined"
+msgstr "Elutasítva"
+
+#: apps/io.ox/tasks/view-detail.js:193
+msgid "Attachments   "
+msgstr "Mellékletek"
+
+#: apps/io.ox/tasks/view-detail.js:201
+msgid "all"
+msgstr "minden"
+
+#: apps/io.ox/participants/views.js:77
+msgid "Group"
+msgstr "Csoport"
+
+#: apps/io.ox/participants/views.js:85
+msgid "Resource group"
+msgstr "Erőforráscsoport"
+
+#: apps/io.ox/participants/views.js:89
+msgid "External user"
+msgstr "Külső felhasználó"
+
+#: apps/io.ox/core/api/folder.js:323
+msgid "New Folder"
+msgstr "Új mappa"
+
+#: apps/io.ox/core/api/folder.js:567 apps/io.ox/core/api/folder.js:571
+msgid "Cannot move folder into itself."
+msgstr "Nem mozgatható egy mappa önmagába."
+
+#: apps/io.ox/core/api/folder.js:575
+msgid "Cannot move shared folder."
+msgstr "A megosztott mappa nem mozgatható."
+
+#: apps/io.ox/core/api/folder.js:579
+msgid "Cannot move system folder."
+msgstr "A rendszermappa nem mozgatható."
+
+#: apps/io.ox/core/api/folder.js:583
+msgid "Cannot move default folders."
+msgstr "Az alapértelmezett mappák nem mozgathatók."
+
+#: apps/io.ox/core/about.js:26
+msgid "Contact: %1$s"
+msgstr "Névjegy: %1$s"
+
+#: apps/io.ox/core/about.js:37 apps/io.ox/core/main.js:274
+msgid "About"
+msgstr "Névjegy"
+
+#: apps/io.ox/core/commons.js:49
+msgid "<b>%1$d</b> elements selected"
+msgstr "<b>%1$d</b> elem kijelölve"
+
+#: apps/io.ox/core/commons.js:181
+msgid "Cancel search"
+msgstr "Keresés megszakítása"
+
+#: apps/io.ox/core/commons.js:319
+msgid "Back"
+msgstr "Vissza"
+
+#: apps/io.ox/core/main.js:48
+msgid "Address Book"
+msgstr "Címjegyzék"
+
+#: apps/io.ox/core/main.js:52 apps/io.ox/mail/main.js:157
+msgid "Conversations"
+msgstr "Társalgások"
+
+#: apps/io.ox/core/main.js:231 apps/io.ox/settings/main.js:77
+msgid "Settings"
+msgstr "Beállítások"
+
+#: apps/io.ox/core/main.js:247 apps/io.ox/help/center.js:104
+msgid "Help"
+msgstr "Segítség"
+
+#: apps/io.ox/core/main.js:292
+msgid "Sign out"
+msgstr "Kijelentkezés"
+
+#: apps/io.ox/core/main.js:351
+msgid "Refresh"
+msgstr "Frissítés"
+
+#: apps/io.ox/core/main.js:364
+msgid "Your session is expired"
+msgstr "A munkafolyamat lejárt"
+
+#: apps/io.ox/core/main.js:365
+msgid "Please sign in again to continue"
+msgstr "Jelentkezzen be újra a folytatáshoz"
+
+#: apps/io.ox/core/main.js:501
+msgid "Restore applications"
+msgstr "Alkalmazások visszaállítása"
+
+#: apps/io.ox/core/main.js:503
+msgid ""
+"The following applications can be restored. Just remove the restore point if "
+"you don't want it to be restored."
+msgstr ""
+"A következő alkalmazások állíthatók helyre. Távolítsa el a helyreállítási "
+"pontot, ha nem szeretné visszaállítani."
+
+#: apps/io.ox/core/main.js:507
+msgid "Continue"
+msgstr "Folytatás"
+
+#: apps/io.ox/core/tk/attachments.js:197 apps/io.ox/mail/view-detail.js:596
+msgid "None"
+msgstr "Nincs"
+
+#: apps/io.ox/core/tk/vgrid.js:501
+msgid "Empty"
+msgstr "Üres"
+
+#: apps/io.ox/core/tk/vgrid.js:579
+msgid "Could not load this list"
+msgstr "A lista nem tölthető be"
+
+#: apps/io.ox/core/tk/dialogs.js:482
+msgid "Close all"
+msgstr "Minden bezárása"
+
+#: apps/io.ox/core/tk/folderviews.js:485
+msgid "New folder"
+msgstr "Új mappa"
+
+#: apps/io.ox/core/tk/folderviews.js:505
+msgid "Add new subfolder"
+msgstr "Új almappa hozzáadása"
+
+#: apps/io.ox/core/tk/folderviews.js:512 apps/io.ox/core/tk/folderviews.js:588
+msgid "Folder name"
+msgstr "Mappa neve"
+
+#: apps/io.ox/core/tk/folderviews.js:519
+msgid "Add folder"
+msgstr "Mappa hozzáadása"
+
+#: apps/io.ox/core/tk/folderviews.js:545
+msgid "Do you really want to delete folder \"%s\"?"
+msgstr "Biztos, hogy törölni szeretné a mappát: „%s”?"
+
+#: apps/io.ox/core/tk/folderviews.js:572
+msgid "This is a standard folder, which can't be renamed."
+msgstr "Ez egy szabványos mappa, amely nem nevezhető át."
+
+#: apps/io.ox/core/tk/folderviews.js:580
+msgid "Rename folder"
+msgstr "Mappa átnevezése"
+
+#: apps/io.ox/core/commons-folderview.js:167
+#: apps/io.ox/core/tk/folderviews.js:637
+msgid "Subscribe IMAP folders"
+msgstr "Feliratkozás IMAP mappákra"
+
+#: apps/io.ox/core/tk/folderviews.js:797
+msgid "Public"
+msgstr "Nyilvános"
+
+#: apps/io.ox/core/tk/folderviews.js:797
+msgid "Shared"
+msgstr "Megosztott"
+
+#. Bytes
+#: apps/io.ox/core/strings.js:18
+msgid "B"
+msgstr "B"
+
+#. Kilobytes
+#: apps/io.ox/core/strings.js:19
+msgid "KB"
+msgstr "KB"
+
+#. Megabytes
+#: apps/io.ox/core/strings.js:20
+msgid "MB"
+msgstr "MB"
+
+#. Gigabytes
+#: apps/io.ox/core/strings.js:21
+msgid "GB"
+msgstr "GB"
+
+#. Terabytes
+#: apps/io.ox/core/strings.js:22
+msgid "TB"
+msgstr "TB"
+
+#. Petabytes
+#: apps/io.ox/core/strings.js:23
+msgid "PB"
+msgstr "PB"
+
+#. Exabytes
+#: apps/io.ox/core/strings.js:24
+msgid "EB"
+msgstr "EB"
+
+#. Zettabytes
+#: apps/io.ox/core/strings.js:25
+msgid "ZB"
+msgstr "ZB"
+
+#. Yottabytes
+#: apps/io.ox/core/strings.js:26
+msgid "YB"
+msgstr "YB"
+
+#. File size
+#. %1$d is the number
+#. %2$s is the unit (B, KB, MB etc.)
+#: apps/io.ox/core/strings.js:62
+msgid "%1$d %2$s"
+msgstr "%1$d. %2$s"
+
+#: apps/io.ox/core/settings/pane.js:44
+msgid ""
+"The setting has been saved and will become active when you enter the "
+"application the next time."
+msgstr ""
+"A beállítás mentésre került, és az alkalmazásba való következő belépéskor "
+"lesz aktív."
+
+#: apps/io.ox/core/settings/pane.js:49
+msgid "Basic settings"
+msgstr "Alapbeállítások"
+
+#: apps/io.ox/core/settings/pane.js:60
+#: apps/io.ox/office/editor/view/controls.js:366
+msgid "Language"
+msgstr "Nyelv"
+
+#: apps/io.ox/core/settings/pane.js:94
+msgid "Timezone"
+msgstr "Időzóna"
+
+#: apps/io.ox/core/settings/pane.js:106
+msgid "Theme"
+msgstr "Téma"
+
+#: apps/io.ox/core/settings/pane.js:118 apps/io.ox/mail/settings/pane.js:54
+msgid "5 minutes"
+msgstr "5 perc"
+
+#: apps/io.ox/core/settings/pane.js:119 apps/io.ox/mail/settings/pane.js:55
+msgid "10 minutes"
+msgstr "10 perc"
+
+#: apps/io.ox/core/settings/pane.js:128
+msgid "Refresh interval"
+msgstr "Frissítési időköz"
+
+#: apps/io.ox/core/settings/pane.js:146
+msgid "Default App after login?"
+msgstr "Alapértelmezett app belépés után?"
+
+#: apps/io.ox/core/commons-folderview.js:131
+msgid "Add subfolder"
+msgstr "Almappa hozzáadása"
+
+#: apps/io.ox/core/commons-folderview.js:150
+#: apps/io.ox/mail/accounts/settings.js:204
+msgid "Add mail account"
+msgstr "E-mail fiók hozzáadása"
+
+#: apps/io.ox/core/commons-folderview.js:225
+msgid "Permissions"
+msgstr "Jogosultságok"
+
+#: apps/io.ox/core/commons-folderview.js:473
+msgid "Toggle folder"
+msgstr "Mappa átváltása"
+
+#: apps/io.ox/core/permissions/permissions.js:31
+msgid "Guest"
+msgstr "Vendég"
+
+#: apps/io.ox/core/permissions/permissions.js:32
+msgid "Author"
+msgstr "Szerző"
+
+#: apps/io.ox/core/permissions/permissions.js:33
+msgid "Administrator"
+msgstr "Adminisztrátor"
+
+#: apps/io.ox/core/permissions/permissions.js:88
+msgid "Apply role"
+msgstr "Szerep alkalmazása"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js:104
+msgid "view the folder"
+msgstr "mappa megjelenítése"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js:106
+msgid "create objects"
+msgstr "elemek létrehozása"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js:108
+#: apps/io.ox/core/permissions/permissions.js:110
+msgid "create objects and subfolders"
+msgstr "elemek és almappák létrehozása"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js:114
+msgid "no read permissions"
+msgstr "nincs olvasási jogosultság"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js:116
+msgid "read own objects"
+msgstr "saját elemek olvasása"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js:118
+#: apps/io.ox/core/permissions/permissions.js:120
+msgid "read all objects"
+msgstr "minden elemek olvasása"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js:124
+msgid "no edit permissions"
+msgstr "nincs szerkesztési jogosultság"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js:126
+msgid "edit own objects"
+msgstr "saját elemek szerkesztése"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js:128
+#: apps/io.ox/core/permissions/permissions.js:130
+msgid "edit all objects"
+msgstr "minden elemek szerkesztése"
+
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js:134
+msgid "no delete permissions"
+msgstr "nincs törlési jogosultságai"
+
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js:136
+msgid "delete only own objects"
+msgstr "csak saját elemek törlése"
+
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js:138
+#: apps/io.ox/core/permissions/permissions.js:140
+msgid "delete all objects"
+msgstr "minden elemek törlése"
+
+#: apps/io.ox/core/permissions/permissions.js:209
+msgid "Owner"
+msgstr "Tulajdonos"
+
+#: apps/io.ox/core/permissions/permissions.js:215
+#: apps/io.ox/core/permissions/permissions.js:287
+msgid "Folder permissions"
+msgstr "Mappa jogosultságai"
+
+#: apps/io.ox/core/permissions/permissions.js:218
+msgid "Object permissions"
+msgstr "Elemek jogosultságai"
+
+#: apps/io.ox/core/permissions/permissions.js:223
+msgid "The user has administrative rights"
+msgstr "A felhasználó rendelkezik adminisztrációs jogosultságokkal"
+
+#. Reminder (objective case): in X weeks
+#. %d is the number of weeks
+#: apps/io.ox/core/date.js:83
+#, c-format
+msgctxt "in"
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d hét"
+msgstr[1] "%d hét"
+
+#. General duration (nominative case): X weeks
+#. %d is the number of weeks
+#: apps/io.ox/core/date.js:87
+#, c-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d hét"
+msgstr[1] "%d hét"
+
+#. Reminder (objective case): in X days
+#. %d is the number of days
+#: apps/io.ox/core/date.js:102
+#, c-format
+msgctxt "in"
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d nap"
+msgstr[1] "%d nap"
+
+#. Reminder (objective case): in X days, Y hours and Z minutes
+#. %1$d is the number of days
+#. %2$s is the text for the remainder of the last day
+#: apps/io.ox/core/date.js:115
+#, c-format
+msgctxt "in"
+msgid "%1$d day, %2$s"
+msgid_plural "%1$d days, %2$s"
+msgstr[0] "%1$d nap, %2$s"
+msgstr[1] "%1$d nap, %2$s"
+
+#. General duration (nominative case): X days, Y hours and Z minutes
+#. %1$d is the number of days
+#. %2$s is the text for the remainder of the last day
+#: apps/io.ox/core/date.js:120
+#, c-format
+msgid "%1$d day, %2$s"
+msgid_plural "%1$d days, %2$s"
+msgstr[0] "%1$d nap, %2$s"
+msgstr[1] "%1$d nap, %2$s"
+
+#. Reminder (objective case): in X hours
+#. %d is the number of hours
+#: apps/io.ox/core/date.js:134
+#, c-format
+msgctxt "in"
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d óra"
+msgstr[1] "%d óra"
+
+#. General duration (nominative case): X hours
+#. %d is the number of hours
+#: apps/io.ox/core/date.js:138
+#, c-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d óra"
+msgstr[1] "%d óra"
+
+#. Reminder (objective case): in X hours and Y minutes
+#. %1$d is the number of hours
+#. %2$s is the text for the remainder of the last hour
+#: apps/io.ox/core/date.js:147
+#, c-format
+msgctxt "in"
+msgid "%1$d hour and %2$s"
+msgid_plural "%1$d hours and %2$s"
+msgstr[0] "%1$d óra és %2$s"
+msgstr[1] "%1$d óra és %2$s"
+
+#. General duration (nominative case): X hours and Y minutes
+#. %1$d is the number of hours
+#. %2$s is the text for the remainder of the last hour
+#: apps/io.ox/core/date.js:152
+#, c-format
+msgid "%1$d hour and %2$s"
+msgid_plural "%1$d hours and %2$s"
+msgstr[0] "%1$d óra és %2$s"
+msgstr[1] "%1$d óra és %2$s"
+
+#. Reminder (objective case): in X minutes
+#. %d is the number of minutes
+#: apps/io.ox/core/date.js:160
+#, c-format
+msgctxt "in"
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d perc"
+msgstr[1] "%d perc"
+
+#. General duration (nominative case): X minutes
+#. %d is the number of minutes
+#: apps/io.ox/core/date.js:164
+#, c-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d perc"
+msgstr[1] "%d perc"
+
+#: apps/io.ox/core/extPatterns/links.js:186
+#: apps/io.ox/mail/write/view-main.js:403
+msgid "More"
+msgstr "Tovább"
+
+#: apps/io.ox/core/desktop.js:30
+msgid "i18n test string - do not translate this"
+msgstr "i18n test string - do not translate this"
+
+#: apps/io.ox/core/desktop.js:459
+msgid "There are unsaved changes."
+msgstr "Mentetlen beállítások vannak."
+
+#: apps/io.ox/core/desktop.js:799 apps/io.ox/core/desktop.js:945
+msgid "%1$s %2$s"
+msgstr "%1$s %2$s"
+
+#: apps/io.ox/core/desktop.js:1237
+msgid "Toggle search"
+msgstr "Keresés ki/be"
+
+#: apps/io.ox/core/desktop.js:1295
+msgid ""
+"Failed to start application. Maybe you have connection problems. Please try "
+"again."
+msgstr ""
+"Az alkalmazás indítása sikertelen. Ezt kapcsolatproblémák okozhatják. "
+"Próbálja újra."
+
+#: apps/io.ox/preview/main.js:75
+msgid "Click to open. Drag to your desktop to download."
+msgstr "Kattintson a megnyitáshoz. Húzza az asztalára a letöltéshez."
+
+#: apps/io.ox/preview/main.js:77
+msgid "Click to open."
+msgstr "Kattintson a megnyitásához."
+
+#: apps/io.ox/preview/main.js:138
+msgid "Preview could not be loaded"
+msgstr "Az előnézet nem tölthető be"
+
+#: apps/io.ox/office/preview/view.js:47
+msgid "First page"
+msgstr "Első oldal"
+
+#: apps/io.ox/office/preview/view.js:48
+msgid "Previous page"
+msgstr "Előző oldal"
+
+#: apps/io.ox/office/preview/view.js:50
+msgid "Next page"
+msgstr "Következő oldal"
+
+#: apps/io.ox/office/preview/view.js:51
+msgid "Last page"
+msgstr "Utolsó oldal"
+
+#: apps/io.ox/office/editor/main.js:146
+#: apps/io.ox/office/editor/view/view.js:230
+#: apps/io.ox/office/preview/main.js:53
+msgid "Unnamed"
+msgstr "Névtelen"
+
+#: apps/io.ox/office/preview/main.js:95
+msgid "An error occurred while loading the document."
+msgstr "Hiba történt a dokumentum betöltése közben."
+
+#: apps/io.ox/office/editor/main.js:285 apps/io.ox/office/preview/main.js:95
+msgid "Load Error"
+msgstr "Betöltési hiba"
+
+#. %1$d is the number of columns in the drop-down grid of a size-chooser control (table size selector)
+#: apps/io.ox/office/tk/dropdown/gridsizer.js:151
+#, c-format
+msgid "%1$d column"
+msgid_plural "%1$d columns"
+msgstr[0] "%1$d oszlop"
+msgstr[1] "%1$d oszlop"
+
+#. %1$d is the number of rows in the drop-down grid of a size-chooser control (table size selector)
+#: apps/io.ox/office/tk/dropdown/gridsizer.js:156
+#, c-format
+msgid "%1$d row"
+msgid_plural "%1$d rows"
+msgstr[0] "%1$d sor"
+msgstr[1] "%1$d sor"
+
+#: apps/io.ox/office/tk/view/alert.js:215
+msgid "Read-only mode"
+msgstr "Csak olvasható mód"
+
+#: apps/io.ox/office/tk/view/alert.js:216
+msgid "You don't have permissions to change this document"
+msgstr "Nincs joga a dokumentum módosításához"
+
+#: apps/io.ox/office/tk/view/alert.js:235
+msgid "Read Only Mode"
+msgstr "Csak olvasható mód"
+
+#: apps/io.ox/office/tk/view/alert.js:236
+msgid "Another user"
+msgstr "Másik felhasználó"
+
+#: apps/io.ox/office/tk/view/alert.js:236
+msgid " is currently editing this document."
+msgstr " jelenleg szerkeszti a dokumentumot."
+
+#: apps/io.ox/office/tk/view/alert.js:241
+msgid "Acquire Edit Rights"
+msgstr "Szerkesztési jogok kérése"
+
+#: apps/io.ox/office/tk/view/alert.js:256
+msgid "Edit Mode"
+msgstr "Szerkesztési mód"
+
+#: apps/io.ox/office/tk/view/alert.js:257
+msgid "You have edit rights."
+msgstr "Van szerkesztési joga."
+
+#: apps/io.ox/editor/main.js:121 apps/io.ox/office/tk/view/alert.js:276
+msgid "Error"
+msgstr "Hiba"
+
+#: apps/io.ox/office/tk/view/alert.js:289
+msgid "AJAX Error"
+msgstr "AJAX hiba"
+
+#: apps/io.ox/office/tk/view/alert.js:304
+msgid "Internal Error"
+msgstr "Belső hiba"
+
+#: apps/io.ox/office/tk/view/alert.js:304
+msgid "Exception caught: "
+msgstr "Elkapott kivétel: "
+
+#: apps/io.ox/office/editor/hyperlink.js:71
+msgid "Insert/Edit Hyperlink"
+msgstr "Hiperhivatkozás beszúrása/szerkesztése"
+
+#: apps/io.ox/office/editor/hyperlink.js:73
+msgid "Enter URL"
+msgstr "Adja meg az URL-címet"
+
+#: apps/io.ox/office/editor/hyperlink.js:75
+msgid "Enter visible text"
+msgstr "Adja meg a látható szöveget"
+
+#: apps/io.ox/office/editor/hyperlink.js:76
+#: apps/io.ox/office/editor/image.js:49 apps/io.ox/office/editor/image.js:118
+#: apps/io.ox/office/editor/view/view.js:400
+msgid "Insert"
+msgstr "Beszúrás"
+
+#: apps/io.ox/office/editor/hyperlink.js:439
+msgid "Text:"
+msgstr "Szöveg:"
+
+#: apps/io.ox/office/editor/hyperlink.js:452
+msgid "URL:"
+msgstr "URL:"
+
+#: apps/io.ox/office/editor/editor.js:2304
+#: apps/io.ox/office/editor/hyperlink.js:469
+msgid "Remove"
+msgstr "Eltávolítás"
+
+#: apps/io.ox/office/editor/fileActions.js:67
+msgid "New office document"
+msgstr "Új Office dokumentum"
+
+#: apps/io.ox/office/editor/fileActions.js:84
+msgid "Edit as new"
+msgstr "Szerkesztés újként"
+
+#: apps/io.ox/office/editor/actions.js:93
+msgid "Print"
+msgstr "Nyomtatás"
+
+#: apps/io.ox/office/editor/main.js:285
+msgid "An error occurred while importing the document."
+msgstr "Hiba történt a dokumentum importálása közben."
+
+#: apps/io.ox/office/editor/main.js:400
+msgid "Synchronization to the server has been lost."
+msgstr "A szinkronizáció a kiszolgálóval elveszett."
+
+#: apps/io.ox/office/editor/main.js:400
+msgid "Server Error"
+msgstr "Kiszolgálóhiba"
+
+#: apps/io.ox/office/editor/main.js:413
+msgid "Network Problems"
+msgstr "Hálózati problémák"
+
+#: apps/io.ox/office/editor/main.js:413
+msgid "Switched to read only mode."
+msgstr "Csak olvasható módba váltva."
+
+#: apps/io.ox/office/editor/main.js:643
+msgid "This document contains unsaved changes. Do you really want to close?"
+msgstr "A dokumentum mentetlen módosításokat tartalmaz. Biztosan bezárja?"
+
+#: apps/io.ox/office/editor/editor.js:370
+msgid "Sorry, failed to load the document successfully."
+msgstr "Elnézést, a dokumentum betöltése meghiúsult."
+
+#: apps/io.ox/office/editor/editor.js:2449
+msgid "Heading"
+msgstr "Címsor"
+
+#: apps/io.ox/office/editor/image.js:26
+msgid "Sorry, image could not be inserted."
+msgstr "Elnézést, a kép nem szúrható be."
+
+#: apps/io.ox/office/editor/image.js:46
+msgid "Select Image File"
+msgstr "Képfájl kiválasztása"
+
+#: apps/io.ox/office/editor/image.js:116
+msgid "Enter Image URL"
+msgstr "Adja meg a kép URL-címét"
+
+#: apps/io.ox/office/editor/view/controls.js:30
+msgid "Dark red"
+msgstr "Sötétvörös"
+
+#: apps/io.ox/mail/view-detail.js:597
+#: apps/io.ox/office/editor/view/controls.js:31
+msgid "Red"
+msgstr "Vörös"
+
+#: apps/io.ox/mail/view-detail.js:603
+#: apps/io.ox/office/editor/view/controls.js:32
+msgid "Orange"
+msgstr "Narancs"
+
+#: apps/io.ox/mail/view-detail.js:606
+#: apps/io.ox/office/editor/view/controls.js:33
+msgid "Yellow"
+msgstr "Sárga"
+
+#: apps/io.ox/mail/view-detail.js:602
+#: apps/io.ox/office/editor/view/controls.js:34
+msgid "Light green"
+msgstr "Világoszöld"
+
+#: apps/io.ox/mail/view-detail.js:599
+#: apps/io.ox/office/editor/view/controls.js:35
+msgid "Green"
+msgstr "Zöld"
+
+#: apps/io.ox/mail/view-detail.js:605
+#: apps/io.ox/office/editor/view/controls.js:36
+msgid "Light blue"
+msgstr "Világoskék"
+
+#: apps/io.ox/mail/view-detail.js:598
+#: apps/io.ox/office/editor/view/controls.js:37
+msgid "Blue"
+msgstr "Kék"
+
+#: apps/io.ox/office/editor/view/controls.js:38
+msgid "Dark blue"
+msgstr "Sötétkék"
+
+#: apps/io.ox/mail/view-detail.js:601
+#: apps/io.ox/office/editor/view/controls.js:39
+msgid "Purple"
+msgstr "Bíbor"
+
+#: apps/io.ox/office/editor/view/controls.js:44
+msgid "Background 1"
+msgstr "Háttér 1"
+
+#: apps/io.ox/office/editor/view/controls.js:45
+msgid "Text 1"
+msgstr "Szöveg 1"
+
+#: apps/io.ox/office/editor/view/controls.js:46
+msgid "Background 2"
+msgstr "Háttér 2"
+
+#: apps/io.ox/office/editor/view/controls.js:47
+msgid "Text 2"
+msgstr "Szöveg 2"
+
+#: apps/io.ox/office/editor/view/controls.js:48
+msgid "Accent 1"
+msgstr "Ékezet 1"
+
+#: apps/io.ox/office/editor/view/controls.js:49
+msgid "Accent 2"
+msgstr "Ékezet 2"
+
+#: apps/io.ox/office/editor/view/controls.js:50
+msgid "Accent 3"
+msgstr "Ékezet 3"
+
+#: apps/io.ox/office/editor/view/controls.js:51
+msgid "Accent 4"
+msgstr "Ékezet 4"
+
+#: apps/io.ox/office/editor/view/controls.js:52
+msgid "Accent 5"
+msgstr "Ékezet 5"
+
+#: apps/io.ox/office/editor/view/controls.js:53
+msgid "Accent 6"
+msgstr "Ékezet 6"
+
+#: apps/io.ox/office/editor/view/controls.js:57
+msgid "English (US)"
+msgstr "Angol (US)"
+
+#: apps/io.ox/office/editor/view/controls.js:58
+msgid "German"
+msgstr "Német"
+
+#: apps/io.ox/office/editor/view/controls.js:59
+msgid "French"
+msgstr "Francia"
+
+#: apps/io.ox/office/editor/view/controls.js:60
+msgid "Spanish"
+msgstr "Spanyol"
+
+#: apps/io.ox/office/editor/view/controls.js:61
+msgid "Czech"
+msgstr "Cseh"
+
+#: apps/io.ox/office/editor/view/controls.js:62
+msgid "Danish"
+msgstr "Dán"
+
+#: apps/io.ox/office/editor/view/controls.js:63
+msgid "Dutch (Netherlands)"
+msgstr "Holland (Hollandia)"
+
+#: apps/io.ox/office/editor/view/controls.js:64
+msgid "Finnish"
+msgstr "Finn"
+
+#: apps/io.ox/office/editor/view/controls.js:65
+msgid "Greek"
+msgstr "Görög"
+
+#: apps/io.ox/office/editor/view/controls.js:66
+msgid "Hungarian"
+msgstr "Magyar"
+
+#: apps/io.ox/office/editor/view/controls.js:67
+msgid "Italian (Italy)"
+msgstr "Olasz (Olaszország)"
+
+#: apps/io.ox/office/editor/view/controls.js:68
+msgid "Polish"
+msgstr "Lengyel"
+
+#: apps/io.ox/office/editor/view/controls.js:69
+msgid "Portuguese (Portugal)"
+msgstr "Portugál (Portugália)"
+
+#: apps/io.ox/office/editor/view/controls.js:70
+msgid "Romanian"
+msgstr "Román"
+
+#: apps/io.ox/office/editor/view/controls.js:71
+msgid "Russian"
+msgstr "Orosz"
+
+#: apps/io.ox/office/editor/view/controls.js:72
+msgid "Swedish (Sweden)"
+msgstr "Svéd (Svédország)"
+
+#: apps/io.ox/office/editor/view/controls.js:183
+msgid "Paragraph style"
+msgstr "Bekezdés stílusa"
+
+#: apps/io.ox/office/editor/view/controls.js:241
+msgid "Lighter"
+msgstr "Világosabb"
+
+#: apps/io.ox/office/editor/view/controls.js:241
+msgid "Darker"
+msgstr "Sötétebb"
+
+#: apps/io.ox/office/editor/view/controls.js:251
+msgid "No color"
+msgstr "Nincs szín"
+
+#: apps/io.ox/office/editor/view/controls.js:251
+msgid "Automatic color"
+msgstr "Automatikus szín"
+
+#: apps/io.ox/office/editor/view/controls.js:255
+msgid "Theme colors"
+msgstr "Téma színei"
+
+#: apps/io.ox/office/editor/view/controls.js:262
+msgid "Standard colors"
+msgstr "Szabványos színek"
+
+#: apps/io.ox/office/editor/view/controls.js:290
+msgid "Font name"
+msgstr "Betűkészlet neve"
+
+#: apps/io.ox/office/editor/view/controls.js:312
+msgid "Font size"
+msgstr "Betűméret"
+
+#: apps/io.ox/office/editor/view/controls.js:333
+msgid "Paragraph borders"
+msgstr "Bekezdés szegélyei"
+
+#: apps/io.ox/office/editor/view/controls.js:341
+msgid "No border"
+msgstr "Nincs szegély"
+
+#: apps/io.ox/office/editor/view/controls.js:342
+msgid "Border left and right"
+msgstr "Szegély balra és jobbra"
+
+#: apps/io.ox/office/editor/view/controls.js:343
+msgid "Border top and bottom"
+msgstr "Szegély fent és lent"
+
+#: apps/io.ox/office/editor/view/controls.js:344
+msgid "Border outside"
+msgstr "Szegély kívül"
+
+#: apps/io.ox/office/editor/view/controls.js:345
+msgid "Border outside and inside"
+msgstr "Szegély kívül és belül"
+
+#: apps/io.ox/office/editor/view/controls.js:346
+msgid "Border left"
+msgstr "Szegély balra"
+
+#: apps/io.ox/office/editor/view/controls.js:347
+msgid "Border right"
+msgstr "Szegély jobbra"
+
+#: apps/io.ox/office/editor/view/controls.js:348
+msgid "Border top"
+msgstr "Szegély fent"
+
+#: apps/io.ox/office/editor/view/controls.js:349
+msgid "Border bottom"
+msgstr "Szegély lent"
+
+#: apps/io.ox/office/editor/view/controls.js:350
+msgid "Border inside"
+msgstr "Szegély belül"
+
+#: apps/io.ox/office/editor/view/controls.js:388
+msgid "Insert table"
+msgstr "Táblázat beszúrása"
+
+#: apps/io.ox/office/editor/view/view.js:85
+msgid "Revert Last Operation"
+msgstr "Utolsó művelet visszagörgetése"
+
+#: apps/io.ox/office/editor/view/view.js:86
+msgid "Restore Last Operation"
+msgstr "Utolsó művelet visszaállítása"
+
+#: apps/io.ox/office/editor/view/view.js:153
+msgid "No document"
+msgstr "Nincs dokumentum"
+
+#: apps/io.ox/office/editor/view/view.js:156
+msgid "Offline"
+msgstr "Kilépett"
+
+#: apps/io.ox/office/editor/view/view.js:163
+msgid "Saving changes"
+msgstr "Változtatások mentése"
+
+#: apps/io.ox/office/editor/view/view.js:166
+msgid "All changes saved"
+msgstr "Minden üzenet elmentve"
+
+#: apps/io.ox/office/editor/view/view.js:238
+#: apps/io.ox/office/editor/view/view.js:496
+msgid "Rename Document"
+msgstr "Dokumentum átnevezése"
+
+#: apps/io.ox/office/editor/view/view.js:240
+msgid "Document name"
+msgstr "Dokumentum neve"
+
+#: apps/io.ox/office/editor/view/view.js:335
+msgid "Format"
+msgstr "Formátum"
+
+#: apps/io.ox/office/editor/view/view.js:342
+msgid "Bold"
+msgstr "Félkövér"
+
+#: apps/io.ox/office/editor/view/view.js:343
+msgid "Italic"
+msgstr "Dőlt"
+
+#: apps/io.ox/office/editor/view/view.js:344
+msgid "Underline"
+msgstr "Aláhúzott"
+
+#: apps/io.ox/office/editor/view/view.js:345
+msgid "Strike through"
+msgstr "Áthúzott"
+
+#: apps/io.ox/office/editor/view/view.js:348
+msgid "Subscript"
+msgstr "Alsó index"
+
+#: apps/io.ox/office/editor/view/view.js:349
+msgid "Superscript"
+msgstr "Felső index"
+
+#: apps/io.ox/office/editor/view/view.js:351
+msgid "Text Fill Color"
+msgstr "Szöveg kitöltőszíne"
+
+#: apps/io.ox/office/editor/view/view.js:353
+msgid "Text Color"
+msgstr "Szövegszín"
+
+#: apps/io.ox/office/editor/view/view.js:355
+msgid "Paragraph Alignment"
+msgstr "Bekezdés igazítása"
+
+#: apps/io.ox/office/editor/view/view.js:356
+msgid "Left"
+msgstr "Balra"
+
+#: apps/io.ox/office/editor/view/view.js:357
+#: apps/io.ox/office/editor/view/view.js:394
+msgid "Center"
+msgstr "Középre"
+
+#: apps/io.ox/office/editor/view/view.js:358
+msgid "Right"
+msgstr "Jobbra"
+
+#: apps/io.ox/office/editor/view/view.js:359
+msgid "Justify"
+msgstr "Sorkizárás"
+
+#: apps/io.ox/office/editor/view/view.js:361
+msgid "Line Spacing"
+msgstr "Sorköz"
+
+#: apps/io.ox/office/editor/view/view.js:362
+msgid "Single"
+msgstr "Egyszeres"
+
+#: apps/io.ox/office/editor/view/view.js:363
+msgid "One and a Half"
+msgstr "Másfeles"
+
+#: apps/io.ox/office/editor/view/view.js:364
+msgid "Double"
+msgstr "Dupla"
+
+#: apps/io.ox/office/editor/view/view.js:366
+msgid "Paragraph Fill Color"
+msgstr "Bekezdés kitöltőszíne"
+
+#: apps/io.ox/office/editor/view/view.js:370
+msgid "Bullets On/Off"
+msgstr "Felsorolás be/ki"
+
+#: apps/io.ox/office/editor/view/view.js:371
+msgid "Numbering On/Off"
+msgstr "Számozás be/ki"
+
+#: apps/io.ox/office/editor/view/view.js:372
+msgid "Demote One Level"
+msgstr "Szint lefokozása eggyel"
+
+#: apps/io.ox/office/editor/view/view.js:373
+msgid "Promote One Level"
+msgstr "Szint előléptetése eggyel"
+
+#: apps/io.ox/office/editor/view/view.js:376
+#: apps/io.ox/office/editor/view/view.js:406
+msgid "Table"
+msgstr "Táblázat"
+
+#: apps/io.ox/office/editor/view/view.js:379
+msgid "Insert Row"
+msgstr "Sor beszúrása"
+
+#: apps/io.ox/office/editor/view/view.js:380
+msgid "Insert Column"
+msgstr "Oszlop beszúrása"
+
+#: apps/io.ox/office/editor/view/view.js:381
+msgid "Delete Rows"
+msgstr "Sorok törlése"
+
+#: apps/io.ox/office/editor/view/view.js:382
+msgid "Delete Columns"
+msgstr "Oszlopok törlése"
+
+#: apps/io.ox/office/editor/view/view.js:384
+msgid "Image"
+msgstr "Kép"
+
+#: apps/io.ox/office/editor/view/view.js:385
+msgid "Insert Image File"
+msgstr "Képfájl beszúrása"
+
+#: apps/io.ox/office/editor/view/view.js:386
+msgid "Insert Image URL"
+msgstr "Kép URL beszúrása"
+
+#: apps/io.ox/office/editor/view/view.js:388
+msgid "Delete Drawing"
+msgstr "Rajz törlése"
+
+#: apps/io.ox/office/editor/view/view.js:390
+msgid "Drawing Position"
+msgstr "Rajz pozíciója"
+
+#: apps/io.ox/office/editor/view/view.js:391
+msgid "Inline With Text"
+msgstr "Beágyazott szöveggel"
+
+#: apps/io.ox/office/editor/view/view.js:392
+msgid "Float Left"
+msgstr "Lebegő balra"
+
+#: apps/io.ox/office/editor/view/view.js:393
+msgid "Float Right"
+msgstr "Lebegő jobbra"
+
+#: apps/io.ox/office/editor/view/view.js:403
+msgid "Insert image file"
+msgstr "Képfájl beszúrása"
+
+#: apps/io.ox/office/editor/view/view.js:404
+msgid "Insert image URL"
+msgstr "Kép URL beszúrása"
+
+#: apps/io.ox/office/editor/view/view.js:407
+msgid "Insert row"
+msgstr "Sor beszúrása"
+
+#: apps/io.ox/office/editor/view/view.js:408
+msgid "Insert column"
+msgstr "Oszlop beszúrása"
+
+#: apps/io.ox/office/editor/view/view.js:409
+msgid "Delete selected rows"
+msgstr "Kijelölt sorok törlése"
+
+#: apps/io.ox/office/editor/view/view.js:410
+msgid "Delete selected columns"
+msgstr "Kijelölt oszlopok törlése"
+
+#: apps/io.ox/office/editor/view/view.js:412
+msgid "Drawing"
+msgstr "Rajz"
+
+#: apps/io.ox/office/editor/view/view.js:413
+msgid "Delete drawing object"
+msgstr "Rajzobjektum törlése"
+
+#: apps/io.ox/office/editor/view/view.js:415
+msgid "Drawing position"
+msgstr "Rajz pozíciója"
+
+#: apps/io.ox/office/editor/view/view.js:416
+msgid "Inline with text"
+msgstr "Beágyazott szöveggel"
+
+#: apps/io.ox/office/editor/view/view.js:417
+msgid "Left aligned, text wraps at right side"
+msgstr "Balra igazított, a szöveg a jobb oldalon törik"
+
+#: apps/io.ox/office/editor/view/view.js:418
+msgid "Right aligned, text wraps at left side"
+msgstr "Jobbra igazított, a szöveg a bal oldalon törik"
+
+#: apps/io.ox/office/editor/view/view.js:419
+msgid "Centered, no text wrapping"
+msgstr "Középre, nincs szövegtörés"
+
+#: apps/io.ox/office/editor/view/view.js:454
+#: apps/io.ox/office/editor/view/view.js:470
+msgid "Debug"
+msgstr "Hibakeresés"
+
+#: apps/io.ox/office/editor/view/view.js:505
+msgid "Quick Search"
+msgstr "Gyors keresés"
+
+#: apps/io.ox/lessons/lessons/basic_requirejs/register.js:16
+msgid "Hello"
+msgstr "Hello"
+
+#: apps/io.ox/lessons/lessons/basic_requirejs/register.js:17
+msgid "Good morning"
+msgstr "Jó reggelt"
+
+#: apps/io.ox/lessons/lessons/basic_requirejs/register.js:18
+msgid "Good evening"
+msgstr "Jó estét"
+
+#: apps/io.ox/portal/main.js:138
+msgid "Good morning, %s"
+msgstr "Jó reggelt, %s"
+
+#: apps/io.ox/portal/main.js:140
+msgid "Good evening, %s"
+msgstr "Jó estét, %s"
+
+#: apps/io.ox/portal/main.js:142
+msgid "Hello %s"
+msgstr "Hello %s"
+
+#: apps/io.ox/portal/main.js:164
+msgid "Customize this page"
+msgstr "Oldal testre szabása"
+
+#. Portal. Logged in as user
+#: apps/io.ox/portal/main.js:173
+msgid "Signed in as %1$s"
+msgstr "Bejelentkezve mint %1$s"
+
+#: apps/io.ox/portal/main.js:352
+msgid "Click here to add your account"
+msgstr "A fiók felvételéhez kattintson ide"
+
+#: apps/io.ox/portal/main.js:378
+msgid "An error occurred. Click to try again"
+msgstr "Hiba történt. Kattintson az újrapróbálkozáshoz."
+
+#: apps/io.ox/portal/settings/pane.js:30
+msgid "Enable Plugin"
+msgstr "Bővítmény engedélyezése"
+
+#: apps/io.ox/portal/settings/pane.js:31 apps/io.ox/portal/settings/pane.js:35
+msgid "Properties"
+msgstr "Tulajdonságok"
+
+#: apps/io.ox/portal/settings/pane.js:33
+msgid "Portal"
+msgstr "Portál"
+
+#: apps/io.ox/portal/settings/pane.js:34
+msgid "Portal Squares"
+msgstr "Portál négyzetek"
+
+#: apps/io.ox/portal/settings/pane.js:121
+msgid "Disable"
+msgstr "Letiltás"
+
+#: apps/io.ox/portal/settings/pane.js:124
+msgid "Enable"
+msgstr "Engedélyezés"
+
+#: apps/io.ox/portal/pulltorefresh.js:86
+msgid "Pull To Refresh"
+msgstr "Húzza a frissítéshez"
+
+#: apps/io.ox/publications/wizard.js:22
+msgid "New publication"
+msgstr "Új publikáció"
+
+#: apps/io.ox/publications/wizard.js:50
+msgid "Publication created"
+msgstr "A publikáció létrehozva"
+
+#: apps/io.ox/publications/wizard.js:59
+msgid "Send email"
+msgstr "E-mail küldése"
+
+#: apps/io.ox/mail/actions.js:52
+msgid "Do you really want to permanently delete this mail?"
+msgid_plural "Do you really want to permanently delete these mails?"
+msgstr[0] "Biztos, hogy véglegesen törölni szeretné ezt az e-mailt?"
+msgstr[1] "Biztos, hogy véglegesen törölni szeretné ezeket az e-maileket?"
+
+#: apps/io.ox/mail/actions.js:151
+msgid "Mail source"
+msgstr "Levélforrás"
+
+#: apps/io.ox/mail/actions.js:198
+msgid "Mails have been moved"
+msgstr "A levelek áthelyezésre kerültek"
+
+#: apps/io.ox/mail/actions.js:235
+msgid "Mails have been copied"
+msgstr "A levelek átmásolásra kerültek"
+
+#: apps/io.ox/mail/actions.js:537
+msgid "Create reminder"
+msgstr "Emlékeztető létrehozása"
+
+#: apps/io.ox/mail/actions.js:549
+msgid "Mail reminder"
+msgstr "Emlékeztető küldése"
+
+#: apps/io.ox/mail/actions.js:555
+msgid "Note"
+msgstr "Megjegyzés"
+
+#: apps/io.ox/mail/actions.js:556
+msgid "Mail reminder for"
+msgstr "Emlékeztető küldése:"
+
+#: apps/io.ox/mail/actions.js:557 apps/io.ox/mail/main.js:159
+#: apps/io.ox/mail/main.js:418 apps/io.ox/mail/write/view-main.js:366
+msgid "From"
+msgstr "Feladó"
+
+#: apps/io.ox/mail/actions.js:616 apps/io.ox/mail/write/main.js:413
+msgid "Compose new mail"
+msgstr "Új levél szerkesztése"
+
+#: apps/io.ox/mail/actions.js:626
+msgid "Reply All"
+msgstr "Válasz mindenkinek"
+
+#: apps/io.ox/mail/actions.js:642 apps/io.ox/mail/write/main.js:416
+msgid "Forward"
+msgstr "Továbbítás"
+
+#: apps/io.ox/mail/actions.js:659
+msgid "Mark Unread"
+msgstr "Megjelölés olvasottként"
+
+#: apps/io.ox/mail/actions.js:667
+msgid "Mark read"
+msgstr "Megjelölés olvasottként"
+
+#: apps/io.ox/mail/actions.js:714
+msgid "View source"
+msgstr "Forrás megtekintése"
+
+#: apps/io.ox/mail/actions.js:738
+msgid "Save as file"
+msgstr "Mentés fájlként"
+
+#: apps/io.ox/mail/actions.js:747
+msgid "Slideshow"
+msgstr "Diavetítés"
+
+#: apps/io.ox/mail/actions.js:798
+msgid "Drop here to import this mail"
+msgstr "Ejtse ide a levél importálásához"
+
+#: apps/io.ox/mail/main.js:160
+msgid "Label"
+msgstr "Címke"
+
+#: apps/io.ox/mail/main.js:166
+msgid "Unread only"
+msgstr "Csak olvasatlan"
+
+#: apps/io.ox/mail/main.js:192
+msgid "%1$d mail"
+msgid_plural "%1$d mails"
+msgstr[0] "%1$d levél"
+msgstr[1] "%1$d levél"
+
+#: apps/io.ox/mail/main.js:360
+msgid "Couldn't load that email."
+msgstr "Az a levél nem tölthető be."
+
+#: apps/io.ox/mail/main.js:383
+msgid "No mails found for \"%s\""
+msgstr "Nem találhatók a következő levelei: „%s”"
+
+#: apps/io.ox/mail/main.js:384
+msgid "No mails in this folder"
+msgstr "Nincsenek levelek ebben a mappában"
+
+#: apps/io.ox/mail/main.js:401
+msgid "Mail has been imported"
+msgstr "A levelek importálva"
+
+#: apps/io.ox/mail/main.js:418 apps/io.ox/mail/view-detail.js:685
+#: apps/io.ox/mail/write/view-main.js:306
+msgid "To"
+msgstr "Címzett"
+
+#: apps/io.ox/mail/main.js:418
+msgid "CC"
+msgstr "Másolat"
+
+#: apps/io.ox/mail/main.js:418
+msgid "Mail text"
+msgstr "Levélszöveg"
+
+#: apps/io.ox/mail/write/main.js:414
+msgid "Reply all"
+msgstr "Válasz mindenkinek"
+
+#: apps/io.ox/mail/settings/pane.js:25 apps/io.ox/mail/write/main.js:488
+msgid "Mail"
+msgstr "Levelek"
+
+#: apps/io.ox/mail/write/main.js:488
+msgid "No subject"
+msgstr "Nincs tárgy"
+
+#: apps/io.ox/mail/write/main.js:553 apps/io.ox/mail/write/main.js:588
+#: apps/io.ox/mail/write/main.js:630
+msgid "An error occured. Please try again."
+msgstr "Hiba történt. Próbálja újra."
+
+#: apps/io.ox/mail/write/main.js:785
+msgid "Mail has empty subject. Send it anyway?"
+msgstr "A levél tárgya üres. Mindenképp elküldi?"
+
+#: apps/io.ox/mail/write/main.js:786
+msgid "Yes, send without subject"
+msgstr "Igen, küldés tárgy nélkül"
+
+#: apps/io.ox/mail/write/main.js:787
+msgid "Add subject"
+msgstr "Tárgy hozzáadása"
+
+#: apps/io.ox/mail/write/main.js:830
+msgid "Mail saved as draft"
+msgstr "Levél mentve piszkozatként"
+
+#: apps/io.ox/mail/write/main.js:868
+msgid "Do you really want to discard this mail?"
+msgstr "Biztos, hogy el szeretné dobni ezt a levelet?"
+
+#: apps/io.ox/mail/write/main.js:870
+msgid "Save as draft"
+msgstr "Mentés piszkozatként"
+
+#: apps/io.ox/mail/write/view-main.js:43
+msgid "Send"
+msgstr "Küldés"
+
+#: apps/io.ox/mail/write/view-main.js:310
+msgid "Copy to"
+msgstr "Másolatot kap"
+
+#: apps/io.ox/mail/write/view-main.js:313
+msgid "Copy (CC) to"
+msgstr "Másolatot (CC) kap"
+
+#: apps/io.ox/mail/write/view-main.js:316
+msgid "Blind copy to"
+msgstr "Rejtett másolatot kap"
+
+#: apps/io.ox/mail/write/view-main.js:319
+msgid "Blind copy (BCC) to"
+msgstr "Rejtett másolatot (BCC) kap"
+
+#: apps/io.ox/mail/write/view-main.js:332
+#: apps/io.ox/mail/write/view-main.js:362
+msgid "Signatures"
+msgstr "Aláírások"
+
+#: apps/io.ox/mail/write/view-main.js:371
+msgid "Sender"
+msgstr "Feladó"
+
+#: apps/io.ox/mail/write/view-main.js:376
+msgid "Options"
+msgstr "Beállítások"
+
+#: apps/io.ox/mail/write/view-main.js:385
+msgid "Normal"
+msgstr "Normál"
+
+#: apps/io.ox/mail/write/view-main.js:400
+msgid "Attach vCard"
+msgstr "vCard hozzáadása"
+
+#: apps/io.ox/mail/write/view-main.js:413
+msgid "Text format"
+msgstr "Szövegformátum"
+
+#: apps/io.ox/mail/write/view-main.js:416
+msgid "Text"
+msgstr "Szöveg"
+
+#: apps/io.ox/mail/settings/old_pane.js:106
+#: apps/io.ox/mail/settings/pane.js:38 apps/io.ox/mail/write/view-main.js:418
+msgid "HTML"
+msgstr "HTML"
+
+#: apps/io.ox/mail/write/view-main.js:494
+msgid "No signature"
+msgstr "Nincs aláírás"
+
+#. (From) email1 on behalf of email2. Appears in email detail view.
+#: apps/io.ox/mail/util.js:122
+msgid "on behalf of"
+msgstr "meghatalmazó:"
+
+#: apps/io.ox/mail/settings/old_pane.js:46 apps/io.ox/mail/settings/pane.js:27
+msgid "Permanently remove deleted E-Mails?"
+msgstr "Véglegesen eltávolítja a törölt leveleket?"
+
+#: apps/io.ox/mail/settings/old_pane.js:47 apps/io.ox/mail/settings/pane.js:28
+msgid ""
+"Automatically collect contacts in the folder \"Collected addresses\" while "
+"sending?"
+msgstr ""
+"Automatikusan gyűjti a névjegyeket küldéskor az „Összegyűjtött címek” "
+"mappában?"
+
+#: apps/io.ox/mail/settings/old_pane.js:48 apps/io.ox/mail/settings/pane.js:29
+msgid ""
+"Automatically collect contacts in the folder \"Collected addresses\" while "
+"reading?"
+msgstr ""
+"Automatikusan gyűjti a névjegyeket olvasáskor az „Összegyűjtött címek” "
+"mappában?"
+
+#: apps/io.ox/mail/settings/old_pane.js:78 apps/io.ox/mail/settings/pane.js:31
+msgid "Compose"
+msgstr "Szerkesztés"
+
+#: apps/io.ox/mail/settings/old_pane.js:80 apps/io.ox/mail/settings/pane.js:32
+msgid "Append vcard"
+msgstr "vCard hozzáadása"
+
+#: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:33
+msgid "Insert the original E-Mail text to a reply"
+msgstr "Az eredeti e-mail beillesztése a válaszba"
+
+#: apps/io.ox/mail/settings/old_pane.js:92 apps/io.ox/mail/settings/pane.js:34
+msgid "Forward E-Mails as:"
+msgstr "E-mailek továbbításának módja:"
+
+#: apps/io.ox/mail/settings/old_pane.js:94 apps/io.ox/mail/settings/pane.js:35
+msgid "Inline"
+msgstr "Beágyazott"
+
+#: apps/io.ox/mail/settings/old_pane.js:95 apps/io.ox/mail/settings/pane.js:36
+msgid "Attachment"
+msgstr "Melléklet"
+
+#: apps/io.ox/mail/settings/old_pane.js:104
+#: apps/io.ox/mail/settings/pane.js:37
+msgid "Format E-Mails as:"
+msgstr "E-mailek formátuma:"
+
+#: apps/io.ox/mail/settings/old_pane.js:107
+#: apps/io.ox/mail/settings/pane.js:39
+msgid "Plain text"
+msgstr "Sima szöveg"
+
+#: apps/io.ox/mail/settings/old_pane.js:108
+#: apps/io.ox/mail/settings/pane.js:40
+msgid "HTML and plain text"
+msgstr "HTML és sima szöveg"
+
+#: apps/io.ox/mail/settings/old_pane.js:117
+#: apps/io.ox/mail/settings/pane.js:41
+msgid "Line wrap when sending text mails after: "
+msgstr "Sortördelés mértéke szöveges levelek küldésekor: "
+
+#: apps/io.ox/mail/settings/old_pane.js:124
+#: apps/io.ox/mail/settings/pane.js:43
+msgid "Default sender address:"
+msgstr "Alapértelmezett küldő e-mail címe:"
+
+#: apps/io.ox/mail/settings/old_pane.js:130
+#: apps/io.ox/mail/settings/pane.js:44
+msgid "Auto-save Email drafts?"
+msgstr "Automatikusan menti az e-mail vázlatait?"
+
+#: apps/io.ox/mail/settings/old_pane.js:156
+#: apps/io.ox/mail/settings/pane.js:45
+msgid "Display"
+msgstr "Megjelenítés"
+
+#: apps/io.ox/mail/settings/old_pane.js:160
+#: apps/io.ox/mail/settings/pane.js:46
+msgid "Allow html formatted E-Mails"
+msgstr "HTML formátumú e-mailek engedélyezése"
+
+#: apps/io.ox/mail/settings/old_pane.js:161
+#: apps/io.ox/mail/settings/pane.js:47
+msgid "Block pre-loading of externally linked images"
+msgstr "A külső hivatkozásokon található képek előtöltésének letiltása"
+
+#: apps/io.ox/mail/settings/old_pane.js:162
+#: apps/io.ox/mail/settings/pane.js:48
+msgid "Display emoticons as graphics in text E-Mails"
+msgstr "Grafikaként jelenjenek meg a hangulatjelek a szöveges e-mailekben"
+
+#: apps/io.ox/mail/settings/old_pane.js:163
+#: apps/io.ox/mail/settings/pane.js:49
+msgid "Color quoted lines"
+msgstr "Idézett sorok színezése"
+
+#: apps/io.ox/mail/settings/pane.js:30
+msgid "Automatically select first E-Mail"
+msgstr "Automatikusan válassza ki az első levelet"
+
+#: apps/io.ox/mail/settings/pane.js:42
+msgid " characters"
+msgstr " karakter"
+
+#: apps/io.ox/mail/settings/pane.js:51
+msgid "disabled"
+msgstr "letiltott"
+
+#: apps/io.ox/mail/settings/pane.js:52
+msgid "1 minute"
+msgstr "1 perc"
+
+#: apps/io.ox/mail/settings/pane.js:53
+msgid "3 minutes"
+msgstr "3 perc"
+
+#: apps/io.ox/mail/accounts/view-form.js:24
+msgid "Account Settings"
+msgstr "Fiók beállításai"
+
+#: apps/io.ox/mail/accounts/view-form.js:25
+msgid "Account Name:"
+msgstr "Felhasználói fiók neve:"
+
+#: apps/io.ox/mail/accounts/view-form.js:26
+msgid "E-Mail Address:"
+msgstr "E-mail cím:"
+
+#: apps/io.ox/mail/accounts/view-form.js:27
+msgid "Use Unified Mail for this account"
+msgstr "Egységes levelezés használata ehhez a fiókhoz"
+
+#: apps/io.ox/mail/accounts/view-form.js:28
+msgid "Server Settings"
+msgstr "Kiszolgáló beállításai"
+
+#: apps/io.ox/mail/accounts/view-form.js:29
+msgid "Server Type:"
+msgstr "Kiszolgáló típusa:"
+
+#: apps/io.ox/mail/accounts/view-form.js:30
+#: apps/io.ox/mail/accounts/view-form.js:39
+msgid "Use SSL connection"
+msgstr "SSL-kapcsolat használata"
+
+#: apps/io.ox/mail/accounts/view-form.js:31
+#: apps/io.ox/mail/accounts/view-form.js:40
+msgid "Server Name:"
+msgstr "Kiszolgáló neve:"
+
+#: apps/io.ox/mail/accounts/view-form.js:32
+#: apps/io.ox/mail/accounts/view-form.js:41
+msgid "Server Port:"
+msgstr "Kiszolgáló portja:"
+
+#: apps/io.ox/mail/accounts/view-form.js:33
+#: apps/io.ox/mail/accounts/view-form.js:43
+msgid "Login"
+msgstr "Bejelentkezés"
+
+#: apps/io.ox/mail/accounts/view-form.js:35
+msgid "POP3:"
+msgstr "POP3:"
+
+#: apps/io.ox/mail/accounts/view-form.js:36
+msgid "Leave messages on server"
+msgstr "Az üzenetek maradjanak meg a kiszolgálón"
+
+#: apps/io.ox/mail/accounts/view-form.js:37
+msgid "Deleting messages on local storage also deletes them on server"
+msgstr "A helyi tárolón lévő üzenet törlésekor az törlésre kerül a kiszolgálón is"
+
+#: apps/io.ox/mail/accounts/view-form.js:38
+msgid "Outgoing Server Settings (SMTP)"
+msgstr "Kimenő kiszolgáló beállításai (SMTP)"
+
+#: apps/io.ox/mail/accounts/view-form.js:42
+msgid "Use Login and Password"
+msgstr "Felhasználónév és jelszó használata"
+
+#: apps/io.ox/mail/accounts/settings.js:89
+msgid "Trying to auto-configure your mail account"
+msgstr "Kísérlet a postafiók automatikus beállítására"
+
+#: apps/io.ox/mail/accounts/settings.js:119
+msgid "There was no suitable server found for this mail/password combination"
+msgstr "Nem található megfelelő kiszolgáló ehhez a cím/jelszó kombinációhoz"
+
+#: apps/io.ox/mail/accounts/settings.js:139
+msgid "Failed to connect."
+msgstr "A kapcsolódás meghiúsult."
+
+#: apps/io.ox/mail/accounts/settings.js:184
+msgid "Your mail address"
+msgstr "Az Ön e-mail címe"
+
+#: apps/io.ox/mail/accounts/settings.js:185
+msgid "Your password"
+msgstr "Az Ön jelszava"
+
+#: apps/io.ox/mail/accounts/settings.js:229
+msgid "This is not a valid mail address"
+msgstr "Ez nem egy érvényes e-mail cím"
+
+#: apps/io.ox/mail/accounts/settings.js:258
+msgid "Account added successfully"
+msgstr "A fiók sikeresen hozzáadva"
+
+#: apps/io.ox/mail/view-detail.js:233
+msgid "This mail has no content"
+msgstr "A levélnek nincs tartalma"
+
+#: apps/io.ox/mail/view-detail.js:307
+msgid "Document"
+msgstr "Dokumentum"
+
+#: apps/io.ox/backbone/forms.js:607 apps/io.ox/mail/view-detail.js:364
+msgid "Show more"
+msgstr "Több megjelenítése"
+
+#: apps/io.ox/mail/view-detail.js:600
+msgid "Grey"
+msgstr "Szürke"
+
+#: apps/io.ox/mail/view-detail.js:604
+msgid "Pink"
+msgstr "Rózsaszín"
+
+#: apps/io.ox/mail/view-detail.js:692
+msgctxt "CC"
+msgid "Copy"
+msgid_plural "Copy"
+msgstr[0] "Másolat"
+msgstr[1] "Másolat"
+
+#: apps/io.ox/mail/view-detail.js:699
+msgid "All recipients"
+msgstr "Bármely címzett"
+
+#: apps/io.ox/mail/view-detail.js:763
+msgctxt "plural"
+msgid "Attachment"
+msgid_plural "Attachments"
+msgstr[0] "Melléklet"
+msgstr[1] "Mellékletek"
+
+#: apps/io.ox/mail/view-detail.js:785
+msgid "more"
+msgstr "tovább"
+
+#: apps/io.ox/mail/view-detail.js:791
+msgid "All attachments"
+msgstr "Minden melléklet"
+
+#: apps/io.ox/mail/view-detail.js:807
+msgid "Entire thread"
+msgstr "Teljes szál"
+
+#: apps/io.ox/mail/view-detail.js:825
+msgid "Warning: This message might be a phishing or scam mail"
+msgstr "Figyelem: Ez az üzenet egy adathalász vagy becsapós e-mail lehet"
+
+#: apps/io.ox/mail/view-detail.js:845
+msgid "Show images"
+msgstr "Képek megjelenítése"
+
+#: apps/io.ox/mail/view-detail.js:848
+msgid "External images have been blocked to protect you against potential spam!"
+msgstr "A lehetséges levélszemét miatt a külső képek betöltése le lett tiltva!"
+
+#: apps/io.ox/settings/main.js:94
+msgid "Expert mode"
+msgstr "Szakértői mód"
+
+#: apps/io.ox/launchpad/main.js:145
+msgid "Running applications"
+msgstr "Alkalmazások futtatása"
+
+#: apps/io.ox/launchpad/main.js:147
+msgid "Your applications"
+msgstr "Alkalmazásai"
+
+#: apps/io.ox/launchpad/main.js:168 apps/io.ox/launchpad/main.js:187
+msgid "Manage applications"
+msgstr "Alkalmazások kezelése"
+
+#: apps/io.ox/backbone/validation.js:42 apps/io.ox/backbone/validation.js:49
+msgid "Please enter a valid date"
+msgstr "Érvényes dátumot adjon meg"
+
+#: apps/io.ox/backbone/basicModel.js:120
+msgid "Invalid data"
+msgstr "Érvénytelen adatok"
+
+#: apps/io.ox/backbone/forms.js:54
+msgid "An error occurred"
+msgstr "Hiba történt"
+
+#: apps/io.ox/backbone/forms.js:57
+msgid "An error occurred. Please try again later"
+msgstr "Hiba történt, próbálja újra később"
+
+#: apps/io.ox/backbone/forms.js:560
+msgid "Show less"
+msgstr "Kevesebb megjelenítése"
+
+#: apps/io.ox/editor/main.js:54
+msgid "Simple Pad"
+msgstr "Egyszerű pad"
+
+#: apps/io.ox/editor/main.js:73
+msgid "Enter document title here"
+msgstr "Írja be ide a dokumentum címét"
+
+#: apps/io.ox/editor/main.js:130
+msgid "Document saved in folder \"%1$s\""
+msgstr "A dokumentum mentve a(z) „%1$s” mappába"
+
+#: apps/io.ox/help/center.js:128
+msgid "Click here to quit the help center"
+msgstr "Kattintson ide a súgóközpontból kilépéshez"
+

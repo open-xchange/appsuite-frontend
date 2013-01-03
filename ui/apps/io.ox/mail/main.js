@@ -192,7 +192,7 @@ define("io.ox/mail/main",
             if (value === true) {
                 grid.refresh().done(grid.pause);
             } else {
-                grid.resume().refresh();
+                grid.resume().refresh(true);
             }
         });
 

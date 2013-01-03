@@ -135,7 +135,9 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
             this.on("change:" + attribute, drawState);
         },
+
         dateFormat: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
+
         datePicker: function ($anchor, attribute, options) {
             var self = this,
                 originalContent = $anchor.html();
@@ -225,7 +227,6 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
     gt.ngettext("every month", "every %1$d months", 2);
     gt.ngettext("after %1$d appointment", 'after %1$d appointments', 2);
 
-
     var RecurrenceView = function (options) {
         _.extend(this, {
             init: function () {
@@ -235,6 +236,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 // Construct the UI
                 this.controls = {
                     checkbox: $('<input type="checkbox">'),
+                    checkboxLabel: $('<label class="checkbox control-label desc">'),
                     detailToggle: $('<a href="#" class="recurrence-detail-toggle">').css({'float': 'right'}).text(gt("Edit")).hide(),
                     typeRadios: {
                         daily: $('<input type="radio" name="recurrence_type" value="daily">'),
@@ -526,11 +528,13 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 var type = this.model.get('recurrence_type');
                 if (type === RECURRENCE_TYPES.NO_RECURRENCE) {
                     this.controls.checkbox.removeAttr("checked");
+                    this.controls.checkboxLabel.css('display', 'inline-block');
                     this.nodes.summary.empty().text(gt("Repeat"));
                     this.controls.detailToggle.hide();
                 } else {
                     this.controls.detailToggle.show();
                     this.controls.checkbox.attr('checked', 'checked');
+                    this.controls.checkboxLabel.css('display', 'block');
                     this.lastConfiguration = {};
 
                     _(["recurrence_type", "days", "day_in_month", "interval", "occurrences", "until"]).each(function (attr) {
@@ -627,17 +631,16 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
                     this.nodes.endsChoice.children().detach();
 
-
                     if (this.model.get('occurrences')) {
                         this.nodes.endsChoice.append(this.ends.after.$el);
                         // workaround: swapped lines to avoid problems via endingChanged (see bug 24138)
-                        this.endsChoice.set('occurrences', this.model.get("occurrences"));
                         this.setEnding(this.ends.after);
+                        this.endsChoice.set('occurrences', this.model.get("occurrences"));
                     } else if (this.model.get('until')) {
                         this.nodes.endsChoice.append(this.ends.date.$el);
                         // workaround: swapped lines to avoid problems via endingChanged (see bug 24138)
-                        this.endsChoice.set("until", this.model.get("until"));
                         this.setEnding(this.ends.date);
+                        this.endsChoice.set("until", this.model.get("until"));
                     } else {
                         this.nodes.endsChoice.append(this.ends.never.$el);
                         this.setEnding(this.ends.never);
@@ -944,9 +947,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     };
                 }
 
-
                 // Weekly
-
                 if (canUpdate(this.sentences.weekly)) {
                     if (! (this.sentences.weekly.days & dayBits)) {
                         this.sentences.weekly.set('days', dayBits);
@@ -964,7 +965,6 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 }
 
                 // Yearly
-
                 if (canUpdate(this.sentences.yearlyDay)) {
                     this.sentences.yearlyDay.set('day', dayBits);
                     this.sentences.yearlyDay.set('ordinal', ordinal);
@@ -982,7 +982,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             render: function () {
                 this.$el.append(
                     $('<div class="row-fluid">').append(
-                        $('<label class="checkbox control-label desc">').append(
+                        this.controls.checkboxLabel.append(
                             this.controls.checkbox,
                             this.nodes.summary,
                             this.controls.detailToggle

@@ -11,7 +11,10 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/application', ['io.ox/office/tk/utils'], function (Utils) {
+define('io.ox/office/tk/application',
+    ['io.ox/files/api',
+     'io.ox/office/tk/utils'
+    ], function (FilesAPI, Utils) {
 
     'use strict';
 
@@ -31,7 +34,10 @@ define('io.ox/office/tk/application', ['io.ox/office/tk/utils'], function (Utils
      */
     function OfficeApplication(options) {
 
-        var // FileStore file descriptor of the document edited by this application
+        var // self reference
+            self = this,
+
+            // FileStore file descriptor of the document edited by this application
             file = Utils.getObjectOption(options, 'file', null);
 
         // public methods -----------------------------------------------------
@@ -65,10 +71,6 @@ define('io.ox/office/tk/application', ['io.ox/office/tk/utils'], function (Utils
                 file = newFile;
             }
             return this;
-        };
-
-        this.getFileName = function () {
-            return (file && _.isString(file.filename)) ? file.filename : null;
         };
 
         /**
@@ -157,6 +159,108 @@ define('io.ox/office/tk/application', ['io.ox/office/tk/utils'], function (Utils
             // build and return the result URL
             return ox.apiRoot + '/spellchecker?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
         };
+
+        /**
+         * Returns the full file name of the current file (with file
+         * extension).
+         *
+         * @returns {String|Null}
+         *  The file name of the current file descriptor; or null, if no file
+         *  descriptor exists.
+         */
+        this.getFullFileName = function () {
+            return (file && _.isString(file.filename)) ? file.filename : null;
+        };
+
+        /**
+         * Returns the short file name of the current file (without file
+         * extension).
+         *
+         * @returns {String|Null}
+         *  The short file name of the current file descriptor; or null, if no
+         *  file descriptor exists.
+         */
+        this.getShortFileName = function () {
+
+            var // the current full file name
+                fileName = this.getFullFileName(),
+                // start position of the extension
+                extensionPos = _.isString(fileName) ? fileName.lastIndexOf('.') : -1;
+
+            return (extensionPos > 0) ? fileName.substring(0, extensionPos) : fileName;
+        };
+
+        /**
+         * Returns the file extension of the current file (without leading
+         * period).
+         *
+         * @returns {String|Null}
+         *  The file extension of the current file descriptor; or null, if no
+         *  file descriptor exists.
+         */
+        this.getFileExtension = function () {
+
+            var // the current full file name
+                fileName = this.getFullFileName(),
+                // start position of the extension
+                extensionPos = _.isString(fileName) ? fileName.lastIndexOf('.') : -1;
+
+            return (extensionPos >= 0) ? fileName.substring(extensionPos + 1) : null;
+        };
+
+        /**
+         * Renames the current file and updates the GUI accordingly.
+         *
+         * @param {String} shortName
+         *  The new short file name (without extension).
+         *
+         * @returns {jQuery.Promise}
+         *  The promise of a deferred object that will be resolved when the
+         *  file has been renamed successfully (the new full file name will be
+         *  passed); or that will be rejected, if renaming the file has failed.
+         */
+        this.rename = function (shortName) {
+
+            var // the file extension
+                extension = this.getFileExtension(),
+
+                // the result deferred
+                def = $.Deferred().done(function (fileName) {
+                    file.filename = fileName;
+                    self.setTitle(shortName);
+                });
+
+            if (_.isString(shortName) && (shortName.length > 0) && file) {
+                if (shortName === this.getShortFileName()) {
+                    def.resolve(file.filename);
+                } else {
+                    $.ajax({
+                        type: 'GET',
+                        url: this.getDocumentFilterUrl('renamedocument', { filename: shortName + '.' + extension }),
+                        dataType: 'json'
+                    })
+                    .done(function (response) {
+                        var data = Application.extractAjaxResultData(response);
+                        if (data && _.isString(data.filename)) {
+                            FilesAPI.propagate('change', file).then(
+                                function () { def.resolve(data.filename); },
+                                function () { def.reject(); }
+                            );
+                        } else {
+                            def.reject();
+                        }
+                    })
+                    .fail(function () {
+                        def.reject();
+                    });
+                }
+            } else {
+                def.reject();
+            }
+
+            return def.promise();
+        };
+
         /**
          * Registers an event handler for specific events at the passed target
          * object. The event handler will be unregistered automatically when

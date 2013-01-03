@@ -232,14 +232,12 @@ i.io-ox-office-icon {
         /* keyboard/mouse effects (not for disabled buttons or groups) */
         &:not(.disabled) a.button:not(.disabled) {
 
-            &:hover { background-color: fade(black, 5%); }
-            &:focus { background-color: fade(black, 5%); }
+            &:hover, &:focus { background-color: fade(black, 5%); }
             &:active { background-color: fade(black, 10%); }
 
             /* selected toggle/radio buttons */
             &.selected {
-                &:hover { background-color: fade(@selected-background, 60%); }
-                &:focus { background-color: fade(@selected-background, 60%); }
+                &:hover, &:focus { background-color: fade(@selected-background, 60%); }
                 &:active { background-color: fade(@selected-background, 70%); }
             }
         }
@@ -267,6 +265,15 @@ i.io-ox-office-icon {
             line-height: 18px;
             cursor: text;
 
+            &:hover:not(:focus) {
+                background-color: fade(black, 5%);
+            }
+
+            &:focus {
+                background-color: white;
+                .box-shadow(0 0 8px fade(@selected-background, 50%));
+            }
+
             &.readonly {
                 cursor: default;
             }
@@ -280,11 +287,12 @@ i.io-ox-office-icon {
         /* groups with white background and shadowed borders --------------- */
 
         &.white {
-            .box-shadow(0 0 4px fade(black, 15%));
+            .box-shadow(0 0 5px fade(black, 15%));
 
             > label, > a.button, > input {
                 height: @control-height - 8;
                 background: white;
+                &:focus { background: white; }
             }
 
             > label, > a.button {
@@ -292,12 +300,12 @@ i.io-ox-office-icon {
             }
 
             /* keyboard/mouse effects (not for disabled buttons) */
-            &:not(.disabled) > a.button:not(.disabled) {
-
-                /* mouse/keyboard effects */
-                &:hover { background: white; }
-                &:focus { background: white; }
-                &:active { background: white; }
+            &:not(.disabled) {
+                > a.button:not(.disabled), input:not(.disabled) {
+                    &:hover, &:focus, &:active {
+                        background: white;
+                    }
+                }
             }
         }
 
@@ -327,10 +335,14 @@ i.io-ox-office-icon {
                 top: 4px;
             }
 
+            &.subtle-input {
+                top: 2px;
+            }
+
             /* group spacing */
             &.separator {
                 width: 10px;
-                height: @control-height;
+                height: 1px;
             }
         }
     }

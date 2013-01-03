@@ -107,25 +107,6 @@ define('io.ox/office/tk/dropdown/dropdown',
         // private methods ----------------------------------------------------
 
         /**
-         * Returns the absolute position of the group node in the browser
-         * window.
-         *
-         * @returns {Object}
-         *  An object with 'left', 'top', 'width', and 'height' attributes.
-         */
-        function getGroupDimensions() {
-
-            var // get position of the group
-                groupDim = groupNode.offset();
-
-            // add group size
-            groupDim.width = groupNode.outerWidth();
-            groupDim.height = groupNode.outerHeight();
-
-            return groupDim;
-        }
-
-        /**
          * Changes the visibility of the drop-down menu. Triggers a 'menuopen'
          * or 'menuclose' event at the group.
          *
@@ -139,7 +120,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             var // whether to show or hide the menu
                 show = (state === true) || ((state !== false) && !self.isMenuVisible()),
                 // position and size of the group node
-                groupDim = getGroupDimensions();
+                groupDim = self.getDimensions();
 
             if (show && !self.isMenuVisible()) {
                 $('body').append(menuNode);
@@ -280,33 +261,68 @@ define('io.ox/office/tk/dropdown/dropdown',
         function windowResizeHandler() {
 
             var // position and size of the parent group node
-                groupDim = getGroupDimensions(),
-                // available width for contents of the drop-down menu
-                availableWidth = window.innerWidth - 2 * WINDOW_BORDER_PADDING,
-                // available height for contents of the drop-down menu
-                availableHeight = 0,
-                // vertical space above the group node
-                availableAbove = groupDim.top - WINDOW_BORDER_PADDING - GROUP_BORDER_PADDING,
-                // vertical space above the group node
-                availableBelow = window.innerHeight - groupDim.top - groupDim.height - WINDOW_BORDER_PADDING - GROUP_BORDER_PADDING,
+                groupDim = self.getDimensions(),
+                // the sizes available at every side of the group node
+                availableSizes = self.getAvailableMenuSizes(),
+                // resulting width and height available for the menu node
+                availableWidth = 0, availableHeight = 0,
                 // new CSS properties of the menu node
-                menuNodeProps = { top: '', bottom: '', left: '', right: '' };
+                menuNodeProps = { top: '', bottom: '', left: '', right: '' },
+                // the side of the group node preferred for the drop-down menu
+                preferredSide = null, maxRatio = 0;
 
-            // decide whether to position the drop-down menu above or below the group node
-            if ((menuNodeSize.height <= availableBelow) || (availableAbove <= availableBelow)) {
-                menuNodeProps.top = groupDim.top + groupDim.height + GROUP_BORDER_PADDING;
-                availableHeight = availableBelow;
-            } else {
+            // calculate the ratio of the menu node being visible at every side of the group
+            _(availableSizes).each(function (size) {
+                size.ratio = Math.min(size.width / menuNodeSize.width, 1) * Math.min(size.height / menuNodeSize.height, 1);
+            });
+
+            // prefer the best side that can take the menu node, in the given order
+            _(['bottom', 'top', 'right', 'left']).find(function (side) {
+                var ratio = availableSizes[side].ratio;
+                if (ratio >= 1) {
+                    preferredSide = side;
+                    return true;
+                } else if (ratio > maxRatio) {
+                    preferredSide = side;
+                    maxRatio = ratio;
+                }
+            });
+
+            // extract available width and height
+            availableWidth = availableSizes[preferredSide].width;
+            availableHeight = availableSizes[preferredSide].height;
+
+            // first part of the position of the drop-down menu
+            switch (preferredSide) {
+            case 'top':
                 menuNodeProps.bottom = window.innerHeight - groupDim.top + GROUP_BORDER_PADDING;
-                availableHeight = availableAbove;
+                break;
+            case 'bottom':
+                menuNodeProps.top = groupDim.top + groupDim.height + GROUP_BORDER_PADDING;
+                break;
+            case 'left':
+                menuNodeProps.right = window.innerWidth - groupDim.left + GROUP_BORDER_PADDING;
+                break;
+            case 'right':
+                menuNodeProps.left = groupDim.left + groupDim.width + GROUP_BORDER_PADDING;
+                break;
             }
 
             // add space for scroll bars if available width or height is not sufficient
             menuNodeProps.width = Math.min(availableWidth, menuNodeSize.width + ((menuNodeSize.height > availableHeight) ? SCROLLBAR_WIDTH : 0));
             menuNodeProps.height = Math.min(availableHeight, menuNodeSize.height + ((menuNodeSize.width > availableWidth) ? SCROLLBAR_HEIGHT : 0));
 
-            // horizontal position: prefer left-aligned, but do not exceed right border of browser window
-            menuNodeProps.left = Math.min(groupDim.left, window.innerWidth - WINDOW_BORDER_PADDING - menuNodeProps.width);
+            // second part of the position of the drop-down menu (do not exceed bottom or right border of browser window)
+            switch (preferredSide) {
+            case 'top':
+            case 'bottom':
+                menuNodeProps.left = Math.min(groupDim.left, window.innerWidth - WINDOW_BORDER_PADDING - menuNodeProps.width);
+                break;
+            case 'left':
+            case 'right':
+                menuNodeProps.top = Math.min(groupDim.top, window.innerHeight - WINDOW_BORDER_PADDING - menuNodeProps.height);
+                break;
+            }
 
             // apply final CSS formatting
             menuNode.css(menuNodeProps);
@@ -336,6 +352,38 @@ define('io.ox/office/tk/dropdown/dropdown',
         }
 
         // methods ------------------------------------------------------------
+
+        /**
+         * Returns the available sizes for the drop-down menu node at every
+         * side of the group node.
+         *
+         * @returns {Object}
+         *  The sizes (objects with 'width' and 'height' attributes) available
+         *  for the menu node, mapped by the side names 'top', 'bottom',
+         *  'left', and 'right'.
+         */
+        this.getAvailableMenuSizes = function () {
+
+            var // position and size of the parent group node
+                groupDim = self.getDimensions(),
+
+                // available total width and height
+                availableWidth = Math.max(window.innerWidth - 2 * WINDOW_BORDER_PADDING, 0),
+                availableHeight = Math.max(window.innerHeight - 2 * WINDOW_BORDER_PADDING, 0),
+
+                // vertical space above, below, left of, and right of the group node
+                availableAbove = Math.max(groupDim.top - WINDOW_BORDER_PADDING - GROUP_BORDER_PADDING, 0),
+                availableBelow = Math.max(window.innerHeight - groupDim.top - groupDim.height - WINDOW_BORDER_PADDING - GROUP_BORDER_PADDING, 0),
+                availableLeft = Math.max(groupDim.left - WINDOW_BORDER_PADDING - GROUP_BORDER_PADDING, 0),
+                availableRight = Math.max(window.innerWidth - groupDim.left - groupDim.width - WINDOW_BORDER_PADDING - GROUP_BORDER_PADDING, 0);
+
+            return {
+                top: { width: availableWidth, height: availableAbove },
+                bottom: { width: availableWidth, height: availableBelow },
+                left: { width: availableLeft, height: availableHeight },
+                right: { width: availableRight, height: availableHeight }
+            };
+        };
 
         /**
          * Returns the drop-down button added to the group.
@@ -466,14 +514,16 @@ define('io.ox/office/tk/dropdown/dropdown',
         this.addFocusableControl(menuButton);
 
         // register event handlers
-        this.on('change cancel', function () { toggleMenu(false); });
+        this.on('change cancel', function () { toggleMenu(false); })
+            .on('show enable', function (state) { if (!state) { toggleMenu(false); } });
         groupNode
             .on('keydown keypress keyup', groupKeyHandler)
             .on('blur:key', Group.FOCUSABLE_SELECTOR, function () { toggleMenu(false); });
         menuButton
             .on('click', menuButtonClickHandler)
             .on('keydown keypress keyup', menuButtonKeyHandler);
-        menuNode.on('keydown keypress keyup', menuKeyHandler);
+        menuNode
+            .on('keydown keypress keyup', menuKeyHandler);
 
         if (autoLayout) {
             menuNode.css('overflow', 'auto');
