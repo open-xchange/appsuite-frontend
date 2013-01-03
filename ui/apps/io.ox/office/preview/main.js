@@ -14,14 +14,13 @@
 define('io.ox/office/preview/main',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/application',
-     'io.ox/office/tk/view/alert',
      'io.ox/office/preview/actions',
      'io.ox/office/preview/model',
      'io.ox/office/preview/controller',
      'io.ox/office/preview/view',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.css'
-    ], function (Utils, Application, Alert, Actions, PreviewModel, PreviewController, PreviewView, gt) {
+    ], function (Utils, Application, Actions, PreviewModel, PreviewController, PreviewView, gt) {
 
     'use strict';
 
@@ -43,18 +42,6 @@ define('io.ox/office/preview/main',
 
         // private methods ----------------------------------------------------
 
-
-        /**
-         * Sets application title (launcher) and window title according to the
-         * current file name.
-         */
-        function updateTitles() {
-            var file = self.getFileDescriptor(),
-                fileName = (file && file.filename) ? file.filename : gt('Unnamed');
-            self.setTitle(fileName);
-            self.getWindow().setTitle(fileName);
-        }
-
         /**
          * Loads the document described in the file descriptor passed to the
          * constructor of this application, and shows the application window.
@@ -65,15 +52,20 @@ define('io.ox/office/preview/main',
          */
         function loadAndShow() {
 
-            var // initialize the deferred to be returned
-                def = $.Deferred().always(function () {
-                    self.getWindow().idle();
-                });
+            var // the deferred to be returned
+                def = $.Deferred();
+
+            // initialize the deferred
+            def.fail(function () {
+                view.showLoadError();
+                model.setPreviewDocument(null);
+            }).always(function () {
+                self.getWindow().idle();
+            });
 
             // show application window
             self.getWindow().show(function () {
                 self.getWindow().busy();
-                updateTitles();
 
                 // do not try to load, if file descriptor is missing
                 if (self.hasFileDescriptor()) {
@@ -92,14 +84,10 @@ define('io.ox/office/preview/main',
                             model.setPreviewDocument(previewDocument);
                             def.resolve();
                         } else {
-                            Alert.showGenericError(self.getWindow().nodes.main.children('.toolpane'), gt('An error occurred while loading the document.'), gt('Load Error'));
-                            model.setPreviewDocument(null);
                             def.reject();
                         }
                     })
-                    .fail(function (response) {
-                        Alert.showAjaxError(self.getWindow().nodes.main.children('.toolpane'), response);
-                        model.setPreviewDocument(null);
+                    .fail(function () {
                         def.reject();
                     });
 
@@ -126,7 +114,7 @@ define('io.ox/office/preview/main',
 
             // create the view (creates application window)
             view = new PreviewView(self);
-            
+
             // disable dropping event in view-mode
             self.getWindow().nodes.main.on('drop dragstart dragover', false);
 

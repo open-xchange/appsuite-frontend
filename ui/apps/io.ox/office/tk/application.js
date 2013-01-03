@@ -13,8 +13,9 @@
 
 define('io.ox/office/tk/application',
     ['io.ox/files/api',
-     'io.ox/office/tk/utils'
-    ], function (FilesAPI, Utils) {
+     'io.ox/office/tk/utils',
+     'gettext!io.ox/office/main'
+    ], function (FilesAPI, Utils, gt) {
 
     'use strict';
 
@@ -70,6 +71,7 @@ define('io.ox/office/tk/application',
             if (_.isNull(file) && _.isObject(newFile)) {
                 file = newFile;
             }
+            this.updateTitle();
             return this;
         };
 
@@ -227,7 +229,7 @@ define('io.ox/office/tk/application',
                 // the result deferred
                 def = $.Deferred().done(function (fileName) {
                     file.filename = fileName;
-                    self.setTitle(shortName);
+                    self.updateTitle();
                 });
 
             if (_.isString(shortName) && (shortName.length > 0) && file) {
@@ -259,6 +261,19 @@ define('io.ox/office/tk/application',
             }
 
             return def.promise();
+        };
+
+        /**
+         * Updates the application title according to the current file name. If
+         * the application does not contain a file descriptor, shows the
+         * localized word 'Unnamed' as title.
+         *
+         * @returns {OfficeApplication}
+         *  A reference to this application object.
+         */
+        this.updateTitle = function () {
+            this.setTitle(this.getShortFileName() || gt('Unnamed'));
+            return this;
         };
 
         /**
@@ -318,6 +333,11 @@ define('io.ox/office/tk/application',
                     $(window).off('resize', resizeHandler);
                 });
         };
+
+        // initialization -----------------------------------------------------
+
+        // set application title to current file name
+        this.updateTitle();
 
     } // class OfficeApplication
 

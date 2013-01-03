@@ -13,8 +13,9 @@
 
 define('io.ox/office/tk/view/view',
         ['io.ox/office/tk/utils',
-         'io.ox/office/tk/view/pane'
-        ], function (Utils, Pane) {
+         'io.ox/office/tk/view/pane',
+         'gettext!io.ox/office/main'
+        ], function (Utils, Pane, gt) {
 
     'use strict';
 
@@ -186,6 +187,160 @@ define('io.ox/office/tk/view/view',
                 windowResizeHandler();
             }
             return this;
+        };
+
+        /**
+         * Shows an alert banner at the top of the application window. An alert
+         * currently shown will be removed before.
+         *
+         * @param {String} title
+         *  The alert title.
+         *
+         * @param {String} message
+         *  The alert message text.
+         *
+         * @param {String} type
+         *  The type of the alert banner. Supported values are 'error',
+         *  'warning', and 'success'.
+         *
+         * @param {Object} [options]
+         *  A map with additional options controlling the appearance and
+         *  behavior of the alert banner. The following options are supported:
+         *  @param {Boolean} [options.closeable]
+         *      If set to true, the alert banner can be closed with a close
+         *      button shown in the top-right corner of the banner.
+         *  @param {Boolean} [options.autoClose]
+         *      If set to true, the alert banner will vanish automatically
+         *      after five seconds.
+         *  @param {String} [options.buttonLabel]
+         *      If specified, a push button will be shown with the passed
+         *      caption label.
+         *  @param {String} [options.buttonKey]
+         *      Must be specified together with the 'options.buttonLabel'
+         *      option. When the button has been pressed, the controller item
+         *      with the passed key will be executed.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
+        this.showAlert = function (title, message, type, options) {
+
+            var // the label of the push button to be shown in the alert banner
+                buttonLabel = Utils.getStringOption(options, 'buttonLabel'),
+                // the controller key of the push button
+                buttonKey = Utils.getStringOption(options, 'buttonKey'),
+                // the alert node
+                alert = $.alert(title, message).removeClass('alert-error').addClass('alert-' + type + ' hide in'),
+                // the main application node
+                mainNode = app.getWindow().nodes.main;
+
+            // make the alert banner closeable
+            if (Utils.getBooleanOption(options, 'closeable', false)) {
+                // alert can be closed by clicking anywhere in the alert
+                alert.click(function () { alert.slideUp(); });
+            } else {
+                // remove closer button
+                alert.find('a.close').remove();
+            }
+
+            // always execute controller default action when alert has been clicked (also if not closeable)
+            alert.click(function () { app.getController().done(); });
+
+            // initialize auto-close
+            if (Utils.getBooleanOption(options, 'autoClose', false)) {
+                _.delay(_.bind(alert.slideUp, alert), 5000);
+            }
+
+            // insert the push button into the alert banner
+            if (_.isString(buttonLabel) && _.isString(buttonKey)) {
+                alert.append(
+                    $.button({ label: buttonLabel })
+                        .addClass('btn-' + type + ' btn-mini')
+                        .click(function () { alert.slideUp(); app.getController().change(buttonKey); })
+                );
+            }
+
+            // remove old alert, insert and show new alert
+            mainNode.find('.alert').remove().end().append(alert);
+            alert.slideDown();
+
+            return this;
+        };
+
+        /**
+         * Shows an error alert banner at the top of the application window. An
+         * alert currently shown will be removed before.
+         *
+         * @param {String} title
+         *  The alert title.
+         *
+         * @param {String} message
+         *  The alert message text.
+         *
+         * @param {Object} [options]
+         *  A map with additional options controlling the appearance and
+         *  behavior of the alert banner. See method Alert.showAlert() for
+         *  details.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
+        this.showError = function (title, message, options) {
+            return this.showAlert(title, message, 'error', options);
+        };
+
+        /**
+         * Shows a warning alert banner at the top of the application window.
+         * An alert currently shown will be removed before.
+         *
+         * @param {String} title
+         *  The alert title.
+         *
+         * @param {String} message
+         *  The alert message text.
+         *
+         * @param {Object} [options]
+         *  A map with additional options controlling the appearance and
+         *  behavior of the alert banner. See method Alert.showAlert() for
+         *  details.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
+        this.showWarning = function (title, message, options) {
+            return this.showAlert(title, message, 'warning', options);
+        };
+
+        /**
+         * Shows a success alert banner at the top of the application window.
+         * An alert currently shown will be removed before.
+         *
+         * @param {String} title
+         *  The alert title.
+         *
+         * @param {String} message
+         *  The alert message text.
+         *
+         * @param {Object} [options]
+         *  A map with additional options controlling the appearance and
+         *  behavior of the alert banner. See method Alert.showAlert() for
+         *  details.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
+        this.showSuccess = function (title, message, options) {
+            return this.showAlert(title, message, 'success', options);
+        };
+
+        /**
+         * Shows a closeable error alert banner with a 'Load Error' message.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
+        this.showLoadError = function () {
+            return this.showError(gt('Load Error'), gt('An error occurred while loading the document.'), { closeable: true });
         };
 
         this.destroy = function () {

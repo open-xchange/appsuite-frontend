@@ -48,8 +48,10 @@ define('io.ox/office/preview/view',
             .addButton('pages/previous', { icon: 'arrow-previous', tooltip: gt('Previous page') })
             .addLabel('pages/current',   { width: 100 })
             .addButton('pages/next',     { icon: 'arrow-next',     tooltip: gt('Next page') })
-            .addButton('pages/last',     { icon: 'arrow-last',     tooltip: gt('Last page') })
-            .getNode().css('text-align', 'center');
+            .addButton('pages/last',     { icon: 'arrow-last',     tooltip: gt('Last page') });
+
+        // center the tool bar in the tool pane
+        toolPane.getNode().css('text-align', 'center');
 
     } // class PreviewView
 
