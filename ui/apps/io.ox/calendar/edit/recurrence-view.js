@@ -633,14 +633,12 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
                     if (this.model.get('occurrences')) {
                         this.nodes.endsChoice.append(this.ends.after.$el);
-                        // workaround: swapped lines to avoid problems via endingChanged (see bug 24138)
+                        this.ends.after.set('occurrences', this.model.get("occurrences"));
                         this.setEnding(this.ends.after);
-                        this.endsChoice.set('occurrences', this.model.get("occurrences"));
                     } else if (this.model.get('until')) {
                         this.nodes.endsChoice.append(this.ends.date.$el);
-                        // workaround: swapped lines to avoid problems via endingChanged (see bug 24138)
+                        this.ends.date.set("until", this.model.get("until"));
                         this.setEnding(this.ends.date);
-                        this.endsChoice.set("until", this.model.get("until"));
                     } else {
                         this.nodes.endsChoice.append(this.ends.never.$el);
                         this.setEnding(this.ends.never);
@@ -729,7 +727,6 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
                         this.model.set(yearly);
                     }
-
                     if (this.endsChoice) {
                         switch (this.endsChoice.id) {
                         case "never":
@@ -752,7 +749,6 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 }
 
                 this.updatingModel = false;
-
                 this.modelChanged();
             },
 
@@ -768,13 +764,13 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             },
             setEnding: function (sentence) {
                 if (this.endsChoice) {
-                    this.endsChoice.off("change");
+                    this.endsChoice.off("change", this.endingChanged, this);
                 }
                 this.endsChoice = sentence;
                 this.endsChoice.on("change", this.endingChanged, this);
             },
             endingChanged: function () {
-                switch (this.endsChoice.ending) {
+                switch (this.endsChoice.ending + "") {
                 case "1":
                     this.setEnding(this.ends.never);
                     break;
