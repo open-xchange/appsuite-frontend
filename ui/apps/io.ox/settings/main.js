@@ -85,8 +85,6 @@ define('io.ox/settings/main',
             }
         };
 
-        win.on('hide', saveSettings);
-
         win.nodes.controls.append(
             forms.createCheckbox({
                 dataid: 'settings-expertcb',
@@ -189,10 +187,12 @@ define('io.ox/settings/main',
         // trigger auto save
         grid.selection.on('change', function (e, selection) {
             if (selection.length === 1) {
-                saveSettings();
                 currentSelection = selection[0];
             }
         });
+
+        // trigger auto save on any change
+        win.nodes.main.on('change', saveSettings);
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/settings', showSettings, right);
         commons.wireGridAndWindow(grid, win);
