@@ -344,7 +344,6 @@ define.async('io.ox/core/tk/html-editor', [], function () {
     function Editor(textarea) {
 
         var def = $.Deferred(), ed;
-
         (textarea = $(textarea)).tinymce({
 
             script_url: ox.base + '/apps/moxiecode/tiny_mce/tiny_mce.js',
@@ -355,10 +354,15 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             init_instance_callback: function () {
                 // get internal editor reference
                 ed = textarea.tinymce();
+                if ($('#' + ed.id + '_ifr')) {
+                    $('#' + ed.id + '_ifr').attr('tabindex', '5');
+                }
                 // add handler for focus/blur
                 $(ed.getWin())
                     .on('focus', function (e) {
                         $('#' + ed.id + '_tbl').addClass('focused');
+                        ed.getBody().focus();
+
                     })
                     .on('blur', function (e) {
                         $('#' + ed.id + '_tbl').removeClass('focused');

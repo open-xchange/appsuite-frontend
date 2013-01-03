@@ -136,7 +136,7 @@ define("io.ox/mail/write/view-main",
             return (this.sections[id + 'Link'] = $('<div>'))
                 .addClass('section-link')
                 .append(
-                    $('<a>', { href: '#', tabindex: '5' })
+                    $('<a>', { href: '#', tabindex: '7' })
                     .attr('data-section-link', id)
                     .text(label)
                     .on('click', { id: id }, $.proxy(fnShowSection, this))
@@ -356,7 +356,7 @@ define("io.ox/mail/write/view-main",
                                     $('<div>').addClass('section-item pointer')
                                     .addClass(index >= signatures.length ? 'signature-remove' : '')
                                     .append(
-                                        $('<a>', { href: '#', tabindex: '5' })
+                                        $('<a>', { href: '#', tabindex: '7' })
                                         .on('click dragstart', $.preventDefault)
                                         .text(o.displayname)
                                     )
@@ -765,7 +765,7 @@ define("io.ox/mail/write/view-main",
 
     function createRadio(name, value, text, isChecked) {
         var label, radio;
-        radio = $('<input>', { type: 'radio', name: name, value: value, tabindex: '5' });
+        radio = $('<input>', { type: 'radio', name: name, value: value, tabindex: '7' });
         label = $('<label class="radio">').append(
             radio, $.txt(_.noI18n('\u00A0\u00A0')), text, $.txt(_.noI18n('\u00A0\u00A0\u00A0\u00A0 '))
         );
@@ -785,7 +785,7 @@ define("io.ox/mail/write/view-main",
 
     function createCheckbox(name, text, isChecked) {
         var label, box;
-        box = $('<input>', { type: 'checkbox', name: name, value: '1', tabindex: '5' });
+        box = $('<input>', { type: 'checkbox', name: name, value: '1', tabindex: '7' });
         label = $('<label class="checkbox">').append(
             box, $.txt(_.noI18n('\u00A0\u00A0')), text, $.txt(_.noI18n('\u00A0\u00A0\u00A0\u00A0 '))
         );
