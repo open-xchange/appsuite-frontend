@@ -107,9 +107,11 @@ define('io.ox/office/tk/control/group',
          * browser window.
          *
          * @returns {Object}
-         *  An object with numeric 'left', 'top', 'width', and 'height'
-         *  attributes representing the position and size of the group node in
-         *  pixels.
+         *  An object with numeric 'left', 'top', 'right', 'bottom', 'width',
+         *  and 'height' attributes representing the position and size of the
+         *  group node in pixels. The attributes 'right' and 'bottom' represent
+         *  the distance of the right/bottom corner of the group node to the
+         *  right/bottom border of the browser window.
          */
         this.getDimensions = function () {
 
@@ -119,6 +121,10 @@ define('io.ox/office/tk/control/group',
             // add group size
             groupDim.width = groupNode.outerWidth();
             groupDim.height = groupNode.outerHeight();
+
+            // add right/bottom distance
+            groupDim.right = window.innerWidth - groupDim.left - groupDim.width;
+            groupDim.bottom = window.innerHeight - groupDim.top - groupDim.height;
 
             return groupDim;
         };
