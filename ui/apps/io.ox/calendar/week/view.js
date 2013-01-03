@@ -216,7 +216,7 @@ define('io.ox/calendar/week/view',
                 }
                 self.clicks++;
 
-                if (self.clickTimer !== null && self.clicks === 2) {
+                if (self.clickTimer !== null && self.clicks === 2 && cT.hasClass('modify')) {
                     clearTimeout(self.clickTimer);
                     self.clicks = 0;
                     self.clickTimer = null;
