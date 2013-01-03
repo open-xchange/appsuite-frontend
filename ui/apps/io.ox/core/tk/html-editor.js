@@ -362,7 +362,6 @@ define.async('io.ox/core/tk/html-editor', [], function () {
                     .on('focus', function (e) {
                         $('#' + ed.id + '_tbl').addClass('focused');
                         ed.getBody().focus();
-
                     })
                     .on('blur', function (e) {
                         $('#' + ed.id + '_tbl').removeClass('focused');

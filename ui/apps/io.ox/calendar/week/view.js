@@ -423,7 +423,9 @@ define('io.ox/calendar/week/view',
             // create and animate timeline
             this.renderTimeline(this.timeline);
             setInterval(this.renderTimeline, 60000, this.timeline);
-            this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick here for whole day appointment')).attr('unselectable', 'on'));
+            if (!Modernizr.touch) {
+                this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick here for whole day appointment')).attr('unselectable', 'on'));
+            }
 
             // create days
             var weekCon = $('<div>').addClass('week-container').append(this.timeline);
