@@ -12,8 +12,9 @@
  */
 
 define('io.ox/office/tk/view/alert',
-    ['gettext!io.ox/office/main'
-    ], function (gt) {
+    ['io.ox/office/tk/utils',
+     'gettext!io.ox/office/main'
+    ], function (Utils, gt) {
 
     'use strict';
 
@@ -30,10 +31,10 @@ define('io.ox/office/tk/view/alert',
      *  @param {Object} [controller] the controller for event handling
      *  @return {jQuery} the created alert
      */
-    function createAlert(title, message, closeable, node, controller) {
+    function createAlert(title, message, closeable, node, controller, classes) {
 
         var // the new alert
-            alert = $.alert(title, message).addClass('hide in');
+            alert = $.alert(title, message).removeClass('alert-error').addClass((_.isString(classes) ? classes : 'alert-error') + ' hide in');
 
         if (closeable) {
             // alert can be closed by clicking anywhere in the alert
@@ -68,8 +69,10 @@ define('io.ox/office/tk/view/alert',
      * @param {String} label the button label
      * @param {Object} controller the controller that handles the event defined by key
      * @param {jQuery} alert
+     * @param {String} classes
+     *  Additional CSS classes that will be added to the button element.
      */
-    function createButton(key, label, controller, alert) {
+    function createButton(key, label, controller, alert, classes) {
         var button = $.button({
                 label: label || '',
                 data: { action: 'ok' },
@@ -78,9 +81,48 @@ define('io.ox/office/tk/view/alert',
                     controller.change(key);
                 }
             });
-        button.addClass('btn-mini');
+        button.addClass((_.isString(classes) ? (classes + ' ') : '') + 'btn-mini');
         alert.append(button);
         return button;
+    }
+
+    /**
+     * Creates an error alert, inserts it at the beginning of the given dom node
+     * and closes it again after given milliseconds (-1 means don't close).
+     * Removes a present alert before adding the new one.
+     *
+     *  @param {String} title the alert title
+     *  @param {String} message the alert message
+     *  @param {boolean} closeable alert can be closed
+     *  @param {jQuery | Object} node the dom node to add the alert to
+     *  @param {Object} controller the controller for event handling
+     *  @param {Number} duration the duration the alert is shown
+     *  @param {Object} [buttonSpec] options for an additional button, with the following attributes:
+     *          {String} buttonSpec.key the event key
+     *          {String} buttonSpec.label the button label
+     */
+    function showAlert(title, message, closeable, node, controller, duration, buttonSpec, alertClasses, buttonClasses) {
+
+        var alert = createAlert(title, message, closeable, node, controller, alertClasses);
+
+        if (_.isObject(buttonSpec) && controller && buttonSpec.key) {
+            createButton(buttonSpec.key, buttonSpec.label, controller, alert, buttonClasses);
+        }
+
+        $(node).prepend(alert);
+        alert.slideDown();
+
+        if (_.isNumber(duration) && duration >= 0) {
+            _.delay(function () {
+                // application may already be dead...
+                if (Utils.containsNode(document, alert)) {
+                    alert.slideUp();
+                    if (controller) {
+                        controller.done();
+                    }
+                }
+            }, duration);
+        }
     }
 
     // static class Alert =====================================================
@@ -105,24 +147,7 @@ define('io.ox/office/tk/view/alert',
      *          {String} buttonSpec.label the button label
      */
     Alert.showError = function (title, message, closeable, node, controller, duration, buttonSpec) {
-
-        var alert = createAlert(title, message, closeable, node, controller);
-
-        if (_.isObject(buttonSpec) && controller && buttonSpec.key) {
-            createButton(buttonSpec.key, buttonSpec.label, controller, alert).addClass('btn-error');
-        }
-
-        $(node).prepend(alert);
-        alert.slideDown();
-
-        if (_.isNumber(duration) && duration >= 0) {
-            _.delay(function () {
-                alert.slideUp();
-                if (controller) {
-                    controller.done();
-                }
-            }, duration);
-        }
+        showAlert(title, message, closeable, node, controller, duration, buttonSpec, 'alert-error', 'btn-error');
     };
 
     /**
@@ -141,25 +166,7 @@ define('io.ox/office/tk/view/alert',
      *          {String} buttonSpec.label the button label
      */
     Alert.showWarning = function (title, message, closeable, node, controller, duration, buttonSpec) {
-
-        var alert = createAlert(title, message, closeable, node, controller)
-            .removeClass('alert-error').addClass('alert-warning');
-
-        if (_.isObject(buttonSpec) && controller && buttonSpec.key) {
-            createButton(buttonSpec.key, buttonSpec.label, controller, alert).addClass('btn-warning');
-        }
-
-        $(node).prepend(alert);
-        alert.slideDown();
-
-        if (_.isNumber(duration) && duration >= 0) {
-            _.delay(function () {
-                alert.slideUp();
-                if (controller) {
-                    controller.done();
-                }
-            }, duration);
-        }
+        showAlert(title, message, closeable, node, controller, duration, buttonSpec, 'alert-warning', 'btn-warning');
     };
 
     /**
@@ -178,25 +185,7 @@ define('io.ox/office/tk/view/alert',
      *          {String} buttonSpec.label the button label
      */
     Alert.showSuccess = function (title, message, closeable, node, controller, duration, buttonSpec) {
-
-        var alert = createAlert(title, message, closeable, node, controller)
-            .removeClass('alert-error').addClass('alert-success');
-
-        if (_.isObject(buttonSpec) && controller && buttonSpec.key) {
-            createButton(buttonSpec.key, buttonSpec.label, controller, alert).addClass('btn-success');
-        }
-
-        $(node).prepend(alert);
-        alert.slideDown();
-
-        if (_.isNumber(duration) && duration >= 0) {
-            _.delay(function () {
-                alert.slideUp();
-                if (controller) {
-                    controller.done();
-                }
-            }, duration);
-        }
+        showAlert(title, message, closeable, node, controller, duration, buttonSpec, 'alert-success', 'btn-success');
     };
 
     // special alerts ---------------------------------------------------------

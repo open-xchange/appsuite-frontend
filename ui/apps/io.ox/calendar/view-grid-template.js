@@ -20,7 +20,6 @@ define("io.ox/calendar/view-grid-template",
 
     "use strict";
     var fnClickPerson = function (e) {
-        console.log('clicked person, ', e);
         e.preventDefault();
         ext.point("io.ox/core/person:action").each(function (ext) {
             _.call(ext.action, e.data, e);
@@ -45,9 +44,22 @@ define("io.ox/calendar/view-grid-template",
                         )
                     )
                     .append(conflicts = $("<div>").addClass("conflicts").hide());
-                return { title: title, location: location, time: time, date: date, shown_as: shown_as, conflicts: conflicts, isPrivate: isPrivate };
+
+                return {
+                    title: title,
+                    location: location,
+                    time: time,
+                    date: date,
+                    shown_as: shown_as,
+                    conflicts: conflicts,
+                    isPrivate: isPrivate
+                };
             },
             set: function (data, fields, index) {
+                var hash = util.getConfirmations(data),
+                    conf = hash[ox.user_id] || { status: 1, comment: "" };
+
+                this.addClass(util.getConfirmationClass(conf.status));
                 fields.title.text(gt.noI18n(data.title || '\u00A0'));
                 fields.location.text(gt.noI18n(data.location || '\u00A0'));
                 util.addTimezoneLabel(fields.time.empty(), data);

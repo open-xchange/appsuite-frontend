@@ -37,7 +37,7 @@ define('io.ox/calendar/model',
                 id: model.id,
                 folder: model.get('folder_id') || model.get('folder')
             };
-            if (model.recurrence_position) {
+            if (model.attributes.recurrence_position) {
                 _.extend(options, {recurrence_position: model.get('recurrence_position')});
             }
             return api.remove(options);
@@ -46,7 +46,8 @@ define('io.ox/calendar/model',
             defaults: {
                 start_date: defStart.getTime(),
                 end_date: defStart.getTime() + date.HOUR,
-                recurrence_type: 0
+                recurrence_type: 0,
+                notification: true
             },
             init: function () {
 
@@ -58,14 +59,17 @@ define('io.ox/calendar/model',
                     }
                 });
             },
-            getParticipants: function () {
+            getParticipants: function (options) {
+
                 if (this._participants) {
                     return this._participants;
                 }
                 var self = this;
+                var defaults = _.extend({sortBy: 'display_name'}, options);
                 var resetListUpdate = false;
                 var changeParticipantsUpdate = false;
                 var participants = this._participants = new pModel.Participants(this.get('participants'));
+
                 participants.invoke('fetch');
 
                 function resetList(participant) {
@@ -200,16 +204,23 @@ define('io.ox/calendar/model',
     DAYS.values = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
 
     return {
-        setDefaultParticipants: function (model) {
+        setDefaultParticipants: function (model, options) {
             return folderAPI.get({folder: model.get('folder_id')}).done(function (folder) {
                 if (folderAPI.is('private', folder)) {
-                    var userID = configAPI.get('identifier');
-                    // it's a private folder for the current user, add him by default
-                    // as participant
-                    model.getParticipants().addUniquely({id: userID, type: 1});
+                    if (options.create) {
+                        var userID = configAPI.get('identifier');
+                        // it's a private folder for the current user, add him by default
+                        // as participant
+                        model.getParticipants().addUniquely({id: userID, type: 1});
 
-                    // use a new, custom and unused property in his model to specify that he can't be removed
-                    model.getParticipants().get(userID).set('ui_removable', false);
+                        // use a new, custom and unused property in his model to specify that he can't be removed
+                        model.getParticipants().get(userID).set('ui_removable', false);
+                    } else {
+                        var userID = configAPI.get('identifier');
+                        if (model.get('organizerId') === userID) {
+                            model.getParticipants().get(userID).set('ui_removable', false);
+                        }
+                    }
 
                 } else if (folderAPI.is('public', folder)) {
                     // if public folder, current user will be added

@@ -79,6 +79,45 @@ define('io.ox/office/tk/control/button',
 
         Group.call(this, options);
 
+        // methods ------------------------------------------------------------
+
+        /**
+         * Returns the DOM button control node, as jQuery object.
+         */
+        this.getButtonNode = function () {
+            return button;
+        };
+
+        /**
+         * Changes the icon of this button control.
+         *
+         * @param {String} [icon]
+         *  The CSS class name of the new icon. If omitted, the current icon
+         *  will be removed from the button.
+         *
+         * @returns {Button}
+         *  A reference to this instance.
+         */
+        this.setIcon = function (icon) {
+            Utils.setControlCaption(button, Utils.extendOptions(options, { icon: icon }));
+            return this;
+        };
+
+        /**
+         * Changes the label text of this button control.
+         *
+         * @param {String} [labelText]
+         *  The new label text. If omitted, the current label text will be
+         *  removed from the button control.
+         *
+         * @returns {Button}
+         *  A reference to this instance.
+         */
+        this.setLabelText = function (labelText) {
+            Utils.setControlCaption(button, Utils.extendOptions(options, { label: labelText }));
+            return this;
+        };
+
         // initialization -----------------------------------------------------
 
         // insert the button into this group, and register event handlers

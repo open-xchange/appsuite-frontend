@@ -26,7 +26,10 @@ define("io.ox/calendar/main",
     var app = ox.ui.createApp({ name: 'io.ox/calendar', title: 'Calendar' }),
         // app window
         win,
-        lastPerspective = 'week:' + settings.get('viewView', 'workweek');
+        lastPerspective = settings.get('viewView', 'week:workweek');
+
+    // corrupt data fix
+    if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
 
     // launcher
     app.setLauncher(function (options) {

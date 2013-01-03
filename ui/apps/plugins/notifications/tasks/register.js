@@ -70,7 +70,14 @@ define('plugins/notifications/tasks/register',
         },
 
         initialize: function () {
+            var self = this;
             this.collection.on('reset add remove', this.render, this);
+            //be responsive
+            api.on('delete', function (e, ids) {
+                _(ids).each(function (id) {
+                    self.collection.remove(self.collection._byId[id.id]);
+                });
+            });
         },
 
         render: function () {
@@ -94,7 +101,7 @@ define('plugins/notifications/tasks/register',
             // this is a very strange API signature; just to have that said
             api.update(_.now(), obj.id, { status: 3, percent_completed: 100 }, obj.folder_id)
                 .done(function (result) {
-                    api.trigger('update:' + cid, result);
+                    api.trigger('update:' + encodeURIComponent(cid), result);
                 });
             model = this.collection.getByCid(item.attr('model-cid'));
             this.collection.remove(model);
@@ -267,7 +274,14 @@ define('plugins/notifications/tasks/register',
         id: 'io-ox-notifications-reminder-tasks',
 
         initialize: function () {
+            var self = this;
             this.collection.on('reset add remove', this.render, this);
+            //be responsive
+            api.on('delete', function (e, ids) {
+                _(ids).each(function (id) {
+                    self.collection.remove(self.collection._byId[id.id]);
+                });
+            });
         },
 
         render: function () {
@@ -343,11 +357,7 @@ define('plugins/notifications/tasks/register',
                 $('<span class="end_date">').text(_.noI18n(task.end_date)),
                 $('<span class="status">').text(task.status).addClass(task.badge),
                 $('<div class="actions">').append(
-                    $('<select class="stateselect" data-action="selector">').append(
-                            $('<option>').text(gt('Confirm')),
-                            $('<option>').text(gt('Decline')),
-                            $('<option>').text(gt('Tentative'))),
-                    $('<button class="btn btn-inverse" data-action="change_state">').text(gt('Change state'))
+                    $('<button class="btn btn-inverse" data-action="change_state">').text(gt('Accept/Decline'))
                 )
             );
             task = null;
@@ -363,7 +373,7 @@ define('plugins/notifications/tasks/register',
             'click [data-action="change_state"]': 'onChangeState'
             //'dispose': 'close'
         },
-
+        
         render: function () {
             var baton = ext.Baton({ model: this.model, view: this });
             ext.point('io.ox/core/notifications/task-confirmation/item').invoke('draw', this.$el, baton);
@@ -400,13 +410,39 @@ define('plugins/notifications/tasks/register',
 
         onChangeState: function (e) {
             e.stopPropagation();
-            var model = this.model,
-                state = this.$el.find(".stateselect").prop('selectedIndex') + 1;
-            api.confirm({id: model.get('id'),
-                         folder_id: model.get("folder_id"),
-                         data: {confirmation: state }
-            }).done(function () {
-                model.collection.remove(model);
+            var model = this.model;
+            require(['io.ox/core/tk/dialogs', 'io.ox/tasks/edit/util'], function (dialogs, editUtil) {
+                //build popup
+                var popup = new dialogs.ModalDialog()
+                    .addPrimaryButton('ChangeConfState', gt('Change state'))
+                    .addButton('cancel', gt('Cancel')),
+                    body = popup.getBody();
+                
+                body.append($("<h4>").text(_.noI18n(model.get("title") || '\u2014')),
+                            $('<div>').text(_.noI18n(model.get("note") || '\u2014')).css({color: '#888', 'margin-bottom': '5px'}));
+                editUtil.buildRow(body, [[editUtil.buildLabel(gt("Confirmation status", "confStateInput")),
+                            $('<select class="stateselect" data-action="selector">').attr("id", "confStateInput").append(
+                            $('<option>').text(gt('Confirm')),
+                            $('<option>').text(gt('Decline')),
+                            $('<option>').text(gt('Tentative')))],
+                            [editUtil.buildLabel(gt("Confirmation message", "confMessageInput")), $('<input>')
+                                 .attr({type: 'text', id: "confMessageInput"})]]);
+                //go
+                popup.show().done(function (action) {
+                    if (action === "ChangeConfState") {
+                        var state = body.find(".stateselect").prop('selectedIndex') + 1,
+                            message = body.find("#confMessageInput").val();
+                        api.confirm({id: model.get('id'),
+                                     folder_id: model.get("folder_id"),
+                                     data: {confirmation: state,
+                                            confirmMessage: message}
+                        }).done(function () {
+                            //update detailview
+                            api.trigger("update:" + model.get('folder_id') + '.' + model.get('id'));
+                            model.collection.remove(model);
+                        });
+                    }
+                });
             });
         }
     });
@@ -417,7 +453,14 @@ define('plugins/notifications/tasks/register',
         id: 'io-ox-notifications-confirmation-tasks',
 
         initialize: function () {
+            var self = this;
             this.collection.on('reset add remove', this.render, this);
+            //be responsive
+            api.on('delete', function (e, ids) {
+                _(ids).each(function (id) {
+                    self.collection.remove(self.collection._byId[id.id]);
+                });
+            });
         },
 
         render: function () {

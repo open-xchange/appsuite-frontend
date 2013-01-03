@@ -12,6 +12,7 @@
  */
 
 define('io.ox/core/settings/register', ['io.ox/core/extensions', 'gettext!io.ox/core/settings'], function (ext, gt) {
+
 	'use strict';
 
 	ext.point("io.ox/settings/pane").extend({
@@ -30,7 +31,10 @@ define('io.ox/core/settings/register', ['io.ox/core/extensions', 'gettext!io.ox/
 					user.on('update', function () {
 						require("io.ox/core/notifications").yell("success", gt("Your data has been saved"));
 					});
-				});
+				}).done(function () {
+						$node.find('[data-action="discard"]').hide();
+					}
+				);
 			});
 		}
 	});

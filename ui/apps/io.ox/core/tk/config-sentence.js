@@ -167,11 +167,10 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
         _.extend(this, Backbone.Events);
         this.$el = $('<span>').html(sentence);
         this.$el.find('a').each(function () {
-            var $anchor = $(this);
-
-            var attribute = $anchor.data("attribute") || 'value';
-            var widget = $anchor.data("widget");
-            var opts = options[attribute] || options;
+            var $anchor = $(this),
+                attribute = $anchor.data("attribute") || 'value',
+                widget = $anchor.data("widget"),
+                opts = options[attribute] || options;
             // TODO: Use ExtensionPoints here
             if (Widgets[widget]) {
                 Widgets[widget].call(self, $anchor, attribute, opts);
@@ -190,7 +189,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             $ghost.find('a').each(function () {
                 $(this).replaceWith($.txt($(this).text()));
             });
-            $ghost.find(".no-clone").remove();
+            $ghost.find(".no-clone, .datepicker").remove();
             return $ghost;
         };
 

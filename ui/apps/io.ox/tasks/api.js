@@ -67,14 +67,14 @@ define("io.ox/tasks/api", ["io.ox/core/http",
 
 
     api.create = function (task) {
-                return http.PUT({
-                    module: "tasks",
-                    params: {action: "new",
-                             timezone: "UTC"},
-                    data: task,
-                    appendColumns: false
-                });
-            };
+        return http.PUT({
+            module: "tasks",
+            params: {action: "new",
+                     timezone: "UTC"},
+            data: task,
+            appendColumns: false
+        });
+    };
 
     api.update = function (timestamp, taskId, modifications, folder) {
                 //check if only one big array was given for exsample by modelfactory
@@ -100,7 +100,6 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     useFolder = folder;
                 }
                 var key = useFolder + "." + taskId;
-
                 return http.PUT({
                     module: "tasks",
                     params: {action: "update",
@@ -123,20 +122,61 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 });
 
             };
+            
+    //used by done/undone actions when used with multiple selection
+    api.updateMultiple = function (list, modifications) {
+        http.pause();
+        
+        var keys  = [];
+        
+        _(list).map(function (obj) {
+            keys.push((obj.folder || obj.folder_id) + "." + obj.id);
+            return http.PUT({
+                module: 'tasks',
+                params: {
+                    action: 'update',
+                    id: obj.id,
+                    folder: obj.folder || obj.folder_id,
+                    timestamp: _.now(),
+                    timezone: "UTC"
+                },
+                data: modifications,
+                appendColumns: false
+            });
+        });
+        return http.resume().pipe(function () {
+            // update cache
+            return $.when(api.caches.get.remove(keys), api.caches.list.remove(keys));
+        }).done(function () {
+            //trigger refresh, for vGrid etc
+            api.trigger('refresh.all');
+        });
+    };
+    
     api.move = function (task, newFolder) {
-        var folder = task.folder_id;
-        if (!folder) {
-            folder = task.folder;
+        var folder;
+        if (!task.length) {
+            folder = task.folder_id;
+            if (!folder) {
+                folder = task.folder;
+            }
         }
+        
         // call updateCaches (part of remove process) to be responsive
         return api.updateCaches(task).pipe(function () {
             // trigger visual refresh
             api.trigger('refresh.all');
-            return api.update(_.now(), task.id, {folder_id: newFolder}, folder);
+            
+            if (!task.length) {
+                return api.update(_.now(), task.id, {folder_id: newFolder}, folder);
+            } else {
+                return api.updateMultiple(task, {folder_id: newFolder});
+            }
         });
     };
     
     api.confirm =  function (options) { //options.id is the id of the task not userId
+        var key = (options.folder_id || options.folder) + "." + options.id;
         return http.PUT({
             module: "tasks",
             params: {
@@ -147,6 +187,9 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             },
             data: options.data, // object with confirmation attribute
             appendColumns: false
+        }).pipe(function (response) {
+            // update cache
+            return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
         });
     };
 

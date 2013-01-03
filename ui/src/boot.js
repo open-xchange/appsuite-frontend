@@ -207,21 +207,26 @@ $(document).ready(function () {
     changeLanguage = function (id) {
         // if the user sets a language on the login page, it will be used for the rest of the session, too
         return require(['io.ox/core/login.' + id]).done(function (gt) {
-            // get all nodes
-            $("[data-i18n]").each(function () {
-                var node = $(this),
-                    val = gt(node.attr("data-i18n")),
-                    target = node.attr("data-i18n-attr") || 'text';
-                switch (target) {
-                case 'value': node.val(val); break;
-                case 'text': node.text(val); break;
-                case 'label': node.contents().get(-1).nodeValue = val; break;
-                default: node.attr(target, val); break;
+            // 404 are a success for IE
+            // "except for some of the error ones on IE (since it triggers success callbacks on scripts that load 404s)
+            // (see https://github.com/jrburke/requirejs/wiki/Requirejs-2.0-draft)
+            if (gt !== undefined) {
+                // get all nodes
+                $("[data-i18n]").each(function () {
+                    var node = $(this),
+                        val = gt(node.attr("data-i18n")),
+                        target = node.attr("data-i18n-attr") || 'text';
+                    switch (target) {
+                    case 'value': node.val(val); break;
+                    case 'text': node.text(val); break;
+                    case 'label': node.contents().get(-1).nodeValue = val; break;
+                    default: node.attr(target, val); break;
+                    }
+                });
+                // update placeholder (IE9 fix)
+                if (_.browser.IE) {
+                    $('input[type=text], input[type=password]').val('').placeholder();
                 }
-            });
-            // update placeholder (IE9 fix)
-            if (_.browser.IE) {
-                $('input[type=text], input[type=password]').val('').placeholder();
             }
         });
     };
@@ -236,8 +241,9 @@ $(document).ready(function () {
     }
 
     var getBrowserLanguage = function () {
-        var language = (navigator.language || navigator.userLanguage).substr(0, 2);
-        return _.chain(ox.serverConfig.languages).keys().find(function (id) {
+        var language = (navigator.language || navigator.userLanguage).substr(0, 2),
+            languages = ox.serverConfig.languages || {};
+        return _.chain(languages).keys().find(function (id) {
                 return id.substr(0, 2) === language;
             }).value();
     };
@@ -247,12 +253,19 @@ $(document).ready(function () {
     setDefaultLanguage = function () {
         // look at navigator.language with en_US as fallback
         var navLang = (navigator.language || navigator.userLanguage).substr(0, 2),
-            lang = "en_US", id = "";
-        for (id in ox.serverConfig.languages) {
+            languages = ox.serverConfig.languages || {},
+            lang = "en_US", id = "", found = false;
+        for (id in languages) {
             // match?
             if (id.substr(0, 2) === navLang) {
                 lang = id;
+                found = true;
                 break;
+            }
+        }
+        if (!found) {
+            if (!_.isEmpty(languages)) {
+                lang = _(languages).keys()[0];
             }
         }
         return changeLanguage(lang);
@@ -309,6 +322,79 @@ $(document).ready(function () {
         };
     }());
 
+    function updateServerConfig(data) {
+        ox.serverConfig = data;
+        require(['io.ox/core/capabilities', 'io.ox/core/manifests']).done(function (capabilities, manifests) {
+            capabilities.reset();
+            manifests.reset();
+        });
+    }
+
+    function setFallbackConfig() {
+        var webmail = {  path: "io.ox/mail/main", requires: "webmail", title: "Mail" };
+        updateServerConfig({
+            buildDate: '',
+            contact: '',
+            copyright: '',
+            capabilities: [{ attributes: {}, backendSupport: false, id: 'webmail' }],
+            forgotPassword: false,
+            languages: {},
+            manifests: [webmail],
+            pageHeader: '',
+            pageHeaderPrefix: '',
+            pageTitle: '',
+            productName: '',
+            productNameMail: '',
+            serverVersion: '',
+            version: ''
+        });
+    }
+
+    function getCachedServerConfig(configCache, cacheKey, def) {
+        configCache.get(cacheKey).done(function (data) {
+            if (data !== null) {
+                updateServerConfig(data);
+            } else {
+                setFallbackConfig();
+            }
+            def.resolve();
+        });
+    }
+
+    function fetchServerConfig(cacheKey) {
+        var def = $.Deferred();
+        require(['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
+            var configCache = new cache.SimpleCache(cacheKey, true);
+            if (ox.online) {
+                http.GET({
+                    module: 'apps/manifests',
+                    params: {
+                        action: 'config'
+                    }
+                })
+                .done(function (data) {
+                    configCache.add(cacheKey, data);
+                    updateServerConfig(data);
+                    def.resolve();
+                })
+                .fail(function () {
+                    getCachedServerConfig(configCache, cacheKey, def);
+                });
+            } else {
+                getCachedServerConfig(configCache, cacheKey, def);
+            }
+        })
+        return def;
+    }
+
+    function fetchUserSpecificServerConfig() {
+        return fetchServerConfig('userconfig');
+    }
+
+    function fetchGeneralServerConfig() {
+        return fetchServerConfig('generalconfig');
+    }
+
     /**
      * Auto login
      */
@@ -316,15 +402,21 @@ $(document).ready(function () {
 
         function loadCoreFiles() {
             // Set user's language (as opposed to the browser's language)
-            return require(['io.ox/core/gettext']).pipe(function (gt) {
+            // Load core plugins
+            return require(['io.ox/core/gettext', 'io.ox/core/manifests']).pipe(function (gt, manifests) {
                 gt.setLanguage(ox.language);
-                return require([ox.base + '/pre-core.js']);
+                if (!ox.online) {
+                    return require([ox.base + '/pre-core.js']);
+                }
+                return manifests.manager.loadPluginsFor('core').pipe(function () {
+                    return require([ox.base + '/pre-core.js']);
+                });
             });
         }
 
-        require(['io.ox/core/session', 'io.ox/core/capabilities', 'io.ox/core/manifests']).done(function (session, capabilities, manifests) {
+        require(['io.ox/core/session', 'io.ox/core/capabilities']).done(function (session, capabilities) {
 
-            var useAutoLogin = capabilities.has("autologin") && ox.online, initialized;
+            var useAutoLogin = (true || capabilities.has("autologin")) && ox.online, initialized;
 
             function continueWithoutAutoLogin() {
                 if (ox.signin) {
@@ -332,24 +424,6 @@ $(document).ready(function () {
                 } else {
                     _.url.redirect('signin');
                 }
-            }
-
-            function fetchUserSpecificServerConfig() {
-                var def = $.Deferred();
-                require(['io.ox/core/http'], function (http) {
-                    http.GET({
-                        module: 'apps/manifests',
-                        params: {
-                            action: 'config'
-                        }
-                    }).done(function (data) {
-                        ox.serverConfig = data;
-                        capabilities.reset();
-                        manifests.reset();
-                        def.resolve();
-                    }).fail(def.reject);
-                }).fail(def.reject);
-                return def;
             }
 
             // got session via hash?
@@ -361,15 +435,16 @@ $(document).ready(function () {
                 ox.language = _.url.hash('language');
                 _.url.redirect('#');
 
-                initialized = fetchUserSpecificServerConfig();
-
-                $.when(loadCoreFiles(), initialized).done(loadCore);
+                fetchUserSpecificServerConfig().done(function () {
+                    loadCoreFiles().done(function () {
+                        loadCore();
+                    });
+                });
 
             } else {
                 // try auto login!?
                 (useAutoLogin ? session.autoLogin() : $.when())
                 .done(function () {
-
                     if (useAutoLogin) {
                         fetchUserSpecificServerConfig().done(function () {
                             loadCoreFiles().done(function () { gotoCore(true); });
@@ -392,7 +467,7 @@ $(document).ready(function () {
         // shortcut
         var sc = ox.serverConfig, lang = sc.languages, node, id = "", footer = "";
         // show languages
-        if (lang !== false) {
+        if (!_.isEmpty(lang)) {
             node = $("#io-ox-language-list");
             for (id in lang) {
                 node.append(
@@ -455,7 +530,7 @@ $(document).ready(function () {
                 // use browser language
                 setDefaultLanguage()
             )
-            .done(function () {
+            .always(function () {
                 // show login dialog
                 $("#io-ox-login-blocker").on("mousedown", false);
                 $("#io-ox-login-form").on("submit", fnSubmit);
@@ -500,24 +575,12 @@ $(document).ready(function () {
 
     var boot = function () {
 
-        // get pre core & server config -- and init http & session
-        require(['io.ox/core/http', 'io.ox/core/session'])
-            .done(function (http) {
-                // TODO: caching
-                http.GET({
-                    module: 'apps/manifests',
-                    params: {
-                        action: 'config'
-                    }
-                }).done(function (data) {
-                    // store server config
-                    ox.serverConfig = data;
-                    // set page title now
-                    document.title = _.noI18n(ox.serverConfig.pageTitle || '');
-                    // continue
-                    autoLogin();
-                });
-            });
+        fetchGeneralServerConfig().done(function () {
+            // set page title now
+            document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+            // continue
+            autoLogin();
+        });
     };
 
     // handle online/offline mode
@@ -546,7 +609,9 @@ $(document).ready(function () {
     if (Modernizr.localstorage) {
         var ui = JSON.parse(localStorage.getItem('appsuite-ui') || '{}');
         if (ui.version !== ox.version) {
-            console.warn('clearing localStorage due to UI update');
+            if (ox.debug === true) {
+                console.warn('clearing localStorage due to UI update');
+            }
             localStorage.clear();
             localStorage.setItem('appsuite-ui', JSON.stringify({ version: ox.version }));
         }

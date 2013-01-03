@@ -202,4 +202,10 @@ define("plugins/portal/linkedIn/register",
             );
         }
     });
+
+    ext.point('io.ox/portal/widget/linkedin/settings').extend({
+        title: gt('LinkedIn'),
+        type: 'linkedin',
+        editable: false
+    });
 });

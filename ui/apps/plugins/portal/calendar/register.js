@@ -68,14 +68,7 @@ define("plugins/portal/calendar/register",
         },
 
         preview: function (baton) {
-
-            var startSpan = new date.Local(),
-                endSpan = startSpan + (24 * 60 * 60 * 1000),
-
-                appointments = _(baton.data).filter(function (app) {
-                    return app.start_date > endSpan || app.end_date < startSpan;
-                }),
-
+            var appointments = baton.data,
                 $content = $('<div class="content">');
 
             if (appointments.length > 0) {
@@ -122,4 +115,11 @@ define("plugins/portal/calendar/register",
             });
         }
     });
+
+    ext.point('io.ox/portal/widget/calendar/settings').extend({
+        title: gt('Calendar'),
+        type: 'calendar',
+        editable: false
+    });
+
 });

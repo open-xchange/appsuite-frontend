@@ -1037,17 +1037,6 @@ input[type=search] {
     padding: 10px;
 }
 
-/* Lightbox */
-
-.io-ox-lightbox-popup {
-    overflow: hidden;
-    background-color: white;
-    border: 3px solid #111;
-    .border-radius(5px 5px 5px 5px);
-    z-index: 65001;
-    padding: 20px;
-}
-
 /* hints */
 
 span.hint {
@@ -1287,12 +1276,27 @@ input.nice-input {
     overflow: auto;
     padding: 13px 0 4px 0;
 
+    .folder-root {
+        display: table;
+        min-width: 100%;
+    }
+
+    .subfolders {
+        width: 100%;
+    }
+
     .folder {
         line-height: 34px;
         padding: 0 13px 0 0;
-        overflow: hidden;
+        overflow: visible;
         white-space: nowrap;
-        text-overflow: ellipsis;
+        width: 100%;
+        .box-sizing(border-box);
+        display: table;
+    }
+
+    .folder-row {
+        display: table-row;
     }
 
     .folder.selectable, .folder.expandable { cursor: pointer; }
@@ -1316,35 +1320,41 @@ input.nice-input {
     }
 
     .folder-arrow {
-        float: left;
-        display: inline-block;
+        display: table-cell;
         width: 50px;
         text-align: center;
+        color: #aaa;
         &:hover { text-decoration: none; }
+        i { display: block; width: 50px; }
     }
 
-    .folder-icon {
-        float: left;
-        width: 16px;
-        height: 16px;
-        border: 0px none;
-        margin: 0 6px 0 0;
+    .folder-label {
+        display: table-cell;
+        margin: 0 1em 0 0;
     }
 
     .folder-counter {
+        display: table-cell;
+        text-align: right;
+    }
+
+    .folder-counter-badge {
         color: #888;
         line-height: 26px;
         padding: 0 0.75em 0 0.75em;
         margin-top: 4px;
-        text-align: right;
-        margin-left: 0.5em;
-        display: inline-block;
-        float: right;
+        display: none;
         background-color: #f0f0f0;
         border-radius: 5px;
+        margin-left: 1em;
     }
 
-    .folder.selected .folder-counter {
+    .show-counter {
+        .folder-counter-badge { display: inline-block; }
+        .folder-label { font-weight: bold; }
+    }
+
+    .folder.selected .folder-counter-badge {
         color: white;
         background-color: #069;
     }
@@ -1391,7 +1401,7 @@ input.nice-input {
 
     .foldertree-container {
 
-        bottom: 36px;
+        bottom: 40px;
 
         &.io-ox-foldertree {
 
@@ -1410,9 +1420,13 @@ input.nice-input {
                 font-weight: bold;
             }
 
-            .folder-counter { background-color: #555; color: white; }
+            .folder-counter-badge { background-color: #555; color: white; }
 
-            a { font-size: 13px; color: lighten(@link-color, 20%); }
+            .folder.show-counter {
+                .folder-label { color: @link-on-dark !important; }
+            }
+
+            .folder-arrow, a { font-size: 13px; color: lighten(@link-color, 20%); }
 
             .folder .shared-by { padding-left: 0; font-size: 12px; }
         }

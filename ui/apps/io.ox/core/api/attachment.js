@@ -87,6 +87,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
         },
         
         createOldWay: function (options, form) {
+            
             var json = {module: options.module,
                         attached: options.id,
                         folder: options.folder || options.folder_id},
@@ -116,6 +117,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                 });
                 deferred[(response && response.error ? 'reject' : 'resolve')](response);
                 window.callback_attach = null;
+                $('#tmp').trigger("attachmentsSaved");
             };
             
             $(form).attr({
@@ -171,7 +173,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                 appendColumns: false
             }).done(function () {
                 require(['io.ox/files/api'], function (fileAPI) {
-                    fileAPI.caches.all.grepRemove(target + '\t');
+                    fileAPI.caches.all.grepRemove(target + api.DELIM);
                     fileAPI.trigger('refresh.all');
                 });
             });

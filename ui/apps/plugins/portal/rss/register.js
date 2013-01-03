@@ -20,7 +20,8 @@ define("plugins/portal/rss/register",
     'io.ox/keychain/api',
     'io.ox/rss/api',
     'io.ox/core/date',
-    'gettext!io.ox/portal'], function (ext, strings, accountApi, serviceApi, messageApi, keychain, rss, date, gt) {
+    'io.ox/core/tk/dialogs',
+    'gettext!io.ox/portal'], function (ext, strings, accountApi, serviceApi, messageApi, keychain, rss, date, dialogs, gt) {
 
     "use strict";
 
@@ -119,30 +120,72 @@ define("plugins/portal/rss/register",
         }())
     });
 
-    // var feeds = [];
+    function edit(model, view) {
 
-    // var tileGroups = settings.get('groups');
-    // tileGroups = _(tileGroups).sortBy(function (group) { return group.index || 0; });
+        var dialog = new dialogs.ModalDialog({ easyOut: true, async: true }),
+            $url = $('<textarea class="input-block-level" rows="5">').attr('placeholder', 'http://').placeholder(),
+            $description = $('<input type="text" class="input-block-level">'),
+            $error = $('<div class="alert alert-error">').hide(),
+            props = model.get('props') || {},
+            that = this;
 
-    // _(tileGroups).each(function (tilegroup) {
-    //     var extension = {
-    //         id: 'rss-' + tilegroup.groupname.replace(/[^a-zA-Z0-9]/g, '-'),
-    //         index: 100,
-    //         title: tilegroup.groupname,
-    //         load: function () {
+        dialog.header($("<h4>").text(gt('RSS Feeds')))
+            .build(function () {
+                this.getContentNode().append(
+                    $('<label>').text(gt('URL')),
+                    $url.val((props.url || []).join('\n')),
+                    $('<label>').text(gt('Description (optional)')),
+                    $description.val(props.description),
+                    $error
+                );
+            })
+            .addPrimaryButton('save', gt('Save'))
+            .addButton('cancel', gt('Cancel'))
+            .show(function () {
+                $url.focus();
+            });
 
+        dialog.on('cancel', function () {
+            if (model.candidate) {
+                view.removeWidget();
+            }
+        });
 
-    //         },
+        dialog.on('save', function (e) {
 
-    //         preview: function () {
+            var url = $.trim($url.val()),
+                description = $.trim($description.val()),
+                deferred = $.Deferred();
 
+            $error.hide();
 
-    //         },
+            if (url.length === 0) {
+                $error.text(gt('Please enter a feed URL.'));
+                deferred.reject();
+            } else {
+                deferred.resolve();
+            }
 
-    //         draw: function (feed) {
+            deferred.done(function () {
+                dialog.close();
+                model.candidate = false;
+                model.set({
+                    title: description,
+                    props: { url: url.split(/\n/), description: description }
+                });
+            });
 
-    //         }
-    //     };
-    //     ext.point("io.ox/portal/widget").extend(extension); //END: ext.point(...).extend
-    // }); //END: tileGroups.each
+            deferred.fail(function () {
+                $error.show();
+                dialog.idle();
+            });
+        });
+    }
+
+    ext.point('io.ox/portal/widget/rss/settings').extend({
+        title: gt('RSS Feed'),
+        type: 'rss',
+        editable: true,
+        edit: edit
+    });
 });

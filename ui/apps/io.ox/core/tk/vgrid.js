@@ -599,8 +599,9 @@ define('io.ox/core/tk/vgrid',
                             tmp.push(obj);
                         }
                     });
-                    list = tmp.concat(all);
+                    list = tmp.concat(list);
                 }
+
                 if (isArray(list)) {
                     return apply(list)
                         .always(function () {

@@ -389,12 +389,15 @@ define('io.ox/core/commons-folderview',
                 });
 
             // draw toolbar
-
             tree.selection.on('change', function (e, selection) {
                 if (selection.length) {
-                    api.get({ folder: selection[0] }).done(function (data) {
+                    var id = selection[0];
+                    api.get({ folder: id }).done(function (data) {
                         baton.data = data;
+                        // update toolbar
                         ext.point(POINT + '/sidepanel/toolbar').invoke('draw', baton.$.toolbar.empty(), baton);
+                        // reload tree node
+                        tree.reloadNode(id);
                     });
                 }
             });

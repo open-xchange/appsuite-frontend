@@ -34,7 +34,7 @@ define('io.ox/core/api/folder',
         getFolder = function (id, opt) {
             // get cache
             opt = opt || {};
-            var cache = opt.storage || folderCache;
+            var cache = opt.storage ? opt.storage.folderCache : folderCache;
             // cache miss?
             var getter = function () {
                 return http.GET({
@@ -156,7 +156,7 @@ define('io.ox/core/api/folder',
                     storage: null
                 }, options || {}),
                 // get cache
-                cache = opt.storage || subFolderCache,
+                cache = opt.storage ? opt.storage.subFolderCache : subFolderCache,
                 // cache miss?
                 getter = function () {
                     return http.GET({
@@ -219,7 +219,7 @@ define('io.ox/core/api/folder',
                         appendColumns: true
                     })
                     .done(function (data) {
-                        // loop over folders to remove root & update cache
+                        // loop over folders to remove root & 1 cache
                         data = _(data).filter(function (folder) {
                             cache.add(folder.id, folder);
                             return folder.id !== '1';
@@ -421,7 +421,27 @@ define('io.ox/core/api/folder',
             });
         },
 
-        update: function (options) {
+        sync: function () {
+            // action=update doesn't inform us about new unread mails, so we need another approach
+            // get all folders from subfolder cache
+            return subFolderCache.keys().pipe(function (keys) {
+                // we can use http.pause() here to create a multiple once backend stops crashing on multiples
+                return $.when.apply($, _(keys).map(function (id) {
+                    return api.getSubFolders({ folder: id, cache: false }).done(function (list) {
+                        _(list).each(function (folder) {
+                            api.trigger('update:unread', folder.id, folder);
+                        });
+                    });
+                }));
+            });
+        },
+
+        update: function (options, storage) {
+
+            if (storage) {
+                storage.subFolderCache.clear();
+                storage.folderCache.clear();
+            }
 
             subFolderCache.clear();
             folderCache.clear();
@@ -716,9 +736,8 @@ define('io.ox/core/api/folder',
                         // unread, title, subfolders, subscr_subflds
                         var equalUnread = a.unread === b.unread,
                             equalData = a.title === b.title && a.subfolders === b.subfolders && a.subscr_subflds === b.subscr_subflds;
-                        if (equalData && !equalUnread) {
-                            api.trigger('update:unread', id, b);
-                        } else if (!equalData) {
+                        api.trigger('update:unread', id, b);
+                        if (!equalData) {
                             api.trigger('update', id, id, b);
                         }
                     })
@@ -727,12 +746,12 @@ define('io.ox/core/api/folder',
                     });
             }
 
-            return function (list) {
+            return function () {
                 if (ox.online) {
-                    _([].concat(list))
-                        .chain()
-                        .map(function (obj) {
-                            return _.isString(obj) ? obj : obj.folder_id;
+                    _.chain(arguments)
+                        .flatten()
+                        .map(function (arg) {
+                            return _.isString(arg) ? arg : arg.folder_id;
                         })
                         .uniq()
                         .each(function (id) {
@@ -878,6 +897,17 @@ define('io.ox/core/api/folder',
     }());
 
     Events.extend(api);
+
+    ox.on('refresh^', function () {
+        api.sync();
+    });
+
+    // publish caches
+    api.caches = {
+        folderCache: folderCache,
+        subFolderCache: subFolderCache,
+        visibleCache: visibleCache
+    };
 
     return api;
 });

@@ -18,16 +18,16 @@ define('io.ox/portal/main',
      'io.ox/core/date',
      'io.ox/core/manifests',
      'io.ox/core/tk/dialogs',
+     'io.ox/portal/widgets',
      'gettext!io.ox/portal',
      'settings!io.ox/portal',
      'less!io.ox/portal/style.css',
      'apps/io.ox/core/tk/jquery-ui.min.js'
-    ], function (ext, userAPI, date, manifests, dialogs, gt, settings) {
+    ], function (ext, userAPI, date, manifests, dialogs, widgets, gt, settings) {
 
     'use strict';
 
-    var READY = $.when(),
-        DEV_PLUGINS = ['plugins/portal/helloworld/register', 'plugins/portal/updater/register'];
+    var READY = $.when();
 
     // time-based greeting phrase
     function getGreetingPhrase(name) {
@@ -48,6 +48,13 @@ define('io.ox/portal/main',
                 this.getGrid().selection.set({ id: 'io.ox/portal' });
             });
         });
+    }
+
+    function setColor(node, model) {
+        var color = node.attr('data-color');
+        node.removeClass('widget-color-' + color);
+        color = model.get('color') || 'black';
+        node.addClass('widget-color-' + color).attr('data-color', color);
     }
 
     // portal header
@@ -98,10 +105,11 @@ define('io.ox/portal/main',
                 'data-widget-id': baton.model.get('id'),
                 'data-widget-type': baton.model.get('type')
             })
-            .addClass('widget widget-color-' + (data.color || 'black') + ' widget-' + data.type + ' pending')
+            .addClass('widget pending')
             .append(
                 $('<h2 class="title">').text('\u00A0')
             );
+            setColor(this, baton.model);
         }
     });
 
@@ -110,82 +118,46 @@ define('io.ox/portal/main',
         win,
         appBaton = ext.Baton({ app: app }),
         sidepopup = new dialogs.SidePopup(),
-        availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
-        collection = new Backbone.Collection([]);
-
-    // for debugging
-    window.portal = app;
-
-    collection.comparator = function (a, b) {
-        return ext.indexSorter({ index: a.get('index') }, { index: b.get('index') });
-    };
+        availablePlugins = widgets.getAvailablePlugins(),
+        collection = widgets.getCollection();
 
     app.settings = settings;
-
-    app.getWidgetSettings = function () {
-        return _(settings.get('widgets/user', {}))
-            .chain()
-            // map first since we need the object keys
-            .map(function (obj, id) {
-                obj.id = id;
-                obj.type = id.split('_')[0];
-                obj.props = obj.props || {};
-                return obj;
-            })
-            .filter(function (obj) {
-                return (obj.enabled === undefined || obj.enabled === true) && _(availablePlugins).contains(obj.plugin);
-            })
-            .value();
-    };
-
-    collection.reset(app.getWidgetSettings());
 
     collection.on('remove', function (model) {
         // remove DOM node
         appBaton.$.widgets.find('[data-widget-cid="' + model.cid + '"]').remove();
         // clean up
-        if (model.baton) {
-            delete model.baton.model;
-            delete model.baton;
+        if (model.has('baton')) {
+            delete model.get('baton').model;
+            model.set('baton', null);
         }
     });
 
     collection.on('add', function (model) {
         app.drawScaffold(model);
-        app.loadPlugins().done(function () {
+        widgets.loadUsedPlugins().done(function () {
             app.drawWidget(model);
         });
     });
 
-    settings.on('change', function () {
-
-        // adopt current DOM order
-        collection.each(function (model) {
-            var node = app.getWidgetNode(model);
-            model.set('index', node.index());
-        });
-
-        var ids = collection.pluck('id');
-
-        _(app.getWidgetSettings()).each(function (obj) {
-            // added?
-            if (!_(ids).contains(obj.id)) {
-                collection.add(obj);
-            } else {
-                // remove from list
-                ids = _(ids).without(obj.id);
+    collection.on('change', function (model, e) {
+        if ('enabled' in e.changes) {
+            if (model.get('enabled')) {
+                app.getWidgetNode(model).show();
+                app.drawWidget(model);
+            } else {
+                app.getWidgetNode(model).hide();
             }
-        });
+        } else if ('color' in e.changes) {
+            setColor(app.getWidgetNode(model), model);
+        } else {
+            app.drawWidget(model);
+            app.refreshWidget(model);
+        }
+    });
 
-        // all remaining ids need to be removed
-        collection.remove(
-            collection.filter(function (model) {
-                return _(ids).contains(model.id);
-            })
-        );
-
+    collection.on('sort', function () {
         collection.sort({ silent: true });
-
         // loop over collection for resorting DOM tree
         collection.each(function (model) {
             // just re-append all in proper order
@@ -224,19 +196,12 @@ define('io.ox/portal/main',
         var node = $('<li>'),
             baton = ext.Baton({ model: model, app: app });
         ext.point('io.ox/portal/widget-scaffold').invoke('draw', node, baton);
+        if (model.get('enabled') === false) node.hide();
         appBaton.$.widgets.append(node);
     };
 
     app.getWidgetNode = function (model) {
         return appBaton.$.widgets.find('[data-widget-cid="' + model.cid + '"]');
-    };
-
-    app.loadPlugins = function () {
-        var usedPlugins = collection.pluck('plugin'),
-            dependencies = _(availablePlugins).intersection(usedPlugins);
-        return require(dependencies).done(function () {
-            app.removeDisabledWidgets();
-        });
     };
 
     function setup(e) {
@@ -271,31 +236,28 @@ define('io.ox/portal/main',
                 node.find('.content').remove();
                 point.invoke('preview', node, baton);
                 node.removeClass('pending error-occurred');
-            }).fail(function () {
+            })
+            .fail(function () {
                 node.find('.content').remove();
                 node.append(
-                    $('<div class="content">').text(gt('An error occurred. Click to try again')).bind('click', function () {
-                                node.addClass('pending');
-                                loadAndPreview(point, node, baton);
-                            })
+                    $('<div class="content">').text(
+                        gt('An error occurred. Click to try again')
+                    )
+                    .on('click', function () {
+                        node.addClass('pending');
+                        loadAndPreview(point, node, baton);
+                    })
                 );
                 node.addClass('error-occurred');
                 node.removeClass('pending');
             });
     }
 
-    app.removeDisabledWidgets = function () {
-        collection.remove(
-            collection.filter(function (model) {
-                return ext.point('io.ox/portal/widget/' + model.get('type'))
-                    .invoke('isEnabled').reduce(reduceBool, true).value() === false;
-            })
-        );
-    };
+    function getTitle(data, fallback) {
+        return data.title || (data.props ? (data.props.description || data.props.title) : '') || fallback || '';
+    }
 
     app.drawWidget = function (model, index) {
-
-        index = index || 0;
 
         var type = model.get('type'),
             node = app.getWidgetNode(model),
@@ -305,34 +267,39 @@ define('io.ox/portal/main',
             requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value(),
             title;
 
-        // remember baton
-        model.set('baton', baton);
+        // set/update title
+        title = node.find('h2.title').text(getTitle(model.toJSON(), point.prop('title')));
 
-        // set title
-        title = node.find('h2.title').text(point.prop('title'));
+        if (!model.drawn) {
 
-        // setup?
-        if (requiresSetUp) {
-            node.removeClass('pending');
-            app.drawDefaultSetup(baton, node);
-        } else {
-            // add link?
-            if (point.prop('action') !== undefined) {
-                title.addClass('action-link').on('click', { baton: baton }, runAction);
+            model.drawn = true;
+            index = index || 0;
+
+            // remember
+            model.set('baton', baton);
+
+            // setup?
+            if (requiresSetUp) {
+                node.removeClass('pending');
+                app.drawDefaultSetup(baton, node);
+            } else {
+                // add link?
+                if (point.prop('action') !== undefined) {
+                    title.addClass('action-link').on('click', { baton: baton }, runAction);
+                }
+                // simple delay approach
+                setTimeout(function () {
+                    // initialize first
+                    point.invoke('initialize', node, baton);
+                    // load & preview
+                    loadAndPreview(point, node, baton);
+                }, delay);
             }
-            // simple delay approach
-            setTimeout(function () {
-                // initialize first
-                point.invoke('initialize', node, baton);
-                // load & preview
-                loadAndPreview(point, node, baton);
-            }, delay);
         }
     };
 
-    // can be called every 30 seconds
-    app.refresh = _.throttle(function () {
-        collection.each(function (model, index) {
+    app.refreshWidget = function (model) {
+        if (model.drawn) {
             var type = model.get('type'),
                 node = app.getWidgetNode(model),
                 delay = Math.random() * (collection.length / 2) * 1000,
@@ -345,7 +312,12 @@ define('io.ox/portal/main',
                     node = baton = point = null;
                 }, 300);
             }, delay);
-        });
+        }
+    };
+
+    // can be called every 30 seconds
+    app.refresh = _.throttle(function () {
+        widgets.getEnabled().each(app.refreshWidget);
     }, 30000);
 
     ox.on('refresh^', function () {
@@ -380,20 +352,20 @@ define('io.ox/portal/main',
                 scroll: true,
                 delay: 150,
                 stop: function (e, ui) {
+                    var obj = widgets.toJSON();
                     // update all indexes
-                    var widgets = settings.get('widgets/user');
                     $(this).children('.widget').each(function (index) {
                         var node = $(this), id = node.attr('data-widget-id');
-                        if (id in widgets) {
-                            widgets[id].index = index;
+                        if (id in obj) {
+                            obj[id].index = index;
                         }
                     });
-                    settings.set('widgets/user', widgets).save();
+                    widgets.save(obj);
                 }
             });
 
-            app.loadPlugins().done(function () {
-                collection.each(app.drawWidget);
+            widgets.loadUsedPlugins().done(function () {
+                widgets.getEnabled().each(app.drawWidget);
             });
         });
     });

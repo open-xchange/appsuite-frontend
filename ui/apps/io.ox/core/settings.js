@@ -23,7 +23,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
         try {
             return JSON.parse(JSON.stringify(obj));
         } catch (e) {
-            console.error(obj, JSON.stringify(obj), e, e.stack);
+            console.error(obj, e, e.stack);
             throw e;
         }
     };
@@ -177,19 +177,16 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             };
 
             return settingsCache.get(path).pipe(function (data) {
-                try {
-                    if (data !== null) {
-                        tree = data.tree;
-                        meta = data.meta;
-                        return data;
-                    } else if (ox.online) {
-                        return load();
-                    } else {
-                        self.detach();
-                        return { tree: tree, meta: meta };
-                    }
-                } finally {
+                if (data !== null) {
+                    tree = data.tree;
+                    meta = data.meta;
                     if (ox.online) load(); // read-through caching
+                    return data;
+                } else if (ox.online) {
+                    return load();
+                } else { // offline
+                    self.detach();
+                    return { tree: tree, meta: meta };
                 }
             });
         };
@@ -205,6 +202,8 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     data: {}
                 })
                 .done(function () {
+                    tree = {};
+                    meta = {};
                     self.trigger('reset');
                 });
             });
@@ -219,18 +218,17 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     data: data
                 })
                 .done(function () { self.trigger('save'); });
-            }, 10000); // limit to 10 seconds
+            }, 5000); // limit to 5 seconds
 
-            return function (data) {
-
-                data = data || tree;
+            return function (custom) {
 
                 if (detached) {
                     console.warn('Not saving detached settings.', path);
                 }
 
+                var data = { tree: custom || tree, meta: meta };
                 settingsCache.add(path, data);
-                save(data);
+                save(data.tree);
 
                 return this;
             };

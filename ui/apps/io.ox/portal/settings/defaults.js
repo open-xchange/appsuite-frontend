@@ -16,18 +16,45 @@ define('io.ox/portal/settings/defaults', [], function () {
     'use strict';
 
     var settingsDefaults = {
-        'pluginSettings': [
-            {id: 'mail', active: true, index: 100},
-            {id: 'twitter', active: true, index: 200},
-            {id: 'linkedIn', active: true, index: 300},
-            {id: 'facebook', active: true, index: 800},
-            {id: 'tasks', active: true, index: 500},
-            {id: 'appointments', active: true, index: 600},
-            {id: 'flickr', active: true, index: 700},
-            {id: 'tumblr', active: true, index: 400},
-            {id: 'quota', active: true, index: 900}
-//            {id: 'rss', active: true, index: 700}
-        ]
+        widgets: {
+            user: {
+                mail_0: {
+                    plugin: 'plugins/portal/mail/register',
+                    color: 'blue',
+                    index: 1
+                },
+                calendar_0: {
+                    plugin: 'plugins/portal/calendar/register',
+                    color: 'red',
+                    index: 2
+                },
+                tasks_0: {
+                    plugin: 'plugins/portal/tasks/register',
+                    color: 'green',
+                    index: 3
+                },
+                birthdays_0: {
+                    plugin: 'plugins/portal/birthdays/register',
+                    color: 'lightgreen',
+                    index: 4
+                },
+                facebook_0: {
+                    plugin: 'plugins/portal/facebook/register',
+                    color: 'blue',
+                    index: 4
+                },
+                twitter_0: {
+                    plugin: 'plugins/portal/twitter/register',
+                    color: 'pink',
+                    index: 5
+                },
+                linkedin_0: {
+                    plugin: 'plugins/portal/linkedin/register',
+                    color: 'lightblue',
+                    index: 6
+                }
+            }
+        }
     };
 
     return settingsDefaults;

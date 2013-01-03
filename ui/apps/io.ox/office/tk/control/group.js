@@ -35,6 +35,14 @@ define('io.ox/office/tk/control/group',
      * the base class for specialized groups and does not add any specific
      * functionality to the inserted controls.
      *
+     * Instances of this class trigger the following events:
+     * - 'change': If the control has been activated in a special way depending
+     *  on the type of the control group. The event handler receives the value
+     *  of the activated control.
+     * - 'cancel': When the focus needs to be returned to the application (e.g.
+     *  when the Escape key is pressed, or when a click on a drop-down button
+     *  closes the opened drop-down menu).
+     *
      * @constructor
      *
      * @param {Object} [options]
@@ -44,8 +52,8 @@ define('io.ox/office/tk/control/group',
      *      Tool tip text shown when the mouse hovers the control. If omitted,
      *      the control will not show a tool tip.
      *  @param {Boolean} [options.white]
-     *      If set to true, control embedded in the group will get a white
-     *      background instead of being transparent.
+     *      If set to true, the group has a white background instead of being
+     *      transparent.
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of
      *      this instance.
@@ -62,6 +70,14 @@ define('io.ox/office/tk/control/group',
             updateHandlers = [];
 
         // private methods ----------------------------------------------------
+
+        /**
+         * Shows or hides this group.
+         */
+        function showGroup(visible) {
+            groupNode.toggleClass(HIDDEN_CLASS, !visible);
+            self.trigger('show', visible);
+        }
 
         /**
          * Keyboard handler for the entire group.
@@ -84,6 +100,27 @@ define('io.ox/office/tk/control/group',
          */
         this.getNode = function () {
             return groupNode;
+        };
+
+        /**
+         * Returns the absolute position and size of the group node in the
+         * browser window.
+         *
+         * @returns {Object}
+         *  An object with numeric 'left', 'top', 'width', and 'height'
+         *  attributes representing the position and size of the group node in
+         *  pixels.
+         */
+        this.getDimensions = function () {
+
+            var // get position of the group
+                groupDim = groupNode.offset();
+
+            // add group size
+            groupDim.width = groupNode.outerWidth();
+            groupDim.height = groupNode.outerHeight();
+
+            return groupDim;
         };
 
         /**
@@ -249,7 +286,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.show = function () {
-            groupNode.removeClass(HIDDEN_CLASS);
+            showGroup(true);
             return this;
         };
 
@@ -260,7 +297,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.hide = function () {
-            groupNode.addClass(HIDDEN_CLASS);
+            showGroup(false);
             return this;
         };
 
@@ -276,8 +313,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.toggle = function (state) {
-            var hidden = (state === false) || ((state !== true) && !this.isVisible());
-            groupNode.toggleClass(HIDDEN_CLASS, hidden);
+            showGroup((state === true) || ((state !== false) && this.isVisible()));
             return this;
         };
 

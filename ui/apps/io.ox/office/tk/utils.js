@@ -25,10 +25,7 @@ define('io.ox/office/tk/utils',
         ICON_SELECTOR = 'span[data-role="icon"]',
 
         // selector for the label <span> element in a control caption
-        LABEL_SELECTOR = 'span[data-role="label"]',
-
-        // selector for <span> elements in a control caption
-        CAPTION_SELECTOR = ICON_SELECTOR + ', ' + LABEL_SELECTOR;
+        LABEL_SELECTOR = 'span[data-role="label"]';
 
     // static class Utils =====================================================
 
@@ -756,6 +753,14 @@ define('io.ox/office/tk/utils',
         outerNode = Utils.getDomNode(outerNode);
         innerNode = Utils.getDomNode(innerNode);
 
+        // IE does not support contains() method at document
+        if (outerNode === document) {
+            outerNode = document.body;
+            if (innerNode === outerNode) {
+                return true;
+            }
+        }
+
         // outer node must be an element; be sure that a node does not contain itself
         if ((outerNode.nodeType !== 1) || (outerNode === innerNode)) {
             return false;
@@ -1363,16 +1368,16 @@ define('io.ox/office/tk/utils',
      *  A map of options to control the properties of the new element. The
      *  following options are supported:
      *  @param [options.value]
-     *      A value or object that will be copied to the 'data-value' attribute
-     *      of the control. Will be converted to a JSON string. Must not be
-     *      null. The undefined value will be ignored.
+     *      A value, object, or function that will be copied to the
+     *      'data-value' attribute of the control. Must not be null or
+     *      undefined.
      *  @param [options.userData]
      *      A value or object that will be copied to the 'data-userdata'
      *      attribute of the control. May contain any user-defined data.
-     *  @param {Number} [options.width]
-     *      The fixed total width of the control element (including padding),
-     *      in pixels. If omitted, the size will be set automatically according
-     *      to the contents of the control.
+     *  @param {Number|String} [options.width]
+     *      The total width of the control element (including padding). If
+     *      omitted, the size will be set automatically according to the
+     *      contents of the control.
      *  @param {Object} [options.css]
      *      A map with CSS formatting attributes to be added to the control.
      *
@@ -1396,13 +1401,15 @@ define('io.ox/office/tk/utils',
 
     /**
      * Returns the value stored in the 'value' data attribute of the first
-     * control in the passed jQuery collection.
+     * control in the passed jQuery collection. If the stored value is a
+     * function, calls that function and returns its result.
      *
      * @param {jQuery} control
      *  A jQuery collection containing a control element.
      */
     Utils.getControlValue = function (control) {
-        return control.first().data('value');
+        var value = control.first().data('value');
+        return _.isFunction(value) ? value() : value;
     };
 
     /**
@@ -1413,8 +1420,8 @@ define('io.ox/office/tk/utils',
      *  A jQuery collection containing a control element.
      *
      * @param value
-     *  A value or object that will be copied to the 'value' data attribute of
-     *  the control. Must not be null. The undefined value will be ignored.
+     *  A value, object, or function that will be copied to the 'value' data
+     *  attribute of the control. Must not be null or undefined.
      */
     Utils.setControlValue = function (control, value) {
         if (!_.isUndefined(value) && !_.isNull(value)) {
@@ -1609,7 +1616,7 @@ define('io.ox/office/tk/utils',
         // create a caption container if missing
         caption = control.children('div.caption');
         if (caption.length === 0) {
-            control.prepend(caption = $('<div>').addClass('caption'));
+            control.prepend(caption = $('<div>').addClass('caption unselectable'));
         }
 
         // remove the old caption spans
@@ -1727,7 +1734,7 @@ define('io.ox/office/tk/utils',
     Utils.createButton = function (options) {
 
         var // create the DOM anchor element representing the button
-            button = Utils.createControl('a', undefined, options).addClass('button');
+            button = Utils.createControl('a', { tabindex: 0 }, options).addClass('button');
 
         Utils.setControlCaption(button, options);
         return button;

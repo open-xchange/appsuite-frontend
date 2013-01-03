@@ -155,6 +155,7 @@ define("io.ox/participants/model",
                 });
                 self.remove(duplicates);
             });
+
         },
         model: ParticipantModel,
         addUniquely: function (models, options) {

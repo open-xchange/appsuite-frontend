@@ -960,6 +960,8 @@ define.async('io.ox/core/date',
 
     var locale = gettext.language.pipe(function (lang) {
         return require(["text!io.ox/core/date/date." + lang + ".json"]);
+    }).pipe(null, function (err) {
+        return require(['text!io.ox/core/date/date.root.json']);
     }).done(function (locale) {
         api.locale = JSON.parse(locale);
         monthRegex = makeRegex(api.locale.months, api.locale.monthsShort);
@@ -968,8 +970,7 @@ define.async('io.ox/core/date',
         dayMap = makeMap(api.locale.days, api.locale.daysShort);
     });
 
-    // TODO: load the entire locale config
-    return $.when(api.getTimeZone('Europe/Berlin'), locale/*, config */)
+    return $.when(api.getTimeZone(config.get('timezone', 'Europe/Berlin')), locale)
         .pipe(function (tz) {
             api.Local = tz;
             return api;

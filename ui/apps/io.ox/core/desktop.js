@@ -534,6 +534,8 @@ define("io.ox/core/desktop",
                 // trigger change event
                 if (win.currentPerspective !== 'main') {
                     win.trigger('change:perspective', name);
+                } else {
+                    win.trigger('change:initialPerspective', name);
                 }
                 // set perspective
                 win.setPerspective(name);

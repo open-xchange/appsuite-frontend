@@ -26,7 +26,7 @@ define('io.ox/core/settings/pane',
 
     var point = views.point("io.ox/core/settings/entry"),
         SettingView = point.createView({ tagName: 'form', className: 'form-horizontal'}),
-        reloadMe = ['language', 'timezone', 'theme', 'refreshInterval'];
+        reloadMe = ['language', 'timezone', 'theme', 'refreshInterval', 'autoOpenNotification'];
 
 
 
@@ -40,7 +40,10 @@ define('io.ox/core/settings/pane',
                 var showNotice = _(reloadMe).any(function (attr) {
                     return e.changes[attr];
                 });
-                if (showNotice) {
+                
+                if (e.changes.autoOpenNotification) {//AutonOpenNotification updates directly
+                    require("io.ox/core/notifications").yell("success", gt("The setting has been saved."));
+                } else if (showNotice) {
                     require("io.ox/core/notifications").yell("success", gt("The setting has been saved and will become active when you enter the application the next time."));
                 }
             });
@@ -57,7 +60,7 @@ define('io.ox/core/settings/pane',
         index: 100,
         attribute: 'language',
         label: gt("Language"),
-        selectOptions: ox.serverConfig.languages
+        selectOptions: ox.serverConfig.languages || {}
     }));
 
     http.GET({
@@ -138,12 +141,46 @@ define('io.ox/core/settings/pane',
             _(appAPI.getFavorites()).each(function (app) {
                 options[app.path] = gt(app.title);
             });
+
+            options.none = gt('None');
+
             point.extend(new forms.SelectControlGroup({
                 id: 'autoStart',
                 index: 500,
                 attribute: 'autoStart',
                 label: gt("Default App after login?"),
                 selectOptions: options
+            }));
+        }
+    }());
+
+    // Auto open notification area
+    (function () {
+        if (settings.isConfigurable('autoOpenNotificationarea')) {
+            point.extend(new forms.ControlGroup({
+                id: 'autoOpenNotfication',
+                index: 600,
+                attribute: 'autoOpenNotification',
+                label: gt("Automatic opening of notification area on new notifications."),
+                control: $('<input type="checkbox">'),
+                updateElement: function () {
+                    var value = this.model.get(this.attribute);
+                    if (value) {
+                        value = 'checked';
+                    } else {
+                        value = undefined;
+                    }
+                    this.nodes.element.attr('checked', value);
+                },
+                updateModel: function () {
+                    var value = this.nodes.element.attr('checked');
+                    if (value) {
+                        value = true;
+                    } else {
+                        value = false;
+                    }
+                    this.model.set(this.attribute, value);
+                }
             }));
         }
     }());

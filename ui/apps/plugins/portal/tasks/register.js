@@ -77,4 +77,10 @@ define("plugins/portal/tasks/register",
             });
         }
     });
+
+    ext.point('io.ox/portal/widget/tasks/settings').extend({
+        title: gt('Tasks'),
+        type: 'tasks',
+        editable: false
+    });
 });

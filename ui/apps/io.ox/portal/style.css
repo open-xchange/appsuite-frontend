@@ -91,7 +91,7 @@
         &:hover { text-decoration: underline; color: white; }
     }
 
-    .widget-color-default {
+    .widget-color-black {
         h2, .accent { color: #333; }
         .action { background-color: #333; }
     }
@@ -148,10 +148,10 @@
         font-weight: bold;
         line-height: 26px;
         height: 26px;
-        overflow: hidden;
         cursor: default;
         z-index: 2;
         .transition(color 0.3s linear);
+        .ellipsis();
     }
 
     h2.action-link {
@@ -328,79 +328,108 @@
     .io-ox-portal .widget { width: 100% / 5 - 0.05%; } /* -0.50% = floating fix */
 }
 
+/* Settings */
 
-/************
- * SETTINGS *
- ************
-*/
-.io-ox-portal-settings-title {
-    font-size: 20px;
-    font-weight: bold;
-}
-.io-ox-settings-item {
-    clear: both;
-    width: 30em;
-}
-.io-ox-setting-title {
-    width: 15em;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    display: inline-block;
-}
-.io-ox-portal-colorAction li {
-    display: block;
-    width: 100%;
-    height: 24px;
-    margin: 2px;
-}
-ul.io-ox-portal-settings {
-    margin: 0;
-    padding: 0;
-}
-li.io-ox-portal-setting {
-    list-style-position: inside;
-    list-style-type: none;
-    background: whiteSmoke;
-    padding: 1em;
-    margin: .25em 0;
-}
-li.io-ox-portal-setting.disabled {
-    background: #fafafa;
-}
-.io-ox-setting-description {
-    width: 20em;
-    display: inline-block;
-}
-.io-ox-portal-optionsAction, .io-ox-portal-colorAction {
-    display: inline-block;
-}
-.io-ox-portal-color-default {
-    background: #333;
-}
-.io-ox-portal-color-red {
-    background: @color_red;
-}
-.io-ox-portal-color-orange {
-    background: @color_orange;
-}
-.io-ox-portal-color-lightgreen {
-    background: darken(@color_lightgreen, 10%);
-}
-.io-ox-portal-color-green {
-    background: @color_green;
-}
-.io-ox-portal-color-lightblue {
-    background: darken(@color_lightblue, 20%);
-}
-.io-ox-portal-color-blue {
-    background: @color_blue;
-}
-.io-ox-portal-color-purple {
-    background: @color_purple;
-}
-.io-ox-portal-color-pink {
-    background: darken(@color_pink, 10%);
-}
-.io-ox-portal-color-gray {
-    background: darken(@color_gray, 20%);
+.io-ox-portal-settings {
+
+    min-height: 100%;
+    max-width: 700px;
+    .user-select(none);
+
+    h1 {
+        font-family: @font-light;
+        font-weight: 300;
+        font-size: 20pt;
+        line-height: 1.15em;
+        margin: 0;
+    }
+
+    .controls {
+        padding: 13px;
+        height: 30px;
+        margin-bottom: 13px;
+    }
+
+    .widget-list {
+        margin: 0;
+        list-style-type: none;
+    }
+
+    .widget-settings-view {
+
+        background-color: #f5f5f5;
+        padding: 13px;
+        margin: 0 0 7px 0;
+        text-align: right;
+        cursor: pointer;
+
+        .widget-title {
+            font-weight: bold;
+            margin-right: 2em;
+        }
+
+        .close {
+            position: relative;
+            top: -2px;
+            width: 1em;
+        }
+
+        .action {
+            margin-right: 2em;
+        }
+
+        &.disabled {
+            background-color: #eee;
+            .widget-title { font-style: italic; font-weight: normal; color: #888; }
+        }
+    }
+
+    .widget-color-black { color: #333; }
+    .widget-color-red { color: @color_red; }
+    .widget-color-orange { color: @color_orange; }
+    .widget-color-lightgreen { color: darken(@color_lightgreen, 10%); }
+    .widget-color-green { color: @color_green; }
+    .widget-color-lightblue { color: darken(@color_lightblue, 20%); }
+    .widget-color-blue { color: @color_blue; }
+    .widget-color-purple { color: @color_purple; }
+    .widget-color-pink { color: darken(@color_pink, 10%); }
+    .widget-color-gray { color: darken(@color_gray, 20%); }
+
+    .colors {
+
+        display: inline-block;
+
+        ul {
+
+            font: 14px/20 @font-normal;
+            width: 200px;
+            text-align: left;
+            right: 0;
+            left: auto;
+
+            a { line-height: 24px; }
+
+            .color-example {
+                display: inline-block;
+                float: right;
+                width: 28px;
+                height: 22px;
+                border: 1px solid rgba(0, 0, 0, 0.2);
+                .border-radius(5px);
+            }
+
+            .color-black { background-color: #333; }
+            .color-red { background-color: @color_red; }
+            .color-orange { background-color: @color_orange; }
+            .color-lightgreen { background-color: darken(@color_lightgreen, 10%); }
+            .color-green { background-color: @color_green; }
+            .color-lightblue { background-color: darken(@color_lightblue, 20%); }
+            .color-blue { background-color: @color_blue; }
+            .color-purple { background-color: @color_purple; }
+            .color-pink { background-color: darken(@color_pink, 10%); }
+            .color-gray { background-color: darken(@color_gray, 20%); }
+
+            .active-color { font-weight: bold; }
+        }
+    }
 }

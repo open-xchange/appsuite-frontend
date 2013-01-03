@@ -18,8 +18,10 @@ define('io.ox/calendar/list/perspective',
      'io.ox/core/commons',
      'io.ox/core/extensions',
      'io.ox/core/date',
+     'io.ox/calendar/util',
+     'settings!io.ox/calendar',
      'gettext!io.ox/calendar'
-     ], function (api, VGrid, tmpl, viewDetail, commons, ext, date, gt) {
+     ], function (api, VGrid, tmpl, viewDetail, commons, ext, date, util, settings, gt) {
 
     'use strict';
 
@@ -161,10 +163,18 @@ define('io.ox/calendar/list/perspective',
                     end: end.getTime(),
                     folder: prop.all && folder.type === 1 ? undefined : prop.folder,
                     order: prop.order
+                }).pipe(function (data) {
+                    if (settings.get('showDeclinedAppointments', 'false') === 'true') {
+                        return data;
+                    } else {
+                        return _.filter(data, function (obj) {
+                            var hash = util.getConfirmations(obj),
+                                conf = hash[ox.user_id] || { status: 1, comment: "" };
+                            return conf.status !== 2;
+                        });
+                    }
                 });
             });
-
-
         });
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/calendar', showAppointment, right, api);

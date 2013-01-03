@@ -251,6 +251,37 @@ define('io.ox/core/commons',
             });
         },
 
+        wirePerspectiveEvents: function (app) {
+            var win = app.getWindow();
+            var oldPerspective = null;
+            win.on('show', function () {
+                oldPerspective = win.currentPerspective;
+                if (win.currentPerspective) {
+                    app.trigger('perspective:' + win.currentPerspective + ":show");
+                }
+            });
+
+            win.on('hide', function () {
+                oldPerspective = win.currentPerspective;
+                if (win.currentPerspective) {
+                    app.trigger('perspective:' + win.currentPerspective + ":hide");
+                }
+            });
+
+            win.on('change:perspective', function (e, newPerspective) {
+                if (oldPerspective) {
+                    app.trigger('perspective:' + oldPerspective + ":hide");
+                }
+                oldPerspective = newPerspective;
+                app.trigger('perspective:' + newPerspective + ":show");
+            });
+
+            win.on('change:initialPerspective', function (e, newPerspective) {
+                oldPerspective = newPerspective;
+                app.trigger('perspective:' + newPerspective + ":show");
+            });
+        },
+
         /**
          * Add folder support
          */
@@ -371,18 +402,20 @@ define('io.ox/core/commons',
             }, 10),
 
             remove = function () {
-                node.remove();
+                if (node) node.remove();
             };
 
         if (_.isArray(data)) {
             // multiple items
             _.chain(data).map(_.cid).each(function (cid) {
+                cid = encodeURIComponent(cid);
                 api.on('delete:' + cid, redraw);
                 api.on('update:' + cid, redraw);
             });
         } else {
             // single item
             cid = _.cid(data);
+            cid = encodeURIComponent(cid);
             api.on('delete:' + cid, remove);
             api.on('update:' + cid, update);
         }
@@ -390,11 +423,13 @@ define('io.ox/core/commons',
         return node.one('dispose', function () {
                 if (_.isArray(data)) {
                     _.chain(data).map(_.cid).each(function (cid) {
+                        cid = encodeURIComponent(cid);
                         api.off('delete:' + cid, redraw);
                         api.off('update:' + cid, redraw);
                     });
                 } else {
                     cid = _.cid(data);
+                    cid = encodeURIComponent(cid);
                     api.off('delete:' + cid, remove);
                     api.off('update:' + cid, update);
                 }

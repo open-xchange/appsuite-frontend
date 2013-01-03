@@ -71,11 +71,6 @@ define('io.ox/calendar/week/view',
                 .on('change', this.redrawAppointment, this);
             this.bindKeys();
             this.initSettings();
-//            settings.on('change:startTime', function (key) {
-//                console.log('settigns geaendert', key);
-//                this.initSettings();
-//                this.render();
-//            });
         },
 
         // set or get week reference start date
@@ -115,7 +110,6 @@ define('io.ox/calendar/week/view',
         // setup setting params
         initSettings: function () {
             // init settings
-            this.showDeclined = settings.get('showDeclinedAppointments', 'false') === 'true';
             this.gridSize = 60 / settings.get('interval', this.gridSize);
             this.workStart = settings.get('startTime', this.workStart);
             this.workEnd = settings.get('endTime', this.workEnd);
@@ -522,6 +516,8 @@ define('io.ox/calendar/week/view',
         },
 
         renderAppointments: function () {
+            this.showDeclined = settings.get('showDeclinedAppointments', 'false') === 'true';
+
             // clear all first
             $('.appointment', this.$el).remove();
             $('.day.today', this.$el).removeClass('today');

@@ -18,7 +18,8 @@ define("io.ox/calendar/api",
      "io.ox/core/event",
      "io.ox/core/config",
      "io.ox/core/api/user",
-     "io.ox/core/api/factory"], function (http, Events, config, userAPI, factory) {
+     "io.ox/core/notifications",
+     "io.ox/core/api/factory"], function (http, Events, config, userAPI, notifications, factory) {
 
     "use strict";
 
@@ -365,6 +366,20 @@ define("io.ox/calendar/api",
         });
         // resume & trigger refresh
         return http.resume()
+            .pipe(function (result) {
+
+                var def = $.Deferred();
+
+                _(result).each(function (val) {
+                    if (val.error) { notifications.yell(val.error); def.reject(val.error); }
+                });
+
+                if (def.state() === 'rejected') {
+                    return def;
+                }
+
+                return def.resolve();
+            })
             .done(function () {
                 // clear cache and trigger local refresh
                 all_cache = {};
@@ -388,6 +403,7 @@ define("io.ox/calendar/api",
         api.getInvites().done(function () {
             // clear caches
             all_cache = {};
+            get_cache = {};
             // trigger local refresh
             api.trigger("refresh.all");
         });

@@ -117,18 +117,37 @@ define("io.ox/core/main",
         });
     }
 
-    function globalRefresh() {
-        // trigger global event
-        if (ox.online && ox.session !== '') {
-            try {
-                ox.trigger("refresh^");
-            } catch (e) {
-                console.error('globalRefresh()', e);
-            }
-        }
-    }
+    var refresh;
 
-    setInterval(globalRefresh, settings.get("refreshInterval", 30000));
+    (function () {
+
+        var interval = settings.get('refreshInterval', 300000), next = _.now() + interval;
+
+        ext.point('io.ox/core/refresh').extend({
+            action: function () {
+                if (ox.online && ox.session !== '') {
+                    try {
+                        // trigger global event
+                        ox.trigger('refresh^');
+                    } catch (e) {
+                        console.error('io.ox/core/refresh:default', e.message, e);
+                    }
+                }
+            }
+        });
+
+        refresh = function () {
+            next = _.now() + interval;
+            ext.point('io.ox/core/refresh').invoke('action');
+        };
+
+        function check() {
+            if (_.now() > next) { refresh(); }
+        }
+
+        setInterval(check, 10000); // check every 10 seconds
+
+    }());
 
     function launch() {
 
@@ -351,7 +370,7 @@ define("io.ox/core/main",
 
                 // refresh
                 addLauncher("right", $('<i class="icon-refresh icon-white">'), function () {
-                    globalRefresh();
+                    refresh();
                     return $.when();
                 }, gt('Refresh')).attr("id", "io-ox-refresh-icon");
 
@@ -393,9 +412,17 @@ define("io.ox/core/main",
             location.hash = '#!';
         }
 
+        var autoLaunchArray = function () {
+            if (settings.get('autoStart') === 'none') {
+                return [];
+            } else {
+                return [].concat(settings.get('autoStart'));
+            }
+        };
+
         var baton = ext.Baton({
             block: $.Deferred(),
-            autoLaunch: _.url.hash("app") ? _.url.hash("app").split(/,/) : [].concat(settings.get('autoStart'))
+            autoLaunch: _.url.hash("app") ? _.url.hash("app").split(/,/) : autoLaunchArray()
         });
 
         var getAutoLaunchDetails = function (str) {

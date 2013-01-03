@@ -24,15 +24,18 @@ define("io.ox/participants/views",
             var self = this,
                 $wrapper = $('<div class="participant-wrapper">'),
                 $img = $('<div>'),
-                $text = $('<div>'),
-                $mail = $('<div>'),
+                $text = $('<div class="participant-name">'),
+                $mail = $('<div class="participant-email">'),
+                $extra = $('<div>').addClass('extra-decorator').html('&nbsp;'),
                 $removeButton = $('<div class="remove">')
                     .append($('<div class="icon">')
                         .append($('<i class="icon-remove">'))
                     );
             self.nodes = {};
+            self.nodes.$wrapper = $wrapper;
             self.nodes.$mail = $mail;
             self.nodes.$img = $img;
+            self.nodes.$extra = $extra;
             // some paint magic
             $removeButton.on('mouseover', function () {
                 $(this).find('i').addClass('icon-white');
@@ -43,11 +46,16 @@ define("io.ox/participants/views",
 
             // choose right contact image and subtext
             this.setTypeStyle();
+
+            this.setOrganizer();
+
             $img.attr('style', getImageStyle(this.model.getImage()));
 
-            $wrapper.append($img,
+            $wrapper.append(
+                $img,
                 $text.text(this.model.getDisplayName()),
-                $mail
+                $mail,
+                $extra
             );
 
             if (this.options.closeButton || _.isUndefined(this.options.closeButton)) {
@@ -62,15 +70,33 @@ define("io.ox/participants/views",
                 $text.text(self.model.getDisplayName());
                 self.setTypeStyle();
             });
+
             return this;
+        },
+        setOrganizer: function () {
+            if (!this.options.baton) {
+                this.nodes.$extra.hide();
+                return;
+            }
+            var organizer = this.options.baton.model.get('organizer'),
+                organizerId = this.options.baton.model.get('organizerId');
+            if (this.model.get('id') === organizerId) {
+                this.nodes.$extra.text(gt('Organizer'));
+            }
+
         },
         setTypeStyle: function  () {
             var type = this.model.get('type');
             this.nodes.$img.removeAttr('class');
+
             switch (type) {
             case 1:
                 this.nodes.$img.addClass('contact-image');
-                this.nodes.$mail.text(this.model.getEmail());
+                var m = this.model.getEmail();
+                this.nodes.$mail.text(m);
+                if (this.options.halo) {
+                    this.nodes.$wrapper.data({email1: m}).addClass('halo-link');
+                }
                 break;
             case 2:
                 this.nodes.$img.addClass('group-image');
@@ -87,6 +113,10 @@ define("io.ox/participants/views",
             case 5:
                 this.nodes.$img.addClass('external-user-image');
                 this.nodes.$mail.text(this.model.getEmail() || gt('External user'));
+                if (this.model.getEmail() && this.options.halo) {
+                    this.nodes.$wrapper.data({email1: this.model.getEmail()}).addClass('halo-link');
+                }
+                this.nodes.$extra.text(gt('External user'));
                 break;
             case 6:
                 this.nodes.$img.addClass('group-image');
@@ -108,15 +138,25 @@ define("io.ox/participants/views",
         tagName: 'div',
         className: 'participantsrow',
         initialize: function (options) {
+            var self = this;
             options.collection.on('add', _.bind(this.onAdd, this));
             options.collection.on('remove', _.bind(this.onRemove, this));
             options.collection.on('reset', _.bind(this.updateContainer, this));
+
         },
         render: function () {
-            var self = this;
+            var self = this,
+                counter = 1;
             this.nodes = {};
+            
+            // bring organizer up
             this.collection.each(function (participant) {
-                self.nodes[participant.id] = self.createParticipantNode(participant);
+                if (participant.get('id') === self.options.baton.model.get('organizerId')) {
+                    self.nodes[0] = self.createParticipantNode(participant); // 0 is reserved for the organizer
+                } else {
+                    self.nodes[counter] = self.createParticipantNode(participant);
+                    counter++;
+                }
             });
             var row = null;
             var c = 0;
@@ -131,7 +171,13 @@ define("io.ox/participants/views",
             return this;
         },
         createParticipantNode: function (participant) {
-            return new ParticipantEntryView({model: participant, className: 'span6'}).render().$el;
+            var self = this;
+            return new ParticipantEntryView({
+                model: participant,
+                baton: self.options.baton,
+                className: 'span6',
+                halo: true
+            }).render().$el;
         },
         updateContainer: function () {
             this.nodes = {};

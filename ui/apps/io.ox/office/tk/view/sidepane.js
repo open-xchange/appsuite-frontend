@@ -14,8 +14,8 @@
 define('io.ox/office/tk/view/sidepane',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/view/pane',
-     'io.ox/office/tk/view/component'
-    ], function (Utils, Pane, Component) {
+     'io.ox/office/tk/view/toolbox'
+    ], function (Utils, Pane, ToolBox) {
 
     'use strict';
 
@@ -29,12 +29,12 @@ define('io.ox/office/tk/view/sidepane',
      * @extends Pane
      *
      * @param {Application} app
-     *  The application.
+     *  The application instance.
+     *
+     * @param {Number} [width=100]
+     *  The width of the side pane, in pixels.
      */
-    function SidePane(app) {
-
-        var // all registered tool boxes, mapped by tool box key
-            toolBoxes = {};
+    function SidePane(app, width) {
 
         // base constructor ---------------------------------------------------
 
@@ -45,24 +45,28 @@ define('io.ox/office/tk/view/sidepane',
         /**
          * Creates a new tool box in the side pane.
          *
-         * @param {String} id
-         *  The unique identifier of the tool box.
-         *
          * @param {Object} [options]
          *  A map of options for the tool box in the side pane. Supports all
-         *  options for labels (see class Label for details).
+         *  options for labels (see class Label for details), and the following
+         *  additional options:
+         *  @param {String} [options.visible]
+         *      The key of the controller item that controls the visibility of
+         *      the tool box. The visibility will be bound to the 'enabled'
+         *      state of the respective controller item.
          */
         this.createToolBox = function (id, options) {
 
-            var // create a new tool box object, and store it in the map
-                toolBox = toolBoxes[id] = new Component(app, { classes: 'toolbox'});
+            var // create a new tool box object
+                toolBox = new ToolBox(options);
 
-            // add the tool box to this side pane, add a heading label to the tool box
+            // add the tool box to this side pane
             this.addViewComponent(toolBox);
-            toolBox.addLabel(id, Utils.extendOptions(options, { classes: 'heading' }));
-
             return toolBox;
         };
+
+        // initialization -----------------------------------------------------
+
+        this.getNode().width(_.isNumber(width) ? width : 100);
 
     } // class SidePane
 

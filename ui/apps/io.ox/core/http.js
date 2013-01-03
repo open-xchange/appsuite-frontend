@@ -417,7 +417,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             o.url += "?" + _.serialize(o.params);
             o.original = o.data;
             o.data = typeof o.data !== "string" ? JSON.stringify(o.data) : o.data;
-            o.contentType = "text/javascript; charset=UTF-8";
+            o.contentType = 'text/javascript; charset=UTF-8';
         }
         else if (type === "UPLOAD") {
             // POST with FormData object
@@ -452,10 +452,11 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         if (response && response.error !== undefined && !response.data) {
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
+                isServerConfig = o.module === 'apps/manifests' && o.data && /^config$/.test(o.data.action),
                 isAutoLogin = o.module === "login" && o.data && /^(autologin|store)$/.test(o.data.action);
-            if (isSessionError && !isAutoLogin) {
+            if (isSessionError && !isAutoLogin && !isServerConfig) {
                 // login dialog
-                ox.session = "";
+                ox.session = '';
                 ox.relogin(o, deferred);
             } else {
                 deferred.reject(response);
@@ -612,8 +613,26 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         return function (o, type) {
             // process options
             o = processOptions(o, type);
+
             // vars
             var r, def = $.Deferred();
+
+            // whitelisting sessionless actions (config, login, autologin)
+            if (!o.params.session) {
+                // check whitelist
+                var whiteList = ['login#*', 'capabilities#*', 'apps/manifests#*', 'files#document', 'office#getFile'],
+                    req = o.module + '#' + o.params.action,
+                    found = _.find(whiteList, function (moduleAction) {
+                        var e = moduleAction.split('#');
+                        return (o.module === e[0] && (e[1] === '*' || o.params.action === e[1]));
+                    });
+                if (!found) {
+                    def.reject({ error: "invalid session" });
+                    ox.relogin(o, def);
+                    return def;
+                }
+            }
+
             // paused?
             if (paused === true) {
                 queue.push({ deferred: def, options: o });

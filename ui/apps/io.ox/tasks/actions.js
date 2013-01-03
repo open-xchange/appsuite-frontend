@@ -27,7 +27,7 @@ define("io.ox/tasks/actions",
     new Action('io.ox/tasks/actions/create', {
         action: function (baton) {
             require(['io.ox/tasks/edit/main'], function (edit) {
-                edit.getApp().launch();
+                edit.getApp().launch({ folderid: baton.app.folder.get()});
             });
         }
     });
@@ -42,27 +42,30 @@ define("io.ox/tasks/actions",
     });
 
     new Action('io.ox/tasks/actions/delete', {
+        requires: 'some',
         action: function (baton) {
-            var data = baton.data;
+            var data = baton.data,
+                numberOfTasks = data.length || 1;
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 //build popup
                 var popup = new dialogs.ModalDialog()
                     .addPrimaryButton('delete', gt('Delete'))
                     .addButton('cancel', gt('Cancel'));
-
                 //Header
                 popup.getBody()
                     .append($("<h4>")
-                            .text(gt('Do you really want to delete this task?')));
+                            .text(gt.ngettext('Do you really want to delete this task?',
+                                              'Do you really want to delete this tasks?', numberOfTasks)));
 
                 //go
                 popup.show().done(function (action) {
                     if (action === 'delete') {
                         require(['io.ox/tasks/api'], function (api) {
-                            api.remove({id: data.id, folder: data.folder_id}, false)
+                            api.remove(data, false)
                                 .done(function (data) {
                                     if (data === undefined || data.length === 0) {
-                                        notifications.yell('success', gt('Task has been deleted!'));
+                                        notifications.yell('success', gt.ngettext('Task has been deleted!',
+                                                                                   'Tasks have been deleted!', numberOfTasks));
                                     } else {//task was modified
                                         notifications.yell('error', gt('Failure! Please refresh.'));
                                     }
@@ -73,29 +76,29 @@ define("io.ox/tasks/actions",
             });
         }
     });
-    
+
     new Action('io.ox/tasks/actions/done', {
         requires: function (e) {
-            return e.baton.data.status !== 3;
+            return (e.baton.data.length  !== undefined || e.baton.data.status !== 3);
         },
         action: function (baton) {
-            changeState(baton);
+            changeState(baton, 1);
         }
     });
-    
+
     new Action('io.ox/tasks/actions/undone', {
         requires: function (e) {
-            return e.baton.data.status === 3;
+            return (e.baton.data.length  !== undefined || e.baton.data.status === 3);
         },
         action: function (baton) {
-            changeState(baton);
+            changeState(baton, 3);
         }
     });
-    
-    function changeState(baton) {
+
+    function changeState(baton, state) {
         var mods,
             data = baton.data;
-        if (data.status === 3) {
+        if (state === 3) {
             mods = {label: gt('Undone'),
                     data: {status: 1,
                            percent_completed: 0
@@ -108,22 +111,36 @@ define("io.ox/tasks/actions",
                           }
                    };
         }
-        require(['io.ox/tasks/api'], function (api) {
-            api.update(data.last_modified || _.now(), data.id, mods.data, data.folder_id || data.folder)
-                .done(function (result) {
-                    api.trigger("update:" + data.folder_id + '.' + data.id);
-                    notifications.yell('success', mods.label);
-                })
-                .fail(function (result) {
-                    notifications.yell('error', gt.noI18n(result));
-                });
+        require(["io.ox/core/http", 'io.ox/tasks/api'], function (http, api) {
+            if (data.length > 1) {
+                api.updateMultiple(data, mods.data)
+                    .done(function (result) {
+                        _(data).each(function (item) {
+                            api.trigger("update:" + encodeURIComponent(item.folder_id + '.' + item.id));
+                        });
+                        notifications.yell('success', mods.label);
+                    })
+                    .fail(function (result) {
+                        notifications.yell('error', gt.noI18n(result));
+                    });
+            } else {
+                api.update(data.last_modified || _.now(), data.id, mods.data, data.folder_id || data.folder)
+                    .done(function (result) {
+                        api.trigger("update:" + encodeURIComponent(data.folder_id + '.' + data.id));
+                        notifications.yell('success', mods.label);
+                    })
+                    .fail(function (result) {
+                        notifications.yell('error', gt.noI18n(result));
+                    });
+            }
         });
     }
 
     new Action('io.ox/tasks/actions/move', {
-        requires: 'one',
+        requires: 'some',
         action: function (baton) {
-            var task = baton.data;
+            var task = baton.data,
+                numberOfTasks = task.length || 1;
             require(['io.ox/core/tk/dialogs', "io.ox/core/tk/folderviews", 'io.ox/tasks/api'],
                     function (dialogs, views, api) {
                 //build popup
@@ -132,7 +149,7 @@ define("io.ox/tasks/actions",
                     .addPrimaryButton("ok", gt("Move"))
                     .addButton("cancel", gt("Cancel"));
                 popup.getBody().css({ height: '250px' });
-                var tree = new views.FolderTree(popup.getBody(), { type: 'tasks' }),
+                var tree = new views.FolderList(popup.getBody(), { type: 'tasks' }),
                     id = String(task.folder || task.folder_id);
                 //go
                 popup.show(function () {
@@ -142,12 +159,23 @@ define("io.ox/tasks/actions",
                 })
                 .done(function (action) {
                     if (action === 'ok') {
+                        var node = $('.io-ox-multi-selection');
+                        node.hide();
+                        node.parent().busy();
                         var target = _(tree.selection.get()).first();
                         // move only if folder differs from old folder
                         if (target && target !== id) {
                             // move action
-                            api.move(task, target).done(function () {
-                                notifications.yell('success', gt('Task moved.'));
+                            api.move(task, target)
+                            .done(function () {
+                                node.show();
+                                node.parent().idle();
+                                notifications.yell('success', gt.ngettext('Task moved.', 'Tasks moved.', numberOfTasks));
+                            })
+                            .fail(function (response) {
+                                node.show();
+                                node.parent().idle();
+                                notifications.yell('error', gt('A severe error occured!'));
                             });
                         }
                     }
@@ -288,7 +316,7 @@ define("io.ox/tasks/actions",
         label: gt("Done"),
         ref: 'io.ox/tasks/actions/done'
     }));
-    
+
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'unDone',
         index: 310,
@@ -296,7 +324,7 @@ define("io.ox/tasks/actions",
         label: gt("Undone"),
         ref: 'io.ox/tasks/actions/undone'
     }));
-    
+
     //strange workaround because extend only takes new links instead of plain objects with draw method
     new Action('io.ox/tasks/actions/placeholder', {
         action: function (baton) {}
@@ -351,7 +379,7 @@ define("io.ox/tasks/actions",
                                         } else {
                                             modifications.start_date = modifications.end_date;
                                             api.update(_.now(), e.data.task.id, modifications, folder).done(function () {
-                                                api.trigger("update:" + folder + '.' + e.data.task.id);
+                                                api.trigger("update:" + encodeURIComponent(folder + '.' + e.data.task.id));
                                                 notifications.yell('success', gt('Changed due date'));
                                             });
                                         }
@@ -359,7 +387,7 @@ define("io.ox/tasks/actions",
                                 });
                             } else {
                                 api.update(_.now(), e.data.task.id, modifications, folder).done(function () {
-                                    api.trigger("update:" + folder + '.' + e.data.task.id);
+                                    api.trigger("update:" + encodeURIComponent(folder + '.' + e.data.task.id));
                                     notifications.yell('success', gt('Changed due date'));
                                 });
                             }

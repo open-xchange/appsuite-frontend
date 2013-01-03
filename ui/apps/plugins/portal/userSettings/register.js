@@ -24,6 +24,7 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
 
             userEdit.editCurrentUser($node).done(function (user) {
                 user.on('update', function () {
+                    require("io.ox/core/notifications").yell("success", gt("Your data has been saved"));
                     popup.close();
                 });
             });
@@ -42,11 +43,11 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
             .header($('<h4>').text('Change password'))
             .build(function () {
                 this.getContentNode().append(
-                    $('<label>').text(gt('Your current pasword')),
+                    $('<label>').text(gt('Your current password')),
                     $('<input type="password" class="input-large current-password">'),
-                    $('<label>').text(gt('New pasword')),
+                    $('<label>').text(gt('New password')),
                     $('<input type="password" class="input-large new-password">'),
-                    $('<label>').text(gt('Repeat new pasword')),
+                    $('<label>').text(gt('Repeat new password')),
                     $('<input type="password" class="input-large repeat-new-password">')
                 );
             })
@@ -99,5 +100,11 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
                 )
             );
         }
+    });
+
+    ext.point('io.ox/portal/widget/userSettings/settings').extend({
+        title: gt('User data'),
+        type: 'userSettings',
+        editable: false
     });
 });

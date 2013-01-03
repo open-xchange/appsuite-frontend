@@ -245,13 +245,9 @@ define("io.ox/mail/api",
         },
         pipe: {
             all: function (response, opt) {
-                // debug flags
-//                _(response.data.slice(0, 7)).each(function (obj, i) {
-//                    console.warn('server > all', i, _.cid(obj), 'seen?', (obj.flags & 32) === 32);
-//                });
                 // reset tracker! if we get a seen mail here, although we have it in 'explicit unseen' hash,
                 // another devices might have set it back to seen.
-                tracker.reset(response.data);
+                tracker.reset(response.data || response); // threadedAll || all
                 return response;
             },
             get: function (data, options) {
@@ -279,11 +275,13 @@ define("io.ox/mail/api",
     // publish tracker
     api.tracker = tracker;
 
+    api.separator = config.get('modules.mail.defaultseparator', '/');
+
     api.SENDTYPE = {
-        NORMAL:  0,
-        REPLY:   1,
-        FORWARD: 2,
-        DRAFT:   3
+        NORMAL:  '0',
+        REPLY:   '1',
+        FORWARD: '2',
+        DRAFT:   '3'
     };
 
     api.FLAGS = {
@@ -434,7 +432,7 @@ define("io.ox/mail/api",
         return http.resume().pipe(function () {
             // trigger update events
             _(list).each(function (obj) {
-                api.trigger('update:' + _.cid(obj), obj);
+                api.trigger('update:' + encodeURIComponent(_.cid(obj)), obj);
             });
             // return list
             return list;
@@ -528,6 +526,12 @@ define("io.ox/mail/api",
 
         list = [].concat(list);
 
+        _(list).each(function (obj) {
+            obj.flags = obj.flags & ~32;
+            api.caches.get.merge(obj);
+            api.caches.list.merge(obj);
+        });
+
         return $.when(
             tracker.update(list, function (obj) {
                 tracker.setUnseen(obj);
@@ -543,6 +547,12 @@ define("io.ox/mail/api",
     api.markRead = function (list) {
 
         list = [].concat(list);
+
+        _(list).each(function (obj) {
+            obj.flags = obj.flags | 32;
+            api.caches.get.merge(obj);
+            api.caches.list.merge(obj);
+        });
 
         return $.when(
             tracker.update(list, function (obj) {
@@ -582,6 +592,7 @@ define("io.ox/mail/api",
                 })
                 .done(function () {
                     notifications.yell('success', 'Mail has been moved');
+                    folderAPI.reload(targetFolderId, list);
                 });
         });
     };
@@ -592,6 +603,7 @@ define("io.ox/mail/api",
             .done(refreshAll)
             .done(function () {
                 notifications.yell('success', 'Mail has been copied');
+                folderAPI.reload(targetFolderId, list);
             });
     };
 
@@ -772,7 +784,8 @@ define("io.ox/mail/api",
                 // clear inbox & sent folder
                 var folders = [].concat(
                     accountAPI.getFoldersByType('inbox'),
-                    accountAPI.getFoldersByType('sent')
+                    accountAPI.getFoldersByType('sent'),
+                    accountAPI.getFoldersByType('drafts')
                 );
                 $.when.apply(
                     _(folders).map(function (id) {
@@ -942,7 +955,7 @@ define("io.ox/mail/api",
         });
         // loop over list and check occurence via hash
         return _(list).filter(function (obj) {
-            var cid = _.cid(obj), found = cid in hash, length = obj.thread.length, s, entire;
+            var cid = _.cid(obj), found = cid in hash, length = obj.thread ? obj.thread.length : 1, s, entire;
             // case #1: found in hash; no thread
             if (found && length <= 1) {
                 return false;
@@ -1019,6 +1032,7 @@ define("io.ox/mail/api",
             .pipe(function (data) {
                 return api.caches.all.grepRemove(options.folder + DELIM).pipe(function () {
                     api.trigger('refresh.all');
+                    folderAPI.reload(options.folder);
                     return data;
                 });
             });

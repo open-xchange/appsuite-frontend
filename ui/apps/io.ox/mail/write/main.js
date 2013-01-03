@@ -118,13 +118,26 @@ define('io.ox/mail/write/main',
             if (index < view.signatures.length) {
                 signature = view.signatures[index];
                 text = $.trim(signature.content);
+                if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
+
                 if (isHTML) {
-                    ed.appendContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
+                    if (signature.misc.insertion === 'below') {
+                        ed.appendContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
+                        ed.scrollTop('bottom');
+                    } else {
+                        ed.prependContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
+                        ed.scrollTop('top');
+                    }
                 } else {
-                    ed.appendContent(text);
+                    if (signature.misc.insertion === 'below') {
+                        ed.appendContent(text);
+                        ed.scrollTop('bottom');
+                    } else {
+                        ed.prependContent(text);
+                        ed.scrollTop('top');
+                    }
                 }
                 currentSignature = text;
-                ed.scrollTop('bottom');
             }
 
             ed.focus();
@@ -292,19 +305,28 @@ define('io.ox/mail/write/main',
             // get default signature
             var ds = _(view.signatures)
                     .find(function (o) {
-                        return o.signature_default === true;
+                        return o.id === settings.get('defaultSignature');
                     }),
-                signature = ds ? $.trim(ds.signature_text) : '',
-                pos = ds ? ds.position : 'below',
                 content = $.trim(str);
+
             // set signature?
             if (ds) {
+
+                var ln2br = function (str) {
+                    return String(str || '').replace(/\r/g, '')
+                      .replace(new RegExp('\\n', 'g'), '<br>'); // '\n' is for IE
+                };
+
+                if (_.isString(ds.misc)) { ds.misc = JSON.parse(ds.misc); }
+
+                var signature = ds ? $.trim(ds.content) : '',
+                pos = ds ? ds.misc.insertion : 'below';
                 // remember as current signature
                 currentSignature = signature;
                 // yep
                 if (editorMode === 'html') {
                     // prepare signature for html
-                    signature = '<p>' + signature.replace(/\n/g, '<br>') + '</p>';
+                    signature = '<p class="io-ox-signature">' + ln2br(signature) + '</p>';
                     // text/html
                     content = '<p></p>' + (pos === 'above' ? signature + content : content + signature);
                 } else {
@@ -581,7 +603,9 @@ define('io.ox/mail/write/main',
                             data.sendtype = mailAPI.SENDTYPE.REPLY;
                             app.setMail({ data: data, mode: type, initial: true })
                             .done(function () {
-                                app.getEditor().focus();
+                                var ed = app.getEditor();
+                                ed.setCaretPosition(0);
+                                ed.focus();
                                 view.scrollpane.scrollTop(0);
                                 win.idle();
                                 def.resolve();
@@ -624,6 +648,8 @@ define('io.ox/mail/write/main',
                     data.sendtype = mailAPI.SENDTYPE.FORWARD;
                     app.setMail({ data: data, mode: 'forward', initial: true })
                     .done(function () {
+                        var ed = app.getEditor();
+                        ed.setCaretPosition(0);
                         focus('to');
                         win.idle();
                         def.resolve();
@@ -801,6 +827,24 @@ define('io.ox/mail/write/main',
                         notifications.yell(result);
                     } else {
                         notifications.yell('success', 'Mail has been sent');
+                        // update base mail
+                        var isReply = mail.data.sendtype === mailAPI.SENDTYPE.REPLY,
+                            isForward = mail.data.sendtype === mailAPI.SENDTYPE.FORWARD,
+                            sep = mailAPI.separator,
+                            base, folder, id;
+                        if (isReply || isForward) {
+                            base = _(mail.data.msgref.split(sep));
+                            folder = base.initial().join(sep);
+                            id = base.last();
+                            mailAPI.get({ folder: folder, id: id }).done(function (data) {
+                                // update answered/forwarded flag
+                                if (isReply) data.flags |= 1;
+                                if (isForward) data.flags |= 256;
+                                $.when(mailAPI.caches.list.merge(data), mailAPI.caches.get.merge(data)).done(function () {
+                                    mailAPI.trigger('refresh.list');
+                                });
+                            });
+                        }
                         app.dirty(false);
                         app.quit();
                     }
@@ -943,7 +987,6 @@ define('io.ox/mail/write/main',
                 return ox.ui.App.reuse('io.ox/mail:forward.' + _.cid(data));
             }
             if (type === 'edit') {
-                console.log('Hier?');
                 return ox.ui.App.reuse('io.ox/mail:edit.' + _.cid(data));
             }
         }

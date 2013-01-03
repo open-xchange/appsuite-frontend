@@ -14,7 +14,8 @@
 define('io.ox/core/api/apps',
     ['io.ox/core/event',
      'io.ox/core/extensions',
-     'io.ox/core/manifests'], function (Events, ext, manifests) {
+     'io.ox/core/manifests',
+     'io.ox/core/capabilities'], function (Events, ext, manifests, capabilities) {
 
     'use strict';
 
@@ -39,9 +40,10 @@ define('io.ox/core/api/apps',
     appData.categories = _(appData.categories).uniq();
 
     // TODO: Make favourites dynamic
-    _(["io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar", "io.ox/files", "io.ox/tasks"]).each(function (appId) {
-        if (appData.apps[appId]) {
-            appData.favorites.push(appId);
+    _(["io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar", "io.ox/files", "io.ox/tasks"]).each(function (id) {
+        var app = appData.apps[id];
+        if (app && capabilities.has(app.requires)) {
+            appData.favorites.push(id);
         }
     });
 
@@ -81,13 +83,6 @@ define('io.ox/core/api/apps',
                         id: 'upgrades',
                         title: 'Upgrades',
                         count: 1,
-                        group: 'Your Apps'
-                    },
-                    {
-                        // special 'Augenwischerei' category
-                        id: 'mockIntegration',
-                        title: 'Parallels Marketplace',
-                        count: 2,
                         group: 'Your Apps'
                     }
                 ].concat(
@@ -137,7 +132,7 @@ define('io.ox/core/api/apps',
             );
         };
 
-    var cachedInstalled = [];
+    var cachedInstalled = null;
 
     // public module interface
     api = {
@@ -151,7 +146,8 @@ define('io.ox/core/api/apps',
         getByCategory: getByCategory,
 
         getInstalled: function (mode) {
-            if (mode === 'cached') {
+            // TODO: not this way please!
+            if (mode === 'cached' && cachedInstalled !== null) {
                 return $.Deferred().resolve(cachedInstalled);
             }
             var installedLoaded = [];
@@ -162,12 +158,9 @@ define('io.ox/core/api/apps',
                 }
             });
             return $.when.apply($, installedLoaded).pipe(function () {
-                var all = [];
-                _(arguments).each(function (apps) {
-                    all = all.concat(apps);
-                });
-                cachedInstalled = all;
-                return all;
+                return (cachedInstalled = _.chain(arguments).flatten().filter(function (app) {
+                    return 'requires' in app ? capabilities.has(app.requires) : true;
+                }).value());
             });
         },
 

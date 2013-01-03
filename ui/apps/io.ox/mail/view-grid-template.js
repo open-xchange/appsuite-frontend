@@ -61,7 +61,7 @@ define('io.ox/mail/view-grid-template',
                 fields.date.text(_.noI18n(util.getTime(data.received_date)));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
                 fields.flag.get(0).className = 'flag flag_' + (data.color_label || 0);
-                if (api.tracker.isPartiallyUnseen(data)) {
+                if (util.isUnseen(data) || api.tracker.isPartiallyUnseen(data)) {
                     this.addClass('unread');
                 }
                 if (util.byMyself(data)) {
@@ -71,10 +71,10 @@ define('io.ox/mail/view-grid-template',
                     this.addClass('deleted');
                 }
                 var thread = api.tracker.getThread(data) || data;
-                if (util.isAnswered(thread)) {
+                if (util.isAnswered(thread, data)) {
                     this.addClass('answered');
                 }
-                if (util.isForwarded(thread)) {
+                if (util.isForwarded(thread, data)) {
                     this.addClass('forwarded');
                 }
                 this.attr('data-index', index);
@@ -93,7 +93,7 @@ define('io.ox/mail/view-grid-template',
                     _(list.slice(1)).each(function (data, index) {
                         self.append(
                             $('<div class="thread-summary-item selectable">')
-                            .addClass(util.isUnread(data) ? 'unread' : undefined)
+                            .addClass(util.isUnseen(data) ? 'unread' : undefined)
                             .attr('data-obj-id', _.cid(data))
                             .append(
                                 $('<div class="thread-summary-right">')

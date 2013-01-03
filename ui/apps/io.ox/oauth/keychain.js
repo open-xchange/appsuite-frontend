@@ -124,7 +124,6 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                         notifications.yell("success", "Account added successfully");
                     };
 
-                    console.log('YEAH oauth', interaction.authUrl);
                     popupWindow.location = interaction.authUrl + '&display=popup';
 
                 }).fail(function (e) {

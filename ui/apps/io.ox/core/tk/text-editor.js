@@ -74,9 +74,28 @@ define('io.ox/core/tk/text-editor', [], function () {
             }
         };
 
+        this.setCaretPosition = function (pos) {
+            var el = textarea.get(0);
+            if (el.setSelectionRange) {
+                el.focus();
+                el.setSelectionRange(pos, pos);
+            } else if (el.createTextRange) {
+                var range = el.createTextRange();
+                range.collapse(true);
+                range.moveEnd('character', pos);
+                range.moveStart('character', pos);
+                range.select();
+            }
+        };
+
         this.appendContent = function (str) {
             var content = this.getContent();
             this.setContent(content + '\n\n' + str);
+        };
+
+        this.prependContent = function (str) {
+            var content = this.getContent();
+            this.setContent(str + '\n\n' + content);
         };
 
         this.replaceParagraph = function (str, rep) {

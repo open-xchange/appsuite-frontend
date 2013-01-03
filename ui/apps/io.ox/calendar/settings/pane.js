@@ -17,7 +17,8 @@ define('io.ox/calendar/settings/pane',
      'io.ox/calendar/settings/model',
      'dot!io.ox/calendar/settings/form.html',
      'io.ox/core/extensions',
-     'gettext!io.ox/calendar/calendar'], function (settings, date, calendarSettingsModel, tmpl, ext, gt) {
+     'gettext!io.ox/calendar/calendar'
+    ], function (settings, date, calendarSettingsModel, tmpl, ext, gt) {
 
     'use strict';
 
@@ -56,9 +57,9 @@ define('io.ox/calendar/settings/pane',
             return array;
         },
 
-        optionsView = [{label: gt('Day'), value: 'day'},
-                       {label: gt('Workweek'), value: 'workweek'},
-                       {label: gt('Week'), value: 'week'},
+        optionsView = [{label: gt('Day'), value: 'week:day'},
+                       {label: gt('Workweek'), value: 'week:workweek'},
+                       {label: gt('Week'), value: 'week:week'},
                        {label: gt('Month'), value: 'month'},
                        {label: gt('List'), value: 'list'}],
 
@@ -131,10 +132,8 @@ define('io.ox/calendar/settings/pane',
                 calendarViewSettings.render().el)
             );
         },
-
         save: function () {
             calendarViewSettings.model.save();
         }
     });
-
 });

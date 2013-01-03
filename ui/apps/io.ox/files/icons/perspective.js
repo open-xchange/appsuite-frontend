@@ -463,14 +463,19 @@ define('io.ox/files/icons/perspective',
                 }, app);
                 if (dropZone) { dropZone.include(); }
             }
-
-
-            app.getWindow().on('change:perspective', function (e) {
-                if (_.browser.IE === undefined || _.browser.IE > 9) {
-                    dropZone.remove();
-                }
+            app.on("perspective:icons:hide", function () {
+                if (dropZone) {dropZone.remove(); }
+                // shortcutPoint.deactivate();
             });
 
+            app.on("perspective:icons:show", function () {
+                if (dropZone) {dropZone.include(); }
+                // shortcutPoint.deactivate();
+            });
+            if (dropZone) {dropZone.include(); }
+
+
+            
             app.on('folder:change', function (e, id, folder) {
                 if (_.browser.IE === undefined || _.browser.IE > 9) {
                     dropZone.remove();

@@ -43,7 +43,7 @@ define('io.ox/mail/util',
                     return d.format(date.TIME);
                 },
                 datestr = function () {
-                    return d.format(date.DATE) + fulldate ? timestr() : '';
+                    return d.format(date.DATE) + (fulldate ? ' ' + timestr() : '');
                 },
                 isSameDay = function () {
                     return d.getDate() === now.getDate() &&
@@ -240,30 +240,24 @@ define('io.ox/mail/util',
             }, 0);
         },
 
-        isUnread: function (data) {
-            if (data && data.thread) {
-                return _(data.thread).reduce(function (memo, obj) {
-                    return memo || (obj.flags & 32) !== 32;
-                }, false);
-            } else {
-                return (data.flags & 32) !== 32;
-            }
+        isUnseen: function (data) {
+            return (data.flags & 32) !== 32;
         },
 
         isDeleted: function (data) {
             return (data.flags & 2) === 2;
         },
 
-        isAnswered: function (data) {
-            return _([].concat(data)).reduce(function (memo, data) {
+        isAnswered: function () {
+            return _.chain(arguments).flatten().compact().reduce(function (memo, data) {
                 return memo || (data.flags & 1) === 1;
-            }, false);
+            }, false).value();
         },
 
-        isForwarded: function (data) {
-            return _([].concat(data)).reduce(function (memo, data) {
+        isForwarded: function () {
+            return _.chain(arguments).flatten().compact().reduce(function (memo, data) {
                 return memo || (data.flags & 256) === 256;
-            }, false);
+            }, false).value();
         },
 
         byMyself: function (data) {

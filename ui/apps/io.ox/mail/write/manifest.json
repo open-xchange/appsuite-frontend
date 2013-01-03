@@ -2,7 +2,7 @@
 	{
 	    title: "Compose email",
 	    company: "Open-Xchange",
-	    icon: "mail-write.png",
+	    icon: "mail.png",
 	    category: "Basic",
 	    settings: false,
 	    visible: false,

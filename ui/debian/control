@@ -1,4 +1,4 @@
-Source: open-xchange-ui7
+Source: open-xchange-appsuite
 Section: non-free/web
 Priority: optional
 Maintainer: Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -8,24 +8,24 @@ Homepage: http://open-xchange.com
 Vcs-Git: https://git.open-xchange.com/git/wd/frontend/web
 Vcs-Browser: https://gitweb.open-xchange.com/?p=wd/frontend/web;a=summary
 
-Package: open-xchange-ui7
+Package: open-xchange-appsuite
 Architecture: all
-Depends: ${misc:Depends}, apache2, open-xchange-ui7-l10n
+Depends: ${misc:Depends}, apache2, open-xchange-appsuite-l10n-en-us | open-xchange-appsuite-l10n
 Description: OX App Suite HTML5 client
 
-Package: open-xchange-ui7-manifest
+Package: open-xchange-appsuite-manifest
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-core
 Description: Manifest for apps included in the OX App Suite HTML5 client
 
-Package: open-xchange-ui7-dev
+Package: open-xchange-appsuite-dev
 Architecture: all
 Depends: nodejs (>= 0.4.0)
 Description: SDK for the OX App Suite HTML5 client
 
 ## l10n ##
-#Package: open-xchange-ui7-l10n-## lang ##
+#Package: open-xchange-appsuite-l10n-## lang ##
 #Architecture: all
-#Provides: open-xchange-ui7-l10n
+#Provides: open-xchange-appsuite-l10n
 #Description: ## Lang ## translation of the OX App Suite HTML5 client
 ## end l10n ##

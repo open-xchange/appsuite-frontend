@@ -68,6 +68,9 @@ define('io.ox/core/cache',
                         layer = persitentCache;
                     } else {
                         layer = fluentCache;
+                        if (ox.user !== '') {
+                            id = 'cache.' + (ox.user || '_') + '.' + (name || '');
+                        }
                     }
                     layer.setId(id);
 

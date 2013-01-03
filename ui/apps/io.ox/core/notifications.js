@@ -12,7 +12,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins'], function (ext, plugins) {
+define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'settings!io.ox/core'], function (ext, plugins, settings) {
 
     'use strict';
 
@@ -38,6 +38,12 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins'], functio
             }
         },
         setCount: function (count) {
+            if (this.model.get('count') < count) {
+                this.trigger('newNotifications');
+            } else //just trigger if count is set to 0, not if it was 0 already
+                if (count === 0 && this.model.get('count') > count) {
+                this.trigger('lastItemDeleted');
+            }
             this.model.set('count', count);
         }
     });
@@ -125,8 +131,30 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins'], functio
                     }
                 })
             );
+            
+            //auto open on new notification
             this.badges.push(badgeView);
-
+            var set = settings.get('autoOpenNotification', true);
+            function toggle(value) {
+                if (value) {
+                    badgeView.on('newNotifications', function () {
+                        self.showList();
+                    });
+                } else {
+                    badgeView.off('newNotifications');
+                }
+            }
+            
+            toggle(set);
+            settings.on('change:autoOpenNotification', function (e, value) {
+                toggle(value);
+            });
+            
+            //close if count set to 0
+            badgeView.on('lastItemDeleted', function () {
+                self.hideList();
+            });
+            
             // invoke plugins
             plugins.loading.done(function () {
                 ext.point('io.ox/core/notifications/register').invoke('register', self, self);

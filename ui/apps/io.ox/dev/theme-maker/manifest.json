@@ -1,7 +1,7 @@
 {
     title: "Theme Maker",
     company: "Mattes Inc.",
-    icon: "theme-maker.png",
+    icon: "default.png",
     category: "Dev",
     settings: false,
     requires: "dev"

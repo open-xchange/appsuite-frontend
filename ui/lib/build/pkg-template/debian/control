@@ -2,12 +2,12 @@ Source: @package@
 Section: non-free/web
 Priority: optional
 Maintainer: @maintainer@
-Build-Depends: debhelper (>= 8.0.0), open-xchange-ui7-dev
+Build-Depends: debhelper (>= 8.0.0), open-xchange-appsuite-dev
 Standards-Version: 3.9.2
 
 Package: @package@
 Architecture: all
-Depends: ${misc:Depends}, open-xchange-ui7
+Depends: ${misc:Depends}, open-xchange-appsuite
 Description: @description@
 
 Package: @package@-manifest

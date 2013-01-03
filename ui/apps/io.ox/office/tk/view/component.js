@@ -14,25 +14,24 @@
 define('io.ox/office/tk/view/component',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
-     'io.ox/office/tk/dropdown/scrollable',
      'io.ox/office/tk/control/group',
      'io.ox/office/tk/control/label',
      'io.ox/office/tk/control/button'
-    ], function (Events, Utils, Scrollable, Group, Label, Button) {
+    ], function (Events, Utils, Group, Label, Button) {
 
     'use strict';
 
     var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
+        KeyCodes = Utils.KeyCodes,
+
+        // CSS class for hidden components
+        HIDDEN_CLASS = 'hidden';
 
     // class Component ========================================================
 
     /**
      * Base class for view components that can be registered at a controller.
-     * Contains instances of Group objects (controls or groups of controls),
-     * receives UI update events from the controller to update the state of the
-     * control groups, and forwards change actions from the control groups to
-     * the controller.
+     * Contains instances of Group objects (controls or groups of controls).
      *
      * Instances of this class trigger the following events:
      * - 'change': If a control has been activated. The event handler receives
@@ -44,17 +43,19 @@ define('io.ox/office/tk/view/component',
      *
      * @constructor
      *
-     * @param {Application} app
-     *  The application instance.
-     *
      * @param {Object} [options]
      *  A map of options to control the properties of the new view component.
      *  The following options are supported:
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of
      *      this instance.
+     *  @param {String} [options.visible]
+     *      The key of the controller item that controls the visibility of the
+     *      view component. The visibility will be bound to the 'enabled' state
+     *      of the respective controller item. If omitted, the view component
+     *      will be visible initially, and will not control its visibility.
      */
-    function Component(app, options) {
+    function Component(options) {
 
         var // self reference
             self = this,
@@ -68,23 +69,10 @@ define('io.ox/office/tk/view/component',
             // all control groups, mapped by key
             groupsByKey = {},
 
-            // group initializer waiting for the first window 'show' event
-            deferredInit = $.Deferred(),
-
-            // whether the application window has been shown at least once
-            windowShown = false;
+            // the controller item controlling the visibility of this view component
+            visibleKey = Utils.getStringOption(options, 'visible');
 
         // private methods ----------------------------------------------------
-
-        /**
-         * Resolves the deferred initializer, if this view component and the
-         * application window are both visible.
-         */
-        function initialize() {
-            if (windowShown && (node.css('display') !== 'none')) {
-                deferredInit.resolve();
-            }
-        }
 
         /**
          * Inserts the passed control group into this view component, either by
@@ -99,14 +87,6 @@ define('io.ox/office/tk/view/component',
 
             // remember the group object
             groups.push(group);
-
-            // Trigger an 'init' event at the group when the container window
-            // becomes visible the first time. The 'deferredInit' object will
-            // be resolved on the first window 'show' event and will execute
-            // all done handlers attached here. If the window is already
-            // visible when calling this method, the deferred is resolved and
-            // will execute the new done handler immediately.
-            deferredInit.done(function () { group.trigger('init'); });
 
             // insert the group into this view component
             node.append(group.getNode());
@@ -196,14 +176,20 @@ define('io.ox/office/tk/view/component',
         };
 
         /**
+         * Returns whether this view component is visible.
+         */
+        this.isVisible = function () {
+            return !node.hasClass(HIDDEN_CLASS);
+        };
+
+        /**
          * Displays this view component, if it is currently hidden.
          *
          * @returns {Component}
          *  A reference to this view component.
          */
         this.show = function () {
-            node.show();
-            initialize();
+            node.removeClass(HIDDEN_CLASS);
             return this;
         };
 
@@ -214,7 +200,7 @@ define('io.ox/office/tk/view/component',
          *  A reference to this view component.
          */
         this.hide = function () {
-            node.hide();
+            node.addClass(HIDDEN_CLASS);
             return this;
         };
 
@@ -250,19 +236,30 @@ define('io.ox/office/tk/view/component',
         };
 
         /**
-         * Adds separation space following the last inserted group.
+         * Adds the passed control group as a 'private group' to this view
+         * component. Change events of the group will not be forwarded to the
+         * listeners of this view component. Instead, the caller has to
+         * register a change listener at the group by itself.
          *
-         * @param {String} [type]
-         *  The type of the separator to be inserted. The resulting design of
-         *  the separator is dependent on the type of this view component. The
-         *  type will be added as CSS class name to the group node representing
-         *  the separator.
+         * @param {Group} group
+         *  The control group object to be inserted.
          *
          * @returns {Component}
          *  A reference to this view component.
          */
-        this.addSeparator = function (type) {
-            insertGroup(new Group({ classes: 'separator' + (_.isString(type) ? (' ' + type) : '') }));
+        this.addPrivateGroup = function (group) {
+            insertGroup(group);
+            return this;
+        };
+
+        /**
+         * Adds separation space following the last inserted group.
+         *
+         * @returns {Component}
+         *  A reference to this view component.
+         */
+        this.addSeparator = function () {
+            insertGroup(new Group({ classes: 'separator' }));
             return this;
         };
 
@@ -295,8 +292,8 @@ define('io.ox/office/tk/view/component',
         };
 
         /**
-         * Creates a new dynamic label control, and inserts it into this view component. The label text will be updated according to calls
-         * of the method ToolBar.update().
+         * Creates a new label control, and inserts it into this view
+         * component.
          *
          * @param {String} key
          *  The unique key of the label.
@@ -345,9 +342,21 @@ define('io.ox/office/tk/view/component',
          *  A reference to this view component.
          */
         this.enable = function (key, state) {
+
+            // change own visibility if specified in options of own constructor
+            if (key === visibleKey) {
+                if (_.isUndefined(state) || (state === true)) {
+                    this.show();
+                } else {
+                    this.hide();
+                }
+            }
+
+            // invoke the enable() method of all groups with the specified key
             if (key in groupsByKey) {
                 _(groupsByKey[key]).invoke('enable', state);
             }
+
             return this;
         };
 
@@ -390,9 +399,8 @@ define('io.ox/office/tk/view/component',
          */
         this.destroy = function () {
             node.off().remove();
-            app.getController().unregisterViewComponent(this);
             this.events.destroy();
-            self = node = groups = groupsByKey = deferredInit = null;
+            self = node = groups = groupsByKey = null;
         };
 
         // initialization -----------------------------------------------------
@@ -402,12 +410,6 @@ define('io.ox/office/tk/view/component',
 
         // additional CSS classes
         node.addClass(Utils.getStringOption(options, 'classes', ''));
-
-        // register this view component at the application controller
-        app.getController().registerViewComponent(this);
-
-        // wait for the first window 'show' event and trigger an 'init' event at all groups
-        app.getWindow().one('show', function () { windowShown = true; initialize(); });
 
         // listen to key events for keyboard focus navigation
         node.on('keydown keypress keyup', keyHandler);

@@ -228,12 +228,69 @@ define('io.ox/files/api',
             });
     };
 
-    api.update = function (file) {
-        var obj = { id: file.id, folder: file.folder_id };
+    api.uploadNewVersionOldSchool = function (options) {
+        // Alright, let's simulate a multipart formdata form
+        options = $.extend({
+            folder: config.get('folder.infostore')
+        }, options || {});
+
+        var formData = options.form,
+            self = this,
+            deferred = $.Deferred();
+
+        if (options.json && !$.isEmptyObject(options.json)) {
+            if (!options.json.folder_id) {
+                options.json.folder_id = options.folder;
+            }
+        } else {
+            options.json = { folder_id: options.folder };
+        }
+        formData.append($('<input>', {'type': 'hidden', 'name': 'json', 'value': JSON.stringify(options.json)}));
+
+        /*return http.UPLOAD({
+                module: 'files',
+                params: { action: 'update', timestamp: _.now(), id: options.id },
+                data: formData,
+                fixPost: true // TODO: temp. backend fix
+            });*/
+        var tmpName = 'iframe_' + _.now(),
+        frame = $('<iframe>', {'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
+
+        $('#tmp').append(frame);
+        window.callback_update = function (data) {
+                var id = options.json.id || options.id,
+                    folder_id = String(options.json.folder_id),
+                    obj = { folder_id: folder_id, id: id };
+                $('#' + tmpName).remove();
+                deferred[(data && data.error ? 'reject' : 'resolve')](data);
+                window.callback_update = null;
+                return api.propagate('change', obj).pipe(function () {
+                    api.trigger('create.version', obj);
+                    return { folder_id: folder_id, id: id, timestamp: data.timestamp};
+                });
+            };
+
+        formData.attr({
+            method: 'post',
+            enctype: 'multipart/form-data',
+            action: ox.apiRoot + '/files?action=update&id=' + options.id + '&timestamp=' + options.timestamp + '&session=' + ox.session,
+            target: tmpName
+        });
+        formData.submit();
+        return deferred;
+    };
+
+    api.update = function (file, makeCurrent) { //special handling for mark as current version
+        var obj = { id: file.id, folder: file.folder_id },
+            updateData = file;
+        
+        if (makeCurrent) {//if there is only version, the request works. If the other fields are present theres a backend error
+            updateData = {version: file.version};
+        }
         return http.PUT({
                 module: 'files',
                 params: { action: 'update', id: file.id, timestamp: _.now() },
-                data: file,
+                data: updateData,
                 appendColumns: false
             })
             .pipe(function () {
@@ -278,7 +335,7 @@ define('io.ox/files/api',
 
             if (/^(new|delete)$/.test(type) && fid) {
                 // if we have a new file or an existing file was deleted, we have to clear the proper folder cache.
-                all = caches.all.grepRemove(fid + '\t');
+                all = caches.all.grepRemove(fid + api.DELIM);
             } else {
                 all = ready;
             }
@@ -297,7 +354,7 @@ define('io.ox/files/api',
                 if (!silent) {
                     if (type === 'change') {
                         return api.get(obj).done(function (data) {
-                            api.trigger('update update:' + _.cid(data), data);
+                            api.trigger('update update:' + encodeURIComponent(_.cid(data)), data);
                             api.trigger('refresh.list');
                         });
                     } else {
@@ -312,23 +369,22 @@ define('io.ox/files/api',
     };
 
     api.versions = function (options) {
-        var getOptions = {action: 'versions'};
-        options = options || {};
+        options = _.extend({ action: 'versions' }, options);
         if (!options.id) {
             throw new Error('Please specify an id for which to fetch versions');
         }
-        getOptions.id = options.id;
-        return api.caches.versions.get(options.id).pipe(function (data) {
+        var id = String(options.id);
+        return api.caches.versions.get(id).pipe(function (data) {
             if (data !== null) {
                 return data;
             } else {
                 return http.GET({
-                    module: 'infostore',
-                    params: getOptions,
+                    module: 'files',
+                    params: options,
                     appendColumns: true
                 })
                 .done(function (data) {
-                    api.caches.versions.add(String(options.id), data);
+                    api.caches.versions.add(id, data);
                 });
             }
         });
@@ -341,6 +397,7 @@ define('io.ox/files/api',
             name = (file.filename ? '/' + encodeURIComponent(file.filename) : '');
         switch (mode) {
         case 'open':
+        case 'view':
             return url + name + query + '&delivery=view';
         case 'download':
             return url + name + query + '&delivery=download';
@@ -389,8 +446,8 @@ define('io.ox/files/api',
                 return $.when.apply($,
                     _(list).map(function (o) {
                         return $.when(
-                            api.caches.all.grepRemove(targetFolderId + '\t'),
-                            api.caches.all.grepRemove(o.folder_id + '\t'),
+                            api.caches.all.grepRemove(targetFolderId + api.DELIM),
+                            api.caches.all.grepRemove(o.folder_id + api.DELIM),
                             api.caches.list.remove({ id: o.id, folder: o.folder_id })
                         );
                     })

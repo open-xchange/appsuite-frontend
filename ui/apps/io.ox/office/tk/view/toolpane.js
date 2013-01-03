@@ -54,7 +54,7 @@ define('io.ox/office/tk/view/toolpane',
         this.createToolBar = function (id) {
 
             var // create a new tool bar object, and store it in the map
-                toolBar = toolBars[id] = new Component(app, { classes: 'toolbar'});
+                toolBar = toolBars[id] = new Component({ classes: 'toolbar'});
 
             // add the tool bar to this tool pane
             this.addViewComponent(toolBar);

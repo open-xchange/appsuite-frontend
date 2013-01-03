@@ -53,7 +53,7 @@ define("io.ox/core/extensions",
         _(registry).each(function (ext) {
             ext.clear();
         });
-        registry = null;
+        registry = {};
     });
 
     var Point = function (options) {
@@ -179,17 +179,6 @@ define("io.ox/core/extensions",
                 extension.index = extension.index || 1000000000;
             }
 
-            // Used for seamless scrolling
-            extension.isLoadingMoreResults = false;
-            extension.timer = 0;
-
-            extension.finishLoadingMoreResults = function (busyIndicator) {
-                extension.isLoadingMoreResults = false;
-                if (busyIndicator) {
-                    busyIndicator.removeClass('io-ox-busy');
-                }
-            };
-
             // skip duplicates (= same id)
             if (!has(extension.id)) {
 
@@ -212,12 +201,6 @@ define("io.ox/core/extensions",
                             return this[name];
                         }
                         return undefined;
-                    };
-                }
-
-                if (!extension.asyncMetadata) {
-                    extension.asyncMetadata = function (name, args) {
-                        return async.defer(extension.metadata(name, args));
                     };
                 }
 
@@ -347,6 +330,10 @@ define("io.ox/core/extensions",
             this.each(function (obj) {
                 options = _.extend(options, obj);
             });
+            // remove extension stuff
+            delete options.index;
+            delete options.invoke;
+            delete options.metadata;
             return options;
         };
 

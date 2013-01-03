@@ -146,6 +146,17 @@
 		width: 45px;
  	}
 }
+
+.io-ox-tasks-edit .task-add-attachments-button {
+	position: relative;
+	display: inline;
+}
+
+.io-ox-tasks-edit .task-add-attachments-input {
+	margin-left: 10px;
+	position: relative;
+	display: inline;
+}
  
  //PickerPopup
  
