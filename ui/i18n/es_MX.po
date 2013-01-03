@@ -1,0 +1,6889 @@
+# translation of ox.po to Spanish
+# Andres Herrera <andres@bureau-cornavin.com>, 2010, 2011, 2012.
+# Antje Faber <antje.faber@open-xchange.com>, 2010, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: ox\n"
+"POT-Creation-Date: DATE\n"
+"PO-Revision-Date: 2012-12-16 08:12+0100\n"
+"Last-Translator: Andres Herrera <andres@bureau-cornavin.com>\n"
+"Language-Team: Spanish <es@bureau-cornavin.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.0\n"
+
+#. Displayed label for attachments
+#. %1$s is the file name.
+#. %2$s is the file size.
+#, c-format
+msgid " %1$s (%2$s) "
+msgstr " %1$s (%2$s) "
+
+#. Displayed label for attachments
+#. %1$s is the file name.
+#. %2$s is the file size.
+#, c-format
+msgid " %1$s (%2$s); "
+msgstr " %1$s (%2$s); "
+
+#. Displayed label for attachments without file size
+#. %1$s is the file name.
+#, c-format
+msgid " %1$s; "
+msgstr " %1$s; "
+
+msgid "% completed"
+msgstr "% completada"
+
+#: tasks/newTask.xml:90 tasks/tasksSplit.xml:99
+msgid "% done:"
+msgstr "% hecho:"
+
+msgid "% finished"
+msgstr "% terminado"
+
+#. General duration (nominative case): X days, Y hours and Z minutes
+#. %1$d is the number of days
+#. %2$s is the text for the remainder of the last day
+#, c-format
+msgid "%1$d day, %2$s"
+msgid_plural "%1$d days, %2$s"
+msgstr[0] "%1$d día, %2$s"
+msgstr[1] "%1$d días, %2$s"
+
+#. Reminder (objective case): in X days, Y hours and Z minutes
+#. %1$d is the number of days
+#. %2$s is the text for the remainder of the last day
+#, c-format
+msgctxt "in"
+msgid "%1$d day, %2$s"
+msgid_plural "%1$d days, %2$s"
+msgstr[0] "%1$d día, %2$s"
+msgstr[1] "%1$d días, %2$s"
+
+#. General duration (nominative case): X hours and Y minutes
+#. %1$d is the number of hours
+#. %2$s is the text for the remainder of the last hour
+#, c-format
+msgid "%1$d hour and %2$s"
+msgid_plural "%1$d hours and %2$s"
+msgstr[0] "%1$d hora y %2$s"
+msgstr[1] "%1$d horas y %2$s"
+
+#. Reminder (objective case): in X hours and Y minutes
+#. %1$d is the number of hours
+#. %2$s is the text for the remainder of the last hour
+#, c-format
+msgctxt "in"
+msgid "%1$d hour and %2$s"
+msgid_plural "%1$d hours and %2$s"
+msgstr[0] "%1$d hora y %2$s"
+msgstr[1] "%1$d horas y %2$s"
+
+#. Byte size like "500 MB". Space or no space?
+#. %1$s is the number
+#. %2$s is the unit
+#, c-format
+msgctxt "bytes"
+msgid "%1$s %2$s"
+msgstr "%1$s %2$s"
+
+#. The relative position of date and time.
+#. %1$s is the date
+#. %2$s is the time
+#, c-format
+msgctxt "datetime"
+msgid "%1$s %2$s"
+msgstr "%1$s %2$s"
+
+#. Title of the content area when a shared folder is displayed.
+#. %1$s is the folder name.
+#. %2$s is the user name of the folder's owner.
+#, c-format
+msgid "%1$s of %2$s"
+msgstr "%1$s de %2$s"
+
+#. Number of unread mails in the header of the mail view
+#. %1$s is the number of unread mails
+#. %2$s is the total number of mails
+#, c-format
+msgid "%1$s of %2$s unread"
+msgstr "%1$s de %2$s no leído(s)"
+
+msgid "%1$s on behalf of"
+msgstr "%1$s en nombre de"
+
+msgid "%1$s: %2$s"
+msgstr "%1$s: %2$s"
+
+#. Format string for warnings. The difference to the default
+#. is that it doesn't have "Error:" at the beginning.
+#. %1$s is the error code.
+#. %2$s is the formatted error message.
+#. %3$s is the unique error ID.
+#, c-format
+msgid "%2$s (%1$s, %3$s)"
+msgstr "%2$s (%1$s, %3$s)"
+
+#. Format string for the 'lastname, firstname' display name default
+#. %1$s is the first name
+#. %2$s is the last name
+#, c-format
+msgid "%2$s, %1$s"
+msgstr "%2$s, %1$s"
+
+#. %d is the number of e-mails.
+#, c-format
+msgid "%d E-Mail"
+msgid_plural "%d E-Mails"
+msgstr[0] "%d E-Mail"
+msgstr[1] "%d E-Mails"
+
+#. %d is the number of appointments.
+#, c-format
+msgid "%d appointment"
+msgid_plural "%d appointments"
+msgstr[0] "%d cita"
+msgstr[1] "%d citas"
+
+#. %d is the number of contacts.
+#, c-format
+msgid "%d contact"
+msgid_plural "%d contacts"
+msgstr[0] "%d contacto"
+msgstr[1] "%d contactos"
+
+#. General duration (nominative case): X days
+#. %d is the number of days
+#, c-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d día"
+msgstr[1] "%d días"
+
+#. Reminder (objective case): in X days
+#. %d is the number of days
+#, c-format
+msgctxt "in"
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d día"
+msgstr[1] "%d días"
+
+msgid "%d day ago"
+msgid_plural "%d days ago"
+msgstr[0] "Hace %d día"
+msgstr[1] "Hace %d días"
+
+#. General duration (nominative case): X hours
+#. %d is the number of hours
+#, c-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d hora"
+msgstr[1] "%d horas"
+
+#. Reminder (objective case): in X hours
+#. %d is the number of hours
+#, c-format
+msgctxt "in"
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d hora"
+msgstr[1] "%d horas"
+
+msgid "%d hour ago"
+msgid_plural "%d hours ago"
+msgstr[0] "Hace %d hora"
+msgstr[1] "Hace %d horas"
+
+#. %d is the number of info items.
+#, c-format
+msgid "%d info item"
+msgid_plural "%d info items"
+msgstr[0] "%d elemento de información"
+msgstr[1] "%d elementos de información"
+
+#. General duration (nominative case): X minutes
+#. %d is the number of minutes
+#, c-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d minuto"
+msgstr[1] "%d minutos"
+
+#. Reminder (objective case): in X minutes
+#. %d is the number of minutes
+#, c-format
+msgctxt "in"
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d minuto"
+msgstr[1] "%d minutos"
+
+msgid "%d minute ago"
+msgid_plural "%d minutes ago"
+msgstr[0] "Hace %d minuto"
+msgstr[1] "Hace %d minutos"
+
+#. %d is the number of tasks.
+#, c-format
+msgid "%d task"
+msgid_plural "%d tasks"
+msgstr[0] "%d tarea"
+msgstr[1] "%d tareas"
+
+#. General duration (nominative case): X weeks
+#. %d is the number of weeks
+#, c-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d semana"
+msgstr[1] "%d semanas"
+
+#. Reminder (objective case): in X weeks
+#. %d is the number of weeks
+#, c-format
+msgctxt "in"
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d semana"
+msgstr[1] "%d semanas"
+
+msgid "%s, EEE"
+msgstr "%s, EEE"
+
+#. '&' before a letter indicates a shortcut, i.e. Alt+V for '&View'
+msgid "&Attachment"
+msgstr "&Adjunto"
+
+msgid "&Distribution List"
+msgstr "&Lista de distribución"
+
+msgid "&E-Mail"
+msgstr "&E-Mail"
+
+#. '&' before a letter indicates a shortcut, i.e. Alt+E for '&Edit'
+msgid "&Edit"
+msgstr "&Editar"
+
+#. '&' before a letter indicates a shortcut, i.e. Alt+F for '&Flags'
+msgid "&Flags"
+msgstr "&Etiquetas"
+
+#. '&' before a letter indicates a shortcut, i.e. Alt+N for '&New'
+msgid "&Folder permissions"
+msgstr "&Permisos de la carpeta"
+
+msgid "&Messaging"
+msgstr "&Mensajería"
+
+#. #-#-#-#-#  ox.pot (Open-Xchange 6)  #-#-#-#-#
+#. '&' before a letter indicates a shortcut, i.e. Alt+N for '&New'
+#. #-#-#-#-#  ox.pot (Open-Xchange 6)  #-#-#-#-#
+#. '&' before a letter indicates a shortcut, i.e. Alt+N for '&New'
+#. #-#-#-#-#  ox.pot (Open-Xchange 6)  #-#-#-#-#
+#. '&' before a letter indicates a shortcut, i.e. Alt+N for '&New'
+#. #-#-#-#-#  ox.pot (Open-Xchange 6)  #-#-#-#-#
+#. '&' before a letter indicates a shortcut, i.e. Alt+N for '&New'
+msgid "&New"
+msgstr "&Nuevo"
+
+msgid "&New Task"
+msgstr "&Nueva tarea"
+
+#. '&' before a letter indicates a shortcut, i.e. Alt+N for '&New'
+msgid "&Object permissions"
+msgstr "&Permisos del objeto"
+
+#. '&' before a letter indicates a shortcut, i.e. Alt+N for '&New'
+msgid "&Save"
+msgstr "&Guardar"
+
+msgid "&Search"
+msgstr "&Buscar"
+
+msgid "&Social"
+msgstr "Redes &sociales"
+
+#. '&' before a letter indicates a shortcut, i.e. Alt+V for '&View'
+msgid "&View"
+msgstr "&Vista"
+
+#: config/config.xml:137
+msgid "(may be slow on old machines)"
+msgstr "(puede ser lento en equipos antiguos)"
+
+#. List separator
+msgid ", "
+msgstr ", "
+
+#: popup_trigger_cb.xml:22
+msgid "--"
+msgstr "--"
+
+msgid "--:--"
+msgstr "--:--"
+
+#: config/config.xml:323
+msgid "12 hours"
+msgstr "12 horas"
+
+#: config/config.xml:321
+msgid "24 hours"
+msgstr "24 horas"
+
+msgid ""
+"<b>Approximate Duration for Subscriptions</b><br/><br/>Subscribing to items "
+"that are not delivered by another Open-Xchange Server (i.e. OXMF) may take "
+"some time.<br/>Example: Importing 100 contacts from Xing takes about 5 "
+"minutes.<br/><br/>We are continually improving this functionality. Future "
+"releases will work significantly faster."
+msgstr ""
+"<b>Tiempo aproximado para las suscripciones</b><br/><br/>Suscribirse a "
+"elementos que no son distribuidos por otro servidor Open-Xchange Server (es "
+"decir, OXMF) puede tardar un tiempo.<br/>Ejemplo: Importar 100 contactos de "
+"Xing puede tardar alrededor de 5 minutos.<br/><br/>Estamos mejorando "
+"continuamente esta funcionalidad. Las versiones futuras funcionarán de "
+"manera sensiblemente más rápida."
+
+msgid "AD"
+msgstr "DC"
+
+msgid "AM"
+msgstr "AM"
+
+#: about.xml:16
+msgid "About"
+msgstr "Acerca de"
+
+msgid "Above the text"
+msgstr "Por encima del texto"
+
+msgid "Absent"
+msgstr "Ausente"
+
+#: acceptdeny.xml:62 tmp_hover.xml:34
+msgid "Accept"
+msgstr "Aceptar"
+
+msgid "Accept and ignore conflicts"
+msgstr "Aceptar e ignorar conflictos"
+
+msgid "Accept and replace exception"
+msgstr "Aceptar y reemplazar excepción"
+
+msgid "Accept extra participant"
+msgstr "Aceptar participante extra"
+
+msgid "Account"
+msgstr "Cuenta"
+
+msgid "Account Name"
+msgstr "Nombre de la cuenta"
+
+msgid "Account Settings"
+msgstr "Configuración de la cuenta"
+
+msgid "Account name"
+msgstr "Nombre de la cuenta"
+
+#. Upsell
+msgid "Account upgrade"
+msgstr "Actualización de la cuenta"
+
+#: sidepanel/subscribe.xml:19
+msgid "Account:"
+msgstr "Cuenta:"
+
+msgid "Accounts"
+msgstr "Cuentas"
+
+msgid "Actions"
+msgstr "Acciones"
+
+#: config/config_portal.xml:31
+msgid "Activate or deactivate the start page hovers."
+msgstr "Active o desactive los elementos emergentes de la página de inicio."
+
+msgid "Active"
+msgstr "Activa"
+
+#: participants_external.xml:31
+msgid "Add"
+msgstr "Añadir"
+
+#: contacts/newDistributionList.xml:94 participants.xml:83 participants.xml:93
+msgid "Add ->"
+msgstr "Añadir ->"
+
+#: mail/newMail.xml:236
+msgid "Add Bcc →"
+msgstr "Añadir Cco →"
+
+#: mail/newMail.xml:227
+msgid "Add Cc →"
+msgstr "Añadir Cc →"
+
+msgid "Add E-Mail account ..."
+msgstr "Añadir cuenta de E-Mail ..."
+
+msgid "Add E-mail account ..."
+msgstr "Añadir cuenta de E-Mail ..."
+
+#: config_popups.xml:126
+msgid "Add Member..."
+msgstr "Añadir miembro..."
+
+#: mail/newMail.xml:218
+msgid "Add To →"
+msgstr "Añadir Para →"
+
+msgid "Add a new account"
+msgstr "Añadir una nueva cuenta"
+
+msgid "Add a new account..."
+msgstr "Añadir una nueva cuenta..."
+
+msgid "Add action"
+msgstr "Añadir acción"
+
+msgid "Add attachment"
+msgstr "Añadir adjunto"
+
+msgid "Add condition"
+msgstr "Añadir condición"
+
+msgid "Add external participant"
+msgstr "Añadir participante externo"
+
+msgid "Add from addressbook"
+msgstr "Añadir desde la libreta de direcciones"
+
+msgid "Add participant"
+msgstr "Añadir participante"
+
+msgid "Add picture"
+msgstr "Añadir foto"
+
+#: config/config_mail.xml:220
+msgid "Add sender and recipients to \"To\", Cc to \"Cc\""
+msgstr ""
+"Añadir el remitente y los destinatarios a \"Para\", destinatarios de copias "
+"a \"Cc\""
+
+#: config/config_mail.xml:222
+msgid "Add sender to \"To\", recipients to \"Cc\""
+msgstr "Añadir el remitente a \"Para\", los destinatarios a \"Cc\""
+
+msgid "Add to address book"
+msgstr "Añadir a libreta de direcciones"
+
+msgid "Add user"
+msgstr "Añadir usuario"
+
+#: contacts/newContact.xml:47
+msgid "Additional"
+msgstr "Adicional"
+
+msgid "Additional:"
+msgstr "Adicional:"
+
+msgid "Address"
+msgstr "Dirección"
+
+msgid "Address (other)"
+msgstr "Dirección (otra)"
+
+msgid "Address (private)"
+msgstr "Dirección (privada)"
+
+msgid "Addresses"
+msgstr "Direcciones"
+
+msgid "Admin"
+msgstr "Administrador"
+
+msgid "Administration"
+msgstr "Administración"
+
+msgid "Administrator"
+msgstr "Administrador"
+
+msgid "Afghanistan"
+msgstr "Afganistán"
+
+#. %s is the product name (by default 'Open-Xchange Server')
+msgid ""
+"After pressing OK, a new window will open where you can authorize %s to "
+"access your account data."
+msgstr ""
+"Tras presionar Aceptar se abrirá una nueva ventana en la que puede autorizar "
+"a %s a acceder a los datos de su cuenta."
+
+msgid "Albania"
+msgstr "Albania"
+
+msgid "Algeria"
+msgstr "Argelia"
+
+#: acceptdeny.xml:40
+msgid "All"
+msgstr "Todos"
+
+msgid "All Categories..."
+msgstr "Todas las categorías..."
+
+#: calendar/month.xml:28 calendar/week.xml:28
+msgid "All appointments"
+msgstr "Todas las citas"
+
+#: calendar/newAppointment.xml:90
+msgid "All day"
+msgstr "Todo el día"
+
+msgid "All folders"
+msgstr "Todas las carpetas"
+
+msgid "All messages"
+msgstr "Todos los mensajes"
+
+msgid "All users"
+msgstr "Todos los usuarios"
+
+#: config/config_mail.xml:296
+msgid "Allow html formatted E-Mails?"
+msgstr "¿Permitir E-Mails con formato HTML?"
+
+msgid "American Samoa"
+msgstr "Samoa Americana"
+
+#. %1$s is the error code.
+#. %2$s is the formatted error message (not used).
+#. %3$s is the unique error ID.
+#, c-format
+msgid "An error occurred. (%1$s, %3$s)"
+msgstr "Ha ocurrido un error. (%1$s, %3$s)"
+
+#. %1$s is the error code.
+#. %2$s is the formatted error message (not used).
+#. %3$s is the unique error ID.
+#, c-format
+msgid "An error occurred. Please try again later. (%1$s, %3$s)"
+msgstr ""
+"Ha ocurrido un error. Por favor, inténtelo de nuevo más tarde. (%1$s, %3$s)"
+
+msgid "Andorra"
+msgstr "Andorra"
+
+msgid "Angola"
+msgstr "Angola"
+
+msgid "Anguilla"
+msgstr "Anguilla"
+
+#: contacts/newContact.xml:288
+msgid "Anniversary"
+msgstr "Aniversario"
+
+msgid "Anniversary:"
+msgstr "Aniversario:"
+
+msgid "Answered"
+msgstr "Contestado"
+
+msgid "Antarctica"
+msgstr "Antártida"
+
+msgid "Antigua and Barbuda"
+msgstr "Antigua y Barbuda"
+
+msgid "Any recipient"
+msgstr "Cualquier destinatario"
+
+#: config/config_mail.xml:174
+msgid "Append vcard?"
+msgstr "¿Añadir vcard?"
+
+#: calendar/detailAppointment.xml:27 calendar/newAppointment.xml:23
+#: calendar/newAppointment.xml:46 confirm.xml:45 confirm.xml:115
+#: mail/detailMail.xml:48 mail/mailHSplit.xml:38 mail/mailVSplit.xml:38
+msgid "Appointment"
+msgstr "Cita"
+
+#: confirm.xml:89
+msgid "Appointment View"
+msgstr "Vista de citas"
+
+msgid "Appointments"
+msgstr "Citas"
+
+#: config/config_calendar.xml:270
+msgid "Appointments in personal calendars: set status to"
+msgstr "Citas en calendarios personales: establecer estado como"
+
+#: config/config_calendar.xml:277
+msgid "Appointments in public calendars: set status to"
+msgstr "Citas en calendarios públicos: establecer estado como"
+
+msgid "Apr"
+msgstr "abr"
+
+msgid "April"
+msgstr "abril"
+
+msgid ""
+"Are you sure you want to delete all E-Mails from this folder? The deleted E-"
+"Mails will be moved to the Trash folder."
+msgstr ""
+"¿Está seguro de querer borrar todos los E-Mails de esta carpeta? Los E-Mails "
+"borrados se moverán a la Papelera."
+
+msgid "Are you sure you want to delete selected item?"
+msgstr "¿Está seguro de querer borrar el elemento seleccionado?"
+
+msgid "Are you sure you want to delete selected items?"
+msgstr "¿Está seguro de querer borrar los elementos seleccionados?"
+
+msgid "Are you sure you want to delete the contact?"
+msgstr "¿Está seguro de querer borrar el contacto?"
+
+msgid "Are you sure you want to delete the item?"
+msgstr "¿Está seguro de querer borrar el elemento?"
+
+msgid "Are you sure you want to delete the selected E-Mails?"
+msgstr "¿Está seguro de querer borrar los E-Mails seleccionados?"
+
+#. #-#-#-#-#  ox.pot (Open-Xchange 6)  #-#-#-#-#
+#. Social Messaging accounts
+msgid "Are you sure you want to delete the selected account?"
+msgid_plural "Are you sure you want to delete the selected accounts?"
+msgstr[0] "¿Está seguro de querer borrar la cuenta seleccionada?"
+msgstr[1] "¿Está seguro de querer borrar las cuentas seleccionadas?"
+
+msgid "Are you sure you want to delete the selected attachment?"
+msgstr "¿Está seguro de querer borrar el adjunto seleccionado?"
+
+msgid "Are you sure you want to delete the selected contact?"
+msgid_plural "Are you sure you want to delete the selected contacts?"
+msgstr[0] "¿Está seguro de querer borrar el contacto seleccionado?"
+msgstr[1] "¿Está seguro de querer borrar los contactos seleccionados?"
+
+msgid "Are you sure you want to delete the selected distribution list?"
+msgid_plural "Are you sure you want to delete the selected distribution lists?"
+msgstr[0] ""
+"¿Está seguro de querer borrar la lista de distribución seleccionada?"
+msgstr[1] ""
+"¿Está seguro de querer borrar las listas de distribución seleccionadas?"
+
+msgid "Are you sure you want to delete the selected folder?"
+msgstr "¿Está seguro de querer borrar la carpeta seleccionada?"
+
+msgid "Are you sure you want to delete the selected group?"
+msgid_plural "Are you sure you want to delete the selected groups?"
+msgstr[0] "¿Está seguro de querer borrar el grupo seleccionado?"
+msgstr[1] "¿Está seguro de querer borrar los grupos seleccionados?"
+
+msgid "Are you sure you want to delete the selected item?"
+msgstr "¿Está seguro de querer borrar el elemento seleccionado?"
+
+msgid "Are you sure you want to delete the selected items?"
+msgstr "¿Está seguro de querer borrar los elementos seleccionados?"
+
+msgid "Are you sure you want to delete the selected publication?"
+msgid_plural "Are you sure you want to delete the selected publications?"
+msgstr[0] "¿Está seguro de querer borrar la publicación seleccionada?"
+msgstr[1] "¿Está seguro de querer borrar las publicaciones seleccionadas?"
+
+msgid "Are you sure you want to delete the selected resource?"
+msgid_plural "Are you sure you want to delete the selected resources?"
+msgstr[0] "¿Está seguro de querer borrar el recurso seleccionado?"
+msgstr[1] "¿Está seguro de querer borrar los recursos seleccionados?"
+
+msgid "Are you sure you want to delete the selected rule?"
+msgid_plural "Are you sure you want to delete the selected rules?"
+msgstr[0] "¿Está seguro de querer borrar la regla seleccionada?"
+msgstr[1] "¿Está seguro de querer borrar las reglas seleccionadas?"
+
+msgid "Are you sure you want to delete the selected subscription?"
+msgid_plural "Are you sure you want to delete the selected subscriptions?"
+msgstr[0] "¿Está seguro de querer borrar la suscripción seleccionada?"
+msgstr[1] "¿Está seguro de querer borrar las suscripciones seleccionadas?"
+
+msgid "Are you sure you want to delete the selected version?"
+msgstr "¿Está seguro de querer borrar la versión seleccionada?"
+
+msgid "Are you sure you want to delete the task?"
+msgstr "¿Está seguro de querer borrar la tarea?"
+
+msgid "Are you sure you want to delete this E-Mail?"
+msgstr "¿Está seguro de querer borrar este E-Mail?"
+
+msgid ""
+"Are you sure you want to detach the file from current Info Item?\n"
+" (all versions of the file will be removed)"
+msgstr ""
+"¿Está seguro de querer quitar el archivo del elemento de información "
+"actual?\n"
+" (todas las versiones del archivo serán eliminadas)"
+
+msgid ""
+"Are you sure you want to permanently delete all E-Mails from this folder? "
+"The deleted E-Mails will be irrevocably lost."
+msgstr ""
+"¿Está seguro de querer borrar permanentemente todos los E-Mails de esta "
+"carpeta? Los E-Mails borrados se perderán definitivamente."
+
+msgid "Argentina"
+msgstr "Argentina"
+
+msgid "Armenia"
+msgstr "Armenia"
+
+msgid "Aruba"
+msgstr "Aruba"
+
+msgid "Ask for new invitation"
+msgstr "Pedir una nueva invitación"
+
+#: contacts/newContact.xml:394
+msgid "Assistant"
+msgstr "Ayudante"
+
+msgid "Assistant:"
+msgstr "Ayudante:"
+
+msgid "Attach InfoItem"
+msgstr "Adjuntar Elemento de información"
+
+msgid "Attach local file"
+msgstr "Adjuntar archivo local"
+
+#: mail/newMail.xml:141
+msgid "Attach vCard"
+msgstr "Adjuntar vCard"
+
+#: config/config_mail.xml:207
+msgid "Attachment"
+msgstr "Adjunto"
+
+#: calendar/detailAppointment.xml:29 calendar/newAppointment.xml:48
+#: contacts/contactsDetail.xml:67 contacts/newContact.xml:49
+#: tasks/newTask.xml:50 tasks/tasksSplit.xml:58 tmp_hover.xml:258
+msgid "Attachments"
+msgstr "Adjuntos"
+
+msgid "Attention"
+msgstr "Atención"
+
+msgid "Aug"
+msgstr "ago"
+
+msgid "August"
+msgstr "agosto"
+
+msgid "Australia"
+msgstr "Australia"
+
+msgid "Austria"
+msgstr "Austria"
+
+msgid "Authorize"
+msgstr "Autorizar"
+
+msgid "Auto"
+msgstr "Auto"
+
+#: config/config_mail.xml:279
+msgid "Auto-save E-Mail drafts?"
+msgstr "¿Guardar automáticamente borradores de E-Mail?"
+
+msgid "Automatic logout"
+msgstr "Desconexión automática"
+
+msgid "Automatically collect contacts"
+msgstr "Recopilar contactos automáticamente"
+
+#. %s is the folder name.
+#, c-format
+msgid "Automatically collect contacts in the folder \"%s\""
+msgstr "Recopilar contactos automáticamente en la carpeta \"%s\""
+
+#: config/config_mail.xml:68
+msgid "Automatically select first E-Mail?"
+msgstr "¿Seleccionar automáticamente el primer E-Mail?"
+
+#: config_popups.xml:68
+msgid "Autorefresh:"
+msgstr "Autorefresco:"
+
+#: calendar/newAppointment.xml:49
+msgid "Availability"
+msgstr "Disponibilidad"
+
+#: config/config_tags.xml:27
+msgid "Available Categories:"
+msgstr "Categorías disponibles:"
+
+#: config/config_team.xml:28
+msgid "Available Teams:"
+msgstr "Equipos disponibles:"
+
+#: config/config_external.xml:32
+msgid "Available UWA modules:"
+msgstr "Módulos UWA disponibles:"
+
+msgid "Azerbaijan"
+msgstr "Azerbaiján"
+
+msgid "BC"
+msgstr "AC"
+
+msgid "BCC"
+msgstr "CCO"
+
+msgid "Back"
+msgstr "Atrás"
+
+msgid "Bahamas"
+msgstr "Bahamas"
+
+msgid "Bahrain"
+msgstr "Bahrein"
+
+msgid "Bangladesh"
+msgstr "Bangladesh"
+
+msgid "Barbados"
+msgstr "Barbados"
+
+msgid "Bars"
+msgstr "Barras"
+
+msgid "Based on mailing list"
+msgstr "Basado en la lista de correo"
+
+msgid "Based on recipients"
+msgstr "Basado en los destinatarios"
+
+msgid "Based on sender"
+msgstr "Basado en el remitente"
+
+msgid "Based on subject"
+msgstr "Basado en el asunto"
+
+#: mail/detailMail.xml:95 mail/mailHSplit.xml:88 mail/mailVSplit.xml:89
+msgid "Bcc"
+msgstr "Cco"
+
+#: mail/newMail.xml:104
+msgid "Bcc..."
+msgstr "Cco..."
+
+msgid "Bcc:"
+msgstr "Cco:"
+
+#: config/config_calendar.xml:288
+msgid "Be a participant when creating appointments?"
+msgstr "¿Desea convertirse en participante al crear una cita?"
+
+#: tmp_hover.xml:64
+msgid "Begins at"
+msgstr "Comienza el"
+
+msgid "Belarus"
+msgstr "Bielorrusia"
+
+msgid "Belgium"
+msgstr "Bélgica"
+
+msgid "Belize"
+msgstr "Bélice"
+
+msgid "Below the text"
+msgstr "Por debajo del texto"
+
+msgid "Benin"
+msgstr "Benin"
+
+msgid "Bermuda"
+msgstr "Bermudas"
+
+msgid "Bhutan"
+msgstr "Bhután"
+
+#: tasks/newTask.xml:196 tasks/tasksSplit.xml:152
+msgid "Billing information:"
+msgstr "Información de facturación:"
+
+msgid "Birthday Appointment"
+msgstr "Cita de cumpleaños"
+
+msgid "Birthday appointment has been changed."
+msgstr "Se ha cambiado la cita de cumpleaños."
+
+msgid "Birthday appointment has been created."
+msgstr "Se ha creado la cita de cumpleaños."
+
+#. New contact window: Used to create a pre-filled title at the new birthday appointment dialog
+#. %s will be replaced with the display name of the contact
+#, c-format
+msgid "Birthday of %s."
+msgstr "Cumpleaños de %s."
+
+#: config/config_mail.xml:309
+msgid "Block pre-loading of externally linked images?"
+msgstr "¿Bloquear la precarga de imágenes externas enlazadas?"
+
+msgid "Bolivia"
+msgstr "Bolivia"
+
+msgid "Bosnia and Herzegovina"
+msgstr "Bosnia Herzegovina"
+
+msgid "Botswana"
+msgstr "Botswana"
+
+msgid "Bouvet Island"
+msgstr "Isla Bouvet"
+
+#: contacts/contactsDetail.xml:141 contacts/newContact.xml:381
+msgid "Branches"
+msgstr "Sucursales"
+
+msgid "Branches:"
+msgstr "Sucursales:"
+
+msgid "Brazil"
+msgstr "Brasil"
+
+msgid "British Indian Ocean Territory"
+msgstr "Territorio Británico del Océano Índico"
+
+msgid "Brunei Darussalam"
+msgstr "Brunei Darussalam"
+
+msgid "Bulgaria"
+msgstr "Bulgaria"
+
+msgid "Burkina Faso"
+msgstr "Burkina Faso"
+
+msgid "Burundi"
+msgstr "Burundi"
+
+msgid "Business"
+msgstr "Negocios"
+
+msgid ""
+"By changing the date of this appointment you are creating an appointment "
+"exception to the series. Do you want to continue?"
+msgstr ""
+"Al modificar la fecha de esta cita, creará una excepción en la serie "
+"recurrente. ¿Desea continuar?"
+
+msgid "CAD"
+msgstr "CAD"
+
+msgid "CC"
+msgstr "CC"
+
+msgid "CHF"
+msgstr "CHF"
+
+msgid "CSV"
+msgstr "CSV"
+
+#: config/config_import.xml:58
+msgid "CSV (Contacts)"
+msgstr "CSV (Contactos)"
+
+#: calendar/month.xml:43
+msgid "CW"
+msgstr "Sem."
+
+#: sidepanel/properties.xml:47
+msgid "CalDAV URL"
+msgstr "URL de CalDAV"
+
+msgid "Calendar"
+msgstr "Calendario"
+
+#: config/config_calendar.xml:200
+msgid "Calendar custom view"
+msgstr "Vista personalizada del calendario"
+
+#: config/config_calendar.xml:166
+msgid "Calendar day view"
+msgstr "Vista del día del calendario"
+
+#: config/config_calendar.xml:176
+msgid "Calendar workweek view"
+msgstr "Vista de semana laboral del calendario"
+
+msgid "Cambodia"
+msgstr "Camboya"
+
+msgid "Cameroon"
+msgstr "Camerún"
+
+msgid "Can not create appointment in a folder other than appointment folder"
+msgstr "No se puede crear una cita en una carpeta que no sea la de citas"
+
+msgid "Canada"
+msgstr "Canadá"
+
+msgid "Canadian dollar"
+msgstr "Dólar canadiense"
+
+#: attachments.xml:43 attachments.xml:75 calendar/calendar_availability.xml:91
+#: calendar/newAppointment.xml:236 calendar/newAppointment.xml:265
+#: calendar/newAppointment.xml:273 config_popups.xml:46 config_popups.xml:90
+#: config_popups.xml:137 confirm.xml:40 confirm.xml:87 confirm.xml:139
+#: confirm.xml:179 confirm.xml:209 contacts/contactsDetail.xml:47
+#: contacts/newContact.xml:248 contacts/newContact.xml:311
+#: contacts/newContact.xml:508 contacts/newDistributionList.xml:108
+#: mail/newMail.xml:249 messaging/popup.xml:28 participants.xml:105
+#: participants_external.xml:45 series.xml:229 series.xml:257 series.xml:290
+#: sidepanel/subscribe.xml:34 tasks/newTask.xml:148 tasks/newTask.xml:250
+#: tasks/newTask.xml:274 tasks/newTask.xml:282
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Cape Verde"
+msgstr "Cabo Verde"
+
+msgid "Cards"
+msgstr "Tarjetas"
+
+#: calendar/newAppointment.xml:140 confirm.xml:148
+#: contacts/contactsDetail.xml:255 contacts/newContact.xml:172
+#: infostore/newInfoItemMain.xml:99 tasks/newTask.xml:106
+msgid "Categories"
+msgstr "Categorías"
+
+msgid "Categories must have a name"
+msgstr "Las categorías han de tener nombre"
+
+#: calendar/newAppointment.xml:140 contacts/newContact.xml:172
+#: infostore/newInfoItemMain.xml:99 tasks/newTask.xml:106
+msgid "Categories..."
+msgstr "Categorías..."
+
+#: calendar/detailAppointment.xml:103 infostore/split.xml:83
+#: tasks/tasksSplit.xml:106
+msgid "Categories:"
+msgstr "Categorías:"
+
+#: confirm.xml:188
+msgid "Category"
+msgstr "Categoría"
+
+msgid "Category names must be unique"
+msgstr "Los nombres de categorías deben ser únicos"
+
+msgid "Cayman Islands"
+msgstr "Islas Caimán"
+
+#: mail/detailMail.xml:91 mail/mailHSplit.xml:84 mail/mailVSplit.xml:85
+msgid "Cc"
+msgstr "Cc"
+
+#: mail/newMail.xml:96
+msgid "Cc..."
+msgstr "Cc..."
+
+msgid "Cc:"
+msgstr "Cc:"
+
+#: contacts/newContact.xml:115 contacts/newContact.xml:286
+msgid "Cell phone"
+msgstr "Teléfono celular"
+
+msgid "Cell phone (private)"
+msgstr "Teléfono celular (privado)"
+
+msgid "Cell phone (private):"
+msgstr "Teléfono celular (privado):"
+
+msgid "Cell phone:"
+msgstr "Teléfono celular:"
+
+msgid "Central African Republic"
+msgstr "República Centroafricana"
+
+msgid "Chad"
+msgstr "Chad"
+
+msgid "Change Password"
+msgstr "Cambiar contraseña"
+
+msgid "Change Personal Contact Information"
+msgstr "Cambiar información personal de contacto"
+
+msgid "Change confirmation"
+msgstr "Cambiar confirmación"
+
+msgid "Change layout"
+msgstr "Cambiar presentación"
+
+#: config/config_calendar.xml:125
+msgid "Change view"
+msgstr "Cambiar vista"
+
+msgid "Changed by"
+msgstr "Cambiada por"
+
+msgid "Changed on"
+msgstr "Cambiada el"
+
+#: calendar/calendar_availability.xml:99
+msgid "Check"
+msgstr "Comprobar"
+
+msgid "Check connection"
+msgstr "Comprobar la conexión"
+
+msgid "Check for new messages every 'n' minutes"
+msgstr "Comprobar nuevos mensajes cada 'n' minutos"
+
+#: calendar/calendar_availability.xml:105
+msgid "Check for:"
+msgstr "Comprobar si hay:"
+
+#: contacts/newContact.xml:408
+msgid "Children"
+msgstr "Hijos"
+
+msgid "Children:"
+msgstr "Hijos:"
+
+msgid "Chile"
+msgstr "Chile"
+
+msgid "China"
+msgstr "China"
+
+msgid "Choose Team"
+msgstr "Elegir equipo"
+
+msgid "Choose a new password for your account."
+msgstr "Elija una nueva contraseña para su cuenta."
+
+msgid "Christmas Island"
+msgstr "Isla de Pascua"
+
+#: contacts/newContact.xml:261
+msgid "City"
+msgstr "Ciudad"
+
+msgid "City (business)"
+msgstr "Ciudad (profesional)"
+
+msgid "City (private)"
+msgstr "Ciudad (personal)"
+
+msgid "City:"
+msgstr "Ciudad:"
+
+msgid "Classic"
+msgstr "Clásico"
+
+#: contacts/newDistributionList.xml:110 mail/newMail.xml:251
+msgid "Clear"
+msgstr "Limpiar"
+
+#: calendar/week.xml:51 calendar/week.xml:65 calendar/week.xml:79
+#: calendar/week.xml:95 calendar/week.xml:109 calendar/week.xml:123
+#: calendar/week.xml:137
+msgid "Click here for further appointments"
+msgstr "Presione aquí para más citas"
+
+msgid "Client PC operating system: Windows XP, Windows Vista, Windows 7"
+msgstr ""
+"Sistema operativo del ordenador cliente: Windows XP, Windows Vista, Windows 7"
+
+msgid "Close"
+msgstr "Cerrar"
+
+msgid "Close Window"
+msgstr "Cerrar ventana"
+
+msgid "Close configuration"
+msgstr "Cerrar configuración"
+
+msgid "Close quick config"
+msgstr "Cerrar configuración rápida"
+
+msgid "Cocos (Keeling) Islands"
+msgstr "Islas Cocos (Keeling)"
+
+msgid "Collapse sidepanel"
+msgstr "Recoger el panel lateral"
+
+#: config/config_mail.xml:136
+msgid "Collect while reading E-Mails?"
+msgstr "¿Recopilar al leer los correos?"
+
+#: config/config_mail.xml:123
+msgid "Collect while sending E-Mails?"
+msgstr "¿Recopilar al enviar los mensajes?"
+
+msgid "Colombia"
+msgstr "Colombia"
+
+msgid "Color"
+msgstr "Color"
+
+#: config/config_mail.xml:335
+msgid "Color quoted lines:"
+msgstr "Colorear líneas citadas:"
+
+#: confirm.xml:172 confirm.xml:199
+msgid "Color:"
+msgstr "Color:"
+
+msgid "Comma Separated"
+msgstr "Separado por comas"
+
+msgid "Comment"
+msgstr "Comentario"
+
+#: acceptdeny.xml:21 acceptdeny.xml:48 tmp_hover.xml:22
+msgid "Comment:"
+msgstr "Comentario:"
+
+#: contacts/contactsDetail.xml:215 contacts/newContact.xml:334
+msgid "Comments"
+msgstr "Comentarios"
+
+#: calendar/detailAppointment.xml:134 calendar/newAppointment.xml:122
+#: infostore/newInfoItemMain.xml:107 tasks/newTask.xml:166
+msgid "Comments:"
+msgstr "Comentarios:"
+
+#: contacts/newContact.xml:375
+msgid "Commercial Register"
+msgstr "Registro comercial"
+
+msgid "Commercial Register:"
+msgstr "Registro comercial:"
+
+#: config/config.xml:25 config/config_mail.xml:26
+msgid "Common"
+msgstr "Común"
+
+msgid "Comoros"
+msgstr "Comoras"
+
+#: config/config.xml:113
+msgid "Compact panel"
+msgstr "Panel compacto"
+
+#: tasks/newTask.xml:200 tasks/tasksSplit.xml:156
+msgid "Companies:"
+msgstr "Compañias:"
+
+#: contacts/contactsDetail.xml:92 contacts/newContact.xml:138
+msgid "Company"
+msgstr "Empresa"
+
+msgid "Company:"
+msgstr "Empresa:"
+
+#: config/config_mail.xml:27
+msgid "Compose"
+msgstr "Redactar"
+
+msgid "Configuration"
+msgstr "Configuración"
+
+msgid "Configuration changed"
+msgstr "Configuración cambiada"
+
+msgid "Configuration damaged, please inform the administrator."
+msgstr "Configuración dañada. Por favor, informe al administrador."
+
+msgid "Confirm new password"
+msgstr "Confirmar nueva contraseña"
+
+msgid "Confirmation"
+msgstr "Confirmación"
+
+#: config/config_calendar.xml:267
+msgid "Confirmation status for appointment invitations"
+msgstr "Estado de confirmación para las invitaciones a citas"
+
+#. #-#-#-#-#  ox.pot (Open-Xchange 6)  #-#-#-#-#
+#. Status message will be shown when the confirmation status has been saved
+#. after clicking on any confirmation button in an itip mail
+msgid "Confirmation status has been saved."
+msgstr "El estado de confirmación se ha guardado."
+
+#: confirm.xml:95
+msgid "Conflicts detected"
+msgstr "Conflictos detectados"
+
+msgid "Congo"
+msgstr "Congo"
+
+msgid "Connection failed! Please check your settings."
+msgstr "¡Conexión fallida!. Por favor, compruebe sus ajustes."
+
+msgid "Connection failed! Please check your settings: "
+msgstr "¡Ha fallado la conexión! Por favor, compruebe sus ajustes:"
+
+msgid "Connector for Microsoft Outlook"
+msgstr "Conector para Microsoft Outlook"
+
+#: contacts/newContact.xml:23
+msgid "Contact"
+msgstr "Contacto"
+
+#: mail/newMail.xml:201 participants.xml:52
+msgid "Contact folder..."
+msgstr "Carpeta de contactos..."
+
+#: contacts/contactsDetail.xml:65 contacts/contactsDetail.xml:66
+msgid "Contact overview"
+msgstr "Vista general de contacto"
+
+#: about.xml:42
+msgid "Contact:"
+msgstr "Contacto:"
+
+msgid "Contacts"
+msgstr "Contactos"
+
+#: config/config_portal.xml:51
+msgid "Contacts:"
+msgstr "Contactos:"
+
+msgid "Contains"
+msgstr "Contiene"
+
+msgid "Content"
+msgstr "Contenido"
+
+msgid "Content-Type:"
+msgstr "Content-Type:"
+
+#: confirm.xml:48
+msgid "Continue"
+msgstr "Continuar"
+
+msgid "Cook Islands"
+msgstr "Islas Cook"
+
+msgid "Copy"
+msgstr "Copiar"
+
+msgid "Costa Rica"
+msgstr "Costa Rica"
+
+msgid "Cote d'Ivoire"
+msgstr "Costa de Marfil"
+
+#: contacts/newContact.xml:156 contacts/newContact.xml:267
+msgid "Country"
+msgstr "País"
+
+#: contacts/newContact.xml:367
+msgid "Country (other)"
+msgstr "País (otro)"
+
+msgid "Country (other):"
+msgstr "País (otro):"
+
+msgid "Country:"
+msgstr "País:"
+
+msgid "Create"
+msgstr "Crear"
+
+msgid "Create Team"
+msgstr "Crear equipo"
+
+msgid "Create a filter"
+msgstr "Crear un filtro"
+
+#: calendar/newAppointment.xml:132
+msgid "Create a recurring appointment"
+msgstr "Crear una cita recurrente"
+
+msgid "Create objects"
+msgstr "Crear objetos"
+
+#: config/config_calendar.xml:285
+msgid "Create public appointments"
+msgstr "Crear citas públicas"
+
+msgid "Create subfolders"
+msgstr "Crear subcarpetas"
+
+msgid "Created"
+msgstr "Creado"
+
+msgid "Created By:"
+msgstr "Creado por:"
+
+#: confirm.xml:118
+msgid "Created by"
+msgstr "Creado por"
+
+#. %s is the name of the creator.
+#, c-format
+msgid "Created by %s"
+msgstr "Creado por %s"
+
+msgid "Created by the vacation notice"
+msgstr "Creado por el aviso de ausencia"
+
+#: calendar/detailAppointment.xml:55 infostore/split.xml:172 tmp_hover.xml:288
+msgid "Created by:"
+msgstr "Creada por:"
+
+msgid "Created on"
+msgstr "Creado el"
+
+#. %1$s is the creation date.
+#. %2$s is the name of the creator.
+#, c-format
+msgid "Created on %1$s by %2$s"
+msgstr "Creado el %1$s por %2$s"
+
+#. General object information at the bottom of the content area.
+#. %1$s is the creation date.
+#. %2$s is the name of the creator.
+#. %3$s is the last modification date.
+#. %4$s is the name of the last editor.
+#, c-format
+msgid "Created on %1$s by %2$s, last changed on %3$s by %4$s"
+msgstr "Creado el %1$s por %2$s, modificado por última vez el %3$s por %4$s"
+
+msgid "Created on:"
+msgstr "Creado el:"
+
+msgid "Creation date:"
+msgstr "Fecha de creación:"
+
+msgid "Croatia"
+msgstr "Croacia"
+
+msgid "Cuba"
+msgstr "Cuba"
+
+msgid "Current"
+msgstr "Actual"
+
+msgid "Current Costs:"
+msgstr "Costes actuales:"
+
+msgid "Current Duration:"
+msgstr "Duración actual:"
+
+#: tasks/newTask.xml:185 tasks/tasksSplit.xml:145
+msgid "Current costs:"
+msgstr "Costes actuales:"
+
+msgid "Current date"
+msgstr "Fecha actual"
+
+#: tasks/newTask.xml:182 tasks/tasksSplit.xml:142
+msgid "Current duration:"
+msgstr "Duración actual:"
+
+msgid "Custom"
+msgstr "Personalizada"
+
+msgid "Custom Widget"
+msgstr "Widget personalizado"
+
+msgid "Custom form"
+msgstr "Formulario personalizado"
+
+msgid "Cut"
+msgstr "Cortar"
+
+msgid "Cyprus"
+msgstr "Chipre"
+
+msgid "Czech Republic"
+msgstr "República Checa"
+
+msgid "DKK"
+msgstr "DKK"
+
+#: series.xml:23
+msgid "Daily"
+msgstr "Diaria"
+
+msgid "Danish krone"
+msgstr "Corona danesa"
+
+msgid "Date"
+msgstr "Fecha"
+
+#: config/config.xml:340
+msgid "Date format:"
+msgstr "Formato de fecha:"
+
+#: contacts/newContact.xml:221
+msgid "Date of birth"
+msgstr "Fecha de nacimiento"
+
+msgid "Date of birth:"
+msgstr "Fecha de nacimiento:"
+
+#: calendar/calendar_availability.xml:62
+msgid "Date:"
+msgstr "Fecha:"
+
+#: series.xml:51
+msgid "Day"
+msgstr "Día"
+
+msgid "Dec"
+msgstr "dic"
+
+msgid "December"
+msgstr "diciembre"
+
+#: acceptdeny.xml:65 tmp_hover.xml:37
+msgid "Decline"
+msgstr "Rechazar"
+
+msgid "Decline counter proposal"
+msgstr "Rechazar contrapropuesta"
+
+msgid "Default"
+msgstr "Por defecto"
+
+#: config/config_mail.xml:259
+msgid "Default E-Mail font size?"
+msgstr "¿Tamaño de letra predeterminado para E-Mail?"
+
+#: config/config_mail.xml:252
+msgid "Default E-Mail font?"
+msgstr "¿Tipo de letra predeterminado para E-Mail?"
+
+#: config_popups.xml:35
+msgid "Default Signature:"
+msgstr "Firma predeterminada:"
+
+#: config_popups.xml:107
+msgid "Default Team:"
+msgstr "Equipo predeterminado:"
+
+#: config/config_calendar.xml:92
+msgid "Default calendar view"
+msgstr "Vista de calendario predeterminada"
+
+#: config/config.xml:64
+msgid "Default module after login?"
+msgstr "¿Módulo predeterminado tras acceder?"
+
+#: config/config_mail.xml:273
+msgid "Default sender address:"
+msgstr "Dirección de remitente predeterminada:"
+
+#: config/config_calendar.xml:157
+msgid "Default time for reminder"
+msgstr "Tiempo predeterminado para el recordatorio"
+
+#: config/config_mail.xml:49
+msgid "Default view for Spam folder:"
+msgstr "Vista predeterminada de la carpeta de correo no deseado:"
+
+#: config/config_contact.xml:28 config/config_infostore.xml:27
+#: config/config_mail.xml:43 config/config_tasks.xml:28
+msgid "Default view:"
+msgstr "Vista predeterminada:"
+
+msgid "Deferred"
+msgstr "Retrasada"
+
+#: config/config.xml:143
+msgid "Delay before a hover is displayed"
+msgstr "Espera antes de mostrar elementos emergentes"
+
+#: confirm.xml:170 infostore/newInfoItemMain.xml:88 participants.xml:84
+#: participants.xml:94 tmp_hover.xml:160
+msgid "Delete"
+msgstr "Borrar"
+
+#. #-#-#-#-#  ox.pot (Open-Xchange 6)  #-#-#-#-#
+#. Social Messaging accounts
+msgid "Delete Account"
+msgid_plural "Delete Accounts"
+msgstr[0] "Borrar cuenta"
+msgstr[1] "Borrar cuentas"
+
+msgid "Delete Appointment"
+msgstr "Borrar cita"
+
+msgid "Delete Attachment"
+msgstr "Borrar adjunto"
+
+msgid "Delete Contact"
+msgstr "Borrar contacto"
+
+msgid "Delete E-Mail"
+msgstr "Borrar E-Mail"
+
+msgid "Delete E-Mails"
+msgstr "Borrar E-Mails"
+
+msgid "Delete Folder"
+msgstr "Borrar carpeta"
+
+msgid "Delete Group"
+msgid_plural "Delete Groups"
+msgstr[0] "Borrar grupo"
+msgstr[1] "Borrar grupos"
+
+msgid "Delete Items"
+msgstr "Borrar elementos"
+
+msgid "Delete Publication"
+msgid_plural "Delete Publications"
+msgstr[0] "Borrar publicación"
+msgstr[1] "Borrar publicaciones"
+
+msgid "Delete Resource"
+msgid_plural "Delete Resources"
+msgstr[0] "Borrar recurso"
+msgstr[1] "Borrar recursos"
+
+msgid "Delete Rule"
+msgid_plural "Delete Rules"
+msgstr[0] "Borrar regla"
+msgstr[1] "Borrar reglas"
+
+msgid "Delete Subscription"
+msgid_plural "Delete Subscriptions"
+msgstr[0] "Borrar suscripción"
+msgstr[1] "Borrar suscripciones"
+
+msgid "Delete Task"
+msgstr "Borrar tarea"
+
+msgid "Delete Version"
+msgstr "Borrar versión"
+
+msgid "Delete account"
+msgid_plural "Delete accounts"
+msgstr[0] "Borrar cuenta"
+msgstr[1] "Borrar cuentas"
+
+msgid "Delete all"
+msgstr "Borrar todo"
+
+msgid "Delete all Categories"
+msgstr "Eliminar todas las categorías"
+
+msgid "Delete contact"
+msgid_plural "Delete contacts"
+msgstr[0] "Borrar contacto"
+msgstr[1] "Borrar contactos"
+
+msgid "Delete distribution list"
+msgid_plural "Delete distribution lists"
+msgstr[0] "Borrar lista de distribución"
+msgstr[1] "Borrar listas de distribución"
+
+msgid "Delete objects"
+msgstr "Borrar objetos"
+
+msgid "Delete own"
+msgstr "Borrar los propios"
+
+msgid "Delete this action"
+msgstr "Borrar esta acción"
+
+msgid "Delete this condition"
+msgstr "Borrar esta condición"
+
+msgid "Deleted"
+msgstr "Borrado"
+
+msgid "Deleting messages on local storage also deletes them on server"
+msgstr ""
+"Al eliminar mensajes guardados localmente también se borrarán en el servidor"
+
+#: mail/newMail.xml:135
+msgid "Delivery receipt"
+msgstr "Acuse de recibo"
+
+msgid "Denmark"
+msgstr "Dinamarca"
+
+#: contacts/contactsDetail.xml:105 contacts/newContact.xml:140
+msgid "Department"
+msgstr "Departamento"
+
+msgid "Department:"
+msgstr "Departamento:"
+
+#: ox.xml:64
+msgid "Description"
+msgstr "Descripción"
+
+#: calendar/detailAppointment.xml:40 calendar/newAppointment.xml:60
+#: reminder.xml:41
+msgid "Description:"
+msgstr "Descripción:"
+
+#: contacts/contactsDetail.xml:31
+msgid "Destination"
+msgstr "Destino"
+
+#: config/config_import.xml:79
+msgid "Destination folder:"
+msgstr "Carpeta de destino"
+
+msgid "Detach file"
+msgstr "Quitar archivo adjunto"
+
+msgid "Detail"
+msgstr "Detalle"
+
+msgid "Detail Information for Publication"
+msgstr "Información detallada de la publicación"
+
+msgid "Detail Information for Subscription"
+msgstr "Información detallada de la suscripción"
+
+msgid "Detail information for publication"
+msgstr "Información detallada de la publicación"
+
+msgid "Detail information for subscription"
+msgstr "Información detallada de la suscripción"
+
+#: config/config_import.xml:31
+msgid ""
+"Detailed information can be found in the Import section of the online help "
+"or the user manual."
+msgstr ""
+"Puede encontrar información detallada en la sección Importar de la ayuda en "
+"línea o el manual del usuario."
+
+#: tasks/newTask.xml:48 tasks/tasksSplit.xml:116
+msgid "Details"
+msgstr "Detalles"
+
+msgid "Details:"
+msgstr "Detalles:"
+
+msgid "Direct link"
+msgstr "Enlace directo"
+
+#: infostore/split.xml:91
+msgid "Direct link:"
+msgstr "Enlace directo:"
+
+msgid "Direct message"
+msgstr "Mensaje directo"
+
+msgid "Disable"
+msgstr "Desactivar"
+
+#: config/config.xml:249
+msgid "Disable all"
+msgstr "Desactivar todo"
+
+msgid "Disabled"
+msgstr "Desactivado"
+
+msgid "Discard"
+msgstr "Descartar"
+
+#: config/config_mail.xml:28
+msgid "Display"
+msgstr "Mostrar"
+
+#: calendar/newAppointment.xml:162
+msgid "Display as"
+msgstr "Mostrar como"
+
+#: calendar/detailAppointment.xml:118 calendar/newAppointment.xml:160
+msgid "Display as:"
+msgstr "Mostrar como:"
+
+#: config/config_mail.xml:322
+msgid "Display emoticons as graphics in text E-Mails?"
+msgstr "¿Mostrar emoticonos como gráficos en E-Mails de texto?"
+
+#: contacts/contactsDetail.xml:88 contacts/newContact.xml:90
+msgid "Display name"
+msgstr "Nombre a mostrar"
+
+msgid "Displayed name"
+msgstr "Nombre mostrado"
+
+#: tasks/newTask.xml:192 tasks/tasksSplit.xml:149
+msgid "Distance:"
+msgstr "Distancia:"
+
+#: contacts/newContact.xml:48 contacts/newDistributionList.xml:24
+msgid "Distribution List"
+msgstr "Lista de distribución"
+
+msgid "Distribution list"
+msgstr "Lista de distribución"
+
+msgid "Djibouti"
+msgstr "Djibouti"
+
+msgid "Do the following:"
+msgstr "Haga lo siguiente:"
+
+msgid "Do you really want to discard your changes and close the window?"
+msgstr "¿De verdad quiere descartar los cambios y cerrar la ventana?"
+
+msgid ""
+"Do you want to delete the whole recurrence or a single instance of the "
+"recurrence?"
+msgstr "¿Desea borrar la serie completa o un elemento individual de la serie?"
+
+msgid ""
+"Do you want to delete the whole recurrence or single instances of the "
+"recurrence?"
+msgstr "¿Desea borrar la serie completa o elementos individuales de la serie?"
+
+msgid ""
+"Do you want to edit the whole recurrence or a single recurrence appointment? "
+"Please note when changing a serial appointment, exceptions to the recurrence "
+"are reset."
+msgstr ""
+"¿Desea editar la serie completa o una cita individual de la serie? Recuerde "
+"que cuando se modifica una cita recurrente, las excepciones de la serie "
+"quedan anuladas."
+
+msgid ""
+"Do you want to edit the whole recurrence or single instances of the "
+"recurrence? Please note when changing a serial appointment, exceptions to "
+"the recurrence are reset."
+msgstr ""
+"¿Desea editar la serie completa o elementos individuales de la serie? Tenga "
+"en cuenta que, cuando se modifica una cita recurrente, las excepciones de la "
+"serie quedan anuladas."
+
+msgid ""
+"Do you want to edit the whole series or a single series appointment? Please "
+"note when changing a serial appointment, exceptions to the series are reset."
+msgstr ""
+"¿Desea editar la serie completa o una cita individual de la serie? Recuerde "
+"que cuando se modifica una cita de la serie, las excepciones de la serie "
+"quedan anuladas."
+
+msgid "Do you want to save your configuration?"
+msgstr "¿Quiere guardar la configuración?"
+
+msgid "Do you want to send a delivery receipt?"
+msgstr "¿Desea enviar un acuse de recibo?"
+
+#: infostore/split.xml:99
+msgid "Document Details"
+msgstr "Detalles del documento"
+
+#: infostore/split.xml:79
+msgid "Document:"
+msgstr "Documento:"
+
+msgid "Does not contain"
+msgstr "No contiene"
+
+msgid "Does not match"
+msgstr "No coincide"
+
+msgid "Does not match regex"
+msgstr "No coincide con la expresión regular"
+
+msgid "Dominica"
+msgstr "Dominica"
+
+msgid "Dominican Republic"
+msgstr "República Dominicana"
+
+#: confirm.xml:33
+msgid "Don't show again"
+msgstr "No mostrar de nuevo"
+
+msgid "Done"
+msgstr "Completada"
+
+msgid "Down"
+msgstr "Abajo"
+
+msgid "Download"
+msgstr "Descargar"
+
+msgid "Download Updater"
+msgstr "Descargar Updater"
+
+msgid "Download updater for the Connector for Microsoft Outlook"
+msgstr "Descargue el updater para el Conector para Microsoft Outlook"
+
+msgid "Drafts folder"
+msgstr "Carpeta borradores"
+
+msgid "Dropdown"
+msgstr "Desplegable"
+
+#: tmp_hover.xml:108
+msgid "Due date"
+msgstr "Fecha de vencimiento"
+
+#: tasks/newTask.xml:74 tasks/tasksSplit.xml:86
+msgid "Due date:"
+msgstr "Fecha vencimiento:"
+
+#. Task details (due date).
+#. %d is the number of days.
+#, c-format
+msgid "Due in %d day."
+msgid_plural "Due in %d days."
+msgstr[0] "Vence en %d día."
+msgstr[1] "Vence en %d días."
+
+#. Task details of a task with only a due date.
+#. %s is the due date.
+#, c-format
+msgid "Due on %s."
+msgstr "Vence el %s."
+
+msgid "Due today!"
+msgstr "¡Vence hoy!"
+
+msgid "Due tomorrow."
+msgstr "Vence mañana."
+
+msgid "Dynamic resizing..."
+msgstr "Redimensionado dinámico..."
+
+#: contacts/newContact.xml:122 contacts/newContact.xml:325
+#: mail/detailMail.xml:23 mail/detailMail.xml:49 mail/mailHSplit.xml:39
+#: mail/mailVSplit.xml:39
+msgid "E-Mail"
+msgstr "E-Mail"
+
+msgid "E-Mail (business):"
+msgstr "E-Mail (profesional):"
+
+#: contacts/newContact.xml:392
+msgid "E-Mail (other)"
+msgstr "E-Mail (otro)"
+
+msgid "E-Mail (other):"
+msgstr "E-Mail (otro):"
+
+msgid "E-Mail (private)"
+msgstr "E-Mail (privado)"
+
+msgid "E-Mail (private):"
+msgstr "E-Mail (privado):"
+
+msgid "E-Mail Accounts"
+msgstr "Cuentas de E-Mail"
+
+msgid "E-Mail Address"
+msgstr "Dirección de E-Mail"
+
+#: config/config_calendar.xml:235 config/config_tasks.xml:74
+msgid "E-Mail notification for Accept/Declined"
+msgstr "Notificación por E-Mail de citas aceptadas/rechazadas"
+
+#: config/config_calendar.xml:221 config/config_tasks.xml:60
+msgid "E-Mail notification for New, Changed, Deleted?"
+msgstr "¿Recibir notificación por correo cuando se crea, modifica o elimina?"
+
+#: config/config_calendar.xml:218
+msgid "E-Mail notification for appointment"
+msgstr "Notificación por E-Mail de citas"
+
+#: config/config_calendar.xml:238
+msgid "E-Mail notification for appointment creator?"
+msgstr "¿Recibir notificación por correo como creador de la cita?"
+
+#: config/config_calendar.xml:252
+msgid "E-Mail notification for appointment participant?"
+msgstr "¿Recibir notificación por correo como participante en la cita?"
+
+#: config/config_tasks.xml:57
+msgid "E-Mail notification for task"
+msgstr "Notificación por E-Mail de tareas"
+
+#: config/config_tasks.xml:77
+msgid "E-Mail notification for task creator?"
+msgstr "¿Recibir notificación por correo como creador de la tarea?"
+
+#: config/config_tasks.xml:91
+msgid "E-Mail notification for task participant?"
+msgstr "¿Recibir notificación por correo como participante en la tarea?"
+
+#: config/config_portal.xml:37 contacts/newDistributionList.xml:85
+#: participants_external.xml:22
+msgid "E-Mail:"
+msgstr "E-Mail:"
+
+msgid "E-mail addresses"
+msgstr "Direcciones de E-mail"
+
+#. Exabyte unit (1024^6)
+msgid "EB"
+msgstr "EB"
+
+#. The date with the day of the week.
+#. EEEE is the full day of the week,
+#. EEE is the short day of the week,
+#. %s is the date.
+#, c-format
+msgid "EEE, %s"
+msgstr "EEE, %s"
+
+#. The date with the day of the week.
+#. EEEE is the full day of the week,
+#. EEE is the short day of the week,
+#. %s is the date.
+#, c-format
+msgid "EEEE, %s"
+msgstr "EEEE, %s"
+
+msgid "EUR"
+msgstr "EUR"
+
+#: series.xml:47 series.xml:136
+msgid "Each"
+msgstr "Cada"
+
+msgid "Each %s %s"
+msgstr "Cada %s %s"
+
+msgid "Each %s Day"
+msgstr "Cada día %s"
+
+msgid "Each %s Week(s) on %s"
+msgstr "Cada %s semana(s) el %s"
+
+msgid "Ecuador"
+msgstr "Ecuador"
+
+#: confirm.xml:47
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Edit Appointment"
+msgstr "Editar cita"
+
+msgid "Edit Contact"
+msgstr "Editar contacto"
+
+msgid "Edit Distribution List"
+msgstr "Editar lista de distribución"
+
+msgid "Edit Furigana"
+msgstr "Editar Furigana"
+
+msgid "Edit InfoItem"
+msgstr "Editar elemento de información"
+
+msgid "Edit Task"
+msgstr "Editar tarea"
+
+msgid "Edit draft"
+msgstr "Editar borrador"
+
+#: config/config_mail.xml:245
+msgid "Editor feature set:"
+msgstr "Características del editor:"
+
+msgid "Editor toolbar"
+msgstr "Barra de herramientas del editor"
+
+msgid "Egypt"
+msgstr "Egipto"
+
+msgid "El Salvador"
+msgstr "El Salvador"
+
+msgid "Elements of this week only"
+msgstr "Sólo elementos de esta semana"
+
+msgid "Email"
+msgstr "Email"
+
+#: config/config.xml:97
+msgid "Embedded windows"
+msgstr "Ventanas incrustadas"
+
+#: contacts/contactsDetail.xml:150 contacts/newContact.xml:158
+msgid "Employee ID"
+msgstr "No. de empleado"
+
+msgid "Employee ID:"
+msgstr "No. de empleado:"
+
+msgid "Empty folder"
+msgstr "Vaciar Carpeta"
+
+msgid "Enable"
+msgstr "Activar"
+
+#: config/config.xml:174
+msgid "Enable Calendar Hover"
+msgstr "Activar elementos emergentes en Calendario"
+
+#: config/config.xml:188 config/config_contact.xml:42
+msgid "Enable Contacts Hover"
+msgstr "Activar elementos emergentes en Contactos"
+
+#: config/config.xml:216
+msgid "Enable E-Mail Hover"
+msgstr "Activar elementos emergentes en E-Mail"
+
+#: config/config_mail.xml:55
+msgid "Enable E-Mail Hover?"
+msgstr "¿Activar elementos emergentes en E-Mail?"
+
+#: config/config.xml:230 config/config_infostore.xml:34
+msgid "Enable Infostore Hover"
+msgstr "Activar elementos emergentes en el Portadocumentos"
+
+#: config/config.xml:160
+msgid "Enable Portal Hover"
+msgstr "Activar elementos emergentes en el portal"
+
+#: config/config.xml:202 config/config_tasks.xml:42
+msgid "Enable Tasks Hover"
+msgstr "Activar elementos emergentes en Tareas"
+
+#: config/config.xml:248
+msgid "Enable all"
+msgstr "Activar todo"
+
+#: config/config_mail.xml:187
+msgid "Enable auto completion of E-Mail addresses?"
+msgstr "¿Activar autocompletado de direcciones de E-Mail?"
+
+#: config/config_calendar.xml:63
+msgid "Enable calendar hovers"
+msgstr "Activar elementos emergentes en el calendario"
+
+#: config/config_portal.xml:75
+msgid "Enable start page hovers"
+msgstr "Activar elementos emergentes de la página principal"
+
+#: config/config.xml:123
+msgid "Enable visual effects"
+msgstr "Activar efectos visuales"
+
+msgid "Enabled"
+msgstr "Activado"
+
+msgid ""
+"Enables offline access to e-mail, calendar, tasks, and contacts folders. Any "
+"changes that are made using Microsoft Outlook offline will be automatically "
+"synchronized the next time you go online:"
+msgstr ""
+"Permite el acceso sin conexión a las carpetas de e-mail, calendario, tareas "
+"y contactos. Cualquier cambio que se lleve a cabo usando Microsoft Office "
+"mientras esté desconectado, se sincronizará automáticamente la próxima vez "
+"que se conecte:"
+
+#: confirm.xml:124
+msgid "End"
+msgstr "Fin"
+
+msgid "End date"
+msgstr "Fecha de finalización"
+
+msgid "End date is before start date"
+msgstr "La fecha de finalización es anterior a la de comienzo"
+
+msgid "End date is before start date."
+msgstr "La fecha de finalización es anterior a la de comienzo."
+
+#: calendar/newAppointment.xml:95
+msgid "End date:"
+msgstr "Fecha de finalización:"
+
+#: config/config_calendar.xml:42
+msgid "End of working time"
+msgstr "Hora de fin de trabajo"
+
+msgid "End time is before start time"
+msgstr "La hora de finalización es anterior a la de comienzo"
+
+#: calendar/detailAppointment.xml:51
+msgid "End:"
+msgstr "Fin:"
+
+#: series.xml:181
+msgid "Ends"
+msgstr "Termina"
+
+#: calendar/workweek.xml:177 tmp_hover.xml:68
+msgid "Ends at"
+msgstr "Finaliza el"
+
+#: reminder.xml:68
+msgid "Ends at:"
+msgstr "Finaliza el:"
+
+msgid "Enhanced"
+msgstr "Ampliado"
+
+#: contacts/newContact.xml:334
+msgid "Enter a comment"
+msgstr "Introducir un comentario"
+
+msgid "Enter a name"
+msgstr "Introducir un nombre"
+
+#: contacts/newContact.xml:47
+msgid "Enter additional data"
+msgstr "Introducir datos adicionales"
+
+#: contacts/newContact.xml:45
+msgid "Enter general data"
+msgstr "Introducir datos generales"
+
+#: contacts/newContact.xml:46
+msgid "Enter personal data"
+msgstr "Introducir datos personales"
+
+msgid "Enter your version comment:"
+msgstr "Introduzca su comentario de la versión:"
+
+msgid "Envelope-To"
+msgstr "Dirigido a"
+
+msgid "Equatorial Guinea"
+msgstr "Guinea Ecuatorial"
+
+msgid "Eritrea"
+msgstr "Eritrea"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Error messages"
+msgstr "Mensajes de error"
+
+msgid "Error-ID: %1$s"
+msgstr "Error-ID: %1$s"
+
+#. HTTP Errors from the server
+#. %1$s is the numeric HTTP status code
+#. %2$s is the corresponding HTTP status text
+#, c-format
+msgid "Error: %1$s - %2$s"
+msgstr "Error: %1$s - %2$s"
+
+#. %1$s is the name of a routing planner.
+#. %2$s is the name of a country.
+#, c-format
+msgid "Error: %1$s doesn't support routing from %2$s"
+msgstr "Error: %1$s no admite guiado desde %2$s"
+
+#. %1$s is the name of a routing planner.
+#. %2$s is the name of a country.
+#, c-format
+msgid "Error: %1$s doesn't support routing to %2$s"
+msgstr "Error: %1$s no admite guiado a %2$s"
+
+#. %1$s is the error code (not used).
+#. %2$s is the formatted error message.
+#. %3$s is the unique error ID (not used).
+#, c-format
+msgid "Error: %2$s"
+msgstr "Error: %2$s"
+
+msgid "Estimated Costs:"
+msgstr "Costes estimados:"
+
+msgid "Estimated Duration:"
+msgstr "Duración estimada:"
+
+#: tasks/newTask.xml:177 tasks/tasksSplit.xml:138
+msgid "Estimated costs:"
+msgstr "Coste estimado:"
+
+#: tasks/newTask.xml:174 tasks/tasksSplit.xml:135
+msgid "Estimated duration:"
+msgstr "Duración estimada:"
+
+msgid "Estonia"
+msgstr "Estonia"
+
+msgid "Ethiopia"
+msgstr "Etiopía"
+
+msgid "Euro"
+msgstr "Euro"
+
+#: series.xml:61
+msgid "Every"
+msgstr "Cada"
+
+msgid "Exception"
+msgstr "Excepción"
+
+msgid "Expert mode"
+msgstr "Modo experto"
+
+msgid "Export"
+msgstr "Exportar"
+
+msgid "Extended"
+msgstr "Extendido"
+
+#: participants_external.xml:16
+msgid "External Addresses"
+msgstr "Direcciones externas"
+
+#: contacts/newDistributionList.xml:79
+msgid "External E-Mail"
+msgstr "E-Mail externo"
+
+#
+msgctxt "friday"
+msgid "F"
+msgstr "V"
+
+msgid "FAQ"
+msgstr "FAQ"
+
+msgid "Falkland Islands (Malvinas)"
+msgstr "Islas Falkland (Malvinas)"
+
+msgid "Faroe Islands"
+msgstr "Islas Feroe"
+
+#: contacts/newContact.xml:108 contacts/newContact.xml:280
+msgid "Fax"
+msgstr "Fax"
+
+msgid "Fax (business)"
+msgstr "Fax (profesional)"
+
+msgid "Fax (business):"
+msgstr "Fax (profesional):"
+
+#: contacts/newContact.xml:385
+msgid "Fax (other)"
+msgstr "Fax (otro)"
+
+msgid "Fax (other):"
+msgstr "Fax (otro):"
+
+msgid "Fax (private)"
+msgstr "Fax (privado)"
+
+msgid "Fax (private):"
+msgstr "Fax (privado):"
+
+msgid "Fax:"
+msgstr "Fax:"
+
+msgid "Feature not available!"
+msgstr "¡Característica no disponible!"
+
+msgid "Feb"
+msgstr "feb"
+
+msgid "February"
+msgstr "febrero"
+
+msgid "Field may not be empty"
+msgstr "El campo no puede estar vacío"
+
+msgid "Fiji"
+msgstr "Fiji"
+
+msgid "File"
+msgstr "Archivo"
+
+msgid "File name"
+msgstr "Nombre de archivo"
+
+#: config/config_import.xml:102
+msgid "File name:"
+msgstr "Nombre de archivo:"
+
+#: infostore/split.xml:117
+msgid "File size:"
+msgstr "Tamaño de archivo:"
+
+#: config/config_import.xml:37
+msgid "File type:"
+msgstr "Tipo de archivo:"
+
+#: infostore/newInfoItemMain.xml:73
+msgid "File..."
+msgstr "Archivo..."
+
+#: attachments.xml:23 infostore/split.xml:171
+msgid "File:"
+msgstr "Archivo:"
+
+msgid "Filter"
+msgstr "Filtro"
+
+#: contacts/contactsCards.xml:24 contacts/contactsList.xml:23
+msgid "Filter contacts"
+msgstr "Filtrar contactos"
+
+msgid "Fine grid"
+msgstr "Rejilla fina"
+
+msgid "Finland"
+msgstr "Finlandia"
+
+msgid "First day"
+msgstr "Primer día"
+
+#: contacts/contactsDetail.xml:110 contacts/newContact.xml:84
+msgid "First name"
+msgstr "Nombre"
+
+msgid "First name:"
+msgstr "Nombre:"
+
+msgid "Flag"
+msgstr "Etiqueta"
+
+#. %d is the flag number
+msgid "Flag #%d"
+msgstr "Etiqueta #%d"
+
+msgid "Flag mail with"
+msgstr "Etiquetar correo con"
+
+msgid "Flags"
+msgstr "Etiquetas"
+
+#: calendar/newAppointment.xml:148 config/config_import.xml:86
+msgid "Folder"
+msgstr "Carpeta"
+
+#: sidepanel/properties.xml:32
+msgid "Folder Name"
+msgstr "Nombre de la carpeta"
+
+msgid "Folder Properties"
+msgstr "Propiedades de la carpeta"
+
+#. %s is the folder name.
+#, c-format
+msgid "Folder Properties: %s"
+msgstr "Propiedades de la carpeta: %s"
+
+msgid "Folder Settings"
+msgstr "Configuración de la carpeta"
+
+#: sidepanel/properties.xml:40
+msgid "Folder Type"
+msgstr "Tipo de carpeta"
+
+msgid "Folder admin"
+msgstr "Administrador de la carpeta"
+
+msgid "Folder name"
+msgstr "Nombre de carpeta"
+
+msgid "Folder path"
+msgstr "Ruta de la carpeta"
+
+msgid "Folder permissions"
+msgstr "Permisos de la carpeta"
+
+#: config/config.xml:71
+msgid "Folder tree"
+msgstr "Árbol de carpetas"
+
+#: calendar/newAppointment.xml:148 contacts/newContact.xml:180
+#: contacts/newDistributionList.xml:54 infostore/newInfoItemMain.xml:59
+#: tasks/newTask.xml:113
+msgid "Folder..."
+msgstr "Carpeta..."
+
+#: calendar/detailAppointment.xml:112 infostore/split.xml:87 tmp_hover.xml:282
+msgid "Folder:"
+msgstr "Carpeta:"
+
+msgid "Folders"
+msgstr "Carpetas"
+
+msgid "Follow Link..."
+msgstr "Siga el enlace..."
+
+msgid "Follow the instructions and install the updater."
+msgstr "Siga las instrucciones e instale el updater."
+
+msgid "For an incoming message that matches:"
+msgstr "Para un mensaje entrante que coincida:"
+
+#: config/config.xml:370
+msgid "Format"
+msgstr "Formato"
+
+#: config/config_mail.xml:229
+msgid "Format E-Mails as:"
+msgstr "Formatear E-Mails como:"
+
+#: tmp_hover.xml:155
+msgid "Forward"
+msgstr "Reenviar"
+
+#: config/config_mail.xml:200
+msgid "Forward E-Mails as:"
+msgstr "Reenviar E-Mails como:"
+
+msgid "France"
+msgstr "Francia"
+
+msgid "Free"
+msgstr "Libre"
+
+#. Upsell: Premium upgrade. Must contain the ellipsis!
+msgid "Free trial..."
+msgstr "Prueba gratuita..."
+
+msgid "French Guiana"
+msgstr "Guayana Francesa"
+
+msgid "French Polynesia"
+msgstr "Polinesia Francesa"
+
+msgid "French Southern Territories"
+msgstr "Territorios Meridionales Franceses"
+
+msgid "Fri"
+msgstr "vie"
+
+#: calendar/month.xml:48 series.xml:82
+msgid "Friday"
+msgstr "viernes"
+
+#: mail/detailMail.xml:83 mail/mailHSplit.xml:76 mail/mailVSplit.xml:77
+#: mail/newMail.xml:72
+msgctxt "who"
+msgid "From"
+msgstr "De"
+
+#. Default name of a mail filter rule
+#. %s is a list of senders
+msgid "From %s"
+msgstr "De %s"
+
+#: calendar/calendar_availability.xml:95
+msgctxt "when"
+msgid "From:"
+msgstr "De:"
+
+#
+msgctxt "who"
+msgid "From:"
+msgstr "De:"
+
+#: contacts/newContact.xml:69
+msgid "Furigana..."
+msgstr "Furigana..."
+
+#. Gigabyte unit (1024^3)
+msgid "GB"
+msgstr "GB"
+
+msgid "GBP"
+msgstr "GBP"
+
+msgid "Gabon"
+msgstr "Gabón"
+
+msgid "Gambia"
+msgstr "Gambia"
+
+#: contacts/newContact.xml:45
+msgid "General"
+msgstr "General"
+
+msgid "Georgia"
+msgstr "Georgia"
+
+msgid "Germany"
+msgstr "Alemania"
+
+#: contacts/contactsDetail.xml:47
+msgid "Get directions"
+msgstr "Obtener indicaciones"
+
+msgid "Ghana"
+msgstr "Ghana"
+
+msgid "Gibraltar"
+msgstr "Gibraltar"
+
+#: mail/newMail.xml:184 participants.xml:33
+msgid "Go"
+msgstr "Ir"
+
+msgid "Good"
+msgstr "Bueno"
+
+msgid "Good evening"
+msgstr "Buenas noches"
+
+msgid "Good morning"
+msgstr "Buenos días"
+
+msgid "Greece"
+msgstr "Grecia"
+
+msgid "Greenland"
+msgstr "Groenlandia"
+
+msgid "Grenada"
+msgstr "Granada"
+
+msgid "Grid"
+msgstr "Rejilla"
+
+msgid "Group"
+msgstr "Grupo"
+
+msgid "Group Administration"
+msgstr "Administración de grupos"
+
+msgid "Group Member"
+msgstr "Miembro del grupo"
+
+msgid "Group Members"
+msgstr "Miembros del grupo"
+
+msgid "Group Task"
+msgstr "Tarea de grupo"
+
+msgid "Group appointment"
+msgstr "Cita de grupo"
+
+msgid "Group name"
+msgstr "Nombre del grupo"
+
+msgid "Group task"
+msgstr "Tarea de grupo"
+
+msgid "Groups"
+msgstr "Grupos"
+
+msgid "Guadeloupe"
+msgstr "Guadalupe"
+
+msgid "Guam"
+msgstr "Guam"
+
+msgid "Guatemala"
+msgstr "Guatemala"
+
+msgid "Guernsey"
+msgstr "Guernsey"
+
+msgid "Guinea"
+msgstr "Guinea"
+
+msgid "Guinea-Bissau"
+msgstr "Guinea-Bissau"
+
+msgid "Guyana"
+msgstr "Guayana"
+
+#. The format for team view timescales
+#. HH is 01-24, hh is 01-12, H is 1-24, h 1-12, a is AM/PM
+msgctxt "teamview"
+msgid "H"
+msgstr "H"
+
+msgid "H-Split"
+msgstr "División Hor"
+
+msgid "H-split view"
+msgstr "Vista División Hor."
+
+#. The format for hours on calendar timescales
+#. when the interval is less than one hour.
+msgctxt "dayview"
+msgid "HH"
+msgstr "HH"
+
+msgid "HH:mm"
+msgstr "HH:mm"
+
+#. The format for calendar timescales
+#. when the interval is at least one hour.
+#. H is 1-24, HH is 01-24, h is 1-12, hh is 01-12, a is AM/PM,
+#. mm is minutes.
+msgctxt "dayview"
+msgid "HH:mm"
+msgstr "HH:mm"
+
+#: config/config_mail.xml:234
+msgid "HTML"
+msgstr "HTML"
+
+#: config/config_mail.xml:238
+msgid "HTML and plain text"
+msgstr "HTML y texto sencillo"
+
+msgid "HTML-only mail"
+msgstr "Correo sólo en HTML"
+
+msgid "Haiti"
+msgstr "Haití"
+
+msgid "Header"
+msgstr "Cabecera"
+
+msgid "Heard Island and McDonald Islands"
+msgstr "Islas Heard y McDonald"
+
+msgid "Hello"
+msgstr "Hola"
+
+msgid "Help"
+msgstr "Ayuda"
+
+#: config/config_import.xml:28
+msgid ""
+"Here you can import tasks, appointments or contacts from iCal, vCard or CSV "
+"files."
+msgstr ""
+"Aquí puede importar tareas, citas o contactos desde archivos iCal, vCard o "
+"CSV."
+
+msgid "Hide"
+msgstr "Ocultar"
+
+msgid "Hide description"
+msgstr "Ocultar descripción"
+
+msgid "Hide later elements"
+msgstr "Ocultar elementos posteriores"
+
+msgid "Hide non-working time"
+msgstr "Ocultar tiempo no laborable"
+
+#: config/config_calendar.xml:77
+msgid "Hide non-working time in teamview"
+msgstr "Ocultar tiempo no laborable en la vista de equipo"
+
+msgid "High"
+msgstr "Alta"
+
+msgid "History of error messages"
+msgstr "Historial de mensajes de error"
+
+msgid "Holy See (Vatican City State)"
+msgstr "Ciudad del Vaticano"
+
+msgid "Honduras"
+msgstr "Honduras"
+
+msgid "Hong Kong"
+msgstr "Hong Kong"
+
+#: config/config.xml:140
+msgid "Hover"
+msgstr "Elementos emergentes"
+
+msgid "Hungary"
+msgstr "Hungria"
+
+msgid "IM"
+msgstr "MI"
+
+msgid "IM (private)"
+msgstr "MI (privado)"
+
+msgid "IM (private):"
+msgstr "MI (privado):"
+
+msgid "IMAP Mail Server"
+msgstr "Servidor de correo IMAP"
+
+#: contacts/newContact.xml:319
+msgid "IP phone"
+msgstr "Teléfono IP"
+
+msgid "IP phone (private)"
+msgstr "Teléfono IP (privado)"
+
+msgid "IP phone (private):"
+msgstr "Teléfono IP (privado):"
+
+msgid "Iceland"
+msgstr "Islandia"
+
+msgid ""
+"If the authorization expired or was revoked, you can repeat the "
+"authorization process by clicking on the button below. The authorization "
+"will proceed in a separate window."
+msgstr ""
+"Si la autorización caducó o fue revocada, puede repetir el proceso de "
+"autorización presionando en el botón siguiente. La autorización se realizará "
+"en una ventana distinta."
+
+#: confirm.xml:140
+msgid "Ignore"
+msgstr "Ignorar"
+
+msgid "Illegal Date in remind date"
+msgstr "Fecha no válida en fecha de recordatorio"
+
+msgid "Illegal Date in start date"
+msgstr "Fecha no válida en fecha de comienzo"
+
+msgid "Illegal date in due date"
+msgstr "Fecha no válida en fecha de vencimiento"
+
+msgid "Illegal entry in reminder hour field"
+msgstr "Entrada no válida en el campo de hora de recordatorio"
+
+msgid "Import"
+msgstr "Importar"
+
+#: config_popups.xml:144
+msgid "Import Status"
+msgstr "Estado de la importación"
+
+msgid "In a public folder there must be at least one participant."
+msgstr "Debe haber al menos un participante en una carpeta pública."
+
+#: confirm.xml:158
+msgid ""
+"In order to assign categories to the objects selected, use the control "
+"fields on the left of the categories. In order to edit a category select it "
+"and use the buttons on the right side."
+msgstr ""
+"Utilice los campos de control situados a la izquierda de las categorías para "
+"asignar una categoría a los objetos seleccionados. Para editar una "
+"categoría, selecciónela y use los botones ubicados a la derecha."
+
+msgid "In progress"
+msgstr "En progreso"
+
+msgid "Inbox"
+msgstr "Bandeja de entrada"
+
+msgid "Incorrect input, only numbers are allowed."
+msgstr "Entrada incorrecta, sólo se permiten números."
+
+msgid "Incorrect input."
+msgstr "Entrada incorrecta."
+
+msgid "India"
+msgstr "India"
+
+msgid "Indonesia"
+msgstr "Indonesia"
+
+#, c-format
+msgid "Info"
+msgstr "Información"
+
+#: infostore/newInfoItemMain.xml:23
+msgid "InfoItem"
+msgstr "Elemento de información"
+
+msgid "InfoStore"
+msgstr "Portadocumentos"
+
+#: config/config_portal.xml:65
+msgid "InfoStore:"
+msgstr "Portadocumentos:"
+
+msgid "Infoitem"
+msgstr "Elemento de información"
+
+msgid "Infostore"
+msgstr "Portadocumentos"
+
+msgid "Initialization ..."
+msgstr "Inicialización ..."
+
+#: config/config_mail.xml:205
+msgid "Inline"
+msgstr "Incrustado"
+
+#: config/config_mail.xml:161
+msgid "Insert the original E-Mail text to a reply?"
+msgstr "¿Insertar el texto original del E-Mail en la respuesta?"
+
+#: contacts/newContact.xml:164 contacts/newContact.xml:321
+msgid "Instant Messenger"
+msgstr "Mensajería instantánea"
+
+msgid "Instant Messenger:"
+msgstr "Mensajería instantánea:"
+
+msgid "Internal Error: The server didn't provide any data."
+msgstr "Error interno: El servidor no proporcionó ningún dato."
+
+#. %s will be replaced with an internal error code
+#, c-format
+msgid "Internal Error: Unable to open the Attachment (%s)."
+msgstr "Error interno: No fue posible abrir el adjunto (%s)."
+
+#: config/config_calendar.xml:27
+msgid "Interval in minutes"
+msgstr "Intervalo en minutos"
+
+#: config/config_tasks.xml:35
+msgid "Interval of the reminder in minutes"
+msgstr "Intervalo del recordatorio en minutos"
+
+msgid "Invalid Signature"
+msgstr "Firma no válida"
+
+msgid "Invalid Team"
+msgstr "Equipo no válido"
+
+msgid "Invalid date"
+msgstr "Fecha no válida"
+
+msgid "Invalid date format for birthday."
+msgstr "Formato de fecha no válido para el cumpleaños."
+
+#. Invalid date format.
+#. %s is the date pattern
+#, c-format
+msgid "Invalid date format. The valid format is %s"
+msgstr "Formato de fecha no válido. El formato correcto es %s"
+
+msgid "Invalid date."
+msgstr "Fecha no válida."
+
+#. %s is the invalid character.
+#, c-format
+msgid "Invalid tag name. Tags may not contain the character '%s'."
+msgstr "Etiqueta no válida. Las etiquetas no pueden contener el carácter '%s'."
+
+msgid "Invalid time."
+msgstr "Hora no válida."
+
+msgid "Invite again"
+msgstr "Invitar otra vez"
+
+msgid "Iran"
+msgstr "Irán"
+
+msgid "Iraq"
+msgstr "Iraq"
+
+msgid "Ireland"
+msgstr "Irlanda"
+
+msgid "Is at least"
+msgstr "Es al menos"
+
+msgid "Is at most"
+msgstr "Es como máximo"
+
+msgid "Is bigger than"
+msgstr "Es mayor que"
+
+msgid "Is exactly"
+msgstr "Es exactamente"
+
+msgid "Is not exactly"
+msgstr "No es exactamente"
+
+msgid "Is smaller than"
+msgstr "Es menor que"
+
+msgid "Isle of Man"
+msgstr "Isla of Man"
+
+msgid "Israel"
+msgstr "Israel"
+
+msgid "Italy"
+msgstr "Italia"
+
+msgid "JPY"
+msgstr "JPY"
+
+msgid "Jamaica"
+msgstr "Jamaica"
+
+msgid "Jan"
+msgstr "ene"
+
+msgid "January"
+msgstr "enero"
+
+msgid "Japan"
+msgstr "Japón"
+
+msgid "Japanese Yen"
+msgstr "Yen japonés"
+
+msgid "Jersey"
+msgstr "Jersey"
+
+msgid "Job position:"
+msgstr "Puesto de trabajo:"
+
+msgid "Jordan"
+msgstr "Jordania"
+
+msgid "Jul"
+msgstr "jul"
+
+msgid "July"
+msgstr "julio"
+
+msgid "Jun"
+msgstr "jun"
+
+msgid "June"
+msgstr "junio"
+
+#. Kilobyte unit (1024)
+msgid "KB"
+msgstr "KB"
+
+msgid "Kazakhstan"
+msgstr "Kazajstán"
+
+msgid "Keep"
+msgstr "Mantener"
+
+msgid "Kenya"
+msgstr "Kenia"
+
+msgid "Kiribati"
+msgstr "Kiribati"
+
+msgid "Korea, Democratic People's Republic of"
+msgstr "Corea del Norte"
+
+msgid "Korea, Republic of"
+msgstr "Corea del Sur"
+
+msgid "Kuwait"
+msgstr "Kuwait"
+
+msgid "Kyrgyzstan"
+msgstr "Kirguistán"
+
+#: config/config.xml:26
+msgid "Language and region"
+msgstr "Idioma y región"
+
+#: config/config.xml:263
+msgid "Language:"
+msgstr "Idioma:"
+
+msgid "Lao People's Democratic Republic"
+msgstr "Laos"
+
+#. #-#-#-#-#  ox.pot (Open-Xchange 6)  #-#-#-#-#
+#. %1$s is the last modification date.
+#. %2$s is the name of the last editor.
+#. #-#-#-#-#  ox.pot (Open-Xchange 6)  #-#-#-#-#
+#. %1$s is the last modification date.
+#. %2$s is the name of the last editor.
+#. #-#-#-#-#  ox.pot (Open-Xchange 6)  #-#-#-#-#
+#. %1$s is the last modification date.
+#. %2$s is the name of the last editor.
+#. #-#-#-#-#  ox.pot (Open-Xchange 6)  #-#-#-#-#
+#. %1$s is the creation date.
+#. %2$s is the name of the creator.
+#, c-format
+msgid "Last changed on %1$s by %2$s"
+msgstr "Modificado por última vez el %1$s por %2$s"
+
+msgid "Last day"
+msgstr "Último día"
+
+msgid "Last modified"
+msgstr "Modificado por última vez"
+
+msgid "Last modified:"
+msgstr "Modificado por última vez:"
+
+#: contacts/contactsDetail.xml:128 contacts/newContact.xml:74
+msgid "Last name"
+msgstr "Apellidos"
+
+msgid "Last name:"
+msgstr "Apellidos:"
+
+#: acceptdeny.xml:71
+msgid "Later"
+msgstr "Luego"
+
+#: config/config_portal.xml:44
+msgid "Later appointments:"
+msgstr "Últimas citas:"
+
+#: config/config_portal.xml:58
+msgid "Later tasks:"
+msgstr "Últimas tareas:"
+
+msgid "Latvia"
+msgstr "Letonia"
+
+msgid "Layout"
+msgstr "Presentación"
+
+msgid "Leave messages on server"
+msgstr "Mantener mensajes en el servidor"
+
+msgid "Lebanon"
+msgstr "Líbano"
+
+msgid "Lesotho"
+msgstr "Lesotho"
+
+msgid "Liberia"
+msgstr "Liberia"
+
+msgid "Libyan Arab Jamahiriya"
+msgstr "Líbia"
+
+msgid "Liechtenstein"
+msgstr "Liechtenstein"
+
+#: config/config_mail.xml:266
+msgid "Line wrap when sending text mails after:"
+msgstr "Dividir líneas al enviar correos de texto tras:"
+
+#: infostore/newInfoItemMain.xml:52 infostore/split.xml:75
+msgid "Link / URL:"
+msgstr "Enlace / URL:"
+
+#: tmp_hover.xml:195
+msgid "Link/Url"
+msgstr "Enlace/Url"
+
+msgid "List"
+msgstr "Lista"
+
+msgid "List view"
+msgstr "Vista de lista"
+
+msgid "Lithuania"
+msgstr "Lituania"
+
+msgid "Load Contents..."
+msgstr "Cargar contenidos..."
+
+#: mail/detailMail.xml:70 mail/mailHSplit.xml:59 mail/mailVSplit.xml:60
+msgid "Load Images"
+msgstr "Cargar imágenes"
+
+#: contacts/contactsCards.xml:53
+msgid "Loading"
+msgstr "Cargando"
+
+msgid "Loading..."
+msgstr "Cargando..."
+
+#: calendar/workweek.xml:161
+msgid "Location"
+msgstr "Ubicación"
+
+#: calendar/detailAppointment.xml:45 calendar/newAppointment.xml:66
+#: reminder.xml:50
+msgid "Location:"
+msgstr "Ubicación:"
+
+msgid "Lock"
+msgstr "Bloquear"
+
+#: infostore/split.xml:132
+msgid "Locked:"
+msgstr "Bloqueado:"
+
+msgid "Login"
+msgstr "Conectar"
+
+#
+msgctxt "username"
+msgid "Login"
+msgstr "Usuario"
+
+#: ox.xml:117
+msgctxt "verb"
+msgid "Login"
+msgstr "Conectar"
+
+msgid "Login failed. Please check your user name and password and try again."
+msgstr ""
+"Conexión fallida. Por favor, compruebe su nombre de usuario y contraseña e "
+"inténtelo de nuevo."
+
+msgid "Login not possible at the moment, please try again later."
+msgstr ""
+"No es posible conectarse por el momento. Por favor, inténtelo más tarde."
+
+msgid "Logout"
+msgstr "Desconectar"
+
+#: config/config.xml:148
+msgid "Long"
+msgstr "Largo"
+
+msgid "Low"
+msgstr "Baja"
+
+msgid "Luxembourg"
+msgstr "Luxemburgo"
+
+#
+msgctxt "monday"
+msgid "M"
+msgstr "L"
+
+msgid "M/d/yy"
+msgstr "M/d/aa"
+
+msgid "M/d/yyyy"
+msgstr "M/d/aaaa"
+
+#. Megabyte unit (1024^2)
+msgid "MB"
+msgstr "MB"
+
+#. Short date format (month and day only)
+#. MM is month, dd is day of the month
+msgid "MM/dd"
+msgstr "MM/dd"
+
+msgid "MM/dd/yy"
+msgstr "MM/dd/aa"
+
+msgid "MM/dd/yyyy"
+msgstr "MM/dd/aaaa"
+
+msgid "Macao"
+msgstr "Macao"
+
+msgid "Macedonia"
+msgstr "Macedonia"
+
+msgid "Madagascar"
+msgstr "Madagascar"
+
+msgid "Mail"
+msgstr "Correo"
+
+msgid "Mail filter"
+msgstr "Filtro de correo"
+
+msgid "Mailing list"
+msgstr "Lista de correo"
+
+#. Default name of a mail filter rule
+#. %s is the name of a mailing list
+msgid "Mailing list %s"
+msgstr "Lista de correo %s"
+
+msgid "Mailtext"
+msgstr "Texto del correo"
+
+msgid "Main window"
+msgstr "Ventana principal"
+
+msgid "Malawi"
+msgstr "Malawi"
+
+msgid "Malaysia"
+msgstr "Malasia"
+
+msgid "Maldives"
+msgstr "Islas Maldivas"
+
+msgid "Mali"
+msgstr "Mali"
+
+msgid "Malta"
+msgstr "Malta"
+
+#: contacts/newContact.xml:388
+msgid "Manager"
+msgstr "Gerente"
+
+msgid "Manager:"
+msgstr "Gerente:"
+
+msgid "Mandatory Field(s) missing!"
+msgstr "¡Falta(n) algún(os) campo(s) obligatorio(s)!"
+
+msgid "Mar"
+msgstr "mar"
+
+msgid "March"
+msgstr "marzo"
+
+#: contacts/newContact.xml:282
+msgid "Marital status"
+msgstr "Estado civil"
+
+msgid "Marital status:"
+msgstr "Estado civil:"
+
+msgid "Mark as"
+msgstr "Etiquetar como"
+
+msgid "Mark as Done"
+msgstr "Etiquetar como Completada"
+
+msgid "Mark as read"
+msgstr "Etiquetar como leído"
+
+msgid "Mark folder read"
+msgstr "Etiquetar carpeta como leída"
+
+msgid "Mark mail as"
+msgstr "Etiquetar correo como"
+
+msgid "Marshall Islands"
+msgstr "Islas Marshall"
+
+msgid "Martinique"
+msgstr "Martinica"
+
+msgid "Matches (wildcards allowed)"
+msgstr "Coincide con (se admiten comodines)"
+
+msgid "Matches regex"
+msgstr "Coincide con la expresión regular"
+
+msgid "Mauritania"
+msgstr "Mauritania"
+
+msgid "Mauritius"
+msgstr "Mauricio"
+
+msgid "Maximum"
+msgstr "Máximo"
+
+msgid "May"
+msgstr "mayo"
+
+msgid "Mayotte"
+msgstr "Mayotte"
+
+#: participants.xml:80
+msgid "Members"
+msgstr "Miembros"
+
+#. %s is the name of a group.
+#, c-format
+msgid "Members of %s"
+msgstr "Miembros de %s"
+
+#: calendar/newAppointment.xml:269 tasks/newTask.xml:278
+msgid "Members of group"
+msgstr "Miembros del grupo"
+
+#: config_popups.xml:112
+msgid "Members:"
+msgstr "Miembros:"
+
+msgid "Message"
+msgstr "Mensaje"
+
+msgid "Messaging"
+msgstr "Mensajería"
+
+msgid "Mexico"
+msgstr "México"
+
+msgid "Micronesia"
+msgstr "Micronesia"
+
+msgid "Microsoft Outlook"
+msgstr "Microsoft Outlook"
+
+#: contacts/contactsDetail.xml:119 contacts/newContact.xml:86
+msgid "Middle name"
+msgstr "Segundo nombre"
+
+msgid "Middle name:"
+msgstr "Segundo nombre:"
+
+msgid "Mime Type"
+msgstr "Tipo mime"
+
+msgid "Mime type"
+msgstr "Tipo mime"
+
+msgid "Minimized"
+msgstr "Minimizado"
+
+msgid "Minimum password length is %1$s."
+msgstr "La longitud mínima de contraseña es %1$s."
+
+msgid "Mobile"
+msgstr "Celular"
+
+msgid "Mobile (private):"
+msgstr "Celular (privado):"
+
+msgid "Mobile:"
+msgstr "Celular:"
+
+msgid "Mode"
+msgstr "Modo"
+
+msgid "Modified By:"
+msgstr "Modificado por:"
+
+#: tmp_hover.xml:294
+msgid "Modified by:"
+msgstr "Modificado por:"
+
+msgid "Modify"
+msgstr "Modificar"
+
+msgid "Modify all"
+msgstr "Modificar todo"
+
+msgid "Modify objects"
+msgstr "Modificar objetos"
+
+msgid "Modify own"
+msgstr "Modificar los propios"
+
+msgid "Modify your account information."
+msgstr "Modificar la información de su cuenta."
+
+msgid "Module"
+msgstr "Módulo"
+
+msgid "Moldova"
+msgstr "Moldavia"
+
+msgid "Mon"
+msgstr "lun"
+
+msgid "Monaco"
+msgstr "Mónaco"
+
+#: calendar/month.xml:44 series.xml:72
+msgid "Monday"
+msgstr "lunes"
+
+msgid "Mongolia"
+msgstr "Mongolia"
+
+msgid "Montenegro"
+msgstr "Montenegro"
+
+msgid "Month"
+msgstr "Mes"
+
+#: series.xml:25
+msgid "Monthly"
+msgstr "Mensual"
+
+msgid "Montserrat"
+msgstr "Montserrat"
+
+msgid "Morocco"
+msgstr "Marruecos"
+
+msgid "Move"
+msgstr "Mover"
+
+msgid "Move to folder"
+msgstr "Mover a la carpeta"
+
+msgid "Mozambique"
+msgstr "Mozambique"
+
+msgid "My Infostore"
+msgstr "Mi Portadocumentos"
+
+msgid "My OX Social"
+msgstr "Mis redes sociales en OX"
+
+msgid "My Social Configuration"
+msgstr "Mi Configuración - Redes Sociales"
+
+msgid "Myanmar"
+msgstr "Birmania"
+
+msgid "Name"
+msgstr "Nombre"
+
+#: contacts/newDistributionList.xml:49
+msgid "Name of the Distribution List:"
+msgstr "Nombre de la lista de distribución:"
+
+#: config_popups.xml:25 config_popups.xml:64 config_popups.xml:102
+#: confirm.xml:195 contacts/newDistributionList.xml:84
+#: participants_external.xml:21
+msgid "Name:"
+msgstr "Nombre:"
+
+msgid "Namibia"
+msgstr "Namibia"
+
+msgid "Nauru"
+msgstr "Nauru"
+
+msgid "Nepal"
+msgstr "Nepal"
+
+msgid "Netherlands"
+msgstr "Holanda"
+
+msgid "Netherlands Antilles"
+msgstr "Antillas Holandesas"
+
+msgid "Network error"
+msgstr "Error de red"
+
+msgid "Never"
+msgstr "Nunca"
+
+msgid "New"
+msgstr "Nuevo"
+
+msgid "New Appointment"
+msgstr "Nueva cita"
+
+msgid "New Caledonia"
+msgstr "Nueva Caledonia"
+
+msgid "New Contact"
+msgstr "Nuevo contacto"
+
+msgid "New Distribution List"
+msgstr "Nueva lista de distribución"
+
+#: mail/newMail.xml:25
+msgid "New E-Mail"
+msgstr "Nuevo E-Mail"
+
+msgid "New InfoItem"
+msgstr "Nuevo elemento de información"
+
+msgid "New Infoitem"
+msgstr "Nuevo elemento de información"
+
+msgid "New Signature"
+msgstr "Nueva firma"
+
+msgid "New Task"
+msgstr "Nueva tarea"
+
+msgid "New Team"
+msgstr "Nuevo equipo"
+
+msgid "New Zealand"
+msgstr "Nueva Zelanda"
+
+msgid "New account"
+msgstr "Nueva cuenta"
+
+#: config/config_calendar.xml:154
+msgid "New appointment"
+msgstr "Nueva cita"
+
+msgid "New contact"
+msgstr "Nuevo contacto"
+
+msgid "New distribution list"
+msgstr "Nueva lista de distribución"
+
+msgid "New folder"
+msgstr "Nueva carpeta"
+
+msgid "New group"
+msgstr "Nuevo grupo"
+
+#: messaging/popup.xml:16
+msgid "New message"
+msgstr "Nuevo mensaje"
+
+msgid "New messaging service"
+msgstr "Nuevo servicio de mensajería"
+
+msgid "New resource"
+msgstr "Nuevo recurso"
+
+msgid "New rule"
+msgstr "Nueva regla"
+
+msgid "New task"
+msgstr "Nueva tarea"
+
+#: confirm.xml:168
+msgid "New..."
+msgstr "Nuevo..."
+
+msgid "Next"
+msgstr "Siguiente"
+
+msgid "Next Week"
+msgstr "Semana siguiente"
+
+msgid "Nicaragua"
+msgstr "Nicaragua"
+
+#: contacts/contactsDetail.xml:146 contacts/newContact.xml:259
+msgid "Nickname"
+msgstr "Apodo"
+
+msgid "Nickname:"
+msgstr "Apodo:"
+
+msgid "Niger"
+msgstr "Níger"
+
+msgid "Nigeria"
+msgstr "Nigeria"
+
+msgid "Niue"
+msgstr "Niue"
+
+#: config/config.xml:47 config/config.xml:85 config/config.xml:130
+#: config/config.xml:167 config/config.xml:181 config/config.xml:195
+#: config/config.xml:209 config/config.xml:223 config/config.xml:237
+#: config/config_calendar.xml:56 config/config_calendar.xml:70
+#: config/config_calendar.xml:84 config/config_calendar.xml:228
+#: config/config_calendar.xml:245 config/config_calendar.xml:259
+#: config/config_calendar.xml:295 config/config_contact.xml:49
+#: config/config_infostore.xml:41 config/config_mail.xml:62
+#: config/config_mail.xml:75 config/config_mail.xml:88
+#: config/config_mail.xml:101 config/config_mail.xml:114
+#: config/config_mail.xml:130 config/config_mail.xml:143
+#: config/config_mail.xml:168 config/config_mail.xml:181
+#: config/config_mail.xml:194 config/config_mail.xml:303
+#: config/config_mail.xml:316 config/config_mail.xml:329
+#: config/config_mail.xml:342 config/config_mail.xml:355
+#: config/config_portal.xml:82 config/config_tasks.xml:49
+#: config/config_tasks.xml:67 config/config_tasks.xml:84
+#: config/config_tasks.xml:98 confirm.xml:42 rightshandling.xml:31
+msgid "No"
+msgstr "No"
+
+msgid "No Appointment selected."
+msgstr "Ninguna cita seleccionada."
+
+msgid "No Attachments available"
+msgstr "Ningún adjunto disponible"
+
+msgid "No Info Items in this folder"
+msgstr "No hay elementos de información en esta carpeta"
+
+msgid "No Members"
+msgstr "Sin miembros"
+
+msgid "No Messaging accounts configured."
+msgstr "No hay configurada ninguna cuenta de mensajería."
+
+msgid "No Publication selected"
+msgstr "No se ha seleccionado ninguna publicación"
+
+msgid "No accounts available"
+msgstr "No hay cuentas disponibles"
+
+msgid "No accounts created"
+msgstr "No se han creado cuentas"
+
+msgid "No addresses available"
+msgstr "Ninguna dirección disponible"
+
+msgid "No appointments today"
+msgstr "Sin citas para hoy"
+
+msgid "No attachments available"
+msgstr "Ningún adjunto disponible"
+
+#: confirm.xml:41 confirm.xml:88
+msgid "No comment"
+msgstr "Sin comentarios"
+
+msgid "No contacts in this folder"
+msgstr "No hay contactos en esta carpeta"
+
+msgid "No error occured"
+msgstr "No ha ocurrido ningún error"
+
+msgid "No groups available"
+msgstr "Ningún grupo disponible"
+
+msgid "No new E-Mails in this folder"
+msgstr "No hay E-Mails nuevos en esta carpeta"
+
+msgid "No participants available"
+msgstr "Ningún participante disponible"
+
+msgid "No publications added"
+msgstr "No se han añadido publicaciones"
+
+msgid "No recurrence"
+msgstr "Sin periodicidad"
+
+msgid "No resources available"
+msgstr "Ningún recurso disponible"
+
+msgid "No route planner registered."
+msgstr "Ningún planificador de rutas registrado."
+
+msgid "No routing data available"
+msgstr "No hay datos de ruta disponibles"
+
+msgid "No rules available"
+msgstr "Ninguna regla disponible"
+
+#. Shown if a search has no result, e.g. in the 'Add participant' dialog
+msgid "No search result found for the string provided"
+msgstr "No se han encontrado resultados en la búsqueda de la cadena indicada"
+
+msgid "No server connection"
+msgstr "Sin conexión con el servidor"
+
+msgid "No subject"
+msgstr "Sin asunto"
+
+msgid "No subscription added"
+msgstr "No se ha añadido ninguna suscripción"
+
+msgid "No subscription selected"
+msgstr "No se ha seleccionado ninguna suscripción"
+
+msgid "No subscriptions configured"
+msgstr "No hay configurada ninguna suscripción"
+
+msgid "No tasks today"
+msgstr "Sin tareas para hoy"
+
+msgid "No text"
+msgstr "Sin texto"
+
+msgid "No title"
+msgstr "Sin título"
+
+msgid "No versions available"
+msgstr "Ninguna versión disponible"
+
+#. Upsell
+msgid "No, not now"
+msgstr "Por ahora, no"
+
+#: series.xml:22
+msgid "None"
+msgstr "Ninguno"
+
+msgid "Norfolk Island"
+msgstr "Isla Norfolk"
+
+#: config/config.xml:150
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Northern Mariana Islands"
+msgstr "Islas Marianas del Norte"
+
+msgid "Norway"
+msgstr "Noruega"
+
+#: tmp_hover.xml:170
+msgid "Not Spam"
+msgstr "No es spam"
+
+#: rightshandling.xml:16
+msgid "Not enough rights"
+msgstr "Sin permisos suficientes"
+
+#. #-#-#-#-#  ox.pot (Open-Xchange 6)  #-#-#-#-#
+#. Task details of a task with no start or due date.
+msgid "Not set"
+msgstr "No establecido"
+
+msgid "Not started"
+msgstr "No comenzada"
+
+msgid "Note"
+msgstr "Nota"
+
+#: attachments.xml:28
+msgid "Note: Attachments are not viewable when composing a new message"
+msgstr ""
+"Nota: Los adjuntos no son visibles mientras se redacta un mensaje nuevo"
+
+#: calendar/newAppointment.xml:115
+msgid "Notify all participants by E-Mail"
+msgstr "Notificar a todos los participantes por E-Mail"
+
+#: config/config_mail.xml:94
+msgid "Notify on delivery receipt?"
+msgstr "¿Notificar acuse de recibo?"
+
+#: tasks/newTask.xml:162
+msgid "Notify participants by E-Mail"
+msgstr "Notificar participantes por E-Mail"
+
+msgid "Nov"
+msgstr "nov"
+
+msgid "November"
+msgstr "noviembre"
+
+msgid "Nr:"
+msgstr "Núm:"
+
+#: config/config_calendar.xml:210
+msgid "Number of concurrent appointments shown in custom view"
+msgstr "Número de citas simultáneas mostradas en la vista personalizada"
+
+#: config/config_calendar.xml:169
+msgid "Number of concurrent appointments shown in day view"
+msgstr "Número de citas simultáneas mostradas en la vista del día"
+
+#: config/config_calendar.xml:193
+msgid "Number of concurrent appointments shown in workweek view"
+msgstr "Número de citas simultáneas mostradas en la vista de semana de trabajo"
+
+msgid "Number of days between vacation notices to the same sender"
+msgstr "Número de días entre avisos de ausencia al mismo destinatario"
+
+#: config/config_calendar.xml:203
+msgid "Number of days in custom view"
+msgstr "Número de días en la vista personalizada"
+
+#: config/config_calendar.xml:179
+msgid "Number of days in work week"
+msgstr "Número de días de trabajo en una semana"
+
+#: config/config_contact.xml:35
+msgid "Number of rows to be displayed in card view:"
+msgstr "Número de filas mostradas en la vista de tarjetas:"
+
+#: attachments.xml:44 attachments.xml:76 config_popups.xml:47
+#: config_popups.xml:91 config_popups.xml:138 config_popups.xml:169
+#: confirm.xml:44 confirm.xml:90 confirm.xml:180 confirm.xml:210
+#: contacts/newContact.xml:509 contacts/newDistributionList.xml:109
+#: mail/newMail.xml:250 participants.xml:106 participants_external.xml:46
+#: reminder.xml:83 series.xml:230 sidepanel/subscribe.xml:35
+msgid "OK"
+msgstr "Aceptar"
+
+msgid "Oct"
+msgstr "oct"
+
+msgid "October"
+msgstr "octubre"
+
+msgid "Of the following conditions:"
+msgstr "De las siguientes condiciones:"
+
+msgid "Old Password is wrong."
+msgstr "La contraseña antigua es errónea."
+
+msgid "Oman"
+msgstr "Omán"
+
+msgid "On %s %s each %s months"
+msgstr "El %s %s cada %s meses"
+
+msgid "On %s %s in %s"
+msgstr "El %s %s de %s"
+
+msgid "On day %s every %s month(s)"
+msgstr "El %s día cada %s mes(es)"
+
+#: ox.xml:92
+msgid ""
+"Only use this option if this computer is used solely by you. Your "
+"credentials are locally saved for the current working day. You can use "
+"several browser windows for working with the groupware. Do not use this "
+"option when working on a 3rd party computer (e.g., in an Internet cafe)"
+msgstr ""
+"Utilice esta opción sólo si este ordenador lo utiliza únicamente usted. Sus "
+"credenciales se guardarán localmente hasta que finalice el actual día de "
+"trabajo. Puede utilizar varias ventanas del navegador para trabajar con el "
+"software colaborativo. No emplee esta opción si trabaja desde un ordenador "
+"de terceros (por ejemplo, desde un cibercafé)"
+
+msgid "Open"
+msgstr "Abrir"
+
+msgid "Open attachment"
+msgstr "Abrir adjunto"
+
+msgid "Open error report"
+msgstr "Abrir informe de error"
+
+msgid "Open version"
+msgstr "Versión abierta"
+
+#: index.xml:24 ox.xml:24
+msgid "Open-Xchange Server"
+msgstr "Servidor Open-Xchange"
+
+#. %d is the number of the optional dynamic field (1-20).
+#, c-format
+msgid "Optional %d"
+msgstr "Opcional %d"
+
+#: contacts/newContact.xml:415
+msgid "Optional 1"
+msgstr "Opcional 1"
+
+#: contacts/newContact.xml:469
+msgid "Optional 10"
+msgstr "Opcional 10"
+
+#: contacts/newContact.xml:417
+msgid "Optional 11"
+msgstr "Opcional 11"
+
+#: contacts/newContact.xml:423
+msgid "Optional 12"
+msgstr "Opcional 12"
+
+#: contacts/newContact.xml:429
+msgid "Optional 13"
+msgstr "Opcional 13"
+
+#: contacts/newContact.xml:435
+msgid "Optional 14"
+msgstr "Opcional 14"
+
+#: contacts/newContact.xml:441
+msgid "Optional 15"
+msgstr "Opcional 15"
+
+#: contacts/newContact.xml:447
+msgid "Optional 16"
+msgstr "Opcional 16"
+
+#: contacts/newContact.xml:453
+msgid "Optional 17"
+msgstr "Opcional 17"
+
+#: contacts/newContact.xml:459
+msgid "Optional 18"
+msgstr "Opcional 18"
+
+#: contacts/newContact.xml:465
+msgid "Optional 19"
+msgstr "Opcional 19"
+
+#: contacts/newContact.xml:421
+msgid "Optional 2"
+msgstr "Opcional 2"
+
+#: contacts/newContact.xml:471
+msgid "Optional 20"
+msgstr "Opcional 20"
+
+#: contacts/newContact.xml:427
+msgid "Optional 3"
+msgstr "Opcional 3"
+
+#: contacts/newContact.xml:433
+msgid "Optional 4"
+msgstr "Opcional 4"
+
+#: contacts/newContact.xml:439
+msgid "Optional 5"
+msgstr "Opcional 5"
+
+#: contacts/newContact.xml:445
+msgid "Optional 6"
+msgstr "Opcional 6"
+
+#: contacts/newContact.xml:451
+msgid "Optional 7"
+msgstr "Opcional 7"
+
+#: contacts/newContact.xml:457
+msgid "Optional 8"
+msgstr "Opcional 8"
+
+#: contacts/newContact.xml:463
+msgid "Optional 9"
+msgstr "Opcional 9"
+
+msgid "Optional Fields:"
+msgstr "Campos opcionales:"
+
+msgid "Options"
+msgstr "Opciones"
+
+#: mail/mailVSplit.xml:171
+msgid "Order by:"
+msgstr "Ordenar por:"
+
+#: mail/detailMail.xml:99 mail/mailHSplit.xml:92 mail/mailVSplit.xml:93
+msgid "Organization"
+msgstr "Organización"
+
+#: tmp_hover.xml:81
+msgid "Organizer"
+msgstr "Organizador"
+
+#: calendar/detailAppointment.xml:63 calendar/newAppointment.xml:174
+msgid "Organizer:"
+msgstr "Organizador:"
+
+msgid "Original Message"
+msgstr "Mensaje original"
+
+#: tmp_hover.xml:278
+msgid "Others"
+msgstr "Otros"
+
+msgid "Outgoing Server Settings (SMTP)"
+msgstr "Ajustes del servidor saliente (SMTP)"
+
+msgid "Outlook file"
+msgstr "Archivo Outlook"
+
+#. Task details (due date).
+#. %d is the number of days.
+#, c-format
+msgid "Overdue by %d day."
+msgid_plural "Overdue by %d days."
+msgstr[0] "Venció hace %d día."
+msgstr[1] "Venció hace %d días."
+
+msgid "Overdue by yesterday."
+msgstr "Venció ayer."
+
+#: contacts/contactsDetail.xml:65 contacts/contactsDetail.xml:66
+#: infostore/split.xml:53 sidepanel/properties.xml:23 tasks/tasksSplit.xml:53
+msgid "Overview"
+msgstr "Vista general"
+
+msgid "Overview Publications"
+msgstr "Vista general de publicaciones"
+
+msgid "Overview Subscriptions"
+msgstr "Vista general de suscripciones."
+
+#. Petabyte unit (1024^5)
+msgid "PB"
+msgstr "PB"
+
+msgid "PLN"
+msgstr "PLN"
+
+msgid "PM"
+msgstr "PM"
+
+msgid "POP3 Mail Server"
+msgstr "Servidor de correo POP3"
+
+#: contacts/newContact.xml:327
+msgid "Pager"
+msgstr "Buscapersonas"
+
+msgid "Pager:"
+msgstr "Buscapersonas:"
+
+msgid "Pakistan"
+msgstr "Pakistán"
+
+msgid "Palau"
+msgstr "Palau"
+
+msgid "Palestinian Territory, Occupied"
+msgstr "Territorio Palestino, Ocupado"
+
+msgid "Panama"
+msgstr "Panamá"
+
+#: config/config.xml:106
+msgid "Panel is shown as"
+msgstr "El panel se muestra como"
+
+msgid "Papua New Guinea"
+msgstr "Papúa Nueva Guinea"
+
+msgid "Paraguay"
+msgstr "Paraguay"
+
+#: config_popups.xml:76
+msgid "Parameter:"
+msgstr "Parámetro:"
+
+msgid "Participant"
+msgstr "Participante"
+
+msgid "Participant:"
+msgstr "Participante:"
+
+#: calendar/calendar_availability.xml:107
+#: calendar/calendar_availability.xml:120 calendar/detailAppointment.xml:28
+#: calendar/newAppointment.xml:47 calendar/workweek.xml:190
+#: participants.xml:78 tasks/newTask.xml:49 tasks/tasksSplit.xml:54
+msgid "Participants"
+msgstr "Participantes"
+
+msgid "Participants/Resources"
+msgstr "Participantes/Recursos"
+
+#: calendar/detailAppointment.xml:67
+msgid "Participants:"
+msgstr "Participantes:"
+
+msgid "Password"
+msgstr "Contraseña"
+
+msgid "Password has changed"
+msgstr "La contraseña ha cambiado"
+
+msgid "Password length must be between %1$s and %2$s characters."
+msgstr "La longitud de la contraseña debe ser de entre %1$s y %2$s caracteres."
+
+msgid "Password strength"
+msgstr "Fortaleza de la contraseña"
+
+#: ox.xml:111
+msgid "Password:"
+msgstr "Contraseña:"
+
+msgid "Paste"
+msgstr "Pegar"
+
+#: config/config_mail.xml:81
+msgid "Permanently remove deleted E-Mails?"
+msgstr "¿Eliminar permanentemente E-Mails borrados?"
+
+msgid "Permanently remove your deleted E-Mails?"
+msgstr "¿Eliminar permanentemente sus E-Mails borrados?"
+
+#: sidepanel/properties.xml:24
+msgid "Permissions"
+msgstr "Permisos"
+
+msgid "Personal Data"
+msgstr "Datos personales"
+
+msgid "Peru"
+msgstr "Perú"
+
+msgid "Philippines"
+msgstr "Filipinas"
+
+#: contacts/newContact.xml:101 contacts/newContact.xml:265
+msgid "Phone"
+msgstr "Teléfono"
+
+#: contacts/newContact.xml:117
+msgid "Phone (assistant)"
+msgstr "Teléfono (ayudante)"
+
+msgid "Phone (business)"
+msgstr "Teléfono (profesional)"
+
+msgid "Phone (business):"
+msgstr "Teléfono (profesional):"
+
+#: contacts/newContact.xml:398
+msgid "Phone (car)"
+msgstr "Teléfono (coche)"
+
+msgid "Phone (car):"
+msgstr "Teléfono (coche):"
+
+#: contacts/newContact.xml:111
+msgid "Phone (company)"
+msgstr "Teléfono (empresa)"
+
+msgid "Phone (company):"
+msgstr "Teléfono (empresa):"
+
+#: contacts/newContact.xml:379
+msgid "Phone (other)"
+msgstr "Teléfono (otro)"
+
+msgid "Phone (other):"
+msgstr "Teléfono (otro):"
+
+msgid "Phone (private 2)"
+msgstr "Teléfono (privado 2)"
+
+msgid "Phone (private 2):"
+msgstr "Teléfono (personal 2):"
+
+msgid "Phone (private)"
+msgstr "Teléfono (privado)"
+
+msgid "Phone (private):"
+msgstr "Teléfono (personal):"
+
+#: contacts/newContact.xml:104 contacts/newContact.xml:271
+msgid "Phone 2"
+msgstr "Teléfono 2"
+
+msgid "Phone 2:"
+msgstr "Teléfono 2:"
+
+msgid "Phone list"
+msgstr "Listado telefónico"
+
+msgid "Phone:"
+msgstr "Teléfono:"
+
+msgid "Picture"
+msgstr "Fotografía"
+
+msgid "Pitcairn"
+msgstr "Pitcairn"
+
+msgid "Place"
+msgstr "Lugar"
+
+#: config_popups.xml:30
+msgid "Place of Signature:"
+msgstr "Lugar de la firma:"
+
+#: config/config_mail.xml:236
+msgid "Plain text"
+msgstr "Texto sencillo"
+
+msgid "Please choose"
+msgstr "Por favor, elija"
+
+msgid "Please choose a file!"
+msgstr "¡Por favor, elija un archivo!"
+
+msgid "Please enter a name"
+msgstr "Por favor, introduzca un nombre"
+
+msgid "Please enter a valid E-Mail address!"
+msgstr "¡Por favor, introduzca una dirección de E-Mail válida!"
+
+msgid "Please enter a valid value in the marked field."
+msgid_plural "Please enter valid values in the marked fields."
+msgstr[0] "Por favor, introduzca un valor válido en el campo marcado."
+msgstr[1] "Por favor, introduzca valores válidos en los campos marcados."
+
+msgid "Please enter your old password and twice the new password."
+msgstr "Por favor, introduzca la contraseña anterior y dos veces la nueva."
+
+msgid "Please enter your search"
+msgstr "Por favor, introduzca su búsqueda"
+
+#. The UWA module description at the user options.
+#. The two %s indicate the start and end of a hyperlink.
+#, c-format
+msgid ""
+"Please have a look at the %sInteresting UWA modules%s page. It shows a list "
+"of widgets and their associated data."
+msgstr ""
+"Por favor, eche un vistazo a la página %sMódulos UWA de Open-Xchange%s. "
+"Muestra una lista de componentes y sus datos asociados."
+
+msgid ""
+"Please note: All messages received from the POP3 account will be stored to a "
+"folder on your local IMAP account."
+msgstr ""
+"Por favor, recuerde que todos los mensajes recibidos desde la cuenta POP3 "
+"serán guardados en una carpeta de su cuenta local IMAP."
+
+msgid ""
+"Please note: You are the creator of this appointment. If you delete this "
+"appointment it will be removed for all participants."
+msgstr ""
+"Por favor, tenga en cuenta: Usted es el creador de esta cita. Si borra dicha "
+"cita, se borrará para todos los participantes."
+
+#: config_popups.xml:39
+msgid ""
+"Please only use HTML signatures if you are familiar with HTML. Using wrong "
+"HTML tags might result in partly or completely garbled signatures."
+msgstr ""
+"Por favor, utilice firmas en HTML sólo si está familiarizado con el HTML. El "
+"uso de etiquetas HTML erróneas podría producir firmas parcial o totalmente "
+"ilegibles."
+
+msgid "Please provide a site name."
+msgstr "Por favor, indique un nombre de sitio."
+
+msgid "Please select a country for the destination address"
+msgstr "Por favor, seleccione un país para la dirección de destino"
+
+msgid "Please select a country for the start address"
+msgstr "Por favor, seleccione un país para la dirección de comienzo"
+
+msgid "Please select a file to import"
+msgstr "Por favor, seleccione un archivo a importar"
+
+msgid "Please select at least one E-Mail address."
+msgstr "Por favor, seleccione al menos una dirección de correo."
+
+msgid "Please select at least one task!"
+msgstr "¡Por favor, seleccione al menos una tarea!"
+
+msgid "Please select only one Publication"
+msgstr "Por favor, seleccione sólo una publicación"
+
+msgid "Please select only one subscription"
+msgstr "Por favor, seleccione sólo una suscripción"
+
+msgid "Please set valid folder!"
+msgstr "¡Por favor, indique una carpeta válida!"
+
+#: infostore/split.xml:41 tasks/tasksSplit.xml:41
+msgid "Please wait ..."
+msgstr "Por favor, espere..."
+
+msgid "Please wait while checking the connection ... This may take a while ..."
+msgstr ""
+"Por favor, espere mientras se comprueba la conexión ... Esto puede tardar un "
+"rato ..."
+
+#: ox.xml:136
+msgid "Please wait while you are being redirected to the start page ..."
+msgstr "Por favor, espere mientras es redirigido a la página de inicio..."
+
+msgid "Poland"
+msgstr "Polonia"
+
+#: config/config.xml:99
+msgid "Popups"
+msgstr "Ventanas emergentes"
+
+msgid "Portal"
+msgstr "Portal"
+
+msgid "Portugal"
+msgstr "Portugal"
+
+#: contacts/contactsDetail.xml:114 contacts/newContact.xml:146
+msgid "Position"
+msgstr "Puesto"
+
+msgid "Position:"
+msgstr "Puesto:"
+
+msgid "Post"
+msgstr "Enviar"
+
+msgid "Pound sterling"
+msgstr "Libra esterlina"
+
+#: mail/detailMail.xml:69 mail/mailHSplit.xml:58 mail/mailVSplit.xml:59
+msgid ""
+"Pre-loading of externally linked images has been blocked to protect your "
+"privacy!"
+msgstr ""
+"¡La precarga de imágenes externas enlazadas ha sido bloqueada para proteger "
+"su privacidad!"
+
+msgid "Preferences"
+msgstr "Preferencias"
+
+#. Upsell
+msgid "Premium features"
+msgstr "Características premium"
+
+msgid "Previous"
+msgstr "Anterior"
+
+#: tasks/tasksSplit.xml:103
+msgid "Principal:"
+msgstr "Principal:"
+
+msgid "Print"
+msgstr "Imprimir"
+
+#: mail/newMail.xml:129
+msgid "Priority"
+msgstr "Prioridad"
+
+#: tasks/newTask.xml:88 tasks/tasksSplit.xml:96
+msgid "Priority:"
+msgstr "Prioridad:"
+
+msgid "Privacy Notice"
+msgstr "Aviso de privacidad"
+
+#: contacts/newContact.xml:46
+msgid "Private"
+msgstr "Privado"
+
+#: calendar/newAppointment.xml:170
+msgid "Private appointment"
+msgstr "Cita privada"
+
+msgid "Private calendars"
+msgstr "Calendarios privados"
+
+#: ox.xml:86
+msgid "Private computer"
+msgstr "Ordenador privado"
+
+#: contacts/newContact.xml:194
+msgid "Private contact"
+msgstr "Contacto privado"
+
+msgid "Private contacts"
+msgstr "Contactos privados"
+
+msgid "Private folders"
+msgstr "Carpetas privadas"
+
+#: tasks/newTask.xml:95
+msgid "Private task"
+msgstr "Tarea privada"
+
+msgid "Private tasks"
+msgstr "Tareas privadas"
+
+msgid "Private:"
+msgstr "Privado:"
+
+msgid "Process subsequent rules even when this rule matches"
+msgstr "Procesar las reglas posteriores cuando esta regla se cumpla"
+
+#: contacts/contactsDetail.xml:132 contacts/newContact.xml:210
+msgid "Profession"
+msgstr "Profesión"
+
+msgid "Profession:"
+msgstr "Profesión:"
+
+msgid "Properties"
+msgstr "Propiedades"
+
+msgid "Public calendars"
+msgstr "Calendarios públicos"
+
+msgid "Public contacts"
+msgstr "Contactos públicos"
+
+#. Title of the content area when a public folder is displayed.
+#. %s is the folder name.
+#, c-format
+msgid "Public folder %s"
+msgstr "Carpeta pública %s"
+
+msgid "Public folders"
+msgstr "Carpetas públicas"
+
+#: ox.xml:72
+msgid "Public or shared computer"
+msgstr "Equipo público o compartido"
+
+msgid "Public tasks"
+msgstr "Tareas públicas"
+
+msgid "Publication"
+msgstr "Publicación"
+
+msgid "Publication status"
+msgstr "Estado de publicación"
+
+msgid "Publications"
+msgstr "Publicaciones"
+
+msgid "Publish"
+msgstr "Publicar"
+
+msgid "Puerto Rico"
+msgstr "Puerto Rico"
+
+msgid "Qatar"
+msgstr "Qatar"
+
+msgid "Quick config"
+msgstr "Configuración rápida"
+
+msgid "Quota Exceed"
+msgstr "Cuota excedida"
+
+msgid "RMB"
+msgstr "RMB"
+
+msgid "RUB"
+msgstr "RUB"
+
+msgid "Read"
+msgstr "Leido"
+
+#
+msgctxt "to"
+msgid "Read"
+msgstr "Leído"
+
+msgid "Read all"
+msgstr "Leer todos"
+
+msgid "Read objects"
+msgstr "Leer objetos"
+
+msgid "Read own"
+msgstr "Leer los propios"
+
+msgid "Read/Unread"
+msgstr "Leído/No leído"
+
+msgid "Rebuild Tree..."
+msgstr "Reconstruir árbol..."
+
+#: mail/detailMail.xml:103 mail/mailHSplit.xml:96 mail/mailVSplit.xml:97
+msgid "Received"
+msgstr "Recibido"
+
+msgid "Received:"
+msgstr "Recibido:"
+
+#: calendar/newAppointment.xml:132 confirm.xml:46 series.xml:16
+msgid "Recurrence"
+msgstr "Periodicidad"
+
+#: series.xml:164
+msgid "Recurrence Duration"
+msgstr "Duración de la serie:"
+
+#: series.xml:19
+msgid "Recurrence Pattern"
+msgstr "Patrón de periodicidad"
+
+#: series.xml:29
+msgid "Recurrence Settings"
+msgstr "Ajustes de periodicidad"
+
+#: calendar/newAppointment.xml:132
+msgctxt "calendar"
+msgid "Recurrence..."
+msgstr "Periodicidad..."
+
+#: tasks/newTask.xml:101
+msgctxt "tasks"
+msgid "Recurrence..."
+msgstr "Periodicidad..."
+
+#: calendar/detailAppointment.xml:97
+msgid "Recurrence:"
+msgstr "Periodicidad:"
+
+msgid "Recurring appointment"
+msgstr "Cita recurrente"
+
+msgid "Recurring task"
+msgstr "Tarea recurrente"
+
+msgid "Redirect to"
+msgstr "Redirigir a"
+
+msgid "Refresh"
+msgstr "Actualizar"
+
+msgid "Reject with reason"
+msgstr "Rechazar con el motivo"
+
+#: config/config.xml:33
+msgid "Reload current view every:"
+msgstr "Actualizar la vista actual cada:"
+
+#: reminder.xml:84
+msgid "Remind me again"
+msgstr "Recordar otra vez"
+
+#: calendar/newAppointment.xml:110 tasks/newTask.xml:125
+msgid "Remind me:"
+msgstr "Recordarme:"
+
+#: reminder.xml:16
+msgid "Reminder"
+msgstr "Recordatorio"
+
+#: calendar/detailAppointment.xml:127 tasks/tasksSplit.xml:89
+msgid "Reminder:"
+msgstr "Recordatorio:"
+
+#: attachments.xml:40 participants_external.xml:47
+msgid "Remove"
+msgstr "Borrar"
+
+#: config_popups.xml:127
+msgid "Remove Member"
+msgstr "Eliminar miembro"
+
+msgid "Remove attachment"
+msgstr "Eliminar adjunto"
+
+msgid "Remove flag"
+msgstr "Borrar etiqueta"
+
+msgid "Remove participant"
+msgstr "Eliminar participante"
+
+msgid "Remove picture"
+msgstr "Borrar foto"
+
+msgid "Remove user"
+msgstr "Eliminar usuario"
+
+#: confirm.xml:169
+msgid "Rename"
+msgstr "Renombrar"
+
+msgid "Renminbi"
+msgstr "Yuan"
+
+#: tmp_hover.xml:145
+msgid "Reply"
+msgstr "Responder"
+
+#: tmp_hover.xml:150
+msgid "Reply all"
+msgstr "Responder a todos"
+
+#: mail/newMail.xml:80
+msgid "Reply-to"
+msgstr "Responder a"
+
+msgid "Reply-to Address"
+msgstr "Responder a la dirección"
+
+msgid "Reserved"
+msgstr "Reservado"
+
+msgid "Resource Administration"
+msgstr "Administración de recursos"
+
+msgid "Resource email"
+msgstr "Email del recurso"
+
+msgid "Resource name"
+msgstr "Nombre del recurso"
+
+#: calendar/calendar_availability.xml:106 participants.xml:91
+msgid "Resources"
+msgstr "Recursos"
+
+#: calendar/detailAppointment.xml:88
+msgid "Resources:"
+msgstr "Recursos:"
+
+#. Title for search results (displayed instead of a folder name).
+#. %s is the search term.
+#, c-format
+msgid "Results for \"%s\""
+msgstr "Resultados para \"%s\""
+
+msgid "Retweet"
+msgstr "Retuitear"
+
+msgid "Retweet new"
+msgstr "Retuitear nuevo"
+
+msgid "Retweet sent successfully"
+msgstr "Retuit enviado satisfactoriamente"
+
+msgid "Reunion"
+msgstr "Reunión"
+
+msgid "Romania"
+msgstr "Rumanía"
+
+#: contacts/contactsDetail.xml:123 contacts/newContact.xml:152
+msgid "Room number"
+msgstr "Número de despacho"
+
+msgid "Room number:"
+msgstr "Número de despacho:"
+
+#: contacts/contactsDetail.xml:18
+msgid "Route Planning"
+msgstr "Planificación de rutas"
+
+msgid "Rule Details"
+msgstr "Detalles de la regla"
+
+msgid "Rule Name"
+msgstr "Nombre de la regla"
+
+msgid "Rules"
+msgstr "Reglas"
+
+msgid "Russian Federation"
+msgstr "Federación Rusa"
+
+msgid "Russian rouble"
+msgstr "Rublo ruso"
+
+msgid "Rwanda"
+msgstr "Ruanda"
+
+#
+msgctxt "saturday"
+msgid "S"
+msgstr "S"
+
+#
+msgctxt "sunday"
+msgid "S"
+msgstr "D"
+
+msgid "SEK"
+msgstr "SEK"
+
+msgid "Saint Barthélemy"
+msgstr "San Bartolomé"
+
+msgid "Saint Helena"
+msgstr "Santa Helena"
+
+msgid "Saint Kitts and Nevis"
+msgstr "San Cristobal y Nieves"
+
+msgid "Saint Lucia"
+msgstr "Santa Lucía"
+
+msgid "Saint Martin (French part)"
+msgstr "San Martín (parte francesa)"
+
+msgid "Saint Pierre and Miquelon"
+msgstr "San Pedro y Miguelón"
+
+msgid "Saint Vincent and the Grenadines"
+msgstr "San Vicente y las Granadinas"
+
+#: contacts/newContact.xml:363
+msgid "Sales Volume"
+msgstr "Volumen de ventas"
+
+msgid "Sales Volume:"
+msgstr "Volumen de ventas:"
+
+msgid "Samoa"
+msgstr "Samoa"
+
+#: config/config.xml:303 config/config.xml:354
+msgid "Sample:"
+msgstr "Ejemplo:"
+
+msgid "San Marino"
+msgstr "San Marino"
+
+msgid "Sao Tome and Principe"
+msgstr "Santo Tomé y Príncipe"
+
+#: calendar/month.xml:49
+msgid "Sat"
+msgstr "sáb"
+
+#: series.xml:84
+msgid "Saturday"
+msgstr "sábado"
+
+msgid "Saudi Arabia"
+msgstr "Arabia Saudí"
+
+#: confirm.xml:49
+msgid "Save"
+msgstr "Guardar"
+
+msgid "Save as"
+msgstr "Guardar como"
+
+msgid "Save attachment"
+msgstr "Guardar adjunto"
+
+#: config/config.xml:40
+msgid "Save configuration before every logout?"
+msgstr "¿Guardar la configuración antes de cada desconexión?"
+
+msgid "Save draft"
+msgstr "Guardar borrador"
+
+msgid "Save in InfoStore"
+msgstr "Guardar en el portadocumentos"
+
+msgid "Save version"
+msgstr "Guardar versión"
+
+#: calendar/newAppointment.xml:88
+msgid "Schedule an all-day event"
+msgstr "Planificar un evento para todo el día"
+
+#: mail/newMail.xml:176
+msgid "Search"
+msgstr "Buscar"
+
+#: mail/newMail.xml:191 participants.xml:41
+msgid "Search all contact folders"
+msgstr "Buscar en todas las carpetas de contactos"
+
+#: participants.xml:26
+msgid "Search:"
+msgstr "Buscar:"
+
+#: ox.xml:64
+msgid "Security"
+msgstr "Seguridad"
+
+#: mail/newMail.xml:196 participants.xml:47
+msgid "Select Address Book:"
+msgstr "Seleccionar libreta de direcciones:"
+
+#: attachments.xml:17 attachments.xml:51
+msgid "Select Attachments"
+msgstr "Seleccionar adjuntos"
+
+msgid "Select Contacts"
+msgstr "Seleccionar contactos"
+
+#: calendar/newAppointment.xml:207 calendar/newAppointment.xml:240
+#: series.xml:236 series.xml:261 tasks/newTask.xml:229 tasks/newTask.xml:253
+msgid "Select Date"
+msgstr "Seleccionar fecha"
+
+#: calendar/newAppointment.xml:152 contacts/newContact.xml:183
+#: contacts/newDistributionList.xml:66 infostore/newInfoItemMain.xml:63
+#: mail/newMail.xml:256 mainpage.xml:33 mainpage.xml:36 mainpage.xml:39
+#: mainpage.xml:42 mainpage.xml:45 mainpage.xml:48 mainpage.xml:76
+#: participants.xml:111 tasks/newTask.xml:115
+msgid "Select Folder"
+msgstr "Seleccionar carpeta"
+
+msgid "Select Members"
+msgstr "Seleccionar miembros"
+
+msgid "Select Participants"
+msgstr "Seleccionar participantes"
+
+#: participants.xml:17
+msgid "Select Participants and Resources"
+msgstr "Seleccionar participantes y recursos"
+
+#: mail/newMail.xml:161
+msgid "Select Recipients"
+msgstr "Seleccionar destinatarios"
+
+msgid "Select Users"
+msgstr "Seleccionar usuarios"
+
+msgid "Select a File:"
+msgstr "Seleccionar un archivo:"
+
+#: contacts/newContact.xml:172
+msgid "Select a contact category"
+msgstr "Seleccionar una categoría de contacto"
+
+#: config/config_import.xml:86
+msgid "Select a folder for import"
+msgstr "Seleccionar una carpeta a importar"
+
+#: tasks/newTask.xml:106
+msgid "Select a task category"
+msgstr "Seleccionar una categoría de tarea"
+
+msgid "Select a type"
+msgstr "Seleccione un tipo"
+
+#: calendar/newAppointment.xml:140
+msgid "Select an appointment category"
+msgstr "Seleccionar una categoría de citas"
+
+#: infostore/newInfoItemMain.xml:99
+msgid "Select an infostore category"
+msgstr "Seleccionar una categoría del portadocumentos"
+
+#: calendar/newAppointment.xml:162
+msgid "Select appointment display type"
+msgstr "Seleccionar el tipo de vista de la cita"
+
+#: acceptdeny.xml:16
+msgid "Select confirmation"
+msgstr "Seleccionar confirmación"
+
+#: participants.xml:73
+msgid "Select from the list and add selected as members"
+msgstr "Seleccionar de la lista y añadir los seleccionados como miembros"
+
+#: participants.xml:71
+msgid "Select from the list and add selected as participants"
+msgstr "Seleccionar de la lista y añadir los seleccionados como participantes"
+
+#: participants.xml:70
+msgid "Select from the list and add selected as participants or resources"
+msgstr ""
+"Seleccionar de la lista y añadir los seleccionados como participantes o "
+"recursos"
+
+#: mail/newMail.xml:215
+msgid "Select from the list and add selected as recipients"
+msgstr "Seleccionar de la lista y añadir seleccionados como destinatarios"
+
+#: participants.xml:72
+msgid "Select from the list and add selected as users"
+msgstr "Seleccionar de la lista y añadir los seleccionados como usuarios"
+
+#: calendar/newAppointment.xml:148
+msgid "Select the appointment path"
+msgstr "Seleccionar la ruta de almacenamiento de la cita"
+
+#: config/config_portal.xml:28
+msgid "Select the number of items to be displayed in the module panes."
+msgstr ""
+"Seleccionar el número de elementos a mostrar en los paneles del módulo."
+
+#: messaging/popup.xml:27
+msgid "Send"
+msgstr "Enviar"
+
+msgid "Send Attachment"
+msgstr "Enviar adjunto"
+
+msgid "Send E-Mail"
+msgstr "Enviar E-Mail"
+
+msgid "Send E-Mail about this publication"
+msgstr "Enviar e-mail acerca de esta publicación."
+
+msgid "Send E-Mail to all"
+msgstr "Enviar E-Mail a todos"
+
+msgid "Send as E-Mail"
+msgstr "Enviar como E-Mail"
+
+msgid "Send as attachment"
+msgstr "Enviar como adjunto"
+
+msgid "Send as link"
+msgstr "Enviar como enlace"
+
+msgid "Send as vCard"
+msgstr "Enviar como vCard"
+
+msgid "Sender/From"
+msgstr "Remitente/De"
+
+msgid "Senegal"
+msgstr "Senegal"
+
+msgid "Sent"
+msgstr "Enviado"
+
+msgid "Sent folder"
+msgstr "Carpeta enviados"
+
+msgid "Sep"
+msgstr "sep"
+
+#: config/config.xml:376
+msgid "Separator"
+msgstr "Separador"
+
+msgid "September"
+msgstr "septiembre"
+
+msgid "Serbia"
+msgstr "Serbia"
+
+msgid "Server Name"
+msgstr "Nombre del servidor"
+
+msgid "Server Port"
+msgstr "Puerto del servidor"
+
+msgid "Server Settings"
+msgstr "Ajustes del servidor"
+
+msgid "Server Type"
+msgstr "Tipo de servidor"
+
+msgid "Service"
+msgstr "Servicio"
+
+msgid "Session has expired"
+msgstr "La sesión ha expirado"
+
+msgid "Seychelles"
+msgstr "Seychelles"
+
+#. Upsell
+msgid "Share calendar"
+msgstr "Compartir calendario"
+
+#. Upsell
+msgid "Share tasks"
+msgstr "Compartir tareas"
+
+#. Upsell
+msgid "Share your contacts"
+msgstr "Comparta sus contactos"
+
+msgid "Shared calendars"
+msgstr "Calendarios compartidos"
+
+msgid "Shared contacts"
+msgstr "Contactos compartidos"
+
+msgid "Shared folders"
+msgstr "Carpetas compartidas"
+
+msgid "Shared tasks"
+msgstr "Tareas compartidas"
+
+#: config/config.xml:152
+msgid "Short"
+msgstr "Corto"
+
+msgid "Show"
+msgstr "Mostrar"
+
+msgid "Show 10 elements"
+msgstr "Mostrar 10 elementos"
+
+msgid "Show 15 elements"
+msgstr "Mostrar 15 elementos"
+
+msgid "Show 20 elements"
+msgstr "Mostrar 20 elementos"
+
+msgid "Show 5 elements"
+msgstr "Mostrar 5 elementos"
+
+#: calendar/calendar_availability.xml:109
+msgid "Show External Participants"
+msgstr "Mostrar participantes externos"
+
+#: calendar/calendar_availability.xml:108
+msgid "Show Group Members"
+msgstr "Mostrar los miembros del grupo"
+
+#: calendar/calendarList.xml:28 calendar/month.xml:28 calendar/week.xml:28
+#: calendar/workweek.xml:209
+msgid "Show all my appointments from all calendars"
+msgstr "Mostrar todas mis citas de todos los calendarios"
+
+msgid "Show appointments"
+msgstr "Mostrar citas"
+
+msgid "Show as"
+msgstr "Mostrar como"
+
+#: config/config_calendar.xml:49
+msgid "Show confirmation popup for new appointments?"
+msgstr "¿Mostrar ventana emergente de confirmación para nuevas citas?"
+
+msgid "Show contacts"
+msgstr "Mostrar contactos"
+
+msgid "Show files"
+msgstr "Mostrar archivos"
+
+msgid "Show in Calendar"
+msgstr "Mostrar en el calendario"
+
+#: acceptdeny.xml:43
+msgid "Show in calendar"
+msgstr "Mostrar en el calendario"
+
+msgid "Show in task"
+msgstr "Mostrar en la tarea"
+
+msgid "Show mails"
+msgstr "Mostrar correos"
+
+#: config/config_mail.xml:348
+msgid "Show name instead of E-Mail address in To and Cc fields:"
+msgstr ""
+"Mostrar el nombre en vez de la dirección de E-Mail en los campos Para y Cc:"
+
+#: config/config_mail.xml:107
+msgid "Show sender image?"
+msgstr "¿Mostrar la imagen del remitente?"
+
+msgid "Show source"
+msgstr "Mostrar fuente"
+
+msgid "Show tasks"
+msgstr "Mostrar tareas"
+
+msgid "Sierra Leone"
+msgstr "Sierra Leona"
+
+#: mail/newMail.xml:55
+msgid "Signature:"
+msgstr "Firma:"
+
+#: config_popups.xml:19
+msgid "Signatures"
+msgstr "Firmas"
+
+#: confirm.xml:98
+msgid "Since the appointment is recurring, it may cause further conflicts."
+msgstr "Esta cita puede causar conflictos futuros debido a que es recurrente."
+
+msgid "Singapore"
+msgstr "Singapur"
+
+msgid "Size"
+msgstr "Tamaño"
+
+msgid "Size (bytes)"
+msgstr "Tamaño (bytes)"
+
+msgid "Size:"
+msgstr "Tamaño:"
+
+msgid "Slovakia"
+msgstr "Eslovaquia"
+
+msgid "Slovenia"
+msgstr "Eslovenia"
+
+msgid "Social"
+msgstr "Redes sociales"
+
+msgid "Social Messaging accounts"
+msgstr "Cuentas de mensajería de redes sociales"
+
+msgid "Solomon Islands"
+msgstr "Islas Solomón"
+
+msgid "Somalia"
+msgstr "Somalia"
+
+msgid "Source"
+msgstr "Fuente"
+
+msgid "South Africa"
+msgstr "Sudáfrica"
+
+msgid "South Georgia and the South Sandwich Islands"
+msgstr "Islas Georgias del Sur y Sandwich del Sur"
+
+msgid "Spain"
+msgstr "España"
+
+#: tmp_hover.xml:165
+msgid "Spam"
+msgstr "Spam"
+
+msgid "Spam folder"
+msgstr "Carpeta de correo no deseado"
+
+#: contacts/newContact.xml:405
+msgid "Spouse's name"
+msgstr "Nombre del cónyuge"
+
+msgid "Spouse's name:"
+msgstr "Nombre del cónyuge:"
+
+msgid "Sri Lanka"
+msgstr "Sri Lanka"
+
+#: confirm.xml:121 contacts/contactsDetail.xml:23
+msgid "Start"
+msgstr "Inicio"
+
+msgid "Start Page"
+msgstr "Página de inicio"
+
+#: series.xml:167 tmp_hover.xml:104
+msgid "Start date"
+msgstr "Fecha de comienzo"
+
+#: calendar/newAppointment.xml:75 tasks/newTask.xml:83
+msgid "Start date:"
+msgstr "Fecha de comienzo:"
+
+#: config/config_calendar.xml:35
+msgid "Start of working time"
+msgstr "Hora de comienzo de trabajo"
+
+msgid "Start page"
+msgstr "Página de inicio"
+
+msgid "Start time"
+msgstr "Hora de comienzo"
+
+#: calendar/detailAppointment.xml:49
+msgid "Start:"
+msgstr "Comienzo:"
+
+#: calendar/workweek.xml:169
+msgid "Starts at"
+msgstr "Comienza a"
+
+#: reminder.xml:59
+msgid "Starts at:"
+msgstr "Comienza a:"
+
+#. Task details of a task with start and due date.
+#. %1$s is the start date.
+#. %2$s is the due date.
+#, c-format
+msgid "Starts on %1$s, due on %2$s."
+msgstr "Comienza el %1$s, vence el %2$s."
+
+#. Task details of a task with only a start date.
+#. %s is the start date.
+#, c-format
+msgid "Starts on %s."
+msgstr "Comienza el %s."
+
+#: contacts/newContact.xml:162 contacts/newContact.xml:273
+msgid "State"
+msgstr "Estado"
+
+msgid "State (business)"
+msgstr "Estado (profesional)"
+
+#: contacts/newContact.xml:373
+msgid "State (other)"
+msgstr "Estado (otro)"
+
+msgid "State (other):"
+msgstr "Estado (otro):"
+
+msgid "State (private)"
+msgstr "Estado (personal)"
+
+msgid "State:"
+msgstr "Estado:"
+
+msgid "Static resizing..."
+msgstr "Redimensionado estático..."
+
+msgid "Status"
+msgstr "Estado"
+
+#: tasks/newTask.xml:79 tasks/tasksSplit.xml:93
+msgid "Status:"
+msgstr "Estado:"
+
+#. %d is the step number.
+#, c-format
+msgid "Step %d. Download Updater"
+msgstr "Paso %d. Descargar Updater"
+
+#: contacts/newContact.xml:144 contacts/newContact.xml:212
+msgid "Street"
+msgstr "Calle"
+
+msgid "Street (business)"
+msgstr "Calle (profesional)"
+
+#: contacts/newContact.xml:353
+msgid "Street (other)"
+msgstr "Calle (otro)"
+
+msgid "Street (other):"
+msgstr "Calle (otro):"
+
+msgid "Street (private)"
+msgstr "Calle (personal)"
+
+msgid "Street:"
+msgstr "Calle:"
+
+msgid "Strong"
+msgstr "Fuerte"
+
+#: mail/newMail.xml:112
+msgid "Subject"
+msgstr "Asunto"
+
+#: tasks/newTask.xml:70 tasks/tasksSplit.xml:82
+msgid "Subject:"
+msgstr "Asunto:"
+
+msgid "Subscribe"
+msgstr "Suscribirse"
+
+#: sidepanel/subscribe.xml:16
+msgid "Subscribe Folder"
+msgstr "Suscribirse a carpeta"
+
+#. Upsell
+msgid "Subscribe contacts from LinkedIn, Facebook, Google..."
+msgstr "Suscribirse a contactos de LinkedIn, Facebook, Google..."
+
+msgid "Subscribe folder"
+msgstr "Suscribirse a la carpeta"
+
+msgid "Subscribe into:"
+msgstr "Suscribirse a:"
+
+#: sidepanel/properties.xml:54
+msgid "Subscribed"
+msgstr "Suscrito"
+
+msgid "Subscription status"
+msgstr "Estado de la suscripción"
+
+msgid "Subscriptions"
+msgstr "Suscripciones"
+
+msgid "Subscriptions successfully migrated"
+msgstr "Suscripciones migradas satisfactoriamente"
+
+#. %d is the number of successfully imported data records
+#, c-format
+msgid "Successfully imported: %d"
+msgstr "Importados con éxito: %d"
+
+msgid "Sudan"
+msgstr "Sudán"
+
+#: contacts/contactsDetail.xml:137 contacts/newContact.xml:92
+msgid "Suffix"
+msgstr "Sufijo"
+
+msgid "Suffix:"
+msgstr "Sufijo:"
+
+#: calendar/month.xml:49
+msgid "Sun"
+msgstr "dom"
+
+#: series.xml:86
+msgid "Sunday"
+msgstr "domingo"
+
+msgid ""
+"Supported Outlook versions (Connector 2 for Microsoft Outlook): Latest "
+"versions of Microsoft Outlook 2003, Microsoft Outlook 2007, Outlook 2010"
+msgstr ""
+"Versiones de Outlook admitidas (Connector 2 para Microsoft Outlook): Últimas "
+"versiones de Microsoft Outlook 2003, Microsoft Outlook 2007, Outlook 2010"
+
+msgid "Suriname"
+msgstr "Surinam"
+
+msgid "Svalbard and Jan Mayen"
+msgstr "Svalbard y Jan Mayen"
+
+msgid "Swaziland"
+msgstr "Suazilandia"
+
+msgid "Sweden"
+msgstr "Suecia"
+
+msgid "Swedish krona"
+msgstr "Corona sueca"
+
+msgid "Swiss franc"
+msgstr "Franco suizo"
+
+#: tmp_hover.xml:284
+msgid "Switch to folder"
+msgstr "Cambiar a carpeta"
+
+msgid "Switzerland"
+msgstr "Suiza"
+
+#. Upsell
+msgid "Sync with mobile phone"
+msgstr "Sincronizar con el teléfono celular"
+
+msgid "Synchronization"
+msgstr "Sincronización"
+
+#. Upsell
+msgid "Synchronize with Outlook"
+msgstr "Sincronizar con Outlook"
+
+#. %s is the error message.
+#, c-format
+msgid ""
+"Syntax error in config: \n"
+"%s"
+msgstr ""
+"Error de sintaxis en la configuración: \n"
+"%s"
+
+#. %s is the JavaScript error message.
+#, c-format
+msgid ""
+"Syntax error in server response (%s): \"%s\"\n"
+"\n"
+"URL: %s\n"
+"\n"
+"Data: %s\n"
+"\n"
+"Response: %s"
+msgstr ""
+"Error de sintaxis en respuesta del servidor (%s): \"%s\"\n"
+"\n"
+"URL: %s\n"
+"\n"
+"Datos: %s\n"
+"\n"
+"Respuesta: %s"
+
+msgid "Syrian Arab Republic"
+msgstr "República Árabe Siria"
+
+msgid "System"
+msgstr "Sistema"
+
+#
+msgctxt "thursday"
+msgid "T"
+msgstr "J"
+
+#
+msgctxt "tuesday"
+msgid "T"
+msgstr "M"
+
+#: contacts/newContact.xml:369
+msgid "TAX ID"
+msgstr "ID Fiscal"
+
+msgid "TAX ID:"
+msgstr "ID Fiscal:"
+
+#. Terabyte unit (1024^4)
+msgid "TB"
+msgstr "TB"
+
+#: contacts/newContact.xml:356
+msgid "TTY/TDD"
+msgstr "DTS"
+
+msgid "TTY/TDD:"
+msgstr "DTS:"
+
+#: config/config.xml:111
+msgid "Tab-based panel"
+msgstr "Panel basado en pestañas"
+
+msgid "Tag mail with"
+msgstr "Etiquetar correo con"
+
+msgid "Taiwan"
+msgstr "Taiwán"
+
+msgid "Tajikistan"
+msgstr "Tayikistán"
+
+msgid "Tanzania"
+msgstr "Tanzania"
+
+msgid "Target"
+msgstr "Destino"
+
+#: tasks/newTask.xml:24 tasks/newTask.xml:47
+msgid "Task"
+msgstr "Tarea"
+
+msgid "Tasks"
+msgstr "Tareas"
+
+#: config_popups.xml:96
+msgid "Team"
+msgstr "Equipo"
+
+msgid "Team Members"
+msgstr "Miembros del equipo"
+
+#: calendar/teamday.xml:20
+msgid "Team view"
+msgstr "Vista de equipo"
+
+msgid "Teams"
+msgstr "Equipos"
+
+#: contacts/newContact.xml:401
+msgid "Telex"
+msgstr "Télex"
+
+msgid "Telex:"
+msgstr "Télex:"
+
+#. Upsell
+msgid "Tell me more..."
+msgstr "Cuénteme más..."
+
+msgid "Temporary"
+msgstr "Provisional"
+
+#: acceptdeny.xml:68 tmp_hover.xml:40
+msgid "Tentative"
+msgstr "Provisional"
+
+#: confirm.xml:17 confirm.xml:56
+msgid "Test"
+msgstr "Prueba"
+
+msgid "Text"
+msgstr "Texto"
+
+msgid "Thailand"
+msgstr "Tailandia"
+
+#. %s is the invalid address
+#, c-format
+msgid "The E-Mail address \"%s\" is not valid."
+msgstr "La dirección de E-Mail \"%s\" no es válida."
+
+msgid ""
+"The E-Mail address you have entered seems not to be valid. Would you like to "
+"add it anyway?"
+msgstr ""
+"La dirección de E-Mail que ha introducido no parece ser válida. ¿Desea "
+"añadirla de todas formas?"
+
+msgid "The E-Mail module is not available"
+msgstr "El módulo de E-Mail no está disponible"
+
+msgid "The configuration could not be saved, because of the following error:"
+msgstr "No se pudo guardar la configuración debido al siguiente error:"
+
+msgid "The connection was successful."
+msgstr "La conexión fue satisfactoria."
+
+#. %s is a field name (estimated costs or current costs).
+#, c-format
+msgid ""
+"The entered value for %s is not within the allowed range. Please use a value "
+"from -130000 to 130000."
+msgstr ""
+"El valor introducido para %s no está dentro del rango permitido. Por favor, "
+"utilice un valor entre -130000 y 130000."
+
+msgid ""
+"The following addresses are already on the list of participants and "
+"therefore not been added: %s"
+msgstr ""
+"Las direcciones siguientes ya están contenidas en la lista de participantes, "
+"por lo que no serán añadidas: %s"
+
+msgid "The following appointment already started:"
+msgstr "La siguiente cita ya comenzó:"
+
+msgid "The following task is already past due:"
+msgstr "La siguiente tarea ya venció:"
+
+#. Task reminder
+#. %s is the time, formatted using the messages with context "in"
+#, c-format
+msgid "The following task is due in %s:"
+msgstr "La siguiente tarea vence en %s:"
+
+#. %1$s is the field name.
+#, c-format
+msgid "The mandatory field %1$s is not defined."
+msgstr "No se ha definido el campo obligatorio %1$s."
+
+msgid "The new folder tree setting will take effect after a new login."
+msgstr "El nuevo árbol de carpetas surtirá efecto cuando acceda de nuevo."
+
+msgid "The new password"
+msgstr "La nueva contraseña"
+
+msgid "The panel setting will take effect after a new login."
+msgstr "Los ajustes del panel surtirán efecto cuando vuelva a conectarse."
+
+msgid "The publication %s is now disabled"
+msgstr "La publicación %s ahora está desactivada"
+
+#. %s is the name of the published folder
+msgid "The publication %s is now enabled"
+msgstr "La publicación %s ahora está activada"
+
+msgid ""
+"The published data will be accessible to everyone on the Internet. Please "
+"consider, which data you want to publish."
+msgstr ""
+"Los datos que se publiquen serán accesibles desde Internet por cualquier "
+"persona. Por favor, considere qué tipo de datos desea publicar."
+
+msgid "The repeat interval must be an integer number"
+msgstr "El intervalo de repetición debe ser un número entero"
+
+#. %s is the number of characters.
+#, c-format
+msgid "The search pattern requires at least %s characters."
+msgstr "El parámetro de búsqueda requiere al menos %s caracteres."
+
+msgid "The selected filter rule refers to an unknown folder '%s'."
+msgstr ""
+"La regla de filtro seleccionada se refiere a una carpeta '%s' desconocida."
+
+msgid "The server didn't respond!"
+msgstr "¡El servidor no respondió!"
+
+msgid "The subscription %s is now disabled"
+msgstr "La suscripción %s ahora está desactivada"
+
+#. %s is the name of the subscribed folder
+msgid "The subscription %s is now enabled"
+msgstr "La suscripción %s ahora está activada"
+
+msgid "The two newly entered passwords do not match."
+msgstr "Las dos contraseñas recién introducidas no coinciden."
+
+msgid ""
+"The updater will inform you of any updates for the Connector for Microsoft "
+"Outlook."
+msgstr ""
+"El updater le informará de cualquier actualización del Conector para "
+"Microsoft Outlook."
+
+msgid ""
+"The window could not be opened. Most likely it has been blocked by a pop-up "
+"or advertisement blocker. Please check your browser settings and make sure "
+"pop-ups are allowed for this domain."
+msgstr ""
+"No puede abrirse la ventana. Lo más probable es que sea debido a que está "
+"activado el bloqueo de elementos emergentes. Por favor, compruebe la "
+"configuración del navegador y asegúrese de que los elementos emergentes no "
+"estén bloqueados para este dominio."
+
+#: config/config.xml:57
+msgid "Theme"
+msgstr "Tema"
+
+msgid "Theme will be applied after a new login."
+msgstr "El tema se aplicará tras una nueva conexión."
+
+msgid "This Signature name already exists"
+msgstr "Este nombre de firma ya existe"
+
+msgid "This Team name already exists"
+msgstr "Este nombre de equipo ya existe"
+
+#. Full sentence:
+#. This feature is not available but you can upgrade your account right now
+msgid "This feature is not available"
+msgstr "Esta característica no está disponible"
+
+msgid "This folder is empty"
+msgstr "Esta carpeta está vacía"
+
+msgid "This group has no members"
+msgstr "Este grupo no tiene ningún miembro"
+
+msgid "This mail contains an URL to a publication."
+msgstr "Este correo contiene una URL de una publicación."
+
+msgid "This object does not contain a file, would you like to send the link?"
+msgstr "Este objeto no contiene ningún archivo, ¿quiere enviar el enlace?"
+
+#. %d is the counted down number of seconds until logout
+#, c-format
+msgid "This session will be terminated in %d second."
+msgid_plural "This session will be terminated in %d seconds."
+msgstr[0] "Esta sesión será finalizada en %d segundo."
+msgstr[1] "Esta sesión será finalizada en %d segundos."
+
+msgid "This session will be terminated."
+msgstr "Está sesión será finalizada."
+
+msgid "Thu"
+msgstr "jue"
+
+#: calendar/month.xml:47 series.xml:78
+msgid "Thursday"
+msgstr "jueves"
+
+msgid "Time Range"
+msgstr "Rango de tiempo"
+
+#: config/config.xml:289
+msgid "Time format:"
+msgstr "Formato de hora:"
+
+#: config/config_calendar.xml:102
+msgid "Time range for the calender view"
+msgstr "Intervalo de tiempo para la vista de calendario"
+
+#: config/config_calendar.xml:116
+msgid "Time range for the list view"
+msgstr "Intervalo de tiempo para la vista de lista"
+
+#: config/config_calendar.xml:109
+msgid "Time range for the team view"
+msgstr "Intervalo de tiempo para la vista de equipo"
+
+#: config/config.xml:270
+msgid "Time zone:"
+msgstr "Zona horaria:"
+
+msgid "Timor-Leste"
+msgstr "Timor Oriental"
+
+#: calendar/workweek.xml:153
+msgctxt "description"
+msgid "Title"
+msgstr "Descripción"
+
+#: contacts/contactsDetail.xml:101 contacts/newContact.xml:64
+msgctxt "salutation"
+msgid "Title"
+msgstr "Tratamiento"
+
+#: infostore/newInfoItemMain.xml:46 infostore/split.xml:71
+msgctxt "description"
+msgid "Title:"
+msgstr "Descripción:"
+
+#
+msgctxt "salutation"
+msgid "Title:"
+msgstr "Tratamiento:"
+
+#: mail/detailMail.xml:87 mail/mailHSplit.xml:80 mail/mailVSplit.xml:81
+msgid "To"
+msgstr "Para"
+
+#. Default name of a mail filter rule
+#. %s is a list of receivers
+msgid "To %s"
+msgstr "Para %s"
+
+msgid "To view attachment you must first save your e-mail as a draft."
+msgstr "Para ver adjuntos antes debe guardar su e-mail como borrador."
+
+#: mail/newMail.xml:88
+msgid "To..."
+msgstr "Para..."
+
+#: messaging/popup.xml:21
+msgid "To:"
+msgstr "Para:"
+
+#: calendar/calendarList.xml:22 calendar/month.xml:22 calendar/teamday.xml:28
+#: calendar/week.xml:22 calendar/workweek.xml:22
+msgid "Today"
+msgstr "Hoy"
+
+msgid "Togo"
+msgstr "Togo"
+
+msgid "Tokelau"
+msgstr "Tokelau"
+
+msgid "Tonga"
+msgstr "Tonga"
+
+msgid "Too short"
+msgstr "Demasiado corto"
+
+msgid "Trash folder"
+msgstr "Papelera"
+
+msgid "Trinidad and Tobago"
+msgstr "Trinidad y Tobago"
+
+msgid "Tue"
+msgstr "mar"
+
+#: calendar/month.xml:45 series.xml:74
+msgid "Tuesday"
+msgstr "martes"
+
+msgid "Tunisia"
+msgstr "Túnez"
+
+msgid "Turkey"
+msgstr "Turquía"
+
+msgid "Turkmenistan"
+msgstr "Turkmenistán"
+
+msgid "Turks and Caicos Islands"
+msgstr "Islas Caicos y Turks"
+
+msgid "Tuvalu"
+msgstr "Tuvalu"
+
+#: contacts/newContact.xml:193
+msgid "Type"
+msgstr "Tipo"
+
+#: calendar/newAppointment.xml:166 infostore/newInfoItemMain.xml:90
+#: infostore/split.xml:127 tasks/newTask.xml:94
+msgid "Type:"
+msgstr "Tipo:"
+
+msgid "URI"
+msgstr "URI"
+
+#: config_popups.xml:72
+msgid "URI:"
+msgstr "URI:"
+
+#: contacts/newContact.xml:124
+msgid "URL"
+msgstr "URL"
+
+msgid "URL:"
+msgstr "URL:"
+
+msgid "US dollar"
+msgstr "Dólar estadounidense"
+
+msgid "USD"
+msgstr "USD"
+
+#: config_popups.xml:53
+msgid "UWA Modules"
+msgstr "Módulos UWA"
+
+msgid "UWA Widgets..."
+msgstr "Widgets UWA..."
+
+msgid "Uganda"
+msgstr "Uganda"
+
+msgid "Ukraine"
+msgstr "Ucrania"
+
+msgid "Unable to create a new subscription folder."
+msgstr "No se pudo crear una nueva carpeta de suscripción."
+
+msgid "Unable to display E-Mail source."
+msgstr "No se pudo mostrar la fuente del E-Mail."
+
+msgid ""
+"Unable to establish a connection to the E-Mail server. Possible reasons: the "
+"mail server is (temporarily) down or there are network connection problems. "
+"To prevent further errors the module has been disabled. Please contact your "
+"administrator."
+msgstr ""
+"Fue imposible establecer una conexión con el servidor de E-Mail. Posibles "
+"motivos: el servidor se ha caído (temporalmente) o hay problemas con la "
+"conexión de red. Se ha desactivado el módulo para prevenir futuros errores. "
+"Por favor, contacte con su administrador."
+
+msgid "Unanswered"
+msgstr "Sin contestar"
+
+msgid "Undeleted"
+msgstr "Recuperado"
+
+msgid ""
+"Unexpected: Unable to load data because the server response was empty! "
+"Please try again later or contact the system administrator!"
+msgstr ""
+"Error inesperado: No es posible leer los datos debido a que la respuesta del "
+"servidor está vacía. Por favor, inténtelo de nuevo más tarde o contacte con "
+"el administrador del sistema."
+
+msgid "Unified Mail"
+msgstr "Correo unificado"
+
+msgid "United Arab Emirates"
+msgstr "Emiratos Árabes Unidos"
+
+msgid "United Kingdom"
+msgstr "Reino Unido"
+
+msgid "United States"
+msgstr "Estados Unidos"
+
+msgid "United States Minor Outlying Islands"
+msgstr "Islas Periféricas Menores de Estados Unidos"
+
+msgid "Unknown"
+msgstr "Desconocida"
+
+msgid "Unlock"
+msgstr "Desbloquear"
+
+msgid "Unnamed signature"
+msgstr "Firma sin nombre"
+
+msgid "Unread"
+msgstr "No leido"
+
+#: calendar/calendar_availability.xml:97
+msgid "Until:"
+msgstr "Hasta:"
+
+msgid "Up"
+msgstr "Arriba"
+
+msgid "Update"
+msgstr "Actualizar"
+
+#: contacts/newContact.xml:500
+msgid "Upload a picture"
+msgstr "Subir una foto"
+
+#: contacts/newContact.xml:492
+msgid "Upload image"
+msgstr "Subir imagen"
+
+msgid "Uruguay"
+msgstr "Uruguay"
+
+#: config_popups.xml:80
+msgid "Use \"Standalone\" Mode:"
+msgstr "Usar modo \"independiente\":"
+
+msgid "Use SSL connection"
+msgstr "Usar conexión SSL"
+
+msgid "Use Unified Mail for this account"
+msgstr "Utilizar el Correo unificado para esta cuenta"
+
+msgid "Use as template"
+msgstr "Usar como plantilla"
+
+#: calendar/calendar_availability.xml:100
+msgid "Use for appointment"
+msgstr "Usar para cita"
+
+#: config/config.xml:78
+msgid "Use the expert mode?"
+msgstr "¿Utilizar el modo experto?"
+
+#: ox.xml:78
+msgid ""
+"Use this option when logging in to the server from a public or shared "
+"computer. Your credentials are not saved locally. You can only use one "
+"browser window for working with the groupware. You can not re-load the "
+"browser window. In order to finish working with the groupware, first log out "
+"from the server. Close the browser window. This prevents unauthorized access "
+"to your groupware data."
+msgstr ""
+"Utilice esta opción cuando acceda al servidor desde un ordenador público o "
+"compartido. Sus credenciales no se guardarán localmente. Sólo puede utilizar "
+"una ventana del navegador para trabajar con el software colaborativo. No "
+"puede actualizar la ventana del navegador. Al terminar de trabajar con el "
+"software colaborativo, primero desconéctese del servidor. Cierre la ventana "
+"del navegador. Esto evita cualquier acceso no autorizado a sus datos del "
+"software colaborativo."
+
+msgid "Use username and password"
+msgstr "Usar nombre de usuario y contraseña"
+
+msgid "User"
+msgstr "Usuario"
+
+#: ox.xml:105
+msgid "User name:"
+msgstr "Nombre de usuario:"
+
+#: participants.xml:79
+msgid "Users"
+msgstr "Usuarios"
+
+msgid "Uzbekistan"
+msgstr "Uzbekistán"
+
+msgid "V-Split"
+msgstr "División Vert"
+
+msgid "V-split view"
+msgstr "Vista Division Vert."
+
+msgid "Vacation Notice"
+msgstr "Aviso de ausencia"
+
+msgid "Vacation notice is active"
+msgstr "El aviso de ausencia está activo"
+
+msgid "Vanuatu"
+msgstr "Vanuatu"
+
+msgid "Venezuela"
+msgstr "Venezuela"
+
+#: ox.xml:141
+msgid "Version"
+msgstr "Versión"
+
+#: infostore/split.xml:175
+msgid "Version Comment:"
+msgstr "Comentario de la versión:"
+
+msgid "Version comment"
+msgstr "Comentario de la versión"
+
+#: infostore/split.xml:54
+msgid "Versions"
+msgstr "Versiones"
+
+msgid "Very high"
+msgstr "Muy alta"
+
+msgid "Very low"
+msgstr "Muy baja"
+
+msgid "Very strong"
+msgstr "Muy fuerte"
+
+msgid "Very weak"
+msgstr "Muy débil"
+
+msgid "Viet Nam"
+msgstr "Vietnam"
+
+#: config/config.xml:54 config/config_calendar.xml:95
+msgid "View"
+msgstr "Vista"
+
+#: calendar/month.xml:28 calendar/week.xml:28
+msgid "View all appointments from all available calendars"
+msgstr "Ver todas las citas para todos los calendarios disponibles"
+
+#: contacts/contactsDetail.xml:67
+msgid "View all attachments"
+msgstr "Ver todos los adjuntos"
+
+#: calendar/calendarList.xml:40 calendar/week.xml:38
+msgid "View the next week"
+msgstr "Ver la semana siguiente"
+
+#: calendar/calendarList.xml:38 calendar/week.xml:36
+msgid "View the previous week"
+msgstr "Ver la semana anterior"
+
+msgid "Virgin Islands, British"
+msgstr "Islas Vírgenes Británicas"
+
+msgid "Virgin Islands, U.S."
+msgstr "Islas Vírgenes Americanas"
+
+msgid "Visibility"
+msgstr "Visibilidad"
+
+msgid "Visible folder"
+msgstr "Carpeta visible"
+
+#: config/config.xml:120
+msgid "Visual effects"
+msgstr "Efectos visuales"
+
+#
+msgctxt "wednesday"
+msgid "W"
+msgstr "M"
+
+msgid "Waiting"
+msgstr "En espera"
+
+msgid "Wallis and Futuna"
+msgstr "Wallis y Futuna"
+
+msgid "Warning"
+msgstr "Advertencia"
+
+#. %1$s is the error code (not used).
+#. %2$s is the formatted error message.
+#. %3$s is the unique error ID (not used).
+#, c-format
+msgid "Warning: %2$s"
+msgstr "Advertencia: %2$s"
+
+#: mail/detailMail.xml:63 mail/mailHSplit.xml:52
+msgid "Warning: This message might be an E-Mail scam!"
+msgstr "Atención: ¡Este E-Mail podría ser un timo!"
+
+#: config_popups.xml:155
+msgid "Warnings:"
+msgstr "Advertencias:"
+
+msgid "Weak"
+msgstr "Débil"
+
+msgid "Wed"
+msgstr "mié"
+
+#: calendar/month.xml:46 series.xml:76
+msgid "Wednesday"
+msgstr "miércoles"
+
+msgid "Week"
+msgstr "Semana"
+
+#: series.xml:63
+msgid "Week(s) on"
+msgstr "Semana(s) en"
+
+msgid "Weekend Day"
+msgstr "Día de fin de semana"
+
+#: series.xml:24
+msgid "Weekly"
+msgstr "Semanal"
+
+msgid "Western Sahara"
+msgstr "Sáhara Occidental"
+
+#: config/config_mail.xml:215
+msgid "When \"Reply all\":"
+msgstr "Al \"Responder a todos\":"
+
+msgid "When activating this option an installation wizard will be launched."
+msgstr "Cuando se active esta opción se lanzará un asistente."
+
+#: config/config_calendar.xml:128
+msgid "When switching to another view"
+msgstr "Al cambiar a otra vista"
+
+msgid ""
+"When using this publish feature, you as the current owner of the data are "
+"responsible for being careful with privacy rules and for complying with "
+"legal obligations (Copyright, Privacy Laws).\n"
+"\n"
+"Especially when publishing personal data you are the responsible party "
+"according to the Federal Data Protection Act (BDSG, Germany) or other "
+"Privacy Acts of your country.\n"
+"\n"
+"According to European and other national regulations you as the responsible "
+"party are in charge of data economy, and must not publish or forward "
+"personal data without the person's consent.\n"
+"\n"
+"Beyond legal obligations, we would like to encourage extreme care when "
+"dealing with personal data. Please consider carefully where you store and to "
+"whom you forward personal data. Please ensure appropriate access protection, "
+"e.g. by proper password protection."
+msgstr ""
+"Al utilizar esta característica de publicación, usted, como propietario "
+"actual de los datos, tiene la responsabilidad de ser respetuoso con las "
+"normas de privacidad y de cumplir con sus obligaciones legales (Copyright, "
+"Leyes sobre privacidad).\n"
+"\n"
+"Usted es la parte responsable, especialmente al publicar datos personales, "
+"de acuerdo con la Ley Orgánica de Protección de Datos (LOPD, España) u otras "
+"leyes sobre privacidad de su país.\n"
+"\n"
+"De acuerdo a las regulaciones europeas y nacionales, usted, como parte "
+"responsable, se hace cargo de todo el ciclo de vida de los datos, y no debe "
+"publicar ni traspasar datos personales sin el consentimiento de dicha "
+"persona.\n"
+"\n"
+"Más allá de estas obligaciones legales, nos gustaría recomendarle un cuidado "
+"extremo cuando se traten datos personales. Por favor, valore con cuidado "
+"dónde almacena y a quién traspasa datos personales. Por favor, asegúrese de "
+"usar una protección de acceso apropiada, p.ej. mediante una adecuada "
+"protección por contraseña."
+
+#: calendar/newAppointment.xml:88
+msgid "Whole-day"
+msgstr "Día completo"
+
+#: config/config.xml:92
+msgid "Windows are shown as"
+msgstr "Las ventanas se muestran como"
+
+msgid "Work Day"
+msgstr "Día laborable"
+
+msgid "Work Week"
+msgstr "Semana laboral"
+
+#: config/config_calendar.xml:186
+msgid "Work week starts on"
+msgstr "La semana de trabajo comienza el"
+
+msgid "Would you like to create the following birthday series appointment?"
+msgstr "¿Quiere crear una serie de citas para el siguiente cumpleaños?"
+
+#. Yottabyte unit (1024^8)
+msgid "YB"
+msgstr "YB"
+
+#: series.xml:26
+msgid "Yearly"
+msgstr "Anual"
+
+msgid "Yemen"
+msgstr "Yemen"
+
+#: config/config.xml:45 config/config.xml:83 config/config.xml:128
+#: config/config.xml:165 config/config.xml:179 config/config.xml:193
+#: config/config.xml:207 config/config.xml:221 config/config.xml:235
+#: config/config_calendar.xml:54 config/config_calendar.xml:68
+#: config/config_calendar.xml:82 config/config_calendar.xml:226
+#: config/config_calendar.xml:243 config/config_calendar.xml:257
+#: config/config_calendar.xml:293 config/config_contact.xml:47
+#: config/config_infostore.xml:39 config/config_mail.xml:60
+#: config/config_mail.xml:73 config/config_mail.xml:86
+#: config/config_mail.xml:99 config/config_mail.xml:112
+#: config/config_mail.xml:128 config/config_mail.xml:141
+#: config/config_mail.xml:166 config/config_mail.xml:179
+#: config/config_mail.xml:192 config/config_mail.xml:301
+#: config/config_mail.xml:314 config/config_mail.xml:327
+#: config/config_mail.xml:340 config/config_mail.xml:353
+#: config/config_portal.xml:80 config/config_tasks.xml:47
+#: config/config_tasks.xml:65 config/config_tasks.xml:82
+#: config/config_tasks.xml:96 confirm.xml:43 rightshandling.xml:32
+msgid "Yes"
+msgstr "Sí"
+
+#. Full sentence:
+#. This feature is not available but you can upgrade your account right now.
+#. Upsell
+msgid "Yes, upgrade my account"
+msgstr "Sí, actualice mi cuenta"
+
+msgid "You can download the updates from within the updater."
+msgstr "Puede descargar las actualizaciones desde dentro del updater."
+
+msgid "You can't create a new recurrence in a modified appointment."
+msgstr "No se puede crear una nueva serie en una cita modificada."
+
+msgid "You cannot remove the owner of the shared folder from this appointment."
+msgstr ""
+"No se pude eliminar de esta cita al propietario de la carpeta compartida."
+
+msgid "You cannot remove yourself from this appointment."
+msgstr "No se puede eliminar a sí mismo de esta cita."
+
+msgid "You did not enter a subject. Would you like to enter a subject now?"
+msgstr "No ha indicado ningún asunto. ¿Desea hacerlo ahora?"
+
+msgid ""
+"You do not have write permission for this folder. The new contact will be "
+"saved in your personal contacts folder. "
+msgstr ""
+"No tiene permisos de escritura en esta carpeta. El nuevo contacto se "
+"guardará en su carpeta de contactos personal."
+
+msgid "You do not have write permission for this object."
+msgstr "No tiene permisos de escritura para este objeto."
+
+#: rightshandling.xml:22
+msgid ""
+"You don't have enough rights to create objects in this folder. Do you want "
+"to create the object in your default folder?"
+msgstr ""
+"No tiene suficientes permisos para crear objetos en esta carpeta. ¿Desea "
+"crear el objeto en su carpeta predeterminada?"
+
+msgid ""
+"You entered an E-Mail address with IDN domain. In some environments IDN "
+"domains will not work as expected. Would you like to add it nevertheless?"
+msgstr ""
+"Ha introducido una dirección de correo con un dominio IDN. En algunos "
+"entornos, los dominios IDN no funcionan tal y como se espera. ¿Desea "
+"añadirla de todos modos?"
+
+msgid ""
+"You have set up an external E-Mail account. The sole responsibility for the "
+"availability of the external E-Mail account lies with the service provider."
+msgstr ""
+"Ha configurado una cuenta externa de correo. La disponibilidad de una cuenta "
+"externa de correo depende exclusivamente del proveedor de correo "
+"correspondiente."
+
+#. Appointment reminder
+#. %s is the time, formatted using the messages with context "in"
+#, c-format
+msgid "You have the following appointment in %s:"
+msgstr "Tiene la siguiente cita en %s:"
+
+msgid "You have to enable cookies to use this application."
+msgstr "Tiene que activar las cookies para usar esta aplicación."
+
+#: acceptdeny.xml:27
+msgid "You have unconfirmed appointments"
+msgstr "Tiene citas sin confirmar"
+
+#: acceptdeny.xml:28
+msgid "You have unconfirmed tasks"
+msgstr "Tiene tareas sin confirmar"
+
+msgid "You must specify an E-Mail address for redirection."
+msgstr "Debe especificar una dirección de E-Mail para la redirección."
+
+#. %s is the product name (default 'Open-Xchange Server')
+msgid ""
+"You need to authorize %1$s to use your account. Please click on the button "
+"below and the authorization will proceed in a separate window."
+msgstr ""
+"Necesita autorizar a %1$s para utilizar su cuenta. Por favor, presione en el "
+"botón siguiente y la autorización se llevará a cabo en una ventana diferente."
+
+#. %d is the number of minutes of inactivity
+#, c-format
+msgid "You seem to have been inactive for %d minute."
+msgid_plural "You seem to have been inactive for %d minutes."
+msgstr[0] "Parece que ha estado inactivo durante %d minuto."
+msgstr[1] "Parece que ha estado inactivo durante %d minutos."
+
+msgid "You wanted to be reminded about the following InfoItem:"
+msgstr "Usted quería que se le recordase el siguiente elemento de información:"
+
+msgid "You're not allowed to delete this attachment!"
+msgstr "¡No se le permite borrar este adjunto!"
+
+msgid "Your browser does not support AJAX."
+msgstr "Su navegador no admite AJAX."
+
+msgid "Your contact information have been saved."
+msgstr "Su información de contacto ha sido guardada."
+
+msgid "Your name"
+msgstr "Su nombre"
+
+msgid "Your new password has been saved."
+msgstr "Su nueva contraseña ha sido guardada."
+
+msgid "Your old password"
+msgstr "Su antigua contraseña"
+
+msgid ""
+"Your password changed. For a future use of your subscriptions and additional "
+"E-Mail accounts enter your old password. This only has to be done once. If "
+"you now cancel the action you have to newly set up all subscriptions and "
+"additional E-Mail accounts."
+msgstr ""
+"Su contraseña ha cambiado. Introduzca su contraseña anterior para utilizar "
+"en el futuro sus suscripciones y cuentas de E-Mail adicionales. Esto sólo "
+"tendrá que hacerlo una vez. Si cancela ahora esta acción, tendrá que "
+"configurar desde cero todas las suscripciones y cuentas de E-Mail "
+"adicionales."
+
+msgid ""
+"Your password is more secure if it also contains capital letters, numbers, "
+"and special characters like %1$s."
+msgstr ""
+"Su contraseña es más segura si contiene también letras en mayúsculas, "
+"números, y caracteres especiales como %1$s."
+
+msgid "Your personal data cannot be saved!"
+msgstr "¡Sus datos personales no pudieron guardarse!"
+
+#: confirm.xml:97
+msgid ""
+"Your scheduled appointment conflicts with one or more previously scheduled "
+"appointments."
+msgstr ""
+"Su cita planificada entra en conflicto con una o más citas planificadas con "
+"anterioridad."
+
+msgid "Your selected picture will be displayed after saving"
+msgstr "La foto seleccionada se mostrará después de ser guardada"
+
+msgid "Your session has expired. Please log in again."
+msgstr "Su sesión ha expirado. Por favor, conéctese de nuevo."
+
+msgid "Your session has expired. You have to close this window."
+msgstr "Su sesión ha expirado. Tiene que cerrar esta ventana."
+
+msgid "Your settings have been saved"
+msgstr "Sus ajustes han sido guardados"
+
+msgid "Your settings have been saved."
+msgstr "Sus ajustes han sido guardados."
+
+#. Zettabyte unit (1024^7)
+msgid "ZB"
+msgstr "ZB"
+
+#: contacts/newContact.xml:255
+msgid "ZIP"
+msgstr "CP"
+
+msgid "ZIP (business)"
+msgstr "Código postal (profesional)"
+
+msgid "ZIP (private)"
+msgstr "Código postal (personal)"
+
+#: contacts/newContact.xml:150
+msgid "ZIP / City"
+msgstr "CP / Ciudad"
+
+#: contacts/newContact.xml:360
+msgid "ZIP / City (other)"
+msgstr "CP / Ciudad (otro)"
+
+msgid "ZIP:"
+msgstr "Código postal:"
+
+msgid "Zambia"
+msgstr "Zambia"
+
+msgid "Zimbabwe"
+msgstr "Zimbabue"
+
+msgid "Zloty"
+msgstr "Zloty"
+
+msgid "Zoom"
+msgstr "Zoom"
+
+msgid "above"
+msgstr "por encima"
+
+#: calendar/calendar_availability.xml:33
+msgid "absent on business"
+msgstr "ausente por trabajo"
+
+msgid "accepted"
+msgstr "aceptada"
+
+#: series.xml:194
+msgid "after"
+msgstr "después de"
+
+msgid "all"
+msgstr "todas"
+
+msgid "any"
+msgstr "cualquiera"
+
+msgid "appointments"
+msgstr "citas"
+
+msgid "ascending"
+msgstr "ascendente"
+
+msgid "attachment"
+msgstr "adjunto"
+
+msgid "auto"
+msgstr "auto"
+
+#: calendar/calendarList.xml:38 calendar/week.xml:36
+msgid "back"
+msgstr "volver"
+
+msgid "below"
+msgstr "por debajo"
+
+#. Information about a locked InfoItem
+#. %1$s is the name of the user who locked the Infoitem.
+#. %2$s is the expiration date of the lock.
+#, c-format
+msgid "by %1$s until %2$s"
+msgstr "en %1$s hasta %2$s"
+
+#. Byte unit
+msgid "bytes"
+msgstr "bytes"
+
+#: config/config_mail.xml:269
+msgid "characters"
+msgstr "caracteres"
+
+#. Second line in the grid of the notification dialog
+#. %s is the name of the appointment creator or organizer
+#, c-format
+msgid "created by %s"
+msgstr "creado por %s"
+
+msgid "current costs"
+msgstr "costes actuales"
+
+msgid "d.M.yy"
+msgstr "d.M.aa"
+
+msgid "d.M.yyyy"
+msgstr "d.M.aaaa"
+
+msgid "d.MM.yy"
+msgstr "d.MM.aa"
+
+#: series.xml:104
+msgid "day every"
+msgstr "día cada"
+
+msgid "dd-MMM-yy"
+msgstr "dd-MMM-aa"
+
+msgid "dd.MM.yy"
+msgstr "dd.MM.aa"
+
+msgid "dd.MM.yyyy"
+msgstr "dd.MM.aaaa"
+
+msgid "dd/MM/yy"
+msgstr "dd/MM/aa"
+
+msgid "dd/MM/yyyy"
+msgstr "dd/MM/aaaa"
+
+msgid "declined"
+msgstr "rechazada"
+
+msgid "default"
+msgstr "predeterminado"
+
+msgid "descending"
+msgstr "descendente"
+
+msgid "disabled"
+msgstr "desactivado"
+
+#: series.xml:119
+msgid "each"
+msgstr "cada"
+
+msgid "enabled"
+msgstr "activado"
+
+#. inclusive range, so e. g. "before" would be wrong
+msgid "ends on"
+msgstr "termina el"
+
+msgid "estimated costs"
+msgstr "costes estimados"
+
+msgid "first"
+msgstr "primera"
+
+#: calendar/calendarList.xml:40 calendar/week.xml:38
+msgid "forward"
+msgstr "avanzar"
+
+msgid "fourth"
+msgstr "cuarta"
+
+#: calendar/calendar_availability.xml:41
+msgid "free"
+msgstr "libre"
+
+#: config/config_import.xml:40
+msgid "iCal"
+msgstr "iCal"
+
+msgid "iCalendar"
+msgstr "iCalendar"
+
+#: series.xml:151
+msgid "in"
+msgstr "en"
+
+#. On some date
+msgid "is on"
+msgstr "es el"
+
+#: config/config_calendar.xml:145
+msgid "keep the current time range"
+msgstr "mantener el intervalo de tiempo actual"
+
+msgid "last"
+msgstr "última"
+
+msgid "locked by"
+msgstr "bloqueado por"
+
+#: tasks/newTask.xml:176 tasks/newTask.xml:184
+msgid "minutes"
+msgstr "minutos"
+
+#. The format for minutes on calendar timescales
+#. when the interval is less than one hour.
+#. 12h formats should use AM/PM ("a").
+#. 24h formats should use minutes ("mm").
+msgctxt "dayview"
+msgid "mm"
+msgstr "mm"
+
+#: series.xml:106 series.xml:121
+msgid "month"
+msgstr "mes"
+
+#: calendar/detailAppointment.xml:70 calendar/detailAppointment.xml:91
+msgid "more"
+msgstr "más"
+
+#: series.xml:185
+msgid "never"
+msgstr "nunca"
+
+msgid "no reminder"
+msgstr "sin recordatorio"
+
+msgid "not sent"
+msgstr "no enviado"
+
+#: series.xml:102 series.xml:116 series.xml:148 series.xml:214
+msgid "on"
+msgstr "el"
+
+#. #-#-#-#-#  ox.pot (Open-Xchange 6)  #-#-#-#-#
+#. Appointment description in the confirmation dialog.
+#. %1$s is the title.
+#. %2$s is the location.
+#, c-format
+msgid "organized by %s"
+msgstr "organizado por %s"
+
+msgid "please select"
+msgstr "por favor, seleccione"
+
+#: config/config.xml:312 config/config.xml:363
+msgid "predefined"
+msgstr "predefinido"
+
+#: calendar/calendar_availability.xml:25
+msgid "reserved"
+msgstr "reservado"
+
+#: contacts/contactsDetail.xml:45
+msgid "route planner"
+msgstr "planificador de ruta"
+
+msgid "second"
+msgstr "segunda"
+
+#: config/config_calendar.xml:133
+msgid "set the last used time range of the new view"
+msgstr ""
+"establecer el intervalo de tiempo empleado la última vez de la vista nueva"
+
+#. inclusive range, so e. g. "after" would be wrong
+msgid "starts on"
+msgstr "comienza el"
+
+#. Address format for 2 line display (card view).
+#.
+#. DO NOT TRANSLATE THE FIELD NAMES!
+#.
+#. Only change the order and punctuation.
+#. \n separates multiple lines. Other punctuation appears as-is.
+#. Available fields are: street, postal_code, city, state, country
+msgid ""
+"street\n"
+"postal_code city"
+msgstr ""
+"street\n"
+"postal_code city"
+
+#. Address format for 4 line display.
+#.
+#. DO NOT TRANSLATE THE FIELD NAMES!
+#.
+#. Only change the order and punctuation.
+#. \n separates multiple lines. Other punctuation appears as-is.
+#. Available fields are: street, postal_code, city, state, country
+msgid ""
+"street\n"
+"postal_code city\n"
+"state\n"
+"country"
+msgstr ""
+"street\n"
+"postal_code city\n"
+"state\n"
+"country"
+
+#. The address format for input fields.
+#.
+#. DO NOT TRANSLATE THE FIELD NAMES!
+#.
+#. Only change the order.
+#. Comma (,) separates lines, slash (/) separates fields in a line.
+msgid "street,postal_code/city,country,state"
+msgstr "street,postal_code/city,country,state"
+
+msgid "tasks"
+msgstr "tareas"
+
+#: calendar/calendar_availability.xml:49
+msgid "temporary"
+msgstr "provisional"
+
+msgid "tentative"
+msgstr "provisional"
+
+msgid "third"
+msgstr "tercera"
+
+msgid "to"
+msgstr "a"
+
+msgid "unknown"
+msgstr "desconocido"
+
+msgid "unkown"
+msgstr "desconocido"
+
+#: config/config.xml:314 config/config.xml:365
+msgid "user defined"
+msgstr "definido por el usuario"
+
+#: config/config_import.xml:49
+msgid "vCard"
+msgstr "vCard"
+
+msgid "waiting"
+msgstr "en espera"
+
+msgid "yy/MM/dd"
+msgstr "aa/MM/dd"
+
+#. #-#-#-#-#  ox.pot (Open-Xchange 6)  #-#-#-#-#
+#. Default date format string
+#. #-#-#-#-#  ox.pot (Open-Xchange 6)  #-#-#-#-#
+#. Default date format string
+msgid "yyyy-MM-dd"
+msgstr "dd/MM/yyyy"
+
+# default date format
+#. normal translation. replace letters only (e.g. jjjj-MM-tt)
+#. not to be confused with the default format
+msgctxt "label"
+msgid "yyyy-MM-dd"
+msgstr "aaaa-MM-dd"
+
+msgid "Åland Islands"
+msgstr "Islas Aland"
+
+#~ msgid "&Distributionlist"
+#~ msgstr "&Lista de distribución"
+
+#~ msgid ""
+#~ "Supported Outlook versions (Connector for Microsoft Outlook): Microsoft "
+#~ "Outlook 2003, Microsoft Outlook 2007"
+#~ msgstr ""
+#~ "Versiones de Outlook admitidas (Conector para Microsoft Outlook): "
+#~ "Microsoft Outlook 2003, Microsoft Outlook 2007"
+
+#~ msgid "... or create a fresh one for your profile"
+#~ msgstr "... o crear uno nuevo para su perfil"
+
+#~ msgid "Add Facebook/Twitter ..."
+#~ msgstr "Añadir Facebook/Twitter ..."
+
+#~ msgid "Add feed"
+#~ msgstr "Añadir feed"
+
+#~ msgid "Facebook"
+#~ msgstr "Facebook"
+
+#~ msgid "Feed has been added"
+#~ msgstr "Se ha añadido el Feed"
+
+#~ msgid "No activity"
+#~ msgstr "Sin actividad"
+
+#~ msgid "Once"
+#~ msgstr "Una vez"
+
+#~ msgid "Preview"
+#~ msgstr "Vista previa"
+
+#~ msgid "RSS Feed"
+#~ msgstr "Feed RSS"
+
+#~ msgid "RSS Feed URL:"
+#~ msgstr "URL del Feed RSS:"
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "New account..."
+#~ msgstr "Nueva cuenta..."
+
+#~ msgid "OAuth Accounts"
+#~ msgstr "Cuentas OAuth"
+
+#~ msgid "No recipients have been added"
+#~ msgstr "No se ha añadido ningún destinatario"
+
+#~ msgid "Please select a contact to add"
+#~ msgstr "Por favor, seleccione un contacto a añadir"
+
+#~ msgid "Select a contact"
+#~ msgstr "Seleccionar un contacto"
+
+#~ msgid "Change Task"
+#~ msgstr "Cambiar tarea"
+
+#~ msgid "All emails"
+#~ msgstr "Todo el email"
+
+#~ msgid "(32-bit only)"
+#~ msgstr "(sólo 32 bits)"
+
+#~ msgid "Accept Party-Crasher"
+#~ msgstr "Aceptar participante extra"
+
+#~ msgid "Appointment '%s' not found."
+#~ msgstr "No se ha encontrado la cita '%s'."
+
+#~ msgid "Confirmation sent."
+#~ msgstr "Confirmación enviada."
+
+#~ msgid ""
+#~ "Do you want to delete the whole series or a single series appointments?"
+#~ msgstr "¿Quiere borrar la serie completa o citas individuales de la serie?"
+
+#~ msgid "No series"
+#~ msgstr "No hay series."
+
+#~ msgid "Series"
+#~ msgstr "Serie"
+
+#~ msgid "Series Duration"
+#~ msgstr "Duración de la serie"
+
+#~ msgid "Series appointment"
+#~ msgstr "Cita recurrente"
+
+#~ msgctxt "calendar"
+#~ msgid "Series..."
+#~ msgstr "Serie..."
+
+#~ msgctxt "tasks"
+#~ msgid "Series..."
+#~ msgstr "Serie..."
+
+#~ msgid "Series:"
+#~ msgstr "Serie:"
+
+#~ msgid "Tags"
+#~ msgstr "Etiquetas"
+
+#~ msgid "This mail contains a reply to an invitation."
+#~ msgstr "Este correo contiene una respuesta a una invitación."
+
+#~ msgid "This mail contains an invitation to an appointment."
+#~ msgstr "Este correo contiene una invitación a una cita."
+
+#~ msgid "Update appointment"
+#~ msgstr "Actualizar cita"
+
+#~ msgid "Update successful"
+#~ msgstr "Actualización realizada con éxito"
+
+#~ msgid "Address (business)"
+#~ msgstr "Dirección (profesional)"
+
+#~ msgid "Company (business)"
+#~ msgstr "Empresa (profesional)"
+
+#~ msgid "E-Mail (business)"
+#~ msgstr "E-Mail (profesional)"
+
+#~ msgid "Enter business data"
+#~ msgstr "Introducir datos profesionales"
+
+#~ msgid "IM (business)"
+#~ msgstr "MI (profesional)"
+
+#~ msgid "IM (business):"
+#~ msgstr "MI (profesional):"
+
+#~ msgid "Matches"
+#~ msgstr "Cumple"
+
+#~ msgid "Mobile (private)"
+#~ msgstr "Celular (privado)"
+
+#~ msgid "Phone (business 2)"
+#~ msgstr "Teléfono (profesional 2)"
+
+#~ msgid "Phone (business 2):"
+#~ msgstr "Teléfono (profesional 2):"
+
+#~ msgid "Show 0 elements"
+#~ msgstr "Mostrar 0 elementos"

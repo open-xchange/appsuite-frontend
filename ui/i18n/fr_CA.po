@@ -4,14 +4,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
-"PO-Revision-Date: 2012-12-26 22:10+0100\n"
+"PO-Revision-Date: 2012-12-26 22:11+0100\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
 "Last-Translator: Éric Bischoff <eric@bureau-cornavin.com>\n"
 "Language-Team: French <fr@bureau-cornavin.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr_FR\n"
+"Language: fr_CA\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 1.5\n"
 
@@ -372,7 +372,7 @@ msgstr "Afficher les commentaires"
 
 #: apps/plugins/portal/facebook/register.js:77
 msgid "No wall posts yet."
-msgstr "Pas de messages sur le mur pour le moment."
+msgstr "Pas de messages sur le babillard pour le moment."
 
 #: apps/plugins/portal/facebook/register.js:179
 #: apps/plugins/portal/linkedIn/register.js:200
@@ -382,7 +382,7 @@ msgstr "Ajoutez votre compte"
 
 #: apps/plugins/portal/twitter/register.js:117
 msgid "Retweeted by %s"
-msgstr "Tweet renvoyé par %s"
+msgstr "Microblogue Tweeter renvoyé par %s"
 
 #: apps/plugins/portal/twitter/register.js:140
 msgid "Follow"
@@ -395,7 +395,7 @@ msgstr "Répondre"
 
 #: apps/plugins/portal/twitter/register.js:155
 msgid "Retweet"
-msgstr "Renvoyer un tweet"
+msgstr "Renvoyer un microblogue Tweeter"
 
 #: apps/plugins/portal/twitter/register.js:156
 msgid "Favorite"
@@ -407,19 +407,19 @@ msgstr "Favorisé"
 
 #: apps/plugins/portal/twitter/register.js:163
 msgid "Retweeted"
-msgstr "Renvoyé un tweet"
+msgstr "Renvoyé un microblogue Tweeter"
 
 #: apps/plugins/portal/twitter/register.js:188
 msgid "Could not load new tweets."
-msgstr "Impossible de charger de nouveaux tweets."
+msgstr "Impossible de charger de nouveaux microblogues Tweeter."
 
 #: apps/plugins/portal/twitter/register.js:227
 msgid "No tweets yet."
-msgstr "Pas de tweets pour le moment."
+msgstr "Pas de microblogues Tweeter pour le moment."
 
 #: apps/plugins/portal/twitter/register.js:275
 msgid "Tweet"
-msgstr "Tweet"
+msgstr "Microblogue Tweeter"
 
 #: apps/plugins/portal/birthdays/register.js:44
 #: apps/plugins/portal/birthdays/register.js:59
@@ -505,27 +505,27 @@ msgstr "Activités récentes"
 
 #: apps/plugins/portal/tumblr/settings/plugin.js:27
 msgid "Tumblr Blogs"
-msgstr "Blogs Tumblr"
+msgstr "Blogues Tumblr"
 
 #: apps/plugins/portal/tumblr/settings/plugin.js:75
 msgid "Edit a blog"
-msgstr "Modifier un blog"
+msgstr "Modifier un blogue"
 
 #: apps/plugins/portal/tumblr/settings/plugin.js:99
 #: apps/plugins/portal/tumblr/settings/plugin.js:269
 msgid "Please enter a blog URL."
-msgstr "Veuillez saisir une URL de blog."
+msgstr "Veuillez saisir une URL de blogue."
 
 #: apps/plugins/portal/tumblr/settings/plugin.js:116
 #: apps/plugins/portal/tumblr/settings/plugin.js:121
 #: apps/plugins/portal/tumblr/settings/plugin.js:285
 #: apps/plugins/portal/tumblr/settings/plugin.js:290
 msgid "Unknown error while checking tumblr blog."
-msgstr "Erreur inconnue en consultant le blog tumblr."
+msgstr "Erreur inconnue en consultant le blogue tumblr."
 
 #: apps/plugins/portal/tumblr/settings/plugin.js:163
 msgid "Delete a blog"
-msgstr "Supprimer un blog"
+msgstr "Supprimer un blogue"
 
 #: apps/plugins/portal/tumblr/settings/plugin.js:164
 msgid "Do you really want to delete the following blog?"
@@ -533,7 +533,7 @@ msgstr "Êtes-vous sûr de vouloir supprimer le blog suivant ?"
 
 #: apps/plugins/portal/tumblr/settings/plugin.js:245
 msgid "Add a blog"
-msgstr "Ajouter un blog"
+msgstr "Ajouter un blogue"
 
 #: apps/plugins/portal/tumblr/register.js:118
 msgid "Read article on tumblr.com"
@@ -885,7 +885,7 @@ msgstr "Envoyer un courriel à tous les participants"
 
 #: apps/io.ox/calendar/actions.js:421 apps/io.ox/mail/actions.js:782
 msgid "Save as distribution list"
-msgstr "Enregistrer comme liste de diffusion"
+msgstr "Enregistrer comme liste de distribution"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:223
 #: apps/io.ox/calendar/edit/recurrence-view.js:275
@@ -1086,7 +1086,7 @@ msgstr "jour en semaine"
 #: apps/io.ox/calendar/edit/recurrence-view.js:347
 #: apps/io.ox/calendar/edit/recurrence-view.js:406
 msgid "day of the weekend"
-msgstr "jour du weekend"
+msgstr "jour de la fin de semaine"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:359
 msgid ""
@@ -1399,14 +1399,14 @@ msgid ""
 "Internet Explorer 9 does not support attachment uploads. Please upgrade to "
 "Internet Explorer 10."
 msgstr ""
-"Internet Explorer 9 ne prend pas en charge les téléchargements de pièces "
+"Internet Explorer 9 ne prend pas en charge les téléversements de pièces "
 "jointes. "
 "Veuillez le mettre à jour en Internet Explorer 10."
 
 #: apps/io.ox/calendar/edit/template.js:438
 #: apps/io.ox/tasks/edit/view-template.js:551
 msgid "Drop here to upload a <b>new attachment</b>"
-msgstr "Déposer ici pour télécharger une <b>nouvelle pièce jointe</b> "
+msgstr "Déposer ici pour téléverser une <b>nouvelle pièce jointe</b> "
 
 #: apps/io.ox/calendar/edit/main.js:26
 msgid "Edit Appointment"
@@ -1454,7 +1454,7 @@ msgstr "Jour ouvré"
 
 #: apps/io.ox/calendar/util.js:286
 msgid "Weekend Day"
-msgstr "Jour du weekend"
+msgstr "Jour de fin de semaine"
 
 #: apps/io.ox/calendar/util.js:329
 msgid "Each %s Day"
@@ -1736,7 +1736,7 @@ msgstr "Êtes-vous sûr de vouloir supprimer ces éléments ?"
 
 #: apps/io.ox/contacts/actions.js:39
 msgid "Do you really want to delete this distribution list?"
-msgstr "Êtes-vous sûr de vouloir supprimer cette liste de diffusion ?"
+msgstr "Êtes-vous sûr de vouloir supprimer cette liste de distribution ?"
 
 #: apps/io.ox/contacts/actions.js:41
 msgid "Do you really want to delete this contact?"
@@ -1755,7 +1755,7 @@ msgstr "Ajouter un contact"
 
 #: apps/io.ox/contacts/actions.js:272
 msgid "Add distribution list"
-msgstr "Ajouter une liste de diffusion"
+msgstr "Ajouter une liste de distribution"
 
 #: apps/io.ox/contacts/actions.js:284
 msgid "Send mail"
@@ -1775,7 +1775,7 @@ msgstr "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
 #: apps/io.ox/contacts/main.js:104 apps/io.ox/contacts/model.js:297
 #: apps/io.ox/contacts/view-detail.js:152 apps/io.ox/participants/views.js:93
 msgid "Distribution list"
-msgstr "Liste de diffusion"
+msgstr "Liste de distribution"
 
 #: apps/io.ox/contacts/main.js:156
 msgid "Couldn't load contact data."
@@ -1910,7 +1910,7 @@ msgstr "Anniversaire"
 
 #: apps/io.ox/contacts/model.js:225 apps/io.ox/contacts/view-detail.js:236
 msgid "Department"
-msgstr "Service"
+msgstr "Département"
 
 #: apps/io.ox/contacts/model.js:226 apps/io.ox/contacts/view-detail.js:237
 msgid "Position"
@@ -1982,7 +1982,7 @@ msgstr "Tél. (voiture)"
 
 #: apps/io.ox/contacts/model.js:252
 msgid "Phone (company)"
-msgstr "Tél. (de la société)"
+msgstr "Tél. (entreprise)"
 
 #: apps/io.ox/contacts/model.js:253
 msgid "Phone (Home)"
@@ -1994,11 +1994,11 @@ msgstr "Tél. (privé 2)"
 
 #: apps/io.ox/contacts/model.js:256
 msgid "Cell phone"
-msgstr "Téléphone portable"
+msgstr "Téléphone cellulaire"
 
 #: apps/io.ox/contacts/model.js:257
 msgid "Cell phone alt"
-msgstr "Téléphone portable 2"
+msgstr "Téléphone cellulaire 2"
 
 #: apps/io.ox/contacts/model.js:258
 msgid "Phone (other)"
@@ -2031,7 +2031,7 @@ msgstr "Téléphone (RNIS)"
 
 #: apps/io.ox/contacts/model.js:265
 msgid "Pager"
-msgstr "Afficheur portable"
+msgstr "Téléavertisseur"
 
 #: apps/io.ox/contacts/model.js:266
 msgid "Telephone primary"
@@ -2067,7 +2067,7 @@ msgstr "Tél. (assistant)"
 
 #: apps/io.ox/contacts/model.js:274 apps/io.ox/tasks/view-detail.js:133
 msgid "Company"
-msgstr "Société"
+msgstr "Entreprise"
 
 #: apps/io.ox/contacts/model.js:275
 msgid "Image 1"
@@ -2159,7 +2159,7 @@ msgstr "Liens"
 
 #: apps/io.ox/contacts/model.js:299
 msgid "Mark as distributionlist"
-msgstr "Marquer comme liste de diffusion"
+msgstr "Marquer comme liste de de distribution"
 
 #: apps/io.ox/contacts/model.js:300
 msgid "Default address"
@@ -2179,7 +2179,7 @@ msgstr "Adresse autre"
 
 #: apps/io.ox/contacts/distrib/main.js:47
 msgid "Create distribution list"
-msgstr "Créer une liste de diffusion"
+msgstr "Créer une liste de distribution"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:39
 msgid "List name"
@@ -2236,7 +2236,7 @@ msgstr "Tél. (privé)"
 #: apps/io.ox/contacts/view-detail.js:267
 #: apps/io.ox/contacts/view-detail.js:268
 msgid "Mobile"
-msgstr "Tél. portable"
+msgstr "Tél. mobile"
 
 #: apps/io.ox/contacts/view-detail.js:296
 msgid "Primary Email"
@@ -2277,7 +2277,7 @@ msgstr "Renommer"
 
 #: apps/io.ox/files/actions.js:399
 msgid "Upload new file"
-msgstr "Télécharger un nouveau fichier"
+msgstr "Téléverser un nouveau fichier"
 
 #: apps/io.ox/files/actions.js:406
 msgid "Share current folder"
@@ -2313,15 +2313,15 @@ msgstr "Supprimer la version"
 
 #: apps/io.ox/files/actions.js:551
 msgid "Drop here to upload a <b>new file</b>"
-msgstr "Déposer ici pour télécharger un <b>nouveau fichier</b>"
+msgstr "Déposer ici pour téléverser un <b>nouveau fichier</b>"
 
 #: apps/io.ox/files/actions.js:565
 msgid "Drop here to upload a <b>new version</b> of \"%1$s\""
-msgstr "Déposer ici pour télécharger une <b>nouvelle version</b> de « %1$s »"
+msgstr "Déposer ici pour téléverser une <b>nouvelle version</b> de « %1$s »"
 
 #: apps/io.ox/files/actions.js:571
 msgid "Drop here to upload a <b>new version</b>"
-msgstr "Déposer ici pour télécharger une <b>nouvelle version</b>"
+msgstr "Déposer ici pour téléverser une <b>nouvelle version</b>"
 
 #: apps/io.ox/files/actions.js:668
 msgid "View Slideshow"
@@ -2404,7 +2404,7 @@ msgstr "Version actuelle"
 
 #: apps/io.ox/files/list/view-detail.js:112
 msgid "Upload a new version"
-msgstr "Télécharger une nouvelle version"
+msgstr "Téléverser une nouvelle version"
 
 #: apps/io.ox/files/list/view-detail.js:119
 msgid "Versions"
@@ -2428,15 +2428,15 @@ msgstr "Dernière modification :"
 
 #: apps/io.ox/files/list/view-detail.js:400
 msgid "Upload"
-msgstr "Télécharger"
+msgstr "Téléverser"
 
 #: apps/io.ox/files/list/view-detail.js:408
 msgid "Uploading..."
-msgstr "Téléchargement en cours…"
+msgstr "Téléversement en cours…"
 
 #: apps/io.ox/files/list/view-detail.js:418
 msgid "Upload new version"
-msgstr "Télécharger une nouvelle version"
+msgstr "Téléverser une nouvelle version"
 
 #: apps/io.ox/files/list/view-detail.js:434
 msgid "Version Comment:"
@@ -2447,7 +2447,7 @@ msgid ""
 "Internet Explorer 9 does not support file uploads. Please upgrade to "
 "Internet Explorer 10."
 msgstr ""
-"Internet Explorer 9 ne prend pas en charge les téléchargements de fichiers. "
+"Internet Explorer 9 ne prend pas en charge les téléversements de fichiers. "
 "Veuillez le mettre à jour en Internet Explorer 10."
 
 #. Show more fields in the file creation dialog
@@ -2669,7 +2669,7 @@ msgstr "Informations de facturation"
 
 #: apps/io.ox/tasks/edit/view-template.js:290
 msgid "Companies"
-msgstr "Sociétés"
+msgstr "Entreprises"
 
 #: apps/io.ox/tasks/edit/view-template.js:388
 #: apps/io.ox/tasks/edit/view-template.js:423
@@ -2685,7 +2685,7 @@ msgid ""
 "Attachment uploads are not supported in Internet Explorer 9. Please upgrade "
 "to Internet Explorer 10."
 msgstr ""
-"Internet Explorer 9 ne prend pas en charge les téléchargements de pièces "
+"Internet Explorer 9 ne prend pas en charge les téléversements de pièces "
 "jointes. "
 "Veuillez le mettre à jour en Internet Explorer 10."
 
@@ -2830,7 +2830,7 @@ msgstr "Décliné"
 
 #: apps/io.ox/tasks/view-detail.js:193
 msgid "Attachments   "
-msgstr "Pièces jointes  "
+msgstr "Pièces jointes"
 
 #: apps/io.ox/tasks/view-detail.js:201
 msgid "all"
@@ -4272,7 +4272,7 @@ msgstr "Copie carbone invisible à"
 
 #: apps/io.ox/mail/write/view-main.js:319
 msgid "Blind copy (BCC) to"
-msgstr "Copie carbone invisible (BCC) à"
+msgstr "Copie carbone invisible (CCI) à"
 
 #: apps/io.ox/mail/write/view-main.js:332
 #: apps/io.ox/mail/write/view-main.js:362
@@ -4409,8 +4409,7 @@ msgstr "Bloquer le préchargement des images externes liées"
 #: apps/io.ox/mail/settings/old_pane.js:162
 #: apps/io.ox/mail/settings/pane.js:48
 msgid "Display emoticons as graphics in text E-Mails"
-msgstr ""
-"Afficher les émoticônes sous forme graphique dans les messages de texte"
+msgstr "Afficher les binettes sous forme graphique dans les messages de texte"
 
 #: apps/io.ox/mail/settings/old_pane.js:163
 #: apps/io.ox/mail/settings/pane.js:49
@@ -4708,7 +4707,7 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "&Pièce jointe"
 
 #~ msgid "&Distribution List"
-#~ msgstr "Liste de &diffusion"
+#~ msgstr "Liste de &distribution"
 
 #~ msgid "&E-Mail"
 #~ msgstr "&Courrier électronique"
@@ -4809,7 +4808,7 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "Ajouter →"
 
 #~ msgid "Add Bcc →"
-#~ msgstr "Ajouter BCC →"
+#~ msgstr "Ajouter CCI →"
 
 #~ msgid "Add Cc →"
 #~ msgstr "Ajouter CC →"
@@ -5072,7 +5071,7 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "Azerbaïdjan"
 
 #~ msgid "BCC"
-#~ msgstr "BCC"
+#~ msgstr "CCI"
 
 #~ msgid "Bahamas"
 #~ msgstr "Bahamas"
@@ -5090,7 +5089,7 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "Barres"
 
 #~ msgid "Based on mailing list"
-#~ msgstr "Suivant la liste de discussion"
+#~ msgstr "Suivant la liste de distribution"
 
 #~ msgid "Based on recipients"
 #~ msgstr "Suivant les destinataires"
@@ -5099,13 +5098,13 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "Suivant l'expéditeur"
 
 #~ msgid "Bcc"
-#~ msgstr "BCC"
+#~ msgstr "CCI"
 
 #~ msgid "Bcc..."
-#~ msgstr "BCC..."
+#~ msgstr "CCI..."
 
 #~ msgid "Bcc:"
-#~ msgstr "BCC :"
+#~ msgstr "CCI :"
 
 #~ msgid "Be a participant when creating appointments?"
 #~ msgstr "Être un participant lors de la création de rendez-vous ?"
@@ -5248,10 +5247,10 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "CC :"
 
 #~ msgid "Cell phone (private):"
-#~ msgstr "Tél portable (privé) :"
+#~ msgstr "Tél cellulaire (privé) :"
 
 #~ msgid "Cell phone:"
-#~ msgstr "Téléphone portable :"
+#~ msgstr "Téléphone cellulaire :"
 
 #~ msgid "Central African Republic"
 #~ msgstr "République centrafricaine"
@@ -5376,7 +5375,7 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "Tableau de bord compact"
 
 #~ msgid "Company:"
-#~ msgstr "Société :"
+#~ msgstr "Entreprise :"
 
 #~ msgid "Configuration"
 #~ msgstr "Réglages"
@@ -5617,7 +5616,7 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "Accusé de réception"
 
 #~ msgid "Department:"
-#~ msgstr "Service :"
+#~ msgstr "Département :"
 
 #~ msgid "Description:"
 #~ msgstr "Description :"
@@ -5678,7 +5677,7 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "Nom affiché"
 
 #~ msgid "Distribution List"
-#~ msgstr "Liste de diffusion"
+#~ msgstr "Liste de distribution"
 
 #~ msgid "Djibouti"
 #~ msgstr "Djibouti"
@@ -5810,7 +5809,7 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "Équateur"
 
 #~ msgid "Edit Distribution List"
-#~ msgstr "Modifier la liste de diffusion"
+#~ msgstr "Modifier la liste de distribution"
 
 #~ msgid "Edit Furigana"
 #~ msgstr "Modifier les Furigana"
@@ -6589,10 +6588,10 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "Filtre de courrier"
 
 #~ msgid "Mailing list"
-#~ msgstr "Liste de discussion"
+#~ msgstr "Liste de distribution"
 
 #~ msgid "Mailing list %s"
-#~ msgstr "Liste de discussion %s"
+#~ msgstr "Liste de distribution %s"
 
 #~ msgid "Main window"
 #~ msgstr "Fenêtre principale"
@@ -6694,10 +6693,10 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "La longueur minimale du mot de passe est %1$s."
 
 #~ msgid "Mobile (private):"
-#~ msgstr "Portable (privé) :"
+#~ msgstr "Mobile (privé) :"
 
 #~ msgid "Mobile:"
-#~ msgstr "Portable :"
+#~ msgstr "Mobile :"
 
 #~ msgid "Modified by:"
 #~ msgstr "Modifié par :"
@@ -6754,7 +6753,7 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "Birmanie"
 
 #~ msgid "Name of the Distribution List:"
-#~ msgstr "Nom de la liste de diffusion :"
+#~ msgstr "Nom de la liste de distribution :"
 
 #~ msgid "Name:"
 #~ msgstr "Nom :"
@@ -6784,7 +6783,7 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "Nouveau contact"
 
 #~ msgid "New Distribution List"
-#~ msgstr "Nouvelle liste de diffusion"
+#~ msgstr "Nouvelle liste de distribution"
 
 #~ msgid "New InfoItem"
 #~ msgstr "Nouvel élément de dépôt"
@@ -7068,7 +7067,7 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "Serveur de courrier POP3"
 
 #~ msgid "Pager:"
-#~ msgstr "Afficheur portable :"
+#~ msgstr "Téléavertisseur :"
 
 #~ msgid "Pakistan"
 #~ msgstr "Pakistan"
@@ -7139,7 +7138,7 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "Tél. (voiture) :"
 
 #~ msgid "Phone (company):"
-#~ msgstr "Tél. (de la société) :"
+#~ msgstr "Tél. (entreprise) :"
 
 #~ msgid "Phone (other):"
 #~ msgstr "Tél. (autre) :"
@@ -8320,7 +8319,7 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "Programme de mise à jour"
 
 #~ msgid "Upload a picture"
-#~ msgstr "Télécharger une photo"
+#~ msgstr "Téléverser une photo"
 
 #~ msgid "Uruguay"
 #~ msgstr "Uruguay"
@@ -8486,11 +8485,11 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ "légales (droit d'auteur, lois sur le respect de la vie privée).\n"
 #~ "\n"
 #~ "En particulier, lorsque vous publiez des données nominatives, vous êtes "
-#~ "la partie responsable, dans le cadre de la loi « Informatique et "
-#~ "libertés » ou d'autres lois sur le respect de la vie privée de votre "
-#~ "pays.\n"
+#~ "la partie responsable, dans le cadre de la « Loi sur la protection des "
+#~ "renseignements personnels et les documents électroniques » ou d'autres "
+#~ "lois sur le respect de la vie privée de votre pays.\n"
 #~ "\n"
-#~ "Selon la réglementation européenne et d'autres réglementations "
+#~ "Selon la réglementation canadienne et d'autres réglementations "
 #~ "nationales, vous, en tant que partie responsable, êtes en charge du cycle "
 #~ "de vie des données et ne devez pas publier ou transmettre des données "
 #~ "nominatives sans le consentement de la personne.\n"
@@ -8578,7 +8577,7 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 
 #~ msgid "You have to enable cookies to use this application."
 #~ msgstr ""
-#~ "Vous devez autoriser les cookies pour pouvoir utiliser cette application."
+#~ "Vous devez autoriser les témoins pour pouvoir utiliser cette application."
 
 #~ msgid "You have unconfirmed appointments"
 #~ msgstr "Vous avez des rendez-vous non confirmés"
@@ -8907,7 +8906,7 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #~ msgstr "temporaire"
 
 #~ msgid "&Distributionlist"
-#~ msgstr "&Liste de diffusion"
+#~ msgstr "&Liste de distribution"
 
 #~ msgid ""
 #~ "Supported Outlook versions (Connector for Microsoft Outlook): Microsoft "
