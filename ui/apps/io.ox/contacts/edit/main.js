@@ -62,10 +62,6 @@ define('io.ox/contacts/edit/main',
                             container.append(editView.render().$el);
                             container.find('input[type=text]:visible').eq(0).focus();
 
-                            container.find('[data-extension-id="display_name"] input').on('keydown', function () {
-                                app.setTitle(_.noI18n($(this).val()));
-                            });
-
                             editView.on('save:start', function () {
                                 win.busy();
                             });
@@ -83,6 +79,10 @@ define('io.ox/contacts/edit/main',
                                 app.quit();
                             });
                             ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
+
+                            contact.on('change:display_name', function () {
+                                app.setTitle(contact.get('display_name'));
+                            });
                         };
 
                     // create model & view
@@ -152,7 +152,6 @@ define('io.ox/contacts/edit/main',
             customizeModel: function (contact) {
                 contact.on('change:first_name change:last_name', function () {
                     contact.set('display_name', util.getFullName(contact.toJSON()));
-                    app.setTitle(util.getFullName(contact.toJSON()));
                 });
             }
         });
