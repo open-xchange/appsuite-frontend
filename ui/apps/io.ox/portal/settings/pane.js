@@ -58,6 +58,9 @@ define('io.ox/portal/settings/pane',
     }
 
     function drawAddButton() {
+        var used = widgets.getUsedTypes(),
+            allTypes = widgets.getAllTypes();
+
         this.append(
             $('<div class="controls">').append(
                 $('<div class="btn-group pull-right">').append(
@@ -66,7 +69,10 @@ define('io.ox/portal/settings/pane',
                         $('<span class="caret">')
                     ),
                     $('<ul class="dropdown-menu">').append(
-                        _(widgets.getAllTypes()).map(function (options) {
+                        _(allTypes).map(function (options) {
+                            if (options.unique && $.inArray(options.type, used)) {
+                                return "";
+                            }
                             return $('<li>').append(
                                 $('<a>', { href: '#', 'data-type': options.type }).text(options.title)
                             );
