@@ -171,15 +171,20 @@ define("io.ox/core/main",
             }
         }
 
+        function addUserContent(model, launcher) {
+            if (model.get('userContent')) {
+                var icon = model.get('userContentIcon') || 'icon-pencil';
+                launcher.addClass('user-content').prepend($('<i class="' + icon + '">'));
+            }
+        }
+
         ox.ui.apps.on('add', function (model, collection, e) {
             // create topbar launcher
             var node = addLauncher('left', model.get('title'), function () { model.launch(); }),
                 title = model.get('title');
             add(node, launchers, model);
             // is user-content?
-            if (model.get('userContent')) {
-                node.addClass('user-content').prepend($('<i class="icon-pencil">'));
-            }
+            addUserContent(model, node);
             // add list item
             node = $('<li>').append(
                 $('<a>', {
@@ -208,9 +213,7 @@ define("io.ox/core/main",
 
         ox.ui.apps.on('change:title', function (model, value) {
             var node = launchers.children('[data-app-guid="' + model.guid + '"]').text(value);
-            if (model.get('userContent')) {
-                node.prepend($('<i class="icon-pencil">'));
-            }
+            addUserContent(model, node);
             launcherDropdown.children('[data-app-guid="' + model.guid + '"] a').text(value);
         });
 
