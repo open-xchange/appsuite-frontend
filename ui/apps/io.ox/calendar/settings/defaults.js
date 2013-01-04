@@ -19,18 +19,16 @@ function () {
     'use strict';
 
     var settingsDefaults = {
-        interval: '30',
-        startTime: '8',
-        endTime: '18',
+        interval: 30,
+        startTime: 8,
+        endTime: 18,
+        defaultReminder: 15,
         viewView: 'week:workweek',
-        showDeclinedAppointments: 'false',
-        defaultReminder: '15',
-        notifyNewModifiedDeleted: 'true',
-        notifyAcceptedDeclinedAsCreator: 'false',
-        notifyAcceptedDeclinedAsParticipant: 'false'
-//        viewCalendar: 'workweek',
-//        viewTeam: 'workweek',
-//        viewList: 'workweek',
+        showDeclinedAppointments: false,
+        notifyNewModifiedDeleted: true,
+        notifyAcceptedDeclinedAsCreator: false,
+        notifyAcceptedDeclinedAsParticipant: false,
+        showAllPrivateAppointments: false
     };
 
     return settingsDefaults;

@@ -60,7 +60,7 @@ define('io.ox/calendar/month/view',
             if (cT.hasClass('appointment') && !cT.hasClass('private')) {
                 var self = this,
                     obj = _.cid(cid + '');
-                
+
                 if (!cT.hasClass('current')) {
                     self.trigger('showAppointment', e, obj);
                     self.pane.find('.appointment')
@@ -185,7 +185,7 @@ define('io.ox/calendar/month/view',
                     conf = hash[myself] || { status: 1, comment: "" };
 
                 // is declined?
-                if (conf.status !== 2 || settings.get('showDeclinedAppointments', 'false') === 'true') {
+                if (conf.status !== 2 || settings.get('showDeclinedAppointments', false)) {
 
                     var startTSUTC = Math.max(model.get('start_date'), this.weekStart),
                         endTSUTC = Math.min(model.get('end_date'), this.weekEnd) - 1;
