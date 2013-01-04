@@ -113,6 +113,15 @@ define("io.ox/mail/main",
         commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads'); // getAllThreads is redefined below!
         commons.wireGridAndSearch(grid, win, api);
 
+        // ignore thread as sort param on search requests
+        grid.setAllRequest('search', function () {
+            var options = win.search.getOptions();
+            options.folder = grid.prop('folder');
+            options.sort = grid.prop('sort') === 'thread' ? '610' : grid.prop('sort');
+            options.order = grid.prop('order');
+            return api.search(win.search.query, options);
+        });
+
         function drawGridOptions(e, type) {
             var ul = grid.getToolbar().find('ul.dropdown-menu'),
                 threadView = settings.get('threadView'),
