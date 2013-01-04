@@ -413,11 +413,17 @@ define("io.ox/core/main",
         }
 
         var autoLaunchArray = function () {
+            var autoStart = [];
             if (settings.get('autoStart') === 'none') {
-                return [];
+                autoStart = [];
             } else {
-                return [].concat(settings.get('autoStart'));
+                autoStart = _([].concat(settings.get('autoStart'))).filter(function (o) { return !_.isUndefined(o) && !_.isNull(o); });
             }
+            if (_.isEmpty(autoStart)) {
+                autoStart.push("io.ox/mail");
+            }
+
+            return autoStart;
         };
 
         var baton = ext.Baton({
