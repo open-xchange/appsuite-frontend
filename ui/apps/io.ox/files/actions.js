@@ -620,17 +620,15 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/icons/slideshow', {
         requires: function (e) {
-            return _(e.context.allIds).reduce(function (memo, obj) {
+            return _(e.baton.allIds).reduce(function (memo, obj) {
                 return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
             }, false);
         },
-        action: function (e) {
-            var baton = e.data.baton;
+        action: function (baton) {
             require(['io.ox/files/carousel'], function (carousel) {
                 carousel.init({
                     fullScreen: false,
-                    list: e.data.allIds,
-                    app: baton.app,
+                    baton: baton,
                     attachmentMode: false
                 });
             });
@@ -639,18 +637,16 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/icons/slideshow-fullscreen', {
         requires: function (e) {
-            return BigScreen.enabled && _(e.context.allIds).reduce(function (memo, obj) {
+            return BigScreen.enabled && _(e.baton.allIds).reduce(function (memo, obj) {
                 return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
             }, false);
         },
-        action: function (e) {
-            var baton = e.data.baton;
+        action: function (baton) {
             BigScreen.request($('.io-ox-files-main .carousel')[0]);
             require(['io.ox/files/carousel'], function (carousel) {
                 carousel.init({
                     fullScreen: true,
-                    list: e.data.allIds,
-                    app: baton.app,
+                    baton: baton,
                     attachmentMode: false
                 });
             });
@@ -659,16 +655,14 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/icons/audioplayer', {
         requires: function (e) {
-            return _(e.context.allIds).reduce(function (memo, obj) {
+            return _(e.baton.allIds).reduce(function (memo, obj) {
                 return memo || (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(obj.filename) && settings.get('audioEnabled');
             }, false);
         },
-        action: function (e) {
-            var baton = e.data.baton;
+        action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
                 mediaplayer.init({
-                    list: e.data.allIds,
-                    app: baton.app,
+                    baton: baton,
                     videoSupport: false
                 });
             });
@@ -683,12 +677,10 @@ define('io.ox/files/actions',
                 return memo || (new RegExp(pattern, 'i')).test(obj.filename) && settings.get('videoEnabled');
             }, false);
         },
-        action: function (e) {
-            var baton = e.data.baton;
+        action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
                 mediaplayer.init({
-                    list: e.data.allIds,
-                    app: baton.app,
+                    baton: baton,
                     videoSupport: true
                 });
             });

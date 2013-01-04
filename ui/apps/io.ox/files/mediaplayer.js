@@ -43,16 +43,15 @@ define('io.ox/files/mediaplayer',
 
         config: {
             list: [],
-            app: null,
             videoSupport: false
         },
 
         init: function (config) {
             _.extend(this.config, config);
-            this.app = config.app;
+            this.app = config.baton.app;
             this.win = this.app.getWindow();
             this.restore();
-            this.list = this.filterMediaList(config.list, config.videoSupport);
+            this.list = this.filterMediaList(config.baton.allIds, config.videoSupport);
             if (this.list.length > 0)
             {
                 this.show();

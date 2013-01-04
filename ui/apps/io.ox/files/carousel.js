@@ -48,8 +48,7 @@ define('io.ox/files/carousel',
 
         config: {
             fullScreen: false,
-            list: [],
-            app: null,
+            baton: null,
             step: 3,
             attachmentMode: false
         },
@@ -59,7 +58,7 @@ define('io.ox/files/carousel',
             this.container.empty().remove();
             $.extend(this.config, config);
 
-            this.app = config.app;
+            this.app = config.baton.app;
             if (config.attachmentMode)
             {
                 this.win = $('.window-container.io-ox-mail-window');
@@ -69,7 +68,7 @@ define('io.ox/files/carousel',
                 this.win = this.app.getWindow();
 
             }
-            this.list = this.filterImagesList(config.list);
+            this.list = this.filterImagesList(config.baton.allIds);
             this.pos = _.extend({}, this.defaults); // get a fresh copy
             this.firstStart = true; // should have a better name
 
@@ -175,7 +174,7 @@ define('io.ox/files/carousel',
             var pos = this.pos,
                 // work with local changes first
                 start = pos.start,
-                end = pos.end;
+                end   = pos.end;
 
             if (pos.direction === 'next') {
                 start = pos.cur;
@@ -273,12 +272,11 @@ define('io.ox/files/carousel',
         },
 
         close: function () {
-            var self = this;
-            if (self.closeControl.is(':visible'))
+            if (this.closeControl.is(':visible'))
             {
-                self.inner.empty().remove();
-                self.container.empty().remove();
-                self.list = [];
+                this.inner.empty().remove();
+                this.container.empty().remove();
+                this.list = [];
             }
         }
     };
