@@ -562,6 +562,10 @@
         console.error(message || 'Assertion failed!');
         if (console.trace) console.trace();
     };
-    if (assert(true) === 0) delete window.assert; // Available only in debug builds
+    try {
+        if (assert(true) === 0) delete window.assert; // Available only in debug builds
+    } catch (e) {
+        // do nothing if delete fails (this happens on IE8 -_-)
+    }
 
 }());
