@@ -1,3 +1,6 @@
 .DS_Store
 /open-xchange-gui?*
 ui/watch.sh
+*.sublime-*
+*~
+*.swp
