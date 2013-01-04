@@ -162,6 +162,9 @@ define('io.ox/calendar/week/view',
             if (cT.hasClass('today')) {
                 this.setStartDate();
             }
+            if (cT.attr('type') === 'checkbox') {
+                settings.set('showAllPrivateAppointments', cT.prop('checked')).save();
+            }
             this.trigger('onRefresh');
         },
 
@@ -465,7 +468,7 @@ define('io.ox/calendar/week/view',
                                     .text(gt('show all'))
                                     .prepend(
                                         this.showAllCheck
-                                            .prop('checked', true)
+                                            .prop('checked', settings.get('showAllPrivateAppointments', false))
                                     )
                             ),
                         $('<div>')
@@ -518,7 +521,7 @@ define('io.ox/calendar/week/view',
         },
 
         renderAppointments: function () {
-            this.showDeclined = settings.get('showDeclinedAppointments', 'false') === 'true';
+            this.showDeclined = settings.get('showDeclinedAppointments', false);
 
             // clear all first
             $('.appointment', this.$el).remove();
@@ -1213,7 +1216,9 @@ define('io.ox/calendar/week/view',
             if (typeof opt === 'boolean') {
                 this.showAllCon[opt ? 'show': 'hide']();
             } else {
-                return this.showAllCheck.prop('checked');
+                var set = settings.get('showAllPrivateAppointments', false);
+                this.showAllCheck.prop('checked', set);
+                return set;
             }
         },
 

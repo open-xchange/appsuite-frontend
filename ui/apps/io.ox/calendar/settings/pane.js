@@ -26,7 +26,7 @@ define('io.ox/calendar/settings/pane',
         staticStrings =  {
             TITLE_CALENDAR: gt('Calendar'),
             TITLE_TIME: gt('Time'),
-            INTERVAL_IN_MINUTES: gt('Interval in minutes'),
+            INTERVAL_IN_MINUTES: gt('Time scale in minutes'),
             WORKING_TIME_START: gt('Start of working time'),
             WORKING_TIME_END: gt('End of working time'),
             TITLE_VIEW: gt('Default calendar view'),
@@ -104,7 +104,17 @@ define('io.ox/calendar/settings/pane',
 
             },
             render: function () {
-                var self = this;
+                var self = this,
+                    needBoolParser = [
+                        'showDeclinedAppointments',
+                        'notifyNewModifiedDeleted',
+                        'notifyAcceptedDeclinedAsCreator',
+                        'notifyAcceptedDeclinedAsParticipant'
+                    ],
+                    boolParser = function (direction, value) {
+                        return direction === 'ModelToView' ? value + '' : value === 'true';
+                    };
+
                 self.$el.empty().append(tmpl.render('io.ox/calendar/settings', {
                     strings: staticStrings,
                     optionsIntervalMinutes: optionsInterval,
@@ -117,6 +127,9 @@ define('io.ox/calendar/settings/pane',
                 }));
 
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
+                _(needBoolParser).each(function (prop) {
+                    defaultBindings[prop].converter = boolParser;
+                });
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
 
                 return self;

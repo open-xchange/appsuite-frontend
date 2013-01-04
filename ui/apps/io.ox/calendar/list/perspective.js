@@ -21,7 +21,7 @@ define('io.ox/calendar/list/perspective',
      'io.ox/calendar/util',
      'settings!io.ox/calendar',
      'gettext!io.ox/calendar'
-     ], function (api, VGrid, tmpl, viewDetail, commons, ext, date, util, settings, gt) {
+    ], function (api, VGrid, tmpl, viewDetail, commons, ext, date, util, settings, gt) {
 
     'use strict';
 
@@ -45,7 +45,6 @@ define('io.ox/calendar/list/perspective',
 
         // add grid options
         grid.prop('order', 'asc')
-            .prop('all', true)
             .prop('folder', app.folder.get());
 
         // add template
@@ -102,7 +101,7 @@ define('io.ox/calendar/list/perspective',
             // sort
             list.find(
                     '[data-option="' + props.order + '"], ' +
-                    '[data-option="' + (props.all ? 'all' : '~all') + '"]'
+                    '[data-option="' + (settings.get('showAllPrivateAppointments', false) ? 'all' : '~all') + '"]'
                 )
                 .find('i').attr('class', 'icon-ok');
             // order
@@ -140,7 +139,8 @@ define('io.ox/calendar/list/perspective',
                                         grid.prop('order', option).refresh(true);
                                         break;
                                     case 'all':
-                                        grid.prop('all', !grid.prop('all')).refresh(true);
+                                        settings.set('showAllPrivateAppointments', !settings.get('showAllPrivateAppointments', false)).save();
+                                        app.trigger('folder:change');
                                         break;
                                     default:
                                         break;
@@ -161,10 +161,10 @@ define('io.ox/calendar/list/perspective',
                 return api.getAll({
                     start: start.getTime(),
                     end: end.getTime(),
-                    folder: prop.all && folder.type === 1 ? undefined : prop.folder,
+                    folder: settings.get('showAllPrivateAppointments', false) && folder.type === 1 ? undefined : prop.folder,
                     order: prop.order
                 }).pipe(function (data) {
-                    if (settings.get('showDeclinedAppointments', 'false') === 'true') {
+                    if (settings.get('showDeclinedAppointments', false)) {
                         return data;
                     } else {
                         return _.filter(data, function (obj) {
@@ -191,6 +191,10 @@ define('io.ox/calendar/list/perspective',
         });
 
         grid.prop('folder', app.folder.get());
+        app.on('folder:change', function () {
+            updateGridOptions();
+            grid.refresh(true);
+        });
         grid.paint();
     };
 

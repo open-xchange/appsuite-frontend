@@ -6,7 +6,6 @@ CACHE:
 @base@/boot.js
 @base@/pre-core.js
 @base@/blank.html
-@base@/src/serverconfig.js
 @base@/src/offline.js
 # theme
 @base@/apps/themes/login/login.css
