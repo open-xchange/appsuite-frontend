@@ -21,4 +21,12 @@
             display: inline-block;
         }
     }
+
+    .view-pane.center {
+        text-align: center;
+        
+        .view-component.toolbar {
+            display: inline-block;
+        }
+    }
 }
