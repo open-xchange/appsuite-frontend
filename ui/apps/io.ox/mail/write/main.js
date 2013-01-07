@@ -282,7 +282,7 @@ define('io.ox/mail/write/main',
         app.getPrimaryAddressFromFolder = function (data) {
 
             var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
-                accountID = mailAPI.getAccountIDFromFolder(folder_id);
+                accountID = data.account_id || mailAPI.getAccountIDFromFolder(folder_id);
 
             return accountAPI.get(accountID).pipe(function (data) {
                 return userAPI.getName(ox.user_id).pipe(function (name) {
