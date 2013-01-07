@@ -67,15 +67,11 @@ define('io.ox/office/tk/control/button',
         }
 
         /**
-         * The action handler for this button.
+         * Returns the value of the button after it has been clicked.
          */
-        function clickHandler() {
-            if (toggle) {
-                Utils.toggleButtons(button);
-                return Utils.isButtonSelected(button);
-            }
-            // push button: return the 'data-value' attribute
-            return Utils.getControlValue(button);
+        function clickHandler(button) {
+            // change boolean value of a toggle button, otherwise return fixed value
+            return toggle ? !Utils.isButtonSelected(button) : Utils.getControlValue(button);
         }
 
         /**
@@ -142,7 +138,7 @@ define('io.ox/office/tk/control/button',
         // insert the button into this group, and register event handlers
         this.addFocusableControl(button)
             .registerUpdateHandler(updateHandler)
-            .registerActionHandler(button, 'click', clickHandler);
+            .registerChangeHandler('click', { node: button, valueResolver: clickHandler });
         button.on('keydown keypress keyup', keyHandler);
 
     } // class Button

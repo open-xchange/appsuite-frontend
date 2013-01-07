@@ -1617,7 +1617,7 @@ define('io.ox/office/tk/utils',
         // create a caption container if missing
         caption = control.children('div.caption');
         if (caption.length === 0) {
-            control.prepend(caption = $('<div>').addClass('caption unselectable'));
+            control.prepend(caption = $('<div>').addClass('caption'));
         }
 
         // remove the old caption spans

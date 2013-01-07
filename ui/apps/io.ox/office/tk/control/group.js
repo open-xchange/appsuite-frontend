@@ -147,67 +147,68 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
-         * Registers the passed action handler for a specific control. Action
-         * handlers will be executed, when the control has been activated in
-         * the user interface. Will trigger a 'change' event, passing its
-         * current value as returned by the passed action handler.
-         *
-         * @param {jQuery} [node]
-         *  The DOM node that catches the jQuery action events. May be a single
-         *  control, or a parent element of several controls. If omitted, uses
-         *  the root node of this group. In case a container element is used,
-         *  the parameter 'selector' must be specified.
+         * Registers an event handler for specific DOM control nodes, that will
+         * trigger a 'change' event for this group instance. The value of the
+         * 'change' event will be determined by the passed value resolver
+         * function.
          *
          * @param {String} type
-         *  The type of the action event, e.g. 'click' or 'change'.
+         *  The type of the event handler that will be bound to the selected
+         *  DOM node(s), e.g. 'click' or 'change'.
          *
-         * @param {String} [selector]
-         *  If specified, selects the ancestor elements of the specified node,
-         *  which are actually triggering the events.
-         *
-         * @param {Function} actionHandler
-         *  The action handler function. Will be called in the context of this
-         *  group. Receives the control that triggered the action event. Must
-         *  return the current value of the control (e.g. the boolean state of
-         *  a toggle button, the value of a list item, or the current text in a
-         *  text input field). May return null to indicate that a 'cancel'
-         *  event should be triggered instead of a 'change' event.
+         * @param {Object} [options]
+         *  A map of options to control the behavior of this method. The
+         *  following options are supported:
+         *  @param {jQuery} [options.node]
+         *      The DOM node that catches the jQuery action events. May be a
+         *      single DOM control node, or a parent element of several
+         *      controls selected by a jQuery selector string, if specified in
+         *      the options parameter. If omitted, defaults to the root node of
+         *      this group.
+         *  @param {String} [options.selector]
+         *      If specified, selects the ancestor elements of the specified
+         *      node, which are actually triggering the events. If omitted, the
+         *      event handler will be bound directly to the node passed to this
+         *      method.
+         *  @param {Function} [options.valueResolver]
+         *      The function that returns the current value of this group
+         *      instance. Will be called in the context of this group. Receives
+         *      the control node that has triggered the event, as jQuery
+         *      object. Must return the current value of the control (e.g. the
+         *      boolean state of a toggle button, the value of a list item, or
+         *      the current text in a text input field). May return null to
+         *      indicate that a 'cancel' event should be triggered instead of a
+         *      'change' event. If omitted, defaults to the static method
+         *      Utils.getControlValue().
          *
          * @returns {Group}
          *  A reference to this group.
          */
-        this.registerActionHandler = function (node, type, selector, actionHandler) {
+        this.registerChangeHandler = function (type, options) {
 
-            function actionEventHandler(event) {
-                var value =  self.isEnabled() ? actionHandler.call(self, $(this)) : null;
+            var // the node to attach the event handler to
+                node = Utils.getOption(options, 'node', groupNode),
+                // the jQuery selector for ancestor nodes
+                selector = Utils.getStringOption(options, 'selector', ''),
+                // the resolver function for the control value
+                valueResolver = Utils.getFunctionOption(options, 'valueResolver', Utils.getControlValue);
+
+            function eventHandler(event) {
+                var value =  self.isEnabled() ? valueResolver.call(self, $(this)) : null;
                 if (_.isNull(value)) {
                     self.trigger('cancel');
                 } else {
+                    self.update(value);
                     self.trigger('change', value);
                 }
                 return false;
             }
 
-            // normalize passed parameters, if node parameter is missing
-            if (_.isString(node)) {
-                // push all parameters to the right, and update node parameter
-                actionHandler = selector;
-                selector = type;
-                type = node;
-                node = groupNode;
-            }
-
-            // normalize passed parameters, if selector parameter is missing
-            if (_.isFunction(selector)) {
-                actionHandler = selector;
-                selector = undefined;
-            }
-
             // attach event handler to the node
             if (selector) {
-                node.on(type, selector, actionEventHandler);
+                node.on(type, selector, eventHandler);
             } else {
-                node.on(type, actionEventHandler);
+                node.on(type, eventHandler);
             }
 
             return this;

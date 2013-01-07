@@ -106,7 +106,7 @@ define('io.ox/office/tk/control/radiolist',
          *  The value associated to the button to be activated. If set to null,
          *  does not activate any button (ambiguous state).
          */
-        function updateHandler(value) {
+        function itemUpdateHandler(value) {
 
             var // activate a radio button
                 button = Utils.selectOptionButton(self.getListItems(), value),
@@ -134,31 +134,19 @@ define('io.ox/office/tk/control/radiolist',
                 updateCaptionHandler.call(self, button, value);
             }
         }
-
         /**
-         * Click handler for an option button in this radio group. Will
-         * activate the clicked button (or deactivate if clicked on an active
-         * button in toggle mode), and return the value of the new active
-         * option button.
-         *
-         * @param {jQuery} button
-         *  The clicked button, as jQuery object.
-         *
-         * @returns
-         *  The button value that has been passed to the addOptionButton()
-         *  method.
+         * Returns the value of the clicked option button, taking the option
+         * 'toggleClick' into account,
          */
-        function clickHandler(button) {
-            var toggleClick = Utils.isButtonSelected(button) && !_.isNull(toggleValue) && !_.isUndefined(toggleValue),
-                value = toggleClick ? toggleValue : Utils.getControlValue(button);
-            updateHandler(value);
-            return value;
+        function itemClickHandler(button) {
+            var toggleClick = Utils.isButtonSelected(button) && !_.isNull(toggleValue) && !_.isUndefined(toggleValue);
+            return toggleClick ? toggleValue : Utils.getControlValue(button);
         }
 
         // base constructor ---------------------------------------------------
 
         Group.call(this, options);
-        List.call(this, options);
+        List.call(this, Utils.extendOptions({ itemValueResolver: itemClickHandler }, options));
 
         // methods ------------------------------------------------------------
 
@@ -204,8 +192,7 @@ define('io.ox/office/tk/control/radiolist',
 
         // register event handlers
         this.on('menuopen', menuOpenHandler)
-            .registerUpdateHandler(updateHandler)
-            .registerActionHandler(this.getButtonGroup().getNode(), 'click', Utils.BUTTON_SELECTOR, clickHandler);
+            .registerUpdateHandler(itemUpdateHandler);
 
     } // class RadioList
 

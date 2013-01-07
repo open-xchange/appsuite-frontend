@@ -74,22 +74,13 @@ define('io.ox/office/tk/control/combofield',
         /**
          * Update handler that activates a list item.
          */
-        function updateHandler(value) {
+        function itemUpdateHandler(value) {
 
             var // activate a button representing a list item
                 button = Utils.selectOptionButton(self.getListItems(), value);
 
             // scroll to make the element visible
             scrollToListItem(button);
-        }
-
-        /**
-         * Click handler for a button representing a list item.
-         */
-        function clickHandler(button) {
-            var value = Utils.getControlValue(button);
-            updateHandler(value);
-            return value;
         }
 
         /**
@@ -191,7 +182,7 @@ define('io.ox/office/tk/control/combofield',
             }
 
             // update selection in drop-down list
-            updateHandler((button.length && (textField.val() === Utils.getControlLabel(button))) ? Utils.getControlValue(button) : null);
+            itemUpdateHandler((button.length && (textField.val() === Utils.getControlLabel(button))) ? Utils.getControlValue(button) : null);
         }
 
         // base constructors --------------------------------------------------
@@ -218,7 +209,7 @@ define('io.ox/office/tk/control/combofield',
         this.addListEntry = function (value, options) {
             this.createListItem(Utils.extendOptions(options, { value: value, label: this.valueToText(value) }));
             // the inserted list item may match the value in the text field
-            updateHandler(this.getFieldValue());
+            itemUpdateHandler(this.getFieldValue());
             return this;
         };
 
@@ -228,8 +219,7 @@ define('io.ox/office/tk/control/combofield',
         this.on('menuopen', menuOpenHandler)
             .on('validated', textFieldValidationHandler)
             .on('readonly', textFieldReadOnlyHandler)
-            .registerUpdateHandler(updateHandler)
-            .registerActionHandler(this.getMenuNode(), 'click', Utils.BUTTON_SELECTOR, clickHandler);
+            .registerUpdateHandler(itemUpdateHandler);
         this.getTextFieldNode()
             .css('padding-right', 0)
             .on('keydown keypress keyup', textFieldKeyHandler);

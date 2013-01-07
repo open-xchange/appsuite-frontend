@@ -89,7 +89,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             // the view component embedded in the drop-down menu
             menuComponent = new Component(),
 
-            // the content node of the menu view component
+            // the root node of the menu view component
             contentNode = menuComponent.getNode(),
 
             // the drop-down menu element containing the menu view component

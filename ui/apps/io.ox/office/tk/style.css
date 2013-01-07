@@ -133,7 +133,7 @@ i.io-ox-office-icon {
 /* view components ========================================================= */
 
 .view-component {
-    
+
     /* standard height of controls */
     @control-height: 32px;
     /* horizontal paddings in control elements */
@@ -143,8 +143,8 @@ i.io-ox-office-icon {
 
     /* outline effect for focused controls */
     .focus-outline() {
-        outline: 2px solid fade(@selected-background, 50%); 
-        outline-offset: -2px; 
+        outline: 2px solid fade(@selected-background, 60%);
+        outline-offset: -2px;
     }
 
     /* glow effect for focused controls */
@@ -480,11 +480,11 @@ i.io-ox-office-icon {
         display: inline-block;
         margin-right: 10px;
     }
-    
+
     h4 {
         font-size: 16px;
     }
-    
+
     p {
         font-size: 13px;
     }
