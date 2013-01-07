@@ -19,7 +19,7 @@ define('io.ox/core/settings/pane',
          'io.ox/core/http',
          'io.ox/core/api/apps',
          'settings!io.ox/core',
-         'gettext!io.ox/core/settings'],
+         'gettext!io.ox/core'],
          function (ext, BasicModel, views, forms, http, appAPI, settings, gt) {
 
     'use strict';
@@ -40,7 +40,7 @@ define('io.ox/core/settings/pane',
                 var showNotice = _(reloadMe).any(function (attr) {
                     return e.changes[attr];
                 });
-                
+
                 if (e.changes.autoOpenNotification) {//AutonOpenNotification updates directly
                     require("io.ox/core/notifications").yell("success", gt("The setting has been saved."));
                 } else if (showNotice) {
@@ -143,7 +143,6 @@ define('io.ox/core/settings/pane',
             });
 
             options.none = gt('None');
-
             point.extend(new forms.SelectControlGroup({
                 id: 'autoStart',
                 index: 500,

@@ -133,7 +133,7 @@ define('io.ox/settings/main',
                     icon: '',
                     id: 'io.ox/core',
                     settings: true,
-                    title: 'Basic Settings'
+                    title: gt('Basic settings')
                 });
 
                 // TODO: Move this to a plugin
