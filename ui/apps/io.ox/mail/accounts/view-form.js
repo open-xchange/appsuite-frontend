@@ -23,6 +23,7 @@ define('io.ox/mail/accounts/view-form',
     var staticStrings =  {
             TITLE_ACCOUNT_SETTINGS: gt('Account Settings'),
             ACCOUNT_NAME: gt('Account Name:'),
+            PERSONAL: gt('Your name:'),
             EMAIL_ADDRESS: gt('E-Mail Address:'),
             UNIFIED_MAIL: gt('Use Unified Mail for this account'),
             SERVER_SETTINGS: gt('Server Settings'),
