@@ -116,10 +116,9 @@ $(document).ready(function () {
         if (ox.signin === true) {
             // show loader
             $("#background_loader").fadeIn(DURATION, function () {
-                var location = "#?" + enc(
-                    _.rot("session=" + ox.session + "&user=" + ox.user +
-                        "&user_id=" + ox.user_id + "&language=" + ox.language, 1)
-                );
+                var ref = _.url.hash('ref'),
+                    location = "#?" + enc(_.rot("session=" + ox.session + "&user=" + ox.user + "&user_id=" + ox.user_id + "&language=" + ox.language + (ref ? "&ref=" + enc(ref) : ''), 1)
+                    );
                 // use redirect servlet for real login request
                 // this even makes chrome and safari asking for storing credentials
                 // skip this for auto-login or during offline mode
@@ -446,10 +445,10 @@ $(document).ready(function () {
                 if (ox.signin) {
                     initialize();
                 } else {
-                    _.url.redirect('signin');
+                    var ref = (location.hash || '').replace(/^#/, '');
+                    _.url.redirect('signin' + (ref ? '#ref=' + enc(ref) : ''));
                 }
             }
-
             // got session via hash?
             if (_.url.hash('session')) {
 
@@ -457,7 +456,8 @@ $(document).ready(function () {
                 ox.user = _.url.hash('user');
                 ox.user_id = parseInt(_.url.hash('user_id') || '0', 10);
                 ox.language = _.url.hash('language');
-                _.url.redirect('#');
+                var ref = _.url.hash('ref');
+                _.url.redirect('#' + (ref ? decodeURIComponent(ref) : ''));
 
                 fetchUserSpecificServerConfig().done(function () {
                     loadCoreFiles().done(function () {

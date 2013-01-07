@@ -52,11 +52,11 @@ SDK for the OX App Suite HTML5 client
 ## l10n ##
 #%package l10n-## lang ##
 #Group: Applications/Productivity
-#Summary: ## Lang ## translation of the OX App Suite HTML5 client
+#Summary: Translation of the OX App Suite HTML5 client (## Lang ##)
 #Provides: open-xchange-appsuite-l10n
 #
 #%description l10n-## lang ##
-### Lang ## translation of the OX App Suite HTML5 client
+#Translation of the OX App Suite HTML5 client (## Lang ##)
 ## end l10n ##
 
 %prep

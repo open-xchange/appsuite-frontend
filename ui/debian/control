@@ -27,5 +27,5 @@ Description: SDK for the OX App Suite HTML5 client
 #Package: open-xchange-appsuite-l10n-## lang ##
 #Architecture: all
 #Provides: open-xchange-appsuite-l10n
-#Description: ## Lang ## translation of the OX App Suite HTML5 client
+#Description: Translation of the OX App Suite HTML5 client (## Lang ##)
 ## end l10n ##
