@@ -10,7 +10,11 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define.async("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/core/api/account", "io.ox/core/event"], function (ext, accountAPI, Events) {
+define.async("io.ox/mail/accounts/keychain",
+             ["io.ox/core/extensions",
+             "io.ox/core/api/account",
+             "io.ox/core/api/user",
+             "io.ox/core/event"], function (ext, accountAPI, userAPI, Events) {
 
     "use strict";
 
@@ -37,11 +41,25 @@ define.async("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/co
                 accounts[data.id] = data;
                 data.accountType = 'mail';
                 data.displayName = data.name || data.primary_address;
+                /* read display name from users vcard, if personal field is unset
+                 * this is needed for internal accounts, at the moment
+                 * FIXME: save one API call here, if data.personal can be assured
+                */
+                userAPI.getName(ox.user_id).pipe(function (name) {
+                    data.personal = data.personal || name;
+                });
             }
             _(allAccounts).each(function (account) {
                 accounts[account.id] = account;
                 account.accountType = 'mail';
                 account.displayName = account.name || account.primary_address;
+                /* read display name from users vcard, if personal field is unset
+                 * this is needed for internal accounts, at the moment
+                 * FIXME: save one API call here, if data.personal can be assured
+                 */
+                userAPI.getName(ox.user_id).pipe(function (name) {
+                    account.personal = account.personal || name;
+                });
             });
             if (evt) {
                 evt = evt.namespace ? evt.type + "." + evt.namespace : evt.type;
