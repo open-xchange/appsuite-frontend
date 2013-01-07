@@ -120,6 +120,13 @@ define('io.ox/office/tk/dropdown/list',
         // methods ------------------------------------------------------------
 
         /**
+         * Returns the button group instance containing all list items.
+         */
+        this.getButtonGroup = function () {
+            return buttonGroup;
+        };
+
+        /**
          * Returns all button elements representing the list items.
          */
         this.getListItems = function () {
@@ -162,7 +169,7 @@ define('io.ox/office/tk/dropdown/list',
             var // all existing list items
                 buttons = self.getListItems(),
                 // create the button element representing the list item
-                button = Utils.createButton(options),
+                button = Utils.createButton(options).addClass(Group.FOCUSABLE_CLASS),
                 // insertion index for sorted lists
                 index = -1;
 

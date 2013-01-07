@@ -185,6 +185,7 @@ define('io.ox/office/tk/control/group',
                 } else {
                     self.trigger('change', value);
                 }
+                return false;
             }
 
             // normalize passed parameters, if node parameter is missing

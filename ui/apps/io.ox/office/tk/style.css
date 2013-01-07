@@ -141,6 +141,18 @@ i.io-ox-office-icon {
     /* space between control caption elements */
     @caption-spacing: 5px;
 
+    /* outline effect for focused controls */
+    .focus-outline() {
+        outline: 2px solid fade(@selected-background, 50%); 
+        outline-offset: -2px; 
+    }
+
+    /* glow effect for focused controls */
+    .focus-glow(@opacity: 50%) {
+        .box-shadow(0 0 8px fade(@selected-background, @opacity));
+    }
+    .focus-glow(hover) { .focus-glow(60%); }
+
     position: relative;
     padding: 0;
 
@@ -237,12 +249,13 @@ i.io-ox-office-icon {
         /* keyboard/mouse effects (not for disabled buttons or groups) */
         &:not(.disabled) a.button:not(.disabled) {
 
-            &:hover, &:focus { background-color: fade(black, 5%); }
+            &:hover { background-color: fade(black, 5%); }
             &:active { background-color: fade(black, 10%); }
+            &:focus:not(:active) { .focus-outline(); }
 
             /* selected toggle/radio buttons */
             &.selected {
-                &:hover, &:focus { background-color: fade(@selected-background, 60%); }
+                &:hover { background-color: fade(@selected-background, 60%); }
                 &:active { background-color: fade(@selected-background, 70%); }
             }
         }
@@ -289,13 +302,6 @@ i.io-ox-office-icon {
 
         /* groups with white background and shadowed borders --------------- */
 
-        .focus-glow(@opacity) {
-            .box-shadow(0 0 8px fade(@selected-background, @opacity));
-        }
-
-        .focus-glow() { .focus-glow(50%); }
-        .focus-glow(hover) { .focus-glow(60%); }
-
         &.white {
             .box-shadow(0 0 5px fade(black, 15%));
 
@@ -319,11 +325,12 @@ i.io-ox-office-icon {
                 > a.button:not(.disabled), input:not(.disabled) {
                     &:hover, &:focus, &:active {
                         background: white;
+                        outline: none;
                     }
                 }
 
                 /* shadow effects for text fields and opened drop-down menus */
-                &.dropdown-open {
+                &.dropdown-open, > a.button:not(.disabled):focus {
                     .focus-glow();
                     &:hover { .focus-glow(hover); }
                 }
