@@ -463,8 +463,10 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             }
         } else {
             // handle warnings
+            var passThrough = false;
             if (response && response.error !== undefined) {
-                console.warn("TODO: warning");
+                console.warn("Request to server resulted in error", response);
+                passThrough = true;
             }
             // success
             if (o.dataType === "json" && o.processResponse === true) {
@@ -499,6 +501,10 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                         var columns = o.params.columns || (o.processResponse === true ? getAllColumns(o.columnModule, true) : '');
                         data = sanitize(response.data, o.columnModule, columns);
                         timestamp = response.timestamp !== undefined ? response.timestamp : _.now();
+                        if (passThrough) {
+                            console.log("DEBUG: ", data);
+                            passThrough = false;
+                        }
                         deferred.resolve(data, timestamp);
                     }
                 } else {

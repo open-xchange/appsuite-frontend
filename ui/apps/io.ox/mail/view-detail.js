@@ -507,6 +507,7 @@ define('io.ox/mail/view-detail',
                 modifiedBaton = deleteAction.data('baton');
                 if (!modifiedBaton || !modifiedBaton.data) {
                     console.error('No baton found. Not supposed to happen.');
+                    return;
                 }
                 sentFolder = config.get('mail.folder.sent');
                 inboxMails = _(modifiedBaton.data).filter(function (elem) {
