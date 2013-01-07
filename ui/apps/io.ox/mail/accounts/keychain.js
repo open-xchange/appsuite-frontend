@@ -36,12 +36,12 @@ define.async("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/co
             if (data) {
                 accounts[data.id] = data;
                 data.accountType = 'mail';
-                data.displayName = data.primary_address || data.name;
+                data.displayName = data.name || data.primary_address;
             }
             _(allAccounts).each(function (account) {
                 accounts[account.id] = account;
                 account.accountType = 'mail';
-                account.displayName = account.primary_address || account.name;
+                account.displayName = account.name || account.primary_address;
             });
             if (evt) {
                 evt = evt.namespace ? evt.type + "." + evt.namespace : evt.type;
