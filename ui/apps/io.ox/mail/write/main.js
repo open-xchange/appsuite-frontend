@@ -291,14 +291,14 @@ define('io.ox/mail/write/main',
         };
 
         app.getFrom = function () {
-            var from_field = view.leftside.find('.fromselect-wrapper select > option[selected=selected]');
+            var from_field = view.leftside.find('.fromselect-wrapper select > :selected');
 
             return [from_field.data('displayname'), from_field.data('primaryaddress')];
         };
 
         app.setFrom = function (data) {
             return this.getPrimaryAddressFromFolder(data).done(function (from) {
-                view.leftside.find('.fromselect-wrapper select > option[selected=selected]').data(from);
+                view.leftside.find('.fromselect-wrapper select').val(from.primaryaddress);
             });
         };
 

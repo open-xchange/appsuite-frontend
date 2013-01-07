@@ -249,6 +249,10 @@ define("io.ox/mail/write/view-main",
                 _.each(array, function (obj, index) {
                     var option = $('<option>').text(_.noI18n(obj.primary_address));
 
+                    option.data({
+                        primaryaddress: obj.primary_address,
+                        displayname: obj.personal
+                    });
                     if (index === 0) {
                         option.attr('selected', 'selected');
                     }
