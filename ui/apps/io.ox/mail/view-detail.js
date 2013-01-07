@@ -500,9 +500,14 @@ define('io.ox/mail/view-detail',
             }
 
             function scrubThreadDelete(deleteAction) {
+                if (! deleteAction) { return; }
+
                 var modifiedBaton, sentFolder, inboxMails;
 
                 modifiedBaton = deleteAction.data('baton');
+                if (!modifiedBaton || !modifiedBaton.data) {
+                    console.err('No baton found. Not supposed to happen.');
+                }
                 sentFolder = config.get('mail.folder.sent');
                 inboxMails = _(modifiedBaton.data).filter(function (elem) {
                     return elem.folder_id !== sentFolder;
