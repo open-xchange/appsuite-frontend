@@ -285,11 +285,8 @@ define('io.ox/mail/write/main',
                 accountID = data.account_id || mailAPI.getAccountIDFromFolder(folder_id);
 
             return accountAPI.get(accountID).pipe(function (data) {
-                return userAPI.getName(ox.user_id).pipe(function (name) {
-                    return {'displayname'    : data.personal || name,
-                            'primaryaddress' : data.primary_address};
-                });
-
+                return {'displayname'    : data.personal,
+                        'primaryaddress' : data.primary_address};
             });
         };
 
