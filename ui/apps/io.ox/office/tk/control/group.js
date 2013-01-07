@@ -84,7 +84,7 @@ define('io.ox/office/tk/control/group',
          */
         function keyHandler(event) {
 
-            var // distinguish between event types (ignore keypress events)
+            var // distinguish between event types
                 keyup = event.type === 'keyup';
 
             if (event.keyCode === KeyCodes.ESCAPE) {
@@ -185,6 +185,7 @@ define('io.ox/office/tk/control/group',
                 } else {
                     self.trigger('change', value);
                 }
+                return false;
             }
 
             // normalize passed parameters, if node parameter is missing

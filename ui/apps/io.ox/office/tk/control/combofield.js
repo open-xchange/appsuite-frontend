@@ -234,6 +234,9 @@ define('io.ox/office/tk/control/combofield',
             .css('padding-right', 0)
             .on('keydown keypress keyup', textFieldKeyHandler);
 
+        // drop-down button is not focusable in combo fields
+        this.getMenuButton().removeClass(TextField.FOCUSABLE_CLASS);
+
         // initialize read-only mode
         textFieldReadOnlyHandler();
 

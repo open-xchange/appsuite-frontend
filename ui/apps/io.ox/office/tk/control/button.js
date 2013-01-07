@@ -18,6 +18,9 @@ define('io.ox/office/tk/control/button',
 
     'use strict';
 
+    var // shortcut for the KeyCodes object
+        KeyCodes = Utils.KeyCodes;
+
     // class Button ===========================================================
 
     /**
@@ -75,6 +78,22 @@ define('io.ox/office/tk/control/button',
             return Utils.getControlValue(button);
         }
 
+        /**
+         * Handles keyboard events in the focused drop-down button.
+         */
+        function keyHandler(event) {
+
+            var // distinguish between event types
+                keyup = event.type === 'keyup';
+
+            switch (event.keyCode) {
+            case KeyCodes.SPACE:
+            case KeyCodes.ENTER:
+                if (keyup) { button.click(); }
+                return false;
+            }
+        }
+
         // base constructor ---------------------------------------------------
 
         Group.call(this, options);
@@ -124,6 +143,7 @@ define('io.ox/office/tk/control/button',
         this.addFocusableControl(button)
             .registerUpdateHandler(updateHandler)
             .registerActionHandler(button, 'click', clickHandler);
+        button.on('keydown keypress keyup', keyHandler);
 
     } // class Button
 

@@ -1039,12 +1039,13 @@ define('io.ox/office/tk/utils',
      */
     Utils.findClosestParent = function (rootNode, node, selector) {
 
+        rootNode = Utils.getDomNode(rootNode);
         node = Utils.getDomNode(node).parentNode;
         while (node && !$(node).is(selector)) {
             node = node.parentNode;
         }
 
-        return (node && Utils.containsNode(rootNode, node)) ? node : null;
+        return (node && ((rootNode === node) || Utils.containsNode(rootNode, node))) ? node : null;
     };
 
     /**
@@ -1733,8 +1734,8 @@ define('io.ox/office/tk/utils',
      */
     Utils.createButton = function (options) {
 
-        var // create the DOM anchor element representing the button
-            button = Utils.createControl('a', { tabindex: 0 }, options).addClass('button');
+        var // create the DOM anchor element representing the button (href="#" is essential for tab traveling)
+            button = Utils.createControl('a', { href: '#', tabindex: 0 }, options).addClass('button');
 
         Utils.setControlCaption(button, options);
         return button;
