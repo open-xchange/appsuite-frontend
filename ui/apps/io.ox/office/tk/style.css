@@ -282,18 +282,19 @@ i.io-ox-office-icon {
 
         /* keyboard/mouse effects (not for disabled fields or groups) */
         &:not(.disabled) input:not(.disabled) {
-            
-            &:hover:not(:focus) {
-                background-color: fade(black, 5%);
-            }
 
-            &:focus {
-                background-color: white;
-                .box-shadow(0 0 8px fade(@selected-background, 50%));
-            }
+            &:hover:not(:focus) { background-color: fade(black, 5%); }
+            &:focus { background-color: white; }
         }
 
         /* groups with white background and shadowed borders --------------- */
+
+        .focus-glow(@opacity) {
+            .box-shadow(0 0 8px fade(@selected-background, @opacity));
+        }
+
+        .focus-glow() { .focus-glow(50%); }
+        .focus-glow(hover) { .focus-glow(60%); }
 
         &.white {
             .box-shadow(0 0 5px fade(black, 15%));
@@ -310,12 +311,30 @@ i.io-ox-office-icon {
 
             /* keyboard/mouse effects (not for disabled buttons) */
             &:not(.disabled) {
+
+                &:hover {
+                    .box-shadow(0 0 6px fade(black, 20%));
+                }
+
                 > a.button:not(.disabled), input:not(.disabled) {
                     &:hover, &:focus, &:active {
                         background: white;
                     }
                 }
+
+                /* shadow effects for text fields and opened drop-down menus */
+                &.dropdown-open {
+                    .focus-glow();
+                    &:hover { .focus-glow(hover); }
+                }
             }
+        }
+
+        /* text field glow effects ----------------------------------------- */
+
+        &:not(.disabled).text-focus {
+            .focus-glow();
+            &:hover { .focus-glow(hover); }
         }
 
         /* vertical button lists ------------------------------------------- */

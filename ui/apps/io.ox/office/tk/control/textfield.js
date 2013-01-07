@@ -21,6 +21,9 @@ define('io.ox/office/tk/control/textfield',
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
 
+        // CSS marker class for the group node while focus is in text field
+        FOCUS_CLASS = 'text-focus',
+
         // default validator without any restrictions on the field text
         defaultValidator = null;
 
@@ -116,6 +119,7 @@ define('io.ox/office/tk/control/textfield',
                 // save current value
                 initialText = textField.val();
                 validationFieldState = getFieldState();
+                self.getNode().addClass(FOCUS_CLASS);
                 break;
             case 'focus:key':
                 // select entire text when reaching the field with keyboard
@@ -132,6 +136,7 @@ define('io.ox/office/tk/control/textfield',
                     textField.val(initialText);
                     initialText = null;
                 }
+                self.getNode().removeClass(FOCUS_CLASS);
                 break;
             }
         }
@@ -191,7 +196,7 @@ define('io.ox/office/tk/control/textfield',
 
         // base constructor ---------------------------------------------------
 
-        Group.call(this, options);
+        Group.call(this, Utils.extendOptions({ white: true }, options));
 
         // methods ------------------------------------------------------------
 

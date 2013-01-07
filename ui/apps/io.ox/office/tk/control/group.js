@@ -84,7 +84,7 @@ define('io.ox/office/tk/control/group',
          */
         function keyHandler(event) {
 
-            var // distinguish between event types (ignore keypress events)
+            var // distinguish between event types
                 keyup = event.type === 'keyup';
 
             if (event.keyCode === KeyCodes.ESCAPE) {

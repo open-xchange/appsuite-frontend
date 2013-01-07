@@ -22,6 +22,9 @@ define('io.ox/office/tk/dropdown/dropdown',
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
 
+        // marker CSS class for groups with opened drop-down menu
+        OPEN_CLASS = 'dropdown-open',
+
         // width and height of system scroll bars, in pixels
         SCROLLBAR_WIDTH = 0,
         SCROLLBAR_HEIGHT = 0;
@@ -118,6 +121,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             if (show && !self.isMenuVisible()) {
                 $('body').append(menuNode);
+                groupNode.addClass(OPEN_CLASS);
                 menuNode.css({
                     top: groupDim.top + groupDim.height + DropDown.GROUP_BORDER_PADDING,
                     left: groupDim.left
@@ -145,6 +149,7 @@ define('io.ox/office/tk/dropdown/dropdown',
                 }
                 self.trigger('menuclose');
                 $(document).off('mousedown click', globalClickHandler);
+                groupNode.removeClass(OPEN_CLASS);
                 menuNode.detach();
             }
         }
@@ -228,11 +233,6 @@ define('io.ox/office/tk/dropdown/dropdown',
                         self.grabMenuFocus();
                     }
                 }
-                return false;
-            }
-
-            // suppress 'keypress' event for SPACE bar (event.keyCode may be zero in Firefox)
-            if ((event.type === 'keypress') && (event.charCode === KeyCodes.SPACE)) {
                 return false;
             }
         }

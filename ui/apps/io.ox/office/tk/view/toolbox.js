@@ -58,7 +58,6 @@ define('io.ox/office/tk/view/toolbox',
 
             node.toggleClass('collapsed');
             headingButton.setIcon('caret-icon ' + (node.hasClass('collapsed') ? 'right' : 'down'));
-            self.trigger('cancel');
         }
 
         // base constructor ---------------------------------------------------
