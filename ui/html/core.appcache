@@ -19,6 +19,8 @@ CACHE:
 @base@/apps/themes/login/fonts/OpenSans-Light-webfont.woff
 @base@/apps/themes/login/fonts/OpenSans-Light-webfont.ttf
 @base@/apps/themes/login/fonts/fontawesome-webfont.woff
+@base@/apps/themes/style.less
+@base@/apps/themes/definitions.less
 @base@/apps/themes/default/style.less
 @base@/apps/themes/default/definitions.less
 @base@/apps/themes/default/dummypicture.png

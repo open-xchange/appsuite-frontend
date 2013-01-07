@@ -250,7 +250,7 @@ define('io.ox/core/api/account',
         })
         .done(function (d) {
             accountsAllCache.add(d, _.now());
-            api.trigger('account_created', {id: d.id, email: d.primary_address});
+            api.trigger('account_created', {id: d.id, email: d.primary_address, name: d.name});
         });
     };
 

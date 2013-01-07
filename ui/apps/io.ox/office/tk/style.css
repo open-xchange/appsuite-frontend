@@ -78,6 +78,10 @@ i.io-ox-office-icon {
     &.arrow-previous        { .icon-position(5, 0); }
     &.arrow-next            { .icon-position(6, 0); }
     &.arrow-last            { .icon-position(7, 0); }
+
+    &.clipboard-cut         { .icon-position(8, 0); }
+    &.clipboard-copy        { .icon-position(9, 0); }
+    &.clipboard-paste       { .icon-position(10, 0); }
 }
 
 /* ========================================================================= */
@@ -97,8 +101,8 @@ i.io-ox-office-icon {
     background-color: @pane-fill-color;
     line-height: 0;
 
-    &.tool-pane {
-        padding: 0 12px;
+    &.hover {
+        background: none;
     }
 
     &.app-pane {
@@ -266,15 +270,6 @@ i.io-ox-office-icon {
             line-height: 18px;
             cursor: text;
 
-            &:hover:not(:focus) {
-                background-color: fade(black, 5%);
-            }
-
-            &:focus {
-                background-color: white;
-                .box-shadow(0 0 8px fade(@selected-background, 50%));
-            }
-
             &.readonly {
                 cursor: default;
             }
@@ -282,6 +277,19 @@ i.io-ox-office-icon {
             /* drop-down button over text field */
             + a.button {
                 z-index: 1;
+            }
+        }
+
+        /* keyboard/mouse effects (not for disabled fields or groups) */
+        &:not(.disabled) input:not(.disabled) {
+            
+            &:hover:not(:focus) {
+                background-color: fade(black, 5%);
+            }
+
+            &:focus {
+                background-color: white;
+                .box-shadow(0 0 8px fade(@selected-background, 50%));
             }
         }
 
@@ -324,8 +332,8 @@ i.io-ox-office-icon {
     /* tool bars ----------------------------------------------------------- */
 
     &.toolbar {
-        display: inline-block;
-        padding: 0;
+        min-height: @control-height;
+        padding: 0 13px;
         clear: both;
 
         /* show groups in a horizontal bar */
@@ -333,12 +341,12 @@ i.io-ox-office-icon {
             display: inline-block;
             float: left;
 
-            &.white {
-                top: 4px;
+            &.right {
+                float: right;
             }
 
-            &.subtle-input {
-                top: 2px;
+            &.white {
+                top: 4px;
             }
 
             /* group spacing */
@@ -438,7 +446,6 @@ i.io-ox-office-icon {
     left: 0;
     right: 0;
     top: 0;
-    min-height: 32px;
     padding: 4px 13px;
     z-index: 100;
 

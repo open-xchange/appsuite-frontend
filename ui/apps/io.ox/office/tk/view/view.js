@@ -19,6 +19,9 @@ define('io.ox/office/tk/view/view',
 
     'use strict';
 
+    var // CSS marker class for panes in hover mode
+        HOVER_CLASS = 'hover';
+
     // class View =============================================================
 
     /**
@@ -80,7 +83,9 @@ define('io.ox/office/tk/view/view',
                     paneOffsets = _.clone(offsets);
                     paneOffsets[horizontal ? (leading ? 'bottom' : 'top') : (leading ? 'right' : 'left')] = 'auto';
                     paneNode.css(paneOffsets);
-                    offsets[panePosition] += (horizontal ? paneNode.outerHeight() : paneNode.outerWidth());
+                    if (!paneNode.hasClass(HOVER_CLASS)) {
+                        offsets[panePosition] += (horizontal ? paneNode.outerHeight() : paneNode.outerWidth());
+                    }
                 }
             });
 
@@ -95,15 +100,63 @@ define('io.ox/office/tk/view/view',
         // methods ------------------------------------------------------------
 
         /**
+         * Returns the root node of the application window.
+         *
+         * @returns {jQuery}
+         *  The root node of the application window.
+         */
+        this.getWindowMainNode = function () {
+            return win.nodes.main;
+        };
+
+        /**
          * Returns the central DOM node of the application (the complete inner
-         * area between all existing view panes). This is always the parent
-         * node of the application model root node.
+         * area between all existing view panes).
          *
          * @returns {jQuery}
          *  The central DOM node of the application.
          */
         this.getApplicationNode = function () {
             return appPane.getNode();
+        };
+
+        /**
+         * Adds the passed view pane instance into this view.
+         *
+         * @param {String} id
+         *  The unique identifier of the new view pane.
+         *
+         * @param {String} position
+         *  The border of the application window to attach the view pane to.
+         *  Supported values are 'top', 'bottom', 'left', and 'right'.
+         *
+         * @param {Object} [options]
+         *  A map of options to control the properties of the new view pane.
+         *  Supports all options supported by the Pane class constructor.
+         *  Additionally, the following options are supported:
+         *  @param {Boolean} [options.hover=false]
+         *      If set to true, the pane will hover over the other panes and
+         *      application contents instead of reserving and consuming the
+         *      space needed for its size.
+         *
+         * @returns {Pane}
+         *  The new view pane.
+         */
+        this.createPane = function (id, position, options) {
+
+            var // create the new view pane
+                pane = panesById[id] = new Pane(app, options);
+
+            panes.push(pane);
+            win.nodes.main.append(pane.getNode());
+            this.setPanePosition(id, position);
+
+            // hover mode
+            if (Utils.getBooleanOption(options, 'hover', false)) {
+                pane.getNode().addClass(HOVER_CLASS);
+            }
+
+            return pane;
         };
 
         /**
@@ -119,29 +172,6 @@ define('io.ox/office/tk/view/view',
          */
         this.getPane = function (id) {
             return (id in panesById) ? panesById[id] : null;
-        };
-
-        /**
-         * Adds the passed view pane instance into this view.
-         *
-         * @param {String} id
-         *  The unique identifier of the view pane.
-         *
-         * @param {Pane} pane
-         *  The new view pane instance.
-         *
-         * @param {String} position
-         *  The border of the application window to attach the view pane to.
-         *  Supported values are 'top', 'bottom', 'left', and 'right'.
-         *
-         * @returns {View}
-         *  A reference to this instance.
-         */
-        this.addPane = function (id, pane, position) {
-            panes.push(pane);
-            panesById[id] = pane;
-            win.nodes.main.append(pane.getNode());
-            return this.setPanePosition(id, position);
         };
 
         /**
@@ -230,9 +260,7 @@ define('io.ox/office/tk/view/view',
                 // the controller key of the push button
                 buttonKey = Utils.getStringOption(options, 'buttonKey'),
                 // the alert node
-                alert = $.alert(title, message).removeClass('alert-error').addClass('alert-' + type + ' hide in'),
-                // the main application node
-                mainNode = app.getWindow().nodes.main;
+                alert = $.alert(title, message).removeClass('alert-error').addClass('alert-' + type + ' hide in');
 
             // make the alert banner closeable
             if (Utils.getBooleanOption(options, 'closeable', false)) {
@@ -261,7 +289,7 @@ define('io.ox/office/tk/view/view',
             }
 
             // remove old alert, insert and show new alert
-            mainNode.find('.alert').remove().end().append(alert);
+            win.nodes.main.find('.alert').remove().end().append(alert);
             alert.slideDown();
 
             return this;

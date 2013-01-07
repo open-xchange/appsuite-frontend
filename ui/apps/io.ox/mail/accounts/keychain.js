@@ -30,9 +30,14 @@ define.async("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/co
 
     var accounts = {};
 
-    function init(evt) {
+    function init(evt, data) {
         return accountAPI.all().done(function (allAccounts) {
             accounts = {};
+            if (data) {
+                accounts[data.id] = data;
+                data.accountType = 'mail';
+                data.displayName = data.primary_address || data.name;
+            }
             _(allAccounts).each(function (account) {
                 accounts[account.id] = account;
                 account.accountType = 'mail';

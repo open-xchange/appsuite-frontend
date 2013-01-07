@@ -43,15 +43,39 @@ $(document).ready(function () {
         setDefaultLanguage,
         autoLogin,
         initialize,
+        contextmenu_blacklist,
         // shortcut
         enc = encodeURIComponent;
 
     // suppress context menu
-    $(document).on('contextmenu', function (e) {
-        if (!/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) {
+
+    contextmenu_blacklist = [
+        '#io-ox-topbar',
+        '.vgrid',
+        '.foldertree-sidepanel',
+        '.window-toolbar',
+        '.io-ox-notifications',
+        '.io-ox-inline-links',
+        '.io-ox-action-link',
+        '.widgets',
+        'select',
+        'button',
+        'input[type=radio]',
+        'input[type=checkbox]',
+        '.btn',
+        '.io-ox-dialog-popup',
+        '.dropdown',
+        '.icon-search',
+        '.contact-grid-index',
+        '.file-icon .wrap',
+        '.carousel',
+        '.mediaplayer'
+    ];
+    if (!ox.debug) {
+        $(document).on('contextmenu', contextmenu_blacklist.join(', '), function (e) {
             e.preventDefault();
-        }
-    });
+        });
+    }
 
     // check for supported browser
     function browserCheck() {

@@ -523,8 +523,10 @@ define('io.ox/office/tk/application',
      */
     Application.createApplication = function (moduleName, ApplicationMixinClass, options) {
 
-        var // the base application object
-            app = ox.ui.createApp({ name: moduleName, userContent: Utils.getBooleanOption(options, 'icon', false) });
+        var // the icon shown in the top bar launcher
+            icon = Utils.getStringOption(options, 'icon'),
+            // the base application object
+            app = ox.ui.createApp({ name: moduleName, userContent: _.isString(icon), userContentIcon: icon });
 
         // mix-in constructor for common methods
         OfficeApplication.call(app, options);

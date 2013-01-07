@@ -275,9 +275,9 @@ define('io.ox/files/icons/perspective',
                         start = 0;
                         end = displayedRows * layout.iconCols;
                         if (layout.iconCols <= 3) end = end + 10;
-                        allIds = filterFiles(ids, options);
-                        ext.point('io.ox/files/icons/actions').invoke('draw', inline, { baton: baton, allIds: allIds });
-                        redraw(allIds.slice(start, end));
+                        baton.allIds = filterFiles(ids, options);
+                        ext.point('io.ox/files/icons/actions').invoke('draw', inline, baton);
+                        redraw(baton.allIds.slice(start, end));
                     })
                     .fail(function (response) {
                         iconview.idle();
@@ -402,6 +402,8 @@ define('io.ox/files/icons/perspective',
 
                         allIds  = ids;
 
+                        baton.allIds = ids;
+
                         _(changed).each(function (cid) {
 
                             var data = hash[cid],
@@ -475,7 +477,7 @@ define('io.ox/files/icons/perspective',
             if (dropZone) {dropZone.include(); }
 
 
-            
+
             app.on('folder:change', function (e, id, folder) {
                 if (_.browser.IE === undefined || _.browser.IE > 9) {
                     dropZone.remove();

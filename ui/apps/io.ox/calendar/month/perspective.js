@@ -18,7 +18,8 @@ define('io.ox/calendar/month/perspective',
      'io.ox/core/tk/dialogs',
      'io.ox/calendar/view-detail',
      'io.ox/calendar/conflicts/conflictList',
-     'gettext!io.ox/calendar'], function (View, api, date, ext, dialogs, detailView, conflictView, gt) {
+     'settings!io.ox/calendar',
+     'gettext!io.ox/calendar'], function (View, api, date, ext, dialogs, detailView, conflictView, settings, gt) {
     'use strict';
 
     var perspective = new ox.ui.Perspective('month');
@@ -123,7 +124,7 @@ define('io.ox/calendar/month/perspective',
                 weeks: this.updateLoad
             }, obj);
             // do folder magic
-            if (this.folder.type !== 1 || this.showAll.prop('checked') === false) {
+            if (this.folder.type !== 1 || !settings.get('showAllPrivateAppointments', false)) {
                 obj.folder = this.folder.id;
             }
             obj.end = obj.start + obj.weeks * date.WEEK;
@@ -205,6 +206,7 @@ define('io.ox/calendar/month/perspective',
                 $('.day.today', this.pane).removeClass('today');
                 day.addClass('today');
             }
+            this.showAll.prop('checked', settings.get('showAllPrivateAppointments', false));
             var weeks = (this.lastWeek - this.firstWeek) / date.WEEK;
             this.updateWeeks({start: this.firstWeek, weeks: weeks});
         },
@@ -302,8 +304,9 @@ define('io.ox/calendar/month/perspective',
                                     .text(gt('show all'))
                                     .prepend(
                                         this.showAll = $('<input type="checkbox">')
-                                            .prop('checked', true)
+                                            .prop('checked', settings.get('showAllPrivateAppointments', false))
                                             .on('change', $.proxy(function (e) {
+                                                settings.set('showAllPrivateAppointments', this.showAll.prop('checked')).save();
                                                 this.app.trigger('folder:change');
                                             }, this))
                                     )
