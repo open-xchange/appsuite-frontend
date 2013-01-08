@@ -173,7 +173,7 @@ define('io.ox/calendar/edit/main',
                     var self = this;
                     app.model = self.model = appointmentModel.factory.create(data);
                     appointmentModel.applyAutoLengthMagic(self.model);
-
+                    appointmentModel.fullTimeChangeBindings(self.model);
                     appointmentModel.setDefaultParticipants(self.model, {create: true}).done(function () {
                         app.view = self.view = new MainView({model: self.model, app: self});
 

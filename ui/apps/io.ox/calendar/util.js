@@ -187,12 +187,18 @@ define("io.ox/calendar/util",
         },
 
         getDateInterval: function (data) {
-            var length = (data.end_date - data.start_date) / DAY >> 0;
+            var length = (data.end_date - data.start_date) / DAY >> 0,
+                startDate = data.start_date,
+                endDate = data.end_date;
+            if (data.full_time) {
+                startDate = date.Local.utc(startDate);
+                endDate = date.Local.utc(endDate);
+            }
+
             if (length > 1) {
-                // \u2013= &ndash;
-                return this.getDate(data.start_date) + " \u2013 " + this.getDate(data.end_date - 1);
+                return this.getDate(startDate) + " \u2013 " + this.getDate(endDate - 1);
             } else {
-                return this.getDate(data.start_date);
+                return this.getDate(startDate);
             }
         },
 

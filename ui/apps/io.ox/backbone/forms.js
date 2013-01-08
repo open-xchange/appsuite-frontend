@@ -670,25 +670,31 @@ define('io.ox/backbone/forms',
     function DatePicker(options) {
         var BinderUtils = {
             convertDate: function (direction, value, attribute, model) {
+                var ret;
                 if (direction === 'ModelToView') {
-                    return BinderUtils._toDate(value, attribute, model);
+                    if (model.get('full_time')) {
+                        value = date.Local.utc(value);
+                        if (attribute === 'end_date') {
+                            value -= date.DAY;
+                        }
+                    }
+                    ret = BinderUtils._toDate(value, attribute, model);
                 } else {
-                    return BinderUtils._dateStrToDate(value, attribute, model);
+                    ret = BinderUtils._dateStrToDate(value, attribute, model);
+                    if (model.get('full_time')) {
+                        if (attribute === 'end_date') {
+                            ret += date.DAY;
+                        }
+                    }
                 }
+                return ret;
             },
 
             convertTime: function (direction, value, attribute, model) {
                 if (direction === 'ModelToView') {
-                    if (model.get('full_time')) {
-                        value = date.Local.utc(value);
-                    }
-                    return BinderUtils._toTime(value, attribute, model, direction);
+                    return BinderUtils._toTime(value, attribute, model);
                 } else {
-                    value = BinderUtils._timeStrToDate(value, attribute, model);
-                    if (model.get('full_time')) {
-                        value = date.Local.localTime(value);
-                    }
-                    return value;
+                    return BinderUtils._timeStrToDate(value, attribute, model);
                 }
             },
 
