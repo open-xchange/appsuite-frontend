@@ -82,9 +82,30 @@ define('io.ox/calendar/edit/template',
             'conflicts': 'showConflicts'
         },
         showConflicts: function (conflicts) {
-            var self = this;
+            var self = this,
+                hardConflict = false;
+            // look for hard conflicts
+            _(conflicts).each(function (conflict) {
+                if (conflict.hard_conflict) {
+                    hardConflict = true;
+                    return;
+                }
+            });
+
             require(["io.ox/calendar/conflicts/conflictList"], function (c) {
                 var conflictList = c.drawList(conflicts);
+                var $acceptButton = $('<a class="btn btn-danger">')
+                    .addClass('btn')
+                    .text(gt('Ignore conflicts'))
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        self.model.set('ignore_conflicts', true);
+                        self.model.save();
+                    });
+                // if there is a hard conflict, hide the accept button
+                if (hardConflict) {
+                    $acceptButton = null;
+                }
                 self.$el.empty().append(
                     conflictList,
                     $('<div class="row">')
@@ -98,14 +119,7 @@ define('io.ox/calendar/edit/template',
                                             self.$el.empty();
                                         }),
                                     '&nbsp;',
-                                    $('<a class="btn btn-danger">')
-                                        .addClass('btn')
-                                        .text(gt('Ignore conflicts'))
-                                        .on('click', function (e) {
-                                            e.preventDefault();
-                                            self.model.set('ignore_conflicts', true);
-                                            self.model.save();
-                                        })
+                                    $acceptButton
                                     )
                             )
                     );
