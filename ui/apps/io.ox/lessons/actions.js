@@ -16,18 +16,25 @@ define('io.ox/lessons/actions', ['io.ox/core/extensions', 'io.ox/core/extPattern
     
     new links.Action('io.ox/lessons/actions/toc', {
         id: 'toc',
-        action: function (app) {
-            app.tableOfContents();
+        action: function (baton) {
+            baton.app.tableOfContents();
         }
     });
     
-    ext.point('io.ox/lessons/links/toolbar').extend(new links.Link({
+    new links.ActionGroup("io.ox/lessons/links/toolbar", {
         index: 100,
-        id: 'toc',
-        label: 'Table of Contents',
+        id: 'default',
+        icon: function () {
+            return $('<i class="icon-list">');
+        }
+    });
+
+    new links.ActionLink('io.ox/lessons/links/toolbar/default', {
+        index: 100,
+        id: 'default',
+        label: 'Table of contents',
         ref: 'io.ox/lessons/actions/toc'
-    }));
-    
+    });
     
         
 });
