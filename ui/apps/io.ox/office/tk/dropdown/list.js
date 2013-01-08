@@ -59,6 +59,9 @@ define('io.ox/office/tk/dropdown/list',
      *      Will be passed to the method Group.registerChangeHandler() called
      *      at the internal button group that contains the list items in the
      *      drop-down menu.
+     *  @param {String} [options.itemDesign='default']
+     *      The design mode of the list items. See the option 'options.design'
+     *      supported by the Group class constructor for details.
      */
     function List(options) {
 
@@ -71,11 +74,8 @@ define('io.ox/office/tk/dropdown/list',
             // functor used to sort the items
             sortFunctor = Utils.getFunctionOption(options, 'sortFunctor'),
 
-            // returns the current value of a clicked list item
-            itemValueResolver = Utils.getFunctionOption(options, 'itemValueResolver'),
-
             // the group in the drop-down menu representing the list items
-            buttonGroup = new Group({ classes: 'button-list' });
+            buttonGroup = new Group({ classes: 'button-list', design: Utils.getStringOption(options, 'itemDesign', 'default') });
 
         // private methods ----------------------------------------------------
 
@@ -218,7 +218,7 @@ define('io.ox/office/tk/dropdown/list',
         // register event handlers
         this.on('menuopen', menuOpenHandler);
         buttonGroup
-            .registerChangeHandler('click', { selector: Utils.BUTTON_SELECTOR, valueResolver: itemValueResolver })
+            .registerChangeHandler('click', { selector: Utils.BUTTON_SELECTOR, valueResolver: Utils.getFunctionOption(options, 'itemValueResolver') })
             .getNode().on('keydown keypress keyup', listKeyHandler);
 
     } // class List

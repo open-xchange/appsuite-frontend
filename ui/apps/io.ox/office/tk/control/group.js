@@ -51,9 +51,18 @@ define('io.ox/office/tk/control/group',
      *  @param {String} [options.tooltip]
      *      Tool tip text shown when the mouse hovers the control. If omitted,
      *      the control will not show a tool tip.
-     *  @param {Boolean} [options.white]
-     *      If set to true, the group has a white background instead of being
-     *      transparent.
+     *  @param {String} [options.design='default']
+     *      Changes the appearance of the control elements and the group.
+     *      Supported values are:
+     *      'default': transparent background; active state and mouse hover
+     *      effect with fill colors; keyboard focus effect with border lines
+     *      (the default design). Exception: *focused* text fields behave as
+     *      described in the 'white' design (white background, glow effect).
+     *      'white': White background with shadow; mouse hover effect with
+     *      darker shadow; keyboard focus effect and drop-down effect with
+     *      glowing shadow.
+     *      'framed': transparent background; active state, mouse hover effect,
+     *      and keyboard focus effect with colored border lines.
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of
      *      this instance.
@@ -377,7 +386,7 @@ define('io.ox/office/tk/control/group',
 
         // formatting and tool tip
         groupNode
-            .addClass(Utils.getBooleanOption(options, 'white') ? 'white' : '')
+            .addClass('design-' + Utils.getStringOption(options, 'design', 'default'))
             .addClass(Utils.getStringOption(options, 'classes', ''));
         Utils.setControlTooltip(groupNode, Utils.getStringOption(options, 'tooltip'));
 

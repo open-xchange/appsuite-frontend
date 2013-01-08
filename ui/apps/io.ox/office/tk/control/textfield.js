@@ -196,7 +196,7 @@ define('io.ox/office/tk/control/textfield',
 
         // base constructor ---------------------------------------------------
 
-        Group.call(this, Utils.extendOptions({ white: true }, options));
+        Group.call(this, Utils.extendOptions({ design: 'white' }, options));
 
         // methods ------------------------------------------------------------
 
