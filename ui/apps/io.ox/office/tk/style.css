@@ -136,20 +136,25 @@ i.io-ox-office-icon {
 
     /* standard height of controls */
     @control-height: 32px;
-    /* horizontal paddings in control elements */
+    /* horizontal padding in control elements */
     @control-padding: 7px;
     /* space between control caption elements */
     @caption-spacing: 5px;
-    /* border width of button focus border */
-    @focus-border-width: 2px;
     /* standard height of controls in drop-down lists */
     @list-item-height: 26px;
 
+    /* border width of button focus border */
+    @default-focus-border-width: 2px;
+    /* border width of framed buttons */
+    @framed-border-width: 3px;
+
     /* glow effect for focused controls */
-    .focus-glow(@opacity: 50%) {
-        .box-shadow(0 0 8px fade(@selected-background, @opacity));
+    .focus-glow(@radius: 8px, @opacity: 50%) {
+        .box-shadow(0 0 @radius fade(@selected-background, @opacity));
     }
-    .focus-glow(hover) { .focus-glow(60%); }
+    .focus-hover-glow() {
+        .focus-glow(9px, 60%);
+    }
 
     position: relative;
     padding: 0;
@@ -181,11 +186,10 @@ i.io-ox-office-icon {
 
         /* common control settings ----------------------------------------- */
 
-        > label, > a.button, > input {
+        label, a.button, input {
             display: inline-block;
             position: relative;
             .box-sizing(border-box);
-            overflow: hidden;
             height: @control-height;
             margin: 0;
             padding: 0;
@@ -208,7 +212,7 @@ i.io-ox-office-icon {
         }
 
         /* control caption elements (always spans as children) */
-        > label, > a.button {
+        label, a.button {
             padding-left: @control-padding;
             padding-right: @control-padding;
             line-height: @control-height;
@@ -231,13 +235,13 @@ i.io-ox-office-icon {
 
         /* labels ---------------------------------------------------------- */
 
-        > label {
+        label {
             text-align: center;
         }
 
         /* buttons --------------------------------------------------------- */
 
-        > a.button {
+        a.button {
             text-align: left;
 
             &.dropdown-button {
@@ -257,7 +261,7 @@ i.io-ox-office-icon {
 
         /* text fields ----------------------------------------------------- */
 
-        > input {
+        input {
             width: 150px;
             padding-left: 4px;
             padding-right: 4px;
@@ -277,16 +281,16 @@ i.io-ox-office-icon {
         /* text field glow effect */
         &:not(.disabled).text-focus {
             .focus-glow();
-            &:hover { .focus-glow(hover); }
+            &:hover { .focus-hover-glow(); }
         }
 
         /* group designs --------------------------------------------------- */
 
         &.design-default {
 
-            > a.button {
-                border: @focus-border-width solid transparent;
-                line-height: @control-height - 2 * @focus-border-width;
+            a.button {
+                border: @default-focus-border-width solid transparent;
+                line-height: @control-height - 2 * @default-focus-border-width;
             
                 /* selected toggle/radio buttons */
                 &.selected {
@@ -297,7 +301,7 @@ i.io-ox-office-icon {
             /* keyboard/mouse effects (not for disabled buttons/text fields or groups) */
             &:not(.disabled) {
                 
-                > a.button:not(.disabled) {
+                a.button:not(.disabled) {
 
                     &:hover { background-color: fade(black, 5%); }
                     &:active { background-color: fade(black, 10%); }
@@ -310,7 +314,7 @@ i.io-ox-office-icon {
                     }
                 }
             
-                > input:not(.disabled) {
+                input:not(.disabled) {
     
                     &:hover:not(:focus) { background: fade(black, 5%); }
                     &:focus, &:active { background: white; }
@@ -318,17 +322,16 @@ i.io-ox-office-icon {
             }
         }
 
+        /* white design: white background, shadows, focus with glow effect */
         &.design-white {
             .box-shadow(0 0 5px fade(black, 15%));
 
-            > label, > a.button, > input {
+            label, a.button, input {
                 height: @control-height - 8px;
                 background: white;
-                &:focus { background: white; }
             }
 
-            > label, > a.button {
-                border: none;
+            label, a.button {
                 line-height: @control-height - 8px;
             }
 
@@ -339,38 +342,37 @@ i.io-ox-office-icon {
                     .box-shadow(0 0 6px fade(black, 20%));
                 }
 
-                > a.button:not(.disabled), input:not(.disabled) {
-                    &:hover, &:focus, &:active {
-                        background: white;
-                    }
-                }
-
                 /* focus glow effect */
-                &.dropdown-open, > a.button:not(.disabled):focus {
+                &.dropdown-open, a.button:not(.disabled):focus {
                     .focus-glow();
-                    &:hover { .focus-glow(hover); }
+                    &:hover { .focus-hover-glow(); }
                 }
             }
         }
 
+        /* framed design: selected, hover, focus with borders (preserve contents) */
         &.design-framed {
 
-            > a.button {
-                background: white;
-                .border-radius(3px);
+            a.button {
+                border: @framed-border-width solid transparent;
+                .border-radius(5px);
+                line-height: @control-height - 2 * @framed-border-width;
 
                 &.selected {
                     border-color: @selected-background;
+                    .box-shadow(0 2px 8px fade(black, 20%));
                 }
             }
 
-            &:not(.disabled) > a.button:not(.disabled) {
+            &:not(.disabled) a.button:not(.disabled) {
                 &:hover:not(:focus) { border-color: fade(black, 10%); }
-                &:active { border-color: fade(black, 15%); }
+                &:active:not(:focus) { border-color: fade(black, 10%); }
+                &:focus { border-color: fade(@selected-background, 60%); }
 
                 &.selected {
                     &:hover:not(:focus) { border-color: darken(@selected-background, 5%); }
-                    &:active { border-color: darken(@selected-background, 10%); }
+                    &:active:not(:focus) { border-color: darken(@selected-background, 10%); }
+                    &:focus { border-color: darken(@selected-background, 20%); }
                 }
             }
         }
@@ -379,19 +381,23 @@ i.io-ox-office-icon {
 
         &.button-list {
 
-            > a.button {
+            a.button {
                 display: block;
                 width: 100%;
                 height: @list-item-height;
-                line-height: @list-item-height - 2 * @focus-border-width;
+                line-height: @list-item-height;
                 text-align: left;
             }
 
-            &.design-framed {
-                padding: 2px;
+            &.design-default a.button {
+                line-height: @list-item-height - 2 * @default-focus-border-width;
+            }
 
-                > a.button:not(:first-child) {
-                    margin-top: 2px;
+            &.design-framed {
+                padding: 4px;
+
+                a.button:not(:first-child) {
+                    margin-top: 4px;
                 }
             }
         }
@@ -456,7 +462,7 @@ i.io-ox-office-icon {
             /* heading button of the tool box, used to collapse/expand */
             &.heading > a.button {
                 height: @heading-height;
-                line-height: @heading-height - 2 * @focus-border-width;
+                line-height: @heading-height - 2 * @default-focus-border-width;
                 font-size: 10px;
                 font-weight: bold;
             }
