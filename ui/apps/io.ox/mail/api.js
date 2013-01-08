@@ -92,11 +92,13 @@ define("io.ox/mail/api",
 
                 var hash = {};
 
+                // hash affected cids
+                // return top thread obj (threadview) or mail obj (singleview)
                 list = _(list).chain()
                     .map(function (obj) {
                         var cid = _.cid(obj), top = threadHash[cid];
                         hash[cid] = true;
-                        return top in threads ? _(threads[top]).first() : null;
+                        return top in threads ? _(threads[top]).first() : obj;
                     })
                     .compact().value();
 
@@ -108,8 +110,11 @@ define("io.ox/mail/api",
                 }
 
                 return api.updateAllCache(list, function (obj) {
-                    process(obj);
-                    _(obj.thread).each(process);
+                    // handles threadView: on || off
+                    if (obj.thread)
+                        _(obj.thread).each(process);
+                    else
+                        process(obj);
                 });
             },
 
@@ -469,15 +474,19 @@ define("io.ox/mail/api",
             return api.caches.all.grepKeys(folder_id + DELIM).pipe(function (keys) {
                 return $.when.apply($, _(keys).map(function (folder_id) {
                     return api.caches.all.get(folder_id).pipe(function (co) {
+                        // handles threadView: on || off
+                        co.data = co.data || co;
                         if (co && co.data) {
                             // update affected items
                             return $.when.apply($,
                                 _(co.data).map(function (obj) {
                                     if (_.cid(obj) in hash) {
                                         callback(obj);
+                                        // handles threadView: on || off
+                                        var elem = obj.thread || obj;
                                         return $.when(
-                                            api.caches.list.merge(obj),
-                                            api.caches.get.merge(obj)
+                                            api.caches.list.merge(elem),
+                                            api.caches.get.merge(elem)
                                         );
                                     } else {
                                         return DONE;
