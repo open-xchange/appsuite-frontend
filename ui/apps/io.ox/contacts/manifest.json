@@ -4,7 +4,7 @@
 	    company: "Open-Xchange",
 	    icon: "addressbook.png",
 	    category: "Basic",
-	    settings: false,
+	    settings: true,
 	    requires: "contacts"
 	},
 	{

@@ -123,13 +123,14 @@ define('io.ox/portal/main',
 
     app.settings = settings;
 
-    collection.on('remove', function (model) {
+    collection.on('remove', function (model, e) {
         // remove DOM node
         appBaton.$.widgets.find('[data-widget-cid="' + model.cid + '"]').remove();
         // clean up
         if (model.has('baton')) {
             delete model.get('baton').model;
             model.set('baton', null);
+            model.isDeleted = true;
         }
     });
 
@@ -139,6 +140,12 @@ define('io.ox/portal/main',
             app.drawWidget(model);
         });
     });
+
+    collection.wasElementDeleted = function (model) {
+        var needle = model.cid,
+            haystack = this.models;
+        return !_(haystack).some(function (suspiciousHay) {return suspiciousHay.cid === needle; });
+    };
 
     collection.on('change', function (model, e) {
         if ('enabled' in e.changes) {
@@ -150,6 +157,8 @@ define('io.ox/portal/main',
             }
         } else if ('color' in e.changes) {
             setColor(app.getWidgetNode(model), model);
+        } else if (this.wasElementDeleted(model)) {
+             //Element was removed, no need to refresh it.
         } else {
             app.drawWidget(model);
             app.refreshWidget(model);
