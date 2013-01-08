@@ -32,10 +32,10 @@ define("io.ox/calendar/api",
 
     var api = {
 
-        get: function (o) {
+        get: function (o, useCache) {
 
             o = o || {};
-
+            useCache = useCache === undefined ? true : !!useCache;
             var params = {
                 action: "get",
                 id: o.id,
@@ -49,7 +49,7 @@ define("io.ox/calendar/api",
 
             var key = (o.folder || o.folder_id) + "." + o.id + "." + (o.recurrence_position || 0);
 
-            if (get_cache[key] === undefined) {
+            if (get_cache[key] === undefined || !useCache) {
                 return http.GET({
                         module: "calendar",
                         params: params

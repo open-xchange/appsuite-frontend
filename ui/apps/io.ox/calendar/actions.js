@@ -113,7 +113,8 @@ define('io.ox/calendar/actions',
                 o.recurrence_position = params.recurrence_position;
             }
 
-            api.get(o).done(function (data) {
+            // disable cache with second param
+            api.get(o, false).done(function (data) {
                 require(['io.ox/calendar/edit/main'], function (m) {
                     if (data.recurrence_type > 0) {
                         require(['io.ox/core/tk/dialogs'], function (dialogs) {
