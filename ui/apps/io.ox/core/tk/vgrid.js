@@ -280,6 +280,7 @@ define('io.ox/core/tk/vgrid',
             var i = 0, $i = labels.list.length, clone = null,
                 obj, cumulatedLabelHeight = 0, text = '', defs = [];
             for (; i < $i; i++) {
+
                 // get
                 obj = labels.list[i];
                 // draw
@@ -349,7 +350,7 @@ define('io.ox/core/tk/vgrid',
             numLabels = 0;
             // loop
             var i = 0, $i = all.length, current, tmp = '';
-            for (; i < $i; i++) {
+            for (; i <= $i; i++) {
                 tmp = self.requiresLabel(i, all[i], current);
                 if (tmp !== false) {
                     labels.list.push({ top: 0, text: '', pos: i });

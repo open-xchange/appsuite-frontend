@@ -119,6 +119,7 @@ define("io.ox/contacts/main",
             build: function () {
             },
             set: function (data, fields, index) {
+                if (data === undefined) return;
                 var name = data.last_name || data.display_name || "#";
                 this.text(_.noI18n(name.substr(0, 1).toUpperCase()));
             }
@@ -126,6 +127,7 @@ define("io.ox/contacts/main",
 
         // requires new label?
         grid.requiresLabel = function (i, data, current) {
+            if (data === undefined) return;
             var name = data.last_name || data.display_name || "#",
                 prefix = _.noI18n(name.substr(0, 1).toUpperCase());
             return (i === 0 || prefix !== current) ? prefix : false;
