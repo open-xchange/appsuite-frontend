@@ -502,7 +502,6 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                         data = sanitize(response.data, o.columnModule, columns);
                         timestamp = response.timestamp !== undefined ? response.timestamp : _.now();
                         if (passThrough) {
-                            console.log("DEBUG: ", data);
                             passThrough = false;
                         }
                         deferred.resolve(data, timestamp);
