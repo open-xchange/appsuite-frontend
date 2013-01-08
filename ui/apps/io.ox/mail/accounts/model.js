@@ -88,8 +88,13 @@ define("io.ox/mail/accounts/model", ["io.ox/core/extensions", "io.ox/keychain/mo
         },
 
         save: function (obj, defered) {
-            if (this.attributes.id) {
-                AccountApi.update(this.attributes);
+
+            if (this.attributes.id !== undefined) {
+                AccountApi.update(this.attributes).done(function (response) {
+                    return defered.resolve(response);
+                }).fail(function (response) {
+                    return defered.resolve(response);
+                });
             } else {
                 if (obj) {
                     this.attributes = obj;
