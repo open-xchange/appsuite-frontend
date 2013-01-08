@@ -563,7 +563,7 @@ msgstr "Zeitzone"
 
 #: apps/io.ox/core/settings/pane.js:108
 msgid "Theme"
-msgstr "Theme"
+msgstr "Design"
 
 #: apps/io.ox/core/settings/pane.js:120 apps/io.ox/mail/settings/pane.js:62
 msgid "5 minutes"
