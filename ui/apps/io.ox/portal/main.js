@@ -124,8 +124,6 @@ define('io.ox/portal/main',
     app.settings = settings;
 
     collection.on('remove', function (model, e) {
-        console.log("REMOVING1:", model, e, this);
-
         // remove DOM node
         appBaton.$.widgets.find('[data-widget-cid="' + model.cid + '"]').remove();
         // clean up
@@ -133,7 +131,6 @@ define('io.ox/portal/main',
             delete model.get('baton').model;
             model.set('baton', null);
             model.isDeleted = true;
-            console.log("REMOVING2:", model, e);
         }
     });
 
