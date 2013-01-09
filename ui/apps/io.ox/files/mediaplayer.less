@@ -69,7 +69,7 @@
 
             .track {
                 color: @playerTextColor;
-                font-family: @font-light;
+                font-family: @lightFontFamily;
                 font-size: 18px;
                 line-height: 24px;
                 font-weight: 300;
@@ -96,7 +96,7 @@
                 // Controls Background
                 .mejs-controls {
 
-                    @mediaplayerSliderBackground: darken(@link-color, 10%);
+                    @mediaplayerSliderBackground: darken(@linkColor, 10%);
 
                     background-color: #333;
 
@@ -105,7 +105,7 @@
                                 background:@mediaplayerSliderBackground;
                             .mejs-time-loaded {
 
-                                background: lighten(@link-color, 10%);
+                                background: lighten(@linkColor, 10%);
                             }
                             .mejs-time-current { }
                         }

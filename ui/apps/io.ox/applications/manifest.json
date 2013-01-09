@@ -1,8 +1,0 @@
-{
-    title: "Application Manager",
-    company: "Open-Xchange",
-    icon: "app-store.png",
-    category: "Basic",
-    settings: false,
-    visible: false
-}

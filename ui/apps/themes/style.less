@@ -12,7 +12,7 @@
  */
 
 #io-ox-core.wallpaper {
-    .radial-gradient(@wallpaper-color1, @wallpaper-color2, @wallpaper-color3);
+    .radial-gradient(@wallpaperColor1, @wallpaperColor2, @wallpaperColor3);
 }
 
 /* scrollable for touch devices, esp. iOS */
@@ -69,7 +69,7 @@
     bottom: auto;
     z-index: 2;
 
-    .vertical-gradient(@topbar-background-alt, @topbar-background);
+    .vertical-gradient(@topbarBackgroundAlt, @topbarBackground);
 }
 
 #io-ox-topbar .launchers {
@@ -91,12 +91,12 @@
 /* ipad: better fat finger support */
 
 .touch #io-ox-topbar { height: 40px; }
-.touch #io-ox-topbar .launcher { font-size: @topbar-font-size + 1; line-height: 35px; padding: 2px 15px 5px 15px; }
+.touch #io-ox-topbar .launcher { font-size: @topbarFontSize + 1; line-height: 35px; padding: 2px 15px 5px 15px; }
 .touch #io-ox-screens { top: 40px; }
 .touch #io-ox-windowmanager .window-container-center { width: 100% !important; }
 .touch #io-ox-top-logo-small { margin-top: 6px; }
 
-.touch body { font-size: @touch-font-size; }
+.touch body { font-size: @touchFontSize; }
 
 .touch .scrollable .scrollable-pane { -webkit-transform: translate3d(0, 0, 0); }
 
@@ -105,8 +105,8 @@
 #io-ox-topbar {
 
     .launcher-dropdown, .launcher {
-        font-size: @topbar-font-size;
-        color: @topbar-launcher-color;
+        font-size: @topbarFontSize;
+        color: @topbarLauncherColor;
         padding: 0px 12px 0px 12px;
         line-height: 40px;
         white-space: nowrap;
@@ -115,17 +115,17 @@
     }
 
     .launcher.hover {
-        color: @topbar-launcher-color-hover;
-        background-color: @topbar-launcher-background-hover;
+        color: @topbarLauncherColor-hover;
+        background-color: @topbarLauncherBackgroundHover;
     }
 
     .launcher.active-app {
-        color: @topbar-launcher-color-active;
-        background-color: @topbar-launcher-background-active;
+        color: @topbarLauncherColorActive;
+        background-color: @topbarLauncherBackgroundActive;
     }
 
     .launcher.user-content i[class^="icon-"] { margin-right: 8px; color: #ccc; }
-    .launcher.active-app.user-content i[class^="icon-"] { color: @link-on-dark; }
+    .launcher.active-app.user-content i[class^="icon-"] { color: @linkOnDark; }
 
     .launcher.left-corner {
         width: 26px;
@@ -191,7 +191,7 @@
         border: 0px none;
     }
 
-    .launcher.right .dropdown-menu a { color: @link-color; }
+    .launcher.right .dropdown-menu a { color: @linkColor; }
     .launcher.right .dropdown-menu li {
         a:hover, a:focus { color: white; }
     }
@@ -239,25 +239,25 @@
 }
 
 #io-ox-welcome {
-    background-color: @welcome-background;
-    background-color: @welcome-background-rgba;
-    color: @welcome-color;
+    background-color: @welcomeBackground;
+    background-color: @welcomeBackgroundRGBA;
+    color: @welcomeColor;
     top: auto;
     height: 70px;
     padding: 10px 13px 10px 13px;
     text-shadow: 0px 0px 1px #fff;
     text-align: right;
-    border-top: 1px solid @welcome-border-color;
+    border-top: 1px solid @welcomeBorderColor;
 }
 
 #io-ox-welcome .accent {
-    color: @welcome-color-accent;
+    color: @welcomeColorAccent;
     display: inline-block;
     margin: 0 0.15em 0 0.15em;
 }
 
 #io-ox-welcome .clock {
-    color: @welcome-color-bright;
+    color: @welcomeColorBright;
 }
 
 /* window manager */
@@ -316,7 +316,7 @@
     color: #EEE;
     border: none;
     font-size: 24px;
-    font-family: @font-light;
+    font-family: @lightFontFamily;
     margin: 0 0 4px 13px;
     line-height: 46px;
 }
@@ -460,16 +460,16 @@
 
     position: absolute;
     top: 0px;
-    width: @window-head-width;
+    width: @windowHeadWidth;
     bottom: 0px;
     left: 0px;
 
     z-index: 20;
 
-    font-size: @window-head-font-size;
+    font-size: @windowHeadFontSize;
 
     .user-select(none);
-    .vertical-gradient(@window-head-top, @window-head-bottom);
+    .vertical-gradient(@windowHeadTop, @windowHeadBottom);
     filter: none;
 }
 
@@ -500,8 +500,8 @@
         outline: 0;
     }
 
-    & > a i { color: @link-on-dark; }
-    &:hover > a i { color: @link-color; text-decoration: none; }
+    & > a i { color: @linkOnDark; }
+    &:hover > a i { color: @linkColor; text-decoration: none; }
     & > a.disabled i { color: #555; cursor: default; }
 
     ul { font-size: 14px; line-height: 20px; }
@@ -521,8 +521,8 @@
 
 .window-title {
     padding: 0 13px 0 13px;
-    color: @window-title-color;
-    font-family: @font-light;
+    color: @windowTitleColor;
+    font-family: @lightFontFamily;
     font-weight: 300;
     font-size: 22px;
     line-height: 30px;
@@ -537,7 +537,7 @@
 }
 
 .window-title .folderview-toggle {
-    color: @link-on-dark;
+    color: @linkOnDark;
 }
 
 .window-title .badge {
@@ -549,7 +549,7 @@
 }
 
 .window-toolbar > a {
-    color: @toolbar-link-color;
+    color: @toolbarLinkColor;
     display: inline-block;
     margin: 0 1em 0 0;
     cursor: pointer;
@@ -558,7 +558,7 @@
     outline: 0;
 }
 
-.window-toolbar > a:hover { color: darken(@toolbar-link-color, 10%); }
+.window-toolbar > a:hover { color: darken(@toolbarLinkColor, 10%); }
 
 .window-toolbar .dropdown-menu { text-align: left; }
 .window-toolbar .dropdown-menu a { margin-right: 0; }
@@ -613,14 +613,14 @@ a.button {
     top: 0px;
     right: 0px;
     bottom: 0px;
-    left: @window-head-width;
+    left: @windowHeadWidth;
     white-space: normal;
     z-index: 10;
     .user-select(text);
 }
 
 .window-body.side-shift {
-    left: @window-content-shift + @window-head-width;
+    left: @windowContentShift + @windowHeadWidth;
 }
 
 .window-container.toolbar-right {
@@ -630,7 +630,7 @@ a.button {
     }
     .window-body {
         left: 0;
-        right: @window-head-width;
+        right: @windowHeadWidth;
     }
 }
 
@@ -717,12 +717,12 @@ a.button {
 
 .vgrid.top-toolbar .vgrid-toolbar {
     top: 0;
-    border-bottom: 1px solid mix(@color, @background, 200%/15);
+    border-bottom: 1px solid mix(@textColor, @background, 200%/15);
 }
 
 .vgrid.bottom-toolbar .vgrid-toolbar {
     bottom: 0;
-    border-top: 1px solid mix(@color, @background, 200%/15);
+    border-top: 1px solid mix(@textColor, @background, 200%/15);
 }
 
 .vgrid.top-toolbar .vgrid-scrollpane {
@@ -745,10 +745,10 @@ a.button {
     position: absolute;
     right: 0;
     left: 0;
-    font-size: @vgrid-font-size;
+    font-size: @vgridFontSize;
     padding: 8px 13px 8px 13px;
-    border-bottom: 1px solid mix(@color, @background, 200%/15);
-    color: @color;
+    border-bottom: 1px solid mix(@textColor, @background, 200%/15);
+    color: @textColor;
     background-color: @background; /* resolves hw accel anti-aliasing */
 }
 
@@ -759,7 +759,7 @@ a.button {
 }
 
 .vgrid-cell.hover:hover {
-    background-color: mix(@color, @background, 1000%/255);
+    background-color: mix(@textColor, @background, 1000%/255);
 }
 
 .vgrid-cell * {
@@ -791,7 +791,7 @@ a.button {
 }
 
 .vgrid-cell.odd {
-    /*background-color: mix(@color, @background, 1000%/255);*/
+    /*background-color: mix(@textColor, @background, 1000%/255);*/
 }
 
 .vgrid-cell.vgrid-label {
@@ -799,10 +799,10 @@ a.button {
     text-align: center;
     line-height: 1em;
     padding: 5px 13px 4px 13px;
-    background-color: mix(@color, @background, 100%/15);
-    border-bottom: 1px solid mix(@color, @background, 300%/15);
+    background-color: mix(@textColor, @background, 100%/15);
+    border-bottom: 1px solid mix(@textColor, @background, 300%/15);
     cursor: pointer;
-    .vertical-gradient(@background, mix(@color, @background, 1500%/255));
+    .vertical-gradient(@background, mix(@textColor, @background, 1500%/255));
 }
 
 .vgrid-cell.vgrid-label.left {
@@ -810,12 +810,12 @@ a.button {
 }
 
 .vgrid-cell.selected {
-    background-color: @selected-background;
+    background-color: @selectedBackground;
     border-bottom-color: rgba(0, 0, 0, 0.20);
 }
 
 .vgrid-cell.selected * {
-    color: @selected-color !important;
+    color: @selectedColor !important;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -868,9 +868,9 @@ a.button {
     height: 19px;
     padding-top: 10px;
     padding-left: 10px;
-    background-color: @status-background;
-    border-top: 1px solid darken(@status-background, 10%);
-    color: @status-color;
+    background-color: @statusBackground;
+    border-top: 1px solid darken(@statusBackground, 10%);
+    color: @statusColor;
     font-size: 8pt;
 }
 
@@ -898,11 +898,11 @@ a.button {
 }
 
 .email-address, .blue {
-    color: @accent1-bright;
+    color: @accent1Bright;
 }
 
 .person, .person-link {
-    color: @person-link-color;
+    color: @personLinkColor;
     word-break: break-all;
 }
 
@@ -910,10 +910,6 @@ a.button {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-a.action-link {
-    color: @action-link-color;
 }
 
 .delimiter {
@@ -925,17 +921,17 @@ a.action-link {
 }
 
 a.attachment-link {
-    color: @mail-attachment-link-color;
+    color: @mailAttachmentLinkColor;
 }
 
 a.attachment-link:hover {
-    color: @mail-attachment-link-color-hover;
+    color: @mailAttachmentLinkColorHover;
 }
 
 a.n-more { white-space: nowrap; display: inline-block; margin-right: 1em; }
 
 a.nolink {
-    color: @color;
+    color: @textColor;
     text-decoration: none;
 }
 
@@ -1015,7 +1011,7 @@ input[type=search] {
 .io-ox-dialog-popup .content .plain-text {
     font-size: 12pt;
     text-align: center;
-    color: @color;
+    color: @textColor;
     padding: 10px;
 }
 
@@ -1035,7 +1031,7 @@ input[type=search] {
 .io-ox-dialog-pane .content {
     font-size: 12pt;
     text-align: center;
-    color: @color;
+    color: @textColor;
     padding: 10px;
 }
 
@@ -1067,9 +1063,9 @@ span.hint {
 /* inline links */
 .io-ox-inline-links {
     position:relative;
-    font-size: @inline-link-font-size;
+    font-size: @inlineLinkFontSize;
     text-align: right;
-    margin: @inline-links-margin;
+    margin: @inlineLinksMargin;
     clear: both;
     .user-select(none);
 }
@@ -1081,7 +1077,7 @@ span.hint {
 
 .io-ox-inline-links > a,
 .io-ox-inline-links > span.dropdown {
-    color: @inline-link-color;
+    color: @inlineLinkColor;
     text-decoration: none;
     padding: 0 0 0 0.5em;
     outline: 0;
@@ -1125,7 +1121,7 @@ span.hint {
 }
 
 .io-ox-multi-selection .io-ox-inline-links a {
-    color: @inline-link-color;
+    color: @inlineLinkColor;
 }
 
 .io-ox-multi-selection .io-ox-inline-links.empty {
@@ -1232,7 +1228,7 @@ span.hint {
 /* input fields */
 
 input.nice-input {
-    color: @color;
+    color: @textColor;
     background-color: white;
     border: 1px solid #ccc;
     padding: 0.10em 0.5em 0.10em 0.5em;
@@ -1305,7 +1301,7 @@ input.nice-input {
     .folder.selectable:hover { background-color: #efefef; }
 
     .folder.selected {
-        background-color: @selected-background !important;
+        background-color: @selectedBackground !important;
     }
 
     .folder.selected * {
@@ -1396,7 +1392,7 @@ input.nice-input {
 
 .foldertree-sidepanel {
 
-    background-color: @foldertree-sidepanel-background;
+    background-color: @foldertreeSidepanelBackground;
     width: 330px;
 
     &.border-right { border: 0px none; }
@@ -1425,10 +1421,10 @@ input.nice-input {
             .folder-counter-badge { background-color: #555; color: white; }
 
             .folder.show-counter {
-                .folder-label { color: @link-on-dark !important; }
+                .folder-label { color: @linkOnDark !important; }
             }
 
-            .folder-arrow, a { font-size: 13px; color: lighten(@link-color, 20%); }
+            .folder-arrow, a { font-size: 13px; color: lighten(@linkColor, 20%); }
 
             .folder .shared-by { padding-left: 0; font-size: 12px; }
         }
@@ -1443,8 +1439,8 @@ input.nice-input {
     }
 
     &.side-shift {
-        width: @window-content-shift;
-        left: 0 - @window-content-shift;
+        width: @windowContentShift;
+        left: 0 - @windowContentShift;
     }
 }
 
@@ -1465,7 +1461,7 @@ a.toolbar-action {
 
 .toolbar-action i.enabled { color: #888; }
 .toolbar-action:hover { background-color: rgba(0, 0, 0, 0.20); }
-a.toolbar-action, .toolbar-action > a { color: @link-on-dark; text-decoration: none; outline: 0; }
+a.toolbar-action, .toolbar-action > a { color: @linkOnDark; text-decoration: none; outline: 0; }
 .toolbar-action.pull-left { margin-right: 1px; }
 .toolbar-action.pull-right { margin-left: 1px; }
 .toolbar-action ul { text-align: left; }

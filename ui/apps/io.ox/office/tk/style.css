@@ -150,7 +150,7 @@ i.io-ox-office-icon {
 
     /* glow effect for focused controls */
     .focus-glow(@radius: 8px, @opacity: 50%) {
-        .box-shadow(0 0 @radius fade(@selected-background, @opacity));
+        .box-shadow(0 0 @radius fade(@selectedBackground, @opacity));
     }
     .focus-hover-glow() {
         .focus-glow(9px, 60%);
@@ -201,7 +201,7 @@ i.io-ox-office-icon {
             white-space: nowrap;
             font-size: 13px;
             font-weight: normal;
-            color: @color;
+            color: @textColor;
             text-shadow: none;
             vertical-align: top;
 
@@ -294,7 +294,7 @@ i.io-ox-office-icon {
             
                 /* selected toggle/radio buttons */
                 &.selected {
-                    background-color: fade(@selected-background, 50%);
+                    background-color: fade(@selectedBackground, 50%);
                 }
             }
 
@@ -305,12 +305,12 @@ i.io-ox-office-icon {
 
                     &:hover { background-color: fade(black, 5%); }
                     &:active { background-color: fade(black, 10%); }
-                    &:focus:not(:active) { border-color: fade(@selected-background, 60%); }
+                    &:focus:not(:active) { border-color: fade(@selectedBackground, 60%); }
     
                     /* selected toggle/radio buttons */
                     &.selected {
-                        &:hover { background-color: fade(@selected-background, 60%); }
-                        &:active { background-color: fade(@selected-background, 70%); }
+                        &:hover { background-color: fade(@selectedBackground, 60%); }
+                        &:active { background-color: fade(@selectedBackground, 70%); }
                     }
                 }
             
@@ -359,7 +359,7 @@ i.io-ox-office-icon {
                 line-height: @control-height - 2 * @framed-border-width;
 
                 &.selected {
-                    border-color: @selected-background;
+                    border-color: @selectedBackground;
                     .box-shadow(0 2px 8px fade(black, 20%));
                 }
             }
@@ -367,12 +367,12 @@ i.io-ox-office-icon {
             &:not(.disabled) a.button:not(.disabled) {
                 &:hover:not(:focus) { border-color: fade(black, 10%); }
                 &:active:not(:focus) { border-color: fade(black, 10%); }
-                &:focus { border-color: fade(@selected-background, 60%); }
+                &:focus { border-color: fade(@selectedBackground, 60%); }
 
                 &.selected {
-                    &:hover:not(:focus) { border-color: darken(@selected-background, 5%); }
-                    &:active:not(:focus) { border-color: darken(@selected-background, 10%); }
-                    &:focus { border-color: darken(@selected-background, 20%); }
+                    &:hover:not(:focus) { border-color: darken(@selectedBackground, 5%); }
+                    &:active:not(:focus) { border-color: darken(@selectedBackground, 10%); }
+                    &:focus { border-color: darken(@selectedBackground, 20%); }
                 }
             }
         }

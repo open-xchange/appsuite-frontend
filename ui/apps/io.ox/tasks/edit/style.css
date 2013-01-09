@@ -12,7 +12,7 @@
  */
  
  .io-ox-tasks-edit-main .title{
-	font-family: @font-light;
+	font-family: @lightFontFamily;
 	font-weight: 300;
 	font-size: 24px;
 	line-height: 30px;
@@ -65,7 +65,7 @@
  .task-edit-label {
  	display: block;
  	color: #333;
-	font-family: @font-light;
+	font-family: @lightFontFamily;
 	line-height: 1.25em;
 	margin-bottom: 5px;
  }

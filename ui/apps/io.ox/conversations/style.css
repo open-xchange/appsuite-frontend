@@ -12,7 +12,7 @@
 }
 
 .io-ox-conversation .subject {
-    font-family: @font-light;
+    font-family: @lightFontFamily;
     font-weight: 300;
     font-size: 16pt;
     color: #555;
@@ -43,7 +43,7 @@
 
 .io-ox-conversation .message .from {
     font-weight: normal;
-    color: @link-color;
+    color: @linkColor;
 }
 
 .io-ox-conversation .message .from.me {
@@ -97,7 +97,7 @@
 
 .io-ox-conversation .controls textarea:focus {
     border-color: transparent;
-    .box-shadow(0px 0px 4px 0px @outline-color);
+    .box-shadow(0px 0px 4px 0px @outlineColor);
 }
 
 .io-ox-conversation .controls button {
