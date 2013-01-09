@@ -121,7 +121,8 @@ define("io.ox/core/main",
 
     (function () {
 
-        var interval = settings.get('refreshInterval', 300000), next = _.now() + interval;
+        var interval = parseInt(settings.get('refreshInterval', 300000), 10),
+            next = _.now() + interval;
 
         ext.point('io.ox/core/refresh').extend({
             action: function () {
