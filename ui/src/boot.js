@@ -21,12 +21,14 @@ require({
 // add fake console (esp. for IE)
 if (typeof window.console === 'undefined') {
     window.console = { log: $.noop, debug: $.noop, error: $.noop, warn: $.noop };
-}
+}  
+
+require(["less!io.ox/core/bootstrap/css/bootstrap.less"]);
 
 $(document).ready(function () {
 
     "use strict";
-
+    
     // animations
     var DURATION = 250,
         // flags
@@ -546,6 +548,7 @@ $(document).ready(function () {
                 'You don&rsquo;t need administrator rights. Just restart IE after installation.</div>'
             ));
         }
+
         return $.when(
                 // load extensions
                 require(['io.ox/core/manifests']).pipe(function (manifests) {
@@ -602,6 +605,12 @@ $(document).ready(function () {
         fetchGeneralServerConfig().done(function () {
             // set page title now
             document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+            if (ox.signin) {
+                require(["themes"], function (themes) {
+                    themes.set(ox.serverConfig.signinTheme || 'login');
+                });
+            }
+
             // continue
             autoLogin();
         });

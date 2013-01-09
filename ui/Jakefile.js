@@ -362,13 +362,8 @@ utils.concat("pre-core.js",
 }());
 
 // Twitter Bootstrap
-utils.copy(utils.list("lib/bootstrap", ["css/bootstrap.min.css", "img/*"]),
+utils.copy(utils.list("lib/bootstrap", ["img/*"]),
     { to: utils.dest("apps/io.ox/core/bootstrap") });
-
-// Concat styles of core and plugins
-utils.concat( "bootstrap.min.css", ["lib/bootstrap/css/bootstrap.min.css", "lib/bootstrap-datepicker.css"],
-        { to: utils.dest("apps/io.ox/core/bootstrap/css") });
-
 
 // jQuery UI
 
