@@ -105,24 +105,27 @@ i.io-ox-office-icon {
         background: none;
     }
 
+    /* the application pane in the middle between all view panes */
     &.app-pane {
         margin: 0;
         padding: 0;
         .overflow(auto);
         background-color: @app-pane-fill-color;
+        text-align: center;
 
-        /* generic design of a 'page': white background with dark box shadow */
+        /* the container element for the application model node(s) */
+        .app-pane-model-container {
+            display: inline-block;
+            .box-sizing(content-box);
+        }
+
+        /* generic design of a 'page': white background with box shadow */
         .page {
             position: relative;
-            margin: auto;
             background-color: white;
             .box-shadow(0 0 8px fade(black, 20%));
         }
     }
-}
-
-.app-pane-model-container {
-    .box-sizing(content-box);
 }
 
 .app-pane-shadow {
@@ -306,10 +309,12 @@ i.io-ox-office-icon {
                     &:hover { background-color: fade(black, 5%); }
                     &:active { background-color: fade(black, 10%); }
                     &:focus:not(:active) { border-color: fade(@selectedBackground, 60%); }
+
                     /* selected toggle/radio buttons */
                     &.selected {
-                        &:hover { background-color: fade(@selectedBackground, 60%); }
-                        &:active { background-color: fade(@selectedBackground, 70%); }
+                        &:hover { background-color: fade(@selected-background, 60%); }
+                        &:active { background-color: fade(@selected-background, 70%); }
+                        &:focus:not(:active) { border-color: darken(@selected-background, 20%); }
                     }
                 }
 
