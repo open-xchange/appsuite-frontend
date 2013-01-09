@@ -35,7 +35,7 @@
         left: 10px;
         float: left;
         line-height: 32px;
-        font-family: @font-light;
+        font-family: @lightFontFamily;
         font-size: 20px;
     }
 
@@ -93,7 +93,7 @@
         position: absolute;
         background: none;
         width: 100%;
-        font-family: @font-light;
+        font-family: @lightFontFamily;
         text-align: center;
         color: #888;
         .ellipsis();
@@ -134,7 +134,7 @@
         left: @weekview-time-with;
         white-space: nowrap;
         background-color: white;
-        font-family: @font-light;
+        font-family: @lightFontFamily;
         font-size: 15px;
     }
 
@@ -176,7 +176,7 @@
     }
 
     .time .number {
-        font-family: @font-light;
+        font-family: @lightFontFamily;
         font-size: 12px;
         position: absolute;
         right: 5px;
@@ -210,7 +210,7 @@
 
     .weekday {
         display: inline-block;
-        font-family: @font-light;
+        font-family: @lightFontFamily;
         font-size: 13px;
         text-align: center;
         .ellipsis();

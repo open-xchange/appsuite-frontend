@@ -29,7 +29,7 @@
     }
 
     h1.greeting {
-        font-family: @font-light;
+        font-family: @lightFontFamily;
         font-weight: 300;
         font-size: 24px;
         line-height: 27px;
@@ -97,48 +97,48 @@
     }
 
     .widget-color-red {
-        h2, .accent { color: @color_red; }
-        .action { background-color: @color_red; }
+        h2, .accent { color: @red; }
+        .action { background-color: @red; }
     }
 
     .widget-color-orange {
-        h2, .accent { color: @color_orange; }
-        .action { background-color: @color_orange; }
+        h2, .accent { color: @orange; }
+        .action { background-color: @orange; }
     }
 
     .widget-color-lightgreen {
-        h2, .accent { color: darken(@color_lightgreen, 10%); }
-        .action { background-color: darken(@color_lightgreen, 10%); }
+        h2, .accent { color: darken(@greenLight, 10%); }
+        .action { background-color: darken(@greenLight, 10%); }
     }
 
     .widget-color-green {
-        h2, .accent { color: @color_green; }
-        .action { background-color: @color_green; }
+        h2, .accent { color: @green; }
+        .action { background-color: @green; }
     }
 
     .widget-color-lightblue {
-        h2, .accent { color: darken(@color_lightblue, 20%); }
-        .action { background-color: darken(@color_lightblue, 20%); }
+        h2, .accent { color: darken(@blueLight, 20%); }
+        .action { background-color: darken(@blueLight, 20%); }
     }
 
     .widget-color-blue {
-        h2, .accent { color: @color_blue; }
-        .action { background-color: @color_blue; }
+        h2, .accent { color: @blue; }
+        .action { background-color: @blue; }
     }
 
     .widget-color-purple {
-        h2, .accent { color: @color_purple; }
-        .action { background-color: @color_purple; }
+        h2, .accent { color: @purple; }
+        .action { background-color: @purple; }
     }
 
     .widget-color-pink {
-        h2, .accent { color: darken(@color_pink, 10%); }
-        .action { background-color: darken(@color_pink, 10%); }
+        h2, .accent { color: darken(@pink, 10%); }
+        .action { background-color: darken(@pink, 10%); }
     }
 
     .widget-color-gray {
-        h2, .accent { color: darken(@color_gray, 20%); }
-        .action { background-color: darken(@color_gray, 20%); }
+        h2, .accent { color: darken(@grayLight, 20%); }
+        .action { background-color: darken(@grayLight, 20%); }
     }
 
     h2 {
@@ -229,7 +229,7 @@
 .portal-feed {
 
     h1 {
-        font-family: @font-light;
+        font-family: @lightFontFamily;
         font-size: 24px;
         font-weight: 300;
         text-align: left;
@@ -276,7 +276,7 @@
     }
 
     .text-delimiter {
-        color: @link-color;
+        color: @linkColor;
         width: 2em;
         display: inline-block;
         text-align: center;
@@ -337,7 +337,7 @@
     .user-select(none);
 
     h1 {
-        font-family: @font-light;
+        font-family: @lightFontFamily;
         font-weight: 300;
         font-size: 20pt;
         line-height: 1.15em;
@@ -385,15 +385,15 @@
     }
 
     .widget-color-black { color: #333; }
-    .widget-color-red { color: @color_red; }
-    .widget-color-orange { color: @color_orange; }
-    .widget-color-lightgreen { color: darken(@color_lightgreen, 10%); }
-    .widget-color-green { color: @color_green; }
-    .widget-color-lightblue { color: darken(@color_lightblue, 20%); }
-    .widget-color-blue { color: @color_blue; }
-    .widget-color-purple { color: @color_purple; }
-    .widget-color-pink { color: darken(@color_pink, 10%); }
-    .widget-color-gray { color: darken(@color_gray, 20%); }
+    .widget-color-red { color: @red; }
+    .widget-color-orange { color: @orange; }
+    .widget-color-lightgreen { color: darken(@greenLight, 10%); }
+    .widget-color-green { color: @green; }
+    .widget-color-lightblue { color: darken(@blueLight, 20%); }
+    .widget-color-blue { color: @blue; }
+    .widget-color-purple { color: @purple; }
+    .widget-color-pink { color: darken(@pink, 10%); }
+    .widget-color-gray { color: darken(@grayLight, 20%); }
 
     .colors {
 
@@ -401,7 +401,7 @@
 
         ul {
 
-            font: 14px/20 @font-normal;
+            font: 14px/20 @normalFontFamily;
             width: 200px;
             text-align: left;
             right: 0;
@@ -419,15 +419,15 @@
             }
 
             .color-black { background-color: #333; }
-            .color-red { background-color: @color_red; }
-            .color-orange { background-color: @color_orange; }
-            .color-lightgreen { background-color: darken(@color_lightgreen, 10%); }
-            .color-green { background-color: @color_green; }
-            .color-lightblue { background-color: darken(@color_lightblue, 20%); }
-            .color-blue { background-color: @color_blue; }
-            .color-purple { background-color: @color_purple; }
-            .color-pink { background-color: darken(@color_pink, 10%); }
-            .color-gray { background-color: darken(@color_gray, 20%); }
+            .color-red { background-color: @red; }
+            .color-orange { background-color: @orange; }
+            .color-lightgreen { background-color: darken(@greenLight, 10%); }
+            .color-green { background-color: @green; }
+            .color-lightblue { background-color: darken(@blueLight, 20%); }
+            .color-blue { background-color: @blue; }
+            .color-purple { background-color: @purple; }
+            .color-pink { background-color: darken(@pink, 10%); }
+            .color-gray { background-color: darken(@grayLight, 20%); }
 
             .active-color { font-weight: bold; }
         }

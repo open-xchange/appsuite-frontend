@@ -49,7 +49,7 @@
     text-align: right;
     padding: 0.25em 0 0.5em 0;
     margin: 1.5em 0px 1.5em 0px;
-    border-bottom: 1px solid @inline-link-border-color;
+    border-bottom: 1px solid @inlineLinkBorderColor;
     height: 1px;
 }
 
@@ -109,21 +109,21 @@
 }
 
 .settings-detail-pane .listbox .selectable[selected] {
-	background-color: @selected-background !important;
+	background-color: @selectedBackground !important;
     background-image: -webkit-gradient(
         linear,
         left top,
         left bottom,
-        color-stop(0, lighten(@selected-background, 20%)),
-        color-stop(1, darken(@selected-background, 5%))
+        color-stop(0, lighten(@selectedBackground, 20%)),
+        color-stop(1, darken(@selectedBackground, 5%))
     ) !important;
-    background-image: -o-linear-gradient(top, lighten(@selected-background, 20%) 0%, darken(@selected-background, 5%) 100%) !important;
+    background-image: -o-linear-gradient(top, lighten(@selectedBackground, 20%) 0%, darken(@selectedBackground, 5%) 100%) !important;
     background-image: -moz-linear-gradient(
         center top,
-        lighten(@selected-background, 20%) 0%,
-        darken(@selected-background, 5%) 100%
+        lighten(@selectedBackground, 20%) 0%,
+        darken(@selectedBackground, 5%) 100%
     ) !important;
-    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="lighten(@selected-background, 20%)", endColorstr="darken(@selected-background, 5%)~")";
+    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="lighten(@selectedBackground, 20%)", endColorstr="darken(@selectedBackground, 5%)~")";
     border-bottom-color: black;
     color: #fff;
 }
