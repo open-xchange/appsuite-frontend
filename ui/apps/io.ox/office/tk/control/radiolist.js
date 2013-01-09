@@ -35,8 +35,7 @@ define('io.ox/office/tk/control/radiolist',
      *  mix-in class. Additionally, the following options are supported:
      *  @param {Boolean} [options.highlight=false]
      *      If set to true, the drop-down button will be highlighted if a list
-     *      item in the drop-down menu is active. Has no effect, if the radio
-     *      group is not in drop-down mode.
+     *      item in the drop-down menu is active.
      *  @param [options.toggleValue]
      *      If set to a value different to null or undefined, the option button
      *      that is currently active can be clicked to be switched off. In that
@@ -46,12 +45,16 @@ define('io.ox/office/tk/control/radiolist',
      *      switched off.
      *  @param {String} [options.updateCaptionMode='all']
      *      Specifies how to update the caption of the drop-down button when a
-     *      list item in the drop-down menu has been activated. If set to
-     *      'label', only the label text of the list item will be copied. If
-     *      set to 'icon', only the icon will be copied. If set to 'none',
-     *      nothing will be copied. By default, icon and label of the list item
-     *      will be copied. Has no effect, if the radio group is not in
-     *      drop-down mode.
+     *      list item in the drop-down menu has been activated. Supports the
+     *      keywords 'all' and 'none', or a space separated list containing the
+     *      string tokens 'icon', 'label', and 'labelCss'.
+     *      - 'icon': copies the icon of the list item to the drop-down button.
+     *      - 'label': copies the label of the list item to the drop-down
+     *          button.
+     *      - 'labelCss': copies the label CSS formatting of the list item to
+     *          the label of the drop-down button.
+     *      The keyword 'all' is equivalent to 'icon label labelCss'. The
+     *      keyword 'none' is equivalent to the empty string.
      *  @param {Function} [options.updateCaptionHandler]
      *      A function that will be called after a list item has been
      *      activated, and the caption of the drop-down button has been updated
@@ -61,8 +64,7 @@ define('io.ox/office/tk/control/radiolist',
      *      and the value of the selected/activated list item in the second
      *      parameter (also if this value does not correspond to any existing
      *      list item). Will be called in the context of this radio group
-     *      instance. Has no effect, if the radio group is not in drop-down
-     *      mode.
+     *      instance.
      */
     function RadioList(options) {
 
@@ -110,22 +112,21 @@ define('io.ox/office/tk/control/radiolist',
 
             var // activate a radio button
                 button = Utils.selectOptionButton(self.getListItems(), value),
+                // the options used to create the list item button
+                buttonOptions = button.data('options') || {},
                 // the options used to set the caption of the drop-down menu button
-                captionOptions = options;
+                captionOptions = _.clone(options);
 
             // highlight the drop-down button
             Utils.toggleButtons(self.getMenuButton(), highlight && (button.length > 0));
 
             // update the caption of the drop-down menu button
-            if (updateCaptionMode !== 'none') {
-                if (button.length) {
-                    if (updateCaptionMode !== 'label') {
-                        captionOptions = Utils.extendOptions(captionOptions, { icon: Utils.getControlIcon(button) });
+            if (updateCaptionMode.length > 0) {
+                _(updateCaptionMode).each(function (name) {
+                    if (name in buttonOptions) {
+                        captionOptions[name] = buttonOptions[name];
                     }
-                    if (updateCaptionMode !== 'icon') {
-                        captionOptions = Utils.extendOptions(captionOptions, { label: Utils.getControlLabel(button) });
-                    }
-                }
+                });
                 Utils.setControlCaption(self.getMenuButton(), captionOptions);
             }
 
@@ -180,8 +181,8 @@ define('io.ox/office/tk/control/radiolist',
 
             var // options for the new button, including the passed value
                 buttonOptions = Utils.extendOptions(options, { value: value }),
-                // the new button
-                button = this.createListItem(buttonOptions);
+                // the new button (button options needed for updating the drop-down menu button)
+                button = this.createListItem(buttonOptions).data('options', buttonOptions);
 
             // add tool tip
             Utils.setControlTooltip(button, Utils.getStringOption(options, 'tooltip'), 'bottom');
@@ -189,6 +190,17 @@ define('io.ox/office/tk/control/radiolist',
         };
 
         // initialization -----------------------------------------------------
+
+        switch (updateCaptionMode) {
+        case 'all':
+            updateCaptionMode = ['icon', 'label', 'labelCss'];
+            break;
+        case 'none':
+            updateCaptionMode = [];
+            break;
+        default:
+            updateCaptionMode = updateCaptionMode.split(/\s+/);
+        }
 
         // register event handlers
         this.on('menuopen', menuOpenHandler)

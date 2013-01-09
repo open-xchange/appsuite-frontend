@@ -12,7 +12,7 @@
  */
 
 /* restrict all definitions to office applications */
-.io-ox-office-main, .io-ox-office-dropdown-container {
+.io-ox-office-main {
 
 /* ========================================================================= */
 /* generic mix-in classes                                                    */
@@ -246,11 +246,11 @@ i.io-ox-office-icon {
 
             &.dropdown-button {
                 padding-right: @caret-width + @control-padding;
-    
+
                 > .caption > span:last-child {
                     margin-right: @caption-spacing;
                 }
-    
+
                 > span.dropdown-caret {
                     position: absolute;
                     top: 0;
@@ -291,7 +291,7 @@ i.io-ox-office-icon {
             a.button {
                 border: @default-focus-border-width solid transparent;
                 line-height: @control-height - 2 * @default-focus-border-width;
-            
+
                 /* selected toggle/radio buttons */
                 &.selected {
                     background-color: fade(@selected-background, 50%);
@@ -300,22 +300,22 @@ i.io-ox-office-icon {
 
             /* keyboard/mouse effects (not for disabled buttons/text fields or groups) */
             &:not(.disabled) {
-                
+
                 a.button:not(.disabled) {
 
                     &:hover { background-color: fade(black, 5%); }
                     &:active { background-color: fade(black, 10%); }
                     &:focus:not(:active) { border-color: fade(@selected-background, 60%); }
-    
+
                     /* selected toggle/radio buttons */
                     &.selected {
                         &:hover { background-color: fade(@selected-background, 60%); }
                         &:active { background-color: fade(@selected-background, 70%); }
                     }
                 }
-            
+
                 input:not(.disabled) {
-    
+
                     &:hover:not(:focus) { background: fade(black, 5%); }
                     &:focus, &:active { background: white; }
                 }
@@ -396,12 +396,20 @@ i.io-ox-office-icon {
             &.design-framed {
                 padding: 4px;
 
-                a.button:not(:first-child) {
-                    margin-top: 4px;
+                a.button {
+                    height: @control-height + 2 * @framed-border-width;
+                    padding-left: 12px;
+                    padding-right: 12px;
+                    line-height: @control-height;
+
+                    &:not(:first-child) {
+                        margin-top: 4px;
+                    }
                 }
             }
         }
-    }
+
+    } /* end of .group */
 
     /* tool bars ----------------------------------------------------------- */
 
@@ -478,13 +486,14 @@ i.io-ox-office-icon {
             display: none;
         }
     }
-}
+
+} /* end of .view-component */
 
 /* ========================================================================= */
 /* drop-down menu elements                                                   */
 /* ========================================================================= */
 
-&.io-ox-office-dropdown-container {
+&.dropdown-container {
     display: inline-block;
     position: absolute;
     z-index: 1000;
@@ -501,13 +510,9 @@ i.io-ox-office-icon {
         display: inline-block;
         width: auto;
 
-        &.dropdown-list {
-            .box-sizing(content-box);
-
-            > .group {
-                display: inline-block;
-                width: 100%;
-            }
+        > .group {
+            display: inline-block;
+            width: 100%;
         }
     }
 }
@@ -546,4 +551,4 @@ i.io-ox-office-icon {
 
 /* ========================================================================= */
 
-} /* end of .io-ox-office-main { */
+} /* end of .io-ox-office-main */

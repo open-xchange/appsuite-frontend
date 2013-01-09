@@ -75,7 +75,7 @@ define('io.ox/office/tk/dropdown/list',
             sortFunctor = Utils.getFunctionOption(options, 'sortFunctor'),
 
             // the group in the drop-down menu representing the list items
-            buttonGroup = new Group({ classes: 'button-list', design: Utils.getStringOption(options, 'itemDesign', 'default') });
+            listItemGroup = new Group({ classes: 'button-list', design: Utils.getStringOption(options, 'itemDesign', 'default') });
 
         // private methods ----------------------------------------------------
 
@@ -107,10 +107,10 @@ define('io.ox/office/tk/dropdown/list',
                 if (keydown && (index >= 0) && (index + 1 < buttons.length)) { buttons.eq(index + 1).focus(); }
                 return false;
             case KeyCodes.PAGE_UP:
-                if (keydown) { buttons.eq(Math.max(0, index - this.getItemCountPerPage())).focus(); }
+                if (keydown) { buttons.eq(Math.max(0, index - List.PAGE_SIZE)).focus(); }
                 return false;
             case KeyCodes.PAGE_DOWN:
-                if (keydown) { buttons.eq(Math.min(buttons.length - 1, index + this.getItemCountPerPage())).focus(); }
+                if (keydown) { buttons.eq(Math.min(buttons.length - 1, index + List.PAGE_SIZE)).focus(); }
                 return false;
             case KeyCodes.HOME:
                 if (keydown) { buttons.first().focus(); }
@@ -128,34 +128,24 @@ define('io.ox/office/tk/dropdown/list',
         // methods ------------------------------------------------------------
 
         /**
-         * Returns the button group instance containing all list items.
+         * Returns the group instance containing all list items.
          */
-        this.getButtonGroup = function () {
-            return buttonGroup;
+        this.getListItemGroup = function () {
+            return listItemGroup;
         };
 
         /**
          * Returns all button elements representing the list items.
          */
         this.getListItems = function () {
-            return buttonGroup.getNode().children(Utils.BUTTON_SELECTOR);
-        };
-
-        /**
-         * Returns the number of list items that can be shown at the same time
-         * in the drop-down list, depending on the current screen size.
-         */
-        this.getItemCountPerPage = function () {
-            var menuNode = self.getMenuNode(),
-                buttons = self.getListItems();
-            return buttons.length ? Math.max(1, Math.floor(menuNode.innerHeight() / buttons.first().outerHeight()) - 1) : 1;
+            return listItemGroup.getNode().children(Utils.BUTTON_SELECTOR);
         };
 
         /**
          * Removes all list items from the drop-down menu.
          */
         this.clearListItems = function () {
-            buttonGroup.getNode().empty();
+            listItemGroup.getNode().empty();
             return this;
         };
 
@@ -196,7 +186,7 @@ define('io.ox/office/tk/dropdown/list',
             if ((0 <= index) && (index < buttons.length)) {
                 buttons.eq(index).before(button);
             } else {
-                buttonGroup.getNode().append(button);
+                listItemGroup.getNode().append(button);
             }
 
             return button;
@@ -204,10 +194,8 @@ define('io.ox/office/tk/dropdown/list',
 
         // initialization -----------------------------------------------------
 
-        this.getMenuComponent().getNode().addClass('dropdown-list');
-
         // add the button group control to the drop-down view component
-        this.addPrivateMenuGroup(buttonGroup);
+        this.addPrivateMenuGroup(listItemGroup);
 
         // default sort functor: sort by button label text, case insensitive
         sortFunctor = _.isFunction(sortFunctor) ? sortFunctor : function (button) {
@@ -217,11 +205,19 @@ define('io.ox/office/tk/dropdown/list',
 
         // register event handlers
         this.on('menuopen', menuOpenHandler);
-        buttonGroup
+        listItemGroup
             .registerChangeHandler('click', { selector: Utils.BUTTON_SELECTOR, valueResolver: Utils.getFunctionOption(options, 'itemValueResolver') })
             .getNode().on('keydown keypress keyup', listKeyHandler);
 
     } // class List
+
+    // static fields ----------------------------------------------------------
+
+    /**
+     * Number of list items that will be skipped when using the PAGE_UP or
+     * PAGE_DOWN key.
+     */
+    List.PAGE_SIZE = 5;
 
     // exports ================================================================
 

@@ -93,7 +93,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             contentNode = menuComponent.getNode(),
 
             // the drop-down menu element containing the menu view component
-            menuNode = $('<div>').addClass('io-ox-office-dropdown-container').append(contentNode),
+            menuNode = $('<div>').addClass('io-ox-office-main dropdown-container').append(contentNode),
 
             // additional controls that toggle the drop-down menu
             menuToggleControls = $(),
@@ -459,7 +459,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             // insert the passed group into the view component of the drop-down menu
             menuComponent.addPrivateGroup(group);
 
-            // forward events of the embedded group to listeners of this group
+            // forward events of the embedded group to listeners of this drop-down group
             group.on('change cancel', function (event, value) {
                 self.trigger(event.type, value);
             });

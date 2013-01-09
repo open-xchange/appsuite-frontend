@@ -1647,22 +1647,6 @@ define('io.ox/office/tk/utils',
     };
 
     /**
-     * Returns the class of the caption icon of the first control in the passed
-     * jQuery collection.
-     *
-     * @param {jQuery} control
-     *  A jQuery collection containing a form control.
-     *
-     * @return {String|Undefined}
-     *  The class of the caption icon of the control, if existing, otherwise
-     *  undefined.
-     */
-    Utils.getControlIcon = function (control) {
-        var icon = control.first().children('div.caption').children(ICON_SELECTOR);
-        return icon.length ? icon.attr('data-icon') : undefined;
-    };
-
-    /**
      * Returns the text label of the first control in the passed jQuery
      * collection.
      *
