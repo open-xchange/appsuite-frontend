@@ -312,9 +312,9 @@ i.io-ox-office-icon {
 
                     /* selected toggle/radio buttons */
                     &.selected {
-                        &:hover { background-color: fade(@selected-background, 60%); }
-                        &:active { background-color: fade(@selected-background, 70%); }
-                        &:focus:not(:active) { border-color: darken(@selected-background, 20%); }
+                        &:hover { background-color: fade(@selectedBackground, 60%); }
+                        &:active { background-color: fade(@selectedBackground, 70%); }
+                        &:focus:not(:active) { border-color: darken(@selectedBackground, 20%); }
                     }
                 }
 
