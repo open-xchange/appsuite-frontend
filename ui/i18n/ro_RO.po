@@ -9,7 +9,7 @@ msgstr ""
 "Language-Team: Romanian <ro@bureau-cornavin.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+# "Content-Transfer-Encoding: 8bit\n"
 "Language: ro\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2);\n"
 "X-Generator: Lokalize 1.4\n"
@@ -4808,7 +4808,7 @@ msgstr "Afișează mai puţine"
 
 #: apps/io.ox/editor/main.js:54
 msgid "Simple Pad"
-msgstr "Suport simplu"
+msgstr "Editor simplu"
 
 #: apps/io.ox/editor/main.js:73
 msgid "Enter document title here"
