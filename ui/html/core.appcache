@@ -13,7 +13,7 @@ CACHE:
 @base@/apps/io.ox/core/bootstrap/basics.js
 @base@/apps/io.ox/core/bootstrap/css/bootstrap.less
 # theme
-@base@/apps/themes/login/styles.css
+@base@/apps/themes/login/style.less
 @base@/apps/themes/login/font-awesome.css
 @base@/apps/themes/login/busy.gif
 @base@/apps/themes/login/fonts/OpenSans-Light-webfont.woff
