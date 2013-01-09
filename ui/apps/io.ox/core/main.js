@@ -41,8 +41,8 @@ define("io.ox/core/main",
     };
 
     var topbar = $('#io-ox-topbar'),
-        launchers = topbar.find('.launchers'),
-        launcherDropdown = topbar.find('.launcher-dropdown ul');
+        launchers = $('.launchers', topbar),
+        launcherDropdown = $('.launcher-dropdown ul', topbar);
 
     // whatever ...
     gt('Address Book');
@@ -50,6 +50,54 @@ define("io.ox/core/main",
     gt('Tasks');
     gt('Files');
     gt('Conversations');
+
+    function tabManager() {
+        // Reset first
+        launchers.children('.launcher:hidden').each(function (i, node) {
+            $(node).show();
+        });
+
+        var items = launchers.children('.launcher'),
+        itemsVisible = launchers.children('.launcher:visible'),
+        itemsRight = topbar.children('.launcher.right'),
+        itemsLeftWidth = 0,
+        itemsRightWidth = $('#io-ox-top-logo-small', topbar).outerWidth(true),
+        viewPortWidth = $(document).width(),
+        launcherDropDownIcon = $('.launcher-dropdown', topbar),
+        launcherDropDownIconWidth = launcherDropDownIcon.outerWidth(true);
+
+        launcherDropDownIcon.hide();
+
+        itemsRight.each(function () {
+            itemsRightWidth += $(this).outerWidth(true);
+        });
+        itemsVisible.each(function () {
+            itemsLeftWidth += $(this).outerWidth(true);
+        });
+
+        var i = 0;
+        var hidden = 0;
+        for (i = items.length; i > 1; i--) {
+            if (itemsLeftWidth + itemsRightWidth <= viewPortWidth) {
+                break;
+            } else {
+                var lastVisibleItem = launchers.children('.launcher:visible').last();
+                itemsLeftWidth = itemsLeftWidth - lastVisibleItem.outerWidth(true);
+                lastVisibleItem.hide();
+                hidden++;
+                if (hidden === 1) {
+                    itemsLeftWidth += launcherDropDownIconWidth;
+                }
+            }
+        }
+        $('li', launcherDropdown).hide();
+        if (hidden > 0) {
+            launcherDropDownIcon.show();
+            for (i = hidden; i > 0; i--) {
+                $('li', launcherDropdown).eq(-i).show();
+            }
+        }
+    }
 
     // add launcher
     var addLauncher = function (side, label, fn, tooltip) {
@@ -197,11 +245,13 @@ define("io.ox/core/main",
             );
             node.on('click', function () { model.launch(); }).appendTo(launcherDropdown);
             add(node, launcherDropdown, model);
+            tabManager();
         });
 
         ox.ui.apps.on('remove', function (model, collection, e) {
             launchers.children('[data-app-guid="' + model.guid + '"]').remove();
             launcherDropdown.children('[data-app-guid="' + model.guid + '"]').remove();
+            tabManager();
         });
 
         ox.ui.apps.on('launch resume', function (model, collection, e) {
@@ -216,6 +266,7 @@ define("io.ox/core/main",
             var node = launchers.children('[data-app-guid="' + model.guid + '"]').text(value);
             addUserContent(model, node);
             launcherDropdown.children('[data-app-guid="' + model.guid + '"] a').text(value);
+            tabManager();
         });
 
         /**
@@ -242,6 +293,7 @@ define("io.ox/core/main",
                 setTimeout(function () {
                     if (ox.online) {
                         notifications.attach(addLauncher);
+                        tabManager();
                     }
                 }, 5000);
             }
@@ -383,6 +435,8 @@ define("io.ox/core/main",
 
                 ext.point('io.ox/core/topbar/launchpad').invoke('draw');
                 ext.point('io.ox/core/topbar/favorites').invoke('draw');
+
+                $(window).resize(tabManager);
             }
         });
 
