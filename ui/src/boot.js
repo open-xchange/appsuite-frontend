@@ -458,8 +458,17 @@ $(document).ready(function () {
                 ox.user = _.url.hash('user');
                 ox.user_id = parseInt(_.url.hash('user_id') || '0', 10);
                 ox.language = _.url.hash('language');
+
+                if (_.url.hash('store') === 'true') {
+                    session.store();
+                }
+
+                // cleanup login params
+                _.url.hash({'session': null, 'user': null, 'user_id': null, 'language': null, 'store': null});
+
                 var ref = _.url.hash('ref');
-                _.url.redirect('#' + (ref ? decodeURIComponent(ref) : ''));
+                ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
+                _.url.redirect(ref ? ref : '#');
 
                 fetchUserSpecificServerConfig().done(function () {
                     loadCoreFiles().done(function () {
