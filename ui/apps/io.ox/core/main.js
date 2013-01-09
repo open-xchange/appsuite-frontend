@@ -228,6 +228,7 @@ define("io.ox/core/main",
         }
 
         ox.ui.apps.on('add', function (model, collection, e) {
+            if (model.get('title') === undefined) { return; }
             // create topbar launcher
             var node = addLauncher('left', model.get('title'), function () { model.launch(); }),
                 title = model.get('title');
