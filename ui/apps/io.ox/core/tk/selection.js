@@ -519,7 +519,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         };
 
         this.selectLastIndex = function () {
-            var item = observedItems[lastValidIndex] || observedItems[0];
+            var item = observedItems[lastValidIndex] || _.last(observedItems);
             if (item !== undefined) {
                 this.select(item);
             }
