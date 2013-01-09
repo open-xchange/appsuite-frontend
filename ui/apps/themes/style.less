@@ -192,7 +192,9 @@
     }
 
     .launcher.right .dropdown-menu a { color: @link-color; }
-    .launcher.right .dropdown-menu li:hover a { color: white; }
+    .launcher.right .dropdown-menu li {
+        a:hover, a:focus { color: white; }
+    }
 
     @-webkit-keyframes launcherColours {
         from { color: #fff; }
