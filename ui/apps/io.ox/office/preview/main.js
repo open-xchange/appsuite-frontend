@@ -71,10 +71,8 @@ define('io.ox/office/preview/main',
                 if (self.hasFileDescriptor()) {
 
                     // load the file
-                    $.ajax({
-                        type: 'GET',
-                        url: self.getDocumentFilterUrl('importdocument', { filter_format: 'html' }),
-                        dataType: 'json'
+                    self.sendAjaxRequest({
+                        url: self.getDocumentFilterUrl('importdocument', { filter_format: 'html' })
                     })
                     .pipe(function (response) {
                         return Application.extractAjaxStringResult(response, 'HTMLPages');
