@@ -277,7 +277,7 @@ define('io.ox/files/icons/perspective',
                         if (layout.iconCols <= 3) end = end + 10;
                         baton.allIds = filterFiles(ids, options);
                         ext.point('io.ox/files/icons/actions').invoke('draw', inline, baton);
-                        redraw(baton.allIds.slice(start, end));
+                        redraw(allIds.slice(start, end));
                     })
                     .fail(function (response) {
                         iconview.idle();
@@ -402,7 +402,7 @@ define('io.ox/files/icons/perspective',
 
                         allIds  = ids;
 
-                        baton.allIds = ids;
+                        //baton.allIds = ids;
 
                         _(changed).each(function (cid) {
 
@@ -450,6 +450,7 @@ define('io.ox/files/icons/perspective',
                     drawFirst();
                 }
             });
+            api.trigger('refresh.all');
         },
 
         render: function (app) {
