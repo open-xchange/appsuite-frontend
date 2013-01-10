@@ -174,15 +174,10 @@ define("io.ox/mail/api",
 
             canAutoRead: function (obj) {
                 var cid = getCID(obj);
-                
                 if (!(cid in unseen)) { //unseen list is not initialized if mailapp was not opened before
                                         //this makes sure mails get removed correctly in notification area if this happens
-                    if ((obj.flags & 32) !== 32) {
-                        unseen[cid] = true;
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    unseen[cid] = true;
+                    return true;
                 } else {
                     return this.isUnseen(cid) && (!(cid in explicitUnseen) || explicitUnseen[cid] < (_.now() - DELAY));
                 }
@@ -564,7 +559,6 @@ define("io.ox/mail/api",
     };
 
     api.markRead = function (list) {
-
         list = [].concat(list);
 
         _(list).each(function (obj) {
