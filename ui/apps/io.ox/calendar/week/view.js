@@ -201,7 +201,7 @@ define('io.ox/calendar/week/view',
                     obj = _.cid($(e.currentTarget).data('cid') + '');
                 if (!cT.hasClass('current')) {
                     self.trigger('showAppointment', e, obj);
-                    self.$el.find('.appointment')
+                    $('.appointment', self.$el)
                         .removeClass('current opac')
                         .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el))
                         .addClass('opac');
@@ -545,7 +545,7 @@ define('io.ox/calendar/week/view',
                 );
                 // mark today
                 if (new date.Local().setHours(0, 0, 0, 0).getTime() === tmpDate.getTime()) {
-                    this.pane.find('.day[date="' + d + '"]').addClass('today');
+                    $('.day[date="' + d + '"]', this.pane).addClass('today');
                     hasToday = true;
                 }
                 tmpDate.add(date.DAY);
@@ -735,8 +735,8 @@ define('io.ox/calendar/week/view',
             });
 
             // init drag and resize widget on appointments
-            var colWidth = $('.day:first').outerWidth(),
-                paneOffset = self.pane.children().first().width(),
+            var colWidth = $('.day', this.$el).outerWidth(),
+                paneOffset = self.pane.children().first().width() + this.$el.offset().left,
                 paneHeight = self.height();
 
             $('.week-container .day>.appointment.modify', this.$el)
@@ -752,7 +752,7 @@ define('io.ox/calendar/week/view',
                         // set current day
                         $.extend(d.my, {
                             curHelper: $(this),
-                            all: $('[data-cid="' + ui.helper.data('cid') + '"]:visible'),
+                            all: $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el),
                             day: Math.floor((e.pageX - paneOffset) / colWidth),
                             handle: ''
                         });
@@ -766,7 +766,6 @@ define('io.ox/calendar/week/view',
                             d = el.data('resizable'),
                             day = Math.floor((e.pageX - paneOffset) / colWidth),
                             mouseY = e.pageY - (self.pane.offset().top - self.pane.scrollTop());
-
                         // detect direction
                         if (ui.position.top !== ui.originalPosition.top) {
                             d.my.handle = 'n';
@@ -807,7 +806,7 @@ define('io.ox/calendar/week/view',
                                 } else {
                                     d.my.all.filter(':visible').last().hide();
                                 }
-                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
+                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
                                 d.my.curHelper = d.my.all.filter(':visible').last();
                                 d.my.curHelper.css({
                                     minHeight: 0,
@@ -819,7 +818,7 @@ define('io.ox/calendar/week/view',
                                     // set new helper
                                     $('.week-container .day[date="' + day + '"]')
                                         .append(d.my.curHelper = el.clone());
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
                                 } else {
                                     d.my.curHelper = d.my.all.filter(':hidden').first();
                                 }
@@ -860,7 +859,7 @@ define('io.ox/calendar/week/view',
                                     d.my.all.filter(':visible').first().hide();
                                 }
                                 // update dataset
-                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
+                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
                                 d.my.curHelper = d.my.all.filter(':visible').first();
                             } else if (day < d.my.day) {
                                 // move left
@@ -868,7 +867,7 @@ define('io.ox/calendar/week/view',
                                     // add new helper
                                     $('.week-container .day[date="' + day + '"]')
                                         .append(d.my.curHelper = el.clone().addClass('opac'));
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
 
                                 } else {
                                     d.my.curHelper = d.my.all.filter(':hidden').last();
@@ -886,7 +885,7 @@ define('io.ox/calendar/week/view',
                                     });
                                 }
                                 // update dataset
-                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
+                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
                             }
                         }
                         // update day
@@ -936,7 +935,7 @@ define('io.ox/calendar/week/view',
                         // write all appointment divs to draggable object
                         var d = $(this).data('draggable');
                         d.my = {};
-                        d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible')
+                        d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el)
                             .addClass('opac')
                             .css({
                                 left : 0,
@@ -994,12 +993,12 @@ define('io.ox/calendar/week/view',
                                 if (((d.my.firstTop >= 0 && firstTop < 0) || (d.my.firstTop >= paneHeight && firstTop < paneHeight)) && diff < 0) {
                                     $('.week-container .day[date="' + (--d.my.firstPos) + '"]')
                                         .append($(this).clone());
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
                                 }
                                 if (((d.my.firstTop < 0 && firstTop >= 0) || (d.my.firstTop < paneHeight && firstTop >= paneHeight)) && diff > 0) {
                                     d.my.firstPos++;
                                     d.my.all.first().remove();
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
                                 }
                                 if (firstTop < 0) {
                                     firstTop += paneHeight;
@@ -1016,12 +1015,12 @@ define('io.ox/calendar/week/view',
                                 if (((d.my.lastHeight <= 0 && lastHeight > 0) || (d.my.lastHeight <= paneHeight && lastHeight > paneHeight)) && diff > 0) {
                                     $('.week-container .day[date="' + (++d.my.lastPos) + '"]')
                                         .append($(this).clone());
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
                                 }
                                 if (((d.my.lastHeight > 0 && lastHeight <= 0) || (d.my.lastHeight > paneHeight && lastHeight <= paneHeight)) && diff < 0) {
                                     d.my.lastPos--;
                                     d.my.all.last().remove();
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]:visible');
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
                                 }
                                 if (lastHeight <= 0) {
                                     lastHeight += paneHeight;
@@ -1153,7 +1152,7 @@ define('io.ox/calendar/week/view',
             if (positionFieldChanged) {
                 this.renderAppointments();
             } else {
-                var el = this.$el.find('[data-cid="' + a.id + '"]:visible');
+                var el = $('[data-cid="' + a.id + '"]', this.$el);
                 el.replaceWith(this.renderAppointment(a)
                     .attr('style', el.attr('style')));
             }
