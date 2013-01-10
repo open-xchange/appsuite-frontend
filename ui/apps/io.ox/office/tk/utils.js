@@ -1247,6 +1247,47 @@ define('io.ox/office/tk/utils',
         return node;
     };
 
+    // calculate size of system scroll bars
+    (function () {
+
+        var // dummy container used to calculate the scroll bar sizes
+            outerDiv = $('<div>').css({ width: '100px', height: '100px', overflow: 'scroll' });
+
+        $('body').append(outerDiv);
+        Utils.SCROLLBAR_WIDTH = 100 - outerDiv[0].clientWidth;
+        Utils.SCROLLBAR_HEIGHT = 100 - outerDiv[0].clientHeight;
+        outerDiv.remove();
+    }());
+
+    /**
+     * Returns the dimensions of the visible area of the passed scrollable
+     * node.
+     *
+     * @param {HTMLElement|jQuery} scrollableNode
+     *  The scrollable DOM element. If this object is a jQuery collection, uses
+     *  the first node it contains.
+     *
+     * @returns {Object}
+     *  An object with numeric 'left', 'top', 'right', 'bottom', 'width', and
+     *  'height' attributes representing the position and size of the visible
+     *  area of the node in pixels. The attributes 'right' and 'bottom'
+     *  represent the distance of the right/bottom corner of the visible area
+     *  to the right/bottom border of the total content area in the node.
+     */
+    Utils.getVisibleDimensions = function (scrollableNode) {
+
+        scrollableNode = Utils.getDomNode(scrollableNode);
+
+        return {
+            left: scrollableNode.scrollLeft,
+            top: scrollableNode.scrollTop,
+            width: scrollableNode.clientWidth,
+            height: scrollableNode.clientHeight,
+            right: scrollableNode.scrollWidth - scrollableNode.clientWidth - scrollableNode.scrollLeft,
+            bottom: scrollableNode.scrollHeight - scrollableNode.clientHeight - scrollableNode.scrollTop
+        };
+    };
+
     /**
      * Scrolls a specific child node of a container node into its visible area.
      *
@@ -1281,7 +1322,7 @@ define('io.ox/office/tk/utils',
 
         var horizontalNames = {
                 offset: 'left',
-                offsetBorder: 'border-left-width',
+                offsetBorder: 'borderLeftWidth',
                 innerSize: 'innerWidth',
                 outerSize: 'outerWidth',
                 scroll: 'scrollLeft'
@@ -1289,7 +1330,7 @@ define('io.ox/office/tk/utils',
 
             verticalNames = {
                 offset: 'top',
-                offsetBorder: 'border-top-width',
+                offsetBorder: 'borderTopWidth',
                 innerSize: 'innerHeight',
                 outerSize: 'outerHeight',
                 scroll: 'scrollTop'
