@@ -1609,7 +1609,10 @@ ul.dropdown-menu li a.disabled { color:#999; }
 
 // TINY SCREENS
 @media (max-width: 700px) {
-
+    .foldertree-sidepanel.side-shift,
+    .window-body.side-shift {
+        left:0;
+    }
     .window-head {
         top: auto; height: 40px; right: 0; width: auto;
         .toolbar-button { line-height: 44px; float: left; }
@@ -1618,6 +1621,7 @@ ul.dropdown-menu li a.disabled { color:#999; }
     }
 
     .window-body { bottom: 40px; left: 0; }
+
     .chromeless-window .window-body { bottom: 0; }
 
     .window-container.toolbar-right {
