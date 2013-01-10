@@ -299,7 +299,13 @@ define('io.ox/core/permissions/permissions',
             folder_id = String(folder);
             api.get({ folder: folder_id }).done(function (data) {
                 try {
+
                     isFolderAdmin = api.Bitmask(data.own_rights).get('admin') >= 1;
+
+                    // Check if ACLs enabled
+                    if (!(data.capabilities & Math.pow(2, 0))) {
+                        isFolderAdmin = false;
+                    }
 
                     var dialog = new dialogs.ModalDialog({
                         width: 800
