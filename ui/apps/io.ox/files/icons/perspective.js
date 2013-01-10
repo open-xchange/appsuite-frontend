@@ -207,7 +207,8 @@ define('io.ox/files/icons/perspective',
                 layout,
                 recalculateLayout,
                 baton = new ext.Baton({ app: app }),
-                dialog = new dialogs.SidePopup();
+                dialog = new dialogs.SidePopup(),
+                inline;
 
             this.main.append(
                 $('<div class="files-iconview">').append(iconview)
@@ -258,10 +259,11 @@ define('io.ox/files/icons/perspective',
                 iconContainer = baton.$.iconContainer;
 
                 // add inline link
-                var inline;
-                iconview.find('.breadcrumb').after(
-                    inline = $('<div class="inline-actions">')
-                );
+                if ($('.inline-actions', iconview).length === 0) {
+                    iconview.find('.breadcrumb').after(
+                        inline = $('<div class="inline-actions">')
+                    );
+                }
 
                 // add element to provoke scrolling
                 iconContainer.append(
@@ -276,7 +278,7 @@ define('io.ox/files/icons/perspective',
                         end = displayedRows * layout.iconCols;
                         if (layout.iconCols <= 3) end = end + 10;
                         baton.allIds = filterFiles(ids, options);
-                        ext.point('io.ox/files/icons/actions').invoke('draw', inline, baton);
+
                         redraw(allIds.slice(start, end));
                     })
                     .fail(function (response) {
@@ -402,7 +404,8 @@ define('io.ox/files/icons/perspective',
 
                         allIds  = ids;
 
-                        //baton.allIds = ids;
+                        baton.allIds = ids;
+                        ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
 
                         _(changed).each(function (cid) {
 
