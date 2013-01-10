@@ -342,7 +342,11 @@ define('plugins/notifications/calendar/register',
                 .on('reminder-calender', function (e, reminder) {
                     var tmp = [];
                     _(reminder).each(function (remObj) {
-                        var obj = {id: remObj.target_id, folder: remObj.folder};
+                        var obj = {
+                            id: remObj.target_id,
+                            folder: remObj.folder,
+                            recurrence_position: remObj.recurrence_position
+                        };
                         calApi.get(obj).done(function (data) {
                             var inObj = {
                                 cid: _.cid(remObj),
