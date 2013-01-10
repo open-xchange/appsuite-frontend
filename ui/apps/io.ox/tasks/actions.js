@@ -116,27 +116,10 @@ define("io.ox/tasks/actions",
                 api.updateMultiple(data, mods.data)
                     .done(function (result) {
                         _(data).each(function (item) {
-                            
                             //update detailview
                             api.trigger("update:" + encodeURIComponent(item.folder_id + '.' + item.id));
                         });
-                        if (state === 3) {
-                            //check if there are new notifications trigger them
-                            api.getList(data, false).done(function (objs) {
-                                var notesToAdd = [];
-                                //check if notification is needed
-                                _(objs).each(function (item) {
-                                    if (item.end_date && item.end_date < _.now()) {
-                                        notesToAdd.push(item);
-                                    }
-                                });
-                                if (notesToAdd.length > 0) {
-                                    api.trigger('add-overdue-tasks', notesToAdd);
-                                }
-                            });
-                        } else if (state === 1) {
-                            api.trigger('remove-overdue-tasks', data);
-                        }
+                        
                         notifications.yell('success', mods.label);
                     })
                     .fail(function (result) {
@@ -145,14 +128,6 @@ define("io.ox/tasks/actions",
             } else {
                 api.update(data.last_modified || _.now(), data.id, mods.data, data.folder_id || data.folder)
                     .done(function (result) {
-                        //check if notification is needed and trigger event
-                        if (state === 3 && data.end_date && data.end_date < _.now()) {
-                            api.get(data, false).done(function (obj) {
-                                api.trigger('add-overdue-tasks', [obj]);
-                            });
-                        } else if (state === 1) {
-                            api.trigger('remove-overdue-tasks', [data]);
-                        }
                         api.trigger("update:" + encodeURIComponent(data.folder_id + '.' + data.id));
                         notifications.yell('success', mods.label);
                     })

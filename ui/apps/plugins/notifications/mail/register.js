@@ -137,24 +137,35 @@ define('plugins/notifications/mail/register',
         index: 200,
         register: function (controller) {
             var notifications = controller.get('io.ox/mail', NotificationsView);
-            api.on('new-mail', function (e, mails) {
-                var mailsToAdd = [],
-                    present = false;
+            
+            function addMails(e, mails) {//adds mails to notificationview
+                var mailsToAdd = [];
                 for (var i = 0; i < mails.length; i++) { //check if models for this mail are already present
-                    present = false;
-                    for (var b = 0; b < notifications.collection.length; b++) {
-                        if (mails[i].id === notifications.collection.models[b].get('id')) {
-                            present = true;
-                        }
-                    }
-                    if (!present) {
+                    if (!(notifications.collection._byId[mails[i].id])) {
                         mailsToAdd.push(mails[i]);
                     }
                 }
                 _(mailsToAdd.reverse()).each(function (mail) {
                     notifications.collection.unshift(new Backbone.Model(mail), { silent: true });
                 });
+            }
+            function removeMails(e, mails) {//removes mails from notificationview
+                _(mails).each(function (mail) {
+                    notifications.collection.remove(notifications.collection._byId[mail.id]);
+                });
+            }
+            
+            api.on('new-mail', function (e, mails) {
+                addMails(e, mails);
                 notifications.collection.trigger('reset');
+            });
+            api.on('add-unseen-mails', function (e, mails) {
+                addMails(e, mails);
+                notifications.collection.trigger('add');
+            });
+            api.on('remove-unseen-mails', function (e, mails) {
+                removeMails(e, mails);
+                notifications.collection.trigger('remove');
             });
 
             api.checkInbox();

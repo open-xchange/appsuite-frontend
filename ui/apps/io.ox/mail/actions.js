@@ -235,7 +235,9 @@ define('io.ox/mail/actions',
             });
         },
         multiple: function (list) {
-            api.markUnread(list);
+            api.markUnread(list).done(function () {
+                api.trigger("add-unseen-mails", list); //create notifications in notification area
+            });
         }
     });
 
@@ -251,10 +253,9 @@ define('io.ox/mail/actions',
             });
         },
         multiple: function (list) {
-            api.markRead(list);
-            for (var i = 0; i < list.length; i++) {
-                ext.point('io.ox/mail/detail/notification').invoke('action', this, list[i]);
-            }
+            api.markRead(list).done(function () {
+                api.trigger("remove-unseen-mails", list); //remove notifications in notification area
+            });
         }
     });
 
