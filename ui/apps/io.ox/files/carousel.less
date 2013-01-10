@@ -14,11 +14,15 @@
  */
 
 .carousel {
-
+    position:absolute;
     background-color: #000;
     margin-bottom: 0;
     z-index: 10000;
-    
+
+    .carousel-inner {
+        position: absolute;
+    }
+
     .closecarousel {
         position: absolute;
         bottom: 26px;
@@ -51,7 +55,7 @@
                 }
                 .divider { color: #fff; }
             }
-            
+
             h4 { text-align: center; }
         }
     }
