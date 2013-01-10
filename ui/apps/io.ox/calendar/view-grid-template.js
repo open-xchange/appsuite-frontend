@@ -16,7 +16,9 @@ define("io.ox/calendar/view-grid-template",
      "io.ox/core/tk/vgrid",
      "io.ox/core/extensions",
      "gettext!io.ox/calendar",
-     "less!io.ox/calendar/style.css"], function (util, VGrid, ext, gt) {
+     "io.ox/core/api/user",
+     "io.ox/core/api/resource",
+     "less!io.ox/calendar/style.css"], function (util, VGrid, ext, gt, userAPI, resourceAPI) {
 
     "use strict";
     var fnClickPerson = function (e) {
@@ -59,36 +61,57 @@ define("io.ox/calendar/view-grid-template",
                 var hash = util.getConfirmations(data),
                     conf = hash[ox.user_id] || { status: 1, comment: "" };
 
-                this.addClass(util.getConfirmationClass(conf.status));
-                fields.title.text(gt.noI18n(data.title || '\u00A0'));
-                fields.location.text(gt.noI18n(data.location || '\u00A0'));
+                this.addClass(util.getConfirmationClass(conf.status) + (data.hard_conflict ? ' hardconflict' : ''));
+                fields.title
+                    .text(data.title ? gt.noI18n(data.title || '\u00A0') : gt('Private'))
+                    .append(
+                        $.txt(' ('),
+                        $('<a>').append(userAPI.getTextNode(data.created_by)).on('click', { internal_userid: data.created_by }, fnClickPerson),
+                        $.txt(')')
+                    );
+                if (data.location) {
+                    fields.location.text(gt.noI18n(data.location || '\u00A0'));
+                }
                 util.addTimezoneLabel(fields.time.empty(), data);
                 fields.date.text(gt.noI18n(util.getDateInterval(data)));
                 fields.shown_as.get(0).className = "shown_as label " + util.getShownAsLabel(data);
-                if (data.conflicting_participants) {
+                if (data.participants && data.conflict) {
                     var conflicts = $('<span>');
-                    fields.conflicts.text(gt('Conflicts:'));
-                    fields.conflicts.append(conflicts);
-                    data.conflicting_participants.each(function (participant, index, list) {
-                        participant.fetch()
-                            .done(function () {
+                    fields.conflicts
+                        .text(gt('Conflicts:'))
+                        .append(conflicts);
+
+                    _(data.participants).each(function (participant, index, list) {
+                        // check for resources
+                        if (participant.type === 3) {
+                            resourceAPI.get({id: participant.id}).done(function (resource) {
                                 conflicts.append(
-                                    $('<a>')
-                                        .addClass('person-link')
-                                        .text(gt.noI18n(participant.get('display_name')))
+                                    $('<span>')
+                                        .addClass('resource-link')
+                                        .text(gt.noI18n(resource.display_name))
                                         .css('margin-left', '4px')
-                                        .on('click', { internal_userid: participant.get('id') }, fnClickPerson)
                                 );
-                                if (index < (list.length - 1)) {
-                                    conflicts.append($('<span>').addClass('delimiter')
-                                        .append($.txt(_.noI18n('\u00A0\u2022 ')))); // '&nbsp;&bull; '
-                                }
                             });
+                        }
+                        // internal user
+                        if (participant.type === 1) {
+                            conflicts.append(
+                                $('<a>')
+                                    .append(userAPI.getTextNode(participant.id))
+                                    .addClass('person-link')
+                                    .css('margin-left', '4px')
+                                    .on('click', { internal_userid: participant.id }, fnClickPerson)
+                            );
+                        }
+                        // separator
+                        if (index < (list.length - 1)) {
+                            conflicts.append($('<span>').addClass('delimiter')
+                                .append($.txt(_.noI18n('\u00A0\u2022 '))));
+                        }
                     });
                     fields.conflicts.show();
                     fields.conflicts.css('white-space', 'normal');
                     this.css('height', 'auto');
-                    window.cdata = data;
                 } else {
                     fields.conflicts.hide();
                 }
