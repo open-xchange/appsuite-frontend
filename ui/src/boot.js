@@ -23,11 +23,12 @@ if (typeof window.console === 'undefined') {
     window.console = { log: $.noop, debug: $.noop, error: $.noop, warn: $.noop };
 }  
 
-require(["less!io.ox/core/bootstrap/css/bootstrap.less"]);
 
 $(document).ready(function () {
-
+    
     "use strict";
+    
+    require(["less!io.ox/core/bootstrap/css/bootstrap.less"]);
     
     // animations
     var DURATION = 250,

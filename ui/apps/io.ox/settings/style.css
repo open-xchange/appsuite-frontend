@@ -92,7 +92,7 @@
 .settings-detail-pane .listbox .listbox-item {
     background-color: #eee;
     margin-bottom: 1px;
-    color: @enabled-color;
+    color: @enabledColor;
 }
 
 .settings-detail-pane .listbox .listbox-item button {
