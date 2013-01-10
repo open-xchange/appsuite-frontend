@@ -21,15 +21,15 @@ require({
 // add fake console (esp. for IE)
 if (typeof window.console === 'undefined') {
     window.console = { log: $.noop, debug: $.noop, error: $.noop, warn: $.noop };
-}  
+}
 
 
 $(document).ready(function () {
-    
+
     "use strict";
-    
+
     require(["less!io.ox/core/bootstrap/css/bootstrap.less"]);
-    
+
     // animations
     var DURATION = 250,
         // flags
@@ -66,7 +66,6 @@ $(document).ready(function () {
         'input[type=radio]',
         'input[type=checkbox]',
         '.btn',
-        '.io-ox-dialog-popup',
         '.dropdown',
         '.icon-search',
         '.contact-grid-index',

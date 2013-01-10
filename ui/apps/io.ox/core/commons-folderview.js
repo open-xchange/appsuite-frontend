@@ -15,7 +15,8 @@ define('io.ox/core/commons-folderview',
      'io.ox/core/extPatterns/links',
      'io.ox/core/notifications',
      'io.ox/core/api/folder',
-     'gettext!io.ox/core'], function (ext, links, notifications, api, gt) {
+     'io.ox/core/config',
+     'gettext!io.ox/core'], function (ext, links, notifications, api, config, gt) {
 
     'use strict';
 
@@ -160,7 +161,7 @@ define('io.ox/core/commons-folderview',
 
         ext.point(POINT + '/sidepanel/toolbar/add').extend({
             id: 'subscribe-folder',
-            index: 200,
+            index: 300,
             draw: function (baton) {
                 if (baton.options.type === 'mail') {
                     this.append($('<li>').append(
@@ -178,7 +179,7 @@ define('io.ox/core/commons-folderview',
 
         ext.point(POINT + '/sidepanel/toolbar/options').extend({
             id: 'rename',
-            index: 100,
+            index: 500,
             draw: function (baton) {
                 var link = $('<a href="#" data-action="rename">').text(gt('Rename'));
                 this.append($('<li>').append(link));
@@ -198,7 +199,7 @@ define('io.ox/core/commons-folderview',
 
         ext.point(POINT + '/sidepanel/toolbar/options').extend({
             id: 'delete',
-            index: 1000,
+            index: 300,
             draw: function (baton) {
                 var link = $('<a href="#" data-action="delete">').text(gt('Delete'));
                 this.append($('<li>').append(link));
@@ -224,6 +225,71 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
                 var link = $('<a href="#" data-action="permissions">').text(gt('Permissions'));
                 this.append($('<li>').append(link.on('click', { app: baton.app }, setFolderPermissions)));
+            }
+        });
+
+        function showFolderProperties(e) {
+            e.preventDefault();
+            var baton = e.data.baton,
+                id = _(baton.app.folderView.selection.get()).first();
+            api.get({ folder: id }).done(function (folder) {
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
+                    var title = gt('Properties'),
+                    dialog = new dialogs.ModalDialog({
+                        easyOut: true
+                    })
+                    .header(
+                        api.getBreadcrumb(folder.id, { prefix: title }).css({ margin: '0' })
+                    )
+                    .build(function () {
+                        function ucfirst(str) {
+                            return str.charAt(0).toUpperCase() + str.slice(1);
+                        }
+                        var node = this.getContentNode().append(
+                            $('<div class="row-fluid">').append(
+                                $('<label>')
+                                    .css({'padding-top': '5px', 'padding-left': '5px'})
+                                    .addClass('span3')
+                                    .text(gt('Foldertype')),
+                                $('<input>', { type: 'text' })
+                                    .addClass('span9')
+                                    .attr('readonly', 'readonly')
+                                    .val(ucfirst(folder.module))
+                            )
+                        );
+                        if (config.get('modules.caldav.active') && folder.module === 'calendar') {
+                            node.append(
+                                $('<div class="row-fluid">').append(
+                                    $('<label>')
+                                        .css({'padding-top': '5px', 'padding-left': '5px'})
+                                        .addClass('span3')
+                                        .text(gt('CalDAV URL')),
+                                    $('<input>', { type: 'text' })
+                                        .addClass('span9')
+                                        .attr('readonly', 'readonly')
+                                        .val(
+                                            _.noI18n(config.get('modules.caldav.url')
+                                                .replace("[hostname]", location.host)
+                                                .replace("[folderId]", id)
+                                        )
+                                    )
+                                )
+                            );
+                        }
+                    })
+                    .addPrimaryButton('ok', gt('Close'))
+                    .show().done(function () { dialog = null; });
+                });
+            });
+        }
+
+        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+            id: 'properties',
+            index: 100,
+            draw: function (baton) {
+                var link = $('<a href="#" data-action="properties">').text(gt('Properties'));
+                this.append($('<li>').append(link));
+                link.on('click', { baton: baton }, showFolderProperties);
             }
         });
 
@@ -275,6 +341,7 @@ define('io.ox/core/commons-folderview',
 
         ext.point(POINT + '/sidepanel/toolbar/options').extend({
             id: 'move',
+            index: 400,
             draw: function (baton) {
                 var link = $('<a href="#" data-action="delete">').text(gt('Move'));
                 this.append($('<li>').append(link));
