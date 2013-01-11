@@ -67,8 +67,18 @@ define('plugins/portal/facebook/register',
         },
 
         preview: function (baton) {
-            var resultsets = baton.data,
-                wall = resultsets.data[0].fql_result_set,
+            var resultsets = baton.data;
+            if (resultsets.error) {
+                console.error("Facebook error occurred", resultsets.error);
+                this.append(
+                    $('<div class="content error">').append(
+                        $('<div class="error bold">').text(gt('Facebook reported an error:')),
+                            $('<div class="errormessage">').text(resultsets.error.message)
+                    )
+                ).addClass('error-occurred');
+                return;
+            }
+            var wall = resultsets.data[0].fql_result_set,
                 profiles = resultsets.data[1].fql_result_set,
                 $content = $('<div class="content pointer">');
             if (!wall || wall.length === 0) {
@@ -297,6 +307,7 @@ define('plugins/portal/facebook/register',
     ext.point('io.ox/portal/widget/facebook/settings').extend({
         title: gt('Facebook'),
         type: 'facebook',
-        editable: false
+        editable: false,
+        unique: true
     });
 });
