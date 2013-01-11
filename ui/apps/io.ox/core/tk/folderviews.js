@@ -356,14 +356,22 @@ define('io.ox/core/tk/folderviews',
             return ready.pipe(function (promise) {
                 // store data
                 data = promise;
-                // create DOM nodes
-                nodes.arrow = $('<div class="folder-arrow"><i class="icon-chevron-right"></i></div>');
-                nodes.label = $('<div class="folder-label">');
-                nodes.counter = $('<div class="folder-counter">').append('<span class="folder-counter-badge">');
-                nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', 'value': data.id }).css('float', 'right');
-                if (data.subscribed) {
-                    nodes.subscriber.attr('checked', 'checked');
+
+                if (nodes && nodes.arrow === undefined) {
+                    // create DOM nodes
+                    nodes.arrow = $('<div class="folder-arrow"><i class="icon-chevron-right"></i></div>');
+                    nodes.label = $('<div class="folder-label">');
+                    nodes.counter = $('<div class="folder-counter">').append('<span class="folder-counter-badge">');
+                    nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', 'value': data.id }).css('float', 'right');
+                    if (data.subscribed) {
+                        nodes.subscriber.attr('checked', 'checked');
+                    }
+                }  else {
+                    //potential workaround for bug 24377 (horizontal folder duplicates)
+                    console.error('bug 24377 workaround: please add a comment to the bug report');
+                    return isOpen() ? paintChildren() : $.when();
                 }
+
                 // draw children
                 var def = isOpen() ? paintChildren() : $.when();
                 updateArrow();
