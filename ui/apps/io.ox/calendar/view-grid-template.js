@@ -63,12 +63,15 @@ define("io.ox/calendar/view-grid-template",
 
                 this.addClass(util.getConfirmationClass(conf.status) + (data.hard_conflict ? ' hardconflict' : ''));
                 fields.title
-                    .text(data.title ? gt.noI18n(data.title || '\u00A0') : gt('Private'))
-                    .append(
-                        $.txt(' ('),
-                        $('<a>').append(userAPI.getTextNode(data.created_by)).on('click', { internal_userid: data.created_by }, fnClickPerson),
-                        $.txt(')')
-                    );
+                    .text(data.title ? gt.noI18n(data.title || '\u00A0') : gt('Private'));
+                if (data.conflict) {
+                    fields.title
+                        .append(
+                            $.txt(' ('),
+                            $('<a>').append(userAPI.getTextNode(data.created_by)).on('click', { internal_userid: data.created_by }, fnClickPerson),
+                            $.txt(')')
+                        );
+                }
                 if (data.location) {
                     fields.location.text(gt.noI18n(data.location || '\u00A0'));
                 }
