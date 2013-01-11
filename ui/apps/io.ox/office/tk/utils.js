@@ -2054,46 +2054,32 @@ define('io.ox/office/tk/utils',
         // methods ------------------------------------------------------------
 
         /**
-         * Creates a deferred method that can be called multiple times.
-         * Execution is separated into a part that runs directly every time the
-         * method is called (direct callback), and a part that runce once after
-         * the current script execution ends (deferred callback).
+         * Creates a deferred method that can be called multiple times during
+         * the current script execution. Execution is separated into a part
+         * that runs directly every time the method is called (the 'direct
+         * callback'), and a part that runce once after the current script
+         * execution ends (the 'deferred callback').
          *
          * @param {Function} directCallback
          *  A function that will be called every time the deferred method
-         *  has been called. Receives the following parameters:
-         *  @param {Object} storage
-         *      The storage object passed to the DeferredObjects.createObject()
-         *      method. Can be used to store additional data needed across
-         *      multiple calls of the direct and/or deferred callbacks.
+         *  has been called. Receives all parameters that have been passed to
+         *  the deferred method.
          *
          * @param {Function} deferredCallback
          *  A function that will be called once after calling the deferred
          *  method once or multiple times during the execution of the current
-         *  script. Receives the following parameters:
-         *  @param {Object} storage
-         *      The storage object passed to the DeferredObjects.createObject()
-         *      method. Can be used to store additional data needed across
-         *      multiple calls of the direct and/or deferred callbacks.
-         *
-         * @param {Object} [storage]
-         *  An object that will be passed to all callback functions and can be
-         *  used to store additional data. The storage object remains valid
-         *  across all calls of the direct callback and the deferred callback.
+         *  script. Does not receive any parameters.
          *
          * @returns {Function}
          *  The deferred method that can be called multiple times, and that
          *  executes the deferred callback once after execution of the current
-         *  script ends. Passes all arguments to the direct callback (following
-         *  the leading storage parameter if specified), and returns the result
-         *  of the direct callback function.
+         *  script ends. Passes all arguments to the direct callback, and
+         *  returns the result of the direct callback function.
          */
-        this.createMethod = function (directCallback, deferredCallback, storage) {
+        this.createMethod = function (directCallback, deferredCallback) {
 
             var // unique index of this deferred method
-                index = count++,
-                // arguments for direct callback
-                args = _.isUndefined(storage) ? [] : [storage];
+                index = count++;
 
             // create and return the deferred method
             return function () {
@@ -2102,12 +2088,12 @@ define('io.ox/office/tk/utils',
                 if (!(index in timeouts)) {
                     timeouts[index] = window.setTimeout(function () {
                         delete timeouts[index];
-                        deferredCallback.call(context, storage);
+                        deferredCallback.call(context);
                     }, 0);
                 }
 
                 // call the direct callback with the passed arguments
-                return directCallback.apply(context, args.concat(_.toArray(arguments)));
+                return directCallback.apply(context, _.toArray(arguments));
             };
         };
 
