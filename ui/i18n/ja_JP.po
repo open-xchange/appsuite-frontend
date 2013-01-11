@@ -1,11 +1,11 @@
 # translation of ox.ja_JP.po to deutsch
-# Antje Faber <antje.faber@open-xchange.com>, 2009, 2011, 2012.
+# Antje Faber <antje.faber@open-xchange.com>, 2009, 2011, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-01-10 14:28+0900\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2013-01-11 10:12+0100\n"
+"Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1757,7 +1757,7 @@ msgstr "アポイントへの出席を依頼"
 #. This string is simply split at spaces (can be more or less than 26 characters)
 #: apps/io.ox/contacts/main.js:50
 msgid "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
-msgstr "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
+msgstr "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z あ か さ た な は ま や ら わ"
 
 #: apps/io.ox/contacts/main.js:104
 #: apps/io.ox/contacts/model.js:297
