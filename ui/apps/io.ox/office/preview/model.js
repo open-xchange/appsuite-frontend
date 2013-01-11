@@ -13,8 +13,9 @@
 
 define('io.ox/office/preview/model',
     ['io.ox/core/event',
+     'io.ox/office/tk/application',
      'less!io.ox/office/preview/style.css'
-    ], function (Events) {
+    ], function (Events, Application) {
 
     'use strict';
 
@@ -31,9 +32,12 @@ define('io.ox/office/preview/model',
 
             // the root node containing the previewed document
             node = $('<div>').addClass('page'),
-
-            // all slides to be shown in the preview
-            pages = $(),
+            
+            // the job id to be used for future page requests
+            jobID = 0,
+            
+            // the total page count of the document
+            pageCount = 0,
 
             // current page index (one-based!)
             curPage = 0;
@@ -41,11 +45,25 @@ define('io.ox/office/preview/model',
         // private methods ----------------------------------------------------
 
         function showPage(page) {
-            if ((page !== curPage) && (1 <= page) && (page <= pages.length)) {
-                pages.eq(curPage - 1).hide();
-                curPage = page;
-                pages.eq(curPage - 1).show();
-                self.trigger('showpage', curPage);
+            if ((page !== curPage) && (page >= 1) && (page <= pageCount)) {
+                
+                // do not try to load, if file descriptor is missing
+                if (app.hasFileDescriptor()) {
+                    // load the file
+                    app.sendAjaxRequest({
+                        url: app.getDocumentFilterUrl('importdocument', { filter_format: 'html', filter_action: 'getpage', job_id: jobID, page_number: page })
+                    })
+                    .pipe(function (response) {
+                        return Application.extractAjaxStringResult(response, 'HTMLPages');
+                    })
+                    .done(function (htmlPage) {
+                        node.get()[0].innerHTML = htmlPage;
+                    })
+                    .fail(function () {
+                    });
+                }
+                
+                self.trigger('showpage', curPage = page);
             }
         }
 
@@ -58,31 +76,19 @@ define('io.ox/office/preview/model',
             return node;
         };
 
-        this.setPreviewDocument = function (htmlPreview) {
+        this.setPreviewDocument = function (_jobID, _pageCount) {
 
-            if (_.isString(htmlPreview)) {
-                // import the passed HTML markup
-                // !!!
-                // don't use the jquery node.html()
-                // method here since this mixes up the defs
-                // section of the svg content (possibly
-                // due to namespace problems)
-                // !!!
-                node.get()[0].innerHTML = htmlPreview;
-
-                // TODO: remove 'hr's in backend, so we don't need to remove it
-                // here for cost reasons
-                node.children('hr').hide();
-                // use all top-level p elements as pages to be displayed
-                pages = node.children('p').css('display', 'inline-block').hide();
+            jobID = _jobID;
+            pageCount = _pageCount;
+            curPage = 0;
+            
+            if (_.isNumber(jobID) && _.isNumber(pageCount)) {
+                showPage(1);
             } else {
                 node.empty();
-                pages = $();
             }
 
-            curPage = pages.length ? 1 : 0;
-            pages.first().show();
-            self.trigger('showpage', curPage);
+            this.trigger('showpage', curPage);
         };
 
         this.getPage = function () {
@@ -90,7 +96,7 @@ define('io.ox/office/preview/model',
         };
 
         this.getPageCount = function () {
-            return pages.length;
+            return pageCount;
         };
 
         /**
@@ -118,11 +124,17 @@ define('io.ox/office/preview/model',
          * Navigating to the last page
          */
         this.lastPage = function () {
-            showPage(pages.length);
+            showPage(pageCount);
         };
 
         this.destroy = function () {
             this.events.destroy();
+            
+            if (jobID !== 0) {
+                app.sendAjaxRequest({
+                    url: app.getDocumentFilterUrl('importdocument', { filter_format: 'html', filter_action: 'endconvert', job_id: jobID })
+                });
+            }
         };
 
         // initialization -----------------------------------------------------
