@@ -1247,6 +1247,8 @@ define('io.ox/office/tk/utils',
         return node;
     };
 
+    // positioning and scrolling ----------------------------------------------
+
     // calculate size of system scroll bars
     (function () {
 
@@ -1261,35 +1263,122 @@ define('io.ox/office/tk/utils',
 
     /**
      * Returns the dimensions of the visible area of the passed scrollable
-     * node.
+     * node. This includes the size of the visible area without scroll bars (if
+     * shown), and the distances of all four borders of the visible area to the
+     * borders of the entire scroll area.
      *
      * @param {HTMLElement|jQuery} scrollableNode
      *  The scrollable DOM element. If this object is a jQuery collection, uses
      *  the first node it contains.
      *
      * @returns {Object}
-     *  An object with numeric 'left', 'top', 'right', 'bottom', 'width', and
-     *  'height' attributes representing the position and size of the visible
-     *  area of the node in pixels. The attributes 'right' and 'bottom'
-     *  represent the distance of the right/bottom corner of the visible area
-     *  to the right/bottom border of the total content area in the node.
+     *  An object with numeric attributes representing the position and size of
+     *  the visible area relative to the entire scroll area of the node in
+     *  pixels:
+     *  - 'left': the distance of the left border of the visible area to the
+     *      left border of the entire scroll area,
+     *  - 'top': the distance of the top border of the visible area to the top
+     *      border of the entire scroll area,
+     *  - 'right': the distance of the right border of the visible area
+     *      (without scroll bar) to the right border of the entire scroll area,
+     *  - 'bottom': the distance of the bottom border of the visible area
+     *      (without scroll bar) to the bottom border of the entire scroll
+     *      area,
+     *  - 'width': the width of the visible area (without scroll bar),
+     *  - 'height': the height of the visible area (without scroll bar).
      */
-    Utils.getVisibleDimensions = function (scrollableNode) {
-
+    Utils.getVisibleAreaDimensions = function (scrollableNode) {
         scrollableNode = Utils.getDomNode(scrollableNode);
-
         return {
             left: scrollableNode.scrollLeft,
             top: scrollableNode.scrollTop,
-            width: scrollableNode.clientWidth,
-            height: scrollableNode.clientHeight,
             right: scrollableNode.scrollWidth - scrollableNode.clientWidth - scrollableNode.scrollLeft,
-            bottom: scrollableNode.scrollHeight - scrollableNode.clientHeight - scrollableNode.scrollTop
+            bottom: scrollableNode.scrollHeight - scrollableNode.clientHeight - scrollableNode.scrollTop,
+            width: scrollableNode.clientWidth,
+            height: scrollableNode.clientHeight
         };
     };
 
     /**
-     * Scrolls a specific child node of a container node into its visible area.
+     * Returns the dimensions of the specified child node inside its scrollable
+     * ancestor node. This includes the size of the child node, and the
+     * distances of all four borders of the child node to the borders of the
+     * visible area or entire scroll area of the scrollable node.
+     *
+     * @param {HTMLElement|jQuery} scrollableNode
+     *  The scrollable DOM element. If this object is a jQuery collection, uses
+     *  the first node it contains.
+     *
+     * @param {HTMLElement|jQuery} childNode
+     *  The DOM element whose dimensions will be calculated. Must be contained
+     *  in the specified scrollable element. If this object is a jQuery
+     *  collection, uses the first node it contains.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the calculation. Supports the following
+     *  options:
+     *  @param {Boolean} [options.visibleArea=false]
+     *      If set to true, calculates the distances of the child node to the
+     *      visible area of the scrollable node. Otherwise, calculates the
+     *      distances of the child node to the entire scroll area of the
+     *      scrollable node.
+     *
+     * @returns {Object}
+     *  An object with numeric attributes representing the position and size of
+     *  the child node relative to the entire scroll area or visible area of
+     *  the scrollable node in pixels:
+     *  - 'left': the distance of the left border of the child node to the
+     *      left border of the scrollable node,
+     *  - 'top': the distance of the top border of the child node to the top
+     *      border of the scrollable node,
+     *  - 'right': the distance of the right border of the child node to the
+     *      right border of the scrollable node,
+     *  - 'bottom': the distance of the bottom border of the child node to the
+     *      bottom border of the scrollable node,
+     *  - 'width': the outer width of the child node (including its borders),
+     *  - 'height': the outer height of the child node (including its borders).
+     */
+    Utils.getChildNodeDimensions = function (scrollableNode, childNode, options) {
+
+        var // the passed scrollable node, as jQuery object
+            $scrollableNode = $(scrollableNode),
+            // the offset of the scrollable node, relative to the browser window
+            scrollableOffset = $scrollableNode.offset(),
+            // the width of the left and top border of the scrollable node, in pixels
+            leftBorderWidth = Utils.convertCssLength($scrollableNode.css('borderLeftWidth'), 'px'),
+            topBorderWidth = Utils.convertCssLength($scrollableNode.css('borderTopWidth'), 'px'),
+            // dimensions of the visible area of the scrollable node
+            visibleDimensions = Utils.getVisibleAreaDimensions(scrollableNode),
+
+            // the passed child node, as jQuery object
+            $childNode = $(childNode),
+            // the offset of the child node, relative to the browser window
+            childOffset = $childNode.offset(),
+            // the dimensions of the child node, relative to the visible area of the scrollable node
+            childDimensions = {
+                left: childOffset.left + leftBorderWidth - scrollableOffset.left,
+                top: childOffset.top + topBorderWidth - scrollableOffset.top,
+                width: $childNode.outerWidth(),
+                height: $childNode.outerHeight()
+            };
+
+        // add right and bottom distance of child node to visible area
+        childDimensions.right = visibleDimensions.width - childDimensions.left - childDimensions.width;
+        childDimensions.bottom = visibleDimensions.height - childDimensions.top - childDimensions.height;
+
+        // add distances to entire scroll area, if option 'visibleArea' is not set
+        if (!Utils.getBooleanOption(options, 'visibleArea', false)) {
+            _(['left', 'top', 'right', 'bottom']).each(function (border) {
+                childDimensions[border] += visibleDimensions[border];
+            });
+        }
+
+        return childDimensions;
+    };
+
+    /**
+     * Scrolls the passed child node into the visible area of the specified
+     * scrollable container node.
      *
      * @param {HTMLElement|jQuery} scrollableNode
      *  The scrollable DOM element that contains the specified child node. If
@@ -1303,97 +1392,28 @@ define('io.ox/office/tk/utils',
      * @param {Object} [options]
      *  A map of options to control the scroll action. Supports the following
      *  options:
-     *  @param {Boolean} [options.horizontal=false]
-     *      If set to true, scrolls the element in horizontal direction.
-     *      Otherwise, scrolls the element in vertical direction.
      *  @param {Number} [options.padding=0]
-     *      Minimum padding between the inner border of the container node and
-     *      the outer border of the child node.
-     *  @param {String} [options.overflow='begin']
-     *      Specifies how to position the child node if it is larger than the
-     *      visible area of the container node. If omitted or set to 'begin',
-     *      the top border (left border in horizontal mode) of the child node
-     *      will be visible. If set to 'center', the child node will be
-     *      centered in the visible area. If set to 'end', the bottom border
-     *      (right border in horizontal mode) of the child node will be
-     *      visible.
+     *      Minimum distance between the borders of the visible area and the
+     *      child node.
      */
-    Utils.scrollToChildNode = (function () {
+    Utils.scrollToChildNode = function (scrollableNode, childNode, options) {
 
-        var horizontalNames = {
-                offset: 'left',
-                offsetBorder: 'borderLeftWidth',
-                innerSize: 'innerWidth',
-                outerSize: 'outerWidth',
-                scroll: 'scrollLeft'
-            },
+        var // dimensions of the child node in the visible area of the scrollable node
+            childDimensions = Utils.getChildNodeDimensions(scrollableNode, childNode, { visibleArea: true }),
+            // padding between scrolled element and border of visible area
+            padding = Utils.getIntegerOption(options, 'padding', 0, 0);
 
-            verticalNames = {
-                offset: 'top',
-                offsetBorder: 'borderTopWidth',
-                innerSize: 'innerHeight',
-                outerSize: 'outerHeight',
-                scroll: 'scrollTop'
-            };
+        function updateScrollPosition(leadingChildOffset, trailingChildOffset, scrollAttributeName) {
 
-        // return the actual scrollToChildNode() method
-        return function (scrollableNode, childNode, options) {
+            var maxPadding = Utils.minMax((leadingChildOffset + trailingChildOffset) / 2, 0, padding),
+                offset = Math.max(leadingChildOffset - Math.max(maxPadding - trailingChildOffset, 0), maxPadding);
 
-            var // scroll direction
-                horizontal = Utils.getBooleanOption(options, 'horizontal', false),
-                // attribute and function names depending on scroll direction
-                names = horizontal ? horizontalNames : verticalNames,
+            Utils.getDomNode(scrollableNode)[scrollAttributeName] -= (offset - leadingChildOffset);
+        }
 
-                // padding between scrolled element and container border
-                padding = Utils.getIntegerOption(options, 'padding', 0, 0, 9999),
-                // how to position an oversized child node
-                overflow = Utils.getStringOption(options, 'overflow'),
-
-                // the scrollable element, as jQuery collection
-                $scrollableNode = $(scrollableNode).first(),
-                // inner size of the scrollable container node
-                scrollableSize = $scrollableNode[names.innerSize](),
-                // border size on left/top end of the container node
-                scrollableBorderSize = Utils.convertCssLength($scrollableNode.css(names.offsetBorder), 'px', 0),
-                // current position of the scrollable container node (inner area, relative to browser window)
-                scrollableOffset = $scrollableNode.offset()[names.offset] + scrollableBorderSize,
-
-                // the child node, as jQuery collection
-                $childNode = $(childNode).first(),
-                // current position of the child node (relative to browser window)
-                childOffset = $childNode.offset()[names.offset],
-                // outer size of the child node
-                childSize = $childNode[names.outerSize](),
-                // maximum possible padding to fit child node into container node
-                maxPadding = Math.min(padding, Math.max(Math.floor((scrollableSize - childSize) / 2), 0)),
-                // minimum offset valid for the child node (with margin from left/top)
-                minChildOffset = scrollableOffset + maxPadding,
-                // maximum offset valid for the child node (with margin from right/bottom)
-                maxChildOffset = scrollableOffset + scrollableSize - maxPadding - childSize,
-                // new absolute offset of the child node to make it visible
-                newChildOffset = 0;
-
-            if (minChildOffset <= maxChildOffset) {
-                // if there is a valid range for the child element, calculate its new position
-                newChildOffset = Utils.minMax(childOffset, minChildOffset, maxChildOffset);
-            } else {
-                // otherwise: find position according to overflow mode
-                switch (overflow) {
-                case 'center':
-                    newChildOffset = Math.floor((minChildOffset + maxChildOffset) / 2);
-                    break;
-                case 'end':
-                    newChildOffset = maxChildOffset;
-                    break;
-                default:
-                    newChildOffset = minChildOffset;
-                }
-            }
-
-            // change the current scroll position of the container node by the difference of old and new child offset
-            $scrollableNode[names.scroll]($scrollableNode[names.scroll]() + childOffset - newChildOffset);
-        };
-    }());
+        updateScrollPosition(childDimensions.left, childDimensions.right, 'scrollLeft');
+        updateScrollPosition(childDimensions.top, childDimensions.bottom, 'scrollTop');
+    };
 
     // form control elements --------------------------------------------------
 

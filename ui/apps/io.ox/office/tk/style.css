@@ -240,6 +240,7 @@ i.io-ox-office-icon {
 
         label {
             text-align: center;
+            cursor: default;
         }
 
         /* buttons --------------------------------------------------------- */
@@ -418,7 +419,6 @@ i.io-ox-office-icon {
     /* tool bars ----------------------------------------------------------- */
 
     &.toolbar {
-        min-height: @control-height;
         padding: 0 13px;
         clear: both;
 

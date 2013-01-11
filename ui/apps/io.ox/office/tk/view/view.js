@@ -82,10 +82,11 @@ define('io.ox/office/tk/view/view',
                 if (paneNode.css('display') !== 'none') {
                     paneOffsets = _.clone(offsets);
                     paneOffsets[horizontal ? (leading ? 'bottom' : 'top') : (leading ? 'right' : 'left')] = 'auto';
-                    paneNode.css(paneOffsets);
-                    if (!paneNode.hasClass(HOVER_CLASS)) {
-                        offsets[panePosition] += (horizontal ? paneNode.outerHeight() : paneNode.outerWidth());
+                    if (paneNode.hasClass(HOVER_CLASS)) {
+                        paneOffsets[horizontal ? 'height' : 'width'] = 0;
                     }
+                    paneNode.css(paneOffsets);
+                    offsets[panePosition] += (horizontal ? paneNode.outerHeight() : paneNode.outerWidth());
                 }
             });
 
