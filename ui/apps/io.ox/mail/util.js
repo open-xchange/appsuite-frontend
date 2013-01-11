@@ -101,8 +101,11 @@ define('io.ox/mail/util',
                 s = s.substr(match[0].length).replace(rRecipientCleanup, '');
                 // get recipient
                 recipient = this.parseRecipient(match[0]);
+                //stupid workarround so exchange draft emails without proper mail adresses get displayed correctly
+                //look Bug 23983
+                var msExchange = recipient[0] === recipient[1];
                 // add to list? (stupid check but avoids trash)
-                if (recipient[1].indexOf('@') > -1) {
+                if (msExchange || recipient[1].indexOf('@') > -1) {
                     list.push(recipient);
                 }
             }
