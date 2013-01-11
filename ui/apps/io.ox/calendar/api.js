@@ -178,14 +178,15 @@ define("io.ox/calendar/api",
                         .pipe(function (data) {
                             api.trigger('refresh.all');
                             api.trigger('update', data);
+                            api.trigger('updateDetails', data); // do not use this event / only for view-details
                             return data;
                         });
                 });
             }
         },
-        
+
         checkForNotification: function (obj, removeAction) {
-            
+
             if (removeAction) {
                 require(["io.ox/core/api/reminder"], function (reminderApi) {
                     reminderApi.trigger("remove-calendar-notifications", obj);
