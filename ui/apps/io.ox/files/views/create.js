@@ -34,7 +34,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
             $form;
 
         $content.append($snippets.find(".fileForm").clone());
-
+        
         $form = $content.find("fieldset");
 
         controlsPoint.each(function (controlExtension) {
@@ -155,7 +155,8 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         index: 40,
         label: gt("Comment"),
         draw: function (element, state) {
-            state.node = $('<textarea rows="5" name="comment" class="input-xlarge">');
+            // without explicit closing tag IE9 added '<body>' as textarea value
+            state.node = $('<textarea rows="5" name="comment" class="input-xlarge"></textarea>');
             element.append(state.node);
         },
         process: function (file, state) {

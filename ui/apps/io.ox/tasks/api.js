@@ -75,6 +75,37 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             appendColumns: false
         });
     };
+    
+    api.checkForNotifications = function (ids, modifications) {
+        var addArray = [],
+            removeArray = [];
+        if (modifications.status) {//status parameter can be string or integer. Force it to be an integer
+            modifications.status = parseInt(modifications.status, 10);
+        }
+        //check overdue
+        if (modifications.status === 3 || modifications.end_date === null) {
+            api.trigger('remove-overdue-tasks', ids);
+        } else if (modifications.status || modifications.end_date) {
+            //current values are needed for further checks
+            api.getList(ids, false).done(function (list) {
+                _(list).each(function (task) {
+                    if (task.status !== 3 && task.end_date) {
+                        if (task.end_date < _.now()) {
+                            addArray.push(task);
+                        } else {
+                            removeArray.push(task);
+                        }
+                    }
+                });
+                if (addArray.length > 0) {
+                    api.trigger('add-overdue-tasks', addArray);
+                }
+                if (removeArray.length > 0) {
+                    api.trigger('remove-overdue-tasks', removeArray);
+                }
+            });
+        }
+    };
 
     api.update = function (timestamp, taskId, modifications, folder) {
                 //check if only one big array was given for exsample by modelfactory
@@ -115,7 +146,10 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
                 }).pipe(function () {
                     //return object with id and folder id needed to save the attachments correctly
-                    return {folder_id: useFolder, id: taskId};
+                    var obj = {folder_id: useFolder, id: taskId};
+                    //notification check
+                    api.checkForNotifications([obj], modifications);
+                    return obj;
                 }).done(function () {
                     //trigger refresh, for vGrid etc
                     api.trigger('refresh.all');
@@ -148,6 +182,8 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             // update cache
             return $.when(api.caches.get.remove(keys), api.caches.list.remove(keys));
         }).done(function () {
+            //notification check
+            api.checkForNotifications(list, modifications);
             //trigger refresh, for vGrid etc
             api.trigger('refresh.all');
         });

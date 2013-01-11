@@ -12,7 +12,7 @@
  */
 
 /* restrict all definitions to office applications */
-.io-ox-office-main, .io-ox-office-dropdown-container {
+.io-ox-office-main {
 
 /* ========================================================================= */
 /* generic mix-in classes                                                    */
@@ -105,24 +105,27 @@ i.io-ox-office-icon {
         background: none;
     }
 
+    /* the application pane in the middle between all view panes */
     &.app-pane {
         margin: 0;
         padding: 0;
         .overflow(auto);
         background-color: @app-pane-fill-color;
+        text-align: center;
 
-        /* generic design of a 'page': white background with dark box shadow */
+        /* the container element for the application model node(s) */
+        .app-pane-model-container {
+            display: inline-block;
+            .box-sizing(content-box);
+        }
+
+        /* generic design of a 'page': white background with box shadow */
         .page {
             position: relative;
-            margin: auto;
             background-color: white;
             .box-shadow(0 0 8px fade(black, 20%));
         }
     }
-}
-
-.app-pane-model-container {
-    .box-sizing(content-box);
 }
 
 .app-pane-shadow {
@@ -150,7 +153,7 @@ i.io-ox-office-icon {
 
     /* glow effect for focused controls */
     .focus-glow(@radius: 8px, @opacity: 50%) {
-        .box-shadow(0 0 @radius fade(@selected-background, @opacity));
+        .box-shadow(0 0 @radius fade(@selectedBackground, @opacity));
     }
     .focus-hover-glow() {
         .focus-glow(9px, 60%);
@@ -201,7 +204,7 @@ i.io-ox-office-icon {
             white-space: nowrap;
             font-size: 13px;
             font-weight: normal;
-            color: @color;
+            color: @textColor;
             text-shadow: none;
             vertical-align: top;
 
@@ -246,11 +249,11 @@ i.io-ox-office-icon {
 
             &.dropdown-button {
                 padding-right: @caret-width + @control-padding;
-    
+
                 > .caption > span:last-child {
                     margin-right: @caption-spacing;
                 }
-    
+
                 > span.dropdown-caret {
                     position: absolute;
                     top: 0;
@@ -291,31 +294,32 @@ i.io-ox-office-icon {
             a.button {
                 border: @default-focus-border-width solid transparent;
                 line-height: @control-height - 2 * @default-focus-border-width;
-            
+
                 /* selected toggle/radio buttons */
                 &.selected {
-                    background-color: fade(@selected-background, 50%);
+                    background-color: fade(@selectedBackground, 50%);
                 }
             }
 
             /* keyboard/mouse effects (not for disabled buttons/text fields or groups) */
             &:not(.disabled) {
-                
+
                 a.button:not(.disabled) {
 
                     &:hover { background-color: fade(black, 5%); }
                     &:active { background-color: fade(black, 10%); }
-                    &:focus:not(:active) { border-color: fade(@selected-background, 60%); }
-    
+                    &:focus:not(:active) { border-color: fade(@selectedBackground, 60%); }
+
                     /* selected toggle/radio buttons */
                     &.selected {
-                        &:hover { background-color: fade(@selected-background, 60%); }
-                        &:active { background-color: fade(@selected-background, 70%); }
+                        &:hover { background-color: fade(@selectedBackground, 60%); }
+                        &:active { background-color: fade(@selectedBackground, 70%); }
+                        &:focus:not(:active) { border-color: darken(@selectedBackground, 20%); }
                     }
                 }
-            
+
                 input:not(.disabled) {
-    
+
                     &:hover:not(:focus) { background: fade(black, 5%); }
                     &:focus, &:active { background: white; }
                 }
@@ -359,7 +363,7 @@ i.io-ox-office-icon {
                 line-height: @control-height - 2 * @framed-border-width;
 
                 &.selected {
-                    border-color: @selected-background;
+                    border-color: @selectedBackground;
                     .box-shadow(0 2px 8px fade(black, 20%));
                 }
             }
@@ -367,12 +371,12 @@ i.io-ox-office-icon {
             &:not(.disabled) a.button:not(.disabled) {
                 &:hover:not(:focus) { border-color: fade(black, 10%); }
                 &:active:not(:focus) { border-color: fade(black, 10%); }
-                &:focus { border-color: fade(@selected-background, 60%); }
+                &:focus { border-color: fade(@selectedBackground, 60%); }
 
                 &.selected {
-                    &:hover:not(:focus) { border-color: darken(@selected-background, 5%); }
-                    &:active:not(:focus) { border-color: darken(@selected-background, 10%); }
-                    &:focus { border-color: darken(@selected-background, 20%); }
+                    &:hover:not(:focus) { border-color: darken(@selectedBackground, 5%); }
+                    &:active:not(:focus) { border-color: darken(@selectedBackground, 10%); }
+                    &:focus { border-color: darken(@selectedBackground, 20%); }
                 }
             }
         }
@@ -396,12 +400,20 @@ i.io-ox-office-icon {
             &.design-framed {
                 padding: 4px;
 
-                a.button:not(:first-child) {
-                    margin-top: 4px;
+                a.button {
+                    height: @control-height + 2 * @framed-border-width;
+                    padding-left: 12px;
+                    padding-right: 12px;
+                    line-height: @control-height;
+
+                    &:not(:first-child) {
+                        margin-top: 4px;
+                    }
                 }
             }
         }
-    }
+
+    } /* end of .group */
 
     /* tool bars ----------------------------------------------------------- */
 
@@ -478,13 +490,14 @@ i.io-ox-office-icon {
             display: none;
         }
     }
-}
+
+} /* end of .view-component */
 
 /* ========================================================================= */
 /* drop-down menu elements                                                   */
 /* ========================================================================= */
 
-&.io-ox-office-dropdown-container {
+&.dropdown-container {
     display: inline-block;
     position: absolute;
     z-index: 1000;
@@ -501,13 +514,9 @@ i.io-ox-office-icon {
         display: inline-block;
         width: auto;
 
-        &.dropdown-list {
-            .box-sizing(content-box);
-
-            > .group {
-                display: inline-block;
-                width: 100%;
-            }
+        > .group {
+            display: inline-block;
+            width: 100%;
         }
     }
 }
@@ -546,4 +555,4 @@ i.io-ox-office-icon {
 
 /* ========================================================================= */
 
-} /* end of .io-ox-office-main { */
+} /* end of .io-ox-office-main */

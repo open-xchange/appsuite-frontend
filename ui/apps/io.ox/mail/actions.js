@@ -29,7 +29,9 @@ define('io.ox/mail/actions',
 
     'use strict';
 
-    var defaultDraftFolder = config.get('modules.mail.defaultFolder.drafts'),
+    var isDraftFolder = function (folder_id) {
+            return _.contains(account.getFoldersByType('drafts'), folder_id);
+        },
         Action = links.Action;
 
     // actions
@@ -81,7 +83,7 @@ define('io.ox/mail/actions',
         requires: function (e) {
             // other recipients that me?
             return e.collection.has('toplevel', 'one') &&
-                util.hasOtherRecipients(e.context) && e.context.folder_id !== defaultDraftFolder;
+                util.hasOtherRecipients(e.context) && !isDraftFolder(e.context);
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -96,7 +98,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/reply', {
         id: 'reply',
         requires: function (e) {
-            return e.collection.has('toplevel', 'one') && e.context.folder_id !== defaultDraftFolder;
+            return e.collection.has('toplevel', 'one') && !isDraftFolder(e.context.folder_id);
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -126,7 +128,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/edit', {
         id: 'edit',
         requires: function (e) {
-            return e.collection.has('toplevel', 'one') && e.context.folder_id === defaultDraftFolder;
+            return e.collection.has('toplevel', 'one') && isDraftFolder(e.context.folder_id);
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -233,7 +235,9 @@ define('io.ox/mail/actions',
             });
         },
         multiple: function (list) {
-            api.markUnread(list);
+            api.markUnread(list).done(function () {
+                api.trigger("add-unseen-mails", list); //create notifications in notification area
+            });
         }
     });
 
@@ -249,10 +253,9 @@ define('io.ox/mail/actions',
             });
         },
         multiple: function (list) {
-            api.markRead(list);
-            for (var i = 0; i < list.length; i++) {
-                ext.point('io.ox/mail/detail/notification').invoke('action', this, list[i]);
-            }
+            api.markRead(list).done(function () {
+                api.trigger("remove-unseen-mails", list); //remove notifications in notification area
+            });
         }
     });
 

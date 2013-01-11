@@ -88,10 +88,17 @@ define('io.ox/office/tk/application',
          *  equality sign. The different options are separated by ampersand
          *  characters.
          *
-         * @returns {String}
-         *  The created URL.
+         * @returns {String|Undefined}
+         *  The created URL with the current session identifier (parameter
+         *  'session') and unique application identifier (parameter 'uid'); or
+         *  undefined, if there is no valid session identifier.
          */
         this.buildServiceUrl = function (service, options) {
+
+            if (!ox.session) {
+                Utils.warn('OfficeApplication.buildServiceUrl(): missing session');
+                return;
+            }
 
             // build a default options map, and add the passed options
             options = Utils.extendOptions({
@@ -111,13 +118,13 @@ define('io.ox/office/tk/application',
          *  The name of the action to be passed to the document filter.
          *
          * @param {Object} [options]
-         *  Additional options that affect the creation of the filter URL. Each
-         *  option will be inserted into the URL as name/value pair separated
-         *  by an equality sign. The different options are separated by
-         *  ampersand characters.
+         *  Additional options that affect the creation of the filter URL. See
+         *  method OfficeApplication.buildServiceUrl() for details. Information
+         *  about the file currently edited will be inserted automatically.
          *
-         * @returns {String}
-         *  The filter URL.
+         * @returns {String|Undefined}
+         *  The final filter URL; or undefined, if there is no valid session
+         *  identifier available.
          */
         this.getDocumentFilterUrl = function (action, options) {
 
@@ -135,31 +142,34 @@ define('io.ox/office/tk/application',
         };
 
         /**
-         * Returns the URL passed to AJAX calls used to access spell checking functions
-         *
-         * @param {String} action
-         *  The name of the action to be passed to the spell checker.
+         * Sends an AJAX request to the specified URL and returns a deferred
+         * waiting for the result. By default, a GET request with data type set
+         * to the value 'json' will be sent.
          *
          * @param {Object} [options]
-         *  Additional options that affect the creation of the spell checker URL. Each
-         *  option will be inserted into the URL as name/value pair separated
-         *  by an equality sign. The different options are separated by
-         *  ampersand characters.
+         *  Additional options that will be passed to the AJAX request. Expects
+         *  the target URL in the option 'options.url'. If the URL is missing
+         *  or empty, no AJAX request will be sent, and the returned deferred
+         *  will be rejected immediately.
          *
-         * @returns {String}
-         *  The spell check URL.
+         * @returns {jQuery.Promise}
+         *  The promise object of the AJAX request.
          */
-        this.getSpellCheckerUrl = function (action, options) {
+        this.sendAjaxRequest = function (options) {
 
-            // build a default options map, and add the passed options
-            options = Utils.extendOptions({
-                action: action,
-                session: ox.session//,
-//                uid: app.getUniqueId()
-            }, options);
+            var // the URL from the passed options object
+                url = Utils.getStringOption(options, 'url', ''),
+                // the result deferred
+                def = null;
 
-            // build and return the result URL
-            return ox.apiRoot + '/spellchecker?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
+            // URL must be a non-empty string
+            if (url.length === 0) {
+                def = $.Deferred().reject();
+            } else {
+                def = $.ajax(Utils.extendOptions({ type: 'GET', dataType: 'json' }, options));
+            }
+
+            return def.promise();
         };
 
         /**
@@ -236,10 +246,8 @@ define('io.ox/office/tk/application',
                 if (shortName === this.getShortFileName()) {
                     def.resolve(file.filename);
                 } else {
-                    $.ajax({
-                        type: 'GET',
-                        url: this.getDocumentFilterUrl('renamedocument', { filename: shortName + '.' + extension }),
-                        dataType: 'json'
+                    this.sendAjaxRequest({
+                        url: this.getDocumentFilterUrl('renamedocument', { filename: shortName + '.' + extension })
                     })
                     .done(function (response) {
                         var data = Application.extractAjaxResultData(response);

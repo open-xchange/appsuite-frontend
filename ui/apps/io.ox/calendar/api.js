@@ -139,7 +139,6 @@ define("io.ox/calendar/api",
 
         update: function (o) {
             var folder_id = o.folder_id || o.folder;
-
             var key = folder_id + "." + o.id + "." + (o.recurrence_position || 0);
             if (_.isEmpty(o)) {
                 return $.when();
@@ -156,6 +155,7 @@ define("io.ox/calendar/api",
                     data: o
                 })
                 .pipe(function (obj) {
+                    api.checkForNotification(o);
                     var getObj = {};
                     if (!_.isUndefined(obj.conflicts)) {
                         var df = new $.Deferred();
@@ -183,6 +183,24 @@ define("io.ox/calendar/api",
                 });
             }
         },
+        
+        checkForNotification: function (obj, removeAction) {
+            
+            if (removeAction) {
+                require(["io.ox/core/api/reminder"], function (reminderApi) {
+                    reminderApi.trigger("remove-calendar-notifications", obj);
+                    api.trigger("remove-calendar-notifications", obj);
+                });
+            } else if (obj.alarm !== "-1" && obj.end_date > _.now()) {//new appointments
+                require(["io.ox/core/api/reminder"], function (reminderApi) {
+                    reminderApi.getReminders();
+                });
+            } else if (obj.alarm || obj.end_date || obj.start_date) {//if one of this has changed during update action
+                require(["io.ox/core/api/reminder"], function (reminderApi) {
+                    reminderApi.getReminders();
+                });
+            }
+        },
 
         create: function (o) {
             return http.PUT({
@@ -194,6 +212,7 @@ define("io.ox/calendar/api",
                 data: o
             })
             .pipe(function (obj) {
+                api.checkForNotification(o);
                 var getObj = {};
                 if (!_.isUndefined(obj.conflicts)) {
                     var df = new $.Deferred();
@@ -235,6 +254,8 @@ define("io.ox/calendar/api",
                 delete get_cache[key];
                 api.trigger('refresh.all');
                 api.trigger('delete', resp);
+                //remove Reminders in Notification Area
+                api.checkForNotification(o, true);
             });
         },
 
@@ -250,6 +271,7 @@ define("io.ox/calendar/api",
             })
             .done(function (resp) {
                 get_cache = {};
+                api.trigger("confirmation-changed", o);//redraw detailview to be responsive and remove invites
                 api.trigger('refresh.all');
             });
         },

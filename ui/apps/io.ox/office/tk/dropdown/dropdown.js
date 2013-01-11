@@ -23,11 +23,7 @@ define('io.ox/office/tk/dropdown/dropdown',
         KeyCodes = Utils.KeyCodes,
 
         // marker CSS class for groups with opened drop-down menu
-        OPEN_CLASS = 'dropdown-open',
-
-        // width and height of system scroll bars, in pixels
-        SCROLLBAR_WIDTH = 0,
-        SCROLLBAR_HEIGHT = 0;
+        OPEN_CLASS = 'dropdown-open';
 
     // class DropDown =========================================================
 
@@ -93,7 +89,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             contentNode = menuComponent.getNode(),
 
             // the drop-down menu element containing the menu view component
-            menuNode = $('<div>').addClass('io-ox-office-dropdown-container').append(contentNode),
+            menuNode = $('<div>').addClass('io-ox-office-main dropdown-container').append(contentNode),
 
             // additional controls that toggle the drop-down menu
             menuToggleControls = $(),
@@ -303,8 +299,8 @@ define('io.ox/office/tk/dropdown/dropdown',
             }
 
             // add space for scroll bars if available width or height is not sufficient
-            menuNodeProps.width = Math.min(availableWidth, menuNodeSize.width + ((menuNodeSize.height > availableHeight) ? SCROLLBAR_WIDTH : 0));
-            menuNodeProps.height = Math.min(availableHeight, menuNodeSize.height + ((menuNodeSize.width > availableWidth) ? SCROLLBAR_HEIGHT : 0));
+            menuNodeProps.width = Math.min(availableWidth, menuNodeSize.width + ((menuNodeSize.height > availableHeight) ? Utils.SCROLLBAR_WIDTH : 0));
+            menuNodeProps.height = Math.min(availableHeight, menuNodeSize.height + ((menuNodeSize.width > availableWidth) ? Utils.SCROLLBAR_HEIGHT : 0));
 
             // second part of the position of the drop-down menu (do not exceed bottom or right border of browser window)
             switch (preferredSide) {
@@ -459,7 +455,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             // insert the passed group into the view component of the drop-down menu
             menuComponent.addPrivateGroup(group);
 
-            // forward events of the embedded group to listeners of this group
+            // forward events of the embedded group to listeners of this drop-down group
             group.on('change cancel', function (event, value) {
                 self.trigger(event.type, value);
             });
@@ -538,21 +534,6 @@ define('io.ox/office/tk/dropdown/dropdown',
      * Padding of drop-down menu to parent group node, in pixels.
      */
     DropDown.GROUP_BORDER_PADDING = 1;
-
-    // global initialization ==================================================
-
-    // calculate size of system scroll bars
-    (function () {
-
-        var // dummy containers used to calculate the scroll bar sizes
-            innerDiv = $('<div>').css({ width: '100%', height: '100%' }),
-            outerDiv = $('<div>').css({ width: '100px', height: '100px', overflow: 'scroll' }).append(innerDiv);
-
-        $('body').append(outerDiv);
-        SCROLLBAR_WIDTH = 100 - innerDiv.width();
-        SCROLLBAR_HEIGHT = 100 - innerDiv.height();
-        outerDiv.remove();
-    }());
 
     // exports ================================================================
 

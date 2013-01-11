@@ -92,7 +92,7 @@ define('io.ox/office/tk/control/combofield',
             var // distinguish between event types (ignore keypress events)
                 keydown = event.type === 'keydown';
 
-            function moveListItem(delta, page) {
+            function moveListItem(delta) {
 
                 var // all list items (button elements)
                     buttons = self.getListItems(),
@@ -103,7 +103,7 @@ define('io.ox/office/tk/control/combofield',
                 self.showMenu();
                 // calculate new index, if old index is valid
                 if (index >= 0) {
-                    index += delta * (page ? self.getItemCountPerPage() : 1);
+                    index += delta;
                 }
                 index = Utils.minMax(index, 0, buttons.length - 1);
                 // call the update handler to update the text field and list selection
@@ -113,16 +113,16 @@ define('io.ox/office/tk/control/combofield',
 
             switch (event.keyCode) {
             case KeyCodes.UP_ARROW:
-                if (keydown) { moveListItem(-1, false); }
+                if (keydown) { moveListItem(-1); }
                 return false;
             case KeyCodes.DOWN_ARROW:
-                if (keydown) { moveListItem(1, false); }
+                if (keydown) { moveListItem(1); }
                 return false;
             case KeyCodes.PAGE_UP:
-                if (keydown) { moveListItem(-1, true); }
+                if (keydown) { moveListItem(-List.PAGE_SIZE); }
                 return false;
             case KeyCodes.PAGE_DOWN:
-                if (keydown) { moveListItem(1, true); }
+                if (keydown) { moveListItem(List.PAGE_SIZE); }
                 return false;
             }
         }

@@ -31,10 +31,7 @@ define("io.ox/core/desktop",
     var currentWindow = null;
 
     // top bar
-    var topbar = $("#io-ox-topbar"),
-        launchers = topbar.find('.launchers'),
-
-        appGuid = 0,
+    var appGuid = 0,
         appCache = new cache.SimpleCache('app-cache', true);
 
     // Apps collection

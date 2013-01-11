@@ -153,7 +153,7 @@ define('plugins/portal/birthdays/register',
     });
 
     ext.point('io.ox/portal/widget/birthdays/settings').extend({
-        title: gt('Birthdays'),
+        title: gt('Next birthdays'),
         type: 'birthdays',
         editable: false,
         unique: true

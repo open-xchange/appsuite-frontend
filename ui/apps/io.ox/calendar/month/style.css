@@ -30,7 +30,7 @@
         left: 10px;
         float: left;
         line-height: 32px;
-        font-family: @font-light;
+        font-family: @lightFontFamily;
         font-size: 20px;
     }
     
@@ -55,7 +55,7 @@
         height: 26px;
         top: @weekview-toolbar-height;
         left: 0;
-        font-family: @font-light;
+        font-family: @lightFontFamily;
         font-size: 13px;
         line-height: 25px;
         z-index: 3;
@@ -86,7 +86,7 @@
     }
     
     .week-info {
-        font-family: @font-light;
+        font-family: @lightFontFamily;
         font-size: 22px;
         line-height: 1.0em;
         color: #555;

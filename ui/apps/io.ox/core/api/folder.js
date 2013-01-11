@@ -16,7 +16,8 @@ define('io.ox/core/api/folder',
      'io.ox/core/config',
      'io.ox/core/api/account',
      'io.ox/core/event',
-     'gettext!io.ox/core'], function (http, cache, config, account, Events, gt) {
+     'io.ox/core/notifications',
+     'gettext!io.ox/core'], function (http, cache, config, account, Events, notifications, gt) {
 
     'use strict';
 
@@ -51,7 +52,11 @@ define('io.ox/core/api/folder',
                     cache.add(data.id, data);
                 })
                 .fail(function (error) {
-                    console.error('folder.get', id, error);
+                    if (error.categories === "PERMISSION_DENIED") {
+                        notifications.yell(error);
+                    } else {
+                        console.error('folder.get', id, error);
+                    }
                 });
             };
 

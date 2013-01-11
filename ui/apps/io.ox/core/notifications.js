@@ -198,7 +198,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'setting
         },
         update: function () {
 
-            var count = _.reduce(this.notifications, function (memo, module) {
+            var count = _.reduce(this.notifications, function (memo, module, key) {
                 if (module.collection.size() > 0) {
                     return memo + module.collection.size();
                 }

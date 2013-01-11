@@ -116,8 +116,10 @@ define("io.ox/tasks/actions",
                 api.updateMultiple(data, mods.data)
                     .done(function (result) {
                         _(data).each(function (item) {
+                            //update detailview
                             api.trigger("update:" + encodeURIComponent(item.folder_id + '.' + item.id));
                         });
+                        
                         notifications.yell('success', mods.label);
                     })
                     .fail(function (result) {

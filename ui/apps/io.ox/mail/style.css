@@ -42,7 +42,7 @@
 
 .vgrid-cell.mail .priority {
     font-weight: bold;
-    color: @mail-priority;
+    color: @mailPriority;
     float: right;
 }
 
@@ -63,10 +63,10 @@
     &.unread i.icon-bookmark { display: inline-block; float:left; }
 
     /* answered */
-    &.answered i.icon-circle-arrow-left { display: inline-block; color: darken(@color_lightgreen, 20%); float:left; }
+    &.answered i.icon-circle-arrow-left { display: inline-block; color: darken(@greenLight, 20%); float:left; }
 
     /* forward */
-    &.forwarded i.icon-circle-arrow-right { display: inline-block; color: darken(@color_pink, 10%); float:left;}
+    &.forwarded i.icon-circle-arrow-right { display: inline-block; color: darken(@pink, 10%); float:left;}
 
     &.unread .subject {
         color: #08c;
@@ -82,7 +82,7 @@
     }
 
     &.unread { background-color: #f5f5f5; }
-    &.selected.unread { background-color: darken(@selected-background, 10%); }
+    &.selected.unread { background-color: darken(@selectedBackground, 10%); }
 
     &.deleted * {
         text-decoration: line-through;
@@ -90,7 +90,7 @@
         -webkit-font-smoothing: antialiased;
     }
 
-    &.selected.deleted * { color: @selected-color !important; }
+    &.selected.deleted * { color: @selectedColor !important; }
 }
 
 /* end:unread */
@@ -141,7 +141,7 @@
 }
 
 .borderradius .vgrid-cell.mail.selected .thread-size {
-    background-color: darken(@selected-background, 15%);
+    background-color: darken(@selectedBackground, 15%);
 }
 
 .vgrid-cell.thread-summary {
@@ -287,7 +287,7 @@
 
     .subject, .thread-size {
         font-size: 16pt;
-        margin: @inline-links-margin;
+        margin: @inlineLinksMargin;
     }
 
     &.unread .from .person-link {
@@ -295,7 +295,7 @@
     }
 
     &.unread .subject {
-        font-family: @font-normal;
+        font-family: @normalFontFamily;
         font-weight: bold;
     }
 
@@ -317,7 +317,7 @@
     }
 
     .flag-dropdown ul {
-        font: 14px/20 @font-normal;
+        font: 14px/20 @normalFontFamily;
         /* right: -22px; */
         right: 165px;
         left: auto;
@@ -341,7 +341,7 @@
     .priority {
         font-weight: bold;
         font-size: 80%;
-        color: @mail-priority;
+        color: @mailPriority;
         vertical-align: top;
         white-space: nowrap;
     }
@@ -493,16 +493,16 @@
 }
 
 /* flag colors */
-.flag_1  { background-color: @color_red; } /* red */
-.flag_7  { background-color: @color_orange; } /* orange */
-.flag_10 { background-color: @color_yellow; } /* yellow */
-.flag_6  { background-color: @color_lightgreen; } /* light green */
-.flag_3  { background-color: @color_green; } /* green */
-.flag_9  { background-color: @color_lightblue; } /* light blue */
-.flag_2  { background-color: @color_blue; } /* blue */
-.flag_5  { background-color: @color_purple; } /* purple (former brown) */
-.flag_8  { background-color: @color_pink; } /* pink */
-.flag_4  { background-color: @color_gray; } /* dark gray */
+.flag_1  { background-color: @red; } /* red */
+.flag_7  { background-color: @orange; } /* orange */
+.flag_10 { background-color: @yellow; } /* yellow */
+.flag_6  { background-color: @greenLight; } /* light green */
+.flag_3  { background-color: @green; } /* green */
+.flag_9  { background-color: @blueLight; } /* light blue */
+.flag_2  { background-color: @blue; } /* blue */
+.flag_5  { background-color: @purple; } /* purple (former brown) */
+.flag_8  { background-color: @pink; } /* pink */
+.flag_4  { background-color: @grayLight; } /* dark gray */
 
 /* attachment preview */
 
@@ -516,7 +516,7 @@ h4.mail-attachment-preview {
 }
 
 .touch .mail-detail .content.plain-text {
-    font-size: @touch-font-size;
+    font-size: @touchFontSize;
 }
 
 .content.fixed-width-font {

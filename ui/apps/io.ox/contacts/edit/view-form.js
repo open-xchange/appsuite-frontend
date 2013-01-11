@@ -353,7 +353,7 @@ define('io.ox/contacts/edit/view-form', [
             });
 
         });
-        
+
         return ContactEditView;
     }
 

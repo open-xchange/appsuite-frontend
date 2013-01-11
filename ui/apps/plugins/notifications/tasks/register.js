@@ -72,12 +72,6 @@ define('plugins/notifications/tasks/register',
         initialize: function () {
             var self = this;
             this.collection.on('reset add remove', this.render, this);
-            //be responsive
-            api.on('delete', function (e, ids) {
-                _(ids).each(function (id) {
-                    self.collection.remove(self.collection._byId[id.id]);
-                });
-            });
         },
 
         render: function () {
@@ -138,8 +132,8 @@ define('plugins/notifications/tasks/register',
         register: function (controller) {
 
             var notifications = controller.get('io.ox/tasks', NotificationsView);
-
-            api.on('new-tasks', function (e, tasks) {
+            
+            function add(e, tasks) {
                 _(tasks).each(function (taskObj) {
                     var task = util.interpretTask(taskObj);
                     notifications.collection.push(
@@ -155,7 +149,26 @@ define('plugins/notifications/tasks/register',
                         { silent: true }
                     );
                 });
+            }
+            
+            function remove(e, tasks) {
+                _(tasks).each(function (taskObj) {
+                    notifications.collection.remove(notifications.collection._byId[taskObj.id]);
+                });
+            }
+            //be responsive
+            api.on('delete', remove);
+            api.on('new-tasks', function (e, tasks) {
+                add(e, tasks);
                 notifications.collection.trigger('reset');
+            });
+            api.on('add-overdue-tasks', function (e, tasks) {
+                add(e, tasks);
+                notifications.collection.trigger('add');
+            });
+            api.on('remove-overdue-tasks', function (e, tasks) {
+                remove(e, tasks);
+                notifications.collection.trigger('remove');
             });
 
             api.getTasks();
