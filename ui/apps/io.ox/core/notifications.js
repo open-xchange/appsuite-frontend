@@ -152,7 +152,12 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'setting
             
             //close if count set to 0
             badgeView.on('lastItemDeleted', function () {
-                self.hideList();
+                var overlay = $('#io-ox-notifications-overlay');
+                if (overlay.has('.mail-detail-decorator').length > 0) {
+                    overlay.on("mail-detail-closed", _.bind(self.slowClose, self));
+                } else {
+                    self.hideList();
+                }
             });
             
             // invoke plugins
@@ -167,7 +172,6 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'setting
                 calNotifications.register();
             });*/
         },
-
         get: function (key, listview) {
             if (_.isUndefined(this.notifications[key])) {
                 var module = {};
@@ -180,6 +184,10 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'setting
                 $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
             }
             return this.notifications[key];
+        },
+        slowClose: function () {
+            $('#io-ox-notifications-overlay').off("mail-detail-closed");
+            this.hideList();
         },
         onAddNotification: function () {
             _.each(this.badges, function (badgeView) {
@@ -229,7 +237,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'setting
                 }
             }, this));
         },
-        hideList: function () {
+        hideList: function (softmode) {
             _.each(this.badges, function (badgeView) {
                 badgeView.setNotifier(false);
             });
