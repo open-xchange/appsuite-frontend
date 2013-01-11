@@ -14,6 +14,10 @@ define('io.ox/contacts/settings/defaults', [], function () {
 
     'use strict';
 
-    return {};
+    var settingsDefault = {
+            showAdmin: false
+        };
+
+    return settingsDefault;
 
 });

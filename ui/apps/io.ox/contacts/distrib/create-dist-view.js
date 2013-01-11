@@ -101,6 +101,8 @@ define('io.ox/contacts/distrib/create-dist-view',
                         }
                     }
 
+                    self.validateMail(newMember);
+
                     if (self.checkForDuplicates(newMember)) {
                         self.model.addMember(newMember);
                     }
@@ -127,6 +129,13 @@ define('io.ox/contacts/distrib/create-dist-view',
             }
         },
 
+        validateMail: function (newMember) {
+            var regEmail = /\@/,
+                self = this,
+                message = gt('The email address ' + newMember.mail + ' is not valid'),
+                result = (regEmail.test(newMember.mail) || newMember.mail === '') ? true : self.drawAlert(message, self.$el);
+        },
+
         checkForDuplicates: function (newMember) {
             var self = this,
                 currentMembers = self.model.get('distribution_list'),
@@ -134,7 +143,8 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             _(currentMembers).each(function (val, key) {
                 if (val.mail === newMember.mail && val.display_name === newMember.display_name) {
-                    self.drawAlert(newMember.mail, self.$el);
+                    var message = gt('The email address ' + newMember.mail + ' is already in the list');
+                    self.drawAlert(message, self.$el);
                     selector = true;
                 }
             });
@@ -146,7 +156,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             }
         },
 
-        drawAlert: function (mail, displayBox) {
+        drawAlert: function (message, displayBox) {
             displayBox.parent().find('.sectiontitle .alert.alert-block').remove();
             displayBox.parent().find('.sectiontitle').append(
                 $('<div>')
@@ -155,9 +165,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                     $('<a>').attr({ href: '#', 'data-dismiss': 'alert' })
                     .addClass('close')
                     .html('&times;'),
-                    $('<p>').text(
-                        gt('The email address ' + mail + ' is already in the list')
-                    )
+                    $('<p>').text(message)
                 )
             );
         },
@@ -332,7 +340,8 @@ define('io.ox/contacts/distrib/create-dist-view',
     });
 
     point.extend(new forms.ErrorAlert({
-        id: 'io.ox/contacts/distrib/create-dist-view/errors'
+        id: 'io.ox/contacts/distrib/create-dist-view/errors',
+        index: 250
     }));
 
     return ContactCreateDistView;

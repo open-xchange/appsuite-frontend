@@ -72,7 +72,7 @@ define('plugins/portal/mail/register',
     });
 
     ext.point('io.ox/portal/widget/mail/settings').extend({
-        title: gt('E-mail'),
+        title: gt('Inbox'),
         type: 'mail',
         editable: false,
         unique: true

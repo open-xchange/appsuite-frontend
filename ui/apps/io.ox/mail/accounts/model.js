@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/mail/accounts/model", ["io.ox/core/extensions", "io.ox/keychain/model", "io.ox/core/api/account"], function (ext, keychainModel, AccountApi) {
+define("io.ox/mail/accounts/model", ["io.ox/core/extensions", "io.ox/keychain/model", "io.ox/core/api/account", 'io.ox/core/api/folder'], function (ext, keychainModel, AccountApi, folderAPI) {
     "use strict";
 
     var AccountModel = keychainModel.Account.extend({
@@ -88,14 +88,22 @@ define("io.ox/mail/accounts/model", ["io.ox/core/extensions", "io.ox/keychain/mo
         },
 
         save: function (obj, defered) {
-            if (this.attributes.id) {
-                AccountApi.update(this.attributes);
+            var that = this;
+            if (this.attributes.id !== undefined) {
+                AccountApi.update(this.attributes).done(function (response) {
+                    folderAPI.folderCache.remove('default' + that.attributes.id);
+                    folderAPI.trigger('update');
+                    return defered.resolve(response);
+                }).fail(function (response) {
+                    return defered.resolve(response);
+                });
             } else {
                 if (obj) {
                     this.attributes = obj;
                     this.attributes.spam_handler = "NoSpamHandler";
                 }
                 AccountApi.create(this.attributes).done(function (response) {
+                    folderAPI.trigger('update');
                     return defered.resolve(response);
                 }).fail(function (response) {
                     return defered.resolve(response);

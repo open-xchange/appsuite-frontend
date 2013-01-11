@@ -412,7 +412,11 @@ define('io.ox/calendar/month/perspective',
                 .getWindow()
                 .on('show', refresh)
                 .on('show', $.proxy(this.restore, this))
-                .on('beforehide', $.proxy(this.save, this));
+                .on('beforehide', $.proxy(this.save, this))
+                .on('change:perspective', function () {
+                    self.dialog.close();
+                });
+
         }
     });
 

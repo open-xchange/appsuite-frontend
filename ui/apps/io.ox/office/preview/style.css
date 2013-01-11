@@ -14,14 +14,7 @@
 
 .io-ox-office-preview-main {
 
-    .view-pane.app-pane {
-        text-align: center;
-
-        div.page {
-            display: inline-block;
-        }
-    }
-
+    /* center controls of the tool bar */
     .view-pane.center {
         text-align: center;
         

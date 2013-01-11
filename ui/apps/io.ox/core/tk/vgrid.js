@@ -285,7 +285,7 @@ define('io.ox/core/tk/vgrid',
                 // draw
                 clone = label.getClone();
                 clone.node.addClass('vgrid-label').data('label-index', i);
-                defs.concat(clone.update(all[obj.pos], obj.pos, '', all[obj.pos - 1] || {}));
+                defs = defs.concat(clone.update(all[obj.pos], obj.pos, '', all[obj.pos - 1] || {}));
                 text = clone.node.text();
                 // add node
                 labels.nodes = labels.nodes.add(clone.node.appendTo(container));

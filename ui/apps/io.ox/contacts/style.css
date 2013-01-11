@@ -111,7 +111,7 @@
     }
 
     .field-label {
-        font-family: @font-light;
+        font-family: @lightFontFamily;
         font-weight: 300;
         color: #555;
         text-align: right;

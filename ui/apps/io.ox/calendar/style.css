@@ -18,6 +18,10 @@
     padding: 0.75em 13px 0.75em 13px;
 }
 
+.vgrid-cell.calendar.hardconflict {
+    background-color: #FF9694;
+}
+
 .vgrid-cell.vgrid-label.calendar-label {
     font-size: 9pt;
     font-weight: normal;
@@ -81,7 +85,7 @@
 /* Detail view */
 
 .calendar-detail .date {
-    font-family: @font-light;
+    font-family: @lightFontFamily;
     font-weight: 300;
     font-size: 1.1em;
     color: #ccc;
@@ -116,7 +120,7 @@
 }
 
 .calendar-detail .io-ox-label {
-    font-family: @font-light;
+    font-family: @lightFontFamily;
     font-weight: 300;
     font-size: 9pt;
     color: #333;
@@ -187,7 +191,7 @@
 }
 
 .calendar-detail .detail-label {
-    font-family: @font-light;
+    font-family: @lightFontFamily;
     font-weight: 300;
     display: inline-block;
     width: 110px;

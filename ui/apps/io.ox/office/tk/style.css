@@ -12,7 +12,7 @@
  */
 
 /* restrict all definitions to office applications */
-.io-ox-office-main, .io-ox-office-dropdown-container {
+.io-ox-office-main {
 
 /* ========================================================================= */
 /* generic mix-in classes                                                    */
@@ -105,24 +105,27 @@ i.io-ox-office-icon {
         background: none;
     }
 
+    /* the application pane in the middle between all view panes */
     &.app-pane {
         margin: 0;
         padding: 0;
         .overflow(auto);
         background-color: @app-pane-fill-color;
+        text-align: center;
 
-        /* generic design of a 'page': white background with dark box shadow */
+        /* the container element for the application model node(s) */
+        .app-pane-model-container {
+            display: inline-block;
+            .box-sizing(content-box);
+        }
+
+        /* generic design of a 'page': white background with box shadow */
         .page {
             position: relative;
-            margin: auto;
             background-color: white;
             .box-shadow(0 0 8px fade(black, 20%));
         }
     }
-}
-
-.app-pane-model-container {
-    .box-sizing(content-box);
 }
 
 .app-pane-shadow {
@@ -133,13 +136,28 @@ i.io-ox-office-icon {
 /* view components ========================================================= */
 
 .view-component {
-    
+
     /* standard height of controls */
     @control-height: 32px;
-    /* horizontal paddings in control elements */
-    @control-padding: 9px;
+    /* horizontal padding in control elements */
+    @control-padding: 7px;
     /* space between control caption elements */
     @caption-spacing: 5px;
+    /* standard height of controls in drop-down lists */
+    @list-item-height: 26px;
+
+    /* border width of button focus border */
+    @default-focus-border-width: 2px;
+    /* border width of framed buttons */
+    @framed-border-width: 3px;
+
+    /* glow effect for focused controls */
+    .focus-glow(@radius: 8px, @opacity: 50%) {
+        .box-shadow(0 0 @radius fade(@selectedBackground, @opacity));
+    }
+    .focus-hover-glow() {
+        .focus-glow(9px, 60%);
+    }
 
     position: relative;
     padding: 0;
@@ -162,13 +180,14 @@ i.io-ox-office-icon {
     .group {
         /* relative position is essential for drop-down menu positioning */
         position: relative;
+        .box-sizing(border-box);
 
         /* hidden groups ('important' to overrule display modes from other rules) */
         &.hidden {
             display: none !important;
         }
 
-        /* common controls ------------------------------------------------- */
+        /* common control settings ----------------------------------------- */
 
         label, a.button, input {
             display: inline-block;
@@ -185,7 +204,7 @@ i.io-ox-office-icon {
             white-space: nowrap;
             font-size: 13px;
             font-weight: normal;
-            color: @color;
+            color: @textColor;
             text-shadow: none;
             vertical-align: top;
 
@@ -228,36 +247,18 @@ i.io-ox-office-icon {
         a.button {
             text-align: left;
 
-            /* selected toggle/radio buttons */
-            &.selected {
-                background-color: fade(@selected-background, 50%);
-            }
-        }
+            &.dropdown-button {
+                padding-right: @caret-width + @control-padding;
 
-        /* keyboard/mouse effects (not for disabled buttons or groups) */
-        &:not(.disabled) a.button:not(.disabled) {
+                > .caption > span:last-child {
+                    margin-right: @caption-spacing;
+                }
 
-            &:hover, &:focus { background-color: fade(black, 5%); }
-            &:active { background-color: fade(black, 10%); }
-
-            /* selected toggle/radio buttons */
-            &.selected {
-                &:hover, &:focus { background-color: fade(@selected-background, 60%); }
-                &:active { background-color: fade(@selected-background, 70%); }
-            }
-        }
-
-        a.button.dropdown-button {
-            padding-right: @caret-width + @control-padding;
-
-            > .caption > span:last-child {
-                margin-right: @caption-spacing;
-            }
-
-            > span.dropdown-caret {
-                position: absolute;
-                top: 0;
-                right: @control-padding;
+                > span.dropdown-caret {
+                    position: absolute;
+                    top: 0;
+                    right: @control-padding;
+                }
             }
         }
 
@@ -267,7 +268,7 @@ i.io-ox-office-icon {
             width: 150px;
             padding-left: 4px;
             padding-right: 4px;
-            line-height: 18px;
+            line-height: normal;
             cursor: text;
 
             &.readonly {
@@ -280,73 +281,139 @@ i.io-ox-office-icon {
             }
         }
 
-        /* keyboard/mouse effects (not for disabled fields or groups) */
-        &:not(.disabled) input:not(.disabled) {
-
-            &:hover:not(:focus) { background-color: fade(black, 5%); }
-            &:focus { background-color: white; }
+        /* text field glow effect */
+        &:not(.disabled).text-focus {
+            .focus-glow();
+            &:hover { .focus-hover-glow(); }
         }
 
-        /* groups with white background and shadowed borders --------------- */
+        /* group designs --------------------------------------------------- */
 
-        .focus-glow(@opacity) {
-            .box-shadow(0 0 8px fade(@selected-background, @opacity));
-        }
+        &.design-default {
 
-        .focus-glow() { .focus-glow(50%); }
-        .focus-glow(hover) { .focus-glow(60%); }
+            a.button {
+                border: @default-focus-border-width solid transparent;
+                line-height: @control-height - 2 * @default-focus-border-width;
 
-        &.white {
-            .box-shadow(0 0 5px fade(black, 15%));
-
-            > label, > a.button, > input {
-                height: @control-height - 8;
-                background: white;
-                &:focus { background: white; }
+                /* selected toggle/radio buttons */
+                &.selected {
+                    background-color: fade(@selectedBackground, 50%);
+                }
             }
 
-            > label, > a.button {
-                line-height: @control-height - 8;
+            /* keyboard/mouse effects (not for disabled buttons/text fields or groups) */
+            &:not(.disabled) {
+
+                a.button:not(.disabled) {
+
+                    &:hover { background-color: fade(black, 5%); }
+                    &:active { background-color: fade(black, 10%); }
+                    &:focus:not(:active) { border-color: fade(@selectedBackground, 60%); }
+
+                    /* selected toggle/radio buttons */
+                    &.selected {
+                        &:hover { background-color: fade(@selectedBackground, 60%); }
+                        &:active { background-color: fade(@selectedBackground, 70%); }
+                        &:focus:not(:active) { border-color: darken(@selectedBackground, 20%); }
+                    }
+                }
+
+                input:not(.disabled) {
+
+                    &:hover:not(:focus) { background: fade(black, 5%); }
+                    &:focus, &:active { background: white; }
+                }
+            }
+        }
+
+        /* white design: white background, shadows, focus with glow effect */
+        &.design-white {
+            .box-shadow(0 0 5px fade(black, 15%));
+
+            label, a.button, input {
+                height: @control-height - 8px;
+                background: white;
+            }
+
+            label, a.button {
+                line-height: @control-height - 8px;
             }
 
             /* keyboard/mouse effects (not for disabled buttons) */
             &:not(.disabled) {
 
-                &:hover {
+                &:not(.text-focus):hover {
                     .box-shadow(0 0 6px fade(black, 20%));
                 }
 
-                > a.button:not(.disabled), input:not(.disabled) {
-                    &:hover, &:focus, &:active {
-                        background: white;
-                    }
-                }
-
-                /* shadow effects for text fields and opened drop-down menus */
-                &.dropdown-open {
+                /* focus glow effect */
+                &.dropdown-open, a.button:not(.disabled):focus {
                     .focus-glow();
-                    &:hover { .focus-glow(hover); }
+                    &:hover { .focus-hover-glow(); }
                 }
             }
         }
 
-        /* text field glow effects ----------------------------------------- */
+        /* framed design: selected, hover, focus with borders (preserve contents) */
+        &.design-framed {
 
-        &:not(.disabled).text-focus {
-            .focus-glow();
-            &:hover { .focus-glow(hover); }
+            a.button {
+                border: @framed-border-width solid transparent;
+                .border-radius(5px);
+                line-height: @control-height - 2 * @framed-border-width;
+
+                &.selected {
+                    border-color: @selectedBackground;
+                    .box-shadow(0 2px 8px fade(black, 20%));
+                }
+            }
+
+            &:not(.disabled) a.button:not(.disabled) {
+                &:hover:not(:focus) { border-color: fade(black, 10%); }
+                &:active:not(:focus) { border-color: fade(black, 10%); }
+                &:focus { border-color: fade(@selectedBackground, 60%); }
+
+                &.selected {
+                    &:hover:not(:focus) { border-color: darken(@selectedBackground, 5%); }
+                    &:active:not(:focus) { border-color: darken(@selectedBackground, 10%); }
+                    &:focus { border-color: darken(@selectedBackground, 20%); }
+                }
+            }
         }
 
         /* vertical button lists ------------------------------------------- */
 
-        &.button-list > a.button {
-            display: block;
-            width: 100%;
-            height: 26px;
-            line-height: 26px;
-            text-align: left;
+        &.button-list {
+
+            a.button {
+                display: block;
+                width: 100%;
+                height: @list-item-height;
+                line-height: @list-item-height;
+                text-align: left;
+            }
+
+            &.design-default a.button {
+                line-height: @list-item-height - 2 * @default-focus-border-width;
+            }
+
+            &.design-framed {
+                padding: 4px;
+
+                a.button {
+                    height: @control-height + 2 * @framed-border-width;
+                    padding-left: 12px;
+                    padding-right: 12px;
+                    line-height: @control-height;
+
+                    &:not(:first-child) {
+                        margin-top: 4px;
+                    }
+                }
+            }
         }
-    }
+
+    } /* end of .group */
 
     /* tool bars ----------------------------------------------------------- */
 
@@ -364,7 +431,7 @@ i.io-ox-office-icon {
                 float: right;
             }
 
-            &.white {
+            &.design-white {
                 top: 4px;
             }
 
@@ -407,7 +474,7 @@ i.io-ox-office-icon {
             /* heading button of the tool box, used to collapse/expand */
             &.heading > a.button {
                 height: @heading-height;
-                line-height: @heading-height;
+                line-height: @heading-height - 2 * @default-focus-border-width;
                 font-size: 10px;
                 font-weight: bold;
             }
@@ -419,22 +486,25 @@ i.io-ox-office-icon {
         }
 
         /* collapsed: hide all groups following the heading button */
-        &.collapsed > .group.heading ~ * { display: none; }
+        &.collapsed > .group.heading ~ * {
+            display: none;
+        }
     }
-}
+
+} /* end of .view-component */
 
 /* ========================================================================= */
 /* drop-down menu elements                                                   */
 /* ========================================================================= */
 
-&.io-ox-office-dropdown-container {
+&.dropdown-container {
     display: inline-block;
     position: absolute;
     z-index: 1000;
     margin: 0;
     padding: 0;
     overflow: visible;
-    background-color: white;
+    background: white;
     border: none;
     .box-shadow(0 5px 10px fade(black, 25%));
     font-size: 0;
@@ -444,13 +514,9 @@ i.io-ox-office-icon {
         display: inline-block;
         width: auto;
 
-        &.dropdown-list {
-            .box-sizing(content-box);
-
-            > .group {
-                display: inline-block;
-                width: 100%;
-            }
+        > .group {
+            display: inline-block;
+            width: 100%;
         }
     }
 }
@@ -473,11 +539,11 @@ i.io-ox-office-icon {
         display: inline-block;
         margin-right: 10px;
     }
-    
+
     h4 {
         font-size: 16px;
     }
-    
+
     p {
         font-size: 13px;
     }
@@ -489,4 +555,4 @@ i.io-ox-office-icon {
 
 /* ========================================================================= */
 
-} /* end of .io-ox-office-main { */
+} /* end of .io-ox-office-main */

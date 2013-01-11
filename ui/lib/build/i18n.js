@@ -23,7 +23,6 @@ var _ = require("../underscore.js");
 
 var potHeader = 'msgid ""\nmsgstr ""\n' +
     '"Project-Id-Version: Open-Xchange 7\\n"\n' +
-    '"POT-Creation-Date: ' + utils.startTime + '\\n"\n' +
     '"PO-Revision-Date: DATE\\n"\n' +
     '"Last-Translator: NAME <EMAIL>\\n"\n' +
     '"Language-Team: NAME <EMAIL>\\n"\n' +

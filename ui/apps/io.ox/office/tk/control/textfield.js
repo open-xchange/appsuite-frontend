@@ -100,7 +100,7 @@ define('io.ox/office/tk/control/textfield',
         }
 
         /**
-         * The action handler for this text field.
+         * Returns the current value associated to the text field.
          */
         function commitHandler() {
             var value = readOnly ? null : self.getFieldValue();
@@ -196,7 +196,7 @@ define('io.ox/office/tk/control/textfield',
 
         // base constructor ---------------------------------------------------
 
-        Group.call(this, Utils.extendOptions({ white: true }, options));
+        Group.call(this, Utils.extendOptions({ design: 'white' }, options));
 
         // methods ------------------------------------------------------------
 
@@ -277,7 +277,7 @@ define('io.ox/office/tk/control/textfield',
         // insert the text field into this group, and register event handlers
         this.addFocusableControl(textField)
             .registerUpdateHandler(updateHandler)
-            .registerActionHandler(textField, 'commit', commitHandler);
+            .registerChangeHandler('commit', { node: textField, valueResolver: commitHandler });
         textField
             .on('focus focus:key blur:key blur', fieldFocusHandler)
             .on('keydown keypress keyup', fieldKeyHandler)

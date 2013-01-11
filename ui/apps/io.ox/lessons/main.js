@@ -34,8 +34,7 @@ define("io.ox/lessons/main", ['io.ox/core/extensions', 'io.ox/lessons/actions', 
         win = ox.ui.createWindow({
             name: 'io.ox/lessons',
             title: "Lessons",
-            toolbar: true,
-            search: true
+            toolbar: true
         });
         
         win.nodes.main.css({

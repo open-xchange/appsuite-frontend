@@ -15,8 +15,9 @@ define('io.ox/contacts/api',
     ['io.ox/core/http',
      'io.ox/core/api/factory',
      'io.ox/core/notifications',
-     'io.ox/core/cache'
-     ], function (http, apiFactory, notifications, cache) {
+     'io.ox/core/cache',
+     'settings!io.ox/contacts'
+     ], function (http, apiFactory, notifications, cache, settings) {
 
     'use strict';
 
@@ -30,7 +31,9 @@ define('io.ox/contacts/api',
                 columns: '20,1,101,500,502',
                 sort: '607', // 607 = magic field
                 order: 'asc',
-                admin: 'false'
+                admin: function () {
+                    return settings.get('showAdmin');
+                }
             },
             list: {
                 action: 'list',

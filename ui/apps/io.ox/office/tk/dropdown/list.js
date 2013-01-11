@@ -54,6 +54,14 @@ define('io.ox/office/tk/dropdown/list',
      *      ordered by their label texts, ignoring case; items without text
      *      label will be prepended in no special order. This option has no
      *      effect, if sorting is not enabled.
+     *  @param {Function} [options.itemValueResolver]
+     *      The function that returns the current value of a clicked list item.
+     *      Will be passed to the method Group.registerChangeHandler() called
+     *      at the internal button group that contains the list items in the
+     *      drop-down menu.
+     *  @param {String} [options.itemDesign='default']
+     *      The design mode of the list items. See the option 'options.design'
+     *      supported by the Group class constructor for details.
      */
     function List(options) {
 
@@ -67,7 +75,7 @@ define('io.ox/office/tk/dropdown/list',
             sortFunctor = Utils.getFunctionOption(options, 'sortFunctor'),
 
             // the group in the drop-down menu representing the list items
-            buttonGroup = new Group({ classes: 'button-list' });
+            listItemGroup = new Group({ classes: 'button-list', design: Utils.getStringOption(options, 'itemDesign', 'default') });
 
         // private methods ----------------------------------------------------
 
@@ -99,10 +107,10 @@ define('io.ox/office/tk/dropdown/list',
                 if (keydown && (index >= 0) && (index + 1 < buttons.length)) { buttons.eq(index + 1).focus(); }
                 return false;
             case KeyCodes.PAGE_UP:
-                if (keydown) { buttons.eq(Math.max(0, index - this.getItemCountPerPage())).focus(); }
+                if (keydown) { buttons.eq(Math.max(0, index - List.PAGE_SIZE)).focus(); }
                 return false;
             case KeyCodes.PAGE_DOWN:
-                if (keydown) { buttons.eq(Math.min(buttons.length - 1, index + this.getItemCountPerPage())).focus(); }
+                if (keydown) { buttons.eq(Math.min(buttons.length - 1, index + List.PAGE_SIZE)).focus(); }
                 return false;
             case KeyCodes.HOME:
                 if (keydown) { buttons.first().focus(); }
@@ -120,27 +128,24 @@ define('io.ox/office/tk/dropdown/list',
         // methods ------------------------------------------------------------
 
         /**
-         * Returns all button elements representing the list items.
+         * Returns the group instance containing all list items.
          */
-        this.getListItems = function () {
-            return buttonGroup.getNode().children(Utils.BUTTON_SELECTOR);
+        this.getListItemGroup = function () {
+            return listItemGroup;
         };
 
         /**
-         * Returns the number of list items that can be shown at the same time
-         * in the drop-down list, depending on the current screen size.
+         * Returns all button elements representing the list items.
          */
-        this.getItemCountPerPage = function () {
-            var menuNode = self.getMenuNode(),
-                buttons = self.getListItems();
-            return buttons.length ? Math.max(1, Math.floor(menuNode.innerHeight() / buttons.first().outerHeight()) - 1) : 1;
+        this.getListItems = function () {
+            return listItemGroup.getNode().children(Utils.BUTTON_SELECTOR);
         };
 
         /**
          * Removes all list items from the drop-down menu.
          */
         this.clearListItems = function () {
-            buttonGroup.getNode().empty();
+            listItemGroup.getNode().empty();
             return this;
         };
 
@@ -162,7 +167,7 @@ define('io.ox/office/tk/dropdown/list',
             var // all existing list items
                 buttons = self.getListItems(),
                 // create the button element representing the list item
-                button = Utils.createButton(options),
+                button = Utils.createButton(options).addClass(Group.FOCUSABLE_CLASS),
                 // insertion index for sorted lists
                 index = -1;
 
@@ -181,7 +186,7 @@ define('io.ox/office/tk/dropdown/list',
             if ((0 <= index) && (index < buttons.length)) {
                 buttons.eq(index).before(button);
             } else {
-                buttonGroup.getNode().append(button);
+                listItemGroup.getNode().append(button);
             }
 
             return button;
@@ -189,10 +194,8 @@ define('io.ox/office/tk/dropdown/list',
 
         // initialization -----------------------------------------------------
 
-        this.getMenuComponent().getNode().addClass('dropdown-list');
-
         // add the button group control to the drop-down view component
-        this.addPrivateMenuGroup(buttonGroup);
+        this.addPrivateMenuGroup(listItemGroup);
 
         // default sort functor: sort by button label text, case insensitive
         sortFunctor = _.isFunction(sortFunctor) ? sortFunctor : function (button) {
@@ -202,9 +205,19 @@ define('io.ox/office/tk/dropdown/list',
 
         // register event handlers
         this.on('menuopen', menuOpenHandler);
-        buttonGroup.getNode().on('keydown keypress keyup', listKeyHandler);
+        listItemGroup
+            .registerChangeHandler('click', { selector: Utils.BUTTON_SELECTOR, valueResolver: Utils.getFunctionOption(options, 'itemValueResolver') })
+            .getNode().on('keydown keypress keyup', listKeyHandler);
 
     } // class List
+
+    // static fields ----------------------------------------------------------
+
+    /**
+     * Number of list items that will be skipped when using the PAGE_UP or
+     * PAGE_DOWN key.
+     */
+    List.PAGE_SIZE = 5;
 
     // exports ================================================================
 

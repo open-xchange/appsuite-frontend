@@ -14,6 +14,7 @@
 define("io.ox/calendar/view-detail",
     ["io.ox/core/extensions",
      "io.ox/calendar/util",
+     "io.ox/calendar/api",
      "io.ox/core/api/user",
      "io.ox/core/api/group",
      "io.ox/core/api/resource",
@@ -22,7 +23,7 @@ define("io.ox/calendar/view-detail",
      "io.ox/core/extPatterns/links",
      "gettext!io.ox/calendar",
      "less!io.ox/calendar/style.css"
-    ], function (ext, util, userAPI, groupAPI, resourceAPI, folderAPI, attachments, links, gt) {
+    ], function (ext, util, calAPI, userAPI, groupAPI, resourceAPI, folderAPI, attachments, links, gt) {
 
     "use strict";
 
@@ -445,6 +446,17 @@ define("io.ox/calendar/view-detail",
                 node.attr('data-cid', String(_.cid(data)));
                 ext.point("io.ox/calendar/detail").invoke("draw", node, data);
             }
+
+            var refresh = function (e, ap) {
+                if (ap.id === data.id && ap.folder === data.folder) {
+                    node.empty();
+                    ext.point("io.ox/calendar/detail").invoke("draw", node, ap);
+                }
+            };
+            // bind api events
+            calAPI
+                .off('updateDetails')
+                .on('updateDetails', refresh);
 
             return node;
         }

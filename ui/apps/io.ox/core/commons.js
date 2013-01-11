@@ -307,7 +307,9 @@ define('io.ox/core/commons',
 
             // explicit vs. default
             if (defaultFolderId !== undefined) {
-                return app.folder.set(defaultFolderId);
+                return app.folder.set(defaultFolderId).pipe(null, function () {
+                    return app.folder.setDefault();
+                });
             } else {
                 return app.folder.setDefault();
             }

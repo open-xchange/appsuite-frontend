@@ -283,7 +283,7 @@ define('io.ox/files/api',
     api.update = function (file, makeCurrent) { //special handling for mark as current version
         var obj = { id: file.id, folder: file.folder_id },
             updateData = file;
-        
+
         if (makeCurrent) {//if there is only version, the request works. If the other fields are present theres a backend error
             updateData = {version: file.version};
         }
@@ -333,7 +333,7 @@ define('io.ox/files/api',
             id = String(obj.id);
             obj = { folder_id: fid, id: id };
 
-            if (/^(new|delete)$/.test(type) && fid) {
+            if (/^(new|change|delete)$/.test(type) && fid) {
                 // if we have a new file or an existing file was deleted, we have to clear the proper folder cache.
                 all = caches.all.grepRemove(fid + api.DELIM);
             } else {
@@ -355,7 +355,7 @@ define('io.ox/files/api',
                     if (type === 'change') {
                         return api.get(obj).done(function (data) {
                             api.trigger('update update:' + encodeURIComponent(_.cid(data)), data);
-                            api.trigger('refresh.list');
+                            api.trigger('refresh.all');
                         });
                     } else {
                         api.trigger('refresh.all');

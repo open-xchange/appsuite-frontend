@@ -212,7 +212,10 @@ define('io.ox/calendar/week/perspective',
                     .on('show', refresh, this)
                     .on('show', $.proxy(this.restore, this))
                     .on('beforehide', $.proxy(this.save, this))
-                    .on('change:perspective', this.view.unbindKeys);
+                    .on('change:perspective', function () {
+                        self.view.unbindKeys();
+                        self.dialog.close();
+                    });
             }
 
             this.view.setScrollPos();

@@ -4608,7 +4608,7 @@ msgstr "Mostrar menos"
 
 #: apps/io.ox/editor/main.js:54
 msgid "Simple Pad"
-msgstr "Bloc de notas"
+msgstr "Bloc de notas simple"
 
 #: apps/io.ox/editor/main.js:73
 msgid "Enter document title here"

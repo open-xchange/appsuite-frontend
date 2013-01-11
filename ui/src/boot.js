@@ -23,9 +23,12 @@ if (typeof window.console === 'undefined') {
     window.console = { log: $.noop, debug: $.noop, error: $.noop, warn: $.noop };
 }
 
+
 $(document).ready(function () {
 
     "use strict";
+
+    require(["less!io.ox/core/bootstrap/css/bootstrap.less"]);
 
     // animations
     var DURATION = 250,
@@ -63,7 +66,6 @@ $(document).ready(function () {
         'input[type=radio]',
         'input[type=checkbox]',
         '.btn',
-        '.io-ox-dialog-popup',
         '.dropdown',
         '.icon-search',
         '.contact-grid-index',
@@ -456,8 +458,17 @@ $(document).ready(function () {
                 ox.user = _.url.hash('user');
                 ox.user_id = parseInt(_.url.hash('user_id') || '0', 10);
                 ox.language = _.url.hash('language');
+
+                if (_.url.hash('store') === 'true') {
+                    session.store();
+                }
+
+                // cleanup login params
+                _.url.hash({'session': null, 'user': null, 'user_id': null, 'language': null, 'store': null});
+
                 var ref = _.url.hash('ref');
-                _.url.redirect('#' + (ref ? decodeURIComponent(ref) : ''));
+                ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
+                _.url.redirect(ref ? ref : '#');
 
                 fetchUserSpecificServerConfig().done(function () {
                     loadCoreFiles().done(function () {
@@ -546,6 +557,7 @@ $(document).ready(function () {
                 'You don&rsquo;t need administrator rights. Just restart IE after installation.</div>'
             ));
         }
+
         return $.when(
                 // load extensions
                 require(['io.ox/core/manifests']).pipe(function (manifests) {
@@ -602,6 +614,12 @@ $(document).ready(function () {
         fetchGeneralServerConfig().done(function () {
             // set page title now
             document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+            if (ox.signin) {
+                require(["themes"], function (themes) {
+                    themes.set(ox.serverConfig.signinTheme || 'login');
+                });
+            }
+
             // continue
             autoLogin();
         });

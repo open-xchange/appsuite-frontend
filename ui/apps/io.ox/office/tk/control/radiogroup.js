@@ -68,23 +68,12 @@ define('io.ox/office/tk/control/radiogroup',
         }
 
         /**
-         * Click handler for an option button in this radio group. Will
-         * activate the clicked button (or deactivate if clicked on an active
-         * button in toggle mode), and return the value of the new active
-         * option button.
-         *
-         * @param {jQuery} button
-         *  The clicked button, as jQuery object.
-         *
-         * @returns
-         *  The button value that has been passed to the addOptionButton()
-         *  method.
+         * Returns the value of the clicked option button, taking the option
+         * 'toggleClick' into account,
          */
         function clickHandler(button) {
-            var toggleClick = Utils.isButtonSelected(button) && !_.isNull(toggleValue) && !_.isUndefined(toggleValue),
-                value = toggleClick ? toggleValue : Utils.getControlValue(button);
-            updateHandler(value);
-            return value;
+            var toggleClick = Utils.isButtonSelected(button) && !_.isNull(toggleValue) && !_.isUndefined(toggleValue);
+            return toggleClick ? toggleValue : Utils.getControlValue(button);
         }
 
         // base constructor ---------------------------------------------------
@@ -136,7 +125,7 @@ define('io.ox/office/tk/control/radiogroup',
 
         // register event handlers
         this.registerUpdateHandler(updateHandler)
-            .registerActionHandler(this.getNode(), 'click', Utils.BUTTON_SELECTOR, clickHandler);
+            .registerChangeHandler('click', { selector: Utils.BUTTON_SELECTOR, valueResolver: clickHandler });
 
     } // class RadioGroup
 

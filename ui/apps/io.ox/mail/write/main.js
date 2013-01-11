@@ -282,26 +282,23 @@ define('io.ox/mail/write/main',
         app.getPrimaryAddressFromFolder = function (data) {
 
             var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
-                accountID = mailAPI.getAccountIDFromFolder(folder_id);
+                accountID = data.account_id || mailAPI.getAccountIDFromFolder(folder_id);
 
             return accountAPI.get(accountID).pipe(function (data) {
-                return userAPI.getName(ox.user_id).pipe(function (name) {
-                    return {'displayname'    : data.personal || name,
-                            'primaryaddress' : data.primary_address};
-                });
-
+                return {'displayname'    : data.personal,
+                        'primaryaddress' : data.primary_address};
             });
         };
 
         app.getFrom = function () {
-            var from_field = view.leftside.find('.fromselect-wrapper select > option[selected=selected]');
+            var from_field = view.leftside.find('.fromselect-wrapper select > :selected');
 
             return [from_field.data('displayname'), from_field.data('primaryaddress')];
         };
 
         app.setFrom = function (data) {
             return this.getPrimaryAddressFromFolder(data).done(function (from) {
-                view.leftside.find('.fromselect-wrapper select > option[selected=selected]').data(from);
+                view.leftside.find('.fromselect-wrapper select').val(from.primaryaddress);
             });
         };
 
@@ -494,6 +491,8 @@ define('io.ox/mail/write/main',
                 var content = data.attachments && data.attachments.length ? (data.attachments[0].content || '') : '';
                 if (mail.format === 'text') {
                     content = content.replace(/<br>\n?/g, '\n');
+                    // backend sends html entities, these need to be transformed into plain text
+                    content = $('<div />').html(content).text();
                 }
                 // image URL fix
                 if (editorMode === 'html') {

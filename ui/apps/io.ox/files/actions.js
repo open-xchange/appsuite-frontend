@@ -325,7 +325,6 @@ define('io.ox/files/actions',
                 .done(function (action) {
                     if (action === 'ok') {
                         var selectedFolder = tree.selection.get();
-                        console.log("SELECTED FOLDER", selectedFolder);
                         if (selectedFolder.length === 1) {
                             // move action
                             api[apiAction](list, selectedFolder[0]).fail(require("io.ox/core/notifications").yell);
