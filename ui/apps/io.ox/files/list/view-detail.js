@@ -293,7 +293,7 @@ define("io.ox/files/list/view-detail",
     ext.point("io.ox/files/details/version").extend({ index: 10,
         id: "filename",
         dim: {
-            span: 4
+            span: 6
         },
         draw: function (baton) {
             baton.label = baton.data.filename || 'YEAH';
@@ -316,7 +316,7 @@ define("io.ox/files/list/view-detail",
         index: 20,
         id: "size",
         dim: {
-            span: 4
+            span: 2
         },
         draw: function (baton) {
             this.text(gt.noI18n(bytesToSize(baton.data.file_size))).css({textAlign: "right"});
