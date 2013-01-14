@@ -134,7 +134,7 @@ define("plugins/portal/rss/register",
                 this.getContentNode().append(
                     $('<label>').text(gt('URL')),
                     $url.val((props.url || []).join('\n')),
-                    $('<label>').text(gt('Description (optional)')),
+                    $('<label>').text(gt('Description')),
                     $description.val(props.description),
                     $error
                 );

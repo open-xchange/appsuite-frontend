@@ -168,7 +168,7 @@ define('plugins/portal/tumblr/register',
                 this.getContentNode().append(
                     $('<label>').text(gt('Feed URL')),
                     $url.val(props.url),
-                    $('<label>').text(gt('Description (optional)')),
+                    $('<label>').text(gt('Description')),
                     $description.val(props.description),
                     $error
                 );
