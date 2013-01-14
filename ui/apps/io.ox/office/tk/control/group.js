@@ -112,8 +112,8 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
-         * Returns the absolute position and size of the group node in the
-         * browser window.
+         * Returns the position and size of the group node in the browser
+         * window.
          *
          * @returns {Object}
          *  An object with numeric 'left', 'top', 'right', 'bottom', 'width',
@@ -122,20 +122,8 @@ define('io.ox/office/tk/control/group',
          *  the distance of the right/bottom corner of the group node to the
          *  right/bottom border of the browser window.
          */
-        this.getDimensions = function () {
-
-            var // get position of the group
-                groupDim = groupNode.offset();
-
-            // add group size
-            groupDim.width = groupNode.outerWidth();
-            groupDim.height = groupNode.outerHeight();
-
-            // add right/bottom distance
-            groupDim.right = window.innerWidth - groupDim.left - groupDim.width;
-            groupDim.bottom = window.innerHeight - groupDim.top - groupDim.height;
-
-            return groupDim;
+        this.getNodePosition = function () {
+            return Utils.getNodePositionInWindow(groupNode);
         };
 
         /**
