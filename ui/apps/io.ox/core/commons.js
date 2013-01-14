@@ -289,7 +289,6 @@ define('io.ox/core/commons',
 
             app.folder
                 .updateTitle(app.getWindow())
-                .updateGrid(grid)
                 .setType(type);
             if (grid) {
                 app.folder.updateGrid(grid);
