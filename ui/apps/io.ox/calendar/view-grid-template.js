@@ -140,6 +140,7 @@ define("io.ox/calendar/view-grid-template",
 
         // detect new labels
         requiresLabel: function (i, data, current) {
+            if (!data) { return false; }
             var d = util.getSmartDate(data.start_date);
             return (i === 0 || d !== current) ? d : false;
         },

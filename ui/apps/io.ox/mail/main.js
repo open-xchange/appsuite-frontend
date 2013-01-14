@@ -282,16 +282,16 @@ define("io.ox/mail/main",
                 grid.repaintLabels().done(function () {
                     grid.repaint();
                     if (list) {
-                        grid.selection.insertAt(list.slice(1), index + 1);
+                        grid.selection.insertAt(list.slice(1), index);
                     }
                 });
             }
 
             function open(index, cid) {
-                if (openThreads[index + 1] === undefined) {
+                if (openThreads[index] === undefined) {
                     var thread = api.getThread(cid);
                     if (thread.length > 1) {
-                        openThreads[index + 1] = cid;
+                        openThreads[index] = cid;
                         api.getList(thread).done(function (list) {
                             refresh(list, index);
                         });
@@ -300,9 +300,9 @@ define("io.ox/mail/main",
             }
 
             function close(index, cid) {
-                if (openThreads[index + 1] !== undefined) {
+                if (openThreads[index] !== undefined) {
                     var thread = api.getThread(cid);
-                    delete openThreads[index + 1];
+                    delete openThreads[index];
                     api.getList(thread).done(function (list) {
                         grid.selection.remove(list.slice(1));
                         refresh();
@@ -311,7 +311,7 @@ define("io.ox/mail/main",
             }
 
             function toggle(index, cid) {
-                if (openThreads[index + 1] === undefined) {
+                if (openThreads[index] === undefined) {
                     open(index, cid);
                 } else {
                     close(index, cid);
@@ -320,7 +320,7 @@ define("io.ox/mail/main",
 
             grid.getContainer().on('click', '.thread-size', function () {
                 var cell = $(this).closest('.vgrid-cell'),
-                    index = parseInt(cell.attr('data-index'), 10),
+                    index = parseInt(cell.attr('data-index'), 10) + 1,
                     cid = cell.attr('data-obj-id');
                 toggle(index, cid);
             });
@@ -344,8 +344,8 @@ define("io.ox/mail/main",
 
             isInOpenThreadSummary = function (obj) {
                 var cid = _.cid(obj),
-                    index = grid.selection.getIndex(cid);
-                return openThreads[index + 1] !== undefined;
+                    index = grid.selection.getIndex(cid) + 1;
+                return openThreads[index] !== undefined;
             };
 
         }());

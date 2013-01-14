@@ -348,7 +348,7 @@ define('io.ox/core/tk/vgrid',
             };
             numLabels = 0;
             // loop
-            var i = 0, $i = all.length, current, tmp = '';
+            var i = 0, $i = all.length + 1, current, tmp = '';
             for (; i < $i; i++) {
                 tmp = self.requiresLabel(i, all[i], current);
                 if (tmp !== false) {
