@@ -18,8 +18,7 @@ define('io.ox/calendar/week/view',
      'io.ox/core/api/folder',
      'settings!io.ox/calendar',
      'less!io.ox/calendar/week/style.css',
-     'apps/io.ox/core/tk/jquery-ui.min.js',
-     'apps/io.ox/core/tk/jquery.mobile.touch.min.js'], function (util, date, ext, gt, folder, settings) {
+     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, gt, folder, settings) {
 
     'use strict';
 
