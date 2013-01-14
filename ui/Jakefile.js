@@ -24,7 +24,6 @@ var i18n = require("./lib/build/i18n");
 var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
 var less = require("./lib/build/less");
-var showdown = require('./lib/showdown/src/showdown');
 
 console.info("Build path: " + utils.builddir);
 
@@ -505,18 +504,16 @@ utils.merge('manifests/' + pkgName + '.json',
         }
     });
 
-// doc task
+// docs task
 
-desc("Developer documentation");
+desc("Generates developer documentation");
 utils.topLevelTask("docs", [], utils.summary("docs"));
 
 var titles = [];
 function docFile(file, title) {
     filename = "doc/" + file + ".html";
-    utils.concat(filename, ["doc/lib/header.html", filename,
-                            "doc/lib/footer.html"], { filter: function(src) {
-                                return new showdown.converter().makeHtml(src);
-                            } });
+    utils.concat(filename,
+        ["doc/lib/header.html", filename, "doc/lib/footer.html"]);
     titles.push('<a href="' + file +'.html">' + title + '</a><br/>');
 }
 
@@ -529,13 +526,14 @@ docFile("development_guide", "UI Development Style Guide");
 docFile("vgrid", "VGrid");
 docFile("i18n", "Internationalization");
 docFile("date", "Date and Time");
+docFile("buildsystem", "Build System");
 
 var indexFiles = ["lib/header.html", "index.html",
     { getData: function() { return titles.join("\n"); } }, "lib/footer.html"];
 indexFiles.dir = "doc";
 utils.concat("doc/index.html", indexFiles);
 
-utils.copy(utils.list("doc/lib", ["prettify.*", "default.css"]),
+utils.copy(utils.list("doc/lib", ["prettify.*", "default.css", "newwin.png"]),
            { to: utils.dest("doc") });
 utils.copyFile("lib/jquery.min.js", utils.dest("doc/jquery.min.js"));
 
@@ -589,7 +587,7 @@ task("deps", [depsPath], function() {
         });
     });
     var down = "children", up = "parents";
-    if (process.env.reverse) { t = down; down = up; up = t; }
+    if (process.env.reverse) { var t = down; down = up; up = t; }
     var root = process.env.root;
     if (root) {
         console.log("");
@@ -636,7 +634,7 @@ utils.topLevelTask('init-packaging', [], function() {
             {
                 key: 'copyright',
                 prompt: 'Copyright line',
-                def: '2012 Open-Xchange, Inc'
+                def: '2013 Open-Xchange, Inc'
             },
             {
                 key: 'licenseName',
@@ -752,12 +750,20 @@ task("dist", [distDest], function () {
 
 // clean task
 
-desc("Removes all generated files");
-task("clean", [], function() {
-    if (path.existsSync("ox.pot")) fs.unlinkSync("ox.pot");
-    rimraf(distDest, rmTmp);
-    function rmTmp() { rimraf("tmp", rmBuild); }
-    function rmBuild() { rimraf(utils.builddir, complete); };
+desc('Removes all generated files');
+task('clean', [], function() {
+    if (path.existsSync('ox.pot')) fs.unlinkSync('ox.pot');
+    var dirs = ['tmp', utils.builddir, distDest];
+    if (process.env.l10nDir) dirs.push(process.env.l10nDir);
+    if (process.env.manifestDir) dirs.push(process.env.manifestDir);
+    rmdirs(dirs.length);
+    function rmdirs(i) {
+        if (i--) {
+            rimraf(dirs[i], function () { rmdirs(i); });
+        } else {
+            complete();
+        }
+    }
 }, { async: true });
 
 // task dependencies

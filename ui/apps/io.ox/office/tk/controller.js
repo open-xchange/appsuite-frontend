@@ -391,37 +391,40 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
          * registered view components.
          *
          * @param {String|RegExp|Null} [keys]
-         *  The keys of the items to be updated, as space-separated string, or
-         *  as regular expression. Strings have to match the keys exactly. If
-         *  omitted, all items will be updated. If set to null, no item will be
-         *  updated.
+         *  The keys of the items to be updated, as space-separated string,
+         *  or as regular expression. Strings have to match the keys
+         *  exactly. If omitted, all items will be updated. If set to null,
+         *  no item will be updated.
          *
          * @returns {Controller}
          *  A reference to this controller.
          */
-        this.update = deferredMethods.createMethod(
+        this.update = (function () {
+
+            var // pending controller keys to be updated
+                pendingKeys = [];
 
             // direct callback: called every time when Controller.update() has been called
-            function registerKeys(storage, keys) {
+            function registerKeys(keys) {
                 // update the array of pending keys
                 if (_.isUndefined(keys)) {
-                    storage.pendingKeys = undefined;
-                } else if (_.isArray(storage.pendingKeys) && (_.isString(keys) || _.isRegExp(keys))) {
-                    storage.pendingKeys.push(keys);
+                    pendingKeys = undefined;
+                } else if (_.isArray(pendingKeys) && (_.isString(keys) || _.isRegExp(keys))) {
+                    pendingKeys.push(keys);
                 }
                 return self;
-            },
+            }
 
             // deferred callback: called once, after current script ends
-            function updateComponents(storage) {
+            function updateComponents() {
                 clearResultCache();
-                _(selectItems(storage.pendingKeys)).invoke('update');
-                storage.pendingKeys = [];
-            },
+                _(selectItems(pendingKeys)).invoke('update');
+                pendingKeys = [];
+            }
 
-            // storage object passed to all callbacks
-            { pendingKeys: [] }
-        );
+            // create and return the deferred Controller.update() method
+            return deferredMethods.createMethod(registerKeys, updateComponents);
+        }()); // Controller.update()
 
         /**
          * Returns the current value of the specified item.

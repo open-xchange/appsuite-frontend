@@ -45,6 +45,7 @@ define('io.ox/settings/main',
             }
         },
         requiresLabel: function (i, data, current) {
+            if (!data) { return false; }
             return data.group !== current ? data.group : false;
         }
     };

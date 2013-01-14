@@ -118,12 +118,21 @@ define("io.ox/mail/write/view-main",
         },
 
         showSection: function (id, focus) {
-            this.sections[id + 'Label'].show();
-            this.sections[id].show().trigger('show');
-            if (focus !== false) {
-                this.focusSection(id);
+            var secLabel = this.sections[id + 'Label'],
+                secLink = this.sections[id + 'Link'],
+                sec = this.sections[id];
+            if (secLabel) {
+                secLabel.show();
             }
-            this.sections[id + 'Link'].hide();
+            if (sec) {
+                sec.show().trigger('show');
+                if (focus !== false) {
+                    this.focusSection(id);
+                }
+            }
+            if (secLink) {
+                secLink.hide();
+            }
         },
 
         hideSection: function (id, node) {

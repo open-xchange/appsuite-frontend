@@ -126,6 +126,7 @@ define("io.ox/contacts/main",
 
         // requires new label?
         grid.requiresLabel = function (i, data, current) {
+            if (!data) { return false; }
             var name = data.last_name || data.display_name || "#",
                 prefix = _.noI18n(name.substr(0, 1).toUpperCase());
             return (i === 0 || prefix !== current) ? prefix : false;

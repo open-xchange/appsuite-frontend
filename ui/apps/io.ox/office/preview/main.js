@@ -69,17 +69,13 @@ define('io.ox/office/preview/main',
 
                 // do not try to load, if file descriptor is missing
                 if (self.hasFileDescriptor()) {
-
                     // load the file
                     self.sendAjaxRequest({
-                        url: self.getDocumentFilterUrl('importdocument', { filter_format: 'html' })
+                        url: self.getDocumentFilterUrl('importdocument', { filter_format: 'html', filter_action: "beginconvert" })
                     })
-                    .pipe(function (response) {
-                        return Application.extractAjaxStringResult(response, 'HTMLPages');
-                    })
-                    .done(function (previewDocument) {
-                        if (_.isString(previewDocument)) {
-                            model.setPreviewDocument(previewDocument);
+                    .done(function (response) {
+                        if ((response.data.JobID) > 0 && (response.data.PageCount > 0)) {
+                            model.setPreviewDocument(response.data.JobID, response.data.PageCount);
                             def.resolve();
                         } else {
                             def.reject();

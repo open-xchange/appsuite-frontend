@@ -56,7 +56,8 @@ define('io.ox/calendar/edit/template',
         index: 100,
         id: 'buttons',
         draw: function (baton) {
-            this.append($('<button class="btn btn-primary" data-action="save" >')
+            var saveButton;
+            this.append(saveButton = $('<button class="btn btn-primary" data-action="save" >')
                 .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
                 .css({float: 'right', marginLeft: '13px'})
                 .on('click', function () {
@@ -83,7 +84,10 @@ define('io.ox/calendar/edit/template',
         },
         showConflicts: function (conflicts) {
             var self = this,
-                hardConflict = false;
+                hardConflict = false,
+                saveButton = $('[data-action="save"]', this.$el.closest('.io-ox-calendar-edit'));
+
+            saveButton.addClass('disabled').off('click');
             // look for hard conflicts
             _(conflicts).each(function (conflict) {
                 if (conflict.hard_conflict) {
@@ -93,8 +97,8 @@ define('io.ox/calendar/edit/template',
             });
 
             require(["io.ox/calendar/conflicts/conflictList"], function (c) {
-                var conflictList = c.drawList(conflicts);
-                var $acceptButton = $('<a class="btn btn-danger">')
+                var conflictList = c.drawList(conflicts),
+                    $acceptButton = hardConflict ? null : $('<a class="btn btn-danger">')
                     .addClass('btn')
                     .text(gt('Ignore conflicts'))
                     .on('click', function (e) {
@@ -102,10 +106,6 @@ define('io.ox/calendar/edit/template',
                         self.model.set('ignore_conflicts', true);
                         self.model.save();
                     });
-                // if there is a hard conflict, hide the accept button
-                if (hardConflict) {
-                    $acceptButton = null;
-                }
                 self.$el.empty().append(
                     conflictList,
                     $('<div class="row">')
@@ -117,6 +117,9 @@ define('io.ox/calendar/edit/template',
                                         .on('click', function (e) {
                                             e.preventDefault();
                                             self.$el.empty();
+                                            saveButton.removeClass('disabled').on('click', function () {
+                                                self.model.save();
+                                            });
                                         }),
                                     '&nbsp;',
                                     $acceptButton
