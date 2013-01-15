@@ -2,9 +2,10 @@
 
 if command -v nodejs > /dev/null; then NODEJS=nodejs; else NODEJS=node; fi
 
-os=`uname`
-if [[ "$os" == 'Darwin' ]]; then
-    $NODEJS lib/appsserver.js /Library/WebServer/Documents/appsuite/
+if [ "$1" ]
+then
+    $NODEJS lib/appsserver.js $1
 else
-    $NODEJS lib/appsserver.js
+    if [ -f local.conf ]; then source ./local.conf; fi
+    $NODEJS lib/appsserver.js $builddir
 fi
