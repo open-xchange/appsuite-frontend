@@ -12,14 +12,14 @@
  */
 define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/core/tk/config-sentence", "io.ox/core/date", 'io.ox/core/tk/keys', 'gettext!io.ox/calendar/edit/main', 'less!io.ox/calendar/edit/style.less'], function (model, ConfigSentence, dateAPI, KeyListener, gt) {
     "use strict";
-    var DAYS = model.DAYS;
-    var RECURRENCE_TYPES = model.RECURRENCE_TYPES;
+    var DAYS = model.DAYS,
+        RECURRENCE_TYPES = model.RECURRENCE_TYPES;
 
     var CalendarWidgets = {
         dayInMonth: function ($anchor, attribute, options) {
-            var self = this;
-            var $dayPicker = $('<table>');
-            var $row;
+            var self = this,
+                $dayPicker = $('<table>'),
+                $row;
 
             function clickHandler(i) {
                 return function (e) {
@@ -68,9 +68,9 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
         days: function ($anchor, attribute, options) {
             // TODO: Modal close. But how?!?
-            var self = this;
-            var $dayList = $('<ul class="io-ox-recurrence-day-picker no-clone">');
-            var nodes = {};
+            var self = this,
+                $dayList = $('<ul class="io-ox-recurrence-day-picker no-clone">'),
+                nodes = {};
 
             this[attribute] = 1;
 
@@ -167,8 +167,8 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             $anchor.on('click', function (e) {
                 e.preventDefault();
                 var $dateInput = $('<input type="text" class="input-small no-clone">').css({
-                    marginBottom: 0
-                }).val(renderDate()),
+                        marginBottom: 0
+                    }).val(renderDate()),
                     keys = new KeyListener($dateInput);
 
                 $dateInput.datepicker({format: CalendarWidgets.dateFormat, parentEl: $(this).parent(), autoclose: true});
@@ -183,7 +183,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 function updateValue() {
                     var value = dateAPI.Local.parse($dateInput.val(), dateAPI.DATE);
                     if (!_.isNull(value) && value.getTime() !== 0) {
-                        self[attribute] = dateAPI.Local.utc(value.getTime());
+                        self[attribute] = dateAPI.Local.localTime(value.getTime());
                         self.trigger("change", self);
                         self.trigger("change:" + attribute, self);
                     }
@@ -514,7 +514,6 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 this.modelChanged();
                 this.updateSuggestions();
 
-
             },
             setHint: function (string) {
                 this.nodes.hint.empty().append($('<small>').text(string));
@@ -543,8 +542,8 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         }
                     });
 
-                    var useLinksHint = gt("Click on the links to change the values.");
-                    var chooseSentenceHint = gt("Click on a sentence to choose when to repeat the appointment.");
+                    var useLinksHint = gt("Click on the links to change the values."),
+                        chooseSentenceHint = gt("Click on a sentence to choose when to repeat the appointment.");
 
                     this.nodes.alternative1.children().detach();
                     this.nodes.alternative2.children().detach();
@@ -753,8 +752,8 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             },
 
             createGhost: function (sentence) {
-                var self = this;
-                var $ghost = $('<span class="muted">').append(sentence.ghost());
+                var self = this,
+                $ghost = $('<span class="muted">').append(sentence.ghost());
                 $ghost.on('click', function () {
                     self.setChoice(sentence);
                     self.updateModel();
@@ -897,15 +896,14 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             //     }
             // },
             updateSuggestions: function () {
-                var self = this;
-                var startDate = new dateAPI.Local(dateAPI.Local.utc(this.model.get("start_date")));
+                var self = this,
+                    startDate = new dateAPI.Local(dateAPI.Local.utc(this.model.get("start_date"))),
+                    dayBits = 1 << startDate.getDay(),
+                    dayInMonth = startDate.getDate(),
+                    month = startDate.getMonth(),
+                    ordinal = Math.ceil(startDate.getDate() / 7),
 
-                var dayBits = 1 << startDate.getDay();
-                var dayInMonth = startDate.getDate();
-                var month = startDate.getMonth();
-                var ordinal = Math.ceil(startDate.getDate() / 7);
-
-                var canUpdate = function (sentence) {
+                    canUpdate = function (sentence) {
                     // Don't update the chosen sentence carelessly
                     return sentence !== self.choice;
                 };

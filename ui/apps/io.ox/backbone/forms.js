@@ -681,10 +681,8 @@ define('io.ox/backbone/forms',
                     ret = BinderUtils._toDate(value, attribute, model);
                 } else {
                     ret = BinderUtils._dateStrToDate(value, attribute, model);
-                    if (model.get('full_time')) {
-                        if (attribute === 'end_date') {
-                            ret += date.DAY;
-                        }
+                    if (model.get('full_time') && attribute === 'end_date') {
+                        ret += date.DAY;
                     }
                 }
                 return ret;

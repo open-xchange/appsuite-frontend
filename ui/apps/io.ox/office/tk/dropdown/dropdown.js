@@ -113,14 +113,14 @@ define('io.ox/office/tk/dropdown/dropdown',
             var // whether to show or hide the menu
                 show = (state === true) || ((state !== false) && !self.isMenuVisible()),
                 // position and size of the group node
-                groupDim = self.getDimensions();
+                groupPosition = self.getNodePosition();
 
             if (show && !self.isMenuVisible()) {
                 $('body').append(menuNode);
                 groupNode.addClass(OPEN_CLASS);
                 menuNode.css({
-                    top: groupDim.top + groupDim.height + DropDown.GROUP_BORDER_PADDING,
-                    left: groupDim.left
+                    top: groupPosition.top + groupPosition.height + DropDown.GROUP_BORDER_PADDING,
+                    left: groupPosition.left
                 });
                 self.trigger('menuopen');
                 // Add a global click handler to close the menu automatically
@@ -251,7 +251,7 @@ define('io.ox/office/tk/dropdown/dropdown',
         function windowResizeHandler() {
 
             var // position and size of the parent group node
-                groupDim = self.getDimensions(),
+                groupPosition = self.getNodePosition(),
                 // the sizes available at every side of the group node
                 availableSizes = self.getAvailableMenuSizes(),
                 // resulting width and height available for the menu node
@@ -285,16 +285,16 @@ define('io.ox/office/tk/dropdown/dropdown',
             // first part of the position of the drop-down menu
             switch (preferredSide) {
             case 'top':
-                menuNodeProps.bottom = window.innerHeight - groupDim.top + DropDown.GROUP_BORDER_PADDING;
+                menuNodeProps.bottom = window.innerHeight - groupPosition.top + DropDown.GROUP_BORDER_PADDING;
                 break;
             case 'bottom':
-                menuNodeProps.top = groupDim.top + groupDim.height + DropDown.GROUP_BORDER_PADDING;
+                menuNodeProps.top = groupPosition.top + groupPosition.height + DropDown.GROUP_BORDER_PADDING;
                 break;
             case 'left':
-                menuNodeProps.right = window.innerWidth - groupDim.left + DropDown.GROUP_BORDER_PADDING;
+                menuNodeProps.right = window.innerWidth - groupPosition.left + DropDown.GROUP_BORDER_PADDING;
                 break;
             case 'right':
-                menuNodeProps.left = groupDim.left + groupDim.width + DropDown.GROUP_BORDER_PADDING;
+                menuNodeProps.left = groupPosition.left + groupPosition.width + DropDown.GROUP_BORDER_PADDING;
                 break;
             }
 
@@ -306,11 +306,11 @@ define('io.ox/office/tk/dropdown/dropdown',
             switch (preferredSide) {
             case 'top':
             case 'bottom':
-                menuNodeProps.left = Math.min(groupDim.left, window.innerWidth - DropDown.WINDOW_BORDER_PADDING - menuNodeProps.width);
+                menuNodeProps.left = Math.min(groupPosition.left, window.innerWidth - DropDown.WINDOW_BORDER_PADDING - menuNodeProps.width);
                 break;
             case 'left':
             case 'right':
-                menuNodeProps.top = Math.min(groupDim.top, window.innerHeight - DropDown.WINDOW_BORDER_PADDING - menuNodeProps.height);
+                menuNodeProps.top = Math.min(groupPosition.top, window.innerHeight - DropDown.WINDOW_BORDER_PADDING - menuNodeProps.height);
                 break;
             }
 
@@ -355,7 +355,7 @@ define('io.ox/office/tk/dropdown/dropdown',
         this.getAvailableMenuSizes = function () {
 
             var // position and size of the parent group node
-                groupDim = self.getDimensions(),
+                groupPosition = self.getNodePosition(),
 
                 // available total width and height
                 availableWidth = Math.max(window.innerWidth - 2 * DropDown.WINDOW_BORDER_PADDING, 0),
@@ -363,10 +363,10 @@ define('io.ox/office/tk/dropdown/dropdown',
 
                 // vertical space above, below, left of, and right of the group node
                 totalPadding = DropDown.WINDOW_BORDER_PADDING + DropDown.GROUP_BORDER_PADDING,
-                availableAbove = Math.max(groupDim.top - totalPadding, 0),
-                availableBelow = Math.max(groupDim.bottom - totalPadding, 0),
-                availableLeft = Math.max(groupDim.left - totalPadding, 0),
-                availableRight = Math.max(groupDim.right - totalPadding, 0);
+                availableAbove = Math.max(groupPosition.top - totalPadding, 0),
+                availableBelow = Math.max(groupPosition.bottom - totalPadding, 0),
+                availableLeft = Math.max(groupPosition.left - totalPadding, 0),
+                availableRight = Math.max(groupPosition.right - totalPadding, 0);
 
             return {
                 top: { width: availableWidth, height: availableAbove },

@@ -64,11 +64,11 @@ define('io.ox/calendar/model',
                 if (this._participants) {
                     return this._participants;
                 }
-                var self = this;
-                var defaults = _.extend({sortBy: 'display_name'}, options);
-                var resetListUpdate = false;
-                var changeParticipantsUpdate = false;
-                var participants = this._participants = new pModel.Participants(this.get('participants'));
+                var self = this,
+                    defaults = _.extend({sortBy: 'display_name'}, options),
+                    resetListUpdate = false,
+                    changeParticipantsUpdate = false,
+                    participants = this._participants = new pModel.Participants(this.get('participants'));
 
                 participants.invoke('fetch');
 
@@ -96,7 +96,6 @@ define('io.ox/calendar/model',
                 return participants;
             }
         },
-
         getUpdatedAttributes: function (model) {
             var attributesToSave = model.changedSinceLoading();
             attributesToSave.id = model.id;

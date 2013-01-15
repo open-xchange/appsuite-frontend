@@ -198,7 +198,7 @@ define('plugins/portal/flickr/register',
                     $q.val(props.query),
                     $('<br>'),
                     $method.val(props.method),
-                    $('<label>').text(gt('Description (optional)')),
+                    $('<label>').text(gt('Description')),
                     $description.val(props.description),
                     $error
                 );

@@ -92,7 +92,8 @@ define('plugins/notifications/mail/register',
         openMail: function (e) {
             var cid = $(e.currentTarget).data('cid'),
                 overlay = $('#io-ox-notifications-overlay'),
-                sidepopup = overlay.prop('sidepopup');
+                sidepopup = overlay.prop('sidepopup'),
+                self = this;
             // toggle?
             if (sidepopup && cid === overlay.find('[data-cid]').data('cid')) {
                 sidepopup.close();
@@ -103,6 +104,9 @@ define('plugins/notifications/mail/register',
                         // open SidePopup without array
                         new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay.empty())
+                            .on("close", function () {
+                                overlay.trigger("mail-detail-closed");
+                            })
                             .show(e, function (popup) {
                                 popup.append(view.draw(data));
                             });

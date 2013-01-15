@@ -70,12 +70,13 @@ define('io.ox/portal/settings/pane',
                     ),
                     $('<ul class="dropdown-menu">').append(
                         _(allTypes).map(function (options) {
-                            if (options.unique && $.inArray(options.type, used)) {
+                            if (options.unique && _(used).contains(options.type)) {
                                 return "";
+                            } else {
+                                return $('<li>').append(
+                                    $('<a>', { href: '#', 'data-type': options.type }).text(options.title)
+                                );
                             }
-                            return $('<li>').append(
-                                $('<a>', { href: '#', 'data-type': options.type }).text(options.title)
-                            );
                         })
                     )
                     .on('click', 'a', addWidget)

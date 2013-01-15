@@ -109,25 +109,25 @@ define("io.ox/preview/main",
     }));
 
     // register audio typed renderer
-    if (Modernizr.audio) {
-        Renderer.point.extend(new Engine({
-            id: "audio",
-            index: 10,
-            supports: (function () {
-                var tmp = [];
-                $.each(Modernizr.audio, function (id, elem) {
-                    tmp.push(id);
-                });
-                return tmp;
-            }()),
-            draw: function (file) {
-                $("<audio>").attr({
-                    controls: "controls",
-                    src: file.dataURL
-                }).appendTo(this);
-            }
-        }));
-    }
+    //if (Modernizr.audio) {
+    //    Renderer.point.extend(new Engine({
+    //        id: "audio",
+    //        index: 10,
+    //        supports: (function () {
+    //            var tmp = [];
+    //            $.each(Modernizr.audio, function (id, elem) {
+    //                tmp.push(id);
+    //            });
+    //            return tmp;
+    //        }()),
+    //        draw: function (file) {
+    //            $("<audio>").attr({
+    //                controls: "controls",
+    //                src: file.dataURL
+    //            }).appendTo(this);
+    //        }
+    //    }));
+    //}
 
     function previewLoaded() {
         $(this).css('visibility', '').closest('div').idle();
