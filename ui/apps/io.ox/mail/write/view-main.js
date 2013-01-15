@@ -256,7 +256,7 @@ define("io.ox/mail/write/view-main",
             accountAPI.all().done(function (array) {
                 var select = node.find('select');
                 _.each(array, function (obj, index) {
-                    var option = $('<option>').text(_.noI18n(obj.primary_address));
+                    var option = $('<option>').text(_.noI18n(util.formatSender(obj.personal, obj.primary_address)));
 
                     option.data({
                         primaryaddress: obj.primary_address,
