@@ -192,7 +192,7 @@ define("io.ox/preview/main",
             index: 10,
             supports:  ['doc', 'dot', 'docx', 'dotx', 'docm', 'dotm', 'xls', 'xlt', 'xla', 'xlsx', 'xltx', 'xlsm',
              'xltm', 'xlam', 'xlsb', 'ppt', 'pot', 'pps', 'ppa', 'pptx', 'potx', 'ppsx', 'ppam', 'pptm', 'potm', 'ppsm', 'pdf',
-             'odt', 'ods', 'odp', 'odg', 'odc', 'odf', 'odi', 'odm' ],
+             'odt', 'ods', 'odp', 'odg', 'odc', 'odf', 'odi', 'odm', 'otg', 'otp', 'ott', 'ots' ],
             draw: function (file, options) {
 
                 var $a = clickableLink(file, function (e) {
