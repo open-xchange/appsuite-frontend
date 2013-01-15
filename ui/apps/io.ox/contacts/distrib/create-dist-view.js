@@ -298,6 +298,16 @@ define('io.ox/contacts/distrib/create-dist-view',
 
         },
 
+        drawFail: function () {
+            var self = this;
+            $('.error-alerts').empty();
+            $('.error-alerts').append(
+                $.fail(gt("Couldn't load all contact images."), function () {
+                    self.model.trigger("change:distribution_list");
+                })
+            );
+        },
+
         drawListetItem: function (o) {
             var self = this,
                 frame = $('<div>').addClass('listet-item').attr({
@@ -317,6 +327,9 @@ define('io.ox/contacts/distrib/create-dist-view',
                 $('<div>').addClass('person-selected-mail')
                 .text((o.mail))
             );
+            api.on('fail', function () {
+                self.drawFail();
+            });
             return frame;
         },
 

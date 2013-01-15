@@ -353,6 +353,7 @@ define('io.ox/contacts/api',
             defaultUrl = ox.base + '/apps/themes/default/dummypicture.png',
             id,
             fail = function () {
+                api.trigger('fail');
                 deferred.resolve(defaultUrl);
             };
 
