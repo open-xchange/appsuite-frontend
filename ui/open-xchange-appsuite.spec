@@ -98,6 +98,7 @@ rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
 
 %files manifest -f tmp/files
 %defattr(-,root,root)
+%dir /opt/open-xchange
 
 %files dev
 %defattr(-,root,root)
