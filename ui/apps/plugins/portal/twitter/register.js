@@ -121,7 +121,10 @@ define('plugins/portal/twitter/register',
     };
 
     function followButton(tweet) {
-        var button_config = "show_count=false&align=right&show_screen_name=false&dnt=true&screen_name=" + tweet.user.screen_name;
+        var button_config = "show_count=false&align=right&show_screen_name=false&dnt=true";
+        // add lang parameter (use the first 2 letters as language indicator for twitter
+        button_config += "&lang=" + ox.language.split('_')[0];
+        button_config += "&screen_name=" + tweet.user.screen_name;
         return $('<iframe>')
             .attr("src", "//platform.twitter.com/widgets/follow_button.html?" + button_config)
             .attr("allowtransparency", "true")
