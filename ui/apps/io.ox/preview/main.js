@@ -121,7 +121,6 @@ define("io.ox/preview/main",
                 return tmp;
             }()),
             draw: function (file) {
-                console.log(file);
                 var audiofile = $("<audio>").attr({
                     src: file.dataURL,
                     type: file.mimetype,
