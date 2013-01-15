@@ -143,7 +143,6 @@ define('plugins/portal/twitter/register',
     var renderTweet = function (tweet) {
         var tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str;
         var profileLink = 'https://twitter.com/' + tweet.user.screen_name;
-        console.log('date', tweet.created_at);
         var tweeted = new date.Local(parseDate(tweet.created_at)).format(date.DATE_TIME);
         var $myTweet = $('<div class="tweet">').data('entry', tweet).append(
             followButton(tweet),
