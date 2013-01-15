@@ -689,7 +689,9 @@ define('io.ox/core/tk/vgrid',
         // selection events
         this.selection
             .on('change', function (e, list) {
-                var id = _(list).map(function (obj) {
+                // prevent to long URLs
+                var MAXSELECTIONSAVE = 50,
+                    id = _(list.slice(0, MAXSELECTIONSAVE)).map(function (obj) {
                         return self.selection.serialize(obj);
                     }).join(',');
                 _.url.hash('id', id !== '' ? id : null);
