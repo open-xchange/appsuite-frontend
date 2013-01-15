@@ -93,11 +93,11 @@ rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
 %files
 %defattr(-,root,root)
 %doc readme.txt
+%dir %{docroot}
+%{docroot}
 
 %files manifest -f tmp/files
 %defattr(-,root,root)
-%dir /opt/open-xchange
-/opt/open-xchange/appsuite
 
 %files dev
 %defattr(-,root,root)
