@@ -29,6 +29,9 @@ define('io.ox/office/tk/view/view',
      * application window, and provides functionality to create and control the
      * top, bottom, and side pane elements.
      *
+     * @param {Application} app
+     *  The application containing this view instance.
+     *
      * @param {Object} [options]
      *  Additional options to control the appearance of the view. The following
      *  options are supported:
