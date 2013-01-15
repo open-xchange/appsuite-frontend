@@ -19,6 +19,10 @@ var url = require('url');
 var prefix = process.argv[2] || '/var/www/appsuite/';
 if (prefix.slice(-1) !== '/') prefix += '/';
 
+var tzModule = 'io.ox/core/date/tz/zoneinfo/';
+var tzPath = process.argv[3] || '/usr/share/zoneinfo/';
+if (tzPath.slice(-1) !== '/') tzPath += '/';
+
 var escapes = {
     '\x00': '\\x00', '\x01': '\\x01', '\x02': '\\x02', '\x03': '\\x03',
     '\x04': '\\x04', '\x05': '\\x05', '\x06': '\\x06', '\x07': '\\x07',
@@ -49,7 +53,11 @@ http.createServer(function (request, response) {
                            escape(list[i]) + "\"');\n");
             continue;
         }
-        var filename = path.join(prefix, 'apps', m[2]);
+        if (m[2].slice(0, tzModule.length) == tzModule) {
+            var filename = path.join(tzPath, m[2].slice(tzModule.length));
+        } else {
+            var filename = path.join(prefix, 'apps', m[2]);
+        }
         var valid = path.existsSync(filename);
         console.log(filename);
         if (!valid) {

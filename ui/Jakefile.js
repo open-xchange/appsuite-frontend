@@ -377,17 +377,6 @@ utils.copy(utils.list("lib", "mediaelement/"), {to: utils.dest("apps") });
 
 utils.copy(utils.list("lib", "ace/"), {to: utils.dest("apps")});
 
-//time zone database
-
-if (!path.existsSync("apps/io.ox/core/date/tz/zoneinfo")) {
-    var zoneinfo = utils.dest("apps/io.ox/core/date/tz/zoneinfo");
-    utils.file(zoneinfo, [], function() {
-        if (!path.existsSync(zoneinfo)) {
-            fs.symlinkSync("/usr/share/zoneinfo", zoneinfo);
-        }
-    });
-}
-
 // external apps
 
 desc('Builds an external app');
