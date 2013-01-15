@@ -41,6 +41,7 @@
 
     .toolbar .showall {
         position: absolute;
+        width: 120px;
         right: 30px;
         top: 10px;
     }

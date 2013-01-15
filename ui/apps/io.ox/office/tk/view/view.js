@@ -261,8 +261,24 @@ define('io.ox/office/tk/view/view',
                 // the controller key of the push button
                 buttonKey = Utils.getStringOption(options, 'buttonKey'),
                 // the alert node
-                alert = $.alert(title, message).removeClass('alert-error').addClass('alert-' + type + ' hide in');
-
+                alert = $.alert(title, message).removeClass('alert-error').addClass('alert-' + type + ' hide in'),
+                // the current alert node
+                oldAlert = win.nodes.main.find('.alert');
+            
+            if (oldAlert.length && oldAlert.css('display') !== 'none') {
+                // Analyze old alert to check if you already show the same alert
+                // We don't want to exchange the alert with same.
+                var alertHeading = oldAlert.children('.alert-heading');
+                
+                if (alertHeading.length) {
+                    var text = alertHeading.text();
+                    if (title === text) {
+                        // Check the heading and if identical just return
+                        return;
+                    }
+                }
+            }
+            
             // make the alert banner closeable
             if (Utils.getBooleanOption(options, 'closeable', false)) {
                 // alert can be closed by clicking anywhere in the alert

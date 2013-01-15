@@ -126,7 +126,7 @@ function jsFilter (data) {
     if (debug) return data.slice(-1) === '\n' ? data : data + '\n';
     tree = pro.ast_lift_variables(tree);
     tree = pro.ast_mangle(tree, { defines: {
-        STATIC_APPS: parse(process.env.STATIC_APPS || 'true')[1][0][1]
+        STATIC_APPS: parse(process.env.STATIC_APPS || 'false')[1][0][1]
     } });
     tree = pro.ast_squeeze(tree, { make_seqs: false });
     // use split_lines
@@ -233,9 +233,9 @@ _.each(_.map(['core', 'signin', 'core.appcache', 'signin.appcache'], utils.dest)
 
 utils.concat("boot.js",
     [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
-     debug ? utils.string(';STATIC_APPS=(' +
-                          (process.env.STATIC_APPS || 'true') + ');')
-           : utils.string(';'),
+     debug ? utils.string(';\nSTATIC_APPS = (' +
+                          (process.env.STATIC_APPS || 'false') + ');\n')
+           : utils.string(';\n'),
      "src/plugins.js", "src/jquery.plugins.js", "apps/io.ox/core/gettext.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
 
@@ -366,7 +366,7 @@ utils.copy(utils.list("lib/bootstrap", ["img/*"]),
 
 // jQuery UI
 
-utils.copy(utils.list("lib", ["jquery-ui.min.js", "jquery.mobile.touch.min.js"]),
+utils.copy(utils.list("lib", ["jquery-ui.min.js"]),
     { to: utils.dest("apps/io.ox/core/tk") });
 
 // Mediaelement.js

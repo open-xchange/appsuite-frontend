@@ -204,6 +204,9 @@ define('io.ox/calendar/week/perspective',
                     .on('delete', function () {
                         // Close dialog after delete
                         self.dialog.close();
+                    })
+                    .on('create update', function (e, obj) {
+                        self.view.setStartDate(obj.start_date);
                     });
 
                 // watch for folder change
