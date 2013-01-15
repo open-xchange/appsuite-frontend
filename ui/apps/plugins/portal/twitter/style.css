@@ -83,6 +83,10 @@
     display: block;
     float: right;
 }
+iframe.io-ox-twitter-follow {
+    width: 300px;
+    height: 20px;
+}
 .io-ox-twitter-retweet-source span, .io-ox-twitter-date, .io-ox-twitter-reply, .io-ox-twitter-retweet, .io-ox-twitter-favorite {
     font-size: 90%;
     color: gray;

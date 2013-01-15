@@ -130,7 +130,6 @@ define('plugins/portal/twitter/register',
             .attr("allowtransparency", "true")
             .attr("frameborder", "0")
             .attr("scrolling", "no")
-            .attr("style", "width:300px; height:20px;")
             .addClass("io-ox-twitter-follow");
     }
 
