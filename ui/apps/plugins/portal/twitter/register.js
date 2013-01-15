@@ -120,6 +120,17 @@ define('plugins/portal/twitter/register',
         return renderTweet(tweet);
     };
 
+    function followButton(tweet) {
+        var button_config = "show_count=false&align=right&show_screen_name=false&dnt=true&screen_name=" + tweet.user.screen_name;
+        return $('<iframe>')
+            .attr("src", "//platform.twitter.com/widgets/follow_button.html?" + button_config)
+            .attr("allowtransparency", "true")
+            .attr("frameborder", "0")
+            .attr("scrolling", "no")
+            .attr("style", "width:300px; height:20px;")
+            .addClass("io-ox-twitter-follow");
+    }
+
     function parseDate(str) {
         var v = str.split(' ');
         return new Date(Date.parse(v[1] + ' ' + v[2] + ', ' + v[5] + ' ' + v[3] + ' UTC'));
@@ -133,10 +144,7 @@ define('plugins/portal/twitter/register',
         console.log('date', tweet.created_at);
         var tweeted = new date.Local(parseDate(tweet.created_at)).format(date.DATE_TIME);
         var $myTweet = $('<div class="tweet">').data('entry', tweet).append(
-            $('<a class="io-ox-twitter-follow btn btn-small" href="https://twitter.com/intent/user">').append(
-                '<i>&nbsp;</i>',
-                $('<span>').text(gt('Follow'))
-            ),
+            followButton(tweet),
             $('<a>').attr({href: profileLink}).append(
                 $('<img>', {src: tweet.user.profile_image_url, 'class': 'profilePicture', alt: tweet.user.description})
             ),
