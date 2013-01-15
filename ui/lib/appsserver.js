@@ -16,7 +16,7 @@ var http = require('http');
 var path = require('path');
 var url = require('url');
 
-var prefix = process.argv[2] || '/var/www/ox7/apps/';
+var prefix = process.argv[2] || '/var/www/appsuite/';
 if (prefix.slice(-1) !== '/') prefix += '/';
 
 var escapes = {
@@ -49,12 +49,12 @@ http.createServer(function (request, response) {
                            escape(list[i]) + "\"');\n");
             continue;
         }
-        var filename = path.join(prefix, m[2]);
+        var filename = path.join(prefix, 'apps', m[2]);
         var valid = path.existsSync(filename);
         console.log(filename);
         if (!valid) {
             console.log('Could not read', filename);
-            response.write("console.log('Could not read " + filename + "');\n");
+            response.write("console.log('Could not read " + m[2] + "');\n");
             continue;
         }
         if (m[1]) {

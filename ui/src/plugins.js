@@ -72,7 +72,7 @@
                 var q = queue;
                 queue = [];
                 oldload(context, modulename,
-                    [ox.apiRoot, '/apps/', ox.base, ',', q.join()].join(''));
+                    [ox.apiRoot, '/apps/load/', ox.base, ',', q.join()].join(''));
                 if (queue.length) console.error('recursive require', queue);
             }
         };
