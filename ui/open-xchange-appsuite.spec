@@ -76,7 +76,7 @@ find "%{buildroot}$APPSUITE" \( -type f -o -type l \) \
     | sed -e 's,%{buildroot},,' >> tmp/files
 ## l10n ##
 #find tmp/l10n \( -type f -o -type l \) -name '*.## Lang ##.js' \
-#    | sed -e 's,tmp/l10n/,$APPSUITE,' > tmp/files-## lang ##
+#    | sed -e "s,tmp/l10n/,$APPSUITE," > tmp/files-## lang ##
 ## end l10n ##
 cp -r tmp/l10n/apps "%{buildroot}$APPSUITE"
 
