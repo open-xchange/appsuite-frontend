@@ -573,7 +573,7 @@ define('io.ox/mail/actions',
 
                         popupBody.append("<div>" + gt('Note') + "</div>");
                         var noteInput = $('<textarea>', { width: '90%', rows: "5", value: gt('Mail reminder for') + ": " + data.subject + " \n" +
-                            gt('From') + ": " + data.from[0][0] + ", " + data.from[0][1] })
+                            gt('From') + ": " + util.formatSender(data.from[0][0], data.from[0][1]) })
                             .focus(function ()
                                     {
                                     this.select();
