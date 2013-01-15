@@ -32,6 +32,9 @@ define('io.ox/mail/actions',
     var isDraftFolder = function (folder_id) {
             return _.contains(account.getFoldersByType('drafts'), folder_id);
         },
+        isDraftMail = function (mail) {
+            return isDraftFolder(mail.folder_id) || ((mail.flags & 4) > 0);
+        },
         Action = links.Action;
 
     // actions
@@ -83,7 +86,7 @@ define('io.ox/mail/actions',
         requires: function (e) {
             // other recipients that me?
             return e.collection.has('toplevel', 'one') &&
-                util.hasOtherRecipients(e.context) && !isDraftFolder(e.context);
+                util.hasOtherRecipients(e.context) && !isDraftMail(e.context);
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -98,7 +101,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/reply', {
         id: 'reply',
         requires: function (e) {
-            return e.collection.has('toplevel', 'one') && !isDraftFolder(e.context.folder_id);
+            return e.collection.has('toplevel', 'one') && !isDraftMail(e.context);
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -128,7 +131,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/edit', {
         id: 'edit',
         requires: function (e) {
-            return e.collection.has('toplevel', 'one') && isDraftFolder(e.context.folder_id);
+            return e.collection.has('toplevel', 'one') && isDraftMail(e.context);
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
