@@ -109,25 +109,72 @@ define("io.ox/preview/main",
     }));
 
     // register audio typed renderer
-    //if (Modernizr.audio) {
-    //    Renderer.point.extend(new Engine({
-    //        id: "audio",
-    //        index: 10,
-    //        supports: (function () {
-    //            var tmp = [];
-    //            $.each(Modernizr.audio, function (id, elem) {
-    //                tmp.push(id);
-    //            });
-    //            return tmp;
-    //        }()),
-    //        draw: function (file) {
-    //            $("<audio>").attr({
-    //                controls: "controls",
-    //                src: file.dataURL
-    //            }).appendTo(this);
-    //        }
-    //    }));
-    //}
+    if (Modernizr.audio) {
+        Renderer.point.extend(new Engine({
+            id: "audio",
+            index: 10,
+            supports: (function () {
+                var tmp = [];
+                $.each(Modernizr.audio, function (id, elem) {
+                    tmp.push(id);
+                });
+                return tmp;
+            }()),
+            draw: function (file) {
+                console.log(file);
+                var audiofile = $("<audio>").attr({
+                    src: file.dataURL,
+                    type: file.mimetype,
+                    preload: 'metadata',
+                    controls: 'control',
+                    autoplay: 'false'
+                }).hide().appendTo(this);
+                var self = this;
+                require(['mediaelement/mediaelement-and-player',
+                        'less!mediaelement/mediaelementplayer.css'], function () {
+
+                    var pw,
+                    wW = $(window).width();
+                    if (wW < 700 && wW > 510) { pw = 480; }
+                    if (wW < 1085 && wW > 900) { pw = 300; }
+
+                    self.find('video, audio').mediaelementplayer({
+                        audioWidth: pw,
+                        videoWidth: pw,
+                        plugins: ['flash', 'silverlight'],
+                        enableAutosize: true,
+                        timerRate: 250,
+                        features: ['playpause', 'progress', 'current', 'volume'],
+                        enablePluginDebug: true,
+                        keyActions: [{
+                            keys: [32, 179], // SPACE
+                            action: function (player, media) {
+                                if (media.paused || media.ended) {
+                                    media.play();
+                                } else {
+                                    media.pause();
+                                }
+                            }
+                        },
+                        {
+                            keys: [39, 228], // RIGHT
+                            action: function (player, media) {
+                                var newVolume = Math.min(media.volume + 0.1, 1);
+                                media.setVolume(newVolume);
+                            }
+                        },
+                        {
+                            keys: [37, 227], // LEFT
+                            action: function (player, media) {
+                                var newVolume = Math.max(media.volume - 0.1, 0);
+                                media.setVolume(newVolume);
+                            }
+                        }]
+                    });
+                });
+            }
+        }));
+    }
 
     function previewLoaded() {
         $(this).css('visibility', '').closest('div').idle();
