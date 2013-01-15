@@ -198,7 +198,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         };
 
         getNode = function (id) {
-            return container.find('.selectable[data-obj-id="' + self.serialize(id) + '"]');
+            return $('.selectable[data-obj-id="' + self.serialize(id) + '"]', container);
         };
 
         isSelected = function (id) {
@@ -211,7 +211,8 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
                 selectedItems[key] = id;
                 getNode(key)
                     .addClass(self.classSelected)
-                    .find('input.reflect-selection').attr('checked', 'checked').end()
+                    .find('input.reflect-selection')
+                    .attr('checked', 'checked').end()
                     .intoViewport(container);
                 last = id;
                 lastIndex = getIndex(id);
@@ -229,8 +230,8 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             var key = self.serialize(id);
             delete selectedItems[key];
             getNode(key)
-                .find('input.reflect-selection').removeAttr('checked').end()
-                .removeClass(self.classSelected);
+                .removeClass(self.classSelected)
+                .find('input.reflect-selection').removeAttr('checked');
             self.trigger('deselect', key);
         };
 
@@ -344,16 +345,16 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
          */
         this.update = function () {
             // get nodes
-            var nodes = container.find('.selectable'),
+            var nodes = $('.selectable', container),
                 i = 0, $i = nodes.length, node = null;
             for (; i < $i; i++) {
                 node = nodes.eq(i);
                 // is selected?
                 if (isSelected(node.attr('data-obj-id'))) {
-                    node.find('input.reflect-selection').attr('checked', 'checked').end()
+                    $('input.reflect-selection', node).attr('checked', 'checked').end()
                         .addClass(self.classSelected);
                 } else {
-                    node.find('input.reflect-selection').removeAttr('checked');
+                    $('input.reflect-selection', node).removeAttr('checked');
                 }
             }
             return this;
@@ -490,7 +491,6 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
                     select(observedItems[a]);
                 }
                 // event
-                changed();
             }
             return this;
         };
