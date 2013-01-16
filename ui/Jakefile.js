@@ -600,6 +600,7 @@ utils.topLevelTask('init-packaging', [], function() {
 (function () {
     var packagingVariables = {
         '': '',
+        '@': '@',
         'package': pkgName,
         timestamp: formatDate(new Date())
     };
