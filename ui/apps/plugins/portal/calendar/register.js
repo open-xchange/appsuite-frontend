@@ -15,10 +15,11 @@
 define("plugins/portal/calendar/register",
     ["io.ox/core/extensions",
      "io.ox/core/date",
+     "io.ox/calendar/util",
      "gettext!plugins/portal",
      'io.ox/core/strings',
      'io.ox/calendar/api'
-    ], function (ext, date, gt, strings, api) {
+    ], function (ext, date, util, gt, strings, api) {
 
     'use strict';
 
@@ -73,9 +74,9 @@ define("plugins/portal/calendar/register",
 
             if (appointments.length > 0) {
                 _(appointments).each(function (nextApp) {
-                    var deltaT = printTimespan(nextApp.start_date, new Date().getTime()),
-                        start = new date.Local(nextApp.start_date), end = new date.Local(nextApp.end_date),
-                        timespan = start.formatInterval(end, date.DATE);
+                    var start = new date.Local(nextApp.start_date),
+                        timespan = util.getSmartDate(nextApp.start_date, true) + ' ' + start.format(date.TIME);
+                        // deltaT = printTimespan(nextApp.start_date, new Date().getTime()),
                     $content.append(
                         $('<div class="item">')
                         .data('item', nextApp)
