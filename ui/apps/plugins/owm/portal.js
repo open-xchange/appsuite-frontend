@@ -1,6 +1,8 @@
 define("plugins/owm/portal", ["io.ox/core/extensions"], function (ext) {
 	"use strict";
 
+    console.log("LOAD!");
+
 	ext.point("io.ox/portal/widget/owm1").extend({
         title: "Hello World",
         draw: function () {

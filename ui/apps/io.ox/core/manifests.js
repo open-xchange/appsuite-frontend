@@ -126,12 +126,13 @@ define.async('io.ox/core/manifests',
             manifestManager.apps = {};
             
             _(ox.serverConfig.manifests).each(process);
+            _(require(ox.base + "/src/manifests.js")).each(process);
         }
     };
 
     if (_.url.hash('customManifests')) {
         var def = $.Deferred();
-        require(ox.base + "/src/manifests.js", function (m) {
+        require([ox.base + "/src/manifests.js"], function (m) {
             _(m).each(process);
             def.resolve(self);
         });
