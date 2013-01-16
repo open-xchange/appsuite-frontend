@@ -73,9 +73,9 @@ define('io.ox/calendar/week/perspective',
             };
 
             if (obj.recurrence_type > 0) {
-                var noSeriesEdit = obj.drag_move && obj.drag_move !== 0,
-                    dialog = new dialogs.ModalDialog();
-                if (noSeriesEdit) {
+                var dialog = new dialogs.ModalDialog();
+                if (obj.drag_move && obj.drag_move !== 0) {
+                    delete obj.drag_move;
                     dialog
                         .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
                         .addButton('appointment', gt('Yes'))
@@ -99,6 +99,8 @@ define('io.ox/calendar/week/perspective',
                                     // calculate new dates if old dates are available
                                     data.start_date += (obj.start_date - obj.old_start_date);
                                     data.end_date += (obj.end_date - obj.old_end_date);
+                                    delete obj.old_start_date;
+                                    delete obj.old_end_date;
                                     apiUpdate(data);
                                 });
                             }

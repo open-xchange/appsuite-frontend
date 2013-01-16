@@ -133,14 +133,14 @@ define('io.ox/calendar/actions',
                                     // edit the series, discard recurrence position
                                     delete o.recurrence_position;
                                 }
-                                if (action === 'appointment') {
-                                    // do nothing
-                                }
 
                                 // disable cache with second param
                                 api.get(o, false).done(function (data) {
                                     if (m.reuse('edit', data, {action: action})) return;
                                     m.getApp().launch().done(function () {
+                                        if (action === 'appointment') {
+                                            data = api.removeRecurrenceInformation(data);
+                                        }
                                         this.edit(data, {action: action});
                                     });
                                 });
