@@ -43,7 +43,6 @@ CACHE:
 @base@/apps/io.ox/core.de_DE.js
 @base@/apps/io.ox/core/date/date.en_US.json
 @base@/apps/io.ox/core/date/date.de_DE.json
-@base@/apps/io.ox/core/date/tz/zoneinfo/Europe/Berlin
 @base@/apps/io.ox/contacts/api.js
 @base@/apps/io.ox/mail/settings/defaults.js
 @base@/apps/io.ox/core/tk/upload.less
