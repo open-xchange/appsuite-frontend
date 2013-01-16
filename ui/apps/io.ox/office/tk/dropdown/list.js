@@ -29,6 +29,11 @@ define('io.ox/office/tk/dropdown/list',
      * containing a list of items. Extends the DropDown mix-in class with
      * functionality specific to the list drop-down element.
      *
+     * Instances of this class trigger the following events:
+     * - 'item:create': After a new list item has been added to this list. The
+     *      event handler receives the button control representing the new list
+     *      item (jQuery object) as second parameter.
+     *
      * Note: This is a mix-in class supposed to extend an existing instance of
      * the class Group or one of its derived classes. Expects the symbol 'this'
      * to be bound to an instance of Group.
@@ -189,6 +194,8 @@ define('io.ox/office/tk/dropdown/list',
                 listItemGroup.getNode().append(button);
             }
 
+            // notify listeners
+            this.trigger('item:create', button);
             return button;
         };
 

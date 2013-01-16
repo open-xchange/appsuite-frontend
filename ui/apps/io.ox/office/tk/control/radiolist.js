@@ -137,7 +137,7 @@ define('io.ox/office/tk/control/radiolist',
         }
         /**
          * Returns the value of the clicked option button, taking the option
-         * 'toggleClick' into account,
+         * 'toggleClick' into account.
          */
         function itemClickHandler(button) {
             var toggleClick = Utils.isButtonSelected(button) && !_.isNull(toggleValue) && !_.isUndefined(toggleValue);
