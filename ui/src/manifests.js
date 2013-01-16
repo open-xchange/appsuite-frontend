@@ -1,7 +1,7 @@
 define(function () {
     return [
         {
-            namespace: ['io.ox/portal/main', 'io.ox/portal/settings/pane'],
+            namespace: ['io.ox/portal/widgets'],
             path: 'plugins/owm/portal'
         }
     ];
