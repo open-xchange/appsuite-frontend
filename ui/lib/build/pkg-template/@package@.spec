@@ -11,7 +11,7 @@ BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 BuildRequires:  open-xchange-appsuite-devel
 
-Requires:       open-xchange-appsuite-manifest, @package@-l10n
+Requires:       open-xchange-appsuite-manifest
 
 %description
 @description@

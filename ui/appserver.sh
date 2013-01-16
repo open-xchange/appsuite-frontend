@@ -2,7 +2,7 @@
 
 if command -v nodejs > /dev/null; then NODEJS=nodejs; else NODEJS=node; fi
 
-if [ "$1" ]
+if [ -n "$1" ]
 then
     $NODEJS lib/appsserver.js "$@"
 else
