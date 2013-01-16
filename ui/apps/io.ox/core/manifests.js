@@ -126,7 +126,9 @@ define.async('io.ox/core/manifests',
             manifestManager.apps = {};
             
             _(ox.serverConfig.manifests).each(process);
-            _(require(ox.base + "/src/manifests.js")).each(process);
+            if (_.url.hash('customManifests')) {
+                _(require(ox.base + "/src/manifests.js")).each(process);
+            }
         }
     };
 
@@ -141,5 +143,5 @@ define.async('io.ox/core/manifests',
         return $.Deferred().resolve(self);
     }
 
-    return self;
+    return $.Deferred().resolve(self);
 });
