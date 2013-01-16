@@ -204,7 +204,7 @@ define("io.ox/files/list/view-detail",
                 $comment = $('<div class="add-comment">').hide().append(
                     $('<label>').append(
                         $.txt(gt('Version Comment')), $('<br>'),
-                        $commentArea = $('<textarea rows="5">')
+                        $commentArea = $('<textarea rows="5"></textarea>')
                     )
                 )
             );
