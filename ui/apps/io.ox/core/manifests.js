@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/manifests',
+define.async('io.ox/core/manifests',
     ['io.ox/core/extensions',
      'io.ox/core/capabilities'
     ], function (ext, capabilities) {
@@ -128,6 +128,17 @@ define('io.ox/core/manifests',
             _(ox.serverConfig.manifests).each(process);
         }
     };
+
+    if (_.url.hash('customManifests')) {
+        var def = $.Deferred();
+        require(ox.base + "/src/manifests.js", function (m) {
+            _(m).each(process);
+            def.resolve(self);
+        });
+        return def;
+    } else {
+        return $.Deferred().resolve(self);
+    }
 
     return self;
 });
