@@ -298,7 +298,7 @@ define('io.ox/mail/write/main',
 
         app.setFrom = function (data) {
             return this.getPrimaryAddressFromFolder(data).done(function (from) {
-                view.leftside.find('.fromselect-wrapper select').val(from.primaryaddress);
+                view.leftside.find('.fromselect-wrapper select').val(mailUtil.formatSender(from.displayname, from.primaryaddress));
             });
         };
 
