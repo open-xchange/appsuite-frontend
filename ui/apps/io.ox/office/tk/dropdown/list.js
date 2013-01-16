@@ -162,6 +162,9 @@ define('io.ox/office/tk/dropdown/list',
          * @param {Object} [options]
          *  A map of options to control the properties of the new button
          *  representing the item. See method Utils.createButton() for details.
+         *  Additionally, the following options are supported:
+         *  @param {String} [options.tooltip]
+         *      Tool tip text shown when the mouse hovers the button.
          *
          * @returns {jQuery}
          *  The button element representing the new list item, as jQuery
@@ -175,6 +178,9 @@ define('io.ox/office/tk/dropdown/list',
                 button = Utils.createButton(options).addClass(Group.FOCUSABLE_CLASS),
                 // insertion index for sorted lists
                 index = -1;
+
+            // add tool tip
+            Utils.setControlTooltip(button, Utils.getStringOption(options, 'tooltip'), 'bottom');
 
             // find insertion index for sorted lists
             if (sorted) {
