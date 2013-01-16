@@ -14,7 +14,8 @@
 define('io.ox/office/preview/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/view/view',
-     'gettext!io.ox/office/main'
+     'gettext!io.ox/office/main',
+     'io.ox/office/preview/actions'
     ], function (Utils, View, gt) {
 
     'use strict';

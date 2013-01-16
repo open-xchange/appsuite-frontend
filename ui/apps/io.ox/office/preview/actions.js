@@ -22,10 +22,6 @@ define('io.ox/office/preview/actions',
 
     var POINT = 'io.ox/office/preview';
 
-    // static class Actions ===================================================
-
-    var Actions = { MODULE_NAME: POINT };
-
     // extension points =======================================================
 
     // close application ------------------------------------------------------
@@ -49,9 +45,5 @@ define('io.ox/office/preview/actions',
         label: gt('Close'),
         ref: POINT + '/actions/close'
     });
-
-    // exports ================================================================
-
-    return Actions;
 
 });

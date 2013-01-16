@@ -19,11 +19,11 @@ define('io.ox/office/tk/application',
 
     'use strict';
 
-    // class OfficeApplication ================================================
+    // class FileBasedApplication =============================================
 
     /**
-     * A mix-in class that defines common public methods for an office
-     * application object.
+     * A mix-in class that defines common public methods for an application
+     * that is based on a document file.
      *
      * @constructor
      *
@@ -33,7 +33,7 @@ define('io.ox/office/tk/application',
      *  A map of options containing initialization data for the new application
      *  object.
      */
-    function OfficeApplication(options) {
+    function FileBasedApplication(options) {
 
         var // self reference
             self = this,
@@ -63,8 +63,8 @@ define('io.ox/office/tk/application',
          * Must not be called if the application already contains a valid file
          * descriptor.
          *
-         * @returns {OfficeApplication}
-         *  A reference to this application object.
+         * @returns {FileBasedApplication}
+         *  A reference to this application instance.
          */
         this.setFileDescriptor = function (newFile) {
             // only set new file descriptor, do not change it
@@ -96,7 +96,7 @@ define('io.ox/office/tk/application',
         this.buildServiceUrl = function (service, options) {
 
             if (!ox.session) {
-                Utils.warn('OfficeApplication.buildServiceUrl(): missing session');
+                Utils.warn('FileBasedApplication.buildServiceUrl(): missing session');
                 return;
             }
 
@@ -119,8 +119,9 @@ define('io.ox/office/tk/application',
          *
          * @param {Object} [options]
          *  Additional options that affect the creation of the filter URL. See
-         *  method OfficeApplication.buildServiceUrl() for details. Information
-         *  about the file currently edited will be inserted automatically.
+         *  method FileBasedApplication.buildServiceUrl() for details.
+         *  Information about the file currently edited will be inserted
+         *  automatically.
          *
          * @returns {String|Undefined}
          *  The final filter URL; or undefined, if there is no valid session
@@ -169,6 +170,90 @@ define('io.ox/office/tk/application',
                 def = $.ajax(Utils.extendOptions({ type: 'GET', dataType: 'json' }, options));
             }
 
+            return def.promise();
+        };
+
+        /**
+         * Extracts the result data object from the passed response object of
+         * an AJAX request.
+         *
+         * @param {Object} response
+         *  The response object of the AJAX request.
+         *
+         * @return {Object|Undefined}
+         *  The result data object, if existing, otherwise undefined.
+         */
+        this.extractAjaxResultData = function (response) {
+
+            var // the data object of the passed AJAX response
+                data = Utils.getOption(response, 'data');
+
+            // convert JSON result string to object (may throw), TODO: still required?
+            if (_.isString(data)) {
+                try {
+                    data = JSON.parse(data);
+                } catch (ex) {
+                    return;
+                }
+            }
+
+            // check that the data attribute is an object
+            return _.isObject(data) ? data : undefined;
+        };
+
+        /**
+         * Reads the specified file and returns the promise of a deferred that
+         * will be resolved or rejected depending on the result of the read
+         * operation. The file will be converted to a data URL containing the
+         * file contents as Base-64 encoded data and passed to the resolved
+         * promise.
+         *
+         * @param {File} fileDesc
+         *  The descriptor of the file to be loaded.
+         *
+         * @returns {jQuery.Promise}
+         *  The promise of a deferred that will be resolved with the result object
+         *  containing the data URL, or rejected if the read operation failed.
+         */
+        this.readClientFileAsDataUrl = function (fileDesc) {
+
+            var // deferred result object
+                def = $.Deferred(),
+                // create a browser file reader instance
+                reader = window.FileReader ? new window.FileReader() : null;
+
+            if (reader) {
+
+                // register the load event handler, deferred will be resolved with data URL
+                reader.onload = function (event) {
+                    if (event && event.target && _.isString(event.target.result)) {
+                        def.resolve(event.target.result);
+                    } else {
+                        def.reject();
+                    }
+                };
+
+                // register error event handlers, deferred will be rejected
+                reader.onerror = reader.onabort = function (event) {
+                    def.reject();
+                };
+
+                // register progress handler, deferred will be notified with percentage
+                reader.onprogress = function (event) {
+                    if (event.lengthComputable) {
+                        def.notify(Math.round((event.loaded / event.total) * 100));
+                    }
+                };
+
+                // read the file and generate a data URL
+                reader.readAsDataURL(fileDesc);
+
+            } else {
+                // file reader not supported
+                def.reject();
+            }
+
+            // return the deferred result
             return def.promise();
         };
 
@@ -249,11 +334,14 @@ define('io.ox/office/tk/application',
                     this.sendAjaxRequest({
                         url: this.getDocumentFilterUrl('renamedocument', { filename: shortName + '.' + extension })
                     })
-                    .done(function (response) {
-                        var data = Application.extractAjaxResultData(response);
-                        if (data && _.isString(data.filename)) {
+                    .pipe(function (response) {
+                        var data = self.extractAjaxResultData(response);
+                        return Utils.getStringOption(data, 'filename');
+                    })
+                    .done(function (fileName) {
+                        if (fileName) {
                             FilesAPI.propagate('change', file).then(
-                                function () { def.resolve(data.filename); },
+                                function () { def.resolve(fileName); },
                                 function () { def.reject(); }
                             );
                         } else {
@@ -276,8 +364,8 @@ define('io.ox/office/tk/application',
          * the application does not contain a file descriptor, shows the
          * localized word 'Unnamed' as title.
          *
-         * @returns {OfficeApplication}
-         *  A reference to this application object.
+         * @returns {FileBasedApplication}
+         *  A reference to this application instance.
          */
         this.updateTitle = function () {
             this.setTitle(this.getShortFileName() || gt('Unnamed'));
@@ -301,8 +389,8 @@ define('io.ox/office/tk/application',
          *  The event handler function that will be bound to the specified
          *  events.
          *
-         * @returns {OfficeApplication}
-         *  A reference to this application object.
+         * @returns {FileBasedApplication}
+         *  A reference to this application instance.
          */
         this.registerEventHandler = function (target, events, handler) {
 
@@ -320,7 +408,7 @@ define('io.ox/office/tk/application',
         /**
          * Registers a handler at the browser window that listens to resize
          * events. The event handler will be activated when the application
-         * window is visible, and deactivated, if the application window is
+         * window is visible; and deactivated, when the application window is
          * hidden.
          *
          * @param {Function} resizeHandler
@@ -328,8 +416,8 @@ define('io.ox/office/tk/application',
          *  window. Will be triggered once when the application window becomes
          *  visible.
          *
-         * @returns {OfficeApplication}
-         *  A reference to this application object.
+         * @returns {FileBasedApplication}
+         *  A reference to this application instance.
          */
         this.registerWindowResizeHandler = function (resizeHandler) {
             this.getWindow()
@@ -347,132 +435,11 @@ define('io.ox/office/tk/application',
         // set application title to current file name
         this.updateTitle();
 
-    } // class OfficeApplication
+    } // class FileBasedApplication
 
     // static class Application ===============================================
 
     var Application = {};
-
-    // AJAX and file system ---------------------------------------------------
-
-    /**
-     * Extracts the result data object from the passed response object of
-     * an AJAX import request.
-     *
-     * @param {Object} response
-     *  The response object of the AJAX request.
-     *
-     * @return {Object|Undefined}
-     *  The result data object, if existing, otherwise undefined.
-     */
-    Application.extractAjaxResultData = function (response) {
-
-        // check that the AJAX response is an object
-        if (!_.isObject(response)) {
-            return;
-        }
-
-        // convert JSON result string to object (may throw)
-        if (_.isString(response.data)) {
-            try {
-                response.data = JSON.parse(response.data);
-            } catch (ex) {
-                return;
-            }
-        }
-
-        // check that the data attribute is an object
-        if (!_.isObject(response.data)) {
-            return;
-        }
-
-        // response data object is valid, return it
-        return response.data;
-    };
-
-    /**
-     * Extracts a string attribute from the passed response object of an AJAX
-     * import request.
-     *
-     * @param {Object} response
-     *  The response object of the AJAX request.
-     *
-     * @param {String} attribName
-     *  The name of the attribute contained in the response data object.
-     *
-     * @return {String|Undefined}
-     *  The attribute value, if existing, otherwise undefined.
-     */
-    Application.extractAjaxStringResult = function (response, attribName) {
-
-        var // the result data
-            data = Application.extractAjaxResultData(response);
-
-        // check that the result data object contains a string attribute
-        if (!_.isObject(data) || !_.isString(data[attribName])) {
-            return;
-        }
-
-        // the result data object is valid, return the attribute value
-        return data[attribName];
-    };
-
-    /**
-     * Reads the specified file and returns a deferred's promise that will be
-     * resolved or rejected depending on the result of the read operation. The
-     * file will be converted to a data URL containing the file contents as
-     * Base-64 encoded data and passed to the promise object.
-     *
-     * @param {File} file
-     *  The file descriptor.
-     *
-     * @returns {jQuery.Promise}
-     *  The promise of a deferred that will be resolved with the result object
-     *  containing the data URL, or rejected if the read operation failed.
-     */
-    Application.readFileAsDataUrl = function (file) {
-
-        var // deferred result object
-            def = $.Deferred(),
-            // create a browser file reader instance
-            reader = window.FileReader ? new window.FileReader() : null;
-
-        if (reader) {
-
-            // register the load event handler, deferred will be resolved with data URL
-            reader.onload = function (event) {
-                if (event && event.target && _.isString(event.target.result)) {
-                    def.resolve(event.target.result);
-                } else {
-                    def.reject();
-                }
-            };
-
-            // register error event handlers, deferred will be rejected
-            reader.onerror = reader.onabort = function (event) {
-                def.reject();
-            };
-
-            // register progress handler, deferred will be notified with percentage
-            reader.onprogress = function (event) {
-                if (event.lengthComputable) {
-                    def.notify(Math.round((event.loaded / event.total) * 100));
-                }
-            };
-
-            // read the file and generate a data URL
-            reader.readAsDataURL(file);
-
-        } else {
-            // file reader not supported
-            def.reject();
-        }
-
-        // return the deferred result
-        return def.promise();
-    };
-
-    // application ------------------------------------------------------------
 
     /**
      * Tries to find a running application which is working on a file described
@@ -537,7 +504,7 @@ define('io.ox/office/tk/application',
             app = ox.ui.createApp({ name: moduleName, userContent: _.isString(icon), userContentIcon: icon });
 
         // mix-in constructor for common methods
-        OfficeApplication.call(app, options);
+        FileBasedApplication.call(app, options);
         // mix-in constructor for methods specific for the application type
         ApplicationMixinClass.call(app, options);
 

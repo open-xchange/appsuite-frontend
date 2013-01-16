@@ -14,13 +14,12 @@
 define('io.ox/office/preview/main',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/application',
-     'io.ox/office/preview/actions',
      'io.ox/office/preview/model',
      'io.ox/office/preview/controller',
      'io.ox/office/preview/view',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.css'
-    ], function (Utils, Application, Actions, PreviewModel, PreviewController, PreviewView, gt) {
+    ], function (Utils, Application, PreviewModel, PreviewController, PreviewView, gt) {
 
     'use strict';
 
@@ -198,7 +197,7 @@ define('io.ox/office/preview/main',
     // io.ox.launch() expects an object with the method getApp()
     return {
         getApp: function (options) {
-            return Application.getOrCreateApplication(Actions.MODULE_NAME, PreviewApplication, options);
+            return Application.getOrCreateApplication('io.ox/office/preview', PreviewApplication, options);
         }
     };
 

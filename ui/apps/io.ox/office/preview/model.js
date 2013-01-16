@@ -13,9 +13,9 @@
 
 define('io.ox/office/preview/model',
     ['io.ox/core/event',
-     'io.ox/office/tk/application',
+     'io.ox/office/tk/utils',
      'less!io.ox/office/preview/style.css'
-    ], function (Events, Application) {
+    ], function (Events, Utils) {
 
     'use strict';
 
@@ -32,10 +32,10 @@ define('io.ox/office/preview/model',
 
             // the root node containing the previewed document
             node = $('<div>').addClass('page'),
-            
+
             // the job id to be used for future page requests
             jobID = 0,
-            
+
             // the total page count of the document
             pageCount = 0,
 
@@ -46,7 +46,7 @@ define('io.ox/office/preview/model',
 
         function showPage(page) {
             if ((page !== curPage) && (page >= 1) && (page <= pageCount)) {
-                
+
                 // do not try to load, if file descriptor is missing
                 if (app.hasFileDescriptor()) {
                     // load the file
@@ -54,15 +54,14 @@ define('io.ox/office/preview/model',
                         url: app.getDocumentFilterUrl('importdocument', { filter_format: 'html', filter_action: 'getpage', job_id: jobID, page_number: page })
                     })
                     .pipe(function (response) {
-                        return Application.extractAjaxStringResult(response, 'HTMLPages');
+                        return app.extractAjaxResultData(response);
                     })
-                    .done(function (htmlPage) {
-                        node.get()[0].innerHTML = htmlPage;
-                    })
-                    .fail(function () {
+                    .done(function (data) {
+                        var htmlPage = Utils.getStringOption(data, 'HTMLPages', '');
+                        node[0].innerHTML = htmlPage;
                     });
                 }
-                
+
                 self.trigger('showpage', curPage = page);
             }
         }
@@ -81,7 +80,7 @@ define('io.ox/office/preview/model',
             jobID = _jobID;
             pageCount = _pageCount;
             curPage = 0;
-            
+
             if (_.isNumber(jobID) && _.isNumber(pageCount)) {
                 showPage(1);
             } else {
@@ -129,7 +128,7 @@ define('io.ox/office/preview/model',
 
         this.destroy = function () {
             this.events.destroy();
-            
+
             if (jobID !== 0) {
                 app.sendAjaxRequest({
                     url: app.getDocumentFilterUrl('importdocument', { filter_format: 'html', filter_action: 'endconvert', job_id: jobID })
