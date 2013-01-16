@@ -79,7 +79,7 @@ define('io.ox/portal/widgets',
         getAllTypes: function () {
             return _.chain(availablePlugins)
                 .map(function (id) {
-                    var type = id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1').toLowerCase();
+                    var type = id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1');
                     return ext.point('io.ox/portal/widget/' + type + '/settings').options();
                 })
                 .filter(function (obj) {
