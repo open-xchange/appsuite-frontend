@@ -155,7 +155,11 @@ define('io.ox/mail/view-detail',
         }, 1000); // 1 second(s)
     };
 
-    var blockquoteMore, blockquoteClickOpen, blockquoteClickClose, mailTo;
+    var blockquoteMore, blockquoteClickOpen, blockquoteClickClose, blockquoteCollapsedHeight, mailTo;
+
+    blockquoteCollapsedHeight = function () {
+        return $.browser.chrome ? 57 : 60;
+    };
 
     blockquoteMore = function (e) {
         e.preventDefault();
@@ -181,7 +185,7 @@ define('io.ox/mail/view-detail',
         }
         $(this).off('dblclick.close')
             .on('click.open', blockquoteClickOpen)
-            .stop().animate({ maxHeight: '60px' }, 300, function () {
+            .stop().animate({ maxHeight: blockquoteCollapsedHeight() }, 300, function () {
                 $(this).addClass('collapsed-blockquote');
             });
         $(this).next().show();
@@ -388,7 +392,7 @@ define('io.ox/mail/view-detail',
                     content.find('blockquote').not(content.find('blockquote blockquote')).each(function () {
                         var node = $(this);
                         node.addClass('collapsed-blockquote')
-                            .css({ opacity: 0.75, maxHeight: '60px' })
+                            .css({ opacity: 0.75, maxHeight: blockquoteCollapsedHeight() })
                             .on('click.open', blockquoteClickOpen)
                             .on('dblclick.close', blockquoteClickClose)
                             .after(
@@ -396,7 +400,7 @@ define('io.ox/mail/view-detail',
                                 .on('click', blockquoteMore)
                             );
                         setTimeout(function () {
-                            if (node.prop('scrollHeight') < 60) { // 3 rows a 20px line-height
+                            if (node.prop('scrollHeight') < blockquoteCollapsedHeight()) { // 3 rows a 20px line-height
                                 node.removeClass('collapsed-blockquote')
                                     .css('maxHeight', '')
                                     .off('click.open dblclick.close')
