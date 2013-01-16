@@ -22,6 +22,7 @@ define('io.ox/portal/widgets',
 
     // application object
     var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
+        allTypes = ext.point('io.ox/portal/widget').chain().pluck('id').value(),
         collection = new Backbone.Collection([]);
 
     collection.comparator = function (a, b) {
@@ -59,7 +60,7 @@ define('io.ox/portal/widgets',
                     return obj;
                 })
                 .filter(function (obj) {
-                    return _(availablePlugins).contains(obj.plugin);
+                    return _(availablePlugins).contains(obj.plugin) || _(allTypes).contains(obj.type);
                 })
                 .value();
         },
@@ -77,7 +78,7 @@ define('io.ox/portal/widgets',
         },
 
         getAllTypes: function () {
-            return _.chain(availablePlugins)
+            return _.chain(availablePlugins.concat(allTypes))
                 .map(function (id) {
                     var type = id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1');
                     return ext.point('io.ox/portal/widget/' + type + '/settings').options();
