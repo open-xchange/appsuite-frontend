@@ -11,7 +11,9 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/autocomplete', function () {
+define('io.ox/core/tk/autocomplete',
+    ['gettext!io.ox/mail'
+    ], function (gt) {
 
     'use strict';
 
@@ -48,7 +50,7 @@ define('io.ox/core/tk/autocomplete', function () {
             update = function () {
                 // get data from current item and update input field
                 var data = scrollpane.children().eq(Math.max(0, index)).data('data');
-                lastValue = o.stringify(data) + '';
+                lastValue = data !== undefined ? o.stringify(data) + '' : lastValue;
                 self.val(lastValue);
 
                 // if two related Fields are needed
@@ -98,7 +100,7 @@ define('io.ox/core/tk/autocomplete', function () {
                         popup.hide().appendTo(self.closest(o.parentSelector));
 
                         var myTop = off.top + h - (self.closest(o.parentSelector).offsetParent().offset().top) + self.offsetParent().scrollTop();
-                        var myLeft = off.left - (self.closest(o.parentSelector).offsetParent().offset().left);
+                        var myLeft = off.left -  (self.closest(o.parentSelector).offsetParent().offset().left);
 
                         popup.css({ top: myTop, left: myLeft, width: w }).show();
 
@@ -145,6 +147,30 @@ define('io.ox/core/tk/autocomplete', function () {
                         emptyPrefix = query;
                         close();
                     }
+                },
+
+            // adds 'retry'-item to popup
+            cbSearchResultFail = function (query) {
+                    popup.idle();
+                    var node = $('<div>')
+                        .addClass('io-ox-center')
+                        .append(
+                            // fail container/content
+                            $('<div>')
+                            .addClass('io-ox-fail')
+                            .html(gt('Could not load this list. '))
+                            .append(
+                                //link
+                                $('<a href="#">')
+                                .text(gt('Retry'))
+                                .on('click', function () {
+                                        self.trigger('keyup', { isRetry: true });
+                                    }
+                                )
+
+                            )
+                        );
+                    node.appendTo(scrollpane);
                 },
 
             // handle key down (esc/cursor only)
@@ -208,17 +234,17 @@ define('io.ox/core/tk/autocomplete', function () {
             },
 
             // handle key up (debounced)
-            fnKeyUp = _.debounce(function (e) {
+            fnKeyUp = _.debounce(function (e, isRetry) {
                 e.stopPropagation();
                 var val = $.trim($(this).val());
+                isRetry = isRetry || false;
                 if (val.length >= o.minLength) {
-                    if (val !== lastValue && val.indexOf(emptyPrefix) === -1) {
-                        // trigger search
+                    if (isRetry || (val !== lastValue && val.indexOf(emptyPrefix) === -1)) {
                         lastValue = val;
                         scrollpane.empty();
                         popup.busy();
                         open();
-                        o.source(val).done(_.lfo(cbSearchResult, val));
+                        o.source(val).then(_.lfo(cbSearchResult, val), cbSearchResultFail);
                     }
                 } else {
                     lastValue = val;
