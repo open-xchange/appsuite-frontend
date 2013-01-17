@@ -258,7 +258,6 @@ define('io.ox/portal/settings/pane',
         pane.find('.widget-settings-view').each(function (index) {
             var node = $(this), id = node.attr('data-widget-id');
             if (id in obj) {
-                console.log('reset index', id, index);
                 obj[id].index = index;
             }
         });
