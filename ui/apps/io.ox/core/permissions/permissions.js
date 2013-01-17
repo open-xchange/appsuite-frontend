@@ -302,8 +302,9 @@ define('io.ox/core/permissions/permissions',
 
                     isFolderAdmin = api.Bitmask(data.own_rights).get('admin') >= 1;
 
-                    // Check if ACLs enabled
-                    if (!(data.capabilities & Math.pow(2, 0))) {
+                    // Check if ACLs enabled and only do that for mail component,
+                    // every other component will have ACL capabilities (stored in DB)
+                    if (data.module === 'mail' && !(data.capabilities & Math.pow(2, 0))) {
                         isFolderAdmin = false;
                     }
 
