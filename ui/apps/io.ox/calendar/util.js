@@ -235,8 +235,10 @@ define("io.ox/calendar/util",
                 $('<span>').addClass('label').text(gt.noI18n(current.abbr)).popover({
                     title: that.getTimeInterval(data) + ' ' + current.abbr,
                     content: getContent,
+                    html: true,
                     animation: false,
                     trigger: 'hover',
+                    container: $('#tmp'),
                     placement: function (tip, element) {
                         var off = $(element).offset(),
                             width = $('body').width() / 2;
