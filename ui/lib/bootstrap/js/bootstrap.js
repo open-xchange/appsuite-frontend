@@ -1059,6 +1059,7 @@
       this.$element = $(element)
       this.options = this.getOptions(options)
       this.enabled = true
+      this.$container = this.options.container || $(element)
 
       if (this.options.trigger == 'click') {
         this.$element.on('click.' + this.type, this.options.selector, $.proxy(this.toggle, this))
@@ -1137,7 +1138,7 @@
         $tip
           .detach()
           .css({ top: 0, left: 0, display: 'block' })
-          .insertAfter(this.$element)
+          .insertAfter(this.$container)
 
         pos = this.getPosition(inside)
 
