@@ -1,7 +1,7 @@
 {
     title: "Tasks",
     company: "Open-Xchange",
-    icon: "default.png",
+    icon: "tasks.png",
     category: "Productivity",
     settings: true,
     requires: "tasks"
