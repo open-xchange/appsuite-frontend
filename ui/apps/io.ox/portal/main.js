@@ -152,7 +152,7 @@ define('io.ox/portal/main',
             if (model.get('enabled')) {
                 app.getWidgetNode(model).show();
                 app.drawWidget(model);
-            } else {
+            } else {
                 app.getWidgetNode(model).hide();
             }
         } else if ('color' in e.changes) {
