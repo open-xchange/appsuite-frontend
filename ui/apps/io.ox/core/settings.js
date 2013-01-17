@@ -211,8 +211,8 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
 
         this.save = (function () {
 
-            var save = _.throttle(function (data) {
-                http.PUT({
+            var request, save = _.throttle(function (data) {
+                request = http.PUT({
                     module: 'jslob',
                     params: { action: 'set', id: path },
                     data: data
@@ -230,7 +230,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                 settingsCache.add(path, data);
                 save(data.tree);
 
-                return this;
+                return request;
             };
         }());
 
