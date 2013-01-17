@@ -253,7 +253,8 @@ define('io.ox/portal/settings/pane',
     }
 
     function saveWidgets() {
-        var obj = widgets.toJSON();
+        var obj = widgets.toJSON(),
+            old_state = obj;
         // update all indexes
         pane.find('.widget-settings-view').each(function (index) {
             var node = $(this), id = node.attr('data-widget-id');
@@ -263,7 +264,11 @@ define('io.ox/portal/settings/pane',
         });
         widgets.update(obj);
         collection.trigger('sort');
-        widgets.save(obj);
+        return widgets.save(obj).fail(function () {
+            //reset old state
+            widgets.update(old_state);
+            collection.trigger('sort');
+        });
     }
 
     ext.point(POINT + '/pane').extend({
@@ -286,7 +291,9 @@ define('io.ox/portal/settings/pane',
                 scroll: true,
                 delay: 150,
                 stop: function (e, ui) {
-                    saveWidgets();
+                    saveWidgets().fail(function () {
+                        list.sortable('cancel');
+                    });
                 }
             });
 
