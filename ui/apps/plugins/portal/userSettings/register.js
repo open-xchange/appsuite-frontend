@@ -27,6 +27,12 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
                     require("io.ox/core/notifications").yell("success", gt("Your data has been saved"));
                     popup.close();
                 });
+            }).fail(function () {
+                $node.append(
+                    $.fail(gt("Couldn't load your contact data."), function () {
+                        userEdit.editCurrentUser($node);
+                    })
+                );
             });
 
             popup.show(e, function (pane) {

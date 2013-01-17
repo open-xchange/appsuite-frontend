@@ -20,35 +20,36 @@ define('io.ox/core/settings/user', [
 	'io.ox/contacts/util'
 ], function (ext, api, contactModel, ViewForm, dialogs, util) {
 
-	'use strict';
+    'use strict';
 
 
 	// Model Factory for use with the edit dialog
-	var factory = contactModel.protectedMethods.buildFactory('io.ox/core/user/model', api);
+    var factory = contactModel.protectedMethods.buildFactory('io.ox/core/user/model', api);
 
-	// The edit dialog
-	var UserEdit = ViewForm.protectedMethods.createContactEdit('io.ox/core/user');
+    // The edit dialog
+    var UserEdit = ViewForm.protectedMethods.createContactEdit('io.ox/core/user');
 
-	return {
-		editCurrentUser: function ($node) {
-			// Load the user
-			return factory.realm('edit').get({}).done(function (user) {
-				$node.append(new UserEdit({model: user}).render().$el);
+    return {
+        editCurrentUser: function ($node) {
+            // Load the user
+            return factory.realm('edit').get({}).done(function (user) {
 
-				user.on('change:first_name change:last_name', function () {
-					user.set('display_name', util.getFullName(user.toJSON()));
-					//app.setTitle(util.getFullName(contact.toJSON()));
-				});
+                $node.append(new UserEdit({model: user}).render().$el);
 
-				user.on('sync:start', function () {
-					dialogs.busy($node);
-				});
+                user.on('change:first_name change:last_name', function () {
+                    user.set('display_name', util.getFullName(user.toJSON()));
+                    //app.setTitle(util.getFullName(contact.toJSON()));
+                });
 
-				user.on('sync:always', function () {
-					dialogs.idle($node);
-				});
-			});
-		}
-	};
-	
+                user.on('sync:start', function () {
+                    dialogs.busy($node);
+                });
+
+                user.on('sync:always', function () {
+                    dialogs.idle($node);
+                });
+            });
+        }
+    };
+
 });
