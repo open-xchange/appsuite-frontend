@@ -89,16 +89,24 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
         title: gt('User data'),
 
         preview: function (baton) {
+            var content;
             this.append(
-                $('<div class="content">').append(
+                content = $('<div class="content">').append(
                     // user data
                     $('<div class="action">').text(gt('My contact data'))
-                    .on('click', changeUserData),
-                    // password
-                    $('<div class="action">').text(gt('My password'))
-                    .on('click', changePassword)
+                    .on('click', changeUserData)
                 )
             );
+            // password
+            //check for capability
+            require(['io.ox/core/capabilities'], function (capabilities) {
+                if (capabilities.has('edit_password')) {
+                    content.append(
+                        $('<div class="action">').text(gt('My password'))
+                        .on('click', changePassword)
+                    );
+                }
+            });
         }
     });
 
