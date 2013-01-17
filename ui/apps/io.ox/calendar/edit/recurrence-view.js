@@ -54,6 +54,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
             $anchor.popover({
                 placement: 'top',
+                html: true,
                 content: function () {
                     return $dayPicker;
                 }
@@ -73,7 +74,6 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 nodes = {};
 
             this[attribute] = 1;
-
             _(DAYS.values).each(function (day) {
                 nodes[day] = $('<li>').append(
                     $('<b>').text(DAYS.i18n[day]).hide(),
@@ -122,6 +122,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
             $anchor.popover({
                 placement: 'top',
+                html: true,
                 content: function () {
                     return $dayList;
                 }
