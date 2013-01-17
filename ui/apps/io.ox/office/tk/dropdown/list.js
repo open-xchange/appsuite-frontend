@@ -29,11 +29,6 @@ define('io.ox/office/tk/dropdown/list',
      * containing a list of items. Extends the DropDown mix-in class with
      * functionality specific to the list drop-down element.
      *
-     * Instances of this class trigger the following events:
-     * - 'item:create': After a new list item has been added to this list. The
-     *      event handler receives the button control representing the new list
-     *      item (jQuery object) as second parameter.
-     *
      * Note: This is a mix-in class supposed to extend an existing instance of
      * the class Group or one of its derived classes. Expects the symbol 'this'
      * to be bound to an instance of Group.
@@ -67,6 +62,10 @@ define('io.ox/office/tk/dropdown/list',
      *  @param {String} [options.itemDesign='default']
      *      The design mode of the list items. See the option 'options.design'
      *      supported by the Group class constructor for details.
+     *  @param {Function} [options.itemCreateHandler]
+     *      A function that will be called after a new list item has been added
+     *      to this list. The function receives the button control representing
+     *      the new list item (jQuery object) as first parameter.
      */
     function List(options) {
 
@@ -80,7 +79,10 @@ define('io.ox/office/tk/dropdown/list',
             sortFunctor = Utils.getFunctionOption(options, 'sortFunctor'),
 
             // the group in the drop-down menu representing the list items
-            listItemGroup = new Group({ classes: 'button-list', design: Utils.getStringOption(options, 'itemDesign', 'default') });
+            listItemGroup = new Group({ classes: 'button-list', design: Utils.getStringOption(options, 'itemDesign', 'default') }),
+
+            // handler called after a new item has been created
+            itemCreateHandler = Utils.getFunctionOption(options, 'itemCreateHandler', $.noop);
 
         // private methods ----------------------------------------------------
 
@@ -200,8 +202,8 @@ define('io.ox/office/tk/dropdown/list',
                 listItemGroup.getNode().append(button);
             }
 
-            // notify listeners
-            this.trigger('item:create', button);
+            // call external handler
+            itemCreateHandler.call(this, button);
             return button;
         };
 
