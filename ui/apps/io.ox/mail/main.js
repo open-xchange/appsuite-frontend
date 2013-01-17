@@ -41,6 +41,8 @@ define("io.ox/mail/main",
                 grid = e.data.grid;
             if (/^(603|607|610|102|thread)$/.test(option)) {
                 grid.prop('sort', option).refresh();
+                //sort must not react to the prop change event because autotoggle uses this too and would mess up the persistent settings
+                app.saveSortSettings('sort', option);
             } else if (/^(asc|desc)$/.test(option)) {
                 grid.prop('order', option).refresh();
             } else if (option === 'unread') {
@@ -64,6 +66,12 @@ define("io.ox/mail/main",
         right,
         scrollpane;
 
+    //for saving the persistent settings
+    app.saveSortSettings = function (type, value) {
+        settings.set(type, value);
+        settings.save();
+    };
+    
     // launcher
     app.setLauncher(function () {
 
@@ -104,11 +112,28 @@ define("io.ox/mail/main",
 
         // add template
         grid.addTemplate(tmpl.main);
-
+        
+        //get sorting settings
+        var sortSettings = {};
+        sortSettings.sort = settings.get('sort', 'thread');
+        sortSettings.unread = settings.get('unread', false);
+        sortSettings.order = settings.get('order', 'desc');
+        
+        if (sortSettings.sort === 'thread' && options.threadView === false) {//check if folder actually supports threadview
+            sortSettings.sort = '610';
+        }
+        
         // add grid options
-        grid.prop('sort', options.threadView !== false ? 'thread' : '610')
-            .prop('order', 'desc')
-            .prop('unread', false);
+        grid.prop('sort', sortSettings.sort)
+            .prop('order', sortSettings.order)
+            .prop('unread', sortSettings.unread);
+        //temp variable not needed anymore
+        sortSettings = null;
+        
+        //sort property is special and needs special handling because of the auto toggling if threadview is not uspported
+        //look into hToolbarOptions function for this
+        grid.on('change:prop:unread', function (e, value) {app.saveSortSettings('unread', value); });
+        grid.on('change:prop:order', function (e, value) {app.saveSortSettings('order', value); });
 
         commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads'); // getAllThreads is redefined below!
         commons.wireGridAndSearch(grid, win, api);
@@ -127,10 +152,12 @@ define("io.ox/mail/main",
                 threadView = settings.get('threadView'),
                 isInbox = account.is('inbox', grid.prop('folder')),
                 isOn = threadView === 'on' || (threadView === 'inbox' && isInbox);
+            
             // some auto toggling
             if (grid.prop('sort') === 'thread' && !isOn) {
                 grid.prop('sort', '610');
-            } else if (grid.prop('sort') === '610' && type === 'folder' && isOn && isInbox) {
+            } //jump back only if thread was the original setting
+            else if (grid.prop('sort') === '610' && type === 'folder' && isOn && isInbox && settings.get('sort') === 'thread') {
                 grid.prop('sort', 'thread');
             }
             // draw list
@@ -243,7 +270,11 @@ define("io.ox/mail/main",
                 }, 'auto')
                 .pipe(function (response) {
                     if (unread) {
-                        response.data = _(response.data).filter(util.isUnseen);
+                        if (response.data) { //threadview
+                            response.data = _(response.data).filter(util.isUnseen);
+                        } else { //no threadview
+                            response = _(response).filter(util.isUnseen);
+                        }
                     }
                     return response;
                 });
