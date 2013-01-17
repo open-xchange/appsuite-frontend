@@ -352,9 +352,9 @@ define("io.ox/mail/main",
 
         // customize selection
         grid.selection.unfold = function () {
-            return _(this.get()).inject(function (memo, o) {
-                return memo.concat(isInOpenThreadSummary(o) ? o : api.getThread(o));
-            }, []);
+            return [].concat(_(this.get()).map(function (o) {
+                return isInOpenThreadSummary(o) ? o : api.getThread(o);
+            }));
         };
 
         var showMail, drawMail, drawFail, drawThread;
