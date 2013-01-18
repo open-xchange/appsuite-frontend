@@ -16,8 +16,8 @@ define('io.ox/files/views/create', [
         'io.ox/core/extensions',
         'io.ox/files/api',
         'gettext!io.ox/files/files',
-        'io.ox/core/tk/inputfile'
-    ], function (dialogs, ext, api, gt, inputfile) {
+        'io.ox/core/tk/attachments'
+    ], function (dialogs, ext, api, gt, attachments) {
 
         'use strict';
 
@@ -77,7 +77,7 @@ define('io.ox/files/views/create', [
             id: 'file',
             index: 200,
             draw: function () {
-                this.append(inputfile.draw({displayLabel: true}));
+                this.append(attachments.fileUploadWidget({displayLabel: true}));
             }
         });
 
