@@ -182,6 +182,16 @@ define('io.ox/files/actions',
                     'Do you really want to delete this file?',
                     'Do you really want to delete these files?',
                     list.length
+            ),
+            responseSuccces = gt.ngettext(
+                    'This file has been deleted',
+                    'These files have been deleted',
+                    list.length
+            ),
+            responseFail = gt.ngettext(
+                    'This file has not been deleted',
+                    'These files have not been deleted',
+                    list.length
             );
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
@@ -192,7 +202,11 @@ define('io.ox/files/actions',
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
-                            api.remove(list);
+                            api.remove(list).done(function () {
+                                notifications.yell('success', responseSuccces);
+                            }).fail(function () {
+                                notifications.yell('error', responseFail);
+                            });
                         }
                     });
             });

@@ -16,8 +16,9 @@ define('io.ox/files/views/create', [
         'io.ox/core/extensions',
         'io.ox/files/api',
         'gettext!io.ox/files/files',
-        'io.ox/core/tk/attachments'
-    ], function (dialogs, ext, api, gt, attachments) {
+        'io.ox/core/tk/attachments',
+        'io.ox/core/notifications'
+    ], function (dialogs, ext, api, gt, attachments, notifications) {
 
         'use strict';
 
@@ -38,7 +39,7 @@ define('io.ox/files/views/create', [
                 .show(function () { $form.find('input:first').focus(); })
                 .done(function (action) {
                     if (action === 'save') {
-                        var files = $form.find('input[type="file"]')[0].files || [],
+                        var files = $form.find('input[type="file"]')[0].files || [],
                         folder = app.folder.get();
                         api.uploadFile({
                             form: $form,
@@ -49,6 +50,10 @@ define('io.ox/files/views/create', [
                                 title: $form.find('input[type="text"]').val()
                             },
                             folder: folder
+                        }).done(function () {
+                            notifications.yell('success', gt('This file has been added'));
+                        }).fail(function () {
+                            notifications.yell('error', gt('This file has not been added'));
                         });
                     }
                 });
