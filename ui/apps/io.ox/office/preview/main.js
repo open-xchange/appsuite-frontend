@@ -80,6 +80,7 @@ define('io.ox/office/preview/main',
                     })
                     .done(function (data) {
                         model.setPreviewDocument(data.JobID, data.PageCount);
+                        def.resolve();
                     })
                     .fail(function () {
                         def.reject();
