@@ -164,7 +164,7 @@ define('io.ox/portal/widgets',
         },
 
         save: function (widgets) {
-            settings.set('widgets/user', widgets).save();
+            return settings.set('widgets/user', widgets).save();
         }
     };
 

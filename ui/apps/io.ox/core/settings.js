@@ -209,10 +209,20 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             });
         };
 
+
+        /**
+         * Save settings to cache and backend.
+         *
+         * You can use the request object to find out whether the save
+         * attempt was successful.
+         *
+         * @return The deffered object of the request sent
+         *
+         */
         this.save = (function () {
 
-            var save = _.throttle(function (data) {
-                http.PUT({
+            var request, save = _.throttle(function (data) {
+                request = http.PUT({
                     module: 'jslob',
                     params: { action: 'set', id: path },
                     data: data
@@ -230,7 +240,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                 settingsCache.add(path, data);
                 save(data.tree);
 
-                return this;
+                return request;
             };
         }());
 
