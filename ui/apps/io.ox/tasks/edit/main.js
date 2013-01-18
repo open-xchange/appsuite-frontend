@@ -104,6 +104,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 app.attributes.title = gt("Create task");
                 taskModel = model.factory.create();
                 if (options.folderid) {//on reload there is no options.folderid so it would crash on saving. Leave default
+                    options.folderid = parseInt(options.folderid, 10);//folderId is sometimes a String but must be a number else the discard buttons thinks this is a missmatch to the defaults
                     taskModel.set('folder_id', options.folderid);
                 }
                 taskView = view.getView(taskModel, win.nodes.main, app);
