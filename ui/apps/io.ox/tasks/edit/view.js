@@ -46,10 +46,10 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
 
             //row 2 start date due date
             util.buildExtensionRow(self.$el, this.getRow(2), self.baton).addClass("collapsed");
-             
+
             //row 3 description
             util.buildExtensionRow(self.$el, this.getRow(3), self.baton);
-            
+
             //expand link
             $('<a>').text(gt("Expand form")).attr('href', '#')
             .on('click', function (e) {
@@ -94,17 +94,17 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                     //#, c-format
                     gt('Attachments (%1$s)', gt.noI18n(number)));
             });
-            
+
             this.getRow(0, app, 'attachments').invoke('draw', attachmentsTab, self.baton);
             util.buildExtensionRow(attachmentsTab, [this.getRow(1, app, 'attachments')], self.baton);
-            
+
             //detailstab
             util.buildExtensionRow(detailsTab, this.getRow(0, app, 'details'), self.baton);
             util.buildExtensionRow(detailsTab, this.getRow(1, app, 'details'), self.baton);
             util.buildExtensionRow(detailsTab, this.getRow(2, app, 'details'), self.baton);
             util.buildExtensionRow(detailsTab, this.getRow(3, app, 'details'), self.baton);
             util.buildExtensionRow(detailsTab, this.getRow(4, app, 'details'), self.baton);
-            
+
             //change title if available
             if (self.model.get("title")) {
                 app.setTitle(self.model.get("title"));
@@ -257,7 +257,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                         self.model.set('alarm', dates.alarmDate.getTime());
                     }
                 });
-            
+
             //row 5
             this.fields.progress = util.buildProgress();
             this.fields.progress.on('change', function () {
@@ -285,7 +285,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 self.fields.progress.val(self.model.get('percent_completed'));
             });
             this.fields.progress.val(this.model.get('percent_completed'));
-            
+
             //row 6
             this.fields.repeatLink = $('<a>').text(gt("Repeat")).addClass("repeat-link").attr('href', '#')
                 .on('click', function (e) { e.preventDefault();
@@ -297,7 +297,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             this.fields = {};
             this.rows = [];
         }
-        
+
     });
 
     return {

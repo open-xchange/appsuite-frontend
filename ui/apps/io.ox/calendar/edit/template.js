@@ -433,7 +433,7 @@ define('io.ox/calendar/edit/template',
     point.extend(new attachments.EditableAttachmentList({
         id: 'attachment_list',
         registerAs: 'attachmentList',
-        className: 'span12',
+        className: 'div',
         index: 1700,
         module: 1
     }));
@@ -442,38 +442,32 @@ define('io.ox/calendar/edit/template',
         id: 'attachments_upload',
         index: 1800,
         draw: function (baton) {
-            var $node = $("<form>").appendTo(this).attr('id', 'attachmentsForm');
-            var $input = $("<input>", {
-                type: "file"
-            });
-            $input.css({'line-height': '0', "margin-left": "10px"});
-            var $button = $("<button>").attr('data-action', 'add').text(gt("Upload file")).addClass("btn");
-
-            if (_.browser.IE !== 9) {
-                $button.on("click", function (e) {
-                    e.preventDefault();
+            var $node = $('<form>').appendTo(this).attr('id', 'attachmentsForm'),
+                $inputWrap = attachments.fileUploadWidget({displayButton: true, multi: true}),
+                $input = $inputWrap.find('input[type="file"]'),
+                $button = $inputWrap.find('button[data-action="add"]')
+                    .on('click', function (e) {
+                e.preventDefault();
+                if (_.browser.IE !== 9) {
                     _($input[0].files).each(function (fileData) {
                         baton.attachmentList.addFile(fileData);
                     });
-                });
-            } else {
-                $button.on("click", function (e) {
+                } else {
                     if ($input.val()) {
                         var fileData = {
-                                name: $input.val().match(/[^\/\\]+$/),
-                                size: 0,
-                                hiddenField: $input
-                            };
-                        e.preventDefault();
+                            name: $input.val().match(/[^\/\\]+$/),
+                            size: 0,
+                            hiddenField: $input
+                        };
                         baton.attachmentList.addFile(fileData);
-                        $input.addClass("add-attachment").hide();
-                        $input = $("<input>", { type: "file" }).appendTo($input.parent());
+                        $input.addClass('add-attachment').hide();
+                        $input = $('<input>', { type: 'file' }).appendTo($input.parent());
                     }
-                });
-            }
+                }
+                $input.trigger('reset.fileupload');
+            });
 
-            $node.append($("<div>").addClass("span12").append($button, $input));
-
+            $node.append($('<div>').addClass('span12').append($inputWrap));
         }
     });
 

@@ -490,65 +490,39 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         registerAs: 'attachmentList',
         className: 'div',
         index: 1900,
-        module: 4,
-        render: function () {
-            var self = this,
-                odd = true,
-                row;
-            _(this.allAttachments).each(function (attachment) {
-                if (odd) {
-                    row = $('<div>').addClass("row-fluid task-edit-row").appendTo(self.$el);
-                    odd = false;
-                } else {
-                    odd = true;
-                }
-                row.append($('<div>').addClass('span6').append(self.renderAttachment(attachment).addClass('span12')));
-            });
-
-            //trigger refresh of attachmentcounter
-            this.baton.parentView.trigger('attachmentCounterRefresh', this.allAttachments.length);
-
-            //replace x with icon
-            self.$el.find('.delete').each(function (index, deleteNode) {
-                $(deleteNode).text('').append('<i class="icon-remove">');
-            });
-            return this;
-        }
+        module: 4
     }));
 
     point.basicExtend({
         id: 'attachment_upload',
         index: 2000,
         draw: function (baton) {
-            var $node = $("<form>").appendTo(this).attr('id', 'attachmentsForm').addClass("span12"),
-                $input = $("<input>", { type: "file" }),
-                $button = $("<button/>").attr('data-action', 'add').text(gt("Upload file")).addClass("btn");
-           
-            if (_.browser.IE !== 9) {
-                $button.on("click", function (e) {
-                    e.preventDefault();
+            var $node = $('<form>').appendTo(this).attr('id', 'attachmentsForm').addClass('span12'),
+                $inputWrap = attachments.fileUploadWidget({displayButton: true, multi: true}),
+                $input = $inputWrap.find('input[type="file"]'),
+                $button = $inputWrap.find('button[data-action="add"]')
+                    .on('click', function (e) {
+                e.preventDefault();
+                if (_.browser.IE !== 9) {
                     _($input[0].files).each(function (fileData) {
                         baton.attachmentList.addFile(fileData);
                     });
-                });
-            } else {
-                $button.on("click", function (e) {
+                } else {
                     if ($input.val()) {
                         var fileData = {
-                                name: $input.val().match(/[^\/\\]+$/),
-                                size: 0,
-                                hiddenField: $input
-                            };
-                        e.preventDefault();
+                            name: $input.val().match(/[^\/\\]+$/),
+                            size: 0,
+                            hiddenField: $input
+                        };
                         baton.attachmentList.addFile(fileData);
-                        $input.addClass("add-attachment").hide();
-                        $input = $("<input>", { type: "file" }).appendTo($input.parent());
+                        $input.addClass('add-attachment').hide();
+                        $input = $('<input>', { type: 'file' }).appendTo($input.parent());
                     }
-                });
-            }
+                }
+                $input.trigger('reset.fileupload');
+            });
 
-            $node.append($("<div>").addClass("task-add-attachments-button").append($button));
-            $node.append($("<div>").addClass("task-add-attachments-input").append($input));
+            $node.append($('<div>').addClass('span12').append($inputWrap));
         }
     });
 

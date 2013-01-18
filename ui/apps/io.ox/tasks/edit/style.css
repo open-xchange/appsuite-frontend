@@ -10,7 +10,7 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
- 
+
  .io-ox-tasks-edit-main .title{
 	font-family: @lightFontFamily;
 	font-weight: 300;
@@ -20,19 +20,19 @@
 	display: inline;
 	margin-bottom: 2em;
  }
- 
+
  .io-ox-tasks-edit-main .collapsed{
  	display: none;
  }
- 
+
  .io-ox-tasks-edit-main .cancel{
 	float: right;
  }
- 
+
  .io-ox-tasks-edit .progress-field{
  	text-align: center;
  }
- 
+
  .io-ox-tasks-edit .private-flag {
  	display: inline;
  	width: auto;
@@ -41,14 +41,14 @@
  	color: #000000;
  	position: relative;
  }
- 
+
  .task-edit-wrapper {
  	max-width: 800px;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 20px;
  }
- 
+
  @media (max-width: 980px) {
  	.io-ox-tasks-edit .progress-field {
  		width: 49px!important;
@@ -57,11 +57,11 @@
  		width: 286px!important;
  	}
  }
- 
+
  .io-ox-tasks-edit .task-participant-input-field {
  		width: 334px;
  }
- 
+
  .task-edit-label {
  	display: block;
  	color: #333;
@@ -69,50 +69,51 @@
 	line-height: 1.25em;
 	margin-bottom: 5px;
  }
- 
+
+ .attachment-edit-row,
  .task-edit-row {
  	margin-bottom: 9px;
  }
- 
+
  .io-ox-tasks-edit .tab-pane {
   	margin-bottom: 85px;
  }
- 
+
  .io-ox-tasks-edit .tab-content {
   	overflow: visible;
  }
- 
+
  .io-ox-tasks-edit .alarm-date-field,
  .io-ox-tasks-edit .start-date-field,
  .io-ox-tasks-edit .end-date-field {
  	width: 142px;
   	float: left!important; //fix order of inputfields in combined inputs
  }
- 
+
  .io-ox-tasks-edit .progress-field {
  	width: 61px;
   	float: left!important; //fix order of inputfields in combined inputs
  }
- 
+
  .io-ox-tasks-edit .fluid-grid-fix {
  	margin-left: -1px; //fix for gap between input and button in combined inputs
  }
- 
+
  .io-ox-tasks-edit .participantsrow {
 	margin-bottom: 30px;
  }
- 
+
  .io-ox-tasks-edit .note-field {
   	height: 120px;
   	min-height: 120px;
   	resize: vertical;
  }
- 
+
  .io-ox-tasks-edit .task-edit-save{
  	margin-left: 13px;
  	float: right;
  }
- 
+
  .io-ox-tasks-edit .info-wrapper .task-attachment-link {
  	margin-bottom: 9px;
  }
@@ -123,7 +124,7 @@
 	margin-top: 10px;
 	margin-right: 10px;
  }
- 
+
  .io-ox-tasks-edit .icon-paper-clip {
  	font-size: 30px;
 	width: 20px;
@@ -157,35 +158,35 @@
 	position: relative;
 	display: inline;
 }
- 
+
  //PickerPopup
- 
+
  .picker-day {
  	border: 1px solid #C0C0C0;
- 	fontsize: 16px; 
+ 	fontsize: 16px;
  }
- 
+
  .picker-table {
  	width: 100%;
  }
- 
+
  .picker-label {
  	left: 50%;
  	position: absolute;
  }
- 
+
  .picker-button-left {
  	float: left;
  	margin-bottom: 7px;
  }
- 
+
  .picker-button-right {
  	float: right;
  	margin-bottom: 7px;
  }
- 
+
  .picked-day {
  	background-color: #0070FF;
  	color: #FFFFFF;
  }
- 
+

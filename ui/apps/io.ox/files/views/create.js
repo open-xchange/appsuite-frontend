@@ -8,187 +8,98 @@
  * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
  *
- * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensions", "io.ox/files/api", "text!io.ox/files/views/snippets.html", "gettext!io.ox/files/files"], function (dialogs, ext, filesApi, snippetsHTML, gt) {
+define('io.ox/files/views/create', [
+        'io.ox/core/tk/dialogs',
+        'io.ox/core/extensions',
+        'io.ox/files/api',
+        'gettext!io.ox/files/files',
+        'io.ox/core/tk/inputfile'
+    ], function (dialogs, ext, api, gt, inputfile) {
 
-    "use strict";
+        'use strict';
 
-    var $snippets = $(snippetsHTML),
-        controlsPoint = ext.point("io.ox/files/create/form"),
-        buttonsPoint = ext.point("io.ox/files/create/action");
+        var POINT = 'io.ox/files/create',
 
-    //assemble create form
-    var show = function (app, delegate) {
+        show = function (app) {
 
-        delegate = delegate || {};
+            var $form = $('<form>', { 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' }),
+            dialog = new dialogs.CreateDialog({ easyOut: true });
 
-        var pane = new dialogs.CreateDialog({
-                easyOut: true
-            }),
-            $content = pane.getContentNode().addClass("create-file"),
-            nodes = {},
-            controlStates = {},
-            buttonHandlers = {},
-            $form;
+            ext.point(POINT + '/form').invoke('draw', $form);
 
-        $content.append($snippets.find(".fileForm").clone());
-        
-        $form = $content.find("fieldset");
-
-        controlsPoint.each(function (controlExtension) {
-            var $formLine, state = {};
-
-            if (controlExtension.label) {
-                $formLine = $snippets.find(".field").clone();
-                $formLine.find("label").attr({"for": controlExtension.id}).text(controlExtension.label);
-            } else {
-                $formLine = $snippets.find(".noLabelField").clone();
-            }
-
-            if (controlExtension.draw) {
-                controlExtension.draw($formLine.find(".controls"), state);
-            }
-
-            if (controlExtension.extendedForm) {
-                $formLine.addClass("extendedForm");
-            }
-
-            controlStates[controlExtension.id] = state;
-
-            $formLine.appendTo($form);
-
-        });
-
-        nodes.moreButton = $content.find(".more");
-
-        nodes.moreButton.text(
-            //#. Show more fields in the file creation dialog
-            gt("Show more..."));
-
-        pane.header(
-            $('<h3>').text(gt("Add new file"))
-        );
-
-        // Hide all extendedFormFields
-
-        $content.find(".extendedForm").hide();
-
-        nodes.moreButton.on("click", function (e) {
-            e.preventDefault();
-            $content.find(".extendedForm").fadeIn();
-            nodes.moreButton.remove();
-            $content.find("input:first").focus();
-        });
-
-        buttonsPoint.each(function (buttonExtension) {
-            pane.addButton(buttonExtension.id, buttonExtension.label, buttonExtension.id, {type: buttonExtension.type});
-            buttonHandlers[buttonExtension.id] = buttonExtension;
-        });
-
-        pane.addButton("cancel", "Cancel", "cancel");
-
-        // And display it all
-        pane.show().done(function (action) {
-            var handler = buttonHandlers[action], fileEntry;
-            if (handler) {
-                fileEntry = { folder: app.folder.get() };
-                controlsPoint.each(function (controlExtension) {
-                    if (controlExtension.process) {
-                        controlExtension.process(fileEntry, controlStates[controlExtension.id]);
+            dialog.header($('<h1>').addClass('clear-title').text(gt('Add new file')));
+            dialog.getBody().append($('<div>').addClass('row-fluid').append($form));
+            dialog
+                .addPrimaryButton('save', gt('Save'), 'save')
+                .addButton('cancel', gt('Cancel'), 'cancel')
+                .show(function () { $form.find('input:first').focus(); })
+                .done(function (action) {
+                    if (action === 'save') {
+                        var files = $form.find('input[type="file"]')[0].files || [],
+                        folder = app.folder.get();
+                        api.uploadFile({
+                            form: $form,
+                            file: _(files).first(),
+                            json: {
+                                folder: folder,
+                                description: $form.find('textarea').val(),
+                                title: $form.find('input[type="text"]').val()
+                            },
+                            folder: folder
+                        });
                     }
                 });
-                if (delegate.modifyFile) {
-                    delegate.modifyFile(fileEntry);
-                }
-                app.getWindow().busy();
-                handler.perform(fileEntry, controlStates, function (data) {
-                    app.getWindow().idle();
-                    if (delegate.uploadedFile) {
-                        delegate.uploadedFile(data);
-                    }
-                });
-            }
-            // clean up
-            $content.empty();
-            $content = pane = null;
-            if (delegate.done) {
-                delegate.done();
+        };
+
+        ext.point(POINT + '/form').extend({
+            index: 100,
+            id: 'createfile',
+            draw: function () {
+                ext.point(POINT + '/field').invoke('draw', this);
             }
         });
 
-    };
-
-    // Title
-    controlsPoint.extend({
-        id: "title",
-        extendedForm: true,
-        index: 10,
-        label: gt("Title"),
-        draw: function (element, state) {
-            state.node = $("<input type='text' name='title'>");
-            element.append(state.node);
-        },
-        process: function (file, state) {
-            var val = state.node.val();
-            if (val) {
-                file.title = state.node.val();
+        ext.point(POINT + '/field').extend({
+            id: 'title',
+            index: 100,
+            draw: function () {
+                this.append(
+                    $('<label>').text(gt('Title')),
+                    $('<input type="text" name="title">').addClass('span12')
+                );
             }
-        }
-    });
+        });
 
-    // File
-    controlsPoint.extend({
-        id: "file",
-        index: 30,
-        draw: function (element, state) {
-            state.node = $("<input type='file' name='file'>");
-            element.append(state.node);
-        }
-    });
-
-    // Comment
-    controlsPoint.extend({
-        id: "comment",
-        extendedForm: true,
-        index: 40,
-        label: gt("Comment"),
-        draw: function (element, state) {
-            // without explicit closing tag IE9 added '<body>' as textarea value
-            state.node = $('<textarea rows="5" name="comment" class="input-xlarge"></textarea>');
-            element.append(state.node);
-        },
-        process: function (file, state) {
-            var val = state.node.val();
-            if (val) {
-                file.description = state.node.val();
+        ext.point(POINT + '/field').extend({
+            id: 'file',
+            index: 200,
+            draw: function () {
+                this.append(inputfile.draw({displayLabel: true}));
             }
-        }
-    });
+        });
 
-    // Save
-    buttonsPoint.extend({
-        id: "save",
-        label: gt("Save"),
-        type: "primary",
-        perform: function (fileEntry, states, cb) {
-            // since I have no clue what this all does I get the form this way;
-            var node = states.file.node.first(),
-                files = node.prop('files') || [],
-                form = node.closest('form');
-            filesApi.uploadFile({
-                form: form,
-                file: _(files).first(),
-                json: fileEntry,
-                folder: fileEntry.folder
-            })
-            .done(cb);
-        }
-    });
+        ext.point(POINT + '/field').extend({
+            id: 'comment',
+            index: 300,
+            draw: function () {
+                this.append(
+                    $('<label>').text(gt('Comment')),
+                    $('<textarea name="description" rows="4" class="span12"></textarea>').keyup(function () {
+                            var pad = parseInt($(this).css('padding-top'), 10),
+                                contentHeight = this.scrollHeight;
+                            if ($.browser.mozilla) { $(this).height(1); } else { contentHeight -= pad * 2; }
+                            if (contentHeight > $(this).height()) $(this).height(contentHeight);
+                        })
+                );
+            }
+        });
 
-    return {
-        show: show
-    };
+        return {
+            show: show
+        };
 
-});
+    }
+);
