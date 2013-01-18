@@ -469,12 +469,17 @@ define('io.ox/office/tk/utils',
      *  or if it does not contain the specified attribute, or if the attribute
      *  is not a string. May be any value (not only strings).
      *
+     * @param {Boolean} [nonEmpty=false]
+     *  If set to true, only non-empty strings will be returned from the
+     *  options object. Empty strings will be replaced with the specified
+     *  default value.
+     *
      * @returns
      *  The value of the specified attribute, or the default value.
      */
-    Utils.getStringOption = function (options, name, def) {
+    Utils.getStringOption = function (options, name, def, nonEmpty) {
         var value = Utils.getOption(options, name);
-        return _.isString(value) ? value : def;
+        return (_.isString(value) && (!nonEmpty || (value.length > 0))) ? value : def;
     };
 
     /**
@@ -639,12 +644,16 @@ define('io.ox/office/tk/utils',
      *  or if it does not contain the specified attribute, or if the attribute
      *  is not an array. May be any value.
      *
+     * @param {Boolean} [nonEmpty=false]
+     *  If set to true, only non-empty arrays will be returned from the options
+     *  object. Empty arrays will be replaced with the specified default value.
+     *
      * @returns
      *  The value of the specified attribute, or the default value.
      */
-    Utils.getArrayOption = function (options, name, def) {
+    Utils.getArrayOption = function (options, name, def, nonEmpty) {
         var value = Utils.getOption(options, name);
-        return _.isArray(value) ? value : def;
+        return (_.isArray(value) && (!nonEmpty || (value.length > 0))) ? value : def;
     };
 
     /**

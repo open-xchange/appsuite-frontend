@@ -72,13 +72,14 @@ define('io.ox/office/preview/main',
                     self.sendAjaxRequest({
                         url: self.getDocumentFilterUrl('importdocument', { filter_format: 'html', filter_action: "beginconvert" })
                     })
-                    .done(function (response) {
-                        if ((response.data.JobID) > 0 && (response.data.PageCount > 0)) {
-                            model.setPreviewDocument(response.data.JobID, response.data.PageCount);
-                            def.resolve();
-                        } else {
-                            def.reject();
-                        }
+                    .pipe(function (response) {
+                        // return a deferred that will be resolved with valid job data
+                        return self.extractAjaxResultValue(response, function (data) {
+                            return (_.isNumber(data.JobID) && (data.JobID > 0) && _.isNumber(data.PageCount) && (data.PageCount > 0)) ? data : undefined;
+                        });
+                    })
+                    .done(function (data) {
+                        model.setPreviewDocument(data.JobID, data.PageCount);
                     })
                     .fail(function () {
                         def.reject();

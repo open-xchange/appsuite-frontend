@@ -224,6 +224,16 @@ define('io.ox/office/tk/view/view',
         };
 
         /**
+         * Returns whether an alert banner is currently visible.
+         *
+         * @returns {Boolean}
+         *  Whether an alert banner is visible.
+         */
+        this.hasAlert = function () {
+            return win.nodes.main.children('.alert').length > 0;
+        };
+
+        /**
          * Shows an alert banner at the top of the application window. An alert
          * currently shown will be removed before.
          *
@@ -264,28 +274,17 @@ define('io.ox/office/tk/view/view',
                 // the controller key of the push button
                 buttonKey = Utils.getStringOption(options, 'buttonKey'),
                 // the alert node
-                alert = $.alert(title, message).removeClass('alert-error').addClass('alert-' + type + ' hide in'),
-                // the current alert node
-                oldAlert = win.nodes.main.find('.alert');
-            
-            if (oldAlert.length && oldAlert.css('display') !== 'none') {
-                // Analyze old alert to check if you already show the same alert
-                // We don't want to exchange the alert with same.
-                var alertHeading = oldAlert.children('.alert-heading');
-                
-                if (alertHeading.length) {
-                    var text = alertHeading.text();
-                    if (title === text) {
-                        // Check the heading and if identical just return
-                        return;
-                    }
-                }
+                alert = $.alert(title, message).removeClass('alert-error').addClass('alert-' + type + ' hide in');
+
+            // Hides the alert with a specific animation.
+            function closeAlert() {
+                alert.slideUp({ complete: function () { alert.remove(); } });
             }
-            
+
             // make the alert banner closeable
             if (Utils.getBooleanOption(options, 'closeable', false)) {
                 // alert can be closed by clicking anywhere in the alert
-                alert.click(function () { alert.slideUp(); });
+                alert.click(closeAlert);
             } else {
                 // remove closer button
                 alert.find('a.close').remove();
@@ -296,7 +295,7 @@ define('io.ox/office/tk/view/view',
 
             // initialize auto-close
             if (Utils.getBooleanOption(options, 'autoClose', false)) {
-                _.delay(_.bind(alert.slideUp, alert), 5000);
+                _.delay(closeAlert, 5000);
             }
 
             // insert the push button into the alert banner
@@ -304,12 +303,12 @@ define('io.ox/office/tk/view/view',
                 alert.append(
                     $.button({ label: buttonLabel })
                         .addClass('btn-' + type + ' btn-mini')
-                        .click(function () { alert.slideUp(); app.getController().change(buttonKey); })
+                        .click(function () { closeAlert(); app.getController().change(buttonKey); })
                 );
             }
 
             // remove old alert, insert and show new alert
-            win.nodes.main.find('.alert').remove().end().append(alert);
+            win.nodes.main.children('.alert').remove().end().append(alert);
             alert.slideDown();
 
             return this;

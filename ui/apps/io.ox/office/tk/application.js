@@ -170,22 +170,27 @@ define('io.ox/office/tk/application',
                 def = $.ajax(Utils.extendOptions({ type: 'GET', dataType: 'json' }, options));
             }
 
-            return def.promise();
+            return def;
         };
 
         /**
          * Extracts the result data object from the passed response object of
-         * an AJAX request.
+         * an AJAX request. Returns a deferred object that will only be
+         * resolved if the passed result object contains a valid data object.
          *
          * @param {Object} response
          *  The response object of the AJAX request.
          *
-         * @return {Object|Undefined}
-         *  The result data object, if existing, otherwise undefined.
+         * @return {jQuery.Promise}
+         *  A new promise that will be resolved with the data object if the
+         *  passed AJAX response contains one. Otherwise, the promise will be
+         *  rejected.
          */
         this.extractAjaxResultData = function (response) {
 
-            var // the data object of the passed AJAX response
+            var // the result deferred
+                def = $.Deferred(),
+                // the data object from the passed AJAX response
                 data = Utils.getOption(response, 'data');
 
             // convert JSON result string to object (may throw), TODO: still required?
@@ -198,7 +203,52 @@ define('io.ox/office/tk/application',
             }
 
             // check that the data attribute is an object
-            return _.isObject(data) ? data : undefined;
+            if (_.isObject(data)) {
+                def.resolve(data);
+            } else {
+                def.reject();
+            }
+
+            return def.promise();
+        };
+
+        /**
+         * Extracts a specific value from the passed response object of an AJAX
+         * request. Returns a deferred object that will only be resolved if the
+         * passed filter callback function returns a value different from
+         * undefined.
+         *
+         * @param {Object} response
+         *  The response object of the AJAX request.
+         *
+         * @param {Function} filter
+         *  A function that will return a value from the data object that has
+         *  been extracted from the AJAX response object, using the method
+         *  FileBasedApplication.extractAjaxResultData(). Will only be called,
+         *  if a valid data object has been extracted from the response. Any
+         *  value different from undefined is considered a valid result.
+         *
+         * @param {Object} [context]
+         *  The context object that will be bound to the filter callback
+         *  function.
+         *
+         * @return {jQuery.Promise}
+         *  A new promise that will be resolved with the value returned by the
+         *  passed filter callback function, if the passed response contains a
+         *  valid data object, and the returned value is not undefined.
+         *  Otherwise, the promise will be rejected.
+         */
+        this.extractAjaxResultValue = function (response, filter, context) {
+            return this.extractAjaxResultData(response).pipe(function (data) {
+                var def = $.Deferred(),
+                    value = filter.call(context, data);
+                if (_.isUndefined(value)) {
+                    def.reject();
+                } else {
+                    def.resolve(value);
+                }
+                return def.promise();
+            });
         };
 
         /**
@@ -212,8 +262,9 @@ define('io.ox/office/tk/application',
          *  The descriptor of the file to be loaded.
          *
          * @returns {jQuery.Promise}
-         *  The promise of a deferred that will be resolved with the result object
-         *  containing the data URL, or rejected if the read operation failed.
+         *  The promise of a deferred that will be resolved with the result
+         *  object containing the data URL, or rejected if the read operation
+         *  failed.
          */
         this.readClientFileAsDataUrl = function (fileDesc) {
 
@@ -313,8 +364,8 @@ define('io.ox/office/tk/application',
          *
          * @returns {jQuery.Promise}
          *  The promise of a deferred object that will be resolved when the
-         *  file has been renamed successfully (the new full file name will be
-         *  passed); or that will be rejected, if renaming the file has failed.
+         *  file has been renamed successfully; or that will be rejected, if
+         *  renaming the file has failed.
          */
         this.rename = function (shortName) {
 
@@ -322,31 +373,29 @@ define('io.ox/office/tk/application',
                 extension = this.getFileExtension(),
 
                 // the result deferred
-                def = $.Deferred().done(function (fileName) {
-                    file.filename = fileName;
+                def = $.Deferred().done(function () {
                     self.updateTitle();
                 });
 
             if (_.isString(shortName) && (shortName.length > 0) && file) {
                 if (shortName === this.getShortFileName()) {
-                    def.resolve(file.filename);
+                    def.resolve();
                 } else {
                     this.sendAjaxRequest({
                         url: this.getDocumentFilterUrl('renamedocument', { filename: shortName + '.' + extension })
                     })
                     .pipe(function (response) {
-                        var data = self.extractAjaxResultData(response);
-                        return Utils.getStringOption(data, 'filename');
+                        // return a deferred that will be resolved with a non-empty file name
+                        return self.extractAjaxResultValue(response, function (data) {
+                            return Utils.getStringOption(data, 'filename', undefined, true);
+                        });
                     })
                     .done(function (fileName) {
-                        if (fileName) {
-                            FilesAPI.propagate('change', file).then(
-                                function () { def.resolve(fileName); },
-                                function () { def.reject(); }
-                            );
-                        } else {
-                            def.reject();
-                        }
+                        file.filename = fileName;
+                        FilesAPI.propagate('change', file).then(
+                            function () { def.resolve(); },
+                            function () { def.reject(); }
+                        );
                     })
                     .fail(function () {
                         def.reject();
@@ -499,9 +548,9 @@ define('io.ox/office/tk/application',
     Application.createApplication = function (moduleName, ApplicationMixinClass, options) {
 
         var // the icon shown in the top bar launcher
-            icon = Utils.getStringOption(options, 'icon'),
+            icon = Utils.getStringOption(options, 'icon', ''),
             // the base application object
-            app = ox.ui.createApp({ name: moduleName, userContent: _.isString(icon), userContentIcon: icon });
+            app = ox.ui.createApp({ name: moduleName, userContent: icon.length > 0, userContentIcon: icon });
 
         // mix-in constructor for common methods
         FileBasedApplication.call(app, options);

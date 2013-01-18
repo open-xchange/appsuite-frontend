@@ -54,10 +54,12 @@ define('io.ox/office/preview/model',
                         url: app.getDocumentFilterUrl('importdocument', { filter_format: 'html', filter_action: 'getpage', job_id: jobID, page_number: page })
                     })
                     .pipe(function (response) {
-                        return app.extractAjaxResultData(response);
+                        // return a deferred that will be resolved with a string
+                        return app.extractAjaxResultValue(response, function (data) {
+                            return Utils.getStringOption(data, 'HTMLPages', '');
+                        });
                     })
-                    .done(function (data) {
-                        var htmlPage = Utils.getStringOption(data, 'HTMLPages', '');
+                    .done(function (htmlPage) {
                         node[0].innerHTML = htmlPage;
                     });
                 }
