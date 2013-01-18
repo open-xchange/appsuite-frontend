@@ -16,11 +16,12 @@ define('io.ox/portal/settings/pane',
        'io.ox/core/manifests',
        'io.ox/settings/utils',
        'io.ox/core/tk/dialogs',
+       'io.ox/core/notifications',
        'io.ox/portal/widgets',
        'settings!io.ox/portal',
        'gettext!io.ox/portal',
        'apps/io.ox/core/tk/jquery-ui.min.js',
-       'less!io.ox/portal/style.css'], function (ext, manifests, utils, dialogs, widgets, settings, gt) {
+       'less!io.ox/portal/style.css'], function (ext, manifests, utils, dialogs, notifications, widgets, settings, gt) {
 
     'use strict';
 
@@ -291,7 +292,12 @@ define('io.ox/portal/settings/pane',
                 scroll: true,
                 delay: 150,
                 stop: function (e, ui) {
-                    saveWidgets().fail(function () {
+                    saveWidgets()
+                    .done(function () {
+                        notifications.yell('success', gt("Settings saved."));
+                    })
+                    .fail(function () {
+                        notifications.yell('error', gt("Could not save settings."));
                         list.sortable('cancel');
                     });
                 }
