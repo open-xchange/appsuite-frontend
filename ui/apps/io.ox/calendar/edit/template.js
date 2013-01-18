@@ -491,5 +491,11 @@ define('io.ox/calendar/edit/template',
         }
     });
 
+    // Disable attachments for specific devices (see boot.js)
+    if (!ox.uploadsEnabled) {
+        ext.point("io.ox/calendar/edit/section").disable("attachments_legend");
+        ext.point("io.ox/calendar/edit/section").disable("attachments_upload");
+    }
+
     return null;
 });

@@ -162,7 +162,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/send', {
         requires: function (e) {
-            return e.collection.has('some') && capabilities.has('webmail');
+            return e.collection.has('some') && capabilities.has('webmail') && ox.uploadsEnabled;
         },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {

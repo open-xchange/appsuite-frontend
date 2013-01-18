@@ -332,7 +332,7 @@ define("io.ox/mail/write/view-main",
             this.addLink('bcc', gt('Blind copy (BCC) to'));
 
             // Attachments (unless we're on iOS)
-            if (!_.browser.iOS) {
+            if (ox.uploadsEnabled) {
                 this.fileCount = 0;
                 var uploadSection = this.createSection('attachments', gt('Attachments'), false, true);
                 this.scrollpane.append(

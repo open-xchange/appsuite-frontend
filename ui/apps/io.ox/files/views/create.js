@@ -102,6 +102,11 @@ define('io.ox/files/views/create', [
             }
         });
 
+        // Disable attachments for specific devices (see boot.js)
+        if (!ox.uploadsEnabled) {
+            ext.point(POINT + '/field').disable('file');
+        }
+
         return {
             show: show
         };
