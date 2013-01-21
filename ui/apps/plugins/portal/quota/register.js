@@ -27,78 +27,78 @@ define("plugins/portal/quota/register",
 
     drawTile = function (quota) {
         this.append(
-            $('<div class="content no-pointer">').append(
-                $('<div class="paragraph">').append(
-                    $("<span>").text(gt("File quota")),
-                    $('<span class="pull-right gray quota-memory-file">'),
-                    $("<div>").addClass("plugins-portal-quota-filebar")
+            $('<div>').addClass('content no-pointer').append(
+                $('<div>').addClass('paragraph').append(
+                    $('<span>').text(gt('File quota')),
+                    $('<span>').addClass('pull-right gray quota-memory-file'),
+                    $('<div>').addClass('plugins-portal-quota-filebar')
                 ),
-                $('<div class="paragraph">').append(
-                    $('<span>').text(gt("Mail quota")),
-                    $('<span class="pull-right gray quota-memory-mail">'),
-                    $("<div>").addClass("plugins-portal-quota-mailbar")
+                $('<div>').addClass('paragraph').append(
+                    $('<span>').text(gt('Mail quota')),
+                    $('<span>').addClass('pull-right gray quota-memory-mail'),
+                    $('<div>').addClass('plugins-portal-quota-mailbar')
                 ),
-                $('<div class="paragraph">').append(
-                    $('<span>').text(gt("Mail count quota")),
-                    $('<span class="pull-right gray quota-mailcount">'),
-                    $("<div>").addClass("plugins-portal-quota-mailcountbar")
-                ).addClass("plugins-portal-quota-mailcount")
+                $('<div>').addClass('paragraph').append(
+                    $('<span>').text(gt('Mail count quota')),
+                    $('<span>').addClass('pull-right gray quota-mailcount'),
+                    $('<div>').addClass('plugins-portal-quota-mailcountbar')
+                ).addClass('plugins-portal-quota-mailcount')
             )
         );
 
         //filestorage
         if (quota.file.quota < 0) {
-            this.find(".quota-memory-file").text(gt("unlimited"));
-            this.find(".plugins-portal-quota-filebar").remove();
+            this.find('.quota-memory-file').text(gt('unlimited'));
+            this.find('.plugins-portal-quota-filebar').remove();
         } else {
-            this.find(".quota-memory-file")
+            this.find('.quota-memory-file')
             .text(//#. %1$s is the storagespace in use
                   //#. %2$s is the max storagespace
                   //#, c-format
-                  gt("%1$s of %2$s", strings.fileSize(quota.file.use), strings.fileSize(quota.file.quota)));
+                  gt('%1$s of %2$s', strings.fileSize(quota.file.use), strings.fileSize(quota.file.quota)));
 
             var width = (quota.file.use / quota.file.quota) * 100;
-            this.find(".plugins-portal-quota-filebar")
-                .addClass("progress progress-striped")
+            this.find('.plugins-portal-quota-filebar')
+                .addClass('progress progress-striped')
                 .append(buildbar(width));
         }
 
         //mailstorage
         if (quota.mail.quota < 0) {
-            this.find(".quota-memory-mail").text(gt("unlimited"));
-            this.find(".plugins-portal-quota-mailbar").remove();
+            this.find('.quota-memory-mail').text(gt('unlimited'));
+            this.find('.plugins-portal-quota-mailbar').remove();
         } else {
-            this.find(".quota-memory-mail")
+            this.find('.quota-memory-mail')
             .text(//#. %1$s is the storagespace in use
                   //#. %2$s is the max storagespace
                   //#, c-format
-                  gt("%1$s of %2$s", strings.fileSize(quota.mail.use),  strings.fileSize(quota.mail.quota)));
+                  gt('%1$s of %2$s', strings.fileSize(quota.mail.use),  strings.fileSize(quota.mail.quota)));
 
             var width = (quota.mail.use / quota.mail.quota) * 100;
-            this.find(".plugins-portal-quota-mailbar")
-                .addClass("progress progress-striped")
+            this.find('.plugins-portal-quota-mailbar')
+                .addClass('progress progress-striped')
                 .append(buildbar(width));
         }
 
         //mailcount
         if (quota.mail.countquota < 0) {
-            this.find(".quota-mailcount").remove();
+            this.find('.quota-mailcount').remove();
         } else {
-            this.find(".quota-mailcount")
+            this.find('.quota-mailcount')
             .text(//#. %1$s is the number of mails
                   //#. %2$s is the maximum number of mails
                   //#, c-format
-                  gt("%1$s of %2$s", gt.noI18n(quota.mail.countuse), gt.noI18n(quota.mail.countquota)));
+                  gt('%1$s of %2$s', gt.noI18n(quota.mail.countuse), gt.noI18n(quota.mail.countquota)));
 
             var width = (quota.mail.countuse / quota.mail.countquota) * 100;
-            this.find(".plugins-portal-quota-mailcountbar")
-                .addClass("progress progress-striped")
+            this.find('.plugins-portal-quota-mailcountbar')
+                .addClass('progress progress-striped')
                 .append(buildbar(width));
         }
     },
 
     buildbar = function (width) {
-        var progressbar = $('<div>').addClass('bar').css('width', width + "%");
+        var progressbar = $('<div>').addClass('bar').css('width', width + '%');
         if (width < 70) {
             progressbar.addClass('default'); // blue instead of green
         } else if (width < 90) {
@@ -118,7 +118,7 @@ define("plugins/portal/quota/register",
         return $.Deferred().resolve();
     };
 
-    ext.point("io.ox/portal/widget/quota").extend({
+    ext.point('io.ox/portal/widget/quota').extend({
         title: gt('Quota'),
         load: load,
         draw: draw,
