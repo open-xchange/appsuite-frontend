@@ -97,6 +97,12 @@ define("plugins/portal/quota/register",
         }
     },
 
+    /**
+     * Create a progress bar with a given @param width.
+     * Usually the width represents the relation of used quota to available quota.
+     *
+     * @return a progressbar element
+     */
     buildbar = function (width) {
         var progressbar = $('<div>').addClass('bar').css('width', width + '%');
         if (width < 70) {
