@@ -564,14 +564,18 @@ define('io.ox/core/tk/vgrid',
 
         loadAll = (function () {
 
-            function fail() {
+            function fail(list) {
+                // is detailed error message enabled
+                list = list.categories === 'PERMISSION_DENIED' ? list : {};
+                list = isArray(list) ? _.first(list) : list;
+
                 // clear grid
                 apply([]);
                 // inform user
                 container.hide().parent().idle()
                     .find('.io-ox-fail').parent().remove().end().end()
                     .append(
-                        $.fail(gt('Could not load this list'), function () {
+                        $.fail(gt(list.error || 'Could not load this list'), function () {
                             container.show();
                             loadAll();
                         })
