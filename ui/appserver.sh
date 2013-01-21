@@ -6,6 +6,6 @@ if [ -n "$1" ]
 then
     $NODEJS lib/appsserver.js "$@"
 else
-    if [ -f local.conf ]; then source ./local.conf; fi
+    if [ -f ./local.conf ]; then . ./local.conf; fi
     $NODEJS lib/appsserver.js $builddir
 fi
