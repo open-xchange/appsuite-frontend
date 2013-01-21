@@ -57,10 +57,9 @@ define("plugins/portal/quota/register",
                   //#, c-format
                   gt('%1$s of %2$s', strings.fileSize(quota.file.use), strings.fileSize(quota.file.quota)));
 
-            var width = (quota.file.use / quota.file.quota) * 100;
             this.find('.plugins-portal-quota-filebar')
                 .addClass('progress progress-striped')
-                .append(buildbar(width));
+                .append(buildbar(quota.file.use, quota.file.quota));
         }
 
         //mailstorage
@@ -74,10 +73,9 @@ define("plugins/portal/quota/register",
                   //#, c-format
                   gt('%1$s of %2$s', strings.fileSize(quota.mail.use),  strings.fileSize(quota.mail.quota)));
 
-            var width = (quota.mail.use / quota.mail.quota) * 100;
             this.find('.plugins-portal-quota-mailbar')
                 .addClass('progress progress-striped')
-                .append(buildbar(width));
+                .append(buildbar(quota.mail.use, quota.mail.quota));
         }
 
         //mailcount
@@ -90,21 +88,23 @@ define("plugins/portal/quota/register",
                   //#, c-format
                   gt('%1$s of %2$s', gt.noI18n(quota.mail.countuse), gt.noI18n(quota.mail.countquota)));
 
-            var width = (quota.mail.countuse / quota.mail.countquota) * 100;
             this.find('.plugins-portal-quota-mailcountbar')
                 .addClass('progress progress-striped')
-                .append(buildbar(width));
+                .append(buildbar(quota.mail.countuse, quota.mail.countquota));
         }
     },
 
     /**
-     * Create a progress bar with a given @param width.
-     * Usually the width represents the relation of used quota to available quota.
+     * Create a progress bar showing the relation of two values represonted by
+     * @param usage and @param size. It’s assumed, that usage is always the smaller
+     * value and size the larger one.
      *
      * @return a progressbar element
      */
-    buildbar = function (width) {
-        var progressbar = $('<div>').addClass('bar').css('width', width + '%');
+    buildbar = function (usage, size) {
+        var width       = (Math.min(usage, size) / Math.max(usage, size)) * 100,
+            progressbar = $('<div>').addClass('bar').css('width', width + '%');
+
         if (width < 70) {
             progressbar.addClass('default'); // blue instead of green
         } else if (width < 90) {
