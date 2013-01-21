@@ -28,70 +28,31 @@ define("plugins/portal/quota/register",
     drawTile = function (quota) {
         this.append(
             $('<div>').addClass('content no-pointer').append(
-                $('<div>').addClass('paragraph').append(
-                    $('<span>').text(gt('File quota')),
-                    $('<span>').addClass('pull-right gray quota-memory-file'),
-                    $('<div>').addClass('plugins-portal-quota-filebar')
-                ),
-                $('<div>').addClass('paragraph').append(
-                    $('<span>').text(gt('Mail quota')),
-                    $('<span>').addClass('pull-right gray quota-memory-mail'),
-                    $('<div>').addClass('plugins-portal-quota-mailbar')
-                ),
-                $('<div>').addClass('paragraph').append(
-                    $('<span>').text(gt('Mail count quota')),
-                    $('<span>').addClass('pull-right gray quota-mailcount'),
-                    $('<div>').addClass('plugins-portal-quota-mailcountbar')
-                ).addClass('plugins-portal-quota-mailcount')
+                addQuotaArea('memory-file', gt('File quota')),
+                addQuotaArea('memory-mail', gt('Mail quota')),
+                addQuotaArea('mailcount', gt('Mail count quota'))
             )
         );
 
-        //filestorage
-        if (quota.file.quota < 0) {
-            this.find('.quota-memory-file').text(gt('unlimited'));
-            this.find('.plugins-portal-quota-filebar').remove();
-        } else {
-            this.find('.quota-memory-file')
-            .text(//#. %1$s is the storagespace in use
-                  //#. %2$s is the max storagespace
-                  //#, c-format
-                  gt('%1$s of %2$s', strings.fileSize(quota.file.use), strings.fileSize(quota.file.quota)));
+        displayQuota({
+            quota: quota.file.quota,
+            usage: quota.file.use,
+            name: 'memory-file',
+            widget: this
+        });
+        displayQuota({
+            quota: quota.mail.quota,
+            usage: quota.mail.use,
+            name: 'memory-mail',
+            widget: this
+        });
+        displayQuota({
+            quota: quota.mail.countquota,
+            usage: quota.mail.countuse,
+            name: 'mailcount',
+            widget: this
+        });
 
-            this.find('.plugins-portal-quota-filebar')
-                .addClass('progress progress-striped')
-                .append(buildbar(quota.file.use, quota.file.quota));
-        }
-
-        //mailstorage
-        if (quota.mail.quota < 0) {
-            this.find('.quota-memory-mail').text(gt('unlimited'));
-            this.find('.plugins-portal-quota-mailbar').remove();
-        } else {
-            this.find('.quota-memory-mail')
-            .text(//#. %1$s is the storagespace in use
-                  //#. %2$s is the max storagespace
-                  //#, c-format
-                  gt('%1$s of %2$s', strings.fileSize(quota.mail.use),  strings.fileSize(quota.mail.quota)));
-
-            this.find('.plugins-portal-quota-mailbar')
-                .addClass('progress progress-striped')
-                .append(buildbar(quota.mail.use, quota.mail.quota));
-        }
-
-        //mailcount
-        if (quota.mail.countquota < 0) {
-            this.find('.quota-mailcount').remove();
-        } else {
-            this.find('.quota-mailcount')
-            .text(//#. %1$s is the number of mails
-                  //#. %2$s is the maximum number of mails
-                  //#, c-format
-                  gt('%1$s of %2$s', gt.noI18n(quota.mail.countuse), gt.noI18n(quota.mail.countquota)));
-
-            this.find('.plugins-portal-quota-mailcountbar')
-                .addClass('progress progress-striped')
-                .append(buildbar(quota.mail.countuse, quota.mail.countquota));
-        }
     },
 
     /**
@@ -114,6 +75,48 @@ define("plugins/portal/quota/register",
         }
 
         return progressbar;
+    },
+    /**
+     * Add a quota section with a given (internal) @param name and a
+     * user visible @param i18nName
+     *
+     * @return - a div element containing some fields for data
+     */
+    addQuotaArea = function (name, i18nName) {
+        return $('<div>').addClass('paragraph')
+            .append($('<span>').text(i18nName),
+                    $('<span>').addClass('pull-right gray quota-' + name),
+                    $('<div>').addClass('plugins-portal-quota-' + name + 'bar')
+                   );
+    },
+    /**
+     * Display quota data in the fields added by addQuotaArea
+     *
+     * @param params - object of the form:
+     * {
+     *  name: name of the quota element (same as for addQuotaArea)
+     *  quota: value of the quota
+     *  usage: actual usage of the quota
+     *  widget: the parent widget of the portal plugins
+     * }
+     */
+    displayQuota = function (params) {
+        if (params.quota < 0) {
+            params.widget.find('.quota-' + params.name).text(gt('unlimited'));
+            params.widget.find('.plugins-portal-quota' + params.name + 'bar').remove();
+        } else {
+            params.widget.find('quota-' + params.name)
+                .text(
+                    //#. %1$s is the storagespace in use
+                    //#. %2$s is the max storagespace
+                    //#, c-format
+                    gt('%1$s of %2$s', strings.fileSize(params.usage), strings.fileSize(params.quota))
+                );
+
+            params.widget.find('.plugins-portal-quota' + params.name + 'bar')
+                .addClass('progress progress-striped')
+                .append(buildbar(params.usage, params.quota));
+        }
     },
 
     load = function () {
