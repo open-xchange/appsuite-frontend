@@ -176,6 +176,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             var key, id;
             if (!e.isDefaultPrevented()) {
                 key = $(this).attr('data-obj-id');
+
                 id = bHasIndex ? observedItems[getIndex(key)] : key;
                 // exists?
                 if (id !== undefined) {
@@ -198,7 +199,8 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         };
 
         getNode = function (id) {
-            return $('.selectable[data-obj-id="' + self.serialize(id) + '"]', container);
+            // Why we do the replacement regex stuff: Bug #24543
+            return $('.selectable[data-obj-id="' + self.serialize(id).replace(/\\\./, '\\\\.') + '"]', container);
         };
 
         isSelected = function (id) {
