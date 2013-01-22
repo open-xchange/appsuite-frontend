@@ -91,7 +91,7 @@ define('io.ox/portal/main',
         index: 200,
         draw: function (baton) {
             this.append(
-                baton.$.widgets = $('<ul class="widgets">')
+                baton.$.widgets = $('<ol class="widgets">')
             );
         }
     });

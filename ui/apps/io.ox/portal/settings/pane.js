@@ -283,7 +283,7 @@ define('io.ox/portal/settings/pane',
         id: "list",
         draw: function () {
 
-            var list = $('<ul class="widget-list">');
+            var list = $('<ol class="widget-list">');
 
             collection.each(function (model) {
                 list.append(createView(model).render().el);
