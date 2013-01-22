@@ -331,6 +331,7 @@ define('plugins/portal/twitter/register',
     ext.point('io.ox/portal/widget/twitter/settings').extend({
         title: gt('Twitter'),
         type: 'twitter',
-        editable: false
+        editable: false,
+        unique: true
     });
 });
