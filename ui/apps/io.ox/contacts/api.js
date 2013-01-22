@@ -295,11 +295,17 @@ define('io.ox/contacts/api',
     };
 
     // simple contact picture cache
-    var contactPictures = new cache.SimpleCache('picture-by-mail', true);
+    var contactPictures = new cache.SimpleCache('picture-by-mail', true),
+        getPictureByMailAddress = null;
 
-    // get contact picture by email address
-    api.getPictureByMailAddress = function (address) {
-
+   /**
+    * get contact picture url (server or cache); adds results to cache
+    *
+    * @private
+    * @param {string} adress emailaddress
+    * @return {string} returns picture url
+    */
+    getPictureByMailAddress = function (address) {
         // lower case!
         address = $.trim(address).toLowerCase();
 
@@ -307,19 +313,33 @@ define('io.ox/contacts/api',
             if (data !== null) {
                 return data;
             } else if (address === '') {
-                return $.Deferred.resolve('');
+                return {};
             } else {
                 return http.PUT({
                     module: 'contacts',
                     params: {
-                        action: 'search',
+                        action: 'advancedSearch',
                         columns: '20,1,500,606'
                     },
                     data: {
-                        email1: address,
-                        email2: address,
-                        email3: address,
-                        orSearch: true
+                        filter: [
+                            'or',
+                            [
+                                '=',
+                                {"field": "email1"},
+                                address
+                            ],
+                            [
+                                '=',
+                                {"field": "email2"},
+                                address
+                            ],
+                            [
+                                '=',
+                                {"field": "email2"},
+                                address
+                            ]
+                        ]
                     }
                 })
                 .pipe(function (data) {
@@ -347,19 +367,30 @@ define('io.ox/contacts/api',
         });
     };
 
+   /**
+    * gets deferred for fetching picture url
+    *
+    * @param {string|object} obj emailaddress or data object (id attr)
+    * @param {object} options height, width, scaleType
+    * @return {deferred}
+    */
     api.getPictureURL = function (obj, options) {
 
         var deferred = $.Deferred(),
-            defaultUrl = ox.base + '/apps/themes/default/dummypicture.png',
+            defaultUrl = ox.base + '/apps/themes/default/dummypicture.png', //initially displayed
             id,
             fail = function () {
                 api.trigger('fail');
                 deferred.resolve(defaultUrl);
             };
 
+        if (typeof obj === 'string' && obj === '') {
+            return deferred.resolve(defaultUrl);
+        }
+
         if (typeof obj === 'string') {
             // assume input is email address
-            api.getPictureByMailAddress(obj)
+            getPictureByMailAddress(obj)
                 .done(function (url) {
                     url = url ? url + '&' + $.param($.extend({}, options)) : defaultUrl;
                     deferred.resolve(url);
@@ -397,6 +428,13 @@ define('io.ox/contacts/api',
         return deferred;
     };
 
+   /**
+    * get div node with callbacks managing fetching/updating
+    *
+    * @param {string|object} obj emailaddress
+    * @param {object} options height, with, scaleType
+    * @return {object} div node with callbacks
+    */
     api.getPicture = function (obj, options) {
         var node, set, clear, cont;
         node = $('<div>');
