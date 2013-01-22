@@ -59,9 +59,6 @@ define('io.ox/portal/settings/pane',
     }
 
     function drawAddButton() {
-        var used = widgets.getUsedTypes(),
-            allTypes = widgets.getAllTypes();
-
         this.append(
             $('<div class="controls">').append(
                 $('<div class="btn-group pull-right">').append(
@@ -69,20 +66,27 @@ define('io.ox/portal/settings/pane',
                         $.txt(gt('Add widget')), $.txt(' '),
                         $('<span class="caret">')
                     ),
-                    $('<ul class="dropdown-menu">').append(
-                        _(allTypes).map(function (options) {
-                            if (options.unique && _(used).contains(options.type)) {
-                                return "";
-                            } else {
-                                return $('<li>').append(
-                                    $('<a>', { href: '#', 'data-type': options.type }).text(options.title)
-                                );
-                            }
-                        })
-                    )
-                    .on('click', 'a', addWidget)
+                    $('<ul class="dropdown-menu">').on('click', 'a', addWidget)
                 )
             )
+        );
+        repopulateAddButton();
+    }
+
+    function repopulateAddButton() {
+        var used = widgets.getUsedTypes(),
+            allTypes = widgets.getAllTypes();
+
+        $('div.controls ul.dropdown-menu').empty().append(
+            _(allTypes).map(function (options) {
+                if (options.unique && _(used).contains(options.type)) {
+                    return "";
+                } else {
+                    return $('<li>').append(
+                        $('<a>', { href: '#', 'data-type': options.type }).text(options.title)
+                    );
+                }
+            })
         );
     }
 
