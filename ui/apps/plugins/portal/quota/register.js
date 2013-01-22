@@ -48,7 +48,9 @@ define("plugins/portal/quota/register",
             i18nName: gt('Mail count quota')
         });
 
-        return fields;
+        return _(fields).select(function (q) {
+            return (q.quota && q.usage);
+        });
     },
 
     drawTile = function (quota) {
@@ -121,6 +123,8 @@ define("plugins/portal/quota/register",
      * }
      */
     displayQuota = function (params) {
+        if (!params.widget.find('.quota-' + params.name)) return;
+
         if (params.quota < 0) {
             params.widget.find('.quota-' + params.name).text(gt('unlimited'));
             params.widget.find('.plugins-portal-quota' + params.name + 'bar').remove();
