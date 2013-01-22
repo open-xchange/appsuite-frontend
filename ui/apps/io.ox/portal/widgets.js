@@ -95,7 +95,7 @@ define('io.ox/portal/widgets',
         getUsedTypes: function () {
             return collection.pluck('plugin')
                 .map(function (id) {
-                    return id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1').toLowerCase();
+                    return id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1');
                 });
         },
 
