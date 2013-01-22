@@ -56,6 +56,7 @@ define('io.ox/portal/settings/pane',
         e.preventDefault();
         var type = $(this).attr('data-type');
         widgets.add(type);
+        repopulateAddButton();
     }
 
     function drawAddButton() {
@@ -247,6 +248,7 @@ define('io.ox/portal/settings/pane',
             } else {
                 this.removeWidget();
             }
+            repopulateAddButton();
         }
     });
 
