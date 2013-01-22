@@ -452,6 +452,7 @@ define('io.ox/calendar/edit/template',
                     _($input[0].files).each(function (fileData) {
                         baton.attachmentList.addFile(fileData);
                     });
+                    $input.trigger('reset.fileupload');
                 } else {
                     if ($input.val()) {
                         var fileData = {
@@ -464,7 +465,6 @@ define('io.ox/calendar/edit/template',
                         $input = $('<input>', { type: 'file' }).appendTo($input.parent());
                     }
                 }
-                $input.trigger('reset.fileupload');
             });
 
             $node.append($('<div>').addClass('span12').append($inputWrap));
