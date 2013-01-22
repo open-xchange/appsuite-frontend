@@ -18,7 +18,7 @@ define('io.ox/calendar/week/view',
      'io.ox/core/api/folder',
      'settings!io.ox/calendar',
      'less!io.ox/calendar/week/style.css',
-     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, gt, folder, settings) {
+     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, gt, folderAPI, settings) {
 
     'use strict';
 
@@ -236,7 +236,7 @@ define('io.ox/calendar/week/view',
 
         // handler for double-click events on grid
         onCreateAppointment: function (e) {
-            if (!folder.can('create', this.folder())) {
+            if (!folderAPI.can('create', this.folder())) {
                 return;
             }
             if ($(e.target).hasClass('timeslot')) {
@@ -257,7 +257,7 @@ define('io.ox/calendar/week/view',
         },
 
         onLasso: function (e) {
-            if (!folder.can('create', this.folder())) {
+            if (!folderAPI.can('create', this.folder())) {
                 return;
             }
 
@@ -1268,7 +1268,7 @@ define('io.ox/calendar/week/view',
             } else {
                 classes = util.getShownAsClass(a.attributes) +
                     ' ' + util.getConfirmationClass(conf.status) +
-                    (folder.can('write', baton.folder, a.attributes) ? ' modify' : '');
+                    (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
             }
 
             this.addClass(classes)

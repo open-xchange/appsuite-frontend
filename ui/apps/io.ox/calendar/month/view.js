@@ -18,7 +18,7 @@ define('io.ox/calendar/month/view',
      'gettext!io.ox/calendar',
      'settings!io.ox/calendar',
      'less!io.ox/calendar/month/style.css',
-     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, folder, gt, settings) {
+     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, folderAPI, gt, settings) {
 
     'use strict';
 
@@ -90,7 +90,7 @@ define('io.ox/calendar/month/view',
         },
 
         onCreateAppointment: function (e) {
-            if (!folder.can('create', this.folder)) {
+            if (!folderAPI.can('create', this.folder)) {
                 return;
             }
             if ($(e.target).hasClass('list')) {
@@ -307,7 +307,7 @@ define('io.ox/calendar/month/view',
             } else {
                 classes = util.getShownAsClass(a.attributes) +
                     ' ' + util.getConfirmationClass(conf.status) +
-                    (folder.can('write', baton.folder, a.attributes) ? ' modify' : '');
+                    (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
             }
 
             this.addClass(classes)
