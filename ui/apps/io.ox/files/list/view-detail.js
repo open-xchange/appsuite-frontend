@@ -141,7 +141,7 @@ define('io.ox/files/list/view-detail',
             );
 
             var $node = $('<form>').appendTo(this),
-            $commentArea = $('<textarea rows="5">'),
+            $commentArea = $('<textarea rows="5"></textarea>'),
             $comment = $('<div class="span12">').hide().append(
                 $('<label>').text(gt('Version Comment')),
                 $commentArea
