@@ -62,6 +62,51 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
+#: apps/plugins/portal/quota/register.js:31
+msgid "File quota"
+msgstr ""
+
+#: apps/plugins/portal/quota/register.js:32
+msgid "Mail quota"
+msgstr ""
+
+#: apps/plugins/portal/quota/register.js:33
+msgid "Mail count quota"
+msgstr ""
+
+#: apps/plugins/portal/quota/register.js:105
+msgid "unlimited"
+msgstr ""
+
+#. #-#-#-#-#-#-#-#-#-#
+#. %1$s is the storagespace in use
+#. %2$s is the max storagespace
+#, c-format
+#. #-#-#-#-#-#-#-#-#-#
+#. %1$s is the storagespace in use
+#. %2$s is the max storagespace
+#, c-format
+#. #-#-#-#-#-#-#-#-#-#
+#. %1$s is the number of mails
+#. %2$s is the maximum number of mails
+#, c-format
+#. #-#-#-#-#-#-#-#-#-#
+#. %1$s is the current page index in office document preview
+#. %2$s is the number of pages in office document preview
+#, c-format
+#: apps/io.ox/office/preview/controller.js:61
+#: apps/plugins/portal/quota/register.js:58
+#: apps/plugins/portal/quota/register.js:75
+#: apps/plugins/portal/quota/register.js:91
+#: apps/plugins/portal/quota/register.js:113
+msgid "%1$s of %2$s"
+msgstr ""
+
+#: apps/plugins/portal/quota/register.js:131
+#: apps/plugins/portal/quota/register.js:144
+msgid "Quota"
+msgstr ""
+
 #: apps/plugins/portal/rss/register.js:54
 #: apps/plugins/portal/rss/register.js:186
 msgid "RSS Feed"
@@ -476,55 +521,6 @@ msgstr ""
 
 #: apps/plugins/portal/updater/register.js:43
 msgid "Updater"
-msgstr ""
-
-#: apps/plugins/portal/quota/register.js:32
-msgid "File quota"
-msgstr ""
-
-#: apps/plugins/portal/quota/register.js:37
-msgid "Mail quota"
-msgstr ""
-
-#: apps/plugins/portal/quota/register.js:42
-msgid "Mail count quota"
-msgstr ""
-
-#: apps/plugins/portal/quota/register.js:51
-#: apps/plugins/portal/quota/register.js:68
-msgid "unlimited"
-msgstr ""
-
-#. #-#-#-#-#-#-#-#-#-#
-#. %1$s is the storagespace in use
-#. %2$s is the max storagespace
-#, c-format
-#. #-#-#-#-#-#-#-#-#-#
-#. %1$s is the number of mails
-#. %2$s is the maximum number of mails
-#, c-format
-#. #-#-#-#-#-#-#-#-#-#
-#. %1$s is the storagespace in use
-#. %2$s is the max storagespace
-#, c-format
-#. #-#-#-#-#-#-#-#-#-#
-#. %1$s is the number of mails
-#. %2$s is the maximum number of mails
-#, c-format
-#. #-#-#-#-#-#-#-#-#-#
-#. %1$s is the current page index in office document preview
-#. %2$s is the number of pages in office document preview
-#, c-format
-#: apps/io.ox/office/preview/controller.js:61
-#: apps/plugins/portal/quota/register.js:58
-#: apps/plugins/portal/quota/register.js:75
-#: apps/plugins/portal/quota/register.js:91
-msgid "%1$s of %2$s"
-msgstr ""
-
-#: apps/plugins/portal/quota/register.js:122
-#: apps/plugins/portal/quota/register.js:135
-msgid "Quota"
 msgstr ""
 
 #: apps/plugins/halo/mail/register.js:41
