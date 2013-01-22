@@ -100,46 +100,30 @@ define("plugins/portal/quota/register",
      * @return - a div element containing some fields for data
      */
     addQuotaArea = function (el, quota) {
+        var label = $('<span>').addClass('pull-right gray quota-' + quota.name),
+            bar = $('<div>').addClass('plugins-portal-quota-' + quota.name + 'bar');
+
         el.append(
             $('<div>').addClass('paragraph')
             .append($('<span>').text(quota.i18nName),
-                    $('<span>').addClass('pull-right gray quota-' + quota.name),
-                    $('<div>').addClass('plugins-portal-quota-' + quota.name + 'bar')
-                   )
+                label,
+                bar
+            )
         );
-        quota.widget = el;
-        displayQuota(quota);
-    },
-    /**
-     * Display quota data in the fields added by addQuotaArea
-     *
-     * @param params - object of the form:
-     * {
-     *  name: name of the quota element (same as for addQuotaArea)
-     *  i18nName: translated name to show to the user
-     *  quota: value of the quota
-     *  usage: actual usage of the quota
-     *  widget: the widget to add the quota fields to
-     * }
-     */
-    displayQuota = function (params) {
-        if (!params.widget.find('.quota-' + params.name)) return;
 
-        if (params.quota < 0) {
-            params.widget.find('.quota-' + params.name).text(gt('unlimited'));
-            params.widget.find('.plugins-portal-quota' + params.name + 'bar').remove();
+        if (quota.quota < 0) {
+            label.text(gt('unlimited'));
+            bar.remove();
         } else {
-            params.widget.find('quota-' + params.name)
-                .text(
-                    //#. %1$s is the storagespace in use
-                    //#. %2$s is the max storagespace
-                    //#, c-format
-                    gt('%1$s of %2$s', strings.fileSize(params.usage), strings.fileSize(params.quota))
-                );
+            label.text(
+                //#. %1$s is the storagespace in use
+                //#. %2$s is the max storagespace
+                //#, c-format
+                gt('%1$s of %2$s', strings.fileSize(quota.usage), strings.fileSize(quota.quota))
+            );
 
-            params.widget.find('.plugins-portal-quota' + params.name + 'bar')
-                .addClass('progress progress-striped')
-                .append(buildbar(params.usage, params.quota));
+            bar.addClass('progress progress-striped')
+            .append(buildbar(quota.usage, quota.quota));
         }
     },
 
