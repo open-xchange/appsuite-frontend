@@ -319,7 +319,7 @@ define('io.ox/portal/settings/pane',
             collection.on('add', function (model) {
                 model.candidate = true;
                 var view = createView(model).render();
-                list.prepend(view.el);
+                list.append(view.el);
                 view.edit();
             });
         }

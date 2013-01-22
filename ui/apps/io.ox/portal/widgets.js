@@ -123,7 +123,7 @@ define('io.ox/portal/widgets',
                 color: colors[_.random(colors.length - 1)],
                 enabled: true,
                 id: id,
-                index: 0,
+                index: collection.length,
                 plugin: 'plugins/portal/' + (plugin || type) + '/register',
                 props: props || {},
                 type: type
