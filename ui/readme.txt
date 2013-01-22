@@ -19,7 +19,7 @@ How to get the UI running in Debian/Ubuntu
 4.  Build the UI and the documentation:
 
         ./build.sh
-        ./build.sh doc
+        ./build.sh docs
 
 5.  If everything works fine, the documentation should be at
     http://localhost/appsuite/doc/apache.html. Continue reading there!
@@ -47,7 +47,7 @@ How to get the UI running on MacOS X
       ./build.sh
 
     - Build documentation:
-      ./build.sh doc
+      ./build.sh docs
 
 4.  If everything works fine, the documentation should be at
     http://localhost/appsuite/doc/apache.html. Continue reading there!
