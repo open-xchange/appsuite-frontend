@@ -24,35 +24,41 @@ define("plugins/portal/quota/register",
     var loadTile = function () {
         return api.get();
     },
+    availableQuota = function (quota) {
+        var fields = [];
 
-    drawTile = function (quota) {
-        this.append(
-            $('<div>').addClass('content no-pointer').append(
-                addQuotaArea('memory-file', gt('File quota')),
-                addQuotaArea('memory-mail', gt('Mail quota')),
-                addQuotaArea('mailcount', gt('Mail count quota'))
-            )
-        );
-
-        displayQuota({
+        fields.push({
             quota: quota.file.quota,
             usage: quota.file.use,
             name: 'memory-file',
-            widget: this
+            i18nName: gt('File quota')
         });
-        displayQuota({
+
+        fields.push({
             quota: quota.mail.quota,
             usage: quota.mail.use,
             name: 'memory-mail',
-            widget: this
+            i18nName: gt('Mail quota')
         });
-        displayQuota({
+
+        fields.push({
             quota: quota.mail.countquota,
             usage: quota.mail.countuse,
             name: 'mailcount',
-            widget: this
+            i18nName: gt('Mail count quota')
         });
 
+        return fields;
+    },
+
+    drawTile = function (quota) {
+        var contentFields = $('<div>').addClass('content no-pointer');
+
+        this.append(contentFields);
+
+        _.each(availableQuota(quota), function (q) {
+            addQuotaArea(contentFields, q);
+        });
     },
 
     /**
@@ -77,17 +83,30 @@ define("plugins/portal/quota/register",
         return progressbar;
     },
     /**
-     * Add a quota section with a given (internal) @param name and a
-     * user visible @param i18nName
+     * Add a quota section with a given (internal) @param quota.name and a
+     * user visible @param quota.i18nName to the element @param el
      *
+     * @param el - the element, that is the parent
+     * @param quota - object of the form:
+     * {
+     *  name: name of the quota element (same as for addQuotaArea)
+     *  i18nName: translated name to show to the user
+     *  quota: value of the quota
+     *  usage: actual usage of the quota
+     *  widget: the widget to add the quota fields to
+     * }
      * @return - a div element containing some fields for data
      */
-    addQuotaArea = function (name, i18nName) {
-        return $('<div>').addClass('paragraph')
-            .append($('<span>').text(i18nName),
-                    $('<span>').addClass('pull-right gray quota-' + name),
-                    $('<div>').addClass('plugins-portal-quota-' + name + 'bar')
-                   );
+    addQuotaArea = function (el, quota) {
+        el.append(
+            $('<div>').addClass('paragraph')
+            .append($('<span>').text(quota.i18nName),
+                    $('<span>').addClass('pull-right gray quota-' + quota.name),
+                    $('<div>').addClass('plugins-portal-quota-' + quota.name + 'bar')
+                   )
+        );
+        quota.widget = el;
+        displayQuota(quota);
     },
     /**
      * Display quota data in the fields added by addQuotaArea
@@ -95,9 +114,10 @@ define("plugins/portal/quota/register",
      * @param params - object of the form:
      * {
      *  name: name of the quota element (same as for addQuotaArea)
+     *  i18nName: translated name to show to the user
      *  quota: value of the quota
      *  usage: actual usage of the quota
-     *  widget: the parent widget of the portal plugins
+     *  widget: the widget to add the quota fields to
      * }
      */
     displayQuota = function (params) {
