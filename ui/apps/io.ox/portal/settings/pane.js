@@ -16,12 +16,11 @@ define('io.ox/portal/settings/pane',
        'io.ox/core/manifests',
        'io.ox/settings/utils',
        'io.ox/core/tk/dialogs',
-       'io.ox/core/notifications',
        'io.ox/portal/widgets',
        'settings!io.ox/portal',
        'gettext!io.ox/portal',
        'apps/io.ox/core/tk/jquery-ui.min.js',
-       'less!io.ox/portal/style.css'], function (ext, manifests, utils, dialogs, notifications, widgets, settings, gt) {
+       'less!io.ox/portal/style.css'], function (ext, manifests, utils, dialogs, widgets, settings, gt) {
 
     'use strict';
 
@@ -259,25 +258,6 @@ define('io.ox/portal/settings/pane',
         return (views[id] = new WidgetSettingsView({ model: model }));
     }
 
-    function saveWidgets() {
-        var obj = widgets.toJSON(),
-            old_state = obj;
-        // update all indexes
-        pane.find('.widget-settings-view').each(function (index) {
-            var node = $(this), id = node.attr('data-widget-id');
-            if (id in obj) {
-                obj[id].index = index;
-            }
-        });
-        widgets.update(obj);
-        collection.trigger('sort');
-        return widgets.save(obj).fail(function () {
-            //reset old state
-            widgets.update(old_state);
-            collection.trigger('sort');
-        });
-    }
-
     ext.point(POINT + '/pane').extend({
         index: 300,
         id: "list",
@@ -298,14 +278,7 @@ define('io.ox/portal/settings/pane',
                 scroll: true,
                 delay: 150,
                 stop: function (e, ui) {
-                    saveWidgets()
-                    .done(function () {
-                        notifications.yell('success', gt("Settings saved."));
-                    })
-                    .fail(function () {
-                        notifications.yell('error', gt("Could not save settings."));
-                        list.sortable('cancel');
-                    });
+                    widgets.save(list);
                 }
             });
 
@@ -321,6 +294,13 @@ define('io.ox/portal/settings/pane',
                 var view = createView(model).render();
                 list.append(view.el);
                 view.edit();
+            });
+
+            collection.on('sort', function () {
+                list.empty();
+                this.each(function (model) {
+                    list.append(createView(model).render().el);
+                });
             });
         }
     });

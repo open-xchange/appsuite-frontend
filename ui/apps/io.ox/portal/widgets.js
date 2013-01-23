@@ -11,9 +11,12 @@
  */
 
 define('io.ox/portal/widgets',
-	['io.ox/core/extensions',
-     'io.ox/core/manifests',
-     'settings!io.ox/portal'], function (ext, manifests, settings) {
+       ['io.ox/core/extensions',
+       'io.ox/core/manifests',
+       'io.ox/core/notifications',
+       'settings!io.ox/portal',
+       'gettext!!io.ox/portal'
+        ], function (ext, manifests, notifications, settings, gt) {
 
 	'use strict';
 
@@ -163,16 +166,42 @@ define('io.ox/portal/widgets',
             });
         },
 
-        save: function (widgets) {
-            return settings.set('widgets/user', widgets).save();
+        /**
+         * Save a list of widgets into the database. The parameter
+         * @param widgetList must be a jQuery UI sortable object with its
+         * children sorted in the order that should be saved.
+         *
+         * @param widgetList - the sortable list of widgets
+         * @return - a deffered object with the save request
+         */
+        save: function (widgetList) {
+            var obj = this.toJSON(), old_state = obj;
+
+            // update all indexes
+            widgetList.children().each(function (index) {
+                var node = $(this), id = node.attr('data-widget-id');
+                if (id in obj) {
+                    obj[id].index = index;
+                }
+            });
+            this.update(obj);
+            collection.trigger('sort');
+
+            return settings.set('widgets/user', this).save()
+            .done(function () {
+                notifications.yell('success', gt("Settings saved."));
+            })
+            .fail(function () {
+                //reset old state
+                this.update(old_state);
+                collection.trigger('sort');
+                widgetList.sortable('cancel');
+                notifications.yell('error', gt("Could not save settings."));
+            });
         }
     };
 
     collection.reset(api.getSettings());
-
-    collection.on('change', function () {
-        api.save(api.toJSON());
-    });
 
     collection.on('remove', function (model) {
         settings.remove('widgets/user/' + model.get('id')).save();
