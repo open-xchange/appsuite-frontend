@@ -1,3 +1,16 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Alexander Quast <alexander.quast@open-xchange.com>
+ */
+
 define("io.ox/participants/model",
         ['io.ox/core/api/user',
          'io.ox/core/api/group',
@@ -84,7 +97,7 @@ define("io.ox/participants/model",
                 df.resolve();
                 break;
             case self.TYPE_EXTERNAL_USER:
-                contactAPI.search(self.get('mail')).done(function (results) {
+                contactAPI.getByEmailadress(self.get('mail')).done(function (results) {
                     if (results && results.length > 0) {
                         var itemWithImage = _(results).find(function (item) {
                             return item.image1_url && item.image1_url !== '';
