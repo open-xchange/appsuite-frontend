@@ -31,6 +31,8 @@ define('io.ox/files/views/create', [
 
             ext.point(POINT + '/form').invoke('draw', $form);
 
+            $form.on('submit', function (e) { e.preventDefault(); });
+
             dialog.header($('<h1>').addClass('clear-title').text(gt('Add new file')));
             dialog.getBody().append($('<div>').addClass('row-fluid').append($form));
             dialog
@@ -39,7 +41,7 @@ define('io.ox/files/views/create', [
                 .show(function () { $form.find('input:first').focus(); })
                 .done(function (action) {
                     if (action === 'save') {
-                        var files = $form.find('input[type="file"]')[0].files || [],
+                        var files = ($form.find('input[type="file"]').length > 0 ? $form.find('input[type="file"]')[0].files : []) || [],
                         folder = app.folder.get();
                         api.uploadFile({
                             form: $form,
