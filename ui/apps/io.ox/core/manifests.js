@@ -118,6 +118,8 @@ define.async('io.ox/core/manifests',
 
     _(ox.serverConfig.manifests).each(process);
 
+    var ts = _.now();
+
     var self = {
         manager: manifestManager,
         reset: function () {
@@ -127,14 +129,18 @@ define.async('io.ox/core/manifests',
             
             _(ox.serverConfig.manifests).each(process);
             if (_.url.hash('customManifests')) {
-                _(require(ox.base + "/src/manifests.js")).each(process);
+                console.info("Loading custom manifests");
+                _(require(ox.base + "/src/manifests.js?t=" + ts)).each(function (m) {
+                    console.info("Custom manifest", m);
+                    process(m);
+                });
             }
         }
     };
 
     if (_.url.hash('customManifests')) {
         var def = $.Deferred();
-        require([ox.base + "/src/manifests.js"], function (m) {
+        require([ox.base + "/src/manifests.js?t=" + ts], function (m) {
             _(m).each(process);
             def.resolve(self);
         });

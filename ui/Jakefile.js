@@ -506,16 +506,15 @@ function docFile(file, title) {
     titles.push('<a href="' + file +'.html">' + title + '</a><br/>');
 }
 
+docFile("gettingStarted", "Getting Started");
 docFile("apache", "Apache Configuration");
-docFile("demo", "Demo Steps");
-docFile("extensions", "Extension Points");
-docFile("libs", "External Libs");
-docFile("features", "Features");
 docFile("development_guide", "UI Development Style Guide");
+docFile("buildsystem", "Build System");
+docFile("manifests", "Module System");
+docFile("libs", "External Libs");
 docFile("vgrid", "VGrid");
 docFile("i18n", "Internationalization");
 docFile("date", "Date and Time");
-docFile("buildsystem", "Build System");
 
 var indexFiles = ["lib/header.html", "index.html",
     { getData: function() { return titles.join("\n"); } }, "lib/footer.html"];
