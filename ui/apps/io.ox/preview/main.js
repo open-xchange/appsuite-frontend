@@ -126,7 +126,7 @@ define("io.ox/preview/main",
                     type: file.mimetype,
                     preload: 'metadata',
                     controls: 'control',
-                    autoplay: 'false'
+                    autoplay: false
                 }).hide().appendTo(this);
                 var self = this;
                 require(['mediaelement/mediaelement-and-player',
