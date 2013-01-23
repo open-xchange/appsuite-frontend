@@ -79,7 +79,9 @@ http.createServer(function (request, response) {
         console.log(filename);
         if (!valid) {
             console.log('Could not read', filename);
-            response.write("console.log('Could not read " + m[2] + "');\n");
+            response.write("define('" + escape(list[i]) +
+                "', function () { throw new Error(\"Could not read '" +
+                escape(m[2]) + "'\"); });\n");
             continue;
         }
         if (m[1]) {
@@ -90,7 +92,8 @@ http.createServer(function (request, response) {
             } else {
                 var s = fs.readFileSync(filename, 'utf8');
             }
-            response.write("define('" + list[i] + "','" + escape(s) + "');\n");
+            response.write("define('" + escape(list[i]) + "','" + escape(s) +
+                           "');\n");
         } else {
             response.write(fs.readFileSync(filename));
         }

@@ -84,14 +84,14 @@
         classicRequire.load = oldload;
 
         define('classic', {load: function (name, parentRequire, load, config) {
-            classicRequire([name], load);
+            classicRequire([name], load, load.error);
         } });
 
         define('text', { load: function (name, parentRequire, load, config) {
-            req(['/text;' + name], load);
+            req(['/text;' + name], load, load.error);
         } });
         define('raw', { load: function (name, parentRequire, load, config) {
-            req(['/raw;' + name], load);
+            req(['/raw;' + name], load, load.error);
         } });
     }());
 

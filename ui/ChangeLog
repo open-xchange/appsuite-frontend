@@ -1,4 +1,8 @@
-* 2012-01-08 - alexander.quast@open-xchange.com
+* 2013-01-23 - viktor.pracht@open-xchange.com
+
+ - Fixed bug 24518: If a timezone can not be loaded, system doesn't allow access
+
+* 2013-01-08 - alexander.quast@open-xchange.com
 
  - Fix for bug 24411: Unresolvable (resource) conflicts
 
