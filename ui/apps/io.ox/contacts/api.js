@@ -505,7 +505,6 @@ define('io.ox/contacts/api',
         };
         // serverresponse vs. cache
         cont = function (data) {
-            debugger;
             if (_.isArray(data) && data.length > 0)
                 set(_.first(data).display_name);
             else if (data && data.display_name)
