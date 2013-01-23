@@ -41,8 +41,25 @@ function escape(s) {
     });
 }
 
+function httpDate(d) {
+    function pad(n) { return n < 10 ? '0' + n : String(n); }
+    return [
+        ['Sun,', 'Mon,', 'Tue,', 'Wed,', 'Thu,', 'Fri,', 'Sat,'][d.getUTCDay()],
+        pad(d.getUTCDate()),
+        ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getUTCMonth()],
+        d.getUTCFullYear(),
+        [pad(d.getUTCHours()),
+         pad(d.getUTCMinutes()),
+         pad(d.getUTCSeconds())].join(':'),
+        'GMT'
+    ].join(' ');
+}
+
 http.createServer(function (request, response) {
     response.setHeader('Content-Type', 'text/javascript;charset=UTF-8');
+    var d = new Date(new Date().getTime() + 3e10);
+    response.setHeader('Expires', httpDate(d));
     var list = url.parse(request.url).pathname.split(',');
     list.shift();
     for (var i in list) {
