@@ -383,7 +383,7 @@ define("io.ox/mail/main",
 
         // customize selection
         grid.selection.unfold = function () {
-            return [].concat(_(this.get()).map(function (o) {
+            return _.flatten(_(this.get()).map(function (o) {
                 return isInOpenThreadSummary(o) ? o : api.getThread(o);
             }));
         };
