@@ -18,12 +18,13 @@ define('io.ox/portal/main',
      'io.ox/core/date',
      'io.ox/core/manifests',
      'io.ox/core/tk/dialogs',
+     'io.ox/core/notifications',
      'io.ox/portal/widgets',
      'gettext!io.ox/portal',
      'settings!io.ox/portal',
      'less!io.ox/portal/style.css',
      'apps/io.ox/core/tk/jquery-ui.min.js'
-    ], function (ext, userAPI, date, manifests, dialogs, widgets, gt, settings) {
+    ], function (ext, userAPI, date, manifests, dialogs, notifications, widgets, gt, settings) {
 
     'use strict';
 
@@ -361,7 +362,8 @@ define('io.ox/portal/main',
                 scroll: true,
                 delay: 150,
                 stop: function (e, ui) {
-                    var obj = widgets.toJSON();
+                    var obj = widgets.toJSON(),
+                        old_state = obj;
                     // update all indexes
                     $(this).children('.widget').each(function (index) {
                         var node = $(this), id = node.attr('data-widget-id');
@@ -369,7 +371,16 @@ define('io.ox/portal/main',
                             obj[id].index = index;
                         }
                     });
-                    widgets.save(obj);
+                    widgets.update(obj);
+                    widgets.save(obj).fail(function () {
+                        widgets.update(old_state);
+                        notifications.yell('error', gt("Could not save settings."));
+                        appBaton.$.widgets.sortable('cancel');
+                    })
+                    .done(function () {
+                        collection.trigger('sort');
+                        notifications.yell('success', gt("Settings saved."));
+                    });
                 }
             });
 
