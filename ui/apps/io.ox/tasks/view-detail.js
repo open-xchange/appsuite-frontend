@@ -5,7 +5,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2011
+ * Copyright (C) Open-Xchange Inc., 2012
  * Mail: info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
@@ -21,7 +21,9 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
     "use strict";
 
     var taskDetailView = {
+            
         draw: function (data) {
+            
             if (!data) {
                 return $('<div>');
             }
@@ -150,25 +152,41 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             }
 
             if (task.participants.length > 0) {
-                var table,
-                    states = [
-                        [gt('Not yet confirmed'), 'grey'],
-                        [gt('Confirmed'), 'green'],
-                        [gt('Declined'), 'red'],
-                        [gt('Tentative'), 'yellow']
-                    ];
-                node.append($('<label class="detail-label">').text(gt("Participants")),
-                            table = $('<table class="task-participants-table">'));
                 require(['io.ox/core/api/user'], function (userApi) {
-                    _(task.participants).each(function (participant) {
-                        userApi.getName(participant.id).done(function (name) {
+                    var table,
+                        states = [
+                            [gt('Not yet confirmed'), 'grey'],
+                            [gt('Confirmed'), 'green'],
+                            [gt('Declined'), 'red'],
+                            [gt('Tentative'), 'yellow']
+                        ],
+                        lookupParticipant = function (node, table, participant) {
+                            userApi.getName(participant.id).done(function (name) {
+                                    drawParticipant(table, participant, name);
+                                }).fail(function () {
+                                    failedToLoad(node, table, participant);
+                                });
+                        },
+                        drawParticipant = function (table, participant, name) {
                             table.append($('<tr>').append(
-                                $('<td class="participants-table-name">').text(name),
-                                $('<td>').text(states[participant.confirmation][0]),
-                                $('<td>').append($('<div>').addClass("participants-table-colorsquare").css("background-color", states[participant.confirmation][1]))
-                                )
+                                        $('<td class="participants-table-name">').text(name),
+                                        $('<td>').text(states[participant.confirmation][0]),
+                                        $('<td>').append($('<div>').addClass("participants-table-colorsquare").css("background-color", states[participant.confirmation][1]))
+                                        )
+                                    );
+                        },
+                        failedToLoad = function (node, table, participant) {
+                            node.append(
+                                $.fail(gt("Could not load all participants for this task."), function () {
+                                    lookupParticipant(node, table, participant);
+                                })
                             );
-                        });
+                        };
+                    node.append($('<label class="detail-label">').text(gt("Participants")),
+                                table = $('<table class="task-participants-table">'));
+                    
+                    _(task.participants).each(function (participant) {
+                        lookupParticipant(node, table, participant);
                     });
                 });
             }
@@ -189,7 +207,12 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
         index: 100,
         id: 'attachments',
         draw: function (task) {
-            var attachmentNode = $('<div>').addClass("attachments-container").appendTo(this);
+            var attachmentNode;
+            if (this.hasClass('attachments-container')) {//if attachmentrequest fails the container is allready there
+                attachmentNode = this;
+            } else {
+                attachmentNode = $('<div>').addClass("attachments-container").appendTo(this);//else build new
+            }
             $('<span>').text(gt("Attachments \u00A0\u00A0")).addClass("attachments").appendTo(attachmentNode);
             require(['io.ox/core/api/attachment'], function (api) {
                 api.getAll({folder_id: task.folder_id, id: task.id, module: 4}).done(function (data) {
@@ -201,10 +224,20 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
                         buildDropdown(attachmentNode, gt("all"), data);
                     }
                     attachmentNode.delegate("a", "click", function (e) {e.preventDefault(); });
+                }).fail(function () {
+                    attachmentFail(attachmentNode, task);
                 });
             });
         }
     });
+    
+    var attachmentFail = function (container, task) {
+        container.empty().append(
+                $.fail(gt("Could not load attachments for this task."), function () {
+                    ext.point("io.ox/tasks/detail-attach").invoke("draw", container, task);
+                })
+            );
+    };
 
     var buildDropdown = function (container, label, data) {
         new links.DropdownLinks({

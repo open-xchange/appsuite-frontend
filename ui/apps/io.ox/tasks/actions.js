@@ -48,30 +48,36 @@ define("io.ox/tasks/actions",
                 numberOfTasks = data.length || 1;
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 //build popup
-                var popup = new dialogs.ModalDialog()
-                    .addPrimaryButton('delete', gt('Delete'))
+                var popup = new dialogs.ModalDialog({async: true})
+                    .addPrimaryButton('deleteTask', gt('Delete'))
                     .addButton('cancel', gt('Cancel'));
                 //Header
                 popup.getBody()
                     .append($("<h4>")
                             .text(gt.ngettext('Do you really want to delete this task?',
                                               'Do you really want to delete this tasks?', numberOfTasks)));
-
                 //go
-                popup.show().done(function (action) {
-                    if (action === 'delete') {
-                        require(['io.ox/tasks/api'], function (api) {
-                            api.remove(data, false)
-                                .done(function (data) {
-                                    if (data === undefined || data.length === 0) {
-                                        notifications.yell('success', gt.ngettext('Task has been deleted!',
-                                                                                   'Tasks have been deleted!', numberOfTasks));
-                                    } else {//task was modified
-                                        notifications.yell('error', gt('Failure! Please refresh.'));
-                                    }
-                                });
-                        });
-                    }
+                popup.show();
+                popup.on("deleteTask", function () {
+                    require(['io.ox/tasks/api'], function (api) {
+                        api.remove(data, false)
+                            .done(function (data) {
+                                if (data === undefined || data.length === 0) {
+                                    notifications.yell('success', gt.ngettext('Task has been deleted!',
+                                                                               'Tasks have been deleted!', numberOfTasks));
+                                } else {//task was modified
+                                    notifications.yell('error', gt('Failure! Please refresh.'));
+                                }
+                                popup.close();
+                            }).fail(function () {
+                                //show retrymessage and enable buttons again
+                                popup.idle();
+                                popup.getBody().append($.fail(gt.ngettext("Could not delete this task.",
+                                                                          "Could not delete this tasks.", numberOfTasks), function () {
+                                    popup.trigger('deleteTask', data);
+                                })).find('h4').remove();
+                            });
+                    });
                 });
             });
         }
