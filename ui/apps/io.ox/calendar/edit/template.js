@@ -378,6 +378,18 @@ define('io.ox/calendar/edit/template',
                 var autocomplete = new AddParticipantsView({el: node});
                 autocomplete.render();
 
+                //add recipents to baton-data-node; used to filter sugestions list in view
+                autocomplete.on('update', function () {
+                    var baton = {list: []};
+                    collection.any(function (item) {
+                        //participant vs. organizer
+                        var email = item.get('email1') || item.get('email2');
+                        if (email !== null)
+                            baton.list.push({email: email, id: item.get('id'), type: item.get('type')});
+                    });
+                    $.data(node, 'baton', baton);
+                });
+
                 autocomplete.on('select', function (data) {
                     var alreadyParticipant = false, obj,
                     userId;

@@ -53,6 +53,30 @@ define('io.ox/calendar/edit/view-addparticipants',
                 .autocomplete({
                     parentSelector: options.parentSelector,
                     api: autocompleteAPI,
+                    // reduce suggestion list
+                    reduce: function (data) {
+
+                        // updating baton-data-node
+                        self.trigger('update');
+
+                        //hash email adresses and internal_userid
+                        var baton = $.data(self.$el, 'baton') || {list: []},
+                            hash = {};
+                        _(baton.list).each(function (obj) {
+                            hash[obj.email] = true;
+                            if (obj.type !== 5)
+                                hash[obj.id] = true;
+                        });
+
+                        // filter doublets
+                        data = _(data).filter(function (recipient) {
+                            if (hash[recipient.email] === undefined && hash[recipient.data.internal_userid] === undefined) {
+                                return hash[recipient.email] = true;
+                            }
+                        });
+
+                        return data;
+                    },
                     draw: function (obj) {
                         if (obj && obj.data.constructor.toString().indexOf('Object') !== -1) {
                             switch (obj.type) {
