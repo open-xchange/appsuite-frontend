@@ -63,6 +63,7 @@ define('io.ox/mail/accounts/view-form',
                 Backbone.Validation.bind(this, {selector: 'data-property'});
             },
             render: function () {
+               
                 var self = this;
                 window.account = self.model;
                 self.$el.empty().append(self.template({
@@ -74,38 +75,39 @@ define('io.ox/mail/accounts/view-form',
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
                 
-                //login for server should be email-address by default;
-                if (self.model.get('login') === undefined) {
-                    self.model.set('login', self.model.get('primary_address'));
-                }
-                
                 function syncLogin(model, value) {
-                    model.set('login', value);
+                        model.set('login', value);
+                    }
+                
+                if (self.model.get('id') !== 0) {//check for primary account
+                    //login for server should be email-address by default;
+                    if (self.model.get('login') === undefined) {
+                        self.model.set('login', self.model.get('primary_address'));
+                    }
+                    
+                    //if login and mailadress are the same change login if mailadress changes
+                    if (self.model.get('primary_address') === self.model.get('login') && !self.inSync) {
+                        self.model.on('change:primary_address', syncLogin);
+                        self.inSync = true;
+                    }
+                    
+                    //react to loginchange
+                    self.model.on('change:login', function (model, value) {
+                        if (value === model.get('primary_address')) {
+                            if (!self.inSync) {//no need to sync if its allready synced...would cause multiple events to be triggerd
+                                self.model.on('change:primary_address', syncLogin);
+                                self.inSync = true;
+                            }
+                        } else {
+                            self.model.off('change:primary_address', syncLogin);
+                            self.inSync = false;
+                        }
+                    });
+                } else {//primary account does not allow editing besides display name and unified mail
+                    self.$el.find('input').attr('disabled', 'disabled');
+                    self.$el.find('#personal').removeAttr('disabled');
+                    self.$el.find('[data-property="unified_inbox_enabled"]').removeAttr('disabled');
                 }
-                
-                //if login and mailadress are the same change login if mailadress changes
-                self.model.on('change:primary_address', function (model, value) {
-                    if (value === model.get('login')) {
-                        if (!self.inSync) {//no need to sync if its allready synced...would cause multiple events to be triggerd
-                            self.model.on('change:primary_address', syncLogin);
-                            self.inSync = true;
-                        }
-                    }
-                });
-                
-                
-                //react to loginchange
-                self.model.on('change:login', function (model, value) {
-                    if (value === model.get('primary_address')) {
-                        if (!self.inSync) {//no need to sync if its allready synced...would cause multiple events to be triggerd
-                            self.model.on('change:primary_address', syncLogin);
-                            self.inSync = true;
-                        }
-                    } else {
-                        self.model.off('change:primary_address', syncLogin);
-                        self.inSync = false;
-                    }
-                });
                 
                 return self;
             },
