@@ -286,7 +286,11 @@ define('plugins/portal/twitter/register',
                     target: '_blank',
                     'class': 'twitter-share-button io-ox-twitter-action-tweet',
                     'data-count': 'none',
-                    'data-size': 'large'
+                    'data-size': 'large',
+                    'data-lang': ox.language.split('_')[0],
+                    'data-url': '',
+                    'data-text': ' ', //there must be text in the text attribute, may be we could add an input field to the sidebar
+                                      //to pre-fill the popup, leaving the default message empty for now
                 }),
                 $('<div>').addClass('clear-title').text('Twitter'),
                 script
