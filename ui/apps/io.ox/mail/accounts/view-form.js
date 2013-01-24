@@ -56,6 +56,9 @@ define('io.ox/mail/accounts/view-form',
                 // create template
                 this.template = doT.template(tmpl);
                 this._modelBinder = new Backbone.ModelBinder();
+                
+                //check if login and mailaddress are synced
+                this.inSync = false;
 
                 Backbone.Validation.bind(this, {selector: 'data-property'});
             },
@@ -67,9 +70,43 @@ define('io.ox/mail/accounts/view-form',
                     optionsServer: optionsServerType,
                     optionsRefreshRate: optionsRefreshRatePop
                 }));
+                
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
-
+                
+                //login for server should be email-address by default;
+                if (self.model.get('login') === undefined) {
+                    self.model.set('login', self.model.get('primary_address'));
+                }
+                
+                function syncLogin(model, value) {
+                    model.set('login', value);
+                }
+                
+                //if login and mailadress are the same change login if mailadress changes
+                self.model.on('change:primary_address', function (model, value) {
+                    if (value === model.get('login')) {
+                        if (!self.inSync) {//no need to sync if its allready synced...would cause multiple events to be triggerd
+                            self.model.on('change:primary_address', syncLogin);
+                            self.inSync = true;
+                        }
+                    }
+                });
+                
+                
+                //react to loginchange
+                self.model.on('change:login', function (model, value) {
+                    if (value === model.get('primary_address')) {
+                        if (!self.inSync) {//no need to sync if its allready synced...would cause multiple events to be triggerd
+                            self.model.on('change:primary_address', syncLogin);
+                            self.inSync = true;
+                        }
+                    } else {
+                        self.model.off('change:primary_address', syncLogin);
+                        self.inSync = false;
+                    }
+                });
+                
                 return self;
             },
             events: {
