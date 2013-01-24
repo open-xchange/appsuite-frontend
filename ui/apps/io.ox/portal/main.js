@@ -161,7 +161,6 @@ define('io.ox/portal/main',
              //Element was removed, no need to refresh it.
         } else {
             app.drawWidget(model);
-            app.refreshWidget(model);
         }
     });
 
@@ -270,7 +269,7 @@ define('io.ox/portal/main',
 
         var type = model.get('type'),
             node = app.getWidgetNode(model),
-            delay = (index / 2 >> 0) * 2000,
+            delay = (index / 2 >> 0) * 1000,
             baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + type }),
             point = ext.point(baton.point),
             requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value(),
@@ -297,7 +296,7 @@ define('io.ox/portal/main',
                     title.addClass('action-link').on('click', { baton: baton }, runAction);
                 }
                 // simple delay approach
-                setTimeout(function () {
+                _.delay(function () {
                     // initialize first
                     point.invoke('initialize', node, baton);
                     // load & preview
@@ -307,20 +306,22 @@ define('io.ox/portal/main',
         }
     };
 
-    app.refreshWidget = function (model) {
+    app.refreshWidget = function (model, index) {
         if (model.drawn) {
             var type = model.get('type'),
                 node = app.getWidgetNode(model),
-                delay = Math.random() * (collection.length / 2) * 1000,
+                delay = (index / 2 >> 0) * 1000,
                 baton = model.get('baton'),
                 point = ext.point(baton.point);
-            setTimeout(function () {
-                node.addClass('pending');
-                setTimeout(function () {
-                    loadAndPreview(point, node, model.get('baton'));
-                    node = baton = point = null;
-                }, 300);
-            }, delay);
+            _.defer(function () {
+                _.delay(function () {
+                    node.addClass('pending');
+                    _.delay(function () {
+                        loadAndPreview(point, node, baton);
+                        node = baton = point = null;
+                    }, 300); // CSS Transition delay 0.3s
+                }, delay);
+            });
         }
     };
 
