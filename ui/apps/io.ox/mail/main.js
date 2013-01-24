@@ -385,7 +385,7 @@ define("io.ox/mail/main",
         grid.selection.unfold = function () {
             return _.flatten(_(this.get()).map(function (o) {
                 return isInOpenThreadSummary(o) ? o : api.getThread(o);
-            }));
+            }), true);
         };
 
         var showMail, drawMail, drawFail, drawThread;
