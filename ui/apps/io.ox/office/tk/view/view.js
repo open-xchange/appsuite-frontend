@@ -45,7 +45,7 @@ define('io.ox/office/tk/view/view',
             controller = app.getController(),
 
             // the application window
-            win = ox.ui.createWindow({ name: app.getName() }),
+            win = ox.ui.createWindow({ name: app.getName(), search: options.search || false }),
 
             // centered application pane
             appPane = null,
