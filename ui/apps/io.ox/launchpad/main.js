@@ -102,7 +102,7 @@ define('io.ox/launchpad/main',
                         app.launch.apply(app, e.data.launchArguments);
                     } else if (e.data.createArguments) {
                         //documents need a parameter to create a new document
-                        e.data.createArguments.folder_id = config.get("folder.infostore");
+                        e.data.createArguments.folderId = String(config.get("folder.infostore"));
                         m.getApp(e.data.createArguments).launch();
                     } else {
                         m.getApp().launch();
@@ -178,7 +178,7 @@ define('io.ox/launchpad/main',
                     }
                 });
             });
-            
+
             api.getInstalled().done(function (installed) {
                 secInstalled.empty();
                 /*secInstalled.append(
