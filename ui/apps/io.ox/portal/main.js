@@ -356,15 +356,17 @@ define('io.ox/portal/main',
             // add side popup
             sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer, .action.pointer', openSidePopup);
 
-            // make sortable
-            appBaton.$.widgets.sortable({
-                containment: win.nodes.main,
-                scroll: true,
-                delay: 150,
-                stop: function (e, ui) {
-                    widgets.save(appBaton.$.widgets);
-                }
-            });
+            // make sortable, but not for Touch devices
+            if (!Modernizr.touch) {
+                appBaton.$.widgets.sortable({
+                    containment: win.nodes.main,
+                    scroll: true,
+                    delay: 150,
+                    stop: function (e, ui) {
+                        widgets.save(appBaton.$.widgets);
+                    }
+                });
+            }
 
             widgets.loadUsedPlugins().done(function () {
                 widgets.getEnabled().each(app.drawWidget);
