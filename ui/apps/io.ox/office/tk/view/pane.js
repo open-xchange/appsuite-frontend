@@ -35,9 +35,6 @@ define('io.ox/office/tk/view/pane',
      *  The following options are supported:
      *  @param {Boolean} [options.transparent=false]
      *      If set to true, the background of the pane will be transparent.
-     *  @param {Boolean} [options.hoverEffect=false]
-     *      If set to true, the contents of the pane will be displayed
-     *      half-transparent as long as the mouse does not hover the pane.
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of the
      *      view pane.
@@ -108,7 +105,6 @@ define('io.ox/office/tk/view/pane',
 
         // additional options and CSS classes
         node.toggleClass('transparent', Utils.getBooleanOption(options, 'transparent', false))
-            .toggleClass('hover-effect', Utils.getBooleanOption(options, 'hoverEffect', false))
             .addClass(Utils.getStringOption(options, 'classes', ''))
             .css(Utils.getObjectOption(options, 'css', {}));
 

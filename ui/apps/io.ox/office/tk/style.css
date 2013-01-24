@@ -142,12 +142,10 @@ i[class^="icon-"], i[class^=" icon-"] {
     /* transparent panes */
     &.transparent {
         background: none;
-    }
 
-    /* half-transparent hover effect */
-    &.hover-effect {
-        .transition(opacity 0.2s linear);
-        &:not(:hover) { .opacity(70); }
+        &.overlay {
+            height: 0;
+        }
     }
 
     /* the application pane in the middle between all view panes */
@@ -205,6 +203,12 @@ i[class^="icon-"], i[class^=" icon-"] {
     /* hidden components ('important' to overrule display modes from other rules) */
     &.hidden {
         display: none !important;
+    }
+
+    /* half-transparent hover effect */
+    &.hover-effect {
+        .transition(opacity 0.2s linear);
+        &:not(:hover) { .opacity(70); }
     }
 
     /* groups (container elements for controls) ---------------------------- */
@@ -439,6 +443,12 @@ i[class^="icon-"], i[class^=" icon-"] {
         padding: @control-spacing 13px 0;
         /* size the tool box according to its floated children */
         overflow: hidden;
+
+        /* inline mode, e.g. multiple tool boxes side-by-side in top pane */
+        &.inline {
+            display: inline-block;
+            vertical-align: top;
+        }
 
         > div.top-shadow {
             position: absolute;

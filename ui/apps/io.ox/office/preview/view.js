@@ -37,16 +37,10 @@ define('io.ox/office/preview/view',
 
         // initialization -----------------------------------------------------
 
-        // the tool pane for tool bars
-        toolPane = this.createPane('toolpane', 'top', {
-            overlay: true,
-            transparent: true,
-            hoverEffect: true,
-            classes: 'center'
-        });
+        // the tool pane for tool boxes
+        toolPane = this.createPane('toolpane', 'top', { overlay: true, transparent: true, css: { textAlign: 'center' } });
 
-        // create the tool bar
-        toolPane.createToolBox({ classes: 'inline'})
+        toolPane.createToolBox({ hoverEffect: true, classes: 'inline' })
             .startGroupContainer()
                 .addButton('pages/first',    { icon: 'arrow-first',    tooltip: gt('Show first page') })
                 .addButton('pages/previous', { icon: 'arrow-previous', tooltip: gt('Show previous page') })
@@ -55,7 +49,7 @@ define('io.ox/office/preview/view',
                 .addButton('pages/last',     { icon: 'arrow-last',     tooltip: gt('Show last page') })
             .endGroupContainer();
 
-        toolPane.createToolBox({ classes: 'inline float-right' })
+        toolPane.createToolBox({ hoverEffect: true, css: { float: 'right', paddingRight: '26px' } })
             .addButton('app/quit', { icon: 'icon-remove', tooltip: gt('Close document') });
 
     } // class PreviewView
