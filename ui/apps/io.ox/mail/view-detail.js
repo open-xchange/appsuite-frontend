@@ -1019,23 +1019,14 @@ define('io.ox/mail/view-detail',
             setTimeout(function () {
                 var scrollHeight = content.get(0).scrollHeight;
 
-                if (scrollHeight === content.height()) { //Bug 22756: FF18 is behaving oddly correct, but impractical
+                if (scrollHeight >= content.height()) { //Bug 22756: FF18 is behaving oddly correct, but impractical
                     var lowestElement = _($(content).find('*'))
                         .chain()
-                        .filter(function (elem) {return elem.css('position') === 'absolute'; })
+                        .filter(function (elem) { return $(elem).position() && $(elem).css('position') === 'absolute'; })
                         .max(function (elem) { return $(elem).position().top + $(elem).height(); })
                         .value();
 
-                    console.log("DEBUG:", $(lowestElement), $(lowestElement).position().top + $(lowestElement).height(), $(lowestElement).position().top, $(lowestElement).height());
-
-                    scrollHeight = Math.round(
-                        $(content)
-                            .chain()
-                            .filter(function (elem) {return elem.css('position') === 'absolute'; })
-                            .find('*').map(function (elem) { return $(elem).position().top + $(elem).height(); })
-                            .max()
-                            .value()
-                    );
+                    scrollHeight = Math.round($(lowestElement).position().top + $(lowestElement).height());
                 }
                 if (scrollHeight > content.height()) {
                     content.css('height', scrollHeight + 'px');
