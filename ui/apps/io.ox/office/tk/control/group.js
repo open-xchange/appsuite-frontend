@@ -226,6 +226,10 @@ define('io.ox/office/tk/control/group',
          */
         this.addChildNodes = function (nodes) {
             groupNode.append(nodes);
+            // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
+            if (groupNode.hasClass('white-icons')) {
+                groupNode.find('i').addClass('icon-white');
+            }
             return this;
         };
 
@@ -240,8 +244,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.addFocusableControl = function (control) {
-            groupNode.append(control.addClass(Group.FOCUSABLE_CLASS));
-            return this;
+            return this.addChildNodes(control.addClass(Group.FOCUSABLE_CLASS));
         };
 
         /**
@@ -369,6 +372,10 @@ define('io.ox/office/tk/control/group',
                 }, this);
             }
             return this;
+        };
+
+        this.destroy = function () {
+            this.events.destroy();
         };
 
         // initialization -----------------------------------------------------

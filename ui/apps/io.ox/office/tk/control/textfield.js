@@ -117,7 +117,9 @@ define('io.ox/office/tk/control/textfield',
             switch (event.type) {
             case 'focus':
                 // save current value
-                initialText = textField.val();
+                if (!_.isString(initialText)) {
+                    initialText = textField.val();
+                }
                 validationFieldState = getFieldState();
                 self.getNode().addClass(FOCUS_CLASS);
                 break;

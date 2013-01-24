@@ -1770,9 +1770,6 @@ define('io.ox/office/tk/utils',
      *  @param {String} [options.icon]
      *      The full name of the Bootstrap or OX icon class. If omitted, no
      *      icon will be shown.
-     *  @param {Boolean} [options.whiteIcon=false]
-     *      If set to true, the icon will be shown in light colors by adding
-     *      the CSS class 'icon-white'.
      *  @param {String} [options.label]
      *      The text label. Will follow an icon. If omitted, no text will be
      *      shown.
@@ -1784,7 +1781,6 @@ define('io.ox/office/tk/utils',
 
         var // option values
             icon = Utils.getStringOption(options, 'icon'),
-            whiteIcon = Utils.getBooleanOption(options, 'whiteIcon'),
             label = Utils.getStringOption(options, 'label'),
             labelCss = Utils.getObjectOption(options, 'labelCss'),
 
@@ -1808,7 +1804,8 @@ define('io.ox/office/tk/utils',
             caption.append($('<span>')
                 .attr('data-role', 'icon')
                 .attr('data-icon', icon)
-                .append(Utils.createIcon(icon, whiteIcon).addClass(language))
+                // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
+                .append(Utils.createIcon(icon, control.closest('.group').hasClass('white-icons')).addClass(language))
             );
         }
 

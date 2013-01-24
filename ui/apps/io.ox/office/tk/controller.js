@@ -35,7 +35,7 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
      *  handler, or if a view component triggers a 'cancel' event. Will be
      *  executed in the context of this controller.
      */
-    function Controller(definitions, defaultDoneHandler) {
+    function Controller(app, definitions, defaultDoneHandler) {
 
         var // self reference
             self = this,
@@ -484,6 +484,14 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
         // initialization -----------------------------------------------------
 
         defaultDoneHandler = _.isFunction(defaultDoneHandler) ? defaultDoneHandler : $.noop;
+
+        this.addDefinitions({
+            'app/quit': {
+                // quit in a timeout, otherwise destructor breaks this controller while running
+                set: function () { window.setTimeout(function () { app.quit(); }, 0); }
+            }
+        });
+
         this.addDefinitions(definitions);
 
     } // class Controller

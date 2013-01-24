@@ -14,9 +14,8 @@
 define('io.ox/office/preview/actions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
-     'io.ox/office/tk/utils',
      'gettext!io.ox/office/main'
-    ], function (ext, links, Utils, gt) {
+    ], function (ext, links, gt) {
 
     'use strict';
 
@@ -36,7 +35,7 @@ define('io.ox/office/preview/actions',
     new links.ActionGroup(POINT + '/links/toolbar', {
         id: 'close',
         index: 100,
-        icon: function () { return Utils.createIcon('icon-remove'); }
+        icon: function () { return $('<i>').addClass('icon-remove'); }
     });
 
     new links.ActionLink(POINT + '/links/toolbar/close', {

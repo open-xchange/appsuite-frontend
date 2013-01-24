@@ -33,6 +33,11 @@ define('io.ox/office/tk/view/pane',
      * @param {Object} [options]
      *  A map of options to control the properties of the new view pane.
      *  The following options are supported:
+     *  @param {Boolean} [options.transparent=false]
+     *      If set to true, the background of the pane will be transparent.
+     *  @param {Boolean} [options.hoverEffect=false]
+     *      If set to true, the contents of the pane will be displayed
+     *      half-transparent as long as the mouse does not hover the pane.
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of the
      *      view pane.
@@ -75,24 +80,6 @@ define('io.ox/office/tk/view/pane',
         };
 
         /**
-         * Creates a new tool bar component in this pane, and registers it at
-         * the application controller.
-         *
-         * @param {Object} [options]
-         *  A map of options for the tool bar in the pane. Supports all options
-         *  supported by the Component class constructor.
-         *
-         * @returns {Component}
-         *  The new tool bar component.
-         */
-        this.createToolBar = function (options) {
-            var toolBar = new Component(options);
-            toolBar.getNode().addClass('toolbar');
-            this.addViewComponent(toolBar);
-            return toolBar;
-        };
-
-        /**
          * Creates a new tool box component in this pane, and registers it at
          * the application controller.
          *
@@ -119,8 +106,10 @@ define('io.ox/office/tk/view/pane',
 
         // initialization -----------------------------------------------------
 
-        // additional CSS classes
-        node.addClass(Utils.getStringOption(options, 'classes', ''))
+        // additional options and CSS classes
+        node.toggleClass('transparent', Utils.getBooleanOption(options, 'transparent', false))
+            .toggleClass('hover-effect', Utils.getBooleanOption(options, 'hoverEffect', false))
+            .addClass(Utils.getStringOption(options, 'classes', ''))
             .css(Utils.getObjectOption(options, 'css', {}));
 
     } // class Pane

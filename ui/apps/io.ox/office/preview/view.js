@@ -14,8 +14,7 @@
 define('io.ox/office/preview/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/view/view',
-     'gettext!io.ox/office/main',
-     'io.ox/office/preview/actions'
+     'gettext!io.ox/office/main'
     ], function (Utils, View, gt) {
 
     'use strict';
@@ -39,15 +38,25 @@ define('io.ox/office/preview/view',
         // initialization -----------------------------------------------------
 
         // the tool pane for tool bars
-        toolPane = this.createPane('toolpane', 'top', { classes: 'center' });
+        toolPane = this.createPane('toolpane', 'top', {
+            overlay: true,
+            transparent: true,
+            hoverEffect: true,
+            classes: 'center'
+        });
 
         // create the tool bar
-        toolPane.createToolBar()
-            .addButton('pages/first',    { icon: 'arrow-first',    tooltip: gt('Show first page') })
-            .addButton('pages/previous', { icon: 'arrow-previous', tooltip: gt('Show previous page') })
-            .addLabel('pages/current',   { width: 100,             tooltip: gt('Current page and total page count') })
-            .addButton('pages/next',     { icon: 'arrow-next',     tooltip: gt('Show next page') })
-            .addButton('pages/last',     { icon: 'arrow-last',     tooltip: gt('Show last page') });
+        toolPane.createToolBox({ classes: 'inline'})
+            .startGroupContainer()
+                .addButton('pages/first',    { icon: 'arrow-first',    tooltip: gt('Show first page') })
+                .addButton('pages/previous', { icon: 'arrow-previous', tooltip: gt('Show previous page') })
+                .addLabel('pages/current',   {                         tooltip: gt('Current page and total page count') })
+                .addButton('pages/next',     { icon: 'arrow-next',     tooltip: gt('Show next page') })
+                .addButton('pages/last',     { icon: 'arrow-last',     tooltip: gt('Show last page') })
+            .endGroupContainer();
+
+        toolPane.createToolBox({ classes: 'inline float-right' })
+            .addButton('app/quit', { icon: 'icon-remove', tooltip: gt('Close document') });
 
     } // class PreviewView
 

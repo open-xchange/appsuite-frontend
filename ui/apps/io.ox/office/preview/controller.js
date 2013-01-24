@@ -20,6 +20,10 @@ define('io.ox/office/preview/controller',
 
     // class PreviewController ================================================
 
+    /**
+     * @constructor
+     * @extends Controller
+     */
     function PreviewController(app) {
 
         var // self reference
@@ -63,7 +67,7 @@ define('io.ox/office/preview/controller',
 
         // base constructor ---------------------------------------------------
 
-        Controller.call(this, items);
+        Controller.call(this, app, items);
 
         // initialization -----------------------------------------------------
 

@@ -18,8 +18,12 @@
     .view-pane.center {
         text-align: center;
         
-        .view-component.toolbar {
+        .view-component.toolbox {
             display: inline-block;
+            
+            &.float-right {
+                float: right;
+            }
         }
     }
 }

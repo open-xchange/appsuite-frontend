@@ -19,8 +19,8 @@ define('io.ox/office/tk/view/view',
 
     'use strict';
 
-    var // CSS marker class for panes in hover mode
-        HOVER_CLASS = 'hover';
+    var // CSS marker class for panes in overlay mode
+        OVERLAY_CLASS = 'overlay';
 
     // class View =============================================================
 
@@ -60,7 +60,10 @@ define('io.ox/office/tk/view/view',
             panesById = {},
 
             // inner shadows for application pane
-            shadowNodes = {};
+            shadowNodes = {},
+
+            // alert banner currently shown
+            currentAlert = null;
 
         // private methods ----------------------------------------------------
 
@@ -68,30 +71,30 @@ define('io.ox/office/tk/view/view',
          * Handles resize events of the browser window, and adjusts the view
          * pane nodes.
          */
-        function windowResizeHandler(event) {
+        function windowResizeHandler() {
 
             var // current offsets representing available space in the application window
                 offsets = { top: 0, bottom: 0, left: 0, right: 0 };
 
-            // update the position of all panes (updates the 'offsets' object accordingly)
-            _(panes).each(function (pane) {
+            function updatePaneNode(paneNode) {
 
-                var paneNode = pane.getNode(),
-                    panePosition = paneNode.data('pane-pos'),
-                    horizontal = (panePosition === 'top') || (panePosition === 'bottom'),
-                    leading = (panePosition === 'top') || (panePosition === 'left'),
-                    paneOffsets = null;
-
-                if (paneNode.css('display') !== 'none') {
+                var position = paneNode.data('pane-pos'),
+                    horizontal = (position === 'top') || (position === 'bottom'),
+                    leading = (position === 'top') || (position === 'left'),
                     paneOffsets = _.clone(offsets);
-                    paneOffsets[horizontal ? (leading ? 'bottom' : 'top') : (leading ? 'right' : 'left')] = 'auto';
-                    if (paneNode.hasClass(HOVER_CLASS)) {
-                        paneOffsets[horizontal ? 'height' : 'width'] = 0;
-                    }
-                    paneNode.css(paneOffsets);
-                    offsets[panePosition] += (horizontal ? paneNode.outerHeight() : paneNode.outerWidth());
+
+                paneOffsets[horizontal ? (leading ? 'bottom' : 'top') : (leading ? 'right' : 'left')] = '';
+                paneNode.css(paneOffsets);
+                if ((paneNode.css('display') !== 'none') && !paneNode.hasClass(OVERLAY_CLASS)) {
+                    offsets[position] += (horizontal ? paneNode.outerHeight() : paneNode.outerWidth());
                 }
-            });
+            }
+
+            // update the position of all panes (updates the 'offsets' object accordingly)
+            _(panes).each(function (pane) { updatePaneNode(pane.getNode()); });
+
+            // update the position of the current alert banner
+            if (currentAlert) { updatePaneNode(currentAlert); }
 
             // update the application pane and the shadow nodes (jQuery interprets numbers as pixels automatically)
             appPane.getNode().css(offsets);
@@ -138,8 +141,8 @@ define('io.ox/office/tk/view/view',
          *  A map of options to control the properties of the new view pane.
          *  Supports all options supported by the Pane class constructor.
          *  Additionally, the following options are supported:
-         *  @param {Boolean} [options.hover=false]
-         *      If set to true, the pane will hover over the other panes and
+         *  @param {Boolean} [options.overlay=false]
+         *      If set to true, the pane will float over the other panes and
          *      application contents instead of reserving and consuming the
          *      space needed for its size.
          *
@@ -156,8 +159,8 @@ define('io.ox/office/tk/view/view',
             this.setPanePosition(id, position);
 
             // hover mode
-            if (Utils.getBooleanOption(options, 'hover', false)) {
-                pane.getNode().addClass(HOVER_CLASS);
+            if (Utils.getBooleanOption(options, 'overlay', false)) {
+                pane.getNode().addClass(OVERLAY_CLASS);
             }
 
             return pane;
@@ -230,7 +233,7 @@ define('io.ox/office/tk/view/view',
          *  Whether an alert banner is visible.
          */
         this.hasAlert = function () {
-            return win.nodes.main.children('.alert').length > 0;
+            return _.isObject(currentAlert);
         };
 
         /**
@@ -273,17 +276,24 @@ define('io.ox/office/tk/view/view',
                 buttonLabel = Utils.getStringOption(options, 'buttonLabel'),
                 // the controller key of the push button
                 buttonKey = Utils.getStringOption(options, 'buttonKey'),
-                // the alert node
-                alert = $.alert(title, message).removeClass('alert-error').addClass('alert-' + type + ' hide in');
+                // create a new alert node
+                alert = $.alert(title, message)
+                    .removeClass('alert-error')
+                    .addClass('alert-' + type + ' ' + OVERLAY_CLASS + ' in hide')
+                    .data('pane-pos', 'top');
 
             // Hides the alert with a specific animation.
             function closeAlert() {
-                alert.slideUp({ complete: function () { alert.remove(); } });
+                alert.slideUp('fast', function () { alert.remove(); });
             }
+
+            // remove alert banner currently shown, update reference to current alert
+            if (currentAlert) { currentAlert.remove(); }
+            currentAlert = alert;
 
             // make the alert banner closeable
             if (Utils.getBooleanOption(options, 'closeable', false)) {
-                // alert can be closed by clicking anywhere in the alert
+                // alert can be closed by clicking anywhere in the banner
                 alert.click(closeAlert);
             } else {
                 // remove closer button
@@ -307,9 +317,10 @@ define('io.ox/office/tk/view/view',
                 );
             }
 
-            // remove old alert, insert and show new alert
-            win.nodes.main.children('.alert').remove().end().append(alert);
-            alert.slideDown();
+            // insert and show the new alert banner
+            win.nodes.main.append(alert);
+            windowResizeHandler();
+            alert.slideDown('fast');
 
             return this;
         };
@@ -409,9 +420,6 @@ define('io.ox/office/tk/view/view',
         appPane = new Pane(app, { classes: 'app-pane' });
         appPane.getNode().append(modelContainerNode);
 
-        // move window tool bar to the right
-        win.nodes.outer.addClass('toolbar-right');
-
         // add the main application pane
         win.nodes.main.addClass('io-ox-office-main ' + app.getName().replace(/[.\/]/g, '-') + '-main').append(appPane.getNode());
 
@@ -425,6 +433,11 @@ define('io.ox/office/tk/view/view',
 
         // update all view components every time the window will be shown
         win.on('show', function () { controller.update(); });
+
+        // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
+        win.one('show', function () {
+            win.nodes.main.find('.toolbox .group:not(.design-white) a.button i').addClass('icon-white').closest('.group').addClass('white-icons');
+        });
 
     } // class View
 

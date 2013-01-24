@@ -47,7 +47,7 @@ define('io.ox/office/tk/view/toolbox',
             headingLabel = Utils.getStringOption(options, 'label'),
 
             // the heading button that collapses/expands the tool box
-            headingButton = _.isString(headingLabel) ? new Button({ classes: 'heading', width: '100%', label: headingLabel, icon: 'caret-icon down' }) : null;
+            headingButton = _.isString(headingLabel) ? new Button({ design: 'heading', width: '100%', label: headingLabel, icon: 'caret-icon down' }) : null;
 
         // private methods ----------------------------------------------------
 
@@ -65,26 +65,17 @@ define('io.ox/office/tk/view/toolbox',
 
         Component.call(this, options);
 
-        // methods ------------------------------------------------------------
-
-        /**
-         * Adds a line break after the last inserted group.
-         *
-         * @returns {ToolBox}
-         *  A reference to this tool box instance.
-         */
-        this.addLineBreak = function () {
-            this.getNode().append($('<br>'));
-            return this;
-        };
-
         // initialization -----------------------------------------------------
 
-        // add the top 'shadow'
-        this.getNode().addClass('toolbox').append($('<div>').addClass('top-shadow'));
+        this.getNode().addClass('toolbox');
 
-        // add the heading button to the tool box, and register the action handler
+        // tool box with heading (button that collapses/expands the tool box)
         if (headingButton) {
+
+            // add top shadow
+            this.getNode().append($('<div>').addClass('top-shadow'));
+
+            // add the heading button to the tool box, and register the action handler
             this.addPrivateGroup(headingButton);
             headingButton.on('change', headingActionHandler);
         }
