@@ -508,6 +508,11 @@ function docFile(file, title) {
 
 docFile("gettingStarted", "Getting Started");
 docFile("apache", "Apache Configuration");
+docFile("demo", "Demo Steps");
+docFile("extensions", "Extension Points");
+docFile("extensionpoints_contact", "Extension Points / Contact App");
+docFile("libs", "External Libs");
+docFile("features", "Features");
 docFile("development_guide", "UI Development Style Guide");
 docFile("buildsystem", "Build System");
 docFile("manifests", "Module System");
@@ -720,12 +725,12 @@ task("dist", [distDest], function () {
     }
     function tar(code) {
         if (code) return fail();
-        
+
         _.each([pkgName + '.spec', 'debian/control'], function (name) {
             var file = path.join(dest, name);
             fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
         });
-        
+
         utils.exec(['tar', 'cjf', debName + '.orig.tar.bz2', tarName],
                    { cwd: distDest }, dpkgSource);
     }
