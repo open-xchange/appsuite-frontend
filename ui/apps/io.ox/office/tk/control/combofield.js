@@ -224,7 +224,7 @@ define('io.ox/office/tk/control/combofield',
             .on('readonly', textFieldReadOnlyHandler)
             .registerUpdateHandler(itemUpdateHandler);
         this.getTextFieldNode()
-            .css('padding-right', 0)
+            .css('padding-right', '1px')
             .on('keydown keypress keyup', textFieldKeyHandler);
 
         // drop-down button is not focusable in combo fields

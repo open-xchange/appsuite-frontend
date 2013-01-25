@@ -63,20 +63,41 @@ define('io.ox/office/tk/view/view',
             shadowNodes = {},
 
             // alert banner currently shown
-            currentAlert = null;
+            currentAlert = null,
+
+            // identifier of the view pane following an alert banner
+            alertsBeforePaneId = null;
 
         // private methods ----------------------------------------------------
 
         /**
-         * Handles resize events of the browser window, and adjusts the view
-         * pane nodes.
+         * Adjusts the positions of all view pane nodes.
          */
-        function windowResizeHandler() {
+        function refreshPaneLayout() {
 
-            var // current offsets representing available space in the application window
+            var // all pane nodes and the alert banner
+                paneNodes = [],
+                // current offsets representing available space in the application window
                 offsets = { top: 0, bottom: 0, left: 0, right: 0 };
 
-            function updatePaneNode(paneNode) {
+            // callback function for _.any(), tries to insert currentAlert into the paneNodes array
+            function insertCurrentAlert(pane, index) {
+                if (pane.getIdentifier() === alertsBeforePaneId) {
+                    paneNodes.splice(index, 0, currentAlert);
+                    return true;
+                }
+            }
+
+            // extract the nodes of all view panes
+            paneNodes = _(panes).map(function (pane) { return pane.getNode(); });
+
+            // insert the current alert banner at the configured position, otherwise append it
+            if (currentAlert && !_(panes).any(insertCurrentAlert)) {
+                paneNodes.push(currentAlert);
+            }
+
+            // update the position of all panes (updates the 'offsets' object accordingly)
+            _(paneNodes).each(function (paneNode) {
 
                 var position = paneNode.data('pane-pos'),
                     horizontal = (position === 'top') || (position === 'bottom'),
@@ -88,13 +109,7 @@ define('io.ox/office/tk/view/view',
                 if ((paneNode.css('display') !== 'none') && !paneNode.hasClass(OVERLAY_CLASS)) {
                     offsets[position] += (horizontal ? paneNode.outerHeight() : paneNode.outerWidth());
                 }
-            }
-
-            // update the position of all panes (updates the 'offsets' object accordingly)
-            _(panes).each(function (pane) { updatePaneNode(pane.getNode()); });
-
-            // update the position of the current alert banner
-            if (currentAlert) { updatePaneNode(currentAlert); }
+            });
 
             // update the application pane and the shadow nodes (jQuery interprets numbers as pixels automatically)
             appPane.getNode().css(offsets);
@@ -152,7 +167,7 @@ define('io.ox/office/tk/view/view',
         this.createPane = function (id, position, options) {
 
             var // create the new view pane
-                pane = panesById[id] = new Pane(app, options);
+                pane = panesById[id] = new Pane(app, id, options);
 
             panes.push(pane);
             win.nodes.main.append(pane.getNode());
@@ -197,31 +212,64 @@ define('io.ox/office/tk/view/view',
         this.setPanePosition = function (id, position) {
             if (id in panesById) {
                 panesById[id].getNode().data('pane-pos', position);
-                windowResizeHandler();
+                refreshPaneLayout();
             }
             return this;
         };
 
+        /**
+         * Makes the view pane with the specified identifier visible.
+         *
+         * @param {String} id
+         *  The unique identifier of the view pane.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
         this.showPane = function (id) {
             if (id in panesById) {
                 panesById[id].getNode().show();
-                windowResizeHandler();
+                refreshPaneLayout();
             }
             return this;
         };
 
+        /**
+         * Hides the view pane with the specified identifier.
+         *
+         * @param {String} id
+         *  The unique identifier of the view pane.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
         this.hidePane = function (id) {
             if (id in panesById) {
                 panesById[id].getNode().hide();
-                windowResizeHandler();
+                refreshPaneLayout();
             }
             return this;
         };
 
+        /**
+         * Changes the visibility of the view pane with the specified
+         * identifier.
+         *
+         * @param {String} id
+         *  The unique identifier of the view pane.
+         *
+         * @param {Boolean} [state]
+         *  If specified, shows or hides the view pane independently from its
+         *  current visibility state. If omitted, toggles the visibility of the
+         *  view pane.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
         this.togglePane = function (id, state) {
             if (id in panesById) {
                 panesById[id].getNode().toggle(state);
-                windowResizeHandler();
+                refreshPaneLayout();
             }
             return this;
         };
@@ -234,6 +282,20 @@ define('io.ox/office/tk/view/view',
          */
         this.hasAlert = function () {
             return _.isObject(currentAlert);
+        };
+
+        /**
+         * Registers the identifier of the first view pane that will be
+         * rendered after an alert banner. By default, an alert banner will be
+         * drawn after all view panes.
+         *
+         * @param {String} id
+         *  The unique identifier of the first view pane drawn after an alert
+         *  banner.
+         */
+        this.showAlertsBeforePane = function (id) {
+            alertsBeforePaneId = _.isString(id) ? id : null;
+            refreshPaneLayout();
         };
 
         /**
@@ -279,12 +341,18 @@ define('io.ox/office/tk/view/view',
                 // create a new alert node
                 alert = $.alert(title, message)
                     .removeClass('alert-error')
-                    .addClass('alert-' + type + ' ' + OVERLAY_CLASS + ' in hide')
+                    .addClass('alert-' + type + ' in hide')
                     .data('pane-pos', 'top');
 
             // Hides the alert with a specific animation.
             function closeAlert() {
-                alert.slideUp('fast', function () { alert.remove(); });
+                alert.slideUp('fast', function () {
+                    alert.remove();
+                    if (alert.is(currentAlert)) {
+                        currentAlert = null;
+                    }
+                    refreshPaneLayout();
+                });
             }
 
             // remove alert banner currently shown, update reference to current alert
@@ -294,7 +362,7 @@ define('io.ox/office/tk/view/view',
             // make the alert banner closeable
             if (Utils.getBooleanOption(options, 'closeable', false)) {
                 // alert can be closed by clicking anywhere in the banner
-                alert.click(closeAlert);
+                alert.click(closeAlert).addClass(OVERLAY_CLASS);
             } else {
                 // remove closer button
                 alert.find('a.close').remove();
@@ -305,6 +373,7 @@ define('io.ox/office/tk/view/view',
 
             // initialize auto-close
             if (Utils.getBooleanOption(options, 'autoClose', false)) {
+                alert.addClass(OVERLAY_CLASS);
                 _.delay(closeAlert, 5000);
             }
 
@@ -319,8 +388,9 @@ define('io.ox/office/tk/view/view',
 
             // insert and show the new alert banner
             win.nodes.main.append(alert);
-            windowResizeHandler();
-            alert.slideDown('fast');
+            refreshPaneLayout();
+            // after alert is visible, refresh pane layout again
+            alert.slideDown('fast', refreshPaneLayout);
 
             return this;
         };
@@ -417,7 +487,7 @@ define('io.ox/office/tk/view/view',
         modelContainerNode.css('margin', Utils.getIntegerOption(options, 'modelPadding', 0, 0) + 'px');
 
         // create the application pane, and insert the model container
-        appPane = new Pane(app, { classes: 'app-pane' });
+        appPane = new Pane(app, 'mainApplicationPane', { classes: 'app-pane' });
         appPane.getNode().append(modelContainerNode);
 
         // add the main application pane
@@ -429,7 +499,7 @@ define('io.ox/office/tk/view/view',
         });
 
         // listen to browser window resize events when the OX window is visible
-        app.registerWindowResizeHandler(windowResizeHandler);
+        app.registerWindowResizeHandler(refreshPaneLayout);
 
         // update all view components every time the window will be shown
         win.on('show', function () { controller.update(); });

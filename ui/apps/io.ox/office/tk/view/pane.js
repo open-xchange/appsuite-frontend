@@ -30,6 +30,9 @@ define('io.ox/office/tk/view/pane',
      * @param {Application} app
      *  The application containing this pane element.
      *
+     * @param {String} id
+     *  The unique identifier of the view pane.
+     *
      * @param {Object} [options]
      *  A map of options to control the properties of the new view pane.
      *  The following options are supported:
@@ -42,7 +45,7 @@ define('io.ox/office/tk/view/pane',
      *      Additional CSS formatting that will be set at the root DOM node of
      *      the view pane.
      */
-    function Pane(app, options) {
+    function Pane(app, id, options) {
 
         var // the container element representing the pane
             node = $('<div>').addClass('view-pane'),
@@ -57,6 +60,13 @@ define('io.ox/office/tk/view/pane',
          */
         this.getNode = function () {
             return node;
+        };
+
+        /**
+         * Returns the unique identifier of this view pane.
+         */
+        this.getIdentifier = function () {
+            return id;
         };
 
         /**
