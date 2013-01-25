@@ -18,6 +18,9 @@ define('io.ox/core/cache/localstorage', function () {
         reg = null,
         // max size for persistent objects
         MAX_LENGTH = 1024 * 1024, // 1MB
+        // queue
+        QUEUE_DELAY = 5000,
+        queue = { timer: null, list: [] },
         // fluent backup cache
         fluent = {},
         // access time
@@ -37,9 +40,16 @@ define('io.ox/core/cache/localstorage', function () {
     }
 
     function deferredSet(cid, json) {
-        _.defer(function () {
-            syncSet(cid, json);
-        });
+        if (queue.timer === null) {
+            queue.timer = setTimeout(function () {
+                _(queue.list).each(function (obj) {
+                    syncSet(obj.cid, obj.json);
+                });
+                queue = { timer: null, list: [] };
+            }, QUEUE_DELAY);
+        } else {
+            queue.list.push({ cid: cid, json: json });
+        }
     }
 
     that = {
