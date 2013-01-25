@@ -146,8 +146,16 @@ define('io.ox/core/api/account',
         }
     };
 
-    api.getPrimaryAddress = function () {
-        return api.get(0).pipe(function (account) { return [account.personal || '', account.primary_address]; });
+    /**
+     * Get the primary address for a given account.
+     *
+     * If no account id is given, the default account will be used.
+     *
+     * @param accountId - the account id for the account, might be null
+     * @return an array containing the personal name (might be empty!) and the primary address
+     */
+    api.getPrimaryAddress = function (accountId) {
+        return api.get(accountId || 0).pipe(function (account) { return [account.personal || '', account.primary_address]; });
     };
 
     /**
