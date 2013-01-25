@@ -159,6 +159,25 @@ define('io.ox/core/api/account',
     };
 
     /**
+     * Get a list of addresses that can be used when sending mails.
+     *
+     * If no account id is given, the default account will be used.
+     *
+     * @param accountId - the account id of the account wanted
+     * @return - the personal name and a list of (alias) addresses usable for sending
+     */
+    api.getSenderAddresses = function (accountId) {
+        return this.get(accountId || 0).pipe(function (account) {
+            if (!account) return null;
+
+            var aliases = account['undefined'] || '';
+            aliases = aliases.split(', ');
+            aliases.push(account.primary_address);
+            return [account.personal || '', _(aliases).compact()];
+        });
+    };
+
+    /**
      * Get all mail accounts
      */
 
