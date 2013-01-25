@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
+define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                                           'io.ox/backbone/views',
                                           'io.ox/core/date',
                                           'io.ox/core/notifications',
@@ -21,7 +21,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                                           'io.ox/core/tk/attachments',
                                           'io.ox/core/extensions'],
                                           function (gt, views, date, notifications, forms, util, pViews, attachments, ext) {
-    "use strict";
+    'use strict';
 
     var point = views.point('io.ox/tasks/edit/view');
 
@@ -56,10 +56,10 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         render: function () {
             var self = this;
             this.nodes = {};
-            this.nodes.select = $('<select>').addClass("status-selector span12").attr("id", "task-edit-status-select");
+            this.nodes.select = $('<select>').addClass('status-selector span12').attr('id', 'task-edit-status-select');
             _(this.selectOptions).each(function (label, value) {
                 self.nodes.select.append(
-                    $("<option>", {value: value}).text(label)
+                    $('<option>', {value: value}).text(label)
                 );
             });
             this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
@@ -95,10 +95,10 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         render: function () {
             var self = this;
             this.nodes = {};
-            this.nodes.select = $('<select>').addClass("priority-selector span12").attr("id", "task-edit-priority-select");
+            this.nodes.select = $('<select>').addClass('priority-selector span12').attr('id', 'task-edit-priority-select');
             _(this.selectOptions).each(function (label, value) {
                 self.nodes.select.append(
-                    $("<option>", {value: value}).text(label)
+                    $('<option>', {value: value}).text(label)
                 );
             });
             this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
@@ -143,7 +143,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                 }
                 this.model.set(this.attribute, value);
             } else {
-                setTimeout(function () {notifications.yell("error", gt("Please enter a correct number.")); }, 300);
+                setTimeout(function () {notifications.yell('error', gt('Please enter a correct number.')); }, 300);
                 this.nodes.inputField.val(this.model.get(this.attribute));
             }
         }
@@ -166,7 +166,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                 }
                 this.model.set(this.attribute, value);
             } else {
-                setTimeout(function () {notifications.yell("error", gt("Please enter a correct number.")); }, 300);
+                setTimeout(function () {notifications.yell('error', gt('Please enter a correct number.')); }, 300);
                 this.nodes.inputField.val(this.model.get(this.attribute));
             }
         }
@@ -189,7 +189,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                 }
                 this.model.set(this.attribute, value);
             } else {
-                setTimeout(function () {notifications.yell("error", gt("Please enter a correct number.")); }, 300);
+                setTimeout(function () {notifications.yell('error', gt('Please enter a correct number.')); }, 300);
                 this.nodes.inputField.val(this.model.get(this.attribute));
             }
         }
@@ -212,7 +212,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                 }
                 this.model.set(this.attribute, value);
             } else {
-                setTimeout(function () {notifications.yell("error", gt("Please enter a correct number.")); }, 300);
+                setTimeout(function () {notifications.yell('error', gt('Please enter a correct number.')); }, 300);
                 this.nodes.inputField.val(this.model.get(this.attribute));
             }
         }
@@ -227,10 +227,10 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         render: function () {
             var self = this;
             this.nodes = {};
-            this.nodes.select = $('<select>').addClass("currency span12").attr("id", "task-edit-currency");
+            this.nodes.select = $('<select>').addClass('currency span12').attr('id', 'task-edit-currency');
             _(this.selectOptions).each(function (label, value) {
                 self.nodes.select.append(
-                    $("<option>", {value: value}).text(label)
+                    $('<option>', {value: value}).text(label)
                 );
             });
             this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
@@ -398,7 +398,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             // just reject the change, if it's not parsable
             if (value !== '' && (_.isNull(parsedDate) || parsedDate.getTime() === 0)) {
                 model.trigger('change:' + attribute);//reset inputfields
-                setTimeout(function () {notifications.yell("error", gt("Please enter a valid date.")); }, 300);
+                setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
                 return model.get(attribute);
             }
             //set hours to 6:00 am if nothing is set
@@ -433,7 +433,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             // just reject the change, if it's not parsable
             if (_.isNull(parsedDate) || parsedDate.getTime() === 0) {
                 model.trigger('change:' + attribute);//reset inputfields
-                setTimeout(function () {notifications.yell("error", gt("Please enter a valid date.")); }, 300);
+                setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
                 return model.get(attribute);
             }
 
@@ -538,10 +538,10 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         }
     });
 
-    ext.point("io.ox/tasks/edit/dnd/actions").extend({
+    ext.point('io.ox/tasks/edit/dnd/actions').extend({
         id: 'attachment',
         index: 100,
-        label: gt("Drop here to upload a <b>new attachment</b>"),
+        label: gt('Drop here to upload a <b>new attachment</b>'),
         multiple: function (files, view) {
             _(files).each(function (fileData) {
                 view.baton.attachmentList.addFile(fileData);

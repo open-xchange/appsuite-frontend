@@ -12,7 +12,7 @@
  */
 
 define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
-                                 "io.ox/tasks/edit/view-template",
+                                 'io.ox/tasks/edit/view-template',
                                  'io.ox/tasks/util',
                                  'io.ox/tasks/model',
                                  'io.ox/core/date',
@@ -22,7 +22,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                                  'io.ox/backbone/views',
                                  'io.ox/backbone/forms'],
                                  function (gt, template, reminderUtil, model, date, util, ext, notifications, views, forms) {
-    "use strict";
+    'use strict';
 
     var point = views.point('io.ox/tasks/edit/view'),
         TaskEditView = point.createView({
@@ -45,13 +45,13 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             util.buildExtensionRow(self.$el, this.getRow(1, app), self.baton);
 
             //row 2 start date due date
-            util.buildExtensionRow(self.$el, this.getRow(2), self.baton).addClass("collapsed");
+            util.buildExtensionRow(self.$el, this.getRow(2), self.baton).addClass('collapsed');
 
             //row 3 description
             util.buildExtensionRow(self.$el, this.getRow(3), self.baton);
 
             //expand link
-            $('<a>').text(gt("Expand form")).attr('href', '#')
+            $('<a>').text(gt('Expand form')).attr('href', '#')
             .on('click', function (e) {
                 e.preventDefault();
                 self.$el.find('.collapsed').show();
@@ -60,10 +60,10 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             .appendTo(this.$el);
 
             //row 4 reminder
-            util.buildExtensionRow(self.$el, this.getRow(4), self.baton).addClass("collapsed");
+            util.buildExtensionRow(self.$el, this.getRow(4), self.baton).addClass('collapsed');
 
             //row 5 status progress priority privateFlag
-            util.buildExtensionRow(self.$el, this.getRow(5), self.baton).addClass("collapsed");
+            util.buildExtensionRow(self.$el, this.getRow(5), self.baton).addClass('collapsed');
 
             //row 6 repeat
             //util.buildRow(this.$el, this.fields.repeatLink);
@@ -78,12 +78,12 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 participantsTab = temp.content.find('#edit-task-tab0'  + '-' + self.cid),
                 attachmentsTab = temp.content.find('#edit-task-tab1'  + '-' + self.cid),
                 detailsTab = temp.content.find('#edit-task-tab2'  + '-' + self.cid);
-            this.$el.append(tabs.addClass("collapsed"), temp.content);
+            this.$el.append(tabs.addClass('collapsed'), temp.content);
             temp = null;
 
             //partitipants tab
-            util.buildExtensionRow(participantsTab, [this.getRow(0, app, 'participants')], self.baton).addClass("collapsed");
-            util.buildExtensionRow(participantsTab, [this.getRow(1, app, 'participants')], self.baton).addClass("collapsed");
+            util.buildExtensionRow(participantsTab, [this.getRow(0, app, 'participants')], self.baton).addClass('collapsed');
+            util.buildExtensionRow(participantsTab, [this.getRow(1, app, 'participants')], self.baton).addClass('collapsed');
 
             //attachmentTab
             var attachmentTabheader = tabs.find('a:eq(1)');
@@ -109,8 +109,8 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             util.buildExtensionRow(detailsTab, this.getRow(4, app, 'details'), self.baton);
 
             //change title if available
-            if (self.model.get("title")) {
-                app.setTitle(self.model.get("title"));
+            if (self.model.get('title')) {
+                app.setTitle(self.model.get('title'));
             }
             return this.$el;
         },
@@ -120,13 +120,13 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             if (this.rows.length > 0) {
                 var value;
                 switch (tab) {
-                case "details":
+                case 'details':
                     value = this.rows[6][number];
                     break;
-                case "participants":
+                case 'participants':
                     value = this.rows[7][number];
                     break;
-                case "attachments":
+                case 'attachments':
                     value = this.rows[8][number];
                     break;
                 default:
@@ -156,11 +156,11 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 //row 3
                 self.rows[3].push(temp.note);
                 //row 4
-                self.rows[4].push([[util.buildLabel(gt("Remind me"), this.fields.reminderDropdown.attr('id')), this.fields.reminderDropdown], 5]);
+                self.rows[4].push([[util.buildLabel(gt('Remind me'), this.fields.reminderDropdown.attr('id')), this.fields.reminderDropdown], 5]);
                 self.rows[4].push(temp.alarm);
                 //row 5
                 self.rows[5].push(temp.status);
-                self.rows[5].push([[util.buildLabel(gt("Progress in %"), this.fields.progress.attr('id')), this.fields.progress.parent()], 3]);
+                self.rows[5].push([[util.buildLabel(gt('Progress in %'), this.fields.progress.attr('id')), this.fields.progress.parent()], 3]);
                 self.rows[5].push(temp.priority);
                 self.rows[5].push(temp.private_flag);
                 //detailtab
@@ -179,13 +179,13 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 self.rows[8].push(temp.attachment_list);
                 self.rows[8].push(temp.attachment_upload);
                 //delegate some events
-                self.$el.delegate("#task-edit-title", "keyup", function () {
+                self.$el.delegate('#task-edit-title', 'keyup', function () {
                     var newTitle = _.noI18n($(this).val());
                     if (!newTitle) {
-                        if (self.model.get("id")) {
-                            newTitle = gt("Edit task");
+                        if (self.model.get('id')) {
+                            newTitle = gt('Edit task');
                         } else {
-                            newTitle = gt("Create task");
+                            newTitle = gt('Create task');
                         }
                     }
                     app.setTitle(newTitle);
@@ -194,12 +194,12 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             }
         },
         createNonExt: function (app) {
-            var saveBtnText = gt("Create"),
+            var saveBtnText = gt('Create'),
                 headlineText = gt('Create task'),
                 self = this;
             if (this.model.attributes.id) {
-                saveBtnText = gt("Save");
-                headlineText = gt("Edit task");
+                saveBtnText = gt('Save');
+                headlineText = gt('Edit task');
             }
             //row 0
             this.fields.headline = $('<h1>').addClass('title').text(headlineText);
@@ -208,7 +208,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                             app.quit();
                         });
             this.fields.saveButton = $('<button>').attr('data-action', 'save')
-                .addClass("btn btn-primary task-edit-save")
+                .addClass('btn btn-primary task-edit-save')
                 .text(saveBtnText)
                 .on('click', function (e) {
                     var callbacks = {
@@ -217,7 +217,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                             app.quit();
                         },
                         error: function (model, response) {
-                            setTimeout(function () {notifications.yell("error", response.error); }, 300);
+                            setTimeout(function () {notifications.yell('error', response.error); }, 300);
                             console.log(model);
                             console.log(response);
                         }
@@ -238,17 +238,17 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                     }
                     e.stopPropagation();
                     if (self.model.get('id')) {
-                        self.model.sync("update", self.model, callbacks);
+                        self.model.sync('update', self.model, callbacks);
                     } else {
                         if (self.model.get('alarm') === null) {//alarm must not be null on create action
                             self.model.set('alarm', undefined);
                         }
-                        self.model.sync("create", self.model, callbacks);
+                        self.model.sync('create', self.model, callbacks);
                     }
 
                 });
             //row 4
-            this.fields.reminderDropdown = $('<select>').attr('id', 'task-edit-reminder-select').addClass("span12")
+            this.fields.reminderDropdown = $('<select>').attr('id', 'task-edit-reminder-select').addClass('span12')
                 .append($('<option>')
                 .text(''), reminderUtil.buildDropdownMenu())
                 .on('change', function (e) {
@@ -256,7 +256,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                         self.model.set('alarm', null);
                     } else {
                         var dates = reminderUtil.computePopupTime(new Date(),
-                                self.fields.reminderDropdown.find(":selected").attr("finderId"));
+                                self.fields.reminderDropdown.find(':selected').attr('finderId'));
                         self.model.set('alarm', dates.alarmDate.getTime());
                     }
                 });
@@ -280,19 +280,19 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                     }
                     self.model.set('percent_completed', value);
                 } else {
-                    setTimeout(function () {notifications.yell("error", gt("Please enter value between 0 and 100.")); }, 300);
+                    setTimeout(function () {notifications.yell('error', gt('Please enter value between 0 and 100.')); }, 300);
                     self.model.trigger('change:percent_completed');
                 }
             });
-            this.model.on("change:percent_completed", function () {
+            this.model.on('change:percent_completed', function () {
                 self.fields.progress.val(self.model.get('percent_completed'));
             });
             this.fields.progress.val(this.model.get('percent_completed'));
 
             //row 6
-            this.fields.repeatLink = $('<a>').text(gt("Repeat")).addClass("repeat-link").attr('href', '#')
+            this.fields.repeatLink = $('<a>').text(gt('Repeat')).addClass('repeat-link').attr('href', '#')
                 .on('click', function (e) { e.preventDefault();
-                                            setTimeout(function () {notifications.yell("info", gt("Under construction")); }, 300);
+                                            setTimeout(function () {notifications.yell('info', gt('Under construction')); }, 300);
                                         });
         },
         close: function () {
