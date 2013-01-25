@@ -202,11 +202,20 @@ define("io.ox/tasks/api", ["io.ox/core/http",
         return api.updateCaches(task).pipe(function () {
             // trigger visual refresh
             api.trigger('refresh.all');
-            
+            function refreshPortal() {
+                api.trigger("removePopup");
+                require(['io.ox/portal/main'], function (portal) {//refresh portal
+                    var app = portal.getApp(),
+                        model = app.getWidgetCollection()._byId.tasks_0;
+                    if (model) {
+                        app.refreshWidget(model, 0);
+                    }
+                });
+            }
             if (!task.length) {
-                return api.update(_.now(), task.id, {folder_id: newFolder}, folder);
+                return api.update(_.now(), task.id, {folder_id: newFolder}, folder).done(refreshPortal);
             } else {
-                return api.updateMultiple(task, {folder_id: newFolder});
+                return api.updateMultiple(task, {folder_id: newFolder}).done(refreshPortal);
             }
         });
     };
@@ -231,6 +240,27 @@ define("io.ox/tasks/api", ["io.ox/core/http",
 
     api.getDefaultFolder = function () {
         return folderApi.getDefaultFolder('tasks');
+    };
+    
+    //gets every task in users private folders. Used in Portal tile
+    api.getAllFromAllFolders = function () {
+        return http.PUT({
+            module: 'folders',
+            params: {
+                action: 'allVisible',
+                content_type: 'tasks',
+                columns: "1"
+            }
+        }).pipe(function (response) {
+            //get the data
+            return $.when.apply($,
+                _(response['private']).map(function (value) {
+                    return api.getAll({folder: value[0]}, false);//no caching here otherwise refresh uses old cache when moving a task
+                })
+            ).pipe(function () {
+                return _.flatten(_.toArray(arguments), true);
+            });
+        });
     };
 
     //for notification view
