@@ -54,10 +54,11 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                 }
             })
             // If autologin fails, try the token login
-            .pipe(null, function () {
+            .then(null, function () {
                 if (!_.url.hash('serverToken')) return;
                 return http.POST({
                     module: 'login',
+                    jsessionid: _.url.hash('jsessionid'),
                     appendColumns: false,
                     appendSession: false,
                     processResponse: false,
@@ -68,7 +69,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                         serverToken: _.url.hash('serverToken'),
                         clientToken: _.url.hash('clientToken')
                     }
-                }).pipe(function (response) { return response.data; });
+                }).then(function (response) { return response.data; });
             })
             .done(function () {
                 _.url.hash({ serverToken: null, clientToken: null });

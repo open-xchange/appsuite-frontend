@@ -392,6 +392,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         o.type = type;
         // prepend root
         o.url = ox.apiRoot + "/" + o.module;
+        if (o.jsessionid) o.url += ';jsessionid=' + o.jsessionid;
         // add session
         if (o.appendSession === true && ox.session) {
             o.params.session = ox.session;
