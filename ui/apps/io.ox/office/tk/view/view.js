@@ -218,6 +218,19 @@ define('io.ox/office/tk/view/view',
         };
 
         /**
+         * Returns whether the specified view pane is currently visible.
+         *
+         * @param {String} id
+         *  The unique identifier of the view pane.
+         *
+         * @returns {Boolean}
+         *  Whether the specified view pane is currently visible.
+         */
+        this.isPaneVisible = function (id) {
+            return  (id in panesById) && (panesById[id].getNode().css('display') !== 'none');
+        };
+
+        /**
          * Makes the view pane with the specified identifier visible.
          *
          * @param {String} id
@@ -344,14 +357,19 @@ define('io.ox/office/tk/view/view',
                     .addClass('alert-' + type + ' in hide')
                     .data('pane-pos', 'top');
 
+            function toggleOverlay(state) {
+                alert.toggleClass(OVERLAY_CLASS, state);
+                refreshPaneLayout();
+            }
+
             // Hides the alert with a specific animation.
             function closeAlert() {
+                toggleOverlay(true);
                 alert.slideUp('fast', function () {
                     alert.remove();
                     if (alert.is(currentAlert)) {
                         currentAlert = null;
                     }
-                    refreshPaneLayout();
                 });
             }
 
@@ -362,7 +380,7 @@ define('io.ox/office/tk/view/view',
             // make the alert banner closeable
             if (Utils.getBooleanOption(options, 'closeable', false)) {
                 // alert can be closed by clicking anywhere in the banner
-                alert.click(closeAlert).addClass(OVERLAY_CLASS);
+                alert.click(closeAlert);
             } else {
                 // remove closer button
                 alert.find('a.close').remove();
@@ -373,7 +391,6 @@ define('io.ox/office/tk/view/view',
 
             // initialize auto-close
             if (Utils.getBooleanOption(options, 'autoClose', false)) {
-                alert.addClass(OVERLAY_CLASS);
                 _.delay(closeAlert, 5000);
             }
 
@@ -388,9 +405,9 @@ define('io.ox/office/tk/view/view',
 
             // insert and show the new alert banner
             win.nodes.main.append(alert);
-            refreshPaneLayout();
-            // after alert is visible, refresh pane layout again
-            alert.slideDown('fast', refreshPaneLayout);
+            toggleOverlay(true);
+            // after alert is visible, remove overlay mode, and refresh pane layout again
+            alert.slideDown('fast', function () { toggleOverlay(false); });
 
             return this;
         };

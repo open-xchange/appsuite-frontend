@@ -40,7 +40,24 @@ define('io.ox/office/tk/application',
             self = this,
 
             // file descriptor of the document edited by this application
-            file = Utils.getObjectOption(launchOptions, 'file', null);
+            file = Utils.getObjectOption(launchOptions, 'file', null),
+
+            // all registered launch handlers
+            launchHandlers = [],
+
+            // all registered quit handlers
+            quitHandlers = [];
+
+        // private methods ----------------------------------------------------
+
+        function callDeferredHandlers(handlers) {
+
+            var // execute all handlers and store their results in an array
+                results = _(handlers).map(function (handler) { return handler.call(self); });
+
+            // accumulate all results into a single Deferred object
+            return $.when.apply($, results);
+        }
 
         // public methods -----------------------------------------------------
 
@@ -242,6 +259,43 @@ define('io.ox/office/tk/application',
         // application setup --------------------------------------------------
 
         /**
+         * Registers a launch handler function that will be executed when the
+         * application will be launched.
+         *
+         * @param {Function} launchHandler
+         *  A function that will be called when the application launches. Will
+         *  be called in the context of this application instance. May return a
+         *  Deferred object, which must be resolved or rejected by the launch
+         *  handler function.
+         *
+         * @returns {Application}
+         *  A reference to this application instance.
+         */
+        this.registerLaunchHandler = function (launchHandler) {
+            launchHandlers.push(launchHandler);
+            return this;
+        };
+
+        /**
+         * Registers a quit handler function that will be executed before the
+         * application will be closed.
+         *
+         * @param {Function} quitHandler
+         *  A function that will be called before the application will be
+         *  closed. Will be called in the context of this application instance.
+         *  May return a Deferred object, which must be resolved or rejected by
+         *  the quit handler function. If the Deferred object will be rejected,
+         *  the application remains alive.
+         *
+         * @returns {Application}
+         *  A reference to this application instance.
+         */
+        this.registerQuitHandler = function (quitHandler) {
+            quitHandlers.push(quitHandler);
+            return this;
+        };
+
+        /**
          * Registers an event handler for specific events at the passed target
          * object. The event handler will be unregistered automatically when
          * the application has been closed.
@@ -266,8 +320,8 @@ define('io.ox/office/tk/application',
             // bind event handler to events
             $(target).on(events, handler);
 
-            // unbind handler when the application window triggers the 'quit' event
-            this.getWindow().on('quit', function () {
+            // unbind handler when application is closed
+            this.on('docs:app:quit', function () {
                 $(target).off(events, handler);
             });
 
@@ -333,6 +387,7 @@ define('io.ox/office/tk/application',
                 })
                 .then(function (fileName) {
                     file.filename = fileName;
+                    // TODO: what if filter request succeeds, but Files API fails?
                     return FilesAPI.propagate('change', file);
                 });
             }
@@ -341,7 +396,28 @@ define('io.ox/office/tk/application',
             return def.always(function () { self.updateTitle(); }).promise();
         };
 
+        this.destroy = function () {
+        };
+
         // initialization -----------------------------------------------------
+
+        // call all registered launch handlers
+        this.setLauncher(function () {
+            return callDeferredHandlers(launchHandlers).then(
+                function () { self.trigger('docs:app:launch'); },
+                function () { self.trigger('docs:app:launch:error'); }
+            ).promise();
+        });
+        delete this.setLauncher;
+
+        // call all registered quit handlers
+        this.setQuit(function () {
+            return callDeferredHandlers(quitHandlers).then(
+                function () { self.trigger('docs:app:quit').destroy(); },
+                function () { self.trigger('docs:app:quit:veto'); }
+            ).promise();
+        });
+        delete this.setQuit;
 
         // set application title to current file name
         this.updateTitle();

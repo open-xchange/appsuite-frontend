@@ -192,22 +192,19 @@ define('io.ox/office/preview/main',
         }
 
         /**
-         * The handler function that will be called when the application shuts
-         * down.
+         * Sends a close notification to the server.
          */
-        function quitHandler() {
-
-            self.sendFilterRequest({
-                params: {
-                    action: 'importdocument',
-                    filter_format: 'html',
-                    filter_action: 'endconvert',
-                    job_id: jobId
-                }
-            });
-
-            self.destroy();
-            return $.when();
+        function sendCloseNotification() {
+            if (jobId) {
+                self.sendFilterRequest({
+                    params: {
+                        action: 'importdocument',
+                        filter_format: 'html',
+                        filter_action: 'endconvert',
+                        job_id: jobId
+                    }
+                });
+            }
         }
 
         // base constructor ---------------------------------------------------
@@ -302,22 +299,22 @@ define('io.ox/office/preview/main',
             return loadAndShow(Utils.getIntegerOption(point, 'page'));
         };
 
-        /**
-         * Destroys the application. Will be called automatically in a forced
-         * quit, but has to be called manually for a regular quit (e.g. from
-         * window close button).
-         */
-        this.destroy = function () {
-            controller.destroy();
-            model.destroy();
-            view.destroy();
-            model = controller = view = null;
-        };
+        this.destroy = (function () {
+            var baseMethod = self.destroy;
+            return function () {
+                controller.destroy();
+                model.destroy();
+                view.destroy();
+                model = controller = view = null;
+                baseMethod.call(self);
+            };
+        }());
 
         // initialization -----------------------------------------------------
 
-        // set launch and quit handlers
-        this.setLauncher(launchHandler).setQuit(quitHandler);
+        // set launch handler, send close notification when closing
+        this.registerLaunchHandler(launchHandler);
+        this.on('docs:app:quit', sendCloseNotification);
 
     }}); // class PreviewApplication
 

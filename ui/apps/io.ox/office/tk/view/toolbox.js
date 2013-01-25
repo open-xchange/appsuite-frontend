@@ -54,10 +54,12 @@ define('io.ox/office/tk/view/toolbox',
         function headingActionHandler() {
 
             var // the DOM node of this tool box
-                node = self.getNode();
+                node = self.getNode(),
+                // whether to collapse or expand
+                collapse = !node.hasClass('collapsed');
 
-            node.toggleClass('collapsed');
-            headingButton.setIcon('caret-icon ' + (node.hasClass('collapsed') ? 'right' : 'down'));
+            node.toggleClass('collapsed', collapse);
+            headingButton.setIcon('caret-icon ' + (collapse ? 'right' : 'down'));
             self.trigger('cancel');
         }
 

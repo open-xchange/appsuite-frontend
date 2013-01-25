@@ -279,7 +279,7 @@ i[class^="icon-"], i[class^=" icon-"] {
         /* fade out caption for buttons and labels in disabled groups */
         &.disabled {
             label, a.button {
-                > .caption {
+                > .caption, > span {
                     .opacity(50);
                 }
             }
