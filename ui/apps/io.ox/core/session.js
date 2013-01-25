@@ -72,7 +72,11 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                 }).then(function (response) { return response.data; });
             })
             .done(function () {
-                _.url.hash({ serverToken: null, clientToken: null });
+                _.url.hash({
+                    jsessionid: null,
+                    serverToken: null,
+                    clientToken: null
+                });
             })
             .done(set);
         },
