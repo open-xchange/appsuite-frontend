@@ -576,6 +576,9 @@ define('io.ox/backbone/forms',
                             self.nodes.extensionNodes[extension.id].show();
                         }
                     });
+                    // Show regular header
+                    this.nodes.collapsedHeader.hide();
+                    this.nodes.header.show();
                 } else if (this.initialState === 'collapsed') {
                     // Show regular header
                     this.nodes.collapsedHeader.hide();
@@ -600,6 +603,9 @@ define('io.ox/backbone/forms',
                             self.nodes.extensionNodes[extension.id].hide();
                         }
                     });
+                    // show collapsedHeader
+                    this.nodes.collapsedHeader.show();
+                    this.nodes.header.hide();
                 } else if (this.initialState === 'collapsed') {
                     // hide all
                     this.nodes.extensions.hide();
@@ -616,16 +622,21 @@ define('io.ox/backbone/forms',
             drawHeader: function () {
                 var self = this;
 
-                this.nodes.header = $('<div class="row sectionheader">').appendTo(this.$el);
+                this.nodes.header = $('<div class="row sectionheader">').append(
+                    $('<span class="offset2 span4">').append(
+                        $('<i class="icon-minus-sign">'),
+                        $('<a href="#">').text(this.title).on('click', function () {
+                            if (self.state === 'mixed') {
+                                self.more();
+                            } else if (self.state === 'allVisible') {
+                                self.less();
+                            }
+                        })
+                    )
+                ).appendTo(this.$el);
 
-                $('<a href="#" class="offset2 span4">').text(this.title).on('click', function () {
-                    if (self.state === 'mixed') {
-                        self.more();
-                    } else if (self.state === 'allVisible') {
-                        self.less();
-                    }
-                }).appendTo(this.nodes.header);
                 if (this.state === 'allVisible') {
+                    this.nodes.header.find('.icon-minus-sign').hide();
                     return;
                 }
 
@@ -637,7 +648,7 @@ define('io.ox/backbone/forms',
                     }
                 });
 
-                if (this.state === 'collapsed') {
+                if (this.state === 'collapsed' || this.initialState === 'mixed') {
                     this.nodes.collapsedHeader = $('<div class="row sectionheader collapsed">').appendTo(this.$el);
                     $('<span class="offset2 span4">').append(
                         $('<i class="icon-plus-sign">'),
