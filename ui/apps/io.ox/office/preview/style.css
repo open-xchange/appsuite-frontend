@@ -13,13 +13,4 @@
  */
 
 .io-ox-office-preview-main {
-
-    /* center controls of the tool bar */
-    .view-pane.center {
-        text-align: center;
-        
-        .view-component.toolbar {
-            display: inline-block;
-        }
-    }
 }

@@ -648,8 +648,9 @@ define('io.ox/core/api/folder',
             case 'read':
                 // can read?
                 // 256 = read own, 512 = read all, 8192 = admin
+                // hide folders where your only permission is to see the foldername (rights !== 1)
                 // return (rights & 256 || rights & 512 || rights & 8192) > 0;
-                return perm(rights, 7) > compareValue || (!this.is('system', data) && this.is('public', data) && data.folder_id !== '10');
+                return perm(rights, 7) > compareValue || (!this.is('system', data) && this.is('public', data) && data.folder_id !== '10') && rights !== 1;
             case 'create':
                 // can create objects?
                 return perm(rights, 0) > 1;

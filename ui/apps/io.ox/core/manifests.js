@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/manifests',
+define.async('io.ox/core/manifests',
     ['io.ox/core/extensions',
      'io.ox/core/capabilities'
     ], function (ext, capabilities) {
@@ -118,6 +118,8 @@ define('io.ox/core/manifests',
 
     _(ox.serverConfig.manifests).each(process);
 
+    var ts = _.now();
+
     var self = {
         manager: manifestManager,
         reset: function () {
@@ -126,8 +128,26 @@ define('io.ox/core/manifests',
             manifestManager.apps = {};
             
             _(ox.serverConfig.manifests).each(process);
+            if (_.url.hash('customManifests')) {
+                console.info("Loading custom manifests");
+                _(require(ox.base + "/src/manifests.js?t=" + ts)).each(function (m) {
+                    console.info("Custom manifest", m);
+                    process(m);
+                });
+            }
         }
     };
 
-    return self;
+    if (_.url.hash('customManifests')) {
+        var def = $.Deferred();
+        require([ox.base + "/src/manifests.js?t=" + ts], function (m) {
+            _(m).each(process);
+            def.resolve(self);
+        });
+        return def;
+    } else {
+        return $.Deferred().resolve(self);
+    }
+
+    return $.Deferred().resolve(self);
 });

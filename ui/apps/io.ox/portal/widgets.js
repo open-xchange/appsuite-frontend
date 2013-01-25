@@ -11,9 +11,12 @@
  */
 
 define('io.ox/portal/widgets',
-	['io.ox/core/extensions',
-     'io.ox/core/manifests',
-     'settings!io.ox/portal'], function (ext, manifests, settings) {
+       ['io.ox/core/extensions',
+       'io.ox/core/manifests',
+       'io.ox/core/notifications',
+       'settings!io.ox/portal',
+       'gettext!io.ox/portal'
+        ], function (ext, manifests, notifications, settings, gt) {
 
 	'use strict';
 
@@ -22,6 +25,7 @@ define('io.ox/portal/widgets',
 
     // application object
     var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
+        allTypes = ext.point('io.ox/portal/widget').chain().pluck('id').value(),
         collection = new Backbone.Collection([]);
 
     collection.comparator = function (a, b) {
@@ -59,7 +63,7 @@ define('io.ox/portal/widgets',
                     return obj;
                 })
                 .filter(function (obj) {
-                    return _(availablePlugins).contains(obj.plugin);
+                    return _(availablePlugins).contains(obj.plugin) || _(allTypes).contains(obj.type);
                 })
                 .value();
         },
@@ -77,9 +81,9 @@ define('io.ox/portal/widgets',
         },
 
         getAllTypes: function () {
-            return _.chain(availablePlugins)
+            return _.chain(availablePlugins.concat(allTypes))
                 .map(function (id) {
-                    var type = id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1').toLowerCase();
+                    var type = id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1');
                     return ext.point('io.ox/portal/widget/' + type + '/settings').options();
                 })
                 .filter(function (obj) {
@@ -94,7 +98,7 @@ define('io.ox/portal/widgets',
         getUsedTypes: function () {
             return collection.pluck('plugin')
                 .map(function (id) {
-                    return id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1').toLowerCase();
+                    return id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1');
                 });
         },
 
@@ -122,7 +126,7 @@ define('io.ox/portal/widgets',
                 color: colors[_.random(colors.length - 1)],
                 enabled: true,
                 id: id,
-                index: 0,
+                index: collection.length,
                 plugin: 'plugins/portal/' + (plugin || type) + '/register',
                 props: props || {},
                 type: type
@@ -162,16 +166,42 @@ define('io.ox/portal/widgets',
             });
         },
 
-        save: function (widgets) {
-            settings.set('widgets/user', widgets).save();
+        /**
+         * Save a list of widgets into the database. The parameter
+         * @param widgetList must be a jQuery UI sortable object with its
+         * children sorted in the order that should be saved.
+         *
+         * @param widgetList - the sortable list of widgets
+         * @return - a deffered object with the save request
+         */
+        save: function (widgetList) {
+            var obj = this.toJSON(), old_state = obj;
+
+            // update all indexes
+            widgetList.children().each(function (index) {
+                var node = $(this), id = node.attr('data-widget-id');
+                if (id in obj) {
+                    obj[id].index = index;
+                }
+            });
+            this.update(obj);
+            collection.trigger('sort');
+
+            return settings.set('widgets/user', this).save()
+            .done(function () {
+                notifications.yell('success', gt("Settings saved."));
+            })
+            .fail(function () {
+                //reset old state
+                this.update(old_state);
+                collection.trigger('sort');
+                widgetList.sortable('cancel');
+                notifications.yell('error', gt("Could not save settings."));
+            });
         }
     };
 
     collection.reset(api.getSettings());
-
-    collection.on('change', function () {
-        api.save(api.toJSON());
-    });
 
     collection.on('remove', function (model) {
         settings.remove('widgets/user/' + model.get('id')).save();

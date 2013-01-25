@@ -1995,11 +1995,11 @@ msgstr "Telefoon (Thuis alt.)"
 
 #: apps/io.ox/contacts/model.js:256
 msgid "Cell phone"
-msgstr "Mobiletelefoon"
+msgstr "Mobiele telefoon"
 
 #: apps/io.ox/contacts/model.js:257
 msgid "Cell phone alt"
-msgstr "Mobiletelefoon alt."
+msgstr "Mobiele telefoon alt."
 
 #: apps/io.ox/contacts/model.js:258
 msgid "Phone (other)"

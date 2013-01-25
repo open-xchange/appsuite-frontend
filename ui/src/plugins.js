@@ -72,7 +72,7 @@
                 var q = queue;
                 queue = [];
                 oldload(context, modulename,
-                    [ox.apiRoot, '/apps/', ox.base, ',', q.join()].join(''));
+                    [ox.apiRoot, '/apps/load/', ox.base, ',', q.join()].join(''));
                 if (queue.length) console.error('recursive require', queue);
             }
         };
@@ -84,14 +84,14 @@
         classicRequire.load = oldload;
 
         define('classic', {load: function (name, parentRequire, load, config) {
-            classicRequire([name], load);
+            classicRequire([name], load, load.error);
         } });
 
         define('text', { load: function (name, parentRequire, load, config) {
-            req(['/text;' + name], load);
+            req(['/text;' + name], load, load.error);
         } });
         define('raw', { load: function (name, parentRequire, load, config) {
-            req(['/raw;' + name], load);
+            req(['/raw;' + name], load, load.error);
         } });
     }());
 

@@ -20,36 +20,37 @@ define('io.ox/office/preview/controller',
 
     // class PreviewController ================================================
 
+    /**
+     * @constructor
+     * @extends Controller
+     */
     function PreviewController(app) {
 
         var // self reference
             self = this,
 
-            // the preview model of the passed application
-            model = app.getModel(),
-
             // all the little controller items
             items = {
 
                 'pages/first': {
-                    enable: function () { return model.getPage() > 1; },
-                    set: function () { model.firstPage(); }
+                    enable: function () { return app.getPage() > 1; },
+                    set: function () { app.firstPage(); }
                 },
                 'pages/previous': {
-                    enable: function () { return model.getPage() > 1; },
-                    set: function () { model.previousPage(); }
+                    enable: function () { return app.getPage() > 1; },
+                    set: function () { app.previousPage(); }
                 },
                 'pages/next': {
-                    enable: function () { return model.getPage() < model.getPageCount(); },
-                    set: function () { model.nextPage(); }
+                    enable: function () { return app.getPage() < app.getPageCount(); },
+                    set: function () { app.nextPage(); }
                 },
                 'pages/last': {
-                    enable: function () { return model.getPage() < model.getPageCount(); },
-                    set: function () { model.lastPage(); }
+                    enable: function () { return app.getPage() < app.getPageCount(); },
+                    set: function () { app.lastPage(); }
                 },
 
                 'pages/current': {
-                    enable: function () { return model.getPageCount() > 0; },
+                    enable: function () { return app.getPageCount() > 0; },
                     get: function () {
                         // the gettext comments MUST be located directly before gt(), but
                         // 'return' cannot be the last token in a line
@@ -58,7 +59,7 @@ define('io.ox/office/preview/controller',
                             //#. %1$s is the current page index in office document preview
                             //#. %2$s is the number of pages in office document preview
                             //#, c-format
-                            gt('%1$s of %2$s', model.getPage(), model.getPageCount());
+                            gt('%1$s of %2$s', app.getPage(), app.getPageCount());
                         return label;
                     }
                 }
@@ -66,12 +67,12 @@ define('io.ox/office/preview/controller',
 
         // base constructor ---------------------------------------------------
 
-        Controller.call(this, items);
+        Controller.call(this, app, items);
 
         // initialization -----------------------------------------------------
 
-        // listen to 'showpage' events and update all GUI elements
-        model.on('showpage', function () { self.update(); });
+        // listen to 'show:page' events and update all GUI elements
+        app.on('show:page', function () { self.update(); });
 
     } // class PreviewController
 

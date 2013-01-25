@@ -30,9 +30,14 @@ define('io.ox/office/tk/view/pane',
      * @param {Application} app
      *  The application containing this pane element.
      *
+     * @param {String} id
+     *  The unique identifier of the view pane.
+     *
      * @param {Object} [options]
      *  A map of options to control the properties of the new view pane.
      *  The following options are supported:
+     *  @param {Boolean} [options.transparent=false]
+     *      If set to true, the background of the pane will be transparent.
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of the
      *      view pane.
@@ -40,7 +45,7 @@ define('io.ox/office/tk/view/pane',
      *      Additional CSS formatting that will be set at the root DOM node of
      *      the view pane.
      */
-    function Pane(app, options) {
+    function Pane(app, id, options) {
 
         var // the container element representing the pane
             node = $('<div>').addClass('view-pane'),
@@ -58,6 +63,13 @@ define('io.ox/office/tk/view/pane',
         };
 
         /**
+         * Returns the unique identifier of this view pane.
+         */
+        this.getIdentifier = function () {
+            return id;
+        };
+
+        /**
          * Adds the passed view component into this pane, and registers it at
          * the application controller.
          *
@@ -72,24 +84,6 @@ define('io.ox/office/tk/view/pane',
             node.append(component.getNode());
             app.getController().registerViewComponent(component);
             return this;
-        };
-
-        /**
-         * Creates a new tool bar component in this pane, and registers it at
-         * the application controller.
-         *
-         * @param {Object} [options]
-         *  A map of options for the tool bar in the pane. Supports all options
-         *  supported by the Component class constructor.
-         *
-         * @returns {Component}
-         *  The new tool bar component.
-         */
-        this.createToolBar = function (options) {
-            var toolBar = new Component(options);
-            toolBar.getNode().addClass('toolbar');
-            this.addViewComponent(toolBar);
-            return toolBar;
         };
 
         /**
@@ -119,8 +113,9 @@ define('io.ox/office/tk/view/pane',
 
         // initialization -----------------------------------------------------
 
-        // additional CSS classes
-        node.addClass(Utils.getStringOption(options, 'classes', ''))
+        // additional options and CSS classes
+        node.toggleClass('transparent', Utils.getBooleanOption(options, 'transparent', false))
+            .addClass(Utils.getStringOption(options, 'classes', ''))
             .css(Utils.getObjectOption(options, 'css', {}));
 
     } // class Pane

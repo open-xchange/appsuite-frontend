@@ -232,7 +232,7 @@ define("io.ox/calendar/api",
                 return api.get(getObj)
                         .pipe(function (data) {
                             api.trigger('refresh.all');
-                            api.trigger('create', getObj);
+                            api.trigger('create', data);
                             return data;
                         });
             });

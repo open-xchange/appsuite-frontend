@@ -209,7 +209,7 @@ define("io.ox/mail/api",
             },
             get: {
                 action: "get",
-                view: settings.get('allowHtmlMessages', true) ? 'noimg' : 'text',
+                view: settings.get('allowHtmlMessages', true) ? (settings.get('allowHtmlImages', false) ? 'noimg' : 'html') : 'text',
                 embedded: "true"
             },
             getUnmodified: {

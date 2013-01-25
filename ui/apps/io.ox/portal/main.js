@@ -91,7 +91,7 @@ define('io.ox/portal/main',
         index: 200,
         draw: function (baton) {
             this.append(
-                baton.$.widgets = $('<ul class="widgets">')
+                baton.$.widgets = $('<ol class="widgets">')
             );
         }
     });
@@ -152,7 +152,7 @@ define('io.ox/portal/main',
             if (model.get('enabled')) {
                 app.getWidgetNode(model).show();
                 app.drawWidget(model);
-            } else {
+            } else {
                 app.getWidgetNode(model).hide();
             }
         } else if ('color' in e.changes) {
@@ -161,7 +161,6 @@ define('io.ox/portal/main',
              //Element was removed, no need to refresh it.
         } else {
             app.drawWidget(model);
-            app.refreshWidget(model);
         }
     });
 
@@ -270,7 +269,7 @@ define('io.ox/portal/main',
 
         var type = model.get('type'),
             node = app.getWidgetNode(model),
-            delay = (index / 2 >> 0) * 2000,
+            delay = (index / 2 >> 0) * 1000,
             baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + type }),
             point = ext.point(baton.point),
             requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value(),
@@ -297,7 +296,7 @@ define('io.ox/portal/main',
                     title.addClass('action-link').on('click', { baton: baton }, runAction);
                 }
                 // simple delay approach
-                setTimeout(function () {
+                _.delay(function () {
                     // initialize first
                     point.invoke('initialize', node, baton);
                     // load & preview
@@ -307,20 +306,22 @@ define('io.ox/portal/main',
         }
     };
 
-    app.refreshWidget = function (model) {
+    app.refreshWidget = function (model, index) {
         if (model.drawn) {
             var type = model.get('type'),
                 node = app.getWidgetNode(model),
-                delay = Math.random() * (collection.length / 2) * 1000,
+                delay = (index / 2 >> 0) * 1000,
                 baton = model.get('baton'),
                 point = ext.point(baton.point);
-            setTimeout(function () {
-                node.addClass('pending');
-                setTimeout(function () {
-                    loadAndPreview(point, node, model.get('baton'));
-                    node = baton = point = null;
-                }, 300);
-            }, delay);
+            _.defer(function () {
+                _.delay(function () {
+                    node.addClass('pending');
+                    _.delay(function () {
+                        loadAndPreview(point, node, baton);
+                        node = baton = point = null;
+                    }, 300); // CSS Transition delay 0.3s
+                }, delay);
+            });
         }
     };
 
@@ -355,23 +356,17 @@ define('io.ox/portal/main',
             // add side popup
             sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer, .action.pointer', openSidePopup);
 
-            // make sortable
-            appBaton.$.widgets.sortable({
-                containment: win.nodes.main,
-                scroll: true,
-                delay: 150,
-                stop: function (e, ui) {
-                    var obj = widgets.toJSON();
-                    // update all indexes
-                    $(this).children('.widget').each(function (index) {
-                        var node = $(this), id = node.attr('data-widget-id');
-                        if (id in obj) {
-                            obj[id].index = index;
-                        }
-                    });
-                    widgets.save(obj);
-                }
-            });
+            // make sortable, but not for Touch devices
+            if (!Modernizr.touch) {
+                appBaton.$.widgets.sortable({
+                    containment: win.nodes.main,
+                    scroll: true,
+                    delay: 150,
+                    stop: function (e, ui) {
+                        widgets.save(appBaton.$.widgets);
+                    }
+                });
+            }
 
             widgets.loadUsedPlugins().done(function () {
                 widgets.getEnabled().each(app.drawWidget);

@@ -60,10 +60,9 @@ define('io.ox/office/tk/control/button',
                 // method Utils.toggleButtons().
                 // TODO: Support for null as tristate?
                 Utils.toggleButtons(button, _.isBoolean(value) && value);
-            } else {
-                // change the 'data-value' attribute of push buttons
-                Utils.setControlValue(button, value);
             }
+            // do not change the initial value of push buttons (several buttons
+            // can be used to change the value of an item independently)
         }
 
         /**

@@ -55,12 +55,10 @@ define('io.ox/portal/settings/pane',
         e.preventDefault();
         var type = $(this).attr('data-type');
         widgets.add(type);
+        repopulateAddButton();
     }
 
     function drawAddButton() {
-        var used = widgets.getUsedTypes(),
-            allTypes = widgets.getAllTypes();
-
         this.append(
             $('<div class="controls">').append(
                 $('<div class="btn-group pull-right">').append(
@@ -68,20 +66,27 @@ define('io.ox/portal/settings/pane',
                         $.txt(gt('Add widget')), $.txt(' '),
                         $('<span class="caret">')
                     ),
-                    $('<ul class="dropdown-menu">').append(
-                        _(allTypes).map(function (options) {
-                            if (options.unique && _(used).contains(options.type)) {
-                                return "";
-                            } else {
-                                return $('<li>').append(
-                                    $('<a>', { href: '#', 'data-type': options.type }).text(options.title)
-                                );
-                            }
-                        })
-                    )
-                    .on('click', 'a', addWidget)
+                    $('<ul class="dropdown-menu">').on('click', 'a', addWidget)
                 )
             )
+        );
+        repopulateAddButton();
+    }
+
+    function repopulateAddButton() {
+        var used = widgets.getUsedTypes(),
+            allTypes = widgets.getAllTypes();
+
+        $('div.controls ul.dropdown-menu').empty().append(
+            _(allTypes).map(function (options) {
+                if (options.unique && _(used).contains(options.type)) {
+                    return "";
+                } else {
+                    return $('<li>').append(
+                        $('<a>', { href: '#', 'data-type': options.type }).text(options.title)
+                    );
+                }
+            })
         );
     }
 
@@ -242,6 +247,7 @@ define('io.ox/portal/settings/pane',
             } else {
                 this.removeWidget();
             }
+            repopulateAddButton();
         }
     });
 
@@ -252,27 +258,12 @@ define('io.ox/portal/settings/pane',
         return (views[id] = new WidgetSettingsView({ model: model }));
     }
 
-    function saveWidgets() {
-        var obj = widgets.toJSON();
-        // update all indexes
-        pane.find('.widget-settings-view').each(function (index) {
-            var node = $(this), id = node.attr('data-widget-id');
-            if (id in obj) {
-                console.log('reset index', id, index);
-                obj[id].index = index;
-            }
-        });
-        widgets.update(obj);
-        collection.trigger('sort');
-        widgets.save(obj);
-    }
-
     ext.point(POINT + '/pane').extend({
         index: 300,
         id: "list",
         draw: function () {
 
-            var list = $('<ul class="widget-list">');
+            var list = $('<ol class="widget-list">');
 
             collection.each(function (model) {
                 list.append(createView(model).render().el);
@@ -287,7 +278,7 @@ define('io.ox/portal/settings/pane',
                 scroll: true,
                 delay: 150,
                 stop: function (e, ui) {
-                    saveWidgets();
+                    widgets.save(list);
                 }
             });
 
@@ -301,8 +292,15 @@ define('io.ox/portal/settings/pane',
             collection.on('add', function (model) {
                 model.candidate = true;
                 var view = createView(model).render();
-                list.prepend(view.el);
+                list.append(view.el);
                 view.edit();
+            });
+
+            collection.on('sort', function () {
+                list.empty();
+                this.each(function (model) {
+                    list.append(createView(model).render().el);
+                });
             });
         }
     });

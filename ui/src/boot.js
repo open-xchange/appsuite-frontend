@@ -79,6 +79,12 @@ $(document).ready(function () {
         });
     }
 
+    // Disable attachments and uploads for specific clients
+    //
+    if (!_.browser.iOS) {
+        ox.uploadsEnabled = true;
+    }
+
     // check for supported browser
     function browserCheck() {
         var supp = false;

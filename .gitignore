@@ -4,3 +4,4 @@ ui/watch.sh
 *.sublime-*
 *~
 *.swp
+*.kate-swp

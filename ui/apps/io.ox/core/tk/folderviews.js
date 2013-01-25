@@ -368,7 +368,6 @@ define('io.ox/core/tk/folderviews',
                     }
                 }  else {
                     //potential workaround for bug 24377 (horizontal folder duplicates)
-                    console.error('bug 24377 workaround: please add a comment to the bug report');
                     return isOpen() ? paintChildren() : $.when();
                 }
 

@@ -63,7 +63,7 @@
 }
 .io-ox-twitter-favorite:before {
     background-position: -32px 0;
-} 
+}
 .io-ox-twitter-favorite:hover:before {
     background-position: -48px 0;
 }
@@ -75,20 +75,17 @@
 }
 .io-ox-twitter-retweet:hover:before {
     background-position: -96px 0;
-} 
+}
 .io-ox-twitter-retweet.retweeted:before {
     background-position: -112px 0;
-} 
+}
 .io-ox-twitter-follow {
     display: block;
     float: right;
 }
-.io-ox-twitter-follow i {
-    background: url('bird_blue_16.png') no-repeat; /* It's really 14px x 11px */
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    background-position: center center;
+iframe.io-ox-twitter-follow {
+    width: 300px;
+    height: 20px;
 }
 .io-ox-twitter-retweet-source span, .io-ox-twitter-date, .io-ox-twitter-reply, .io-ox-twitter-retweet, .io-ox-twitter-favorite {
     font-size: 90%;

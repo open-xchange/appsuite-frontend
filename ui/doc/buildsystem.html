@@ -101,7 +101,7 @@ path either by extending the <code>$PATH</code> variable
 <code class="typ">$ </code><code class="pln">export PATH=$PATH:$OX_APPSUITE_DEV/bin</code>
 </pre>
 <p>
-or copying or symlinking the executable.
+or by copying or symlinking the executable.
 </p>
 <pre class="nocode prettyprint">
 <code class="typ"># </code><code class="pln">ln -s $OX_APPSUITE_DEV/bin/build-appsuite /usr/local/bin</code>
@@ -114,8 +114,8 @@ The build system is executed by invoking the command
 <code>build-appsuite</code>. Similar to most build systems, the build system can
 perform multiple tasks, which are specified as parameters on the command line.
 Each task can require any number of parameters. These parameters can be
-specified either on the command line using the syntax <code>name=value</code> or
-as environment variables.
+specified either on the command line, using the syntax <code>name=value</code>,
+or as environment variables.
 </p><p>
 If present, the file <code>local.conf</code> is sourced by a shell script before
 the build process starts. This file can export environment variables which are
@@ -183,7 +183,7 @@ After the task is finished, the generated files can be customized manually to
 account for any additional packaging requirements.
 </p>
 
-<h4>app</h4>
+<h4 id="app">app</h4>
 <p>
 The main workhorse task is <code>app</code>. It is used to process all source
 files to an optimized deployable app. During development, it is usually called
@@ -396,6 +396,11 @@ example-app_0.0.1-1.debian.tar.bz2  example-app_0.0.1.orig.tar.bz2</code>
             <code>default</code>, <code>dist</code>.
         </p>
         <p><b>Default:</b> same as <code>builddir</code></p>
+        <p>
+            If the value contains the string <code>@lang@</code>, it will be
+            replaced by the lowercase language code (e.g. <code>en-us</code>) to
+            allow per-language directories.
+        </p>
     </dd>
 </dl>
 <dl>
@@ -503,7 +508,7 @@ example-app_0.0.1-1.debian.tar.bz2  example-app_0.0.1.orig.tar.bz2</code>
             A JavaScript expression for the constant STATIC_APPS.
         </p>
         <p><b>Used by:</b> <code>app</code>, <code>default</code>.</p>
-        <p><b>Default:</b> <code>true</code></p>
+        <p><b>Default:</b> <code>false</code></p>
         <p>
             When source compression is enabled, the expression is evaluated at
             build time and is used to eliminate dead code. This constant is used

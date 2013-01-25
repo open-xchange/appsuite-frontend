@@ -78,7 +78,7 @@ define('io.ox/mail/view-detail',
         regDocumentAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/files(?:&perspective=list)?&folder=(\d+)&id=([\d\.]+))(\s*)$/i,
         regLink = /^(.*)(https?:\/\/\S+)(\s.*)?$/i,
         regMail = /([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/i,
-        regMailReplace = /([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/ig, /* dedicated one to avoid strange side effects */
+        regMailReplace = /([^\s<;\(\)\[\]\|]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/ig, /* dedicated one to avoid strange side effects */
         regMailComplex = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/, /* "name" <address> */
         regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/g, /* "name" <address> */
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
@@ -155,7 +155,11 @@ define('io.ox/mail/view-detail',
         }, 1000); // 1 second(s)
     };
 
-    var blockquoteMore, blockquoteClickOpen, blockquoteClickClose, mailTo;
+    var blockquoteMore, blockquoteClickOpen, blockquoteClickClose, blockquoteCollapsedHeight, mailTo;
+
+    blockquoteCollapsedHeight = function () {
+        return $.browser.chrome ? 57 : 60;
+    };
 
     blockquoteMore = function (e) {
         e.preventDefault();
@@ -181,7 +185,7 @@ define('io.ox/mail/view-detail',
         }
         $(this).off('dblclick.close')
             .on('click.open', blockquoteClickOpen)
-            .stop().animate({ maxHeight: '60px' }, 300, function () {
+            .stop().animate({ maxHeight: blockquoteCollapsedHeight() }, 300, function () {
                 $(this).addClass('collapsed-blockquote');
             });
         $(this).next().show();
@@ -388,7 +392,7 @@ define('io.ox/mail/view-detail',
                     content.find('blockquote').not(content.find('blockquote blockquote')).each(function () {
                         var node = $(this);
                         node.addClass('collapsed-blockquote')
-                            .css({ opacity: 0.75, maxHeight: '60px' })
+                            .css({ opacity: 0.75, maxHeight: blockquoteCollapsedHeight() })
                             .on('click.open', blockquoteClickOpen)
                             .on('dblclick.close', blockquoteClickClose)
                             .after(
@@ -396,7 +400,7 @@ define('io.ox/mail/view-detail',
                                 .on('click', blockquoteMore)
                             );
                         setTimeout(function () {
-                            if (node.prop('scrollHeight') < 60) { // 3 rows a 20px line-height
+                            if (node.prop('scrollHeight') < blockquoteCollapsedHeight()) { // 3 rows a 20px line-height
                                 node.removeClass('collapsed-blockquote')
                                     .css('maxHeight', '')
                                     .off('click.open dblclick.close')
@@ -1014,6 +1018,16 @@ define('io.ox/mail/view-detail',
 
             setTimeout(function () {
                 var scrollHeight = content.get(0).scrollHeight;
+
+                if (scrollHeight >= content.height()) { //Bug 22756: FF18 is behaving oddly correct, but impractical
+                    var lowestElement = _($(content).find('*'))
+                        .chain()
+                        .filter(function (elem) { return $(elem).position() && $(elem).css('position') === 'absolute'; })
+                        .max(function (elem) { return $(elem).position().top + $(elem).height(); })
+                        .value();
+
+                    scrollHeight = Math.round($(lowestElement).position().top + $(lowestElement).height());
+                }
                 if (scrollHeight > content.height()) {
                     content.css('height', scrollHeight + 'px');
                 }

@@ -7,12 +7,5 @@ Standards-Version: 3.9.2
 
 Package: @package@
 Architecture: all
-Depends: ${misc:Depends}, open-xchange-appsuite
+Depends: ${misc:Depends}, open-xchange-appsuite-manifest
 Description: @description@
-
-Package: @package@-manifest
-Architecture: all
-Depends: ${misc:Depends}, open-xchange-core
-Description: @description@
- .
- This package contains the manifest for installation on the backend.

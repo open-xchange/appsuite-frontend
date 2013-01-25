@@ -19,22 +19,39 @@
 /* ========================================================================= */
 
 .opacity(@opacity) {
-    @opacity-percent: @opacity * 100;
-    opacity: @opacity;
-    filter: alpha(opacity=@opacity-percent);
+    opacity: @opacity / 100;
+    filter: ~"alpha(opacity=@{opacity})";
 }
 
-.transition(@transition) {
-    -webkit-transition: @transition;
-    -moz-transition: @transition;
-    -ms-transition: @transition;
-    -o-transition: @transition;
-    transition: @transition;
+.border-top-left-radius(@radius) {
+    -webkit-border-top-left-radius: @radius;
+    -moz-border-radius-topleft: @radius;
+    border-top-left-radius: @radius;
 }
 
-/* Opera does not get "-o-transition: none" right */
-.transition(none) {
-    -o-transition-property: none;
+.border-bottom-left-radius(@radius) {
+    -webkit-border-bottom-left-radius: @radius;
+    -moz-border-radius-bottomleft: @radius;
+    border-bottom-left-radius: @radius;
+}
+
+.border-top-right-radius(@radius) {
+    -webkit-border-top-right-radius: @radius;
+    -moz-border-radius-topright: @radius;
+    border-top-right-radius: @radius;
+}
+
+.border-bottom-right-radius(@radius) {
+    -webkit-border-bottom-right-radius: @radius;
+    -moz-border-radius-bottomright: @radius;
+    border-bottom-right-radius: @radius;
+}
+
+.box-shadow-2(@shadow1, @shadow2) {
+    -webkit-box-shadow: @shadow1, @shadow2;
+    -moz-box-shadow: @shadow1, @shadow2;
+    -ms-box-shadow: @shadow1, @shadow2;
+    box-shadow: @shadow1, @shadow2;
 }
 
 /* ========================================================================= */
@@ -84,25 +101,41 @@ i.io-ox-office-icon {
     &.clipboard-paste       { .icon-position(10, 0); }
 }
 
+/* give standard Bootstrap icons a minimum width */
+i[class^="icon-"], i[class^=" icon-"] {
+    min-width: @icon-size;
+    text-align: center;
+}
+
 /* ========================================================================= */
 /* panes and view components                                                 */
 /* ========================================================================= */
 
 /* background color for panes */
-@pane-fill-color: #f5f5f5;
+@pane-fill-color: #333333;
 
 /* background color for panes */
 @app-pane-fill-color: #e5e5e5;
+
+/* shadow for hovering elements */
+.drop-shadow(@size: 5px) {
+    .box-shadow(0 @size 2 * @size fade(black, 20%));
+}
 
 /* panes =================================================================== */
 
 .view-pane {
     position: absolute;
-    background-color: @pane-fill-color;
+    background: @pane-fill-color;
     line-height: 0;
 
-    &.hover {
+    /* transparent panes */
+    &.transparent {
         background: none;
+
+        &.overlay {
+            height: 0;
+        }
     }
 
     /* the application pane in the middle between all view panes */
@@ -110,7 +143,7 @@ i.io-ox-office-icon {
         margin: 0;
         padding: 0;
         .overflow(auto);
-        background-color: @app-pane-fill-color;
+        background: @app-pane-fill-color;
         text-align: center;
 
         /* the container element for the application model node(s) */
@@ -122,7 +155,7 @@ i.io-ox-office-icon {
         /* generic design of a 'page': white background with box shadow */
         .page {
             position: relative;
-            background-color: white;
+            background: white;
             .box-shadow(0 0 8px fade(black, 20%));
         }
     }
@@ -138,26 +171,21 @@ i.io-ox-office-icon {
 .view-component {
 
     /* standard height of controls */
-    @control-height: 32px;
+    @control-height: 36px;
     /* horizontal padding in control elements */
-    @control-padding: 7px;
+    @control-padding: 10px;
     /* space between control caption elements */
     @caption-spacing: 5px;
     /* standard height of controls in drop-down lists */
-    @list-item-height: 26px;
+    @list-item-height: 30px;
 
-    /* border width of button focus border */
-    @default-focus-border-width: 2px;
-    /* border width of framed buttons */
+    /* border width of buttons in framed design mode */
     @framed-border-width: 3px;
 
-    /* glow effect for focused controls */
-    .focus-glow(@radius: 8px, @opacity: 50%) {
-        .box-shadow(0 0 @radius fade(@selectedBackground, @opacity));
-    }
-    .focus-hover-glow() {
-        .focus-glow(9px, 60%);
-    }
+    /* glow effect for focused controls, use as argument for .box-shadow() */
+    @focus-glow-effect: 0 0 8px 2px fade(@selectedBackground, 60%);
+    /* glow effect for focused and hovered controls, use as argument for .box-shadow() */
+    @focus-glow-hover-effect: 0 0 8px 2px fade(@selectedBackground, 75%);
 
     position: relative;
     padding: 0;
@@ -167,12 +195,10 @@ i.io-ox-office-icon {
         display: none !important;
     }
 
-    /* disabled style for any element marked with the 'disabled' class */
-    .disabled {
-        .opacity(0.5);
-
-        /* override mouse pointer for any embedded elements */
-        &, * { cursor: default !important; }
+    /* half-transparent hover effect */
+    &.hover-effect {
+        .transition(opacity 0.2s linear);
+        &:not(:hover) { .opacity(70); }
     }
 
     /* groups (container elements for controls) ---------------------------- */
@@ -187,6 +213,12 @@ i.io-ox-office-icon {
             display: none !important;
         }
 
+        /* disabled groups ('important' to overrule display modes from other rules) */
+        &.disabled {
+            /* override mouse pointer for any embedded elements */
+            &, * { cursor: default !important; }
+        }
+
         /* common control settings ----------------------------------------- */
 
         label, a.button, input {
@@ -196,6 +228,7 @@ i.io-ox-office-icon {
             height: @control-height;
             margin: 0;
             padding: 0;
+            overflow: hidden;
             background: none;
             border: none;
             .border-radius(0);
@@ -232,6 +265,22 @@ i.io-ox-office-icon {
 
                 > span + span {
                     margin-left: @caption-spacing;
+                }
+            }
+
+            /* fade out contents of disabled buttons and labels */
+            &.disabled {
+                > .caption, > span {
+                    .opacity(50);
+                }
+            }
+        }
+
+        /* fade out caption for buttons and labels in disabled groups */
+        &.disabled {
+            label, a.button {
+                > .caption, > span {
+                    .opacity(50);
                 }
             }
         }
@@ -275,82 +324,48 @@ i.io-ox-office-icon {
             &.readonly {
                 cursor: default;
             }
-
-            /* drop-down button over text field */
-            + a.button {
-                z-index: 1;
-            }
         }
 
-        /* text field glow effect */
-        &:not(.disabled).text-focus {
-            .focus-glow();
-            &:hover { .focus-hover-glow(); }
+        /* vertical button lists ------------------------------------------- */
+
+        &.button-list {
+            padding: 5px 0;
+
+            a.button {
+                display: block;
+                width: 100%;
+                height: @list-item-height;
+                line-height: @list-item-height;
+                text-align: left;
+            }
         }
 
         /* group designs --------------------------------------------------- */
 
-        &.design-default {
+        &.design-default.button-list {
 
             a.button {
-                border: @default-focus-border-width solid transparent;
-                line-height: @control-height - 2 * @default-focus-border-width;
+                border: 1px solid transparent;
+                line-height: @list-item-height - 2px;
 
-                /* selected toggle/radio buttons */
                 &.selected {
-                    background-color: fade(@selectedBackground, 50%);
+                    background: fade(@selectedBackground, 60%);
                 }
             }
 
-            /* keyboard/mouse effects (not for disabled buttons/text fields or groups) */
-            &:not(.disabled) {
+            &:not(.disabled) a.button:not(.disabled) {
 
-                a.button:not(.disabled) {
+                &:hover { background: fade(black, 5%); }
+                &:active { background: fade(black, 10%); }
 
-                    &:hover { background-color: fade(black, 5%); }
-                    &:active { background-color: fade(black, 10%); }
-                    &:focus:not(:active) { border-color: fade(@selectedBackground, 60%); }
-
-                    /* selected toggle/radio buttons */
-                    &.selected {
-                        &:hover { background-color: fade(@selectedBackground, 60%); }
-                        &:active { background-color: fade(@selectedBackground, 70%); }
-                        &:focus:not(:active) { border-color: darken(@selectedBackground, 20%); }
-                    }
+                &:focus:not(:active) {
+                    border-color: @selectedBackground;
+                    .box-shadow(@focus-glow-effect);
                 }
 
-                input:not(.disabled) {
-
-                    &:hover:not(:focus) { background: fade(black, 5%); }
-                    &:focus, &:active { background: white; }
-                }
-            }
-        }
-
-        /* white design: white background, shadows, focus with glow effect */
-        &.design-white {
-            .box-shadow(0 0 5px fade(black, 15%));
-
-            label, a.button, input {
-                height: @control-height - 8px;
-                background: white;
-            }
-
-            label, a.button {
-                line-height: @control-height - 8px;
-            }
-
-            /* keyboard/mouse effects (not for disabled buttons) */
-            &:not(.disabled) {
-
-                &:not(.text-focus):hover {
-                    .box-shadow(0 0 6px fade(black, 20%));
-                }
-
-                /* focus glow effect */
-                &.dropdown-open, a.button:not(.disabled):focus {
-                    .focus-glow();
-                    &:hover { .focus-hover-glow(); }
+                &.selected {
+                    &:hover { background: fade(@selectedBackground, 70%); }
+                    &:active { background: fade(@selectedBackground, 80%); }
                 }
             }
         }
@@ -365,7 +380,7 @@ i.io-ox-office-icon {
 
                 &.selected {
                     border-color: @selectedBackground;
-                    .box-shadow(0 2px 8px fade(black, 20%));
+                    .drop-shadow(4px);
                 }
             }
 
@@ -380,25 +395,8 @@ i.io-ox-office-icon {
                     &:focus { border-color: darken(@selectedBackground, 20%); }
                 }
             }
-        }
 
-        /* vertical button lists ------------------------------------------- */
-
-        &.button-list {
-
-            a.button {
-                display: block;
-                width: 100%;
-                height: @list-item-height;
-                line-height: @list-item-height;
-                text-align: left;
-            }
-
-            &.design-default a.button {
-                line-height: @list-item-height - 2 * @default-focus-border-width;
-            }
-
-            &.design-framed {
+            &.button-list {
                 padding: 4px;
 
                 a.button {
@@ -416,41 +414,33 @@ i.io-ox-office-icon {
 
     } /* end of .group */
 
-    /* tool bars ----------------------------------------------------------- */
-
-    &.toolbar {
-        padding: 0 13px;
-        clear: both;
-
-        /* show groups in a horizontal bar */
-        > .group {
-            display: inline-block;
-            float: left;
-
-            &.right {
-                float: right;
-            }
-
-            &.design-white {
-                top: 4px;
-            }
-
-            /* group spacing */
-            &.separator {
-                width: 10px;
-                height: 1px;
-            }
-        }
-    }
-
     /* tool boxes ---------------------------------------------------------- */
 
     &.toolbox {
-        @heading-height: 22px;
+
+        /* default spacing between controls */
+        @control-spacing: 8px;
+        /* border radius for controls */
+        @border-radius: 5px;
+        /* height of the heading label */
+        @heading-height: 28px;
+
+        /* default 3D effect for buttons */
+        @button-shadow-effect: 5px 20px 20px -20px fade(white, 20%) inset;
+        /* default 3D effect for selected buttons */
+        @selected-button-shadow-effect: 5px 20px 20px -20px fade(white, 50%) inset;
 
         display: block;
         .box-sizing(content-box);
-        padding: 8px 6px 4px;
+        padding: @control-spacing 13px 0;
+        /* size the tool box according to its floated children */
+        overflow: hidden;
+
+        /* inline mode, e.g. multiple tool boxes side-by-side in top pane */
+        &.inline {
+            display: inline-block;
+            vertical-align: top;
+        }
 
         > div.top-shadow {
             position: absolute;
@@ -461,37 +451,209 @@ i.io-ox-office-icon {
             .vertical-gradient(darken(@pane-fill-color, 10%), @pane-fill-color);
         }
 
-        > .group {
+        .group, > .group-container {
             display: inline-block;
-            margin-bottom: 4px;
-            vertical-align: middle;
+            float: left;
+        }
 
-            /* group spacing */
-            &.separator {
-                width: 10px;
+        /* show groups in a horizontal bar */
+        > .group, > .group-container {
+            margin-right: @control-spacing;
+            margin-bottom: @control-spacing;
+            .border-radius(@border-radius);
+            .box-shadow(2px 2px 6px fade(white, 10%));
+
+            &.right {
+                float: right;
+                margin-right: 0;
             }
 
-            /* heading button of the tool box, used to collapse/expand */
-            &.heading > a.button {
-                height: @heading-height;
-                line-height: @heading-height - 2 * @default-focus-border-width;
-                font-size: 10px;
-                font-weight: bold;
+            &:last-child {
+                margin-right: 0;
             }
 
-            /* groups spanning the full width of the pane */
-            &.full-width, &.heading {
-                width: 100%;
+            /* line break */
+            &.line-break {
+                clear: both;
             }
+        }
+
+        > .group-container > .group {
+            &:first-child {
+                .border-top-left-radius(@border-radius);
+                .border-bottom-left-radius(@border-radius);
+            }
+            &:last-child {
+                .border-top-right-radius(@border-radius);
+                .border-bottom-right-radius(@border-radius);
+            }
+            + .group {
+                margin-left: -1px;
+            }
+        }
+
+        >.group, > .group-container > .group:first-child {
+            > *:first-child { 
+                .border-top-left-radius(@border-radius);
+                .border-bottom-left-radius(@border-radius);
+            }
+        }
+
+        >.group, > .group-container > .group:last-child {
+            > *:last-child {
+                .border-top-right-radius(@border-radius);
+                .border-bottom-right-radius(@border-radius);
+            }
+        }
+
+        /* groups spanning the full width of the pane */
+        > .group.full-width, > .group.design-heading {
+            width: 100%;
+            margin-right: 0;
         }
 
         /* collapsed: hide all groups following the heading button */
-        &.collapsed > .group.heading ~ * {
+        &.collapsed > .group.design-heading ~ * {
             display: none;
         }
-    }
+
+        .group {
+
+            label, a.button, input {
+                border: 1px solid #181818;
+
+                + label, + a.button, + input {
+                    margin-left: -1px;
+                }
+            }
+
+            label, a.button {
+                line-height: @control-height - 2px;
+            }
+
+            input:not(:last-child) {
+                border-right: none;
+                + * { border-left: none; }
+            }
+
+            /* raise hovered/focused control to make all borders visible */
+            &:not(.disabled) {
+                a.button, input {
+                    &:not(.disabled) {
+                        &:hover:not(:focus), &:active:not(:focus) { z-index: 2; }
+                        &:focus { z-index: 4; }
+                    }
+                }
+            }
+
+            &:not(.disabled) {
+                a.button:not(.disabled) {
+                    &:focus:not(:active) {
+                        border-color: @selectedBackground;
+                        .box-shadow(@focus-glow-effect);
+                    }
+                }
+            }
+
+            /* glow effects for groups with text boxes */
+            &.text-focus:not(.disabled) {
+                .box-shadow(@focus-glow-effect);
+
+                input, a.button {
+                    border-color: @selectedBackground;
+                }
+            }
+
+            /* add specific design properties for white on dark design */
+            &.design-default {
+                background: @pane-fill-color;
+
+                label, a.button, input {
+                    color: white;
+                }
+
+                /* selected toggle/radio buttons */
+                a.button.selected {
+                    background: fade(@selectedBackground, 60%);
+                }
+
+                /* keyboard/mouse effects (not for disabled buttons/text fields or groups) */
+                &:not(.disabled) {
+
+                    a.button:not(.disabled) {
+                        .box-shadow(@button-shadow-effect);
+
+                        &:hover { background: fade(white, 5%); }
+                        &:active { background: fade(black, 5%); }
+
+                        &:focus:not(:active) {
+                            .box-shadow-2(@button-shadow-effect, @focus-glow-effect);
+                        }
+
+                        /* selected toggle/radio buttons */
+                        &.selected {
+                            .box-shadow(@selected-button-shadow-effect);
+
+                            &:hover { background: fade(@selectedBackground, 70%); }
+                            &:active { background: fade(@selectedBackground, 50%); }
+
+                            &:focus:not(:active) {
+                                .box-shadow-2(@selected-button-shadow-effect, @focus-glow-effect);
+                            }
+                        }
+                    }
+
+                    /* text fields without white background as long as not focused */
+                    input:not(.disabled) {
+                        &:hover:not(:focus) { background: fade(white, 5%); }
+
+                        &:focus, &:active {
+                            background: white;
+                            color: @textColor;
+                        }
+                    }
+                }
+            }
+
+            /* add specific design properties for white background design */
+            &.design-white {
+                label, a.button, input {
+                    background: white;
+                    color: @textColor;
+                }
+            }
+
+            /* add specific design properties for the heading button */
+            &.design-heading {
+                .box-shadow(none);
+
+                a.button {
+                    height: @heading-height;
+                    line-height: @heading-height - 2px;
+                    font-size: 12px;
+                    font-weight: bold;
+                    color: white;
+
+                    &:active, &:not(:focus) {
+                        border-color: transparent;
+                    }
+                }
+            }
+
+        } /* end of .group */
+
+    } /* end of &.toolbox */
 
 } /* end of .view-component */
+
+/* modified shadow effect for groups in transparent panes */
+.view-pane.transparent > .view-component.toolbox {
+    overflow: visible;
+
+    > .group, > .group-container {
+        .drop-shadow();
+    }
+}
 
 /* ========================================================================= */
 /* drop-down menu elements                                                   */
@@ -506,7 +668,8 @@ i.io-ox-office-icon {
     overflow: visible;
     background: white;
     border: none;
-    .box-shadow(0 5px 10px fade(black, 25%));
+    .border-radius(5px);
+    .drop-shadow();
     font-size: 0;
     line-height: 0;
 
@@ -533,6 +696,7 @@ i.io-ox-office-icon {
     top: 0;
     padding: 4px 13px;
     z-index: 100;
+    .border-radius(0);
 
     h4, p, button {
         float: left;

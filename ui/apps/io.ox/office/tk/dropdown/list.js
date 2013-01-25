@@ -62,6 +62,10 @@ define('io.ox/office/tk/dropdown/list',
      *  @param {String} [options.itemDesign='default']
      *      The design mode of the list items. See the option 'options.design'
      *      supported by the Group class constructor for details.
+     *  @param {Function} [options.itemCreateHandler]
+     *      A function that will be called after a new list item has been added
+     *      to this list. The function receives the button control representing
+     *      the new list item (jQuery object) as first parameter.
      */
     function List(options) {
 
@@ -75,7 +79,10 @@ define('io.ox/office/tk/dropdown/list',
             sortFunctor = Utils.getFunctionOption(options, 'sortFunctor'),
 
             // the group in the drop-down menu representing the list items
-            listItemGroup = new Group({ classes: 'button-list', design: Utils.getStringOption(options, 'itemDesign', 'default') });
+            listItemGroup = new Group({ classes: 'button-list', design: Utils.getStringOption(options, 'itemDesign', 'default') }),
+
+            // handler called after a new item has been created
+            itemCreateHandler = Utils.getFunctionOption(options, 'itemCreateHandler', $.noop);
 
         // private methods ----------------------------------------------------
 
@@ -157,6 +164,9 @@ define('io.ox/office/tk/dropdown/list',
          * @param {Object} [options]
          *  A map of options to control the properties of the new button
          *  representing the item. See method Utils.createButton() for details.
+         *  Additionally, the following options are supported:
+         *  @param {String} [options.tooltip]
+         *      Tool tip text shown when the mouse hovers the button.
          *
          * @returns {jQuery}
          *  The button element representing the new list item, as jQuery
@@ -170,6 +180,9 @@ define('io.ox/office/tk/dropdown/list',
                 button = Utils.createButton(options).addClass(Group.FOCUSABLE_CLASS),
                 // insertion index for sorted lists
                 index = -1;
+
+            // add tool tip
+            Utils.setControlTooltip(button, Utils.getStringOption(options, 'tooltip'), 'bottom');
 
             // find insertion index for sorted lists
             if (sorted) {
@@ -189,6 +202,8 @@ define('io.ox/office/tk/dropdown/list',
                 listItemGroup.getNode().append(button);
             }
 
+            // call external handler
+            itemCreateHandler.call(this, button);
             return button;
         };
 

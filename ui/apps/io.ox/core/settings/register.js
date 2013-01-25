@@ -13,29 +13,36 @@
 
 define('io.ox/core/settings/register', ['io.ox/core/extensions', 'gettext!io.ox/core/settings'], function (ext, gt) {
 
-	'use strict';
+    'use strict';
 
-	ext.point("io.ox/settings/pane").extend({
-		id: 'users',
-		title: gt("My contact data"),
-		ref: 'io.ox/users',
-		loadSettingPane: false
-	});
+    ext.point("io.ox/settings/pane").extend({
+        id: 'users',
+        title: gt("My contact data"),
+        ref: 'io.ox/users',
+        loadSettingPane: false
+    });
 
-	ext.point("io.ox/users/settings/detail").extend({
-		index: 100,
-		draw: function () {
-			var $node = this;
-			require(["io.ox/core/settings/user"], function (users) {
-				users.editCurrentUser($node).done(function (user) {
-					user.on('update', function () {
-						require("io.ox/core/notifications").yell("success", gt("Your data has been saved"));
-					});
-				}).done(function () {
-						$node.find('[data-action="discard"]').hide();
-					}
-				);
-			});
-		}
-	});
+    ext.point("io.ox/users/settings/detail").extend({
+        index: 100,
+        draw: function () {
+            var $node = this;
+            require(["io.ox/core/settings/user"], function (users) {
+                users.editCurrentUser($node).done(function (user) {
+                    user.on('update', function () {
+                        require("io.ox/core/notifications").yell("success", gt("Your data has been saved"));
+                    });
+                }).done(function () {
+                    $node.find('[data-action="discard"]').hide();
+                }).fail(function () {
+                    $node.append(
+                        $.fail(gt("Couldn't load your contact data."), function () {
+                            users.editCurrentUser($node).done(function () {
+                                $node.find('[data-action="discard"]').hide();
+                            });
+                        })
+                    );
+                });
+            });
+        }
+    });
 });

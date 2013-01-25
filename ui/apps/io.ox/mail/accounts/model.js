@@ -90,7 +90,15 @@ define("io.ox/mail/accounts/model", ["io.ox/core/extensions", "io.ox/keychain/mo
         save: function (obj, defered) {
             var that = this;
             if (this.attributes.id !== undefined) {
-                AccountApi.update(this.attributes).done(function (response) {
+                var mods = this.attributes;
+                if (this.attributes.id === 0) {//primary mail account only allows editing of display name and unified mail
+                    mods = {
+                            id: that.attributes.id,
+                            personal: that.attributes.personal,
+                            unified_inbox_enabled: that.attributes.unified_inbox_enabled
+                        };
+                }
+                AccountApi.update(mods).done(function (response) {
                     folderAPI.folderCache.remove('default' + that.attributes.id);
                     folderAPI.trigger('update');
                     return defered.resolve(response);

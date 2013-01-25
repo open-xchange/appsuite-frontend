@@ -46,9 +46,16 @@ define('io.ox/office/tk/view/component',
      * @param {Object} [options]
      *  A map of options to control the properties of the new view component.
      *  The following options are supported:
+     *  @param {Boolean} [options.hoverEffect=false]
+     *      If set to true, the contents of the view component will be
+     *      displayed half-transparent as long as the mouse does not hover the
+     *      view component.
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of
-     *      this instance.
+     *      this view component.
+     *  @param {Object} [options.css]
+     *      Additional CSS formatting that will be set at the root DOM node of
+     *      this view component.
      *  @param {String} [options.visible]
      *      The key of the controller item that controls the visibility of the
      *      view component. The visibility will be bound to the 'enabled' state
@@ -68,6 +75,9 @@ define('io.ox/office/tk/view/component',
 
             // all control groups, mapped by key
             groupsByKey = {},
+
+            // the target node for new groups
+            containerNode = node,
 
             // the controller item controlling the visibility of this view component
             visibleKey = Utils.getStringOption(options, 'visible');
@@ -89,7 +99,7 @@ define('io.ox/office/tk/view/component',
             groups.push(group);
 
             // insert the group into this view component
-            node.append(group.getNode());
+            containerNode.append(group.getNode());
 
             // always forward 'cancel' events (e.g. closed drop-down menu)
             group.on('cancel', function () { self.trigger('cancel'); });
@@ -253,17 +263,6 @@ define('io.ox/office/tk/view/component',
         };
 
         /**
-         * Adds separation space following the last inserted group.
-         *
-         * @returns {Component}
-         *  A reference to this view component.
-         */
-        this.addSeparator = function () {
-            insertGroup(new Group({ classes: 'separator' }));
-            return this;
-        };
-
-        /**
          * Adds the passed control group to this view component. Calls to the
          * method Component.update() will be forwarded to all registered
          * groups.
@@ -326,6 +325,22 @@ define('io.ox/office/tk/view/component',
          */
         this.addButton = function (key, options) {
             return this.addGroup(key, new Button(options));
+        };
+
+        this.startGroupContainer = function (options) {
+
+            // create the container node for the groups
+            containerNode = $('<div>')
+                .addClass('group-container')
+                .addClass(Utils.getStringOption(options, 'classes', ''))
+                .appendTo(node);
+
+            return this;
+        };
+
+        this.endGroupContainer = function () {
+            containerNode = node;
+            return this;
         };
 
         /**
@@ -400,6 +415,7 @@ define('io.ox/office/tk/view/component',
         this.destroy = function () {
             node.off().remove();
             this.events.destroy();
+            _(groups).invoke('destroy');
             self = node = groups = groupsByKey = null;
         };
 
@@ -409,7 +425,9 @@ define('io.ox/office/tk/view/component',
         Events.extend(this);
 
         // additional CSS classes
-        node.addClass(Utils.getStringOption(options, 'classes', ''));
+        node.toggleClass('hover-effect', Utils.getBooleanOption(options, 'hoverEffect', false))
+            .addClass(Utils.getStringOption(options, 'classes', ''))
+            .css(Utils.getObjectOption(options, 'css', {}));
 
         // listen to key events for keyboard focus navigation
         node.on('keydown keypress keyup', keyHandler);

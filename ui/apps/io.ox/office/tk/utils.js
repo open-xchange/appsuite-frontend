@@ -469,12 +469,17 @@ define('io.ox/office/tk/utils',
      *  or if it does not contain the specified attribute, or if the attribute
      *  is not a string. May be any value (not only strings).
      *
+     * @param {Boolean} [nonEmpty=false]
+     *  If set to true, only non-empty strings will be returned from the
+     *  options object. Empty strings will be replaced with the specified
+     *  default value.
+     *
      * @returns
      *  The value of the specified attribute, or the default value.
      */
-    Utils.getStringOption = function (options, name, def) {
+    Utils.getStringOption = function (options, name, def, nonEmpty) {
         var value = Utils.getOption(options, name);
-        return _.isString(value) ? value : def;
+        return (_.isString(value) && (!nonEmpty || (value.length > 0))) ? value : def;
     };
 
     /**
@@ -639,12 +644,16 @@ define('io.ox/office/tk/utils',
      *  or if it does not contain the specified attribute, or if the attribute
      *  is not an array. May be any value.
      *
+     * @param {Boolean} [nonEmpty=false]
+     *  If set to true, only non-empty arrays will be returned from the options
+     *  object. Empty arrays will be replaced with the specified default value.
+     *
      * @returns
      *  The value of the specified attribute, or the default value.
      */
-    Utils.getArrayOption = function (options, name, def) {
+    Utils.getArrayOption = function (options, name, def, nonEmpty) {
         var value = Utils.getOption(options, name);
-        return _.isArray(value) ? value : def;
+        return (_.isArray(value) && (!nonEmpty || (value.length > 0))) ? value : def;
     };
 
     /**
@@ -1262,12 +1271,52 @@ define('io.ox/office/tk/utils',
     }());
 
     /**
-     * Returns the dimensions of the visible area of the passed scrollable
-     * node. This includes the size of the visible area without scroll bars (if
+     * Returns the position and size of the specified node inside visible area
+     * of the browser window. This includes the distances of all four borders
+     * of the node to the borders of the browser window.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The DOM element whose position relative to the browser window will be
+     *  calculated. If this object is a jQuery collection, uses the first node
+     *  it contains.
+     *
+     * @returns {Object}
+     *  An object with numeric attributes representing the position and size of
+     *  the node relative to the browser window in pixels:
+     *  - 'left': the distance of the left border of the node to the left
+     *      border of the browser window,
+     *  - 'top': the distance of the top border of the node to the top border
+     *      of the browser window,
+     *  - 'right': the distance of the right border of the node to the right
+     *      border of the browser window,
+     *  - 'bottom': the distance of the bottom border of the node to the bottom
+     *      border of the browser window,
+     *  - 'width': the outer width of the node (including its borders),
+     *  - 'height': the outer height of the node (including its borders).
+     */
+    Utils.getNodePositionInWindow = function (node) {
+
+        var // the passed node, as jQuery object
+            $node = $(node),
+            // the offset of the node, relative to the browser window
+            position = $node.offset();
+
+        // add size and right/bottom distances
+        position.width = $node.outerWidth();
+        position.height = $node.outerHeight();
+        position.right = window.innerWidth - position.left - position.width;
+        position.bottom = window.innerHeight - position.top - position.height;
+
+        return position;
+    };
+
+    /**
+     * Returns the position of the visible area of the passed scrollable node.
+     * This includes the size of the visible area without scroll bars (if
      * shown), and the distances of all four borders of the visible area to the
      * borders of the entire scroll area.
      *
-     * @param {HTMLElement|jQuery} scrollableNode
+     * @param {HTMLElement|jQuery} node
      *  The scrollable DOM element. If this object is a jQuery collection, uses
      *  the first node it contains.
      *
@@ -1287,16 +1336,93 @@ define('io.ox/office/tk/utils',
      *  - 'width': the width of the visible area (without scroll bar),
      *  - 'height': the height of the visible area (without scroll bar).
      */
-    Utils.getVisibleAreaDimensions = function (scrollableNode) {
-        scrollableNode = Utils.getDomNode(scrollableNode);
+    Utils.getVisibleAreaPosition = function (node) {
+        node = Utils.getDomNode(node);
         return {
-            left: scrollableNode.scrollLeft,
-            top: scrollableNode.scrollTop,
-            right: scrollableNode.scrollWidth - scrollableNode.clientWidth - scrollableNode.scrollLeft,
-            bottom: scrollableNode.scrollHeight - scrollableNode.clientHeight - scrollableNode.scrollTop,
-            width: scrollableNode.clientWidth,
-            height: scrollableNode.clientHeight
+            left: node.scrollLeft,
+            top: node.scrollTop,
+            right: node.scrollWidth - node.clientWidth - node.scrollLeft,
+            bottom: node.scrollHeight - node.clientHeight - node.scrollTop,
+            width: node.clientWidth,
+            height: node.clientHeight
         };
+    };
+
+    /**
+     * Returns the position and size of the specified window rectangle inside
+     * the passed scrollable node. This includes the size of the rectangle as
+     * specified, and the distances of all four borders of the rectangle to the
+     * borders of the visible area or entire scroll area of the scrollable
+     * node.
+     *
+     * @param {HTMLElement|jQuery} scrollableNode
+     *  The scrollable DOM element. If this object is a jQuery collection, uses
+     *  the first node it contains.
+     *
+     * @param {Object} windowRect
+     *  The rectangle whose position and size relative to the scrollable node
+     *  will be calculated. Must provide the attributes 'left', 'top', 'width',
+     *  and 'height' in pixels. The attributes 'left' and 'top' are interpreted
+     *  relatively to the browser window.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the calculation. Supports the following
+     *  options:
+     *  @param {Boolean} [options.visibleArea=false]
+     *      If set to true, calculates the distances of the window rectangle to
+     *      the visible area of the scrollable node. Otherwise, returns the
+     *      top and left position and the size of the window rectangle
+     *      unmodified, and adds the distance of its right and bottom borders
+     *      to the right and bottom borders of the entire scroll area of the
+     *      scrollable node.
+     *
+     * @returns {Object}
+     *  An object with numeric attributes representing the position and size of
+     *  the window rectangle relative to the entire scroll area or visible area
+     *  of the scrollable node in pixels:
+     *  - 'left': the distance of the left border of the window rectangle to
+     *      the left border of the scrollable node,
+     *  - 'top': the distance of the top border of the window rectangle to the
+     *      top border of the scrollable node,
+     *  - 'right': the distance of the right border of the window rectangle to
+     *      the right border of the scrollable node,
+     *  - 'bottom': the distance of the bottom border of the window rectangle
+     *      to the bottom border of the scrollable node,
+     *  - 'width': the width of the window rectangle, as passed,
+     *  - 'height': the height of the window rectangle, as passed.
+     */
+    Utils.getRectanglePositionInNode = function (scrollableNode, windowRect, options) {
+
+        var // the passed scrollable node, as jQuery object
+            $scrollableNode = $(scrollableNode),
+            // the offset of the scrollable node, relative to the browser window
+            scrollableOffset = $scrollableNode.offset(),
+            // the width of the left and top border of the scrollable node, in pixels
+            leftBorderWidth = Utils.convertCssLength($scrollableNode.css('borderLeftWidth'), 'px'),
+            topBorderWidth = Utils.convertCssLength($scrollableNode.css('borderTopWidth'), 'px'),
+            // dimensions of the visible area of the scrollable node
+            visiblePosition = Utils.getVisibleAreaPosition(scrollableNode),
+
+            // the dimensions of the window rectangle, relative to the visible area of the scrollable node
+            dimensions = {
+                left: windowRect.left + leftBorderWidth - scrollableOffset.left,
+                top: windowRect.top + topBorderWidth - scrollableOffset.top,
+                width: windowRect.width,
+                height: windowRect.height
+            };
+
+        // add right and bottom distance of child node to visible area
+        dimensions.right = visiblePosition.width - dimensions.left - dimensions.width;
+        dimensions.bottom = visiblePosition.height - dimensions.top - dimensions.height;
+
+        // add distances to entire scroll area, if option 'visibleArea' is not set
+        if (!Utils.getBooleanOption(options, 'visibleArea', false)) {
+            _(['left', 'top', 'right', 'bottom']).each(function (border) {
+                dimensions[border] += visiblePosition[border];
+            });
+        }
+
+        return dimensions;
     };
 
     /**
@@ -1338,42 +1464,49 @@ define('io.ox/office/tk/utils',
      *  - 'width': the outer width of the child node (including its borders),
      *  - 'height': the outer height of the child node (including its borders).
      */
-    Utils.getChildNodeDimensions = function (scrollableNode, childNode, options) {
+    Utils.getChildNodePositionInNode = function (scrollableNode, childNode, options) {
+        var windowPosition = Utils.getNodePositionInWindow(childNode);
+        return Utils.getRectanglePositionInNode(scrollableNode, windowPosition, options);
+    };
 
-        var // the passed scrollable node, as jQuery object
-            $scrollableNode = $(scrollableNode),
-            // the offset of the scrollable node, relative to the browser window
-            scrollableOffset = $scrollableNode.offset(),
-            // the width of the left and top border of the scrollable node, in pixels
-            leftBorderWidth = Utils.convertCssLength($scrollableNode.css('borderLeftWidth'), 'px'),
-            topBorderWidth = Utils.convertCssLength($scrollableNode.css('borderTopWidth'), 'px'),
-            // dimensions of the visible area of the scrollable node
-            visibleDimensions = Utils.getVisibleAreaDimensions(scrollableNode),
+    /**
+     * Scrolls the passed window rectangle into the visible area of the
+     * specified scrollable node.
+     *
+     * @param {HTMLElement|jQuery} scrollableNode
+     *  The scrollable DOM element. If this object is a jQuery collection, uses
+     *  the first node it contains.
+     *
+     * @param {Object} windowRect
+     *  The rectangle of the browser window that will be made visible by
+     *  scrolling the scrollable node. Must provide the attributes 'left',
+     *  'top', 'width', and 'height' in pixels. The attributes 'left' and 'top'
+     *  are interpreted relatively to the browser window.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the scroll action. Supports the following
+     *  options:
+     *  @param {Number} [options.padding=0]
+     *      Minimum distance between the borders of the visible area and the
+     *      rectangle.
+     */
+    Utils.scrollToWindowRectangle = function (scrollableNode, windowRect, options) {
 
-            // the passed child node, as jQuery object
-            $childNode = $(childNode),
-            // the offset of the child node, relative to the browser window
-            childOffset = $childNode.offset(),
-            // the dimensions of the child node, relative to the visible area of the scrollable node
-            childDimensions = {
-                left: childOffset.left + leftBorderWidth - scrollableOffset.left,
-                top: childOffset.top + topBorderWidth - scrollableOffset.top,
-                width: $childNode.outerWidth(),
-                height: $childNode.outerHeight()
-            };
+        var // dimensions of the rectangle in the visible area of the scrollable node
+            position = Utils.getRectanglePositionInNode(scrollableNode, windowRect, { visibleArea: true }),
+            // padding between scrolled element and border of visible area
+            padding = Utils.getIntegerOption(options, 'padding', 0, 0);
 
-        // add right and bottom distance of child node to visible area
-        childDimensions.right = visibleDimensions.width - childDimensions.left - childDimensions.width;
-        childDimensions.bottom = visibleDimensions.height - childDimensions.top - childDimensions.height;
+        function updateScrollPosition(leadingChildOffset, trailingChildOffset, scrollAttributeName) {
 
-        // add distances to entire scroll area, if option 'visibleArea' is not set
-        if (!Utils.getBooleanOption(options, 'visibleArea', false)) {
-            _(['left', 'top', 'right', 'bottom']).each(function (border) {
-                childDimensions[border] += visibleDimensions[border];
-            });
+            var maxPadding = Utils.minMax((leadingChildOffset + trailingChildOffset) / 2, 0, padding),
+                offset = Math.max(leadingChildOffset - Math.max(maxPadding - trailingChildOffset, 0), maxPadding);
+
+            Utils.getDomNode(scrollableNode)[scrollAttributeName] -= (offset - leadingChildOffset);
         }
 
-        return childDimensions;
+        updateScrollPosition(position.left, position.right, 'scrollLeft');
+        updateScrollPosition(position.top, position.bottom, 'scrollTop');
     };
 
     /**
@@ -1397,22 +1530,8 @@ define('io.ox/office/tk/utils',
      *      child node.
      */
     Utils.scrollToChildNode = function (scrollableNode, childNode, options) {
-
-        var // dimensions of the child node in the visible area of the scrollable node
-            childDimensions = Utils.getChildNodeDimensions(scrollableNode, childNode, { visibleArea: true }),
-            // padding between scrolled element and border of visible area
-            padding = Utils.getIntegerOption(options, 'padding', 0, 0);
-
-        function updateScrollPosition(leadingChildOffset, trailingChildOffset, scrollAttributeName) {
-
-            var maxPadding = Utils.minMax((leadingChildOffset + trailingChildOffset) / 2, 0, padding),
-                offset = Math.max(leadingChildOffset - Math.max(maxPadding - trailingChildOffset, 0), maxPadding);
-
-            Utils.getDomNode(scrollableNode)[scrollAttributeName] -= (offset - leadingChildOffset);
-        }
-
-        updateScrollPosition(childDimensions.left, childDimensions.right, 'scrollLeft');
-        updateScrollPosition(childDimensions.top, childDimensions.bottom, 'scrollTop');
+        var windowPosition = Utils.getNodePositionInWindow(childNode);
+        Utils.scrollToWindowRectangle(scrollableNode, windowPosition, options);
     };
 
     // form control elements --------------------------------------------------
@@ -1651,9 +1770,6 @@ define('io.ox/office/tk/utils',
      *  @param {String} [options.icon]
      *      The full name of the Bootstrap or OX icon class. If omitted, no
      *      icon will be shown.
-     *  @param {Boolean} [options.whiteIcon=false]
-     *      If set to true, the icon will be shown in light colors by adding
-     *      the CSS class 'icon-white'.
      *  @param {String} [options.label]
      *      The text label. Will follow an icon. If omitted, no text will be
      *      shown.
@@ -1665,7 +1781,6 @@ define('io.ox/office/tk/utils',
 
         var // option values
             icon = Utils.getStringOption(options, 'icon'),
-            whiteIcon = Utils.getBooleanOption(options, 'whiteIcon'),
             label = Utils.getStringOption(options, 'label'),
             labelCss = Utils.getObjectOption(options, 'labelCss'),
 
@@ -1689,7 +1804,8 @@ define('io.ox/office/tk/utils',
             caption.append($('<span>')
                 .attr('data-role', 'icon')
                 .attr('data-icon', icon)
-                .append(Utils.createIcon(icon, whiteIcon).addClass(language))
+                // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
+                .append(Utils.createIcon(icon, control.closest('.group').hasClass('white-icons')).addClass(language))
             );
         }
 

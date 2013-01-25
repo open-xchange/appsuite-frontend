@@ -95,7 +95,7 @@ define("plugins/portal/linkedIn/register",
         }
     });
 
-    ext.point("io.ox/portal/widget/linkedin").extend({
+    ext.point("io.ox/portal/widget/linkedIn").extend({
 
         title: 'LinkedIn',
 
@@ -203,7 +203,7 @@ define("plugins/portal/linkedIn/register",
         }
     });
 
-    ext.point('io.ox/portal/widget/linkedin/settings').extend({
+    ext.point('io.ox/portal/widget/linkedIn/settings').extend({
         title: gt('LinkedIn'),
         type: 'linkedin',
         editable: false,

@@ -14,19 +14,23 @@
 define('io.ox/office/preview/main',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/application',
-     'io.ox/office/preview/actions',
+     'io.ox/office/tk/applauncher',
      'io.ox/office/preview/model',
      'io.ox/office/preview/controller',
      'io.ox/office/preview/view',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.css'
-    ], function (Utils, Application, Actions, PreviewModel, PreviewController, PreviewView, gt) {
+    ], function (Utils, Application, ApplicationLauncher, PreviewModel, PreviewController, PreviewView, gt) {
 
     'use strict';
 
     // class PreviewApplication ===============================================
 
-    function PreviewApplication(options) {
+    /**
+     * @constructor
+     * @extends Application
+     */
+    var PreviewApplication = Application.extend({ constructor: function (launchOptions) {
 
         var // self reference
             self = this,
@@ -38,30 +42,81 @@ define('io.ox/office/preview/main',
             controller = null,
 
             // view, contains panes, tool bars, etc.
-            view = null;
+            view = null,
+
+            // the unique job identifier to be used for page requests
+            jobId = null,
+
+            // the total page count of the document
+            pageCount = 0,
+
+            // current page index (one-based!)
+            page = 0;
 
         // private methods ----------------------------------------------------
+
+        function showPage(newPage) {
+
+            var // a timeout for the window busy call
+                busyTimeout = null;
+
+            // check that the page changes inside the allowed page range
+            if ((page === newPage) || (newPage < 1) || (newPage > pageCount)) {
+                return;
+            }
+            page = newPage;
+
+            // switch window to busy state after a short delay
+            busyTimeout = window.setTimeout(function () {
+                self.getWindow().busy();
+                busyTimeout = null;
+            }, 500);
+
+            // load the requested page
+            self.sendFilterRequest({
+                params: {
+                    action: 'importdocument',
+                    job_id: jobId,
+                    filter_format: 'html',
+                    filter_action: 'getpage',
+                    page_number: page
+                },
+                resultFilter: function (data) {
+                    // extract HTML source, returning undefined will reject the entire request
+                    return Utils.getStringOption(data, 'HTMLPages');
+                }
+            })
+            .done(function (html) {
+                model.renderPage(html);
+            })
+            .fail(function () {
+                view.showLoadError();
+            })
+            .always(function () {
+                self.trigger('show:page', page);
+                if (busyTimeout) {
+                    window.clearTimeout(busyTimeout);
+                } else {
+                    self.getWindow().idle();
+                }
+            });
+        }
 
         /**
          * Loads the document described in the file descriptor passed to the
          * constructor of this application, and shows the application window.
          *
+         * @param {Number} [newPage=1]
+         *  The index of the page shown after loading the document.
+         *
          * @returns {jQuery.Promise}
          *  The promise of a deferred that reflects the result of the load
          *  operation.
          */
-        function loadAndShow() {
+        function loadAndShow(newPage) {
 
             var // the deferred to be returned
                 def = $.Deferred();
-
-            // initialize the deferred
-            def.fail(function () {
-                view.showLoadError();
-                model.setPreviewDocument(null);
-            }).always(function () {
-                self.getWindow().idle();
-            });
 
             // show application window
             self.getWindow().show(function () {
@@ -70,16 +125,22 @@ define('io.ox/office/preview/main',
                 // do not try to load, if file descriptor is missing
                 if (self.hasFileDescriptor()) {
                     // load the file
-                    self.sendAjaxRequest({
-                        url: self.getDocumentFilterUrl('importdocument', { filter_format: 'html', filter_action: "beginconvert" })
-                    })
-                    .done(function (response) {
-                        if ((response.data.JobID) > 0 && (response.data.PageCount > 0)) {
-                            model.setPreviewDocument(response.data.JobID, response.data.PageCount);
-                            def.resolve();
-                        } else {
-                            def.reject();
+                    self.sendFilterRequest({
+                        params: {
+                            action: 'importdocument',
+                            filter_format: 'html',
+                            filter_action: 'beginconvert'
+                        },
+                        resultFilter: function (data) {
+                            // check required entries, returning undefined will reject this request
+                            return (_.isNumber(data.JobID) && (data.JobID > 0) && _.isNumber(data.PageCount) && (data.PageCount > 0)) ? data : undefined;
                         }
+                    })
+                    .done(function (data) {
+                        jobId = data.JobID;
+                        pageCount = data.PageCount;
+                        page = 0;
+                        def.resolve();
                     })
                     .fail(function () {
                         def.reject();
@@ -91,7 +152,18 @@ define('io.ox/office/preview/main',
                 }
             });
 
-            return def.promise();
+            // initialize the deferred
+            return def
+                .always(function () {
+                    self.getWindow().idle();
+                })
+                .done(function () {
+                    showPage(newPage || 1);
+                })
+                .fail(function () {
+                    view.showLoadError();
+                })
+                .promise();
         }
 
         /**
@@ -120,13 +192,24 @@ define('io.ox/office/preview/main',
         }
 
         /**
-         * The handler function that will be called when the application shuts
-         * down.
+         * Sends a close notification to the server.
          */
-        function quitHandler() {
-            self.destroy();
-            return $.when();
+        function sendCloseNotification() {
+            if (jobId) {
+                self.sendFilterRequest({
+                    params: {
+                        action: 'importdocument',
+                        filter_format: 'html',
+                        filter_action: 'endconvert',
+                        job_id: jobId
+                    }
+                });
+            }
         }
+
+        // base constructor ---------------------------------------------------
+
+        Application.call(this, launchOptions);
 
         // methods ------------------------------------------------------------
 
@@ -151,6 +234,48 @@ define('io.ox/office/preview/main',
         };
 
         /**
+         * Returns the one-based index of the page currently shown.
+         */
+        this.getPage = function () {
+            return page;
+        };
+
+        /**
+         * Returns the total number of pages contained by the current document.
+         */
+        this.getPageCount = function () {
+            return pageCount;
+        };
+
+        /**
+         * Shows the first page of the current document.
+         */
+        this.firstPage = function () {
+            showPage(1);
+        };
+
+        /**
+         * Shows the previous page of the current document.
+         */
+        this.previousPage = function () {
+            showPage(page - 1);
+        };
+
+        /**
+         * Shows the next page of the current document.
+         */
+        this.nextPage = function () {
+            showPage(page + 1);
+        };
+
+        /**
+         * Shows the last page of the current document.
+         */
+        this.lastPage = function () {
+            showPage(pageCount);
+        };
+
+        /**
          * Will be called automatically from the OX framework to create and
          * return a restore point containing the current state of the
          * application.
@@ -159,7 +284,7 @@ define('io.ox/office/preview/main',
          *  The restore point containing the application state.
          */
         this.failSave = function () {
-            return { module: self.getName(), point: { file: this.getFileDescriptor() } };
+            return { module: self.getName(), point: { file: this.getFileDescriptor(), page: page } };
         };
 
         /**
@@ -171,34 +296,34 @@ define('io.ox/office/preview/main',
          */
         this.failRestore = function (point) {
             this.setFileDescriptor(Utils.getObjectOption(point, 'file'));
-            return loadAndShow();
+            return loadAndShow(Utils.getIntegerOption(point, 'page'));
         };
 
-        /**
-         * Destroys the application. Will be called automatically in a forced
-         * quit, but has to be called manually for a regular quit (e.g. from
-         * window close button).
-         */
-        this.destroy = function () {
-            controller.destroy();
-            model.destroy();
-            view.destroy();
-            model = controller = view = null;
-        };
+        this.destroy = (function () {
+            var baseMethod = self.destroy;
+            return function () {
+                controller.destroy();
+                model.destroy();
+                view.destroy();
+                model = controller = view = null;
+                baseMethod.call(self);
+            };
+        }());
 
         // initialization -----------------------------------------------------
 
-        // set launch and quit handlers
-        this.setLauncher(launchHandler).setQuit(quitHandler);
+        // set launch handler, send close notification when closing
+        this.registerLaunchHandler(launchHandler);
+        this.on('docs:app:quit', sendCloseNotification);
 
-    } // class PreviewApplication
+    }}); // class PreviewApplication
 
     // exports ================================================================
 
     // io.ox.launch() expects an object with the method getApp()
     return {
-        getApp: function (options) {
-            return Application.getOrCreateApplication(Actions.MODULE_NAME, PreviewApplication, options);
+        getApp: function (launchOptions) {
+            return ApplicationLauncher.getOrCreateApplication('io.ox/office/preview', PreviewApplication, launchOptions);
         }
     };
 

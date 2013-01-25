@@ -117,7 +117,9 @@ define('io.ox/office/tk/control/textfield',
             switch (event.type) {
             case 'focus':
                 // save current value
-                initialText = textField.val();
+                if (!_.isString(initialText)) {
+                    initialText = textField.val();
+                }
                 validationFieldState = getFieldState();
                 self.getNode().addClass(FOCUS_CLASS);
                 break;
@@ -127,8 +129,10 @@ define('io.ox/office/tk/control/textfield',
                 validationFieldState = getFieldState();
                 break;
             case 'blur:key':
-                // commit value when losing focus via keyboard
-                textField.trigger('commit');
+                // commit changed value when losing focus via keyboard
+                if (initialText !== textField.val()) {
+                    textField.trigger('commit');
+                }
                 break;
             case 'blur':
                 // restore saved value

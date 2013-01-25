@@ -32,6 +32,9 @@ define('io.ox/mail/actions',
     var isDraftFolder = function (folder_id) {
             return _.contains(account.getFoldersByType('drafts'), folder_id);
         },
+        isDraftMail = function (mail) {
+            return isDraftFolder(mail.folder_id) || ((mail.flags & 4) > 0);
+        },
         Action = links.Action;
 
     // actions
@@ -83,7 +86,7 @@ define('io.ox/mail/actions',
         requires: function (e) {
             // other recipients that me?
             return e.collection.has('toplevel', 'one') &&
-                util.hasOtherRecipients(e.context) && !isDraftFolder(e.context);
+                util.hasOtherRecipients(e.context) && !isDraftMail(e.context);
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -98,7 +101,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/reply', {
         id: 'reply',
         requires: function (e) {
-            return e.collection.has('toplevel', 'one') && !isDraftFolder(e.context.folder_id);
+            return e.collection.has('toplevel', 'one') && !isDraftMail(e.context);
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -128,7 +131,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/edit', {
         id: 'edit',
         requires: function (e) {
-            return e.collection.has('toplevel', 'one') && isDraftFolder(e.context.folder_id);
+            return e.collection.has('toplevel', 'one') && isDraftMail(e.context);
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -203,10 +206,24 @@ define('io.ox/mail/actions',
                         if (action === 'ok') {
                             var target = _(tree.selection.get()).first();
                             if (target && target !== folderId) {
+                                var vGrid;
+                                if (type === "move") {//add busy animation should be same as vgrid.js busy()
+                                    vGrid = $(".vgrid-scrollpane").children().first();
+                                    if (vGrid) {
+                                        vGrid.css({ visibility: 'hidden' }).parent().busy();
+                                        $(".vgrid-scrollpane").find('.io-ox-center').remove();
+                                    }
+                                }
                                 api[type](list, target).then(
                                     function () {
                                         notifications.yell('success', success);
                                         folderAPI.reload(target, list);
+                                        if (type === "move") {//remove busy animation should be same as vgrid.js idle()
+                                            vGrid = $(".vgrid-scrollpane").children().first();
+                                            if (vGrid) {
+                                                vGrid.show().css({ visibility: '' }).parent().idle();
+                                            }
+                                        }
                                     },
                                     notifications.yell
                                 );
@@ -573,7 +590,7 @@ define('io.ox/mail/actions',
 
                         popupBody.append("<div>" + gt('Note') + "</div>");
                         var noteInput = $('<textarea>', { width: '90%', rows: "5", value: gt('Mail reminder for') + ": " + data.subject + " \n" +
-                            gt('From') + ": " + data.from[0][0] + ", " + data.from[0][1] })
+                            gt('From') + ": " + util.formatSender(data.from[0][0], data.from[0][1]) })
                             .focus(function ()
                                     {
                                     this.select();

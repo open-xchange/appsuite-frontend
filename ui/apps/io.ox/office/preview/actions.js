@@ -14,17 +14,12 @@
 define('io.ox/office/preview/actions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
-     'io.ox/office/tk/utils',
      'gettext!io.ox/office/main'
-    ], function (ext, links, Utils, gt) {
+    ], function (ext, links, gt) {
 
     'use strict';
 
     var POINT = 'io.ox/office/preview';
-
-    // static class Actions ===================================================
-
-    var Actions = { MODULE_NAME: POINT };
 
     // extension points =======================================================
 
@@ -40,7 +35,7 @@ define('io.ox/office/preview/actions',
     new links.ActionGroup(POINT + '/links/toolbar', {
         id: 'close',
         index: 100,
-        icon: function () { return Utils.createIcon('icon-remove'); }
+        icon: function () { return $('<i>').addClass('icon-remove'); }
     });
 
     new links.ActionLink(POINT + '/links/toolbar/close', {
@@ -49,9 +44,5 @@ define('io.ox/office/preview/actions',
         label: gt('Close'),
         ref: POINT + '/actions/close'
     });
-
-    // exports ================================================================
-
-    return Actions;
 
 });

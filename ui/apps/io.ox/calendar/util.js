@@ -142,10 +142,11 @@ define("io.ox/calendar/util",
 //            return d.format(date.locale.date);
 //        },
 
-        getSmartDate: function (timestamp) {
+        getSmartDate: function (timestamp, showDate) {
 
             var d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local(),
                 now = new date.Local(),
+                showDate = showDate || false,
                 weekStart = this.floor(now.getTime(), "week"),
                 diff = 0,
                 diffWeek = 0;
@@ -165,25 +166,25 @@ define("io.ox/calendar/util",
             // past?
             if (diff < 0) {
                 if (diff >= -1 * DAY) {
-                    return "Yesterday";
+                    return gt("Yesterday");
                 } else if (diffWeek > -7 * DAY) {
-                    return "Last Week";
+                    return gt("Last Week");
                 }
             } else {
                 // future
                 if (diff < DAY) {
-                    return "Today";
+                    return gt("Today");
                 } else if (diff < 2 * DAY) {
-                    return "Tomorrow";
+                    return gt("Tomorrow");
                 } else if (diffWeek < 7 * DAY) {
                     return n_day[d.getDay()]; // this week
                 } else if (diffWeek >= 7 * DAY && diffWeek < 14 * DAY) {
-                    return "Next week";
+                    return showDate ? d.format(date.DATE) : gt("Next Week");
                 }
             }
 
             // any other month
-            return n_month[d.getMonth()] + " " + d.getYear();
+            return showDate ? d.format(date.DATE) : n_month[d.getMonth()] + " " + d.getYear();
         },
 
         getDateInterval: function (data) {
@@ -234,8 +235,10 @@ define("io.ox/calendar/util",
                 $('<span>').addClass('label').text(gt.noI18n(current.abbr)).popover({
                     title: that.getTimeInterval(data) + ' ' + current.abbr,
                     content: getContent,
+                    html: true,
                     animation: false,
                     trigger: 'hover',
+                    container: $('#tmp'),
                     placement: function (tip, element) {
                         var off = $(element).offset(),
                             width = $('body').width() / 2;

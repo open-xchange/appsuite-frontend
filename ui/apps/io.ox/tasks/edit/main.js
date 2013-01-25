@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
+define('io.ox/tasks/edit/main', ['gettext!io.ox/tasks',
                                  'io.ox/core/extensions',
                                  'io.ox/tasks/model',
                                  'io.ox/tasks/edit/view',
@@ -19,11 +19,11 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                                  'less!io.ox/tasks/edit/style.css'],
                                  function (gt, ext, model, view, dnd) {
 
-    "use strict";
+    'use strict';
 
     function createApp() {
         // application object
-        var app = ox.ui.createApp({ name: 'io.ox/tasks/edit', title: gt("Edit task"), userContent: true }),
+        var app = ox.ui.createApp({ name: 'io.ox/tasks/edit', title: gt('Edit task'), userContent: true }),
             // app window
             win,
             //app
@@ -90,7 +90,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
 
             win.addClass('io-ox-tasks-edit-main');
             app.setWindow(win);
-            win.nodes.main.addClass("scrollable");
+            win.nodes.main.addClass('scrollable');
             //ModelView
             if (taskData) {
                 this.edit = true;
@@ -101,23 +101,24 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     taskView = view.getView(taskModel, win.nodes.main, app);
                 });
             } else {
-                app.attributes.title = gt("Create task");
+                app.attributes.title = gt('Create task');
                 taskModel = model.factory.create();
                 if (options.folderid) {//on reload there is no options.folderid so it would crash on saving. Leave default
+                    options.folderid = parseInt(options.folderid, 10);//folderId is sometimes a String but must be a number else the discard buttons thinks this is a missmatch to the defaults
                     taskModel.set('folder_id', options.folderid);
                 }
                 taskView = view.getView(taskModel, win.nodes.main, app);
             }
             if (_.browser.IE === undefined || _.browser.IE > 9) {
                 self.dropZone = new dnd.UploadZone({
-                    ref: "io.ox/tasks/edit/dnd/actions"
+                    ref: 'io.ox/tasks/edit/dnd/actions'
                 }, taskView);
             }
 
             win.on('show', function () {
                 if (app.dropZone) {app.dropZone.include(); }
                 if (taskView) {
-                    taskView.$el.find(".title-field").focus();
+                    taskView.$el.find('.title-field').focus();
                 }
             });
 
@@ -142,11 +143,11 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             };
 
             if (app.isDirty()) {
-                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
-                        .text(gt("Do you really want to discard your changes?"))
-                        .addPrimaryButton("delete", gt('Discard changes'))
-                        .addButton("cancel", gt('Cancel'))
+                        .text(gt('Do you really want to discard your changes?'))
+                        .addPrimaryButton('delete', gt('Discard changes'))
+                        .addButton('cancel', gt('Cancel'))
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
@@ -161,7 +162,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             } else {
                 if (app.edit) {
                     require(['io.ox/tasks/api'], function (api) {
-                        api.trigger("update:" + encodeURIComponent(taskModel.attributes.folder_id + '.' + taskModel.attributes.id));
+                        api.trigger('update:' + encodeURIComponent(taskModel.attributes.folder_id + '.' + taskModel.attributes.id));
                         clean();
                         model.factory.realm('edit').release();//old model no longer needed
                         def.resolve();

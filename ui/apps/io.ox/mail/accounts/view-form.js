@@ -33,7 +33,7 @@ define('io.ox/mail/accounts/view-form',
             SERVER_PORT: gt('Server Port:'),
             LOGIN: gt('Login'),
             PASSWORD: gt('Password'),
-            POP_3_REFRESH: gt('POP3:'),
+            POP_3_REFRESH: gt('Refresh rate in minutes:'),
             LEAVE_MESSAGES: gt('Leave messages on server'),
             DELETING_ON_LOCAL: gt('Deleting messages on local storage also deletes them on server'),
             TITLE_SERVER_OUT: gt('Outgoing Server Settings (SMTP)'),
@@ -56,6 +56,9 @@ define('io.ox/mail/accounts/view-form',
                 // create template
                 this.template = doT.template(tmpl);
                 this._modelBinder = new Backbone.ModelBinder();
+                
+                //check if login and mailaddress are synced
+                this.inSync = false;
 
                 Backbone.Validation.bind(this, {selector: 'data-property'});
             },
@@ -67,9 +70,59 @@ define('io.ox/mail/accounts/view-form',
                     optionsServer: optionsServerType,
                     optionsRefreshRate: optionsRefreshRatePop
                 }));
+                var pop3node = self.$el.find('[data-property="pop3_refresh_rate"]').parentsUntil('.form-horizontal', '.control-group').first();
+                
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
-
+                //check if pop3 refresh rate needs to be displayed
+                if (self.model.get('mail_protocol') === 'imap') {
+                    pop3node.hide();
+                }
+                
+                function syncLogin(model, value) {
+                        model.set('login', value);
+                    }
+                
+                if (self.model.get('id') !== 0) {//check for primary account
+                    
+                    //refreshrate field needs to be toggled
+                    self.model.on('change:mail_protocol', function (model, value) {
+                        if (value === 'imap') {
+                            pop3node.hide();
+                        } else {
+                            pop3node.show();
+                        }
+                    });
+                    
+                    //login for server should be email-address by default;
+                    if (self.model.get('login') === undefined) {
+                        self.model.set('login', self.model.get('primary_address'));
+                    }
+                    
+                    //if login and mailadress are the same change login if mailadress changes
+                    if (self.model.get('primary_address') === self.model.get('login') && !self.inSync) {
+                        self.model.on('change:primary_address', syncLogin);
+                        self.inSync = true;
+                    }
+                    
+                    //react to loginchange
+                    self.model.on('change:login', function (model, value) {
+                        if (value === model.get('primary_address')) {
+                            if (!self.inSync) {//no need to sync if its allready synced...would cause multiple events to be triggerd
+                                self.model.on('change:primary_address', syncLogin);
+                                self.inSync = true;
+                            }
+                        } else {
+                            self.model.off('change:primary_address', syncLogin);
+                            self.inSync = false;
+                        }
+                    });
+                } else {//primary account does not allow editing besides display name and unified mail
+                    self.$el.find('input').attr('disabled', 'disabled');
+                    self.$el.find('#personal').removeAttr('disabled');
+                    self.$el.find('[data-property="unified_inbox_enabled"]').removeAttr('disabled');
+                }
+                
                 return self;
             },
             events: {

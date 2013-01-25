@@ -86,21 +86,22 @@ define('io.ox/calendar/week/view',
                     break;
                 }
             } else {
+                // today button
+                var jumptTo = (opt && typeof opt === 'number') ? new date.Local(opt) : new date.Local();
                 switch (this.mode) {
                 case 1: // day
                     this.columns = 1;
-                    this.startDate = new date.Local().setHours(0, 0, 0, 0);
+                    this.startDate = jumptTo.setHours(0, 0, 0, 0);
                     break;
                 case 2: // workweek
                     this.columns = 5;
-                    var l = new date.Local(),
-                    weekStart = date.Local.utc((l.getDays() - l.getDay() + this.workWeekStart) * date.DAY);
+                    var weekStart = date.Local.utc((jumptTo.getDays() - jumptTo.getDay() + this.workWeekStart) * date.DAY);
                     this.startDate = new date.Local(weekStart);
                     break;
                 default:
                 case 3: // week
                     this.columns = 7;
-                    this.startDate = new date.Local().setStartOfWeek();
+                    this.startDate = jumptTo.setStartOfWeek();
                     break;
                 }
             }

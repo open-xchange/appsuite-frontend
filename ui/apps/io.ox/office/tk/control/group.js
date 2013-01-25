@@ -37,11 +37,15 @@ define('io.ox/office/tk/control/group',
      *
      * Instances of this class trigger the following events:
      * - 'change': If the control has been activated in a special way depending
-     *  on the type of the control group. The event handler receives the value
-     *  of the activated control.
+     *      on the type of the control group. The event handler receives the
+     *      value of the activated control as second parameter.
      * - 'cancel': When the focus needs to be returned to the application (e.g.
-     *  when the Escape key is pressed, or when a click on a drop-down button
-     *  closes the opened drop-down menu).
+     *      when the Escape key is pressed, or when a click on a drop-down
+     *      button closes the opened drop-down menu).
+     * - 'show': After the control has been shown or hidden. The event handler
+     *      receives the new visibility state as second parameter.
+     * - 'enable': After the control has been enabled or disabled. The event
+     *      handler receives the new state as second parameter.
      *
      * @constructor
      *
@@ -112,8 +116,8 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
-         * Returns the absolute position and size of the group node in the
-         * browser window.
+         * Returns the position and size of the group node in the browser
+         * window.
          *
          * @returns {Object}
          *  An object with numeric 'left', 'top', 'right', 'bottom', 'width',
@@ -122,20 +126,8 @@ define('io.ox/office/tk/control/group',
          *  the distance of the right/bottom corner of the group node to the
          *  right/bottom border of the browser window.
          */
-        this.getDimensions = function () {
-
-            var // get position of the group
-                groupDim = groupNode.offset();
-
-            // add group size
-            groupDim.width = groupNode.outerWidth();
-            groupDim.height = groupNode.outerHeight();
-
-            // add right/bottom distance
-            groupDim.right = window.innerWidth - groupDim.left - groupDim.width;
-            groupDim.bottom = window.innerHeight - groupDim.top - groupDim.height;
-
-            return groupDim;
+        this.getNodePosition = function () {
+            return Utils.getNodePositionInWindow(groupNode);
         };
 
         /**
@@ -234,6 +226,10 @@ define('io.ox/office/tk/control/group',
          */
         this.addChildNodes = function (nodes) {
             groupNode.append(nodes);
+            // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
+            if (groupNode.hasClass('white-icons')) {
+                groupNode.find('i').addClass('icon-white');
+            }
             return this;
         };
 
@@ -248,8 +244,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.addFocusableControl = function (control) {
-            groupNode.append(control.addClass(Group.FOCUSABLE_CLASS));
-            return this;
+            return this.addChildNodes(control.addClass(Group.FOCUSABLE_CLASS));
         };
 
         /**
@@ -377,6 +372,10 @@ define('io.ox/office/tk/control/group',
                 }, this);
             }
             return this;
+        };
+
+        this.destroy = function () {
+            this.events.destroy();
         };
 
         // initialization -----------------------------------------------------

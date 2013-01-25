@@ -126,7 +126,7 @@ function jsFilter (data) {
     if (debug) return data.slice(-1) === '\n' ? data : data + '\n';
     tree = pro.ast_lift_variables(tree);
     tree = pro.ast_mangle(tree, { defines: {
-        STATIC_APPS: parse(process.env.STATIC_APPS || 'true')[1][0][1]
+        STATIC_APPS: parse(process.env.STATIC_APPS || 'false')[1][0][1]
     } });
     tree = pro.ast_squeeze(tree, { make_seqs: false });
     // use split_lines
@@ -233,9 +233,9 @@ _.each(_.map(['core', 'signin', 'core.appcache', 'signin.appcache'], utils.dest)
 
 utils.concat("boot.js",
     [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
-     debug ? utils.string(';STATIC_APPS=(' +
-                          (process.env.STATIC_APPS || 'true') + ');')
-           : utils.string(';'),
+     debug ? utils.string(';\nSTATIC_APPS = (' +
+                          (process.env.STATIC_APPS || 'false') + ');\n')
+           : utils.string(';\n'),
      "src/plugins.js", "src/jquery.plugins.js", "apps/io.ox/core/gettext.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
 
@@ -366,7 +366,7 @@ utils.copy(utils.list("lib/bootstrap", ["img/*"]),
 
 // jQuery UI
 
-utils.copy(utils.list("lib", ["jquery-ui.min.js", "jquery.mobile.touch.min.js"]),
+utils.copy(utils.list("lib", ["jquery-ui.min.js"]),
     { to: utils.dest("apps/io.ox/core/tk") });
 
 // Mediaelement.js
@@ -376,17 +376,6 @@ utils.copy(utils.list("lib", "mediaelement/"), {to: utils.dest("apps") });
 // Ace editor
 
 utils.copy(utils.list("lib", "ace/"), {to: utils.dest("apps")});
-
-//time zone database
-
-if (!path.existsSync("apps/io.ox/core/date/tz/zoneinfo")) {
-    var zoneinfo = utils.dest("apps/io.ox/core/date/tz/zoneinfo");
-    utils.file(zoneinfo, [], function() {
-        if (!path.existsSync(zoneinfo)) {
-            fs.symlinkSync("/usr/share/zoneinfo", zoneinfo);
-        }
-    });
-}
 
 // external apps
 
@@ -517,16 +506,16 @@ function docFile(file, title) {
     titles.push('<a href="' + file +'.html">' + title + '</a><br/>');
 }
 
+docFile("gettingStarted", "Getting Started");
 docFile("apache", "Apache Configuration");
-docFile("demo", "Demo Steps");
-docFile("extensions", "Extension Points");
+docFile("extensionpoints_contact", "Extension Points / Contact App");
 docFile("libs", "External Libs");
-docFile("features", "Features");
 docFile("development_guide", "UI Development Style Guide");
+docFile("buildsystem", "Build System");
+docFile("manifests", "Module System");
 docFile("vgrid", "VGrid");
 docFile("i18n", "Internationalization");
 docFile("date", "Date and Time");
-docFile("buildsystem", "Build System");
 
 var indexFiles = ["lib/header.html", "index.html",
     { getData: function() { return titles.join("\n"); } }, "lib/footer.html"];
@@ -611,6 +600,7 @@ utils.topLevelTask('init-packaging', [], function() {
 (function () {
     var packagingVariables = {
         '': '',
+        '@': '@',
         'package': pkgName,
         timestamp: formatDate(new Date())
     };
@@ -731,12 +721,12 @@ task("dist", [distDest], function () {
     }
     function tar(code) {
         if (code) return fail();
-        
+
         _.each([pkgName + '.spec', 'debian/control'], function (name) {
             var file = path.join(dest, name);
             fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
         });
-        
+
         utils.exec(['tar', 'cjf', debName + '.orig.tar.bz2', tarName],
                    { cwd: distDest }, dpkgSource);
     }

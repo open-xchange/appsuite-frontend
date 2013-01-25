@@ -50,16 +50,32 @@ define('io.ox/calendar/edit/view-addparticipants',
             }
 
             self.autoparticipants = self.$el.find('.add-participant')
-                .attr('autocapitalize', 'off')
-                .attr('autocorrect',    'off')
-                .attr('autocomplete',   'off')
                 .autocomplete({
                     parentSelector: options.parentSelector,
-                    source: function (query) {
-                        return autocompleteAPI.search(query);
-                    },
-                    stringify: function (obj) {
-                        return (obj && obj.data && obj.data.display_name) ? obj.data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''): '';
+                    api: autocompleteAPI,
+                    // reduce suggestion list
+                    reduce: function (data) {
+
+                        // updating baton-data-node
+                        self.trigger('update');
+
+                        //hash email adresses and internal_userid
+                        var baton = $.data(self.$el, 'baton') || {list: []},
+                            hash = {};
+                        _(baton.list).each(function (obj) {
+                            hash[obj.email] = true;
+                            if (obj.type !== 5)
+                                hash[obj.id] = true;
+                        });
+
+                        // filter doublets
+                        data = _(data).filter(function (recipient) {
+                            if (hash[recipient.email] === undefined && hash[recipient.data.internal_userid] === undefined) {
+                                return hash[recipient.email] = true;
+                            }
+                        });
+
+                        return data;
                     },
                     draw: function (obj) {
                         if (obj && obj.data.constructor.toString().indexOf('Object') !== -1) {
@@ -107,21 +123,25 @@ define('io.ox/calendar/edit/view-addparticipants',
             return self;
         },
         onClickAdd: function (e) {
-            var selectedItem = this.autoparticipants.getSelectedItem();
+            var selectedItem = this.autoparticipants.getSelectedItem(),
+                self = this;
 
             if (selectedItem) {
                 return this.autoparticipants.trigger('selected', selectedItem);
             } else {
-                var node = this.$('input.add-participant');
-                var val = node.val();
-                var list = mailUtil.parseRecipients(val);
+                var node = this.$('input.add-participant'),
+                    val = node.val(),
+                    list = mailUtil.parseRecipients(val);
                 if (list.length) {
-                    this.select({
-                        id: Math.random(),
-                        display_name: list[0][0],
-                        mail: list[0][1],
-                        image1_url: '',
-                        type: 5 // TYPE_EXTERNAL_USER
+                    // add n extenal users
+                    _.each(list, function (elem) {
+                        self.select({
+                            id: Math.random(),
+                            display_name: elem[0],
+                            mail: elem[1],
+                            image1_url: '',
+                            type: 5 // TYPE_EXTERNAL_USER
+                        });
                     });
                 } else {
                     node.attr('disabled', 'disabled')

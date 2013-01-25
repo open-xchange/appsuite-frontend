@@ -10,17 +10,17 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define("io.ox/tasks/api", ["io.ox/core/http",
-                           "io.ox/core/config",
+define('io.ox/tasks/api', ['io.ox/core/http',
+                           'io.ox/core/config',
                            'io.ox/core/api/factory',
-                           "io.ox/core/api/folder"], function (http, configApi, apiFactory, folderApi) {
+                           'io.ox/core/api/folder'], function (http, configApi, apiFactory, folderApi) {
 
-    "use strict";
+    'use strict';
 
 
  // generate basic API
     var api = apiFactory({
-        module: "tasks",
+        module: 'tasks',
         keyGenerator: function (obj) {
             var folder = null;
             if (obj.folder) {
@@ -28,36 +28,36 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             } else if (obj.folder_id) {
                 folder = obj.folder_id;
             } else {
-                console.log("no folderAttribute for cache Keygen found, using default");
-                folder = folderApi.getDefaultFolder("tasks");
+                console.log('no folderAttribute for cache Keygen found, using default');
+                folder = folderApi.getDefaultFolder('tasks');
             }
 
             return obj ? folder + '.' + obj.id : '';
         },
         requests: {
             all: {
-                folder: folderApi.getDefaultFolder("tasks"),
-                columns: "1,20,101,200,202,203,220,300,301",
-                sort: "202",
-                order: "asc",
+                folder: folderApi.getDefaultFolder('tasks'),
+                columns: '1,20,101,200,202,203,220,300,301',
+                sort: '202',
+                order: 'asc',
                 cache: true, // allow DB cache
-                timezone: "UTC"
+                timezone: 'UTC'
             },
             list: {
-                action: "list",
-                columns: "1,20,101,200,202,203,220,300,301,309",
-                timezone: "UTC"
+                action: 'list',
+                columns: '1,20,101,200,202,203,220,300,301,309',
+                timezone: 'UTC'
             },
             get: {
-                action: "get",
-                timezone: "UTC"
+                action: 'get',
+                timezone: 'UTC'
             },
             search: {
-                action: "search",
-                columns: "1,20,200,202,220,300,301",
-                sort: "202",
-                order: "asc",
-                timezone: "UTC",
+                action: 'search',
+                columns: '1,20,200,202,220,300,301',
+                sort: '202',
+                order: 'asc',
+                timezone: 'UTC',
                 getData: function (query) {
                     return { folder: query.folder, pattern: query.pattern };
                 }
@@ -68,9 +68,9 @@ define("io.ox/tasks/api", ["io.ox/core/http",
 
     api.create = function (task) {
         return http.PUT({
-            module: "tasks",
-            params: {action: "new",
-                     timezone: "UTC"},
+            module: 'tasks',
+            params: {action: 'new',
+                     timezone: 'UTC'},
             data: task,
             appendColumns: false
         });
@@ -130,14 +130,14 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 } else {
                     useFolder = folder;
                 }
-                var key = useFolder + "." + taskId;
+                var key = useFolder + '.' + taskId;
                 return http.PUT({
-                    module: "tasks",
-                    params: {action: "update",
+                    module: 'tasks',
+                    params: {action: 'update',
                         folder: useFolder,
                         id: taskId,
                         timestamp: timestamp,
-                        timezone: "UTC"
+                        timezone: 'UTC'
                     },
                     data: modifications,
                     appendColumns: false
@@ -164,7 +164,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
         var keys  = [];
         
         _(list).map(function (obj) {
-            keys.push((obj.folder || obj.folder_id) + "." + obj.id);
+            keys.push((obj.folder || obj.folder_id) + '.' + obj.id);
             return http.PUT({
                 module: 'tasks',
                 params: {
@@ -172,7 +172,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     id: obj.id,
                     folder: obj.folder || obj.folder_id,
                     timestamp: _.now(),
-                    timezone: "UTC"
+                    timezone: 'UTC'
                 },
                 data: modifications,
                 appendColumns: false
@@ -202,24 +202,33 @@ define("io.ox/tasks/api", ["io.ox/core/http",
         return api.updateCaches(task).pipe(function () {
             // trigger visual refresh
             api.trigger('refresh.all');
-            
+            function refreshPortal() {
+                api.trigger("removePopup");
+                require(['io.ox/portal/main'], function (portal) {//refresh portal
+                    var app = portal.getApp(),
+                        model = app.getWidgetCollection()._byId.tasks_0;
+                    if (model) {
+                        app.refreshWidget(model, 0);
+                    }
+                });
+            }
             if (!task.length) {
-                return api.update(_.now(), task.id, {folder_id: newFolder}, folder);
+                return api.update(_.now(), task.id, {folder_id: newFolder}, folder).done(refreshPortal);
             } else {
-                return api.updateMultiple(task, {folder_id: newFolder});
+                return api.updateMultiple(task, {folder_id: newFolder}).done(refreshPortal);
             }
         });
     };
     
     api.confirm =  function (options) { //options.id is the id of the task not userId
-        var key = (options.folder_id || options.folder) + "." + options.id;
+        var key = (options.folder_id || options.folder) + '.' + options.id;
         return http.PUT({
-            module: "tasks",
+            module: 'tasks',
             params: {
-                action: "confirm",
+                action: 'confirm',
                 folder: options.folder_id || options.folder,
                 id: options.id,
-                timezone: "UTC"
+                timezone: 'UTC'
             },
             data: options.data, // object with confirmation attribute
             appendColumns: false
@@ -232,18 +241,39 @@ define("io.ox/tasks/api", ["io.ox/core/http",
     api.getDefaultFolder = function () {
         return folderApi.getDefaultFolder('tasks');
     };
+    
+    //gets every task in users private folders. Used in Portal tile
+    api.getAllFromAllFolders = function () {
+        return http.PUT({
+            module: 'folders',
+            params: {
+                action: 'allVisible',
+                content_type: 'tasks',
+                columns: "1"
+            }
+        }).pipe(function (response) {
+            //get the data
+            return $.when.apply($,
+                _(response['private']).map(function (value) {
+                    return api.getAll({folder: value[0]}, false);//no caching here otherwise refresh uses old cache when moving a task
+                })
+            ).pipe(function () {
+                return _.flatten(_.toArray(arguments), true);
+            });
+        });
+    };
 
     //for notification view
     api.getTasks = function () {
 
         return http.GET({
-            module: "tasks",
-            params: {action: "all",
+            module: 'tasks',
+            params: {action: 'all',
                 folder: api.getDefaultFolder(),
-                columns: "1,20,200,202,220,203,300,309",
-                sort: "202",
-                order: "asc",
-                timezone: "UTC"
+                columns: '1,20,200,202,220,203,300,309',
+                sort: '202',
+                order: 'asc',
+                timezone: 'UTC'
             }
         }).pipe(function (list) {
             // sorted by end_date filter over due Tasks
@@ -276,12 +306,12 @@ define("io.ox/tasks/api", ["io.ox/core/http",
     // global refresh
     api.refresh = function () {
         if (ox.online) {
-            // clear "all & list" caches
+            // clear 'all & list' caches
             api.caches.all.clear();
             api.caches.list.clear();
             api.getTasks().done(function () {
                 // trigger local refresh
-                api.trigger("refresh.all");
+                api.trigger('refresh.all');
             });
         }
 

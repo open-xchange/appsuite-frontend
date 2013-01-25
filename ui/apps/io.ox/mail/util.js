@@ -196,6 +196,17 @@ define('io.ox/mail/util',
             return $('<span>').addClass('person').text(_.noI18n(dn));
         },
 
+        /**
+         * Format the Sender field using display name and email
+         *
+         * @return the email address or a string like "Display Name" <email@address.example>
+         */
+        formatSender: function (display_name, email) {
+            var name = _.isString(display_name) ? display_name.replace(rDisplayNameCleanup, '') : '';
+
+            return name === '' ? email.toLowerCase() : "\"" + name + "\" <" + email.toLowerCase() + ">";
+        },
+
         getFlag: function (data) {
             return data.color_label || 0;
         },

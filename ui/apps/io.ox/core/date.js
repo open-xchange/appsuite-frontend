@@ -970,9 +970,13 @@ define.async('io.ox/core/date',
         dayMap = makeMap(api.locale.days, api.locale.daysShort);
     });
 
-    return $.when(api.getTimeZone(config.get('timezone', 'Europe/Berlin')), locale)
-        .pipe(function (tz) {
-            api.Local = tz;
-            return api;
-        });
+    // TODO: get default from local clock
+    return $.when(
+        api.getTimeZone(config.get('timezone', 'UTC'))
+            .then(null, function () { return api.getTimeZone('UTC'); }),
+        locale
+    ).then(function (tz) {
+        api.Local = tz;
+        return api;
+    });
 });

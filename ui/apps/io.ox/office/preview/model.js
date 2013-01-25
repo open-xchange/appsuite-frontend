@@ -12,60 +12,21 @@
  */
 
 define('io.ox/office/preview/model',
-    ['io.ox/core/event',
-     'io.ox/office/tk/application',
+    ['io.ox/office/tk/utils',
      'less!io.ox/office/preview/style.css'
-    ], function (Events, Application) {
+    ], function (Utils) {
 
     'use strict';
 
     // class PreviewModel =====================================================
 
     /**
-     * The preview model. Triggers a 'showpage' event passing the current page
-     * number (one-based) when the visible page has been changed.
+     * The preview model.
      */
-    function PreviewModel(app) {
+    function PreviewModel() {
 
-        var // self reference
-            self = this,
-
-            // the root node containing the previewed document
-            node = $('<div>').addClass('page'),
-            
-            // the job id to be used for future page requests
-            jobID = 0,
-            
-            // the total page count of the document
-            pageCount = 0,
-
-            // current page index (one-based!)
-            curPage = 0;
-
-        // private methods ----------------------------------------------------
-
-        function showPage(page) {
-            if ((page !== curPage) && (page >= 1) && (page <= pageCount)) {
-                
-                // do not try to load, if file descriptor is missing
-                if (app.hasFileDescriptor()) {
-                    // load the file
-                    app.sendAjaxRequest({
-                        url: app.getDocumentFilterUrl('importdocument', { filter_format: 'html', filter_action: 'getpage', job_id: jobID, page_number: page })
-                    })
-                    .pipe(function (response) {
-                        return Application.extractAjaxStringResult(response, 'HTMLPages');
-                    })
-                    .done(function (htmlPage) {
-                        node.get()[0].innerHTML = htmlPage;
-                    })
-                    .fail(function () {
-                    });
-                }
-                
-                self.trigger('showpage', curPage = page);
-            }
-        }
+        var // the root node containing the previewed document
+            node = $('<div>').addClass('page');
 
         // methods ------------------------------------------------------------
 
@@ -76,71 +37,15 @@ define('io.ox/office/preview/model',
             return node;
         };
 
-        this.setPreviewDocument = function (_jobID, _pageCount) {
-
-            jobID = _jobID;
-            pageCount = _pageCount;
-            curPage = 0;
-            
-            if (_.isNumber(jobID) && _.isNumber(pageCount)) {
-                showPage(1);
-            } else {
-                node.empty();
-            }
-
-            this.trigger('showpage', curPage);
-        };
-
-        this.getPage = function () {
-            return curPage;
-        };
-
-        this.getPageCount = function () {
-            return pageCount;
-        };
-
         /**
-         * Navigating to the first page
+         * Inserts the passed HTML source code into the root node of this
+         * document model.
          */
-        this.firstPage = function () {
-            showPage(1);
+        this.renderPage = function (html) {
+            node[0].innerHTML = html;
         };
 
-        /**
-         * Navigating to the previous page
-         */
-        this.previousPage = function () {
-            showPage(curPage - 1);
-        };
-
-        /**
-         * Navigating to the next page
-         */
-        this.nextPage = function () {
-            showPage(curPage + 1);
-        };
-
-        /**
-         * Navigating to the last page
-         */
-        this.lastPage = function () {
-            showPage(pageCount);
-        };
-
-        this.destroy = function () {
-            this.events.destroy();
-            
-            if (jobID !== 0) {
-                app.sendAjaxRequest({
-                    url: app.getDocumentFilterUrl('importdocument', { filter_format: 'html', filter_action: 'endconvert', job_id: jobID })
-                });
-            }
-        };
-
-        // initialization -----------------------------------------------------
-
-        // add event hub
-        Events.extend(this);
+        this.destroy = $.noop;
 
     } // class PreviewModel
 

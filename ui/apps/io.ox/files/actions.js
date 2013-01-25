@@ -162,7 +162,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/send', {
         requires: function (e) {
-            return e.collection.has('some') && capabilities.has('webmail');
+            return e.collection.has('some') && capabilities.has('webmail') && ox.uploadsEnabled;
         },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -182,6 +182,16 @@ define('io.ox/files/actions',
                     'Do you really want to delete this file?',
                     'Do you really want to delete these files?',
                     list.length
+            ),
+            responseSuccces = gt.ngettext(
+                    'This file has been deleted',
+                    'These files have been deleted',
+                    list.length
+            ),
+            responseFail = gt.ngettext(
+                    'This file has not been deleted',
+                    'These files have not been deleted',
+                    list.length
             );
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
@@ -192,7 +202,11 @@ define('io.ox/files/actions',
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
-                            api.remove(list);
+                            api.remove(list).done(function () {
+                                notifications.yell('success', responseSuccces);
+                            }).fail(function () {
+                                notifications.yell('error', responseFail);
+                            });
                         }
                     });
             });
@@ -258,7 +272,7 @@ define('io.ox/files/actions',
         requires: 'one',
         action: function (baton) {
             require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
-                var $input = $('<textarea rows="10">').css({width: "507px"});
+                var $input = $('<textarea rows="10"></textarea>').css({width: "507px"});
                 $input.val(baton.data.description);
                 var $form = $("<form>").append(
                     $('<label for="name">').append($('<b>').text(gt("Description"))),
@@ -412,7 +426,7 @@ define('io.ox/files/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-pencil">');
+            return $('<i class="icon-plus">');
         }
     });
 

@@ -19,7 +19,7 @@ define('io.ox/office/tk/control/radiolist',
 
     'use strict';
 
-    // class RadioList =======================================================
+    // class RadioList ========================================================
 
     /**
      * Creates a drop-down list control used to hold a set of radio buttons.
@@ -135,9 +135,10 @@ define('io.ox/office/tk/control/radiolist',
                 updateCaptionHandler.call(self, button, value);
             }
         }
+
         /**
          * Returns the value of the clicked option button, taking the option
-         * 'toggleClick' into account,
+         * 'toggleClick' into account.
          */
         function itemClickHandler(button) {
             var toggleClick = Utils.isButtonSelected(button) && !_.isNull(toggleValue) && !_.isUndefined(toggleValue);
@@ -159,20 +160,17 @@ define('io.ox/office/tk/control/radiolist',
         };
 
         /**
-         * Adds a new option button to this radio group.
+         * Adds a new option button to this radio list.
          *
          * @param value
-         *  The unique value associated to the button. Must not be null or
-         *  undefined.
+         *  The unique value associated to the option button. Must not be null
+         *  or undefined.
          *
          * @param {Object} [options]
-         *  A map of options to control the properties of the new button.
-         *  Supports all generic formatting options for buttons (See method
-         *  Utils.createButton() for details), except 'options.value' which
-         *  will be set to the 'value' parameter passed to this function.
-         *  Additionally, the following options are supported:
-         *  @param {String} [options.tooltip]
-         *      Tool tip text shown when the mouse hovers the button.
+         *  A map of options to control the properties of the new option
+         *  button. Supports all options supported by the method
+         *  List.createListItem(), except 'options.value' which will be set to
+         *  the 'value' parameter passed to this method.
          *
          * @returns {RadioList}
          *  A reference to this instance.
@@ -180,12 +178,10 @@ define('io.ox/office/tk/control/radiolist',
         this.addOptionButton = function (value, options) {
 
             var // options for the new button, including the passed value
-                buttonOptions = Utils.extendOptions(options, { value: value }),
-                // the new button (button options needed for updating the drop-down menu button)
-                button = this.createListItem(buttonOptions).data('options', buttonOptions);
+                buttonOptions = Utils.extendOptions(options, { value: value });
 
-            // add tool tip
-            Utils.setControlTooltip(button, Utils.getStringOption(options, 'tooltip'), 'bottom');
+            // the new button (button options needed for updating the drop-down menu button)
+            this.createListItem(buttonOptions).data('options', buttonOptions);
             return this;
         };
 

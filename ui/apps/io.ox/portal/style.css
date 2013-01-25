@@ -78,7 +78,6 @@
     .pending {
         background-color: #fafafa;
         h2 { color: #ddd !important; }
-        .content { opacity: 0; }
     }
 
     .action {

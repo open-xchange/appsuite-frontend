@@ -53,6 +53,31 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                     client: that.client()
                 }
             })
+            // If autologin fails, try the token login
+            .then(null, function () {
+                if (!_.url.hash('serverToken')) return;
+                return http.POST({
+                    module: 'login',
+                    jsessionid: _.url.hash('jsessionid'),
+                    appendColumns: false,
+                    appendSession: false,
+                    processResponse: false,
+                    timeout: TIMEOUTS.AUTOLOGIN,
+                    params: {
+                        action: 'tokens',
+                        client: that.client(),
+                        serverToken: _.url.hash('serverToken'),
+                        clientToken: _.url.hash('clientToken')
+                    }
+                }).then(function (response) { return response.data; });
+            })
+            .done(function () {
+                _.url.hash({
+                    jsessionid: null,
+                    serverToken: null,
+                    clientToken: null
+                });
+            })
             .done(set);
         },
 

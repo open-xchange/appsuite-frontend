@@ -37,16 +37,20 @@ define('io.ox/office/preview/view',
 
         // initialization -----------------------------------------------------
 
-        // the tool pane for tool bars
-        toolPane = this.createPane('toolpane', 'top', { classes: 'center' });
+        // the tool pane for tool boxes
+        toolPane = this.createPane('toolpane', 'top', { overlay: true, transparent: true, css: { textAlign: 'center' } });
 
-        // create the tool bar
-        toolPane.createToolBar()
-            .addButton('pages/first',    { icon: 'arrow-first',    tooltip: gt('Show first page') })
-            .addButton('pages/previous', { icon: 'arrow-previous', tooltip: gt('Show previous page') })
-            .addLabel('pages/current',   { width: 100,             tooltip: gt('Current page and total page count') })
-            .addButton('pages/next',     { icon: 'arrow-next',     tooltip: gt('Show next page') })
-            .addButton('pages/last',     { icon: 'arrow-last',     tooltip: gt('Show last page') });
+        toolPane.createToolBox({ hoverEffect: true, classes: 'inline' })
+            .startGroupContainer()
+                .addButton('pages/first',    { icon: 'arrow-first',    tooltip: gt('Show first page') })
+                .addButton('pages/previous', { icon: 'arrow-previous', tooltip: gt('Show previous page') })
+                .addLabel('pages/current',   {                         tooltip: gt('Current page and total page count') })
+                .addButton('pages/next',     { icon: 'arrow-next',     tooltip: gt('Show next page') })
+                .addButton('pages/last',     { icon: 'arrow-last',     tooltip: gt('Show last page') })
+            .endGroupContainer();
+
+        toolPane.createToolBox({ hoverEffect: true, css: { float: 'right', paddingRight: '26px' } })
+            .addButton('app/quit', { icon: 'icon-remove', tooltip: gt('Close document') });
 
     } // class PreviewView
 

@@ -203,11 +203,14 @@ define('io.ox/office/tk/control/combofield',
          * @param {Object} [options]
          *  Additional options for the list entry. Supports all button
          *  formatting options (see method Utils.createButton() for details),
-         *  except 'options.value' and 'options.label' which will both be set
-         *  to the 'value' parameter passed to this function.
+         *  except 'options.value' which will be set to the 'value' parameter
+         *  passed to this function. If the option 'options.label' is not
+         *  specified, the label of the list entry will be set to the string
+         *  value provided by the current validator of the text field.
          */
         this.addListEntry = function (value, options) {
-            this.createListItem(Utils.extendOptions(options, { value: value, label: this.valueToText(value) }));
+            options = Utils.extendOptions({ label: this.valueToText(value) }, options);
+            this.createListItem(Utils.extendOptions(options, { value: value }));
             // the inserted list item may match the value in the text field
             itemUpdateHandler(this.getFieldValue());
             return this;
@@ -221,7 +224,7 @@ define('io.ox/office/tk/control/combofield',
             .on('readonly', textFieldReadOnlyHandler)
             .registerUpdateHandler(itemUpdateHandler);
         this.getTextFieldNode()
-            .css('padding-right', 0)
+            .css('padding-right', '1px')
             .on('keydown keypress keyup', textFieldKeyHandler);
 
         // drop-down button is not focusable in combo fields

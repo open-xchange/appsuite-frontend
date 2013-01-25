@@ -289,7 +289,7 @@ define('io.ox/contacts/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-pencil">');
+            return $('<i class="icon-plus">');
         }
     });
 

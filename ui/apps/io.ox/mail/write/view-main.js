@@ -256,7 +256,7 @@ define("io.ox/mail/write/view-main",
             accountAPI.all().done(function (array) {
                 var select = node.find('select');
                 _.each(array, function (obj, index) {
-                    var option = $('<option>').text(_.noI18n(obj.primary_address));
+                    var option = $('<option>').text(_.noI18n(util.formatSender(obj.personal, obj.primary_address)));
 
                     option.data({
                         primaryaddress: obj.primary_address,
@@ -276,18 +276,39 @@ define("io.ox/mail/write/view-main",
                 .addClass('recipient-list').hide();
         },
 
+
+       /**
+        * appends recipient nodes
+        *
+        * @param {string} id defines section (f.e. 'cc')
+        * @param {array} list contains recipient objects
+        * @return {void}
+        */
         addRecipients: function (id, list) {
-            // loop over list and draw recipient
-            _(list).each(function (recipient) {
-                var node = $('<div>');
-                drawContact(id, node, {
-                    display_name: recipient[0] ? recipient[0].replace(/^('|")|('|")$/g, '') : recipient[1],
-                    email: recipient[1],
-                    contact: {}
-                });
-                // add to proper section (to, CC, ...)
-                this.sections[id + 'List'].append(node);
+            var hash = {};
+
+            //hash current recipients
+            this.app.getWindowNode().find('input[name=' + id + ']').map(function () {
+                var rcpt = mailUtil.parseRecipient($(this).val())[1];
+                hash[rcpt] = true;
+            });
+            // ignore doublets and draw remaining
+            list = _(list).filter(function (recipient) {
+                if (hash[recipient[1]] === undefined) {
+                    //draw recipient
+                    var node = $('<div>');
+                    drawContact(id, node, {
+                        display_name: recipient[0] ? recipient[0].replace(/^('|")|('|")$/g, '') : recipient[1],
+                        email: recipient[1],
+                        contact: {}
+                    });
+                    // add to proper section (to, CC, ...)
+                    this.sections[id + 'List'].append(node);
+                    // if list itself contains doublets
+                    return hash[recipient[1]] = true;
+                }
             }, this);
+
             if (list && list.length) {
                 this.sections[id + 'List'].show().trigger('show');
             }
@@ -332,7 +353,7 @@ define("io.ox/mail/write/view-main",
             this.addLink('bcc', gt('Blind copy (BCC) to'));
 
             // Attachments (unless we're on iOS)
-            if (!_.browser.iOS) {
+            if (ox.uploadsEnabled) {
                 this.fileCount = 0;
                 var uploadSection = this.createSection('attachments', gt('Attachments'), false, true);
                 this.scrollpane.append(
@@ -487,8 +508,7 @@ define("io.ox/mail/write/view-main",
                                 type: 'text',
                                 name: 'subject',
                                 tabindex: '3',
-                                placeholder: gt('Subject'),
-                                autocomplete: 'off'
+                                placeholder: gt('Subject')
                             })
                             .addClass('subject')
                             .val('')
@@ -733,14 +753,7 @@ define("io.ox/mail/write/view-main",
             // hidden field
             $('<input>', { type: 'hidden', name: id, value: serialize(data) }),
             // display name
-            $('<div>').append(
-                $('<a href="#" class="halo-link">')
-                .data({
-                    display_name: data.display_name,
-                    email1: data.email
-                })
-                .text(_.noI18n(data.display_name + '\u00A0'))
-            ),
+            $('<div>').append(contactsAPI.getDisplayName(data)),
             // email address
             $('<div>').text(_.noI18n(String(data.email || '').toLowerCase())),
             // remove

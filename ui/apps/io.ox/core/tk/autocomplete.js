@@ -11,27 +11,46 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/autocomplete', function () {
+define('io.ox/core/tk/autocomplete',
+    [   'gettext!io.ox/mail',
+        'io.ox/mail/util'
+    ], function (gt, mailUtil) {
 
     'use strict';
 
     var popup = $('<div>').addClass('autocomplete-popup'),
         scrollpane = popup.scrollable();
 
+    //returns the input elem
     $.fn.autocomplete = function (o) {
 
         o = $.extend({
-            minLength: 1,
-            maxResults: 25,
-            delay: 100,
-            source: null,
-            draw: null,
-            blur: $.noop,
-            click: $.noop,
-            parentSelector: 'body',
-            stringify: JSON.stringify
-        }, o || {});
+                minLength: 1,
+                maxResults: 25,
+                delay: 100,
+                collection: null,
+                draw: null,
+                blur: $.noop,
+                click: $.noop,
+                parentSelector: 'body',
+                api: null,
+                node: null,
 
+                //get data
+                source: function (val) {
+                    return this.api.search(val);
+                },
+
+                //remove untwanted items
+                reduce: function (data) {
+                    return data;
+                },
+
+                //object related unique string
+                stringify: function (data) {
+                    return data.display_name ? '"' + data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, '') + '" <' + data.email + '>' : data.email;
+                }
+            }, o || {});
 
 
         var self = $(this),
@@ -48,7 +67,7 @@ define('io.ox/core/tk/autocomplete', function () {
             update = function () {
                 // get data from current item and update input field
                 var data = scrollpane.children().eq(Math.max(0, index)).data('data');
-                lastValue = o.stringify(data) + '';
+                lastValue = data !== undefined ? o.stringify(data) + '' : lastValue;
                 self.val(lastValue);
 
                 // if two related Fields are needed
@@ -98,7 +117,7 @@ define('io.ox/core/tk/autocomplete', function () {
                         popup.hide().appendTo(self.closest(o.parentSelector));
 
                         var myTop = off.top + h - (self.closest(o.parentSelector).offsetParent().offset().top) + self.offsetParent().scrollTop();
-                        var myLeft = off.left - (self.closest(o.parentSelector).offsetParent().offset().left);
+                        var myLeft = off.left -  (self.closest(o.parentSelector).offsetParent().offset().left);
 
                         popup.css({ top: myTop, left: myLeft, width: w }).show();
 
@@ -147,6 +166,30 @@ define('io.ox/core/tk/autocomplete', function () {
                     }
                 },
 
+            // adds 'retry'-item to popup
+            cbSearchResultFail = function (query) {
+                    popup.idle();
+                    var node = $('<div>')
+                        .addClass('io-ox-center')
+                        .append(
+                            // fail container/content
+                            $('<div>')
+                            .addClass('io-ox-fail')
+                            .html(gt('Could not load this list. '))
+                            .append(
+                                //link
+                                $('<a href="#">')
+                                .text(gt('Retry'))
+                                .on('click', function () {
+                                        self.trigger('keyup', { isRetry: true });
+                                    }
+                                )
+
+                            )
+                        );
+                    node.appendTo(scrollpane);
+                },
+
             // handle key down (esc/cursor only)
             fnKeyDown = function (e) {
                 e.stopPropagation();
@@ -163,6 +206,12 @@ define('io.ox/core/tk/autocomplete', function () {
                         break;
                     case 13: // enter
                         scrollpane.find('.selected').trigger('click');
+
+                        //calendar: add string
+                        var val = $.trim($(this).val());
+                        if (val.length > 0) {
+                            $(this).trigger('selected', val);
+                        }
                         break;
                     case 9:  // tab
                         e.preventDefault();
@@ -208,17 +257,19 @@ define('io.ox/core/tk/autocomplete', function () {
             },
 
             // handle key up (debounced)
-            fnKeyUp = _.debounce(function (e) {
+            fnKeyUp = _.debounce(function (e, isRetry) {
                 e.stopPropagation();
                 var val = $.trim($(this).val());
+                isRetry = isRetry || false;
                 if (val.length >= o.minLength) {
-                    if (val !== lastValue && val.indexOf(emptyPrefix) === -1) {
-                        // trigger search
+                    if (isRetry || (val !== lastValue && val.indexOf(emptyPrefix) === -1)) {
                         lastValue = val;
                         scrollpane.empty();
                         popup.busy();
                         open();
-                        o.source(val).done(_.lfo(cbSearchResult, val));
+                        o.source(val)
+                            .pipe(o.reduce)
+                            .then(_.lfo(cbSearchResult, val), cbSearchResultFail);
                     }
                 } else {
                     lastValue = val;
@@ -227,9 +278,14 @@ define('io.ox/core/tk/autocomplete', function () {
             }, o.delay);
 
 
+       /**
+        * get the selected item
+        *
+        * @return {object|boolean} data object or false
+        */
         this.getSelectedItem = function () {
             var data = scrollpane.children().eq(Math.max(0, index)).data('data');
-            return data || false;
+            return index < 0 ? false : data;
         };
 
         if (_.isFunction(o.source) && _.isFunction(o.draw)) {
@@ -243,7 +299,7 @@ define('io.ox/core/tk/autocomplete', function () {
                     .on('blur', fnBlur)
                     .attr({
                         autocapitalize: 'off',
-                        autocomplete: 'off',
+                        autocomplete: 'off', //naming conflict with function
                         autocorrect: 'off'
                     });
             });

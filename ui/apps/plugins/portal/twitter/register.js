@@ -120,6 +120,19 @@ define('plugins/portal/twitter/register',
         return renderTweet(tweet);
     };
 
+    function followButton(tweet) {
+        var button_config = "show_count=false&align=right&show_screen_name=false&dnt=true";
+        // add lang parameter (use the first 2 letters as language indicator for twitter
+        button_config += "&lang=" + ox.language.split('_')[0];
+        button_config += "&screen_name=" + tweet.user.screen_name;
+        return $('<iframe>')
+            .attr("src", "//platform.twitter.com/widgets/follow_button.html?" + button_config)
+            .attr("allowtransparency", "true")
+            .attr("frameborder", "0")
+            .attr("scrolling", "no")
+            .addClass("io-ox-twitter-follow");
+    }
+
     function parseDate(str) {
         var v = str.split(' ');
         return new Date(Date.parse(v[1] + ' ' + v[2] + ', ' + v[5] + ' ' + v[3] + ' UTC'));
@@ -130,13 +143,9 @@ define('plugins/portal/twitter/register',
     var renderTweet = function (tweet) {
         var tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str;
         var profileLink = 'https://twitter.com/' + tweet.user.screen_name;
-        console.log('date', tweet.created_at);
         var tweeted = new date.Local(parseDate(tweet.created_at)).format(date.DATE_TIME);
         var $myTweet = $('<div class="tweet">').data('entry', tweet).append(
-            $('<a class="io-ox-twitter-follow btn btn-small" href="https://twitter.com/intent/user">').append(
-                '<i>&nbsp;</i>',
-                $('<span>').text(gt('Follow'))
-            ),
+            followButton(tweet),
             $('<a>').attr({href: profileLink}).append(
                 $('<img>', {src: tweet.user.profile_image_url, 'class': 'profilePicture', alt: tweet.user.description})
             ),
@@ -277,7 +286,11 @@ define('plugins/portal/twitter/register',
                     target: '_blank',
                     'class': 'twitter-share-button io-ox-twitter-action-tweet',
                     'data-count': 'none',
-                    'data-size': 'large'
+                    'data-size': 'large',
+                    'data-lang': ox.language.split('_')[0],
+                    'data-url': '',
+                    'data-text': ' ' //there must be text in the text attribute, may be we could add an input field to the sidebar
+                                      //to pre-fill the popup, leaving the default message empty for now
                 }),
                 $('<div>').addClass('clear-title').text('Twitter'),
                 script
@@ -322,6 +335,7 @@ define('plugins/portal/twitter/register',
     ext.point('io.ox/portal/widget/twitter/settings').extend({
         title: gt('Twitter'),
         type: 'twitter',
-        editable: false
+        editable: false,
+        unique: true
     });
 });
