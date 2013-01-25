@@ -308,7 +308,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "1034": "pop3_delete_write_through",
             "1035": "pop3_storage ",
             "1036": "pop3_path",
-            "1037": "personal"
+            "1037": "personal",
+            "1038": "addresses"
         },
         "attachment": {
             "1": "id",
