@@ -619,6 +619,25 @@ define('io.ox/backbone/forms',
                 this.nodes.toggleLink.text(gt('Show more'));
             },
 
+            /**
+             * Draw the header of a section.
+             *
+             * There can be four states a section might be in.
+             * 1. allVisible
+             *   * if this is the initial state, section can never be collapsed
+             *   * neither + or - sign are shown
+             * 2. mixed open
+             *   * section contains some visible fields that can be hidden by the user
+             *   * - sign is shown
+             * 3. mixed close
+             *   * section contains some hidden fields that can be made visible by the user
+             *   * + sign is shown
+             * 3. collapsed
+             *   * some or all fields of this section are hidden
+             *   * + sign is shown
+             *
+             * TODO: this code might need some cleanup (drawHeader, less and more)
+             */
             drawHeader: function () {
                 var self = this;
 
