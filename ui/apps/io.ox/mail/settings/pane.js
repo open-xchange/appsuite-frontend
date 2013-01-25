@@ -61,63 +61,53 @@ define('io.ox/mail/settings/pane',
                            {label: gt('3 minutes'), value: '3_minutes'},
                            {label: gt('5 minutes'), value: '5_minutes'},
                            {label: gt('10 minutes'), value: '10_minutes'}],
-        mailViewSettings;
+        mailViewSettings,
+        itemList = [];
 
-
-    api.all().done(function (array) {
-        var itemList = [];
-        _.each(array, function (key, value) {
-            itemList.push(key.primary_address);
-        });
-
-
-        var MailSettingsView = Backbone.View.extend({
-            tagName: "div",
-            _modelBinder: undefined,
-            initialize: function (options) {
-                // create template
-                this._modelBinder = new Backbone.ModelBinder();
-
-            },
-            render: function () {
-                var self = this;
-                self.$el.empty().append(tmpl.render('io.ox/mail/settings', {
-                    strings: staticStrings,
-                    optionsAutoSaveMinutes: optionsAutoSave,
-                    optionsAllAccountes: itemList
-                }));
-
-                var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-                self._modelBinder.bind(self.model, self.el, defaultBindings);
-
-                return self;
-            }
-        });
-
-        ext.point('io.ox/mail/settings/detail').extend({
-            index: 200,
-            id: 'mailsettings',
-            draw: function (data) {
-
-                mailViewSettings = new MailSettingsView({model: mailSettings});
-                var holder = $('<div>').css('max-width', '800px');
-                this.append(holder.append(
-                    mailViewSettings.render().el)
-                );
-            },
-
-            save: function () {
-                mailViewSettings.model.save();
-            }
-        });
-
-
+    /* TODO: only the default account can have multiple aliases for now
+     * all other accounts can only have one address (the primary address)
+     * So the option is only for the default account, for now. This should
+     * be changed in the future
+     */
+    api.getSenderAddresses(0).done(function (aliases) {
+        return Array.prototype.push.apply(itemList, aliases[1]);
     });
 
+    var MailSettingsView = Backbone.View.extend({
+        tagName: "div",
+        _modelBinder: undefined,
+        initialize: function (options) {
+            // create template
+            this._modelBinder = new Backbone.ModelBinder();
+        },
+        render: function () {
+            var self = this;
+            self.$el.empty().append(tmpl.render('io.ox/mail/settings', {
+                strings: staticStrings,
+                optionsAutoSaveMinutes: optionsAutoSave,
+                optionsAllAccountes: itemList
+            }));
+            var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
+            self._modelBinder.bind(self.model, self.el, defaultBindings);
+            return self;
+        }
+    });
 
+    ext.point('io.ox/mail/settings/detail').extend({
+        index: 200,
+        id: 'mailsettings',
+        draw: function (data) {
 
+            mailViewSettings = new MailSettingsView({model: mailSettings});
+            var holder = $('<div>').css('max-width', '800px');
+            this.append(holder.append(
+                mailViewSettings.render().el)
+            );
+        },
 
-
-
+        save: function () {
+            mailViewSettings.model.save();
+        }
+    });
 
 });
