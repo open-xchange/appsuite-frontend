@@ -89,7 +89,6 @@ msgid "Description"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/template.js:61
-#: apps/io.ox/contacts/create/view.js:101
 #: apps/io.ox/contacts/distrib/create-dist-view.js:43
 #: apps/io.ox/contacts/edit/view-form.js:264
 #: apps/io.ox/core/permissions/permissions.js:341
@@ -110,8 +109,8 @@ msgstr ""
 #: apps/io.ox/calendar/month/perspective.js:86
 #: apps/io.ox/calendar/week/perspective.js:59
 #: apps/io.ox/calendar/week/perspective.js:89 apps/io.ox/contacts/actions.js:50
-#: apps/io.ox/contacts/actions.js:120 apps/io.ox/contacts/create/view.js:102
-#: apps/io.ox/contacts/distrib/main.js:163 apps/io.ox/contacts/edit/main.js:130
+#: apps/io.ox/contacts/actions.js:120 apps/io.ox/contacts/distrib/main.js:163
+#: apps/io.ox/contacts/edit/main.js:130
 #: apps/io.ox/core/commons-folderview.js:308
 #: apps/io.ox/core/permissions/permissions.js:341
 #: apps/io.ox/core/tk/folderviews.js:547 apps/io.ox/core/tk/folderviews.js:576
@@ -442,11 +441,11 @@ msgstr ""
 #: apps/io.ox/core/main.js:50 apps/io.ox/tasks/settings/pane.js:26
 #: apps/plugins/notifications/tasks/register.js:189
 #: apps/plugins/portal/tasks/register.js:26
-#: apps/plugins/portal/tasks/register.js:82
+#: apps/plugins/portal/tasks/register.js:91
 msgid "Tasks"
 msgstr ""
 
-#: apps/plugins/portal/tasks/register.js:43
+#: apps/plugins/portal/tasks/register.js:47
 msgid "You don't have any tasks"
 msgstr ""
 
@@ -883,7 +882,7 @@ msgstr ""
 msgid "Folder"
 msgstr ""
 
-#: apps/io.ox/backbone/forms.js:613 apps/io.ox/mail/view-detail.js:399
+#: apps/io.ox/backbone/forms.js:619 apps/io.ox/mail/view-detail.js:399
 msgid "Show more"
 msgstr ""
 
@@ -2727,15 +2726,15 @@ msgstr ""
 msgid "Preview could not be loaded"
 msgstr ""
 
-#: apps/io.ox/office/tk/view/view.js:401
+#: apps/io.ox/office/tk/view/view.js:488
 msgid "Load Error"
 msgstr ""
 
-#: apps/io.ox/office/tk/view/view.js:401
+#: apps/io.ox/office/tk/view/view.js:488
 msgid "An error occurred while loading the document."
 msgstr ""
 
-#: apps/io.ox/office/tk/application.js:152
+#: apps/io.ox/office/tk/application.js:169
 msgid "Unnamed"
 msgstr ""
 
@@ -3371,10 +3370,6 @@ msgstr ""
 
 #: apps/io.ox/contacts/model.js:308
 msgid "Address Other"
-msgstr ""
-
-#: apps/io.ox/contacts/create/view.js:95
-msgid "Add new contact"
 msgstr ""
 
 #: apps/io.ox/contacts/settings/pane.js:24
