@@ -31,7 +31,7 @@ var pkgName = process.env['package'];
 var ver = process.env.version;
 var rev = process.env.revision;
 
-if ((!pkgName || !ver || !rev) && path.existsSync('debian/changelog')) {
+if ((!pkgName || !ver || !rev) && fs.existsSync('debian/changelog')) {
     var changelogEntry = /(\S+) \((\S+)-(\d+)\)/.exec(
         fs.readFileSync('debian/changelog', 'utf8'));
     pkgName = pkgName || changelogEntry[1];
@@ -406,7 +406,7 @@ file("ox.pot", [utils.source("Jakefile.js")], function() {
     fs.writeFileSync(this.name,
         i18n.generatePOT(this.prereqs.slice(skipOxPotPrereqs)));
 });
-if (path.existsSync('html/core_body.html')) {
+if (fs.existsSync('html/core_body.html')) {
     file('ox.pot', ['tmp/core_body.html']);
 }
 var skipOxPotPrereqs = jake.Task['ox.pot'].prereqs.length;
@@ -429,13 +429,13 @@ utils.fileType("module").addHook("filter", jsFilter)
 
 utils.concat("dependencies.json", [{
     getData: function() {
-        if (path.existsSync(depsPath)) {
+        if (fs.existsSync(depsPath)) {
             var oldFile = fs.readFileSync(depsPath, "utf8");
             if (oldFile) {
                 var oldDeps = JSON.parse(oldFile);
                 for (var i in oldDeps) {
                     if (!(i in moduleDeps) &&
-                        path.existsSync(path.join("apps", i + ".js")))
+                        fs.existsSync(path.join("apps", i + ".js")))
                     {
                         moduleDeps[i] = oldDeps[i];
                     }
@@ -482,14 +482,14 @@ utils.merge('manifests/' + pkgName + '.json',
                     if (!entry.path) {
                         if (entry.namespace) {
                             // Assume Plugin
-                            if (path.existsSync("apps/" + prefix +
+                            if (fs.existsSync("apps/" + prefix +
                                                 "register.js"))
                             {
                                 entry.path = prefix + "register";
                             }
                         } else {
                             // Assume App
-                            if (path.existsSync("apps/" + prefix + "main.js")) {
+                            if (fs.existsSync("apps/" + prefix + "main.js")) {
                                 entry.path = prefix + "main";
                             }
                         }
@@ -644,7 +644,7 @@ utils.topLevelTask('init-packaging', [], function() {
                 handler: function (answer) {
                     var license = path.join(utils.source('lib/build/licenses'),
                         answer.toLowerCase().replace(/(\.0)*\+?$/, '.txt'));
-                    if (path.existsSync(license)) {
+                    if (fs.existsSync(license)) {
                         packagingVariables.license = license;
                     }
                 }
@@ -732,14 +732,14 @@ task("dist", [distDest], function () {
     }
     function tar(code) {
         if (code) return fail();
-        
+
         var file = path.join(dest, pkgName + '.spec');
         fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')
             .replace(/^(Version:\s*)\S+/gm, '$01' + ver)));
         file = path.join(dest, 'debian/control');
         fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
-        
-        if (path.existsSync('i18n/languagenames.json')) {
+
+        if (fs.existsSync('i18n/languagenames.json')) {
             var languageNames = _.extend(
                 JSON.parse(fs.readFileSync('i18n/languagenames.json', 'utf8')),
                 JSON.parse(fs.readFileSync('i18n/overrides.json', 'utf8')));
@@ -771,7 +771,7 @@ task("dist", [distDest], function () {
 
 desc('Removes all generated files');
 task('clean', [], function() {
-    if (path.existsSync('ox.pot')) fs.unlinkSync('ox.pot');
+    if (fs.existsSync('ox.pot')) fs.unlinkSync('ox.pot');
     var dirs = ['tmp', utils.builddir, distDest];
     if (process.env.l10nDir) dirs.push(process.env.l10nDir);
     if (process.env.manifestDir) dirs.push(process.env.manifestDir);

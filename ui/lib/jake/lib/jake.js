@@ -142,7 +142,7 @@ jake = new function () {
     switch (type) {
       case 'directory':
         action = function () {
-          
+
           // Recursive mkdir from https://gist.github.com/319051
           // mkdirsSync(path, [mode=(0777^umask)]) -> pathsCreated
           function mkdirsSync(dirname, mode) {
@@ -173,8 +173,8 @@ jake = new function () {
             }
             return pathsCreated;
           };
-          
-          if (!path.existsSync(name)) {
+
+          if (!fs.existsSync(name)) {
             mkdirsSync(name, 0755);
           }
         };
@@ -186,7 +186,7 @@ jake = new function () {
       default:
         constructor = Task;
     }
-    
+
     var fullName = name;
     for (var ns = jake.currentNamespace; ns; ns = ns.parentNamespace) {
         if (ns !== jake.defaultNamespace) fullName = ns.name + ':' + fullName;
@@ -206,7 +206,7 @@ jake = new function () {
       task.fullName = fullName;
       jake.Task[fullName] = task;
     }
-    
+
     if (jake.currentTaskDescription) {
       task.description = jake.currentTaskDescription;
       jake.currentTaskDescription = null;

@@ -97,7 +97,7 @@ TaskBase = new (function () {
       if (!prereq) {
         filePath = name.split(':')[1] || name;
         // Create a dummy FileTask if file actually exists
-        if (path.existsSync(filePath)) {
+        if (fs.existsSync(filePath)) {
           stats = fs.statSync(filePath);
           prereq = new jake.FileTask(name);
           prereq.modTime = stats.mtime;

@@ -115,7 +115,7 @@ PackageTask.prototype = new (function () {
         // Make any necessary container directories
         fDirArr.forEach(function (dir) {
           baseDir += baseDir ? '/' + dir : dir;
-          if (!path.existsSync(baseDir)) {
+          if (!fs.existsSync(baseDir)) {
             fs.mkdirSync(baseDir, 0755);
           }
         });

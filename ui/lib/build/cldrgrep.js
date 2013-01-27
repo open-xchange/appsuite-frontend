@@ -49,7 +49,7 @@ var loadLanguage = _.memoize(function (lang) {
             return n === undefined && parent ? parent.resolve(path) : n;
         },
         list: function (path) {
-            
+
         }
     };
 });
@@ -96,7 +96,7 @@ function xpath(path, parents) {
     });
 }
 
-if (path.existsSync('all.json')) {
+if (fs.existsSync('all.json')) {
     files = JSON.parse(fs.readFileSync('all.json', 'utf8'));
     grep();
 } else {
