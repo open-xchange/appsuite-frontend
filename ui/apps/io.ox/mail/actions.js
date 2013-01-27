@@ -179,57 +179,59 @@ define('io.ox/mail/actions',
             id: type,
             requires: 'toplevel some',
             multiple: function (list, baton) {
-                var vGrid;
-                if (list.length > 1) {
-                    vGrid = baton.grid;
-                } else {
-                    vGrid = baton.app.getGrid();
-                }
+
+                var vGrid = baton.grid || (baton.app && baton.app.getGrid());
+
                 require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
-                    var dialog = new dialogs.ModalDialog({ easyOut: true })
-                        .header($('<h3>').text(label))
-                        .addPrimaryButton("ok", label)
-                        .addButton("cancel", gt("Cancel"));
-                    dialog.getBody().css({ height: '250px' });
-                    var folderId = String(list[0].folder_id),
-                        id = settings.get('folderpopup/last') || folderId,
-                        tree = new views.FolderTree(dialog.getBody(), {
-                            type: 'mail',
-                            open: settings.get('folderpopup/open', []),
-                            toggle: function (open) {
-                                settings.set('folderpopup/open', open).save();
+
+                    function commit(target) {
+                        if (type === "move" && vGrid) vGrid.busy();
+                        api[type](list, target).then(
+                            function () {
+                                notifications.yell('success', success);
+                                folderAPI.reload(target, list);
+                                if (type === "move" && vGrid) vGrid.idle();
                             },
-                            select: function (id) {
-                                settings.set('folderpopup/last', id).save();
-                            }
-                        });
-                    dialog.show(function () {
-                        tree.paint().done(function () {
-                            tree.select(id);
-                        });
-                    })
-                    .done(function (action) {
-                        if (action === 'ok') {
-                            var target = _(tree.selection.get()).first();
-                            if (target && target !== folderId) {
-                                if (type === "move" && vGrid) {//add busy animation
-                                    vGrid.busy();
+                            notifications.yell
+                        );
+                    }
+
+                    if (baton.target) {
+                        commit(baton.target);
+                    } else {
+                        var dialog = new dialogs.ModalDialog({ easyOut: true })
+                            .header($('<h3>').text(label))
+                            .addPrimaryButton("ok", label)
+                            .addButton("cancel", gt("Cancel"));
+                        dialog.getBody().css({ height: '250px' });
+                        var folderId = String(list[0].folder_id),
+                            id = settings.get('folderpopup/last') || folderId,
+                            tree = new views.FolderTree(dialog.getBody(), {
+                                type: 'mail',
+                                open: settings.get('folderpopup/open', []),
+                                toggle: function (open) {
+                                    settings.set('folderpopup/open', open).save();
+                                },
+                                select: function (id) {
+                                    settings.set('folderpopup/last', id).save();
                                 }
-                                api[type](list, target).then(
-                                    function () {
-                                        notifications.yell('success', success);
-                                        folderAPI.reload(target, list);
-                                        if (type === "move" && vGrid) {//remove busy animation
-                                            vGrid.idle();
-                                        }
-                                    },
-                                    notifications.yell
-                                );
+                            });
+                        dialog.show(function () {
+                            tree.paint().done(function () {
+                                tree.select(id);
+                            });
+                        })
+                        .done(function (action) {
+                            if (action === 'ok') {
+                                var target = _(tree.selection.get()).first();
+                                if (target && target !== folderId) {
+                                    commit(target);
+                                }
                             }
-                        }
-                        tree.destroy();
-                        tree = dialog = null;
-                    });
+                            tree.destroy();
+                            tree = dialog = null;
+                        });
+                    }
                 });
             }
         });

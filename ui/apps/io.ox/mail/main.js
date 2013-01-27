@@ -23,13 +23,14 @@ define("io.ox/mail/main",
      "gettext!io.ox/mail",
      "io.ox/core/tk/upload",
      "io.ox/core/extPatterns/dnd",
+     "io.ox/core/extPatterns/actions",
      "io.ox/core/notifications",
      "io.ox/core/api/folder",
      "io.ox/core/api/account",
      "settings!io.ox/mail",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
-    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd, notifications, folderAPI, account, settings) {
+    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd, actions, notifications, folderAPI, account, settings) {
 
     'use strict';
 
@@ -509,6 +510,14 @@ define("io.ox/mail/main",
             );
 
         }());
+
+        // drag & drop
+        win.nodes.outer.on('drop', function (e, baton) {
+            console.log('Drop!', baton);
+            if (baton.dragType === 'mail') {
+                actions.invoke('io.ox/mail/actions/move', null, baton);
+            }
+        });
 
         // go!
         commons.addFolderSupport(app, grid, 'mail', options.folder)

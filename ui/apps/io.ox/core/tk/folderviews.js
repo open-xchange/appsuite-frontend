@@ -431,7 +431,7 @@ define('io.ox/core/tk/folderviews',
             .append(this.container = $('<div class="folder-root">'));
 
         // selection
-        Selection.extend(this, container) // not this.container!
+        Selection.extend(this, container, { dropzone: true, dropType: 'folder' }) // not this.container!
             .setMultiple(false)
             .setSerializer(function (obj) {
                 return String(obj.id);

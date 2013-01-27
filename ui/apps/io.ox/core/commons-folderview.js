@@ -363,6 +363,7 @@ define('io.ox/core/commons-folderview',
         var container = $(),
             sidepanel = $(),
             visible = false,
+            tmpVisible = false,
             top = 0, UP = 'icon-chevron-up', DOWN = 'icon-chevron-down',
             fnChangeFolder, fnHide, fnShow, togglePermanent,
             disablePermanent, enablePermanent,
@@ -525,6 +526,7 @@ define('io.ox/core/commons-folderview',
         loadTree = function (e) {
             toggle();
             app.showFolderView = fnShow;
+            app.hideFolderView = fnHide;
             app.toggleFolderView = toggle;
             loadTree = toggleTree = $.noop;
             return require(['io.ox/core/tk/folderviews']).pipe(initTree);
@@ -533,6 +535,7 @@ define('io.ox/core/commons-folderview',
         toggleTree = loadTree;
 
         app.showFolderView = loadTree;
+        app.hideFolderView = $.noop;
         app.toggleFolderView = loadTree;
         app.togglePermanentFolderView = togglePermanent;
         app.folderView = null;
@@ -576,6 +579,19 @@ define('io.ox/core/commons-folderview',
         if (options.visible === true) {
             toggleTree();
         }
+
+        // auto-open on drag
+        app.getWindow().nodes.body.on({
+            dragstart: function () {
+                tmpVisible = !visible;
+                app.showFolderView();
+            },
+            dragstop: function () {
+                if (tmpVisible) {
+                    app.hideFolderView();
+                }
+            }
+        });
     }
 
     return {

@@ -378,7 +378,7 @@ define('io.ox/core/tk/vgrid',
         Events.extend(this);
 
         // selection
-        Selection.extend(this, scrollpane);
+        Selection.extend(this, scrollpane, { draggable: true, dragType: 'mail' });
 
         // due to performance reasons we don't scrol but jump
         scrollToLabel = function (index) {

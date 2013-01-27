@@ -116,8 +116,7 @@ define('io.ox/mail/view-detail',
 
     var isValidHost = function (url) {
         var match = url.match(/^https?:\/\/([^\/]+)/i);
-        return match && match.length &&
-                _(ox.serverConfig.hosts).indexOf(match[1]) > -1;
+        return match && match.length && _(ox.serverConfig.hosts).indexOf(match[1]) > -1;
     };
 
     var drawDocumentLink = function (href, title) {

@@ -1230,6 +1230,7 @@ input.nice-input {
 
     overflow: auto;
     padding: 13px 0 4px 0;
+    .user-select(none);
 
     .folder-root {
         display: table;
@@ -1255,6 +1256,8 @@ input.nice-input {
     }
 
     .folder.selectable, .folder.expandable { cursor: pointer; }
+
+    .folder.selectable.dnd-over,
     .folder.selectable:hover { background-color: #efefef; }
 
     .folder.selected {
@@ -1365,9 +1368,8 @@ input.nice-input {
             .folder.unreadable .folder-label { color: #888; }
             .folder-icon { display: none; }
 
-            .folder.selectable:hover {
-                background-color: #555;
-            }
+            .folder.selectable.dnd-over,
+            .folder.selectable:hover { background-color: #555; }
 
             .folder.selected {
                 background-image: none !important;
@@ -1486,6 +1488,24 @@ div.external-user-image {
     background-size: cover;
     background-repeat: no-repeat;
     float: left;
+}
+
+/** DRAG & DROP **/
+
+.drag-helper {
+    position: absolute;
+    z-index: 65000;
+    background-color: rgba(240, 240, 240, 0.80);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 13px;
+    width: 300px;
+    height: 20px;
+    line-height: 20px;
+    color: #333;
+    text-shadow: 0 0 5px white;
+    font-weight: bold;
+    .ellipsis();
+    .badge { margin-right: 1em; }
 }
 
 /** DROPDOWNS **/

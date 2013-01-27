@@ -11,11 +11,35 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
+define('io.ox/core/tk/selection',
+    ['io.ox/core/event',
+     'io.ox/core/extensions',
+     'io.ox/core/notifications',
+     'gettext!io.ox/core'], function (Events, ext, notifications, gt) {
 
     'use strict';
 
-    var Selection = function (container) {
+    function joinTextNodes(nodes, delimiter) {
+        nodes = nodes.map(function () { return $.trim($(this).text()); });
+        return $.makeArray(nodes).join(delimiter || '');
+    }
+
+    function defaultMessage(items) {
+        var title = joinTextNodes(this.find('.selected .drag-title'), ', ');
+        return title || gt.format(gt.ngettext('%1$d Items', '1 item', items.length), items.length);
+    }
+
+    var Selection = function (container, options) {
+
+        options = _.extend({
+            draggable: false,
+            dragMessage: defaultMessage,
+            dragCssClass: undefined,
+            dragType: '',
+            dropzone: false,
+            dropzoneSelector: '.selectable',
+            dropType: ''
+        }, options);
 
         this.classFocus = 'focussed';
         this.classSelected = 'selected';
@@ -593,11 +617,134 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
 
         // bind general click handler
         container.on('click contextmenu', '.selectable', click);
+
+        /*
+        * DND
+        */
+        (function () {
+
+            var data,
+                source,
+                helper = null,
+                fast,
+                deltaLeft = 15,
+                deltaTop = 15,
+                // move helper
+                px = 0, py = 0, x = 0, y = 0,
+                abs = Math.abs;
+
+            function move(e) {
+                // use fast access
+                x = e.pageX + deltaLeft;
+                y = e.pageY + deltaTop;
+                if (abs(px - x) >= 5 || abs(py - y) >= 5) {
+                    fast.left = x + 'px';
+                    fast.top = y + 'px';
+                    px = x;
+                    py = y;
+                }
+            }
+
+            function firstMove() {
+                // trigger DOM event
+                container.trigger('dragstart');
+            }
+
+            function over() {
+                $(this).addClass('dnd-over');
+            }
+
+            function out() {
+                $(this).removeClass('dnd-over');
+            }
+
+            function drag(e) {
+                // unbind
+                $(document).off('mousemove.dnd', drag);
+                // create helper
+                helper = $('<div class="drag-helper">').append(
+                    $('<span class="badge badge-important">').text(data.length),
+                    $('<span>').text(options.dragMessage.call(container, data, source))
+                );
+                // get fast access
+                fast = helper[0].style;
+                // initial move
+                px = py = x = y = 0;
+                move(e);
+                // replace in DOM
+                helper.appendTo(document.body);
+                // bind
+                $(document).on('mousemove.dnd', move)
+                    .one('mousemove.dnd', firstMove)
+                    .on('mouseover.dnd', '.selectable', over)
+                    .on('mouseout.dnd', '.selectable', out);
+            }
+
+            function remove() {
+                if (helper !== null) {
+                    helper.remove();
+                    helper = fast = null;
+                }
+            }
+
+            function stop() {
+                // unbind handlers
+                $(document).off('mousemove.dnd mouseup.dnd mouseover.dnd mouseout.dnd');
+                $('.dropzone').each(function () {
+                    var node = $(this), selector = node.attr('data-dropzones');
+                    (selector ? node.find(selector) : node).off('mouseup.dnd');
+                });
+                $('.dnd-over').removeClass('dnd-over');
+                // trigger DOM event
+                container.trigger('dragstop');
+                // revert?
+                if (helper !== null) {
+                    remove();
+                }
+            }
+
+            function drop(e) {
+                var target = $(this).attr('data-obj-id') || $(this).attr('data-cid'),
+                    baton = new ext.Baton({ data: data, dragType: options.dragType, dropzone: this, target: target });
+                $(this).trigger('drop', [baton]);
+            }
+
+            function start(e) {
+                source = $(this);
+                data = self.unique(self.unfold());
+                // bind events
+                $('.dropzone').each(function () {
+                    var node = $(this), selector = node.attr('data-dropzones');
+                    (selector ? node.find(selector) : node).on('mouseup.dnd', drop);
+                });
+                $(document).on('mousemove.dnd', drag).on('mouseup.dnd', stop);
+                // prevent text selection
+                e.preventDefault();
+            }
+
+            // drag & drop
+            if (!Modernizr.touch) {
+                // draggable?
+                if (options.draggable) {
+                    container.on('mousedown.dnd', '.selectable.selected', start);
+                }
+                // dropzone?
+                if (options.dropzone) {
+                    container.addClass('dropzone')
+                        .attr('data-dropzones', options.dropzoneSelector)
+                        .on('drop', function (e, baton) {
+                            baton.dropType = options.dropType;
+                            self.trigger('drop', baton);
+                        });
+                }
+            }
+
+        }());
     };
 
-    Selection.extend = function (obj, node) {
+    Selection.extend = function (obj, node, options) {
         // extend object
-        return (obj.selection = new Selection(node));
+        return (obj.selection = new Selection(node, options || {}));
     };
 
     return Selection;
