@@ -317,14 +317,12 @@ define('io.ox/office/tk/view/view',
          *  @param {Boolean} [options.closeable]
          *      If set to true, the alert banner can be closed with a close
          *      button shown in the top-right corner of the banner.
-         *  @param {Boolean} [options.autoClose]
-         *      If set to true, the alert banner will vanish automatically
-         *      after five seconds.
-         *  @param {Number} [options.timeout]
-         *      Can be specified together with 'options.autoClose'. Specifies
-         *      the number of milliseconds until the alert banner will
-         *      vanish automatically. If not specified the default of five
-         *      seconds is used.
+         *  @param {Number} [options.timeout=5000]
+         *      Can be specified together with 'options.closeable'. Specifies
+         *      the number of milliseconds until the alert banner will vanish
+         *      automatically. If not specified, the default of five seconds is
+         *      used. The value 0 will show a closeable alert banner that will
+         *      not vanish automatically.
          *  @param {String} [options.buttonLabel]
          *      If specified, a push button will be shown with the passed
          *      caption label.
@@ -346,7 +344,9 @@ define('io.ox/office/tk/view/view',
                 alert = $.alert(title, message)
                     .removeClass('alert-error')
                     .addClass('alert-' + type + ' in hide')
-                    .data('pane-pos', 'top');
+                    .data('pane-pos', 'top'),
+                // auto-close timeout delay
+                timeout = Utils.getIntegerOption(options, 'timeout', 5000);
 
             function toggleOverlay(state) {
                 alert.toggleClass(OVERLAY_CLASS, state);
@@ -364,6 +364,11 @@ define('io.ox/office/tk/view/view',
                 });
             }
 
+            function buttonClickHandler() {
+                closeAlert();
+                app.getController().change(buttonKey);
+            }
+
             // remove alert banner currently shown, update reference to current alert
             if (currentAlert) { currentAlert.remove(); }
             currentAlert = alert;
@@ -372,6 +377,8 @@ define('io.ox/office/tk/view/view',
             if (Utils.getBooleanOption(options, 'closeable', false)) {
                 // alert can be closed by clicking anywhere in the banner
                 alert.click(closeAlert);
+                // initialize auto-close
+                if (timeout > 0) { _.delay(closeAlert, timeout); }
             } else {
                 // remove closer button
                 alert.find('a.close').remove();
@@ -380,18 +387,10 @@ define('io.ox/office/tk/view/view',
             // always execute controller default action when alert has been clicked (also if not closeable)
             alert.click(function () { app.getController().done(); });
 
-            // initialize auto-close
-            if (Utils.getBooleanOption(options, 'autoClose', false)) {
-                var timeout = Utils.getNumberOption(options, 'timeout', 5000);
-                _.delay(closeAlert, timeout);
-            }
-
             // insert the push button into the alert banner
             if (_.isString(buttonLabel) && _.isString(buttonKey)) {
                 alert.append(
-                    $.button({ label: buttonLabel })
-                        .addClass('btn-' + type + ' btn-mini')
-                        .click(function () { closeAlert(); app.getController().change(buttonKey); })
+                    $.button({ label: buttonLabel }).addClass('btn-' + type + ' btn-mini').click(buttonClickHandler)
                 );
             }
 
