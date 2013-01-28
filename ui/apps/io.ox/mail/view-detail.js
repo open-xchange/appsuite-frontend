@@ -211,7 +211,7 @@ define('io.ox/mail/view-detail',
         getContent: function (data) {
 
             if (!data || !data.attachments) {
-                return $();
+                return { content: $(), isLarge: false, type: 'text/plain' };
             }
 
             var att = data.attachments, source = '', type = 'text/plain',
@@ -243,10 +243,13 @@ define('io.ox/mail/view-detail',
 
                 // empty?
                 if (source === '') {
-                    return $('<div class="content">').append(
-                        $('<div class="alert alert-info">')
-                        .text(gt('This mail has no content'))
-                    );
+                    return {
+                        content: $('<div class="content">').append(
+                            $('<div class="alert alert-info">').text(gt('This mail has no content'))
+                        ),
+                        isLarge: false,
+                        type: 'text/html'
+                    };
                 }
 
                 // replace images on source level
@@ -414,7 +417,7 @@ define('io.ox/mail/view-detail',
                 console.error('mail.getContent', e.message, e, data);
             }
 
-            return content;
+            return { content: content, isLarge: isLarge, type: type };
         },
 
         drawScaffold: function (baton, resolver) {
@@ -1001,36 +1004,36 @@ define('io.ox/mail/view-detail',
         }
     });
 
+    function findFarthestElement(memo, node) {
+        var pos;
+        if (node.css('position') === 'absolute' && (pos = node.position())) {
+            memo.x = Math.max(memo.x, pos.left + node.width());
+            memo.y = Math.max(memo.y, pos.top + node.height());
+        }
+        return memo;
+    }
+
     ext.point('io.ox/mail/detail').extend({
         index: 200,
         id: 'content',
         draw: function (baton) {
 
-            var data = baton.data;
+            var data = baton.data, content = that.getContent(data);
 
             this.attr('data-cid', data.folder_id + '.' + data.id).append(
-                that.getContent(data),
-                $('<div>').addClass('mail-detail-clear-both')
+                content.content, $('<div>').addClass('mail-detail-clear-both')
             );
 
             var content = this.find('.content');
 
             setTimeout(function () {
-                var scrollHeight = content.get(0).scrollHeight;
-
-                if (scrollHeight >= content.height()) { //Bug 22756: FF18 is behaving oddly correct, but impractical
-                    var lowestElement = _($(content).find('*'))
-                        .chain()
-                        .filter(function (elem) { return $(elem).position() && $(elem).css('position') === 'absolute'; })
-                        .max(function (elem) { return $(elem).position().top + $(elem).height(); })
-                        .value();
-                    if (lowestElement !== -Infinity) {
-                        scrollHeight = Math.round($(lowestElement).position().top + $(lowestElement).height());
-                    }
+                var farthest = { x: content.get(0).scrollWidth, y: content.get(0).scrollHeight },
+                    width = content.width(), height = content.height();
+                if (!content.isLarge && (farthest.x >= width || farthest.y >= height)) { // Bug 22756: FF18 is behaving oddly correct, but impractical
+                    farthest = _.chain($(content).find('*')).map($).reduce(findFarthestElement, farthest).value();
                 }
-                if (scrollHeight > content.height()) {
-                    content.css('height', scrollHeight + 'px');
-                }
+                if (farthest.x > width) content.css('width', Math.round(farthest.x) + 'px');
+                if (farthest.y > height) content.css('height', Math.round(farthest.y) + 'px');
                 content = null;
             }, 0);
         }
