@@ -1025,8 +1025,9 @@ define('io.ox/mail/view-detail',
                         .filter(function (elem) { return $(elem).position() && $(elem).css('position') === 'absolute'; })
                         .max(function (elem) { return $(elem).position().top + $(elem).height(); })
                         .value();
-
-                    scrollHeight = Math.round($(lowestElement).position().top + $(lowestElement).height());
+                    if (lowestElement !== -Infinity) {
+                        scrollHeight = Math.round($(lowestElement).position().top + $(lowestElement).height());
+                    }
                 }
                 if (scrollHeight > content.height()) {
                     content.css('height', scrollHeight + 'px');
