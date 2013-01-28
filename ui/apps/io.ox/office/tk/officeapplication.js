@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/application',
+define('io.ox/office/tk/officeapplication',
     ['io.ox/files/api',
      'io.ox/office/tk/utils',
      'io.ox/office/tk/io',
@@ -20,21 +20,66 @@ define('io.ox/office/tk/application',
 
     'use strict';
 
-    // class Application ======================================================
+    // class OfficeApplication ================================================
 
     /**
      * A mix-in class that defines common public methods for an application
      * that is based on a document file.
      *
+     * Triggers the events supported by the base class ox.ui.App, and the
+     * following additional events:
+     * - 'docs:init': Once during launch, after this application instance has
+     *      been constructed completely, before the registered launch handlers
+     *      will be called.
+     * - 'docs:quit': Before the application will be really closed, after all
+     *      registered before-quit handlers have been called, and none has
+     *      rejected quitting, and before the application will be destroyed.
+     * - 'docs:resume': After all registered before-quit handlers have been
+     *      called, and at least one has rejected quitting. The application
+     *      continues to run normally.
+     *
      * @constructor
      *
      * @extends ox.ui.App
      *
+     * @param {Function} ModelClass
+     *  The constructor function of the document model class. MUST derive from
+     *  the class Model. Receives a reference to this application instance.
+     *  MUST NOT use the methods OfficeApplication.getModel(),
+     *  OfficeApplication.getView(), or OfficeApplication.getController()
+     *  during construction. For further initialization depending on valid
+     *  model/view/controller instances, the constructor can register an event
+     *  handler for the 'docs:init' event of this application.
+     *
+     * @param {Function} ViewClass
+     *  The constructor function of the view class. MUST derive from the class
+     *  View. Receives a reference to this application instance. MUST NOT use
+     *  the methods OfficeApplication.getModel(), OfficeApplication.getView(),
+     *  or OfficeApplication.getController() during construction. For further
+     *  initialization depending on valid model/view/controller instances, the
+     *  constructor can register an event handler for the 'docs:init' event of
+     *  this application.
+     *
+     * @param {Function} ControllerClass
+     *  The constructor function of the controller class. MUST derive from the
+     *  class Controller. Receives a reference to this application instance.
+     *  MUST NOT use the methods OfficeApplication.getModel(),
+     *  OfficeApplication.getView(), or OfficeApplication.getController()
+     *  during construction. For further initialization depending on valid
+     *  model/view/controller instances, the constructor can register an event
+     *  handler for the 'docs:init' event of this application.
+     *
      * @param {Object} launchOptions
      *  A map of options containing initialization data for the new application
-     *  object.
+     *  object. The following options are supported directly:
+     *  @param {Boolean} [launchOptions.search=false]
+     *      If set to true, the application will show and use the global search
+     *      tool bar.
+     *  @param {Boolean} [launchOptions.detachable=true]
+     *      If set to false, the application window will not be detached from
+     *      the DOM while it is hidden.
      */
-    function Application(launchOptions) {
+    function OfficeApplication(ModelClass, ViewClass, ControllerClass, launchOptions) {
 
         var // self reference
             self = this,
@@ -46,7 +91,16 @@ define('io.ox/office/tk/application',
             launchHandlers = [],
 
             // all registered quit handlers
-            quitHandlers = [];
+            quitHandlers = [],
+
+            // the document model instance
+            model = null,
+
+            // application view: contains panes, tool bars, etc.
+            view = null,
+
+            // the controller instance as single connection point between model and view
+            controller = null;
 
         // private methods ----------------------------------------------------
 
@@ -60,6 +114,36 @@ define('io.ox/office/tk/application',
         }
 
         // public methods -----------------------------------------------------
+
+        /**
+         * Returns the document model instance of this application.
+         *
+         * @returns {DocumentModel}
+         *  The document model instance of this application.
+         */
+        this.getModel = function () {
+            return model;
+        };
+
+        /**
+         * Returns the view instance of this application.
+         *
+         * @returns {View}
+         *  The view instance of this application.
+         */
+        this.getView = function () {
+            return view;
+        };
+
+        /**
+         * Returns the controller instance of this application.
+         *
+         * @returns {Controller}
+         *  The controller instance of this application.
+         */
+        this.getController = function () {
+            return controller;
+        };
 
         /**
          * Returns whether this application contains a valid file descriptor.
@@ -81,7 +165,7 @@ define('io.ox/office/tk/application',
          * Must not be called if the application already contains a valid file
          * descriptor.
          *
-         * @returns {Application}
+         * @returns {OfficeApplication}
          *  A reference to this application instance.
          */
         this.setFileDescriptor = function (newFile) {
@@ -162,7 +246,7 @@ define('io.ox/office/tk/application',
          * the application does not contain a file descriptor, shows the
          * localized word 'Unnamed' as title.
          *
-         * @returns {Application}
+         * @returns {OfficeApplication}
          *  A reference to this application instance.
          */
         this.updateTitle = function () {
@@ -221,7 +305,7 @@ define('io.ox/office/tk/application',
 
             // build default options, and add the passed options
             options = Utils.extendOptions({
-                module: Application.FILTER_MODULE_NAME,
+                module: OfficeApplication.FILTER_MODULE_NAME,
                 params: this.getFileParameters()
             }, options);
 
@@ -253,7 +337,7 @@ define('io.ox/office/tk/application',
             options = Utils.extendOptions(this.getFileParameters(), options);
 
             // build and return the resulting URL
-            return ox.apiRoot + '/' + Application.FILTER_MODULE_NAME + '?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
+            return ox.apiRoot + '/' + OfficeApplication.FILTER_MODULE_NAME + '?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
         };
 
         // application setup --------------------------------------------------
@@ -265,10 +349,10 @@ define('io.ox/office/tk/application',
          * @param {Function} launchHandler
          *  A function that will be called when the application launches. Will
          *  be called in the context of this application instance. May return a
-         *  Deferred object, which must be resolved or rejected by the launch
-         *  handler function.
+         *  Deferred object, which must be resolved (never rejected) by the
+         *  launch handler function.
          *
-         * @returns {Application}
+         * @returns {OfficeApplication}
          *  A reference to this application instance.
          */
         this.registerLaunchHandler = function (launchHandler) {
@@ -280,18 +364,18 @@ define('io.ox/office/tk/application',
          * Registers a quit handler function that will be executed before the
          * application will be closed.
          *
-         * @param {Function} quitHandler
+         * @param {Function} beforeQuitHandler
          *  A function that will be called before the application will be
          *  closed. Will be called in the context of this application instance.
          *  May return a Deferred object, which must be resolved or rejected by
          *  the quit handler function. If the Deferred object will be rejected,
          *  the application remains alive.
          *
-         * @returns {Application}
+         * @returns {OfficeApplication}
          *  A reference to this application instance.
          */
-        this.registerQuitHandler = function (quitHandler) {
-            quitHandlers.push(quitHandler);
+        this.registerBeforeQuitHandler = function (beforeQuitHandler) {
+            quitHandlers.push(beforeQuitHandler);
             return this;
         };
 
@@ -312,7 +396,7 @@ define('io.ox/office/tk/application',
          *  The event handler function that will be bound to the specified
          *  events.
          *
-         * @returns {Application}
+         * @returns {OfficeApplication}
          *  A reference to this application instance.
          */
         this.registerEventHandler = function (target, events, handler) {
@@ -321,7 +405,7 @@ define('io.ox/office/tk/application',
             $(target).on(events, handler);
 
             // unbind handler when application is closed
-            this.on('docs:app:quit', function () {
+            this.on('docs:quit', function () {
                 $(target).off(events, handler);
             });
 
@@ -339,7 +423,7 @@ define('io.ox/office/tk/application',
          *  window. Will be triggered once when the application window becomes
          *  visible.
          *
-         * @returns {Application}
+         * @returns {OfficeApplication}
          *  A reference to this application instance.
          */
         this.registerWindowResizeHandler = function (resizeHandler) {
@@ -396,44 +480,78 @@ define('io.ox/office/tk/application',
             return def.always(function () { self.updateTitle(); }).promise();
         };
 
-        this.destroy = function () {
-        };
-
         // initialization -----------------------------------------------------
 
         // call all registered launch handlers
         this.setLauncher(function () {
-            return callDeferredHandlers(launchHandlers).then(
-                function () { self.trigger('docs:app:launch'); },
-                function () { self.trigger('docs:app:launch:error'); }
-            ).promise();
+
+            var // create the application window
+                win = ox.ui.createWindow({
+                    name: self.getName(),
+                    search: Utils.getBooleanOption(launchOptions, 'search', false)
+                });
+
+            // do not detach window if specified
+            win.detachable = Utils.getBooleanOption(launchOptions, 'detachable', true);
+
+            // set the window at the application instance
+            self.setWindow(win);
+
+            // create and initialize the MVC instances
+            model = new ModelClass(self);
+            view = new ViewClass(self);
+            controller = new ControllerClass(self);
+            self.trigger('docs:init');
+
+            // kill the application if no file descriptor is present
+            win.on('open', function () {
+                if (!self.hasFileDescriptor()) {
+                    _.defer(function () { self.quit(); });
+                }
+            });
+
+            // call all registered launch handlers, return the accumulated Deferred object
+            return callDeferredHandlers(launchHandlers).promise();
         });
-        delete this.setLauncher;
 
         // call all registered quit handlers
         this.setQuit(function () {
-            return callDeferredHandlers(quitHandlers).then(
-                function () { self.trigger('docs:app:quit').destroy(); },
-                function () { self.trigger('docs:app:quit:veto'); }
-            ).promise();
+
+            return callDeferredHandlers(quitHandlers)
+                .done(function () {
+                    // base application does not trigger 'quit' events
+                    self.trigger('docs:quit');
+                    // destroy class members
+                    controller.destroy();
+                    view.destroy();
+                    model.destroy();
+                    model = view = controller = null;
+                })
+                .fail(function () {
+                    self.trigger('docs:resume');
+                })
+                .promise();
         });
+
+        // prevent usage of these methods in derived classes
+        delete this.setLauncher;
         delete this.setQuit;
 
         // set application title to current file name
         this.updateTitle();
 
-    } // class Application
+    } // class OfficeApplication
 
     // constants --------------------------------------------------------------
 
     /**
      * The name of the document filter server module.
      */
-    Application.FILTER_MODULE_NAME = 'oxodocumentfilter';
+    OfficeApplication.FILTER_MODULE_NAME = 'oxodocumentfilter';
 
 
     // exports ================================================================
 
-    return _.makeExtendable(Application);
+    return _.makeExtendable(OfficeApplication);
 
 });

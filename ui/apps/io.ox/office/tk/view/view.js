@@ -29,7 +29,9 @@ define('io.ox/office/tk/view/view',
      * application window, and provides functionality to create and control the
      * top, bottom, and side pane elements.
      *
-     * @param {Application} app
+     * @constructor
+     *
+     * @param {OfficeApplication} app
      *  The application containing this view instance.
      *
      * @param {Object} [options]
@@ -41,13 +43,7 @@ define('io.ox/office/tk/view/view',
      */
     function View(app, options) {
 
-        var // the application controller
-            controller = app.getController(),
-
-            // the application window
-            win = ox.ui.createWindow({ name: app.getName(), search: options.search || false }),
-
-            // centered application pane
+        var // centered application pane
             appPane = null,
 
             // application model container node
@@ -122,16 +118,6 @@ define('io.ox/office/tk/view/view',
         // methods ------------------------------------------------------------
 
         /**
-         * Returns the root node of the application window.
-         *
-         * @returns {jQuery}
-         *  The root node of the application window.
-         */
-        this.getWindowMainNode = function () {
-            return win.nodes.main;
-        };
-
-        /**
          * Returns the central DOM node of the application (the complete inner
          * area between all existing view panes).
          *
@@ -170,7 +156,7 @@ define('io.ox/office/tk/view/view',
                 pane = panesById[id] = new Pane(app, id, options);
 
             panes.push(pane);
-            win.nodes.main.append(pane.getNode());
+            app.getWindowNode().append(pane.getNode());
             this.setPanePosition(id, position);
 
             // hover mode
@@ -410,7 +396,7 @@ define('io.ox/office/tk/view/view',
             }
 
             // insert and show the new alert banner
-            win.nodes.main.append(alert);
+            app.getWindowNode().append(alert);
             toggleOverlay(true);
             // after alert is visible, remove overlay mode, and refresh pane layout again
             alert.slideDown('fast', function () { toggleOverlay(false); });
@@ -497,13 +483,10 @@ define('io.ox/office/tk/view/view',
         this.destroy = function () {
             _(panes).invoke('destroy');
             appPane.destroy();
-            win = appPane = panes = panesById = null;
+            appPane = panes = panesById = null;
         };
 
         // initialization -----------------------------------------------------
-
-        // set the window at the application instance
-        app.setWindow(win);
 
         // insert the document model root node into the container node
         modelContainerNode.append(app.getModel().getNode());
@@ -514,22 +497,22 @@ define('io.ox/office/tk/view/view',
         appPane.getNode().append(modelContainerNode);
 
         // add the main application pane
-        win.nodes.main.addClass('io-ox-office-main ' + app.getName().replace(/[.\/]/g, '-') + '-main').append(appPane.getNode());
+        app.getWindowNode().addClass('io-ox-office-main ' + app.getName().replace(/[.\/]/g, '-') + '-main').append(appPane.getNode());
 
         // add shadow nodes above application pane, but below other panes
         _(['top', 'bottom', 'left', 'right']).each(function (border) {
-            win.nodes.main.append(shadowNodes[border] = $('<div>').addClass('app-pane-shadow'));
+            app.getWindowNode().append(shadowNodes[border] = $('<div>').addClass('app-pane-shadow'));
         });
 
         // listen to browser window resize events when the OX window is visible
         app.registerWindowResizeHandler(refreshPaneLayout);
 
         // update all view components every time the window will be shown
-        win.on('show', function () { controller.update(); });
+        app.getWindow().on('show', function () { app.getController().update(); });
 
         // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
-        win.one('show', function () {
-            win.nodes.main.find('.toolbox .group:not(.design-white) a.button i').addClass('icon-white').closest('.group').addClass('white-icons');
+        app.getWindow().on('open', function () {
+            app.getWindowNode().find('.toolbox .group:not(.design-white) a.button i').addClass('icon-white').closest('.group').addClass('white-icons');
         });
 
     } // class View

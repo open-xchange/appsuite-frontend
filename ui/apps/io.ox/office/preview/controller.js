@@ -22,14 +22,12 @@ define('io.ox/office/preview/controller',
 
     /**
      * @constructor
+     *
      * @extends Controller
      */
     function PreviewController(app) {
 
-        var // self reference
-            self = this,
-
-            // all the little controller items
+        var // all the little controller items
             items = {
 
                 'pages/first': {
@@ -68,11 +66,6 @@ define('io.ox/office/preview/controller',
         // base constructor ---------------------------------------------------
 
         Controller.call(this, app, items);
-
-        // initialization -----------------------------------------------------
-
-        // listen to 'show:page' events and update all GUI elements
-        app.on('show:page', function () { self.update(); });
 
     } // class PreviewController
 

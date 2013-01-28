@@ -13,36 +13,30 @@
 
 define('io.ox/office/preview/main',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/application',
+     'io.ox/office/tk/officeapplication',
      'io.ox/office/tk/applauncher',
      'io.ox/office/preview/model',
-     'io.ox/office/preview/controller',
      'io.ox/office/preview/view',
+     'io.ox/office/preview/controller',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.css'
-    ], function (Utils, Application, ApplicationLauncher, PreviewModel, PreviewController, PreviewView, gt) {
+    ], function (Utils, OfficeApplication, ApplicationLauncher, PreviewModel, PreviewView, PreviewController, gt) {
 
     'use strict';
 
     // class PreviewApplication ===============================================
 
     /**
+     * The Preview application used to view any Office documents.
+     *
      * @constructor
-     * @extends Application
+     *
+     * @extends OfficeApplication
      */
-    var PreviewApplication = Application.extend({ constructor: function (launchOptions) {
+    var PreviewApplication = OfficeApplication.extend({ constructor: function (launchOptions) {
 
         var // self reference
             self = this,
-
-            // the previewer model
-            model = null,
-
-            // controller as single connection point between model and view elements
-            controller = null,
-
-            // view, contains panes, tool bars, etc.
-            view = null,
 
             // the unique job identifier to be used for page requests
             jobId = null,
@@ -87,13 +81,13 @@ define('io.ox/office/preview/main',
                 }
             })
             .done(function (html) {
-                model.renderPage(html);
+                self.getModel().renderPage(html);
             })
             .fail(function () {
-                view.showLoadError();
+                self.getView().showLoadError();
             })
             .always(function () {
-                self.trigger('show:page', page);
+                self.getController().update();
                 if (busyTimeout) {
                     window.clearTimeout(busyTimeout);
                 } else {
@@ -110,85 +104,58 @@ define('io.ox/office/preview/main',
          *  The index of the page shown after loading the document.
          *
          * @returns {jQuery.Promise}
-         *  The promise of a deferred that reflects the result of the load
-         *  operation.
+         *  The promise of a Deferred object that will be resolved always (when
+         *  the initial data of the preview document has been loaded, or when
+         *  an error has occurred).
          */
         function loadAndShow(newPage) {
 
             var // the deferred to be returned
-                def = $.Deferred();
+                def = $.Deferred(),
+                // the application window
+                win = self.getWindow();
 
             // show application window
-            self.getWindow().show(function () {
-                self.getWindow().busy();
+            win.show(function () {
 
-                // do not try to load, if file descriptor is missing
-                if (self.hasFileDescriptor()) {
-                    // load the file
-                    self.sendFilterRequest({
-                        params: {
-                            action: 'importdocument',
-                            filter_format: 'html',
-                            filter_action: 'beginconvert'
-                        },
-                        resultFilter: function (data) {
-                            // check required entries, returning undefined will reject this request
-                            return (_.isNumber(data.JobID) && (data.JobID > 0) && _.isNumber(data.PageCount) && (data.PageCount > 0)) ? data : undefined;
-                        }
-                    })
-                    .done(function (data) {
-                        jobId = data.JobID;
-                        pageCount = data.PageCount;
-                        page = 0;
-                        def.resolve();
-                    })
-                    .fail(function () {
-                        def.reject();
-                    });
-
-                } else {
-                    // no file descriptor (restored from save point): just show an empty application
+                // no file descriptor (e.g. restored from save point): just show an empty application
+                if (!self.hasFileDescriptor()) {
                     def.resolve();
+                    return;
                 }
-            });
 
-            // initialize the deferred
-            return def
-                .always(function () {
-                    self.getWindow().idle();
+                // set window to busy state
+                win.busy();
+
+                // load the file
+                self.sendFilterRequest({
+                    params: {
+                        action: 'importdocument',
+                        filter_format: 'html',
+                        filter_action: 'beginconvert'
+                    },
+                    resultFilter: function (data) {
+                        // check required entries, returning undefined will reject this request
+                        return (_.isNumber(data.JobID) && (data.JobID > 0) && _.isNumber(data.PageCount) && (data.PageCount > 0)) ? data : undefined;
+                    }
                 })
-                .done(function () {
+                .done(function (data) {
+                    jobId = data.JobID;
+                    pageCount = data.PageCount;
+                    page = 0;
                     showPage(newPage || 1);
                 })
                 .fail(function () {
-                    view.showLoadError();
+                    self.getView().showLoadError();
                 })
-                .promise();
-        }
+                .always(function () {
+                    win.idle();
+                    // always resolve the Deferred, as expected by ox.launch() and app.failRestore()
+                    def.resolve();
+                });
+            });
 
-        /**
-         * The handler function that will be called while launching the
-         * application. Creates and initializes a new application window.
-         */
-        function launchHandler() {
-
-            // create the previewer model
-            model = new PreviewModel(self);
-
-            // create the controller
-            controller = new PreviewController(self);
-
-            // create the view (creates application window)
-            view = new PreviewView(self);
-
-            // disable dropping event in view-mode
-            view.getWindowMainNode().on('drop dragstart dragover', false);
-
-            // disable FF spell checking
-            $('body').attr('spellcheck', false);
-
-            // load the file
-            return loadAndShow();
+            return def.promise();
         }
 
         /**
@@ -207,31 +174,31 @@ define('io.ox/office/preview/main',
             }
         }
 
+        /**
+         * The handler function that will be called while launching the
+         * application. Creates and initializes a new application window.
+         *
+         * @returns {jQuery.Promise}
+         *  The promise of a Deferred object that will be resolved always (when
+         *  the initial data of the preview document has been loaded, or when
+         *  an error has occurred).
+         */
+        function launchHandler() {
+
+            // disable dropping event in view-mode
+            self.getWindowNode().on('drop dragstart dragover', false);
+            // disable FF spell checking
+            $('body').attr('spellcheck', false);
+
+            // load the file
+            return loadAndShow();
+        }
+
         // base constructor ---------------------------------------------------
 
-        Application.call(this, launchOptions);
+        OfficeApplication.call(this, PreviewModel, PreviewView, PreviewController, launchOptions);
 
         // methods ------------------------------------------------------------
-
-        /**
-         * Returns the previewer model instance of this preview application.
-         *
-         * @returns {PreviewModel}
-         *  The model of this preview application.
-         */
-        this.getModel = function () {
-            return model;
-        };
-
-        /**
-         * Returns the controller of this preview application.
-         *
-         * @returns {PreviewController}
-         *  The controller of this preview application.
-         */
-        this.getController = function () {
-            return controller;
-        };
 
         /**
          * Returns the one-based index of the page currently shown.
@@ -284,7 +251,10 @@ define('io.ox/office/preview/main',
          *  The restore point containing the application state.
          */
         this.failSave = function () {
-            return { module: self.getName(), point: { file: this.getFileDescriptor(), page: page } };
+            return {
+                module: self.getName(),
+                point: { file: this.getFileDescriptor(), page: page }
+            };
         };
 
         /**
@@ -299,22 +269,13 @@ define('io.ox/office/preview/main',
             return loadAndShow(Utils.getIntegerOption(point, 'page'));
         };
 
-        this.destroy = (function () {
-            var baseMethod = self.destroy;
-            return function () {
-                controller.destroy();
-                model.destroy();
-                view.destroy();
-                model = controller = view = null;
-                baseMethod.call(self);
-            };
-        }());
-
         // initialization -----------------------------------------------------
 
-        // set launch handler, send close notification when closing
+        // set launch handler
         this.registerLaunchHandler(launchHandler);
-        this.on('docs:app:quit', sendCloseNotification);
+
+        // send notification to server on quit
+        this.on('docs:quit', sendCloseNotification);
 
     }}); // class PreviewApplication
 

@@ -27,7 +27,7 @@ define('io.ox/office/tk/view/pane',
      *
      * @constructor
      *
-     * @param {Application} app
+     * @param {OfficeApplication} app
      *  The application containing this pane element.
      *
      * @param {String} id

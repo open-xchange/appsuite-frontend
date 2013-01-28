@@ -14,7 +14,8 @@
 define('io.ox/office/preview/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/view/view',
-     'gettext!io.ox/office/main'
+     'gettext!io.ox/office/main',
+     'less!io.ox/office/preview/style.css'
     ], function (Utils, View, gt) {
 
     'use strict';
@@ -28,8 +29,35 @@ define('io.ox/office/preview/view',
      */
     function PreviewView(app) {
 
-        var // tool pane containing all tool bars
-            toolPane = null;
+        var // self reference
+            self = this;
+
+        // private methods ----------------------------------------------------
+
+        /**
+         * Initialization after construction. Will be called once after
+         * construction of the application is finished.
+         */
+        function initHandler() {
+
+            var // the tool pane for tool boxes
+                toolPane = self.createPane('toolpane', 'top', { overlay: true, transparent: true, css: { textAlign: 'center' } });
+
+            toolPane.createToolBox({ hoverEffect: true, classes: 'inline' })
+                .startGroupContainer()
+                    .addButton('pages/first',    { icon: 'arrow-first',    tooltip: gt('Show first page') })
+                    .addButton('pages/previous', { icon: 'arrow-previous', tooltip: gt('Show previous page') })
+                    .addLabel('pages/current',   {                         tooltip: gt('Current page and total page count') })
+                    .addButton('pages/next',     { icon: 'arrow-next',     tooltip: gt('Show next page') })
+                    .addButton('pages/last',     { icon: 'arrow-last',     tooltip: gt('Show last page') })
+                .endGroupContainer();
+
+            toolPane.createToolBox({ hoverEffect: true, css: { float: 'right', paddingRight: '26px' } })
+                .addButton('app/quit', { icon: 'icon-remove', tooltip: gt('Close document') });
+
+            // show alert banners above the overlay pane (floating buttons below alert banners)
+            self.showAlertsBeforePane('toolpane');
+        }
 
         // base constructor ---------------------------------------------------
 
@@ -37,20 +65,8 @@ define('io.ox/office/preview/view',
 
         // initialization -----------------------------------------------------
 
-        // the tool pane for tool boxes
-        toolPane = this.createPane('toolpane', 'top', { overlay: true, transparent: true, css: { textAlign: 'center' } });
-
-        toolPane.createToolBox({ hoverEffect: true, classes: 'inline' })
-            .startGroupContainer()
-                .addButton('pages/first',    { icon: 'arrow-first',    tooltip: gt('Show first page') })
-                .addButton('pages/previous', { icon: 'arrow-previous', tooltip: gt('Show previous page') })
-                .addLabel('pages/current',   {                         tooltip: gt('Current page and total page count') })
-                .addButton('pages/next',     { icon: 'arrow-next',     tooltip: gt('Show next page') })
-                .addButton('pages/last',     { icon: 'arrow-last',     tooltip: gt('Show last page') })
-            .endGroupContainer();
-
-        toolPane.createToolBox({ hoverEffect: true, css: { float: 'right', paddingRight: '26px' } })
-            .addButton('app/quit', { icon: 'icon-remove', tooltip: gt('Close document') });
+        // initialization after construction
+        app.on('docs:init', initHandler);
 
     } // class PreviewView
 

@@ -13,20 +13,28 @@
 
 define('io.ox/office/preview/model',
     ['io.ox/office/tk/utils',
-     'less!io.ox/office/preview/style.css'
-    ], function (Utils) {
+     'io.ox/office/tk/model'
+    ], function (Utils, Model) {
 
     'use strict';
 
     // class PreviewModel =====================================================
 
     /**
-     * The preview model.
+     * The model of the Preview application.
+     *
+     * @constructor
+     *
+     * @extends Model
      */
-    function PreviewModel() {
+    function PreviewModel(app) {
 
         var // the root node containing the previewed document
             node = $('<div>').addClass('page');
+
+        // base constructor ---------------------------------------------------
+
+        Model.call(this, app);
 
         // methods ------------------------------------------------------------
 
@@ -45,12 +53,11 @@ define('io.ox/office/preview/model',
             node[0].innerHTML = html;
         };
 
-        this.destroy = $.noop;
-
     } // class PreviewModel
 
     // exports ================================================================
 
-    return PreviewModel;
+    // derive this class from class Model
+    return Model.extend({ constructor: PreviewModel });
 
 });
