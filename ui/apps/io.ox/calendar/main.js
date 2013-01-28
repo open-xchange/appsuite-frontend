@@ -34,7 +34,7 @@ define("io.ox/calendar/main",
     // First mobile handling, just for the moment a workaround until we have
     // the backend calls for this
 
-    if (_.browser.iOS) {
+    if (_.browser.iOS || _.browser.android) {
         // force listview for iOS device
         lastPerspective = 'list';
     }

@@ -118,7 +118,9 @@
         /** MacOS **/
         MacOS: ua.indexOf('Macintosh') > -1,
         /** iOS **/
-        iOS: !!navigator.userAgent.match(/(iPad|iPhone|iPod)/i)
+        iOS: !!navigator.userAgent.match(/(iPad|iPhone|iPod)/i),
+        /** Android **/
+        android: !!navigator.userAgent.match(/Android/i)
     };
 
     // extend underscore utilities
