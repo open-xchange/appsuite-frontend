@@ -36,8 +36,6 @@ CACHE:
 @base@/apps/io.ox/mail/view-detail.js
 @base@/apps/io.ox/mail/view-grid-template.js
 @base@/apps/io.ox/mail/images/ping.mp3
-@base@/apps/io.ox/core.en_US.js
-@base@/apps/io.ox/core/date/date.en_US.json
 @base@/apps/io.ox/contacts/api.js
 @base@/apps/io.ox/mail/settings/defaults.js
 @base@/apps/io.ox/core/tk/upload.less
