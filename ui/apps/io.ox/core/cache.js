@@ -125,7 +125,6 @@ define('io.ox/core/cache',
             timestamp = timestamp !== undefined ? timestamp : _.now();
             // add/update?
             return index.get(key).pipe(function (getdata) {
-                var type = getdata === null ? 'add modify *' : 'update modify *';
                 if (getdata !== null) {
                     if (timestamp >= getdata.timestamp) {
                         return index.set(key, {
