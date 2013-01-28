@@ -40,6 +40,8 @@ define('io.ox/office/tk/view/component',
      * - 'cancel': When the focus needs to be returned to the application (e.g.
      *  when the Escape key is pressed, or when a click on a drop-down button
      *  closes the opened drop-down menu).
+     * - 'show': When the visibility of the component has been changed. The
+     *  event handler receives the visibility state as second parameter.
      *
      * @constructor
      *
@@ -83,6 +85,17 @@ define('io.ox/office/tk/view/component',
             visibleKey = Utils.getStringOption(options, 'visible');
 
         // private methods ----------------------------------------------------
+
+        /**
+         * Changes the visibility of this view component and triggers a 'show'
+         * event.
+         */
+        function showComponent(state) {
+            if (self.isVisible() !== state) {
+                node.toggleClass(HIDDEN_CLASS, !state);
+                self.trigger('show', state);
+            }
+        }
 
         /**
          * Inserts the passed control group into this view component, either by
@@ -199,7 +212,7 @@ define('io.ox/office/tk/view/component',
          *  A reference to this view component.
          */
         this.show = function () {
-            node.removeClass(HIDDEN_CLASS);
+            showComponent(true);
             return this;
         };
 
@@ -210,7 +223,7 @@ define('io.ox/office/tk/view/component',
          *  A reference to this view component.
          */
         this.hide = function () {
-            node.addClass(HIDDEN_CLASS);
+            showComponent(false);
             return this;
         };
 

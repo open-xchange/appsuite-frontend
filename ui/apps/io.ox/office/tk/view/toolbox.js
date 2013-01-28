@@ -25,6 +25,11 @@ define('io.ox/office/tk/view/toolbox',
      * Represents a view component with a fixed width and a vertically oriented
      * layout.
      *
+     * Instances of this class trigger all events of the base class Component,
+     * and the following additional events:
+     * - 'collapse': If this tool box has been collapsed or expanded. The event
+     * handler receives the collapsed state as second parameter.
+     *
      * @constructor
      *
      * @extends Component
@@ -47,25 +52,57 @@ define('io.ox/office/tk/view/toolbox',
             headingLabel = Utils.getStringOption(options, 'label'),
 
             // the heading button that collapses/expands the tool box
-            headingButton = _.isString(headingLabel) ? new Button({ design: 'heading', width: '100%', label: headingLabel, icon: 'caret-icon down' }) : null;
+            headingButton = _.isString(headingLabel) ? new Button({ design: 'heading', width: '100%', label: headingLabel, icon: 'caret-icon down' }) : null,
+
+            // whether this tool box has been collapsed manually
+            manuallyCollapsed = false;
 
         // private methods ----------------------------------------------------
 
+        function collapseToolBox(collapse) {
+            if (self.isCollapsed() !== collapse) {
+                self.getNode().toggleClass('collapsed', collapse);
+                headingButton.setIcon('caret-icon ' + (collapse ? 'right' : 'down'));
+                self.trigger('collapse', collapse);
+            }
+        }
+
         function headingActionHandler() {
-
-            var // the DOM node of this tool box
-                node = self.getNode(),
-                // whether to collapse or expand
-                collapse = !node.hasClass('collapsed');
-
-            node.toggleClass('collapsed', collapse);
-            headingButton.setIcon('caret-icon ' + (collapse ? 'right' : 'down'));
+            manuallyCollapsed = !self.isCollapsed();
+            collapseToolBox(manuallyCollapsed);
             self.trigger('cancel');
         }
 
         // base constructor ---------------------------------------------------
 
         Component.call(this, options);
+
+        // methods ------------------------------------------------------------
+
+        /**
+         * Returns whether this tool box is currently collapsed.
+         */
+        this.isCollapsed = function () {
+            return this.getNode().hasClass('collapsed');
+        };
+
+        /**
+         * Returns whether this tool box has been collapsed manually with the
+         * header button.
+         */
+        this.isManuallyCollapsed = function () {
+            return manuallyCollapsed;
+        };
+
+        this.collapse = function () {
+            manuallyCollapsed = false;
+            collapseToolBox(true);
+        };
+
+        this.expand = function () {
+            manuallyCollapsed = false;
+            collapseToolBox(false);
+        };
 
         // initialization -----------------------------------------------------
 
