@@ -334,6 +334,11 @@ define('io.ox/office/tk/view/view',
          *  @param {Boolean} [options.autoClose]
          *      If set to true, the alert banner will vanish automatically
          *      after five seconds.
+         *  @param {Number} [options.timeout]
+         *      Can be specified together with 'options.autoClose'. Specifies
+         *      the number of milliseconds until the alert banner will
+         *      vanish automatically. If not specified the default of five
+         *      seconds is used.
          *  @param {String} [options.buttonLabel]
          *      If specified, a push button will be shown with the passed
          *      caption label.
@@ -391,7 +396,8 @@ define('io.ox/office/tk/view/view',
 
             // initialize auto-close
             if (Utils.getBooleanOption(options, 'autoClose', false)) {
-                _.delay(closeAlert, 5000);
+                var timeout = Utils.getNumberOption(options, 'timeout', 5000);
+                _.delay(closeAlert, timeout);
             }
 
             // insert the push button into the alert banner
