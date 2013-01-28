@@ -14,7 +14,8 @@
 define('io.ox/office/tk/view/view',
         ['io.ox/office/tk/utils',
          'io.ox/office/tk/view/pane',
-         'gettext!io.ox/office/main'
+         'gettext!io.ox/office/main',
+         'less!io.ox/office/tk/view/style.css'
         ], function (Utils, Pane, gt) {
 
     'use strict';

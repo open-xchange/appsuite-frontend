@@ -11,7 +11,7 @@
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  */
 
-define('io.ox/office/tk/model',
+define('io.ox/office/tk/app/model',
      ['io.ox/core/event',
       'io.ox/office/tk/utils'
      ], function (Events, Utils) {

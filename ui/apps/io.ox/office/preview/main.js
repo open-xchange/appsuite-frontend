@@ -13,8 +13,8 @@
 
 define('io.ox/office/preview/main',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/officeapplication',
-     'io.ox/office/tk/applauncher',
+     'io.ox/office/tk/app/officeapplication',
+     'io.ox/office/tk/app/applauncher',
      'io.ox/office/preview/model',
      'io.ox/office/preview/view',
      'io.ox/office/preview/controller',

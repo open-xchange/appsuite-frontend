@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/officeapplication',
+define('io.ox/office/tk/app/officeapplication',
     ['io.ox/files/api',
      'io.ox/office/tk/utils',
      'io.ox/office/tk/io',

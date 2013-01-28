@@ -13,7 +13,7 @@
 
 define('io.ox/office/preview/model',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/model'
+     'io.ox/office/tk/app/model'
     ], function (Utils, Model) {
 
     'use strict';

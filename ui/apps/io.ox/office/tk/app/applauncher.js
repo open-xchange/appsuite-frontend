@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/applauncher', ['io.ox/office/tk/utils'], function (Utils) {
+define('io.ox/office/tk/app/applauncher', ['io.ox/office/tk/utils'], function (Utils) {
 
     'use strict';
 
