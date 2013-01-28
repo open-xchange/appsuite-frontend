@@ -7,7 +7,6 @@ CACHE:
 @base@/boot.js
 @base@/pre-core.js
 @base@/blank.html
-@base@/src/serverconfig.js
 @base@/src/offline.js
 # bootstrap
 @base@/apps/io.ox/core/bootstrap/basics.js
@@ -28,9 +27,7 @@ CACHE:
 @base@/apps/themes/default/logo-small.png
 # core
 @base@/apps/io.ox/core/main.js
-@base@/apps/io.ox/static/core.js
 # mail
-@base@/apps/io.ox/static/mail.js
 @base@/apps/io.ox/mail/actions.js
 @base@/apps/io.ox/mail/api.js
 @base@/apps/io.ox/mail/main.js
