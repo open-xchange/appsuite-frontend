@@ -178,7 +178,7 @@ define('io.ox/core/api/folder',
                     .pipe(function (data, timestamp) {
                         // rearrange on multiple ???
                         if (data.timestamp) {
-                            timestamp = data.timestamp;
+                            timestamp = _.now(); // force update
                             data = data.data;
                         }
                         return $.when(
@@ -433,17 +433,21 @@ define('io.ox/core/api/folder',
 
         sync: function () {
             // action=update doesn't inform us about new unread mails, so we need another approach
+
+            // renew subfoldercache
             // get all folders from subfolder cache
             return subFolderCache.keys().pipe(function (keys) {
-                // we can use http.pause() here to create a multiple once backend stops crashing on multiples
+                subFolderCache.clear();
                 http.pause();
                 _(keys).map(function (id) {
                     return api.getSubFolders({ folder: id, cache: false });
                 });
-                return http.resume().done(function (list) {
-                    _(list).each(function (folderList) {
+                return http.resume().done(function (data) {
+                    _(data).each(function (folderList) {
                         _(folderList.data).each(function (folder) {
-                            api.trigger('update:unread', folder.id, folder);
+                            if (folder.unread !== null) {
+                                api.trigger('update:unread', folder.id, folder);
+                            }
                         });
                     });
                 });
