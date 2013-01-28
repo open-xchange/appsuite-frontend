@@ -176,13 +176,18 @@ define('io.ox/core/api/folder',
                         appendColumns: true
                     })
                     .pipe(function (data, timestamp) {
+                        // rearrange on multiple ???
+                        if (data.timestamp) {
+                            timestamp = data.timestamp;
+                            data = data.data;
+                        }
                         return $.when(
                             // add to cache
                             cache.add(opt.folder, data, timestamp),
                             // also add to folder cache
                             $.when.apply($,
                                 _(data).map(function (folder) {
-                                    return folderCache.add(folder.id, folder);
+                                    return folderCache.add(folder.id, folder, timestamp);
                                 })
                             )
                         )
@@ -287,7 +292,7 @@ define('io.ox/core/api/folder',
                                 },
                                 addToCache = function (obj) {
                                     // add to folder cache
-                                    folderCache.add(obj, timestamp);
+                                    folderCache.add(obj.id, obj, timestamp);
                                     return obj;
                                 },
                                 sorter = function (a, b) {
@@ -431,13 +436,17 @@ define('io.ox/core/api/folder',
             // get all folders from subfolder cache
             return subFolderCache.keys().pipe(function (keys) {
                 // we can use http.pause() here to create a multiple once backend stops crashing on multiples
-                return $.when.apply($, _(keys).map(function (id) {
-                    return api.getSubFolders({ folder: id, cache: false }).done(function (list) {
-                        _(list).each(function (folder) {
+                http.pause();
+                _(keys).map(function (id) {
+                    return api.getSubFolders({ folder: id, cache: false });
+                });
+                return http.resume().done(function (list) {
+                    _(list).each(function (folderList) {
+                        _(folderList.data).each(function (folder) {
                             api.trigger('update:unread', folder.id, folder);
                         });
                     });
-                }));
+                });
             });
         },
 
