@@ -485,7 +485,13 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                                 // data/error
                                 if (response[i].data !== undefined) {
                                     // data
-                                    tmp = sanitize(response[i].data, o.data[i].columnModule, o.data[i].columns);
+                                    var module = o.data[i].columnModule ? o.data[i].columnModule : o.data[i].module;
+                                    // handling for GET requests
+                                    if (typeof o.data === "string") {
+                                        o.data = JSON.parse(o.data);
+                                        module = o.data[i].module;
+                                    }
+                                    tmp = sanitize(response[i].data, module, o.data[i].columns);
                                     data.push({ data: tmp, timestamp: timestamp });
                                     // handle warnings within multiple
                                     if (response[i].error !== undefined) {
