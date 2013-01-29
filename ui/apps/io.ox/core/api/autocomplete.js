@@ -60,7 +60,7 @@ define('io.ox/core/api/autocomplete',
                         switch (type) {
                         case 'user':
                         case 'contact':
-                            retData = self.processContactResults(type, retData.concat(self.processContacts(type, data[index])), query);
+                            retData = self.processContactResults(type, retData.concat(self.processItem(type, data[index])), query);
                             break;
                         case 'resource':
                         case 'group':
@@ -72,17 +72,6 @@ define('io.ox/core/api/autocomplete',
                     return (self.cache[query] = retData);
                 });
             }
-        },
-        processContacts: function (type, data) {
-            var result = _(data.data).map(function (dataItem) {
-                var myobj = {
-                    data: dataItem,
-                    type: type
-                };
-                return myobj;
-            });
-
-            return result;
         },
         processItem: function (type, data) {
             var result = _(data.data).map(function (dataItem) {
