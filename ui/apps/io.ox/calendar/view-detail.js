@@ -340,7 +340,7 @@ define("io.ox/calendar/view-detail",
             )
             .append(
                 $("<span>")
-                    .addClass("detail")
+                    .addClass("detail shown-as")
                     .append($.txt(gt.noI18n(" ")), $.txt(gt.noI18n(util.getShownAs(data))))
             )
             .append($("<br>"));
@@ -358,7 +358,7 @@ define("io.ox/calendar/view-detail",
                         .addClass("detail-label")
                         .append($.txt(gt("Folder")), $.txt(gt.noI18n(":\u00A0"))),
                     $("<span>")
-                        .addClass("detail")
+                        .addClass("detail folder")
                         .text(gt.noI18n(folderAPI.getTextNode(data.folder_id).data)),
                     $("<br>")
                 );
@@ -379,7 +379,7 @@ define("io.ox/calendar/view-detail",
                 )
                 .append(
                     $("<span>")
-                        .addClass("detail")
+                        .addClass("detail created")
                         .append($("<span>").text(gt.noI18n(data.creation_date ? util.getDate(data.creation_date) : '')))
                         .append($("<span>").text(gt.noI18n(" \u2013 ")))
                         .append($("<span>").append(data.created_by ? userAPI.getTextNode(data.created_by) : ''))
@@ -402,7 +402,7 @@ define("io.ox/calendar/view-detail",
                 )
                 .append(
                     $("<span>")
-                        .addClass("detail")
+                        .addClass("detail modified")
                         .append($("<span>").text(gt.noI18n(data.last_modified ? util.getDate(data.last_modified) : '')))
                         .append($("<span>").text(gt.noI18n(" \u2013 ")))
                         .append($("<span>").append(data.modified_by ? userAPI.getTextNode(data.modified_by) : ''))
