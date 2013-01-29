@@ -100,11 +100,25 @@ define('io.ox/office/tk/app/officeapplication',
             view = null,
 
             // the controller instance as single connection point between model and view
-            controller = null;
+            controller = null,
+
+            // browser timeouts for delayed callbacks, mapped by initial setTimeout() call
+            delayTimeouts = {},
+
+            // browser timeouts for debounced methods, mapped by their indexes
+            debounceTimeouts = {},
+
+            // counter for unique indexes of all debounced methods
+            debounceCount = 0;
 
         // private methods ----------------------------------------------------
 
-        function callDeferredHandlers(handlers) {
+        /**
+         * Calls all handler functions contained in the passed array, and
+         * returns a Deferred object that accumulates the result of all
+         * handlers.
+         */
+        function callHandlers(handlers) {
 
             var // execute all handlers and store their results in an array
                 results = _(handlers).map(function (handler) { return handler.call(self); });
@@ -437,7 +451,154 @@ define('io.ox/office/tk/app/officeapplication',
                 });
         };
 
+        /**
+         * Creates a debounced method that can be called multiple times during
+         * the current script execution. Execution is separated into a part
+         * that runs directly every time the method is called (the 'direct
+         * callback'), and a part that runs once after the current script
+         * execution ends (the 'deferred callback').
+         *
+         * @param {Function} directCallback
+         *  A function that will be called every time the debounced method
+         *  has been called. Receives all parameters that have been passed to
+         *  the debounced method.
+         *
+         * @param {Function} deferredCallback
+         *  A function that will be called once after calling the debounced
+         *  method at least once during the execution of the current script.
+         *  Does not receive any parameters. As long as this function returns
+         *  true, it will be called again after the passed repeatition delay
+         *  time.
+         *
+         * @param {Number} [initialDelay=0]
+         *  The time (in milliseconds) the first execution of the deferred
+         *  callback function will be delayed.
+         *
+         * @param {Number} [repeatedDelay=initialDelay]
+         *  The time (in milliseconds) after the execution of the deferred
+         *  callback function will be repeated. If omitted, the passed initial
+         *  delay time will be used.
+         *
+         * @returns {Function}
+         *  The deferred method that can be called multiple times, and that
+         *  executes the deferred callback once after execution of the current
+         *  script ends. Passes all arguments to the direct callback, and
+         *  returns the result of the direct callback function.
+         */
+        this.createDebouncedMethod = function (directCallback, deferredCallback, initialDelay, repeatedDelay) {
+
+            var // unique index of this deferred method
+                index = debounceCount++;
+
+            // creates a timeout calling the deferred callback, if not already done
+            function createTimeout(delay) {
+
+                // do not create multiple timeouts
+                if (index in debounceTimeouts) { return; }
+
+                // create a new timeout that calls the deferred callback
+                debounceTimeouts[index] = window.setTimeout(function () {
+                    // first delete the timeout from the map
+                    // (allow to call ourselves from deferred callback)
+                    delete debounceTimeouts[index];
+                    // call deferred callback, recall it if it returns true
+                    if (deferredCallback.call(self) === true) {
+                        createTimeout(repeatedDelay);
+                    }
+                }, delay);
+            }
+
+            initialDelay = _.isNumber(initialDelay) ? initialDelay : 0;
+            repeatedDelay = _.isNumber(repeatedDelay) ? repeatedDelay : initialDelay;
+
+            // create and return the deferred method
+            return function () {
+                // create a timeout calling the deferred callback
+                createTimeout(initialDelay);
+                // call the direct callback with the passed arguments
+                return directCallback.apply(self, _.toArray(arguments));
+            };
+        };
+
         // application runtime ------------------------------------------------
+
+        /**
+         * Executes the passed callback function once or repeatedly in a
+         * browser timeout. If the application will be closed before the
+         * callback function has been started, or while the callback function
+         * will be repeated, it will not be executed anymore.
+         *
+         * @param {Function} callback
+         *  The callback function that will be executed in a browser timeout
+         *  after the specified initial delay time. As long as this function
+         *  returns true, it will be called again after the specified
+         *  repetition delay time.
+         *
+         * @param {Number} [initialDelay=0]
+         *  The time (in milliseconds) the first execution of the passed
+         *  callback function will be delayed.
+         *
+         * @param {Number} [repeatedDelay=initialDelay]
+         *  The time (in milliseconds) after the execution of the passed
+         *  callback function will be repeated. If omitted, the passed initial
+         *  delay time will be used.
+         *
+         * @returns {Number}
+         *  A unique identifier that can be used to identify the pending
+         *  callback function.
+         */
+        this.executeDelayed = function (callback, initialDelay, repeatedDelay) {
+
+            var // the unique timeout identifier (initial browser timeout handle)
+                id = null,
+                // the delay time for the next execution of the callback
+                delay = _.isNumber(initialDelay) ? initialDelay : 0;
+
+            // executes the callback, repeats execution if required
+            function executeCallback() {
+                delete delayTimeouts[id];
+                // call deferred callback, recall it if it returns true
+                if (callback() === true) {
+                    delayTimeouts[id] = window.setTimeout(executeCallback, delay);
+                }
+            }
+
+            // create initial timeout
+            id = window.setTimeout(executeCallback, delay);
+            delayTimeouts[id] = id;
+
+            // switch to repetition delay time
+            if (_.isNumber(repeatedDelay)) {
+                delay = repeatedDelay;
+            }
+
+            return id;
+        };
+
+        /**
+         * Cancels the execution of the specified deferred method. If the
+         * deferred callback function has been executed already and is not
+         * executed repeatedly, this method has no effect.
+         *
+         * @param {Number} id
+         *  The unique identifier of the deferred callback, as returned from
+         *  the method OfficeApplication.executeDelayed().
+         *
+         * @returns {Boolean}
+         *  Whether the specified callback was still waiting for its execution
+         *  and has been cancelled.
+         */
+        this.cancelDelayed = function (id) {
+
+            var // whether the timeout is still waiting for execution
+                pending = id in delayTimeouts;
+
+            if (pending) {
+                window.clearTimeout(delayTimeouts[id]);
+                delete delayTimeouts[id];
+            }
+            return pending;
+        };
 
         /**
          * Renames the current file and updates the GUI accordingly.
@@ -505,27 +666,37 @@ define('io.ox/office/tk/app/officeapplication',
 
             // kill the application if no file descriptor is present
             win.on('open', function () {
-                if (!self.hasFileDescriptor()) {
+                if (!file) {
                     _.defer(function () { self.quit(); });
                 }
             });
 
             // call all registered launch handlers, return the accumulated Deferred object
-            return callDeferredHandlers(launchHandlers).promise();
+            return callHandlers(launchHandlers).promise();
         });
 
         // call all registered quit handlers
         this.setQuit(function () {
 
-            return callDeferredHandlers(quitHandlers)
+            return callHandlers(quitHandlers)
                 .done(function () {
+
+                    // cancel all running timeouts
+                    _(delayTimeouts).each(function (timeout) {
+                        window.clearTimeout(timeout);
+                    });
+                    _(debounceTimeouts).each(function (timeout) {
+                        window.clearTimeout(timeout);
+                    });
+
                     // base application does not trigger 'quit' events
                     self.trigger('docs:quit');
+
                     // destroy class members
                     controller.destroy();
                     view.destroy();
                     model.destroy();
-                    model = view = controller = null;
+                    model = view = controller = delayTimeouts = debounceTimeouts = null;
                 })
                 .fail(function () {
                     self.trigger('docs:resume');

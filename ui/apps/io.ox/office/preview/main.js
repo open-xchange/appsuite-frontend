@@ -47,6 +47,10 @@ define('io.ox/office/preview/main',
             // current page index (one-based!)
             page = 0;
 
+        // base constructor ---------------------------------------------------
+
+        OfficeApplication.call(this, PreviewModel, PreviewView, PreviewController, launchOptions);
+
         // private methods ----------------------------------------------------
 
         function showPage(newPage) {
@@ -193,10 +197,6 @@ define('io.ox/office/preview/main',
             // load the file
             return loadAndShow();
         }
-
-        // base constructor ---------------------------------------------------
-
-        OfficeApplication.call(this, PreviewModel, PreviewView, PreviewController, launchOptions);
 
         // methods ------------------------------------------------------------
 

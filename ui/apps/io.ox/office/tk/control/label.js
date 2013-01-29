@@ -45,6 +45,10 @@ define('io.ox/office/tk/control/label',
             // the update handler
             updateHandler = Utils.getFunctionOption(options, 'updateHandler');
 
+        // base constructor ---------------------------------------------------
+
+        Group.call(this, options);
+
         // private methods ----------------------------------------------------
 
         /**
@@ -59,10 +63,6 @@ define('io.ox/office/tk/control/label',
             var labelOptions = Utils.extendOptions(options, { label: (_.isUndefined(value) || _.isNull(value)) ? undefined : value });
             Utils.setControlCaption(label, labelOptions);
         }
-
-        // base constructor ---------------------------------------------------
-
-        Group.call(this, options);
 
         // methods ------------------------------------------------------------
 

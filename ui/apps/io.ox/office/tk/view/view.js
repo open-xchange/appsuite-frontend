@@ -59,11 +59,14 @@ define('io.ox/office/tk/view/view',
             // inner shadows for application pane
             shadowNodes = {},
 
+            // identifier of the view pane following an alert banner
+            alertsBeforePaneId = null,
+
             // alert banner currently shown
             currentAlert = null,
 
-            // identifier of the view pane following an alert banner
-            alertsBeforePaneId = null;
+            // timeout for current alert auto-close
+            currentAlertTimeout = null;
 
         // private methods ----------------------------------------------------
 
@@ -359,9 +362,7 @@ define('io.ox/office/tk/view/view',
                 toggleOverlay(true);
                 alert.slideUp('fast', function () {
                     alert.remove();
-                    if (alert.is(currentAlert)) {
-                        currentAlert = null;
-                    }
+                    currentAlert = null;
                 });
             }
 
@@ -371,6 +372,8 @@ define('io.ox/office/tk/view/view',
             }
 
             // remove alert banner currently shown, update reference to current alert
+            app.cancelDelayed(currentAlertTimeout);
+            currentAlertTimeout = null;
             if (currentAlert) { currentAlert.remove(); }
             currentAlert = alert;
 
@@ -379,7 +382,9 @@ define('io.ox/office/tk/view/view',
                 // alert can be closed by clicking anywhere in the banner
                 alert.click(closeAlert);
                 // initialize auto-close
-                if (timeout > 0) { _.delay(closeAlert, timeout); }
+                if (timeout > 0) {
+                    currentAlertTimeout = app.executeDelayed(closeAlert, timeout);
+                }
             } else {
                 // remove closer button
                 alert.find('a.close').remove();

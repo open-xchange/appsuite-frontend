@@ -57,6 +57,10 @@ define('io.ox/office/tk/view/toolbox',
             // whether this tool box has been collapsed manually
             manuallyCollapsed = false;
 
+        // base constructor ---------------------------------------------------
+
+        Component.call(this, options);
+
         // private methods ----------------------------------------------------
 
         function collapseToolBox(collapse) {
@@ -72,10 +76,6 @@ define('io.ox/office/tk/view/toolbox',
             collapseToolBox(manuallyCollapsed);
             self.trigger('cancel');
         }
-
-        // base constructor ---------------------------------------------------
-
-        Component.call(this, options);
 
         // methods ------------------------------------------------------------
 

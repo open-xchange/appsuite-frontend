@@ -47,6 +47,10 @@ define('io.ox/office/tk/control/radiogroup',
             // fall-back value for toggle click
             toggleValue = Utils.getOption(options, 'toggleValue');
 
+        // base constructor ---------------------------------------------------
+
+        Group.call(this, options);
+
         // private methods ----------------------------------------------------
 
         /**
@@ -75,10 +79,6 @@ define('io.ox/office/tk/control/radiogroup',
             var toggleClick = Utils.isButtonSelected(button) && !_.isNull(toggleValue) && !_.isUndefined(toggleValue);
             return toggleClick ? toggleValue : Utils.getControlValue(button);
         }
-
-        // base constructor ---------------------------------------------------
-
-        Group.call(this, options);
 
         // methods ------------------------------------------------------------
 

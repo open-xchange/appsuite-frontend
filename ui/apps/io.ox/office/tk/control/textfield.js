@@ -72,6 +72,10 @@ define('io.ox/office/tk/control/textfield',
             // initial value of text field when focused, needed for ESCAPE key handling
             initialText = null;
 
+        // base constructor ---------------------------------------------------
+
+        Group.call(this, Utils.extendOptions({ design: 'white' }, options));
+
         // private methods ----------------------------------------------------
 
         /**
@@ -197,10 +201,6 @@ define('io.ox/office/tk/control/textfield',
                 validationFieldState = getFieldState();
             }
         }
-
-        // base constructor ---------------------------------------------------
-
-        Group.call(this, Utils.extendOptions({ design: 'white' }, options));
 
         // methods ------------------------------------------------------------
 

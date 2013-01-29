@@ -21,9 +21,14 @@ define('io.ox/office/preview/controller',
     // class PreviewController ================================================
 
     /**
+     * The controller of the OX Preview application.
+     *
      * @constructor
      *
      * @extends Controller
+     *
+     * @param {PreviewApplication} app
+     *  The OX Preview application that has created this controller instance.
      */
     function PreviewController(app) {
 
@@ -50,7 +55,7 @@ define('io.ox/office/preview/controller',
                 'pages/current': {
                     enable: function () { return app.getPageCount() > 0; },
                     get: function () {
-                        // the gettext comments MUST be located directly before gt(), but
+                        // the gettext comments must be located directly before gt(), but
                         // 'return' cannot be the last token in a line
                         // -> use a temporary variable to store the result
                         var label =
@@ -65,7 +70,12 @@ define('io.ox/office/preview/controller',
 
         // base constructor ---------------------------------------------------
 
-        Controller.call(this, app, items);
+        Controller.call(this, app);
+
+        // initialization -----------------------------------------------------
+
+        // register item definitions
+        this.registerDefinitions(items);
 
     } // class PreviewController
 
