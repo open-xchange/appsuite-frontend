@@ -291,8 +291,13 @@ define('io.ox/mail/write/main',
                 accountID = data.account_id || mailAPI.getAccountIDFromFolder(folder_id);
 
             return accountAPI.get(accountID).pipe(function (data) {
+                var primary_address = null;
+                // TODO: don’t handle default user separately
+                if (accountID === "0") {
+                    primary_address = settings.get('defaultSendAddress');
+                }
                 return {'displayname'    : data.personal,
-                        'primaryaddress' : data.primary_address};
+                        'primaryaddress' : primary_address || data.primary_address};
             });
         };
 

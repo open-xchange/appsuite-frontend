@@ -251,24 +251,24 @@ define("io.ox/mail/write/view-main",
         },
 
         createSenderField: function () {
-            var node = $('<div>').addClass('fromselect-wrapper')
-                    .append($('<select>').css('width', '100%'));
+            var node = $('<div>').addClass('fromselect-wrapper'),
+                select = $('<select>').css('width', '100%');
             accountAPI.all().done(function (array) {
-                var select = node.find('select');
                 _.each(array, function (obj, index) {
-                    var option = $('<option>').text(_.noI18n(util.formatSender(obj.personal, obj.primary_address)));
+                    accountAPI.getSenderAddresses(obj.id).done(function (aliases) {
+                        _.each(aliases[1], function (alias) {
+                            var option = $('<option>').text(_.noI18n(util.formatSender(aliases[0], alias)));
 
-                    option.data({
-                        primaryaddress: obj.primary_address,
-                        displayname: obj.personal
+                            option.data({
+                                primaryaddress: alias,
+                                displayname: aliases[0]
+                            });
+                            select.append(option);
+                        });
                     });
-                    if (index === 0) {
-                        option.attr('selected', 'selected');
-                    }
-                    select.append(option);
                 });
             });
-            return node;
+            return node.append(select);
         },
 
         createRecipientList: function (id) {
