@@ -269,15 +269,16 @@ $(document).ready(function () {
         changeLanguage(e.data.id);
         // the user forced a language
         ox.forcedLanguage = e.data.id;
-    }
+    };
 
     var getBrowserLanguage = function () {
         var language = (navigator.language || navigator.userLanguage).substr(0, 2),
-            languages = ox.serverConfig.languages || {};
+            languages = ox.serverConfig.languages || {};
         return _.chain(languages).keys().find(function (id) {
                 return id.substr(0, 2) === language;
             }).value();
     };
+
     /**
      * Set default language
      */
