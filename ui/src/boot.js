@@ -438,7 +438,7 @@ $(document).ready(function () {
         $("#background_loader").idle().fadeOut(DURATION, function () {
             $("#io-ox-login-container").empty().append(
                 $("<h1>").text("There was a problem connecting to the site."),
-                $("<h1>").append($('<a href="#">').text("Click here to try again"))
+                $("<h1>").append($('<a href="#">').text("Click here to try again").on('click', function () { location.reload(); }))
             );
         });
     }
