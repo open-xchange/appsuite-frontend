@@ -435,12 +435,19 @@ $(document).ready(function () {
     }
 
     function serverDown() {
-        $("#background_loader").idle().fadeOut(DURATION, function () {
-            $("#io-ox-login-container").empty().append(
-                $("<h1>").text("There was a problem connecting to the site."),
-                $("<h1>").append($('<a href="#">').text("Click here to try again").on('click', function () { location.reload(); }))
+        var localCSS = {
+            paddingTop: '40px',
+            margin: '0',
+            textAlign: 'center'
+        };
+        
+        $("#io-ox-login-container")
+            .empty()
+            .append(
+                $("<h2>").css(localCSS).text("There was a problem connecting to the site."),
+                $("<h3>").css(localCSS).append($('<a href="#">').text("Click here to try again").on('click', function () { location.reload(); }))
             );
-        });
+        $("#background_loader").idle().fadeOut(DURATION);
     }
 
     /**
