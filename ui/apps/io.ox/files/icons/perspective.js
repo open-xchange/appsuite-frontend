@@ -27,7 +27,7 @@ define('io.ox/files/icons/perspective',
 
     'use strict';
 
-    ext.point('io.ox/mail/icons/options').extend({
+    ext.point('io.ox/files/icons/options').extend({
         thumbnailWidth: 128,
         thumbnailHeight: 90,
         fileIconWidth: 158,
@@ -191,7 +191,7 @@ define('io.ox/files/icons/perspective',
     return _.extend(new ox.ui.Perspective('icons'), {
 
         draw: function (app) {
-            var options = ext.point('io.ox/mail/icons/options').options();
+            var options = ext.point('io.ox/files/icons/options').options();
             var win = app.getWindow(),
                 iconview = $('<div class="files-scrollable-pane">'),
                 iconContainer,
