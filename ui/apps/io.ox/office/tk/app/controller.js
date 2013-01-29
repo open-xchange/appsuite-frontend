@@ -427,7 +427,7 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
         };
 
         /**
-         * Updates the values of the specified items, and updates all
+         * Receives the current values of the specified items, and updates all
          * registered view components.
          *
          * @param {String|RegExp|Null} [keys]

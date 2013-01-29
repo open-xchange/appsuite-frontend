@@ -27,8 +27,9 @@ define('io.ox/office/tk/view/toolbox',
      *
      * Instances of this class trigger all events of the base class Component,
      * and the following additional events:
-     * - 'collapse': If this tool box has been collapsed or expanded. The event
-     * handler receives the collapsed state as second parameter.
+     * - 'expand': If this tool box has been collapsed or expanded. The event
+     *  handler receives the current state (true if expanded, or false if
+     *  collapsed) as second parameter.
      *
      * @constructor
      *
@@ -63,17 +64,17 @@ define('io.ox/office/tk/view/toolbox',
 
         // private methods ----------------------------------------------------
 
-        function collapseToolBox(collapse) {
-            if (self.isCollapsed() !== collapse) {
-                self.getNode().toggleClass('collapsed', collapse);
-                headingButton.setIcon('caret-icon ' + (collapse ? 'right' : 'down'));
-                self.trigger('collapse', collapse);
+        function expandToolBox(expand) {
+            if (self.isCollapsed() === expand) {
+                self.getNode().toggleClass('collapsed', !expand);
+                headingButton.setIcon('caret-icon ' + (expand ? 'down' : 'right'));
+                self.trigger('expand', expand);
             }
         }
 
         function headingActionHandler() {
             manuallyCollapsed = !self.isCollapsed();
-            collapseToolBox(manuallyCollapsed);
+            expandToolBox(!manuallyCollapsed);
             self.trigger('cancel');
         }
 
@@ -96,12 +97,12 @@ define('io.ox/office/tk/view/toolbox',
 
         this.collapse = function () {
             manuallyCollapsed = false;
-            collapseToolBox(true);
+            expandToolBox(false);
         };
 
         this.expand = function () {
             manuallyCollapsed = false;
-            collapseToolBox(false);
+            expandToolBox(true);
         };
 
         // initialization -----------------------------------------------------

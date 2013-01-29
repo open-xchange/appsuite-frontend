@@ -135,6 +135,39 @@ define('io.ox/office/tk/view/view',
         /**
          * Adds the passed view pane instance into this view.
          *
+         * @param {Pane} pane
+         *  The view pane instance to be inserted into this view.
+         *
+         * @param {String} position
+         *  The border of the application window to attach the view pane to.
+         *  Supported values are 'top', 'bottom', 'left', and 'right'.
+         *
+         * @param {Object} [options]
+         *  A map of options to control the appearance of the view pane. The
+         *  following options are supported:
+         *  @param {Boolean} [options.overlay=false]
+         *      If set to true, the pane will float over the other panes and
+         *      application contents instead of reserving and consuming the
+         *      space needed for its size.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
+        this.addPane = function (pane, position, options) {
+
+            // insert the pane
+            panesById[pane.getIdentifier()] = pane;
+            panes.push(pane);
+            app.getWindowNode().append(pane.getNode());
+
+            // overlay mode and position
+            pane.getNode().toggleClass(OVERLAY_CLASS, Utils.getBooleanOption(options, 'overlay', false));
+            return this.setPanePosition(pane.getIdentifier(), position);
+        };
+
+        /**
+         * Creates a new view pane instance in this view.
+         *
          * @param {String} id
          *  The unique identifier of the new view pane.
          *
@@ -144,30 +177,15 @@ define('io.ox/office/tk/view/view',
          *
          * @param {Object} [options]
          *  A map of options to control the properties of the new view pane.
-         *  Supports all options supported by the Pane class constructor.
-         *  Additionally, the following options are supported:
-         *  @param {Boolean} [options.overlay=false]
-         *      If set to true, the pane will float over the other panes and
-         *      application contents instead of reserving and consuming the
-         *      space needed for its size.
+         *  Supports all options supported by the Pane class constructor, and
+         *  the method View.addPane().
          *
          * @returns {Pane}
          *  The new view pane.
          */
         this.createPane = function (id, position, options) {
-
-            var // create the new view pane
-                pane = panesById[id] = new Pane(app, id, options);
-
-            panes.push(pane);
-            app.getWindowNode().append(pane.getNode());
-            this.setPanePosition(id, position);
-
-            // hover mode
-            if (Utils.getBooleanOption(options, 'overlay', false)) {
-                pane.getNode().addClass(OVERLAY_CLASS);
-            }
-
+            var pane = new Pane(app, id, options);
+            this.addPane(pane, position, options);
             return pane;
         };
 

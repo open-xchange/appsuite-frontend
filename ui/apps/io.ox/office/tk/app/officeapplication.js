@@ -480,7 +480,7 @@ define('io.ox/office/tk/app/officeapplication',
          *  delay time will be used.
          *
          * @returns {Function}
-         *  The deferred method that can be called multiple times, and that
+         *  The debounced method that can be called multiple times, and that
          *  executes the deferred callback once after execution of the current
          *  script ends. Passes all arguments to the direct callback, and
          *  returns the result of the direct callback function.
