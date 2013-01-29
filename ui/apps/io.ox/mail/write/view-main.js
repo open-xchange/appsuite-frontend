@@ -695,7 +695,7 @@ define("io.ox/mail/write/view-main",
     }
 
     function createStringOfRecipients(distlistarray) {
-        var string;
+        var string = '';
         _.each(distlistarray, function (val) {
             if (string === '') {
                 string = '"' + val.display_name + '"' + '<' + val.mail + '>';
