@@ -316,6 +316,11 @@ define('io.ox/contacts/api',
             } else {
                 return api.getByEmailadress(address)
                 .pipe(function (data) {
+                    //TODO: use smarter server request instead
+                    data = data.filter(function (item) {
+                        return !item.mark_as_distributionlist;
+                    });
+
                     if (data.length) {
                         // favor contacts with an image
                         data.sort(function (a, b) {
@@ -337,7 +342,7 @@ define('io.ox/contacts/api',
                             display_name: data[0].display_name
                         });
                     } else {
-                        // no picture found
+                        // no data found
                         return cacheByMail.add(address, {});
                     }
                 });
@@ -363,17 +368,17 @@ define('io.ox/contacts/api',
                     'or',
                     [
                         '=',
-                        {"field": "email1"},
+                        {'field': 'email1'},
                         address
                     ],
                     [
                         '=',
-                        {"field": "email2"},
+                        {'field': 'email2'},
                         address
                     ],
                     [
                         '=',
-                        {"field": "email3"},
+                        {'field': 'email3'},
                         address
                     ]
                 ]
@@ -486,7 +491,6 @@ define('io.ox/contacts/api',
     */
 
     api.getDisplayName = function (data) {
-        //TODO: com
         var set, clear, cont,
             node = $('<a href="#" class="halo-link">'),
             email = data.email || data.mail;
