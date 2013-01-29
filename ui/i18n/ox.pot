@@ -62,6 +62,188 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
+#: apps/io.ox/mail/view-detail.js:249
+msgid "This mail has no content"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:330 apps/io.ox/mail/view-detail.js:341
+msgid "Document"
+msgstr ""
+
+#: apps/io.ox/calendar/view-detail.js:359 apps/io.ox/contacts/view-detail.js:359
+#: apps/io.ox/mail/view-detail.js:335 apps/io.ox/mail/view-detail.js:346
+msgid "Folder"
+msgstr ""
+
+#: apps/io.ox/backbone/forms.js:619 apps/io.ox/mail/view-detail.js:399
+msgid "Show more"
+msgstr ""
+
+#: apps/io.ox/core/settings/pane.js:145 apps/io.ox/core/tk/attachments.js:233
+#: apps/io.ox/mail/view-detail.js:723
+msgid "None"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:724 apps/io.ox/portal/settings/pane.js:104
+msgid "Red"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:725 apps/io.ox/portal/settings/pane.js:109
+msgid "Blue"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:726 apps/io.ox/portal/settings/pane.js:107
+msgid "Green"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:727
+msgid "Grey"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:728 apps/io.ox/portal/settings/pane.js:110
+msgid "Purple"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:729 apps/io.ox/portal/settings/pane.js:106
+msgid "Light green"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:730 apps/io.ox/portal/settings/pane.js:105
+msgid "Orange"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:731 apps/io.ox/portal/settings/pane.js:111
+msgid "Pink"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:732 apps/io.ox/portal/settings/pane.js:108
+msgid "Light blue"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:733
+msgid "Yellow"
+msgstr ""
+
+#: apps/io.ox/mail/main.js:486 apps/io.ox/mail/view-detail.js:815
+#: apps/io.ox/mail/write/view-main.js:340
+msgid "To"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:822
+msgctxt "CC"
+msgid "Copy"
+msgid_plural "Copy"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/mail/view-detail.js:829
+msgid "All recipients"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:894
+msgctxt "plural"
+msgid "Attachment"
+msgid_plural "Attachments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/mail/view-detail.js:919
+msgid "more"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:925
+msgid "All attachments"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:941
+msgid "Entire thread"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:961
+msgid "Warning: This message might be a phishing or scam mail"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:982
+msgid "Show images"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:985
+msgid "External images have been blocked to protect you against potential spam!"
+msgstr ""
+
+#: apps/io.ox/calendar/week/view.js:430
+msgid "Doubleclick here for whole day appointment"
+msgstr ""
+
+#: apps/io.ox/calendar/list/perspective.js:132
+#: apps/io.ox/calendar/month/perspective.js:304
+#: apps/io.ox/calendar/week/view.js:468
+msgid "show all"
+msgstr ""
+
+#: apps/io.ox/calendar/month/perspective.js:330 apps/io.ox/calendar/util.js:176
+#: apps/io.ox/calendar/week/view.js:484
+#: apps/plugins/portal/birthdays/register.js:91
+msgid "Today"
+msgstr ""
+
+#: apps/io.ox/calendar/month/view.js:121
+msgid "CW"
+msgstr ""
+
+#: apps/io.ox/core/api/folder.js:380
+msgid "New Folder"
+msgstr ""
+
+#: apps/io.ox/office/tk/view/view.js:480
+msgid "Load Error"
+msgstr ""
+
+#: apps/io.ox/office/tk/view/view.js:480
+msgid "An error occurred while loading the document."
+msgstr ""
+
+#: apps/io.ox/office/tk/app/officeapplication.js:253
+msgid "Unnamed"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:48
+msgid "Show first page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:49
+msgid "Show previous page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:50
+msgid "Current page and total page count"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:51
+msgid "Show next page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:52
+msgid "Show last page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:56
+msgid "Close document"
+msgstr ""
+
+#. #-#-#-#-#-#-#-#-#-#
+#. %1$s is the current page index in office document preview
+#. %2$s is the number of pages in office document preview
+#, c-format
+#. #-#-#-#-#-#-#-#-#-#
+#. %1$s is the storagespace in use
+#. %2$s is the max storagespace
+#, c-format
+#: apps/io.ox/office/preview/controller.js:60
+#: apps/plugins/portal/quota/register.js:122
+msgid "%1$s of %2$s"
+msgstr ""
+
 #: apps/plugins/portal/rss/register.js:54
 #: apps/plugins/portal/rss/register.js:186
 msgid "RSS Feed"
@@ -279,12 +461,6 @@ msgstr ""
 msgid "Buy a gift"
 msgstr ""
 
-#: apps/io.ox/calendar/month/perspective.js:330 apps/io.ox/calendar/util.js:176
-#: apps/io.ox/calendar/week/view.js:484
-#: apps/plugins/portal/birthdays/register.js:91
-msgid "Today"
-msgstr ""
-
 #: apps/io.ox/calendar/util.js:178 apps/plugins/portal/birthdays/register.js:91
 msgid "Tomorrow"
 msgstr ""
@@ -484,19 +660,6 @@ msgstr ""
 msgid "unlimited"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
-#. %1$s is the storagespace in use
-#. %2$s is the max storagespace
-#, c-format
-#. #-#-#-#-#-#-#-#-#-#
-#. %1$s is the current page index in office document preview
-#. %2$s is the number of pages in office document preview
-#, c-format
-#: apps/io.ox/office/preview/controller.js:62
-#: apps/plugins/portal/quota/register.js:122
-msgid "%1$s of %2$s"
-msgstr ""
-
 #: apps/plugins/portal/quota/register.js:139
 #: apps/plugins/portal/quota/register.js:152
 msgid "Quota"
@@ -549,6 +712,7 @@ msgstr ""
 msgid "Remind me again"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. Reminder (objective case): in X minutes
@@ -867,115 +1031,6 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/register.js:301
 msgid "Set as default"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:249
-msgid "This mail has no content"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:330 apps/io.ox/mail/view-detail.js:341
-msgid "Document"
-msgstr ""
-
-#: apps/io.ox/calendar/view-detail.js:359 apps/io.ox/contacts/view-detail.js:359
-#: apps/io.ox/mail/view-detail.js:335 apps/io.ox/mail/view-detail.js:346
-msgid "Folder"
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:619 apps/io.ox/mail/view-detail.js:399
-msgid "Show more"
-msgstr ""
-
-#: apps/io.ox/core/settings/pane.js:145 apps/io.ox/core/tk/attachments.js:233
-#: apps/io.ox/mail/view-detail.js:723
-msgid "None"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:724 apps/io.ox/portal/settings/pane.js:104
-msgid "Red"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:725 apps/io.ox/portal/settings/pane.js:109
-msgid "Blue"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:726 apps/io.ox/portal/settings/pane.js:107
-msgid "Green"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:727
-msgid "Grey"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:728 apps/io.ox/portal/settings/pane.js:110
-msgid "Purple"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:729 apps/io.ox/portal/settings/pane.js:106
-msgid "Light green"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:730 apps/io.ox/portal/settings/pane.js:105
-msgid "Orange"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:731 apps/io.ox/portal/settings/pane.js:111
-msgid "Pink"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:732 apps/io.ox/portal/settings/pane.js:108
-msgid "Light blue"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:733
-msgid "Yellow"
-msgstr ""
-
-#: apps/io.ox/mail/main.js:486 apps/io.ox/mail/view-detail.js:815
-#: apps/io.ox/mail/write/view-main.js:340
-msgid "To"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:822
-msgctxt "CC"
-msgid "Copy"
-msgid_plural "Copy"
-msgstr[0] ""
-msgstr[1] ""
-
-#: apps/io.ox/mail/view-detail.js:829
-msgid "All recipients"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:894
-msgctxt "plural"
-msgid "Attachment"
-msgid_plural "Attachments"
-msgstr[0] ""
-msgstr[1] ""
-
-#: apps/io.ox/mail/view-detail.js:919
-msgid "more"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:925
-msgid "All attachments"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:941
-msgid "Entire thread"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:961
-msgid "Warning: This message might be a phishing or scam mail"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:982
-msgid "Show images"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:985
-msgid "External images have been blocked to protect you against potential spam!"
 msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js:89
@@ -1637,6 +1692,7 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js:105
 #: apps/io.ox/calendar/settings/pane.js:94
@@ -1646,6 +1702,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? NO
@@ -1659,16 +1716,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/list/perspective.js:85
 msgid "Couldn't load appointment data."
-msgstr ""
-
-#: apps/io.ox/calendar/list/perspective.js:132
-#: apps/io.ox/calendar/month/perspective.js:304
-#: apps/io.ox/calendar/week/view.js:468
-msgid "show all"
-msgstr ""
-
-#: apps/io.ox/calendar/week/view.js:430
-msgid "Doubleclick here for whole day appointment"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/template.js:103
@@ -1686,6 +1733,7 @@ msgstr ""
 msgid "Do you want to edit the whole series or just one appointment within the series?"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. Use singular in this context
@@ -2111,10 +2159,6 @@ msgstr ""
 #: apps/io.ox/calendar/edit/template.js:489
 #: apps/io.ox/tasks/edit/view-template.js:544
 msgid "Drop here to upload a <b>new attachment</b>"
-msgstr ""
-
-#: apps/io.ox/calendar/month/view.js:121
-msgid "CW"
 msgstr ""
 
 #: apps/io.ox/calendar/util.js:169
@@ -2665,10 +2709,6 @@ msgstr ""
 msgid "Contact: %1$s"
 msgstr ""
 
-#: apps/io.ox/core/api/folder.js:375
-msgid "New Folder"
-msgstr ""
-
 #: apps/io.ox/core/desktop.js:455
 msgid "There are unsaved changes."
 msgstr ""
@@ -2724,42 +2764,6 @@ msgstr ""
 
 #: apps/io.ox/preview/main.js:184
 msgid "Preview could not be loaded"
-msgstr ""
-
-#: apps/io.ox/office/tk/view/view.js:488
-msgid "Load Error"
-msgstr ""
-
-#: apps/io.ox/office/tk/view/view.js:488
-msgid "An error occurred while loading the document."
-msgstr ""
-
-#: apps/io.ox/office/tk/application.js:169
-msgid "Unnamed"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:45
-msgid "Show first page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:46
-msgid "Show previous page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:47
-msgid "Current page and total page count"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:48
-msgid "Show next page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:49
-msgid "Show last page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:53
-msgid "Close document"
 msgstr ""
 
 #: apps/io.ox/portal/settings/pane.js:49
