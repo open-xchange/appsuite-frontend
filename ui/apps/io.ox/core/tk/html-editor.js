@@ -597,6 +597,10 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             $(selector, ed.getDoc()).remove();
         };
 
+        this.removeClassBySelector = function (selector, name) {
+            $(selector, ed.getDoc()).removeClass(name);
+        };
+
         this.replaceContent = function (str, rep) {
 
             // adopted from tinyMCE's searchreplace plugin

@@ -102,11 +102,17 @@ define('io.ox/mail/write/main',
             var index = e.data.index,
                 signature, text,
                 ed = this.getEditor(),
-                isHTML = !!ed.removeBySelector;
+                isHTML = !!ed.removeBySelector,
+                modified = isHTML ? $('<root></root>').append(ed.getContent()).find('p.io-ox-signature').text() !== currentSignature : false;
 
             // remove current signature from editor
             if (isHTML) {
-                ed.removeBySelector('.io-ox-signature');
+                //only remove class if user modified content of signature paragraph block
+                if (modified) {
+                    ed.removeClassBySelector('.io-ox-signature', 'io-ox-signature');
+                } else {
+                    ed.removeBySelector('.io-ox-signature');
+                }
             } else {
                 if (currentSignature) {
                     ed.replaceParagraph(currentSignature, '');
@@ -121,7 +127,7 @@ define('io.ox/mail/write/main',
                 if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
 
                 if (isHTML) {
-                    if (signature.misc.insertion === 'below') {
+                    if (signature.misc && signature.misc.insertion === 'below') {
                         ed.appendContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
                         ed.scrollTop('bottom');
                     } else {
@@ -129,7 +135,7 @@ define('io.ox/mail/write/main',
                         ed.scrollTop('top');
                     }
                 } else {
-                    if (signature.misc.insertion === 'below') {
+                    if (signature.misc && signature.misc.insertion === 'below') {
                         ed.appendContent(text);
                         ed.scrollTop('bottom');
                     } else {
@@ -321,7 +327,7 @@ define('io.ox/mail/write/main',
                 if (_.isString(ds.misc)) { ds.misc = JSON.parse(ds.misc); }
 
                 var signature = ds ? $.trim(ds.content) : '',
-                pos = ds ? ds.misc.insertion : 'below';
+                pos = ds ? ds.misc && ds.misc.insertion || 'below' : 'below';
                 // remember as current signature
                 currentSignature = signature;
                 // yep
