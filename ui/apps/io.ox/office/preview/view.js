@@ -66,7 +66,7 @@ define('io.ox/office/preview/view',
         // initialization -----------------------------------------------------
 
         // initialization after construction
-        app.on('docs:init', initHandler);
+        app.registerInitHandler(initHandler);
 
     } // class PreviewView
 

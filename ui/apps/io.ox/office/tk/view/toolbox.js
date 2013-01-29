@@ -29,7 +29,7 @@ define('io.ox/office/tk/view/toolbox',
      * and the following additional events:
      * - 'expand': If this tool box has been collapsed or expanded. The event
      *  handler receives the current state (true if expanded, or false if
-     *  collapsed) as second parameter.
+     *  collapsed).
      *
      * @constructor
      *

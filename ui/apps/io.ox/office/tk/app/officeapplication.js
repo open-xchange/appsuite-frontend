@@ -30,7 +30,9 @@ define('io.ox/office/tk/app/officeapplication',
      * following additional events:
      * - 'docs:init': Once during launch, after this application instance has
      *      been constructed completely, before the registered launch handlers
-     *      will be called.
+     *      will be called. Note that the calling order of the event listeners
+     *      is not defined. See method OfficeApplication.registerInitHandler()
+     *      for an alternative.
      * - 'docs:quit': Before the application will be really closed, after all
      *      registered before-quit handlers have been called, and none has
      *      rejected quitting, and before the application will be destroyed.
@@ -49,7 +51,9 @@ define('io.ox/office/tk/app/officeapplication',
      *  OfficeApplication.getView(), or OfficeApplication.getController()
      *  during construction. For further initialization depending on valid
      *  model/view/controller instances, the constructor can register an event
-     *  handler for the 'docs:init' event of this application.
+     *  handler for the 'docs:init' event of this application, or register an
+     *  initialization handler with the OfficeApplication.registerInitHandler()
+     *  method.
      *
      * @param {Function} ViewClass
      *  The constructor function of the view class. MUST derive from the class
@@ -58,7 +62,8 @@ define('io.ox/office/tk/app/officeapplication',
      *  or OfficeApplication.getController() during construction. For further
      *  initialization depending on valid model/view/controller instances, the
      *  constructor can register an event handler for the 'docs:init' event of
-     *  this application.
+     *  this application, or register an initialization handler with the
+     *  OfficeApplication.registerInitHandler() method.
      *
      * @param {Function} ControllerClass
      *  The constructor function of the controller class. MUST derive from the
@@ -67,7 +72,9 @@ define('io.ox/office/tk/app/officeapplication',
      *  OfficeApplication.getView(), or OfficeApplication.getController()
      *  during construction. For further initialization depending on valid
      *  model/view/controller instances, the constructor can register an event
-     *  handler for the 'docs:init' event of this application.
+     *  handler for the 'docs:init' event of this application, or register an
+     *  initialization handler with the OfficeApplication.registerInitHandler()
+     *  method.
      *
      * @param {Object} launchOptions
      *  A map of options containing initialization data for the new application
@@ -86,6 +93,9 @@ define('io.ox/office/tk/app/officeapplication',
 
             // file descriptor of the document edited by this application
             file = Utils.getObjectOption(launchOptions, 'file', null),
+
+            // all registered initialization handlers
+            initHandlers = [],
 
             // all registered launch handlers
             launchHandlers = [],
@@ -355,6 +365,25 @@ define('io.ox/office/tk/app/officeapplication',
         };
 
         // application setup --------------------------------------------------
+
+        /**
+         * Registers an initialization handler function that will be executed
+         * when the application has been be constructed (especially the model,
+         * view, and controller instances). All registered initialization
+         * handlers will be called in order of their insertion.
+         *
+         * @param {Function} initHandler
+         *  A function that will be called when the application has been
+         *  constructed. Will be called in the context of this application
+         *  instance.
+         *
+         * @returns {OfficeApplication}
+         *  A reference to this application instance.
+         */
+        this.registerInitHandler = function (initHandler) {
+            initHandlers.push(initHandler);
+            return this;
+        };
 
         /**
          * Registers a launch handler function that will be executed when the
@@ -658,11 +687,16 @@ define('io.ox/office/tk/app/officeapplication',
             // set the window at the application instance
             self.setWindow(win);
 
-            // create and initialize the MVC instances
+            // create the MVC instances
             model = new ModelClass(self);
             view = new ViewClass(self);
             controller = new ControllerClass(self);
+
+            // call initialization listeners and handlers
             self.trigger('docs:init');
+            _(initHandlers).each(function (initHandler) {
+                initHandler.call(self);
+            });
 
             // kill the application if no file descriptor is present
             win.on('open', function () {
