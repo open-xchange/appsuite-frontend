@@ -205,7 +205,7 @@ define("plugins/portal/linkedIn/register",
 
     ext.point('io.ox/portal/widget/linkedIn/settings').extend({
         title: gt('LinkedIn'),
-        type: 'linkedin',
+        type: 'linkedIn',
         editable: false,
         unique: true
     });
