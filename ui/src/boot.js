@@ -639,9 +639,7 @@ $(document).ready(function () {
             // set page title now
             document.title = _.noI18n(ox.serverConfig.pageTitle || '');
             if (ox.signin) {
-                console.log("Signin");
                 require(["themes"], function (themes) {
-                    console.log("Themes");
                     themes.set(ox.serverConfig.signinTheme || 'login');
                 });
             }
