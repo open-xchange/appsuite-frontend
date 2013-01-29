@@ -16,19 +16,15 @@ define: true, _: true
 define('io.ox/settings/accounts/settings/pane',
       ox.withPluginsFor('keychainSettings',
             ['io.ox/core/extensions',
-           'io.ox/core/tk/view',
-           'io.ox/settings/utils',
            'io.ox/core/tk/dialogs',
            "io.ox/keychain/api",
-           'io.ox/core/tk/forms',
            "io.ox/keychain/model",
            "io.ox/core/api/folder",
-           //'gettext!io.ox/settings/accounts/keyring', does not work at the moment
            'text!io.ox/settings/accounts/email/tpl/account_select.html',
            'text!io.ox/settings/accounts/email/tpl/listbox.html'
 
 
-       ]), function (ext, View, utils, dialogs, api, forms, keychainModel, folderAPI, /* gt,*/ tmpl, listboxtmpl) {
+       ]), function (ext, dialogs, api, keychainModel, folderAPI, tmpl, listboxtmpl) {
 
 
     'use strict';
