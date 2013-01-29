@@ -71,7 +71,7 @@ define("io.ox/mail/main",
         settings.set(type, value);
         settings.save();
     };
-    
+
     // launcher
     app.setLauncher(function () {
 
@@ -112,24 +112,24 @@ define("io.ox/mail/main",
 
         // add template
         grid.addTemplate(tmpl.main);
-        
+
         //get sorting settings
         var sortSettings = {};
         sortSettings.sort = settings.get('sort', 'thread');
         sortSettings.unread = settings.get('unread', false);
         sortSettings.order = settings.get('order', 'desc');
-        
+
         if (sortSettings.sort === 'thread' && options.threadView === false) {//check if folder actually supports threadview
             sortSettings.sort = '610';
         }
-        
+
         // add grid options
         grid.prop('sort', sortSettings.sort)
             .prop('order', sortSettings.order)
             .prop('unread', sortSettings.unread);
         //temp variable not needed anymore
         sortSettings = null;
-        
+
         //sort property is special and needs special handling because of the auto toggling if threadview is not uspported
         //look into hToolbarOptions function for this
         grid.on('change:prop:unread', function (e, value) {app.saveSortSettings('unread', value); });
@@ -152,7 +152,7 @@ define("io.ox/mail/main",
                 threadView = settings.get('threadView'),
                 isInbox = account.is('inbox', grid.prop('folder')),
                 isOn = threadView === 'on' || (threadView === 'inbox' && isInbox);
-            
+
             // some auto toggling
             if (grid.prop('sort') === 'thread' && !isOn) {
                 grid.prop('sort', '610');
