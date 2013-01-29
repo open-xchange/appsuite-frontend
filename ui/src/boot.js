@@ -382,6 +382,11 @@ $(document).ready(function () {
     }
 
     function getCachedServerConfig(configCache, cacheKey, def) {
+        if (!configCache || !cacheKey) {
+            setFallbackConfig();
+            def.resolve();
+            return;
+        }
         configCache.get(cacheKey).done(function (data) {
             if (data !== null) {
                 updateServerConfig(data);
@@ -414,7 +419,9 @@ $(document).ready(function () {
             } else {
                 getCachedServerConfig(configCache, cacheKey, def);
             }
-        })
+        }).fail(function () {
+            getCachedServerConfig(null, cacheKey, def);
+        });
         return def;
     }
 
@@ -424,6 +431,15 @@ $(document).ready(function () {
 
     function fetchGeneralServerConfig() {
         return fetchServerConfig('generalconfig');
+    }
+
+    function serverDown() {
+        $("#background_loader").idle().fadeOut(DURATION, function () {
+            $("#io-ox-login-container").empty().append(
+                $("<h1>").text("There was a problem connecting to the site."),
+                $("<h1>").append($('<a href="#">').text("Click here to try again"))
+            );
+        });
     }
 
     /**
@@ -498,6 +514,8 @@ $(document).ready(function () {
                     continueWithoutAutoLogin();
                 });
             }
+        }).fail(function () {
+            serverDown();
         });
     };
 
@@ -616,12 +634,13 @@ $(document).ready(function () {
     $("#background_loader").busy();
 
     var boot = function () {
-
         fetchGeneralServerConfig().done(function () {
             // set page title now
             document.title = _.noI18n(ox.serverConfig.pageTitle || '');
             if (ox.signin) {
+                console.log("Signin");
                 require(["themes"], function (themes) {
+                    console.log("Themes");
                     themes.set(ox.serverConfig.signinTheme || 'login');
                 });
             }
