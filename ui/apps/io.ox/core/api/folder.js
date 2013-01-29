@@ -437,20 +437,18 @@ define('io.ox/core/api/folder',
             // renew subfoldercache
             // get all folders from subfolder cache
             return subFolderCache.keys().pipe(function (keys) {
+                // clear subfolder cache
                 subFolderCache.clear();
+
+                // renew all subfolder entries
                 http.pause();
                 _(keys).map(function (id) {
                     return api.getSubFolders({ folder: id, cache: false });
                 });
-                return http.resume().done(function (data) {
-                    _(data).each(function (folderList) {
-                        _(folderList.data).each(function (folder) {
-                            if (folder.unread !== null) {
-                                api.trigger('update:unread', folder.id, folder);
-                            }
-                        });
-                    });
-                });
+
+                api.trigger('update');
+
+                return http.resume();
             });
         },
 
