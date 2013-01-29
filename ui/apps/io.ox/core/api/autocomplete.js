@@ -75,12 +75,8 @@ define('io.ox/core/api/autocomplete',
         },
         processContacts: function (type, data) {
             var result = _(data.data).map(function (dataItem) {
-                // TODO: the api should return already mapped objects
-                var contactColumns = '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592';
-                var obj = http.makeObject(dataItem, 'contacts', contactColumns.split(','));
-
                 var myobj = {
-                    data: obj,
+                    data: dataItem,
                     type: type
                 };
                 return myobj;
