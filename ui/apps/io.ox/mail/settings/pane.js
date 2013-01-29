@@ -14,7 +14,8 @@
 define('io.ox/mail/settings/pane',
        ['settings!io.ox/mail', 'io.ox/mail/settings/model',
         'dot!io.ox/mail/settings/form.html', 'io.ox/core/extensions',
-        'gettext!io.ox/mail', 'io.ox/core/api/account'], function (settings, mailSettingsModel, tmpl, ext, gt, api) {
+        'io.ox/core/notifications',
+        'gettext!io.ox/mail', 'io.ox/core/api/account'], function (settings, mailSettingsModel, tmpl, ext, notifications, gt, api) {
 
     'use strict';
 
@@ -106,7 +107,9 @@ define('io.ox/mail/settings/pane',
         },
 
         save: function () {
-            mailViewSettings.model.save();
+            mailViewSettings.model.save().fail(function () {
+                notifications.yell('error', gt('Could not save settings'));
+            });
         }
     });
 
