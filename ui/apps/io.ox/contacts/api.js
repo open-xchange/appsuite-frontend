@@ -49,7 +49,6 @@ define('io.ox/contacts/api',
                 columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592',
                 sort: '609', // magic sort field - ignores asc/desc
                 getData: function (query, opt) {
-                    debugger;
                     return {
                         display_name: query + '*',
                         first_name: query + '*',
