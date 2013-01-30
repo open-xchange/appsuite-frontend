@@ -221,6 +221,7 @@ define('io.ox/contacts/api',
 
     api.on('refresh.all', function () {
         autocompleteCache.clear();
+        api.caches.get.clear();
     });
 
     api.autocomplete = function (query) {
