@@ -64,7 +64,7 @@ preview: function (baton) {
 }
 </script>
 
-<p><em>draw</em> is used to draw contend into a side-popup.</p>
+<p><em>draw</em> is used to draw contend into a side-popup. The side-popup uses the following delegate: '.item, .content.pointer' </p>
 
 <script type="text/example">
 draw: function (baton) {
@@ -75,16 +75,21 @@ draw: function (baton) {
 </script>
 
 <p>
-    Finaly use a extensionpoint <em>io.ox/portal/widget/[PLUGINNAME]/settings</em> to make the plugin appear in the portal settings.<br>
-    If <em>editable</em> is set to true the plugin can have own settings.<br>
+    Finally use a extensionpoint <em>io.ox/portal/widget/[PLUGINNAME]/settings</em> to make the plugin appear in the portal settings.<br><br>
+    To make this plugin editable set <em>editable</em> to true.<br>
+    Create a <em>edit</em> function in <em>register.js</em> that handles the editprocess. The model and the view of the Plugin are available as arguments.<br>
+    Add <em>edit: edit </em> to the extensionpoint to make this function available to the view.<br>
+    
+</p>   
+<p>
     If <em>unique</em> is set to true only one instance of this plugin is allowed.<br>
 </p>
-
 <script type="text/example">
 ext.point('io.ox/portal/widget/[PLUGINNAME]/settings').extend({
         title: gt('Hello World'),
         type: 'helloworld',
-        editable: false,
+        editable: true,
+        edit: edit,
         unique: true
 });
 </script>
