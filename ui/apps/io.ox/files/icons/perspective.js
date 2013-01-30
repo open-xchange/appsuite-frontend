@@ -18,12 +18,10 @@ define('io.ox/files/icons/perspective',
      'io.ox/core/tk/upload',
      'io.ox/core/extPatterns/dnd',
      'io.ox/core/extPatterns/shortcuts',
-     'io.ox/core/commons',
      'io.ox/core/api/folder',
      'gettext!io.ox/files',
-     'io.ox/core/http',
      'io.ox/core/capabilities'
-     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, commons, folderAPI, gt, http, Caps) {
+     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, folderAPI, gt, Caps) {
 
     'use strict';
 
@@ -169,7 +167,7 @@ define('io.ox/files/icons/perspective',
         if (!app.getWindow().search.active) {
             return api.getAll({ folder: app.folder.get() });
         } else {
-            return api.search(app.getWindow().search.query);
+            return api.search(app.getWindow().search.query, { folder: app.folder.get() });
         }
     }
 
@@ -191,8 +189,8 @@ define('io.ox/files/icons/perspective',
     return _.extend(new ox.ui.Perspective('icons'), {
 
         draw: function (app) {
-            var options = ext.point('io.ox/files/icons/options').options();
-            var win = app.getWindow(),
+            var options = ext.point('io.ox/files/icons/options').options(),
+                win = app.getWindow(),
                 iconview = $('<div class="files-scrollable-pane">'),
                 iconContainer,
                 start,
@@ -227,7 +225,7 @@ define('io.ox/files/icons/perspective',
             };
 
             drawIcons = function (files) {
-                iconContainer.find('.scroll-spacer').before(
+                iconContainer.find('.scroll-spacer', win).before(
                     _(files).map(function (file) {
                         drawnCids.push(_.cid(file));
                         return drawIcon(file);
@@ -238,7 +236,7 @@ define('io.ox/files/icons/perspective',
             redraw = function (ids) {
                 drawIcons(ids);
                 $('.files-iconview').on('scroll', function (event) {
-                    if ($('.files-scrollable-pane')[0].scrollHeight - $(this).scrollTop() === $(this).outerHeight()) {
+                    if ($('.files-scrollable-pane', win)[0].scrollHeight - $(this).scrollTop() === $(this).outerHeight()) {
                         $(this).off('scroll');
                         start = end;
                         end = end + layout.iconCols;
@@ -278,6 +276,8 @@ define('io.ox/files/icons/perspective',
                         end = displayedRows * layout.iconCols;
                         if (layout.iconCols <= 3) end = end + 10;
                         baton.allIds = filterFiles(ids, options);
+
+                        allIds = baton.allIds;
 
                         redraw(allIds.slice(start, end));
                     })
