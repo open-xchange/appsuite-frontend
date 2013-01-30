@@ -33,6 +33,22 @@ define('io.ox/office/tk/app/officeapplication',
      *      will be called. Note that the calling order of the event listeners
      *      is not defined. See method OfficeApplication.registerInitHandler()
      *      for an alternative.
+     * - 'docs:init:after': Once during launch, after the registered launch
+     *      handlers have been called.
+     * - 'docs:init:success': Directly after the event 'docs:init:after', if
+     *      all initialization handlers returned successfully.
+     * - 'docs:init:error': Directly after the event 'docs:init:after', if any
+     *      initialization handler failed.
+     * - 'docs:import:before': Once during launch before the document described
+     *      in the file descriptor will be imported.
+     * - 'docs:import:after': Once during launch, after the document described
+     *      in the file descriptor has been imported (successfully or not).
+     * - 'docs:import:success': Directly after the event 'docs:import:after',
+     *      if the document described in the file descriptor has been imported
+     *      successfully.
+     * - 'docs:import:error': Directly after the event 'docs:import:after',
+     *      if an error occurred while importing the document described in the
+     *      file descriptor.
      * - 'docs:quit': Before the application will be really closed, after all
      *      registered before-quit handlers have been called, and none has
      *      rejected quitting, and before the application will be destroyed.
@@ -76,6 +92,16 @@ define('io.ox/office/tk/app/officeapplication',
      *  initialization handler with the OfficeApplication.registerInitHandler()
      *  method.
      *
+     * @param {Function} importHandler
+     *  A function that will be called to import the document described in the
+     *  file descriptor of this application. Will be called once after
+     *  launching the application regularly, or after restoring the application
+     *  from a save point after the browser has been opened or the web page has
+     *  been reloaded. Will be called in the context of this application. If
+     *  called from fail-restore, receives the save point as first parameter.
+     *  Must return a Deferred object that will be resolved or rejected after
+     *  the document has been loaded.
+     *
      * @param {Object} launchOptions
      *  A map of options containing initialization data for the new application
      *  object. The following options are supported directly:
@@ -86,7 +112,7 @@ define('io.ox/office/tk/app/officeapplication',
      *      If set to false, the application window will not be detached from
      *      the DOM while it is hidden.
      */
-    function OfficeApplication(ModelClass, ViewClass, ControllerClass, launchOptions) {
+    function OfficeApplication(ModelClass, ViewClass, ControllerClass, importHandler, launchOptions) {
 
         var // self reference
             self = this,
@@ -97,11 +123,11 @@ define('io.ox/office/tk/app/officeapplication',
             // all registered initialization handlers
             initHandlers = [],
 
-            // all registered launch handlers
-            launchHandlers = [],
+            // all registered before-quit handlers
+            beforeQuitHandlers = [],
 
-            // all registered quit handlers
-            quitHandlers = [],
+            // all registered fail-save handlers
+            failSaveHandlers = [],
 
             // the document model instance
             model = null,
@@ -122,6 +148,51 @@ define('io.ox/office/tk/app/officeapplication',
             debounceCount = 0;
 
         // private methods ----------------------------------------------------
+
+        /**
+         * Imports the document described by the current file descriptor, by
+         * calling the import handler passed to the constructor. Does nothing
+         * (but return a resolved Deferred object), if no file descriptor
+         * exists.
+         *
+         * @param {Object} [point]
+         *  The save point if called from fail-restore.
+         *
+         * @returns {jQuery.Promise}
+         *  The result of the import handler passed to the constructor of this
+         *  application.
+         */
+        function importDocument(point) {
+
+            var // the application window
+                win = self.getWindow();
+
+            // do nothing if file descriptor is missing (e.g. while restoring after browser refresh)
+            if (!file) { return $.when(); }
+
+            // set window to busy state while the import handler is running
+            win.busy();
+
+            // notify listeners
+            self.trigger('docs:import:before');
+
+            // call the import handler
+            return importHandler.call(self, point)
+                .always(function () {
+                    self.trigger('docs:import:after');
+                })
+                .done(function () {
+                    self.trigger('docs:import:success');
+                })
+                .fail(function () {
+                    Utils.warn('OfficeApplication.launch(): importing document ' + file.filename + ' failed.');
+                    view.showLoadError();
+                    self.trigger('docs:import:error');
+                })
+                .always(function () {
+                    win.idle();
+                });
+        }
 
         /**
          * Calls all handler functions contained in the passed array, and
@@ -168,6 +239,8 @@ define('io.ox/office/tk/app/officeapplication',
         this.getController = function () {
             return controller;
         };
+
+        // file descriptor ----------------------------------------------------
 
         /**
          * Returns whether this application contains a valid file descriptor.
@@ -370,36 +443,23 @@ define('io.ox/office/tk/app/officeapplication',
          * Registers an initialization handler function that will be executed
          * when the application has been be constructed (especially the model,
          * view, and controller instances). All registered initialization
-         * handlers will be called in order of their insertion.
+         * handlers will be called in order of their insertion. If the
+         * initialization handlers return a Deferred object, launching the
+         * application will be deferred until all Deferred objects have been
+         * resolved or rejected. If any of the handlers rejects its Deferred
+         * object, the application cannot be launched at all.
          *
          * @param {Function} initHandler
          *  A function that will be called when the application has been
          *  constructed. Will be called in the context of this application
-         *  instance.
+         *  instance. May return a Deferred object, which must be resolved or
+         *  rejected by the initialization handler function.
          *
          * @returns {OfficeApplication}
          *  A reference to this application instance.
          */
         this.registerInitHandler = function (initHandler) {
             initHandlers.push(initHandler);
-            return this;
-        };
-
-        /**
-         * Registers a launch handler function that will be executed when the
-         * application will be launched.
-         *
-         * @param {Function} launchHandler
-         *  A function that will be called when the application launches. Will
-         *  be called in the context of this application instance. May return a
-         *  Deferred object, which must be resolved (never rejected) by the
-         *  launch handler function.
-         *
-         * @returns {OfficeApplication}
-         *  A reference to this application instance.
-         */
-        this.registerLaunchHandler = function (launchHandler) {
-            launchHandlers.push(launchHandler);
             return this;
         };
 
@@ -418,7 +478,25 @@ define('io.ox/office/tk/app/officeapplication',
          *  A reference to this application instance.
          */
         this.registerBeforeQuitHandler = function (beforeQuitHandler) {
-            quitHandlers.push(beforeQuitHandler);
+            beforeQuitHandlers.push(beforeQuitHandler);
+            return this;
+        };
+
+        /**
+         * Registers a handler function that will be executed when the
+         * application creates a new restore point.
+         *
+         * @param {Function} failSaveHandler
+         *  A function that will be called when the application creates a new
+         *  restore point. Will be called in the context of this application
+         *  instance. Must return an object the new restore point will be
+         *  extended with.
+         *
+         * @returns {OfficeApplication}
+         *  A reference to this application instance.
+         */
+        this.registerFailSaveHandler = function (failSaveHandler) {
+            failSaveHandlers.push(failSaveHandler);
             return this;
         };
 
@@ -670,12 +748,65 @@ define('io.ox/office/tk/app/officeapplication',
             return def.always(function () { self.updateTitle(); }).promise();
         };
 
+        /**
+         * Will be called automatically from the OX core framework to create
+         * and return a restore point containing the current state of the
+         * application.
+         *
+         * @returns {Object}
+         *  The restore point containing the application state.
+         */
+        this.failSave = function () {
+
+            var // create the new restore point with basic information
+                restorePoint = {
+                    module: this.getName(),
+                    point: { file: file }
+                };
+
+            // call all fail-save handlers and add their data to the restore point
+            _(failSaveHandlers).each(function (failSaveHandler) {
+                _(restorePoint.point).extend(failSaveHandler.call(this));
+            }, this);
+
+            return restorePoint;
+        };
+
+        /**
+         * Will be called automatically from the OX core framework to restore
+         * the state of the application after a browser refresh.
+         *
+         * @param {Object} point
+         *  The save point containing the application state, as returned by the
+         *  last call of the OfficeApplication.failSave() method.
+         *
+         * @returns {jQuery.Promise}
+         *  The promise of a Deferred object that will be resolved when the
+         *  import handler has loaded the document.
+         */
+        this.failRestore = function (point) {
+
+            var // the result Deferred object
+                def = $.Deferred();
+
+                // set file descriptor and import the document
+            this.setFileDescriptor(Utils.getObjectOption(point, 'file'));
+            // always resolve the deferred (expected by the core launcher)
+            importDocument(point).always(function () { def.resolve(); });
+
+            return def.promise();
+        };
+
         // initialization -----------------------------------------------------
 
         // call all registered launch handlers
         this.setLauncher(function () {
 
-            var // create the application window
+            var // the result Deferred object
+                def = $.Deferred(),
+                // the Deferred object waiting for the initialization handlers
+                initDef = $.Deferred(),
+                // create the application window
                 win = ox.ui.createWindow({
                     name: self.getName(),
                     search: Utils.getBooleanOption(launchOptions, 'search', false)
@@ -692,27 +823,57 @@ define('io.ox/office/tk/app/officeapplication',
             view = new ViewClass(self);
             controller = new ControllerClass(self);
 
-            // call initialization listeners and handlers
-            self.trigger('docs:init');
-            _(initHandlers).each(function (initHandler) {
-                initHandler.call(self);
-            });
+            // in order to get the 'open' event of the window at all, it must be shown (also without file)
+            win.show(function () {
+                win.busy();
 
-            // kill the application if no file descriptor is present
-            win.on('open', function () {
-                if (!file) {
-                    _.defer(function () { self.quit(); });
+                // wait for pending initialization, kill the application if no
+                // file descriptor is present after fail-restore (using absence
+                // of the launch option 'action' as indicator for fail-restore)
+                if (!launchOptions || !('action' in launchOptions)) {
+
+                    // the 'open' event of the window is triggered once after launch and fail-restore
+                    win.on('open', function () {
+                        initDef.always(function () {
+                            if (!file) {
+                                _.defer(function () { self.quit(); });
+                            }
+                        });
+                    });
                 }
+
+                // call initialization listeners
+                self.trigger('docs:init');
+
+                // call initialization handlers, they may return Deferred objects
+                callHandlers(initHandlers)
+                .always(function () {
+                    self.trigger('docs:init:after');
+                    // this resumes pending window 'open' event handler
+                    initDef.resolve();
+                    win.idle();
+                })
+                .done(function () {
+                    self.trigger('docs:init:success');
+                    // import the document, always resolve the result Deferred object (expected by the core launcher)
+                    importDocument().always(function () { def.resolve(); });
+                })
+                .fail(function () {
+                    self.trigger('docs:init:error');
+                    // failing initialization handler should have shown an error alert
+                    Utils.warn('OfficeApplication.launch(): initialization failed.');
+                    def.resolve();
+                });
+
             });
 
-            // call all registered launch handlers, return the accumulated Deferred object
-            return callHandlers(launchHandlers).promise();
+            return def.promise();
         });
 
         // call all registered quit handlers
         this.setQuit(function () {
 
-            return callHandlers(quitHandlers)
+            return callHandlers(beforeQuitHandlers)
                 .done(function () {
 
                     // cancel all running timeouts
