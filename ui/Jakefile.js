@@ -515,6 +515,7 @@ docFile("development_guide", "UI Development Style Guide");
 docFile("buildsystem", "Build System");
 docFile("manifests", "Module System");
 docFile("vgrid", "VGrid");
+docFile("portalplugin", "Portal Plugins ");
 docFile("i18n", "Internationalization");
 docFile("date", "Date and Time");
 
