@@ -128,7 +128,7 @@ define('io.ox/portal/widgets',
                 id: id,
                 index: collection.length,
                 plugin: 'plugins/portal/' + (plugin || type) + '/register',
-                props: props || {},
+                props: props || {},
                 type: type
             };
 
