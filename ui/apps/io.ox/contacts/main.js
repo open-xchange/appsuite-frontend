@@ -199,6 +199,8 @@ define("io.ox/contacts/main",
                 // Reload
                 showContact(app.currentContact);
             }
+        }).on('refresh.all', function () {
+            showContact(app.currentContact);
         });
 
         app.getGrid = function () {
