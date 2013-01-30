@@ -293,12 +293,8 @@ define('io.ox/tasks/api', ['io.ox/core/http',
                     }
                 }
             }
-            if (dueTasks.length > 0) {
-                api.trigger('new-tasks', dueTasks);
-            }
-            if (confirmTasks.length > 0) {
-                api.trigger('confirm-tasks', confirmTasks);
-            }
+            api.trigger('new-tasks', dueTasks);//even if empty array is given it needs to be triggered to remove notifications that does not exist anymore(already handled in ox6 etc)
+            api.trigger('confirm-tasks', confirmTasks);//same here
             return list;
         });
     };
