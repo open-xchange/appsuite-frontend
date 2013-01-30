@@ -97,18 +97,14 @@ define("io.ox/participants/model",
                 df.resolve();
                 break;
             case self.TYPE_EXTERNAL_USER:
-                contactAPI.getByEmailadress(self.get('mail')).done(function (results) {
-                    if (results && results.length > 0) {
-                        var itemWithImage = _(results).find(function (item) {
-                            return item.image1_url && item.image1_url !== '';
-                        });
-                        itemWithImage = itemWithImage || results[0]; // take with image or just the first one
+                contactAPI.getByEmailadress(self.get('mail')).done(function (data) {
+                    if (data && data.display_name) {
                         self.set({
-                            display_name: itemWithImage.display_name,
+                            display_name: data.display_name,
                             email1: self.get('mail') || self.get('email1'),
-                            image1_url: itemWithImage.image1_url,
-                            type: itemWithImage.internal_userid ? self.TYPE_USER : self.TYPE_EXTERNAL_USER,
-                            id: itemWithImage.internal_userid ? itemWithImage.internal_userid : self.get('id')
+                            image1_url: data.image1_url,
+                            type: data.internal_userid ? self.TYPE_USER : self.TYPE_EXTERNAL_USER,
+                            id: data.internal_userid ? data.internal_userid : self.get('id')
                         });
                         self.id = self.get('id');
                         self.trigger("change");
