@@ -516,7 +516,7 @@ define('io.ox/core/tk/folderviews',
             })
             .done(function (data) {
                 self.idle().repaint().done(function () {
-                    self.select(data);
+                    self.select(data.id);
                 });
             });
         };
