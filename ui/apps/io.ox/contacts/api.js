@@ -255,6 +255,8 @@ define('io.ox/contacts/api',
                 return data;
             } else {
                 query = String(query || '').toLowerCase();
+                /*  boolean parameter seems to be a hack to set
+                    option 'emailAutoComplete: false' only in contacts api */
                 return api.search(query, true)
                     .pipe(function (data) {
                         var tmp = [], hash = {};

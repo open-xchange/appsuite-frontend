@@ -50,6 +50,8 @@ define('io.ox/core/api/autocomplete',
                 // cache miss
                 http.pause();
                 _(self.apis).each(function (apiModule) {
+                    /*  boolean parameter seems to be a hack to set
+                        option 'emailAutoComplete: false' only in contacts api */
                     apiModule.api.search(query, true);
                 });
                 return http.resume().pipe(function (data) {
