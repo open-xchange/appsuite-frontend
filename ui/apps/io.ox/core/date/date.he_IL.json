@@ -1,0 +1,123 @@
+{
+    "daysInFirstWeek": null,
+    "weekStart": 0,
+    "days": [
+        "יום ראשון",
+        "יום שני",
+        "יום שלישי",
+        "יום רביעי",
+        "יום חמישי",
+        "יום שישי",
+        "יום שבת"
+    ],
+    "daysShort": [
+        "יום א׳",
+        "יום ב׳",
+        "יום ג׳",
+        "יום ד׳",
+        "יום ה׳",
+        "יום ו׳",
+        "שבת"
+    ],
+    "daysStandalone": [
+        "א'",
+        "ב'",
+        "ג'",
+        "ד'",
+        "ה'",
+        "ו'",
+        "ש'"
+    ],
+    "months": [
+        "ינואר",
+        "פברואר",
+        "מרץ",
+        "אפריל",
+        "מאי",
+        "יוני",
+        "יולי",
+        "אוגוסט",
+        "ספטמבר",
+        "אוקטובר",
+        "נובמבר",
+        "דצמבר"
+    ],
+    "monthsShort": [
+        "ינו",
+        "פבר",
+        "מרץ",
+        "אפר",
+        "מאי",
+        "יונ",
+        "יול",
+        "אוג",
+        "ספט",
+        "אוק",
+        "נוב",
+        "דצמ"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "d.M.yyyy",
+        "yMEd": "E, d/M/y",
+        "yMMMd": "d בMMM y",
+        "yMMMEd": "E, d בMMM y",
+        "hm": "h:mm a",
+        "Hm": "HH:mm",
+        "v": "v",
+        "Hmv": "HH:mm v",
+        "hmv": "h:mm a v",
+        "yMdHm": "d.M.yyyy, HH:mm",
+        "yMdHmv": "d.M.yyyy, HH:mm v",
+        "yMdhm": "d.M.yyyy, h:mm a",
+        "yMdhmv": "d.M.yyyy, h:mm a v",
+        "yMEdHm": "E, d/M/y, HH:mm",
+        "yMEdHmv": "E, d/M/y, HH:mm v",
+        "yMEdhm": "E, d/M/y, h:mm a",
+        "yMEdhmv": "E, d/M/y, h:mm a v"
+    },
+    "date": "d בMMM yyyy",
+    "time": "HH:mm",
+    "dateTimeFormat": "%2$s, %1$s",
+    "intervals": {
+        "fallback": "%1$s – %2$s",
+        "hm": {
+            "a": "h:mm a – h:mm a",
+            "h": "h:mm–h:mm a",
+            "m": "h:mm–h:mm a"
+        },
+        "Hm": {
+            "h": "HH:mm–HH:mm",
+            "m": "HH:mm–HH:mm"
+        },
+        "hmv": {
+            "a": "h:mm a – h:mm a v",
+            "h": "h:mm–h:mm a v",
+            "m": "h:mm–h:mm a v"
+        },
+        "Hmv": {
+            "h": "HH:mm–HH:mm v",
+            "m": "HH:mm–HH:mm v"
+        },
+        "yMMMd": {
+            "d": "d–d MMM y",
+            "m": "d MMM – d MMM y",
+            "y": "d MMM y – d MMM y"
+        },
+        "yMMMEd": {
+            "d": "EEEE d MMM – EEEE d MMM y",
+            "m": "EEEE d MMM – EEEE d MMM y",
+            "y": "EEEE d MMM y – EEEE d MMM y"
+        }
+    },
+    "dayPeriods": {
+        "am": "לפנה״צ",
+        "pm": "אחה״צ"
+    },
+    "eras": [
+        "לפנה״ס",
+        "לסה״נ"
+    ],
+    "dateTime": "d בMMM yyyy, HH:mm",
+    "h12": false
+}

@@ -1,0 +1,122 @@
+{
+    "daysInFirstWeek": null,
+    "days": [
+        "રવિવાર",
+        "સોમવાર",
+        "મંગળવાર",
+        "બુધવાર",
+        "ગુરુવાર",
+        "શુક્રવાર",
+        "શનિવાર"
+    ],
+    "daysShort": [
+        "રવિ",
+        "સોમ",
+        "મંગળ",
+        "બુધ",
+        "ગુરુ",
+        "શુક્ર",
+        "શનિ"
+    ],
+    "daysStandalone": [
+        "ર",
+        "સો",
+        "મં",
+        "બુ",
+        "ગુ",
+        "શુ",
+        "શ"
+    ],
+    "months": [
+        "જાન્યુઆરી",
+        "ફેબ્રુઆરી",
+        "માર્ચ",
+        "એપ્રિલ",
+        "મે",
+        "જૂન",
+        "જુલાઈ",
+        "ઑગસ્ટ",
+        "સપ્ટેમ્બર",
+        "ઑક્ટોબર",
+        "નવેમ્બર",
+        "ડિસેમ્બર"
+    ],
+    "monthsShort": [
+        "જાન્યુ",
+        "ફેબ્રુ",
+        "માર્ચ",
+        "એપ્રિલ",
+        "મે",
+        "જૂન",
+        "જુલાઈ",
+        "ઑગસ્ટ",
+        "સપ્ટે",
+        "ઑક્ટો",
+        "નવે",
+        "ડિસે"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "d/M/y",
+        "yMEd": "E, M/d/y",
+        "yMMMd": "d, MMM y",
+        "yMMMEd": "E, MMM d, y",
+        "hm": "hh:mm a",
+        "Hm": "HH:mm",
+        "v": "v",
+        "Hmv": "HH:mm v",
+        "hmv": "hh:mm a v",
+        "yMdHm": "d/M/y HH:mm",
+        "yMdHmv": "d/M/y HH:mm v",
+        "yMdhm": "d/M/y hh:mm a",
+        "yMdhmv": "d/M/y hh:mm a v",
+        "yMEdHm": "E, M/d/y HH:mm",
+        "yMEdHmv": "E, M/d/y HH:mm v",
+        "yMEdhm": "E, M/d/y hh:mm a",
+        "yMEdhmv": "E, M/d/y hh:mm a v"
+    },
+    "date": "d MMM, y",
+    "time": "hh:mm a",
+    "dateTimeFormat": "%2$s %1$s",
+    "intervals": {
+        "fallback": "%1$s – %2$s",
+        "hm": {
+            "a": "h:mm a – h:mm a",
+            "h": "h:mm–h:mm a",
+            "m": "h:mm–h:mm a"
+        },
+        "Hm": {
+            "h": "HH:mm–HH:mm",
+            "m": "HH:mm–HH:mm"
+        },
+        "hmv": {
+            "a": "h:mm a – h:mm a v",
+            "h": "h:mm–h:mm a v",
+            "m": "h:mm–h:mm a v"
+        },
+        "Hmv": {
+            "h": "HH:mm–HH:mm v",
+            "m": "HH:mm–HH:mm v"
+        },
+        "yMMMd": {
+            "d": "d-d MMM,y",
+            "m": "d MMM-d MMM y",
+            "y": "d MMM,y-d MMM,y"
+        },
+        "yMMMEd": {
+            "d": "E, d MMM-E, d MMM y",
+            "m": "E,d MMM-E,d MMM y",
+            "y": "E, d MMM y-E, d MMM y"
+        }
+    },
+    "dayPeriods": {
+        "am": "AM",
+        "pm": "PM"
+    },
+    "eras": [
+        "ઈલુના જન્મ પહેસાં",
+        "ઇસવીસન"
+    ],
+    "dateTime": "d MMM, y hh:mm a",
+    "h12": true
+}

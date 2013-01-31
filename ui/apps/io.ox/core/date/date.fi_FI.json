@@ -1,0 +1,123 @@
+{
+    "daysInFirstWeek": 4,
+    "weekStart": 1,
+    "days": [
+        "sunnuntaina",
+        "maanantaina",
+        "tiistaina",
+        "keskiviikkona",
+        "torstaina",
+        "perjantaina",
+        "lauantaina"
+    ],
+    "daysShort": [
+        "su",
+        "ma",
+        "ti",
+        "ke",
+        "to",
+        "pe",
+        "la"
+    ],
+    "daysStandalone": [
+        "su",
+        "ma",
+        "ti",
+        "ke",
+        "to",
+        "pe",
+        "la"
+    ],
+    "months": [
+        "tammikuuta",
+        "helmikuuta",
+        "maaliskuuta",
+        "huhtikuuta",
+        "toukokuuta",
+        "kesäkuuta",
+        "heinäkuuta",
+        "elokuuta",
+        "syyskuuta",
+        "lokakuuta",
+        "marraskuuta",
+        "joulukuuta"
+    ],
+    "monthsShort": [
+        "tammikuuta",
+        "helmikuuta",
+        "maaliskuuta",
+        "huhtikuuta",
+        "toukokuuta",
+        "kesäkuuta",
+        "heinäkuuta",
+        "elokuuta",
+        "syyskuuta",
+        "lokakuuta",
+        "marraskuuta",
+        "joulukuuta"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "d.M.yyyy",
+        "yMEd": "E d.M.yyyy",
+        "yMMMd": "d. MMM y",
+        "yMMMEd": "E d. MMM y",
+        "hm": "h.mm a",
+        "Hm": "H.mm",
+        "v": "v",
+        "Hmv": "H.mm v",
+        "hmv": "h.mm a v",
+        "yMdHm": "d.M.yyyy H.mm",
+        "yMdHmv": "d.M.yyyy H.mm v",
+        "yMdhm": "d.M.yyyy h.mm a",
+        "yMdhmv": "d.M.yyyy h.mm a v",
+        "yMEdHm": "E d.M.yyyy H.mm",
+        "yMEdHmv": "E d.M.yyyy H.mm v",
+        "yMEdhm": "E d.M.yyyy h.mm a",
+        "yMEdhmv": "E d.M.yyyy h.mm a v"
+    },
+    "date": "d.M.yyyy",
+    "time": "H.mm",
+    "dateTimeFormat": "%2$s %1$s",
+    "intervals": {
+        "fallback": "%1$s–%2$s",
+        "hm": {
+            "a": "h.mm a – h.mm a",
+            "h": "h.mm–h.mm a",
+            "m": "h.mm–h.mm a"
+        },
+        "Hm": {
+            "h": "H.mm–H.mm",
+            "m": "H.mm–H.mm"
+        },
+        "hmv": {
+            "a": "h.mm a – h.mm a v",
+            "h": "h.mm–h.mm a v",
+            "m": "h.mm–h.mm a v"
+        },
+        "Hmv": {
+            "h": "H.mm–H.mm v",
+            "m": "H.mm–H.mm v"
+        },
+        "yMMMd": {
+            "d": "d.–d. MMMM y",
+            "m": "d. MMMM – d. MMMM y",
+            "y": "d. MMMM y – d. MMMM y"
+        },
+        "yMMMEd": {
+            "d": "E d. – E d. MMMM y",
+            "m": "E d. MMMM – E d. MMMM y",
+            "y": "E d. MMMM y – E d. MMMM y"
+        }
+    },
+    "dayPeriods": {
+        "am": "ap.",
+        "pm": "ip."
+    },
+    "eras": [
+        "eKr.",
+        "jKr."
+    ],
+    "dateTime": "d.M.yyyy H.mm",
+    "h12": false
+}

@@ -1,0 +1,122 @@
+{
+    "daysInFirstWeek": null,
+    "days": [
+        "Sɔ́ndi",
+        "Mɔ́ndi",
+        "Ápta Mɔ́ndi",
+        "Wɛ́nɛsɛdɛ",
+        "Tɔ́sɛdɛ",
+        "Fɛlâyɛdɛ",
+        "Sásidɛ"
+    ],
+    "daysShort": [
+        "Sɔ́ndi",
+        "Mɔ́ndi",
+        "Ápta Mɔ́ndi",
+        "Wɛ́nɛsɛdɛ",
+        "Tɔ́sɛdɛ",
+        "Fɛlâyɛdɛ",
+        "Sásidɛ"
+    ],
+    "daysStandalone": [
+        "Sɔ́ndi",
+        "Mɔ́ndi",
+        "Ápta Mɔ́ndi",
+        "Wɛ́nɛsɛdɛ",
+        "Tɔ́sɛdɛ",
+        "Fɛlâyɛdɛ",
+        "Sásidɛ"
+    ],
+    "months": [
+        "Nduŋmbi Saŋ",
+        "Pɛsaŋ Pɛ́pá",
+        "Pɛsaŋ Pɛ́tát",
+        "Pɛsaŋ Pɛ́nɛ́kwa",
+        "Pɛsaŋ Pataa",
+        "Pɛsaŋ Pɛ́nɛ́ntúkú",
+        "Pɛsaŋ Saambá",
+        "Pɛsaŋ Pɛ́nɛ́fɔm",
+        "Pɛsaŋ Pɛ́nɛ́pfúꞋú",
+        "Pɛsaŋ Nɛgɛ́m",
+        "Pɛsaŋ Ntsɔ̌pmɔ́",
+        "Pɛsaŋ Ntsɔ̌ppá"
+    ],
+    "monthsShort": [
+        "Nduŋmbi Saŋ",
+        "Pɛsaŋ Pɛ́pá",
+        "Pɛsaŋ Pɛ́tát",
+        "Pɛsaŋ Pɛ́nɛ́kwa",
+        "Pɛsaŋ Pataa",
+        "Pɛsaŋ Pɛ́nɛ́ntúkú",
+        "Pɛsaŋ Saambá",
+        "Pɛsaŋ Pɛ́nɛ́fɔm",
+        "Pɛsaŋ Pɛ́nɛ́pfúꞋú",
+        "Pɛsaŋ Nɛgɛ́m",
+        "Pɛsaŋ Ntsɔ̌pmɔ́",
+        "Pɛsaŋ Ntsɔ̌ppá"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "M.d.y",
+        "yMEd": "E, y-M-d",
+        "yMMMd": "y MMM d",
+        "yMMMEd": "E, y MMM d",
+        "hm": "h:mm a",
+        "Hm": "HH:mm",
+        "v": "v",
+        "Hmv": "HH:mm v",
+        "hmv": "h:mm a v",
+        "yMdHm": "M.d.y HH:mm",
+        "yMdHmv": "M.d.y HH:mm v",
+        "yMdhm": "M.d.y h:mm a",
+        "yMdhmv": "M.d.y h:mm a v",
+        "yMEdHm": "E, y-M-d HH:mm",
+        "yMEdHmv": "E, y-M-d HH:mm v",
+        "yMEdhm": "E, y-M-d h:mm a",
+        "yMEdhmv": "E, y-M-d h:mm a v"
+    },
+    "date": "y MMM d",
+    "time": "HH:mm",
+    "dateTimeFormat": "%2$s %1$s",
+    "intervals": {
+        "fallback": "%1$s – %2$s",
+        "hm": {
+            "a": "h:mm a – h:mm a",
+            "h": "h:mm–h:mm a",
+            "m": "h:mm–h:mm a"
+        },
+        "Hm": {
+            "h": "HH:mm–HH:mm",
+            "m": "HH:mm–HH:mm"
+        },
+        "hmv": {
+            "a": "h:mm a – h:mm a v",
+            "h": "h:mm–h:mm a v",
+            "m": "h:mm–h:mm a v"
+        },
+        "Hmv": {
+            "h": "HH:mm–HH:mm v",
+            "m": "HH:mm–HH:mm v"
+        },
+        "yMMMd": {
+            "d": "yyyy-MM-d – d",
+            "m": "yyyy-MM-dd – MM-d",
+            "y": "yyyy-MM-dd – yyyy-MM-dd"
+        },
+        "yMMMEd": {
+            "d": "E, yyyy-MM-dd – E, yyyy-MM-dd",
+            "m": "E, yyyy-MM-dd – E, yyyy-MM-dd",
+            "y": "E, yyyy-MM-dd – E, yyyy-MM-dd"
+        }
+    },
+    "dayPeriods": {
+        "am": "mba’mba’",
+        "pm": "ŋka mbɔ́t nji"
+    },
+    "eras": [
+        "tsɛttsɛt mɛŋgu’ mi ɛ́ lɛɛnɛ Kɛlísɛtɔ gɔ ńɔ́",
+        "tsɛttsɛt mɛŋgu’ mi ɛ́ fúnɛ Kɛlísɛtɔ tɔ́ mɔ́"
+    ],
+    "dateTime": "y MMM d HH:mm",
+    "h12": false
+}

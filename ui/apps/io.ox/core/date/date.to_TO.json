@@ -1,0 +1,123 @@
+{
+    "daysInFirstWeek": 1,
+    "weekStart": 1,
+    "days": [
+        "Sāpate",
+        "Mōnite",
+        "Tūsite",
+        "Pulelulu",
+        "Tuʻapulelulu",
+        "Falaite",
+        "Tokonaki"
+    ],
+    "daysShort": [
+        "Sāp",
+        "Mōn",
+        "Tūs",
+        "Pul",
+        "Tuʻa",
+        "Fal",
+        "Tok"
+    ],
+    "daysStandalone": [
+        "Sāp",
+        "Mōn",
+        "Tūs",
+        "Pul",
+        "Tuʻa",
+        "Fal",
+        "Tok"
+    ],
+    "months": [
+        "Sānuali",
+        "Fēpueli",
+        "Maʻasi",
+        "ʻEpeleli",
+        "Mē",
+        "Sune",
+        "Siulai",
+        "ʻAokosi",
+        "Sepitema",
+        "ʻOkatopa",
+        "Nōvema",
+        "Tīsema"
+    ],
+    "monthsShort": [
+        "Sān",
+        "Fēp",
+        "Maʻa",
+        "ʻEpe",
+        "Mē",
+        "Sun",
+        "Siu",
+        "ʻAok",
+        "Sep",
+        "ʻOka",
+        "Nōv",
+        "Tīs"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "d-M-y",
+        "yMEd": "E, d/M/yyyy",
+        "yMMMd": "d MMM y",
+        "yMMMEd": "E d MMM y",
+        "hm": "h:mm a",
+        "Hm": "H:mm",
+        "v": "v",
+        "Hmv": "H:mm v",
+        "hmv": "h:mm a v",
+        "yMdHm": "d-M-y H:mm",
+        "yMdHmv": "d-M-y H:mm v",
+        "yMdhm": "d-M-y h:mm a",
+        "yMdhmv": "d-M-y h:mm a v",
+        "yMEdHm": "E, d/M/yyyy H:mm",
+        "yMEdHmv": "E, d/M/yyyy H:mm v",
+        "yMEdhm": "E, d/M/yyyy h:mm a",
+        "yMEdhmv": "E, d/M/yyyy h:mm a v"
+    },
+    "date": "d MMM y",
+    "time": "HH:mm",
+    "dateTimeFormat": "%2$s %1$s",
+    "intervals": {
+        "fallback": "%1$s – %2$s",
+        "hm": {
+            "a": "h:mm a – h:mm a",
+            "h": "h:mm–h:mm a",
+            "m": "h:mm–h:mm a"
+        },
+        "Hm": {
+            "h": "HH:mm–HH:mm",
+            "m": "HH:mm–HH:mm"
+        },
+        "hmv": {
+            "a": "h:mm a – h:mm a v",
+            "h": "h:mm–h:mm a v",
+            "m": "h:mm–h:mm a v"
+        },
+        "Hmv": {
+            "h": "HH:mm–HH:mm v",
+            "m": "HH:mm–HH:mm v"
+        },
+        "yMMMd": {
+            "d": "MMM d-d, y",
+            "m": "d MMM - d MMM y",
+            "y": "d MMM y - d MMM y"
+        },
+        "yMMMEd": {
+            "d": "E, d MMM - E, d MMM y",
+            "m": "E, d MMM - E, d MMM y",
+            "y": "E, d MMM y - E, d MMM y"
+        }
+    },
+    "dayPeriods": {
+        "am": "AM",
+        "pm": "PM"
+    },
+    "eras": [
+        "KM",
+        "TS"
+    ],
+    "dateTime": "d MMM y HH:mm",
+    "h12": false
+}
