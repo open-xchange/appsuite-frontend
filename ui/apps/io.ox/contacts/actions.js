@@ -114,33 +114,37 @@ define('io.ox/contacts/actions',
     var copyMove = function (type, apiAction, title, success) {
         return function (list) {
             require(['io.ox/contacts/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (api, dialogs, views) {
+
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
                     .header($('<h3>').text(title))
                     .addPrimaryButton('ok', title)
-                    .addButton('cancel', gt('Cancel'));
-                dialog.getBody().css('height', '250px');
-                var item = _(list).first(),
-                    tree = new views.FolderList(dialog.getBody(), { type: type });
-                tree.paint();
-                dialog.show(function () {
-                    tree.selection.set(item.folder_id || item.folder);
-                })
-                .done(function (action) {
-                    if (action === 'ok') {
-                        var selectedFolder = tree.selection.get();
-                        if (selectedFolder.length === 1) {
-                            // move action
-                            api[apiAction](list, selectedFolder[0]).then(
-                                function () {
-                                    notifications.yell('success', success);
-                                },
-                                notifications.yell
-                            );
+                    .addButton('cancel', gt('Cancel')),
+                    item = _(list).first(),
+                    id = String(item.folder_id || item.folder),
+                    tree = new views.FolderList(dialog.getBody().css('height', '250px'), { type: type });
+
+                dialog
+                    .show(function () {
+                        tree.paint().done(function () {
+                            tree.select(id);
+                        });
+                    })
+                    .done(function (action) {
+                        if (action === 'ok') {
+                            var selectedFolder = tree.selection.get();
+                            if (selectedFolder.length === 1) {
+                                // move action
+                                api[apiAction](list, selectedFolder[0]).then(
+                                    function () {
+                                        notifications.yell('success', success);
+                                    },
+                                    notifications.yell
+                                );
+                            }
                         }
-                    }
-                    tree.destroy();
-                    tree = dialog = null;
-                });
+                        tree.destroy();
+                        tree = dialog = null;
+                    });
             });
         };
     };
