@@ -15,6 +15,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
 	'use strict';
 
     var SCHEMA = 1;
+    var QUEUE_DELAY = 5000;
 
 	var instances = {},
         moduleDefined = $.Deferred(),
@@ -26,6 +27,9 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     }
 
     function IndexeddbStorage(id) {
+        var fluent = {},
+            queue = { timer: null, list: [] };
+
         db.transaction("databases", "readwrite").objectStore("databases").put({name: id});
 
         var opened =  window.indexedDB.open("oxcache_" + id, SCHEMA);
@@ -66,11 +70,18 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 });
             },
             get: function (key) {
+                if (_.isUndefined(key) || _.isNull(key)) {
+                    return $.Deferred().resolve(null);
+                }
+                if (fluent[key]) {
+                    return $.Deferred().resolve(fluent[key]);
+                }
                 return read(function (cache, important) {
                     var def = $.Deferred();
                     function found(obj) {
                         if (!_.isUndefined(obj) && !_.isNull(obj)) {
                             def.resolve(obj.data);
+                            fluent[key] = obj.data;
                         }
                     }
                     $.when(
@@ -84,20 +95,31 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 });
             },
             set: function (key, data, options) {
-                return readwrite(function (cache, important) {
-                    if (options && options.important) {
-                        return OP(important.put({
-                            key: key,
-                            data: data
-                        }));
-                    } else {
-                        return OP(cache.put({
-                            key: key,
-                            data: data,
-                            created: _.now()
-                        }));
-                    }
-                });
+                if (queue.timer === null) {
+                    queue.timer = setTimeout(function () {
+                        readwrite(function (cache, important) {
+                            _(queue.list).each(function (obj) {
+                                if (obj.options && obj.options.important) {
+                                    OP(important.put({
+                                        key: obj.key,
+                                        data: obj.data
+                                    }));
+                                } else {
+                                    OP(cache.put({
+                                        key: obj.key,
+                                        data: obj.data,
+                                        created: _.now()
+                                    }));
+                                }
+                            });
+                            return $.when();
+                        });
+                        queue = { timer: null, list: [] };
+                    }, QUEUE_DELAY);
+                }
+                queue.list.push({ key: key, data: data, options: options });
+                fluent[key] = data;
+                return $.Deferred().resolve();
             },
             remove: function (key) {
                 return readwrite(function (cache, important) {
