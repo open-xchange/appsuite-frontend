@@ -105,7 +105,7 @@
             "y": "MMM d, y – MMM d, y"
         },
         "yMMMEd": {
-            "d": "E, MMM d – E, MMM d, y",
+            "d": "E, MMM d ��� E, MMM d, y",
             "m": "E, MMM d – E, MMM d, y",
             "y": "E, MMM d, y – E, MMM d, y"
         }

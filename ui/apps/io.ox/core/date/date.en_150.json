@@ -60,25 +60,25 @@
         "E": "E",
         "yMd": "d/M/y",
         "yMEd": "E, d/M/y",
-        "yMMMd": "MMM d, y",
+        "yMMMd": "d MMM y",
         "yMMMEd": "E d MMM y",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "d/M/y, HH:mm",
-        "yMdHmv": "d/M/y, HH:mm v",
-        "yMdhm": "d/M/y, h:mm a",
-        "yMdhmv": "d/M/y, h:mm a v",
-        "yMEdHm": "E, d/M/y, HH:mm",
-        "yMEdHmv": "E, d/M/y, HH:mm v",
-        "yMEdhm": "E, d/M/y, h:mm a",
-        "yMEdhmv": "E, d/M/y, h:mm a v"
+        "yMdHm": "d/M/y HH:mm",
+        "yMdHmv": "d/M/y HH:mm v",
+        "yMdhm": "d/M/y h:mm a",
+        "yMdhmv": "d/M/y h:mm a v",
+        "yMEdHm": "E, d/M/y HH:mm",
+        "yMEdHmv": "E, d/M/y HH:mm v",
+        "yMEdhm": "E, d/M/y h:mm a",
+        "yMEdhmv": "E, d/M/y h:mm a v"
     },
     "date": "dd MMM y",
     "time": "HH:mm",
-    "dateTimeFormat": "%2$s, %1$s",
+    "dateTimeFormat": "%2$s %1$s",
     "intervals": {
         "fallback": "%1$s - %2$s",
         "hm": {
@@ -111,14 +111,14 @@
         }
     },
     "dayPeriods": {
-        "am": "AM",
+        "am": "am",
         "noon": "noon",
-        "pm": "PM"
+        "pm": "pm"
     },
     "eras": [
         "BC",
         "AD"
     ],
-    "dateTime": "dd MMM y, HH:mm",
+    "dateTime": "dd MMM y HH:mm",
     "h12": false
 }

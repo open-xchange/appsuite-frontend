@@ -58,7 +58,7 @@
     "formats": {
         "E": "E",
         "yMd": "d/M/y",
-        "yMEd": "EEE, d/M/y",
+        "yMEd": "E d/M/y",
         "yMMMd": "d MMM y",
         "yMMMEd": "EEE, d 'de' MMMM 'de' y",
         "hm": "hh:mm a",
@@ -70,10 +70,10 @@
         "yMdHmv": "d/M/y HH:mm v",
         "yMdhm": "d/M/y hh:mm a",
         "yMdhmv": "d/M/y hh:mm a v",
-        "yMEdHm": "EEE, d/M/y HH:mm",
-        "yMEdHmv": "EEE, d/M/y HH:mm v",
-        "yMEdhm": "EEE, d/M/y hh:mm a",
-        "yMEdhmv": "EEE, d/M/y hh:mm a v"
+        "yMEdHm": "E d/M/y HH:mm",
+        "yMEdHmv": "E d/M/y HH:mm v",
+        "yMEdhm": "E d/M/y hh:mm a",
+        "yMEdhmv": "E d/M/y hh:mm a v"
     },
     "date": "dd/MM/yyyy",
     "time": "HH:mm",

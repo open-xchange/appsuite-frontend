@@ -102,7 +102,7 @@
         "yMMMd": {
             "d": "d–d MMM, y",
             "m": "d MMM – d MMM, y",
-            "y": "d MMM, y ��� d MMM, y"
+            "y": "d MMM, y – d MMM, y"
         },
         "yMMMEd": {
             "d": "E, d MMM – E, d MMM, y",

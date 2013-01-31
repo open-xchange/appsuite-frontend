@@ -83,7 +83,7 @@
         "fallback": "%1$s – %2$s",
         "hm": {
             "a": "h:mm a – h:mm a",
-            "h": "h:mm���h:mm a",
+            "h": "h:mm–h:mm a",
             "m": "h:mm–h:mm a"
         },
         "Hm": {

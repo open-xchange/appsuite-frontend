@@ -57,27 +57,27 @@
     ],
     "formats": {
         "E": "E",
-        "yMd": "M/d/y",
-        "yMEd": "E, M/d/y",
-        "yMMMd": "MMM d, y",
-        "yMMMEd": "E, MMM d, y",
+        "yMd": "dd/MM/yyyy",
+        "yMEd": "E, dd/MM/yyyy",
+        "yMMMd": "d MMM y",
+        "yMMMEd": "E, d MMM y",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "M/d/y, HH:mm",
-        "yMdHmv": "M/d/y, HH:mm v",
-        "yMdhm": "M/d/y, h:mm a",
-        "yMdhmv": "M/d/y, h:mm a v",
-        "yMEdHm": "E, M/d/y, HH:mm",
-        "yMEdHmv": "E, M/d/y, HH:mm v",
-        "yMEdhm": "E, M/d/y, h:mm a",
-        "yMEdhmv": "E, M/d/y, h:mm a v"
+        "yMdHm": "dd/MM/yyyy HH:mm",
+        "yMdHmv": "dd/MM/yyyy HH:mm v",
+        "yMdhm": "dd/MM/yyyy h:mm a",
+        "yMdhmv": "dd/MM/yyyy h:mm a v",
+        "yMEdHm": "E, dd/MM/yyyy HH:mm",
+        "yMEdHmv": "E, dd/MM/yyyy HH:mm v",
+        "yMEdhm": "E, dd/MM/yyyy h:mm a",
+        "yMEdhmv": "E, dd/MM/yyyy h:mm a v"
     },
-    "date": "MMM d, y",
-    "time": "h:mm a",
-    "dateTimeFormat": "%2$s, %1$s",
+    "date": "d MMM y",
+    "time": "HH:mm",
+    "dateTimeFormat": "%2$s %1$s",
     "intervals": {
         "fallback": "%1$s – %2$s",
         "hm": {
@@ -99,25 +99,25 @@
             "m": "HH:mm–HH:mm v"
         },
         "yMMMd": {
-            "d": "MMM d–d, y",
-            "m": "MMM d – MMM d, y",
-            "y": "MMM d, y – MMM d, y"
+            "d": "d–d MMM y",
+            "m": "d MMM – d MMM y",
+            "y": "d MMM y – d MMM y"
         },
         "yMMMEd": {
-            "d": "E, MMM d – E, MMM d, y",
-            "m": "E, MMM d – E, MMM d, y",
-            "y": "E, MMM d, y – E, MMM d, y"
+            "d": "E, d – E, d MMM y",
+            "m": "E, d MMM – E, d MMM y",
+            "y": "E, d MMM y – E, d MMM y"
         }
     },
     "dayPeriods": {
-        "am": "AM",
+        "am": "am",
         "noon": "noon",
-        "pm": "PM"
+        "pm": "pm"
     },
     "eras": [
         "BC",
         "AD"
     ],
-    "dateTime": "MMM d, y, h:mm a",
-    "h12": true
+    "dateTime": "d MMM y HH:mm",
+    "h12": false
 }

@@ -20,12 +20,14 @@ Description: Manifest and apps included in the OX App Suite HTML5 client
 
 Package: open-xchange-appsuite-dev
 Architecture: all
-Depends: nodejs (>= 0.4.0)
+Depends: ${misc:Depends}, nodejs (>= 0.4.0)
 Description: SDK for the OX App Suite HTML5 client
 
 ## l10n ##
 #Package: open-xchange-appsuite-l10n-## lang ##
 #Architecture: all
+#Depends: ${misc:Depends}, open-xchange-l10n-## lang ##
 #Provides: open-xchange-appsuite-l10n
+#Breaks: open-xchange-l10n-## lang ## (<< 7.0.1)
 #Description: Translation of the OX App Suite HTML5 client (## Lang ##)
 ## end l10n ##

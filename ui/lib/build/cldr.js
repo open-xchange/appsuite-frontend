@@ -7,52 +7,44 @@ var utils = require("./fileutils");
 var xml2js = require("../xml2js/lib/xml2js");
 var _ = require("../underscore");
 
+var languageNames = {};
+
 desc("Downloads the latest CLDR data and updates date translations for all " +
      "languages in i18n/*.po .");
-utils.topLevelTask("update-i18n", ["lib/build/cldr.js"]);
+utils.topLevelTask("update-i18n", ["lib/build/cldr.js"], function () {
+    fs.writeFileSync('i18n/languagenames.json',
+                     JSON.stringify(languageNames, null, 4));
+});
 var svnPath = "/repos/cldr/" + (
         process.env.tag ? "tags/" + process.env.tag :
         process.env.branch ? "branches/" + process.env.branch :
         "trunk"
     ) + "/common/";
 
-var parentLocales = (function () {
-    var reverse = {
-        "root": "az_Cyrl ha_Arab ku_Latn mn_Mong pa_Arab shi_Tfng sr_Latn " +
-                "uz_Arab uz_Latn vai_Latn zh_Hant",
-        "en_GB": "en_AU en_BE en_HK en_IE en_IN en_MT en_NZ en_PK en_SG",
-        "es_419": "es_AR es_BO es_CL es_CO es_CR es_DO es_EC es_GT es_HN " +
-                  "es_MX es_NI es_PA es_PE es_PR es_PY es_SV es_US es_UY es_VE",
-        "pt_PT": "pt_AO pt_GW pt_MZ pt_ST"
-    };
-    var map = {};
-    for (var parent in reverse) {
-        children = reverse[parent].split(' ');
-        for (var i in children) map[children[i]] = parent;
-    }
-    return map;
-}());
-
 function getParent(name) {
+    var parentLocales = supplementalData().parentLocales;
     if (name in parentLocales) return parentLocales[name];
     var i = name.lastIndexOf("_");
     return i >= 0 ? name.slice(0, i) : name !== "root" ? "root" : null;
 }
 
 task('update-i18n', ['update-i18n_propfind']);
-task('update-i18n_propfind', ['tmp/cldr/main.propfind'], function () {
-    var json = JSON.parse(fs.readFileSync('tmp/cldr/main.propfind', 'utf8'));
-    _.each(json['D:response'], function (prop) {
-        var match = /\/(\w+)\.xml$/.exec(prop['D:href']);
-        if (!match) return;
-        var lang = match[1];
-        var dest = processLanguage(lang);
-        for (var name = lang; name; name = getParent(name)) {
-            task(dest, ["tmp/cldr/main/" + name + ".json"]);
-            downloadFile("main/" + name);
-        }
+task('update-i18n_propfind',
+    ['tmp/cldr/main.propfind', 'tmp/cldr/supplemental/supplementalData.json'],
+    function () {
+        var json = JSON.parse(fs.readFileSync('tmp/cldr/main.propfind',
+                                              'utf8'));
+        _.each(json['D:response'], function (prop) {
+            var match = /\/(\w+)\.xml$/.exec(prop['D:href']);
+            if (!match) return;
+            var lang = match[1];
+            var dest = processLanguage(lang);
+            for (var name = lang; name; name = getParent(name)) {
+                task(dest, ["tmp/cldr/main/" + name + ".json"]);
+                downloadFile("main/" + name);
+            }
+        });
     });
-});
 
 directory('tmp/cldr');
 file('tmp/cldr/main.propfind', ['tmp/cldr'],
@@ -60,6 +52,7 @@ file('tmp/cldr/main.propfind', ['tmp/cldr'],
 
 function propfind(path, callback) {
     var dest = 'tmp/cldr/' + path + '.propfind';
+    console.log('PROPFIND', path + '/');
     http.request({
         hostname: 'unicode.org',
         path: svnPath + path + '/',
@@ -112,9 +105,18 @@ downloadFile("supplemental/supplementalData", function (supp) {
         return parent;
     }
 
+    var parentLocales = {};
+    _.each(supp.parentLocales.parentLocale, function (parentLocale) {
+        var parent = parentLocale['@'].parent;
+        _.each(parentLocale['@'].locales.split(' '), function(locale) {
+            parentLocales[locale] = parent;
+        });
+    });
+
     return {
         minDays: mapTerritories(supp.weekData.minDays, "count"),
-        firstDay: mapTerritories(supp.weekData.firstDay, "day")
+        firstDay: mapTerritories(supp.weekData.firstDay, "day"),
+        parentLocales: parentLocales
     };
 
     function mapTerritories(tags, attr) {
@@ -146,6 +148,7 @@ function downloadFile(name, filter) {
     utils.file(dest, [], download, { async: true });
 
     function download() {
+        console.log('GET', name + '.xml');
         http.get({ host: "unicode.org", path: svnPath + name + ".xml" },
             parse).on("error", function (e) {
                 fail("HTTP error: " + e.message);
@@ -166,7 +169,7 @@ function downloadFile(name, filter) {
     }
 }
 
-function str(node) { return typeof node === 'string' ? node : node['#']; }
+function str(node) { return typeof node === 'object' ? node['#'] : node; }
 
 function processLanguage(lang) {
     var dest = "update-i18n-" + lang;
@@ -174,8 +177,41 @@ function processLanguage(lang) {
     task(dest,
         ["lib/build/cldr.js", "tmp/cldr/supplemental/supplementalData.json"],
         function () {
-			console.log('processing', lang);
             var ldml = loadLanguage(lang), supp = supplementalData();
+            
+            // extract the display name of the locale
+            var ldn = 'localeDisplayNames/', name;
+            for (var L = lang; L; L = L.replace(/(?:^|_)[A-Za-z0-9]+$/, '')) {
+                name = str(ldml.get(ldn +
+                    'languages/language[@type="' + L + '"]'));
+                if (name) break;
+            }
+            if (name) {
+                var id = ldml.get('identity', false);
+                var subtags = _.chain([['script', 'scripts'],
+                                       ['territory', 'territories'],
+                                       ['variant', 'variants']])
+                    .map(function (st) {
+                        return (st[0] in id) && ldml.get(ldn + st[1] + '/' +
+                            st[0] + '[@type="' + id[st[0]]['@'].type + '"]');
+                    })
+                    .filter(function (st) {
+                        return st && L.indexOf(st['@'].type) < 0;
+                    })
+                    .map(str).value();
+                if (subtags.length) {
+                    var pattern = str(ldml.get(ldn +
+                            'localeDisplayPattern/localePattern'));
+                    var separator = str(ldml.get(ldn +
+                            'localeDisplayPattern/localeSeparator'));
+                    languageNames[lang] = format(pattern,
+                                               [name, subtags.join(separator)]);
+                } else {
+                    languageNames[lang] = name;
+                }
+            }
+            
+            // extract locale data
             var gregorian = "dates/calendars/calendar[@type='gregorian']/";
             var weekDays = { sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5,
                              sat: 6 };
@@ -341,12 +377,19 @@ var loadLanguage = _.memoize(function (lang) {
     var parent = getParent(lang);
     parent = parent && loadLanguage(parent);
     return {
-        get: function (path) {
+        /**
+         * Selects a subtree based on an XPath string.
+         * @param path {string} The XPath string used to select the subtree.
+         * @param inherit {boolean} Optional parameter to manually suppress
+         * inheritance (blocking elements are not recognized automatically).
+         * @returns The selected subtree.
+         */
+        get: function (path, inherit) {
             if (typeof path == "string") path = xpath(path);
             var element = path[path.length - 1].element;
             var r = this.resolve(path);
             while (r && r.alias) r = this.resolve(r.alias);
-            if (!parent) return r;
+            if (inherit === false || !parent) return r;
             var p = parent.get(path);
             if (!p) return r;
             if (!r) return p;

@@ -80,7 +80,7 @@
     "time": "ah:mm",
     "dateTimeFormat": "%2$s %1$s",
     "intervals": {
-        "fallback": "%1$s���%2$s",
+        "fallback": "%1$s–%2$s",
         "hm": {
             "a": "ah:mm至ah:mm",
             "h": "ah:mm至h:mm",

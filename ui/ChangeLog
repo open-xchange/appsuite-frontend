@@ -1,6 +1,10 @@
+* 2013-01-31 - viktor.pracht@open-xchange.com
+
+ - Fixed bug 24669: Login doesn't work with cs_CZ locale
+
 * 2013-01-28 - viktor.pracht@open-xchange.com
 
- - Fixed bug #24612: Non-Existing file references in app cache manifests break UI update
+ - Fixed bug 24612: Non-Existing file references in app cache manifests break UI update
 
 * 2013-01-25 - viktor.pracht@open-xchange.com
 
