@@ -161,19 +161,27 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                             [gt('Tentative'), 'yellow']
                         ],
                         lookupParticipant = function (node, table, participant) {
-                            userApi.getName(participant.id).done(function (name) {
-                                    drawParticipant(table, participant, name);
-                                }).fail(function () {
-                                    failedToLoad(node, table, participant);
-                                });
+                            if (participant.id) {//external participants dont have an id but the display name is already given
+                                userApi.getName(participant.id).done(function (name) {
+                                        drawParticipant(table, participant, name);
+                                    }).fail(function () {
+                                        failedToLoad(node, table, participant);
+                                    });
+                            } else {
+                                drawParticipant(table, participant, participant.display_name);
+                            }
                         },
                         drawParticipant = function (table, participant, name) {
-                            table.append($('<tr>').append(
-                                        $('<td class="participants-table-name">').text(name),
-                                        $('<td>').text(states[participant.confirmation][0]),
-                                        $('<td>').append($('<div>').addClass('participants-table-colorsquare').css('background-color', states[participant.confirmation][1]))
-                                        )
+                            var row;
+                            table.append(row = $('<tr>').append(
+                                $('<td class="participants-table-name">').text(name))
+                            );
+                            if (participant.confirmation !== undefined) {
+                                row.append(
+                                    $('<td>').text(states[participant.confirmation][0]),
+                                    $('<td>').append($('<div>').addClass('participants-table-colorsquare').css('background-color', states[participant.confirmation][1]))
                                     );
+                            }
                         },
                         failedToLoad = function (node, table, participant) {
                             node.append(

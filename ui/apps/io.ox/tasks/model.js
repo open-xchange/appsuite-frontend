@@ -24,7 +24,10 @@ define('io.ox/tasks/model', ['io.ox/tasks/api',
             status: 1,
             priority: 2,
             percent_completed: 0,
-            folder_id: api.getDefaultFolder()
+            folder_id: api.getDefaultFolder(),
+            recurrence_type: 0,
+            private_flag: false,
+            notification: true//set allways (OX6 does this too)
         },
         factory = new ModelFactory({
             ref: 'io.ox/tasks/model',
