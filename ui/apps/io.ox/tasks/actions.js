@@ -138,7 +138,11 @@ define('io.ox/tasks/actions',
                         notifications.yell('success', mods.label);
                     })
                     .fail(function (result) {
-                        notifications.yell('error', gt.noI18n(result));
+                        var errorMsg = gt("A severe error occured!");
+                        if (result.code === "TSK-0007") {//task was modified before
+                            errorMsg = gt("Task was modified before, please reload");
+                        }
+                        notifications.yell('error', errorMsg);
                     });
             }
         });
