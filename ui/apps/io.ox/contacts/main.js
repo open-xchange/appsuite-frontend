@@ -147,7 +147,7 @@ define("io.ox/contacts/main",
                     .done(_.lfo(drawContact))
                     .fail(_.lfo(drawFail, obj));
             } else {
-                console.error('showContact', obj);
+                right.idle().empty();
             }
         };
 
@@ -200,7 +200,9 @@ define("io.ox/contacts/main",
                 showContact(app.currentContact);
             }
         }).on('refresh.all', function () {
-            showContact(app.currentContact);
+            if (app.currentContact) {
+                showContact(app.currentContact);
+            }
         });
 
         app.getGrid = function () {
