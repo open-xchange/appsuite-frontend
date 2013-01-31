@@ -175,7 +175,7 @@ define('io.ox/files/actions',
         }
     });
 
-    new Action('io.ox/files/actions/showsendlink', {
+    new Action('io.ox/files/actions/showlink', {
         requires: function (e) {
             return e.collection.has('some') && capabilities.has('webmail');
         },
@@ -542,10 +542,10 @@ define('io.ox/files/actions',
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'showsendlink',
+        id: 'showlink',
         index: 400,
-        label: gt("Show sendlink"),
-        ref: "io.ox/files/actions/showsendlink"
+        label: gt("Show link"),
+        ref: "io.ox/files/actions/showlink"
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
