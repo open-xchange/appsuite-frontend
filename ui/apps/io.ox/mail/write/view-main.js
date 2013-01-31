@@ -199,19 +199,17 @@ define("io.ox/mail/write/view-main",
                     .attr('data-type', id) // not name=id!
                     .addClass('discreet')
                     .autocomplete({
-                        source: function (query) {
-                            return autocompleteAPI.search(query)
-                                .pipe(function (data) {
-                                    // remove duplicates
-                                    var hash = {};
-                                    node.find('input[name=' + id + ']').map(function () {
-                                        var rcpt = mailUtil.parseRecipient($(this).val())[1];
-                                        hash[rcpt] = true;
-                                    });
-                                    return _(data).filter(function (o) {
-                                        return hash[o.email] === undefined;
-                                    });
-                                });
+                        api: autocompleteAPI,
+                        reduce: function (data) {
+                            // remove duplicates
+                            var hash = {};
+                            node.find('input[name=' + id + ']').map(function () {
+                                var rcpt = mailUtil.parseRecipient($(this).val())[1];
+                                hash[rcpt] = true;
+                            });
+                            return _(data).filter(function (o) {
+                                return hash[o.email] === undefined;
+                            });
                         },
                         stringify: function (data) {
                             return data.display_name ?
@@ -732,7 +730,7 @@ define("io.ox/mail/write/view-main",
         return list.map(function (elem) {
             var obj = {
                 display_name: _.isArray(elem) ? elem[0].replace(/^('|")|('|")$/g, '') : elem.display_name.replace(/^('|")|('|")$/g, '') || '',
-                email: _.isArray(elem) ? elem[1] : elem.mail || elem.email || '',
+                email: _.isArray(elem) ? elem[1] : elem.email || elem.mail || '',
                 image1_url: elem.image1_url || '',
                 folder_id: elem.folder_id || '',
                 id: elem.id || ''
