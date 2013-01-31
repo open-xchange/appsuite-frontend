@@ -62,6 +62,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
 
         _.extend(this, {
             clear: function () {
+                fluent = {};
                 return readwrite(function (cache, important) {
                     return $.when(
                         OP(cache.clear()),
@@ -122,6 +123,9 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 return $.Deferred().resolve();
             },
             remove: function (key) {
+                if (fluent[key]) {
+                    delete fluent[key];
+                }
                 return readwrite(function (cache, important) {
                     return $.when(
                         cache['delete'](key),

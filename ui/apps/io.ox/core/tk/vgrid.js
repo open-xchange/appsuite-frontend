@@ -136,6 +136,73 @@ define('io.ox/core/tk/vgrid',
         };
     }
 
+    var ChunkedLoader = function () {
+        var CHUNK_SIZE = 50;
+
+        this.load = _.identity();
+        this.all = function () {
+            return [];
+        };
+
+        function loadChunk(index) {
+            var all = this.all();
+            var offset = CHUNK_SIZE * index;
+            var numRows = offset + CHUNK_SIZE - 1;
+
+            var subset = all.slice(offset, offset + numRows);
+            
+            return this.load(subset);
+        }
+
+        function getChunkLoaders(start, length) {
+            var end = start + length;
+            var startChunk = Math.floor(start / CHUNK_SIZE);
+            var endChunk = Math.floor(end / CHUNK_SIZE);
+            var i = 0;
+            
+            var chunkLoaders = [];
+
+            for (i = startChunk; i++; i <= endChunk) {
+                var lowerBound = i * CHUNK_SIZE;
+                var upperBound = ((i + 1) * CHUNK_SIZE) - 1;
+                if (start > lowerBound) {
+                    lowerBound = start;
+                }
+                if (end < upperBound) {
+                    upperBound = end;
+                }
+                chunkLoaders[i] = {
+                    loader: loadChunk(i),
+                    start: (i * CHUNK_SIZE) - lowerBound,
+                    end: (i * CHUNK_SIZE) - (upperBound + 1)
+                };
+            }
+
+            return chunkLoaders;
+        }
+
+        this.load = function (start, length) {
+            var chunkLoaders = getChunkLoaders(start, length);
+            var deferreds = [];
+            _(chunkLoaders).each(function (obj) {
+                deferreds.push(obj.loader);
+            });
+            var def = $.Deferred();
+            var list = [];
+
+            $.when.apply($, deferreds).done(function () {
+                var i;
+                for (i = 0; i < arguments.length; i++) {
+                    list = list.concat(arguments[0].slice(chunkLoaders[i].start, chunkLoaders[i].end));
+                }
+                def.resolve(list);
+            }).fail(def.reject);
+
+            return def;
+        };
+    };
+
+
     var VGrid = function (target, options) {
 
         options = options || {};
