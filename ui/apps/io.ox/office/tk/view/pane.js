@@ -70,6 +70,16 @@ define('io.ox/office/tk/view/pane',
         };
 
         /**
+         * Returns whether this view pane is currently visible.
+         *
+         * @returns {Boolean}
+         *  Whether the view pane is currently visible.
+         */
+        this.isVisible = function () {
+            return node.css('display') !== 'none';
+        };
+
+        /**
          * Adds the passed view component into this pane, and registers it at
          * the application controller.
          *
@@ -98,7 +108,7 @@ define('io.ox/office/tk/view/pane',
          *  The new tool box component.
          */
         this.createToolBox = function (options) {
-            var toolBox = new ToolBox(app, options);
+            var toolBox = new ToolBox(options);
             this.addViewComponent(toolBox);
             return toolBox;
         };

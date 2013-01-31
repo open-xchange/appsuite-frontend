@@ -126,6 +126,7 @@ i[class^="icon-"], i[class^=" icon-"] {
 
 .view-pane {
     position: absolute;
+    overflow: hidden;
     background: @pane-fill-color;
     line-height: 0;
 
@@ -135,6 +136,7 @@ i[class^="icon-"], i[class^=" icon-"] {
 
         &.overlay {
             height: 0;
+            overflow: visible;
         }
     }
 

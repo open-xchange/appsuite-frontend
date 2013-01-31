@@ -52,7 +52,7 @@ define('io.ox/office/tk/view/toolbox',
      *      If set to true, the heading label can be clicked to expand the tool
      *      box (show all its contents) after it has been collapsed.
      */
-    function ToolBox(app, options) {
+    function ToolBox(options) {
 
         var // self reference
             self = this,
@@ -71,7 +71,7 @@ define('io.ox/office/tk/view/toolbox',
 
         // base constructor ---------------------------------------------------
 
-        Component.call(this, app, options);
+        Component.call(this, options);
 
         // private methods ----------------------------------------------------
 
@@ -82,10 +82,12 @@ define('io.ox/office/tk/view/toolbox',
          *  If set to true, the tool box will be expanded, otherwise collapsed.
          */
         function expandToolBox(expand) {
-            self.getNode().toggleClass(COLLAPSED_CLASS, !expand);
-            headingButton
-                .setIcon('caret-icon ' + (expand ? 'down' : 'right'))
-                .enable(expand ? canCollapse : canExpand);
+            if (headingButton) {
+                self.getNode().toggleClass(COLLAPSED_CLASS, !expand);
+                headingButton
+                    .setIcon('caret-icon ' + (expand ? 'down' : 'right'))
+                    .enable(expand ? canCollapse : canExpand);
+            }
         }
 
         /**

@@ -235,7 +235,7 @@ define('io.ox/office/tk/view/view',
          *  Whether the specified view pane is currently visible.
          */
         this.isPaneVisible = function (id) {
-            return  (id in panesById) && (panesById[id].getNode().css('display') !== 'none');
+            return  (id in panesById) && panesById[id].isVisible();
         };
 
         /**
