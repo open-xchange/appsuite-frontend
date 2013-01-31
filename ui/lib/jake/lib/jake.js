@@ -104,30 +104,6 @@ utils.mixin(jake, new (function () {
   this.DirectoryTask = DirectoryTask;
   this.Namespace = Namespace;
 
-  this.parseAllTasks = function () {
-    var _parseNs = function (name, ns) {
-      var nsTasks = ns.tasks
-        , task
-        , nsNamespaces = ns.childNamespaces
-        , fullName;
-      // Iterate through the tasks in each namespace
-      for (var q in nsTasks) {
-        task = nsTasks[q];
-        // Preface only the namespaced tasks
-        fullName = name == 'default' ? q : name + ':' + q;
-        // Save with 'taskname' or 'namespace:taskname' key
-        task.fullName = fullName;
-        jake.Task[fullName] = task;
-      }
-      for (var p in nsNamespaces) {
-        fullName = name  == 'default' ? p : name + ':' + p;
-        _parseNs(fullName, nsNamespaces[p]);
-      }
-    };
-
-    _parseNs('default', jake.defaultNamespace);
-  };
-
   /**
    * Displays the list of descriptions avaliable for tasks defined in
    * a Jakefile
@@ -230,18 +206,24 @@ utils.mixin(jake, new (function () {
         constructor = Task;
     }
     
-    task = jake.Task[name];
+    var fullName = name;
+    for (var ns = jake.currentNamespace; ns; ns = ns.parentNamespace) {
+        if (ns !== jake.defaultNamespace) fullName = ns.name + ':' + fullName;
+    }
+    task = jake.Task[fullName];
     if (task) {
       if (task.type != type && type != "task") {
-        throw new Error('Cannot change type of task ' + name + ' from ' +
+        throw new Error('Cannot change type of task ' + fullName + ' from ' +
                         task.type + ' to ' + type);
       }
-      task.prereqs = task.prereqs.concat(prereqs);
+      task.prereqs.push.apply(task.prereqs, prereqs);
       if (action) task.action = action;
     } else {
       task = new constructor(name, prereqs, action, opts);
       task.type = type;
       jake.currentNamespace.tasks[name] = task;
+      task.fullName = fullName;
+      jake.Task[fullName] = task;
     }
     
     if (jake.currentTaskDescription) {
@@ -249,10 +231,6 @@ utils.mixin(jake, new (function () {
       jake.currentTaskDescription = null;
     }
     task.namespace = jake.currentNamespace;
-
-    // FIXME: Should only need to add a new entry for the current
-    // task-definition, not reparse the entire structure
-    jake.parseAllTasks();
 
     return task;
   };
