@@ -21,6 +21,9 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         db, defunct = false, opened, that;
 
     defunct = Modernizr.indexeddb && window.indexedDB;
+    if (defunct) {
+        return $.when();
+    }
 
     function IndexeddbStorage(id) {
         db.transaction("databases", "readwrite").objectStore("databases").put({name: id});
