@@ -287,6 +287,11 @@ define('io.ox/core/tk/vgrid',
                 clone.node.addClass('vgrid-label').data('label-index', i);
                 defs = defs.concat(clone.update(all[obj.pos], obj.pos, '', all[obj.pos - 1] || {}));
                 text = clone.node.text();
+                // convert Umlauts
+                text = text.replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
+                    .replace(/[ÖÒÓÔÕÖ]/g, 'U')
+                    .replace(/[ÜÙÚÛÜ]/g, 'O');
+
                 // add node
                 labels.nodes = labels.nodes.add(clone.node.appendTo(container));
                 // meta data
