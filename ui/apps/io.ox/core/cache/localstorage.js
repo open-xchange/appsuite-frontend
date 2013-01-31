@@ -10,14 +10,11 @@
  * @author Martin Holzhauer <martin.holzhauer@open-xchange.com>
  */
 
-define('io.ox/core/cache/localstorage', function () {
+define('io.ox/core/cache/localstorage', ["io.ox/core/extensions"], function (ext) {
 
     'use strict';
 
-    var id = null,
-        reg = null,
-        // max size for persistent objects
-        MAX_LENGTH = 1024 * 1024, // 1MB
+    var MAX_LENGTH = 1024 * 1024, // 1MB
         // queue
         QUEUE_DELAY = 5000,
         queue = { timer: null, list: [] },
@@ -25,6 +22,8 @@ define('io.ox/core/cache/localstorage', function () {
         fluent = {},
         // access time
         access = {},
+        // Instances
+        instances = {},
         that;
 
     function syncSet(cid, json) {
@@ -52,16 +51,114 @@ define('io.ox/core/cache/localstorage', function () {
         }
     }
 
-    that = {
+    function WebStorage(id) {
+        var reg = new RegExp('^' + id.replace(/\./g, '\\.') + '\\.');
 
+        _.extend(this, {
+            clear: function () {
+                // loop over all keys (do this in two loops due to very strange async-ish behaviour in some browsers)
+                var i = 0, $i = localStorage.length, key, tmp = [];
+                for (; i < $i; i++) {
+                    // copy?
+                    if (reg.test(key = localStorage.key(i))) {
+                        tmp.push(key);
+                    }
+                }
+                // loop over tmp and remove items
+                _(tmp).each(function (key) {
+                    localStorage.removeItem(key);
+                });
+                // clear backup cache
+                for (key in fluent) {
+                    if (reg.test(key)) {
+                        delete fluent[key];
+                    }
+                }
+                return $.when();
+            },
+
+            get: function (key) {
+
+                // fetch first, then GC
+                var cid = id + '.' + key, inFluent = cid in fluent, data, def = $.Deferred();
+
+                // try to be fast without blocking
+                if (inFluent) {
+                    data = JSON.parse(fluent[cid]);
+                    def.resolve(data);
+                    access[cid] = _.now();
+                } else {
+                    setTimeout(function () {
+                        var item = localStorage.getItem(cid);
+                        if (item !== null) {
+                            access[cid] = _.now();
+                            data = JSON.parse(fluent[cid] = item);
+                            def.resolve(data);
+                        } else {
+                            def.resolve(null);
+                        }
+                    }, 0);
+                }
+
+                return def;
+            },
+
+            set: function (key, data) {
+
+                var cid = id + '.' + key;
+
+                // use fluent cache to be fast
+                data = JSON.stringify(data);
+                fluent[cid] = data;
+                access[cid] = _.now();
+
+                if (data.length <= MAX_LENGTH) {
+                    if (/app-cache\.index\.savepoints$/.test(cid)) {
+                        // need to be sync here; otherwise failover fails
+                        syncSet(cid, data);
+                    } else {
+                        // don't block
+                        deferredSet(cid, data);
+                    }
+                }
+
+                return $.Deferred().resolve(key);
+            },
+
+            remove: function (key) {
+                var cid = id + '.' + key;
+                delete fluent[cid];
+                localStorage.removeItem(cid); // do this sync
+                return $.when();
+            },
+
+            keys: function () {
+                var i, $i, key, tmp = [];
+                // loop over all keys
+                for (i = 0, $i = localStorage.length; i < $i; i++) {
+                    // get key by index
+                    key = localStorage.key(i);
+                    // match?
+                    if (reg.test(key)) {
+                        tmp.push(key.substr(id.length + 1));
+                    }
+                }
+                // loop over backup cache
+                for (key in fluent) {
+                    if (reg.test(key)) {
+                        tmp.push(key.substr(id.length + 1));
+                    }
+                }
+                return $.Deferred().resolve(_(tmp).uniq());
+            }
+        });
+    }
+
+    that = {
+        id: 'localstorage',
+        index: 200,
         dump: function () {
             console.debug('fluent', fluent, 'access', access);
-        },
-
-        setId: function (theId) {
-            id = theId;
-            reg = new RegExp('^' + id.replace(/\./g, '\\.') + '\\.');
-            return this;
         },
 
         getStorageLayerName: function () {
@@ -94,103 +191,17 @@ define('io.ox/core/cache/localstorage', function () {
             items = null;
         },
 
-        clear: function () {
-            // loop over all keys (do this in two loops due to very strange async-ish behaviour in some browsers)
-            var i = 0, $i = localStorage.length, key, tmp = [];
-            for (; i < $i; i++) {
-                // copy?
-                if (reg.test(key = localStorage.key(i))) {
-                    tmp.push(key);
-                }
+        getInstance: function (id) {
+            if (!instances[id]) {
+                return instances[id] = new WebStorage(id);
             }
-            // loop over tmp and remove items
-            _(tmp).each(function (key) {
-                localStorage.removeItem(key);
-            });
-            // clear backup cache
-            for (key in fluent) {
-                if (reg.test(key)) {
-                    delete fluent[key];
-                }
-            }
-            return $.when();
-        },
-
-        get: function (key) {
-
-            // fetch first, then GC
-            var cid = id + '.' + key, inFluent = cid in fluent, data, def = $.Deferred();
-
-            // try to be fast without blocking
-            if (inFluent) {
-                data = JSON.parse(fluent[cid]);
-                def.resolve(data);
-                access[cid] = _.now();
-            } else {
-                setTimeout(function () {
-                    var item = localStorage.getItem(cid);
-                    if (item !== null) {
-                        access[cid] = _.now();
-                        data = JSON.parse(fluent[cid] = item);
-                        def.resolve(data);
-                    } else {
-                        def.resolve(null);
-                    }
-                }, 0);
-            }
-
-            return def;
-        },
-
-        set: function (key, data) {
-
-            var cid = id + '.' + key;
-
-            // use fluent cache to be fast
-            data = JSON.stringify(data);
-            fluent[cid] = data;
-            access[cid] = _.now();
-
-            if (data.length <= MAX_LENGTH) {
-                if (/app-cache\.index\.savepoints$/.test(cid)) {
-                    // need to be sync here; otherwise failover fails
-                    syncSet(cid, data);
-                } else {
-                    // don't block
-                    deferredSet(cid, data);
-                }
-            }
-
-            return $.Deferred().resolve(key);
-        },
-
-        remove: function (key) {
-            var cid = id + '.' + key;
-            delete fluent[cid];
-            localStorage.removeItem(cid); // do this sync
-            return $.when();
-        },
-
-        keys: function () {
-            var i, $i, key, tmp = [];
-            // loop over all keys
-            for (i = 0, $i = localStorage.length; i < $i; i++) {
-                // get key by index
-                key = localStorage.key(i);
-                // match?
-                if (reg.test(key)) {
-                    tmp.push(key.substr(id.length + 1));
-                }
-            }
-            // loop over backup cache
-            for (key in fluent) {
-                if (reg.test(key)) {
-                    tmp.push(key.substr(id.length + 1));
-                }
-            }
-            return $.Deferred().resolve(_(tmp).uniq());
+            return instances[id];
         }
+
+        
     };
+    
+    ext.point("io.ox/core/cache/storage").extend(that);
 
     return that;
 });

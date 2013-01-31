@@ -493,14 +493,15 @@ define('io.ox/core/commons-folderview',
 
                     api.on('update', function (e, id, newId, data) {
                         // this is used by folder rename, since the id might change (mail folders)
-                        if (_.isEqual(tree.selection.get(), [id])) {
+                        var sel = tree.selection.get();
+                        if (_.isEqual(sel, [id])) {
                             tree.repaint().done(function () {
                                 tree.idle();
                                 if (newId !== id) tree.select(newId);
                             });
                         } else {
-                            if (!id && !newId) {
-                                tree.select('default0/INBOX');
+                            if (!id && !newId && sel.length === 0) {
+                                tree.select(config.get('folder.' + options.type) + '');
                             }
                             tree.repaint();
                             tree.idle();

@@ -14,7 +14,7 @@
 define('io.ox/calendar/edit/template',
         ['io.ox/core/extensions',
          'gettext!io.ox/calendar/edit/main',
-         'io.ox/contacts/util',
+         'io.ox/calendar/util',
          'io.ox/core/date',
          'io.ox/backbone/views',
          'io.ox/backbone/forms',

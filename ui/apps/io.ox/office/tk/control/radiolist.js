@@ -83,6 +83,11 @@ define('io.ox/office/tk/control/radiolist',
             // custom update handler for the caption of the menu button
             updateCaptionHandler = Utils.getFunctionOption(options, 'updateCaptionHandler');
 
+        // base constructor ---------------------------------------------------
+
+        Group.call(this, options);
+        List.call(this, Utils.extendOptions({ itemValueResolver: itemClickHandler }, options));
+
         // private methods ----------------------------------------------------
 
         /**
@@ -144,11 +149,6 @@ define('io.ox/office/tk/control/radiolist',
             var toggleClick = Utils.isButtonSelected(button) && !_.isNull(toggleValue) && !_.isUndefined(toggleValue);
             return toggleClick ? toggleValue : Utils.getControlValue(button);
         }
-
-        // base constructor ---------------------------------------------------
-
-        Group.call(this, options);
-        List.call(this, Utils.extendOptions({ itemValueResolver: itemClickHandler }, options));
 
         // methods ------------------------------------------------------------
 

@@ -919,7 +919,11 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                     .done(function (data) {
                         // orchestrate callbacks and their data
                         for (i = 0, $l = q.length; i < $l; i++) {
-                            q[i].deferred.resolve(data[i]);
+                            if (data[i].data && data[i].timestamp) {
+                                q[i].deferred.resolve(data[i].data, data[i].timestamp);
+                            } else {
+                                q[i].deferred.resolve(data[i]);
+                            }
                         }
                         // continuation
                         def.resolve(data);

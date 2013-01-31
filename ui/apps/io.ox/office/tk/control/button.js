@@ -48,6 +48,10 @@ define('io.ox/office/tk/control/button',
             // toggle button or push button
             toggle = Utils.getBooleanOption(options, 'toggle', false);
 
+        // base constructor ---------------------------------------------------
+
+        Group.call(this, options);
+
         // private methods ----------------------------------------------------
 
         /**
@@ -88,10 +92,6 @@ define('io.ox/office/tk/control/button',
                 return false;
             }
         }
-
-        // base constructor ---------------------------------------------------
-
-        Group.call(this, options);
 
         // methods ------------------------------------------------------------
 

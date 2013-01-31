@@ -77,6 +77,7 @@ define('io.ox/core/event', function () {
                     delete context.events;
                     delete context.on;
                     delete context.off;
+                    delete context.one;
                     delete context.trigger;
                 } catch (e) { }
             }

@@ -41,7 +41,7 @@ define('io.ox/office/tk/view/component',
      *  when the Escape key is pressed, or when a click on a drop-down button
      *  closes the opened drop-down menu).
      * - 'show': When the visibility of the component has been changed. The
-     *  event handler receives the visibility state as second parameter.
+     *  event handler receives the visibility state.
      *
      * @constructor
      *

@@ -269,15 +269,16 @@ $(document).ready(function () {
         changeLanguage(e.data.id);
         // the user forced a language
         ox.forcedLanguage = e.data.id;
-    }
+    };
 
     var getBrowserLanguage = function () {
         var language = (navigator.language || navigator.userLanguage).substr(0, 2),
-            languages = ox.serverConfig.languages || {};
+            languages = ox.serverConfig.languages || {};
         return _.chain(languages).keys().find(function (id) {
                 return id.substr(0, 2) === language;
             }).value();
     };
+
     /**
      * Set default language
      */
@@ -382,6 +383,11 @@ $(document).ready(function () {
     }
 
     function getCachedServerConfig(configCache, cacheKey, def) {
+        if (!configCache || !cacheKey) {
+            setFallbackConfig();
+            def.resolve();
+            return;
+        }
         configCache.get(cacheKey).done(function (data) {
             if (data !== null) {
                 updateServerConfig(data);
@@ -414,7 +420,9 @@ $(document).ready(function () {
             } else {
                 getCachedServerConfig(configCache, cacheKey, def);
             }
-        })
+        }).fail(function () {
+            getCachedServerConfig(null, cacheKey, def);
+        });
         return def;
     }
 
@@ -424,6 +432,22 @@ $(document).ready(function () {
 
     function fetchGeneralServerConfig() {
         return fetchServerConfig('generalconfig');
+    }
+
+    function serverDown() {
+        var localCSS = {
+            paddingTop: '40px',
+            margin: '0',
+            textAlign: 'center'
+        };
+        
+        $("#io-ox-login-container")
+            .empty()
+            .append(
+                $("<h2>").css(localCSS).text("There was a problem connecting to the site."),
+                $("<h3>").css(localCSS).append($('<a href="#">').text("Click here to try again").on('click', function () { location.reload(); }))
+            );
+        $("#background_loader").idle().fadeOut(DURATION);
     }
 
     /**
@@ -498,6 +522,8 @@ $(document).ready(function () {
                     continueWithoutAutoLogin();
                 });
             }
+        }).fail(function () {
+            serverDown();
         });
     };
 
@@ -616,7 +642,6 @@ $(document).ready(function () {
     $("#background_loader").busy();
 
     var boot = function () {
-
         fetchGeneralServerConfig().done(function () {
             // set page title now
             document.title = _.noI18n(ox.serverConfig.pageTitle || '');

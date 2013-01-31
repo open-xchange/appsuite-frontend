@@ -151,7 +151,7 @@ define('io.ox/core/tk/autocomplete',
                             var node = $('<div>')
                                 .addClass('autocomplete-item')
                                 .data('data', data)
-                                .on('click', { index: index, contact: data.contact, email: data.email, distlistarray: data.data.distribution_list }, fnSelectItem);
+                                .on('click', { index: index, contact: data.contact, email: data.email, distlistarray: data.data.distribution_list, id: data.data.id, folder_id: data.data.folder_id, image1_url: data.data.image1_url, display_name: data.data.display_name, mail: data.data.email1 }, fnSelectItem);
                             o.draw.call(node, data, query);
                             node.appendTo(scrollpane);
                         });

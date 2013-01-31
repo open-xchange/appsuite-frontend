@@ -70,7 +70,9 @@ define('io.ox/calendar/edit/view-addparticipants',
 
                         // filter doublets
                         data = _(data).filter(function (recipient) {
-                            if (hash[recipient.email] === undefined && hash[recipient.data.internal_userid] === undefined) {
+                            if (recipient.type === 'resource') {
+                                return hash[recipient.data.mailaddress] = true;
+                            } else if (hash[recipient.email] === undefined && hash[recipient.data.internal_userid] === undefined) {
                                 return hash[recipient.email] = true;
                             }
                         });

@@ -362,9 +362,9 @@ define('plugins/notifications/calendar/register',
                             if (ReminderNotifications.collection.hidden.length === 0 || _.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
                                 tmp.push(inObj);
                             }
-                            ReminderNotifications.collection.reset(tmp);
                         });
                     });
+                    ReminderNotifications.collection.reset(tmp);
                 })
                 .on('remove-calendar-notifications', removeReminders)
                 .getReminders();

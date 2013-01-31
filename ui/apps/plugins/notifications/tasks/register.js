@@ -133,11 +133,11 @@ define('plugins/notifications/tasks/register',
 
             var notifications = controller.get('io.ox/tasks', NotificationsView);
             
-            function add(e, tasks) {
+            function add(e, tasks, reset) {
+                var items = [];
                 _(tasks).each(function (taskObj) {
-                    var task = util.interpretTask(taskObj);
-                    notifications.collection.push(
-                        new Backbone.Model({
+                    var task = util.interpretTask(taskObj),
+                        tmp = new Backbone.Model({
                             id: task.id,
                             folder_id: task.folder_id,
                             badge: task.badge,
@@ -145,10 +145,16 @@ define('plugins/notifications/tasks/register',
                             end_date: task.end_date,
                             status: task.status,
                             cid: _.cid(task)
-                        }),
-                        { silent: true }
-                    );
+                        });
+                    if (reset) {
+                        items.push(tmp);
+                    } else {
+                        notifications.collection.push(tmp, {silent: true});
+                    }
                 });
+                if (reset) {
+                    notifications.collection.reset(items);
+                }
             }
             
             function remove(e, tasks) {
@@ -159,7 +165,7 @@ define('plugins/notifications/tasks/register',
             //be responsive
             api.on('delete', remove);
             api.on('new-tasks', function (e, tasks) {
-                add(e, tasks);
+                add(e, tasks, true);
                 notifications.collection.trigger('reset');
             });
             api.on('add-overdue-tasks', function (e, tasks) {
@@ -319,13 +325,13 @@ define('plugins/notifications/tasks/register',
             var notifications = controller.get('io.ox/tasksreminder', NotificationsReminderView);
 
             reminderApi.on('reminder-tasks', function (e, reminderTaskIds, reminderIds) {
-
                 api.getAll({}, false).done(function (tasks) {
+                    var items = [];
                     _(tasks).each(function (taskObj) {
                         var index = $.inArray(taskObj.id, reminderTaskIds);
                         if (index !== -1) {
                             var task = util.interpretTask(taskObj);
-                            notifications.collection.push(
+                            items.push(
                                 new Backbone.Model({
                                     id: task.id,
                                     folder_id: task.folder_id,
@@ -334,12 +340,11 @@ define('plugins/notifications/tasks/register',
                                     title: task.title,
                                     end_date: task.end_date,
                                     status: task.status
-                                }),
-                                { silent: true }
+                                })
                             );
                         }
                     });
-                    notifications.collection.trigger('reset');
+                    notifications.collection.reset(items).trigger('reset');
                 });
             });
         }
@@ -497,13 +502,13 @@ define('plugins/notifications/tasks/register',
         register: function (controller) {
             var notifications = controller.get('io.ox/tasksconfirmation', NotificationsConfirmationView);
             api.on('confirm-tasks', function (e, confirmationTasks) {
+                var items = [];
                 _(confirmationTasks).each(function (task) {
-                    notifications.collection.push(
-                        new Backbone.Model(task),
-                        { silent: true }
+                    items.push(
+                        new Backbone.Model(task)
                     );
                 });
-                notifications.collection.trigger('reset');
+                notifications.collection.reset(items).trigger('reset');
             });
         }
     });

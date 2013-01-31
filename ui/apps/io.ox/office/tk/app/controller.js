@@ -24,33 +24,34 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
      *
      * @constructor
      *
-     * @param {Object} definitions
-     *  A map of key/definition pairs. Each attribute in this map defines an
-     *  item, keyed by its name. See method Controller.addDefinitions() for
-     *  details.
-     *
-     * @param {Function} [defaultDoneHandler]
-     *  A function that will run when an item setter function has been executed
-     *  after a 'change' event and the item does not define its own done
-     *  handler, or if a view component triggers a 'cancel' event. Will be
-     *  executed in the context of this controller.
+     * @param {OfficeApplication} app
+     *  The application that has created this controller instance.
      */
-    function Controller(app, definitions, defaultDoneHandler) {
+    function Controller(app) {
 
         var // self reference
             self = this,
 
-            // deferred methods that will be executed in a browser timeout
-            deferredMethods = new Utils.DeferredMethods(this),
-
             // definitions for all items, mapped by item key
             items = {},
+
+            // all registered default done handlers
+            doneHandlers = [],
 
             // registered view components
             components = [],
 
             // cached item values during a complex update
-            resultCache = {};
+            resultCache = {},
+
+            // all the little controller items
+            items = {
+
+                'app/quit': {
+                    // quit in a timeout (otherwise destructor breaks this controller while running)
+                    set: function () { _.defer(function () { app.quit(); }); }
+                }
+            };
 
         // class Item ---------------------------------------------------------
 
@@ -69,7 +70,7 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
                 // handler for value setter
                 setHandler = Utils.getFunctionOption(definition, 'set', $.noop),
                 // done handler
-                doneHandler = Utils.getFunctionOption(definition, 'done', defaultDoneHandler);
+                doneHandler = Utils.getFunctionOption(definition, 'done', callDoneHandlers);
 
             function getAndCacheResult(type, handler, parentValue) {
 
@@ -211,19 +212,39 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
         }
 
         /**
+         * Calls all registered default done handlers.
+         */
+        function callDoneHandlers() {
+            _(doneHandlers).each(function (doneHandler) {
+                doneHandler.call(self);
+            });
+        }
+
+        /**
+         * Calls the set handler of the item with the registered key. If the
+         * item does not exist, calls the registered default done handlers.
+         */
+        function callSetHandler(key, value) {
+            if (key in items) {
+                clearResultCache();
+                items[key].change(value);
+            } else {
+                callDoneHandlers();
+            }
+        }
+
+        /**
          * The event handler function that will listen to 'change' and 'cancel'
          * events in all registered view components.
          */
         function componentEventHandler(event, key, value) {
-            if (event.type === 'change') {
-                if (key in items) {
-                    clearResultCache();
-                    items[key].change(value);
-                } else {
-                    defaultDoneHandler.call(self);
-                }
-            } else if (event.type === 'cancel') {
-                defaultDoneHandler.call(self);
+            switch (event.type) {
+            case 'change':
+                callSetHandler(key, value);
+                break;
+            case 'cancel':
+                callDoneHandlers();
+                break;
             }
         }
 
@@ -282,7 +303,7 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
          * @returns {Controller}
          *  A reference to this controller instance.
          */
-        this.addDefinition = function (key, definition) {
+        this.registerDefinition = function (key, definition) {
             if (_.isString(key) && key && _.isObject(definition)) {
                 items[key] = new Item(key, definition);
             }
@@ -294,14 +315,33 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
          *
          * @param {Object} definitions
          *  A map of key/definition pairs for all new items. Each item will be
-         *  defined by calling the method Controller.addDefinition().
+         *  defined by calling the method Controller.registerDefinition(). See
+         *  this method for more details.
          *
          * @returns {Controller}
          *  A reference to this controller instance.
          */
-        this.addDefinitions = function (definitions) {
-            _(definitions).each(function (definition, key) { this.addDefinition(key, definition); }, this);
+        this.registerDefinitions = function (definitions) {
+            _(definitions).each(function (definition, key) {
+                this.registerDefinition(key, definition);
+            }, this);
             return this;
+        };
+
+        /**
+         * Registers a callback function that will be called when an item
+         * setter function has been executed after a 'change' event and the
+         * item does not define its own done handler, or if a view component
+         * triggers a 'cancel' event. Will be executed in the context of this
+         * controller.
+         *
+         * @param {Function} doneHandler
+         *
+         * @returns {Controller}
+         *  A reference to this controller instance.
+         */
+        this.registerDoneHandler = function (doneHandler) {
+            doneHandlers.push(doneHandler);
         };
 
         /**
@@ -387,7 +427,7 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
         };
 
         /**
-         * Updates the values of the specified items, and updates all
+         * Receives the current values of the specified items, and updates all
          * registered view components.
          *
          * @param {String|RegExp|Null} [keys]
@@ -422,8 +462,9 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
                 pendingKeys = [];
             }
 
-            // create and return the deferred Controller.update() method
-            return deferredMethods.createMethod(registerKeys, updateComponents);
+            // create and return the debounced Controller.update() method
+            return app.createDebouncedMethod(registerKeys, updateComponents);
+
         }()); // Controller.update()
 
         /**
@@ -455,7 +496,7 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
          *  A reference to this controller.
          */
         this.change = function (key, value) {
-            componentEventHandler({ type: 'change' }, key, value);
+            callSetHandler(key, value);
             return this;
         };
 
@@ -467,7 +508,7 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
          *  A reference to this controller.
          */
         this.cancel = this.done = function () {
-            componentEventHandler({ type: 'cancel' });
+            callDoneHandlers();
             return this;
         };
 
@@ -475,24 +516,15 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
          * Removes this controller from all event sources.
          */
         this.destroy = function () {
-            deferredMethods.destroy();
             // unregister from view components
             _(components).invoke('off', 'change cancel', componentEventHandler);
-            deferredMethods = items = components = null;
+            items = components = null;
         };
 
         // initialization -----------------------------------------------------
 
-        defaultDoneHandler = _.isFunction(defaultDoneHandler) ? defaultDoneHandler : $.noop;
-
-        this.addDefinitions({
-            'app/quit': {
-                // quit in a timeout, otherwise destructor breaks this controller while running
-                set: function () { window.setTimeout(function () { app.quit(); }, 0); }
-            }
-        });
-
-        this.addDefinitions(definitions);
+        // register item definitions
+        this.registerDefinitions(items);
 
     } // class Controller
 

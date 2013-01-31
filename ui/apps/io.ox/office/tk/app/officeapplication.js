@@ -30,7 +30,25 @@ define('io.ox/office/tk/app/officeapplication',
      * following additional events:
      * - 'docs:init': Once during launch, after this application instance has
      *      been constructed completely, before the registered launch handlers
-     *      will be called.
+     *      will be called. Note that the calling order of the event listeners
+     *      is not defined. See method OfficeApplication.registerInitHandler()
+     *      for an alternative.
+     * - 'docs:init:after': Once during launch, after the registered launch
+     *      handlers have been called.
+     * - 'docs:init:success': Directly after the event 'docs:init:after', if
+     *      all initialization handlers returned successfully.
+     * - 'docs:init:error': Directly after the event 'docs:init:after', if any
+     *      initialization handler failed.
+     * - 'docs:import:before': Once during launch before the document described
+     *      in the file descriptor will be imported.
+     * - 'docs:import:after': Once during launch, after the document described
+     *      in the file descriptor has been imported (successfully or not).
+     * - 'docs:import:success': Directly after the event 'docs:import:after',
+     *      if the document described in the file descriptor has been imported
+     *      successfully.
+     * - 'docs:import:error': Directly after the event 'docs:import:after',
+     *      if an error occurred while importing the document described in the
+     *      file descriptor.
      * - 'docs:quit': Before the application will be really closed, after all
      *      registered before-quit handlers have been called, and none has
      *      rejected quitting, and before the application will be destroyed.
@@ -49,7 +67,9 @@ define('io.ox/office/tk/app/officeapplication',
      *  OfficeApplication.getView(), or OfficeApplication.getController()
      *  during construction. For further initialization depending on valid
      *  model/view/controller instances, the constructor can register an event
-     *  handler for the 'docs:init' event of this application.
+     *  handler for the 'docs:init' event of this application, or register an
+     *  initialization handler with the OfficeApplication.registerInitHandler()
+     *  method.
      *
      * @param {Function} ViewClass
      *  The constructor function of the view class. MUST derive from the class
@@ -58,7 +78,8 @@ define('io.ox/office/tk/app/officeapplication',
      *  or OfficeApplication.getController() during construction. For further
      *  initialization depending on valid model/view/controller instances, the
      *  constructor can register an event handler for the 'docs:init' event of
-     *  this application.
+     *  this application, or register an initialization handler with the
+     *  OfficeApplication.registerInitHandler() method.
      *
      * @param {Function} ControllerClass
      *  The constructor function of the controller class. MUST derive from the
@@ -67,7 +88,19 @@ define('io.ox/office/tk/app/officeapplication',
      *  OfficeApplication.getView(), or OfficeApplication.getController()
      *  during construction. For further initialization depending on valid
      *  model/view/controller instances, the constructor can register an event
-     *  handler for the 'docs:init' event of this application.
+     *  handler for the 'docs:init' event of this application, or register an
+     *  initialization handler with the OfficeApplication.registerInitHandler()
+     *  method.
+     *
+     * @param {Function} importHandler
+     *  A function that will be called to import the document described in the
+     *  file descriptor of this application. Will be called once after
+     *  launching the application regularly, or after restoring the application
+     *  from a save point after the browser has been opened or the web page has
+     *  been reloaded. Will be called in the context of this application. If
+     *  called from fail-restore, receives the save point as first parameter.
+     *  Must return a Deferred object that will be resolved or rejected after
+     *  the document has been loaded.
      *
      * @param {Object} launchOptions
      *  A map of options containing initialization data for the new application
@@ -79,7 +112,7 @@ define('io.ox/office/tk/app/officeapplication',
      *      If set to false, the application window will not be detached from
      *      the DOM while it is hidden.
      */
-    function OfficeApplication(ModelClass, ViewClass, ControllerClass, launchOptions) {
+    function OfficeApplication(ModelClass, ViewClass, ControllerClass, importHandler, launchOptions) {
 
         var // self reference
             self = this,
@@ -87,11 +120,14 @@ define('io.ox/office/tk/app/officeapplication',
             // file descriptor of the document edited by this application
             file = Utils.getObjectOption(launchOptions, 'file', null),
 
-            // all registered launch handlers
-            launchHandlers = [],
+            // all registered initialization handlers
+            initHandlers = [],
 
-            // all registered quit handlers
-            quitHandlers = [],
+            // all registered before-quit handlers
+            beforeQuitHandlers = [],
+
+            // all registered fail-save handlers
+            failSaveHandlers = [],
 
             // the document model instance
             model = null,
@@ -100,11 +136,70 @@ define('io.ox/office/tk/app/officeapplication',
             view = null,
 
             // the controller instance as single connection point between model and view
-            controller = null;
+            controller = null,
+
+            // browser timeouts for delayed callbacks, mapped by initial setTimeout() call
+            delayTimeouts = {},
+
+            // browser timeouts for debounced methods, mapped by their indexes
+            debounceTimeouts = {},
+
+            // counter for unique indexes of all debounced methods
+            debounceCount = 0;
 
         // private methods ----------------------------------------------------
 
-        function callDeferredHandlers(handlers) {
+        /**
+         * Imports the document described by the current file descriptor, by
+         * calling the import handler passed to the constructor. Does nothing
+         * (but return a resolved Deferred object), if no file descriptor
+         * exists.
+         *
+         * @param {Object} [point]
+         *  The save point if called from fail-restore.
+         *
+         * @returns {jQuery.Promise}
+         *  The result of the import handler passed to the constructor of this
+         *  application.
+         */
+        function importDocument(point) {
+
+            var // the application window
+                win = self.getWindow();
+
+            // do nothing if file descriptor is missing (e.g. while restoring after browser refresh)
+            if (!file) { return $.when(); }
+
+            // set window to busy state while the import handler is running
+            win.busy();
+
+            // notify listeners
+            self.trigger('docs:import:before');
+
+            // call the import handler
+            return importHandler.call(self, point)
+                .always(function () {
+                    self.trigger('docs:import:after');
+                })
+                .done(function () {
+                    self.trigger('docs:import:success');
+                })
+                .fail(function () {
+                    Utils.warn('OfficeApplication.launch(): importing document ' + file.filename + ' failed.');
+                    view.showLoadError();
+                    self.trigger('docs:import:error');
+                })
+                .always(function () {
+                    win.idle();
+                });
+        }
+
+        /**
+         * Calls all handler functions contained in the passed array, and
+         * returns a Deferred object that accumulates the result of all
+         * handlers.
+         */
+        function callHandlers(handlers) {
 
             var // execute all handlers and store their results in an array
                 results = _(handlers).map(function (handler) { return handler.call(self); });
@@ -144,6 +239,8 @@ define('io.ox/office/tk/app/officeapplication',
         this.getController = function () {
             return controller;
         };
+
+        // file descriptor ----------------------------------------------------
 
         /**
          * Returns whether this application contains a valid file descriptor.
@@ -343,20 +440,26 @@ define('io.ox/office/tk/app/officeapplication',
         // application setup --------------------------------------------------
 
         /**
-         * Registers a launch handler function that will be executed when the
-         * application will be launched.
+         * Registers an initialization handler function that will be executed
+         * when the application has been be constructed (especially the model,
+         * view, and controller instances). All registered initialization
+         * handlers will be called in order of their insertion. If the
+         * initialization handlers return a Deferred object, launching the
+         * application will be deferred until all Deferred objects have been
+         * resolved or rejected. If any of the handlers rejects its Deferred
+         * object, the application cannot be launched at all.
          *
-         * @param {Function} launchHandler
-         *  A function that will be called when the application launches. Will
-         *  be called in the context of this application instance. May return a
-         *  Deferred object, which must be resolved (never rejected) by the
-         *  launch handler function.
+         * @param {Function} initHandler
+         *  A function that will be called when the application has been
+         *  constructed. Will be called in the context of this application
+         *  instance. May return a Deferred object, which must be resolved or
+         *  rejected by the initialization handler function.
          *
          * @returns {OfficeApplication}
          *  A reference to this application instance.
          */
-        this.registerLaunchHandler = function (launchHandler) {
-            launchHandlers.push(launchHandler);
+        this.registerInitHandler = function (initHandler) {
+            initHandlers.push(initHandler);
             return this;
         };
 
@@ -375,7 +478,25 @@ define('io.ox/office/tk/app/officeapplication',
          *  A reference to this application instance.
          */
         this.registerBeforeQuitHandler = function (beforeQuitHandler) {
-            quitHandlers.push(beforeQuitHandler);
+            beforeQuitHandlers.push(beforeQuitHandler);
+            return this;
+        };
+
+        /**
+         * Registers a handler function that will be executed when the
+         * application creates a new restore point.
+         *
+         * @param {Function} failSaveHandler
+         *  A function that will be called when the application creates a new
+         *  restore point. Will be called in the context of this application
+         *  instance. Must return an object the new restore point will be
+         *  extended with.
+         *
+         * @returns {OfficeApplication}
+         *  A reference to this application instance.
+         */
+        this.registerFailSaveHandler = function (failSaveHandler) {
+            failSaveHandlers.push(failSaveHandler);
             return this;
         };
 
@@ -437,7 +558,154 @@ define('io.ox/office/tk/app/officeapplication',
                 });
         };
 
+        /**
+         * Creates a debounced method that can be called multiple times during
+         * the current script execution. Execution is separated into a part
+         * that runs directly every time the method is called (the 'direct
+         * callback'), and a part that runs once after the current script
+         * execution ends (the 'deferred callback').
+         *
+         * @param {Function} directCallback
+         *  A function that will be called every time the debounced method
+         *  has been called. Receives all parameters that have been passed to
+         *  the debounced method.
+         *
+         * @param {Function} deferredCallback
+         *  A function that will be called once after calling the debounced
+         *  method at least once during the execution of the current script.
+         *  Does not receive any parameters. As long as this function returns
+         *  true, it will be called again after the passed repeatition delay
+         *  time.
+         *
+         * @param {Number} [initialDelay=0]
+         *  The time (in milliseconds) the first execution of the deferred
+         *  callback function will be delayed.
+         *
+         * @param {Number} [repeatedDelay=initialDelay]
+         *  The time (in milliseconds) after the execution of the deferred
+         *  callback function will be repeated. If omitted, the passed initial
+         *  delay time will be used.
+         *
+         * @returns {Function}
+         *  The debounced method that can be called multiple times, and that
+         *  executes the deferred callback once after execution of the current
+         *  script ends. Passes all arguments to the direct callback, and
+         *  returns the result of the direct callback function.
+         */
+        this.createDebouncedMethod = function (directCallback, deferredCallback, initialDelay, repeatedDelay) {
+
+            var // unique index of this deferred method
+                index = debounceCount++;
+
+            // creates a timeout calling the deferred callback, if not already done
+            function createTimeout(delay) {
+
+                // do not create multiple timeouts
+                if (index in debounceTimeouts) { return; }
+
+                // create a new timeout that calls the deferred callback
+                debounceTimeouts[index] = window.setTimeout(function () {
+                    // first delete the timeout from the map
+                    // (allow to call ourselves from deferred callback)
+                    delete debounceTimeouts[index];
+                    // call deferred callback, recall it if it returns true
+                    if (deferredCallback.call(self) === true) {
+                        createTimeout(repeatedDelay);
+                    }
+                }, delay);
+            }
+
+            initialDelay = _.isNumber(initialDelay) ? initialDelay : 0;
+            repeatedDelay = _.isNumber(repeatedDelay) ? repeatedDelay : initialDelay;
+
+            // create and return the deferred method
+            return function () {
+                // create a timeout calling the deferred callback
+                createTimeout(initialDelay);
+                // call the direct callback with the passed arguments
+                return directCallback.apply(self, _.toArray(arguments));
+            };
+        };
+
         // application runtime ------------------------------------------------
+
+        /**
+         * Executes the passed callback function once or repeatedly in a
+         * browser timeout. If the application will be closed before the
+         * callback function has been started, or while the callback function
+         * will be repeated, it will not be executed anymore.
+         *
+         * @param {Function} callback
+         *  The callback function that will be executed in a browser timeout
+         *  after the specified initial delay time. As long as this function
+         *  returns true, it will be called again after the specified
+         *  repetition delay time.
+         *
+         * @param {Number} [initialDelay=0]
+         *  The time (in milliseconds) the first execution of the passed
+         *  callback function will be delayed.
+         *
+         * @param {Number} [repeatedDelay=initialDelay]
+         *  The time (in milliseconds) after the execution of the passed
+         *  callback function will be repeated. If omitted, the passed initial
+         *  delay time will be used.
+         *
+         * @returns {Number}
+         *  A unique identifier that can be used to identify the pending
+         *  callback function.
+         */
+        this.executeDelayed = function (callback, initialDelay, repeatedDelay) {
+
+            var // the unique timeout identifier (initial browser timeout handle)
+                id = null,
+                // the delay time for the next execution of the callback
+                delay = _.isNumber(initialDelay) ? initialDelay : 0;
+
+            // executes the callback, repeats execution if required
+            function executeCallback() {
+                delete delayTimeouts[id];
+                // call deferred callback, recall it if it returns true
+                if (callback() === true) {
+                    delayTimeouts[id] = window.setTimeout(executeCallback, delay);
+                }
+            }
+
+            // create initial timeout
+            id = window.setTimeout(executeCallback, delay);
+            delayTimeouts[id] = id;
+
+            // switch to repetition delay time
+            if (_.isNumber(repeatedDelay)) {
+                delay = repeatedDelay;
+            }
+
+            return id;
+        };
+
+        /**
+         * Cancels the execution of the specified deferred method. If the
+         * deferred callback function has been executed already and is not
+         * executed repeatedly, this method has no effect.
+         *
+         * @param {Number} id
+         *  The unique identifier of the deferred callback, as returned from
+         *  the method OfficeApplication.executeDelayed().
+         *
+         * @returns {Boolean}
+         *  Whether the specified callback was still waiting for its execution
+         *  and has been cancelled.
+         */
+        this.cancelDelayed = function (id) {
+
+            var // whether the timeout is still waiting for execution
+                pending = id in delayTimeouts;
+
+            if (pending) {
+                window.clearTimeout(delayTimeouts[id]);
+                delete delayTimeouts[id];
+            }
+            return pending;
+        };
 
         /**
          * Renames the current file and updates the GUI accordingly.
@@ -480,12 +748,65 @@ define('io.ox/office/tk/app/officeapplication',
             return def.always(function () { self.updateTitle(); }).promise();
         };
 
+        /**
+         * Will be called automatically from the OX core framework to create
+         * and return a restore point containing the current state of the
+         * application.
+         *
+         * @returns {Object}
+         *  The restore point containing the application state.
+         */
+        this.failSave = function () {
+
+            var // create the new restore point with basic information
+                restorePoint = {
+                    module: this.getName(),
+                    point: { file: file }
+                };
+
+            // call all fail-save handlers and add their data to the restore point
+            _(failSaveHandlers).each(function (failSaveHandler) {
+                _(restorePoint.point).extend(failSaveHandler.call(this));
+            }, this);
+
+            return restorePoint;
+        };
+
+        /**
+         * Will be called automatically from the OX core framework to restore
+         * the state of the application after a browser refresh.
+         *
+         * @param {Object} point
+         *  The save point containing the application state, as returned by the
+         *  last call of the OfficeApplication.failSave() method.
+         *
+         * @returns {jQuery.Promise}
+         *  The promise of a Deferred object that will be resolved when the
+         *  import handler has loaded the document.
+         */
+        this.failRestore = function (point) {
+
+            var // the result Deferred object
+                def = $.Deferred();
+
+                // set file descriptor and import the document
+            this.setFileDescriptor(Utils.getObjectOption(point, 'file'));
+            // always resolve the deferred (expected by the core launcher)
+            importDocument(point).always(function () { def.resolve(); });
+
+            return def.promise();
+        };
+
         // initialization -----------------------------------------------------
 
         // call all registered launch handlers
         this.setLauncher(function () {
 
-            var // create the application window
+            var // the result Deferred object
+                def = $.Deferred(),
+                // the Deferred object waiting for the initialization handlers
+                initDef = $.Deferred(),
+                // create the application window
                 win = ox.ui.createWindow({
                     name: self.getName(),
                     search: Utils.getBooleanOption(launchOptions, 'search', false)
@@ -497,35 +818,80 @@ define('io.ox/office/tk/app/officeapplication',
             // set the window at the application instance
             self.setWindow(win);
 
-            // create and initialize the MVC instances
+            // create the MVC instances
             model = new ModelClass(self);
             view = new ViewClass(self);
             controller = new ControllerClass(self);
-            self.trigger('docs:init');
 
-            // kill the application if no file descriptor is present
-            win.on('open', function () {
-                if (!self.hasFileDescriptor()) {
-                    _.defer(function () { self.quit(); });
+            // in order to get the 'open' event of the window at all, it must be shown (also without file)
+            win.show(function () {
+                win.busy();
+
+                // wait for pending initialization, kill the application if no
+                // file descriptor is present after fail-restore (using absence
+                // of the launch option 'action' as indicator for fail-restore)
+                if (!launchOptions || !('action' in launchOptions)) {
+
+                    // the 'open' event of the window is triggered once after launch and fail-restore
+                    win.on('open', function () {
+                        initDef.always(function () {
+                            if (!file) {
+                                _.defer(function () { self.quit(); });
+                            }
+                        });
+                    });
                 }
+
+                // call initialization listeners
+                self.trigger('docs:init');
+
+                // call initialization handlers, they may return Deferred objects
+                callHandlers(initHandlers)
+                .always(function () {
+                    self.trigger('docs:init:after');
+                    // this resumes pending window 'open' event handler
+                    initDef.resolve();
+                    win.idle();
+                })
+                .done(function () {
+                    self.trigger('docs:init:success');
+                    // import the document, always resolve the result Deferred object (expected by the core launcher)
+                    importDocument().always(function () { def.resolve(); });
+                })
+                .fail(function () {
+                    self.trigger('docs:init:error');
+                    // failing initialization handler should have shown an error alert
+                    Utils.warn('OfficeApplication.launch(): initialization failed.');
+                    def.resolve();
+                });
+
             });
 
-            // call all registered launch handlers, return the accumulated Deferred object
-            return callDeferredHandlers(launchHandlers).promise();
+            return def.promise();
         });
 
         // call all registered quit handlers
         this.setQuit(function () {
 
-            return callDeferredHandlers(quitHandlers)
+            return callHandlers(beforeQuitHandlers)
                 .done(function () {
+
+                    // cancel all running timeouts
+                    _(delayTimeouts).each(function (timeout) {
+                        window.clearTimeout(timeout);
+                    });
+                    _(debounceTimeouts).each(function (timeout) {
+                        window.clearTimeout(timeout);
+                    });
+
                     // base application does not trigger 'quit' events
                     self.trigger('docs:quit');
+
                     // destroy class members
                     controller.destroy();
                     view.destroy();
                     model.destroy();
-                    model = view = controller = null;
+                    model = view = controller = delayTimeouts = debounceTimeouts = null;
                 })
                 .fail(function () {
                     self.trigger('docs:resume');

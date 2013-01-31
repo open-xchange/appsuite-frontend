@@ -361,9 +361,8 @@ define("io.ox/calendar/api",
                 })
                 .sortBy('start_date')
                 .value();
-            if (invites.length > 0) {
-                api.trigger('new-invites', invites);
-            }
+            
+            api.trigger('new-invites', invites);//even if empty array is given it needs to be triggered to remove notifications that does not exist anymore(already handled in ox6 etc)
             return invites;
         });
     };

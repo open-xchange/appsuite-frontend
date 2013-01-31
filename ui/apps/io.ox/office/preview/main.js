@@ -47,6 +47,10 @@ define('io.ox/office/preview/main',
             // current page index (one-based!)
             page = 0;
 
+        // base constructor ---------------------------------------------------
+
+        OfficeApplication.call(this, PreviewModel, PreviewView, PreviewController, importDocument, launchOptions);
+
         // private methods ----------------------------------------------------
 
         function showPage(newPage) {
@@ -97,69 +101,54 @@ define('io.ox/office/preview/main',
         }
 
         /**
-         * Loads the document described in the file descriptor passed to the
-         * constructor of this application, and shows the application window.
+         * Loads the first page of the document described in the current file
+         * descriptor.
          *
-         * @param {Number} [newPage=1]
-         *  The index of the page shown after loading the document.
+         * @param {Object} [point]
+         *  The save point if called from fail-restore.
          *
          * @returns {jQuery.Promise}
-         *  The promise of a Deferred object that will be resolved always (when
-         *  the initial data of the preview document has been loaded, or when
-         *  an error has occurred).
+         *  The promise of a Deferred object that will be resolved when the
+         *  initial data of the preview document has been loaded; or rejected
+         *  when an error has occurred.
          */
-        function loadAndShow(newPage) {
+        function importDocument(point) {
 
-            var // the deferred to be returned
-                def = $.Deferred(),
-                // the application window
-                win = self.getWindow();
+            // disable drop events
+            self.getWindowNode().on('drop dragstart dragover', false);
 
-            // show application window
-            win.show(function () {
+            // disable FF spell checking
+            $('body').attr('spellcheck', false);
 
-                // no file descriptor (e.g. restored from save point): just show an empty application
-                if (!self.hasFileDescriptor()) {
-                    def.resolve();
-                    return;
+            // wait for unload events and send notification to server
+            self.registerEventHandler(window, 'unload', sendCloseNotification);
+
+            // load the file
+            return self.sendFilterRequest({
+                params: {
+                    action: 'importdocument',
+                    filter_format: 'html',
+                    filter_action: 'beginconvert'
+                },
+                resultFilter: function (data) {
+                    // check required entries, returning undefined will reject this request
+                    return (_.isNumber(data.JobID) && (data.JobID > 0) && _.isNumber(data.PageCount) && (data.PageCount > 0)) ? data : undefined;
                 }
+            })
+            .done(function (data) {
 
-                // set window to busy state
-                win.busy();
-
-                // load the file
-                self.sendFilterRequest({
-                    params: {
-                        action: 'importdocument',
-                        filter_format: 'html',
-                        filter_action: 'beginconvert'
-                    },
-                    resultFilter: function (data) {
-                        // check required entries, returning undefined will reject this request
-                        return (_.isNumber(data.JobID) && (data.JobID > 0) && _.isNumber(data.PageCount) && (data.PageCount > 0)) ? data : undefined;
-                    }
-                })
-                .done(function (data) {
-                    jobId = data.JobID;
-                    pageCount = data.PageCount;
-                    page = 0;
-                    showPage(newPage || 1);
-                })
-                .fail(function () {
-                    self.getView().showLoadError();
-                })
-                .always(function () {
-                    win.idle();
-                    // always resolve the Deferred, as expected by ox.launch() and app.failRestore()
-                    def.resolve();
-                });
-            });
-
-            return def.promise();
+                // show a page of the document
+                jobId = data.JobID;
+                pageCount = data.PageCount;
+                page = 0;
+                showPage(Utils.getIntegerOption(point, 'page', 1));
+            })
+            .promise();
         }
 
         /**
-         * Sends a close notification to the server.
+         * Sends a close notification to the server, when the application has
+         * been closed.
          */
         function sendCloseNotification() {
             if (jobId) {
@@ -173,30 +162,6 @@ define('io.ox/office/preview/main',
                 });
             }
         }
-
-        /**
-         * The handler function that will be called while launching the
-         * application. Creates and initializes a new application window.
-         *
-         * @returns {jQuery.Promise}
-         *  The promise of a Deferred object that will be resolved always (when
-         *  the initial data of the preview document has been loaded, or when
-         *  an error has occurred).
-         */
-        function launchHandler() {
-
-            // disable dropping event in view-mode
-            self.getWindowNode().on('drop dragstart dragover', false);
-            // disable FF spell checking
-            $('body').attr('spellcheck', false);
-
-            // load the file
-            return loadAndShow();
-        }
-
-        // base constructor ---------------------------------------------------
-
-        OfficeApplication.call(this, PreviewModel, PreviewView, PreviewController, launchOptions);
 
         // methods ------------------------------------------------------------
 
@@ -242,37 +207,10 @@ define('io.ox/office/preview/main',
             showPage(pageCount);
         };
 
-        /**
-         * Will be called automatically from the OX framework to create and
-         * return a restore point containing the current state of the
-         * application.
-         *
-         * @return {Object}
-         *  The restore point containing the application state.
-         */
-        this.failSave = function () {
-            return {
-                module: self.getName(),
-                point: { file: this.getFileDescriptor(), page: page }
-            };
-        };
-
-        /**
-         * Will be called automatically from the OX framework to restore the
-         * state of the application after a browser refresh.
-         *
-         * @param {Object} point
-         *  The restore point containing the application state.
-         */
-        this.failRestore = function (point) {
-            this.setFileDescriptor(Utils.getObjectOption(point, 'file'));
-            return loadAndShow(Utils.getIntegerOption(point, 'page'));
-        };
-
         // initialization -----------------------------------------------------
 
-        // set launch handler
-        this.registerLaunchHandler(launchHandler);
+        // fail-save handler returns data needed to restore the application after browser refresh
+        this.registerFailSaveHandler(function () { return { page: page }; });
 
         // send notification to server on quit
         this.on('docs:quit', sendCloseNotification);

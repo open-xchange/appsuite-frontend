@@ -67,9 +67,10 @@ define('io.ox/office/tk/app/applauncher', ['io.ox/office/tk/utils'], function (U
      * @param {String} moduleName
      *  The application type identifier.
      *
-     * @param {Function} ApplicationMixinClass
-     *  The constructor function of a mix-in class that will extend the core
-     *  application object. Receives the passed options map as first parameter.
+     * @param {Function} ApplicationClass
+     *  The constructor function of the application mix-in class that will
+     *  extend the core application object. Receives the passed launch options
+     *  as first parameter.
      *
      * @param {Object} [launchOptions]
      *  A map of options containing initialization data for the new application
@@ -78,7 +79,7 @@ define('io.ox/office/tk/app/applauncher', ['io.ox/office/tk/utils'], function (U
      * @returns {ox.ui.App}
      *  The new application object.
      */
-    ApplicationLauncher.createApplication = function (moduleName, ApplicationMixinClass, launchOptions) {
+    ApplicationLauncher.createApplication = function (moduleName, ApplicationClass, launchOptions) {
 
         var // the icon shown in the top bar launcher
             icon = Utils.getStringOption(launchOptions, 'icon', ''),
@@ -86,7 +87,7 @@ define('io.ox/office/tk/app/applauncher', ['io.ox/office/tk/utils'], function (U
             app = ox.ui.createApp({ name: moduleName, userContent: icon.length > 0, userContentIcon: icon });
 
         // mix-in constructor for additional application methods
-        ApplicationMixinClass.call(app, launchOptions);
+        ApplicationClass.call(app, launchOptions);
 
         return app;
     };
@@ -101,9 +102,10 @@ define('io.ox/office/tk/app/applauncher', ['io.ox/office/tk/utils'], function (U
      * @param {String} moduleName
      *  The application type identifier.
      *
-     * @param {Function} ApplicationMixinClass
-     *  The constructor function of a mix-in class that will extend the core
-     *  application object. Receives the passed options map as first parameter.
+     * @param {Function} ApplicationClass
+     *  The constructor function of the application mix-in class that will
+     *  extend the core application object. Receives the passed launch options
+     *  as first parameter.
      *
      * @param {Object} [launchOptions]
      *  A map of options containing initialization data for the new application
@@ -113,14 +115,14 @@ define('io.ox/office/tk/app/applauncher', ['io.ox/office/tk/utils'], function (U
      *  A running application of the specified type with a matching file
      *  descriptor, or a newly created application object.
      */
-    ApplicationLauncher.getOrCreateApplication = function (moduleName, ApplicationMixinClass, launchOptions) {
+    ApplicationLauncher.getOrCreateApplication = function (moduleName, ApplicationClass, launchOptions) {
 
         var // try to find a running application
             app = ApplicationLauncher.getRunningApplication(moduleName, launchOptions);
 
         // no running application: create and initialize a new application object
         if (!_.isObject(app)) {
-            app = ApplicationLauncher.createApplication(moduleName, ApplicationMixinClass, launchOptions);
+            app = ApplicationLauncher.createApplication(moduleName, ApplicationClass, launchOptions);
         }
 
         return app;

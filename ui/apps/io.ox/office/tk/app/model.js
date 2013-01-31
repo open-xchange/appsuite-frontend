@@ -21,16 +21,21 @@ define('io.ox/office/tk/app/model',
     // class Model ============================================================
 
     /**
-     * The base class for all document model classes of OX Documents
-     * applications.
+     * The base class for model classes used in OX Documents applications. Adds
+     * the Events mix-in class to all created instances.
      *
      * @constructor
+     *
+     * @extends Events
+     *
+     * @param {OfficeApplication} app
+     *  The application that has created this model instance.
      */
     function Model(app) {
 
         // base constructor ---------------------------------------------------
 
-        // events support (mix-in class)
+        // add the Events mix-in class
         Events.extend(this);
 
         // methods ------------------------------------------------------------

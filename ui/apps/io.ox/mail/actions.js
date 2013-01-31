@@ -179,6 +179,12 @@ define('io.ox/mail/actions',
             id: type,
             requires: 'toplevel some',
             multiple: function (list, baton) {
+                var vGrid;
+                if (list.length > 1) {
+                    vGrid = baton.grid;
+                } else {
+                    vGrid = baton.app.getGrid();
+                }
                 require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
                     var dialog = new dialogs.ModalDialog({ easyOut: true })
                         .header($('<h3>').text(label))
@@ -206,23 +212,15 @@ define('io.ox/mail/actions',
                         if (action === 'ok') {
                             var target = _(tree.selection.get()).first();
                             if (target && target !== folderId) {
-                                var vGrid;
-                                if (type === "move") {//add busy animation should be same as vgrid.js busy()
-                                    vGrid = $(".vgrid-scrollpane").children().first();
-                                    if (vGrid) {
-                                        vGrid.css({ visibility: 'hidden' }).parent().busy();
-                                        $(".vgrid-scrollpane").find('.io-ox-center').remove();
-                                    }
+                                if (type === "move" && vGrid) {//add busy animation
+                                    vGrid.busy();
                                 }
                                 api[type](list, target).then(
                                     function () {
                                         notifications.yell('success', success);
                                         folderAPI.reload(target, list);
-                                        if (type === "move") {//remove busy animation should be same as vgrid.js idle()
-                                            vGrid = $(".vgrid-scrollpane").children().first();
-                                            if (vGrid) {
-                                                vGrid.show().css({ visibility: '' }).parent().idle();
-                                            }
+                                        if (type === "move" && vGrid) {//remove busy animation
+                                            vGrid.idle();
                                         }
                                     },
                                     notifications.yell

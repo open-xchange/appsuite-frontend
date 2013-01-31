@@ -333,11 +333,19 @@ define("io.ox/core/main",
             index: 200,
             draw: function () {
                 if (BigScreen.enabled) {
+                    var fullscreenButton,
+                        toggleText = function () {
+                            if (fullscreenButton.text() === gt('Fullscreen')) {
+                                fullscreenButton.text(gt('Exit Fullscreen'));
+                            } else {
+                                fullscreenButton.text(gt('Fullscreen'));
+                            }
+                        };
                     this.append(
                         $('<li>').append(
-                            $('<a href="#" data-action="fullscreen">').text(gt('Fullscreen'))
+                            fullscreenButton = $('<a href="#" data-action="fullscreen">').text(gt('Fullscreen'))
                         )
-                        .on('click', function () { BigScreen.toggle(); })
+                        .on('click', function () { BigScreen.toggle(); toggleText(); })
                     );
                 }
             }

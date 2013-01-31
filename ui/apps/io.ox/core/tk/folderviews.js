@@ -516,7 +516,7 @@ define('io.ox/core/tk/folderviews',
             })
             .done(function (data) {
                 self.idle().repaint().done(function () {
-                    self.select(data);
+                    self.select(data.id);
                 });
             });
         };
@@ -882,11 +882,14 @@ define('io.ox/core/tk/folderviews',
             return folder;
         }
 
-        function paint() {
+        function paint(options) {
+            options = $.extend({
+                type: opt.type
+            }, options || {});
 
             self.busy();
 
-            return api.getVisible({ type: opt.type }).done(function (data) {
+            return api.getVisible(options).done(function (data) {
                 var id, section,
                     drawSection = function (node, list) {
                         // loop over folders
@@ -920,7 +923,7 @@ define('io.ox/core/tk/folderviews',
 
         this.internal.repaint = function () {
             self.container.empty();
-            return paint();
+            return paint({cache: false});
         };
 
         this.removeNode = this.repaintNode = this.internal.repaint;

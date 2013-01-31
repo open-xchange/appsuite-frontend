@@ -287,29 +287,25 @@ define("io.ox/mail/write/view-main",
         addRecipients: function (id, list) {
             var hash = {};
 
-            //hash current recipients
-            this.app.getWindowNode().find('input[name=' + id + ']').map(function () {
-                var rcpt = mailUtil.parseRecipient($(this).val())[1];
-                hash[rcpt] = true;
-            });
-            // ignore doublets and draw remaining
-            list = _(list).filter(function (recipient) {
-                if (hash[recipient[1]] === undefined) {
-                    //draw recipient
-                    var node = $('<div>');
-                    drawContact(id, node, {
-                        display_name: recipient[0] ? recipient[0].replace(/^('|")|('|")$/g, '') : recipient[1],
-                        email: recipient[1],
-                        contact: {}
-                    });
-                    // add to proper section (to, CC, ...)
-                    this.sections[id + 'List'].append(node);
-                    // if list itself contains doublets
-                    return hash[recipient[1]] = true;
-                }
-            }, this);
-
             if (list && list.length) {
+                list = getNormalized(list);
+                //hash current recipients
+                this.app.getWindowNode().find('input[name=' + id + ']').map(function () {
+                    var rcpt = mailUtil.parseRecipient($(this).val())[1];
+                    hash[rcpt] = true;
+                });
+                // ignore doublets and draw remaining
+                list = _(list).filter(function (recipient) {
+                    if (hash[recipient.email] === undefined) {
+                        //draw recipient
+                        var node = $('<div>');
+                        drawContact(id, node, recipient);
+                        // add to proper section (to, CC, ...)
+                        this.sections[id + 'List'].append(node);
+                        // if list itself contains doublets
+                        return hash[recipient.email] = true;
+                    }
+                }, this);
                 this.sections[id + 'List'].show().trigger('show');
             }
         },
@@ -694,27 +690,20 @@ define("io.ox/mail/write/view-main",
         }
     }
 
-    function createStringOfRecipients(distlistarray) {
-        var string;
-        _.each(distlistarray, function (val) {
-            if (string === '') {
-                string = '"' + val.display_name + '"' + '<' + val.mail + '>';
-            } else {
-                string = string + ', "' + val.display_name + '"' + '<' + val.mail + '>';
-            }
-        });
-        return string;
-    }
-
     function copyRecipients(id, node, e) {
-        var valBase;
+        var valBase, list;
+
+        //normalize data
         if (e && e.data.distlistarray !== null) {
-            valBase = createStringOfRecipients(e.data.distlistarray);
-        }
-         else {
+            //distribution list
+            list = e.data.distlistarray;
+        } else if (e && e.data.id) {
+            //selected contact list
+            list = [ e.data ];
+        } else {
             valBase = node.val();
+            list = mailUtil.parseRecipients(valBase);
         }
-        var list = mailUtil.parseRecipients(valBase);
         if (list.length) {
             // add
             this.addRecipients(id, list);
@@ -731,8 +720,29 @@ define("io.ox/mail/write/view-main",
         }
     }
 
-    function drawAutoCompleteItem(node, data, query) {
+   /**
+    * returns an array of normalized contact objects (display_name, mail, image1_url, folder_id, id)
+    * @author <a href="mailto:frank.paczynski@open-xchange.com">Frank Paczynski</a>
+    *
+    * @param {array|object} list contacts
+    * @return {array} array with contact object
+    */
+    function getNormalized(list) {
+        var elem;
+        return list.map(function (elem) {
+            var obj = {
+                display_name: _.isArray(elem) ? elem[0].replace(/^('|")|('|")$/g, '') : elem.display_name.replace(/^('|")|('|")$/g, '') || '',
+                email: _.isArray(elem) ? elem[1] : elem.mail || elem.email || '',
+                image1_url: elem.image1_url || '',
+                folder_id: elem.folder_id || '',
+                id: elem.id || ''
+            };
+            obj.url = contactsUtil.getImage(obj, contactPictureOptions);
+            return obj;
+        });
+    }
 
+    function drawAutoCompleteItem(node, data, query) {
         var url = contactsUtil.getImage(data.data, contactPictureOptions);
 
         node.addClass('io-ox-mail-write-contact').append(
@@ -749,7 +759,7 @@ define("io.ox/mail/write/view-main",
 
         node.addClass('io-ox-mail-write-contact section-item').append(
             // picture
-            contactsAPI.getPicture(data.email + '', contactPictureOptions).addClass('contact-image'),
+            contactsAPI.getPicture(data, contactPictureOptions).addClass('contact-image'),
             // hidden field
             $('<input>', { type: 'hidden', name: id, value: serialize(data) }),
             // display name

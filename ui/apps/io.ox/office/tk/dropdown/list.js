@@ -84,6 +84,10 @@ define('io.ox/office/tk/dropdown/list',
             // handler called after a new item has been created
             itemCreateHandler = Utils.getFunctionOption(options, 'itemCreateHandler', $.noop);
 
+        // base constructor ---------------------------------------------------
+
+        DropDown.call(this, Utils.extendOptions(options, { autoLayout: true }));
+
         // private methods ----------------------------------------------------
 
         /**
@@ -127,10 +131,6 @@ define('io.ox/office/tk/dropdown/list',
                 return false;
             }
         }
-
-        // base constructor ---------------------------------------------------
-
-        DropDown.call(this, Utils.extendOptions(options, { autoLayout: true }));
 
         // methods ------------------------------------------------------------
 

@@ -32,6 +32,10 @@ define('io.ox/office/preview/view',
         var // self reference
             self = this;
 
+        // base constructor ---------------------------------------------------
+
+        View.call(this, app, { modelPadding: 30 });
+
         // private methods ----------------------------------------------------
 
         /**
@@ -59,14 +63,10 @@ define('io.ox/office/preview/view',
             self.showAlertsBeforePane('toolpane');
         }
 
-        // base constructor ---------------------------------------------------
-
-        View.call(this, app, { modelPadding: 30 });
-
         // initialization -----------------------------------------------------
 
         // initialization after construction
-        app.on('docs:init', initHandler);
+        app.registerInitHandler(initHandler);
 
     } // class PreviewView
 

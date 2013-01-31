@@ -38,14 +38,14 @@ define('io.ox/office/tk/control/group',
      * Instances of this class trigger the following events:
      * - 'change': If the control has been activated in a special way depending
      *      on the type of the control group. The event handler receives the
-     *      value of the activated control as second parameter.
+     *      new value of the activated control.
      * - 'cancel': When the focus needs to be returned to the application (e.g.
      *      when the Escape key is pressed, or when a click on a drop-down
      *      button closes the opened drop-down menu).
      * - 'show': After the control has been shown or hidden. The event handler
-     *      receives the new visibility state as second parameter.
+     *      receives the new visibility state.
      * - 'enable': After the control has been enabled or disabled. The event
-     *      handler receives the new state as second parameter.
+     *      handler receives the new state.
      *
      * @constructor
      *

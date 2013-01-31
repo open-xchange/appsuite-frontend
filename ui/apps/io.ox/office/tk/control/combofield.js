@@ -50,6 +50,12 @@ define('io.ox/office/tk/control/combofield',
             // search the list items and insert label into text field while editing
             typeAhead = Utils.getBooleanOption(options, 'typeAhead', false);
 
+        // base constructors --------------------------------------------------
+
+        TextField.call(this, options);
+        // no caption for the drop-down button
+        List.call(this, Utils.extendOptions(options, { plainCaret: true }));
+
         // private methods ----------------------------------------------------
 
         /**
@@ -184,12 +190,6 @@ define('io.ox/office/tk/control/combofield',
             // update selection in drop-down list
             itemUpdateHandler((button.length && (textField.val() === Utils.getControlLabel(button))) ? Utils.getControlValue(button) : null);
         }
-
-        // base constructors --------------------------------------------------
-
-        TextField.call(this, options);
-        // no caption for the drop-down button
-        List.call(this, Utils.extendOptions(options, { plainCaret: true }));
 
         // methods ------------------------------------------------------------
 
