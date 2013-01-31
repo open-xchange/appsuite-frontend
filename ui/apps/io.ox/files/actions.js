@@ -181,14 +181,25 @@ define('io.ox/files/actions',
         },
         multiple: function (list) {
             api.getList(list).done(function (list) {
-                var content  = _(list).map(function (file) {
+                var calcWidth,
+                    container = $('<div>').css('display', 'inline-block'),
+                    content  = _(list).map(function (file) {
                     var url = location.protocol + '//' + location.host + ox.root + '/#!&app=io.ox/files&perspective=list&folder=' + file.folder_id + '&id=' + _.cid(file);
-                    return gt('File: %1$s', file.title || file.filename) + '\n' + gt('Direct link: %1$s', url);
+                    return {'name': gt('File: %1$s', file.title || file.filename), 'link': gt('Direct link: %1$s', url)};
                 });
 
+                _(content).each(function (item) {
+                    container.append($('<p>').append($('<div>').text(item.name), $('<div>').text(item.link)));
+                });
+
+                // to get the width of the container
+                $('body').append(container);
+                calcWidth = container.width();
+                calcWidth = calcWidth + 30;
+
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog()
-                        .text((content.join('\n\n')))
+                    new dialogs.ModalDialog({width: calcWidth, addclass: 'dialogreselect'})
+                        .append(container)
                         .addButton("cancel", gt('Cancel'))
                         .show();
                 });
