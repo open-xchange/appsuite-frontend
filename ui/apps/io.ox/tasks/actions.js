@@ -63,12 +63,13 @@ define('io.ox/tasks/actions',
                     require(['io.ox/tasks/api'], function (api) {
                         api.remove(data, false)
                             .done(function (data) {
-                                if (data === undefined || data.length === 0) {
-                                    notifications.yell('success', gt.ngettext('Task has been deleted!',
-                                                                               'Tasks have been deleted!', numberOfTasks));
-                                } else {//task was modified
+                                //if (data === undefined || data.length === 0) {
+                                notifications.yell('success', gt.ngettext('Task has been deleted!',
+                                                                          'Tasks have been deleted!', numberOfTasks));
+                                //} removed because somehow the response changed to idbrequest and user would see a wrong error message, looking into this later
+                                /* else {//task was modified
                                     notifications.yell('error', gt('Failure! Please refresh.'));
-                                }
+                                }*/
                                 popup.close();
                             }).fail(function () {
                                 //show retrymessage and enable buttons again
