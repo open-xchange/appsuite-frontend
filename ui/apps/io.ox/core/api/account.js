@@ -170,7 +170,7 @@ define('io.ox/core/api/account',
         return this.get(accountId || 0).pipe(function (account) {
             if (!account) return null;
 
-            var aliases = account['undefined'] || '';
+            var aliases = account.addresses || '';
             aliases = aliases.split(', ');
             aliases.push(account.primary_address);
             return [account.personal || '', _(aliases).compact()];
