@@ -48,7 +48,12 @@ define('io.ox/core/tk/autocomplete',
 
                 //object related unique string
                 stringify: function (data) {
-                    return data.display_name ? '"' + data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, '') + '" <' + data.email + '>' : data.email;
+                    var value;
+                    if (data.type === 'resource' || data.type === 'group')
+                        value = data.data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, '');
+                    else
+                        value = data.display_name ? '"' + data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, '') + '" <' + data.email + '>' : data.email;
+                    return value;
                 }
             }, o || {});
 
