@@ -72,8 +72,8 @@ define('io.ox/tasks/actions',
                             }).fail(function () {
                                 //show retrymessage and enable buttons again
                                 popup.idle();
-                                popup.getBody().append($.fail(gt.ngettext('Could not delete this task.',
-                                                                          'Could not delete this tasks.', numberOfTasks), function () {
+                                popup.getBody().append($.fail(gt.ngettext('The task could not be deleted.',
+                                                                          'The tasks could not be deleted.', numberOfTasks), function () {
                                     popup.trigger('deleteTask', data);
                                 })).find('h4').remove();
                             });
