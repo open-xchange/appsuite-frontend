@@ -16,7 +16,8 @@ define('io.ox/tasks/actions',
      'io.ox/tasks/util',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/tasks',
-     'io.ox/core/notifications'], function (ext, util, links, gt, notifications) {
+     'io.ox/core/notifications',
+     'io.ox/core/config'], function (ext, util, links, gt, notifications, configApi) {
 
     'use strict';
 
@@ -193,6 +194,46 @@ define('io.ox/tasks/actions',
                     }
                     tree.destroy();
                     tree = popup = null;
+                });
+            });
+        }
+    });
+    
+    new Action('io.ox/tasks/actions/confirm', {
+        id: 'confirm',
+        requires: function (args) {
+            var result = false;
+            if (args.baton.data.participants) {
+                var userId = configApi.get('identifier');
+                _(args.baton.data.participants).each(function (participant) {
+                    if (participant.id === userId) {
+                        result = true;
+                    }
+                });
+                return result;
+            }
+            return result;
+        },
+        action: function (baton) {
+            var data = baton.data;
+            require(['io.ox/tasks/edit/util', 'io.ox/core/tk/dialogs', 'io.ox/tasks/api'], function (editUtil, dialogs, api) {
+                //build popup
+                var popup = editUtil.buildConfirmationPopup(data, dialogs, true);
+                //go
+                popup.popup.show().done(function (action) {
+                    if (action === "ChangeConfState") {
+                        var state = popup.state.prop('selectedIndex') + 1,
+                            message = popup.message.val();
+                        api.confirm({id: data.id,
+                                     folder_id: data.folder_id,
+                                     data: {confirmation: state,
+                                            confirmMessage: message}
+                        }).done(function () {
+                            //update detailview
+                            api.trigger("update:" + data.folder_id + '.' + data.id);
+                            api.trigger("remove-task-confirmation-notification", [{id: data.id}]);
+                        });
+                    }
                 });
             });
         }
@@ -416,6 +457,14 @@ define('io.ox/tasks/actions',
         prio: 'lo',
         label: gt('Move'),
         ref: 'io.ox/tasks/actions/move'
+    }));
+    
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'confirm',
+        index: 600,
+        prio: 'lo',
+        label: gt('Change confirmation status'),
+        ref: 'io.ox/tasks/actions/confirm'
     }));
 
     // Attachments
