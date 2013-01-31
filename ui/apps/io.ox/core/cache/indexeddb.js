@@ -150,10 +150,6 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         }
     };
 
-    if (defunct) {
-        return moduleDefined.resolve(that);
-    }
-
     // Adapter for IndexedDB operations to the familiar deferreds
     function OP(request) {
         var def = $.Deferred();
