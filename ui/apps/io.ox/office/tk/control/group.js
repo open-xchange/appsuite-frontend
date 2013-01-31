@@ -82,6 +82,11 @@ define('io.ox/office/tk/control/group',
             // update handler functions
             updateHandlers = [];
 
+        // base constructor ---------------------------------------------------
+
+        // add event hub
+        Events.extend(this);
+
         // private methods ----------------------------------------------------
 
         /**
@@ -318,8 +323,7 @@ define('io.ox/office/tk/control/group',
          *
          * @param {Boolean} [state]
          *  If specified, shows or hides the groups depending on the boolean
-         *  value. If omitted, switches the group from visible to hidden and
-         *  vice versa.
+         *  value. If omitted, toggles the current visibility of the group.
          *
          * @returns {Group}
          *  A reference to this group.
@@ -379,9 +383,6 @@ define('io.ox/office/tk/control/group',
         };
 
         // initialization -----------------------------------------------------
-
-        // add event hub
-        Events.extend(this);
 
         // formatting and tool tip
         groupNode

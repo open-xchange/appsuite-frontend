@@ -1534,6 +1534,30 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     // form control elements --------------------------------------------------
 
     /**
+     * Creates and returns a new <div> container element.
+     *
+     * @param {String} className
+     *  CSS class name set at the container element.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the new element. The
+     *  following options are supported:
+     *  @param {String} [options.classes]
+     *      A space-separated list of CSS classes to be added to the element.
+     *  @param {Object} [options.css]
+     *      A map with CSS formatting attributes to be added to the element.
+     *
+     * @returns {jQuery}
+     *  A jQuery object containing the new container element.
+     */
+    Utils.createContainerNode = function (className, options) {
+        return $('<div>')
+            .addClass(className)
+            .addClass(Utils.getStringOption(options, 'classes', ''))
+            .css(Utils.getObjectOption(options, 'css', {}));
+    };
+
+    /**
      * Creates and returns a new form control element.
      *
      * @param {String} elementName
@@ -1740,7 +1764,6 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  The new icon element, as jQuery object.
      */
     Utils.createIcon = function (icon, white) {
-        // icon class name must be first to be able to select icon subsets in CSS
         return $('<i>').addClass(icon + (/^icon-/.test(icon) ? '' : ' io-ox-office-icon') + ((white === true) ? ' icon-white' : ''));
     };
 

@@ -493,16 +493,6 @@ define('io.ox/office/tk/view/view',
             return this.showAlert(title, message, 'success', options);
         };
 
-        /**
-         * Shows a closeable error alert banner with a 'Load Error' message.
-         *
-         * @returns {View}
-         *  A reference to this instance.
-         */
-        this.showLoadError = function () {
-            return this.showError(gt('Load Error'), gt('An error occurred while loading the document.'), { closeable: true });
-        };
-
         this.destroy = function () {
             _(panes).invoke('destroy');
             appPane.destroy();
@@ -534,7 +524,7 @@ define('io.ox/office/tk/view/view',
         app.getWindow().on('show', function () { app.getController().update(); });
 
         // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
-        app.getWindow().on('open', function () {
+        app.on('docs:init:after', function () {
             app.getWindowNode().find('.toolbox .group:not(.design-white) a.button i').addClass('icon-white').closest('.group').addClass('white-icons');
         });
 

@@ -186,7 +186,7 @@ define('io.ox/office/tk/app/officeapplication',
                 })
                 .fail(function () {
                     Utils.warn('OfficeApplication.launch(): importing document ' + file.filename + ' failed.');
-                    view.showLoadError();
+                    view.showError(gt('Load Error'), gt('An error occurred while loading the document.'));
                     self.trigger('docs:import:error');
                 })
                 .always(function () {

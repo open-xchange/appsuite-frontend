@@ -48,7 +48,7 @@ define('io.ox/office/tk/view/pane',
     function Pane(app, id, options) {
 
         var // the container element representing the pane
-            node = $('<div>').addClass('view-pane'),
+            node = Utils.createContainerNode('view-pane', options),
 
             // view components contained in this pane
             components = [];
@@ -98,7 +98,7 @@ define('io.ox/office/tk/view/pane',
          *  The new tool box component.
          */
         this.createToolBox = function (options) {
-            var toolBox = new ToolBox(options);
+            var toolBox = new ToolBox(app, options);
             this.addViewComponent(toolBox);
             return toolBox;
         };
@@ -113,10 +113,8 @@ define('io.ox/office/tk/view/pane',
 
         // initialization -----------------------------------------------------
 
-        // additional options and CSS classes
-        node.toggleClass('transparent', Utils.getBooleanOption(options, 'transparent', false))
-            .addClass(Utils.getStringOption(options, 'classes', ''))
-            .css(Utils.getObjectOption(options, 'css', {}));
+        // additional CSS classes
+        node.toggleClass('transparent', Utils.getBooleanOption(options, 'transparent', false));
 
     } // class Pane
 
