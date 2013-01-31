@@ -175,6 +175,27 @@ define('io.ox/files/actions',
         }
     });
 
+    new Action('io.ox/files/actions/showsendlink', {
+        requires: function (e) {
+            return e.collection.has('some') && capabilities.has('webmail');
+        },
+        multiple: function (list) {
+            api.getList(list).done(function (list) {
+                var content  = _(list).map(function (file) {
+                    var url = location.protocol + '//' + location.host + ox.root + '/#!&app=io.ox/files&perspective=list&folder=' + file.folder_id + '&id=' + _.cid(file);
+                    return gt('File: %1$s', file.title || file.filename) + '\n' + gt('Direct link: %1$s', url);
+                });
+
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text((content.join('\n\n')))
+                        .addButton("cancel", gt('Cancel'))
+                        .show();
+                });
+            });
+        }
+    });
+
     new Action('io.ox/files/actions/delete', {
         requires: 'some',
         multiple: function (list) {
@@ -518,6 +539,13 @@ define('io.ox/files/actions',
         index: 400,
         label: gt("Send by mail"),
         ref: "io.ox/files/actions/send"
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'showsendlink',
+        index: 400,
+        label: gt("Show sendlink"),
+        ref: "io.ox/files/actions/showsendlink"
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
