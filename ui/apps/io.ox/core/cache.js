@@ -39,6 +39,8 @@ define('io.ox/core/cache',
         }
         storages[storage.id] = storage;
     });
+    // #!&cacheStorage=localstorage
+    preferredPersistentCache = _.url.hash('cacheStorage') ? _.url.hash('cacheStorage') : preferredPersistentCache;
 
     /**
      *  @class CacheStorage
