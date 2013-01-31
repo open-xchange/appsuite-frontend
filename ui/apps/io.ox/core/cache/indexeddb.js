@@ -20,7 +20,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         moduleDefined = $.Deferred(),
         db, defunct = false, opened, that;
 
-    defunct = Modernizr.indexeddb && window.indexedDB;
+    defunct = !(Modernizr.indexeddb && window.indexedDB);
     if (defunct) {
         return $.when();
     }
@@ -79,7 +79,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     ).done(function () {
                         def.resolve(null);
                     });
-                    
+
                     return def;
                 });
             },
