@@ -203,6 +203,15 @@ define('io.ox/portal/widgets',
 
     collection.reset(api.getSettings());
 
+    collection.on('change', function () {
+        settings.set('widgets/user', api.toJSON()).save()
+        // don’t handle positive case here, since this is called quite often
+        // TODO: make sure, this is only called as much as needed, also _.throttle handles this (see settings.save)
+        .fail(function () {
+            notifications.yell('error', gt("Could not save settings."));
+        });
+    });
+
     collection.on('remove', function (model) {
         settings.remove('widgets/user/' + model.get('id')).save();
     });
