@@ -349,7 +349,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/slideshow-attachment', {
         id: 'slideshow',
         requires: function (e) {
-            return _(e.context).reduce(function (memo, obj) {
+            return _([e.context]).reduce(function (memo, obj) {
                 return memo && (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
             }, true);
         },
