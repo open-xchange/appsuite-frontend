@@ -63,21 +63,21 @@ define('io.ox/tasks/actions',
                     require(['io.ox/tasks/api'], function (api) {
                         api.remove(data, false)
                             .done(function (data) {
-                                //if (data === undefined || data.length === 0) {
                                 notifications.yell('success', gt.ngettext('Task has been deleted!',
                                                                           'Tasks have been deleted!', numberOfTasks));
-                                //} removed because somehow the response changed to idbrequest and user would see a wrong error message, looking into this later
-                                /* else {//task was modified
-                                    notifications.yell('error', gt('Failure! Please refresh.'));
-                                }*/
                                 popup.close();
-                            }).fail(function () {
-                                //show retrymessage and enable buttons again
-                                popup.idle();
-                                popup.getBody().append($.fail(gt.ngettext('The task could not be deleted.',
-                                                                          'The tasks could not be deleted.', numberOfTasks), function () {
-                                    popup.trigger('deleteTask', data);
-                                })).find('h4').remove();
+                            }).fail(function (result) {
+                                if (result.code === "TSK-0019") { //task was already deleted somewhere else. everythings fine, just show info
+                                    notifications.yell('info', gt('Task was already deleted!'));
+                                    popup.close();
+                                } else {
+                                    //show retrymessage and enable buttons again
+                                    popup.idle();
+                                    popup.getBody().append($.fail(gt.ngettext('The task could not be deleted.',
+                                                                              'The tasks could not be deleted.', numberOfTasks), function () {
+                                        popup.trigger('deleteTask', data);
+                                    })).find('h4').remove();
+                                }
                             });
                     });
                 });
