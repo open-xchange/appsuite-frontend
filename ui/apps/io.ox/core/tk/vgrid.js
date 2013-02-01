@@ -157,7 +157,6 @@ define('io.ox/core/tk/vgrid',
             var offset = CHUNK_SIZE * index;
             var numRows = CHUNK_SIZE - 1;
             
-            console.log("FETCH", offset, offset + numRows);
 
             var subset = all.slice(offset, offset + numRows);
 
