@@ -1,9 +1,9 @@
 # Antje Faber <antje.faber@open-xchange.com>, 2009, 2010, 2012.
-# Andres Herrera <andres@bureau-cornavin.com>, 2010, 2011, 2012.
+# Andres Herrera <andres@bureau-cornavin.com>, 2010, 2011, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
-"PO-Revision-Date: 2012-12-16 02:49+0100\n"
+"PO-Revision-Date: 2013-01-28 01:05+0100\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
 "Last-Translator: Andres Herrera <andres@bureau-cornavin.com>\n"
 "Language-Team: Spanish <es@bureau-cornavin.com>\n"
@@ -55,11 +55,11 @@ msgstr "Contraseña"
 
 #: html/core_body.html:70
 msgid "Sign in"
-msgstr "Registrarse"
+msgstr "Conectarse"
 
 #: html/core_body.html:77
 msgid "Stay signed in"
-msgstr "Mantenerse registrado"
+msgstr "Mantenerse conectado"
 
 #: html/core_body.html:83
 msgid "Forgot your password?"
@@ -454,11 +454,11 @@ msgstr "Cuota de ficheros"
 
 #: apps/plugins/portal/quota/register.js:37
 msgid "Mail quota"
-msgstr "Cuota de E-Mail"
+msgstr "Cuota de correo"
 
 #: apps/plugins/portal/quota/register.js:42
 msgid "Mail count quota"
-msgstr "Cuenta de E-Mails"
+msgstr "Cuota de número de de correos"
 
 #: apps/plugins/portal/quota/register.js:51
 #: apps/plugins/portal/quota/register.js:68
@@ -720,7 +720,7 @@ msgstr "Cambiar estado"
 
 #: apps/plugins/notifications/mail/register.js:27
 msgid "New Mails"
-msgstr "Nuevos E-Mails"
+msgstr "Nuevos correos electrónicos"
 
 #: apps/plugins/notifications/mail/register.js:30
 msgid "Show Inbox"
@@ -732,7 +732,7 @@ msgstr "Conversaciones recientes"
 
 #: apps/plugins/halo/mail/register.js:46
 msgid "Received mails"
-msgstr "E-mails recibidos"
+msgstr "Correos recibidos"
 
 #: apps/plugins/halo/mail/register.js:48
 msgid "Cannot find any messages this contact sent to you."
@@ -740,7 +740,7 @@ msgstr "No se encuentra ningún mensaje que este contacto le haya enviado."
 
 #: apps/plugins/halo/mail/register.js:55
 msgid "Sent mails"
-msgstr "E-mails enviados"
+msgstr "Correos enviados"
 
 #: apps/plugins/halo/mail/register.js:57
 msgid "Cannot find any messages you sent to this contact."
@@ -876,7 +876,7 @@ msgstr "Cambiar estado"
 
 #: apps/io.ox/calendar/actions.js:412
 msgid "Send mail to all participants"
-msgstr "Enviar e-mail a todos los participantes"
+msgstr "Enviar correo electrónico a todos los participantes"
 
 #: apps/io.ox/calendar/actions.js:421 apps/io.ox/mail/actions.js:782
 msgid "Save as distribution list"
@@ -1361,7 +1361,7 @@ msgstr "Tipo"
 #: apps/io.ox/core/tk/folderviews.js:797
 #: apps/io.ox/tasks/edit/view-template.js:125
 msgid "Private"
-msgstr "Privado"
+msgstr "Privada"
 
 #: apps/io.ox/calendar/edit/template.js:314
 #: apps/io.ox/calendar/view-detail.js:226 apps/io.ox/tasks/edit/view.js:72
@@ -1520,24 +1520,27 @@ msgstr "Tiempo predeterminado para el recordatorio"
 
 #: apps/io.ox/calendar/settings/pane.js:38
 msgid "E-Mail notification for appointment"
-msgstr "Notificación de citas por E.Mail"
+msgstr "Notificación de citas por correo electrónico"
 
 #: apps/io.ox/calendar/settings/pane.js:39
 msgid "E-Mail notification for New, Changed, Deleted?"
-msgstr "¿Recibir notificación por correo cuando se crea, modifica o elimina?"
+msgstr ""
+"¿Recibir notificación por correo electrónico sobre creaciones, "
+"modificaciones y borrados?"
 
 #: apps/io.ox/calendar/settings/pane.js:40
 #: apps/io.ox/tasks/settings/pane.js:31
 msgid "E-Mail notification for Accept/Declined"
-msgstr "Notificación por E-Mail de citas aceptadas/rechazadas"
+msgstr "Notificación por correo electrónico de citas aceptadas/rechazadas"
 
 #: apps/io.ox/calendar/settings/pane.js:41
 msgid "E-Mail notification for appointment creator?"
-msgstr "¿Recibir notificación por correo como creador de la cita?"
+msgstr "¿Recibir notificación por correo electrónico como creador de la cita?"
 
 #: apps/io.ox/calendar/settings/pane.js:42
 msgid "E-Mail notification for appointment participant?"
-msgstr "¿Recibir notificación por correo como participante en la cita?"
+msgstr ""
+"¿Recibir notificación por correo electrónico como participante en la cita?"
 
 #: apps/io.ox/calendar/settings/pane.js:43
 msgid "Show declined appointments"
@@ -1741,7 +1744,7 @@ msgstr "Añadir lista de distribución"
 
 #: apps/io.ox/contacts/actions.js:284
 msgid "Send mail"
-msgstr "Enviar E-Mail"
+msgstr "Enviar correo"
 
 #: apps/io.ox/contacts/actions.js:292 apps/io.ox/mail/actions.js:789
 msgid "Invite to appointment"
@@ -1992,15 +1995,15 @@ msgstr "Fax (alternativo)"
 
 #: apps/io.ox/contacts/model.js:260
 msgid "Email 1"
-msgstr "Email 1"
+msgstr "Correo electrónico 1"
 
 #: apps/io.ox/contacts/model.js:261
 msgid "Email 2"
-msgstr "Email 2"
+msgstr "Correo electrónico 2"
 
 #: apps/io.ox/contacts/model.js:262
 msgid "Email 3"
-msgstr "Email 3"
+msgstr "Correo electrónico 3"
 
 #: apps/io.ox/contacts/model.js:263 apps/io.ox/office/editor/image.js:48
 #: apps/io.ox/office/editor/image.js:117
@@ -2184,7 +2187,7 @@ msgstr "Nombre"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:80
 msgid "Email address"
-msgstr "Dirección de E-mail"
+msgstr "Dirección de correo electrónico"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:169
 #: apps/io.ox/contacts/view-detail.js:284
@@ -2222,12 +2225,12 @@ msgstr "Móvil"
 
 #: apps/io.ox/contacts/view-detail.js:296
 msgid "Primary Email"
-msgstr "E-mail principal"
+msgstr "Correo principal"
 
 #: apps/io.ox/contacts/view-detail.js:299
 #: apps/io.ox/contacts/view-detail.js:303
 msgid "Alternative Email"
-msgstr "E-Mail alternativo"
+msgstr "Correo alternativo"
 
 #: apps/io.ox/contacts/view-detail.js:319
 msgid "Birthday"
@@ -2471,7 +2474,7 @@ msgstr "Crear tarea nueva"
 
 #: apps/io.ox/tasks/actions.js:245
 msgid "Undone"
-msgstr "Revertido"
+msgstr "Sin completar"
 
 #: apps/io.ox/tasks/actions.js:286
 msgid "Change due date"
@@ -2761,15 +2764,15 @@ msgstr "Intervalo del recordatorio en minutos"
 
 #: apps/io.ox/tasks/settings/pane.js:30
 msgid "E-Mail notification for task"
-msgstr "Notificación por E-Mail de tareas"
+msgstr "Notificación de tareas por correo electrónico"
 
 #: apps/io.ox/tasks/settings/pane.js:32
 msgid "E-Mail notification for task creator?"
-msgstr "¿Notificar por E-Mail de la creación de tareas?"
+msgstr "¿Notificar por correo electrónico de la creación de tareas?"
 
 #: apps/io.ox/tasks/settings/pane.js:33
 msgid "E-Mail notification for task participant?"
-msgstr "¿Notificación por E-Mail como participantes de la tarea?"
+msgstr "¿Notificación por correo electrónico a participantes de la tarea?"
 
 #: apps/io.ox/tasks/settings/pane.js:37
 msgid "H-split view"
@@ -3074,7 +3077,7 @@ msgstr "Añadir subcarpeta"
 #: apps/io.ox/core/commons-folderview.js:150
 #: apps/io.ox/mail/accounts/settings.js:204
 msgid "Add mail account"
-msgstr "Añadir cuenta de E-Mail"
+msgstr "Añadir cuenta de correo electrónico"
 
 #: apps/io.ox/core/commons-folderview.js:225
 msgid "Permissions"
@@ -4067,13 +4070,15 @@ msgstr "Publicación creada"
 
 #: apps/io.ox/publications/wizard.js:59
 msgid "Send email"
-msgstr "Enviar E-Mail"
+msgstr "Enviar correo electrónico"
 
 #: apps/io.ox/mail/actions.js:52
 msgid "Do you really want to permanently delete this mail?"
 msgid_plural "Do you really want to permanently delete these mails?"
-msgstr[0] "¿Está seguro de querer borrar este E-Mail definitivamente?"
-msgstr[1] "¿Está seguro de querer borrar estos E-Mails definitivamente?"
+msgstr[0] ""
+"¿Está seguro de querer borrar este correo electrónico definitivamente?"
+msgstr[1] ""
+"¿Está seguro de querer borrar estos correos electrónicos definitivamente?"
 
 #: apps/io.ox/mail/actions.js:151
 msgid "Mail source"
@@ -4081,11 +4086,11 @@ msgstr "Fuente de correo"
 
 #: apps/io.ox/mail/actions.js:198
 msgid "Mails have been moved"
-msgstr "Los E-mails se han movido"
+msgstr "Los correos se han movido"
 
 #: apps/io.ox/mail/actions.js:235
 msgid "Mails have been copied"
-msgstr "Los E-mails se han copiado"
+msgstr "Los correos se han copiado"
 
 #: apps/io.ox/mail/actions.js:537
 msgid "Create reminder"
@@ -4093,7 +4098,7 @@ msgstr "Crear recordatorio"
 
 #: apps/io.ox/mail/actions.js:549
 msgid "Mail reminder"
-msgstr "Recordatorio de E-mail"
+msgstr "Recordatorio por correo electrónico"
 
 #: apps/io.ox/mail/actions.js:555
 msgid "Note"
@@ -4101,7 +4106,7 @@ msgstr "Nota"
 
 #: apps/io.ox/mail/actions.js:556
 msgid "Mail reminder for"
-msgstr "Recordatorio de E-mail para"
+msgstr "Recordatorio por correo electrónico para"
 
 #: apps/io.ox/mail/actions.js:557 apps/io.ox/mail/main.js:159
 #: apps/io.ox/mail/main.js:418 apps/io.ox/mail/write/view-main.js:366
@@ -4110,7 +4115,7 @@ msgstr "De"
 
 #: apps/io.ox/mail/actions.js:616 apps/io.ox/mail/write/main.js:413
 msgid "Compose new mail"
-msgstr "Redactar nuevo E-mail"
+msgstr "Redactar nuevo correo electrónico"
 
 #: apps/io.ox/mail/actions.js:626
 msgid "Reply All"
@@ -4142,7 +4147,7 @@ msgstr "Presentación"
 
 #: apps/io.ox/mail/actions.js:798
 msgid "Drop here to import this mail"
-msgstr "Soltar aquí para importar este E-mail"
+msgstr "Soltar aquí para importar este correo"
 
 #: apps/io.ox/mail/main.js:160
 msgid "Label"
@@ -4155,12 +4160,12 @@ msgstr "No leidos sólo"
 #: apps/io.ox/mail/main.js:192
 msgid "%1$d mail"
 msgid_plural "%1$d mails"
-msgstr[0] "%1$d E-Mail"
-msgstr[1] "%1$d E-Mails"
+msgstr[0] "%1$d correo"
+msgstr[1] "%1$d correos"
 
 #: apps/io.ox/mail/main.js:360
 msgid "Couldn't load that email."
-msgstr "No se pudo cargar el E-mail."
+msgstr "No se pudo cargar el correo electrónico."
 
 #: apps/io.ox/mail/main.js:383
 msgid "No mails found for \"%s\""
@@ -4293,7 +4298,7 @@ msgstr "en nombre de"
 
 #: apps/io.ox/mail/settings/old_pane.js:46 apps/io.ox/mail/settings/pane.js:27
 msgid "Permanently remove deleted E-Mails?"
-msgstr "¿Eliminar permanentemente los E-Mails borrados?"
+msgstr "¿Eliminar permanentemente los correos borrados?"
 
 #: apps/io.ox/mail/settings/old_pane.js:47 apps/io.ox/mail/settings/pane.js:28
 msgid ""
@@ -4321,11 +4326,11 @@ msgstr "Añadir vcard"
 
 #: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:33
 msgid "Insert the original E-Mail text to a reply"
-msgstr "Insertar el texto original del E-Mail en la respuesta"
+msgstr "Insertar el texto original del correo en la respuesta"
 
 #: apps/io.ox/mail/settings/old_pane.js:92 apps/io.ox/mail/settings/pane.js:34
 msgid "Forward E-Mails as:"
-msgstr "Reenviar E-Mails como:"
+msgstr "Reenviar correos electrónicos como:"
 
 #: apps/io.ox/mail/settings/old_pane.js:94 apps/io.ox/mail/settings/pane.js:35
 msgid "Inline"
@@ -4338,7 +4343,7 @@ msgstr "Adjunto"
 #: apps/io.ox/mail/settings/old_pane.js:104
 #: apps/io.ox/mail/settings/pane.js:37
 msgid "Format E-Mails as:"
-msgstr "Formatear E-Mails como:"
+msgstr "Formatear correos electrónicos como:"
 
 #: apps/io.ox/mail/settings/old_pane.js:107
 #: apps/io.ox/mail/settings/pane.js:39
@@ -4363,7 +4368,7 @@ msgstr "Dirección de remite predeterminada:"
 #: apps/io.ox/mail/settings/old_pane.js:130
 #: apps/io.ox/mail/settings/pane.js:44
 msgid "Auto-save Email drafts?"
-msgstr "¿Guardar automáticamente borradores de E-Mail?"
+msgstr "¿Guardar automáticamente borradores de correo electrónico?"
 
 #: apps/io.ox/mail/settings/old_pane.js:156
 #: apps/io.ox/mail/settings/pane.js:45
@@ -4373,7 +4378,7 @@ msgstr "Mostrar"
 #: apps/io.ox/mail/settings/old_pane.js:160
 #: apps/io.ox/mail/settings/pane.js:46
 msgid "Allow html formatted E-Mails"
-msgstr "Permitir E-Mails con formato HTML"
+msgstr "Permitir correos electrónicos con formato HTML"
 
 #: apps/io.ox/mail/settings/old_pane.js:161
 #: apps/io.ox/mail/settings/pane.js:47
@@ -4383,7 +4388,7 @@ msgstr "Bloquear la precarga de imágenes externas enlazadas"
 #: apps/io.ox/mail/settings/old_pane.js:162
 #: apps/io.ox/mail/settings/pane.js:48
 msgid "Display emoticons as graphics in text E-Mails"
-msgstr "Mostrar emoticonos como gráficos en E-Mails de texto"
+msgstr "Mostrar emoticonos como gráficos en correos de texto"
 
 #: apps/io.ox/mail/settings/old_pane.js:163
 #: apps/io.ox/mail/settings/pane.js:49
@@ -4392,7 +4397,7 @@ msgstr "Colorear líneas citadas"
 
 #: apps/io.ox/mail/settings/pane.js:30
 msgid "Automatically select first E-Mail"
-msgstr "Seleccionar automáticamente el primer E-Mail"
+msgstr "Seleccionar automáticamente el primer correo electrónico"
 
 #: apps/io.ox/mail/settings/pane.js:42
 msgid " characters"
@@ -4420,7 +4425,7 @@ msgstr "Nombre de la cuenta:"
 
 #: apps/io.ox/mail/accounts/view-form.js:26
 msgid "E-Mail Address:"
-msgstr "Dirección de E-Mail:"
+msgstr "Dirección de correo electrónico:"
 
 #: apps/io.ox/mail/accounts/view-form.js:27
 msgid "Use Unified Mail for this account"
