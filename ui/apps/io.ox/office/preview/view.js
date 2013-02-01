@@ -63,7 +63,7 @@ define('io.ox/office/preview/view',
             self.showAlertsBeforePane('toolpane');
 
             // insert the model content node into the application pane
-            self.insertContentNode(self.getModel().getNode());
+            self.insertContentNode(app.getModel().getNode());
         }
 
         // initialization -----------------------------------------------------
