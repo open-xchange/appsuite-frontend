@@ -87,7 +87,6 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                                 def.resolve(data);
                             } catch (e) {
                                 // ignore broken values
-                                
                             }
                         }
                     }
