@@ -354,13 +354,16 @@ define('io.ox/mail/actions',
             }, true);
         },
         multiple: function (list) {
-            _(list).each(function (data) {
-                data.url = api.getUrl(data, 'view') + '&scaleType=contain&width=' + $(window).width() + '&height=' + $(window).height();
-            });
             require(['io.ox/files/carousel'], function (slideshow) {
+                var files = _(list).map(function (file) {
+                    return {
+                        url: api.getUrl(file, 'view'),
+                        filename: file.filename
+                    };
+                });
                 slideshow.init({
                     fullScreen: false,
-                    list: list,
+                    baton: {allIds: files},
                     attachmentMode: true
                 });
             });
