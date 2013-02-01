@@ -335,6 +335,11 @@
     font-weight: 300;
 }
 
+.io-ox-mail-write .change-format a.active {
+    color: darken(@linkColor, 50%);
+    font-weight: 500;
+}
+
 /* Proofread */
 
 .io-ox-mail-proofread {

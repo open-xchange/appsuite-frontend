@@ -71,8 +71,18 @@ define('io.ox/mail/write/main',
             previous;
 
         function getDefaultEditorMode() {
-            if (defaultEditorMode === 'text') return 'text';
-            return 'html';
+            return (_.indexOf(['text', 'html', 'alternative'], defaultEditorMode) >= 0) ? defaultEditorMode : 'html';
+        }
+
+        function getContentType() {
+            switch (getDefaultEditorMode()) {
+            case 'text':
+                return 'text/plain';
+            case 'html':
+                return 'text/html';
+            case 'alternative':
+                return 'alternative';
+            }
         }
 
         app = ox.ui.createApp({
@@ -268,6 +278,10 @@ define('io.ox/mail/write/main',
 
             return _.queued(function (mode) {
                 // change?
+                defaultEditorMode = mode;
+                if (mode === 'alternative') {
+                    mode = 'html';
+                }
                 return (mode === editorMode ?
                     $.when() :
                     changeMode(mode || editorMode).done(function () {
@@ -739,19 +753,19 @@ define('io.ox/mail/write/main',
             // get content
             if (editorMode === 'html') {
                 content = {
-                    content_type: 'text/html',
                     content: (app.getEditor() ? app.getEditor().getContent() : '')
                         // reverse img fix
                         .replace(/(<img[^>]+src=")(\/appsuite\/)?api\//g, '$1/ajax/')
                 };
             } else {
                 content = {
-                    content_type: 'text/plain',
                     content: (app.getEditor() ? app.getEditor().getContent() : '')
                         .replace(/</g, '&lt;') // escape <
                         .replace(/\n/g, '<br>\n') // escape line-breaks
                 };
             }
+
+            content.content_type = getContentType();
 
             mail = {
                 from: [data.from] || [],
