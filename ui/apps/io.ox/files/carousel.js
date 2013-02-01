@@ -45,6 +45,23 @@ define('io.ox/files/carousel',
         nextControl:    $('<a class="carousel-control right">').text(gt.noI18n('›')).attr('data-slide', 'next'),
         closeControl:   $('<button class="btn btn-primary closecarousel">').text(gt('Close')),
 
+       /**
+        * The config parameter used to initialize a carousel.
+        *
+        * The fields are mostly self-explaining. Important field is baton.
+        * It must contain an object that looks like this:
+        * { allIds: [
+        *     { filename: 'the filename.ext',
+        *       url: 'an_url_ponting/to/the_file'
+        *     }, …
+        *   ]
+        * }
+        *
+        * The url attribute for the items in allIds list is optional and can be used to provide
+        * an user-defined url for the image. If this attribute is not defined, the files API getUrl
+        * method is used to get the URL for the file.
+        *
+        */
         config: {
             fullScreen: false,
             baton: null,
