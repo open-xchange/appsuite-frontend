@@ -158,7 +158,7 @@ define('plugins/portal/facebook/register',
                 ext.point('plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
                     if (renderer.accepts(post) && ! foundHandler) {
-                        console.log(profile.name, ' Renderer: ', renderer.id, post); //this is too useful to delete it, just uncomment it
+                        //console.log(profile.name, ' Renderer: ', renderer.id, post); //this is too useful to delete it, just uncomment it
                         renderer.draw.apply(content_container, [post]);
                         foundHandler = true;
                     }
