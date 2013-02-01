@@ -75,10 +75,13 @@ define("io.ox/core/main",
             itemsLeftWidth += $(this).outerWidth(true);
         });
 
-        var i = 0;
-        var hidden = 0;
+        var visibleTabs,
+            i = 0,
+            hidden = 0;
+
         for (i = items.length; i > 1; i--) {
-            if (itemsLeftWidth + itemsRightWidth <= viewPortWidth) {
+            visibleTabs = itemsVisible.length - hidden;
+            if (itemsLeftWidth + itemsRightWidth <= viewPortWidth || visibleTabs <= 3) {
                 break;
             } else {
                 var lastVisibleItem = launchers.children('.launcher:visible').last();
@@ -87,6 +90,9 @@ define("io.ox/core/main",
                 hidden++;
                 if (hidden === 1) {
                     itemsLeftWidth += launcherDropDownIconWidth;
+                }
+                if (visibleTabs <= 4) {
+                    $('.launcher.left-corner', topbar).hide();
                 }
             }
         }
