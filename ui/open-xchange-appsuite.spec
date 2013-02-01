@@ -112,6 +112,7 @@ rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
 ## l10n ##
 #%files l10n-## lang ## -f tmp/files-## lang ##
 #%defattr(-,root,root)
+#%dir /opt/open-xchange/etc
 #/opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-## lang ##.properties
 ## end l10n ##
 
