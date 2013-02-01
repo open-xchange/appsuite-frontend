@@ -134,7 +134,9 @@ define('io.ox/tasks/actions',
                         notifications.yell('error', gt.noI18n(result));
                     });
             } else {
-                api.update(data.last_modified || _.now(), data.id, mods.data, data.folder_id || data.folder)
+                mods.data.id = data.id;
+                mods.data.folder_id = data.folder_id || data.folder;
+                api.update(mods.data)
                     .done(function (result) {
                         api.trigger('update:' + encodeURIComponent(data.folder_id + '.' + data.id));
                         notifications.yell('success', mods.label);
@@ -405,13 +407,10 @@ define('io.ox/tasks/actions',
                         var finderId = $(this).attr('finderId');
                         require(['io.ox/tasks/api'], function (api) {
                             var endDate = util.computePopupTime(new Date(), finderId).alarmDate,
-                                modifications = {end_date: endDate.getTime()},
-                                folder;
-                            if (e.data.task.folder) {
-                                folder = e.data.task.folder;
-                            } else {
-                                folder = e.data.task.folder_id;
-                            }
+                                modifications = {end_date: endDate.getTime(),
+                                                 id: e.data.task.id,
+                                                 folder_id: e.data.task.folder_id || e.data.task.folder};
+                            
                             //check if startDate is still valid with new endDate, if not, show dialog
                             if (e.data.task.start_date && e.data.task.start_date > endDate.getTime()) {
                                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
@@ -432,16 +431,16 @@ define('io.ox/tasks/actions',
                                             notifications.yell('info', gt('Canceled'));
                                         } else {
                                             modifications.start_date = modifications.end_date;
-                                            api.update(_.now(), e.data.task.id, modifications, folder).done(function () {
-                                                api.trigger('update:' + encodeURIComponent(folder + '.' + e.data.task.id));
+                                            api.update(modifications).done(function () {
+                                                api.trigger('update:' + encodeURIComponent(modifications.folder_id + '.' + modifications.id));
                                                 notifications.yell('success', gt('Changed due date'));
                                             });
                                         }
                                     });
                                 });
                             } else {
-                                api.update(_.now(), e.data.task.id, modifications, folder).done(function () {
-                                    api.trigger('update:' + encodeURIComponent(folder + '.' + e.data.task.id));
+                                api.update(modifications).done(function () {
+                                    api.trigger('update:' + encodeURIComponent(modifications.folder_id + '.' + modifications.id));
                                     notifications.yell('success', gt('Changed due date'));
                                 });
                             }

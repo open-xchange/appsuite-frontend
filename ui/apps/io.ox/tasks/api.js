@@ -139,49 +139,45 @@ define('io.ox/tasks/api', ['io.ox/core/http',
         }
     };
 
-    api.update = function (timestamp, taskId, modifications, folder) {
-                //check if only one big array was given for exsample by modelfactory
-                if (arguments.length === 1) {
-                    var args = arguments[0];
-                    timestamp = args.last_modified;
-                    if (!timestamp) {
-                        timestamp = _.now();
-                    }
-                    taskId = args.id;
-                    
-                    folder = args.folder_id;
-                    if (!folder) {
-                        folder = args.folder;
-                    }
-                    modifications = args;
+    api.update = function (task, newFolder) {
+                //check if oldschool argument list was used (timestamp, taskId, modifications, folder) convert and give notice
+                if (arguments.length > 2) {
+                    console.log("Using old api signature.");
+                    task = arguments[2];
+                    task.folder_id = arguments[3];
+                    task.id = arguments[1];
                 }
-                modifications.notification = true;//set allways (OX6 does this too)
-                //go on normaly
-                var useFolder;
-                if (folder === undefined) {
+                
+                var useFolder = task.folder_id || task.folder,
+                    timestamp = task.last_modified || _.now();
+                
+                if (newFolder && arguments.length === 2) { //folder is only used by move operation, because here we need 2 folder attributes
+                    task.folder_id = newFolder;
+                }
+                task.notification = true;//set allways (OX6 does this too)
+                
+                if (useFolder === undefined) {//if no folder is given use default
                     useFolder = api.getDefaultFolder();
-                } else {
-                    useFolder = folder;
                 }
-                var key = useFolder + '.' + taskId;
+                var key = useFolder + '.' + task.id;
                 return http.PUT({
                     module: 'tasks',
                     params: {action: 'update',
                         folder: useFolder,
-                        id: taskId,
+                        id: task.id,
                         timestamp: timestamp,
                         timezone: 'UTC'
                     },
-                    data: modifications,
+                    data: task,
                     appendColumns: false
                 }).pipe(function () {
                     // update cache
                     return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
                 }).pipe(function () {
                     //return object with id and folder id needed to save the attachments correctly
-                    var obj = {folder_id: useFolder, id: taskId};
+                    var obj = {folder_id: useFolder, id: task.id};
                     //notification check
-                    api.checkForNotifications([obj], modifications);
+                    api.checkForNotifications([obj], task);
                     return obj;
                 }).done(function () {
                     //trigger refresh, for vGrid etc
@@ -246,7 +242,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
                 });
             }
             if (!task.length) {
-                return api.update(_.now(), task.id, {folder_id: newFolder}, folder).done(refreshPortal);
+                return api.update(task, newFolder).done(refreshPortal);
             } else {
                 return api.updateMultiple(task, {folder_id: newFolder}).done(refreshPortal);
             }
