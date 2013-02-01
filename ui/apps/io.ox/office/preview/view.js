@@ -34,7 +34,7 @@ define('io.ox/office/preview/view',
 
         // base constructor ---------------------------------------------------
 
-        View.call(this, app, { modelPadding: 30 });
+        View.call(this, app, { scrollable: true, padding: 30 });
 
         // private methods ----------------------------------------------------
 
@@ -61,6 +61,9 @@ define('io.ox/office/preview/view',
 
             // show alert banners above the overlay pane (floating buttons below alert banners)
             self.showAlertsBeforePane('toolpane');
+
+            // insert the model content node into the application pane
+            self.insertContentNode(self.getModel().getNode());
         }
 
         // initialization -----------------------------------------------------

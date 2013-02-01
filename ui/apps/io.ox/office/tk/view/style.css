@@ -124,9 +124,8 @@ i[class^="icon-"], i[class^=" icon-"] {
 
 /* panes =================================================================== */
 
-.view-pane {
+> .view-pane {
     position: absolute;
-    overflow: hidden;
     background: @pane-fill-color;
     line-height: 0;
 
@@ -136,34 +135,47 @@ i[class^="icon-"], i[class^=" icon-"] {
 
         &.overlay {
             height: 0;
-            overflow: visible;
         }
     }
 
     /* the application pane in the middle between all view panes */
     &.app-pane {
+        .box-sizing(content-box);
         margin: 0;
         padding: 0;
-        .overflow(auto);
         background: @app-pane-fill-color;
-        text-align: center;
 
-        /* the container element for the application model node(s) */
-        .app-pane-model-container {
-            display: inline-block;
-            .box-sizing(content-box);
-        }
+        /* the container element for the application contents */
+        > .app-container {
+            display: block;
+            width: 100%;
+            height: 100%;
+        } 
+        
+        /* scrollable app pane, center container node horizontally into application pane */
+        &.scrollable {
+            .overflow(auto);
+            text-align: center;
 
-        /* generic design of a 'page': white background with box shadow */
-        .page {
-            position: relative;
-            background: white;
-            .box-shadow(0 0 8px fade(black, 20%));
+            /* the container element for the application contents */
+            > .app-container {
+                display: inline-block;
+                width: auto;
+                height: auto;
+
+                /* generic design of a 'page': white background with box shadow */
+                > .page {
+                    position: relative;
+                    background: white;
+                    .box-shadow(0 0 8px fade(black, 20%));
+                }
+            }
         }
     }
 }
 
-.app-pane-shadow {
+/* the inner shadows of the application pane */
+> .app-pane-shadow {
     position: absolute;
     .box-shadow(0 0 10px fade(black, 20%));
 }
