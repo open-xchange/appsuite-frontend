@@ -150,7 +150,7 @@ define('io.ox/core/tk/vgrid',
             var numRows = offset + CHUNK_SIZE - 1;
 
             var subset = all.slice(offset, offset + numRows);
-            
+
             return this.load(subset);
         }
 
@@ -159,7 +159,7 @@ define('io.ox/core/tk/vgrid',
             var startChunk = Math.floor(start / CHUNK_SIZE);
             var endChunk = Math.floor(end / CHUNK_SIZE);
             var i = 0;
-            
+
             var chunkLoaders = [];
 
             for (i = startChunk; i++; i <= endChunk) {
@@ -356,8 +356,8 @@ define('io.ox/core/tk/vgrid',
                 text = clone.node.text();
                 // convert Umlauts
                 text = text.replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
-                    .replace(/[ÖÒÓÔÕÖ]/g, 'U')
-                    .replace(/[ÜÙÚÛÜ]/g, 'O');
+                    .replace(/[ÖÒÓÔÕÖ]/g, 'O')
+                    .replace(/[ÜÙÚÛÜ]/g, 'U');
 
                 // add node
                 labels.nodes = labels.nodes.add(clone.node.appendTo(container));
