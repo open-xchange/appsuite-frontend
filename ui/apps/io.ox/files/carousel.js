@@ -159,8 +159,9 @@ define('io.ox/files/carousel',
             });
         },
 
-        addURL: function (file) {
-            return api.getUrl(file, 'open') + '&scaleType=contain&width=' + $(window).width() + '&height=' + $(window).height();
+        urlFor: function (file) {
+            var url = file.url || api.getUrl(file, 'open');
+            return url + '&scaleType=contain&width=' + $(window).width() + '&height=' + $(window).height();
         },
 
         imgError: function () {
@@ -206,7 +207,7 @@ define('io.ox/files/carousel',
             if (item.children().length === 0) {
                 if (this.config.attachmentMode === false) {
                     item.append(
-                        $('<img>', { alt: '', src: this.addURL(file) })
+                        $('<img>', { alt: '', src: this.urlFor(file) })
                             .on('error', this.imgError) /* error doesn't seem to bubble */,
                         $('<div class="carousel-caption">').append(
                             $('<h4>').text(gt.noI18n(file.filename)),
