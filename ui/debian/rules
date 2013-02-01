@@ -15,8 +15,9 @@ override_dh_auto_install:
 	    manifestDir=debian/open-xchange-appsuite-manifest/opt/open-xchange/appsuite \
 	    $(FLAGS) --trace
 	for i in i18n/*.properties; do \
-	    mkdir -p debian/$${i:5:-11}/opt/open-xchange/etc/languages/appsuite/; \
-	    cp $$i debian/$${i:5:-11}/opt/open-xchange/etc/languages/appsuite/; \
+	    j=$${i#i18n/}; pkgname=$${j%.properties}; \
+	    mkdir -p debian/$$pkgname/opt/open-xchange/etc/languages/appsuite/; \
+	    cp $$i debian/$$pkgname/opt/open-xchange/etc/languages/appsuite/; \
 	done
 	cp -r debian/open-xchange-appsuite/var/www/appsuite/apps \
 	    debian/open-xchange-appsuite-manifest/opt/open-xchange/appsuite/
