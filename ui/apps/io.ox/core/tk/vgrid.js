@@ -141,6 +141,8 @@ define('io.ox/core/tk/vgrid',
         var THRESHHOLD_EAGER = 0;
         var activeLoaders = {};
 
+        this.MAX_CHUNK = 200;
+        this.MIN_CHUNK = 50;
 
         this.fetch = _.identity();
         this.all = function () {
@@ -153,8 +155,10 @@ define('io.ox/core/tk/vgrid',
             }
             var all = this.all(options);
             var offset = CHUNK_SIZE * index;
-            var numRows = offset + CHUNK_SIZE - 1;
+            var numRows = CHUNK_SIZE - 1;
             
+            console.log("FETCH", offset, offset + numRows);
+
             var subset = all.slice(offset, offset + numRows);
 
             if (_.isEmpty(subset)) {
@@ -173,14 +177,14 @@ define('io.ox/core/tk/vgrid',
 
         this.getChunkLoaders = function getChunkLoaders(start, length, options) {
             CHUNK_SIZE = Math.ceil(this.all().length / 3);
-            if (CHUNK_SIZE > 200) {
-                CHUNK_SIZE = 200;
+            if (CHUNK_SIZE > this.MAX_CHUNK) {
+                CHUNK_SIZE = this.MAX_CHUNK;
             }
-            if (CHUNK_SIZE < 50) {
-                CHUNK_SIZE = 50;
+            if (CHUNK_SIZE < this.MIN_CHUNK) {
+                CHUNK_SIZE = this.MIN_CHUNK;
             }
             THRESHHOLD_EAGER = CHUNK_SIZE;
-
+            
             var end = start + length;
             var startChunk = Math.floor(start / CHUNK_SIZE);
             var endChunk = Math.floor(end / CHUNK_SIZE);
@@ -358,7 +362,9 @@ define('io.ox/core/tk/vgrid',
                 fetch: function (subset, options) {
                     var load = loadData[options.mode] || loadData.all;
                     return load.call(self, subset);
-                }
+                },
+                MAX_CHUNK: options.maxChunkSize || 200,
+                MIN_CHUNK: options.minChunkSize || 50
             });
 
         // add label class
