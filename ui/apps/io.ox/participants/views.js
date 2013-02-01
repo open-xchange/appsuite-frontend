@@ -92,7 +92,8 @@ define("io.ox/participants/views",
             switch (type) {
             case 1:
                 this.nodes.$img.addClass('contact-image');
-                var m = this.model.getEmail();
+                //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
+                var m = this.model.get('emailparam') ? this.model.get('emailparam') : this.model.getEmail();
                 this.nodes.$mail.text(m);
                 if (this.options.halo) {
                     this.nodes.$wrapper.data({email1: m}).addClass('halo-link');

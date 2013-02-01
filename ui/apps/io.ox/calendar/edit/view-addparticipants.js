@@ -104,6 +104,8 @@ define('io.ox/calendar/edit/view-addparticipants',
                                     obj.data.type = 5;
                                     // h4ck
                                     obj.data.email1 = obj.email;
+                                    //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
+                                    obj.data.emailparam = obj.email;
                                 }
                                 break;
                             case 'resource':
