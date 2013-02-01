@@ -556,6 +556,7 @@ define('io.ox/office/tk/app/officeapplication',
                 .on('hide', function () {
                     $(window).off('resize', resizeHandler);
                 });
+            return this;
         };
 
         /**
@@ -620,10 +621,13 @@ define('io.ox/office/tk/app/officeapplication',
 
             // create and return the deferred method
             return function () {
-                // create a timeout calling the deferred callback
-                createTimeout(initialDelay);
-                // call the direct callback with the passed arguments
-                return directCallback.apply(self, _.toArray(arguments));
+                // do not call from other unregistered pending timeouts after quit
+                if (debounceTimeouts) {
+                    // create a timeout calling the deferred callback
+                    createTimeout(initialDelay);
+                    // call the direct callback with the passed arguments
+                    return directCallback.apply(self, _.toArray(arguments));
+                }
             };
         };
 
@@ -670,13 +674,16 @@ define('io.ox/office/tk/app/officeapplication',
                 }
             }
 
-            // create initial timeout
-            id = window.setTimeout(executeCallback, delay);
-            delayTimeouts[id] = id;
+            // do not call from other unregistered pending timeouts after quit
+            if (delayTimeouts) {
+                // create initial timeout
+                id = window.setTimeout(executeCallback, delay);
+                delayTimeouts[id] = id;
 
-            // switch to repetition delay time
-            if (_.isNumber(repeatedDelay)) {
-                delay = repeatedDelay;
+                // switch to repetition delay time
+                if (_.isNumber(repeatedDelay)) {
+                    delay = repeatedDelay;
+                }
             }
 
             return id;
