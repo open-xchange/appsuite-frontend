@@ -19,13 +19,13 @@
         "შაბ"
     ],
     "daysStandalone": [
-        "კვი",
-        "ორშ",
-        "სამ",
-        "ოთხ",
-        "ხუთ",
-        "პარ",
-        "შაბ"
+        "კვ",
+        "ორ",
+        "სმ",
+        "ოთ",
+        "ხთ",
+        "პრ",
+        "შბ"
     ],
     "months": [
         "იანვარი",
@@ -34,7 +34,7 @@
         "აპრილი",
         "მაისი",
         "ივნისი",
-        "ივლის",
+        "ივლისი",
         "აგვისტო",
         "სექტემბერი",
         "ოქტომბერი",
@@ -57,25 +57,25 @@
     ],
     "formats": {
         "E": "E",
-        "yMd": "y-M-d",
+        "yMd": "d.M.y",
         "yMEd": "E, d.M.y",
-        "yMMMd": "y MMM d",
-        "yMMMEd": "E, d MMM y",
+        "yMMMd": "d MMM, y",
+        "yMMMEd": "E, d MMM, y",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "y-M-d HH:mm",
-        "yMdHmv": "y-M-d HH:mm v",
-        "yMdhm": "y-M-d h:mm a",
-        "yMdhmv": "y-M-d h:mm a v",
+        "yMdHm": "d.M.y HH:mm",
+        "yMdHmv": "d.M.y HH:mm v",
+        "yMdhm": "d.M.y h:mm a",
+        "yMdhmv": "d.M.y h:mm a v",
         "yMEdHm": "E, d.M.y HH:mm",
         "yMEdHmv": "E, d.M.y HH:mm v",
         "yMEdhm": "E, d.M.y h:mm a",
         "yMEdhmv": "E, d.M.y h:mm a v"
     },
-    "date": "y MMM d",
+    "date": "d MMM, y",
     "time": "HH:mm",
     "dateTimeFormat": "%2$s %1$s",
     "intervals": {
@@ -99,24 +99,25 @@
             "m": "HH:mm–HH:mm v"
         },
         "yMMMd": {
-            "d": "yyyy-MM-d – d",
-            "m": "yyyy-MM-dd – MM-d",
-            "y": "yyyy-MM-dd – yyyy-MM-dd"
+            "d": "d – d MMM, y",
+            "m": "dd MM - dd MM, y",
+            "y": "dd MMM, y - d MMM, y"
         },
         "yMMMEd": {
             "d": "E, d - E, d MMM y",
-            "m": "E, d MMM - E, d MMM y",
-            "y": "E, d MMM y - E, d MMM y"
+            "m": "E, d MMM - E, d MMM, y",
+            "y": "E, d MMM, y - E, d MMM, y"
         }
     },
     "dayPeriods": {
-        "am": "დილის",
-        "pm": "საღამოს"
+        "am": "AM",
+        "noon": "შუადღე",
+        "pm": "PM"
     },
     "eras": [
-        "ჩვენს წელთაღრიცხვამდე",
-        "ჩვენი წელთაღრიცხვით"
+        "ძვ. წ.",
+        "ახ. წ."
     ],
-    "dateTime": "y MMM d HH:mm",
+    "dateTime": "d MMM, y HH:mm",
     "h12": false
 }

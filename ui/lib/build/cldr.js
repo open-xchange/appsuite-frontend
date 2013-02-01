@@ -12,6 +12,13 @@ var languageNames = {};
 desc("Downloads the latest CLDR data and updates date translations for all " +
      "languages in i18n/*.po .");
 utils.topLevelTask("update-i18n", ["lib/build/cldr.js"], function () {
+    function alias(from, to) {
+        languageNames[to] = languageNames[from];
+        fs.writeFileSync('apps/io.ox/core/date/date.' + to + '.json',
+            fs.readFileSync('apps/io.ox/core/date/date.' + from + '.json'));
+    }
+    alias('zh_Hans', 'zh_CN');
+    alias('zh_Hant', 'zh_TW');
     fs.writeFileSync('i18n/languagenames.json',
                      JSON.stringify(languageNames, null, 4));
 });

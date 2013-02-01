@@ -2,83 +2,83 @@
     "daysInFirstWeek": null,
     "weekStart": 1,
     "days": [
-        "Կիրակի",
-        "Երկուշաբթի",
-        "Երեքշաբթի",
-        "Չորեքշաբթի",
-        "Հինգշաբթի",
-        "Ուրբաթ",
-        "Շաբաթ"
+        "կիրակի",
+        "երկուշաբթի",
+        "երեքշաբթի",
+        "չորեքշաբթի",
+        "հինգշաբթի",
+        "ուրբաթ",
+        "շաբաթ"
     ],
     "daysShort": [
-        "Կիր",
-        "Երկ",
-        "Երք",
-        "Չոր",
-        "Հնգ",
-        "Ուր",
-        "Շաբ"
+        "կիր",
+        "երկ",
+        "երք",
+        "չոր",
+        "հնգ",
+        "ուր",
+        "շաբ"
     ],
     "daysStandalone": [
-        "Կիր",
-        "Երկ",
-        "Երք",
-        "Չոր",
-        "Հնգ",
-        "Ուր",
-        "Շաբ"
+        "կիր",
+        "երկ",
+        "երք",
+        "չոր",
+        "հնգ",
+        "ուր",
+        "շաբ"
     ],
     "months": [
-        "Հունվար",
-        "Փետրվար",
-        "Մարտ",
-        "Ապրիլ",
-        "Մայիս",
-        "Հունիս",
-        "Հուլիս",
-        "Օգոստոս",
-        "Սեպտեմբեր",
-        "Հոկտեմբեր",
-        "Նոյեմբեր",
-        "Դեկտեմբեր"
+        "հունվարի",
+        "փետրվարի",
+        "մարտի",
+        "ապրիլի",
+        "մայիսի",
+        "հունիսի",
+        "հուլիսի",
+        "օգոստոսի",
+        "սեպտեմբերի",
+        "հոկտեմբերի",
+        "նոյեմբերի",
+        "դեկտեմբերի"
     ],
     "monthsShort": [
-        "Հնվ",
-        "Փտվ",
-        "Մրտ",
-        "Ապր",
-        "Մյս",
-        "Հնս",
-        "Հլս",
-        "Օգս",
-        "Սեպ",
-        "Հոկ",
-        "Նոյ",
-        "Դեկ"
+        "հնվ",
+        "փտվ",
+        "մրտ",
+        "ապր",
+        "մյս",
+        "հնս",
+        "հլս",
+        "օգս",
+        "սեպ",
+        "հոկ",
+        "նոյ",
+        "դեկ"
     ],
     "formats": {
         "E": "E",
-        "yMd": "y-M-d",
-        "yMEd": "E, y-M-d",
-        "yMMMd": "y MMM d",
-        "yMMMEd": "E, y MMM d",
+        "yMd": "dd.MM.y",
+        "yMEd": "d.MM.y թ., E",
+        "yMMMd": "d MMM, y թ.",
+        "yMMMEd": "d MMM, y թ., E",
         "hm": "h:mm a",
-        "Hm": "HH:mm",
+        "Hm": "H:mm",
         "v": "v",
-        "Hmv": "HH:mm v",
+        "Hmv": "H:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "y-M-d HH:mm",
-        "yMdHmv": "y-M-d HH:mm v",
-        "yMdhm": "y-M-d h:mm a",
-        "yMdhmv": "y-M-d h:mm a v",
-        "yMEdHm": "E, y-M-d HH:mm",
-        "yMEdHmv": "E, y-M-d HH:mm v",
-        "yMEdhm": "E, y-M-d h:mm a",
-        "yMEdhmv": "E, y-M-d h:mm a v"
+        "yMdHm": "dd.MM.y, H:mm",
+        "yMdHmv": "dd.MM.y, H:mm v",
+        "yMdhm": "dd.MM.y, h:mm a",
+        "yMdhmv": "dd.MM.y, h:mm a v",
+        "yMEdHm": "d.MM.y թ., E, H:mm",
+        "yMEdHmv": "d.MM.y թ., E, H:mm v",
+        "yMEdhm": "d.MM.y թ., E, h:mm a",
+        "yMEdhmv": "d.MM.y թ., E, h:mm a v"
     },
-    "date": "MMM d, y",
-    "time": "HH:mm",
-    "dateTimeFormat": "%2$s %1$s",
+    "date": "dd MMM, y թ.",
+    "time": "H:mm",
+    "dateTimeFormat": "%2$s, %1$s",
     "intervals": {
         "fallback": "%1$s - %2$s",
         "hm": {
@@ -87,8 +87,8 @@
             "m": "h:mm-h:mm a"
         },
         "Hm": {
-            "h": "HH:mm-HH:mm",
-            "m": "HH:mm-HH:mm"
+            "h": "H:mm-H:mm",
+            "m": "H:mm-H:mm"
         },
         "hmv": {
             "a": "h:mm a – h:mm a v",
@@ -96,28 +96,28 @@
             "m": "h:mm-h:mm a v"
         },
         "Hmv": {
-            "h": "HH:mm-HH:mm v",
-            "m": "HH:mm-HH:mm v"
+            "h": "H:mm-H:mm v",
+            "m": "H:mm-H:mm v"
         },
         "yMMMd": {
-            "d": "MMM dd-dd, y",
-            "m": "MMM dd - MMM dd, y",
-            "y": "MMM dd, y - MMM dd, y"
+            "d": "dd-dd MMM, y թ.",
+            "m": "dd MMM - dd MMM, y թ.",
+            "y": "dd MMM, y - dd MMM, y թ."
         },
         "yMMMEd": {
-            "d": "E, MMM d - E, MMM d, y",
-            "m": "E, MMM d - E, MMM d, y",
-            "y": "E, MMM d, y - E, MMM d, y"
+            "d": "E, d MMM - E, d MMM, y թ.",
+            "m": "E, d MMM - E, d MMM, y թ.",
+            "y": "E, d MMM, y - E, d MMM, y թ."
         }
     },
     "dayPeriods": {
-        "am": "Առ․",
-        "pm": "Կե․"
+        "am": "կեսօրից առաջ",
+        "pm": "կեսօրից հետո"
     },
     "eras": [
-        "Մ․Թ․Ա․",
-        "Մ․Թ․"
+        "մ.թ.ա.",
+        "մ.թ."
     ],
-    "dateTime": "MMM d, y HH:mm",
+    "dateTime": "dd MMM, y թ., H:mm",
     "h12": false
 }

@@ -88,6 +88,7 @@
         },
         "Hm": {
             "h": "HH:mm–HH:mm",
+            "a": "HH:mm–HH:mm",
             "m": "HH:mm–HH:mm"
         },
         "hmv": {
@@ -97,6 +98,7 @@
         },
         "Hmv": {
             "h": "HH:mm–HH:mm v",
+            "a": "HH:mm–HH:mm v",
             "m": "HH:mm–HH:mm v"
         },
         "yMMMd": {
@@ -112,6 +114,7 @@
     },
     "dayPeriods": {
         "am": "AM",
+        "noon": "hanner dydd",
         "pm": "PM"
     },
     "eras": [
