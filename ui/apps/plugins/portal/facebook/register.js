@@ -413,9 +413,8 @@ define('plugins/portal/facebook/register',
             return true;
         },
         draw: function (post) {
-            console.log('This message is of the type "' + post.type + '". We do not know how to render this yet. Please tell us about it! Here is some additional data:', post);
+            console.log('This message is of the type "' + post.type + '". We do not know how to render this yet. Please tell us about it! Here is some additional data:', JSON.stringify(post));
             this.text(post.message);
-//            this.html('<em style="color: red;">This message is of the type <b>' + post.type + '</b>. We do not know how to render this yet. Please tell us about it!</em>');
         }
     });
 
