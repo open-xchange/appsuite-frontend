@@ -1042,12 +1042,7 @@ define('io.ox/mail/view-detail',
         index: 100,
         id: 'update-notification',
         action: function (data) {
-            //build cid
-            var cid = (data.folder_id || data.folder) + '.' + data.id,
-                notificationItem = $.find('#io-ox-notifications-mail .item[data-cid="' + cid + '"]');
-            if (notificationItem) {
-                $(notificationItem).trigger('dispose');//use dispose event, to clean up properly
-            }
+            api.trigger('remove-unseen-mails', [data]);
         }
     });
 
