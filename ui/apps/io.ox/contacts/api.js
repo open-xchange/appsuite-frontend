@@ -403,7 +403,7 @@ define('io.ox/contacts/api',
             else
                 return deferred.resolve(defaultUrl);
         }
-        if (obj.id || obj.contact_id) {
+        if (obj.id || obj.contact_id) {
             // duck checks
             if (api.looksLikeResource(obj)) {
                 defaultUrl = ox.base + '/apps/themes/default/dummypicture_resource.xpng';
@@ -529,7 +529,7 @@ define('io.ox/contacts/api',
                 set(data);
         };
         cont(data.display_name);
-        if (data && (data.contact_id || data.id) && _.isString(data.display_name)) {
+        if (data && (data.contact_id || data.id) && _.isString(data.display_name)) {
             clear();
         } else {
             api.getByEmailadress(data.email).done(cont).always(clear);
