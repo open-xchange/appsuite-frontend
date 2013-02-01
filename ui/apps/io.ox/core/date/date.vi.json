@@ -1,0 +1,122 @@
+{
+    "daysInFirstWeek": null,
+    "days": [
+        "Chủ nhật",
+        "Thứ hai",
+        "Thứ ba",
+        "Thứ tư",
+        "Thứ năm",
+        "Thứ sáu",
+        "Thứ bảy"
+    ],
+    "daysShort": [
+        "CN",
+        "Th 2",
+        "Th 3",
+        "Th 4",
+        "Th 5",
+        "Th 6",
+        "Th 7"
+    ],
+    "daysStandalone": [
+        "CN",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7"
+    ],
+    "months": [
+        "tháng một",
+        "tháng hai",
+        "tháng ba",
+        "tháng tư",
+        "tháng năm",
+        "tháng sáu",
+        "tháng bảy",
+        "tháng tám",
+        "tháng chín",
+        "tháng mười",
+        "tháng mười một",
+        "tháng mười hai"
+    ],
+    "monthsShort": [
+        "thg 1",
+        "thg 2",
+        "thg 3",
+        "thg 4",
+        "thg 5",
+        "thg 6",
+        "thg 7",
+        "thg 8",
+        "thg 9",
+        "thg 10",
+        "thg 11",
+        "thg 12"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "d/M/y",
+        "yMEd": "E, d-M-yyyy",
+        "yMMMd": "d MMM, y",
+        "yMMMEd": "E, d MMM y",
+        "hm": "h:mm a",
+        "Hm": "H:mm",
+        "v": "v",
+        "Hmv": "H:mm v",
+        "hmv": "h:mm a v",
+        "yMdHm": "H:mm d/M/y",
+        "yMdHmv": "H:mm v d/M/y",
+        "yMdhm": "h:mm a d/M/y",
+        "yMdhmv": "h:mm a v d/M/y",
+        "yMEdHm": "H:mm E, d-M-yyyy",
+        "yMEdHmv": "H:mm v E, d-M-yyyy",
+        "yMEdhm": "h:mm a E, d-M-yyyy",
+        "yMEdhmv": "h:mm a v E, d-M-yyyy"
+    },
+    "date": "dd-MM-yyyy",
+    "time": "HH:mm",
+    "dateTimeFormat": "%1$s %2$s",
+    "intervals": {
+        "fallback": "%1$s - %2$s",
+        "hm": {
+            "a": "h:mm a – h:mm a",
+            "h": "h:mm-h:mm a",
+            "m": "h:mm-h:mm a"
+        },
+        "Hm": {
+            "h": "HH:mm-HH:mm",
+            "m": "HH:mm-HH:mm"
+        },
+        "hmv": {
+            "a": "h:mm a – h:mm a v",
+            "h": "h:mm-h:mm a v",
+            "m": "h:mm-h:mm a v"
+        },
+        "Hmv": {
+            "h": "HH:mm-HH:mm v",
+            "m": "HH:mm-HH:mm v"
+        },
+        "yMMMd": {
+            "d": "'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M 'năm' y",
+            "m": "'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M 'năm' y",
+            "y": "'Ngày' dd 'tháng' M 'năm' y - 'Ngày' dd 'tháng' M 'năm' y"
+        },
+        "yMMMEd": {
+            "d": "EEEE, 'ngày' dd MMM - EEEE, 'ngày' dd MMM 'năm' y",
+            "m": "E, d 'tháng' M - E, d 'tháng' M, y",
+            "y": "E, d 'tháng' M, y - E, d 'tháng' M, y"
+        }
+    },
+    "dayPeriods": {
+        "am": "SA",
+        "pm": "CH"
+    },
+    "eras": [
+        "tr. CN",
+        "sau CN"
+    ],
+    "dateTime": "HH:mm dd-MM-yyyy",
+    "h12": false
+}

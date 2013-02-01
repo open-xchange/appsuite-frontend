@@ -175,6 +175,38 @@ define('io.ox/files/actions',
         }
     });
 
+    new Action('io.ox/files/actions/showlink', {
+        requires: function (e) {
+            return e.collection.has('some') && capabilities.has('webmail');
+        },
+        multiple: function (list) {
+            api.getList(list).done(function (list) {
+                var calcWidth,
+                    container = $('<div>').css('display', 'inline-block'),
+                    content  = _(list).map(function (file) {
+                    var url = location.protocol + '//' + location.host + ox.root + '/#!&app=io.ox/files&perspective=list&folder=' + file.folder_id + '&id=' + _.cid(file);
+                    return {'name': gt('File: %1$s', file.title || file.filename), 'link': gt('Direct link: %1$s', url)};
+                });
+
+                _(content).each(function (item) {
+                    container.append($('<p>').append($('<div>').text(item.name), $('<div>').text(item.link)));
+                });
+
+                // to get the width of the container
+                $('body').append(container);
+                calcWidth = container.width();
+                calcWidth = calcWidth + 30;
+
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog({width: calcWidth, addclass: 'dialogreselect'})
+                        .append(container)
+                        .addButton("cancel", gt('Cancel'))
+                        .show();
+                });
+            });
+        }
+    });
+
     new Action('io.ox/files/actions/delete', {
         requires: 'some',
         multiple: function (list) {
@@ -518,6 +550,13 @@ define('io.ox/files/actions',
         index: 400,
         label: gt("Send by mail"),
         ref: "io.ox/files/actions/send"
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'showlink',
+        index: 400,
+        label: gt("Show link"),
+        ref: "io.ox/files/actions/showlink"
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({

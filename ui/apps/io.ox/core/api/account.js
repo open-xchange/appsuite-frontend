@@ -170,7 +170,12 @@ define('io.ox/core/api/account',
         return this.get(accountId || 0).pipe(function (account) {
             if (!account) return null;
 
-            var aliases = account['undefined'] || '';
+            if (accountId === 0) {
+                //TODO: remove, once aliases are handled also for accounts
+                return [account.personal || '', config.get('modules.mail.addresses')];
+            }
+
+            var aliases = account.addresses || '';
             aliases = aliases.split(', ');
             aliases.push(account.primary_address);
             return [account.personal || '', _(aliases).compact()];

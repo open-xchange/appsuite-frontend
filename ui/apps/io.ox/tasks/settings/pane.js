@@ -47,16 +47,21 @@ define('io.ox/tasks/settings/pane',
         },
         render: function () {
             var self = this;
+            //change attributetypes to string otherwise settings would be empty...
+            self.model.set('notifyAcceptedDeclinedAsCreator', self.model.get('notifyAcceptedDeclinedAsCreator').toString());
+            self.model.set('notifyAcceptedDeclinedAsParticipant', self.model.get('notifyAcceptedDeclinedAsParticipant').toString());
+            self.model.set('notifyNewModifiedDeleted', self.model.get('notifyNewModifiedDeleted').toString());
+            self.model.set('interval', self.model.get('interval').toString());
             self.$el.empty().append(tmpl.render('io.ox/tasks/settings', {
                 strings: staticStrings,
                 optionsYesAnswers: optionsYes,
                 optionsNoAnswers: optionsNo,
                 optionsIntervalMinutes: optionsInterval
             }));
-
+            
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
             self._modelBinder.bind(self.model, self.el, defaultBindings);
-
+            
             return self;
 
         }
@@ -76,6 +81,18 @@ define('io.ox/tasks/settings/pane',
 
         save: function () {
 //            console.log(calendarViewSettings.model);
+            //change to correct attributetypes before saving
+            function makeBool(attribute) {
+                if (tasksViewSettings.model.get(attribute) === "true" || tasksViewSettings.model.get(attribute) === true) {
+                    tasksViewSettings.model.set(attribute, true);
+                } else {
+                    tasksViewSettings.model.set(attribute, false);
+                }
+            }
+            makeBool('notifyAcceptedDeclinedAsCreator');
+            makeBool('notifyAcceptedDeclinedAsParticipant');
+            makeBool('notifyNewModifiedDeleted');
+            tasksViewSettings.model.set('interval', parseInt(tasksViewSettings.model.get('interval'), 10));
             tasksViewSettings.model.save();
         }
     });

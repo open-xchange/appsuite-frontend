@@ -1,0 +1,122 @@
+{
+    "daysInFirstWeek": null,
+    "days": [
+        "रविवार",
+        "सोमवार",
+        "मंगळवार",
+        "बुधवार",
+        "गुरुवार",
+        "शुक्रवार",
+        "शनिवार"
+    ],
+    "daysShort": [
+        "रवि",
+        "सोम",
+        "मंगळ",
+        "बुध",
+        "गुरु",
+        "शुक्र",
+        "शनि"
+    ],
+    "daysStandalone": [
+        "र",
+        "सो",
+        "मं",
+        "बु",
+        "गु",
+        "शु",
+        "श"
+    ],
+    "months": [
+        "जानेवारी",
+        "फेब्रुवारी",
+        "मार्च",
+        "एप्रिल",
+        "मे",
+        "जून",
+        "जुलै",
+        "ऑगस्ट",
+        "सप्टेंबर",
+        "ऑक्टोबर",
+        "नोव्हेंबर",
+        "डिसेंबर"
+    ],
+    "monthsShort": [
+        "जाने",
+        "फेब्रु",
+        "मार्च",
+        "एप्रि",
+        "मे",
+        "जून",
+        "जुलै",
+        "ऑग",
+        "सेप्टें",
+        "ऑक्ट",
+        "नोव्हें",
+        "डिसें"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "d/M/y",
+        "yMEd": "E, M/d/y",
+        "yMMMd": "d MMM y",
+        "yMMMEd": "E, MMM d, y",
+        "hm": "h:mm a",
+        "Hm": "H-mm",
+        "v": "v",
+        "Hmv": "H-mm v",
+        "hmv": "h:mm a v",
+        "yMdHm": "d/M/y H-mm",
+        "yMdHmv": "d/M/y H-mm v",
+        "yMdhm": "d/M/y h:mm a",
+        "yMdhmv": "d/M/y h:mm a v",
+        "yMEdHm": "E, M/d/y H-mm",
+        "yMEdHmv": "E, M/d/y H-mm v",
+        "yMEdhm": "E, M/d/y h:mm a",
+        "yMEdhmv": "E, M/d/y h:mm a v"
+    },
+    "date": "d MMM y",
+    "time": "h-mm a",
+    "dateTimeFormat": "%2$s %1$s",
+    "intervals": {
+        "fallback": "%1$s – %2$s",
+        "hm": {
+            "a": "h:mm a – h:mm a",
+            "h": "h:mm–h:mm a",
+            "m": "h:mm–h:mm a"
+        },
+        "Hm": {
+            "h": "HH:mm–HH:mm",
+            "m": "HH:mm–HH:mm"
+        },
+        "hmv": {
+            "a": "h:mm a – h:mm a v",
+            "h": "h:mm–h:mm a v",
+            "m": "h:mm–h:mm a v"
+        },
+        "Hmv": {
+            "h": "HH:mm–HH:mm v",
+            "m": "HH:mm–HH:mm v"
+        },
+        "yMMMd": {
+            "d": "d-d MMM y",
+            "m": "d MMM - d MMM y",
+            "y": "d MMM y - d MMM y"
+        },
+        "yMMMEd": {
+            "d": "E, d MMM y - E, d MMM y",
+            "m": "E, d MMM - E, d MMM y",
+            "y": "E, d MMM y - E, d MMM y"
+        }
+    },
+    "dayPeriods": {
+        "am": "AM",
+        "pm": "PM"
+    },
+    "eras": [
+        "ईसापूर्व",
+        "सन"
+    ],
+    "dateTime": "d MMM y h-mm a",
+    "h12": true
+}

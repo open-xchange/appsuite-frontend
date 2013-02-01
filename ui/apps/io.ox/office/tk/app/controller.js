@@ -11,7 +11,10 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Utils) {
+define('io.ox/office/tk/app/controller',
+    ['io.ox/core/event',
+     'io.ox/office/tk/utils'
+    ], function (Events, Utils) {
 
     'use strict';
 
@@ -48,7 +51,7 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
             items = {
 
                 'app/quit': {
-                    // quit in a timeout (otherwise destructor breaks this controller while running)
+                    // quit in a timeout (otherwise this controller becomes invalid while still running)
                     set: function () { _.defer(function () { app.quit(); }); }
                 }
             };
@@ -70,7 +73,9 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
                 // handler for value setter
                 setHandler = Utils.getFunctionOption(definition, 'set', $.noop),
                 // done handler
-                doneHandler = Utils.getFunctionOption(definition, 'done', callDoneHandlers);
+                doneHandler = Utils.getFunctionOption(definition, 'done', callDoneHandlers),
+                // whether the item executes asynchronously
+                async = Utils.getBooleanOption(definition, 'async', false);
 
             function getAndCacheResult(type, handler, parentValue) {
 
@@ -149,14 +154,27 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
              */
             this.change = function (value) {
                 if (this.isEnabled()) {
-                    setHandler.call(self, value);
-                    this.update(value);
+                    if (async) {
+                        this.enable(false);
+                        setHandler.call(self, value).always(function () {
+                            enabled = true;
+                            self.update(); // updates enable+value
+                        });
+                    } else {
+                        setHandler.call(self, value);
+                        this.update(value);
+                    }
                 }
                 doneHandler.call(self);
                 return this;
             };
 
         } // class Item
+
+        // base constructor ---------------------------------------------------
+
+        // add event hub
+        Events.extend(this);
 
         // private methods ----------------------------------------------------
 
@@ -295,6 +313,12 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
          *      Setter function changing the value of an item to the first
          *      parameter of the setter. Can be omitted for read-only items.
          *      Defaults to an empty function.
+         *  @param {Function} [definition.async=false]
+         *      If set to true, the setter function executes asynchronously and
+         *      MUST return a Deferred object. As long as the setter function
+         *      runs, the item will be disabled. When the Deferred object has
+         *      been resolved or rejected, the item will be enabled and
+         *      updated again.
          *  @param {Function} [definition.done]
          *      A function that will be executed after the setter function has
          *      returned. If specified, overrides the default done handler
@@ -387,46 +411,6 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
         };
 
         /**
-         * Enables or disables the specified items, and updates all registered
-         * view components.
-         *
-         * @param {String|RegExp|Null} [keys]
-         *  The keys of the items to be enabled or disabled, as space-separated
-         *  string, or as regular expression. Strings have to match the keys
-         *  exactly. If omitted, all items will be enabled or disabled. If set
-         *  to null, no item will be enabled or disabled.
-         *
-         * @param {Boolean} [state=true]
-         *  If omitted or set to true, the items will be enabled. Otherwise,
-         *  the items will be disabled.
-         *
-         * @returns {Controller}
-         *  A reference to this controller.
-         */
-        this.enable = function (keys, state) {
-            clearResultCache();
-            _(selectItems(keys)).invoke('enable', state);
-            return this;
-        };
-
-        /**
-         * Disables the specified items, and updates all registered view
-         * components. Shortcut for Controller.enable(keys, false).
-         *
-         * @param {String|RegExp|Null} [keys]
-         *  The keys of the items to be disabled, as space-separated string, or
-         *  as regular expression. Strings have to match the keys exactly. If
-         *  omitted, all items will be disabled. If set to null, no item will
-         *  be disabled.
-         *
-         * @returns {Controller}
-         *  A reference to this controller.
-         */
-        this.disable = function (keys) {
-            return this.enable(keys, false);
-        };
-
-        /**
          * Receives the current values of the specified items, and updates all
          * registered view components.
          *
@@ -456,14 +440,15 @@ define('io.ox/office/tk/app/controller', ['io.ox/office/tk/utils'], function (Ut
             }
 
             // deferred callback: called once, after current script ends
-            function updateComponents() {
+            function triggerUpdate() {
                 clearResultCache();
                 _(selectItems(pendingKeys)).invoke('update');
                 pendingKeys = [];
+                self.trigger('update', resultCache);
             }
 
             // create and return the debounced Controller.update() method
-            return app.createDebouncedMethod(registerKeys, updateComponents);
+            return app.createDebouncedMethod(registerKeys, triggerUpdate);
 
         }()); // Controller.update()
 

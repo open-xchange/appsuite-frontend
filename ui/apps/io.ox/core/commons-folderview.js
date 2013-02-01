@@ -250,7 +250,7 @@ define('io.ox/core/commons-folderview',
                                 $('<label>')
                                     .css({'padding-top': '5px', 'padding-left': '5px'})
                                     .addClass('span3')
-                                    .text(gt('Foldertype')),
+                                    .text(gt('Folder type')),
                                 $('<input>', { type: 'text' })
                                     .addClass('span9')
                                     .attr('readonly', 'readonly')

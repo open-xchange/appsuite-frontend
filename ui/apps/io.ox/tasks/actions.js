@@ -16,7 +16,8 @@ define('io.ox/tasks/actions',
      'io.ox/tasks/util',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/tasks',
-     'io.ox/core/notifications'], function (ext, util, links, gt, notifications) {
+     'io.ox/core/notifications',
+     'io.ox/core/config'], function (ext, util, links, gt, notifications, configApi) {
 
     'use strict';
 
@@ -62,18 +63,19 @@ define('io.ox/tasks/actions',
                     require(['io.ox/tasks/api'], function (api) {
                         api.remove(data, false)
                             .done(function (data) {
-                                if (data === undefined || data.length === 0) {
-                                    notifications.yell('success', gt.ngettext('Task has been deleted!',
-                                                                               'Tasks have been deleted!', numberOfTasks));
-                                } else {//task was modified
+                                //if (data === undefined || data.length === 0) {
+                                notifications.yell('success', gt.ngettext('Task has been deleted!',
+                                                                          'Tasks have been deleted!', numberOfTasks));
+                                //} removed because somehow the response changed to idbrequest and user would see a wrong error message, looking into this later
+                                /* else {//task was modified
                                     notifications.yell('error', gt('Failure! Please refresh.'));
-                                }
+                                }*/
                                 popup.close();
                             }).fail(function () {
                                 //show retrymessage and enable buttons again
                                 popup.idle();
-                                popup.getBody().append($.fail(gt.ngettext('Could not delete this task.',
-                                                                          'Could not delete this tasks.', numberOfTasks), function () {
+                                popup.getBody().append($.fail(gt.ngettext('The task could not be deleted.',
+                                                                          'The tasks could not be deleted.', numberOfTasks), function () {
                                     popup.trigger('deleteTask', data);
                                 })).find('h4').remove();
                             });
@@ -138,7 +140,11 @@ define('io.ox/tasks/actions',
                         notifications.yell('success', mods.label);
                     })
                     .fail(function (result) {
-                        notifications.yell('error', gt.noI18n(result));
+                        var errorMsg = gt("A severe error occured!");
+                        if (result.code === "TSK-0007") {//task was modified before
+                            errorMsg = gt("Task was modified before, please reload");
+                        }
+                        notifications.yell('error', errorMsg);
                     });
             }
         });
@@ -189,6 +195,46 @@ define('io.ox/tasks/actions',
                     }
                     tree.destroy();
                     tree = popup = null;
+                });
+            });
+        }
+    });
+    
+    new Action('io.ox/tasks/actions/confirm', {
+        id: 'confirm',
+        requires: function (args) {
+            var result = false;
+            if (args.baton.data.participants) {
+                var userId = configApi.get('identifier');
+                _(args.baton.data.participants).each(function (participant) {
+                    if (participant.id === userId) {
+                        result = true;
+                    }
+                });
+                return result;
+            }
+            return result;
+        },
+        action: function (baton) {
+            var data = baton.data;
+            require(['io.ox/tasks/edit/util', 'io.ox/core/tk/dialogs', 'io.ox/tasks/api'], function (editUtil, dialogs, api) {
+                //build popup
+                var popup = editUtil.buildConfirmationPopup(data, dialogs, true);
+                //go
+                popup.popup.show().done(function (action) {
+                    if (action === "ChangeConfState") {
+                        var state = popup.state.prop('selectedIndex') + 1,
+                            message = popup.message.val();
+                        api.confirm({id: data.id,
+                                     folder_id: data.folder_id,
+                                     data: {confirmation: state,
+                                            confirmMessage: message}
+                        }).done(function () {
+                            //update detailview
+                            api.trigger("update:" + data.folder_id + '.' + data.id);
+                            api.trigger("remove-task-confirmation-notification", [{id: data.id}]);
+                        });
+                    }
                 });
             });
         }
@@ -412,6 +458,14 @@ define('io.ox/tasks/actions',
         prio: 'lo',
         label: gt('Move'),
         ref: 'io.ox/tasks/actions/move'
+    }));
+    
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'confirm',
+        index: 600,
+        prio: 'lo',
+        label: gt('Change confirmation status'),
+        ref: 'io.ox/tasks/actions/confirm'
     }));
 
     // Attachments

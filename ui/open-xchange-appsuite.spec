@@ -53,6 +53,7 @@ SDK for the OX App Suite HTML5 client
 #%package l10n-## lang ##
 #Group: Applications/Productivity
 #Summary: Translation of the OX App Suite HTML5 client (## Lang ##)
+#Requires: open-xchange-l10n-## lang ##
 #Provides: open-xchange-appsuite-l10n
 #
 #%description l10n-## lang ##
@@ -79,6 +80,8 @@ find "%{buildroot}$APPSUITE" \( -type f -o -type l \) \
 #    | sed -e "s,tmp/l10n/,$APPSUITE," > tmp/files-## lang ##
 ## end l10n ##
 cp -r tmp/l10n/apps "%{buildroot}$APPSUITE"
+mkdir -p "%{buildroot}/opt/open-xchange/etc/languages/appsuite/"
+cp i18n/*.properties "%{buildroot}/opt/open-xchange/etc/languages/appsuite/"
 
 mkdir -p "%{buildroot}/opt/open-xchange-appsuite-dev"
 cp -r bin lib Jakefile.js "%{buildroot}/opt/open-xchange-appsuite-dev/"
@@ -109,6 +112,7 @@ rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
 ## l10n ##
 #%files l10n-## lang ## -f tmp/files-## lang ##
 #%defattr(-,root,root)
+#/opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-## lang ##.properties
 ## end l10n ##
 
 %changelog

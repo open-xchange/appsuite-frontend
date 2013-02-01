@@ -255,6 +255,8 @@ define('io.ox/contacts/api',
                 return data;
             } else {
                 query = String(query || '').toLowerCase();
+                /*  boolean parameter seems to be a hack to set
+                    option 'emailAutoComplete: false' only in contacts api */
                 return api.search(query, true)
                     .pipe(function (data) {
                         var tmp = [], hash = {};
@@ -500,10 +502,16 @@ define('io.ox/contacts/api',
             email = data.email;
         //set node content
         set = function (name) {
-            node.data({
-                display_name: name,
-                email1: data.email
-            }).text(_.noI18n(name + '\u00A0'));
+            if (/\@/.test(data.email)) {
+                node.data({
+                    display_name: name,
+                    email1: data.email
+                });
+            } else {
+                //disable halo link if unique id (email) is missing
+                node.removeClass('halo-link');
+            }
+            node.text(_.noI18n(name + '\u00A0'));
         };
         // clear vars after call stack has cleared
         clear = function () {

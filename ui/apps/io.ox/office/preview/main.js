@@ -88,7 +88,7 @@ define('io.ox/office/preview/main',
                 self.getModel().renderPage(html);
             })
             .fail(function () {
-                self.getView().showLoadError();
+                self.getView().showError(gt('Load Error'), gt('An error occurred while loading the page.'), { closeable: true });
             })
             .always(function () {
                 self.getController().update();

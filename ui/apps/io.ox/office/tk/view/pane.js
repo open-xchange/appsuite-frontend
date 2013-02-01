@@ -48,7 +48,7 @@ define('io.ox/office/tk/view/pane',
     function Pane(app, id, options) {
 
         var // the container element representing the pane
-            node = $('<div>').addClass('view-pane'),
+            node = Utils.createContainerNode('view-pane', options),
 
             // view components contained in this pane
             components = [];
@@ -67,6 +67,16 @@ define('io.ox/office/tk/view/pane',
          */
         this.getIdentifier = function () {
             return id;
+        };
+
+        /**
+         * Returns whether this view pane is currently visible.
+         *
+         * @returns {Boolean}
+         *  Whether the view pane is currently visible.
+         */
+        this.isVisible = function () {
+            return node.css('display') !== 'none';
         };
 
         /**
@@ -113,10 +123,8 @@ define('io.ox/office/tk/view/pane',
 
         // initialization -----------------------------------------------------
 
-        // additional options and CSS classes
-        node.toggleClass('transparent', Utils.getBooleanOption(options, 'transparent', false))
-            .addClass(Utils.getStringOption(options, 'classes', ''))
-            .css(Utils.getObjectOption(options, 'css', {}));
+        // additional CSS classes
+        node.toggleClass('transparent', Utils.getBooleanOption(options, 'transparent', false));
 
     } // class Pane
 

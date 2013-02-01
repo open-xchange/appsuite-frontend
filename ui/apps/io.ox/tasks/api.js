@@ -65,8 +65,40 @@ define('io.ox/tasks/api', ['io.ox/core/http',
         }
     });
 
-
+    //current participantsmodel is heavily overloaded but does not contain the needed information ... maybe include this in the standard participants model if calendar etc need the same
+    function repairParticipants(participants) {
+        var list = [];
+        if (participants && participants.length > 0) {
+            _(participants).each(function (participant) {
+                var tmp = {};
+                tmp.type = participant.type;
+                switch (participant.type) {
+                case 1://internal user
+                    tmp.type = participant.type;
+                    tmp.mail = participant.email1;
+                    tmp.display_name = participant.display_name;
+                    tmp.id = participant.id;
+                    break;
+                case 5://external user
+                    tmp.type = participant.type;
+                    tmp.mail = participant.mail;
+                    tmp.display_name = participant.display_name;
+                    tmp.id = 0;
+                    break;
+                default://all the rest
+                    tmp = participant;
+                    break;
+                }
+                list.push(tmp);
+            });
+            return list;
+        } else {
+            return participants;
+        }
+    }
+    
     api.create = function (task) {
+        task.participants = repairParticipants(task.participants);
         return http.PUT({
             module: 'tasks',
             params: {action: 'new',
@@ -123,6 +155,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
                     }
                     modifications = args;
                 }
+                modifications.notification = true;//set allways (OX6 does this too)
                 //go on normaly
                 var useFolder;
                 if (folder === undefined) {
@@ -160,7 +193,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
     //used by done/undone actions when used with multiple selection
     api.updateMultiple = function (list, modifications) {
         http.pause();
-        
+        modifications.notification = true;//set allways (OX6 does this too)
         var keys  = [];
         
         _(list).map(function (obj) {

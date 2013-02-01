@@ -429,27 +429,14 @@ define('plugins/notifications/tasks/register',
         onChangeState: function (e) {
             e.stopPropagation();
             var model = this.model;
-            require(['io.ox/core/tk/dialogs', 'io.ox/tasks/edit/util'], function (dialogs, editUtil) {
+            require(['io.ox/tasks/edit/util', 'io.ox/core/tk/dialogs'], function (editUtil, dialogs) {
                 //build popup
-                var popup = new dialogs.ModalDialog()
-                    .addPrimaryButton('ChangeConfState', gt('Change state'))
-                    .addButton('cancel', gt('Cancel')),
-                    body = popup.getBody();
-                
-                body.append($("<h4>").text(_.noI18n(model.get("title") || '\u2014')),
-                            $('<div>').text(_.noI18n(model.get("note") || '\u2014')).css({color: '#888', 'margin-bottom': '5px'}));
-                editUtil.buildRow(body, [[editUtil.buildLabel(gt("Confirmation status", "confStateInput")),
-                            $('<select class="stateselect" data-action="selector">').attr("id", "confStateInput").append(
-                            $('<option>').text(gt('Confirm')),
-                            $('<option>').text(gt('Decline')),
-                            $('<option>').text(gt('Tentative')))],
-                            [editUtil.buildLabel(gt("Confirmation message", "confMessageInput")), $('<input>')
-                                 .attr({type: 'text', id: "confMessageInput"})]]);
+                var popup = editUtil.buildConfirmationPopup(model, dialogs);
                 //go
-                popup.show().done(function (action) {
+                popup.popup.show().done(function (action) {
                     if (action === "ChangeConfState") {
-                        var state = body.find(".stateselect").prop('selectedIndex') + 1,
-                            message = body.find("#confMessageInput").val();
+                        var state = popup.state.prop('selectedIndex') + 1,
+                            message = popup.message.val();
                         api.confirm({id: model.get('id'),
                                      folder_id: model.get("folder_id"),
                                      data: {confirmation: state,
@@ -509,6 +496,10 @@ define('plugins/notifications/tasks/register',
                     );
                 });
                 notifications.collection.reset(items).trigger('reset');
+            }).on('remove-task-confirmation-notification', function (e, ids) {
+                _(ids).each(function (id) {
+                    notifications.collection.remove(notifications.collection._byId[id.id]);
+                });
             });
         }
     });

@@ -58,23 +58,35 @@ define('io.ox/calendar/edit/view-addparticipants',
 
                         // updating baton-data-node
                         self.trigger('update');
-
-                        //hash email adresses and internal_userid
                         var baton = $.data(self.$el, 'baton') || {list: []},
                             hash = {};
                         _(baton.list).each(function (obj) {
-                            hash[obj.email] = true;
-                            if (obj.type !== 5)
-                                hash[obj.id] = true;
+                            // handle contacts/external contacts
+                            if (obj.type === 1 || obj.type === 5) {
+                                obj.type = 5;
+                                hash[obj.email] = true;
+                                hash[5 + '|' + obj.id] = true;
+                            } else {
+                                hash[obj.type + '|' + obj.id] = true;
+                            }
                         });
 
                         // filter doublets
                         data = _(data).filter(function (recipient) {
-                            if (recipient.type === 'resource') {
-                                return hash[recipient.data.mailaddress] = true;
-                            } else if (hash[recipient.email] === undefined && hash[recipient.data.internal_userid] === undefined) {
-                                return hash[recipient.email] = true;
+                            var type;
+                            switch (recipient.type) {
+                            case 'user':
+                            case 'contact':
+                                type = 5;
+                                break;
+                            case 'group':
+                                type = 2;
+                                break;
+                            case 'resource':
+                                type = 3;
+                                break;
                             }
+                            return !hash[type + '|' + recipient.data.id] && !hash[recipient.email];
                         });
 
                         return data;

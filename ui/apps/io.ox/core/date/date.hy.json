@@ -1,0 +1,122 @@
+{
+    "daysInFirstWeek": null,
+    "days": [
+        "կիրակի",
+        "երկուշաբթի",
+        "երեքշաբթի",
+        "չորեքշաբթի",
+        "հինգշաբթի",
+        "ուրբաթ",
+        "շաբաթ"
+    ],
+    "daysShort": [
+        "կիր",
+        "երկ",
+        "երք",
+        "չոր",
+        "հնգ",
+        "ուր",
+        "շաբ"
+    ],
+    "daysStandalone": [
+        "կիր",
+        "երկ",
+        "երք",
+        "չոր",
+        "հնգ",
+        "ուր",
+        "շաբ"
+    ],
+    "months": [
+        "հունվարի",
+        "փետրվարի",
+        "մարտի",
+        "ապրիլի",
+        "մայիսի",
+        "հունիսի",
+        "հուլիսի",
+        "օգոստոսի",
+        "սեպտեմբերի",
+        "հոկտեմբերի",
+        "նոյեմբերի",
+        "դեկտեմբերի"
+    ],
+    "monthsShort": [
+        "հնվ",
+        "փտվ",
+        "մրտ",
+        "ապր",
+        "մյս",
+        "հնս",
+        "հլս",
+        "օգս",
+        "սեպ",
+        "հոկ",
+        "նոյ",
+        "դեկ"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "dd.MM.y",
+        "yMEd": "d.MM.y թ., E",
+        "yMMMd": "d MMM, y թ.",
+        "yMMMEd": "d MMM, y թ., E",
+        "hm": "h:mm a",
+        "Hm": "H:mm",
+        "v": "v",
+        "Hmv": "H:mm v",
+        "hmv": "h:mm a v",
+        "yMdHm": "dd.MM.y, H:mm",
+        "yMdHmv": "dd.MM.y, H:mm v",
+        "yMdhm": "dd.MM.y, h:mm a",
+        "yMdhmv": "dd.MM.y, h:mm a v",
+        "yMEdHm": "d.MM.y թ., E, H:mm",
+        "yMEdHmv": "d.MM.y թ., E, H:mm v",
+        "yMEdhm": "d.MM.y թ., E, h:mm a",
+        "yMEdhmv": "d.MM.y թ., E, h:mm a v"
+    },
+    "date": "dd MMM, y թ.",
+    "time": "H:mm",
+    "dateTimeFormat": "%2$s, %1$s",
+    "intervals": {
+        "fallback": "%1$s - %2$s",
+        "hm": {
+            "a": "h:mm a – h:mm a",
+            "h": "h:mm-h:mm a",
+            "m": "h:mm-h:mm a"
+        },
+        "Hm": {
+            "h": "H:mm-H:mm",
+            "m": "H:mm-H:mm"
+        },
+        "hmv": {
+            "a": "h:mm a – h:mm a v",
+            "h": "h:mm-h:mm a v",
+            "m": "h:mm-h:mm a v"
+        },
+        "Hmv": {
+            "h": "H:mm-H:mm v",
+            "m": "H:mm-H:mm v"
+        },
+        "yMMMd": {
+            "d": "dd-dd MMM, y թ.",
+            "m": "dd MMM - dd MMM, y թ.",
+            "y": "dd MMM, y - dd MMM, y թ."
+        },
+        "yMMMEd": {
+            "d": "E, d MMM - E, d MMM, y թ.",
+            "m": "E, d MMM - E, d MMM, y թ.",
+            "y": "E, d MMM, y - E, d MMM, y թ."
+        }
+    },
+    "dayPeriods": {
+        "am": "կեսօրից առաջ",
+        "pm": "կեսօրից հետո"
+    },
+    "eras": [
+        "մ.թ.ա.",
+        "մ.թ."
+    ],
+    "dateTime": "dd MMM, y թ., H:mm",
+    "h12": false
+}

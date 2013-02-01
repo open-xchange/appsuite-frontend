@@ -1,0 +1,123 @@
+{
+    "daysInFirstWeek": 1,
+    "weekStart": 0,
+    "days": [
+        "রবিবার",
+        "সোমবার",
+        "মঙ্গলবার",
+        "বুধবার",
+        "বৃহষ্পতিবার",
+        "শুক্রবার",
+        "শনিবার"
+    ],
+    "daysShort": [
+        "রবি",
+        "সোম",
+        "মঙ্গল",
+        "বুধ",
+        "বৃহস্পতি",
+        "শুক্র",
+        "শনি"
+    ],
+    "daysStandalone": [
+        "রঃ",
+        "সোঃ",
+        "মঃ",
+        "বুঃ",
+        "বৃঃ",
+        "শুঃ",
+        "শোঃ"
+    ],
+    "months": [
+        "জানুয়ারী",
+        "ফেব্রুয়ারী",
+        "মার্চ",
+        "এপ্রিল",
+        "মে",
+        "জুন",
+        "জুলাই",
+        "আগস্ট",
+        "সেপ্টেম্বর",
+        "অক্টোবর",
+        "নভেম্বর",
+        "ডিসেম্বর"
+    ],
+    "monthsShort": [
+        "জানুয়ারী",
+        "ফেব্রুয়ারী",
+        "মার্চ",
+        "এপ্রিল",
+        "মে",
+        "জুন",
+        "জুলাই",
+        "আগস্ট",
+        "সেপ্টেম্বর",
+        "অক্টোবর",
+        "নভেম্বর",
+        "ডিসেম্বর"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "d/M/y",
+        "yMEd": "E, d/M/y",
+        "yMMMd": "d MMM, y",
+        "yMMMEd": "E, d MMM, y",
+        "hm": "h:mm a",
+        "Hm": "HH:mm",
+        "v": "v",
+        "Hmv": "HH:mm v",
+        "hmv": "h:mm a v",
+        "yMdHm": "d/M/y HH:mm",
+        "yMdHmv": "d/M/y HH:mm v",
+        "yMdhm": "d/M/y h:mm a",
+        "yMdhmv": "d/M/y h:mm a v",
+        "yMEdHm": "E, d/M/y HH:mm",
+        "yMEdHmv": "E, d/M/y HH:mm v",
+        "yMEdhm": "E, d/M/y h:mm a",
+        "yMEdhmv": "E, d/M/y h:mm a v"
+    },
+    "date": "d MMM, y",
+    "time": "h:mm a",
+    "dateTimeFormat": "%2$s %1$s",
+    "intervals": {
+        "fallback": "%1$s – %2$s",
+        "hm": {
+            "a": "h:mm a – h:mm a",
+            "h": "h:mm–h:mm a",
+            "m": "h:mm–h:mm a"
+        },
+        "Hm": {
+            "h": "HH:mm–HH:mm",
+            "m": "HH:mm–HH:mm"
+        },
+        "hmv": {
+            "a": "h:mm a – h:mm a v",
+            "h": "h:mm–h:mm a v",
+            "m": "h:mm–h:mm a v"
+        },
+        "Hmv": {
+            "h": "HH:mm–HH:mm v",
+            "m": "HH:mm–HH:mm v"
+        },
+        "yMMMd": {
+            "d": "d–d MMM, y",
+            "m": "d MMM – d MMM, y",
+            "y": "d MMM, y – d MMM, y"
+        },
+        "yMMMEd": {
+            "d": "E, d MMM – E, d MMM, y",
+            "m": "E, d MMM – E, d MMM, y",
+            "y": "E, d MMM, y – E, d MMM, y"
+        }
+    },
+    "dayPeriods": {
+        "am": "পূর্বাহ্ণ",
+        "pm": "অপরাহ্ণ"
+    },
+    "eras": [
+        "খৃষ্টপূর্ব",
+        "খৃষ্টাব্দ"
+    ],
+    "dateTime": "d MMM, y h:mm a",
+    "h12": true
+}

@@ -136,6 +136,37 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
             for (var i = 0; i < tempNodes.length; i += 2) {
                 this.buildRow(node, [tempNodes[i], tempNodes[i + 1]], [6, 6], false);
             }
+        },
+        
+        buildConfirmationPopup: function (model, dialogs, isArray) {
+            //build popup
+            var popup = new dialogs.ModalDialog()
+                .addPrimaryButton('ChangeConfState', gt('Change state'))
+                .addButton('cancel', gt('Cancel')),
+                body = popup.getBody(),
+                title,
+                note,
+                message,
+                state;
+                
+            if (isArray) {//if model is actually an array with attributes it should work too but needs parameter or script stops working without notice...strange
+                title = model.title || '\u2014';
+                note  = model.note || '\u2014';
+            } else {
+                title = model.get("title") || '\u2014';
+                note  = model.get("note") || '\u2014';
+            }
+                
+            body.append($("<h4>").text(_.noI18n(title)),
+                        $('<div>').text(_.noI18n(note)).css({color: '#888', 'margin-bottom': '5px'}));
+            util.buildRow(body, [[util.buildLabel(gt("Confirmation status", "confStateInput")),
+                        state = $('<select class="stateselect" data-action="selector">').attr("id", "confStateInput").append(
+                        $('<option>').text(gt('Confirm')),
+                        $('<option>').text(gt('Decline')),
+                        $('<option>').text(gt('Tentative')))],
+                        [util.buildLabel(gt("Confirmation message", "confMessageInput")), message = $('<input>')
+                             .attr({type: 'text', id: "confMessageInput"})]]);
+            return {popup: popup, state: state, message: message};
         }
     };
 

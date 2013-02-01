@@ -1,0 +1,124 @@
+{
+    "daysInFirstWeek": null,
+    "weekStart": 1,
+    "days": [
+        "კვირა",
+        "ორშაბათი",
+        "სამშაბათი",
+        "ოთხშაბათი",
+        "ხუთშაბათი",
+        "პარასკევი",
+        "შაბათი"
+    ],
+    "daysShort": [
+        "კვი",
+        "ორშ",
+        "სამ",
+        "ოთხ",
+        "ხუთ",
+        "პარ",
+        "შაბ"
+    ],
+    "daysStandalone": [
+        "კვ",
+        "ორ",
+        "სმ",
+        "ოთ",
+        "ხთ",
+        "პრ",
+        "შბ"
+    ],
+    "months": [
+        "იანვარი",
+        "თებერვალი",
+        "მარტი",
+        "აპრილი",
+        "მაისი",
+        "ივნისი",
+        "ივლისი",
+        "აგვისტო",
+        "სექტემბერი",
+        "ოქტომბერი",
+        "ნოემბერი",
+        "დეკემბერი"
+    ],
+    "monthsShort": [
+        "იან",
+        "თებ",
+        "მარ",
+        "აპრ",
+        "მაი",
+        "ივნ",
+        "ივლ",
+        "აგვ",
+        "სექ",
+        "ოქტ",
+        "ნოე",
+        "დეკ"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "d.M.y",
+        "yMEd": "E, d.M.y",
+        "yMMMd": "d MMM, y",
+        "yMMMEd": "E, d MMM, y",
+        "hm": "h:mm a",
+        "Hm": "HH:mm",
+        "v": "v",
+        "Hmv": "HH:mm v",
+        "hmv": "h:mm a v",
+        "yMdHm": "d.M.y HH:mm",
+        "yMdHmv": "d.M.y HH:mm v",
+        "yMdhm": "d.M.y h:mm a",
+        "yMdhmv": "d.M.y h:mm a v",
+        "yMEdHm": "E, d.M.y HH:mm",
+        "yMEdHmv": "E, d.M.y HH:mm v",
+        "yMEdhm": "E, d.M.y h:mm a",
+        "yMEdhmv": "E, d.M.y h:mm a v"
+    },
+    "date": "d MMM, y",
+    "time": "HH:mm",
+    "dateTimeFormat": "%2$s %1$s",
+    "intervals": {
+        "fallback": "%1$s – %2$s",
+        "hm": {
+            "a": "h:mm a – h:mm a",
+            "h": "h:mm–h:mm a",
+            "m": "h:mm–h:mm a"
+        },
+        "Hm": {
+            "h": "HH:mm–HH:mm",
+            "m": "HH:mm–HH:mm"
+        },
+        "hmv": {
+            "a": "h:mm a – h:mm a v",
+            "h": "h:mm–h:mm a v",
+            "m": "h:mm–h:mm a v"
+        },
+        "Hmv": {
+            "h": "HH:mm–HH:mm v",
+            "m": "HH:mm–HH:mm v"
+        },
+        "yMMMd": {
+            "d": "d – d MMM, y",
+            "m": "dd MM - dd MM, y",
+            "y": "dd MMM, y - d MMM, y"
+        },
+        "yMMMEd": {
+            "d": "E, d - E, d MMM y",
+            "m": "E, d MMM - E, d MMM, y",
+            "y": "E, d MMM, y - E, d MMM, y"
+        }
+    },
+    "dayPeriods": {
+        "am": "AM",
+        "noon": "შუადღე",
+        "pm": "PM"
+    },
+    "eras": [
+        "ძვ. წ.",
+        "ახ. წ."
+    ],
+    "dateTime": "d MMM, y HH:mm",
+    "h12": false
+}

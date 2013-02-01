@@ -336,8 +336,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             frame.append(img)
             .append(
                 $('<div>').addClass('person-link ellipsis')
-                .append($('<a>', {'href': '#'})
-                .on('click', {id: o.id, email1: o.mail}, self.fnClickPerson).text(o.display_name)),
+                .append($('<div>').append(api.getDisplayName({email: o.mail, display_name: o.display_name }))),
                 $('<div>').addClass('person-selected-mail')
                 .text((o.mail))
             );

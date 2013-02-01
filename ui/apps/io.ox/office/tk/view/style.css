@@ -126,6 +126,7 @@ i[class^="icon-"], i[class^=" icon-"] {
 
 .view-pane {
     position: absolute;
+    overflow: hidden;
     background: @pane-fill-color;
     line-height: 0;
 
@@ -135,6 +136,7 @@ i[class^="icon-"], i[class^=" icon-"] {
 
         &.overlay {
             height: 0;
+            overflow: visible;
         }
     }
 
@@ -267,21 +269,12 @@ i[class^="icon-"], i[class^=" icon-"] {
                     margin-left: @caption-spacing;
                 }
             }
-
-            /* fade out contents of disabled buttons and labels */
-            &.disabled {
-                > .caption, > span {
-                    .opacity(50);
-                }
-            }
         }
 
         /* fade out caption for buttons and labels in disabled groups */
-        &.disabled {
-            label, a.button {
-                > .caption, > span {
-                    .opacity(50);
-                }
+        &.disabled label, &.disabled a.button, label.disabled, a.button.disabled {
+            > .caption, > span {
+                .opacity(50);
             }
         }
 
@@ -418,12 +411,14 @@ i[class^="icon-"], i[class^=" icon-"] {
 
     &.toolbox {
 
+        /* left/right padding to controls */
+        @toolbox-padding: 13px;
         /* default spacing between controls */
         @control-spacing: 8px;
         /* border radius for controls */
         @border-radius: 5px;
         /* height of the heading label */
-        @heading-height: 28px;
+        @heading-height: 32px;
 
         /* default 3D effect for buttons */
         @button-shadow-effect: 5px 20px 20px -20px fade(white, 20%) inset;
@@ -432,7 +427,7 @@ i[class^="icon-"], i[class^=" icon-"] {
 
         display: block;
         .box-sizing(content-box);
-        padding: @control-spacing 13px 0;
+        padding: @control-spacing @toolbox-padding 0;
         /* size the tool box according to its floated children */
         overflow: hidden;
 
@@ -440,15 +435,6 @@ i[class^="icon-"], i[class^=" icon-"] {
         &.inline {
             display: inline-block;
             vertical-align: top;
-        }
-
-        > div.top-shadow {
-            position: absolute;
-            top: 0;
-            height: 10px;
-            left: 0;
-            right: 0;
-            .vertical-gradient(darken(@pane-fill-color, 10%), @pane-fill-color);
         }
 
         .group, > .group-container {
@@ -493,7 +479,7 @@ i[class^="icon-"], i[class^=" icon-"] {
         }
 
         >.group, > .group-container > .group:first-child {
-            > *:first-child { 
+            > *:first-child {
                 .border-top-left-radius(@border-radius);
                 .border-bottom-left-radius(@border-radius);
             }
@@ -507,14 +493,9 @@ i[class^="icon-"], i[class^=" icon-"] {
         }
 
         /* groups spanning the full width of the pane */
-        > .group.full-width, > .group.design-heading {
+        > .group.full-width {
             width: 100%;
             margin-right: 0;
-        }
-
-        /* collapsed: hide all groups following the heading button */
-        &.collapsed > .group.design-heading ~ * {
-            display: none;
         }
 
         .group {
@@ -544,14 +525,10 @@ i[class^="icon-"], i[class^=" icon-"] {
                         &:focus { z-index: 4; }
                     }
                 }
-            }
 
-            &:not(.disabled) {
-                a.button:not(.disabled) {
-                    &:focus:not(:active) {
-                        border-color: @selectedBackground;
-                        .box-shadow(@focus-glow-effect);
-                    }
+                a.button:not(.disabled):focus:not(:active) {
+                    border-color: @selectedBackground;
+                    .box-shadow(@focus-glow-effect);
                 }
             }
 
@@ -623,24 +600,46 @@ i[class^="icon-"], i[class^=" icon-"] {
                 }
             }
 
-            /* add specific design properties for the heading button */
-            &.design-heading {
-                .box-shadow(none);
+        } /* end of .group */
+
+        /* add specific design properties for the heading button */
+        &.collapsing {
+            margin-top: -@control-spacing;
+            padding-top: @heading-height + 2 * @control-spacing;
+
+            > .group.design-heading {
+                position: absolute;
+                top: @control-spacing;
+                left: -1px;
+                right: -1px;
+                margin-right: 0;
+                background: #222;
+                .box-shadow(5px 20px 20px -20px fade(white, 10%) inset);
+                .border-radius(0);
 
                 a.button {
+                    width: 100%;
                     height: @heading-height;
+                    .border-radius(0);
                     line-height: @heading-height - 2px;
                     font-size: 12px;
                     font-weight: bold;
                     color: white;
+                }
 
-                    &:active, &:not(:focus) {
-                        border-color: transparent;
+                /* do not fade out disabled headings (but stick to default mouse pointer) */
+                &.disabled a.button, a.button.disabled {
+                    > .caption, > span {
+                        .opacity(100);
                     }
                 }
             }
 
-        } /* end of .group */
+            /* collapsed: hide all groups following the heading button */
+            &.collapsed > .group.design-heading ~ * {
+                display: none;
+            }
+        }
 
     } /* end of &.toolbox */
 

@@ -15,14 +15,21 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
 	'use strict';
 
     var SCHEMA = 1;
+    var QUEUE_DELAY = 5000;
 
 	var instances = {},
         moduleDefined = $.Deferred(),
         db, defunct = false, opened, that;
 
-    defunct = Modernizr.indexeddb && window.indexedDB;
+    defunct = !(Modernizr.indexeddb && window.indexedDB);
+    if (defunct) {
+        return $.when();
+    }
 
     function IndexeddbStorage(id) {
+        var fluent = {},
+            queue = { timer: null, list: [] };
+
         db.transaction("databases", "readwrite").objectStore("databases").put({name: id});
 
         var opened =  window.indexedDB.open("oxcache_" + id, SCHEMA);
@@ -55,6 +62,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
 
         _.extend(this, {
             clear: function () {
+                fluent = {};
                 return readwrite(function (cache, important) {
                     return $.when(
                         OP(cache.clear()),
@@ -63,11 +71,23 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 });
             },
             get: function (key) {
+                if (_.isUndefined(key) || _.isNull(key)) {
+                    return $.Deferred().resolve(null);
+                }
+                if (fluent[key]) {
+                    return $.Deferred().resolve(JSON.parse(fluent[key]));
+                }
                 return read(function (cache, important) {
                     var def = $.Deferred();
                     function found(obj) {
                         if (!_.isUndefined(obj) && !_.isNull(obj)) {
-                            def.resolve(obj.data);
+                            try {
+                                var data = JSON.parse(obj.data);
+                                fluent[key] = obj.data;
+                                def.resolve(data);
+                            } catch (e) {
+                                // ignore broken values
+                            }
                         }
                     }
                     $.when(
@@ -76,27 +96,40 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     ).done(function () {
                         def.resolve(null);
                     });
-                    
+
                     return def;
                 });
             },
             set: function (key, data, options) {
-                return readwrite(function (cache, important) {
-                    if (options && options.important) {
-                        return OP(important.put({
-                            key: key,
-                            data: data
-                        }));
-                    } else {
-                        return OP(cache.put({
-                            key: key,
-                            data: data,
-                            created: _.now()
-                        }));
-                    }
-                });
+                if (queue.timer === null) {
+                    queue.timer = setTimeout(function () {
+                        readwrite(function (cache, important) {
+                            _(queue.list).each(function (obj) {
+                                if (obj.options && obj.options.important) {
+                                    OP(important.put({
+                                        key: obj.key,
+                                        data: JSON.stringify(obj.data)
+                                    }));
+                                } else {
+                                    OP(cache.put({
+                                        key: obj.key,
+                                        data: JSON.stringify(obj.data)
+                                    }));
+                                }
+                            });
+                            return $.when();
+                        });
+                        queue = { timer: null, list: [] };
+                    }, QUEUE_DELAY);
+                }
+                queue.list.push({ key: key, data: data, options: options });
+                fluent[key] = JSON.stringify(data);
+                return $.Deferred().resolve();
             },
             remove: function (key) {
+                if (fluent[key]) {
+                    delete fluent[key];
+                }
                 return readwrite(function (cache, important) {
                     return $.when(
                         cache['delete'](key),
@@ -146,10 +179,6 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         gc: function () {
         }
     };
-
-    if (defunct) {
-        return moduleDefined.resolve(that);
-    }
 
     // Adapter for IndexedDB operations to the familiar deferreds
     function OP(request) {
@@ -247,11 +276,14 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         function destroyDB() {
             // Drop all databases
             var def = $.Deferred();
+            var deletes = [];
             ITER(db.transaction("databases").objectStore("databases").openCursor()).step(function (cursor) {
-                window.indexedDB.deleteDatabase(cursor.key);
+                deletes.push(OP(window.indexedDB.deleteDatabase(cursor.key)));
             }).end(function () {
-                OP(db.transaction("databases", "readwrite").objectStore("databases").clear()).done(function () {
-                    initializeDB().done(def.resolve).fail(def.reject);
+                $.when.apply($, deletes).done(function () {
+                    OP(db.transaction("databases", "readwrite").objectStore("databases").clear()).done(function () {
+                        initializeDB().done(def.resolve).fail(def.reject);
+                    }).fail(def.reject);
                 }).fail(def.reject);
             }).fail(def.reject);
 

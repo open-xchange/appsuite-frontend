@@ -714,7 +714,7 @@ task("dist", [distDest], function () {
             function (m, block) {
                 block = block.replace(/^#/gm, '');
                 return _.map(i18n.languages(), function (Lang) {
-                    var lang = Lang.toLowerCase().replace('_', '-');
+                    var lang = Lang.toLowerCase().replace(/_/g, '-');
                     return block.replace(/## ([Ll])ang ##/g, function (m, L) {
                         return L === 'L' ? Lang : lang;
                     });
@@ -728,6 +728,22 @@ task("dist", [distDest], function () {
             var file = path.join(dest, name);
             fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
         });
+        
+        if (path.existsSync('i18n/languagenames.json')) {
+            var languageNames =
+                JSON.parse(fs.readFileSync('i18n/languagenames.json', 'utf8'));
+            _.each(i18n.languages(), function (Lang) {
+                var lang = Lang.toLowerCase().replace(/_/g, '-');
+                fs.writeFileSync(path.join(dest, 'i18n',
+                        'open-xchange-appsuite-l10n-' + lang + '.properties'),
+                    'io.ox/appsuite/languages/' + Lang + '=' +
+                    languageNames[Lang].replace(/[^\x21-\x7e]/g, function(c) {
+                        if (c === ' ') return '\\ ';
+                        var hex = c.charCodeAt(0).toString(16);
+                        return '\\u0000'.slice(0, -hex.length) + hex;
+                    }));
+            });
+        }
 
         utils.exec(['tar', 'cjf', debName + '.orig.tar.bz2', tarName],
                    { cwd: distDest }, dpkgSource);
