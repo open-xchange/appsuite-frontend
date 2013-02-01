@@ -18,7 +18,6 @@ define('io.ox/files/carousel',
      'gettext!io.ox/files',
      'io.ox/files/api',
      'io.ox/core/api/folder',
-     'io.ox/files/actions',
      'less!io.ox/files/carousel.less'
     ], function (commons, gt, api, folderAPI) {
 
