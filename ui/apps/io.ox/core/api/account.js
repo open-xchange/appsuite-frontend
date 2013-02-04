@@ -23,8 +23,6 @@ define('io.ox/core/api/account',
     // quick hash for sync checks
     var idHash = {},
         typeHash = {},
-        // chache
-        cache = new Cache.ObjectCache('account', true, function (o) { return String(o.id); }),
         // default separator
         separator = config.get('modules.mail.defaultseparator', '/');
 
@@ -178,7 +176,7 @@ define('io.ox/core/api/account',
             var aliases = account.addresses || '';
             aliases = aliases.split(', ');
             aliases.push(account.primary_address);
-            return [account.personal || '', _(aliases).compact()];
+            return [account.personal || account.name || '', _(aliases).compact()];
         });
     };
 
@@ -189,7 +187,6 @@ define('io.ox/core/api/account',
     var accountsAllCache = new Cache.ObjectCache('account', true, function (o) { return String(o.id); });
 
     api.all = function () {
-
         var getter = function () {
             return http.GET({
                 module: 'account',

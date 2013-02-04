@@ -425,8 +425,8 @@ define("io.ox/mail/write/view-main",
             this.addSection('from', gt('From'), false, true)
                 .append(this.createSenderField());
 
-            accountAPI.all().done(function (array) {
-                if (array[1]) {
+            accountAPI.getSenderAddresses(0).done(function (array) {
+                if (array[1].length > 1) {
                     self.addLink('from', gt('Sender'));
                 }
             });
