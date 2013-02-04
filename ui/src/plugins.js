@@ -211,6 +211,7 @@
                             'text!themes/' + name + '/style.less'])
                 .pipe(function (def1, def2, style1, style2) {
                     var path = ox.base + '/apps/themes/' + name + '/';
+                    $('head #favicon').attr({ href: path + 'favicon.ico' });
                     themeLess.path = path;
                     themeLess.name = path + 'dynamic.less';
                     themeLess.source = style1 + (style2 || '');
