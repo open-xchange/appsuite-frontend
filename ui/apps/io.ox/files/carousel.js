@@ -18,7 +18,6 @@ define('io.ox/files/carousel',
      'gettext!io.ox/files',
      'io.ox/files/api',
      'io.ox/core/api/folder',
-     'io.ox/files/actions',
      'less!io.ox/files/carousel.less'
     ], function (commons, gt, api, folderAPI) {
 
@@ -46,6 +45,23 @@ define('io.ox/files/carousel',
         nextControl:    $('<a class="carousel-control right">').text(gt.noI18n('›')).attr('data-slide', 'next'),
         closeControl:   $('<button class="btn btn-primary closecarousel">').text(gt('Close')),
 
+       /**
+        * The config parameter used to initialize a carousel.
+        *
+        * The fields are mostly self-explaining. Important field is baton.
+        * It must contain an object that looks like this:
+        * { allIds: [
+        *     { filename: 'the filename.ext',
+        *       url: 'an_url_ponting/to/the_file'
+        *     }, …
+        *   ]
+        * }
+        *
+        * The url attribute for the items in allIds list is optional and can be used to provide
+        * an user-defined url for the image. If this attribute is not defined, the files API getUrl
+        * method is used to get the URL for the file.
+        *
+        */
         config: {
             fullScreen: false,
             baton: null,
@@ -160,8 +176,9 @@ define('io.ox/files/carousel',
             });
         },
 
-        addURL: function (file) {
-            return api.getUrl(file, 'open') + '&scaleType=contain&width=' + $(window).width() + '&height=' + $(window).height();
+        urlFor: function (file) {
+            var url = file.url || api.getUrl(file, 'open');
+            return url + '&scaleType=contain&width=' + $(window).width() + '&height=' + $(window).height();
         },
 
         imgError: function () {
@@ -207,7 +224,7 @@ define('io.ox/files/carousel',
             if (item.children().length === 0) {
                 if (this.config.attachmentMode === false) {
                     item.append(
-                        $('<img>', { alt: '', src: this.addURL(file) })
+                        $('<img>', { alt: '', src: this.urlFor(file) })
                             .on('error', this.imgError) /* error doesn't seem to bubble */,
                         $('<div class="carousel-caption">').append(
                             $('<h4>').text(gt.noI18n(file.filename)),

@@ -44,7 +44,7 @@ define('plugins/portal/birthdays/register',
         title: gt('Next birthdays'),
 
         load: function (baton) {
-            var start = _.now(),
+            var start = _.now() - 24 * 60 * 60 * 1000, //yes, one could try to calculate 00:00Z this day, but hey...
                 end = start + RANGE;
             return api.birthdays({start: start, end: end, right_hand_limit: 14}).done(function (data) {
                 baton.data = data;

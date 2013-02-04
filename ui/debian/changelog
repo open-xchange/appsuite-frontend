@@ -1,3 +1,15 @@
+open-xchange-appsuite (7.0.1-1) unstable; urgency=low
+
+  * First release candidate for 7.0.1
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Fri, 01 Feb 2013 15:28:23 +0100
+
+open-xchange-appsuite (7.0.1-0) unstable; urgency=low
+
+  * prepare for 7.0.1
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Fri, 01 Feb 2013 15:01:46 +0100
+
 open-xchange-appsuite (7.0.0-12) unstable; urgency=low
 
   * Third release candidate for 7.0.0

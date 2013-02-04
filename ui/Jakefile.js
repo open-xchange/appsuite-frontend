@@ -27,11 +27,28 @@ var less = require("./lib/build/less");
 
 console.info("Build path: " + utils.builddir);
 
+var pkgName = process.env['package'];
+var ver = process.env.version;
+var rev = process.env.revision;
+
+if ((!pkgName || !ver || !rev) && path.existsSync('debian/changelog')) {
+    var changelogEntry = /(\S+) \((\S+)-(\d+)\)/.exec(
+        fs.readFileSync('debian/changelog', 'utf8'));
+    pkgName = pkgName || changelogEntry[1];
+    ver = ver || changelogEntry[2];
+    rev = rev || changelogEntry[3];
+}
+
+if (!pkgName) {
+    console.error('Please specify the package name using package=<NAME>');
+    process.exit(1);
+}
+ver = ver || "0.0.1";
+rev = rev || "1";
+
 function pad (n) { return n < 10 ? "0" + n : n; }
 var t = utils.startTime;
-var ver = (process.env.version || "7.0.0");
-var rev = ver + "-" + (process.env.revision || "1");
-version = rev + "." + t.getUTCFullYear() +
+version = ver + "-" + rev + "." + t.getUTCFullYear() +
     pad(t.getUTCMonth() + 1) + pad(t.getUTCDate()) + "." +
     pad(t.getUTCHours()) + pad(t.getUTCMinutes()) +
     pad(t.getUTCSeconds());
@@ -43,15 +60,6 @@ function envBoolean(name) {
 
 var debug = envBoolean('debug');
 if (debug) console.info("Debug mode: on");
-
-var pkgName = process.env['package'];
-if (!pkgName && path.existsSync('debian/changelog')) {
-    pkgName = /\S+/.exec(fs.readFileSync('debian/changelog', 'utf8'))[0];
-}
-if (!pkgName) {
-    console.error('Please specify the package name using package=<NAME>');
-    process.exit(1);
-}
 
 utils.fileType("source").addHook("filter", utils.includeFilter);
 utils.fileType("module").addHook("filter", utils.includeFilter);
@@ -516,6 +524,7 @@ docFile("buildsystem", "Build System");
 docFile("manifests", "Module System");
 docFile("vgrid", "VGrid");
 docFile("portalplugin", "Portal Plugins ");
+docFile("actions_files", "Actions / Files App");
 docFile("i18n", "Internationalization");
 docFile("date", "Date and Time");
 
@@ -723,11 +732,12 @@ task("dist", [distDest], function () {
     }
     function tar(code) {
         if (code) return fail();
-
-        _.each([pkgName + '.spec', 'debian/control'], function (name) {
-            var file = path.join(dest, name);
-            fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
-        });
+        
+        var file = path.join(dest, pkgName + '.spec');
+        fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')
+            .replace(/^(Version:\s*)\S+/gm, '$01' + ver)));
+        file = path.join(dest, 'debian/control');
+        fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
         
         if (path.existsSync('i18n/languagenames.json')) {
             var languageNames =

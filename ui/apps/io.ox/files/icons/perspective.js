@@ -25,6 +25,8 @@ define('io.ox/files/icons/perspective',
 
     'use strict';
 
+    var dropZone;
+
     ext.point('io.ox/files/icons/options').extend({
         thumbnailWidth: 128,
         thumbnailHeight: 90,
@@ -156,13 +158,6 @@ define('io.ox/files/icons/perspective',
         }
     });
 
-    function iconClick(popup, e, target) {
-        var cid = target.attr('data-cid');
-        api.get(_.cid(cid)).done(function (file) {
-            popup.append(viewDetail.draw(file));
-        });
-    }
-
     function loadFiles(app) {
         if (!app.getWindow().search.active) {
             return api.getAll({ folder: app.folder.get() });
@@ -213,6 +208,18 @@ define('io.ox/files/icons/perspective',
             );
 
             layout = calculateLayout(iconview, options);
+
+            function iconClick(popup, e, target) {
+
+                var cid = target.attr('data-cid');
+                api.get(_.cid(cid)).done(function (file) {
+                    app.currentFile = file;
+                    if (dropZone) {
+                        dropZone.update();
+                    }
+                    popup.append(viewDetail.draw(file));
+                });
+            }
 
             dialog.delegate(iconview, '.file-icon', iconClick);
 
@@ -325,6 +332,23 @@ define('io.ox/files/icons/perspective',
                 stop: function () {
                     //drawFirst();
                     api.trigger('refresh.all');
+                    win.idle();
+                }
+            });
+
+            app.queues.update = upload.createQueue({
+                start: function () {
+                    win.busy(0);
+                },
+                progress: function (data) {
+                    return api.uploadNewVersion({
+                            file: data,
+                            id: app.currentFile.id,
+                            folder: app.currentFile.folder_id,
+                            timestamp: app.currentFile.last_modified
+                        });
+                },
+                stop: function () {
                     win.idle();
                 }
             });
@@ -460,8 +484,6 @@ define('io.ox/files/icons/perspective',
             this.main.addClass('files-icon-perspective').empty();
 
             var that = this;
-
-            var dropZone;
 
             if (_.browser.IE === undefined || _.browser.IE > 9) {
                 dropZone = new dnd.UploadZone({

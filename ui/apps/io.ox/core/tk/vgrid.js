@@ -136,33 +136,63 @@ define('io.ox/core/tk/vgrid',
         };
     }
 
-    var ChunkedLoader = function () {
-        var CHUNK_SIZE = 50;
+    var ChunkedLoader = function (options) {
+        var CHUNK_SIZE = 100;
+        var THRESHHOLD_EAGER = 0;
+        var activeLoaders = {};
 
-        this.load = _.identity();
+        this.MAX_CHUNK = 200;
+        this.MIN_CHUNK = 50;
+
+        this.fetch = _.identity();
         this.all = function () {
             return [];
         };
 
-        function loadChunk(index) {
-            var all = this.all();
+        this.loadChunk = function loadChunk(index, options) {
+            if (activeLoaders[index]) {
+                return activeLoaders[index];
+            }
+            var all = this.all(options);
             var offset = CHUNK_SIZE * index;
-            var numRows = offset + CHUNK_SIZE - 1;
+            var numRows = CHUNK_SIZE - 1;
+            
 
             var subset = all.slice(offset, offset + numRows);
-            
-            return this.load(subset);
-        }
 
-        function getChunkLoaders(start, length) {
+            if (_.isEmpty(subset)) {
+                return $.Deferred().resolve([]);
+            }
+            var fetcher = this.fetch(subset, options);
+            activeLoaders[index] = fetcher;
+            
+            fetcher.always(function () {
+                activeLoaders[index] = null;
+                delete activeLoaders[index];
+            });
+
+            return fetcher;
+        };
+
+        this.getChunkLoaders = function getChunkLoaders(start, length, options) {
+            CHUNK_SIZE = Math.ceil(this.all().length / 3);
+            if (CHUNK_SIZE > this.MAX_CHUNK) {
+                CHUNK_SIZE = this.MAX_CHUNK;
+            }
+            if (CHUNK_SIZE < this.MIN_CHUNK) {
+                CHUNK_SIZE = this.MIN_CHUNK;
+            }
+            THRESHHOLD_EAGER = CHUNK_SIZE;
+            
             var end = start + length;
             var startChunk = Math.floor(start / CHUNK_SIZE);
             var endChunk = Math.floor(end / CHUNK_SIZE);
             var i = 0;
-            
+
             var chunkLoaders = [];
 
-            for (i = startChunk; i++; i <= endChunk) {
+
+            for (i = startChunk; i <= endChunk; i++) {
                 var lowerBound = i * CHUNK_SIZE;
                 var upperBound = ((i + 1) * CHUNK_SIZE) - 1;
                 if (start > lowerBound) {
@@ -171,18 +201,30 @@ define('io.ox/core/tk/vgrid',
                 if (end < upperBound) {
                     upperBound = end;
                 }
-                chunkLoaders[i] = {
-                    loader: loadChunk(i),
-                    start: (i * CHUNK_SIZE) - lowerBound,
-                    end: (i * CHUNK_SIZE) - (upperBound + 1)
-                };
+                chunkLoaders.push({
+                    loader: this.loadChunk(i, options),
+                    start: lowerBound - (i * CHUNK_SIZE),
+                    end: upperBound - (i * CHUNK_SIZE)
+                });
+            }
+
+            // Fetch eagerly the next chunk, when we come close to the edge
+            if (activeLoaders.length < 5) {
+                if ((CHUNK_SIZE - (end % CHUNK_SIZE)) < THRESHHOLD_EAGER) {
+                    this.loadChunk(endChunk + 1, options);
+                }
+
+                // Fetch eagerly the previous chunk, when we come close to the edge
+                if (startChunk > 0 && ((start % CHUNK_SIZE) < THRESHHOLD_EAGER)) {
+                    this.loadChunk(startChunk - 1, options);
+                }
             }
 
             return chunkLoaders;
-        }
+        };
 
-        this.load = function (start, length) {
-            var chunkLoaders = getChunkLoaders(start, length);
+        this.load = function (start, length, options) {
+            var chunkLoaders = this.getChunkLoaders(start, length, options);
             var deferreds = [];
             _(chunkLoaders).each(function (obj) {
                 deferreds.push(obj.loader);
@@ -193,13 +235,15 @@ define('io.ox/core/tk/vgrid',
             $.when.apply($, deferreds).done(function () {
                 var i;
                 for (i = 0; i < arguments.length; i++) {
-                    list = list.concat(arguments[0].slice(chunkLoaders[i].start, chunkLoaders[i].end));
+                    list = list.concat(arguments[i].slice(chunkLoaders[i].start, chunkLoaders[i].end));
                 }
                 def.resolve(list);
             }).fail(def.reject);
 
             return def;
         };
+
+        _.extend(this, options);
     };
 
 
@@ -310,7 +354,18 @@ define('io.ox/core/tk/vgrid',
             getIndex,
             fnScroll,
             deserialize,
-            emptyMessage;
+            emptyMessage,
+            chunkLoader = new ChunkedLoader({
+                all: function () {
+                    return all;
+                },
+                fetch: function (subset, options) {
+                    var load = loadData[options.mode] || loadData.all;
+                    return load.call(self, subset);
+                },
+                MAX_CHUNK: options.maxChunkSize || 200,
+                MIN_CHUNK: options.minChunkSize || 50
+            });
 
         // add label class
         template.node.addClass('selectable');
@@ -356,8 +411,8 @@ define('io.ox/core/tk/vgrid',
                 text = clone.node.text();
                 // convert Umlauts
                 text = text.replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
-                    .replace(/[ÖÒÓÔÕÖ]/g, 'U')
-                    .replace(/[ÜÙÚÛÜ]/g, 'O');
+                    .replace(/[ÖÒÓÔÕÖ]/g, 'O')
+                    .replace(/[ÜÙÚÛÜ]/g, 'U');
 
                 // add node
                 labels.nodes = labels.nodes.add(clone.node.appendTo(container));
@@ -499,7 +554,6 @@ define('io.ox/core/tk/vgrid',
 
                 // keep positive
                 offset = Math.max(offset, 0);
-
                 if (offset === currentOffset) {
                     return DONE;
                 } else {
@@ -507,15 +561,13 @@ define('io.ox/core/tk/vgrid',
                 }
 
                 // get all items
-                var load = loadData[currentMode] || loadData.all,
-                    subset = all.slice(offset, offset + numRows),
-                    lfo = _.lfo(cont, offset);
-
-                return load.call(self, subset)
+                var lfo = _.lfo(cont, offset);
+                
+                return chunkLoader.load(offset, numRows, {mode: currentMode})
                     .done(lfo)
                     .fail(function () {
                         // continue with dummy array
-                        lfo(new Array(subset.length));
+                        lfo(new Array(numRows));
                     });
             };
 

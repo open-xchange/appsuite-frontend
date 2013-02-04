@@ -327,6 +327,12 @@ $(document).ready(function () {
                 $("#io-ox-login-form").on("submit", fnSubmit);
                 $("#io-ox-login-username").val(ox.user || "");
                 $("#io-ox-login-password").val("");
+                // hide forgot password?
+                if (ox.serverConfig.forgotPassword === false) {
+                    $("#io-ox-forgot-password").remove();
+                } else {
+                    $("#io-ox-forgot-password").find("a").attr("href", ox.serverConfig.forgotPassword);
+                }
                 // set success handler
                 loginSuccess = function () {
                     $("#io-ox-login-screen").fadeOut(DURATION, function () {
@@ -347,6 +353,7 @@ $(document).ready(function () {
                 $("#io-ox-login-screen").addClass("relogin").fadeIn(DURATION, function () {
                     $("#io-ox-login-password").focus().select();
                 });
+
             } else {
                 // enqueue last request
                 queue.push({ request: request, deferred: deferred });
@@ -468,9 +475,17 @@ $(document).ready(function () {
                 });
             });
         }
+        var serverUp = false;
+        if (Modernizr.IE) {
+            setTimeout(function () {
+                if (!serverUp) {
+                    serverDown();
+                }
+            }, 6000);
+        }
 
         require(['io.ox/core/session', 'io.ox/core/capabilities']).done(function (session, capabilities) {
-
+            serverUp = true;
             var useAutoLogin = (true || capabilities.has("autologin")) && ox.online, initialized;
 
             function continueWithoutAutoLogin() {

@@ -45,6 +45,11 @@ define('plugins/portal/facebook/register',
         return _.find(profiles, function (profile) { return profile.id === actor_id; });
     };
 
+    var getHelpFromUser = function (post) {
+        console.log('Little was known about this type of post (#' + post.type + ') when we wrote this program. Maybe you can send us the following information so we can improve it?',
+            JSON.stringify(post));
+    };
+
     ext.point('io.ox/portal/widget/facebook').extend({
 
         title: 'Facebook',
@@ -147,6 +152,9 @@ define('plugins/portal/facebook/register',
                     ));
 
                 //use extension mechanism to enable rendering of different contents
+                var extPoints = ext.point('plugins/portal/facebook/renderer'),
+                    sortedExtPoints = _(extPoints).sortBy(function (elem) {return elem.index; });
+
                 ext.point('plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
                     if (renderer.accepts(post) && ! foundHandler) {
@@ -192,6 +200,8 @@ define('plugins/portal/facebook/register',
         }
     });
 
+
+    /* index >= 128 for all plugins with a clearly defined purpose (meaning: I exactly know what I'm doing) */
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'photo',
         index: 128,
@@ -200,9 +210,13 @@ define('plugins/portal/facebook/register',
         },
         draw: function (post) {
             var media = post.attachment.media[0];
-            this.text(post.story || post.message || post.attachment.name).append(
-                $('<a>', {'class': "posted-image", 'href': media.href})
-                    .append($('<img>', {'class': "posted-image", 'src': media.src, alt: media.alt, title: media.alt})));
+            this.append(
+                $('<a>', {'class': "posted-image", 'href': media.href}).append(
+                    $('<img>', {'class': "posted-image", 'src': media.src, alt: media.alt, title: media.alt}),
+                    $('<div>').text(post.description || ''),
+                    $('<div>').text(post.message || '')
+                )
+            );
         }
     });
 
@@ -216,6 +230,105 @@ define('plugins/portal/facebook/register',
             this.text(post.message);
         }
     });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'friends',
+        index: 128,
+        accepts: function (post) {
+            return (post.type === 8);
+        },
+        draw: function (post) {
+            this.text(post.message);
+        }
+    });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'tagged-in-photo',
+        index: 128,
+        accepts: function (post) {
+            return (post.type === 65);
+        },
+        draw: function (post) {
+            this.text(post.description);
+            getHelpFromUser(post);
+        }
+    });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'reply-on-wallpost',
+        index: 128,
+        accepts: function (post) {
+            return (post.type === 56);
+        },
+        draw: function (post) {
+            this.text(post.message);
+        }
+    });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'like',
+        index: 128,
+        accepts: function (post) {
+            return (post.type === 161);
+        },
+        draw: function (post) {
+            this.append(
+                $('<div>').text(post.description));
+            if (post.attachment && post.attachment.name && post.attachment.href) {
+                var attachment = post.attachment;
+                $('<a>', {href: attachment.href}).text(attachment.name);
+            }
+            getHelpFromUser(post);
+        }
+    });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'photo-comment',
+        index: 128,
+        accepts: function (post) {
+            return (post.type === 257);
+        },
+        draw: function (post) {
+            this.text(post.description);
+            getHelpFromUser(post);
+        }
+    });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'link-like',
+        index: 128,
+        accepts: function (post) {
+            return (post.type === 347);
+        },
+        draw: function (post) {
+            if (post.attachment.href && post.attachment.name) {
+                var $link = $('<a>', {href: post.attachment.href}).text(post.attachment.name);
+                this.text(gt('Liked a link: %s', $link));
+            }
+            getHelpFromUser(post);
+        }
+    });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'photo-share',
+        index: 128,
+        accepts: function (post) {
+            return post.type === 80 && post.attachment.fb_object_type === 'photo';
+        },
+        draw: function (post) {
+            var media = post.attachment.media[0];
+
+            $('<div class="message">').text(post.attachment.name || post.message).appendTo($(this));
+            if (media !== undefined) {
+                $('<a>').attr({href: media.href})
+                    .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
+                    .append($('<div>').text(post.attachment.caption))
+                    .appendTo($(this));
+            }
+        }
+    });
+
+    /* index >= 196 for plugins handling generic stuff (like the common comment) */
 
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'link',
@@ -255,8 +368,9 @@ define('plugins/portal/facebook/register',
         }
     });
 
+
     ext.point('plugins/portal/facebook/renderer').extend({
-        id: 'app_story',
+        id: 'app-story',
         index: 196,
         accepts: function (post) {
             return (post.type === 237);
@@ -276,7 +390,7 @@ define('plugins/portal/facebook/register',
 
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'new-cover-photo',
-        index: 197,
+        index: 196,
         accepts: function (post) {
             return post.type === 373 && post.attachment.media[0];
         },
@@ -291,6 +405,7 @@ define('plugins/portal/facebook/register',
         }
     });
 
+    /* index >224 for fallback solutions */
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'fallback',
         index: 256,
