@@ -39,6 +39,13 @@ define('io.ox/core/api/snippets', ['io.ox/core/http', 'io.ox/core/event'], funct
 			params: {
 				action: 'all'
 			}
+		})
+		.pipe(function (data) {
+			return _(data).map(function (sig) {
+				// robustness: signature migration
+				sig.misc = $.extend({ insertion: 'below'}, sig.misc || {});
+				return sig;
+			});
 		});
 	};
 
