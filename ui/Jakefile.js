@@ -29,7 +29,7 @@ console.info("Build path: " + utils.builddir);
 
 function pad (n) { return n < 10 ? "0" + n : n; }
 var t = utils.startTime;
-var ver = (process.env.version || "7.0.0");
+var ver = (process.env.version || "7.0.1");
 var rev = ver + "-" + (process.env.revision || "1");
 version = rev + "." + t.getUTCFullYear() +
     pad(t.getUTCMonth() + 1) + pad(t.getUTCDate()) + "." +
