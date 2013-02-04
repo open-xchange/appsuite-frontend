@@ -316,6 +316,7 @@ define('io.ox/mail/actions',
                         var pre = new p.Preview({
                             data: data,
                             filename: data.filename,
+                            parent: data.parent,
                             mimetype: data.content_type,
                             dataURL: api.getUrl(data, 'view')
                         }, {

@@ -225,6 +225,7 @@ define("io.ox/preview/main",
             var self = this;
             require(['io.ox/mail/view-detail'], function (view) {
                 var data = file.data.nested_message;
+                data.parent = file.parent;
                 self.append(view.draw(data).css('padding', 0));
             });
         },
