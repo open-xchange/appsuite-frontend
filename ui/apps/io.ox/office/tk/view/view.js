@@ -38,17 +38,23 @@ define('io.ox/office/tk/view/view',
      * @param {Object} [options]
      *  Additional options to control the appearance of the view. The following
      *  options are supported:
-     *  @param {Number} [options.modelPadding=0]
-     *      The padding of the model root node to the borders of the scrollable
-     *      application pane.
+     *  @param {Boolean} [options.scrollable=false]
+     *      If set to true, the application pane will be scrollable, and the
+     *      application container node becomes resizeable. By default, the size
+     *      of the application container node is locked and synchronized with
+     *      the size of the application pane (with regard to padding, see the
+     *      option 'options.appPanePadding').
+     *  @param {Number} [options.padding=0]
+     *      The padding between the fixed application pane and the embedded
+     *      application container node.
      */
     function View(app, options) {
 
         var // centered application pane
             appPane = null,
 
-            // application model container node
-            modelContainerNode = $('<div>').addClass('app-pane-model-container'),
+            // root application container node
+            appContainerNode = $('<div>').addClass('app-container'),
 
             // all pane instances, in insertion order
             panes = [],
@@ -122,14 +128,34 @@ define('io.ox/office/tk/view/view',
         // methods ------------------------------------------------------------
 
         /**
-         * Returns the central DOM node of the application (the complete inner
-         * area between all existing view panes).
+         * Returns the DOM node of the application pane (the complete inner
+         * area between all existing view panes). Note that this is NOT the
+         * container node where applications insert their own contents. The
+         * method View.insertContentNode() is intended to be used to insert own
+         * contents into the application pane.
          *
          * @returns {jQuery}
-         *  The central DOM node of the application.
+         *  The DOM node of the application pane.
          */
-        this.getApplicationNode = function () {
+        this.getAppPaneNode = function () {
             return appPane.getNode();
+        };
+
+        /**
+         * Inserts new DOM nodes into the container node of the application
+         * pane.
+         *
+         * @param {HTMLElement|jQuery}
+         *  The DOM node(s) to be inserted into the application pane. If this
+         *  object is a jQuery collection, inserts all contained DOM nodes into
+         *  the application pane.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
+        this.insertContentNode = function (contentNode) {
+            appContainerNode.append(contentNode);
+            return this;
         };
 
         /**
@@ -307,8 +333,9 @@ define('io.ox/office/tk/view/view',
 
         /**
          * Registers the identifier of the first view pane that will be
-         * rendered after an alert banner. By default, an alert banner will be
-         * drawn after all view panes.
+         * rendered after/below an alert banner. By default, an alert banner
+         * will be drawn after all registered view panes, but above the
+         * application pane.
          *
          * @param {String} id
          *  The unique identifier of the first view pane drawn after an alert
@@ -501,15 +528,13 @@ define('io.ox/office/tk/view/view',
 
         // initialization -----------------------------------------------------
 
-        // insert the document model root node into the container node
-        modelContainerNode.append(app.getModel().getNode());
-        modelContainerNode.css('margin', Utils.getIntegerOption(options, 'modelPadding', 0, 0) + 'px');
-
-        // create the application pane, and insert the model container
+        // create the application pane, and insert the container node
         appPane = new Pane(app, 'mainApplicationPane', { classes: 'app-pane' });
-        appPane.getNode().append(modelContainerNode);
+        appPane.getNode()
+            .toggleClass('scrollable', Utils.getBooleanOption(options, 'scrollable', false))
+            .append(appContainerNode.css('margin', Utils.getIntegerOption(options, 'padding', 0, 0) + 'px'));
 
-        // add the main application pane
+        // add the main application pane to the application window
         app.getWindowNode().addClass('io-ox-office-main ' + app.getName().replace(/[.\/]/g, '-') + '-main').append(appPane.getNode());
 
         // add shadow nodes above application pane, but below other panes
@@ -517,11 +542,13 @@ define('io.ox/office/tk/view/view',
             app.getWindowNode().append(shadowNodes[border] = $('<div>').addClass('app-pane-shadow'));
         });
 
-        // listen to browser window resize events when the OX window is visible
+        // listen to browser window resize events when the application window is visible
         app.registerWindowResizeHandler(refreshPaneLayout);
 
         // update all view components every time the window will be shown
-        app.getWindow().on('show', function () { app.getController().update(); });
+        app.getWindow().on('show', function () {
+            app.getController().update().done();
+        });
 
         // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
         app.on('docs:init:after', function () {

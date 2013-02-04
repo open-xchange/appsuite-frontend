@@ -110,7 +110,10 @@ define('io.ox/launchpad/main',
                 });
             }
         },
-
+        fnHasAppStore = function () {
+            var managePoint = ext.point("io.ox/core/apps/manage");
+            return managePoint.list().length > 0;
+        },
         fnOpenAppStore = function (e) {
             e.preventDefault();
             var openedStore = false;
@@ -157,18 +160,19 @@ define('io.ox/launchpad/main',
             });
 
             // add link to app store
-
-            api.getInstalled('cached').done(function (installed) {
+            function fnListApps(installed) {
                 secInstalled.empty();
-                /*secInstalled.append(
-                    $('<div>').addClass('manage-apps')
-                    .append(
-                        $('<a>', { href: '#', tabindex: '1' })
-                        .addClass('btn btn-primary')
-                        .text(gt('Manage applications'))
-                        .on('click', fnOpenAppStore)
-                    )
-                );*/
+                if (fnHasAppStore()) {
+                    secInstalled.append(
+                        $('<div>').addClass('manage-apps')
+                        .append(
+                            $('<a>', { href: '#', tabindex: '1' })
+                            .addClass('btn btn-primary')
+                            .text(gt('Manage applications'))
+                            .on('click', fnOpenAppStore)
+                        )
+                    );
+                }
                 _(installed).each(function (data) {
                     // draw installed app
                     if (data.visible || _.isUndefined(data.visible)) {
@@ -177,28 +181,11 @@ define('io.ox/launchpad/main',
                         );
                     }
                 });
-            });
+            }
 
-            api.getInstalled().done(function (installed) {
-                secInstalled.empty();
-                /*secInstalled.append(
-                    $('<div>').addClass('manage-apps')
-                    .append(
-                        $('<a>', { href: '#', tabindex: '1' })
-                        .addClass('btn btn-primary')
-                        .text(gt('Manage applications'))
-                        .on('click', fnOpenAppStore)
-                    )
-                );*/
-                _(installed).each(function (data) {
-                    // draw installed app
-                    if (data.visible || _.isUndefined(data.visible)) {
-                        secInstalled.append(
-                            drawApp(data).on('click', data, launchApp)
-                        );
-                    }
-                });
-            });
+            api.getInstalled('cached').done(fnListApps);
+
+            api.getInstalled().done(fnListApps);
 
             if (running.length) {
                 pad.append(hRunning, secRunning);

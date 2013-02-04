@@ -62,6 +62,18 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
+#: apps/io.ox/launchpad/main.js:148
+msgid "Running applications"
+msgstr ""
+
+#: apps/io.ox/launchpad/main.js:150
+msgid "Your applications"
+msgstr ""
+
+#: apps/io.ox/launchpad/main.js:171
+msgid "Manage applications"
+msgstr ""
+
 #: apps/plugins/portal/rss/register.js:54
 #: apps/plugins/portal/rss/register.js:186
 msgid "RSS Feed"
@@ -488,6 +500,10 @@ msgstr ""
 #. %2$s is the max storagespace
 #, c-format
 #. #-#-#-#-#-#-#-#-#-#
+#. %1$s is the storagespace in use
+#. %2$s is the max storagespace
+#, c-format
+#. #-#-#-#-#-#-#-#-#-#
 #. %1$s is the current page index in office document preview
 #. %2$s is the number of pages in office document preview
 #, c-format
@@ -550,6 +566,7 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
 #. Reminder (objective case): in X minutes
 #. %d is the number of minutes
 #, c-format
@@ -610,7 +627,7 @@ msgstr ""
 msgid "Distribution list"
 msgstr ""
 
-#: apps/io.ox/core/main.js:309 apps/io.ox/settings/main.js:78
+#: apps/io.ox/core/main.js:315 apps/io.ox/settings/main.js:78
 msgid "Settings"
 msgstr ""
 
@@ -908,8 +925,8 @@ msgstr ""
 msgid "Yellow"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:486 apps/io.ox/mail/view-detail.js:815
-#: apps/io.ox/mail/write/view-main.js:334
+#: apps/io.ox/mail/main.js:486 apps/io.ox/mail/main.js:491
+#: apps/io.ox/mail/view-detail.js:815 apps/io.ox/mail/write/view-main.js:334
 msgid "To"
 msgstr ""
 
@@ -1071,71 +1088,74 @@ msgstr ""
 msgid "on behalf of"
 msgstr ""
 
-#: apps/io.ox/core/main.js:52 apps/io.ox/mail/main.js:165
+#: apps/io.ox/core/main.js:52 apps/io.ox/mail/main.js:170
 msgid "Conversations"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:166 apps/io.ox/tasks/edit/view-template.js:489
+#: apps/io.ox/mail/main.js:166 apps/io.ox/mail/main.js:171
+#: apps/io.ox/tasks/edit/view-template.js:489
 msgid "Date"
 msgstr ""
 
 #: apps/io.ox/mail/actions.js:591 apps/io.ox/mail/main.js:167
-#: apps/io.ox/mail/main.js:486 apps/io.ox/mail/write/view-main.js:424
+#: apps/io.ox/mail/main.js:172 apps/io.ox/mail/main.js:486
+#: apps/io.ox/mail/main.js:491 apps/io.ox/mail/write/view-main.js:424
 msgid "From"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:168
+#: apps/io.ox/mail/main.js:173
 msgid "Label"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/template.js:155 apps/io.ox/mail/actions.js:582
-#: apps/io.ox/mail/main.js:169 apps/io.ox/mail/main.js:486
+#: apps/io.ox/mail/main.js:169 apps/io.ox/mail/main.js:174
+#: apps/io.ox/mail/main.js:486 apps/io.ox/mail/main.js:491
 #: apps/io.ox/mail/write/view-main.js:505
 #: apps/io.ox/tasks/edit/view-template.js:36 apps/io.ox/tasks/main.js:239
 msgid "Subject"
 msgstr ""
 
 #: apps/io.ox/calendar/list/perspective.js:129 apps/io.ox/mail/main.js:171
-#: apps/io.ox/tasks/main.js:242
+#: apps/io.ox/mail/main.js:176 apps/io.ox/tasks/main.js:242
 msgid "Ascending"
 msgstr ""
 
 #: apps/io.ox/calendar/list/perspective.js:130 apps/io.ox/mail/main.js:172
-#: apps/io.ox/tasks/main.js:243
+#: apps/io.ox/mail/main.js:177 apps/io.ox/tasks/main.js:243
 msgid "Descending"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:174
+#: apps/io.ox/mail/main.js:179
 msgid "Unread only"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:245
+#: apps/io.ox/mail/main.js:250
 msgid "%1$d mail"
 msgid_plural "%1$d mails"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/io.ox/mail/main.js:414 apps/io.ox/mail/main.js:428
+#: apps/io.ox/mail/main.js:419 apps/io.ox/mail/main.js:433
 msgid "Couldn't load that email."
 msgstr ""
 
-#: apps/io.ox/mail/main.js:451
+#: apps/io.ox/mail/main.js:456
 msgid "No mails found for \042%s\042"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:452
+#: apps/io.ox/mail/main.js:457
 msgid "No mails in this folder"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:469
+#: apps/io.ox/mail/main.js:474
 msgid "Mail has been imported"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:486
+#: apps/io.ox/mail/main.js:491
 msgid "CC"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:486
+#: apps/io.ox/mail/main.js:491
 msgid "Mail text"
 msgstr ""
 
@@ -1614,6 +1634,7 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js:105
 #: apps/io.ox/calendar/settings/pane.js:94
@@ -1623,6 +1644,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? NO
@@ -1663,6 +1685,7 @@ msgstr ""
 msgid "Do you want to edit the whole series or just one appointment within the series?"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. Use singular in this context
@@ -2256,7 +2279,7 @@ msgstr ""
 msgid "Close all"
 msgstr ""
 
-#: apps/io.ox/core/tk/vgrid.js:575
+#: apps/io.ox/core/tk/vgrid.js:626
 msgid "Empty"
 msgstr ""
 
@@ -2607,48 +2630,52 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
-#: apps/io.ox/core/main.js:325 apps/io.ox/help/center.js:104
+#: apps/io.ox/core/main.js:325 apps/io.ox/core/main.js:331
+#: apps/io.ox/help/center.js:104
 msgid "Help"
 msgstr ""
 
 #: apps/io.ox/core/main.js:338 apps/io.ox/core/main.js:341
-#: apps/io.ox/core/main.js:346 apps/io.ox/files/actions.js:761
+#: apps/io.ox/core/main.js:344 apps/io.ox/core/main.js:346
+#: apps/io.ox/core/main.js:347 apps/io.ox/core/main.js:352
+#: apps/io.ox/files/actions.js:761
 msgid "Fullscreen"
 msgstr ""
 
-#: apps/io.ox/core/main.js:339
+#: apps/io.ox/core/main.js:345
 msgid "Exit Fullscreen"
 msgstr ""
 
 #: apps/io.ox/core/about.js:36 apps/io.ox/core/main.js:360
+#: apps/io.ox/core/main.js:366
 msgid "About"
 msgstr ""
 
-#: apps/io.ox/core/main.js:378
+#: apps/io.ox/core/main.js:384
 msgid "Sign out"
 msgstr ""
 
-#: apps/io.ox/core/main.js:440
+#: apps/io.ox/core/main.js:446
 msgid "Refresh"
 msgstr ""
 
-#: apps/io.ox/core/main.js:455
+#: apps/io.ox/core/main.js:461
 msgid "Your session is expired"
 msgstr ""
 
-#: apps/io.ox/core/main.js:456
+#: apps/io.ox/core/main.js:462
 msgid "Please sign in again to continue"
 msgstr ""
 
-#: apps/io.ox/core/main.js:568
+#: apps/io.ox/core/main.js:574
 msgid "Restore applications"
 msgstr ""
 
-#: apps/io.ox/core/main.js:570
+#: apps/io.ox/core/main.js:576
 msgid "The following applications can be restored. Just remove the restore point if you don't want it to be restored."
 msgstr ""
 
-#: apps/io.ox/core/main.js:574
+#: apps/io.ox/core/main.js:580
 msgid "Continue"
 msgstr ""
 
@@ -3025,14 +3052,6 @@ msgstr ""
 
 #: apps/io.ox/publications/wizard.js:59
 msgid "Send email"
-msgstr ""
-
-#: apps/io.ox/launchpad/main.js:145
-msgid "Running applications"
-msgstr ""
-
-#: apps/io.ox/launchpad/main.js:147
-msgid "Your applications"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js:211
