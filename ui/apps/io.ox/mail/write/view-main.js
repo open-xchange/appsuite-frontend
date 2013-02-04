@@ -44,7 +44,8 @@ define("io.ox/mail/write/view-main",
         index: 100,
         label: gt('Send'),
         cssClasses: 'btn btn-primary',
-        ref: POINT + '/actions/send'
+        ref: POINT + '/actions/send',
+        tabIndex: '6'
     }));
 
     ext.point(POINT + '/toolbar').extend(new links.Button({
@@ -743,10 +744,10 @@ define("io.ox/mail/write/view-main",
         var elem;
         return list.map(function (elem) {
             var obj = {
-                display_name: _.isArray(elem) ? elem[0].replace(/^('|")|('|")$/g, '') : elem.display_name.replace(/^('|")|('|")$/g, '') || '',
-                email: _.isArray(elem) ? elem[1] : elem.email || elem.mail || '',
-                image1_url: elem.image1_url || '',
-                folder_id: elem.folder_id || '',
+                display_name: _.isArray(elem) ? elem[0].replace(/^('|")|('|")$/g, '') : elem.display_name.replace(/^('|")|('|")$/g, '') || '',
+                email: _.isArray(elem) ? elem[1] : elem.email || elem.mail || '',
+                image1_url: elem.image1_url || '',
+                folder_id: elem.folder_id || '',
                 id: elem.id || ''
             };
             obj.url = contactsUtil.getImage(obj, contactPictureOptions);
@@ -779,7 +780,7 @@ define("io.ox/mail/write/view-main",
             // email address
             $('<div>').text(_.noI18n(String(data.email || '').toLowerCase())),
             // remove
-            $('<a>', { href: '#', tabindex: '6' })
+            $('<a>', { href: '#' })
                 .addClass('remove')
                 .append(
                     $('<div>').addClass('icon').text(_.noI18n('\u00D7')) // &times;
