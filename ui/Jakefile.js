@@ -516,6 +516,7 @@ docFile("buildsystem", "Build System");
 docFile("manifests", "Module System");
 docFile("vgrid", "VGrid");
 docFile("portalplugin", "Portal Plugins ");
+docFile("actions_files", "Actions / Files App");
 docFile("i18n", "Internationalization");
 docFile("date", "Date and Time");
 
@@ -728,7 +729,7 @@ task("dist", [distDest], function () {
             var file = path.join(dest, name);
             fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
         });
-        
+
         if (path.existsSync('i18n/languagenames.json')) {
             var languageNames =
                 JSON.parse(fs.readFileSync('i18n/languagenames.json', 'utf8'));
