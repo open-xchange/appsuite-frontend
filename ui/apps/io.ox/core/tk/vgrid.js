@@ -191,6 +191,7 @@ define('io.ox/core/tk/vgrid',
 
             var chunkLoaders = [];
 
+
             for (i = startChunk; i <= endChunk; i++) {
                 var lowerBound = i * CHUNK_SIZE;
                 var upperBound = ((i + 1) * CHUNK_SIZE) - 1;
@@ -234,7 +235,7 @@ define('io.ox/core/tk/vgrid',
             $.when.apply($, deferreds).done(function () {
                 var i;
                 for (i = 0; i < arguments.length; i++) {
-                    list = list.concat(arguments[0].slice(chunkLoaders[i].start, chunkLoaders[i].end));
+                    list = list.concat(arguments[i].slice(chunkLoaders[i].start, chunkLoaders[i].end));
                 }
                 def.resolve(list);
             }).fail(def.reject);
@@ -561,7 +562,7 @@ define('io.ox/core/tk/vgrid',
 
                 // get all items
                 var lfo = _.lfo(cont, offset);
-
+                
                 return chunkLoader.load(offset, numRows, {mode: currentMode})
                     .done(lfo)
                     .fail(function () {
