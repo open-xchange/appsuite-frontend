@@ -62,6 +62,18 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
+#: apps/io.ox/launchpad/main.js:148
+msgid "Running applications"
+msgstr ""
+
+#: apps/io.ox/launchpad/main.js:150
+msgid "Your applications"
+msgstr ""
+
+#: apps/io.ox/launchpad/main.js:171
+msgid "Manage applications"
+msgstr ""
+
 #: apps/plugins/portal/rss/register.js:54
 #: apps/plugins/portal/rss/register.js:186
 msgid "RSS Feed"
@@ -3040,14 +3052,6 @@ msgstr ""
 
 #: apps/io.ox/publications/wizard.js:59
 msgid "Send email"
-msgstr ""
-
-#: apps/io.ox/launchpad/main.js:145
-msgid "Running applications"
-msgstr ""
-
-#: apps/io.ox/launchpad/main.js:147
-msgid "Your applications"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js:211
