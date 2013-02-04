@@ -723,11 +723,12 @@ task("dist", [distDest], function () {
     }
     function tar(code) {
         if (code) return fail();
-
-        _.each([pkgName + '.spec', 'debian/control'], function (name) {
-            var file = path.join(dest, name);
-            fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
-        });
+        
+        var file = path.join(dest, pkgName + '.spec');
+        fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')
+            .replace(/^(Version:\s*)\S+/gm, '$01' + ver)));
+        file = path.join(dest, 'debian/control');
+        fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
         
         if (path.existsSync('i18n/languagenames.json')) {
             var languageNames =
