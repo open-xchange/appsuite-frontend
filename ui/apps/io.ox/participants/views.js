@@ -95,6 +95,9 @@ define("io.ox/participants/views",
                 //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
                 var m = this.model.get('emailparam') ? this.model.get('emailparam') : this.model.getEmail();
                 this.nodes.$mail.text(m);
+                //workaround bug 24485: suppress visually nested autocomplete items
+                if (m === '')
+                    this.nodes.$mail.html('&nbsp;');
                 if (this.options.halo) {
                     this.nodes.$wrapper.data({email1: m}).addClass('halo-link');
                 }
