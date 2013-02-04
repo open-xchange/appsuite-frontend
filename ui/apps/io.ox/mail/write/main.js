@@ -913,6 +913,10 @@ define('io.ox/mail/write/main',
             var mail = this.getMail(),
                 def = new $.Deferred();
 
+            // get flat ids for data.infostore_ids
+            if (mail.data.infostore_ids) {
+                mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
+            }
             // send!
             mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
 
