@@ -70,6 +70,10 @@ define('io.ox/office/tk/control/group',
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of
      *      this instance.
+     *  @param {Boolean} [options.visible=true]
+     *      If set to false, the group will be hidden permanently. Can be used
+     *      to hide groups depending on a certain condition while initializing
+     *      view components.
      */
     function Group(options) {
 
@@ -390,16 +394,20 @@ define('io.ox/office/tk/control/group',
             .addClass(Utils.getStringOption(options, 'classes', ''));
         Utils.setControlTooltip(groupNode, Utils.getStringOption(options, 'tooltip'));
 
-        // add event handlers
-        groupNode
-            .on('keydown keypress keyup', keyHandler)
-            // suppress events for disabled controls
-            .on('mousedown dragover drop contextmenu', function (event) {
-                if (!self.isEnabled()) {
-                    event.preventDefault();
-                    self.trigger('cancel');
-                }
-            });
+        if (Utils.getBooleanOption(options, 'visible', true)) {
+            // add event handlers
+            groupNode
+                .on('keydown keypress keyup', keyHandler)
+                // suppress events for disabled controls
+                .on('mousedown dragover drop contextmenu', function (event) {
+                    if (!self.isEnabled()) {
+                        event.preventDefault();
+                        self.trigger('cancel');
+                    }
+                });
+        } else {
+            this.hide();
+        }
 
     } // class Group
 
