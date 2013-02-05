@@ -72,7 +72,7 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
 
 
         this.getAll = function () {
-            return _(cache[service.id].accounts).chain().map(function (account) {return account; }).sortBy(function (account) {return account.id; }).map(outgoing).value();
+            return _(cache[service.id].accounts).chain().map(function (account) { return account; }).sortBy(function (account) {return account.id; }).map(outgoing).value();
         };
 
         this.get = function (id) {
@@ -182,23 +182,22 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                 params.id = account.id;
             }
             var popupWindow = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+            popupWindow.focus();
 
             http.GET({
                 module: "oauth/accounts",
                 params: params
             })
             .done(function (interaction) {
-
                 window["callback_" + callbackName] = function (response) {
                     cache[service.id].accounts[response.data.id] = response.data;
-                    def.resolve(response.data);
                     delete window["callback_" + callbackName];
                     popupWindow.close();
                     self.trigger("update", response.data);
                     ox.trigger("refresh-portal");
+                    def.resolve(response.data);
                 };
                 popupWindow.location = interaction.authUrl;
-
             })
             .fail(function (e) {
                 notifications.yell('error', e.error);
