@@ -198,13 +198,13 @@ define('plugins/portal/twitter/register',
 
     var drawPreview = function (baton) {
         var content = baton.contentNode;
-
         if (baton.data.length === 0) {
             content.append(
                 $('<div class="paragraph">').text(gt('No tweets yet.'))
             );
 
         } else if (baton.data.errors && baton.data.errors.length > 0) {
+            content.removeClass('pointer');
             $('<div class="paragraph">').text(gt('Twitter reported the following errors:')).appendTo(content);
             _(baton.data.errors).each(function (myError) {
                 $('<div class="error">').text("(" + myError.code + ") " + myError.message).appendTo(content);
@@ -286,7 +286,6 @@ define('plugins/portal/twitter/register',
             var content = $('<div class="content pointer">');
             baton.contentNode = content;
             drawPreview(baton);
-
             this.append(content);
         },
 
