@@ -200,7 +200,7 @@ define('io.ox/files/actions',
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog({width: calcWidth, addclass: 'dialogreselect'})
                         .append(container)
-                        .addButton("cancel", gt('Cancel'))
+                        .addButton('cancel', gt('Cancel'))
                         .show();
                 });
             });
@@ -229,8 +229,8 @@ define('io.ox/files/actions',
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 new dialogs.ModalDialog()
                     .text(question)
-                    .addPrimaryButton("delete", gt('Delete'))
-                    .addButton("cancel", gt('Cancel'))
+                    .addPrimaryButton('delete', gt('Delete'))
+                    .addButton('cancel', gt('Cancel'))
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
@@ -263,13 +263,13 @@ define('io.ox/files/actions',
                         update.filename = name;
                     }
 
-                    return api.update(update).fail(require("io.ox/core/notifications").yell);
+                    return api.update(update).fail(require('io.ox/core/notifications').yell);
                 }
 
 
                 $input.val(baton.data.title || baton.data.filename);
-                var $form = $("<form>").append(
-                    $('<label for="name">').append($('<b>').text(gt("Name"))),
+                var $form = $('<form>').append(
+                    $('<label for="name">').append($('<b>').text(gt('Name'))),
                     $input
                 );
 
@@ -304,10 +304,10 @@ define('io.ox/files/actions',
         requires: 'one',
         action: function (baton) {
             require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
-                var $input = $('<textarea rows="10"></textarea>').css({width: "507px"});
+                var $input = $('<textarea rows="10"></textarea>').css({width: '507px'});
                 $input.val(baton.data.description);
-                var $form = $("<form>").append(
-                    $('<label for="name">').append($('<b>').text(gt("Description"))),
+                var $form = $('<form>').append(
+                    $('<label for="name">').append($('<b>').text(gt('Description'))),
                     $input
                 );
                 var dialog = null;
@@ -323,7 +323,7 @@ define('io.ox/files/actions',
                         description: description
                     };
 
-                    return api.update(update).fail(require("io.ox/core/notifications").yell);
+                    return api.update(update).fail(require('io.ox/core/notifications').yell);
                 }
 
                 keys.on('shift+enter', function () {
@@ -373,7 +373,7 @@ define('io.ox/files/actions',
                         var selectedFolder = tree.selection.get();
                         if (selectedFolder.length === 1) {
                             // move action
-                            api[apiAction](list, selectedFolder[0]).fail(require("io.ox/core/notifications").yell);
+                            api[apiAction](list, selectedFolder[0]).fail(require('io.ox/core/notifications').yell);
                         }
                     }
                     tree.destroy();
@@ -440,8 +440,8 @@ define('io.ox/files/actions',
                 // ask
                 new dialogs.ModalDialog()
                     .text(question)
-                    .addPrimaryButton("delete", gt("Delete"))
-                    .addButton("cancel", gt("Cancel"))
+                    .addPrimaryButton('delete', gt('Delete'))
+                    .addButton('cancel', gt('Cancel'))
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
@@ -464,8 +464,8 @@ define('io.ox/files/actions',
 
     new ActionLink(POINT + '/links/toolbar/default', {
         index: 100,
-        id: "upload",
-        label: gt("Upload new file"),
+        id: 'upload',
+        label: gt('Upload new file'),
         ref: POINT + '/actions/upload'
     });
 
@@ -507,92 +507,92 @@ define('io.ox/files/actions',
     // });
 
     // new ActionLink(POINT + '/links/toolbar/publish', {
-    //     id: "publish",
-    //     label: gt("Publish current folder"),
-    //     ref: "io.ox/files/actions/publish"
+    //     id: 'publish',
+    //     label: gt('Publish current folder'),
+    //     ref: 'io.ox/files/actions/publish'
     // });
 
     // INLINE
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: "editor",
+        id: 'editor',
         index: 40,
         prio: 'hi',
-        label: gt("Edit"),
-        ref: "io.ox/files/actions/editor"
+        label: gt('Edit'),
+        ref: 'io.ox/files/actions/editor'
     }));
 
-    ext.point("io.ox/files/links/inline").extend(new links.Link({
-        id: "open",
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'open',
         index: 100,
         prio: 'hi',
-        label: gt("Open"),
-        ref: "io.ox/files/actions/open"
+        label: gt('Open'),
+        ref: 'io.ox/files/actions/open'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'download',
         index: 200,
         prio: 'hi',
-        label: gt("Download"),
-        ref: "io.ox/files/actions/download"
+        label: gt('Download'),
+        ref: 'io.ox/files/actions/download'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'sendlink',
         index: 300,
-        label: gt("Send as link"),
-        ref: "io.ox/files/actions/sendlink"
+        label: gt('Send as link'),
+        ref: 'io.ox/files/actions/sendlink'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'send',
         index: 400,
-        label: gt("Send by mail"),
-        ref: "io.ox/files/actions/send"
+        label: gt('Send by mail'),
+        ref: 'io.ox/files/actions/send'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'showlink',
         index: 400,
-        label: gt("Show link"),
-        ref: "io.ox/files/actions/showlink"
+        label: gt('Show link'),
+        ref: 'io.ox/files/actions/showlink'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'rename',
         index: 500,
-        label: gt("Rename"),
-        ref: "io.ox/files/actions/rename"
+        label: gt('Rename'),
+        ref: 'io.ox/files/actions/rename'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'edit-description',
         index: 550,
-        label: gt("Edit description"),
-        ref: "io.ox/files/actions/edit-description"
+        label: gt('Edit description'),
+        ref: 'io.ox/files/actions/edit-description'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'move',
         index: 600,
-        label: gt("Move"),
-        ref: "io.ox/files/actions/move"
+        label: gt('Move'),
+        ref: 'io.ox/files/actions/move'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'copy',
         index: 700,
-        label: gt("Copy"),
-        ref: "io.ox/files/actions/copy"
+        label: gt('Copy'),
+        ref: 'io.ox/files/actions/copy'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'delete',
         index: 800,
         prio: 'hi',
-        label: gt("Delete"),
-        ref: "io.ox/files/actions/delete"
+        label: gt('Delete'),
+        ref: 'io.ox/files/actions/delete'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
@@ -600,7 +600,7 @@ define('io.ox/files/actions',
         index: 900,
         prio: 'lo',
         label: gt('Add to portal'),
-        ref: "io.ox/files/actions/add-to-portal"
+        ref: 'io.ox/files/actions/add-to-portal'
     }));
 
     // version links
@@ -609,30 +609,30 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'open',
         index: 100,
-        label: gt("Open"),
-        ref: "io.ox/files/actions/open"
+        label: gt('Open'),
+        ref: 'io.ox/files/actions/open'
     }));
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'download',
         index: 200,
-        label: gt("Download"),
-        ref: "io.ox/files/actions/download"
+        label: gt('Download'),
+        ref: 'io.ox/files/actions/download'
     }));
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'makeCurrent',
         index: 250,
-        label: gt("Make this the current version"),
-        ref: "io.ox/files/versions/actions/makeCurrent"
+        label: gt('Make this the current version'),
+        ref: 'io.ox/files/versions/actions/makeCurrent'
     }));
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'delete',
         index: 300,
-        label: gt("Delete version"),
-        ref: "io.ox/files/versions/actions/delete",
-        special: "danger"
+        label: gt('Delete version'),
+        ref: 'io.ox/files/versions/actions/delete',
+        special: 'danger'
     }));
 
     // Drag and Drop
@@ -640,7 +640,7 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/dnd/actions').extend({
         id: 'create',
         index: 10,
-        label: gt("Drop here to upload a <b>new file</b>"),
+        label: gt('Drop here to upload a <b>new file</b>'),
         multiple: function (files, app) {
             app.queues.create.offer(files);
         }
