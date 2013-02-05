@@ -156,7 +156,7 @@ define('io.ox/core/tk/vgrid',
             var all = this.all(options);
             var offset = CHUNK_SIZE * index;
             var numRows = CHUNK_SIZE - 1;
-            
+
 
             var subset = all.slice(offset, offset + numRows);
 
@@ -165,7 +165,7 @@ define('io.ox/core/tk/vgrid',
             }
             var fetcher = this.fetch(subset, options);
             activeLoaders[index] = fetcher;
-            
+
             fetcher.always(function () {
                 activeLoaders[index] = null;
                 delete activeLoaders[index];
@@ -183,7 +183,7 @@ define('io.ox/core/tk/vgrid',
                 CHUNK_SIZE = this.MIN_CHUNK;
             }
             THRESHHOLD_EAGER = CHUNK_SIZE;
-            
+
             var end = start + length;
             var startChunk = Math.floor(start / CHUNK_SIZE);
             var endChunk = Math.floor(end / CHUNK_SIZE);
@@ -562,7 +562,7 @@ define('io.ox/core/tk/vgrid',
 
                 // get all items
                 var lfo = _.lfo(cont, offset);
-                
+
                 return chunkLoader.load(offset, numRows, {mode: currentMode})
                     .done(lfo)
                     .fail(function () {
@@ -876,7 +876,7 @@ define('io.ox/core/tk/vgrid',
         };
 
         this.idle = function () {
-            container.show().css({ visibility: '' }).parent().idle();
+            _.defer(function () { container.show().css({ visibility: '' }).parent().idle(); });
             return this;
         };
 
