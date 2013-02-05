@@ -20,6 +20,81 @@ define('io.ox/office/tk/app/officeapplication',
 
     'use strict';
 
+    // private static functions ===============================================
+
+    /**
+     * Tries to find a running application which is working on a file described
+     * in the passed options object.
+     *
+     * @param {String} moduleName
+     *  The application type identifier.
+     *
+     * @param {Object} [launchOptions]
+     *  A map of options that may contain a file descriptor in 'options.file'.
+     *  If existing, compares it with the file descriptors of all running
+     *  applications with the specified module identifier (returned by their
+     *  getFileDescriptor() method).
+     *
+     * @returns {ox.ui.App}
+     *  A running application of the specified type with a matching file
+     *  descriptor.
+     */
+    function getRunningApplication(moduleName, launchOptions) {
+
+        var // get file descriptor from options
+            file = Utils.getObjectOption(launchOptions, 'file', null),
+
+            // find running editor application
+            runningApps = file ? ox.ui.App.get(moduleName).filter(function (app) {
+                var appFile = _.isFunction(app.getFileDescriptor) ? app.getFileDescriptor() : null;
+                // TODO: check file version too?
+                return _.isObject(appFile) &&
+                    (file.id === appFile.id) &&
+                    (file.folder_id === appFile.folder_id);
+            }) : [];
+
+        if (runningApps.length > 1) {
+            Utils.warn('ApplicationLauncher.getRunningApplication(): found multiple applications for the same file.');
+        }
+        return runningApps.length ? runningApps[0] : null;
+    }
+
+    /**
+     * Creates a new application object of the specified type, and performs
+     * basic initialization steps.
+     *
+     * @param {String} moduleName
+     *  The application type identifier.
+     *
+     * @param {Function} ApplicationClass
+     *  The constructor function of the application mix-in class that will
+     *  extend the core application object. Receives the passed launch options
+     *  as first parameter.
+     *
+     * @param {Object} [launchOptions]
+     *  A map of options containing initialization data for the new application
+     *  object.
+     *
+     * @returns {ox.ui.App}
+     *  The new application object.
+     */
+    function createApplication(moduleName, ApplicationClass, launchOptions) {
+
+        var // the icon shown in the top bar launcher
+            icon = Utils.getStringOption(launchOptions, 'icon', ''),
+            // the base application object
+            app = ox.ui.createApp({ name: moduleName, userContent: icon.length > 0, userContentIcon: icon });
+
+        // mix-in constructor for additional application methods
+        ApplicationClass.call(app, launchOptions);
+
+        return app;
+    }
+
+    function getOrCreateApplication(moduleName, ApplicationClass, launchOptions) {
+
+    }
+
     // class OfficeApplication ================================================
 
     /**
@@ -435,7 +510,7 @@ define('io.ox/office/tk/app/officeapplication',
 
             // build default options, and add the passed options
             options = Utils.extendOptions({
-                module: OfficeApplication.DOCUMENTCONVERTER_MODULE_NAME,
+                module: OfficeApplication.CONVERTER_MODULE_NAME,
                 params: this.getFileParameters()
             }, options);
 
@@ -955,8 +1030,56 @@ define('io.ox/office/tk/app/officeapplication',
      * The name of the document filter server module.
      */
     OfficeApplication.FILTER_MODULE_NAME = 'oxodocumentfilter';
-    OfficeApplication.DOCUMENTCONVERTER_MODULE_NAME = 'oxodocumentconverter';
 
+    /**
+     * The name of the document converter server module.
+     */
+    OfficeApplication.CONVERTER_MODULE_NAME = 'oxodocumentconverter';
+
+    // static methods ---------------------------------------------------------
+
+    /**
+     * Creates a static launcher that has to be returned by the main module of
+     * each application type. The launcher tries to find a running application
+     * which is working on a file described in the launch options passed to the
+     * launcher. If no such application exists, it creates and returns a new
+     * application object.
+     *
+     * @param {String} moduleName
+     *  The application type identifier.
+     *
+     * @param {Function} ApplicationClass
+     *  The constructor function of the application mix-in class that will
+     *  extend the core application object. Receives the launch options passed
+     *  to the launcher as first parameter.
+     *
+     * @param {Object} [defaultLaunchOptions]
+     *  A map of options containing initialization data for the new application
+     *  object. Will be extended with the actual launch options passed to the
+     *  launcher.
+     *
+     * @returns {Object}
+     *  The launcher object expected by the ox.launch() method.
+     */
+    OfficeApplication.createLauncher = function (moduleName, ApplicationClass, defaultLaunchOptions) {
+
+        function launchApp(launchOptions) {
+
+            var // try to find a running application
+                app = getRunningApplication(moduleName, launchOptions);
+
+            // no running application: create and initialize a new application object
+            if (!_.isObject(app)) {
+                launchOptions = Utils.extendOptions(defaultLaunchOptions, launchOptions);
+                app = createApplication(moduleName, ApplicationClass, launchOptions);
+            }
+
+            return app;
+        }
+
+        // ox.launch() expects an object with the method getApp()
+        return { getApp: launchApp };
+    };
 
     // exports ================================================================
 
