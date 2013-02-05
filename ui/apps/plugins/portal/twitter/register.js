@@ -231,15 +231,14 @@ define('plugins/portal/twitter/register',
             return $('<a>').text(gt('Click to authorize your account again')).on('click', function () {
                 keychain.submodules.twitter.reauthorize(account).done(function () {
                     console.log(gt("You have reauthorized this account."));
-                    ext.point(baton.point).invoke('preview', baton);
                 }).fail(function () {
                     console.error(gt("Something went wrong reauthorizing the account."));
                 });
             });
         } else if (errorCode === 88 || errorCode === 130) {
-            return $('<a>').text(gt('Click to retry later.'));
+            return $('<a>').text(gt('Click to retry later.')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
         } else {
-            return $('<a>').text(gt('Click to retry'));
+            return $('<a>').text(gt('Click to retry')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
         }
     };
 
