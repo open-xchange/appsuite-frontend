@@ -190,10 +190,6 @@ define('io.ox/core/tk/vgrid',
 
             var chunkLoaders = [];
 
-<<<<<<< HEAD
-=======
-
->>>>>>> f53d402b8658a0adff42e40c1cf5059b6f047f3a
             for (i = startChunk; i <= endChunk; i++) {
                 var lowerBound = i * CHUNK_SIZE;
                 var upperBound = ((i + 1) * CHUNK_SIZE) - 1;
@@ -564,11 +560,6 @@ define('io.ox/core/tk/vgrid',
 
                 // get all items
                 var lfo = _.lfo(cont, offset);
-<<<<<<< HEAD
-
-=======
-                
->>>>>>> f53d402b8658a0adff42e40c1cf5059b6f047f3a
                 return chunkLoader.load(offset, numRows, {mode: currentMode})
                     .done(lfo)
                     .fail(function () {
