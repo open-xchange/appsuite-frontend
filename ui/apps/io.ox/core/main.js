@@ -35,7 +35,18 @@ define("io.ox/core/main",
             .always(function () {
                 $("#background_loader").fadeIn(DURATION, function () {
                     $("#io-ox-core").hide();
-                    _.url.redirect("signin");
+                    var deferreds = [];
+                    ext.point("io.ox/core/logout").each(function (extension) {
+                        if (ext.logout) {
+                            var def = ext.logout();
+                            if (def) {
+                                deferreds.push(def);
+                            }
+                        }
+                    });
+                    $.when.apply($, deferreds).always(function () {
+                        _.url.redirect("signin");
+                    });
                 });
             });
     };
