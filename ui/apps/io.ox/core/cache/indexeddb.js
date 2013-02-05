@@ -129,7 +129,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     delete fluent[key];
                 }
                 return readwrite(function (cache) {
-                    return cache['delete'](key);
+                    return OP(cache['delete'](key));
                 });
             },
             keys: function () {
