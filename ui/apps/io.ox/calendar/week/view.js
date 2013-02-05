@@ -253,7 +253,9 @@ define('io.ox/calendar/week/view',
         },
 
         onUpdateAppointment: function (obj) {
-            this.trigger('updateAppointment', obj);
+            if (obj.start_date && obj.end_date && obj.start_date < obj.end_date) {
+                this.trigger('updateAppointment', obj);
+            }
         },
 
         onLasso: function (e) {
@@ -735,7 +737,7 @@ define('io.ox/calendar/week/view',
             });
 
             // init drag and resize widget on appointments
-            var colWidth = $('.day', this.$el).outerWidth(),
+            var colWidth = $('.day:first', this.$el).outerWidth(),
                 paneOffset = self.pane.children().first().width() + this.$el.offset().left,
                 paneHeight = self.height();
 
@@ -910,18 +912,19 @@ define('io.ox/calendar/week/view',
                         default:
                             break;
                         }
-                        el.busy();
                         // disable widget
-                        d.options.disabled = true;
+                        el.resizable('disable').busy();
                         self.onUpdateAppointment(app);
                     }
                 })
                 .draggable({
                     grid: [colWidth, self.gridHeight()],
+                    distance: 10,
                     scroll: true,
                     revertDuration: 0,
                     revert: function (drop) {
                         //if false then no socket object drop occurred.
+
                         if (drop === false) {
                             //revert the appointment by returning true
                             $(this).show();
@@ -956,7 +959,6 @@ define('io.ox/calendar/week/view',
                             move = Math.floor(left / colWidth),
                             day = d.my.initPos + move,
                             top = ui.position.top;
-
                         // correct position
                         if (d.my.firstPos === d.my.lastPos) {
                             d.my.mode = 4;
@@ -1044,7 +1046,7 @@ define('io.ox/calendar/week/view',
                             move = Math.round((ui.position.left - ui.originalPosition.left) / colWidth),
                             app = self.collection.get($(this).data('cid')).attributes,
                             startTS = app.start_date + self.getTimeFromPos(d.my.lastTop - ui.originalPosition.top) + (move * date.DAY);
-                        if (e.pageX < window.innerWidth - off.left && e.pageY < window.innerHeight) {
+                        if (e.pageX < window.innerWidth && e.pageX > off.left && e.pageY < window.innerHeight) {
                             // save for update calculations
                             app.old_start_date = app.start_date;
                             app.old_end_date = app.end_date;
@@ -1055,7 +1057,7 @@ define('io.ox/calendar/week/view',
                             });
                             d.my.all.busy();
                             // disable widget
-                            d.options.disabled = true;
+                            $(this).draggable('disable');
                             self.onUpdateAppointment(app);
                         } else {
                             self.trigger('onRefresh');
