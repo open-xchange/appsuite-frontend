@@ -18,9 +18,6 @@ define('io.ox/files/settings/pane',
 
     'use strict';
 
-
-
-
     var filesSettings =  settings.createModel(filesSettingsModel),
         staticStrings =  {
             TITLE_FILES: gt('Files'),
@@ -34,7 +31,7 @@ define('io.ox/files/settings/pane',
         filesViewSettings;
 
     var FilesSettingsView = Backbone.View.extend({
-        tagName: "div",
+        tagName: 'div',
         _modelBinder: undefined,
         initialize: function (options) {
             // create template
@@ -52,7 +49,6 @@ define('io.ox/files/settings/pane',
             self._modelBinder.bind(self.model, self.el, defaultBindings);
 
             return self;
-
         }
     });
 
@@ -69,7 +65,6 @@ define('io.ox/files/settings/pane',
         },
 
         save: function () {
-//            console.log(calendarViewSettings.model);
             filesViewSettings.model.save();
         }
     });

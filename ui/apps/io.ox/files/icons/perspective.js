@@ -85,11 +85,7 @@ define('io.ox/files/icons/perspective',
         return node;
     }
 
-    function imageIconError(e) {
-        $(this).replaceWith(drawGeneric(e.data.name));
-    }
-
-    function audioIconError(e) {
+    function iconError(e) {
         $(this).replaceWith(drawGeneric(e.data.name));
     }
 
@@ -134,9 +130,9 @@ define('io.ox/files/icons/perspective',
                 iElement;
             this.addClass('file-icon pull-left').attr('data-cid', _.cid(file));
             if ((/^(image\/(gif|png|jpe?g|bmp|tiff))$/i).test(file.file_mimetype)) {
-                img = drawImage(getIcon(file, options)).on('error', { name: file.filename }, imageIconError);
+                img = drawImage(getIcon(file, options)).on('error', { name: file.filename }, iconError);
             } else if ((/^audio\/(mpeg|m4a|x-m4a)$/i).test(file.file_mimetype)) {
-                img = drawImage(getCover(file, options)).on('error', { name: file.filename }, audioIconError);
+                img = drawImage(getCover(file, options)).on('error', { name: file.filename }, iconError);
             } else if (Caps.has('document_preview') &&
                     (/^application\/.*(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf).*$/i).test(file.file_mimetype)) {
                 iElement = drawGeneric(file.filename);
@@ -353,9 +349,8 @@ define('io.ox/files/icons/perspective',
                 }
             });
 
-
             var shortcutPoint = new shortcuts.Shortcuts({
-                ref: "io.ox/files/shortcuts"
+                ref: 'io.ox/files/shortcuts'
             });
 
             $(window).resize(_.debounce(recalculateLayout, 300));
@@ -369,16 +364,16 @@ define('io.ox/files/icons/perspective',
                 drawFirst();
             });
 
-            win.on("hide", function () {
+            win.on('hide', function () {
                 shortcutPoint.deactivate();
             });
 
-            api.on("delete.version", function () {
+            api.on('delete.version', function () {
                 // Close dialog after delete
                 dialog.close();
             });
 
-            api.on("update", function (e, obj) {
+            api.on('update', function (e, obj) {
                 // update icon
                 var cid = _.cid(obj), icon = iconview.find('.file-icon[data-cid="' + cid + '"]');
                 if (icon.length) {
@@ -386,7 +381,7 @@ define('io.ox/files/icons/perspective',
                 }
             });
 
-            api.on("refresh.all", function () {
+            api.on('refresh.all', function () {
                 if (!app.getWindow().search.active) {
                     api.getAll({ folder: app.folder.get() }).done(function (ids) {
 
@@ -487,22 +482,20 @@ define('io.ox/files/icons/perspective',
 
             if (_.browser.IE === undefined || _.browser.IE > 9) {
                 dropZone = new dnd.UploadZone({
-                    ref: "io.ox/files/dnd/actions"
+                    ref: 'io.ox/files/dnd/actions'
                 }, app);
                 if (dropZone) { dropZone.include(); }
             }
-            app.on("perspective:icons:hide", function () {
+            app.on('perspective:icons:hide', function () {
                 if (dropZone) {dropZone.remove(); }
                 // shortcutPoint.deactivate();
             });
 
-            app.on("perspective:icons:show", function () {
+            app.on('perspective:icons:show', function () {
                 if (dropZone) {dropZone.include(); }
                 // shortcutPoint.deactivate();
             });
             if (dropZone) {dropZone.include(); }
-
-
 
             app.on('folder:change', function (e, id, folder) {
                 if (_.browser.IE === undefined || _.browser.IE > 9) {
