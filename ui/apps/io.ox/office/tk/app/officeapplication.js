@@ -180,6 +180,7 @@ define('io.ox/office/tk/app/officeapplication',
             return importHandler.call(self, point)
                 .always(function () {
                     self.trigger('docs:import:after');
+                    controller.update();
                 })
                 .done(function () {
                     self.trigger('docs:import:success');
@@ -856,6 +857,7 @@ define('io.ox/office/tk/app/officeapplication',
                 callHandlers(initHandlers)
                 .always(function () {
                     self.trigger('docs:init:after');
+                    controller.update();
                     // this resumes pending window 'open' event handler
                     initDef.resolve();
                     win.idle();
