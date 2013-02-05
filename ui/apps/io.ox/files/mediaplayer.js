@@ -24,7 +24,7 @@ define('io.ox/files/mediaplayer',
      'apps/io.ox/core/tk/jquery-ui.min.js'
     ], function (commons, gt, api, folderAPI) {
 
-    "use strict";
+    'use strict';
 
     var mediaplayer = {
 

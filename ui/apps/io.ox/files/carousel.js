@@ -21,7 +21,7 @@ define('io.ox/files/carousel',
      'less!io.ox/files/carousel.less'
     ], function (commons, gt, api, folderAPI) {
 
-    "use strict";
+    'use strict';
 
     var carouselSlider = {
 

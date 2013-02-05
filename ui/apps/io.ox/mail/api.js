@@ -527,6 +527,8 @@ define("io.ox/mail/api",
 
         list = [].concat(list);
 
+        label = String(label); // Bugfix: #24730
+
         return $.when(
             tracker.update(list, function (obj) {
                 obj.color_label = label;

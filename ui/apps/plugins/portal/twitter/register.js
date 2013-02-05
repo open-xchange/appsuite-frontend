@@ -147,7 +147,7 @@ define('plugins/portal/twitter/register',
         var $myTweet = $('<div class="tweet">').data('entry', tweet).append(
             followButton(tweet),
             $('<a>').attr({href: profileLink}).append(
-                $('<img>', {src: tweet.user.profile_image_url, 'class': 'profilePicture', alt: tweet.user.description})
+                $('<img>', {src: tweet.user.profile_image_url_https, 'class': 'profilePicture', alt: tweet.user.description})
             ),
             $('<div class="text">').append(
                 $('<strong class="io-ox-twitter-name">').text(tweet.user.name),
