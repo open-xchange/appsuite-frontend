@@ -75,7 +75,12 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     return $.Deferred().resolve(null);
                 }
                 if (fluent[key]) {
-                    return $.Deferred().resolve(JSON.parse(fluent[key]));
+                    try {
+                        return $.Deferred().resolve(JSON.parse(fluent[key]));
+                    } catch (e) {
+                        console.error("Could not deserialize", id, key, fluent[key], e);
+                        return $.Deferred().resolve(null);
+                    }
                 }
                 return read(function (cache, important) {
                     var def = $.Deferred();
@@ -87,6 +92,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                                 def.resolve(data);
                             } catch (e) {
                                 // ignore broken values
+                                console.error("Could not deserialize", id, key, fluent[key], e);
                             }
                         }
                     }
@@ -105,16 +111,21 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     queue.timer = setTimeout(function () {
                         readwrite(function (cache, important) {
                             _(queue.list).each(function (obj) {
-                                if (obj.options && obj.options.important) {
-                                    OP(important.put({
-                                        key: obj.key,
-                                        data: JSON.stringify(obj.data)
-                                    }));
-                                } else {
-                                    OP(cache.put({
-                                        key: obj.key,
-                                        data: JSON.stringify(obj.data)
-                                    }));
+                                try {
+                                    if (obj.options && obj.options.important) {
+                                        OP(important.put({
+                                            key: obj.key,
+                                            data: JSON.stringify(obj.data)
+                                        }));
+                                    } else {
+                                        OP(cache.put({
+                                            key: obj.key,
+                                            data: JSON.stringify(obj.data)
+                                        }));
+                                    }
+                                } catch (e) {
+                                    // SKIP
+                                    console.error("Could not serialize", id, obj.key, obj.data);
                                 }
                             });
                             return $.when();

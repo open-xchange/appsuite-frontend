@@ -54,7 +54,7 @@
                     <input type="hidden" name="location" value=""><!-- used by redirect servlet -->
 
                     <div class="row-fluid control-group">
-                        <div class="span6">
+                        <div class="span5">
                             <input type="email" id="io-ox-login-username" name="username" tabindex="1"
                                 class="span12" maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false"
                                 placeholder="User name" data-i18n="User name" data-i18n-attr='placeholder'>
@@ -64,7 +64,7 @@
                                 class="span12" maxlength="100" autocorrect="off" autocapitalize="off"
                                 placeholder="Password" data-i18n="Password" data-i18n-attr='placeholder'>
                         </div>
-                        <div class="span2">
+                        <div class="span3">
                             <input type="submit" tabindex="3" name="signin"
                                 id="login-button" class="span12 btn btn-primary"
                                 value="Sign in" data-i18n="Sign in" data-i18n-attr='value'>
@@ -95,11 +95,21 @@
             </div>
             </div>
 
-            <div class="css-table-row">
-            <div class="css-table-cell" id="io-ox-login-footer">
-                <div id="io-ox-languages"><i data-i18n="Languages">Languages</i>:&nbsp; <span id="io-ox-language-list"></span></div>
-                <div id="io-ox-copyright"></div>
-            </div>
+            <div class="row-fluid" id="io-ox-login-footer">
+                <div class="row-fluid">
+                    <div class="span2" id="io-ox-languages"><i data-i18n="Languages">Languages</i>:</div>
+                    <div class="span10">
+                        <div class="btn-group dropup">
+                            <a id="io-ox-current-language" class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" id="io-ox-language-list"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div id="io-ox-copyright"></div>
+                </div>
             </div>
 
         </div>

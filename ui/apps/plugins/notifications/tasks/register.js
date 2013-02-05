@@ -92,8 +92,11 @@ define('plugins/notifications/tasks/register',
             var item = $(e.currentTarget).closest('.item'),
                 cid = item.attr('data-cid'),
                 obj = _.cid(cid), model;
-            // this is a very strange API signature; just to have that said
-            api.update(_.now(), obj.id, { status: 3, percent_completed: 100 }, obj.folder_id)
+            // now with much cooler api signature. YEAH!
+            api.update({id: obj.id,
+                        folder_id: obj.folder_id,
+                        status: 3,
+                        percent_completed: 100 })
                 .done(function (result) {
                     api.trigger('update:' + encodeURIComponent(cid), result);
                 });

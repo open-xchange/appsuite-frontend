@@ -44,13 +44,9 @@ define('io.ox/calendar/week/perspective',
 
         updateAppointment: function (obj) {
             var self = this;
-            _.each(obj, function (el, i) {
-                if (el === null) {
-                    delete obj[i];
-                }
-            });
 
             var apiUpdate = function (obj) {
+                obj = clean(obj);
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
                         new dialogs.ModalDialog()
@@ -72,10 +68,18 @@ define('io.ox/calendar/week/perspective',
                 });
             };
 
+            var clean = function (app) {
+                _.each(app, function (el, i) {
+                    if (el === null || _.indexOf(['old_start_date', 'old_end_date', 'drag_move'], i) >= 0) {
+                        delete app[i];
+                    }
+                });
+                return app;
+            };
+
             if (obj.recurrence_type > 0) {
                 var dialog = new dialogs.ModalDialog();
                 if (obj.drag_move && obj.drag_move !== 0) {
-                    delete obj.drag_move;
                     dialog
                         .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
                         .addButton('appointment', gt('Yes'))
@@ -99,8 +103,6 @@ define('io.ox/calendar/week/perspective',
                                     // calculate new dates if old dates are available
                                     data.start_date += (obj.start_date - obj.old_start_date);
                                     data.end_date += (obj.end_date - obj.old_end_date);
-                                    delete obj.old_start_date;
-                                    delete obj.old_end_date;
                                     apiUpdate(data);
                                 });
                             }

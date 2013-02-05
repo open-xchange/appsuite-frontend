@@ -15,7 +15,6 @@
 define("io.ox/mail/write/view-main",
     ["io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
-     "io.ox/mail/util",
      "io.ox/mail/actions",
      'io.ox/core/tk/view',
      'io.ox/core/tk/model',
@@ -29,8 +28,10 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/api/account',
      'io.ox/core/api/snippets',
      'io.ox/core/strings',
+     'io.ox/core/config',
+     'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, gt) {
+    ], function (ext, links, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, config, settings, gt) {
 
     'use strict';
 
@@ -43,7 +44,8 @@ define("io.ox/mail/write/view-main",
         index: 100,
         label: gt('Send'),
         cssClasses: 'btn btn-primary',
-        ref: POINT + '/actions/send'
+        ref: POINT + '/actions/send',
+        tabIndex: '6'
     }));
 
     ext.point(POINT + '/toolbar').extend(new links.Button({
@@ -255,7 +257,7 @@ define("io.ox/mail/write/view-main",
                 _.each(array, function (obj, index) {
                     accountAPI.getSenderAddresses(obj.id).done(function (aliases) {
                         _.each(aliases[1], function (alias) {
-                            var option = $('<option>').text(_.noI18n(util.formatSender(aliases[0], alias)));
+                            var option = $('<option>').text(_.noI18n(mailUtil.formatSender(aliases[0], alias)));
 
                             option.data({
                                 primaryaddress: alias,
@@ -424,8 +426,8 @@ define("io.ox/mail/write/view-main",
             this.addSection('from', gt('From'), false, true)
                 .append(this.createSenderField());
 
-            accountAPI.all().done(function (array) {
-                if (array[1]) {
+            accountAPI.getSenderAddresses(0).done(function (array) {
+                if (array[1].length > 1) {
                     self.addLink('from', gt('Sender'));
                 }
             });
@@ -462,18 +464,31 @@ define("io.ox/mail/write/view-main",
 
             var fnChangeFormat = function (e) {
                 e.preventDefault();
+                $(this).addClass('active').siblings().removeClass('active');
                 app.setFormat(e.data.format).done(function () {
                     app.getEditor().focus();
                 });
             };
 
             if (!Modernizr.touch) {
+                var format = settings.get('messageFormat');
                 this.addSection('format', gt('Text format'), true, false)
                     .append(
                         $('<div>').addClass('change-format').append(
-                            $('<a>', { href: '#' }).text(gt('Text')).on('click', { format: 'text' }, fnChangeFormat),
+                            $('<a>', { href: '#' })
+                                .text(gt('Text'))
+                                .addClass(format === 'text' ? 'active' : '')
+                                .on('click', { format: 'text' }, fnChangeFormat),
                             $.txt(_.noI18n(' \u00A0\u2013\u00A0 ')), // &ndash;
-                            $('<a>', { href: '#' }).text(gt('HTML')).on('click', { format: 'html' }, fnChangeFormat)
+                            $('<a>', { href: '#' })
+                                .text(gt('HTML'))
+                                .addClass(format === 'html' ? 'active' : '')
+                                .on('click', { format: 'html' }, fnChangeFormat),
+                            $.txt(_.noI18n(' \u00A0\u2013\u00A0 ')), // &ndash;
+                            $('<a>', { href: '#' })
+                                .text(gt('Both'))
+                                .addClass(format === 'alternative' ? 'active' : '')
+                                .on('click', { format: 'alternative' }, fnChangeFormat)
                         )
                     );
             }
@@ -729,10 +744,10 @@ define("io.ox/mail/write/view-main",
         var elem;
         return list.map(function (elem) {
             var obj = {
-                display_name: _.isArray(elem) ? elem[0].replace(/^('|")|('|")$/g, '') : elem.display_name.replace(/^('|")|('|")$/g, '') || '',
-                email: _.isArray(elem) ? elem[1] : elem.email || elem.mail || '',
-                image1_url: elem.image1_url || '',
-                folder_id: elem.folder_id || '',
+                display_name: (_.isArray(elem) ? elem[0] || '' : elem.display_name || '').replace(/^('|")|('|")$/g, ''),
+                email: _.isArray(elem) ? elem[1] : elem.email || elem.mail || '',
+                image1_url: elem.image1_url || '',
+                folder_id: elem.folder_id || '',
                 id: elem.id || ''
             };
             obj.url = contactsUtil.getImage(obj, contactPictureOptions);
@@ -765,7 +780,7 @@ define("io.ox/mail/write/view-main",
             // email address
             $('<div>').text(_.noI18n(String(data.email || '').toLowerCase())),
             // remove
-            $('<a>', { href: '#', tabindex: '6' })
+            $('<a>', { href: '#' })
                 .addClass('remove')
                 .append(
                     $('<div>').addClass('icon').text(_.noI18n('\u00D7')) // &times;

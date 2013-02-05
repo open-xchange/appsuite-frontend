@@ -65,7 +65,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                             if (obj.type === 1 || obj.type === 5) {
                                 obj.type = 5;
                                 hash[obj.email] = true;
-                                hash[5 + '|' + obj.id] = true;
+                                hash[obj.type + '|' + obj.id] = true;
                             } else {
                                 hash[obj.type + '|' + obj.id] = true;
                             }
@@ -86,7 +86,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                                 type = 3;
                                 break;
                             }
-                            return !hash[type + '|' + recipient.data.id] && !hash[recipient.email];
+                            return !hash[type + '|' + recipient.data.id] && !hash[type + '|' + recipient.data.internal_userid || ''] && !hash[recipient.email];
                         });
 
                         return data;
@@ -104,6 +104,8 @@ define('io.ox/calendar/edit/view-addparticipants',
                                     obj.data.type = 5;
                                     // h4ck
                                     obj.data.email1 = obj.email;
+                                    //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
+                                    obj.data.emailparam = obj.email;
                                 }
                                 break;
                             case 'resource':

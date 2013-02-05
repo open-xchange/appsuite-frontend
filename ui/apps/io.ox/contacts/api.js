@@ -298,7 +298,7 @@ define('io.ox/contacts/api',
     };
 
     /** @define {object} simple contact cache */
-    var fetchCache = new cache.SimpleCache('data-by-mail', true);
+    var fetchCache = new cache.SimpleCache('contacts-fetching', true);
 
    /**
     * get contact redced/filtered contact data; manages caching
@@ -403,7 +403,7 @@ define('io.ox/contacts/api',
             else
                 return deferred.resolve(defaultUrl);
         }
-        if (obj.id || obj.contact_id) {
+        if (obj.id || obj.contact_id) {
             // duck checks
             if (api.looksLikeResource(obj)) {
                 defaultUrl = ox.base + '/apps/themes/default/dummypicture_resource.xpng';
@@ -442,8 +442,9 @@ define('io.ox/contacts/api',
         } else if (obj.email) {
             api.getByEmailadress(obj.email)
                 .done(function (data) {
-                    data.image1_url = data.image1_url ? data.image1_url + '&' + $.param($.extend({}, options)) : defaultUrl;
-                    deferred.resolve(data.image1_url);
+                    //do not set data.image1_url (would also update cached object)
+                    var url = data.image1_url ? data.image1_url + '&' + $.param($.extend({}, options)) : defaultUrl;
+                    deferred.resolve(url);
                 })
                 .fail(fail);
         } else {
@@ -529,7 +530,7 @@ define('io.ox/contacts/api',
                 set(data);
         };
         cont(data.display_name);
-        if (data && (data.contact_id || data.id) && _.isString(data.display_name)) {
+        if (data && (data.contact_id || data.id) && _.isString(data.display_name)) {
             clear();
         } else {
             api.getByEmailadress(data.email).done(cont).always(clear);

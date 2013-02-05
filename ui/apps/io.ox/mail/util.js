@@ -320,6 +320,7 @@ define('io.ox/mail/util',
                                 _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), 50), // remove consecutive white-space
                             title: obj.filename || obj.subject || '',
                             mail: mail,
+                            parent: data.parent || mail,
                             nested_message: _.extend({}, obj, { parent: mail })
                         });
                     }
@@ -330,7 +331,7 @@ define('io.ox/mail/util',
                     obj = data.attachments[i];
                     if (obj.disp === 'attachment') {
                         attachments.push(
-                            _.extend(obj, { mail: mail, title: obj.filename || '' })
+                            _.extend(obj, { mail: mail, title: obj.filename || '', parent: data.parent || mail })
                         );
                     }
                 }

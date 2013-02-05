@@ -725,7 +725,7 @@ define('io.ox/files/actions',
         requires: function (e) {
             var pattern = '\\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm|3gp)';
             if (_.browser.Chrome) pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)';
-            return _(e.context.allIds).reduce(function (memo, obj) {
+            return _(e.baton.allIds).reduce(function (memo, obj) {
                 return memo || (new RegExp(pattern, 'i')).test(obj.filename) && settings.get('videoEnabled');
             }, false);
         },

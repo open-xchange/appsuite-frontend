@@ -481,8 +481,8 @@ define("io.ox/mail/api",
                 return $.when.apply($, _(keys).map(function (folder_id) {
                     return api.caches.all.get(folder_id).pipe(function (co) {
                         // handles threadView: on || off
-                        co.data = co.data || co;
-                        if (co && co.data) {
+                        if (co) {
+                            co.data = co.data || co;
                             // update affected items
                             return $.when.apply($,
                                 _(co.data).map(function (obj) {

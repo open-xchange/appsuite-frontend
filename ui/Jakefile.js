@@ -524,6 +524,7 @@ docFile("buildsystem", "Build System");
 docFile("manifests", "Module System");
 docFile("vgrid", "VGrid");
 docFile("portalplugin", "Portal Plugins ");
+docFile("actions_files", "Actions / Files App");
 docFile("i18n", "Internationalization");
 docFile("date", "Date and Time");
 

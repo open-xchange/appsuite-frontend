@@ -71,12 +71,12 @@ define('io.ox/office/preview/main',
             }, 500);
 
             // load the requested page
-            self.sendFilterRequest({
+            self.sendDocumentConverterRequest({
                 params: {
-                    action: 'importdocument',
+                    action: 'convertdocument',
                     job_id: jobId,
-                    filter_format: 'html',
-                    filter_action: 'getpage',
+                    convert_format: 'html',
+                    convert_action: 'getpage',
                     page_number: page
                 },
                 resultFilter: function (data) {
@@ -124,11 +124,11 @@ define('io.ox/office/preview/main',
             self.registerEventHandler(window, 'unload', sendCloseNotification);
 
             // load the file
-            return self.sendFilterRequest({
+            return self.sendDocumentConverterRequest({
                 params: {
-                    action: 'importdocument',
-                    filter_format: 'html',
-                    filter_action: 'beginconvert'
+                    action: 'convertdocument',
+                    convert_format: 'html',
+                    convert_action: 'beginconvert'
                 },
                 resultFilter: function (data) {
                     // check required entries, returning undefined will reject this request
@@ -152,11 +152,11 @@ define('io.ox/office/preview/main',
          */
         function sendCloseNotification() {
             if (jobId) {
-                self.sendFilterRequest({
+                self.sendDocumentConverterRequest({
                     params: {
-                        action: 'importdocument',
-                        filter_format: 'html',
-                        filter_action: 'endconvert',
+                        action: 'convertdocument',
+                        convert_format: 'html',
+                        convert_action: 'endconvert',
                         job_id: jobId
                     }
                 });

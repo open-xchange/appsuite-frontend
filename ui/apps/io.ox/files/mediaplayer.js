@@ -50,8 +50,10 @@ define('io.ox/files/mediaplayer',
             _.extend(this.config, config);
             this.app = config.baton.app;
             this.win = this.app.getWindow();
+
             this.restore();
             this.list = this.filterMediaList(config.baton.allIds, config.videoSupport);
+
             if (this.list.length > 0)
             {
                 this.show();
@@ -308,11 +310,7 @@ define('io.ox/files/mediaplayer',
         },
 
         restore: function () {
-            if (this.config.videoSupport) {
-                this.close();
-            }
-            else
-            {
+            if (!this.config.videoSupport) {
                 $('#io-ox-topbar > .minimizedmediaplayer').remove();
                 this.list = [];
                 this.container.show();

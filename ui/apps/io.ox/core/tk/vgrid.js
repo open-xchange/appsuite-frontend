@@ -156,10 +156,9 @@ define('io.ox/core/tk/vgrid',
             var all = this.all(options);
             var offset = CHUNK_SIZE * index;
             var numRows = CHUNK_SIZE - 1;
-            
-            console.log("FETCH", offset, offset + numRows);
 
             var subset = all.slice(offset, offset + numRows);
+    
             if (_.isEmpty(subset)) {
                 return $.Deferred().resolve([]);
             }
@@ -188,9 +187,13 @@ define('io.ox/core/tk/vgrid',
             var startChunk = Math.floor(start / CHUNK_SIZE);
             var endChunk = Math.floor(end / CHUNK_SIZE);
             var i = 0;
-            
+
             var chunkLoaders = [];
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f53d402b8658a0adff42e40c1cf5059b6f047f3a
             for (i = startChunk; i <= endChunk; i++) {
                 var lowerBound = i * CHUNK_SIZE;
                 var upperBound = ((i + 1) * CHUNK_SIZE) - 1;
@@ -234,7 +237,7 @@ define('io.ox/core/tk/vgrid',
             $.when.apply($, deferreds).done(function () {
                 var i;
                 for (i = 0; i < arguments.length; i++) {
-                    list = list.concat(arguments[0].slice(chunkLoaders[i].start, chunkLoaders[i].end));
+                    list = list.concat(arguments[i].slice(chunkLoaders[i].start, chunkLoaders[i].end));
                 }
                 def.resolve(list);
             }).fail(def.reject);
@@ -410,8 +413,8 @@ define('io.ox/core/tk/vgrid',
                 text = clone.node.text();
                 // convert Umlauts
                 text = text.replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
-                    .replace(/[ÖÒÓÔÕÖ]/g, 'U')
-                    .replace(/[ÜÙÚÛÜ]/g, 'O');
+                    .replace(/[ÖÒÓÔÕÖ]/g, 'O')
+                    .replace(/[ÜÙÚÛÜ]/g, 'U');
 
                 // add node
                 labels.nodes = labels.nodes.add(clone.node.appendTo(container));
@@ -561,7 +564,11 @@ define('io.ox/core/tk/vgrid',
 
                 // get all items
                 var lfo = _.lfo(cont, offset);
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> f53d402b8658a0adff42e40c1cf5059b6f047f3a
                 return chunkLoader.load(offset, numRows, {mode: currentMode})
                     .done(lfo)
                     .fail(function () {

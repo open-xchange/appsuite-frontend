@@ -316,6 +316,7 @@ define('io.ox/mail/actions',
                         var pre = new p.Preview({
                             data: data,
                             filename: data.filename,
+                            parent: data.parent,
                             mimetype: data.content_type,
                             dataURL: api.getUrl(data, 'view')
                         }, {
@@ -349,18 +350,21 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/slideshow-attachment', {
         id: 'slideshow',
         requires: function (e) {
-            return _(e.context).reduce(function (memo, obj) {
+            return e.collection.has('multiple') && _(e.context).reduce(function (memo, obj) {
                 return memo && (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
             }, true);
         },
         multiple: function (list) {
-            _(list).each(function (data) {
-                data.url = api.getUrl(data, 'view') + '&scaleType=contain&width=' + $(window).width() + '&height=' + $(window).height();
-            });
             require(['io.ox/files/carousel'], function (slideshow) {
+                var files = _(list).map(function (file) {
+                    return {
+                        url: api.getUrl(file, 'view'),
+                        filename: file.filename
+                    };
+                });
                 slideshow.init({
                     fullScreen: false,
-                    list: list,
+                    baton: {allIds: files},
                     attachmentMode: true
                 });
             });

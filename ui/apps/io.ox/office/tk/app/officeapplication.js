@@ -412,6 +412,38 @@ define('io.ox/office/tk/app/officeapplication',
         };
 
         /**
+         * Sends a request to the document converter module on the server and
+         * returns the promise of a Deferred object waiting for the response.
+         * The module name, the unique identifier of this application, and the
+         * parameters of the file currently opened by the application will be
+         * added to the request parameters automatically. See method
+         * IO.sendRequest() for further details.
+         *
+         * @param {Object} options
+         *  Additional options. See method IO.sendRequest() for details.
+         *
+         * @returns
+         *  The promise of the request. Will be rejected immediately, if this
+         *  application is not connected to a document file.
+         */
+        this.sendDocumentConverterRequest = function (options) {
+
+            // reject immediately if no file is present
+            if (!this.hasFileDescriptor()) {
+                return $.Deferred().reject();
+            }
+
+            // build default options, and add the passed options
+            options = Utils.extendOptions({
+                module: OfficeApplication.DOCUMENTCONVERTER_MODULE_NAME,
+                params: this.getFileParameters()
+            }, options);
+
+            // send the request
+            return this.sendRequest(options);
+        };
+
+        /**
          * Creates and returns the URL of server requests used to convert a
          * document file with the document filter module.
          *
@@ -923,6 +955,7 @@ define('io.ox/office/tk/app/officeapplication',
      * The name of the document filter server module.
      */
     OfficeApplication.FILTER_MODULE_NAME = 'oxodocumentfilter';
+    OfficeApplication.DOCUMENTCONVERTER_MODULE_NAME = 'oxodocumentconverter';
 
 
     // exports ================================================================
