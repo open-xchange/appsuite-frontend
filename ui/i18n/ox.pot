@@ -62,18 +62,6 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
-#: apps/io.ox/launchpad/main.js:148
-msgid "Running applications"
-msgstr ""
-
-#: apps/io.ox/launchpad/main.js:150
-msgid "Your applications"
-msgstr ""
-
-#: apps/io.ox/launchpad/main.js:171
-msgid "Manage applications"
-msgstr ""
-
 #: apps/plugins/portal/rss/register.js:54
 #: apps/plugins/portal/rss/register.js:186
 msgid "RSS Feed"
@@ -500,10 +488,6 @@ msgstr ""
 #. %2$s is the max storagespace
 #, c-format
 #. #-#-#-#-#-#-#-#-#-#
-#. %1$s is the storagespace in use
-#. %2$s is the max storagespace
-#, c-format
-#. #-#-#-#-#-#-#-#-#-#
 #. %1$s is the current page index in office document preview
 #. %2$s is the number of pages in office document preview
 #, c-format
@@ -564,7 +548,6 @@ msgstr ""
 msgid "Remind me again"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. Reminder (objective case): in X minutes
@@ -925,8 +908,8 @@ msgstr ""
 msgid "Yellow"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:486 apps/io.ox/mail/main.js:491
-#: apps/io.ox/mail/view-detail.js:815 apps/io.ox/mail/write/view-main.js:334
+#: apps/io.ox/mail/main.js:491 apps/io.ox/mail/view-detail.js:815
+#: apps/io.ox/mail/write/view-main.js:334
 msgid "To"
 msgstr ""
 
@@ -1092,13 +1075,11 @@ msgstr ""
 msgid "Conversations"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:166 apps/io.ox/mail/main.js:171
-#: apps/io.ox/tasks/edit/view-template.js:489
+#: apps/io.ox/mail/main.js:171 apps/io.ox/tasks/edit/view-template.js:489
 msgid "Date"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:591 apps/io.ox/mail/main.js:167
-#: apps/io.ox/mail/main.js:172 apps/io.ox/mail/main.js:486
+#: apps/io.ox/mail/actions.js:591 apps/io.ox/mail/main.js:172
 #: apps/io.ox/mail/main.js:491 apps/io.ox/mail/write/view-main.js:424
 msgid "From"
 msgstr ""
@@ -1108,20 +1089,19 @@ msgid "Label"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/template.js:155 apps/io.ox/mail/actions.js:582
-#: apps/io.ox/mail/main.js:169 apps/io.ox/mail/main.js:174
-#: apps/io.ox/mail/main.js:486 apps/io.ox/mail/main.js:491
+#: apps/io.ox/mail/main.js:174 apps/io.ox/mail/main.js:491
 #: apps/io.ox/mail/write/view-main.js:505
 #: apps/io.ox/tasks/edit/view-template.js:36 apps/io.ox/tasks/main.js:239
 msgid "Subject"
 msgstr ""
 
-#: apps/io.ox/calendar/list/perspective.js:129 apps/io.ox/mail/main.js:171
-#: apps/io.ox/mail/main.js:176 apps/io.ox/tasks/main.js:242
+#: apps/io.ox/calendar/list/perspective.js:129 apps/io.ox/mail/main.js:176
+#: apps/io.ox/tasks/main.js:242
 msgid "Ascending"
 msgstr ""
 
-#: apps/io.ox/calendar/list/perspective.js:130 apps/io.ox/mail/main.js:172
-#: apps/io.ox/mail/main.js:177 apps/io.ox/tasks/main.js:243
+#: apps/io.ox/calendar/list/perspective.js:130 apps/io.ox/mail/main.js:177
+#: apps/io.ox/tasks/main.js:243
 msgid "Descending"
 msgstr ""
 
@@ -1634,7 +1614,6 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js:105
 #: apps/io.ox/calendar/settings/pane.js:94
@@ -1644,7 +1623,6 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? NO
@@ -1685,7 +1663,6 @@ msgstr ""
 msgid "Do you want to edit the whole series or just one appointment within the series?"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. Use singular in this context
@@ -2630,15 +2607,12 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
-#: apps/io.ox/core/main.js:325 apps/io.ox/core/main.js:331
-#: apps/io.ox/help/center.js:104
+#: apps/io.ox/core/main.js:331 apps/io.ox/help/center.js:104
 msgid "Help"
 msgstr ""
 
-#: apps/io.ox/core/main.js:338 apps/io.ox/core/main.js:341
-#: apps/io.ox/core/main.js:344 apps/io.ox/core/main.js:346
-#: apps/io.ox/core/main.js:347 apps/io.ox/core/main.js:352
-#: apps/io.ox/files/actions.js:761
+#: apps/io.ox/core/main.js:344 apps/io.ox/core/main.js:347
+#: apps/io.ox/core/main.js:352 apps/io.ox/files/actions.js:761
 msgid "Fullscreen"
 msgstr ""
 
@@ -2646,8 +2620,7 @@ msgstr ""
 msgid "Exit Fullscreen"
 msgstr ""
 
-#: apps/io.ox/core/about.js:36 apps/io.ox/core/main.js:360
-#: apps/io.ox/core/main.js:366
+#: apps/io.ox/core/about.js:36 apps/io.ox/core/main.js:366
 msgid "About"
 msgstr ""
 
@@ -3052,6 +3025,18 @@ msgstr ""
 
 #: apps/io.ox/publications/wizard.js:59
 msgid "Send email"
+msgstr ""
+
+#: apps/io.ox/launchpad/main.js:148
+msgid "Running applications"
+msgstr ""
+
+#: apps/io.ox/launchpad/main.js:150
+msgid "Your applications"
+msgstr ""
+
+#: apps/io.ox/launchpad/main.js:171
+msgid "Manage applications"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js:211
