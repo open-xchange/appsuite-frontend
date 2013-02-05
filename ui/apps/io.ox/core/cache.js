@@ -32,6 +32,15 @@ define('io.ox/core/cache',
             }
         };
 
+    ox.cache = {
+        clear: function () {
+            ext.point("io.ox/core/cache/storage").each(function (storage) {
+                if (storage.clear && storage.isUsable()) {
+                    storage.clear();
+                }
+            });
+        }
+    };
 
     ext.point("io.ox/core/cache/storage").each(function (storage) {
         if (storage.isUsable() && _.isNull(preferredPersistentCache)) {
@@ -77,7 +86,7 @@ define('io.ox/core/cache',
                         layer = fluentCache;
                     }
                     id = 'cache.' + (ox.user || '_') + '.' + (name || '');
-                    
+
                     instance = layer.getInstance(id);
                     return instance;
                 };

@@ -68,6 +68,10 @@ define('io.ox/core/cache/simple', ["io.ox/core/extensions"],
                     return true;
                 },
                 gc: function () {
+                },
+                clear: function () {
+                    storage = {};
+                    instances = {};
                 }
             };
 

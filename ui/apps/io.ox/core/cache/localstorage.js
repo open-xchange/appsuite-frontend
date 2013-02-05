@@ -196,11 +196,16 @@ define('io.ox/core/cache/localstorage', ["io.ox/core/extensions"], function (ext
                 return instances[id] = new WebStorage(id);
             }
             return instances[id];
+        },
+
+        clear: function () {
+            fluent = {};
+            instances = {};
+            localStorage.clear();
         }
 
-        
     };
-    
+
     ext.point("io.ox/core/cache/storage").extend(that);
 
     return that;
