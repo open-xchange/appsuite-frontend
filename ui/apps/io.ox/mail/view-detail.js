@@ -148,11 +148,10 @@ define('io.ox/mail/view-detail',
 
     var delayedRead = function (data, node) {
         setTimeout(function () {
-            node.removeClass('unread');
             api.tracker.applyAutoRead(data);
             ext.point('io.ox/mail/detail/notification').invoke('action', node, data);
             node = data = null;
-        }, 1000); // 1 second(s)
+        }, 0); // without visual transition
     };
 
     var blockquoteMore, blockquoteClickOpen, blockquoteClickClose, blockquoteCollapsedHeight, mailTo;
@@ -450,10 +449,14 @@ define('io.ox/mail/view-detail',
                     node.addClass('by-myself');
                 }
 
-                if (api.tracker.isUnseen(data)) {
+                var isUnseen = api.tracker.isUnseen(data),
+                    canAutoRead = api.tracker.canAutoRead(data);
+
+                if (isUnseen && !canAutoRead) {
                     node.addClass('unread');
                 }
-                if (api.tracker.canAutoRead(data)) {
+
+                if (canAutoRead) {
                     delayedRead(data, node);
                 }
 
