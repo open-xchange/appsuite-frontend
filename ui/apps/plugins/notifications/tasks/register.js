@@ -248,13 +248,19 @@ define('plugins/notifications/tasks/register',
 
         remindAgain: function (e) {
             var endDate = new Date(),
-                dates;
+                dates,
+                model = this.model,
+                key = [model.get('folder_id') + '.' + model.get('id')];
             
             dates = util.computePopupTime(endDate, this.$el.find(".dateselect :selected").attr("finderid"));
             endDate = dates.alarmDate;
-            reminderApi.remindMeAgain(endDate.getTime(), this.model.attributes.reminderId);
+            reminderApi.remindMeAgain(endDate.getTime(), model.attributes.reminderId).pipe(function () {
+                return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
+            }).done(function () {
+                api.trigger("update:" + key[0]);//update detailview
+            });
             e.stopPropagation();
-            this.model.collection.remove(this.model);
+            model.collection.remove(model);
         },
 
         onClickItem: function (e) {
