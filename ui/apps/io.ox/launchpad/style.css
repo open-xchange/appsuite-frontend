@@ -2,6 +2,7 @@
 #io-ox-launchpad .pad {
     margin: 26px auto 26px auto;
     width: 700px;
+    min-height: 0;
 }
 
 #io-ox-launchpad .section {
@@ -77,6 +78,7 @@
 
 /* touch device */
 
-.touch #io-ox-launchpad .pad { width: 1000px; }
+.touch #io-ox-launchpad .pad {
+    width: 1000px; }
 .touch #io-ox-launchpad .app { width: 180px; font-size: @touchFontSize; }
 .touch #io-ox-launchpad .app .icon { width: 64px; height: 64px; }

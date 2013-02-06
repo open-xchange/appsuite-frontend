@@ -225,10 +225,11 @@ html, body {
 }
 
 #io-ox-copyright {
-    color: #072131;
+    color: rgba(0, 0, 0, 0.7);
     text-align: right;
     font-weight: 300;
     margin-bottom: 1em;
+    font-size: 13px;
 }
 
 #io-ox-offline {
