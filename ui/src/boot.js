@@ -23,12 +23,12 @@ if (typeof window.console === 'undefined') {
     window.console = { log: $.noop, debug: $.noop, error: $.noop, warn: $.noop };
 }
 
-
-$(document).ready(function () {
+// not document.ready casue we wait for CSS to be loaded
+$(window).load(function () {
 
     'use strict';
 
-    require(['less!io.ox/core/bootstrap/css/bootstrap.less']);
+    var bootstrapLoaded = require(['less!io.ox/core/bootstrap/css/bootstrap.less']);
 
     // animations
     var DURATION = 250,
@@ -51,7 +51,6 @@ $(document).ready(function () {
         enc = encodeURIComponent;
 
     // suppress context menu
-
     contextmenu_blacklist = [
         '#io-ox-topbar',
         '.vgrid',
@@ -73,6 +72,7 @@ $(document).ready(function () {
         '.carousel',
         '.mediaplayer'
     ];
+
     if (!ox.debug) {
         $(document).on('contextmenu', contextmenu_blacklist.join(', '), function (e) {
             e.preventDefault();
@@ -80,7 +80,6 @@ $(document).ready(function () {
     }
 
     // Disable attachments and uploads for specific clients
-    //
     if (!_.browser.iOS) {
         ox.uploadsEnabled = true;
     }
@@ -266,7 +265,6 @@ $(document).ready(function () {
     };
 
     fnChangeLanguage = function (e) {
-
         // stop event
         e.preventDefault();
         // change language
@@ -291,12 +289,9 @@ $(document).ready(function () {
         var navLang = (navigator.language || navigator.userLanguage).substr(0, 2),
             languages = ox.serverConfig.languages || {},
             lang = 'en_US', id = '', found = false, langCookie = _.getCookie('language');
-
-
         if (langCookie) {
             return changeLanguage(langCookie);
         }
-
         for (id in languages) {
             // match?
             if (id.substr(0, 2) === navLang) {
@@ -694,7 +689,10 @@ $(document).ready(function () {
     $('#background_loader').busy();
 
     var boot = function () {
-        fetchGeneralServerConfig().done(function () {
+        $.when(
+            bootstrapLoaded,
+            fetchGeneralServerConfig
+        ).done(function () {
             // set page title now
             document.title = _.noI18n(ox.serverConfig.pageTitle || '');
             if (ox.signin) {
@@ -702,7 +700,6 @@ $(document).ready(function () {
                     themes.set(ox.serverConfig.signinTheme || 'login');
                 });
             }
-
             // continue
             autoLogin();
         });
@@ -726,8 +723,8 @@ $(document).ready(function () {
 
     // handle document visiblity
     $(window).on('blur focus', function (e) {
-            ox.windowState = e.type === 'blur' ? 'background' : 'foreground';
-        });
+        ox.windowState = e.type === 'blur' ? 'background' : 'foreground';
+    });
 
     // clear persistent caches due to update?
     // TODO: add indexedDB once it's getting used
