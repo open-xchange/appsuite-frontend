@@ -212,6 +212,7 @@ define('plugins/portal/twitter/register',
             });
 
         } else {
+            content.addClass('pointer');
             _(baton.data).each(function (tweet) {
                 var message = String(tweet.text).replace(/((#|@)[\wäöüß]+)/ig, '<span class="accent">$1</span>');
                 content.append(
@@ -228,17 +229,17 @@ define('plugins/portal/twitter/register',
         if (errorCode === 32 || errorCode === 89 || errorCode === 135) {
             var account = keychain.getStandardAccount('twitter');
 
-            return $('<a>').text(gt('Click to authorize your account again')).on('click', function () {
+            return $('<a class="solution">').text(gt('Click to authorize your account again')).on('click', function () {
                 keychain.submodules.twitter.reauthorize(account).done(function () {
-                    console.log(gt("You have reauthorized this account."));
+                    console.log(gt("You have reauthorized this %s account.", 'Twitter'));
                 }).fail(function () {
-                    console.error(gt("Something went wrong reauthorizing the account."));
+                    console.error(gt("Something went wrong reauthorizing the %s account.", 'Twitter'));
                 });
             });
         } else if (errorCode === 88 || errorCode === 130) {
-            return $('<a>').text(gt('Click to retry later.')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
+            return $('<a class="solution">').text(gt('Click to retry later.')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
         } else {
-            return $('<a>').text(gt('Click to retry')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
+            return $('<a class="solution">').text(gt('Click to retry')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
         }
     };
 

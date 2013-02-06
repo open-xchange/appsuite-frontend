@@ -50,6 +50,30 @@ define('plugins/portal/facebook/register',
             JSON.stringify(post));
     };
 
+    var handleError = function (node, baton) {
+        var resultsets = baton.data;
+        console.error("Facebook error occurred", resultsets.error);
+        node.append(
+            $('<div class="content error">').append(
+                $('<div class="error bold">').text(gt('Facebook reported an error:')),
+                    $('<div class="errormessage">').text(resultsets.error.message)
+            )
+        ).addClass('error-occurred');
+        if (resultsets.error.message.indexOf('authorize') !== -1) {
+            var account = keychain.getStandardAccount('facebook');
+
+            node.find('.content.error').append(
+                $('<a class="solution">').text(gt('Click to authorize your account again')).on('click', function () {
+                    keychain.submodules.facebook.reauthorize(account).done(function () {
+                        console.log(gt("You have reauthorized this %s account.", 'Facebook'));
+                    }).fail(function () {
+                        console.error(gt("Something went wrong reauthorizing the %s account.", 'Facebook'));
+                    });
+                })
+            );
+        }
+    };
+
     ext.point('io.ox/portal/widget/facebook').extend({
 
         title: 'Facebook',
@@ -74,13 +98,7 @@ define('plugins/portal/facebook/register',
         preview: function (baton) {
             var resultsets = baton.data;
             if (resultsets.error) {
-                console.error("Facebook error occurred", resultsets.error);
-                this.append(
-                    $('<div class="content error">').append(
-                        $('<div class="error bold">').text(gt('Facebook reported an error:')),
-                            $('<div class="errormessage">').text(resultsets.error.message)
-                    )
-                ).addClass('error-occurred');
+                handleError(this, baton);
                 return;
             }
             var wall = resultsets.data[0].fql_result_set,
@@ -196,6 +214,13 @@ define('plugins/portal/facebook/register',
                     $('<span>').text(gt('Add your account'))),
                 $('<div class="io-ox-portal-actions"').append(
                     $('<i class="icon-remove io-ox-portal-action">'))
+            );
+        },
+
+        recover: function () {
+            var $node = $(this);
+            $node.empty().append(
+                $('<div>').text("THIS TOTALLY FAILED!")
             );
         }
     });

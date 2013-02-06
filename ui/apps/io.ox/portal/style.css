@@ -327,8 +327,10 @@
     .io-ox-portal .widget { width: 100% / 5 - 0.05%; } /* -0.50% = floating fix */
 }
 
+.content a.solution {
+    cursor: pointer;
+}
 /* Settings */
-
 .io-ox-portal-settings {
 
     min-height: 100%;
