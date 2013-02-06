@@ -1,17 +1,17 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
 define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (ext) {
+
 	'use strict';
 
     var SCHEMA = 1;
@@ -33,8 +33,8 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
 
         var dbOpened = $.Deferred();// OP(opened);
 
-        OP(db.transaction("databases", "readwrite").objectStore("databases").put({name: id})).done(function (db) {
-            var opened =  window.indexedDB.open("oxcache_" + id, SCHEMA);
+        OP(db.transaction("databases", "readwrite").objectStore("databases").put({ name: id })).done(function (db) {
+            var opened =  window.indexedDB.open(id, SCHEMA);
             opened.onupgradeneeded = function (e) {
                 // Set up object stores
                 myDB = e.target.result;
@@ -239,7 +239,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     }
 
     // Open the Meta-Database
-    var opened = window.indexedDB.open("oxcache_metadata", SCHEMA);
+    var opened = window.indexedDB.open('appsuite.cache.metadata', SCHEMA);
 
     opened.onupgradeneeded = function (e) {
         // Set up object stores
@@ -264,7 +264,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
             if (instances[cursor.key]) {
                 instances[cursor.key].close();
             }
-            deletes.push(OP(window.indexedDB.deleteDatabase("oxcache_" + cursor.key)));
+            deletes.push(OP(window.indexedDB.deleteDatabase(cursor.key)));
         }).end(function () {
             $.when.apply($, deletes).done(function () {
                 instances = {};
