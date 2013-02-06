@@ -71,7 +71,7 @@ define('io.ox/office/preview/main',
             }, 500);
 
             // load the requested page
-            self.sendDocumentConverterRequest({
+            self.sendConverterRequest({
                 params: {
                     action: 'convertdocument',
                     job_id: jobId,
@@ -124,7 +124,7 @@ define('io.ox/office/preview/main',
             self.registerEventHandler(window, 'unload', function () { self.sendCloseNotification(); });
 
             // load the file
-            return self.sendDocumentConverterRequest({
+            return self.sendConverterRequest({
                 params: {
                     action: 'convertdocument',
                     convert_format: 'html',
@@ -196,7 +196,7 @@ define('io.ox/office/preview/main',
          */
         this.sendCloseNotification = function () {
             if (jobId) {
-                self.sendDocumentConverterRequest({
+                self.sendConverterRequest({
                     params: {
                         action: 'convertdocument',
                         convert_format: 'html',

@@ -42,15 +42,18 @@ define('io.ox/office/tk/io',
      *  the Deferred object will be resolved with the return value of this
      *  filter function.
      *
+     * @param {Object} [context]
+     *  The context object that will be bound to the passed filter fucntion.
+     *
      * @returns {Function}
      *  A new function that returns a Deferred object that has been resolved or
      *  rejected depending on the result of the passed filter callback
      *  function.
      */
-    IO.createDeferredFilter = function (filter) {
+    IO.createDeferredFilter = function (filter, context) {
         return function (response) {
             var def = $.Deferred(),
-                value = filter(response);
+                value = _.isObject(response) ? filter.call(context, response) : undefined;
             return _.isUndefined(value) ? def.reject() : def.resolve(value);
         };
     };

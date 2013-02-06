@@ -497,7 +497,7 @@ define('io.ox/office/tk/app/officeapplication',
          *  The promise of the request. Will be rejected immediately, if this
          *  application is not connected to a document file.
          */
-        this.sendDocumentConverterRequest = function (options) {
+        this.sendConverterRequest = function (options) {
 
             // reject immediately if no file is present
             if (!this.hasFileDescriptor()) {
