@@ -581,7 +581,7 @@ $(document).ready(function () {
                     i++;
                     node.append(
                         $('<a href="#">')
-                            .on('click', { id: id }, fnChangeLanguage)
+                            .on('click', { id: langSorted[id] }, fnChangeLanguage)
                             .text(lang[langSorted[id]])
                     );
                     if (i < langCount && langCount < maxLang) {
