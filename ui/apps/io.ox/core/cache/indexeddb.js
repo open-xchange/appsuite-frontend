@@ -101,28 +101,19 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 });
             },
             set: function (key, data, options) {
-                if (queue.timer === null) {
-                    queue.timer = setTimeout(function () {
-                        readwrite(function (cache) {
-                            _(queue.list).each(function (obj) {
-                                try {
-                                    OP(cache.put({
-                                        key: obj.key,
-                                        data: JSON.stringify(obj.data)
-                                    }));
-                                } catch (e) {
-                                    // SKIP
-                                    console.error("Could not serialize", id, obj.key, obj.data);
-                                }
-                            });
-                            return $.when();
-                        });
-                        queue = { timer: null, list: [] };
-                    }, QUEUE_DELAY);
-                }
-                queue.list.push({ key: key, data: data, options: options });
                 fluent[key] = JSON.stringify(data);
-                return $.Deferred().resolve();
+                return readwrite(function (cache) {
+                    try {
+                        return OP(cache.put({
+                            key: key,
+                            data: JSON.stringify(data)
+                        }));
+                    } catch (e) {
+                        // SKIP
+                        console.error("Could not serialize", id, key, data);
+                        return $.Deferred().reject();
+                    }
+                });
             },
             remove: function (key) {
                 if (fluent[key]) {
