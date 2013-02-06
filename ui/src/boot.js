@@ -691,7 +691,7 @@ $(window).load(function () {
     var boot = function () {
         $.when(
             bootstrapLoaded,
-            fetchGeneralServerConfig
+            fetchGeneralServerConfig()
         ).done(function () {
             // set page title now
             document.title = _.noI18n(ox.serverConfig.pageTitle || '');
