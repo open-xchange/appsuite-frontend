@@ -89,6 +89,9 @@ define("io.ox/core/extPatterns/actions",
                 // get return value
                 var ret = _.isFunction(action.requires) ?
                         action.requires({ collection: collection, context: baton.data, baton: baton }) : true;
+
+                if (!ret) return $.Deferred().reject();
+
                 // is not deferred?
                 if (!ret.promise) {
                     ret = $.Deferred().resolve(ret);

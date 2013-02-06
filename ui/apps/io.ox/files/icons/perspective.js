@@ -239,7 +239,7 @@ define('io.ox/files/icons/perspective',
             redraw = function (ids) {
                 drawIcons(ids);
                 $('.files-iconview').on('scroll', function (event) {
-                    if ($('.files-scrollable-pane', win)[0].scrollHeight - $(this).scrollTop() === $(this).outerHeight()) {
+                    if ($('.files-scrollable-pane', win).length > 0 && $('.files-scrollable-pane', win)[0].scrollHeight - $(this).scrollTop() === $(this).outerHeight()) {
                         $(this).off('scroll');
                         start = end;
                         end = end + layout.iconCols;

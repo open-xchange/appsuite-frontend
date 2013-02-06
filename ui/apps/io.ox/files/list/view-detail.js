@@ -133,7 +133,7 @@ define('io.ox/files/list/view-detail',
         id: 'upload',
         index: 400,
         draw: function (baton) {
-
+            if (!ox.uploadsEnabled) return;
             var self = this, file = baton.data;
 
             this.append(
