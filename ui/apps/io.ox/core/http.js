@@ -530,7 +530,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         // slow mode
         slow = _.url.hash("slow"),
         // fail mode
-        fail = _.url.hash('fail') !== undefined;
+        fail = _.url.hash('fail') !== undefined || ox.fail !== undefined;
 
     var ajax = (function () {
 
@@ -672,7 +672,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             }
             // continuation
             function cont() {
-                if (fail && o.module !== "login" && Math.random() < Number(_.url.hash('fail'))) {
+                if ((ox.fail || fail) && o.module !== "login" && Math.random() < Number(ox.fail || _.url.hash('fail') || 0)) {
                     // simulate broken connection
                     console.error("HTTP fail", r.o.url, r.xhr);
                     r.def.reject({ error: "0 simulated fail" });
@@ -927,7 +927,13 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                         // continuation
                         def.resolve(data);
                     })
-                    .fail(def.reject);
+                    .fail(function (error) {
+                        _(q).each(function (item) {
+                            item.deferred.reject(error);
+                        });
+                        // continuation
+                        def.reject(error);
+                    });
                 } else {
                     // continuation
                     def.resolve([]);

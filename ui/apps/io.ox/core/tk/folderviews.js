@@ -914,6 +914,14 @@ define('io.ox/core/tk/folderviews',
             })
             .done(function () {
                 self.selection.update();
+            })
+            .fail(function (error) {
+                self.container.append(
+                    $.fail(gt('Couldn\'t load folders.'), function () {
+                        self.internal.repaint();
+                    })
+                );
+                self.idle();
             });
         }
 
@@ -923,7 +931,7 @@ define('io.ox/core/tk/folderviews',
 
         this.internal.repaint = function () {
             self.container.empty();
-            return paint({cache: false});
+            return paint({ cache: false });
         };
 
         this.removeNode = this.repaintNode = this.internal.repaint;
