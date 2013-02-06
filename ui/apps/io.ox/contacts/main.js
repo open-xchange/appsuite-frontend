@@ -110,6 +110,11 @@ define("io.ox/contacts/main",
                         fields.private_flag.hide();
                     }
                     fields.description.text(_.noI18n(util.getDescription(data)));
+                    if ((_.noI18n(util.getFullName(data)) + _.noI18n(util.getDescription(data))).trim().length === 0) {
+                        // nothing is written down, add some text, so user isn’t confused
+                        fields.name.addClass('bright-text').append(gt("Empty name and description found."));
+                        fields.description.append(gt("Edit to set a name."));
+                    }
                 }
             }
         });
