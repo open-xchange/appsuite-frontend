@@ -453,18 +453,13 @@ $(document).ready(function () {
     }
 
     function serverDown() {
-        var localCSS = {
-            paddingTop: '40px',
-            margin: '0',
-            textAlign: 'center'
-        };
-
-        $('#io-ox-login-container')
-            .empty()
-            .append(
-                $('<h2>').css(localCSS).text('There was a problem connecting to the site.'),
-                $('<h3>').css(localCSS).append($('<a href="#">').text('Click here to try again').on('click', function () { location.reload(); }))
-            );
+        $('body').addClass('down');
+        $('#io-ox-login-container').empty().append(
+            $('<div class="alert alert-info">').append(
+                $('<div><b>Connection error</b></div> The service is not available right now. <a href="#">Retry</a>')
+            )
+            .on('click', function (e) { e.preventDefault(); location.reload(); })
+        );
         $('#background_loader').idle().fadeOut(DURATION);
     }
 
