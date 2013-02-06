@@ -132,7 +132,6 @@ define('io.ox/mail/view-detail',
             folder = m[3];
             id = m[4];
             href = '#app=io.ox/files&perspective=list&folder=' + folder + '&id=' + id;
-            console.log('draw', href, folder, id);
             link.on('click', { hash: href }, openDocumentLink);
         } else {
             // nope, external
@@ -1020,8 +1019,13 @@ define('io.ox/mail/view-detail',
 
             var data = baton.data, content = that.getContent(data);
 
-            this.attr('data-cid', data.folder_id + '.' + data.id).append(
-                content.content, $('<div>').addClass('mail-detail-clear-both')
+            this.attr({
+                'data-cid': data.folder_id + '.' + data.id,
+                'data-content-type': content.type
+            })
+            .append(
+                content.content,
+                $('<div>').addClass('mail-detail-clear-both')
             );
 
             var content = this.find('.content');

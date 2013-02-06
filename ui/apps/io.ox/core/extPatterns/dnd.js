@@ -15,6 +15,7 @@ define("io.ox/core/extPatterns/dnd", ["io.ox/core/extensions", "io.ox/core/tk/up
     "use strict";
 
     var UploadZone = function () {
+
         var dropZone, point, included = false, args = $.makeArray(arguments), options = args.shift();
 
         point = ext.point(options.ref);
@@ -58,13 +59,16 @@ define("io.ox/core/extPatterns/dnd", ["io.ox/core/extensions", "io.ox/core/tk/up
                 });
             });
 
+
             dropZone = upload.dnd.createDropZone({
                 type: 'multiple',
                 actions: actions
             });
 
-            dropZone.on("drop", handleDrop);
-            dropZone.on("drop-multiple", handleMultiDrop);
+            if (_.isFunction(dropZone.on)) { // temp. fix: avoids strange opera runtime error
+                dropZone.on("drop", handleDrop);
+                dropZone.on("drop-multiple", handleMultiDrop);
+            }
 
             if (included) {
                 dropZone.include();
