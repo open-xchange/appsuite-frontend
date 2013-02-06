@@ -216,6 +216,14 @@ html, body {
     font-style: normal;
 }
 
+#io-ox-languages a {
+    white-space: nowrap;
+}
+
+.language-delimiter {
+    color: rgba(255, 255, 255, 0.40);
+}
+
 #io-ox-copyright {
     color: #072131;
     text-align: right;

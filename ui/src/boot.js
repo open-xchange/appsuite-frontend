@@ -585,7 +585,7 @@ $(document).ready(function () {
                             .text(lang[langSorted[id]])
                     );
                     if (i < langCount && langCount < maxLang) {
-                        node.append(document.createTextNode('\u00A0\u2022\u00A0'));
+                        node.append($('<span class="language-delimiter">').text('\u00A0\u00A0\u2022\u00A0 '));
                     }
                 }
             } else {
