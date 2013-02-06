@@ -16,8 +16,7 @@
  *
 */
 
-var fs = require('fs')
-  , path = require('path')
+var path = require('path')
   , Loader;
 
 
@@ -31,8 +30,8 @@ Loader = function () {
       // Warning, recursive
       , exists = function () {
           var cwd = process.cwd();
-          if (fs.existsSync(jakefile) || fs.existsSync(jakefile + '.js') ||
-            fs.existsSync(jakefile + '.coffee')) {
+          if (path.existsSync(jakefile) || path.existsSync(jakefile + '.js') ||
+            path.existsSync(jakefile + '.coffee')) {
             return true;
           }
           if (!fileSpecified) {
@@ -48,7 +47,7 @@ Loader = function () {
       fail('No Jakefile. Specify a valid path with -f/--jakefile, or place one in the current directory.');
     }
 
-    isCoffee = fs.existsSync(jakefile + '.coffee');
+    isCoffee = path.existsSync(jakefile + '.coffee');
     if (isCoffee) {
       try {
         CoffeeScript = require('coffee-script');

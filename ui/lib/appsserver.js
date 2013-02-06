@@ -75,7 +75,7 @@ http.createServer(function (request, response) {
         } else {
             var filename = path.join(prefix, 'apps', m[2]);
         }
-        var valid = fs.existsSync(filename);
+        var valid = path.existsSync(filename);
         console.log(filename);
         if (!valid) {
             console.log('Could not read', filename);

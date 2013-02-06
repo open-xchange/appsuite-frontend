@@ -2,12 +2,12 @@
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
- *
+ * 
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
+ * 
  * Copyright (C) Open-Xchange Inc., 2011
- * Mail: info@open-xchange.com
- *
+ * Mail: info@open-xchange.com 
+ * 
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
@@ -54,7 +54,7 @@ exports.startTime = new Date;
 function FileType() {}
 
 /**
- * Returns all applicable hooks of a specific hook type.
+ * Returns all applicable hooks of a specific hook type. 
  * @param {String} type The hook type to return.
  * @param {Function or Array} prepend An optional hook or array of hooks to
  * prepend before all other hooks.
@@ -325,7 +325,7 @@ exports.concat = makeMerge(function (self, type, data, files) {
         }
         return fileDefs.value;
     }
-});
+});    
 
 /**
  * Converts a string to a pseudo-file for use by concat().
@@ -432,7 +432,7 @@ exports.gzip = function(src, dest, callback) {
  * @param {Function} cmp An optional comparison function like in Array.sort().
  * @type Array
  * @return A sorted array with elements from a and b, except for duplicates
- * from b. All entries from a are included.
+ * from b. All entries from a are included. 
  */
 exports.mergeArrays = function(a, b, cmp) {
     if (!cmp) cmp = function(x, y) { return x < y ? -1 : x > y ? 1 : 0; };
@@ -462,7 +462,7 @@ exports.includes = {
      */
     load: function(filename) {
         includesFile = filename;
-        if (fs.existsSync(filename)) {
+        if (path.existsSync(filename)) {
             includes = JSON.parse(fs.readFileSync(filename, "utf8"));
             for (var target in includes) {
                 var inc = includes[target];
@@ -473,7 +473,7 @@ exports.includes = {
             }
         }
     },
-
+    
     /**
      * Specifies which includes were found in a source file.
      * @param {String} file The target file which contains the results of
@@ -486,7 +486,7 @@ exports.includes = {
         includes[file] = { list: includedFiles };
         if (type) includes[file].type = type;
     },
-
+    
     /**
      * Adds an include found in a source file.
      * @param {String} file The target file which contains the results of
@@ -497,7 +497,7 @@ exports.includes = {
         if (!(file in includes)) includes[file] = { list: [] };
         includes[file].list.push(include);
     },
-
+    
     /**
      * Saves the list of inlcudes to the file previously specified by
      * includes.load.
@@ -508,7 +508,7 @@ exports.includes = {
         }
         fs.writeFileSync(includesFile, JSON.stringify(includes));
     }
-
+    
 };
 
 /**

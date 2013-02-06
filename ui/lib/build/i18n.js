@@ -2,12 +2,12 @@
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
- *
+ * 
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
+ * 
  * Copyright (C) Open-Xchange Inc., 2011
- * Mail: info@open-xchange.com
- *
+ * Mail: info@open-xchange.com 
+ * 
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
@@ -126,7 +126,7 @@ function addMessage(filename, node, method, getSrc) {
         msg[method[i]] = val;
         return true;
     }
-
+    
     exports.addMessage(msg, filename);
     return pro.MAP.skip;
 }
@@ -221,7 +221,7 @@ function mkdirsSync(dirname, mode) {
 exports.modules = {
     load: function(filename) {
         gtModulesFilename = filename;
-        if (fs.existsSync(filename)) {
+        if (path.existsSync(filename)) {
             gtModules = JSON.parse(fs.readFileSync(filename, "utf8"));
         }
     },
@@ -248,7 +248,7 @@ exports.modules = {
 
 exports.potScanner = function(name, deps, f) {
     var self = this;
-
+    
     // find gettext dependency
     var apiName, moduleName;
     var depNames = _.pluck(deps[1], 1);
@@ -260,7 +260,7 @@ exports.potScanner = function(name, deps, f) {
         }
     }
     if (!apiName) return;
-
+    
     // find gettext calls
     // results are stored in pot and exports.potFiles
     var gtScope = f[3].scope;
@@ -275,7 +275,7 @@ exports.potScanner = function(name, deps, f) {
         if (!method) return;
         return addMessage(self.task.name, this, method, self.getSrc);
     }).scan(f);
-
+    
     exports.modules.add(moduleName, this.getSrc(name[0].start.line + 1).name,
                         this.task.name);
 };
@@ -305,7 +305,7 @@ function escapePO(s) {
 exports.generatePOT = function(files) {
     _.each(files, function(file) {
         orig = file.slice(8).replace(/\+-/g, "/").replace(/\+\+/g, "+");
-        if (!(orig in exports.potFiles) && fs.existsSync(file)) {
+        if (!(orig in exports.potFiles) && path.existsSync(file)) {
             var loaded = JSON.parse(fs.readFileSync(file, "utf8"));
             exports.potFiles[orig] = loaded;
             for (var i in loaded) addMsg(pot, i, loaded[i]);
@@ -351,17 +351,17 @@ function format(string, params) {
 }
 
 exports.parsePO = function(file, filename) {
-
+    
     var po = { nplurals: 1, plural: 0, dictionary: {} };
-
+    
     // empty PO file?
     if (/^\s*$/.test(file)) {
         return po;
     }
-
+    
     poTokenizer.lastIndex = 0;
     var line_no = 1;
-
+    
     function next() {
         while (poTokenizer.lastIndex < file.length) {
             var t = poTokenizer.exec(file);
@@ -394,21 +394,19 @@ exports.parsePO = function(file, filename) {
                 [lookahead, name, filename, line_no]));
         }
     }
-
+    
     if (clause("msgid") != "") {
         throw new Error(Format("Missing PO file header in %s", [filename]));
     }
-
     var header = clause("msgstr");
     var pluralForms = headerRegExp.exec(header);
     if (!pluralForms) {
         throw new Error(format("No valid Plural-Forms header in %s",
                                [filename]));
     }
-
     po = { nplurals: Number(pluralForms[1]), plural: pluralForms[2],
            dictionary: {} };
-
+    
     while (lookahead) {
         var ctx = clause("msgctxt", true);
         var id = clause("msgid");
