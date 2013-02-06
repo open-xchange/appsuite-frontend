@@ -740,8 +740,9 @@ task("dist", [distDest], function () {
         fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
         
         if (path.existsSync('i18n/languagenames.json')) {
-            var languageNames =
-                JSON.parse(fs.readFileSync('i18n/languagenames.json', 'utf8'));
+            var languageNames = _.extend(
+                JSON.parse(fs.readFileSync('i18n/languagenames.json', 'utf8')),
+                JSON.parse(fs.readFileSync('i18n/overrides.json', 'utf8')));
             _.each(i18n.languages(), function (Lang) {
                 var lang = Lang.toLowerCase().replace(/_/g, '-');
                 fs.writeFileSync(path.join(dest, 'i18n',
