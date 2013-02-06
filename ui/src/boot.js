@@ -497,7 +497,7 @@ $(document).ready(function () {
 
         require(['io.ox/core/session', 'io.ox/core/capabilities']).done(function (session, capabilities) {
             serverUp = true;
-            var useAutoLogin = (true || capabilities.has('autologin')) && ox.online, initialized;
+            var useAutoLogin = capabilities.has('autologin') && ox.online, initialized;
 
             function continueWithoutAutoLogin() {
                 if (ox.signin) {
@@ -560,7 +560,7 @@ $(document).ready(function () {
         // shortcut
         var sc = ox.serverConfig,
             lang = sc.languages,
-            caps = require("io.ox/core/capabilities"),
+            capabilities = require("io.ox/core/capabilities"),
             node,
             id = '',
             footer = '',
@@ -613,7 +613,7 @@ $(document).ready(function () {
         footer += sc.buildDate ? '(' + sc.buildDate + ')' : '';
         $('#io-ox-copyright').text(footer);
         // hide checkbox?
-        if (sc.autoLogin === false || !caps.has("autologin")) {
+        if (!capabilities.has("autologin")) {
             $('#io-ox-login-store').remove();
         }
         // hide forgot password?
