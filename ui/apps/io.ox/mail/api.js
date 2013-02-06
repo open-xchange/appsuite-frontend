@@ -213,7 +213,7 @@ define("io.ox/mail/api",
     var api = apiFactory({
         module: "mail",
         keyGenerator: function (obj) {
-            return obj ? (obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.view || 'noimg') : '';
+            return obj ? (obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.view || api.options.requests.get.view || '') : '';
         },
         requests: {
             all: {
