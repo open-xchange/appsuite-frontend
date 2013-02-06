@@ -125,7 +125,7 @@ define('io.ox/mail/util',
                     email1: String(list[i][1] || '').toLowerCase()
                 };
                 $('<a>', { href: '#', title: obj.email1 })
-                    .addClass('person-link')
+                    .addClass('person-link person-' + field)
                     .css('whiteSpace', 'nowrap')
                     .text(_.noI18n(obj.display_name))
                     .data('person', obj)

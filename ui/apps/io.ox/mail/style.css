@@ -290,13 +290,25 @@
         margin: @inlineLinksMargin;
     }
 
-    &.unread .from .person-link {
-        font-weight: bold;
+    .from .person-link.person-sender {
+        color: #333;
+    }
+
+    .from .person-link.person-from {
+        font-weight: 500;
+        color: black;
+    }
+
+    .subject .icon-bookmark {
+        display: none;
     }
 
     &.unread .subject {
-        font-family: @normalFontFamily;
-        font-weight: bold;
+        color: @linkColor;
+        .icon-bookmark {
+            display: inline-block;
+            margin-right: 0.5em;
+        }
     }
 
     .thread-size {

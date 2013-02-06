@@ -774,13 +774,13 @@ define('io.ox/mail/view-detail',
         index: 130,
         id: 'subject',
         draw: function (baton) {
-            var data = baton.data;
             this.append(
-                $('<div>')
-                    .addClass('subject clear-title')
+                $('<div class="subject clear-title">').append(
+                    $('<i class="icon-bookmark">'),
                     // inject some zero width spaces for better word-break
-                    .text(_.noI18n(data.subject ? $.trim(data.subject) : '\u00A0'))
-                    .append($('<span>').addClass('priority').append(util.getPriority(data)))
+                    $.txt(_.noI18n($.trim(baton.data.subject) || '\u00A0')),
+                    $('<span class="priority">').append(util.getPriority(baton.data))
+                )
             );
         }
     });
