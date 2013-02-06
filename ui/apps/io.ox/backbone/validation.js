@@ -40,7 +40,9 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
         },
         date: function (val) {
             // val: timestamp
-            if (!_.isNumber(val) || val > 253402214400008) {
+            // tasks allows null values to remove a date. Calendar must have start and end date
+            // calendar fields use val = undefined if they are empty so this should work correctly for both systems
+            if (val !== null && !_.isNumber(val) || val > 253402214400008) {
                 return gt('Please enter a valid date');
             }
             return true;

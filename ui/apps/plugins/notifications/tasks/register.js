@@ -209,11 +209,11 @@ define('plugins/notifications/tasks/register',
                 $('<div class="title">').text(_.noI18n(model.get('title'))),
                 $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
                 $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')),
-                $('<div class="actions">').append(
+                $('<div class="task-actions">').append(
+                    $('<select class="dateselect" data-action="selector">').append(util.buildDropdownMenu(new Date())),
                     $('<button class="btn btn-inverse taskremindbtn" data-action="remindAgain">').text(gt('Remind me again')),
-                    $('<button class="btn btn-inverse taskokbtn" data-action="ok">').text(gt('OK')),
-                    $('<select class="dateselect" data-action="selector">')
-                    .append(util.buildDropdownMenu(new Date()))
+                    $('<button class="btn btn-inverse taskRemindOkBtn" data-action="ok">').text(gt('OK'))
+                    
                 )
             );
         }
@@ -239,7 +239,7 @@ define('plugins/notifications/tasks/register',
         deleteReminder: function (e) {
             e.stopPropagation();
             reminderApi.deleteReminder(this.model.attributes.reminderId);
-            this.close();
+            this.model.collection.remove(this.model);
         },
 
         selectClicked: function (e) {
@@ -249,11 +249,12 @@ define('plugins/notifications/tasks/register',
         remindAgain: function (e) {
             var endDate = new Date(),
                 dates;
-            dates = util.computePopupTime(endDate, this.$el.find(".dateselect").find(":selected").attr("finderId"));
+            
+            dates = util.computePopupTime(endDate, this.$el.find(".dateselect :selected").attr("finderid"));
             endDate = dates.alarmDate;
             reminderApi.remindMeAgain(endDate.getTime(), this.model.attributes.reminderId);
             e.stopPropagation();
-            this.close();
+            this.model.collection.remove(this.model);
         },
 
         onClickItem: function (e) {
@@ -282,11 +283,6 @@ define('plugins/notifications/tasks/register',
                     });
                 });
             }
-        },
-
-        close: function () {
-            this.remove();
-            this.model.destroy();
         }
     });
 
@@ -503,6 +499,7 @@ define('plugins/notifications/tasks/register',
                 _(ids).each(function (id) {
                     notifications.collection.remove(notifications.collection._byId[id.id]);
                 });
+                notifications.collection.trigger("remove");
             });
         }
     });

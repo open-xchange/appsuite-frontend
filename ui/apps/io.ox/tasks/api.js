@@ -105,6 +105,9 @@ define('io.ox/tasks/api', ['io.ox/core/http',
                      timezone: 'UTC'},
             data: task,
             appendColumns: false
+        }).done(function (response) {
+            api.checkForNotifications([{id: response.id, folder_id: task.folder_id}], task);
+            return response;
         });
     };
     
@@ -113,6 +116,40 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             removeArray = [];
         if (modifications.status) {//status parameter can be string or integer. Force it to be an integer
             modifications.status = parseInt(modifications.status, 10);
+        }
+        
+        if (modifications.participants) {
+            var myId = configApi.get('identifier'),
+                triggered = false;
+            _(modifications.participants).each(function (obj) { //user is added to a task
+                if (obj.id === myId) {
+                    triggered = true;
+                    api.getTasks();
+                }
+            });
+            //get all data if not already triggered
+            if (!triggered) {
+                api.get(ids[0]).done(function (data) {//only occurs if only one task is given
+                    if (data.participants.length > 0) {//all participants are removed
+                        api.trigger('remove-task-confirmation-notification', ids);
+                    } else {
+                        _(data.participants).each(function (obj) {
+                            if (obj.id === myId) { //user is in participants so there must already be a notification
+                                triggered = true;
+                            }
+                        });
+                        if (!triggered) { //user is not in participants anymore
+                            api.trigger('remove-task-confirmation-notification', ids);
+                        }
+                    }
+                });
+            }
+        }
+        
+        if (modifications.alarm || modifications.alarm === null) {//reminders need updates because alarm changed is set or unset
+            require(['io.ox/core/api/reminder'], function (reminderApi) {
+                reminderApi.getReminders();
+            });
         }
         //check overdue
         if (modifications.status === 3 || modifications.end_date === null) {
