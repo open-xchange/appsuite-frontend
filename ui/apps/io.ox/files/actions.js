@@ -185,12 +185,24 @@ define('io.ox/files/actions',
                     container = $('<div>').css('display', 'inline-block'),
                     content  = _(list).map(function (file) {
                     var url = location.protocol + '//' + location.host + ox.root + '/#!&app=io.ox/files&perspective=list&folder=' + file.folder_id + '&id=' + _.cid(file);
-                    return {'name': gt('File: %1$s', file.title || file.filename), 'link': gt('Direct link: %1$s', url)};
+                    return {'name': gt('File: %1$s', file.title || file.filename), 'link': gt('Direct link: %1$s', url), 'cleanlink': url};
                 });
 
-                _(content).each(function (item) {
-                    container.append($('<p>').append($('<div>').text(item.name), $('<div>').text(item.link)));
-                });
+                if (window.clipboardData) {
+
+                    _(content).each(function (item) {
+                        var copyButton = $('<a>').attr('href', '#').addClass('btn').text(gt('copy to clipboard'));
+                        copyButton.on('click', function () {
+                            window.clipboardData.setData('Text', item.cleanlink);
+                        });
+
+                        container.append($('<p>').append($('<div>').text(item.name), $('<div>').text(item.link + ' ').append(copyButton)));
+                    });
+                } else {
+                    _(content).each(function (item) {
+                        container.append($('<p>').append($('<div>').text(item.name), $('<div>').text(item.link)));
+                    });
+                }
 
                 // to get the width of the container
                 $('body').append(container);

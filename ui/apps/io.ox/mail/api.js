@@ -38,7 +38,10 @@ define("io.ox/mail/api",
 
             // track mails that are manually marked as unseen
             explicitUnseen = {},
-            unseen = {};
+            unseen = {},
+
+            // track mails that should be ignored
+            ignored = {};
 
         var extend = function (a, b) {
             return _.extend(a, { flags: b.flags, color_label: b.color_label });
@@ -146,6 +149,24 @@ define("io.ox/mail/api",
                 unseen[cid] = false;
             },
 
+            /**
+             * @param {object|string} obj (id, folder_id) or string (cid)
+             * @returns {void}
+             */
+            ignore: function (obj) {
+                var cid = getCID(obj);
+                ignored[cid] = true;
+            },
+
+            /**
+             * @param {object|string} obj (id, folder_id) or string (cid)
+             * @returns {boolean}
+             */
+            isIgnored: function (obj) {
+                var cid = getCID(obj);
+                return !!ignored[cid];
+            },
+
             // use this to check if mails in a thread are unseen
             isPartiallyUnseen: function (obj) {
                 var cid = getCID(obj), top = threads[threadHash[cid]];
@@ -192,7 +213,7 @@ define("io.ox/mail/api",
     var api = apiFactory({
         module: "mail",
         keyGenerator: function (obj) {
-            return obj ? (obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.view || 'noimg') : '';
+            return obj ? (obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.view || api.options.requests.get.view || '') : '';
         },
         requests: {
             all: {
@@ -245,7 +266,7 @@ define("io.ox/mail/api",
                 if (e.code === "MSG-0032") {
                     // mail no longer exists, so we remove it locally
                     api.remove([params], true).done(function () {
-                        api.trigger('not-found');
+                        api.trigger('not-found', params);
                     });
                 }
             }
@@ -522,6 +543,11 @@ define("io.ox/mail/api",
             }));
         };
     }());
+
+    api.on('not-found', function (e, obj) {
+        tracker.ignore(obj);
+        api.trigger('refresh.list');
+    });
 
     api.changeColor = function (list, label, local) {
 

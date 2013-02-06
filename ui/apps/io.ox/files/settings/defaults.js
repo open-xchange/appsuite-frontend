@@ -19,7 +19,7 @@ function () {
     'use strict';
 
     var settingsDefaults = {
-            view: "icons",
+            view: 'icons',
             videoEnabled: true,
             audioEnabled: true
         };

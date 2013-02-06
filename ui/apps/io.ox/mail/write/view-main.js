@@ -426,9 +426,17 @@ define("io.ox/mail/write/view-main",
             this.addSection('from', gt('From'), false, true)
                 .append(this.createSenderField());
 
+
             accountAPI.getSenderAddresses(0).done(function (array) {
                 if (array[1].length > 1) {
                     self.addLink('from', gt('Sender'));
+                } else {
+                    // As soon as the field "addresses" comes from the backend we should change this
+                    accountAPI.all().done(function (array) {
+                        if (array[1]) {
+                            self.addLink('from', gt('Sender'));
+                        }
+                    });
                 }
             });
 

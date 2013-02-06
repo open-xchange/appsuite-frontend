@@ -640,7 +640,6 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                         return (o.module === e[0] && (e[1] === '*' || o.params.action === e[1]));
                     });
                 if (!found) {
-                    def.reject({ error: "invalid session" });
                     ox.relogin(o, def);
                     return def;
                 }

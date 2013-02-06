@@ -39,8 +39,8 @@ define('io.ox/files/list/perspective',
             build: function () {
                 var name;
                 this
-                    .addClass("file")
-                    .append(name = $("<div>").addClass("name"));
+                    .addClass('file')
+                    .append(name = $('<div>').addClass('name'));
                 return { name: name };
             },
             set: function (data, fields, index) {
@@ -97,14 +97,14 @@ define('io.ox/files/list/perspective',
                 dropZone.update();
             }
         })
-        .on("change", function (evt, selected) {
+        .on('change', function (evt, selected) {
             if (selected.length > 1) {
                 app.currentFile = null;
             }
         });
 
         // delete item
-        api.on("beforedelete", function () {
+        api.on('beforedelete', function () {
             grid.selection.selectNext();
         });
 
@@ -153,22 +153,22 @@ define('io.ox/files/list/perspective',
 
         if (_.browser.IE === undefined || _.browser.IE > 9) {
             dropZone = new dnd.UploadZone({
-                ref: "io.ox/files/dnd/actions"
+                ref: 'io.ox/files/dnd/actions'
             }, app);
 
 
         // var shortcutPoint = new shortcuts.Shortcuts({
-        //     ref: "io.ox/files/shortcuts"
+        //     ref: 'io.ox/files/shortcuts'
         // });
             if (dropZone) {dropZone.include(); }
 
 
-            app.on("perspective:list:hide", function () {
+            app.on('perspective:list:hide', function () {
                 if (dropZone) {dropZone.remove(); }
                 // shortcutPoint.deactivate();
             });
 
-            app.on("perspective:list:show", function () {
+            app.on('perspective:list:show', function () {
                 if (dropZone) {dropZone.include(); }
                 // shortcutPoint.deactivate();
             });
