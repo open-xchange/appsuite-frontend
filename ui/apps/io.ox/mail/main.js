@@ -401,8 +401,15 @@ define("io.ox/mail/main",
             // which mode?
             if (grid.getMode() === "all" && grid.prop('sort') === 'thread' && !isInOpenThreadSummary(obj)) {
                 // get thread
-                var thread = api.getThread(obj),
-                    baton = ext.Baton({ data: thread, app: app });
+                var thread, baton;
+
+                //remove ignored messages
+                thread = _(api.getThread(obj)).filter(function (item) {
+                    return !api.tracker.isIgnored(item);
+                });
+
+                baton = ext.Baton({ data: thread, app: app });
+
                 // get first mail first
                 api.get(api.reduce(thread[0]))
                     .done(_.lfo(drawThread, baton))
