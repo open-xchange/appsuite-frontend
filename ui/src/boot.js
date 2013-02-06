@@ -261,13 +261,6 @@ $(document).ready(function () {
                 if (_.browser.IE) {
                     $('input[type=text], input[type=password]').val('').placeholder();
                 }
-
-                if ($('#io-ox-current-language').length > 0) {
-                    $('#io-ox-current-language').text(ox.serverConfig.languages[id]).append($('<span class="caret">'));
-                }
-                if ($('#io-ox-login-footer select').length > 0) {
-                    $('#io-ox-login-footer select option[value="' + id + '"]').attr('selected', 'selected');
-                }
             }
         });
     };
@@ -573,33 +566,26 @@ $(document).ready(function () {
             footer = '',
             i = 0,
             cl = $('#io-ox-current-language').parent(),
-            maxLang = 10;
+            maxLang = 20;
         // show languages
         if (!_.isEmpty(lang)) {
             var langCount = _.size(lang);
             node = $('#io-ox-language-list');
 
-            // Display inline list of languages if there are up to "maxLang" languages, else display bs dropup menu, but if a mobile device is detected display native select element
-            if (langCount > maxLang && !Modernizr.touch) {
-                require(['io.ox/core/bootstrap/basics']);
-            } else {
-                node.removeClass('dropdown-menu').appendTo(cl.parent());
-                cl.remove();
-            }
+            // Display native select box for languages if there are up to "maxLang" languages
 
-            if(!Modernizr.touch) {
-                for (id in lang) {
-                    var li;
+            var langSorted = _.toArray(_.invert(lang)).sort();
+            if (langCount < maxLang) {
+                for (id in langSorted) {
+                    var link;
                     i++;
                     node.append(
-                        li = $('<li>').append(
-                            $('<a href="#">')
+                        $('<a href="#">')
                             .on('click', { id: id }, fnChangeLanguage)
-                            .text(lang[id])
-                        )
+                            .text(lang[langSorted[id]])
                     );
                     if (i < langCount && langCount < maxLang) {
-                        li.append(document.createTextNode('\u00A0\u2022\u00A0'));
+                        node.append(document.createTextNode('\u00A0\u2022\u00A0'));
                     }
                 }
             } else {
@@ -608,17 +594,15 @@ $(document).ready(function () {
                     ox.forcedLanguage = $(this).val();
                 });
                 for (id in lang) {
-                    var li;
                     sel.append(
                         $('<option>').attr('value', id)
-                            .text(lang[id])
-
+                            .text(lang[langSorted[id]])
                     );
                 }
-                $('#io-ox-language-list').replaceWith(sel);
+                $('#io-ox-language-list').append(sel);
             }
         } else {
-            $('#io-ox-login-footer div:first-child').remove();
+            $("#io-ox-languages").remove();
         }
         // update header
         $('#io-ox-login-header-prefix').text((sc.pageHeaderPrefix || '') + ' ');
