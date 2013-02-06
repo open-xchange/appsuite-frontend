@@ -12,11 +12,12 @@
  */
 
 define('io.ox/office/tk/view/view',
-        ['io.ox/office/tk/utils',
+        ['io.ox/core/event',
+         'io.ox/office/tk/utils',
          'io.ox/office/tk/view/pane',
          'gettext!io.ox/office/main',
          'less!io.ox/office/tk/view/style.css'
-        ], function (Utils, Pane, gt) {
+        ], function (Events, Utils, Pane, gt) {
 
     'use strict';
 
@@ -31,6 +32,8 @@ define('io.ox/office/tk/view/view',
      * top, bottom, and side pane elements.
      *
      * @constructor
+     *
+     * @extends Events
      *
      * @param {OfficeApplication} app
      *  The application containing this view instance.
@@ -73,6 +76,11 @@ define('io.ox/office/tk/view/view',
 
             // timeout for current alert auto-close
             currentAlertTimeout = null;
+
+        // base constructor ---------------------------------------------------
+
+        // add event hub
+        Events.extend(this);
 
         // private methods ----------------------------------------------------
 
@@ -521,6 +529,7 @@ define('io.ox/office/tk/view/view',
         };
 
         this.destroy = function () {
+            this.events.destroy();
             _(panes).invoke('destroy');
             appPane.destroy();
             appPane = panes = panesById = null;

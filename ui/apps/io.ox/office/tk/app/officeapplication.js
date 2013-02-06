@@ -91,10 +91,6 @@ define('io.ox/office/tk/app/officeapplication',
         return app;
     }
 
-    function getOrCreateApplication(moduleName, ApplicationClass, launchOptions) {
-
-    }
-
     // class OfficeApplication ================================================
 
     /**
