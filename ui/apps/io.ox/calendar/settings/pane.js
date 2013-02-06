@@ -44,7 +44,7 @@ define('io.ox/calendar/settings/pane',
             SHOW_DECLINED_APPOINTMENTS: gt('Show declined appointments')
         },
 
-        optionsInterval = [gt('5'), gt('10'), gt('15'), gt('20'), gt('30'), gt('60')],
+        optionsInterval = _([5, 10, 15, 20, 30, 60]).map(gt.noI18n),
 
         optionsTime = function () {
             var array = [];
