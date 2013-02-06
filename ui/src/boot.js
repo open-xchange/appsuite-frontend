@@ -567,6 +567,7 @@ $(document).ready(function () {
         // shortcut
         var sc = ox.serverConfig,
             lang = sc.languages,
+            caps = require("io.ox/core/capabilities"),
             node,
             id = '',
             footer = '',
@@ -628,7 +629,7 @@ $(document).ready(function () {
         footer += sc.buildDate ? '(' + sc.buildDate + ')' : '';
         $('#io-ox-copyright').text(footer);
         // hide checkbox?
-        if (sc.autoLogin === false) {
+        if (sc.autoLogin === false || !caps.has("autologin")) {
             $('#io-ox-login-store').remove();
         }
         // hide forgot password?
