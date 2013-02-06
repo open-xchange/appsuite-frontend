@@ -133,7 +133,6 @@ define('io.ox/mail/view-detail',
             folder = m[3];
             id = m[4];
             href = '#app=io.ox/files&perspective=list&folder=' + folder + '&id=' + id;
-            console.log('draw', href, folder, id);
             link.on('click', { hash: href }, openDocumentLink);
         } else {
             // nope, external

@@ -479,7 +479,7 @@ define("io.ox/mail/write/view-main",
             };
 
             if (!Modernizr.touch) {
-                var format = settings.get('messageFormat');
+                var format = settings.get('messageFormat', 'html');
                 this.addSection('format', gt('Text format'), true, false)
                     .append(
                         $('<div>').addClass('change-format').append(
@@ -490,13 +490,8 @@ define("io.ox/mail/write/view-main",
                             $.txt(_.noI18n(' \u00A0\u2013\u00A0 ')), // &ndash;
                             $('<a>', { href: '#' })
                                 .text(gt('HTML'))
-                                .addClass(format === 'html' ? 'active' : '')
-                                .on('click', { format: 'html' }, fnChangeFormat),
-                            $.txt(_.noI18n(' \u00A0\u2013\u00A0 ')), // &ndash;
-                            $('<a>', { href: '#' })
-                                .text(gt('Both'))
-                                .addClass(format === 'alternative' ? 'active' : '')
-                                .on('click', { format: 'alternative' }, fnChangeFormat)
+                                .addClass(format === 'html' || format === 'alternative' ? 'active' : '')
+                                .on('click', { format: 'html' }, fnChangeFormat)
                         )
                     );
             }

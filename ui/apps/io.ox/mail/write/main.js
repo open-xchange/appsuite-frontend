@@ -64,24 +64,25 @@ define('io.ox/mail/write/main',
             editorHash = {},
             currentSignature = '',
             editorMode,
-            defaultEditorMode = settings.get('messageFormat'),
+            messageFormat = settings.get('messageFormat', 'html'),
             composeMode,
             view,
             model,
             previous;
 
         function getDefaultEditorMode() {
-            return (_.indexOf(['text', 'html', 'alternative'], defaultEditorMode) >= 0) ? defaultEditorMode : 'html';
+            return messageFormat === 'text' ? 'text' : 'html';
         }
 
-        function getContentType() {
-            switch (getDefaultEditorMode()) {
-            case 'text':
+        function getEditorMode(mode) {
+            return mode === 'text' ? 'text' : 'html';
+        }
+
+        function getContentType(mode) {
+            if (mode === 'text') {
                 return 'text/plain';
-            case 'html':
-                return 'text/html';
-            case 'alternative':
-                return 'alternative';
+            } else {
+                return messageFormat === 'html' ? 'text/html' : 'alternative';
             }
         }
 
@@ -278,10 +279,7 @@ define('io.ox/mail/write/main',
 
             return _.queued(function (mode) {
                 // change?
-                defaultEditorMode = mode;
-                if (mode === 'alternative') {
-                    mode = 'html';
-                }
+                mode = getEditorMode(mode);
                 return (mode === editorMode ?
                     $.when() :
                     changeMode(mode || editorMode).done(function () {
@@ -765,7 +763,7 @@ define('io.ox/mail/write/main',
                 };
             }
 
-            content.content_type = getContentType();
+            content.content_type = getContentType(editorMode);
 
             mail = {
                 from: [data.from] || [],
