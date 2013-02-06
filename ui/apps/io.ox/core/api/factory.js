@@ -142,9 +142,11 @@ define("io.ox/core/api/factory",
                     .pipe(function (data) {
                         return (o.pipe.all || _.identity)(data, opt);
                     })
-                    .done(function (data) {
+                    .pipe(function (data) {
                         // add to cache
-                        cache.add(cid, data);
+                        return $.when(cache.add(cid, data)).pipe(function () {
+                            return data;
+                        });
                     });
                 };
 
@@ -179,11 +181,12 @@ define("io.ox/core/api/factory",
                     .pipe(function (data) {
                         return (o.pipe.list || _.identity)(data);
                     })
-                    .done(function (data) {
+                    .pipe(function (data) {
                         // add to cache
-                        caches.list.add(data);
                         // merge with "get" cache
-                        caches.get.merge(data);
+                        return $.when(caches.list.add(data), caches.get.merge(data)).pipe(function () {
+                            return data;
+                        });
                     });
                 };
                 // empty?
@@ -220,17 +223,22 @@ define("io.ox/core/api/factory",
                     .pipe(function (data) {
                         return (o.pipe.get || _.identity)(data, opt);
                     })
-                    .done(function (data) {
+                    .pipe(function (data) {
                         // use cache?
                         if (useCache) {
                             // add to cache
-                            caches.get.add(data);
-                            // update list cache
-                            caches.list.merge(data).done(function (ok) {
-                                if (ok) {
-                                    api.trigger('refresh.list');
-                                }
+                            return $.when(
+                                caches.get.add(data),
+                                caches.list.merge(data).done(function (ok) {
+                                    if (ok) {
+                                        api.trigger('refresh.list');
+                                    }
+                                })
+                            ).pipe(function () {
+                                return data;
                             });
+                        } else {
+                            return data;
                         }
                     })
                     .fail(function (e) {
@@ -371,10 +379,15 @@ define("io.ox/core/api/factory",
         api.refresh = function () {
             if (ox.online) {
                 // clear "all & list" caches
-                api.caches.all.clear();
-                api.caches.list.clear();
-                // trigger local refresh
-                api.trigger("refresh.all");
+                return $.when(
+                    api.caches.all.clear(),
+                    api.caches.list.clear()
+                ).done(function () {
+                    // trigger local refresh
+                    api.trigger("refresh.all");
+                });
+            } else {
+                return $.when();
             }
         };
 
