@@ -160,16 +160,16 @@ define('io.ox/files/list/perspective',
         // var shortcutPoint = new shortcuts.Shortcuts({
         //     ref: 'io.ox/files/shortcuts'
         // });
-            if (dropZone) {dropZone.include(); }
+            if (dropZone) dropZone.include();
 
 
             app.on('perspective:list:hide', function () {
-                if (dropZone) {dropZone.remove(); }
+                if (dropZone) dropZone.remove();
                 // shortcutPoint.deactivate();
             });
 
             app.on('perspective:list:show', function () {
-                if (dropZone) {dropZone.include(); }
+                if (dropZone) dropZone.include();
                 // shortcutPoint.deactivate();
             });
 
@@ -193,7 +193,7 @@ define('io.ox/files/list/perspective',
         app.on('folder:change', function (e, id, folder) {
             if (_.browser.IE === undefined || _.browser.IE > 9) {
                 dropZone.remove();
-                if (dropZone) { dropZone.include(); }
+                if (dropZone) dropZone.include();
             }
             // reset first
             win.nodes.title.find('.has-publications').remove();

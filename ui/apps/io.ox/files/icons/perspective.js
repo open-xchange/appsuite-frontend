@@ -168,8 +168,8 @@ define('io.ox/files/icons/perspective',
 
     function calculateLayout(el, options) {
 
-        var rows = Math.round((el.parent().height() - 40) / options.fileIconHeight);
-        var cols = Math.floor((el.parent().width() - 6) / options.fileIconWidth);
+        var rows = Math.round((el.height() - 40) / options.fileIconHeight);
+        var cols = Math.floor((el.width() - 6) / options.fileIconWidth);
 
         if (rows === 0) rows = 1;
         if (cols === 0) cols = 1;
@@ -203,7 +203,7 @@ define('io.ox/files/icons/perspective',
                 $('<div class="files-iconview">').append(iconview)
             );
 
-            layout = calculateLayout(iconview, options);
+            layout = calculateLayout(iconview.parent(), options);
 
             function iconClick(popup, e, target) {
 
@@ -297,8 +297,7 @@ define('io.ox/files/icons/perspective',
                 var last_layout = layout;
                 layout = calculateLayout($('.files-iconview'), options);
 
-                if (last_layout.icons < layout.icons)
-                {
+                if (last_layout.icons < layout.icons) {
                     start = end;
                     end = end + (layout.icons - last_layout.icons);
                     redraw(allIds.slice(start, end));
@@ -326,7 +325,6 @@ define('io.ox/files/icons/perspective',
                     });
                 },
                 stop: function () {
-                    //drawFirst();
                     api.trigger('refresh.all');
                     win.idle();
                 }
@@ -484,23 +482,23 @@ define('io.ox/files/icons/perspective',
                 dropZone = new dnd.UploadZone({
                     ref: 'io.ox/files/dnd/actions'
                 }, app);
-                if (dropZone) { dropZone.include(); }
+                if (dropZone) dropZone.include();
             }
             app.on('perspective:icons:hide', function () {
-                if (dropZone) {dropZone.remove(); }
+                if (dropZone) dropZone.remove();
                 // shortcutPoint.deactivate();
             });
 
             app.on('perspective:icons:show', function () {
-                if (dropZone) {dropZone.include(); }
+                if (dropZone) dropZone.include();
                 // shortcutPoint.deactivate();
             });
-            if (dropZone) {dropZone.include(); }
+            if (dropZone) dropZone.include();
 
             app.on('folder:change', function (e, id, folder) {
                 if (_.browser.IE === undefined || _.browser.IE > 9) {
                     dropZone.remove();
-                    if (dropZone) { dropZone.include(); }
+                    if (dropZone) dropZone.include();
                 }
                 that.main.empty();
                 that.draw(app);

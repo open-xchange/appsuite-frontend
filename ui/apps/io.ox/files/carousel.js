@@ -75,14 +75,10 @@ define('io.ox/files/carousel',
             $.extend(this.config, config);
 
             this.app = config.baton.app;
-            if (config.attachmentMode)
-            {
+            if (config.attachmentMode) {
                 this.win = $('.window-container.io-ox-mail-window');
-            }
-            else
-            {
+            } else {
                 this.win = this.app.getWindow();
-
             }
             this.list = this.filterImagesList(config.baton.allIds);
             this.pos = _.extend({}, this.defaults); // get a fresh copy
@@ -222,7 +218,7 @@ define('io.ox/files/carousel',
             }
 
             if (item.children().length === 0) {
-                if (this.config.attachmentMode === false) {
+                if (!this.config.attachmentMode) {
                     item.append(
                         $('<img>', { alt: '', src: this.urlFor(file) })
                             .on('error', this.imgError) /* error doesn't seem to bubble */,
@@ -231,9 +227,7 @@ define('io.ox/files/carousel',
                             folderAPI.getBreadcrumb(file.folder_id, { handler: this.app.folder.set, subfolder: false, last: false })
                         )
                     );
-                }
-                else
-                {
+                } else {
                     item.append(
                         $('<img>', { alt: '', src: file.url })
                             .on('error', this.imgError) /* error doesn't seem to bubble */,
@@ -244,8 +238,7 @@ define('io.ox/files/carousel',
         },
 
         prevItem: function () {
-            if (this.prevControl.is(':visible'))
-            {
+            if (this.prevControl.is(':visible')) {
                 if (!this.pos.sliding && this.pos.cur > 0) {
                     this.container.carousel('prev');
                 }
@@ -253,8 +246,7 @@ define('io.ox/files/carousel',
         },
 
         nextItem: function () {
-            if (this.nextControl.is(':visible'))
-            {
+            if (this.nextControl.is(':visible')) {
                 if (!this.pos.sliding && this.pos.cur < (this.list.length - 1)) {
                     this.container.carousel('next');
                 }
@@ -265,12 +257,9 @@ define('io.ox/files/carousel',
 
         show: function () {
             var win;
-            if (this.config.attachmentMode)
-            {
+            if (this.config.attachmentMode) {
                 win = $('.window-container.io-ox-mail-window');
-            }
-            else
-            {
+            } else {
                 win = this.win.nodes.outer;
             }
             win.busy();
@@ -289,8 +278,7 @@ define('io.ox/files/carousel',
         },
 
         close: function () {
-            if (this.closeControl.is(':visible'))
-            {
+            if (this.closeControl.is(':visible')) {
                 this.inner.empty().remove();
                 this.container.empty().remove();
                 this.list = [];
