@@ -676,7 +676,7 @@ define('io.ox/core/tk/folderviews',
                         container
                     );
                 })
-                .addButton('cancel', 'Cancel')
+                .addButton('cancel', gt('Cancel'))
                 .addPrimaryButton('save', gt('Save'))
                 .show(function () {
                 }).done(function (action) {

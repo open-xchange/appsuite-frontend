@@ -851,7 +851,7 @@ define('io.ox/mail/write/main',
                         // TODO: check if backend just says "A severe error occured"
                         notifications.yell(result);
                     } else {
-                        notifications.yell('success', 'Mail has been sent');
+                        notifications.yell('success', gt('Mail has been sent'));
                         // update base mail
                         var isReply = mail.data.sendtype === mailAPI.SENDTYPE.REPLY,
                             isForward = mail.data.sendtype === mailAPI.SENDTYPE.FORWARD,
