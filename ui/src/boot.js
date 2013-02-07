@@ -427,7 +427,7 @@ $(window).load(function () {
                 http.GET({
                     module: 'apps/manifests',
                     params: { action: 'config' },
-                    appendSession: false
+                    appendSession: (cacheKey === 'userconfig')
                 })
                 .done(function (data) {
                     configCache.add(cacheKey, data);
