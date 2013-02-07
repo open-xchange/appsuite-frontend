@@ -117,7 +117,7 @@ define("io.ox/participants/model",
                 break;
             case self.TYPE_DISTLIST_USER_GROUP:
                 //fetch user group
-                groupAPI.get({id: self.get('id')}).done(function (group) {
+                contactAPI.get({id: self.get('id'), folder_id: self.get('folder_id')}).done(function (group) {
                     self.set(group);
                     self.trigger('change', self);
                     df.resolve();
