@@ -112,6 +112,14 @@ define('io.ox/tasks/api', ['io.ox/core/http',
     };
     
     api.checkForNotifications = function (ids, modifications) {
+        if (modifications.folder_id) {//move operation! Every notifications needs to be reseted or they will link to unavailable tasks
+            api.getTasks();
+            require(['io.ox/core/api/reminder'], function (reminderApi) {
+                reminderApi.getReminders();
+            });
+            return;
+        }
+        
         var addArray = [],
             removeArray = [];
         if (modifications.status) {//status parameter can be string or integer. Force it to be an integer
@@ -332,7 +340,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
     //for notification view
     api.getTasks = function () {
 
-        return http.GET({
+        return http.GET({//could be done to use all folders, see portal widget but not sure if this is needed (lots of requests)
             module: 'tasks',
             params: {action: 'all',
                 folder: api.getDefaultFolder(),
