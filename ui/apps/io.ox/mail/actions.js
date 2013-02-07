@@ -396,7 +396,7 @@ define('io.ox/mail/actions',
             notifications.yell('info', 'Attachments will be saved!');
             api.saveAttachments(list)
                 .done(function (data) {
-                    notifications.yell('success', 'Attachments have been saved!');
+                    notifications.yell('success', gt('Attachments have been saved'));
                 })
                 .fail(notifications.yell);
         }
