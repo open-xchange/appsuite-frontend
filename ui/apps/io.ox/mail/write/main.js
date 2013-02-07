@@ -117,7 +117,7 @@ define('io.ox/mail/write/main',
                 signature, text,
                 ed = this.getEditor(),
                 isHTML = !!ed.removeBySelector,
-                modified = isHTML ? $('<root></root>').append(ed.getContent()).find('p.io-ox-signature').text() !== currentSignature : false;
+                modified = isHTML ? $('<root></root>').append(ed.getContent()).find('p.io-ox-signature').text() !== currentSignature.replace(/(\r\n|\n|\r)/gm, '') : false;
 
             // remove current signature from editor
             if (isHTML) {
