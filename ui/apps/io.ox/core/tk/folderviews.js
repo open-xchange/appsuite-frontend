@@ -786,6 +786,7 @@ define('io.ox/core/tk/folderviews',
         }
 
         this.select = function (data) {
+            if (data === null) debugger;
             // unpack array; pluck 'id'
             data = _.isArray(data) ? data[0] : data;
             data = _.isString(data) ? data : String(data.id);
