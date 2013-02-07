@@ -60,8 +60,6 @@ define('io.ox/core/tk/autocomplete',
 
         var self = $(this),
 
-            // last search
-            lastValue = '',
             // no-results prefix
             emptyPrefix = "\u0000",
             // current search result index
@@ -72,8 +70,6 @@ define('io.ox/core/tk/autocomplete',
             update = function () {
                 // get data from current item and update input field
                 var data = scrollpane.children().eq(Math.max(0, index)).data('data');
-                lastValue = data !== undefined ? o.stringify(data) + '' : lastValue;
-                self.val(lastValue);
 
                 // if two related Fields are needed
                 if (_.isFunction(o.related)) {
@@ -267,8 +263,7 @@ define('io.ox/core/tk/autocomplete',
                 var val = $.trim($(this).val());
                 isRetry = isRetry || false;
                 if (val.length >= o.minLength) {
-                    if (isRetry || (val !== lastValue && val.indexOf(emptyPrefix) === -1)) {
-                        lastValue = val;
+                    if (isRetry || val.indexOf(emptyPrefix) === -1) {
                         scrollpane.empty();
                         popup.busy();
                         open();
@@ -277,7 +272,6 @@ define('io.ox/core/tk/autocomplete',
                             .then(_.lfo(cbSearchResult, val), cbSearchResultFail);
                     }
                 } else {
-                    lastValue = val;
                     close();
                 }
             }, o.delay);
