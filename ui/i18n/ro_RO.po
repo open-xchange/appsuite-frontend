@@ -4,14 +4,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2012-12-16 16:11+0000\n"
-"Last-Translator: Daiana Heinrich <daiana@bureau-cornavin.com>\n"
+"PO-Revision-Date: 2013-01-04 22:47+0200\n"
+"Last-Translator: Adriana <adrianamartiniuc@yahoo.com>\n"
 "Language-Team: Romanian <ro@bureau-cornavin.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-# "Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Language: ro\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2);;\n"
 "X-Generator: Lokalize 1.4\n"
 
 #: apps/io.ox/calendar/settings/pane.js:46
@@ -67,11 +67,8 @@ msgid "Forgot your password?"
 msgstr "Ați uitat parola?"
 
 #: html/core_body.html:91
-msgid ""
-"No connection to server. Please check your internet connection and retry."
-msgstr ""
-"Nicio conexiune cu serverul. Verificați conexiunea internet și încercați din "
-"nou."
+msgid "No connection to server. Please check your internet connection and retry."
+msgstr "Nicio conexiune cu serverul. Verificați conexiunea internet și încercați din nou."
 
 #: html/core_body.html:100
 msgid "Languages"
@@ -669,17 +666,8 @@ msgid "Comments"
 msgstr "Comentarii"
 
 #: apps/plugins/portal/updater/register.js:30
-msgid ""
-"The updater provides a simple installation wizard. Follow the instructions to "
-"install the application. The updater will inform you of any updates for the "
-"Connector for Microsoft Outlook and the Notifier. You can download the "
-"updates from within the updater."
-msgstr ""
-"Aplicația de actualizare afișează un asistent de instalare simplu. Urmați "
-"instrucțiunile pentru a instala aplicația. Aplicația de actualizare vă va "
-"informa cu privire la actualizările Conectorului pentru Microsoft Outlook și "
-"ale Notificatorului. Puteți descărca actualizările prin aplicația de "
-"actualizare."
+msgid "The updater provides a simple installation wizard. Follow the instructions to install the application. The updater will inform you of any updates for the Connector for Microsoft Outlook and the Notifier. You can download the updates from within the updater."
+msgstr "Aplicația de actualizare afișează un asistent de instalare simplu. Urmați instrucțiunile pentru a instala aplicația. Aplicația de actualizare vă va informa cu privire la actualizările Conectorului pentru Microsoft Outlook și ale Notificatorului. Puteți descărca actualizările prin aplicația de actualizare."
 
 #: apps/io.ox/core/tk/attachments.js:223
 #: apps/io.ox/files/actions.js:457
@@ -797,18 +785,12 @@ msgstr "Ignoră conflictele"
 
 #: apps/io.ox/calendar/month/perspective.js:98
 #: apps/io.ox/calendar/week/perspective.js:80
-msgid ""
-"By changing the date of this appointment you are creating an appointment "
-"exception to the series. Do you want to continue?"
-msgstr ""
-"Dacă modificați data acestei întâlniri se va crea o întâlnire excepție într-o "
-"serie. Doriți să continuați?"
+msgid "By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?"
+msgstr "Dacă modificați data acestei întâlniri se va crea o întâlnire excepție într-o serie. Doriți să continuați?"
 
 #: apps/io.ox/calendar/actions.js:113
 #: apps/io.ox/calendar/week/perspective.js:85
-msgid ""
-"Do you want to edit the whole series or just one appointment within the "
-"series?"
+msgid "Do you want to edit the whole series or just one appointment within the series?"
 msgstr "Doriți să editați toată seria sau doar anumite întâlniri din serie?"
 
 #. #-#-#-#-#-#-#-#-#-#
@@ -833,9 +815,7 @@ msgid "CW"
 msgstr "Săpt."
 
 #: apps/io.ox/calendar/actions.js:188
-msgid ""
-"Do you want to delete the whole series or just one appointment within the "
-"series?"
+msgid "Do you want to delete the whole series or just one appointment within the series?"
 msgstr "Doriți să ștergeți toată seria sau doar o anumită întâlnire din serie?"
 
 #: apps/io.ox/calendar/actions.js:189
@@ -983,52 +963,20 @@ msgid "Yearly"
 msgstr "Anual"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:270
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" "
-"data-attribute=\"interval\">every <span class=\"number-control\">2</span> "
-"days</a>. "
-msgstr ""
-"Întâlnirea se repetă <a href=\"#\"  data-widget=\"number\" "
-"data-attribute=\"interval\">o dată la <span class=\"number-control\">2</span> "
-"zile</a>. "
+msgid "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> days</a>. "
+msgstr "Întâlnirea se repetă <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">o dată la <span class=\"number-control\">2</span> zile</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:284
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" "
-"data-attribute=\"interval\">every <span class=\"number-control\">2</span> "
-"weeks</a> on <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">"
-"monday</a>. "
-msgstr ""
-"Întâlnirea se repetă <a href=\"#\"  data-widget=\"number\" "
-"data-attribute=\"interval\">o dată la <span class=\"number-control\">2</span> "
-"săptămâni</a> <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">"
-"lunea</a>. "
+msgid "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</a> on <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">monday</a>. "
+msgstr "Întâlnirea se repetă <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">o dată la <span class=\"number-control\">2</span> săptămâni</a> <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">lunea</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:301
-msgid ""
-"The appointment is repeated on day <a href=\"#\"  data-widget=\"custom\" "
-"data-attribute=\"dayInMonth\">10</a> <a href=\"#\"  data-widget=\"number\" "
-"data-attribute=\"interval\">every <span class=\"number-control\">2</span> "
-"months</a>. "
-msgstr ""
-"Întâlnirea se repetă <a href=\"#\"  data-widget=\"custom\" "
-"data-attribute=\"dayInMonth\">a zecea zi</a> <a href=\"#\"  "
-"data-widget=\"number\" data-attribute=\"interval\">o dată la <span "
-"class=\"number-control\">2</span> luni</a>. "
+msgid "The appointment is repeated on day <a href=\"#\"  data-widget=\"custom\" data-attribute=\"dayInMonth\">10</a> <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> months</a>. "
+msgstr "Întâlnirea se repetă <a href=\"#\"  data-widget=\"custom\" data-attribute=\"dayInMonth\">a zecea zi</a> <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">o dată la <span class=\"number-control\">2</span> luni</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:317
-msgid ""
-"The appointment is repeated the <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"day\">wednesday</a> <a href=\"#\" data-widget=\"number\" "
-"data-attribute=\"interval\">every <span class=\"number-control\">2</span> "
-"months</a>. "
-msgstr ""
-"Întâlnirea se repetă <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"ordinal\">a doua</a> <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"day\">miercuri</a> <a href=\"#\" data-widget=\"number\" "
-"data-attribute=\"interval\">o dată la <span class=\"number-control\">2</span> "
-"luni</a>. "
+msgid "The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options\" data-attribute=\"day\">wednesday</a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> months</a>. "
+msgstr "Întâlnirea se repetă <a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">a doua</a> <a href=\"#\" data-widget=\"options\" data-attribute=\"day\">miercuri</a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">o dată la <span class=\"number-control\">2</span> luni</a>. "
 
 #. #-#-#-#-#-#-#-#-#-#
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
@@ -1141,14 +1089,8 @@ msgid "day of the weekend"
 msgstr "zi din weekend"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:359
-msgid ""
-"The appointment is repeated every year on day <a href=\"#\"  "
-"data-widget=\"custom\" data-attribute=\"dayInMonth\">10</a> of <a href=\"#\" "
-"data-widget=\"options\" data-attribute=\"month\">october</a>. "
-msgstr ""
-"Întâlnirea se repetă în fiecare an <a href=\"#\"  data-widget=\"custom\" "
-"data-attribute=\"dayInMonth\">în a zecea zi</a> din <a href=\"#\" "
-"data-widget=\"options\" data-attribute=\"month\">octombrie</a>. "
+msgid "The appointment is repeated every year on day <a href=\"#\"  data-widget=\"custom\" data-attribute=\"dayInMonth\">10</a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">october</a>. "
+msgstr "Întâlnirea se repetă în fiecare an <a href=\"#\"  data-widget=\"custom\" data-attribute=\"dayInMonth\">în a zecea zi</a> din <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">octombrie</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:364
 msgid "January"
@@ -1199,16 +1141,8 @@ msgid "Cecember"
 msgstr "Decembrie"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:380
-msgid ""
-"The appointment is repeated every <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"day\">wednesday</a> in <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"month\">october</a>. "
-msgstr ""
-"Întâlnirea se repetă <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"ordinal\">în prima</a> <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"day\">miercuri</a> din <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"month\">octombrie</a>. "
+msgid "The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-attribute=\"day\">wednesday</a> in <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">october</a>. "
+msgstr "Întâlnirea se repetă <a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">în prima</a> <a href=\"#\" data-widget=\"options\" data-attribute=\"day\">miercuri</a> din <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">octombrie</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:412
 msgid "january"
@@ -1276,33 +1210,16 @@ msgid "ends"
 msgstr "se termină"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:442
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">"
-"never ends</a>."
-msgstr ""
-"Seria <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">nu are "
-"sfârșit</a>."
+msgid "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">never ends</a>."
+msgstr "Seria <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">nu are sfârșit</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:450
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">"
-"ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget=\"custom\">"
-"11/03/2013</a>."
-msgstr ""
-"Seria <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">se "
-"termină</a> în <a href=\"#\" data-attribute=\"until\" data-widget=\"custom\">"
-"11/03/2013</a>."
+msgid "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget=\"custom\">11/03/2013</a>."
+msgstr "Seria <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">se termină</a> în <a href=\"#\" data-attribute=\"until\" data-widget=\"custom\">11/03/2013</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:455
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">"
-"ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number\">"
-"after <span class=\"number-control\">2</span> appointments</a>."
-msgstr ""
-"Seria <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">se "
-"termină</a> <a href=\"#\" data-attribute=\"occurrences\" "
-"data-widget=\"number\">după <span class=\"number-control\">2</span> "
-"întâlniri</a>."
+msgid "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number\">after <span class=\"number-control\">2</span> appointments</a>."
+msgstr "Seria <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">se termină</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number\">după <span class=\"number-control\">2</span> întâlniri</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:529
 #: apps/io.ox/tasks/edit/view.js:290
@@ -1315,8 +1232,7 @@ msgstr "Apăsați pe legături pentru a modifica valorile."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:543
 msgid "Click on a sentence to choose when to repeat the appointment."
-msgstr ""
-"Apăsați pe propoziție pentru a selecta momentul de repetare a întâlnirii."
+msgstr "Apăsați pe propoziție pentru a selecta momentul de repetare a întâlnirii."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:793
 msgid "Please choose a sentence below."
@@ -1468,12 +1384,8 @@ msgstr "Fișiere atașate"
 
 #: apps/io.ox/calendar/edit/template.js:429
 #: apps/io.ox/mail/write/view-main.js:170
-msgid ""
-"Internet Explorer 9 does not support attachment uploads. Please upgrade to "
-"Internet Explorer 10."
-msgstr ""
-"Internet Explorer 9 nu suportă încărcarea de fișiere atașate. Treceți la "
-"Internet Explorer 10."
+msgid "Internet Explorer 9 does not support attachment uploads. Please upgrade to Internet Explorer 10."
+msgstr "Internet Explorer 9 nu suportă încărcarea de fișiere atașate. Treceți la Internet Explorer 10."
 
 #: apps/io.ox/calendar/edit/template.js:438
 #: apps/io.ox/tasks/edit/view-template.js:551
@@ -1795,12 +1707,8 @@ msgid "Conflicts:"
 msgstr "Conflicte:"
 
 #: apps/io.ox/calendar/acceptdeny.js:28
-msgid ""
-"You are about to change your confirmation status. Please leave a comment for "
-"other participants."
-msgstr ""
-"Sunteți pe cale de a schimba starea confirmării dumneavoastră. Scrieți un "
-"comentariu pentru alți participanți."
+msgid "You are about to change your confirmation status. Please leave a comment for other participants."
+msgstr "Sunteți pe cale de a schimba starea confirmării dumneavoastră. Scrieți un comentariu pentru alți participanți."
 
 #: apps/io.ox/calendar/acceptdeny.js:32
 msgid "Comment:"
@@ -2559,12 +2467,8 @@ msgid "Version Comment:"
 msgstr "Comentariu versiune:"
 
 #: apps/io.ox/files/list/view-detail.js:449
-msgid ""
-"Internet Explorer 9 does not support file uploads. Please upgrade to Internet "
-"Explorer 10."
-msgstr ""
-"Internet Explorer 9 nu suportă încărcarea de fișiere. Treceți la Internet "
-"Explorer 10."
+msgid "Internet Explorer 9 does not support file uploads. Please upgrade to Internet Explorer 10."
+msgstr "Internet Explorer 9 nu suportă încărcarea de fișiere. Treceți la Internet Explorer 10."
 
 #. Show more fields in the file creation dialog
 #: apps/io.ox/files/views/create.js:55
@@ -2623,9 +2527,7 @@ msgstr "Date incorecte"
 #. If this happens the user gets the option to change the start date so it matches the due date
 #: apps/io.ox/tasks/actions.js:315
 msgid "The due date cannot be before start date. Adjust start date?"
-msgstr ""
-"Data scadentă nu poate fi înaintea datei de început. Doriți să modificați "
-"data de început?"
+msgstr "Data scadentă nu poate fi înaintea datei de început. Doriți să modificați data de început?"
 
 #: apps/io.ox/tasks/actions.js:320
 msgid "Canceled"
@@ -2813,12 +2715,8 @@ msgid "Date"
 msgstr "Dată"
 
 #: apps/io.ox/tasks/edit/view-template.js:526
-msgid ""
-"Attachment uploads are not supported in Internet Explorer 9. Please upgrade "
-"to Internet Explorer 10."
-msgstr ""
-"Încărcarea de fișiere atașate nu este suportată în Internet Explorer 9. "
-"Treceți la Internet Explorer 10."
+msgid "Attachment uploads are not supported in Internet Explorer 9. Please upgrade to Internet Explorer 10."
+msgstr "Încărcarea de fișiere atașate nu este suportată în Internet Explorer 9. Treceți la Internet Explorer 10."
 
 #: apps/io.ox/tasks/model.js:105
 msgid "Progress must be a valid number between 0 and 100"
@@ -3062,12 +2960,8 @@ msgid "Restore applications"
 msgstr "Restabilește aplicațiile"
 
 #: apps/io.ox/core/main.js:503
-msgid ""
-"The following applications can be restored. Just remove the restore point if "
-"you don't want it to be restored."
-msgstr ""
-"Următoarele aplicații nu pot fi restabilite. Eliminați punctul de restabilire "
-"dacă nu doriți să fie restabilite."
+msgid "The following applications can be restored. Just remove the restore point if you don't want it to be restored."
+msgstr "Următoarele aplicații nu pot fi restabilite. Eliminați punctul de restabilire dacă nu doriți să fie restabilite."
 
 #: apps/io.ox/core/main.js:507
 msgid "Continue"
@@ -3185,9 +3079,7 @@ msgid "%1$d %2$s"
 msgstr "%1$d %2$s"
 
 #: apps/io.ox/core/settings/pane.js:44
-msgid ""
-"The setting has been saved and will become active when you enter the "
-"application the next time."
+msgid "The setting has been saved and will become active when you enter the application the next time."
 msgstr "Setarea a fost salvată și va fi activată la următoarea accesare."
 
 #: apps/io.ox/core/settings/pane.js:49
@@ -3466,7 +3358,7 @@ msgstr "Mai multe"
 
 #: apps/io.ox/core/desktop.js:30
 msgid "i18n test string - do not translate this"
-msgstr ""
+msgstr "i18n test string - do not translate this"
 
 #: apps/io.ox/core/desktop.js:459
 msgid "There are unsaved changes."
@@ -3482,12 +3374,8 @@ msgid "Toggle search"
 msgstr "Comutare căutare"
 
 #: apps/io.ox/core/desktop.js:1295
-msgid ""
-"Failed to start application. Maybe you have connection problems. Please try "
-"again."
-msgstr ""
-"Aplicația nu a putut demara. Probabil aveți probleme de conexiune. Încercați "
-"din nou."
+msgid "Failed to start application. Maybe you have connection problems. Please try again."
+msgstr "Aplicația nu a putut demara. Probabil aveți probleme de conexiune. Încercați din nou."
 
 #: apps/io.ox/preview/main.js:75
 msgid "Click to open. Drag to your desktop to download."
@@ -3665,9 +3553,7 @@ msgstr "Comutat pe mod doar în citire."
 
 #: apps/io.ox/office/editor/main.js:643
 msgid "This document contains unsaved changes. Do you really want to close?"
-msgstr ""
-"Documentul conține modificări care nu au fost salvate. Sigur doriți să îl "
-"închideți?"
+msgstr "Documentul conține modificări care nu au fost salvate. Sigur doriți să îl închideți?"
 
 #: apps/io.ox/office/editor/editor.js:370
 msgid "Sorry, failed to load the document successfully."
@@ -4486,19 +4372,13 @@ msgstr "Doriți să eliminați definitiv e-mailurile șterse?"
 
 #: apps/io.ox/mail/settings/old_pane.js:47
 #: apps/io.ox/mail/settings/pane.js:28
-msgid ""
-"Automatically collect contacts in the folder \"Collected addresses\" while "
-"sending?"
-msgstr ""
-"Colectează automat contactele în dosarul  \"Adrese colectate\" la trimitere?"
+msgid "Automatically collect contacts in the folder \"Collected addresses\" while sending?"
+msgstr "Colectează automat contactele în dosarul  \"Adrese colectate\" la trimitere?"
 
 #: apps/io.ox/mail/settings/old_pane.js:48
 #: apps/io.ox/mail/settings/pane.js:29
-msgid ""
-"Automatically collect contacts in the folder \"Collected addresses\" while "
-"reading?"
-msgstr ""
-"Colectează automat contactele în dosarul \"Adrese colectate\" la trimitere?"
+msgid "Automatically collect contacts in the folder \"Collected addresses\" while reading?"
+msgstr "Colectează automat contactele în dosarul \"Adrese colectate\" la trimitere?"
 
 #: apps/io.ox/mail/settings/old_pane.js:78
 #: apps/io.ox/mail/settings/pane.js:31
@@ -4659,8 +4539,7 @@ msgstr "Păstrează mesajele pe server"
 
 #: apps/io.ox/mail/accounts/view-form.js:37
 msgid "Deleting messages on local storage also deletes them on server"
-msgstr ""
-"Mesajele șterse de pe mediul de stocare local vor fi șterse și de pe server"
+msgstr "Mesajele șterse de pe mediul de stocare local vor fi șterse și de pe server"
 
 #: apps/io.ox/mail/accounts/view-form.js:38
 msgid "Outgoing Server Settings (SMTP)"
@@ -4676,9 +4555,7 @@ msgstr "Tentativă de auto-configurare a contului dumneavoatră de mail"
 
 #: apps/io.ox/mail/accounts/settings.js:119
 msgid "There was no suitable server found for this mail/password combination"
-msgstr ""
-"Nu a fost găsit niciun server potrivit pentru această combinație de "
-"mail/parolă"
+msgstr "Nu a fost găsit niciun server potrivit pentru această combinație de mail/parolă"
 
 #: apps/io.ox/mail/accounts/settings.js:139
 msgid "Failed to connect."
@@ -4762,11 +4639,8 @@ msgid "Show images"
 msgstr "Afișează imaginile"
 
 #: apps/io.ox/mail/view-detail.js:848
-msgid ""
-"External images have been blocked to protect you against potential spam!"
-msgstr ""
-"Imaginile externe au fost blocate pentru a vă proteja împotriva eventualelor "
-"mesaje nedorite!"
+msgid "External images have been blocked to protect you against potential spam!"
+msgstr "Imaginile externe au fost blocate pentru a vă proteja împotriva eventualelor mesaje nedorite!"
 
 #: apps/io.ox/settings/main.js:94
 msgid "Expert mode"

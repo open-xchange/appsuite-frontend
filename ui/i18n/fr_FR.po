@@ -485,7 +485,7 @@ msgstr "%1$s sur %2$s"
 
 #: apps/plugins/portal/quota/register.js:122
 msgid "Quota"
-msgstr "Quota"
+msgstr "Quotas"
 
 #: apps/plugins/portal/linkedIn/register.js:146
 msgid "You have no new messages"
@@ -1299,7 +1299,7 @@ msgstr "Créer"
 #: apps/io.ox/editor/main.js:220 apps/io.ox/mail/write/main.js:869
 #: apps/io.ox/mail/write/view-main.js:59 apps/io.ox/tasks/edit/view.js:203
 msgid "Discard"
-msgstr "Désactiver"
+msgstr "Abandonner"
 
 #: apps/io.ox/calendar/edit/template.js:139 apps/io.ox/mail/actions.js:548
 #: apps/io.ox/mail/main.js:161 apps/io.ox/mail/main.js:418
@@ -3102,7 +3102,7 @@ msgstr "Droits"
 
 #: apps/io.ox/core/commons-folderview.js:473
 msgid "Toggle folder"
-msgstr "Inverser le dossier"
+msgstr "Dossier oui/non"
 
 #: apps/io.ox/core/permissions/permissions.js:31
 msgid "Guest"
@@ -3329,7 +3329,7 @@ msgstr "%1$s %2$s"
 
 #: apps/io.ox/core/desktop.js:1237
 msgid "Toggle search"
-msgstr "Inverser la recherche"
+msgstr "Recherche oui/non"
 
 #: apps/io.ox/core/desktop.js:1295
 msgid ""

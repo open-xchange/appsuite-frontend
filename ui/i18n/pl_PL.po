@@ -1,18 +1,19 @@
 # Antje Faber <antje.faber@open-xchange.com>, 2010, 2011, 2012.
+# jolanta <kontekst@kontekst.biz>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
-"PO-Revision-Date: 2012-12-16 13:01+0100\n"
+"PO-Revision-Date: 2013-01-25 03:57-0800\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"Last-Translator: Jaroslaw Hirny <jaroslaw@bureau-cornavin.com>\n"
-"Language-Team: Polski <pl@bureau-cornavin.com>\n"
+"Last-Translator: jolanta <kontekst@kontekst.biz>\n"
+"Language-Team: Polish <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pl\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: apps/io.ox/calendar/settings/pane.js:46
 #: apps/io.ox/tasks/settings/pane.js:39
@@ -94,7 +95,7 @@ msgstr "Za %s sek.:"
 
 #: apps/plugins/portal/calendar/register.js:37
 msgid "Started %s minutes ago:"
-msgstr "Rozpoczęte %d min. temu:"
+msgstr "Rozpoczęte %d min temu:"
 
 #: apps/plugins/portal/calendar/register.js:37
 msgid "In %s minutes:"
@@ -102,7 +103,7 @@ msgstr "Za %s min:"
 
 #: apps/plugins/portal/calendar/register.js:41
 msgid "Started %s hours ago:"
-msgstr "Rozpoczęte %s godz. temu:"
+msgstr "Rozpoczęto %s godz. temu:"
 
 #: apps/plugins/portal/calendar/register.js:41
 msgid "In %s hours:"
@@ -110,7 +111,7 @@ msgstr "Za %s godz.:"
 
 #: apps/plugins/portal/calendar/register.js:45
 msgid "Started %s days ago:"
-msgstr "Rozpoczęte %s dni temu:"
+msgstr "Rozpoczęto %s dni temu:"
 
 #: apps/plugins/portal/calendar/register.js:45
 msgid "In %s days:"
@@ -739,7 +740,7 @@ msgstr "Nie można znaleźć żadnych wiadomości wysłanych od tego kontaktu."
 
 #: apps/plugins/halo/mail/register.js:55
 msgid "Sent mails"
-msgstr "Wysłane wiadomości "
+msgstr "Wysłane wiadomości"
 
 #: apps/plugins/halo/mail/register.js:57
 msgid "Cannot find any messages you sent to this contact."
@@ -876,11 +877,11 @@ msgstr "Zmień status"
 
 #: apps/io.ox/calendar/actions.js:412
 msgid "Send mail to all participants"
-msgstr "Wyślij wiadomość do wszystkich uczestników"
+msgstr "Wyślij wiadomość e-mail do wszystkich uczestników"
 
 #: apps/io.ox/calendar/actions.js:421 apps/io.ox/mail/actions.js:782
 msgid "Save as distribution list"
-msgstr "Zapisz jako rozdzielnik"
+msgstr "Zapisz jako listę dystrybucyjną"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:223
 #: apps/io.ox/calendar/edit/recurrence-view.js:275
@@ -932,7 +933,7 @@ msgstr "Co miesiąc"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:260
 msgid "Yearly"
-msgstr "Co roku"
+msgstr "Co rok"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:270
 msgid ""
@@ -1258,7 +1259,7 @@ msgstr "Powtórz"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:542
 msgid "Click on the links to change the values."
-msgstr "Aby zmienić wartości, kliknij ten odnośnik."
+msgstr "Aby zmienić wartości, kliknij te łącza."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:543
 msgid "Click on a sentence to choose when to repeat the appointment."
@@ -1326,7 +1327,7 @@ msgstr "Cały dzień"
 #: apps/io.ox/calendar/edit/template.js:248
 msgid "%1$d Minute"
 msgid_plural "%1$d Minutes"
-msgstr[0] "%1$d min."
+msgstr[0] "%1$d min"
 msgstr[1] "%1$d min."
 msgstr[2] "%1$d min."
 
@@ -1366,7 +1367,7 @@ msgstr "Tymczasowe"
 
 #: apps/io.ox/calendar/edit/template.js:289 apps/io.ox/calendar/util.js:34
 msgid "Absent"
-msgstr "Nieobecne"
+msgstr "Nieobecność"
 
 #: apps/io.ox/calendar/edit/template.js:290 apps/io.ox/calendar/util.js:34
 msgid "Free"
@@ -1407,7 +1408,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/template.js:438
 #: apps/io.ox/tasks/edit/view-template.js:551
 msgid "Drop here to upload a <b>new attachment</b>"
-msgstr "Przeciągnij tutaj <b>nowy załącznik</b> do wysłania"
+msgstr "Przeciągnij tutaj <b>nowy załącznik</b> do przesłania"
 
 #: apps/io.ox/calendar/edit/main.js:26
 msgid "Edit Appointment"
@@ -1417,7 +1418,7 @@ msgstr "Edytuj spotkanie"
 #: apps/io.ox/contacts/edit/main.js:116 apps/io.ox/editor/main.js:219
 #: apps/io.ox/tasks/edit/main.js:144
 msgid "Do you really want to discard your changes?"
-msgstr "Czy na pewno chcesz porzucić zmiany?"
+msgstr "Czy na pewno chcesz odrzucić zmiany?"
 
 #: apps/io.ox/calendar/edit/main.js:96
 msgid "Edit appointment"
@@ -1536,28 +1537,28 @@ msgstr "Zakres dat dla widoku listy"
 
 #: apps/io.ox/calendar/settings/pane.js:37
 msgid "Default time for reminder"
-msgstr "Czas domyślny dla przypomnienia"
+msgstr "Domyślny czas przypomnienia"
 
 #: apps/io.ox/calendar/settings/pane.js:38
 msgid "E-Mail notification for appointment"
-msgstr "Zawiadomienie przez e-mail o nowym spotkaniu"
+msgstr "Powiadomienie e-mail o nowym spotkaniu"
 
 #: apps/io.ox/calendar/settings/pane.js:39
 msgid "E-Mail notification for New, Changed, Deleted?"
-msgstr "Zawiadomienie przez e-mail o Nowym, Zmienionym, Usuniętym?"
+msgstr "Powiadomienie e-mail o nowym, zmienionym, usuniętym?"
 
 #: apps/io.ox/calendar/settings/pane.js:40
 #: apps/io.ox/tasks/settings/pane.js:31
 msgid "E-Mail notification for Accept/Declined"
-msgstr "Zawiadomienie przez e-mail o Zaakceptowanym, Odrzuconym"
+msgstr "Powiadomienie e-mail o przyjęciu/odrzuceniu"
 
 #: apps/io.ox/calendar/settings/pane.js:41
 msgid "E-Mail notification for appointment creator?"
-msgstr "Zawiadomienie przez e-mail dla autora spotkania?"
+msgstr "Powiadomienie e-mail dla twórcy spotkania?"
 
 #: apps/io.ox/calendar/settings/pane.js:42
 msgid "E-Mail notification for appointment participant?"
-msgstr "Zawiadomienie przez e-mail dla uczestnika spotkania?"
+msgstr "Powiadomienie e-mail dla uczestnika spotkania?"
 
 #: apps/io.ox/calendar/settings/pane.js:43
 msgid "Show declined appointments"
@@ -1574,16 +1575,16 @@ msgstr "bez przypomnienia"
 #: apps/io.ox/calendar/settings/pane.js:72
 #: apps/io.ox/core/settings/pane.js:120
 msgid "15 minutes"
-msgstr "15 min."
+msgstr "15 min"
 
 #: apps/io.ox/calendar/settings/pane.js:73
 #: apps/io.ox/core/settings/pane.js:121
 msgid "30 minutes"
-msgstr "30 min."
+msgstr "30 min"
 
 #: apps/io.ox/calendar/settings/pane.js:74
 msgid "45 minutes"
-msgstr "45 min."
+msgstr "45 min"
 
 #: apps/io.ox/calendar/settings/pane.js:75
 msgid "1 hour"
@@ -1734,11 +1735,11 @@ msgstr "Dodaj nowy kontakt"
 
 #: apps/io.ox/contacts/actions.js:37
 msgid "Do you really want to delete these items?"
-msgstr "Czy na pewno chcesz usunąć wybrane elementy?"
+msgstr "Czy na pewno chcesz usunąć te elementy?"
 
 #: apps/io.ox/contacts/actions.js:39
 msgid "Do you really want to delete this distribution list?"
-msgstr "Czy na pewno chcesz usunąć wybrany rozdzielnik?"
+msgstr "Czy na pewno chcesz usunąć tę listę dystrybucyjną?"
 
 #: apps/io.ox/contacts/actions.js:41
 msgid "Do you really want to delete this contact?"
@@ -1757,7 +1758,7 @@ msgstr "Dodaj kontakt"
 
 #: apps/io.ox/contacts/actions.js:272
 msgid "Add distribution list"
-msgstr "Dodaj rozdzielnik"
+msgstr "Dodaj listę dystrybucyjną"
 
 #: apps/io.ox/contacts/actions.js:284
 msgid "Send mail"
@@ -1765,7 +1766,7 @@ msgstr "Wyślij wiadomość"
 
 #: apps/io.ox/contacts/actions.js:292 apps/io.ox/mail/actions.js:789
 msgid "Invite to appointment"
-msgstr "Zaproś do spotkania"
+msgstr "Zaproś na spotkanie"
 
 #. Address book thumb index
 #. (guess translation is only needed for Asian languages)
@@ -1777,7 +1778,7 @@ msgstr "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
 #: apps/io.ox/contacts/main.js:104 apps/io.ox/contacts/model.js:297
 #: apps/io.ox/contacts/view-detail.js:152 apps/io.ox/participants/views.js:93
 msgid "Distribution list"
-msgstr "Rozdzielnik "
+msgstr "Lista dystrybucyjna "
 
 #: apps/io.ox/contacts/main.js:156
 msgid "Couldn't load contact data."
@@ -2181,7 +2182,7 @@ msgstr "Adres (inny)"
 
 #: apps/io.ox/contacts/distrib/main.js:47
 msgid "Create distribution list"
-msgstr "Utwórz rozdzielnik"
+msgstr "Utwórz listę dystrybucyjną"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:39
 msgid "List name"
@@ -2281,7 +2282,7 @@ msgstr "Zmień nazwę"
 
 #: apps/io.ox/files/actions.js:399
 msgid "Upload new file"
-msgstr "Załaduj nowy plik"
+msgstr "Prześlij nowy plik"
 
 #: apps/io.ox/files/actions.js:406
 msgid "Share current folder"
@@ -2301,7 +2302,7 @@ msgstr "Wyślij jako łącze"
 
 #: apps/io.ox/files/actions.js:471
 msgid "Send by mail"
-msgstr "Wyślij przez wiadomość e-mail"
+msgstr "Wyślij w wiadomości e-mail"
 
 #: apps/io.ox/files/actions.js:485
 msgid "Edit description"
@@ -2309,7 +2310,7 @@ msgstr "Edytuj opis"
 
 #: apps/io.ox/files/actions.js:531
 msgid "Make this the current version"
-msgstr "Oznacz tę wersję jako bieżącą"
+msgstr "Ustaw tę wersję jako bieżącą"
 
 #: apps/io.ox/files/actions.js:541
 msgid "Delete version"
@@ -2404,7 +2405,7 @@ msgstr "Nie można załadować danych pliku."
 
 #: apps/io.ox/files/list/view-detail.js:102
 msgid "Current version"
-msgstr "Aktualna wersja"
+msgstr "Wersja bieżąca"
 
 #: apps/io.ox/files/list/view-detail.js:112
 msgid "Upload a new version"
@@ -2557,7 +2558,7 @@ msgstr "Priorytet"
 
 #: apps/io.ox/tasks/main.js:240
 msgid "Show done tasks"
-msgstr "Pokaż zrealizowane zadania"
+msgstr "Pokaż wykonane zadania"
 
 #: apps/io.ox/tasks/edit/view.js:54
 msgid "Expand form"
@@ -2746,15 +2747,15 @@ msgstr "następna sobota"
 
 #: apps/io.ox/tasks/util.js:144
 msgid "in 5 minutes"
-msgstr "za 5 min."
+msgstr "za 5 min"
 
 #: apps/io.ox/tasks/util.js:145
 msgid "in 15 minutes"
-msgstr "za 15 min."
+msgstr "za 15 min"
 
 #: apps/io.ox/tasks/util.js:146
 msgid "in 30 minutes"
-msgstr "za 30 min."
+msgstr "za 30 min"
 
 #: apps/io.ox/tasks/util.js:147
 msgid "in one hour"
@@ -2783,15 +2784,15 @@ msgstr "Odstęp między przypomnieniami w minutach"
 
 #: apps/io.ox/tasks/settings/pane.js:30
 msgid "E-Mail notification for task"
-msgstr "Zawiadomienie przez e-mail dla zadania"
+msgstr "Powiadomienie e-mail dla zadania"
 
 #: apps/io.ox/tasks/settings/pane.js:32
 msgid "E-Mail notification for task creator?"
-msgstr "Zawiadomienie przez e-mail dla autora zadania?"
+msgstr "Powiadomienie e-mail dla twórcy zadania?"
 
 #: apps/io.ox/tasks/settings/pane.js:33
 msgid "E-Mail notification for task participant?"
-msgstr "Zawiadomienie przez e-mail dla uczestnika zadania?"
+msgstr "Powiadomienie e-mail dla uczestnika zadania?"
 
 #: apps/io.ox/tasks/settings/pane.js:37
 msgid "H-split view"
@@ -2974,7 +2975,7 @@ msgstr "Czy na pewno chcesz usunąć folder \"%s\"?"
 
 #: apps/io.ox/core/tk/folderviews.js:572
 msgid "This is a standard folder, which can't be renamed."
-msgstr "Jest to folder standardowy. Zmiana jego nazwy nie jest możliwa."
+msgstr "To jest folder standardowy. Zmiana jego nazwy nie jest możliwa."
 
 #: apps/io.ox/core/tk/folderviews.js:580
 msgid "Rename folder"
@@ -3072,11 +3073,11 @@ msgstr "Temat"
 
 #: apps/io.ox/core/settings/pane.js:118 apps/io.ox/mail/settings/pane.js:54
 msgid "5 minutes"
-msgstr "5 min."
+msgstr "5 min"
 
 #: apps/io.ox/core/settings/pane.js:119 apps/io.ox/mail/settings/pane.js:55
 msgid "10 minutes"
-msgstr "10 min."
+msgstr "10 min"
 
 #: apps/io.ox/core/settings/pane.js:128
 msgid "Refresh interval"
@@ -3306,7 +3307,7 @@ msgstr[2] "%1$d godzin i %2$s"
 msgctxt "in"
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] "%d minutę"
+msgstr[0] "%d min"
 msgstr[1] "%d minuty"
 msgstr[2] "%d minut"
 
@@ -3316,7 +3317,7 @@ msgstr[2] "%d minut"
 #, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] "%d minuta"
+msgstr[0] "%d min"
 msgstr[1] "%d minuty"
 msgstr[2] "%d minut"
 
@@ -3427,7 +3428,7 @@ msgstr "Inny użytkownik"
 
 #: apps/io.ox/office/tk/view/alert.js:236
 msgid " is currently editing this document."
-msgstr "edytuje aktualnie ten dokument."
+msgstr "aktualnie edytuje ten dokument."
 
 #: apps/io.ox/office/tk/view/alert.js:241
 msgid "Acquire Edit Rights"
@@ -4127,7 +4128,7 @@ msgstr "Utwórz przypomnienie"
 
 #: apps/io.ox/mail/actions.js:549
 msgid "Mail reminder"
-msgstr "Przypomnienie przez wiadomość e-mail"
+msgstr "Przypomnienie pocztą e-mail"
 
 #: apps/io.ox/mail/actions.js:555
 msgid "Note"
@@ -4135,7 +4136,7 @@ msgstr "Uwaga"
 
 #: apps/io.ox/mail/actions.js:556
 msgid "Mail reminder for"
-msgstr "Przypomnienie przez wiadomość e-mail dla"
+msgstr "Przypomnienie pocztą e-mail dla"
 
 #: apps/io.ox/mail/actions.js:557 apps/io.ox/mail/main.js:159
 #: apps/io.ox/mail/main.js:418 apps/io.ox/mail/write/view-main.js:366
@@ -4144,7 +4145,7 @@ msgstr "Od"
 
 #: apps/io.ox/mail/actions.js:616 apps/io.ox/mail/write/main.js:413
 msgid "Compose new mail"
-msgstr "Utwórz nową wiadomość e-mail"
+msgstr "Nowa wiadomość e-mail"
 
 #: apps/io.ox/mail/actions.js:626
 msgid "Reply All"
@@ -4328,7 +4329,7 @@ msgstr "w imieniu"
 
 #: apps/io.ox/mail/settings/old_pane.js:46 apps/io.ox/mail/settings/pane.js:27
 msgid "Permanently remove deleted E-Mails?"
-msgstr "Trwale usunąć wykasowane wiadomości?"
+msgstr "Trwale usuwać kasowane wiadomości?"
 
 #: apps/io.ox/mail/settings/old_pane.js:47 apps/io.ox/mail/settings/pane.js:28
 msgid ""
@@ -4364,7 +4365,7 @@ msgstr "Prześlij wiadomość dalej jako:"
 
 #: apps/io.ox/mail/settings/old_pane.js:94 apps/io.ox/mail/settings/pane.js:35
 msgid "Inline"
-msgstr "W linii"
+msgstr "W tekście"
 
 #: apps/io.ox/mail/settings/old_pane.js:95 apps/io.ox/mail/settings/pane.js:36
 msgid "Attachment"
@@ -4388,7 +4389,7 @@ msgstr "HTML i zwykły tekst"
 #: apps/io.ox/mail/settings/old_pane.js:117
 #: apps/io.ox/mail/settings/pane.js:41
 msgid "Line wrap when sending text mails after: "
-msgstr "Kolumna zawijania linii podczas wysyłania wiadomości e-mail:"
+msgstr "Zawijanie linii podczas wysyłania wiadomości tekstowych po:"
 
 #: apps/io.ox/mail/settings/old_pane.js:124
 #: apps/io.ox/mail/settings/pane.js:43
@@ -4408,7 +4409,7 @@ msgstr "Wyświetlanie"
 #: apps/io.ox/mail/settings/old_pane.js:160
 #: apps/io.ox/mail/settings/pane.js:46
 msgid "Allow html formatted E-Mails"
-msgstr "Dopuść wiadomości w formacie HTML"
+msgstr "Zezwalaj na wiadomości w formacie HTML"
 
 #: apps/io.ox/mail/settings/old_pane.js:161
 #: apps/io.ox/mail/settings/pane.js:47
@@ -4418,7 +4419,7 @@ msgstr "Zablokuj ładowanie połączonych obrazów zewnętrznych"
 #: apps/io.ox/mail/settings/old_pane.js:162
 #: apps/io.ox/mail/settings/pane.js:48
 msgid "Display emoticons as graphics in text E-Mails"
-msgstr "Wyświetl emotikony jako grafikę w treści wiadomości e-mail"
+msgstr "Wyświetlaj emotikony jako obrazki w tekstowych wiadomościach e-mail"
 
 #: apps/io.ox/mail/settings/old_pane.js:163
 #: apps/io.ox/mail/settings/pane.js:49
@@ -4439,11 +4440,11 @@ msgstr "Wyłączona"
 
 #: apps/io.ox/mail/settings/pane.js:52
 msgid "1 minute"
-msgstr "1 minuta"
+msgstr "1 min"
 
 #: apps/io.ox/mail/settings/pane.js:53
 msgid "3 minutes"
-msgstr "3 min."
+msgstr "3 min"
 
 #: apps/io.ox/mail/accounts/view-form.js:24
 msgid "Account Settings"
@@ -4571,7 +4572,7 @@ msgstr[2] "Kopiuj"
 
 #: apps/io.ox/mail/view-detail.js:699
 msgid "All recipients"
-msgstr "Wszyscy odbiorcy"
+msgstr "Wszyscy adresaci"
 
 #: apps/io.ox/mail/view-detail.js:763
 msgctxt "plural"
@@ -4595,9 +4596,7 @@ msgstr "Cały wątek"
 
 #: apps/io.ox/mail/view-detail.js:825
 msgid "Warning: This message might be a phishing or scam mail"
-msgstr ""
-"Ostrzeżenie: ta wiadomość może być wysłana przez innego odbiorcę, niż został "
-"podany."
+msgstr "Ostrzeżenie: ta wiadomość może być próbą oszustwa."
 
 #: apps/io.ox/mail/view-detail.js:845
 msgid "Show images"
@@ -4640,7 +4639,7 @@ msgstr "Wystąpił błąd"
 
 #: apps/io.ox/backbone/forms.js:57
 msgid "An error occurred. Please try again later"
-msgstr "Wystąpił błąd. Spróbuj ponownie później. "
+msgstr "Wystąpił błąd. Spróbuj ponownie później."
 
 #: apps/io.ox/backbone/forms.js:560
 msgid "Show less"
@@ -4721,7 +4720,7 @@ msgstr "Kliknij tutaj, aby zamknąć pomoc"
 #~ msgstr "&Załącznik"
 
 #~ msgid "&Distribution List"
-#~ msgstr "&Rozdzielnik"
+#~ msgstr "&Lista dystrybucyjna"
 
 #~ msgid "&E-Mail"
 #~ msgstr "&E-mail"
@@ -4751,7 +4750,7 @@ msgstr "Kliknij tutaj, aby zamknąć pomoc"
 #~ msgstr "&Szukaj"
 
 #~ msgid "&Social"
-#~ msgstr "&Funkcje społeczne "
+#~ msgstr "&Sieci społecznościowe "
 
 #~ msgid "&View"
 #~ msgstr "&Widok"
@@ -4855,10 +4854,10 @@ msgstr "Kliknij tutaj, aby zamknąć pomoc"
 
 #~ msgid "Add sender and recipients to \"To\", Cc to \"Cc\""
 #~ msgstr ""
-#~ "Dodaj nadawcę i odbiorców do \"Do\", a odbiorców do wiadomości do \"DW\" "
+#~ "Dodaj nadawcę i adresatów w polu \"Do\", a adresatów kopii w polu \"DW\" "
 
 #~ msgid "Add sender to \"To\", recipients to \"Cc\""
-#~ msgstr "Dodaj nadawcę do \"Do\", odbiorców do \"DW\""
+#~ msgstr "Dodaj nadawcę w polu \"Do\", a adresatów w polu \"DW\""
 
 #~ msgid "Add to address book"
 #~ msgstr "Dodaj do książki adresowej"
@@ -5110,7 +5109,7 @@ msgstr "Kliknij tutaj, aby zamknąć pomoc"
 #~ msgstr "Na podstawie listy adresowej "
 
 #~ msgid "Based on recipients"
-#~ msgstr "Na podstawie odbiorcy"
+#~ msgstr "Na podstawie adresata"
 
 #~ msgid "Based on sender"
 #~ msgstr "Na podstawie nadawcy"
@@ -5697,7 +5696,7 @@ msgstr "Kliknij tutaj, aby zamknąć pomoc"
 #~ msgstr "Nazwa wyświetlana "
 
 #~ msgid "Distribution List"
-#~ msgstr "Rozdzielnik"
+#~ msgstr "Lista dystrybucyjna"
 
 #~ msgid "Djibouti"
 #~ msgstr "Dżibuti"
@@ -5708,12 +5707,12 @@ msgstr "Kliknij tutaj, aby zamknąć pomoc"
 #~ msgid ""
 #~ "Do you want to delete the whole recurrence or a single instance of the "
 #~ "recurrence?"
-#~ msgstr "Chcesz usunąć cały cykl czy pojedynczy element z cyklu? "
+#~ msgstr "Chcesz usunąć cały cykl czy jeden element z cyklu? "
 
 #~ msgid ""
 #~ "Do you want to delete the whole recurrence or single instances of the "
 #~ "recurrence?"
-#~ msgstr "Chcesz usunąć cały cykl czy pojedynczy element z cyklu? "
+#~ msgstr "Chcesz usunąć cały cykl czy jeden element z cyklu? "
 
 #~ msgid ""
 #~ "Do you want to edit the whole recurrence or a single recurrence "
@@ -5729,8 +5728,8 @@ msgstr "Kliknij tutaj, aby zamknąć pomoc"
 #~ "recurrence? Please note when changing a serial appointment, exceptions to "
 #~ "the recurrence are reset."
 #~ msgstr ""
-#~ "Chcesz edytować cały cykl czy pojedynczy element z cyklu? Pamiętaj, że "
-#~ "zmiana pojedynczego spotkania z cyklu spowoduje nowe ustawienie wyjątków "
+#~ "Chcesz edytować cały cykl czy jeden element z cyklu? Pamiętaj, że "
+#~ "zmiana jednego spotkania z cyklu spowoduje nowe ustawienie wyjątków "
 #~ "w cyklu. "
 
 #~ msgid ""
@@ -5833,7 +5832,7 @@ msgstr "Kliknij tutaj, aby zamknąć pomoc"
 #~ msgstr "Ekwador"
 
 #~ msgid "Edit Distribution List"
-#~ msgstr "Edytuj rozdzielnik"
+#~ msgstr "Edytuj listę dystrybucyjną"
 
 #~ msgid "Edit Furigana"
 #~ msgstr "Edytuj furigana"
@@ -6766,10 +6765,10 @@ msgstr "Kliknij tutaj, aby zamknąć pomoc"
 #~ msgstr "Mój magazyn informacji"
 
 #~ msgid "My OX Social"
-#~ msgstr "Moje funkcje społeczne"
+#~ msgstr "Moje funkcje społecznościowe"
 
 #~ msgid "My Social Configuration"
-#~ msgstr "Moja konfiguracja społeczna"
+#~ msgstr "Moja konfiguracja społecznościowa"
 
 # This country used to function as Birma in Polish and the old name is still commonly used, so I added it in the brackets.
 # dash: Iwona you decide which one we keep
@@ -6778,7 +6777,7 @@ msgstr "Kliknij tutaj, aby zamknąć pomoc"
 #~ msgstr "Myanmar (Birma)"
 
 #~ msgid "Name of the Distribution List:"
-#~ msgstr "Nazwa rozdzielnika:"
+#~ msgstr "Nazwa listy dystrybucyjnej:"
 
 #~ msgid "Name:"
 #~ msgstr "Nazwa:"
@@ -6808,7 +6807,7 @@ msgstr "Kliknij tutaj, aby zamknąć pomoc"
 #~ msgstr "Nowy kontakt"
 
 #~ msgid "New Distribution List"
-#~ msgstr "Nowy rozdzielnik"
+#~ msgstr "Nowa lista dystrybucyjna"
 
 #~ msgid "New InfoItem"
 #~ msgstr "Nowy element informacji  "
@@ -7578,7 +7577,7 @@ msgstr "Kliknij tutaj, aby zamknąć pomoc"
 #~ msgstr "Wybierz uczestników i zasoby"
 
 #~ msgid "Select Recipients"
-#~ msgstr "Wybierz odbiorców"
+#~ msgstr "Wybierz adresatów"
 
 #~ msgid "Select Users"
 #~ msgstr "Wybierz użytkowników"
@@ -7614,7 +7613,7 @@ msgstr "Kliknij tutaj, aby zamknąć pomoc"
 #~ msgstr "Wybierz z listy i dodaj wybranych jako uczestników lub zasoby"
 
 #~ msgid "Select from the list and add selected as recipients"
-#~ msgstr "Wybierz z listy i dodaj wybrane jako odbiorców"
+#~ msgstr "Wybierz z listy i dodaj wybranych jako adresatów"
 
 #~ msgid "Select from the list and add selected as users"
 #~ msgstr "Wybierz z listy i dodaj wybranych jako użytkowników"
@@ -7751,10 +7750,10 @@ msgstr "Kliknij tutaj, aby zamknąć pomoc"
 #~ msgstr "Słowenia"
 
 #~ msgid "Social"
-#~ msgstr "Funkcje społeczne"
+#~ msgstr "Sieci społecznościowe"
 
 #~ msgid "Social Messaging accounts"
-#~ msgstr "Konta społecznego przesyłania wiadomości"
+#~ msgstr "Konta do wiadomości w sieciach społecznościowych"
 
 #~ msgid "Solomon Islands"
 #~ msgstr "Wyspy Salomona"
@@ -8316,7 +8315,7 @@ msgstr "Kliknij tutaj, aby zamknąć pomoc"
 #~ msgstr "Updater"
 
 #~ msgid "Upload a picture"
-#~ msgstr "Załaduj obraz"
+#~ msgstr "Prześlij obraz"
 
 #~ msgid "Uruguay"
 #~ msgstr "Urugwaj"
@@ -8916,7 +8915,7 @@ msgstr "Kliknij tutaj, aby zamknąć pomoc"
 #~ msgstr "Konta OAuth"
 
 #~ msgid "No recipients have been added"
-#~ msgstr "Nie dodano żadnych odbiorców"
+#~ msgstr "Nie dodano żadnego adresata"
 
 #~ msgid "Please select a contact to add"
 #~ msgstr "Wybierz kontakt do dodania"
