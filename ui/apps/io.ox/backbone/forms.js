@@ -440,7 +440,6 @@ define('io.ox/backbone/forms',
                 this.$el.append(
                         $('<label class="checkbox">')
                         .addClass(this.labelClassName || '')
-                        .css('display', 'inline-block')
                         .append(
                             this.nodes.checkbox = $('<input type="checkbox">'),
                             this.label
