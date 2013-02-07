@@ -137,9 +137,9 @@ define('io.ox/core/tk/vgrid',
     }
 
     var ChunkedLoader = function (options) {
-        var CHUNK_SIZE = 100;
-        var THRESHHOLD_EAGER = 0;
-        var activeLoaders = {};
+        var CHUNK_SIZE = 100,
+            THRESHHOLD_EAGER = 0,
+            activeLoaders = {};
 
         this.MAX_CHUNK = 200;
         this.MIN_CHUNK = 50;
@@ -155,9 +155,7 @@ define('io.ox/core/tk/vgrid',
             }
             var all = this.all(options);
             var offset = CHUNK_SIZE * index;
-            var numRows = CHUNK_SIZE - 1;
-
-
+            var numRows = CHUNK_SIZE;
             var subset = all.slice(offset, offset + numRows);
 
             if (_.isEmpty(subset)) {
@@ -175,26 +173,17 @@ define('io.ox/core/tk/vgrid',
         };
 
         this.getChunkLoaders = function getChunkLoaders(start, length, options) {
-            CHUNK_SIZE = Math.ceil(this.all().length / 3);
-            if (CHUNK_SIZE > this.MAX_CHUNK) {
-                CHUNK_SIZE = this.MAX_CHUNK;
-            }
-            if (CHUNK_SIZE < this.MIN_CHUNK) {
-                CHUNK_SIZE = this.MIN_CHUNK;
-            }
+            CHUNK_SIZE = Math.max(Math.min(Math.ceil(this.all().length / 3), this.MAX_CHUNK), this.MIN_CHUNK);
             THRESHHOLD_EAGER = CHUNK_SIZE;
 
-            var end = start + length;
-            var startChunk = Math.floor(start / CHUNK_SIZE);
-            var endChunk = Math.floor(end / CHUNK_SIZE);
-            var i = 0;
+            var end = start + length,
+                startChunk = Math.floor(start / CHUNK_SIZE),
+                endChunk = Math.floor(end / CHUNK_SIZE),
+                chunkLoaders = [];
 
-            var chunkLoaders = [];
-
-
-            for (i = startChunk; i <= endChunk; i++) {
-                var lowerBound = i * CHUNK_SIZE;
-                var upperBound = ((i + 1) * CHUNK_SIZE) - 1;
+            for (var i = startChunk; i <= endChunk; i++) {
+                var lowerBound = i * CHUNK_SIZE,
+                    upperBound = lowerBound + CHUNK_SIZE;
                 if (start > lowerBound) {
                     lowerBound = start;
                 }
@@ -425,8 +414,8 @@ define('io.ox/core/tk/vgrid',
                 var i, obj, node;
                 for (i = 0; i < $i; i++) {
                     obj = labels.list[i];
-                    node = labels.nodes.eq(i);
                     obj.top = cumulatedLabelHeight + obj.pos * itemHeight;
+                    node = labels.nodes.eq(i);
                     node.css({ top: obj.top + 'px' });
                     cumulatedLabelHeight += (obj.height = node.outerHeight(true) || labelHeight);
                 }
@@ -474,7 +463,7 @@ define('io.ox/core/tk/vgrid',
             };
             numLabels = 0;
             // loop
-            var i = 0, $i = all.length + 1, current, tmp = '';
+            var i = 0, $i = all.length + 1, current = '', tmp = '';
             for (; i < $i; i++) {
                 tmp = self.requiresLabel(i, all[i], current);
                 if (tmp !== false) {
@@ -489,7 +478,6 @@ define('io.ox/core/tk/vgrid',
 
             // calling this via LFO, so that we always get the latest data
             function cont(offset, data) {
-
                 // vars
                 var i, $i, shift = 0, j = '', row,
                     defaultClassName = template.getDefaultClassName(),
