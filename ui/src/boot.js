@@ -602,8 +602,8 @@ $(window).load(function () {
             $("#io-ox-languages").remove();
         }
         // update header
-        $('#io-ox-login-header-prefix').text((sc.pageHeaderPrefix || '') + ' ');
-        $('#io-ox-login-header-label').text(sc.pageHeader || '');
+        $('#io-ox-login-header-prefix').text((sc.pageHeaderPrefix || '\u00A0') + ' ');
+        $('#io-ox-login-header-label').text(sc.pageHeader || '\u00A0');
         // update footer
         footer = sc.copyright ? sc.copyright + ' ' : '';
         footer += sc.version ? 'Version: ' + sc.version + ' ' : '';
