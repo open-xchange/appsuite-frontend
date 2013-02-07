@@ -28,7 +28,9 @@ $(window).load(function () {
 
     'use strict';
 
-    var bootstrapLoaded = require(['less!io.ox/core/bootstrap/css/bootstrap.less']);
+    if (!ox.signin) {
+        require(['less!io.ox/core/bootstrap/css/bootstrap.less']);
+    }
 
     // animations
     var DURATION = 250,
@@ -695,10 +697,7 @@ $(window).load(function () {
     $('#background_loader').busy();
 
     var boot = function () {
-        $.when(
-            bootstrapLoaded,
-            fetchGeneralServerConfig()
-        ).done(function () {
+        fetchGeneralServerConfig().done(function () {
             // set page title now
             document.title = _.noI18n(ox.serverConfig.pageTitle || '');
             if (ox.signin) {
