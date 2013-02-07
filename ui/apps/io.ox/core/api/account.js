@@ -278,8 +278,9 @@ define('io.ox/core/api/account',
             data: data
         })
         .done(function (d) {
-            accountsAllCache.add(d, _.now());
-            api.trigger('account_created', {id: d.id, email: d.primary_address, name: d.name});
+            accountsAllCache.add(d, _.now()).done(function () {
+                api.trigger('account_created', {id: d.id, email: d.primary_address, name: d.name});
+            });
         });
     };
 
@@ -323,9 +324,10 @@ define('io.ox/core/api/account',
             params: {action: 'delete'},
             data: data
         }).done(function () {
-            accountsAllCache.remove(data);
-            api.trigger('refresh.all');
-            api.trigger('delete');
+            accountsAllCache.remove(data).done(function () {
+                api.trigger('refresh.all');
+                api.trigger('delete');
+            });
         });
     };
 
