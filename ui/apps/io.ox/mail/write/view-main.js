@@ -267,6 +267,10 @@ define("io.ox/mail/write/view-main",
                                 primaryaddress: alias,
                                 displayname: aliases[0]
                             });
+                            // this code runs after setFrom in main.js, so we need to pre-select here
+                            if (alias === settings.get('defaultSendAddress')) {
+                                option.attr('selected', 'selected');
+                            }
                             select.append(option);
                         });
                     });
