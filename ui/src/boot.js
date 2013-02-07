@@ -102,6 +102,11 @@ $(window).load(function () {
         );
     }
 
+    // gettext for stupids
+    function gt(id) {
+        return $('#io-ox-login-feedback-strings').find('[data-i18n-id="' + id + '"]').text();
+    }
+
     // continuation
     cont = function () {
         $('#io-ox-login-username').focus().select();
@@ -196,7 +201,7 @@ $(window).load(function () {
                 $('#io-ox-login-form').css('opacity', '');
                 // show error
                 if (error && error.error === '0 general') {
-                    error = { error: $('#io-ox-login-feedback-strings').find('[data-i18n-id="no-connection"]').text() };
+                    error = { error: gt('no-connection') };
                 }
                 feedback('info', $.txt(_.formatError(error, '%1$s')));
                 // restore form
@@ -213,10 +218,10 @@ $(window).load(function () {
         $('#io-ox-login-feedback').busy().empty();
         // user name and password shouldn't be empty
         if ($.trim(username).length === 0) {
-            return fail({ error: 'Please enter your credentials.', code: 'UI-0001' }, 'username');
+            return fail({ error: gt('enter-credentials'), code: 'UI-0001' }, 'username');
         }
         if ($.trim(password).length === 0 && ox.online) {
-            return fail({ error: 'Please enter your password.', code: 'UI-0002' }, 'password');
+            return fail({ error: gt('enter-password'), code: 'UI-0002' }, 'password');
         }
         // login
         require(['io.ox/core/session']).done(function (session) {
@@ -255,7 +260,6 @@ $(window).load(function () {
                 });
                 // Set Cookie
                 _.setCookie('language', id);
-
                 // update placeholder (IE9 fix)
                 if (_.browser.IE) {
                     $('input[type=text], input[type=password]').val('').placeholder();
