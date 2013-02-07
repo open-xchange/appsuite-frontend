@@ -245,18 +245,19 @@ define('io.ox/portal/main',
                 point.invoke('preview', node, baton);
                 node.removeClass('pending error-occurred');
             })
-            .fail(function () {
+            .fail(function (errorData) {
                 node.find('.content').remove();
                 node.append(
-                    $('<div class="content">').text(
-                        gt('An error occurred. Click to try again')
+                    $('<div class="content error">').append(
+                        $('<div>').text(gt('An error occurred. The message was:')),
+                        $('<div class="italic">').text(errorData.error),
+                        '<br />',
+                        $('<a class="solution">').text(gt('Click to try again.')).on('click', function () {
+                            node.addClass('pending');
+                            loadAndPreview(point, node, baton);
+                        })
                     )
-                    .on('click', function () {
-                        node.addClass('pending');
-                        loadAndPreview(point, node, baton);
-                    })
                 );
-                node.addClass('error-occurred');
                 node.removeClass('pending');
             });
     }
