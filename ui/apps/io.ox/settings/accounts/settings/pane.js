@@ -14,7 +14,7 @@
 define: true, _: true
 */
 
-define(_.identity('io.ox/settings/accounts/settings/pane:plugins'), ox.withPluginsFor('keychainSettings', []));
+define(_.identity('io.ox/settings/accounts/settings/pane/plugins'), ox.withPluginsFor('keychainSettings', []));
 
 define('io.ox/settings/accounts/settings/pane',
         ['io.ox/core/extensions',
@@ -25,7 +25,7 @@ define('io.ox/settings/accounts/settings/pane',
            'text!io.ox/settings/accounts/email/tpl/account_select.html',
            'text!io.ox/settings/accounts/email/tpl/listbox.html',
            'gettext!io.ox/settings/accounts',
-           'io.ox/settings/accounts/settings/pane:plugins'
+           'io.ox/settings/accounts/settings/pane/plugins'
        ], function (ext, dialogs, api, keychainModel, folderAPI, tmpl, listboxtmpl, gt) {
 
 
