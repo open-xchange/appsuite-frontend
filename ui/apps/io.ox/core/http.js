@@ -395,8 +395,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         o.url = ox.apiRoot + "/" + o.module;
         if (o.jsessionid) o.url += ';jsessionid=' + o.jsessionid;
         // add session
-        if (o.appendSession === true && ox.session) {
-            o.params.session = ox.session;
+        if (o.appendSession === true) {
+            o.params.session = ox.session || 'unset';
         }
         // add columns
         if (o.appendColumns === true && o.params.columns === undefined) {
