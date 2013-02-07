@@ -96,7 +96,8 @@ define('plugins/notifications/tasks/register',
             api.update({id: obj.id,
                         folder_id: obj.folder_id,
                         status: 3,
-                        percent_completed: 100 })
+                        percent_completed: 100,
+                        date_completed: _.now() })
                 .done(function (result) {
                     api.trigger('update:' + encodeURIComponent(cid), result);
                 });

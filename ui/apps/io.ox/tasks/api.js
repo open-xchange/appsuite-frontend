@@ -204,6 +204,13 @@ define('io.ox/tasks/api', ['io.ox/core/http',
                 if (useFolder === undefined) {//if no folder is given use default
                     useFolder = api.getDefaultFolder();
                 }
+                
+                if (task.status === 3 || task.status === '3') {
+                    task.date_completed = _.now();
+                } else if (task.status !== 3 && task.status !== '3') {
+                    task.date_completed = null;
+                }
+                
                 var key = useFolder + '.' + task.id;
                 return http.PUT({
                     module: 'tasks',

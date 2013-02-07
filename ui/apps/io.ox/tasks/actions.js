@@ -109,13 +109,15 @@ define('io.ox/tasks/actions',
         if (state === 3) {
             mods = {label: gt('Undone'),
                     data: {status: 1,
-                           percent_completed: 0
+                           percent_completed: 0,
+                           date_completed: null
                           }
                    };
         } else {
             mods = {label: gt('Done'),
                     data: {status: 3,
-                           percent_completed: 100
+                           percent_completed: 100,
+                           date_completed: _.now()
                           }
                    };
         }
