@@ -24,6 +24,8 @@ define('io.ox/launchpad/main',
     'use strict';
 
     // same stupid solution like in core/main until we get translated apps from backend
+    gt('Portal');
+    gt('Mail');
     gt('Address Book');
     gt('Calendar');
     gt('Tasks');
