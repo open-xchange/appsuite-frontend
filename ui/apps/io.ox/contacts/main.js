@@ -146,9 +146,9 @@ define("io.ox/contacts/main",
         showContact = function (obj) {
             // get contact
             right.busy(true);
-            app.currentContact = obj;
             if (obj && obj.id !== undefined) {
-                api.get(api.reduce(obj))
+                app.currentContact = api.reduce(obj);
+                api.get(app.currentContact)
                     .done(_.lfo(drawContact))
                     .fail(_.lfo(drawFail, obj));
             } else {
@@ -201,11 +201,6 @@ define("io.ox/contacts/main",
 
         api.on("edit", function (evt, updated) {
             if (updated.folder === app.currentContact.folder_id && updated.id === app.currentContact.id) {
-                // Reload
-                showContact(app.currentContact);
-            }
-        }).on('refresh.all', function () {
-            if (app.currentContact) {
                 showContact(app.currentContact);
             }
         });

@@ -546,7 +546,8 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         };
 
         this.contains = function (ids) {
-            return _([].concat(ids)).inject(function (memo, id) {
+            var list = [].concat(ids);
+            return !!list.length && _(list).inject(function (memo, id) {
                 return memo && id in observedItemsIndex;
             }, true);
         };

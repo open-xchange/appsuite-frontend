@@ -413,7 +413,6 @@ define('io.ox/core/tk/vgrid',
                 text = text.replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
                     .replace(/[ÖÒÓÔÕÖ]/g, 'O')
                     .replace(/[ÜÙÚÛÜ]/g, 'U');
-
                 // add node
                 labels.nodes = labels.nodes.add(clone.node.appendTo(container));
                 // meta data
@@ -649,6 +648,7 @@ define('io.ox/core/tk/vgrid',
             // use url?
             ids = id !== undefined ? id.split(/,/) : [];
             if (all.length) {
+                //console.debug('updateSelection', ids, 'contains', self.selection.contains(ids));
                 if (ids.length && self.selection.contains(ids)) {
                     // convert ids to objects first - avoids problems with
                     // non-existing items that cannot be resolved in selections
