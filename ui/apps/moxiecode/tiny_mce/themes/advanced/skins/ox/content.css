@@ -2,6 +2,7 @@
 html {
     padding: 13px;
     max-width: 650px;
+    border-right: 1px dotted #ccc;
 }
 
 body {
