@@ -361,23 +361,25 @@ define('io.ox/contacts/distrib/create-dist-view',
     /**
     * remove allready used items
     *
-    * @return {object} data
+    * @return {object} data (list, hits)
     */
     function filterUsed(data, node) {
         var self = this,
             currentMembers = self.model.get('distribution_list') || {},
-            hash = {};
+            hash = {},
+            list;
 
         _(currentMembers).each(function (val) {
             hash[val.mail] = true;
         });
 
-        // ignore doublets and draw remaining
-        data = _(data).filter(function (member) {
+        // ignore doublets
+        list = _(data).filter(function (member) {
             return (hash[member.email] === undefined);
         }, this);
 
-        return data;
+        //return number of query hits and the filtered list
+        return { list: list, hits: data.length};
     }
 
     ext.point('io.ox/contacts/model/validation/distribution_list').extend({

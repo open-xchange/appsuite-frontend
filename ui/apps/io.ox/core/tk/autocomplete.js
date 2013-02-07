@@ -144,7 +144,8 @@ define('io.ox/core/tk/autocomplete',
                 },
 
             // handle search result
-            cbSearchResult = function (query, list) {
+            cbSearchResult = function (query, data) {
+                    var list = data.list;
                     if (list.length) {
                         // draw results
                         popup.idle();
@@ -161,8 +162,8 @@ define('io.ox/core/tk/autocomplete',
                         //open();
                         index = -1;
                     } else {
-                        // leads to no results
-                        emptyPrefix = query;
+                        // leads to no results if returned data wasn't filtered before (allready participant)
+                        emptyPrefix = data.hits ? emptyPrefix : query;
                         close();
                     }
                 },

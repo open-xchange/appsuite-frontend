@@ -203,15 +203,19 @@ define("io.ox/mail/write/view-main",
                     .autocomplete({
                         api: autocompleteAPI,
                         reduce: function (data) {
+                            var hash = {},
+                                list;
                             // remove duplicates
-                            var hash = {};
                             node.find('input[name=' + id + ']').map(function () {
                                 var rcpt = mailUtil.parseRecipient($(this).val())[1];
                                 hash[rcpt] = true;
                             });
-                            return _(data).filter(function (o) {
+                            list = _(data).filter(function (o) {
                                 return hash[o.email] === undefined;
                             });
+
+                            //return number of query hits and the filtered list
+                            return { list: list, hits: data.length };
                         },
                         stringify: function (data) {
                             return data.display_name ?
