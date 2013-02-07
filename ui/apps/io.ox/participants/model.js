@@ -97,7 +97,7 @@ define("io.ox/participants/model",
                 df.resolve();
                 break;
             case self.TYPE_EXTERNAL_USER:
-                contactAPI.getByEmailadress(self.get('mail')).done(function (data) {
+                contactAPI.getByEmailadress(self.get('mail') || self.get('email1')).done(function (data) {
                     if (data && data.display_name) {
                         self.set({
                             display_name: data.display_name,
