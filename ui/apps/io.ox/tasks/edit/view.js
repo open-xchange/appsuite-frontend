@@ -243,6 +243,9 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                         if (self.model.get('alarm') === null) {//alarm must not be null on create action
                             self.model.set('alarm', undefined);
                         }
+                        if (self.model.get('status') === 3 || self.model.get('status') === '3') {
+                            self.model.set('date_completed', _.now());
+                        }
                         self.model.sync('create', self.model, callbacks);
                     }
 

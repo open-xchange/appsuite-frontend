@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 define('io.ox/tasks/api', ['io.ox/core/http',
-                           'io.ox/core/config',
+                           'settings!io.ox/core',
                            'io.ox/core/api/factory',
                            'io.ox/core/api/folder'], function (http, configApi, apiFactory, folderApi) {
 
@@ -112,6 +112,14 @@ define('io.ox/tasks/api', ['io.ox/core/http',
     };
     
     api.checkForNotifications = function (ids, modifications) {
+        if (modifications.folder_id) {//move operation! Every notifications needs to be reseted or they will link to unavailable tasks
+            api.getTasks();
+            require(['io.ox/core/api/reminder'], function (reminderApi) {
+                reminderApi.getReminders();
+            });
+            return;
+        }
+        
         var addArray = [],
             removeArray = [];
         if (modifications.status) {//status parameter can be string or integer. Force it to be an integer
@@ -196,6 +204,13 @@ define('io.ox/tasks/api', ['io.ox/core/http',
                 if (useFolder === undefined) {//if no folder is given use default
                     useFolder = api.getDefaultFolder();
                 }
+                
+                if (task.status === 3 || task.status === '3') {
+                    task.date_completed = _.now();
+                } else if (task.status !== 3 && task.status !== '3') {
+                    task.date_completed = null;
+                }
+                
                 var key = useFolder + '.' + task.id;
                 return http.PUT({
                     module: 'tasks',
@@ -332,7 +347,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
     //for notification view
     api.getTasks = function () {
 
-        return http.GET({
+        return http.GET({//could be done to use all folders, see portal widget but not sure if this is needed (lots of requests)
             module: 'tasks',
             params: {action: 'all',
                 folder: api.getDefaultFolder(),

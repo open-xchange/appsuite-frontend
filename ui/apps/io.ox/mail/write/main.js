@@ -16,7 +16,6 @@ define('io.ox/mail/write/main',
     ['io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/core/extensions',
-     'io.ox/core/config',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/core/api/user',
@@ -28,7 +27,7 @@ define('io.ox/mail/write/main',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style.css',
-     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, notifications, settings, gt) {
+     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, notifications, settings, gt) {
 
     'use strict';
 
@@ -70,6 +69,9 @@ define('io.ox/mail/write/main',
             model,
             previous;
 
+        if (Modernizr.touch) messageFormat = 'text'; // See Bug 24802
+
+
         function getDefaultEditorMode() {
             return messageFormat === 'text' ? 'text' : 'html';
         }
@@ -103,10 +105,7 @@ define('io.ox/mail/write/main',
 
         window.newmailapp = function () { return app; };
 
-        view.signatures = _(config.get('gui.mail.signatures') || []).map(function (obj) {
-            obj.signature_name = _.noI18n(obj.signature_name);
-            return obj;
-        });
+        
 
         app.setSignature = function (e) {
 
@@ -114,7 +113,7 @@ define('io.ox/mail/write/main',
                 signature, text,
                 ed = this.getEditor(),
                 isHTML = !!ed.removeBySelector,
-                modified = isHTML ? $('<root></root>').append(ed.getContent()).find('p.io-ox-signature').text() !== currentSignature : false;
+                modified = isHTML ? $('<root></root>').append(ed.getContent()).find('p.io-ox-signature').text() !== currentSignature.replace(/(\r\n|\n|\r)/gm, '') : false;
 
             // remove current signature from editor
             if (isHTML) {
@@ -306,7 +305,7 @@ define('io.ox/mail/write/main',
                 var primary_address = null;
                 // TODO: don’t handle default user separately
                 if (accountID === "0") {
-                    primary_address = settings.get('defaultSendAddress');
+                    primary_address = settings.get('defaultSendAddress') || mailUtil.getInitialDefaultSender();
                 }
                 return {'displayname'    : data.personal,
                         'primaryaddress' : primary_address || data.primary_address};
@@ -496,7 +495,7 @@ define('io.ox/mail/write/main',
             this.setAttachments(data.attachments);
             this.setNestedMessages(data.nested_msgs);
             this.setPriority(data.priority || 3);
-            this.setAttachVCard(data.vcard !== undefined ? data.vcard : config.get('mail.vcard', false));
+            this.setAttachVCard(data.vcard !== undefined ? data.vcard : settings.get('vcard', false));
             this.setMsgRef(data.msgref);
             this.setSendType(data.sendtype);
             // add files (from file storage)

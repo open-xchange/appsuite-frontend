@@ -16,7 +16,7 @@
 define("io.ox/calendar/api",
     ["io.ox/core/http",
      "io.ox/core/event",
-     "io.ox/core/config",
+     "settings!io.ox/core",
      "io.ox/core/api/user",
      "io.ox/core/notifications",
      "io.ox/core/api/factory"], function (http, Events, config, userAPI, notifications, factory) {
@@ -313,7 +313,7 @@ define("io.ox/calendar/api",
             }
 
             if (!params.folder) {
-                params.folder = config.get('folder.calendar');
+                params.folder = config.get('folder/calendar');
             }
 
             // do not know if cache is a good idea

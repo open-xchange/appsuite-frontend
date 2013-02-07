@@ -14,8 +14,7 @@
 //TODO: split into packages for services, accounts and messages
 define("io.ox/messaging/messages/api",
     ["io.ox/core/http",
-    "io.ox/core/config",
-    "io.ox/core/api/user"], function (http, config, userAPI) {
+    "io.ox/core/api/user"], function (http, userAPI) {
 
     "use strict";
 

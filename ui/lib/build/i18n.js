@@ -145,7 +145,8 @@ function poFiles() {
         poFiles.value = {};
         _.each(exports.languages(), function(lang) {
             poFiles.value[lang] = exports.parsePO(
-                fs.readFileSync("i18n/" + lang + ".po", "utf8"));
+                fs.readFileSync("i18n/" + lang + ".po", "utf8"),
+                "i18n/" + lang + ".po");
         });
     }
     return poFiles.value;
@@ -328,11 +329,11 @@ exports.generatePOT = function(files) {
 };
 
 var poTokenizer = new RegExp(
-    '^(#.*|[ \\t\\v\\f]+)$' +                  // comment or empty line
-    '|(\\r\\n|\\r|\\n)' +                      // linebreak (for line numbering)
-    '|^(msg[\\[\\]\\w]+)(?:$|[ \\t\\v\\f]+)' + // keyword
-    '|[ \\t\\v\\f]*("[^\r\n]*")\\s*$' +        // string
-    '|(.)',                                    // anything else is an error
+    '^(#.*|[ \\t\\v\\f]+)$' +                 // comment or empty line
+    '|(\\r\\n|\\r|\\n)' +                     // linebreak (for line numbering)
+    '|^(msg[\\[\\]\\w]+)(?:$|[ \\t\\v\\f])' + // keyword
+    '|("[^\r\n]*")' +                         // string
+    '|(.)',                                   // anything else is an error
     "gm");
 
 var headerRegExp = new RegExp(
@@ -349,7 +350,7 @@ function format(string, params) {
         }).replace(/%%/, "%");
 }
 
-exports.parsePO = function(file) {
+exports.parsePO = function(file, filename) {
     
     var po = { nplurals: 1, plural: 0, dictionary: {} };
     
@@ -372,7 +373,7 @@ exports.parsePO = function(file) {
             if (t[3]) return t[3];
             if (t[4]) return t[4];
             if (t[5]) throw new Error(format(
-                "Invalid character in line %s.", [line_no]));
+                "Invalid character (%s:%s)", [filename, line_no]));
         }
     }
 
@@ -389,18 +390,22 @@ exports.parsePO = function(file) {
             return parts.join("");
         } else if (!optional) {
             throw new Error(format(
-                "Unexpected '%1$s' in line %3$s, expected '%2$s'.",
-                [lookahead, name, line_no]));
+                "Unexpected '%1$s', expected '%2$s' (%3$s:%4$s)",
+                [lookahead, name, filename, line_no]));
         }
     }
     
-    if (clause("msgid") != "") throw new Error("Missing PO file header");
+    if (clause("msgid") != "") {
+        throw new Error(Format("Missing PO file header in %s", [filename]));
+    }
     var header = clause("msgstr");
     var pluralForms = headerRegExp.exec(header);
-    if (pluralForms) {
-        po = { nplurals: Number(pluralForms[1]), plural: pluralForms[2],
-               dictionary: {} };
+    if (!pluralForms) {
+        throw new Error(format("No valid Plural-Forms header in %s",
+                               [filename]));
     }
+    po = { nplurals: Number(pluralForms[1]), plural: pluralForms[2],
+           dictionary: {} };
     
     while (lookahead) {
         var ctx = clause("msgctxt", true);

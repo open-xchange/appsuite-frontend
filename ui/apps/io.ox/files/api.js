@@ -17,7 +17,7 @@
 define('io.ox/files/api',
     ['io.ox/core/http',
      'io.ox/core/api/factory',
-     'io.ox/core/config',
+     'settings!io.ox/core',
      'io.ox/core/cache'
     ], function (http, apiFactory, config, cache) {
 
@@ -61,7 +61,7 @@ define('io.ox/files/api',
         requests: {
             all: {
                 action: 'all',
-                folder: config.get('folder.infostore'),
+                folder: config.get('folder/infostore'),
                 columns: allColumns,
                 sort: '700',
                 order: 'asc'
@@ -133,7 +133,7 @@ define('io.ox/files/api',
 
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
-            folder: config.get('folder.infostore')
+            folder: config.get('folder/infostore')
         }, options || {});
 
         function fixOptions() {
@@ -192,7 +192,7 @@ define('io.ox/files/api',
     api.uploadNewVersion = function (options) {
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
-            folder: config.get('folder.infostore')
+            folder: config.get('folder/infostore')
         }, options || {});
 
         var formData = new FormData();
@@ -231,7 +231,7 @@ define('io.ox/files/api',
     api.uploadNewVersionOldSchool = function (options) {
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
-            folder: config.get('folder.infostore')
+            folder: config.get('folder/infostore')
         }, options || {});
 
         var formData = options.form,
@@ -301,7 +301,7 @@ define('io.ox/files/api',
     api.create = function (options) {
 
         options = $.extend({
-            folder: config.get('folder.infostore')
+            folder: config.get('folder/infostore')
         }, options || {});
 
         if (!options.json.folder_id) {

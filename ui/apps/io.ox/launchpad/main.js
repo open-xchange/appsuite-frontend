@@ -16,7 +16,7 @@
 define('io.ox/launchpad/main',
     ['io.ox/core/desktop',
      'io.ox/core/api/apps',
-     'io.ox/core/config',
+     'settings!io.ox/core',
      'io.ox/core/extensions',
      'gettext!io.ox/core',
      'less!io.ox/launchpad/style.css'], function (desktop, api, config, ext, gt) {
@@ -24,6 +24,8 @@ define('io.ox/launchpad/main',
     'use strict';
 
     // same stupid solution like in core/main until we get translated apps from backend
+    gt('Portal');
+    gt('Mail');
     gt('Address Book');
     gt('Calendar');
     gt('Tasks');
@@ -111,7 +113,7 @@ define('io.ox/launchpad/main',
                         app.launch.apply(app, e.data.launchArguments);
                     } else if (e.data.createArguments) {
                         //documents need a parameter to create a new document
-                        e.data.createArguments.folderId = String(config.get("folder.infostore"));
+                        e.data.createArguments.folderId = String(config.get("folder/infostore"));
                         m.getApp(e.data.createArguments).launch();
                     } else {
                         m.getApp().launch();

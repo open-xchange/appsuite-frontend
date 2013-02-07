@@ -17,7 +17,7 @@ define('io.ox/tasks/actions',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/tasks',
      'io.ox/core/notifications',
-     'io.ox/core/config'], function (ext, util, links, gt, notifications, configApi) {
+     'settings!io.ox/core'], function (ext, util, links, gt, notifications, configApi) {
 
     'use strict';
 
@@ -109,13 +109,15 @@ define('io.ox/tasks/actions',
         if (state === 3) {
             mods = {label: gt('Undone'),
                     data: {status: 1,
-                           percent_completed: 0
+                           percent_completed: 0,
+                           date_completed: null
                           }
                    };
         } else {
             mods = {label: gt('Done'),
                     data: {status: 3,
-                           percent_completed: 100
+                           percent_completed: 100,
+                           date_completed: _.now()
                           }
                    };
         }

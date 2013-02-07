@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/api/account',
-    ['io.ox/core/config',
+    ['settings!io.ox/mail',
      'io.ox/core/http',
      'io.ox/core/cache',
      'io.ox/core/event'
@@ -24,7 +24,7 @@ define('io.ox/core/api/account',
     var idHash = {},
         typeHash = {},
         // default separator
-        separator = config.get('modules.mail.defaultseparator', '/');
+        separator = config.get('defaultseparator', '/');
 
     var process = function (data) {
 
@@ -37,11 +37,11 @@ define('io.ox/core/api/account',
                 var prefix = 'default' + account.id + separator,
                     field = id + '_fullname';
                 if (account.id === 0 && !account[field]) {
-                    var folder = config.get('mail.folder.' + id);
+                    var folder = config.get('folder/' + id);
                     // folder isn't available in config
                     if (!folder) {
                         // educated guess
-                        folder = config.get('mail.folder.inbox') + separator +  (account[id] || title);
+                        folder = config.get('folder/inbox') + separator +  (account[id] || title);
                     }
                     account[field] = folder;
                 } else if (!account[field]) {
@@ -170,7 +170,7 @@ define('io.ox/core/api/account',
 
             if (accountId === 0) {
                 //TODO: remove, once aliases are handled also for accounts
-                return [account.personal || '', config.get('modules.mail.addresses')];
+                return [account.personal || '', config.get('addresses')];
             }
 
             var aliases = account.addresses || '';
@@ -278,8 +278,9 @@ define('io.ox/core/api/account',
             data: data
         })
         .done(function (d) {
-            accountsAllCache.add(d, _.now());
-            api.trigger('account_created', {id: d.id, email: d.primary_address, name: d.name});
+            accountsAllCache.add(d, _.now()).done(function () {
+                api.trigger('account_created', {id: d.id, email: d.primary_address, name: d.name});
+            });
         });
     };
 
@@ -323,9 +324,10 @@ define('io.ox/core/api/account',
             params: {action: 'delete'},
             data: data
         }).done(function () {
-            accountsAllCache.remove(data);
-            api.trigger('refresh.all');
-            api.trigger('delete');
+            accountsAllCache.remove(data).done(function () {
+                api.trigger('refresh.all');
+                api.trigger('delete');
+            });
         });
     };
 
