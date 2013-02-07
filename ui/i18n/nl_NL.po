@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-01-27 16:36+0100\n"
+"PO-Revision-Date: 2013-02-01 22:51+0100\n"
 "Last-Translator: Ivar Snaaijer <Ivar@bureau-cornavin.com >\n"
 "Language-Team: Dutch <nl@bureau-cornavin.com>\n"
 "MIME-Version: 1.0\n"
@@ -3098,7 +3098,7 @@ msgstr "E-mailaccount toevoegen"
 
 #: apps/io.ox/core/commons-folderview.js:225
 msgid "Permissions"
-msgstr "Toestemmingen"
+msgstr "Rechten"
 
 #: apps/io.ox/core/commons-folderview.js:473
 msgid "Toggle folder"
@@ -4278,7 +4278,7 @@ msgstr "Blinde kopie (BCC) aan"
 #: apps/io.ox/mail/write/view-main.js:332
 #: apps/io.ox/mail/write/view-main.js:362
 msgid "Signatures"
-msgstr "Handtekeningen"
+msgstr "Ondertekeningen"
 
 #: apps/io.ox/mail/write/view-main.js:371
 msgid "Sender"
@@ -4311,7 +4311,7 @@ msgstr "HTML"
 
 #: apps/io.ox/mail/write/view-main.js:494
 msgid "No signature"
-msgstr "Geen handtekening"
+msgstr "Geen ondertekening"
 
 #. (From) email1 on behalf of email2. Appears in email detail view.
 #: apps/io.ox/mail/util.js:122
