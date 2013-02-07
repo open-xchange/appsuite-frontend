@@ -144,7 +144,6 @@ define("plugins/portal/linkedIn/register",
             })
             .pipe(function (msgs) {
                 var data = JSON.parse(msgs);
-                console.log(data, data.values);
                 if ((data.errorCode >= 0) && data.message) {
                     return (baton.data = data);
                 }
