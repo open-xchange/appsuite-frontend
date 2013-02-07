@@ -12,7 +12,7 @@
  */
 
 define("plugins/halo/mail/register",
-    ["io.ox/core/extensions", "gettext!plugins/halo/mail"], function (ext, gt) {
+    ["io.ox/core/extensions", "gettext!plugins/halo"], function (ext, gt) {
 
     "use strict";
 
