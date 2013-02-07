@@ -70,6 +70,9 @@ define('io.ox/mail/write/main',
             model,
             previous;
 
+        if (Modernizr.touch) messageFormat = 'text'; // See Bug 24802
+
+
         function getDefaultEditorMode() {
             return messageFormat === 'text' ? 'text' : 'html';
         }

@@ -104,6 +104,9 @@ define('io.ox/mail/settings/pane',
             this.append(holder.append(
                 mailViewSettings.render().el)
             );
+            if (Modernizr.touch) { // See Bug 24802
+                holder.find('input[name="messageFormat"]:first').closest('.control-group').hide().prev().hide();
+            }
         },
 
         save: function () {
