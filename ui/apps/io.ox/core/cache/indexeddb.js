@@ -68,6 +68,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 });
             },
             get: function (key) {
+                key = "" + key;
                 if (_.isUndefined(key) || _.isNull(key)) {
                     return $.Deferred().resolve(null);
                 }
@@ -101,6 +102,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 });
             },
             set: function (key, data, options) {
+                key = "" + key;
                 fluent[key] = JSON.stringify(data);
                 return readwrite(function (cache) {
                     try {
@@ -116,6 +118,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 });
             },
             remove: function (key) {
+                key = "" + key;
                 if (fluent[key]) {
                     delete fluent[key];
                 }
