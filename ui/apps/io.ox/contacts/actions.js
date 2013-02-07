@@ -15,7 +15,7 @@ define('io.ox/contacts/actions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/contacts/api',
-     'settings!io.ox/core',
+     'io.ox/core/config',
      'io.ox/core/notifications',
      'io.ox/core/capabilities',
      'gettext!io.ox/contacts'], function (ext, links, api, config, notifications, capabilities, gt) {
@@ -256,7 +256,7 @@ define('io.ox/contacts/actions',
                 // open app
                 require(['io.ox/calendar/edit/main'], function (m) {
                     m.getApp().launch().done(function () {
-                        this.create({ participants: participants, folder_id: config.get('folder/calendar') });
+                        this.create({ participants: participants, folder_id: config.get('folder.calendar') });
                     });
                 });
             });

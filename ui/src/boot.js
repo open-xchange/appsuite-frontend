@@ -164,17 +164,19 @@ $(window).load(function () {
         $('#io-ox-login-screen').hide();
         $(this).busy();
         // get configuration & core
-        require(['themes', 'settings!io.ox/core']).done(function (themes, settings) {
+        require(['io.ox/core/config', 'themes', 'settings!io.ox/core']).done(function (config, themes, settings) {
             var theme = settings.get('theme') || 'default';
-            $.when(
-                require(['io.ox/core/main']),
-                themes.set(theme)
-            ).done(function (core) {
-                // go!
-                core.launch();
-            })
-            .fail(function (e) {
-                console.error('Cannot launch core!', e);
+            config.load().done(function () {
+                $.when(
+                    require(['io.ox/core/main']),
+                    themes.set(theme)
+                ).done(function (core) {
+                    // go!
+                    core.launch();
+                })
+                .fail(function (e) {
+                    console.error('Cannot launch core!', e);
+                });
             });
         });
     };

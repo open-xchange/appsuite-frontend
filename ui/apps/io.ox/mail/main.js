@@ -16,7 +16,7 @@ define("io.ox/mail/main",
      "io.ox/mail/api",
      "io.ox/core/extensions",
      "io.ox/core/commons",
-     "settings!io.ox/mail",
+     "io.ox/core/config",
      "io.ox/core/tk/vgrid",
      "io.ox/mail/view-detail",
      "io.ox/mail/view-grid-template",
@@ -33,7 +33,7 @@ define("io.ox/mail/main",
 
     'use strict';
 
-    var draftFolderId = config.get('defaultFolder/drafts'),
+    var draftFolderId = config.get('modules.mail.defaultFolder.drafts'),
 
         hToolbarOptions = function (e) {
             e.preventDefault();

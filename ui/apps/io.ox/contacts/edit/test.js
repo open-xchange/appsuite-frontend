@@ -14,7 +14,7 @@ define('io.ox/contacts/edit/test',
     ['io.ox/core/extensions',
      'io.ox/contacts/main',
      'io.ox/contacts/api',
-     'settings!io.ox/core',
+     'io.ox/core/config',
      'io.ox/core/date'
     ], function (ext, contacts, api, config, date) {
 
@@ -133,7 +133,7 @@ define('io.ox/contacts/edit/test',
     }
 
  // get the current folder
-    var fId = config.get("folder/contacts");
+    var fId = config.get("folder.contacts");
     testObject.folder_id = fId;
 
     var testFactory = {

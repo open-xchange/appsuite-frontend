@@ -178,10 +178,10 @@ define("io.ox/core/desktop",
 
                     setDefault: function () {
                         var def = new $.Deferred();
-                        require(['settings!io.ox/core', 'settings!io.ox/mail'], function (config, mailConfig) {
+                        require(['io.ox/core/config'], function (config) {
                             var defaultFolder = type === 'mail' ?
-                                    mailConfig.get('folder/inbox') :
-                                    config.get('folder/' + type);
+                                    config.get('mail.folder.inbox') :
+                                    config.get('folder.' + type);
                             if (defaultFolder) {
                                 that.set(defaultFolder)
                                     .done(def.resolve)

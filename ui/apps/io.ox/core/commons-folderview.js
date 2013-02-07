@@ -15,9 +15,8 @@ define('io.ox/core/commons-folderview',
      'io.ox/core/extPatterns/links',
      'io.ox/core/notifications',
      'io.ox/core/api/folder',
-     'settings!io.ox/core',
-     'settings!io.ox/caldav',
-     'gettext!io.ox/core'], function (ext, links, notifications, api, config, caldavConfig, gt) {
+     'io.ox/core/config',
+     'gettext!io.ox/core'], function (ext, links, notifications, api, config, gt) {
 
     'use strict';
 
@@ -258,7 +257,7 @@ define('io.ox/core/commons-folderview',
                                     .val(ucfirst(folder.module))
                             )
                         );
-                        if (caldavConfig.get('active') && folder.module === 'calendar') {
+                        if (config.get('modules.caldav.active') && folder.module === 'calendar') {
                             node.append(
                                 $('<div class="row-fluid">').append(
                                     $('<label>')
@@ -269,7 +268,7 @@ define('io.ox/core/commons-folderview',
                                         .addClass('span9')
                                         .attr('readonly', 'readonly')
                                         .val(
-                                            _.noI18n(caldavConfig.get('url')
+                                            _.noI18n(config.get('modules.caldav.url')
                                                 .replace("[hostname]", location.host)
                                                 .replace("[folderId]", id)
                                         )
@@ -502,7 +501,7 @@ define('io.ox/core/commons-folderview',
                             });
                         } else {
                             if (!id && !newId && sel.length === 0) {
-                                tree.select(config.get('folder/' + options.type) + '');
+                                tree.select(config.get('folder.' + options.type) + '');
                             }
                             tree.repaint();
                             tree.idle();

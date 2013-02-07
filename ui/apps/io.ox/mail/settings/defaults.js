@@ -11,9 +11,10 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/settings/defaults', function (util) {
+define('io.ox/mail/settings/defaults', ['io.ox/mail/util'], function (util) {
 
     'use strict';
+
     var settingsDefaults = {
             'removeDeletedPermanently': false,
             'contactCollectOnMailTransport': false,
@@ -24,7 +25,7 @@ define('io.ox/mail/settings/defaults', function (util) {
             'forwardMessageAs': 'Inline',
             'messageFormat': 'html',
             'lineWrapAfter': '',
-            'defaultSendAddress': null,
+            'defaultSendAddress': util.getInitialDefaultSender(),
             'autoSafeDraftsAfter': false,
             'allowHtmlMessages': true,
             'allowHtmlImages': false,

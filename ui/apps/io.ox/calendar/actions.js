@@ -16,7 +16,7 @@ define('io.ox/calendar/actions',
      'io.ox/calendar/api',
      'io.ox/calendar/util',
      'gettext!io.ox/calendar/actions',
-     'settings!io.ox/core',
+     'io.ox/core/config',
      'io.ox/core/notifications',
      'io.ox/core/capabilities'
     ], function (ext, links, api, util, gt, config, notifications, capabilities) {
@@ -87,7 +87,7 @@ define('io.ox/calendar/actions',
             return capabilities.has('contacts');
         },
         action: function (baton) {
-            var contactsFolder = config.get('folder/contacts'),
+            var contactsFolder = config.get('folder.contacts'),
                 def = $.Deferred();
             util.createDistlistArrayFromPartisipantList(baton.data.participants, def);
             def.done(function (initdata) {

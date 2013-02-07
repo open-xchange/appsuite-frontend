@@ -16,7 +16,8 @@
 define("io.ox/rss/api",
     ["io.ox/core/http",
      "io.ox/core/event",
-     "io.ox/core/api/user"], function (http, Events, userAPI) {
+     "io.ox/core/config",
+     "io.ox/core/api/user"], function (http, Events, config, userAPI) {
 
     "use strict";
     var api = {
