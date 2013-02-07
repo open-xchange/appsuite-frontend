@@ -426,9 +426,8 @@ $(window).load(function () {
             if (ox.online) {
                 http.GET({
                     module: 'apps/manifests',
-                    params: {
-                        action: 'config'
-                    }
+                    params: { action: 'config' },
+                    appendSession: false
                 })
                 .done(function (data) {
                     configCache.add(cacheKey, data);

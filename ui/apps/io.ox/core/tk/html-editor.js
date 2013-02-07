@@ -630,8 +630,6 @@ define.async('io.ox/core/tk/html-editor', [], function () {
                 }
             }
 
-            window.lala = win;
-
             return found;
         };
 
