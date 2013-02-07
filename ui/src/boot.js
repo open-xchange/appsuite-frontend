@@ -43,6 +43,7 @@ $(window).load(function () {
         fnSubmit,
         fnChangeLanguage,
         changeLanguage,
+        forcedLanguage,
         setDefaultLanguage,
         autoLogin,
         initialize,
@@ -228,7 +229,8 @@ $(window).load(function () {
             session.login(
                 username,
                 password,
-                $('#io-ox-login-store-box').prop('checked')
+                $('#io-ox-login-store-box').prop('checked'),
+                forcedLanguage || ox.language || 'en_US'
             )
             .done(function () {
                 // success
@@ -259,7 +261,7 @@ $(window).load(function () {
                     }
                 });
                 // Set Cookie
-                _.setCookie('language', id);
+                _.setCookie('language', (ox.language = id));
                 // update placeholder (IE9 fix)
                 if (_.browser.IE) {
                     $('input[type=text], input[type=password]').val('').placeholder();
@@ -274,7 +276,7 @@ $(window).load(function () {
         // change language
         changeLanguage(e.data.id);
         // the user forced a language
-        ox.forcedLanguage = e.data.id;
+        forcedLanguage = e.data.id;
     };
 
     var getBrowserLanguage = function () {
@@ -585,7 +587,7 @@ $(window).load(function () {
             } else {
                 var sel = $('<select>').change(function() {
                     changeLanguage($(this).val());
-                    ox.forcedLanguage = $(this).val();
+                    forcedLanguage = $(this).val();
                 });
                 for (id in lang) {
                     sel.append(
