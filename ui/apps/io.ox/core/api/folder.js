@@ -13,11 +13,12 @@
 define('io.ox/core/api/folder',
     ['io.ox/core/http',
      'io.ox/core/cache',
-     'io.ox/core/config',
+     'settings!io.ox/core',
+     'settings!io.ox/mail',
      'io.ox/core/api/account',
      'io.ox/core/event',
      'io.ox/core/notifications',
-     'gettext!io.ox/core'], function (http, cache, config, account, Events, notifications, gt) {
+     'gettext!io.ox/core'], function (http, cache, config, mailConfig, account, Events, notifications, gt) {
 
     'use strict';
 
@@ -281,7 +282,7 @@ define('io.ox/core/api/folder',
                         .pipe(function (data, timestamp) {
                             // clean up
                             var id, folders, tmp = {},
-                                defaultFolder = String(config.get('folder.' + opt.type, 0)),
+                                defaultFolder = String(config.get('folder/' + opt.type, 0)),
 
                                 makeObject = function (raw) {
                                     return http.makeObject(raw, 'folders');
@@ -613,7 +614,7 @@ define('io.ox/core/api/folder',
                         return (/^default[1-9]/).test(String(data.id)) && !this.is('unifiedmail', data);
                     case 'defaultfolder':
                         // get default folder
-                        var folders = config.get('mail.folder');
+                        var folders = mailConfig.get('folder');
                         for (id in folders) {
                             if (folders[id] === data.id) {
                                 return true;
@@ -831,7 +832,7 @@ define('io.ox/core/api/folder',
 
     api.getDefaultFolder = function (type) {
         type = type || 'mail';
-        return config.get(type === 'mail' ? 'mail.folder.inbox' : 'folder.' + type);
+        return type === 'mail' ? mailConfig.get("folder/inbox") : config.get('folder/' + type);
     };
 
     api.getBreadcrumb = (function () {

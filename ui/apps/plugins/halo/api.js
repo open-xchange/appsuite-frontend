@@ -15,9 +15,9 @@
 // TODO: Caching?
 
 define.async('plugins/halo/api',
-    ['io.ox/core/http', 'io.ox/core/config',
+    ['io.ox/core/http',
      'plugins/halo/config', 'io.ox/core/extensions'
-    ], function (http, config, haloConfigUtil, ext) {
+    ], function (http, haloConfigUtil, ext) {
 
     'use strict';
 
@@ -128,7 +128,7 @@ define.async('plugins/halo/api',
             // TODO: remove; temp.fix for sequence
             list = _(list).without('com.openexchange.halo.contacts');
             list.unshift('com.openexchange.halo.contacts');
-            var providerConfig = config.get('ui.halo.providers');
+            var providerConfig = {};
             activeProviders = haloConfigUtil.interpret(providerConfig, list);
             // publish api!
             return api;

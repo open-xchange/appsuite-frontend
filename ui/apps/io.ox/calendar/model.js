@@ -19,7 +19,7 @@ define('io.ox/calendar/model',
         'io.ox/participants/model',
         'io.ox/core/date',
         'io.ox/core/api/folder',
-        'io.ox/core/config'], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, configAPI) {
+        'settings!io.ox/core'], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, configAPI) {
 
     "use strict";
 

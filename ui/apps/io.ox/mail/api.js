@@ -14,12 +14,13 @@
 define("io.ox/mail/api",
     ["io.ox/core/http",
      "io.ox/core/cache",
-     "io.ox/core/config",
+     "settings!io.ox/core",
+     "settings!io.ox/mail",
      "io.ox/core/api/factory",
      "io.ox/core/api/folder",
      "io.ox/core/api/account",
      "io.ox/core/notifications",
-     'settings!io.ox/mail'], function (http, cache, config, apiFactory, folderAPI, accountAPI, notifications, settings) {
+     'settings!io.ox/mail'], function (http, cache, config, mailConfig, apiFactory, folderAPI, accountAPI, notifications, settings) {
 
     'use strict';
 
@@ -307,7 +308,7 @@ define("io.ox/mail/api",
     // publish tracker
     api.tracker = tracker;
 
-    api.separator = config.get('modules.mail.defaultseparator', '/');
+    api.separator = mailConfig.get('defaultseparator', '/');
 
     api.SENDTYPE = {
         NORMAL:  '0',
@@ -854,7 +855,7 @@ define("io.ox/mail/api",
 
     api.saveAttachments = function (list, target) {
         // be robust
-        target = target || config.get('folder.infostore');
+        target = target || config.get('folder/infostore');
         // support for multiple attachments
         list = _.isArray(list) ? list : [list];
         http.pause();

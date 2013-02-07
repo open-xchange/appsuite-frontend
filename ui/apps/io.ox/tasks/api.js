@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 define('io.ox/tasks/api', ['io.ox/core/http',
-                           'io.ox/core/config',
+                           'settings!io.ox/core',
                            'io.ox/core/api/factory',
                            'io.ox/core/api/folder'], function (http, configApi, apiFactory, folderApi) {
 

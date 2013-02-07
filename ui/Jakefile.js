@@ -282,7 +282,6 @@ utils.concat("boot.js", [
 utils.concat("pre-core.js",
     utils.list("apps", [
         "io.ox/core/settings.js", // settings plugin
-        "io.ox/core/config.js",
         "io.ox/core/tk/selection.js",
         "io.ox/core/tk/vgrid.js",
         "io.ox/core/tk/model.js",

@@ -16,8 +16,8 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
 
     function fnMigrateClassicSignatures() {
         var def = $.Deferred();
-        require(["io.ox/core/config", "io.ox/core/api/snippets"], function (config, snippets) {
-            var classicSignatures = config.get('gui.mail.signatures');
+        require(["settings!io.ox/migration", "io.ox/core/api/snippets"], function (config, snippets) {
+            var classicSignatures = config.get('gui/mail/signatures');
 
             var deferreds = _(classicSignatures).map(function (classicSignature) {
                 // console.log("Importing signature " + classicSignature.signature_name);
@@ -252,7 +252,7 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
         index: 300,
         draw: function () {
             var $node = this;
-            require(["io.ox/core/api/snippets", 'io.ox/core/config'], function (snippets, config) {
+            require(["io.ox/core/api/snippets", 'settings!io.ox/migration'], function (snippets, config) {
                 var $list, signatures;
                 function fnDrawAll() {
                     snippets.getAll('signature').done(function (sigs) {
@@ -315,9 +315,9 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                     $("<br>").appendTo($node);
 
 
-                    if (config.get('gui.mail.signatures') && !_.isNull && config.get('gui.mail.signatures').length > 0) {
+                    if (config.get('gui/mail/signatures') && !_.isNull && config.get('gui/mail/signatures').length > 0) {
                         $('<a href="#">').text(gt("Import signatures")).on('click', function (e) {
-                            fnImportSignatures(e, config.get('gui.mail.signatures'));
+                            fnImportSignatures(e, config.get('gui/mail/signatures'));
                             return false;
                         }).appendTo($node);
                     }

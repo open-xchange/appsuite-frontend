@@ -14,7 +14,7 @@
 
 define('io.ox/mail/util',
     ['io.ox/core/extensions',
-     'io.ox/core/config',
+     'settings!io.ox/mail',
      'io.ox/core/date',
      'gettext!io.ox/core'], function (ext, config, date, gt) {
 
@@ -68,7 +68,7 @@ define('io.ox/mail/util',
         // mail addresses hash
         addresses = {};
 
-    _(config.get('mail.addresses', [])).each(function (address) {
+    _(config.get('addresses', [])).each(function (address) {
         addresses[address.toLowerCase()] = true;
     });
 
@@ -287,7 +287,7 @@ define('io.ox/mail/util',
         },
 
         getInitialDefaultSender: function () {
-            var mailArray = _(config.get('mail.addresses', []));
+            var mailArray = _(config.get('addresses', []));
             return mailArray._wrapped[0];
         },
 
