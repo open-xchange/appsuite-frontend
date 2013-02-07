@@ -17,7 +17,7 @@ define('io.ox/tasks/actions',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/tasks',
      'io.ox/core/notifications',
-     'io.ox/core/config'], function (ext, util, links, gt, notifications, configApi) {
+     'settings!io.ox/core'], function (ext, util, links, gt, notifications, configApi) {
 
     'use strict';
 

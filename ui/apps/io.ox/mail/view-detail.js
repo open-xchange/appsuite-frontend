@@ -17,7 +17,7 @@ define('io.ox/mail/view-detail',
      'io.ox/core/extPatterns/links',
      'io.ox/mail/util',
      'io.ox/mail/api',
-     'io.ox/core/config',
+     'settings!io.ox/mail',
      'io.ox/core/http',
      'io.ox/core/api/account',
      'settings!io.ox/mail',
@@ -529,7 +529,7 @@ define('io.ox/mail/view-detail',
                     console.error('No baton found. Not supposed to happen.');
                     return;
                 }
-                sentFolder = config.get('mail.folder.sent');
+                sentFolder = config.get('folder/sent');
                 inboxMails = _(modifiedBaton.data).filter(function (elem) {
                     return elem.folder_id !== sentFolder;
                 });

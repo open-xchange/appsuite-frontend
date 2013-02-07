@@ -18,12 +18,11 @@ define('io.ox/core/tk/folderviews',
      'io.ox/core/api/user',
      'io.ox/core/extensions',
      'io.ox/core/event',
-     'io.ox/core/config',
      'io.ox/core/notifications',
      'io.ox/core/http',
      'io.ox/core/cache',
      'gettext!io.ox/core'
-    ], function (Selection, api, account, userAPI, ext, Events, config, notifications, http, cache, gt) {
+    ], function (Selection, api, account, userAPI, ext, Events, notifications, http, cache, gt) {
 
     'use strict';
 
