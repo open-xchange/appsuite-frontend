@@ -241,8 +241,9 @@ define("io.ox/core/main",
 
         function addUserContent(model, launcher) {
             if (model.get('userContent')) {
-                var icon = model.get('userContentIcon') || 'icon-pencil';
-                launcher.addClass('user-content').prepend($('<i class="' + icon + '">'));
+                var cls = model.get('userContentClass') || '',
+                    icon = model.get('userContentIcon') || 'icon-pencil';
+                launcher.addClass('user-content').addClass(cls).prepend($('<i class="' + icon + '">'));
             }
         }
 
