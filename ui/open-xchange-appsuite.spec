@@ -49,6 +49,22 @@ Requires:       nodejs >= 0.4.0
 %description    dev
 SDK for the OX App Suite HTML5 client
 
+%package        help-de-de
+Group:          Applications/Productivity
+Summary:        Online help for OX App Suite (de_DE)
+Provides:       open-xchange-appsuite-help
+
+%description    help-de-de
+Online help for OX App Suite (de_DE)
+
+%package        help-en-us
+Group:          Applications/Productivity
+Summary:        Online help for OX App Suite (en_US)
+Provides:       open-xchange-appsuite-help
+
+%description    help-en-us
+Online help for OX App Suite (en_US)
+
 ## l10n ##
 #%package l10n-## lang ##
 #Group: Applications/Productivity
@@ -89,8 +105,9 @@ sed -i -e 's#OX_APPSUITE_DEV=.*#OX_APPSUITE_DEV="/opt/open-xchange-appsuite-dev"
     "%{buildroot}/opt/open-xchange-appsuite-dev/bin/build-appsuite"
 
 %clean
-sh build.sh clean builddir="%{buildroot}%{docroot}" version=%{version} revision=%{release}
-rm -r "%{buildroot}/opt/open-xchange/appsuite"
+APPSUITE=/opt/open-xchange/appsuite/
+sh build.sh clean builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
+    manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{release}
 rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
 
 %files
@@ -98,6 +115,7 @@ rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
 %doc readme.txt
 %dir %{docroot}
 %{docroot}
+%exclude %{docroot}/help
 
 %files manifest -f tmp/files
 %defattr(-,root,root)
@@ -108,6 +126,16 @@ rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
 %dir /opt/open-xchange-appsuite-dev
 /opt/open-xchange-appsuite-dev
 %attr(644,root,root) /opt/open-xchange-appsuite-dev/lib/sax-js/examples/switch-bench.js
+
+%files help-de-de
+%defattr(-,root,root)
+%dir %{docroot}/help
+%{docroot}/help/de_DE
+
+%files help-en-us
+%defattr(-,root,root)
+%dir %{docroot}/help
+%{docroot}/help/en_US
 
 ## l10n ##
 #%files l10n-## lang ## -f tmp/files-## lang ##

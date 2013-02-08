@@ -13,6 +13,7 @@ override_dh_auto_install:
 	    builddir=debian/open-xchange-appsuite/var/www/appsuite \
 	    l10nDir=debian/open-xchange-appsuite-l10n-@lang@/opt/open-xchange/appsuite \
 	    manifestDir=debian/open-xchange-appsuite-manifest/opt/open-xchange/appsuite \
+	    helpDir=debian/open-xchange-appsuite-help-@lang@/var/www/appsuite \
 	    $(FLAGS) --trace
 	for i in i18n/*.properties; do \
 	    j=$${i#i18n/}; pkgname=$${j%.properties}; \
@@ -30,6 +31,7 @@ override_dh_auto_clean:
 	    builddir=debian/open-xchange-appsuite/var/www/appsuite \
 	    l10nDir=debian/open-xchange-appsuite-l10n-@lang@/opt/open-xchange/appsuite \
 	    manifestDir=debian/open-xchange-appsuite-manifest/opt/open-xchange/appsuite \
+        helpDir=debian/open-xchange-appsuite-help-@lang@/var/www/appsuite \
 	    $(FLAGS) --trace
 
 %:

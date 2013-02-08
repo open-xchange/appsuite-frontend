@@ -385,6 +385,16 @@ utils.copy(utils.list("lib", "mediaelement/"), {to: utils.dest("apps") });
 
 utils.copy(utils.list("lib", "ace/"), {to: utils.dest("apps")});
 
+//online help
+
+var helpDir = process.env.helpDir || utils.builddir;
+_.each(fs.readdirSync('help'), function (Lang) {
+    var lang = Lang.toLowerCase().replace(/_/g, '-');
+    utils.copy(utils.list(path.join('help', Lang + '/')), {
+        to: helpDir.replace(/@lang@/g, lang)
+    });
+});
+
 // external apps
 
 desc('Builds an external app');
@@ -711,7 +721,7 @@ directory(distDest, ["clean"]);
 desc("Creates source packages");
 task("dist", [distDest], function () {
     var toCopy = _.reject(fs.readdirSync("."), function(f) {
-        return /^(tmp|ox.pot|build)$/.test(f);
+        return /^(tmp|ox\.pot|build|local\.conf)$/.test(f);
     });
     var tarName = pkgName + '-' + ver;
     var debName = pkgName + '_' + ver;
