@@ -253,13 +253,10 @@ define('io.ox/calendar/week/view',
             }
         },
 
-        onEditAppointment: function (e) {
-            var cid = $(e.currentTarget).data('cid'),
-                obj = _.cid(cid + '');
-            this.trigger('openEditAppointment', e, obj);
-        },
-
-        // handler for double-click events on grid
+        /**
+         * handler for double-click events on grid to create new appointments
+         * @param  {MouseEvent} e double click event
+         */
         onCreateAppointment: function (e) {
             if (!folderAPI.can('create', this.folder())) {
                 return;
@@ -277,12 +274,20 @@ define('io.ox/calendar/week/view',
             }
         },
 
+        /**
+         * handler for appointment updates
+         * @param  {Object} obj appointment object
+         */
         onUpdateAppointment: function (obj) {
             if (obj.start_date && obj.end_date && obj.start_date < obj.end_date) {
                 this.trigger('updateAppointment', obj);
             }
         },
 
+        /**
+         * handler for lasso function in grid
+         * @param  {MouseEvent} e mouseevents on day container
+         */
         onLasso: function (e) {
             if (!folderAPI.can('create', this.folder())) {
                 return;
@@ -1206,7 +1211,6 @@ define('io.ox/calendar/week/view',
             }
         },
 
-        //
         /**
          * round an integer to the next grid size
          * @param  {number} pos position as integer
@@ -1229,7 +1233,11 @@ define('io.ox/calendar/week/view',
             return Math[typ](pos / h) * h;
         },
 
-        // calculate css position paramter (top and left) of an appointment
+        /**
+         * calculate css position paramter (top and left) of an appointment
+         * @param  {Object} ap jQuery object of the appointment
+         * @return {Object}    object containin top and height values
+         */
         calcPos: function (ap) {
             var start = new date.Local(ap.pos.start),
                 end = new date.Local(ap.pos.end),
@@ -1244,27 +1252,47 @@ define('io.ox/calendar/week/view',
             };
         },
 
-        // get timestamp from date marker
+        /**
+         * get timestamp from date marker
+         * @param  {number} tag value of the day [0 - 6] for week view
+         * @return {number}     timestamp
+         */
         getTimeFromDateTag: function (tag)  {
             return this.startDate.getTime() + (tag * date.DAY);
         },
 
-        // calc daily timestamp from mouse position
+        /**
+         * calc daily timestamp from mouse position
+         * @param  {number} pos       mouse x position
+         * @param  {String} roundType specifies the used rounding algorithm {n=floor, s=ceil, else round}
+         * @return {number}           closest grid position
+         */
         getTimeFromPos: function (pos, roundType) {
             roundType = roundType || '';
             return this.roundToGrid(pos, roundType) / this.height() * date.DAY;
         },
 
-        // calculate complete height of the grid
+        /**
+         * calculate complete height of the grid
+         * @return {number} height of the grid
+         */
         height: function () {
             return this.cellHeight * this.slots * this.fragmentation;
         },
 
-        // calculate height of a single grid fragment
+        /**
+         * calculate height of a single grid fragment
+         * @return {number} height of a single grid fragment
+         */
         gridHeight: function () {
             return this.cellHeight * this.fragmentation / this.gridSize;
         },
 
+        /**
+         * get and set property of showAll checkbox
+         * @param  {Boolean} opt display option of the showAll checkbox
+         * @return {Boolean}     value of the showAllPrivateAppointments setting (only when opt param === undefined)
+         */
         showAll: function (opt) {
             if (typeof opt === 'boolean') {
                 this.showAllCon[opt ? 'show': 'hide']();
@@ -1275,6 +1303,11 @@ define('io.ox/calendar/week/view',
             }
         },
 
+        /**
+         * get or set current folder data
+         * @param  {Object} data folder data
+         * @return {Object}      current folder data
+         */
         folder: function (data) {
             if (data) {
                 this.folderData = data;
@@ -1295,11 +1328,17 @@ define('io.ox/calendar/week/view',
             }
         },
 
+        /**
+         * save current scrollposition for the view instance
+         */
         save: function () {
             // save scrollposition
             this.restoreCache.scrollPosition = this.pane.scrollTop();
         },
 
+        /**
+         * restore scrollposition for the view instance
+         */
         restore: function () {
             // restore scrollposition
             if (this.restoreCache.scrollPosition) {
