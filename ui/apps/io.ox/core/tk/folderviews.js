@@ -18,11 +18,12 @@ define('io.ox/core/tk/folderviews',
      'io.ox/core/api/user',
      'io.ox/core/extensions',
      'io.ox/core/event',
+     'io.ox/core/config',
      'io.ox/core/notifications',
      'io.ox/core/http',
      'io.ox/core/cache',
      'gettext!io.ox/core'
-    ], function (Selection, api, account, userAPI, ext, Events, notifications, http, cache, gt) {
+    ], function (Selection, api, account, userAPI, ext, Events, config, notifications, http, cache, gt) {
 
     'use strict';
 
@@ -676,7 +677,7 @@ define('io.ox/core/tk/folderviews',
                         container
                     );
                 })
-                .addButton('cancel', 'Cancel')
+                .addButton('cancel', gt('Cancel'))
                 .addPrimaryButton('save', gt('Save'))
                 .show(function () {
                 }).done(function (action) {
@@ -785,6 +786,7 @@ define('io.ox/core/tk/folderviews',
         }
 
         this.select = function (data) {
+            if (data === null) debugger;
             // unpack array; pluck 'id'
             data = _.isArray(data) ? data[0] : data;
             data = _.isString(data) ? data : String(data.id);

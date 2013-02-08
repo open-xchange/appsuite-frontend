@@ -16,7 +16,7 @@
 define('io.ox/launchpad/main',
     ['io.ox/core/desktop',
      'io.ox/core/api/apps',
-     'settings!io.ox/core',
+     'io.ox/core/config',
      'io.ox/core/extensions',
      'gettext!io.ox/core',
      'less!io.ox/launchpad/style.css'], function (desktop, api, config, ext, gt) {
@@ -113,7 +113,7 @@ define('io.ox/launchpad/main',
                         app.launch.apply(app, e.data.launchArguments);
                     } else if (e.data.createArguments) {
                         //documents need a parameter to create a new document
-                        e.data.createArguments.folderId = String(config.get("folder/infostore"));
+                        e.data.createArguments.folderId = String(config.get("folder.infostore"));
                         m.getApp(e.data.createArguments).launch();
                     } else {
                         m.getApp().launch();

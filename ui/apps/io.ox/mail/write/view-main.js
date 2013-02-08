@@ -28,9 +28,10 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/api/account',
      'io.ox/core/api/snippets',
      'io.ox/core/strings',
+     'io.ox/core/config',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, settings, gt) {
+    ], function (ext, links, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, config, settings, gt) {
 
     'use strict';
 
@@ -266,6 +267,10 @@ define("io.ox/mail/write/view-main",
                                 primaryaddress: alias,
                                 displayname: aliases[0]
                             });
+                            // this code runs after setFrom in main.js, so we need to pre-select here
+                            if (alias === settings.get('defaultSendAddress')) {
+                                option.attr('selected', 'selected');
+                            }
                             select.append(option);
                         });
                     });

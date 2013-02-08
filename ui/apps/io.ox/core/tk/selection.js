@@ -176,7 +176,6 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             var key, id;
             if (!e.isDefaultPrevented()) {
                 key = $(this).attr('data-obj-id');
-
                 id = bHasIndex ? observedItems[getIndex(key)] : key;
                 // exists?
                 if (id !== undefined) {

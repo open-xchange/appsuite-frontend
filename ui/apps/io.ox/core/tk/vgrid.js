@@ -238,7 +238,7 @@ define('io.ox/core/tk/vgrid',
 
     var VGrid = function (target, options) {
 
-        options = options || {};
+        options = _.extend({ simple: true, editable: true }, options || {});
 
         // target node
         var node = $(target).empty().addClass('vgrid'),
@@ -430,12 +430,9 @@ define('io.ox/core/tk/vgrid',
                 createCheckbox = function () {
                     var id = 'grid_cb_' + (guid++), fields = {};
                     this.prepend(
-                        fields.div = $('<div>')
-                        .addClass('vgrid-cell-checkbox')
-                        .append(
-                            fields.label = $('<label>', { 'for': id })
-                            .append(
-                                fields.input = $('<input>', { type: 'checkbox', id: id }).addClass('reflect-selection')
+                        fields.div = $('<div class="vgrid-cell-checkbox">').append(
+                            fields.label = $('<label>').append(
+                                fields.input = $('<input type="checkbox" class="reflect-selection">')
                             )
                         )
                     );

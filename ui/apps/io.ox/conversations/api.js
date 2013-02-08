@@ -12,8 +12,9 @@
  */
 
 define("io.ox/conversations/api",
-    ["io.ox/core/http", "io.ox/core/api/factory"
-    ], function (http, apiFactory) {
+    ["io.ox/core/http", "io.ox/core/api/factory",
+     "io.ox/core/config"
+    ], function (http, apiFactory, config) {
 
     "use strict";
 

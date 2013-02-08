@@ -19,12 +19,13 @@ define("io.ox/contacts/main",
      "io.ox/core/tk/vgrid",
      "io.ox/help/hints",
      "io.ox/contacts/view-detail",
+     "io.ox/core/config",
      "io.ox/core/extensions",
      "io.ox/core/commons",
      "gettext!io.ox/contacts",
      "settings!io.ox/contacts",
      "less!io.ox/contacts/style.css"
-    ], function (util, api, VGrid, hints, viewDetail, ext, commons, gt, settings) {
+    ], function (util, api, VGrid, hints, viewDetail, config, ext, commons, gt, settings) {
 
     "use strict";
 

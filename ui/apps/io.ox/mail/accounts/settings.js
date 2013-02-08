@@ -212,8 +212,8 @@ define('io.ox/mail/accounts/settings',
                 .append(
                     alertPlaceholder
                 )
-                .addButton('cancel', 'Cancel')
-                .addPrimaryButton('add', 'Add')
+                .addButton('cancel', gt('Cancel'))
+                .addPrimaryButton('add', gt('Add'))
                 .show(function () {
                     inputFieldMail.focus();
                 });
