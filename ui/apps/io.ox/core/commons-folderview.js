@@ -171,6 +171,32 @@ define('io.ox/core/commons-folderview',
             }
         });
 
+        function markMailFolderRead(e) {
+            e.preventDefault();
+            require(['io.ox/mail/api'], function (mail) {
+                var items = _(e.data.app.getGrid().getData()).map(function (item) {
+                    return {id: item.id, folder: item.folder_id};
+                });
+                mail.markRead(items).done(function () {
+                    mail.trigger("remove-unseen-mails", items); //remove notifications in notification area
+                    api.trigger('update:unread', items[0].folder);
+                });
+            });
+        }
+
+        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+            id: 'mark-folder-read',
+            index: 50,
+            draw: function (baton) {
+                if (baton.options.type !== 'mail') return;
+
+                this.append($('<li>').append(
+                    $('<a href="#" data-action="markfolderread">').text(gt('Mark all mails as read'))
+                    .on('click', { app: baton.app }, markMailFolderRead)
+                ));
+            }
+        });
+
         function renameFolder(e) {
             e.preventDefault();
             e.data.app.folderView.rename();
