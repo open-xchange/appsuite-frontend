@@ -72,7 +72,12 @@ define('io.ox/calendar/week/view',
             this.initSettings();
         },
 
-        // set or get week reference start date
+        /**
+         * set week reference start date
+         * @param {string|number} opt
+         *        number: Timestamp of a date in the reference week. Now if empty
+         *        string: {'next', 'prev'} set next or previous week
+         */
         setStartDate: function (opt) {
             if (opt && typeof opt === 'string') {
                 switch (opt) {
@@ -107,7 +112,9 @@ define('io.ox/calendar/week/view',
             }
         },
 
-        // setup setting params
+        /**
+         * setup setting params
+         */
         initSettings: function () {
             // init settings
             this.gridSize = 60 / settings.get('interval', this.gridSize);
@@ -130,7 +137,10 @@ define('io.ox/calendar/week/view',
             'change .toolbar .showall input[type="checkbox"]' : 'onControlView'
         },
 
-        // handler for hover effect
+        /**
+         * handler for hover effect
+         * @param  {MouseEvent} e Hover event (mouseenter, mouseleave)
+         */
         onHover: function (e) {
             if (!this.lasso) {
                 var cid = _.cid($(e.currentTarget).data('cid') + ''),
@@ -148,7 +158,10 @@ define('io.ox/calendar/week/view',
             }
         },
 
-        // handler for clickevents in toolbar
+        /**
+         * handler for clickevents in toolbar
+         * @param  {MouseEvent} e Clickevent
+         */
         onControlView: function (e) {
             e.preventDefault();
             var cT = $(e.currentTarget),
@@ -168,7 +181,10 @@ define('io.ox/calendar/week/view',
             this.trigger('onRefresh');
         },
 
-        // handler for key events in view
+        /**
+         * handler for key events in view
+         * @param  {KeyEvent} e Keyboard event
+         */
         onKey: function (e) {
             e.preventDefault();
             switch (e.which) {
@@ -185,15 +201,24 @@ define('io.ox/calendar/week/view',
             }
         },
 
+        /**
+         * unbind onKey handler on keyup event from document
+         */
         unbindKeys: function () {
             $(document).off('keyup', this.onKey);
         },
 
+        /**
+         * bin onKey handler on keyup event to document
+         */
         bindKeys: function () {
             $(document).on('keyup', $.proxy(this.onKey, this));
         },
 
-        // handler for single- and double-click events on appointments
+        /**
+         * handler for single- and double-click events on appointments
+         * @param  {KeyEvent} e Keyboard event
+         */
         onClickAppointment: function (e) {
             var cT = $(e.currentTarget);
             if (cT.hasClass('appointment') && !this.lasso && !cT.hasClass('private')) {
@@ -411,6 +436,10 @@ define('io.ox/calendar/week/view',
             return;
         },
 
+        /**
+         * render the week view
+         * @return {Backbone.View} this view
+         */
         render: function () {
 
             // create timelabels
@@ -505,10 +534,12 @@ define('io.ox/calendar/week/view',
                         this.pane.empty().append(timeLabel, weekCon)
                     )
             );
-
             return this;
         },
 
+        /**
+         * move the calendar window scrolling position, so that the working hours are centered
+         */
         setScrollPos: function () {
             var slotHeight = this.cellHeight * this.fragmentation,
                 workHeight = slotHeight * (this.workEnd - this.workStart),
@@ -517,11 +548,18 @@ define('io.ox/calendar/week/view',
             this.pane.scrollTop((slotHeight * this.workStart) - newPos);
         },
 
+        /**
+         * change the timeline css top value to the current time position
+         * @param  {Object} tl Timeline as jQuery object
+         */
         renderTimeline: function (tl) {
             var d = new date.Local();
             tl.css({ top: ((d.getHours() / 24 + d.getMinutes() / 1440) * 100) + '%'});
         },
 
+        /**
+         * clear all appointments from current week and render all appointments form collection
+         */
         renderAppointments: function () {
             this.showDeclined = settings.get('showDeclinedAppointments', false);
 
@@ -1133,7 +1171,11 @@ define('io.ox/calendar/week/view',
                 });
         },
 
-        // render an single appointment
+        /**
+         * render an single appointment
+         * @param  {Backbone.Model} a Appointment Model
+         * @return {Object}   a jQuery object of the appointment
+         */
         renderAppointment: function (a) {
             var el = $('<div>')
                 .addClass('appointment')
@@ -1148,6 +1190,10 @@ define('io.ox/calendar/week/view',
             return el;
         },
 
+        /**
+         * redraw a rendered appointment
+         * @param  {Backbone.Model} a Appointment Model
+         */
         redrawAppointment: function (a) {
             var positionFieldChanged = _(['start_date', 'end_date', 'full_time'])
                 .any(function (attr) { return !_.isUndefined(a.changed[attr]); });
@@ -1160,7 +1206,13 @@ define('io.ox/calendar/week/view',
             }
         },
 
-        // round an integer to the next grid size
+        //
+        /**
+         * round an integer to the next grid size
+         * @param  {number} pos position as integer
+         * @param  {String} typ specifies the used rounding algorithm {n=floor, s=ceil, else round}
+         * @return {number}     rounded value
+         */
         roundToGrid: function (pos, typ) {
             var h = this.gridHeight();
             switch (typ) {
