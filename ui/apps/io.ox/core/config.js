@@ -16,8 +16,6 @@ define('io.ox/core/config', ['io.ox/core/http', 'io.ox/core/cache'], function (h
 
     var config = {}, configCache;
 
-    console.error('require.define() for "io.ox/core/config" called more than once! Causes empty config.');
-
     var get = function (key) {
         var parts = typeof key === 'string' ? key.split(/\./) : key,
             tmp = config || {}, i = 0, $i = parts.length;
