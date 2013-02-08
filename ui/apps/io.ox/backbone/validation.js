@@ -56,8 +56,8 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
             return _.now() > val || gt('Please enter a date in the past');
         },
         email: function (val) {
-            var result = (regEmail.test(val) || val === '') ? true : gt('Please enter a valid email address');
-            return result;
+            var result = (regEmail.test(val) || val === '');
+            return result || gt('Please enter a valid email address');
 
         },
         url: function (val) {
@@ -113,7 +113,7 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
                             var value = attributes[attribute];
 
                             if (_.isUndefined(value) || value === null || value === '') {
-                                errors.add(attribute, 'Please enter a value');
+                                errors.add(attribute, gt('Please enter a value'));
                             }
                         }
                     });
