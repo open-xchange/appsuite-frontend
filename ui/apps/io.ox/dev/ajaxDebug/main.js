@@ -85,9 +85,7 @@ define("io.ox/dev/ajaxDebug/main",
         viewer = new callViews.CallView(right, callHandler);
 
         // Grid
-        grid = new VGrid(left);
-
-        grid.setMultiple(false);
+        grid = new VGrid(left, { multiple: false });
 
         // fix selection's serialize
         grid.selection.serialize = function (obj) {

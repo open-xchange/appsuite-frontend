@@ -238,7 +238,7 @@ define('io.ox/core/tk/vgrid',
 
     var VGrid = function (target, options) {
 
-        options = _.extend({ simple: true, editable: true }, options || {});
+        options = _.extend({ simple: true, editable: true, multiple: true }, options || {});
 
         // target node
         var node = $(target).empty().addClass('vgrid'),
@@ -322,7 +322,7 @@ define('io.ox/core/tk/vgrid',
             // touch devices (esp. ipad) need higher multiplier due to momentum scrolling
             mult = Modernizr.touch ? 6 : 3,
             // properties
-            props = { editable: false },
+            props = { editable: options.editable || false },
             // shortcut
             isArray = _.isArray,
             // private methods
@@ -960,20 +960,21 @@ define('io.ox/core/tk/vgrid',
         };
 
         this.setEditable = function (flag, selector) {
-            if (flag) {
-                node.addClass('editable');
-                this.selection.setEditable(true, options.simple ? '.vgrid-cell-checkbox' : '.vgrid-cell');
-                this.prop('editable', true);
-            } else {
-                node.removeClass('editable');
-                this.selection.setEditable(false);
-                this.prop('editable', false);
+            if (options.multiple === true) {
+                if (flag) {
+                    node.addClass('editable');
+                    this.selection.setEditable(true, options.simple ? '.vgrid-cell-checkbox' : '.vgrid-cell');
+                    this.prop('editable', true);
+                } else {
+                    node.removeClass('editable');
+                    this.selection.setEditable(false);
+                    this.prop('editable', false);
+                }
             }
         };
 
         this.setMultiple = function (flag) {
-            this.selection.setMultiple(flag);
-            toolbar[flag ? 'show' : 'detach']();
+            console.warn('deprecated', flag);
         };
 
         this.prop = function (key, value) {
@@ -1034,8 +1035,15 @@ define('io.ox/core/tk/vgrid',
         };
 
         // apply options
-        if (options.editable) {
-            this.setEditable(true);
+        if (options.multiple) {
+            if (options.editable) {
+                this.setEditable(true);
+            }
+            this.selection.setMultiple(true);
+            toolbar.show();
+        } else {
+            this.selection.setMultiple(false);
+            toolbar.detach();
         }
 
         node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');
