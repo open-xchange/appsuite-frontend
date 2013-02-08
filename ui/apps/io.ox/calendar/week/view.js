@@ -1306,7 +1306,8 @@ define('io.ox/calendar/week/view',
         /**
          * get or set current folder data
          * @param  {Object} data folder data
-         * @return {Object}      current folder data
+         * @return {Object}      if (data === undefined) current folder data
+         *                       else object containing start and end timestamp of the current week
          */
         folder: function (data) {
             if (data) {

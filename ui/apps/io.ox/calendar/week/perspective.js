@@ -31,6 +31,11 @@ define('io.ox/calendar/week/perspective',
         view:           null,   // the current view obj
         modes:          { 'week:day': 1, 'week:workweek': 2, 'week:week': 3 }, // all available modes
 
+        /**
+         * open sidepopup to show appointment
+         * @param  {Event}  e   given click event
+         * @param  {Object} obj appointment object (min. id, folder_id, recurrence_position)
+         */
         showAppointment: function (e, obj) {
             // open appointment details
             var self = this;
@@ -42,9 +47,17 @@ define('io.ox/calendar/week/perspective',
             });
         },
 
+        /**
+         * update appointment data
+         * @param  {Object} obj new appointment data
+         */
         updateAppointment: function (obj) {
             var self = this;
 
+            /**
+             * call api update function
+             * @param  {Object} obj new appointment data
+             */
             var apiUpdate = function (obj) {
                 obj = clean(obj);
                 api.update(obj).fail(function (con) {
@@ -68,6 +81,11 @@ define('io.ox/calendar/week/perspective',
                 });
             };
 
+            /**
+             * cleanup appointment data
+             * @param  {Object} obj new appointment data
+             * @return {Object}     clean appointment data
+             */
             var clean = function (app) {
                 _.each(app, function (el, i) {
                     if (el === null || _.indexOf(['old_start_date', 'old_end_date', 'drag_move'], i) >= 0) {
@@ -120,16 +138,30 @@ define('io.ox/calendar/week/perspective',
             }
         },
 
+        /**
+         * open create dialog
+         * @param  {Event}  e   given click event
+         * @param  {Object} obj appointment object
+         */
         openCreateAppointment: function (e, obj) {
             ext.point('io.ox/calendar/detail/actions/create')
                 .invoke('action', this, {app: this.app}, obj);
         },
 
+        /**
+         * open edit dialog
+         * @param  {Event}  e   given click event
+         * @param  {Object} obj appointment object
+         */
         openEditAppointment: function (e, obj) {
             ext.point('io.ox/calendar/detail/actions/edit')
                 .invoke('action', this, {data: obj});
         },
 
+        /**
+         * get appointments and update collection
+         * @param  {Object} obj object containing start and end timestamp
+         */
         getAppointments: function (obj) {
             // fetch appointments
             var collection = this.collection;
@@ -146,6 +178,9 @@ define('io.ox/calendar/week/perspective',
             }
         },
 
+        /**
+         * refresh appointment data
+         */
         refresh: function () {
             var self = this;
             this.app.folder.getData().done(function (data) {
@@ -154,6 +189,9 @@ define('io.ox/calendar/week/perspective',
             });
         },
 
+        /**
+         * trigger view save function
+         */
         save: function () {
             // save scrollposition
             if (this.view) {
@@ -161,6 +199,9 @@ define('io.ox/calendar/week/perspective',
             }
         },
 
+        /**
+         * trigger view restore function
+         */
         restore: function () {
             // restore scrollposition
             if (this.view) {
@@ -168,6 +209,11 @@ define('io.ox/calendar/week/perspective',
             }
         },
 
+        /**
+         * [render description]
+         * @param  {Object} app current application
+         * @param  {Object} opt perspective options
+         */
         render: function (app, opt) {
             // init perspective
             this.app = app;
