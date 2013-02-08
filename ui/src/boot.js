@@ -430,7 +430,7 @@ $(window).load(function () {
                     appendSession: (cacheKey === 'userconfig')
                 })
                 .done(function (data) {
-                    serverUp = false;
+                    serverUp();
                     configCache.add(cacheKey, data);
                     updateServerConfig(data);
                     def.resolve();
@@ -439,10 +439,12 @@ $(window).load(function () {
                     getCachedServerConfig(configCache, cacheKey, def);
                 });
             } else {
-                serverUp = true; // kinda
+                serverUp();
                 getCachedServerConfig(configCache, cacheKey, def);
             }
-        }).fail(function () {
+        })
+        .fail(function () {
+            serverDown();
             getCachedServerConfig(null, cacheKey, def);
         });
         return def;
@@ -456,6 +458,12 @@ $(window).load(function () {
         return fetchServerConfig('generalconfig');
     }
 
+    var serverTimeout = setTimeout(serverDown, 30000); // long timeout for slow connections & IE
+
+    function serverUp() {
+        clearTimeout(serverTimeout);
+    }
+
     function serverDown() {
         $('body').addClass('down');
         $('#io-ox-login-container').empty().append(
@@ -465,17 +473,8 @@ $(window).load(function () {
             .on('click', function (e) { e.preventDefault(); location.reload(); })
         );
         $('#background_loader').idle().fadeOut(DURATION);
+        console.warn('Server is down.');
     }
-
-    // TODO: This might have to be removed when we have a good offline mode
-    var serverUp = false;
-    setTimeout(function () {
-        if (!serverUp) {
-            serverDown();
-        }
-    }, 6000);
-
-    
 
     /**
      * Auto login
@@ -497,8 +496,10 @@ $(window).load(function () {
         }
 
         require(['io.ox/core/session', 'io.ox/core/capabilities']).done(function (session, capabilities) {
-            serverUp = true;
+
             var useAutoLogin = capabilities.has('autologin') && ox.online, initialized;
+
+            serverUp();
 
             function continueWithoutAutoLogin() {
                 if (ox.signin) {
@@ -549,9 +550,8 @@ $(window).load(function () {
                     continueWithoutAutoLogin();
                 });
             }
-        }).fail(function () {
-            serverDown();
-        });
+        })
+        .fail(serverDown);
     };
 
     /**
